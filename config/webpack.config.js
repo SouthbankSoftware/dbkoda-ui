@@ -1,8 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
-const precss = require("precss");
-const autoprefixer = require("autoprefixer");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = (() => {
 
@@ -36,7 +35,11 @@ const config = (() => {
         },
         {
           test: /\.scss|css$/,
-          use: ["style-loader","css-loader","postcss-loader","resolve-url-loader","sass-loader?sourceMap"]
+          use: ExtractTextPlugin.extract({
+            fallback: "style-loader",
+            use: ["css-loader", 'sass-loader'],
+            publicPath: "/dist"
+          })
         },
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
@@ -67,17 +70,10 @@ const getPlugins = () => {
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({hash: false, template: "./src/index.html"}),
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb/),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.scss$/,
-      debug: true,
-      options: {
-        postcss: function () {
-          return [precss, autoprefixer];
-        },
-        context: path.join(__dirname, "src"),
-        output: {path: path.join(__dirname, "../dist")}
-      }
+    new ExtractTextPlugin({
+      filename: "/styles/bundle.css",
+      disable: false,
+      allChunks: true
     }),
   ];
 

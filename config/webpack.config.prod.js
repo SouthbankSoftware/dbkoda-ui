@@ -50,7 +50,11 @@ const getPlugins = (()=>{
         warnings: false
       }
     }),
-    new ExtractTextPlugin("assets/styles.css"),
+    new ExtractTextPlugin({
+      filename: "/styles/bundle.css",
+      disable: false,
+      allChunks: true
+    }),
     new HtmlWebpackPlugin({
       hash: false,
       template: './src/index.html'
