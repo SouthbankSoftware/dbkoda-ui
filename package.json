@@ -7,7 +7,8 @@
     "start": "node config/devserver.js",
     "build": "rimraf ./dist && webpack --config config/webpack.config.prod.js",
     "preview": "http-server ./dist -p 1234 -c-1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint src/. test/."
   },
   "keywords": [
     "React",
@@ -48,6 +49,7 @@
   "devDependencies": {
     "autoprefixer": "^6.5.0",
     "babel-core": "^6.23.1",
+    "babel-eslint": "^7.1.1",
     "babel-loader": "^6.3.2",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -56,6 +58,9 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "css-loader": "^0.25.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "html-webpack-plugin": "^2.22.0",
     "image-webpack-loader": "^2.0.0",
@@ -73,6 +78,8 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "eslint": "^3.16.1",
+    "eslint-plugin-react": "latest",
     "http-server": "^0.9.0",
     "lazy-route": "^1.0.7",
     "lodash": "^4.17.4",
