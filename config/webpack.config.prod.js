@@ -27,22 +27,9 @@ const getPlugins = (()=>{
       }
     }),
     new webpack.optimize.OccurrenceOrderPlugin(true),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.scss$/,
-      debug: true,
-      options: {
-        postcss: function () {
-          return [precss, autoprefixer];
-        },
-        context: path.join(__dirname, 'src'),
-        output: {
-          path: path.join(__dirname, 'dist')
-        }
-      }
-    }),
     new webpack.NamedModulesPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
+      name: 'chunk',
       minChunks: Infinity
     }),
     new webpack.optimize.UglifyJsPlugin({
