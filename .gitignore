@@ -4,7 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+dist
 # Runtime data
 pids
 *.pid
@@ -56,3 +56,6 @@ typings/
 
 # dotenv environment variables file
 .env
+
+# intellji
+*.iml

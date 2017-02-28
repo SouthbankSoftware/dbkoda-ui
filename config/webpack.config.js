@@ -14,7 +14,7 @@ module.exports = {
     "./src/index.jsx"
   ],
   output: {
-    path: path.join(__dirname, "dist"),
+    path: path.join(__dirname, "../dist"),
     publicPath: "/",
     filename: "app.[hash].js"
   },
@@ -65,7 +65,7 @@ module.exports = {
           return [ precss, autoprefixer ];
         },
         context: path.join(__dirname, "src"),
-        output: { path: path.join(__dirname, "dist") }
+        output: { path: path.join(__dirname, "../dist") }
       }
     })
   ]
