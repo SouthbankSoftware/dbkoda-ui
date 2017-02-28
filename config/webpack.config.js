@@ -38,7 +38,7 @@ const config = (() => {
           use: ExtractTextPlugin.extract({
             fallback: "style-loader",
             use: ["css-loader", 'sass-loader'],
-            publicPath: "/dist"
+            publicPath: "styles/bundle.css"
           })
         },
         {
@@ -71,7 +71,7 @@ const getPlugins = () => {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({hash: false, template: "./src/index.html"}),
     new ExtractTextPlugin({
-      filename: "/styles/bundle.css",
+      filename: "styles/bundle.css",
       disable: false,
       allChunks: true
     }),

@@ -38,7 +38,7 @@ const getPlugins = (()=>{
       }
     }),
     new ExtractTextPlugin({
-      filename: "/styles/bundle.css",
+      filename: "styles/bundle.css",
       disable: false,
       allChunks: true
     }),
