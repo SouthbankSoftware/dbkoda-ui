@@ -17,7 +17,7 @@ const config = (() => {
     },
     devtool: "eval",
     module: {
-      loaders: [
+      rules: [
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
@@ -36,11 +36,11 @@ const config = (() => {
         },
         {
           test: /\.scss|css$/,
-          loader: "style-loader!css-loader!postcss-loader!resolve-url-loader!sass-loader?sourceMap"
+          use: ["style-loader","css-loader","postcss-loader","resolve-url-loader","sass-loader?sourceMap"]
         },
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
-          loaders: [
+          use: [
             "file-loader?hash=sha512&digest=hex&name=assets/[hash].[ext]",
             "image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false"
           ]
