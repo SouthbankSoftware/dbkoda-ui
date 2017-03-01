@@ -15,3 +15,39 @@ h1 {
   font-size: 40px;
   margin-top: 4px;
 }
+
+.middleRow {
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidePanel {
+  float:left;
+  border: 1px solid black;
+  width: 30%;
+  height: 80%;
+}
+
+.editorPanel {
+  float: left;
+  border: 1px solid black;
+  width: 70%;
+  height: 80%;
+}
+
+.outputPanel {
+  height:100%;
+  width:100%;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+[data-reactroot] {
+  height: 100% !important; 
+}
+
+#root {
+  height: 100%;
+}

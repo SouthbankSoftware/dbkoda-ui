@@ -1,4 +1,5 @@
 import React from 'react';
+import {BlueprintDemo} from './blue-print-demo.jsx';
 
 export const NavbarDemo = () => {
     return (
@@ -8,7 +9,7 @@ export const NavbarDemo = () => {
           <input className="pt-input" placeholder="Search files..." type="text" />
         </div>
         <div className="pt-navbar-group pt-align-right">
-          <button className="pt-button pt-minimal pt-icon-home">Home</button>
+          <BlueprintDemo />
           <button className="pt-button pt-minimal pt-icon-document">Files</button>
           <span className="pt-navbar-divider" />
           <button className="pt-button pt-minimal pt-icon-user" />

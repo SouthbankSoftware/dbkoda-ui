@@ -3,7 +3,7 @@ import React from 'react';
 
 export const BlueprintDemo = () => {
   const menu = (
-    <Menu>
+    <Menu className="pt-dark">
       <MenuItem text="New"/>
       <MenuItem text="Open"/>
       <MenuItem text="Save"/>
