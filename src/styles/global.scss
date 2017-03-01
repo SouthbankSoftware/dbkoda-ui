@@ -1,4 +1,17 @@
+$background-primary-color: #2d3c46;
+$white-color: #f5f8fa;
 
-div {
-  background-color: red;
+html {
+  height: 100%;
+}
+
+body {
+  background-color: $background-primary-color;
+  height: 100%;
+}
+
+h1 {
+  color: $white-color;
+  font-size: 40px;
+  margin-top: 4px;
 }
