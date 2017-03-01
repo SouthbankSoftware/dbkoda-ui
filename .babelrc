@@ -9,8 +9,9 @@
     "react"
   ],
   "plugins": [
-    "transform-async-to-generator",
     "transform-decorators-legacy",
+    "transform-class-properties",
+    "transform-async-to-generator",
     "react-hot-loader/babel"
   ]
 }

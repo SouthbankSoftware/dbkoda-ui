@@ -8,6 +8,7 @@ import '../styles/global.scss';
 import {BlueprintDemo} from './blue-print-demo.jsx';
 import {NavbarDemo} from './navbar-demo.jsx';
 import {Codemirror} from './codemirror-demo.jsx';
+import TabDemo from './tab-demo.jsx';
 
 export default class App extends React.Component {
   render() {
@@ -26,6 +27,7 @@ export default class App extends React.Component {
           <div className="editorPanel">
             <NavbarDemo />
             <Codemirror />
+            <TabDemo/>
           </div>
           <div className="outputPanel">
             <h1>
