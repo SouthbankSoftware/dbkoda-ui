@@ -25,7 +25,6 @@ const config = (() => {
               loader: 'babel-loader',
 
             }],
-
         },
         {
           test: /\.scss|css$/,
@@ -46,7 +45,7 @@ const config = (() => {
           test: /\.(png|svg|woff|eot|ttf|woff2)(\?.*$|$)/,
           loader: "url-loader?limit=100000&mimetype=application/font-woff"
         },
-        {test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader"},
+        {test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader?name=images/[hash].[ext]"},
       ]
     },
     plugins: getPlugins()
