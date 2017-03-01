@@ -91,7 +91,11 @@
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.0.1",
     "react-dom": "^15.4.2",
-    "react-router-dom": "^4.0.0-beta.6"
+    "react-router-dom": "^4.0.0-beta.6",
+    "react-codemirror": "^0.3.0",
+    "codemirror": "^5.1.0",
+    "codemirror-colorpicker": "^1.0.0",
+    "codemirror-highlight": "^1.0.0"
   },
   "repository": {
     "url": "",
