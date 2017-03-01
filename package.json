@@ -5,10 +5,11 @@
   "main": "webpack.config.js",
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback --port 3000",
-    "build": "rimraf ./dist && webpack --config config/webpack.config.prod.js",
+    "build": "yarn run clean && rimraf ./dist && webpack --config config/webpack.config.prod.js",
     "preview": "http-server ./dist -p 1234 -c-1",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "eslint src/. test/."
+    "eslint": "eslint src/. test/.",
+    "clean": "rimraf ./dist rmdir"
   },
   "keywords": [
     "React",
@@ -80,6 +81,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^1.10.0",
+    "cross-env": "^3.1.4",
     "http-server": "^0.9.0",
     "lazy-route": "^1.0.7",
     "lodash": "^4.17.4",
@@ -87,6 +89,7 @@
     "mobx-react": "^4.1.0",
     "mobx-react-devtools": "^4.2.11",
     "moment": "^2.17.1",
+    "node-config": "^0.0.2",
     "package": "^1.0.1",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.0.1",
