@@ -24,7 +24,7 @@ export default class App extends React.Component {
             <h1>Side Panel.</h1>
           </div>
           <div className="editorPanel">
-            <h1>Editor</h1>
+            <NavbarDemo />
             <Codemirror />
           </div>
           <div className="outputPanel">
