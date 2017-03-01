@@ -1,5 +1,16 @@
 {
-    "presets": [
-        "es2015", "react"
-    ]
+  "presets": [
+    [
+      "es2015",
+      {
+        "modules": false
+      }
+    ],
+    "react"
+  ],
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-decorators-legacy",
+    "react-hot-loader/babel"
+  ]
 }

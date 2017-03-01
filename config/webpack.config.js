@@ -20,18 +20,12 @@ const config = (() => {
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          loader: "babel-loader",
-          query: {
-            presets: [
-              ["es2015", {modules: false}],
-              "stage-0",
-              "react"
-            ],
-            plugins: [
-              "transform-async-to-generator",
-              "transform-decorators-legacy"
-            ]
-          }
+          use: [
+            {
+              loader: 'babel-loader',
+
+            }],
+
         },
         {
           test: /\.scss|css$/,

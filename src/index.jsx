@@ -1,7 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/App.jsx';
-import {ENV} from './env';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/App.jsx";
 
-console.log('working on ', ENV);
-ReactDOM.render(<App />, document.getElementById('root'));
+const render = (Component) => ReactDOM.render(
+  <Component/>, document.getElementById('root'));
+
+render(App);
