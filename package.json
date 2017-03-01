@@ -4,7 +4,7 @@
   "description": "DBEnvy",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback",
+    "start": "webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback --port 3000",
     "build": "rimraf ./dist && webpack --config config/webpack.config.prod.js",
     "preview": "http-server ./dist -p 1234 -c-1",
     "test": "echo \"Error: no test specified\" && exit 1",
