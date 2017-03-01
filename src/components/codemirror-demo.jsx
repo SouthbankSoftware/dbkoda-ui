@@ -6,7 +6,7 @@ require('codemirror/mode/markdown/markdown');
 
 export const Codemirror = React.createClass({
   getInitialState () {
-    return {code: '// Code'};
+    return {code: '// Welcome to DBEnvy!'};
   },
   updateCode (newCode) {
     this.setState({code: newCode});
