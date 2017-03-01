@@ -10,7 +10,7 @@ const config = (() => {
       "./src/index.jsx"
     ],
     output: {
-      path: path.join(__dirname, "../dist"),
+      path: path.join(__dirname, "../dist/"),
       publicPath: "/",
       filename: "app.[hash].js"
     },
@@ -20,11 +20,7 @@ const config = (() => {
         {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
-          use: [
-            {
-              loader: 'babel-loader',
-
-            }],
+          use: ['babel-loader'],
         },
         {
           test: /\.scss|css$/,

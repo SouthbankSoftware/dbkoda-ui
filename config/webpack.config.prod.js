@@ -6,12 +6,12 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = (() => {
   return{
-    entry: webpackConfig.entry,
+    entry: './src/index.jsx',
     output: {
-      path: webpackConfig.output.path,
-      publicPath: webpackConfig.output.path,
-      filename: '[name].[hash].js',
-      chunkFilename: '[name].[chunkhash].js'
+      path: './dist',
+      publicPath: './',
+      filename: 'js/[name].[hash].js',
+      chunkFilename: 'js/[name].[chunkhash].js'
     },
     devtool: 'cheap-module-source-map',
     plugins: getPlugins(),
