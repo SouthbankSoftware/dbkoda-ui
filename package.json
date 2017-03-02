@@ -9,7 +9,7 @@
     "preview": "http-server ./dist -p 1234 -c-1",
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint src/. test/.",
-    "docs": "esdoc -c .esdoc.json",
+    "docs": "esdoc -c .esdoc.json && open ./docs/index.html",
     "clean": "rimraf ./dist rmdir"
   },
   "keywords": [
