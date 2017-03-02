@@ -1,0 +1,33 @@
+{
+  "source": "./src",
+  "destination": "./docs",
+  "includes": ["\\.(js|jsx)$"],
+  "excludes": ["\\.config\\.(js|jsx)$"],
+  "access": ["public", "protected"],
+  "autoPrivate": true,
+  "unexportIdentifier": false,
+  "undocumentIdentifier": true,
+  "builtinExternal": true,
+  "index": "./README.md",
+  "package": "./package.json",
+  "coverage": true,
+  "includeSource": true,
+  "test": {
+    "type": "mocha",
+    "source": "./src",
+    "includes": ["\\.test.(js|jsx)$"],
+    "excludes": ["\\.config\\.(js|jsx)$"]
+  },
+  "title": "DBEnvy",
+  "lint": true,
+  "experimentalProposal": {
+    "classProperties": true,
+    "objectRestSpread": true,
+    "decorators": true,
+    "doExpressions": true,
+    "functionBind": true,
+    "asyncGenerators": true,
+    "exportExtensions": true,
+    "dynamicImport": true
+  }
+}

@@ -1,0 +1,14 @@
+# @Author: guiguan
+# @Date:   2017-01-09T15:15:34+11:00
+# @Last modified by:   guiguan
+# @Last modified time: 2017-03-03T10:12:12+11:00
+
+
+
+pipeline:
+  prepare:
+    image: southbanksoftware/dbenvy-ci-node-runtime
+    volumes_from:
+      - dbenvy-ci-volumes-data
+    commands:
+      - dbenvy-ci --url=http://172.16.0.1:3030 loadConfig
