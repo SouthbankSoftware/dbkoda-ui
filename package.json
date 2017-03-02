@@ -1,7 +1,7 @@
 {
   "name": "dbenvy-ui",
   "version": "0.1.0",
-  "description": "DBEnvy",
+  "description": "DBEnvy UI",
   "main": "webpack.config.js",
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback --port 3000",
@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint src/. test/.",
     "docs": "esdoc -c .esdoc.json && open ./docs/index.html",
-    "clean": "rimraf ./dist rmdir"
+    "clean": "rimraf ./dist rmdir",
+    "drone:sign": "drone sign \"SouthbankSoftware/$npm_package_name\""
   },
   "keywords": [
     "React",
