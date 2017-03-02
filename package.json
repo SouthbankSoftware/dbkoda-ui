@@ -9,6 +9,7 @@
     "preview": "http-server ./dist -p 1234 -c-1",
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint src/. test/.",
+    "docs": "esdoc -c .esdoc.json",
     "clean": "rimraf ./dist rmdir"
   },
   "keywords": [
@@ -80,7 +81,11 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^1.10.0",
+    "codemirror": "^5.1.0",
+    "codemirror-colorpicker": "^1.0.0",
+    "codemirror-highlight": "^1.0.0",
     "cross-env": "^3.1.4",
+    "esdoc": "^0.5.2",
     "http-server": "^0.9.0",
     "lazy-route": "^1.0.7",
     "lodash": "^4.17.4",
@@ -92,12 +97,9 @@
     "package": "^1.0.1",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.0.1",
-    "react-dom": "^15.4.2",
-    "react-router-dom": "^4.0.0-beta.6",
     "react-codemirror": "^0.3.0",
-    "codemirror": "^5.1.0",
-    "codemirror-colorpicker": "^1.0.0",
-    "codemirror-highlight": "^1.0.0"
+    "react-dom": "^15.4.2",
+    "react-router-dom": "^4.0.0-beta.6"
   },
   "repository": {
     "url": "",
