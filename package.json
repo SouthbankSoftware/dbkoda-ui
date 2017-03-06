@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback --port 3000",
     "build": "yarn run clean && rimraf ./dist && webpack --config config/webpack.config.prod.js",
     "preview": "http-server ./dist -p 1234 -c-1",
-    "test": "npm run eslint && npm run mocha",
+    "test": "npm run eslint && nyc npm run mocha",
     "eslint": "eslint src/. test/.",
     "mocha": "NODE_ENV=test mocha --opts mocha.opts ./src/**/*.test.js*",
     "test-target": "NODE_ENV=test mocha --opts mocha.opts",
@@ -51,9 +51,11 @@
     }
   ],
   "devDependencies": {
+    "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.3.2",
+    "babel-plugin-istanbul": "^4.0.0",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -78,6 +80,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "node-sass": "^4.5.0",
+    "nyc": "^10.1.2",
     "postcss-loader": "^1.3.2",
     "precss": "^1.4.0",
     "react-addons-test-utils": "^15.4.2",
@@ -115,5 +118,11 @@
   "repository": {
     "url": "",
     "type": "git"
+  },
+  "nyc": {
+    "exclude": [
+      "**/*.test.js*",
+      "dist"
+    ]
   }
 }
