@@ -5,10 +5,10 @@ import '../../node_modules/@blueprintjs/core/dist/blueprint.css';
 import '../../node_modules/codemirror/lib/codemirror.css';
 import '../../node_modules/codemirror/theme/ambiance.css';
 import '../styles/global.scss';
-import {BlueprintDemo} from './blue-print-demo.jsx';
 import {NavbarDemo} from './navbar-demo.jsx';
 import {Codemirror} from './codemirror-demo.jsx';
 import TabDemo from './tab-demo.jsx';
+
 
 export default class App extends React.Component {
   render() {
