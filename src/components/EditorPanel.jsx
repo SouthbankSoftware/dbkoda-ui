@@ -23,7 +23,7 @@ export default class EditorPanel extends React.Component {
 
   render() {
     return (
-      <div className="pt-dark">
+      <div className="pt-dark editorPanel">
         <EditorToolBar />
         <Tabs2
           id="EditorTabs"
