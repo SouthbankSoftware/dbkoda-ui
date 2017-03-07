@@ -1,11 +1,21 @@
-import {Button, Menu, MenuItem, MenuDivider, Popover, Position} from "@blueprintjs/core";
-import React from 'react';
+import {Menu, MenuItem, MenuDivider, Popover, Button, Position} from "@blueprintjs/core";
+import React from "react";
+import {connectionService} from "../feathers";
 
 export const BlueprintDemo = () => {
+
   const menu = (
     <Menu className="pt-dark">
-      <MenuItem text="New"/>
-      <MenuItem text="Open"/>
+      <MenuItem text="New" onClick={() => {
+        connectionService().create({}, {query: {url: 'mongodb://dbenvy:DBEnvy2016@ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com'}})
+          .then(r => {
+            console.log('response', r);
+          })
+          .catch(err => {
+            console.err(err);
+          });
+      }}/>
+      <MenuItem text="Run..."/>
       <MenuItem text="Save"/>
       <MenuDivider />
       <MenuItem text="Settings..."/>
