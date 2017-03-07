@@ -9,7 +9,7 @@
     "preview": "http-server ./dist -p 1234 -c-1",
     "test": "npm run eslint && nyc npm run mocha",
     "eslint": "eslint src/. test/.",
-    "mocha": "NODE_ENV=test mocha --opts mocha.opts ./src/**/*.test.js*",
+    "mocha": "NODE_ENV=test babel-node ./node_modules/mocha/bin/_mocha --opts mocha.opts ./src/**/*.test.js*",
     "test-target": "NODE_ENV=test mocha --opts mocha.opts",
     "docs": "esdoc -c .esdoc.json && open ./docs/index.html",
     "clean": "rimraf ./dist rmdir",
@@ -125,6 +125,10 @@
     "exclude": [
       "**/*.test.js*",
       "dist"
+    ],
+    "extension": [
+      ".js",
+      ".jsx"
     ]
   }
 }
