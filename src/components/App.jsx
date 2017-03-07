@@ -8,7 +8,7 @@ import '../styles/global.scss';
 import {BlueprintDemo} from './blue-print-demo.jsx';
 import {NavbarDemo} from './navbar-demo.jsx';
 import {Codemirror} from './codemirror-demo.jsx';
-import TabDemo from './tab-demo.jsx';
+import EditorPanel from './EditorPanel.jsx';
 
 export default class App extends React.Component {
   render() {
@@ -18,16 +18,14 @@ export default class App extends React.Component {
           textAlign: 'center'
         }}>
           <h1>DBEnvy UI Demo</h1>
-          <NavbarDemo/>
+          <NavbarDemo />
         </div>
         <div className="middleRow">
           <div className="sidePanel">
             <h1>Side Panel.</h1>
           </div>
           <div className="editorPanel">
-            <NavbarDemo />
-            <Codemirror />
-            <TabDemo/>
+            <EditorPanel />
           </div>
           <div className="outputPanel">
             <h1>
