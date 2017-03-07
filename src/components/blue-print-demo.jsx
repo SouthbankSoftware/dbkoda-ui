@@ -1,6 +1,6 @@
 import {Menu, MenuItem, MenuDivider, Popover, Button, Position} from "@blueprintjs/core";
 import React from "react";
-import {featherClient} from "../feathers";
+import {featherClient} from "../feathers/index";
 
 export const BlueprintDemo = () => {
 
