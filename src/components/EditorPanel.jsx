@@ -27,6 +27,7 @@ export default class EditorPanel extends React.Component {
         <EditorToolBar />
         <Tabs2
           id="EditorTabs"
+          className="editorTabView"
           renderActiveTabPanelOnly={false}
           onChange={(newTab) => {
           this.setState({tabId: newTab});

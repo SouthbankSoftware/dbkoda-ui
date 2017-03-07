@@ -42,7 +42,15 @@ h3 {
 .editorPanel {
   float: left;
   width: 100%;
-  height: 80%;
+  height: 100%;
+}
+
+.editorTabView {
+  height: 93%;
+}
+
+.editorView {
+  height: 100%;
 }
 
 .drawer {
@@ -74,10 +82,12 @@ h3 {
 .pt-tabs {
   color: $whiteColor;
   background-color: $tabPrimaryColor;
+
 }
 
 .pt-tab-panel {
   margin-top: 2px;
+  height: 100%;
 }
 
 .pt-tab {
@@ -90,4 +100,12 @@ h3 {
 
 .cm-s-ambiance .CodeMirror-linenumber {
   color: $whiteColor;
+}
+
+.ReactCodeMirror {
+  height: 100%;
+}
+
+.CodeMirror {
+  height:93%;
 }
