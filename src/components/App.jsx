@@ -8,7 +8,7 @@
 import React from 'react';
 import SplitPane from 'react-split-pane';
 import Drawer from 'react-motion-drawer';
-import { Button } from '@blueprintjs/core';
+import {Button} from '@blueprintjs/core';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -22,11 +22,11 @@ import './App.scss';
 
 export default class App extends React.Component {
   state = {
-    drawerOpen: open,
+    drawerOpen: open
   };
 
   render() {
-    const { drawerOpen } = this.state;
+    const {drawerOpen} = this.state;
 
     return (
       <div>
@@ -35,11 +35,8 @@ export default class App extends React.Component {
           open={drawerOpen}
           width="36%"
           handleWidth={0}
-          onChange={open => this.setState({ drawerOpen: open })}
-        >
-          <div
-            className="drawerPanel"
-          >
+          onChange={open => this.setState({drawerOpen: open})}>
+          <div className="drawerPanel">
             <h3>Please close me!!!</h3>
           </div>
         </Drawer>
@@ -50,9 +47,8 @@ export default class App extends React.Component {
                 className="pt-intent-primary"
                 iconName="pt-icon-menu-closed"
                 onClick={() => {
-                  this.setState({ drawerOpen: true });
-                }}
-              />
+                this.setState({drawerOpen: true});
+              }} />
             </div>
             <div />
           </SplitPane>
