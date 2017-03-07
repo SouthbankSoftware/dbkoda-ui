@@ -8,7 +8,6 @@ import '../styles/global.scss';
 import {NavbarDemo} from './navbar-demo.jsx';
 import {Codemirror} from './codemirror-demo.jsx';
 import TabDemo from './tab-demo.jsx';
-import {featherClient} from '../feathers';
 
 export default class App extends React.Component {
 
