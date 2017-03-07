@@ -50,7 +50,7 @@ export default class EditorToolBar extends React.Component {
 
   render() {
     return (
-      <nav className="pt-navbar pt-dark .modifier">
+      <nav className="pt-navbar pt-dark editorToolBar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
             <button
