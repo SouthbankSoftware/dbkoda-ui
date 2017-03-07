@@ -4,6 +4,7 @@ require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 
+
 export const Codemirror = React.createClass({
   getInitialState () {
     return {code: '// Welcome to DBEnvy!'};
