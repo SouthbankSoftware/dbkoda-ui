@@ -40,13 +40,24 @@ h3 {
 }
 
 .editorPanel {
-  float: left;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
-  height: 100%;
+}
+
+.editorToolBar {
+  order: 0;
+  flex-grow: 1;
 }
 
 .editorTabView {
-  height: 93%;
+  height:100%;
+  order: 1;
+  flex-grow: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .editorView {
@@ -104,8 +115,13 @@ h3 {
 
 .ReactCodeMirror {
   height: 100%;
+
 }
 
 .CodeMirror {
-  height:93%;
+  height: 100%;
+}
+
+.CodeMirror-scroll {
+  padding-bottom: 0px;
 }
