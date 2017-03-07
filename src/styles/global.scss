@@ -62,11 +62,12 @@ h1 {
 
 .pt-tabs {
   color: $white-color;
-  background-color: $background-secondary-color;
-  padding-left: 2%;
+  background-color: $tab-primary-color;
 }
 
-.pt-tab-list {}
+.pt-tab-panel {
+  margin-top: 2px;
+}
 
 .pt-tab {
   color: $white-color;
@@ -74,4 +75,8 @@ h1 {
 
 .pt-tab-indicator {
   background-color: $white-color;
+}
+
+.cm-s-ambiance .CodeMirror-linenumber {
+  color: $white-color;
 }

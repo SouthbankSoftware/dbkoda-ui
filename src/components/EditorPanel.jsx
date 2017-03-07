@@ -5,14 +5,7 @@
  * Author: Michael Harrison.
  */
 import React from 'react';
-import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  Tabs2,
-  Tab2
-} from '@blueprintjs/core';
+import {Tabs2, Tab2} from '@blueprintjs/core';
 import EditorToolBar from './EditorToolBar.jsx';
 import EditorView from './EditorView.jsx';
 
