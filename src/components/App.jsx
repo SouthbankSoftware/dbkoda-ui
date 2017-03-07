@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-03-07T18:35:03+11:00
+ * @Last modified time: 2017-03-07T18:49:59+11:00
  */
 
 import React from 'react';
@@ -14,43 +14,11 @@ import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
+
+import EditorPanel from './EditorPanel.jsx';
+
 import '../styles/global.scss';
 import './App.scss';
-
-// import {BlueprintDemo} from './blue-print-demo.jsx';
-// import {NavbarDemo} from './navbar-demo.jsx';
-// import {Codemirror} from './codemirror-demo.jsx';
-// import TabDemo from './tab-demo.jsx';
-//
-// export default class App extends React.Component {
-//   render() {
-//     return (
-//       <div>
-//         <div style={{
-//           textAlign: 'center'
-//         }}>
-//           <h1>DBEnvy UI Demo</h1>
-//           <NavbarDemo/>
-//         </div>
-//         <div className="middleRow">
-//           <div className="sidePanel">
-//             <h1>Side Panel.</h1>
-//           </div>
-//           <div className="editorPanel">
-//             <NavbarDemo />
-//             <Codemirror />
-//             <TabDemo/>
-//           </div>
-//           <div className="outputPanel">
-//             <h1>
-//               Output
-//             </h1>
-//           </div>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
 
 export default class App extends React.Component {
   state = {
@@ -93,7 +61,7 @@ export default class App extends React.Component {
             <div />
           </SplitPane>
           <SplitPane split="horizontal" defaultSize="70%">
-            <div />
+            <EditorPanel />
             <div />
           </SplitPane>
         </SplitPane>
