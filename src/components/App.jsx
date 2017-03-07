@@ -15,7 +15,7 @@ import '@blueprintjs/core/dist/blueprint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 
-import EditorPanel from './EditorPanel.jsx';
+import EditorPanel from './editor/EditorPanel.jsx';
 
 import '../styles/global.scss';
 import './App.scss';

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Intent} from '@blueprintjs/core';
-import {NewToaster} from './Toaster.jsx';
+import {NewToaster} from '../common/Toaster.jsx';
 
 export default class EditorToolBar extends React.Component {
   constructor(props) {
