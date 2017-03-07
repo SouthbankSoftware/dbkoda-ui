@@ -1,21 +1,30 @@
-$background-primary-color: #2d3c46;
-$background-secondary-color: #394b59;
-$tab-primary-color: #3d3d3d;
-$tab-stroke-color: #d1ccc8;
-$white-color: #f5f8fa;
-$bright-blue-font: #179dea;
-html {
-  height: 100%;
-}
-
+ // @Author: guiguan
+// @Date:   2017-03-07T13:47:00+11:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-03-07T18:42:33+11:00
+$backgroundPrimaryColor: #2d3c46;
+$backgroundSecondaryColor: #394b59;
+$tabPrimaryColor: #3d3d3d;
+$tabStrokeColor: #d1ccc8;
+$whiteColor: #f5f8fa;
+$brightBlueFont: #179dea;
 body {
-  background-color: $background-primary-color;
-  height: 100%;
+  background-color: $backgroundPrimaryColor;
 }
 
 h1 {
-  color: $white-color;
+  color: $whiteColor;
   font-size: 40px;
+  margin-top: 4px;
+}
+
+h2 {
+  color: $whiteColor;
+  margin-top: 4px;
+}
+
+h3 {
+  color: $whiteColor;
   margin-top: 4px;
 }
 
@@ -26,16 +35,34 @@ h1 {
 
 .sidePanel {
   float: left;
-  border: 1px solid black;
   width: 30%;
   height: 80%;
 }
 
 .editorPanel {
   float: left;
-  border: 1px solid black;
-  width: 70%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
+}
+
+.editorTabView {
+  height: 93%;
+}
+
+.editorView {
+  height: 100%;
+}
+
+.drawer {
+  background-color: $backgroundPrimaryColor
+}
+
+.drawerPanel {
+  background-color: $backgroundPrimaryColor;
+  width: '100%';
+  height: '100%';
+  display: 'flex';
+  flex: '1 1 0%'
 }
 
 .outputPanel {
@@ -47,31 +74,38 @@ h1 {
   height: 100%;
 }
 
-[data-reactroot] {
-  height: 100% !important;
-}
-
-#root {
-  height: 100%;
-}
-
 .pt-tab[aria-selected="true"],
 .pt-tab:not([aria-disabled="true"]):hover {
-  color: $bright-blue-font;
+  color: $brightBlueFont;
 }
 
 .pt-tabs {
-  color: $white-color;
-  background-color: $background-secondary-color;
-  padding-left: 2%;
+  color: $whiteColor;
+  background-color: $tabPrimaryColor;
+
 }
 
-.pt-tab-list {}
+.pt-tab-panel {
+  margin-top: 2px;
+  height: 100%;
+}
 
 .pt-tab {
-  color: $white-color;
+  color: $whiteColor;
 }
 
 .pt-tab-indicator {
-  background-color: $white-color;
+  background-color: $whiteColor;
+}
+
+.cm-s-ambiance .CodeMirror-linenumber {
+  color: $whiteColor;
+}
+
+.ReactCodeMirror {
+  height: 100%;
+}
+
+.CodeMirror {
+  height:93%;
 }

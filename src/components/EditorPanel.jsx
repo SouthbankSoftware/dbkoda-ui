@@ -5,14 +5,7 @@
  * Author: Michael Harrison.
  */
 import React from 'react';
-import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  Tabs2,
-  Tab2
-} from '@blueprintjs/core';
+import {Tabs2, Tab2} from '@blueprintjs/core';
 import EditorToolBar from './EditorToolBar.jsx';
 import EditorView from './EditorView.jsx';
 
@@ -30,10 +23,11 @@ export default class EditorPanel extends React.Component {
 
   render() {
     return (
-      <div className="pt-dark">
+      <div className="pt-dark editorPanel">
         <EditorToolBar />
         <Tabs2
           id="EditorTabs"
+          className="editorTabView"
           renderActiveTabPanelOnly={false}
           onChange={(newTab) => {
           this.setState({tabId: newTab});

@@ -1,25 +1,16 @@
+/**
+ * @Author: guiguan
+ * @Date:   2017-03-03T10:09:27+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-03-07T16:57:53+11:00
+ */
+
 const webpackConfig = require('./webpack.config');
-const webpack = require("webpack");
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const config = (() => {
-  return{
-    entry: './src/index.jsx',
-    output: {
-      path: './dist',
-      publicPath: './',
-      filename: 'js/[name].[hash].js',
-      chunkFilename: 'js/[name].[chunkhash].js'
-    },
-    devtool: 'cheap-module-source-map',
-    plugins: getPlugins(),
-    module: webpackConfig.module,
-  }
-});
-
-const getPlugins = (()=>{
+const getPlugins = (() => {
   return [
     new webpack.DefinePlugin({
       'process.env': {
@@ -38,7 +29,7 @@ const getPlugins = (()=>{
       }
     }),
     new ExtractTextPlugin({
-      filename: "styles/bundle.css",
+      filename: 'styles/bundle.css',
       disable: false,
       allChunks: true
     }),
@@ -46,7 +37,25 @@ const getPlugins = (()=>{
       hash: false,
       template: './src/index.html'
     }),
-  ]
+  ];
+});
+
+const config = (() => {
+  return {
+    entry: './src/index.jsx',
+    output: {
+      path: './dist',
+      publicPath: './',
+      filename: 'js/[name].[hash].js',
+      chunkFilename: 'js/[name].[chunkhash].js'
+    },
+    resolve: {
+      extensions: ['.js', '.jsx']
+    },
+    devtool: 'cheap-module-source-map',
+    plugins: getPlugins(),
+    module: webpackConfig.module,
+  };
 });
 
 module.exports = config();

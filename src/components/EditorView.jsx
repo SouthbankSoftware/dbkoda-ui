@@ -31,7 +31,7 @@ export default class EditorView extends React.Component {
   }
 
   refresh() {
-    const cm = this
+    const cm = this // eslint-disable-line react/no-string-refs
       .refs
       .editor
       .getCodeMirror();
@@ -55,13 +55,9 @@ export default class EditorView extends React.Component {
     };
 
     return (
-      <div>
-        <CodeMirror
-          autoSave
-          ref="editor"
-          value={this.state.code}
-          onChange={value => this.setState({code: value})}
-          options={options} />
+      <div className="editorView">
+        <CodeMirror autoSave ref="editor" // eslint-disable-line react/no-string-refs
+          value={this.state.code} onChange={value => this.setState({code: value})} options={options} />
       </div>
     );
   }

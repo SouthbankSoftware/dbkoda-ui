@@ -1,40 +1,62 @@
-import React from 'react';
+/**
+ * @Author: guiguan
+ * @Date:   2017-03-07T13:47:00+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-03-07T18:49:59+11:00
+ */
 
-import '../../node_modules/normalize.css/normalize.css';
-import '../../node_modules/@blueprintjs/core/dist/blueprint.css';
-import '../../node_modules/codemirror/lib/codemirror.css';
-import '../../node_modules/codemirror/theme/ambiance.css';
-import '../styles/global.scss';
-import {NavbarDemo} from './navbar-demo.jsx';
-import {Codemirror} from './codemirror-demo.jsx';
+import React from 'react';
+import SplitPane from 'react-split-pane';
+import Drawer from 'react-motion-drawer';
+import {Button} from '@blueprintjs/core';
+
+import 'normalize.css/normalize.css';
+import '@blueprintjs/core/dist/blueprint.css';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/ambiance.css';
+
 import EditorPanel from './EditorPanel.jsx';
 
+import '../styles/global.scss';
+import './App.scss';
+
 export default class App extends React.Component {
-
-
+  state = {
+    drawerOpen: open
+  };
 
   render() {
+    const {drawerOpen} = this.state;
+
     return (
       <div>
-        <div style={{
-          textAlign: 'center'
-        }}>
-          <h1>DBEnvy UI Demo</h1>
-          <NavbarDemo />
-        </div>
-        <div className="middleRow">
-          <div className="sidePanel">
-            <h1>Side Panel.</h1>
+        <Drawer
+          className="drawer"
+          open={drawerOpen}
+          width="36%"
+          handleWidth={0}
+          onChange={open => this.setState({drawerOpen: open})}>
+          <div className="drawerPanel">
+            <h3>Please close me!!!</h3>
           </div>
-          <div className="editorPanel">
+        </Drawer>
+        <SplitPane split="vertical" defaultSize="30%">
+          <SplitPane split="horizontal" defaultSize="50%">
+            <div>
+              <Button
+                className="pt-intent-primary"
+                iconName="pt-icon-menu-closed"
+                onClick={() => {
+                this.setState({drawerOpen: true});
+              }} />
+            </div>
+            <div />
+          </SplitPane>
+          <SplitPane split="horizontal" defaultSize="70%">
             <EditorPanel />
-          </div>
-          <div className="outputPanel">
-            <h1>
-              Output
-            </h1>
-          </div>
-        </div>
+            <div />
+          </SplitPane>
+        </SplitPane>
       </div>
     );
   }
