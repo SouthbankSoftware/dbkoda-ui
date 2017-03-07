@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"1-liners@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/1-liners/-/1-liners-0.4.0.tgz#b0bfbbeee45a07b86abffab2cb9220b6b12a8e2a"
+
 "@blueprintjs/core@^1.10.0":
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-1.10.0.tgz#eefac7c7ee35ca321c49e3b4924ad40ae3c19ccc"
@@ -838,7 +842,7 @@ babel-plugin-transform-function-bind@^6.22.0:
     babel-plugin-syntax-function-bind "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-object-rest-spread@^6.22.0:
+babel-plugin-transform-object-rest-spread@^6.22.0, babel-plugin-transform-object-rest-spread@^6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-object-rest-spread/-/babel-plugin-transform-object-rest-spread-6.23.0.tgz#875d6bc9be761c58a2ae3feee5dc4895d8c7f921"
   dependencies:
@@ -983,7 +987,7 @@ babel-preset-react@^6.16.0:
     babel-plugin-transform-react-jsx-source "^6.22.0"
     babel-preset-flow "^6.23.0"
 
-babel-preset-stage-0@^6.16.0:
+babel-preset-stage-0@^6.16.0, babel-preset-stage-0@^6.22.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-preset-stage-0/-/babel-preset-stage-0-6.22.0.tgz#707eeb5b415da769eff9c42f4547f644f9296ef9"
   dependencies:
@@ -1203,6 +1207,10 @@ boom@2.x.x:
   resolved "https://registry.yarnpkg.com/boom/-/boom-2.10.1.tgz#39c8918ceff5799f83f9492a848f625add0c766f"
   dependencies:
     hoek "2.x.x"
+
+bowser@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/bowser/-/bowser-1.6.0.tgz#37fc387b616cb6aef370dab4d6bd402b74c5c54d"
 
 brace-expansion@^1.0.0:
   version "1.1.6"
@@ -1834,6 +1842,12 @@ css-color-function@^1.2.0:
 css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
+
+css-in-js-utils@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/css-in-js-utils/-/css-in-js-utils-1.0.3.tgz#9ac7e02f763cf85d94017666565ed68a5b5f3215"
+  dependencies:
+    hyphenate-style-name "^1.0.2"
 
 css-loader@^0.26.2:
   version "0.26.2"
@@ -3276,6 +3290,10 @@ gulplog@^1.0.0:
   dependencies:
     glogg "^1.0.0"
 
+hammerjs@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
+
 handle-thing@^1.2.4:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/handle-thing/-/handle-thing-1.2.5.tgz#fd7aad726bf1a5fd16dfc29b2f7a6601d27139c4"
@@ -3509,6 +3527,10 @@ https-browserify@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-0.0.1.tgz#3f91365cabe60b77ed0ebba24b454e3e09d95a82"
 
+hyphenate-style-name@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
+
 ice-cap@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/ice-cap/-/ice-cap-0.0.4.tgz#8a6d31ab4cac8d4b56de4fa946df3352561b6e18"
@@ -3639,6 +3661,13 @@ inherits@2.0.1:
 ini@~1.3.0:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.4.tgz#0537cb79daf59b59a1a517dff706c86ec039162e"
+
+inline-style-prefixer@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/inline-style-prefixer/-/inline-style-prefixer-3.0.0.tgz#4feb44053c29aa2fe2aaecac4fb3e9459f871239"
+  dependencies:
+    bowser "^1.6.0"
+    css-in-js-utils "^1.0.0"
 
 inquirer@^0.12.0:
   version "0.12.0"
@@ -5120,6 +5149,10 @@ pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
 
+performance-now@^0.2.0, performance-now@~0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
+
 pify@^2.0.0, pify@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
@@ -5709,6 +5742,12 @@ querystringify@0.0.x:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-0.0.4.tgz#0cf7f84f9463ff0ae51c4c4b142d95be37724d9c"
 
+raf@^3.1.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/raf/-/raf-3.3.0.tgz#93845eeffc773f8129039f677f80a36044eee2c3"
+  dependencies:
+    performance-now "~0.2.0"
+
 randomatic@^1.1.3:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-1.1.6.tgz#110dcabff397e9dcff7c0789ccc0a49adf1ec5bb"
@@ -5767,6 +5806,12 @@ react-dom@^15.4.1, react-dom@^15.4.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
+react-hammerjs@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/react-hammerjs/-/react-hammerjs-0.5.0.tgz#aa20e5c5f44d660f3e8e87ed11282f12173e77ae"
+  dependencies:
+    hammerjs "^2.0.8"
+
 react-hot-loader@^3.0.0-beta.2:
   version "3.0.0-beta.6"
   resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-3.0.0-beta.6.tgz#463fac0bfc8b63a8385258af20c91636abce75f4"
@@ -5777,6 +5822,22 @@ react-hot-loader@^3.0.0-beta.2:
     react-proxy "^3.0.0-alpha.0"
     redbox-react "^1.2.5"
     source-map "^0.4.4"
+
+react-motion-drawer@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/react-motion-drawer/-/react-motion-drawer-2.1.5.tgz#5ed380d90af70871c35b766facd83376b8d5e2fc"
+  dependencies:
+    "1-liners" "^0.4.0"
+    babel-preset-stage-0 "^6.22.0"
+    react-hammerjs "^0.5.0"
+    react-motion "^0.4.7"
+
+react-motion@^0.4.7:
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/react-motion/-/react-motion-0.4.7.tgz#f77331ec7920bdb0d0cfc37eb6ffa10571bf42c7"
+  dependencies:
+    performance-now "^0.2.0"
+    raf "^3.1.0"
 
 react-proxy@^3.0.0-alpha.0:
   version "3.0.0-alpha.1"
@@ -5799,6 +5860,17 @@ react-router@^4.0.0-alpha.6, react-router@^4.0.0-beta.6:
     invariant "^2.2.2"
     loose-envify "^1.3.1"
     path-to-regexp "^1.5.3"
+
+react-split-pane@^0.1.58:
+  version "0.1.58"
+  resolved "https://registry.yarnpkg.com/react-split-pane/-/react-split-pane-0.1.58.tgz#0e9929401ffcd4eb655d7698774945af4758b53d"
+  dependencies:
+    inline-style-prefixer "^3.0.0"
+    react-style-proptype "^2.0.1"
+
+react-style-proptype@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-style-proptype/-/react-style-proptype-2.0.1.tgz#6b29b9bceb11d6be279ffee3debe1fe1edbee97b"
 
 react@^15.4.1, react@^15.4.2:
   version "15.4.2"

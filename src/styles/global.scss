@@ -1,53 +1,45 @@
-$background-primary-color: #2d3c46;
-$white-color: #f5f8fa;
+// @Author: guiguan
+// @Date:   2017-03-07T13:47:00+11:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-03-07T17:27:14+11:00
 
-html {
-  height: 100%;
-}
+$backgroundPrimaryColor: #2d3c46;
+$whiteColor: #f5f8fa;
 
 body {
-  background-color: $background-primary-color;
-  height: 100%;
+  background-color: $backgroundPrimaryColor;
 }
 
-h1 {
-  color: $white-color;
-  font-size: 40px;
-  margin-top: 4px;
-}
-
-.middleRow {
-  height: 100%;
-  overflow: hidden;
-}
-
-.sidePanel {
-  float:left;
-  border: 1px solid black;
-  width: 30%;
-  height: 80%;
-}
-
-.editorPanel {
-  float: left;
-  border: 1px solid black;
-  width: 70%;
-  height: 80%;
-}
-
-.outputPanel {
-  height:100%;
-  width:100%;
-}
-
-.fullHeight {
-  height: 100%;
-}
-
-[data-reactroot] {
-  height: 100% !important; 
-}
-
-#root {
-  height: 100%;
-}
+// h1 {
+//   color: $whiteColor;
+//   font-size: 40px;
+//   margin-top: 4px;
+// }
+// 
+// .middleRow {
+//   height: 100%;
+//   overflow: hidden;
+// }
+// 
+// .sidePanel {
+//   float:left;
+//   border: 1px solid black;
+//   width: 30%;
+//   height: 80%;
+// }
+// 
+// .editorPanel {
+//   float: left;
+//   border: 1px solid black;
+//   width: 70%;
+//   height: 80%;
+// }
+// 
+// .outputPanel {
+//   height:100%;
+//   width:100%;
+// }
+// 
+// .fullHeight {
+//   height: 100%;
+// }
