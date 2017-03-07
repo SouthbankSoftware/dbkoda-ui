@@ -57,6 +57,7 @@ rules:
   no-restricted-syntax: 0
   no-unused-expressions: 0
   newline-per-chained-call: 0
+  no-undef: 0
   no-use-before-define: [error, {functions: false, classes: true}]
 plugins: [react, import]
 settings:

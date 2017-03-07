@@ -1,4 +1,9 @@
 {
+  "env": {
+    "test": {
+      "plugins": [ "istanbul" ]
+    }
+  },
   "presets": [
     [
       "es2015",
@@ -7,7 +12,8 @@
       }
     ],
     "react",
-    "es2015-node-auto"
+    "es2015-node-auto",
+    "stage-0"
   ],
   "plugins": [
     "transform-decorators-legacy",
