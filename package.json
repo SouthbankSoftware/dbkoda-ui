@@ -9,7 +9,7 @@
     "preview": "http-server ./dist -p 1234 -c-1",
     "test": "npm run eslint && nyc npm run mocha",
     "eslint": "eslint src/. test/.",
-    "mocha": "NODE_ENV=test mocha --opts mocha.opts ./src/**/*.test.js*",
+    "mocha": "NODE_ENV=test babel-node ./node_modules/mocha/bin/_mocha --opts mocha.opts ./src/**/*.test.js*",
     "test-target": "NODE_ENV=test mocha --opts mocha.opts",
     "docs": "esdoc -c .esdoc.json && open ./docs/index.html",
     "clean": "rimraf ./dist rmdir",
@@ -94,8 +94,8 @@
     "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
-    "@blueprintjs/core": "^1.10.0",
-    "codemirror": "^5.1.0",
+    "@blueprintjs/core": "^1.11.1",
+    "codemirror": "^5.24.2",
     "codemirror-colorpicker": "^1.0.0",
     "codemirror-highlight": "^1.0.0",
     "cross-env": "^3.1.4",
@@ -125,6 +125,10 @@
     "exclude": [
       "**/*.test.js*",
       "dist"
+    ],
+    "extension": [
+      ".js",
+      ".jsx"
     ]
   }
 }
