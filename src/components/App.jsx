@@ -31,27 +31,23 @@ export default class App extends React.Component {
     return (
       <div>
         <Drawer
+          className="drawer"
           open={drawerOpen}
           width="36%"
           handleWidth={0}
           onChange={open => this.setState({ drawerOpen: open })}
         >
           <div
-            style={{
-              backgroundColor: 'white',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              flex: '1 1 0%',
-            }}
+            className="drawerPanel"
           >
-            <p>Please close me!!!</p>
+            <h3>Please close me!!!</h3>
           </div>
         </Drawer>
         <SplitPane split="vertical" defaultSize="30%">
           <SplitPane split="horizontal" defaultSize="50%">
             <div>
               <Button
+                className="pt-intent-primary"
                 iconName="pt-icon-menu-closed"
                 onClick={() => {
                   this.setState({ drawerOpen: true });
