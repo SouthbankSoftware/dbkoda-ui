@@ -1,6 +1,6 @@
 import Panel from './Panel';
-import Editor from './Panel';
-import Toolbar from './Panel';
+import Editor from './Editor';
+import Toolbar from './Toolbar';
 
 export default {
   OutputPanel: Panel,
