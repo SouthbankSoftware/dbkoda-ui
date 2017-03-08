@@ -1,13 +1,13 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-03-08T16:36:44+11:00
+ * @Last modified time: 2017-03-08T16:48:36+11:00
  */
 
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
 import {observer, observable} from 'mobx-react';
 import {Button, Intent} from '@blueprintjs/core';
-import {NewToaster} from '~/common/Toaster.jsx';
+import {NewToaster} from '#/common/Toaster.jsx';
 
 /* eslint-disable react/sort-comp */
 

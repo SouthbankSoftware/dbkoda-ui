@@ -4,5 +4,8 @@
  * @Last modified by:   guiguan
  * @Last modified time: 2017-03-08T14:53:29+11:00
  */
-
 import {observable, action} from 'mobx';
+
+export default class Store {
+
+}
