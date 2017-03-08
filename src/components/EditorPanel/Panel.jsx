@@ -4,12 +4,14 @@
  * Copyright (c) 2017
  * Author: Michael Harrison.
  */
+/* eslint-disable react/no-string-refs */
 import React from 'react';
 import {Tabs2, Tab2} from '@blueprintjs/core';
-import EditorToolBar from './EditorToolBar.jsx';
-import EditorView from './EditorView.jsx';
+import Toolbar from './Toolbar.jsx';
+import View from './View.jsx';
+import featherClient from '../../helper/feathers/index.js';
 
-export default class EditorPanel extends React.Component {
+export default class Panel extends React.Component {
 
   constructor(props) {
     super(props);
@@ -19,12 +21,22 @@ export default class EditorPanel extends React.Component {
       tabId: '1',
       vertical: false
     };
+
+    this.executeAll = this
+      .executeAll
+      .bind(this);
+  }
+
+  executeAll() {
+    const content = this.refs.editor1.state.code;
+    featherClient.executeCommandThroughShell(connectionId, this.state.shellId, content);
+    console.log(content);
   }
 
   render() {
     return (
-      <div className="pt-dark editorPanel">
-        <EditorToolBar />
+      <div className="pt-dark editorPanel"> 
+        <Toolbar executeAll={this.executeAll} />
         <Tabs2
           id="EditorTabs"
           className="editorTabView"
@@ -34,13 +46,13 @@ export default class EditorPanel extends React.Component {
         }}
           selectedTabId={this.state.tabId}>
           <span className="pt-navbar-divider " />
-          <Tab2 id="1" title="First" panel={<EditorView />} />
+          <Tab2 id="1" title="First" panel={<View ref="editor1" />} />
           <span className="pt-navbar-divider" />
-          <Tab2 id="2" title="Second" panel={<EditorView />} />
+          <Tab2 id="2" title="Second" panel={<View />} />
           <span className="pt-navbar-divider" />
-          <Tab2 id="3" title="Third" panel={<EditorView />} />
+          <Tab2 id="3" title="Third" panel={<View />} />
           <span className="pt-navbar-divider" />
-          <Tab2 id="4" title="Fourth" panel={<EditorView />} />
+          <Tab2 id="4" title="Fourth" panel={<View />} />
           <span className="pt-navbar-divider" />
         </Tabs2>
       </div>

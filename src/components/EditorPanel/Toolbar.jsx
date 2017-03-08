@@ -2,7 +2,8 @@ import React from 'react';
 import {Intent} from '@blueprintjs/core';
 import {NewToaster} from '../common/Toaster.jsx';
 
-export default class EditorToolBar extends React.Component {
+export default class Toolbar extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {};
@@ -24,10 +25,8 @@ export default class EditorToolBar extends React.Component {
       .bind(this);
   }
 
-  // -------------------//
-  // . TOOLBAR ACTIONS //
-  // ----------------- //
-  // Placeholder - Linting disabled for this line.
+  // -------------------// . TOOLBAR ACTIONS // ----------------- // Placeholder -
+  // Linting disabled for this line.
   addEditor() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
@@ -36,15 +35,28 @@ export default class EditorToolBar extends React.Component {
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
   // Placeholder - Linting disabled for this line.
+  openFile() { // eslint-disable-line class-methods-use-this
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+  }
+  // Placeholder - Linting disabled for this line.
+  saveFile() { // eslint-disable-line class-methods-use-this
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+  }
+  // Placeholder - Linting disabled for this line.
   executeLine() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
+  executeAll() {
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    this.props.executeAll(); // eslint-disable-line react/prop-types
+  }
+
   // Placeholder - Linting disabled for this line.
-  executeAll() { // eslint-disable-line class-methods-use-this
+  explainPlan() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
   // Placeholder - Linting disabled for this line.
-  explainPlan() { // eslint-disable-line class-methods-use-this
+  stopExecution() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
@@ -61,6 +73,13 @@ export default class EditorToolBar extends React.Component {
               onClick={this.removeEditor} />
           </div>
           <span className="pt-navbar-divider" />
+          <button
+            className="pt-button pt-icon-document-open pt-intent-primary"
+            onClick={this.openFile} />
+          <button
+            className="pt-button pt-icon-floppy-disk pt-intent-primary"
+            onClick={this.saveFile} />
+          <span className="pt-navbar-divider" />
           <div className="pt-button-group">
             <button
               className="pt-button pt-icon-chevron-right pt-intent-primary"
@@ -71,6 +90,9 @@ export default class EditorToolBar extends React.Component {
             <button
               className="pt-button pt-icon-help pt-intent-primary"
               onClick={this.explainPlan} />
+            <button
+              className="pt-button pt-icon-stop pt-intent-warning"
+              onClick={this.stopExecution} />
           </div>
           <span className="pt-navbar-divider" />
           <input className="pt-input" placeholder="Search Tabs..." type="text" />
