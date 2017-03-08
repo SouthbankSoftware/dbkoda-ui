@@ -8,7 +8,7 @@ require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/display/autorefresh.js');
 
-export default class EditorView extends React.Component {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
