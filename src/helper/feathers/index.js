@@ -1,6 +1,7 @@
 import load from 'little-loader';
 import feathers from 'feathers-client';
 import _ from 'lodash';
+import {url} from '../../env';
 
 let instance = false;
 
@@ -27,6 +28,10 @@ class FeatherClient {
         listener(output);
       }
     });
+  }
+
+  service(service) {
+    return this.feathers.service(service);
   }
 
   /**
@@ -105,7 +110,7 @@ export const featherClient = () => {
 
 let times = 0;
 const loadPrimus = () => {
-  load('http://localhost:3030/dist/primus.js', (err) => {
+  load(url + '/dist/primus.js', (err) => {
     if (!err) {
       const primus = new Primus('http://localhost:3030');
       featherClient().configurePrimus(primus);
