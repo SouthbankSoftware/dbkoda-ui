@@ -11,10 +11,10 @@ import MobX from 'mobx';
 import {NewToaster} from '../common/Toaster';
 import {Intent} from '@blueprintjs/core';
 
-import OutputToolbar from './OutputToolbar';
-import OutputEditor from './OutputEditor';
+import OutputToolbar from './Toolbar';
+import OutputEditor from './Editor';
 
-export default class OutputPanel extends React.Component {
+export default class Panel extends React.Component {
   constructor() {
     super();
     this.clearOutput = this.clearOutput.bind(this);

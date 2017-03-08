@@ -2,7 +2,7 @@ import React from 'react';
 import CodeMirror from 'react-codemirror';
 require('codemirror/mode/javascript/javascript');
 
-export default class OutputEditor extends React.Component {
+export default class Editor extends React.Component {
   render(props) {
     let outputOptions = {
       mode: 'text/javascript',

@@ -62,3 +62,6 @@ typings/
 
 # intellji
 *.iml
+
+# osx directory service store
+*.DS_Store
