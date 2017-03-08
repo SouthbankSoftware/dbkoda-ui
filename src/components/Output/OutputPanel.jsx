@@ -8,7 +8,7 @@
 
 import React from 'react';
 import MobX from 'mobx';
-import {NewToaster} from '../Toaster';
+import {NewToaster} from '../common/Toaster';
 import {Intent} from '@blueprintjs/core';
 
 import OutputToolbar from './OutputToolbar';
