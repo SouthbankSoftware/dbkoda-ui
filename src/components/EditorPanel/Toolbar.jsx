@@ -1,8 +1,8 @@
 import React from 'react';
-import {observer, observable} from 'mobx-react';
+import {observer} from 'mobx-react';
 import {Button, Intent} from '@blueprintjs/core';
 import {NewToaster} from '../common/Toaster.jsx';
-import {featherClient} from '../../helper/feathers';
+import {featherClient} from '../../helpers/feathers';
 
 /* eslint-disable react/sort-comp */
 
@@ -11,16 +11,17 @@ export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeProfileList: ['No Active Profile'],
       newConnectionLoading: false,
+      currentProfile: 0,
+      noActiveProfile: true,
+      noExecutionRunning: true,
       id: 0,
       shellId: 0
     };
 
     this.addEditor = this
       .addEditor
-      .bind(this);
-    this.removeEditor = this
-      .removeEditor
       .bind(this);
     this.executeLine = this
       .executeLine
@@ -31,11 +32,13 @@ export default class Toolbar extends React.Component {
     this.explainPlan = this
       .explainPlan
       .bind(this);
+    this.onDropdownChanged = this
+      .onDropdownChanged
+      .bind(this);
   }
 
-  // -------------------// . TOOLBAR ACTIONS // ----------------- // Placeholder -
-  // Linting disabled for this line.
-  addEditor() { // eslint-disable-line class-methods-use-this
+  // -------------------// . TOOLBAR ACTIONS // ----------------- //
+  addEditor() {
     try {
       this.setState({newConnectionLoading: true});
       featherClient()
@@ -47,11 +50,18 @@ export default class Toolbar extends React.Component {
         })
         .then((res) => {
           console.log('get response', res);
-          this.state.id = res.id;
-          this.state.shellId = res.shellId;
-          console.log(this.state.id, ' + ', this.state.shellId);
-          NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+          // Set States
+          this.setState({id: res.id});
+          this.setState({shellId: res.shellId});
           this.setState({newConnectionLoading: false});
+          const tempProfileList = this.state.activeProfileList;
+          tempProfileList.push(res.id);
+          this.setState({activeProfileList: tempProfileList});
+          // Send message to Panel to crate new editor.
+          this
+            .props
+            .newEditor(res.id); // eslint-disable-line react/prop-types
+          NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
         })
         .catch((err) => {
           console.log('connection failed ', err.message);
@@ -61,10 +71,6 @@ export default class Toolbar extends React.Component {
     } catch (err) {
       NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
-  }
-  // Placeholder - Linting disabled for this line.
-  removeEditor() { // eslint-disable-line class-methods-use-this
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
   // Placeholder - Linting disabled for this line.
   openFile() { // eslint-disable-line class-methods-use-this
@@ -84,7 +90,6 @@ export default class Toolbar extends React.Component {
       .props
       .executeAll(); // eslint-disable-line react/prop-types
   }
-
   // Placeholder - Linting disabled for this line.
   explainPlan() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
@@ -94,9 +99,19 @@ export default class Toolbar extends React.Component {
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
+  onDropdownChanged() {
+    this.setState({currentProfile: event.target.value});
+    if (event.target.value == 0) {
+      this.setState({noActiveProfile: true});
+    } else {
+      this.setState({noActiveProfile: false});
+    }
+  }
+
   render() {
+    console.log(this.state.activeProfileList);
     return (
-      <nav className="pt-navbar pt-dark editorToolBar">
+      <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
             <Button
@@ -104,30 +119,43 @@ export default class Toolbar extends React.Component {
               loading={this.state.newConnectionLoading}
               onClick={this.addEditor} />
             <Button
-              className="pt-button pt-icon-delete pt-intent-primary"
-              onClick={this.removeEditor} />
+              className="pt-button pt-icon-document-open pt-intent-primary"
+              onClick={this.openFile} />
+            <Button
+              className="pt-button pt-icon-floppy-disk pt-intent-primary"
+              onClick={this.saveFile} />
           </div>
           <span className="pt-navbar-divider" />
-          <Button
-            className="pt-button pt-icon-document-open pt-intent-primary"
-            onClick={this.openFile} />
-          <Button
-            className="pt-button pt-icon-floppy-disk pt-intent-primary"
-            onClick={this.saveFile} />
-          <span className="pt-navbar-divider" />
-          <div className="pt-button-group">
+          <div className="pt-button-group pt-intent-primary">
+            <div className="pt-select pt-intent-primary">
+              <select
+                onChange={this.onDropdownChanged}
+                defaultValue="1"
+                className="pt-intent-primary">
+                {this
+                  .state
+                  .activeProfileList
+                  .map((name, index) => {
+                    return <option value={index}>{name}</option>;
+                  })}
+              </select>
+            </div>
             <Button
               className="pt-button pt-icon-chevron-right pt-intent-primary"
-              onClick={this.executeLine} />
+              onClick={this.executeLine}
+              disabled={this.state.noActiveProfile} />
             <Button
               className="pt-button pt-icon-double-chevron-right pt-intent-primary"
-              onClick={this.executeAll} />
+              onClick={this.executeAll}
+              disabled={this.state.noActiveProfile} />
             <Button
               className="pt-button pt-icon-help pt-intent-primary"
-              onClick={this.explainPlan} />
+              onClick={this.explainPlan}
+              disabled={this.state.noActiveProfile} />
             <Button
-              className="pt-button pt-icon-stop pt-intent-warning"
-              onClick={this.stopExecution} />
+              className="pt-button pt-icon-stop pt-intent-danger"
+              onClick={this.stopExecution}
+              disabled={this.state.noExecutionRunning} />
           </div>
           <span className="pt-navbar-divider" />
           <input className="pt-input" placeholder="Search Tabs..." type="text" />
