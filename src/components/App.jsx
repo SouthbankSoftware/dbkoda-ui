@@ -16,6 +16,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 
 import EditorPanel from './editor/EditorPanel.jsx';
+import OutputPanel from './Output/OutputPanel.jsx';
 
 import '../styles/global.scss';
 import './App.scss';
@@ -40,8 +41,8 @@ export default class App extends React.Component {
             <h3>Please close me!!!</h3>
           </div>
         </Drawer>
-        <SplitPane split="vertical" defaultSize="30%">
-          <SplitPane split="horizontal" defaultSize="50%">
+        <SplitPane split="vertical" defaultSize="30%" minSize={100} maxSize={600}>
+          <SplitPane split="horizontal" defaultSize="50%" minSize={100} maxSize={1000}>
             <div>
               <Button
                 className="pt-intent-primary"
@@ -52,9 +53,9 @@ export default class App extends React.Component {
             </div>
             <div />
           </SplitPane>
-          <SplitPane split="horizontal" defaultSize="70%">
+          <SplitPane split="horizontal" defaultSize="70%" minSize={200} maxSize={1000}>
             <EditorPanel />
-            <div />
+            <OutputPanel />
           </SplitPane>
         </SplitPane>
       </div>
