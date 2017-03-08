@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {useStrict} from 'mobx';
 import {Provider} from 'mobx-react';
 import App from './components/App.jsx';
-import Store from './store';
+import Store from './stores/global';
 
 useStrict(true);
 

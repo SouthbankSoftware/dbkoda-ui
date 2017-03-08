@@ -2,7 +2,7 @@ import React from 'react';
 import {observer, observable} from 'mobx-react';
 import {Button, Intent} from '@blueprintjs/core';
 import {NewToaster} from '../common/Toaster.jsx';
-import {featherClient} from '../../helper/feathers';
+import {featherClient} from '../../helpers/feathers';
 
 /* eslint-disable react/sort-comp */
 
