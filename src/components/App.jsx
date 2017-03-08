@@ -16,7 +16,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 
 import {EditorPanel} from './EditorPanel/index.js';
-import OutputPanel from './Output/OutputPanel.jsx';
+import {OutputPanel} from './outputPanel';
 
 import '../styles/global.scss';
 import './App.scss';

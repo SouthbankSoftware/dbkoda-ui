@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class OutputToolbar extends React.Component {
+export default class Toolbar extends React.Component {
   render(props) {
     return (
       <nav className="pt-navbar pt-dark .modifier">
