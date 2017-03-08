@@ -16,6 +16,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 
 import EditorPanel from './editor/EditorPanel.jsx';
+import OutputPanel from './Output/OutputPanel.jsx';
 
 import '../styles/global.scss';
 import './App.scss';
@@ -54,7 +55,7 @@ export default class App extends React.Component {
           </SplitPane>
           <SplitPane split="horizontal" defaultSize="70%" minSize={200} maxSize={1000}>
             <EditorPanel />
-            <div />
+            <OutputPanel />
           </SplitPane>
         </SplitPane>
       </div>
