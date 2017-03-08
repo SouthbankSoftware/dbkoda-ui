@@ -1,6 +1,5 @@
 import load from 'little-loader';
 import feathers from 'feathers-client';
-import _ from 'lodash';
 import {url} from '../../env';
 
 let instance = false;
@@ -34,72 +33,6 @@ class FeatherClient {
     return this.feathers.service(service);
   }
 
-  /**
-   * create mongodb connection
-   *
-   * @param url the mongodb url
-   * @param test  whether this is test connection
-   * @param ssl whether connect through ssl
-   * @param authorization whether require authorization check after connection
-   * @returns {Promise<any>}
-   */
-  createConnection(url, test = false, ssl = false, authorization = true) {
-    return this.connectionService.create({}, {query: {url, test, ssl, authorization}});
-  }
-
-  /**
-   * create a shell connection on the connection id;
-   *
-   * @param connectionId  the id of the mongodb connection
-   * @returns {Promise<any>}
-   */
-  createShellConnection(connectionId) {
-    return this.shellService.create({id: connectionId});
-  }
-
-  getShellOutputListeners(connectionId, shellId) {
-    return _.filter(this.outputListeners, {connectionId, shellId});
-  }
-
-  /**
-   * add listener on the shell output via websocket
-   *
-   * @param connectionId  the mongodb connection id
-   * @param shellId the shell connection id
-   * @param listener  the listener who is listening on that connection
-   */
-  addOutputListener(connectionId, shellId, listener) {
-    const listeners = this.getShellOutputListeners(connectionId, shellId);
-    if (listeners.length === 0) {
-      listeners.push({connectionId, shellId, listeners: [listener]});
-    } else {
-      listeners.listeners.push(listener);
-    }
-  }
-
-  /**
-   * execute command through shell connection
-   * @returns {Promise<any>}
-   */
-  executeCommandThroughShell(connectionId, shellId, command) {
-    return this.shellService.update(connectionId, {'shellId': shellId, 'commands': command});
-  }
-
-  /**
-   * remove shell connection
-   *
-   */
-  removeShellConnection(connectionId, shellId) {
-    return this.shellService.remove(connectionId, {query: {shellId}});
-  }
-
-  /**
-   * remove a mongodb connection. it will remove all shell connections.
-   * @param connectionId
-   */
-  removeConnection(connectionId) {
-    return this.connectionService.remove(connectionId);
-  }
 }
 
 export const featherClient = () => {
