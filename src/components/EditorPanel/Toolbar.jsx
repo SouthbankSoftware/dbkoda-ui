@@ -5,9 +5,10 @@
 
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
-import {observer, observable} from 'mobx-react';
+import {observer} from 'mobx-react';
 import {Button, Intent} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
+import _ from 'lodash';
 
 /* eslint-disable react/sort-comp */
 

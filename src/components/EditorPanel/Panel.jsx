@@ -5,11 +5,12 @@
  * Author: Michael Harrison.
  */
 /* eslint-disable react/no-string-refs */
-/* eslint-disable react/no-string-refs */
 import React from 'react';
+import _ from 'lodash';
 import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
+
 // import {featherClient} from '../../helper/feathers';
 
 export default class Panel extends React.Component {
@@ -18,8 +19,10 @@ export default class Panel extends React.Component {
     super(props);
     this.state = {
       tabs: [],
+      isRemovingTab: false,
+      isRemovingCurrentTab: false,
       activePanelOnly: false,
-      animate: true,
+      animate: false,
       tabId: 0,
       vertical: false
     };
@@ -33,6 +36,9 @@ export default class Panel extends React.Component {
     this.closeTab = this
       .closeTab
       .bind(this);
+      this.changeTab = this
+      .changeTab
+      .bind(this);
   }
 
   executeAll() {
@@ -44,20 +50,39 @@ export default class Panel extends React.Component {
     const newTabs = this.state.tabs;
     newTabs.push({id: newId, title: newId});
     this.setState({tabs: newTabs});
-
   }
 
-  closeTab(removeTabId) {
+  closeTab(removeTabId, removeTabTitle) {
     const newTabs = this.state.tabs;
-    const index = newTabs.indexOf();
+    const index = _.findIndex(newTabs, {id: removeTabId, title: removeTabTitle});
+    if (removeTabId == this.state.tabId) {
+       this.state.tabId = 0;
+       this.state.isRemovingCurrentTab = true;
+    } else {
+     this.state.isRemovingCurrentTab = false;
+    }
     newTabs.splice(index, 1);
+    this.state.isRemovingTab = true;
     this.setState({tabs: newTabs});
-    this.setState({tabId: 0});
-    console.log(this.state.tabs);
-    console.log(this.state.tabId);
+  }
+
+  changeTab(newTab) {
+    if (this.state.isRemovingTab) {
+      this.state.isRemovingTab = false;
+      if (this.state.isRemovingCurrentTab) {
+        this.state.isRemovingCurrentTab = false;
+        this.setState({tabId: 0});
+      } else {
+        this.setState({tabId: this.state.tabId});
+      }
+    } else {
+      this.setState({tabId: newTab});
+    }
   }
 
   render() {
+    console.log('Tabs: ', this.state.tabs);
+    console.log('TabId: ', this.state.tabId);
     return (
       <div className="pt-dark editorPanel">
         <Toolbar executeAll={this.executeAll} newEditor={this.newEditor} ref="toolbar" />
@@ -65,10 +90,9 @@ export default class Panel extends React.Component {
           id="EditorTabs"
           className="editorTabView"
           renderActiveTabPanelOnly={false}
+          animate={this.state.animate}
           sele
-          onChange={(newTab) => {
-          this.setState({tabId: newTab});
-        }}
+          onChange={this.changeTab}
           selectedTabId={this.state.tabId}>
           <Tab2 id={0} title="Default" panel={<View ref="defaultEditor" />} />
           {this
@@ -79,7 +103,7 @@ export default class Panel extends React.Component {
                 <Tab2 id={tab.id} title={tab.title} panel={<View ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
-                    onClick={() => this.closeTab(tab.id)}>
+                    onClick={() => this.closeTab(tab.id, tab.title)}>
                     <span className="pt-icon-cross" />
                   </Button>
                 </Tab2>
