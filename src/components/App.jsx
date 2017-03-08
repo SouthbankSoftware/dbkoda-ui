@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-07T18:49:59+11:00
+* @Last modified by:   wahaj
+* @Last modified time: 2017-03-08T17:17:38+11:00
  */
 
 import React from 'react';
@@ -17,6 +17,7 @@ import 'codemirror/theme/ambiance.css';
 
 import {EditorPanel} from './EditorPanel/index.js';
 import {OutputPanel} from './outputPanel';
+import TreePanel from './tree';
 
 import '../styles/global.scss';
 import './App.scss';
@@ -51,7 +52,7 @@ export default class App extends React.Component {
                 this.setState({drawerOpen: true});
               }} />
             </div>
-            <div />
+            <div><TreePanel /></div>
           </SplitPane>
           <SplitPane split="horizontal" defaultSize="70%" minSize={200} maxSize={1000}>
             <EditorPanel />
