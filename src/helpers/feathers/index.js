@@ -1,7 +1,7 @@
 import load from 'little-loader';
 import feathers from 'feathers-client';
-import {url} from '../../env';
 import _ from 'lodash';
+import {url} from '../../env';
 
 let instance = false;
 
