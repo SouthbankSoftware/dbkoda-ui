@@ -59,6 +59,7 @@ typings/
 
 # vscode
 .vscode/
+tsconfig.json
 
 # intellji
 *.iml
