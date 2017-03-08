@@ -12,10 +12,11 @@ export default class Toolbar extends React.Component {
             title="Clear Output (Shortcut+Keys)"
           />
           <button
-            className="pt-button"
+            className="pt-button pt-disabled"
             onClick={this.props.showMore}
-            title="Show More (Shortcut+Keys)">
-            Show More
+            title="Show More (Shortcut+Keys)"
+            disabled="disabled">
+            More
           </button>
         </div>
         <div className="pt-navbar-group pt-right-align"></div>
