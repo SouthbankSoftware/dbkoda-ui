@@ -1,6 +1,7 @@
 import load from 'little-loader';
 import feathers from 'feathers-client';
 import {url} from '../../env';
+import _ from 'lodash';
 
 let instance = false;
 
@@ -17,10 +18,55 @@ class FeatherClient {
 
   configurePrimus(primus) {
     this.feathers = this.feathers.configure(feathers.primus(primus));
+    this.shellService = this.feathers.service('/mongo-shells');
+    this.shellService.on('shell-output', (output) => {
+      console.log('get output', output);
+      const {id, shellId} = output;
+      const listeners = this.getShellOutputListeners(id, shellId);
+      for (const listener of listeners) {
+        listener(output);
+      }
+    });
   }
 
   service(service) {
     return this.feathers.service(service);
+  }
+
+  /**
+   * add listener on the shell output via websocket
+   *
+   * @param connectionId  the mongodb connection id
+   * @param shellId the shell connection id
+   * @param listener  the listener who is listening on that connection
+   */
+  addOutputListener(connectionId, shellId, listener) {
+    const listeners = this.getShellOutputListeners(connectionId, shellId);
+    if (listeners.length === 0) {
+      listeners.push({connectionId, shellId, listeners: [listener]});
+    } else {
+      listeners.listeners.push(listener);
+    }
+  }
+
+  /**
+   * remove output listener from featherjs client
+   *
+   * @param connectionId
+   * @param shellId
+   * @param listener
+   */
+  removeOutputListener(connectionId, shellId, listener) {
+    const listeners = this.getShellOutputListeners(connectionId, shellId);
+    if (listeners.length > 0) {
+      const idx = listeners.indexOf(listener);
+      if (idx >= 0) {
+        listeners.splice(idx, 1);
+      }
+    }
+  }
+  getShellOutputListeners(connectionId, shellId) {
+    return _.filter(this.outputListeners, {connectionId, shellId});
   }
 
 }
