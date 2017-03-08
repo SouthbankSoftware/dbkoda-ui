@@ -9,7 +9,7 @@ import React from 'react';
 import {Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
-import featherClient from '../../helper/feathers/index.js';
+// import {featherClient} from '../../helper/feathers';
 
 export default class Panel extends React.Component {
 
@@ -29,14 +29,13 @@ export default class Panel extends React.Component {
 
   executeAll() {
     const content = this.refs.editor1.state.code;
-    featherClient.executeCommandThroughShell(connectionId, this.state.shellId, content);
     console.log(content);
   }
 
   render() {
     return (
       <div className="pt-dark editorPanel"> 
-        <Toolbar executeAll={this.executeAll} />
+        <Toolbar executeAll={this.executeAll} ref="toolbar"/>
         <Tabs2
           id="EditorTabs"
           className="editorTabView"
