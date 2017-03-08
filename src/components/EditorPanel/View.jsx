@@ -1,4 +1,9 @@
-import '../../../node_modules/codemirror/lib/codemirror.css';
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-03-08T16:57:06+11:00
+ */
+
+import 'codemirror/lib/codemirror.css';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
