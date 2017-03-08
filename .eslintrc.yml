@@ -2,7 +2,7 @@
 # @Date:   2016-06-02T14:58:00+10:00
 # @Email:  root@guiguan.net
 # @Last modified by:   guiguan
-# @Last modified time: 2017-02-05T15:00:44+11:00
+# @Last modified time: 2017-03-08T16:48:31+11:00
 
 extends: airbnb
 parser: babel-eslint
@@ -43,7 +43,7 @@ rules:
   import/namespace: 0
   import/no-named-as-default: 2
   # this requires eslint-import-resolver-node@0.3.0 to be installed in order for import/resolver settings to work
-  import/no-unresolved: 2
+  import/no-unresolved: [2, {ignore: ["^[~]", "^[#]"]}]
   import/prefer-default-export: 0
   import/no-extraneous-dependencies: 0
   import/extensions: 0

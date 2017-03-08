@@ -16,6 +16,13 @@
     "transform-async-to-generator",
     "transform-object-rest-spread",
     "react-hot-loader/babel",
-    "add-module-exports"
+    "add-module-exports",
+    ["babel-plugin-root-import", [{
+      "rootPathPrefix": "~",
+      "rootPathSuffix": "src"
+    }, {
+      "rootPathPrefix": "#",
+      "rootPathSuffix": "src/components"
+    }]]
   ]
 }

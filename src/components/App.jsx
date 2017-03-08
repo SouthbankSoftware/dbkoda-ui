@@ -2,62 +2,117 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-03-07T18:49:59+11:00
+ * @Last modified time: 2017-03-08T19:34:56+11:00
  */
 
 import React from 'react';
 import SplitPane from 'react-split-pane';
 import Drawer from 'react-motion-drawer';
-import {Button} from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
+import { action, untracked } from 'mobx';
+import { inject, observer, PropTypes } from 'mobx-react';
+import DevTools from 'mobx-react-devtools';
+import { EditorPanel } from '#/EditorPanel/index.js';
+import { OutputPanel } from '#/OutputPanel';
+import TreePanel from '#/tree';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
+import '~/styles/global.scss';
 
-import {EditorPanel} from './EditorPanel/index.js';
-import {OutputPanel} from './outputPanel';
-
-import '../styles/global.scss';
 import './App.scss';
 
+@inject(allStores => ({ layout: allStores.store.layout }))
+@observer
 export default class App extends React.Component {
-  state = {
-    drawerOpen: open
+  static propTypes = {
+    layout: PropTypes.observableObject.isRequired,
   };
 
+  @action.bound
+  updateDrawerOpenStatus(open) {
+    this.props.layout.drawerOpen = open;
+  }
+
+  @action.bound
+  updateOverallSplitPos(pos) {
+    this.props.layout.overallSplitPos = pos;
+  }
+
+  @action.bound
+  updateLeftSplitPos(pos) {
+    this.props.layout.leftSplitPos = pos;
+  }
+
+  @action.bound
+  updateRightSplitPos(pos) {
+    this.props.layout.rightSplitPos = pos;
+  }
+
   render() {
-    const {drawerOpen} = this.state;
+    const { layout } = this.props;
+    let defaultOverallSplitPos;
+    let defaultLeftSplitPos;
+    let defaultRightSplitPos;
+
+    untracked(() => {
+      defaultOverallSplitPos = layout.overallSplitPos;
+      defaultLeftSplitPos = layout.leftSplitPos;
+      defaultRightSplitPos = layout.rightSplitPos;
+    });
 
     return (
       <div>
         <Drawer
           className="drawer"
-          open={drawerOpen}
+          open={layout.drawerOpen}
           width="36%"
           handleWidth={0}
-          onChange={open => this.setState({drawerOpen: open})}>
+          onChange={this.updateDrawerOpenStatus}
+        >
           <div className="drawerPanel">
             <h3>Please close me!!!</h3>
           </div>
         </Drawer>
-        <SplitPane split="vertical" defaultSize="30%" minSize={100} maxSize={600}>
-          <SplitPane split="horizontal" defaultSize="50%" minSize={100} maxSize={1000}>
+        <SplitPane
+          split="vertical"
+          defaultSize={defaultOverallSplitPos}
+          onDragFinished={this.updateOverallSplitPos}
+          minSize={100}
+          maxSize={600}
+        >
+          <SplitPane
+            split="horizontal"
+            defaultSize={defaultLeftSplitPos}
+            onDragFinished={this.updateLeftSplitPos}
+            minSize={100}
+            maxSize={1000}
+          >
             <div>
               <Button
                 className="pt-intent-primary"
                 iconName="pt-icon-menu-closed"
                 onClick={() => {
-                this.setState({drawerOpen: true});
-              }} />
+                  this.updateDrawerOpenStatus(true);
+                }}
+              />
             </div>
-            <div />
+            <div><TreePanel /></div>
           </SplitPane>
-          <SplitPane split="horizontal" defaultSize="70%" minSize={200} maxSize={1000}>
+          <SplitPane
+            split="horizontal"
+            defaultSize={defaultRightSplitPos}
+            onDragFinished={this.updateRightSplitPos}
+            minSize={200}
+            maxSize={1000}
+          >
             <EditorPanel />
             <OutputPanel />
           </SplitPane>
         </SplitPane>
+        <DevTools />
       </div>
     );
   }
