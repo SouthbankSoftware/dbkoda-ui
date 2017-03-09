@@ -143,7 +143,7 @@ export default class Toolbar extends React.Component {
                   .state
                   .activeProfileList
                   .map((name, index) => {
-                    return <option value={index}>{name}</option>;
+                    return <option key={index} value={index}>{name}</option>;  // eslint-disable-line react/no-array-index-key
                   })}
               </select>
             </div>
