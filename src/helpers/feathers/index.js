@@ -18,13 +18,15 @@ class FeatherClient {
 
   configurePrimus(primus) {
     this.feathers = this.feathers.configure(feathers.primus(primus));
-    this.shellService = this.feathers.service('/mongo-shells');
+    this.shellService = this.feathers.service('/mongo-shells')
+    const that = this;
     this.shellService.on('shell-output', (output) => {
-      console.log('get output', output);
       const {id, shellId} = output;
-      const listeners = this.getShellOutputListeners(id, shellId);
-      for (const listener of listeners) {
-        listener(output);
+      const listeners = that.getShellOutputListeners(parseInt(id, 10), parseInt(shellId, 10));
+      for (const ls of listeners) {
+        for (const l of ls.listeners) {
+          l(output);
+        }
       }
     });
   }
@@ -43,9 +45,9 @@ class FeatherClient {
   addOutputListener(connectionId, shellId, listener) {
     const listeners = this.getShellOutputListeners(connectionId, shellId);
     if (listeners.length === 0) {
-      listeners.push({connectionId, shellId, listeners: [listener]});
+      this.outputListeners.push({connectionId, shellId, listeners: [listener]});
     } else {
-      listeners.listeners.push(listener);
+      listeners[0].listeners.push(listener);
     }
   }
 
@@ -65,6 +67,7 @@ class FeatherClient {
       }
     }
   }
+
   getShellOutputListeners(connectionId, shellId) {
     return _.filter(this.outputListeners, {connectionId, shellId});
   }
