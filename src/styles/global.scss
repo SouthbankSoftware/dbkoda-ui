@@ -6,8 +6,11 @@
  $backgroundSecondaryColor: #394b59;
  $tabPrimaryColor: #3d3d3d;
  $tabStrokeColor: #d1ccc8;
- $whiteColor: #f5f8fa;
  $brightBlueFont: #179dea;
+ $blueDarkest: #0e5a8a;
+ $selectGray: #8a9ba8;
+ $whiteColor: #f5f8fa;
+ $blackColor: #000000;
  body {
    background-color: $backgroundPrimaryColor;
  }
@@ -78,9 +81,17 @@
  .pt-tab {
    color: $whiteColor;
  }
+
+ .pt-tab-list{
+   margin-left: 28px
+ }
  
  .pt-tab-indicator {
    background-color: $whiteColor;
+ }
+
+  .pt-select {
+   background-color: $selectGray !important;
  }
  
  .cm-s-ambiance .CodeMirror-linenumber {

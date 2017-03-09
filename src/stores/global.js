@@ -18,7 +18,7 @@ export default class Store {
     rightSplitPos: '70%',
   };
 
-  @computed get topology() {
+  @computed get topology() { // eslint-disable-line
     // this.getTopologyFromProfile()
 
     return TempTopology.data;
