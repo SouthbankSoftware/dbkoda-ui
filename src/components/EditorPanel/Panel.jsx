@@ -7,12 +7,14 @@
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import _ from 'lodash';
+import { inject, observer} from 'mobx-react';
 import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 
 // import {featherClient} from '../../helper/feathers';
-
+@inject('store')
+@observer
 export default class Panel extends React.Component {
 
   constructor(props) {
@@ -53,6 +55,7 @@ export default class Panel extends React.Component {
   }
 
   closeTab(removeTabId, removeTabTitle) {
+    // Update Tabs
     const newTabs = this.state.tabs;
     const index = _.findIndex(newTabs, {id: removeTabId, title: removeTabTitle});
     if (removeTabId == this.state.tabId) {
@@ -64,6 +67,8 @@ export default class Panel extends React.Component {
     newTabs.splice(index, 1);
     this.state.isRemovingTab = true;
     this.setState({tabs: newTabs});
+
+    // Update Toolbar
   }
 
   changeTab(newTab) {

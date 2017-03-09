@@ -3,15 +3,17 @@
  * @Last modified time: 2017-03-08T16:56:38+11:00
  */
 
+/* eslint-disable-line react/prop-types */
+
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
-import {observer} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import {Button, Intent} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import _ from 'lodash';
 
 /* eslint-disable react/sort-comp */
-
+@inject('store')
 @observer
 export default class Toolbar extends React.Component {
   constructor(props) {
@@ -56,6 +58,7 @@ export default class Toolbar extends React.Component {
         })
         .then((res) => {
           console.log('get response', res);
+          this.props.store.profiles.set(res.id, res.shellId); // eslint-disable-line react/prop-types
           // Set States
           this.setState({id: res.id});
           this.setState({shellId: res.shellId});
@@ -63,6 +66,7 @@ export default class Toolbar extends React.Component {
           const tempProfileList = this.state.activeProfileList;
           tempProfileList.push(res.id);
           this.setState({activeProfileList: tempProfileList});
+
           // Send message to Panel to crate new editor.
           this
             .props
