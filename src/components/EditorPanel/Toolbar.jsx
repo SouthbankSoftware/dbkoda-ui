@@ -1,18 +1,12 @@
-/**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-08T16:56:38+11:00
- */
-
 /* eslint-disable-line react/prop-types */
+/* eslint-disable react/sort-comp */
 
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
 import {Button, Intent} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
-import _ from 'lodash';
 
-/* eslint-disable react/sort-comp */
 @inject('store')
 @observer
 export default class Toolbar extends React.Component {
@@ -58,7 +52,11 @@ export default class Toolbar extends React.Component {
         })
         .then((res) => {
           console.log('get response', res);
-          this.props.store.editors.set(res.id, res.shellId); // eslint-disable-line react/prop-types
+          this
+            .props
+            .store // eslint-disable-line react/prop-types
+            .editors // eslint-disable-line react/prop-types
+            .set(res.id, res.shellId);  // eslint-disable-line react/prop-types
           // Set States
           this.setState({id: res.id});
           this.setState({shellId: res.shellId});
@@ -119,7 +117,6 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
-    console.log("Editors ", this.store);
     return (
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
