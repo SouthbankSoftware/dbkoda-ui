@@ -6,6 +6,7 @@ import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 
+
 @inject('store')
 @observer
 export default class Panel extends React.Component {
@@ -35,9 +36,11 @@ export default class Panel extends React.Component {
       .bind(this);
   }
 
-  executeAll() {
+  executeAll(currentProfile) {
     const content = this.refs.editor1.state.code;
-    console.log('Executing Script: ', content);
+    console.log('Sending Script: ', content);
+    console.log('Sending To: ', currentProfile);
+    // Send content to Feathers Client.
   }
 
   newEditor(newId) {
@@ -57,6 +60,11 @@ export default class Panel extends React.Component {
       .props
       .store
       .editors
+      .delete(removeTabId);
+      this
+      .props
+      .store
+      .profiles
       .delete(removeTabId);
   }
 
@@ -88,7 +96,6 @@ export default class Panel extends React.Component {
           className="editorTabView"
           renderActiveTabPanelOnly={false}
           animate={this.state.animate}
-          sele
           onChange={this.changeTab}
           selectedTabId={this.state.tabId}>
           <Tab2 id={0} title="Default" panel={<View ref="defaultEditor" />} /> {editors.map((tab) => {

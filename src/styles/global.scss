@@ -8,7 +8,7 @@
  $tabStrokeColor: #d1ccc8;
  $brightBlueFont: #179dea;
  $blueDarkest: #0e5a8a;
- $selectGray: #8a9ba8;
+ $tabSeperator: #636a70;
  $whiteColor: #f5f8fa;
  $blackColor: #000000;
  body {
@@ -29,17 +29,6 @@
  h3 {
    color: $whiteColor;
    margin-top: 4px;
- }
- 
- .middleRow {
-   height: 100%;
-   overflow: hidden;
- }
- 
- .sidePanel {
-   float: left;
-   width: 30%;
-   height: 80%;
  }
  
  .drawer {
@@ -80,6 +69,8 @@
  
  .pt-tab {
    color: $whiteColor;
+   border-right: 1px solid $tabSeperator;
+   padding-right: 5px;
  }
 
  .pt-tab-list{
@@ -88,10 +79,6 @@
  
  .pt-tab-indicator {
    background-color: $whiteColor;
- }
-
-  .pt-select {
-   background-color: $selectGray !important;
  }
  
  .cm-s-ambiance .CodeMirror-linenumber {
