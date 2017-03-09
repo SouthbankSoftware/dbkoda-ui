@@ -58,7 +58,7 @@ export default class Toolbar extends React.Component {
         })
         .then((res) => {
           console.log('get response', res);
-          this.props.store.profiles.set(res.id, res.shellId); // eslint-disable-line react/prop-types
+          this.props.store.editors.set(res.id, res.shellId); // eslint-disable-line react/prop-types
           // Set States
           this.setState({id: res.id});
           this.setState({shellId: res.shellId});
@@ -119,7 +119,7 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
-    console.log(this.state.activeProfileList);
+    console.log("Editors ", this.store);
     return (
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">

@@ -20,7 +20,6 @@ export default class Panel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: [],
       isRemovingTab: false,
       isRemovingCurrentTab: false,
       activePanelOnly: false,
@@ -49,26 +48,20 @@ export default class Panel extends React.Component {
   }
 
   newEditor(newId) {
-    const newTabs = this.state.tabs;
-    newTabs.push({id: newId, title: newId});
-    this.setState({tabs: newTabs});
+   this.tabId = newId;
   }
 
-  closeTab(removeTabId, removeTabTitle) {
+  closeTab(removeTabId) {
     // Update Tabs
-    const newTabs = this.state.tabs;
-    const index = _.findIndex(newTabs, {id: removeTabId, title: removeTabTitle});
     if (removeTabId == this.state.tabId) {
        this.state.tabId = 0;
        this.state.isRemovingCurrentTab = true;
     } else {
      this.state.isRemovingCurrentTab = false;
     }
-    newTabs.splice(index, 1);
     this.state.isRemovingTab = true;
-    this.setState({tabs: newTabs});
 
-    // Update Toolbar
+    this.props.store.editors.delete(removeTabId);
   }
 
   changeTab(newTab) {
@@ -86,8 +79,10 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    console.log('Tabs: ', this.state.tabs);
-    console.log('TabId: ', this.state.tabId);
+    const store = this.props.store;
+    const editors = this.props.store.editors.entries();
+    console.log("Store: ", store);
+    console.log("Editors: ", editors);
     return (
       <div className="pt-dark editorPanel">
         <Toolbar executeAll={this.executeAll} newEditor={this.newEditor} ref="toolbar" />
@@ -100,15 +95,14 @@ export default class Panel extends React.Component {
           onChange={this.changeTab}
           selectedTabId={this.state.tabId}>
           <Tab2 id={0} title="Default" panel={<View ref="defaultEditor" />} />
-          {this
-            .state
-            .tabs
+          {
+            editors
             .map((tab) => {
               return (
-                <Tab2 id={tab.id} title={tab.title} panel={<View ref="defaultEditor" />}>
+                <Tab2 id={tab[0]} title={tab[1]} panel={<View ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
-                    onClick={() => this.closeTab(tab.id, tab.title)}>
+                    onClick={() => this.closeTab(tab[0], tab[1])}>
                     <span className="pt-icon-cross" />
                   </Button>
                 </Tab2>
