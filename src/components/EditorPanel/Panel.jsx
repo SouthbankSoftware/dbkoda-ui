@@ -48,7 +48,7 @@ export default class Panel extends React.Component {
   }
 
   newEditor(newId) {
-   this.tabId = newId;
+   this.setState({tabId: newId});
   }
 
   closeTab(removeTabId) {
