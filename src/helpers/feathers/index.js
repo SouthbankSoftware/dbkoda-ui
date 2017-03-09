@@ -18,7 +18,7 @@ class FeatherClient {
 
   configurePrimus(primus) {
     this.feathers = this.feathers.configure(feathers.primus(primus));
-    this.shellService = this.feathers.service('/mongo-shells')
+    this.shellService = this.feathers.service('/mongo-shells');
     const that = this;
     this.shellService.on('shell-output', (output) => {
       const {id, shellId} = output;
