@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-03-10T17:40:40+11:00
+ * @Last modified time: 2017-03-11T00:35:49+11:00
  */
 
 import React from 'react';
@@ -23,6 +23,11 @@ import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';
 
 import './App.scss';
+
+const splitPane2Style = {
+  display: 'flex',
+  flexDirection: 'column'
+};
 
 @inject(allStores => ({ layout: allStores.store.layout }))
 @observer
@@ -89,6 +94,7 @@ export default class App extends React.Component {
             onDragFinished={this.updateLeftSplitPos}
             minSize={100}
             maxSize={1000}
+            pane2Style={splitPane2Style}
           >
             <div>
               <Button
@@ -107,6 +113,7 @@ export default class App extends React.Component {
             onDragFinished={this.updateRightSplitPos}
             minSize={200}
             maxSize={1000}
+            pane2Style={splitPane2Style}
           >
             <EditorPanel />
             <OutputPanel />
