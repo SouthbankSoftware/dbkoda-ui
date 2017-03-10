@@ -2,10 +2,10 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import {action} from 'mobx';
 import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
-
 
 @inject('store')
 @observer
@@ -22,9 +22,6 @@ export default class Panel extends React.Component {
       vertical: false
     };
 
-    this.executeAll = this
-      .executeAll
-      .bind(this);
     this.newEditor = this
       .newEditor
       .bind(this);
@@ -36,22 +33,20 @@ export default class Panel extends React.Component {
       .bind(this);
   }
 
-  executeAll(currentProfile) {
-    const content = this.refs.editor1.state.code;
-    console.log('Sending Script: ', content);
-    console.log('Sending To: ', currentProfile);
-    // Send content to Feathers Client.
-  }
-
-  newEditor(newId) {
+  @action newEditor(newId) {
+    this.props.store // eslint-disable-line react/prop-types
+      .activeDropdownId = newId; // eslint-disable-line react/prop-types
+    this.props.store // eslint-disable-line react/prop-types
+      .activeEditorId = newId; // eslint-disable-line react/prop-types
     this.setState({tabId: newId});
   }
 
-  closeTab(removeTabId) {
+  @action closeTab(removeTabId) {
     // Update Tabs
     if (removeTabId == this.state.tabId) {
       this.state.tabId = 0;
       this.state.isRemovingCurrentTab = true;
+      this.props.store.activeEditorId = 0;
     } else {
       this.state.isRemovingCurrentTab = false;
     }
@@ -61,28 +56,34 @@ export default class Panel extends React.Component {
       .store
       .editors
       .delete(removeTabId);
-      this
+    this
       .props
       .store
       .profiles
       .delete(removeTabId);
+    this.setState({isRemovingTab: true});
+    this.forceUpdate();
   }
 
-  changeTab(newTab) {
+  @action changeTab(newTab) {
+    // Check if last update was a remove for specialHandling.
     if (this.state.isRemovingTab) {
       this.state.isRemovingTab = false;
       if (this.state.isRemovingCurrentTab) {
         this.state.isRemovingCurrentTab = false;
-        this.setState({tabId: 0});
+        this.props.store.activeEditorId = newTab;
+        this.setState({tabId: newTab});
       } else {
         this.setState({tabId: this.state.tabId});
       }
     } else {
+      this.props.store.activeEditorId = newTab;
       this.setState({tabId: newTab});
     }
   }
 
   render() {
+    console.log(this.props.store.activeEditorId);
     const editors = this
       .props
       .store
@@ -97,10 +98,14 @@ export default class Panel extends React.Component {
           renderActiveTabPanelOnly={false}
           animate={this.state.animate}
           onChange={this.changeTab}
-          selectedTabId={this.state.tabId}>
+          selectedTabId={this.props.store.activeEditorId}>
           <Tab2 id={0} title="Default" panel={<View ref="defaultEditor" />} /> {editors.map((tab) => {
             return (
-              <Tab2 key={tab[0]} id={tab[0]} title={tab[1]} panel={<View ref="defaultEditor" />}>
+              <Tab2
+                key={tab[0]}
+                id={tab[0]}
+                title={tab[0]}
+                panel={<View ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
                   onClick={() => this.closeTab(tab[0], tab[1])}>
