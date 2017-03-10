@@ -6,7 +6,7 @@
 import 'codemirror/lib/codemirror.css';
 import {inject} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
-import {autorun, mobx, reaction, action} from 'mobx';
+import {reaction} from 'mobx';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
