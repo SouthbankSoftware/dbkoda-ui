@@ -19,7 +19,5 @@ describe('test feathers client', () => {
     assert.equal(output.length, 1);
     assert.equal(output[0].listeners.length, 1);
     assert.equal(output[0].listeners[0], 'test2');
-
-
   });
 });
