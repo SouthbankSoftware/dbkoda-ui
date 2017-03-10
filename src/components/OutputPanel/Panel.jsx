@@ -6,33 +6,25 @@
  * @Last modified time: 2017-03-07T11:07:18+11:00
  */
 import React from 'react';
+import {action} from 'mobx';
+import {inject, observer} from 'mobx-react';
 import {NewToaster} from '../common/Toaster';
 import {Intent} from '@blueprintjs/core';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import {featherClient} from '../../helpers/feathers';
 
+@inject('store')
+@observer
 export default class Panel extends React.Component {
-  constructor() {
-    super();
-    this.clearOutput = this.clearOutput.bind(this);
-    this.updateOutput = this.updateOutput.bind(this);
-    this.state = {
-      output: "// Output goes here!"
-    };
+  constructor(props) {
+    super(props);
     featherClient().addOutputListener(1, 2, this.outputAvaiable.bind(this));
   }
 
+  @action
   outputAvaiable(output) {
-    this.setState({output: this.state.output+'\n'+output.output});
-  }
-
-  clearOutput() {
-    this.updateOutput('');
-  }
-
-  updateOutput(newOutput) {
-    this.setState({output: newOutput});
+    this.props.store.output = this.props.store.output + '\n' + output.output;
   }
 
   showMore() {
@@ -42,8 +34,8 @@ export default class Panel extends React.Component {
   render() {
     return (
       <div className="pt-dark outputPanel">
-        <OutputToolbar clearOutput={this.clearOutput} showMore={this.showMore}/>
-        <OutputEditor value={this.state.output}/>
+        <OutputToolbar showMore={this.showMore}/>
+        <OutputEditor />
       </div>
     );
   }

@@ -1,126 +1,122 @@
-// @Author: guiguan
- // @Date:   2017-03-07T13:47:00+11:00
- // @Last modified by:   mike
- // @Last modified time: 2017-03-08 11:47:05
- $backgroundPrimaryColor: #2d3c46;
- $backgroundSecondaryColor: #394b59;
- $tabPrimaryColor: #3d3d3d;
- $tabStrokeColor: #d1ccc8;
- $brightBlueFont: #179dea;
- $blueDarkest: #0e5a8a;
- $tabSeperator: #636a70;
- $whiteColor: #f5f8fa;
- $blackColor: #000000;
- body {
-   background-color: $backgroundPrimaryColor;
- }
- 
- h1 {
-   color: $whiteColor;
-   font-size: 40px;
-   margin-top: 4px;
- }
- 
- h2 {
-   color: $whiteColor;
-   margin-top: 4px;
- }
- 
- h3 {
-   color: $whiteColor;
-   margin-top: 4px;
- }
- 
- .drawer {
-   background-color: $backgroundPrimaryColor
- }
- 
- .drawerPanel {
-   background-color: $backgroundPrimaryColor;
-   width: '100%';
-   height: '100%';
-   display: 'flex';
-   flex: '1 1 0%'
- }
- 
- .outputPanel {
-   height: 100%;
-   width: 100%;
- }
- 
- .fullHeight {
-   height: 100%;
- }
- 
- .pt-tab[aria-selected="true"],
- .pt-tab:not([aria-disabled="true"]):hover {
-   color: $brightBlueFont;
- }
- 
- .pt-tabs {
-   color: $whiteColor;
-   background-color: $tabPrimaryColor;
- }
- 
- .pt-tab-panel {
-   margin-top: 2px;
-   height: 100%;
- }
- 
- .pt-tab {
-   color: $whiteColor;
-   border-right: 1px solid $tabSeperator;
-   padding-right: 5px;
- }
+$backgroundPrimaryColor: #2d3c46;
+$backgroundSecondaryColor: #394b59;
+$tabPrimaryColor: #3d3d3d;
+$tabStrokeColor: #d1ccc8;
+$brightBlueFont: #179dea;
+$blueDarkest: #0e5a8a;
+$selectGray: #8a9ba8;
+$whiteColor: #f5f8fa;
+$blackColor: #000000;
 
- .pt-tab-list{
-   margin-left: 28px
- }
- 
- .pt-tab-indicator {
-   background-color: $whiteColor;
- }
- 
- .cm-s-ambiance .CodeMirror-linenumber {
-   color: $whiteColor;
- }
- 
- // ======================== //
- //      Editor Panel
- // ======================== // 
- .editorPanel {
-   display: flex;
-   flex-direction: column;
-   align-items: stretch;
-   width: 100%;
- }
- 
- .editorToolBar {
-   order: 0;
-   flex-grow: 1;
- }
- 
- .editorTabView {
-   height: 100%;
-   order: 1;
-   flex-grow: 3;
-   display: flex;
-   flex-direction: column;
-   align-items: stretch;
- }
- 
- .editorView {
-   height: 100%;
- }
- 
- .ReactCodeMirror {
-   height: 100%;
- }
- 
- .CodeMirror {
-   height: 100%;
- }
- 
- .CodeMirror-scroll {
-   padding-bottom: 0px;
- }
+body {
+  background-color: $backgroundPrimaryColor;
+}
+
+h1 {
+  color: $whiteColor;
+  font-size: 40px;
+  margin-top: 4px;
+}
+
+h2 {
+  color: $whiteColor;
+  margin-top: 4px;
+}
+
+h3 {
+  color: $whiteColor;
+  margin-top: 4px;
+}
+
+.middleRow {
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidePanel {
+  float: left;
+  width: 30%;
+  height: 80%;
+}
+
+.drawer {
+  background-color: $backgroundPrimaryColor;
+}
+
+.drawerPanel {
+  background-color: $backgroundPrimaryColor;
+  width: '100%';
+  height: '100%';
+  display: 'flex';
+  flex: '1 1 0%';
+}
+
+.outputPanel {
+  height: 100%;
+  width: 100%;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.pt-tab:not([aria-disabled="true"]):hover,
+.pt-tab[aria-selected="true"] {
+  color: $brightBlueFont;
+}
+
+.pt-tabs {
+  color: $whiteColor;
+  background-color: $tabPrimaryColor;
+}
+
+.pt-tab-panel {
+  flex: 1;
+  display: flex;
+  margin-top: 2px;
+}
+
+.pt-tab {
+  color: $whiteColor;
+}
+
+.pt-tab-list {
+  margin-left: 28px;
+}
+
+.pt-tab-indicator {
+  background-color: $whiteColor;
+}
+
+.pt-select {
+  background-color: $selectGray !important;
+}
+
+.cm-s-ambiance .CodeMirror-linenumber {
+  color: $whiteColor;
+}
+
+// ======================== //
+//      Editor Panel
+// ======================== // 
+.editorPanel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.editorTabView {
+  flex-direction: column;
+  flex: 1;
+  display: flex;
+}
+
+.editorView {
+  flex: 1;
+}
+
+.CodeMirror,
+.ReactCodeMirror {
+  height: 100%;
+}
+>>>>>>> 55c71cab7bb946fdd2e82433e1612a8e4264532f

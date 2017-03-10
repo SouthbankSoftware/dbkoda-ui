@@ -43,11 +43,11 @@ class FeatherClient {
    * @param listener  the listener who is listening on that connection
    */
   addOutputListener(connectionId, shellId, listener) {
-    const listeners = this.getShellOutputListeners(connectionId, shellId);
-    if (listeners.length === 0) {
+    const output = this.getShellOutputListeners(connectionId, shellId);
+    if (output.length === 0) {
       this.outputListeners.push({connectionId, shellId, listeners: [listener]});
     } else {
-      listeners[0].listeners.push(listener);
+      output[0].listeners.push(listener);
     }
   }
 
@@ -59,11 +59,11 @@ class FeatherClient {
    * @param listener
    */
   removeOutputListener(connectionId, shellId, listener) {
-    const listeners = this.getShellOutputListeners(connectionId, shellId);
-    if (listeners.length > 0) {
-      const idx = listeners.indexOf(listener);
+    const output = this.getShellOutputListeners(connectionId, shellId);
+    if (output.length > 0) {
+      const idx = output[0].listeners.indexOf(listener);
       if (idx >= 0) {
-        listeners.splice(idx, 1);
+        output[0].listeners.splice(idx, 1);
       }
     }
   }
