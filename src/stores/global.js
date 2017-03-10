@@ -17,6 +17,7 @@ export default class Store {
     leftSplitPos: '50%',
     rightSplitPos: '70%',
   };
+  @observable output = '// Output goes here!';
 
   @computed get topology() { // eslint-disable-line
     // this.getTopologyFromProfile()
