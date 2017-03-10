@@ -1,6 +1,6 @@
 import {assert} from 'chai';
-import {featherClient} from './index';
 import nock from 'nock';
+import {featherClient} from './index';
 
 describe('test feathers client', () => {
   it('should register a listener', () => {
@@ -30,6 +30,5 @@ describe('test feathers client', () => {
         shellId: '946B7D1C',
       });
     console.log('feather client ', featherClient().service('/mongo-connection'));
-
   });
 });
