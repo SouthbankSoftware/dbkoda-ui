@@ -18,17 +18,13 @@ export default class Panel extends React.Component {
     this.clearOutput = this.clearOutput.bind(this);
     this.updateOutput = this.updateOutput.bind(this);
     this.state = {
-      output: "// Output goes here!"
+      output: "// Some overriding output goes here!"
     };
     featherClient().addOutputListener(1, 2, this.outputAvaiable.bind(this));
   }
 
   outputAvaiable(output) {
     this.setState({output: this.state.output+'\n'+output.output});
-  }
-
-  clearOutput() {
-    this.updateOutput('');
   }
 
   updateOutput(newOutput) {
@@ -42,8 +38,8 @@ export default class Panel extends React.Component {
   render() {
     return (
       <div className="pt-dark outputPanel">
-        <OutputToolbar clearOutput={this.clearOutput} showMore={this.showMore}/>
-        <OutputEditor value={this.state.output}/>
+        <OutputToolbar showMore={this.showMore}/>
+        <OutputEditor />
       </div>
     );
   }

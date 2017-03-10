@@ -1,6 +1,19 @@
 import React from 'react';
+import {inject, observer} from 'mobx-react';
+import {action} from 'mobx';
 
+@inject('store')
+@observer
 export default class Toolbar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.clearOutput = this.clearOutput.bind(this);
+  }
+
+  @action clearOutput() {
+    this.props.store.output = '';
+  }
+
   render(props) {
     return (
       <nav className="pt-navbar pt-dark .modifier">
@@ -8,7 +21,7 @@ export default class Toolbar extends React.Component {
           <div className="pt-navbar-heading">Query Output</div>
           <button
             className="pt-button pt-icon-disable"
-            onClick={this.props.clearOutput}
+            onClick={this.clearOutput}
             title="Clear Output (Shortcut+Keys)"
           />
           <button

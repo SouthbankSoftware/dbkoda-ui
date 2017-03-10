@@ -1,9 +1,16 @@
 import React from 'react';
 import CodeMirror from 'react-codemirror';
 require('codemirror/mode/javascript/javascript');
+import {inject, observer} from 'mobx-react';
 
+@inject('store')
+@observer
 export default class Editor extends React.Component {
-  render(props) {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
     let outputOptions = {
       mode: 'text/javascript',
       matchBrackets: true,
@@ -16,7 +23,7 @@ export default class Editor extends React.Component {
 
     return (
       <CodeMirror
-        value={this.props.value}
+        value={this.props.store.output}
         options={outputOptions}
       />
     );
