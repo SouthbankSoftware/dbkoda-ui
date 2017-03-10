@@ -9,6 +9,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const PrimusWebpackPlugin = require('primus-webpack-plugin');
 
 const getPlugins = () => {
   return [
@@ -17,6 +18,17 @@ const getPlugins = () => {
         'NODE_ENV': JSON.stringify('development')
       }
     }),
+    new PrimusWebpackPlugin({
+      filename: '/primus-client.js',
+      minify: true,
+      primusOptions: {
+        transformer: 'websockets',
+        timeout: false,
+      }
+    }),
+    // new webpack.ProvidePlugin({
+    //   Primus: 'primus-client',
+    // }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({hash: false, template: './src/index.html'}),

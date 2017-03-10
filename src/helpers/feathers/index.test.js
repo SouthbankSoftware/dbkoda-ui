@@ -1,4 +1,5 @@
 import {assert} from 'chai';
+import nock from 'nock';
 import {featherClient} from './index';
 
 describe('test feathers client', () => {
@@ -19,5 +20,15 @@ describe('test feathers client', () => {
     assert.equal(output.length, 1);
     assert.equal(output[0].listeners.length, 1);
     assert.equal(output[0].listeners[0], 'test2');
+  });
+
+  it('test mock server', () => {
+    nock('http://localhost:3030')
+      .post('/mongo-connection')
+      .reply(200, {
+        id: '123ABC',
+        shellId: '946B7D1C',
+      });
+    console.log('feather client ', featherClient().service('/mongo-connection'));
   });
 });

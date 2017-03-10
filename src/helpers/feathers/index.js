@@ -77,6 +77,7 @@ class FeatherClient {
 export const featherClient = () => {
   if (instance) return instance;
   instance = new FeatherClient();
+  // instance.configurePrimus(new Primus(url));
   return instance;
 };
 
@@ -84,7 +85,7 @@ let times = 0;
 const loadPrimus = () => {
   load(url + '/dist/primus.js', (err) => {
     if (!err) {
-      const primus = new Primus('http://localhost:3030');
+      const primus = new Primus(url);
       featherClient().configurePrimus(primus);
     } else {
       times += 1;
