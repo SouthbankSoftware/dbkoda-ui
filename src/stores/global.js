@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-08T19:18:30+11:00
+* @Last modified by:   chris
+* @Last modified time: 2017-03-10T13:12:00+11:00
  */
 
 import { observable, computed } from 'mobx';
@@ -20,7 +20,10 @@ export default class Store {
     leftSplitPos: '50%',
     rightSplitPos: '70%',
   };
-  @observable output = '// Output goes here!';
+  @observable output = {
+      output: '// Output goes here!',
+      canShowMore: true,
+  }
 
   @computed get topology() { // eslint-disable-line
     // this.getTopologyFromProfile()
