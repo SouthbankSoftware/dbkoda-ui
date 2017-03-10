@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {action} from 'mobx';
+import {action, reaction} from 'mobx';
 import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
@@ -99,13 +99,13 @@ export default class Panel extends React.Component {
           animate={this.state.animate}
           onChange={this.changeTab}
           selectedTabId={this.props.store.activeEditorId}>
-          <Tab2 id={0} title="Default" panel={<View ref="defaultEditor" />} /> {editors.map((tab) => {
+          <Tab2 id={0} title="Default" panel={<View id={0} ref="defaultEditor" />} /> {editors.map((tab) => {
             return (
               <Tab2
                 key={tab[0]}
                 id={tab[0]}
-                title={tab[0]}
-                panel={<View ref="defaultEditor" />}>
+                title={tab[0] + ':' + tab[1]}
+                panel={<View id={tab[0]} ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
                   onClick={() => this.closeTab(tab[0], tab[1])}>
