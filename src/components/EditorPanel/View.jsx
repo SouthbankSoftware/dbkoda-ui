@@ -37,16 +37,18 @@ export default class View extends React.Component {
     const reaction1 = reaction( // eslint-disable-line
         () => this.props.store.executingEditorAll, executingEditorAll => { //eslint-disable-line
       if (this.props.store.activeEditorId == this.props.id && this.props.store.executingEditorAll == true) {
-          console.log('Sending data to feathers id ', this.props.store.activeDropdownId), ': "', this.state.code, '".';
-          // Send request to feathers client
-          const service = featherClient()
-          .service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(this.props.store.activeDropdownId, {
-            shellId: parseInt(this.props.store.activeDropdownId) + 1,
-            commands: this.state.code
-          });
-          this.props.store.executingEditorAll = false;
+        console.log('Sending data to feathers id ', this.props.store.activeDropdownId,
+        ': "',
+        this.state.code,
+        '".');
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(this.props.store.activeDropdownId, {
+          shellId: parseInt(this.props.store.activeDropdownId) + 1, // eslint-disable-line
+          commands: this.state.code
+        });
+        this.props.store.executingEditorAll = false;
       }
     });
   }

@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {action, reaction} from 'mobx';
+import {action} from 'mobx';
 import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';

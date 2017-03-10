@@ -95,7 +95,7 @@ export default class Toolbar extends React.Component {
   executeLine() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
-  
+
   @action executeAll() {
     this.props.store.executingEditorAll = true;
   }
