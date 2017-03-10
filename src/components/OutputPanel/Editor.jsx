@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
 * @Last modified by:   chris
-* @Last modified time: 2017-03-10T13:42:00+11:00
+* @Last modified time: 2017-03-10T16:44:52+11:00
 */
 
 import React from 'react';
@@ -31,10 +31,12 @@ export default class Editor extends React.Component {
     };
 
     return (
-      <CodeMirror className="outputEditor"
-        value={this.props.output.output}
-        options={outputOptions}
-      />
+      <div className="outputEditor">
+        <CodeMirror
+          value={this.props.output.output}
+          options={outputOptions}
+        />
+      </div>
     );
   }
 }
