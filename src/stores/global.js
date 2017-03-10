@@ -13,7 +13,7 @@ export default class Store {
   @observable editors = observable.map();
   @observable activeEditorId = 0;
   @observable activeDropdownId = 'Default';
-  @observable executeScriptActive = false;
+  @observable executingEditorAll = false;
   @observable layout = {
     drawerOpen: false,
     overallSplitPos: '30%',

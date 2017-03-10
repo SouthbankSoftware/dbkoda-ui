@@ -2,9 +2,11 @@
  * @Last modified by:   guiguan
  * @Last modified time: 2017-03-08T16:57:06+11:00
  */
-
+/* eslint-disable react/prop-types */
 import 'codemirror/lib/codemirror.css';
 import {inject} from 'mobx-react';
+import {featherClient} from '~/helpers/feathers';
+import {reaction} from 'mobx';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
@@ -31,6 +33,24 @@ export default class View extends React.Component {
       },
       code: '// Welcome to DBEnvy'
     };
+
+    const reaction1 = reaction( // eslint-disable-line
+        () => this.props.store.executingEditorAll, executingEditorAll => { //eslint-disable-line
+      if (this.props.store.activeEditorId == this.props.id && this.props.store.executingEditorAll == true) {
+        console.log('Sending data to feathers id ', this.props.store.activeDropdownId,
+        ': "',
+        this.state.code,
+        '".');
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(this.props.store.activeDropdownId, {
+          shellId: parseInt(this.props.store.activeDropdownId) + 1, // eslint-disable-line
+          commands: this.state.code
+        });
+        this.props.store.executingEditorAll = false;
+      }
+    });
   }
 
   componentDidMount() {
