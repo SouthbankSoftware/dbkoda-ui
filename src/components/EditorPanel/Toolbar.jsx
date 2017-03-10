@@ -1,9 +1,10 @@
-/* eslint-disable-line react/prop-types */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
+import {action} from 'mobx';
 import {Button, Intent} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 
@@ -13,7 +14,6 @@ export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeProfileList: ['No Active Profile'],
       newConnectionLoading: false,
       currentProfile: 0,
       noActiveProfile: true,
@@ -40,7 +40,7 @@ export default class Toolbar extends React.Component {
   }
 
   // -------------------// . TOOLBAR ACTIONS // ----------------- //
-  addEditor() {
+  @action addEditor() {
     try {
       this.setState({newConnectionLoading: true});
       featherClient()
@@ -56,14 +56,17 @@ export default class Toolbar extends React.Component {
             .props
             .store // eslint-disable-line react/prop-types
             .editors // eslint-disable-line react/prop-types
-            .set(res.id, res.shellId);  // eslint-disable-line react/prop-types
-          // Set States
-          this.setState({id: res.id});
-          this.setState({shellId: res.shellId});
+            .set(res.id, res.shellId); // eslint-disable-line react/prop-types
+          this
+            .props
+            .store // eslint-disable-line react/prop-types
+            .profiles // eslint-disable-line react/prop-types
+            .set(res.id, res.shellId); // eslint-disable-line react/prop-types
+             // eslint-disable-line react/prop-types
+          this.state.noActiveProfile = false;
+          this.state.id = res.id;
+          this.shellId = res.shellId;
           this.setState({newConnectionLoading: false});
-          const tempProfileList = this.state.activeProfileList;
-          tempProfileList.push(res.id);
-          this.setState({activeProfileList: tempProfileList});
 
           // Send message to Panel to crate new editor.
           this
@@ -92,11 +95,9 @@ export default class Toolbar extends React.Component {
   executeLine() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
-  executeAll() {
+    // Placeholder - Linting disabled for this line.
+  executeAll() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-    this
-      .props
-      .executeAll(); // eslint-disable-line react/prop-types
   }
   // Placeholder - Linting disabled for this line.
   explainPlan() { // eslint-disable-line class-methods-use-this
@@ -107,9 +108,10 @@ export default class Toolbar extends React.Component {
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
-  onDropdownChanged() {
+  @action onDropdownChanged(event) {
+    this.props.store.activeDropdownId = event.target.value;
     this.setState({currentProfile: event.target.value});
-    if (event.target.value == 0) {
+    if (event.target.value == 'Default') {
       this.setState({noActiveProfile: true});
     } else {
       this.setState({noActiveProfile: false});
@@ -117,6 +119,13 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
+    console.log('Active Dropdown: ', this.props.store.activeDropdownId);
+    const profiles = this
+      .props
+      .store
+      .profiles
+      .entries();
+    const activeId = this.props.store.activeDropdownId;
     return (
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
@@ -137,14 +146,11 @@ export default class Toolbar extends React.Component {
             <div className="pt-select pt-intent-primary">
               <select
                 onChange={this.onDropdownChanged}
-                defaultValue="1"
+                value={activeId}
                 className="pt-intent-primary">
-                {this
-                  .state
-                  .activeProfileList
-                  .map((name, index) => {
-                    return <option key={index} value={index}>{name}</option>;  // eslint-disable-line react/no-array-index-key
-                  })}
+                <option key="Default" value="Default">Default</option>; {profiles.map((profile) => {
+                  return <option key={profile[0]} value={profile[0]}>{profile[0]}</option>; // eslint-disable-line react/no-array-index-key
+                })}
               </select>
             </div>
             <Button

@@ -11,6 +11,9 @@ import TempTopology from './TempTopology.js';
 export default class Store {
   @observable profiles = observable.map();
   @observable editors = observable.map();
+  @observable activeEditorId = 0;
+  @observable activeDropdownId = 'Default';
+  @observable executeScriptActive = false;
   @observable layout = {
     drawerOpen: false,
     overallSplitPos: '30%',
