@@ -8,18 +8,34 @@
 
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import { reaction } from 'mobx';
 import CodeMirror from 'react-codemirror';
 require('codemirror/mode/javascript/javascript');
 
-@inject(allStores => ({ output: allStores.store.output }) )
+@inject(allStores => ({ output: allStores.store.output }))
 @observer
 export default class Editor extends React.Component {
   constructor(props) {
     super(props);
+    this.jumpToLine = this
+      .jumpToLine
+      .bind(this);
+
+    const reactionToNewOutput = reaction( // eslint-disable-line
+        () => this.props.output.output, output => { //eslint-disable-line
+          const cm = this.refs.editor.getCodeMirror();
+          console.log('Scrolling to ', cm.lineCount());
+          cm.scrollIntoView({line: cm.lineCount() - 1, ch:0});
+      }
+    );
+}
+
+  jumpToLine(i, editor) { // eslint-disable-line
+    
   }
 
   render() {
-    let outputOptions = {
+    const outputOptions = {
       mode: 'text/javascript',
       matchBrackets: true,
       json: true,
@@ -32,7 +48,7 @@ export default class Editor extends React.Component {
 
     return (
       <div className="outputEditor">
-        <CodeMirror
+        <CodeMirror autosave ref="editor"
           value={this.props.output.output}
           options={outputOptions}
         />
