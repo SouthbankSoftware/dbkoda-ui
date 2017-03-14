@@ -27,7 +27,7 @@ export default class Editor extends React.Component {
       readOnly: true,
       smartIndent: true,
       theme: 'ambiance',
-      typescript: true
+      typescript: true,
     };
 
     return (

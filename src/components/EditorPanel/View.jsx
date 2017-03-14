@@ -34,13 +34,11 @@ export default class View extends React.Component {
       code: '// Welcome to DBEnvy'
     };
 
-    const reaction1 = reaction( // eslint-disable-line
+    const reactionToExecuteAll = reaction( // eslint-disable-line
         () => this.props.store.executingEditorAll, executingEditorAll => { //eslint-disable-line
+      console.log('Execute All');
       if (this.props.store.activeEditorId == this.props.id && this.props.store.executingEditorAll == true) {
-        console.log('Sending data to feathers id ', this.props.store.activeDropdownId,
-        ': "',
-        this.state.code,
-        '".');
+        console.log('Sending data to feathers id ', this.props.store.activeDropdownId, ': "', this.state.code, '".');
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
@@ -49,6 +47,30 @@ export default class View extends React.Component {
           commands: this.state.code
         });
         this.props.store.executingEditorAll = false;
+      }
+    });
+
+    const reactionToExecuteLine = reaction( // eslint-disable-line
+        () => this.props.store.executingEditorLines, executingEditorLines => { //eslint-disable-line
+      if (this.props.store.activeEditorId == this.props.id && this.props.store.executingEditorLines == true) {
+        // Determine code to send.
+        const cm = this.refs.editor.getCodeMirror();
+        let content = cm.getSelection();
+        if (cm.getSelection().length > 0) {
+          console.log('Executing Highlighted Text.');
+        } else {
+          console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
+          content = cm.getLine(cm.getCursor().line);
+        }
+        console.log('Sending data to feathers id ', this.props.store.activeDropdownId, ': "', content, '".');
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(this.props.store.activeDropdownId, {
+          shellId: parseInt(this.props.store.activeDropdownId) + 1, // eslint-disable-line
+          commands: content
+        });
+        this.props.store.executingEditorLines = false;
       }
     });
   }
@@ -66,14 +88,14 @@ export default class View extends React.Component {
   }
 
   updateCode(newCode) {
-    this.state.code = newCode;
+    this.setState({code: newCode});
   }
 
   render() {
     return (
       <div className="editorView">
         <CodeMirror autoSave ref="editor" // eslint-disable-line react/no-string-refs
-          value={this.state.code} onChange={value => this.setState({code: value})} options={this.state.options} />
+          value={this.state.code} onChange={value => this.updateCode(value)} options={this.state.options} />
       </div>
     );
   }
