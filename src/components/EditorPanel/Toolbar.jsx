@@ -13,7 +13,7 @@ import React from 'react';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
 import {action} from 'mobx';
-import {Button, Intent} from '@blueprintjs/core';
+import {AnchorButton, Button, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 
 @inject('store')
@@ -167,56 +167,74 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
-            <Button
-              className="pt-button pt-icon-add pt-intent-primary"
-              loading={this.state.newConnectionLoading}
-              onClick={this.addEditor} />
-            <Button
-              className="pt-button pt-icon-document-open pt-intent-primary"
-              onClick={this.openFile} />
-            <Button
-              className="pt-button pt-icon-floppy-disk pt-intent-primary"
-              onClick={this.saveFile} />
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Add a new Editor" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <Button
+                className="pt-button pt-icon-add pt-intent-primary"
+                loading={this.state.newConnectionLoading}
+                onClick={this.addEditor} />
+            </Tooltip>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Open a File from Disc" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <Button
+                className="pt-button pt-icon-document-open pt-intent-primary"
+                onClick={this.openFile} />
+            </Tooltip>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Save Editor Contents to Disc" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <Button
+                className="pt-button pt-icon-floppy-disk pt-intent-primary"
+                onClick={this.saveFile} />
+            </Tooltip>
           </div>
           <span className="pt-navbar-divider" />
           <div className="pt-button-group pt-intent-primary">
             <div className="pt-select pt-intent-primary">
-              <select
-                onChange={this.onDropdownChanged}
-                value={activeId}
-                className="pt-intent-primary">
-                <option key="Default" value="Default">Default</option>; {profiles.map((profile) => {
-                  return <option key={profile[0]} value={profile[0]}>{profile[0]}</option>; // eslint-disable-line react/no-array-index-key
-                })}
-              </select>
+              <Tooltip intent={Intent.NONE} hoverOpenDelay={500} content="Select a connection to send commands to." tooltipClassName="pt-dark" position={Position.BOTTOM}>
+                <select
+                  onChange={this.onDropdownChanged}
+                  value={activeId}
+                  className="pt-intent-primary">
+                  <option key="Default" value="Default">Default</option>; {profiles.map((profile) => {
+                    return <option key={profile[0]} value={profile[0]}>{profile[0]}</option>; // eslint-disable-line react/no-array-index-key
+                  })}
+                </select>
+              </Tooltip>
             </div>
-            <Button
-              className="pt-button pt-icon-chevron-right pt-intent-primary"
-              onClick={this.executeLine}
-              disabled={this.state.noActiveProfile} />
-            <Button
-              className="pt-button pt-icon-double-chevron-right pt-intent-primary"
-              onClick={this.executeAll}
-              disabled={this.state.noActiveProfile} />
-            <Button
-              className="pt-button pt-icon-help pt-intent-primary"
-              onClick={this.explainPlan}
-              disabled={this.state.noActiveProfile} />
-            <Button
-              className="pt-button pt-icon-stop pt-intent-danger"
-              onClick={this.stopExecution}
-              disabled={this.state.noExecutionRunning} />
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Execute Selected Commands" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <AnchorButton
+                className="pt-button pt-icon-chevron-right pt-intent-primary"
+                onClick={this.executeLine}
+                disabled={this.state.noActiveProfile} />
+            </Tooltip>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Execute All Commands" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <AnchorButton
+                className="pt-button pt-icon-double-chevron-right pt-intent-primary"
+                onClick={this.executeAll}
+                disabled={this.state.noActiveProfile} />
+            </Tooltip>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Explain a Query" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <AnchorButton
+                className="pt-button pt-icon-help pt-intent-primary"
+                onClick={this.explainPlan}
+                disabled={this.state.noActiveProfile} />
+            </Tooltip>
+            <Tooltip intent={Intent.DANGER} hoverOpenDelay={500} content="Stop Execution" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <AnchorButton
+                className="pt-button pt-icon-stop pt-intent-danger"
+                onClick={this.stopExecution}
+                disabled={this.state.noExecutionRunning} />
+            </Tooltip>
           </div>
           <span className="pt-navbar-divider" />
-          <div className="pt-input-group .modifier">
-            <span className="pt-icon pt-icon-search" />
-            <input
-              className="pt-input"
-              type="search"
-              placeholder="Filter Tabs..."
-              dir="auto"
-              onChange={this.onFilterChanged} />
-          </div>
+          <Tooltip intent={Intent.NONE} hoverOpenDelay={500} content="Enter a string to search for Editors" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <div className="pt-input-group .modifier">
+              <span className="pt-icon pt-icon-search" />
+              <input
+                className="pt-input"
+                type="search"
+                placeholder="Filter Tabs..."
+                dir="auto"
+                onChange={this.onFilterChanged} />
+            </div>
+          </Tooltip>
         </div>
       </nav>
     );
