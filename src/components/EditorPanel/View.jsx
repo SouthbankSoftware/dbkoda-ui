@@ -1,7 +1,11 @@
 /**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-08T16:57:06+11:00
- */
+* @Author: Michael Harrison <mike>
+* @Date:   2017-03-14 15:54:01
+* @Email:  mike@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2017-03-14 15:54:27
+*/
+
 /* eslint-disable react/prop-types */
 import 'codemirror/lib/codemirror.css';
 import {inject} from 'mobx-react';
