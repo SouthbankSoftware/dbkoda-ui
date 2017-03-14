@@ -10,7 +10,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { useStrict } from 'mobx';
 import Store from '~/stores/global';
-import { EditorPanel, EditorToolbar, EditorView } from '../index.js';
+import { EditorPanel, EditorToolbar } from '../index.js';
 
 describe('Editor Panel', () => {
   let app;
@@ -40,6 +40,10 @@ describe('Toolbar', () => {
   });
 
   test('has buttons', () => {
+    expect(app.find('Button').length).toEqual(7);
+  });
+
+  test('has disabled buttons', () => {
     expect(app.find('Button').length).toEqual(7);
   });
 

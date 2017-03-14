@@ -98,7 +98,7 @@ export default class Panel extends React.Component {
       .entries();
     return (
       <div className="pt-dark editorPanel">
-        <Toolbar executeAll={this.executeAll} newEditor={this.newEditor} ref="toolbar"/>
+        <Toolbar executeAll={this.executeAll} newEditor={this.newEditor} ref="toolbar" />
         <Tabs2
           id="EditorTabs"
           className="editorTabView"
@@ -109,10 +109,10 @@ export default class Panel extends React.Component {
           <Tab2
             id={0}
             title="Default"
-            panel={< View id = {
+            panel={<View id={
             0
           }
-          ref = "defaultEditor" />}/> {editors.map((tab) => {
+              ref="defaultEditor" />} /> {editors.map((tab) => {
             if (tab[1].visible) {
               return (
                 <Tab2
@@ -120,36 +120,35 @@ export default class Panel extends React.Component {
                   key={tab[1].shellId}
                   id={tab[1].id}
                   title={tab[1].id + ':' + tab[1].shellId}
-                  panel={< View id = {
+                  panel={<View id={
                   tab[1].id
                 }
-                ref = "defaultEditor" />}>
+                    ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
                     onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
-                    <span className="pt-icon-cross"/>
+                    <span className="pt-icon-cross" />
                   </Button>
                 </Tab2>
               );
-            } else {
+            }
               return (
                 <Tab2
                   className="notVisible"
                   key={tab[1].shellId}
                   id={tab[1].id}
                   title={tab[1].alias}
-                  panel={< View id = {
+                  panel={<View id={
                   tab[1].id
                 }
-                ref = "defaultEditor" />}>
+                    ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
                     onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
-                    <span className="pt-icon-cross"/>
+                    <span className="pt-icon-cross" />
                   </Button>
                 </Tab2>
               );
-            }
           })}
         </Tabs2>
       </div>
