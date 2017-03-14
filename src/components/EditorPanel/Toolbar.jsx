@@ -45,7 +45,7 @@ export default class Toolbar extends React.Component {
     this.onDropdownChanged = this
       .onDropdownChanged
       .bind(this);
-      this.onFilterChanged = this
+    this.onFilterChanged = this
       .onFilterChanged
       .bind(this);
   }
@@ -67,7 +67,12 @@ export default class Toolbar extends React.Component {
             .props
             .store // eslint-disable-line react/prop-types
             .editors // eslint-disable-line react/prop-types
-            .set(res.id, {id: res.id, alias: res.id + ':' + res.shellId, shellId: res.shellId, visible: true}); // eslint-disable-line react/prop-types
+            .set(res.id, {
+              id: res.id,
+              alias: res.id + ':' + res.shellId,
+              shellId: res.shellId,
+              visible: true
+            }); // eslint-disable-line react/prop-types
           this
             .props
             .store // eslint-disable-line react/prop-types
@@ -130,18 +135,25 @@ export default class Toolbar extends React.Component {
   }
 
   @action onFilterChanged(event) {
-    const filter = event.target.value.replace(/ /g, '');
-    this.props.store.editors.forEach( (value, key) => {
-      if (value.alias.includes(filter)) {
-        console.log(value.alias, ' includes filter (', filter, ')');
-        value.visible = true;
-      } else {
-        if (value.id === this.props.store.activeEditorId) {
-          this.props.store.activeEditorId = 0;
+    const filter = event
+      .target
+      .value
+      .replace(/ /g, '');
+    this
+      .props
+      .store
+      .editors
+      .forEach((value) => {
+        if (value.alias.includes(filter)) {
+          console.log(value.alias, ' includes filter (', filter, ')');
+          value.visible = true;
+        } else {
+          if (value.id === this.props.store.activeEditorId) {
+            this.props.store.activeEditorId = 0;
+          }
+          value.visible = false;
         }
-        value.visible = false;
-      }
-    });
+      });
   }
 
   render() {
