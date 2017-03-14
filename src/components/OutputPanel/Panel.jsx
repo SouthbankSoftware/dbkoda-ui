@@ -7,15 +7,13 @@
  */
 
 import React from 'react';
-import { action } from 'mobx';
-import { inject, observer } from 'mobx-react';
-import { NewToaster } from '../common/Toaster';
-import { Intent } from '@blueprintjs/core';
+import {action} from 'mobx';
+import {inject, observer} from 'mobx-react';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
-import { featherClient } from '../../helpers/feathers';
+import {featherClient} from '../../helpers/feathers';
 
-@inject(allStores => ({ output: allStores.store.output }))
+@inject(allStores => ({output: allStores.store.output}))
 @observer
 export default class Panel extends React.Component {
   constructor(props) {
@@ -27,7 +25,15 @@ export default class Panel extends React.Component {
 
   @action.bound
   outputAvaiable(output) {
-    this.props.output.output = this.props.output.output + '\n' + output.output;
+    // Parse output for string 'Type "it" for more'
+    this.props.output.output = this.props.output.output + '\n' + output.output + '\n'; // eslint-disable-line
+    if (output.output.endsWith('Type "it" for more')) {
+      console.log('can show more');
+      this.props.output.cannotShowMore = false; // eslint-disable-line
+    } else {
+      console.log('cannot show more');
+      this.props.output.cannotShowMore = true; // eslint-disable-line
+    }
   }
 
   render() {

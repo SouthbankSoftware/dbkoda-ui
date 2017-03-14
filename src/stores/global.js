@@ -23,7 +23,7 @@ export default class Store {
   };
   @observable output = {
       output: '// Output goes here!',
-      canShowMore: true,
+      cannotShowMore: true,
   }
 
   @computed get topology() { // eslint-disable-line

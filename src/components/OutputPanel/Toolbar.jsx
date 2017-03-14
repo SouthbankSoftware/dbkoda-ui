@@ -17,9 +17,6 @@ import {Intent, Button} from '@blueprintjs/core';
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      canShowMore: true
-    };
   }
 
   @action.bound
@@ -44,7 +41,7 @@ export default class Toolbar extends React.Component {
           <Button
             className="pt-button showMoreBtn pt-intent-primary"
             onClick={this.showMore}
-            disabled={this.state.canShowMore}
+            disabled={this.props.output.cannotShowMore}
             title="Show More (Shortcut+Keys)">
             Show More
           </Button>
