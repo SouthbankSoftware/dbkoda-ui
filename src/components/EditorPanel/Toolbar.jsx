@@ -201,7 +201,7 @@ export default class Toolbar extends React.Component {
             <input
               className="pt-input"
               type="search"
-              placeholder="Search input"
+              placeholder="Filter Tabs..."
               dir="auto"
               onChange={this.onFilterChanged} />
           </div>
