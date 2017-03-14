@@ -45,6 +45,9 @@ export default class Toolbar extends React.Component {
     this.onDropdownChanged = this
       .onDropdownChanged
       .bind(this);
+      this.onFilterChanged = this
+      .onFilterChanged
+      .bind(this);
   }
 
   // -------------------// . TOOLBAR ACTIONS // ----------------- //
@@ -64,7 +67,7 @@ export default class Toolbar extends React.Component {
             .props
             .store // eslint-disable-line react/prop-types
             .editors // eslint-disable-line react/prop-types
-            .set(res.id, res.shellId); // eslint-disable-line react/prop-types
+            .set(res.id, {id: res.id, alias: res.id + ':' + res.shellId, shellId: res.shellId, visible: true}); // eslint-disable-line react/prop-types
           this
             .props
             .store // eslint-disable-line react/prop-types
@@ -126,6 +129,18 @@ export default class Toolbar extends React.Component {
     }
   }
 
+  @action onFilterChanged(event) {
+    const filter = event.target.value.replace(/ /g, '');
+    this.props.store.editors.forEach( (value, key) => {
+      if (value.alias.includes(filter)) {
+        console.log(value.alias, ' includes filter (', filter, ')');
+        value.visible = true;
+      } else {
+        value.visible = false;
+      }
+    });
+  }
+
   render() {
     const profiles = this
       .props
@@ -178,7 +193,15 @@ export default class Toolbar extends React.Component {
               disabled={this.state.noExecutionRunning} />
           </div>
           <span className="pt-navbar-divider" />
-          <input className="pt-input" placeholder="Search Tabs..." type="text" />
+          <div className="pt-input-group .modifier">
+            <span className="pt-icon pt-icon-search" />
+            <input
+              className="pt-input"
+              type="search"
+              placeholder="Search input"
+              dir="auto"
+              onChange={this.onFilterChanged} />
+          </div>
         </div>
       </nav>
     );

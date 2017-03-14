@@ -113,6 +113,10 @@ h3 {
 // ======================== //
 //      Editor Panel
 // ======================== //
+
+.notVisible {
+  display:  none;
+}
 .editorPanel {
   display: flex;
   flex-direction: column;

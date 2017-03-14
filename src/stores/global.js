@@ -15,6 +15,8 @@ export default class Store {
   @observable activeDropdownId = 'Default';
   @observable executingEditorAll = false;
   @observable executingEditorLines = false;
+  @observable tabFilter = '';
+
   @observable layout = {
     drawerOpen: false,
     overallSplitPos: '30%',
