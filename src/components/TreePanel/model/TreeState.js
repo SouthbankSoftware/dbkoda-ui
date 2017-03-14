@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-08T16:50:56+11:00
+* @Last modified time: 2017-03-14T15:58:15+11:00
 */
 
 import { observable } from 'mobx';
@@ -16,15 +16,29 @@ export default class TreeState {
     this.nodes = observable([]);
   }
 
-  parseJson(jsonString) {
-    const treeJson = JSON.parse(jsonString);
+  parseJson(treeJson) {
     this.nodes.clear();
     for (const node of treeJson) {
       this.nodes.push(new TreeNode(node));
     }
   }
 
-  getTopology() {
-    return this.nodes;
+  selectNode(nodeData, e) {
+    const originallySelected = nodeData.isSelected;
+    if (!e.shiftKey) {
+      this.forEachNode(this.nodes, (n) => { n.isSelected = false; });
+    }
+    nodeData.isSelected = originallySelected == null ? true : !originallySelected;
+  }
+
+  forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
+    if (nodes == null) {
+      return;
+    }
+
+    for (const node of nodes) {
+      callback(node);
+      this.forEachNode(node.childNodes, callback);
+    }
   }
 }

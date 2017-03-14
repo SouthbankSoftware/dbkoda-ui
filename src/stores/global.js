@@ -1,11 +1,11 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
-* @Last modified by:   chris
-* @Last modified time: 2017-03-10T13:12:00+11:00
+* @Last modified by:   wahaj
+* @Last modified time: 2017-03-14T16:18:55+11:00
  */
 
-import { observable, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import TempTopology from './TempTopology.js';
 
 export default class Store {
@@ -26,9 +26,9 @@ export default class Store {
       cannotShowMore: true,
   }
 
-  @computed get topology() { // eslint-disable-line
-    // this.getTopologyFromProfile()
+  @observable topology = JSON.parse(TempTopology.data);
 
-    return TempTopology.data;
+  @action addTopology = (value) => {
+    this.topology.push(value);
   }
 }

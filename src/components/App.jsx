@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-14T15:52:10+11:00
+* @Last modified time: 2017-03-14T16:36:23+11:00
  */
 
 import React from 'react';
@@ -105,7 +105,7 @@ export default class App extends React.Component {
                 }}
               />
             </div>
-            <div><TreePanel /></div>
+            <TreePanel />
           </SplitPane>
           <SplitPane
             split="horizontal"

@@ -1,6 +1,6 @@
 /**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-08T16:41:29+11:00
+* @Last modified by:   wahaj
+* @Last modified time: 2017-03-14T16:15:18+11:00
  */
 
 import React from 'react';
@@ -13,6 +13,8 @@ import App from './components/App.jsx';
 useStrict(true);
 
 const store = new Store();
+
+window.stores = store;
 
 ReactDOM.render(
   <Provider store={store}>

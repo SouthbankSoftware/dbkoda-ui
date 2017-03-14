@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-08T16:46:31+11:00
+* @Last modified time: 2017-03-14T16:01:50+11:00
 */
 
 import { observable } from 'mobx';
@@ -16,6 +16,8 @@ export default class TreeNode implements ITreeNode {
   type;
   iconName;
   @observable childNodes;
+  @observable isSelected = false;
+  @observable isExpanded = false;
 
   constructor(treeNode, parentTextAsId) {
     this.label = treeNode.text;
