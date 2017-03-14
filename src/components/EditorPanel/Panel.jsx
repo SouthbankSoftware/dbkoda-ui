@@ -42,9 +42,9 @@ export default class Panel extends React.Component {
   }
 
   @action newEditor(newId) {
-    this.props.store // eslint-disable-line react/prop-types
+    this.props.store.editorPanel // eslint-disable-line react/prop-types
       .activeDropdownId = newId; // eslint-disable-line react/prop-types
-    this.props.store // eslint-disable-line react/prop-types
+    this.props.store.editorPanel // eslint-disable-line react/prop-types
       .activeEditorId = newId; // eslint-disable-line react/prop-types
     this.setState({tabId: newId});
   }
@@ -54,7 +54,7 @@ export default class Panel extends React.Component {
     if (removeTabId == this.state.tabId) {
       this.state.tabId = 0;
       this.state.isRemovingCurrentTab = true;
-      this.props.store.activeEditorId = 0;
+      this.props.store.editorPanel.activeEditorId = 0;
     } else {
       this.state.isRemovingCurrentTab = false;
     }
@@ -79,13 +79,13 @@ export default class Panel extends React.Component {
       this.state.isRemovingTab = false;
       if (this.state.isRemovingCurrentTab) {
         this.state.isRemovingCurrentTab = false;
-        this.props.store.activeEditorId = newTab;
+        this.props.store.editorPanel.activeEditorId = newTab;
         this.setState({tabId: newTab});
       } else {
         this.setState({tabId: this.state.tabId});
       }
     } else {
-      this.props.store.activeEditorId = newTab;
+      this.props.store.editorPanel.activeEditorId = newTab;
       this.setState({tabId: newTab});
     }
   }
@@ -105,7 +105,7 @@ export default class Panel extends React.Component {
           renderActiveTabPanelOnly={false}
           animate={this.state.animate}
           onChange={this.changeTab}
-          selectedTabId={this.props.store.activeEditorId}>
+          selectedTabId={this.props.store.editorPanel.activeEditorId}>
           <Tab2
             id={0}
             title="Default"

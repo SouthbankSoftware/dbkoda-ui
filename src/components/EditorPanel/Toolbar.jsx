@@ -109,11 +109,11 @@ export default class Toolbar extends React.Component {
   }
 
   @action executeLine() {
-    this.props.store.executingEditorLines = true;
+    this.props.store.editorPanel.executingEditorLines = true;
   }
 
   @action executeAll() {
-    this.props.store.executingEditorAll = true;
+    this.props.store.editorPanel.executingEditorAll = true;
   }
   // Placeholder - Linting disabled for this line.
   explainPlan() { // eslint-disable-line class-methods-use-this
@@ -125,7 +125,7 @@ export default class Toolbar extends React.Component {
   }
 
   @action onDropdownChanged(event) {
-    this.props.store.activeDropdownId = event.target.value;
+    this.props.store.editorPanel.activeDropdownId = event.target.value;
     this.setState({currentProfile: event.target.value});
     if (event.target.value == 'Default') {
       this.setState({noActiveProfile: true});
@@ -148,8 +148,8 @@ export default class Toolbar extends React.Component {
           console.log(value.alias, ' includes filter (', filter, ')');
           value.visible = true;
         } else {
-          if (value.id === this.props.store.activeEditorId) {
-            this.props.store.activeEditorId = 0;
+          if (value.id === this.props.store.editorPanel.activeEditorId) {
+            this.props.store.editorPanel.activeEditorId = 0;
           }
           value.visible = false;
         }
@@ -162,7 +162,7 @@ export default class Toolbar extends React.Component {
       .store
       .profiles
       .entries();
-    const activeId = this.props.store.activeDropdownId;
+    const activeId = this.props.store.editorPanel.activeDropdownId;
     return (
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
