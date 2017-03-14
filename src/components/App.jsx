@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-11T00:35:49+11:00
+* @Last modified by:   wahaj
+* @Last modified time: 2017-03-14T15:52:10+11:00
  */
 
 import React from 'react';
@@ -14,7 +14,7 @@ import { inject, observer, PropTypes } from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
 import { EditorPanel } from '#/EditorPanel/index.js';
 import { OutputPanel } from '#/OutputPanel';
-import TreePanel from '#/tree';
+import { TreePanel } from '#/TreePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
