@@ -17,10 +17,7 @@ require('codemirror/mode/javascript/javascript');
 export default class Editor extends React.Component {
   constructor(props) {
     super(props);
-    this.jumpToLine = this
-      .jumpToLine
-      .bind(this);
-
+    
     const reactionToNewOutput = reaction( // eslint-disable-line
         () => this.props.output.output, output => { //eslint-disable-line
       const cm = this
