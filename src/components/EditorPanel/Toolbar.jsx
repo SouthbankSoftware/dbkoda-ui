@@ -62,7 +62,7 @@ export default class Toolbar extends React.Component {
             .store // eslint-disable-line react/prop-types
             .profiles // eslint-disable-line react/prop-types
             .set(res.id, res.shellId); // eslint-disable-line react/prop-types
-             // eslint-disable-line react/prop-types
+          // eslint-disable-line react/prop-types
           this.state.noActiveProfile = false;
           this.state.id = res.id;
           this.shellId = res.shellId;
@@ -119,7 +119,6 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
-    console.log('Active Dropdown: ', this.props.store.activeDropdownId);
     const profiles = this
       .props
       .store
