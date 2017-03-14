@@ -136,6 +136,9 @@ export default class Toolbar extends React.Component {
         console.log(value.alias, ' includes filter (', filter, ')');
         value.visible = true;
       } else {
+        if (value.id === this.props.store.activeEditorId) {
+          this.props.store.activeEditorId = 0;
+        }
         value.visible = false;
       }
     });
