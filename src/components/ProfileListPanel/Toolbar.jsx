@@ -10,6 +10,7 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import {observer, inject} from 'mobx-react';
+import {action} from 'mobx';
 import {AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 
@@ -22,7 +23,8 @@ export default class Toolbar extends React.Component {
   }
 
   // Placeholder - Linting disabled for this line.
-  newProfile() { // eslint-disable-line class-methods-use-this
+ @action newProfile() { // eslint-disable-line class-methods-use-this
+    this.props.store.profileList.creatingNewProfile = true;
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
@@ -46,7 +48,7 @@ export default class Toolbar extends React.Component {
               hoverOpenDelay={1000}
               content="Create a new Profile"
               tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
+              position={Position.BOTTOM_LEFT}>
               <AnchorButton
                 className="pt-button pt-icon-add pt-intent-primary"
                 onClick={this.newProfile} />

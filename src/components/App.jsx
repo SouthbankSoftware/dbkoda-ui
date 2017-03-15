@@ -97,7 +97,6 @@ export default class App extends React.Component {
             maxSize={1000}
             pane2Style={splitPane2Style}
           >
-           
             <ProfileListPanel />
             <TreePanel />
           </SplitPane>
