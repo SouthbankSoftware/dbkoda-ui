@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-14 15:54:27
+* @Last modified by:   wahaj
+* @Last modified time: 2017-03-15T16:01:13+11:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -42,9 +42,9 @@ export default class Panel extends React.Component {
   }
 
   @action newEditor(newId) {
-    this.props.store // eslint-disable-line react/prop-types
+    this.props.store.editorPanel // eslint-disable-line react/prop-types
       .activeDropdownId = newId; // eslint-disable-line react/prop-types
-    this.props.store // eslint-disable-line react/prop-types
+    this.props.store.editorPanel // eslint-disable-line react/prop-types
       .activeEditorId = newId; // eslint-disable-line react/prop-types
     this.setState({tabId: newId});
   }
@@ -54,7 +54,7 @@ export default class Panel extends React.Component {
     if (removeTabId == this.state.tabId) {
       this.state.tabId = 0;
       this.state.isRemovingCurrentTab = true;
-      this.props.store.activeEditorId = 0;
+      this.props.store.editorPanel.activeEditorId = 0;
     } else {
       this.state.isRemovingCurrentTab = false;
     }
@@ -79,17 +79,20 @@ export default class Panel extends React.Component {
       this.state.isRemovingTab = false;
       if (this.state.isRemovingCurrentTab) {
         this.state.isRemovingCurrentTab = false;
-        this.props.store.activeEditorId = newTab;
+        this.props.store.editorPanel.activeEditorId = newTab;
         this.setState({tabId: newTab});
       } else {
         this.setState({tabId: this.state.tabId});
       }
     } else {
-      this.props.store.activeEditorId = newTab;
+      this.props.store.editorPanel.activeEditorId = newTab;
       this.setState({tabId: newTab});
     }
   }
-
+  @action handleDrop(item) {
+    this.props.store.dragItem.item = item;
+    this.props.store.dragItem.dragDrop = true;
+  }
   render() {
     const editors = this
       .props
@@ -98,21 +101,21 @@ export default class Panel extends React.Component {
       .entries();
     return (
       <div className="pt-dark editorPanel">
-        <Toolbar executeAll={this.executeAll} newEditor={this.newEditor} ref="toolbar"/>
+        <Toolbar executeAll={this.executeAll} newEditor={this.newEditor} ref="toolbar" />
         <Tabs2
           id="EditorTabs"
           className="editorTabView"
           renderActiveTabPanelOnly={false}
           animate={this.state.animate}
           onChange={this.changeTab}
-          selectedTabId={this.props.store.activeEditorId}>
+          selectedTabId={this.props.store.editorPanel.activeEditorId}>
           <Tab2
             id={0}
             title="Default"
-            panel={< View id = {
+            panel={<View id={
             0
-          }
-          ref = "defaultEditor" />}/> {editors.map((tab) => {
+          } onDrop={item => this.handleDrop(item)}
+              ref="defaultEditor" />} /> {editors.map((tab) => {
             if (tab[1].visible) {
               return (
                 <Tab2
@@ -120,36 +123,35 @@ export default class Panel extends React.Component {
                   key={tab[1].shellId}
                   id={tab[1].id}
                   title={tab[1].id + ':' + tab[1].shellId}
-                  panel={< View id = {
+                  panel={<View id={
                   tab[1].id
-                }
-                ref = "defaultEditor" />}>
+                } onDrop={item => this.handleDrop(item)}
+                    ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
                     onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
-                    <span className="pt-icon-cross"/>
+                    <span className="pt-icon-cross" />
                   </Button>
                 </Tab2>
               );
-            } else {
+            }
               return (
                 <Tab2
                   className="notVisible"
                   key={tab[1].shellId}
                   id={tab[1].id}
                   title={tab[1].alias}
-                  panel={< View id = {
+                  panel={<View id={
                   tab[1].id
                 }
-                ref = "defaultEditor" />}>
+                    ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
                     onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
-                    <span className="pt-icon-cross"/>
+                    <span className="pt-icon-cross" />
                   </Button>
                 </Tab2>
               );
-            }
           })}
         </Tabs2>
       </div>

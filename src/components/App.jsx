@@ -2,18 +2,21 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-14T16:36:23+11:00
+* @Last modified time: 2017-03-15T12:14:15+11:00
  */
 
 import React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
 import Drawer from 'react-motion-drawer';
 import { Button } from '@blueprintjs/core';
 import { action, untracked } from 'mobx';
 import { inject, observer, PropTypes } from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
-import { EditorPanel } from '#/EditorPanel/index.js';
+import { EditorPanel } from '#/EditorPanel';
 import { OutputPanel } from '#/OutputPanel';
+import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
 
 import 'normalize.css/normalize.css';
@@ -31,7 +34,7 @@ const splitPane2Style = {
 
 @inject(allStores => ({ layout: allStores.store.layout }))
 @observer
-export default class App extends React.Component {
+class App extends React.Component {
   static propTypes = {
     layout: PropTypes.observableObject.isRequired,
   };
@@ -85,8 +88,8 @@ export default class App extends React.Component {
           split="vertical"
           defaultSize={defaultOverallSplitPos}
           onDragFinished={this.updateOverallSplitPos}
-          minSize={100}
-          maxSize={600}
+          minSize={350}
+          maxSize={750}
         >
           <SplitPane
             split="horizontal"
@@ -96,15 +99,7 @@ export default class App extends React.Component {
             maxSize={1000}
             pane2Style={splitPane2Style}
           >
-            <div>
-              <Button
-                className="pt-intent-primary"
-                iconName="pt-icon-menu-closed"
-                onClick={() => {
-                  this.updateDrawerOpenStatus(true);
-                }}
-              />
-            </div>
+            <ProfileListPanel />
             <TreePanel />
           </SplitPane>
           <SplitPane
@@ -124,3 +119,5 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default DragDropContext(HTML5Backend)(App);

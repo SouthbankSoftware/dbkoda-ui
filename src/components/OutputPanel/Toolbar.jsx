@@ -10,10 +10,11 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
 import {NewToaster} from '../common/Toaster';
-import {Intent, Button} from '@blueprintjs/core';
+import {HotkeysTarget, Hotkeys, Hotkey, Intent, Button} from '@blueprintjs/core';
 
 @inject(allStores => ({output: allStores.store.output}))
 @observer
+@HotkeysTarget
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
@@ -48,6 +49,18 @@ export default class Toolbar extends React.Component {
         </div>
         <div className="pt-navbar-group pt-right-align" />
       </nav>
+    );
+  }
+
+  renderHotkeys() {
+    return (
+      <Hotkeys>
+        <Hotkey
+          global
+          combo="shift + c"
+          label="Clear Output"
+          onKeyDown={this.clearOutput} />
+      </Hotkeys>
     );
   }
 }
