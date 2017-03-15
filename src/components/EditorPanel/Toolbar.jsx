@@ -167,18 +167,18 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Add a new Editor" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Add a new Editor" tooltipClassName="pt-dark" position={Position.BOTTOM}>
               <Button
                 className="pt-button pt-icon-add pt-intent-primary"
                 loading={this.state.newConnectionLoading}
                 onClick={this.addEditor} />
             </Tooltip>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Open a File from Disc" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Open a File from Disc" tooltipClassName="pt-dark" position={Position.BOTTOM}>
               <Button
                 className="pt-button pt-icon-document-open pt-intent-primary"
                 onClick={this.openFile} />
             </Tooltip>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Save Editor Contents to Disc" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Save Editor Contents to Disc" tooltipClassName="pt-dark" position={Position.BOTTOM}>
               <Button
                 className="pt-button pt-icon-floppy-disk pt-intent-primary"
                 onClick={this.saveFile} />
@@ -187,7 +187,7 @@ export default class Toolbar extends React.Component {
           <span className="pt-navbar-divider" />
           <div className="pt-button-group pt-intent-primary">
             <div className="pt-select pt-intent-primary">
-              <Tooltip intent={Intent.NONE} hoverOpenDelay={500} content="Select a connection to send commands to." tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <Tooltip intent={Intent.NONE} hoverOpenDelay={1000} content="Select a connection to send commands to." tooltipClassName="pt-dark" position={Position.BOTTOM}>
                 <select
                   onChange={this.onDropdownChanged}
                   value={activeId}
@@ -198,25 +198,25 @@ export default class Toolbar extends React.Component {
                 </select>
               </Tooltip>
             </div>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Execute Selected Commands" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Execute Selected Commands" tooltipClassName="pt-dark" position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-chevron-right pt-intent-primary"
                 onClick={this.executeLine}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Execute All Commands" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Execute All Commands" tooltipClassName="pt-dark" position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-double-chevron-right pt-intent-primary"
                 onClick={this.executeAll}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={500} content="Explain a Query" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Explain a Query" tooltipClassName="pt-dark" position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-help pt-intent-primary"
                 onClick={this.explainPlan}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
-            <Tooltip intent={Intent.DANGER} hoverOpenDelay={500} content="Stop Execution" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip intent={Intent.DANGER} hoverOpenDelay={1000} content="Stop Execution" tooltipClassName="pt-dark" position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-stop pt-intent-danger"
                 onClick={this.stopExecution}
@@ -224,7 +224,7 @@ export default class Toolbar extends React.Component {
             </Tooltip>
           </div>
           <span className="pt-navbar-divider" />
-          <Tooltip intent={Intent.NONE} hoverOpenDelay={500} content="Enter a string to search for Editors" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+          <Tooltip intent={Intent.NONE} hoverOpenDelay={1000} content="Enter a string to search for Editors" tooltipClassName="pt-dark" position={Position.BOTTOM}>
             <div className="pt-input-group .modifier">
               <span className="pt-icon pt-icon-search" />
               <input
