@@ -12,8 +12,9 @@ import { Button } from '@blueprintjs/core';
 import { action, untracked } from 'mobx';
 import { inject, observer, PropTypes } from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
-import { EditorPanel } from '#/EditorPanel/index.js';
+import { EditorPanel } from '#/EditorPanel';
 import { OutputPanel } from '#/OutputPanel';
+import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
 
 import 'normalize.css/normalize.css';
@@ -85,8 +86,8 @@ export default class App extends React.Component {
           split="vertical"
           defaultSize={defaultOverallSplitPos}
           onDragFinished={this.updateOverallSplitPos}
-          minSize={100}
-          maxSize={600}
+          minSize={350}
+          maxSize={750}
         >
           <SplitPane
             split="horizontal"
@@ -96,15 +97,8 @@ export default class App extends React.Component {
             maxSize={1000}
             pane2Style={splitPane2Style}
           >
-            <div>
-              <Button
-                className="pt-intent-primary"
-                iconName="pt-icon-menu-closed"
-                onClick={() => {
-                  this.updateDrawerOpenStatus(true);
-                }}
-              />
-            </div>
+           
+            <ProfileListPanel />
             <TreePanel />
           </SplitPane>
           <SplitPane

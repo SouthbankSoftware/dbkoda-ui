@@ -117,7 +117,7 @@ h3 {
 .notVisible {
   display:  none;
 }
-.editorPanel {
+.editorPanel, .profileListPanel {
   display: flex;
   flex-direction: column;
   width: 100%;
