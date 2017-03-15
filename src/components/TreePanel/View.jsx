@@ -3,19 +3,24 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-14T16:45:42+11:00
+* @Last modified time: 2017-03-15T11:54:14+11:00
 */
 
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 
-import { Classes, ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
-
+import TreeState from './model/TreeState.js';
 import './View.scss';
 
 @inject('treeState')
 @observer
 export default class TreeView extends React.Component {
+  static get defaultProps() {
+    return {
+      treeState: undefined
+    };
+  }
   constructor(props) {
     super(props);
 
@@ -59,3 +64,7 @@ export default class TreeView extends React.Component {
     );
   }
 }
+
+TreeView.propTypes = {
+  treeState: React.PropTypes.instanceOf(TreeState)
+};
