@@ -24,7 +24,6 @@ export default class Toolbar extends React.Component {
 
   // Placeholder - Linting disabled for this line.
  @action newProfile() { // eslint-disable-line class-methods-use-this
-    this.props.store.profileList.creatingNewProfile = true;
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 

@@ -10,7 +10,8 @@
 import 'codemirror/lib/codemirror.css';
 import {inject} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
-import {reaction} from 'mobx';
+import {action, reaction} from 'mobx';
+import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
@@ -21,6 +22,7 @@ require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/display/autorefresh.js');
 
 @inject('store')
+@ContextMenuTarget
 export default class View extends React.Component {
   constructor(props) {
     super(props);
@@ -58,7 +60,10 @@ export default class View extends React.Component {
         () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
       if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorLines == true) {
         // Determine code to send.
-        const cm = this.refs.editor.getCodeMirror(); // eslint-disable-line
+        const cm = this
+          .refs
+          .editor
+          .getCodeMirror(); // eslint-disable-line
         let content = cm.getSelection();
         if (cm.getSelection().length > 0) {
           console.log('Executing Highlighted Text.');
@@ -77,6 +82,15 @@ export default class View extends React.Component {
         this.props.store.editorPanel.executingEditorLines = false;
       }
     });
+    this.refresh = this
+      .refresh
+      .bind(this);
+    this.executeLine = this
+      .executeLine
+      .bind(this);
+    this.executeAll = this
+      .executeAll
+      .bind(this);
   }
 
   componentDidMount() {
@@ -93,6 +107,36 @@ export default class View extends React.Component {
 
   updateCode(newCode) {
     this.setState({code: newCode});
+  }
+
+  @action executeLine() {
+    this.props.store.editorPanel.executingEditorLines = true;
+  }
+
+  @action executeAll() {
+    this.props.store.editorPanel.executingEditorAll = true;
+  }
+
+  renderContextMenu() {
+    return (
+      <Menu>
+        <MenuItem
+          onClick={this.executeLine}
+          text="Execute Selected"
+          iconName="pt-icon-chevron-right"
+          intent={Intent.NONE} />
+        <MenuItem
+          onClick={this.executeAll}
+          text="Execute All"
+          iconName="pt-icon-double-chevron-right"
+          intent={Intent.NONE} />
+        <MenuItem
+          onClick={this.refresh}
+          text="Refresh"
+          iconName="pt-icon-refresh"
+          intent={Intent.NONE} />
+      </Menu>
+    );
   }
 
   render() {
