@@ -7,8 +7,8 @@ if (process.env.NODE_ENV === 'production') {
 
 }
 module.exports = {
-  protocol: 'http://',
-  host: 'localhost',
-  port: 3030,
+  protocol,
+  host,
+  port,
   url
 };
