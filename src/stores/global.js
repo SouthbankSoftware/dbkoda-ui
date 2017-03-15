@@ -26,6 +26,11 @@ export default class Store {
     leftSplitPos: '50%',
     rightSplitPos: '70%'
   };
+
+  @observable profileList = {
+    creatingNewProfile: false
+  };
+
   @observable output = {
     output: '// Output goes here!',
     cannotShowMore: true

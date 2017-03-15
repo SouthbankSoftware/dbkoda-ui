@@ -10,7 +10,8 @@
 import 'codemirror/lib/codemirror.css';
 import {inject} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
-import {reaction} from 'mobx';
+import {action, reaction} from 'mobx';
+import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
 import { DropTarget } from 'react-dnd';
 import { DragItemTypes} from '#/common/Constants.js';
@@ -38,6 +39,7 @@ function collect(connect, monitor) {
 }
 
 @inject('store')
+@ContextMenuTarget
 class View extends React.Component {
   constructor(props) {
     super(props);
@@ -75,7 +77,10 @@ class View extends React.Component {
         () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
       if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorLines == true) {
         // Determine code to send.
-        const cm = this.refs.editor.getCodeMirror(); // eslint-disable-line
+        const cm = this
+          .refs
+          .editor
+          .getCodeMirror(); // eslint-disable-line
         let content = cm.getSelection();
         if (cm.getSelection().length > 0) {
           console.log('Executing Highlighted Text.');
@@ -104,6 +109,15 @@ class View extends React.Component {
         }
       }
     );
+    this.refresh = this
+      .refresh
+      .bind(this);
+    this.executeLine = this
+      .executeLine
+      .bind(this);
+    this.executeAll = this
+      .executeAll
+      .bind(this);
   }
 
   componentDidMount() {
@@ -120,6 +134,36 @@ class View extends React.Component {
 
   updateCode(newCode) {
     this.setState({code: newCode});
+  }
+
+  @action executeLine() {
+    this.props.store.editorPanel.executingEditorLines = true;
+  }
+
+  @action executeAll() {
+    this.props.store.editorPanel.executingEditorAll = true;
+  }
+
+  renderContextMenu() {
+    return (
+      <Menu>
+        <MenuItem
+          onClick={this.executeLine}
+          text="Execute Selected"
+          iconName="pt-icon-chevron-right"
+          intent={Intent.NONE} />
+        <MenuItem
+          onClick={this.executeAll}
+          text="Execute All"
+          iconName="pt-icon-double-chevron-right"
+          intent={Intent.NONE} />
+        <MenuItem
+          onClick={this.refresh}
+          text="Refresh"
+          iconName="pt-icon-refresh"
+          intent={Intent.NONE} />
+      </Menu>
+    );
   }
 
   render() {

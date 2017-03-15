@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   mike
- * @Last modified time: 2017-03-14 15:54:27
+ * @Last modified time: 2017-03-15 11:19:16
 */
 
 /* eslint-disable react/prop-types */
@@ -13,11 +13,20 @@ import React from 'react';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
 import {action} from 'mobx';
-import {AnchorButton, Button, Intent, Position, Tooltip} from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Intent,
+  Position,
+  Tooltip,
+  Hotkey,
+  Hotkeys,
+  HotkeysTarget
+} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 
 @inject('store')
 @observer
+@HotkeysTarget
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
@@ -46,6 +55,9 @@ export default class Toolbar extends React.Component {
       .onDropdownChanged
       .bind(this);
     this.onFilterChanged = this
+      .onFilterChanged
+      .bind(this);
+    this.renderHotkeys = this
       .onFilterChanged
       .bind(this);
   }
@@ -167,19 +179,34 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Add a new Editor" tooltipClassName="pt-dark" position={Position.BOTTOM}>
-              <Button
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content="Add a new Editor"
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}>
+              <AnchorButton
                 className="pt-button pt-icon-add pt-intent-primary"
                 loading={this.state.newConnectionLoading}
                 onClick={this.addEditor} />
             </Tooltip>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Open a File from Disc" tooltipClassName="pt-dark" position={Position.BOTTOM}>
-              <Button
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content="Open a File from Disc"
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}>
+              <AnchorButton
                 className="pt-button pt-icon-document-open pt-intent-primary"
                 onClick={this.openFile} />
             </Tooltip>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Save Editor Contents to Disc" tooltipClassName="pt-dark" position={Position.BOTTOM}>
-              <Button
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content="Save Editor Contents to Disc"
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}>
+              <AnchorButton
                 className="pt-button pt-icon-floppy-disk pt-intent-primary"
                 onClick={this.saveFile} />
             </Tooltip>
@@ -187,7 +214,12 @@ export default class Toolbar extends React.Component {
           <span className="pt-navbar-divider" />
           <div className="pt-button-group pt-intent-primary">
             <div className="pt-select pt-intent-primary">
-              <Tooltip intent={Intent.NONE} hoverOpenDelay={1000} content="Select a connection to send commands to." tooltipClassName="pt-dark" position={Position.BOTTOM}>
+              <Tooltip
+                intent={Intent.NONE}
+                hoverOpenDelay={1000}
+                content="Select a connection to send commands to."
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}>
                 <select
                   onChange={this.onDropdownChanged}
                   value={activeId}
@@ -198,25 +230,45 @@ export default class Toolbar extends React.Component {
                 </select>
               </Tooltip>
             </div>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Execute Selected Commands" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content="Execute Selected Commands"
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-chevron-right pt-intent-primary"
                 onClick={this.executeLine}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Execute All Commands" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content="Execute All Commands"
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-double-chevron-right pt-intent-primary"
                 onClick={this.executeAll}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
-            <Tooltip intent={Intent.PRIMARY} hoverOpenDelay={1000} content="Explain a Query" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              content="Explain a Query"
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-help pt-intent-primary"
                 onClick={this.explainPlan}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
-            <Tooltip intent={Intent.DANGER} hoverOpenDelay={1000} content="Stop Execution" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+            <Tooltip
+              intent={Intent.DANGER}
+              hoverOpenDelay={1000}
+              content="Stop Execution"
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-stop pt-intent-danger"
                 onClick={this.stopExecution}
@@ -224,7 +276,12 @@ export default class Toolbar extends React.Component {
             </Tooltip>
           </div>
           <span className="pt-navbar-divider" />
-          <Tooltip intent={Intent.NONE} hoverOpenDelay={1000} content="Enter a string to search for Editors" tooltipClassName="pt-dark" position={Position.BOTTOM}>
+          <Tooltip
+            intent={Intent.NONE}
+            hoverOpenDelay={1000}
+            content="Enter a string to search for Editors"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
             <div className="pt-input-group .modifier">
               <span className="pt-icon pt-icon-search" />
               <input
@@ -239,4 +296,32 @@ export default class Toolbar extends React.Component {
       </nav>
     );
   }
+
+  renderHotkeys() {
+    return (
+      <Hotkeys>
+        <Hotkey
+          global
+          combo="shift + n"
+          label="New Editor"
+          onKeyDown={this.addEditor} />
+        <Hotkey
+          global
+          combo="shift + a"
+          label="Execute All"
+          onKeyDown={this.executeAll} />
+        <Hotkey
+          global
+          combo="shift + e"
+          label="Execute Selected"
+          onKeyDown={this.executeLine} />
+        <Hotkey
+          global
+          combo="shift + s"
+          label="Stop Execution"
+          onKeyDown={this.stopExecution} />
+      </Hotkeys>
+    );
+  }
+
 }
