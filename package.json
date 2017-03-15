@@ -4,7 +4,7 @@
   "description": "DBEnvy UI",
   "main": "webpack.config.js",
   "scripts": {
-    "start": "webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback --port 3000",
+    "start": "webpack --config config/webpack.config.js && webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback --port 3000 --content-base dist",
     "build": "yarn run clean && rimraf ./dist && webpack --config config/webpack.config.prod.js",
     "preview": "http-server ./dist -p 1234 -c-1",
     "test": "npm run eslint && nyc npm run mocha",

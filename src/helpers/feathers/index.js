@@ -1,4 +1,3 @@
-// import load from 'little-loader';
 import feathers from 'feathers-client';
 import _ from 'lodash';
 import Primus from '@southbanksoftware/dbenvy-controller';
@@ -81,23 +80,3 @@ export const featherClient = () => {
   instance.configurePrimus(new Primus(url));
   return instance;
 };
-
-// let times = 0;
-// const loadPrimus = () => {
-//   load(url + '/dist/primus.js', (err) => {
-//     if (!err) {
-//       const primus = new Primus(url);
-//       featherClient().configurePrimus(primus);
-//     } else {
-//       times += 1;
-//       if (times < 3) {
-//         setTimeout(() => {
-//           loadPrimus();
-//         }, 3000);
-//       }
-//     }
-//   });
-// };
-// if (process.env.NODE_ENV !== 'test') {
-//   loadPrimus();
-// }
