@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-15 11:19:08
+* @Last modified by:   wahaj
+* @Last modified time: 2017-03-15T16:00:47+11:00
 */
 
 /* eslint-disable react/prop-types */
@@ -13,6 +13,9 @@ import {featherClient} from '~/helpers/feathers';
 import {action, reaction} from 'mobx';
 import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
+import { DropTarget } from 'react-dnd';
+import { DragItemTypes} from '#/common/Constants.js';
+
 const React = require('react');
 const CodeMirror = require('react-codemirror');
 
@@ -21,9 +24,23 @@ require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/display/autorefresh.js');
 
+const editorTarget = {
+  drop(props, monitor) {
+    const item = monitor.getItem();
+    props.onDrop(item);
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  };
+}
+
 @inject('store')
 @ContextMenuTarget
-export default class View extends React.Component {
+class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -95,6 +112,16 @@ export default class View extends React.Component {
         this.props.store.editorPanel.executingEditorLines = false;
       }
     });
+
+    const reactionToDragDrop = reaction(  // eslint-disable-line
+      () => this.props.store.dragItem.dragDrop, dragDrop => {   // eslint-disable-line
+        if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
+          const item = this.props.store.dragItem.item;
+          this.setState({code: item.label});
+          this.props.store.dragItem.dragDrop = false;
+        }
+      }
+    );
     this.refresh = this
       .refresh
       .bind(this);
@@ -153,11 +180,26 @@ export default class View extends React.Component {
   }
 
   render() {
-    return (
+    const { connectDropTarget, isOver } = this.props;
+    return connectDropTarget(
       <div className="editorView">
         <CodeMirror autoSave ref="editor" // eslint-disable-line react/no-string-refs
           value={this.state.code} onChange={value => this.updateCode(value)} options={this.state.options} />
+        {isOver &&
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            width: '100%',
+            zIndex: 1,
+            opacity: 0.5,
+            backgroundColor: 'yellow',
+          }} />
+        }
       </div>
     );
   }
 }
+
+export default DropTarget(DragItemTypes.LABEL, editorTarget, collect)(View);
