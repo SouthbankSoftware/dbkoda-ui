@@ -15,8 +15,7 @@ const React = require('react');
 export default class ListView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
 
   render() {

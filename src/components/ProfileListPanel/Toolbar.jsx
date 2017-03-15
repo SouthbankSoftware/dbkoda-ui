@@ -9,19 +9,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 import React from 'react';
-import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
-import {action} from 'mobx';
-import {
-  AnchorButton,
-  Button,
-  Intent,
-  Position,
-  Tooltip,
-  Hotkey,
-  Hotkeys,
-  HotkeysTarget
-} from '@blueprintjs/core';
+import {AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 
 @inject('store')
@@ -32,50 +21,62 @@ export default class Toolbar extends React.Component {
     this.state = {};
   }
 
+  // Placeholder - Linting disabled for this line.
+  newProfile() { // eslint-disable-line class-methods-use-this
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+  }
+
+  // Placeholder - Linting disabled for this line.
+  editProfile() { // eslint-disable-line class-methods-use-this
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+  }
+
+  // Placeholder - Linting disabled for this line.
+  removeProfile() { // eslint-disable-line class-methods-use-this
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+  }
+
   render() {
     return (
-      <nav className="pt-navbar editorToolBar">
+      <nav className="pt-navbar profileListToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
-              content="Add a new Editor"
+              content="Create a new Profile"
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-add pt-intent-primary"
-                loading={this.state.newConnectionLoading}
-                onClick={this.addEditor} />
+                onClick={this.newProfile} />
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
-              content="Add a new Editor"
+              content="Edit a Profile"
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-add pt-intent-primary"
-                loading={this.state.newConnectionLoading}
-                onClick={this.addEditor} />
+                className="pt-button pt-icon-edit pt-intent-primary"
+                onClick={this.editProfile} />
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
-              content="Add a new Editor"
+              content="Remove a Profile"
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-add pt-intent-primary"
-                loading={this.state.newConnectionLoading}
-                onClick={this.addEditor} />
+                className="pt-button pt-icon-remove pt-intent-danger"
+                onClick={this.removeProfile} />
             </Tooltip>
           </div>
           <span className="pt-navbar-divider" />
           <Tooltip
             intent={Intent.NONE}
             hoverOpenDelay={1000}
-            content="Enter a string to search for Editors"
+            content="Enter a string to search for Profiles"
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <div className="pt-input-group .modifier">
@@ -83,7 +84,7 @@ export default class Toolbar extends React.Component {
               <input
                 className="pt-input"
                 type="search"
-                placeholder="Filter Tabs..."
+                placeholder="Filter Profiles..."
                 dir="auto"
                 onChange={this.onFilterChanged} />
             </div>
