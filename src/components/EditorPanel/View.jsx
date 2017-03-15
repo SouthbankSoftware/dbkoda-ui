@@ -37,7 +37,20 @@ export default class View extends React.Component {
         typescript: true,
         lineNumbers: true
       },
-      code: '// Welcome to DBEnvy'
+      code: '//////////////////////////////////\n' +
+            '// Welcome to DBEnvy!\n' +
+            '//\n' +
+            '// Try some of our Hotkeys:\n' +
+            '// Note: Currently you cannot have the editor focused while using hotkeys!\n' +
+            '// Shift + n : New Editor\n' +
+            '// Shift + e : Execute Selected\n' +
+            '// Shift + a : Execute All\n' +
+            '// Shift + c : Clean Output\n' +
+            '//\n' +
+            '// You can also right click on the Editor for a context Menu.\n' +
+            '// If you have too many tabs, use the filter box to search for a specific alias.\n' +
+            '//////////////////////////////////\n'
+
     };
 
     const reactionToExecuteAll = reaction( // eslint-disable-line
