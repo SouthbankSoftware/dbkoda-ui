@@ -15,7 +15,6 @@ import {observer, inject} from 'mobx-react';
 import {action} from 'mobx';
 import {
   AnchorButton,
-  Button,
   Intent,
   Position,
   Tooltip,
