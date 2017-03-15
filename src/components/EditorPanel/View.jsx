@@ -39,26 +39,26 @@ export default class View extends React.Component {
     };
 
     const reactionToExecuteAll = reaction( // eslint-disable-line
-        () => this.props.store.executingEditorAll, executingEditorAll => { //eslint-disable-line
+        () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
       console.log('Execute All');
-      if (this.props.store.activeEditorId == this.props.id && this.props.store.executingEditorAll == true) {
-        console.log('Sending data to feathers id ', this.props.store.activeDropdownId, ': "', this.state.code, '".');
+      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorAll == true) {
+        console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': "', this.state.code, '".');
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
-        service.update(this.props.store.activeDropdownId, {
-          shellId: parseInt(this.props.store.activeDropdownId) + 1, // eslint-disable-line
+        service.update(this.props.store.editorPanel.activeDropdownId, {
+          shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
           commands: this.state.code
         });
-        this.props.store.executingEditorAll = false;
+        this.props.store.editorPanel.executingEditorAll = false;
       }
     });
 
     const reactionToExecuteLine = reaction( // eslint-disable-line
-        () => this.props.store.executingEditorLines, executingEditorLines => { //eslint-disable-line
-      if (this.props.store.activeEditorId == this.props.id && this.props.store.executingEditorLines == true) {
+        () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
+      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorLines == true) {
         // Determine code to send.
-        const cm = this.refs.editor.getCodeMirror();
+        const cm = this.refs.editor.getCodeMirror(); // eslint-disable-line
         let content = cm.getSelection();
         if (cm.getSelection().length > 0) {
           console.log('Executing Highlighted Text.');
@@ -66,15 +66,15 @@ export default class View extends React.Component {
           console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
           content = cm.getLine(cm.getCursor().line);
         }
-        console.log('Sending data to feathers id ', this.props.store.activeDropdownId, ': "', content, '".');
+        console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': "', content, '".');
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
-        service.update(this.props.store.activeDropdownId, {
-          shellId: parseInt(this.props.store.activeDropdownId) + 1, // eslint-disable-line
+        service.update(this.props.store.editorPanel.activeDropdownId, {
+          shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
           commands: content
         });
-        this.props.store.executingEditorLines = false;
+        this.props.store.editorPanel.executingEditorLines = false;
       }
     });
   }

@@ -27,7 +27,7 @@ export default class Panel extends React.Component {
   outputAvaiable(output) {
     // Parse output for string 'Type "it" for more'
     this.props.output.output = this.props.output.output + '\n' + output.output + '\n'; // eslint-disable-line
-    if (output.output.endsWith('Type "it" for more')) {
+    if (output.output.replace(/^\s+|\s+$/g, '').endsWith('Type "it" for more')) {
       console.log('can show more');
       this.props.output.cannotShowMore = false; // eslint-disable-line
     } else {
