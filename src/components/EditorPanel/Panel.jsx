@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-14 15:54:27
+* @Last modified by:   wahaj
+* @Last modified time: 2017-03-15T16:01:13+11:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -89,7 +89,10 @@ export default class Panel extends React.Component {
       this.setState({tabId: newTab});
     }
   }
-
+  @action handleDrop(item) {
+    this.props.store.dragItem.item = item;
+    this.props.store.dragItem.dragDrop = true;
+  }
   render() {
     const editors = this
       .props
@@ -111,7 +114,7 @@ export default class Panel extends React.Component {
             title="Default"
             panel={<View id={
             0
-          }
+          } onDrop={item => this.handleDrop(item)}
               ref="defaultEditor" />} /> {editors.map((tab) => {
             if (tab[1].visible) {
               return (
@@ -122,7 +125,7 @@ export default class Panel extends React.Component {
                   title={tab[1].id + ':' + tab[1].shellId}
                   panel={<View id={
                   tab[1].id
-                }
+                } onDrop={item => this.handleDrop(item)}
                     ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"

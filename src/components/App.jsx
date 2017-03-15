@@ -2,10 +2,12 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-14T16:36:23+11:00
+* @Last modified time: 2017-03-15T12:14:15+11:00
  */
 
 import React from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
 import Drawer from 'react-motion-drawer';
 import { Button } from '@blueprintjs/core';
@@ -31,7 +33,7 @@ const splitPane2Style = {
 
 @inject(allStores => ({ layout: allStores.store.layout }))
 @observer
-export default class App extends React.Component {
+class App extends React.Component {
   static propTypes = {
     layout: PropTypes.observableObject.isRequired,
   };
@@ -124,3 +126,5 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default DragDropContext(HTML5Backend)(App);
