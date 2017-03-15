@@ -3,12 +3,17 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-14T16:01:50+11:00
+* @Last modified time: 2017-03-15T11:33:35+11:00
 */
+
+import React from 'react';
+
 
 import { observable } from 'mobx';
 
 import { ITreeNode } from '@blueprintjs/core';
+
+import DragLabel from './DragLabel.jsx';
 
 export default class TreeNode implements ITreeNode {
   id;
@@ -19,15 +24,15 @@ export default class TreeNode implements ITreeNode {
   @observable isSelected = false;
   @observable isExpanded = false;
 
-  constructor(treeNode, parentTextAsId) {
-    this.label = treeNode.text;
+  constructor(treeNode, parentId) {
     this.type = TreeNode.getNodeType(treeNode);
     this.iconName = `tree-${this.type}`;
-    if (parentTextAsId) {
-      this.id = `${parentTextAsId}_${this.label}`;
+    if (parentId) {
+      this.id = `${parentId}_${treeNode.text}`;
     } else {
       this.id = this.type + '_parent';
     }
+    this.label = <DragLabel label={treeNode.text} id={this.id} type={this.type} />;
     if (treeNode.children) {
       this.childNodes = observable([]);
       for (const childnode of treeNode.children) {

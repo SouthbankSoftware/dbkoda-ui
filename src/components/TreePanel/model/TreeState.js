@@ -3,12 +3,12 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-14T15:58:15+11:00
+* @Last modified time: 2017-03-15T10:53:43+11:00
 */
 
 import { observable } from 'mobx';
 
-import TreeNode from './TreeNode.js';
+import TreeNode from './TreeNode.jsx';
 
 export default class TreeState {
   nodes;
