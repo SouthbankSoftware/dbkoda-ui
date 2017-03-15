@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T11:33:35+11:00
+* @Last modified time: 2017-03-15T17:26:42+11:00
 */
 
 import React from 'react';
@@ -24,19 +24,31 @@ export default class TreeNode implements ITreeNode {
   @observable isSelected = false;
   @observable isExpanded = false;
 
-  constructor(treeNode, parentId) {
+  constructor(treeNode, parentId, filter) {
     this.type = TreeNode.getNodeType(treeNode);
     this.iconName = `tree-${this.type}`;
-    if (parentId) {
+    if (parentId && parentId != 'root') {
       this.id = `${parentId}_${treeNode.text}`;
     } else {
-      this.id = this.type + '_parent';
+      this.id = `${this.type}_${parentId}`;
+    }
+    if (filter != '') {
+      this.isExpanded = true;
     }
     this.label = <DragLabel label={treeNode.text} id={this.id} type={this.type} />;
     if (treeNode.children) {
       this.childNodes = observable([]);
       for (const childnode of treeNode.children) {
-        this.childNodes.push(new TreeNode(childnode, this.id));
+        const child = new TreeNode(childnode, this.id, filter);
+        if (filter == '') {
+          this.childNodes.push(child);
+        } else if (childnode.text.toLowerCase().indexOf(filter) >= 0) {
+          this.childNodes.push(child);
+        } else if (childnode.children && childnode.children.length > 0) {
+          if (child.childNodes && child.childNodes.length > 0) {
+            this.childNodes.push(child);
+          }
+        }
       }
     }
   }

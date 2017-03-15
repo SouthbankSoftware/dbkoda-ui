@@ -3,24 +3,36 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T10:53:43+11:00
+* @Last modified time: 2017-03-15T17:25:34+11:00
 */
 
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
 
 import TreeNode from './TreeNode.jsx';
 
 export default class TreeState {
   nodes;
+  @observable filter = '';
+  treeJson;
   constructor() {
     this.nodes = observable([]);
   }
-
-  parseJson(treeJson) {
+  @action setFilter(value) {
+    this.filter = value.toLowerCase();
+    this.filterNodes();
+  }
+  filterNodes() {
     this.nodes.clear();
-    for (const node of treeJson) {
-      this.nodes.push(new TreeNode(node));
+    for (const node of this.treeJson) {
+      const treeNode = new TreeNode(node, 'root', this.filter);
+      if (treeNode.childNodes && treeNode.childNodes.length > 0) {
+        this.nodes.push(treeNode);
+      }
     }
+  }
+  parseJson(treeJson) {
+    this.treeJson = treeJson;
+    this.filterNodes();
   }
 
   selectNode(nodeData, e) {
