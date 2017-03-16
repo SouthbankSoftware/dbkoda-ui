@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
 * @Last modified by:   chris
-* @Last modified time: 2017-03-16T11:56:39+11:00
+* @Last modified time: 2017-03-16T16:47:30+11:00
 */
 
 import React from 'react';
@@ -11,7 +11,7 @@ import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
 import {NewToaster} from '../common/Toaster';
-import {HotkeysTarget, Hotkeys, Hotkey, Intent, Button} from '@blueprintjs/core';
+import {HotkeysTarget, Hotkeys, Hotkey, Intent, Tooltip, AnchorButton, Position} from '@blueprintjs/core';
 
 @inject('store')
 @observer
@@ -43,17 +43,29 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-navbar-heading">Query Output</div>
-          <Button
-            className="pt-button pt-icon-disable pt-intent-warning clearOutputBtn"
-            onClick={this.clearOutput}
-            title="Clear Output (Shortcut+Keys)" />
-          <Button
-            className="pt-button showMoreBtn pt-intent-primary"
-            onClick={this.showMore}
-            disabled={this.props.store.output.cannotShowMore}
-            title="Show More (Shortcut+Keys)">
-            Show More
-          </Button>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Clear Output Contents (Shift + C)"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-button pt-icon-disable pt-intent-warning clearOutputBtn"
+              onClick={this.clearOutput} />
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Show More (Shift + M)"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-button showMoreBtn pt-intent-primary"
+              onClick={this.showMore}
+              disabled={this.props.store.output.cannotShowMore} >
+              Show More
+            </AnchorButton>
+          </Tooltip>
         </div>
         <div className="pt-navbar-group pt-right-align" />
       </nav>
@@ -68,6 +80,11 @@ export default class Toolbar extends React.Component {
           combo="shift + c"
           label="Clear Output"
           onKeyDown={this.clearOutput} />
+        <Hotkey
+          global
+          combo="shift + m"
+          label="Show More"
+          onKeyDown={this.showMore} />
       </Hotkeys>
     );
   }
