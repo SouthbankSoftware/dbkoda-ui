@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T17:26:42+11:00
+* @Last modified time: 2017-03-15T17:34:12+11:00
 */
 
 import React from 'react';
@@ -35,7 +35,7 @@ export default class TreeNode implements ITreeNode {
     if (filter != '') {
       this.isExpanded = true;
     }
-    this.label = <DragLabel label={treeNode.text} id={this.id} type={this.type} />;
+    this.label = <DragLabel label={treeNode.text} id={this.id} type={this.type} filter={filter} />;
     if (treeNode.children) {
       this.childNodes = observable([]);
       for (const childnode of treeNode.children) {

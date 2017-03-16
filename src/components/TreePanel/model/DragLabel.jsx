@@ -3,7 +3,7 @@
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T12:41:45+11:00
+* @Last modified time: 2017-03-16T10:46:44+11:00
 */
 
 import React from 'react';
@@ -24,6 +24,24 @@ function collect(connect, monitor) {
 }
 
 class DragLabel extends React.Component {
+  static get defaultProps() {
+    return {
+      filter: ''
+    };
+  }
+  get FilteredTextLabel() {
+    const filterText = this.props.filter;
+    const strText = this.props.label;
+    const matchStart = strText.toLowerCase().indexOf(filterText.toLowerCase());
+    if (filterText != '' && matchStart >= 0) {
+      const matchEnd = matchStart + (filterText.length - 1);
+      const beforeMatch = strText.slice(0, matchStart);
+      const matchText = strText.slice(matchStart, matchEnd + 1);
+      const afterMatch = strText.slice(matchEnd + 1);
+      return <span>{beforeMatch}<mark>{matchText}</mark>{afterMatch}</span>;
+    }
+    return strText;
+  }
   render() {
     const { connectDragSource, isDragging } = this.props;
     return connectDragSource(
@@ -32,13 +50,14 @@ class DragLabel extends React.Component {
           opacity: isDragging ? 0.5 : 1,
           cursor: 'move',
         }}
-      >{this.props.label}</span>,
+      >{this.FilteredTextLabel}</span>,
     );
   }
 }
 
 DragLabel.propTypes = {
   label: React.PropTypes.string.isRequired,
+  filter: React.PropTypes.string.isRequired,
   connectDragSource: React.PropTypes.func.isRequired,
   isDragging: React.PropTypes.bool.isRequired,
 };
