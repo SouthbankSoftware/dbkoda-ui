@@ -10,7 +10,7 @@
     "test": "npm run eslint && nyc npm run mocha",
     "eslint": "eslint src/. tests/.",
     "mocha": "NODE_ENV=test babel-node ./node_modules/mocha/bin/_mocha --opts mocha.opts ./src/**/*.test.js*",
-    "jest": "jest --config jest.json",
+    "jest": "jest --config jest.json --coverage",
     "test-target": "NODE_ENV=test mocha --opts mocha.opts",
     "docs": "esdoc -c .esdoc.json && open ./docs/index.html",
     "clean": "rimraf ./dist rmdir",
