@@ -17,6 +17,7 @@ class FeatherClient {
   }
 
   configurePrimus(primus) {
+    this.primus = primus;
     this.feathers = this.feathers.configure(feathers.primus(primus));
     this.shellService = this.feathers.service('/mongo-shells');
     const that = this;
@@ -72,6 +73,10 @@ class FeatherClient {
     return _.filter(this.outputListeners, {connectionId, shellId});
   }
 
+  closeConnection() {
+    // TODO: find a way to close the connection
+
+  }
 }
 
 export const featherClient = () => {
