@@ -98,7 +98,7 @@ class App extends React.Component {
             maxSize={1000}
             pane2Style={splitPane2Style}
           >
-            <ProfileListPanel />
+            <ProfileListPanel openDrawer={this.updateDrawerOpenStatus} />
             <TreePanel />
           </SplitPane>
           <SplitPane

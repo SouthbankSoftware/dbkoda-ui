@@ -20,11 +20,13 @@ export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+
+    this.newProfile = this.newProfile.bind(this);
   }
 
   // Placeholder - Linting disabled for this line.
  @action newProfile() { // eslint-disable-line class-methods-use-this
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    this.props.store.layout.drawerOpen = true;
   }
 
   // Placeholder - Linting disabled for this line.
