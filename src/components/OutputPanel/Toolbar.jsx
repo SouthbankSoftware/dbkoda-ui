@@ -2,8 +2,8 @@
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
-* @Last modified by:   chris
-* @Last modified time: 2017-03-16T16:47:30+11:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-03-17T13:44:54+11:00
 */
 
 import React from 'react';
@@ -23,7 +23,7 @@ export default class Toolbar extends React.Component {
 
   @action.bound
   clearOutput() {
-    this.props.store.output.output = '';
+    this.props.store.outputPanel.output = '';
   }
 
   @action.bound
@@ -62,7 +62,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button showMoreBtn pt-intent-primary"
               onClick={this.showMore}
-              disabled={this.props.store.output.cannotShowMore} >
+              disabled={this.props.store.outputPanel.cannotShowMore} >
               Show More
             </AnchorButton>
           </Tooltip>
