@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
-* @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T15:20:40+11:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-03-17T12:01:19+11:00
  */
 
 import {observable, action} from 'mobx';
@@ -31,7 +31,7 @@ export default class Store {
     creatingNewProfile: false
   };
 
-  @observable output = {
+  @observable outputPanel = {
     output: '// Output goes here!',
     cannotShowMore: true
   }
