@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
-* @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T12:14:15+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-03-16T17:05:45+11:00
  */
 
 import React from 'react';
@@ -10,7 +10,6 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
 import Drawer from 'react-motion-drawer';
-import { Button } from '@blueprintjs/core';
 import { action, untracked } from 'mobx';
 import { inject, observer, PropTypes } from 'mobx-react';
 import DevTools from 'mobx-react-devtools';

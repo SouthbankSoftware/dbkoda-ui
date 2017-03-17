@@ -70,7 +70,7 @@ export default class Toolbar extends React.Component {
         .service('/mongo-connection')
         .create({}, {
           query: {
-            url: 'mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com'
+            url: 'mongodb://localhost/27017'
           }
         })
         .then((res) => {
