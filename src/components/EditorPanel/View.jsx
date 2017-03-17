@@ -152,7 +152,8 @@ class View extends React.Component {
       () => this.props.store.dragItem.dragDrop, dragDrop => {   // eslint-disable-line
         if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
           const item = this.props.store.dragItem.item;
-          this.setState({code: item.label});
+          // this.setState({code: item.label});
+          this.insertAtCursor(item.label);
           this.props.store.dragItem.dragDrop = false;
         }
       }
@@ -167,13 +168,25 @@ class View extends React.Component {
       .executeAll
       .bind(this);
   }
-
+  
   /**
    * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.
    */
   componentDidMount() {
     this.refresh();
   }
+
+  /**
+ * Inserts the text at the current cursor position
+ * @param {String} text - The text to add to the editor.
+ */
+  insertAtCursor(text) {
+  const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+      cm.replaceSelection(text);
+}
 
   /**
    * Refresh the code mirror instance to account for tab or layout changes.
