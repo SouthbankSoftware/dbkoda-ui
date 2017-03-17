@@ -3,7 +3,7 @@
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-16T10:46:44+11:00
+* @Last modified time: 2017-03-17T09:23:03+11:00
 */
 
 import React from 'react';
@@ -23,6 +23,9 @@ function collect(connect, monitor) {
   };
 }
 
+/**
+ * Defines the label of tree component which is dragable using react-dnd
+ */
 class DragLabel extends React.Component {
   static get defaultProps() {
     return {

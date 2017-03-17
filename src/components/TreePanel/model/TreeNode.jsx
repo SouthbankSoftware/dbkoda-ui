@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
 * @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T17:34:12+11:00
+* @Last modified time: 2017-03-17T10:34:08+11:00
 */
 
 import React from 'react';
@@ -23,40 +23,56 @@ export default class TreeNode implements ITreeNode {
   @observable childNodes;
   @observable isSelected = false;
   @observable isExpanded = false;
+  isFiltered = false;
 
-  constructor(treeNode, parentId, filter) {
-    this.type = TreeNode.getNodeType(treeNode);
+  /**
+   * Traverse a single dependency tree (DFS)
+   *
+   * @param {Object} treeJSON - JSON object from controller having text
+   * @param {string} parentId - ID of the parent node
+   * @param {string} filter - any string set by the user in searchbar for highlighting purpose
+   */
+  constructor(treeJSON, parentId, filter, isParentFiltered) {
+    this.type = TreeNode.getNodeType(treeJSON);
+    console.log(this.type);
     this.iconName = `tree-${this.type}`;
     if (parentId && parentId != 'root') {
-      this.id = `${parentId}_${treeNode.text}`;
+      this.id = `${parentId}_${treeJSON.text}`;
     } else {
       this.id = `${this.type}_${parentId}`;
     }
-    if (filter != '') {
+
+    if (treeJSON.text.toLowerCase().indexOf(filter) >= 0 || isParentFiltered) {
+      this.isFiltered = true;
+    }
+    if (filter != '' && !this.isFiltered) {
       this.isExpanded = true;
     }
-    this.label = <DragLabel label={treeNode.text} id={this.id} type={this.type} filter={filter} />;
-    if (treeNode.children) {
+    this.label = <DragLabel label={treeJSON.text} id={this.id} type={this.type} filter={filter} />;
+    if (treeJSON.children) {
       this.childNodes = observable([]);
-      for (const childnode of treeNode.children) {
-        const child = new TreeNode(childnode, this.id, filter);
-        if (filter == '') {
+      for (const childJSON of treeJSON.children) {
+        const child = new TreeNode(childJSON, this.id, filter, this.isFiltered);
+        if (filter == '' || this.isFiltered) {                             // add the child nodes if there is no filter
           this.childNodes.push(child);
-        } else if (childnode.text.toLowerCase().indexOf(filter) >= 0) {
+        } else if (childJSON.text.toLowerCase().indexOf(filter) >= 0) {     // add the child node if filtered text is found in the child node label
           this.childNodes.push(child);
-        } else if (childnode.children && childnode.children.length > 0) {
-          if (child.childNodes && child.childNodes.length > 0) {
+        } else if (childJSON.children && childJSON.children.length > 0) {   // add the child node if the grand child has filtered text in the label
+          if (child.childNodes && child.childNodes.length > 0) {              // Check if there are childNodes existing
             this.childNodes.push(child);
           }
         }
       }
     }
   }
-
-  static getNodeType(treeNode) {
-    if (treeNode.type) {
-      return treeNode.type;
+/**
+ * @param {Object} treeJSON - JSON object from controller having text
+ * @return {string} - type of the node in mongodb
+ */
+  static getNodeType(treeJSON) {
+    if (treeJSON.type) {
+      return treeJSON.type;
     }
-    return treeNode.text.toLowerCase().replace(' ', '');
+    return treeJSON.text.toLowerCase().replace(' ', '');
   }
 }
