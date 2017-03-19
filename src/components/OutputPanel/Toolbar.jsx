@@ -3,39 +3,56 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-17T13:44:54+11:00
+ * @Last modified time: 2017-03-20T09:12:11+11:00
 */
 
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {action} from 'mobx';
+import {action, reaction} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
 import {NewToaster} from '../common/Toaster';
 import {HotkeysTarget, Hotkeys, Hotkey, Intent, Tooltip, AnchorButton, Position} from '@blueprintjs/core';
 
+
+/**
+ * The OutputPanel toolbar, which hold the commands and actions specific to the output panel
+ *
+ */
 @inject('store')
 @observer
 @HotkeysTarget
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
+
+    const reactionToShowMore = reaction( // eslint-disable-line
+        () => this.props.store.outputPanel.showingMore, showingMore => {
+      const command = 'it';
+      console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': ', command, '.');
+      const service = featherClient().service('/mongo-shells');
+      service.timeout = 30000;
+      service.update(this.props.store.editorPanel.activeDropdownId, {
+        shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
+        commands: command
+      });
+    });
   }
 
+  /**
+   * Clears the output editor panel of all it's contents
+   */
   @action.bound
   clearOutput() {
     this.props.store.outputPanel.output = '';
   }
 
+  /**
+   * Sends the 'it' command back to the shell on the controller to get more results
+   */
   @action.bound
   showMore() {
-    const command = 'it';
-    console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': ', command, '.');
-    const service = featherClient().service('/mongo-shells');
-    service.timeout = 30000;
-    service.update(this.props.store.editorPanel.activeDropdownId, {
-      shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
-      commands: command
-    });
+    this.props.store.outputPanel.showingMore = true;
+    this.props.store.outputPanel.cannotShowMore = true;
   }
 
   render() {
