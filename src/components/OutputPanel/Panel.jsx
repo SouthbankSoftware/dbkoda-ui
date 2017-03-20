@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-17T13:49:39+11:00
+ * @Last modified time: 2017-03-20T09:09:59+11:00
  */
 
 import React from 'react';
@@ -29,12 +29,14 @@ export default class Panel extends React.Component {
   outputAvaiable(output) {
     // Parse output for string 'Type "it" for more'
     this.props.outputPanel.output = this.props.outputPanel.output + '\n' + output.output + '\n'; // eslint-disable-line
-    if (output.output.replace(/^\s+|\s+$/g, '').endsWith('Type "it" for more')) {
+    if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
       this.props.outputPanel.cannotShowMore = false; // eslint-disable-line
     } else {
-      console.log('cannot show more');
-      this.props.outputPanel.cannotShowMore = true; // eslint-disable-line
+      if(this.props.outputPanel.cannotShowMore && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
+        console.log('cannot show more');
+        this.props.outputPanel.cannotShowMore = true; // eslint-disable-line
+      }
     }
   }
 
