@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
-* @Last modified by:   Mike
-* @Last modified time: 2017-03-17 09:46:10
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-17T17:04:19+11:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -15,6 +15,7 @@ import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
 import { DropTarget } from 'react-dnd';
 import { DragItemTypes} from '#/common/Constants.js';
+import CodeGeneration from '#/common/CodeGeneration.js';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
@@ -30,8 +31,8 @@ require('codemirror/addon/display/autorefresh.js');
 const editorTarget = {
   /**
    * drop method for dropping items into editor.
-   * @param {} props - Properties.
-   * @param {} monitor - ???
+   * @param {} props - Properties of the DropTarget.
+   * @param {} monitor - keeps the state of drag process, e.g object which is being dragged
    */
   drop(props, monitor) {
     const item = monitor.getItem();
@@ -40,9 +41,9 @@ const editorTarget = {
 };
 
 /**
- * Collect method to help with drag and drop actions?
- * @param {} connect - ???
- * @param {} monitor - ???
+ * Collect the information required by the connector and inject it into the react component as props
+ * @param {} connect - connectors let you assign one of the predefined roles (a drag source, a drag preview, or a drop target) to the DOM nodes
+ * @param {} monitor - keeps the state of drag process, e.g object which is being dragged
  */
 function collect(connect, monitor) {
   return {
@@ -153,7 +154,7 @@ class View extends React.Component {
         if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
           const item = this.props.store.dragItem.item;
           // this.setState({code: item.label});
-          this.insertAtCursor(item.label);
+          this.insertAtCursor(CodeGeneration.getCodeForTreeNode(item));
           this.props.store.dragItem.dragDrop = false;
         }
       }
@@ -168,7 +169,7 @@ class View extends React.Component {
       .executeAll
       .bind(this);
   }
-  
+
   /**
    * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.
    */

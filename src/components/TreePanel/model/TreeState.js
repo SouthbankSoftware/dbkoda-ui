@@ -2,8 +2,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
-* @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T17:25:34+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-20T15:59:57+11:00
 */
 
 import { observable, action } from 'mobx';
@@ -24,7 +24,7 @@ export default class TreeState {
   filterNodes() {
     this.nodes.clear();
     for (const node of this.treeJson) {
-      const treeNode = new TreeNode(node, 'root', this.filter);
+      const treeNode = new TreeNode(node, this.filter);
       if (treeNode.childNodes && treeNode.childNodes.length > 0) {
         this.nodes.push(treeNode);
       }
