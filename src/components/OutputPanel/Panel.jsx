@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-21T09:26:25+11:00
+ * @Last modified time: 2017-03-21T09:52:33+11:00
  */
 
 import React from 'react';
@@ -47,8 +47,14 @@ export default class Panel extends React.Component {
     return (
       editors.map((editor) => {
         const editorTitle = `${editor[1].id}:${editor[1].shellId}`;
+        console.log(editor[1].visible);
+        let tabClassName = "notVisible";
+        if (editor[1].visible) {
+          tabClassName = "visible";
+        }
         return (
           <Tab2
+            className={tabClassName}
             key={editor[1].shellId}
             id={editor[1].id}
             title={editorTitle}
