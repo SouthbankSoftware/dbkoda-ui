@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-20T16:18:56+11:00
+ * @Last modified time: 2017-03-20T17:17:41+11:00
 */
 
 import React from 'react';
@@ -18,6 +18,7 @@ import DragLabel from './DragLabel.jsx';
 export default class TreeNode implements ITreeNode {
   id;
   @observable label;
+  text;
   type;
   iconName;
   @observable childNodes;
@@ -50,6 +51,7 @@ export default class TreeNode implements ITreeNode {
     if (filter != '' && !this.isFiltered) {
       this.isExpanded = true;
     }
+    this.text = treeJSON.text;
     this.label = <DragLabel label={treeJSON.text} id={this.id} type={this.type} refParent={this.refParent} filter={filter} />;
     if (treeJSON.children) {
       this.childNodes = observable([]);

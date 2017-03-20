@@ -3,7 +3,7 @@
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-20T16:18:54+11:00
+ * @Last modified time: 2017-03-20T17:16:41+11:00
 */
 
 import React from 'react';
@@ -32,6 +32,16 @@ class DragLabel extends React.Component {
       filter: ''
     };
   }
+  get ServerName() {
+    const serverName = this.props.label;
+    let newServerName = serverName;
+    const dotPos = serverName.indexOf('.');
+    const colonPos = serverName.indexOf(':');
+    if (colonPos + dotPos > 1) {
+        newServerName = serverName.substr(0, dotPos) + serverName.substr(colonPos);
+    }
+    return (newServerName);
+}
   get FilteredTextLabel() {
     const filterText = this.props.filter;
     const strText = this.props.label;
@@ -42,6 +52,9 @@ class DragLabel extends React.Component {
       const matchText = strText.slice(matchStart, matchEnd + 1);
       const afterMatch = strText.slice(matchEnd + 1);
       return <span>{beforeMatch}<mark>{matchText}</mark>{afterMatch}</span>;
+    }
+    if (this.props.type == 'shard' || this.props.type == 'config') {
+      return this.ServerName;
     }
     return strText;
   }
@@ -60,6 +73,7 @@ class DragLabel extends React.Component {
 
 DragLabel.propTypes = {
   label: React.PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
   filter: React.PropTypes.string.isRequired,
   connectDragSource: React.PropTypes.func.isRequired,
   isDragging: React.PropTypes.bool.isRequired,

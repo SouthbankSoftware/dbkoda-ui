@@ -3,7 +3,7 @@
 * @Date:   2017-03-17T10:29:12+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-20T16:48:20+11:00
+ * @Last modified time: 2017-03-20T17:18:05+11:00
 */
 
 export default class CodeGeneration {
@@ -49,7 +49,7 @@ export default class CodeGeneration {
       case 'collection':
         return CodeGeneration.templates.collectionNode(treeNode.label);
       case 'index':
-        return CodeGeneration.templates.indexNode(treeNode.refParent.label.props.label);
+        return CodeGeneration.templates.indexNode(treeNode.refParent.text);
       case 'users':
         return CodeGeneration.templates.usersNode();
       case 'user':
