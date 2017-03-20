@@ -23,6 +23,7 @@ import '@blueprintjs/core/dist/blueprint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';
+import {ConnectionProfilePanel} from '../components/ConnectionPanel';
 
 import './App.scss';
 
@@ -79,9 +80,8 @@ class App extends React.Component {
           handleWidth={0}
           onChange={this.updateDrawerOpenStatus}
         >
-          <div className="drawerPanel">
-            <h3>Please close me!!!</h3>
-          </div>
+
+          <ConnectionProfilePanel/>
         </Drawer>
         <SplitPane
           split="vertical"
