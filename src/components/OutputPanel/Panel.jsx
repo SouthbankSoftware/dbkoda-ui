@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-21T08:54:59+11:00
+ * @Last modified time: 2017-03-21T09:26:25+11:00
  */
 
 import React from 'react';
@@ -23,6 +23,20 @@ export default class Panel extends React.Component {
       currentTab: 0
     }
     this.changeTab = this.changeTab.bind(this);
+
+    /**
+     * Reaction function for when the active editorPanel is changed,
+     * update the active outputPanel
+     * @param {function()} - The state that will trigger the reaction
+     * @param {function()} - The reaction to trigger on state change
+     */
+    const reactionToEditorChange = reaction(
+      () => this.props.store.editorPanel.activeEditorId,
+      activeEditorId => {
+        this.setState({currentTab: activeEditorId});
+      },
+      { "name": "reactionOutputPanelTabChange" }
+    );
   }
 
   changeTab(newTab) {
@@ -44,9 +58,9 @@ export default class Panel extends React.Component {
               shellId={editor[1].shellId} />
             }>
           </Tab2>
-        )
+        );
       })
-    )
+    );
   }
 
   render() {
@@ -56,7 +70,7 @@ export default class Panel extends React.Component {
         <Tabs2 id="outputPanelTabs"
           className="outputTabView"
           onChange={this.changeTab}
-          selectedTabIndex={this.state.currentTab}>
+          selectedTabId={this.state.currentTab}>
           <Tab2 key={0}
             id={0}
             panel={
