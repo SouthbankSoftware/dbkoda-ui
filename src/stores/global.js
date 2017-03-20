@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   chris
- * @Last modified time: 2017-03-17T16:31:05+11:00
+ * @Last modified time: 2017-03-20T14:58:32+11:00
  */
 
 import {observable, action} from 'mobx';
@@ -11,6 +11,7 @@ import TempTopology from './TempTopology.js';
 export default class Store {
   @observable profiles = observable.map();
   @observable editors = observable.map();
+  @observable outputs = observable.map();
 
   @observable editorPanel = {
     activeEditorId: 0,
@@ -30,13 +31,7 @@ export default class Store {
   @observable profileList = {
     creatingNewProfile: false
   };
-
-  @observable outputPanel = {
-    output: '// Output goes here!',
-    cannotShowMore: true,
-    showingMore: false
-  }
-
+  
   @observable dragItem = {
     dragDrop: false,
     item: null

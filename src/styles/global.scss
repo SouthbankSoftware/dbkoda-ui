@@ -1,8 +1,8 @@
 // @Author: chris
 // @Date:   2017-03-10T15:54:46+11:00
 // @Email:  chris@southbanksoftware.com
-// @Last modified by:   guiguan
-// @Last modified time: 2017-03-10T20:57:03+11:00
+// @Last modified by:   chris
+// @Last modified time: 2017-03-21T08:53:08+11:00
 
 
 
@@ -59,17 +59,6 @@ h3 {
   flex: '1 1 0%';
 }
 
-.outputPanel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.outputEditor {
-  flex: 1;
-  min-height: 0;
-}
-
 .fullHeight {
   height: 100%;
 }
@@ -108,6 +97,34 @@ h3 {
 
 .cm-s-ambiance .CodeMirror-linenumber {
   color: $whiteColor;
+}
+
+// ======================== //
+//      Output Panel
+// ======================== //
+
+.outputToolbar {
+  order: 1;
+}
+
+.outputTabView {
+  order: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.outputEditor {
+  order: 3;
+  flex: 1;
+  min-height: 0;
+}
+
+
+.outputPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 // ======================== //

@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-20T09:12:11+11:00
+ * @Last modified time: 2017-03-20T16:57:37+11:00
 */
 
 import React from 'react';
@@ -22,28 +22,12 @@ import {HotkeysTarget, Hotkeys, Hotkey, Intent, Tooltip, AnchorButton, Position}
 @observer
 @HotkeysTarget
 export default class Toolbar extends React.Component {
-  constructor(props) {
-    super(props);
-
-    const reactionToShowMore = reaction( // eslint-disable-line
-        () => this.props.store.outputPanel.showingMore, showingMore => {
-      const command = 'it';
-      console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': ', command, '.');
-      const service = featherClient().service('/mongo-shells');
-      service.timeout = 30000;
-      service.update(this.props.store.editorPanel.activeDropdownId, {
-        shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
-        commands: command
-      });
-    });
-  }
-
   /**
    * Clears the output editor panel of all it's contents
    */
   @action.bound
   clearOutput() {
-    this.props.store.outputPanel.output = '';
+    this.props.store.outputs.get(this.props.id).output = '';
   }
 
   /**
@@ -51,8 +35,15 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   showMore() {
-    this.props.store.outputPanel.showingMore = true;
-    this.props.store.outputPanel.cannotShowMore = true;
+    const command = 'it';
+    console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': ', command, '.');
+    const service = featherClient().service('/mongo-shells');
+    service.timeout = 30000;
+    service.update(this.props.store.editorPanel.activeDropdownId, {
+      shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
+      commands: command
+    });
+    this.props.store.outputs.get(this.props.id).cannotShowMore = true;
   }
 
   render() {
@@ -79,7 +70,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button showMoreBtn pt-intent-primary"
               onClick={this.showMore}
-              disabled={this.props.store.outputPanel.cannotShowMore} >
+              disabled={this.props.store.outputs.get(this.props.id).cannotShowMore} >
               Show More
             </AnchorButton>
           </Tooltip>

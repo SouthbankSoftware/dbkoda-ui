@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-20T09:09:59+11:00
+ * @Last modified time: 2017-03-21T08:54:59+11:00
  */
 
 import React from 'react';
@@ -11,40 +11,62 @@ import {action, reaction} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
-import {featherClient} from '../../helpers/feathers';
 
-@inject(allStores => ({outputPanel: allStores.store.outputPanel}))
+import {Tabs2, Tab2} from '@blueprintjs/core';
+
+@inject('store')
 @observer
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
-    featherClient().addOutputListener(1, 2, this.outputAvaiable);
-    featherClient().addOutputListener(3, 4, this.outputAvaiable);
-    featherClient().addOutputListener(5, 6, this.outputAvaiable);
-    featherClient().addOutputListener(7, 8, this.outputAvaiable);
-    featherClient().addOutputListener(9, 10, this.outputAvaiable);
+    this.state = {
+      currentTab: 0
+    }
+    this.changeTab = this.changeTab.bind(this);
   }
 
-  @action.bound
-  outputAvaiable(output) {
-    // Parse output for string 'Type "it" for more'
-    this.props.outputPanel.output = this.props.outputPanel.output + '\n' + output.output + '\n'; // eslint-disable-line
-    if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
-      console.log('can show more');
-      this.props.outputPanel.cannotShowMore = false; // eslint-disable-line
-    } else {
-      if(this.props.outputPanel.cannotShowMore && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
-        console.log('cannot show more');
-        this.props.outputPanel.cannotShowMore = true; // eslint-disable-line
-      }
-    }
+  changeTab(newTab) {
+    this.setState({currentTab: newTab});
+  }
+
+  getTabs(editors) {
+    return (
+      editors.map((editor) => {
+        const editorTitle = `${editor[1].id}:${editor[1].shellId}`;
+        return (
+          <Tab2
+            key={editor[1].shellId}
+            id={editor[1].id}
+            title={editorTitle}
+            panel={
+              <OutputEditor
+              id={editor[1].id}
+              shellId={editor[1].shellId} />
+            }>
+          </Tab2>
+        )
+      })
+    )
   }
 
   render() {
+    // Toolbar must be rendered after tabs for initialisation purposes
     return (
       <div className="pt-dark outputPanel">
-        <OutputToolbar />
-        <OutputEditor />
+        <Tabs2 id="outputPanelTabs"
+          className="outputTabView"
+          onChange={this.changeTab}
+          selectedTabIndex={this.state.currentTab}>
+          <Tab2 key={0}
+            id={0}
+            panel={
+              <OutputEditor id={0} shellId={0} />
+            }
+            title="Default">
+          </Tab2>
+          {this.getTabs(this.props.store.editors.entries())}
+        </Tabs2>
+        <OutputToolbar id={this.state.currentTab} />
       </div>
     );
   }
