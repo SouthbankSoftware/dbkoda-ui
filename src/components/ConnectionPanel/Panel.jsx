@@ -1,6 +1,7 @@
 import React from 'react';
 import {inject, observer, action} from 'mobx-react';
 import validatorjs from 'validatorjs';
+import autobind from 'autobind-decorator';
 import forms from './Form';
 import Radio from './Radio';
 import Input from './Input';
@@ -26,6 +27,11 @@ export default class Panel extends React.Component {
 
   }
 
+  @autobind
+  hostRadioOnChange(){
+    this.form.$('hostRadio').set('value', !this.form.$('hostRadio').get('value'));
+    this.form.$('urlRadio').set('value', !this.form.$('urlRadio').get('value'));
+  }
 
   render() {
     const form = this.form;
@@ -37,18 +43,12 @@ export default class Panel extends React.Component {
             <Input field={form.$('alias')}/>
           </div>
           <div className="profile-input-row">
-            <Radio field={form.$('hostRadio')} onChange={() => {
-              form.$('hostRadio').set('value', !form.$('hostRadio').get('value'));
-              form.$('urlRadio').set('value', !form.$('urlRadio').get('value'));
-            }}/>
+            <Radio field={form.$('hostRadio')} onChange={this.hostRadioOnChange}/>
             <Input field={form.$('host')} showLabel={false} disable={!form.$('hostRadio').get('value')}/>
             <Input field={form.$('port')} showLabel={false} disable={!form.$('hostRadio').get('value')}/>
           </div>
           <div className="profile-input-row">
-            <Radio field={form.$('urlRadio')} onChange={() => {
-              form.$('hostRadio').set('value', !form.$('hostRadio').get('value'));
-              form.$('urlRadio').set('value', !form.$('urlRadio').get('value'));
-            }}/>
+            <Radio field={form.$('urlRadio')} onChange={this.hostRadioOnChange}/>
             <Input field={form.$('url')} showLabel={false} disable={!form.$('urlRadio').get('value')}/>
           </div>
           <div className="profile-input-row">
