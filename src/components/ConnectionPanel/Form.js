@@ -6,35 +6,43 @@ export default {
     type: 'text',
     rules: 'required|string',
   }, {
-    name: 'host',
+    name: 'hostRadio',
+    value: true,
     label: 'Host',
-    placeholder: 'Hostname',
-    type: 'text',
-    rules: 'required|string',
-  }, {
-    name: 'port',
-    label: 'Port',
-    type: 'number',
-    rules: 'required|numeric',
-    value: '27017',
-  }, {
-    name: 'url',
-    label: 'URL',
-
-  }, {
-    name: 'database',
-    label: 'Database',
-  }, {
-    name: 'ssl',
-    label: 'SSL',
-  }, {
-    name: 'sha',
-    label: 'SCRAM-SHA-1(username/password)',
-  }, {
-    name: 'username',
-    label: 'Username'
-  }, {
-    name: 'password',
-    label: 'Password',
-  }]
+  },
+    {
+      name: 'host',
+      placeholder: 'Hostname',
+      type: 'text',
+      rules: 'required|string',
+    }, {
+      name: 'port',
+      type: 'number',
+      rules: 'required|numeric',
+      value: '27017',
+    }, {
+      name: 'urlRadio',
+      label: 'URL',
+      value: false,
+    },
+    {
+      name: 'url',
+      label: 'URL',
+      value: '',
+    }, {
+      name: 'database',
+      label: 'Database',
+    }, {
+      name: 'ssl',
+      label: 'SSL',
+    }, {
+      name: 'sha',
+      label: 'SCRAM-SHA-1(username/password)',
+    }, {
+      name: 'username',
+      label: 'Username'
+    }, {
+      name: 'password',
+      label: 'Password',
+    }]
 };

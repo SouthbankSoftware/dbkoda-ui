@@ -23,6 +23,10 @@
   flex-direction: row;
 }
 
+.hostRadio-radio-input, .urlRadio-radio-input{
+  width: 50px;
+}
+
 .port-input-content {
   margin-left: 2%;
   flex-direction: row;
@@ -86,3 +90,4 @@
   width: 100%;
   margin: 0 0 10% 0;
 }
+

@@ -1,8 +1,8 @@
 import React from 'react';
-import {inject, observer} from 'mobx-react';
+import {inject, observer, action} from 'mobx-react';
 import validatorjs from 'validatorjs';
-import {Radio} from '@blueprintjs/core';
 import forms from './Form';
+import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
 import ProfileForm from './ProfileForm';
@@ -16,7 +16,16 @@ export default class Panel extends React.Component {
     super(props);
     this.state = {};
     this.form = new ProfileForm({fields: forms.fields}, {plugins: {dvr: validatorjs}});
+    this.form.observe({
+      path: 'hostRadio',
+      key: 'value', // can be any field property
+      call: ({form, field, change}) => {
+        console.log('xxx')
+      },
+    })
+
   }
+
 
   render() {
     const form = this.form;
@@ -28,13 +37,19 @@ export default class Panel extends React.Component {
             <Input field={form.$('alias')}/>
           </div>
           <div className="profile-input-row">
-            <Radio className="pt-form-group"/>
-            <Input field={form.$('host')}/>
-            <Input field={form.$('port')}/>
+            <Radio field={form.$('hostRadio')} onChange={() => {
+              form.$('hostRadio').set('value', !form.$('hostRadio').get('value'));
+              form.$('urlRadio').set('value', !form.$('urlRadio').get('value'));
+            }}/>
+            <Input field={form.$('host')} showLabel={false} disable={!form.$('hostRadio').get('value')}/>
+            <Input field={form.$('port')} showLabel={false} disable={!form.$('hostRadio').get('value')}/>
           </div>
           <div className="profile-input-row">
-            <Radio className="pt-form-group"/>
-            <Input field={form.$('url')}/>
+            <Radio field={form.$('urlRadio')} onChange={() => {
+              form.$('hostRadio').set('value', !form.$('hostRadio').get('value'));
+              form.$('urlRadio').set('value', !form.$('urlRadio').get('value'));
+            }}/>
+            <Input field={form.$('url')} showLabel={false} disable={!form.$('urlRadio').get('value')}/>
           </div>
           <div className="profile-input-row">
             <Input field={form.$('database')}/>
