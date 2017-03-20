@@ -2,8 +2,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
-* @Last modified by:   wahaj
-* @Last modified time: 2017-03-17T09:23:03+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-20T16:18:54+11:00
 */
 
 import React from 'react';
@@ -12,7 +12,7 @@ import { DragItemTypes } from '#/common/Constants.js';
 
 const labelSource = {
   beginDrag(props) {
-    return { label: props.label };
+    return { label: props.label, type: props.type, id: props.id, refParent: props.refParent};
   },
 };
 
