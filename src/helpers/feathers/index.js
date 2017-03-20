@@ -74,8 +74,7 @@ class FeatherClient {
   }
 
   closeConnection() {
-    // TODO: find a way to close the connection
-
+    this.feathers.primus.end();
   }
 }
 

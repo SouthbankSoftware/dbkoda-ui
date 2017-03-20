@@ -1,0 +1,88 @@
+/**
+
+ */
+
+.profile-title {
+  text-align: center;
+  margin: 5% 10% 5% 10%;
+}
+
+.profile-input-row {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-items: center;
+}
+
+.profile-input {
+  display: flex;
+  flex-direction: row;
+}
+
+.host-input-content {
+  flex-direction: row;
+}
+
+.port-input-content {
+  margin-left: 2%;
+  flex-direction: row;
+}
+
+.port-input {
+  width: 50%;
+}
+
+.input-label {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-form {
+  margin: 5%;
+}
+
+.input-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.alias-input-content {
+  margin-left: 30px;
+}
+
+.alias-input-content > label{
+  width: 50px;
+}
+
+.host-input-content > label{
+  width: 55px;
+}
+
+.port-input {
+  width: 100%;
+}
+
+.url-input-content > label{
+  width: 48px;
+}
+
+.database-input-content > label{
+  width: 95px;
+}
+
+.url-input-content, .url-input {
+  width: 100%;
+}
+
+.ssl-input-content {
+  margin-left: 5%;
+  margin-top: 4%;
+}
+
+.profile-separator {
+  height: 1px;
+  background-color: gray;
+  width: 100%;
+  margin: 0 0 10% 0;
+}
