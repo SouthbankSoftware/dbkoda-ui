@@ -76,7 +76,7 @@ class App extends React.Component {
         <Drawer
           className="drawer"
           open={layout.drawerOpen}
-          width="36%"
+          width="40%"
           handleWidth={0}
           noTouchOpen={true}
           noTouchClose={true}

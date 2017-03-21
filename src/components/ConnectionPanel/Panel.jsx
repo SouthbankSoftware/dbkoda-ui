@@ -1,9 +1,12 @@
+/**
+ * connection profile panel class
+ */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
 import validatorjs from 'validatorjs';
 import autobind from 'autobind-decorator';
-import {Intent} from '@blueprintjs/core';
+import {Intent, Position} from '@blueprintjs/core';
 import forms from './Form';
 import Radio from './Radio';
 import Input from './Input';
@@ -11,7 +14,8 @@ import Checkbox from './Checkbox';
 import ProfileForm from './ProfileForm';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
-import {NewToaster} from '../common/Toaster';
+import {DBenvyToaster, NewToaster} from '../common/Toaster';
+import Label from './Label';
 
 @inject(allStores => ({
   layout: allStores.store.layout,
@@ -73,17 +77,17 @@ export default class Panel extends React.Component {
           this
             .props
             .profiles
-            .set(res.id, {shellId:res.shellId, alias: form.alias});
+            .set(res.id, {shellId: res.shellId, alias: form.alias});
           this._close();
           NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
         })
         .catch((err) => {
           console.log('connection failed ', err.message);
-          NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          DBenvyToaster(Position.LEFT_TOP).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           this.setState({newConnectionLoading: false});
         });
     } catch (err) {
-      NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      DBenvyToaster(Position.LEFT_TOP).show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
   }
 
@@ -93,38 +97,59 @@ export default class Panel extends React.Component {
       <div className="pt-dark ">
         <h3 className="profile-title">Create New Connection</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
-          <div className="profile-input-row">
-            <Input field={form.$('alias')} />
+          <div>
+            <ul>
+              <li>
+                <Label text='Alias'/>
+              </li>
+              <li>
+                <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange}/>
+              </li>
+              <li>
+                <Radio field={form.$('urlRadio')} onChange={this._hostRadioOnChange}/>
+              </li>
+              <li><Label text="Database"/></li>
+            </ul>
+            <ul>
+              <li>
+                <Input field={form.$('alias')}/>
+              </li>
+              <li>
+                <div className="host-input-container">
+                  <Input field={form.$('host')} showLabel={false} disable={!form.$('hostRadio').get('value')}/>
+                  <Label text='Port'/>
+                  <Input field={form.$('port')} showLabel={false} disable={!form.$('hostRadio').get('value')}/>
+                </div>
+              </li>
+              <li>
+                <Input field={form.$('url')} showLabel={false} disable={!form.$('urlRadio').get('value')}/>
+              </li>
+              <li>
+                <div className="host-input-container">
+                  <Input field={form.$('database')}/>
+                  <Checkbox field={form.$('ssl')}/>
+                </div>
+              </li>
+            </ul>
           </div>
-          <div className="profile-input-row">
-            <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
-            <Input field={form.$('host')} showLabel={false} disable={!form.$('hostRadio').get('value')} />
-            <Input field={form.$('port')} showLabel={false} disable={!form.$('hostRadio').get('value')} />
+          <div className="profile-separator"/>
+          <Label className="profile-align-left" text='Authentication'/>
+          <Checkbox field={form.$('sha')}/>
+          <div>
+            <ul>
+              <li><Label text='User Name'/></li>
+              <li><Label text='Password'/></li>
+            </ul>
+            <ul>
+              <li><Input field={form.$('username')} disable={!form.$('sha').get('value')}/></li>
+              <li><Input field={form.$('password')} disable={!form.$('sha').get('value')}/></li>
+            </ul>
           </div>
-          <div className="profile-input-row">
-            <Radio field={form.$('urlRadio')} onChange={this._hostRadioOnChange} />
-            <Input field={form.$('url')} showLabel={false} disable={!form.$('urlRadio').get('value')} />
+          <div className="profile-button-panel">
+            <button className="pt-button pt-intent-success" type="submit" onClick={form.onSubmit}>Connect</button>
+            <button className="pt-button pt-intent-primary" type="button" onClick={form.onReset}>Reset</button>
+            <button className="pt-button pt-intent-primary" type="button" onClick={this._close}>Close</button>
           </div>
-          <div className="profile-input-row">
-            <Input field={form.$('database')} />
-            <Checkbox field={form.$('ssl')} />
-          </div>
-          <div className="profile-separator" />
-          <label className="pt-label .modifier">
-            Authentication
-          </label>
-          <div className="profile-input-row">
-            <Checkbox field={form.$('sha')} />
-          </div>
-          <div className="profile-input-row">
-            <Input field={form.$('username')} disable={!form.$('sha').get('value')} />
-          </div>
-          <div className="profile-input-row">
-            <Input field={form.$('password')} disable={!form.$('sha').get('value')} />
-          </div>
-          <button className="pt-button pt-intent-success" type="submit" onClick={form.onSubmit}>Connect</button>
-          <button className="pt-button pt-intent-primary" type="button" onClick={form.onReset}>Reset</button>
-          <button className="pt-button pt-intent-primary" type="button" onClick={this._close}>Close</button>
         </form>
       </div>
     );
@@ -132,4 +157,3 @@ export default class Panel extends React.Component {
 
 
 }
-

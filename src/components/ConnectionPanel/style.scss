@@ -7,6 +7,33 @@
   margin: 5% 10% 5% 10%;
 }
 
+.profile-form ul {
+  float: left;
+  margin: 0px;
+  padding: 0px;
+}
+
+.cell-column-container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-bottom: 0px;
+}
+
+.profile-form ul li {
+  list-style: none;
+  padding: 10px 2px;
+  height: 30px;
+}
+
+.host-input-container {
+  display: flex;
+  flex-direction: row;
+}
+
 .profile-input-row {
   display: flex;
   flex-direction: row;
@@ -23,65 +50,26 @@
   flex-direction: row;
 }
 
-.hostRadio-radio-input, .urlRadio-radio-input{
-  width: 50px;
+.profile-connection-input {
+  padding: 0 0 0 5px;
 }
 
-.port-input-content {
-  margin-left: 2%;
-  flex-direction: row;
+.profile-align-left{
+  align-items: flex-start;
 }
 
-.port-input {
-  width: 50%;
-}
-
-.input-label {
-  display: flex;
-  flex-direction: row;
+.field-label {
+  margin: 5px 5px 0 0 !important;
 }
 
 .profile-form {
   margin: 5%;
-}
-
-.input-content {
   display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.alias-input-content {
-  margin-left: 30px;
-}
-
-.alias-input-content > label{
-  width: 50px;
-}
-
-.host-input-content > label{
-  width: 55px;
-}
-
-.port-input {
-  width: 100%;
-}
-
-.url-input-content > label{
-  width: 48px;
-}
-
-.database-input-content > label{
-  width: 95px;
+  flex-direction: column;
 }
 
 .url-input-content, .url-input {
   width: 100%;
-}
-
-.ssl-input-content {
-  margin-left: 5%;
-  margin-top: 4%;
 }
 
 .profile-separator {
@@ -91,3 +79,7 @@
   margin: 0 0 10% 0;
 }
 
+.profile-button-panel {
+  display: flex;
+  flex-direction: row;
+}
