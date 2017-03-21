@@ -13,7 +13,9 @@ export default class ProfileForm extends MobxReactForm {
 
 
   onSuccess(form) {
-    this.connect(form.values());
+    const formValues = form.values();
+
+    this.connect(formValues);
   }
 
   onError(form) {

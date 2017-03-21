@@ -12,7 +12,7 @@ export default observer(({field, showLabel = true, disable = false}) => (
       showLabel ? <label className="pt-label" htmlFor={field.id}>{field.label}</label> : null
     }
     <div className="input-content">
-      <input className={field.name + '-input'} {...field.bind()} disabled={disable ? 'disabled' : ''}/>
+      <input className={field.name + '-input pt-input'} {...field.bind()} disabled={disable ? 'disabled' : ''}/>
     </div>
   </div>
 ));
