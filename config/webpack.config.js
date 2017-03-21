@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-06T16:22:54+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-07T16:57:35+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-21T11:43:32+11:00
  */
 
 const path = require('path');
@@ -66,6 +66,7 @@ const config = (() => {
           loader: 'url-loader?limit=100000&mimetype=application/font-woff'
         },
         {test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader?name=images/[hash].[ext]'},
+        { test: /\.handlebars|hbs$/, loader: 'handlebars-loader' },
       ]
     },
     resolve: {
