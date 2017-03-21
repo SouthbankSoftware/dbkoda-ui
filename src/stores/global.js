@@ -4,7 +4,6 @@
  * @Last modified by:   chris
  * @Last modified time: 2017-03-20T14:58:32+11:00
  */
-
 import {observable, action} from 'mobx';
 import TempTopology from './TempTopology.js';
 
@@ -31,7 +30,7 @@ export default class Store {
   @observable profileList = {
     creatingNewProfile: false
   };
-  
+
   @observable dragItem = {
     dragDrop: false,
     item: null
