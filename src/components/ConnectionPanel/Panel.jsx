@@ -29,7 +29,7 @@ export default class Panel extends React.Component {
       path: 'hostRadio',
       key: 'value', // can be any field property
       call: ({form, field, change}) => {
-        console.log('xxx')
+        console.log('xxx');
       },
     });
   }
@@ -55,7 +55,7 @@ export default class Panel extends React.Component {
       connectionUrl = form.url;
     }
     if (form.sha) {
-      let split = connectionUrl.split('mongodb://');
+      const split = connectionUrl.split('mongodb://');
       connectionUrl = 'mongodb://' + form.username + ':' + form.password + '@' + split[1];
     }
     console.log('connection url ', connectionUrl);
@@ -74,7 +74,7 @@ export default class Panel extends React.Component {
           this
             .props
             .profiles
-            .set(res.id, res.shellId);
+            .set(res.id, {shellId:res.shellId, alias: form.alias});
           this._close();
           NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
         })
@@ -95,37 +95,37 @@ export default class Panel extends React.Component {
         <h3 className="profile-title">Create New Connection</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
           <div className="profile-input-row">
-            <Input field={form.$('alias')}/>
+            <Input field={form.$('alias')} />
           </div>
           <div className="profile-input-row">
-            <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange}/>
-            <Input field={form.$('host')} showLabel={false} disable={!form.$('hostRadio').get('value')}/>
-            <Input field={form.$('port')} showLabel={false} disable={!form.$('hostRadio').get('value')}/>
+            <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
+            <Input field={form.$('host')} showLabel={false} disable={!form.$('hostRadio').get('value')} />
+            <Input field={form.$('port')} showLabel={false} disable={!form.$('hostRadio').get('value')} />
           </div>
           <div className="profile-input-row">
-            <Radio field={form.$('urlRadio')} onChange={this._hostRadioOnChange}/>
-            <Input field={form.$('url')} showLabel={false} disable={!form.$('urlRadio').get('value')}/>
+            <Radio field={form.$('urlRadio')} onChange={this._hostRadioOnChange} />
+            <Input field={form.$('url')} showLabel={false} disable={!form.$('urlRadio').get('value')} />
           </div>
           <div className="profile-input-row">
-            <Input field={form.$('database')}/>
-            <Checkbox field={form.$('ssl')}/>
+            <Input field={form.$('database')} />
+            <Checkbox field={form.$('ssl')} />
           </div>
-          <div className="profile-separator"/>
+          <div className="profile-separator" />
           <label className="pt-label .modifier">
             Authentication
           </label>
           <div className="profile-input-row">
-            <Checkbox field={form.$('sha')}/>
+            <Checkbox field={form.$('sha')} />
           </div>
           <div className="profile-input-row">
-            <Input field={form.$('username')} disable={!form.$('sha').get('value')}/>
+            <Input field={form.$('username')} disable={!form.$('sha').get('value')} />
           </div>
           <div className="profile-input-row">
-            <Input field={form.$('password')} disable={!form.$('sha').get('value')}/>
+            <Input field={form.$('password')} disable={!form.$('sha').get('value')} />
           </div>
-          <button className="pt-button" type="submit" onClick={form.onSubmit}>Connect</button>
-          <button className="pt-button" type="button" onClick={form.onReset}>Reset</button>
-          <button className="pt-button" type="button" onClick={this._close}>Close</button>
+          <button className="pt-button pt-intent-success" type="submit" onClick={form.onSubmit}>Connect</button>
+          <button className="pt-button pt-intent-primary" type="button" onClick={form.onReset}>Reset</button>
+          <button className="pt-button pt-intent-primary" type="button" onClick={this._close}>Close</button>
         </form>
       </div>
     );
