@@ -58,7 +58,6 @@ export default class Panel extends React.Component {
       const split = connectionUrl.split('mongodb://');
       connectionUrl = 'mongodb://' + form.username + ':' + form.password + '@' + split[1];
     }
-    console.log('connection url ', connectionUrl);
     try {
       featherClient()
         .service('/mongo-connection')
