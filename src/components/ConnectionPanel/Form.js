@@ -3,46 +3,50 @@ export default {
     name: 'alias',
     label: 'Alias',
     placeholder: 'Alias',
+    value: 'Connection - 1',
     type: 'text',
     rules: 'required|string',
   }, {
     name: 'hostRadio',
-    value: true,
+    value: false,
     label: 'Host',
-  },
-    {
-      name: 'host',
-      placeholder: 'Hostname',
-      type: 'text',
-      rules: 'required|string',
-    }, {
-      name: 'port',
-      type: 'number',
-      rules: 'required|numeric',
-      value: '27017',
-    }, {
-      name: 'urlRadio',
-      label: 'URL',
-      value: false,
-    },
-    {
-      name: 'url',
-      label: 'URL',
-      value: '',
-    }, {
-      name: 'database',
-      label: 'Database',
-    }, {
-      name: 'ssl',
-      label: 'SSL',
-    }, {
-      name: 'sha',
-      label: 'SCRAM-SHA-1(username/password)',
-    }, {
-      name: 'username',
-      label: 'Username'
-    }, {
-      name: 'password',
-      label: 'Password',
-    }]
+  }, {
+    name: 'host',
+    placeholder: 'Hostname',
+    type: 'text',
+    rules: 'string',
+  }, {
+    name: 'port',
+    type: 'number',
+    rules: 'numeric',
+    value: '27017',
+  }, {
+    name: 'urlRadio',
+    label: 'URL',
+    value: true,
+  }, {
+    name: 'url',
+    label: 'URL',
+    placeholder: 'mongodb://',
+    value: 'mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com',
+  }, {
+    name: 'database',
+    label: 'Database',
+    value: 'test',
+  }, {
+    name: 'ssl',
+    label: 'SSL',
+  }, {
+    name: 'sha',
+    value: false,
+    label: 'SCRAM-SHA-1(username/password)',
+  }, {
+    name: 'username',
+    label: 'Username',
+    value: 'dbenvy',
+  }, {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+  }]
 };

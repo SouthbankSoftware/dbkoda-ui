@@ -10,7 +10,9 @@ export default observer(({field}) => (
 
   <div className={field.name + '-input-content pt-form-group pt-inline '}>
     <div className="input-content">
-      <Checkbox className={field.name + '-input'} {...field.bind()} />
+      <Checkbox className={field.name + '-input'} {...field.bind()}
+                checked={field.get('value')}
+                onChange={()=> field.set('value', !field.get('value'))}/>
     </div>
   </div>
 ));

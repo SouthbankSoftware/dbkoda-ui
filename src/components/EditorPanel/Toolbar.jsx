@@ -88,7 +88,7 @@ export default class Toolbar extends React.Component {
             .props
             .store // eslint-disable-line react/prop-types
             .profiles // eslint-disable-line react/prop-types
-            .set(res.id, res.shellId); // eslint-disable-line react/prop-types
+            .set(res.id, {shellId: res.shellId}); // eslint-disable-line react/prop-types
           // eslint-disable-line react/prop-types
           this.state.noActiveProfile = false;
           this.state.id = res.id;

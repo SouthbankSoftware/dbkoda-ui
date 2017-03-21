@@ -78,9 +78,10 @@ class App extends React.Component {
           open={layout.drawerOpen}
           width="36%"
           handleWidth={0}
+          noTouchOpen={true}
+          noTouchClose={true}
           onChange={this.updateDrawerOpenStatus}
         >
-
           <ConnectionProfilePanel/>
         </Drawer>
         <SplitPane
