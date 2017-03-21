@@ -26,7 +26,7 @@ export default class ProfileForm extends MobxReactForm {
       connectionUrl = ProfileForm.mongoProtocol + formValues.username + ':' + formValues.password + '@' + split[1];
     }
 
-    this.connect({url: connectionUrl, database: formValues.database, authorization: true, test: false});
+    this.connect({url: connectionUrl, database: formValues.database, authorization: true, test: false, alias: formValues.alias});
   }
 
   onTest(form) {
