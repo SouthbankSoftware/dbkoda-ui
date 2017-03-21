@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-03-17T17:04:19+11:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-03-22T08:38:29+11:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -84,6 +84,8 @@ class View extends React.Component {
             '// Shift + e : Execute Selected\n' +
             '// Shift + a : Execute All\n' +
             '// Shift + c : Clean Output\n' +
+            '// Shift + x : Save Output\n' +
+            '// Shift + m : Show More Output (If Available)\n' +
             '//\n' +
             '// You can also right click on the Editor for a context Menu.\n' +
             '// If you have too many tabs, use the filter box to search for a specific alias.\n' +

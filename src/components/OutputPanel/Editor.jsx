@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-21T08:48:54+11:00
+ * @Last modified time: 2017-03-21T11:49:55+11:00
 */
 
 import React from 'react';
@@ -20,7 +20,7 @@ export default class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.props.store.outputs.set(this.props.id, {
-      output: '// Output from ' + this.props.id,
+      output: '',
       cannotShowMore: true,
       showingMore: false
     });
