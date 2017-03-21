@@ -2,6 +2,8 @@ import MobxReactForm from 'mobx-react-form';
 
 export default class ProfileForm extends MobxReactForm {
 
+  static mongoProtocol = 'mongodb://';
+
   onInit() {
     // this.$('hostRadio').observe({
     //   key: 'value', // can be any field property
@@ -11,11 +13,24 @@ export default class ProfileForm extends MobxReactForm {
     // });
   }
 
-
   onSuccess(form) {
     const formValues = form.values();
+    let connectionUrl;
+    if (formValues.hostRadio) {
+      connectionUrl = ProfileForm.mongoProtocol + formValues.host + ':' + formValues.port;
+    } else if (formValues.urlRadio) {
+      connectionUrl = formValues.url;
+    }
+    if (formValues.sha) {
+      const split = connectionUrl.split(ProfileForm.mongoProtocol);
+      connectionUrl = ProfileForm.mongoProtocol + formValues.username + ':' + formValues.password + '@' + split[1];
+    }
 
-    this.connect(formValues);
+    this.connect({url: connectionUrl, database: formValues.database, authorization: true, test: false});
+  }
+
+  onTest(form) {
+    console.log('click test', form);
   }
 
   onError(form) {

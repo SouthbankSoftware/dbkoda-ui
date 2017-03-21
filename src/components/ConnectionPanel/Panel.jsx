@@ -52,25 +52,11 @@ export default class Panel extends React.Component {
   @action.bound
   _connect(form) {
     console.log('get form value ', form);
-    let connectionUrl;
-    if (form.hostRadio) {
-      connectionUrl = 'mongodb://' + form.host + ':' + form.port;
-    } else if (form.urlRadio) {
-      connectionUrl = form.url;
-    }
-    if (form.sha) {
-      const split = connectionUrl.split('mongodb://');
-      connectionUrl = 'mongodb://' + form.username + ':' + form.password + '@' + split[1];
-    }
     try {
       featherClient()
         .service('/mongo-connection')
         .create({}, {
-          query: {
-            url: connectionUrl,
-            authorization: true,
-            database: form.database,
-          }
+          query: form
         })
         .then((res) => {
           console.log('get response', res);
