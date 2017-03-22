@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-20T16:57:37+11:00
+ * @Last modified time: 2017-03-22T09:58:06+11:00
 */
 
 import React from 'react';
@@ -22,6 +22,10 @@ import {HotkeysTarget, Hotkeys, Hotkey, Intent, Tooltip, AnchorButton, Position}
 @observer
 @HotkeysTarget
 export default class Toolbar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.downloadOutput = this.downloadOutput.bind(this);
+  }
   /**
    * Clears the output editor panel of all it's contents
    */
@@ -46,6 +50,18 @@ export default class Toolbar extends React.Component {
     this.props.store.outputs.get(this.props.id).cannotShowMore = true;
   }
 
+  /**
+   * Downloads the current contents of the Output Editor to a file
+   */
+  downloadOutput() {
+    var data   = new Blob([this.props.store.outputs.get(this.props.id).output], {type: 'text/csv'}),
+    csvURL = window.URL.createObjectURL(data),
+    tempLink = document.createElement('a');
+    tempLink.href = csvURL;
+    tempLink.setAttribute('download',`output-${this.props.id}.js`);
+    tempLink.click();
+  }
+
   render() {
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
@@ -58,7 +74,7 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-button pt-icon-disable pt-intent-warning clearOutputBtn"
+              className="pt-icon-disable pt-intent-warning clearOutputBtn"
               onClick={this.clearOutput} />
           </Tooltip>
           <Tooltip
@@ -68,10 +84,21 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-button showMoreBtn pt-intent-primary"
+              className="showMoreBtn pt-intent-primary"
               onClick={this.showMore}
               disabled={this.props.store.outputs.get(this.props.id).cannotShowMore} >
               Show More
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Save Output (Shift + X)"
+            tooltipClassName="pt-dark"
+            positioon={Position.BOTTOM}>
+            <AnchorButton
+              className="saveOutputBtn pt-icon-floppy-disk pt-intent-primary"
+              onClick={this.downloadOutput}>
             </AnchorButton>
           </Tooltip>
         </div>
@@ -93,6 +120,11 @@ export default class Toolbar extends React.Component {
           combo="shift + m"
           label="Show More"
           onKeyDown={this.showMore} />
+          <Hotkey
+            global
+            combo="shift + x"
+            label="Save Output"
+            onKeyDown={this.showMore} />
       </Hotkeys>
     );
   }

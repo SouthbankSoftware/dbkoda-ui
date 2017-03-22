@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-21T08:48:54+11:00
+ * @Last modified time: 2017-03-22T09:56:00+11:00
 */
 
 import React from 'react';
@@ -14,19 +14,36 @@ import CodeMirror from 'react-codemirror';
 import {featherClient} from '../../helpers/feathers';
 require('codemirror/mode/javascript/javascript');
 
+/**
+ * Renders the window through which all output is shown for a specific editor
+ * instance. Handles connection setup and view scrolling.
+ */
 @inject('store')
 @observer
 export default class Editor extends React.Component {
+  /**
+   * Constructor for the OutputEditor class
+   * @param {Object} props - The properties passed to the component.
+   * Contains:
+   *    @param {number} id - The id of the allocated connection
+   *    @param {number} shellId - The shellId of the allocated connection
+   *    @param {Object} store - The mobx global store object (injected)
+   */
   constructor(props) {
     super(props);
     this.props.store.outputs.set(this.props.id, {
-      output: '// Output from ' + this.props.id,
+      output: '',
       cannotShowMore: true,
       showingMore: false
     });
     featherClient().addOutputListener(parseInt(props.id), parseInt(props.shellId), this.outputAvailable);
   }
 
+  /**
+   * Receives output from the server and parses show more text
+   * @listens {featherClient} output- Listens for output from the feathers server
+   * @param {Object} output - An object containing the output from shell commands
+   */
   @action.bound
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
@@ -42,6 +59,9 @@ export default class Editor extends React.Component {
     }
   }
 
+  /**
+   * Lifecycle method. Updates the scrolling view after render is completed
+   */
   componentDidUpdate() {
     setTimeout(
       () => {
