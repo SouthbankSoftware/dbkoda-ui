@@ -2,8 +2,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
-* @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T11:54:14+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-22T16:16:51+11:00
 */
 
 import React from 'react';
@@ -36,7 +36,7 @@ export default class TreeView extends React.Component {
     _nodePath: number[],
     e: React.MouseEvent<HTMLElement>,
   ) => {
-    this.props.treeState.selectNode(nodeData, e);
+    this.props.treeState.selectNode(nodeData);
     this.setState({nodes: this.props.treeState.nodes});
   };
 

@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-20T17:17:41+11:00
+ * @Last modified time: 2017-03-21T16:42:03+11:00
 */
 
 import React from 'react';
@@ -35,7 +35,6 @@ export default class TreeNode implements ITreeNode {
    */
   constructor(treeJSON, filter, parent) {
     this.type = TreeNode.getNodeType(treeJSON, parent);
-    console.log(this.type);
     this.iconName = `tree-${this.type}`;
     if (parent && parent.id != 'root') {
       this.id = `${parent.id}_${treeJSON.text}`;
