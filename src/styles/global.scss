@@ -100,3 +100,8 @@ h3 {
 .cm-s-ambiance .CodeMirror-linenumber {
   color: $whiteColor;
 }
+
+.CodeMirror,
+.ReactCodeMirror {
+  height: 100%;
+}
