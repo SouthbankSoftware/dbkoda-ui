@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-22T09:56:00+11:00
+ * @Last modified time: 2017-03-23T08:38:44+11:00
 */
 
 import React from 'react';
@@ -11,8 +11,10 @@ import ReactDOM from 'react-dom';
 import { inject, observer } from 'mobx-react';
 import {action,reaction} from 'mobx';
 import CodeMirror from 'react-codemirror';
-import {featherClient} from '../../helpers/feathers';
 require('codemirror/mode/javascript/javascript');
+
+import {featherClient} from '../../helpers/feathers';
+import OutputTerminal from './Terminal';
 
 /**
  * Renders the window through which all output is shown for a specific editor
@@ -36,7 +38,9 @@ export default class Editor extends React.Component {
       cannotShowMore: true,
       showingMore: false
     });
-    featherClient().addOutputListener(parseInt(props.id), parseInt(props.shellId), this.outputAvailable);
+    featherClient().addOutputListener(parseInt(props.id),
+                                      parseInt(props.shellId),
+                                      this.outputAvailable);
   }
 
   /**
@@ -47,15 +51,16 @@ export default class Editor extends React.Component {
   @action.bound
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
-    this.props.store.outputs.get(this.props.id).output = this.props.store.outputs.get(this.props.id).output + '\n' + output.output + '\n'; // eslint-disable-line
+    this.props.store.outputs.get(this.props.id).output =
+      this.props.store.outputs.get(this.props.id).output + '\n' +
+      output.output; // eslint-disable-line
     if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
       this.props.store.outputs.get(this.props.id).cannotShowMore = false; // eslint-disable-line
-    } else {
-      if(this.props.store.outputs.get(this.props.id).cannotShowMore && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
-        console.log('cannot show more');
-        this.props.store.outputs.get(this.props.id).cannotShowMore = true; // eslint-disable-line
-      }
+    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore &&
+              output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
+      console.log('cannot show more');
+      this.props.store.outputs.get(this.props.id).cannotShowMore = true; // eslint-disable-line
     }
   }
 
@@ -95,7 +100,8 @@ export default class Editor extends React.Component {
           ref="editor"
           value={this.props.store.outputs.get(this.props.id).output}
           options={outputOptions}
-        />
+          />
+        <OutputTerminal id={this.props.id} shellId={this.props.shellId} />
       </div>
     );
   }
