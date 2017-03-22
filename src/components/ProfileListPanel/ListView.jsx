@@ -44,7 +44,7 @@ export default class ListView extends React.Component {
       .entries();
     const renderCell = (rowIndex : number) => <Cell>{profiles[rowIndex][1].alias}</Cell>;
     return (
-      <div className="editorView">
+      <div className="profileList">
         <Table
           allowMultipleSelection={false}
           numRows={this.props.store.profiles.size}

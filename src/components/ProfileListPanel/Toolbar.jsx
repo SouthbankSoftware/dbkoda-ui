@@ -19,7 +19,10 @@ import {NewToaster} from '#/common/Toaster';
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      editDisabled: true,
+      removeDisabled: true
+    };
 
     this.newProfile = this.newProfile.bind(this);
   }
@@ -51,7 +54,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM_LEFT}>
               <AnchorButton
-                className="pt-button pt-icon-add pt-intent-primary"
+                className="pt-button pt-icon-add pt-intent-primary newProfileButton"
                 onClick={this.newProfile} />
             </Tooltip>
             <Tooltip
@@ -61,8 +64,9 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-edit pt-intent-primary"
-                onClick={this.editProfile} />
+                className="pt-button pt-icon-edit pt-intent-primary editProfileButton"
+                onClick={this.editProfile}
+                disabled />
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
@@ -71,8 +75,9 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-remove pt-intent-danger"
-                onClick={this.removeProfile} />
+                className="pt-button pt-icon-remove pt-intent-danger removeProfileButton"
+                onClick={this.removeProfile}
+                disabled />
             </Tooltip>
           </div>
           <span className="pt-navbar-divider" />

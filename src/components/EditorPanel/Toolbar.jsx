@@ -186,7 +186,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-add pt-intent-primary"
+                className="pt-button pt-icon-add pt-intent-primary addEditorButton"
                 loading={this.state.newConnectionLoading}
                 onClick={this.addEditor} />
             </Tooltip>
@@ -197,7 +197,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-document-open pt-intent-primary"
+                className="pt-button pt-icon-document-open pt-intent-primary openFileButton"
                 onClick={this.openFile} />
             </Tooltip>
             <Tooltip
@@ -207,7 +207,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-floppy-disk pt-intent-primary"
+                className="pt-button pt-icon-floppy-disk pt-intent-primary saveFileButton"
                 onClick={this.saveFile} />
             </Tooltip>
           </div>
@@ -237,7 +237,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-chevron-right pt-intent-primary"
+                className="pt-button pt-icon-chevron-right pt-intent-primary executeLineButton"
                 onClick={this.executeLine}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
@@ -248,7 +248,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-double-chevron-right pt-intent-primary"
+                className="pt-button pt-icon-double-chevron-right pt-intent-primary executeAllButton"
                 onClick={this.executeAll}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
@@ -259,7 +259,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-help pt-intent-primary"
+                className="pt-button pt-icon-help pt-intent-primary explainPlanButton"
                 onClick={this.explainPlan}
                 disabled={this.state.noActiveProfile} />
             </Tooltip>
@@ -270,7 +270,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-stop pt-intent-danger"
+                className="pt-button pt-icon-stop pt-intent-danger stopExecutionButton"
                 onClick={this.stopExecution}
                 disabled={this.state.noExecutionRunning} />
             </Tooltip>
