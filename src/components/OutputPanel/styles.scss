@@ -1,0 +1,39 @@
+// @Author: chris
+// @Date:   2017-03-22T12:00:54+11:00
+// @Email:  chris@southbanksoftware.com
+// @Last modified by:   chris
+// @Last modified time: 2017-03-22T12:01:33+11:00
+
+.outputToolbar {
+  order: 1;
+}
+
+.outputTabView {
+  order: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.outputEditor {
+  order: 3;
+  flex: 1;
+  min-height: 0;
+}
+
+.outputTerminal {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.outputPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.CodeMirror,
+.ReactCodeMirror {
+  height: 100%;
+}

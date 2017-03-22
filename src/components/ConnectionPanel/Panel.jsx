@@ -4,17 +4,15 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
-import validatorjs from 'validatorjs';
 import autobind from 'autobind-decorator';
 import {Intent, Position} from '@blueprintjs/core';
-import forms from './Form';
 import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
-import ProfileForm from './ProfileForm';
+import form from './ProfileForm';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
-import {DBenvyToaster, NewToaster} from '../common/Toaster';
+import {DBenvyToaster} from '../common/Toaster';
 import Label from './Label';
 
 @inject(allStores => ({
@@ -28,21 +26,14 @@ export default class Panel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.form = new ProfileForm({fields: forms.fields}, {plugins: {dvr: validatorjs}});
-    this.form.connect = this._connect;
-    this.form.observe({
-      path: 'hostRadio',
-      key: 'value', // can be any field property
-      call: ({form, field, change}) => {
-        console.log('xxx');
-      },
-    });
+    form.connect = this._connect;
+    form.testConnect = this._testConnect;
   }
 
   @autobind
   _hostRadioOnChange() {
-    this.form.$('hostRadio').set('value', !this.form.$('hostRadio').get('value'));
-    this.form.$('urlRadio').set('value', !this.form.$('hostRadio').get('value'));
+    form.$('hostRadio').set('value', !form.$('hostRadio').get('value'));
+    form.$('urlRadio').set('value', !form.$('hostRadio').get('value'));
   }
 
   @action.bound
@@ -52,36 +43,96 @@ export default class Panel extends React.Component {
 
   @action.bound
   _connect(form) {
-    console.log('get form value ', form);
+    if (!this.validConnectionFormData(form)) {
+      return;
+    }
+    this.requestConnection(form);
+  }
+
+  /**
+   * request connection through feathers client
+   *
+   * @param data
+   */
+  requestConnection(data) {
     try {
       this.props.profileList.creatingNewProfile = true;
       featherClient()
         .service('/mongo-connection')
         .create({}, {
-          query: form
+          query: data
         })
         .then((res) => {
           console.log('get response', res);
-          this
-            .props
-            .profiles
-            .set(res.id, {shellId: res.shellId, alias: form.alias});
-          this._close();
-          NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+          let message = 'Connection Success!';
+          let position = Position.LEFT_BOTTOM;
+          if (!data.test) {
+            position = Position.RIGHT_TOP;
+            form.reset();
+            this
+              .props
+              .profiles
+              .set(res.id, {shellId: res.shellId, alias: data.alias});
+            this._close();
+          } else {
+            message = 'Test ' + message;
+          }
+          DBenvyToaster(position).show({
+            message,
+            intent: Intent.SUCCESS,
+            iconName: 'pt-icon-thumbs-up'
+          });
         })
         .catch((err) => {
           console.log('connection failed ', err.message);
-          DBenvyToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          DBenvyToaster(Position.LEFT_BOTTOM).show({
+            message: err.message,
+            intent: Intent.DANGER,
+            iconName: 'pt-icon-thumbs-down'
+          });
           this.setState({newConnectionLoading: false});
         });
     } catch (err) {
-      DBenvyToaster(Position.LEFT_BOTTOM).show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      DBenvyToaster(Position.LEFT_BOTTOM).show({
+        message: 'Sorry, not yet implemented!',
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down'
+      });
     }
     this.props.profileList.creatingNewProfile = false;
   }
 
+  /**
+   * validate connection form data
+   *
+   * @param data
+   * @returns {boolean}
+   */
+  validConnectionFormData(data) {
+    let validate = true;
+    this.props.profiles.forEach((value, key) => {
+      if (value.alias === data.alias) {
+        DBenvyToaster(Position.LEFT_TOP).show({
+          message: 'Alias already existed.',
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
+        validate = false;
+      }
+    });
+    return validate;
+  }
+
+  @action.bound
+  _testConnect(data) {
+    console.log('validate form ', data);
+    if (!this.validConnectionFormData(data)) {
+      return;
+    }
+    this.requestConnection(data);
+  }
+
   render() {
-    const form = this.form;
     return (
       <div className="pt-dark ">
         <h3 className="profile-title">Create New Connection</h3>
@@ -137,12 +188,12 @@ export default class Panel extends React.Component {
           <div className="profile-button-panel">
             <button className="pt-button pt-intent-success" type="submit" onClick={form.onSubmit}>Connect</button>
             <button className="pt-button pt-intent-primary" type="button" onClick={form.onReset}>Reset</button>
+            <button className="pt-button pt-intent-primary" type="button" onClick={form.onTest.bind(form)}>Test</button>
             <button className="pt-button pt-intent-primary" type="button" onClick={this._close}>Close</button>
           </div>
         </form>
       </div>
     );
   }
-
 
 }
