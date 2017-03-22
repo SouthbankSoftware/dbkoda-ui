@@ -22,7 +22,7 @@ import {
   HotkeysTarget
 } from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
-import './style.scss';
+import './Panel.scss';
 
 @inject('store')
 @observer

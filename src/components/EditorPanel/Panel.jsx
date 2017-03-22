@@ -13,7 +13,7 @@ import {action} from 'mobx';
 import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
-import './style.scss';
+import './Panel.scss';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
