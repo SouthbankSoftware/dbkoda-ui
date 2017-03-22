@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-22T09:58:06+11:00
+ * @Last modified time: 2017-03-22T11:57:18+11:00
 */
 
 import React from 'react';
@@ -26,6 +26,7 @@ export default class Toolbar extends React.Component {
     super(props);
     this.downloadOutput = this.downloadOutput.bind(this);
   }
+
   /**
    * Clears the output editor panel of all it's contents
    */
@@ -39,15 +40,17 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   showMore() {
-    const command = 'it';
-    console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': ', command, '.');
-    const service = featherClient().service('/mongo-shells');
-    service.timeout = 30000;
-    service.update(this.props.store.editorPanel.activeDropdownId, {
-      shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
-      commands: command
-    });
-    this.props.store.outputs.get(this.props.id).cannotShowMore = true;
+    if(!this.props.store.outputs.get(this.props.id).cannotShowMore) {
+      const command = 'it';
+      console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': ', command, '.');
+      const service = featherClient().service('/mongo-shells');
+      service.timeout = 30000;
+      service.update(this.props.store.editorPanel.activeDropdownId, {
+        shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
+        commands: command
+      });
+      this.props.store.outputs.get(this.props.id).cannotShowMore = true;
+    }
   }
 
   /**
@@ -124,7 +127,7 @@ export default class Toolbar extends React.Component {
             global
             combo="shift + x"
             label="Save Output"
-            onKeyDown={this.showMore} />
+            onKeyDown={this.downloadOutput} />
       </Hotkeys>
     );
   }
