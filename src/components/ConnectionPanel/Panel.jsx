@@ -12,7 +12,7 @@ import Checkbox from './Checkbox';
 import form from './ProfileForm';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
-import {DBenvyToaster, NewToaster} from '../common/Toaster';
+import {DBenvyToaster} from '../common/Toaster';
 import Label from './Label';
 
 @inject(allStores => ({
@@ -51,25 +51,26 @@ export default class Panel extends React.Component {
   /**
    * request connection through feathers client
    *
-   * @param form
+   * @param data
    */
-  requestConnection(form) {
+  requestConnection(data) {
     try {
       featherClient()
         .service('/mongo-connection')
         .create({}, {
-          query: form
+          query: data
         })
         .then((res) => {
           console.log('get response', res);
           let message = 'Connection Success!';
           let position = Position.LEFT_TOP;
-          if (!form.test) {
+          if (!data.test) {
             position = Position.RIGHT_TOP;
+            form.reset();
             this
               .props
               .profiles
-              .set(res.id, {shellId: res.shellId, alias: form.alias});
+              .set(res.id, {shellId: res.shellId, alias: data.alias});
             this._close();
           } else {
             message = 'Test ' + message;
