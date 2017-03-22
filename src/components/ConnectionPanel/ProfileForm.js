@@ -11,14 +11,12 @@ export class ProfileForm extends MobxReactForm {
     this.$('hostRadio').observe({
       key: 'value',
       call: ({form, field, change}) => {
-        console.log('xxxx,', field, change);
         form.$('urlRadio').set('value', change.oldValue);
       },
     });
     this.$('urlRadio').observe({
       key: 'value',
       call: ({form, field, change}) => {
-        console.log('xxxx,', field, change);
         form.$('hostRadio').set('value', change.oldValue);
       },
     });
