@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-21T16:49:20+11:00
+ * @Last modified time: 2017-03-22T09:58:06+11:00
 */
 
 import React from 'react';
@@ -50,6 +50,9 @@ export default class Toolbar extends React.Component {
     this.props.store.outputs.get(this.props.id).cannotShowMore = true;
   }
 
+  /**
+   * Downloads the current contents of the Output Editor to a file
+   */
   downloadOutput() {
     var data   = new Blob([this.props.store.outputs.get(this.props.id).output], {type: 'text/csv'}),
     csvURL = window.URL.createObjectURL(data),
