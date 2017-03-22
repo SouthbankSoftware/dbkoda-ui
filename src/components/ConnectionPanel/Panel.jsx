@@ -3,13 +3,14 @@
  */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {action} from 'mobx';
+import {action, observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import {Intent, Position} from '@blueprintjs/core';
+import validatorjs from 'validatorjs';
 import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
-import form from './ProfileForm';
+import {ProfileForm, Form} from './ProfileForm';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
@@ -22,17 +23,19 @@ import Label from './Label';
 @observer
 export default class Panel extends React.Component {
 
+  form = new ProfileForm({fields: Form.fields}, {plugins: {dvr: validatorjs}});
+
   constructor(props) {
     super(props);
     this.state = {};
-    form.connect = this._connect;
-    form.testConnect = this._testConnect;
+    this.form.connect = this._connect;
+    this.form.testConnect = this._testConnect;
   }
 
   @autobind
   _hostRadioOnChange() {
-    form.$('hostRadio').set('value', !form.$('hostRadio').get('value'));
-    form.$('urlRadio').set('value', !form.$('hostRadio').get('value'));
+    this.form.$('hostRadio').set('value', !this.form.$('hostRadio').get('value'));
+    this.form.$('urlRadio').set('value', !this.form.$('hostRadio').get('value'));
   }
 
   @action.bound
@@ -66,7 +69,7 @@ export default class Panel extends React.Component {
           let position = Position.LEFT_TOP;
           if (!data.test) {
             position = Position.RIGHT_TOP;
-            form.reset();
+            this.form.reset();
             this
               .props
               .profiles
@@ -130,6 +133,7 @@ export default class Panel extends React.Component {
   }
 
   render() {
+    const form = this.form;
     return (
       <div className="pt-dark ">
         <h3 className="profile-title">Create New Connection</h3>

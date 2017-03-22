@@ -2,28 +2,26 @@
  * profile form classs
  */
 import MobxReactForm from 'mobx-react-form';
-import validatorjs from 'validatorjs';
-
 
 export class ProfileForm extends MobxReactForm {
 
   static mongoProtocol = 'mongodb://';
 
   onInit() {
-    // this.$('hostRadio').observe({
-    //   key: 'value',
-    //   call: ({form, field, change}) => {
-    //     console.log('xxxx,', field, change);
-    //     form.$('urlRadio').set('value', change.oldValue);
-    //   },
-    // });
-    // this.$('urlRadio').observe({
-    //   key: 'value',
-    //   call: ({form, field, change}) => {
-    //     console.log('xxxx,', field, change);
-    //     form.$('hostRadio').set('value', change.oldValue);
-    //   },
-    // });
+    this.$('hostRadio').observe({
+      key: 'value',
+      call: ({form, field, change}) => {
+        console.log('xxxx,', field, change);
+        form.$('urlRadio').set('value', change.oldValue);
+      },
+    });
+    this.$('urlRadio').observe({
+      key: 'value',
+      call: ({form, field, change}) => {
+        console.log('xxxx,', field, change);
+        form.$('hostRadio').set('value', change.oldValue);
+      },
+    });
   }
 
   onSuccess(form) {
@@ -125,5 +123,3 @@ export const Form = {
   }]
 };
 
-
-export default new ProfileForm({fields: Form.fields}, {plugins: {dvr: validatorjs}});
