@@ -14,8 +14,8 @@ import {featherClient} from '~/helpers/feathers';
 import {action, reaction} from 'mobx';
 import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
-import { DropTarget } from 'react-dnd';
-import { DragItemTypes} from '#/common/Constants.js';
+import {DropTarget} from 'react-dnd';
+import {DragItemTypes} from '#/common/Constants.js';
 import CodeGeneration from '#/common/CodeGeneration.js';
 import './Panel.scss';
 
@@ -68,7 +68,7 @@ function collect(connect, monitor) {
 class View extends React.Component {
   static propTypes = {
     store: PropTypes.observableObject.isRequired,
-    id: React.PropTypes.number.isRequired,
+    id: React.PropTypes.number.isRequired
   };
   constructor(props) {
     super(props);
@@ -81,29 +81,24 @@ class View extends React.Component {
         matchBrackets: true,
         autoCloseBrackets: true,
         keyMap: 'sublime',
-        extraKeys: {'Ctrl-Space': 'autocomplete'},
-        mode: {name: 'text/javascript', json: true}
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete'
+        },
+        mode: {
+          name: 'text/javascript',
+          json: true
+        }
       },
-      code: '//////////////////////////////////\n' +
-            '// Welcome to DBEnvy!\n' +
-            '//\n' +
-            '// Please forgive the terrible color pallete for now.\n' +
-            '// I promise it\'s only a placeholder.\n' +
-            '// Also forgive the temporary highlighting of comments, working on it.\n' +
-            '//\n' +
-            '// Try some of our Hotkeys:\n' +
-            '// Note: Currently you cannot have the editor focused while using hotkeys!\n' +
-            '// Ctrl + Space : Auto-Complete (Partially complete)\n' +
-            '// Shift + n : New Editor\n' +
-            '// Shift + e : Execute Selected\n' +
-            '// Shift + a : Execute All\n' +
-            '// Shift + c : Clean Output\n' +
-            '// Shift + x : Save Output\n' +
-            '// Shift + m : Show More Output (If Available)\n' +
-            '//\n' +
-            '// You can also right click on the Editor for a context Menu.\n' +
-            '// If you have too many tabs, use the filter box to search for a specific alias.\n' +
-            '//////////////////////////////////\n'
+      code: '//////////////////////////////////\n// Welcome to DBEnvy!\n//\n// Please forgive' +
+          ' the terrible color pallete for now.\n// I promise it\'s only a placeholder.\n//' +
+          ' Also forgive the temporary highlighting of comments, working on it.\n//\n// Try' +
+          ' some of our Hotkeys:\n// Note: Currently you cannot have the editor focused whi' +
+          'le using hotkeys!\n// Ctrl + Space : Auto-Complete (Partially complete)\n// Shif' +
+          't + n : New Editor\n// Shift + e : Execute Selected\n// Shift + a : Execute All' +
+          '\n// Shift + c : Clean Output\n// Shift + x : Save Output\n// Shift + m : Show M' +
+          'ore Output (If Available)\n//\n// You can also right click on the Editor for a c' +
+          'ontext Menu.\n// If you have too many tabs, use the filter box to search for a s' +
+          'pecific alias.\n//////////////////////////////////\n'
     };
 
     /**
@@ -159,21 +154,20 @@ class View extends React.Component {
       }
     });
 
-      /**
+    /**
      * Reaction function for when a change occurs on the dragItem.drapDrop state.
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      */
-    const reactionToDragDrop = reaction(  // eslint-disable-line
-      () => this.props.store.dragItem.dragDrop, dragDrop => {   // eslint-disable-line
-        if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
-          const item = this.props.store.dragItem.item;
-          // this.setState({code: item.label});
-          this.insertAtCursor(CodeGeneration.getCodeForTreeNode(item));
-          this.props.store.dragItem.dragDrop = false;
-        }
+    const reactionToDragDrop = reaction( // eslint-disable-line
+        () => this.props.store.dragItem.dragDrop, dragDrop => { // eslint-disable-line
+      if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
+        const item = this.props.store.dragItem.item;
+        // this.setState({code: item.label});
+        this.insertAtCursor(CodeGeneration.getCodeForTreeNode(item));
+        this.props.store.dragItem.dragDrop = false;
       }
-    );
+    });
     this.refresh = this
       .refresh
       .bind(this);
@@ -197,12 +191,12 @@ class View extends React.Component {
  * @param {String} text - The text to add to the editor.
  */
   insertAtCursor(text) {
-  const cm = this
+    const cm = this
       .refs
       .editor
       .getCodeMirror();
-      cm.replaceSelection(text);
-}
+    cm.replaceSelection(text);
+  }
 
   /**
    * Refresh the code mirror instance to account for tab or layout changes.
@@ -221,29 +215,24 @@ class View extends React.Component {
    */
   updateCode(newCode) {
     this.setState({code: newCode});
-     const cm = this
+    const cm = this
       .refs
       .editor
       .getCodeMirror();
 
-      cm.addOverlay({
-    token: (stream, state) => {
-
-      if (stream.match('use')) {
-        return 'mongo-keyword-use';
-      } else if(stream.match('db')) {
-        return 'mongo-keyword-db';
-      } else if(stream.match('it')) {
-        return 'mongo-keyword-it';
+    cm.addOverlay({
+      token: (stream) => {
+        if (stream.match('use')) {
+          return 'mongo-keyword-use';
+        } else if (stream.match('db')) {
+          return 'mongo-keyword-db';
+        } else if (stream.match('it')) {
+          return 'mongo-keyword-it';
+        }
+        while (stream.next() != null && !stream.match('use', false) && !stream.match('db', false) && !stream.match('it', false)) { } // eslint-disable-line
+        return null;
       }
-    while (stream.next() != null && !stream.match('use', false)
-      && !stream.match('db', false)
-      && !stream.match('it', false)
-    )
-    {}
-    return null;
-    }
-})
+    });
   }
 
   /**
@@ -289,23 +278,26 @@ class View extends React.Component {
    * Render method for the component.
    */
   render() {
-    const { connectDropTarget, isOver } = this.props; // eslint-disable-line
+    const {connectDropTarget, isOver} = this.props; // eslint-disable-line
     return connectDropTarget(
       <div className="editorView">
-        <CodeMirror autoSave ref="editor"
-          value={this.state.code} onChange={value => this.updateCode(value)} options={this.state.options} />
-        {isOver &&
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: '100%',
-            zIndex: 1,
-            opacity: 0.5,
-            backgroundColor: 'yellow',
-          }} />
-        }
+        <CodeMirror
+          autoSave
+          ref="editor"
+          value={this.state.code}
+          onChange={value => this.updateCode(value)}
+          options={this.state.options} /> {isOver && <div
+            style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '100%',
+          zIndex: 1,
+          opacity: 0.5,
+          backgroundColor: 'yellow'
+        }} />
+}
       </div>
     );
   }

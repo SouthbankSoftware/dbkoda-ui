@@ -10,7 +10,7 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
-import {observer, inject, PropTypes} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import {action} from 'mobx';
 import {
   AnchorButton,
