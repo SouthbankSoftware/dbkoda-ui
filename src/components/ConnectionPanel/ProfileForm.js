@@ -2,6 +2,7 @@
  * profile form classs
  */
 import MobxReactForm from 'mobx-react-form';
+import validatorjs from 'validatorjs';
 
 export class ProfileForm extends MobxReactForm {
 
@@ -123,3 +124,12 @@ export const Form = {
   }]
 };
 
+/**
+ * create form data on profile panel.
+ *
+ * @param formData
+ */
+export const createForm = (profile = null) => {
+  const formData = profile === null ? Form.fields : profile;
+  return new ProfileForm({fields: formData}, {plugins: {dvr: validatorjs}});
+};

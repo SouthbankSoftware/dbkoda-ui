@@ -6,11 +6,10 @@ import {inject, observer} from 'mobx-react';
 import {action, observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import {Intent, Position} from '@blueprintjs/core';
-import validatorjs from 'validatorjs';
 import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
-import {ProfileForm, Form} from './ProfileForm';
+import {createForm} from './ProfileForm';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
@@ -24,7 +23,7 @@ import Label from './Label';
 @observer
 export default class Panel extends React.Component {
 
-  form = new ProfileForm({fields: Form.fields}, {plugins: {dvr: validatorjs}});
+  form = createForm();
 
   constructor(props) {
     super(props);
