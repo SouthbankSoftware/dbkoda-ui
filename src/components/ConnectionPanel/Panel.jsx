@@ -19,7 +19,8 @@ import Label from './Label';
 
 @inject(allStores => ({
   layout: allStores.store.layout,
-  profiles: allStores.store.profiles
+  profiles: allStores.store.profiles,
+  profileList: allStores.store.profileList,
 }))
 @observer
 export default class Panel extends React.Component {
@@ -53,6 +54,7 @@ export default class Panel extends React.Component {
   _connect(form) {
     console.log('get form value ', form);
     try {
+      this.props.profileList.creatingNewProfile = true;
       featherClient()
         .service('/mongo-connection')
         .create({}, {
@@ -69,12 +71,13 @@ export default class Panel extends React.Component {
         })
         .catch((err) => {
           console.log('connection failed ', err.message);
-          DBenvyToaster(Position.LEFT_TOP).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          DBenvyToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           this.setState({newConnectionLoading: false});
         });
     } catch (err) {
-      DBenvyToaster(Position.LEFT_TOP).show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      DBenvyToaster(Position.LEFT_BOTTOM).show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
+    this.props.profileList.creatingNewProfile = false;
   }
 
   render() {

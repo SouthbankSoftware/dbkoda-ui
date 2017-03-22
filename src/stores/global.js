@@ -28,6 +28,7 @@ export default class Store {
   };
 
   @observable profileList = {
+    selectedProfile: null,
     creatingNewProfile: false
   };
 

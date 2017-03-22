@@ -17,7 +17,7 @@ import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 import { DropTarget } from 'react-dnd';
 import { DragItemTypes} from '#/common/Constants.js';
 import CodeGeneration from '#/common/CodeGeneration.js';
-import './style.scss';
+import './Panel.scss';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');

@@ -20,6 +20,7 @@ import { TreePanel } from '#/TreePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
+import '@blueprintjs/table/dist/table.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';

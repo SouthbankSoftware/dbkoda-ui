@@ -18,12 +18,12 @@ $stringFontColor: #4CAF50;
 $keywordUseFontColor: #b95cce;
 
 div.CodeMirror span.CodeMirror-matchingbracket{
-  color: $white;
-  background-color: $matchingBackground;
+  color: $white !important;
+  background-color: $matchingBackground !important;
 }
 
 div.CodeMirror span.CodeMirror-nonmatchingbracket {
-  color: $brightRedFont;
+  color: $brightRedFont !important;
 }
 
 span.cm-property {
