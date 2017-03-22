@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-20T15:59:57+11:00
+ * @Last modified time: 2017-03-22T16:16:24+11:00
 */
 
 import { observable, action } from 'mobx';
@@ -35,11 +35,9 @@ export default class TreeState {
     this.filterNodes();
   }
 
-  selectNode(nodeData, e) {
+  selectNode(nodeData) {
     const originallySelected = nodeData.isSelected;
-    if (!e.shiftKey) {
-      this.forEachNode(this.nodes, (n) => { n.isSelected = false; });
-    }
+    this.forEachNode(this.nodes, (n) => { n.isSelected = false; });
     nodeData.isSelected = originallySelected == null ? true : !originallySelected;
   }
 
