@@ -12,6 +12,7 @@ import {inject, observer} from 'mobx-react';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import {Tabs2, Tab2} from '@blueprintjs/core';
+import './style.scss';
 
 /**
  * The main panel for the Output view, this handles tabbing,
