@@ -7,6 +7,7 @@
 */
 
 /* eslint-disable react/no-string-refs */
+import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
@@ -16,6 +17,7 @@ import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 import { DropTarget } from 'react-dnd';
 import { DragItemTypes} from '#/common/Constants.js';
 import CodeGeneration from '#/common/CodeGeneration.js';
+import './style.scss';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
@@ -24,6 +26,12 @@ require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/display/autorefresh.js');
+require('codemirror/addon/edit/matchbrackets.js');
+require('codemirror/addon/edit/closebrackets.js');
+require('codemirror/addon/fold/foldgutter.js');
+require('codemirror/addon/hint/show-hint.js');
+require('codemirror/addon/hint/javascript-hint.js');
+require('codemirror/keymap/sublime.js');
 
 /**
  * editorTarget object for helping with drag and drop actions?
@@ -66,20 +74,26 @@ class View extends React.Component {
     super(props);
     this.state = {
       options: {
-        mode: 'text/javascript',
-        matchBrackets: true,
-        json: true,
-        jsonld: true,
         smartIndent: true,
         theme: 'ambiance',
-        typescript: true,
-        lineNumbers: true
+        lineNumbers: 'true',
+        tabSize: 2,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        keyMap: 'sublime',
+        extraKeys: {'Ctrl-Space': 'autocomplete'},
+        mode: {name: 'text/javascript', json: true}
       },
       code: '//////////////////////////////////\n' +
             '// Welcome to DBEnvy!\n' +
             '//\n' +
+            '// Please forgive the terrible color pallete for now.\n' +
+            '// I promise it\'s only a placeholder.\n' +
+            '// Also forgive the temporary highlighting of comments, working on it.\n' +
+            '//\n' +
             '// Try some of our Hotkeys:\n' +
             '// Note: Currently you cannot have the editor focused while using hotkeys!\n' +
+            '// Ctrl + Space : Auto-Complete (Partially complete)\n' +
             '// Shift + n : New Editor\n' +
             '// Shift + e : Execute Selected\n' +
             '// Shift + a : Execute All\n' +
@@ -90,7 +104,6 @@ class View extends React.Component {
             '// You can also right click on the Editor for a context Menu.\n' +
             '// If you have too many tabs, use the filter box to search for a specific alias.\n' +
             '//////////////////////////////////\n'
-
     };
 
     /**
@@ -208,6 +221,29 @@ class View extends React.Component {
    */
   updateCode(newCode) {
     this.setState({code: newCode});
+     const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+
+      cm.addOverlay({
+    token: (stream, state) => {
+
+      if (stream.match('use')) {
+        return 'mongo-keyword-use';
+      } else if(stream.match('db')) {
+        return 'mongo-keyword-db';
+      } else if(stream.match('it')) {
+        return 'mongo-keyword-it';
+      }
+    while (stream.next() != null && !stream.match('use', false)
+      && !stream.match('db', false)
+      && !stream.match('it', false)
+    )
+    {}
+    return null;
+    }
+})
   }
 
   /**

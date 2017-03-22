@@ -2,9 +2,7 @@
 // @Date:   2017-03-10T15:54:46+11:00
 // @Email:  chris@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-03-21T08:53:08+11:00
-
-
+// @Last modified time: 2017-03-22T12:01:11+11:00
 
 $backgroundPrimaryColor: #2d3c46;
 $backgroundSecondaryColor: #394b59;
@@ -101,60 +99,4 @@ h3 {
 
 .cm-s-ambiance .CodeMirror-linenumber {
   color: $whiteColor;
-}
-
-// ======================== //
-//      Output Panel
-// ======================== //
-
-.outputToolbar {
-  order: 1;
-}
-
-.outputTabView {
-  order: 2;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.outputEditor {
-  order: 3;
-  flex: 1;
-  min-height: 0;
-}
-
-
-.outputPanel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-// ======================== //
-//      Editor Panel
-// ======================== //
-
-.notVisible {
-  display:  none;
-}
-.editorPanel, .profileListPanel {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.editorTabView {
-  flex-direction: column;
-  flex: 1;
-  display: flex;
-}
-
-.editorView {
-  flex: 1;
-}
-
-.CodeMirror,
-.ReactCodeMirror {
-  height: 100%;
 }

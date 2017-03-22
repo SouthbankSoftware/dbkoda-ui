@@ -1,0 +1,76 @@
+$white: #ffffff;
+$brightBlueFont: #179dea;
+$greyBlueFont: #8dacbc;
+$purpleFont: #b95cce;
+$brightRedFont: #db3737;
+$matchingBackground: #6b6b6b;
+$backgroundPrimaryColor: #2d3c46;
+$backgroundSecondaryColor: #394b59;
+$tabPrimaryColor: #3d3d3d;
+$tabStrokeColor: #d1ccc8;
+$brightBlueFont: #179dea;
+$blueDarkest: #0e5a8a;
+$selectGray: #8a9ba8;
+$whiteColor: #f5f8fa;
+$blackColor: #000000;
+$propFontColor: #D32F2F;
+$stringFontColor: #4CAF50;
+$keywordUseFontColor: #b95cce;
+
+div.CodeMirror span.CodeMirror-matchingbracket{
+  color: $white;
+  background-color: $matchingBackground;
+}
+
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
+  color: $brightRedFont;
+}
+
+span.cm-property {
+  color: $propFontColor !important;
+}
+
+span.cm-string {
+  color: $stringFontColor !important;
+}
+
+span.cm-mongo-keyword-use {
+  color: $purpleFont !important;
+}
+
+span.cm-mongo-keyword-db {
+  color: $brightBlueFont !important;
+}
+
+span.cm-mongo-keyword-it {
+  color: $greyBlueFont !important;
+}
+
+.notVisible {
+  display:  none;
+}
+.editorPanel, .profileListPanel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.editorTabView {
+  flex-direction: column;
+  flex: 1;
+  display: flex;
+}
+
+.editorView {
+  flex: 1;
+}
+
+.CodeMirror,
+.ReactCodeMirror {
+  height: 100%;
+}
+
+.cm-s-ambiance .CodeMirror-linenumber {
+  color: $whiteColor;
+}
+
