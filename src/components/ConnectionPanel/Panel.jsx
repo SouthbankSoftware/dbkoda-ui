@@ -9,7 +9,6 @@ import {Intent, Position} from '@blueprintjs/core';
 import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
-import {createForm} from './ProfileForm';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
@@ -23,13 +22,15 @@ import Label from './Label';
 @observer
 export default class Panel extends React.Component {
 
-  form = createForm();
-
   constructor(props) {
     super(props);
     this.state = {};
-    this.form.connect = this._connect;
-    this.form.testConnect = this._testConnect;
+
+  }
+
+  componentWillMount(){
+    this.props.form.connect = this._connect;
+    this.props.form.testConnect = this._testConnect;
   }
 
   @autobind
@@ -45,10 +46,23 @@ export default class Panel extends React.Component {
 
   @action.bound
   _connect(form) {
-    if (!this.validConnectionFormData(form)) {
+    if (!this.validateConnectionFormData(form)) {
       return;
     }
-    this.requestConnection(form);
+    this.props.profileList.creatingNewProfile = true;
+    this.props.connect(form)
+      .then(v=>{
+        this._close();
+      })
+      .catch((err) => {
+        console.log('connection failed ', err.message);
+        this.props.profileList.creatingNewProfile = false;
+        DBenvyToaster(Position.LEFT_BOTTOM).show({
+          message: err.message,
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
+      });;
   }
 
   /**
@@ -74,7 +88,7 @@ export default class Panel extends React.Component {
             this
               .props
               .profiles
-              .set(res.id, {shellId: res.shellId, alias: data.alias});
+              .set(res.id, {...data, shellId: res.shellId, password: '******', status: 'OPEN'});
             this._close();
           } else {
             message = 'Test ' + message;
@@ -101,8 +115,9 @@ export default class Panel extends React.Component {
         iconName: 'pt-icon-thumbs-down'
       });
     }
-    this.props.profileList.creatingNewProfile = false;
   }
+
+
 
   /**
    * validate connection form data
@@ -110,11 +125,11 @@ export default class Panel extends React.Component {
    * @param data
    * @returns {boolean}
    */
-  validConnectionFormData(data) {
+  validateConnectionFormData(data) {
     let validate = true;
     this.props.profiles.forEach((value, key) => {
       if (value.alias === data.alias) {
-        DBenvyToaster(Position.LEFT_TOP).show({
+        DBenvyToaster(Position.LEFT_BOTTOM).show({
           message: 'Alias already existed.',
           intent: Intent.DANGER,
           iconName: 'pt-icon-thumbs-down'
@@ -128,14 +143,14 @@ export default class Panel extends React.Component {
   @action.bound
   _testConnect(data) {
     console.log('validate form ', data);
-    if (!this.validConnectionFormData(data)) {
+    if (!this.validateConnectionFormData(data)) {
       return;
     }
     this.requestConnection(data);
   }
 
   render() {
-    const form = this.form;
+    const form = this.props.form;
     return (
       <div className="pt-dark ">
         <h3 className="profile-title">Create New Connection</h3>

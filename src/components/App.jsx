@@ -24,7 +24,7 @@ import '@blueprintjs/table/dist/table.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';
-import {ConnectionProfilePanel} from '../components/ConnectionPanel';
+import {ConnectionProfileCreator} from '../components/ConnectionPanel';
 
 import './App.scss';
 
@@ -81,9 +81,10 @@ class App extends React.Component {
           handleWidth={0}
           noTouchOpen={true}
           noTouchClose={true}
+          drawerStyle={{'minWidth':500}}
           onChange={this.updateDrawerOpenStatus}
         >
-          <ConnectionProfilePanel/>
+          <ConnectionProfileCreator/>
         </Drawer>
         <SplitPane
           split="vertical"

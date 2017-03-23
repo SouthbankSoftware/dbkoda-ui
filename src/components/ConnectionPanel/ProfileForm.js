@@ -133,3 +133,7 @@ export const createForm = (profile = null) => {
   const formData = profile === null ? Form.fields : profile;
   return new ProfileForm({fields: formData}, {plugins: {dvr: validatorjs}});
 };
+
+export const createFromFromProfile = (profile) => {
+
+}
