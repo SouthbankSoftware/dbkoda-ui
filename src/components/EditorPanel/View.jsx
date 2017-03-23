@@ -7,6 +7,7 @@
 */
 
 /* eslint-disable react/no-string-refs */
+/* eslint-disable react/prop-types */
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import {inject, PropTypes} from 'mobx-react';
@@ -67,7 +68,7 @@ function collect(connect, monitor) {
 @ContextMenuTarget
 class View extends React.Component {
   static propTypes = {
-    store: PropTypes.observableObject.isRequired,
+    store: PropTypes.observableObject.isRequired
   };
   constructor(props) {
     super(props);
@@ -108,19 +109,19 @@ class View extends React.Component {
     const reactionToExecuteAll = reaction( // eslint-disable-line
         () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
       if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorAll == true) {
-       let shell = null;
-       let id = null;
-       this
-      .props
-      .store
-      .profiles
-      .forEach((value) => {
-        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-          shell = value.shellId;
-          id = value.id;
-        }
-        });
-        console.log('[', this.props.store.editorPanel.activeDropdownId,']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
+        let shell = null;
+        let id = null;
+        this
+          .props
+          .store
+          .profiles
+          .forEach((value) => {
+            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+              shell = value.shellId;
+              id = value.id;
+            }
+          });
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
@@ -141,8 +142,8 @@ class View extends React.Component {
         () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
       if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorLines == true) {
         // Determine code to send.
-         let shell = null;
-         let id = null;
+        let shell = null;
+        let id = null;
         const cm = this
           .refs
           .editor
@@ -155,16 +156,16 @@ class View extends React.Component {
           content = cm.getLine(cm.getCursor().line);
         }
         this
-      .props
-      .store
-      .profiles
-      .forEach((value) => {
-        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-           shell = value.shellId;
-           id = value.id;
-        }
-        });
-        console.log('[', this.props.store.editorPanel.activeDropdownId,']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+          .props
+          .store
+          .profiles
+          .forEach((value) => {
+            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+              shell = value.shellId;
+              id = value.id;
+            }
+          });
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
@@ -199,32 +200,6 @@ class View extends React.Component {
       .executeAll
       .bind(this);
   }
-
-      getIdForProfile(profile) {
-      this
-      .props
-      .store
-      .profiles
-      .forEach((value) => {
-        if (value.alias == profile) {
-          console.log('[', value.alias, ']', '=', '[', profile, ']');
-          console.log(value.id);
-        }
-      });
-    }
-
-    getShellForProfile(profile) {
-      this
-      .props
-      .store
-      .profiles
-      .forEach((value) => {
-        if (value.alias == profile) {
-          console.log('[', value.alias, ']', '=', '[', profile, ']');
-          console.log(value.shellId); 
-        }
-      });
-    }
 
   /**
    * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.
@@ -276,7 +251,7 @@ class View extends React.Component {
         } else if (stream.match('it')) {
           return 'mongo-keyword-it';
         }
-        while (stream.next() != null && !stream.match('use', false) && !stream.match('db', false) && !stream.match('it', false)) { } // eslint-disable-line
+        while (stream.next() != null && !stream.match('use', false) && !stream.match('db', false) && !stream.match('it', false)) {} // eslint-disable-line
         return null;
       }
     });

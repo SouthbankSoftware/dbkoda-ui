@@ -37,9 +37,6 @@ export default class Panel extends React.Component {
     const reactionToEditorChange = reaction(
       () => this.props.store.editorPanel.activeEditorId,
       activeEditorId => {
-        console.log('a ', this.props.store.editorPanel.activeEditorId);
-        console.log('a ', this.props.store.outputs);
-        console.log('a ', this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId));
           this.setState({currentTab: this.props.store.editorPanel.activeEditorId});
       },
       { "name": "reactionOutputPanelTabChange" }
@@ -86,7 +83,6 @@ export default class Panel extends React.Component {
 
   render() {
     // Toolbar must be rendered after tabs for initialisation purposes
-    console.log('test ', this.state.currentTab);
     return (
       <div className="pt-dark outputPanel">
         <Tabs2 id="outputPanelTabs"
