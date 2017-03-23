@@ -23,19 +23,19 @@ export default class Panel extends React.Component {
 
   }
 
-  componentWillMount() {
-    this.props.form.connect = this._connect;
-  }
+  // componentWillReceiveProps(nextProps){
+  //   console.log('2222 ', this.props.form)
+  //   this.props.form.connect = this._connect;
+  // }
+
+  // componentWillMount() {
+  //   this.props.form.connect = this._connect;
+  // }
 
   @autobind
   _hostRadioOnChange() {
     this.props.form.$('hostRadio').set('value', !this.props.form.$('hostRadio').get('value'));
     this.props.form.$('urlRadio').set('value', !this.props.form.$('hostRadio').get('value'));
-  }
-
-  @action.bound
-  _connect(form) {
-    this.props.connect(form);
   }
 
   handleConnectionError(err) {
@@ -106,7 +106,7 @@ export default class Panel extends React.Component {
             <button className="pt-button pt-intent-success" type="submit" onClick={form.onSubmit}>Connect</button>
             <button className="pt-button pt-intent-primary" type="button" onClick={form.onReset}>Reset</button>
             <button className="pt-button pt-intent-primary" type="button" onClick={form.onTest.bind(form)}>Test</button>
-            <button className="pt-button pt-intent-primary" type="button" onClick={this._close}>Close</button>
+            <button className="pt-button pt-intent-primary" type="button" onClick={this.props.close}>Close</button>
           </div>
         </form>
       </div>

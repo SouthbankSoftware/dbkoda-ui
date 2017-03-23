@@ -32,7 +32,7 @@ export default class ListView extends React.Component {
       .store
       .profiles
       .entries();
-    const profile = profiles[(region[0].rows[0])][1].alias;
+    const profile = profiles[(region[0].rows[0])][1];
     this.props.store.profileList.selectedProfile = profile;
   }
 

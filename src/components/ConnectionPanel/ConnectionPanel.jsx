@@ -5,49 +5,34 @@ import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Intent, Position } from '@blueprintjs/core';
-import { createForm } from './ProfileForm';
+import { createForm, createFromFromProfile } from './ProfileForm';
 import Panel from './Panel';
 import { featherClient } from '../../helpers/feathers';
 import { DBenvyToaster } from '../common/Toaster';
 
-const form = createForm();
-
 const ConnectionPanel = (
   { profiles, editors, editorPanel, editorToolbar, profileList, layout },
 ) => {
-  const connect = action((data) => {
-    if (!validateConnectionFormData(data)) {
+  let selectedProfile = profileList.selectedProfile;
+  let edit = false;
+  if (profileList.selectedProfile) {
+    edit = true;
+  }
+  console.log('this is edit ', edit);
+  const form = createForm(selectedProfile);
+  form.connect = action((data) => {
+    if (!edit && !validateConnectionFormData(data)) {
       return;
     }
     profileList.creatingNewProfile = true;
+    console.log('create connection ', data);
     return featherClient()
       .service('/mongo-connection')
       .create({}, {
         query: data,
       })
       .then((res) => {
-        profileList.creatingNewProfile = false;
-        console.log('get response', res);
-        let message = 'Connection Success!';
-        let position = Position.LEFT_BOTTOM;
-        if (!data.test) {
-          position = Position.RIGHT_TOP;
-          form.reset();
-          profiles.set(res.id, {
-            ...data,
-            shellId: res.shellId,
-            password: '******',
-            status: 'OPEN',
-          });
-          setTimeout(setEditorStatus(res, data), 100);
-        } else {
-          message = 'Test ' + message;
-        }
-        DBenvyToaster(position).show({
-          message,
-          intent: Intent.SUCCESS,
-          iconName: 'pt-icon-thumbs-up',
-        });
+        onSuccess(res, data);
       })
       .catch((err) => {
         console.log('connection failed ', err);
@@ -60,8 +45,41 @@ const ConnectionPanel = (
       });
   });
 
-  const setEditorStatus = action((res, data) => {
+  const onSuccess = action((res, data) => {
+    profileList.creatingNewProfile = false;
+    console.log('get response', res);
+    let message = 'Connection Success!';
+    let position = Position.LEFT_BOTTOM;
+    if (!data.test) {
+      if (edit) {
+        profiles.delete(selectedProfile.id);
+      }
+      position = Position.RIGHT_TOP;
+      form.reset();
+      profiles.set(res.id, {
+        ...data,
+        id: res.id,
+        shellId: res.shellId,
+        password: null,
+        status: 'OPEN',
+      });
+      close();
+      setTimeout(setEditorStatus(res, data), 100);
+    } else {
+      message = 'Test ' + message;
+    }
+    DBenvyToaster(position).show({
+      message,
+      intent: Intent.SUCCESS,
+      iconName: 'pt-icon-thumbs-up',
+    });
+  });
+
+  const close = action(() => {
     layout.drawerOpen = false;
+  });
+
+  const setEditorStatus = action((res, data) => {
     editors.set(res.id, {
       // eslint-disable-line react/prop-types
       id: res.id,
@@ -100,7 +118,7 @@ const ConnectionPanel = (
     return validate;
   };
 
-  return <Panel form={form} connect={connect} />;
+  return <Panel form={form} close={close} />;
 };
 
 export default inject(allStores => ({

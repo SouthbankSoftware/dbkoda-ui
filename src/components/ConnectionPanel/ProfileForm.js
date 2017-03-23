@@ -30,6 +30,7 @@ export class ProfileForm extends MobxReactForm {
   }
 
   onTest() {
+    console.log('xxxx:', this);
     this.connect({...this.createFormData(this), test: true});
   }
 
@@ -46,11 +47,10 @@ export class ProfileForm extends MobxReactForm {
       connectionUrl = ProfileForm.mongoProtocol + formValues.username + ':' + formValues.password + '@' + split[1];
     }
     return {
+      ...formValues,
       url: connectionUrl,
-      database: formValues.database,
       authorization: true,
       test: false,
-      alias: formValues.alias
     };
   }
 
@@ -124,16 +124,29 @@ export const Form = {
   }]
 };
 
+export const createFormFromProfile = (profile) => {
+  const fields = JSON.parse(JSON.stringify(Form.fields));
+  fields[0].value = profile.alias;
+  fields[1].value = profile.hostRadio;
+  fields[2].value = profile.host;
+  fields[3].value = profile.port;
+  fields[4].value = profile.urlRadio;
+  fields[5].value = profile.url;
+  fields[6].value = profile.database;
+  fields[7].value = profile.ssl;
+  fields[8].value = profile.sha;
+  fields[9].value = profile.username;
+  fields[10].value = profile.password;
+  return fields;
+};
+
 /**
  * create form data on profile panel.
  *
  * @param formData
  */
 export const createForm = (profile = null) => {
-  const formData = profile === null ? Form.fields : profile;
+  const formData = profile === null ? Form.fields : createFormFromProfile(profile);
+  console.log('create fields ', formData);
   return new ProfileForm({fields: formData}, {plugins: {dvr: validatorjs}});
-};
-
-export const createFromFromProfile = (profile) => {
-  console.log('create from ' + profile);
 };

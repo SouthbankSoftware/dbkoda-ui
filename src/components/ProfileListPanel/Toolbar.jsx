@@ -29,12 +29,14 @@ export default class Toolbar extends React.Component {
 
   // Placeholder - Linting disabled for this line.
  @action newProfile() { // eslint-disable-line class-methods-use-this
+   this.props.store.profileList.selectedProfile = null;
     this.props.store.layout.drawerOpen = true;
   }
 
   // Placeholder - Linting disabled for this line.
+  @action.bound
   editProfile() { // eslint-disable-line class-methods-use-this
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    this.props.store.layout.drawerOpen = true;
   }
 
   // Placeholder - Linting disabled for this line.
@@ -66,7 +68,7 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-edit pt-intent-primary editProfileButton"
                 onClick={this.editProfile}
-                disabled />
+                disabled={!this.props.store.profileList.selectedProfile} />
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
