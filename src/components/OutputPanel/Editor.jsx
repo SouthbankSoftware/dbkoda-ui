@@ -94,7 +94,6 @@ export default class Editor extends React.Component {
       theme: 'ambiance',
       typescript: true,
     };
-
     return (
       <div className="outputEditor">
         <CodeMirror

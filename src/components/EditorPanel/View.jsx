@@ -164,7 +164,7 @@ class View extends React.Component {
            id = value.id;
         }
         });
-        console.log('[', this.props.store.editorPanel.activeDropdownId,']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
+        console.log('[', this.props.store.editorPanel.activeDropdownId,']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
