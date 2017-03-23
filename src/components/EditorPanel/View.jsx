@@ -68,7 +68,6 @@ function collect(connect, monitor) {
 class View extends React.Component {
   static propTypes = {
     store: PropTypes.observableObject.isRequired,
-    id: React.PropTypes.number.isRequired
   };
   constructor(props) {
     super(props);
@@ -108,14 +107,25 @@ class View extends React.Component {
      */
     const reactionToExecuteAll = reaction( // eslint-disable-line
         () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
-      console.log('Execute All');
-      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorAll == true) {
-        console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': "', this.state.code, '".');
+      if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorAll == true) {
+       let shell = null;
+       let id = null;
+       this
+      .props
+      .store
+      .profiles
+      .forEach((value) => {
+        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+          shell = value.shellId;
+          id = value.id;
+        }
+        });
+        console.log('[', this.props.store.editorPanel.activeDropdownId,']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
-        service.update(this.props.store.editorPanel.activeDropdownId, {
-          shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
+        service.update(id, {
+          shellId: shell, // eslint-disable-line
           commands: this.state.code
         });
         this.props.store.editorPanel.executingEditorAll = false;
@@ -129,8 +139,10 @@ class View extends React.Component {
      */
     const reactionToExecuteLine = reaction( // eslint-disable-line
         () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
-      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorLines == true) {
+      if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorLines == true) {
         // Determine code to send.
+         let shell = null;
+         let id = null;
         const cm = this
           .refs
           .editor
@@ -142,18 +154,27 @@ class View extends React.Component {
           console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
           content = cm.getLine(cm.getCursor().line);
         }
-        console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': "', content, '".');
+        this
+      .props
+      .store
+      .profiles
+      .forEach((value) => {
+        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+           shell = value.shellId;
+           id = value.id;
+        }
+        });
+        console.log('[', this.props.store.editorPanel.activeDropdownId,']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
-        service.update(this.props.store.editorPanel.activeDropdownId, {
-          shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
+        service.update(id, {
+          shellId: shell, // eslint-disable-line
           commands: content
         });
         this.props.store.editorPanel.executingEditorLines = false;
       }
     });
-
     /**
      * Reaction function for when a change occurs on the dragItem.drapDrop state.
      * @param {function()} - The state that will trigger the reaction.
@@ -178,6 +199,32 @@ class View extends React.Component {
       .executeAll
       .bind(this);
   }
+
+      getIdForProfile(profile) {
+      this
+      .props
+      .store
+      .profiles
+      .forEach((value) => {
+        if (value.alias == profile) {
+          console.log('[', value.alias, ']', '=', '[', profile, ']');
+          console.log(value.id);
+        }
+      });
+    }
+
+    getShellForProfile(profile) {
+      this
+      .props
+      .store
+      .profiles
+      .forEach((value) => {
+        if (value.alias == profile) {
+          console.log('[', value.alias, ']', '=', '[', profile, ']');
+          console.log(value.shellId); 
+        }
+      });
+    }
 
   /**
    * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.

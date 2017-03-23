@@ -24,7 +24,7 @@ export default class Panel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTab: 0
+      currentTab: 'Default'
     }
     this.changeTab = this.changeTab.bind(this);
 
@@ -37,7 +37,10 @@ export default class Panel extends React.Component {
     const reactionToEditorChange = reaction(
       () => this.props.store.editorPanel.activeEditorId,
       activeEditorId => {
-        this.setState({currentTab: activeEditorId});
+        if (this.props.store.outputs.get(this.activeEditorId) == null) {
+        } else {
+          this.setState({currentTab: activeEditorId});
+        }
       },
       { "name": "reactionOutputPanelTabChange" }
     );
@@ -58,8 +61,7 @@ export default class Panel extends React.Component {
   renderTabs(editors) {
     return (
       editors.map((editor) => {
-        const editorTitle = `${editor[1].id}:${editor[1].shellId}`;
-        console.log(editor[1].visible);
+        const editorTitle = editor[1].alias + ' (' + editor[1].shellId + ')';
         let tabClassName = "notVisible";
         if (editor[1].visible) {
           tabClassName = "visible";
@@ -68,10 +70,11 @@ export default class Panel extends React.Component {
           <Tab2
             className={tabClassName}
             key={editor[1].shellId}
-            id={editor[1].id}
+            id={editorTitle}
             title={editorTitle}
             panel={
               <OutputEditor
+              title={editorTitle}
               id={editor[1].id}
               shellId={editor[1].shellId} />
             }>
@@ -90,9 +93,9 @@ export default class Panel extends React.Component {
           onChange={this.changeTab}
           selectedTabId={this.state.currentTab}>
           <Tab2 key={0}
-            id={0}
+            id="Default"
             panel={
-              <OutputEditor id={0} shellId={0} />
+              <OutputEditor title="Default" id="Default" shellId={0} />
             }
             title="Default">
           </Tab2>

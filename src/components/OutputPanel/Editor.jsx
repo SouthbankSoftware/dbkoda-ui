@@ -33,7 +33,9 @@ export default class Editor extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.props.store.outputs.set(this.props.id, {
+    this.props.store.outputs.set(this.props.title, {
+      id: this.props.id,
+      title: this.props.title,
       output: '',
       cannotShowMore: true,
       showingMore: false
@@ -51,16 +53,16 @@ export default class Editor extends React.Component {
   @action.bound
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
-    this.props.store.outputs.get(this.props.id).output =
-      this.props.store.outputs.get(this.props.id).output + '\n' +
+    this.props.store.outputs.get(this.props.title).output =
+      this.props.store.outputs.get(this.props.title).output + '\n' +
       output.output; // eslint-disable-line
     if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
-      this.props.store.outputs.get(this.props.id).cannotShowMore = false; // eslint-disable-line
-    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore &&
+      this.props.store.outputs.get(this.props.title).cannotShowMore = false; // eslint-disable-line
+    } else if (this.props.store.outputs.get(this.props.title).cannotShowMore &&
               output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
       console.log('cannot show more');
-      this.props.store.outputs.get(this.props.id).cannotShowMore = true; // eslint-disable-line
+      this.props.store.outputs.get(this.props.title).cannotShowMore = true; // eslint-disable-line
     }
   }
 
@@ -98,7 +100,7 @@ export default class Editor extends React.Component {
         <CodeMirror
           autosave
           ref="editor"
-          value={this.props.store.outputs.get(this.props.id).output}
+          value={this.props.store.outputs.get(this.props.title).output}
           options={outputOptions}
           />
         <OutputTerminal id={this.props.id} shellId={this.props.shellId} />

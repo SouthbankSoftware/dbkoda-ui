@@ -12,13 +12,25 @@ export default class Store {
   @observable editors = observable.map();
   @observable outputs = observable.map();
 
-  @observable editorPanel = {
-    activeEditorId: 0,
+  @observable editorPanel = observable({
+    creatingNewEditor: false,
+    creatingWithProfile: false,
+    res: null,
+    activeEditorId: 'Default',
     activeDropdownId: 'Default',
     executingEditorAll: false,
     executingEditorLines: false,
     tabFilter: ''
-  }
+  })
+
+  @observable editorToolbar = observable({
+      newConnectionLoading: false,
+      currentProfile: 0,
+      noActiveProfile: true,
+      noExecutionRunning: true,
+      id: 0,
+      shellId: 0
+  })
 
   @observable layout = {
     drawerOpen: false,
@@ -27,10 +39,10 @@ export default class Store {
     rightSplitPos: '70%'
   };
 
-  @observable profileList = {
+  @observable profileList = observable({
     selectedProfile: null,
     creatingNewProfile: false
-  };
+  });
 
   @observable dragItem = {
     dragDrop: false,
@@ -43,5 +55,11 @@ export default class Store {
     this
       .topology
       .push(value);
+  }
+
+  @action addEditor = (withProfile, newRes) => {
+    this.editorPanel.creatingNewEditor = true;
+    this.editorPanel.creatingWithProfile = withProfile;
+    this.editorPanel.res = newRes;
   }
 }
