@@ -10,7 +10,7 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
-import {observer, inject, PropTypes} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import {action} from 'mobx';
 import {
   AnchorButton,
@@ -30,14 +30,6 @@ import './Panel.scss';
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      newConnectionLoading: false,
-      currentProfile: 0,
-      noActiveProfile: true,
-      noExecutionRunning: true,
-      id: 0,
-      shellId: 0
-    };
 
     this.addEditor = this
       .addEditor
@@ -65,7 +57,7 @@ export default class Toolbar extends React.Component {
   // -------------------// . TOOLBAR ACTIONS // ----------------- //
   @action addEditor() {
     try {
-      this.setState({newConnectionLoading: true});
+      this.props.store.editorToolBar.newConnectionLoading = true;
       featherClient()
         .service('/mongo-connection')
         .create({}, {
@@ -91,10 +83,10 @@ export default class Toolbar extends React.Component {
             .profiles // eslint-disable-line react/prop-types
             .set(res.id, {shellId: res.shellId}); // eslint-disable-line react/prop-types
           // eslint-disable-line react/prop-types
-          this.state.noActiveProfile = false;
-          this.state.id = res.id;
-          this.shellId = res.shellId;
-          this.setState({newConnectionLoading: false});
+          this.props.store.editorToolbar.noActiveProfile = false;
+          this.props.store.editorToolbar.id = res.id;
+          this.props.store.editorToolbar.shellId = res.shellId;
+          this.props.store.editorToolbar.newConnectionLoading = false;
 
           // Send message to Panel to crate new editor.
           this
@@ -105,7 +97,7 @@ export default class Toolbar extends React.Component {
         .catch((err) => {
           console.log('connection failed ', err.message);
           NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-          this.setState({newConnectionLoading: false});
+         this.props.store.editorToolbar.newConnectionLoading = false;
         });
     } catch (err) {
       NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
@@ -138,11 +130,11 @@ export default class Toolbar extends React.Component {
 
   @action onDropdownChanged(event) {
     this.props.store.editorPanel.activeDropdownId = event.target.value;
-    this.setState({currentProfile: event.target.value});
+    this.props.store.editorToolbar.currentProfile = event.target.value;
     if (event.target.value == 'Default') {
-      this.setState({noActiveProfile: true});
+     this.props.store.editorToolbar.noActiveProfile = true;
     } else {
-      this.setState({noActiveProfile: false});
+    this.props.store.editorToolbar.noActiveProfile = false;
     }
   }
 
@@ -169,12 +161,12 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
+    console.log(this.props.store.editorPanel.activeDropdownId);
     const profiles = this
       .props
       .store
       .profiles
       .entries();
-    const activeId = this.props.store.editorPanel.activeDropdownId;
     return (
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
@@ -186,8 +178,8 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-add pt-intent-primary"
-                loading={this.state.newConnectionLoading}
+                className="pt-button pt-icon-add pt-intent-primary addEditorButton"
+                loading={this.props.store.editorToolbar.newConnectionLoading}
                 onClick={this.addEditor} />
             </Tooltip>
             <Tooltip
@@ -197,7 +189,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-document-open pt-intent-primary"
+                className="pt-button pt-icon-document-open pt-intent-primary openFileButton"
                 onClick={this.openFile} />
             </Tooltip>
             <Tooltip
@@ -207,7 +199,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-floppy-disk pt-intent-primary"
+                className="pt-button pt-icon-floppy-disk pt-intent-primary saveFileButton"
                 onClick={this.saveFile} />
             </Tooltip>
           </div>
@@ -222,10 +214,10 @@ export default class Toolbar extends React.Component {
                 position={Position.BOTTOM}>
                 <select
                   onChange={this.onDropdownChanged}
-                  value={activeId}
+                  value={this.props.store.editorPanel.activeDropdownId}
                   className="pt-intent-primary">
                   <option key="Default" value="Default">Default</option>; {profiles.map((profile) => {
-                    return <option key={profile[0]} value={profile[0]}>{profile[0]}</option>; // eslint-disable-line react/no-array-index-key
+                    return <option key={profile[0]} value={profile[1].alias}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
                   })}
                 </select>
               </Tooltip>
@@ -237,9 +229,9 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-chevron-right pt-intent-primary"
+                className="pt-button pt-icon-chevron-right pt-intent-primary executeLineButton"
                 onClick={this.executeLine}
-                disabled={this.state.noActiveProfile} />
+                disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
@@ -248,9 +240,9 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-double-chevron-right pt-intent-primary"
+                className="pt-button pt-icon-double-chevron-right pt-intent-primary executeAllButton"
                 onClick={this.executeAll}
-                disabled={this.state.noActiveProfile} />
+                disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
@@ -259,9 +251,9 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-help pt-intent-primary"
+                className="pt-button pt-icon-help pt-intent-primary explainPlanButton"
                 onClick={this.explainPlan}
-                disabled={this.state.noActiveProfile} />
+                disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
             <Tooltip
               intent={Intent.DANGER}
@@ -270,9 +262,9 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-stop pt-intent-danger"
+                className="pt-button pt-icon-stop pt-intent-danger stopExecutionButton"
                 onClick={this.stopExecution}
-                disabled={this.state.noExecutionRunning} />
+                disabled={this.props.store.editorToolbar.noExecutionRunning} />
             </Tooltip>
           </div>
           <span className="pt-navbar-divider" />

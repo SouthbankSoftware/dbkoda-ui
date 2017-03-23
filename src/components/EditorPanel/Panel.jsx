@@ -21,8 +21,8 @@ import './Panel.scss';
 @inject('store')
 @observer
 export default class Panel extends React.Component {
-   static propTypes = {
-    store: PropTypes.observableObject.isRequired,
+  static propTypes = {
+    store: PropTypes.observableObject.isRequired
   };
   constructor(props) {
     super(props);
@@ -51,10 +51,8 @@ export default class Panel extends React.Component {
    * @param {String} newId - The id of the newly created Editor tab.
    */
   @action newEditor(newId) {
-    this.props.store.editorPanel
-      .activeDropdownId = newId;
-    this.props.store.editorPanel
-      .activeEditorId = newId;
+    this.props.store.editorPanel.activeDropdownId = newId;
+    this.props.store.editorPanel.activeEditorId = newId;
     this.setState({tabId: newId});
   }
 
@@ -63,7 +61,8 @@ export default class Panel extends React.Component {
    * @param {String} removeTabId - The Id of the tab being removed.
    */
   @action closeTab(removeTabId) {
-    // Check if tab to be removed is currenlty selected tab, this will require more handing in UI.
+    // Check if tab to be removed is currenlty selected tab, this will require more
+    // handing in UI.
     if (removeTabId == this.state.tabId) {
       this.state.tabId = 0;
       this.state.isRemovingCurrentTab = true;
@@ -136,23 +135,32 @@ export default class Panel extends React.Component {
           onChange={this.changeTab}
           selectedTabId={this.props.store.editorPanel.activeEditorId}>
           <Tab2
-            id={0}
+            id="Default"
             title="Default"
-            panel={<View id={
+            panel={<View id ={
             0
-          } onDrop={item => this.handleDrop(item)}
-              ref="defaultEditor" />} /> {editors.map((tab) => {
+          }
+              onDrop ={
+            item => this.handleDrop(item)
+          }
+              ref ="defaultEditor" />} /> {editors.map((tab) => {
             if (tab[1].visible) {
               return (
                 <Tab2
                   className="visible"
                   key={tab[1].shellId}
-                  id={tab[1].id}
-                  title={tab[1].id + ':' + tab[1].shellId}
-                  panel={<View id={
+                  id={tab[1].alias + ' (' + tab[1].shellId + ')'}
+                  title={tab[1].alias + ' (' + tab[1].shellId + ')'}
+                  panel={<View id= {
                   tab[1].id
-                } onDrop={item => this.handleDrop(item)}
-                    ref="defaultEditor" />}>
+                }
+                    title ={
+                  tab[1].alias + ' (' + tab[1].shellId + ')'
+                }
+                    onDrop ={
+                  item => this.handleDrop(item)
+                }
+                    ref= "defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
                     onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
@@ -161,23 +169,23 @@ export default class Panel extends React.Component {
                 </Tab2>
               );
             }
-              return (
-                <Tab2
-                  className="notVisible"
-                  key={tab[1].shellId}
-                  id={tab[1].id}
-                  title={tab[1].alias}
-                  panel={<View id={
-                  tab[1].id
-                }
-                    ref="defaultEditor" />}>
-                  <Button
-                    className="pt-intent-primary pt-minimal"
-                    onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
-                    <span className="pt-icon-cross" />
-                  </Button>
-                </Tab2>
-              );
+            return (
+              <Tab2
+                className="notVisible"
+                key={tab[1].shellId}
+                id={tab[1].id}
+                title={tab[1].alias}
+                panel={<View id ={
+                tab[1].id
+              }
+                  ref ="defaultEditor" />}>
+                <Button
+                  className="pt-intent-primary pt-minimal"
+                  onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
+                  <span className="pt-icon-cross" />
+                </Button>
+              </Tab2>
+            );
           })}
         </Tabs2>
       </div>

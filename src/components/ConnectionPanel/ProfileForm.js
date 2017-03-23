@@ -135,5 +135,5 @@ export const createForm = (profile = null) => {
 };
 
 export const createFromFromProfile = (profile) => {
-
-}
+  console.log('create from ' + profile);
+};
