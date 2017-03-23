@@ -14,14 +14,6 @@ import {featherClient} from '~/helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
 import Label from './Label';
 
-@inject(allStores => ({
-  layout: allStores.store.layout,
-  profiles: allStores.store.profiles,
-  editors: allStores.store.editors,
-  editorPanel: allStores.store.editorPanel,
-  editorToolbar: allStores.store.editorToolbar,
-  profileList: allStores.store.profileList
-}))
 @observer
 export default class Panel extends React.Component {
 
@@ -31,69 +23,19 @@ export default class Panel extends React.Component {
 
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.props.form.connect = this._connect;
-    this.props.form.testConnect = this._testConnect;
   }
 
   @autobind
   _hostRadioOnChange() {
-    this.form.$('hostRadio').set('value', !this.form.$('hostRadio').get('value'));
-    this.form.$('urlRadio').set('value', !this.form.$('hostRadio').get('value'));
-  }
-
-  @action.bound
-  _close() {
-    this.props.layout.drawerOpen = false;
+    this.props.form.$('hostRadio').set('value', !this.props.form.$('hostRadio').get('value'));
+    this.props.form.$('urlRadio').set('value', !this.props.form.$('hostRadio').get('value'));
   }
 
   @action.bound
   _connect(form) {
-    if (!this.validateConnectionFormData(form)) {
-      return;
-    }
-    this.props.profileList.creatingNewProfile = true;
-    this.props.connect(form)
-      .then(v=>{
-        this._close();
-      })
-      .catch((err) => {
-        this.props.profileList.creatingNewProfile = false;
-        this.handleConnectionError(err);
-      });;
-  }
-
-  /**
-   * validate connection form data
-   *
-   * @param data
-   * @returns {boolean}
-   */
-  validateConnectionFormData(data) {
-    let validate = true;
-    this.props.profiles.forEach((value, key) => {
-      if (value.alias === data.alias) {
-        DBenvyToaster(Position.LEFT_BOTTOM).show({
-          message: 'Alias already existed.',
-          intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down'
-        });
-        validate = false;
-      }
-    });
-    return validate;
-  }
-
-  @action.bound
-  _testConnect(data) {
-    console.log('validate form ', data);
-    if (!this.validateConnectionFormData(data)) {
-      return;
-    }
-    this.props.connect(data)
-      .catch((err) => {
-        this.handleConnectionError(err);
-      });;
+    this.props.connect(form);
   }
 
   handleConnectionError(err) {

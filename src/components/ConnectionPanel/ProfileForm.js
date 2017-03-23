@@ -30,7 +30,7 @@ export class ProfileForm extends MobxReactForm {
   }
 
   onTest() {
-    this.testConnect({...this.createFormData(this), test: true});
+    this.connect({...this.createFormData(this), test: true});
   }
 
   createFormData(form) {

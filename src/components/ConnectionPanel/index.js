@@ -1,8 +1,6 @@
 
-import Panel from './Panel';
-import Creator from './Creator';
+import ConnectionPanel from './ConnectionPanel';
 
 export default {
-  ConnectionProfilePanel: Panel,
-  ConnectionProfileCreator: Creator,
+  ConnectionProfilePanel: ConnectionPanel,
 };
