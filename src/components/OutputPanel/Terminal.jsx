@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-23T09:17:51+11:00
+ * @Last modified time: 2017-03-23T17:18:19+11:00
  */
 
 import React from 'react';
@@ -20,9 +20,48 @@ export default class Terminal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      command: ''
+      command: '',
+      commandHistory: [],
+      historyCursor: 0
     };
+
     this.updateCommand = this.updateCommand.bind(this);
+    this.showPreviousCommand = this.showPreviousCommand.bind(this);
+    this.showNextCommand = this.showNextCommand.bind(this);
+    this.updateHistory = this.updateHistory.bind(this);
+  }
+
+  /**
+   * Get a less recent command from the history
+   */
+  showPreviousCommand() {
+    if (this.state.historyCursor > 0) {
+      this.state.historyCursor--;
+      this.updateCommand(this.state.commandHistory[this.state.historyCursor]);
+    }
+  }
+
+  /**
+   * Get a more recent command from the history
+   */
+  showNextCommand() {
+    if (this.state.historyCursor < this.state.commandHistory.length) {
+      this.state.historyCursor++;
+      this.updateCommand(this.state.commandHistory[this.state.historyCursor]);
+    }
+    else {
+      this.updateCommand('');
+    }
+  }
+
+  /**
+   * Adds a command to the commandHistory and updates the historyCursor
+   */
+  updateHistory(command) {
+    this.state.commandHistory.push(command);
+    this.state.historyCursor = this.state.commandHistory.length;
+    console.log(this.state.commandHistory);
+    console.log(this.state.historyCursor);
   }
 
   /**
@@ -40,6 +79,7 @@ export default class Terminal extends React.Component {
   executeCommand() {
     const command = this.state.command;
     console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
+    this.updateHistory(command);
     const service = featherClient().service('/mongo-shells');
     service.timeout = 30000;
     service.update(parseInt(this.props.id), {
@@ -55,6 +95,16 @@ export default class Terminal extends React.Component {
    */
   componentDidMount() {
     var cm = this.refs.terminal.getCodeMirror();
+    cm.on("keydown", (cm, keyEvent) => {
+      if (keyEvent.keyCode == 38) {
+        // Up
+        this.showPreviousCommand();
+      }
+      else if (keyEvent.keyCode == 40) {
+        // Down
+        this.showNextCommand();
+      }
+    });
     cm.on("beforeChange", (cm, changeObj) => {
       // If typed new line, attempt submit
       var typedNewLine = (changeObj.origin == '+input' &&
