@@ -34,7 +34,6 @@ export default class ListView extends React.Component {
       .entries();
     const profile = profiles[(region[0].rows[0])][1].alias;
     this.props.store.profileList.selectedProfile = profile;
-    this.props.store.layout.drawerOpen = true;
   }
 
   render() {
