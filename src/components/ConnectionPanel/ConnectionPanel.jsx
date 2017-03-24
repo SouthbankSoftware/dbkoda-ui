@@ -38,6 +38,7 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
     query.url = connectionUrl;
     query.ssl = data.ssl;
     query.test = data.test;
+    query.authorization = data.authorization;
     return featherClient()
       .service('/mongo-connection')
       .create({}, {
@@ -79,6 +80,7 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
   const onSuccess = action((res, data) => {
     profileList.creatingNewProfile = false;
     console.log('get response', res);
+
     let message = 'Connection Success!';
     let position = Position.LEFT_BOTTOM;
     if (!data.test) {

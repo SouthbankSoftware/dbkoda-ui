@@ -2,6 +2,7 @@ import feathers from 'feathers-client';
 import _ from 'lodash';
 import Primus from '@southbanksoftware/dbenvy-controller';
 import {url} from '../../env';
+import {Broker, EventType} from '../broker';
 
 let instance = false;
 
@@ -21,14 +22,17 @@ class FeatherClient {
     this.feathers = this.feathers.configure(feathers.primus(primus));
     this.shellService = this.feathers.service('/mongo-shells');
     const that = this;
+    console.log('broker= ', Broker);
     this.shellService.on('shell-output', (output) => {
+      console.log('get output ', output);
       const {id, shellId} = output;
-      const listeners = that.getShellOutputListeners(parseInt(id, 10), parseInt(shellId, 10));
-      for (const ls of listeners) {
-        for (const l of ls.listeners) {
-          l(output);
-        }
-      }
+      Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
+      // const listeners = that.getShellOutputListeners(parseInt(id, 10), parseInt(shellId, 10));
+      // for (const ls of listeners) {
+      //   for (const l of ls.listeners) {
+      //     l(output);
+      //   }
+      // }
     });
   }
 
