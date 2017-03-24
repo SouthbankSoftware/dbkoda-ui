@@ -2,23 +2,22 @@
  * connection profile panel class
  */
 import React from 'react';
-import { observer } from 'mobx-react';
-import { action, observable } from 'mobx';
+import {observer} from 'mobx-react';
+import {action, observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import _ from 'lodash';
-import { AnchorButton } from '@blueprintjs/core';
+import {AnchorButton} from '@blueprintjs/core';
 import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
 import './style.scss';
-import { featherClient } from '~/helpers/feathers';
+import {featherClient} from '~/helpers/feathers';
 import Label from './Label';
 
 @observer
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { connecting: false, testing: false };
+    this.state = {connecting: false, testing: false};
   }
 
   @autobind _hostRadioOnChange() {
@@ -27,17 +26,18 @@ export default class Panel extends React.Component {
   }
 
   @autobind _connect(data) {
-    this.setState({ connecting: true });
-    this.props.connect(data).then(() => this.setState({ connecting: false }));
+    this.setState({connecting: true});
+    this.props.connect(data).then(() => this.setState({connecting: false})).catch(()=>this.setState({connecting: false}));
   }
 
   @autobind _test(data) {
-    this.setState({ testing: true });
-    this.props.connect(data).then(() => this.setState({ testing: false }));
+    this.setState({testing: true});
+    this.props.connect(data).then(() => this.setState({testing: false})).catch(()=>this.setState({testing: false}));
   }
 
+
   render() {
-    const { form, title } = this.props;
+    const {form, title} = this.props;
     form.connect = this._connect;
     form.test = this._test;
     return (
@@ -47,19 +47,19 @@ export default class Panel extends React.Component {
           <div>
             <ul>
               <li>
-                <Label text="Alias" />
+                <Label text="Alias"/>
               </li>
               <li>
-                <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
+                <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange}/>
               </li>
               <li>
-                <Radio field={form.$('urlRadio')} onChange={this._hostRadioOnChange} />
+                <Radio field={form.$('urlRadio')} onChange={this._hostRadioOnChange}/>
               </li>
-              <li><Label text="Database" /></li>
+              <li><Label text="Database"/></li>
             </ul>
             <ul>
               <li>
-                <Input field={form.$('alias')} />
+                <Input field={form.$('alias')}/>
               </li>
               <li>
                 <div className="host-input-container">
@@ -68,7 +68,7 @@ export default class Panel extends React.Component {
                     showLabel={false}
                     disable={!form.$('hostRadio').get('value')}
                   />
-                  <Label text="Port" />
+                  <Label text="Port"/>
                   <Input
                     field={form.$('port')}
                     showLabel={false}
@@ -85,23 +85,23 @@ export default class Panel extends React.Component {
               </li>
               <li>
                 <div className="host-input-container">
-                  <Input field={form.$('database')} />
-                  <Checkbox field={form.$('ssl')} />
+                  <Input field={form.$('database')}/>
+                  <Checkbox field={form.$('ssl')}/>
                 </div>
               </li>
             </ul>
           </div>
-          <div className="profile-separator" />
-          <Label className="profile-align-left" text="Authentication" />
-          <Checkbox field={form.$('sha')} />
+          <div className="profile-separator"/>
+          <Label className="profile-align-left" text="Authentication"/>
+          <Checkbox field={form.$('sha')}/>
           <div>
             <ul>
-              <li><Label text="User Name" /></li>
-              <li><Label text="Password" /></li>
+              <li><Label text="User Name"/></li>
+              <li><Label text="Password"/></li>
             </ul>
             <ul>
-              <li><Input field={form.$('username')} disable={!form.$('sha').get('value')} /></li>
-              <li><Input field={form.$('password')} disable={!form.$('sha').get('value')} /></li>
+              <li><Input field={form.$('username')} disable={!form.$('sha').get('value')}/></li>
+              <li><Input field={form.$('password')} disable={!form.$('sha').get('value')}/></li>
             </ul>
           </div>
           <div className="profile-button-panel">
@@ -122,7 +122,7 @@ export default class Panel extends React.Component {
               className="pt-button pt-intent-primary"
               type="button"
               onClick={form.onTest.bind(form)}
-              text="text"
+              text="Test"
               loading={this.state.testing}
             />
             <AnchorButton
