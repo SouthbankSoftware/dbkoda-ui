@@ -24,6 +24,9 @@ import {
 import {NewToaster} from '#/common/Toaster';
 import './Panel.scss';
 
+/**
+ * Defines the Toolbar for the Tabbed Editor Panel.
+ */
 @inject('store')
 @observer
 @HotkeysTarget
@@ -54,16 +57,23 @@ export default class Toolbar extends React.Component {
       .bind(this);
   }
 
-  // -------------------// . TOOLBAR ACTIONS // ----------------- //
+   /**
+   * Method for adding a new editor to an existing connection.
+   */
   @action addEditor() {
     try {
-      this.props.store.editorToolBar.newConnectionLoading = true;
+      this.setNewEditorLoading(true);
+      const profileTitle = this.props.store.editorToolbar.activeDropdownId;
+      const profileId = 'UNKNOWN';
+      this.props.store.profiles.forEach((value) => {
+        if (value.alias == profileTitle) {
+          this.profileId = value.id;
+        }
+      });
       featherClient()
-        .service('/mongo-connection')
-        .create({}, {
-          query: {
-            url: 'mongodb://localhost/27017'
-          }
+        .service('/mongo-shell')
+        .create({
+          id:  profileId
         })
         .then((res) => {
           console.log('get response', res);
@@ -77,57 +87,88 @@ export default class Toolbar extends React.Component {
               shellId: res.shellId,
               visible: true
             }); // eslint-disable-line react/prop-types
-          this
-            .props
-            .store // eslint-disable-line react/prop-types
-            .profiles // eslint-disable-line react/prop-types
-            .set(res.id, {shellId: res.shellId}); // eslint-disable-line react/prop-types
           // eslint-disable-line react/prop-types
           this.props.store.editorToolbar.noActiveProfile = false;
           this.props.store.editorToolbar.id = res.id;
           this.props.store.editorToolbar.shellId = res.shellId;
-          this.props.store.editorToolbar.newConnectionLoading = false;
-
-          // Send message to Panel to crate new editor.
+          this.setNewEditorLoading(false);
           this
             .props
             .newEditor(res.id); // eslint-disable-line react/prop-types
           NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+          this.setNewEditorLoading(false);
         })
         .catch((err) => {
           console.log('connection failed ', err.message);
           NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-         this.props.store.editorToolbar.newConnectionLoading = false;
+          this.setNewEditorLoading(false);
         });
     } catch (err) {
+      console.log(err);
       NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
   }
-  // Placeholder - Linting disabled for this line.
+
+  /**
+   * Action for setting if the new Editor is loading.
+   * Note: This function exists only because of an issue with MobX strict mode in callbacks.
+   * Guan has found a solution to this using runInAction (@Mike, Replace this some time.)
+   * @param {Boolean} isLoading - Is the editor loading.
+   */
+  @action
+  setNewEditorLoading(isLoading) {
+    this.props.store.editorToolbar.newConnectionLoading = isLoading;
+  }
+
+  /**
+   * NOT YET IMPLEMENTED: Open a File from Localhost.
+   */
   openFile() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
-  // Placeholder - Linting disabled for this line.
+
+  /**
+   * NOT YET IMPLEMENTED: Save a File to Localhost.
+   */
   saveFile() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
+  /**
+   * Execute the line currently selected in the active CodeMirror instance.
+   */
   @action executeLine() {
     this.props.store.editorPanel.executingEditorLines = true;
   }
 
+  /**
+   * Execute all the contents of the currently active CodeMirror instance.
+   */
   @action executeAll() {
     this.props.store.editorPanel.executingEditorAll = true;
   }
-  // Placeholder - Linting disabled for this line.
+
+  /**
+   * NOT YET IMPLEMENTED: Open the Explain Plan dialog for the currently selected line in the active
+   * codemirror instance.
+   */
   explainPlan() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
-  // Placeholder - Linting disabled for this line.
+
+  /**
+   * NOT YET IMPLEMENTED: Stop the current execution on this connection.
+   */
   stopExecution() { // eslint-disable-line class-methods-use-this
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
+  /**
+   * Event triggered when the dropdown changes.
+   * @param {Object} event - The event that triggered this action.
+   * @param {Object} event.target - The target of the event.
+   * @param {String} event.target.value - The new value of the dropdown.
+   */
   @action onDropdownChanged(event) {
     this.props.store.editorPanel.activeDropdownId = event.target.value;
     this.props.store.editorToolbar.currentProfile = event.target.value;
@@ -138,6 +179,12 @@ export default class Toolbar extends React.Component {
     }
   }
 
+  /**
+   * Event triggered when the dropdown changes.
+   * @param {Object} event - The event that triggered this action.
+   * @param {Object} event.target - The target of the event.
+   * @param {String} event.target.value - The new value of the filter.
+   */
   @action onFilterChanged(event) {
     const filter = event
       .target
@@ -160,8 +207,10 @@ export default class Toolbar extends React.Component {
       });
   }
 
+  /**
+   * Render function for this component.
+   */
   render() {
-    console.log(this.props.store.editorPanel.activeDropdownId);
     const profiles = this
       .props
       .store
@@ -289,6 +338,9 @@ export default class Toolbar extends React.Component {
     );
   }
 
+  /**
+   * Render function for the hotkeys associated with this component.
+   */
   renderHotkeys() {
     return (
       <Hotkeys>

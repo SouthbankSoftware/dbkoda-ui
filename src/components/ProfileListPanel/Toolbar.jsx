@@ -30,7 +30,7 @@ export default class Toolbar extends React.Component {
   // Placeholder - Linting disabled for this line.
  @action newProfile() { // eslint-disable-line class-methods-use-this
    this.props.store.profileList.selectedProfile = null;
-    this.props.store.layout.drawerOpen = true;
+   this.props.store.layout.drawerOpen = true;
   }
 
   // Placeholder - Linting disabled for this line.
@@ -57,6 +57,7 @@ export default class Toolbar extends React.Component {
               position={Position.BOTTOM_LEFT}>
               <AnchorButton
                 className="pt-button pt-icon-add pt-intent-primary newProfileButton"
+                loading={this.props.store.profileList.creatingNewProfile}
                 onClick={this.newProfile} />
             </Tooltip>
             <Tooltip
