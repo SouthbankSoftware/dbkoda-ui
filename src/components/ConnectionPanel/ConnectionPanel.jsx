@@ -5,7 +5,7 @@ import React from 'react';
 import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {Intent, Position} from '@blueprintjs/core';
-import {createForm, createFromFromProfile} from './ProfileForm';
+import {createForm, createFromFromProfile, ProfileForm} from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
@@ -19,18 +19,32 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
   const form = createForm(selectedProfile);
   const connect = action((data) => {
     if (!edit && !validateConnectionFormData(data)) {
-      return;
+      return Promise.reject('Validation failed.');
+    }
+    const query = {...data};
+    let connectionUrl;
+    if (query.hostRadio) {
+      connectionUrl = ProfileForm.mongoProtocol + query.host + ':' + query.port;
+    } else if (query.urlRadio) {
+      connectionUrl = query.url;
+    }
+    if (query.sha) {
+      const split = connectionUrl.split(ProfileForm.mongoProtocol);
+      connectionUrl = ProfileForm.mongoProtocol + query.username + ':' + query.password + '@' + split[1];
+    }
+    query.url = connectionUrl;
+    if (query.database) {
+      query.url = query.url + '/' + query.database;
     }
     return featherClient()
       .service('/mongo-connection')
       .create({}, {
-        query: data,
+        query,
       })
       .then((res) => {
         onSuccess(res, data);
       })
       .catch((err) => {
-        console.log('connection failed ', err);
         DBenvyToaster(Position.LEFT_BOTTOM).show({
           message: err.message,
           intent: Intent.DANGER,
@@ -38,6 +52,27 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
         });
       });
   });
+
+  /**
+   * validate connection form data
+   *
+   * @param data
+   * @returns {boolean}
+   */
+  const validateConnectionFormData = (data) => {
+    let validate = true;
+    profiles.forEach((value, key) => {
+      if (value.alias === data.alias) {
+        DBenvyToaster(Position.LEFT_BOTTOM).show({
+          message: 'Alias already existed.',
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down',
+        });
+        validate = false;
+      }
+    });
+    return validate;
+  };
 
   const onSuccess = action((res, data) => {
     profileList.creatingNewProfile = false;
@@ -91,26 +126,7 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
     editorToolbar.noActiveProfile = false;
   });
 
-  /**
-   * validate connection form data
-   *
-   * @param data
-   * @returns {boolean}
-   */
-  const validateConnectionFormData = (data) => {
-    let validate = true;
-    profiles.forEach((value, key) => {
-      if (value.alias === data.alias) {
-        DBenvyToaster(Position.LEFT_BOTTOM).show({
-          message: 'Alias already existed.',
-          intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down',
-        });
-        validate = false;
-      }
-    });
-    return validate;
-  };
+
   return <Panel form={form} close={close} connect={connect}
                 title={edit ? 'Edit Connection' : 'Create New Connection'}/>;
 };

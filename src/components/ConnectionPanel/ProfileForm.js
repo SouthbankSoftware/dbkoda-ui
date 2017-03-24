@@ -34,20 +34,9 @@ export class ProfileForm extends MobxReactForm {
   }
 
   createFormData(form) {
-    const formValues = form.values();
-    let connectionUrl;
-    if (formValues.hostRadio) {
-      connectionUrl = ProfileForm.mongoProtocol + formValues.host + ':' + formValues.port;
-    } else if (formValues.urlRadio) {
-      connectionUrl = formValues.url;
-    }
-    if (formValues.sha) {
-      const split = connectionUrl.split(ProfileForm.mongoProtocol);
-      connectionUrl = ProfileForm.mongoProtocol + formValues.username + ':' + formValues.password + '@' + split[1];
-    }
+    const formValues = {...form.values()};
     return {
       ...formValues,
-      url: connectionUrl,
       authorization: true,
       test: false,
     };
@@ -104,7 +93,7 @@ export const Form = {
   }, {
     name: 'database',
     label: 'Database',
-    value: 'test',
+    value: 'admin',
   }, {
     name: 'ssl',
     label: 'SSL',
