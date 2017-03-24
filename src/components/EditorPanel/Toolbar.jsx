@@ -23,6 +23,7 @@ import {
 } from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import './Panel.scss';
+import {Broker, EventType} from '../../helpers/broker';
 
 /**
  * Defines the Toolbar for the Tabbed Editor Panel.
@@ -55,6 +56,36 @@ export default class Toolbar extends React.Component {
     this.renderHotkeys = this
       .onFilterChanged
       .bind(this);
+  }
+
+  componentWillMount(){
+    Broker.on(EventType.NEW_PROFILE_CREATED, (profile)=>{
+      this.profileCreated(profile);
+    });
+  }
+
+  /**
+   * called when there is new connection profile get created.
+   *
+   * @param profile the newly created connection profile
+   */
+  profileCreated(profile){
+    let {editors, editorToolbar, editorPanel} = this.props.store
+    editors.set(profile.alias + ' (' + profile.shellId + ')', {
+      // eslint-disable-line react/prop-types
+      id: profile.id,
+      alias: profile.alias,
+      shellId: profile.shellId,
+      visible: true,
+    });
+    editorToolbar.noActiveProfile = false;
+    editorToolbar.id = profile.id;
+    editorToolbar.shellId = profile.shellId;
+    editorToolbar.newConnectionLoading = false;
+    editorPanel.activeEditorId = profile.alias + ' (' + profile.shellId + ')';
+    editorPanel.activeDropdownId = profile.alias;
+    editorToolbar.currentProfile = profile.id;
+    editorToolbar.noActiveProfile = false;
   }
 
   /**
