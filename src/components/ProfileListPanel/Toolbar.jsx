@@ -10,7 +10,7 @@
 /* eslint-disable react/sort-comp */
 import React from 'react';
 import {observer, inject} from 'mobx-react';
-import {action} from 'mobx';
+import {action, runInAction} from 'mobx';
 import {AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import {ProfileStatus} from '../common/Constants';
@@ -67,7 +67,7 @@ export default class Toolbar extends React.Component {
         .then(v=>{
           console.log('got close response ', v);
           this.setState({closingProfile: false});
-          selectedProfile.status = ProfileStatus.CLOSED;
+          runInAction(()=>selectedProfile.status = ProfileStatus.CLOSED);
           NewToaster.show({message: 'Connection Closed', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })
@@ -115,7 +115,8 @@ export default class Toolbar extends React.Component {
                      position={Position.BOTTOM}>
               <AnchorButton className="pt-icon-cross pt-intent-danger closeProfileButton"
                             loading={this.state.closingProfile}
-                            disabled={!this.props.store.profileList.selectedProfile}
+                            disabled={!this.props.store.profileList.selectedProfile
+                              || this.props.store.profileList.selectedProfile.status === ProfileStatus.CLOSED}
                             onClick={this.closeProfile}/>
             </Tooltip>
             <Tooltip
