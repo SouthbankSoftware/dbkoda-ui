@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-24T11:48:26+11:00
+ * @Last modified time: 2017-03-24T15:18:44+11:00
 */
 
 import React from 'react';
@@ -25,6 +25,28 @@ export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
     this.downloadOutput = this.downloadOutput.bind(this);
+
+    /**
+     * Reaction to fire off execution of ShowMore (it) command
+     */
+    const reactionToExecutingCmd = reaction(
+      () => this.props.store.outputPanel.executingShowMore,
+      executingShowMore => {
+        if(!this.props.store.outputs.get(this.props.title).cannotShowMore) {
+          const command = 'it';
+          console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.title).id, ': ', command, '.');
+          const service = featherClient().service('/mongo-shells');
+          service.timeout = 30000;
+          service.update(this.props.store.outputs.get(this.props.title).id, {
+            shellId: parseInt(this.props.store.outputs.get(this.props.title).id) + 1, // eslint-disable-line
+            commands: command
+          });
+          this.props.store.outputs.get(this.props.title).cannotShowMore = true;
+        }
+        this.props.store.outputPanel.executingShowMore = false;
+      },
+      { "name": "reactionOutputToolbarShowMore" }
+    );
   }
 
   /**
@@ -32,7 +54,7 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   clearOutput() {
-    this.props.store.outputs.get(this.props.id).output = '';
+    this.props.store.outputs.get(this.props.title).output = '';
   }
 
   /**
@@ -40,28 +62,18 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   showMore() {
-    if(!this.props.store.outputs.get(this.props.id).cannotShowMore) {
-      const command = 'it';
-      console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.id).id, ': ', command, '.');
-      const service = featherClient().service('/mongo-shells');
-      service.timeout = 30000;
-      service.update(this.props.store.outputs.get(this.props.id).id, {
-        shellId: parseInt(this.props.store.outputs.get(this.props.id).id) + 1, // eslint-disable-line
-        commands: command
-      });
-      this.props.store.outputs.get(this.props.id).cannotShowMore = true;
-    }
+    this.props.store.outputPanel.executingShowMore = true;
   }
 
   /**
    * Downloads the current contents of the Output Editor to a file
    */
   downloadOutput() {
-    var data   = new Blob([this.props.store.outputs.get(this.props.id).output], {type: 'text/csv'}),
+    var data   = new Blob([this.props.store.outputs.get(this.props.title).output], {type: 'text/csv'}),
     csvURL = window.URL.createObjectURL(data),
     tempLink = document.createElement('a');
     tempLink.href = csvURL;
-    tempLink.setAttribute('download',`output-${this.props.id}.js`);
+    tempLink.setAttribute('download',`output-${this.props.title}.js`);
     tempLink.click();
   }
 
@@ -89,7 +101,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="showMoreBtn pt-intent-primary"
               onClick={this.showMore}
-              disabled={this.props.store.outputs.get(this.props.id).cannotShowMore} >
+              disabled={this.props.store.outputs.get(this.props.title).cannotShowMore} >
               Show More
             </AnchorButton>
           </Tooltip>
@@ -123,11 +135,11 @@ export default class Toolbar extends React.Component {
           combo="shift + m"
           label="Show More"
           onKeyDown={this.showMore} />
-          <Hotkey
-            global
-            combo="shift + x"
-            label="Save Output"
-            onKeyDown={this.downloadOutput} />
+        <Hotkey
+          global
+          combo="shift + x"
+          label="Save Output"
+          onKeyDown={this.downloadOutput} />
       </Hotkeys>
     );
   }

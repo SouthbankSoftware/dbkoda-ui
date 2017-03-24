@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-22T09:41:15+11:00
+ * @Last modified time: 2017-03-24T14:46:56+11:00
  */
 
 import React from 'react';
@@ -23,21 +23,17 @@ import './style.scss';
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      currentTab: 'Default'
-    }
-    this.changeTab = this.changeTab.bind(this);
-
     /**
      * Reaction function for when the active editorPanel is changed,
      * update the active outputPanel
      * @param {function()} - The state that will trigger the reaction
      * @param {function()} - The reaction to trigger on state change
+     * @param {Object} - The options object for reactions
      */
     const reactionToEditorChange = reaction(
       () => this.props.store.editorPanel.activeEditorId,
       activeEditorId => {
-          this.setState({currentTab: this.props.store.editorPanel.activeEditorId});
+          this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
       },
       { "name": "reactionOutputPanelTabChange" }
     );
@@ -47,8 +43,9 @@ export default class Panel extends React.Component {
    * Updates the active tab state for the Output view
    * @param {string} newTab - The html id of the new active tab
    */
+  @action.bound
   changeTab(newTab) {
-    this.setState({currentTab: newTab});
+    this.props.store.outputPanel.currentTab = newTab;
   }
 
   /**
@@ -88,7 +85,7 @@ export default class Panel extends React.Component {
         <Tabs2 id="outputPanelTabs"
           className="outputTabView"
           onChange={this.changeTab}
-          selectedTabId={this.state.currentTab}>
+          selectedTabId={this.props.store.outputPanel.currentTab}>
           <Tab2 key={0}
             id="Default"
             panel={
@@ -98,7 +95,7 @@ export default class Panel extends React.Component {
           </Tab2>
           {this.renderTabs(this.props.store.editors.entries())}
         </Tabs2>
-        <OutputToolbar id={this.state.currentTab} />
+        <OutputToolbar title={this.props.store.outputPanel.currentTab} />
       </div>
     );
   }

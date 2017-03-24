@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-23T17:18:19+11:00
+ * @Last modified time: 2017-03-24T15:15:27+11:00
  */
 
 import React from 'react';
@@ -20,7 +20,7 @@ require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 require('codemirror/keymap/sublime.js');
 
-inject('store')
+@inject('store')
 @observer
 export default class Terminal extends React.Component {
   constructor(props) {
@@ -35,6 +35,27 @@ export default class Terminal extends React.Component {
     this.showPreviousCommand = this.showPreviousCommand.bind(this);
     this.showNextCommand = this.showNextCommand.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
+
+    /**
+     * Reaction to fire off execution of Terminal Commands
+     */
+    const reactionToExecutingCmd = reaction(
+      () => this.props.store.outputPanel.executingTerminalCmd,
+      executingTerminalCmd => {
+        const command = this.state.command;
+        console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
+        this.updateHistory(command);
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(parseInt(this.props.id), {
+          shellId: parseInt(this.props.shellId), // eslint-disable-line
+          commands: command
+        });
+        this.setState({ command: '' });
+        this.props.store.outputPanel.executingTerminalCmd = false;
+      },
+      { "name": "reactionOutputTerminalExecuteCmd" }
+    );
   }
 
   /**
@@ -56,7 +77,7 @@ export default class Terminal extends React.Component {
       this.updateCommand(this.state.commandHistory[this.state.historyCursor]);
     }
     else {
-      this.updateCommand('');
+      this.setState({ command: '' });
     }
   }
 
@@ -102,16 +123,7 @@ export default class Terminal extends React.Component {
    */
   @action.bound
   executeCommand() {
-    const command = this.state.command;
-    console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
-    this.updateHistory(command);
-    const service = featherClient().service('/mongo-shells');
-    service.timeout = 30000;
-    service.update(parseInt(this.props.id), {
-      shellId: parseInt(this.props.shellId), // eslint-disable-line
-      commands: command
-    });
-    this.setState({ command: '' });
+    this.props.store.outputPanel.executingTerminalCmd = true;
   }
 
   /**
