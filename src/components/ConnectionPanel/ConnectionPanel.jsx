@@ -21,21 +21,24 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
     if (!edit && !validateConnectionFormData(data)) {
       return Promise.reject('Validation failed.');
     }
-    const query = {...data};
+    const query = {};
     let connectionUrl;
-    if (query.hostRadio) {
-      connectionUrl = ProfileForm.mongoProtocol + query.host + ':' + query.port;
-    } else if (query.urlRadio) {
-      connectionUrl = query.url;
+    if (data.hostRadio) {
+      connectionUrl = ProfileForm.mongoProtocol + data.host + ':' + data.port;
+    } else if (data.urlRadio) {
+      connectionUrl = data.url;
     }
-    if (query.sha) {
+    if (data.sha) {
       const split = connectionUrl.split(ProfileForm.mongoProtocol);
-      connectionUrl = ProfileForm.mongoProtocol + query.username + ':' + query.password + '@' + split[1];
+      connectionUrl = ProfileForm.mongoProtocol + data.username + ':' + data.password + '@' + split[1];
+    }
+    if (data.database) {
+      connectionUrl = data.url + '/' + data.database;
     }
     query.url = connectionUrl;
-    if (query.database) {
-      query.url = query.url + '/' + query.database;
-    }
+    query.ssl = data.ssl;
+    query.test = data.test;
+    console.log('send request ', data);
     return featherClient()
       .service('/mongo-connection')
       .create({}, {

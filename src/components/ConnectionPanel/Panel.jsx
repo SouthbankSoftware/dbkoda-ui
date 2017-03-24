@@ -106,28 +106,24 @@ export default class Panel extends React.Component {
           </div>
           <div className="profile-button-panel">
             <AnchorButton
-              className="pt-button pt-intent-success"
-              type="submit"
+              className="pt-button  pt-intent-success"
               onClick={form.onSubmit}
               text="Connect"
               loading={this.state.connecting}
             />
             <AnchorButton
-              className="pt-button pt-intent-primary"
-              type="button"
+              className=" pt-intent-primary"
               onClick={form.onReset}
               text="Reset"
             />
             <AnchorButton
-              className="pt-button pt-intent-primary"
-              type="button"
+              className="pt-intent-primary"
               onClick={form.onTest.bind(form)}
               text="Test"
               loading={this.state.testing}
             />
             <AnchorButton
               className="pt-button pt-intent-primary"
-              type="button"
               text='Close'
               onClick={this.props.close}
             />
