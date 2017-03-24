@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-22T11:57:18+11:00
+ * @Last modified time: 2017-03-24T11:48:26+11:00
 */
 
 import React from 'react';
@@ -16,7 +16,7 @@ import {HotkeysTarget, Hotkeys, Hotkey, Intent, Tooltip, AnchorButton, Position}
 
 /**
  * The OutputPanel toolbar, which hold the commands and actions specific to the output panel
- *
+ *  @param {Object} props - Holds the properties store (injected) and id (passed)
  */
 @inject('store')
 @observer
@@ -42,11 +42,11 @@ export default class Toolbar extends React.Component {
   showMore() {
     if(!this.props.store.outputs.get(this.props.id).cannotShowMore) {
       const command = 'it';
-      console.log('Sending data to feathers id ', this.props.store.editorPanel.activeDropdownId, ': ', command, '.');
+      console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.id).id, ': ', command, '.');
       const service = featherClient().service('/mongo-shells');
       service.timeout = 30000;
-      service.update(this.props.store.editorPanel.activeDropdownId, {
-        shellId: parseInt(this.props.store.editorPanel.activeDropdownId) + 1, // eslint-disable-line
+      service.update(this.props.store.outputs.get(this.props.id).id, {
+        shellId: parseInt(this.props.store.outputs.get(this.props.id).id) + 1, // eslint-disable-line
         commands: command
       });
       this.props.store.outputs.get(this.props.id).cannotShowMore = true;
