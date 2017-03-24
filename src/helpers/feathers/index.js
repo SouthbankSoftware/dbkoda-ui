@@ -1,5 +1,4 @@
 import feathers from 'feathers-client';
-import _ from 'lodash';
 import Primus from '@southbanksoftware/dbenvy-controller';
 import {url} from '../../env';
 import {Broker, EventType} from '../broker';

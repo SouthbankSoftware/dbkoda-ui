@@ -34,11 +34,6 @@ const createEmiter = () => {
 };
 
 
-// export const Broker = () => {
-//   if (instance) return instance;
-//   instance = createEmiter();
-//   return instance;
-// };
 if (!instance) {
   instance = createEmiter();
 }

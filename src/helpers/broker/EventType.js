@@ -18,4 +18,4 @@ export default {
    * when a connection is removed
    */
   PROFILE_REMOVED: 'controller::connection-removed',
-}
+};
