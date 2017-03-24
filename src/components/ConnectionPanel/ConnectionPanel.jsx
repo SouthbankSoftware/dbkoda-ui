@@ -33,12 +33,11 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
       connectionUrl = ProfileForm.mongoProtocol + data.username + ':' + data.password + '@' + split[1];
     }
     if (data.database) {
-      connectionUrl = data.url + '/' + data.database;
+      connectionUrl = connectionUrl + '/' + data.database;
     }
     query.url = connectionUrl;
     query.ssl = data.ssl;
     query.test = data.test;
-    console.log('send request ', data);
     return featherClient()
       .service('/mongo-connection')
       .create({}, {
