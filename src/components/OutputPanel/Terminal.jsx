@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-24T15:55:48+11:00
+ * @Last modified time: 2017-03-24T16:13:22+11:00
  */
 
 import React from 'react';
@@ -42,17 +42,19 @@ export default class Terminal extends React.Component {
     const reactionToExecutingCmd = reaction(
       () => this.props.store.outputPanel.executingTerminalCmd,
       executingTerminalCmd => {
-        const command = this.state.command;
-        console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
-        this.updateHistory(command);
-        const service = featherClient().service('/mongo-shells');
-        service.timeout = 30000;
-        service.update(parseInt(this.props.id), {
-          shellId: parseInt(this.props.shellId), // eslint-disable-line
-          commands: command
-        });
-        this.setState({ command: '' });
-        this.props.store.outputPanel.executingTerminalCmd = false;
+        if (this.props.store.outputPanel.executingTerminalCmd) {
+          const command = this.state.command;
+          console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
+          this.updateHistory(command);
+          const service = featherClient().service('/mongo-shells');
+          service.timeout = 30000;
+          service.update(parseInt(this.props.id), {
+            shellId: parseInt(this.props.shellId), // eslint-disable-line
+            commands: command
+          });
+          this.setState({ command: '' });
+          this.props.store.outputPanel.executingTerminalCmd = false;
+        }
       },
       { "name": "reactionOutputTerminalExecuteCmd" }
     );
