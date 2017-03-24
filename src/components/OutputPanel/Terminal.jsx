@@ -95,7 +95,6 @@ export default class Terminal extends React.Component {
         return null;
       }
     });
-
   }
 
   /**
