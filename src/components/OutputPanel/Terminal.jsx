@@ -12,7 +12,13 @@ import {action, reaction} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
 import {AnchorButton} from '@blueprintjs/core';
 import CodeMirror from 'react-codemirror';
+
 require('codemirror/mode/javascript/javascript');
+require('codemirror/addon/edit/matchbrackets.js');
+require('codemirror/addon/edit/closebrackets.js');
+require('codemirror/addon/hint/show-hint.js');
+require('codemirror/addon/hint/javascript-hint.js');
+require('codemirror/keymap/sublime.js');
 
 inject('store')
 @observer
@@ -70,6 +76,25 @@ export default class Terminal extends React.Component {
    */
   updateCommand(newCmd) {
     this.setState({ command: newCmd });
+
+     const cm = this
+      .refs
+      .terminal
+      .getCodeMirror();
+
+    cm.addOverlay({
+      token: (stream) => {
+        if (stream.match('use')) {
+          return 'mongo-keyword-use';
+        } else if (stream.match('db')) {
+          return 'mongo-keyword-db';
+        } else if (stream.match('it')) {
+          return 'mongo-keyword-it';
+        }
+        while (stream.next() != null && !stream.match('use', false) && !stream.match('db', false) && !stream.match('it', false)) {} // eslint-disable-line
+        return null;
+      }
+    });
   }
 
   /**
@@ -130,11 +155,19 @@ export default class Terminal extends React.Component {
 
   render() {
     const terminalOptions = {
-      mode: 'text/javascript',
+      mode: {
+          name: 'text/javascript',
+          json: true
+        },
       matchBrackets: true,
+      autoCloseBrackets: true,
       json: true,
       jsonld: true,
       scrollbarStyle: null,
+      keyMap: 'sublime',
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete'
+        },
       smartIndent: true,
       theme: 'ambiance',
       typescript: true,
