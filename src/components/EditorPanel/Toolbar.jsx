@@ -57,49 +57,33 @@ export default class Toolbar extends React.Component {
       .bind(this);
   }
 
-   /**
+  /**
    * Method for adding a new editor to an existing connection.
    */
   @action addEditor() {
     try {
       this.setNewEditorLoading(true);
-      const profileTitle = this.props.store.editorToolbar.activeDropdownId;
-      const profileId = 'UNKNOWN';
-      this.props.store.profiles.forEach((value) => {
-        if (value.alias == profileTitle) {
-          this.profileId = value.id;
-        }
-      });
+      const profileTitle = this.props.store.editorPanel.activeDropdownId;
+      let profileId = 'UNKNOWN';
+      this
+        .props
+        .store
+        .profiles
+        .forEach((value) => {
+          if (value.alias == profileTitle) {
+            profileId = value.id;
+          }
+        });
+      console.log('Create new Editor for ID:', profileId);
       featherClient()
-        .service('/mongo-shell')
-        .create({
-          id:  profileId
-        })
+        .service('/mongo-shells')
+        .create({id: profileId})
         .then((res) => {
           console.log('get response', res);
-          this
-            .props
-            .store // eslint-disable-line react/prop-types
-            .editors // eslint-disable-line react/prop-types
-            .set(res.id, {
-              id: res.id,
-              alias: res.id + ':' + res.shellId,
-              shellId: res.shellId,
-              visible: true
-            }); // eslint-disable-line react/prop-types
-          // eslint-disable-line react/prop-types
-          this.props.store.editorToolbar.noActiveProfile = false;
-          this.props.store.editorToolbar.id = res.id;
-          this.props.store.editorToolbar.shellId = res.shellId;
-          this.setNewEditorLoading(false);
-          this
-            .props
-            .newEditor(res.id); // eslint-disable-line react/prop-types
-          NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
-          this.setNewEditorLoading(false);
+          this.setNewEditorState(res);
         })
         .catch((err) => {
-          console.log('connection failed ', err.message);
+          console.log(err);
           NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           this.setNewEditorLoading(false);
         });
@@ -118,6 +102,33 @@ export default class Toolbar extends React.Component {
   @action
   setNewEditorLoading(isLoading) {
     this.props.store.editorToolbar.newConnectionLoading = isLoading;
+  }
+
+  /**
+   * Action for setting the new editor state.
+   * Note: This function exists only because of an issue with MobX strict mode in callbacks.
+   * Guan has found a solution to this using runInAction (@Mike, Replace this some time.)
+   * @param {Object} res - The response recieved from Feathers.
+   */
+  @action
+  setNewEditorState(res) {
+    this.props.store.editors.set(this.props.store.editorPanel.activeDropdownId + ' (' + res.shellId + ')', {
+      // eslint-disable-line react/prop-types
+      id: res.id,
+      alias: this.props.store.editorPanel.activeDropdownId,
+      shellId: res.shellId,
+      visible: true
+    });
+    this.props.store.editorToolbar.noActiveProfile = false;
+    this.props.store.editorToolbar.id = res.id;
+    this.props.store.editorToolbar.shellId = res.shellId;
+    this.props.store.editorToolbar.newConnectionLoading = false;
+    this.props.store.editorPanel.activeEditorId = this.props.store.editorPanel.activeDropdownId + ' (' + res.shellId + ')';
+    this.props.store.editorPanel.activeDropdownId = this.props.store.editorPanel.activeDropdownId;
+    this.props.store.editorToolbar.currentProfile = res.id;
+    this.props.store.editorToolbar.noActiveProfile = false;
+    NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    this.setNewEditorLoading(false);
   }
 
   /**
@@ -173,9 +184,9 @@ export default class Toolbar extends React.Component {
     this.props.store.editorPanel.activeDropdownId = event.target.value;
     this.props.store.editorToolbar.currentProfile = event.target.value;
     if (event.target.value == 'Default') {
-     this.props.store.editorToolbar.noActiveProfile = true;
+      this.props.store.editorToolbar.noActiveProfile = true;
     } else {
-    this.props.store.editorToolbar.noActiveProfile = false;
+      this.props.store.editorToolbar.noActiveProfile = false;
     }
   }
 
@@ -344,11 +355,7 @@ export default class Toolbar extends React.Component {
   renderHotkeys() {
     return (
       <Hotkeys>
-        <Hotkey
-          global
-          combo="shift + n"
-          label="New Editor"
-          onKeyDown={this.addEditor} />
+        <Hotkey global combo="shift + n" label="New Editor" onKeyDown={this.addEditor} />
         <Hotkey
           global
           combo="shift + a"

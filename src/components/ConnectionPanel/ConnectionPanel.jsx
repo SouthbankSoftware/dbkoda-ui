@@ -95,7 +95,7 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
         status: 'OPEN',
       });
       close();
-      setTimeout(setEditorStatus(res, data), 100);
+      setTimeout(setEditorStatus(res, data), 0);
     } else {
       message = 'Test ' + message;
     }
@@ -111,7 +111,7 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
   });
 
   const setEditorStatus = action((res, data) => {
-    editors.set(res.id, {
+    editors.set(data.alias + ' (' + res.shellId + ')', {
       // eslint-disable-line react/prop-types
       id: res.id,
       alias: data.alias,
