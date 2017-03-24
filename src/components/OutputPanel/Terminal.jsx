@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-24T15:15:27+11:00
+ * @Last modified time: 2017-03-24T15:55:48+11:00
  */
 
 import React from 'react';
@@ -123,7 +123,9 @@ export default class Terminal extends React.Component {
    */
   @action.bound
   executeCommand() {
-    this.props.store.outputPanel.executingTerminalCmd = true;
+    if (this.state.command) {
+      this.props.store.outputPanel.executingTerminalCmd = true;
+    }
   }
 
   /**
