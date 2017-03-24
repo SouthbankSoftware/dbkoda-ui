@@ -2,30 +2,25 @@
  * create new profile form and handle connection
  */
 import React from 'react';
-import { action } from 'mobx';
-import { inject, observer } from 'mobx-react';
-import { Intent, Position } from '@blueprintjs/core';
-import { createForm, createFromFromProfile } from './ProfileForm';
+import {action} from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {Intent, Position} from '@blueprintjs/core';
+import {createForm, createFromFromProfile} from './ProfileForm';
 import Panel from './Panel';
-import { featherClient } from '../../helpers/feathers';
-import { DBenvyToaster } from '../common/Toaster';
+import {featherClient} from '../../helpers/feathers';
+import {DBenvyToaster} from '../common/Toaster';
 
-const ConnectionPanel = (
-  { profiles, editors, editorPanel, editorToolbar, profileList, layout },
-) => {
+const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profileList, layout},) => {
   let selectedProfile = profileList.selectedProfile;
   let edit = false;
   if (profileList.selectedProfile) {
     edit = true;
   }
-  console.log('this is edit ', edit);
   const form = createForm(selectedProfile);
-  form.connect = action((data) => {
+  const connect = action((data) => {
     if (!edit && !validateConnectionFormData(data)) {
       return;
     }
-    profileList.creatingNewProfile = true;
-    console.log('create connection ', data);
     return featherClient()
       .service('/mongo-connection')
       .create({}, {
@@ -36,7 +31,6 @@ const ConnectionPanel = (
       })
       .catch((err) => {
         console.log('connection failed ', err);
-        profileList.creatingNewProfile = false;
         DBenvyToaster(Position.LEFT_BOTTOM).show({
           message: err.message,
           intent: Intent.DANGER,
@@ -117,8 +111,8 @@ const ConnectionPanel = (
     });
     return validate;
   };
-
-  return <Panel form={form} close={close} />;
+  return <Panel form={form} close={close} connect={connect}
+                title={edit ? 'Edit Connection' : 'Create New Connection'}/>;
 };
 
 export default inject(allStores => ({

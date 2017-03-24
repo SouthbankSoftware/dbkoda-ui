@@ -33,6 +33,9 @@ class FeatherClient {
   }
 
   service(service) {
+    if (!this.primus) {
+      return null;
+    }
     return this.feathers.service(service);
   }
 
