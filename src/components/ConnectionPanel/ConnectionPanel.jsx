@@ -9,6 +9,8 @@ import {createForm, createFromFromProfile, ProfileForm} from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
+import {Broker, EventType} from '../../helpers/broker';
+import {ProfileStatus} from '.././common/Constants';
 
 const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profileList, layout},) => {
   let selectedProfile = profileList.selectedProfile;
@@ -94,9 +96,10 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
         id: res.id,
         shellId: res.shellId,
         password: null,
-        status: 'OPEN',
+        status: ProfileStatus.OPEN,
       });
       close();
+      Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
       setTimeout(setEditorStatus(res, data), 100);
     } else {
       message = 'Test ' + message;
