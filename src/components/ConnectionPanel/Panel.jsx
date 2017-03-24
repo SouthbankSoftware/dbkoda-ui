@@ -20,7 +20,6 @@ export default class Panel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-
   }
 
   // componentWillReceiveProps(nextProps){
