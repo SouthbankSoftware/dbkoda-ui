@@ -96,7 +96,7 @@ class View extends React.Component {
           '\n// Shift + c : Clean Output\n// Shift + x : Save Output\n// Shift + m : Show M' +
           'ore Output (If Available)\n//\n// You can also right click on the Editor for a c' +
           'ontext Menu.\n// If you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n//////////////////////////////////\n'
+          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collections;\nuse test;'
     };
 
     /**
