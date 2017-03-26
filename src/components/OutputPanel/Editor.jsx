@@ -13,7 +13,7 @@ import {action,reaction} from 'mobx';
 import CodeMirror from 'react-codemirror';
 require('codemirror/mode/javascript/javascript');
 
-import {featherClient} from '../../helpers/feathers';
+import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
 
 /**
@@ -40,14 +40,15 @@ export default class Editor extends React.Component {
       cannotShowMore: true,
       showingMore: false
     });
-    featherClient().addOutputListener(parseInt(props.id),
-                                      parseInt(props.shellId),
-                                      this.outputAvailable);
+  }
+
+  componentDidMount(){
+    let {props} = this;
+    Broker.on(EventType.createShellOutputEvent(props.id, props.shellId), this.outputAvailable);
   }
 
   /**
    * Receives output from the server and parses show more text
-   * @listens {featherClient} output- Listens for output from the feathers server
    * @param {Object} output - An object containing the output from shell commands
    */
   @action.bound

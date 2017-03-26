@@ -11,3 +11,8 @@
 export const DragItemTypes = {
   LABEL: 'label'
 };
+
+export const ProfileStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+};

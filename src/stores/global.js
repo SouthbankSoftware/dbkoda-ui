@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   chris
- * @Last modified time: 2017-03-20T14:58:32+11:00
+ * @Last modified time: 2017-03-24T15:11:08+11:00
  */
 import {observable, action} from 'mobx';
 import TempTopology from './TempTopology.js';
@@ -21,7 +21,7 @@ export default class Store {
     executingEditorAll: false,
     executingEditorLines: false,
     tabFilter: ''
-  })
+  });
 
   @observable editorToolbar = observable({
       newConnectionLoading: false,
@@ -30,7 +30,13 @@ export default class Store {
       noExecutionRunning: true,
       id: 0,
       shellId: 0
-  })
+  });
+
+  @observable outputPanel = observable({
+    currentTab: 'Default',
+    executingShowMore: false,
+    executingTerminalCmd: false
+  });
 
   @observable layout = {
     drawerOpen: false,

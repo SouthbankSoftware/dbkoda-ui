@@ -9,8 +9,10 @@ import {createForm, createFromFromProfile, ProfileForm} from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
+import {Broker, EventType} from '../../helpers/broker';
+import {ProfileStatus} from '.././common/Constants';
 
-const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profileList, layout},) => {
+const ConnectionPanel = ({profiles, profileList, layout},) => {
   let selectedProfile = profileList.selectedProfile;
   let edit = false;
   if (profileList.selectedProfile) {
@@ -38,6 +40,7 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
     query.url = connectionUrl;
     query.ssl = data.ssl;
     query.test = data.test;
+    query.authorization = data.authorization;
     return featherClient()
       .service('/mongo-connection')
       .create({}, {
@@ -76,9 +79,13 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
     return validate;
   };
 
+  /**
+   * when connection successfully created, this method will add the new profile on store.
+   */
   const onSuccess = action((res, data) => {
     profileList.creatingNewProfile = false;
     console.log('get response', res);
+
     let message = 'Connection Success!';
     let position = Position.LEFT_BOTTOM;
     if (!data.test) {
@@ -92,10 +99,10 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
         id: res.id,
         shellId: res.shellId,
         password: null,
-        status: 'OPEN',
+        status: ProfileStatus.OPEN,
       });
       close();
-      setTimeout(setEditorStatus(res, data), 0);
+      Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
     } else {
       message = 'Test ' + message;
     }
@@ -110,34 +117,12 @@ const ConnectionPanel = ({profiles, editors, editorPanel, editorToolbar, profile
     layout.drawerOpen = false;
   });
 
-  const setEditorStatus = action((res, data) => {
-    editors.set(data.alias + ' (' + res.shellId + ')', {
-      // eslint-disable-line react/prop-types
-      id: res.id,
-      alias: data.alias,
-      shellId: res.shellId,
-      visible: true,
-    });
-    editorToolbar.noActiveProfile = false;
-    editorToolbar.id = res.id;
-    editorToolbar.shellId = res.shellId;
-    editorToolbar.newConnectionLoading = false;
-    editorPanel.activeEditorId = data.alias + ' (' + res.shellId + ')';
-    editorPanel.activeDropdownId = data.alias;
-    editorToolbar.currentProfile = res.id;
-    editorToolbar.noActiveProfile = false;
-  });
-
-
   return <Panel form={form} close={close} connect={connect}
                 title={edit ? 'Edit Connection' : 'Create New Connection'}/>;
 };
 
 export default inject(allStores => ({
   profiles: allStores.store.profiles,
-  editors: allStores.store.editors,
-  editorPanel: allStores.store.editorPanel,
-  editorToolbar: allStores.store.editorToolbar,
   profileList: allStores.store.profileList,
   layout: allStores.store.layout,
 }))(observer(ConnectionPanel));
