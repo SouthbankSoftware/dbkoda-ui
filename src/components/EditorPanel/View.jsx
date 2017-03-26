@@ -17,7 +17,6 @@ import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
 import {DragItemTypes} from '#/common/Constants.js';
-import EditorHighlighter from '#/common/EditorHighlighter.js';
 import CodeGeneration from '#/common/CodeGeneration.js';
 import './Panel.scss';
 
