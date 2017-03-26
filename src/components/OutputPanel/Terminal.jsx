@@ -11,7 +11,6 @@ import {inject, observer} from 'mobx-react';
 import {action, reaction} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
 import {AnchorButton} from '@blueprintjs/core';
-import EditorHighlighter from '#/common/EditorHighlighter.js';
 import CodeMirror from 'react-codemirror';
 
 require('codemirror/mode/javascript/javascript');
@@ -105,10 +104,6 @@ export default class Terminal extends React.Component {
       .refs
       .terminal
       .getCodeMirror();
-
-    cm.addOverlay({
-      token: EditorHighlighter.defaultOverlay
-    });
   }
 
   /**

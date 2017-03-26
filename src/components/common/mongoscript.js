@@ -73,9 +73,16 @@ CodeMirror.defineMode("mongoscript", function(config, parserConfig) {
       "extends": C,
       "await": C,
       "async": kw("async", "keyword"),
-      "dbs": MONGO("mongo-keyword-dbs"),
+      "db": MONGO("db"),
       "show": MONGO("show"),
-      
+      "dbs":MONGO("dbs"),
+      "use":MONGO("use"),
+      "collections":MONGO("collections"),
+      "users":MONGO("users"),
+      "roles":MONGO("roles"),
+      "profile":MONGO("profile"),
+      "databases":MONGO("databases"),
+      "it":MONGO("it"),
     };
 
     // Extend the 'normal' keywords with the TypeScript language extensions

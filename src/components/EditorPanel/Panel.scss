@@ -34,22 +34,6 @@ span.cm-string {
   color: $stringFontColor !important;
 }
 
-span.cm-mongo-keyword-use {
-  color: $purpleFont !important;
-}
-
-span.cm-mongo-keyword-db {
-  color: $brightBlueFont !important;
-}
-
-span.cm-mongo-keyword-it {
-  color: $purpleFont !important;
-}
-
-span.cm-mongo-keyword-show {
-  color: $purpleFont !important;
-}
-
 .notVisible {
   display:  none;
 }
@@ -81,32 +65,35 @@ span.cm-mongo-keyword-show {
 
 //////////////\ -------------------- \///////////////
 //////////////\ Syntax Highlighting \///////////////
-span.cm-mongo-keyword-db {
+span.cm-db {
   color: $purpleFont !important;
 }
-span.cm-mongo-keyword-show {
+span.cm-show {
   color: $brightBlueFont !important;
 }
-span.cm-mongo-keyword-dbs {
+span.cm-dbs {
   color: $purpleFont !important;
 }
-span.cm-mongo-keyword-use {
+span.cm-use {
+  color: $brightBlueFont !important;
+}
+span.cm-collections {
   color: $purpleFont !important;
 }
-span.cm-mongo-keyword-collections {
+span.cm-users {
   color: $purpleFont !important;
 }
-span.cm-mongo-keyword-users {
+span.cm-roles {
   color: $purpleFont !important;
 }
-span.cm-mongo-keyword-roles {
+span.cm-profile{
   color: $purpleFont !important;
 }
-span.cm-mongo-keyword-profile{
+span.cm-databases {
   color: $purpleFont !important;
 }
-span.cm-mongo-keyword-databases {
-  color: $purpleFont !important;
+span.cm-it{
+  color: $brightBlueFont !important;
 }
 //////////////\ Syntax Highlighting \///////////////
 //////////////\ -------------------- \///////////////
