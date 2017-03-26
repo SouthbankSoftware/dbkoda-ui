@@ -11,6 +11,7 @@ import {inject, observer} from 'mobx-react';
 import {action, reaction} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
 import {AnchorButton} from '@blueprintjs/core';
+import EditorHighlighter from '#/common/EditorHighlighter.js';
 import CodeMirror from 'react-codemirror';
 
 require('codemirror/mode/javascript/javascript');
@@ -83,17 +84,7 @@ export default class Terminal extends React.Component {
       .getCodeMirror();
 
     cm.addOverlay({
-      token: (stream) => {
-        if (stream.match('use')) {
-          return 'mongo-keyword-use';
-        } else if (stream.match('db')) {
-          return 'mongo-keyword-db';
-        } else if (stream.match('it')) {
-          return 'mongo-keyword-it';
-        }
-        while (stream.next() != null && !stream.match('use', false) && !stream.match('db', false) && !stream.match('it', false)) {} // eslint-disable-line
-        return null;
-      }
+      token: EditorHighlighter.defaultOverlay
     });
   }
 

@@ -17,6 +17,7 @@ import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
 import {DragItemTypes} from '#/common/Constants.js';
+import EditorHighlighter from '#/common/EditorHighlighter.js';
 import CodeGeneration from '#/common/CodeGeneration.js';
 import './Panel.scss';
 
@@ -33,6 +34,7 @@ require('codemirror/addon/fold/foldgutter.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 require('codemirror/keymap/sublime.js');
+require('#/common/mongoScript.js');
 
 /**
  * editorTarget object for helping with drag and drop actions?
@@ -84,10 +86,7 @@ class View extends React.Component {
         extraKeys: {
           'Ctrl-Space': 'autocomplete'
         },
-        mode: {
-          name: 'text/javascript',
-          json: true
-        }
+        mode: 'mongoscript'
       },
       code: '//////////////////////////////////\n// Welcome to DBEnvy!\n//\n// Please forgive' +
           ' the terrible color pallete for now.\n// I promise it\'s only a placeholder.\n//' +
@@ -241,20 +240,6 @@ class View extends React.Component {
       .refs
       .editor
       .getCodeMirror();
-
-    cm.addOverlay({
-      token: (stream) => {
-        if (stream.match('use')) {
-          return 'mongo-keyword-use';
-        } else if (stream.match('db')) {
-          return 'mongo-keyword-db';
-        } else if (stream.match('it')) {
-          return 'mongo-keyword-it';
-        }
-        while (stream.next() != null && !stream.match('use', false) && !stream.match('db', false) && !stream.match('it', false)) {} // eslint-disable-line
-        return null;
-      }
-    });
   }
 
   /**

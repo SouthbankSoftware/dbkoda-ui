@@ -43,7 +43,11 @@ span.cm-mongo-keyword-db {
 }
 
 span.cm-mongo-keyword-it {
-  color: $greyBlueFont !important;
+  color: $purpleFont !important;
+}
+
+span.cm-mongo-keyword-show {
+  color: $purpleFont !important;
 }
 
 .notVisible {
@@ -74,3 +78,35 @@ span.cm-mongo-keyword-it {
   color: $whiteColor;
 }
 
+
+//////////////\ -------------------- \///////////////
+//////////////\ Syntax Highlighting \///////////////
+span.cm-mongo-keyword-db {
+  color: $purpleFont !important;
+}
+span.cm-mongo-keyword-show {
+  color: $brightBlueFont !important;
+}
+span.cm-mongo-keyword-dbs {
+  color: $purpleFont !important;
+}
+span.cm-mongo-keyword-use {
+  color: $purpleFont !important;
+}
+span.cm-mongo-keyword-collections {
+  color: $purpleFont !important;
+}
+span.cm-mongo-keyword-users {
+  color: $purpleFont !important;
+}
+span.cm-mongo-keyword-roles {
+  color: $purpleFont !important;
+}
+span.cm-mongo-keyword-profile{
+  color: $purpleFont !important;
+}
+span.cm-mongo-keyword-databases {
+  color: $purpleFont !important;
+}
+//////////////\ Syntax Highlighting \///////////////
+//////////////\ -------------------- \///////////////
