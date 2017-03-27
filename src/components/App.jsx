@@ -17,6 +17,8 @@ import { EditorPanel } from '#/EditorPanel';
 import { OutputPanel } from '#/OutputPanel';
 import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
+import {ConnectionProfilePanel} from '../components/ConnectionPanel';
+import EventReaction from '#/common/logging/EventReaction.jsx';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -24,7 +26,7 @@ import '@blueprintjs/table/dist/table.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';
-import {ConnectionProfilePanel} from '../components/ConnectionPanel';
+
 
 import './App.scss';
 
@@ -33,7 +35,7 @@ const splitPane2Style = {
   flexDirection: 'column'
 };
 
-@inject(allStores => ({ layout: allStores.store.layout }))
+@inject(allStores => ({ store: allStores.store, layout: allStores.store.layout }))
 @observer
 class App extends React.Component {
   static propTypes = {
@@ -84,7 +86,7 @@ class App extends React.Component {
           drawerStyle={{'minWidth':500}}
           onChange={this.updateDrawerOpenStatus}
         >
-          <ConnectionProfilePanel/>
+          <ConnectionProfilePanel />
         </Drawer>
         <SplitPane
           split="vertical"
@@ -116,6 +118,7 @@ class App extends React.Component {
             <OutputPanel />
           </SplitPane>
         </SplitPane>
+        <EventReaction />
         <DevTools />
       </div>
     );

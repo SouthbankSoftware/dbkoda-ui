@@ -40,7 +40,7 @@ describe('Profile List Toolbar', () => {
   });
 
   test('has buttons', () => {
-    expect(app.find('AnchorButton').length).toEqual(3);
+    expect(app.find('AnchorButton').length).toEqual(4);
   });
 
   test('has disabled buttons', () => {
