@@ -3,18 +3,18 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-22T16:16:51+11:00
+ * @Last modified time: 2017-03-27T17:35:10+11:00
 */
 
 import React from 'react';
-import {inject, observer} from 'mobx-react';
+import {inject} from 'mobx-react';
+import { reaction } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
 
 @inject('treeState')
-@observer
 export default class TreeView extends React.Component {
   static get defaultProps() {
     return {
@@ -25,10 +25,10 @@ export default class TreeView extends React.Component {
     super(props);
 
     this.state = {nodes: this.props.treeState.nodes};
-  }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({nodes: nextProps.treeState.nodes});
+    reaction( () => this.props.treeState.filter, treeNodesChanged => {
+      this.setState({nodes: this.props.treeState.nodes});
+    })
   }
 
   handleNodeClick = (

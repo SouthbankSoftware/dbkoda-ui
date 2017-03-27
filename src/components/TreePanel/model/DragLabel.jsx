@@ -3,7 +3,7 @@
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-20T17:16:41+11:00
+ * @Last modified time: 2017-03-27T17:37:03+11:00
 */
 
 import React from 'react';
@@ -12,7 +12,7 @@ import { DragItemTypes } from '#/common/Constants.js';
 
 const labelSource = {
   beginDrag(props) {
-    return { label: props.label, type: props.type, id: props.id, refParent: props.refParent};
+    return { label: props.label, type: props.type, id: props.id, refParent: props.refParent };
   },
 };
 
@@ -27,21 +27,16 @@ function collect(connect, monitor) {
  * Defines the label of tree component which is dragable using react-dnd
  */
 class DragLabel extends React.Component {
-  static get defaultProps() {
-    return {
-      filter: ''
-    };
-  }
   get ServerName() {
     const serverName = this.props.label;
     let newServerName = serverName;
     const dotPos = serverName.indexOf('.');
     const colonPos = serverName.indexOf(':');
     if (colonPos + dotPos > 1) {
-        newServerName = serverName.substr(0, dotPos) + serverName.substr(colonPos);
+      newServerName = serverName.substr(0, dotPos) + serverName.substr(colonPos);
     }
-    return (newServerName);
-}
+    return newServerName;
+  }
   get FilteredTextLabel() {
     const filterText = this.props.filter;
     const strText = this.props.label;

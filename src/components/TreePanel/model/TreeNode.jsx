@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-21T16:42:03+11:00
+ * @Last modified time: 2017-03-27T17:34:02+11:00
 */
 
 import React from 'react';
@@ -21,7 +21,8 @@ export default class TreeNode implements ITreeNode {
   text;
   type;
   iconName;
-  @observable childNodes;
+  allChildNodes;
+  childNodes;
   @observable isSelected = false;
   @observable isExpanded = false;
   isFiltered = false;
@@ -33,7 +34,7 @@ export default class TreeNode implements ITreeNode {
    * @param {string} filter - any string set by the user in searchbar for highlighting purpose
    * @param {Object} parent - reference to the parent node
    */
-  constructor(treeJSON, filter, parent) {
+  constructor(treeJSON, parent) {
     this.type = TreeNode.getNodeType(treeJSON, parent);
     this.iconName = `tree-${this.type}`;
     if (parent && parent.id != 'root') {
@@ -44,29 +45,43 @@ export default class TreeNode implements ITreeNode {
     if (parent) {
       this.refParent = parent;
     }
-    if (treeJSON.text.toLowerCase().indexOf(filter) >= 0 || (parent && parent.isFiltered)) {
+    this.text = treeJSON.text;
+    this.label = <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} filter={this.filter} />;
+    if (treeJSON.children) {
+      this.allChildNodes = [];
+      for (const childJSON of treeJSON.children) {
+        const child = new TreeNode(childJSON, this);
+        this.allChildNodes.push(child);
+      }
+    }
+  }
+
+  setFilter(filter, parent) {
+    this.isFiltered = false;
+    this.isExpanded = false;
+    this.childNodes = undefined;
+    if (this.text.toLowerCase().indexOf(filter) >= 0 || (parent && parent.isFiltered)) {
       this.isFiltered = true;
     }
     if (filter != '' && !this.isFiltered) {
       this.isExpanded = true;
     }
-    this.text = treeJSON.text;
-    this.label = <DragLabel label={treeJSON.text} id={this.id} type={this.type} refParent={this.refParent} filter={filter} />;
-    if (treeJSON.children) {
-      this.childNodes = observable([]);
-      for (const childJSON of treeJSON.children) {
-        const child = new TreeNode(childJSON, filter, this);
+    if (this.allChildNodes) {
+      this.childNodes = [];
+      for (const child of this.allChildNodes) {
+        child.setFilter(filter, this);
         if (filter == '' || this.isFiltered) {                             // add the child nodes if there is no filter
           this.childNodes.push(child);
-        } else if (childJSON.text.toLowerCase().indexOf(filter) >= 0) {     // add the child node if filtered text is found in the child node label
+        } else if (child.text.toLowerCase().indexOf(filter) >= 0) {     // add the child node if filtered text is found in the child node label
           this.childNodes.push(child);
-        } else if (childJSON.children && childJSON.children.length > 0) {   // add the child node if the grand child has filtered text in the label
+        } else if (child.allChildNodes && child.allChildNodes.length > 0) {   // add the child node if the grand child has filtered text in the label
           if (child.childNodes && child.childNodes.length > 0) {              // Check if there are childNodes existing
             this.childNodes.push(child);
           }
         }
       }
     }
+    this.label = <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} filter={filter} />;
   }
 /**
  * @param {Object} treeJSON - JSON object from controller having text
