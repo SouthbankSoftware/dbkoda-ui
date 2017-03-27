@@ -41,6 +41,10 @@ const ConnectionPanel = ({profiles, profileList, layout},) => {
     query.ssl = data.ssl;
     query.test = data.test;
     query.authorization = data.authorization;
+    if(selectedProfile){
+      query.id = selectedProfile.id;
+      query.shellId = selectedProfile.shellId;
+    }
     return featherClient()
       .service('/mongo-connection')
       .create({}, {

@@ -4,7 +4,7 @@ import {useStrict} from 'mobx';
 import {assert, expect} from 'chai';
 import {Provider} from 'mobx-react';
 import Store from '../../../stores/global';
-import Panel from '../Panel';
+import ConnectionPanel from '../ConnectionPanel';
 import Label from '../Label';
 
 describe('New Profile Panel', () => {
@@ -14,12 +14,12 @@ describe('New Profile Panel', () => {
     useStrict(true);
     const store = new Store();
     app = mount(<Provider store={store}>
-      <Panel/>
+      <ConnectionPanel/>
     </Provider>);
   });
 
   it('form field exist', () => {
-    expect(app.contains(<Panel/>)).to.equal(true);
+    expect(app.contains(<ConnectionPanel/>)).to.equal(true);
     expect(app.find(".profile-form")).to.have.length(1);
   });
 
