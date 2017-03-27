@@ -108,16 +108,17 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
+    const {selectedProfile} = this.props.store.profileList;
     return (
       <nav className="pt-navbar profileListToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
-            <Alert className="alert" intent={Intent.PRIMARY} isOpen={this.state.closeConnectionAlert} confirmButtonText="Close Connection"
+            <Alert className="pt-dark" intent={Intent.PRIMARY} isOpen={this.state.closeConnectionAlert} confirmButtonText="Close Connection"
                    cancelButtonText="Cancel" onConfirm={this.closeProfile}
                    onCancel={this.hideCloseConnectionAlert}>
               <p>Are you sure you want to close this connection?</p>
             </Alert>
-            <Alert className="alert" intent={Intent.PRIMARY} isOpen={this.state.removeConnectionAlert} confirmButtonText="Remove Connection"
+            <Alert className="pt-dark" intent={Intent.PRIMARY} isOpen={this.state.removeConnectionAlert} confirmButtonText="Remove Connection"
                    cancelButtonText="Cancel" onConfirm={this.removeProfile}
                    onCancel={this.hideRemoveConnectionAlert}>
               <p>Are you sure you want to remove this connection?</p>
@@ -142,17 +143,17 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-edit pt-intent-primary editProfileButton"
                 onClick={this.editProfile}
-                disabled={!this.props.store.profileList.selectedProfile} />
+                disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN } />
             </Tooltip>
             <Tooltip intent={Intent.PRIMARY}
                      hoverOpenDelay={1000}
                      content="Close a Profile"
                      tooltipClassName="pt-dark"
                      position={Position.BOTTOM}>
-              <AnchorButton className="pt-icon-cross pt-intent-danger closeProfileButton"
+              <AnchorButton className="pt-icon-remove pt-intent-danger closeProfileButton"
                             loading={this.state.closingProfile}
-                            disabled={!this.props.store.profileList.selectedProfile
-                              || this.props.store.profileList.selectedProfile.status === ProfileStatus.CLOSED}
+                            disabled={!selectedProfile
+                              || selectedProfile.status === ProfileStatus.CLOSED}
                             onClick={this.showCloseConnectionAlert}/>
             </Tooltip>
             <Tooltip
@@ -162,7 +163,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-remove pt-intent-danger removeProfileButton"
+                className="pt-button pt-icon-cross pt-intent-danger removeProfileButton"
                 onClick={this.showRemoveConnectionAlert}
                 disabled = {!this.props.store.profileList.selectedProfile
                 || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN} />

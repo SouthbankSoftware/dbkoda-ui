@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   chris
- * @Last modified time: 2017-03-24T15:11:08+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-27T16:00:22+11:00
  */
 import {observable, action} from 'mobx';
 import TempTopology from './TempTopology.js';
@@ -50,12 +50,15 @@ export default class Store {
     creatingNewProfile: false
   });
 
-  @observable dragItem = {
+  @observable dragItem = observable({
     dragDrop: false,
     item: null
-  };
+  });
 
-  @observable topology = JSON.parse(TempTopology.data);
+  @observable topology = observable({
+    isChanged: true,
+    json: JSON.parse(TempTopology.data)
+  });
 
   @action addTopology = (value) => {
     this
