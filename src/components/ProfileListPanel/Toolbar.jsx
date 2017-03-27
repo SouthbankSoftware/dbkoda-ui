@@ -113,12 +113,12 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar profileListToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
-            <Alert className="alert" intent={Intent.PRIMARY} isOpen={this.state.closeConnectionAlert} confirmButtonText="Close Connection"
+            <Alert className="pt-dark" intent={Intent.PRIMARY} isOpen={this.state.closeConnectionAlert} confirmButtonText="Close Connection"
                    cancelButtonText="Cancel" onConfirm={this.closeProfile}
                    onCancel={this.hideCloseConnectionAlert}>
               <p>Are you sure you want to close this connection?</p>
             </Alert>
-            <Alert className="alert" intent={Intent.PRIMARY} isOpen={this.state.removeConnectionAlert} confirmButtonText="Remove Connection"
+            <Alert className="pt-dark" intent={Intent.PRIMARY} isOpen={this.state.removeConnectionAlert} confirmButtonText="Remove Connection"
                    cancelButtonText="Cancel" onConfirm={this.removeProfile}
                    onCancel={this.hideRemoveConnectionAlert}>
               <p>Are you sure you want to remove this connection?</p>
