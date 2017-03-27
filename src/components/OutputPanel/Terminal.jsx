@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-24T16:13:22+11:00
+ * @Last modified time: 2017-03-27T15:21:42+11:00
  */
 
 import React from 'react';
@@ -48,8 +48,8 @@ export default class Terminal extends React.Component {
           this.updateHistory(command);
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
-          service.update(parseInt(this.props.id), {
-            shellId: parseInt(this.props.shellId), // eslint-disable-line
+          service.update(this.props.id, {
+            shellId: this.props.shellId, // eslint-disable-line
             commands: command
           });
           this.setState({ command: '' });

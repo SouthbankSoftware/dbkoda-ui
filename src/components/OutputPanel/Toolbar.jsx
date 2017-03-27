@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-27T11:54:48+11:00
+ * @Last modified time: 2017-03-27T15:24:24+11:00
 */
 
 import React from 'react';
@@ -38,7 +38,7 @@ export default class Toolbar extends React.Component {
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
           service.update(this.props.store.outputs.get(this.props.title).id, {
-            shellId: parseInt(this.props.store.outputs.get(this.props.title).id) + 1, // eslint-disable-line
+            shellId: this.props.shellId, // eslint-disable-line
             commands: command
           });
           this.props.store.outputs.get(this.props.title).cannotShowMore = true;
