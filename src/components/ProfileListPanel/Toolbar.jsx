@@ -11,7 +11,8 @@
 import React from 'react';
 import {observer, inject} from 'mobx-react';
 import {action, runInAction} from 'mobx';
-import {AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
+import autobind from 'autobind-decorator';
+import {AnchorButton, Intent, Position, Tooltip, Alert} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
@@ -26,6 +27,7 @@ export default class Toolbar extends React.Component {
       editDisabled: true,
       removeDisabled: true,
       closingProfile: false,
+      closeConnectionAlert: false,
     };
 
     this.newProfile = this.newProfile.bind(this);
@@ -66,7 +68,7 @@ export default class Toolbar extends React.Component {
       featherClient().service('/mongo-connection').remove(selectedProfile.id)
         .then(v=>{
           console.log('got close response ', v);
-          this.setState({closingProfile: false});
+          this.setState({closingProfile: false, closeConnectionAlert:false});
           runInAction(()=>selectedProfile.status = ProfileStatus.CLOSED);
           NewToaster.show({message: 'Connection Closed', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
@@ -74,11 +76,21 @@ export default class Toolbar extends React.Component {
         .catch(err=>{
           console.log('error:', err);
           NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-          this.setState({closingProfile: false});
+          this.setState({closingProfile: false, closeConnectionAlert:false});
         })
     } else {
       NewToaster.show({message: 'No Profile Selected!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
+  }
+
+  @autobind
+  closeCloseConnectionAlert(){
+    this.setState({closeConnectionAlert: false});
+  }
+
+  @autobind
+  openCloseConnectionAlert() {
+    this.setState({closeConnectionAlert: true});
   }
 
   render() {
@@ -86,6 +98,11 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar profileListToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
+            <Alert intent={Intent.PRIMARY} isOpen={this.state.closeConnectionAlert} confirmButtonText="Close Connection"
+                   cancelButtonText="Cancel" onConfirm={this.closeProfile}
+                   onCancel={this.closeCloseConnectionAlert}>
+              <p>Are you sure you want to close this connection?</p>
+            </Alert>
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
@@ -117,7 +134,7 @@ export default class Toolbar extends React.Component {
                             loading={this.state.closingProfile}
                             disabled={!this.props.store.profileList.selectedProfile
                               || this.props.store.profileList.selectedProfile.status === ProfileStatus.CLOSED}
-                            onClick={this.closeProfile}/>
+                            onClick={this.openCloseConnectionAlert}/>
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
