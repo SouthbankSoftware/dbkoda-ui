@@ -68,7 +68,7 @@ export default class Panel extends React.Component {
                     showLabel={false}
                     disable={!form.$('hostRadio').get('value')}
                   />
-                  <Label text="Port"/>
+                  <Label className="port-label" text="Port"/>
                   <Input
                     field={form.$('port')}
                     showLabel={false}

@@ -12,15 +12,23 @@ export class ProfileForm extends MobxReactForm {
     this.$('hostRadio').observe({
       key: 'value',
       call: ({form, field, change}) => {
-        console.log('field changed ', field);
-        form.$('urlRadio').set('value', change.oldValue);
+        if (change.newValue) {
+          form.$('host').set('rules', 'required|string');
+          form.$('port').set('rules', 'required|numeric');
+        } else {
+          form.$('host').set('rules', '');
+          form.$('port').set('rules', '');
+        }
       },
     });
     this.$('urlRadio').observe({
       key: 'value',
       call: ({form, field, change}) => {
-        console.log('field changed ', field);
-        form.$('hostRadio').set('value', change.oldValue);
+        if (change.newValue) {
+          form.$('url').set('rules', 'regex:/^mongodb:\/\//');
+        } else {
+          form.$('url').set('rules', '');
+        }
       },
     });
   }
@@ -89,6 +97,7 @@ export const Form = {
     name: 'url',
     label: 'URL',
     placeholder: 'mongodb://',
+    rules: 'regex:/^mongodb:\/\//',
     value: 'mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com',
   }, {
     name: 'database',
