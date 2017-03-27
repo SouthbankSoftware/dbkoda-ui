@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-24T15:18:44+11:00
+ * @Last modified time: 2017-03-27T11:54:48+11:00
 */
 
 import React from 'react';
@@ -85,6 +85,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
+            inline={true}
             content="Clear Output Contents (Shift + C)"
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
@@ -95,6 +96,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
+            inline={true}
             content="Show More (Shift + M)"
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
@@ -108,6 +110,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
+            inline={true}
             content="Save Output (Shift + X)"
             tooltipClassName="pt-dark"
             positioon={Position.BOTTOM}>
