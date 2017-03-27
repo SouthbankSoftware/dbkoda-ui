@@ -108,6 +108,7 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
+    const {selectedProfile} = this.props.store.profileList;
     return (
       <nav className="pt-navbar profileListToolbar">
         <div className="pt-navbar-group pt-align-left">
@@ -142,17 +143,17 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-edit pt-intent-primary editProfileButton"
                 onClick={this.editProfile}
-                disabled={!this.props.store.profileList.selectedProfile} />
+                disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN } />
             </Tooltip>
             <Tooltip intent={Intent.PRIMARY}
                      hoverOpenDelay={1000}
                      content="Close a Profile"
                      tooltipClassName="pt-dark"
                      position={Position.BOTTOM}>
-              <AnchorButton className="pt-icon-cross pt-intent-danger closeProfileButton"
+              <AnchorButton className="pt-icon-remove pt-intent-danger closeProfileButton"
                             loading={this.state.closingProfile}
-                            disabled={!this.props.store.profileList.selectedProfile
-                              || this.props.store.profileList.selectedProfile.status === ProfileStatus.CLOSED}
+                            disabled={!selectedProfile
+                              || selectedProfile.status === ProfileStatus.CLOSED}
                             onClick={this.showCloseConnectionAlert}/>
             </Tooltip>
             <Tooltip
@@ -162,7 +163,7 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-remove pt-intent-danger removeProfileButton"
+                className="pt-button pt-icon-cross pt-intent-danger removeProfileButton"
                 onClick={this.showRemoveConnectionAlert}
                 disabled = {!this.props.store.profileList.selectedProfile
                 || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN} />
