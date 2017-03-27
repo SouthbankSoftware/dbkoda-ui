@@ -2,13 +2,13 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
-* @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T11:53:27+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-27T16:10:57+11:00
 */
 
 import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
-import { autorun } from 'mobx';
+import { reaction } from 'mobx';
 
 import Store from '~/stores/global';
 
@@ -24,10 +24,19 @@ export default class TreePanel extends React.Component {
       store: undefined
     };
   }
+  constructor(props) {
+    super(props);
+    if (this.props.store.topology.json !== null) {
+      this.treeState.parseJson(this.props.store.topology.json);
+    }
+  }
   componentWillMount() {
-    autorun(() => {
-      this.treeState.parseJson(this.props.store.topology);
-      this.forceUpdate();
+    reaction( // eslint-disable-line
+        () => this.props.store.topology.isChanged, topologyChange => { // eslint-disable-line
+      if (this.props.store.topology.isChanged && this.props.store.topology.json !== null) {
+        this.treeState.parseJson(this.props.store.topology.json);
+        this.forceUpdate();
+      }
     });
   }
   treeState = new TreeState();

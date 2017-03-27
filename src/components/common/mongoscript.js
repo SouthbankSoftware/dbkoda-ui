@@ -83,6 +83,8 @@ CodeMirror.defineMode("mongoscript", function(config, parserConfig) {
       "profile":MONGO("profile"),
       "databases":MONGO("databases"),
       "it":MONGO("it"),
+      "mongos":MONGO("mongos-prompt"),
+      "dbenvy":MONGO("dbenvy-prompt")
     };
 
     // Extend the 'normal' keywords with the TypeScript language extensions

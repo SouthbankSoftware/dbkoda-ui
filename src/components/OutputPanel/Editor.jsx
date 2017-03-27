@@ -12,6 +12,7 @@ import { inject, observer } from 'mobx-react';
 import {action,reaction} from 'mobx';
 import CodeMirror from 'react-codemirror';
 require('codemirror/mode/javascript/javascript');
+require('#/common/MongoScript.js');
 
 import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
@@ -86,7 +87,7 @@ export default class Editor extends React.Component {
 
   render() {
     const outputOptions = {
-      mode: 'text/javascript',
+      mode: 'mongoscript',
       matchBrackets: true,
       json: true,
       jsonld: true,
