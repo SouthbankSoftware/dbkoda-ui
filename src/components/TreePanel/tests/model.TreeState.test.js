@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T14:23:34+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-22T16:44:23+11:00
+ * @Last modified time: 2017-03-28T17:17:06+11:00
  */
 
 import TreeState from '#/TreePanel/model/TreeState';
@@ -85,10 +85,32 @@ describe('TreeState', () => {
     expect(nodeCheck.noOfNodes).toEqual(9);
   });
 
+  test('should select root node', () => {
+    treeState.selectRootNode(treeState.nodes[1]);
+    expect(treeState.nodes[0].text).toEqual('...');
+    expect(treeState.nodes[1].text).toEqual('Shards');
+  });
+
+  test('should reset root node', () => {
+    treeState.resetRootNode();
+    expect(treeState.nodes[0].text).toEqual('Databases');
+    expect(treeState.nodes[1].text).toEqual('Shards');
+  });
+
   const treeState1 = new TreeState();
   test('should have one node of "Databases"', () => {
     treeState1.parseJson(treeJson);
     treeState1.setFilter('stat');
     expect(treeState1.nodes.length).toEqual(1);
+    console.log(treeState1.nodes[0].allChildNodes[0]);
   });
+
+  test('should have ROOT node of "DBEnvyLoad" with "bstatestat" node as filter', () => {
+    treeState1.setFilter('');
+    treeState1.selectRootNode(treeState.nodes[0].allChildNodes[0]);
+    treeState1.setFilter('bstatestat');
+    expect(treeState1.nodes[0].text).toEqual('...');
+    expect(treeState1.nodes[1].text).toEqual('DBEnvyLoad');
+    expect(treeState1.nodes[1].childNodes[0].text).toEqual('bstatestat');
+  })
 });
