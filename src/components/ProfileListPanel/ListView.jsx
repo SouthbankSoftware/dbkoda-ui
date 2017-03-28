@@ -43,11 +43,7 @@ export default class ListView extends React.Component {
       .entries();
     profiles.map(p=>console.log('profile status:', p[1].status));
     const renderCell = (rowIndex: number) => {
-
-      console.log('row index ', profiles[rowIndex]);
       const currentProfile = profiles[rowIndex][1];
-      console.log('current profile ', currentProfile.status);
-
       return <Cell>{profiles[rowIndex][1].alias}</Cell>;
     };
     return (

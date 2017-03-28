@@ -54,7 +54,7 @@
   padding: 0 0 0 5px;
 }
 
-.profile-align-left{
+.profile-align-left {
   align-items: flex-start;
 }
 
@@ -62,7 +62,7 @@
   margin: 5px 5px 0 0 !important;
 }
 
-.port-label{
+.port-label {
   margin-top: 0px;
 }
 
@@ -88,7 +88,11 @@
   flex-direction: row;
 }
 
-.profile-error-input{
+.profile-error-input {
   margin: 10px;
-  
+
+}
+
+.ssl-input {
+  margin-left: 10px;
 }
