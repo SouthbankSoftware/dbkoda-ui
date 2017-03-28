@@ -62,6 +62,10 @@
   margin: 5px 5px 0 0 !important;
 }
 
+.port-label{
+  margin-top: 0px;
+}
+
 .profile-form {
   margin: 5%;
   display: flex;
@@ -82,4 +86,9 @@
 .profile-button-panel {
   display: flex;
   flex-direction: row;
+}
+
+.profile-error-input{
+  margin: 10px;
+  
 }

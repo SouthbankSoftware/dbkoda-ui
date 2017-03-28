@@ -7,7 +7,7 @@
 */
 
 import React from 'react';
-import {shallow, mount} from 'enzyme';
+import {shallow, mount, render} from 'enzyme';
 import {useStrict} from 'mobx';
 import Store from '~/stores/global';
 import {EditorPanel, EditorToolbar, EditorView} from '../index.js';
@@ -32,10 +32,13 @@ describe('Editor Panel', () => {
 
 describe('Toolbar', () => {
   let app;
+  let app2;
+  let store;
+  let store2;
 
   beforeAll(() => {
-    useStrict(true);
-    const store = new Store();
+    useStrict(false);
+    store = new Store();
     app = mount(<EditorToolbar.wrappedComponent store={store} />);
   });
 

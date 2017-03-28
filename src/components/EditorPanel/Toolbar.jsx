@@ -22,6 +22,7 @@ import {
   HotkeysTarget
 } from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
+import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
 
@@ -58,8 +59,8 @@ export default class Toolbar extends React.Component {
       .bind(this);
   }
 
-  componentWillMount(){
-    Broker.on(EventType.NEW_PROFILE_CREATED, (profile)=>{
+  componentWillMount() {
+    Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
       this.profileCreated(profile);
     });
   }
@@ -69,14 +70,14 @@ export default class Toolbar extends React.Component {
    *
    * @param profile the newly created connection profile
    */
-  profileCreated(profile){
-    let {editors, editorToolbar, editorPanel} = this.props.store
+  profileCreated(profile) {
+    const {editors, editorToolbar, editorPanel} = this.props.store;
     editors.set(profile.alias + ' (' + profile.shellId + ')', {
       // eslint-disable-line react/prop-types
       id: profile.id,
       alias: profile.alias,
       shellId: profile.shellId,
-      visible: true,
+      visible: true
     });
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
@@ -105,11 +106,12 @@ export default class Toolbar extends React.Component {
             profileId = value.id;
           }
         });
-        if (profileId == 'UNKNOWN') {
-          NewToaster.show({message: 'Cannot create new Editor for Default Tab.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'})
-          this.setNewEditorLoading(false);
-          return null;
-        }
+      if (profileId == 'UNKNOWN') {
+        EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
+        NewToaster.show({message: 'Cannot create new Editor for Default Tab.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+        this.setNewEditorLoading(false);
+        return null;
+      }
       console.log('Create new Editor for ID:', profileId);
       featherClient()
         .service('/mongo-shells')
@@ -120,11 +122,13 @@ export default class Toolbar extends React.Component {
         })
         .catch((err) => {
           console.log(err);
+          EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, err.message);
           NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           this.setNewEditorLoading(false);
         });
     } catch (err) {
       console.log(err);
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
       NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
   }
@@ -148,13 +152,17 @@ export default class Toolbar extends React.Component {
    */
   @action
   setNewEditorState(res) {
-    this.props.store.editors.set(this.props.store.editorPanel.activeDropdownId + ' (' + res.shellId + ')', {
-      // eslint-disable-line react/prop-types
-      id: res.id,
-      alias: this.props.store.editorPanel.activeDropdownId,
-      shellId: res.shellId,
-      visible: true
-    });
+    this
+      .props
+      .store
+      .editors
+      .set(this.props.store.editorPanel.activeDropdownId + ' (' + res.shellId + ')', {
+        // eslint-disable-line react/prop-types
+        id: res.id,
+        alias: this.props.store.editorPanel.activeDropdownId,
+        shellId: res.shellId,
+        visible: true
+      });
     this.props.store.editorToolbar.noActiveProfile = false;
     this.props.store.editorToolbar.id = res.id;
     this.props.store.editorToolbar.shellId = res.shellId;
@@ -171,6 +179,7 @@ export default class Toolbar extends React.Component {
    * NOT YET IMPLEMENTED: Open a File from Localhost.
    */
   openFile() { // eslint-disable-line class-methods-use-this
+    EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented openFile');
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
@@ -178,6 +187,7 @@ export default class Toolbar extends React.Component {
    * NOT YET IMPLEMENTED: Save a File to Localhost.
    */
   saveFile() { // eslint-disable-line class-methods-use-this
+    EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented saveFile');
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
@@ -200,14 +210,16 @@ export default class Toolbar extends React.Component {
    * codemirror instance.
    */
   explainPlan() { // eslint-disable-line class-methods-use-this
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented explainPlan');
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
   }
 
   /**
    * NOT YET IMPLEMENTED: Stop the current execution on this connection.
    */
   stopExecution() { // eslint-disable-line class-methods-use-this
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented stopExecution');
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
   }
 
   /**

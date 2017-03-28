@@ -99,11 +99,22 @@ const ConnectionPanel = ({profiles, profileList, layout},) => {
       position = Position.RIGHT_TOP;
       form.reset();
       profiles.set(res.id, {
-        ...data,
         id: res.id,
         shellId: res.shellId,
         password: null,
         status: ProfileStatus.OPEN,
+        database: data.database,
+        alias: data.alias,
+        authorization: data.authorization,
+        host: data.host,
+        hostRadio: data.hostRadio,
+        port: data.port,
+        ssl: data.ssl,
+        test: data.test,
+        url: data.url,
+        urlRadio: data.urlRadio,
+        username: data.username,
+        sha: data.sha,
       });
       close();
       Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
