@@ -1,22 +1,23 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-16T17:05:45+11:00
+ * @Last modified by:   mike
+ * @Last modified time: 2017-03-28 16:03:54
  */
 
 import React from 'react';
-import { DragDropContext } from 'react-dnd';
+import {Alert, Intent} from '@blueprintjs/core';
+import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
 import Drawer from 'react-motion-drawer';
-import { action, untracked } from 'mobx';
-import { inject, observer, PropTypes } from 'mobx-react';
+import {action, untracked} from 'mobx';
+import {inject, observer, PropTypes} from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
-import { EditorPanel } from '#/EditorPanel';
-import { OutputPanel } from '#/OutputPanel';
-import { ProfileListPanel } from '#/ProfileListPanel';
-import { TreePanel } from '#/TreePanel';
+import {EditorPanel} from '#/EditorPanel';
+import {OutputPanel} from '#/OutputPanel';
+import {ProfileListPanel} from '#/ProfileListPanel';
+import {TreePanel} from '#/TreePanel';
 import {ConnectionProfilePanel} from '../components/ConnectionPanel';
 import EventReaction from '#/common/logging/EventReaction.jsx';
 
@@ -27,7 +28,6 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';
 
-
 import './App.scss';
 
 const splitPane2Style = {
@@ -35,12 +35,18 @@ const splitPane2Style = {
   flexDirection: 'column'
 };
 
-@inject(allStores => ({ store: allStores.store, layout: allStores.store.layout }))
+@inject(allStores => ({store: allStores.store, layout: allStores.store.layout}))
 @observer
 class App extends React.Component {
   static propTypes = {
-    layout: PropTypes.observableObject.isRequired,
+    layout: PropTypes.observableObject.isRequired
   };
+
+  @action.bound
+  closeOptIn(bool) {
+    this.props.store.userPreferences.telemetryEnabled = bool;
+    this.props.store.layout.optInVisible = false;
+  }
 
   @action.bound
   updateDrawerOpenStatus(open) {
@@ -63,7 +69,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { layout } = this.props;
+    const {layout} = this.props;
     let defaultOverallSplitPos;
     let defaultLeftSplitPos;
     let defaultRightSplitPos;
@@ -73,19 +79,38 @@ class App extends React.Component {
       defaultLeftSplitPos = layout.leftSplitPos;
       defaultRightSplitPos = layout.rightSplitPos;
     });
-
     return (
       <div>
+        <Alert
+          className="pt-dark optInAlert"
+          isOpen={this.props.layout.optInVisible}
+          intent={Intent.PRIMARY}
+          iconName="pt-icon-chart"
+          confirmButtonText="Sure!"
+          onConfirm={() => this.closeOptIn(true)}
+          cancelButtonText="No Thanks."
+          onCancel={() => this.closeOptIn(false)}>
+          <h2>Hey!</h2>
+          <p>
+            We would like to gather information about how you are using the product so we
+            can make it even more awesome.
+          </p>
+          <p>
+            Is it okay if we collect some information about how you interact
+            with <b className="optInBoldDBEnvy"> DBEnvy </b> and send it back to our servers?
+          </p>
+        </Alert>
         <Drawer
           className="drawer"
           open={layout.drawerOpen}
           width="40%"
           handleWidth={0}
-          noTouchOpen={true}
-          noTouchClose={true}
-          drawerStyle={{'minWidth':500}}
-          onChange={this.updateDrawerOpenStatus}
-        >
+          noTouchOpen
+          noTouchClose
+          drawerStyle={{
+          'minWidth': 500
+        }}
+          onChange={this.updateDrawerOpenStatus}>
           <ConnectionProfilePanel />
         </Drawer>
         <SplitPane
@@ -93,16 +118,14 @@ class App extends React.Component {
           defaultSize={defaultOverallSplitPos}
           onDragFinished={this.updateOverallSplitPos}
           minSize={350}
-          maxSize={750}
-        >
+          maxSize={750}>
           <SplitPane
             split="horizontal"
             defaultSize={defaultLeftSplitPos}
             onDragFinished={this.updateLeftSplitPos}
             minSize={100}
             maxSize={1000}
-            pane2Style={splitPane2Style}
-          >
+            pane2Style={splitPane2Style}>
             <ProfileListPanel openDrawer={this.updateDrawerOpenStatus} />
             <TreePanel />
           </SplitPane>
@@ -112,8 +135,7 @@ class App extends React.Component {
             onDragFinished={this.updateRightSplitPos}
             minSize={200}
             maxSize={1000}
-            pane2Style={splitPane2Style}
-          >
+            pane2Style={splitPane2Style}>
             <EditorPanel />
             <OutputPanel />
           </SplitPane>

@@ -1,3 +1,10 @@
+/**
+ * @Author: mike
+ * @Date:   2017-03-28 16:13:50
+ * @Last modified by:   mike
+ * @Last modified time: 2017-03-28 16:14:04
+ */
+
 export default {
 
   getTypeEnum() {
@@ -43,6 +50,20 @@ export default {
       type: eventType,
       fragment: eventFragment,
       message: eventMessage,
+      timestamp: dateTime
+    };
+    // Placeholder until file API is complete.
+    console.log(data);
+  },
+
+  recordEvent(eventType, eventFragment, eventMessage, eventChange) {
+    const currentDate = new Date();
+    const dateTime = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear() + ' @ ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
+    const data = {
+      type: eventType,
+      fragment: eventFragment,
+      message: eventMessage,
+      change: eventChange,
       timestamp: dateTime
     };
     // Placeholder until file API is complete.
