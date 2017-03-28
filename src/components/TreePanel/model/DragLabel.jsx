@@ -3,10 +3,12 @@
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-27T17:37:03+11:00
+ * @Last modified time: 2017-03-27T17:59:42+11:00
 */
 
 import React from 'react';
+import { observer, inject } from 'mobx-react';
+import {  computed } from 'mobx';
 import { DragSource } from 'react-dnd';
 import { DragItemTypes } from '#/common/Constants.js';
 
@@ -26,6 +28,8 @@ function collect(connect, monitor) {
 /**
  * Defines the label of tree component which is dragable using react-dnd
  */
+@inject('treeState')
+@observer
 class DragLabel extends React.Component {
   get ServerName() {
     const serverName = this.props.label;
@@ -37,8 +41,8 @@ class DragLabel extends React.Component {
     }
     return newServerName;
   }
-  get FilteredTextLabel() {
-    const filterText = this.props.filter;
+  @computed get FilteredTextLabel() {
+    const filterText = this.props.treeState.filter;
     const strText = this.props.label;
     const matchStart = strText.toLowerCase().indexOf(filterText.toLowerCase());
     if (filterText != '' && matchStart >= 0) {
@@ -69,7 +73,6 @@ class DragLabel extends React.Component {
 DragLabel.propTypes = {
   label: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
-  filter: React.PropTypes.string.isRequired,
   connectDragSource: React.PropTypes.func.isRequired,
   isDragging: React.PropTypes.bool.isRequired,
 };
