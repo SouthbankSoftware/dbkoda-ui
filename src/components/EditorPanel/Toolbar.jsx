@@ -105,6 +105,11 @@ export default class Toolbar extends React.Component {
             profileId = value.id;
           }
         });
+        if (profileId == 'UNKNOWN') {
+          NewToaster.show({message: 'Cannot create new Editor for Default Tab.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'})
+          this.setNewEditorLoading(false);
+          return null;
+        }
       console.log('Create new Editor for ID:', profileId);
       featherClient()
         .service('/mongo-shells')

@@ -33,7 +33,7 @@ require('codemirror/addon/fold/foldgutter.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 require('codemirror/keymap/sublime.js');
-require('#/common/mongoScript.js');
+require('#/common/MongoScript.js');
 
 /**
  * editorTarget object for helping with drag and drop actions?

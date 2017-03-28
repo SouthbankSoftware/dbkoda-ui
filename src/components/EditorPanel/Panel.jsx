@@ -58,15 +58,15 @@ export default class Panel extends React.Component {
 
   /**
    * Action for closing a tab.
-   * @param {String} removeTabId - The Id of the tab being removed.
+   * @param {Object} oldTab- The Id of the tab being removed.
    */
-  @action closeTab(removeTabId) {
+  @action closeTab(oldTab) {
     // Check if tab to be removed is currenlty selected tab, this will require more
     // handing in UI.
-    if (removeTabId == this.state.tabId) {
-      this.state.tabId = 0;
+    console.log(this.props.store.editorPanel.activeEditorId);
+    if ((oldTab.alias + ' (' + oldTab.shellId + ')') == this.props.store.editorPanel.activeEditorId) {
+      this.props.store.editorPanel.activeEditorId = 'Default';
       this.state.isRemovingCurrentTab = true;
-      this.props.store.editorPanel.activeEditorId = 0;
     } else {
       this.state.isRemovingCurrentTab = false;
     }
@@ -75,12 +75,7 @@ export default class Panel extends React.Component {
       .props
       .store
       .editors
-      .delete(removeTabId);
-    this
-      .props
-      .store
-      .profiles
-      .delete(removeTabId);
+      .delete(oldTab.alias + ' (' + oldTab.shellId + ')');
     this.setState({isRemovingTab: true});
     this.forceUpdate();
   }
@@ -163,7 +158,7 @@ export default class Panel extends React.Component {
                     ref= "defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
-                    onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
+                    onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
                   </Button>
                 </Tab2>
@@ -181,7 +176,7 @@ export default class Panel extends React.Component {
                   ref ="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
-                  onClick={() => this.closeTab(tab[1].id, tab[1].shellId)}>
+                  onClick={() => this.closeTab(tab[1])}>
                   <span className="pt-icon-cross" />
                 </Button>
               </Tab2>

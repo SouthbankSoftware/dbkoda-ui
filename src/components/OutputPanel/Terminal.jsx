@@ -19,6 +19,7 @@ require('codemirror/addon/edit/closebrackets.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 require('codemirror/keymap/sublime.js');
+require('#/common/MongoScript.js');
 
 @inject('store')
 @observer
@@ -157,10 +158,7 @@ export default class Terminal extends React.Component {
 
   render() {
     const terminalOptions = {
-      mode: {
-          name: 'text/javascript',
-          json: true
-        },
+      mode: 'mongoscript',
       matchBrackets: true,
       autoCloseBrackets: true,
       json: true,

@@ -10,7 +10,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {useStrict} from 'mobx';
 import Store from '~/stores/global';
-import {EditorPanel, EditorToolbar} from '../index.js';
+import {EditorPanel, EditorToolbar, EditorView} from '../index.js';
 
 describe('Editor Panel', () => {
   let app;
@@ -58,3 +58,4 @@ describe('Toolbar', () => {
     expect(app.find('input').length).toEqual(1);
   });
 });
+
