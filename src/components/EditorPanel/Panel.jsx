@@ -17,6 +17,7 @@ import './Panel.scss';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
+ * @extends {React.Component}
  */
 @inject('store')
 @observer
@@ -58,7 +59,7 @@ export default class Panel extends React.Component {
 
   /**
    * Action for closing a tab.
-   * @param {Object} oldTab- The Id of the tab being removed.
+   * @param {Object} oldTab - The Id of the tab being removed.
    */
   @action closeTab(oldTab) {
     // Check if tab to be removed is currenlty selected tab, this will require more

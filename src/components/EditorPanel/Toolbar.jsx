@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   mike
- * @Last modified time: 2017-03-15 11:19:16
+ * @Last modified time: 2017-03-28 16:14:24
 */
 
 /* eslint-disable react/prop-types */
@@ -107,7 +107,9 @@ export default class Toolbar extends React.Component {
           }
         });
       if (profileId == 'UNKNOWN') {
-        EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
+        if (this.props.store.userPreferences.telemetryEnabled) {
+            EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
+        }
         NewToaster.show({message: 'Cannot create new Editor for Default Tab.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
         this.setNewEditorLoading(false);
         return null;
@@ -122,13 +124,17 @@ export default class Toolbar extends React.Component {
         })
         .catch((err) => {
           console.log(err);
-          EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, err.message);
+          if (this.props.store.userPreferences.telemetryEnabled) {
+            EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, err.message);
+          }
           NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           this.setNewEditorLoading(false);
         });
     } catch (err) {
       console.log(err);
-      EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
+      if (this.props.store.userPreferences.telemetryEnabled) {
+        EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
+      }
       NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
   }
@@ -255,11 +261,10 @@ export default class Toolbar extends React.Component {
       .editors
       .forEach((value) => {
         if (value.alias.includes(filter)) {
-          console.log(value.alias, ' includes filter (', filter, ')');
           value.visible = true;
         } else {
-          if (value.id === this.props.store.editorPanel.activeEditorId) {
-            this.props.store.editorPanel.activeEditorId = 0;
+          if ((value.alias + ' (' + value.shellId + ')') == this.props.store.editorPanel.activeEditorId) {
+            this.props.store.editorPanel.activeEditorId = 'Default';
           }
           value.visible = false;
         }
