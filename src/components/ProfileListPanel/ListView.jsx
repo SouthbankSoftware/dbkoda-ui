@@ -1,15 +1,14 @@
 /**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-03-15 13:40:45
-* @Email:  mike@southbanksoftware.com
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-03-15 13:40:45
+ * @Email:  mike@southbanksoftware.com
  * @Last modified by:   mike
  * @Last modified time: 2017-03-15 13:40:42
-*/
-
+ */
 /* eslint-disable react/prop-types */
-import {observer, inject} from 'mobx-react';
-import {action, reaction} from 'mobx';
-import {Table, Column, Cell, SelectionModes, Regions} from '@blueprintjs/table';
+import {inject, observer} from 'mobx-react';
+import {action, reaction, runInAction} from 'mobx';
+import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
 
 const React = require('react');
 
@@ -27,7 +26,7 @@ export default class ListView extends React.Component {
       this.props.store.profileList.selectedProfile = null;
       return;
     }
-     const profiles = this
+    const profiles = this
       .props
       .store
       .profiles
@@ -37,12 +36,20 @@ export default class ListView extends React.Component {
   }
 
   render() {
-     const profiles = this
+    const profiles = this
       .props
       .store
       .profiles
       .entries();
-    const renderCell = (rowIndex : number) => <Cell>{profiles[rowIndex][1].alias}</Cell>;
+    profiles.map(p=>console.log('profile status:', p[1].status));
+    const renderCell = (rowIndex: number) => {
+
+      console.log('row index ', profiles[rowIndex]);
+      const currentProfile = profiles[rowIndex][1];
+      console.log('current profile ', currentProfile.status);
+
+      return <Cell>{profiles[rowIndex][1].alias}</Cell>;
+    };
     return (
       <div className="profileList">
         <Table
@@ -55,7 +62,7 @@ export default class ListView extends React.Component {
           defaultColumnWidth={1024}
           onSelection={(region) => this.onSelection(region)}
         >
-          <Column name="Connection Profiles" renderCell={renderCell} />
+          <Column name="Connection Profiles" renderCell={renderCell}/>
         </Table>
       </div>
     );

@@ -1,28 +1,53 @@
 /**
- * profile form classs
+ * profile form class
  */
 import MobxReactForm from 'mobx-react-form';
 import validatorjs from 'validatorjs';
+import _ from 'lodash';
 
 export class ProfileForm extends MobxReactForm {
 
   static mongoProtocol = 'mongodb://';
 
   onInit() {
+    // add dynamic validation on each field
     this.$('hostRadio').observe({
       key: 'value',
       call: ({form, field, change}) => {
-        console.log('field changed ', field);
-        form.$('urlRadio').set('value', change.oldValue);
+        if (change.newValue) {
+          form.$('host').set('rules', 'required|string');
+          form.$('port').set('rules', 'required|numeric');
+        } else {
+          form.$('host').set('rules', '');
+          form.$('port').set('rules', '');
+        }
+        form.validate();
       },
     });
     this.$('urlRadio').observe({
       key: 'value',
       call: ({form, field, change}) => {
-        console.log('field changed ', field);
-        form.$('hostRadio').set('value', change.oldValue);
+        if (change.newValue) {
+          form.$('url').set('rules', 'regex:/^mongodb:\/\//');
+        } else {
+          form.$('url').set('rules', '');
+        }
+        form.validate();
       },
     });
+    this.$('sha').observe({
+      key: 'value',
+      call: ({form, change}) => {
+        if (change.newValue) {
+          form.$('username').set('rules', 'required|string');
+          form.$('password').set('rules', 'required|string');
+        } else {
+          form.$('username').set('rules', '');
+          form.$('password').set('rules', '');
+        }
+        form.validate();
+      }
+    })
   }
 
   onSuccess(form) {
@@ -46,16 +71,29 @@ export class ProfileForm extends MobxReactForm {
     // get all form errors
     console.log('All form errors', form.errors());
     // invalidate the form with a custom error message
-    form.invalidate('This is a generic error message!');
+    let errorMsg = [];
+    const error = form.errors();
+    _.keys(error).forEach(key => {
+      if (error[key]) {
+        errorMsg.push(error[key]);
+      }
+    });
+    form.invalidate('Form has error.');
   }
 
-  // plugins() {
-  //   return {
-  //     dvr: {
-  //       package: validatorjs,
-  //     },
-  //   };
-  // }
+  plugins() {
+    return {
+      dvr: {
+        package: validatorjs,
+        extend: ($validator) => {
+          // here we can access the `validatorjs` instance
+          var messages = $validator.getMessages('en');
+          messages.required = ':attribute field is required.';
+          $validator.setMessages('en', messages);
+        },
+      },
+    };
+  }
 
 }
 
@@ -76,11 +114,13 @@ export const Form = {
     placeholder: 'Hostname',
     type: 'text',
     rules: 'string',
+    label: 'Host',
   }, {
     name: 'port',
     type: 'number',
     rules: 'numeric',
     value: '27017',
+    label: 'Port',
   }, {
     name: 'urlRadio',
     label: 'URL',
@@ -89,6 +129,7 @@ export const Form = {
     name: 'url',
     label: 'URL',
     placeholder: 'mongodb://',
+    rules: 'regex:/^mongodb:\/\//',
     value: 'mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com',
   }, {
     name: 'database',
@@ -135,5 +176,5 @@ export const createFormFromProfile = (profile) => {
  */
 export const createForm = (profile = null) => {
   const formData = profile === null ? Form.fields : createFormFromProfile(profile);
-  return new ProfileForm({fields: formData}, {plugins: {dvr: validatorjs}});
+  return new ProfileForm({fields: formData});
 };

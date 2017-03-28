@@ -12,6 +12,7 @@ import Checkbox from './Checkbox';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
 import Label from './Label';
+import { Colors } from "@blueprintjs/core"
 
 @observer
 export default class Panel extends React.Component {
@@ -35,11 +36,26 @@ export default class Panel extends React.Component {
     this.props.connect(data).then(() => this.setState({testing: false})).catch(()=>this.setState({testing: false}));
   }
 
+  @autobind _getFormErrors(){
+    console.log('All form errors', this.props.form.errors());
+    // invalidate the form with a custom error message
+    let errorMsg = [];
+    const error = this.props.form.errors();
+    _.keys(error).forEach(key => {
+      if (error[key]) {
+        errorMsg.push(error[key]);
+      }
+    });
+    console.log('get error ', errorMsg);
+    return errorMsg;
+  }
 
   render() {
     const {form, title} = this.props;
     form.connect = this._connect;
     form.test = this._test;
+    const formErrors = this._getFormErrors();
+
     return (
       <div className="pt-dark ">
         <h3 className="profile-title">{title}</h3>
@@ -68,7 +84,7 @@ export default class Panel extends React.Component {
                     showLabel={false}
                     disable={!form.$('hostRadio').get('value')}
                   />
-                  <Label text="Port"/>
+                  <Label className="port-label" text="Port"/>
                   <Input
                     field={form.$('port')}
                     showLabel={false}
@@ -109,6 +125,7 @@ export default class Panel extends React.Component {
               className="pt-button pt-intent-success"
               onClick={form.onSubmit}
               text="Connect"
+              disabled={formErrors.length > 0}
               loading={this.state.connecting}
             />
             <AnchorButton
@@ -120,6 +137,7 @@ export default class Panel extends React.Component {
               className="pt-button pt-intent-primary"
               onClick={form.onTest.bind(form)}
               text="Test"
+              disabled={formErrors.length > 0}
               loading={this.state.testing}
             />
             <AnchorButton
@@ -129,6 +147,14 @@ export default class Panel extends React.Component {
             />
           </div>
         </form>
+        <div className="profile-error-input" style={{color: Colors.RED2}}>
+          {
+            formErrors.map((error, i)=>{
+              return <div key={i}><strong>{error}</strong></div>
+            })
+          }
+
+        </div>
       </div>
     );
   }
