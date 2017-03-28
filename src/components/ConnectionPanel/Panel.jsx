@@ -12,7 +12,8 @@ import Checkbox from './Checkbox';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
 import Label from './Label';
-import { Colors } from "@blueprintjs/core"
+import { Colors } from "@blueprintjs/core";
+import _ from 'lodash';
 
 @observer
 export default class Panel extends React.Component {
@@ -37,7 +38,6 @@ export default class Panel extends React.Component {
   }
 
   @autobind _getFormErrors(){
-    console.log('All form errors', this.props.form.errors());
     // invalidate the form with a custom error message
     let errorMsg = [];
     const error = this.props.form.errors();
@@ -46,7 +46,6 @@ export default class Panel extends React.Component {
         errorMsg.push(error[key]);
       }
     });
-    console.log('get error ', errorMsg);
     return errorMsg;
   }
 
