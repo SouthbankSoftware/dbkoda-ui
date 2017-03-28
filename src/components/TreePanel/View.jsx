@@ -3,18 +3,20 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T12:55:49+11:00
+ * @Last modified time: 2017-03-28T16:48:42+11:00
 */
 
 import React from 'react';
 import {inject} from 'mobx-react';
 import { reaction } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
+import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
 
 @inject('treeState')
+@ContextMenuTarget
 export default class TreeView extends React.Component {
   static get defaultProps() {
     return {
@@ -31,11 +33,19 @@ export default class TreeView extends React.Component {
     });
   }
 
-  handleNodeClick = (
-    nodeData: ITreeNode,
-    _nodePath: number[],
-    e: React.MouseEvent<HTMLElement>,
-  ) => {
+  nodeRightClicked;
+
+  handleNodeClick = (nodeData: ITreeNode, _nodePath: number[]) => {
+    if (nodeData.text == '...') {
+      this.props.treeState.resetRootNode();
+    } else {
+      this.props.treeState.selectNode(nodeData);
+    }
+    this.setState({nodes: this.props.treeState.nodes});
+  };
+
+  handleNodeContextMenu = (nodeData: ITreeNode, _nodePath: number[]) => {
+    this.nodeRightClicked = nodeData;
     this.props.treeState.selectNode(nodeData);
     this.setState({nodes: this.props.treeState.nodes});
   };
@@ -49,6 +59,25 @@ export default class TreeView extends React.Component {
     nodeData.isExpanded = true;
     this.setState({nodes: this.props.treeState.nodes});
   };
+  handleMakeRoot = () => {
+    if (this.nodeRightClicked) {
+      this.props.treeState.selectRootNode(this.nodeRightClicked);
+      this.setState({nodes: this.props.treeState.nodes});
+    }
+  };
+
+  renderContextMenu() {
+    return (
+      <Menu>
+        <MenuItem
+          onClick={this.handleMakeRoot}
+          text="Make Root Node"
+          iconName="pt-icon-git-new-branch"
+          intent={Intent.NONE} />
+      </Menu>
+    );
+  }
+
   render() {
     const classNames = `${Classes.ELEVATION_0} ${Classes.DARK}`;
     return (
@@ -58,6 +87,7 @@ export default class TreeView extends React.Component {
           onNodeClick={this.handleNodeClick}
           onNodeCollapse={this.handleNodeCollapse}
           onNodeExpand={this.handleNodeExpand}
+          onNodeContextMenu={this.handleNodeContextMenu}
           className={classNames}
         />
       </div>

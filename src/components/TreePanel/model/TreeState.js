@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T13:41:34+11:00
+ * @Last modified time: 2017-03-28T16:54:03+11:00
 */
 
 import { observable, action } from 'mobx';
@@ -16,9 +16,11 @@ export default class TreeState {
   @observable filter = '';
   treeJson;
   treeRoot;                 // required for make root node functionality
+  resetTreeNode;
   constructor() {
     this.treeNodes = observable([]);
     this.filteredNodes = observable([]);
+    this.resetTreeNode = new TreeNode({text: '...'});
   }
   @action setFilter(value) {
     this.filter = value.toLowerCase();
@@ -26,10 +28,17 @@ export default class TreeState {
   }
   filterNodes() {
     this.filteredNodes.clear();
-    for (const treeNode of this.treeNodes) {
-      treeNode.setFilter(this.filter);
-      if (treeNode.childNodes && treeNode.childNodes.length > 0) {
-        this.filteredNodes.push(treeNode);
+    if (this.treeRoot) {
+      this.filteredNodes.push(this.resetTreeNode);
+      this.treeRoot.setFilter(this.filter);
+      this.treeRoot.isExpanded = true;
+      this.filteredNodes.push(this.treeRoot);
+    } else {
+      for (const treeNode of this.treeNodes) {
+        treeNode.setFilter(this.filter);
+        if (treeNode.childNodes && treeNode.childNodes.length > 0) {
+          this.filteredNodes.push(treeNode);
+        }
       }
     }
   }
@@ -43,11 +52,18 @@ export default class TreeState {
     }
     this.filterNodes();
   }
-
   selectNode(nodeData) {
     const originallySelected = nodeData.isSelected;
     this.forEachNode(this.nodes, (n) => { n.isSelected = false; });
     nodeData.isSelected = originallySelected == null ? true : !originallySelected;
+  }
+  selectRootNode(nodeData) {
+    this.treeRoot = nodeData;
+    this.filterNodes();
+  }
+  resetRootNode() {
+    this.treeRoot = undefined;
+    this.filterNodes();
   }
   get nodes() {
     return this.filteredNodes;

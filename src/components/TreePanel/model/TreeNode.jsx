@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T10:01:23+11:00
+ * @Last modified time: 2017-03-28T15:08:40+11:00
 */
 
 import React from 'react';
@@ -54,7 +54,12 @@ export default class TreeNode implements ITreeNode {
       }
     }
   }
-
+  /**
+   * Traverse a single dependency tree (DFS)
+   *
+   * @param {Object} filter - string value to find in the text label of each node.
+   * @param {Object} parent - reference to the parent node
+   */
   setFilter(filter, parent) {
     this.isFiltered = false;
     this.isExpanded = false;
