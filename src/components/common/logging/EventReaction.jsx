@@ -29,8 +29,11 @@ export default class EventReaction extends React.Component {
     const editorListObserver = observe(store.editors, change => this.observeEditorList(change, typeEnum, fragmentEnum));
     const editorPanelObserver = observe(store.editorPanel, change => this.observeEditorPanel(change, typeEnum, fragmentEnum));
     const profileListObserver = observe(store.profiles, change => this.observeProfileList(change, typeEnum, fragmentEnum));
+    const userPreferencesObserver = observe(store.userPreferences, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
 
-    console.log('Logging framework started...');
+    if (this.props.store.userPreferences.telemtryEnabled) {
+      EventLogging.recordEvent(typeEnum.EVENT.APP.OPEN, fragmentEnum.PROFILES, 'DBEnvy App started.', change);
+    }
   }
 
   observeEditorList(change, typeEnum, fragmentEnum) {
@@ -111,7 +114,32 @@ export default class EventReaction extends React.Component {
       }
     }
   }
+
+  observeUserPreferences(change, typeEnum, fragmentEnum) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      switch (change.type) {
+        case 'update':
+          switch (change.name) {
+            case 'telemetryEnabled':
+              if (change.oldValue) {
+                EventLogging.recordEvent(typeEnum.EVENT.USER_PREFERENCES.TELEMETRY.DISABLED, fragmentEnum.PREFERENCES, 'Telemtry Disabled.', change);
+              } else {
+                EventLogging.recordEvent(typeEnum.EVENT.USER_PREFERENCES.TELEMETRY.ENABLED, fragmentEnum.PREFERENCES, 'Telemtry Enabled.', change);
+              }
+              break;
+            default:
+              EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITOR_PANEL, 'Unknown Update on UserPreferences.', change);
+              break;
+          }
+          break;
+        default:
+          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITOR_PANEL, 'Unknown Change on UserPreferences.', change);
+          break;
+      }
+    }
+  }
+
   render() {
-    return <div/>;
+    return <div />;
   }
 }
