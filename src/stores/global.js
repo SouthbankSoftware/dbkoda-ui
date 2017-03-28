@@ -43,7 +43,7 @@ export default class Store {
   });
 
   @observable layout = {
-    optInVisible: true,
+    optInVisible: false,
     drawerOpen: false,
     overallSplitPos: '30%',
     leftSplitPos: '50%',
