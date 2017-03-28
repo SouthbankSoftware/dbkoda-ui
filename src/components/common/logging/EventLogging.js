@@ -14,6 +14,16 @@ export default {
     return {
       EVENT: {
         EVENT: 'EVENT',
+        APP: {
+          OPEN: 'EVENT_APP_OPEN',
+          CLOSE: 'EVENT_APP_CLOSE'
+        },
+        USER_PREFERENCES:{
+          TELEMETRY:{
+            ENABLED: 'EVENT_USER_PREFERENCES_TELEMTRY_ENABLED',
+            DISABLED: 'EVENT_USER_PREFERENCES_TELEMTRY_DISABLED'
+          }
+        },
         EDITOR_PANEL: {
           NEW_EDITOR: {
             START: 'EVENT_EDITOR_NEW_EDITOR_START',
@@ -47,7 +57,7 @@ export default {
    * @return {Object} An object containing the different UIFragments.
    */
   getFragmentEnum() {
-    return {EDITORS: 'EDITORS', PROFILES: 'PROFILES', EDITOR_PANEL: 'EDITOR_PANEL', OUTPUT: 'OUTPUTS', TREE: 'TREE'};
+    return {EDITORS: 'EDITORS', PROFILES: 'PROFILES', EDITOR_PANEL: 'EDITOR_PANEL', OUTPUT: 'OUTPUTS', TREE: 'TREE', PREFERENCES: 'PREFERENCES'};
   },
 
   /**
