@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-27T16:13:00+11:00
+ * @Last modified time: 2017-03-28T13:41:34+11:00
 */
 
 import { observable, action } from 'mobx';
@@ -51,10 +51,6 @@ export default class TreeState {
   }
   get nodes() {
     return this.filteredNodes;
-  }
-
-  set nodes(value) {
-    this.filteredNodes = value;
   }
 
   forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {

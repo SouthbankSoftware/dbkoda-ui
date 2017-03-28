@@ -3,12 +3,12 @@
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-27T17:59:42+11:00
+ * @Last modified time: 2017-03-28T12:32:56+11:00
 */
 
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import {  computed } from 'mobx';
+import { computed } from 'mobx';
 import { DragSource } from 'react-dnd';
 import { DragItemTypes } from '#/common/Constants.js';
 

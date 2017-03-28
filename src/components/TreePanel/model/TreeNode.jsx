@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-27T18:00:53+11:00
+ * @Last modified time: 2017-03-28T10:01:23+11:00
 */
 
 import React from 'react';
@@ -31,7 +31,6 @@ export default class TreeNode implements ITreeNode {
    * Traverse a single dependency tree (DFS)
    *
    * @param {Object} treeJSON - JSON object from controller having text
-   * @param {string} filter - any string set by the user in searchbar for highlighting purpose
    * @param {Object} parent - reference to the parent node
    */
   constructor(treeJSON, parent) {

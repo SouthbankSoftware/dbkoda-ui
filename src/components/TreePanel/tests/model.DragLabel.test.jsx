@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T17:09:32+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-24T12:30:47+11:00
+ * @Last modified time: 2017-03-28T12:51:54+11:00
  */
 
 import React from 'react';
@@ -19,20 +19,25 @@ describe('DragLabel', () => {
   const props = {
     id: 'root_shards_s0_ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37017',
     label: 'ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37017',
-    type: 'shard',
-    filter: '',
+    type: 'shard'
   };
   const props1 = {
     id: 'root_databases_DBEnvyLoad',
     label: 'DBEnvyLoad',
-    type: 'database',
-    filter: ''
+    type: 'database'
+  };
+
+  const treeState = {
+    filter: '',
+    setFilter: (value) => {
+      treeState.filter = value;
+    }
   };
 
   class DragLabelTest extends React.Component {
     render() {
       return (
-        <DragLabel id={this.props.id} label={this.props.label} type={this.props.type} filter={this.props.filter} />
+        <DragLabel id={this.props.id} label={this.props.label} type={this.props.type} treeState={this.props.treeState} />
       );
     }
   }
@@ -45,33 +50,33 @@ describe('DragLabel', () => {
 
   test('check label text', () => {
     const label = mount(
-      <DDCDragLabel id={props.id} label={props.label} type={props.type} filter={props.filter} />,
+      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />,
     );
     expect(label.find('span').text()).toEqual('ec2-13-54-17-227:37017');
   });
 
   test('matches snapshot', () => {
     const testLabel = renderer.create(
-      <DDCDragLabel id={props.id} label={props.label} type={props.type} filter={props.filter} />,
+      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />,
     );
 
     expect(testLabel).toMatchSnapshot();
   });
 
   test('check label text with filter', () => {
-    props.filter = 'south';
+    treeState.setFilter('south');
     const label = mount(
-      <DDCDragLabel id={props.id} label={props.label} type={props.type} filter={props.filter} />,
+      <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />,
     );
 
     expect(label.find('mark').text()).toEqual(
-      props.filter,
+      treeState.filter,
     );
   });
 
   test('check label text with filter', () => {
     const label1 = mount(
-      <DDCDragLabel id={props1.id} label={props1.label} type={props1.type} filter={props1.filter} />,
+      <DDCDragLabel id={props1.id} label={props1.label} type={props1.type} treeState={treeState} />,
     );
 
     expect(label1.find('span').text()).toEqual(props1.label);

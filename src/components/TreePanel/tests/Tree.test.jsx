@@ -3,38 +3,40 @@
  * @Date:   2017-03-24T16:13:16+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-27T12:34:20+11:00
+ * @Last modified time: 2017-03-28T13:39:54+11:00
  */
 
 import React from 'react';
 import { mount } from 'enzyme';
 import { useStrict } from 'mobx';
+import { Provider } from 'mobx-react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import Store from '~/stores/global';
+import TempTopology from '~/stores/TempTopology.js';
 import TreeState from '#/TreePanel/model/TreeState';
 import { TreeView, TreeToolbar } from '../index.js';
 
 describe('Tree View and Toolbar', () => {
-  const store = new Store();
-  const treeState = new TreeState();
-
   class TreeViewTest extends React.Component {
     render() {
       return (
-        <div>
-          <TreeToolbar treeState={this.props.treeState} />
-          <TreeView treeState={this.props.treeState} />
-        </div>
+        <Provider treeState={this.props.treeState}>
+          <div>
+            <TreeToolbar />
+            <TreeView />
+          </div>
+        </Provider>
       );
     }
   }
 
   const DDCTreeView = DragDropContext(HTML5Backend)(TreeViewTest);
+  const topology = JSON.parse(TempTopology.data);
+  const treeState = new TreeState();
+  treeState.parseJson(topology);
 
   beforeAll(() => {
     useStrict(true);
-    treeState.parseJson(store.topology);
   });
 
   test('set a filter in toolbar', () => {

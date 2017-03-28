@@ -3,7 +3,7 @@
  * @Date:   2017-03-21T15:38:33+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-22T16:10:57+11:00
+ * @Last modified time: 2017-03-28T12:42:27+11:00
  */
 
 // import React from 'react';
@@ -54,19 +54,20 @@ describe('TreeNode', () => {
     ],
   };
 
-  const treeNode = new TreeNode(treeJson, '');
+  const treeNode = new TreeNode(treeJson);
 
   test('should have a label', () => {
     expect(treeNode.text).toEqual('Databases');
   });
   test('should have childNodes', () => {
-    expect(treeNode.childNodes.length).toEqual(2);
+    expect(treeNode.allChildNodes.length).toEqual(2);
   });
   test('should return a type', () => {
     expect(TreeNode.getNodeType(treeJson)).toEqual('databases');
   });
 
-  const treeNode1 = new TreeNode(treeJson, 'dbenvy');
+  const treeNode1 = new TreeNode(treeJson);
+  treeNode1.setFilter('dbenvy');
   test('should have children with "dbenvy" text filter', () => {
     expect(treeNode1.childNodes.length).toEqual(1);
 
@@ -74,7 +75,8 @@ describe('TreeNode', () => {
     expect(child.text.toLowerCase().indexOf('dbenvy') >= 0).toEqual(true);
   });
 
-  const treeNode2 = new TreeNode(treeJson, 'orders');
+  const treeNode2 = new TreeNode(treeJson);
+  treeNode2.setFilter('orders');
   test('should have child node because of grand child is selected in filter', () => {
     expect(treeNode2.childNodes.length).toEqual(1);
   });

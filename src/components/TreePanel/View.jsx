@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-27T17:35:10+11:00
+ * @Last modified time: 2017-03-28T12:55:49+11:00
 */
 
 import React from 'react';
@@ -26,9 +26,9 @@ export default class TreeView extends React.Component {
 
     this.state = {nodes: this.props.treeState.nodes};
 
-    reaction( () => this.props.treeState.filter, treeNodesChanged => {
+    reaction(() => this.props.treeState.filter, () => {
       this.setState({nodes: this.props.treeState.nodes});
-    })
+    });
   }
 
   handleNodeClick = (
