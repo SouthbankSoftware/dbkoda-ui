@@ -45,6 +45,7 @@ export default {
       message: eventMessage,
       timestamp: dateTime
     };
+    // Placeholder until file API is complete.
     console.log(data);
   }
 };
