@@ -255,11 +255,10 @@ export default class Toolbar extends React.Component {
       .editors
       .forEach((value) => {
         if (value.alias.includes(filter)) {
-          console.log(value.alias, ' includes filter (', filter, ')');
           value.visible = true;
         } else {
-          if (value.id === this.props.store.editorPanel.activeEditorId) {
-            this.props.store.editorPanel.activeEditorId = 0;
+          if ((value.alias + ' (' + value.shellId + ')') == this.props.store.editorPanel.activeEditorId) {
+            this.props.store.editorPanel.activeEditorId = 'Default';
           }
           value.visible = false;
         }
