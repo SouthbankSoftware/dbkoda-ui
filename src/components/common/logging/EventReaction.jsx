@@ -3,9 +3,12 @@
 
 import {observer, inject} from 'mobx-react';
 import {observe, action, reaction} from 'mobx';
+import EventLogging from './EventLogging.js';
 
 const React = require('react');
 const _ = require('lodash');
+
+const instance = false;
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  */
@@ -15,43 +18,8 @@ export default class EventReaction extends React.Component {
   constructor(props) {
     super(props);
 
-    const typeEnum = {
-      EVENT: {
-        EVENT: 'EVENT',
-        EDITOR_PANEL: {
-          NEW_EDITOR: {
-            START: 'EVENT_EDITOR_NEW_EDITOR_START',
-            FINISH: 'EVENT_EDITOR_NEW_EDITOR_FINISH'
-          },
-          CLOSE_EDITOR: 'EVENT_EDITOR_CLOSE_EDITOR',
-          CHANGE_DROPDOWN: 'EVENT_EDITOR_CHANGE_DROPDOWN',
-          CHANGE_ACTIVE_EDITOR: 'EVENT_EDITOR_CHANGE_ACTIVE',
-          TOOLBAR: {
-            EXECUTE_ALL: {
-              START: 'EVENT_EDITOR_TOOLBAR_EXECUTE_ALL_START',
-              FINISH: 'EVENT_EDITOR_TOOLBAR_EXECUTE_ALL_FINISH'
-            },
-            EXECUTE_LINE: {
-              START: 'EVENT_EDITOR_TOOLBAR_EXECUTE_LINE_START',
-              FINISH: 'EVENT_EDITOR_TOOLBAR_EXECUTE_LINE_FINISH'
-            },
-            CHANGE_FILTER: 'EVENT_EDITOR_TOOLBAR_CHANGE_FILTER'
-          }
-        }
-      },
-      INFO: 'INFO',
-      ERROR: 'ERROR',
-      CRASH: 'CRASH'
-    };
-
-    const fragmentEnum = {
-      EDITORS: 'EDITORS',
-      PROFILES: 'PROFILES',
-      EDITOR_PANEL: 'EDITOR_PANEL',
-      OUTPUT: 'OUTPUTS',
-      TREE: 'TREE'
-    };
-
+    const typeEnum = EventLogging.getTypeEnum();
+    const fragmentEnum = EventLogging.getFragmentEnum();
     const store = this.props.store;
     const editorListObserver = observe(store.editors, change => this.observeEditorList(change, typeEnum, fragmentEnum));
     const editorPanelObserver = observe(store.editorPanel, change => this.observeEditorPanel(change, typeEnum, fragmentEnum));
@@ -93,16 +61,16 @@ export default class EventReaction extends React.Component {
             break;
           case 'executingEditorAll':
             if (change.oldValue == 'false') {
-              this.recordEvent(typeEnum.EVENT.EDITOR_PANEL.EXECUTE_ALL.START, fragmentEnum.EDITOR_PANEL, 'Execute All event Started.', change);
+              this.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_ALL.START, fragmentEnum.EDITOR_PANEL, 'Execute All event Started.', change);
             } else {
-              this.recordEvent(typeEnum.EVENT.EDITOR_PANEL.EXECUTE_ALL.FINISH, fragmentEnum.EDITOR_PANEL, 'Execute All event finished.', change);
+              this.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_ALL.FINISH, fragmentEnum.EDITOR_PANEL, 'Execute All event finished.', change);
             }
             break;
           case 'executingEditorLines':
-             if (change.oldValue == 'false') {
-              this.recordEvent(typeEnum.EVENT.EDITOR_PANEL.EXECUTE_LINE.START, fragmentEnum.EDITOR_PANEL, 'Execute Line event Started.', change);
+            if (change.oldValue == 'false') {
+              this.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_LINE.START, fragmentEnum.EDITOR_PANEL, 'Execute Line event Started.', change);
             } else {
-              this.recordEvent(typeEnum.EVENT.EDITOR_PANEL.EXECUTE_LINE.FINISH, fragmentEnum.EDITOR_PANEL, 'Execute Line event finished.', change);
+              this.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_LINE.FINISH, fragmentEnum.EDITOR_PANEL, 'Execute Line event finished.', change);
             }
             break;
           case 'tabFilter':
@@ -148,6 +116,6 @@ export default class EventReaction extends React.Component {
   }
 
   render() {
-    return <div/>;
+    return <div />;
   }
 }
