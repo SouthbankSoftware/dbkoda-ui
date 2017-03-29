@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T16:54:03+11:00
+ * @Last modified time: 2017-03-29T10:54:48+11:00
 */
 
 import { observable, action } from 'mobx';
@@ -15,12 +15,12 @@ export default class TreeState {
   @observable filteredNodes;
   @observable filter = '';
   treeJson;
-  treeRoot;                 // required for make root node functionality
+  treeRoot; // required for make root node functionality
   resetTreeNode;
   constructor() {
     this.treeNodes = observable([]);
     this.filteredNodes = observable([]);
-    this.resetTreeNode = new TreeNode({text: '...'});
+    this.resetTreeNode = new TreeNode({ text: '...' });
   }
   @action setFilter(value) {
     this.filter = value.toLowerCase();
@@ -42,6 +42,10 @@ export default class TreeState {
       }
     }
   }
+  /**
+   * function to parse json document from the controller
+   * @param  {json} treeJson [description]
+   */
   parseJson(treeJson) {
     this.treeJson = treeJson;
     for (const node of this.treeJson) {
@@ -52,9 +56,15 @@ export default class TreeState {
     }
     this.filterNodes();
   }
+  /**
+   * function to select a specific node in a tree
+   * @param  {TreeNode} nodeData treeNode which has been clicked by the userPreferences
+   */
   selectNode(nodeData) {
     const originallySelected = nodeData.isSelected;
-    this.forEachNode(this.nodes, (n) => { n.isSelected = false; });
+    this.forEachNode(this.nodes, (n) => {
+      n.isSelected = false;
+    });
     nodeData.isSelected = originallySelected == null ? true : !originallySelected;
   }
   selectRootNode(nodeData) {
