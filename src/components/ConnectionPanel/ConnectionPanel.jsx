@@ -5,6 +5,7 @@ import React from 'react';
 import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {Intent, Position} from '@blueprintjs/core';
+import EventLogging from '#/common/logging/EventLogging';
 import {createForm, createFromFromProfile, ProfileForm} from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
@@ -45,6 +46,7 @@ const ConnectionPanel = ({profiles, profileList, layout},) => {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
     }
+    profileList.creatingNewProfile = true;
     return featherClient()
       .service('/mongo-connection')
       .create({}, {
