@@ -18,10 +18,16 @@ export default {
           OPEN: 'EVENT_APP_OPEN',
           CLOSE: 'EVENT_APP_CLOSE'
         },
-        USER_PREFERENCES:{
-          TELEMETRY:{
+        USER_PREFERENCES: {
+          TELEMETRY: {
             ENABLED: 'EVENT_USER_PREFERENCES_TELEMTRY_ENABLED',
             DISABLED: 'EVENT_USER_PREFERENCES_TELEMTRY_DISABLED'
+          }
+        },
+        CONNECTION_PANEL: {
+          NEW_PROFILE: {
+            START: 'EVENT_CONNECTIONS_NEW_PROFILE_START',
+            FINISH: 'EVENT_CONNECTIONS_NEW_PROFILE_FINISH',
           }
         },
         EDITOR_PANEL: {
@@ -32,6 +38,7 @@ export default {
           CLOSE_EDITOR: 'EVENT_EDITOR_CLOSE_EDITOR',
           CHANGE_DROPDOWN: 'EVENT_EDITOR_CHANGE_DROPDOWN',
           CHANGE_ACTIVE_EDITOR: 'EVENT_EDITOR_CHANGE_ACTIVE',
+          CHANGE_FILTER: 'EVENT_EDITOR_CHANGE_FILTER',
           TOOLBAR: {
             EXECUTE_ALL: {
               START: 'EVENT_EDITOR_TOOLBAR_EXECUTE_ALL_START',
@@ -57,7 +64,14 @@ export default {
    * @return {Object} An object containing the different UIFragments.
    */
   getFragmentEnum() {
-    return {EDITORS: 'EDITORS', PROFILES: 'PROFILES', EDITOR_PANEL: 'EDITOR_PANEL', OUTPUT: 'OUTPUTS', TREE: 'TREE', PREFERENCES: 'PREFERENCES'};
+    return {
+      EDITORS: 'EDITORS',
+      PROFILES: 'PROFILES',
+      EDITOR_PANEL: 'EDITOR_PANEL',
+      OUTPUT: 'OUTPUTS',
+      TREE: 'TREE',
+      PREFERENCES: 'PREFERENCES'
+    };
   },
 
   /**
@@ -68,7 +82,13 @@ export default {
    */
   recordManualEvent(eventType, eventFragment, eventMessage) {
     const currentDate = new Date();
-    const dateTime = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear() + ' @ ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
+    let offset = (currentDate.getTimezoneOffset() / 60);
+    if (offset > 0) {
+      offset = 'UTC -' + Math.abs(offset);
+    } else {
+      offset = 'UTC +' + Math.abs(offset);
+    }
+    const dateTime = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear() + ' @ ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds() + ':' + currentDate.getMilliseconds() + ' ' + offset;
     const data = {
       type: eventType,
       fragment: eventFragment,
@@ -88,7 +108,13 @@ export default {
    */
   recordEvent(eventType, eventFragment, eventMessage, eventChange) {
     const currentDate = new Date();
-    const dateTime = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear() + ' @ ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
+    let offset = (currentDate.getTimezoneOffset() / 60);
+    if (offset > 0) {
+      offset = 'UTC-' + Math.abs(offset);
+    } else {
+      offset = 'UTC+' + Math.abs(offset);
+    }
+    const dateTime = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear() + ' @ ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds() + ':' + currentDate.getMilliseconds() + ' ' + offset;
     const data = {
       type: eventType,
       fragment: eventFragment,
@@ -98,6 +124,40 @@ export default {
     };
     // Placeholder until file API is complete.
     console.log(data);
+  },
+
+  createTimedEvent(eventType, eventFragment, eventMessage, eventChange) {
+    const currentDate = new Date();
+    let offset = (currentDate.getTimezoneOffset() / 60);
+    if (offset > 0) {
+      offset = 'UTC-' + Math.abs(offset);
+    } else {
+      offset = 'UTC+' + Math.abs(offset);
+    }
+    const dateTime = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear() + ' @ ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds() + ':' + currentDate.getMilliseconds() + ' ' + offset;
+    const data = {
+      type: eventType,
+      fragment: eventFragment,
+      message: eventMessage,
+      change: eventChange,
+      startTimestamp: dateTime,
+      endTimestamp: null
+    };
+    // Placeholder until file API is complete.
+    return data;
+  },
+
+  recordTimedEvent(event) {
+    const currentDate = new Date();
+    let offset = (currentDate.getTimezoneOffset() / 60);
+    if (offset > 0) {
+      offset = 'UTC-' + Math.abs(offset);
+    } else {
+      offset = 'UTC+' + Math.abs(offset);
+    }
+    const dateTime = currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getFullYear() + ' @ ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds() + ':' + currentDate.getMilliseconds() + ' ' + offset;
+    event.endTimestamp = dateTime;
+    // Placeholder until file API is complete.
+    console.log(event);
   }
 };
-

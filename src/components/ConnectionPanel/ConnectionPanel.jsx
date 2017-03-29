@@ -5,6 +5,7 @@ import React from 'react';
 import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {Intent, Position} from '@blueprintjs/core';
+import EventLogging from '#/common/logging/EventLogging';
 import {createForm, createFromFromProfile, ProfileForm} from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';

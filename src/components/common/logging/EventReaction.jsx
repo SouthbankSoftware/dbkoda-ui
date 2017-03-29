@@ -28,7 +28,7 @@ export default class EventReaction extends React.Component {
     const store = this.props.store;
     const editorListObserver = observe(store.editors, change => this.observeEditorList(change, typeEnum, fragmentEnum));
     const editorPanelObserver = observe(store.editorPanel, change => this.observeEditorPanel(change, typeEnum, fragmentEnum));
-    const profileListObserver = observe(store.profiles, change => this.observeProfileList(change, typeEnum, fragmentEnum));
+    const profilePanelObserver = observe(store.profile, change => this.observeProfilePanel(change, typeEnum, fragmentEnum));
     const userPreferencesObserver = observe(store.userPreferences, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
 
     if (this.props.store.userPreferences.telemtryEnabled) {
@@ -36,23 +36,8 @@ export default class EventReaction extends React.Component {
     }
   }
 
-  observeEditorList(change, typeEnum, fragmentEnum) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
-      switch (change.type) {
-        case 'add':
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Editor added to Editors Map.', change);
-          break;
-        case 'remove':
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Editor removed from Editors Map.', change);
-          break;
-        default:
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Unknown Change on Editors Map.', change);
-          break;
-      }
-    }
-  }
-
   observeEditorPanel(change, typeEnum, fragmentEnum) {
+    console.log('test');
     if (this.props.store.userPreferences.telemetryEnabled) {
       switch (change.type) {
         case 'update':
@@ -71,14 +56,14 @@ export default class EventReaction extends React.Component {
               EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.CHANGE_DROPDOWN, fragmentEnum.EDITOR_PANEL, 'Swapped Dropdown Selection.', change);
               break;
             case 'executingEditorAll':
-              if (change.oldValue == 'false') {
+              if (!change.oldValue) {
                 EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_ALL.START, fragmentEnum.EDITOR_PANEL, 'Execute All event Started.', change);
               } else {
                 EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_ALL.FINISH, fragmentEnum.EDITOR_PANEL, 'Execute All event finished.', change);
               }
               break;
             case 'executingEditorLines':
-              if (change.oldValue == 'false') {
+              if (!change.oldValue) {
                 EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_LINE.START, fragmentEnum.EDITOR_PANEL, 'Execute Line event Started.', change);
               } else {
                 EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.TOOLBAR.EXECUTE_LINE.FINISH, fragmentEnum.EDITOR_PANEL, 'Execute Line event finished.', change);
@@ -100,7 +85,7 @@ export default class EventReaction extends React.Component {
   }
 
   observeProfileList(change, typeEnum, fragmentEnum) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.store.userPreferences.telemetryEnabled && this.props.store.userPreferences.observeMobX) {
       switch (change.type) {
         case 'add':
           EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Profile added to Profiles Map', change);
@@ -110,6 +95,22 @@ export default class EventReaction extends React.Component {
           break;
         default:
           EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Unknown Change on Profiles Map.', change);
+          break;
+      }
+    }
+  }
+
+  observeEditorList(change, typeEnum, fragmentEnum) {
+    if (this.props.store.userPreferences.telemetryEnabled && this.props.store.userPreferences.observeMobX) {
+      switch (change.type) {
+        case 'add':
+          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Editor added to Editors Map.', change);
+          break;
+        case 'remove':
+          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Editor removed from Editors Map.', change);
+          break;
+        default:
+          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Unknown Change on Editors Map.', change);
           break;
       }
     }
