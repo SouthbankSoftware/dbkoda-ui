@@ -41,7 +41,7 @@ export default class EventReaction extends React.Component {
         case 'update':
           switch (change.name) {
             case 'creatingNewEditor':
-              if (change.oldValue == 'false') {
+              if (!change.oldValue) {
                 EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.NEW_EDITOR.START, fragmentEnum.EDITOR_PANEL, 'Create new Editor event Started.', change);
               } else {
                 EventLogging.recordEvent(typeEnum.EVENT.EDITOR_PANEL.NEW_EDITOR.FINISH, fragmentEnum.EDITOR_PANEL, 'Create new Editor event Finished.', change);

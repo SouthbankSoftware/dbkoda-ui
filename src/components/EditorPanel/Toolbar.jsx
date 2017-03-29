@@ -94,6 +94,7 @@ export default class Toolbar extends React.Component {
    */
   @action addEditor() {
     try {
+      this.props.store.editorPanel.creatingNewEditor = true;
       this.setNewEditorLoading(true);
       const profileTitle = this.props.store.editorPanel.activeDropdownId;
       let profileId = 'UNKNOWN';
@@ -108,9 +109,10 @@ export default class Toolbar extends React.Component {
         });
       if (profileId == 'UNKNOWN') {
         if (this.props.store.userPreferences.telemetryEnabled) {
-            EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
+            EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
         }
         NewToaster.show({message: 'Cannot create new Editor for Default Tab.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+        this.onFail();
         this.setNewEditorLoading(false);
         return null;
       }
@@ -123,19 +125,19 @@ export default class Toolbar extends React.Component {
           this.setNewEditorState(res);
         })
         .catch((err) => {
-          console.log(err);
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, err.message);
           }
+          this.onFail();
           NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           this.setNewEditorLoading(false);
         });
     } catch (err) {
-      console.log(err);
       if (this.props.store.userPreferences.telemetryEnabled) {
-        EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
+        EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, err.message);
       }
-      NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      this.onFail();
     }
   }
 
@@ -169,6 +171,7 @@ export default class Toolbar extends React.Component {
         shellId: res.shellId,
         visible: true
       });
+    this.props.store.editorPanel.creatingNewEditor = false;
     this.props.store.editorToolbar.noActiveProfile = false;
     this.props.store.editorToolbar.id = res.id;
     this.props.store.editorToolbar.shellId = res.shellId;
@@ -179,6 +182,11 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.noActiveProfile = false;
     NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.setNewEditorLoading(false);
+  }
+
+  @action
+  onFail() {
+     this.props.store.editorPanel.creatingNewEditor = false;
   }
 
   /**
@@ -255,6 +263,8 @@ export default class Toolbar extends React.Component {
       .target
       .value
       .replace(/ /g, '');
+      this.props.store.editorPanel.tabFilter = filter;
+      console.log(this.props.store.editors);
     this
       .props
       .store

@@ -13,8 +13,13 @@ import {DBenvyToaster} from '../common/Toaster';
 import {Broker, EventType} from '../../helpers/broker';
 import {ProfileStatus} from '.././common/Constants';
 
-const ConnectionPanel = ({profiles, profileList, layout},) => {
-  let selectedProfile = profileList.selectedProfile;
+const ConnectionPanel = ({
+  profiles,
+  profileList,
+  layout,
+  userPreferences
+}, ) => {
+  const selectedProfile = profileList.selectedProfile;
   let edit = false;
   if (profileList.selectedProfile) {
     edit = true;
@@ -42,25 +47,20 @@ const ConnectionPanel = ({profiles, profileList, layout},) => {
     query.ssl = data.ssl;
     query.test = data.test;
     query.authorization = data.authorization;
-    if(selectedProfile){
+    if (selectedProfile) {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
     }
     profileList.creatingNewProfile = true;
     return featherClient()
       .service('/mongo-connection')
-      .create({}, {
-        query,
-      })
+      .create({}, {query})
       .then((res) => {
         onSuccess(res, data);
       })
       .catch((err) => {
-        DBenvyToaster(Position.LEFT_BOTTOM).show({
-          message: err.message,
-          intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down',
-        });
+        onFail();
+        DBenvyToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       });
   });
 
@@ -74,11 +74,7 @@ const ConnectionPanel = ({profiles, profileList, layout},) => {
     let validate = true;
     profiles.forEach((value, key) => {
       if (value.alias === data.alias) {
-        DBenvyToaster(Position.LEFT_BOTTOM).show({
-          message: 'Alias already existed.',
-          intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down',
-        });
+        DBenvyToaster(Position.LEFT_BOTTOM).show({message: 'Alias already existed.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
         validate = false;
       }
     });
@@ -116,30 +112,34 @@ const ConnectionPanel = ({profiles, profileList, layout},) => {
         url: data.url,
         urlRadio: data.urlRadio,
         username: data.username,
-        sha: data.sha,
+        sha: data.sha
       });
       close();
       Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
     } else {
       message = 'Test ' + message;
     }
-    DBenvyToaster(position).show({
-      message,
-      intent: Intent.SUCCESS,
-      iconName: 'pt-icon-thumbs-up',
-    });
+    DBenvyToaster(position).show({message, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+  });
+
+  const onFail = action(() => {
+    if (userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.FAILED, EventLogging.getFragmentEnum().PROFILES, 'Attempt to create a new profile failed.');
+    }
+    profileList.creatingNewProfile = false;
   });
 
   const close = action(() => {
     layout.drawerOpen = false;
   });
 
-  return <Panel form={form} close={close} connect={connect}
-                title={edit ? 'Edit Connection' : 'Create New Connection'}/>;
+  return (<Panel
+    form={form}
+    close={close}
+    connect={connect}
+    title={edit
+    ? 'Edit Connection'
+    : 'Create New Connection'}/>);
 };
 
-export default inject(allStores => ({
-  profiles: allStores.store.profiles,
-  profileList: allStores.store.profileList,
-  layout: allStores.store.layout,
-}))(observer(ConnectionPanel));
+export default inject(allStores => ({profiles: allStores.store.profiles, profileList: allStores.store.profileList, layout: allStores.store.layout, userPreferences: allStores.store.userPreferences}))(observer(ConnectionPanel));
