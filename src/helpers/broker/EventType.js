@@ -13,9 +13,16 @@ export default {
   /**
    * when a connection got closed
    */
-  PROFILE_CLOSED: 'controller::connection-closed',
+  PROFILE_CLOSED: 'controller::connection::closed',
   /**
    * when a connection is removed
    */
-  PROFILE_REMOVED: 'controller::connection-removed',
+  PROFILE_REMOVED: 'controller::connection::removed',
+  /**
+   * shell command execution finished.
+   */
+  COMMAND_EXECUTION_FINISHED: 'controller::command::execute::finished',
+  createShellExecutionFinishEvent: (id, shellId) => {
+    return 'controller::command::execute::finished::' + id + '::' + shellId;
+  }
 };
