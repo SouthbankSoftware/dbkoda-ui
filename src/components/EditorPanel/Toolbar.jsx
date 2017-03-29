@@ -109,7 +109,7 @@ export default class Toolbar extends React.Component {
         });
       if (profileId == 'UNKNOWN') {
         if (this.props.store.userPreferences.telemetryEnabled) {
-            EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
+          EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
         }
         NewToaster.show({message: 'Cannot create new Editor for Default Tab.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
         this.onFail();
@@ -186,14 +186,16 @@ export default class Toolbar extends React.Component {
 
   @action
   onFail() {
-     this.props.store.editorPanel.creatingNewEditor = false;
+    this.props.store.editorPanel.creatingNewEditor = false;
   }
 
   /**
    * NOT YET IMPLEMENTED: Open a File from Localhost.
    */
   openFile() { // eslint-disable-line class-methods-use-this
-    EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented openFile');
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented openFile');
+    }
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
@@ -201,7 +203,9 @@ export default class Toolbar extends React.Component {
    * NOT YET IMPLEMENTED: Save a File to Localhost.
    */
   saveFile() { // eslint-disable-line class-methods-use-this
-    EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented saveFile');
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented saveFile');
+    }
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
   }
 
@@ -224,7 +228,9 @@ export default class Toolbar extends React.Component {
    * codemirror instance.
    */
   explainPlan() { // eslint-disable-line class-methods-use-this
-    EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented explainPlan');
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented explainPlan');
+    }
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
   }
 
@@ -232,7 +238,9 @@ export default class Toolbar extends React.Component {
    * NOT YET IMPLEMENTED: Stop the current execution on this connection.
    */
   stopExecution() { // eslint-disable-line class-methods-use-this
-    EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented stopExecution');
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented stopExecution');
+    }
     NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
   }
 
@@ -263,8 +271,8 @@ export default class Toolbar extends React.Component {
       .target
       .value
       .replace(/ /g, '');
-      this.props.store.editorPanel.tabFilter = filter;
-      console.log(this.props.store.editors);
+    this.props.store.editorPanel.tabFilter = filter;
+    console.log(this.props.store.editors);
     this
       .props
       .store

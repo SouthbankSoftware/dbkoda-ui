@@ -28,6 +28,7 @@ export default class EventReaction extends React.Component {
     const store = this.props.store;
     const editorPanelObserver = observe(store.editorPanel, change => this.observeEditorPanel(change, typeEnum, fragmentEnum));
     const profilePanelObserver = observe(store.profileList, change => this.observeProfilePanel(change, typeEnum, fragmentEnum));
+    const profileOutputObserver = observe(store.outputPanel, change => this.observeOutputPanel(change, typeEnum, fragmentEnum));
     const userPreferencesObserver = observe(store.userPreferences, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
 
     if (this.props.store.userPreferences.telemtryEnabled) {
@@ -104,6 +105,37 @@ export default class EventReaction extends React.Component {
           break;
         default:
           EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Unknown Change on ProfilePanel.', change);
+          break;
+      }
+    }
+  }
+
+  observeOutputPanel(change, typeEnum, fragmentEnum) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      switch (change.type) {
+        case 'update':
+          switch (change.name) {
+            case 'executingShowMore':
+              if (!change.oldValue) {
+                EventLogging.recordEvent(typeEnum.EVENT.OUTPUT_PANEL.SHOW_MORE.START, fragmentEnum.PROFILES, 'Show More Event Started.', change);
+              } else {
+                EventLogging.recordEvent(typeEnum.EVENT.OUTPUT_PANEL.SHOW_MORE.FINISH, fragmentEnum.PROFILES, 'Show More Event Finished.', change);
+              }
+              break;
+            case 'executingTerminalCmd':
+              if (!change.oldValue) {
+                EventLogging.recordEvent(typeEnum.EVENT.OUTPUT_PANEL.EXECUTE_TERMINAL.START, fragmentEnum.PROFILES, 'Execute Terminal Event Started', change);
+              } else {
+                EventLogging.recordEvent(typeEnum.EVENT.OUTPUT_PANEL.EXECUTE_TERMINAL.FINISH, fragmentEnum.PROFILES, 'Execute Terminal Event Finished', change);
+              }
+              break;
+            default:
+              EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.OUTPUT, 'Unknown Update on OutputPanel.', change);
+              break;
+          }
+          break;
+        default:
+          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.OUTPUT, 'Unknown Change on OutputPanel.', change);
           break;
       }
     }

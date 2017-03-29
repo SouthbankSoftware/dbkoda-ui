@@ -11,6 +11,7 @@ import {inject, observer} from 'mobx-react';
 import {action, reaction} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
 import {NewToaster} from '../common/Toaster';
+import EventLogging from '#/common/logging/EventLogging';
 import {HotkeysTarget, Hotkeys, Hotkey, Intent, Tooltip, AnchorButton, Position} from '@blueprintjs/core';
 
 
@@ -55,6 +56,9 @@ export default class Toolbar extends React.Component {
   @action.bound
   clearOutput() {
     this.props.store.outputs.get(this.props.title).output = '';
+     if (this.props.store.userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
+    }
   }
 
   /**
@@ -69,6 +73,9 @@ export default class Toolbar extends React.Component {
    * Downloads the current contents of the Output Editor to a file
    */
   downloadOutput() {
+     if (this.props.store.userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.SAVE_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User saved Output');
+    }
     var data   = new Blob([this.props.store.outputs.get(this.props.title).output], {type: 'text/csv'}),
     csvURL = window.URL.createObjectURL(data),
     tempLink = document.createElement('a');
