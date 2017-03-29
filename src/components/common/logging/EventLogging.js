@@ -102,6 +102,7 @@ export default {
       type: eventType,
       fragment: eventFragment,
       message: eventMessage,
+      change: null,
       timestamp: dateTime
     };
     // Placeholder until file API is complete.
