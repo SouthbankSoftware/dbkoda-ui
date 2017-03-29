@@ -36,6 +36,7 @@ export default class Editor extends React.Component {
     super(props);
     this.props.store.outputs.set(this.props.title, {
       id: this.props.id,
+      shellId: this.props.shellId,
       title: this.props.title,
       output: '',
       cannotShowMore: true,
@@ -87,6 +88,7 @@ export default class Editor extends React.Component {
 
   render() {
     const outputOptions = {
+      lineWrapping: true,
       mode: 'mongoscript',
       matchBrackets: true,
       json: true,

@@ -38,7 +38,7 @@ export default class Toolbar extends React.Component {
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
           service.update(this.props.store.outputs.get(this.props.title).id, {
-            shellId: this.props.shellId, // eslint-disable-line
+            shellId: this.props.store.outputs.get(this.props.title).shellId, // eslint-disable-line
             commands: command
           });
           this.props.store.outputs.get(this.props.title).cannotShowMore = true;
