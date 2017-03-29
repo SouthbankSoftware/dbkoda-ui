@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T16:54:03+11:00
+ * @Last modified time: 2017-03-29T16:13:57+11:00
 */
 
 import { observable, action } from 'mobx';
@@ -15,12 +15,16 @@ export default class TreeState {
   @observable filteredNodes;
   @observable filter = '';
   treeJson;
-  treeRoot;                 // required for make root node functionality
+  treeRoot; // required for make root node functionality
   resetTreeNode;
+  @observable profileAlias = '';
   constructor() {
-    this.treeNodes = observable([]);
+    this.treeNodes = [];
     this.filteredNodes = observable([]);
-    this.resetTreeNode = new TreeNode({text: '...'});
+    this.resetTreeNode = new TreeNode({ text: '...' });
+  }
+  @action setProfileAlias(value) {
+    this.profileAlias = value;
   }
   @action setFilter(value) {
     this.filter = value.toLowerCase();
@@ -42,19 +46,32 @@ export default class TreeState {
       }
     }
   }
+  /**
+   * function to parse json document from the controller
+   * @param  {json} treeJson [description]
+   */
   parseJson(treeJson) {
     this.treeJson = treeJson;
-    for (const node of this.treeJson) {
-      const treeNode = new TreeNode(node);
-      if (treeNode.allChildNodes && treeNode.allChildNodes.length > 0) {
-        this.treeNodes.push(treeNode);
+    if (this.treeJson.length && this.treeJson.length > 0) {
+      this.treeNodes = [];
+      for (const node of this.treeJson) {
+        const treeNode = new TreeNode(node);
+        if (treeNode.allChildNodes && treeNode.allChildNodes.length > 0) {
+          this.treeNodes.push(treeNode);
+        }
       }
+      this.filterNodes();
     }
-    this.filterNodes();
   }
+  /**
+   * function to select a specific node in a tree
+   * @param  {TreeNode} nodeData treeNode which has been clicked by the userPreferences
+   */
   selectNode(nodeData) {
     const originallySelected = nodeData.isSelected;
-    this.forEachNode(this.nodes, (n) => { n.isSelected = false; });
+    this.forEachNode(this.nodes, (n) => {
+      n.isSelected = false;
+    });
     nodeData.isSelected = originallySelected == null ? true : !originallySelected;
   }
   selectRootNode(nodeData) {

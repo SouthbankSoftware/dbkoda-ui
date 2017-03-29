@@ -1,11 +1,10 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   mike
- * @Last modified time: 2017-03-28 16:04:38
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-29T15:31:01+11:00
  */
 import {observable, action} from 'mobx';
-import TempTopology from './TempTopology.js';
 
 export default class Store {
   @observable profiles = observable.map();
@@ -61,9 +60,14 @@ export default class Store {
   });
 
   @observable topology = observable({
-    isChanged: true,
-    json: JSON.parse(TempTopology.data)
+    isChanged: false,
+    json: {}
   });
+
+  @action updateTopology = (jsonData) => {
+    this.topology.json = jsonData;
+    this.topology.isChanged = true;
+  }
 
   @action addEditor = (withProfile, newRes) => {
     this.editorPanel.creatingNewEditor = true;

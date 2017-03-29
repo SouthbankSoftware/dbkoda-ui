@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T14:23:34+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T17:17:06+11:00
+ * @Last modified time: 2017-03-29T09:53:38+11:00
  */
 
 import TreeState from '#/TreePanel/model/TreeState';
@@ -102,7 +102,6 @@ describe('TreeState', () => {
     treeState1.parseJson(treeJson);
     treeState1.setFilter('stat');
     expect(treeState1.nodes.length).toEqual(1);
-    console.log(treeState1.nodes[0].allChildNodes[0]);
   });
 
   test('should have ROOT node of "DBEnvyLoad" with "bstatestat" node as filter', () => {
@@ -112,5 +111,5 @@ describe('TreeState', () => {
     expect(treeState1.nodes[0].text).toEqual('...');
     expect(treeState1.nodes[1].text).toEqual('DBEnvyLoad');
     expect(treeState1.nodes[1].childNodes[0].text).toEqual('bstatestat');
-  })
+  });
 });
