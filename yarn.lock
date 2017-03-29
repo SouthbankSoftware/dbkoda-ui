@@ -1650,6 +1650,13 @@ center-align@^0.1.1:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
 
+chai-enzyme@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/chai-enzyme/-/chai-enzyme-0.6.1.tgz#585c963c6ea1331446efd12ee8391e807d758620"
+  dependencies:
+    html "^1.0.0"
+    react-element-to-jsx-string "^5.0.0"
+
 "chai@>=1.9.2 <4.0.0", chai@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/chai/-/chai-3.5.0.tgz#4d02637b067fe958bdbfdd3a40ec56fef7373247"
@@ -1830,6 +1837,10 @@ codemirror@3.x:
 codemirror@^5.18.2, codemirror@^5.24.2:
   version "5.24.2"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.24.2.tgz#b55ca950fa009709c37df68eb133310ed89cf2fe"
+
+collapse-white-space@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/collapse-white-space/-/collapse-white-space-1.0.2.tgz#9c463fb9c6d190d2dcae21a356a01bcae9eeef6d"
 
 color-convert@^0.5.0:
   version "0.5.3"
@@ -2612,6 +2623,10 @@ download@^4.0.0, download@^4.1.2:
     vinyl-fs "^2.2.0"
     ware "^1.2.0"
 
+dumpenvy@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/dumpenvy/-/dumpenvy-1.0.2.tgz#8eb314b4134b2bd1720d764522af463ec6a297fd"
+
 duplexer2@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/duplexer2/-/duplexer2-0.0.2.tgz#c614dcf67e2fb14995a91711e5a617e8a60a31db"
@@ -2661,6 +2676,10 @@ ecstatic@^1.4.0:
     mime "^1.2.11"
     minimist "^1.1.0"
     url-join "^1.0.0"
+
+editions@^1.1.1:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/editions/-/editions-1.3.3.tgz#0907101bdda20fac3cbe334c27cbd0688dc99a5b"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -4135,6 +4154,12 @@ html-webpack-plugin@^2.28.0:
     pretty-error "^2.0.2"
     toposort "^1.0.0"
 
+html@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/html/-/html-1.0.0.tgz#a544fa9ea5492bfb3a2cca8210a10be7b5af1f61"
+  dependencies:
+    concat-stream "^1.4.7"
+
 htmlparser2@^3.9.1:
   version "3.9.2"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.9.2.tgz#1bdf87acca0f3f9e53fa4fcceb0f4b4cbb00b338"
@@ -4604,6 +4629,10 @@ is-regex@^1.0.3:
   resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.0.4.tgz#5517489b547091b0930e095654ced25ee97e9491"
   dependencies:
     has "^1.0.1"
+
+is-regexp@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/is-regexp/-/is-regexp-1.0.0.tgz#fd2d883545c46bac5a633e7b9a09e87fa2cb5069"
 
 is-relative@^0.1.0:
   version "0.1.3"
@@ -7168,6 +7197,17 @@ react-dom@^15.4.1, react-dom@^15.4.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
+react-element-to-jsx-string@^5.0.0:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/react-element-to-jsx-string/-/react-element-to-jsx-string-5.0.7.tgz#c663a4800a9c712115c0d8519cb0215a46a1f0f2"
+  dependencies:
+    collapse-white-space "^1.0.0"
+    is-plain-object "^2.0.1"
+    lodash "^4.17.4"
+    sortobject "^1.0.0"
+    stringify-object "2.4.0"
+    traverse "^0.6.6"
+
 react-hammerjs@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/react-hammerjs/-/react-hammerjs-0.5.0.tgz#aa20e5c5f44d660f3e8e87ed11282f12173e77ae"
@@ -7890,6 +7930,12 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
+sortobject@^1.0.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/sortobject/-/sortobject-1.1.1.tgz#4f695d4d44ed0a4c06482c34c2582a2dcdc2ab34"
+  dependencies:
+    editions "^1.1.1"
+
 source-list-map@^0.1.7, source-list-map@~0.1.7:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-0.1.8.tgz#c550b2ab5427f6b3f21f5afead88c4f5587b2106"
@@ -8093,6 +8139,13 @@ string-width@^2.0.0:
 string_decoder@^0.10.25, string_decoder@~0.10.x:
   version "0.10.31"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
+
+stringify-object@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/stringify-object/-/stringify-object-2.4.0.tgz#c62d11023eb21fe2d9b087be039a26df3b22a09d"
+  dependencies:
+    is-plain-obj "^1.0.0"
+    is-regexp "^1.0.0"
 
 stringstream@~0.0.4:
   version "0.0.5"
@@ -8381,7 +8434,7 @@ tr46@~0.0.1, tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
 
-traverse@0.6.6:
+traverse@0.6.6, traverse@^0.6.6:
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/traverse/-/traverse-0.6.6.tgz#cbdf560fd7b9af632502fed40f918c157ea97137"
 

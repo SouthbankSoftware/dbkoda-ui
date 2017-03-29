@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-28 16:14:24
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-03-29T17:35:58+11:00
 */
 
 /* eslint-disable react/prop-types */
@@ -56,6 +56,12 @@ export default class Toolbar extends React.Component {
       .bind(this);
     this.renderHotkeys = this
       .onFilterChanged
+      .bind(this);
+    this.openFile = this
+      .openFile
+      .bind(this);
+    this.saveFile = this
+      .saveFile
       .bind(this);
   }
 
@@ -188,6 +194,8 @@ export default class Toolbar extends React.Component {
   onFail() {
     this.props.store.editorPanel.creatingNewEditor = false;
   }
+  
+  _dumpedStore = null;
 
   /**
    * NOT YET IMPLEMENTED: Open a File from Localhost.
@@ -196,7 +204,10 @@ export default class Toolbar extends React.Component {
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented openFile');
     }
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    // NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    this._dumpedStore = this.props.store.dump();
+    console.log('Store dumped!');
+    console.log(this._dumpedStore);
   }
 
   /**
@@ -206,7 +217,9 @@ export default class Toolbar extends React.Component {
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented saveFile');
     }
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    // NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    this.props.store.restore(this._dumpedStore);
+    console.log('Store restored!');
   }
 
   /**
