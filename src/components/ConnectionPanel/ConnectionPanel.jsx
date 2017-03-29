@@ -46,6 +46,7 @@ const ConnectionPanel = ({profiles, profileList, layout},) => {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
     }
+    profileList.creatingNewProfile = true;
     return featherClient()
       .service('/mongo-connection')
       .create({}, {

@@ -34,9 +34,6 @@ export default class ListView extends React.Component {
       .entries();
     const profile = profiles[(region[0].rows[0])][1];
     this.props.store.profileList.selectedProfile = profile;
-    if (this.props.store.userPreferences.telemetryEnabled) {
-      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CHANGE_PROFILE_SELECTION, EventLogging.getFragmentEnum().PROFILES, 'User changed selection on the profile list.');
-    }
   }
 
   render() {

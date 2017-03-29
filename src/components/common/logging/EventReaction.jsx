@@ -26,9 +26,8 @@ export default class EventReaction extends React.Component {
     const typeEnum = EventLogging.getTypeEnum();
     const fragmentEnum = EventLogging.getFragmentEnum();
     const store = this.props.store;
-    const editorListObserver = observe(store.editors, change => this.observeEditorList(change, typeEnum, fragmentEnum));
     const editorPanelObserver = observe(store.editorPanel, change => this.observeEditorPanel(change, typeEnum, fragmentEnum));
-    const profilePanelObserver = observe(store.profile, change => this.observeProfilePanel(change, typeEnum, fragmentEnum));
+    const profilePanelObserver = observe(store.profileList, change => this.observeProfilePanel(change, typeEnum, fragmentEnum));
     const userPreferencesObserver = observe(store.userPreferences, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
 
     if (this.props.store.userPreferences.telemtryEnabled) {
@@ -37,7 +36,6 @@ export default class EventReaction extends React.Component {
   }
 
   observeEditorPanel(change, typeEnum, fragmentEnum) {
-    console.log('test');
     if (this.props.store.userPreferences.telemetryEnabled) {
       switch (change.type) {
         case 'update':
@@ -84,33 +82,28 @@ export default class EventReaction extends React.Component {
     }
   }
 
-  observeProfileList(change, typeEnum, fragmentEnum) {
-    if (this.props.store.userPreferences.telemetryEnabled && this.props.store.userPreferences.observeMobX) {
+  observeProfilePanel(change, typeEnum, fragmentEnum) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
       switch (change.type) {
-        case 'add':
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Profile added to Profiles Map', change);
-          break;
-        case 'remove':
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Profile removed from Profile Map', change);
+        case 'update':
+          switch (change.name) {
+            case 'creatingNewProfile':
+              if (!change.oldValue) {
+                EventLogging.recordEvent(typeEnum.EVENT.CONNECTION_PANEL.NEW_PROFILE.START, fragmentEnum.PROFILES, 'Create new Profile event Started.', change);
+              } else {
+                EventLogging.recordEvent(typeEnum.EVENT.CONNECTION_PANEL.NEW_PROFILE.FINISH, fragmentEnum.PROFILES, 'Create new Profile event Finished.', change);
+              }
+              break;
+            case 'selectedProfile':
+              EventLogging.recordEvent(typeEnum.EVENT.CONNECTION_PANEL.CHANGE_PROFILE_SELECTION, fragmentEnum.PROFILES, 'Change Profile Event.', change);
+              break;
+            default:
+              EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Unknown Update on ProfilePanel.', change);
+              break;
+          }
           break;
         default:
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Unknown Change on Profiles Map.', change);
-          break;
-      }
-    }
-  }
-
-  observeEditorList(change, typeEnum, fragmentEnum) {
-    if (this.props.store.userPreferences.telemetryEnabled && this.props.store.userPreferences.observeMobX) {
-      switch (change.type) {
-        case 'add':
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Editor added to Editors Map.', change);
-          break;
-        case 'remove':
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Editor removed from Editors Map.', change);
-          break;
-        default:
-          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.EDITORS, 'Unknown Change on Editors Map.', change);
+          EventLogging.recordEvent(typeEnum.EVENT.EVENT, fragmentEnum.PROFILES, 'Unknown Change on ProfilePanel.', change);
           break;
       }
     }
