@@ -10,44 +10,58 @@ export class ProfileForm extends MobxReactForm {
   static mongoProtocol = 'mongodb://';
 
   onInit() {
+
     // add dynamic validation on each field
+
     this.$('hostRadio').observe({
       key: 'value',
       call: ({form, field, change}) => {
-        if (change.newValue) {
-          form.$('host').set('rules', 'required|string');
-          form.$('port').set('rules', 'required|numeric');
-        } else {
-          form.$('host').set('rules', '');
-          form.$('port').set('rules', '');
-        }
+        this.addHostRules(form, change.newValue);
         form.validate();
       },
     });
     this.$('urlRadio').observe({
       key: 'value',
       call: ({form, field, change}) => {
-        if (change.newValue) {
-          form.$('url').set('rules', 'regex:/^mongodb:\/\//');
-        } else {
-          form.$('url').set('rules', '');
-        }
+        this.addUrlRules(form, change.newValue);
         form.validate();
       },
     });
     this.$('sha').observe({
       key: 'value',
       call: ({form, change}) => {
-        if (change.newValue) {
-          form.$('username').set('rules', 'required|string');
-          form.$('password').set('rules', 'required|string');
-        } else {
-          form.$('username').set('rules', '');
-          form.$('password').set('rules', '');
-        }
+        this.addAuthenticationRules(form, change.newValue);
         form.validate();
       }
     })
+  }
+
+  addUrlRules(form, value){
+    if (value) {
+      form.$('url').set('rules', 'regex:/^mongodb:\/\//');
+    } else {
+      form.$('url').set('rules', '');
+    }
+  }
+
+  addAuthenticationRules(form, value){
+    if (value) {
+      form.$('username').set('rules', 'required|string');
+      form.$('password').set('rules', 'required|string');
+    } else {
+      form.$('username').set('rules', '');
+      form.$('password').set('rules', '');
+    }
+  }
+
+  addHostRules(form, value){
+    if (value) {
+      form.$('host').set('rules', 'required|string');
+      form.$('port').set('rules', 'required|numeric');
+    } else {
+      form.$('host').set('rules', '');
+      form.$('port').set('rules', '');
+    }
   }
 
   onSuccess(form) {

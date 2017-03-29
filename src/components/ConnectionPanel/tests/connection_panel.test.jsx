@@ -10,7 +10,7 @@ import Label from '../Label';
 describe('New Profile Panel', () => {
   let app;
 
-  before(() => {
+  beforeAll(() => {
     useStrict(true);
     const store = new Store();
     app = mount(<Provider store={store}>

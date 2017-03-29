@@ -5,7 +5,7 @@ import React from 'react';
 import {observer} from 'mobx-react';
 import {action, observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import {AnchorButton} from '@blueprintjs/core';
+import {AnchorButton, Button} from '@blueprintjs/core';
 import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
@@ -120,26 +120,27 @@ export default class Panel extends React.Component {
             </ul>
           </div>
           <div className="profile-button-panel">
-            <AnchorButton
+            <Button
               className="pt-button pt-intent-success"
               onClick={form.onSubmit}
               text="Connect"
+              type="submit"
               disabled={formErrors.length > 0}
               loading={this.state.connecting}
             />
-            <AnchorButton
+            <Button
               className="pt-button pt-intent-primary"
               onClick={form.onReset}
               text="Reset"
             />
-            <AnchorButton
+            <Button
               className="pt-button pt-intent-primary"
               onClick={form.onTest.bind(form)}
               text="Test"
               disabled={formErrors.length > 0}
               loading={this.state.testing}
             />
-            <AnchorButton
+            <Button
               className="pt-button pt-intent-primary"
               text='Close'
               onClick={this.props.close}
