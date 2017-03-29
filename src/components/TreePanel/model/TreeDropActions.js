@@ -3,21 +3,25 @@
 * @Date:   2017-03-17T10:29:12+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-24T15:47:03+11:00
+ * @Last modified time: 2017-03-29T14:30:35+11:00
 */
 
-const Templates = require('./templates');
+const Templates = require('../templates/dragdrop');
 
-export default class CodeGeneration {
+export default class TreeDropActions {
   static getTemplateByType(type) {
     const templateId = Templates[type];
-    const template = require('./templates/'+ templateId); //eslint-disable-line
+    const template = require('../templates/dragdrop/'+ templateId); //eslint-disable-line
+    console.log(template);
     return template;
   }
-
-  static getCodeForTreeNode(treeNode) {
+  /**
+   * get context for handlebars template
+   * @param  TreeNode treeNode  selected treenode dragged by the user
+   * @return object   context   object containing necessory information for the template.
+   */
+  static getContext(treeNode) {
     let context = {};
-    const template = CodeGeneration.getTemplateByType(treeNode.type);
     switch (treeNode.type) {
       case 'config': {
           const server = treeNode.label.split(':');
@@ -34,6 +38,11 @@ export default class CodeGeneration {
         context = { text: treeNode.label };
         break;
     }
+    return context;
+  }
+  static getCodeForTreeNode(treeNode) {
+    const context = TreeDropActions.getContext(treeNode);
+    const template = TreeDropActions.getTemplateByType(treeNode.type);
     return template(context);
   }
 }

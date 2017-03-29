@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-24 09:58:35
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-03-29T12:30:49+11:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -17,7 +17,7 @@ import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
 import {DragItemTypes} from '#/common/Constants.js';
-import CodeGeneration from '#/common/CodeGeneration.js';
+import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import './Panel.scss';
 
 const React = require('react');
@@ -184,7 +184,7 @@ class View extends React.Component {
       if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
         const item = this.props.store.dragItem.item;
         // this.setState({code: item.label});
-        this.insertAtCursor(CodeGeneration.getCodeForTreeNode(item));
+        this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
         this.props.store.dragItem.dragDrop = false;
       }
     });
