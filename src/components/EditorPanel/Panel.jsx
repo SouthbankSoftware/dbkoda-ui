@@ -144,7 +144,7 @@ export default class Panel extends React.Component {
               return (
                 <Tab2
                   className="visible"
-                  key={tab[1].shellId}
+                  key={tab[1].alias + ' (' + tab[1].shellId + ')'}
                   id={tab[1].alias + ' (' + tab[1].shellId + ')'}
                   title={tab[1].alias + ' (' + tab[1].shellId + ')'}
                   panel={<View id= {
@@ -168,7 +168,7 @@ export default class Panel extends React.Component {
             return (
               <Tab2
                 className="notVisible"
-                key={tab[1].shellId}
+                key={tab[1].alias + ' (' + tab[1].shellId + ')'}
                 id={tab[1].id}
                 title={tab[1].alias}
                 panel={<View id ={
