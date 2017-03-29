@@ -9,6 +9,7 @@
 import {inject, observer} from 'mobx-react';
 import {action, reaction, runInAction} from 'mobx';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
+import EventLogging from '#/common/logging/EventLogging';
 
 const React = require('react');
 
@@ -33,6 +34,9 @@ export default class ListView extends React.Component {
       .entries();
     const profile = profiles[(region[0].rows[0])][1];
     this.props.store.profileList.selectedProfile = profile;
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CHANGE_PROFILE_SELECTION, EventLogging.getFragmentEnum().PROFILES, 'User changed selection on the profile list.');
+    }
   }
 
   render() {
@@ -41,9 +45,8 @@ export default class ListView extends React.Component {
       .store
       .profiles
       .entries();
-    profiles.map(p=>console.log('profile status:', p[1].status));
-    const renderCell = (rowIndex: number) => {
-      const currentProfile = profiles[rowIndex][1];
+    profiles.map(p => console.log('profile status:', p[1].status));
+    const renderCell = (rowIndex : number) => {
       return <Cell>{profiles[rowIndex][1].alias}</Cell>;
     };
     return (
@@ -56,9 +59,8 @@ export default class ListView extends React.Component {
           isColumnResizable={false}
           isRowResizable={false}
           defaultColumnWidth={1024}
-          onSelection={(region) => this.onSelection(region)}
-        >
-          <Column name="Connection Profiles" renderCell={renderCell}/>
+          onSelection={region => this.onSelection(region)}>
+          <Column name="Connection Profiles" renderCell={renderCell} />
         </Table>
       </div>
     );
