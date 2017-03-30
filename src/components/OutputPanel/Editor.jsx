@@ -105,7 +105,7 @@ export default class Editor extends React.Component {
           value={this.props.store.outputs.get(this.props.title).output}
           options={outputOptions}
           />
-        <OutputTerminal id={this.props.id} shellId={this.props.shellId} />
+        <OutputTerminal id={this.props.id} shellId={this.props.shellId} title={this.props.title} />
       </div>
     );
   }

@@ -128,6 +128,10 @@ export default class Terminal extends React.Component {
       this.props.store.outputPanel.clearingOutput = true;
       return false;
     }
+    if (["it"].indexOf(command) >= 0) {
+      this.props.store.outputPanel.executingShowMore = true;
+      return false;
+    }
     return command;
   }
 
