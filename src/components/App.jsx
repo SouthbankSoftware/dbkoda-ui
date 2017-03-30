@@ -108,7 +108,7 @@ class App extends React.Component {
           noTouchOpen
           noTouchClose
           drawerStyle={{
-          'minWidth': 500
+          'minWidth': 512
         }}
           onChange={this.updateDrawerOpenStatus}>
           <ConnectionProfilePanel />
