@@ -85,7 +85,6 @@ export default class Editor extends React.Component {
     );
   }
 
-
   render() {
     const outputOptions = {
       lineWrapping: true,

@@ -113,6 +113,9 @@ export default class Terminal extends React.Component {
   @action.bound
   executeCommand() {
     if (this.state.command) {
+      if (["clear","cls"].indexOf(this.state.command) >= 0) {
+        this.props
+      }
       this.props.store.outputPanel.executingTerminalCmd = true;
     }
   }

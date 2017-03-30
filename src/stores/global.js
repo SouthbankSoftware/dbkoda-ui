@@ -20,7 +20,6 @@ export default class Store {
 
   @observable editorPanel = observable({
     creatingNewEditor: false,
-    creatingWithProfile: false,
     res: null,
     activeEditorId: 'Default',
     activeDropdownId: 'Default',
@@ -40,6 +39,7 @@ export default class Store {
 
   @observable outputPanel = observable({
     currentTab: 'Default',
+    clearingOutput: false,
     executingShowMore: false,
     executingTerminalCmd: false,
   });

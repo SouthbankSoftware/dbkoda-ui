@@ -48,6 +48,22 @@ export default class Toolbar extends React.Component {
       },
       { "name": "reactionOutputToolbarShowMore" }
     );
+
+    /**
+     * Reaction to clear the output console
+     */
+    const reactionToClearingOutput = reaction(
+      () => this.props.store.outputPanel.clearingOutput,
+      clearingOutput => {
+        if (this.props.store.outputPanel.clearingOutput) {
+          this.props.store.outputs.get(this.props.title).output = '';
+          if (this.props.store.userPreferences.telemetryEnabled) {
+            EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
+          }
+          this.props.store.outputPanel.clearingOutput = false;
+        }
+      }
+    );
   }
 
   /**
@@ -55,10 +71,8 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   clearOutput() {
-    this.props.store.outputs.get(this.props.title).output = '';
-     if (this.props.store.userPreferences.telemetryEnabled) {
-      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
-    }
+    this.props.store.outputPanel.clearingOutput = true;
+    console.log(this.props.store.outputPanel.clearingOutput);
   }
 
   /**
@@ -73,7 +87,7 @@ export default class Toolbar extends React.Component {
    * Downloads the current contents of the Output Editor to a file
    */
   downloadOutput() {
-     if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.SAVE_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User saved Output');
     }
     var data   = new Blob([this.props.store.outputs.get(this.props.title).output], {type: 'text/csv'}),
@@ -93,7 +107,7 @@ export default class Toolbar extends React.Component {
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
             inline={true}
-            content="Clear Output Contents (Shift + C)"
+            content="Clear Output Contents (Ctrl + L)"
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
@@ -137,7 +151,7 @@ export default class Toolbar extends React.Component {
       <Hotkeys>
         <Hotkey
           global
-          combo="shift + c"
+          combo="ctrl + l"
           label="Clear Output"
           onKeyDown={this.clearOutput} />
         <Hotkey
