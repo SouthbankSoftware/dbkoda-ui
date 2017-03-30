@@ -57,7 +57,7 @@ export default class Editor extends React.Component {
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
     this.props.store.outputs.get(this.props.title).output =
-      this.props.store.outputs.get(this.props.title).output + '\n' +
+      this.props.store.outputs.get(this.props.title).output +
       output.output; // eslint-disable-line
     if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
