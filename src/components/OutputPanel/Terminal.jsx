@@ -33,6 +33,7 @@ export default class Terminal extends React.Component {
     };
 
     this.updateCommand = this.updateCommand.bind(this);
+    this.interceptCommand = this.interceptCommand.bind(this);
     this.showPreviousCommand = this.showPreviousCommand.bind(this);
     this.showNextCommand = this.showNextCommand.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
@@ -44,15 +45,17 @@ export default class Terminal extends React.Component {
       () => this.props.store.outputPanel.executingTerminalCmd,
       executingTerminalCmd => {
         if (this.props.store.outputPanel.executingTerminalCmd) {
-          const command = this.state.command;
-          console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
-          this.updateHistory(command);
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(this.props.id, {
-            shellId: this.props.shellId, // eslint-disable-line
-            commands: command
-          });
+          this.updateHistory(this.state.command);
+          const command = this.interceptCommand(this.state.command);
+          if (command) {
+            console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
+            const service = featherClient().service('/mongo-shells');
+            service.timeout = 30000;
+            service.update(this.props.id, {
+              shellId: this.props.shellId, // eslint-disable-line
+              commands: command
+            });
+          }
           this.setState({ command: '' });
           this.props.store.outputPanel.executingTerminalCmd = false;
         }
@@ -113,11 +116,19 @@ export default class Terminal extends React.Component {
   @action.bound
   executeCommand() {
     if (this.state.command) {
-      if (["clear","cls"].indexOf(this.state.command) >= 0) {
-        this.props
-      }
       this.props.store.outputPanel.executingTerminalCmd = true;
     }
+  }
+
+  /**
+   * Checks for commands that can be run locally before passing on
+   */
+  interceptCommand(command) {
+    if (["clear","cls"].indexOf(command) >= 0) {
+      this.props.store.outputPanel.clearingOutput = true;
+      return false;
+    }
+    return command;
   }
 
   /**
