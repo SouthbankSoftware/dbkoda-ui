@@ -95,7 +95,7 @@ export default class Panel extends React.Component {
           </Tab2>
           {this.renderTabs(this.props.store.editors.entries())}
         </Tabs2>
-        <OutputToolbar title={this.props.store.outputPanel.currentTab} />
+        <OutputToolbar />
       </div>
     );
   }

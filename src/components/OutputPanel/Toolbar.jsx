@@ -30,19 +30,19 @@ export default class Toolbar extends React.Component {
     /**
      * Reaction to fire off execution of ShowMore (it) command
      */
-    const reactionToExecutingCmd = reaction(
+    const reactionToExecutingShowMore = reaction(
       () => this.props.store.outputPanel.executingShowMore,
       executingShowMore => {
-        if(!this.props.store.outputs.get(this.props.title).cannotShowMore) {
+        if(!this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore) {
           const command = 'it';
-          console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.title).id, ': ', command, '.');
+          console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.store.outputPanel.currentTab).id, ': ', command, '.');
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
-          service.update(this.props.store.outputs.get(this.props.title).id, {
-            shellId: this.props.store.outputs.get(this.props.title).shellId, // eslint-disable-line
+          service.update(this.props.store.outputs.get(this.props.store.outputPanel.currentTab).id, {
+            shellId: this.props.store.outputs.get(this.props.store.outputPanel.currentTab).shellId, // eslint-disable-line
             commands: command
           });
-          this.props.store.outputs.get(this.props.title).cannotShowMore = true;
+          this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore = true;
         }
         this.props.store.outputPanel.executingShowMore = false;
       },
@@ -56,13 +56,14 @@ export default class Toolbar extends React.Component {
       () => this.props.store.outputPanel.clearingOutput,
       clearingOutput => {
         if (this.props.store.outputPanel.clearingOutput) {
-          this.props.store.outputs.get(this.props.title).output = '';
+          this.props.store.outputs.get(this.props.store.outputPanel.currentTab).output = '';
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
           }
           this.props.store.outputPanel.clearingOutput = false;
         }
-      }
+      },
+      { "name": "reactionOutputToolbarClearOutput" }
     );
   }
 
@@ -90,15 +91,16 @@ export default class Toolbar extends React.Component {
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.SAVE_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User saved Output');
     }
-    var data   = new Blob([this.props.store.outputs.get(this.props.title).output], {type: 'text/csv'}),
+    var data   = new Blob([this.props.store.outputs.get(this.props.store.outputPanel.currentTab).output], {type: 'text/csv'}),
     csvURL = window.URL.createObjectURL(data),
     tempLink = document.createElement('a');
     tempLink.href = csvURL;
-    tempLink.setAttribute('download',`output-${this.props.title}.js`);
+    tempLink.setAttribute('download',`output-${this.props.store.outputPanel.currentTab}.js`);
     tempLink.click();
   }
 
   render() {
+    console.log("Render Toolbar!");
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
@@ -124,7 +126,9 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="showMoreBtn pt-intent-primary"
               onClick={this.showMore}
-              disabled={this.props.store.outputs.get(this.props.title).cannotShowMore} >
+              disabled={this.props.store.outputs.get(
+                          this.props.store.outputPanel.currentTab
+                        ).cannotShowMore} >
               Show More
             </AnchorButton>
           </Tooltip>

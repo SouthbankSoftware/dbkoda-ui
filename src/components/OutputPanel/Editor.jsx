@@ -40,7 +40,8 @@ export default class Editor extends React.Component {
       title: this.props.title,
       output: '',
       cannotShowMore: true,
-      showingMore: false
+      showingMore: false,
+      commandHistory: []
     });
   }
 

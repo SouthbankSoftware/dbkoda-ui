@@ -70,7 +70,7 @@ export default class Terminal extends React.Component {
   showPreviousCommand() {
     if (this.state.historyCursor > 0) {
       this.state.historyCursor--;
-      this.updateCommand(this.state.commandHistory[this.state.historyCursor]);
+      this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
     }
   }
 
@@ -78,9 +78,9 @@ export default class Terminal extends React.Component {
    * Get a more recent command from the history
    */
   showNextCommand() {
-    if (this.state.historyCursor < this.state.commandHistory.length) {
+    if (this.state.historyCursor < this.props.store.outputs.get(this.props.title).commandHistory.length) {
       this.state.historyCursor++;
-      this.updateCommand(this.state.commandHistory[this.state.historyCursor]);
+      this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
     }
     else {
       this.setState({ command: '' });
@@ -91,10 +91,8 @@ export default class Terminal extends React.Component {
    * Adds a command to the commandHistory and updates the historyCursor
    */
   updateHistory(command) {
-    this.state.commandHistory.push(command);
-    this.state.historyCursor = this.state.commandHistory.length;
-    console.log(this.state.commandHistory);
-    console.log(this.state.historyCursor);
+    this.props.store.outputs.get(this.props.title).commandHistory.push(command);
+    this.state.historyCursor = this.props.store.outputs.get(this.props.title).commandHistory.length;
   }
 
   /**
