@@ -2,8 +2,8 @@
  * @Author: chris
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-03-27T15:21:42+11:00
+ * @Last modified by:   Mike
+ * @Last modified time: 2017-03-31 14:14:16
  */
 
 import React from 'react';
@@ -32,36 +32,42 @@ export default class Terminal extends React.Component {
       historyCursor: 0
     };
 
-    this.updateCommand = this.updateCommand.bind(this);
-    this.interceptCommand = this.interceptCommand.bind(this);
-    this.showPreviousCommand = this.showPreviousCommand.bind(this);
-    this.showNextCommand = this.showNextCommand.bind(this);
-    this.updateHistory = this.updateHistory.bind(this);
+    this.updateCommand = this
+      .updateCommand
+      .bind(this);
+    this.interceptCommand = this
+      .interceptCommand
+      .bind(this);
+    this.showPreviousCommand = this
+      .showPreviousCommand
+      .bind(this);
+    this.showNextCommand = this
+      .showNextCommand
+      .bind(this);
+    this.updateHistory = this
+      .updateHistory
+      .bind(this);
 
     /**
      * Reaction to fire off execution of Terminal Commands
      */
-    const reactionToExecutingCmd = reaction(
-      () => this.props.store.outputPanel.executingTerminalCmd,
-      executingTerminalCmd => {
-        if (this.props.store.outputPanel.executingTerminalCmd) {
-          this.updateHistory(this.state.command);
-          const command = this.interceptCommand(this.state.command);
-          if (command) {
-            console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
-            const service = featherClient().service('/mongo-shells');
-            service.timeout = 30000;
-            service.update(this.props.id, {
-              shellId: this.props.shellId, // eslint-disable-line
-              commands: command
-            });
-          }
-          this.setState({ command: '' });
-          this.props.store.outputPanel.executingTerminalCmd = false;
+    const reactionToExecutingCmd = reaction(() => this.props.store.outputPanel.executingTerminalCmd, (executingTerminalCmd) => {
+      if (this.props.store.outputPanel.executingTerminalCmd) {
+        this.updateHistory(this.state.command);
+        const command = this.interceptCommand(this.state.command);
+        if (command) {
+          console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
+          const service = featherClient().service('/mongo-shells');
+          service.timeout = 30000;
+          service.update(this.props.id, {
+            shellId: this.props.shellId, // eslint-disable-line
+            commands: command
+          });
         }
-      },
-      { "name": "reactionOutputTerminalExecuteCmd" }
-    );
+        this.setState({command: ''});
+        this.props.store.outputPanel.executingTerminalCmd = false;
+      }
+    }, {'name': 'reactionOutputTerminalExecuteCmd'});
   }
 
   /**
@@ -81,9 +87,8 @@ export default class Terminal extends React.Component {
     if (this.state.historyCursor < this.props.store.outputs.get(this.props.title).commandHistory.length) {
       this.state.historyCursor++;
       this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
-    }
-    else {
-      this.setState({ command: '' });
+    } else {
+      this.setState({command: ''});
     }
   }
 
@@ -91,8 +96,20 @@ export default class Terminal extends React.Component {
    * Adds a command to the commandHistory and updates the historyCursor
    */
   updateHistory(command) {
-    this.props.store.outputs.get(this.props.title).commandHistory.push(command);
-    this.state.historyCursor = this.props.store.outputs.get(this.props.title).commandHistory.length;
+    this
+      .props
+      .store
+      .outputs
+      .get(this.props.title)
+      .commandHistory
+      .push(command);
+    this.state.historyCursor = this
+      .props
+      .store
+      .outputs
+      .get(this.props.title)
+      .commandHistory
+      .length;
   }
 
   /**
@@ -100,9 +117,9 @@ export default class Terminal extends React.Component {
    * @param {string} newCmd - The updated code to be stored in state
    */
   updateCommand(newCmd) {
-    this.setState({ command: newCmd });
+    this.setState({command: newCmd});
 
-     const cm = this
+    const cm = this
       .refs
       .terminal
       .getCodeMirror();
@@ -122,11 +139,11 @@ export default class Terminal extends React.Component {
    * Checks for commands that can be run locally before passing on
    */
   interceptCommand(command) {
-    if (["clear","cls"].indexOf(command) >= 0) {
+    if (['clear', 'cls'].indexOf(command) >= 0) {
       this.props.store.outputPanel.clearingOutput = true;
       return false;
     }
-    if (["it"].indexOf(command) >= 0) {
+    if (['it'].indexOf(command) >= 0) {
       this.props.store.outputPanel.executingShowMore = true;
       return false;
     }
@@ -138,33 +155,35 @@ export default class Terminal extends React.Component {
    * post-render, tapping into CodeMirror's js API
    */
   componentDidMount() {
-    var cm = this.refs.terminal.getCodeMirror();
-    cm.on("keydown", (cm, keyEvent) => {
+    const cm = this
+      .refs
+      .terminal
+      .getCodeMirror();
+    cm.on('keydown', (cm, keyEvent) => {
       if (keyEvent.keyCode == 38) {
         // Up
         this.showPreviousCommand();
-      }
-      else if (keyEvent.keyCode == 40) {
+      } else if (keyEvent.keyCode == 40) {
         // Down
         this.showNextCommand();
       }
     });
-    cm.on("beforeChange", (cm, changeObj) => {
+    cm.on('beforeChange', (cm, changeObj) => {
       // If typed new line, attempt submit
-      var typedNewLine = (changeObj.origin == '+input' &&
-                          typeof changeObj.text == "object" &&
-                          changeObj.text.join("") == "");
+      let typedNewLine = (changeObj.origin == '+input' && typeof changeObj.text == 'object' && changeObj.text.join('') == '');
       if (typedNewLine) {
-        // TODO call execute command
+        if (this.props.store.editorToolbar.noActiveProfile) {
+          return changeObj.cancel();
+        }
         this.executeCommand();
         return changeObj.cancel();
       }
       // Remove pasted new lines
-      var pastedNewLine = (changeObj.origin == 'paste' &&
-                          typeof changeObj.text == "object" &&
-                          changeObj.text.length > 1);
+      let pastedNewLine = (changeObj.origin == 'paste' && typeof changeObj.text == 'object' && changeObj.text.length > 1);
       if (pastedNewLine) {
-        var newText = changeObj.text.join(" ");
+        let newText = changeObj
+          .text
+          .join(' ');
         return changeObj.update(null, null, [newText]);
       }
       // Otherwise allow input untouched
@@ -181,12 +200,12 @@ export default class Terminal extends React.Component {
       jsonld: true,
       scrollbarStyle: null,
       keyMap: 'sublime',
-        extraKeys: {
-          'Ctrl-Space': 'autocomplete'
-        },
+      extraKeys: {
+        'Ctrl-Space': 'autocomplete'
+      },
       smartIndent: true,
       theme: 'ambiance',
-      typescript: true,
+      typescript: true
     };
 
     return (
@@ -196,12 +215,11 @@ export default class Terminal extends React.Component {
           ref="terminal"
           options={terminalOptions}
           value={this.state.command}
-          onChange={value => this.updateCommand(value)}
-          />
+          onChange={value => this.updateCommand(value)} />
         <AnchorButton
           className="executeCmdBtn pt-button pt-icon-key-enter"
-          onClick={this.executeCommand}
-          />
+          disabled={this.props.store.editorToolbar.noActiveProfile}
+          onClick={this.executeCommand} />
       </div>
     );
   }
