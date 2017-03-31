@@ -194,7 +194,7 @@ export default class Toolbar extends React.Component {
   onFail() {
     this.props.store.editorPanel.creatingNewEditor = false;
   }
-  
+
   _dumpedStore = null;
 
   /**
@@ -204,8 +204,12 @@ export default class Toolbar extends React.Component {
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented openFile');
     }
-    // NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-    this._dumpedStore = this.props.store.dump();
+    // NewToaster.show({message: 'Sorry, not yet implemented!', intent:
+    // Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    this._dumpedStore = this
+      .props
+      .store
+      .dump();
     console.log('Store dumped!');
     console.log(this._dumpedStore);
   }
@@ -217,8 +221,12 @@ export default class Toolbar extends React.Component {
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented saveFile');
     }
-    // NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-    this.props.store.restore(this._dumpedStore);
+    // NewToaster.show({message: 'Sorry, not yet implemented!', intent:
+    // Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    this
+      .props
+      .store
+      .restore(this._dumpedStore);
     console.log('Store restored!');
   }
 
@@ -350,21 +358,14 @@ export default class Toolbar extends React.Component {
           <span className="pt-navbar-divider" />
           <div className="pt-button-group pt-intent-primary">
             <div className="pt-select pt-intent-primary">
-              <Tooltip
-                intent={Intent.NONE}
-                hoverOpenDelay={1000}
-                content="Select a connection to send commands to."
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}>
-                <select
-                  onChange={this.onDropdownChanged}
-                  value={this.props.store.editorPanel.activeDropdownId}
-                  className="pt-intent-primary">
-                  <option key="Default" value="Default">Default</option>; {profiles.map((profile) => {
-                    return <option key={profile[0]} value={profile[1].alias}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
-                  })}
-                </select>
-              </Tooltip>
+              <select
+                onChange={this.onDropdownChanged}
+                value={this.props.store.editorPanel.activeDropdownId}
+                className="pt-intent-primary">
+                <option key="Default" value="Default">Default</option>; {profiles.map((profile) => {
+                  return <option key={profile[0]} value={profile[1].alias}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
+                })}
+              </select>
             </div>
             <Tooltip
               intent={Intent.PRIMARY}
