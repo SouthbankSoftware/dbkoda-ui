@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T16:13:57+11:00
+ * @Last modified time: 2017-03-31T10:31:26+11:00
 */
 
 import { observable, action } from 'mobx';
@@ -16,6 +16,7 @@ export default class TreeState {
   @observable filter = '';
   treeJson;
   treeRoot; // required for make root node functionality
+  previousState; // last state before we have changed the root node.
   resetTreeNode;
   @observable profileAlias = '';
   constructor() {
@@ -52,11 +53,13 @@ export default class TreeState {
    */
   parseJson(treeJson) {
     this.treeJson = treeJson;
+    this.treeRoot = undefined;
+    this.filteredNodes.clear();
     if (this.treeJson.length && this.treeJson.length > 0) {
       this.treeNodes = [];
       for (const node of this.treeJson) {
         const treeNode = new TreeNode(node);
-        if (treeNode.allChildNodes && treeNode.allChildNodes.length > 0) {
+        if (treeNode.allChildNodes && treeNode.allChildNodes.size > 0) {
           this.treeNodes.push(treeNode);
         }
       }
@@ -68,19 +71,35 @@ export default class TreeState {
    * @param  {TreeNode} nodeData treeNode which has been clicked by the userPreferences
    */
   selectNode(nodeData) {
-    const originallySelected = nodeData.isSelected;
+    // const originallySelected = nodeData.isSelected;
     this.forEachNode(this.nodes, (n) => {
       n.isSelected = false;
     });
-    nodeData.isSelected = originallySelected == null ? true : !originallySelected;
+    nodeData.isSelected = true; // originallySelected == null ? true : !originallySelected;
   }
   selectRootNode(nodeData) {
+    this.preserveState();
     this.treeRoot = nodeData;
     this.filterNodes();
   }
   resetRootNode() {
     this.treeRoot = undefined;
     this.filterNodes();
+    this.restoreState();
+  }
+  preserveState() {
+    this.previousState = new Map();
+    for (const child of this.treeNodes) {
+      this.previousState.set(child.id, child.StateObject);
+    }
+  }
+  restoreState() {
+    if (this.previousState && this.previousState.size > 0) {
+      for (const child of this.treeNodes) {
+        const lastState = this.previousState.get(child.id);
+        child.StateObject = lastState;
+      }
+    }
   }
   get nodes() {
     return this.filteredNodes;

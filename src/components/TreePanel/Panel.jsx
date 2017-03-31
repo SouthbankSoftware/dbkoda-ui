@@ -3,18 +3,16 @@
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T16:15:11+11:00
+ * @Last modified time: 2017-03-29T16:51:29+11:00
 */
 
 import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
 import { reaction } from 'mobx';
-
 import Store from '~/stores/global';
-
+import { Intent, Position } from '@blueprintjs/core';
 import { featherClient } from '../../helpers/feathers';
 import { DBenvyToaster } from '../common/Toaster';
-import { Intent, Position } from '@blueprintjs/core';
 import TreeState from './model/TreeState.js';
 import TreeToolbar from './Toolbar.jsx';
 import TreeView from './View.jsx';

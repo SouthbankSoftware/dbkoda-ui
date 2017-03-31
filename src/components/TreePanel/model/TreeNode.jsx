@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T15:08:40+11:00
+ * @Last modified time: 2017-03-31T10:40:25+11:00
 */
 
 import React from 'react';
@@ -47,10 +47,10 @@ export default class TreeNode implements ITreeNode {
     this.text = treeJSON.text;
     this.label = <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} filter={this.filter} />;
     if (treeJSON.children) {
-      this.allChildNodes = [];
+      this.allChildNodes = new Map();
       for (const childJSON of treeJSON.children) {
         const child = new TreeNode(childJSON, this);
-        this.allChildNodes.push(child);
+        this.allChildNodes.set(child.id, child);
       }
     }
   }
@@ -72,13 +72,13 @@ export default class TreeNode implements ITreeNode {
     }
     if (this.allChildNodes) {
       this.childNodes = [];
-      for (const child of this.allChildNodes) {
+      for (const child of this.allChildNodes.values()) {
         child.setFilter(filter, this);
         if (filter == '' || this.isFiltered) {                             // add the child nodes if there is no filter
           this.childNodes.push(child);
         } else if (child.text.toLowerCase().indexOf(filter) >= 0) {     // add the child node if filtered text is found in the child node label
           this.childNodes.push(child);
-        } else if (child.allChildNodes && child.allChildNodes.length > 0) {   // add the child node if the grand child has filtered text in the label
+        } else if (child.allChildNodes && child.allChildNodes.size > 0) {   // add the child node if the grand child has filtered text in the label
           if (child.childNodes && child.childNodes.length > 0) {              // Check if there are childNodes existing
             this.childNodes.push(child);
           }
@@ -98,5 +98,29 @@ export default class TreeNode implements ITreeNode {
       return parent.id.split('_')[1];
     }
     return treeJSON.text.toLowerCase().replace(' ', '');
+  }
+  get StateObject() {
+    const objState = {};
+    objState.isFiltered = (this.isFiltered || false);
+    objState.isExpanded = (this.isExpanded || false);
+    objState.isSelected = (this.isSelected || false);
+    objState.id = this.id;
+    objState.allChildNodes = [];
+    if (this.allChildNodes) {
+      for (const child of this.allChildNodes.values()) {
+        objState.allChildNodes.push(child.StateObject);
+      }
+    }
+    return objState;
+  }
+  set StateObject(objState) {
+    this.isFiltered = objState.isFiltered;
+    this.isExpanded = objState.isExpanded;
+    this.isSelected = objState.isSelected;
+    if (objState.allChildNodes.length > 0) {
+      for (const child of objState.allChildNodes) {
+        this.allChildNodes.get(child.id).StateObject = child;
+      }
+    }
   }
 }
