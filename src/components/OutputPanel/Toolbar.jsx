@@ -138,7 +138,7 @@ export default class Toolbar extends React.Component {
             inline={true}
             content="Save Output (Shift + X)"
             tooltipClassName="pt-dark"
-            positioon={Position.BOTTOM}>
+            position={Position.BOTTOM}>
             <AnchorButton
               className="saveOutputBtn pt-icon-floppy-disk pt-intent-primary"
               onClick={this.downloadOutput}>
