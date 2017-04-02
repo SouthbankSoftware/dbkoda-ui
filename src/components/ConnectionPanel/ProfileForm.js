@@ -10,19 +10,18 @@ export class ProfileForm extends MobxReactForm {
   static mongoProtocol = 'mongodb://';
 
   onInit() {
-
     // add dynamic validation on each field
 
     this.$('hostRadio').observe({
       key: 'value',
-      call: ({form, field, change}) => {
+      call: ({form, change}) => {
         this.addHostRules(form, change.newValue);
         form.validate();
       },
     });
     this.$('urlRadio').observe({
       key: 'value',
-      call: ({form, field, change}) => {
+      call: ({form, change}) => {
         this.addUrlRules(form, change.newValue);
         form.validate();
       },
@@ -33,18 +32,18 @@ export class ProfileForm extends MobxReactForm {
         this.addAuthenticationRules(form, change.newValue);
         form.validate();
       }
-    })
+    });
   }
 
-  addUrlRules(form, value){
+  addUrlRules(form, value) {
     if (value) {
-      form.$('url').set('rules', 'regex:/^mongodb:\/\//');
+      form.$('url').set('rules', 'regex:/^mongodb:///');
     } else {
       form.$('url').set('rules', '');
     }
   }
 
-  addAuthenticationRules(form, value){
+  addAuthenticationRules(form, value) {
     if (value) {
       form.$('username').set('rules', 'required|string');
       form.$('password').set('rules', 'required|string');
@@ -54,7 +53,7 @@ export class ProfileForm extends MobxReactForm {
     }
   }
 
-  addHostRules(form, value){
+  addHostRules(form, value) {
     if (value) {
       form.$('host').set('rules', 'required|string');
       form.$('port').set('rules', 'required|numeric');
@@ -85,9 +84,9 @@ export class ProfileForm extends MobxReactForm {
     // get all form errors
     console.log('All form errors', form.errors());
     // invalidate the form with a custom error message
-    let errorMsg = [];
+    const errorMsg = [];
     const error = form.errors();
-    _.keys(error).forEach(key => {
+    _.keys(error).forEach((key) => {
       if (error[key]) {
         errorMsg.push(error[key]);
       }
@@ -101,7 +100,7 @@ export class ProfileForm extends MobxReactForm {
         package: validatorjs,
         extend: ($validator) => {
           // here we can access the `validatorjs` instance
-          var messages = $validator.getMessages('en');
+          const messages = $validator.getMessages('en');
           messages.required = ':attribute field is required.';
           $validator.setMessages('en', messages);
         },
@@ -143,7 +142,7 @@ export const Form = {
     name: 'url',
     label: 'URL',
     placeholder: 'mongodb://',
-    rules: 'regex:/^mongodb:\/\//',
+    rules: 'regex:/^mongodb:///',
     value: 'mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com',
   }, {
     name: 'database',
