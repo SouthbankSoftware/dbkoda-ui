@@ -5,14 +5,13 @@ import React from 'react';
 import {observer} from 'mobx-react';
 import {action, observable} from 'mobx';
 import autobind from 'autobind-decorator';
-import {AnchorButton, Button} from '@blueprintjs/core';
+import {Button, Colors} from '@blueprintjs/core';
 import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
 import './style.scss';
 import {featherClient} from '~/helpers/feathers';
 import Label from './Label';
-import { Colors } from "@blueprintjs/core";
 import _ from 'lodash';
 
 @observer
@@ -29,15 +28,15 @@ export default class Panel extends React.Component {
 
   @autobind _connect(data) {
     this.setState({connecting: true});
-    this.props.connect(data).then(() => this.setState({connecting: false})).catch(()=>this.setState({connecting: false}));
+    this.props.connect(data).then(() => this.setState({connecting: false})).catch(() => this.setState({connecting: false}));
   }
 
   @autobind _test(data) {
     this.setState({testing: true});
-    this.props.connect(data).then(() => this.setState({testing: false})).catch(()=>this.setState({testing: false}));
+    this.props.connect(data).then(() => this.setState({testing: false})).catch(() => this.setState({testing: false}));
   }
 
-  @autobind _getFormErrors(){
+  @autobind _getFormErrors() {
     // invalidate the form with a custom error message
     let errorMsg = [];
     const error = this.props.form.errors();
@@ -50,9 +49,12 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    const {form, title} = this.props;
+    const {form, title, profiles} = this.props;
     form.connect = this._connect;
     form.test = this._test;
+    if (this.props.form.$('alias').value === 'Connection - 1' && profiles) {
+      this.props.form.$('alias').value = 'Connection - ' + (profiles.size + 1);
+    }
     const formErrors = this._getFormErrors();
 
     return (
@@ -149,7 +151,7 @@ export default class Panel extends React.Component {
         </form>
         <div className="profile-error-input" style={{color: Colors.RED2}}>
           {
-            formErrors.map((error, i)=>{
+            formErrors.map((error, i) => {
               return <div key={i}><strong>{error}</strong></div>
             })
           }
