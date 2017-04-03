@@ -1,3 +1,9 @@
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-03T10:29:47+10:00
+ */
+
+/* eslint-disable */
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
