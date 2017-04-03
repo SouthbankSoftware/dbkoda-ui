@@ -27,11 +27,12 @@ $rightArrow: "\25B8";
 
 div.CodeMirror span.CodeMirror-matchingbracket{
   color: $white !important;
-  background-color: $matchingBackground !important;
+  border: 1px solid $white;
 }
 
 div.CodeMirror span.CodeMirror-nonmatchingbracket {
   color: $brightRedFont !important;
+  border: 1px solid $brightRedFont;
 }
 
 span.cm-property {
