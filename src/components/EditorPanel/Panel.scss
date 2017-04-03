@@ -19,15 +19,15 @@ $blueDarkest: #0e5a8a;
 $selectGray: #8a9ba8;
 $whiteColor: #f5f8fa;
 $blackColor: #000000;
-$propFontColor: #D32F2F;
-$stringFontColor: #4CAF50;
+$propFontColor: #aac6e3;
+$stringFontColor: #4caf50;
 
 $downArrow: "\25BE";
 $rightArrow: "\25B8";
 
 div.CodeMirror span.CodeMirror-matchingbracket{
   color: $white !important;
-  border: 1px solid $white;
+  border: 1px solid $selectGray;
 }
 
 div.CodeMirror span.CodeMirror-nonmatchingbracket {
