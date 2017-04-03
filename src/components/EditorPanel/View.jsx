@@ -27,6 +27,7 @@ const CodeMirrorCore = require('codemirror');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
+require('codemirror/addon/selection/active-line.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/edit/closebrackets.js');

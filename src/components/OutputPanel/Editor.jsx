@@ -90,7 +90,7 @@ export default class Editor extends React.Component {
     const outputOptions = {
        smartIndent: true,
         theme: 'ambiance',
-        styleActiveLine: true,
+        readOnly: true,
         lineWrapping: false,
         tabSize: 2,
         matchBrackets: true,
