@@ -74,6 +74,9 @@ span.cm-string {
 
 //////////////\ -------------------- \///////////////
 //////////////\ Syntax Highlighting \///////////////
+span.cm-mongo-operator {
+  color: $white !important;
+}
 span.cm-db {
   color: $purpleFont !important;
 }
