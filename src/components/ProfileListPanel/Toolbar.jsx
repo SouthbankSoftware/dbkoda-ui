@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-15 13:34:55
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-15 13:34:51
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-03T15:25:25+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -14,7 +14,7 @@ import autobind from 'autobind-decorator';
 import {Alert, AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
-import {ProfileStatus} from '../common/Constants';
+import {ProfileStatus, DrawerPanes} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
 
@@ -44,7 +44,8 @@ export default class Toolbar extends React.Component {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the New Connection Profile drawer.');
     }
     this.props.store.profileList.selectedProfile = null;
-    this.props.store.layout.drawerOpen = true;
+    this.props.store.drawer.drawerChild = DrawerPanes.PROFILE;
+    this.props.store.drawer.drawerOpen = true;
   }
 
   /**
@@ -63,7 +64,8 @@ export default class Toolbar extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the Edit Connection Profile drawer.');
         }
-        this.props.store.layout.drawerOpen = true;
+        this.props.store.drawer.drawerChild = DrawerPanes.PROFILE;
+        this.props.store.drawer.drawerOpen = true;
       }
     } else {
       if (this.props.store.userPreferences.telemetryEnabled) {

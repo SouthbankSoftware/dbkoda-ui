@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   mike
- * @Last modified time: 2017-03-28 16:03:54
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-03T15:30:47+10:00
  */
 
 import React from 'react';
@@ -20,6 +20,7 @@ import {ProfileListPanel} from '#/ProfileListPanel';
 import {TreePanel} from '#/TreePanel';
 import {ConnectionProfilePanel} from '../components/ConnectionPanel';
 import EventReaction from '#/common/logging/EventReaction.jsx';
+import {DrawerPanes} from '#/common/Constants';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -35,7 +36,7 @@ const splitPane2Style = {
   flexDirection: 'column'
 };
 
-@inject(allStores => ({store: allStores.store, layout: allStores.store.layout}))
+@inject(allStores => ({store: allStores.store, layout: allStores.store.layout, drawer: allStores.store.drawer}))
 @observer
 class App extends React.Component {
   static propTypes = {
@@ -50,7 +51,7 @@ class App extends React.Component {
 
   @action.bound
   updateDrawerOpenStatus(open) {
-    this.props.layout.drawerOpen = open;
+    this.props.drawer.drawerOpen = open;
   }
 
   @action.bound
@@ -68,8 +69,16 @@ class App extends React.Component {
     this.props.layout.rightSplitPos = pos;
   }
 
+  @action.bound
+  getDrawerChild() {
+    if (this && this.props.drawer.drawerChild == DrawerPanes.PROFILE) {
+      return <ConnectionProfilePanel />;
+    }
+    return null;
+  }
+
   render() {
-    const {layout} = this.props;
+    const {layout, drawer} = this.props;
     let defaultOverallSplitPos;
     let defaultLeftSplitPos;
     let defaultRightSplitPos;
@@ -102,7 +111,7 @@ class App extends React.Component {
         </Alert>
         <Drawer
           className="drawer"
-          open={layout.drawerOpen}
+          open={drawer.drawerOpen}
           width="40%"
           handleWidth={0}
           noTouchOpen
@@ -111,7 +120,7 @@ class App extends React.Component {
           'minWidth': 512
         }}
           onChange={this.updateDrawerOpenStatus}>
-          <ConnectionProfilePanel />
+          {this.getDrawerChild}
         </Drawer>
         <SplitPane
           split="vertical"

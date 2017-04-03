@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-29T17:30:54+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-03T15:13:35+10:00
  */
 
 import _ from 'lodash';
@@ -46,10 +46,14 @@ export default class Store {
 
   @observable layout = {
     optInVisible: true,
-    drawerOpen: false,
     overallSplitPos: '30%',
     leftSplitPos: '50%',
     rightSplitPos: '70%',
+  };
+
+  @observable drawer = {
+    drawerOpen: false,
+    drawerChild: null,
   };
 
   @observable profileList = observable({
