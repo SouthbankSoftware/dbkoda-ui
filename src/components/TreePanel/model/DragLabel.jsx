@@ -3,7 +3,7 @@
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T12:32:56+11:00
+ * @Last modified time: 2017-04-03T12:27:27+10:00
 */
 
 import React from 'react';
@@ -13,11 +13,21 @@ import { DragSource } from 'react-dnd';
 import { DragItemTypes } from '#/common/Constants.js';
 
 const labelSource = {
+  /**
+   * drag call back function with attached the props with the element being dragged
+   * @param  {object} props props of this element from which the drag process is being initiated
+   * @return {object}       returns the props to be passed on to drop target
+   */
   beginDrag(props) {
     return { label: props.label, type: props.type, id: props.id, refParent: props.refParent };
   },
 };
-
+/**
+ * Collect the information required by the connector and inject it into the react component as props
+ * @param {} connect - connectors let you assign one of the predefined roles (a drag source, a drag preview, or a drop target) to the DOM nodes
+ * @param {} monitor - keeps the state of drag process, e.g object which is being dragged
+ * @return {object} props object for component
+ */
 function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
@@ -31,6 +41,9 @@ function collect(connect, monitor) {
 @inject('treeState')
 @observer
 class DragLabel extends React.Component {
+  /**
+   * Get the trimmed server name in case of server config/shard treeNode
+   */
   get ServerName() {
     const serverName = this.props.label;
     let newServerName = serverName;
@@ -41,6 +54,10 @@ class DragLabel extends React.Component {
     }
     return newServerName;
   }
+  /**
+   * Returns the text of the label to render with filtered text highlighted
+   * @return {string} - HTML text
+   */
   @computed get FilteredTextLabel() {
     const filterText = this.props.treeState.filter;
     const strText = this.props.label;
@@ -57,6 +74,10 @@ class DragLabel extends React.Component {
     }
     return strText;
   }
+  /**
+   * Main Render method of this React Component
+   * @return {connectDragSource} - returns the react component with the dragDrop api wrapper.
+   */
   render() {
     const { connectDragSource, isDragging } = this.props;
     return connectDragSource(
