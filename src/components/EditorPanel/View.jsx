@@ -22,6 +22,7 @@ import './Panel.scss';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
+const CM = require('codemirror');
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
@@ -204,6 +205,13 @@ class View extends React.Component {
    */
   componentDidMount() {
     this.refresh();
+    const orig = CM.hint.javascript;
+    CM.hint.javascript = function(cm) {
+      const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+      inner.list.push("test");
+      console.log('xxxxxx')
+      return inner;
+    };
   }
 
   /**
@@ -291,6 +299,7 @@ class View extends React.Component {
           autoSave
           ref="editor"
           value={this.state.code}
+          codeMirrorInstance={CM}
           onChange={value => this.updateCode(value)}
           options={this.state.options} /> {isOver && <div
             style={{
