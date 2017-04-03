@@ -1,4 +1,14 @@
 /**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-30T09:57:22+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-03T11:29:02+10:00
+ */
+
+
+
+/**
  * create new profile form and handle connection
  */
 import React from 'react';
@@ -114,6 +124,9 @@ const ConnectionPanel = ({
         username: data.username,
         sha: data.sha
       });
+      if (!profileList.selectedProfile) {
+        profileList.selectedProfile = profiles.get(res.id);
+      }
       close();
       Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
     } else {

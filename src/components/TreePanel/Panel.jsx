@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T16:51:29+11:00
+ * @Last modified time: 2017-04-03T10:41:02+10:00
 */
 
 import React from 'react';
@@ -32,12 +32,17 @@ export default class TreePanel extends React.Component {
     }
   }
   componentWillMount() {
+    /**
+     * Reaction to change in selected Profile from the profile pane
+     * @param  {function} this - condition to react on change
+     * @param  {function} if   - Reaction callback Function
+     */
     reaction(
       () => this.props.store.profileList.selectedProfile,
       () => {
         if (this.props.store.profileList.selectedProfile) {
           this.treeState.setProfileAlias(this.props.store.profileList.selectedProfile.alias);
-          featherClient()
+          featherClient()                 // Calls the controller to load the topology associated with the selected Profile
             .service('/mongo-inspector')
             .get(this.props.store.profileList.selectedProfile.id)
             .then((res) => {
@@ -53,7 +58,11 @@ export default class TreePanel extends React.Component {
         }
       },
     );
-
+    /**
+     * Reaction to update tree when topology is changed
+     * @param  {function} this Condition to react on changed
+     * @param  {function} if   Reaction callback function
+     */
     reaction(
       () => this.props.store.topology.isChanged,
       () => {
