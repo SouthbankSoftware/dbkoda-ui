@@ -10,6 +10,7 @@
 /* eslint-disable react/prop-types */
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/lint/lint.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction} from 'mobx';
@@ -25,9 +26,12 @@ const React = require('react');
 const CodeMirror = require('react-codemirror');
 const CM = require('codemirror');
 
+require('codemirror/addon/lint/lint.css');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
+require('codemirror/addon/lint/lint.js');
+require('codemirror/addon/lint/javascript-lint.js');
 require('codemirror/addon/selection/active-line.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
@@ -90,12 +94,13 @@ class View extends React.Component {
         tabSize: 2,
         matchBrackets: true,
         autoCloseBrackets: true,
+        lint: true,
         foldOptions: {
           widget: '...'
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
+          'CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'
         ],
         keyMap: 'sublime',
         extraKeys: {

@@ -1818,6 +1818,10 @@ codemirror-highlight@^1.0.0:
     codemirror "3.x"
     escape-html "~1.0.0"
 
+codemirror-lint-eslint@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/codemirror-lint-eslint/-/codemirror-lint-eslint-1.0.1.tgz#6d4e068353394d97322c807325e373b9c7103fc9"
+
 codemirror@3.x:
   version "3.24.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-3.24.0.tgz#335634d8aaf469f2d6968d2bc80417213fba99d6"
@@ -5013,12 +5017,6 @@ js-yaml@~3.7.0:
     argparse "^1.0.7"
     esprima "^2.6.0"
 
-jsbeautify@^0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/jsbeautify/-/jsbeautify-0.3.6.tgz#571b72cb8aed76aaf2a58731a2bca31ab592bf25"
-  dependencies:
-    optimist "0.x.x"
-
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -6109,7 +6107,7 @@ opn@4.0.2:
     object-assign "^4.0.1"
     pinkie-promise "^2.0.0"
 
-optimist@0.6.x, optimist@0.x.x, optimist@^0.6.1:
+optimist@0.6.x, optimist@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/optimist/-/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
   dependencies:
