@@ -2,8 +2,8 @@
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-03T09:47:22+11:00
 * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-10T17:36:52+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-03T15:13:31+10:00
 */
 
 import React from 'react';
@@ -17,16 +17,19 @@ import Store from '~/stores/global';
 describe('App', () => {
   let app;
   const layout = observable({
-    drawerOpen: false,
     overallSplitPos: '30%',
     leftSplitPos: '50%',
     rightSplitPos: '70%',
   });
 
+  const drawer = observable({
+    drawerOpen: false
+  });
+
   beforeAll(() => {
     useStrict(true);
 
-    app = shallow(<App.wrappedComponent layout={layout} />);
+    app = shallow(<App.wrappedComponent layout={layout} drawer={drawer} />);
   });
 
   test('has a drawer', () => {

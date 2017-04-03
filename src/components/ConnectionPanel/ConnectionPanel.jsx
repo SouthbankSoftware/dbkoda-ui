@@ -3,32 +3,32 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T11:29:02+10:00
+ * @Last modified time: 2017-04-03T15:36:29+10:00
  */
-
-
 
 /**
  * create new profile form and handle connection
  */
 import React from 'react';
-import {action} from 'mobx';
-import {inject, observer} from 'mobx-react';
-import {Intent, Position} from '@blueprintjs/core';
+import { action } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { Intent, Position } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
-import {createForm, createFromFromProfile, ProfileForm} from './ProfileForm';
+import { createForm, createFromFromProfile, ProfileForm } from './ProfileForm';
 import Panel from './Panel';
-import {featherClient} from '../../helpers/feathers';
-import {DBenvyToaster} from '../common/Toaster';
-import {Broker, EventType} from '../../helpers/broker';
-import {ProfileStatus} from '.././common/Constants';
+import { featherClient } from '../../helpers/feathers';
+import { DBenvyToaster } from '../common/Toaster';
+import { Broker, EventType } from '../../helpers/broker';
+import { ProfileStatus } from '.././common/Constants';
 
-const ConnectionPanel = ({
-  profiles,
-  profileList,
-  layout,
-  userPreferences
-}, ) => {
+const ConnectionPanel = (
+  {
+    profiles,
+    profileList,
+    drawer,
+    userPreferences,
+  },
+) => {
   const selectedProfile = profileList.selectedProfile;
   let edit = false;
   if (profileList.selectedProfile) {
@@ -48,7 +48,12 @@ const ConnectionPanel = ({
     }
     if (data.sha) {
       const split = connectionUrl.split(ProfileForm.mongoProtocol);
-      connectionUrl = ProfileForm.mongoProtocol + data.username + ':' + data.password + '@' + split[1];
+      connectionUrl = ProfileForm.mongoProtocol +
+        data.username +
+        ':' +
+        data.password +
+        '@' +
+        split[1];
     }
     if (data.database) {
       connectionUrl = connectionUrl + '/' + data.database;
@@ -64,13 +69,17 @@ const ConnectionPanel = ({
     profileList.creatingNewProfile = true;
     return featherClient()
       .service('/mongo-connection')
-      .create({}, {query})
+      .create({}, { query })
       .then((res) => {
         onSuccess(res, data);
       })
       .catch((err) => {
         onFail();
-        DBenvyToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        DBenvyToaster(Position.LEFT_BOTTOM).show({
+          message: err.message,
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down',
+        });
       });
   });
 
@@ -84,7 +93,11 @@ const ConnectionPanel = ({
     let validate = true;
     profiles.forEach((value, key) => {
       if (value.alias === data.alias) {
-        DBenvyToaster(Position.LEFT_BOTTOM).show({message: 'Alias already existed.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        DBenvyToaster(Position.LEFT_BOTTOM).show({
+          message: 'Alias already existed.',
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down',
+        });
         validate = false;
       }
     });
@@ -122,7 +135,7 @@ const ConnectionPanel = ({
         url: data.url,
         urlRadio: data.urlRadio,
         username: data.username,
-        sha: data.sha
+        sha: data.sha,
       });
       if (!profileList.selectedProfile) {
         profileList.selectedProfile = profiles.get(res.id);
@@ -132,28 +145,42 @@ const ConnectionPanel = ({
     } else {
       message = 'Test ' + message;
     }
-    DBenvyToaster(position).show({message, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    DBenvyToaster(position).show({
+      message,
+      intent: Intent.SUCCESS,
+      iconName: 'pt-icon-thumbs-up',
+    });
   });
 
   const onFail = action(() => {
     if (userPreferences.telemetryEnabled) {
-      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.FAILED, EventLogging.getFragmentEnum().PROFILES, 'Attempt to create a new profile failed.');
+      EventLogging.recordManualEvent(
+        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.FAILED,
+        EventLogging.getFragmentEnum().PROFILES,
+        'Attempt to create a new profile failed.',
+      );
     }
     profileList.creatingNewProfile = false;
   });
 
   const close = action(() => {
-    layout.drawerOpen = false;
+    drawer.drawerOpen = false;
   });
 
-  return (<Panel
-    form={form}
-    close={close}
-    connect={connect}
-    profiles={profiles}
-    title={edit
-    ? 'Edit Connection'
-    : 'Create New Connection'}/>);
+  return (
+    <Panel
+      form={form}
+      close={close}
+      connect={connect}
+      profiles={profiles}
+      title={edit ? 'Edit Connection' : 'Create New Connection'}
+    />
+  );
 };
 
-export default inject(allStores => ({profiles: allStores.store.profiles, profileList: allStores.store.profileList, layout: allStores.store.layout, userPreferences: allStores.store.userPreferences}))(observer(ConnectionPanel));
+export default inject(allStores => ({
+  profiles: allStores.store.profiles,
+  profileList: allStores.store.profileList,
+  drawer: allStores.store.drawer,
+  userPreferences: allStores.store.userPreferences,
+}))(observer(ConnectionPanel));

@@ -45,4 +45,16 @@ describe('New Connection Profile Panel', () => {
     expect(app.find('.port-input')).to.not.be.disabled();
     expect(app.find('.url-input')).to.be.disabled();
   });
+
+
+  it('test new connection with hostname disabled', () => {
+    let store = new Store();
+    let form = createForm({hostRadio: false});
+    const app = mount(<Provider store={store}>
+      <Panel form={form}/>
+    </Provider>);
+    expect(app.find('.host-input')).to.be.disabled();
+    expect(app.find('.port-input')).to.be.disabled();
+    expect(app.find('.url-input')).to.not.be.disabled();
+  });
 });
