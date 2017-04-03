@@ -20,6 +20,7 @@ import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import './Panel.scss';
 
+const Beautify = require('js-beautify').js_beautify;
 const React = require('react');
 const CodeMirror = require('react-codemirror');
 const CM = require('codemirror');
@@ -27,13 +28,19 @@ const CM = require('codemirror');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
+require('codemirror/addon/selection/active-line.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/edit/closebrackets.js');
+require('codemirror/addon/fold/foldcode.js');
 require('codemirror/addon/fold/foldgutter.js');
+require('codemirror/addon/fold/brace-fold.js');
+require('codemirror/addon/fold/comment-fold.js');
+require('codemirror/addon/fold/xml-fold.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 require('codemirror/keymap/sublime.js');
+require('codemirror-formatting');
 require('#/common/MongoScript.js');
 
 /**
@@ -76,31 +83,42 @@ class View extends React.Component {
     super(props);
     this.state = {
       options: {
-        smartIndent: true,
         theme: 'ambiance',
         lineNumbers: 'true',
+        indentUnit: 2,
+        smartIndent: true,
         tabSize: 2,
         matchBrackets: true,
         autoCloseBrackets: true,
+        foldOptions: {
+          widget: '...'
+        },
+        foldGutter: true,
+        gutters: [
+          'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
+        ],
         keyMap: 'sublime',
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
+          },
+          'Ctrl-B': function(cm) {
+            const beautified = Beautify(cm.getSelection(), {
+              'indent_size': 2,
+              'indent_char': ' ',
+              'indent_with_tabs': false,
+              'jslint_happy': true,
+            });
+            cm.setValue(beautified);
           }
         },
-        mode: 'mongoscript'
+        mode: 'mongoscript',
       },
-      code: '//////////////////////////////////\n// Welcome to DBEnvy!\n//\n// Please forgive' +
-          ' the terrible color pallete for now.\n// I promise it\'s only a placeholder.\n//' +
-          ' Also forgive the temporary highlighting of comments, working on it.\n//\n// Try' +
-          ' some of our Hotkeys:\n// Note: Currently you cannot have the editor focused whi' +
-          'le using hotkeys!\n// Ctrl + Space : Auto-Complete (Partially complete)\n// Shif' +
-          't + n : New Editor\n// Shift + e : Execute Selected\n// Shift + a : Execute All' +
-          '\n// Shift + c : Clean Output\n// Shift + x : Save Output\n// Shift + m : Show M' +
-          'ore Output (If Available)\n//\n// You can also right click on the Editor for a c' +
-          'ontext Menu.\n// If you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collection' +
+      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive' +
+          ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
+          ' Also forgive the temporary highlighting of comments, working on it.\n\nIf you have too many tabs, use the filter box to search for a s' +
+          'pecific alias.\n\nUse \'Ctrl-B\` to beautify selected text using JS-Beautify.**/\n\nshow dbs;\nshow collection' +
           's;\nuse test;'
     };
 
