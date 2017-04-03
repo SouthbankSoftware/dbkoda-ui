@@ -84,7 +84,10 @@ class View extends React.Component {
         autoCloseBrackets: true,
         keyMap: 'sublime',
         extraKeys: {
-          'Ctrl-Space': 'autocomplete'
+          'Ctrl-Space': 'autocomplete',
+          'Ctrl-Q': function (cm) {
+            cm.foldCode(cm.getCursor());
+          }
         },
         mode: 'mongoscript'
       },
@@ -97,7 +100,8 @@ class View extends React.Component {
           '\n// Shift + c : Clean Output\n// Shift + x : Save Output\n// Shift + m : Show M' +
           'ore Output (If Available)\n//\n// You can also right click on the Editor for a c' +
           'ontext Menu.\n// If you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collections;\nuse test;'
+          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collection' +
+          's;\nuse test;'
     };
 
     /**
@@ -208,8 +212,7 @@ class View extends React.Component {
     const orig = CM.hint.javascript;
     CM.hint.javascript = function(cm) {
       const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-      inner.list.push("test");
-      console.log('xxxxxx')
+      console.log('current line: ', cm.doc.getRange({...cm.getCursor(), ch:0}, cm.getCursor()));
       return inner;
     };
   }
@@ -299,7 +302,6 @@ class View extends React.Component {
           autoSave
           ref="editor"
           value={this.state.code}
-          codeMirrorInstance={CM}
           onChange={value => this.updateCode(value)}
           options={this.state.options} /> {isOver && <div
             style={{

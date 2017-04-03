@@ -3,14 +3,11 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-31T10:40:25+11:00
+ * @Last modified time: 2017-04-03T12:39:14+10:00
 */
 
 import React from 'react';
-
-
 import { observable } from 'mobx';
-
 import { ITreeNode } from '@blueprintjs/core';
 
 import DragLabel from './DragLabel.jsx';
@@ -35,7 +32,7 @@ export default class TreeNode implements ITreeNode {
    */
   constructor(treeJSON, parent) {
     this.type = TreeNode.getNodeType(treeJSON, parent);
-    this.iconName = `tree-${this.type}`;
+    this.iconName = `pt-icon-${this.type}`;
     if (parent && parent.id != 'root') {
       this.id = `${parent.id}_${treeJSON.text}`;
     } else {
@@ -87,6 +84,8 @@ export default class TreeNode implements ITreeNode {
     }
   }
 /**
+ * Returns the node type based on the node text or json specified node type
+ *
  * @param {Object} treeJSON - JSON object from controller having text
  * @return {string} - type of the node in mongodb
  */
@@ -99,6 +98,10 @@ export default class TreeNode implements ITreeNode {
     }
     return treeJSON.text.toLowerCase().replace(' ', '');
   }
+
+  /**
+   * Returns the current tree node state to restore to it after a temporary change (used for SetTreeRoot functionality)
+   */
   get StateObject() {
     const objState = {};
     objState.isFiltered = (this.isFiltered || false);
@@ -113,6 +116,10 @@ export default class TreeNode implements ITreeNode {
     }
     return objState;
   }
+  /**
+   * Set the current node to a previously saved state
+   * @param {Object} objState - JSON Object representing the treeNode state
+   */
   set StateObject(objState) {
     this.isFiltered = objState.isFiltered;
     this.isExpanded = objState.isExpanded;

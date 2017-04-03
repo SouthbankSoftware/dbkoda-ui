@@ -3,12 +3,17 @@
 * @Date:   2017-03-17T10:29:12+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T14:30:35+11:00
+ * @Last modified time: 2017-04-03T09:57:45+10:00
 */
 
 const Templates = require('../templates/dragdrop');
 
 export default class TreeDropActions {
+  /**
+   * Function to load a template based on the resolved template type
+   * @param  {string} type - Type of the template to load
+   * @return {Template}    - Handle Template to generate code based on context
+   */
   static getTemplateByType(type) {
     const templateId = Templates[type];
     const template = require('../templates/dragdrop/'+ templateId); //eslint-disable-line
@@ -17,8 +22,8 @@ export default class TreeDropActions {
   }
   /**
    * get context for handlebars template
-   * @param  TreeNode treeNode  selected treenode dragged by the user
-   * @return object   context   object containing necessory information for the template.
+   * @param  {TreeNode} treeNode  - selected treenode dragged by the user
+   * @return {Object}             - object containing necessory information for the template.
    */
   static getContext(treeNode) {
     let context = {};
@@ -40,6 +45,11 @@ export default class TreeDropActions {
     }
     return context;
   }
+  /**
+   * Function to get the code specific to TreeNode type
+   * @param  {TreeNode} treeNode - selected node for which the user wants to generate code
+   * @return {String}            - generated code
+   */
   static getCodeForTreeNode(treeNode) {
     const context = TreeDropActions.getContext(treeNode);
     const template = TreeDropActions.getTemplateByType(treeNode.type);

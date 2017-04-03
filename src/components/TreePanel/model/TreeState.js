@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-31T10:31:26+11:00
+ * @Last modified time: 2017-04-03T12:36:46+10:00
 */
 
 import { observable, action } from 'mobx';
@@ -24,13 +24,24 @@ export default class TreeState {
     this.filteredNodes = observable([]);
     this.resetTreeNode = new TreeNode({ text: '...' });
   }
+  /**
+   * set the selected profile alias to be shown in toolbar
+   * @param {string}  - text of profile alias
+   */
   @action setProfileAlias(value) {
     this.profileAlias = value;
   }
+  /**
+   * Set the filter value for the tree nodes and executes the function to filter treeNodes.
+   * @param {string}  - text to filter and highlight
+   */
   @action setFilter(value) {
     this.filter = value.toLowerCase();
     this.filterNodes();
   }
+  /**
+   * Function to perform the filter action on the treeNodes.
+   */
   filterNodes() {
     this.filteredNodes.clear();
     if (this.treeRoot) {
@@ -77,22 +88,36 @@ export default class TreeState {
     });
     nodeData.isSelected = true; // originallySelected == null ? true : !originallySelected;
   }
+  /**
+   * Set the root node of the tree
+   * @param  {treeNode} nodeData treeNode which has been selected by the user
+   */
   selectRootNode(nodeData) {
     this.preserveState();
     this.treeRoot = nodeData;
     this.filterNodes();
   }
+  /**
+   * Reset the root node to display the complete topology of the selected profile
+   */
   resetRootNode() {
     this.treeRoot = undefined;
     this.filterNodes();
     this.restoreState();
   }
+  /**
+   * Save the state of tree for future restoration
+   */
   preserveState() {
     this.previousState = new Map();
     for (const child of this.treeNodes) {
       this.previousState.set(child.id, child.StateObject);
     }
   }
+  /**
+   * Restores the tree state to a previous state
+   * @return {[type]} [description]
+   */
   restoreState() {
     if (this.previousState && this.previousState.size > 0) {
       for (const child of this.treeNodes) {
@@ -101,10 +126,18 @@ export default class TreeState {
       }
     }
   }
+  /**
+   * Returns the tree nodes to bind to react tree component
+   * @return {[type]} [description]
+   */
   get nodes() {
     return this.filteredNodes;
   }
-
+  /**
+   * Function to iterate all the nodes of a treeState
+   * @param  {ITreeNode[]}   nodes    - Nodes array/map to parse
+   * @param  {Function} callback - Callback method to execute on each node
+   */
   forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
     if (nodes == null) {
       return;
