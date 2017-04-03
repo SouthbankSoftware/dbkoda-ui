@@ -88,15 +88,29 @@ export default class Editor extends React.Component {
 
   render() {
     const outputOptions = {
-      lineWrapping: true,
-      mode: 'mongoscript',
-      matchBrackets: true,
-      json: true,
-      jsonld: true,
-      readOnly: true,
-      smartIndent: true,
-      theme: 'ambiance',
-      typescript: true,
+       smartIndent: true,
+        theme: 'ambiance',
+        styleActiveLine: true,
+        lineNumbers: 'true',
+        lineWrapping: false,
+        tabSize: 2,
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        foldOptions: {
+          widget: '...'
+        },
+        foldGutter: true,
+        gutters: [
+          'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
+        ],
+        keyMap: 'sublime',
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete',
+          'Ctrl-Q': function (cm) {
+            cm.foldCode(cm.getCursor());
+          }
+        },
+        mode: 'mongoscript'
     };
     return (
       <div className="outputEditor">
