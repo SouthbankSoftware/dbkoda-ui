@@ -1,14 +1,27 @@
 # @Author: guiguan
 # @Date:   2017-01-09T15:15:34+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-03-03T10:12:12+11:00
+# @Last modified time: 2017-04-03T11:59:18+10:00
 
 
 
 pipeline:
-  prepare:
+  # prepare:
+  #   image: southbanksoftware/dbenvy-ci-node-runtime
+  #   volumes_from:
+  #     - dbenvy-ci-volumes-data
+  #   commands:
+  #     - dbenvy-ci --url=http://172.16.0.1:3030 loadConfig
+  build:
     image: southbanksoftware/dbenvy-ci-node-runtime
-    volumes_from:
-      - dbenvy-ci-volumes-data
     commands:
-      - dbenvy-ci --url=http://172.16.0.1:3030 loadConfig
+      - yarn test
+  slack:
+    image: plugins/slack
+    webhook: ${SLACK_WEBHOOK}
+    channel: ci
+    template: >
+      Build <{{build.link}}|{{build.number}}> (<https://github.com/{{repo.owner}}/{{repo.name}}/commit/{{build.commit}}|{{truncate build.commit 8}}>) of <https://github.com/{{repo.owner}}/{{repo.name}}|{{repo.owner}}/{{repo.name}}> has {{#success build.status}}succeeded{{else}}failed{{/success}} in {{since job.started}}
+      <@{{build.author}}>: {{{build.message}}}
+    when:
+      status: [success, failure]

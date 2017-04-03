@@ -150,6 +150,7 @@ const ConnectionPanel = ({
     form={form}
     close={close}
     connect={connect}
+    profiles={profiles}
     title={edit
     ? 'Edit Connection'
     : 'Create New Connection'}/>);
