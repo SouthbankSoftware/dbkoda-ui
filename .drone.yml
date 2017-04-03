@@ -1,7 +1,7 @@
 # @Author: guiguan
 # @Date:   2017-01-09T15:15:34+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-04-03T13:14:39+10:00
+# @Last modified time: 2017-04-03T13:21:26+10:00
 
 
 
@@ -16,8 +16,9 @@ pipeline:
     image: southbanksoftware/dbenvy-ci-node-runtime
     commands:
       - echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > ~/.npmrc
-      - yarn global add node-gyp
-      - yarn install
+      - npm install
+      # - yarn global add node-gyp
+      # - yarn install
       - yarn test
   slack:
     image: plugins/slack
