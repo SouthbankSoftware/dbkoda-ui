@@ -21,15 +21,18 @@ $whiteColor: #f5f8fa;
 $blackColor: #000000;
 $propFontColor: #D32F2F;
 $stringFontColor: #4CAF50;
-$keywordUseFontColor: #b95cce;
+
+$downArrow: "\25BE";
+$rightArrow: "\25B8";
 
 div.CodeMirror span.CodeMirror-matchingbracket{
   color: $white !important;
-  background-color: $matchingBackground !important;
+  border: 1px solid $white;
 }
 
 div.CodeMirror span.CodeMirror-nonmatchingbracket {
   color: $brightRedFont !important;
+  border: 1px solid $brightRedFont;
 }
 
 span.cm-property {
@@ -107,6 +110,43 @@ span.cm-dbenvy-prompt{
 span.cm-mongos-prompt{
   color: $selectGray !important;
 }
+
+.CodeMirror-foldmarker {
+  color: $purpleFont;
+  font-family: arial;
+  line-height: .3;
+  cursor: pointer;
+}
+
+.CodeMirror-foldgutter {
+  width: .7em;
+}
+.cm-s-ambiance .CodeMirror-guttermarker-subtle {
+  color: $white !important;
+  cursor: pointer;
+}
+
+.CodeMirror-foldgutter-open,
+.CodeMirror-foldgutter-folded {
+  color: #555;
+  cursor: pointer;
+}
+.CodeMirror-foldgutter-open:after {
+  content: $downArrow;
+}
+.CodeMirror-foldgutter-folded:after {
+  content: $rightArrow;
+}
+.CodeMirror-activeline {
+
+}
+.CodeMirror-activeline-background {
+ background: none repeat scroll 0% 0% rgba(255, 255, 255, 0.10) !important;
+}
+.CodeMirror-activeline-gutter {
+ background-color: $matchingBackground;
+}
+
 
 //////////////\ Syntax Highlighting \///////////////
 //////////////\ -------------------- \///////////////

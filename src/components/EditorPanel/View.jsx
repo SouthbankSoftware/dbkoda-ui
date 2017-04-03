@@ -22,6 +22,7 @@ import './Panel.scss';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
+const CM = require('codemirror');
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
@@ -83,7 +84,10 @@ class View extends React.Component {
         autoCloseBrackets: true,
         keyMap: 'sublime',
         extraKeys: {
-          'Ctrl-Space': 'autocomplete'
+          'Ctrl-Space': 'autocomplete',
+          'Ctrl-Q': function (cm) {
+            cm.foldCode(cm.getCursor());
+          }
         },
         mode: 'mongoscript'
       },
@@ -96,7 +100,8 @@ class View extends React.Component {
           '\n// Shift + c : Clean Output\n// Shift + x : Save Output\n// Shift + m : Show M' +
           'ore Output (If Available)\n//\n// You can also right click on the Editor for a c' +
           'ontext Menu.\n// If you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collections;\nuse test;'
+          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collection' +
+          's;\nuse test;'
     };
 
     /**
@@ -204,6 +209,12 @@ class View extends React.Component {
    */
   componentDidMount() {
     this.refresh();
+    const orig = CM.hint.javascript;
+    CM.hint.javascript = function(cm) {
+      const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+      console.log('current line: ', cm.doc.getRange({...cm.getCursor(), ch:0}, cm.getCursor()));
+      return inner;
+    };
   }
 
   /**

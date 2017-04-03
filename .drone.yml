@@ -1,7 +1,7 @@
 # @Author: guiguan
 # @Date:   2017-01-09T15:15:34+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-04-03T11:59:18+10:00
+# @Last modified time: 2017-04-03T14:38:37+10:00
 
 
 
@@ -14,14 +14,19 @@ pipeline:
   #     - dbenvy-ci --url=http://172.16.0.1:3030 loadConfig
   build:
     image: southbanksoftware/dbenvy-ci-node-runtime
+    pull: true
     commands:
+      - echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" >> ~/.npmrc
+      - yarn global add node-gyp
+      - yarn install
       - yarn test
   slack:
     image: plugins/slack
+    pull: true
     webhook: ${SLACK_WEBHOOK}
     channel: ci
     template: >
       Build <{{build.link}}|{{build.number}}> (<https://github.com/{{repo.owner}}/{{repo.name}}/commit/{{build.commit}}|{{truncate build.commit 8}}>) of <https://github.com/{{repo.owner}}/{{repo.name}}|{{repo.owner}}/{{repo.name}}> has {{#success build.status}}succeeded{{else}}failed{{/success}} in {{since job.started}}
-      <@{{build.author}}>: {{{build.message}}}
+      <@${DRONE_COMMIT_AUTHOR}>: {{{build.message}}}
     when:
       status: [success, failure]
