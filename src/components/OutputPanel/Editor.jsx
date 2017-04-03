@@ -91,7 +91,6 @@ export default class Editor extends React.Component {
        smartIndent: true,
         theme: 'ambiance',
         styleActiveLine: true,
-        lineNumbers: 'true',
         lineWrapping: false,
         tabSize: 2,
         matchBrackets: true,
