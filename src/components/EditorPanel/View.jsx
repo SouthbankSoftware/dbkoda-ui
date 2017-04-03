@@ -22,20 +22,15 @@ import './Panel.scss';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
-const CodeMirrorCore = require('codemirror');
+const CM = require('codemirror');
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
-require('codemirror/addon/selection/active-line.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/edit/closebrackets.js');
-require('codemirror/addon/fold/foldcode.js');
 require('codemirror/addon/fold/foldgutter.js');
-require('codemirror/addon/fold/brace-fold.js');
-require('codemirror/addon/fold/comment-fold.js');
-require('codemirror/addon/fold/xml-fold.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 require('codemirror/keymap/sublime.js');
@@ -83,19 +78,10 @@ class View extends React.Component {
       options: {
         smartIndent: true,
         theme: 'ambiance',
-        styleActiveLine: true,
         lineNumbers: 'true',
-        lineWrapping: false,
         tabSize: 2,
         matchBrackets: true,
         autoCloseBrackets: true,
-        foldOptions: {
-          widget: '...'
-        },
-        foldGutter: true,
-        gutters: [
-          'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
-        ],
         keyMap: 'sublime',
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
@@ -217,6 +203,12 @@ class View extends React.Component {
    */
   componentDidMount() {
     this.refresh();
+    const orig = CM.hint.javascript;
+    CM.hint.javascript = function(cm) {
+      const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+      console.log('current line: ', cm.doc.getRange({...cm.getCursor(), ch:0}, cm.getCursor()));
+      return inner;
+    };
   }
 
   /**
