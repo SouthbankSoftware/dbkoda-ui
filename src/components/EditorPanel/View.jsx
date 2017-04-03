@@ -22,6 +22,7 @@ import './Panel.scss';
 
 const React = require('react');
 const CodeMirror = require('react-codemirror');
+const CodeMirrorCore = require('codemirror');
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
@@ -29,7 +30,11 @@ require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/edit/closebrackets.js');
+require('codemirror/addon/fold/foldcode.js');
 require('codemirror/addon/fold/foldgutter.js');
+require('codemirror/addon/fold/brace-fold.js');
+require('codemirror/addon/fold/comment-fold.js');
+require('codemirror/addon/fold/xml-fold.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 require('codemirror/keymap/sublime.js');
@@ -77,13 +82,25 @@ class View extends React.Component {
       options: {
         smartIndent: true,
         theme: 'ambiance',
+        styleActiveLine: true,
         lineNumbers: 'true',
+        lineWrapping: false,
         tabSize: 2,
         matchBrackets: true,
         autoCloseBrackets: true,
+        foldOptions: {
+          widget: '...'
+        },
+        foldGutter: true,
+        gutters: [
+          'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
+        ],
         keyMap: 'sublime',
         extraKeys: {
-          'Ctrl-Space': 'autocomplete'
+          'Ctrl-Space': 'autocomplete',
+          'Ctrl-Q': function (cm) {
+            cm.foldCode(cm.getCursor());
+          }
         },
         mode: 'mongoscript'
       },
@@ -96,7 +113,8 @@ class View extends React.Component {
           '\n// Shift + c : Clean Output\n// Shift + x : Save Output\n// Shift + m : Show M' +
           'ore Output (If Available)\n//\n// You can also right click on the Editor for a c' +
           'ontext Menu.\n// If you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collections;\nuse test;'
+          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collection' +
+          's;\nuse test;'
     };
 
     /**
