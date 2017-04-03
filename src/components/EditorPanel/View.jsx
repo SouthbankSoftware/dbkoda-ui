@@ -105,16 +105,10 @@ class View extends React.Component {
         },
         mode: 'mongoscript'
       },
-      code: '//////////////////////////////////\n// Welcome to DBEnvy!\n//\n// Please forgive' +
-          ' the terrible color pallete for now.\n// I promise it\'s only a placeholder.\n//' +
-          ' Also forgive the temporary highlighting of comments, working on it.\n//\n// Try' +
-          ' some of our Hotkeys:\n// Note: Currently you cannot have the editor focused whi' +
-          'le using hotkeys!\n// Ctrl + Space : Auto-Complete (Partially complete)\n// Shif' +
-          't + n : New Editor\n// Shift + e : Execute Selected\n// Shift + a : Execute All' +
-          '\n// Shift + c : Clean Output\n// Shift + x : Save Output\n// Shift + m : Show M' +
-          'ore Output (If Available)\n//\n// You can also right click on the Editor for a c' +
-          'ontext Menu.\n// If you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n//////////////////////////////////\n\nshow dbs;\nshow collection' +
+      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive' +
+          ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
+          ' Also forgive the temporary highlighting of comments, working on it.\n\nIf you have too many tabs, use the filter box to search for a s' +
+          'pecific alias.\n**/\n\nshow dbs;\nshow collection' +
           's;\nuse test;'
     };
 
