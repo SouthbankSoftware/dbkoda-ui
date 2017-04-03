@@ -36,7 +36,7 @@ CodeMirror.defineMode("mongoscript", function(config, parserConfig) {
     var B = kw("keyword b", "keyword b");
     var C = kw("keyword c", "keyword c");
     function MONGO(type) {return {type: "keyword", style: type}};
-    var OP = MONGO("mongo-operator");
+    var OP = kw("variable", "mongo-operator");
     var operator = kw("operator"), atom = {type: "atom", style: "atom"};
     var jsKeywords = {
       "if": kw("if","keyword"),
