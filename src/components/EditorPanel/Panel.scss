@@ -146,7 +146,9 @@ span.cm-mongos-prompt{
 .CodeMirror-activeline-gutter {
  background-color: $matchingBackground;
 }
-
+.pt-dark pre {
+  box-shadow: none !important;
+}
 
 //////////////\ Syntax Highlighting \///////////////
 //////////////\ -------------------- \///////////////
