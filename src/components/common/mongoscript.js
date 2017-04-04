@@ -20,7 +20,7 @@ function expressionAllowed(stream, state, backUp) {
     (state.lastType == "quasi" && /\{\s*$/.test(stream.string.slice(0, stream.pos - (backUp || 0))))
 }
 
-CodeMirror.defineMode("mongoscript", function(config, parserConfig) {
+CodeMirror.defineMode("MongoScript", function(config, parserConfig) {
   var indentUnit = config.indentUnit;
   var statementIndent = parserConfig.statementIndent;
   var jsonldMode = parserConfig.jsonld;
@@ -1003,7 +1003,7 @@ CodeMirror.defineMode("mongoscript", function(config, parserConfig) {
 CodeMirror.registerHelper("wordChars", "javascript", /[\w$]/);
 
 CodeMirror.defineMIME("text/javascript", "javascript");
-CodeMirror.defineMIME("text/mongoscript", "mongoscript");
+CodeMirror.defineMIME("text/MongoScript", "MongoScript");
 CodeMirror.defineMIME("text/ecmascript", "javascript");
 CodeMirror.defineMIME("application/javascript", "javascript");
 CodeMirror.defineMIME("application/x-javascript", "javascript");

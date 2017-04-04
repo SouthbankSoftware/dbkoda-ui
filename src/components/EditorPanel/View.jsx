@@ -1,10 +1,11 @@
 /**
- * @Author: Michael Harrison <mike>
- * @Date:   2017-03-14 15:54:01
- * @Email:  mike@southbanksoftware.com
+* @Author: Michael Harrison <mike>
+* @Date:   2017-03-14 15:54:01
+* @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
  * @Last modified time: 2017-03-29T12:30:49+11:00
- */
+*/
+
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
 import 'codemirror/addon/hint/show-hint.css';
@@ -20,12 +21,12 @@ import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import './Panel.scss';
 
+const Prettier = require('prettier');
 const Beautify = require('js-beautify').js_beautify;
 const React = require('react');
 const CodeMirror = require('react-codemirror');
 const CM = require('codemirror');
 
-require('codemirror/addon/lint/lint.css');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
@@ -82,7 +83,6 @@ class View extends React.Component {
   static propTypes = {
     store: PropTypes.observableObject.isRequired
   };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -108,7 +108,7 @@ class View extends React.Component {
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           },
-          'Ctrl-B': function (cm) {
+          'Ctrl-P': function(cm) {
             const beautified = Beautify(cm.getSelection(), {
               'indent_size': 2,
               'indent_char': ' ',
@@ -118,13 +118,13 @@ class View extends React.Component {
             cm.setValue(beautified);
           }
         },
-        mode: 'mongoscript',
+        mode: 'MongoScript',
       },
       code: '/**\nWelcome to DBEnvy!\n\nPlease forgive' +
-      ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
-      ' Also forgive the temporary highlighting of comments, working on it.\n\nIf you have too many tabs, use the filter box to search for a s' +
-      'pecific alias.\n\nUse \'Ctrl-B\` to beautify selected text using JS-Beautify.**/\n\nshow dbs;\nshow collection' +
-      's;\nuse test;'
+          ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
+          ' Also forgive the temporary highlighting of comments, working on it.\n\nIf you have too many tabs, use the filter box to search for a s' +
+          'pecific alias.\n\nUse \'Ctrl-B\` to beautify selected text using JS-Beautify.**/\n\nshow dbs;\nshow collection' +
+          's;\nuse test;'
     };
 
     /**
@@ -133,31 +133,31 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExecuteAll = reaction( // eslint-disable-line
-      () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
-        if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorAll == true) {
-          let shell = null;
-          let id = null;
-          this
-            .props
-            .store
-            .profiles
-            .forEach((value) => {
-              if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-                shell = value.shellId;
-                id = value.id;
-              }
-            });
-          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
-          // Send request to feathers client
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(id, {
-            shellId: shell, // eslint-disable-line
-            commands: this.state.code
+        () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
+      if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorAll == true) {
+        let shell = null;
+        let id = null;
+        this
+          .props
+          .store
+          .profiles
+          .forEach((value) => {
+            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+              shell = value.shellId;
+              id = value.id;
+            }
           });
-          this.props.store.editorPanel.executingEditorAll = false;
-        }
-      });
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(id, {
+          shellId: shell, // eslint-disable-line
+          commands: this.state.code
+        });
+        this.props.store.editorPanel.executingEditorAll = false;
+      }
+    });
 
     /**
      * Reaction function for when a change occurs on the editorPanel.executingEditorLines state.
@@ -165,57 +165,57 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExecuteLine = reaction( // eslint-disable-line
-      () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
-        if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorLines == true) {
-          // Determine code to send.
-          let shell = null;
-          let id = null;
-          const cm = this
-            .refs
-            .editor
-            .getCodeMirror(); // eslint-disable-line
-          let content = cm.getSelection();
-          if (cm.getSelection().length > 0) {
-            console.log('Executing Highlighted Text.');
-          } else {
-            console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
-            content = cm.getLine(cm.getCursor().line);
-          }
-          this
-            .props
-            .store
-            .profiles
-            .forEach((value) => {
-              if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-                shell = value.shellId;
-                id = value.id;
-              }
-            });
-          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
-          // Send request to feathers client
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(id, {
-            shellId: shell, // eslint-disable-line
-            commands: content
-          });
-          this.props.store.editorPanel.executingEditorLines = false;
+        () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
+      if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorLines == true) {
+        // Determine code to send.
+        let shell = null;
+        let id = null;
+        const cm = this
+          .refs
+          .editor
+          .getCodeMirror(); // eslint-disable-line
+        let content = cm.getSelection();
+        if (cm.getSelection().length > 0) {
+          console.log('Executing Highlighted Text.');
+        } else {
+          console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
+          content = cm.getLine(cm.getCursor().line);
         }
-      });
+        this
+          .props
+          .store
+          .profiles
+          .forEach((value) => {
+            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+              shell = value.shellId;
+              id = value.id;
+            }
+          });
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(id, {
+          shellId: shell, // eslint-disable-line
+          commands: content
+        });
+        this.props.store.editorPanel.executingEditorLines = false;
+      }
+    });
     /**
      * Reaction function for when a change occurs on the dragItem.drapDrop state.
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToDragDrop = reaction( // eslint-disable-line
-      () => this.props.store.dragItem.dragDrop, dragDrop => { // eslint-disable-line
-        if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
-          const item = this.props.store.dragItem.item;
-          // this.setState({code: item.label});
-          this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
-          this.props.store.dragItem.dragDrop = false;
-        }
-      });
+        () => this.props.store.dragItem.dragDrop, dragDrop => { // eslint-disable-line
+      if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
+        const item = this.props.store.dragItem.item;
+        // this.setState({code: item.label});
+        this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
+        this.props.store.dragItem.dragDrop = false;
+      }
+    });
     this.refresh = this
       .refresh
       .bind(this);
@@ -281,9 +281,9 @@ class View extends React.Component {
   }
 
   /**
-   * Inserts the text at the current cursor position
-   * @param {String} text - The text to add to the editor.
-   */
+ * Inserts the text at the current cursor position
+ * @param {String} text - The text to add to the editor.
+ */
   insertAtCursor(text) {
     const cm = this
       .refs
@@ -309,10 +309,6 @@ class View extends React.Component {
    */
   updateCode(newCode) {
     this.setState({code: newCode});
-    const cm = this
-      .refs
-      .editor
-      .getCodeMirror();
   }
 
   /**
@@ -339,17 +335,17 @@ class View extends React.Component {
           onClick={this.executeLine}
           text="Execute Selected"
           iconName="pt-icon-chevron-right"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.executeAll}
           text="Execute All"
           iconName="pt-icon-double-chevron-right"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.refresh}
           text="Refresh"
           iconName="pt-icon-refresh"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
       </Menu>
     );
   }
@@ -366,8 +362,8 @@ class View extends React.Component {
           ref="editor"
           value={this.state.code}
           onChange={value => this.updateCode(value)}
-          options={this.state.options}/> {isOver && <div
-        style={{
+          options={this.state.options} /> {isOver && <div
+            style={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -376,8 +372,8 @@ class View extends React.Component {
           zIndex: 1,
           opacity: 0.5,
           backgroundColor: 'yellow'
-        }}/>
-      }
+        }} />
+}
       </div>
     );
   }

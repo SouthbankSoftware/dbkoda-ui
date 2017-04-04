@@ -130,6 +130,7 @@
     "moment": "^2.17.1",
     "node-config": "^0.0.2",
     "package": "^1.0.1",
+    "prettier": "^0.22.0",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.0.1",
     "react-codemirror": "^0.3.0",
@@ -139,6 +140,8 @@
     "react-motion-drawer": "^2.1.5",
     "react-router-dom": "^4.0.0-beta.6",
     "react-split-pane": "^0.1.58",
+    "typescript": "^2.2.2",
+    "typescript-eslint-parser": "^2.0.0",
     "validatorjs": "^3.11.0"
   },
   "repository": {
