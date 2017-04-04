@@ -109,7 +109,7 @@ export default class Editor extends React.Component {
             cm.foldCode(cm.getCursor());
           }
         },
-        mode: 'mongoscript'
+        mode: 'MongoScript'
     };
     return (
       <div className="outputEditor">

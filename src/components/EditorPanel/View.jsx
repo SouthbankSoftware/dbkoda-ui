@@ -21,12 +21,12 @@ import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import './Panel.scss';
 
+const Prettier = require('prettier');
 const Beautify = require('js-beautify').js_beautify;
 const React = require('react');
 const CodeMirror = require('react-codemirror');
 const CM = require('codemirror');
 
-require('codemirror/addon/lint/lint.css');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
@@ -108,7 +108,7 @@ class View extends React.Component {
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           },
-          'Ctrl-B': function(cm) {
+          'Ctrl-P': function(cm) {
             const beautified = Beautify(cm.getSelection(), {
               'indent_size': 2,
               'indent_char': ' ',
@@ -116,9 +116,17 @@ class View extends React.Component {
               'jslint_happy': true,
             });
             cm.setValue(beautified);
+          },
+          'Ctrl-B': function(cm) {
+            const beautified = Prettier.format(cm.getSelection(), {
+              tabWidth: 2,
+              singleQuote: true,
+              bracketSpacing: true
+            });
+            cm.setValue(beautified);
           }
         },
-        mode: 'mongoscript',
+        mode: 'MongoScript',
       },
       code: '/**\nWelcome to DBEnvy!\n\nPlease forgive' +
           ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
