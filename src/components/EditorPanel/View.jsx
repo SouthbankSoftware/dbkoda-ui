@@ -108,16 +108,16 @@ class View extends React.Component {
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           },
-          'Ctrl-P': function(cm) {
+          'Ctrl-P': function (cm) {
             const beautified = Beautify(cm.getSelection(), {
               'indent_size': 2,
               'indent_char': ' ',
               'indent_with_tabs': false,
-              'jslint_happy': true,
+              'jslint_happy': true
             });
             cm.setValue(beautified);
           },
-          'Ctrl-B': function(cm) {
+          'Ctrl-B': function (cm) {
             const beautified = Prettier.format(cm.getSelection(), {
               tabWidth: 2,
               singleQuote: true,
@@ -126,13 +126,13 @@ class View extends React.Component {
             cm.setValue(beautified);
           }
         },
-        mode: 'MongoScript',
+        mode: 'MongoScript'
       },
-      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive' +
-          ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
-          ' Also forgive the temporary highlighting of comments, working on it.\n\nIf you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n\nUse \'Ctrl-B\` to beautify selected text using JS-Beautify.**/\n\nshow dbs;\nshow collection' +
-          's;\nuse test;'
+      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive the terrible color pallete for now.\n ' +
+          'I promise it\'s only a placeholder.\n Also forgive the temporary highlighting of' +
+          ' comments, working on it.\n\nIf you have too many tabs, use the filter box to se' +
+          'arch for a specific alias.\n\nUse \'Ctrl-B\' to beautify selected text using JS-' +
+          'Beautify.**/\n\nshow dbs;\nshow collections;\nuse test;'
     };
 
     /**
@@ -241,9 +241,16 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
     const orig = CM.hint.javascript;
-    CM.hint.javascript = function(cm) {
-      const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-      console.log('current line: ', cm.doc.getRange({...cm.getCursor(), ch:0}, cm.getCursor()));
+    CM.hint.javascript = function (cm) {
+      const inner = orig(cm) || {
+        from: cm.getCursor(),
+        to: cm.getCursor(),
+        list: []
+      };
+      console.log('current line: ', cm.doc.getRange({
+        ...cm.getCursor(),
+        ch: 0
+      }, cm.getCursor()));
       return inner;
     };
   }
@@ -277,10 +284,6 @@ class View extends React.Component {
    */
   updateCode(newCode) {
     this.setState({code: newCode});
-    const cm = this
-      .refs
-      .editor
-      .getCodeMirror();
   }
 
   /**
