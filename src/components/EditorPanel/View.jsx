@@ -14,7 +14,7 @@ import 'codemirror/addon/lint/lint.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction} from 'mobx';
-import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
+import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
 import {DragItemTypes} from '#/common/Constants.js';
@@ -108,31 +108,23 @@ class View extends React.Component {
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           },
-          'Ctrl-P': function (cm) {
+          'Ctrl-P': function(cm) {
             const beautified = Beautify(cm.getSelection(), {
               'indent_size': 2,
               'indent_char': ' ',
               'indent_with_tabs': false,
-              'jslint_happy': true
-            });
-            cm.setValue(beautified);
-          },
-          'Ctrl-B': function (cm) {
-            const beautified = Prettier.format(cm.getSelection(), {
-              tabWidth: 2,
-              singleQuote: true,
-              bracketSpacing: true
+              'jslint_happy': true,
             });
             cm.setValue(beautified);
           }
         },
-        mode: 'MongoScript'
+        mode: 'MongoScript',
       },
-      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive the terrible color pallete for now.\n ' +
-          'I promise it\'s only a placeholder.\n Also forgive the temporary highlighting of' +
-          ' comments, working on it.\n\nIf you have too many tabs, use the filter box to se' +
-          'arch for a specific alias.\n\nUse \'Ctrl-B\' to beautify selected text using JS-' +
-          'Beautify.**/\n\nshow dbs;\nshow collections;\nuse test;'
+      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive' +
+          ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
+          ' Also forgive the temporary highlighting of comments, working on it.\n\nIf you have too many tabs, use the filter box to search for a s' +
+          'pecific alias.\n\nUse \'Ctrl-B\` to beautify selected text using JS-Beautify.**/\n\nshow dbs;\nshow collection' +
+          's;\nuse test;'
     };
 
     /**
@@ -235,24 +227,57 @@ class View extends React.Component {
       .bind(this);
   }
 
+  getActiveProfileId() {
+    let shell = null;
+    let id = null;
+    this
+      .props
+      .store
+      .profiles
+      .forEach((value) => {
+        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+          shell = value.shellId;
+          id = value.id;
+        }
+      });
+    return {id, shell};
+  }
+
   /**
    * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.
    */
   componentDidMount() {
     this.refresh();
     const orig = CM.hint.javascript;
-    CM.hint.javascript = function (cm) {
-      const inner = orig(cm) || {
-        from: cm.getCursor(),
-        to: cm.getCursor(),
-        list: []
-      };
-      console.log('current line: ', cm.doc.getRange({
-        ...cm.getCursor(),
-        ch: 0
-      }, cm.getCursor()));
-      return inner;
-    };
+    // CM.hint.javascript = (cm) => {
+    //   const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+    //   let range = cm.doc.getRange({...cm.getCursor(), ch: 0}, cm.getCursor());
+    //   console.log('current line: ', range);
+    //   const {id, shell} = this.getActiveProfileId();
+    //   const service = featherClient().service('/mongo-auto-complete');
+    //   service.get(id, {query: {shellId: shell, command: range}})
+    //     .then((res) => {
+    //       console.log('write response ', res);
+    //     });
+    //   return inner;
+    // };
+
+    CM.commands.autocomplete = (cm) => {
+      console.log('xxxxx', cm);
+      const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+      let range = cm.doc.getRange({...cm.getCursor(), ch: 0}, cm.getCursor());
+      console.log('current line: ', range);
+      const {id, shell} = this.getActiveProfileId();
+      if(!id || !shell){
+        return;
+      }
+      const service = featherClient().service('/mongo-auto-complete');
+      service.get(id, {query: {shellId: shell, command: range}})
+        .then((res) => {
+          console.log('write response ', res);
+          inner.list = inner.list.concat(res);
+        });
+    }
   }
 
   /**
