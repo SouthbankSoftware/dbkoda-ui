@@ -38,9 +38,9 @@ export default class Panel extends React.Component {
 
   @autobind _getFormErrors() {
     // invalidate the form with a custom error message
-    let errorMsg = [];
+    const errorMsg = [];
     const error = this.props.form.errors();
-    _.keys(error).forEach(key => {
+    _.keys(error).forEach((key) => {
       if (error[key]) {
         errorMsg.push(error[key]);
       }
@@ -48,11 +48,16 @@ export default class Panel extends React.Component {
     return errorMsg;
   }
 
+  @autobind _save(data) {
+    this.props.save(data);
+  }
+
   render() {
-    const {form, title, profiles} = this.props;
+    const {form, edit, title, profiles} = this.props;
     form.connect = this._connect;
     form.test = this._test;
-    if (this.props.form.$('alias').value === 'Connection - 1' && profiles) {
+    form.save = this._save;
+    if (!edit && this.props.form.$('alias').value === 'Connection - 1' && profiles) {
       this.props.form.$('alias').value = 'Connection - ' + (profiles.size + 1);
     }
     const formErrors = this._getFormErrors();
@@ -131,7 +136,7 @@ export default class Panel extends React.Component {
               loading={this.state.connecting}
             />
             <Button
-              className="pt-button pt-intent-primary"
+              className="pt-button pt-intent-warning"
               onClick={form.onReset}
               text="Reset"
             />
@@ -144,7 +149,12 @@ export default class Panel extends React.Component {
             />
             <Button
               className="pt-button pt-intent-primary"
-              text='Close'
+              text="Save"
+              onClick={form.onSave.bind(form)}
+            />
+            <Button
+              className="pt-button pt-intent-primary"
+              text="Close"
               onClick={this.props.close}
             />
           </div>
@@ -152,7 +162,7 @@ export default class Panel extends React.Component {
         <div className="profile-error-input" style={{color: Colors.RED2}}>
           {
             formErrors.map((error, i) => {
-              return <div key={i}><strong>{error}</strong></div>
+              return <div key={i}><strong>{error}</strong></div>;
             })
           }
 

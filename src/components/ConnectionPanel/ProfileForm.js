@@ -71,6 +71,10 @@ export class ProfileForm extends MobxReactForm {
     this.test({...this.createFormData(this), test: true});
   }
 
+  onSave() {
+    this.save({...this.createFormData(this)});
+  }
+
   createFormData(form) {
     const formValues = {...form.values()};
     return {
