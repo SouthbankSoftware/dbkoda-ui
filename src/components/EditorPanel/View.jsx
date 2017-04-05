@@ -10,7 +10,7 @@
 /* eslint-disable react/prop-types */
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
-
+import 'codemirror/addon/lint/lint.css';
 
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
@@ -311,7 +311,6 @@ class View extends React.Component {
       .editor
       .getCodeMirror();
     cm.refresh();
-    cm.performLint();
   }
 
   /**
@@ -319,7 +318,6 @@ class View extends React.Component {
    * @param {String} - New code to be entered into the editor.
    */
   updateCode(newCode) {
-    this.refs.editor.getCodeMirror().performLint();
     this.setState({code: newCode});
   }
 
