@@ -10,6 +10,7 @@ $brightBlueFont: #179dea;
 $greyBlueFont: #8dacbc;
 $purpleFont: #b95cce;
 $brightRedFont: #db3737;
+$darkRedFont: #9b4d4d;
 $matchingBackground: #6b6b6b;
 $backgroundPrimaryColor: #2d3c46;
 $backgroundSecondaryColor: #394b59;
@@ -151,6 +152,44 @@ span.cm-mongos-prompt{
 }
 .pt-dark pre {
   box-shadow: none !important;
+}
+
+.lint-error-text {
+
+}
+.lint-error-icon {
+  color: $brightRedFont;
+  font-style: oblique;
+  font-size: 20px;
+  float: right;
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px solid $brightRedFont;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    font-size:12px;
+    
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }
 
 //////////////\ Syntax Highlighting \///////////////

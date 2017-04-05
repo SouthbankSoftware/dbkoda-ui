@@ -88,6 +88,8 @@ class View extends React.Component {
     this.state = {
       lintingErrors: [],
       lintingAnnotations: [],
+      isLinting: false,
+      lintLoops: 0,
       options: {
         theme: 'ambiance',
         lineNumbers: 'true',
@@ -101,7 +103,7 @@ class View extends React.Component {
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'
+          'CodeMirror-lint-markers', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
         ],
         keyMap: 'sublime',
         extraKeys: {
@@ -221,6 +223,9 @@ class View extends React.Component {
     this.executeAll = this
       .executeAll
       .bind(this);
+    this.loopingLint = this
+      .loopingLint
+      .bind(this);
   }
 
   getActiveProfileId() {
@@ -292,6 +297,7 @@ class View extends React.Component {
           cm.showHint(options);
         });
     };
+
   }
 
   /**
@@ -325,56 +331,65 @@ class View extends React.Component {
       .refs
       .editor
       .getCodeMirror();
-
     this
       .state
       .lintingErrors
       .forEach((value) => {
         const msg = document.createElement('div');
-        const icon = msg.appendChild(document.createElement('span'));
-        icon.innerHTML = '!!';
-        icon.className = 'lint-error-icon';
-        msg.appendChild(document.createTextNode(value.message));
-        msg.className = 'lint-error';
-        this
-          .state
-          .lintingAnnotations
-          .push(cm.addLineWidget(value.line-1, msg, {
-            coverGutter: false,
-            noHScroll: true
-          }));
+        const icon = msg.appendChild(document.createElement('div'));
+        icon.innerHTML = '!';
+        const tooltip = icon.appendChild(document.createElement('span'));
+        tooltip.innerHTML = value.message;
+        tooltip.className = 'tooltiptext';
+        icon.className = 'tooltip lint-error-icon';
+        msg.className = 'tooltiptext';
+
+        cm.setGutterMarker(value.line - 1, 'CodeMirror-lint-markers', msg);
       });
   }
 
-  /**
-   * clear all annotations
-   */
-  clearAnnotations() {
-    const cm = this
-      .refs
-      .editor
-      .getCodeMirror();
-    cm.operation(() => {
-      for (let i = 0; i < this.state.lintingAnnotations.length; i++) {
-        cm.removeLineWidget(this.state.lintingAnnotations[i]);
-      }
-    });
-    this.state.lintingAnnotations.length = 0;
-  }
+
   /**
    * Update the local code state.
    * @param {String} - New code to be entered into the editor.
    */
   updateCode(newCode) {
     this.setState({code: newCode});
-    this.clearAnnotations();
+    if (!this.state.isLinting) {
+      this.state.isLinting = true;
+      this.loopingLint();
+    }
+  }
+
+  loopingLint() {
+
+    this.state.lintLoops = this.state.lintLoops + 1;
+    // Lint 10 times before waiting for more input.
+    if (this.state.lintLoops > 10) {
+      this.state.isLinting = false;
+      this.state.lintLoops = 0;
+      return;
+    }
+    // Clear Annotations.
+      const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+
+    this
+      .state
+      .lintingErrors
+      .forEach((value) => {
+        cm.removeLineClass(value.line, 'text', 'lint-error');
+        cm.clearGutter('CodeMirror-lint-markers');
+      });
     // Trigger linting on code.
     const service = featherClient().service('linter');
     service.timeout = 30000;
     service
       .get('{id}', {
       query: {
-        code: newCode, // eslint-disable-line
+        code: this.state.code, // eslint-disable-line
         options: {}
       }
     })
@@ -392,8 +407,8 @@ class View extends React.Component {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, error);
         }
       });
+      setTimeout(this.loopingLint, 1500);
   }
-
   /**
    * Trigger an executeLine event by updating the MobX global store.
    */
