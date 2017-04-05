@@ -107,7 +107,7 @@ class View extends React.Component {
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           },
-          'Ctrl-P': function (cm) {
+          'Ctrl-B': function (cm) {
             const beautified = Prettier.format(cm.getSelection(), {});
             cm.setValue(beautified);
           }
