@@ -86,6 +86,10 @@
 .profile-button-panel {
   display: flex;
   flex-direction: row;
+
+  button{
+    margin-left: 10px;
+  }
 }
 
 .profile-error-input {
