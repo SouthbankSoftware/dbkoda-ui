@@ -10,7 +10,7 @@
 /* eslint-disable react/prop-types */
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/addon/lint/lint.css';
+
 
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
@@ -40,10 +40,6 @@ require('codemirror/addon/fold/foldgutter.js');
 require('codemirror/addon/fold/brace-fold.js');
 require('codemirror/addon/fold/comment-fold.js');
 require('codemirror/addon/fold/xml-fold.js');
-
-require('jshint');
-require('codemirror/addon/lint/javascript-lint');
-require('codemirror/addon/lint/lint');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 
@@ -116,8 +112,8 @@ class View extends React.Component {
             cm.setValue(beautified);
           }
         },
-        mode: 'javascript',
-        lint: true
+        mode: 'MongoScript',
+
       },
       code: '/**\nWelcome to DBEnvy!\n\nPlease forgive the terrible color pallete for now.\n ' +
           'I promise it\'s only a placeholder.\n Also forgive the temporary highlighting of' +
