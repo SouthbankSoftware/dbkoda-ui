@@ -86,6 +86,8 @@ class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      lintingErrors: [],
+      lintingAnnotations: [],
       options: {
         theme: 'ambiance',
         lineNumbers: 'true',
@@ -316,12 +318,56 @@ class View extends React.Component {
   }
 
   /**
+   * Update linting annotations on the editor.
+   */
+  updateLintingAnnotations() {
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+
+    this
+      .state
+      .lintingErrors
+      .forEach((value) => {
+        const msg = document.createElement('div');
+        const icon = msg.appendChild(document.createElement('span'));
+        icon.innerHTML = '!!';
+        icon.className = 'lint-error-icon';
+        msg.appendChild(document.createTextNode(value.message));
+        msg.className = 'lint-error';
+        this
+          .state
+          .lintingAnnotations
+          .push(cm.addLineWidget(value.line-1, msg, {
+            coverGutter: false,
+            noHScroll: true
+          }));
+      });
+  }
+
+  /**
+   * clear all annotations
+   */
+  clearAnnotations() {
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+    cm.operation(() => {
+      for (let i = 0; i < this.state.lintingAnnotations.length; i++) {
+        cm.removeLineWidget(this.state.lintingAnnotations[i]);
+      }
+    });
+    this.state.lintingAnnotations.length = 0;
+  }
+  /**
    * Update the local code state.
    * @param {String} - New code to be entered into the editor.
    */
   updateCode(newCode) {
     this.setState({code: newCode});
-
+    this.clearAnnotations();
     // Trigger linting on code.
     const service = featherClient().service('linter');
     service.timeout = 30000;
@@ -334,6 +380,8 @@ class View extends React.Component {
     })
       .then((result) => {
         if (result.length > 0) {
+          this.state.lintingErrors = result;
+          this.updateLintingAnnotations();
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING, EventLogging.getFragmentEnum().EDITORS, result);
           }
@@ -370,17 +418,17 @@ class View extends React.Component {
           onClick={this.executeLine}
           text="Execute Selected"
           iconName="pt-icon-chevron-right"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
         <MenuItem
           onClick={this.executeAll}
           text="Execute All"
           iconName="pt-icon-double-chevron-right"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
         <MenuItem
           onClick={this.refresh}
           text="Refresh"
           iconName="pt-icon-refresh"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
       </Menu>
     );
   }
@@ -398,8 +446,8 @@ class View extends React.Component {
           codeMirrorInstance={CM}
           value={this.state.code}
           onChange={value => this.updateCode(value)}
-          options={this.state.options} /> {isOver && <div
-            style={{
+          options={this.state.options}/> {isOver && <div
+          style={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -408,7 +456,7 @@ class View extends React.Component {
           zIndex: 1,
           opacity: 0.5,
           backgroundColor: 'yellow'
-        }} />
+        }}/>
 }
       </div>
     );
