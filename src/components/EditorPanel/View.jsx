@@ -18,6 +18,7 @@ import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 import {DropTarget} from 'react-dnd';
 import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
+import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 
 const Prettier = require('prettier');
@@ -248,10 +249,12 @@ class View extends React.Component {
         .getCursor()
         .ch;
       let end = start;
-      while (end < currentLine.length && /[\w|.$]+/.test(currentLine.charAt(end)))
-        {end -= 1;}
-      while (start && /[\w|.$]+/.test(currentLine.charAt(start - 1)))
-        {start -= 1;}
+      while (end < currentLine.length && /[\w|.$]+/.test(currentLine.charAt(end))) {
+        end -= 1;
+      }
+      while (start && /[\w|.$]+/.test(currentLine.charAt(start - 1))) {
+        start -= 1;
+      }
       const curWord = start != end && currentLine.slice(start, end);
       console.log('current word ', curWord);
       if (!curWord) {
@@ -331,11 +334,15 @@ class View extends React.Component {
     })
       .then((result) => {
         if (result.length > 0) {
-          console.log(result);
+          if (this.props.store.userPreferences.telemetryEnabled) {
+            EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING, EventLogging.getFragmentEnum().EDITORS, result);
+          }
         }
       })
       .catch((error) => {
-        console.error(error);
+        if (this.props.store.userPreferences.telemetryEnabled) {
+          EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, error);
+        }
       });
   }
 
