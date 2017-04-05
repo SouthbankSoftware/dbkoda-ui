@@ -11,6 +11,7 @@
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
+
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction} from 'mobx';
@@ -30,8 +31,6 @@ const CM = require('codemirror');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
-require('codemirror/addon/lint/lint.js');
-require('codemirror/addon/lint/javascript-lint.js');
 require('codemirror/addon/selection/active-line.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
@@ -41,8 +40,13 @@ require('codemirror/addon/fold/foldgutter.js');
 require('codemirror/addon/fold/brace-fold.js');
 require('codemirror/addon/fold/comment-fold.js');
 require('codemirror/addon/fold/xml-fold.js');
+
+require('jshint');
+require('codemirror/addon/lint/javascript-lint');
+require('codemirror/addon/lint/lint');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
+
 require('codemirror/keymap/sublime.js');
 require('codemirror-formatting');
 require('#/common/MongoScript.js');
@@ -94,7 +98,6 @@ class View extends React.Component {
         tabSize: 2,
         matchBrackets: true,
         autoCloseBrackets: true,
-        lint: true,
         foldOptions: {
           widget: '...'
         },
@@ -108,23 +111,19 @@ class View extends React.Component {
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           },
-          'Ctrl-P': function(cm) {
-            const beautified = Beautify(cm.getSelection(), {
-              'indent_size': 2,
-              'indent_char': ' ',
-              'indent_with_tabs': false,
-              'jslint_happy': true,
-            });
+          'Ctrl-P': function (cm) {
+            const beautified = Prettier.format(cm.getSelection(), {});
             cm.setValue(beautified);
           }
         },
-        mode: 'MongoScript',
+        mode: 'javascript',
+        lint: true
       },
-      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive' +
-          ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
-          ' Also forgive the temporary highlighting of comments, working on it.\n\nIf you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n\nUse \'Ctrl-B\` to beautify selected text using JS-Beautify.**/\n\nshow dbs;\nshow collection' +
-          's;\nuse test;'
+      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive the terrible color pallete for now.\n ' +
+          'I promise it\'s only a placeholder.\n Also forgive the temporary highlighting of' +
+          ' comments, working on it.\n\nIf you have too many tabs, use the filter box to se' +
+          'arch for a specific alias.\n\nUse \'Ctrl-B\' to beautify selected text using JS-' +
+          'Beautify.**/\n\nshow dbs;\nshow collections;\nuse test;'
     };
 
     /**
@@ -249,35 +248,50 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
     const orig = CM.hint.javascript;
-    // CM.hint.javascript = (cm) => {
-    //   const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-    //   let range = cm.doc.getRange({...cm.getCursor(), ch: 0}, cm.getCursor());
-    //   console.log('current line: ', range);
-    //   const {id, shell} = this.getActiveProfileId();
-    //   const service = featherClient().service('/mongo-auto-complete');
-    //   service.get(id, {query: {shellId: shell, command: range}})
-    //     .then((res) => {
-    //       console.log('write response ', res);
-    //     });
-    //   return inner;
-    // };
+    // CM.hint.javascript = (cm) => {   const inner = orig(cm) || {from:
+    // cm.getCursor(), to: cm.getCursor(), list: []};   let range =
+    // cm.doc.getRange({...cm.getCursor(), ch: 0}, cm.getCursor());
+    // console.log('current line: ', range);   const {id, shell} =
+    // this.getActiveProfileId();   const service =
+    // featherClient().service('/mongo-auto-complete');   service.get(id, {query:
+    // {shellId: shell, command: range}})     .then((res) => {
+    // console.log('write response ', res);     });   return inner; };
 
     CM.commands.autocomplete = (cm) => {
       console.log('xxxxx', cm);
-      const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-      let range = cm.doc.getRange({...cm.getCursor(), ch: 0}, cm.getCursor());
+      const inner = orig(cm) || {
+        from: cm.getCursor(),
+        to: cm.getCursor(),
+        list: []
+      };
+      const range = cm
+        .doc
+        .getRange({
+          ...cm.getCursor(),
+          ch: 0
+        }, cm.getCursor());
       console.log('current line: ', range);
       const {id, shell} = this.getActiveProfileId();
-      if(!id || !shell){
+      if (!id || !shell) {
         return;
       }
       const service = featherClient().service('/mongo-auto-complete');
-      service.get(id, {query: {shellId: shell, command: range}})
+      service
+        .get(id, {
+        query: {
+          shellId: shell,
+          command: range
+        }
+      })
         .then((res) => {
           console.log('write response ', res);
-          inner.list = inner.list.concat(res);
+          inner.list = inner
+            .list
+            .concat(res);
         });
-    }
+    };
+
+    CM.registerHelper('lint', 'mode', (text) => { console.log(text);/* your cool stuff here */ });
   }
 
   /**
@@ -301,6 +315,7 @@ class View extends React.Component {
       .editor
       .getCodeMirror();
     cm.refresh();
+    cm.performLint();
   }
 
   /**
@@ -308,6 +323,7 @@ class View extends React.Component {
    * @param {String} - New code to be entered into the editor.
    */
   updateCode(newCode) {
+    this.refs.editor.getCodeMirror().performLint();
     this.setState({code: newCode});
   }
 
