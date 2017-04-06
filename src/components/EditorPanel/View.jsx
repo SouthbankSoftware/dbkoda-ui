@@ -111,10 +111,6 @@ class View extends React.Component {
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           },
-          'Ctrl-B': function (cm) {
-            const beautified = Prettier.format(cm.getSelection(), {});
-            cm.setValue(beautified);
-          }
         },
         mode: 'MongoScript'
       },
@@ -226,6 +222,7 @@ class View extends React.Component {
     this.loopingLint = this
       .loopingLint
       .bind(this);
+    this.prettifyAll = this.prettifyAll.bind(this);
   }
 
   getActiveProfileId() {
@@ -330,6 +327,15 @@ class View extends React.Component {
       .editor
       .getCodeMirror();
     cm.refresh();
+  }
+
+  /**
+   * Prettify selected code.
+   */
+  prettifyAll() {
+    const cm = this.refs.editor.getCodeMirror();
+    const beautified = Prettier.format(this.state.code, {});
+    cm.setValue(beautified);
   }
 
   /**
@@ -452,6 +458,11 @@ class View extends React.Component {
           onClick={this.refresh}
           text="Refresh"
           iconName="pt-icon-refresh"
+          intent={Intent.NONE}/>
+          <MenuItem
+          onClick={this.prettifyAll}
+          text="Format All"
+          iconName="pt-icon-align-left"
           intent={Intent.NONE}/>
       </Menu>
     );
