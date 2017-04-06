@@ -407,8 +407,8 @@ class View extends React.Component {
       }
     })
       .then((result) => {
-        if (result.length > 0) {
-          this.state.lintingErrors = result;
+        if (result.results[0].messages.length > 0) {
+          this.state.lintingErrors = result.results[0].messages;
           this.updateLintingAnnotations();
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING, EventLogging.getFragmentEnum().EDITORS, result);
