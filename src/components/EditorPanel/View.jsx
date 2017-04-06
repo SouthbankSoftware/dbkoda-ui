@@ -283,15 +283,13 @@ class View extends React.Component {
       })
         .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
+          const cursor = cm.getDoc().getCursor();
+          const from = new CM.Pos(cursor.line, cursor.ch - curWord.length);
           const options = {
             hint() {
               return {
-                from: cm
-                  .getDoc()
-                  .getCursor(),
-                to: cm
-                  .getDoc()
-                  .getCursor(),
+                from: from,
+                to: cm.getDoc().getCursor(),
                 list: res
               };
             },

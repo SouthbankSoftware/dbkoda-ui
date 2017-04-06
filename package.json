@@ -1,7 +1,7 @@
 {
   "name": "@southbanksoftware/dbenvy-ui",
   "gitName": "dbenvy-ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DBEnvy UI",
   "main": "webpack.config.js",
   "scripts": {
