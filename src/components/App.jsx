@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T15:30:47+10:00
+ * @Last modified time: 2017-04-06T17:25:11+10:00
  */
 
 import React from 'react';
@@ -18,6 +18,7 @@ import {EditorPanel} from '#/EditorPanel';
 import {OutputPanel} from '#/OutputPanel';
 import {ProfileListPanel} from '#/ProfileListPanel';
 import {TreePanel} from '#/TreePanel';
+import {TreeActionPanel} from '#/TreeActionPanel';
 import {ConnectionProfilePanel} from '../components/ConnectionPanel';
 import EventReaction from '#/common/logging/EventReaction.jsx';
 import {DrawerPanes} from '#/common/Constants';
@@ -73,6 +74,8 @@ class App extends React.Component {
   getDrawerChild() {
     if (this && this.props.drawer.drawerChild == DrawerPanes.PROFILE) {
       return <ConnectionProfilePanel />;
+    } else if (this && this.props.drawer.drawerChild == DrawerPanes.DYNAMIC) {
+      return <TreeActionPanel />;
     }
     return null;
   }
