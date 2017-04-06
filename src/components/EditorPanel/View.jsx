@@ -86,6 +86,10 @@ class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      lintingErrors: [],
+      lintingAnnotations: [],
+      isLinting: false,
+      lintLoops: 0,
       options: {
         theme: 'ambiance',
         lineNumbers: 'true',
@@ -99,7 +103,7 @@ class View extends React.Component {
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'
+          'CodeMirror-lint-markers', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
         ],
         keyMap: 'sublime',
         extraKeys: {
@@ -107,10 +111,6 @@ class View extends React.Component {
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           },
-          'Ctrl-B': function (cm) {
-            const beautified = Prettier.format(cm.getSelection(), {});
-            cm.setValue(beautified);
-          }
         },
         mode: 'MongoScript'
       },
@@ -219,6 +219,10 @@ class View extends React.Component {
     this.executeAll = this
       .executeAll
       .bind(this);
+    this.loopingLint = this
+      .loopingLint
+      .bind(this);
+    this.prettifyAll = this.prettifyAll.bind(this);
   }
 
   getActiveProfileId() {
@@ -297,6 +301,7 @@ class View extends React.Component {
           cm.showHint(options);
         });
     };
+
   }
 
   /**
@@ -323,24 +328,88 @@ class View extends React.Component {
   }
 
   /**
+   * Prettify selected code.
+   */
+  prettifyAll() {
+    const cm = this.refs.editor.getCodeMirror();
+    const beautified = Prettier.format(this.state.code, {});
+    cm.setValue(beautified);
+  }
+
+  /**
+   * Update linting annotations on the editor.
+   */
+  updateLintingAnnotations() {
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+    this
+      .state
+      .lintingErrors
+      .forEach((value) => {
+        const msg = document.createElement('div');
+        const icon = msg.appendChild(document.createElement('div'));
+        icon.innerHTML = '!';
+        const tooltip = icon.appendChild(document.createElement('span'));
+        tooltip.innerHTML = value.message;
+        tooltip.className = 'tooltiptext';
+        icon.className = 'tooltip lint-error-icon';
+        msg.className = 'tooltiptext';
+
+        cm.setGutterMarker(value.line - 1, 'CodeMirror-lint-markers', msg);
+      });
+  }
+
+
+  /**
    * Update the local code state.
    * @param {String} - New code to be entered into the editor.
    */
   updateCode(newCode) {
     this.setState({code: newCode});
+    if (!this.state.isLinting) {
+      this.state.isLinting = true;
+      this.loopingLint();
+    }
+  }
 
+  loopingLint() {
+
+    this.state.lintLoops = this.state.lintLoops + 1;
+    // Lint 10 times before waiting for more input.
+    if (this.state.lintLoops > 10) {
+      this.state.isLinting = false;
+      this.state.lintLoops = 0;
+      return;
+    }
+    // Clear Annotations.
+      const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+
+    this
+      .state
+      .lintingErrors
+      .forEach((value) => {
+        cm.removeLineClass(value.line, 'text', 'lint-error');
+        cm.clearGutter('CodeMirror-lint-markers');
+      });
     // Trigger linting on code.
     const service = featherClient().service('linter');
     service.timeout = 30000;
     service
       .get('{id}', {
       query: {
-        code: newCode, // eslint-disable-line
+        code: this.state.code, // eslint-disable-line
         options: {}
       }
     })
       .then((result) => {
         if (result.length > 0) {
+          this.state.lintingErrors = result;
+          this.updateLintingAnnotations();
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING, EventLogging.getFragmentEnum().EDITORS, result);
           }
@@ -351,8 +420,8 @@ class View extends React.Component {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, error);
         }
       });
+      setTimeout(this.loopingLint, 1500);
   }
-
   /**
    * Trigger an executeLine event by updating the MobX global store.
    */
@@ -377,17 +446,22 @@ class View extends React.Component {
           onClick={this.executeLine}
           text="Execute Selected"
           iconName="pt-icon-chevron-right"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
         <MenuItem
           onClick={this.executeAll}
           text="Execute All"
           iconName="pt-icon-double-chevron-right"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
         <MenuItem
           onClick={this.refresh}
           text="Refresh"
           iconName="pt-icon-refresh"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
+          <MenuItem
+          onClick={this.prettifyAll}
+          text="Format All"
+          iconName="pt-icon-align-left"
+          intent={Intent.NONE}/>
       </Menu>
     );
   }
@@ -405,8 +479,8 @@ class View extends React.Component {
           codeMirrorInstance={CM}
           value={this.state.code}
           onChange={value => this.updateCode(value)}
-          options={this.state.options} /> {isOver && <div
-            style={{
+          options={this.state.options}/> {isOver && <div
+          style={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -415,7 +489,7 @@ class View extends React.Component {
           zIndex: 1,
           opacity: 0.5,
           backgroundColor: 'yellow'
-        }} />
+        }}/>
 }
       </div>
     );
