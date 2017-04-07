@@ -87,7 +87,7 @@ class View extends React.Component {
     super(props);
     this.state = {
       lintingErrors: [],
-      lintingAnnotations: [],
+      lintingAnnotations: new Map(),
       isLinting: false,
       lintLoops: 0,
       options: {
@@ -110,7 +110,7 @@ class View extends React.Component {
           'Ctrl-Space': 'autocomplete',
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
-          },
+          }
         },
         mode: 'MongoScript'
       },
@@ -247,13 +247,12 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
     //
-    let orig = CM.hint.javascript;
-    CM.hint.javascript = function (cm) {
-      let inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-      console.log('xxxxx')
-      inner.list.push("bozo");
-      return inner;
-    };
+    // let orig = CM.hint.javascript;
+    // CM.hint.javascript = function (cm) {
+    //   let inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+    //   inner.list.push("bozo");
+    //   return inner;
+    // };
 
 
     CM.commands.autocomplete = (cm) => {
@@ -349,16 +348,37 @@ class View extends React.Component {
       .state
       .lintingErrors
       .forEach((value) => {
-        const msg = document.createElement('div');
-        const icon = msg.appendChild(document.createElement('div'));
-        icon.innerHTML = '!';
-        const tooltip = icon.appendChild(document.createElement('span'));
-        tooltip.innerHTML = value.message;
-        tooltip.className = 'tooltiptext';
-        icon.className = 'tooltip lint-error-icon';
-        msg.className = 'tooltiptext';
+        // Check if line already used, if so append.
+        if (this.state.lintingAnnotations.get(value.line) != undefined) {
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = this.state.lintingAnnotations.get(value.line).lintText + '\n' + value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          msg.lintText = tooltip.innerHTML;
+          this.state.lintingAnnotations.set(value.line, msg);
+        } else {
+          // New Annotation.
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          this.state.lintingAnnotations.set(value.line, msg);
+        }
+      });
 
-        cm.setGutterMarker(value.line - 1, 'CodeMirror-lint-markers', msg);
+    this
+      .state
+      .lintingAnnotations
+      .forEach((value, key) => {
+        cm.setGutterMarker(key - 1, 'CodeMirror-lint-markers', value);
       });
   }
 
@@ -376,16 +396,15 @@ class View extends React.Component {
   }
 
   loopingLint() {
-
     this.state.lintLoops = this.state.lintLoops + 1;
     // Lint 10 times before waiting for more input.
-    if (this.state.lintLoops > 10) {
+    if (this.state.lintLoops > 2) {
       this.state.isLinting = false;
       this.state.lintLoops = 0;
       return;
     }
     // Clear Annotations.
-      const cm = this
+    const cm = this
       .refs
       .editor
       .getCodeMirror();
@@ -408,8 +427,8 @@ class View extends React.Component {
       }
     })
       .then((result) => {
-        if (result.length > 0) {
-          this.state.lintingErrors = result;
+        if (result.results[0].messages.length > 0) {
+          this.state.lintingErrors = result.results[0].messages;
           this.updateLintingAnnotations();
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING, EventLogging.getFragmentEnum().EDITORS, result);
@@ -421,7 +440,7 @@ class View extends React.Component {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, error);
         }
       });
-      setTimeout(this.loopingLint, 1500);
+    setTimeout(this.loopingLint, 1500);
   }
   /**
    * Trigger an executeLine event by updating the MobX global store.
@@ -447,22 +466,22 @@ class View extends React.Component {
           onClick={this.executeLine}
           text="Execute Selected"
           iconName="pt-icon-chevron-right"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.executeAll}
           text="Execute All"
           iconName="pt-icon-double-chevron-right"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.refresh}
           text="Refresh"
           iconName="pt-icon-refresh"
-          intent={Intent.NONE}/>
-          <MenuItem
+          intent={Intent.NONE} />
+        <MenuItem
           onClick={this.prettifyAll}
           text="Format All"
           iconName="pt-icon-align-left"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
       </Menu>
     );
   }
@@ -490,7 +509,7 @@ class View extends React.Component {
           zIndex: 1,
           opacity: 0.5,
           backgroundColor: 'yellow'
-        }}/>
+        }} />
 }
       </div>
     );

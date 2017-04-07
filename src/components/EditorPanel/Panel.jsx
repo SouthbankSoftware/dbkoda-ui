@@ -132,14 +132,11 @@ export default class Panel extends React.Component {
           selectedTabId={this.props.store.editorPanel.activeEditorId}>
           <Tab2
             id="Default"
-            title="Default"
-            panel={<View id ={
-            0
-          }
-              onDrop ={
-            item => this.handleDrop(item)
-          }
-              ref ="defaultEditor" />} /> {editors.map((tab) => {
+            title="Welcome"
+            panel={<div > <h2 style={{
+            float: 'center'
+          }}>Welcome to DBEnvy
+          </h2> <h3 > Welcome page coming soon ...</h3> </div>} /> {editors.map((tab) => {
             if (tab[1].visible) {
               return (
                 <Tab2
@@ -147,16 +144,16 @@ export default class Panel extends React.Component {
                   key={tab[1].alias + ' (' + tab[1].shellId + ')'}
                   id={tab[1].alias + ' (' + tab[1].shellId + ')'}
                   title={tab[1].alias + ' (' + tab[1].shellId + ')'}
-                  panel={<View id= {
+                  panel={<View id={
                   tab[1].id
                 }
-                    title ={
+                    title={
                   tab[1].alias + ' (' + tab[1].shellId + ')'
                 }
-                    onDrop ={
+                    onDrop={
                   item => this.handleDrop(item)
                 }
-                    ref= "defaultEditor" />}>
+                    ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
                     onClick={() => this.closeTab(tab[1])}>
@@ -171,10 +168,10 @@ export default class Panel extends React.Component {
                 key={tab[1].alias + ' (' + tab[1].shellId + ')'}
                 id={tab[1].id}
                 title={tab[1].alias}
-                panel={<View id ={
+                panel={<View id={
                 tab[1].id
               }
-                  ref ="defaultEditor" />}>
+                  ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
                   onClick={() => this.closeTab(tab[1])}>
