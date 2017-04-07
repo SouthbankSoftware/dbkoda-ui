@@ -380,7 +380,7 @@ class View extends React.Component {
   loopingLint() {
     this.state.lintLoops = this.state.lintLoops + 1;
     // Lint 10 times before waiting for more input.
-    if (this.state.lintLoops > 10) {
+    if (this.state.lintLoops > 2) {
       this.state.isLinting = false;
       this.state.lintLoops = 0;
       return;
