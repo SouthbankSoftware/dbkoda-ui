@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-06T16:48:33+10:00
+ * @Last modified time: 2017-04-07T16:44:34+10:00
  */
 
 
@@ -45,6 +45,7 @@
      service.timeout = 30000;
      service.get(id, {
        shellId: shell, // eslint-disable-line
+       type: 'cmd',
        commands: content
      }).then((res) => {
        resolve(res);
@@ -55,10 +56,42 @@
    });
  };
 
+ const parseDefinitions = (ddd, dFunctions, treeNode) => {
+   const formData = [];
+   for (const defField of ddd.Fields) {
+     const formField = {};
+     formField.name = defField.name;
+     formField.label = defField.name;
+     formField.type = defField.type;
+
+     if (defField.keyValue) {
+       formField.value = treeNode.text;
+     }
+    //  if (defField.readOnly) {
+    //    formField.disabled = true;
+    //  }
+     if (defField.type == 'Table') {
+       formField.fields = [];
+       for (const col of defField.columns) {
+         const colField = {};
+         colField.name = col.name;
+         colField.label = col.name;
+         colField.type = col.type;
+         formField.fields.push(colField);
+       }
+     }
+     formData.push(formField);
+   }
+   return formData;
+ };
+
  export const CreateForm = (treeNode, treeAction) => {
-   const fields = require('../DialogDefinitions/' + treeAction + '.ddd.json');  //eslint-disable-line
+   const ddd = require('../DialogDefinitions/' + treeAction + '.ddd.json');  //eslint-disable-line
    const formFunctions = require('../Functions/' + treeAction + '.js')[treeAction]; //eslint-disable-line
    formFunctions.setExecuteFunction(executeCommand);
-   const form = new PrefilledForm({fields: formData});
+
+   const formData = parseDefinitions(ddd, formFunctions, treeNode);
+
+   const form = {title: ddd.Title, mobxForm: new PrefilledForm({fields: formData})};
    return form;
  };

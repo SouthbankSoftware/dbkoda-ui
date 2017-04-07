@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-06T18:23:53+10:00
+ * @Last modified time: 2017-04-07T16:39:02+10:00
 */
 
 import React from 'react';
@@ -29,7 +29,7 @@ export default class TreeView extends React.Component {
 
     this.state = {nodes: this.props.treeState.nodes};
 
-    reaction(() => this.props.treeState.isFiltered, () => {
+    reaction(() => this.props.treeState.isJsonParsed, () => {
       this.setState({nodes: this.props.treeState.nodes});
     });
     reaction(() => this.props.treeState.filter, () => {
@@ -100,7 +100,7 @@ export default class TreeView extends React.Component {
     console.log('clicked:', action);
     if (this.nodeRightClicked) {
       console.log('test global store', this.props.store);
-      // this.props.treeState.executeTreeAction(this.nodeRightClicked, action);
+      this.props.store.showTreeActionPane(this.nodeRightClicked, action);
     }
   };
 

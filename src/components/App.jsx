@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-06T17:25:11+10:00
+ * @Last modified time: 2017-04-07T12:21:21+10:00
  */
 
 import React from 'react';
@@ -115,7 +115,7 @@ class App extends React.Component {
         <Drawer
           className="drawer"
           open={drawer.drawerOpen}
-          width="40%"
+          width={drawer.width}
           handleWidth={0}
           noTouchOpen
           noTouchClose

@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-06T18:21:00+10:00
+ * @Last modified time: 2017-04-07T08:35:01+10:00
 */
 
 import { observable, action } from 'mobx';
@@ -14,7 +14,7 @@ export default class TreeState {
   treeNodes;
   @observable filteredNodes;
   @observable filter = '';
-  @observable isFiltered = false;
+  @observable isJsonParsed = false;
   treeJson;
   treeRoot; // required for make root node functionality
   previousState; // last state before we have changed the root node.
@@ -38,7 +38,6 @@ export default class TreeState {
    */
   @action setFilter(value) {
     this.filter = value.toLowerCase();
-    this.isFiltered = false;
     this.filterNodes();
   }
   /**
@@ -59,13 +58,13 @@ export default class TreeState {
         }
       }
     }
-    this.isFiltered = true;
   }
   /**
    * function to parse json document from the controller
    * @param  {json} treeJson [description]
    */
   parseJson(treeJson) {
+    this.isJsonParsed = false;
     this.treeJson = treeJson;
     this.treeRoot = undefined;
     this.filteredNodes.clear();
@@ -78,6 +77,7 @@ export default class TreeState {
         }
       }
       this.filterNodes();
+      this.isJsonParsed = true;
     }
   }
   /**
