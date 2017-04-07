@@ -117,7 +117,7 @@ export default class Toolbar extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
         }
-        NewToaster.show({message: 'Cannot create new Editor for Default Tab.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({message: 'Cannot create new Editor for "No Active Connection".', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
         this.onFail();
         this.setNewEditorLoading(false);
         return null;
