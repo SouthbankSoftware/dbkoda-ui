@@ -2,12 +2,13 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T15:13:35+10:00
+ * @Last modified time: 2017-04-07T12:34:00+10:00
  */
 
 import _ from 'lodash';
 import { observable, action } from 'mobx';
 import { dump, restore } from 'dumpenvy';
+import { DrawerPanes } from '#/common/Constants';
 
 export default class Store {
   @observable profiles = observable.map();
@@ -53,7 +54,21 @@ export default class Store {
 
   @observable drawer = {
     drawerOpen: false,
+    width: '30%',
     drawerChild: null,
+    treeNode: null,
+    treeAction: null
+  };
+
+  @action showConnectionPane = () => {
+    this.drawer.drawerChild = DrawerPanes.PROFILE;
+    this.drawer.drawerOpen = true;
+  }
+  @action showTreeActionPane = (treeNode, treeAction) => {
+    this.drawer.treeNode = treeNode;
+    this.drawer.treeAction = treeAction;
+    this.drawer.drawerChild = DrawerPanes.DYNAMIC;
+    this.drawer.drawerOpen = true;
   };
 
   @observable profileList = observable({

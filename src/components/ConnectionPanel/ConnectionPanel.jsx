@@ -3,7 +3,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T15:36:29+10:00
+ * @Last modified time: 2017-04-05T10:34:22+10:00
  */
 /**
  * create new profile form and handle connection
@@ -13,7 +13,7 @@ import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {Intent, Position} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
-import {createForm, createFromFromProfile, ProfileForm} from './ProfileForm';
+import { createForm, ProfileForm } from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
