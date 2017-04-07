@@ -1,11 +1,10 @@
 /**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-03-14 15:54:01
-* @Email:  mike@southbanksoftware.com
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-03-14 15:54:01
+ * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
  * @Last modified time: 2017-03-29T12:30:49+11:00
-*/
-
+ */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
 import 'codemirror/addon/hint/show-hint.css';
@@ -19,6 +18,7 @@ import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 import {DropTarget} from 'react-dnd';
 import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
+import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 
 const Prettier = require('prettier');
@@ -30,8 +30,6 @@ const CM = require('codemirror');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
-require('codemirror/addon/lint/lint.js');
-require('codemirror/addon/lint/javascript-lint.js');
 require('codemirror/addon/selection/active-line.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
@@ -43,6 +41,7 @@ require('codemirror/addon/fold/comment-fold.js');
 require('codemirror/addon/fold/xml-fold.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
+
 require('codemirror/keymap/sublime.js');
 require('codemirror-formatting');
 require('#/common/MongoScript.js');
@@ -83,9 +82,14 @@ class View extends React.Component {
   static propTypes = {
     store: PropTypes.observableObject.isRequired
   };
+
   constructor(props) {
     super(props);
     this.state = {
+      lintingErrors: [],
+      lintingAnnotations: new Map(),
+      isLinting: false,
+      lintLoops: 0,
       options: {
         theme: 'ambiance',
         lineNumbers: 'true',
@@ -94,37 +98,27 @@ class View extends React.Component {
         tabSize: 2,
         matchBrackets: true,
         autoCloseBrackets: true,
-        lint: true,
         foldOptions: {
           widget: '...'
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'
+          'CodeMirror-lint-markers', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
         ],
         keyMap: 'sublime',
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
-          },
-          'Ctrl-P': function(cm) {
-            const beautified = Beautify(cm.getSelection(), {
-              'indent_size': 2,
-              'indent_char': ' ',
-              'indent_with_tabs': false,
-              'jslint_happy': true,
-            });
-            cm.setValue(beautified);
           }
         },
-        mode: 'MongoScript',
+        mode: 'MongoScript'
       },
-      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive' +
-          ' the terrible color pallete for now.\n I promise it\'s only a placeholder.\n' +
-          ' Also forgive the temporary highlighting of comments, working on it.\n\nIf you have too many tabs, use the filter box to search for a s' +
-          'pecific alias.\n\nUse \'Ctrl-B\` to beautify selected text using JS-Beautify.**/\n\nshow dbs;\nshow collection' +
-          's;\nuse test;'
+      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive the terrible color pallete for now.\n ' +
+          'I promise it\'s only a placeholder.\n Also forgive the temporary highlighting of' +
+          ' comments, working on it.\n\nIf you have too many tabs, use the filter box to se' +
+          'arch for a specific alias.\n\nUse \'Ctrl-B\' to beautify selected text using JS-' +
+          'Beautify.**/\n\nshow dbs;\nshow collections;\nuse test;'
     };
 
     /**
@@ -225,6 +219,74 @@ class View extends React.Component {
     this.executeAll = this
       .executeAll
       .bind(this);
+    this.loopingLint = this
+      .loopingLint
+      .bind(this);
+    this.prettifyAll = this
+      .prettifyAll
+      .bind(this);
+  }
+
+  /**
+   * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.
+   */
+  componentDidMount() {
+    this.refresh();
+    //
+    // let orig = CM.hint.javascript; CM.hint.javascript = function (cm) {   let
+    // inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+    // inner.list.push("bozo");   return inner; };
+
+    CM.commands.autocomplete = (cm) => {
+      const currentLine = cm.getLine(cm.getCursor().line);
+      console.log('current line:', currentLine);
+      let start = cm
+        .getCursor()
+        .ch;
+      let end = start;
+      while (end < currentLine.length && /[\w|.$]+/.test(currentLine.charAt(end))) {
+        end -= 1;
+      }
+      while (start && /[\w|.$]+/.test(currentLine.charAt(start - 1))) {
+        start -= 1;
+      }
+      const curWord = start != end && currentLine.slice(start, end);
+      console.log('current word ', curWord);
+      if (!curWord) {
+        return;
+      }
+      const {id, shell} = this.getActiveProfileId();
+      if (!id || !shell) {
+        return;
+      }
+      const service = featherClient().service('/mongo-auto-complete');
+      service
+        .get(id, {
+        query: {
+          shellId: shell,
+          command: curWord
+        }
+      })
+        .then((res) => {
+          console.log('write response ', res, cm.getDoc().getCursor());
+          const cursor = cm
+            .getDoc()
+            .getCursor();
+          const from = new CM.Pos(cursor.line, cursor.ch - curWord.length);
+          const options = {
+            hint() {
+              return {
+                from,
+                to: cm
+                  .getDoc()
+                  .getCursor(),
+                list: res
+              };
+            }
+          };
+          cm.showHint(options);
+        });
+    };
   }
 
   getActiveProfileId() {
@@ -244,46 +306,9 @@ class View extends React.Component {
   }
 
   /**
-   * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.
+   * Inserts the text at the current cursor position
+   * @param {String} text - The text to add to the editor.
    */
-  componentDidMount() {
-    this.refresh();
-    const orig = CM.hint.javascript;
-    // CM.hint.javascript = (cm) => {
-    //   const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-    //   let range = cm.doc.getRange({...cm.getCursor(), ch: 0}, cm.getCursor());
-    //   console.log('current line: ', range);
-    //   const {id, shell} = this.getActiveProfileId();
-    //   const service = featherClient().service('/mongo-auto-complete');
-    //   service.get(id, {query: {shellId: shell, command: range}})
-    //     .then((res) => {
-    //       console.log('write response ', res);
-    //     });
-    //   return inner;
-    // };
-
-    CM.commands.autocomplete = (cm) => {
-      console.log('xxxxx', cm);
-      const inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-      let range = cm.doc.getRange({...cm.getCursor(), ch: 0}, cm.getCursor());
-      console.log('current line: ', range);
-      const {id, shell} = this.getActiveProfileId();
-      if(!id || !shell){
-        return;
-      }
-      const service = featherClient().service('/mongo-auto-complete');
-      service.get(id, {query: {shellId: shell, command: range}})
-        .then((res) => {
-          console.log('write response ', res);
-          inner.list = inner.list.concat(res);
-        });
-    }
-  }
-
-  /**
- * Inserts the text at the current cursor position
- * @param {String} text - The text to add to the editor.
- */
   insertAtCursor(text) {
     const cm = this
       .refs
@@ -304,13 +329,122 @@ class View extends React.Component {
   }
 
   /**
+   * Prettify selected code.
+   */
+  prettifyAll() {
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+    const beautified = Prettier.format(this.state.code, {});
+    cm.setValue(beautified);
+  }
+
+  /**
+   * Update linting annotations on the editor.
+   */
+  updateLintingAnnotations() {
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+    this
+      .state
+      .lintingErrors
+      .forEach((value) => {
+        // Check if line already used, if so append.
+        if (this.state.lintingAnnotations.get(value.line) != undefined) {
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = this.state.lintingAnnotations.get(value.line).lintText + '\n' + value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          msg.lintText = tooltip.innerHTML;
+          this.state.lintingAnnotations.set(value.line, msg);
+        } else {
+          // New Annotation.
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          this.state.lintingAnnotations.set(value.line, msg);
+        }
+      });
+
+    this
+      .state
+      .lintingAnnotations
+      .forEach((value, key) => {
+        cm.setGutterMarker(key - 1, 'CodeMirror-lint-markers', value);
+      });
+  }
+
+  /**
    * Update the local code state.
    * @param {String} - New code to be entered into the editor.
    */
   updateCode(newCode) {
     this.setState({code: newCode});
+    if (!this.state.isLinting) {
+      this.state.isLinting = true;
+      this.loopingLint();
+    }
   }
 
+  loopingLint() {
+    this.state.lintLoops = this.state.lintLoops + 1;
+    // Lint 10 times before waiting for more input.
+    if (this.state.lintLoops > 2) {
+      this.state.isLinting = false;
+      this.state.lintLoops = 0;
+      return;
+    }
+    // Clear Annotations.
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+
+    this
+      .state
+      .lintingErrors
+      .forEach((value) => {
+        cm.removeLineClass(value.line, 'text', 'lint-error');
+        cm.clearGutter('CodeMirror-lint-markers');
+      });
+    // Trigger linting on code.
+    const service = featherClient().service('linter');
+    service.timeout = 30000;
+    service
+      .get('{id}', {
+      query: {
+        code: this.state.code, // eslint-disable-line
+        options: {}
+      }
+    })
+      .then((result) => {
+        if (result.results[0].messages.length > 0) {
+          this.state.lintingErrors = result.results[0].messages;
+          this.updateLintingAnnotations();
+          if (this.props.store.userPreferences.telemetryEnabled) {
+            EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING, EventLogging.getFragmentEnum().EDITORS, result);
+          }
+        }
+      })
+      .catch((error) => {
+        if (this.props.store.userPreferences.telemetryEnabled) {
+          EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, error);
+        }
+      });
+    setTimeout(this.loopingLint, 1500);
+  }
   /**
    * Trigger an executeLine event by updating the MobX global store.
    */
@@ -346,6 +480,11 @@ class View extends React.Component {
           text="Refresh"
           iconName="pt-icon-refresh"
           intent={Intent.NONE} />
+        <MenuItem
+          onClick={this.prettifyAll}
+          text="Format All"
+          iconName="pt-icon-align-left"
+          intent={Intent.NONE} />
       </Menu>
     );
   }
@@ -360,6 +499,7 @@ class View extends React.Component {
         <CodeMirror
           autoSave
           ref="editor"
+          codeMirrorInstance={CM}
           value={this.state.code}
           onChange={value => this.updateCode(value)}
           options={this.state.options} /> {isOver && <div

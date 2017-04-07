@@ -5,36 +5,35 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2017-04-05T10:34:22+10:00
  */
-
 /**
  * create new profile form and handle connection
  */
 import React from 'react';
-import { action } from 'mobx';
-import { inject, observer } from 'mobx-react';
-import { Intent, Position } from '@blueprintjs/core';
+import {action} from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {Intent, Position} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import { createForm, ProfileForm } from './ProfileForm';
 import Panel from './Panel';
-import { featherClient } from '../../helpers/feathers';
-import { DBenvyToaster } from '../common/Toaster';
-import { Broker, EventType } from '../../helpers/broker';
-import { ProfileStatus } from '.././common/Constants';
+import {featherClient} from '../../helpers/feathers';
+import {DBenvyToaster} from '../common/Toaster';
+import {Broker, EventType} from '../../helpers/broker';
+import {ProfileStatus} from '.././common/Constants';
+import uuidV1 from 'uuid/v1';
 
-const ConnectionPanel = (
-  {
-    profiles,
-    profileList,
-    drawer,
-    userPreferences,
-  },
-) => {
+const ConnectionPanel = ({
+                           profiles,
+                           profileList,
+                           drawer,
+                           userPreferences,
+                         },) => {
   const selectedProfile = profileList.selectedProfile;
   let edit = false;
   if (profileList.selectedProfile) {
     edit = true;
   }
   const form = createForm(selectedProfile);
+
   const connect = action((data) => {
     if (!edit && !validateConnectionFormData(data)) {
       return Promise.reject('Validation failed.');
@@ -69,7 +68,7 @@ const ConnectionPanel = (
     profileList.creatingNewProfile = true;
     return featherClient()
       .service('/mongo-connection')
-      .create({}, { query })
+      .create({}, {query})
       .then((res) => {
         onSuccess(res, data);
       })
@@ -167,12 +166,31 @@ const ConnectionPanel = (
     drawer.drawerOpen = false;
   });
 
+  const save = action((formData) => {
+    const profile = {...formData, status: ProfileStatus.CLOSED};
+    if (edit) {
+      profile.id = selectedProfile.id;
+      profile.shellId = selectedProfile.shellId;
+      profiles.delete(profile.id);
+    }
+    if (!profile.id) {
+      profile.id = uuidV1();
+    }
+    if (!profile.shellId) {
+      profile.shellId = uuidV1();
+    }
+    profiles.set(profile.id, profile);
+    close();
+  });
+
   return (
     <Panel
       form={form}
       close={close}
+      edit={edit}
       connect={connect}
       profiles={profiles}
+      save={save}
       title={edit ? 'Edit Connection' : 'Create New Connection'}
     />
   );
