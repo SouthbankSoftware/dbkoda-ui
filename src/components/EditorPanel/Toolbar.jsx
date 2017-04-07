@@ -362,7 +362,7 @@ export default class Toolbar extends React.Component {
                 onChange={this.onDropdownChanged}
                 value={this.props.store.editorPanel.activeDropdownId}
                 className="pt-intent-primary">
-                <option key="Default" value="Default">Default</option>; {profiles.map((profile) => {
+                <option key="Default" value="Default">No Active Connection</option>; {profiles.map((profile) => {
                   return <option key={profile[0]} value={profile[1].alias}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
                 })}
               </select>
