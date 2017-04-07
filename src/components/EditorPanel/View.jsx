@@ -87,7 +87,7 @@ class View extends React.Component {
     super(props);
     this.state = {
       lintingErrors: [],
-      lintingAnnotations: [],
+      lintingAnnotations: new Map(),
       isLinting: false,
       lintLoops: 0,
       options: {
@@ -289,7 +289,7 @@ class View extends React.Component {
     };
   }
 
-    getActiveProfileId() {
+  getActiveProfileId() {
     let shell = null;
     let id = null;
     this
@@ -352,16 +352,37 @@ class View extends React.Component {
       .state
       .lintingErrors
       .forEach((value) => {
-        const msg = document.createElement('div');
-        const icon = msg.appendChild(document.createElement('div'));
-        icon.innerHTML = '!';
-        const tooltip = icon.appendChild(document.createElement('span'));
-        tooltip.innerHTML = value.message;
-        tooltip.className = 'tooltiptext';
-        icon.className = 'tooltip lint-error-icon';
-        msg.className = 'tooltiptext';
+        // Check if line already used, if so append.
+        if (this.state.lintingAnnotations.get(value.line) != undefined) {
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = this.state.lintingAnnotations.get(value.line).lintText + '\n' + value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          msg.lintText = tooltip.innerHTML;
+          this.state.lintingAnnotations.set(value.line, msg);
+        } else {
+          // New Annotation.
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          this.state.lintingAnnotations.set(value.line, msg);
+        }
+      });
 
-        cm.setGutterMarker(value.line - 1, 'CodeMirror-lint-markers', msg);
+    this
+      .state
+      .lintingAnnotations
+      .forEach((value, key) => {
+        cm.setGutterMarker(key - 1, 'CodeMirror-lint-markers', value);
       });
   }
 
