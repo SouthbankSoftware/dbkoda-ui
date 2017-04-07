@@ -247,12 +247,13 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
     //
-    // let orig = CM.hint.javascript;
-    // CM.hint.javascript = function (cm) {
-    //   let inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-    //   inner.list.push("bozo");
-    //   return inner;
-    // };
+    let orig = CM.hint.javascript;
+    CM.hint.javascript = function (cm) {
+      let inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+      console.log('xxxxx')
+      inner.list.push("bozo");
+      return inner;
+    };
 
 
     CM.commands.autocomplete = (cm) => {

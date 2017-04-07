@@ -46,17 +46,23 @@ const ConnectionPanel = ({
       connectionUrl = data.url;
     }
     if (data.sha) {
-      const split = connectionUrl.split(ProfileForm.mongoProtocol);
-      connectionUrl = ProfileForm.mongoProtocol +
-        data.username +
-        ':' +
-        data.password +
-        '@' +
-        split[1];
+      // const split = connectionUrl.split(ProfileForm.mongoProtocol);
+      // connectionUrl = ProfileForm.mongoProtocol +
+      //   data.username +
+      //   ':' +
+      //   data.password +
+      //   '@' +
+      //   split[1];
+      query.username = data.username;
+      query.password = data.password;
     }
-    if (data.database) {
-      connectionUrl = connectionUrl + '/' + data.database;
+    if (data.ssl) {
+      connectionUrl.indexOf('?') > 0 ? connectionUrl += '&ssl=true' : connectionUrl += '?ssl=true';
     }
+    // if (data.database) {
+    //   connectionUrl = connectionUrl + '/' + data.database;
+    // }
+    query.database = data.database;
     query.url = connectionUrl;
     query.ssl = data.ssl;
     query.test = data.test;
