@@ -33,7 +33,7 @@ export default class Store {
     newConnectionLoading: false,
     currentProfile: 0,
     noActiveProfile: true,
-    noExecutionRunning: true,
+    isActiveExecuting: false,
     id: 0,
     shellId: 0,
   });
