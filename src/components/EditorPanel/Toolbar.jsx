@@ -332,6 +332,7 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-add pt-intent-primary addEditorButton"
                 loading={this.props.store.editorToolbar.newConnectionLoading}
+                disabled={this.props.store.editorToolbar.noActiveProfile}
                 onClick={this.addEditor} />
             </Tooltip>
             <Tooltip
