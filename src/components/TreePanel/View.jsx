@@ -98,7 +98,9 @@ export default class TreeView extends React.Component {
   handleTreeActionClick = (e: React.MouseEvent) => {
     const action = e._targetInst._currentElement._owner._instance.props.name;
     console.log('clicked:', action);
-    if (this.nodeRightClicked) {
+    if (action == 'SampleCollections') {
+      this.props.treeState.sampleCollection(this.nodeRightClicked);
+    } else if (this.nodeRightClicked) {
       console.log('test global store', this.props.store);
       this.props.store.showTreeActionPane(this.nodeRightClicked, action);
     }

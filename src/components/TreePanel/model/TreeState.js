@@ -130,6 +130,14 @@ export default class TreeState {
     }
   }
   /**
+   * Updates the tree state to show collection information.
+   * @param {Object} nodeRightClicked - The Node that triggered this action.
+   */
+  sampleCollection(nodeRightClicked) {
+    console.log('!TEST SAMPLING COLLECTIONS TEST!');
+    const query = '';
+  }
+  /**
    * Returns the tree nodes to bind to react tree component
    * @return {[type]} [description]
    */
