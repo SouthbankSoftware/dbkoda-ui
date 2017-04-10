@@ -83,7 +83,8 @@ export default class Toolbar extends React.Component {
       id: profile.id,
       alias: profile.alias,
       shellId: profile.shellId,
-      visible: true
+      visible: true,
+      executing: false
     });
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
@@ -409,7 +410,7 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-stop pt-intent-danger stopExecutionButton"
                 onClick={this.stopExecution}
-                disabled={this.props.store.editorToolbar.noExecutionRunning} />
+                disabled={!this.props.store.editorToolbar.isActiveExecuting} />
             </Tooltip>
           </div>
           <span className="pt-navbar-divider" />
