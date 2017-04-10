@@ -47,6 +47,8 @@ require('codemirror/keymap/sublime.js');
 require('codemirror-formatting');
 require('#/common/MongoScript.js');
 
+const MAX_LINT_ERROR_CHARACTERS = 150;
+const LINT_INTERVAL = 1000;
 /**
  * editorTarget object for helping with drag and drop actions?
  */
@@ -385,6 +387,7 @@ class View extends React.Component {
       .refs
       .editor
       .getCodeMirror();
+      this.state.lintingAnnotations.clear();
     this
       .state
       .lintingErrors
@@ -403,6 +406,10 @@ class View extends React.Component {
           tooltip.className = 'tooltiptext';
           icon.className = 'tooltip lint-error-icon';
           msg.className = 'tooltiptext';
+          console.log(tooltip.innerHTML.length);
+          if (tooltip.innerHTML.length > MAX_LINT_ERROR_CHARACTERS) {
+            tooltip.innerHTML = 'Too many Linting Errors on this line...';
+          }
           msg.lintText = tooltip.innerHTML;
           this
             .state
@@ -447,7 +454,7 @@ class View extends React.Component {
 
   loopingLint() {
     this.state.lintLoops = this.state.lintLoops + 1;
-    // Lint 10 times before waiting for more input.
+    // Lint 2 times before waiting for more input.
     if (this.state.lintLoops > 2) {
       this.state.isLinting = false;
       this.state.lintLoops = 0;
@@ -490,7 +497,7 @@ class View extends React.Component {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, error);
         }
       });
-    setTimeout(this.loopingLint, 1500);
+    setTimeout(this.loopingLint, LINT_INTERVAL);
   }
   /**
    * Trigger an executeLine event by updating the MobX global store.
