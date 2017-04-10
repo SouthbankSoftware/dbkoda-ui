@@ -110,6 +110,9 @@ class View extends React.Component {
         keyMap: 'sublime',
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
+          'Tab': function (cm) {
+            cm.replaceSelection('  ');
+          },
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           }
@@ -312,7 +315,7 @@ class View extends React.Component {
     };
   }
 
-   getActiveProfileId() {
+  getActiveProfileId() {
     let shell = null;
     let id = null;
     this
@@ -386,7 +389,10 @@ class View extends React.Component {
       .refs
       .editor
       .getCodeMirror();
-      this.state.lintingAnnotations.clear();
+    this
+      .state
+      .lintingAnnotations
+      .clear();
     this
       .state
       .lintingErrors
