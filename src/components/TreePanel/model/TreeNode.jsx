@@ -7,8 +7,8 @@
 */
 
 import React from 'react';
-import { observable } from 'mobx';
-import { ITreeNode } from '@blueprintjs/core';
+import {observable} from 'mobx';
+import {ITreeNode} from '@blueprintjs/core';
 
 import DragLabel from './DragLabel.jsx';
 
@@ -43,19 +43,28 @@ export default class TreeNode implements ITreeNode {
     }
     if (parent && !parent.allChildNodes) {
       parent.allChildNodes = new Map();
-      parent.allChildNodes.set(this.id, this);
-      console.log('Test - Tree Add');
+      parent
+        .allChildNodes
+        .set(this.id, this);
     } else if (parent && parent.allChildNodes) {
-      parent.allChildNodes.set(this.id, this);
-      console.log('Test - Tree Add 2');
+      parent
+        .allChildNodes
+        .set(this.id, this);
     }
     this.text = treeJSON.text;
-    this.label = <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} filter={this.filter} />;
+    this.label = (<DragLabel
+      label={this.text}
+      id={this.id}
+      type={this.type}
+      refParent={this.refParent}
+      filter={this.filter} />);
     if (treeJSON.children) {
       this.allChildNodes = new Map();
       for (const childJSON of treeJSON.children) {
         const child = new TreeNode(childJSON, this);
-        this.allChildNodes.set(child.id, child);
+        this
+          .allChildNodes
+          .set(child.id, child);
       }
     }
   }
@@ -79,19 +88,28 @@ export default class TreeNode implements ITreeNode {
       this.childNodes = [];
       for (const child of this.allChildNodes.values()) {
         child.setFilter(filter, this);
-        if (filter == '' || this.isFiltered) {                             // add the child nodes if there is no filter
-          this.childNodes.push(child);
-        } else if (child.text.toLowerCase().indexOf(filter) >= 0) {     // add the child node if filtered text is found in the child node label
-          this.childNodes.push(child);
-        } else if (child.allChildNodes && child.allChildNodes.size > 0) {   // add the child node if the grand child has filtered text in the label
-          if (child.childNodes && child.childNodes.length > 0) {              // Check if there are childNodes existing
-            this.childNodes.push(child);
+        if (filter == '' || this.isFiltered) {
+          // add the child nodes if there is no filter
+          this
+            .childNodes
+            .push(child);
+        } else if (child.text.toLowerCase().indexOf(filter) >= 0) {
+          // add the child node if filtered text is found in the child node label
+          this
+            .childNodes
+            .push(child);
+        } else if (child.allChildNodes && child.allChildNodes.size > 0) { // add the child node if the grand child has filtered text in the label
+          if (child.childNodes && child.childNodes.length > 0) {
+            // Check if there are childNodes existing
+            this
+              .childNodes
+              .push(child);
           }
         }
       }
     }
   }
-/**
+  /**
  * Returns the node type based on the node text or json specified node type
  *
  * @param {Object} treeJSON - JSON object from controller having text
@@ -102,9 +120,14 @@ export default class TreeNode implements ITreeNode {
       return treeJSON.type;
     }
     if (parent && parent.id != 'root') {
-      return parent.id.split('_')[1];
+      return parent
+        .id
+        .split('_')[1];
     }
-    return treeJSON.text.toLowerCase().replace(' ', '');
+    return treeJSON
+      .text
+      .toLowerCase()
+      .replace(' ', '');
   }
 
   /**
@@ -119,7 +142,9 @@ export default class TreeNode implements ITreeNode {
     objState.allChildNodes = [];
     if (this.allChildNodes) {
       for (const child of this.allChildNodes.values()) {
-        objState.allChildNodes.push(child.StateObject);
+        objState
+          .allChildNodes
+          .push(child.StateObject);
       }
     }
     return objState;
@@ -134,7 +159,10 @@ export default class TreeNode implements ITreeNode {
     this.isSelected = objState.isSelected;
     if (objState.allChildNodes.length > 0) {
       for (const child of objState.allChildNodes) {
-        this.allChildNodes.get(child.id).StateObject = child;
+        this
+          .allChildNodes
+          .get(child.id)
+          .StateObject = child;
       }
     }
   }

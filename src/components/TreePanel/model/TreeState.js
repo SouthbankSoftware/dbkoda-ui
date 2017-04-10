@@ -169,24 +169,20 @@ export default class TreeState {
         {
           text: 'Name',
           type: 'label'
-        },
-        {
+        }, {
           text: 'Date of Birth',
           type: 'numerical'
-        },
-        {
+        }, {
           text: 'Address',
           type: 'properties',
           children: [
             {
               text: 'State',
               type: 'label'
-            },
-            {
+            }, {
               text: 'PostCode',
               type: 'numerical'
-            },
-            {
+            }, {
               text: 'Street Address',
               type: 'numerical'
             }
@@ -194,24 +190,13 @@ export default class TreeState {
         }
       ]
     };
-    console.log(nodeRightClicked);
-     if (!nodeRightClicked.allChildNodes) {
+    if (!nodeRightClicked.allChildNodes) {
       nodeRightClicked.allChildNodes = new Map();
-    } 
-    const child = new TreeNode(sampleStructure, nodeRightClicked);
-   
-    // child.type = 'collection';
-    // child.text = 'Sample';
-    // if (nodeRightClicked.allChildNodes == undefined) {
-    //   nodeRightClicked.allChildNodes = new Map();
-    // }
-    // nodeRightClicked
-    //   .allChildNodes
-    //   .set('sample', child);
-    // this.filterNodes();
-    nodeRightClicked.setFilter(this.filter);
-    console.log(child);
     }
+    const child = new TreeNode(sampleStructure, nodeRightClicked);
+    console.log('Tree Created Child: ', child);
+    nodeRightClicked.setFilter(this.filter);
+  }
   /**
    * Returns the tree nodes to bind to react tree component
    * @return {[type]} [description]
