@@ -194,9 +194,13 @@ export default class TreeState {
         }
       ]
     };
+    console.log(nodeRightClicked);
     const child = new TreeNode(sampleStructure, nodeRightClicked);
     child.type = 'collection';
     child.text = 'Sample';
+    if (nodeRightClicked.allChildNodes == undefined) {
+      nodeRightClicked.allChildNodes = new Map();
+    }
     nodeRightClicked
       .allChildNodes
       .set('sample', child);
