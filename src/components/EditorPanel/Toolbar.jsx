@@ -392,18 +392,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeAll}
                 disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
-            <ExplainPopover editorToolbar={this.props.store.editorToolbar}/>
-            {/*<Tooltip*/}
-              {/*intent={Intent.PRIMARY}*/}
-              {/*hoverOpenDelay={1000}*/}
-              {/*content="Explain a Query"*/}
-              {/*tooltipClassName="pt-dark"*/}
-              {/*position={Position.BOTTOM}>*/}
-              {/*<AnchorButton*/}
-                {/*className="pt-button pt-icon-help pt-intent-primary explainPlanButton"*/}
-                {/*onClick={this.explainPlan}*/}
-                {/*disabled={this.props.store.editorToolbar.noActiveProfile} />*/}
-            {/*</Tooltip>*/}
+            <ExplainPopover editorToolbar={this.props.store.editorToolbar} editorPanel={this.props.store.editorPanel}/>
             <Tooltip
               intent={Intent.DANGER}
               hoverOpenDelay={1000}
