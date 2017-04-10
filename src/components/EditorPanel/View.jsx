@@ -405,7 +405,6 @@ class View extends React.Component {
           tooltip.className = 'tooltiptext';
           icon.className = 'tooltip lint-error-icon';
           msg.className = 'tooltiptext';
-          console.log(tooltip.innerHTML.length);
           if (tooltip.innerHTML.length > MAX_LINT_ERROR_CHARACTERS) {
             tooltip.innerHTML = 'Too many Linting Errors on this line...';
           }
