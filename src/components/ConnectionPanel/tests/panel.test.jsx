@@ -49,7 +49,7 @@ describe('New Connection Profile Panel', () => {
 
   it('test new connection with hostname disabled', () => {
     let store = new Store();
-    let form = createForm({hostRadio: false});
+    let form = createForm({hostRadio: false, urlRadio: true});
     const app = mount(<Provider store={store}>
       <Panel form={form}/>
     </Provider>);
