@@ -26,6 +26,7 @@ export default class Store {
     activeDropdownId: 'Default',
     executingEditorAll: false,
     executingEditorLines: false,
+    executingExplain: undefined,
     tabFilter: '',
   });
 
