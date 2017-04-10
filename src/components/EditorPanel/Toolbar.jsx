@@ -25,6 +25,7 @@ import {NewToaster} from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
+import ExplainPopover from './ExplainPopover';
 
 /**
  * Defines the Toolbar for the Tabbed Editor Panel.
@@ -391,17 +392,18 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeAll}
                 disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Explain a Query"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
-              <AnchorButton
-                className="pt-button pt-icon-help pt-intent-primary explainPlanButton"
-                onClick={this.explainPlan}
-                disabled={this.props.store.editorToolbar.noActiveProfile} />
-            </Tooltip>
+            <ExplainPopover editorToolbar={this.props.store.editorToolbar}/>
+            {/*<Tooltip*/}
+              {/*intent={Intent.PRIMARY}*/}
+              {/*hoverOpenDelay={1000}*/}
+              {/*content="Explain a Query"*/}
+              {/*tooltipClassName="pt-dark"*/}
+              {/*position={Position.BOTTOM}>*/}
+              {/*<AnchorButton*/}
+                {/*className="pt-button pt-icon-help pt-intent-primary explainPlanButton"*/}
+                {/*onClick={this.explainPlan}*/}
+                {/*disabled={this.props.store.editorToolbar.noActiveProfile} />*/}
+            {/*</Tooltip>*/}
             <Tooltip
               intent={Intent.DANGER}
               hoverOpenDelay={1000}
