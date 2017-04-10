@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-06T16:22:54+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-03-21T11:43:32+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-06T23:32:05+10:00
  */
 
 const path = require('path');
@@ -35,7 +35,7 @@ const config = (() => {
     ],
     output: {
       path: path.join(__dirname, '../dist/'),
-      publicPath: '/',
+      publicPath: './',
       filename: 'app.[hash].js'
     },
     devtool: 'source-map',
@@ -51,7 +51,7 @@ const config = (() => {
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             use: ['css-loader', 'sass-loader'],
-            publicPath: 'styles/bundle.css'
+            publicPath: './styles/bundle.css'
           })
         },
         {

@@ -1,9 +1,26 @@
 {
   "name": "@southbanksoftware/dbenvy-ui",
   "gitName": "dbenvy-ui",
+  "fullName": "DBEnvy UI",
+  "description": "DBEnvy UI built with state of the art React stack",
   "version": "0.1.1",
-  "description": "DBEnvy UI",
-  "main": "webpack.config.js",
+  "author": {
+    "name": "Southbank Software",
+    "email": "developer@southbanksoftware.com",
+    "url": "http://southbanksoftware.com"
+  },
+  "main": "dist/index.html",
+  "keywords": [
+    "React",
+    "React-Router",
+    "MobX",
+    "Webpack",
+    "ES6",
+    "ES7"
+  ],
+  "engines": {
+    "node": ">= 7.2.1"
+  },
   "scripts": {
     "start": "webpack --config config/webpack.config.js && webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback --port 3000 --content-base dist",
     "build": "yarn run clean && rimraf ./dist && webpack --config config/webpack.config.prod.js",
@@ -16,41 +33,16 @@
     "clean": "rimraf ./dist rmdir",
     "drone:sign": "drone sign \"SouthbankSoftware/$npm_package_gitName\""
   },
-  "keywords": [
-    "React",
-    "React-Router",
-    "MobX",
-    "Webpack",
-    "ES6",
-    "ES7"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SouthbankSoftware/dbenvy-ui.git"
+  },
   "license": "BSD",
-  "contributors": [
-    {
-      "name": "Guy Harrison",
-      "email": "guy@southbanksoftware.com"
-    },
-    {
-      "name": "Michael Harrison",
-      "email": "mike@southbanksoftware.com"
-    },
-    {
-      "name": "Joey Zhao",
-      "email": "joey@southbanksoftware.com"
-    },
-    {
-      "name": "Guan Gui",
-      "email": "guan@southbanksoftware.com"
-    },
-    {
-      "name": "Wahaj Shamim",
-      "email": "wahaj@southbanksoftware.com"
-    },
-    {
-      "name": "Chris Trott",
-      "email": "chris@southbanksoftware.com"
-    }
-  ],
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/SouthbankSoftware/dbenvy-ui/issues"
+  },
+  "homepage": "https://github.com/SouthbankSoftware/dbenvy-ui#readme",
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
@@ -144,19 +136,5 @@
     "typescript-eslint-parser": "^2.0.0",
     "uuid": "^3.0.1",
     "validatorjs": "^3.11.0"
-  },
-  "repository": {
-    "url": "",
-    "type": "git"
-  },
-  "nyc": {
-    "exclude": [
-      "**/*.test.js*",
-      "dist"
-    ],
-    "extension": [
-      ".js",
-      ".jsx"
-    ]
   }
 }

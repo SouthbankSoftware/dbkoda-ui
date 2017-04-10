@@ -29,13 +29,12 @@
     pure-render-decorator "^1.1"
     tslib "^1.5.0"
 
-"@southbanksoftware/dbenvy-controller@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@southbanksoftware/dbenvy-controller/-/dbenvy-controller-0.1.3.tgz#c89185728f61b211e0ed2023da4dd5ce83e5b0ec"
+"@southbanksoftware/dbenvy-controller@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@southbanksoftware/dbenvy-controller/-/dbenvy-controller-0.1.4.tgz#7b2a1e04e07268318ca8dbfd6c40b125683683db"
   dependencies:
     body-parser "^1.15.2"
     byline "^5.0.0"
-    child_pty "^3.0.7"
     compression "^1.6.2"
     cors "^2.8.1"
     crypto-js "^3.1.9-1"
@@ -1717,14 +1716,6 @@ cheerio@0.22.0, cheerio@^0.22.0:
     lodash.reduce "^4.4.0"
     lodash.reject "^4.4.0"
     lodash.some "^4.4.0"
-
-child_pty@^3.0.7:
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/child_pty/-/child_pty-3.0.7.tgz#0afa116493ca3849ffae0a1aabb78616e6426516"
-  dependencies:
-    extend "^3.0.0"
-    nan "^2.4.0"
-    termios "^0.1.1"
 
 chokidar@^1.4.3, chokidar@^1.6.0, chokidar@^1.6.1:
   version "1.6.1"
@@ -5854,7 +5845,7 @@ nan@2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.5.0.tgz#aa8f1e34531d807e9e27755b234b4a6ec0c152a8"
 
-nan@^2.3.0, nan@^2.3.2, nan@^2.4.0, nan@^2.5.1:
+nan@^2.3.0, nan@^2.3.2:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.5.1.tgz#d5b01691253326a97a2bbee9e61c55d8d60351e2"
 
@@ -8304,13 +8295,6 @@ tempfile@^1.0.0:
     os-tmpdir "^1.0.0"
     uuid "^2.0.1"
 
-termios@^0.1.1:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/termios/-/termios-0.1.6.tgz#cb7e7b1aa33d784559947662d7bc01d523052cbe"
-  dependencies:
-    extend "^3.0.0"
-    nan "^2.5.1"
-
 test-exclude@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/test-exclude/-/test-exclude-4.0.0.tgz#0ddc0100b8ae7e88b34eb4fd98a907e961991900"
@@ -8655,7 +8639,7 @@ uuid@^2.0.1, uuid@^2.0.2, uuid@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
-uuid@^3.0.0:
+uuid@^3.0.0, uuid@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 
