@@ -1,5 +1,7 @@
-# dbenvy-ui
-Next generation MongoDB Admin tool built with React.js
+# DBEnvy UI
+*DBEnvy UI built with state of the art React stack*
+
+[![Build Status](https://drone.hoth.southbanksoftware.com/api/badges/SouthbankSoftware/dbenvy-ui/status.svg)](https://drone.hoth.southbanksoftware.com/SouthbankSoftware/dbenvy-ui)
 
 ## Build tool
 
@@ -29,11 +31,11 @@ Currently you need to run the Controller seperately to the product.
 
 The structure of the output structure:
 
-```
-|-- dist
-|   +-- images
-|   +-- js
-|   +-- index.html
-|   +-- styles
-|--
+```text
+dbenvy-ui
+├── dist
+│   ├── images
+│   ├── js
+│   ├── index.html
+│   └── styles
 ```
