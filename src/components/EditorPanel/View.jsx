@@ -23,7 +23,6 @@ import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
 
 const Prettier = require('prettier');
-const Beautify = require('js-beautify').js_beautify;
 const React = require('react');
 const CodeMirror = require('react-codemirror');
 const CM = require('codemirror');
@@ -251,22 +250,6 @@ class View extends React.Component {
       .bind(this);
   }
 
-  getActiveProfileId() {
-    let shell = null;
-    let id = null;
-    this
-      .props
-      .store
-      .profiles
-      .forEach((value) => {
-        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-          shell = value.shellId;
-          id = value.id;
-        }
-      });
-    return {id, shell};
-  }
-
   /**
    * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.
    */
@@ -329,9 +312,25 @@ class View extends React.Component {
     };
   }
 
+   getActiveProfileId() {
+    let shell = null;
+    let id = null;
+    this
+      .props
+      .store
+      .profiles
+      .forEach((value) => {
+        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+          shell = value.shellId;
+          id = value.id;
+        }
+      });
+    return {id, shell};
+  }
+
   @action.bound
   finishedExecution() {
-    const {id, shell} = this.getActiveProfileId();
+    const {id, shell} = this.getActiveProfileId(); // eslint-disable-line
     const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
     this
       .props
