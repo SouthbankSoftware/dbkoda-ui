@@ -1,7 +1,7 @@
 # @Author: guiguan
 # @Date:   2017-01-09T15:15:34+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-04-03T17:00:33+10:00
+# @Last modified time: 2017-04-10T18:04:32+10:00
 
 
 
@@ -13,7 +13,7 @@ pipeline:
   #   commands:
   #     - dbenvy-ci --url=http://172.16.0.1:3030 loadConfig
   build:
-    image: southbanksoftware/dbenvy-ci-node-runtime
+    image: southbanksoftware/cienvy:node-nm
     pull: true
     commands:
       - echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" >> ~/.npmrc
