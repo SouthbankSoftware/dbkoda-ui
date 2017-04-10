@@ -41,6 +41,14 @@ export default class TreeNode implements ITreeNode {
     if (parent) {
       this.refParent = parent;
     }
+    if (parent && !parent.allChildNodes) {
+      parent.allChildNodes = new Map();
+      parent.allChildNodes.set(this.id, this);
+      console.log('Test - Tree Add');
+    } else if (parent && parent.allChildNodes) {
+      parent.allChildNodes.set(this.id, this);
+      console.log('Test - Tree Add 2');
+    }
     this.text = treeJSON.text;
     this.label = <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} filter={this.filter} />;
     if (treeJSON.children) {

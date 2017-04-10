@@ -195,17 +195,23 @@ export default class TreeState {
       ]
     };
     console.log(nodeRightClicked);
-    const child = new TreeNode(sampleStructure, nodeRightClicked);
-    child.type = 'collection';
-    child.text = 'Sample';
-    if (nodeRightClicked.allChildNodes == undefined) {
+     if (!nodeRightClicked.allChildNodes) {
       nodeRightClicked.allChildNodes = new Map();
+    } 
+    const child = new TreeNode(sampleStructure, nodeRightClicked);
+   
+    // child.type = 'collection';
+    // child.text = 'Sample';
+    // if (nodeRightClicked.allChildNodes == undefined) {
+    //   nodeRightClicked.allChildNodes = new Map();
+    // }
+    // nodeRightClicked
+    //   .allChildNodes
+    //   .set('sample', child);
+    // this.filterNodes();
+    nodeRightClicked.setFilter(this.filter);
+    console.log(child);
     }
-    nodeRightClicked
-      .allChildNodes
-      .set('sample', child);
-    this.filterNodes();
-  }
   /**
    * Returns the tree nodes to bind to react tree component
    * @return {[type]} [description]
