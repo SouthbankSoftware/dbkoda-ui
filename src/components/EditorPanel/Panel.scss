@@ -47,19 +47,23 @@ span.cm-string {
 .notVisible {
   display:  none;
 }
-.editorPanel, .profileListPanel {
+.editorPanel, .profileListPanel, .welcomePanel {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.editorTabView {
+.editorTabView, .welcomePanel {
   flex-direction: column;
   flex: 1;
   display: flex;
 }
 
 .editorView {
+  flex: 1;
+}
+
+iframe {
   flex: 1;
 }
 

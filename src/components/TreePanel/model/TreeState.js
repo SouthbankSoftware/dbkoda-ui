@@ -2,11 +2,11 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T12:36:46+10:00
+ * @Last modified by:   mike
+ * @Last modified time: 2017-04-10 11:03:34
 */
 
-import { observable, action } from 'mobx';
+import {observable, action} from 'mobx';
 
 import TreeNode from './TreeNode.jsx';
 
@@ -14,6 +14,7 @@ export default class TreeState {
   treeNodes;
   @observable filteredNodes;
   @observable filter = '';
+  @observable isJsonParsed = false;
   treeJson;
   treeRoot; // required for make root node functionality
   previousState; // last state before we have changed the root node.
@@ -22,7 +23,7 @@ export default class TreeState {
   constructor() {
     this.treeNodes = [];
     this.filteredNodes = observable([]);
-    this.resetTreeNode = new TreeNode({ text: '...' });
+    this.resetTreeNode = new TreeNode({text: '...'});
   }
   /**
    * set the selected profile alias to be shown in toolbar
@@ -43,17 +44,27 @@ export default class TreeState {
    * Function to perform the filter action on the treeNodes.
    */
   filterNodes() {
-    this.filteredNodes.clear();
+    this
+      .filteredNodes
+      .clear();
     if (this.treeRoot) {
-      this.filteredNodes.push(this.resetTreeNode);
-      this.treeRoot.setFilter(this.filter);
+      this
+        .filteredNodes
+        .push(this.resetTreeNode);
+      this
+        .treeRoot
+        .setFilter(this.filter);
       this.treeRoot.isExpanded = true;
-      this.filteredNodes.push(this.treeRoot);
+      this
+        .filteredNodes
+        .push(this.treeRoot);
     } else {
       for (const treeNode of this.treeNodes) {
         treeNode.setFilter(this.filter);
         if (treeNode.childNodes && treeNode.childNodes.length > 0) {
-          this.filteredNodes.push(treeNode);
+          this
+            .filteredNodes
+            .push(treeNode);
         }
       }
     }
@@ -63,18 +74,24 @@ export default class TreeState {
    * @param  {json} treeJson [description]
    */
   parseJson(treeJson) {
+    this.isJsonParsed = false;
     this.treeJson = treeJson;
     this.treeRoot = undefined;
-    this.filteredNodes.clear();
+    this
+      .filteredNodes
+      .clear();
     if (this.treeJson.length && this.treeJson.length > 0) {
       this.treeNodes = [];
       for (const node of this.treeJson) {
         const treeNode = new TreeNode(node);
         if (treeNode.allChildNodes && treeNode.allChildNodes.size > 0) {
-          this.treeNodes.push(treeNode);
+          this
+            .treeNodes
+            .push(treeNode);
         }
       }
       this.filterNodes();
+      this.isJsonParsed = true;
     }
   }
   /**
@@ -111,7 +128,9 @@ export default class TreeState {
   preserveState() {
     this.previousState = new Map();
     for (const child of this.treeNodes) {
-      this.previousState.set(child.id, child.StateObject);
+      this
+        .previousState
+        .set(child.id, child.StateObject);
     }
   }
   /**
@@ -121,10 +140,62 @@ export default class TreeState {
   restoreState() {
     if (this.previousState && this.previousState.size > 0) {
       for (const child of this.treeNodes) {
-        const lastState = this.previousState.get(child.id);
+        const lastState = this
+          .previousState
+          .get(child.id);
         child.StateObject = lastState;
       }
     }
+  }
+  /**
+   * Updates the tree state to show collection information.
+   * @param {Object} nodeRightClicked - The Node that triggered this action.
+   */
+  sampleCollection(nodeRightClicked) {
+    console.log(this.treeNodes);
+    const database = nodeRightClicked.refParent.text;
+    const queryFirst = 'use ' + database;
+    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 100}})';
+
+    console.log(queryFirst);
+    console.log(querySecond);
+
+    // This will be sent to tree service and return a JSON object of the appropriate
+    // structure.
+    const sampleStructure = {
+      text: 'Collection Sample',
+      type: 'properties',
+      children: [
+        {
+          text: 'Name',
+          type: 'label'
+        }, {
+          text: 'Date of Birth',
+          type: 'numerical'
+        }, {
+          text: 'Address',
+          type: 'properties',
+          children: [
+            {
+              text: 'State',
+              type: 'label'
+            }, {
+              text: 'PostCode',
+              type: 'numerical'
+            }, {
+              text: 'Street Address',
+              type: 'numerical'
+            }
+          ]
+        }
+      ]
+    };
+    if (!nodeRightClicked.allChildNodes) {
+      nodeRightClicked.allChildNodes = new Map();
+    }
+    const child = new TreeNode(sampleStructure, nodeRightClicked);
+    console.log('Tree Created Child: ', child);
+    nodeRightClicked.setFilter(this.filter);
   }
   /**
    * Returns the tree nodes to bind to react tree component
@@ -138,7 +209,7 @@ export default class TreeState {
    * @param  {ITreeNode[]}   nodes    - Nodes array/map to parse
    * @param  {Function} callback - Callback method to execute on each node
    */
-  forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
+  forEachNode(nodes : ITreeNode[], callback : (node : ITreeNode) => void) {
     if (nodes == null) {
       return;
     }

@@ -14,6 +14,7 @@ import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
+import WelcomeView from './WelcomeView.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -132,14 +133,8 @@ export default class Panel extends React.Component {
           selectedTabId={this.props.store.editorPanel.activeEditorId}>
           <Tab2
             id="Default"
-            title="Default"
-            panel={<View id ={
-            0
-          }
-              onDrop ={
-            item => this.handleDrop(item)
-          }
-              ref ="defaultEditor" />} /> {editors.map((tab) => {
+            title="Welcome"
+            panel={<WelcomeView />} /> {editors.map((tab) => {
             if (tab[1].visible) {
               return (
                 <Tab2
@@ -147,16 +142,16 @@ export default class Panel extends React.Component {
                   key={tab[1].alias + ' (' + tab[1].shellId + ')'}
                   id={tab[1].alias + ' (' + tab[1].shellId + ')'}
                   title={tab[1].alias + ' (' + tab[1].shellId + ')'}
-                  panel={<View id= {
+                  panel={<View id={
                   tab[1].id
                 }
-                    title ={
+                    title={
                   tab[1].alias + ' (' + tab[1].shellId + ')'
                 }
-                    onDrop ={
+                    onDrop={
                   item => this.handleDrop(item)
                 }
-                    ref= "defaultEditor" />}>
+                    ref="defaultEditor" />}>
                   <Button
                     className="pt-intent-primary pt-minimal"
                     onClick={() => this.closeTab(tab[1])}>
@@ -171,10 +166,10 @@ export default class Panel extends React.Component {
                 key={tab[1].alias + ' (' + tab[1].shellId + ')'}
                 id={tab[1].id}
                 title={tab[1].alias}
-                panel={<View id ={
+                panel={<View id={
                 tab[1].id
               }
-                  ref ="defaultEditor" />}>
+                  ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
                   onClick={() => this.closeTab(tab[1])}>

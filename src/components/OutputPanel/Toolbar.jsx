@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-27T15:24:24+11:00
+ * @Last modified time: 2017-04-07T12:09:40+10:00
 */
 
 import React from 'react';
@@ -100,7 +100,6 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
-    console.log("Render Toolbar!");
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">

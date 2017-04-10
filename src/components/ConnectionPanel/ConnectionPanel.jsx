@@ -3,7 +3,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T15:36:29+10:00
+ * @Last modified time: 2017-04-05T10:34:22+10:00
  */
 /**
  * create new profile form and handle connection
@@ -13,7 +13,7 @@ import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {Intent, Position} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
-import {createForm, createFromFromProfile, ProfileForm} from './ProfileForm';
+import { createForm, ProfileForm } from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
@@ -46,17 +46,13 @@ const ConnectionPanel = ({
       connectionUrl = data.url;
     }
     if (data.sha) {
-      const split = connectionUrl.split(ProfileForm.mongoProtocol);
-      connectionUrl = ProfileForm.mongoProtocol +
-        data.username +
-        ':' +
-        data.password +
-        '@' +
-        split[1];
+      query.username = data.username;
+      query.password = data.password;
     }
-    if (data.database) {
-      connectionUrl = connectionUrl + '/' + data.database;
+    if (data.ssl) {
+      connectionUrl.indexOf('?') > 0 ? connectionUrl += '&ssl=true' : connectionUrl += '?ssl=true';
     }
+    query.database = data.database;
     query.url = connectionUrl;
     query.ssl = data.ssl;
     query.test = data.test;

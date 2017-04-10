@@ -3,10 +3,10 @@
 * @Date:   2017-03-17T10:29:12+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T09:57:45+10:00
+ * @Last modified time: 2017-04-05T12:02:06+10:00
 */
 
-const Templates = require('../templates/dragdrop');
+import Templates from '../templates/dragdrop';
 
 export default class TreeDropActions {
   /**

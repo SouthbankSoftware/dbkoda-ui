@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T10:41:02+10:00
+ * @Last modified time: 2017-04-06T17:46:24+10:00
 */
 
 import React from 'react';
@@ -46,6 +46,7 @@ export default class TreePanel extends React.Component {
             .service('/mongo-inspector')
             .get(this.props.store.profileList.selectedProfile.id)
             .then((res) => {
+              console.log('treeJson:', res);
               this.props.store.updateTopology(res);
             })
             .catch((err) => {
@@ -69,7 +70,6 @@ export default class TreePanel extends React.Component {
         if (this.props.store.topology.isChanged && this.props.store.topology.json !== null) {
           this.treeState.parseJson(this.props.store.topology.json);
           this.props.store.topology.isChanged = false;
-          this.forceUpdate();
         }
       },
     );

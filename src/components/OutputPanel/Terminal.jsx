@@ -193,7 +193,7 @@ export default class Terminal extends React.Component {
 
   render() {
     const terminalOptions = {
-      mode: 'mongoscript',
+      mode: 'MongoScript',
       matchBrackets: true,
       autoCloseBrackets: true,
       json: true,

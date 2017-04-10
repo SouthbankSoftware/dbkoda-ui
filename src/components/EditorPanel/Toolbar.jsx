@@ -25,6 +25,7 @@ import {NewToaster} from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
+import ExplainPopover from './ExplainPopover';
 
 /**
  * Defines the Toolbar for the Tabbed Editor Panel.
@@ -83,7 +84,8 @@ export default class Toolbar extends React.Component {
       id: profile.id,
       alias: profile.alias,
       shellId: profile.shellId,
-      visible: true
+      visible: true,
+      executing: false
     });
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
@@ -117,7 +119,7 @@ export default class Toolbar extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
         }
-        NewToaster.show({message: 'Cannot create new Editor for Default Tab.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({message: 'Cannot create new Editor for "No Active Connection".', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
         this.onFail();
         this.setNewEditorLoading(false);
         return null;
@@ -332,6 +334,7 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-add pt-intent-primary addEditorButton"
                 loading={this.props.store.editorToolbar.newConnectionLoading}
+                disabled={this.props.store.editorToolbar.noActiveProfile}
                 onClick={this.addEditor} />
             </Tooltip>
             <Tooltip
@@ -362,7 +365,7 @@ export default class Toolbar extends React.Component {
                 onChange={this.onDropdownChanged}
                 value={this.props.store.editorPanel.activeDropdownId}
                 className="pt-intent-primary">
-                <option key="Default" value="Default">Default</option>; {profiles.map((profile) => {
+                <option key="Default" value="Default">No Active Connection</option>; {profiles.map((profile) => {
                   return <option key={profile[0]} value={profile[1].alias}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
                 })}
               </select>
@@ -389,17 +392,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeAll}
                 disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Explain a Query"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
-              <AnchorButton
-                className="pt-button pt-icon-help pt-intent-primary explainPlanButton"
-                onClick={this.explainPlan}
-                disabled={this.props.store.editorToolbar.noActiveProfile} />
-            </Tooltip>
+            <ExplainPopover editorToolbar={this.props.store.editorToolbar} editorPanel={this.props.store.editorPanel}/>
             <Tooltip
               intent={Intent.DANGER}
               hoverOpenDelay={1000}
@@ -409,7 +402,7 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-stop pt-intent-danger stopExecutionButton"
                 onClick={this.stopExecution}
-                disabled={this.props.store.editorToolbar.noExecutionRunning} />
+                disabled={!this.props.store.editorToolbar.isActiveExecuting} />
             </Tooltip>
           </div>
           <span className="pt-navbar-divider" />

@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T10:55:54+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-27T13:06:21+11:00
+ * @Last modified time: 2017-04-10T08:59:05+10:00
 */
 import ReactDOM from 'react-dom';
 import { assert, expect } from 'chai';
@@ -39,6 +39,7 @@ describe('Output Toolbar', () => {
       cannotShowMore: true,
       showingMore: false
     });
+    store.outputPanel.currentTab = 'Test';
   });
 
   test('should have an enabled showMoreBtn when cannotShowMore is false', () => {

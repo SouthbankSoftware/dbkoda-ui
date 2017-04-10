@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T12:30:49+11:00
+ * @Last modified by:   mike
+ * @Last modified time: 2017-04-10 11:03:04
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -20,9 +20,9 @@ import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
+import {Broker, EventType} from '../../helpers/broker';
 
 const Prettier = require('prettier');
-const Beautify = require('js-beautify').js_beautify;
 const React = require('react');
 const CodeMirror = require('react-codemirror');
 const CM = require('codemirror');
@@ -46,6 +46,8 @@ require('codemirror/keymap/sublime.js');
 require('codemirror-formatting');
 require('#/common/MongoScript.js');
 
+const MAX_LINT_ERROR_CHARACTERS = 150;
+const LINT_INTERVAL = 1000;
 /**
  * editorTarget object for helping with drag and drop actions?
  */
@@ -87,7 +89,7 @@ class View extends React.Component {
     super(props);
     this.state = {
       lintingErrors: [],
-      lintingAnnotations: [],
+      lintingAnnotations: new Map(),
       isLinting: false,
       lintLoops: 0,
       options: {
@@ -103,14 +105,17 @@ class View extends React.Component {
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-lint-markers', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
+          'CodeMirror-linenumbers', 'CodeMirror-lint-markers', 'CodeMirror-foldgutter'
         ],
         keyMap: 'sublime',
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
+          'Tab': function (cm) {
+            cm.replaceSelection('  ');
+          },
           'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
-          },
+          }
         },
         mode: 'MongoScript'
       },
@@ -142,12 +147,22 @@ class View extends React.Component {
             }
           });
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
+        Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+        this
+          .props
+          .store
+          .editors
+          .get(editorIndex)
+          .executing = true;
+        this.props.store.editorToolbar.isActiveExecuting = true;
+        console.log('Editor: Execution started! ' + editorIndex);
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
         service.update(id, {
           shellId: shell, // eslint-disable-line
-          commands: this.state.code
+            commands: this.state.code.replace('\t', '  ')
         });
         this.props.store.editorPanel.executingEditorAll = false;
       }
@@ -186,12 +201,23 @@ class View extends React.Component {
             }
           });
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+
+        Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+        this
+          .props
+          .store
+          .editors
+          .get(editorIndex)
+          .executing = true;
+        this.props.store.editorToolbar.isActiveExecuting = true;
+        console.log('Editor: Execution started! ' + editorIndex);
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
         service.update(id, {
           shellId: shell, // eslint-disable-line
-          commands: content
+          commands: content.replace('\t', '  ')
         });
         this.props.store.editorPanel.executingEditorLines = false;
       }
@@ -210,6 +236,63 @@ class View extends React.Component {
         this.props.store.dragItem.dragDrop = false;
       }
     });
+
+
+    /**
+     * Reaction function for when a change occurs on the editorPanel.executingEditorLines state.
+     * @param {function()} - The state that will trigger the reaction.
+     * @param {function()} - The reaction to any change on the state.
+     */
+    const reactionToExplain = reaction( // eslint-disable-line
+      () => this.props.store.editorPanel.executingExplain, executingEditorLines => { //eslint-disable-line
+        const explainParam = this.props.store.editorPanel.executingExplain;
+        if (this.props.store.editorPanel.activeEditorId == this.props.title && explainParam) {
+          // Determine code to send.
+          let shell = null;
+          let id = null;
+          const cm = this
+            .refs
+            .editor
+            .getCodeMirror(); // eslint-disable-line
+          let content = cm.getSelection();
+          if (cm.getSelection().length > 0) {
+            console.log('Executing Highlighted Text.');
+          } else {
+            console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
+            content = cm.getLine(cm.getCursor().line);
+          }
+          content += '.explain("' + explainParam+'")';
+          this
+            .props
+            .store
+            .profiles
+            .forEach((value) => {
+              if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+                shell = value.shellId;
+                id = value.id;
+              }
+            });
+          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+
+          const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+          this
+            .props
+            .store
+            .editors
+            .get(editorIndex)
+            .executing = true;
+          this.props.store.editorToolbar.isActiveExecuting = true;
+          // Send request to feathers client
+          const service = featherClient().service('/mongo-shells');
+          service.timeout = 30000;
+          service.update(id, {
+            shellId: shell, // eslint-disable-line
+            commands: content.replace('\t', '  ')
+          });
+          this.props.store.editorPanel.executingExplain = false;
+        }
+      });
+
     this.refresh = this
       .refresh
       .bind(this);
@@ -222,23 +305,9 @@ class View extends React.Component {
     this.loopingLint = this
       .loopingLint
       .bind(this);
-    this.prettifyAll = this.prettifyAll.bind(this);
-  }
-
-  getActiveProfileId() {
-    let shell = null;
-    let id = null;
-    this
-      .props
-      .store
-      .profiles
-      .forEach((value) => {
-        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-          shell = value.shellId;
-          id = value.id;
-        }
-      });
-    return {id, shell};
+    this.prettifyAll = this
+      .prettifyAll
+      .bind(this);
   }
 
   /**
@@ -247,13 +316,9 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
     //
-    // let orig = CM.hint.javascript;
-    // CM.hint.javascript = function (cm) {
-    //   let inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-    //   inner.list.push("bozo");
-    //   return inner;
-    // };
-
+    // let orig = CM.hint.javascript; CM.hint.javascript = function (cm) {   let
+    // inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+    // inner.list.push("bozo");   return inner; };
 
     CM.commands.autocomplete = (cm) => {
       const currentLine = cm.getLine(cm.getCursor().line);
@@ -287,21 +352,55 @@ class View extends React.Component {
       })
         .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
-          const cursor = cm.getDoc().getCursor();
+          const cursor = cm
+            .getDoc()
+            .getCursor();
           const from = new CM.Pos(cursor.line, cursor.ch - curWord.length);
           const options = {
             hint() {
               return {
-                from: from,
-                to: cm.getDoc().getCursor(),
+                from,
+                to: cm
+                  .getDoc()
+                  .getCursor(),
                 list: res
               };
-            },
+            }
           };
           cm.showHint(options);
         });
     };
+  }
 
+  getActiveProfileId() {
+    let shell = null;
+    let id = null;
+    this
+      .props
+      .store
+      .profiles
+      .forEach((value) => {
+        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+          shell = value.shellId;
+          id = value.id;
+        }
+      });
+    return {id, shell};
+  }
+
+  @action.bound
+  finishedExecution() {
+    const {id, shell} = this.getActiveProfileId(); // eslint-disable-line
+    const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+    this
+      .props
+      .store
+      .editors
+      .get(editorIndex)
+      .executing = false;
+    if (this.props.store.editorPanel.activeEditorId == this.props.title) {
+      this.props.store.editorToolbar.isActiveExecuting = false;
+    }
   }
 
   /**
@@ -331,7 +430,10 @@ class View extends React.Component {
    * Prettify selected code.
    */
   prettifyAll() {
-    const cm = this.refs.editor.getCodeMirror();
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
     const beautified = Prettier.format(this.state.code, {});
     cm.setValue(beautified);
   }
@@ -346,21 +448,58 @@ class View extends React.Component {
       .getCodeMirror();
     this
       .state
+      .lintingAnnotations
+      .clear();
+    this
+      .state
       .lintingErrors
       .forEach((value) => {
-        const msg = document.createElement('div');
-        const icon = msg.appendChild(document.createElement('div'));
-        icon.innerHTML = '!';
-        const tooltip = icon.appendChild(document.createElement('span'));
-        tooltip.innerHTML = value.message;
-        tooltip.className = 'tooltiptext';
-        icon.className = 'tooltip lint-error-icon';
-        msg.className = 'tooltiptext';
+        // Check if line already used, if so append.
+        if (this.state.lintingAnnotations.get(value.line) != undefined) {
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = this
+            .state
+            .lintingAnnotations
+            .get(value.line)
+            .lintText + '\n' + value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          if (tooltip.innerHTML.length > MAX_LINT_ERROR_CHARACTERS) {
+            tooltip.innerHTML = 'Too many Linting Errors on this line...';
+          }
+          msg.lintText = tooltip.innerHTML;
+          this
+            .state
+            .lintingAnnotations
+            .set(value.line, msg);
+        } else {
+          // New Annotation.
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          this
+            .state
+            .lintingAnnotations
+            .set(value.line, msg);
+        }
+      });
 
-        cm.setGutterMarker(value.line - 1, 'CodeMirror-lint-markers', msg);
+    this
+      .state
+      .lintingAnnotations
+      .forEach((value, key) => {
+        cm.setGutterMarker(key - 1, 'CodeMirror-lint-markers', value);
       });
   }
-
 
   /**
    * Update the local code state.
@@ -375,16 +514,15 @@ class View extends React.Component {
   }
 
   loopingLint() {
-
     this.state.lintLoops = this.state.lintLoops + 1;
-    // Lint 10 times before waiting for more input.
-    if (this.state.lintLoops > 10) {
+    // Lint 2 times before waiting for more input.
+    if (this.state.lintLoops > 2) {
       this.state.isLinting = false;
       this.state.lintLoops = 0;
       return;
     }
     // Clear Annotations.
-      const cm = this
+    const cm = this
       .refs
       .editor
       .getCodeMirror();
@@ -407,8 +545,8 @@ class View extends React.Component {
       }
     })
       .then((result) => {
-        if (result.length > 0) {
-          this.state.lintingErrors = result;
+        if (result.results[0].messages.length > 0) {
+          this.state.lintingErrors = result.results[0].messages;
           this.updateLintingAnnotations();
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING, EventLogging.getFragmentEnum().EDITORS, result);
@@ -420,7 +558,7 @@ class View extends React.Component {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, error);
         }
       });
-      setTimeout(this.loopingLint, 1500);
+    setTimeout(this.loopingLint, LINT_INTERVAL);
   }
   /**
    * Trigger an executeLine event by updating the MobX global store.
@@ -446,22 +584,22 @@ class View extends React.Component {
           onClick={this.executeLine}
           text="Execute Selected"
           iconName="pt-icon-chevron-right"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.executeAll}
           text="Execute All"
           iconName="pt-icon-double-chevron-right"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.refresh}
           text="Refresh"
           iconName="pt-icon-refresh"
-          intent={Intent.NONE}/>
-          <MenuItem
+          intent={Intent.NONE} />
+        <MenuItem
           onClick={this.prettifyAll}
           text="Format All"
           iconName="pt-icon-align-left"
-          intent={Intent.NONE}/>
+          intent={Intent.NONE} />
       </Menu>
     );
   }
@@ -479,8 +617,8 @@ class View extends React.Component {
           codeMirrorInstance={CM}
           value={this.state.code}
           onChange={value => this.updateCode(value)}
-          options={this.state.options}/> {isOver && <div
-          style={{
+          options={this.state.options} /> {isOver && <div
+            style={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -489,7 +627,7 @@ class View extends React.Component {
           zIndex: 1,
           opacity: 0.5,
           backgroundColor: 'yellow'
-        }}/>
+        }} />
 }
       </div>
     );

@@ -3,19 +3,20 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T09:56:46+11:00
+ * @Last modified time: 2017-04-07T16:39:02+10:00
 */
 
 import React from 'react';
 import {inject} from 'mobx-react';
-import { reaction } from 'mobx';
+import { reaction, observe } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
-import {ContextMenuTarget, Menu, MenuItem, Intent} from '@blueprintjs/core';
+import {ContextMenuTarget, Menu, MenuItem, MenuDivider, Intent} from '@blueprintjs/core';
+import TreeActions from './templates/tree-actions/actions.json';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
 
-@inject('treeState')
+@inject(allStores => ({store: allStores.store, treeState: allStores.treeState}))
 @ContextMenuTarget
 export default class TreeView extends React.Component {
   static get defaultProps() {
@@ -28,12 +29,40 @@ export default class TreeView extends React.Component {
 
     this.state = {nodes: this.props.treeState.nodes};
 
+    reaction(() => this.props.treeState.isJsonParsed, () => {
+      this.setState({nodes: this.props.treeState.nodes});
+    });
     reaction(() => this.props.treeState.filter, () => {
       this.setState({nodes: this.props.treeState.nodes});
     });
   }
 
-  nodeRightClicked;
+  getContextMenu() {
+    if (this.nodeRightClicked) {
+      const Actions = TreeActions[this.nodeRightClicked.type];
+      const Menus = [];
+      Menus.push(<MenuItem
+        onClick={this.handleMakeRoot}
+        text="Make Root Node"
+        key="MakeRoot"
+        name="MakeRoot"
+        iconName="pt-icon-git-new-branch"
+        intent={Intent.NONE} />);
+      if (Actions && Actions.length > 0) {
+        Menus.push(<MenuDivider key="divider" />);
+        for (const objAction of Actions) {
+          Menus.push(<MenuItem
+            onClick={this.handleTreeActionClick}
+            text={objAction.text}
+            name={objAction.name}
+            key={objAction.name}
+            iconName={objAction.icon}
+            intent={Intent.NONE} />);
+        }
+      }
+      return (<Menu>{Menus}</Menu>);
+    }
+  }
 
   handleNodeClick = (nodeData: ITreeNode, _nodePath: number[]) => {
     if (nodeData.text == '...') {
@@ -59,23 +88,29 @@ export default class TreeView extends React.Component {
     nodeData.isExpanded = true;
     this.setState({nodes: this.props.treeState.nodes});
   };
+
   handleMakeRoot = () => {
     if (this.nodeRightClicked) {
       this.props.treeState.selectRootNode(this.nodeRightClicked);
       this.setState({nodes: this.props.treeState.nodes});
     }
   };
+  handleTreeActionClick = (e: React.MouseEvent) => {
+    const action = e._targetInst._currentElement._owner._instance.props.name;
+    console.log('clicked:', action);
+    if (action == 'SampleCollections') {
+      this.props.treeState.sampleCollection(this.nodeRightClicked);
+    } else if (this.nodeRightClicked) {
+      console.log('test global store', this.props.store);
+      this.props.store.showTreeActionPane(this.nodeRightClicked, action);
+    }
+  };
+
+
+  nodeRightClicked;
 
   renderContextMenu() {
-    return (
-      <Menu>
-        <MenuItem
-          onClick={this.handleMakeRoot}
-          text="Make Root Node"
-          iconName="pt-icon-git-new-branch"
-          intent={Intent.NONE} />
-      </Menu>
-    );
+    return this.getContextMenu();
   }
 
   render() {
