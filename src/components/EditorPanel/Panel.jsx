@@ -14,6 +14,7 @@ import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
+import WelcomeView from './WelcomeView.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -133,10 +134,7 @@ export default class Panel extends React.Component {
           <Tab2
             id="Default"
             title="Welcome"
-            panel={<div > <h2 style={{
-            float: 'center'
-          }}>Welcome to DBEnvy
-          </h2> <h3 > Welcome page coming soon ...</h3> </div>} /> {editors.map((tab) => {
+            panel={<WelcomeView />} /> {editors.map((tab) => {
             if (tab[1].visible) {
               return (
                 <Tab2
