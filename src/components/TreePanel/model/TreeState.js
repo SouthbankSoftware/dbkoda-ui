@@ -2,8 +2,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-07T08:35:01+10:00
+ * @Last modified by:   mike
+ * @Last modified time: 2017-04-10 11:03:34
 */
 
 import {observable, action} from 'mobx';
@@ -194,19 +194,13 @@ export default class TreeState {
         }
       ]
     };
-
-
     const child = new TreeNode(sampleStructure, nodeRightClicked);
     child.type = 'collection';
     child.text = 'Sample';
     nodeRightClicked
       .allChildNodes
       .set('sample', child);
-    console.log(nodeRightClicked);
-    console.log(child);
     this.filterNodes();
-    console.log(nodeRightClicked);
-    console.log(child);
   }
   /**
    * Returns the tree nodes to bind to react tree component

@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-04-10T09:36:35+10:00
+ * @Last modified by:   mike
+ * @Last modified time: 2017-04-10 11:03:04
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -104,7 +104,7 @@ class View extends React.Component {
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-lint-markers', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
+          'CodeMirror-linenumbers', 'CodeMirror-lint-markers', 'CodeMirror-foldgutter'
         ],
         keyMap: 'sublime',
         extraKeys: {
@@ -145,9 +145,14 @@ class View extends React.Component {
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
         const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
-        this.props.store.editors.get(editorIndex).executing = true;
+        this
+          .props
+          .store
+          .editors
+          .get(editorIndex)
+          .executing = true;
         this.props.store.editorToolbar.isActiveExecuting = true;
-        console.log("Editor: Execution started! " + editorIndex);
+        console.log('Editor: Execution started! ' + editorIndex);
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
@@ -195,9 +200,14 @@ class View extends React.Component {
 
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
         const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
-        this.props.store.editors.get(editorIndex).executing = true;
+        this
+          .props
+          .store
+          .editors
+          .get(editorIndex)
+          .executing = true;
         this.props.store.editorToolbar.isActiveExecuting = true;
-        console.log("Editor: Execution started! " + editorIndex);
+        console.log('Editor: Execution started! ' + editorIndex);
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
@@ -234,7 +244,9 @@ class View extends React.Component {
     this.loopingLint = this
       .loopingLint
       .bind(this);
-    this.prettifyAll = this.prettifyAll.bind(this);
+    this.prettifyAll = this
+      .prettifyAll
+      .bind(this);
   }
 
   getActiveProfileId() {
@@ -259,13 +271,9 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
     //
-    // let orig = CM.hint.javascript;
-    // CM.hint.javascript = function (cm) {
-    //   let inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
-    //   inner.list.push("bozo");
-    //   return inner;
-    // };
-
+    // let orig = CM.hint.javascript; CM.hint.javascript = function (cm) {   let
+    // inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+    // inner.list.push("bozo");   return inner; };
 
     CM.commands.autocomplete = (cm) => {
       const currentLine = cm.getLine(cm.getCursor().line);
@@ -299,16 +307,20 @@ class View extends React.Component {
       })
         .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
-          const cursor = cm.getDoc().getCursor();
+          const cursor = cm
+            .getDoc()
+            .getCursor();
           const from = new CM.Pos(cursor.line, cursor.ch - curWord.length);
           const options = {
             hint() {
               return {
-                from: from,
-                to: cm.getDoc().getCursor(),
+                from,
+                to: cm
+                  .getDoc()
+                  .getCursor(),
                 list: res
               };
-            },
+            }
           };
           cm.showHint(options);
         });
@@ -319,7 +331,12 @@ class View extends React.Component {
   finishedExecution() {
     const {id, shell} = this.getActiveProfileId();
     const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
-    this.props.store.editors.get(editorIndex).executing = false;
+    this
+      .props
+      .store
+      .editors
+      .get(editorIndex)
+      .executing = false;
     if (this.props.store.editorPanel.activeEditorId == this.props.title) {
       this.props.store.editorToolbar.isActiveExecuting = false;
     }
@@ -352,7 +369,10 @@ class View extends React.Component {
    * Prettify selected code.
    */
   prettifyAll() {
-    const cm = this.refs.editor.getCodeMirror();
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
     const beautified = Prettier.format(this.state.code, {});
     cm.setValue(beautified);
   }
@@ -375,12 +395,19 @@ class View extends React.Component {
           const icon = msg.appendChild(document.createElement('div'));
           icon.innerHTML = '!';
           const tooltip = icon.appendChild(document.createElement('span'));
-          tooltip.innerHTML = this.state.lintingAnnotations.get(value.line).lintText + '\n' + value.message;
+          tooltip.innerHTML = this
+            .state
+            .lintingAnnotations
+            .get(value.line)
+            .lintText + '\n' + value.message;
           tooltip.className = 'tooltiptext';
           icon.className = 'tooltip lint-error-icon';
           msg.className = 'tooltiptext';
           msg.lintText = tooltip.innerHTML;
-          this.state.lintingAnnotations.set(value.line, msg);
+          this
+            .state
+            .lintingAnnotations
+            .set(value.line, msg);
         } else {
           // New Annotation.
           const msg = document.createElement('div');
@@ -391,7 +418,10 @@ class View extends React.Component {
           tooltip.className = 'tooltiptext';
           icon.className = 'tooltip lint-error-icon';
           msg.className = 'tooltiptext';
-          this.state.lintingAnnotations.set(value.line, msg);
+          this
+            .state
+            .lintingAnnotations
+            .set(value.line, msg);
         }
       });
 
@@ -402,7 +432,6 @@ class View extends React.Component {
         cm.setGutterMarker(key - 1, 'CodeMirror-lint-markers', value);
       });
   }
-
 
   /**
    * Update the local code state.
@@ -520,8 +549,8 @@ class View extends React.Component {
           codeMirrorInstance={CM}
           value={this.state.code}
           onChange={value => this.updateCode(value)}
-          options={this.state.options}/> {isOver && <div
-          style={{
+          options={this.state.options} /> {isOver && <div
+            style={{
           position: 'absolute',
           top: 0,
           left: 0,
