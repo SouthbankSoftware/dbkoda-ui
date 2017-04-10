@@ -162,7 +162,7 @@ class View extends React.Component {
         service.timeout = 30000;
         service.update(id, {
           shellId: shell, // eslint-disable-line
-          commands: this.state.code
+          commands: this.state.code.replace('\t', '  ')
         });
         this.props.store.editorPanel.executingEditorAll = false;
       }
@@ -217,7 +217,7 @@ class View extends React.Component {
         service.timeout = 30000;
         service.update(id, {
           shellId: shell, // eslint-disable-line
-          commands: content
+          commands: content.replace('\t', '  ')
         });
         this.props.store.editorPanel.executingEditorLines = false;
       }
