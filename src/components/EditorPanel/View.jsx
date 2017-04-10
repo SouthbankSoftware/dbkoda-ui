@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T12:30:49+11:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-10T09:36:35+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -20,6 +20,7 @@ import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
+import {Broker, EventType} from '../../helpers/broker';
 
 const Prettier = require('prettier');
 const Beautify = require('js-beautify').js_beautify;
@@ -142,6 +143,11 @@ class View extends React.Component {
             }
           });
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
+        Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+        this.props.store.editors.get(editorIndex).executing = true;
+        this.props.store.editorToolbar.isActiveExecuting = true;
+        console.log("Editor: Execution started! " + editorIndex);
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
@@ -186,6 +192,12 @@ class View extends React.Component {
             }
           });
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+
+        Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+        this.props.store.editors.get(editorIndex).executing = true;
+        this.props.store.editorToolbar.isActiveExecuting = true;
+        console.log("Editor: Execution started! " + editorIndex);
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
@@ -301,7 +313,16 @@ class View extends React.Component {
           cm.showHint(options);
         });
     };
+  }
 
+  @action.bound
+  finishedExecution() {
+    const {id, shell} = this.getActiveProfileId();
+    const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+    this.props.store.editors.get(editorIndex).executing = false;
+    if (this.props.store.editorPanel.activeEditorId == this.props.title) {
+      this.props.store.editorToolbar.isActiveExecuting = false;
+    }
   }
 
   /**

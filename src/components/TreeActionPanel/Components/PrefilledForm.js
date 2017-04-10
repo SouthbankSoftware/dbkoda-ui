@@ -3,13 +3,12 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-07T16:44:34+10:00
+ * @Last modified time: 2017-04-10T10:41:46+10:00
  */
 
 
  import MobxReactForm from 'mobx-react-form';
  import validatorjs from 'validatorjs';
- import _ from 'lodash';
  import {featherClient} from '~/helpers/feathers';
 
  export class PrefilledForm extends MobxReactForm {

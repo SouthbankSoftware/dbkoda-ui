@@ -3,7 +3,7 @@
  * @Date:   2017-03-21T15:38:33+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T12:42:27+11:00
+ * @Last modified time: 2017-04-10T10:25:03+10:00
  */
 
 // import React from 'react';
@@ -60,7 +60,7 @@ describe('TreeNode', () => {
     expect(treeNode.text).toEqual('Databases');
   });
   test('should have childNodes', () => {
-    expect(treeNode.allChildNodes.length).toEqual(2);
+    expect(treeNode.allChildNodes.size).toEqual(2);
   });
   test('should return a type', () => {
     expect(TreeNode.getNodeType(treeJson)).toEqual('databases');

@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T14:23:34+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T09:53:38+11:00
+ * @Last modified time: 2017-04-10T10:36:33+10:00
  */
 
 import TreeState from '#/TreePanel/model/TreeState';
@@ -106,7 +106,7 @@ describe('TreeState', () => {
 
   test('should have ROOT node of "DBEnvyLoad" with "bstatestat" node as filter', () => {
     treeState1.setFilter('');
-    treeState1.selectRootNode(treeState.nodes[0].allChildNodes[0]);
+    treeState1.selectRootNode(treeState.nodes[0].allChildNodes.values().next().value);
     treeState1.setFilter('bstatestat');
     expect(treeState1.nodes[0].text).toEqual('...');
     expect(treeState1.nodes[1].text).toEqual('DBEnvyLoad');
