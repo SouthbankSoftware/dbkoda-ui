@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T12:39:14+10:00
+ * @Last modified time: 2017-04-11T08:51:18+10:00
 */
 
 import React from 'react';
@@ -12,7 +12,7 @@ import {ITreeNode} from '@blueprintjs/core';
 
 import DragLabel from './DragLabel.jsx';
 
-export default class TreeNode implements ITreeNode {
+export default class TreeNode {
   id;
   @observable label;
   text;
@@ -52,12 +52,7 @@ export default class TreeNode implements ITreeNode {
         .set(this.id, this);
     }
     this.text = treeJSON.text;
-    this.label = (<DragLabel
-      label={this.text}
-      id={this.id}
-      type={this.type}
-      refParent={this.refParent}
-      filter={this.filter} />);
+    this.label = <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} />;
     if (treeJSON.children) {
       this.allChildNodes = new Map();
       for (const childJSON of treeJSON.children) {

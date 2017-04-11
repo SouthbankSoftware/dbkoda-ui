@@ -12,7 +12,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
-import {action, reaction} from 'mobx';
+import {action, reaction, observe} from 'mobx';
 import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
@@ -280,10 +280,12 @@ class View extends React.Component {
           this.props.store.editorToolbar.isActiveExecuting = true;
           // Send request to feathers client
           const service = featherClient().service('/mongo-shells');
+          const filteredContent = content.replace('\t', '  ');
           service.timeout = 30000;
+          Broker.emit(EventType.EXPLAIN_EXECUTION_EVENT, {id, shell, command: filteredContent});
           service.update(id, {
             shellId: shell, // eslint-disable-line
-            commands: content.replace('\t', '  ')
+            commands: filteredContent
           });
           this.props.store.editorPanel.executingExplain = false;
         }
@@ -310,6 +312,18 @@ class View extends React.Component {
       }
     );
 
+
+    const reactToTreeActionChange = reaction( //eslint-disable-line
+      () => this.props.store.treeActionPanel.treeActionFormObservable,
+      () => {
+        if (this.props.store.treeActionPanel.treeActionFormObservable) {
+          observe(this.props.store.treeActionPanel.form.mobxForm.fields, (change) => {
+            console.log(change);
+          });
+          this.props.store.treeActionPanel.treeActionFormObservable = false;
+        }
+      }
+    );
     this.refresh = this
       .refresh
       .bind(this);

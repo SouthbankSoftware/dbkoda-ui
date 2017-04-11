@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-11T09:07:56+10:00
+ * @Last modified time: 2017-04-11T13:55:44+10:00
  */
 
 import React from 'react';
@@ -52,9 +52,12 @@ export default class Terminal extends React.Component {
      * Reaction to fire off execution of Terminal Commands
      */
     const reactionToExecutingCmd = reaction(() => this.props.store.outputPanel.executingTerminalCmd, (executingTerminalCmd) => {
-      if (this.props.store.outputPanel.executingTerminalCmd) {
+      console.log(`Executing terminal if ( ${this.props.title} == ${this.props.store.editorPanel.activeEditorId} )`);
+      if (this.props.store.outputPanel.executingTerminalCmd && this.props.title == this.props.store.editorPanel.activeEditorId) {
+        console.log("React to executingTerminalCmd");
         this.updateHistory(this.state.command);
         const command = this.interceptCommand(this.state.command);
+        console.log(command);
         if (command) {
           console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
           this.props.store.editorToolbar.isActiveExecuting = true;
@@ -132,6 +135,7 @@ export default class Terminal extends React.Component {
    */
   @action.bound
   executeCommand() {
+    console.log("Set executingTerminalCmd = true");
     if (this.state.command) {
       this.props.store.outputPanel.executingTerminalCmd = true;
     }

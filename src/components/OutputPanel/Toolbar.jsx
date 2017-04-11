@@ -127,7 +127,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="showMoreBtn pt-intent-primary"
               onClick={this.showMore}
-              disabled={this.props.store.outputs.get(
+              disabled={this.props.store.outputPanel.currentTab === 'Explain' || this.props.store.outputs.get(
                           this.props.store.outputPanel.currentTab
                         ).cannotShowMore} >
               Show More
