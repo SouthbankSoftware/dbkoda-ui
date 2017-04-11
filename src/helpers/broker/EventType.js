@@ -1,4 +1,4 @@
-export default {
+export const EventType = {
   /**
    * used when a new connection profile is created
    */
@@ -24,5 +24,6 @@ export default {
   COMMAND_EXECUTION_FINISHED: 'controller::command::execute::finished',
   createShellExecutionFinishEvent: (id, shellId) => {
     return 'controller::command::execute::finished::' + id + '::' + shellId;
-  }
+  },
+  EXPLAIN_EXECUTION_EVENT: 'executing::explain',
 };

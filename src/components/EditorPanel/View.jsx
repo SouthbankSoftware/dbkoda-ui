@@ -21,6 +21,7 @@ import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
+import {Explain} from '../ExplainPanel/index';
 
 const Prettier = require('prettier');
 const React = require('react');
@@ -237,7 +238,6 @@ class View extends React.Component {
       }
     });
 
-
     /**
      * Reaction function for when a change occurs on the editorPanel.executingEditorLines state.
      * @param {function()} - The state that will trigger the reaction.
@@ -284,10 +284,12 @@ class View extends React.Component {
           this.props.store.editorToolbar.isActiveExecuting = true;
           // Send request to feathers client
           const service = featherClient().service('/mongo-shells');
+          const filteredContent = content.replace('\t', '  ');
           service.timeout = 30000;
+          Broker.emit(EventType.EXPLAIN_EXECUTION_EVENT, {id, shell, command: filteredContent});
           service.update(id, {
             shellId: shell, // eslint-disable-line
-            commands: content.replace('\t', '  ')
+            commands: filteredContent
           });
           this.props.store.editorPanel.executingExplain = false;
         }
@@ -628,7 +630,8 @@ class View extends React.Component {
           opacity: 0.5,
           backgroundColor: 'yellow'
         }} />
-}
+        }
+        <Explain/>
       </div>
     );
   }
