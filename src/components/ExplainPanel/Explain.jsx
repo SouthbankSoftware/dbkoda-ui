@@ -42,7 +42,6 @@ export default class Explain extends React.Component {
       Broker.removeListener(this.brokerEvent, this.explainAvailable);
       this.brokerEvent = undefined;
       // this.props.explainPanel.activeId = 'Expalin';
-      console.log('final explain output ', this.explainOutput);
       this.setState({explainOutput: JSON.parse(this.explainOutput)});
     } else {
       this.explainOutput += outputMsg.trim();
