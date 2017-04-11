@@ -38,9 +38,9 @@
             }, {
                 "name": "Role",
                 "type": "Text",
-                "lookup": "dbenvy_listRoles()"
+                "lookup": "dbenvy_listRoles"
             }]
         }
     ],
-    "Validate": "dbenvy_validateUser()"
+    "Validate": "dbenvy_validateUser"
 }
