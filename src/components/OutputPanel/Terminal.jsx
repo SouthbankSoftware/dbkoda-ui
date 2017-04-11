@@ -2,8 +2,8 @@
  * @Author: chris
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2017-03-31 14:14:16
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-11T09:07:56+10:00
  */
 
 import React from 'react';
@@ -57,6 +57,8 @@ export default class Terminal extends React.Component {
         const command = this.interceptCommand(this.state.command);
         if (command) {
           console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
+          this.props.store.editorToolbar.isActiveExecuting = true;
+          this.props.store.editors.get(this.props.title).executing = true;
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
           service.update(this.props.id, {

@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-07T12:34:00+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-11T11:04:29+10:00
  */
 
 import _ from 'lodash';
@@ -27,6 +27,7 @@ export default class Store {
     executingEditorAll: false,
     executingEditorLines: false,
     executingExplain: undefined,
+    stoppingExecution: false,
     tabFilter: '',
   });
 

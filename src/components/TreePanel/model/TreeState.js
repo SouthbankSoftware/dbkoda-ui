@@ -20,6 +20,7 @@ export default class TreeState {
   previousState; // last state before we have changed the root node.
   resetTreeNode;
   @observable profileAlias = '';
+  updateCallback;
   constructor() {
     this.treeNodes = [];
     this.filteredNodes = observable([]);
@@ -152,14 +153,9 @@ export default class TreeState {
    * @param {Object} nodeRightClicked - The Node that triggered this action.
    */
   sampleCollection(nodeRightClicked) {
-    console.log(this.treeNodes);
     const database = nodeRightClicked.refParent.text;
     const queryFirst = 'use ' + database;
     const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 100}})';
-
-    console.log(queryFirst);
-    console.log(querySecond);
-
     // This will be sent to tree service and return a JSON object of the appropriate
     // structure.
     const sampleStructure = {
@@ -195,7 +191,13 @@ export default class TreeState {
     }
     const child = new TreeNode(sampleStructure, nodeRightClicked);
     console.log('Tree Created Child: ', child);
+    nodeRightClicked.isExpanded = true;
+    child.isExpanded = true;
     nodeRightClicked.setFilter(this.filter);
+    this.updateCallback();
+    nodeRightClicked.isExpanded = true;
+    this.updateCallback();
+    // Force re-render of tree.
   }
   /**
    * Returns the tree nodes to bind to react tree component

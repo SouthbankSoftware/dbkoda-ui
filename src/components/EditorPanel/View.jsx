@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-04-10 11:03:04
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-11T11:04:06+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -120,11 +120,7 @@ class View extends React.Component {
         },
         mode: 'MongoScript'
       },
-      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive the terrible color pallete for now.\n ' +
-          'I promise it\'s only a placeholder.\n Also forgive the temporary highlighting of' +
-          ' comments, working on it.\n\nIf you have too many tabs, use the filter box to se' +
-          'arch for a specific alias.\n\nUse \'Ctrl-B\' to beautify selected text using JS-' +
-          'Beautify.**/\n\nshow dbs;\nshow collections;\nuse test;'
+      code: ''
     };
 
     /**
@@ -149,6 +145,7 @@ class View extends React.Component {
           });
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        // Listen for completion
         const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
         this
           .props
@@ -202,7 +199,7 @@ class View extends React.Component {
             }
           });
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
-
+        // Listen for completion
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
         const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
         this
@@ -212,7 +209,7 @@ class View extends React.Component {
           .get(editorIndex)
           .executing = true;
         this.props.store.editorToolbar.isActiveExecuting = true;
-        console.log('Editor: Execution started! ' + editorIndex);
+
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
@@ -294,6 +291,27 @@ class View extends React.Component {
           this.props.store.editorPanel.executingExplain = false;
         }
       });
+
+    /**
+     * Reaction function for when a change occurs on the
+     * editorPanel.stoppingExecution state.
+     */
+    const reactionToStopExecution = reaction(
+      () => this.props.store.editorPanel.stoppingExecution,
+      stoppingExecution => {
+        if (this.props.store.editorPanel.stoppingExecution) {
+          const id = this.props.store.editorToolbar.id;
+          const shellId = this.props.store.editorToolbar.shellId;
+          console.log(`Stopping Execution of ${id} ${shellId}!`);
+          const service = featherClient().service('/mongo-stop-execution');
+          service.timeout = 30000;
+          service.create({
+            id: id,
+            shellId: shellId, // eslint-disable-line
+          });
+        }
+      }
+    );
 
     this.refresh = this
       .refresh
@@ -402,6 +420,7 @@ class View extends React.Component {
       .executing = false;
     if (this.props.store.editorPanel.activeEditorId == this.props.title) {
       this.props.store.editorToolbar.isActiveExecuting = false;
+      this.props.store.editorPanel.stoppingExecution = false;
     }
   }
 
@@ -630,7 +649,7 @@ class View extends React.Component {
           opacity: 0.5,
           backgroundColor: 'yellow'
         }} />
-        }
+      }
         <Explain/>
       </div>
     );
