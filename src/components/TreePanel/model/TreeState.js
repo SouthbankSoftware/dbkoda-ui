@@ -153,7 +153,6 @@ export default class TreeState {
    * @param {Object} nodeRightClicked - The Node that triggered this action.
    */
   sampleCollection(nodeRightClicked) {
-    console.log(this.treeNodes);
     const database = nodeRightClicked.refParent.text;
     const queryFirst = 'use ' + database;
     const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 100}})';
@@ -192,8 +191,12 @@ export default class TreeState {
     }
     const child = new TreeNode(sampleStructure, nodeRightClicked);
     console.log('Tree Created Child: ', child);
+    nodeRightClicked.isExpanded = true;
+    child.isExpanded = true;
     nodeRightClicked.setFilter(this.filter);
-    this.setFilter('ABCDEFG');
+    this.updateCallback();
+    nodeRightClicked.isExpanded = true;
+    this.updateCallback();
     // Force re-render of tree.
   }
   /**

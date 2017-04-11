@@ -27,8 +27,8 @@ export default class TreeView extends React.Component {
   constructor(props) {
     super(props);
     this.props.treeState.updateCallback = () => {
-      console.log('TESTTESTTEST');
       this.setState({nodes: this.props.treeState.nodes});
+      console.log(this.props.treeState.nodes);
     };
 
     this.state = {nodes: this.props.treeState.nodes};
