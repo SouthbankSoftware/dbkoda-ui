@@ -4,12 +4,16 @@
   flex-direction: column;
 }
 
+.welcomePanelWrapper {
+  width: 100%;
+}
 .welcomePanel {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  padding-left: 10px;
-
+  padding-top: 20px;
+  padding-left: 20px;
+  width: 100%;
   height: 90%;
 }
 
@@ -18,8 +22,8 @@
   padding-left: 20px;
   display: flex;
   flex-direction: column;
+  border-top: 1px solid white;
   border-left: 1px solid white;
-
   height: 100%;
 }
 
@@ -44,6 +48,7 @@
   flex-grow: 1;
   padding-right: 5px;
   height: 100%;
+  border-top: 1px solid white;
 }
 .newsArticles {
   order: 1;

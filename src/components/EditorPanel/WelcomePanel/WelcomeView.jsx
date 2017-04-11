@@ -29,7 +29,7 @@ export default class Panel extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="welcomePanelWrapper">
         <h1>Welcome to DBEnvy</h1>
         <div className="pt-dark welcomePanel">
           <News />
