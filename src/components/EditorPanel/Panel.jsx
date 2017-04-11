@@ -14,7 +14,7 @@ import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
-import WelcomeView from './WelcomeView.jsx';
+import WelcomeView from './WelcomePanel/WelcomeView.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.

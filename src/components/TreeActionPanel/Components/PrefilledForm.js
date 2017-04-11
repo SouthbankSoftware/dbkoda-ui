@@ -6,7 +6,7 @@
  * @Last modified time: 2017-04-11T16:26:47+10:00
  */
 
-
+ /* eslint-disable */
  import MobxReactForm from 'mobx-react-form';
  import validatorjs from 'validatorjs';
  import {featherClient} from '~/helpers/feathers';

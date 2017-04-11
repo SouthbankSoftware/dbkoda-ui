@@ -9,6 +9,10 @@
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import News from './News.jsx';
+import Info from './Info.jsx';
+import './Welcome.scss';
+
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -25,9 +29,12 @@ export default class Panel extends React.Component {
 
   render() {
     return (
-      <div className="pt-dark welcomePanel">
+      <div className="welcomePanelWrapper">
         <h1>Welcome to DBEnvy</h1>
-        <iframe src="http://southbanksoftware.com" />
+        <div className="pt-dark welcomePanel">
+          <News />
+          <Info />
+        </div>
       </div>
     );
   }
