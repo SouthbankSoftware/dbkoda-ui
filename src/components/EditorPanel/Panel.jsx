@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
-* @Last modified by:   wahaj
-* @Last modified time: 2017-03-15T16:01:13+11:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-11T12:30:47+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -100,6 +100,10 @@ export default class Panel extends React.Component {
     } else {
       this.props.store.editorPanel.activeEditorId = newTab;
       this.setState({tabId: newTab});
+      this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).alias;
+      this.props.store.editorToolbar.id = this.props.store.editors.get(newTab).id;
+      this.props.store.editorToolbar.shellId = this.props.store.editors.get(newTab).shellId;
+      console.log(`activeDropdownId: ${this.props.store.editorPanel.activeDropdownId} , id: ${this.props.store.editorToolbar.id}, shellId: ${this.props.store.editorToolbar.shellId}`);
     }
   }
 
