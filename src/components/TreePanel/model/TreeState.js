@@ -2,8 +2,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-04-10 11:03:34
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-12T08:41:57+10:00
 */
 
 import {observable, action} from 'mobx';
@@ -14,7 +14,7 @@ export default class TreeState {
   treeNodes;
   @observable filteredNodes;
   @observable filter = '';
-  @observable isJsonParsed = false;
+  @observable isNewJsonAvailable = false;
   treeJson;
   treeRoot; // required for make root node functionality
   previousState; // last state before we have changed the root node.
@@ -75,7 +75,6 @@ export default class TreeState {
    * @param  {json} treeJson [description]
    */
   parseJson(treeJson) {
-    this.isJsonParsed = false;
     this.treeJson = treeJson;
     this.treeRoot = undefined;
     this
@@ -92,7 +91,7 @@ export default class TreeState {
         }
       }
       this.filterNodes();
-      this.isJsonParsed = true;
+      this.isNewJsonAvailable = true;
     }
   }
   /**

@@ -3,12 +3,12 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-11T10:00:53+10:00
+ * @Last modified time: 2017-04-12T08:46:03+10:00
 */
 
 import React from 'react';
 import {inject} from 'mobx-react';
-import { reaction, observe } from 'mobx';
+import { reaction } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 import {ContextMenuTarget, Menu, MenuItem, MenuDivider, Intent} from '@blueprintjs/core';
 import TreeActions from './templates/tree-actions/actions.json';
@@ -28,13 +28,15 @@ export default class TreeView extends React.Component {
     super(props);
     this.props.treeState.updateCallback = () => {
       this.setState({nodes: this.props.treeState.nodes});
-      console.log(this.props.treeState.nodes);
     };
 
     this.state = {nodes: this.props.treeState.nodes};
 
-    reaction(() => this.props.treeState.isJsonParsed, () => {
-      this.setState({nodes: this.props.treeState.nodes});
+    reaction(() => this.props.treeState.isNewJsonAvailable, () => {
+      if (this.props.treeState.isNewJsonAvailable) {
+        this.setState({nodes: this.props.treeState.nodes});
+        this.props.treeState.isNewJsonAvailable = false;
+      }
     });
     reaction(() => this.props.treeState.filter, () => {
       this.setState({nodes: this.props.treeState.nodes});
@@ -101,15 +103,12 @@ export default class TreeView extends React.Component {
   };
   handleTreeActionClick = (e: React.MouseEvent) => {
     const action = e._targetInst._currentElement._owner._instance.props.name;
-    console.log('clicked:', action);
     if (action == 'SampleCollections') {
       this.props.treeState.sampleCollection(this.nodeRightClicked);
     } else if (this.nodeRightClicked) {
-      console.log('test global store', this.props.store);
       this.props.store.showTreeActionPane(this.nodeRightClicked, action);
     }
   };
-
 
   nodeRightClicked;
 
