@@ -74,6 +74,10 @@ export default class Store {
     explainAvailable: false,
   }
 
+  @observable mongoShellPrompt = {
+    prompt: 'dbenvy>',
+  }
+
   @action showConnectionPane = () => {
     this.drawer.drawerChild = DrawerPanes.PROFILE;
     this.drawer.drawerOpen = true;
