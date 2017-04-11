@@ -280,10 +280,12 @@ class View extends React.Component {
           this.props.store.editorToolbar.isActiveExecuting = true;
           // Send request to feathers client
           const service = featherClient().service('/mongo-shells');
+          const filteredContent = content.replace('\t', '  ');
           service.timeout = 30000;
+          Broker.emit(EventType.EXPLAIN_EXECUTION_EVENT, {id, shell, command: filteredContent});
           service.update(id, {
             shellId: shell, // eslint-disable-line
-            commands: content.replace('\t', '  ')
+            commands: filteredContent
           });
           this.props.store.editorPanel.executingExplain = false;
         }

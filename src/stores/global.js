@@ -69,6 +69,11 @@ export default class Store {
     treeActionFormObservable: false,
   }
 
+  @observable explainPanel = {
+    activeId: undefined,
+    explainAvailable: false,
+  }
+
   @action showConnectionPane = () => {
     this.drawer.drawerChild = DrawerPanes.PROFILE;
     this.drawer.drawerOpen = true;
