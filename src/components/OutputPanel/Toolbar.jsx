@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-07T12:09:40+10:00
+ * @Last modified time: 2017-04-11T09:23:07+10:00
 */
 
 import React from 'react';
@@ -36,6 +36,8 @@ export default class Toolbar extends React.Component {
         if(!this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore) {
           const command = 'it';
           console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.store.outputPanel.currentTab).id, ': ', command, '.');
+          this.props.store.editorToolbar.isActiveExecuting = true;
+          this.props.store.editors.get(this.props.store.outputPanel.currentTab).executing = true;
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
           service.update(this.props.store.outputs.get(this.props.store.outputPanel.currentTab).id, {

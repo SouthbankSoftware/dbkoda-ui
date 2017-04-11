@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-29T17:35:58+11:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-10T16:39:31+10:00
 */
 
 /* eslint-disable react/prop-types */
@@ -260,11 +260,9 @@ export default class Toolbar extends React.Component {
   /**
    * NOT YET IMPLEMENTED: Stop the current execution on this connection.
    */
+   @action.bound
   stopExecution() { // eslint-disable-line class-methods-use-this
-    if (this.props.store.userPreferences.telemetryEnabled) {
-      EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented stopExecution');
-    }
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+    this.props.store.editorPanel.stoppingExecution = true;
   }
 
   /**
@@ -379,6 +377,7 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-chevron-right pt-intent-primary executeLineButton"
                 onClick={this.executeLine}
+                loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
             <Tooltip
@@ -390,6 +389,7 @@ export default class Toolbar extends React.Component {
               <AnchorButton
                 className="pt-button pt-icon-double-chevron-right pt-intent-primary executeAllButton"
                 onClick={this.executeAll}
+                loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
             <ExplainPopover editorToolbar={this.props.store.editorToolbar} editorPanel={this.props.store.editorPanel}/>
@@ -401,6 +401,7 @@ export default class Toolbar extends React.Component {
               position={Position.BOTTOM}>
               <AnchorButton
                 className="pt-button pt-icon-stop pt-intent-danger stopExecutionButton"
+                loading={this.props.store.editorPanel.stoppingExecution}
                 onClick={this.stopExecution}
                 disabled={!this.props.store.editorToolbar.isActiveExecuting} />
             </Tooltip>
