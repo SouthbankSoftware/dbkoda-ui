@@ -154,8 +154,9 @@ export default class TreeState {
    */
   sampleCollection(nodeRightClicked) {
     const database = nodeRightClicked.refParent.text;
-    const queryFirst = 'use ' + database;
-    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 100}})';
+    const queryFirst = 'use ' + database; // eslint-disable-line
+    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 100}})'; // eslint-disable-line
+    console.log(queryfirst, querySeconds);
     // This will be sent to tree service and return a JSON object of the appropriate
     // structure.
     const sampleStructure = {
