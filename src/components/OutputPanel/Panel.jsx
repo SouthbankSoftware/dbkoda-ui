@@ -11,8 +11,10 @@ import {action, reaction} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
-import {Tabs2, Tab2} from '@blueprintjs/core';
+import {Tab2, Tabs2} from '@blueprintjs/core';
 import './style.scss';
+import {Explain} from '../ExplainPanel/index';
+import {Broker, EventType} from '../../helpers/broker';
 
 /**
  * The main panel for the Output view, this handles tabbing,
@@ -33,10 +35,18 @@ export default class Panel extends React.Component {
     const reactionToEditorChange = reaction(
       () => this.props.store.editorPanel.activeEditorId,
       activeEditorId => {
-          this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
+        this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
       },
-      { "name": "reactionOutputPanelTabChange" }
+      {"name": "reactionOutputPanelTabChange"}
     );
+
+    /**
+     * called when there is an explain excution happened
+     */
+    Broker.on(EventType.EXPLAIN_EXECUTION_EVENT, () => {
+      this.props.store.outputPanel.currentTab = 'Explain';
+      this.props.store.outputPanel.explainAvailable = true;
+    });
   }
 
   /**
@@ -68,9 +78,9 @@ export default class Panel extends React.Component {
             title={editorTitle}
             panel={
               <OutputEditor
-              title={editorTitle}
-              id={editor[1].id}
-              shellId={editor[1].shellId} />
+                title={editorTitle}
+                id={editor[1].id}
+                shellId={editor[1].shellId}/>
             }>
           </Tab2>
         );
@@ -78,22 +88,40 @@ export default class Panel extends React.Component {
     );
   }
 
+  renderExplainOutput() {
+    let tabClassName = "notVisible";
+    if (this.props.store.outputPanel.explainAvailable) {
+      tabClassName = "visible";
+    }
+      return (<Tab2
+        className={tabClassName}
+        key={'Explain'}
+        id={'Explain'}
+        title={'Explain'}
+        panel={
+          <Explain />
+        }>
+      </Tab2>);
+  }
+
   render() {
     // Toolbar must be rendered after tabs for initialisation purposes
     return (
       <div className="pt-dark outputPanel">
         <Tabs2 id="outputPanelTabs"
-          className="outputTabView"
-          onChange={this.changeTab}
-          selectedTabId={this.props.store.outputPanel.currentTab}>
+               className="outputTabView"
+               onChange={this.changeTab}
+               selectedTabId={this.props.store.outputPanel.currentTab}>
           <Tab2 key={0}
-            id="Default"
-            panel={
-              <OutputEditor title="Default" id="Default" shellId={0} />
-            }
-            title="Default">
+                id="Default"
+                panel={
+                  <OutputEditor title="Default" id="Default" shellId={0}/>
+                }
+                title="Default">
           </Tab2>
+
           {this.renderTabs(this.props.store.editors.entries())}
+          {this.renderExplainOutput()}
         </Tabs2>
         <OutputToolbar />
       </div>

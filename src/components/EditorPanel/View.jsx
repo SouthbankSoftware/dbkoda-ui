@@ -21,7 +21,6 @@ import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
-import {Explain} from '../ExplainPanel/index';
 
 const Prettier = require('prettier');
 const React = require('react');
@@ -650,7 +649,6 @@ class View extends React.Component {
           backgroundColor: 'yellow'
         }} />
       }
-        <Explain/>
       </div>
     );
   }

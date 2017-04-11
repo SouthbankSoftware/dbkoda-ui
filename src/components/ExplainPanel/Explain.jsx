@@ -5,7 +5,9 @@ import {action} from 'mobx';
 
 import {Broker, EventType} from '../../helpers/broker/index';
 
-@inject('store')
+@inject(allStores => ({
+  explainPanel: allStores.store.explainPanel,
+}))
 @observer
 export default class Explain extends React.Component {
 
@@ -15,7 +17,7 @@ export default class Explain extends React.Component {
       this.explainCommand = command;
       this.explainOutput = '';
       this.brokerEvent = EventType.createShellOutputEvent(id, shell);
-      Broker.on(this.brokerEvent, this.explainAvailable);
+      Broker.on(this.brokerEvent, this.explainAvailable.bind(this));
     });
     this.state = {};
   }
@@ -39,14 +41,16 @@ export default class Explain extends React.Component {
       // end of the explain
       Broker.removeListener(this.brokerEvent, this.explainAvailable);
       this.brokerEvent = undefined;
+      // this.props.explainPanel.activeId = 'Expalin';
+      console.log('final explain output ', this.explainOutput);
       this.setState({explainOutput: JSON.parse(this.explainOutput)});
     } else {
-      this.explainOutput += outputMsg + '\n';
+      this.explainOutput += outputMsg.trim();
     }
   }
 
   render() {
     console.log('render ', this.state.explainOutput);
-    return (<div />);
+    return (<div> {this.explainOutput} </div>);
   }
 }

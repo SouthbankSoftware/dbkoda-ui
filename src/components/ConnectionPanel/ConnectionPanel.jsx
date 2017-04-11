@@ -13,13 +13,13 @@ import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {Intent, Position} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
-import { createForm, ProfileForm } from './ProfileForm';
+import {createForm, ProfileForm} from './ProfileForm';
+import uuidV1 from 'uuid/v1';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
 import {Broker, EventType} from '../../helpers/broker';
 import {ProfileStatus} from '.././common/Constants';
-import uuidV1 from 'uuid/v1';
 
 const ConnectionPanel = ({
                            profiles,
