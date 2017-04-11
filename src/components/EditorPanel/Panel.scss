@@ -145,9 +145,6 @@ span.cm-mongos-prompt{
 .CodeMirror-foldgutter-folded:after {
   content: $rightArrow;
 }
-.CodeMirror-activeline {
-
-}
 .CodeMirror-activeline-background {
  background: none repeat scroll 0% 0% rgba(255, 255, 255, 0.10) !important;
 }
@@ -157,18 +154,12 @@ span.cm-mongos-prompt{
 .pt-dark pre {
   box-shadow: none !important;
 }
-
-.lint-error-text {
-
-}
 .lint-error-icon {
   color: $brightRedFont;
   font-style: oblique;
   font-size: 20px;
   float: right;
-}
-
-
+} 
 .tooltip {
     position: relative;
     display: inline-block;
