@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T10:55:54+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-10T08:59:05+10:00
+ * @Last modified time: 2017-04-11T14:01:42+10:00
 */
 import ReactDOM from 'react-dom';
 import { assert, expect } from 'chai';
@@ -21,7 +21,6 @@ describe('Output Toolbar', () => {
   let window;
   let store;
   let OutputToolbarWrapper = function OutputToolbarWrapper(props) {
-    console.log(props.store.outputs.get('Test').cannotShowMore);
     return (<Provider store={props.store}><OutputToolbar title="Test" /></Provider>);
   }
 
