@@ -119,11 +119,7 @@ class View extends React.Component {
         },
         mode: 'MongoScript'
       },
-      code: '/**\nWelcome to DBEnvy!\n\nPlease forgive the terrible color pallete for now.\n ' +
-          'I promise it\'s only a placeholder.\n Also forgive the temporary highlighting of' +
-          ' comments, working on it.\n\nIf you have too many tabs, use the filter box to se' +
-          'arch for a specific alias.\n\nUse \'Ctrl-B\' to beautify selected text using JS-' +
-          'Beautify.**/\n\nshow dbs;\nshow collections;\nuse test;'
+      code: ''
     };
 
     /**
