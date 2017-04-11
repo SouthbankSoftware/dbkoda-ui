@@ -1,0 +1,67 @@
+.links {
+  order: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcomePanel {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding-left: 10px;
+
+  height: 90%;
+}
+
+.infoPanel {
+  flex-grow: 2;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid white;
+
+  height: 100%;
+}
+
+.hotkeyItems {
+  display: flex;
+  flex-direction: column;
+}
+
+.hotkeyItem {
+  display: flex;
+  flex-direction: row;
+}
+
+.hotkeyTitle {
+  padding-right: 5px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
+}
+
+.newsPanel {
+  flex-grow: 1;
+  padding-right: 5px;
+  height: 100%;
+}
+.newsArticles {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.newsItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsHeader{
+  display: flex;
+  flex-direction: row;
+}
+
+.newsIcon {
+  padding-right: 5px;
+}
+
