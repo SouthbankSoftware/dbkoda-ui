@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   chris
- * @Last modified time: 2017-04-11T11:04:29+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-11T16:36:27+10:00
  */
 
 import _ from 'lodash';
@@ -38,6 +38,7 @@ export default class Store {
     isActiveExecuting: false,
     id: 0,
     shellId: 0,
+    newEditorForTreeAction: false,
   });
 
   @observable outputPanel = observable({
@@ -58,21 +59,31 @@ export default class Store {
     drawerOpen: false,
     width: '30%',
     drawerChild: null,
-    treeNode: null,
-    treeAction: null
   };
+
+  @observable treeActionPanel = {
+    treeNode: null,
+    treeAction: null,
+    form: null,
+    treeActionEditorId: '',
+    treeActionFormObservable: false,
+  }
 
   @action showConnectionPane = () => {
     this.drawer.drawerChild = DrawerPanes.PROFILE;
     this.drawer.drawerOpen = true;
   }
   @action showTreeActionPane = (treeNode, treeAction) => {
-    this.drawer.treeNode = treeNode;
-    this.drawer.treeAction = treeAction;
+    this.treeActionPanel.treeNode = treeNode;
+    this.treeActionPanel.treeAction = treeAction;
     this.drawer.drawerChild = DrawerPanes.DYNAMIC;
     this.drawer.drawerOpen = true;
+    this.editorToolbar.newEditorForTreeAction = true;
   };
-
+  @action setTreeActionForm = (form) => {
+    this.treeActionPanel.form = form;
+    this.treeActionPanel.treeActionFormObservable = true;
+  }
   @observable profileList = observable({
     selectedProfile: null,
     creatingNewProfile: false,

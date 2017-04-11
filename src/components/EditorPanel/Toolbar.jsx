@@ -11,7 +11,7 @@
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
-import {action} from 'mobx';
+import {action, reaction} from 'mobx';
 import {
   AnchorButton,
   Intent,
@@ -64,6 +64,14 @@ export default class Toolbar extends React.Component {
     this.saveFile = this
       .saveFile
       .bind(this);
+
+    const reactionToAddTabForTreeAction = reaction( // eslint-disable-line
+        () => this.props.store.editorToolbar.newEditorForTreeAction, () => {
+          if (this.props.store.editorToolbar.newEditorForTreeAction) {
+            this.addEditor();
+          }
+        }
+      );
   }
 
   componentWillMount() {
@@ -168,11 +176,12 @@ export default class Toolbar extends React.Component {
    */
   @action
   setNewEditorState(res) {
+    const editorId = this.props.store.editorPanel.activeDropdownId + ' (' + res.shellId + ')';
     this
       .props
       .store
       .editors
-      .set(this.props.store.editorPanel.activeDropdownId + ' (' + res.shellId + ')', {
+      .set(editorId, {
         // eslint-disable-line react/prop-types
         id: res.id,
         alias: this.props.store.editorPanel.activeDropdownId,
@@ -190,6 +199,10 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.noActiveProfile = false;
     NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.setNewEditorLoading(false);
+    if (this.props.store.editorToolbar.newEditorForTreeAction) {
+      this.props.store.editorToolbar.newEditorForTreeAction = false;
+      this.props.store.treeActionPanel.treeActionEditorId = editorId;
+    }
   }
 
   @action

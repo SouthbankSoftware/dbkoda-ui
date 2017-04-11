@@ -3,24 +3,27 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-07T14:33:43+10:00
+ * @Last modified time: 2017-04-11T16:36:25+10:00
  */
 
 import React from 'react';
+import { observe } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import View from './View';
-import { CreateForm, PrefilledForm } from './Components/PrefilledForm';
+import { CreateForm } from './Components/PrefilledForm';
 
 @inject('store')
 @observer
 export default class TreeActionPanel extends React.Component {
   populateFields(treeNode, treeAction) {
-    return CreateForm(treeNode, treeAction);
+    const prefilledForm = CreateForm(treeNode, treeAction);
+    this.props.store.setTreeActionForm(prefilledForm);
+    return prefilledForm;
   }
 
   render() {
-    const {drawer} = this.props.store;
-    const form = this.populateFields(drawer.treeNode, drawer.treeAction);
-    return <View title={form.title} form={form.mobxForm} />;
+    const {treeActionPanel} = this.props.store;
+    const prefilledForm = this.populateFields(treeActionPanel.treeNode, treeActionPanel.treeAction);
+    return <View title={prefilledForm.title} mobxForm={prefilledForm.mobxForm} />;
   }
 }
