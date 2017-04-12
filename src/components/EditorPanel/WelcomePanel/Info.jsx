@@ -7,6 +7,7 @@
 */
 
 /* eslint-disable react/no-string-refs */
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 
@@ -23,9 +24,11 @@ export default class Info extends React.Component {
     this.state = {
       hotkeys: [
         {
+          key: 1,
           title: 'Auto-Complete',
           hotkey: 'Ctrl+Space'
         }, {
+          key: 2,
           title: 'Fold / Unfold',
           hotkey: 'Ctrl+Q'
         }
@@ -43,7 +46,7 @@ export default class Info extends React.Component {
             .hotkeys
             .map((item) => {
               return (
-                <div className="hotkeyItem">
+                <div key={item.key} className="hotkeyItem">
                   <h5 className="hotkeyTitle">{item.title + ': '}</h5>
                   <p>{item.hotkey}</p>
                 </div>
