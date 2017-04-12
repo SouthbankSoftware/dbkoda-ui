@@ -11,6 +11,8 @@
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
+import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/search/matchesonscrollbar.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction, observe} from 'mobx';
@@ -43,6 +45,12 @@ require('codemirror/addon/fold/comment-fold.js');
 require('codemirror/addon/fold/xml-fold.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
+require('codemirror/addon/search/search.js');
+require('codemirror/addon/search/searchcursor.js');
+require('codemirror/addon/search/jump-to-line.js');
+require('codemirror/addon/dialog/dialog.js');
+require('codemirror/addon/search/matchesonscrollbar.js');
+require('codemirror/addon/scroll/annotatescrollbar.js');
 
 require('codemirror/keymap/sublime.js');
 require('codemirror-formatting');

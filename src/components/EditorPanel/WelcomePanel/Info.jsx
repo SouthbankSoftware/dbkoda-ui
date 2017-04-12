@@ -31,6 +31,14 @@ export default class Info extends React.Component {
           key: 2,
           title: 'Fold / Unfold',
           hotkey: 'Ctrl+Q'
+        }, {
+          key: 3,
+          title: 'Search Editor',
+          hotkey: 'Command+F'
+        }, {
+          key: 4,
+          title: 'Fold / Unfold',
+          hotkey: 'Command+Control+Shift+F'
         }
       ]
     };
