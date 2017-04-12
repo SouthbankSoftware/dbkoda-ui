@@ -1,10 +1,11 @@
-.explain-panel{
+.explain-panel {
   display: flex;
   flex: 1;
   flex-direction: row;
   overflow-x: scroll;
 
 }
+
 .explain-tab {
   flex: 1;
   display: flex;
@@ -18,12 +19,12 @@
   flex: 1;
   order: 2;
   flex-direction: row;
-  .pt-tab-list{
+  .pt-tab-list {
     margin: 0;
   }
 }
 
-.explain-tab-title-button{
+.explain-tab-title-button {
   padding: 0;
 }
 
@@ -38,10 +39,25 @@
 }
 
 .explain-not-visible {
-  display:  none;
+  display: none;
 }
 
-
 .explain-visible {
-  display:  flex;
+  display: flex;
+}
+
+.explain-command-info {
+  display: flex;
+  ul li {
+    list-style: none;
+  }
+  ul {
+    float: left;
+    padding-left: 10px;
+
+  }
+  ul .label {
+    color: #179dea;
+    margin-bottom: 10px;
+  }
 }

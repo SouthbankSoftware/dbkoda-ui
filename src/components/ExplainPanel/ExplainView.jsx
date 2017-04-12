@@ -1,7 +1,24 @@
 import React from 'react';
-import {Button, Tab2, Tabs2, Text} from '@blueprintjs/core';
-import {Table, Cell, Column} from '@blueprintjs/table';
 import './style.scss';
+
+
+const ExplainCommandInfo = ({explain, command}) => {
+  console.log('command info ', explain, command);
+  return (
+    <div className="explain-command-info">
+      <ul>
+        <li className="label">
+          NameSpace:
+        </li>
+        <li className="label">Query Command:</li>
+      </ul>
+      <ul>
+        <li>{explain.queryPlanner.namespace}</li>
+        <li>{command}</li>
+      </ul>
+    </div>
+  );
+};
 
 const ExplainView = ({explains}) => {
   if (!explains.output) {
@@ -11,9 +28,7 @@ const ExplainView = ({explains}) => {
   const output = JSON.parse(explains.output);
   console.log('output:', output);
   return (<div className="explain-view-panel">
-
-    <div>Namespace: {output.queryPlanner.namespace}</div>
-    <div>Query: {explains.command}</div>
+    <ExplainCommandInfo explain={output} command={explains.command} />
     <table className="pt-table">
       <tr>
         <td>Document Returned:</td>
