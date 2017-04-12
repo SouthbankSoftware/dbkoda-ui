@@ -62,7 +62,7 @@ export default class Explain extends React.Component {
       // this.props.explainPanel.activeId = 'Expalin';
       console.log('write explain output ', this.explainOutput);
       const currentEditor = this.props.editors.get(currentEditorId);
-      this.props.editors.set(currentEditorId, {...currentEditor, explains: this.explainOutput});
+      this.props.editors.set(currentEditorId, {...currentEditor, explains: JSON.parse(this.explainOutput)});
       this.setState({explainOutput: JSON.parse(this.explainOutput)});
     } else {
       this.explainOutput += outputMsg.trim();

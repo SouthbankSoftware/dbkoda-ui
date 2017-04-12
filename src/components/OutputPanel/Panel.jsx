@@ -63,39 +63,39 @@ export default class Panel extends React.Component {
    * @param {Object[]} editors - The editor states that require output rendering
    */
   renderTabs(editors) {
-     const tabs = editors.map((editor) => {
-        const editorTitle = editor[1].alias + ' (' + editor[1].shellId + ')';
-        let tabClassName = "notVisible";
-        if (editor[1].visible) {
-          tabClassName = "visible";
-        }
-        console.log('render editor', editor[1].explains);
-        const array = [];
-        array.push(<Tab2
-          className={tabClassName}
-          key={editor[1].shellId}
-          id={editorTitle}
-          title={editorTitle}
-          panel={
-            <OutputEditor
-              title={editorTitle}
-              id={editor[1].id}
-              shellId={editor[1].shellId}/>
-          }>
-        </Tab2>);
-        if(editor[1].explains){
-          array.push(<Tab2
-            className={tabClassName}
-            key={'Explain_'+editor[1].shellId}
-            id={'Explain'}
-            title={'Explain'}
-            panel={
-              <Explain />
-            }>
-          </Tab2>);
-        }
-        return array;
-      });
+    const tabs = editors.map((editor) => {
+      const editorTitle = editor[1].alias + ' (' + editor[1].shellId + ')';
+      let tabClassName = "notVisible";
+      if (editor[1].visible) {
+        tabClassName = "visible";
+      }
+      console.log('render editor', editor[1].explains);
+      const array = [];
+      array.push(<Tab2
+        className={tabClassName}
+        key={editor[1].shellId}
+        id={editorTitle}
+        title={editorTitle}
+        panel={
+          <OutputEditor
+            title={editorTitle}
+            id={editor[1].id}
+            shellId={editor[1].shellId}/>
+        }>
+      </Tab2>);
+      array.push(<Tab2
+        className={editor[1].explains ? 'visible' : 'notVisible'}
+        key={'Explain_' + editor[1].shellId}
+        id={'Explain' + editor[1].shellId}
+        title={'Explain' + editor[1].shellId}
+        panel={
+          <Explain />
+        }>
+      </Tab2>);
+      return array;
+    });
+    console.log('get tables:', [].concat.apply([], tabs));
+
     return [].concat.apply([], tabs);
   }
 
