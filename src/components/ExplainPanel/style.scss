@@ -1,0 +1,47 @@
+.explain-panel{
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  overflow-x: scroll;
+
+}
+.explain-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: scroll;
+  padding: 0 !important;
+}
+
+.explain-tabs {
+  display: flex;
+  flex: 1;
+  order: 2;
+  flex-direction: row;
+  .pt-tab-list{
+    margin: 0;
+  }
+}
+
+.explain-tab-title-button{
+  padding: 0;
+}
+
+.explain-json-raw-panel {
+  flex: 1;
+}
+
+.explain-view-panel {
+  flex: 1;
+  background-color: #182026;
+  margin: 10px;
+}
+
+.explain-not-visible {
+  display:  none;
+}
+
+
+.explain-visible {
+  display:  flex;
+}
