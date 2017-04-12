@@ -37,7 +37,7 @@ export default class Info extends React.Component {
           hotkey: 'Command+F'
         }, {
           key: 4,
-          title: 'Search / Replace in Editor,
+          title: 'Search / Replace in Editor',
           hotkey: 'Command+Control+Shift+F'
         }
       ]
