@@ -245,56 +245,56 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExplain = reaction( // eslint-disable-line
-        () => this.props.store.editorPanel.executingExplain, executingEditorLines => { //eslint-disable-line
-      const explainParam = this.props.store.editorPanel.executingExplain;
-      if (this.props.store.editorPanel.activeEditorId == this.props.title && explainParam) {
-        // Determine code to send.
-        let shell = null;
-        let id = null;
-        const cm = this
-          .refs
-          .editor
-          .getCodeMirror(); // eslint-disable-line
-        let content = cm.getSelection();
-        if (cm.getSelection().length > 0) {
-          console.log('Executing Highlighted Text.');
-        } else {
-          console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
-          content = cm.getLine(cm.getCursor().line);
-        }
-        content += '.explain("' + explainParam + '")';
-        this
-          .props
-          .store
-          .profiles
-          .forEach((value) => {
-            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-              shell = value.shellId;
-              id = value.id;
-            }
-          });
-        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+      () => this.props.store.editorPanel.executingExplain, executingEditorLines => { //eslint-disable-line
+        const explainParam = this.props.store.editorPanel.executingExplain;
+        if (this.props.store.editorPanel.activeEditorId == this.props.title && explainParam) {
+          // Determine code to send.
+          let shell = null;
+          let id = null;
+          const cm = this
+            .refs
+            .editor
+            .getCodeMirror(); // eslint-disable-line
+          let content = cm.getSelection();
+          if (cm.getSelection().length > 0) {
+            console.log('Executing Highlighted Text.');
+          } else {
+            console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
+            content = cm.getLine(cm.getCursor().line);
+          }
+          content += '.explain("' + explainParam+'")';
+          this
+            .props
+            .store
+            .profiles
+            .forEach((value) => {
+              if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+                shell = value.shellId;
+                id = value.id;
+              }
+            });
+          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
 
-        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
-        this
-          .props
-          .store
-          .editors
-          .get(editorIndex)
-          .executing = true;
-        this.props.store.editorToolbar.isActiveExecuting = true;
-        // Send request to feathers client
-        const service = featherClient().service('/mongo-shells');
-        const filteredContent = content.replace('\t', '  ');
-        service.timeout = 30000;
-        Broker.emit(EventType.EXPLAIN_EXECUTION_EVENT, {id, shell, command: filteredContent});
-        service.update(id, {
-          shellId: shell, // eslint-disable-line
-          commands: filteredContent
-        });
-        this.props.store.editorPanel.executingExplain = false;
-      }
-    });
+          const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+          const editor = this
+            .props
+            .store
+            .editors
+            .get(editorIndex);
+
+          editor.executing = true;
+          // Send request to feathers client
+          const service = featherClient().service('/mongo-shells');
+          const filteredContent = content.replace('\t', '  ');
+          service.timeout = 30000;
+          Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {id, shell, command: filteredContent});
+          service.update(id, {
+            shellId: shell, // eslint-disable-line
+            commands: filteredContent
+          });
+          this.props.store.editorPanel.executingExplain = false;
+        }
+      });
 
     /**
      * Reaction function for when a change occurs on the

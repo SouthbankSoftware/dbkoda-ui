@@ -26,7 +26,7 @@ const ConnectionPanel = ({
                            profileList,
                            drawer,
                            userPreferences,
-                         },) => {
+                         }) => {
   const selectedProfile = profileList.selectedProfile;
   let edit = false;
   if (profileList.selectedProfile) {

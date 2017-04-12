@@ -25,5 +25,7 @@ export const EventType = {
   createShellExecutionFinishEvent: (id, shellId) => {
     return 'controller::command::execute::finished::' + id + '::' + shellId;
   },
-  EXPLAIN_EXECUTION_EVENT: 'executing::explain',
+  createExplainExeuctionEvent: (id, shellId) => {
+    return 'executing::explain::' + id + '::' + shellId;
+  }
 };
