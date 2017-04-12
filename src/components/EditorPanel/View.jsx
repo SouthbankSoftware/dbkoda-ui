@@ -384,6 +384,9 @@ class View extends React.Component {
       })
         .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
+          if(res && res.length === 1 && res[0].trim().length === 0){
+            return;
+          }
           const cursor = cm
             .getDoc()
             .getCursor();
