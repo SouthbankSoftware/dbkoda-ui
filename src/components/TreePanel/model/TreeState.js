@@ -6,7 +6,10 @@
  * @Last modified time: 2017-04-12T08:41:57+10:00
 */
 
+/* eslint-disable */
+
 import {observable, action} from 'mobx';
+import _ from 'lodash';
 import {featherClient} from '~/helpers/feathers';
 import {NewToaster} from '#/common/Toaster';
 import {Intent} from '@blueprintjs/core';
@@ -156,69 +159,23 @@ export default class TreeState {
    * @param {Object} nodeRightClicked - The Node that triggered this action.
    */
   sampleCollection(nodeRightClicked) {
-    const db = nodeRightClicked.refParent.text;
-    const queryFirst = 'use ' + database; // eslint-disable-line
-    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 20}})'; // eslint-disable-line
-    const collection = nodeRightClicked.text;
-    const profile = this.updateCallback2();
-
-    let sampleJSON;
-    const service = featherClient().service('/mongo-driver');
-    service.timeout = 30000;
-    service
-      .get({
-        id: profile.id,
-        database: db,
-        type: 'sample-collection'
-      }, {})
-      .then((res) => {
-        sampleJSON = this.parseSampleData(res);
-        if (true) {
-          sampleJSON = {
-            text: 'Collection Sample',
-            type: 'properties',
-            children: [
-              {
-                text: 'Name',
-                type: 'label'
-              }, {
-                text: 'Date of Birth',
-                type: 'numerical'
-              }, {
-                text: 'Address',
-                type: 'properties',
-                children: [
-                  {
-                    text: 'State',
-                    type: 'label'
-                  }, {
-                    text: 'PostCode',
-                    type: 'numerical'
-                  }, {
-                    text: 'Street Address',
-                    type: 'numerical'
-                  }
-                ]
-              }
-            ]
-          };
-        }
-        if (!nodeRightClicked.allChildNodes) {
-          nodeRightClicked.allChildNodes = new Map();
-        }
-        const child = new TreeNode(sampleJSON, nodeRightClicked);
-        console.log('Tree Created Child: ', child);
-        nodeRightClicked.isExpanded = true;
-        child.isExpanded = true;
-        nodeRightClicked.setFilter(this.filter);
-        this.updateCallback();
-        nodeRightClicked.isExpanded = true;
-        this.updateCallback();
-        // Force re-render of tree.
-      })
-      .catch((err) => {
-        NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-      });
+    // const db = nodeRightClicked.refParent.text; const queryFirst = 'use ' +
+    // database; // eslint-disable-line const querySecond = 'db.' +
+    // nodeRightClicked.text + '.aggregate({$sample: {size: 20}})'; //
+    // eslint-disable-line const collection = nodeRightClicked.text; const profile =
+    // this.updateCallback2();
+    const res = this.getDummyResult(); // Replace with real query.
+    const sampleJSON = this.parseSampleData(res);
+    if (!nodeRightClicked.allChildNodes) {
+      nodeRightClicked.allChildNodes = new Map();
+    }
+    const child = new TreeNode(sampleJSON, nodeRightClicked);
+    nodeRightClicked.isExpanded = true;
+    child.isExpanded = true;
+    nodeRightClicked.setFilter(this.filter);
+    this.updateCallback();
+    nodeRightClicked.isExpanded = true;
+    this.updateCallback();
   }
 
   /**
@@ -227,9 +184,45 @@ export default class TreeState {
    * @return {Object} - The resulting tree structure.
    */
   parseSampleData(queryResult) {
-    console.log('Sample Result: ', queryResult);
-    // @TODO -> Parse 100 JSON rows and return common keys.
-    return queryResult;
+    // Create an object as a union of all attributes.
+    let object = queryResult[0];
+    queryResult.forEach((document) => {
+      object = _.merge(object, document);
+    });
+
+    //Build tree from JSON object.
+    let treeObj = {
+      text: 'Attributes',
+      type: 'object',
+      children: []
+    };
+
+    this.traverseObject(object, treeObj.children);
+    console.log(object);
+    console.log(treeObj);
+
+    //console.log(keys);
+    return treeObj;
+  }
+
+  traverseObject(obj, childArray) {
+    Object
+      .keys(obj)
+      .forEach(function (key) {
+        if (typeof obj[key] === 'object') {
+          let newChild = {
+            text: key,
+            type: 'properties',
+            children: []
+          };
+          this.traverseObject(obj[key], newChild.children);
+          childArray.push(newChild);
+        } else {
+          childArray.push({text: key, type: 'numerical'});;
+        }
+        // Create a node
+
+      }.bind(this));
   }
 
   /**
@@ -253,5 +246,164 @@ export default class TreeState {
       callback(node);
       this.forEachNode(node.childNodes, callback);
     }
+  }
+
+  getDummyResult() {
+    return [
+      {
+
+        'name': 'd',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'g',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'a',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'k',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'l',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'm',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'b',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'c',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'h',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'f',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+        'name': 'e',
+        'age': '1',
+        'height': 123,
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'j',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+        'name': 'e',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2,
+            'ccc': 3
+          }
+        }
+      }, {
+        'name': 'e',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }
+    ];
   }
 }
