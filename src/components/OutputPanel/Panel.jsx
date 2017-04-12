@@ -7,14 +7,13 @@
  */
 
 import React from 'react';
-import {action, reaction} from 'mobx';
+import {action, reaction, runInAction} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import {Tab2, Tabs2} from '@blueprintjs/core';
 import './style.scss';
 import {Explain} from '../ExplainPanel/index';
-import {Broker, EventType} from '../../helpers/broker';
 
 /**
  * The main panel for the Output view, this handles tabbing,
@@ -39,14 +38,6 @@ export default class Panel extends React.Component {
       },
       {'name': 'reactionOutputPanelTabChange'}
     );
-
-    /**
-     * called when there is an explain excution happened
-     */
-    Broker.on(EventType.EXPLAIN_EXECUTION_EVENT, () => {
-      this.props.store.outputPanel.currentTab = 'Explain';
-      this.props.store.outputPanel.explainAvailable = true;
-    });
   }
 
   /**
@@ -69,31 +60,36 @@ export default class Panel extends React.Component {
       if (editor[1].visible) {
         tabClassName = 'visible';
       }
-      const array = [];
-      array.push(<Tab2
-        className={tabClassName}
-        key={editor[1].shellId}
-        id={editorTitle}
-        title={editorTitle}
-        panel={
-          <OutputEditor
-            title={editorTitle}
-            id={editor[1].id}
-            shellId={editor[1].shellId} />
-        } />);
-      array.push(<Tab2
-        className={editor[1].explains ? 'visible' : 'notVisible'}
-        key={'Explain_' + editor[1].shellId}
-        id={'Explain' + editor[1].shellId}
-        title={'Explain' + editor[1].shellId}
-        panel={
-          <Explain />
-        } />);
-      return array;
+      if (editor[1].explains && editor[1].active) {
+        runInAction(() => {
+          this.props.store.outputPanel.currentTab = 'Explain-' + editor[1].shellId;
+          editor[1].active = false;
+        });
+      }
+      return [
+        <Tab2
+          className={tabClassName}
+          key={editor[1].shellId}
+          id={editorTitle}
+          title={editorTitle}
+          panel={
+            <OutputEditor
+              title={editorTitle}
+              id={editor[1].id}
+              shellId={editor[1].shellId} />
+          } />,
+        <Tab2
+          className={editor[1].explains ? 'visible' : 'notVisible'}
+          key={'Explain-' + editor[1].shellId}
+          id={'Explain-' + editor[1].shellId}
+          title={'Explain-' + editor[1].shellId}
+          panel={
+            <Explain editor={editor[1]} />
+          } />
+      ];
     });
     return [].concat.apply([], tabs);
   }
-
 
   render() {
     // Toolbar must be rendered after tabs for initialisation purposes

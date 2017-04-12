@@ -287,7 +287,7 @@ class View extends React.Component {
           const service = featherClient().service('/mongo-shells');
           const filteredContent = content.replace('\t', '  ');
           service.timeout = 30000;
-          Broker.emit(EventType.EXPLAIN_EXECUTION_EVENT, {id, shell, command: filteredContent});
+          Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {id, shell, command: filteredContent});
           service.update(id, {
             shellId: shell, // eslint-disable-line
             commands: filteredContent
