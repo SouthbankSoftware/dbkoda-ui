@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-04-11T11:04:06+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-12T15:12:07+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -11,6 +11,8 @@
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
+import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/search/matchesonscrollbar.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction, observe} from 'mobx';
@@ -43,6 +45,12 @@ require('codemirror/addon/fold/comment-fold.js');
 require('codemirror/addon/fold/xml-fold.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
+require('codemirror/addon/search/search.js');
+require('codemirror/addon/search/searchcursor.js');
+require('codemirror/addon/search/jump-to-line.js');
+require('codemirror/addon/dialog/dialog.js');
+require('codemirror/addon/search/matchesonscrollbar.js');
+require('codemirror/addon/scroll/annotatescrollbar.js');
 
 require('codemirror/keymap/sublime.js');
 require('codemirror-formatting');
@@ -314,14 +322,20 @@ class View extends React.Component {
     });
 
     const reactToTreeActionChange = reaction( //eslint-disable-line
-        () => this.props.store.treeActionPanel.treeActionFormObservable, () => {
-      if (this.props.store.treeActionPanel.treeActionFormObservable) {
-        observe(this.props.store.treeActionPanel.form.mobxForm.fields, (change) => {
-          console.log(change);
-        });
-        this.props.store.treeActionPanel.treeActionFormObservable = false;
-      }
-    });
+        () => this.props.store.treeActionPanel.isNewFormValues,
+        () => {
+          console.log('wahaj is testing:', this.props.store.treeActionPanel.isNewFormValues);
+          if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.title) {
+            console.log('gen code from editor:', this.props.store.treeActionPanel.formValues);
+            const cm = this
+              .refs
+              .editor
+              .getCodeMirror();
+            cm.setValue(this.props.store.treeActionPanel.formValues);
+            this.props.store.treeActionPanel.isNewFormValues = false;
+          }
+        }
+      );
     this.refresh = this
       .refresh
       .bind(this);
