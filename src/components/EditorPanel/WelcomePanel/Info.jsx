@@ -33,11 +33,11 @@ export default class Info extends React.Component {
           hotkey: 'Ctrl+Q'
         }, {
           key: 3,
-          title: 'Search Editor',
+          title: 'Search in Editor',
           hotkey: 'Command+F'
         }, {
           key: 4,
-          title: 'Fold / Unfold',
+          title: 'Search / Replace in Editor,
           hotkey: 'Command+Control+Shift+F'
         }
       ]
