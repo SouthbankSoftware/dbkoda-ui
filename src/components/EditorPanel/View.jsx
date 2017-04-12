@@ -271,13 +271,13 @@ class View extends React.Component {
           console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
 
           const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
-          this
+          const editor = this
             .props
             .store
             .editors
-            .get(editorIndex)
-            .executing = true;
-          this.props.store.editorToolbar.isActiveExecuting = true;
+            .get(editorIndex);
+
+          editor.executing = true;
           // Send request to feathers client
           const service = featherClient().service('/mongo-shells');
           const filteredContent = content.replace('\t', '  ');
