@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-04-11T11:04:06+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-12T15:12:07+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -295,7 +295,7 @@ class View extends React.Component {
           const service = featherClient().service('/mongo-shells');
           const filteredContent = content.replace('\t', '  ');
           service.timeout = 30000;
-          Broker.emit(EventType.EXPLAIN_EXECUTION_EVENT, {id, shell, command: filteredContent});
+          Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {id, shell, command: filteredContent});
           service.update(id, {
             shellId: shell, // eslint-disable-line
             commands: filteredContent
@@ -322,14 +322,20 @@ class View extends React.Component {
     });
 
     const reactToTreeActionChange = reaction( //eslint-disable-line
-        () => this.props.store.treeActionPanel.treeActionFormObservable, () => {
-      if (this.props.store.treeActionPanel.treeActionFormObservable) {
-        observe(this.props.store.treeActionPanel.form.mobxForm.fields, (change) => {
-          console.log(change);
-        });
-        this.props.store.treeActionPanel.treeActionFormObservable = false;
-      }
-    });
+        () => this.props.store.treeActionPanel.isNewFormValues,
+        () => {
+          console.log('wahaj is testing:', this.props.store.treeActionPanel.isNewFormValues);
+          if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.title) {
+            console.log('gen code from editor:', this.props.store.treeActionPanel.formValues);
+            const cm = this
+              .refs
+              .editor
+              .getCodeMirror();
+            cm.setValue(this.props.store.treeActionPanel.formValues);
+            this.props.store.treeActionPanel.isNewFormValues = false;
+          }
+        }
+      );
     this.refresh = this
       .refresh
       .bind(this);

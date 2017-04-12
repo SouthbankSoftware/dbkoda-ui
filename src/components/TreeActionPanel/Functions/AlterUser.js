@@ -3,7 +3,7 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-11T16:19:26+10:00
+ * @Last modified time: 2017-04-12T14:02:57+10:00
  */
 
 export const AlterUser = {
@@ -16,7 +16,7 @@ export const AlterUser = {
     const data = new Promise((resolve, reject) => {
       AlterUser.executeCommand(
         `db.getSiblingDB("admin").system.users.find({
-          "_id": userId
+          "_id": ${userId}
       }).toArray()`,
       ).then((userDocs) => {
         console.log(userDocs);
@@ -30,7 +30,7 @@ export const AlterUser = {
         outputDoc.UserId = userDoc._id;
         outputDoc.Database = userDoc.db;
         outputDoc.UserName = userDoc.user;
-        outputDoc.CustomData = userDoc.customData;
+        // outputDoc.CustomData = userDoc.customData;
         outputDoc.Roles = [];
         userDoc.roles.forEach((role) => {
           outputDoc.Roles.push({
@@ -39,7 +39,7 @@ export const AlterUser = {
           });
         });
 
-        setTimeout(resolve, 2000, outputDoc);
+        setTimeout(resolve, 1000, outputDoc);
       }).catch(
         // Log the rejection reason
        (reason) => {

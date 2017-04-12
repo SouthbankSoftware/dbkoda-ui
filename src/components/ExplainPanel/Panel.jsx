@@ -5,8 +5,11 @@
 import React from 'react';
 import {action} from 'mobx';
 
-const Panel = () => {
-  return (<div></div>)
+const Panel = ({editor}) => {
+  console.log('get explain:', editor);
+  return (<div>
+
+  </div>);
 };
 
 

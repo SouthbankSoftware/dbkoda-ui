@@ -12,23 +12,27 @@ import Panel from './Panel';
 @inject(allStores => ({
   explainPanel: allStores.store.explainPanel,
   editors: allStores.store.editors,
+  outputPanel: allStores.store.outputPanel,
 }))
 @observer
 export default class Explain extends React.Component {
 
   constructor(props) {
     super(props);
-    Broker.on(EventType.EXPLAIN_EXECUTION_EVENT, ({id, shell, command}) => {
-      this.explainCommand = command;
-      this.explainOutput = '';
-      this.brokerEvent = EventType.createShellOutputEvent(id, shell);
-      Broker.on(this.brokerEvent, this.explainAvailable.bind(this));
-    });
+
     this.state = {};
   }
 
   componentDidMount() {
-
+    const {editor} = this.props;
+    if (editor) {
+      Broker.on(EventType.createExplainExeuctionEvent(editor.id, editor.shellId), ({id, shell, command}) => {
+        this.explainCommand = command;
+        this.explainOutput = '';
+        this.brokerEvent = EventType.createShellOutputEvent(id, shell);
+        Broker.on(this.brokerEvent, this.explainAvailable);
+      });
+    }
   }
 
   /**
@@ -39,10 +43,8 @@ export default class Explain extends React.Component {
   @action.bound
   explainAvailable(output) {
     const outputMsg = output.output;
-    console.log('get editors:', this.props.editors);
-    let currentEditorId;
-    this.props.editors.forEach((value, key, map) => {
-      console.log('iterate editors ', key, value, map);
+    let currentEditorId = false;
+    this.props.editors.forEach((value, key) => {
       if (value.id === output.id && value.shellId === output.shellId) {
         currentEditorId = key;
       }
@@ -51,7 +53,6 @@ export default class Explain extends React.Component {
     if (!currentEditorId) {
       return;
     }
-    console.log('find editor');
     if (outputMsg.indexOf(this.explainCommand) >= 0 && outputMsg.indexOf('dbenvy>') >= 0) {
       // beginning of the explain command
       this.explainOutput = '';
@@ -59,18 +60,22 @@ export default class Explain extends React.Component {
       // end of the explain
       Broker.removeListener(this.brokerEvent, this.explainAvailable);
       this.brokerEvent = undefined;
-      // this.props.explainPanel.activeId = 'Expalin';
       console.log('write explain output ', this.explainOutput);
       const currentEditor = this.props.editors.get(currentEditorId);
-      this.props.editors.set(currentEditorId, {...currentEditor, explains: JSON.parse(this.explainOutput)});
-      this.setState({explainOutput: JSON.parse(this.explainOutput)});
+      this.props.editors.set(currentEditorId, {
+        ...currentEditor,
+        explains: JSON.parse(this.explainOutput),
+        active: true
+      });
+      this.explainOutput = '';
     } else {
       this.explainOutput += outputMsg.trim();
     }
   }
 
   render() {
-    console.log('render ', this.state.explainOutput);
-    return (<Panel />);
+    console.log('render ', this.props.editor.explains);
+
+    return (<Panel editor={this.props.editor}/>);
   }
 }

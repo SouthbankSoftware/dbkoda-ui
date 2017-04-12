@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-06T16:22:54+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-04-12T11:24:17+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-12T14:39:46+10:00
  */
 
 const path = require('path');
@@ -67,7 +67,10 @@ const config = () => {
           test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
           loader: 'file-loader?name=images/[hash].[ext]',
         },
-        { test: /\.handlebars|hbs$/, loader: 'handlebars-loader' },
+        {
+          test: /\.handlebars|hbs$/,
+          loader: 'handlebars-loader?helperDirs[]=' + path.join(__dirname, '../src/helpers/handlebars'),
+        },
       ],
     },
     resolve: {
@@ -76,7 +79,7 @@ const config = () => {
     plugins: getPlugins(),
     node: {
       fs: 'empty',
-      module: 'empty'
+      module: 'empty',
     },
   };
 };
