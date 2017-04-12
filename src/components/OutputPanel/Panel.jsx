@@ -94,8 +94,6 @@ export default class Panel extends React.Component {
       </Tab2>);
       return array;
     });
-    console.log('get tables:', [].concat.apply([], tabs));
-
     return [].concat.apply([], tabs);
   }
 
