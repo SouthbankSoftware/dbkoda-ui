@@ -69,7 +69,6 @@ export default class Panel extends React.Component {
       if (editor[1].visible) {
         tabClassName = "visible";
       }
-      console.log('render editor', editor[1].explains);
       const array = [];
       array.push(<Tab2
         className={tabClassName}
