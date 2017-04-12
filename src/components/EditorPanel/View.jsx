@@ -7,6 +7,7 @@
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
+/* eslint-disable */
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
@@ -17,6 +18,7 @@ import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
 import {DragItemTypes} from '#/common/Constants.js';
+import {NewToaster} from '#/common/Toaster';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
@@ -159,7 +161,10 @@ class View extends React.Component {
         service.timeout = 30000;
         service.update(id, {
           shellId: shell, // eslint-disable-line
-            commands: this.state.code.replace('\t', '  ')
+          commands: this
+            .state
+            .code
+            .replace('\t', '  ')
         });
         this.props.store.editorPanel.executingEditorAll = false;
       }
@@ -295,35 +300,28 @@ class View extends React.Component {
      * Reaction function for when a change occurs on the
      * editorPanel.stoppingExecution state.
      */
-    const reactionToStopExecution = reaction(
-      () => this.props.store.editorPanel.stoppingExecution,
-      stoppingExecution => {
-        if (this.props.store.editorPanel.stoppingExecution) {
-          const id = this.props.store.editorToolbar.id;
-          const shellId = this.props.store.editorToolbar.shellId;
-          console.log(`Stopping Execution of ${id} ${shellId}!`);
-          const service = featherClient().service('/mongo-stop-execution');
-          service.timeout = 30000;
-          service.create({
-            id: id,
-            shellId: shellId, // eslint-disable-line
-          });
-        }
+    const reactionToStopExecution = reaction(() => this.props.store.editorPanel.stoppingExecution, (stoppingExecution) => {
+      if (this.props.store.editorPanel.stoppingExecution) {
+        const id = this.props.store.editorToolbar.id;
+        const shellId = this.props.store.editorToolbar.shellId;
+        console.log(`Stopping Execution of ${id} ${shellId}!`);
+        const service = featherClient().service('/mongo-stop-execution');
+        service.timeout = 30000;
+        service.create({
+          id: id, shellId: shellId, // eslint-disable-line
+        });
       }
-    );
-
+    });
 
     const reactToTreeActionChange = reaction( //eslint-disable-line
-      () => this.props.store.treeActionPanel.treeActionFormObservable,
-      () => {
-        if (this.props.store.treeActionPanel.treeActionFormObservable) {
-          observe(this.props.store.treeActionPanel.form.mobxForm.fields, (change) => {
-            console.log(change);
-          });
-          this.props.store.treeActionPanel.treeActionFormObservable = false;
-        }
+        () => this.props.store.treeActionPanel.treeActionFormObservable, () => {
+      if (this.props.store.treeActionPanel.treeActionFormObservable) {
+        observe(this.props.store.treeActionPanel.form.mobxForm.fields, (change) => {
+          console.log(change);
+        });
+        this.props.store.treeActionPanel.treeActionFormObservable = false;
       }
-    );
+    });
     this.refresh = this
       .refresh
       .bind(this);
@@ -338,6 +336,9 @@ class View extends React.Component {
       .bind(this);
     this.prettifyAll = this
       .prettifyAll
+      .bind(this);
+    this.prettifySelection = this
+      .prettifySelection
       .bind(this);
   }
 
@@ -462,15 +463,42 @@ class View extends React.Component {
   }
 
   /**
-   * Prettify selected code.
+   * Prettify All code.
    */
   prettifyAll() {
     const cm = this
       .refs
       .editor
       .getCodeMirror();
-    const beautified = Prettier.format(this.state.code, {});
-    cm.setValue(beautified);
+    try {
+      const beautified = Prettier.format(this.state.code, {});
+      cm.setValue(beautified);
+    } catch (err) {
+      NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      if (this.props.store.userPreferences.telemetryEnabled) {
+        EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format All failed with error: ' + err);
+      }
+    }
+  }
+
+  /**
+   * Prettify selected code.
+   */
+  prettifySelection() {
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+    console.log(cm.getSelection());
+    try {
+      const beautified = Prettier.format(cm.getSelection(), {});
+      cm.replaceSelection(beautified);
+    } catch (err) {
+      NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      if (this.props.store.userPreferences.telemetryEnabled) {
+        EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format Selection failed with error: ' + err);
+      }
+    }
   }
 
   /**
@@ -619,22 +647,27 @@ class View extends React.Component {
           onClick={this.executeLine}
           text="Execute Selected"
           iconName="pt-icon-chevron-right"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
         <MenuItem
           onClick={this.executeAll}
           text="Execute All"
           iconName="pt-icon-double-chevron-right"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
         <MenuItem
           onClick={this.refresh}
           text="Refresh"
           iconName="pt-icon-refresh"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
         <MenuItem
           onClick={this.prettifyAll}
           text="Format All"
           iconName="pt-icon-align-left"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}/>
+        <MenuItem
+          onClick={this.prettifySelection}
+          text="Format Selection"
+          iconName="pt-icon-align-left"
+          intent={Intent.NONE}/>
       </Menu>
     );
   }
@@ -652,8 +685,8 @@ class View extends React.Component {
           codeMirrorInstance={CM}
           value={this.state.code}
           onChange={value => this.updateCode(value)}
-          options={this.state.options} /> {isOver && <div
-            style={{
+          options={this.state.options}/> {isOver && <div
+          style={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -662,8 +695,8 @@ class View extends React.Component {
           zIndex: 1,
           opacity: 0.5,
           backgroundColor: 'yellow'
-        }} />
-      }
+        }}/>
+}
       </div>
     );
   }

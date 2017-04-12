@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-06T16:22:54+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-04-06T23:32:05+10:00
+ * @Last modified time: 2017-04-12T11:24:17+10:00
  */
 
 const path = require('path');
@@ -14,29 +14,27 @@ const getPlugins = () => {
   return [
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('development')
-      }
+        NODE_ENV: JSON.stringify('development'),
+      },
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({hash: false, template: './src/index.html'}),
+    new HtmlWebpackPlugin({ hash: false, template: './src/index.html' }),
     new ExtractTextPlugin({
       filename: 'styles/bundle.css',
       disable: false,
-      allChunks: true
+      allChunks: true,
     }),
   ];
 };
 
-const config = (() => {
+const config = () => {
   return {
-    entry: [
-      './src/index.jsx'
-    ],
+    entry: ['./src/index.jsx'],
     output: {
       path: path.join(__dirname, '../dist/'),
-      publicPath: './',
-      filename: 'app.[hash].js'
+      publicPath: '/',
+      filename: 'app.[hash].js',
     },
     devtool: 'source-map',
     module: {
@@ -51,29 +49,36 @@ const config = (() => {
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             use: ['css-loader', 'sass-loader'],
-            publicPath: './styles/bundle.css'
-          })
+            publicPath: '/styles/bundle.css',
+          }),
         },
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
           use: [
             'file-loader?hash=sha512&digest=hex&name=assets/[hash].[ext]',
-            'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
-          ]
+            'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false',
+          ],
         },
         {
           test: /\.(png|svg|woff|eot|ttf|woff2)(\?.*$|$)/,
-          loader: 'url-loader?limit=100000&mimetype=application/font-woff'
+          loader: 'url-loader?limit=100000&mimetype=application/font-woff',
         },
-        {test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader?name=images/[hash].[ext]'},
+        {
+          test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          loader: 'file-loader?name=images/[hash].[ext]',
+        },
         { test: /\.handlebars|hbs$/, loader: 'handlebars-loader' },
-      ]
+      ],
     },
     resolve: {
-      extensions: ['.js', '.jsx']
+      extensions: ['.js', '.jsx'],
     },
-    plugins: getPlugins()
+    plugins: getPlugins(),
+    node: {
+      fs: 'empty',
+      module: 'empty'
+    },
   };
-});
+};
 
 module.exports = config();

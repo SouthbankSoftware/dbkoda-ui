@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-03T10:09:27+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-03-07T16:57:53+11:00
+ * @Last modified time: 2017-04-12T11:32:19+10:00
  */
 
 const webpackConfig = require('./webpack.config');
@@ -45,7 +45,7 @@ const config = (() => {
     entry: './src/index.jsx',
     output: {
       path: './dist',
-      publicPath: './',
+      publicPath: '/',
       filename: 'js/[name].[hash].js',
       chunkFilename: 'js/[name].[chunkhash].js'
     },
@@ -55,6 +55,10 @@ const config = (() => {
     devtool: 'cheap-module-source-map',
     plugins: getPlugins(),
     module: webpackConfig.module,
+    node: {
+      fs: 'empty',
+      module: 'empty'
+    },
   };
 });
 

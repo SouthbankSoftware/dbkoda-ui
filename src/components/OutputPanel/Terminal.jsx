@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-11T13:55:44+10:00
+ * @Last modified time: 2017-04-12T09:45:57+10:00
  */
 
 import React from 'react';
@@ -12,6 +12,7 @@ import {action, reaction} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
 import {AnchorButton} from '@blueprintjs/core';
 import CodeMirror from 'react-codemirror';
+import {Broker, EventType} from '../../helpers/broker';
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/addon/edit/matchbrackets.js');
@@ -52,9 +53,7 @@ export default class Terminal extends React.Component {
      * Reaction to fire off execution of Terminal Commands
      */
     const reactionToExecutingCmd = reaction(() => this.props.store.outputPanel.executingTerminalCmd, (executingTerminalCmd) => {
-      console.log(`Executing terminal if ( ${this.props.title} == ${this.props.store.editorPanel.activeEditorId} )`);
       if (this.props.store.outputPanel.executingTerminalCmd && this.props.title == this.props.store.editorPanel.activeEditorId) {
-        console.log("React to executingTerminalCmd");
         this.updateHistory(this.state.command);
         const command = this.interceptCommand(this.state.command);
         console.log(command);
@@ -64,6 +63,7 @@ export default class Terminal extends React.Component {
           this.props.store.editors.get(this.props.title).executing = true;
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
+          Broker.on(EventType.createShellExecutionFinishEvent(this.props.id, this.props.shellId), this.finishedExecution);
           service.update(this.props.id, {
             shellId: this.props.shellId, // eslint-disable-line
             commands: command
@@ -149,11 +149,28 @@ export default class Terminal extends React.Component {
       this.props.store.outputPanel.clearingOutput = true;
       return false;
     }
-    if (['it'].indexOf(command) >= 0) {
+    if (['it', 'show more'].indexOf(command) >= 0) {
       this.props.store.outputPanel.executingShowMore = true;
       return false;
     }
     return command;
+  }
+
+  @action.bound
+  finishedExecution() {
+    const id = this.props.store.editorToolbar.id;
+    const shell = this.props.store.editorToolbar.shellId;
+    const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+    this
+      .props
+      .store
+      .editors
+      .get(editorIndex)
+      .executing = false;
+    if (this.props.store.editorPanel.activeEditorId == this.props.title) {
+      this.props.store.editorToolbar.isActiveExecuting = false;
+      this.props.store.editorPanel.stoppingExecution = false;
+    }
   }
 
   /**

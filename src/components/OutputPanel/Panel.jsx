@@ -86,7 +86,7 @@ export default class Panel extends React.Component {
         if(editor[1].explains){
           array.push(<Tab2
             className={tabClassName}
-            key={'Explain'}
+            key={'Explain_'+editor[1].shellId}
             id={'Explain'}
             title={'Explain'}
             panel={
@@ -96,26 +96,9 @@ export default class Panel extends React.Component {
         }
         return array;
       });
-     console.log('get tables ', [].concat.apply([], tabs);
     return [].concat.apply([], tabs);
   }
 
-  renderExplainOutput() {
-    let tabClassName = "notVisible";
-    if (this.props.store.outputPanel.explainAvailable) {
-      tabClassName = "visible";
-    }
-
-      return (<Tab2
-        className={tabClassName}
-        key={'Explain'}
-        id={'Explain'}
-        title={'Explain'}
-        panel={
-          <Explain />
-        }>
-      </Tab2>);
-  }
 
   render() {
     // Toolbar must be rendered after tabs for initialisation purposes
@@ -134,7 +117,6 @@ export default class Panel extends React.Component {
           </Tab2>
 
           {this.renderTabs(this.props.store.editors.entries())}
-          {this.renderExplainOutput()}
         </Tabs2>
         <OutputToolbar />
       </div>

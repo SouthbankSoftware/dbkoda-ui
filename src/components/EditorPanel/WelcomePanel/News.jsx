@@ -7,6 +7,7 @@
 */
 
 /* eslint-disable react/no-string-refs */
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 
@@ -23,10 +24,12 @@ export default class News extends React.Component {
     this.state = {
       news: [
         {
+          key: 1,
           title: 'Some News Update',
           icon: 'pt-icon-comment',
           content: 'This is some content, placeholder, this could contain images and or links.'
         }, {
+          key: 2,
           title: 'Another News Update!',
           icon: 'pt-icon-endorsed',
           content: 'This is some more content, placeholder, this could contain images and or links.'
@@ -45,7 +48,7 @@ export default class News extends React.Component {
             .news
             .map((item) => {
               return (
-                <div className="newsItem">
+                <div key={item.key} className="newsItem">
                   <div className="newsHeader">
                     <i className={item.icon + ' newsIcon'} />
                     <h4>{item.title}</h4>
