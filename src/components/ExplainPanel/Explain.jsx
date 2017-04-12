@@ -26,7 +26,6 @@ export default class Explain extends React.Component {
   componentDidMount() {
     const {editor} = this.props;
     if (editor) {
-      console.log('create shell execution event ', editor);
       Broker.on(EventType.createExplainExeuctionEvent(editor.id, editor.shellId), ({id, shell, command}) => {
         this.explainCommand = command;
         this.explainOutput = '';
@@ -34,12 +33,6 @@ export default class Explain extends React.Component {
         Broker.on(this.brokerEvent, this.explainAvailable);
       });
     }
-    // Broker.on(EventType.EXPLAIN_EXECUTION_EVENT, ({id, shell, command}) => {
-    //   this.explainCommand = command;
-    //   this.explainOutput = '';
-    //   this.brokerEvent = EventType.createShellOutputEvent(id, shell);
-    //   Broker.on(this.brokerEvent, this.explainAvailable.bind(this));
-    // });
   }
 
   /**
@@ -50,7 +43,6 @@ export default class Explain extends React.Component {
   @action.bound
   explainAvailable(output) {
     const outputMsg = output.output;
-    console.log('get explain output @@@@@ ', output);
     let currentEditorId = false;
     this.props.editors.forEach((value, key) => {
       if (value.id === output.id && value.shellId === output.shellId) {
@@ -66,7 +58,6 @@ export default class Explain extends React.Component {
       this.explainOutput = '';
     } else if (outputMsg.trim() === 'dbenvy>' && this.brokerEvent) {
       // end of the explain
-      console.log('remove broker event ', this.brokerEvent);
       Broker.removeListener(this.brokerEvent, this.explainAvailable);
       this.brokerEvent = undefined;
       console.log('write explain output ', this.explainOutput);
