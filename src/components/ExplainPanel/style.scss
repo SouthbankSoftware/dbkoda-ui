@@ -1,3 +1,6 @@
+$labelColor: #179dea;
+$contentColor: white;
+
 .explain-panel {
   display: flex;
   flex: 1;
@@ -50,6 +53,7 @@
   display: flex;
   ul li {
     list-style: none;
+    margin-bottom: 10px;
   }
   ul {
     float: left;
@@ -57,7 +61,30 @@
 
   }
   ul .label {
-    color: #179dea;
-    margin-bottom: 10px;
+    color: $labelColor;
   }
+}
+
+.explain-output-list-label {
+  list-style: none;
+  color: $labelColor;
+}
+
+.explain-output-list-content {
+  list-style: none;
+  color: $contentColor;
+}
+
+.explain-output-column-label {
+  float: left;
+}
+
+.explain-stage-button {
+  margin-left: 5px;
+  margin-top: 5px;
+  height: 10px;
+}
+
+.explain-stage-detail-popup{
+  padding: 0px;
 }
