@@ -8,7 +8,6 @@ import JSONTree from 'react-json-tree';
  * show explain command information
  */
 const ExplainCommandInfo = ({explain, command}) => {
-  console.log('command info ', explain, command);
   return (
     <div className="explain-command-info">
       <ul>
@@ -61,7 +60,6 @@ const WinningPlain = ({explain, type}) => {
       return (<div style={{marginLeft: 10}}>
         {
           stages.map((stage, i) => {
-            console.log('render stage ', stage, JSON.stringify(stage));
             return (<div key={i} style={{display: 'flex'}}>
               <Popover
                 content={<JSONTree data={stage}/>}
