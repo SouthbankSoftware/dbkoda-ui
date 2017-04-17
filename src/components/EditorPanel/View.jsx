@@ -279,7 +279,6 @@ class View extends React.Component {
           } else{
             content += '.explain("' + explainParam + '")';
           }
-          console.log('send explain command ', content);
           this
             .props
             .store
