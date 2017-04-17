@@ -1,8 +1,11 @@
 import React from 'react';
-import './style.scss';
-import {Types} from './Types';
+import {toJS} from 'mobx';
+
 import {Button, Popover, PopoverInteractionKind, Position} from '@blueprintjs/core';
 import JSONTree from 'react-json-tree';
+import {theme} from './JsonTreeTheme';
+import './style.scss';
+import {Types} from './Types';
 
 /**
  * show explain command information
@@ -42,8 +45,6 @@ export const getExecutionStages = (executionStages) => {
       stages.push(currentStage);
       currentStage = currentStage.inputStage;
     }
-  } else {
-    stages.push(explain.queryPlanner.winningPlan);
   }
   return stages;
 };
@@ -56,16 +57,17 @@ const WinningPlain = ({explain, type}) => {
   switch (type) {
     case Types.ALL_PLANS_EXECUTION:
     case Types.EXECUTION_STATS:
-      stages = getExecutionStages(explain.executionStats.executionStages).reverse();
+      stages = getExecutionStages(explain.executionStats.executionStages);
       return (<div style={{marginLeft: 10}}>
         {
           stages.map((stage, i) => {
             return (<div key={i} style={{display: 'flex'}}>
               <Popover
-                content={<JSONTree data={stage}/>}
+                content={<JSONTree data={stage} invertTheme={false} theme={theme}/>}
                 interactionKind={PopoverInteractionKind.CLICK}
                 position={Position.TOP_RIGHT}
                 useSmartPositioning={false}
+                className="explain-stage-popover"
                 popoverClassName="explain-stage-detail-popup"
               >
                 <Button className="explain-stage-button">{stage.stage}</Button>
@@ -76,7 +78,7 @@ const WinningPlain = ({explain, type}) => {
                 <li
                   className="explain-output-list-label">{stage.stage === 'IXSCAN' ? 'Key Examined:' : 'Doc Examined:'}</li>
               </ul>
-              <ul className="explain-output-column-label">
+              <ul className="explain-output-column-content">
                 <li className="explain-output-list-content">{stage.nReturned}</li>
                 <li className="explain-output-list-content">{stage.executionTimeMillisEstimate}</li>
                 <li
@@ -87,17 +89,23 @@ const WinningPlain = ({explain, type}) => {
         }
       </div>);
     default:
-      stages = getExecutionStages(explain.queryPlanner.winningPlan).reverse();
+      stages = getExecutionStages(explain.queryPlanner.winningPlan);
       return (<div style={{marginLeft: 10}}>
-        <Popover
-          content={<JSONTree data={stages[0]}/>}
-          interactionKind={PopoverInteractionKind.CLICK}
-          popoverClassName="explain-stage-detail-popup"
-          position={Position.TOP_RIGHT}
-          useSmartPositioning={false}
-        >
-          <Button className="explain-stage-button">{stages[0].stage}</Button>
-        </Popover>
+        {
+          stages.map((stage, i) => {
+            return (<div key={i} style={{display: 'flex'}}>
+              <Popover
+                content={<JSONTree data={stages[0]}/>}
+                interactionKind={PopoverInteractionKind.CLICK}
+                popoverClassName="explain-stage-detail-popup"
+                position={Position.TOP_RIGHT}
+                useSmartPositioning={false}
+              >
+                <Button className="explain-stage-button">{stages[i].stage}</Button>
+              </Popover>
+            </div>)
+          })
+        }
       </div>);
   }
 };
@@ -122,17 +130,15 @@ const GlobalStatistics = ({explains, type}) => {
         </ul>
       </div>);
     default:
-      return (<div>
-
-      </div>);
+      return (<div />);
   }
-}
+};
 
 const ExplainView = ({explains}) => {
   if (!explains.output) {
     return null;
   }
-  const output = JSON.parse(explains.output);
+  const output = toJS(explains.output);
   return (<div className="explain-view-panel">
     <ExplainCommandInfo explain={output} command={explains.command}/>
     <div style={{margin: 10}}>Winning Plan</div>

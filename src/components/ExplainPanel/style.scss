@@ -77,6 +77,12 @@ $contentColor: white;
 
 .explain-output-column-label {
   float: left;
+  flex: 1;
+}
+
+.explain-output-column-content {
+  float: left;
+  flex: 2;
 }
 
 .explain-stage-button {
@@ -85,6 +91,14 @@ $contentColor: white;
   height: 10px;
 }
 
-.explain-stage-detail-popup{
+.explain-stage-detail-popup {
   padding: 0px;
+  .pt-popover-content ul:first-child {
+    overflow-y: auto;
+    height: 300px;
+  }
+}
+
+.explain-stage-popover {
+  flex: 0.5;
 }
