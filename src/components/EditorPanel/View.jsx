@@ -275,7 +275,9 @@ class View extends React.Component {
             content = content.replace(/\.count\(\)/, '.explain("'+explainParam+'").count()')
           } else if(content.indexOf('.update(') > 0){
             content = content.replace(/\.update\(/, '.explain("'+explainParam+'").update(')
-          }  else{
+          } else if(content.indexOf('.distinct(') > 0){
+            content = content.replace(/\.distinct\(/, '.explain("'+explainParam+'").distinct(')
+          } else{
             content += '.explain("' + explainParam + '")';
           }
           console.log('send explain command ', content);
