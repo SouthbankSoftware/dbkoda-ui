@@ -270,7 +270,6 @@ class View extends React.Component {
             console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
             content = cm.getLine(cm.getCursor().line);
           }
-
           if(content.indexOf('count()') > 0){
             content = content.replace(/\.count\(\)/, '.explain("'+explainParam+'").count()')
           } else if(content.indexOf('.update(') > 0){
