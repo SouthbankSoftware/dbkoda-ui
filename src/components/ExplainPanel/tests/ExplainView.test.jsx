@@ -3,7 +3,6 @@ import {useStrict} from 'mobx';
 import chai, {expect, assert} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import {getExecutionStages} from '../ExplainView';
-import EJSON from 'mongodb-extended-json';
 
 chai.use(chaiEnzyme());
 
