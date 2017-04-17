@@ -159,23 +159,35 @@ export default class TreeState {
    * @param {Object} nodeRightClicked - The Node that triggered this action.
    */
   sampleCollection(nodeRightClicked) {
-    // const db = nodeRightClicked.refParent.text; const queryFirst = 'use ' +
-    // database; // eslint-disable-line const querySecond = 'db.' +
-    // nodeRightClicked.text + '.aggregate({$sample: {size: 20}})'; //
-    // eslint-disable-line const collection = nodeRightClicked.text; const profile =
-    // this.updateCallback2();
-    const res = this.getDummyResult(); // Replace with real query.
-    const sampleJSON = this.parseSampleData(res);
-    if (!nodeRightClicked.allChildNodes) {
-      nodeRightClicked.allChildNodes = new Map();
-    }
-    const child = new TreeNode(sampleJSON, nodeRightClicked);
-    nodeRightClicked.isExpanded = true;
-    child.isExpanded = true;
-    nodeRightClicked.setFilter(this.filter);
-    this.updateCallback();
-    nodeRightClicked.isExpanded = true;
-    this.updateCallback();
+    const db = nodeRightClicked.refParent.text;
+    const queryFirst = 'use ' + db + '\n'; // eslint-disable-line
+    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 20}})'; //
+    const profile = this.updateCallback2();
+
+    console.log(queryFirst + querySecond);
+    console.log(profile);
+
+    const service = featherClient().service('/mongo-sync-execution');
+    service.timeout = 30000;
+    service
+      .update(profile.id, {
+      shellId: profile.shellId, // eslint-disable-line
+      commands: queryFirst + querySecond
+    })
+      .then((res) => {
+        const sampleJSON = this.parseSampleData(res);
+        if (!nodeRightClicked.allChildNodes) {
+          nodeRightClicked.allChildNodes = new Map();
+        }
+        const child = new TreeNode(sampleJSON, nodeRightClicked);
+        nodeRightClicked.isExpanded = true;
+        child.isExpanded = true;
+        nodeRightClicked.setFilter(this.filter);
+        this.updateCallback();
+        nodeRightClicked.isExpanded = true;
+        this.updateCallback();
+      });
+
   }
 
   /**
@@ -184,10 +196,22 @@ export default class TreeState {
    * @return {Object} - The resulting tree structure.
    */
   parseSampleData(queryResult) {
-    // Create an object as a union of all attributes.
-    let object = queryResult[0];
+    // Create an object as a union of all attributes. Remove db swap.
+    //Replace ObjectID(...) elements.
+    queryResult = queryResult.replace(/ObjectId\(/g,'');
+    queryResult = queryResult.replace(/ISODate\(/g,'');
+    queryResult = queryResult.replace(/\)/g,'');
+
+    queryResult = queryResult.split('\n');
+    queryResult.splice(0, 1);
+    console.log('Result Array: ', queryResult);
+    let object = JSON.parse(queryResult[0]);
     queryResult.forEach((document) => {
-      object = _.merge(object, document);
+      if (document.length > 1) {
+        document = JSON.parse(document);
+        console.log(document);
+        object = _.merge(object, document);
+      }
     });
 
     //Build tree from JSON object.
@@ -196,10 +220,9 @@ export default class TreeState {
       type: 'object',
       children: []
     };
-
+    console.log('DB Object: ', object);
     this.traverseObject(object, treeObj.children);
-    console.log(object);
-    console.log(treeObj);
+    console.log('Tree Object: ', treeObj);
 
     //console.log(keys);
     return treeObj;
