@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T15:02:15+10:00
+ * @Last modified time: 2017-04-18T09:12:30+10:00
  */
 
  /* eslint-disable */
@@ -64,7 +64,7 @@
        formField.readonly = true;
      }
      if (defField.type == 'Table') {
-       formField.fields = [];
+       formField.fields = [];   // this variable will hold the rows of Table
        for (const col of defField.columns) {
          const colField = {};
          colField.name = col.name;
@@ -95,6 +95,7 @@
 
    // get Fields for Mobx React Form
    const formFields = getFieldsFromDefinitions(ddd);
+   console.log(formFields);
 
    // callback function to get the updated values from the form
    const formValueUpdates = (values) => {
@@ -119,7 +120,18 @@
    const updatePrefilledData = (data) => {
        for (const key in data) {
          if (Object.prototype.hasOwnProperty.call(data, key)) {
-           form.mobxForm.$(key).set('value', data[key]);
+           if (typeof data[key] == 'string') {
+             form.mobxForm.$(key).set('value', data[key]);
+           } else {
+             const obj = data[key];
+             for (const objKey in obj) {
+               const colField = {};
+               colField.name = key;
+               colField.label = key;
+               colField.type = 'Text';
+             }
+           }
+
          }
        }
    };
