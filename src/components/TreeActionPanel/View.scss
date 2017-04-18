@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-04-18T16:27:25+10:00
+// @Last modified time: 2017-04-18T17:08:08+10:00
 
 
 
@@ -23,4 +23,10 @@ text-align: right;
 .right-button {
   float: right;
   margin: 10px;
+}
+
+.transparent-btn {
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
 }
