@@ -15,7 +15,8 @@
             "type": "Text",
             "readOnly": true,
             "lookup": "dbenvy_listdb"
-        }, {
+        },
+        {
             "name": "UserName",
             "type": "Text",
             "readOnly": true
@@ -28,7 +29,8 @@
             "name": "CustomData",
             "type": "Text",
             "optional": true
-        }, {
+        },
+        {
             "name": "Roles",
             "type": "Table",
             "columns": [{

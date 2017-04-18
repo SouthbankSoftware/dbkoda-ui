@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-18T10:43:37+10:00
+ * @Last modified time: 2017-04-18T13:42:48+10:00
  */
 
 import React from 'react';
@@ -18,11 +18,16 @@ export default class TreeActionPanel extends React.Component {
   executeCommand = (content) => {
     let id = null;
     let shell = null;
-    const editor = this.props.store.editors.get(
-      this.props.store.treeActionPanel.treeActionEditorId,
-    );
-    id = editor.id;
-    shell = editor.shellId;
+    this
+      .props
+      .store
+      .profiles
+      .forEach((value) => {
+        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+          shell = value.shellId;
+          id = value.id;
+        }
+      });
     if (shell && id && shell != '' && id != '') {
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 30000;
@@ -70,11 +75,17 @@ export default class TreeActionPanel extends React.Component {
     //   ]);
     // });
   };
-
+  componentWillMount() {
+    const { treeActionPanel, updateDynamicFormCode } = this.props.store;
+     this.dynamicForm = CreateForm(treeActionPanel, updateDynamicFormCode, this.executeCommand);
+  }
   render() {
     console.log(this);
-    const { treeActionPanel, updateDynamicFormCode } = this.props.store;
-    const dynamicForm = CreateForm(treeActionPanel, updateDynamicFormCode, this.executeCommand);
-    return <View title={dynamicForm.title} mobxForm={dynamicForm.mobxForm} />;
+    return <View title={this.dynamicForm.title} mobxForm={this.dynamicForm.mobxForm} />;
   }
+  componentDidMount() {
+    this.dynamicForm.getData();
+  }
+
+  dynamicForm;
 }
