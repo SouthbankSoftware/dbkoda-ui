@@ -73,6 +73,8 @@ $contentColor: white;
 .explain-output-list-content {
   list-style: none;
   color: $contentColor;
+  width: 100px;
+  text-align: right;
 }
 
 .explain-output-column-label {
@@ -83,6 +85,7 @@ $contentColor: white;
 .explain-output-column-content {
   float: left;
   flex: 2;
+
 }
 
 .explain-stage-button {
