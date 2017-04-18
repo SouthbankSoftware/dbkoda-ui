@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T15:12:07+10:00
+ * @Last modified time: 2017-04-18T14:04:15+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -341,9 +341,7 @@ class View extends React.Component {
     const reactToTreeActionChange = reaction( //eslint-disable-line
         () => this.props.store.treeActionPanel.isNewFormValues,
         () => {
-          console.log('wahaj is testing:', this.props.store.treeActionPanel.isNewFormValues);
           if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.title) {
-            console.log('gen code from editor:', this.props.store.treeActionPanel.formValues);
             const cm = this
               .refs
               .editor

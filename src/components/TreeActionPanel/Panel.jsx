@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-18T13:42:48+10:00
+ * @Last modified time: 2017-04-18T14:02:36+10:00
  */
 
 import React from 'react';
@@ -18,22 +18,33 @@ export default class TreeActionPanel extends React.Component {
   executeCommand = (content) => {
     let id = null;
     let shell = null;
-    this
-      .props
-      .store
-      .profiles
-      .forEach((value) => {
-        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-          shell = value.shellId;
-          id = value.id;
-        }
-      });
+    this.props.store.profiles.forEach((value) => {
+      if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+        shell = value.shellId;
+        id = value.id;
+      }
+    });
     if (shell && id && shell != '' && id != '') {
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 30000;
-      return service.update(id, {
-        shellId: shell, // eslint-disable-line
-        commands: content,
+      return new Promise((resolve, reject) => {
+        service
+          .update(id, {
+            shellId: shell, // eslint-disable-line
+            commands: content,
+          })
+          .then((res) => {
+            if (typeof res == 'string') {
+              const json = JSON.parse(res);
+              resolve(json);
+            } else {
+              resolve(res);
+            }
+          })
+          .catch((reason) => {
+            console.log('executeCommand:', 'Handle rejected promise (' + reason + ') here.');
+            reject(reason);
+          });
       });
     }
     return null;
@@ -77,7 +88,7 @@ export default class TreeActionPanel extends React.Component {
   };
   componentWillMount() {
     const { treeActionPanel, updateDynamicFormCode } = this.props.store;
-     this.dynamicForm = CreateForm(treeActionPanel, updateDynamicFormCode, this.executeCommand);
+    this.dynamicForm = CreateForm(treeActionPanel, updateDynamicFormCode, this.executeCommand);
   }
   render() {
     console.log(this);
