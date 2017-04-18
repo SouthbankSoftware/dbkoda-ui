@@ -3,17 +3,17 @@
  *
  */
 import React from 'react';
-import {action} from 'mobx';
+import {action, toJS} from 'mobx';
 import JSONTree from 'react-json-tree';
-
+import {theme} from './JsonTreeTheme';
 
 const RawJson = ({explains}) => {
   if (!explains.output) {
     return null;
   }
-  const output = JSON.parse(explains.output);
+  const output = toJS(explains.output);
   return (<div className="explain-json-raw-panel">
-    <JSONTree data={output} />
+    <JSONTree data={output} invertTheme={false}  theme={theme}/>
   </div>);
 };
 

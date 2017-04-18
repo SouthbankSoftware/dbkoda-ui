@@ -71,6 +71,10 @@ const config = () => {
           test: /\.handlebars|hbs$/,
           loader: 'handlebars-loader?helperDirs[]=' + path.join(__dirname, '../src/helpers/handlebars'),
         },
+        {
+          test: /node_modules\/JSONStream\/index\.js$/,
+          use: ['shebang-loader', 'babel-loader']
+        }
       ],
     },
     resolve: {

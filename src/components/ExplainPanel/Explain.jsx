@@ -61,15 +61,20 @@ export default class Explain extends React.Component {
       // end of the explain
       Broker.removeListener(this.brokerEvent, this.explainAvailable);
       this.brokerEvent = undefined;
+      console.log('explain output:', this.explainOutput);
       const currentEditor = this.props.editors.get(currentEditorId);
       this.props.editors.set(currentEditorId, {
         ...currentEditor,
-        explains: {output:this.explainOutput, active: true, type: this.explainType, command: this.explainCommand},
+        explains: {output:JSON.parse(this.parseOutput(this.explainOutput)), active: true, type: this.explainType, command: this.explainCommand},
       });
       this.explainOutput = '';
     } else {
       this.explainOutput += outputMsg.trim();
     }
+  }
+
+  parseOutput(output) {
+    return output.replace(/NumberLong\((\d*)\)/g, '$1');
   }
 
   render() {

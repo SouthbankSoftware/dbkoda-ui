@@ -270,7 +270,15 @@ class View extends React.Component {
             console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
             content = cm.getLine(cm.getCursor().line);
           }
-          content += '.explain("' + explainParam+'")';
+          if(content.indexOf('count()') > 0){
+            content = content.replace(/\.count\(\)/, '.explain("'+explainParam+'").count()')
+          } else if(content.indexOf('.update(') > 0){
+            content = content.replace(/\.update\(/, '.explain("'+explainParam+'").update(')
+          } else if(content.indexOf('.distinct(') > 0){
+            content = content.replace(/\.distinct\(/, '.explain("'+explainParam+'").distinct(')
+          } else{
+            content += '.explain("' + explainParam + '")';
+          }
           this
             .props
             .store

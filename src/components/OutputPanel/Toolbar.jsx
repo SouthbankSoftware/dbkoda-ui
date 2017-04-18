@@ -57,7 +57,7 @@ export default class Toolbar extends React.Component {
     const reactionToClearingOutput = reaction(
       () => this.props.store.outputPanel.clearingOutput,
       clearingOutput => {
-        if (this.props.store.outputPanel.clearingOutput) {
+        if (this.props.store.outputPanel.clearingOutput && this.props.store.outputs.get(this.props.store.outputPanel.currentTab)) {
           this.props.store.outputs.get(this.props.store.outputPanel.currentTab).output = '';
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
