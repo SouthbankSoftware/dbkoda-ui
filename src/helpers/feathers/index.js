@@ -23,7 +23,7 @@ class FeatherClient {
     this.feathers = this.feathers.configure(feathers.primus(primus));
     this.shellService = this.feathers.service('/mongo-shells');
     this.shellService.on('shell-output', (output) => {
-      console.log('get output ', output);
+      // console.log('get output ', output);
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
     });

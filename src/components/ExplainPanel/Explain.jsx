@@ -26,51 +26,43 @@ export default class Explain extends React.Component {
   componentDidMount() {
     const {editor} = this.props;
     if (editor) {
-      Broker.on(EventType.createExplainExeuctionEvent(editor.id, editor.shellId), ({id, shell, command, type}) => {
-        this.explainCommand = command;
-        this.explainOutput = '';
-        this.explainType = type;
-        this.brokerEvent = EventType.createShellOutputEvent(id, shell);
-        Broker.on(this.brokerEvent, this.explainAvailable);
-      });
+      Broker.on(EventType.createExplainExeuctionEvent(editor.id, editor.shellId), this.explainOutputAvailable);
     }
   }
 
-  /**
-   * get explain output message
-   *
-   * @param output
-   */
   @action.bound
-  explainAvailable(output) {
-    const outputMsg = output.output;
+  explainOutputAvailable({id, shell, command, type, output}){
+    this.explainCommand = command;
+    this.explainOutput = '';
+    this.explainType = type;
     let currentEditorId = false;
     this.props.editors.forEach((value, key) => {
-      if (value.id === output.id && value.shellId === output.shellId) {
+      if (value.id === id && value.shellId === shell) {
         currentEditorId = key;
       }
     });
 
     if (!currentEditorId) {
+      console.log('can"t find editor by id:' + currentEditorId);
       return;
     }
-    if (outputMsg.indexOf(this.explainCommand) >= 0 && outputMsg.indexOf('dbenvy>') >= 0) {
-      // beginning of the explain command
-      this.explainOutput = '';
-    } else if (outputMsg.trim() === 'dbenvy>' && this.brokerEvent) {
-      // end of the explain
-      Broker.removeListener(this.brokerEvent, this.explainAvailable);
-      this.brokerEvent = undefined;
-      console.log('explain output:', this.explainOutput);
-      const currentEditor = this.props.editors.get(currentEditorId);
-      this.props.editors.set(currentEditorId, {
-        ...currentEditor,
-        explains: {output:JSON.parse(this.parseOutput(this.explainOutput)), active: true, type: this.explainType, command: this.explainCommand},
-      });
-      this.explainOutput = '';
-    } else {
-      this.explainOutput += outputMsg.trim();
+    // const currentEditor = editor;
+    let explainOutputJson;
+    try {
+      explainOutputJson = {
+        output: JSON.parse(this.parseOutput(output.replace(/\n/, '').replace(/\s/g, ''))),
+        active: true,
+        type: this.explainType,
+        command: this.explainCommand
+      };
+    } catch (err) {
+      console.log('err parse explain output ', err);
+      explainOutputJson = {error: 'Failed to parse output JSON'};
     }
+    this.props.editors.set(currentEditorId, {
+      ...this.props.editor,
+      explains: explainOutputJson,
+    });
   }
 
   parseOutput(output) {
@@ -78,6 +70,6 @@ export default class Explain extends React.Component {
   }
 
   render() {
-    return (<Panel editor={this.props.editor} />);
+    return (<Panel editor={this.props.editor}/>);
   }
 }
