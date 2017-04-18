@@ -1,3 +1,7 @@
+/**
+ * explain view used to show explain panel
+ */
+
 import React from 'react';
 import {toJS} from 'mobx';
 
@@ -27,6 +31,9 @@ const ExplainCommandInfo = ({explain, command}) => {
   );
 };
 
+/**
+ * find execution state by the given stage name
+ */
 export const findExecutionStage = (stages, stage) => {
   let currentStage = stages;
   while (currentStage) {
@@ -37,6 +44,9 @@ export const findExecutionStage = (stages, stage) => {
   }
 };
 
+/**
+ * get execution stages array
+ */
 export const getExecutionStages = (executionStages) => {
   const stages = [];
   if (executionStages) {
@@ -63,7 +73,7 @@ const WinningPlain = ({explain, type}) => {
           stages.map((stage, i) => {
             return (<div key={i} style={{display: 'flex'}}>
               <Popover
-                content={<JSONTree data={stage} invertTheme={false} theme={theme}/>}
+                content={<JSONTree data={stage} invertTheme={false} theme={theme} />}
                 interactionKind={PopoverInteractionKind.CLICK}
                 position={Position.TOP_RIGHT}
                 useSmartPositioning={false}
@@ -73,7 +83,7 @@ const WinningPlain = ({explain, type}) => {
                 <Button className="explain-stage-button">{stage.stage}</Button>
               </Popover>
               <ul className="explain-output-column-label">
-                <li className="explain-output-list-label">nReturned:</li>
+                <li className="explain-output-list-label">Number Of Returned Document:</li>
                 <li className="explain-output-list-label">Execution Time:</li>
                 <li
                   className="explain-output-list-label">{stage.stage === 'IXSCAN' ? 'Key Examined:' : 'Doc Examined:'}</li>
@@ -95,7 +105,7 @@ const WinningPlain = ({explain, type}) => {
           stages.map((stage, i) => {
             return (<div key={i} style={{display: 'flex'}}>
               <Popover
-                content={<JSONTree data={stages[0]}/>}
+                content={<JSONTree data={stages[0]} />}
                 interactionKind={PopoverInteractionKind.CLICK}
                 popoverClassName="explain-stage-detail-popup"
                 position={Position.TOP_RIGHT}
@@ -103,13 +113,16 @@ const WinningPlain = ({explain, type}) => {
               >
                 <Button className="explain-stage-button">{stages[i].stage}</Button>
               </Popover>
-            </div>)
+            </div>);
           })
         }
       </div>);
   }
 };
 
+/**
+ * create global statistics panel of explain
+ */
 const GlobalStatistics = ({explains, type}) => {
   switch (type) {
     case Types.ALL_PLANS_EXECUTION:
@@ -140,10 +153,10 @@ const ExplainView = ({explains}) => {
   }
   const output = toJS(explains.output);
   return (<div className="explain-view-panel">
-    <ExplainCommandInfo explain={output} command={explains.command}/>
+    <ExplainCommandInfo explain={output} command={explains.command} />
     <div style={{margin: 10}}>Winning Plan</div>
-    <WinningPlain explain={output} type={explains.type}/>
-    <GlobalStatistics explains={output} type={explains.type}/>
+    <WinningPlain explain={output} type={explains.type} />
+    <GlobalStatistics explains={output} type={explains.type} />
   </div>);
 };
 

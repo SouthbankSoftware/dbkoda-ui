@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T15:19:57+10:00
+ * @Last modified time: 2017-04-12T15:12:07+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -15,7 +15,7 @@ import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
-import {action, reaction, observe} from 'mobx';
+import {action, observe, reaction} from 'mobx';
 import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
@@ -270,14 +270,18 @@ class View extends React.Component {
             console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
             content = cm.getLine(cm.getCursor().line);
           }
-          if(content.indexOf('count()') > 0){
-            content = content.replace(/\.count\(\)/, '.explain("'+explainParam+'").count()')
-          } else if(content.indexOf('.update(') > 0){
-            content = content.replace(/\.update\(/, '.explain("'+explainParam+'").update(')
-          } else if(content.indexOf('.distinct(') > 0){
-            content = content.replace(/\.distinct\(/, '.explain("'+explainParam+'").distinct(')
-          } else{
-            content += '.explain("' + explainParam + '")';
+          if (content.indexOf('count()') > 0) {
+            content = content.replace(/\.count\(\)/, '.explain("' + explainParam + '").count()')
+          } else if (content.indexOf('.update(') > 0) {
+            content = content.replace(/\.update\(/, '.explain("' + explainParam + '").update(')
+          } else if (content.indexOf('.distinct(') > 0) {
+            content = content.replace(/\.distinct\(/, '.explain("' + explainParam + '").distinct(')
+          } else if (content.indexOf('.explain') < 0) {
+            if(content.match(/;$/)) {
+              content = content.replace(/;$/, '.explain("' + explainParam + '");');
+            }else{
+              content += '.explain("' + explainParam + '")';
+            }
           }
           this
             .props
@@ -303,7 +307,12 @@ class View extends React.Component {
           const service = featherClient().service('/mongo-shells');
           const filteredContent = content.replace('\t', '  ');
           service.timeout = 30000;
-          Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {id, shell, command: filteredContent, type: explainParam});
+          Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {
+            id,
+            shell,
+            command: filteredContent,
+            type: explainParam
+          });
           service.update(id, {
             shellId: shell, // eslint-disable-line
             commands: filteredContent
@@ -332,7 +341,9 @@ class View extends React.Component {
     const reactToTreeActionChange = reaction( //eslint-disable-line
         () => this.props.store.treeActionPanel.isNewFormValues,
         () => {
+          console.log('wahaj is testing:', this.props.store.treeActionPanel.isNewFormValues);
           if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.title) {
+            console.log('gen code from editor:', this.props.store.treeActionPanel.formValues);
             const cm = this
               .refs
               .editor
@@ -397,14 +408,14 @@ class View extends React.Component {
       const service = featherClient().service('/mongo-auto-complete');
       service
         .get(id, {
-        query: {
-          shellId: shell,
-          command: curWord
-        }
-      })
+          query: {
+            shellId: shell,
+            command: curWord
+          }
+        })
         .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
-          if(res && res.length === 1 && res[0].trim().length === 0){
+          if (res && res.length === 1 && res[0].trim().length === 0) {
             return;
           }
           const cursor = cm
