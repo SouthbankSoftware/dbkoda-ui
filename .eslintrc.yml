@@ -2,14 +2,14 @@
 # @Date:   2016-06-02T14:58:00+10:00
 # @Email:  root@guiguan.net
 # @Last modified by:   guiguan
-# @Last modified time: 2017-03-08T16:48:31+11:00
+# @Last modified time: 2017-04-13T12:51:23+10:00
 
 extends: airbnb
 parser: babel-eslint
 env:
   browser: true
   node: true
-  mocha: true
+  jest: true
   es6: true
 rules:
   arrow-body-style: 0

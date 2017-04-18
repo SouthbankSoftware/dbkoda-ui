@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-18T14:04:15+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-18T15:42:32+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -324,19 +324,37 @@ class View extends React.Component {
     /**
      * Reaction function for when a change occurs on the
      * editorPanel.stoppingExecution state.
+     * @param {function()} - The state that will trigger the reaction.
+     * @param {function()} - The reaction to any change on the state.
      */
-    const reactionToStopExecution = reaction(() => this.props.store.editorPanel.stoppingExecution, (stoppingExecution) => {
-      if (this.props.store.editorPanel.stoppingExecution) {
-        const id = this.props.store.editorToolbar.id;
-        const shellId = this.props.store.editorToolbar.shellId;
-        console.log(`Stopping Execution of ${id} ${shellId}!`);
-        const service = featherClient().service('/mongo-stop-execution');
-        service.timeout = 30000;
-        service.create({
-          id: id, shellId: shellId, // eslint-disable-line
-        });
+    const reactionToStopExecution = reaction(
+      () => this.props.store.editorPanel.stoppingExecution,
+      stoppingExecution => {
+        if (this.props.store.editorPanel.stoppingExecution) {
+          const id = this.props.store.editorToolbar.id;
+          const shellId = this.props.store.editorToolbar.shellId;
+          console.log(`Stopping Execution of ${id} / ${shellId}!`);
+          //Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
+          const service = featherClient().service('/mongo-stop-execution');
+          service.timeout = 30000;
+          service
+            .get(id, {
+              query: {
+                shellId: shellId, // eslint-disable-line
+              }
+            })
+            .then((response) => {
+              console.log(`Stopped Execution of ${id} / ${shellId}!`);
+              NewToaster.show({message: response.result, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+              this.finishedExecution();
+            })
+            .catch((reason) => {
+              console.log(`Stopping Execution failed for ${id} / ${shellId}!`);
+              NewToaster.show({message: "Stop Execution Failed! " + reason, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+            });
+        }
       }
-    });
+    );
 
     const reactToTreeActionChange = reaction( //eslint-disable-line
         () => this.props.store.treeActionPanel.isNewFormValues,
@@ -406,11 +424,11 @@ class View extends React.Component {
       const service = featherClient().service('/mongo-auto-complete');
       service
         .get(id, {
-          query: {
-            shellId: shell,
-            command: curWord
-          }
-        })
+        query: {
+          shellId: shell,
+          command: curWord
+        }
+      })
         .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
           if (res && res.length === 1 && res[0].trim().length === 0) {
@@ -454,7 +472,8 @@ class View extends React.Component {
 
   @action.bound
   finishedExecution() {
-    const {id, shell} = this.getActiveProfileId(); // eslint-disable-line
+    const id = this.props.store.editorToolbar.id;
+    const shell = this.props.store.editorToolbar.shellId;
     const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
     this
       .props
