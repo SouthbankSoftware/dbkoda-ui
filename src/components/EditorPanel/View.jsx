@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T15:12:07+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-18T15:42:32+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -138,45 +138,45 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExecuteAll = reaction( // eslint-disable-line
-      () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
-        if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorAll == true) {
-          let shell = null;
-          let id = null;
-          this
-            .props
-            .store
-            .profiles
-            .forEach((value) => {
-              if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-                shell = value.shellId;
-                id = value.id;
-              }
-            });
-          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
-          Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
-          // Listen for completion
-          const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
-          this
-            .props
-            .store
-            .editors
-            .get(editorIndex)
-            .executing = true;
-          this.props.store.editorToolbar.isActiveExecuting = true;
-          console.log('Editor: Execution started! ' + editorIndex);
-          // Send request to feathers client
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(id, {
-            shellId: shell, // eslint-disable-line
-            commands: this
-              .state
-              .code
-              .replace('\t', '  ')
+        () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
+      if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorAll == true) {
+        let shell = null;
+        let id = null;
+        this
+          .props
+          .store
+          .profiles
+          .forEach((value) => {
+            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+              shell = value.shellId;
+              id = value.id;
+            }
           });
-          this.props.store.editorPanel.executingEditorAll = false;
-        }
-      });
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
+        Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        // Listen for completion
+        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+        this
+          .props
+          .store
+          .editors
+          .get(editorIndex)
+          .executing = true;
+        this.props.store.editorToolbar.isActiveExecuting = true;
+        console.log('Editor: Execution started! ' + editorIndex);
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(id, {
+          shellId: shell, // eslint-disable-line
+          commands: this
+            .state
+            .code
+            .replace('\t', '  ')
+        });
+        this.props.store.editorPanel.executingEditorAll = false;
+      }
+    });
 
     /**
      * Reaction function for when a change occurs on the editorPanel.executingEditorLines state.
@@ -184,68 +184,68 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExecuteLine = reaction( // eslint-disable-line
-      () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
-        if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorLines == true) {
-          // Determine code to send.
-          let shell = null;
-          let id = null;
-          const cm = this
-            .refs
-            .editor
-            .getCodeMirror(); // eslint-disable-line
-          let content = cm.getSelection();
-          if (cm.getSelection().length > 0) {
-            console.log('Executing Highlighted Text.');
-          } else {
-            console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
-            content = cm.getLine(cm.getCursor().line);
-          }
-          this
-            .props
-            .store
-            .profiles
-            .forEach((value) => {
-              if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-                shell = value.shellId;
-                id = value.id;
-              }
-            });
-          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
-          // Listen for completion
-          Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
-          const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
-          this
-            .props
-            .store
-            .editors
-            .get(editorIndex)
-            .executing = true;
-          this.props.store.editorToolbar.isActiveExecuting = true;
-
-          // Send request to feathers client
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(id, {
-            shellId: shell, // eslint-disable-line
-            commands: content.replace('\t', '  ')
-          });
-          this.props.store.editorPanel.executingEditorLines = false;
+        () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
+      if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorLines == true) {
+        // Determine code to send.
+        let shell = null;
+        let id = null;
+        const cm = this
+          .refs
+          .editor
+          .getCodeMirror(); // eslint-disable-line
+        let content = cm.getSelection();
+        if (cm.getSelection().length > 0) {
+          console.log('Executing Highlighted Text.');
+        } else {
+          console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
+          content = cm.getLine(cm.getCursor().line);
         }
-      });
+        this
+          .props
+          .store
+          .profiles
+          .forEach((value) => {
+            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+              shell = value.shellId;
+              id = value.id;
+            }
+          });
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+        // Listen for completion
+        Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+        this
+          .props
+          .store
+          .editors
+          .get(editorIndex)
+          .executing = true;
+        this.props.store.editorToolbar.isActiveExecuting = true;
+
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(id, {
+          shellId: shell, // eslint-disable-line
+          commands: content.replace('\t', '  ')
+        });
+        this.props.store.editorPanel.executingEditorLines = false;
+      }
+    });
     /**
      * Reaction function for when a change occurs on the dragItem.drapDrop state.
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToDragDrop = reaction( // eslint-disable-line
-      () => this.props.store.dragItem.dragDrop, dragDrop => { // eslint-disable-line
-        if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
-          const item = this.props.store.dragItem.item;
-          // this.setState({code: item.label});
-          this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
-          this.props.store.dragItem.dragDrop = false;
-        }
-      });
+        () => this.props.store.dragItem.dragDrop, dragDrop => { // eslint-disable-line
+      if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
+        const item = this.props.store.dragItem.item;
+        // this.setState({code: item.label});
+        this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
+        this.props.store.dragItem.dragDrop = false;
+      }
+    });
 
     /**
      * Reaction function for when a change occurs on the editorPanel.executingEditorLines state.
@@ -328,35 +328,51 @@ class View extends React.Component {
     /**
      * Reaction function for when a change occurs on the
      * editorPanel.stoppingExecution state.
+     * @param {function()} - The state that will trigger the reaction.
+     * @param {function()} - The reaction to any change on the state.
      */
-    const reactionToStopExecution = reaction(() => this.props.store.editorPanel.stoppingExecution, (stoppingExecution) => {
-      if (this.props.store.editorPanel.stoppingExecution) {
-        const id = this.props.store.editorToolbar.id;
-        const shellId = this.props.store.editorToolbar.shellId;
-        console.log(`Stopping Execution of ${id} ${shellId}!`);
-        const service = featherClient().service('/mongo-stop-execution');
-        service.timeout = 30000;
-        service.create({
-          id: id, shellId: shellId, // eslint-disable-line
-        });
-      }
-    });
-
-    const reactToTreeActionChange = reaction( //eslint-disable-line
-      () => this.props.store.treeActionPanel.isNewFormValues,
-      () => {
-        console.log('wahaj is testing:', this.props.store.treeActionPanel.isNewFormValues);
-        if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.title) {
-          console.log('gen code from editor:', this.props.store.treeActionPanel.formValues);
-          const cm = this
-            .refs
-            .editor
-            .getCodeMirror();
-          cm.setValue(this.props.store.treeActionPanel.formValues);
-          this.props.store.treeActionPanel.isNewFormValues = false;
+    const reactionToStopExecution = reaction(
+      () => this.props.store.editorPanel.stoppingExecution,
+      stoppingExecution => {
+        if (this.props.store.editorPanel.stoppingExecution) {
+          const id = this.props.store.editorToolbar.id;
+          const shellId = this.props.store.editorToolbar.shellId;
+          console.log(`Stopping Execution of ${id} / ${shellId}!`);
+          //Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
+          const service = featherClient().service('/mongo-stop-execution');
+          service.timeout = 30000;
+          service
+            .get(id, {
+              query: {
+                shellId: shellId, // eslint-disable-line
+              }
+            })
+            .then((response) => {
+              console.log(`Stopped Execution of ${id} / ${shellId}!`);
+              NewToaster.show({message: response.result, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+              this.finishedExecution();
+            })
+            .catch((reason) => {
+              console.log(`Stopping Execution failed for ${id} / ${shellId}!`);
+              NewToaster.show({message: "Stop Execution Failed! " + reason, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+            });
         }
       }
     );
+
+    const reactToTreeActionChange = reaction( //eslint-disable-line
+        () => this.props.store.treeActionPanel.isNewFormValues,
+        () => {
+          if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.title) {
+            const cm = this
+              .refs
+              .editor
+              .getCodeMirror();
+            cm.setValue(this.props.store.treeActionPanel.formValues);
+            this.props.store.treeActionPanel.isNewFormValues = false;
+          }
+        }
+      );
     this.refresh = this
       .refresh
       .bind(this);
@@ -412,11 +428,11 @@ class View extends React.Component {
       const service = featherClient().service('/mongo-auto-complete');
       service
         .get(id, {
-          query: {
-            shellId: shell,
-            command: curWord
-          }
-        })
+        query: {
+          shellId: shell,
+          command: curWord
+        }
+      })
         .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
           if (res && res.length === 1 && res[0].trim().length === 0) {
@@ -460,7 +476,8 @@ class View extends React.Component {
 
   @action.bound
   finishedExecution() {
-    const {id, shell} = this.getActiveProfileId(); // eslint-disable-line
+    const id = this.props.store.editorToolbar.id;
+    const shell = this.props.store.editorToolbar.shellId;
     const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
     this
       .props
@@ -509,11 +526,7 @@ class View extends React.Component {
       const beautified = Prettier.format(this.state.code, {});
       cm.setValue(beautified);
     } catch (err) {
-      NewToaster.show({
-        message: 'Unable to format text, sorry!',
-        intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
-      });
+      NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format All failed with error: ' + err);
       }
@@ -533,11 +546,7 @@ class View extends React.Component {
       const beautified = Prettier.format(cm.getSelection(), {});
       cm.replaceSelection(beautified);
     } catch (err) {
-      NewToaster.show({
-        message: 'Unable to format text, sorry!',
-        intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
-      });
+      NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format Selection failed with error: ' + err);
       }
@@ -567,10 +576,10 @@ class View extends React.Component {
           icon.innerHTML = '!';
           const tooltip = icon.appendChild(document.createElement('span'));
           tooltip.innerHTML = this
-              .state
-              .lintingAnnotations
-              .get(value.line)
-              .lintText + '\n' + value.message;
+            .state
+            .lintingAnnotations
+            .get(value.line)
+            .lintText + '\n' + value.message;
           tooltip.className = 'tooltiptext';
           icon.className = 'tooltip lint-error-icon';
           msg.className = 'tooltiptext';
@@ -645,11 +654,11 @@ class View extends React.Component {
     service.timeout = 30000;
     service
       .get('{id}', {
-        query: {
-          code: this.state.code, // eslint-disable-line
-          options: {}
-        }
-      })
+      query: {
+        code: this.state.code, // eslint-disable-line
+        options: {}
+      }
+    })
       .then((result) => {
         if (result.results[0].messages.length > 0) {
           this.state.lintingErrors = result.results[0].messages;
@@ -666,7 +675,6 @@ class View extends React.Component {
       });
     setTimeout(this.loopingLint, LINT_INTERVAL);
   }
-
   /**
    * Trigger an executeLine event by updating the MobX global store.
    */
@@ -730,7 +738,7 @@ class View extends React.Component {
           value={this.state.code}
           onChange={value => this.updateCode(value)}
           options={this.state.options}/> {isOver && <div
-        style={{
+          style={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -740,7 +748,7 @@ class View extends React.Component {
           opacity: 0.5,
           backgroundColor: 'yellow'
         }}/>
-      }
+}
       </div>
     );
   }
