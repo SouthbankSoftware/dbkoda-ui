@@ -3,7 +3,7 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T14:02:57+10:00
+ * @Last modified time: 2017-04-18T10:42:20+10:00
  */
 
 export const AlterUser = {
@@ -14,38 +14,46 @@ export const AlterUser = {
   // Prefill function for alter user
   dbenvy_AlterUserPreFill: (userId) => {
     const data = new Promise((resolve, reject) => {
-      AlterUser.executeCommand(
+      const promise = AlterUser.executeCommand(
         `db.getSiblingDB("admin").system.users.find({
-          "_id": ${userId}
+          "_id": "${userId}"
       }).toArray()`,
-      ).then((userDocs) => {
-        console.log(userDocs);
-        if (userDocs.length == 0) {
-          throw new Error(Localisation.string.error1.part1 + userId + ' found for Alter User');
-        } else if (userDocs.length > 1) {
-          throw new Error('dbenvy: Too many users found for Alter User');
-        }
-        const userDoc = userDocs[0];
-        const outputDoc = {};
-        outputDoc.UserId = userDoc._id;
-        outputDoc.Database = userDoc.db;
-        outputDoc.UserName = userDoc.user;
-        // outputDoc.CustomData = userDoc.customData;
-        outputDoc.Roles = [];
-        userDoc.roles.forEach((role) => {
-          outputDoc.Roles.push({
-            Role: role.role,
-            Database: role.db,
-          });
-        });
+      );
+      if (promise) {
+        promise
+          .then((userDocs) => {
+            console.log(userDocs);
+            if (userDocs.length == 0) {
+              throw new Error(Localisation.string.error1.part1 + userId + ' found for Alter User');
+            } else if (userDocs.length > 1) {
+              throw new Error('dbenvy: Too many users found for Alter User');
+            }
+            const userDoc = userDocs[0];
+            const outputDoc = {};
+            outputDoc.UserId = userDoc._id;
+            outputDoc.Database = userDoc.db;
+            outputDoc.UserName = userDoc.user;
+            // outputDoc.CustomData = userDoc.customData;
+            outputDoc.Roles = [];
+            userDoc.roles.forEach((role) => {
+              outputDoc.Roles.push({
+                Role: role.role,
+                Database: role.db,
+              });
+            });
 
-        setTimeout(resolve, 1000, outputDoc);
-      }).catch(
-        // Log the rejection reason
-       (reason) => {
-            console.log('Handle rejected promise (' + reason + ') here.');
-            reject(reason);
-        });
+            setTimeout(resolve, 1000, outputDoc);
+          })
+          .catch(
+            // Log the rejection reason
+            (reason) => {
+              console.log('Handle rejected promise (' + reason + ') here.');
+              reject(reason);
+            },
+          );
+      } else {
+        reject(' Some error with the executing command. ');
+      }
     });
     return data;
   },
