@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-04-11T11:04:06+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-12T15:12:07+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -11,9 +11,11 @@
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
+import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/search/matchesonscrollbar.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
-import {action, reaction, observe} from 'mobx';
+import {action, observe, reaction} from 'mobx';
 import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
@@ -43,6 +45,12 @@ require('codemirror/addon/fold/comment-fold.js');
 require('codemirror/addon/fold/xml-fold.js');
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
+require('codemirror/addon/search/search.js');
+require('codemirror/addon/search/searchcursor.js');
+require('codemirror/addon/search/jump-to-line.js');
+require('codemirror/addon/dialog/dialog.js');
+require('codemirror/addon/search/matchesonscrollbar.js');
+require('codemirror/addon/scroll/annotatescrollbar.js');
 
 require('codemirror/keymap/sublime.js');
 require('codemirror-formatting');
@@ -245,56 +253,73 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExplain = reaction( // eslint-disable-line
-        () => this.props.store.editorPanel.executingExplain, executingEditorLines => { //eslint-disable-line
-      const explainParam = this.props.store.editorPanel.executingExplain;
-      if (this.props.store.editorPanel.activeEditorId == this.props.title && explainParam) {
-        // Determine code to send.
-        let shell = null;
-        let id = null;
-        const cm = this
-          .refs
-          .editor
-          .getCodeMirror(); // eslint-disable-line
-        let content = cm.getSelection();
-        if (cm.getSelection().length > 0) {
-          console.log('Executing Highlighted Text.');
-        } else {
-          console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
-          content = cm.getLine(cm.getCursor().line);
-        }
-        content += '.explain("' + explainParam + '")';
-        this
-          .props
-          .store
-          .profiles
-          .forEach((value) => {
-            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-              shell = value.shellId;
-              id = value.id;
+      () => this.props.store.editorPanel.executingExplain, executingEditorLines => { //eslint-disable-line
+        const explainParam = this.props.store.editorPanel.executingExplain;
+        if (this.props.store.editorPanel.activeEditorId == this.props.title && explainParam) {
+          // Determine code to send.
+          let shell = null;
+          let id = null;
+          const cm = this
+            .refs
+            .editor
+            .getCodeMirror(); // eslint-disable-line
+          let content = cm.getSelection();
+          if (cm.getSelection().length > 0) {
+            console.log('Executing Highlighted Text.');
+          } else {
+            console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
+            content = cm.getLine(cm.getCursor().line);
+          }
+          if (content.indexOf('count()') > 0) {
+            content = content.replace(/\.count\(\)/, '.explain("' + explainParam + '").count()')
+          } else if (content.indexOf('.update(') > 0) {
+            content = content.replace(/\.update\(/, '.explain("' + explainParam + '").update(')
+          } else if (content.indexOf('.distinct(') > 0) {
+            content = content.replace(/\.distinct\(/, '.explain("' + explainParam + '").distinct(')
+          } else if (content.indexOf('.explain') < 0) {
+            if(content.match(/;$/)) {
+              content = content.replace(/;$/, '.explain("' + explainParam + '");');
+            }else{
+              content += '.explain("' + explainParam + '")';
             }
-          });
-        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+          }
+          this
+            .props
+            .store
+            .profiles
+            .forEach((value) => {
+              if (value.alias == this.props.store.editorPanel.activeDropdownId) {
+                shell = value.shellId;
+                id = value.id;
+              }
+            });
+          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
 
-        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
-        this
-          .props
-          .store
-          .editors
-          .get(editorIndex)
-          .executing = true;
-        this.props.store.editorToolbar.isActiveExecuting = true;
-        // Send request to feathers client
-        const service = featherClient().service('/mongo-shells');
-        const filteredContent = content.replace('\t', '  ');
-        service.timeout = 30000;
-        Broker.emit(EventType.EXPLAIN_EXECUTION_EVENT, {id, shell, command: filteredContent});
-        service.update(id, {
-          shellId: shell, // eslint-disable-line
-          commands: filteredContent
-        });
-        this.props.store.editorPanel.executingExplain = false;
-      }
-    });
+          const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+          const editor = this
+            .props
+            .store
+            .editors
+            .get(editorIndex);
+
+          editor.executing = true;
+          // Send request to feathers client
+          const service = featherClient().service('/mongo-shells');
+          const filteredContent = content.replace('\t', '  ');
+          service.timeout = 30000;
+          Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {
+            id,
+            shell,
+            command: filteredContent,
+            type: explainParam
+          });
+          service.update(id, {
+            shellId: shell, // eslint-disable-line
+            commands: filteredContent
+          });
+          this.props.store.editorPanel.executingExplain = false;
+        }
+      });
 
     /**
      * Reaction function for when a change occurs on the
@@ -314,14 +339,20 @@ class View extends React.Component {
     });
 
     const reactToTreeActionChange = reaction( //eslint-disable-line
-        () => this.props.store.treeActionPanel.treeActionFormObservable, () => {
-      if (this.props.store.treeActionPanel.treeActionFormObservable) {
-        observe(this.props.store.treeActionPanel.form.mobxForm.fields, (change) => {
-          console.log(change);
-        });
-        this.props.store.treeActionPanel.treeActionFormObservable = false;
-      }
-    });
+        () => this.props.store.treeActionPanel.isNewFormValues,
+        () => {
+          console.log('wahaj is testing:', this.props.store.treeActionPanel.isNewFormValues);
+          if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.title) {
+            console.log('gen code from editor:', this.props.store.treeActionPanel.formValues);
+            const cm = this
+              .refs
+              .editor
+              .getCodeMirror();
+            cm.setValue(this.props.store.treeActionPanel.formValues);
+            this.props.store.treeActionPanel.isNewFormValues = false;
+          }
+        }
+      );
     this.refresh = this
       .refresh
       .bind(this);
@@ -377,14 +408,14 @@ class View extends React.Component {
       const service = featherClient().service('/mongo-auto-complete');
       service
         .get(id, {
-        query: {
-          shellId: shell,
-          command: curWord
-        }
-      })
+          query: {
+            shellId: shell,
+            command: curWord
+          }
+        })
         .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
-          if(res && res.length === 1 && res[0].trim().length === 0){
+          if (res && res.length === 1 && res[0].trim().length === 0) {
             return;
           }
           const cursor = cm

@@ -1,15 +1,14 @@
 // TODO: We will need a json helper for the customData field
-db.getSiblingDB("{{Database}}").updateUser( 
+db.getSiblingDB("{{Database}}").updateUser(
    "{{UserName}}",
-   {  {{#if CustomData}} 
-     customData :  {{json CustomData}} , {{/if}}
-     roles: [ {{#each Roles}} 
+   {  {{#if CustomData}}
+     customData :  {{{json CustomData}}} , {{/if}}
+     roles: [ {{#each Roles}}
              {role:"{{Role}}", db: "{{Database}}" } {{#unless last}},{{/unless}}    {{/each}}
             ]             {{#if Password}} ,
-     pwd: "{{Password}}"  {{/if}} 
-    }  ,          
+     pwd: "{{Password}}"  {{/if}}
+    }  ,
     {  w: "majority" }
 );
 
-db.getSiblingDB("admin").system.users.find({_id:"{{UserId}}"}).pretty(); 
-
+db.getSiblingDB("admin").system.users.find({_id:"{{UserId}}"}).pretty();

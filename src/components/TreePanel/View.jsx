@@ -30,6 +30,10 @@ export default class TreeView extends React.Component {
       this.setState({nodes: this.props.treeState.nodes});
     };
 
+   this.props.treeState.updateCallback2 = () => {
+      return this.props.store.profileList.selectedProfile;
+    };
+
     this.state = {nodes: this.props.treeState.nodes};
 
     reaction(() => this.props.treeState.isNewJsonAvailable, () => {

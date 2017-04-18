@@ -6,8 +6,14 @@
  * @Last modified time: 2017-04-12T08:41:57+10:00
 */
 
-import {observable, action} from 'mobx';
+/* eslint-disable */
 
+import {observable, action} from 'mobx';
+import _ from 'lodash';
+import {featherClient} from '~/helpers/feathers';
+import {NewToaster} from '#/common/Toaster';
+import {Intent} from '@blueprintjs/core';
+import EventLogging from '#/common/logging/EventLogging';
 import TreeNode from './TreeNode.jsx';
 
 export default class TreeState {
@@ -21,6 +27,7 @@ export default class TreeState {
   resetTreeNode;
   @observable profileAlias = '';
   updateCallback;
+  updateCallback2;
   constructor() {
     this.treeNodes = [];
     this.filteredNodes = observable([]);
@@ -152,53 +159,95 @@ export default class TreeState {
    * @param {Object} nodeRightClicked - The Node that triggered this action.
    */
   sampleCollection(nodeRightClicked) {
-    const database = nodeRightClicked.refParent.text;
-    const queryFirst = 'use ' + database; // eslint-disable-line
-    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 100}})'; // eslint-disable-line
-    console.log(queryfirst, querySeconds);
-    // This will be sent to tree service and return a JSON object of the appropriate
-    // structure.
-    const sampleStructure = {
-      text: 'Collection Sample',
-      type: 'properties',
-      children: [
-        {
-          text: 'Name',
-          type: 'label'
-        }, {
-          text: 'Date of Birth',
-          type: 'numerical'
-        }, {
-          text: 'Address',
-          type: 'properties',
-          children: [
-            {
-              text: 'State',
-              type: 'label'
-            }, {
-              text: 'PostCode',
-              type: 'numerical'
-            }, {
-              text: 'Street Address',
-              type: 'numerical'
-            }
-          ]
+    const db = nodeRightClicked.refParent.text;
+    const queryFirst = 'use ' + db + '\n'; // eslint-disable-line
+    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 20}})'; //
+    const profile = this.updateCallback2();
+
+    console.log(queryFirst + querySecond);
+    console.log(profile);
+
+    const service = featherClient().service('/mongo-sync-execution');
+    service.timeout = 30000;
+    service
+      .update(profile.id, {
+      shellId: profile.shellId, // eslint-disable-line
+      commands: queryFirst + querySecond
+    })
+      .then((res) => {
+        const sampleJSON = this.parseSampleData(res);
+        if (!nodeRightClicked.allChildNodes) {
+          nodeRightClicked.allChildNodes = new Map();
         }
-      ]
-    };
-    if (!nodeRightClicked.allChildNodes) {
-      nodeRightClicked.allChildNodes = new Map();
-    }
-    const child = new TreeNode(sampleStructure, nodeRightClicked);
-    console.log('Tree Created Child: ', child);
-    nodeRightClicked.isExpanded = true;
-    child.isExpanded = true;
-    nodeRightClicked.setFilter(this.filter);
-    this.updateCallback();
-    nodeRightClicked.isExpanded = true;
-    this.updateCallback();
-    // Force re-render of tree.
+        const child = new TreeNode(sampleJSON, nodeRightClicked);
+        nodeRightClicked.isExpanded = true;
+        child.isExpanded = true;
+        nodeRightClicked.setFilter(this.filter);
+        this.updateCallback();
+        nodeRightClicked.isExpanded = true;
+        this.updateCallback();
+      });
+
   }
+
+  /**
+   * Parse sample data from shell and create a tree sample structure.
+   * @param {Object[]} queryResult - An array of JSON objects from the collection.
+   * @return {Object} - The resulting tree structure.
+   */
+  parseSampleData(queryResult) {
+    // Create an object as a union of all attributes. Remove db swap.
+    //Replace ObjectID(...) elements.
+    queryResult = queryResult.replace(/ObjectId\(/g,'');
+    queryResult = queryResult.replace(/ISODate\(/g,'');
+    queryResult = queryResult.replace(/\)/g,'');
+
+    queryResult = queryResult.split('\n');
+    queryResult.splice(0, 1);
+    console.log('Result Array: ', queryResult);
+    let object = JSON.parse(queryResult[0]);
+    queryResult.forEach((document) => {
+      if (document.length > 1) {
+        document = JSON.parse(document);
+        console.log(document);
+        object = _.merge(object, document);
+      }
+    });
+
+    //Build tree from JSON object.
+    let treeObj = {
+      text: 'Attributes',
+      type: 'object',
+      children: []
+    };
+    console.log('DB Object: ', object);
+    this.traverseObject(object, treeObj.children);
+    console.log('Tree Object: ', treeObj);
+
+    //console.log(keys);
+    return treeObj;
+  }
+
+  traverseObject(obj, childArray) {
+    Object
+      .keys(obj)
+      .forEach(function (key) {
+        if (typeof obj[key] === 'object') {
+          let newChild = {
+            text: key,
+            type: 'properties',
+            children: []
+          };
+          this.traverseObject(obj[key], newChild.children);
+          childArray.push(newChild);
+        } else {
+          childArray.push({text: key, type: 'numerical'});;
+        }
+        // Create a node
+
+      }.bind(this));
+  }
+
   /**
    * Returns the tree nodes to bind to react tree component
    * @return {[type]} [description]
@@ -220,5 +269,164 @@ export default class TreeState {
       callback(node);
       this.forEachNode(node.childNodes, callback);
     }
+  }
+
+  getDummyResult() {
+    return [
+      {
+
+        'name': 'd',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'g',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'a',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'k',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'l',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'm',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'b',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'c',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'h',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'f',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+        'name': 'e',
+        'age': '1',
+        'height': 123,
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+
+        'name': 'j',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }, {
+        'name': 'e',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2,
+            'ccc': 3
+          }
+        }
+      }, {
+        'name': 'e',
+        'age': '1',
+        'nested': {
+          'a': 1,
+          'b': {
+            'bb': 1,
+            'bbb': 2
+          }
+        }
+      }
+    ];
   }
 }

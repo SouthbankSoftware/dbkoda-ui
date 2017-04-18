@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-11T08:51:18+10:00
+ * @Last modified time: 2017-04-12T11:17:35+10:00
 */
 
 import React from 'react';
@@ -24,6 +24,7 @@ export default class TreeNode {
   @observable isExpanded = false;
   isFiltered = false;
   refParent;
+  json;
   /**
    * Traverse a single dependency tree (DFS)
    *
@@ -52,6 +53,7 @@ export default class TreeNode {
         .set(this.id, this);
     }
     this.text = treeJSON.text;
+    this.json = treeJSON;
     this.label = <DragLabel label={this.text} id={this.id} type={this.type} refParent={this.refParent} />;
     if (treeJSON.children) {
       this.allChildNodes = new Map();

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-11T16:36:27+10:00
+ * @Last modified time: 2017-04-12T15:07:00+10:00
  */
 
 import _ from 'lodash';
@@ -66,7 +66,8 @@ export default class Store {
     treeAction: null,
     form: null,
     treeActionEditorId: '',
-    treeActionFormObservable: false,
+    formValues: '',
+    isNewFormValues: false
   }
 
   @observable explainPanel = {
@@ -78,21 +79,8 @@ export default class Store {
     prompt: 'dbenvy>',
   }
 
-  @action showConnectionPane = () => {
-    this.drawer.drawerChild = DrawerPanes.PROFILE;
-    this.drawer.drawerOpen = true;
-  }
-  @action showTreeActionPane = (treeNode, treeAction) => {
-    this.treeActionPanel.treeNode = treeNode;
-    this.treeActionPanel.treeAction = treeAction;
-    this.drawer.drawerChild = DrawerPanes.DYNAMIC;
-    this.drawer.drawerOpen = true;
-    this.editorToolbar.newEditorForTreeAction = true;
-  };
-  @action setTreeActionForm = (form) => {
-    this.treeActionPanel.form = form;
-    this.treeActionPanel.treeActionFormObservable = true;
-  }
+
+
   @observable profileList = observable({
     selectedProfile: null,
     creatingNewProfile: false,
@@ -107,6 +95,23 @@ export default class Store {
     isChanged: false,
     json: {},
   });
+
+  @action showConnectionPane = () => {
+    this.drawer.drawerChild = DrawerPanes.PROFILE;
+    this.drawer.drawerOpen = true;
+  }
+  @action showTreeActionPane = (treeNode, treeAction) => {
+    this.treeActionPanel.treeNode = treeNode;
+    this.treeActionPanel.treeAction = treeAction;
+    this.drawer.drawerChild = DrawerPanes.DYNAMIC;
+    this.drawer.drawerOpen = true;
+    this.editorToolbar.newEditorForTreeAction = true;
+  };
+
+  @action updateDynamicFormCode = (value) => {
+    this.treeActionPanel.formValues = value;
+    this.treeActionPanel.isNewFormValues = true;
+  };
 
   @action updateTopology = (jsonData) => {
     this.topology.json = jsonData;

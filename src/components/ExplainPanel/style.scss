@@ -1,0 +1,107 @@
+$labelColor: #179dea;
+$contentColor: white;
+
+.explain-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  overflow-x: scroll;
+
+}
+
+.explain-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: scroll;
+  padding: 0 !important;
+}
+
+.explain-tabs {
+  display: flex;
+  flex: 1;
+  order: 2;
+  flex-direction: row;
+  .pt-tab-list {
+    margin: 0;
+  }
+}
+
+.explain-tab-title-button {
+  padding: 0;
+}
+
+.explain-json-raw-panel {
+  flex: 1;
+}
+
+.explain-view-panel {
+  flex: 1;
+  background-color: #182026;
+  margin: 10px;
+}
+
+.explain-not-visible {
+  display: none;
+}
+
+.explain-visible {
+  display: flex;
+}
+
+.explain-command-info {
+  display: flex;
+  ul li {
+    list-style: none;
+    margin-bottom: 10px;
+  }
+  ul {
+    float: left;
+    padding-left: 10px;
+
+  }
+  ul .label {
+    color: $labelColor;
+  }
+}
+
+.explain-output-list-label {
+  list-style: none;
+  color: $labelColor;
+}
+
+.explain-output-list-content {
+  list-style: none;
+  color: $contentColor;
+  width: 100px;
+  text-align: right;
+}
+
+.explain-output-column-label {
+  float: left;
+  flex: 1;
+}
+
+.explain-output-column-content {
+  float: left;
+  flex: 2;
+
+}
+
+.explain-stage-button {
+  margin-left: 5px;
+  margin-top: 5px;
+  height: 10px;
+}
+
+.explain-stage-detail-popup {
+  padding: 0px;
+  .pt-popover-content ul:first-child {
+    overflow-y: auto;
+    height: 300px;
+  }
+}
+
+.explain-stage-popover {
+  flex: 0.5;
+}
