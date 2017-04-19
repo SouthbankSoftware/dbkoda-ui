@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-18T13:45:26+10:00
+ * @Last modified time: 2017-04-19T09:50:28+10:00
 */
 
 import React from 'react';
@@ -44,7 +44,7 @@ export default class TreePanel extends React.Component {
           this.treeState.setProfileAlias(this.props.store.profileList.selectedProfile.alias);
           const service = featherClient()                 // Calls the controller to load the topology associated with the selected Profile
             .service('/mongo-inspector');
-            service.timeout = 30000;
+            service.timeout = 60000;
             service.get(this.props.store.profileList.selectedProfile.id)
             .then((res) => {
               console.log('treeJson:', res);

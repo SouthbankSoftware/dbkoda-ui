@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "webpack --config config/webpack.config.js && webpack-dev-server --config config/webpack.config.js --hot --history-api-fallback --port 3000 --content-base dist",
-    "build": "yarn run clean && rimraf ./dist && webpack --config config/webpack.config.prod.js",
+    "build": "yarn run clean && rimraf ./dist && webpack --config config/webpack.config.js",
     "preview": "http-server ./dist -p 1234 -c-1",
     "test": "yarn run eslint && yarn run jest",
     "eslint": "eslint src/. tests/.",

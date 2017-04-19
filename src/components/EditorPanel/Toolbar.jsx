@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-04-10T16:39:31+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-19T09:38:04+10:00
 */
 
 /* eslint-disable react/prop-types */
@@ -210,8 +210,6 @@ export default class Toolbar extends React.Component {
     this.props.store.editorPanel.creatingNewEditor = false;
   }
 
-  _dumpedStore = null;
-
   /**
    * NOT YET IMPLEMENTED: Open a File from Localhost.
    */
@@ -221,12 +219,7 @@ export default class Toolbar extends React.Component {
     }
     // NewToaster.show({message: 'Sorry, not yet implemented!', intent:
     // Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-    this._dumpedStore = this
-      .props
-      .store
-      .dump();
-    console.log('Store dumped!');
-    console.log(this._dumpedStore);
+    this.props.store.load();
   }
 
   /**
@@ -238,11 +231,7 @@ export default class Toolbar extends React.Component {
     }
     // NewToaster.show({message: 'Sorry, not yet implemented!', intent:
     // Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-    this
-      .props
-      .store
-      .restore(this._dumpedStore);
-    console.log('Store restored!');
+    this.props.store.save();
   }
 
   /**

@@ -1,27 +1,27 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-07T12:21:21+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-19T10:28:56+10:00
  */
 
 import React from 'react';
-import {Alert, Intent} from '@blueprintjs/core';
-import {DragDropContext} from 'react-dnd';
+import { Alert, Intent } from '@blueprintjs/core';
+import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
 import Drawer from 'react-motion-drawer';
-import {action, untracked} from 'mobx';
-import {inject, observer, PropTypes} from 'mobx-react';
+import { action, untracked } from 'mobx';
+import { inject, observer, PropTypes } from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
-import {EditorPanel} from '#/EditorPanel';
-import {OutputPanel} from '#/OutputPanel';
-import {ProfileListPanel} from '#/ProfileListPanel';
-import {TreePanel} from '#/TreePanel';
-import {TreeActionPanel} from '#/TreeActionPanel';
-import {ConnectionProfilePanel} from '../components/ConnectionPanel';
+import { EditorPanel } from '#/EditorPanel';
+import { OutputPanel } from '#/OutputPanel';
+import { ProfileListPanel } from '#/ProfileListPanel';
+import { TreePanel } from '#/TreePanel';
+import { TreeActionPanel } from '#/TreeActionPanel';
+import { ConnectionProfilePanel } from '../components/ConnectionPanel';
 import EventReaction from '#/common/logging/EventReaction.jsx';
-import {DrawerPanes} from '#/common/Constants';
+import { DrawerPanes } from '#/common/Constants';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -37,7 +37,11 @@ const splitPane2Style = {
   flexDirection: 'column'
 };
 
-@inject(allStores => ({store: allStores.store, layout: allStores.store.layout, drawer: allStores.store.drawer}))
+@inject(allStores => ({
+  store: allStores.store,
+  layout: allStores.store.layout,
+  drawer: allStores.store.drawer
+}))
 @observer
 class App extends React.Component {
   static propTypes = {
@@ -80,8 +84,15 @@ class App extends React.Component {
     return null;
   }
 
+  // componentDidMount() {
+  // }
+  // 
+  // componentWillUnmount() {
+  //   this.props.store.save();
+  // }
+
   render() {
-    const {layout, drawer} = this.props;
+    const { layout, drawer } = this.props;
     let defaultOverallSplitPos;
     let defaultLeftSplitPos;
     let defaultRightSplitPos;
@@ -101,7 +112,8 @@ class App extends React.Component {
           confirmButtonText="Sure!"
           onConfirm={() => this.closeOptIn(true)}
           cancelButtonText="No Thanks."
-          onCancel={() => this.closeOptIn(false)}>
+          onCancel={() => this.closeOptIn(false)}
+        >
           <h2>Hey!</h2>
           <p>
             We would like to gather information about how you are using the product so we
@@ -109,7 +121,11 @@ class App extends React.Component {
           </p>
           <p>
             Is it okay if we collect some information about how you interact
-            with <b className="optInBoldDBEnvy"> DBEnvy </b> and send it back to our servers?
+            with
+            {' '}
+            <b className="optInBoldDBEnvy"> DBEnvy </b>
+            {' '}
+            and send it back to our servers?
           </p>
         </Alert>
         <Drawer
@@ -120,9 +136,10 @@ class App extends React.Component {
           noTouchOpen
           noTouchClose
           drawerStyle={{
-          'minWidth': 512
-        }}
-          onChange={this.updateDrawerOpenStatus}>
+            minWidth: 512
+          }}
+          onChange={this.updateDrawerOpenStatus}
+        >
           {this.getDrawerChild}
         </Drawer>
         <SplitPane
@@ -130,14 +147,16 @@ class App extends React.Component {
           defaultSize={defaultOverallSplitPos}
           onDragFinished={this.updateOverallSplitPos}
           minSize={350}
-          maxSize={750}>
+          maxSize={750}
+        >
           <SplitPane
             split="horizontal"
             defaultSize={defaultLeftSplitPos}
             onDragFinished={this.updateLeftSplitPos}
             minSize={100}
             maxSize={1000}
-            pane2Style={splitPane2Style}>
+            pane2Style={splitPane2Style}
+          >
             <ProfileListPanel openDrawer={this.updateDrawerOpenStatus} />
             <TreePanel />
           </SplitPane>
@@ -147,7 +166,8 @@ class App extends React.Component {
             onDragFinished={this.updateRightSplitPos}
             minSize={200}
             maxSize={1000}
-            pane2Style={splitPane2Style}>
+            pane2Style={splitPane2Style}
+          >
             <EditorPanel />
             <OutputPanel />
           </SplitPane>

@@ -3,11 +3,13 @@
  * @Date:   2017-04-18T13:51:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-18T16:19:29+10:00
+ * @Last modified time: 2017-04-19T10:22:26+10:00
  */
 
 import React from 'react';
 import { observer } from 'mobx-react';
+
+import FieldControl from './FieldControls';
 
 export default observer(({ member }) => {
   const rowFields = [];
@@ -28,6 +30,13 @@ export default observer(({ member }) => {
   return (
     <div>
       {rowFields}
+      <FieldControl
+        field={member}
+        labels={false}
+        controls={{
+          onDel: true,
+        }}
+      />
     </div>
   );
 });

@@ -1,14 +1,16 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T15:07:00+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-19T10:30:04+10:00
  */
 
 import _ from 'lodash';
 import { observable, action } from 'mobx';
 import { dump, restore } from 'dumpenvy';
 import { DrawerPanes } from '#/common/Constants';
+import { featherClient } from '~/helpers/feathers';
+import path from 'path';
 
 export default class Store {
   @observable profiles = observable.map();
@@ -16,7 +18,7 @@ export default class Store {
   @observable outputs = observable.map();
 
   @observable userPreferences = observable({
-    telemetryEnabled: false,
+    telemetryEnabled: false
   });
 
   @observable editorPanel = observable({
@@ -28,7 +30,7 @@ export default class Store {
     executingEditorLines: false,
     executingExplain: undefined,
     stoppingExecution: false,
-    tabFilter: '',
+    tabFilter: ''
   });
 
   @observable editorToolbar = observable({
@@ -39,27 +41,27 @@ export default class Store {
     isExplainExecuting: false,
     id: 0,
     shellId: 0,
-    newEditorForTreeAction: false,
+    newEditorForTreeAction: false
   });
 
   @observable outputPanel = observable({
     currentTab: 'Default',
     clearingOutput: false,
     executingShowMore: false,
-    executingTerminalCmd: false,
+    executingTerminalCmd: false
   });
 
   @observable layout = {
     optInVisible: true,
     overallSplitPos: '30%',
     leftSplitPos: '50%',
-    rightSplitPos: '70%',
+    rightSplitPos: '70%'
   };
 
   @observable drawer = {
     drawerOpen: false,
     width: '30%',
-    drawerChild: null,
+    drawerChild: null
   };
 
   @observable treeActionPanel = {
@@ -69,38 +71,36 @@ export default class Store {
     treeActionEditorId: '',
     formValues: '',
     isNewFormValues: false
-  }
+  };
 
   @observable explainPanel = {
     activeId: undefined,
-    explainAvailable: false,
-  }
+    explainAvailable: false
+  };
 
   @observable mongoShellPrompt = {
-    prompt: 'dbenvy>',
-  }
-
-
+    prompt: 'dbenvy>'
+  };
 
   @observable profileList = observable({
     selectedProfile: null,
-    creatingNewProfile: false,
+    creatingNewProfile: false
   });
 
   @observable dragItem = observable({
     dragDrop: false,
-    item: null,
+    item: null
   });
 
   @observable topology = observable({
     isChanged: false,
-    json: {},
+    json: {}
   });
 
   @action showConnectionPane = () => {
     this.drawer.drawerChild = DrawerPanes.PROFILE;
     this.drawer.drawerOpen = true;
-  }
+  };
   @action showTreeActionPane = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
@@ -132,5 +132,34 @@ export default class Store {
   @action restore(data) {
     const newStore = restore(data);
     _.assign(this, newStore);
+  }
+
+  load() {
+    featherClient()
+      .service('files')
+      .get(path.resolve('/tmp/stateStore.json'))
+      .then(({ content }) => {
+        this.restore(content);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  save() {
+    featherClient()
+      .service('files')
+      .create({
+        _id: path.resolve('/tmp/stateStore.json'),
+        content: this.dump()
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  constructor() {
+    this.load();
   }
 }
