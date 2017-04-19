@@ -270,6 +270,7 @@ class View extends React.Component {
             console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
             content = cm.getLine(cm.getCursor().line);
           }
+          content = content.replace(/\n/, '');
           if (content.indexOf('count()') > 0) {
             content = content.replace(/\.count\(\)/, '.explain("' + explainParam + '").count()')
           } else if (content.indexOf('.update(') > 0) {
@@ -277,9 +278,9 @@ class View extends React.Component {
           } else if (content.indexOf('.distinct(') > 0) {
             content = content.replace(/\.distinct\(/, '.explain("' + explainParam + '").distinct(')
           } else if (content.indexOf('.explain') < 0) {
-            if(content.match(/;$/)) {
+            if (content.match(/;$/)) {
               content = content.replace(/;$/, '.explain("' + explainParam + '");');
-            }else{
+            } else {
               content += '.explain("' + explainParam + '")';
             }
           }
@@ -304,18 +305,21 @@ class View extends React.Component {
 
           editor.executing = true;
           // Send request to feathers client
-          const service = featherClient().service('/mongo-shells');
+          const service = featherClient().service('/mongo-sync-execution');
           const filteredContent = content.replace('\t', '  ');
           service.timeout = 30000;
-          Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {
-            id,
-            shell,
-            command: filteredContent,
-            type: explainParam
-          });
+
           service.update(id, {
             shellId: shell, // eslint-disable-line
             commands: filteredContent
+          }).then((response) => {
+            Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {
+              id,
+              shell,
+              command: filteredContent,
+              type: explainParam,
+              output: response,
+            });
           });
           this.props.store.editorPanel.executingExplain = false;
         }

@@ -12,6 +12,9 @@ import ExplainView from './ExplainView';
 
 const Panel = ({editor}) => {
   console.log('get explain:', editor);
+  if (editor.explains && editor.explains.error) {
+    return (<div>{editor.explains.error}</div>);
+  }
   return (<div className="explain-panel">
     <Tabs2 className="explain-tabs" vertical>
       <Tab2 className="explain-tab" id={editor.shellId}
