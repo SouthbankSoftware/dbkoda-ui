@@ -164,9 +164,6 @@ export default class TreeState {
     const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 20}})'; //
     const profile = this.updateCallback2();
 
-    console.log(queryFirst + querySecond);
-    console.log(profile);
-
     const service = featherClient().service('/mongo-sync-execution');
     service.timeout = 30000;
     service
@@ -196,11 +193,11 @@ export default class TreeState {
    * @return {Object} - The resulting tree structure.
    */
   parseSampleData(queryResult) {
-    // Create an object as a union of all attributes. Remove db swap.
-    //Replace ObjectID(...) elements.
-    queryResult = queryResult.replace(/ObjectId\(/g,'');
-    queryResult = queryResult.replace(/ISODate\(/g,'');
-    queryResult = queryResult.replace(/\)/g,'');
+    // Create an object as a union of all attributes. Remove db swap. Replace
+    // ObjectID(...) elements.
+    queryResult = queryResult.replace(/ObjectId\(/g, '');
+    queryResult = queryResult.replace(/ISODate\(/g, '');
+    queryResult = queryResult.replace(/\)/g, '');
 
     queryResult = queryResult.split('\n');
     queryResult.splice(0, 1);
@@ -216,8 +213,8 @@ export default class TreeState {
 
     //Build tree from JSON object.
     let treeObj = {
-      text: 'Attributes',
-      type: 'object',
+      text: 'Sample',
+      type: 'help',
       children: []
     };
     console.log('DB Object: ', object);
@@ -229,23 +226,39 @@ export default class TreeState {
   }
 
   traverseObject(obj, childArray) {
-    Object
-      .keys(obj)
-      .forEach(function (key) {
-        if (typeof obj[key] === 'object') {
-          let newChild = {
-            text: key,
-            type: 'properties',
-            children: []
-          };
-          this.traverseObject(obj[key], newChild.children);
-          childArray.push(newChild);
-        } else {
-          childArray.push({text: key, type: 'numerical'});;
-        }
-        // Create a node
+    if (obj) {
+      Object
+        .keys(obj)
+        .forEach(function (key) {
+          if (typeof obj[key] === 'object') {
+            if (Array.isArray(obj[key])) {
+              //Array
+              console.log('Object is Array');
+              let newChild = {
+                text: key + ' (array)',
+                type: 'properties',
+                children: []
+              };
+              this.traverseObject(obj[key][0], newChild.children);
+              childArray.push(newChild);
+            } else {
+              //Object
+              let newChild = {
+                text: key,
+                type: 'property',
+                children: []
+              };
+              this.traverseObject(obj[key], newChild.children);
+              childArray.push(newChild);
+            }
 
-      }.bind(this));
+          } else {
+            childArray.push({text: key, type: 'numerical'});;
+          }
+          // Create a node
+
+        }.bind(this));
+    }
   }
 
   /**
