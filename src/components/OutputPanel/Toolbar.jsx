@@ -57,13 +57,29 @@ export default class Toolbar extends React.Component {
     const reactionToClearingOutput = reaction(
       () => this.props.store.outputPanel.clearingOutput,
       clearingOutput => {
+        const currentab = this.props.store.outputPanel.currentTab;
         if (this.props.store.outputPanel.clearingOutput && this.props.store.outputs.get(this.props.store.outputPanel.currentTab)) {
-          this.props.store.outputs.get(this.props.store.outputPanel.currentTab).output = '';
-          if (this.props.store.userPreferences.telemetryEnabled) {
-            EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
+            this.props.store.outputs.get(this.props.store.outputPanel.currentTab).output = '';
+            if (this.props.store.userPreferences.telemetryEnabled) {
+              EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
+            }
+        } else if(currentab.indexOf('Explain-') === 0){
+          // close explain output
+          const shellId = currentab.split('Explain-')[1];
+          let editorKey = null;
+          let editor = null;
+          this.props.store.editors.forEach((value, key) => {
+            if (value.shellId === shellId) {
+              editorKey = key;
+              editor = value;
+            }
+          });
+          if(editor) {
+            this.props.store.editors.set(editorKey, {...editor, explains: undefined});
+            this.props.store.outputPanel.currentTab = editor.alias + ' (' + editor.shellId + ')';
           }
-          this.props.store.outputPanel.clearingOutput = false;
         }
+        this.props.store.outputPanel.clearingOutput = false;
       },
       { "name": "reactionOutputToolbarClearOutput" }
     );

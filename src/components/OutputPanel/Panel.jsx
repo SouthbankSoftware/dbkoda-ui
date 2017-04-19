@@ -61,7 +61,6 @@ export default class Panel extends React.Component {
         tabClassName = 'visible';
       }
       if (editor[1].explains && editor[1].explains.active) {
-        console.log('update explain output id');
         runInAction(() => {
           this.props.store.outputPanel.currentTab = 'Explain-' + editor[1].shellId;
           editor[1].explains.active = false;
