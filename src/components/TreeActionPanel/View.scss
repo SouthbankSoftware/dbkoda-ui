@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-04-19T10:25:54+10:00
+// @Last modified time: 2017-04-19T15:01:05+10:00
 
 
 
@@ -37,4 +37,8 @@ text-align: right;
 
 .right {
   float: right;
+}
+
+.tooltip-btn {
+  z-index: 9999;
 }

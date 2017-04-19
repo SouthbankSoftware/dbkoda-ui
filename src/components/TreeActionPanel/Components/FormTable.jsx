@@ -3,7 +3,7 @@
  * @Date:   2017-04-18T13:31:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-19T10:22:04+10:00
+ * @Last modified time: 2017-04-19T16:35:22+10:00
  */
 
 import React from 'react';
@@ -38,10 +38,9 @@ export default observer(({ members }) => {
         <div className="right">
           <FieldControl
             field={members}
-            labels={false}
             controls={{
               onAdd: true,
-              onReset: true,
+              onClear: true,
             }}
           />
         </div>
