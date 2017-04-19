@@ -36,6 +36,7 @@ export default class Store {
     currentProfile: 0,
     noActiveProfile: true,
     isActiveExecuting: false,
+    isExplainExecuting: false,
     id: 0,
     shellId: 0,
     newEditorForTreeAction: false,

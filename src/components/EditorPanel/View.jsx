@@ -15,7 +15,7 @@ import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
 import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
-import {action, observe, reaction} from 'mobx';
+import {action, observe, reaction, runInAction} from 'mobx';
 import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 
 import {DropTarget} from 'react-dnd';
@@ -308,11 +308,14 @@ class View extends React.Component {
           const service = featherClient().service('/mongo-sync-execution');
           const filteredContent = content.replace('\t', '  ');
           service.timeout = 30000;
-
+          this.props.store.editorToolbar.isExplainExecuting = true;
           service.update(id, {
             shellId: shell, // eslint-disable-line
             commands: filteredContent
           }).then((response) => {
+            runInAction(()=>{
+              this.props.store.editorToolbar.isExplainExecuting = false;
+            });
             Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {
               id,
               shell,
@@ -320,6 +323,12 @@ class View extends React.Component {
               type: explainParam,
               output: response,
             });
+          }).catch((err)=>{
+            console.log('error:', err);
+            runInAction(()=>{
+              this.props.store.editorToolbar.isExplainExecuting = false;
+            });
+
           });
           this.props.store.editorPanel.executingExplain = false;
         }

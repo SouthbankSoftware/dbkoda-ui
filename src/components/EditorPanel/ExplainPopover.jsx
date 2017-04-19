@@ -35,13 +35,15 @@ const ExplainMenu = ({editorPanel}) => {
  * define the popup explain component
  */
 export default observer(({editorToolbar, editorPanel}) => (
-  <Popover className="explainPopover" content={<ExplainMenu editorPanel={editorPanel} />} position={Position.BOTTOM_RIGHT}>
+  <Popover className="explainPopover" content={<ExplainMenu editorPanel={editorPanel} />}
+    position={Position.BOTTOM_RIGHT}>
     <Tooltip content="Explain"
       intent={Intent.PRIMARY}
       hoverOpenDelay={1000}
       tooltipClassName="pt-dark"
       position={Position.BOTTOM}>
       <AnchorButton className="pt-icon-help pt-intent-primary explainPlanButton"
+        loading={editorToolbar.isExplainExecuting}
         disabled={editorToolbar.noActiveProfile} />
     </Tooltip>
   </Popover>
