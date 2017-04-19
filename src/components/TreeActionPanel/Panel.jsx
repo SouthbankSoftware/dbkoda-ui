@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-18T14:02:36+10:00
+ * @Last modified time: 2017-04-19T10:27:48+10:00
  */
 
 import React from 'react';
@@ -36,9 +36,9 @@ export default class TreeActionPanel extends React.Component {
           .then((res) => {
             if (typeof res == 'string') {
               const json = JSON.parse(res);
-              resolve(json);
+              setTimeout(resolve, 300, json);
             } else {
-              resolve(res);
+              setTimeout(resolve, 300, res);
             }
           })
           .catch((reason) => {
