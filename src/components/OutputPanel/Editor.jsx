@@ -3,19 +3,18 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-07T13:13:05+10:00
+ * @Last modified time: 2017-04-21T09:19:49+10:00
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { inject, observer } from 'mobx-react';
-import {action,reaction} from 'mobx';
+import { action } from 'mobx';
 import CodeMirror from 'react-codemirror';
-require('codemirror/mode/javascript/javascript');
-require('#/common/MongoScript.js');
-
 import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
+
+require('codemirror/mode/javascript/javascript');
+require('#/common/MongoScript.js');
 
 /**
  * Renders the window through which all output is shown for a specific editor
@@ -46,8 +45,24 @@ export default class Editor extends React.Component {
   }
 
   componentDidMount() {
-    let {props} = this;
+    const {props} = this;
     Broker.on(EventType.createShellOutputEvent(props.id, props.shellId), this.outputAvailable);
+  }
+
+  /**
+   * Lifecycle method. Updates the scrolling view after render is completed
+   */
+  componentDidUpdate() {
+    setTimeout(
+      () => {
+        const cm = this.editor.getCodeMirror();
+        cm.scrollIntoView({
+          line: cm.lineCount() - 1,
+          ch: 0,
+        });
+      },
+      0,
+    );
   }
 
   /**
@@ -68,22 +83,6 @@ export default class Editor extends React.Component {
       console.log('cannot show more');
       this.props.store.outputs.get(this.props.title).cannotShowMore = true; // eslint-disable-line
     }
-  }
-
-  /**
-   * Lifecycle method. Updates the scrolling view after render is completed
-   */
-  componentDidUpdate() {
-    setTimeout(
-      () => {
-        const cm = this.refs.editor.getCodeMirror();
-        cm.scrollIntoView({
-          line: cm.lineCount() - 1,
-          ch: 0,
-        });
-      },
-      0,
-    );
   }
 
   render() {
@@ -115,7 +114,7 @@ export default class Editor extends React.Component {
       <div className="outputEditor">
         <CodeMirror
           autosave
-          ref="editor"
+          ref={(c) => { this.editor = c; }}
           value={this.props.store.outputs.get(this.props.title).output}
           options={outputOptions}
           />
