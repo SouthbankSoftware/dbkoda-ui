@@ -162,7 +162,7 @@ export default class Panel extends React.Component {
         <div className="profile-error-input" style={{color: Colors.RED2}}>
           {
             formErrors.map((error, i) => {
-              return <div key={i}><strong>{error}</strong></div>;
+              return <div key='profile-error'><strong>{error}</strong></div>;
             })
           }
 

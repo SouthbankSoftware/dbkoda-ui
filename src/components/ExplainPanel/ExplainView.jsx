@@ -70,10 +70,10 @@ const WinningPlain = ({explain, type}) => {
       stages = getExecutionStages(explain.executionStats.executionStages);
       return (<div style={{marginLeft: 10}}>
         {
-          stages.map((stage, i) => {
-            return (<div key={i} style={{display: 'flex'}}>
+          stages.map((stage) => {
+            return (<div key={'explain-view'} style={{display: 'flex'}}>
               <Popover
-                content={<JSONTree data={stage} invertTheme={false} theme={theme}/>}
+                content={<JSONTree data={stage} invertTheme={false} theme={theme} />}
                 interactionKind={PopoverInteractionKind.CLICK}
                 position={Position.TOP_RIGHT}
                 useSmartPositioning={false}
@@ -103,9 +103,9 @@ const WinningPlain = ({explain, type}) => {
       return (<div style={{marginLeft: 10}}>
         {
           stages.map((stage, i) => {
-            return (<div key={i} style={{display: 'flex'}}>
+            return (<div key={'execution-stage'} style={{display: 'flex'}}>
               <Popover
-                content={<JSONTree data={stages[0]}/>}
+                content={<JSONTree data={stages[0]} />}
                 interactionKind={PopoverInteractionKind.CLICK}
                 popoverClassName="explain-stage-detail-popup"
                 position={Position.TOP_RIGHT}
@@ -148,26 +148,16 @@ const GlobalStatistics = ({explains, type}) => {
 };
 
 const ExplainView = ({explains}) => {
-
-  if (!explains.output) {
+  if (!explains || !explains.output) {
     return null;
   }
   const output = toJS(explains.output);
   return (<div className="explain-view-panel">
-    <ExplainCommandInfo explain={output} command={explains.command}/>
+    <ExplainCommandInfo explain={output} command={explains.command} />
     <div style={{margin: 10}}>Winning Plan</div>
-    <WinningPlain explain={output} type={explains.type}/>
-    <GlobalStatistics explains={output} type={explains.type}/>
+    <WinningPlain explain={output} type={explains.type} />
+    <GlobalStatistics explains={output} type={explains.type} />
   </div>);
 };
-
-ExplainView.propTypes = {
-  explains: React.PropTypes.object.isRequired,
-};
-
-ExplainView.defaultProps = {
-  explains: {},
-};
-
 
 export default ExplainView;

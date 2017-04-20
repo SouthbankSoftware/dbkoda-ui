@@ -2,12 +2,10 @@
  * explain component is used to handle explain output
  */
 import React from 'react';
-import {featherClient} from '~/helpers/feathers';
 import {inject, observer} from 'mobx-react';
-import {action, observable} from 'mobx';
-
-import {Broker, EventType} from '../../helpers/broker/index';
+import {action} from 'mobx';
 import Panel from './Panel';
+import {Broker, EventType} from '../../helpers/broker/index';
 
 @inject(allStores => ({
   explainPanel: allStores.store.explainPanel,
@@ -31,7 +29,7 @@ export default class Explain extends React.Component {
   }
 
   @action.bound
-  explainOutputAvailable({id, shell, command, type, output}){
+  explainOutputAvailable({id, shell, command, type, output}) {
     this.explainCommand = command;
     this.explainOutput = '';
     this.explainType = type;
@@ -70,6 +68,7 @@ export default class Explain extends React.Component {
   }
 
   render() {
-    return (<Panel editor={this.props.editor}/>);
+    return (<Panel editor={this.props.editor} />);
   }
+
 }

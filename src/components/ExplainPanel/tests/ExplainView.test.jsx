@@ -1,6 +1,4 @@
-import React from 'react';
-import {useStrict} from 'mobx';
-import chai, {expect, assert} from 'chai';
+import chai, {assert} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import {getExecutionStages} from '../ExplainView';
 
@@ -109,7 +107,6 @@ describe('test explain view', () => {
     assert.equal(stages.length, 2);
     assert.equal(stages[0].stage, 'FETCH');
     assert.equal(stages[1].stage, 'IXSCAN');
-
   });
 
   it('test plain explain output ', () => {
@@ -118,5 +115,4 @@ describe('test explain view', () => {
     assert.equal(stages.length, 1);
     assert.equal(stages[0].stage, 'COLLSCAN');
   });
-
 });
