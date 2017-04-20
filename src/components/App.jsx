@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-04-19T10:28:56+10:00
+ * @Last modified time: 2017-04-20T13:47:51+10:00
  */
 
 import React from 'react';
@@ -19,7 +19,6 @@ import { OutputPanel } from '#/OutputPanel';
 import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
 import { TreeActionPanel } from '#/TreeActionPanel';
-import { ConnectionProfilePanel } from '../components/ConnectionPanel';
 import EventReaction from '#/common/logging/EventReaction.jsx';
 import { DrawerPanes } from '#/common/Constants';
 
@@ -31,6 +30,8 @@ import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';
 
 import './App.scss';
+
+import { ConnectionProfilePanel } from '../components/ConnectionPanel';
 
 const splitPane2Style = {
   display: 'flex',
@@ -49,32 +50,6 @@ class App extends React.Component {
   };
 
   @action.bound
-  closeOptIn(bool) {
-    this.props.store.userPreferences.telemetryEnabled = bool;
-    this.props.store.layout.optInVisible = false;
-  }
-
-  @action.bound
-  updateDrawerOpenStatus(open) {
-    this.props.drawer.drawerOpen = open;
-  }
-
-  @action.bound
-  updateOverallSplitPos(pos) {
-    this.props.layout.overallSplitPos = pos;
-  }
-
-  @action.bound
-  updateLeftSplitPos(pos) {
-    this.props.layout.leftSplitPos = pos;
-  }
-
-  @action.bound
-  updateRightSplitPos(pos) {
-    this.props.layout.rightSplitPos = pos;
-  }
-
-  @action.bound
   getDrawerChild() {
     if (this && this.props.drawer.drawerChild == DrawerPanes.PROFILE) {
       return <ConnectionProfilePanel />;
@@ -84,9 +59,35 @@ class App extends React.Component {
     return null;
   }
 
+  @action.bound
+  updateRightSplitPos(pos) {
+    this.props.layout.rightSplitPos = pos;
+  }
+
+  @action.bound
+  updateOverallSplitPos(pos) {
+    this.props.layout.overallSplitPos = pos;
+  }
+
+  @action.bound
+  updateDrawerOpenStatus(open) {
+    this.props.drawer.drawerOpen = open;
+  }
+
+  @action.bound
+  updateLeftSplitPos(pos) {
+    this.props.layout.leftSplitPos = pos;
+  }
+
+  @action.bound
+  closeOptIn(bool) {
+    this.props.store.userPreferences.telemetryEnabled = bool;
+    this.props.store.layout.optInVisible = false;
+  }
+
   // componentDidMount() {
   // }
-  // 
+  //
   // componentWillUnmount() {
   //   this.props.store.save();
   // }
