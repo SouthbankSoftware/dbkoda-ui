@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-19T10:27:48+10:00
+ * @Last modified time: 2017-04-20T13:58:29+10:00
  */
 
 import React from 'react';
@@ -15,6 +15,13 @@ import { CreateForm } from './Components/DynamicForm';
 @inject('store')
 @observer
 export default class TreeActionPanel extends React.Component {
+  componentWillMount() {
+    const { treeActionPanel, updateDynamicFormCode } = this.props.store;
+    this.dynamicForm = CreateForm(treeActionPanel, updateDynamicFormCode, this.executeCommand);
+  }
+  componentDidMount() {
+    this.dynamicForm.getData();
+  }
   executeCommand = (content) => {
     let id = null;
     let shell = null;
@@ -48,55 +55,10 @@ export default class TreeActionPanel extends React.Component {
       });
     }
     return null;
-
-    // return new Promise((resolve, reject) => {
-    //   console.log(content);
-    //   resolve([
-    //     {
-    //       _id: 'admin.guy',
-    //       user: 'guy',
-    //       db: 'admin',
-    //       credentials: {
-    //         'SCRAM-SHA-1': {
-    //           iterationCount: 10000,
-    //           salt: 'sjNrJJJC2I8tOCakO791pw==',
-    //           storedKey: '8hpBguJRQD+YSe6uuiWZM2VzC5A=',
-    //           serverKey: 'SNVyV9eX+L91QRAMU5Z9yxT2nvM=',
-    //         },
-    //       },
-    //       roles: [
-    //         {
-    //           role: 'userAdminAnyDatabase',
-    //           db: 'admin',
-    //         },
-    //         {
-    //           role: 'readWriteAnyDatabase',
-    //           db: 'admin',
-    //         },
-    //         {
-    //           role: 'dbAdminAnyDatabase',
-    //           db: 'admin',
-    //         },
-    //         {
-    //           role: 'clusterAdmin',
-    //           db: 'admin',
-    //         },
-    //       ],
-    //     },
-    //   ]);
-    // });
   };
-  componentWillMount() {
-    const { treeActionPanel, updateDynamicFormCode } = this.props.store;
-    this.dynamicForm = CreateForm(treeActionPanel, updateDynamicFormCode, this.executeCommand);
-  }
+  dynamicForm;
   render() {
     console.log(this);
     return <View title={this.dynamicForm.title} mobxForm={this.dynamicForm.mobxForm} />;
   }
-  componentDidMount() {
-    this.dynamicForm.getData();
-  }
-
-  dynamicForm;
 }
