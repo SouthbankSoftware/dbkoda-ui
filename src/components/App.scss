@@ -1,7 +1,7 @@
 // @Author: guiguan
 // @Date:   2017-03-07T17:09:22+11:00
 // @Last modified by:   guiguan
-// @Last modified time: 2017-04-20T11:45:09+10:00
+// @Last modified time: 2017-04-20T13:12:43+10:00
 
 $purpleFont: #b95cce;
 $resizerHoverColor: rgba(97, 114, 126, 0.7);
@@ -17,7 +17,7 @@ $resizerHoverColor: rgba(97, 114, 126, 0.7);
   background-clip: padding-box;
 }
 
-.Resizer:hover {
+.Resizer:active, .Resizer:hover {
   -webkit-transition: all 2s ease;
   transition: all 2s ease;
 }
@@ -31,7 +31,7 @@ $resizerHoverColor: rgba(97, 114, 126, 0.7);
   width: 100%;
 }
 
-.Resizer.horizontal:hover {
+.Resizer.horizontal:active, .Resizer.horizontal:hover {
   border-top: 5px solid $resizerHoverColor;
   border-bottom: 5px solid $resizerHoverColor;
 }
@@ -44,7 +44,7 @@ $resizerHoverColor: rgba(97, 114, 126, 0.7);
   cursor: col-resize;
 }
 
-.Resizer.vertical:hover {
+.Resizer.vertical:active, .Resizer.vertical:hover {
   border-left: 5px solid $resizerHoverColor;
   border-right: 5px solid $resizerHoverColor;
 }
