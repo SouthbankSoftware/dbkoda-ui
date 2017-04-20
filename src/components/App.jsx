@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-04-20T13:47:51+10:00
+ * @Last modified time: 2017-04-20T14:06:40+10:00
  */
 
 import React from 'react';
@@ -144,6 +144,7 @@ class App extends React.Component {
           {this.getDrawerChild}
         </Drawer>
         <SplitPane
+          className="RootSplitPane"
           split="vertical"
           defaultSize={defaultOverallSplitPos}
           onDragFinished={this.updateOverallSplitPos}
@@ -151,6 +152,7 @@ class App extends React.Component {
           maxSize={750}
         >
           <SplitPane
+            className="LeftSplitPane"
             split="horizontal"
             defaultSize={defaultLeftSplitPos}
             onDragFinished={this.updateLeftSplitPos}
@@ -162,6 +164,7 @@ class App extends React.Component {
             <TreePanel />
           </SplitPane>
           <SplitPane
+            className="RightSplitPane"
             split="horizontal"
             defaultSize={defaultRightSplitPos}
             onDragFinished={this.updateRightSplitPos}
