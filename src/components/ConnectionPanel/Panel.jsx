@@ -3,16 +3,14 @@
  */
 import React from 'react';
 import {observer} from 'mobx-react';
-import {action, observable} from 'mobx';
 import autobind from 'autobind-decorator';
 import {Button, Colors} from '@blueprintjs/core';
+import _ from 'lodash';
 import Radio from './Radio';
 import Input from './Input';
 import Checkbox from './Checkbox';
 import './style.scss';
-import {featherClient} from '~/helpers/feathers';
 import Label from './Label';
-import _ from 'lodash';
 
 @observer
 export default class Panel extends React.Component {
@@ -69,19 +67,19 @@ export default class Panel extends React.Component {
           <div>
             <ul>
               <li>
-                <Label text="Alias"/>
+                <Label text="Alias" />
               </li>
               <li>
-                <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange}/>
+                <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
               </li>
               <li>
-                <Radio field={form.$('urlRadio')} onChange={this._hostRadioOnChange}/>
+                <Radio field={form.$('urlRadio')} onChange={this._hostRadioOnChange} />
               </li>
-              <li><Label text="Database"/></li>
+              <li><Label text="Database" /></li>
             </ul>
             <ul>
               <li>
-                <Input field={form.$('alias')}/>
+                <Input field={form.$('alias')} />
               </li>
               <li>
                 <div className="host-input-container">
@@ -90,7 +88,7 @@ export default class Panel extends React.Component {
                     showLabel={false}
                     disable={!form.$('hostRadio').get('value')}
                   />
-                  <Label className="port-label" text="Port"/>
+                  <Label className="port-label" text="Port" />
                   <Input
                     field={form.$('port')}
                     showLabel={false}
@@ -107,23 +105,23 @@ export default class Panel extends React.Component {
               </li>
               <li>
                 <div className="host-input-container">
-                  <Input field={form.$('database')}/>
-                  <Checkbox field={form.$('ssl')}/>
+                  <Input field={form.$('database')} />
+                  <Checkbox field={form.$('ssl')} />
                 </div>
               </li>
             </ul>
           </div>
-          <div className="profile-separator"/>
-          <Label className="profile-align-left" text="Authentication"/>
-          <Checkbox field={form.$('sha')}/>
+          <div className="profile-separator" />
+          <Label className="profile-align-left" text="Authentication" />
+          <Checkbox field={form.$('sha')} />
           <div>
             <ul>
-              <li><Label text="User Name"/></li>
-              <li><Label text="Password"/></li>
+              <li><Label text="User Name" /></li>
+              <li><Label text="Password" /></li>
             </ul>
             <ul>
-              <li><Input field={form.$('username')} disable={!form.$('sha').get('value')}/></li>
-              <li><Input field={form.$('password')} disable={!form.$('sha').get('value')}/></li>
+              <li><Input field={form.$('username')} disable={!form.$('sha').get('value')} /></li>
+              <li><Input field={form.$('password')} disable={!form.$('sha').get('value')} /></li>
             </ul>
           </div>
           <div className="profile-button-panel">
@@ -161,8 +159,8 @@ export default class Panel extends React.Component {
         </form>
         <div className="profile-error-input" style={{color: Colors.RED2}}>
           {
-            formErrors.map((error, i) => {
-              return <div key='profile-error'><strong>{error}</strong></div>;
+            formErrors.map((error) => {
+              return <div key="profile-error"><strong>{error}</strong></div>;
             })
           }
 
