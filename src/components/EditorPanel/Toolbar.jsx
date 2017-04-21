@@ -394,7 +394,7 @@ export default class Toolbar extends React.Component {
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
-            <ExplainPopover editorToolbar={this.props.store.editorToolbar} editorPanel={this.props.store.editorPanel}/>
+            <ExplainPopover editorToolbar={this.props.store.editorToolbar} editorPanel={this.props.store.editorPanel} />
             <Tooltip
               intent={Intent.DANGER}
               hoverOpenDelay={1000}

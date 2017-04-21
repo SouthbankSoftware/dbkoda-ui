@@ -7,10 +7,10 @@
 */
 
 import React from 'react';
-import {shallow, mount, render} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import {useStrict} from 'mobx';
 import Store from '~/stores/global';
-import {EditorPanel, EditorToolbar, EditorView} from '../index.js';
+import {EditorPanel, EditorToolbar} from '../index.js';
 
 describe('Editor Panel', () => {
   let app;
@@ -32,9 +32,7 @@ describe('Editor Panel', () => {
 
 describe('Toolbar', () => {
   let app;
-  let app2;
   let store;
-  let store2;
 
   beforeAll(() => {
     useStrict(false);

@@ -1,6 +1,7 @@
 /**
  * connection profile panel class
  */
+/* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import {observer} from 'mobx-react';
 import autobind from 'autobind-decorator';
