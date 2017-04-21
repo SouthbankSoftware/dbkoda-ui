@@ -67,11 +67,10 @@ export default class Toolbar extends React.Component {
 
     const reactionToAddTabForTreeAction = reaction( // eslint-disable-line
         () => this.props.store.editorToolbar.newEditorForTreeAction, () => {
-          if (this.props.store.editorToolbar.newEditorForTreeAction) {
-            this.addEditor();
-          }
-        }
-      );
+      if (this.props.store.editorToolbar.newEditorForTreeAction) {
+        this.addEditor();
+      }
+    });
   }
 
   componentWillMount() {
@@ -219,7 +218,10 @@ export default class Toolbar extends React.Component {
     }
     // NewToaster.show({message: 'Sorry, not yet implemented!', intent:
     // Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-    this.props.store.load();
+    this
+      .props
+      .store
+      .load();
   }
 
   /**
@@ -231,7 +233,10 @@ export default class Toolbar extends React.Component {
     }
     // NewToaster.show({message: 'Sorry, not yet implemented!', intent:
     // Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-    this.props.store.save();
+    this
+      .props
+      .store
+      .save();
   }
 
   /**
@@ -262,7 +267,7 @@ export default class Toolbar extends React.Component {
   /**
    * NOT YET IMPLEMENTED: Stop the current execution on this connection.
    */
-   @action.bound
+  @action.bound
   stopExecution() { // eslint-disable-line class-methods-use-this
     this.props.store.editorPanel.stoppingExecution = true;
   }
@@ -321,6 +326,7 @@ export default class Toolbar extends React.Component {
       .store
       .profiles
       .entries();
+    console.log('PROFILELIST: ', profiles);
     return (
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
@@ -366,7 +372,9 @@ export default class Toolbar extends React.Component {
                 value={this.props.store.editorPanel.activeDropdownId}
                 className="pt-intent-primary">
                 <option key="Default" value="Default">No Active Connection</option>; {profiles.map((profile) => {
-                  return <option key={profile[0]} value={profile[1].alias}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
+                  if (profile[1].status == 'OPEN') {
+                    return <option key={profile[0]} value={profile[1].alias}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
+                  }
                 })}
               </select>
             </div>
@@ -394,7 +402,9 @@ export default class Toolbar extends React.Component {
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile} />
             </Tooltip>
-            <ExplainPopover editorToolbar={this.props.store.editorToolbar} editorPanel={this.props.store.editorPanel} />
+            <ExplainPopover
+              editorToolbar={this.props.store.editorToolbar}
+              editorPanel={this.props.store.editorPanel} />
             <Tooltip
               intent={Intent.DANGER}
               hoverOpenDelay={1000}
