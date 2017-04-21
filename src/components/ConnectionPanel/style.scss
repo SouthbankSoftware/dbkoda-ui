@@ -2,73 +2,31 @@
 // @Date:   2017-04-10T10:37:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-04-21T10:34:27+10:00
+// @Last modified time: 2017-04-21T15:57:53+10:00
 
-
-
-.profile-title {
-  text-align: center;
-  margin: 5% 10% 5% 10%;
+.pt-label-r{
+  text-align: right;
 }
 
-.profile-form ul {
-  float: left;
-  margin: 0px;
-  padding: 0px;
+.field-inline {
+  display: inline-block !important;
+  margin: 0 5px 0 5px;
 }
 
-.cell-column-container {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  align-items: center;
+.zero-margin {
+  margin: 0 !important;
+}
+
+.width-100-pr {
+  width: 100%;
+}
+
+.pt-form-helper-text {
+  color: red !important;
+}
+
+.pt-control {
   margin-top: 5px;
-  margin-left: 5px;
-  margin-bottom: 0px;
-}
-
-.profile-form ul li {
-  list-style: none;
-  padding: 10px 2px;
-  height: 30px;
-  margin: 20px 0px;
-}
-
-.host-input-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.profile-input-row {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  align-items: center;
-}
-
-.profile-input {
-  display: flex;
-  flex-direction: row;
-}
-
-.host-input-content {
-  flex-direction: row;
-}
-
-.profile-connection-input {
-  padding: 0 0 0 5px;
-}
-
-.profile-align-left {
-  align-items: flex-start;
-}
-
-.field-label {
-  margin: 5px 5px 0 0 !important;
-}
-
-.port-label {
-  margin-top: 0px;
 }
 
 .profile-form {
@@ -77,8 +35,9 @@
   flex-direction: column;
 }
 
-.url-input-content, .url-input {
-  width: 100%;
+.profile-title {
+  text-align: center;
+  margin: 5% 10% 5% 10%;
 }
 
 .profile-separator {
@@ -99,9 +58,24 @@
 
 .profile-error-input {
   margin: 10px;
-
 }
 
-.ssl-input {
-  margin-left: 10px;
+.alias-label, .database-label, username-label, password-label {
+  min-width: 70px;
+}
+
+.url-label, .host-label {
+  min-width: 44px;
+}
+
+.port-label {
+  width: 28px;
+}
+
+.alias-input-content, .alias-input-content .pt-form-content, .alias-input, .url-input-content, .url-input-content .pt-form-content, .url-input {
+  width: 100%;
+}
+
+.port-input {
+  width: 80px;
 }
