@@ -27,5 +27,6 @@ export const EventType = {
   },
   createExplainExeuctionEvent: (id, shellId) => {
     return 'executing::explain::' + id + '::' + shellId;
-  }
+  },
+  FEATHER_CLIENT_LOADED: 'feather::client::loaded',
 };

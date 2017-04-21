@@ -1,7 +1,7 @@
 import React from 'react';
 import {mount} from 'enzyme';
 import {useStrict} from 'mobx';
-import {assert, expect} from 'chai';
+import {expect} from 'chai';
 import {Provider} from 'mobx-react';
 import Store from '../../../stores/global';
 import ConnectionPanel from '../ConnectionPanel';

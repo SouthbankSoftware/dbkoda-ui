@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T10:27:30+10:00
+ * @Last modified time: 2017-04-21T10:52:04+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -45,7 +45,6 @@ export default class TreeActionView extends React.Component {
           {formFields}
           <button
             className="pt-button pt-large pt-intent-primary right-button"
-            type="submit"
             onClick={this.close}
           >
             Close

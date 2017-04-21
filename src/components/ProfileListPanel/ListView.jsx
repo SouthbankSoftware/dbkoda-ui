@@ -7,9 +7,8 @@
  */
 /* eslint-disable react/prop-types */
 import {inject, observer} from 'mobx-react';
-import {action, reaction, runInAction} from 'mobx';
+import {action} from 'mobx';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
-import EventLogging from '#/common/logging/EventLogging';
 
 const React = require('react');
 

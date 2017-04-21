@@ -6,11 +6,12 @@
  */
 
 import _ from 'lodash';
-import { observable, action } from 'mobx';
-import { dump, restore } from 'dumpenvy';
-import { DrawerPanes } from '#/common/Constants';
-import { featherClient } from '~/helpers/feathers';
+import {observable, action} from 'mobx';
+import {dump, restore} from 'dumpenvy';
+import {DrawerPanes} from '#/common/Constants';
+import {featherClient} from '~/helpers/feathers';
 import path from 'path';
+import {Broker, EventType} from '../helpers/broker';
 
 export default class Store {
   @observable profiles = observable.map();
@@ -134,7 +135,7 @@ export default class Store {
     featherClient()
       .service('files')
       .get(path.resolve('/tmp/stateStore.json'))
-      .then(({ content }) => {
+      .then(({content}) => {
         this.restore(content);
       })
       .catch((err) => {
@@ -149,13 +150,16 @@ export default class Store {
         _id: path.resolve('/tmp/stateStore.json'),
         content: this.dump()
       })
-      .then(() => {})
+      .then(() => {
+      })
       .catch((err) => {
         console.log(err);
       });
   }
 
   constructor() {
-    this.load();
+    Broker.on(EventType.FEATHER_CLIENT_LOADED, () => {
+      this.load();
+    });
   }
 }

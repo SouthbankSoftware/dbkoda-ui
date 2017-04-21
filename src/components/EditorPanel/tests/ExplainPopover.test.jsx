@@ -10,7 +10,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 import {useStrict} from 'mobx';
 import Store from '~/stores/global';
-import {assert, expect} from 'chai';
+import {expect} from 'chai';
 import {ExplainPopover} from '../index.js';
 
 
@@ -27,7 +27,5 @@ describe('Explain Toolbar Test', () => {
   test('has explain menu items', () => {
     expect(app.find('.explainPopover')).to.have.length(1);
   });
-
-
 });
 

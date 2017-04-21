@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-12T09:45:57+10:00
+ * @Last modified time: 2017-04-21T09:47:23+10:00
  */
 
 import React from 'react';
@@ -52,27 +52,71 @@ export default class Terminal extends React.Component {
     /**
      * Reaction to fire off execution of Terminal Commands
      */
-    const reactionToExecutingCmd = reaction(() => this.props.store.outputPanel.executingTerminalCmd, (executingTerminalCmd) => {
-      if (this.props.store.outputPanel.executingTerminalCmd && this.props.title == this.props.store.editorPanel.activeEditorId) {
-        this.updateHistory(this.state.command);
-        const command = this.interceptCommand(this.state.command);
-        console.log(command);
-        if (command) {
-          console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
-          this.props.store.editorToolbar.isActiveExecuting = true;
-          this.props.store.editors.get(this.props.title).executing = true;
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          Broker.on(EventType.createShellExecutionFinishEvent(this.props.id, this.props.shellId), this.finishedExecution);
-          service.update(this.props.id, {
-            shellId: this.props.shellId, // eslint-disable-line
-            commands: command
-          });
+    reaction(
+      () => this.props.store.outputPanel.executingTerminalCmd,
+      (executingTerminalCmd) => {
+        if (executingTerminalCmd && this.props.title == this.props.store.editorPanel.activeEditorId) {
+          this.updateHistory(this.state.command);
+          const command = this.interceptCommand(this.state.command);
+          console.log(command);
+          if (command) {
+            console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
+            this.props.store.editorToolbar.isActiveExecuting = true;
+            this.props.store.editors.get(this.props.title).executing = true;
+            const service = featherClient().service('/mongo-shells');
+            service.timeout = 30000;
+            Broker.on(EventType.createShellExecutionFinishEvent(this.props.id, this.props.shellId), this.finishedExecution);
+            service.update(this.props.id, {
+              shellId: this.props.shellId, // eslint-disable-line
+              commands: command
+            });
+          }
+          this.setState({command: ''});
+          this.props.store.outputPanel.executingTerminalCmd = false;
         }
-        this.setState({command: ''});
-        this.props.store.outputPanel.executingTerminalCmd = false;
+      },
+      { 'name': 'reactionOutputTerminalExecuteCmd' }
+    );
+  }
+
+  /**
+   * Lifecycle function. Adds event handling for terminal single-line editor
+   * post-render, tapping into CodeMirror's js API
+   */
+  componentDidMount() {
+    const cm = this
+      .terminal
+      .getCodeMirror();
+    cm.on('keydown', (cm, keyEvent) => {
+      if (keyEvent.keyCode == 38) {
+        // Up
+        this.showPreviousCommand();
+      } else if (keyEvent.keyCode == 40) {
+        // Down
+        this.showNextCommand();
       }
-    }, {'name': 'reactionOutputTerminalExecuteCmd'});
+    });
+    cm.on('beforeChange', (cm, changeObj) => {
+      // If typed new line, attempt submit
+      const typedNewLine = (changeObj.origin == '+input' && typeof changeObj.text == 'object' && changeObj.text.join('') == '');
+      if (typedNewLine) {
+        if (this.props.store.editorToolbar.noActiveProfile) {
+          return changeObj.cancel();
+        }
+        this.executeCommand();
+        return changeObj.cancel();
+      }
+      // Remove pasted new lines
+      const pastedNewLine = (changeObj.origin == 'paste' && typeof changeObj.text == 'object' && changeObj.text.length > 1);
+      if (pastedNewLine) {
+        const newText = changeObj
+          .text
+          .join(' ');
+        return changeObj.update(null, null, [newText]);
+      }
+      // Otherwise allow input untouched
+      return null;
+    });
   }
 
   /**
@@ -80,7 +124,7 @@ export default class Terminal extends React.Component {
    */
   showPreviousCommand() {
     if (this.state.historyCursor > 0) {
-      this.state.historyCursor--;
+      this.state.historyCursor += 1;
       this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
     }
   }
@@ -90,7 +134,7 @@ export default class Terminal extends React.Component {
    */
   showNextCommand() {
     if (this.state.historyCursor < this.props.store.outputs.get(this.props.title).commandHistory.length) {
-      this.state.historyCursor++;
+      this.state.historyCursor += 1;
       this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
     } else {
       this.setState({command: ''});
@@ -123,11 +167,6 @@ export default class Terminal extends React.Component {
    */
   updateCommand(newCmd) {
     this.setState({command: newCmd});
-
-    const cm = this
-      .refs
-      .terminal
-      .getCodeMirror();
   }
 
   /**
@@ -135,7 +174,7 @@ export default class Terminal extends React.Component {
    */
   @action.bound
   executeCommand() {
-    console.log("Set executingTerminalCmd = true");
+    console.log('Set executingTerminalCmd = true');
     if (this.state.command) {
       this.props.store.outputPanel.executingTerminalCmd = true;
     }
@@ -158,7 +197,6 @@ export default class Terminal extends React.Component {
 
   @action.bound
   finishedExecution() {
-    const id = this.props.store.editorToolbar.id;
     const shell = this.props.store.editorToolbar.shellId;
     const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
     this
@@ -171,47 +209,6 @@ export default class Terminal extends React.Component {
       this.props.store.editorToolbar.isActiveExecuting = false;
       this.props.store.editorPanel.stoppingExecution = false;
     }
-  }
-
-  /**
-   * Lifecycle function. Adds event handling for terminal single-line editor
-   * post-render, tapping into CodeMirror's js API
-   */
-  componentDidMount() {
-    const cm = this
-      .refs
-      .terminal
-      .getCodeMirror();
-    cm.on('keydown', (cm, keyEvent) => {
-      if (keyEvent.keyCode == 38) {
-        // Up
-        this.showPreviousCommand();
-      } else if (keyEvent.keyCode == 40) {
-        // Down
-        this.showNextCommand();
-      }
-    });
-    cm.on('beforeChange', (cm, changeObj) => {
-      // If typed new line, attempt submit
-      let typedNewLine = (changeObj.origin == '+input' && typeof changeObj.text == 'object' && changeObj.text.join('') == '');
-      if (typedNewLine) {
-        if (this.props.store.editorToolbar.noActiveProfile) {
-          return changeObj.cancel();
-        }
-        this.executeCommand();
-        return changeObj.cancel();
-      }
-      // Remove pasted new lines
-      let pastedNewLine = (changeObj.origin == 'paste' && typeof changeObj.text == 'object' && changeObj.text.length > 1);
-      if (pastedNewLine) {
-        let newText = changeObj
-          .text
-          .join(' ');
-        return changeObj.update(null, null, [newText]);
-      }
-      // Otherwise allow input untouched
-      return null;
-    });
   }
 
   render() {
@@ -235,7 +232,7 @@ export default class Terminal extends React.Component {
       <div className="outputTerminal">
         <CodeMirror
           className="outputCmdLine"
-          ref="terminal"
+          ref={(c) => { this.terminal = c; }}
           options={terminalOptions}
           value={this.state.command}
           onChange={value => this.updateCommand(value)} />

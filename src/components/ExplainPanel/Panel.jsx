@@ -3,15 +3,13 @@
  *
  */
 import React from 'react';
-import {action} from 'mobx';
-import {Button, Tab2, Tabs2, Text} from '@blueprintjs/core';
+import {Button, Tab2, Tabs2} from '@blueprintjs/core';
 import './style.scss';
 
 import RawJson from './RawJson';
 import ExplainView from './ExplainView';
 
 const Panel = ({editor}) => {
-  console.log('get explain:', editor);
   if (editor.explains && editor.explains.error) {
     return (<div>{editor.explains.error}</div>);
   }
@@ -26,14 +24,6 @@ const Panel = ({editor}) => {
         panel={<RawJson explains={editor.explains} />} />
     </Tabs2>
   </div>);
-};
-
-Panel.propTypes = {
-  editor: React.PropTypes.object.isRequired,
-};
-
-Panel.defaultProps = {
-  editor: {},
 };
 
 export default Panel;

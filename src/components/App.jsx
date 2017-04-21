@@ -102,6 +102,7 @@ class App extends React.Component {
           </p>
         </Alert>
         <SplitPane
+          className="RootSplitPane"
           split="vertical"
           defaultSize={defaultOverallSplitPos}
           onDragFinished={this.updateOverallSplitPos}
@@ -110,6 +111,7 @@ class App extends React.Component {
         >
           <SidebarPanel />
           <SplitPane
+            className="LeftSplitPane"
             split="horizontal"
             defaultSize={defaultRightSplitPos}
             onDragFinished={this.updateRightSplitPos}

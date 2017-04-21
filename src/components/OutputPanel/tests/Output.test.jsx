@@ -3,26 +3,24 @@
 * @Date:   2017-03-10T10:55:54+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-11T14:01:42+10:00
+ * @Last modified time: 2017-04-21T09:56:46+10:00
 */
 import ReactDOM from 'react-dom';
-import { assert, expect } from 'chai';
-import { shallow, mount } from 'enzyme';
-import { useStrict } from 'mobx';
+import { assert } from 'chai';
 import { Provider } from 'mobx-react';
-import renderer from 'react-test-renderer';
-import { OutputToolbar, OutputEditor, OutputPanel } from '../index.js';
 import Store from '~/stores/global';
-var jsdom = require("jsdom").jsdom;
-let React = require('react');
+import { OutputToolbar } from '../index.js';
+
+const jsdom = require('jsdom').jsdom;
+const React = require('react');
 
 describe('Output Toolbar', () => {
   let document;
-  let window;
+  let window; // eslint-disable-line
   let store;
-  let OutputToolbarWrapper = function OutputToolbarWrapper(props) {
+  const OutputToolbarWrapper = function OutputToolbarWrapper(props) {
     return (<Provider store={props.store}><OutputToolbar title="Test" /></Provider>);
-  }
+  };
 
   beforeAll(() => {
     document = jsdom('<div id="container"></div>');
@@ -44,14 +42,12 @@ describe('Output Toolbar', () => {
   test('should have an enabled showMoreBtn when cannotShowMore is false', () => {
     store.outputs.get('Test').cannotShowMore = false;
     ReactDOM.render(<OutputToolbarWrapper store={store} />, document.getElementById('container'));
-    let paragraph = document.querySelector('.showMoreBtn');
     assert(!document.querySelector('.showMoreBtn').hasAttribute('disabled'));
   });
 
   test('should have a disabled showMoreBtn when cannotShowMore is true', () => {
     store.outputs.get('Test').cannotShowMore = true;
     ReactDOM.render(<OutputToolbarWrapper store={store} />, document.getElementById('container'));
-    let paragraph = document.querySelector('.showMoreBtn');
     assert(document.querySelector('.showMoreBtn').hasAttribute('disabled'));
   });
 
@@ -64,7 +60,6 @@ describe('Output Toolbar', () => {
     ReactDOM.render(<OutputToolbarWrapper store={store} />, document.getElementById('container'));
     assert(document.querySelector('.saveOutputBtn'));
   });
-
 });
 
 describe('Output Panel', () => {

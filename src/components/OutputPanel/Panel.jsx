@@ -3,15 +3,15 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-03-24T14:46:56+11:00
+ * @Last modified time: 2017-04-21T08:58:04+10:00
  */
 
 import React from 'react';
 import {action, reaction, runInAction} from 'mobx';
 import {inject, observer} from 'mobx-react';
+import {Tab2, Tabs2} from '@blueprintjs/core';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
-import {Tab2, Tabs2} from '@blueprintjs/core';
 import './style.scss';
 import {Explain} from '../ExplainPanel/index';
 
@@ -31,10 +31,10 @@ export default class Panel extends React.Component {
      * @param {function()} - The reaction to trigger on state change
      * @param {Object} - The options object for reactions
      */
-    const reactionToEditorChange = reaction(
+    reaction(
       () => this.props.store.editorPanel.activeEditorId,
       (activeEditorId) => {
-        this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
+        this.props.store.outputPanel.currentTab = activeEditorId;
       },
       {'name': 'reactionOutputPanelTabChange'}
     );
@@ -88,7 +88,7 @@ export default class Panel extends React.Component {
           } />
       ];
     });
-    return [].concat.apply([], tabs);
+    return [].concat(...tabs);
   }
 
   render() {
