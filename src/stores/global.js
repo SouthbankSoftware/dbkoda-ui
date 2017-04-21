@@ -6,7 +6,7 @@
  */
 
 import _ from 'lodash';
-import {observable, action, reaction} from 'mobx';
+import {observable, action} from 'mobx';
 import {dump, restore} from 'dumpenvy';
 import {DrawerPanes} from '#/common/Constants';
 import {featherClient} from '~/helpers/feathers';
