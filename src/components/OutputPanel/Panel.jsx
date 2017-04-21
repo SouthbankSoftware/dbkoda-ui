@@ -57,7 +57,9 @@ export default class Panel extends React.Component {
     const tabs = editors.map((editor) => {
       const editorTitle = editor[1].alias + ' (' + editor[1].shellId + ')';
       let tabClassName = 'notVisible';
-      if (editor[1].visible) {
+      console.log('TEST: ', editor[1]);
+            console.log('TEST2: ', this.props.store.outputs);
+      if (editor[1].visible && (this.props.store.editorToolbar.shellId == editor[1].shellId)) {
         tabClassName = 'visible';
       }
       if (editor[1].explains && editor[1].explains.active) {
@@ -105,7 +107,6 @@ export default class Panel extends React.Component {
               <OutputEditor title="Default" id="Default" shellId={0} />
                 }
             title="Default" />
-
           {this.renderTabs(this.props.store.editors.entries())}
         </Tabs2>
         <OutputToolbar />
