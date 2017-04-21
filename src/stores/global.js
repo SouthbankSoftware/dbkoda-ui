@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-04-19T10:30:04+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-21T10:42:13+10:00
  */
 
 import _ from 'lodash';
@@ -59,9 +59,7 @@ export default class Store {
   };
 
   @observable drawer = {
-    drawerOpen: false,
-    width: '30%',
-    drawerChild: null
+    drawerChild: DrawerPanes.DEFAULT
   };
 
   @observable treeActionPanel = {
@@ -99,13 +97,11 @@ export default class Store {
 
   @action showConnectionPane = () => {
     this.drawer.drawerChild = DrawerPanes.PROFILE;
-    this.drawer.drawerOpen = true;
   };
   @action showTreeActionPane = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
     this.drawer.drawerChild = DrawerPanes.DYNAMIC;
-    this.drawer.drawerOpen = true;
     this.editorToolbar.newEditorForTreeAction = true;
   };
 

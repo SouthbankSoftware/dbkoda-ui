@@ -3,7 +3,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-05T10:34:22+10:00
+ * @Last modified time: 2017-04-21T09:53:10+10:00
  */
 /**
  * create new profile form and handle connection
@@ -19,7 +19,7 @@ import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
 import {Broker, EventType} from '../../helpers/broker';
-import {ProfileStatus} from '.././common/Constants';
+import {ProfileStatus, DrawerPanes} from '.././common/Constants';
 
 const ConnectionPanel = ({
                            profiles,
@@ -160,7 +160,7 @@ const ConnectionPanel = ({
   });
 
   const close = action(() => {
-    drawer.drawerOpen = false;
+    drawer.drawerChild = DrawerPanes.DEFAULT;
   });
 
   const save = action((formData) => {

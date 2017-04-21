@@ -3,20 +3,29 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-19T16:00:00+10:00
+ * @Last modified time: 2017-04-21T10:27:30+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
 
 import React from 'react';
-import { observer } from 'mobx-react';
-
+import { action } from 'mobx';
+import { observer, inject } from 'mobx-react';
+import { DrawerPanes } from '#/common/Constants';
 import FormTable from './Components/FormTable';
 import TextField from './Components/TextField';
+
 import './View.scss';
 
+@inject(allStores => ({
+  drawer: allStores.store.drawer
+}))
 @observer
 export default class TreeActionView extends React.Component {
+  @action.bound
+  close() {
+    this.props.drawer.drawerChild = DrawerPanes.DEFAULT;
+  }
   render() {
     const { mobxForm, title } = this.props;
     const formFields = [];
@@ -34,7 +43,20 @@ export default class TreeActionView extends React.Component {
         <h3 className="profile-title">{title}</h3>
         <form onChange={mobxForm.onValueChange(mobxForm)}>
           {formFields}
-          <button className="pt-button pt-large pt-intent-primary right-button" type="submit" onClick={mobxForm.onSubmit}>Update</button>
+          <button
+            className="pt-button pt-large pt-intent-primary right-button"
+            type="submit"
+            onClick={this.close}
+          >
+            Close
+          </button>
+          <button
+            className="pt-button pt-large pt-intent-success right-button"
+            type="submit"
+            onClick={mobxForm.onSubmit}
+          >
+            Update
+          </button>
           <p>{mobxForm.error}</p>
         </form>
       </div>
