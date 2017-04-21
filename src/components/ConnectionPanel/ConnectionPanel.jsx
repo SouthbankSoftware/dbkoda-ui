@@ -3,7 +3,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-05T10:34:22+10:00
+ * @Last modified time: 2017-04-21T10:51:03+10:00
  */
 /**
  * create new profile form and handle connection
@@ -13,13 +13,15 @@ import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {Intent, Position} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
-import {createForm, ProfileForm} from './ProfileForm';
 import uuidV1 from 'uuid/v1';
+import {createForm, ProfileForm} from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
 import {Broker, EventType} from '../../helpers/broker';
-import {ProfileStatus} from '.././common/Constants';
+import {ProfileStatus, DrawerPanes} from '.././common/Constants';
+
+
 
 const ConnectionPanel = ({
                            profiles,
@@ -34,51 +36,6 @@ const ConnectionPanel = ({
   }
   const form = createForm(selectedProfile);
 
-  const connect = action((data) => {
-    if (!edit && !validateConnectionFormData(data)) {
-      return Promise.reject('Validation failed.');
-    }
-    const query = {};
-    let connectionUrl;
-    if (data.hostRadio) {
-      connectionUrl = ProfileForm.mongoProtocol + data.host + ':' + data.port;
-    } else if (data.urlRadio) {
-      connectionUrl = data.url;
-    }
-    if (data.sha) {
-      query.username = data.username;
-      query.password = data.password;
-    }
-    if (data.ssl) {
-      connectionUrl.indexOf('?') > 0 ? connectionUrl += '&ssl=true' : connectionUrl += '?ssl=true';
-    }
-    query.database = data.database;
-    query.url = connectionUrl;
-    query.ssl = data.ssl;
-    query.test = data.test;
-    query.authorization = data.authorization;
-    if (selectedProfile) {
-      query.id = selectedProfile.id;
-      query.shellId = selectedProfile.shellId;
-    }
-    profileList.creatingNewProfile = true;
-    const service = featherClient()
-      .service('/mongo-connection');
-    service.timeout = 30000;
-    return service.create({}, {query})
-      .then((res) => {
-        onSuccess(res, data);
-      })
-      .catch((err) => {
-        onFail();
-        DBenvyToaster(Position.LEFT_BOTTOM).show({
-          message: err.message,
-          intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down',
-        });
-      });
-  });
-
   /**
    * validate connection form data
    *
@@ -87,7 +44,7 @@ const ConnectionPanel = ({
    */
   const validateConnectionFormData = (data) => {
     let validate = true;
-    profiles.forEach((value, key) => {
+    profiles.forEach((value) => {
       if (value.alias === data.alias) {
         DBenvyToaster(Position.LEFT_BOTTOM).show({
           message: 'Alias already existed.',
@@ -100,6 +57,9 @@ const ConnectionPanel = ({
     return validate;
   };
 
+  const close = action(() => {
+    drawer.drawerChild = DrawerPanes.DEFAULT;
+  });
   /**
    * when connection successfully created, this method will add the new profile on store.
    */
@@ -159,8 +119,49 @@ const ConnectionPanel = ({
     profileList.creatingNewProfile = false;
   });
 
-  const close = action(() => {
-    drawer.drawerOpen = false;
+  const connect = action((data) => {
+    if (!edit && !validateConnectionFormData(data)) {
+      return Promise.reject('Validation failed.');
+    }
+    const query = {};
+    let connectionUrl;
+    if (data.hostRadio) {
+      connectionUrl = ProfileForm.mongoProtocol + data.host + ':' + data.port;
+    } else if (data.urlRadio) {
+      connectionUrl = data.url;
+    }
+    if (data.sha) {
+      query.username = data.username;
+      query.password = data.password;
+    }
+    if (data.ssl) {
+      connectionUrl.indexOf('?') > 0 ? connectionUrl += '&ssl=true' : connectionUrl += '?ssl=true';
+    }
+    query.database = data.database;
+    query.url = connectionUrl;
+    query.ssl = data.ssl;
+    query.test = data.test;
+    query.authorization = data.authorization;
+    if (selectedProfile) {
+      query.id = selectedProfile.id;
+      query.shellId = selectedProfile.shellId;
+    }
+    profileList.creatingNewProfile = true;
+    const service = featherClient()
+      .service('/mongo-connection');
+    service.timeout = 30000;
+    return service.create({}, {query})
+      .then((res) => {
+        onSuccess(res, data);
+      })
+      .catch((err) => {
+        onFail();
+        DBenvyToaster(Position.LEFT_BOTTOM).show({
+          message: err.message,
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down',
+        });
+      });
   });
 
   const save = action((formData) => {

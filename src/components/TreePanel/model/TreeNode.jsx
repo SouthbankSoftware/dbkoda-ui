@@ -3,12 +3,11 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T11:17:35+10:00
+ * @Last modified time: 2017-04-20T14:00:17+10:00
 */
 
 import React from 'react';
 import {observable} from 'mobx';
-import {ITreeNode} from '@blueprintjs/core';
 
 import DragLabel from './DragLabel.jsx';
 

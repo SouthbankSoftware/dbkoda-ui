@@ -3,7 +3,7 @@
  * @Date:   2017-04-18T13:51:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-19T15:18:31+10:00
+ * @Last modified time: 2017-04-20T18:35:18+10:00
  */
 
 import React from 'react';
@@ -16,9 +16,6 @@ export default observer(({ member }) => {
   member.map((col) => {
     rowFields.push(
       <div className="pt-form-group form-group-inline">
-        {/* <label className="pt-label" htmlFor={col.id}>
-          {col.label}
-        </label> */}
         <div className="pt-form-content">
           <input className="pt-input pt-input-90" {...col.bind()} />
           <p className="pt-form-helper-text">{col.error}</p>

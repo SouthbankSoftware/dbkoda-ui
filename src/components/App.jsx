@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-04-20T14:06:40+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-21T15:18:15+10:00
  */
 
 import React from 'react';
@@ -10,17 +10,13 @@ import { Alert, Intent } from '@blueprintjs/core';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
-import Drawer from 'react-motion-drawer';
 import { action, untracked } from 'mobx';
 import { inject, observer, PropTypes } from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
 import { EditorPanel } from '#/EditorPanel';
 import { OutputPanel } from '#/OutputPanel';
-import { ProfileListPanel } from '#/ProfileListPanel';
-import { TreePanel } from '#/TreePanel';
-import { TreeActionPanel } from '#/TreeActionPanel';
+import { SidebarPanel } from '#/SidebarPanel';
 import EventReaction from '#/common/logging/EventReaction.jsx';
-import { DrawerPanes } from '#/common/Constants';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -31,33 +27,15 @@ import '~/styles/global.scss';
 
 import './App.scss';
 
-import { ConnectionProfilePanel } from '../components/ConnectionPanel';
-
-const splitPane2Style = {
-  display: 'flex',
-  flexDirection: 'column'
-};
-
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  drawer: allStores.store.drawer
 }))
 @observer
 class App extends React.Component {
   static propTypes = {
     layout: PropTypes.observableObject.isRequired
   };
-
-  @action.bound
-  getDrawerChild() {
-    if (this && this.props.drawer.drawerChild == DrawerPanes.PROFILE) {
-      return <ConnectionProfilePanel />;
-    } else if (this && this.props.drawer.drawerChild == DrawerPanes.DYNAMIC) {
-      return <TreeActionPanel />;
-    }
-    return null;
-  }
 
   @action.bound
   updateRightSplitPos(pos) {
@@ -67,11 +45,6 @@ class App extends React.Component {
   @action.bound
   updateOverallSplitPos(pos) {
     this.props.layout.overallSplitPos = pos;
-  }
-
-  @action.bound
-  updateDrawerOpenStatus(open) {
-    this.props.drawer.drawerOpen = open;
   }
 
   @action.bound
@@ -93,14 +66,16 @@ class App extends React.Component {
   // }
 
   render() {
-    const { layout, drawer } = this.props;
+    const { layout } = this.props;
+    const splitPane2Style = {
+      display: 'flex',
+      flexDirection: 'column'
+    };
     let defaultOverallSplitPos;
-    let defaultLeftSplitPos;
     let defaultRightSplitPos;
 
     untracked(() => {
       defaultOverallSplitPos = layout.overallSplitPos;
-      defaultLeftSplitPos = layout.leftSplitPos;
       defaultRightSplitPos = layout.rightSplitPos;
     });
     return (
@@ -129,20 +104,6 @@ class App extends React.Component {
             and send it back to our servers?
           </p>
         </Alert>
-        <Drawer
-          className="drawer"
-          open={drawer.drawerOpen}
-          width={drawer.width}
-          handleWidth={0}
-          noTouchOpen
-          noTouchClose
-          drawerStyle={{
-            minWidth: 512
-          }}
-          onChange={this.updateDrawerOpenStatus}
-        >
-          {this.getDrawerChild}
-        </Drawer>
         <SplitPane
           className="RootSplitPane"
           split="vertical"
@@ -151,20 +112,9 @@ class App extends React.Component {
           minSize={350}
           maxSize={750}
         >
+          <SidebarPanel />
           <SplitPane
             className="LeftSplitPane"
-            split="horizontal"
-            defaultSize={defaultLeftSplitPos}
-            onDragFinished={this.updateLeftSplitPos}
-            minSize={100}
-            maxSize={1000}
-            pane2Style={splitPane2Style}
-          >
-            <ProfileListPanel openDrawer={this.updateDrawerOpenStatus} />
-            <TreePanel />
-          </SplitPane>
-          <SplitPane
-            className="RightSplitPane"
             split="horizontal"
             defaultSize={defaultRightSplitPos}
             onDragFinished={this.updateRightSplitPos}

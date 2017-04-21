@@ -195,8 +195,10 @@ export default class TreeState {
   parseSampleData(queryResult) {
     // Create an object as a union of all attributes. Remove db swap. Replace
     // ObjectID(...) elements.
+    try {
     queryResult = queryResult.replace(/ObjectId\(/g, '');
     queryResult = queryResult.replace(/ISODate\(/g, '');
+    queryResult = queryResult.replace(/NumberLong\(/g, '');
     queryResult = queryResult.replace(/\)/g, '');
 
     queryResult = queryResult.split('\n');
@@ -223,6 +225,9 @@ export default class TreeState {
 
     //console.log(keys);
     return treeObj;
+    } catch(err) {
+      NewToaster.show({message: 'Sorry, sampling of collection failed!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+    }
   }
 
   traverseObject(obj, childArray) {

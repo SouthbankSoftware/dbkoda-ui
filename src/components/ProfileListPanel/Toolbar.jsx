@@ -14,7 +14,7 @@ import autobind from 'autobind-decorator';
 import {Alert, AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
-import {ProfileStatus, DrawerPanes} from '../common/Constants';
+import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
 

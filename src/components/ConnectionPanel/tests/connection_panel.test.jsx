@@ -1,7 +1,17 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-04-21T10:47:14+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-21T17:17:17+10:00
+ */
+
+
+
 import React from 'react';
 import {mount} from 'enzyme';
 import {useStrict} from 'mobx';
-import {assert, expect} from 'chai';
+import {expect} from 'chai';
 import {Provider} from 'mobx-react';
 import Store from '../../../stores/global';
 import ConnectionPanel from '../ConnectionPanel';
@@ -24,23 +34,23 @@ describe('New Profile Panel', () => {
   });
 
   it('alias exist', () => {
-    expect(app.contains(<Label text="Alias" />)).to.equal(true);
+    expect(app.find('.alias-label')).to.have.length(1);
   });
 
   it('user name exist', () => {
-    expect(app.contains(<Label text="User Name" />)).to.equal(true);
+    expect(app.find('.username-label')).to.have.length(1);
   });
 
   it('password exist', () => {
-    expect(app.contains(<Label text="Password" />)).to.equal(true);
+    expect(app.find('.password-label')).to.have.length(1);
   });
 
   it('database exist', () => {
-    expect(app.contains(<Label text="Database" />)).to.equal(true);
+    expect(app.find('.database-label')).to.have.length(1);
   });
 
   it('authentication exist', () => {
-    expect(app.contains(<Label text="Authentication" className="profile-align-left" />)).to.equal(true);
+    expect(app.contains(<Label text="Authentication" />)).to.equal(true);
   });
 
   it('host radio exist', () => {
