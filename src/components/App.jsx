@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T10:25:14+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-21T15:18:15+10:00
  */
 
 import React from 'react';
@@ -67,7 +67,10 @@ class App extends React.Component {
 
   render() {
     const { layout } = this.props;
-    let splitPane2Style;
+    const splitPane2Style = {
+      display: 'flex',
+      flexDirection: 'column'
+    };
     let defaultOverallSplitPos;
     let defaultRightSplitPos;
 
