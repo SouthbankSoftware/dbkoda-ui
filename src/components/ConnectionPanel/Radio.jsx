@@ -11,7 +11,7 @@ export default observer(({field, onChange = null, }) => (
   <div className={field.name + '-input-content pt-form-group pt-inline cell-column-container'}>
     <div className="input-content">
       <Radio className={field.name + '-radio-input'} {...field.bind()} checked={field.get('value')}
-             onChange={onChange.bind(this)}/>
+        onChange={onChange} />
     </div>
   </div>
 ));

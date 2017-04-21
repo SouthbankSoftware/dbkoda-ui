@@ -4,6 +4,7 @@
 import MobxReactForm from 'mobx-react-form';
 import validatorjs from 'validatorjs';
 import _ from 'lodash';
+import autobind from 'autobind-decorator';
 
 export class ProfileForm extends MobxReactForm {
 
@@ -63,14 +64,17 @@ export class ProfileForm extends MobxReactForm {
     }
   }
 
+  @autobind
   onSuccess(form) {
     this.connect({...this.createFormData(form), test: false});
   }
 
+  @autobind
   onTest() {
     this.test({...this.createFormData(this), test: true});
   }
 
+  @autobind
   onSave() {
     this.save({...this.createFormData(this)});
   }

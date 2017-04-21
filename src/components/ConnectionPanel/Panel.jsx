@@ -140,7 +140,7 @@ export default class Panel extends React.Component {
             />
             <Button
               className="pt-button pt-intent-primary"
-              onClick={form.onTest.bind(form)}
+              onClick={form.onTest}
               text="Test"
               disabled={formErrors.length > 0}
               loading={this.state.testing}
@@ -148,7 +148,7 @@ export default class Panel extends React.Component {
             <Button
               className="pt-button pt-intent-primary"
               text="Save"
-              onClick={form.onSave.bind(form)}
+              onClick={form.onSave}
             />
             <Button
               className="pt-button pt-intent-primary"
