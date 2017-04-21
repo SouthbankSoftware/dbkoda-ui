@@ -2,18 +2,11 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-14 15:54:27
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-21T18:13:14+10:00
  */
 
-import Panel from './Panel.jsx';
-import Toolbar from './Toolbar.jsx';
-import View from './View.jsx';
-import ExplainPopover from './ExplainPopover';
-
-export default {
-  EditorPanel: Panel,
-  EditorToolbar: Toolbar,
-  EditorView: View,
-  ExplainPopover,
-};
+export EditorPanel from './Panel.jsx';
+export EditorToolbar from './Toolbar.jsx';
+export EditorView from './View.jsx';
+export ExplainPopover from './ExplainPopover';

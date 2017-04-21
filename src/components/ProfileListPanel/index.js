@@ -1,17 +1,11 @@
 /**
-* @Author: Michael Harrison <mike>
-* @Date:   22017-03-15 13:31:31
-* @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-15 13:31:40
-*/
+ * @Author: Michael Harrison <mike>
+ * @Date:   22017-03-15 13:31:31
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-21T18:15:01+10:00
+ */
 
-import Panel from './Panel.jsx';
-import Toolbar from './Toolbar.jsx';
-import ListView from './ListView.jsx';
-
-export default {
-  ProfileListPanel: Panel,
-  ProfileListToolbar: Toolbar,
-  ProfileListView: ListView
-};
+export ProfileListPanel from './Panel.jsx';
+export ProfileListToolbar from './Toolbar.jsx';
+export ProfileListView from './ListView.jsx';

@@ -1,6 +1,6 @@
 /**
-* @Last modified by:   wahaj
-* @Last modified time: 2017-03-14T16:15:18+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-21T16:36:03+10:00
  */
 
 import React from 'react';
@@ -8,7 +8,9 @@ import ReactDOM from 'react-dom';
 import { useStrict } from 'mobx';
 import { Provider } from 'mobx-react';
 import Store from '~/stores/global';
-import App from './components/App.jsx';
+import { AppContainer } from 'react-hot-loader';
+import App from './components/App';
+// import TestApp from './components/TestApp';
 
 useStrict(true);
 
@@ -16,9 +18,22 @@ const store = new Store();
 
 window.stores = store;
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root'),
-);
+const render = (Component) => {
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={store}>
+        <Component />
+      </Provider>
+    </AppContainer>,
+    document.getElementById('root')
+  );
+};
+
+render(App);
+
+// Hot Module Replacement API
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+    render(App);
+  });
+}

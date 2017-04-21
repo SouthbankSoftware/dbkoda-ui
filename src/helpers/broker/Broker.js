@@ -1,11 +1,14 @@
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-21T19:07:28+10:00
+ */
+
 import EventEmitter2 from 'eventemitter2';
 
 let instance = null;
 
-
 const createEmiter = () => {
   return new EventEmitter2.EventEmitter2({
-
     //
     // set this to `true` to use wildcards. It defaults to `false`.
     //
@@ -33,8 +36,7 @@ const createEmiter = () => {
   });
 };
 
-
 if (!instance) {
   instance = createEmiter();
 }
-export const Broker = instance;
+export default instance;

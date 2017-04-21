@@ -7,17 +7,14 @@
       }
     ],
     "react",
-    "es2015-node-auto",
     "stage-0"
   ],
   "plugins": [
+    "react-hot-loader/babel",
     "transform-decorators-legacy",
     "transform-class-properties",
     "transform-async-to-generator",
-    "transform-object-rest-spread",
-    "react-hot-loader/babel",
-    "add-module-exports",
-    ["babel-plugin-root-import", [{
+    "transform-object-rest-spread", ["babel-plugin-root-import", [{
       "rootPathPrefix": "~",
       "rootPathSuffix": "src"
     }, {
