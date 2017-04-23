@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-04-19T09:38:04+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-24T08:56:20+10:00
 */
 
 /* eslint-disable react/prop-types */
@@ -87,11 +87,14 @@ export default class Toolbar extends React.Component {
    */
   profileCreated(profile) {
     const {editors, editorToolbar, editorPanel} = this.props.store;
-    editors.set(profile.alias + ' (' + profile.shellId + ')', {
+    const fileName = `new${profile.editorCount}.js`;
+    profile.editorCount += 1;
+    editors.set(profile.alias + ' (' + fileName + ')', {
       // eslint-disable-line react/prop-types
       id: profile.id,
       alias: profile.alias,
       shellId: profile.shellId,
+      fileName,
       visible: true,
       executing: false
     });
@@ -99,7 +102,7 @@ export default class Toolbar extends React.Component {
     editorToolbar.id = profile.id;
     editorToolbar.shellId = profile.shellId;
     editorToolbar.newConnectionLoading = false;
-    editorPanel.activeEditorId = profile.alias + ' (' + profile.shellId + ')';
+    editorPanel.activeEditorId = profile.alias + ' (' + fileName + ')';
     editorPanel.activeDropdownId = profile.alias;
     editorToolbar.currentProfile = profile.id;
     editorToolbar.noActiveProfile = false;
@@ -176,7 +179,9 @@ export default class Toolbar extends React.Component {
    */
   @action
   setNewEditorState(res) {
-    const editorId = this.props.store.editorPanel.activeDropdownId + ' (' + res.shellId + ')';
+    const fileName = `new${this.props.store.profiles.get(res.id).editorCount}.js`;
+    const editorId = this.props.store.editorPanel.activeDropdownId + ' (' + fileName + ')';
+    this.props.store.profiles.get(res.id).editorCount += 1;
     this
       .props
       .store
@@ -186,6 +191,7 @@ export default class Toolbar extends React.Component {
         id: res.id,
         alias: this.props.store.editorPanel.activeDropdownId,
         shellId: res.shellId,
+        fileName,
         visible: true
       });
     this.props.store.editorPanel.creatingNewEditor = false;
@@ -193,7 +199,7 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.id = res.id;
     this.props.store.editorToolbar.shellId = res.shellId;
     this.props.store.editorToolbar.newConnectionLoading = false;
-    this.props.store.editorPanel.activeEditorId = this.props.store.editorPanel.activeDropdownId + ' (' + res.shellId + ')';
+    this.props.store.editorPanel.activeEditorId = this.props.store.editorPanel.activeDropdownId + ' (' + fileName + ')';
     this.props.store.editorPanel.activeDropdownId = this.props.store.editorPanel.activeDropdownId;
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;

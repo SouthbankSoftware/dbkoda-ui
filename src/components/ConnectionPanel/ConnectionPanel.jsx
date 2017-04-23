@@ -2,9 +2,10 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T10:51:03+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-21T11:01:53+10:00
  */
+
 /**
  * create new profile form and handle connection
  */
@@ -92,6 +93,7 @@ const ConnectionPanel = ({
         urlRadio: data.urlRadio,
         username: data.username,
         sha: data.sha,
+        editorCount: 1,
       });
       if (!profileList.selectedProfile) {
         profileList.selectedProfile = profiles.get(res.id);
