@@ -146,7 +146,7 @@ class View extends React.Component {
         this
           .props
           .store
-          .profiles
+          .editors
           .forEach((value) => {
             if (value.alias == this.props.store.editorPanel.activeDropdownId) {
               shell = value.shellId;

@@ -292,6 +292,18 @@ export default class Toolbar extends React.Component {
     } else {
       this.props.store.editorToolbar.noActiveProfile = false;
     }
+
+    // Send command through current editor to swap DB:
+    // Get current editor instance:
+
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+
+    const profile = this.props.store.profiles.get(this.props.store.editorToolbar.currentProfile);
+
+    console.log(editor);
+    console.log(this.props.store.editorToolbar.currentProfile);
+    console.log(this.props.store.profiles);
+    console.log(profile);
   }
 
   /**
@@ -332,7 +344,6 @@ export default class Toolbar extends React.Component {
       .store
       .profiles
       .entries();
-    console.log('PROFILELIST: ', profiles);
     return (
       <nav className="pt-navbar editorToolBar">
         <div className="pt-navbar-group pt-align-left">
