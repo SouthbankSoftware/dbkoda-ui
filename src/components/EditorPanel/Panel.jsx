@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-11T12:30:47+10:00
+ * @Last modified time: 2017-04-21T16:48:24+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -66,7 +66,7 @@ export default class Panel extends React.Component {
     // Check if tab to be removed is currenlty selected tab, this will require more
     // handing in UI.
     console.log(this.props.store.editorPanel.activeEditorId);
-    if ((oldTab.alias + ' (' + oldTab.shellId + ')') == this.props.store.editorPanel.activeEditorId) {
+    if ((oldTab.alias + ' (' + oldTab.fileName + ')') == this.props.store.editorPanel.activeEditorId) {
       this.props.store.editorPanel.activeEditorId = 'Default';
       this.state.isRemovingCurrentTab = true;
     } else {
@@ -77,7 +77,7 @@ export default class Panel extends React.Component {
       .props
       .store
       .editors
-      .delete(oldTab.alias + ' (' + oldTab.shellId + ')');
+      .delete(oldTab.alias + ' (' + oldTab.fileName + ')');
     this.setState({isRemovingTab: true});
     this.forceUpdate();
   }
@@ -100,9 +100,11 @@ export default class Panel extends React.Component {
     } else {
       this.props.store.editorPanel.activeEditorId = newTab;
       this.setState({tabId: newTab});
-      this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).alias;
-      this.props.store.editorToolbar.id = this.props.store.editors.get(newTab).id;
-      this.props.store.editorToolbar.shellId = this.props.store.editors.get(newTab).shellId;
+      if (newTab != 'Default') {
+        this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).alias;
+        this.props.store.editorToolbar.id = this.props.store.editors.get(newTab).id;
+        this.props.store.editorToolbar.shellId = this.props.store.editors.get(newTab).shellId;
+      }
       console.log(`activeDropdownId: ${this.props.store.editorPanel.activeDropdownId} , id: ${this.props.store.editorToolbar.id}, shellId: ${this.props.store.editorToolbar.shellId}`);
     }
   }
@@ -143,14 +145,14 @@ export default class Panel extends React.Component {
               return (
                 <Tab2
                   className="visible"
-                  key={tab[1].alias + ' (' + tab[1].shellId + ')'}
-                  id={tab[1].alias + ' (' + tab[1].shellId + ')'}
-                  title={tab[1].alias + ' (' + tab[1].shellId + ')'}
+                  key={tab[1].alias + ' (' + tab[1].fileName + ')'}
+                  id={tab[1].alias + ' (' + tab[1].fileName + ')'}
+                  title={tab[1].alias + ' (' + tab[1].fileName + ')'}
                   panel={<View id={
                   tab[1].id
                 }
                     title={
-                  tab[1].alias + ' (' + tab[1].shellId + ')'
+                  tab[1].alias + ' (' + tab[1].fileName + ')'
                 }
                     onDrop={
                   item => this.handleDrop(item)
@@ -167,7 +169,7 @@ export default class Panel extends React.Component {
             return (
               <Tab2
                 className="notVisible"
-                key={tab[1].alias + ' (' + tab[1].shellId + ')'}
+                key={tab[1].alias + ' (' + tab[1].fileName + ')'}
                 id={tab[1].id}
                 title={tab[1].alias}
                 panel={<View id={
