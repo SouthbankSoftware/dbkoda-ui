@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T09:55:31+10:00
+ * @Last modified time: 2017-04-21T15:43:32+10:00
 */
 
 import React from 'react';
@@ -74,7 +74,7 @@ export default class Toolbar extends React.Component {
           });
           if (editor) {
             this.props.store.editors.set(editorKey, {...editor, explains: undefined});
-            this.props.store.outputPanel.currentTab = editor.alias + ' (' + editor.shellId + ')';
+            this.props.store.outputPanel.currentTab = editor.alias + ' (' + editor.fileName + ')';
           }
         }
         this.props.store.outputPanel.clearingOutput = false;

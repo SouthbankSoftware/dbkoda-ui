@@ -2,7 +2,7 @@
 // @Date:   2017-04-10T10:37:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-04-21T15:57:53+10:00
+// @Last modified time: 2017-04-21T16:33:53+10:00
 
 .pt-label-r{
   text-align: right;
@@ -30,21 +30,21 @@
 }
 
 .profile-form {
-  margin: 5%;
+  margin: 35px;
   display: flex;
   flex-direction: column;
 }
 
 .profile-title {
   text-align: center;
-  margin: 5% 10% 5% 10%;
+  margin: 35px 0;
 }
 
 .profile-separator {
   height: 1px;
   background-color: gray;
   width: 100%;
-  margin: 0 0 10% 0;
+  margin: 0 0 20px 0;
 }
 
 .profile-button-panel {
@@ -72,7 +72,11 @@
   width: 28px;
 }
 
-.alias-input-content, .alias-input-content .pt-form-content, .alias-input, .url-input-content, .url-input-content .pt-form-content, .url-input {
+.alias-input-content, .alias-input-content .pt-form-content, .alias-input,
+.url-input-content, .url-input-content .pt-form-content, .url-input,
+.host-input-content, .host-input-content .pt-form-content, .host-input,
+.database-input-content, .database-input-content .pt-form-content, .database-input,
+ {
   width: 100%;
 }
 

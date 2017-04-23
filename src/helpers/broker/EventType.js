@@ -1,4 +1,9 @@
-export const EventType = {
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-21T19:04:09+10:00
+ */
+
+export default {
   /**
    * used when a new connection profile is created
    */
@@ -28,5 +33,5 @@ export const EventType = {
   createExplainExeuctionEvent: (id, shellId) => {
     return 'executing::explain::' + id + '::' + shellId;
   },
-  FEATHER_CLIENT_LOADED: 'feather::client::loaded',
+  FEATHER_CLIENT_LOADED: 'feather::client::loaded'
 };

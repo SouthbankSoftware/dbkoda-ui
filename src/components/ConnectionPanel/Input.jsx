@@ -3,7 +3,7 @@
  * @Date:   2017-04-21T10:47:14+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T16:04:17+10:00
+ * @Last modified time: 2017-04-21T16:38:47+10:00
  */
 
 /**
@@ -24,7 +24,7 @@ export default observer(({ field, showLabel = false, disable = false }) => (
       </label>}
     <div className="pt-form-content field-inline">
       <input
-        className={field.name + '-input pt-input profile-connection-input'}
+        className={field.name + '-input pt-input'}
         {...field.bind()}
         disabled={disable ? 'disabled' : ''}
       />

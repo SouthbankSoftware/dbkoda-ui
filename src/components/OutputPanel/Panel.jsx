@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T08:58:04+10:00
+ * @Last modified time: 2017-04-24T08:50:02+10:00
  */
 
 import React from 'react';
@@ -55,7 +55,8 @@ export default class Panel extends React.Component {
    */
   renderTabs(editors) {
     const tabs = editors.map((editor) => {
-      const editorTitle = editor[1].alias + ' (' + editor[1].shellId + ')';
+      const editorTitle = editor[1].alias + ' (' + editor[1].fileName + ')';
+
       let tabClassName = 'notVisible';
       console.log(editors);
       if (editor[1].visible && (this.props.store.editorToolbar.shellId == editor[1].shellId)) {
@@ -63,7 +64,7 @@ export default class Panel extends React.Component {
       }
       if (editor[1].explains && editor[1].explains.active) {
         runInAction(() => {
-          this.props.store.outputPanel.currentTab = 'Explain-' + editor[1].shellId;
+          this.props.store.outputPanel.currentTab = 'Explain-' + editor[1].fileName;
           editor[1].explains.active = false;
         });
       }
@@ -71,7 +72,7 @@ export default class Panel extends React.Component {
         <Tab2
           className={tabClassName}
           key={editor[1].shellId}
-          id={editorTitle}
+          id={editor[1].alias + ' (' + editor[1].fileName + ')'}
           title={editorTitle}
           panel={
             <OutputEditor
@@ -81,9 +82,9 @@ export default class Panel extends React.Component {
           } />,
         <Tab2
           className={(editor[1].explains && tabClassName !== 'notVisible') ? 'visible' : 'notVisible'}
-          key={'Explain-' + editor[1].shellId}
-          id={'Explain-' + editor[1].shellId}
-          title={'Explain-' + editor[1].shellId}
+          key={'Explain-' + editor[1].fileName}
+          id={'Explain-' + editor[1].fileName}
+          title={'Explain-' + editor[1].fileName}
           panel={
             <Explain editor={editor[1]} />
           } />

@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-19T13:47:27+10:00
+ * @Last modified time: 2017-04-21T16:19:55+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -156,7 +156,7 @@ class View extends React.Component {
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
         // Listen for completion
-        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+        const editorIndex = this.props.store.editorPanel.activeEditorId;
         this
           .props
           .store
@@ -214,7 +214,7 @@ class View extends React.Component {
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
         // Listen for completion
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
-        const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+        const editorIndex = this.props.store.editorPanel.activeEditorId;
         this
           .props
           .store
@@ -297,7 +297,7 @@ class View extends React.Component {
             });
           console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
 
-          const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+          const editorIndex = this.props.store.editorPanel.activeEditorId;
           const editor = this
             .props
             .store
@@ -493,7 +493,7 @@ class View extends React.Component {
   finishedExecution() {
     const id = this.props.store.editorToolbar.id;
     const shell = this.props.store.editorToolbar.shellId;
-    const editorIndex = this.props.store.editorPanel.activeDropdownId + ' (' + shell + ')';
+    const editorIndex = this.props.store.editorPanel.activeEditorId;
     this
       .props
       .store
