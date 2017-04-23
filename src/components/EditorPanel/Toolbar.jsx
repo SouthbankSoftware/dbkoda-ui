@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T16:41:37+10:00
+ * @Last modified time: 2017-04-24T08:56:20+10:00
 */
 
 /* eslint-disable react/prop-types */
@@ -94,7 +94,7 @@ export default class Toolbar extends React.Component {
       id: profile.id,
       alias: profile.alias,
       shellId: profile.shellId,
-      fileName: fileName,
+      fileName,
       visible: true,
       executing: false
     });
@@ -191,7 +191,7 @@ export default class Toolbar extends React.Component {
         id: res.id,
         alias: this.props.store.editorPanel.activeDropdownId,
         shellId: res.shellId,
-        fileName: fileName,
+        fileName,
         visible: true
       });
     this.props.store.editorPanel.creatingNewEditor = false;
