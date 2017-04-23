@@ -106,6 +106,7 @@ class View extends React.Component {
         theme: 'ambiance',
         lineNumbers: 'true',
         indentUnit: 2,
+        styleActiveLine: 'true',
         smartIndent: true,
         tabSize: 2,
         matchBrackets: true,
@@ -115,7 +116,7 @@ class View extends React.Component {
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-linenumbers', 'CodeMirror-lint-markers', 'CodeMirror-foldgutter'
+          'CodeMirror-linenumbers','CodeMirror-foldgutter', 'CodeMirror-lint-markers'
         ],
         keyMap: 'sublime',
         extraKeys: {

@@ -2,8 +2,33 @@
  * @Author: mike
  * @Date:   2017-03-28 16:04:27
  * @Last modified by:   mike
- * @Last modified time: 2017-03-28 16:04:23
+ * @Last modified time: 2017-04-21 17:08:04
  */
+// Theme 1 Colours: These should be externalized eventually:
+//Editor:
+$editor-background: #202020;
+$editor-active-line: #303030;
+$editor-text-comments: #8B8B8B;
+//NavBars:
+$navbar-right-background: #494849;
+$navbar-right-heading: #BFBEC0;
+$navbar-secondary-background: #323232;
+$navbar-left-background: #212E33;
+$navbar-left-heading: #BFBEC0;
+$panel-left-background: #2D3D46;
+//Buttons:
+
+
+$backgroundPrimaryColor: #2d3c46;
+$backgroundSecondaryColor: #394b59;
+$tabPrimaryColor: #3d3d3d;
+$tabStrokeColor: #d1ccc8;
+$brightBlueFont: #179dea;
+$blueDarkest: #0e5a8a;
+$selectGray: #8a9ba8;
+$whiteColor: #f5f8fa;
+$blackColor: #000000;
+
 
 $white: #ffffff;
 $brightBlueFont: #179dea;
@@ -76,6 +101,10 @@ iframe {
   color: $whiteColor;
 }
 
+.CodeMirror-linebackground {
+  background-color: $editor-background !important;
+}
+
 
 //////////////\ -------------------- \///////////////
 //////////////\ Syntax Highlighting \///////////////
@@ -119,6 +148,15 @@ span.cm-mongos-prompt{
   color: $selectGray !important;
 }
 
+.CodeMirror-gutters {
+  background-color: $editor-background !important;
+  border-right: 1px solid $editor-background !important;
+  box-shadow: none !important;
+}
+
+.CodeMirror-gutter {
+  background-color: $editor-background !important;
+}
 .CodeMirror-foldmarker {
   color: $purpleFont;
   font-family: arial;
@@ -146,10 +184,10 @@ span.cm-mongos-prompt{
   content: $rightArrow;
 }
 .CodeMirror-activeline-background {
- background: none repeat scroll 0% 0% rgba(255, 255, 255, 0.10) !important;
+  background-color: $editor-active-line !important; 
 }
 .CodeMirror-activeline-gutter {
- background-color: $matchingBackground;
+ background-color: $editor-background;
 }
 .pt-dark pre {
   box-shadow: none !important;
