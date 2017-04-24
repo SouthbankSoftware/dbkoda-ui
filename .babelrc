@@ -10,7 +10,6 @@
     "stage-0"
   ],
   "plugins": [
-    "react-hot-loader/babel",
     "transform-decorators-legacy",
     "transform-class-properties",
     "transform-async-to-generator",
@@ -20,7 +19,8 @@
     }, {
       "rootPathPrefix": "#",
       "rootPathSuffix": "src/components"
-    }]]
+    }]],
+    "react-hot-loader/babel"
   ],
   "env": {
     "test": {
@@ -30,7 +30,6 @@
         "stage-0"
       ],
       "plugins": [
-        "react-hot-loader/babel",
         "transform-decorators-legacy",
         "transform-class-properties",
         "transform-async-to-generator",
@@ -40,7 +39,8 @@
         }, {
           "rootPathPrefix": "#",
           "rootPathSuffix": "src/components"
-        }]]
+        }]],
+        "react-hot-loader/babel"
       ]
     }
   }
