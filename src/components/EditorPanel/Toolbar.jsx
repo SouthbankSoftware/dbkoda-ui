@@ -181,9 +181,24 @@ export default class Toolbar extends React.Component {
    */
   @action
   setNewEditorState(res) {
-    const fileName = `new${this.props.store.profiles.get(res.id).editorCount}.js`;
-    const editorId = this.props.store.profiles.get(res.id).alias + ' (' + fileName + ')';
-    this.props.store.profiles.get(res.id).editorCount += 1;
+    const fileName = `new${this
+      .props
+      .store
+      .profiles
+      .get(res.id)
+      .editorCount}.js`;
+    const editorId = this
+      .props
+      .store
+      .profiles
+      .get(res.id)
+      .alias + ' (' + fileName + ')';
+    this
+      .props
+      .store
+      .profiles
+      .get(res.id)
+      .editorCount += 1;
     this
       .props
       .store
@@ -191,9 +206,19 @@ export default class Toolbar extends React.Component {
       .set(editorId, {
         // eslint-disable-line react/prop-types
         id: res.id,
-        alias: this.props.store.profiles.get(res.id).alias,
+        alias: this
+          .props
+          .store
+          .profiles
+          .get(res.id)
+          .alias,
         shellId: res.shellId,
-        currentProfile: this.props.store.profiles.get(res.id).id,
+        currentProfile: this
+          .props
+          .store
+          .profiles
+          .get(res.id)
+          .id,
         fileName,
         visible: true
       });
@@ -202,7 +227,12 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.id = res.id;
     this.props.store.editorToolbar.shellId = res.shellId;
     this.props.store.editorToolbar.newConnectionLoading = false;
-    this.props.store.editorPanel.activeEditorId = this.props.store.profiles.get(res.id).alias + ' (' + fileName + ')';
+    this.props.store.editorPanel.activeEditorId = this
+      .props
+      .store
+      .profiles
+      .get(res.id)
+      .alias + ' (' + fileName + ')';
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
     NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
@@ -252,14 +282,22 @@ export default class Toolbar extends React.Component {
    * Execute the line currently selected in the active CodeMirror instance.
    */
   @action executeLine() {
-    this.props.store.editorPanel.executingEditorLines = true;
+    if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId) == 'Default') {
+      NewToaster.show({message: 'Cannot Execute on Welcome Page.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+    } else {
+      this.props.store.editorPanel.executingEditorLines = true;
+    }
   }
 
   /**
    * Execute all the contents of the currently active CodeMirror instance.
    */
   @action executeAll() {
-    this.props.store.editorPanel.executingEditorAll = true;
+    if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId) == 'Default') {
+      NewToaster.show({message: 'Cannot Execute on Welcome Page.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+    } else {
+      this.props.store.editorPanel.executingEditorAll = true;
+    }
   }
 
   /**
@@ -296,10 +334,17 @@ export default class Toolbar extends React.Component {
       this.props.store.editorToolbar.noActiveProfile = false;
     }
 
-    // Send command through current editor to swap DB:
-    // Get current editor instance:
-    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-    const profile = this.props.store.profiles.get(this.props.store.editorToolbar.currentProfile);
+    // Send command through current editor to swap DB: Get current editor instance:
+    const editor = this
+      .props
+      .store
+      .editors
+      .get(this.props.store.editorPanel.activeEditorId);
+    const profile = this
+      .props
+      .store
+      .profiles
+      .get(this.props.store.editorToolbar.currentProfile);
     console.log('Editor: ', editor);
     console.log('Profile: ', profile);
 
@@ -353,7 +398,7 @@ export default class Toolbar extends React.Component {
    * Render function for this component.
    */
   render() {
-     console.log('TEST!!!', this.props.store.editorPanel.activeDropdownId);
+    console.log('TEST!!!', this.props.store.editorPanel.activeDropdownId);
     const profiles = this
       .props
       .store
