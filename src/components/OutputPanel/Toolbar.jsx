@@ -63,11 +63,11 @@ export default class Toolbar extends React.Component {
             }
         } else if (currentab.indexOf('Explain-') === 0) {
           // close explain output
-          const shellId = currentab.split('Explain-')[1];
+          const explainName = currentab.split('Explain-')[1];
           let editorKey = null;
           let editor = null;
           this.props.store.editors.forEach((value, key) => {
-            if (value.shellId === shellId) {
+            if (value.alias + ' (' + value.fileName + ')' === explainName) {
               editorKey = key;
               editor = value;
             }

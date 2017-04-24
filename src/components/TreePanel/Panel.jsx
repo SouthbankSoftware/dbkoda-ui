@@ -47,7 +47,6 @@ export default class TreePanel extends React.Component {
             service.timeout = 60000;
             service.get(this.props.store.profileList.selectedProfile.id)
             .then((res) => {
-              console.log('treeJson:', res);
               this.props.store.updateTopology(res);
             })
             .catch((err) => {

@@ -41,9 +41,12 @@ export default class ListView extends React.Component {
       .store
       .profiles
       .entries();
-    profiles.map(p => console.log('profile status:', p[1].status));
     const renderCell = (rowIndex : number) => {
-      return <Cell>{profiles[rowIndex][1].alias}</Cell>;
+      if (profiles[rowIndex][1].status == 'OPEN') {
+        return <Cell>{profiles[rowIndex][1].alias}</Cell>;
+      } else { // eslint-disable-line
+        return <Cell><i className="closedProfile">{profiles[rowIndex][1].alias}</i></Cell>;
+      }
     };
     return (
       <div className="profileList">

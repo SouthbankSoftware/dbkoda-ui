@@ -82,7 +82,7 @@ export default class Panel extends React.Component {
     const formErrors = this._getFormErrors();
 
     return (
-      <div className="pt-dark ">
+      <div className="pt-dark connection-profile">
         <h3 className="profile-title">{title}</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
           <Input field={form.$('alias')} showLabel />

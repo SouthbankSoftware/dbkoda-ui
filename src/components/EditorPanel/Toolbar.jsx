@@ -122,8 +122,6 @@ export default class Toolbar extends React.Component {
         .store
         .profiles
         .forEach((value) => {
-          console.log('Profile Alias: ', value.alias);
-          console.log('Active Dropdown: ', profileTitle);
           if (value.id == profileTitle) {
             profileId = value.id;
           }
@@ -137,7 +135,6 @@ export default class Toolbar extends React.Component {
         this.setNewEditorLoading(false);
         return null;
       }
-      console.log('Create new Editor for ID:', profileId);
       featherClient()
         .service('/mongo-shells')
         .create({id: profileId})
@@ -377,7 +374,6 @@ export default class Toolbar extends React.Component {
       .value
       .replace(/ /g, '');
     this.props.store.editorPanel.tabFilter = filter;
-    console.log(this.props.store.editors);
     this
       .props
       .store
@@ -398,7 +394,6 @@ export default class Toolbar extends React.Component {
    * Render function for this component.
    */
   render() {
-    console.log('TEST!!!', this.props.store.editorPanel.activeDropdownId);
     const profiles = this
       .props
       .store
