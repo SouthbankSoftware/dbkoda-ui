@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-04-21T11:01:53+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-24T10:54:50+10:00
  */
 
 /**
@@ -27,7 +27,7 @@ import {ProfileStatus, DrawerPanes} from '.././common/Constants';
 const ConnectionPanel = ({
                            profiles,
                            profileList,
-                           drawer,
+                           setDrawerChild,
                            userPreferences,
                          }) => {
   const selectedProfile = profileList.selectedProfile;
@@ -59,7 +59,7 @@ const ConnectionPanel = ({
   };
 
   const close = action(() => {
-    drawer.drawerChild = DrawerPanes.DEFAULT;
+    setDrawerChild(DrawerPanes.DEFAULT);
   });
   /**
    * when connection successfully created, this method will add the new profile on store.
@@ -157,6 +157,7 @@ const ConnectionPanel = ({
         onSuccess(res, data);
       })
       .catch((err) => {
+        console.log(err.stack);
         onFail();
         DBenvyToaster(Position.LEFT_BOTTOM).show({
           message: err.message,
@@ -199,6 +200,6 @@ const ConnectionPanel = ({
 export default inject(allStores => ({
   profiles: allStores.store.profiles,
   profileList: allStores.store.profileList,
-  drawer: allStores.store.drawer,
+  setDrawerChild: allStores.store.setDrawerChild,
   userPreferences: allStores.store.userPreferences,
 }))(observer(ConnectionPanel));

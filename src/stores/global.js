@@ -2,16 +2,15 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T10:42:13+10:00
+ * @Last modified time: 2017-04-24T12:53:26+10:00
  */
 
 import _ from 'lodash';
-import {observable, action} from 'mobx';
-import {dump, restore} from 'dumpenvy';
-import {DrawerPanes} from '#/common/Constants';
-import {featherClient} from '~/helpers/feathers';
+import { dump, restore } from 'dumpenvy';
+import { DrawerPanes } from '#/common/Constants';
+import { featherClient } from '~/helpers/feathers';
 import path from 'path';
-import {Broker, EventType} from '../helpers/broker';
+import { Broker, EventType } from '../helpers/broker';
 
 export default class Store {
   @observable profiles = observable.map();
@@ -96,24 +95,34 @@ export default class Store {
     json: {}
   });
 
+  setDrawerChild = (value) => {
+    runInAction('update left drawer', () => {
+      this.drawer.drawerChild = value;
+    });
+  };
+
   @action showConnectionPane = () => {
-    this.drawer.drawerChild = DrawerPanes.PROFILE;
+    this.setDrawerChild(DrawerPanes.PROFILE);
   };
   @action showTreeActionPane = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
-    this.drawer.drawerChild = DrawerPanes.DYNAMIC;
+    this.setDrawerChild(DrawerPanes.DYNAMIC);
     this.editorToolbar.newEditorForTreeAction = true;
   };
 
-  @action updateDynamicFormCode = (value) => {
-    this.treeActionPanel.formValues = value;
-    this.treeActionPanel.isNewFormValues = true;
+  updateDynamicFormCode = (value) => {
+    runInAction('update code in editor', () => {
+      this.treeActionPanel.formValues = value;
+      this.treeActionPanel.isNewFormValues = true;
+    });
   };
 
-  @action updateTopology = (jsonData) => {
-    this.topology.json = jsonData;
-    this.topology.isChanged = true;
+  updateTopology = (jsonData) => {
+    runInAction('updating topology', () => {
+      this.topology.json = jsonData;
+      this.topology.isChanged = true;
+    });
   };
 
   @action addEditor = (withProfile, newRes) => {
@@ -135,7 +144,7 @@ export default class Store {
     featherClient()
       .service('files')
       .get(path.resolve('/tmp/stateStore.json'))
-      .then(({content}) => {
+      .then(({ content }) => {
         this.restore(content);
       })
       .catch((err) => {
@@ -150,8 +159,7 @@ export default class Store {
         _id: path.resolve('/tmp/stateStore.json'),
         content: this.dump()
       })
-      .then(() => {
-      })
+      .then(() => {})
       .catch((err) => {
         console.log(err);
       });

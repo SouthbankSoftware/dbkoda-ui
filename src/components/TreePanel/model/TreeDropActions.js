@@ -3,7 +3,7 @@
 * @Date:   2017-03-17T10:29:12+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-05T12:02:06+10:00
+ * @Last modified time: 2017-04-24T12:56:14+10:00
 */
 
 import Templates from '../templates/dragdrop';
@@ -17,7 +17,6 @@ export default class TreeDropActions {
   static getTemplateByType(type) {
     const templateId = Templates[type];
     const template = require('../templates/dragdrop/'+ templateId); //eslint-disable-line
-    console.log(template);
     return template;
   }
   /**

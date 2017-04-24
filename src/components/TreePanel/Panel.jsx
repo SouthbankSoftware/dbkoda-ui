@@ -3,12 +3,12 @@
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-19T09:50:28+10:00
+ * @Last modified time: 2017-04-24T11:02:51+10:00
 */
 
 import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
-import { reaction } from 'mobx';
+import { reaction, runInAction } from 'mobx';
 import Store from '~/stores/global';
 import { Intent, Position } from '@blueprintjs/core';
 import { featherClient } from '../../helpers/feathers';
@@ -51,6 +51,7 @@ export default class TreePanel extends React.Component {
               this.props.store.updateTopology(res);
             })
             .catch((err) => {
+              console.log(err.stack);
               DBenvyToaster(Position.LEFT_BOTTOM).show({
                 message: err.message,
                 intent: Intent.DANGER,
@@ -70,7 +71,9 @@ export default class TreePanel extends React.Component {
       () => {
         if (this.props.store.topology.isChanged && this.props.store.topology.json !== null) {
           this.treeState.parseJson(this.props.store.topology.json);
-          this.props.store.topology.isChanged = false;
+          runInAction('update topology isChanged', () => {
+            this.props.store.topology.isChanged = false;
+          });
         }
       },
     );
