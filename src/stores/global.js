@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-24T14:07:32+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-24T18:38:20+10:00
  */
 
 import _ from 'lodash';
@@ -12,6 +12,14 @@ import { DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import path from 'path';
 import { Broker, EventType } from '../helpers/broker';
+
+global.IS_ELECTRON = _.has(window, 'process.versions.electron');
+
+let ipcRenderer;
+
+if (IS_ELECTRON) {
+  ipcRenderer = window.require('electron').ipcRenderer;
+}
 
 export default class Store {
   @observable profiles = observable.map();
@@ -164,7 +172,7 @@ export default class Store {
 
     // Editors:
     newStore.editors.forEach((value) => {
-        value.executing = false;
+      value.executing = false;
     });
 
     // OutputPanel:
@@ -190,6 +198,16 @@ export default class Store {
       })
       .catch((err) => {
         console.log(err);
+      })
+      .then(() => {
+        if (IS_ELECTRON) {
+          _.delay(
+            () => {
+              ipcRenderer.send('appReady');
+            },
+            200
+          );
+        }
       });
   }
 
@@ -208,7 +226,7 @@ export default class Store {
 
   constructor() {
     Broker.on(EventType.FEATHER_CLIENT_LOADED, () => {
-      // this.load();
+      this.load();
     });
   }
 }
