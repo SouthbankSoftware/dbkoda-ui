@@ -76,12 +76,10 @@ export default class Editor extends React.Component {
       this.props.store.outputs.get(this.props.title).output +
       output.output; // eslint-disable-line
     let outputLines = totalOutput.split('\r');
-    console.log('get output lines ', outputLines.length);
 
     if (outputLines && outputLines.length >= 500) {
       outputLines = outputLines.slice(Math.max(outputLines.length - 500, 1));
       totalOutput = outputLines.join('\r');
-      console.log('reduce output lines ', outputLines.length);
     }
     this.props.store.outputs.get(this.props.title).output = totalOutput;
     if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {

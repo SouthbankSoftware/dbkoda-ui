@@ -168,7 +168,7 @@ export default class Store {
 
   constructor() {
     Broker.on(EventType.FEATHER_CLIENT_LOADED, () => {
-      this.load();
+      // this.load();
     });
   }
 }
