@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T16:41:37+10:00
+ * @Last modified time: 2017-04-24T08:56:20+10:00
 */
 
 /* eslint-disable react/prop-types */
@@ -193,8 +193,12 @@ export default class Toolbar extends React.Component {
         id: res.id,
         alias: this.props.store.profiles.get(res.id).alias,
         shellId: res.shellId,
+<<<<<<< HEAD
         currentProfile: this.props.store.profiles.get(res.id).id,
         fileName: fileName,
+=======
+        fileName,
+>>>>>>> 6c0f6d7c30e3d27f1d5ce533c359218c10c10337
         visible: true
       });
     this.props.store.editorPanel.creatingNewEditor = false;

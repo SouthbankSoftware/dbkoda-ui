@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T16:10:06+10:00
+ * @Last modified time: 2017-04-24T10:36:44+10:00
  */
 
 import React from 'react';
@@ -124,7 +124,7 @@ export default class Terminal extends React.Component {
    */
   showPreviousCommand() {
     if (this.state.historyCursor > 0) {
-      this.state.historyCursor += 1;
+      this.state.historyCursor -= 1;
       this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
     }
   }
@@ -197,7 +197,6 @@ export default class Terminal extends React.Component {
 
   @action.bound
   finishedExecution() {
-    const shell = this.props.store.editorToolbar.shellId;
     this
       .props
       .store
