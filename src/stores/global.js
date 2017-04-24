@@ -138,7 +138,47 @@ export default class Store {
 
   @action restore(data) {
     const newStore = restore(data);
+    this.cleanStore(newStore);
+    console.log('Restoring Store: ', newStore);
     _.assign(this, newStore);
+  }
+
+  cleanStore(newStore) {
+    // EditorPanel:
+    newStore.editorPanel.activeDropdownId = 'Default';
+    newStore.editorPanel.activeEditorId = 'Default';
+    newStore.editorPanel.creatingNewEditor = false;
+    newStore.editorPanel.executingEditorAll = false;
+    newStore.editorPanel.executingEditorLines = false;
+    newStore.editorPanel.stoppingExecution = false;
+    newStore.editorPanel.tabFilter = '';
+
+    // EditorToolbar:
+    newStore.editorToolbar.currentProfile = 0;
+    newStore.editorToolbar.id = 0;
+    newStore.editorToolbar.shellId = 0;
+    newStore.editorToolbar.isActiveExecuting = false;
+    newStore.editorToolbar.isExplainExecuting = false;
+    newStore.editorToolbar.newConnectionLoading = false;
+    newStore.editorToolbar.noActiveProfile = true;
+
+    // Editors:
+    newStore.editors.forEach((value) => {
+        value.executing = false;
+    });
+
+    // OutputPanel:
+    newStore.outputPanel.clearingOutput = false;
+    newStore.outputPanel.executingShowMore = false;
+    newStore.outputPanel.executingTerminalCmd = false;
+
+    // ProfileList
+    newStore.profileList.creatingNewProfile = false;
+
+    // Profiles:
+    newStore.profiles.forEach((value) => {
+      value.status = 'CLOSED';
+    });
   }
 
   load() {
