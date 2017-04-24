@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-04-24T09:59:22+10:00
+ * @Last modified time: 2017-04-24T10:19:23+10:00
  */
 
 import React from 'react';
@@ -37,6 +37,12 @@ class App extends React.Component {
     layout: PropTypes.observableObject.isRequired
   };
 
+  componentDidMount() {
+    window.addEventListener('beforeunload', () => {
+      this.props.store.save();
+    });
+  }
+
   @action.bound
   updateRightSplitPos(pos) {
     this.props.layout.rightSplitPos = pos;
@@ -56,12 +62,6 @@ class App extends React.Component {
   closeOptIn(bool) {
     this.props.store.userPreferences.telemetryEnabled = bool;
     this.props.store.layout.optInVisible = false;
-  }
-
-  componentDidMount() {
-    window.addEventListener('beforeunload', () => {
-      this.props.store.save();
-    });
   }
 
   render() {
