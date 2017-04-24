@@ -138,9 +138,8 @@ export default class Store {
 
   @action restore(data) {
     const newStore = restore(data);
-    console.log(newStore);
     this.cleanStore(newStore);
-    console.log(newStore);
+    console.log('Restoring Store: ', newStore);
     _.assign(this, newStore);
   }
 
