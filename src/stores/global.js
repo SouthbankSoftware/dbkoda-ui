@@ -146,6 +146,8 @@ export default class Store {
 
   cleanStore(newStore) {
     // EditorPanel:
+    newStore.editorPanel.activeDropdownId = 'Default';
+    newStore.editorPanel.activeEditorId = 'Default';
     newStore.editorPanel.creatingNewEditor = false;
     newStore.editorPanel.executingEditorAll = false;
     newStore.editorPanel.executingEditorLines = false;
@@ -153,7 +155,9 @@ export default class Store {
     newStore.editorPanel.tabFilter = '';
 
     // EditorToolbar:
-    newStore.editorToolbar.currentProfile = 'Default';
+    newStore.editorToolbar.currentProfile = 0;
+    newStore.editorToolbar.id = 0;
+    newStore.editorToolbar.shellId = 0;
     newStore.editorToolbar.isActiveExecuting = false;
     newStore.editorToolbar.isExplainExecuting = false;
     newStore.editorToolbar.newConnectionLoading = false;
