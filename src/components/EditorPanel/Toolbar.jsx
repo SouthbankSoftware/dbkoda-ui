@@ -193,12 +193,8 @@ export default class Toolbar extends React.Component {
         id: res.id,
         alias: this.props.store.profiles.get(res.id).alias,
         shellId: res.shellId,
-<<<<<<< HEAD
         currentProfile: this.props.store.profiles.get(res.id).id,
         fileName: fileName,
-=======
-        fileName,
->>>>>>> 6c0f6d7c30e3d27f1d5ce533c359218c10c10337
         visible: true
       });
     this.props.store.editorPanel.creatingNewEditor = false;
