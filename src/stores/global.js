@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-04-24T18:21:34+10:00
+ * @Last modified time: 2017-04-24T18:38:20+10:00
  */
 
 import _ from 'lodash';
@@ -172,7 +172,7 @@ export default class Store {
 
     // Editors:
     newStore.editors.forEach((value) => {
-        value.executing = false;
+      value.executing = false;
     });
 
     // OutputPanel:
@@ -195,6 +195,11 @@ export default class Store {
       .get(path.resolve('/tmp/stateStore.json'))
       .then(({ content }) => {
         this.restore(content);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .then(() => {
         if (IS_ELECTRON) {
           _.delay(
             () => {
@@ -203,9 +208,6 @@ export default class Store {
             200
           );
         }
-      })
-      .catch((err) => {
-        console.log(err);
       });
   }
 
@@ -224,7 +226,7 @@ export default class Store {
 
   constructor() {
     Broker.on(EventType.FEATHER_CLIENT_LOADED, () => {
-      // this.load();
+      this.load();
     });
   }
 }
