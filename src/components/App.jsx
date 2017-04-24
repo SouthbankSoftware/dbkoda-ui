@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   chris
- * @Last modified time: 2017-04-21T15:18:15+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-24T09:59:22+10:00
  */
 
 import React from 'react';
@@ -29,7 +29,7 @@ import './App.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  layout: allStores.store.layout,
+  layout: allStores.store.layout
 }))
 @observer
 class App extends React.Component {
@@ -58,12 +58,11 @@ class App extends React.Component {
     this.props.store.layout.optInVisible = false;
   }
 
-  // componentDidMount() {
-  // }
-  //
-  // componentWillUnmount() {
-  //   this.props.store.save();
-  // }
+  componentDidMount() {
+    window.addEventListener('beforeunload', () => {
+      this.props.store.save();
+    });
+  }
 
   render() {
     const { layout } = this.props;
