@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T16:19:55+10:00
+ * @Last modified time: 2017-04-24T15:12:24+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -145,7 +145,7 @@ class View extends React.Component {
         console.log(this.props.store.profiles);
         let shell = null;
         let id = null;
-        
+
         const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
         shell = editor.shellId;
         id = editor.id;
@@ -247,8 +247,10 @@ class View extends React.Component {
         const explainParam = this.props.store.editorPanel.executingExplain;
         if (this.props.store.editorPanel.activeEditorId == this.props.title && explainParam) {
           // Determine code to send.
-          let shell = null;
-          let id = null;
+          const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+          const shell = editor.shellId;
+          const id = editor.id;
+
           const cm = this
             .refs
             .editor
@@ -274,24 +276,8 @@ class View extends React.Component {
               content += '.explain("' + explainParam + '")';
             }
           }
-          this
-            .props
-            .store
-            .profiles
-            .forEach((value) => {
-              if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-                shell = value.shellId;
-                id = value.id;
-              }
-            });
-          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
 
-          const editorIndex = this.props.store.editorPanel.activeEditorId;
-          const editor = this
-            .props
-            .store
-            .editors
-            .get(editorIndex);
+          console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
 
           editor.executing = true;
           // Send request to feathers client
