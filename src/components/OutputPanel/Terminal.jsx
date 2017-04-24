@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-24T08:55:39+10:00
+ * @Last modified time: 2017-04-24T10:36:44+10:00
  */
 
 import React from 'react';
@@ -124,7 +124,7 @@ export default class Terminal extends React.Component {
    */
   showPreviousCommand() {
     if (this.state.historyCursor > 0) {
-      this.state.historyCursor += 1;
+      this.state.historyCursor -= 1;
       this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
     }
   }
