@@ -94,7 +94,7 @@ export default class Toolbar extends React.Component {
       alias: profile.alias,
       shellId: profile.shellId,
       currentProfile: profile.id,
-      fileName: fileName,
+      fileName,
       visible: true,
       executing: false
     });
@@ -194,7 +194,7 @@ export default class Toolbar extends React.Component {
         alias: this.props.store.profiles.get(res.id).alias,
         shellId: res.shellId,
         currentProfile: this.props.store.profiles.get(res.id).id,
-        fileName: fileName,
+        fileName,
         visible: true
       });
     this.props.store.editorPanel.creatingNewEditor = false;
@@ -298,7 +298,7 @@ export default class Toolbar extends React.Component {
 
     // Send command through current editor to swap DB:
     // Get current editor instance:
-    let editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     const profile = this.props.store.profiles.get(this.props.store.editorToolbar.currentProfile);
     console.log('Editor: ', editor);
     console.log('Profile: ', profile);
