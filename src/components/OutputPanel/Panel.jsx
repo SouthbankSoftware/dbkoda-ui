@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-24T08:50:02+10:00
+ * @Last modified time: 2017-04-24T15:05:08+10:00
  */
 
 import React from 'react';
@@ -71,7 +71,7 @@ export default class Panel extends React.Component {
         <Tab2
           className={tabClassName}
           key={editor[1].shellId}
-          id={editor[1].alias + ' (' + editor[1].fileName + ')'}
+          id={editorTitle}
           title={editorTitle}
           panel={
             <OutputEditor
@@ -81,9 +81,9 @@ export default class Panel extends React.Component {
           } />,
         <Tab2
           className={(editor[1].explains && tabClassName !== 'notVisible') ? 'visible' : 'notVisible'}
-          key={'Explain-' + editor[1].fileName}
-          id={'Explain-' + editor[1].fileName}
-          title={'Explain-' + editor[1].fileName}
+          key={'Explain-' + editorTitle}
+          id={'Explain-' + editorTitle}
+          title={'Explain-' + editorTitle}
           panel={
             <Explain editor={editor[1]} />
           } />
