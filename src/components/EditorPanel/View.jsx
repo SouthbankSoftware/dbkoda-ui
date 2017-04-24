@@ -141,18 +141,14 @@ class View extends React.Component {
     const reactionToExecuteAll = reaction( // eslint-disable-line
         () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
       if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorAll == true) {
+        console.log(this.props.store.editors);
+        console.log(this.props.store.profiles);
         let shell = null;
         let id = null;
-        this
-          .props
-          .store
-          .editors
-          .forEach((value) => {
-            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-              shell = value.shellId;
-              id = value.id;
-            }
-          });
+        
+        const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+        shell = editor.shellId;
+        id = editor.id;
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
         // Listen for completion
@@ -201,16 +197,9 @@ class View extends React.Component {
           console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
           content = cm.getLine(cm.getCursor().line);
         }
-        this
-          .props
-          .store
-          .profiles
-          .forEach((value) => {
-            if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-              shell = value.shellId;
-              id = value.id;
-            }
-          });
+         const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+        shell = editor.shellId;
+        id = editor.id;
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
         // Listen for completion
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
