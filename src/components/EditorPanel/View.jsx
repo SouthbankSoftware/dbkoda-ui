@@ -106,6 +106,7 @@ class View extends React.Component {
         theme: 'ambiance',
         lineNumbers: 'true',
         indentUnit: 2,
+        styleActiveLine: 'true',
         smartIndent: true,
         tabSize: 2,
         matchBrackets: true,
@@ -115,7 +116,7 @@ class View extends React.Component {
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-linenumbers', 'CodeMirror-lint-markers', 'CodeMirror-foldgutter'
+          'CodeMirror-linenumbers','CodeMirror-foldgutter', 'CodeMirror-lint-markers'
         ],
         keyMap: 'sublime',
         extraKeys: {
@@ -145,7 +146,7 @@ class View extends React.Component {
         this
           .props
           .store
-          .profiles
+          .editors
           .forEach((value) => {
             if (value.alias == this.props.store.editorPanel.activeDropdownId) {
               shell = value.shellId;
