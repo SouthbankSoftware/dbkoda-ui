@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action } from 'mobx';
+import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
 import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
@@ -46,6 +46,9 @@ export default class Editor extends React.Component {
 
   componentDidMount() {
     const {props} = this;
+    runInAction(() => {
+      this.props.store.outputs.get(this.props.title).output = this.props.initialMsg;
+    });
     Broker.on(EventType.createShellOutputEvent(props.id, props.shellId), this.outputAvailable);
   }
 

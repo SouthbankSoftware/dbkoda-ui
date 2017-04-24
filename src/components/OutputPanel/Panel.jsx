@@ -77,6 +77,7 @@ export default class Panel extends React.Component {
             <OutputEditor
               title={editorTitle}
               id={editor[1].id}
+              initialMsg={editor[1].initialMsg}
               shellId={editor[1].shellId} />
           } />,
         <Tab2

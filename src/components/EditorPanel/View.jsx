@@ -449,18 +449,9 @@ class View extends React.Component {
   }
 
   getActiveProfileId() {
-    let shell = null;
-    let id = null;
-    this
-      .props
-      .store
-      .profiles
-      .forEach((value) => {
-        if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-          shell = value.shellId;
-          id = value.id;
-        }
-      });
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const shell = editor.shellId;
+    const id = editor.id;
     return {id, shell};
   }
 

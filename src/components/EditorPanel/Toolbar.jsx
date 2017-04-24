@@ -96,7 +96,8 @@ export default class Toolbar extends React.Component {
       currentProfile: profile.id,
       fileName,
       visible: true,
-      executing: false
+      executing: false,
+      initialMsg: profile.initialMsg,
     });
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
@@ -217,7 +218,8 @@ export default class Toolbar extends React.Component {
           .get(res.id)
           .id,
         fileName,
-        visible: true
+        visible: true,
+        initialMsg: res.output.join('\n'),
       });
     this.props.store.editorPanel.creatingNewEditor = false;
     this.props.store.editorToolbar.noActiveProfile = false;
