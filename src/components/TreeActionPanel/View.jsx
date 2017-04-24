@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T10:52:04+10:00
+ * @Last modified time: 2017-04-24T10:33:57+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -18,13 +18,13 @@ import TextField from './Components/TextField';
 import './View.scss';
 
 @inject(allStores => ({
-  drawer: allStores.store.drawer
+  setDrawerChild: allStores.store.setDrawerChild
 }))
 @observer
 export default class TreeActionView extends React.Component {
   @action.bound
   close() {
-    this.props.drawer.drawerChild = DrawerPanes.DEFAULT;
+    this.props.setDrawerChild(DrawerPanes.DEFAULT);
   }
   render() {
     const { mobxForm, title } = this.props;
