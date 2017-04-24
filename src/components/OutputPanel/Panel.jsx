@@ -58,7 +58,6 @@ export default class Panel extends React.Component {
       const editorTitle = editor[1].alias + ' (' + editor[1].fileName + ')';
 
       let tabClassName = 'notVisible';
-      console.log(editors);
       if (editor[1].visible && (this.props.store.editorToolbar.shellId == editor[1].shellId)) {
         tabClassName = 'visible';
       }

@@ -49,6 +49,7 @@ export default class Panel extends React.Component {
   }
 
   /**
+   * DEPRECATED? Remove this after refactoring.
    * Action for creating a new editor in the MobX store.
    * @param {String} newId - The id of the newly created Editor tab.
    */
@@ -101,7 +102,7 @@ export default class Panel extends React.Component {
       this.props.store.editorPanel.activeEditorId = newTab;
       this.setState({tabId: newTab});
       if (newTab != 'Default') {
-        this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).alias;
+        this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).currentProfile;
         this.props.store.editorToolbar.id = this.props.store.editors.get(newTab).id;
         this.props.store.editorToolbar.shellId = this.props.store.editors.get(newTab).shellId;
       }

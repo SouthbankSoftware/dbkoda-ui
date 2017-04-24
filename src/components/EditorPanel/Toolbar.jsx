@@ -93,6 +93,7 @@ export default class Toolbar extends React.Component {
       id: profile.id,
       alias: profile.alias,
       shellId: profile.shellId,
+      currentProfile: profile.id,
       fileName: fileName,
       visible: true,
       executing: false
@@ -102,7 +103,7 @@ export default class Toolbar extends React.Component {
     editorToolbar.shellId = profile.shellId;
     editorToolbar.newConnectionLoading = false;
     editorPanel.activeEditorId = profile.alias + ' (' + fileName + ')';
-    editorPanel.activeDropdownId = profile.alias;
+    editorPanel.activeDropdownId = profile.id;
     editorToolbar.currentProfile = profile.id;
     editorToolbar.noActiveProfile = false;
   }
@@ -121,7 +122,9 @@ export default class Toolbar extends React.Component {
         .store
         .profiles
         .forEach((value) => {
-          if (value.alias == profileTitle) {
+          console.log('Profile Alias: ', value.alias);
+          console.log('Active Dropdown: ', profileTitle);
+          if (value.id == profileTitle) {
             profileId = value.id;
           }
         });
@@ -179,7 +182,7 @@ export default class Toolbar extends React.Component {
   @action
   setNewEditorState(res) {
     const fileName = `new${this.props.store.profiles.get(res.id).editorCount}.js`;
-    const editorId = this.props.store.editorPanel.activeDropdownId + ' (' + fileName + ')';
+    const editorId = this.props.store.profiles.get(res.id).alias + ' (' + fileName + ')';
     this.props.store.profiles.get(res.id).editorCount += 1;
     this
       .props
@@ -188,8 +191,9 @@ export default class Toolbar extends React.Component {
       .set(editorId, {
         // eslint-disable-line react/prop-types
         id: res.id,
-        alias: this.props.store.editorPanel.activeDropdownId,
+        alias: this.props.store.profiles.get(res.id).alias,
         shellId: res.shellId,
+        currentProfile: this.props.store.profiles.get(res.id).id,
         fileName: fileName,
         visible: true
       });
@@ -198,8 +202,7 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.id = res.id;
     this.props.store.editorToolbar.shellId = res.shellId;
     this.props.store.editorToolbar.newConnectionLoading = false;
-    this.props.store.editorPanel.activeEditorId = this.props.store.editorPanel.activeDropdownId + ' (' + fileName + ')';
-    this.props.store.editorPanel.activeDropdownId = this.props.store.editorPanel.activeDropdownId;
+    this.props.store.editorPanel.activeEditorId = this.props.store.profiles.get(res.id).alias + ' (' + fileName + ')';
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
     NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
@@ -295,15 +298,26 @@ export default class Toolbar extends React.Component {
 
     // Send command through current editor to swap DB:
     // Get current editor instance:
-
-    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-
+    let editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     const profile = this.props.store.profiles.get(this.props.store.editorToolbar.currentProfile);
+    console.log('Editor: ', editor);
+    console.log('Profile: ', profile);
 
-    console.log(editor);
-    console.log(this.props.store.editorToolbar.currentProfile);
-    console.log(this.props.store.profiles);
-    console.log(profile);
+    // Send Command:
+    const service = featherClient().service('/mongo-sync-execution');
+    service.timeout = 30000;
+    service
+      .update(editor.id, {
+      shellId: editor.shellId,
+      newProfile: profile.id,
+      swapProfile: true // eslint-disable-line
+    })
+      .then((res) => {
+        console.log(res);
+        console.log(editor);
+        editor.currentProfile = profile.id;
+        console.log(editor);
+      });
   }
 
   /**
@@ -339,6 +353,7 @@ export default class Toolbar extends React.Component {
    * Render function for this component.
    */
   render() {
+     console.log('TEST!!!', this.props.store.editorPanel.activeDropdownId);
     const profiles = this
       .props
       .store
@@ -390,7 +405,7 @@ export default class Toolbar extends React.Component {
                 className="pt-intent-primary">
                 <option key="Default" value="Default">No Active Connection</option>; {profiles.map((profile) => {
                   if (profile[1].status == 'OPEN') {
-                    return <option key={profile[0]} value={profile[1].alias}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
+                    return <option key={profile[0]} value={profile[1].id}>{profile[1].alias}</option>; // eslint-disable-line react/no-array-index-key
                   }
                 })}
               </select>
