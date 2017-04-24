@@ -2,11 +2,11 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-24T13:18:27+10:00
+ * @Last modified time: 2017-04-24T14:07:32+10:00
  */
 
 import _ from 'lodash';
-import { observable, action } from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { dump, restore } from 'dumpenvy';
 import { DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';

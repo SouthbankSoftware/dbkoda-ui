@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-04-24T10:19:23+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-24T13:58:22+10:00
  */
 
 import React from 'react';
@@ -51,11 +51,6 @@ class App extends React.Component {
   @action.bound
   updateOverallSplitPos(pos) {
     this.props.layout.overallSplitPos = pos;
-  }
-
-  @action.bound
-  updateLeftSplitPos(pos) {
-    this.props.layout.leftSplitPos = pos;
   }
 
   @action.bound

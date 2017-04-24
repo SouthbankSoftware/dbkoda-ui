@@ -3,12 +3,12 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T11:17:27+10:00
+ * @Last modified time: 2017-04-24T13:58:56+10:00
  */
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { untracked } from 'mobx';
+import { action, untracked } from 'mobx';
 import SplitPane from 'react-split-pane';
 
 import { ProfileListPanel } from '#/ProfileListPanel';
@@ -32,6 +32,11 @@ export default class Panel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  @action.bound
+  updateLeftSplitPos(pos) {
+    this.props.layout.leftSplitPos = pos;
   }
 
   render() {
