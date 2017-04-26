@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-20T13:58:29+10:00
+ * @Last modified time: 2017-04-26T15:27:57+10:00
  */
 
 import React from 'react';
@@ -17,7 +17,11 @@ import { CreateForm } from './Components/DynamicForm';
 export default class TreeActionPanel extends React.Component {
   componentWillMount() {
     const { treeActionPanel, updateDynamicFormCode } = this.props.store;
-    this.dynamicForm = CreateForm(treeActionPanel, updateDynamicFormCode, this.executeCommand);
+    this.dynamicForm = CreateForm(
+      treeActionPanel,
+      updateDynamicFormCode,
+      this.executeCommand
+    );
   }
   componentDidMount() {
     this.dynamicForm.getData();
@@ -25,12 +29,11 @@ export default class TreeActionPanel extends React.Component {
   executeCommand = (content) => {
     let id = null;
     let shell = null;
-    this.props.store.profiles.forEach((value) => {
-      if (value.alias == this.props.store.editorPanel.activeDropdownId) {
-        shell = value.shellId;
-        id = value.id;
-      }
-    });
+    const editor = this.props.store.editors.get(
+      this.props.store.treeActionPanel.treeActionEditorId
+    );
+    shell = editor.shellId;
+    id = editor.id;
     if (shell && id && shell != '' && id != '') {
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 30000;
@@ -38,7 +41,7 @@ export default class TreeActionPanel extends React.Component {
         service
           .update(id, {
             shellId: shell, // eslint-disable-line
-            commands: content,
+            commands: content
           })
           .then((res) => {
             if (typeof res == 'string') {
@@ -49,7 +52,10 @@ export default class TreeActionPanel extends React.Component {
             }
           })
           .catch((reason) => {
-            console.log('executeCommand:', 'Handle rejected promise (' + reason + ') here.');
+            console.log(
+              'executeCommand:',
+              'Handle rejected promise (' + reason + ') here.'
+            );
             reject(reason);
           });
       });
@@ -59,6 +65,11 @@ export default class TreeActionPanel extends React.Component {
   dynamicForm;
   render() {
     console.log(this);
-    return <View title={this.dynamicForm.title} mobxForm={this.dynamicForm.mobxForm} />;
+    return (
+      <View
+        title={this.dynamicForm.title}
+        mobxForm={this.dynamicForm.mobxForm}
+      />
+    );
   }
 }
