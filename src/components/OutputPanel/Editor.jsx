@@ -84,6 +84,8 @@ export default class Editor extends React.Component {
       outputLines = outputLines.slice(Math.max(outputLines.length - 500, 1));
       totalOutput = outputLines.join('\r');
     }
+    console.log('previous output ', this.props.store.outputs.get(this.props.title).output )
+    console.log('totalOutput = ', totalOutput)
     this.props.store.outputs.get(this.props.title).output = totalOutput;
     if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
@@ -93,6 +95,7 @@ export default class Editor extends React.Component {
       console.log('cannot show more');
       this.props.store.outputs.get(this.props.title).cannotShowMore = true; // eslint-disable-line
     }
+    this.forceUpdate();
   }
 
   render() {

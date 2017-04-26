@@ -22,8 +22,6 @@ import {DBenvyToaster} from '../common/Toaster';
 import {Broker, EventType} from '../../helpers/broker';
 import {ProfileStatus, DrawerPanes} from '.././common/Constants';
 
-
-
 const ConnectionPanel = ({
                            profiles,
                            profileList,
@@ -72,6 +70,7 @@ const ConnectionPanel = ({
     if (!data.test) {
       if (edit) {
         profiles.delete(selectedProfile.id);
+        Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {id: res.id, shellId: res.shellId, output:res.output.join('\r')});
       }
       position = Position.RIGHT_TOP;
       form.reset();
@@ -149,8 +148,7 @@ const ConnectionPanel = ({
       query.shellId = selectedProfile.shellId;
     }
     profileList.creatingNewProfile = true;
-    const service = featherClient()
-      .service('/mongo-connection');
+    const service = featherClient().service('/mongo-connection');
     service.timeout = 30000;
     return service.create({}, {query})
       .then((res) => {
