@@ -67,7 +67,6 @@ export default class Panel extends React.Component {
           editor[1].explains.active = false;
         });
       }
-      console.log('xxxx editor title ', editor[1]);
       return [
         <Tab2
           className={tabClassName}
