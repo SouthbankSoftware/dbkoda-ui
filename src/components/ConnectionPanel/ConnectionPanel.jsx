@@ -66,7 +66,7 @@ const ConnectionPanel = ({
    */
   const onSuccess = action((res, data) => {
     profileList.creatingNewProfile = false;
-
+    console.log('connect successfully ', res);
     let message = 'Connection Success!';
     let position = Position.LEFT_BOTTOM;
     if (!data.test) {
@@ -93,6 +93,7 @@ const ConnectionPanel = ({
         username: data.username,
         sha: data.sha,
         editorCount: 1,
+        initialMsg: res.output.join('\r'),
       });
       if (!profileList.selectedProfile) {
         profileList.selectedProfile = profiles.get(res.id);

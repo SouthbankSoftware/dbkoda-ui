@@ -63,7 +63,7 @@ export default class Panel extends React.Component {
       }
       if (editor[1].explains && editor[1].explains.active) {
         runInAction(() => {
-          this.props.store.outputPanel.currentTab = 'Explain-' + editor[1].fileName;
+          this.props.store.outputPanel.currentTab = 'Explain-' + editorTitle;
           editor[1].explains.active = false;
         });
       }
@@ -77,6 +77,7 @@ export default class Panel extends React.Component {
             <OutputEditor
               title={editorTitle}
               id={editor[1].id}
+              initialMsg={editor[1].initialMsg}
               shellId={editor[1].shellId} />
           } />,
         <Tab2

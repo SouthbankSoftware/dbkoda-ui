@@ -53,13 +53,17 @@ const loadPrimus = () => {
     if (!err) {
       const primus = new Primus(url);
       featherClient().configurePrimus(primus);
-      Broker.emit(EventType.FEATHER_CLIENT_LOADED);
+      console.log('load primus successfully.');
+      Broker.emit(EventType.FEATHER_CLIENT_LOADED, true);
     } else {
       times += 1;
       if (times < 3) {
         setTimeout(() => {
           loadPrimus();
         }, 3000);
+      } else {
+        console.log('load primus failed.');
+        Broker.emit(EventType.FEATHER_CLIENT_LOADED, false);
       }
     }
   });
