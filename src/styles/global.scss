@@ -8,20 +8,35 @@
 
 // Theme 1 Colours: These should be externalized eventually:
 //Editor:
-$editor-background: #202020;
-$editor-text-comments: #8B8B8B;
+$editorBackground: #202020;
+$editorActiveLine: #303030;
+$editorTextComments: #8B8B8B;
 //NavBars:
-$navbar-right-background: #494849;
-$navbar-right-heading: #BFBEC0;
+$navbarRightBackground: #494849;
+$navbarRighHeading: #BFBEC0;
 $navbar-secondary-background: #323232;
 $navbar-left-background: #212E33;
 $navbar-left-heading: #BFBEC0;
 $panel-left-background: #2D3D46;
 //Buttons:
+$buttonPrimaryBackground: #BFBEC0;
+$buttonPrimaryBackgroundHover: #99979b;
+$buttonPrimaryIcon: #58595B;
+$buttonSecondaryBackground: #2D3D46;
+$buttonSecondaryIcon: #BFBEC0;
+$buttonTertiaryBackground: #202020;
+$buttonTertiaryIcon: #BFBEC0;
+$buttonDangerBackground: #8A4148;
+$buttonDangerIcon: #BFBEC0;
+$selectPrimaryBackground: #313131;
+$searchPrimaryBackground: #BFBEc0;
+$searchPrimaryFontColor: #494849;
+$searchSecondaryBackground: #202020;
+$searchSecondaryFontColor: #222222;
 
 
-$backgroundPrimaryColor: #2d3c46;
-$backgroundSecondaryColor: #394b59;
+$backgroundPrimaryColor: #2d3d46;
+$backgroundPrimaryColor: #2d3d46;
 $tabPrimaryColor: #3d3d3d;
 $tabStrokeColor: #d1ccc8;
 $brightBlueFont: #179dea;

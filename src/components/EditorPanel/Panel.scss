@@ -6,21 +6,35 @@
  */
 // Theme 1 Colours: These should be externalized eventually:
 //Editor:
-$editor-background: #202020;
-$editor-active-line: #303030;
-$editor-text-comments: #8B8B8B;
+$editorBackground: #202020;
+$editorActiveLine: #303030;
+$editorTextComments: #8B8B8B;
 //NavBars:
-$navbar-right-background: #494849;
-$navbar-right-heading: #BFBEC0;
+$navbarRightBackground: #494849;
+$navbarRighHeading: #BFBEC0;
 $navbar-secondary-background: #323232;
 $navbar-left-background: #212E33;
 $navbar-left-heading: #BFBEC0;
 $panel-left-background: #2D3D46;
 //Buttons:
+$buttonPrimaryBackground: #BFBEC0;
+$buttonPrimaryBackgroundHover: #99979b;
+$buttonPrimaryIcon: #58595B;
+$buttonSecondaryBackground: #2D3D46;
+$buttonSecondaryIcon: #BFBEC0;
+$buttonTertiaryBackground: #202020;
+$buttonTertiaryIcon: #BFBEC0;
+$buttonDangerBackground: #8A4148;
+$buttonDangerIcon: #BFBEC0;
+$selectPrimaryBackground: #313131;
+$searchPrimaryBackground: #BFBEc0;
+$searchPrimaryFontColor: #494849;
+$searchSecondaryBackground: #202020;
+$searchSecondaryFontColor: #222222;
 
 
-$backgroundPrimaryColor: #2d3c46;
-$backgroundSecondaryColor: #394b59;
+$backgroundPrimaryColor: #2d3d46;
+$backgroundPrimaryColor: #2d3d46;
 $tabPrimaryColor: #3d3d3d;
 $tabStrokeColor: #d1ccc8;
 $brightBlueFont: #179dea;
@@ -28,8 +42,6 @@ $blueDarkest: #0e5a8a;
 $selectGray: #8a9ba8;
 $whiteColor: #f5f8fa;
 $blackColor: #000000;
-
-
 $white: #ffffff;
 $brightBlueFont: #179dea;
 $greyBlueFont: #8dacbc;
@@ -72,6 +84,11 @@ span.cm-string {
 .notVisible {
   display:  none;
 }
+
+.editorToolbar {
+  background-color: $navbarRightBackground !important;
+}
+
 .editorPanel, .profileListPanel, .welcomePanel {
   display: flex;
   flex-direction: column;
@@ -102,7 +119,7 @@ iframe {
 }
 
 .CodeMirror-linebackground {
-  background-color: $editor-background !important;
+  background-color: $editorBackground !important;
 }
 
 
@@ -149,13 +166,13 @@ span.cm-mongos-prompt{
 }
 
 .CodeMirror-gutters {
-  background-color: $editor-background !important;
-  border-right: 1px solid $editor-background !important;
+  background-color: $editorBackground !important;
+  border-right: 1px solid $editorBackground !important;
   box-shadow: none !important;
 }
 
 .CodeMirror-gutter {
-  background-color: $editor-background !important;
+  background-color: $editorBackground !important;
 }
 .CodeMirror-foldmarker {
   color: $purpleFont;
@@ -184,14 +201,51 @@ span.cm-mongos-prompt{
   content: $rightArrow;
 }
 .CodeMirror-activeline-background {
-  background-color: $editor-active-line !important; 
+  background-color: $editorActiveLine !important; 
 }
 .CodeMirror-activeline-gutter {
- background-color: $editor-background;
+ background-color: $editorBackground;
 }
 .pt-dark pre {
   box-shadow: none !important;
 }
+
+
+a.pt-intent-primary {
+  background-color: $buttonPrimaryBackground !important;
+  color: $buttonPrimaryIcon !important;
+}
+a.pt-intent-primary:hover {
+  background-color: $buttonPrimaryBackgroundHover !important;
+  color: $buttonPrimaryIcon !important;
+}
+a.pt-disabled.pt-intent-primary {
+  background-color:rgba(255, 255, 255, 0.3) !important;
+}
+select.pt-intent-primary {
+  background-color: $selectPrimaryBackground !important;
+  color: $buttonPrimaryBackground !important;
+}
+
+input.pt-input, textarea {
+  background-color: $searchPrimaryBackground !important;
+  color: $searchPrimaryFontColor !important;
+}
+
+input.pt-input.secondaryInput, textArea {
+  background-color: $searchSecondaryBackground !important;
+  color: $searchSecondaryFontColor !important;
+}
+
+.pt-icon-search {
+  color: $buttonPrimaryIcon !important;
+}
+
+::-webkit-input-placeholder {
+  color: $searchPrimaryFontColor !important;
+}
+
+
 .lint-error-icon {
   color: $brightRedFont;
   font-style: oblique;

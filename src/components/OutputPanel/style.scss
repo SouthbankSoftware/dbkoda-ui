@@ -3,9 +3,18 @@
 // @Email:  chris@southbanksoftware.com
 // @Last modified by:   chris
 // @Last modified time: 2017-03-22T17:17:54+11:00
+//NavBars:
+$navbarRightBackground: #494849;
+$navbarRighHeading: #BFBEC0;
+$navbar-secondary-background: #323232;
+$navbar-left-background: #212E33;
+$navbar-left-heading: #BFBEC0;
+$panel-left-background: #2D3D46;
+
 
 .outputToolbar {
   order: 1;
+  background-color: $navbarRightBackground !important;
 }
 
 .outputTabView {

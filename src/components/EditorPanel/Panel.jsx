@@ -160,7 +160,7 @@ export default class Panel extends React.Component {
                 }
                     ref="defaultEditor" />}>
                   <Button
-                    className="pt-intent-primary pt-minimal"
+                    className="pt-minimal"
                     onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
                   </Button>

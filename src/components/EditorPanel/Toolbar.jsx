@@ -402,7 +402,7 @@ export default class Toolbar extends React.Component {
       .profiles
       .entries();
     return (
-      <nav className="pt-navbar editorToolBar">
+      <nav className="pt-navbar editorToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
             <Tooltip
@@ -502,7 +502,7 @@ export default class Toolbar extends React.Component {
             <div className="pt-input-group .modifier">
               <span className="pt-icon pt-icon-search" />
               <input
-                className="pt-input"
+                className="pt-input secondaryInput"
                 type="search"
                 placeholder="Filter Tabs..."
                 dir="auto"

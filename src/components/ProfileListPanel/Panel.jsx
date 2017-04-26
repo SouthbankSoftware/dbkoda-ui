@@ -12,6 +12,7 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import Toolbar from './Toolbar.jsx';
 import ListView from './ListView.jsx';
+import './styles.scss';
 
 @inject('store')
 @observer

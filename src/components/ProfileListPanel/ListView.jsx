@@ -9,6 +9,7 @@
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
+import './styles.scss';
 
 const React = require('react');
 
