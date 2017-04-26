@@ -79,7 +79,7 @@ export default class Editor extends React.Component {
       this.props.store.outputs.get(this.props.title).output +
       output.output; // eslint-disable-line
     let outputLines = totalOutput.split('\r');
-
+    // keep only 500 lines on output panel
     if (outputLines && outputLines.length >= 500) {
       outputLines = outputLines.slice(Math.max(outputLines.length - 500, 1));
       totalOutput = outputLines.join('\r');
