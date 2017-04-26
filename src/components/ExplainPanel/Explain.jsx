@@ -1,4 +1,12 @@
 /**
+ * @Author: chris
+ * @Date:   2017-04-20T17:58:30+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-04-26T16:29:28+10:00
+ */
+
+/**
  * explain component is used to handle explain output
  */
 import React from 'react';
@@ -24,7 +32,7 @@ export default class Explain extends React.Component {
   componentDidMount() {
     const {editor} = this.props;
     if (editor) {
-      Broker.on(EventType.createExplainExeuctionEvent(editor.id, editor.shellId), this.explainOutputAvailable);
+      Broker.on(EventType.createExplainExecutionEvent(editor.currentProfile, editor.shellId), this.explainOutputAvailable);
     }
   }
 
@@ -35,7 +43,7 @@ export default class Explain extends React.Component {
     this.explainType = type;
     let currentEditorId = false;
     this.props.editors.forEach((value, key) => {
-      if (value.id === id && value.shellId === shell) {
+      if (value.currentProfile === id && value.shellId === shell) {
         currentEditorId = key;
       }
     });

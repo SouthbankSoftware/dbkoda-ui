@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T09:19:49+10:00
+ * @Last modified time: 2017-04-26T15:29:03+10:00
 */
 
 import React from 'react';
@@ -27,14 +27,16 @@ export default class Editor extends React.Component {
    * Constructor for the OutputEditor class
    * @param {Object} props - The properties passed to the component.
    * Contains:
-   *    @param {number} id - The id of the allocated connection
+   *    @param {number} id - The unique id of the allocated editor
+   *    @param {number} connId - The id of the allocated connection
    *    @param {number} shellId - The shellId of the allocated connection
    *    @param {Object} store - The mobx global store object (injected)
    */
   constructor(props) {
     super(props);
-    this.props.store.outputs.set(this.props.title, {
+    this.props.store.outputs.set(this.props.id, {
       id: this.props.id,
+      connId: this.props.connId,
       shellId: this.props.shellId,
       title: this.props.title,
       output: '',
@@ -47,9 +49,9 @@ export default class Editor extends React.Component {
   componentDidMount() {
     const {props} = this;
     runInAction(() => {
-      this.props.store.outputs.get(this.props.title).output = this.props.initialMsg;
+      this.props.store.outputs.get(this.props.id).output = this.props.initialMsg;
     });
-    Broker.on(EventType.createShellOutputEvent(props.id, props.shellId), this.outputAvailable);
+    Broker.on(EventType.createShellOutputEvent(props.connId, props.shellId), this.outputAvailable);
   }
 
   /**
@@ -76,7 +78,7 @@ export default class Editor extends React.Component {
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
     let totalOutput =
-      this.props.store.outputs.get(this.props.title).output +
+      this.props.store.outputs.get(this.props.id).output +
       output.output; // eslint-disable-line
     let outputLines = totalOutput.split('\r');
     // keep only 500 lines on output panel
@@ -84,14 +86,14 @@ export default class Editor extends React.Component {
       outputLines = outputLines.slice(Math.max(outputLines.length - 500, 1));
       totalOutput = outputLines.join('\r');
     }
-    this.props.store.outputs.get(this.props.title).output = totalOutput;
+    this.props.store.outputs.get(this.props.id).output = totalOutput;
     if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
-      this.props.store.outputs.get(this.props.title).cannotShowMore = false; // eslint-disable-line
-    } else if (this.props.store.outputs.get(this.props.title).cannotShowMore &&
+      this.props.store.outputs.get(this.props.id).cannotShowMore = false; // eslint-disable-line
+    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore &&
               output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
       console.log('cannot show more');
-      this.props.store.outputs.get(this.props.title).cannotShowMore = true; // eslint-disable-line
+      this.props.store.outputs.get(this.props.id).cannotShowMore = true; // eslint-disable-line
     }
     this.forceUpdate();
   }
@@ -126,10 +128,10 @@ export default class Editor extends React.Component {
         <CodeMirror
           autosave
           ref={(c) => { this.editor = c; }}
-          value={this.props.store.outputs.get(this.props.title).output}
+          value={this.props.store.outputs.get(this.props.id).output}
           options={outputOptions}
           />
-        <OutputTerminal id={this.props.id} shellId={this.props.shellId} title={this.props.title} />
+        <OutputTerminal id={this.props.id} connId={this.props.connId} shellId={this.props.shellId} title={this.props.title} />
       </div>
     );
   }

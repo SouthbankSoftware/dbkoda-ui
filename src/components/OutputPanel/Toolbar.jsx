@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T15:43:32+10:00
+ * @Last modified time: 2017-04-26T15:31:48+10:00
 */
 
 import React from 'react';
@@ -89,7 +89,6 @@ export default class Toolbar extends React.Component {
   @action.bound
   clearOutput() {
     this.props.store.outputPanel.clearingOutput = true;
-    console.log(this.props.store.outputPanel.clearingOutput);
   }
 
   /**
@@ -163,9 +162,12 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="showMoreBtn pt-intent-primary"
               onClick={this.showMore}
-              disabled={this.props.store.outputPanel.currentTab.indexOf('Explain') >= 0 || this.props.store.outputs.get(
-                          this.props.store.outputPanel.currentTab
-                        ).cannotShowMore} >
+              disabled={
+                this.props.store.outputPanel.currentTab.indexOf('Explain') >= 0
+                  || this.props.store.outputs.get(
+                    this.props.store.outputPanel.currentTab
+                  ).cannotShowMore
+              } >
               Show More
             </AnchorButton>
           </Tooltip>

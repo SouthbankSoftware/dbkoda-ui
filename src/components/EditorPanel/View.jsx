@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-24T15:12:24+10:00
+ * @Last modified time: 2017-04-26T16:09:03+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -140,31 +140,27 @@ class View extends React.Component {
      */
     const reactionToExecuteAll = reaction( // eslint-disable-line
         () => this.props.store.editorPanel.executingEditorAll, executingEditorAll => { //eslint-disable-line
-      if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorAll == true) {
+      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorAll == true) {
         console.log(this.props.store.editors);
         console.log(this.props.store.profiles);
-        let shell = null;
-        let id = null;
-
         const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-        shell = editor.shellId;
-        id = editor.id;
-        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', this.state.code, '".');
-        Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        let shell = editor.shellId;
+        let profileId = editor.currentProfile;
+
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', profileId, '/', shell, ': "', this.state.code, '".');
+        Broker.on(EventType.createShellExecutionFinishEvent(profileId, shell), this.finishedExecution);
         // Listen for completion
-        const editorIndex = this.props.store.editorPanel.activeEditorId;
         this
           .props
           .store
           .editors
-          .get(editorIndex)
+          .get(editor.id)
           .executing = true;
         this.props.store.editorToolbar.isActiveExecuting = true;
-        console.log('Editor: Execution started! ' + editorIndex);
         // Send request to feathers client
         const service = featherClient().service('/mongo-shells');
         service.timeout = 30000;
-        service.update(id, {
+        service.update(profileId, {
           shellId: shell, // eslint-disable-line
           commands: this
             .state
@@ -182,10 +178,12 @@ class View extends React.Component {
      */
     const reactionToExecuteLine = reaction( // eslint-disable-line
         () => this.props.store.editorPanel.executingEditorLines, executingEditorLines => { //eslint-disable-line
-      if (this.props.store.editorPanel.activeEditorId == this.props.title && this.props.store.editorPanel.executingEditorLines == true) {
+      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorLines == true) {
         // Determine code to send.
-        let shell = null;
-        let id = null;
+        const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+        let shell = editor.shellId;
+        let id = editor.currentProfile;
+
         const cm = this
           .refs
           .editor
@@ -197,18 +195,15 @@ class View extends React.Component {
           console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
           content = cm.getLine(cm.getCursor().line);
         }
-         const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-        shell = editor.shellId;
-        id = editor.id;
+
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
         // Listen for completion
         Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
-        const editorIndex = this.props.store.editorPanel.activeEditorId;
         this
           .props
           .store
           .editors
-          .get(editorIndex)
+          .get(editor.id)
           .executing = true;
         this.props.store.editorToolbar.isActiveExecuting = true;
 
@@ -245,11 +240,11 @@ class View extends React.Component {
     const reactionToExplain = reaction( // eslint-disable-line
       () => this.props.store.editorPanel.executingExplain, executingEditorLines => { //eslint-disable-line
         const explainParam = this.props.store.editorPanel.executingExplain;
-        if (this.props.store.editorPanel.activeEditorId == this.props.title && explainParam) {
+        if (this.props.store.editorPanel.activeEditorId == this.props.id && explainParam) {
           // Determine code to send.
           const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
           const shell = editor.shellId;
-          const id = editor.id;
+          const id = editor.currentProfile;
 
           const cm = this
             .refs
@@ -292,7 +287,7 @@ class View extends React.Component {
             runInAction(()=>{
               this.props.store.editorToolbar.isExplainExecuting = false;
             });
-            Broker.emit(EventType.createExplainExeuctionEvent(id, shell), {
+            Broker.emit(EventType.createExplainExecutionEvent(id, shell), {
               id,
               shell,
               command: filteredContent,
@@ -320,8 +315,9 @@ class View extends React.Component {
       () => this.props.store.editorPanel.stoppingExecution,
       stoppingExecution => {
         if (this.props.store.editorPanel.stoppingExecution) {
-          const id = this.props.store.editorToolbar.id;
-          const shellId = this.props.store.editorToolbar.shellId;
+          const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+          const shell = editor.shellId;
+          const id = editor.currentProfile;
           console.log(`Stopping Execution of ${id} / ${shellId}!`);
           //Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
           const service = featherClient().service('/mongo-stop-execution');
@@ -353,7 +349,7 @@ class View extends React.Component {
     const reactToTreeActionChange = reaction( //eslint-disable-line
         () => this.props.store.treeActionPanel.isNewFormValues,
         () => {
-          if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.title) {
+          if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.id) {
             const cm = this
               .refs
               .editor
@@ -466,7 +462,7 @@ class View extends React.Component {
       .editors
       .get(editorIndex)
       .executing = false;
-    if (this.props.store.editorPanel.activeEditorId == this.props.title) {
+    if (this.props.store.editorPanel.activeEditorId == this.props.id) {
       this.props.store.editorToolbar.isActiveExecuting = false;
       this.props.store.editorPanel.stoppingExecution = false;
     }

@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T16:48:24+10:00
+ * @Last modified time: 2017-04-26T12:55:19+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -67,7 +67,7 @@ export default class Panel extends React.Component {
     // Check if tab to be removed is currenlty selected tab, this will require more
     // handing in UI.
     console.log(this.props.store.editorPanel.activeEditorId);
-    if ((oldTab.alias + ' (' + oldTab.fileName + ')') == this.props.store.editorPanel.activeEditorId) {
+    if ((oldTab.id) == this.props.store.editorPanel.activeEditorId) {
       this.props.store.editorPanel.activeEditorId = 'Default';
       this.state.isRemovingCurrentTab = true;
     } else {
@@ -78,7 +78,7 @@ export default class Panel extends React.Component {
       .props
       .store
       .editors
-      .delete(oldTab.alias + ' (' + oldTab.fileName + ')');
+      .delete(oldTab.id);
     this.setState({isRemovingTab: true});
     this.forceUpdate();
   }
@@ -146,8 +146,8 @@ export default class Panel extends React.Component {
               return (
                 <Tab2
                   className="visible"
-                  key={tab[1].alias + ' (' + tab[1].fileName + ')'}
-                  id={tab[1].alias + ' (' + tab[1].fileName + ')'}
+                  key={tab[1].id}
+                  id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
                   panel={<View id={
                   tab[1].id
