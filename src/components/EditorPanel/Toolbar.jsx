@@ -97,7 +97,7 @@ export default class Toolbar extends React.Component {
       fileName,
       visible: true,
       executing: false,
-      initialMsg: profile.initialMsg,
+      initialMsg: profile.initialMsg
     });
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
@@ -219,7 +219,9 @@ export default class Toolbar extends React.Component {
           .id,
         fileName,
         visible: true,
-        initialMsg: res.output.join('\n'),
+        initialMsg: res
+          .output
+          .join('\n')
       });
     this.props.store.editorPanel.creatingNewEditor = false;
     this.props.store.editorToolbar.noActiveProfile = false;
@@ -404,41 +406,6 @@ export default class Toolbar extends React.Component {
     return (
       <nav className="pt-navbar editorToolbar">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-button-group">
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Add a new Editor"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
-              <AnchorButton
-                className="pt-button pt-icon-add pt-intent-primary addEditorButton"
-                loading={this.props.store.editorToolbar.newConnectionLoading}
-                disabled={this.props.store.editorToolbar.noActiveProfile}
-                onClick={this.addEditor} />
-            </Tooltip>
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Open a File from Disc"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
-              <AnchorButton
-                className="pt-button pt-icon-document-open pt-intent-primary openFileButton"
-                onClick={this.openFile} />
-            </Tooltip>
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Save Editor Contents to Disc"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
-              <AnchorButton
-                className="pt-button pt-icon-floppy-disk pt-intent-primary saveFileButton"
-                onClick={this.saveFile} />
-            </Tooltip>
-          </div>
-          <span className="pt-navbar-divider" />
           <div className="pt-button-group pt-intent-primary">
             <div className="pt-select pt-intent-primary">
               <select
@@ -492,7 +459,40 @@ export default class Toolbar extends React.Component {
                 disabled={!this.props.store.editorToolbar.isActiveExecuting} />
             </Tooltip>
           </div>
-          <span className="pt-navbar-divider" />
+        </div>
+        <div className="pt-navbar-group pt-align-right">
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Add a new Editor"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-button pt-icon-add pt-intent-primary addEditorButton"
+              loading={this.props.store.editorToolbar.newConnectionLoading}
+              disabled={this.props.store.editorToolbar.noActiveProfile}
+              onClick={this.addEditor} />
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Open a File from Disc"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-button pt-icon-document-open pt-intent-primary openFileButton"
+              onClick={this.openFile} />
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Save Editor Contents to Disc"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-button pt-icon-floppy-disk pt-intent-primary saveFileButton"
+              onClick={this.saveFile} />
+          </Tooltip>
           <Tooltip
             intent={Intent.NONE}
             hoverOpenDelay={1000}

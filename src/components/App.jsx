@@ -121,7 +121,7 @@ class App extends React.Component {
           </SplitPane>
         </SplitPane>
         <EventReaction />
-        <DevTools />
+        <DevTools position={{top: 0, right: 500}} />
       </div>
     );
   }
