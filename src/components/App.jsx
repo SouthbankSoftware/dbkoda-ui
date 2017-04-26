@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-24T13:58:22+10:00
+ * @Last modified time: 2017-04-26T12:44:17+10:00
  */
 
 import React from 'react';
@@ -108,7 +108,7 @@ class App extends React.Component {
         >
           <SidebarPanel />
           <SplitPane
-            className="LeftSplitPane"
+            className="RightSplitPane"
             split="horizontal"
             defaultSize={defaultRightSplitPos}
             onDragFinished={this.updateRightSplitPos}

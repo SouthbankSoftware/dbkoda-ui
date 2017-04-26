@@ -3,7 +3,7 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-24T13:58:56+10:00
+ * @Last modified time: 2017-04-26T12:43:51+10:00
  */
 
 import React from 'react';
@@ -52,6 +52,7 @@ export default class Panel extends React.Component {
       <div>
         {drawerChild == DrawerPanes.DEFAULT &&
           <SplitPane
+            className="LeftSplitPane"
             split="horizontal"
             defaultSize={defaultLeftSplitPos}
             onDragFinished={this.updateLeftSplitPos}
