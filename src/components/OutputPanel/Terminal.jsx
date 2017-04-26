@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-24T10:36:44+10:00
+ * @Last modified time: 2017-04-26T13:52:43+10:00
  */
 
 import React from 'react';
@@ -55,18 +55,18 @@ export default class Terminal extends React.Component {
     reaction(
       () => this.props.store.outputPanel.executingTerminalCmd,
       (executingTerminalCmd) => {
-        if (executingTerminalCmd && this.props.title == this.props.store.editorPanel.activeEditorId) {
+        if (executingTerminalCmd && this.props.id == this.props.store.editorPanel.activeEditorId) {
           this.updateHistory(this.state.command);
           const command = this.interceptCommand(this.state.command);
           console.log(command);
           if (command) {
-            console.log('Sending data to feathers id ', this.props.id, ': ', this.props.shellId, command, '.');
+            console.log('Sending data to feathers id ', this.props.connId, ': ', this.props.shellId, command, '.');
             this.props.store.editorToolbar.isActiveExecuting = true;
-            this.props.store.editors.get(this.props.title).executing = true;
+            this.props.store.editors.get(this.props.id).executing = true;
             const service = featherClient().service('/mongo-shells');
             service.timeout = 30000;
-            Broker.on(EventType.createShellExecutionFinishEvent(this.props.id, this.props.shellId), this.finishedExecution);
-            service.update(this.props.id, {
+            Broker.on(EventType.createShellExecutionFinishEvent(this.props.connId, this.props.shellId), this.finishedExecution);
+            service.update(this.props.connId, {
               shellId: this.props.shellId, // eslint-disable-line
               commands: command
             });
@@ -125,7 +125,7 @@ export default class Terminal extends React.Component {
   showPreviousCommand() {
     if (this.state.historyCursor > 0) {
       this.state.historyCursor -= 1;
-      this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
+      this.updateCommand(this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]);
     }
   }
 
@@ -133,9 +133,9 @@ export default class Terminal extends React.Component {
    * Get a more recent command from the history
    */
   showNextCommand() {
-    if (this.state.historyCursor < this.props.store.outputs.get(this.props.title).commandHistory.length) {
+    if (this.state.historyCursor < this.props.store.outputs.get(this.props.id).commandHistory.length) {
       this.state.historyCursor += 1;
-      this.updateCommand(this.props.store.outputs.get(this.props.title).commandHistory[this.state.historyCursor]);
+      this.updateCommand(this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]);
     } else {
       this.setState({command: ''});
     }
@@ -149,14 +149,14 @@ export default class Terminal extends React.Component {
       .props
       .store
       .outputs
-      .get(this.props.title)
+      .get(this.props.id)
       .commandHistory
       .push(command);
     this.state.historyCursor = this
       .props
       .store
       .outputs
-      .get(this.props.title)
+      .get(this.props.id)
       .commandHistory
       .length;
   }
@@ -201,9 +201,9 @@ export default class Terminal extends React.Component {
       .props
       .store
       .editors
-      .get(this.props.store.editorPanel.activeEditorId)
+      .get(this.props.id)
       .executing = false;
-    if (this.props.store.editorPanel.activeEditorId == this.props.title) {
+    if (this.props.store.editorPanel.activeEditorId == this.props.id) {
       this.props.store.editorToolbar.isActiveExecuting = false;
       this.props.store.editorPanel.stoppingExecution = false;
     }

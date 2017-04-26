@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-24T08:56:20+10:00
+ * @Last modified time: 2017-04-26T14:48:46+10:00
 */
 
 /* eslint-disable react/prop-types */
@@ -12,6 +12,7 @@ import React from 'react';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
 import {action, reaction} from 'mobx';
+import uuidV1 from 'uuid';
 import {
   AnchorButton,
   Intent,
@@ -87,10 +88,11 @@ export default class Toolbar extends React.Component {
   profileCreated(profile) {
     const {editors, editorToolbar, editorPanel} = this.props.store;
     const fileName = `new${profile.editorCount}.js`;
+    const editorId = uuidV1();
     profile.editorCount += 1;
-    editors.set(profile.alias + ' (' + fileName + ')', {
+    editors.set(editorId, {
       // eslint-disable-line react/prop-types
-      id: profile.id,
+      id: editorId,
       alias: profile.alias,
       shellId: profile.shellId,
       currentProfile: profile.id,
@@ -103,7 +105,7 @@ export default class Toolbar extends React.Component {
     editorToolbar.id = profile.id;
     editorToolbar.shellId = profile.shellId;
     editorToolbar.newConnectionLoading = false;
-    editorPanel.activeEditorId = profile.alias + ' (' + fileName + ')';
+    editorPanel.activeEditorId = editorId;
     editorPanel.activeDropdownId = profile.id;
     editorToolbar.currentProfile = profile.id;
     editorToolbar.noActiveProfile = false;
@@ -185,12 +187,7 @@ export default class Toolbar extends React.Component {
       .profiles
       .get(res.id)
       .editorCount}.js`;
-    const editorId = this
-      .props
-      .store
-      .profiles
-      .get(res.id)
-      .alias + ' (' + fileName + ')';
+    const editorId = uuidV1();
     this
       .props
       .store
@@ -203,7 +200,7 @@ export default class Toolbar extends React.Component {
       .editors
       .set(editorId, {
         // eslint-disable-line react/prop-types
-        id: res.id,
+        id: editorId,
         alias: this
           .props
           .store
@@ -211,29 +208,17 @@ export default class Toolbar extends React.Component {
           .get(res.id)
           .alias,
         shellId: res.shellId,
-        currentProfile: this
-          .props
-          .store
-          .profiles
-          .get(res.id)
-          .id,
+        currentProfile: res.id,
         fileName,
         visible: true,
-        initialMsg: res
-          .output
-          .join('\n')
+        initialMsg: res.output ? res.output.join('\n') : '',
       });
     this.props.store.editorPanel.creatingNewEditor = false;
     this.props.store.editorToolbar.noActiveProfile = false;
     this.props.store.editorToolbar.id = res.id;
     this.props.store.editorToolbar.shellId = res.shellId;
     this.props.store.editorToolbar.newConnectionLoading = false;
-    this.props.store.editorPanel.activeEditorId = this
-      .props
-      .store
-      .profiles
-      .get(res.id)
-      .alias + ' (' + fileName + ')';
+    this.props.store.editorPanel.activeEditorId = editorId;
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
     NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
@@ -283,7 +268,7 @@ export default class Toolbar extends React.Component {
    * Execute the line currently selected in the active CodeMirror instance.
    */
   @action executeLine() {
-    if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId) == 'Default') {
+    if (this.props.store.editorPanel.activeEditorId == 'Default') {
       NewToaster.show({message: 'Cannot Execute on Welcome Page.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
     } else {
       this.props.store.editorPanel.executingEditorLines = true;
@@ -294,7 +279,7 @@ export default class Toolbar extends React.Component {
    * Execute all the contents of the currently active CodeMirror instance.
    */
   @action executeAll() {
-    if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId) == 'Default') {
+    if (this.props.store.editorPanel.activeEditorId == 'Default') {
       NewToaster.show({message: 'Cannot Execute on Welcome Page.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
     } else {
       this.props.store.editorPanel.executingEditorAll = true;

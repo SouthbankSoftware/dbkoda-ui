@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-24T15:05:08+10:00
+ * @Last modified time: 2017-04-26T15:59:38+10:00
  */
 
 import React from 'react';
@@ -63,28 +63,28 @@ export default class Panel extends React.Component {
       }
       if (editor[1].explains && editor[1].explains.active) {
         runInAction(() => {
-          this.props.store.outputPanel.currentTab = 'Explain-' + editorTitle;
+          this.props.store.outputPanel.currentTab = 'Explain-' + editor[1].id;
           editor[1].explains.active = false;
         });
       }
-      console.log('xxxx editor title ', editor[1]);
       return [
         <Tab2
           className={tabClassName}
-          key={editor[1].shellId}
-          id={editorTitle}
+          key={editor[1].id}
+          id={editor[1].id}
           title={editorTitle}
           panel={
             <OutputEditor
               title={editorTitle}
               id={editor[1].id}
+              connId={editor[1].currentProfile}
               initialMsg={editor[1].initialMsg}
               shellId={editor[1].shellId} />
           } />,
         <Tab2
           className={(editor[1].explains && tabClassName !== 'notVisible') ? 'visible' : 'notVisible'}
-          key={'Explain-' + editorTitle}
-          id={'Explain-' + editorTitle}
+          key={'Explain-' + editor[1].id}
+          id={'Explain-' + editor[1].id}
           title={'Explain-' + editorTitle}
           panel={
             <Explain editor={editor[1]} />
@@ -106,7 +106,7 @@ export default class Panel extends React.Component {
             id="Default"
             panel={
               <OutputEditor title="Default" id="Default" shellId={0} />
-                }
+            }
             title="Default" />
           {this.renderTabs(this.props.store.editors.entries())}
         </Tabs2>
