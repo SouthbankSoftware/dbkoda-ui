@@ -116,7 +116,7 @@ class View extends React.Component {
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-linenumbers','CodeMirror-foldgutter', 'CodeMirror-lint-markers'
+          'CodeMirror-linenumbers','CodeMirror-foldgutter' // , 'CodeMirror-lint-markers'
         ],
         keyMap: 'sublime',
         extraKeys: {
