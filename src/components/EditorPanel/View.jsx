@@ -408,6 +408,7 @@ class View extends React.Component {
       if (!id || !shell) {
         return;
       }
+      console.log('send auto complete ', id, shell, curWord);
       const service = featherClient().service('/mongo-auto-complete');
       service
         .get(id, {
@@ -444,8 +445,7 @@ class View extends React.Component {
   getActiveProfileId() {
     const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     const shell = editor.shellId;
-    const id = editor.id;
-    return {id, shell};
+    return {id: editor.currentProfile, shell};
   }
 
   @action.bound
