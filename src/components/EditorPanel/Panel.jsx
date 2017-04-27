@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-26T12:55:19+10:00
+ * @Last modified time: 2017-04-27T12:15:45+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -29,8 +29,6 @@ export default class Panel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isRemovingTab: false,
-      isRemovingCurrentTab: false,
       activePanelOnly: false,
       animate: false,
       tabId: 0,
@@ -69,17 +67,17 @@ export default class Panel extends React.Component {
     console.log(this.props.store.editorPanel.activeEditorId);
     if ((oldTab.id) == this.props.store.editorPanel.activeEditorId) {
       this.props.store.editorPanel.activeEditorId = 'Default';
-      this.state.isRemovingCurrentTab = true;
+      this.props.store.editorPanel.isRemovingCurrentTab = true;
     } else {
-      this.state.isRemovingCurrentTab = false;
+      this.props.store.editorPanel.isRemovingCurrentTab = false;
     }
-    this.state.isRemovingTab = true;
+    this.props.store.editorPanel.removingTabId = oldTab.id;
+    console.log('Removing tab id: ' + this.props.store.editorPanel.removingTabId);
     this
       .props
       .store
       .editors
       .delete(oldTab.id);
-    this.setState({isRemovingTab: true});
     this.forceUpdate();
   }
 
@@ -89,10 +87,10 @@ export default class Panel extends React.Component {
    */
   @action changeTab(newTab) {
     // Check if last update was a remove for special Handling.
-    if (this.state.isRemovingTab) {
-      this.state.isRemovingTab = false;
-      if (this.state.isRemovingCurrentTab) {
-        this.state.isRemovingCurrentTab = false;
+    if (this.props.store.editorPanel.removingTabId) {
+      this.props.store.editorPanel.removingTabId = false;
+      if (this.props.store.editorPanel.isRemovingCurrentTab) {
+        this.props.store.editorPanel.isRemovingCurrentTab = false;
         this.props.store.editorPanel.activeEditorId = newTab;
         this.setState({tabId: newTab});
       } else {
@@ -150,7 +148,7 @@ export default class Panel extends React.Component {
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
                   panel={<View id={
-                  tab[1].id
+                  tab[0]
                 }
                     title={
                   tab[1].alias + ' (' + tab[1].fileName + ')'

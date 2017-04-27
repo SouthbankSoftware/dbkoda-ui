@@ -3,10 +3,11 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-26T15:29:03+10:00
+ * @Last modified time: 2017-04-27T12:26:21+10:00
 */
 
 import React from 'react';
+import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
@@ -44,6 +45,21 @@ export default class Editor extends React.Component {
       showingMore: false,
       commandHistory: []
     });
+
+    /** Reaction to editor tab closing
+     *
+     *  @param
+     *  @param
+     */
+    reaction(
+      () => this.props.store.editorPanel.removingTabId,
+      (removingTabId) => {
+        if (removingTabId && this.props.id == removingTabId) {
+          this.props.store.outputs.delete(this.props.id);
+        }
+      },
+      { 'name': 'reactionOutputEditorRemoveTab' }
+    );
   }
 
   componentDidMount() {
@@ -95,7 +111,7 @@ export default class Editor extends React.Component {
       console.log('cannot show more');
       this.props.store.outputs.get(this.props.id).cannotShowMore = true; // eslint-disable-line
     }
-    this.forceUpdate();
+    // this.forceUpdate();
   }
 
   render() {
