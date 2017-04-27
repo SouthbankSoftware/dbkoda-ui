@@ -98,6 +98,11 @@ export default class Panel extends React.Component {
       }
     } else {
       this.props.store.editorPanel.activeEditorId = newTab;
+      if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).executing == true) {
+        this.props.store.editorToolbar.isActiveExecuting = true;
+      } else {
+        this.props.store.editorToolbar.isActiveExecuting = false;
+      }
       this.setState({tabId: newTab});
       if (newTab != 'Default') {
         this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).currentProfile;

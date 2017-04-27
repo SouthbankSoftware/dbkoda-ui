@@ -222,6 +222,7 @@ export default class Toolbar extends React.Component {
         shellId: res.shellId,
         currentProfile: res.id,
         fileName,
+        executing: false,
         visible: true,
         initialMsg: res.output ? res.output.join('\n') : '',
       });
