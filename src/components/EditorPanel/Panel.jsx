@@ -150,7 +150,7 @@ export default class Panel extends React.Component {
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
                   panel={<View id={
-                  tab[1].id
+                  tab[0]
                 }
                     title={
                   tab[1].alias + ' (' + tab[1].fileName + ')'

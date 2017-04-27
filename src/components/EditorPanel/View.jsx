@@ -388,7 +388,6 @@ class View extends React.Component {
     // let orig = CM.hint.javascript; CM.hint.javascript = function (cm) {   let
     // inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
     // inner.list.push("bozo");   return inner; };
-
     CM.commands.autocomplete = (cm) => {
       const currentLine = cm.getLine(cm.getCursor().line);
       console.log('current line:', currentLine);
@@ -598,7 +597,7 @@ class View extends React.Component {
    * @param {String} - New code to be entered into the editor.
    */
   updateCode(newCode) {
-    this.setState({code: newCode});
+    this.props.store.editors.get(this.props.id).code = newCode;
     if (!this.state.isLinting) {
       this.state.isLinting = true;
       this.loopingLint();
@@ -712,7 +711,7 @@ class View extends React.Component {
           autoSave
           ref="editor"
           codeMirrorInstance={CM}
-          value={this.state.code}
+          value={this.props.store.editors.get(this.props.id).code}
           onChange={value => this.updateCode(value)}
           options={this.state.options}/> {isOver && <div
           style={{
