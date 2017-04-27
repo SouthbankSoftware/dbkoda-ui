@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-26T15:31:48+10:00
+ * @Last modified time: 2017-04-27T12:47:02+10:00
 */
 
 import React from 'react';
@@ -55,26 +55,19 @@ export default class Toolbar extends React.Component {
     reaction(
       () => this.props.store.outputPanel.clearingOutput,
       (clearingOutput) => {
-        const currentab = this.props.store.outputPanel.currentTab;
-        if (clearingOutput && this.props.store.outputs.get(this.props.store.outputPanel.currentTab)) {
-            this.props.store.outputs.get(this.props.store.outputPanel.currentTab).output = '';
+        const currentTab = this.props.store.outputPanel.currentTab;
+        if (clearingOutput && this.props.store.outputs.get(currentTab)) {
+            this.props.store.outputs.get(currentTab).output = '';
             if (this.props.store.userPreferences.telemetryEnabled) {
               EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
             }
-        } else if (currentab.indexOf('Explain-') === 0) {
+        } else if (currentTab.indexOf('Explain-') === 0) {
           // close explain output
-          const explainName = currentab.split('Explain-')[1];
-          let editorKey = null;
-          let editor = null;
-          this.props.store.editors.forEach((value, key) => {
-            if (value.alias + ' (' + value.fileName + ')' === explainName) {
-              editorKey = key;
-              editor = value;
-            }
-          });
+          const editorKey = currentTab.split('Explain-')[1];
+          const editor = this.props.store.editors.get(editorKey);
           if (editor) {
             this.props.store.editors.set(editorKey, {...editor, explains: undefined});
-            this.props.store.outputPanel.currentTab = editor.alias + ' (' + editor.fileName + ')';
+            this.props.store.outputPanel.currentTab = editorKey;
           }
         }
         this.props.store.outputPanel.clearingOutput = false;
