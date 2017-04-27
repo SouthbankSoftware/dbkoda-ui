@@ -56,7 +56,7 @@ export default class Explain extends React.Component {
     let explainOutputJson;
     try {
       explainOutputJson = {
-        output: JSON.parse(this.parseOutput(output.replace(/\n/, '').replace(/\s/g, ''))),
+        output: JSON.parse(this.parseOutput(output.replace(/\n/g, '').replace(/\s/g, '').replace(/\r/g, ''))),
         active: true,
         type: this.explainType,
         command: this.explainCommand

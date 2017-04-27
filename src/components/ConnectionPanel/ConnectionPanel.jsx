@@ -92,7 +92,7 @@ const ConnectionPanel = ({
         username: data.username,
         sha: data.sha,
         editorCount: 1,
-        initialMsg: res.output.join('\r'),
+        initialMsg: res.output ? res.output.join('\r') : '',
       });
       if (!profileList.selectedProfile) {
         profileList.selectedProfile = profiles.get(res.id);
