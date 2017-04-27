@@ -162,9 +162,7 @@ class View extends React.Component {
         service.timeout = 30000;
         service.update(profileId, {
           shellId: shell, // eslint-disable-line
-          commands: this
-            .state
-            .code
+          commands: editor.code
             .replace('\t', '  ')
         });
         this.props.store.editorPanel.executingEditorAll = false;
