@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-28T08:46:34+10:00
+ * @Last modified time: 2017-04-28T09:05:43+10:00
 */
 
 import React from 'react';
@@ -56,6 +56,7 @@ export default class Editor extends React.Component {
       (removingTabId) => {
         if (removingTabId && this.props.id == removingTabId) {
           this.props.store.outputs.delete(this.props.id);
+          Broker.removeListener(EventType.createShellOutputEvent(props.connId, props.shellId), this.outputAvailable);
         }
       },
       { 'name': 'reactionOutputEditorRemoveTab' }
