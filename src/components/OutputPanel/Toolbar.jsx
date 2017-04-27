@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-27T12:47:02+10:00
+ * @Last modified time: 2017-04-28T09:40:00+10:00
 */
 
 import React from 'react';
@@ -57,10 +57,11 @@ export default class Toolbar extends React.Component {
       (clearingOutput) => {
         const currentTab = this.props.store.outputPanel.currentTab;
         if (clearingOutput && this.props.store.outputs.get(currentTab)) {
-            this.props.store.outputs.get(currentTab).output = '';
-            if (this.props.store.userPreferences.telemetryEnabled) {
-              EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
-            }
+          this.props.store.outputs.get(currentTab).output = '';
+          if (this.props.store.userPreferences.telemetryEnabled) {
+            EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
+          }
+          this.props.store.outputPanel.clearingOutput = false;
         } else if (currentTab.indexOf('Explain-') === 0) {
           // close explain output
           const editorKey = currentTab.split('Explain-')[1];
@@ -69,8 +70,8 @@ export default class Toolbar extends React.Component {
             this.props.store.editors.set(editorKey, {...editor, explains: undefined});
             this.props.store.outputPanel.currentTab = editorKey;
           }
+          this.props.store.outputPanel.clearingOutput = false;
         }
-        this.props.store.outputPanel.clearingOutput = false;
       },
       { 'name': 'reactionOutputToolbarClearOutput' }
     );
