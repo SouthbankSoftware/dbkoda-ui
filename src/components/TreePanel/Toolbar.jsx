@@ -51,7 +51,7 @@ export default class TreeToolbar extends React.Component {
       </Menu>
     );
     return (
-      <nav className="pt-navbar pt-dark .modifier">
+      <nav className=" treeToolbar pt-navbar pt-dark .modifier">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-navbar-heading">{this.state.profileAlias}</div>
           <input

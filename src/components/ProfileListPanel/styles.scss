@@ -15,12 +15,17 @@ $buttonPrimaryBackground: #BFBEC0;
 $buttonPrimaryBackgroundHover: #99979b;
 $buttonPrimaryIcon: #58595B;
 $buttonSecondaryBackground: #2D3D46;
+$buttonSecondaryBackgroundHover: #1e282f;
 $buttonSecondaryIcon: #BFBEC0;
+$buttonTertiaryBackground: #202020;
+$buttonTertiaryIcon: #BFBEC0;
 $buttonDangerBackground: #8A4148;
 $buttonDangerIcon: #BFBEC0;
 $selectPrimaryBackground: #313131;
 $searchPrimaryBackground: #BFBEc0;
 $searchPrimaryFontColor: #494849;
+$searchSecondaryBackground: #202020;
+$searchSecondaryFontColor: #222222;
 
 
 .profileListToolbar {
@@ -29,6 +34,11 @@ $searchPrimaryFontColor: #494849;
 
 a.pt-intent-primary.secondaryButton {
   background-color: $buttonSecondaryBackground !important;
+  color: $buttonSecondaryIcon !important;
+}
+
+a.pt-intent-primary.secondaryButton:hover {
+  background-color: $buttonSecondaryBackgroundHover !important;
   color: $buttonSecondaryIcon !important;
 }
 
