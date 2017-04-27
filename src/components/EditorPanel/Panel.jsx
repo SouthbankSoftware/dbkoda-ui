@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-27T13:00:08+10:00
+ * @Last modified time: 2017-04-28T08:50:17+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -174,7 +174,7 @@ export default class Panel extends React.Component {
                 panel={<View id={
                     tab[1].id
                   }
-                  ref="defaultEditor" /> }>
+                  ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
                   onClick={() => this.closeTab(tab[1])}>

@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-27T17:43:04+10:00
+ * @Last modified time: 2017-04-28T08:51:42+10:00
 */
 
 /* eslint-disable react/prop-types */
@@ -89,7 +89,7 @@ export default class Toolbar extends React.Component {
     const {editors, editorToolbar, editorPanel} = this.props.store;
     let existingEditor = null;
     let profileHasEditor = false;
-    editors.forEach( (editor) => {
+    editors.forEach((editor) => {
       if (profile.shellId == editor.shellId) {
         existingEditor = editor;
         profileHasEditor = true;
@@ -111,8 +111,7 @@ export default class Toolbar extends React.Component {
         initialMsg: profile.initialMsg
       });
       editorPanel.activeEditorId = editorId;
-    }
-    else {
+    } else {
       editorPanel.activeEditorId = existingEditor.id;
     }
     editorToolbar.noActiveProfile = false;
@@ -122,7 +121,7 @@ export default class Toolbar extends React.Component {
     editorPanel.activeDropdownId = profile.id;
     editorToolbar.currentProfile = profile.id;
     editorToolbar.noActiveProfile = false;
-  }
+}
 
   /**
    * Method for adding a new editor to an existing connection.
