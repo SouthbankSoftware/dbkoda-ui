@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-28T11:59:06+10:00
+ * @Last modified time: 2017-04-28T13:39:36+10:00
 */
 
 import React from 'react';
@@ -38,6 +38,7 @@ export default class Editor extends React.Component {
     if (this.props.store.outputs.get(this.props.id)) {
       this.props.store.outputs.get(this.props.id).cannotShowMore = true;
       this.props.store.outputs.get(this.props.id).showingMore = false;
+      this.props.store.outputs.get(this.props.id).output += '** Session Restored **\r';
     } else {
       console.log(`create new output for ${this.props.id}`);
       this.props.store.outputs.set(this.props.id, {

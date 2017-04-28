@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-28T09:40:00+10:00
+ * @Last modified time: 2017-04-28T13:58:40+10:00
 */
 
 import React from 'react';
@@ -31,14 +31,15 @@ export default class Toolbar extends React.Component {
      reaction(
       () => this.props.store.outputPanel.executingShowMore,
       (executingShowMore) => {
+        console.log(`if ${executingShowMore} && !${this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore}`);
         if (executingShowMore && !this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore) {
           const command = 'it';
-          console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.store.outputPanel.currentTab).id, ': ', command, '.');
+          console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.store.outputPanel.currentTab).connId, ': ', command, '.');
           this.props.store.editorToolbar.isActiveExecuting = true;
           this.props.store.editors.get(this.props.store.outputPanel.currentTab).executing = true;
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
-          service.update(this.props.store.outputs.get(this.props.store.outputPanel.currentTab).id, {
+          service.update(this.props.store.outputs.get(this.props.store.outputPanel.currentTab).connId, {
             shellId: this.props.store.outputs.get(this.props.store.outputPanel.currentTab).shellId,
             commands: command
           });
@@ -90,6 +91,7 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   showMore() {
+    console.log('executingShowMore = true');
     this.props.store.outputPanel.executingShowMore = true;
   }
 
