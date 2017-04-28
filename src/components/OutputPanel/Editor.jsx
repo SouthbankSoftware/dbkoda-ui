@@ -94,11 +94,12 @@ export default class Editor extends React.Component {
   @action.bound
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
-    let totalOutput =
+    const totalOutput =
       this.props.store.outputs.get(this.props.id).output +
       output.output; // eslint-disable-line
-    let outputLines = totalOutput.split('\r');
-    // keep only 500 lines on output panel
+
+    // Enable below code when doing pagination, keep only 500 lines on output panel
+    // let outputLines = totalOutput.split('\r');
     // if (outputLines && outputLines.length >= 500) {
     //   outputLines = outputLines.slice(Math.max(outputLines.length - 500, 1));
     //   totalOutput = outputLines.join('\r');
