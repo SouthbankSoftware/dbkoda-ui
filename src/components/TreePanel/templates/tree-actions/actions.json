@@ -7,7 +7,7 @@
    "mongos"         : [],
    "databases"      : [],
    "database"       : [],
-   "collection"     : [{"name": "SampleCollections", "text": "Sample Collection", "icon": "pt-icon-search-template"}],
+   "collection"     : [{"name": "SampleCollections", "text": "Find Attributes", "icon": "pt-icon-search-template"}],
    "index"          : [],
    "users"          : [],
    "user"           : [{"name": "AlterUser", "text": "Alter User", "icon": "pt-icon-user"}]

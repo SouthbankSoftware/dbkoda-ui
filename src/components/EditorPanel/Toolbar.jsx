@@ -236,6 +236,7 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.noActiveProfile = false;
     NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.setNewEditorLoading(false);
+    this.props.store.editorToolbar.isActiveExecuting = false;
     if (this.props.store.editorToolbar.newEditorForTreeAction) {
       this.props.store.editorToolbar.newEditorForTreeAction = false;
       this.props.store.treeActionPanel.treeActionEditorId = editorId;

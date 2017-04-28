@@ -215,7 +215,7 @@ export default class TreeState {
 
     //Build tree from JSON object.
     let treeObj = {
-      text: 'Sample',
+      text: 'Attributes',
       type: 'help',
       children: []
     };
