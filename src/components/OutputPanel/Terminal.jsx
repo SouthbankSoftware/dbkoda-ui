@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-26T13:52:43+10:00
+ * @Last modified time: 2017-04-28T10:59:11+10:00
  */
 
 import React from 'react';
@@ -29,7 +29,6 @@ export default class Terminal extends React.Component {
     super(props);
     this.state = {
       command: '',
-      commandHistory: [],
       historyCursor: 0
     };
 

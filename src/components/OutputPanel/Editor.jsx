@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-27T12:26:21+10:00
+ * @Last modified time: 2017-04-28T13:39:36+10:00
 */
 
 import React from 'react';
@@ -35,16 +35,23 @@ export default class Editor extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.props.store.outputs.set(this.props.id, {
-      id: this.props.id,
-      connId: this.props.connId,
-      shellId: this.props.shellId,
-      title: this.props.title,
-      output: '',
-      cannotShowMore: true,
-      showingMore: false,
-      commandHistory: []
-    });
+    if (this.props.store.outputs.get(this.props.id)) {
+      this.props.store.outputs.get(this.props.id).cannotShowMore = true;
+      this.props.store.outputs.get(this.props.id).showingMore = false;
+      this.props.store.outputs.get(this.props.id).output += '** Session Restored **\r';
+    } else {
+      console.log(`create new output for ${this.props.id}`);
+      this.props.store.outputs.set(this.props.id, {
+        id: this.props.id,
+        connId: this.props.connId,
+        shellId: this.props.shellId,
+        title: this.props.title,
+        output: '',
+        cannotShowMore: true,
+        showingMore: false,
+        commandHistory: []
+      });
+    }
 
     /** Reaction to editor tab closing
      *
@@ -56,6 +63,7 @@ export default class Editor extends React.Component {
       (removingTabId) => {
         if (removingTabId && this.props.id == removingTabId) {
           this.props.store.outputs.delete(this.props.id);
+          Broker.removeListener(EventType.createShellOutputEvent(props.connId, props.shellId), this.outputAvailable);
         }
       },
       { 'name': 'reactionOutputEditorRemoveTab' }
@@ -65,7 +73,7 @@ export default class Editor extends React.Component {
   componentDidMount() {
     const {props} = this;
     runInAction(() => {
-      this.props.store.outputs.get(this.props.id).output = this.props.initialMsg;
+      this.props.store.outputs.get(this.props.id).output += this.props.initialMsg;
     });
     Broker.on(EventType.createShellOutputEvent(props.connId, props.shellId), this.outputAvailable);
   }
@@ -93,15 +101,16 @@ export default class Editor extends React.Component {
   @action.bound
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
-    let totalOutput =
+    const totalOutput =
       this.props.store.outputs.get(this.props.id).output +
       output.output; // eslint-disable-line
-    let outputLines = totalOutput.split('\r');
-    // keep only 500 lines on output panel
-    if (outputLines && outputLines.length >= 500) {
-      outputLines = outputLines.slice(Math.max(outputLines.length - 500, 1));
-      totalOutput = outputLines.join('\r');
-    }
+
+    // Enable below code when doing pagination, keep only 500 lines on output panel
+    // let outputLines = totalOutput.split('\r');
+    // if (outputLines && outputLines.length >= 500) {
+    //   outputLines = outputLines.slice(Math.max(outputLines.length - 500, 1));
+    //   totalOutput = outputLines.join('\r');
+    // }
     this.props.store.outputs.get(this.props.id).output = totalOutput;
     if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
@@ -111,7 +120,7 @@ export default class Editor extends React.Component {
       console.log('cannot show more');
       this.props.store.outputs.get(this.props.id).cannotShowMore = true; // eslint-disable-line
     }
-    // this.forceUpdate();
+    this.forceUpdate();
   }
 
   render() {

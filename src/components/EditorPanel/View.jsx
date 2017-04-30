@@ -165,7 +165,7 @@ class View extends React.Component {
             '/',
             shell,
             ': "',
-            this.getCode(),
+            editor.code,
             '".'
           );
           Broker.on(
@@ -180,7 +180,7 @@ class View extends React.Component {
           service.timeout = 30000;
           service.update(profileId, {
             shellId: shell, // eslint-disable-line
-            commands: this.getCode().replace('\t', '  ')
+            commands: editor.code.replace('\t', '  ')
           });
           this.props.store.editorPanel.executingEditorAll = false;
         }
@@ -446,23 +446,26 @@ class View extends React.Component {
         }
       }
     );
-    
+
     // reactToEditorContentChange
     // TODO
-    reaction(() => {
-      const currEditor = this.props.store.editors.get(this.props.id);
-      if (currEditor) {
-        return currEditor.code;
+    reaction(
+      () => {
+        const currEditor = this.props.store.editors.get(this.props.id);
+        if (currEditor) {
+          return currEditor.code;
+        }
+      },
+      code => {
+        if (code) {
+          const cm = this.refs.editor.getCodeMirror();
+          const oldCursor = cm.getCursor();
+          cm.setValue(code);
+          cm.setCursor(oldCursor);
+        }
       }
-    }, (code) => {
-      if (code) {
-        const cm = this.refs.editor.getCodeMirror();
-        const oldCursor = cm.getCursor();
-        cm.setValue(code);
-        cm.setCursor(oldCursor);
-      }
-    });
-    
+    );
+
     this.refresh = this.refresh.bind(this);
     this.executeLine = this.executeLine.bind(this);
     this.executeAll = this.executeAll.bind(this);
@@ -502,6 +505,7 @@ class View extends React.Component {
       if (!id || !shell) {
         return;
       }
+      console.log('send auto complete ', id, shell, curWord);
       const service = featherClient().service('/mongo-auto-complete');
       service
         .get(id, {
@@ -536,8 +540,7 @@ class View extends React.Component {
       this.props.store.editorPanel.activeEditorId
     );
     const shell = editor.shellId;
-    const id = editor.id;
-    return { id, shell };
+    return { id: editor.currentProfile, shell };
   }
 
   @action.bound

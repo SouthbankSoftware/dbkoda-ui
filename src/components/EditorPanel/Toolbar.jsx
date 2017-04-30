@@ -1,10 +1,10 @@
 /**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-03-14 15:54:01
-* @Email:  mike@southbanksoftware.com
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-03-14 15:54:01
+ * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
  * @Last modified time: 2017-05-01T02:36:04+10:00
-*/
+ */
 
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -79,30 +79,42 @@ export default class Toolbar extends React.Component {
    */
   profileCreated(profile) {
     const { editors, editorToolbar, editorPanel } = this.props.store;
-    const fileName = `new${profile.editorCount}.js`;
-    const editorId = uuidV1();
-    profile.editorCount += 1;
-    editors.set(
-      editorId,
-      observable({
-        // eslint-disable-line react/prop-types
-        id: editorId,
-        alias: profile.alias,
-        shellId: profile.shellId,
-        currentProfile: profile.id,
-        fileName,
-        visible: true,
-        executing: false,
-        initialMsg: profile.initialMsg,
-        code: '',
-        path: null
-      })
-    );
+    let existingEditor = null;
+    let profileHasEditor = false;
+    editors.forEach((editor) => {
+      if (profile.shellId == editor.shellId) {
+        existingEditor = editor;
+        profileHasEditor = true;
+      }
+    });
+    if (!profileHasEditor) {
+      const fileName = `new${profile.editorCount}.js`;
+      const editorId = uuidV1();
+      profile.editorCount += 1;
+      editors.set(
+        editorId,
+        observable({
+          // eslint-disable-line react/prop-types
+          id: editorId,
+          alias: profile.alias,
+          shellId: profile.shellId,
+          currentProfile: profile.id,
+          fileName,
+          visible: true,
+          executing: false,
+          initialMsg: profile.initialMsg,
+          code: '',
+          path: null
+        })
+      );
+      editorPanel.activeEditorId = editorId;
+    } else {
+      editorPanel.activeEditorId = existingEditor.id;
+    }
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
     editorToolbar.shellId = profile.shellId;
     editorToolbar.newConnectionLoading = false;
-    editorPanel.activeEditorId = editorId;
     editorPanel.activeDropdownId = profile.id;
     editorToolbar.currentProfile = profile.id;
     editorToolbar.noActiveProfile = false;
@@ -215,6 +227,7 @@ export default class Toolbar extends React.Component {
             shellId: res.shellId,
             currentProfile: res.id,
             fileName,
+            executing: false,
             visible: true,
             initialMsg: res.output ? res.output.join('\n') : '',
             code: '',
@@ -238,6 +251,7 @@ export default class Toolbar extends React.Component {
       iconName: 'pt-icon-thumbs-up'
     });
     this.setNewEditorLoading(false);
+    this.props.store.editorToolbar.isActiveExecuting = false;
     if (this.props.store.editorToolbar.newEditorForTreeAction) {
       this.props.store.editorToolbar.newEditorForTreeAction = false;
       this.props.store.treeActionPanel.treeActionEditorId = editorId;

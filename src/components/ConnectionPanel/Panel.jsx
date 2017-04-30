@@ -133,7 +133,7 @@ export default class Panel extends React.Component {
           />
           <div className="profile-button-panel">
             <Button
-              className="pt-button pt-intent-success"
+              className="connectButton pt-button pt-intent-success"
               onClick={form.onSubmit}
               text="Connect"
               type="submit"
@@ -141,24 +141,24 @@ export default class Panel extends React.Component {
               loading={this.state.connecting}
             />
             <Button
-              className="pt-button pt-intent-warning"
+              className="reset-button pt-button pt-intent-warning"
               onClick={form.onReset}
               text="Reset"
             />
             <Button
-              className="pt-button pt-intent-primary"
+              className="test-button pt-button pt-intent-primary"
               onClick={form.onTest}
               text="Test"
               disabled={formErrors.length > 0}
               loading={this.state.testing}
             />
             <Button
-              className="pt-button pt-intent-primary"
+              className="save-button pt-button pt-intent-primary"
               text="Save"
               onClick={form.onSave}
             />
             <Button
-              className="pt-button pt-intent-primary"
+              className="close-button pt-button pt-intent-primary"
               text="Close"
               onClick={this.props.close}
             />

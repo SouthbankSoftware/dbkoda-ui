@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-27T12:15:45+10:00
+ * @Last modified time: 2017-04-28T08:50:17+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -98,6 +98,11 @@ export default class Panel extends React.Component {
       }
     } else {
       this.props.store.editorPanel.activeEditorId = newTab;
+      if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).executing == true) {
+        this.props.store.editorToolbar.isActiveExecuting = true;
+      } else {
+        this.props.store.editorToolbar.isActiveExecuting = false;
+      }
       this.setState({tabId: newTab});
       if (newTab != 'Default') {
         this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).currentProfile;
@@ -168,12 +173,12 @@ export default class Panel extends React.Component {
             return (
               <Tab2
                 className="notVisible"
-                key={tab[1].alias + ' (' + tab[1].fileName + ')'}
+                key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}
                 panel={<View id={
-                tab[1].id
-              }
+                    tab[1].id
+                  }
                   ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
