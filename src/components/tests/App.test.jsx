@@ -6,6 +6,7 @@
  * @Last modified time: 2017-04-21T10:45:13+10:00
 */
 
+import '~/stores/global';
 import React from 'react';
 import { shallow } from 'enzyme';
 import { observable, useStrict } from 'mobx';

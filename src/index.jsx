@@ -1,12 +1,12 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-04-24T18:19:48+10:00
+ * @Last modified time: 2017-04-30T22:45:22+10:00
  */
 
 import Store from '~/stores/global';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { useStrict } from 'mobx';
+import mobx, { useStrict } from 'mobx';
 import { Provider } from 'mobx-react';
 import { AppContainer } from 'react-hot-loader';
 import App from './components/App';
@@ -15,7 +15,8 @@ useStrict(true);
 
 const store = new Store();
 
-window.stores = store;
+window.store = store;
+window.mobx = mobx;
 
 const render = (Component) => {
   ReactDOM.render(

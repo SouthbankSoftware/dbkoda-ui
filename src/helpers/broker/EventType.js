@@ -1,6 +1,6 @@
 /**
- * @Last modified by:   chris
- * @Last modified time: 2017-04-26T16:09:27+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-05-01T01:29:35+10:00
  */
 
 export default {
@@ -33,5 +33,8 @@ export default {
   createExplainExecutionEvent: (id, shellId) => {
     return 'executing::explain::' + id + '::' + shellId;
   },
-  FEATHER_CLIENT_LOADED: 'feather::client::loaded'
+  FEATHER_CLIENT_LOADED: 'feather::client::loaded',
+  createFileChangedEvent(id) {
+    return `fileChanged::${id}`;
+  }
 };

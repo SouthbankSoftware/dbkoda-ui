@@ -1,3 +1,8 @@
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-05-01T01:35:50+10:00
+ */
+
 import load from 'little-loader';
 import feathers from 'feathers-client';
 import { url } from '../../env';
@@ -25,6 +30,9 @@ class FeatherClient {
     this.shellService.on('mongo-execution-end', (output) => {
       const { id, shellId } = output;
       Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId));
+    });
+    this.service('files').on('changed', ({_id}) => {
+      Broker.emit(EventType.createFileChangedEvent(_id));
     });
   }
 
