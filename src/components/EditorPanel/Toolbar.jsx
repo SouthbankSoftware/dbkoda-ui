@@ -538,7 +538,7 @@ export default class Toolbar extends React.Component {
               <select
                 onChange={this.onDropdownChanged}
                 value={this.props.store.editorPanel.activeDropdownId}
-                className="pt-intent-primary"
+                className="pt-intent-primary editorContextDropdown"
               >
                 <option key="Default" value="Default">
                   No Active Connection
