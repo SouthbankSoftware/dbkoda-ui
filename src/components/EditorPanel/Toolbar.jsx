@@ -326,6 +326,9 @@ export default class Toolbar extends React.Component {
       const currentEditor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId
       );
+      if (!currentEditor) {
+        return;
+      }
       const _saveFile = (path) => {
         return featherClient()
           .service('files')
@@ -612,6 +615,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button pt-icon-document-open pt-intent-primary openFileButton"
               onClick={this.openFile}
+              disabled={this.props.store.editorToolbar.noActiveProfile}
             />
           </Tooltip>
           <Tooltip
@@ -624,6 +628,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button pt-icon-floppy-disk pt-intent-primary saveFileButton"
               onClick={this.saveFile}
+              disabled={this.props.store.editorToolbar.noActiveProfile}
             />
           </Tooltip>
           <Tooltip
