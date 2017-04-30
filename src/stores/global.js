@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   chris
- * @Last modified time: 2017-04-27T11:56:22+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-05-01T02:28:58+10:00
  */
 
 import _ from 'lodash';
@@ -195,8 +195,8 @@ export default class Store {
     featherClient()
       .service('files')
       .get(path.resolve('/tmp/stateStore.json'))
-      .then(({ content }) => {
-        this.restore(content);
+      .then(({ _content }) => {
+        // this.restore(content);
       })
       .catch((err) => {
         console.log(err);

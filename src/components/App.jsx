@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-26T12:44:17+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-04-30T20:49:54+10:00
  */
 
 import React from 'react';
@@ -121,7 +121,9 @@ class App extends React.Component {
           </SplitPane>
         </SplitPane>
         <EventReaction />
-        <DevTools position={{top: 0, right: 500}} />
+        <div className="DevTools">
+          <DevTools position={{ right: -1000, top: 200 }} />
+        </div>
       </div>
     );
   }
