@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-05-01T02:28:58+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-01T09:49:18+10:00
  */
 
 import _ from 'lodash';
@@ -106,10 +106,11 @@ export default class Store {
     json: {}
   });
 
-  setDrawerChild = (value) => {
-    runInAction('update left drawer', () => {
-      this.drawer.drawerChild = value;
-    });
+  @action setDrawerChild = (value) => {
+    this.drawer.drawerChild = value;
+    // runInAction('update left drawer', () => {
+    //
+    // });
   };
 
   @action showConnectionPane = () => {
@@ -122,18 +123,18 @@ export default class Store {
     this.editorToolbar.newEditorForTreeAction = true;
   };
 
-  updateDynamicFormCode = (value) => {
-    runInAction('update code in editor', () => {
+  @action updateDynamicFormCode = (value) => {
+    // runInAction('update code in editor', () => {
       this.treeActionPanel.formValues = value;
       this.treeActionPanel.isNewFormValues = true;
-    });
+    // });
   };
 
-  updateTopology = (jsonData) => {
-    runInAction('updating topology', () => {
+  @action updateTopology = (jsonData) => {
+    // runInAction('updating topology', () => {
       this.topology.json = jsonData;
       this.topology.isChanged = true;
-    });
+    // });
   };
 
   @action addEditor = (withProfile, newRes) => {

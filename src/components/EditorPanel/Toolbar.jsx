@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-05-01T02:36:04+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-01T09:40:26+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -12,7 +12,7 @@ import _ from 'lodash';
 import React from 'react';
 import { featherClient } from '~/helpers/feathers';
 import { observer, inject } from 'mobx-react';
-import { action, observable, runInAction } from 'mobx';
+import { action, reaction, observable, runInAction } from 'mobx';
 import uuidV1 from 'uuid';
 import path from 'path';
 import {
@@ -56,14 +56,15 @@ export default class Toolbar extends React.Component {
     this.openFile = this.openFile.bind(this);
     this.saveFile = this.saveFile.bind(this);
 
-    // const reactionToAddTabForTreeAction = reaction(
-    //   () => this.props.store.editorToolbar.newEditorForTreeAction,
-    //   () => {
-    //     if (this.props.store.editorToolbar.newEditorForTreeAction) {
-    //       this.addEditor();
-    //     }
-    //   }
-    // );
+    // reaction to add a new editor when a new tree action open a new form. This will create a new editor.
+    reaction(
+      () => this.props.store.editorToolbar.newEditorForTreeAction,
+      () => {
+        if (this.props.store.editorToolbar.newEditorForTreeAction) {
+          this.addEditor();
+        }
+      }
+    );
   }
 
   componentWillMount() {
