@@ -3,17 +3,17 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-01T10:19:37+10:00
+ * @Last modified time: 2017-05-01T10:46:19+10:00
  */
 
 import React from 'react';
-import {action, reaction, runInAction} from 'mobx';
-import {inject, observer} from 'mobx-react';
-import {Tab2, Tabs2} from '@blueprintjs/core';
+import { action, reaction, runInAction } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { Tab2, Tabs2 } from '@blueprintjs/core';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
-import {Explain} from '../ExplainPanel/index';
+import { Explain } from '../ExplainPanel/index';
 
 /**
  * The main panel for the Output view, this handles tabbing,
@@ -36,7 +36,7 @@ export default class Panel extends React.Component {
       (activeEditorId) => {
         this.props.store.outputPanel.currentTab = activeEditorId;
       },
-      {'name': 'reactionOutputPanelTabChange'}
+      { name: 'reactionOutputPanelTabChange' }
     );
   }
 
@@ -58,7 +58,10 @@ export default class Panel extends React.Component {
       const editorTitle = editor[1].alias + ' (' + editor[1].fileName + ')';
 
       let tabClassName = 'notVisible';
-      if (editor[1].visible && (this.props.store.editorToolbar.shellId == editor[1].shellId)) {
+      if (
+        editor[1].visible &&
+        this.props.store.editorToolbar.shellId == editor[1].shellId
+      ) {
         tabClassName = 'visible';
       }
       if (editor[1].explains && editor[1].explains.active) {
@@ -79,16 +82,21 @@ export default class Panel extends React.Component {
               id={editor[1].id}
               connId={editor[1].currentProfile}
               initialMsg={editor[1].initialMsg}
-              shellId={editor[1].shellId} />
-          } />,
+              shellId={editor[1].shellId}
+            />
+          }
+        />,
         <Tab2
-          className={(editor[1].explains && tabClassName !== 'notVisible') ? 'visible' : 'notVisible'}
+          className={
+            editor[1].explains && tabClassName !== 'notVisible'
+              ? 'visible'
+              : 'notVisible'
+          }
           key={'Explain-' + editor[1].id}
           id={'Explain-' + editor[1].id}
           title={'Explain-' + editorTitle}
-          panel={
-            <Explain editor={editor[1]} />
-          } />
+          panel={<Explain editor={editor[1]} />}
+        />
       ];
     });
     return [].concat(...tabs);
@@ -96,20 +104,25 @@ export default class Panel extends React.Component {
 
   render() {
     // Toolbar must be rendered after tabs for initialisation purposes
-    const defaultVisible = (this.props.store.editorPanel.activeEditorId == 'Default') ? 'visible' : 'notVisible';
+    const defaultVisible = this.props.store.editorPanel.activeEditorId ==
+      'Default'
+      ? 'visible'
+      : 'notVisible';
     return (
       <div className="pt-dark outputPanel">
-        <Tabs2 id="outputPanelTabs"
+        <Tabs2
+          id="outputPanelTabs"
           className="outputTabView"
           onChange={this.changeTab}
-          selectedTabId={this.props.store.outputPanel.currentTab}>
-          <Tab2 key={0}
+          selectedTabId={this.props.store.outputPanel.currentTab}
+        >
+          <Tab2
+            key={0}
             className={defaultVisible}
             id="Default"
-            panel={
-              <OutputEditor title="Default" id="Default" shellId={0} />
-            }
-            title="Default" />
+            panel={<OutputEditor title="Default" id="Default" shellId={0} />}
+            title="Default"
+          />
           {this.renderTabs(this.props.store.editors.entries())}
         </Tabs2>
         <OutputToolbar />

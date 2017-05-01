@@ -1,4 +1,12 @@
 /**
+ * @Author: chris
+ * @Date:   2017-05-01T11:45:01+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-01T13:55:54+10:00
+ */
+
+/**
  * explain popover menu
  */
 import React from 'react';
@@ -22,20 +30,26 @@ const sendQueryCommand = action((editorPanel, param) => {
  *
  * @param editorPanel
  */
-const ExplainMenu = ({editorPanel}) => {
-  return (<Menu>
-    <MenuItem className="queryPlanner" text="queryPlanner"
-      onClick={() => sendQueryCommand(editorPanel, QUERY_PLANNER)} />
-    <MenuItem text="executionStats" onClick={() => sendQueryCommand(editorPanel, EXECUTION_STATS)} />
-    <MenuItem text="allPlansExecution" onClick={() => sendQueryCommand(editorPanel, ALL_PLANS_EXECUTION)} />
-  </Menu>);
+const ExplainMenu = ({editorPanel, editorToolbar}) => {
+  let menu;
+  if (editorToolbar.noActiveProfile) {
+    menu = null;
+  } else {
+    menu = (<Menu>
+      <MenuItem className="queryPlannerButton" text="queryPlanner"
+        onClick={() => sendQueryCommand(editorPanel, QUERY_PLANNER)} />
+      <MenuItem className="executionStatsButton" text="executionStats" onClick={() => sendQueryCommand(editorPanel, EXECUTION_STATS)} />
+      <MenuItem className="allPlansExecutionButton" text="allPlansExecution" onClick={() => sendQueryCommand(editorPanel, ALL_PLANS_EXECUTION)} />
+    </Menu>);
+  }
+  return menu;
 };
 
 /**
  * define the popup explain component
  */
 export default observer(({editorToolbar, editorPanel}) => (
-  <Popover className="explainPopover" content={<ExplainMenu editorPanel={editorPanel} />}
+  <Popover className="explainPopover" content={<ExplainMenu editorPanel={editorPanel} editorToolbar={editorToolbar} />}
     position={Position.BOTTOM_RIGHT}>
     <Tooltip content="Explain"
       intent={Intent.PRIMARY}
@@ -48,6 +62,3 @@ export default observer(({editorToolbar, editorPanel}) => (
     </Tooltip>
   </Popover>
 ));
-
-
-

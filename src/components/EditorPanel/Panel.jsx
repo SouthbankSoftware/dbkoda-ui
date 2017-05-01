@@ -106,10 +106,18 @@ export default class Panel extends React.Component {
       this.setState({tabId: newTab});
       if (newTab != 'Default') {
         this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).currentProfile;
+        if (this.props.store.profiles.get(this.props.store.editorPanel.activeDropdownId).status == 'CLOSED') {
+          this.props.store.editorPanel.activeDropdownId = 'Default';
+        }
         this.props.store.editorToolbar.id = this.props.store.editors.get(newTab).id;
         this.props.store.editorToolbar.shellId = this.props.store.editors.get(newTab).shellId;
       }
       console.log(`activeDropdownId: ${this.props.store.editorPanel.activeDropdownId} , id: ${this.props.store.editorToolbar.id}, shellId: ${this.props.store.editorToolbar.shellId}`);
+      if (this.props.store.editorPanel.activeDropdownId == 'Default') {
+        this.props.store.editorToolbar.noActiveProfile = true;
+      } else {
+        this.props.store.editorToolbar.noActiveProfile = false;
+      }
     }
   }
 
@@ -148,7 +156,7 @@ export default class Panel extends React.Component {
             if (tab[1].visible) {
               return (
                 <Tab2
-                  className="visible"
+                  className={'visible ' + tab[1].fileName}
                   key={tab[1].id}
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
@@ -172,7 +180,7 @@ export default class Panel extends React.Component {
             }
             return (
               <Tab2
-                className="notVisible"
+                className={'notVisible ' + tab[1].fileName}
                 key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}

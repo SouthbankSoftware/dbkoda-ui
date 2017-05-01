@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-01T10:25:27+10:00
+ * @Last modified time: 2017-05-01T10:53:37+10:00
 */
 
 import React from 'react';
@@ -11,7 +11,7 @@ import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
-import {Broker, EventType} from '../../helpers/broker';
+import { Broker, EventType } from '../../helpers/broker';
 import OutputTerminal from './Terminal';
 
 require('codemirror/mode/javascript/javascript');
@@ -39,7 +39,9 @@ export default class Editor extends React.Component {
       this.props.store.outputs.get(this.props.id).cannotShowMore = true;
       this.props.store.outputs.get(this.props.id).showingMore = false;
       if (this.props.store.outputs.get(this.props.id).output) {
-        this.props.store.outputs.get(this.props.id).output += '** Session Restored **\r';
+        this.props.store.outputs.get(
+          this.props.id
+        ).output += '** Session Restored **\r';
       }
     } else {
       console.log(`create new output for ${this.props.id}`);
@@ -65,21 +67,29 @@ export default class Editor extends React.Component {
       (removingTabId) => {
         if (removingTabId && this.props.id == removingTabId) {
           this.props.store.outputs.delete(this.props.id);
-          Broker.removeListener(EventType.createShellOutputEvent(props.connId, props.shellId), this.outputAvailable);
+          Broker.removeListener(
+            EventType.createShellOutputEvent(props.connId, props.shellId),
+            this.outputAvailable
+          );
         }
       },
-      { 'name': 'reactionOutputEditorRemoveTab' }
+      { name: 'reactionOutputEditorRemoveTab' }
     );
   }
 
   componentDidMount() {
-    const {props} = this;
+    const { props } = this;
     runInAction(() => {
       if (this.props.initialMsg) {
-        this.props.store.outputs.get(this.props.id).output += this.props.initialMsg;
+        this.props.store.outputs.get(
+          this.props.id
+        ).output += this.props.initialMsg;
       }
     });
-    Broker.on(EventType.createShellOutputEvent(props.connId, props.shellId), this.outputAvailable);
+    Broker.on(
+      EventType.createShellOutputEvent(props.connId, props.shellId),
+      this.outputAvailable
+    );
   }
 
   /**
@@ -91,10 +101,10 @@ export default class Editor extends React.Component {
         const cm = this.editor.getCodeMirror();
         cm.scrollIntoView({
           line: cm.lineCount() - 1,
-          ch: 0,
+          ch: 0
         });
       },
-      0,
+      0
     );
   }
 
@@ -105,8 +115,7 @@ export default class Editor extends React.Component {
   @action.bound
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
-    const totalOutput =
-      this.props.store.outputs.get(this.props.id).output +
+    const totalOutput = this.props.store.outputs.get(this.props.id).output +
       output.output; // eslint-disable-line
 
     // Enable below code when doing pagination, keep only 500 lines on output panel
@@ -116,51 +125,60 @@ export default class Editor extends React.Component {
     //   totalOutput = outputLines.join('\r');
     // }
     this.props.store.outputs.get(this.props.id).output = totalOutput;
-    if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
+    if (
+      output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')
+    ) {
       console.log('can show more');
-      this.props.store.outputs.get(this.props.id).cannotShowMore = false; // eslint-disable-line
-    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore &&
-              output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
+      this.props.store.outputs.get(this.props.id).cannotShowMore = false;
+    } else if (
+      this.props.store.outputs.get(this.props.id).cannotShowMore &&
+      output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')
+    ) {
       console.log('cannot show more');
-      this.props.store.outputs.get(this.props.id).cannotShowMore = true; // eslint-disable-line
+      this.props.store.outputs.get(this.props.id).cannotShowMore = true;
     }
     this.forceUpdate();
   }
 
   render() {
     const outputOptions = {
-       smartIndent: true,
-        theme: 'ambiance',
-        readOnly: true,
-        lineWrapping: false,
-        tabSize: 2,
-        matchBrackets: true,
-        autoCloseBrackets: true,
-        foldOptions: {
-          widget: '...'
-        },
-        foldGutter: true,
-        gutters: [
-          'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
-        ],
-        keyMap: 'sublime',
-        extraKeys: {
-          'Ctrl-Space': 'autocomplete',
-          'Ctrl-Q': function (cm) {
-            cm.foldCode(cm.getCursor());
-          }
-        },
-        mode: 'MongoScript'
+      smartIndent: true,
+      theme: 'ambiance',
+      readOnly: true,
+      lineWrapping: false,
+      tabSize: 2,
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      foldOptions: {
+        widget: '...'
+      },
+      foldGutter: true,
+      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+      keyMap: 'sublime',
+      extraKeys: {
+        'Ctrl-Space': 'autocomplete',
+        'Ctrl-Q': function(cm) {
+          cm.foldCode(cm.getCursor());
+        }
+      },
+      mode: 'MongoScript'
     };
     return (
       <div className="outputEditor">
         <CodeMirror
           autosave
-          ref={(c) => { this.editor = c; }}
+          ref={(c) => {
+            this.editor = c;
+          }}
           value={this.props.store.outputs.get(this.props.id).output}
           options={outputOptions}
-          />
-        <OutputTerminal id={this.props.id} connId={this.props.connId} shellId={this.props.shellId} title={this.props.title} />
+        />
+        <OutputTerminal
+          id={this.props.id}
+          connId={this.props.connId}
+          shellId={this.props.shellId}
+          title={this.props.title}
+        />
       </div>
     );
   }

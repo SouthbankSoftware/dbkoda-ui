@@ -3,16 +3,16 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-28T10:59:11+10:00
+ * @Last modified time: 2017-05-01T11:15:18+10:00
  */
 
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {action, reaction} from 'mobx';
-import {featherClient} from '~/helpers/feathers';
-import {AnchorButton} from '@blueprintjs/core';
+import { inject, observer } from 'mobx-react';
+import { action, reaction } from 'mobx';
+import { featherClient } from '~/helpers/feathers';
+import { AnchorButton } from '@blueprintjs/core';
 import CodeMirror from 'react-codemirror';
-import {Broker, EventType} from '../../helpers/broker';
+import { Broker, EventType } from '../../helpers/broker';
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/addon/edit/matchbrackets.js');
@@ -32,21 +32,11 @@ export default class Terminal extends React.Component {
       historyCursor: 0
     };
 
-    this.updateCommand = this
-      .updateCommand
-      .bind(this);
-    this.interceptCommand = this
-      .interceptCommand
-      .bind(this);
-    this.showPreviousCommand = this
-      .showPreviousCommand
-      .bind(this);
-    this.showNextCommand = this
-      .showNextCommand
-      .bind(this);
-    this.updateHistory = this
-      .updateHistory
-      .bind(this);
+    this.updateCommand = this.updateCommand.bind(this);
+    this.interceptCommand = this.interceptCommand.bind(this);
+    this.showPreviousCommand = this.showPreviousCommand.bind(this);
+    this.showNextCommand = this.showNextCommand.bind(this);
+    this.updateHistory = this.updateHistory.bind(this);
 
     /**
      * Reaction to fire off execution of Terminal Commands
@@ -54,27 +44,43 @@ export default class Terminal extends React.Component {
     reaction(
       () => this.props.store.outputPanel.executingTerminalCmd,
       (executingTerminalCmd) => {
-        if (executingTerminalCmd && this.props.id == this.props.store.editorPanel.activeEditorId) {
+        if (
+          executingTerminalCmd &&
+          this.props.id == this.props.store.editorPanel.activeEditorId
+        ) {
           this.updateHistory(this.state.command);
           const command = this.interceptCommand(this.state.command);
           console.log(command);
           if (command) {
-            console.log('Sending data to feathers id ', this.props.connId, ': ', this.props.shellId, command, '.');
+            console.log(
+              'Sending data to feathers id ',
+              this.props.connId,
+              ': ',
+              this.props.shellId,
+              command,
+              '.'
+            );
             this.props.store.editorToolbar.isActiveExecuting = true;
             this.props.store.editors.get(this.props.id).executing = true;
             const service = featherClient().service('/mongo-shells');
             service.timeout = 30000;
-            Broker.on(EventType.createShellExecutionFinishEvent(this.props.connId, this.props.shellId), this.finishedExecution);
+            Broker.on(
+              EventType.createShellExecutionFinishEvent(
+                this.props.connId,
+                this.props.shellId
+              ),
+              this.finishedExecution
+            );
             service.update(this.props.connId, {
-              shellId: this.props.shellId, // eslint-disable-line
+              shellId: this.props.shellId,
               commands: command
             });
           }
-          this.setState({command: ''});
+          this.setState({ command: '' });
           this.props.store.outputPanel.executingTerminalCmd = false;
         }
       },
-      { 'name': 'reactionOutputTerminalExecuteCmd' }
+      { name: 'reactionOutputTerminalExecuteCmd' }
     );
   }
 
@@ -83,9 +89,7 @@ export default class Terminal extends React.Component {
    * post-render, tapping into CodeMirror's js API
    */
   componentDidMount() {
-    const cm = this
-      .terminal
-      .getCodeMirror();
+    const cm = this.terminal.getCodeMirror();
     cm.on('keydown', (cm, keyEvent) => {
       if (keyEvent.keyCode == 38) {
         // Up
@@ -97,7 +101,9 @@ export default class Terminal extends React.Component {
     });
     cm.on('beforeChange', (cm, changeObj) => {
       // If typed new line, attempt submit
-      const typedNewLine = (changeObj.origin == '+input' && typeof changeObj.text == 'object' && changeObj.text.join('') == '');
+      const typedNewLine = changeObj.origin == '+input' &&
+        typeof changeObj.text == 'object' &&
+        changeObj.text.join('') == '';
       if (typedNewLine) {
         if (this.props.store.editorToolbar.noActiveProfile) {
           return changeObj.cancel();
@@ -106,11 +112,11 @@ export default class Terminal extends React.Component {
         return changeObj.cancel();
       }
       // Remove pasted new lines
-      const pastedNewLine = (changeObj.origin == 'paste' && typeof changeObj.text == 'object' && changeObj.text.length > 1);
+      const pastedNewLine = changeObj.origin == 'paste' &&
+        typeof changeObj.text == 'object' &&
+        changeObj.text.length > 1;
       if (pastedNewLine) {
-        const newText = changeObj
-          .text
-          .join(' ');
+        const newText = changeObj.text.join(' ');
         return changeObj.update(null, null, [newText]);
       }
       // Otherwise allow input untouched
@@ -124,7 +130,11 @@ export default class Terminal extends React.Component {
   showPreviousCommand() {
     if (this.state.historyCursor > 0) {
       this.state.historyCursor -= 1;
-      this.updateCommand(this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]);
+      this.updateCommand(
+        this.props.store.outputs.get(this.props.id).commandHistory[
+          this.state.historyCursor
+        ]
+      );
     }
   }
 
@@ -132,11 +142,18 @@ export default class Terminal extends React.Component {
    * Get a more recent command from the history
    */
   showNextCommand() {
-    if (this.state.historyCursor < this.props.store.outputs.get(this.props.id).commandHistory.length) {
+    if (
+      this.state.historyCursor <
+      this.props.store.outputs.get(this.props.id).commandHistory.length
+    ) {
       this.state.historyCursor += 1;
-      this.updateCommand(this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]);
+      this.updateCommand(
+        this.props.store.outputs.get(this.props.id).commandHistory[
+          this.state.historyCursor
+        ]
+      );
     } else {
-      this.setState({command: ''});
+      this.setState({ command: '' });
     }
   }
 
@@ -144,20 +161,10 @@ export default class Terminal extends React.Component {
    * Adds a command to the commandHistory and updates the historyCursor
    */
   updateHistory(command) {
-    this
-      .props
-      .store
-      .outputs
-      .get(this.props.id)
-      .commandHistory
-      .push(command);
-    this.state.historyCursor = this
-      .props
-      .store
-      .outputs
-      .get(this.props.id)
-      .commandHistory
-      .length;
+    this.props.store.outputs.get(this.props.id).commandHistory.push(command);
+    this.state.historyCursor = this.props.store.outputs.get(
+      this.props.id
+    ).commandHistory.length;
   }
 
   /**
@@ -165,7 +172,7 @@ export default class Terminal extends React.Component {
    * @param {string} newCmd - The updated code to be stored in state
    */
   updateCommand(newCmd) {
-    this.setState({command: newCmd});
+    this.setState({ command: newCmd });
   }
 
   /**
@@ -196,12 +203,7 @@ export default class Terminal extends React.Component {
 
   @action.bound
   finishedExecution() {
-    this
-      .props
-      .store
-      .editors
-      .get(this.props.id)
-      .executing = false;
+    this.props.store.editors.get(this.props.id).executing = false;
     if (this.props.store.editorPanel.activeEditorId == this.props.id) {
       this.props.store.editorToolbar.isActiveExecuting = false;
       this.props.store.editorPanel.stoppingExecution = false;
@@ -229,14 +231,18 @@ export default class Terminal extends React.Component {
       <div className="outputTerminal">
         <CodeMirror
           className="outputCmdLine"
-          ref={(c) => { this.terminal = c; }}
+          ref={(c) => {
+            this.terminal = c;
+          }}
           options={terminalOptions}
           value={this.state.command}
-          onChange={value => this.updateCommand(value)} />
+          onChange={value => this.updateCommand(value)}
+        />
         <AnchorButton
           className="executeCmdBtn pt-button pt-icon-key-enter"
           disabled={this.props.store.editorToolbar.noActiveProfile}
-          onClick={this.executeCommand} />
+          onClick={this.executeCommand}
+        />
       </div>
     );
   }
