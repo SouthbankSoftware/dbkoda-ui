@@ -9,7 +9,6 @@
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';

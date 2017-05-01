@@ -24,10 +24,10 @@ const sendQueryCommand = action((editorPanel, param) => {
  */
 const ExplainMenu = ({editorPanel}) => {
   return (<Menu>
-    <MenuItem className="queryPlanner" text="queryPlanner"
+    <MenuItem className="queryPlannerButton" text="queryPlanner"
       onClick={() => sendQueryCommand(editorPanel, QUERY_PLANNER)} />
-    <MenuItem text="executionStats" onClick={() => sendQueryCommand(editorPanel, EXECUTION_STATS)} />
-    <MenuItem text="allPlansExecution" onClick={() => sendQueryCommand(editorPanel, ALL_PLANS_EXECUTION)} />
+    <MenuItem className="executionStatsButton" text="executionStats" onClick={() => sendQueryCommand(editorPanel, EXECUTION_STATS)} />
+    <MenuItem className="allPlansExecutionButton" text="allPlansExecution" onClick={() => sendQueryCommand(editorPanel, ALL_PLANS_EXECUTION)} />
   </Menu>);
 };
 
