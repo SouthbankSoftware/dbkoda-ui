@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-01T09:40:26+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-01T12:01:48+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -485,21 +485,23 @@ export default class Toolbar extends React.Component {
     console.log('Editor: ', editor);
     console.log('Profile: ', profile);
 
-    // Send Command:
-    const service = featherClient().service('/mongo-sync-execution');
-    service.timeout = 30000;
-    service
-      .update(editor.id, {
-        shellId: editor.shellId,
-        newProfile: profile.id,
-        swapProfile: true // eslint-disable-line
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(editor);
-        editor.currentProfile = profile.id;
-        console.log(editor);
-      });
+    if (profile) {
+      // Send Command:
+      const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 30000;
+      service
+        .update(editor.currentProfile, {
+          shellId: editor.shellId,
+          newProfile: profile.id,
+          swapProfile: true // eslint-disable-line
+        })
+        .then((res) => {
+          console.log(res);
+          console.log(editor);
+          editor.currentProfile = profile.id;
+          console.log(editor);
+        });
+    }
   }
 
   /**
