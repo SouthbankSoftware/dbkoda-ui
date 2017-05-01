@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-26T15:59:38+10:00
+ * @Last modified time: 2017-05-01T10:19:37+10:00
  */
 
 import React from 'react';
@@ -96,6 +96,7 @@ export default class Panel extends React.Component {
 
   render() {
     // Toolbar must be rendered after tabs for initialisation purposes
+    const defaultVisible = (this.props.store.editorPanel.activeEditorId == 'Default') ? 'visible' : 'notVisible';
     return (
       <div className="pt-dark outputPanel">
         <Tabs2 id="outputPanelTabs"
@@ -103,6 +104,7 @@ export default class Panel extends React.Component {
           onChange={this.changeTab}
           selectedTabId={this.props.store.outputPanel.currentTab}>
           <Tab2 key={0}
+            className={defaultVisible}
             id="Default"
             panel={
               <OutputEditor title="Default" id="Default" shellId={0} />

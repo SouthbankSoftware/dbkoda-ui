@@ -2,11 +2,11 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-01T09:49:18+10:00
+ * @Last modified time: 2017-05-01T10:31:17+10:00
  */
 
 import _ from 'lodash';
-import { observable, action, runInAction } from 'mobx';
+import { observable, action} from 'mobx';
 import { dump, restore } from 'dumpenvy';
 import { DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
@@ -108,9 +108,6 @@ export default class Store {
 
   @action setDrawerChild = (value) => {
     this.drawer.drawerChild = value;
-    // runInAction('update left drawer', () => {
-    //
-    // });
   };
 
   @action showConnectionPane = () => {
@@ -124,17 +121,13 @@ export default class Store {
   };
 
   @action updateDynamicFormCode = (value) => {
-    // runInAction('update code in editor', () => {
-      this.treeActionPanel.formValues = value;
-      this.treeActionPanel.isNewFormValues = true;
-    // });
+    this.treeActionPanel.formValues = value;
+    this.treeActionPanel.isNewFormValues = true;
   };
 
   @action updateTopology = (jsonData) => {
-    // runInAction('updating topology', () => {
-      this.topology.json = jsonData;
-      this.topology.isChanged = true;
-    // });
+    this.topology.json = jsonData;
+    this.topology.isChanged = true;
   };
 
   @action addEditor = (withProfile, newRes) => {
