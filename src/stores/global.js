@@ -196,8 +196,8 @@ export default class Store {
     featherClient()
       .service('files')
       .get(path.resolve('/tmp/stateStore.json'))
-      .then(({ _content }) => {
-        // this.restore(content);
+      .then(({ content }) => {
+        this.restore(content);
       })
       .catch((err) => {
         console.log(err);
