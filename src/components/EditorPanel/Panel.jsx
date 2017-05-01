@@ -150,13 +150,14 @@ export default class Panel extends React.Component {
           onChange={this.changeTab}
           selectedTabId={this.props.store.editorPanel.activeEditorId}>
           <Tab2
+            className="welcomeTab"
             id="Default"
             title="Welcome"
             panel={<WelcomeView />} /> {editors.map((tab) => {
             if (tab[1].visible) {
               return (
                 <Tab2
-                  className={'visible ' + tab[1].fileName}
+                  className={'editorTab visible ' + tab[1].fileName}
                   key={tab[1].id}
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
@@ -180,7 +181,7 @@ export default class Panel extends React.Component {
             }
             return (
               <Tab2
-                className={'notVisible ' + tab[1].fileName}
+                className={'editorTab notVisible ' + tab[1].fileName}
                 key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}
