@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-01T10:45:26+10:00
+ * @Last modified time: 2017-05-01T10:53:37+10:00
 */
 
 import React from 'react';
@@ -129,13 +129,13 @@ export default class Editor extends React.Component {
       output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')
     ) {
       console.log('can show more');
-      this.props.store.outputs.get(this.props.id).cannotShowMore = false; // eslint-disable-line
+      this.props.store.outputs.get(this.props.id).cannotShowMore = false;
     } else if (
       this.props.store.outputs.get(this.props.id).cannotShowMore &&
       output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')
     ) {
       console.log('cannot show more');
-      this.props.store.outputs.get(this.props.id).cannotShowMore = true; // eslint-disable-line
+      this.props.store.outputs.get(this.props.id).cannotShowMore = true;
     }
     this.forceUpdate();
   }

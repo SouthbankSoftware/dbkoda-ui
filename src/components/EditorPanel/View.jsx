@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-05-01T02:43:56+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-01T11:40:10+10:00
  */
 
 /* eslint-disable react/no-string-refs */
@@ -342,19 +342,17 @@ class View extends React.Component {
           .get(this.props.store.editorPanel.activeEditorId);
         const shell = editor.shellId;
         const id = editor.currentProfile;
-        console.log(`Stopping Execution of ${id} / ${shellId}!`);
-        // Broker.on(EventType.createShellExecutionFinishEvent(id, shellId),
-        // this.finishedExecution);
+        console.log(`Stopping Execution of ${id} / ${shell}!`);
         const service = featherClient().service('/mongo-stop-execution');
         service.timeout = 30000;
         service
           .get(id, {
           query: {
-            shellId: shellId // eslint-disable-line
+            shellId: shell
           }
         })
           .then((response) => {
-            console.log(`Stopped Execution of ${id} / ${shellId}!`);
+            console.log(`Stopped Execution of ${id} / ${shell}!`);
             if (response) {
               NewToaster.show({message: response.result, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
             } else {
@@ -363,7 +361,7 @@ class View extends React.Component {
             this.finishedExecution();
           })
           .catch((reason) => {
-            console.log(`Stopping Execution failed for ${id} / ${shellId}!`);
+            console.log(`Stopping Execution failed for ${id} / ${shell}!`);
             NewToaster.show({
               message: 'Stop Execution Failed! ' + reason,
               intent: Intent.DANGER,
