@@ -3,12 +3,12 @@
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-24T11:02:51+10:00
+ * @Last modified time: 2017-05-01T13:56:12+10:00
 */
 
 import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
-import { reaction, runInAction } from 'mobx';
+import { reaction, runInAction, observable } from 'mobx';
 import Store from '~/stores/global';
 import { Intent, Position } from '@blueprintjs/core';
 import { featherClient } from '../../helpers/feathers';
@@ -37,15 +37,17 @@ export default class TreePanel extends React.Component {
      * @param  {function} this - condition to react on change
      * @param  {function} if   - Reaction callback Function
      */
-    reaction(
-      () => this.props.store.profileList.selectedProfile,
-      () => {
-        if (this.props.store.profileList.selectedProfile) {
-          this.treeState.setProfileAlias(this.props.store.profileList.selectedProfile.alias);
+
+    const onSelectProfile = () => {
+      const profile = this.props.store.profileList.selectedProfile;
+      if (profile) {
+        if (profile.status == 'OPEN') {
+          this.bShowTree = true;
+          this.treeState.setProfileAlias(profile.alias);
           const service = featherClient()                 // Calls the controller to load the topology associated with the selected Profile
             .service('/mongo-inspector');
             service.timeout = 60000;
-            service.get(this.props.store.profileList.selectedProfile.id)
+            service.get(profile.id)
             .then((res) => {
               this.props.store.updateTopology(res);
             })
@@ -57,15 +59,21 @@ export default class TreePanel extends React.Component {
                 iconName: 'pt-icon-thumbs-down',
               });
             });
+        } else {
+          this.bShowTree = false;
         }
-      },
+      }
+    };
+    this.reactionToProfile = reaction(
+      () => this.props.store.profileList.selectedProfile,
+      () => onSelectProfile()
     );
     /**
      * Reaction to update tree when topology is changed
      * @param  {function} this Condition to react on changed
      * @param  {function} if   Reaction callback function
      */
-    reaction(
+    this.reactionToTopology = reaction(
       () => this.props.store.topology.isChanged,
       () => {
         if (this.props.store.topology.isChanged && this.props.store.topology.json !== null) {
@@ -76,9 +84,17 @@ export default class TreePanel extends React.Component {
         }
       },
     );
+
+    onSelectProfile();
+  }
+  componentWillUnmount() {
+    this.reactionToProfile();
+    this.reactionToTopology();
   }
   treeState = new TreeState();
-
+  reactionToProfile;
+  reactionToTopology;
+  @observable bShowTree = false;
   render() {
     const divStyle = {
       height: '100%',
@@ -87,7 +103,8 @@ export default class TreePanel extends React.Component {
       <Provider treeState={this.treeState}>
         <div style={divStyle}>
           <TreeToolbar />
-          <TreeView />
+          {(this.bShowTree == false) && <div className="pt-navbar-heading">Please reconnect profile to view its topology.</div>}
+          {this.bShowTree && <TreeView />}
         </div>
       </Provider>
     );

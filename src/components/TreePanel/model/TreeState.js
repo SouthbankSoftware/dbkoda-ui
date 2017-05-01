@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T08:41:57+10:00
+ * @Last modified time: 2017-05-01T11:54:59+10:00
 */
 
 /* eslint-disable */
@@ -51,7 +51,7 @@ export default class TreeState {
   /**
    * Function to perform the filter action on the treeNodes.
    */
-  filterNodes() {
+  @action filterNodes() {
     this
       .filteredNodes
       .clear();
@@ -81,7 +81,7 @@ export default class TreeState {
    * function to parse json document from the controller
    * @param  {json} treeJson [description]
    */
-  parseJson(treeJson) {
+  @action parseJson(treeJson) {
     this.treeJson = treeJson;
     this.treeRoot = undefined;
     this
@@ -105,7 +105,7 @@ export default class TreeState {
    * function to select a specific node in a tree
    * @param  {TreeNode} nodeData treeNode which has been clicked by the userPreferences
    */
-  selectNode(nodeData) {
+  @action selectNode(nodeData) {
     // const originallySelected = nodeData.isSelected;
     this.forEachNode(this.nodes, (n) => {
       n.isSelected = false;
@@ -116,7 +116,7 @@ export default class TreeState {
    * Set the root node of the tree
    * @param  {treeNode} nodeData treeNode which has been selected by the user
    */
-  selectRootNode(nodeData) {
+  @action selectRootNode(nodeData) {
     this.preserveState();
     this.treeRoot = nodeData;
     this.filterNodes();
@@ -124,7 +124,7 @@ export default class TreeState {
   /**
    * Reset the root node to display the complete topology of the selected profile
    */
-  resetRootNode() {
+  @action resetRootNode() {
     this.treeRoot = undefined;
     this.filterNodes();
     this.restoreState();
@@ -132,7 +132,7 @@ export default class TreeState {
   /**
    * Save the state of tree for future restoration
    */
-  preserveState() {
+  @action preserveState() {
     this.previousState = new Map();
     for (const child of this.treeNodes) {
       this
@@ -144,7 +144,7 @@ export default class TreeState {
    * Restores the tree state to a previous state
    * @return {[type]} [description]
    */
-  restoreState() {
+  @action restoreState() {
     if (this.previousState && this.previousState.size > 0) {
       for (const child of this.treeNodes) {
         const lastState = this

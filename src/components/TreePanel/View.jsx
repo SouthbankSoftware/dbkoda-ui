@@ -3,12 +3,12 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-12T08:46:03+10:00
+ * @Last modified time: 2017-05-01T13:43:15+10:00
 */
 
 import React from 'react';
 import {inject} from 'mobx-react';
-import { reaction } from 'mobx';
+import { reaction, runInAction } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 import {ContextMenuTarget, Menu, MenuItem, MenuDivider, Intent} from '@blueprintjs/core';
 import TreeActions from './templates/tree-actions/actions.json';
@@ -35,18 +35,26 @@ export default class TreeView extends React.Component {
     };
 
     this.state = {nodes: this.props.treeState.nodes};
-
-    reaction(() => this.props.treeState.isNewJsonAvailable, () => {
-      if (this.props.treeState.isNewJsonAvailable) {
-        this.setState({nodes: this.props.treeState.nodes});
-        this.props.treeState.isNewJsonAvailable = false;
-      }
-    });
-    reaction(() => this.props.treeState.filter, () => {
+  }
+  componentWillMount() {
+    const onNewJson = () => {
+      runInAction('update state var', () => {
+        if (this.props.treeState.isNewJsonAvailable) {
+          this.setState({nodes: this.props.treeState.nodes});
+          this.props.treeState.isNewJsonAvailable = false;
+        }
+      });
+    };
+    this.reactionToJson = reaction(() => this.props.treeState.isNewJsonAvailable, () => onNewJson());
+    this.reactionToFilter = reaction(() => this.props.treeState.filter, () => {
       this.setState({nodes: this.props.treeState.nodes});
     });
+    onNewJson();
   }
-
+  componentWillUnmount() {
+    this.reactionToJson();
+    this.reactionToFilter();
+  }
   getContextMenu() {
     if (this.nodeRightClicked) {
       const Actions = TreeActions[this.nodeRightClicked.type];
@@ -73,7 +81,8 @@ export default class TreeView extends React.Component {
       return (<Menu>{Menus}</Menu>);
     }
   }
-
+  reactionToJson;
+  reactionToFilter;
   handleNodeClick = (nodeData: ITreeNode, _nodePath: number[]) => {
     if (nodeData.text == '...') {
       this.props.treeState.resetRootNode();

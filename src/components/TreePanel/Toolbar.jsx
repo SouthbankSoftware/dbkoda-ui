@@ -3,12 +3,11 @@
 * @Date:   2017-03-07T12:00:43+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-29T16:17:57+11:00
+ * @Last modified time: 2017-05-01T11:36:04+10:00
 */
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { reaction } from 'mobx';
 import { Button, Menu, MenuItem, MenuDivider, Popover, Position } from '@blueprintjs/core';
 import TreeState from './model/TreeState.js';
 
@@ -22,20 +21,8 @@ export default class TreeToolbar extends React.Component {
   }
   constructor(props) {
     super(props);
-    this.state = {profileAlias: this.props.treeState.profileAlias};
     this.updateFilter = this.updateFilter.bind(this);
   }
-  componentWillMount() {
-    reaction(
-      () => this.props.treeState.profileAlias,
-      () => {
-        if (this.props.treeState.profileAlias) {
-          this.setState({profileAlias: this.props.treeState.profileAlias});
-        }
-      }
-    );
-  }
-  profileAlias = '';
   updateFilter(event) {
     const value = event.target.value.replace(/ /g, '');
     this.props.treeState.setFilter(value);
@@ -53,7 +40,7 @@ export default class TreeToolbar extends React.Component {
     return (
       <nav className=" treeToolbar pt-navbar pt-dark .modifier">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">{this.state.profileAlias}</div>
+          <div className="pt-navbar-heading">{this.props.treeState.profileAlias}</div>
           <input
             className="pt-input"
             placeholder="Search..."
