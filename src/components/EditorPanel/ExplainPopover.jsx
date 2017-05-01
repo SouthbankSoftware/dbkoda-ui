@@ -3,7 +3,7 @@
  * @Date:   2017-05-01T11:45:01+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-01T13:46:21+10:00
+ * @Last modified time: 2017-05-01T13:55:54+10:00
  */
 
 /**
@@ -34,8 +34,7 @@ const ExplainMenu = ({editorPanel, editorToolbar}) => {
   let menu;
   if (editorToolbar.noActiveProfile) {
     menu = null;
-  }
-  else {
+  } else {
     menu = (<Menu>
       <MenuItem className="queryPlannerButton" text="queryPlanner"
         onClick={() => sendQueryCommand(editorPanel, QUERY_PLANNER)} />
