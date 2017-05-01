@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-28T08:50:17+10:00
+ * @Last modified time: 2017-05-01T09:46:30+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -98,7 +98,7 @@ export default class Panel extends React.Component {
       }
     } else {
       this.props.store.editorPanel.activeEditorId = newTab;
-      if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).executing == true) {
+      if (newTab != 'Default' && this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).executing == true) {
         this.props.store.editorToolbar.isActiveExecuting = true;
       } else {
         this.props.store.editorToolbar.isActiveExecuting = false;
