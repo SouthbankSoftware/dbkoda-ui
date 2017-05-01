@@ -8,24 +8,25 @@
 
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
-/* eslint-disable */
+/* eslint-disable no-unused-vars */
+
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import { inject, PropTypes } from 'mobx-react';
-import { featherClient } from '~/helpers/feathers';
-import { action, observe, reaction, runInAction } from 'mobx';
-import { ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
+import {inject, PropTypes} from 'mobx-react';
+import {featherClient} from '~/helpers/feathers';
+import {action, reaction, runInAction} from 'mobx';
+import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
 
-import { DropTarget } from 'react-dnd';
-import { DragItemTypes } from '#/common/Constants.js';
-import { NewToaster } from '#/common/Toaster';
+import {DropTarget} from 'react-dnd';
+import {DragItemTypes} from '#/common/Constants.js';
+import {NewToaster} from '#/common/Toaster';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
-import { Broker, EventType } from '../../helpers/broker';
+import {Broker, EventType} from '../../helpers/broker';
 
 const Prettier = require('prettier');
 const React = require('react');
@@ -117,16 +118,15 @@ class View extends React.Component {
         },
         foldGutter: true,
         gutters: [
-          'CodeMirror-linenumbers',
-          'CodeMirror-foldgutter' // , 'CodeMirror-lint-markers'
+          'CodeMirror-linenumbers', 'CodeMirror-foldgutter' // , 'CodeMirror-lint-markers'
         ],
         keyMap: 'sublime',
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
-          Tab: function(cm) {
+          Tab(cm) {
             cm.replaceSelection('  ');
           },
-          'Ctrl-Q': function(cm) {
+          'Ctrl-Q': function (cm) {
             cm.foldCode(cm.getCursor());
           }
         },
@@ -141,51 +141,42 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExecuteAll = reaction(
-      // eslint-disable-line
-      () => this.props.store.editorPanel.executingEditorAll,
-      executingEditorAll => {
-        //eslint-disable-line
-        if (
-          this.props.store.editorPanel.activeEditorId == this.props.id &&
-          this.props.store.editorPanel.executingEditorAll == true
-        ) {
-          console.log(this.props.store.editors);
-          console.log(this.props.store.profiles);
-          const editor = this.props.store.editors.get(
-            this.props.store.editorPanel.activeEditorId
-          );
-          let shell = editor.shellId;
-          let profileId = editor.currentProfile;
+    // eslint-disable-line
+    () => this.props.store.editorPanel.executingEditorAll, (executingEditorAll) => {
+      //eslint-disable-line
+      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorAll == true) {
+        console.log(this.props.store.editors);
+        console.log(this.props.store.profiles);
+        const editor = this
+          .props
+          .store
+          .editors
+          .get(this.props.store.editorPanel.activeEditorId);
+        const shell = editor.shellId;
+        const profileId = editor.currentProfile;
 
-          console.log(
-            '[',
-            this.props.store.editorPanel.activeDropdownId,
-            ']Sending data to feathers id ',
-            profileId,
-            '/',
-            shell,
-            ': "',
-            editor.code,
-            '".'
-          );
-          Broker.on(
-            EventType.createShellExecutionFinishEvent(profileId, shell),
-            this.finishedExecution
-          );
-          // Listen for completion
-          this.props.store.editors.get(editor.id).executing = true;
-          this.props.store.editorToolbar.isActiveExecuting = true;
-          // Send request to feathers client
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(profileId, {
-            shellId: shell, // eslint-disable-line
-            commands: editor.code.replace('\t', '  ')
-          });
-          this.props.store.editorPanel.executingEditorAll = false;
-        }
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', profileId, '/', shell, ': "', editor.code, '".');
+        Broker.on(EventType.createShellExecutionFinishEvent(profileId, shell), this.finishedExecution);
+        // Listen for completion
+        this
+          .props
+          .store
+          .editors
+          .get(editor.id)
+          .executing = true;
+        this.props.store.editorToolbar.isActiveExecuting = true;
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(profileId, {
+          shellId: shell, // eslint-disable-line
+          commands: editor
+            .code
+            .replace('\t', '  ')
+        });
+        this.props.store.editorPanel.executingEditorAll = false;
       }
-    );
+    });
 
     /**
      * Reaction function for when a change occurs on the editorPanel.executingEditorLines state.
@@ -193,84 +184,68 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExecuteLine = reaction(
-      // eslint-disable-line
-      () => this.props.store.editorPanel.executingEditorLines,
-      executingEditorLines => {
-        //eslint-disable-line
-        if (
-          this.props.store.editorPanel.activeEditorId == this.props.id &&
-          this.props.store.editorPanel.executingEditorLines == true
-        ) {
-          // Determine code to send.
-          const editor = this.props.store.editors.get(
-            this.props.store.editorPanel.activeEditorId
-          );
-          let shell = editor.shellId;
-          let id = editor.currentProfile;
+    // eslint-disable-line
+    () => this.props.store.editorPanel.executingEditorLines, (executingEditorLines) => {
+      //eslint-disable-line
+      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.editorPanel.executingEditorLines == true) {
+        // Determine code to send.
+        const editor = this
+          .props
+          .store
+          .editors
+          .get(this.props.store.editorPanel.activeEditorId);
+        const shell = editor.shellId;
+        const id = editor.currentProfile;
 
-          const cm = this.refs.editor.getCodeMirror(); // eslint-disable-line
-          let content = cm.getSelection();
-          if (cm.getSelection().length > 0) {
-            console.log('Executing Highlighted Text.');
-          } else {
-            console.log(
-              'No Highlighted Text, Executing Line: ',
-              cm.getCursor().line + 1
-            );
-            content = cm.getLine(cm.getCursor().line);
-          }
-
-          console.log(
-            '[',
-            this.props.store.editorPanel.activeDropdownId,
-            ']Sending data to feathers id ',
-            id,
-            '/',
-            shell,
-            ': "',
-            content,
-            '".'
-          );
-          // Listen for completion
-          Broker.on(
-            EventType.createShellExecutionFinishEvent(id, shell),
-            this.finishedExecution
-          );
-          this.props.store.editors.get(editor.id).executing = true;
-          this.props.store.editorToolbar.isActiveExecuting = true;
-
-          // Send request to feathers client
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(id, {
-            shellId: shell, // eslint-disable-line
-            commands: content.replace('\t', '  ')
-          });
-          this.props.store.editorPanel.executingEditorLines = false;
+        const cm = this
+          .refs
+          .editor
+          .getCodeMirror(); // eslint-disable-line
+        let content = cm.getSelection();
+        if (cm.getSelection().length > 0) {
+          console.log('Executing Highlighted Text.');
+        } else {
+          console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
+          content = cm.getLine(cm.getCursor().line);
         }
+
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+        // Listen for completion
+        Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
+        this
+          .props
+          .store
+          .editors
+          .get(editor.id)
+          .executing = true;
+        this.props.store.editorToolbar.isActiveExecuting = true;
+
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(id, {
+          shellId: shell, // eslint-disable-line
+          commands: content.replace('\t', '  ')
+        });
+        this.props.store.editorPanel.executingEditorLines = false;
       }
-    );
+    });
     /**
      * Reaction function for when a change occurs on the dragItem.drapDrop state.
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToDragDrop = reaction(
+    // eslint-disable-line
+    () => this.props.store.dragItem.dragDrop, (dragDrop) => {
       // eslint-disable-line
-      () => this.props.store.dragItem.dragDrop,
-      dragDrop => {
-        // eslint-disable-line
-        if (
-          this.props.store.dragItem.dragDrop &&
-          this.props.store.dragItem.item !== null
-        ) {
-          const item = this.props.store.dragItem.item;
-          // this.setState({code: item.label});
-          this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
-          this.props.store.dragItem.dragDrop = false;
-        }
+      if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
+        const item = this.props.store.dragItem.item;
+        // this.setState({code: item.label});
+        this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
+        this.props.store.dragItem.dragDrop = false;
       }
-    );
+    });
 
     /**
      * Reaction function for when a change occurs on the editorPanel.executingEditorLines state.
@@ -278,105 +253,80 @@ class View extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToExplain = reaction(
-      // eslint-disable-line
-      () => this.props.store.editorPanel.executingExplain,
-      executingEditorLines => {
-        //eslint-disable-line
-        const explainParam = this.props.store.editorPanel.executingExplain;
-        if (
-          this.props.store.editorPanel.activeEditorId == this.props.id &&
-          explainParam
-        ) {
-          // Determine code to send.
-          const editor = this.props.store.editors.get(
-            this.props.store.editorPanel.activeEditorId
-          );
-          const shell = editor.shellId;
-          const id = editor.currentProfile;
+    // eslint-disable-line
+    () => this.props.store.editorPanel.executingExplain, (executingEditorLines) => {
+      //eslint-disable-line
+      const explainParam = this.props.store.editorPanel.executingExplain;
+      if (this.props.store.editorPanel.activeEditorId == this.props.id && explainParam) {
+        // Determine code to send.
+        const editor = this
+          .props
+          .store
+          .editors
+          .get(this.props.store.editorPanel.activeEditorId);
+        const shell = editor.shellId;
+        const id = editor.currentProfile;
 
-          const cm = this.refs.editor.getCodeMirror(); // eslint-disable-line
-          let content = cm.getSelection();
-          if (cm.getSelection().length > 0) {
-            console.log('Executing Highlighted Text.');
-          } else {
-            console.log(
-              'No Highlighted Text, Executing Line: ',
-              cm.getCursor().line + 1
-            );
-            content = cm.getLine(cm.getCursor().line);
-          }
-          content = content.replace(/\n/g, '');
-          if (content.indexOf('count()') > 0) {
-            content = content.replace(
-              /\.count\(\)/,
-              '.explain("' + explainParam + '").count()'
-            );
-          } else if (content.indexOf('.update(') > 0) {
-            content = content.replace(
-              /\.update\(/,
-              '.explain("' + explainParam + '").update('
-            );
-          } else if (content.indexOf('.distinct(') > 0) {
-            content = content.replace(
-              /\.distinct\(/,
-              '.explain("' + explainParam + '").distinct('
-            );
-          } else if (content.indexOf('.explain') < 0) {
-            if (content.match(/;$/)) {
-              content = content.replace(
-                /;$/,
-                '.explain("' + explainParam + '");'
-              );
-            } else {
-              content += '.explain("' + explainParam + '")';
-            }
-          }
-
-          console.log(
-            '[',
-            this.props.store.editorPanel.activeDropdownId,
-            ']Sending data to feathers id ',
-            id,
-            '/',
-            shell,
-            ': "',
-            content,
-            '".'
-          );
-
-          editor.executing = true;
-          // Send request to feathers client
-          const service = featherClient().service('/mongo-sync-execution');
-          const filteredContent = content.replace('\t', '  ');
-          service.timeout = 30000;
-          this.props.store.editorToolbar.isExplainExecuting = true;
-          service
-            .update(id, {
-              shellId: shell, // eslint-disable-line
-              commands: filteredContent
-            })
-            .then(response => {
-              runInAction(() => {
-                this.props.store.editorToolbar.isExplainExecuting = false;
-              });
-              Broker.emit(EventType.createExplainExecutionEvent(id, shell), {
-                id,
-                shell,
-                command: filteredContent,
-                type: explainParam,
-                output: response
-              });
-            })
-            .catch(err => {
-              console.log('error:', err);
-              runInAction(() => {
-                this.props.store.editorToolbar.isExplainExecuting = false;
-              });
-            });
-          this.props.store.editorPanel.executingExplain = false;
+        const cm = this
+          .refs
+          .editor
+          .getCodeMirror(); // eslint-disable-line
+        let content = cm.getSelection();
+        if (cm.getSelection().length > 0) {
+          console.log('Executing Highlighted Text.');
+        } else {
+          console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
+          content = cm.getLine(cm.getCursor().line);
         }
+        content = content.replace(/\n/g, '');
+        if (content.indexOf('count()') > 0) {
+          content = content.replace(/\.count\(\)/, '.explain("' + explainParam + '").count()');
+        } else if (content.indexOf('.update(') > 0) {
+          content = content.replace(/\.update\(/, '.explain("' + explainParam + '").update(');
+        } else if (content.indexOf('.distinct(') > 0) {
+          content = content.replace(/\.distinct\(/, '.explain("' + explainParam + '").distinct(');
+        } else if (content.indexOf('.explain') < 0) {
+          if (content.match(/;$/)) {
+            content = content.replace(/;$/, '.explain("' + explainParam + '");');
+          } else {
+            content += '.explain("' + explainParam + '")';
+          }
+        }
+
+        console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
+
+        editor.executing = true;
+        // Send request to feathers client
+        const service = featherClient().service('/mongo-sync-execution');
+        const filteredContent = content.replace('\t', '  ');
+        service.timeout = 30000;
+        this.props.store.editorToolbar.isExplainExecuting = true;
+        service
+          .update(id, {
+          shellId: shell, // eslint-disable-line
+          commands: filteredContent
+        })
+          .then((response) => {
+            runInAction(() => {
+              this.props.store.editorToolbar.isExplainExecuting = false;
+            });
+            Broker.emit(EventType.createExplainExecutionEvent(id, shell), {
+              id,
+              shell,
+              command: filteredContent,
+              type: explainParam,
+              output: response
+            });
+          })
+          .catch((err) => {
+            console.log('error:', err);
+            runInAction(() => {
+              this.props.store.editorToolbar.isExplainExecuting = false;
+            });
+          });
+        this.props.store.editorPanel.executingExplain = false;
       }
-    );
+    });
 
     /**
      * Reaction function for when a change occurs on the
@@ -384,94 +334,100 @@ class View extends React.Component {
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      */
-    const reactionToStopExecution = reaction(
-      () => this.props.store.editorPanel.stoppingExecution,
-      stoppingExecution => {
-        if (this.props.store.editorPanel.stoppingExecution) {
-          const editor = this.props.store.editors.get(
-            this.props.store.editorPanel.activeEditorId
-          );
-          const shell = editor.shellId;
-          const id = editor.currentProfile;
-          console.log(`Stopping Execution of ${id} / ${shellId}!`);
-          //Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
-          const service = featherClient().service('/mongo-stop-execution');
-          service.timeout = 30000;
-          service
-            .get(id, {
-              query: {
-                shellId: shellId // eslint-disable-line
-              }
-            })
-            .then(response => {
-              console.log(`Stopped Execution of ${id} / ${shellId}!`);
-              if (response) {
-                NewToaster.show({
-                  message: response.result,
-                  intent: Intent.SUCCESS,
-                  iconName: 'pt-icon-thumbs-up'
-                });
-              } else {
-                NewToaster.show({
-                  message: 'Execution Stopped Successfully',
-                  intent: Intent.SUCCESS,
-                  iconName: 'pt-icon-thumbs-up'
-                });
-              }
-              this.finishedExecution();
-            })
-            .catch(reason => {
-              console.log(`Stopping Execution failed for ${id} / ${shellId}!`);
-              NewToaster.show({
-                message: 'Stop Execution Failed! ' + reason,
-                intent: Intent.DANGER,
-                iconName: 'pt-icon-thumbs-down'
-              });
+    const reactionToStopExecution = reaction(() => this.props.store.editorPanel.stoppingExecution, (stoppingExecution) => {
+      if (this.props.store.editorPanel.stoppingExecution) {
+        const editor = this
+          .props
+          .store
+          .editors
+          .get(this.props.store.editorPanel.activeEditorId);
+        const shell = editor.shellId;
+        const id = editor.currentProfile;
+        console.log(`Stopping Execution of ${id} / ${shellId}!`);
+        // Broker.on(EventType.createShellExecutionFinishEvent(id, shellId),
+        // this.finishedExecution);
+        const service = featherClient().service('/mongo-stop-execution');
+        service.timeout = 30000;
+        service
+          .get(id, {
+          query: {
+            shellId: shellId // eslint-disable-line
+          }
+        })
+          .then((response) => {
+            console.log(`Stopped Execution of ${id} / ${shellId}!`);
+            if (response) {
+              NewToaster.show({message: response.result, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+            } else {
+              NewToaster.show({message: 'Execution Stopped Successfully', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+            }
+            this.finishedExecution();
+          })
+          .catch((reason) => {
+            console.log(`Stopping Execution failed for ${id} / ${shellId}!`);
+            NewToaster.show({
+              message: 'Stop Execution Failed! ' + reason,
+              intent: Intent.DANGER,
+              iconName: 'pt-icon-thumbs-down'
             });
-        }
+          });
       }
-    );
+    });
 
     const reactToTreeActionChange = reaction(
-      //eslint-disable-line
-      () => this.props.store.treeActionPanel.isNewFormValues,
-      () => {
-        if (
-          this.props.store.treeActionPanel.isNewFormValues &&
-          this.props.store.editorPanel.activeEditorId == this.props.id
-        ) {
-          const cm = this.refs.editor.getCodeMirror();
-          cm.setValue(this.props.store.treeActionPanel.formValues);
-          this.props.store.treeActionPanel.isNewFormValues = false;
-        }
+    //eslint-disable-line
+    () => this.props.store.treeActionPanel.isNewFormValues, () => {
+      if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.id) {
+        const cm = this
+          .refs
+          .editor
+          .getCodeMirror();
+        cm.setValue(this.props.store.treeActionPanel.formValues);
+        this.props.store.treeActionPanel.isNewFormValues = false;
       }
-    );
+    });
 
     // reactToEditorContentChange
     // TODO
-    reaction(
-      () => {
-        const currEditor = this.props.store.editors.get(this.props.id);
-        if (currEditor) {
-          return currEditor.code;
-        }
-      },
-      code => {
-        if (code) {
-          const cm = this.refs.editor.getCodeMirror();
-          const oldCursor = cm.getCursor();
-          cm.setValue(code);
-          cm.setCursor(oldCursor);
-        }
+    reaction(() => {
+      const currEditor = this
+        .props
+        .store
+        .editors
+        .get(this.props.id);
+      if (currEditor) {
+        return currEditor.code;
       }
-    );
+    }, (code) => {
+      if (code) {
+        const cm = this
+          .refs
+          .editor
+          .getCodeMirror();
+        const oldCursor = cm.getCursor();
+        cm.setValue(code);
+        cm.setCursor(oldCursor);
+      }
+    });
 
-    this.refresh = this.refresh.bind(this);
-    this.executeLine = this.executeLine.bind(this);
-    this.executeAll = this.executeAll.bind(this);
-    this.loopingLint = this.loopingLint.bind(this);
-    this.prettifyAll = this.prettifyAll.bind(this);
-    this.prettifySelection = this.prettifySelection.bind(this);
+    this.refresh = this
+      .refresh
+      .bind(this);
+    this.executeLine = this
+      .executeLine
+      .bind(this);
+    this.executeAll = this
+      .executeAll
+      .bind(this);
+    this.loopingLint = this
+      .loopingLint
+      .bind(this);
+    this.prettifyAll = this
+      .prettifyAll
+      .bind(this);
+    this.prettifySelection = this
+      .prettifySelection
+      .bind(this);
   }
 
   /**
@@ -483,14 +439,14 @@ class View extends React.Component {
     // let orig = CM.hint.javascript; CM.hint.javascript = function (cm) {   let
     // inner = orig(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
     // inner.list.push("bozo");   return inner; };
-    CM.commands.autocomplete = cm => {
+    CM.commands.autocomplete = (cm) => {
       const currentLine = cm.getLine(cm.getCursor().line);
       console.log('current line:', currentLine);
-      let start = cm.getCursor().ch;
+      let start = cm
+        .getCursor()
+        .ch;
       let end = start;
-      while (
-        end < currentLine.length && /[\w|.$]+/.test(currentLine.charAt(end))
-      ) {
+      while (end < currentLine.length && /[\w|.$]+/.test(currentLine.charAt(end))) {
         end -= 1;
       }
       while (start && /[\w|.$]+/.test(currentLine.charAt(start - 1))) {
@@ -501,7 +457,7 @@ class View extends React.Component {
       if (!curWord) {
         return;
       }
-      const { id, shell } = this.getActiveProfileId();
+      const {id, shell} = this.getActiveProfileId();
       if (!id || !shell) {
         return;
       }
@@ -509,23 +465,27 @@ class View extends React.Component {
       const service = featherClient().service('/mongo-auto-complete');
       service
         .get(id, {
-          query: {
-            shellId: shell,
-            command: curWord
-          }
-        })
-        .then(res => {
+        query: {
+          shellId: shell,
+          command: curWord
+        }
+      })
+        .then((res) => {
           console.log('write response ', res, cm.getDoc().getCursor());
           if (res && res.length === 1 && res[0].trim().length === 0) {
             return;
           }
-          const cursor = cm.getDoc().getCursor();
+          const cursor = cm
+            .getDoc()
+            .getCursor();
           const from = new CM.Pos(cursor.line, cursor.ch - curWord.length);
           const options = {
             hint() {
               return {
                 from,
-                to: cm.getDoc().getCursor(),
+                to: cm
+                  .getDoc()
+                  .getCursor(),
                 list: res
               };
             }
@@ -536,31 +496,32 @@ class View extends React.Component {
   }
 
   getActiveProfileId() {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
+    const editor = this
+      .props
+      .store
+      .editors
+      .get(this.props.store.editorPanel.activeEditorId);
     const shell = editor.shellId;
-    return { id: editor.currentProfile, shell };
+    return {id: editor.currentProfile, shell};
   }
 
-  @action.bound
-  finishedExecution() {
-    const id = this.props.store.editorToolbar.id;
-    const shell = this.props.store.editorToolbar.shellId;
-    const editorIndex = this.props.store.editorPanel.activeEditorId;
-    this.props.store.editors.get(editorIndex).executing = false;
-    if (this.props.store.editorPanel.activeEditorId == this.props.id) {
-      this.props.store.editorToolbar.isActiveExecuting = false;
-      this.props.store.editorPanel.stoppingExecution = false;
-    }
+  getCode() {
+    return this
+      .props
+      .store
+      .editors
+      .get(this.props.id)
+      .code;
   }
-
   /**
    * Inserts the text at the current cursor position
    * @param {String} text - The text to add to the editor.
    */
   insertAtCursor(text) {
-    const cm = this.refs.editor.getCodeMirror();
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
     cm.replaceSelection(text);
   }
 
@@ -568,7 +529,10 @@ class View extends React.Component {
    * Refresh the code mirror instance to account for tab or layout changes.
    */
   refresh() {
-    const cm = this.refs.editor.getCodeMirror();
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
     cm.refresh();
   }
 
@@ -576,22 +540,17 @@ class View extends React.Component {
    * Prettify All code.
    */
   prettifyAll() {
-    const cm = this.refs.editor.getCodeMirror();
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
     try {
       const beautified = Prettier.format(this.getCode(), {});
       cm.setValue(beautified);
     } catch (err) {
-      NewToaster.show({
-        message: 'Unable to format text, sorry!',
-        intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
-      });
+      NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          'Format All failed with error: ' + err
-        );
+        EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format All failed with error: ' + err);
       }
     }
   }
@@ -600,23 +559,18 @@ class View extends React.Component {
    * Prettify selected code.
    */
   prettifySelection() {
-    const cm = this.refs.editor.getCodeMirror();
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
     console.log(cm.getSelection());
     try {
       const beautified = Prettier.format(cm.getSelection(), {});
       cm.replaceSelection(beautified);
     } catch (err) {
-      NewToaster.show({
-        message: 'Unable to format text, sorry!',
-        intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
-      });
+      NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          'Format Selection failed with error: ' + err
-        );
+        EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format Selection failed with error: ' + err);
       }
     }
   }
@@ -625,49 +579,79 @@ class View extends React.Component {
    * Update linting annotations on the editor.
    */
   updateLintingAnnotations() {
-    const cm = this.refs.editor.getCodeMirror();
-    this.state.lintingAnnotations.clear();
-    this.state.lintingErrors.forEach(value => {
-      // Check if line already used, if so append.
-      if (this.state.lintingAnnotations.get(value.line) != undefined) {
-        const msg = document.createElement('div');
-        const icon = msg.appendChild(document.createElement('div'));
-        icon.innerHTML = '!';
-        const tooltip = icon.appendChild(document.createElement('span'));
-        tooltip.innerHTML = this.state.lintingAnnotations.get(
-          value.line
-        ).lintText +
-          '\n' +
-          value.message;
-        tooltip.className = 'tooltiptext';
-        icon.className = 'tooltip lint-error-icon';
-        msg.className = 'tooltiptext';
-        if (tooltip.innerHTML.length > MAX_LINT_ERROR_CHARACTERS) {
-          tooltip.innerHTML = 'Too many Linting Errors on this line...';
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
+    this
+      .state
+      .lintingAnnotations
+      .clear();
+    this
+      .state
+      .lintingErrors
+      .forEach((value) => {
+        // Check if line already used, if so append.
+        if (this.state.lintingAnnotations.get(value.line) != undefined) {
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = this
+            .state
+            .lintingAnnotations
+            .get(value.line)
+            .lintText + '\n' + value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          if (tooltip.innerHTML.length > MAX_LINT_ERROR_CHARACTERS) {
+            tooltip.innerHTML = 'Too many Linting Errors on this line...';
+          }
+          msg.lintText = tooltip.innerHTML;
+          this
+            .state
+            .lintingAnnotations
+            .set(value.line, msg);
+        } else {
+          // New Annotation.
+          const msg = document.createElement('div');
+          const icon = msg.appendChild(document.createElement('div'));
+          icon.innerHTML = '!';
+          const tooltip = icon.appendChild(document.createElement('span'));
+          tooltip.innerHTML = value.message;
+          tooltip.className = 'tooltiptext';
+          icon.className = 'tooltip lint-error-icon';
+          msg.className = 'tooltiptext';
+          this
+            .state
+            .lintingAnnotations
+            .set(value.line, msg);
         }
-        msg.lintText = tooltip.innerHTML;
-        this.state.lintingAnnotations.set(value.line, msg);
-      } else {
-        // New Annotation.
-        const msg = document.createElement('div');
-        const icon = msg.appendChild(document.createElement('div'));
-        icon.innerHTML = '!';
-        const tooltip = icon.appendChild(document.createElement('span'));
-        tooltip.innerHTML = value.message;
-        tooltip.className = 'tooltiptext';
-        icon.className = 'tooltip lint-error-icon';
-        msg.className = 'tooltiptext';
-        this.state.lintingAnnotations.set(value.line, msg);
-      }
-    });
+      });
 
-    this.state.lintingAnnotations.forEach((value, key) => {
-      cm.setGutterMarker(key - 1, 'CodeMirror-lint-markers', value);
-    });
+    this
+      .state
+      .lintingAnnotations
+      .forEach((value, key) => {
+        cm.setGutterMarker(key - 1, 'CodeMirror-lint-markers', value);
+      });
   }
-
-  getCode() {
-    return this.props.store.editors.get(this.props.id).code;
+  @action.bound
+  finishedExecution() {
+    const id = this.props.store.editorToolbar.id;
+    const shell = this.props.store.editorToolbar.shellId;
+    const editorIndex = this.props.store.editorPanel.activeEditorId;
+    this
+      .props
+      .store
+      .editors
+      .get(editorIndex)
+      .executing = false;
+    if (this.props.store.editorPanel.activeEditorId == this.props.id) {
+      this.props.store.editorToolbar.isActiveExecuting = false;
+      this.props.store.editorPanel.stoppingExecution = false;
+    }
   }
 
   /**
@@ -675,7 +659,12 @@ class View extends React.Component {
    * @param {String} - New code to be entered into the editor.
    */
   @action updateCode(newCode) {
-    this.props.store.editors.get(this.props.id).code = newCode;
+    this
+      .props
+      .store
+      .editors
+      .get(this.props.id)
+      .code = newCode;
     if (!this.state.isLinting) {
       this.state.isLinting = true;
       this.loopingLint();
@@ -691,44 +680,39 @@ class View extends React.Component {
       return;
     }
     // Clear Annotations.
-    const cm = this.refs.editor.getCodeMirror();
+    const cm = this
+      .refs
+      .editor
+      .getCodeMirror();
 
-    this.state.lintingErrors.forEach(value => {
-      cm.removeLineClass(value.line, 'text', 'lint-error');
-      cm.clearGutter('CodeMirror-lint-markers');
-    });
+    this
+      .state
+      .lintingErrors
+      .forEach((value) => {
+        cm.removeLineClass(value.line, 'text', 'lint-error');
+        cm.clearGutter('CodeMirror-lint-markers');
+      });
     // Trigger linting on code.
     const service = featherClient().service('linter');
     service.timeout = 30000;
-    service
-      .get('{id}', {
-        query: {
-          code: this.getCode(), // eslint-disable-line
-          options: {}
-        }
-      })
-      .then(result => {
-        if (result.results[0].messages.length > 0) {
-          this.state.lintingErrors = result.results[0].messages;
-          this.updateLintingAnnotations();
-          if (this.props.store.userPreferences.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING,
-              EventLogging.getFragmentEnum().EDITORS,
-              result
-            );
-          }
-        }
-      })
-      .catch(error => {
+    service.get('{id}', {
+      query: {
+        code: this.getCode(), // eslint-disable-line
+        options: {}
+      }
+    }).then((result) => {
+      if (result.results[0].messages.length > 0) {
+        this.state.lintingErrors = result.results[0].messages;
+        this.updateLintingAnnotations();
         if (this.props.store.userPreferences.telemetryEnabled) {
-          EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().ERROR,
-            EventLogging.getFragmentEnum().EDITORS,
-            error
-          );
+          EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.LINTING_WARNING, EventLogging.getFragmentEnum().EDITORS, result);
         }
-      });
+      }
+    }).catch((error) => {
+      if (this.props.store.userPreferences.telemetryEnabled) {
+        EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, error);
+      }
+    });
     setTimeout(this.loopingLint, LINT_INTERVAL);
   }
   /**
@@ -755,32 +739,27 @@ class View extends React.Component {
           onClick={this.executeLine}
           text="Execute Selected"
           iconName="pt-icon-chevron-right"
-          intent={Intent.NONE}
-        />
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.executeAll}
           text="Execute All"
           iconName="pt-icon-double-chevron-right"
-          intent={Intent.NONE}
-        />
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.refresh}
           text="Refresh"
           iconName="pt-icon-refresh"
-          intent={Intent.NONE}
-        />
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.prettifyAll}
           text="Format All"
           iconName="pt-icon-align-left"
-          intent={Intent.NONE}
-        />
+          intent={Intent.NONE} />
         <MenuItem
           onClick={this.prettifySelection}
           text="Format Selection"
           iconName="pt-icon-align-left"
-          intent={Intent.NONE}
-        />
+          intent={Intent.NONE} />
       </Menu>
     );
   }
@@ -789,7 +768,7 @@ class View extends React.Component {
    * Render method for the component.
    */
   render() {
-    const { connectDropTarget, isOver } = this.props; // eslint-disable-line
+    const {connectDropTarget, isOver} = this.props; // eslint-disable-line
     return connectDropTarget(
       <div className="editorView">
         <CodeMirror
@@ -798,22 +777,18 @@ class View extends React.Component {
           codeMirrorInstance={CM}
           value={this.getCode()}
           onChange={value => this.updateCode(value)}
-          options={this.state.options}
-        />
-        {' '}
-        {isOver &&
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              height: '100%',
-              width: '100%',
-              zIndex: 1,
-              opacity: 0.5,
-              backgroundColor: 'yellow'
-            }}
-          />}
+          options={this.state.options} /> {' '}
+        {isOver && <div
+          style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '100%',
+          zIndex: 1,
+          opacity: 0.5,
+          backgroundColor: 'yellow'
+        }} />}
       </div>
     );
   }
