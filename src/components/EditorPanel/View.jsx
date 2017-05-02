@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-03T09:03:07+10:00
+ * @Last modified time: 2017-05-03T09:22:05+10:00
  */
 
 /* eslint-disable react/no-string-refs */
@@ -402,13 +402,15 @@ class View extends React.Component {
       }
     }, (code) => {
       if (code) {
-        const cm = this
-          .refs
-          .editor
-          .getCodeMirror();
-        const oldCursor = cm.getCursor();
-        cm.setValue(code);
-        cm.setCursor(oldCursor);
+        try {
+          const cm = this
+            .refs
+            .editor
+            .getCodeMirror();
+          const oldCursor = cm.getCursor();
+          cm.setValue(code);
+          cm.setCursor(oldCursor);
+        } catch (e) { console.log(e); }
       }
     });
 

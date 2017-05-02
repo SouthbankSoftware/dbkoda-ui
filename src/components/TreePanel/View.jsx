@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T13:58:23+10:00
+ * @Last modified time: 2017-05-03T09:16:00+10:00
 */
 
 import React from 'react';
@@ -21,7 +21,12 @@ import './View.scss';
 export default class TreeView extends React.Component {
   static get defaultProps() {
     return {
-      treeState: undefined
+      treeState: {},
+      store: {
+        treeActionPanel: {
+          treeActionEditorId: ''
+        }
+      }
     };
   }
   constructor(props) {
