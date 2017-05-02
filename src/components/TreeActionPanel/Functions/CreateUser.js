@@ -12,7 +12,7 @@ export const AlterUser = {
     CreateUser.executeCommand = cbFuncExecute;
   },
   // Prefill function for alter user
-  dbenvy_AlterUserPreFill: () => {
+  dbenvy_CreateUserPreFill: () => {
     const data = {};
     data.Database = 'test';
     data.roles = [];
@@ -27,7 +27,7 @@ export const AlterUser = {
 
   dbenvy_listdb: () => {
     const data = new Promise((resolve, reject) => {
-      AlterUser.executeCommand(
+      CreateUser.executeCommand(
         'db.adminCommand({listDatabases: 1})',
       ).then((res) => {
         const dblist = [];
@@ -43,7 +43,7 @@ export const AlterUser = {
   },
   dbenvy_listRoles: () => {
     const data = new Promise((resolve, reject) => {
-      AlterUser.executeCommand(
+      CreateUser.executeCommand(
         'db.getSiblingDB("admin").getRoles({rolesInfo: 1, showPrivileges: false, showBuiltinRoles: true})',
       ).then((res) => {
         const roleList = [];
