@@ -12,7 +12,7 @@ import _ from 'lodash';
 import React from 'react';
 import { featherClient } from '~/helpers/feathers';
 import { observer, inject } from 'mobx-react';
-import { action, reaction, observable, runInAction } from 'mobx';
+import { action, reaction, observable, runInAction, when } from 'mobx';
 import uuidV1 from 'uuid';
 import path from 'path';
 import {
@@ -279,17 +279,27 @@ export default class Toolbar extends React.Component {
       });
   };
 
-  // TODO: unwatch when closing tabs
   _watchFileBackgroundChange = (editorId) => {
     const editor = this.props.store.editors.get(editorId);
     if (editor && editor.path) {
-      Broker.on(EventType.createFileChangedEvent(editor.path), () => {
+      const handleFileChangedEvent = () => {
         this._openFile(editor.path, ({ content }) => {
-          runInAction('update file content', () => {
+          runInAction(`Apply file background change for ${editorId}`, () => {
             editor.code = content;
           });
         });
-      });
+      };
+      const eventName = EventType.createFileChangedEvent(editor.path);
+      Broker.on(eventName, handleFileChangedEvent);
+
+      // smart recycle
+      when(
+        `Unwatch file changes for ${editorId}`,
+        () => !this.props.store.editors.has(editorId),
+        () => {
+          Broker.off(eventName, handleFileChangedEvent);
+        }
+      );
     }
   };
 
