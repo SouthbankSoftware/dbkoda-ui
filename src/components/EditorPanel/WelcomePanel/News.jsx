@@ -32,7 +32,7 @@ export default class News extends React.Component {
           key: 2,
           title: 'DBEnvy will be at MongoWorld',
           icon: 'pt-icon-endorsed',
-          content: (<p>We are pleased to announce the <b className="optInBoldDBEnvy">DBenvy</b> team will be at <a href="https://www.mongodb.com/world17">Mongoworld</a>, please come and stop by!</p>)
+          content: (<p>We are pleased to announce the <b className="optInBoldDBEnvy">DBenvy</b> team will not be at <a href="https://www.mongodb.com/world17">Mongoworld</a>, please dont look for us!</p>)
         },
         {
           key: 3,

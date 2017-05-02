@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T12:00:22+10:00
+ * @Last modified time: 2017-05-03T09:03:07+10:00
  */
 
 /* eslint-disable react/no-string-refs */
@@ -83,7 +83,8 @@ const editorTarget = {
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
+    isOver: monitor.isOver(),
+    isOverCurrent: monitor.isOver({ shallow: true }),
   };
 }
 
@@ -239,7 +240,7 @@ class View extends React.Component {
     // eslint-disable-line
     () => this.props.store.dragItem.dragDrop, (dragDrop) => {
       // eslint-disable-line
-      if (this.props.store.dragItem.dragDrop) {
+      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.dragItem.dragDrop) {
         if (this.props.store.dragItem.item) {
           const item = this.props.store.dragItem.item;
           this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));

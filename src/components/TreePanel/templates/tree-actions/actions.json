@@ -9,6 +9,6 @@
    "database"       : [],
    "collection"     : [{"name": "SampleCollections", "text": "Find Attributes", "icon": "pt-icon-search-template"}],
    "index"          : [],
-   "users"          : [],
+   "users"          : [{"name": "CreateUser", "text": "Create User", "icon": "pt-icon-user"}],
    "user"           : [{"name": "AlterUser", "text": "Alter User", "icon": "pt-icon-user"}]
  }
