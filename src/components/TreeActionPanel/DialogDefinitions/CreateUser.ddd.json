@@ -1,0 +1,40 @@
+{
+    "Title": "Create User",
+    "Fields": [
+        {
+            "name": "UserName",
+            "type": "Text",
+            "readOnly": false
+        },        
+        {
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true,
+            "lookup": "dbenvy_listdb"
+        },
+
+        {
+            "name": "Password",
+            "type": "Text"
+        },
+        {
+            "name": "CustomData",
+            "type": "Text",
+            "optional": true
+        },
+        {
+            "name": "Roles",
+            "type": "Table",
+            "columns": [{
+                "name": "Database",
+                "type": "Text",
+                "lookup": "dbenvy_listdb"
+            }, {
+                "name": "Role",
+                "type": "Text",
+                "lookup": "dbenvy_listRoles"
+            }]
+        }
+    ],
+    "Validate": "dbenvy_validateUser"
+}

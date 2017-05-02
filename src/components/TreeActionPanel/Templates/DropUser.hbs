@@ -1,0 +1,8 @@
+// TODO: We will need a json helper for the customData field
+db.getSiblingDB("{{Database}}").dropUser( 
+   "{{UserName}}",    
+    {  w: "majority" }
+);
+
+db.getSiblingDB("admin").system.users.find({_id:"{{UserId}}"}).pretty(); 
+
