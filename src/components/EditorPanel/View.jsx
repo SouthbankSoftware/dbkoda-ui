@@ -547,6 +547,12 @@ class View extends React.Component {
       .getCodeMirror();
     try {
       const beautified = Prettier.format(this.getCode(), {});
+      this
+        .props
+        .store
+        .editors
+        .get(this.props.id)
+        .code = beautified;
       cm.setValue(beautified);
     } catch (err) {
       NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
