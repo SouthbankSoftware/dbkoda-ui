@@ -3,7 +3,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-24T10:54:50+10:00
+ * @Last modified time: 2017-05-02T09:38:25+10:00
  */
 
 /**
@@ -95,9 +95,7 @@ const ConnectionPanel = ({
         editorCount: 1,
         initialMsg: res.output ? res.output.join('\r') : '',
       });
-      if (!profileList.selectedProfile) {
-        profileList.selectedProfile = profiles.get(res.id);
-      }
+      profileList.selectedProfile = profiles.get(res.id);
       close();
       Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
     } else {
