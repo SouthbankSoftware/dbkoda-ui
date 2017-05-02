@@ -1,0 +1,24 @@
+{
+    "UserId": "admin.randomUser",
+    "Database": "admin",
+    "UserName": "randomUser",
+    "Password": "xyz",
+    "Roles": [{
+            "Role": "userAdminAnyDatabase",
+            "Database": "admin"
+        },
+        {
+            "Role": "readWriteAnyDatabase",
+            "Database": "admin"
+        },
+        {
+            "Role": "dbAdminAnyDatabase",
+            "Database": "admin"
+        },
+        {
+            "Role": "clusterAdmin",
+            "Database": "admin",
+            "last": 1
+        }
+    ]
+}
