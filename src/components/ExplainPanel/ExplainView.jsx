@@ -56,8 +56,13 @@ export const getExecutionStages = (executionStages) => {
       currentStage = currentStage.inputStage;
     }
   }
+  console.log('get execution stages ', stages);
   return stages;
 };
+
+const getRandomNumber = () => {
+  return Math.floor(Math.random() * 7000) + 6000;
+}
 
 /**
  * show winning plain
@@ -71,9 +76,9 @@ const WinningPlain = ({explain, type}) => {
       return (<div style={{marginLeft: 10}}>
         {
           stages.map((stage) => {
-            return (<div key={'explain-view'} style={{display: 'flex'}}>
+            return (<div key={'explain-view-' + stage.stage + '-' + getRandomNumber()} style={{display: 'flex'}}>
               <Popover
-                content={<JSONTree data={stage} invertTheme={false} theme={theme} />}
+                content={<JSONTree data={stage} invertTheme={false} theme={theme}/>}
                 interactionKind={PopoverInteractionKind.CLICK}
                 position={Position.TOP_RIGHT}
                 useSmartPositioning={false}
@@ -105,7 +110,7 @@ const WinningPlain = ({explain, type}) => {
           stages.map((stage, i) => {
             return (<div key={'execution-stage'} style={{display: 'flex'}}>
               <Popover
-                content={<JSONTree data={stages[0]} />}
+                content={<JSONTree data={stages[0]}/>}
                 interactionKind={PopoverInteractionKind.CLICK}
                 popoverClassName="explain-stage-detail-popup"
                 position={Position.TOP_RIGHT}
@@ -153,10 +158,10 @@ const ExplainView = ({explains}) => {
   }
   const output = toJS(explains.output);
   return (<div className="explain-view-panel">
-    <ExplainCommandInfo explain={output} command={explains.command} />
+    <ExplainCommandInfo explain={output} command={explains.command}/>
     <div style={{margin: 10}}>Winning Plan</div>
-    <WinningPlain explain={output} type={explains.type} />
-    <GlobalStatistics explains={output} type={explains.type} />
+    <WinningPlain explain={output} type={explains.type}/>
+    <GlobalStatistics explains={output} type={explains.type}/>
   </div>);
 };
 
