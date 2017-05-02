@@ -57,7 +57,7 @@ export default observer(({editorToolbar, editorPanel}) => (
       tooltipClassName="pt-dark"
       position={Position.BOTTOM}>
       <AnchorButton className="pt-icon-help pt-intent-primary explainPlanButton"
-        loading={editorToolbar.isExplainExecuting}
+        loading={editorToolbar.isActiveExecuting}
         disabled={editorToolbar.noActiveProfile} />
     </Tooltip>
   </Popover>

@@ -2,14 +2,14 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-01T09:46:30+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-02T12:49:18+10:00
 */
 
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer, PropTypes} from 'mobx-react';
-import {action} from 'mobx';
+import {action, runInAction} from 'mobx';
 import {Button, Tabs2, Tab2} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
@@ -127,7 +127,17 @@ export default class Panel extends React.Component {
    */
   @action handleDrop(item) {
     this.props.store.dragItem.item = item;
-    this.props.store.dragItem.dragDrop = true;
+    if (!this.props.store.dragItem.dragDrop) {
+      this.props.store.dragItem.dragDrop = true;
+    } else {
+      this.props.store.dragItem.dragDrop = false;
+      const setDragDropTrueLater = () => {              // This hack is done to fix the state in case of exception where the value is preserved as true while it is not draging
+        runInAction('set drag drop to true', () => {
+          this.props.store.dragItem.dragDrop = true;
+        });
+      };
+      setTimeout(setDragDropTrueLater, 500);
+    }
   }
 
   /**

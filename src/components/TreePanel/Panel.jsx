@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T10:17:04+10:00
+ * @Last modified time: 2017-05-02T12:46:38+10:00
 */
 
 import React from 'react';
@@ -58,6 +58,8 @@ export default class TreePanel extends React.Component {
         } else {
           this.updateStatus('NOPROFILE');
         }
+      } else {
+        this.updateStatus('NEW');
       }
     };
     /**
@@ -101,7 +103,7 @@ export default class TreePanel extends React.Component {
   treeState = new TreeState();
   reactionToProfile;
   reactionToTopology;
-  @observable treeStatus = 'NOPROFILE';
+  @observable treeStatus = 'NEW';
   render() {
     const divStyle = {
       height: '100%'

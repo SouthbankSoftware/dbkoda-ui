@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-24T10:33:57+10:00
+ * @Last modified time: 2017-05-02T13:59:31+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -25,6 +25,7 @@ export default class TreeActionView extends React.Component {
   @action.bound
   close() {
     this.props.setDrawerChild(DrawerPanes.DEFAULT);
+    this.props.store.treeActionPanel.treeActionEditorId = '';
   }
   render() {
     const { mobxForm, title } = this.props;
