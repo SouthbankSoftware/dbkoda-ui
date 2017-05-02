@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-03-14T16:45:59+11:00
+// @Last modified time: 2017-05-02T09:57:20+10:00
 
 // Theme 1 Colours: These should be externalized eventually:
 //Editor:
@@ -40,4 +40,17 @@ $searchSecondaryFontColor: #222222;
 .sb-tree-view {
   overflow: auto !important;
   height: calc(100% - 50px);
+}
+
+.tree-msg-div span {
+  color: white;
+  padding: 10px 5px;
+  display: block;
+  text-align: center;
+  border: white;
+  border-style: solid;
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  right: 20%;
 }
