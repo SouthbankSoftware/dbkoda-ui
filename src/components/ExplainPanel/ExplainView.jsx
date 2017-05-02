@@ -56,7 +56,12 @@ export const getExecutionStages = (executionStages) => {
       currentStage = currentStage.inputStage;
     }
   }
+  console.log('get execution stages ', stages);
   return stages;
+};
+
+const getRandomNumber = () => {
+  return Math.floor(Math.random() * 7000) + 6000;
 };
 
 /**
@@ -71,7 +76,7 @@ const WinningPlain = ({explain, type}) => {
       return (<div style={{marginLeft: 10}}>
         {
           stages.map((stage) => {
-            return (<div key={'explain-view'} style={{display: 'flex'}}>
+            return (<div key={'explain-view-' + stage.stage + '-' + getRandomNumber()} style={{display: 'flex'}}>
               <Popover
                 content={<JSONTree data={stage} invertTheme={false} theme={theme} />}
                 interactionKind={PopoverInteractionKind.CLICK}
