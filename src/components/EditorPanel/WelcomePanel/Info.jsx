@@ -10,6 +10,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import {AnchorButton, Intent} from '@blueprintjs/core';
 
 /**
  * Panel for wrapping the Info List.
@@ -22,23 +23,29 @@ export default class Info extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hotkeys: [
+      tips: [
         {
           key: 1,
-          title: 'Auto-Complete',
-          hotkey: 'Ctrl+Space'
+          title: (
+            <a href="https://docs.mongodb.com/">MongoDB Documentation</a>
+          ),
+          content: ''
         }, {
           key: 2,
-          title: 'Fold / Unfold',
-          hotkey: 'Ctrl+Q'
+          title: (
+            <a href="https://github.com/SouthbankSoftware/dbenvy">DBEnvy Documentation</a>
+          ),
+          content: ''
         }, {
           key: 3,
-          title: 'Search in Editor',
-          hotkey: 'Command+F'
+          title: 'A link to some stuff: ',
+          content: (
+            <a href="https://mail.google.com/">Google.</a>
+          )
         }, {
           key: 4,
-          title: 'Search / Replace in Editor',
-          hotkey: 'Command+Control+Shift+F'
+          title: 'A button that opens preferences or something.',
+          content: (<AnchorButton className="pt-button pt-icon-chevron-right pt-intent-primary" />)
         }
       ]
     };
@@ -47,16 +54,16 @@ export default class Info extends React.Component {
   render() {
     return (
       <div className="pt-dark infoPanel">
-        <h3>Hotkeys</h3>
+        <h3 className="optInBoldDBEnvy">Getting Started...</h3>
         <div className="hotkeyItems">
           {this
             .state
-            .hotkeys
+            .tips
             .map((item) => {
               return (
                 <div key={item.key} className="hotkeyItem">
-                  <h5 className="hotkeyTitle">{item.title + ': '}</h5>
-                  <p>{item.hotkey}</p>
+                  <h5 className="hotkeyTitle">{item.title}</h5>
+                  {item.content}
                 </div>
               );
             })}

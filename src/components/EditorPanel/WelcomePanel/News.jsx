@@ -25,14 +25,20 @@ export default class News extends React.Component {
       news: [
         {
           key: 1,
-          title: 'Some News Update',
-          icon: 'pt-icon-comment',
-          content: 'This is some content, placeholder, this could contain images and or links.'
+          title: 'Bug Fix Update 1.2.43',
+          icon: 'pt-icon-build',
+          content: (<p>New release should have fixed a number of bugs with the editor, see the full list <a href="https://github.com/SouthbankSoftware/dbenvy/releases"> here </a>.<ul><li> - We broke everything.</li><li> - Then we fixed everything again.</li> <li> - We <b>think</b>...</li></ul></p>)
         }, {
           key: 2,
-          title: 'Another News Update!',
+          title: 'DBEnvy will be at MongoWorld',
           icon: 'pt-icon-endorsed',
-          content: 'This is some more content, placeholder, this could contain images and or links.'
+          content: (<p>We are pleased to announce the <b className="optInBoldDBEnvy">DBenvy</b> team will be at <a href="https://www.mongodb.com/world17">Mongoworld</a>, please come and stop by!</p>)
+        },
+        {
+          key: 3,
+          title: 'CIEnvy 2.0 released',
+          icon: 'pt-icon-automatic-updates',
+          content: <p><b className="optInBoldDBEnvy">CIEnvy</b> is the worlds greatest CI platform, check it out <a href ="https://github.com/SouthbankSoftware/dbenvy/releases">here </a>.</p>
         }
       ]
     };
@@ -41,7 +47,7 @@ export default class News extends React.Component {
   render() {
     return (
       <div className="pt-dark newsPanel">
-        <h3>News</h3>
+        <h3 className="optInBoldDBEnvy">News</h3>
         <div className="newsArticles">
           {this
             .state
