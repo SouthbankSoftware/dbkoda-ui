@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-01T13:43:15+10:00
+ * @Last modified time: 2017-05-02T13:58:23+10:00
 */
 
 import React from 'react';
@@ -50,10 +50,21 @@ export default class TreeView extends React.Component {
       this.setState({nodes: this.props.treeState.nodes});
     });
     onNewJson();
+
+    this.reactionToTreeAction = reaction(
+      () => this.props.store.treeActionPanel.treeActionEditorId,
+      () => {
+        if (this.props.store.treeActionPanel.treeActionEditorId != '') {
+          this.props.store.showTreeActionPane();
+          // this.props.store.treeActionPanel.treeActionEditorId = '';  // will update this in the dialog execution.
+        }
+      }
+    );
   }
   componentWillUnmount() {
     this.reactionToJson();
     this.reactionToFilter();
+    this.reactionToTreeAction();
   }
   getContextMenu() {
     if (this.nodeRightClicked) {
@@ -83,6 +94,7 @@ export default class TreeView extends React.Component {
   }
   reactionToJson;
   reactionToFilter;
+  reactionToTreeAction;
   handleNodeClick = (nodeData: ITreeNode, _nodePath: number[]) => {
     if (nodeData.text == '...') {
       this.props.treeState.resetRootNode();
@@ -119,7 +131,7 @@ export default class TreeView extends React.Component {
     if (action == 'SampleCollections') {
       this.props.treeState.sampleCollection(this.nodeRightClicked);
     } else if (this.nodeRightClicked) {
-      this.props.store.showTreeActionPane(this.nodeRightClicked, action);
+      this.props.store.addNewEditorForTreeAction(this.nodeRightClicked, action);
     }
   };
 

@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-01T10:31:17+10:00
+ * @Last modified time: 2017-05-02T13:45:25+10:00
  */
 
 import _ from 'lodash';
@@ -112,12 +112,16 @@ export default class Store {
   @action showConnectionPane = () => {
     this.setDrawerChild(DrawerPanes.PROFILE);
   };
-  @action showTreeActionPane = (treeNode, treeAction) => {
+
+  @action showTreeActionPane = () => {
+    this.setDrawerChild(DrawerPanes.DYNAMIC);
+  };
+
+  @action addNewEditorForTreeAction = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
-    this.setDrawerChild(DrawerPanes.DYNAMIC);
     this.editorToolbar.newEditorForTreeAction = true;
-  };
+  }
 
   @action updateDynamicFormCode = (value) => {
     this.treeActionPanel.formValues = value;
