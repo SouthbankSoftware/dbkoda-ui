@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-01T12:01:48+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-02T16:02:41+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -12,7 +12,7 @@ import _ from 'lodash';
 import React from 'react';
 import { featherClient } from '~/helpers/feathers';
 import { observer, inject } from 'mobx-react';
-import { action, reaction, observable, runInAction } from 'mobx';
+import { action, reaction, observable, runInAction, when } from 'mobx';
 import uuidV1 from 'uuid';
 import path from 'path';
 import {
@@ -55,9 +55,15 @@ export default class Toolbar extends React.Component {
     this.renderHotkeys = this.onFilterChanged.bind(this);
     this.openFile = this.openFile.bind(this);
     this.saveFile = this.saveFile.bind(this);
+  }
+
+  componentWillMount() {
+    Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
+      this.profileCreated(profile);
+    });
 
     // reaction to add a new editor when a new tree action open a new form. This will create a new editor.
-    reaction(
+    this.reactionToNewEditorForTreeAction = reaction(
       () => this.props.store.editorToolbar.newEditorForTreeAction,
       () => {
         if (this.props.store.editorToolbar.newEditorForTreeAction) {
@@ -67,11 +73,11 @@ export default class Toolbar extends React.Component {
     );
   }
 
-  componentWillMount() {
-    Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
-      this.profileCreated(profile);
-    });
+  componentWillUnmount() {
+    this.reactionToNewEditorForTreeAction();
   }
+
+  reactionToNewEditorForTreeAction;
 
   /**
    * called when there is new connection profile get created.
@@ -279,17 +285,27 @@ export default class Toolbar extends React.Component {
       });
   };
 
-  // TODO: unwatch when closing tabs
   _watchFileBackgroundChange = (editorId) => {
     const editor = this.props.store.editors.get(editorId);
     if (editor && editor.path) {
-      Broker.on(EventType.createFileChangedEvent(editor.path), () => {
+      const handleFileChangedEvent = () => {
         this._openFile(editor.path, ({ content }) => {
-          runInAction('update file content', () => {
+          runInAction(`Apply file background change for ${editorId}`, () => {
             editor.code = content;
           });
         });
-      });
+      };
+      const eventName = EventType.createFileChangedEvent(editor.path);
+      Broker.on(eventName, handleFileChangedEvent);
+
+      // smart recycle
+      when(
+        `Unwatch file changes for ${editorId}`,
+        () => !this.props.store.editors.has(editorId),
+        () => {
+          Broker.off(eventName, handleFileChangedEvent);
+        }
+      );
     }
   };
 
