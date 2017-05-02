@@ -25,7 +25,7 @@ $selectPrimaryBackground: #313131;
 $searchPrimaryBackground: #BFBEc0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #222222;
+$searchSecondaryFontColor: #BFBEc0;
 
 
 $backgroundPrimaryColor: #2d3d46;
@@ -168,6 +168,7 @@ span.cm-mongos-prompt{
 
 .CodeMirror-gutter {
   background-color: $editorBackground !important;
+   
 }
 .CodeMirror-foldmarker {
   color: $purpleFont;
@@ -178,6 +179,15 @@ span.cm-mongos-prompt{
 
 .CodeMirror-foldgutter {
   width: .7em;
+  margin-right: 5px !important;
+}
+.CodeMirror-foldgutter-open {
+  padding-left: 5px !important;
+  padding-left: 5px !important;
+}
+.CodeMirrror-foldgutter-folded{
+  padding-left: 5px !important;
+  padding-left: 5px !important;
 }
 .cm-s-ambiance .CodeMirror-guttermarker-subtle {
   color: $white !important;
