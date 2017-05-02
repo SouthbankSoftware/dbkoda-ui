@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T13:45:25+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-03T09:32:47+10:00
  */
 
 import _ from 'lodash';
@@ -172,6 +172,11 @@ export default class Store {
     // Editors:
     newStore.editors.forEach((value) => {
       value.executing = false;
+    });
+
+    // Outputs:
+    newStore.outputs.forEach((value) => {
+      value = observable(value);
     });
 
     // OutputPanel:

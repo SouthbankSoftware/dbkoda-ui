@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-01T10:53:37+10:00
+ * @Last modified time: 2017-05-03T09:39:30+10:00
 */
 
 import React from 'react';
@@ -137,7 +137,6 @@ export default class Editor extends React.Component {
       console.log('cannot show more');
       this.props.store.outputs.get(this.props.id).cannotShowMore = true;
     }
-    this.forceUpdate();
   }
 
   render() {
