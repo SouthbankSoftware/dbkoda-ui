@@ -300,8 +300,8 @@ class View extends React.Component {
         // Send request to feathers client
         const service = featherClient().service('/mongo-sync-execution');
         const filteredContent = content.replace('\t', '  ');
-        service.timeout = 30000;
-        this.props.store.editorToolbar.isExplainExecuting = true;
+        service.timeout = 120000;
+        this.props.store.editorToolbar.isActiveExecuting = true;
         service
           .update(id, {
           shellId: shell, // eslint-disable-line
@@ -309,7 +309,8 @@ class View extends React.Component {
         })
           .then((response) => {
             runInAction(() => {
-              this.props.store.editorToolbar.isExplainExecuting = false;
+              this.props.store.editorToolbar.isActiveExecuting = false;
+              editor.executing = false;
             });
             Broker.emit(EventType.createExplainExecutionEvent(id, shell), {
               id,
@@ -322,7 +323,8 @@ class View extends React.Component {
           .catch((err) => {
             console.log('error:', err);
             runInAction(() => {
-              this.props.store.editorToolbar.isExplainExecuting = false;
+              editor.executing = false;
+              this.props.store.editorToolbar.isActiveExecuting = false;
             });
           });
         this.props.store.editorPanel.executingExplain = false;
