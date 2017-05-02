@@ -10,7 +10,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {AnchorButton, Intent} from '@blueprintjs/core';
+import {AnchorButton} from '@blueprintjs/core';
 
 /**
  * Panel for wrapping the Info List.

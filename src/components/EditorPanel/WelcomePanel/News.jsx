@@ -38,7 +38,7 @@ export default class News extends React.Component {
           key: 3,
           title: 'CIEnvy 2.0 released',
           icon: 'pt-icon-automatic-updates',
-          content: <p><b className="optInBoldDBEnvy">CIEnvy</b> is the worlds greatest CI platform, check it out <a href ="https://github.com/SouthbankSoftware/dbenvy/releases">here </a>.</p>
+          content: <p><b className="optInBoldDBEnvy">CIEnvy</b> is the worlds greatest CI platform, check it out <a href="https://github.com/SouthbankSoftware/dbenvy/releases">here </a>.</p>
         }
       ]
     };

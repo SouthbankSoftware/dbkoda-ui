@@ -157,7 +157,7 @@ export default class Panel extends React.Component {
             if (tab[1].visible) {
               return (
                 <Tab2
-                  className={'editorTab visible ' + tab[1].fileName}
+                  className={'editorTab visible ' + tab[1].alias}
                   key={tab[1].id}
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
@@ -181,7 +181,7 @@ export default class Panel extends React.Component {
             }
             return (
               <Tab2
-                className={'editorTab notVisible ' + tab[1].fileName}
+                className={'editorTab notVisible ' + tab[1].alias}
                 key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}
