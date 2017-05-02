@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-01T11:40:10+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-02T12:00:22+10:00
  */
 
 /* eslint-disable react/no-string-refs */
@@ -69,6 +69,7 @@ const editorTarget = {
    * @param {} monitor - keeps the state of drag process, e.g object which is being dragged
    */
   drop(props, monitor) {
+    console.log('DROP monitor.getItem:', monitor.getItem());
     const item = monitor.getItem();
     props.onDrop(item);
   }
@@ -238,10 +239,11 @@ class View extends React.Component {
     // eslint-disable-line
     () => this.props.store.dragItem.dragDrop, (dragDrop) => {
       // eslint-disable-line
-      if (this.props.store.dragItem.dragDrop && this.props.store.dragItem.item !== null) {
-        const item = this.props.store.dragItem.item;
-        // this.setState({code: item.label});
-        this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
+      if (this.props.store.dragItem.dragDrop) {
+        if (this.props.store.dragItem.item) {
+          const item = this.props.store.dragItem.item;
+          this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
+        }
         this.props.store.dragItem.dragDrop = false;
       }
     });
