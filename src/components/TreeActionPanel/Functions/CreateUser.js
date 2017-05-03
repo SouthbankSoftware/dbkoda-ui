@@ -6,7 +6,7 @@
  * @Last modified time: 2017-04-18T16:45:28+10:00
  */
 
-export const AlterUser = {
+export const CreateUser = {
   executeCommand: null,
   setExecuteFunction: (cbFuncExecute) => {
     CreateUser.executeCommand = cbFuncExecute;
