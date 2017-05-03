@@ -1,14 +1,30 @@
 {
-   "shard"          : [],
-   "shards"         : [],
-   "configservers"  : [],
-   "config"         : [],
-   "routers"        : [],
-   "mongos"         : [],
-   "databases"      : [],
-   "database"       : [],
-   "collection"     : [{"name": "SampleCollections", "text": "Find Attributes", "icon": "pt-icon-search-template"}],
-   "index"          : [],
-   "users"          : [{"name": "CreateUser", "text": "Create User", "icon": "pt-icon-user"}],
-   "user"           : [{"name": "AlterUser", "text": "Alter User", "icon": "pt-icon-user"}]
- }
+    "shard": [],
+    "shards": [],
+    "configservers": [],
+    "config": [],
+    "routers": [],
+    "mongos": [],
+    "databases": [],
+    "database": [],
+    "collection": [{
+        "name": "SampleCollections",
+        "text": "Find Attributes",
+        "icon": "pt-icon-search-template"
+    }, {
+        "name": "CreateIndex",
+        "text": "Create standard index",
+        "icon": "pt-icon-search-template"
+    }],
+    "index": [],
+    "users": [{
+        "name": "CreateUser",
+        "text": "Create User",
+        "icon": "pt-icon-user"
+    }],
+    "user": [{
+        "name": "AlterUser",
+        "text": "Alter User",
+        "icon": "pt-icon-user"
+    }]
+}

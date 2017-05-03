@@ -1,9 +1,7 @@
 // TODO: We will need a json helper for the customData field
 db.getSiblingDB("{{Database}}").createUser({ 
    user: "{{UserName}}",
-   pwd: "{{Password}}",
-    {{#if CustomData}} 
-     customData :  {{json CustomData}} , {{/if}}
+   pwd: "{{Password}}", {{#if CustomData}} customData :  {{json CustomData}} , {{/if}}
      roles: [ {{#each Roles}} 
              {role:"{{Role}}", db: "{{Database}}" } {{#unless last}},{{/unless}}    {{/each}}
             ]              
@@ -11,5 +9,5 @@ db.getSiblingDB("{{Database}}").createUser({
     {  w: "majority" }
 );
 
-db.getSiblingDB("admin").system.users.find({_id:"{{UserId}}"}).pretty(); 
+db.getSiblingDB("admin").system.users.find({user:"{{UserName}}"}).pretty(); 
 

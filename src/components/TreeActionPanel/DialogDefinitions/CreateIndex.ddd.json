@@ -1,0 +1,84 @@
+{
+    "Title": "Create Index",
+    "DefaultValues": {
+        "function": "dbenvy_CreateIndexPreFill",
+        "arguments": [{
+            "name": "CollectionName"
+        }]
+    },
+    "Fields": [
+       {
+            "name": "Database",
+            "type": "Text",
+            "readOnly": false
+        },
+      {
+            "name": "CollectionName",
+            "type": "Text",
+            "readOnly": true,
+            "keyValue": true
+        },
+        {
+            "name": "IndexName",
+            "type": "Text",
+            "tooltip": "Name of the index (optional)",
+            "optional": true
+        },
+        {
+            "name": "Unique",
+            "type": "Text",
+            "readOnly": false,
+            "tooltip": "Are the values in the index unique",
+            "default": "false",
+            "rules":"boolean"
+        },
+        {
+            "name": "Background",
+            "type": "Text",
+            "readOnly": false,
+            "tooltip": "Build index in the background?",
+            "optional": true,
+            "default": "false"
+        },
+        {
+            "name": "Sparse",
+            "type": "Text",
+            "readOnly": false,
+            "tooltip": "Only index documents that contain the field",
+            "optional": true,
+            "default": "false"
+        },
+        {
+            "name": "partialFilterExpression",
+            "type": "Text",
+            "readOnly": false,
+            "tooltip": "filter condition that limits index scope",
+            "optional": true,
+            "default": "false"
+        },
+        {
+            "name": "expireAfterSeconds",
+            "type": "Text",
+            "readOnly": false,
+            "tooltip": "Time to Live (TTL) for documents",
+            "optional": true,
+            "default": "false"
+        },
+        {
+            "name": "Keys",
+            "type": "Table",
+            "columns": [{
+                    "name": "AttributeName",
+                    "tooltip": "Name of the attribute to be indexed",
+                    "type": "Text"
+                },
+                {
+                    "name": "Direction",
+                    "type": "Text",
+                    "defaut": "1",
+                    "tooltip": "1 for ascending index, -1 for descending index"
+                }
+            ]
+        }
+    ]
+}
