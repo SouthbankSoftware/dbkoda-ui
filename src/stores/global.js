@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   chris
- * @Last modified time: 2017-05-03T09:32:47+10:00
+ * @Last modified time: 2017-05-03T10:18:43+10:00
  */
 
 import _ from 'lodash';
@@ -175,8 +175,8 @@ export default class Store {
     });
 
     // Outputs:
-    newStore.outputs.forEach((value) => {
-      value = observable(value);
+    newStore.outputs.forEach((value, key, map) => {
+      map.set(key, observable(value));
     });
 
     // OutputPanel:

@@ -9,41 +9,33 @@
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
 
-const templateToBeTested = '../Templates/DropUser.hbs';
-const inputForTheTemplate = './DropUser.hbs.input.json';
+const templateToBeTested = './src/components/TreeActionPanel/Templates/DropUser.hbs';
+const templateInput = require('./DropUser.hbs.input.json');
 const hbs = require('handlebars');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
-const common = require('./common.js'); 
+const common = require('./common.js');
 
 // Random username for the test
 const randomUser = 'user' + Math.floor(Math.random() * 10000000);
 const adminRandomUser = 'admin.' + randomUser;
 
 // Data that is input to the handlebars template
-const templateInput = require(inputForTheTemplate);
+
 
 templateInput.UserId = adminRandomUser;
 templateInput.UserName = randomUser;
 
 // Command to create the user
-const createUserCmd = sprintf('db.getSiblingDB("admin").createUser(   \
-    {user: "%s" , \
-    pwd:  "password" ,\
-    roles:[]} \
-   ,{w: "majority"} \
-   );\n', randomUser);
+const createUserCmd = sprintf('db.getSiblingDB("admin").createUser(       {user: "%s" , pwd:  "password" ,    roles:[]}   ,{w: "majority"}    );\n', randomUser);
 
-const validateUserCreatedCmd = sprintf(
-    '\nvar userDoc=db.getSiblingDB("admin").system.users.find({_id:"%s"}).toArray()[0]; \
-    print (userDoc._id+" user exists")\n',
+const validateUserCreatedCmd = sprintf('\nvar userDoc=db.getSiblingDB("admin").system.users.find({_id:"%s"}).toArray()[0];  print (userDoc._id+" user exists")\n',
     adminRandomUser);
 
 
 // Command that checks the user does not exist (after drop)
 const validateUserDroppedCmd = sprintf(
-    '\nvar count=db.getSiblingDB("admin").system.users.find({_id:"%s"}).count();\
-    if (count==0) print (count+" Users found"); \n',
+    '\nvar count=db.getSiblingDB("admin").system.users.find({_id:"%s"}).count(); if (count==0) print (count+" Users found"); \n',
     adminRandomUser);
 
 // Run the test
