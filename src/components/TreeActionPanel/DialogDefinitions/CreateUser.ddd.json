@@ -1,11 +1,14 @@
 {
     "Title": "Create User",
+    "DefaultValues": {
+        "function":"dbenvy_CreateUserPreFill"
+    },
     "Fields": [
         {
             "name": "UserName",
             "type": "Text",
             "readOnly": false
-        },        
+        },
         {
             "name": "Database",
             "type": "Text",
