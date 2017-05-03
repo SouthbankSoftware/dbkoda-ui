@@ -519,7 +519,6 @@ class View extends React.Component {
    * @param {String} text - The text to add to the editor.
    */
   insertAtCursor(text) {
-    console.log('TEST: ', text);
     const cm = this
       .refs
       .editor
