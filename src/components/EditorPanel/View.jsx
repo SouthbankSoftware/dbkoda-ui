@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-03T09:22:05+10:00
+ * @Last modified time: 2017-05-03T16:17:51+10:00
  */
 
 /* eslint-disable react/no-string-refs */
@@ -380,11 +380,15 @@ class View extends React.Component {
     //eslint-disable-line
     () => this.props.store.treeActionPanel.isNewFormValues, () => {
       if (this.props.store.treeActionPanel.isNewFormValues && this.props.store.editorPanel.activeEditorId == this.props.id) {
-        const cm = this
-          .refs
-          .editor
-          .getCodeMirror();
-        cm.setValue(this.props.store.treeActionPanel.formValues);
+        try {
+          const cm = this
+            .refs
+            .editor
+            .getCodeMirror();
+          cm.setValue(this.props.store.treeActionPanel.formValues);
+        } catch (e) {
+          console.log(e);
+        }
         this.props.store.treeActionPanel.isNewFormValues = false;
       }
     });

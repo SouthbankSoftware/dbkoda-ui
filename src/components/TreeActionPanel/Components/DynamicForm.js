@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-03T12:07:10+10:00
+ * @Last modified time: 2017-05-03T16:46:13+10:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -80,42 +80,66 @@ const getFieldsFromDefinitions = (ddd) => {
 
   const fields = [];
   const labels = {};
-  const rules = {};
   const types = {};
-  const disabled = {};
+  const rules = {};
   const bindings = {};
+  const disabled = {};
+
+  const getField = (defField) => {
+    const res = {};
+    res.fieldName = defField.name;
+    res.fieldLabel = defField.name;
+    res.fieldType = defField.type;
+    res.fieldRules = '';
+    if (defField.readOnly) {
+      res.disabled = true;
+    }
+
+    if (defField.keyValue) {
+      res.fieldRules += 'required';
+    }
+    if (defField.rules) {
+      if (res.fieldRules && res.fieldRules.length > 0) {
+        res.fieldRules += '|';
+      }
+      res.fieldRules += defField.rules;
+    }
+    if (defField.type == 'Text') {
+      if (res.fieldRules && res.fieldRules.length > 0) {
+        res.fieldRules += '|';
+      }
+      res.fieldRules += 'string';
+      res.fieldBinding = 'TextField';
+    }
+    if (defField.type == 'Select') {
+      if (res.fieldRules && res.fieldRules.length > 0) {
+        res.fieldRules += '|';
+      }
+      res.fieldRules += 'string';
+      res.fieldBinding = 'SelectField';
+    }
+    return res;
+  };
 
   for (const defField of ddd.Fields) {
-    const fieldName = defField.name;
-    fields.push(fieldName);
+    const resField = getField(defField);
 
-    const fieldLabel = defField.name;
-    labels[fieldName] = fieldLabel;
-
-    if (defField.readOnly) {
-      disabled[fieldName] = true;
-    }
-
-    let fieldRules = 'string';
-    if (defField.keyValue) {
-      fieldRules += '|required';
-    }
-
-    types[fieldName] = defField.type;
-
-    if (defField.type == 'Text') {
-      rules[fieldName] = fieldRules;
-      bindings[fieldName] = 'TextField';
-    }
+    fields.push(resField.fieldName);
+    labels[resField.fieldName] = resField.fieldLabel;
+    types[resField.fieldName] = resField.fieldType;
+    rules[resField.fieldName] = resField.fieldRules;
+    if (resField.fieldBinding) bindings[resField.fieldName] = resField.fieldBinding;
+    if (resField.disabled) disabled[resField.fieldName] = resField.disabled;
 
     if (defField.type == 'Table') {
       for (const col of defField.columns) {
-        const colFieldName = fieldName + '[].' + col.name;
+        const colField = getField(col);
+        const colFieldName = resField.fieldName + '[].' + colField.fieldName;
         fields.push(colFieldName);
-        labels[colFieldName] = col.name;
-        types[colFieldName] = col.type;
-        rules[colFieldName] = 'string';
-        bindings[colFieldName] = 'TextField';
+        labels[colFieldName] = colField.fieldLabel;
+        types[colFieldName] = colField.fieldType;
+        rules[colFieldName] = colField.fieldRules;
+        bindings[colFieldName] = colField.fieldBinding;
       }
     }
   }
