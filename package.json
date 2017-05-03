@@ -128,5 +128,8 @@
     "validatorjs": "^3.11.0",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "shelljs": "^0.7.7"
   }
 }

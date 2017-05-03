@@ -56,7 +56,6 @@ export const getExecutionStages = (executionStages) => {
       currentStage = currentStage.inputStage;
     }
   }
-  console.log('get execution stages ', stages);
   return stages;
 };
 
