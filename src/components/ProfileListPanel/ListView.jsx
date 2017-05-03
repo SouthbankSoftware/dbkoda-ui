@@ -63,7 +63,7 @@ export default class ListView extends React.Component {
           isRowResizable={false}
           defaultColumnWidth={1024}
           onSelection={region => this.onSelection(region)}>
-          <Column name="Connection Profiles" renderCell={renderCell}/>
+          <Column name="Connection Profiles" renderCell={renderCell} />
         </Table>
       </div>
     );
