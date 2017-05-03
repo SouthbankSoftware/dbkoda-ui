@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-19T16:41:32+10:00
+ * @Last modified time: 2017-05-03T12:07:10+10:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -130,7 +130,7 @@ const getFieldsFromDefinitions = (ddd) => {
   return result;
 };
 
-export const CreateForm = (treeActionStore, updateDynamicFormCode, executeCommandFunc) => {
+export const CreateForm = (treeActionStore, updateDynamicFormCode, executeQuery) => {
   const treeAction = treeActionStore.treeAction;
   const treeNode = treeActionStore.treeNode;
   // Load the form definitions dynamically
@@ -142,8 +142,8 @@ export const CreateForm = (treeActionStore, updateDynamicFormCode, executeComman
   // load the form template
   const formTemplate = require('../Templates/' + treeAction + '.hbs'); //eslint-disable-line
 
-  // set executeCommandFunc which will be called from Form Functions to get the data from controller.
-  formFunctions.setExecuteFunction(executeCommandFunc);
+  // // set executeQuery which will be called from Form Functions to get the data from controller.
+  // formFunctions.setExecuteFunction(executeQuery);
 
   // get Fields for Mobx React Form
   const formDefs = getFieldsFromDefinitions(ddd);
@@ -171,10 +171,14 @@ export const CreateForm = (treeActionStore, updateDynamicFormCode, executeComman
     form.mobxForm.update(data);         //eslint-disable-line
   };
 
+  const defaultParseFunction = (values) => {
+    return values;
+  };
+
   // check if definitions has a keyField for prefetching data and send request to controller
   const getPrefilledFormData = () => {
+    let keyValue = null;
     if (keyField && keyField.length > 0) {
-      let keyValue = null;
       switch (keyField[0].name) {
         case 'UserId':
           if (treeNode.type == 'user') {
@@ -184,8 +188,30 @@ export const CreateForm = (treeActionStore, updateDynamicFormCode, executeComman
         default:
           keyValue = treeNode.text;
       }
-      const PrefilledValues = formFunctions[ddd.DefaultValues.function](keyValue);
-      PrefilledValues.then(updatePrefilledData);
+    }
+
+    if (ddd.DefaultValues) {
+      let PrefilledValues;
+      if (keyField.length > 0) {
+        PrefilledValues = formFunctions[ddd.DefaultValues.function](keyValue);
+      } else {
+        PrefilledValues = formFunctions[ddd.DefaultValues.function]();
+      }
+
+      if (typeof PrefilledValues === 'string') {
+        let parseFunction;
+        if (formFunctions[ddd.DefaultValues.function + '_parse']) {
+          parseFunction = formFunctions[ddd.DefaultValues.function + '_parse'];
+        } else {
+          parseFunction = defaultParseFunction;
+        }
+        executeQuery(PrefilledValues).then((res) => {
+          const parsedValues = parseFunction(res);
+          updatePrefilledData(parsedValues);
+        });
+      } else if (typeof PrefilledValues === 'object') {
+        updatePrefilledData(PrefilledValues);
+      }
     }
   };
 
