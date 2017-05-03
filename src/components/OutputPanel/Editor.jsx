@@ -3,11 +3,11 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-03T09:39:30+10:00
+ * @Last modified time: 2017-05-03T10:50:38+10:00
 */
 
 import React from 'react';
-import { reaction } from 'mobx';
+import { reaction, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
@@ -45,7 +45,7 @@ export default class Editor extends React.Component {
       }
     } else {
       console.log(`create new output for ${this.props.id}`);
-      this.props.store.outputs.set(this.props.id, {
+      this.props.store.outputs.set(this.props.id, observable({
         id: this.props.id,
         connId: this.props.connId,
         shellId: this.props.shellId,
@@ -54,7 +54,7 @@ export default class Editor extends React.Component {
         cannotShowMore: true,
         showingMore: false,
         commandHistory: []
-      });
+      }));
     }
 
     /** Reaction to editor tab closing
