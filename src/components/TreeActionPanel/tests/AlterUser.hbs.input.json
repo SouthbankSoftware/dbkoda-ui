@@ -3,6 +3,7 @@
     "Database": "admin",
     "UserName": "randomUser",
     "Password": "xyz",
+    "CustomData": {"customDataField":"Custom Data value"},
     "Roles": [{
             "Role": "userAdminAnyDatabase",
             "Database": "admin"

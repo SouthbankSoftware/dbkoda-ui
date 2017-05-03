@@ -1,4 +1,3 @@
-// TODO: We will need a json helper for the customData field
 db.getSiblingDB("{{Database}}").createUser({ 
    user: "{{UserName}}",
    pwd: "{{Password}}", {{#if CustomData}} customData :  {{json CustomData}} , {{/if}}

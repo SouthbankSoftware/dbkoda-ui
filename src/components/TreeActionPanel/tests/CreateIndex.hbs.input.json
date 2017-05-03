@@ -14,7 +14,7 @@
     ],
     "Background": false,
     "Unique": false,
-    "partialFilterExpressions": {
+    "partialFilterExpression": {
         "a": 1
     },
     "expireAfterSeconds": 2000,

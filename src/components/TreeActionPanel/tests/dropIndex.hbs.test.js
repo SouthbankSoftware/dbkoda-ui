@@ -8,8 +8,8 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
-const templateToBeTested = './src/components/TreeActionPanel/Templates/CreateIndex.hbs';
-const templateInput = require('./CreateIndex.hbs.input.json');
+const templateToBeTested = './src/components/TreeActionPanel/Templates/DropIndex.hbs';
+const templateInput = require('./DropIndex.hbs.input.json');
 const hbs = require('handlebars');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
@@ -30,6 +30,7 @@ const setupCollectionCommands = [];
 setupCollectionCommands.push(sprintf('use test\n'));
 setupCollectionCommands.push(sprintf('db.%s.drop();\n', randomCollectionName));
 setupCollectionCommands.push(sprintf('db.%s.insertOne({a:1,b:1,c:{d:1,e:1}});\n', randomCollectionName));
+setupCollectionCommands.push(sprintf('db.%s.createIndex({a:1},{"name":"%s"});\n', randomCollectionName, randomIndexName));
 
 // Command that checks the user is OK
 const validateIndexCmd = sprintf('\ndb.%s.getIndexes().forEach(i=>{if (i.name==="%s") {print ("Found index "+i.name)' +
@@ -43,20 +44,22 @@ test('Create Index template', (done) => {
     if (!err) {
       const templateSource = data.toString();
       const compiledTemplate = hbs.compile(templateSource);
-      const createIndexCommands = compiledTemplate(templateInput);
+      const DropIndexCommands = compiledTemplate(templateInput);
       let mongoCommands = '';
       setupCollectionCommands.forEach((c) => {
         mongoCommands += c;
       });
-      mongoCommands += createIndexCommands;
+      mongoCommands += DropIndexCommands;
       mongoCommands += validateIndexCmd;
       mongoCommands += dropCollectionCmd + '\nexit\n';
       // console.log(mongoCommands);
       const matchString = sprintf('Found index %s', randomIndexName);
+      const matchString2 = '{ "nIndexesWas" : 2, "ok" : 1 }';
       common
         .mongoOutput(mongoCommands)
         .then((output) => {
-          expect(output).toEqual(expect.stringMatching(matchString));
+          expect(output).not.toEqual(expect.stringMatching(matchString));
+          expect(output).toEqual(expect.stringMatching(matchString2));
           done();
         });
     }
