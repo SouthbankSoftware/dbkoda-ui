@@ -1,8 +1,10 @@
 {
     "Title": "Alter User",
     "DefaultValues": {
-        "function":"dbenvy_AlterUserPreFill",
-        "arguments":[{"name":"UserId"}]
+        "function": "dbenvy_AlterUserPreFill",
+        "arguments": [{
+            "name": "UserId"
+        }]
     },
     "Fields": [{
             "name": "UserId",

@@ -1,0 +1,12 @@
+db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").createIndex(
+  { {{#each Keys}}
+     "{{AttributeName}}":{{Direction}}{{#unless last}},{{/unless}}{{/each}} } ,
+  {
+    background: {{Background}},
+    unique: {{Unique}},{{#if IndexName}}
+    name: "{{IndexName}}",{{/if}}{{#if partialFilterExpression}}
+    partialFilterExpression: {{{json partialFilterExpression}}},{{/if}}{{#if expireAfterSeconds}}
+    expireAfterSeconds :  {{expireAfterSeconds}} , {{/if}}
+    sparse: {{Sparse}}
+  }
+);

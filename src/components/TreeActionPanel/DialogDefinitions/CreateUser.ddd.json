@@ -1,7 +1,8 @@
 {
     "Title": "Create User",
     "DefaultValues": {
-        "function":"dbenvy_CreateUserPreFill"
+        "function":"dbenvy_CreateUserPreFill",
+        "arguments":[]
     },
     "Fields": [
         {

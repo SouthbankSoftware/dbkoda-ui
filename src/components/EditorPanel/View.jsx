@@ -154,7 +154,7 @@ class View extends React.Component {
           .editors
           .get(this.props.store.editorPanel.activeEditorId);
         const shell = editor.shellId;
-        const profileId = editor.currentProfile;
+        const profileId = editor.profileId;
 
         console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', profileId, '/', shell, ': "', editor.code, '".');
         Broker.on(EventType.createShellExecutionFinishEvent(profileId, shell), this.finishedExecution);
@@ -196,7 +196,7 @@ class View extends React.Component {
           .editors
           .get(this.props.store.editorPanel.activeEditorId);
         const shell = editor.shellId;
-        const id = editor.currentProfile;
+        const id = editor.profileId;
 
         const cm = this
           .refs
@@ -267,7 +267,7 @@ class View extends React.Component {
           .editors
           .get(this.props.store.editorPanel.activeEditorId);
         const shell = editor.shellId;
-        const id = editor.currentProfile;
+        const id = editor.profileId;
 
         const cm = this
           .refs
@@ -346,10 +346,10 @@ class View extends React.Component {
           .editors
           .get(this.props.store.editorPanel.activeEditorId);
         const shell = editor.shellId;
-        const id = editor.currentProfile;
+        const id = editor.profileId;
         console.log(`Stopping Execution of ${id} / ${shell}!`);
         const service = featherClient().service('/mongo-stop-execution');
-        service.timeout = 30000;
+        service.timeout = 1000;
         service
           .get(id, {
           query: {
