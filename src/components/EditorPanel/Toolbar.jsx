@@ -104,6 +104,7 @@ export default class Toolbar extends React.Component {
           // eslint-disable-line react/prop-types
           id: editorId,
           alias: profile.alias,
+          profileId: profile.id,
           shellId: profile.shellId,
           currentProfile: profile.id,
           fileName,
@@ -231,6 +232,7 @@ export default class Toolbar extends React.Component {
             // eslint-disable-line react/prop-types
             id: editorId,
             alias: this.props.store.profiles.get(res.id).alias,
+            profileId: res.id,
             shellId: res.shellId,
             currentProfile: res.id,
             fileName,
@@ -500,26 +502,29 @@ export default class Toolbar extends React.Component {
     );
     console.log('Editor: ', editor);
     console.log('Profile: ', profile);
-
     if (profile) {
       // Send Command:
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
+      service.timeout = 1000;
       service
-        .update(editor.currentProfile, {
+        .update(editor.profileId, {
           shellId: editor.shellId,
           newProfile: profile.id,
           swapProfile: true // eslint-disable-line
         })
         .then((res) => {
           console.log(res);
-          console.log(editor);
-          editor.currentProfile = profile.id;
-          console.log(editor);
+          this.updateCurrentProfile(profile);
+        }).catch((err) => {
+          console.log('Failed to swap profiles: ', err);
+          this.updateCurrentProfile(profile);
         });
     }
   }
 
+@action updateCurrentProfile(profile) {
+  this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).currentProfile = profile.id;
+}
   /**
    * Event triggered when the dropdown changes.
    * @param {Object} event - The event that triggered this action.
