@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-04T19:01:17+10:00
+ * @Last modified time: 2017-05-04T19:24:37+10:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -191,6 +191,12 @@ const getFieldsFromDefinitions = (ddd, formFunctions, executeQuery) => {
       result.options = options;
 
       resolve(result);
+    }).catch((reason) => {
+      console.log(
+        'getFieldsFromDefinitions:',
+        'Handle rejected promise (' + reason + ') here.'
+      );
+      reject(reason);
     });
   });
 };
@@ -310,7 +316,7 @@ export const CreateForm = (
       resolve(form);
     }).catch((reason) => {
       console.log(
-        'getFieldsFromDefinitions:',
+        'CreateForm:',
         'Handle rejected promise (' + reason + ') here.'
       );
       reject(reason);
