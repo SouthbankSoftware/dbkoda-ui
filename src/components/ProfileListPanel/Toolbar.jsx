@@ -114,11 +114,11 @@ export default class Toolbar extends React.Component {
         .remove(selectedProfile.id)
         .then((v) => {
           console.log('got close response ', v);
-          this.setState({closingProfile: false, closeConnectionAlert: false});
           runInAction(() => {
             selectedProfile.status = ProfileStatus.CLOSED;
             profiles.set(selectedProfile.id, selectedProfile);
           });
+          this.setState({closingProfile: false, closeConnectionAlert: false});
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User closed a profile connection.');
           }
@@ -158,7 +158,7 @@ export default class Toolbar extends React.Component {
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-button-group">
             <Alert
-              className="pt-dark"
+              className="pt-dark close-profile-alert-dialog"
               intent={Intent.PRIMARY}
               isOpen={this.state.closeConnectionAlert}
               confirmButtonText="Close Connection"
@@ -168,7 +168,7 @@ export default class Toolbar extends React.Component {
               <p>Are you sure you want to close this connection?</p>
             </Alert>
             <Alert
-              className="pt-dark"
+              className="pt-dark remove-profile-alert-dialog"
               intent={Intent.PRIMARY}
               isOpen={this.state.removeConnectionAlert}
               confirmButtonText="Remove Connection"
