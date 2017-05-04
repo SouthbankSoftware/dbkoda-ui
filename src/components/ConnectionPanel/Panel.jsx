@@ -39,7 +39,7 @@ export default class Panel extends React.Component {
     }
   }
 
-  @autobind _urlRadioOnChange(){
+  @autobind _urlRadioOnChange() {
     if (!this.props.form.$('urlRadio').get('value')) {
       this.props.form
         .$('hostRadio')
