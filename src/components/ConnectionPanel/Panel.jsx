@@ -29,12 +29,25 @@ export default class Panel extends React.Component {
   }
 
   @autobind _hostRadioOnChange() {
-    this.props.form
-      .$('hostRadio')
-      .set('value', !this.props.form.$('hostRadio').get('value'));
-    this.props.form
-      .$('urlRadio')
-      .set('value', !this.props.form.$('hostRadio').get('value'));
+    if (!this.props.form.$('hostRadio').get('value')) {
+      this.props.form
+        .$('hostRadio')
+        .set('value', !this.props.form.$('hostRadio').get('value'));
+      this.props.form
+        .$('urlRadio')
+        .set('value', !this.props.form.$('hostRadio').get('value'));
+    }
+  }
+
+  @autobind _urlRadioOnChange() {
+    if (!this.props.form.$('urlRadio').get('value')) {
+      this.props.form
+        .$('hostRadio')
+        .set('value', !this.props.form.$('hostRadio').get('value'));
+      this.props.form
+        .$('urlRadio')
+        .set('value', !this.props.form.$('hostRadio').get('value'));
+    }
   }
 
   @autobind _connect(data) {
@@ -105,7 +118,7 @@ export default class Panel extends React.Component {
           <div className="pt-form-group pt-inline zero-margin">
             <Radio
               field={form.$('urlRadio')}
-              onChange={this._hostRadioOnChange}
+              onChange={this._urlRadioOnChange}
             />
             <Input
               field={form.$('url')}
