@@ -8,12 +8,16 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
+const debug = false;
 const templateToBeTested = './src/components/TreeActionPanel/Templates/CreateUser.hbs';
 const templateInput = require('./CreateUser.hbs.input.json');
 const hbs = require('handlebars');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const common = require('./common.js');
+const jsonHelper = require('../../../helpers/handlebars/json.js');
+
+hbs.registerHelper('json', jsonHelper);
 
 
 // Random username for the test
@@ -45,7 +49,7 @@ test('Create User template', (done) => {
                 validateUsesrCmd +
                 dropUserCmd +
                 '\nexit\n';
-            // console.log(mongoCommands);
+            if (debug) console.log(mongoCommands);
             const matchString = sprintf('%s created ok', adminRandomUser);
             common.mongoOutput(mongoCommands).then((output) => {
                 expect(output).toEqual(expect.stringMatching(matchString));

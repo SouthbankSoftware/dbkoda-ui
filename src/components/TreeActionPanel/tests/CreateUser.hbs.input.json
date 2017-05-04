@@ -3,6 +3,7 @@
     "Database": "admin",
     "UserName": "randomUser",
     "Password": "xyz",
+    "CustomData":"{a:1,b:1}",
     "Roles": [{
             "Role": "userAdminAnyDatabase",
             "Database": "admin"

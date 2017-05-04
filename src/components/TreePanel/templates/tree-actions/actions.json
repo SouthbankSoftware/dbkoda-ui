@@ -16,7 +16,11 @@
         "text": "Create standard index",
         "icon": "pt-icon-search-template"
     }],
-    "index": [],
+    "index": [{
+        "name": "DropIndex",
+        "text": "Drop Index",
+        "icon": "pt-icon-user"
+    }],
     "users": [{
         "name": "CreateUser",
         "text": "Create User",
@@ -25,6 +29,11 @@
     "user": [{
         "name": "AlterUser",
         "text": "Alter User",
+        "icon": "pt-icon-user"
+    },
+    {
+        "name": "DropUser",
+        "text": "Drop User",
         "icon": "pt-icon-user"
     }]
 }

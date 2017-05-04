@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-01T10:46:19+10:00
+ * @Last modified time: 2017-05-04T09:27:34+10:00
  */
 
 import React from 'react';
@@ -80,6 +80,7 @@ export default class Panel extends React.Component {
             <OutputEditor
               title={editorTitle}
               id={editor[1].id}
+              profileId={editor[1].profileId}
               connId={editor[1].currentProfile}
               initialMsg={editor[1].initialMsg}
               shellId={editor[1].shellId}

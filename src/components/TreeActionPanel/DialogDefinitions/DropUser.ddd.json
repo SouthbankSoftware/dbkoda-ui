@@ -1,0 +1,26 @@
+{
+    "Title": "Drop User",
+    "DefaultValues": {
+        "function": "dbenvy_DropUserPreFill",
+        "arguments": [{
+            "name": "UserId"
+        }]
+    },
+    "Fields": [{
+            "name": "UserId",
+            "type": "Text",
+            "readOnly": true,
+            "keyValue": true
+        },
+        {
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true,
+            "lookup": "dbenvy_listdb"
+        },
+        {
+            "name": "UserName",
+            "type": "Text",
+            "readOnly": true
+        }]
+}

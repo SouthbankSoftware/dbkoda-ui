@@ -9,12 +9,16 @@
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
 
+const debug = false;
 const templateToBeTested = './src/components/TreeActionPanel/Templates/AlterUser.hbs';
 const templateInput = require('./AlterUser.hbs.input.json');
 const hbs = require('handlebars');
 const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const common = require('./common.js');
+const jsonHelper = require('../../../helpers/handlebars/json.js');
+
+hbs.registerHelper('json', jsonHelper);
 
 // Random username for the test
 const randomUser = 'user' + Math.floor(Math.random() * 10000000);
@@ -49,6 +53,7 @@ test('Alter User template', (done) => {
                 validateUsesrCmd +
                 dropUserCmd +
                 '\nexit\n';
+            if (debug) console.log(mongoCommands);
             const matchString = sprintf('%s updated ok', adminRandomUser);
             common.mongoOutput(mongoCommands).then((output) => {
                 expect(output).toEqual(expect.stringMatching(matchString));

@@ -1,0 +1,32 @@
+{
+    "Title": "Drop Index",
+    "DefaultValues": {
+        "function": "dbenvy_DropIndexPreFill",
+        "arguments": [
+          {"name": "Database" },
+          {"name": "CollectionName" },
+          {"name": "IndexName" }
+          ]
+    },
+    "Fields": [
+       {
+            "name": "Database",
+            "type": "Text",
+            "readOnly": false,
+            "keyValue": true
+        },
+      {
+            "name": "CollectionName",
+            "type": "Text",
+            "readOnly": false,
+            "keyValue": true
+        },
+        {
+            "name": "IndexName",
+            "type": "Text",
+            "tooltip": "Name of the index (optional)",
+            "optional": false,
+            "keyValue": true
+        }
+    ]
+}
