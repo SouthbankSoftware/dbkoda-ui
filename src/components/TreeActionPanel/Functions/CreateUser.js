@@ -16,7 +16,7 @@ export const CreateUser = {
     const data = {};
     data.Database = 'test';
     data.Roles = [];
-    data.Roles.push({Role:'read', Database:'test'});
+    data.Roles.push({ Database:'test', Role:'read'});
     return data;
   },
   dbenvy_validateUser: (inputDoc) => {

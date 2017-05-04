@@ -6,7 +6,11 @@
     "routers": [],
     "mongos": [],
     "databases": [],
-    "database": [],
+    "database": [{
+        "name": "CreateCollection",
+        "text": "Create Collection",
+        "icon": "pt-icon-search-template"
+    }],
     "collection": [{
         "name": "SampleCollections",
         "text": "Find Attributes",

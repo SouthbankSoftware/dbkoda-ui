@@ -3,10 +3,11 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T13:56:56+10:00
+ * @Last modified time: 2017-05-04T19:06:47+10:00
  */
 
 import React from 'react';
+import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import View from './View';
@@ -17,16 +18,19 @@ import { CreateForm } from './Components/DynamicForm';
 export default class TreeActionPanel extends React.Component {
   componentWillMount() {
     const { treeActionPanel, updateDynamicFormCode } = this.props.store;
-    this.dynamicForm = CreateForm(
+    this.formPromise = CreateForm(
       treeActionPanel,
       updateDynamicFormCode,
       this.executeCommand
     );
-  }
-  componentDidMount() {
-    this.dynamicForm.getData();
+    this.formPromise.then((res) => {
+      this.dynamicForm = res;
+      this.showForm(true);
+      this.dynamicForm.getData();
+    });
   }
   executeCommand = (content) => {
+    console.log('-------------Command:', content);
     let id = null;
     let shell = null;
     const editor = this.props.store.editors.get(
@@ -44,9 +48,16 @@ export default class TreeActionPanel extends React.Component {
             commands: content
           })
           .then((res) => {
+            console.log('----------Result:', res);
             if (typeof res == 'string') {
-              const json = JSON.parse(res);
-              resolve(json);
+              res = res.replace(/[\r\n]*/g, '');
+              try {
+                const json = JSON.parse(res);
+                resolve(json);
+              } catch (e) {
+                console.log(e);
+                resolve({});
+              }
             } else {
               resolve(res);
             }
@@ -62,14 +73,21 @@ export default class TreeActionPanel extends React.Component {
     }
     return null;
   };
+  formPromise;
   dynamicForm;
+  @observable bForm = false;
+  @action showForm(value) {
+    this.bForm = value;
+  }
   render() {
     console.log(this);
     return (
-      <View
-        title={this.dynamicForm.title}
-        mobxForm={this.dynamicForm.mobxForm}
-      />
+      <div>
+        {this.bForm && <View
+          title={this.dynamicForm.title}
+          mobxForm={this.dynamicForm.mobxForm}
+        />}
+      </div>
     );
   }
 }

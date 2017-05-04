@@ -1,11 +1,12 @@
 /**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-04-21T19:24:31+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-04T16:24:11+10:00
  */
 
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 
 module.exports = {
   context: path.resolve(__dirname, '../src'),
@@ -13,6 +14,7 @@ module.exports = {
     // activate HMR for React
     'react-hot-loader/patch',
 
+    'babel-polyfill',
     // bundle the client for webpack-dev-server
     // and connect to the provided endpoint
     'webpack-dev-server/client?http://localhost:3000',
