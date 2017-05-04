@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-03T16:46:13+10:00
+ * @Last modified time: 2017-05-04T13:42:05+10:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -84,6 +84,7 @@ const getFieldsFromDefinitions = (ddd) => {
   const rules = {};
   const bindings = {};
   const disabled = {};
+  const arrayLast = [];     // an object to keep reference of array fields to add last element later before sending to the template.
 
   const getField = (defField) => {
     const res = {};
@@ -141,6 +142,8 @@ const getFieldsFromDefinitions = (ddd) => {
         rules[colFieldName] = colField.fieldRules;
         bindings[colFieldName] = colField.fieldBinding;
       }
+
+      arrayLast.push(resField.fieldName);
     }
   }
 
@@ -150,6 +153,7 @@ const getFieldsFromDefinitions = (ddd) => {
   result.types = types;
   result.disabled = disabled;
   result.bindings = bindings;
+  result.arrayLast = arrayLast;
 
   return result;
 };
@@ -175,7 +179,15 @@ export const CreateForm = (treeActionStore, updateDynamicFormCode, executeQuery)
 
   // callback function to get the updated values from the form
   const formValueUpdates = (values) => {
-    // console.log('form new values:', values);
+    console.log('form new values:', values);
+    if (formDefs.arrayLast.length > 0) {
+      for (const fld of formDefs.arrayLast) {
+        if (values[fld].length > 0) {
+          const idx = values[fld].length - 1;
+          values[fld][idx].last = 1;
+        }
+      }
+    }
     if (treeActionStore) {
       const generatedCode = formTemplate(values);
       updateDynamicFormCode(generatedCode);
@@ -183,12 +195,12 @@ export const CreateForm = (treeActionStore, updateDynamicFormCode, executeQuery)
   };
 
   // Get keyfield to prefill the form
-  const keyField = ddd.Fields.filter((item) => {
-    if (item.keyValue) {
-      return item.keyValue;
-    }
-    return false;
-  });
+  // const keyField = ddd.Fields.filter((item) => {
+  //   if (item.keyValue) {
+  //     return item.keyValue;
+  //   }
+  //   return false;
+  // });
 
   // Update the form after prefetching the data from controller
   const updatePrefilledData = (data) => {
@@ -201,23 +213,50 @@ export const CreateForm = (treeActionStore, updateDynamicFormCode, executeQuery)
 
   // check if definitions has a keyField for prefetching data and send request to controller
   const getPrefilledFormData = () => {
-    let keyValue = null;
-    if (keyField && keyField.length > 0) {
-      switch (keyField[0].name) {
-        case 'UserId':
-          if (treeNode.type == 'user') {
-            keyValue = treeNode.json.db + '.' + treeNode.json.text;
-          }
-          break;
-        default:
-          keyValue = treeNode.text;
-      }
-    }
+    // let keyValues = [];
+    // if (keyField && keyField.length > 0) {
+    //   switch (keyField[0].name) {
+    //     case 'UserId':
+    //       if (treeNode.type == 'user') {
+    //         keyValue = treeNode.json.db + '.' + treeNode.json.text;
+    //       }
+    //       break;
+    //     default:
+    //       keyValue = treeNode.text;
+    //   }
+    // }
 
     if (ddd.DefaultValues) {
+      const params = {};
+      if (ddd.DefaultValues.arguments) {
+        const args = ddd.DefaultValues.arguments;
+        for (let i = 0; i < args.length; i += 1) {
+          const arg = args[i];
+          switch (arg.value) {
+            case 'treeNode.parentDB':
+              if (treeNode.type == 'user') {
+                params[arg.name] = treeNode.json.db;
+              } else if (treeNode.type == 'collection') {
+                params[arg.name] = treeNode.refParent.json.text;
+              } else if (treeNode.type == 'index') {
+                params[arg.name] = treeNode.refParent.refParent.json.text;
+              }
+              break;
+
+            case 'treeNode.parentCOL':
+              if (treeNode.type == 'index') {
+                params[arg.name] = treeNode.refParent.json.text;
+              }
+              break;
+            default:
+              params[arg.name] = treeNode.json.text;
+          }
+        }
+      }
+
       let PrefilledValues;
-      if (keyField.length > 0) {
-        PrefilledValues = formFunctions[ddd.DefaultValues.function](keyValue);
+      if (ddd.DefaultValues.arguments && ddd.DefaultValues.arguments.length > 0) {
+        PrefilledValues = formFunctions[ddd.DefaultValues.function](params);
       } else {
         PrefilledValues = formFunctions[ddd.DefaultValues.function]();
       }

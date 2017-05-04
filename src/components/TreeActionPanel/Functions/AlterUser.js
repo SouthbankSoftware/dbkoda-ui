@@ -3,13 +3,15 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-03T11:36:25+10:00
+ * @Last modified time: 2017-05-04T13:25:10+10:00
  */
 
 export const AlterUser = {
   // Prefill function for alter user
-  dbenvy_AlterUserPreFill: (userId) => {
-    return `db.getSiblingDB("admin").system.users.find({"_id": "${userId}"}).toArray()`;
+  dbenvy_AlterUserPreFill: (params) => {
+    const userId = params.UserId;
+    const parentDb = params.parentDB;
+    return `db.getSiblingDB("admin").system.users.find({"_id": "${parentDb}.${userId}"}).toArray()`;
   },
   dbenvy_AlterUserPreFill_parse: (userDocs) => {
     console.log(userDocs);
@@ -27,8 +29,8 @@ export const AlterUser = {
     outputDoc.Roles = [];
     userDoc.roles.forEach((role) => {
       outputDoc.Roles.push({
-        Role: role.role,
         Database: role.db,
+        Role: role.role,
       });
     });
 

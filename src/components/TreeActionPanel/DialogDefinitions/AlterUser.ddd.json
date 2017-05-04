@@ -1,50 +1,57 @@
 {
-    "Title": "Alter User",
-    "DefaultValues": {
-        "function": "dbenvy_AlterUserPreFill",
-        "arguments": [{
-            "name": "UserId"
-        }]
-    },
-    "Fields": [{
-            "name": "UserId",
-            "type": "Text",
-            "readOnly": true,
-            "keyValue": true
-        },
-        {
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true,
-            "lookup": "dbenvy_listdb"
-        },
-        {
-            "name": "UserName",
-            "type": "Text",
-            "readOnly": true
-        },
-        {
-            "name": "Password",
-            "type": "Text"
-        },
-        {
-            "name": "CustomData",
-            "type": "Text",
-            "optional": true
-        },
-        {
-            "name": "Roles",
-            "type": "Table",
-            "columns": [{
-                "name": "Database",
-                "type": "Text",
-                "lookup": "dbenvy_listdb"
-            }, {
-                "name": "Role",
-                "type": "Text",
-                "lookup": "dbenvy_listRoles"
-            }]
-        }
-    ],
-    "Validate": "dbenvy_validateUser"
+	"Title": "Alter User",
+	"DefaultValues": {
+		"function": "dbenvy_AlterUserPreFill",
+		"arguments": [{
+			"name": "UserId",
+			"value": "treeNode"
+		}, {
+			"name": "parentDB",
+			"value": "treeNode.parentDB"
+		}, {
+			"name": "parentCOL",
+			"value": "treeNode.parentCOL"
+		}]
+	},
+	"Fields": [{
+			"name": "UserId",
+			"type": "Text",
+			"readOnly": true,
+			"keyValue": true
+		},
+		{
+			"name": "Database",
+			"type": "Select",
+			"readOnly": true,
+			"lookup": "dbenvy_listdb"
+		},
+		{
+			"name": "UserName",
+			"type": "Text",
+			"readOnly": true
+		},
+		{
+			"name": "Password",
+			"type": "Text"
+		},
+		{
+			"name": "CustomData",
+			"type": "Text",
+			"optional": true
+		},
+		{
+			"name": "Roles",
+			"type": "Table",
+			"columns": [{
+				"name": "Database",
+				"type": "Text",
+				"lookup": "dbenvy_listdb"
+			}, {
+				"name": "Role",
+				"type": "Text",
+				"lookup": "dbenvy_listRoles"
+			}]
+		}
+	],
+	"Validate": "dbenvy_validateUser"
 }
