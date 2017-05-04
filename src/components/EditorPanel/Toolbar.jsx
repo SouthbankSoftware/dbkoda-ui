@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T16:02:41+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-04T21:08:08+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -524,6 +524,7 @@ export default class Toolbar extends React.Component {
 
 @action updateCurrentProfile(profile) {
   this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).currentProfile = profile.id;
+  this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).alias = profile.alias;
 }
   /**
    * Event triggered when the dropdown changes.
