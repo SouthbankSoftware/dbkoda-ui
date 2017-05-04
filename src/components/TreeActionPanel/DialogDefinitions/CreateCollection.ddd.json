@@ -1,0 +1,69 @@
+{
+    "Title": "Create Collection",
+    "DefaultValues": {
+        "function": "dbenvy_CreateCollectionPreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": false,
+            "rules": "required"
+        },
+        {
+            "name": "CollectionName",
+            "type": "Text",
+            "readOnly": false,
+            "rules": "required"
+        },
+        {
+            "name": "capped",
+            "type": "Text",
+            "readOnly": false,
+            "rules": "boolean"
+        },
+        {
+            "name": "autoIndexId",
+            "type": "Text",
+            "readOnly": false,
+            "rules": "boolean"
+        },
+        {
+            "name": "size",
+            "type": "Text",
+            "readOnly": false,
+            "rules": "integer"
+        },
+        {
+            "name": "max",
+            "type": "Text",
+            "readOnly": false,
+            "rules": "integer"
+        },
+        {
+            "name": "storageEngineOptions",
+            "type": "Text",
+            "readOnly": false
+        },
+        {
+            "name": "validator",
+            "type": "Text",
+            "readOnly": false
+        },
+        {
+            "name": "validationLevel",
+            "type": "Text",
+            "default": "off",
+            "readOnly": false
+        },
+        {
+            "name": "validationAction",
+            "type": "Text",
+            "default": "warn",
+            "readOnly": false
+        }
+    ]
+}
