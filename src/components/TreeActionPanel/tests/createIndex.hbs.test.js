@@ -8,6 +8,8 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
+
+const debug = false;
 const templateToBeTested = './src/components/TreeActionPanel/Templates/CreateIndex.hbs';
 const templateInput = require('./CreateIndex.hbs.input.json');
 const hbs = require('handlebars');
@@ -51,7 +53,7 @@ test('Create Index template', (done) => {
       mongoCommands += createIndexCommands;
       mongoCommands += validateIndexCmd;
       mongoCommands += dropCollectionCmd + '\nexit\n';
-      // console.log(mongoCommands);
+      if (debug) console.log(mongoCommands);
       const matchString = sprintf('Found index %s', randomIndexName);
       common
         .mongoOutput(mongoCommands)

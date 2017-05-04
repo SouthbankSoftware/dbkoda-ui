@@ -5,7 +5,7 @@ db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").createIndex(
     background: {{Background}},
     unique: {{Unique}},{{#if IndexName}}
     name: "{{IndexName}}",{{/if}}{{#if partialFilterExpression}}
-    partialFilterExpression: {{{json partialFilterExpression}}},{{/if}}{{#if expireAfterSeconds}}
+    partialFilterExpression: {{{partialFilterExpression}}},{{/if}}{{#if expireAfterSeconds}}
     expireAfterSeconds :  {{expireAfterSeconds}} , {{/if}}
     sparse: {{Sparse}}
   }
