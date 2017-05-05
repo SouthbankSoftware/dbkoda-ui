@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-04T19:06:47+10:00
+ * @Last modified time: 2017-05-05T16:03:22+10:00
  */
 
 import React from 'react';
@@ -30,7 +30,6 @@ export default class TreeActionPanel extends React.Component {
     });
   }
   executeCommand = (content) => {
-    console.log('-------------Command:', content);
     let id = null;
     let shell = null;
     const editor = this.props.store.editors.get(
@@ -48,7 +47,6 @@ export default class TreeActionPanel extends React.Component {
             commands: content
           })
           .then((res) => {
-            console.log('----------Result:', res);
             if (typeof res == 'string') {
               res = res.replace(/[\r\n]*/g, '');
               try {

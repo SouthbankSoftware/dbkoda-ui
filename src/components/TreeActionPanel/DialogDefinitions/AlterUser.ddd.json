@@ -44,11 +44,11 @@
 			"type": "Table",
 			"columns": [{
 				"name": "Database",
-				"type": "Text",
+				"type": "Select",
 				"lookup": "dbenvy_listdb"
 			}, {
 				"name": "Role",
-				"type": "Text",
+				"type": "Select",
 				"lookup": "dbenvy_listRoles"
 			}]
 		}
