@@ -12,9 +12,10 @@ export const CreateIndex = {
     CreateIndex.executeCommand = cbFuncExecute;
   },
   // Prefill function for alter user
-  dbenvy_CreateIndexPreFill: (collectionName) => {
+  dbenvy_CreateIndexPreFill: (params) => {
     const data = {};
-    data.CollectionName = collectionName;
+    data.Database = params.Database;
+    data.CollectionName = params.CollectionName;
     data.Unique = 'false';
     data.Background = 'false';
     data.Sparse = 'false';
