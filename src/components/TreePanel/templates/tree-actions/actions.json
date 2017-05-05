@@ -39,5 +39,7 @@
         "name": "DropUser",
         "text": "Drop User",
         "icon": "pt-icon-user"
-    }]
+    }],
+    "replicaset": [],
+    "replica_member": []
 }

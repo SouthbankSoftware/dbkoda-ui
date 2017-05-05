@@ -3,7 +3,7 @@
  * @Date:   2017-03-21T12:01:26+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-21T12:31:36+11:00
+ * @Last modified time: 2017-05-05T16:53:35+10:00
  */
 
 
@@ -21,4 +21,6 @@
    index          : 'tree-index-node.hbs',
    users          : 'tree-users-node.hbs',
    user           : 'tree-user-node.hbs',
+   replicaset     : 'tree-replicaset-node.hbs',
+   replica_member : 'tree-replica_member-node.hbs'
  };
