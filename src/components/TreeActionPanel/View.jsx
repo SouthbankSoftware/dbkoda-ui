@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-03T16:18:22+10:00
+ * @Last modified time: 2017-05-05T16:43:01+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -21,14 +21,21 @@ import './View.scss';
 @inject(allStores => ({
   setDrawerChild: allStores.store.setDrawerChild,
   treeActionPanel: allStores.store.treeActionPanel,
+  editorPanel: allStores.store.editorPanel,
 }))
 @observer
 export default class TreeActionView extends React.Component {
   @action.bound
-  close() {
+  close(e) {
+    e.preventDefault();
     this.props.setDrawerChild(DrawerPanes.DEFAULT);
     this.props.treeActionPanel.treeActionEditorId = '';
     this.props.treeActionPanel.isNewFormValues = false;
+  }
+  @action.bound
+  execute(e) {
+    e.preventDefault();
+    this.props.editorPanel.executingEditorAll = true;
   }
   render() {
     const { mobxForm, title } = this.props;
@@ -57,10 +64,9 @@ export default class TreeActionView extends React.Component {
           </button>
           <button
             className="pt-button pt-large pt-intent-success right-button"
-            type="submit"
-            onClick={mobxForm.onSubmit}
+            onClick={this.execute}
           >
-            Update
+            Execute
           </button>
           <p>{mobxForm.error}</p>
         </form>
