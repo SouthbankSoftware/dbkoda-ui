@@ -507,7 +507,7 @@ class View extends React.Component {
             this.props.store.editorToolbar.isActiveExecuting = false;
             editor.executing = false;
           });
-          Broker.emit(EventType.createExplainExecutionFinishedEvent(id, shell), {
+          Broker.emit(EventType.EXPLAIN_OUTPUT_AVAILABLE, {
             id,
             shell,
             command: filteredContent,

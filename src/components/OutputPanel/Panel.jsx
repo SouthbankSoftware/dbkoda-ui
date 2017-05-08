@@ -5,7 +5,6 @@
  * @Last modified by:   chris
  * @Last modified time: 2017-05-04T09:27:34+10:00
  */
-
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -14,6 +13,7 @@ import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
 import { Explain } from '../ExplainPanel/index';
+import {Broker, EventType} from '../../helpers/broker';
 
 /**
  * The main panel for the Output view, this handles tabbing,
@@ -38,6 +38,47 @@ export default class Panel extends React.Component {
       },
       { name: 'reactionOutputPanelTabChange' }
     );
+  }
+
+  componentWillMount() {
+    Broker.on(EventType.EXPLAIN_OUTPUT_PARSED, this.explainOutputAvailable.bind(this));
+    Broker.on(EventType.SHELL_OUTPUT_AVAILABLE, this.shellOutputAvailable.bind(this));
+  }
+
+  componentWillUnmount() {
+    Broker.removeListener(EventType.EXPLAIN_OUTPUT_PARSED, this.explainOutputAvailable.bind(this));
+    Broker.removeListener(EventType.SHELL_OUTPUT_AVAILABLE, this.shellOutputAvailable.bind(this));
+  }
+
+  @action.bound
+  explainOutputAvailable({id, shell}) {
+    console.log('explain output available ', id, shell);
+    const editors = this.props.store.editors.entries();
+    const that = this;
+    editors.map((editor) => {
+      if (editor[1].visible && editor[1].shellId == that.props.store.editorToolbar.shellId
+        && editor[1].shellId == shell && editor[1].profileId == id && editor[1].explains && !editor[1].explains.active) {
+        runInAction(() => {
+          editor[1].explains.active = true;
+        });
+      }
+    });
+  }
+
+  @action.bound
+  shellOutputAvailable({id, shellId}) {
+    const editors = this.props.store.editors.entries();
+    editors.map((editor) => {
+      if (editor[1].visible && editor[1].shellId == this.props.store.editorToolbar.shellId
+        && editor[1].shellId == shellId && editor[1].profileId == id) {
+        runInAction(() => {
+          this.props.store.outputPanel.currentTab = editor[1].id;
+          if (editor[1].explains) {
+            editor[1].explains.active = false;
+          }
+        });
+      }
+    });
   }
 
   /**

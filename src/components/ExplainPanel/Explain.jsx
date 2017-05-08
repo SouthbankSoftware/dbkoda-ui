@@ -32,14 +32,14 @@ export default class Explain extends React.Component {
   componentDidMount() {
     const {editor} = this.props;
     if (editor) {
-      Broker.on(EventType.createExplainExecutionFinishedEvent(editor.currentProfile, editor.shellId), this.explainOutputAvailable);
+      Broker.on(EventType.EXPLAIN_OUTPUT_AVAILABLE, this.explainOutputAvailable);
     }
   }
 
   componentWillUnmount() {
     const {editor} = this.props;
     if (editor) {
-      Broker.removeListener(EventType.createExplainExecutionFinishedEvent(editor.currentProfile, editor.shellId), this.explainOutputAvailable);
+      Broker.removeListener(EventType.EXPLAIN_OUTPUT_AVAILABLE, this.explainOutputAvailable);
     }
   }
 
@@ -49,14 +49,16 @@ export default class Explain extends React.Component {
     this.explainOutput = '';
     this.explainType = type;
     let currentEditorId = false;
+    let currentEditor = null;
     this.props.editors.forEach((value, key) => {
       if (value.currentProfile === id && value.shellId === shell) {
         currentEditorId = key;
+        currentEditor = value;
       }
     });
 
-    if (!currentEditorId) {
-      console.log('can"t find editor by id:' + currentEditorId);
+    if (!currentEditor) {
+      console.log('can"t find editor by id:', id, shell);
       return;
     }
     // const currentEditor = editor;
@@ -64,7 +66,6 @@ export default class Explain extends React.Component {
     try {
       explainOutputJson = {
         output: JSON.parse(this.parseOutput(output.replace(/\n/g, '').replace(/\s/g, '').replace(/\r/g, ''))),
-        active: true,
         type: this.explainType,
         command: this.explainCommand
       };
@@ -72,10 +73,13 @@ export default class Explain extends React.Component {
       console.log('err parse explain output ', err);
       explainOutputJson = {error: 'Failed to parse output JSON'};
     }
+    console.log('update editor ', currentEditorId);
+    console.log('current editor ', this.props.editor);
     this.props.editors.set(currentEditorId, {
-      ...this.props.editor,
+      ...currentEditor,
       explains: explainOutputJson,
     });
+    Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, {id, shell});
   }
 
   parseOutput(output) {
