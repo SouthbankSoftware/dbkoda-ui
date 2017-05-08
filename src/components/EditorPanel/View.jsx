@@ -249,18 +249,6 @@ class View extends React.Component {
       });
 
     /**
-     * Reaction function for when a change occurs on the editorPanel.executingEditorLines state.
-     * @param {function()} - The state that will trigger the reaction.
-     * @param {function()} - The reaction to any change on the state.
-     */
-    const reactionToExplain = reaction(
-      // eslint-disable-line
-      () => this.props.store.editorPanel.executingExplain, (executingEditorLines) => {
-        //eslint-disable-line
-        const explainParam = this.props.store.editorPanel.executingExplain;
-      });
-
-    /**
      * Reaction function for when a change occurs on the
      * editorPanel.stoppingExecution state.
      * @param {function()} - The state that will trigger the reaction.
