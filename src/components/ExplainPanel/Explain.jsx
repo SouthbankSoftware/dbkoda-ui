@@ -32,7 +32,14 @@ export default class Explain extends React.Component {
   componentDidMount() {
     const {editor} = this.props;
     if (editor) {
-      Broker.on(EventType.createExplainExecutionEvent(editor.currentProfile, editor.shellId), this.explainOutputAvailable);
+      Broker.on(EventType.createExplainExecutionFinishedEvent(editor.currentProfile, editor.shellId), this.explainOutputAvailable);
+    }
+  }
+
+  componentWillUnmount() {
+    const {editor} = this.props;
+    if (editor) {
+      Broker.removeListener(EventType.createExplainExecutionFinishedEvent(editor.currentProfile, editor.shellId), this.explainOutputAvailable);
     }
   }
 

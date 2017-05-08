@@ -5,7 +5,6 @@
  * @Last modified by:   chris
  * @Last modified time: 2017-05-01T13:55:54+10:00
  */
-
 /**
  * explain popover menu
  */
@@ -13,6 +12,8 @@ import React from 'react';
 import {observer} from 'mobx-react';
 import {AnchorButton, Intent, Menu, MenuItem, Popover, Position, Tooltip} from '@blueprintjs/core';
 import {action} from 'mobx';
+import {Broker, EventType} from '../../helpers/broker/index';
+
 
 const QUERY_PLANNER = 'queryPlanner';
 const EXECUTION_STATS = 'executionStats';
@@ -21,8 +22,10 @@ const ALL_PLANS_EXECUTION = 'allPlansExecution';
 /**
  * set executing explain state
  */
-const sendQueryCommand = action((editorPanel, param) => {
-  editorPanel.executingExplain = param;
+const sendQueryCommand = action((param) => {
+  const event = EventType.EXECUTION_EXPLAIN_EVENT;
+  console.log('send explain query event ', param);
+  Broker.emit(event, param);
 });
 
 /**
@@ -30,16 +33,18 @@ const sendQueryCommand = action((editorPanel, param) => {
  *
  * @param editorPanel
  */
-const ExplainMenu = ({editorPanel, editorToolbar}) => {
+const ExplainMenu = ({editorToolbar}) => {
   let menu;
   if (editorToolbar.noActiveProfile) {
     menu = null;
   } else {
     menu = (<Menu>
       <MenuItem className="queryPlannerButton" text="queryPlanner"
-        onClick={() => sendQueryCommand(editorPanel, QUERY_PLANNER)} />
-      <MenuItem className="executionStatsButton" text="executionStats" onClick={() => sendQueryCommand(editorPanel, EXECUTION_STATS)} />
-      <MenuItem className="allPlansExecutionButton" text="allPlansExecution" onClick={() => sendQueryCommand(editorPanel, ALL_PLANS_EXECUTION)} />
+        onClick={() => sendQueryCommand(QUERY_PLANNER)} />
+      <MenuItem className="executionStatsButton" text="executionStats"
+        onClick={() => sendQueryCommand(EXECUTION_STATS)} />
+      <MenuItem className="allPlansExecutionButton" text="allPlansExecution"
+        onClick={() => sendQueryCommand(ALL_PLANS_EXECUTION)} />
     </Menu>);
   }
   return menu;
@@ -48,8 +53,9 @@ const ExplainMenu = ({editorPanel, editorToolbar}) => {
 /**
  * define the popup explain component
  */
-export default observer(({editorToolbar, editorPanel}) => (
-  <Popover className="explainPopover" content={<ExplainMenu editorPanel={editorPanel} editorToolbar={editorToolbar} />}
+export default observer(({editorToolbar}) => (
+  <Popover className="explainPopover"
+    content={<ExplainMenu editorToolbar={editorToolbar} />}
     position={Position.BOTTOM_RIGHT}>
     <Tooltip content="Explain"
       intent={Intent.PRIMARY}
