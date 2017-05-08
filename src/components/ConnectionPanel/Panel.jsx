@@ -11,9 +11,9 @@
  */
 /* eslint-disable react/jsx-no-bind */
 import React from 'react';
-import { observer } from 'mobx-react';
+import {observer} from 'mobx-react';
 import autobind from 'autobind-decorator';
-import { Button } from '@blueprintjs/core';
+import {Button} from '@blueprintjs/core';
 import _ from 'lodash';
 import Radio from './Radio';
 import Input from './Input';
@@ -25,15 +25,22 @@ import Label from './Label';
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { connecting: false, testing: false };
+    this.state = {
+      connecting: false,
+      testing: false
+    };
   }
 
   @autobind _hostRadioOnChange() {
     if (!this.props.form.$('hostRadio').get('value')) {
-      this.props.form
+      this
+        .props
+        .form
         .$('hostRadio')
         .set('value', !this.props.form.$('hostRadio').get('value'));
-      this.props.form
+      this
+        .props
+        .form
         .$('urlRadio')
         .set('value', !this.props.form.$('hostRadio').get('value'));
     }
@@ -41,56 +48,71 @@ export default class Panel extends React.Component {
 
   @autobind _urlRadioOnChange() {
     if (!this.props.form.$('urlRadio').get('value')) {
-      this.props.form
+      this
+        .props
+        .form
         .$('hostRadio')
         .set('value', !this.props.form.$('hostRadio').get('value'));
-      this.props.form
+      this
+        .props
+        .form
         .$('urlRadio')
         .set('value', !this.props.form.$('hostRadio').get('value'));
     }
   }
 
   @autobind _connect(data) {
-    this.setState({ connecting: true });
-    this.props
+    this.setState({connecting: true});
+    this
+      .props
       .connect(data)
-      .then(() => this.setState({ connecting: false }))
-      .catch(() => this.setState({ connecting: false }));
+      .then(() => this.setState({connecting: false}))
+      .catch(() => this.setState({connecting: false}));
   }
 
   @autobind _test(data) {
-    this.setState({ testing: true });
-    this.props
+    this.setState({testing: true});
+    this
+      .props
       .connect(data)
-      .then(() => this.setState({ testing: false }))
-      .catch(() => this.setState({ testing: false }));
+      .then(() => this.setState({testing: false}))
+      .catch(() => this.setState({testing: false}));
   }
 
   @autobind _getFormErrors() {
     // invalidate the form with a custom error message
     const errorMsg = [];
-    const error = this.props.form.errors();
-    _.keys(error).forEach((key) => {
-      if (error[key]) {
-        errorMsg.push(error[key]);
-      }
-    });
+    const error = this
+      .props
+      .form
+      .errors();
+    _
+      .keys(error)
+      .forEach((key) => {
+        if (error[key]) {
+          errorMsg.push(error[key]);
+        }
+      });
     return errorMsg;
   }
 
   @autobind _save(data) {
-    this.props.save(data);
+    this
+      .props
+      .save(data);
   }
 
   render() {
-    const { form, edit, title, profiles } = this.props;
+    const {form, edit, title, profiles} = this.props;
     form.connect = this._connect;
     form.test = this._test;
     form.save = this._save;
-    if (
-      !edit && this.props.form.$('alias').value === 'Connection - 1' && profiles
-    ) {
-      this.props.form.$('alias').value = 'Connection - ' + (profiles.size + 1);
+    if (!edit && this.props.form.$('alias').value === 'Connection - 1' && profiles) {
+      this
+        .props
+        .form
+        .$('alias')
+        .value = 'Connection - ' + (profiles.size + 1);
     }
     const formErrors = this._getFormErrors();
 
@@ -100,31 +122,28 @@ export default class Panel extends React.Component {
         <form className="profile-form" onSubmit={form.onSubmit}>
           <Input field={form.$('alias')} showLabel />
           <div className="pt-form-group pt-inline zero-margin">
-            <Radio
-              field={form.$('hostRadio')}
-              onChange={this._hostRadioOnChange}
-            />
+            <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
             <Input
               field={form.$('host')}
               showLabel
-              disable={!form.$('hostRadio').get('value')}
-            />
+              disable={!form
+              .$('hostRadio')
+              .get('value')} />
             <Input
               field={form.$('port')}
               showLabel
-              disable={!form.$('hostRadio').get('value')}
-            />
+              disable={!form
+              .$('hostRadio')
+              .get('value')} />
           </div>
           <div className="pt-form-group pt-inline zero-margin">
-            <Radio
-              field={form.$('urlRadio')}
-              onChange={this._urlRadioOnChange}
-            />
+            <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
             <Input
               field={form.$('url')}
               showLabel
-              disable={!form.$('urlRadio').get('value')}
-            />
+              disable={!form
+              .$('urlRadio')
+              .get('value')} />
           </div>
           <div className="pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
@@ -137,44 +156,41 @@ export default class Panel extends React.Component {
           <Input
             field={form.$('username')}
             showLabel
-            disable={!form.$('sha').get('value')}
-          />
+            disable={!form
+            .$('sha')
+            .get('value')} />
           <Input
             field={form.$('password')}
             showLabel
-            disable={!form.$('sha').get('value')}
-          />
-        <div className="form-button-panel">
+            disable={!form
+            .$('sha')
+            .get('value')} />
+          <div className="form-button-panel">
             <Button
               className="connectButton pt-button pt-intent-success"
               onClick={form.onSubmit}
               text="Connect"
               type="submit"
               disabled={formErrors.length > 0}
-              loading={this.state.connecting}
-            />
+              loading={this.state.connecting} />
             <Button
               className="reset-button pt-button pt-intent-warning"
               onClick={form.onReset}
-              text="Reset"
-            />
+              text="Reset" />
             <Button
               className="test-button pt-button pt-intent-primary"
               onClick={form.onTest}
               text="Test"
               disabled={formErrors.length > 0}
-              loading={this.state.testing}
-            />
+              loading={this.state.testing} />
             <Button
               className="save-button pt-button pt-intent-primary"
               text="Save"
-              onClick={form.onSave}
-            />
+              onClick={form.onSave} />
             <Button
               className="close-button pt-button pt-intent-primary"
               text="Close"
-              onClick={this.props.close}
-            />
+              onClick={this.props.close} />
           </div>
         </form>
         {/* <div className="profile-error-input" style={{ color: Colors.RED2 }}>
