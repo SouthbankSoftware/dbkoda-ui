@@ -3,7 +3,7 @@
  * @Date:   2017-04-21T10:47:14+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T16:00:16+10:00
+ * @Last modified time: 2017-05-08T12:57:45+10:00
  */
 
 /**
@@ -96,7 +96,7 @@ export default class Panel extends React.Component {
 
     return (
       <div className="pt-dark connection-profile">
-        <h3 className="profile-title">{title}</h3>
+        <h3 className="form-title">{title}</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
           <Input field={form.$('alias')} showLabel />
           <div className="pt-form-group pt-inline zero-margin">
@@ -144,7 +144,7 @@ export default class Panel extends React.Component {
             showLabel
             disable={!form.$('sha').get('value')}
           />
-          <div className="profile-button-panel">
+        <div className="form-button-panel">
             <Button
               className="connectButton pt-button pt-intent-success"
               onClick={form.onSubmit}

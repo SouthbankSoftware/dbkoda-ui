@@ -15,39 +15,47 @@
 	},
 	"Fields": [{
 			"name": "UserId",
+			"label": "User ID",
 			"type": "Text",
 			"readOnly": true,
 			"keyValue": true
 		},
 		{
 			"name": "Database",
+			"label": "Database",
 			"type": "Select",
 			"readOnly": true,
 			"lookup": "dbenvy_listdb"
 		},
 		{
 			"name": "UserName",
+			"label": "User Name",
 			"type": "Text",
 			"readOnly": true
 		},
 		{
 			"name": "Password",
+			"label": "Password",
 			"type": "Text"
 		},
 		{
 			"name": "CustomData",
+			"label": "Custom JSON",
 			"type": "Text",
 			"optional": true
 		},
 		{
 			"name": "Roles",
+			"label": "Database Roles",
 			"type": "Table",
 			"columns": [{
 				"name": "Database",
+				"label": "Database",
 				"type": "Select",
 				"lookup": "dbenvy_listdb"
 			}, {
 				"name": "Role",
+				"label": "Role",
 				"type": "Select",
 				"lookup": "dbenvy_listRoles"
 			}]

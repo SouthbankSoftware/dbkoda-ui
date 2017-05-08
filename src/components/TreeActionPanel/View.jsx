@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-05T16:43:01+10:00
+ * @Last modified time: 2017-05-08T13:00:33+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -21,7 +21,7 @@ import './View.scss';
 @inject(allStores => ({
   setDrawerChild: allStores.store.setDrawerChild,
   treeActionPanel: allStores.store.treeActionPanel,
-  editorPanel: allStores.store.editorPanel,
+  editorPanel: allStores.store.editorPanel
 }))
 @observer
 export default class TreeActionView extends React.Component {
@@ -53,22 +53,25 @@ export default class TreeActionView extends React.Component {
     }
     return (
       <div className="pt-dark ">
-        <h3 className="profile-title">{title}</h3>
+        <h3 className="form-title">{title}</h3>
         <form onChange={mobxForm.onValueChange(mobxForm)}>
           {formFields}
-          <button
-            className="pt-button pt-large pt-intent-primary right-button"
-            onClick={this.close}
-          >
-            Close
-          </button>
-          <button
-            className="pt-button pt-large pt-intent-success right-button"
-            onClick={this.execute}
-          >
-            Execute
-          </button>
-          <p>{mobxForm.error}</p>
+          <div className="form-button-panel">
+            <button
+              className="pt-button pt-intent-success right-button"
+              disabled={!mobxForm.isValid}
+              onClick={this.execute}
+            >
+              Execute
+            </button>
+            <button
+              className="pt-button pt-intent-primary right-button"
+              onClick={this.close}
+            >
+              Close
+            </button>
+          </div>
+          <p className="pt-form-helper-text">{mobxForm.error}</p>
         </form>
       </div>
     );

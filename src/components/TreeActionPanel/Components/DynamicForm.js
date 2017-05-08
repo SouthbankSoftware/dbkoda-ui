@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-05T16:02:28+10:00
+ * @Last modified time: 2017-05-08T12:44:27+10:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -11,14 +11,24 @@ import validatorjs from 'validatorjs';
 
 export class DynamicForm extends MobxReactForm {
   sendFormValues;
+  validateFormValues;
   constructor(setup, options) {
     super(setup, options);
     this.sendFormValues = options.updates;
+    this.validateFormValues = options.validate;
   }
   onSuccess(form) {
     // get field values
-    if (this.sendFormValues) {
-      this.sendFormValues(form.values());
+    const formValues = form.values();
+    if (this.validateFormValues) {
+      try {
+        const valid = this.validateFormValues(formValues);
+        if (valid && this.sendFormValues) {
+          this.sendFormValues(formValues);
+        }
+      } catch (e) {
+        form.invalidate(e.message);
+      }
     }
   }
   onError(form) {
@@ -28,7 +38,9 @@ export class DynamicForm extends MobxReactForm {
     form.invalidate('This is a generic error message!');
   }
   onValueChange(form) {
-    form.submit();
+    if (form.isValid) {
+      form.submit();
+    }
     // console.log('Testing change:', this.values());
   }
   onFieldChange = field =>
@@ -95,7 +107,7 @@ export class DynamicForm extends MobxReactForm {
 const getField = (defField, formFunctions) => {
   const res = {};
   res.fieldName = defField.name;
-  res.fieldLabel = defField.name;
+  res.fieldLabel = (defField.label) ? defField.label : defField.name;
   res.fieldType = defField.type;
   res.fieldRules = '';
   if (defField.readOnly) {
@@ -292,6 +304,13 @@ export const CreateForm = (
           }
         };
 
+        // callback function to validate the input document
+        const formInputValidate = (values) => {
+          if (ddd && ddd.Validate && formFunctions[ddd.Validate]) {
+            return formFunctions[ddd.Validate](values);
+          }
+        }
+
         // Update the form after prefetching the data from controller
         const updatePrefilledData = (data) => {
           form.mobxForm.update(data); //eslint-disable-line
@@ -365,7 +384,7 @@ export const CreateForm = (
         // create a DynamicForm instance with the fields definitions and callback function
         const form = {
           title: ddd.Title,
-          mobxForm: new DynamicForm(formDefs, { updates: formValueUpdates }),
+          mobxForm: new DynamicForm(formDefs, { updates: formValueUpdates, validate: formInputValidate }),
           getData: getPrefilledFormData
         };
         treeActionStore.form = form;
