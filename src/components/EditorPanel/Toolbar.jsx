@@ -204,7 +204,7 @@ export default class Toolbar extends React.Component {
 
   /**
    * Action for setting if the new Editor is loading.
-   * Note: This function exists only because of an issue with MobX strict mode in callbacks.
+   * //TODO Note: This function exists only because of an issue with MobX strict mode in callbacks.
    * Guan has found a solution to this using runInAction (@Mike, Replace this some time.)
    * @param {Boolean} isLoading - Is the editor loading.
    */

@@ -27,7 +27,9 @@ $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
 $searchSecondaryFontColor: #222222;
 
-
+.profileListPanel {
+  background-color: $panelLeftBackground !important;
+}
 .profileListToolbar {
   background-color: $navbarLeftBackground !important;
 }
