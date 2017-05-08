@@ -68,6 +68,72 @@ export default class ListView extends React.Component {
     this.props.store.profileList.selectedProfile = profile;
   }
 
+  /**
+   * Action for setting the new editor state.
+   * Note: This function exists only because of an issue with MobX strict mode in callbacks.
+   * Guan has found a solution to this using runInAction (@Mike, Replace this some time.)
+   * @param {Object} res - The response recieved from Feathers.
+   * @param {Object} options - options for new editor
+   * @return {string} editor ID
+   */
+  @action setNewEditorState(res, options = {}) {
+    const fileName = `new${this
+      .props
+      .store
+      .profiles
+      .get(res.id)
+      .editorCount}.js`;
+    const editorId = uuidV1();
+    this
+      .props
+      .store
+      .profiles
+      .get(res.id)
+      .editorCount += 1;
+    this
+      .props
+      .store
+      .editors
+      .set(editorId, observable(_.assign({
+        // eslint-disable-line react/prop-types
+        id: editorId,
+        alias: this
+          .props
+          .store
+          .profiles
+          .get(res.id)
+          .alias,
+        profileId: res.id,
+        shellId: res.shellId,
+        currentProfile: res.id,
+        fileName,
+        executing: false,
+        visible: true,
+        initialMsg: res.output
+          ? res
+            .output
+            .join('\n')
+          : '',
+        code: '',
+        path: null
+      }, options)));
+    this.props.store.editorPanel.creatingNewEditor = false;
+    this.props.store.editorToolbar.noActiveProfile = false;
+    this.props.store.editorToolbar.id = res.id;
+    this.props.store.editorToolbar.shellId = res.shellId;
+    this.props.store.editorToolbar.newConnectionLoading = false;
+    this.props.store.editorPanel.activeEditorId = editorId;
+    this.props.store.editorToolbar.currentProfile = res.id;
+    this.props.store.editorToolbar.noActiveProfile = false;
+    NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    this.props.store.editorToolbar.isActiveExecuting = false;
+    if (this.props.store.editorToolbar.newEditorForTreeAction) {
+      this.props.store.editorToolbar.newEditorForTreeAction = false;
+      this.props.store.treeActionPanel.treeActionEditorId = editorId;
+    }
+    return editorId;
+  }
+
   @action
   openProfile() {
     /*    console.log('PROFILE1: ', this.state.targetProfile);
@@ -170,72 +236,6 @@ export default class ListView extends React.Component {
     }
   }
 
-  /**
-   * Action for setting the new editor state.
-   * Note: This function exists only because of an issue with MobX strict mode in callbacks.
-   * Guan has found a solution to this using runInAction (@Mike, Replace this some time.)
-   * @param {Object} res - The response recieved from Feathers.
-   * @param {Object} options - options for new editor
-   * @return {string} editor ID
-   */
-  @action setNewEditorState(res, options = {}) {
-    const fileName = `new${this
-      .props
-      .store
-      .profiles
-      .get(res.id)
-      .editorCount}.js`;
-    const editorId = uuidV1();
-    this
-      .props
-      .store
-      .profiles
-      .get(res.id)
-      .editorCount += 1;
-    this
-      .props
-      .store
-      .editors
-      .set(editorId, observable(_.assign({
-        // eslint-disable-line react/prop-types
-        id: editorId,
-        alias: this
-          .props
-          .store
-          .profiles
-          .get(res.id)
-          .alias,
-        profileId: res.id,
-        shellId: res.shellId,
-        currentProfile: res.id,
-        fileName,
-        executing: false,
-        visible: true,
-        initialMsg: res.output
-          ? res
-            .output
-            .join('\n')
-          : '',
-        code: '',
-        path: null
-      }, options)));
-    this.props.store.editorPanel.creatingNewEditor = false;
-    this.props.store.editorToolbar.noActiveProfile = false;
-    this.props.store.editorToolbar.id = res.id;
-    this.props.store.editorToolbar.shellId = res.shellId;
-    this.props.store.editorToolbar.newConnectionLoading = false;
-    this.props.store.editorPanel.activeEditorId = editorId;
-    this.props.store.editorToolbar.currentProfile = res.id;
-    this.props.store.editorToolbar.noActiveProfile = false;
-    NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
-    this.props.store.editorToolbar.isActiveExecuting = false;
-    if (this.props.store.editorToolbar.newEditorForTreeAction) {
-      this.props.store.editorToolbar.newEditorForTreeAction = false;
-      this.props.store.treeActionPanel.treeActionEditorId = editorId;
-    }
-    return editorId;
-  }
-
   @action
   editProfile() {
     const selectedProfile = this.state.targetProfile;
@@ -293,7 +293,7 @@ export default class ListView extends React.Component {
   }
   @autobind
   openOpenConnectionAlert() {
-    if (this.state.targetProfile.authorization) {
+    if (this.state.targetProfile.sha) {
       this.state.openWithAuthorization = true;
       this.setState({isOpenWarningActive: true});
     } else {
