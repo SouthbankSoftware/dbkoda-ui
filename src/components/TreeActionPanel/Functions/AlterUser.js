@@ -3,7 +3,7 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-04T13:25:10+10:00
+ * @Last modified time: 2017-05-08T12:38:34+10:00
  */
 
 export const AlterUser = {
@@ -37,9 +37,10 @@ export const AlterUser = {
     return outputDoc;
   },
   dbenvy_validateUser: (inputDoc) => {
-    if (!Object.prototype.hasOwnProperty.call(inputDoc, 'Roles')) {
-      throw new Error('dbenvy: Alter user should include as least one role');
+    if (Object.prototype.hasOwnProperty.call(inputDoc, 'Roles') && inputDoc.Roles.length > 0) {
+      return true;
     }
+    throw new Error('dbenvy: Alter user should include as least one role');
   },
 
   dbenvy_listdb: () => {
