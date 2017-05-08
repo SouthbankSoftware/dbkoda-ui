@@ -56,4 +56,13 @@ describe('New Profile Panel', () => {
   it('host radio exist', () => {
     expect(app.find('.hostRadio-radio-input')).to.have.length(2);
   });
+
+  it('button panel exist', () => {
+    expect(app.find('.profile-button-panel')).to.have.length(1);
+    expect(app.find('.profile-button-panel .connectButton')).to.have.length(1);
+    expect(app.find('.profile-button-panel .reset-button')).to.have.length(1);
+    expect(app.find('.profile-button-panel .test-button')).to.have.length(1);
+    expect(app.find('.profile-button-panel .save-button')).to.have.length(1);
+    expect(app.find('.profile-button-panel .close-button')).to.have.length(1);
+  });
 });

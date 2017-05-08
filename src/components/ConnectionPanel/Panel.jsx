@@ -166,7 +166,7 @@ export default class Panel extends React.Component {
             .$('sha')
             .get('value')} />
 
-          <div className="form-button-panel">
+          <div className="profile-button-panel">
             <Button
               className="connectButton pt-button pt-intent-success"
               onClick={form.onSubmit}
