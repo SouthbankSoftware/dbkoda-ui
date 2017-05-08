@@ -611,7 +611,6 @@ export default class Toolbar extends React.Component {
             </Tooltip>
             <ExplainPopover
               editorToolbar={this.props.store.editorToolbar}
-              editorPanel={this.props.store.editorPanel}
             />
             <Tooltip
               intent={Intent.DANGER}

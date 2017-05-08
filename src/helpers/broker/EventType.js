@@ -30,9 +30,10 @@ export default {
   createShellExecutionFinishEvent: (id, shellId) => {
     return 'controller::command::execute::finished::' + id + '::' + shellId;
   },
-  createExplainExecutionEvent: (id, shellId) => {
-    return 'executing::explain::' + id + '::' + shellId;
+  createExplainExecutionFinishedEvent: (id, shellId) => {
+    return 'finish::executing::explain::' + id + '::' + shellId;
   },
+  EXECUTION_EXPLAIN_EVENT: 'executing::explain',
   FEATHER_CLIENT_LOADED: 'feather::client::loaded',
   createFileChangedEvent(id) {
     return `fileChanged::${id}`;
