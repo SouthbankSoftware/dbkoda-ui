@@ -105,12 +105,27 @@ export default class Panel extends React.Component {
       }
       this.setState({tabId: newTab});
       if (newTab != 'Default') {
-        this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(newTab).currentProfile;
+        this.props.store.editorPanel.activeDropdownId = this
+          .props
+          .store
+          .editors
+          .get(newTab)
+          .currentProfile;
         if (this.props.store.profiles.get(this.props.store.editorPanel.activeDropdownId).status == 'CLOSED') {
           this.props.store.editorPanel.activeDropdownId = 'Default';
         }
-        this.props.store.editorToolbar.id = this.props.store.editors.get(newTab).id;
-        this.props.store.editorToolbar.shellId = this.props.store.editors.get(newTab).shellId;
+        this.props.store.editorToolbar.id = this
+          .props
+          .store
+          .editors
+          .get(newTab)
+          .id;
+        this.props.store.editorToolbar.shellId = this
+          .props
+          .store
+          .editors
+          .get(newTab)
+          .shellId;
       }
       console.log(`activeDropdownId: ${this.props.store.editorPanel.activeDropdownId} , id: ${this.props.store.editorToolbar.id}, shellId: ${this.props.store.editorToolbar.shellId}`);
       if (this.props.store.editorPanel.activeDropdownId == 'Default') {
@@ -131,7 +146,7 @@ export default class Panel extends React.Component {
       this.props.store.dragItem.dragDrop = true;
     } else {
       this.props.store.dragItem.dragDrop = false;
-      const setDragDropTrueLater = () => {              // This hack is done to fix the state in case of exception where the value is preserved as true while it is not draging
+      const setDragDropTrueLater = () => { // This hack is done to fix the state in case of exception where the value is preserved as true while it is not draging
         runInAction('set drag drop to true', () => {
           this.props.store.dragItem.dragDrop = true;
         });
@@ -181,9 +196,7 @@ export default class Panel extends React.Component {
                   item => this.handleDrop(item)
                 }
                     ref="defaultEditor" />}>
-                  <Button
-                    className="pt-minimal"
-                    onClick={() => this.closeTab(tab[1])}>
+                  <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
                   </Button>
                 </Tab2>
@@ -196,8 +209,8 @@ export default class Panel extends React.Component {
                 id={tab[1].id}
                 title={tab[1].alias}
                 panel={<View id={
-                    tab[1].id
-                  }
+                tab[1].id
+              }
                   ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
