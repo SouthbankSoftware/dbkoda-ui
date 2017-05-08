@@ -165,6 +165,7 @@ export default class Panel extends React.Component {
             disable={!form
             .$('sha')
             .get('value')} />
+
           <div className="form-button-panel">
             <Button
               className="connectButton pt-button pt-intent-success"

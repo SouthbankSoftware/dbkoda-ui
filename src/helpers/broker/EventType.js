@@ -11,7 +11,7 @@ export default {
   /**
    * event type for shell output message
    */
-  SHELL_OUTPUT: 'controller::shell::output',
+  SHELL_OUTPUT_AVAILABLE: 'controller::shell::output::available',
   createShellOutputEvent: (id, shellId) => {
     return 'controller::shell::output::' + id + '::' + shellId;
   },
@@ -33,6 +33,8 @@ export default {
   createExplainExecutionFinishedEvent: (id, shellId) => {
     return 'finish::executing::explain::' + id + '::' + shellId;
   },
+  EXPLAIN_OUTPUT_AVAILABLE: 'explain::output::available',
+  EXPLAIN_OUTPUT_PARSED: 'explain::output::parsed',
   EXECUTION_EXPLAIN_EVENT: 'executing::explain',
   FEATHER_CLIENT_LOADED: 'feather::client::loaded',
   createFileChangedEvent(id) {

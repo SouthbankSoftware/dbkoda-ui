@@ -309,7 +309,7 @@ export const CreateForm = (
           if (ddd && ddd.Validate && formFunctions[ddd.Validate]) {
             return formFunctions[ddd.Validate](values);
           }
-        }
+        };
 
         // Update the form after prefetching the data from controller
         const updatePrefilledData = (data) => {
