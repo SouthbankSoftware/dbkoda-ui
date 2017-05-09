@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T14:44:19+10:00
+ * @Last modified time: 2017-05-09T16:13:33+10:00
  */
 
 import { DynamicForm } from './Components/DynamicForm';
@@ -56,6 +56,9 @@ export default class FormBuilder {
     }
     if (defField.type == 'Boolean') {
       res.fieldBinding = 'BooleanField';
+    }
+    if (defField.type == 'Numeric') {
+      res.fieldBinding = 'NumericField';
     }
     return res;
   };

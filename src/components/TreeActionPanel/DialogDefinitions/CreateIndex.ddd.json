@@ -31,15 +31,15 @@
         },
         {
             "name": "Unique",
-            "type": "Text",
+            "type": "Boolean",
             "readOnly": false,
             "tooltip": "Are the values in the index unique",
             "default": "false",
-            "rules": "boolean" 
+            "rules": "boolean"
         },
         {
             "name": "Background",
-            "type": "Text",
+            "type": "Boolean",
             "readOnly": false,
             "tooltip": "Build index in the background?",
             "optional": true,
@@ -48,7 +48,7 @@
         },
         {
             "name": "Sparse",
-            "type": "Text",
+            "type": "Boolean",
             "readOnly": false,
             "tooltip": "Only index documents that contain the field",
             "optional": true,

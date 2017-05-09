@@ -33,7 +33,7 @@
         },
         {
             "name": "size",
-            "type": "Text",
+            "type": "Numeric",
             "readOnly": false,
             "rules": "integer"
         },

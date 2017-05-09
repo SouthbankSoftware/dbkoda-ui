@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T14:43:01+10:00
+ * @Last modified time: 2017-05-09T16:35:00+10:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -53,6 +53,10 @@ export class DynamicForm extends MobxReactForm {
     () => {
       field.state.form.submit();
     };
+  onFieldValueChange = (value, field) => {
+    field.value = value;
+    field.state.form.submit();
+  };
   bindings() {
     return {
       TextField: ({ $try, field, props }) => ({
@@ -94,6 +98,20 @@ export class DynamicForm extends MobxReactForm {
         onBlur: $try(props.onBlur, field.onBlur),
         onFocus: $try(props.onFocus, field.onFocus),
         autoFocus: $try(props.autoFocus, field.autoFocus)
+      }),
+      NumericField: ({ $try, field, props }) => ({
+        type: $try(props.type, field.type),
+        id: $try(props.id, field.id),
+        name: $try(props.name, field.name),
+        value: $try(props.value, field.value),
+        label: $try(props.label, field.label),
+        placeholder: $try(props.placeholder, field.placeholder),
+        disabled: $try(props.disabled, field.disabled),
+        onChange: $try(props.onChange, this.onFieldChange(field)),
+        onBlur: $try(props.onBlur, field.onBlur),
+        onFocus: $try(props.onFocus, field.onFocus),
+        autoFocus: $try(props.autoFocus, field.autoFocus),
+        onValueChange: $try(props.onValueChange, (value) => { this.onFieldValueChange(value, field); })
       })
     };
   }
