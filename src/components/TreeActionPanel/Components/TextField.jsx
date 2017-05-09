@@ -3,7 +3,7 @@
  * @Date:   2017-04-19T15:43:32+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T10:18:20+10:00
+ * @Last modified time: 2017-05-09T12:52:49+10:00
  */
 
 import React from 'react';
@@ -45,10 +45,10 @@ export default observer(({
             intent={Intent.PRIMARY}
             position={Position.TOP}
           >
-            <input className={inputClassName} {...field.bind()} />
+            <input className={inputClassName} {...field.bind()} type="text" />
           </Tooltip>}
         {(!field.options || !field.options.tooltip) &&
-          <input className={inputClassName} {...field.bind()} />}
+          <input className={inputClassName} {...field.bind()} type="text" />}
         <p className="pt-form-helper-text">{field.error}</p>
       </div>
     </div>

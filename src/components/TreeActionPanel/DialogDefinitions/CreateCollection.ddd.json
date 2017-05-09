@@ -21,13 +21,13 @@
         },
         {
             "name": "capped",
-            "type": "Text",
+            "type": "Boolean",
             "readOnly": false,
             "rules": "boolean"
         },
         {
             "name": "autoIndexId",
-            "type": "Text",
+            "type": "Boolean",
             "readOnly": false,
             "rules": "boolean"
         },

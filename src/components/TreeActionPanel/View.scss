@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-09T11:40:49+10:00
+// @Last modified time: 2017-05-09T14:56:43+10:00
 
 
 
@@ -20,6 +20,10 @@
 .pt-select {
   height: 30px;
   width: 170px;
+}
+
+.pt-checkbox-form {
+  width: 72%;
 }
 
 .pt-input {
@@ -60,4 +64,10 @@
 .pt-tooltip-indicator-form {
     border-bottom: none !important;
     vertical-align: middle !important;
+}
+
+.pt-form-content-reverse{
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse;
 }
