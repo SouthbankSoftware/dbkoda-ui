@@ -16,4 +16,7 @@ export const CreateCollection = {
     data.capped = false;
     return data;
   },
+  dbenvy_validationLevel: () => {
+    return (['off', 'strict', 'moderate']);
+  }
 };

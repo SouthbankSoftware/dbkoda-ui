@@ -2,30 +2,38 @@
     "Title": "Drop Index",
     "DefaultValues": {
         "function": "dbenvy_DropIndexPreFill",
-        "arguments": [
-          {"name": "Database" },
-          {"name": "CollectionName" },
-          {"name": "IndexName" }
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parentDB"
+        }, 
+        {
+            "name": "CollectionName",
+            "value": "treeNode.parentCOL"
+        },
+        {
+            "name": "IndexName",
+            "value": "treeNode"
+        }
           ]
     },
     "Fields": [
        {
             "name": "Database",
             "type": "Text",
-            "readOnly": false,
+            "readOnly": true,
             "keyValue": true
         },
       {
             "name": "CollectionName",
             "type": "Text",
-            "readOnly": false,
+            "readOnly": true,
             "keyValue": true
         },
         {
             "name": "IndexName",
             "type": "Text",
             "tooltip": "Name of the index (optional)",
-            "optional": false,
+            "readOnly":true,
             "keyValue": true
         }
     ]

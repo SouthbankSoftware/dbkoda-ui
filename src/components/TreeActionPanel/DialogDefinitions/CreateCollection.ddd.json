@@ -57,7 +57,8 @@
             "name": "validationLevel",
             "type": "Text",
             "default": "off",
-            "readOnly": false
+            "readOnly": false,
+            "lookup": "dbenvy_validationLevel"
         },
         {
             "name": "validationAction",
