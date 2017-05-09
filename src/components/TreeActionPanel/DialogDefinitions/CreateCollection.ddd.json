@@ -39,7 +39,7 @@
         },
         {
             "name": "max",
-            "type": "Text",
+            "type": "Numeric",
             "readOnly": false,
             "rules": "integer"
         },
