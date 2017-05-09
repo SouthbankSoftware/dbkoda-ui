@@ -115,6 +115,11 @@ h3 {
 
 .pt-tab-list {
   margin-left: 28px;
+  overflow-x: scroll;
+}
+
+.pt-tab-list::-webkit-scrollbar {
+  display: none;
 }
 
 .pt-tab-indicator {

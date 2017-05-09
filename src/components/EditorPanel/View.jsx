@@ -51,6 +51,7 @@ require('codemirror/addon/search/jump-to-line.js');
 require('codemirror/addon/dialog/dialog.js');
 require('codemirror/addon/search/matchesonscrollbar.js');
 require('codemirror/addon/scroll/annotatescrollbar.js');
+require('codemirror/addon/scroll/simplescrollbars.js');
 
 require('codemirror/keymap/sublime.js');
 require('codemirror-formatting');
@@ -102,6 +103,7 @@ class View extends React.Component {
     this.state = {
       lintingErrors: [],
       lintingAnnotations: new Map(),
+      lineWrapping: true,
       isLinting: false,
       lintLoops: 0,
       options: {
@@ -109,6 +111,7 @@ class View extends React.Component {
         lineNumbers: 'true',
         indentUnit: 2,
         styleActiveLine: 'true',
+        scrollbarStyle: 'overlay',
         smartIndent: true,
         tabSize: 2,
         matchBrackets: true,

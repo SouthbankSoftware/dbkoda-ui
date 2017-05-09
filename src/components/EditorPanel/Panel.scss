@@ -98,6 +98,14 @@ span.cm-string {
 
 .editorView {
   flex: 1;
+  width: 100%;
+}
+
+.editorTab {
+}
+
+.CodeMirror-scroll {
+  width: 100%;
 }
 
 iframe {
