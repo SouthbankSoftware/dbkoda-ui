@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-05T16:27:19+10:00
+// @Last modified time: 2017-05-09T10:00:05+10:00
 
 
 
@@ -16,15 +16,20 @@
   text-align: right;
 }
 
-.pt-input-90 {
-  width: 90%
-}
-
 .pt-select {
   height: 30px;
+  width: 170px;
 }
 
-.pt-select-90 {
+.pt-input {
+  width: 170px;
+}
+
+.table-field-100 {
+  width: 100%;
+}
+
+.table-field-90 {
   width: 90%
 }
 
@@ -49,4 +54,9 @@
 
 .tooltip-btn {
   z-index: 9999;
+}
+
+.pt-tooltip-indicator-form {
+    border-bottom: none !important;
+    vertical-align: middle !important;
 }

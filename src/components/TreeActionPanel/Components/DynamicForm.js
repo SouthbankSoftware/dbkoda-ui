@@ -3,7 +3,7 @@
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-08T12:44:27+10:00
+ * @Last modified time: 2017-05-09T09:23:54+10:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -109,6 +109,7 @@ const getField = (defField, formFunctions) => {
   res.fieldName = defField.name;
   res.fieldLabel = (defField.label) ? defField.label : defField.name;
   res.fieldType = defField.type;
+  res.fieldTooltip = (defField.tooltip) ? defField.tooltip : null;
   res.fieldRules = '';
   if (defField.readOnly) {
     res.disabled = true;
@@ -203,6 +204,9 @@ const getFieldsFromDefinitions = (ddd, formFunctions, executeQuery) => {
       if (fld.fieldBinding) {
         bindings[fldName] = fld.fieldBinding;
       }
+      if (fld.fieldTooltip) {
+        options[fldName] = {tooltip: fld.fieldTooltip};
+      }
       if (fld.disabled) disabled[fldName] = fld.disabled;
 
       if (fld.fieldQuery) {
@@ -234,6 +238,7 @@ const getFieldsFromDefinitions = (ddd, formFunctions, executeQuery) => {
     result.disabled = disabled;
     result.bindings = bindings;
     result.arrayLast = arrayLast;
+    result.options = options;
 
     if (queries.length > 0) {
       resolveQueries(queries, executeQuery, {})
@@ -246,10 +251,13 @@ const getFieldsFromDefinitions = (ddd, formFunctions, executeQuery) => {
               if (formFunctions[fldQuery.parseFn]) {
                 arrOptions = [''].concat(formFunctions[fldQuery.parseFn](resOpts));
               }
-              options[fldName] = arrOptions;
+              if (options[fldName]) {
+                options[fldName].dropdown = arrOptions;
+              } else {
+                options[fldName] = {dropdown: arrOptions};
+              }
             }
           }
-          result.options = options;
           resolve(result);
         })
         .catch((reason) => {
@@ -309,7 +317,7 @@ export const CreateForm = (
           if (ddd && ddd.Validate && formFunctions[ddd.Validate]) {
             return formFunctions[ddd.Validate](values);
           }
-        }
+        };
 
         // Update the form after prefetching the data from controller
         const updatePrefilledData = (data) => {

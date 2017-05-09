@@ -3,19 +3,32 @@
  * @Date:   2017-04-19T15:43:32+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-05T16:20:19+10:00
+ * @Last modified time: 2017-05-09T10:18:20+10:00
  */
 
 import React from 'react';
 import { observer } from 'mobx-react';
+
+import { Intent, Position, Tooltip } from '@blueprintjs/core';
 
 export default observer(({
   field,
   showLabel = true,
   formGroup = false
 }) => {
-  const fldClassName = (formGroup) ? 'pt-form-group form-group-inline' : 'pt-form-group pt-inline';
-  const inputClassName = (formGroup) ? 'pt-input pt-input-90' : 'pt-input';
+  const fldClassName = formGroup
+    ? 'pt-form-group form-group-inline'
+    : 'pt-form-group pt-inline';
+  let inputClassName = 'pt-input';
+  let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
+  if (formGroup) {
+    if (field.options && field.options.tooltip) {
+      tooltipClassName += ' table-field-90';
+      inputClassName += ' table-field-100';
+    } else {
+      inputClassName += ' table-field-90';
+    }
+  }
   return (
     <div className={fldClassName}>
       {showLabel &&
@@ -23,7 +36,19 @@ export default observer(({
           {field.label}
         </label>}
       <div className="pt-form-content">
-        <input className={inputClassName} {...field.bind()} />
+        {field.options &&
+          field.options.tooltip &&
+          <Tooltip
+            className={tooltipClassName}
+            content={field.options.tooltip}
+            inline
+            intent={Intent.PRIMARY}
+            position={Position.TOP}
+          >
+            <input className={inputClassName} {...field.bind()} />
+          </Tooltip>}
+        {(!field.options || !field.options.tooltip) &&
+          <input className={inputClassName} {...field.bind()} />}
         <p className="pt-form-helper-text">{field.error}</p>
       </div>
     </div>
