@@ -3,7 +3,7 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-08T11:44:44+10:00
+ * @Last modified time: 2017-05-09T10:24:13+10:00
  */
 
 export const CreateUser = {
@@ -19,6 +19,7 @@ export const CreateUser = {
     if (!Object.prototype.hasOwnProperty.call(inputDoc, 'Roles')) {
       throw new Error('dbenvy: Alter user should include as least one role');
     }
+    return true;
   },
   dbenvy_listdb: () => {
     return 'db.adminCommand({listDatabases: 1})';
