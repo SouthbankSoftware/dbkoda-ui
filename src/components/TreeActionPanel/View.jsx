@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-08T13:00:33+10:00
+ * @Last modified time: 2017-05-09T12:58:32+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -15,6 +15,7 @@ import { DrawerPanes } from '#/common/Constants';
 import FormTable from './Components/FormTable';
 import TextField from './Components/TextField';
 import SelectField from './Components/SelectField';
+import BooleanField from './Components/BooleanField';
 
 import './View.scss';
 
@@ -48,6 +49,8 @@ export default class TreeActionView extends React.Component {
           formFields.push(<FormTable key={key} members={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'Select') {
           formFields.push(<SelectField key={key} field={mobxForm.$(key)} />);
+        } else if (mobxForm.fields.get(key).type == 'Boolean') {
+          formFields.push(<BooleanField key={key} field={mobxForm.$(key)} />);
         }
       }
     }

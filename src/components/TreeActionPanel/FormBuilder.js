@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T12:06:38+10:00
+ * @Last modified time: 2017-05-09T14:44:19+10:00
  */
 
 import { DynamicForm } from './Components/DynamicForm';
@@ -53,6 +53,9 @@ export default class FormBuilder {
       }
       res.fieldRules += 'string';
       res.fieldBinding = 'SelectField';
+    }
+    if (defField.type == 'Boolean') {
+      res.fieldBinding = 'BooleanField';
     }
     return res;
   };
@@ -112,6 +115,7 @@ export default class FormBuilder {
       result.bindings = {};
       result.arrayLast = [];    // an object to keep reference of array fields to add last element later before sending to the template.
       result.options = {};
+      result.values = {};
 
       const queries = [];       // array of all the queries required by fields.
       const queryFieldsHash = {};
@@ -128,6 +132,10 @@ export default class FormBuilder {
           result.options[fldName] = { tooltip: fld.fieldTooltip };
         }
         if (fld.disabled) result.disabled[fldName] = fld.disabled;
+
+        if (fld.fieldType == 'Boolean') {
+          result.values[fldName] = false;
+        }
 
         if (fld.fieldQuery) {
           if (queries.indexOf(fld.fieldQuery) < 0) {
@@ -237,6 +245,7 @@ export default class FormBuilder {
             if (ddd && ddd.Validate && formFunctions[ddd.Validate]) {
               return formFunctions[ddd.Validate](values);
             }
+            return true;
           };
 
           // Update the form after prefetching the data from controller
