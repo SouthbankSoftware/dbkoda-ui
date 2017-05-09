@@ -147,6 +147,7 @@ const ConnectionPanel = ({
       query.shellId = selectedProfile.shellId;
     }
     profileList.creatingNewProfile = true;
+    console.log('Q: ', query);
     const service = featherClient().service('/mongo-connection');
     service.timeout = 30000;
     return service.create({}, {query})

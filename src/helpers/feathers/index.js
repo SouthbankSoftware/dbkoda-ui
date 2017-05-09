@@ -26,6 +26,7 @@ class FeatherClient {
       const { id, shellId } = output;
       console.log('got output ', output);
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
+      Broker.emit(EventType.SHELL_OUTPUT_AVAILABLE, output);
     });
     this.shellService.on('mongo-execution-end', (output) => {
       const { id, shellId } = output;
