@@ -61,7 +61,9 @@ export default class ListView extends React.Component {
     this.deleteProfile = this
       .deleteProfile
       .bind(this);
-      this.swapToEditor = this.swapToEditor.bind(this);
+    this.swapToEditor = this
+      .swapToEditor
+      .bind(this);
   }
 
   @action
@@ -407,10 +409,9 @@ export default class ListView extends React.Component {
   @autobind
   @action
   swapToEditor(event) {
-    console.log('Swap to Editor: ', event);
-     this.props.store.editorToolbar.id = event.id;
-     this.props.store.editorToolbar.shellId = event.shellId;
-     this.props.store.editorPanel.activeEditorId = event.id;
+    this.props.store.editorToolbar.id = event.id;
+    this.props.store.editorToolbar.shellId = event.shellId;
+    this.props.store.editorPanel.activeEditorId = event.id;
   }
   @action
   renderBodyContextMenu(context) {
@@ -430,11 +431,13 @@ export default class ListView extends React.Component {
       connect = (
         <div>
           <MenuItem
+            className="profileListContextMenu openProfile"
             onClick={this.openOpenConnectionAlert}
             text="Open Connection"
             iconName="pt-icon-unlock"
             intent={Intent.NONE} />
           <MenuItem
+            className="profileListContextMenu editProfile"
             onClick={this.editProfile}
             text="Edit Profile"
             iconName="pt-icon-edit"
@@ -450,6 +453,7 @@ export default class ListView extends React.Component {
         .forEach((value) => {
           if (value.profileId.trim() == this.state.targetProfile.id.trim()) {
             windows.push((<MenuItem
+              className={'profileListContextMenu editorListing ' + value.fileName}
               text={value.fileName}
               iconName="pt-icon-new-text-box"
               onClick={() => this.swapToEditor(value)}
@@ -459,11 +463,13 @@ export default class ListView extends React.Component {
       connect = (
         <div>
           <MenuItem
+            className="profileListContextMenu closeProfile"
             onClick={this.openCloseConnectionAlert}
             text="Close Connection"
             iconName="pt-icon-lock"
             intent={Intent.NONE} />
           <MenuItem
+            className="profileListContextMenu newWindow"
             onClick={this.newEditorWindow}
             text="New Window"
             iconName="pt-icon-new-text-box"
@@ -472,15 +478,15 @@ export default class ListView extends React.Component {
       );
     }
     return (
-      <Menu>
+      <Menu className="profileListContextMenu">
         {connect}
         <MenuItem
+          className="profileListContextMenu deleteProfile"
           onClick={this.openRemoveConnectionAlert}
           text="Delete Profile"
           iconName="pt-icon-delete"
           intent={Intent.NONE} />
-        <MenuDivider />
-        {windows}
+        <MenuDivider /> {windows}
       </Menu>
 
     );
@@ -497,7 +503,7 @@ export default class ListView extends React.Component {
         ? 'connection-profile-cell connection-profile-cell-selected'
         : 'connection-profile-cell';
       if (profiles[rowIndex][1].status == 'OPEN') {
-        return <Cell className={className}>{profiles[rowIndex][1].alias}</Cell>;
+        return <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>{profiles[rowIndex][1].alias}</Cell>;
       }
       return (
         <Cell className={className}>
