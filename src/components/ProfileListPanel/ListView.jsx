@@ -61,6 +61,7 @@ export default class ListView extends React.Component {
     this.deleteProfile = this
       .deleteProfile
       .bind(this);
+      this.swapToEditor = this.swapToEditor.bind(this);
   }
 
   @action
@@ -403,7 +404,14 @@ export default class ListView extends React.Component {
   setPWText(event) {
     this.setState({passwordText: event.target.value});
   }
-
+  @autobind
+  @action
+  swapToEditor(event) {
+    console.log('Swap to Editor: ', event);
+     this.props.store.editorToolbar.id = event.id;
+     this.props.store.editorToolbar.shellId = event.shellId;
+     this.props.store.editorPanel.activeEditorId = event.id;
+  }
   @action
   renderBodyContextMenu(context) {
     const profiles = this
@@ -434,6 +442,7 @@ export default class ListView extends React.Component {
         </div>
       );
     } else {
+      windows.push((<MenuItem text="Editors:" />));
       this
         .props
         .store
@@ -443,6 +452,7 @@ export default class ListView extends React.Component {
             windows.push((<MenuItem
               text={value.fileName}
               iconName="pt-icon-new-text-box"
+              onClick={() => this.swapToEditor(value)}
               intent={Intent.NONE} />));
           }
         });
@@ -470,7 +480,7 @@ export default class ListView extends React.Component {
           iconName="pt-icon-delete"
           intent={Intent.NONE} />
         <MenuDivider />
-        <MenuItem text="Editors:" /> {windows}
+        {windows}
       </Menu>
 
     );
