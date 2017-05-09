@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-05T16:03:22+10:00
+ * @Last modified time: 2017-05-09T10:55:17+10:00
  */
 
 import React from 'react';
@@ -11,14 +11,15 @@ import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import View from './View';
-import { CreateForm } from './Components/DynamicForm';
+import FormBuilder from './FormBuilder';
 
 @inject('store')
 @observer
 export default class TreeActionPanel extends React.Component {
   componentWillMount() {
     const { treeActionPanel, updateDynamicFormCode } = this.props.store;
-    this.formPromise = CreateForm(
+    const formBuilder = new FormBuilder();
+    this.formPromise = formBuilder.createForm(
       treeActionPanel,
       updateDynamicFormCode,
       this.executeCommand

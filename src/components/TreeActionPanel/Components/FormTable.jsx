@@ -3,7 +3,7 @@
  * @Date:   2017-04-18T13:31:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-04T13:25:36+10:00
+ * @Last modified time: 2017-05-09T11:13:27+10:00
  */
 
 import React from 'react';
@@ -19,7 +19,7 @@ export default observer(({ members }) => {
     for (const lbl in cols) {
       if ({}.hasOwnProperty.call(cols, lbl)) {
         labels.push(
-          <div className="pt-form-group form-group-inline">
+          <div key={'lbl' + lbl} className="pt-form-group form-group-inline">
             <label htmlFor={lbl}>{lbl}</label>
           </div>,
         );
@@ -48,7 +48,7 @@ export default observer(({ members }) => {
 
       <hr />
       {labels}
-      {members.map(member => <FormTableRow key={member.key} member={member} />)}
+      {members.map(member => <FormTableRow key={member.id} member={member} />)}
 
     </fieldset>
   );
