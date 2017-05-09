@@ -13,7 +13,7 @@ import FieldControl from './FieldControls';
 import TextField from './TextField';
 import SelectField from './SelectField';
 import NumericField from './NumericField';
-import BooleanField from './BooleanField';
+import BooleanField from './BooleanField'; // eslint-disable-line
 
 export default observer(({ member }) => {
   const rowFields = [];
