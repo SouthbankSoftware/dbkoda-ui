@@ -409,7 +409,6 @@ export default class ListView extends React.Component {
   @autobind
   @action
   swapToEditor(event) {
-    console.log('Swap to Editor: ', event);
     this.props.store.editorToolbar.id = event.id;
     this.props.store.editorToolbar.shellId = event.shellId;
     this.props.store.editorPanel.activeEditorId = event.id;
