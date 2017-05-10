@@ -12,7 +12,6 @@ import _ from 'lodash';
 import React from 'react';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
-import autobind from 'autobind-decorator';
 import {action, reaction, observable, runInAction, when} from 'mobx';
 import uuidV1 from 'uuid';
 import path from 'path';
