@@ -9,9 +9,11 @@
     },
     "Fields": [{
             "name": "Database",
-            "type": "Text",
+            "type": "Select",
             "readOnly": false,
-            "rules": "required"
+            "optional": false,
+            "rules": "required",
+            "lookup": "dbenvy_listdb"
         },
         {
             "name": "CollectionName",
@@ -20,32 +22,29 @@
             "rules": "required"
         },
         {
-            "name": "capped",
-            "type": "Boolean",
-            "readOnly": false,
-            "rules": "boolean"
-        },
-        {
-            "name": "autoIndexId",
+            "name": "capped",         
             "type": "Boolean",
             "readOnly": false,
             "rules": "boolean"
         },
         {
             "name": "size",
+"tooltip": "maximum size in bytes for a capped collection",
             "type": "Numeric",
             "readOnly": false,
             "rules": "integer"
         },
         {
             "name": "max",
+            "tooltip": "maximum number of documents in a capped collection",
             "type": "Numeric",
             "readOnly": false,
             "rules": "integer"
         },
         {
-            "name": "storageEngineOptions",
+            "name": "storageEngine",
             "type": "Text",
+            "tooltip": "Storage Engine specific options",
             "readOnly": false
         },
         {
@@ -55,16 +54,17 @@
         },
         {
             "name": "validationLevel",
-            "type": "Text",
-            "default": "off",
+            "type": "Select",
+            "optional": true,
             "readOnly": false,
             "lookup": "dbenvy_validationLevel"
         },
         {
             "name": "validationAction",
-            "type": "Text",
-            "default": "warn",
-            "readOnly": false
+            "type": "Select",
+            "optional": true,
+            "readOnly": false,
+            "lookup": "dbenvy_validationAction"
         }
     ]
 }

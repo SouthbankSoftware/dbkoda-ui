@@ -1,0 +1,27 @@
+{
+    "Title": "Drop All Indexes",
+    "DefaultValues": {
+        "function": "dbenvy_DropAllIndexesPreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parentDB"
+        }, {
+            "name": "CollectionName",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": false,
+            "rules": "required"
+        },
+        {
+            "name": "CollectionName",
+            "type": "Text",
+            "readOnly": true,
+            "keyValue": true,
+            "rules": "required"
+        }
+    ]
+}

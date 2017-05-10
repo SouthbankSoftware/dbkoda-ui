@@ -17,6 +17,27 @@ export const CreateCollection = {
     return data;
   },
   dbenvy_validationLevel: () => {
-    return (['off', 'strict', 'moderate']);
+    return ('db');
+  },
+  dbenvy_validationLevel_parse: (res) => {
+    console.log(res);
+    return (['off', 'moderate', 'severe']);
+  },
+  dbenvy_validationAction: () => {
+    return ('db');
+  },
+  dbenvy_validationAction_parse: (res) => {
+    console.log(res);
+    return (['error', 'warn']);
+  },
+  dbenvy_listdb: () => {
+    return 'db.adminCommand({listDatabases: 1})';
+  },
+  dbenvy_listdb_parse: (res) => {
+    const dblist = [];
+    res.databases.forEach((d) => {
+      dblist.push(d.name);
+    });
+    return dblist;
   }
 };
