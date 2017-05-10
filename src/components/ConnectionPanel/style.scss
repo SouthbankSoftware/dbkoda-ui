@@ -1,85 +1,90 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-04-10T10:37:14+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-05-09T13:53:51+10:00
+// @Last modified by:   chris
+// @Last modified time: 2017-05-10T14:42:39+10:00
 
-.pt-label-r{
-  text-align: right;
-}
-
-.field-inline {
-  display: inline-block !important;
-  margin: 0 5px 0 5px;
-}
-
-.zero-margin {
-  margin: 0 !important;
-}
-
-.width-100-pr {
-  width: 100%;
-}
-
-.pt-form-helper-text {
-  color: red !important;
-}
-
-.pt-control {
-  margin-top: 5px;
-}
-
-.profile-form {
-  margin: 35px;
-  display: flex;
-  flex-direction: column;
-}
-
-.profile-title, .form-title {
-  text-align: center;
-  margin: 35px 0;
-}
-
-.profile-separator {
-  height: 1px;
-  background-color: gray;
-  width: 100%;
-  margin: 0 0 20px 0;
-}
-
-.profile-button-panel, .form-button-panel {
-  display: flex;
-  flex-direction: row;
-
-  button{
-    margin-left: 10px;
+.connection-profile {
+  .pt-label-r {
+    text-align: left;
+    margin: 0;
   }
-}
 
-.profile-error-input {
-  margin: 10px;
-}
+  .pt-form-helper-text {
+    color: red !important;
+  }
 
-.alias-label, .database-label, username-label, password-label {
-  min-width: 70px;
-}
+  .field-inline {
+    display: inline-block !important;
+    margin: 0 5px 0 5px;
+  }
 
-.url-label, .host-label {
-  min-width: 44px;
-}
+  .zero-margin {
+    margin: 0 !important;
+  }
 
-.port-label {
-  width: 28px;
-}
+  .width-100-pr {
+    width: 100%;
+  }
 
-.alias-input-content, .alias-input-content .pt-form-content, .alias-input,
-.url-input-content, .url-input-content .pt-form-content, .url-input,
-.host-input-content, .host-input-content .pt-form-content, .host-input,
-.database-input-content, .database-input-content .pt-form-content, .database-input
- {
-  width: 100%;
-}
+  .pt-control {
+    margin-top: 5px;
+  }
 
-.port-input {
-  width: 80px;
+  .profile-form {
+    margin: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .profile-title, .form-title {
+    text-align: center;
+    margin: 35px 0;
+  }
+
+  .profile-separator {
+    height: 1px;
+    background-color: gray;
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+
+  .profile-button-panel, .form-button-panel {
+    display: flex;
+    flex-direction: row;
+
+    button{
+      margin-left: 10px;
+      padding: 0 1%;
+    }
+  }
+
+  .profile-error-input {
+    margin: 10px;
+  }
+
+  .alias-label, .database-label, username-label, password-label {
+    min-width: 55px;
+  }
+
+  .url-label, .host-label {
+    min-width: 30px;
+  }
+
+  .alias-input-content, .alias-input-content .pt-form-content, .alias-input,
+  .url-input-content, .url-input-content .pt-form-content, .url-input,
+  .host-input-content, .host-input-content .pt-form-content, .host-input,
+  .database-input-content, .database-input-content .pt-form-content, .database-input
+  {
+    width: 100%;
+  }
+
+  .port-input {
+    width: 80px;
+  }
+
+  .port-label {
+    width: 5px;
+    margin: 0 !important;
+  }
 }

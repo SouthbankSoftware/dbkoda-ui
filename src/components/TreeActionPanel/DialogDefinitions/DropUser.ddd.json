@@ -3,8 +3,15 @@
     "DefaultValues": {
         "function": "dbenvy_DropUserPreFill",
         "arguments": [{
-            "name": "UserId"
-        }]
+			"name": "UserId",
+			"value": "treeNode"
+		}, {
+			"name": "parentDB",
+			"value": "treeNode.parentDB"
+		}, {
+			"name": "parentCOL",
+			"value": "treeNode.parentCOL"
+		}]
     },
     "Fields": [{
             "name": "UserId",

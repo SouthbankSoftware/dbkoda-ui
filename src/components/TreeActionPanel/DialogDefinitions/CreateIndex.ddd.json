@@ -13,63 +13,60 @@
     "Fields": [{
             "name": "Database",
             "type": "Text",
-            "readOnly": false,
+            "readOnly": true,
             "rules": "required"
         },
         {
             "name": "CollectionName",
             "type": "Text",
             "readOnly": true,
-            "keyValue": true,
-            "rules": "required"
+            "rules": "required",
+            "lookup":"dbenvy_listcollections",
+				"lookup_arguments": [{
+					"name": "db",
+					"value": "treeNode.parentDB"
+				}]
         },
         {
             "name": "IndexName",
+            "label": "Index Name (optional)",
             "type": "Text",
-            "tooltip": "Name of the index (optional)",
-            "optional": true
+            "tooltip": "Name of the index (optional)"
         },
         {
             "name": "Unique",
             "type": "Boolean",
             "readOnly": false,
             "tooltip": "Are the values in the index unique",
-            "default": false,
             "rules": "boolean"
         },
         {
             "name": "Background",
+            "label": "Background Build",
             "type": "Boolean",
             "readOnly": false,
             "tooltip": "Build index in the background?",
-            "optional": true,
-            "default": false,
             "rules": "boolean"
         },
         {
             "name": "Sparse",
             "type": "Boolean",
             "readOnly": false,
-            "tooltip": "Only index documents that contain the field",
-            "optional": true,
-            "default": false,
-            "rules": "boolean"
+            "tooltip": "Only index documents that contain the field"
         },
         {
             "name": "partialFilterExpression",
-            "type": "Boolean",
+            "label": "Partial Filter",
+            "type": "Text",
             "readOnly": false,
-            "tooltip": "filter condition that limits index scope",
-            "optional": true,
-            "default": false
+            "tooltip": "filter condition that limits index scope"
         },
         {
             "name": "expireAfterSeconds",
+            "label": "Expire After Seconds",
             "type": "Numeric",
             "readOnly": false,
             "tooltip": "Time to Live (TTL) for documents",
-            "optional": true,
-            "default": 0,
             "rules": "integer"
         },
         {

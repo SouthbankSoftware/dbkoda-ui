@@ -5,6 +5,7 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2017-05-09T13:25:50+10:00
  */
+import * as common from './Common.js';
 
 export const CreateCollection = {
   // Prefill function for alter user
@@ -30,14 +31,6 @@ export const CreateCollection = {
     console.log(res);
     return (['error', 'warn']);
   },
-  dbenvy_listdb: () => {
-    return 'db.adminCommand({listDatabases: 1})';
-  },
-  dbenvy_listdb_parse: (res) => {
-    const dblist = [];
-    res.databases.forEach((d) => {
-      dblist.push(d.name);
-    });
-    return dblist;
-  }
+  dbenvy_listdb: common.dbenvy_listdb,
+  dbenvy_listdb_parse: common.dbenvy_listdb_parse
 };

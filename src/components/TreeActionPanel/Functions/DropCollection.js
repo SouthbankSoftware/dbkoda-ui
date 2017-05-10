@@ -8,13 +8,13 @@
 
 import * as common from './Common.js';
 
-export const DropAllIndexes = {
+export const DropCollection = {
     executeCommand: null,
     setExecuteFunction: (cbFuncExecute) => {
-        DropAllIndexes.executeCommand = cbFuncExecute;
+        DropCollection.executeCommand = cbFuncExecute;
     },
     // Prefill function for alter user
-    dbenvy_DropAllIndexesPreFill: (params) => {
+    dbenvy_DropCollectionPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
