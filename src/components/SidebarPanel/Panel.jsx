@@ -3,16 +3,17 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-26T12:43:51+10:00
+ * @Last modified time: 2017-05-10T14:43:51+10:00
  */
 
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { inject, observer, Provider } from 'mobx-react';
 import { action, untracked } from 'mobx';
 import SplitPane from 'react-split-pane';
 
 import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
+import TreeState from '#/TreePanel/model/TreeState.js';
 import { ConnectionProfilePanel } from '#/ConnectionPanel';
 import { TreeActionPanel } from '#/TreeActionPanel';
 import { DrawerPanes } from '#/common/Constants';
@@ -39,6 +40,7 @@ export default class Panel extends React.Component {
     this.props.layout.leftSplitPos = pos;
   }
 
+  treeState = new TreeState();
   render() {
     const { layout, drawer } = this.props;
     const drawerChild = drawer.drawerChild;
@@ -61,7 +63,9 @@ export default class Panel extends React.Component {
             pane2Style={splitPane2Style}
           >
             <ProfileListPanel />
-            <TreePanel />
+            <Provider treeState={this.treeState}>
+              <TreePanel />
+            </Provider>
           </SplitPane>}
 
         {drawerChild == DrawerPanes.PROFILE &&
