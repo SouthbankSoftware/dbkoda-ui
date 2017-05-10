@@ -2,9 +2,13 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-09T14:56:43+10:00
+// @Last modified time: 2017-05-10T16:31:43+10:00
 
 
+.form-title {
+  text-align: center;
+  margin: 35px 0;
+}
 
 .form-group-inline {
   display: inline-block !important;
@@ -30,12 +34,23 @@
   width: 170px;
 }
 
+.pt-numeric-input {
+  width: 170px;
+  .pt-input-group {
+    width: 140px;
+  }
+}
+
 .table-field-100 {
-  width: 100%;
+  width: 100% !important;
 }
 
 .table-field-90 {
   width: 90%
+}
+
+.table-field-80 {
+  width: 80%
 }
 
 .right-button {

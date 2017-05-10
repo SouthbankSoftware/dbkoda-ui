@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T16:07:17+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T16:18:58+10:00
+ * @Last modified time: 2017-05-10T16:24:47+10:00
  */
 
 
@@ -13,7 +13,7 @@
   * @Date:   2017-04-19T15:43:32+10:00
   * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T16:18:58+10:00
+ * @Last modified time: 2017-05-10T16:24:47+10:00
   */
 
  import React from 'react';
@@ -33,10 +33,10 @@
    let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
    if (formGroup) {
      if (field.options && field.options.tooltip) {
-       tooltipClassName += ' table-field-90';
+       tooltipClassName += ' table-field-80';
        inputClassName += ' table-field-100';
      } else {
-       inputClassName += ' table-field-90';
+       inputClassName += ' table-field-80';
      }
    }
    return (
