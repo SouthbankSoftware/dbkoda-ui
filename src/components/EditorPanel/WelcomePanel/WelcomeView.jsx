@@ -11,7 +11,6 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import News from './News.jsx';
 import Info from './Info.jsx';
-import './Welcome.scss';
 
 
 /**
@@ -31,7 +30,7 @@ export default class Panel extends React.Component {
     return (
       <div className="welcomePanelWrapper">
         <h1>Welcome to DBEnvy</h1>
-        <div className="pt-dark welcomePanel">
+        <div className="welcomePanel">
           <News />
           <Info />
         </div>
