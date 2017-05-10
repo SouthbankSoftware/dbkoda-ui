@@ -3,7 +3,7 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T09:39:01+10:00
+ * @Last modified time: 2017-05-10T12:11:34+10:00
  */
 
 export const CreateIndex = {
@@ -16,9 +16,6 @@ export const CreateIndex = {
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
-    data.Unique = false;
-    data.Background = false;
-    data.Sparse = false;
     return data;
   }
 };

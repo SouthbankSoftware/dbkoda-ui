@@ -34,7 +34,7 @@
             "type": "Boolean",
             "readOnly": false,
             "tooltip": "Are the values in the index unique",
-            "default": "false",
+            "default": false,
             "rules": "boolean"
         },
         {
@@ -43,7 +43,7 @@
             "readOnly": false,
             "tooltip": "Build index in the background?",
             "optional": true,
-            "default": "false",
+            "default": false,
             "rules": "boolean"
         },
         {
@@ -52,7 +52,7 @@
             "readOnly": false,
             "tooltip": "Only index documents that contain the field",
             "optional": true,
-            "default": "false",
+            "default": false,
             "rules": "boolean"
         },
         {
@@ -61,7 +61,7 @@
             "readOnly": false,
             "tooltip": "filter condition that limits index scope",
             "optional": true,
-            "default": "false"
+            "default": false
         },
         {
             "name": "expireAfterSeconds",
@@ -69,7 +69,7 @@
             "readOnly": false,
             "tooltip": "Time to Live (TTL) for documents",
             "optional": true,
-            "default": "false",
+            "default": 0,
             "rules": "integer"
         },
         {
@@ -84,7 +84,7 @@
                 {
                     "name": "Direction",
                     "type": "Numeric",
-                    "defaut": "1",
+                    "defaut": 1,
                     "tooltip": "1 for ascending index, -1 for descending index",
                     "rules": "required|integer|in:-1,1"
                 }

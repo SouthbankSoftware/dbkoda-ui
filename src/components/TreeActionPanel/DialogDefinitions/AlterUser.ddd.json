@@ -57,7 +57,11 @@
 				"name": "Role",
 				"label": "Role",
 				"type": "Select",
-				"lookup": "dbenvy_listRoles"
+				"lookup": "dbenvy_listRoles",
+				"lookup_arguments": [{
+					"name": "db",
+					"value": "treeNode.parentDB"
+				}]
 			}]
 		}
 	],

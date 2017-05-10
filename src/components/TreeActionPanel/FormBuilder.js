@@ -3,12 +3,13 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T16:13:33+10:00
+ * @Last modified time: 2017-05-10T12:17:05+10:00
  */
 
 import { DynamicForm } from './Components/DynamicForm';
 
 export default class FormBuilder {
+  treeNode: null
   /**
    * Resolves the definition field into Mobx React Form field
    * @param  {Object} defField      Field object from DDD filter
@@ -30,6 +31,9 @@ export default class FormBuilder {
       // if a field is a key value, it should be required
       res.fieldRules += 'required';
     }
+    if (Object.prototype.hasOwnProperty.call(defField, 'default')) {
+      res.fieldDefault = defField.default;
+    }
     if (defField.rules) {
       if (res.fieldRules && res.fieldRules.length > 0) {
         res.fieldRules += '|';
@@ -37,21 +41,19 @@ export default class FormBuilder {
       res.fieldRules += defField.rules;
     }
     if (defField.lookup && formFunctions[defField.lookup]) {
-      res.fieldQuery = formFunctions[defField.lookup]();
+      let params = {};
+      if (defField.lookup_arguments) {
+        params = this.resolveArguments(defField.lookup_arguments);
+        res.fieldQuery = formFunctions[defField.lookup](params);
+      } else {
+        res.fieldQuery = formFunctions[defField.lookup]();
+      }
       res.fieldParseFn = defField.lookup + '_parse';
     }
     if (defField.type == 'Text') {
-      if (res.fieldRules && res.fieldRules.length > 0) {
-        res.fieldRules += '|';
-      }
-      res.fieldRules += 'string';
       res.fieldBinding = 'TextField';
     }
     if (defField.type == 'Select') {
-      if (res.fieldRules && res.fieldRules.length > 0) {
-        res.fieldRules += '|';
-      }
-      res.fieldRules += 'string';
       res.fieldBinding = 'SelectField';
     }
     if (defField.type == 'Boolean') {
@@ -136,8 +138,8 @@ export default class FormBuilder {
         }
         if (fld.disabled) result.disabled[fldName] = fld.disabled;
 
-        if (fld.fieldType == 'Boolean') {
-          result.values[fldName] = false;
+        if (Object.prototype.hasOwnProperty.call(fld, 'fieldDefault')) {
+          result.values[fldName] = fld.fieldDefault;
         }
 
         if (fld.fieldQuery) {
@@ -202,6 +204,41 @@ export default class FormBuilder {
     });
   };
   /**
+   * Resolve the prefetch arguments and return them as params
+   * @param  {Array}  args     Arguments array as provided from DDD file
+   * @return {Object}          Object containing params for prefetch function
+   */
+  resolveArguments = (args) => {
+    const params = {};
+    if (args.length > 0 && this.treeNode) {
+      for (let i = 0; i < args.length; i += 1) {
+        const arg = args[i];
+        switch (arg.value) {
+          case 'treeNode.parentDB':
+            if (this.treeNode.type == 'user') {
+              params[arg.name] = this.treeNode.json.db;
+            } else if (this.treeNode.type == 'collection') {
+              params[arg.name] = this.treeNode.refParent.json.text;
+            } else if (this.treeNode.type == 'index') {
+              params[
+                arg.name
+              ] = this.treeNode.refParent.refParent.json.text;
+            }
+            break;
+
+          case 'treeNode.parentCOL':
+            if (this.treeNode.type == 'index') {
+              params[arg.name] = this.treeNode.refParent.json.text;
+            }
+            break;
+          default:
+            params[arg.name] = this.treeNode.json.text;
+        }
+      }
+    }
+    return params;
+  }
+  /**
    * Function to create a dynamic form based on the tree action.
    * @param  {Object}   treeActionStore       Store which contains all the information about selected tree action
    * @param  {Function} updateDynamicFormCode Callback function to send the generated code back to editor
@@ -210,7 +247,7 @@ export default class FormBuilder {
    */
   createForm = (treeActionStore, updateDynamicFormCode, executeQuery) => {
     const treeAction = treeActionStore.treeAction;
-    const treeNode = treeActionStore.treeNode;
+    this.treeNode = treeActionStore.treeNode;
     // Load the form definitions dynamically
     const ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
 
@@ -263,33 +300,10 @@ export default class FormBuilder {
           // check if definitions has a keyField for prefetching data and send request to controller
           const getPrefilledFormData = () => {
             if (ddd.DefaultValues) {
-              const params = {};
+              let params = {};
               if (ddd.DefaultValues.arguments) {
                 const args = ddd.DefaultValues.arguments;
-                for (let i = 0; i < args.length; i += 1) {
-                  const arg = args[i];
-                  switch (arg.value) {
-                    case 'treeNode.parentDB':
-                      if (treeNode.type == 'user') {
-                        params[arg.name] = treeNode.json.db;
-                      } else if (treeNode.type == 'collection') {
-                        params[arg.name] = treeNode.refParent.json.text;
-                      } else if (treeNode.type == 'index') {
-                        params[
-                          arg.name
-                        ] = treeNode.refParent.refParent.json.text;
-                      }
-                      break;
-
-                    case 'treeNode.parentCOL':
-                      if (treeNode.type == 'index') {
-                        params[arg.name] = treeNode.refParent.json.text;
-                      }
-                      break;
-                    default:
-                      params[arg.name] = treeNode.json.text;
-                  }
-                }
+                params = this.resolveArguments(args);
               }
 
               let PrefilledValues;

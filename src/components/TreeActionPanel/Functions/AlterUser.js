@@ -3,8 +3,10 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-08T12:38:34+10:00
+ * @Last modified time: 2017-05-10T10:45:15+10:00
  */
+
+import * as common from './Common.js';
 
 export const AlterUser = {
   // Prefill function for alter user
@@ -43,24 +45,8 @@ export const AlterUser = {
     throw new Error('dbenvy: Alter user should include as least one role');
   },
 
-  dbenvy_listdb: () => {
-    return 'db.adminCommand({listDatabases: 1})';
-  },
-  dbenvy_listdb_parse: (res) => {
-    const dblist = [];
-    res.databases.forEach((d) => {
-      dblist.push(d.name);
-    });
-    return dblist;
-  },
-  dbenvy_listRoles: () => {
-    return 'db.getSiblingDB("admin").getRoles({rolesInfo: 1, showPrivileges: false, showBuiltinRoles: true})';
-  },
-  dbenvy_listRoles_parse: (res) => {
-    const roleList = [];
-    res.forEach((r) => {
-      roleList.push(r.role);
-    });
-    return roleList;
-  }
+  dbenvy_listdb: common.dbenvy_listdb,
+  dbenvy_listdb_parse: common.dbenvy_listdb_parse,
+  dbenvy_listRoles: common.dbenvy_listRoles,
+  dbenvy_listRoles_parse: common.dbenvy_listRoles_parse
 };
