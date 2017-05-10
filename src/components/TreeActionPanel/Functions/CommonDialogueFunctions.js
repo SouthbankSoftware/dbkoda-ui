@@ -1,18 +1,11 @@
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-04-03T16:14:52+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T12:27:05+10:00
- */
-
-
-export const CreateIndex = {
-    // Prefill function for alter user
+export const CommonDialogueFunctions = {
     dbenvy_CreateIndexPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
+        data.Unique = 'false';
+        data.Background = 'false';
+        data.Sparse = 'false';
         return data;
     },
     dbenvy_listcollections: () => {
@@ -25,5 +18,5 @@ export const CreateIndex = {
             collectionList.push(d);
         });
         return collectionList;
-    }
+    },
 };

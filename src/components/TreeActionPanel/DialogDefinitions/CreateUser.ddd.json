@@ -6,17 +6,16 @@
     },
     "Fields": [
         {
+            "name": "Database",
+            "type": "Select",
+            "readOnly": false,
+            "lookup": "dbenvy_listdb"
+        },
+        {
             "name": "UserName",
             "type": "Text",
             "readOnly": false
         },
-        {
-            "name": "Database",
-            "type": "Select",
-            "readOnly": true,
-            "lookup": "dbenvy_listdb"
-        },
-
         {
             "name": "Password",
             "type": "Text"

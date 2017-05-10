@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-05T16:25:00+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-10T09:34:26+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -250,6 +250,24 @@ class View extends React.Component {
           this.props.store.dragItem.dragDrop = false;
         }
       });
+
+      /**
+       * Reaction function to receive and append a command from the output terminal
+       * @param {function()} - The state that will trigger the reaction.
+       * @param {function()} - The reaction to any change on the state.
+       */
+      const reactionToTerminalPush = reaction(
+        () => this.props.store.outputPanel.sendingCommand,
+        (sendingCommand) => {
+          console.log('reactionToTerminalPush');
+          if (sendingCommand) {
+            console.log(sendingCommand);
+            this.insertAtCursor(sendingCommand);
+            this.props.store.outputPanel.sendingCommand = '';
+          }
+        },
+        { 'name': 'EditorViewReactionToTerminalPush' }
+      );
 
     /**
      * Reaction function for when a change occurs on the

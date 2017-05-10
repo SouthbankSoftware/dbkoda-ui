@@ -8,6 +8,4 @@ db.getSiblingDB("{{Database}}").createUser({
     },          
     {  w: "majority" }
 );
-
-db.getSiblingDB("admin").system.users.find({user:"{{UserName}}"}).pretty(); 
-
+ 

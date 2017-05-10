@@ -3,13 +3,17 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T12:27:05+10:00
+ * @Last modified time: 2017-05-03T12:12:33+10:00
  */
 
 
-export const CreateIndex = {
+export const DropAllIndexes = {
+    executeCommand: null,
+    setExecuteFunction: (cbFuncExecute) => {
+        DropAllIndexes.executeCommand = cbFuncExecute;
+    },
     // Prefill function for alter user
-    dbenvy_CreateIndexPreFill: (params) => {
+    dbenvy_DropAllIndexesPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
