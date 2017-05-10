@@ -12,8 +12,15 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
+import EJSON from 'mongodb-extended-json';
 import Panel from './Panel';
 import {Broker, EventType} from '../../helpers/broker/index';
+
+export const parseOutput = (output) => {
+  return output.replace(/NumberLong\((\d*)\)/g, '$1')
+    .replace(/\n/g, '').replace(/\s/g, '').replace(/\r/g, '')
+    .replace(/:(\/[^\/]*\/)/g, ':"$1"');
+};
 
 @inject(allStores => ({
   explainPanel: allStores.store.explainPanel,
@@ -65,13 +72,13 @@ export default class Explain extends React.Component {
     let explainOutputJson;
     try {
       explainOutputJson = {
-        output: JSON.parse(this.parseOutput(output.replace(/\n/g, '').replace(/\s/g, '').replace(/\r/g, ''))),
+        output: EJSON.parse(parseOutput(output)),
         type: this.explainType,
         command: this.explainCommand
       };
     } catch (err) {
-      console.log('err parse explain output ', err);
-      explainOutputJson = {error: 'Failed to parse output JSON'};
+      console.log('err parse explain output ', err, parseOutput(output));
+      explainOutputJson = {error: 'Failed to parse output JSON '};
     }
     console.log('update editor ', currentEditorId);
     console.log('current editor ', this.props.editor);
@@ -80,10 +87,6 @@ export default class Explain extends React.Component {
       explains: explainOutputJson,
     });
     Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, {id, shell});
-  }
-
-  parseOutput(output) {
-    return output.replace(/NumberLong\((\d*)\)/g, '$1');
   }
 
   render() {

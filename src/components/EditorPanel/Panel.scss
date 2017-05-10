@@ -1,8 +1,22 @@
 // Theme 1 Colours: These should be externalized eventually:
+//Tabs:
+$tabFontColor: #8B8B8B;
+$tabBackground: #323232;
+$tabBackgroundSelected: #202020;
 //Editor:
 $editorBackground: #202020;
 $editorActiveLine: #303030;
+$editorSelectText: #404040;
 $editorTextComments: #8B8B8B;
+$editorDefaultFontColor: #FFB795;
+$keywordOne: #179DEA;
+$keywordTwo: #B95CCE;
+$keywordThree: #DB3737;
+$keywordFour: #8A9BA8;
+$propFontColor: #aac6e3;
+$stringFontColor: #4caf50;
+$white: #ffffff;
+$black: #000000;
 //NavBars:
 $navbarRightBackground: #494849;
 $navbarRighHeading: #BFBEC0;
@@ -22,275 +36,336 @@ $buttonTertiaryIcon: #BFBEC0;
 $buttonDangerBackground: #8A4148;
 $buttonDangerIcon: #BFBEC0;
 $selectPrimaryBackground: #313131;
-$searchPrimaryBackground: #BFBEc0;
+$searchPrimaryBackground: #BFBEC0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEc0;
+$searchSecondaryFontColor: #BFBEC0;
 
 
-$backgroundPrimaryColor: #2d3d46;
-$backgroundPrimaryColor: #2d3d46;
-$tabPrimaryColor: #3d3d3d;
-$tabStrokeColor: #d1ccc8;
-$brightBlueFont: #179dea;
-$blueDarkest: #0e5a8a;
-$selectGray: #8a9ba8;
-$whiteColor: #f5f8fa;
-$blackColor: #000000;
-$white: #ffffff;
-$brightBlueFont: #179dea;
-$greyBlueFont: #8dacbc;
-$purpleFont: #b95cce;
-$brightRedFont: #db3737;
-$darkRedFont: #9b4d4d;
-$matchingBackground: #6b6b6b;
-$backgroundPrimaryColor: #2d3c46;
-$backgroundSecondaryColor: #394b59;
-$tabPrimaryColor: #3d3d3d;
-$tabStrokeColor: #d1ccc8;
-$blueDarkest: #0e5a8a;
-$selectGray: #8a9ba8;
-$whiteColor: #f5f8fa;
-$blackColor: #000000;
-$propFontColor: #aac6e3;
-$stringFontColor: #4caf50;
+
 
 $downArrow: "\25BE";
 $rightArrow: "\25B8";
-
-div.CodeMirror span.CodeMirror-matchingbracket{
-  color: $white !important;
-  border: 1px solid $selectGray;
-}
-
-div.CodeMirror span.CodeMirror-nonmatchingbracket {
-  color: $brightRedFont !important;
-  border: 1px solid $brightRedFont;
-}
-
-span.cm-property {
-  color: $propFontColor !important;
-}
-
-span.cm-string {
-  color: $stringFontColor !important;
-}
-
-.notVisible {
-  display:  none;
-}
-
-.editorToolbar {
-  background-color: $navbarRightBackground !important;
-}
-
-.editorPanel, .profileListPanel, .welcomePanel {
+// Panel CSS
+.editorPanel {
   display: flex;
   flex-direction: column;
   width: 100%;
-}
-
-.editorTabView, .welcomePanel {
-  flex-direction: column;
-  flex: 1;
-  display: flex;
-}
-
-.editorView {
-  flex: 1;
-  width: 100%;
-}
-
-.editorTab {
-}
-
-.CodeMirror-scroll {
-  width: 100%;
-}
-
-iframe {
-  flex: 1;
-}
-
-.CodeMirror,
-.ReactCodeMirror {
-  height: 100%;
-}
-
-.cm-s-ambiance .CodeMirror-linenumber {
-  color: $whiteColor;
-}
-
-.CodeMirror-linebackground {
-  background-color: $editorBackground !important;
-}
-
-
-//////////////\ -------------------- \///////////////
-//////////////\ Syntax Highlighting \///////////////
-span.cm-mongo-operator {
-  color: $white !important;
-}
-span.cm-db {
-  color: $purpleFont !important;
-}
-span.cm-show {
-  color: $brightBlueFont !important;
-}
-span.cm-dbs {
-  color: $purpleFont !important;
-}
-span.cm-use {
-  color: $brightBlueFont !important;
-}
-span.cm-collections {
-  color: $purpleFont !important;
-}
-span.cm-users {
-  color: $purpleFont !important;
-}
-span.cm-roles {
-  color: $purpleFont !important;
-}
-span.cm-profile{
-  color: $purpleFont !important;
-}
-span.cm-databases {
-  color: $purpleFont !important;
-}
-span.cm-it{
-  color: $brightBlueFont !important;
-}
-span.cm-dbenvy-prompt{
-  color: $selectGray !important;
-}
-span.cm-mongos-prompt{
-  color: $selectGray !important;
-}
-
-.CodeMirror-gutters {
-  background-color: $editorBackground !important;
-  border-right: 1px solid $editorBackground !important;
-  box-shadow: none !important;
-}
-
-.CodeMirror-gutter {
-  background-color: $editorBackground !important;
-   
-}
-.CodeMirror-foldmarker {
-  color: $purpleFont;
-  font-family: arial;
-  line-height: .3;
-  cursor: pointer;
-}
-
-.CodeMirror-foldgutter {
-  width: .7em;
-  margin-right: 5px !important;
-}
-.CodeMirror-foldgutter-open {
-  padding-left: 5px !important;
-  padding-left: 5px !important;
-}
-.CodeMirrror-foldgutter-folded{
-  padding-left: 5px !important;
-  padding-left: 5px !important;
-}
-.cm-s-ambiance .CodeMirror-guttermarker-subtle {
-  color: $white !important;
-  cursor: pointer;
-}
-
-.CodeMirror-foldgutter-open,
-.CodeMirror-foldgutter-folded {
-  color: #555;
-  cursor: pointer;
-}
-.CodeMirror-foldgutter-open:after {
-  content: $downArrow;
-}
-.CodeMirror-foldgutter-folded:after {
-  content: $rightArrow;
-}
-.CodeMirror-activeline-background {
-  background-color: $editorActiveLine !important; 
-}
-.CodeMirror-activeline-gutter {
- background-color: $editorBackground;
-}
-.pt-dark pre {
-  box-shadow: none !important;
-}
-
-
-a.pt-intent-primary {
-  background-color: $buttonPrimaryBackground !important;
-  color: $buttonPrimaryIcon !important;
-}
-a.pt-intent-primary:hover {
-  background-color: $buttonPrimaryBackgroundHover !important;
-  color: $buttonPrimaryIcon !important;
-}
-a.pt-disabled.pt-intent-primary {
-  background-color:rgba(255, 255, 255, 0.3) !important;
-}
-select.pt-intent-primary {
-  background-color: $selectPrimaryBackground !important;
-  color: $buttonPrimaryBackground !important;
-}
-
-input.pt-input, textarea {
-  background-color: $searchPrimaryBackground !important;
-  color: $searchPrimaryFontColor !important;
-}
-
-input.pt-input.secondaryInput, textArea {
-  background-color: $searchSecondaryBackground !important;
-  color: $searchSecondaryFontColor !important;
-}
-
-.pt-icon-search {
-  color: $buttonPrimaryIcon !important;
-}
-
-::-webkit-input-placeholder {
-  color: $searchPrimaryFontColor !important;
-}
-
-
-.lint-error-icon {
-  color: $brightRedFont;
-  font-style: oblique;
-  font-size: 20px;
-  float: right;
-} 
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px solid $brightRedFont;
-}
-
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 160px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    font-size:12px;
-    
-    /* Position the tooltip */
-    position: absolute;
+  .notVisible {
+    display: none;
+  }
+  .editorToolbar {
+    background-color: $navbarRightBackground !important;
+  }
+  .editorTabView {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    .pt-tab-list {
+      background-color: $tabBackground;
+      margin-left:0px;
+      .pt-tab {
+        color: $tabFontColor;
+        background-color: $tabBackground;
+        outline: unset;
+        box-shadow: unset;
+      }
+      .pt-tab[aria-selected="true"] {
+        box-shadow: unset;
+        background-color: $tabBackgroundSelected;
+      }
+      .pt-tab:hover {
+        color: $white;
+      }
+      .welcomeTab {
+        padding-left: 10px;
+        padding-right: 5px;
+        flex-grow: initial;
+      }
+      .editorTab {
+        padding-left: 5px;
+        padding-right: 5px;
+        flex-grow: 1;
+      }
+    }
+    .editorTab {
+      margin-top: 0px;
+      flex-grow: 1;
+      .editorView {
+        flex: 1;
+        width: 100%;
+      }
+    }
+    .welcomeTab {
+      flex-grow: 1;
+      flex-direction: column;
+      height: 100%;
+      margin-top: 0px;
+      .welcomePanelWrapper {
+        flex-direction: row;
+        flex-grow: 1;
+        background-color: $editorBackground;
+        width: 100%;
+        h1 {
+          margin-top: 10px;
+          margin-left: 10px;
+        }
+        .welcomePanel {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          padding-top: 20px;
+          padding-left: 20px;
+          width: 100%;
+          height: 90%;
+          .newsPanel {
+            flex-grow: 1;
+            padding-right: 5px;
+            height: 100%;
+            border-top: 1px solid #4f4f4f;
+            .newsArticles {
+              order: 1;
+              display: flex;
+              flex-direction: column;
+              .newsItem {
+                display: flex;
+                flex-direction: column;
+                .newsHeader {
+                  display: flex;
+                  flex-direction: row;
+                  .newsIcon {
+                    padding-right: 5px;
+                  }
+                }
+              }
+            }
+          }
+          .infoPanel {
+            flex-grow: 2;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid #4f4f4f;
+            border-left: 1px solid #4f4f4f;
+            height: 100%;
+            .hotkeyItems {
+              display: flex;
+              flex-direction: column;
+              .hotkeyItem {
+                display: flex;
+                flex-direction: row;
+                .hotkeyTitle {
+                  padding-right: 5px;
+                  flex-wrap: nowrap;
+                  white-space: nowrap;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  } //// Code Mirror CSS: ////
+  /////////////////////////////
+  div.CodeMirror span.CodeMirror-matchingbracket {
+    color: $white !important;
+    border: 1px solid $keywordFour;
+  }
+  div.CodeMirror span.CodeMirror-nonmatchingbracket {
+    color: $keywordThree !important;
+    border: 1px solid $keywordThree;
+  }
+  span.cm-property {
+    color: $propFontColor !important;
+  }
+  span.cm-string {
+    color: $stringFontColor !important;
+  }
+  .CodeMirror-overlayscroll-vertical {
+    height: 0% !important;
+  }
+  .CodeMirror-scroll {
+    background-color: $editorBackground;
+    width: 100%;
+  }
+  .CodeMirror,
+  .ReactCodeMirror {
+    height: 100%;
+  }
+  .cm-s-ambiance .CodeMirror-linenumber {
+    color: $white;
+  }
+  .CodeMirror-linebackground {
+    background-color: $editorBackground !important;
+  }
+  .CodeMirror-line {
+    background-color: $editorBackground;
+  }
+  span.cm-mongo-operator {
+    color: $white !important;
+  }
+  .cm-variable {
+    color: $editorDefaultFontColor !important;
+  }
+  span.cm-db {
+    color: $keywordTwo !important;
+  }
+  span.cm-show {
+    color: $keywordOne !important;
+  }
+  span.cm-dbs {
+    color: $keywordTwo !important;
+  }
+  span.cm-use {
+    color: $keywordOne !important;
+  }
+  span.cm-collections {
+    color: $keywordTwo !important;
+  }
+  span.cm-users {
+    color: $keywordTwo !important;
+  }
+  span.cm-roles {
+    color: $keywordTwo !important;
+  }
+  span.cm-profile {
+    color: $keywordTwo !important;
+  }
+  span.cm-databases {
+    color: $keywordTwo !important;
+  }
+  span.cm-it {
+    color: $keywordOne !important;
+  }
+  span.cm-dbenvy-prompt {
+    color: $keywordFour !important;
+  }
+  span.cm-mongos-prompt {
+    color: $keywordFour !important;
+  }
+  .CodeMirror-gutters {
+    background-color: $editorBackground !important;
+    border-right: 1px solid $editorBackground !important;
+    box-shadow: none !important;
+  }
+  .CodeMirror-gutter {
+    background-color: $editorBackground !important;
+  }
+  .CodeMirror-foldmarker {
+    color: $keywordTwo;
+    font-family: arial;
+    line-height: .3;
+    cursor: pointer;
+  }
+  .CodeMirror-foldgutter {
+    width: .7em;
+    margin-right: 5px !important;
+  }
+  .CodeMirror-foldgutter-open {
+    padding-left: 5px !important;
+    padding-left: 5px !important;
+  }
+  .CodeMirrror-foldgutter-folded {
+    padding-left: 5px !important;
+    padding-left: 5px !important;
+  }
+  .cm-s-ambiance .CodeMirror-guttermarker-subtle {
+    color: $white !important;
+    cursor: pointer;
+  }
+  .CodeMirror-foldgutter-open,
+  .CodeMirror-foldgutter-folded {
+    color: #555;
+    cursor: pointer;
+  }
+  .CodeMirror-foldgutter-open:after {
+    content: $downArrow;
+  }
+  .CodeMirror-foldgutter-folded:after {
+    content: $rightArrow;
+  }
+  .CodeMirror-activeline-background {
+    background-color: $editorActiveLine !important;
+  }
+  .CodeMirror-activeline-gutter {
+    background-color: $editorBackground;
+  }
+  .lint-error-icon {
+    color: $keywordThree;
+    font-style: oblique;
+    font-size: 20px;
+    float: right;
+  }
+  .CodeMirror-cursor {
+    border-left: 1px solid $white;
+    border-right: none;
+    width: 0;
+  }
+  /* Shown when moving in bi-directional text */
+  .CodeMirror div.CodeMirror-secondarycursor {
+    border-left: 1px solid silver;
+  }
+  .cm-fat-cursor .CodeMirror-cursor {
+    width: auto;
+    border: 0 !important;
+    background: #7e7;
+  }
+  .cm-fat-cursor div.CodeMirror-cursors {
     z-index: 1;
-    top: -5px;
-    left: 105%;
+  }
+  .cm-animate-fat-cursor {
+    width: auto;
+    border: 0;
+    -webkit-animation: blink 1.06s steps(1) infinite;
+    -moz-animation: blink 1.06s steps(1) infinite;
+    animation: blink 1.06s steps(1) infinite;
+    background-color: #7e7;
+  }
+  @-moz-keyframes blink {
+    0% {}
+    50% {
+      background-color: transparent;
+    }
+    100% {}
+  }
+  @-webkit-keyframes blink {
+    0% {}
+    50% {
+      background-color: transparent;
+    }
+    100% {}
+  }
+  @keyframes blink {
+    0% {}
+    50% {
+      background-color: transparent;
+    }
+    100% {}
+  }
+  /* Can style cursor different in overwrite (non-insert) mode */
+  .CodeMirror-overwrite .CodeMirror-cursor {}
+  .cm-tab {
+    display: inline-block;
+    text-decoration: inherit;
+  }
+  .CodeMirror-rulers {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -50px;
+    bottom: -20px;
+    overflow: hidden;
+  }
+  .CodeMirror-ruler {
+    border-left: 1px solid #ccc;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+  }
+  .CodeMirror-selectedtext {
+    background-color: $editorSelectText !important;
+  }
 }
 
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-}
 
-//////////////\ Syntax Highlighting \///////////////
-//////////////\ -------------------- \///////////////
+

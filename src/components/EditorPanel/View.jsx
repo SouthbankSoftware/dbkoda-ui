@@ -35,6 +35,7 @@ require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/selection/active-line.js');
+require('codemirror/addon/selection/mark-selection.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/edit/closebrackets.js');
@@ -107,12 +108,13 @@ class View extends React.Component {
       isLinting: false,
       lintLoops: 0,
       options: {
-        theme: 'ambiance',
+
         lineNumbers: 'true',
         indentUnit: 2,
         styleActiveLine: 'true',
         scrollbarStyle: 'overlay',
         smartIndent: true,
+        styleSelectedText: true,
         tabSize: 2,
         matchBrackets: true,
         autoCloseBrackets: true,

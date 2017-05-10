@@ -3,13 +3,13 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T12:17:05+10:00
+ * @Last modified time: 2017-05-10T13:44:48+10:00
  */
 
 import { DynamicForm } from './Components/DynamicForm';
 
 export default class FormBuilder {
-  treeNode: null
+  treeNode: null;
   /**
    * Resolves the definition field into Mobx React Form field
    * @param  {Object} defField      Field object from DDD filter
@@ -118,14 +118,15 @@ export default class FormBuilder {
       result.types = {};
       result.disabled = {};
       result.bindings = {};
-      result.arrayLast = [];    // an object to keep reference of array fields to add last element later before sending to the template.
+      result.arrayLast = []; // an object to keep reference of array fields to add last element later before sending to the template.
       result.options = {};
       result.values = {};
 
-      const queries = [];       // array of all the queries required by fields.
+      const queries = []; // array of all the queries required by fields.
       const queryFieldsHash = {};
 
-      const setFormOptions = (fld, fldName) => {    // Function to set the field resolved from getField function in the result for mobx-react-form
+      const setFormOptions = (fld, fldName) => {
+        // Function to set the field resolved from getField function in the result for mobx-react-form
         result.fields.push(fldName);
         result.labels[fldName] = fld.fieldLabel;
         result.types[fldName] = fld.fieldType;
@@ -161,10 +162,12 @@ export default class FormBuilder {
         if (defField.type == 'Table') {
           for (const col of defField.columns) {
             const colField = this.getField(col, formFunctions);
-            const colFieldName = resField.fieldName + '[].' + colField.fieldName;
+            const colFieldName = resField.fieldName +
+              '[].' +
+              colField.fieldName;
             setFormOptions(colField, colFieldName);
           }
-          result.arrayLast.push(resField.fieldName);  // this is utilized after the form has returned the input document for the template
+          result.arrayLast.push(resField.fieldName); // this is utilized after the form has returned the input document for the template
         }
       }
 
@@ -220,9 +223,7 @@ export default class FormBuilder {
             } else if (this.treeNode.type == 'collection') {
               params[arg.name] = this.treeNode.refParent.json.text;
             } else if (this.treeNode.type == 'index') {
-              params[
-                arg.name
-              ] = this.treeNode.refParent.refParent.json.text;
+              params[arg.name] = this.treeNode.refParent.refParent.json.text;
             }
             break;
 
@@ -237,7 +238,7 @@ export default class FormBuilder {
       }
     }
     return params;
-  }
+  };
   /**
    * Function to create a dynamic form based on the tree action.
    * @param  {Object}   treeActionStore       Store which contains all the information about selected tree action
@@ -246,117 +247,123 @@ export default class FormBuilder {
    * @return {Promise}                        Promise which will be resolved once all the queries for prefetching are resolved.
    */
   createForm = (treeActionStore, updateDynamicFormCode, executeQuery) => {
-    const treeAction = treeActionStore.treeAction;
-    this.treeNode = treeActionStore.treeNode;
-    // Load the form definitions dynamically
-    const ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
+    try {
+      const treeAction = treeActionStore.treeAction;
+      this.treeNode = treeActionStore.treeNode;
+      // Load the form definitions dynamically
+      const ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
 
-    // Load the form functions to support the definitions dynamically
-    const formFunctions = require('./Functions/' + treeAction + '.js')[treeAction]; //eslint-disable-line
+      // Load the form functions to support the definitions dynamically
+      const formFunctions = require('./Functions/' + treeAction + '.js')[     //eslint-disable-line
+        treeAction
+      ];
 
-    // load the form template
-    const formTemplate = require('./Templates/' + treeAction + '.hbs'); //eslint-disable-line
+      // load the form template
+      const formTemplate = require('./Templates/' + treeAction + '.hbs'); //eslint-disable-line
 
-    return new Promise((resolve, reject) => {
-      // get Fields for Mobx React Form
-      this.getFieldsFromDefinitions(ddd, formFunctions, executeQuery)
-        .then((formDefs) => {
-          console.log(formDefs);
+      return new Promise((resolve, reject) => {
+        // get Fields for Mobx React Form
+        this.getFieldsFromDefinitions(ddd, formFunctions, executeQuery)
+          .then((formDefs) => {
+            console.log(formDefs);
 
-          // callback function to get the updated values from the form
-          const formValueUpdates = (values) => {
-            console.log('form new values:', values);
-            if (formDefs.arrayLast.length > 0) {
-              for (const fld of formDefs.arrayLast) {
-                if (values[fld].length > 0) {
-                  const idx = values[fld].length - 1;
-                  values[fld][idx].last = 1;
+            // callback function to get the updated values from the form
+            const formValueUpdates = (values) => {
+              console.log('form new values:', values);
+              if (formDefs.arrayLast.length > 0) {
+                for (const fld of formDefs.arrayLast) {
+                  if (values[fld].length > 0) {
+                    const idx = values[fld].length - 1;
+                    values[fld][idx].last = 1;
+                  }
                 }
               }
-            }
-            if (treeActionStore) {
-              const generatedCode = formTemplate(values);
-              updateDynamicFormCode(generatedCode);
-            }
-          };
-
-          // callback function to validate the input document
-          const formInputValidate = (values) => {
-            if (ddd && ddd.Validate && formFunctions[ddd.Validate]) {
-              return formFunctions[ddd.Validate](values);
-            }
-            return true;
-          };
-
-          // Update the form after prefetching the data from controller
-          const updatePrefilledData = (data) => {
-            form.mobxForm.update(data); //eslint-disable-line
-          };
-
-          const defaultParseFunction = (values) => {
-            return values;
-          };
-
-          // check if definitions has a keyField for prefetching data and send request to controller
-          const getPrefilledFormData = () => {
-            if (ddd.DefaultValues) {
-              let params = {};
-              if (ddd.DefaultValues.arguments) {
-                const args = ddd.DefaultValues.arguments;
-                params = this.resolveArguments(args);
+              if (treeActionStore) {
+                const generatedCode = formTemplate(values);
+                updateDynamicFormCode(generatedCode);
               }
+            };
 
-              let PrefilledValues;
-              if (
-                ddd.DefaultValues.arguments &&
-                ddd.DefaultValues.arguments.length > 0
-              ) {
-                PrefilledValues = formFunctions[ddd.DefaultValues.function](
-                  params
-                );
-              } else {
-                PrefilledValues = formFunctions[ddd.DefaultValues.function]();
+            // callback function to validate the input document
+            const formInputValidate = (values) => {
+              if (ddd && ddd.Validate && formFunctions[ddd.Validate]) {
+                return formFunctions[ddd.Validate](values);
               }
+              return true;
+            };
 
-              if (typeof PrefilledValues === 'string') {
-                let parseFunction;
-                if (formFunctions[ddd.DefaultValues.function + '_parse']) {
-                  parseFunction = formFunctions[
-                    ddd.DefaultValues.function + '_parse'
-                  ];
+            // Update the form after prefetching the data from controller
+            const updatePrefilledData = (data) => {
+              form.mobxForm.update(data); //eslint-disable-line
+            };
+
+            const defaultParseFunction = (values) => {
+              return values;
+            };
+
+            // check if definitions has a keyField for prefetching data and send request to controller
+            const getPrefilledFormData = () => {
+              if (ddd.DefaultValues) {
+                let params = {};
+                if (ddd.DefaultValues.arguments) {
+                  const args = ddd.DefaultValues.arguments;
+                  params = this.resolveArguments(args);
+                }
+
+                let PrefilledValues;
+                if (
+                  ddd.DefaultValues.arguments &&
+                  ddd.DefaultValues.arguments.length > 0
+                ) {
+                  PrefilledValues = formFunctions[ddd.DefaultValues.function](
+                    params
+                  );
                 } else {
-                  parseFunction = defaultParseFunction;
+                  PrefilledValues = formFunctions[ddd.DefaultValues.function]();
                 }
-                executeQuery(PrefilledValues).then((res) => {
-                  const parsedValues = parseFunction(res);
-                  updatePrefilledData(parsedValues);
-                });
-              } else if (typeof PrefilledValues === 'object') {
-                updatePrefilledData(PrefilledValues);
+
+                if (typeof PrefilledValues === 'string') {
+                  let parseFunction;
+                  if (formFunctions[ddd.DefaultValues.function + '_parse']) {
+                    parseFunction = formFunctions[
+                      ddd.DefaultValues.function + '_parse'
+                    ];
+                  } else {
+                    parseFunction = defaultParseFunction;
+                  }
+                  executeQuery(PrefilledValues).then((res) => {
+                    const parsedValues = parseFunction(res);
+                    updatePrefilledData(parsedValues);
+                  });
+                } else if (typeof PrefilledValues === 'object') {
+                  updatePrefilledData(PrefilledValues);
+                }
               }
-            }
-          };
+            };
 
-          // create a DynamicForm instance with the fields definitions and callback function
-          const form = {
-            title: ddd.Title,
-            mobxForm: new DynamicForm(formDefs, {
-              updates: formValueUpdates,
-              validate: formInputValidate
-            }),
-            getData: getPrefilledFormData
-          };
-          treeActionStore.form = form;
+            // create a DynamicForm instance with the fields definitions and callback function
+            const form = {
+              title: ddd.Title,
+              mobxForm: new DynamicForm(formDefs, {
+                updates: formValueUpdates,
+                validate: formInputValidate
+              }),
+              getData: getPrefilledFormData
+            };
+            treeActionStore.form = form;
 
-          resolve(form);
-        })
-        .catch((reason) => {
-          console.log(
-            'CreateForm:',
-            'Handle rejected promise (' + reason + ') here.'
-          );
-          reject(reason);
-        });
-    });
+            resolve(form);
+          })
+          .catch((reason) => {
+            console.log(
+              'CreateForm:',
+              'Handle rejected promise (' + reason + ') here.'
+            );
+            reject(reason);
+          });
+      });
+    } catch (e) {
+      return new Promise().reject(e.message);
+    }
   };
 }
