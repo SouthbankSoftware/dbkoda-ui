@@ -22,14 +22,14 @@
             "rules": "required"
         },
         {
-            "name": "capped",         
+            "name": "capped",
             "type": "Boolean",
             "readOnly": false,
             "rules": "boolean"
         },
         {
             "name": "size",
-"tooltip": "maximum size in bytes for a capped collection",
+            "tooltip": "maximum size in bytes for a capped collection",
             "type": "Numeric",
             "readOnly": false,
             "rules": "integer"
