@@ -26,8 +26,6 @@ $searchPrimaryBackground: #BFBEc0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
 $searchSecondaryFontColor: #BFBEc0;
-
-
 $backgroundPrimaryColor: #2d3d46;
 $backgroundPrimaryColor: #2d3d46;
 $tabPrimaryColor: #3d3d3d;
@@ -37,6 +35,25 @@ $blueDarkest: #0e5a8a;
 $selectGray: #8a9ba8;
 $whiteColor: #f5f8fa;
 $blackColor: #000000;
+$white: #ffffff;
+$brightBlueFont: #179dea;
+$greyBlueFont: #8dacbc;
+$purpleFont: #b95cce;
+$brightRedFont: #db3737;
+$darkRedFont: #9b4d4d;
+$matchingBackground: #6b6b6b;
+$backgroundPrimaryColor: #2d3c46;
+$backgroundSecondaryColor: #394b59;
+$tabPrimaryColor: #3d3d3d;
+$tabStrokeColor: #d1ccc8;
+$blueDarkest: #0e5a8a;
+$selectGray: #8a9ba8;
+$whiteColor: #f5f8fa;
+$blackColor: #000000;
+$propFontColor: #aac6e3;
+$stringFontColor: #4caf50;
+$downArrow: "\25BE";
+$rightArrow: "\25B8";
 
 body {
   background-color: $backgroundPrimaryColor;
@@ -141,4 +158,76 @@ h3 {
 
 .alert{
   //background-color: $backgroundSecondaryColor;
+}
+
+
+
+//  //// Global CSS: ////  //
+/////////////////////////////
+.pt-dark pre {
+  box-shadow: none !important;
+}
+a.pt-intent-primary {
+  background-color: $buttonPrimaryBackground !important;
+  color: $buttonPrimaryIcon !important;
+}
+
+a.pt-intent-primary:hover {
+  background-color: $buttonPrimaryBackgroundHover !important;
+  color: $buttonPrimaryIcon !important;
+}
+
+a.pt-disabled.pt-intent-primary {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+select.pt-intent-primary {
+  background-color: $selectPrimaryBackground !important;
+  color: $buttonPrimaryBackground !important;
+}
+
+input.pt-input,
+textarea {
+  background-color: $searchPrimaryBackground !important;
+  color: $searchPrimaryFontColor !important;
+}
+
+input.pt-input.secondaryInput,
+textArea {
+  background-color: $searchSecondaryBackground !important;
+  color: $searchSecondaryFontColor !important;
+}
+
+.pt-icon-search {
+  color: $buttonPrimaryIcon !important;
+}
+
+::-webkit-input-placeholder {
+  color: $searchPrimaryFontColor !important;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px solid $brightRedFont;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 12px;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 105%;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

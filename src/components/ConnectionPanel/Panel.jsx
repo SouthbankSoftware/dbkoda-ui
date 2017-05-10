@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-21T10:47:14+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-08T12:57:45+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-10T11:59:23+10:00
  */
 
 /**
@@ -147,9 +147,11 @@ export default class Panel extends React.Component {
           </div>
           <div className="pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
+          </div>
+          <div className="profile-separator" />
+          <div className="pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssl')} />
           </div>
-
           <div className="profile-separator" />
           <Label text="Authentication" />
           <Checkbox field={form.$('sha')} />
