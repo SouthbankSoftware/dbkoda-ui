@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T10:55:17+10:00
+ * @Last modified time: 2017-05-10T13:38:42+10:00
  */
 
 import React from 'react';
@@ -28,6 +28,8 @@ export default class TreeActionPanel extends React.Component {
       this.dynamicForm = res;
       this.showForm(true);
       this.dynamicForm.getData();
+    }).catch((reason) => {
+      this.updateMsg(reason);
     });
   }
   executeCommand = (content) => {
@@ -74,9 +76,13 @@ export default class TreeActionPanel extends React.Component {
   };
   formPromise;
   dynamicForm;
+  @observable msg = '';
   @observable bForm = false;
   @action showForm(value) {
     this.bForm = value;
+  }
+  @action updateMsg(value) {
+    this.msg = value;
   }
   render() {
     console.log(this);
@@ -86,6 +92,10 @@ export default class TreeActionPanel extends React.Component {
           title={this.dynamicForm.title}
           mobxForm={this.dynamicForm.mobxForm}
         />}
+        {!this.bForm &&
+          <div className="tree-msg-div">
+            <span>{this.msg}</span>
+          </div>}
       </div>
     );
   }

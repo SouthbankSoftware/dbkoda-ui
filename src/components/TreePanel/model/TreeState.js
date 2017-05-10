@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-01T11:54:59+10:00
+ * @Last modified time: 2017-05-10T14:51:55+10:00
 */
 
 /* eslint-disable */
@@ -17,6 +17,7 @@ import EventLogging from '#/common/logging/EventLogging';
 import TreeNode from './TreeNode.jsx';
 
 export default class TreeState {
+  profileId;
   treeNodes;
   @observable filteredNodes;
   @observable filter = '';
@@ -32,6 +33,9 @@ export default class TreeState {
     this.treeNodes = [];
     this.filteredNodes = observable([]);
     this.resetTreeNode = new TreeNode({text: '...'});
+  }
+  @action setProfileId(value) {
+    this.profileId = value;
   }
   /**
    * set the selected profile alias to be shown in toolbar
