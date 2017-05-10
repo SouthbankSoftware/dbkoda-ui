@@ -22,5 +22,7 @@ export const CreateIndex = {
     dbenvy_listdb: common.dbenvy_listdb,
     dbenvy_listdb_parse: common.dbenvy_listdb_parse,
     dbenvy_listcollections: common.dbenvy_listcollections,
-    dbenvy_listcollections_parse: common.dbenvy_listcollections_parse
+    dbenvy_listcollections_parse: common.dbenvy_listcollections_parse,
+    dbenvyListAttributes: common.dbenvyListAttributes,
+    dbenvyListAttributes_parse: common.dbenvyListAttributes_parse
 };
