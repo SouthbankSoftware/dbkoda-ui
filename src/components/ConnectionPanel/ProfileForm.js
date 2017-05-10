@@ -1,4 +1,9 @@
 /**
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-10T14:49:05+10:00
+ */
+
+/**
  * profile form class
  */
 import MobxReactForm from 'mobx-react-form';
@@ -141,7 +146,7 @@ export const Form = {
     type: 'number',
     rules: 'numeric',
     value: '27017',
-    label: 'Port',
+    label: ':',
   }, {
     name: 'urlRadio',
     label: 'URL',
