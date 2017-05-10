@@ -6,7 +6,7 @@ import {parseOutput} from '../Explain';
 chai.use(chaiEnzyme());
 
 describe('test explain view', () => {
-  it('test parse stages output', () => {
+  test('test parse stages output', () => {
     const explainOutput = {
       'queryPlanner': {
         'plannerVersion': 1,
