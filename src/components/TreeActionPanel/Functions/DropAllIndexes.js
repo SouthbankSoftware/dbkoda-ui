@@ -7,19 +7,16 @@
  */
 
 
-export const CreateIndex = {
+export const DropAllIndexes = {
     executeCommand: null,
     setExecuteFunction: (cbFuncExecute) => {
-        CreateIndex.executeCommand = cbFuncExecute;
+        DropAllIndexes.executeCommand = cbFuncExecute;
     },
     // Prefill function for alter user
-    dbenvy_CreateIndexPreFill: (params) => {
+    dbenvy_DropAllIndexesPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
-        data.Unique = 'false';
-        data.Background = 'false';
-        data.Sparse = 'false';
         return data;
     },
     dbenvy_listcollections: () => {

@@ -3,14 +3,14 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-01T11:15:18+10:00
+ * @Last modified time: 2017-05-10T09:29:35+10:00
  */
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, reaction } from 'mobx';
 import { featherClient } from '~/helpers/feathers';
-import { AnchorButton } from '@blueprintjs/core';
+import { AnchorButton, ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import CodeMirror from 'react-codemirror';
 import { Broker, EventType } from '../../helpers/broker';
 
@@ -24,12 +24,29 @@ require('#/common/MongoScript.js');
 
 @inject('store')
 @observer
+@ContextMenuTarget
 export default class Terminal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       command: '',
-      historyCursor: 0
+      historyCursor: 0,
+      terminalOptions: {
+        mode: 'MongoScript',
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        json: true,
+        jsonld: true,
+        scrollbarStyle: null,
+        keyMap: 'sublime',
+        extraKeys: {
+          'Ctrl-Space': 'autocomplete',
+          'Ctrl-E': () => { this.sendCommandToEditor(); }
+        },
+        smartIndent: true,
+        theme: 'ambiance',
+        typescript: true
+      }
     };
 
     this.updateCommand = this.updateCommand.bind(this);
@@ -201,6 +218,20 @@ export default class Terminal extends React.Component {
     return command;
   }
 
+  /**
+   *
+   */
+   @action.bound
+  sendCommandToEditor() {
+    if (this.state.command) {
+      this.props.store.outputPanel.sendingCommand = this.state.command;
+      this.setState({
+        command: ''
+      });
+      console.log('Send command to editor: ' + this.props.store.outputPanel.sendingCommand);
+    }
+  }
+
   @action.bound
   finishedExecution() {
     this.props.store.editors.get(this.props.id).executing = false;
@@ -210,23 +241,19 @@ export default class Terminal extends React.Component {
     }
   }
 
-  render() {
-    const terminalOptions = {
-      mode: 'MongoScript',
-      matchBrackets: true,
-      autoCloseBrackets: true,
-      json: true,
-      jsonld: true,
-      scrollbarStyle: null,
-      keyMap: 'sublime',
-      extraKeys: {
-        'Ctrl-Space': 'autocomplete'
-      },
-      smartIndent: true,
-      theme: 'ambiance',
-      typescript: true
-    };
+  renderContextMenu() {
+    return (
+      <Menu>
+        <MenuItem
+          onClick={this.sendCommandToEditor}
+          text="Send Command to Editor"
+          iconName="pt-icon-chevron-up"
+          intent={Intent.NONE} />
+      </Menu>
+    );
+  }
 
+  render() {
     return (
       <div className="outputTerminal">
         <CodeMirror
@@ -234,7 +261,7 @@ export default class Terminal extends React.Component {
           ref={(c) => {
             this.terminal = c;
           }}
-          options={terminalOptions}
+          options={this.state.terminalOptions}
           value={this.state.command}
           onChange={value => this.updateCommand(value)}
         />

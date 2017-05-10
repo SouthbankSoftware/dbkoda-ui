@@ -8,11 +8,11 @@
 
 export const DropIndex = {
   // Prefill function for alter user
-  dbenvy_DropIndexPreFill: (Database, CollectionName, IndexName) => {
+  dbenvy_DropIndexPreFill: (params) => {
     const outputDoc = {};
-    outputDoc.Database = Database;
-    outputDoc.CollectionName = CollectionName;
-    outputDoc.IndexName = IndexName;
+    outputDoc.Database = params.Database;
+    outputDoc.CollectionName = params.CollectionName;
+    outputDoc.IndexName = params.IndexName;
     return outputDoc;
   }
 };

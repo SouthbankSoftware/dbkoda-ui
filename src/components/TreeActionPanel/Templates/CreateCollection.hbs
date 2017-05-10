@@ -7,8 +7,8 @@ db.getSiblingDB("{{Database}}").createCollection(
          size: {{size}}{{/if ~}}
 {{#if max ~}},
          max: {{max}}{{/if ~}}
-{{#if storageEngineOptions ~}},
-         storageEngineOptions: {{storageEngineOptions}}{{/if ~}}
+{{#if storageEngine~}},
+         storageEngine: {{storageEngine}}{{/if ~}}
 {{#if validator ~}},
          validator: {{validator}}{{/if ~}}
 {{#if validationLevel ~}},

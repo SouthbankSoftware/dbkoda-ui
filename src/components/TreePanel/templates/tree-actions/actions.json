@@ -19,6 +19,10 @@
         "name": "CreateIndex",
         "text": "Create standard index",
         "icon": "pt-icon-search-template"
+    }, {
+        "name": "DropAllIndexes",
+        "text": "Drop All Indexes",
+        "icon": "pt-icon-search-template"
     }],
     "index": [{
         "name": "DropIndex",

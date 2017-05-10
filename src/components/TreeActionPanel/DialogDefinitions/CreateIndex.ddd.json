@@ -34,7 +34,6 @@
             "type": "Boolean",
             "readOnly": false,
             "tooltip": "Are the values in the index unique",
-            "default": "false",
             "rules": "boolean"
         },
         {
@@ -43,7 +42,7 @@
             "readOnly": false,
             "tooltip": "Build index in the background?",
             "optional": true,
-            "default": "false",
+            "default": false,
             "rules": "boolean"
         },
         {
@@ -52,16 +51,14 @@
             "readOnly": false,
             "tooltip": "Only index documents that contain the field",
             "optional": true,
-            "default": "false",
             "rules": "boolean"
         },
         {
             "name": "partialFilterExpression",
-            "type": "Boolean",
+            "type": "Text",
             "readOnly": false,
             "tooltip": "filter condition that limits index scope",
-            "optional": true,
-            "default": "false"
+            "optional": true 
         },
         {
             "name": "expireAfterSeconds",
