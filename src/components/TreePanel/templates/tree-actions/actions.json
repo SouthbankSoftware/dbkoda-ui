@@ -9,7 +9,7 @@
     "database": [{
         "name": "CreateCollection",
         "text": "Create Collection",
-        "icon": "pt-icon-search-template"
+        "icon": "pt-icon-add"
     }],
     "collection": [{
         "name": "SampleCollections",
@@ -18,11 +18,15 @@
     }, {
         "name": "CreateIndex",
         "text": "Create standard index",
-        "icon": "pt-icon-search-template"
+        "icon": "pt-icon-add"
     }, {
         "name": "DropAllIndexes",
         "text": "Drop All Indexes",
-        "icon": "pt-icon-search-template"
+        "icon": "pt-icon-delete"
+    }, {
+        "name": "DropCollection",
+        "text": "DropCollection",
+        "icon": "pt-icon-delete"
     }],
     "index": [{
         "name": "DropIndex",

@@ -107,7 +107,7 @@ class View extends React.Component {
       isLinting: false,
       lintLoops: 0,
       options: {
-        theme: 'ambiance',
+
         lineNumbers: 'true',
         indentUnit: 2,
         styleActiveLine: 'true',
