@@ -1,6 +1,7 @@
 import chai, {assert} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import {getExecutionStages} from '../ExplainView';
+import {parseOutput} from '../Explain';
 
 chai.use(chaiEnzyme());
 
@@ -114,5 +115,41 @@ describe('test explain view', () => {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     assert.equal(stages.length, 1);
     assert.equal(stages[0].stage, 'COLLSCAN');
+  });
+
+  test('test parse explain output with regex', () => {
+    const output = '{"filter":{"email":/net/}}';
+    let p = parseOutput(output);
+    assert.equal(p, '{"filter":{"email":"/net/"}}');
+    p = parseOutput('{"filter" : { \
+      "email" : /net/ \
+    }}');
+    assert.equal(p, '{"filter":{"email":"/net/"}}');
+
+    p = parseOutput('{"plannerVersion" : 1,\
+    "namespace" : "m102.people",\
+      "indexFilterSet" : false,\
+      "parsedQuery" : {\
+      "$and" : [\
+        {\
+          "last_name" : {\
+            "$eq" : "Pham"\
+          }\
+        },\
+        {\
+          "email" : /net/\
+        }\
+      ]\
+    }}');
+    assert.equal(p, '{"plannerVersion":1,"namespace":"m102.people","indexFilterSet":false,"parsedQuery":{"$and":[{"last_name":{"$eq":"Pham"}},{"email":"/net/"}]}}');
+
+    p = parseOutput('{"a":/b/,"c":/d/}');
+    assert.equal(p, '{"a":"/b/","c":"/d/"}');
+
+    p = parseOutput('{"a":"/"}');
+    assert.equal(p, '{"a":"/"}');
+
+    p = parseOutput('{"filter":{"email":/net/},"rejected":"[/net/,/net/]"}');
+    assert.equal(p, '{"filter":{"email":"/net/"},"rejected":"[/net/,/net/]"}');
   });
 });
