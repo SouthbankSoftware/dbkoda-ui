@@ -44,7 +44,6 @@ export const AlterUser = {
     }
     throw new Error('dbenvy: Alter user should include as least one role');
   },
-
   dbenvy_listdb: common.dbenvy_listdb,
   dbenvy_listdb_parse: common.dbenvy_listdb_parse,
   dbenvy_listRoles: common.dbenvy_listRoles,

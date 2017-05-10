@@ -1,9 +1,22 @@
 // Theme 1 Colours: These should be externalized eventually:
+//Tabs:
+$tabFontColor: #8B8B8B;
+$tabBackground: #323232;
+$tabBackgroundSelected: #202020;
 //Editor:
 $editorBackground: #202020;
 $editorActiveLine: #303030;
 $editorSelectText: #404040;
 $editorTextComments: #8B8B8B;
+$editorDefaultFontColor: #FFB795;
+$keywordOne: #179DEA;
+$keywordTwo: #B95CCE;
+$keywordThree: #DB3737;
+$keywordFour: #8A9BA8;
+$propFontColor: #aac6e3;
+$stringFontColor: #4caf50;
+$white: #ffffff;
+$black: #000000;
 //NavBars:
 $navbarRightBackground: #494849;
 $navbarRighHeading: #BFBEC0;
@@ -23,37 +36,14 @@ $buttonTertiaryIcon: #BFBEC0;
 $buttonDangerBackground: #8A4148;
 $buttonDangerIcon: #BFBEC0;
 $selectPrimaryBackground: #313131;
-$searchPrimaryBackground: #BFBEc0;
+$searchPrimaryBackground: #BFBEC0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEc0;
-$editorDefaultFontColor: #FFB795;
-$backgroundPrimaryColor: #2d3d46;
-$backgroundPrimaryColor: #2d3d46;
-$tabPrimaryColor: #3d3d3d;
-$tabStrokeColor: #d1ccc8;
-$brightBlueFont: #179dea;
-$blueDarkest: #0e5a8a;
-$selectGray: #8a9ba8;
-$whiteColor: #f5f8fa;
-$blackColor: #000000;
-$white: #ffffff;
-$brightBlueFont: #179dea;
-$greyBlueFont: #8dacbc;
-$purpleFont: #b95cce;
-$brightRedFont: #db3737;
-$darkRedFont: #9b4d4d;
-$matchingBackground: #6b6b6b;
-$backgroundPrimaryColor: #2d3c46;
-$backgroundSecondaryColor: #394b59;
-$tabPrimaryColor: #3d3d3d;
-$tabStrokeColor: #d1ccc8;
-$blueDarkest: #0e5a8a;
-$selectGray: #8a9ba8;
-$whiteColor: #f5f8fa;
-$blackColor: #000000;
-$propFontColor: #aac6e3;
-$stringFontColor: #4caf50;
+$searchSecondaryFontColor: #BFBEC0;
+
+
+
+
 $downArrow: "\25BE";
 $rightArrow: "\25B8";
 // Panel CSS
@@ -72,20 +62,23 @@ $rightArrow: "\25B8";
     flex-direction: column;
     flex-grow: 1;
     .pt-tab-list {
+      background-color: $tabBackground;
+      margin-left:0px;
       .pt-tab {
-        color: $navbarRighHeading;
+        color: $tabFontColor;
+        background-color: $tabBackground;
         outline: unset;
         box-shadow: unset;
       }
       .pt-tab[aria-selected="true"] {
         box-shadow: unset;
-        background-color: $editorBackground;
+        background-color: $tabBackgroundSelected;
       }
       .pt-tab:hover {
         color: $white;
       }
       .welcomeTab {
-        padding-left: 5px;
+        padding-left: 10px;
         padding-right: 5px;
         flex-grow: initial;
       }
@@ -176,11 +169,11 @@ $rightArrow: "\25B8";
   /////////////////////////////
   div.CodeMirror span.CodeMirror-matchingbracket {
     color: $white !important;
-    border: 1px solid $selectGray;
+    border: 1px solid $keywordFour;
   }
   div.CodeMirror span.CodeMirror-nonmatchingbracket {
-    color: $brightRedFont !important;
-    border: 1px solid $brightRedFont;
+    color: $keywordThree !important;
+    border: 1px solid $keywordThree;
   }
   span.cm-property {
     color: $propFontColor !important;
@@ -200,7 +193,7 @@ $rightArrow: "\25B8";
     height: 100%;
   }
   .cm-s-ambiance .CodeMirror-linenumber {
-    color: $whiteColor;
+    color: $white;
   }
   .CodeMirror-linebackground {
     background-color: $editorBackground !important;
@@ -215,40 +208,40 @@ $rightArrow: "\25B8";
     color: $editorDefaultFontColor !important;
   }
   span.cm-db {
-    color: $purpleFont !important;
+    color: $keywordTwo !important;
   }
   span.cm-show {
-    color: $brightBlueFont !important;
+    color: $keywordOne !important;
   }
   span.cm-dbs {
-    color: $purpleFont !important;
+    color: $keywordTwo !important;
   }
   span.cm-use {
-    color: $brightBlueFont !important;
+    color: $keywordOne !important;
   }
   span.cm-collections {
-    color: $purpleFont !important;
+    color: $keywordTwo !important;
   }
   span.cm-users {
-    color: $purpleFont !important;
+    color: $keywordTwo !important;
   }
   span.cm-roles {
-    color: $purpleFont !important;
+    color: $keywordTwo !important;
   }
   span.cm-profile {
-    color: $purpleFont !important;
+    color: $keywordTwo !important;
   }
   span.cm-databases {
-    color: $purpleFont !important;
+    color: $keywordTwo !important;
   }
   span.cm-it {
-    color: $brightBlueFont !important;
+    color: $keywordOne !important;
   }
   span.cm-dbenvy-prompt {
-    color: $selectGray !important;
+    color: $keywordFour !important;
   }
   span.cm-mongos-prompt {
-    color: $selectGray !important;
+    color: $keywordFour !important;
   }
   .CodeMirror-gutters {
     background-color: $editorBackground !important;
@@ -259,7 +252,7 @@ $rightArrow: "\25B8";
     background-color: $editorBackground !important;
   }
   .CodeMirror-foldmarker {
-    color: $purpleFont;
+    color: $keywordTwo;
     font-family: arial;
     line-height: .3;
     cursor: pointer;
@@ -298,13 +291,13 @@ $rightArrow: "\25B8";
     background-color: $editorBackground;
   }
   .lint-error-icon {
-    color: $brightRedFont;
+    color: $keywordThree;
     font-style: oblique;
     font-size: 20px;
     float: right;
   }
   .CodeMirror-cursor {
-    border-left: 1px solid white;
+    border-left: 1px solid $white;
     border-right: none;
     width: 0;
   }
@@ -369,7 +362,10 @@ $rightArrow: "\25B8";
     bottom: 0;
     position: absolute;
   }
-   ::selection {
-    background-color: $editorActiveLine !important;
+  .CodeMirror-selectedtext {
+    background-color: $editorSelectText !important;
   }
 }
+
+
+
