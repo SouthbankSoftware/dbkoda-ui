@@ -369,7 +369,10 @@ $rightArrow: "\25B8";
     bottom: 0;
     position: absolute;
   }
-   ::selection {
-    background-color: $editorActiveLine !important;
+  .CodeMirror-selectedtext {
+    background-color: $editorSelectText !important;
   }
 }
+
+
+
