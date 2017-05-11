@@ -155,6 +155,7 @@ export default class Panel extends React.Component {
         <Tabs2
           id="outputPanelTabs"
           className="outputTabView"
+          animate={false}
           onChange={this.changeTab}
           selectedTabId={this.props.store.outputPanel.currentTab}
         >

@@ -32,6 +32,7 @@ $buttonSecondaryBackground: #2D3D46;
 $buttonSecondaryBackgroundHover: #1e282f;
 $buttonSecondaryIcon: #BFBEC0;
 $buttonTertiaryBackground: #202020;
+$buttonTertiaryBackgroundHover: #404040;
 $buttonTertiaryBackgroundDisabled: #303030;
 $buttonTertiaryIcon: #BFBEC0;
 $buttonDangerBackground: #8A4148;
@@ -72,8 +73,23 @@ h3 {
   margin-right: 5px;
 }
 .circleButton:hover {
-  background-color: $buttonTertiaryIcon !important;
-  color: $buttonTertiaryBackground !important;
+  background-color: $buttonTertiaryBackgroundHover !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.circleButton.pt-disabled {
+    background-color: $buttonTertiaryBackgroundDisabled !important;
+}
+.circleButton.warningButton {
+  background-color: $keywordThree !important;
+  color: $white !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.circleButton.warningButton:hover {
+  background-color: $buttonTertiaryBackground !important;
   border-radius: 50%;
   margin-left: 5px;
   margin-right: 5px;
@@ -114,10 +130,7 @@ h3 {
   z-index: 20000;
 }
 
-.pt-tab:not([aria-disabled="true"]):hover,
-.pt-tab[aria-selected="true"] {
-  color: $keywordOne;
-}
+
 
 .pt-tabs {
   color: $white;
@@ -166,19 +179,7 @@ h3 {
 .pt-dark pre {
   box-shadow: none !important;
 }
-a.pt-intent-primary {
-  background-color: $buttonPrimaryBackground !important;
-  color: $buttonPrimaryIcon !important;
-}
 
-a.pt-intent-primary:hover {
-  background-color: $buttonPrimaryBackgroundHover !important;
-  color: $buttonPrimaryIcon !important;
-}
-
-a.pt-disabled.pt-intent-primary {
-  background-color: rgba(255, 255, 255, 0.3) !important;
-}
 
 select.pt-intent-primary {
   background-color: $selectPrimaryBackground !important;
@@ -229,4 +230,22 @@ textArea {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+a.pt-intent-primary {
+  background-color: $buttonPrimaryBackground !important;
+  color: $buttonPrimaryIcon !important;
+}
+
+a.pt-intent-primary:hover {
+  background-color: $buttonPrimaryBackgroundHover !important;
+  color: $buttonPrimaryIcon !important;
+}
+
+a.pt-disabled.pt-intent-primary {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.pt-tab:not([aria-disabled="true"]):hover,
+.pt-tab[aria-selected="true"]:hover {
+  color: $buttonSecondaryBackgroundHover !important;
 }

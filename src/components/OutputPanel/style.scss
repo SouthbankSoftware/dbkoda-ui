@@ -3,63 +3,394 @@
 // @Email:  chris@southbanksoftware.com
 // @Last modified by:   chris
 // @Last modified time: 2017-03-22T17:17:54+11:00
+// Theme 1 Colours: These should be externalized eventually:
+//Tabs:
+$tabFontColor: #8B8B8B;
+$tabBackground: #323232;
+$tabBackgroundSelected: #202020;
+//Editor:
+$editorBackground: #202020;
+$editorActiveLine: #303030;
+$editorSelectText: #404040;
+$editorTextComments: #8B8B8B;
+$editorDefaultFontColor: #FFB795;
+$keywordOne: #179DEA;
+$keywordTwo: #B95CCE;
+$keywordThree: #DB3737;
+$keywordFour: #8A9BA8;
+$propFontColor: #aac6e3;
+$stringFontColor: #4caf50;
+$white: #ffffff;
+$black: #000000;
+//Output:
+$terminalBackground: #494849;
+$terminalInput: #202020;
+$terminalButtonBackground: #BFBEC0;
+$terminalButtonIcon: #58595B;
 //NavBars:
 $navbarRightBackground: #494849;
 $navbarRighHeading: #BFBEC0;
-$navbar-secondary-background: #323232;
-$navbar-left-background: #212E33;
-$navbar-left-heading: #BFBEC0;
-$panel-left-background: #2D3D46;
-
-
-.outputToolbar {
-  order: 1;
-  background-color: $navbarRightBackground !important;
-}
-
-.outputTabView {
-  order: 2;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.outputEditor {
-  order: 3;
-  flex: 1;
-  min-height: 0;
-  padding-bottom: 30px;
-}
-
-.outputTerminal {
-  position: absolute;
-  bottom: 0;
-  z-index: 10;
-  width: 100%;
-
-  order: 4;
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  height: 30px;
-}
-
-.outputCmdLine {
-  flex: 1;
-  order: 1;
-}
-
-.executeCmdBtn {
-  flex: initial;
-  order: 2;
-  width: 50px;
-}
-
+$navbarSecondaryBackground: #323232;
+$navbarLeftBackground: #212E33;
+$navbarLeftHeading: #BFBEC0;
+$panelLeftBackground: #2D3D46;
+//Buttons:
+$buttonPrimaryBackground: #BFBEC0;
+$buttonPrimaryBackgroundHover: #99979b;
+$buttonPrimaryIcon: #58595B;
+$buttonSecondaryBackground: #2D3D46;
+$buttonSecondaryBackgroundHover: #1e282f;
+$buttonSecondaryIcon: #BFBEC0;
+$buttonTertiaryBackground: #202020;
+$buttonTertiaryIcon: #BFBEC0;
+$buttonDangerBackground: #8A4148;
+$buttonDangerBackgroundHover:#9A5158;
+$buttonDangerIcon: #BFBEC0;
+$selectPrimaryBackground: #313131;
+$selectBorderColor: #515151;
+$searchPrimaryBackground: #BFBEC0;
+$searchPrimaryFontColor: #494849;
+$searchSecondaryBackground: #202020;
+$searchSecondaryFontColor: #BFBEC0;
+$downArrow: "\25BE";
+$rightArrow: "\25B8";
 .outputPanel {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-x: scroll; 
+  overflow-x: scroll;
+  .outputTabView {
+    order: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .pt-tab-list {
+      .pt-tab {
+        padding-left: 5px;
+        padding-right: 5px;
+        flex-grow: 1;
+        color: $tabFontColor;
+        background-color: $tabBackground;
+        outline: unset;
+        box-shadow: unset;
+      }
+      .pt-tab[aria-selected="true"] {
+        box-shadow: unset;
+        background-color: $tabBackgroundSelected;
+      }
+      .pt-tab:hover {
+        color: $white !important;
+      }
+    }
+    .pt-tab-panel {
+      margin-top: 0px;
+      flex-grow: 1;
+      .outputEditor {
+        flex: 1;
+        width: 100%;
+        order: 3;
+        min-height: 0;
+        padding-bottom: 30px;
+        .outputTerminal {
+          background-color: $terminalBackground;
+          position: absolute;
+          bottom: 0;
+          z-index: 10;
+          width: 100%;
+          order: 4;
+          flex: 1;
+          display: flex;
+          flex-direction: row;
+          height: 50px;
+          .outputCmdLine {
+            background-color: $terminalInput;
+            flex: 1;
+            order: 1;
+            margin-top: 12px;
+            margin-left: 12px;
+            height: 30px;
+          }
+          .pt-button {
+            background-color: $terminalButtonBackground;
+            color: $terminalButtonIcon;
+            margin-right: 50px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-top-right-radius: 50%;
+            border-bottom-right-radius: 50%;
+            flex: initial;
+            order: 2;
+            width: 20px;
+          }
+        }
+      }
+    }
+  }
+  .outputToolbar {
+    order: 1;
+    background-color: $navbarRightBackground !important;
+    .pt-align-left {
+      span {  
+        .pt-button {
+        }
+        .clearOutputBtn {
+          background-color: $buttonDangerBackground !important;
+          color: $buttonDangerIcon !important;
+        }
+        .clearOutputBtn:hover {
+          background-color: $buttonDangerBackgroundHover !important;
+          color: $buttonDangerIcon !important;
+        }
+      }
+    }
+  }
+} //// Code Mirror CSS: ////
+/////////////////////////////
+div.CodeMirror span.CodeMirror-matchingbracket {
+  color: $white !important;
+  border: 1px solid $keywordFour;
+}
+
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
+  color: $keywordThree !important;
+  border: 1px solid $keywordThree;
+}
+
+span.cm-property {
+  color: $propFontColor !important;
+}
+
+span.cm-string {
+  color: $stringFontColor !important;
+}
+
+.CodeMirror-overlayscroll-vertical {
+  height: 0% !important;
+}
+
+.CodeMirror-scroll {
+  background-color: $editorBackground;
+  width: 100%;
+}
+
+.CodeMirror,
+.ReactCodeMirror {
+  height: 100%;
+}
+
+.cm-s-ambiance .CodeMirror-linenumber {
+  color: $white;
+}
+
+.CodeMirror-linebackground {
+  background-color: $editorBackground !important;
+}
+
+.CodeMirror-line {
+  background-color: $editorBackground;
+}
+
+span.cm-mongo-operator {
+  color: $white !important;
+}
+
+.cm-variable {
+  color: $editorDefaultFontColor !important;
+}
+
+span.cm-db {
+  color: $keywordTwo !important;
+}
+
+span.cm-show {
+  color: $keywordOne !important;
+}
+
+span.cm-dbs {
+  color: $keywordTwo !important;
+}
+
+span.cm-use {
+  color: $keywordOne !important;
+}
+
+span.cm-collections {
+  color: $keywordTwo !important;
+}
+
+span.cm-users {
+  color: $keywordTwo !important;
+}
+
+span.cm-roles {
+  color: $keywordTwo !important;
+}
+
+span.cm-profile {
+  color: $keywordTwo !important;
+}
+
+span.cm-databases {
+  color: $keywordTwo !important;
+}
+
+span.cm-it {
+  color: $keywordOne !important;
+}
+
+span.cm-dbenvy-prompt {
+  color: $keywordFour !important;
+}
+
+span.cm-mongos-prompt {
+  color: $keywordFour !important;
+}
+
+.CodeMirror-gutters {
+  background-color: $editorBackground !important;
+  border-right: 1px solid $editorBackground !important;
+  box-shadow: none !important;
+}
+
+.CodeMirror-gutter {
+  background-color: $editorBackground !important;
+}
+
+.CodeMirror-foldmarker {
+  color: $keywordTwo;
+  font-family: arial;
+  line-height: .3;
+  cursor: pointer;
+}
+
+.CodeMirror-foldgutter {
+  width: .7em;
+  margin-right: 5px !important;
+}
+
+.CodeMirror-foldgutter-open {
+  padding-left: 5px !important;
+  padding-left: 5px !important;
+}
+
+.CodeMirrror-foldgutter-folded {
+  padding-left: 5px !important;
+  padding-left: 5px !important;
+}
+
+.cm-s-ambiance .CodeMirror-guttermarker-subtle {
+  color: $white !important;
+  cursor: pointer;
+}
+
+.CodeMirror-foldgutter-open,
+.CodeMirror-foldgutter-folded {
+  color: #555;
+  cursor: pointer;
+}
+
+.CodeMirror-foldgutter-open:after {
+  content: $downArrow;
+}
+
+.CodeMirror-foldgutter-folded:after {
+  content: $rightArrow;
+}
+
+.CodeMirror-activeline-background {
+  background-color: $editorActiveLine !important;
+}
+
+.CodeMirror-activeline-gutter {
+  background-color: $editorBackground;
+}
+
+.lint-error-icon {
+  color: $keywordThree;
+  font-style: oblique;
+  font-size: 20px;
+  float: right;
+}
+
+.CodeMirror-cursor {
+  border-left: 1px solid $white;
+  border-right: none;
+  width: 0;
+}
+
+
+/* Shown when moving in bi-directional text */
+
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid silver;
+}
+
+.cm-fat-cursor .CodeMirror-cursor {
+  width: auto;
+  border: 0 !important;
+  background: #7e7;
+}
+
+.cm-fat-cursor div.CodeMirror-cursors {
+  z-index: 1;
+}
+
+.cm-animate-fat-cursor {
+  width: auto;
+  border: 0;
+  -webkit-animation: blink 1.06s steps(1) infinite;
+  -moz-animation: blink 1.06s steps(1) infinite;
+  animation: blink 1.06s steps(1) infinite;
+  background-color: #7e7;
+}
+
+@-moz-keyframes blink {
+  0% {}
+  50% {
+    background-color: transparent;
+  }
+  100% {}
+}
+
+@-webkit-keyframes blink {
+  0% {}
+  50% {
+    background-color: transparent;
+  }
+  100% {}
+}
+
+@keyframes blink {
+  0% {}
+  50% {
+    background-color: transparent;
+  }
+  100% {}
+}
+
+.cm-tab {
+  display: inline-block;
+  text-decoration: inherit;
+}
+
+.CodeMirror-rulers {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -50px;
+  bottom: -20px;
+  overflow: hidden;
+}
+
+.CodeMirror-ruler {
+  border-left: 1px solid #ccc;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+}
+
+.CodeMirror-selectedtext {
+  background-color: $editorSelectText !important;
 }
 
 .CodeMirror,

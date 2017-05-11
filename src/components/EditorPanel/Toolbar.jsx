@@ -560,6 +560,7 @@ export default class Toolbar extends React.Component {
     return (
       <nav className="pt-navbar editorToolbar">
         <div className="pt-navbar-group pt-align-left leftEditorToolbar">
+          <div className="pt-navbar-heading">Query Input</div>
           <div className="pt-button-group pt-intent-primary leftButtonGroup">
             <div className="pt-select pt-intent-primary editorContextDropdownWrapper">
               <select

@@ -88,7 +88,7 @@ $rightArrow: "\25B8";
         background-color: $tabBackgroundSelected;
       }
       .pt-tab:hover {
-        color: $white;
+        color: $white !important;
       }
       .welcomeTab {
         padding-left: 10px;
@@ -178,7 +178,8 @@ $rightArrow: "\25B8";
         }
       }
     }
-  } //// Code Mirror CSS: ////
+  } 
+  //// Code Mirror CSS: ////
   /////////////////////////////
   div.CodeMirror span.CodeMirror-matchingbracket {
     color: $white !important;

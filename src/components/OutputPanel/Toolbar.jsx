@@ -201,7 +201,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              className="pt-icon-disable pt-intent-warning clearOutputBtn"
+              className="pt-icon-disable pt-intent-danger circleButton clearOutputBtn"
               onClick={this.clearOutput}
             />
           </Tooltip>
@@ -214,7 +214,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              className="showMoreBtn pt-intent-primary"
+              className="pt-icon-double-chevron-down showMoreBtn circleButton"
               onClick={this.showMore}
               disabled={
                 this.props.store.outputPanel.currentTab.indexOf('Explain') >=
@@ -223,9 +223,7 @@ export default class Toolbar extends React.Component {
                     this.props.store.outputPanel.currentTab
                   ).cannotShowMore
               }
-            >
-              Show More
-            </AnchorButton>
+            />
           </Tooltip>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -236,7 +234,7 @@ export default class Toolbar extends React.Component {
             position={Position.BOTTOM}
           >
             <AnchorButton
-              className="saveOutputBtn pt-icon-floppy-disk pt-intent-primary"
+              className="saveOutputBtn pt-icon-floppy-disk circleButton"
               onClick={this.downloadOutput}
             />
           </Tooltip>
