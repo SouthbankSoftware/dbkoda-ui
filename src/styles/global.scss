@@ -1,5 +1,4 @@
 // Theme 1 Colours: These should be externalized eventually:
-// Theme 1 Colours: These should be externalized eventually:
 //Tabs:
 $tabFontColor: #8B8B8B;
 $tabBackground: #323232;
@@ -33,6 +32,7 @@ $buttonSecondaryBackground: #2D3D46;
 $buttonSecondaryBackgroundHover: #1e282f;
 $buttonSecondaryIcon: #BFBEC0;
 $buttonTertiaryBackground: #202020;
+$buttonTertiaryBackgroundDisabled: #303030;
 $buttonTertiaryIcon: #BFBEC0;
 $buttonDangerBackground: #8A4148;
 $buttonDangerIcon: #BFBEC0;
@@ -62,6 +62,21 @@ h2 {
 h3 {
   color: $white;
   margin-top: 4px;
+}
+
+.circleButton {
+  background-color: $buttonTertiaryBackground !important;
+  color: $buttonTertiaryIcon !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.circleButton:hover {
+  background-color: $buttonTertiaryIcon !important;
+  color: $buttonTertiaryBackground !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .closedProfile {

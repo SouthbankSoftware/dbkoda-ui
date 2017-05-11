@@ -36,14 +36,11 @@ $buttonTertiaryIcon: #BFBEC0;
 $buttonDangerBackground: #8A4148;
 $buttonDangerIcon: #BFBEC0;
 $selectPrimaryBackground: #313131;
+$selectBorderColor: #515151;
 $searchPrimaryBackground: #BFBEC0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
 $searchSecondaryFontColor: #BFBEC0;
-
-
-
-
 $downArrow: "\25BE";
 $rightArrow: "\25B8";
 // Panel CSS
@@ -56,6 +53,22 @@ $rightArrow: "\25B8";
   }
   .editorToolbar {
     background-color: $navbarRightBackground !important;
+    .leftEditorToolbar {
+      .leftButtonGroup {
+        .editorContextDropdownWrapper {
+          border: 1px solid $selectBorderColor;
+          background-color: $selectPrimaryBackground !important;
+          .editorContextDropdown {
+            outline: unset;
+            background-color: $selectPrimaryBackground;
+            border-right: 1px solid $selectBorderColor !important;
+            padding-right: 24px !important;
+            padding-left: 5px;
+            width: 100%;
+          }
+        }
+      }
+    }
   }
   .editorTabView {
     display: flex;
@@ -63,7 +76,7 @@ $rightArrow: "\25B8";
     flex-grow: 1;
     .pt-tab-list {
       background-color: $tabBackground;
-      margin-left:0px;
+      margin-left: 0px;
       .pt-tab {
         color: $tabFontColor;
         background-color: $tabBackground;
@@ -145,10 +158,10 @@ $rightArrow: "\25B8";
             padding-left: 20px;
             display: flex;
             flex-direction: column;
-            border-top: 1px solid #4f4f4f;
-            border-left: 1px solid #4f4f4f;
+            border-top: 1px solid #4F4F4F;
+            border-left: 1px solid #4f4F4F;
             height: 100%;
-            .hotkeyItems {
+            F .hotkeyItems {
               display: flex;
               flex-direction: column;
               .hotkeyItem {
@@ -366,6 +379,3 @@ $rightArrow: "\25B8";
     background-color: $editorSelectText !important;
   }
 }
-
-
-
