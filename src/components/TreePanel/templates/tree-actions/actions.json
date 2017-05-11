@@ -10,14 +10,23 @@
         "name": "CreateCollection",
         "text": "Create Collection",
         "icon": "pt-icon-add"
-    }],
+    },{
+        "name": "CreateCollection",
+        "text": "Create Collection",
+        "icon": "pt-icon-add"
+    },{
+        "name": "setProfilingLevel",
+        "text": "Set Profiling Level",
+        "icon": "pt-icon-history"
+    }
+    ],
     "collection": [{
         "name": "SampleCollections",
         "text": "Find Attributes",
         "icon": "pt-icon-search-template"
     }, {
         "name": "CreateIndex",
-        "text": "Create standard index",
+        "text": "Create Index",
         "icon": "pt-icon-add"
     }, {
         "name": "DropAllIndexes",

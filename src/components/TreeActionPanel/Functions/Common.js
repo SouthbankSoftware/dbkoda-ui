@@ -43,37 +43,43 @@ export function dbenvy_listcollections_parse(res) { //eslint-disable-line
 
 export function dbenvyListAttributes(params) {
     const cmd = 'db.getSiblingDB("' + params.db + '").getCollection("' + params.collection +
-    '").aggregate([{ $sample: {size: 20}}]).toArray()';
+        '").aggregate([{ $sample: {size: 20}}]).toArray()';
     return cmd;
 }
 
 export function dbenvyListAttributes_parse(res) { //eslint-disable-line
     // Print attributes to one level (eg xxx.yyy but not xxx.yyy.zzz)
+    // console.log(res);
     const attributes = {};
     res.forEach((doc) => {
-        console.log(doc);
         Object.keys(doc).forEach((key) => {
             let keytype = typeof doc[key];
-            if (doc[key].constructor === Array) {
-              keytype = 'array';
+            if (doc[key]) {
+                if (doc[key].constructor === Array) {
+                    keytype = 'array';
+                }
             }
             attributes[key] = keytype;
             if (keytype == 'object') {
-               const obj = doc[key];
-               Object.keys(obj).forEach((nestedKey) => {
-                 attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
-               });
+                const obj = doc[key];
+                if (obj) {
+                    Object.keys(obj).forEach((nestedKey) => {
+                        attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
+                    });
+                }
             } else
             if (keytype === 'array') {
                 const docarray = doc[key];
                 docarray.forEach((nestedDoc) => {
                     const obj = nestedDoc;
                     Object.keys(obj).forEach((nestedKey) => {
-                     attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
+                        attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
                     });
                 });
             }
         });
     });
-    return Object.keys(attributes).sort();
+    const results = Object.keys(attributes).sort();
+    // console.log('listAttributes returning ' + results.length);
+    return results;
 }
