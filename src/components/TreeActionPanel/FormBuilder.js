@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T13:44:48+10:00
+ * @Last modified time: 2017-05-11T15:41:10+10:00
  */
 
 import { DynamicForm } from './Components/DynamicForm';
@@ -181,9 +181,13 @@ export default class FormBuilder {
                 const resOpts = resQueries[fldQuery.query];
                 let arrOptions = [];
                 if (formFunctions[fldQuery.parseFn]) {
-                  arrOptions = [''].concat(
-                    formFunctions[fldQuery.parseFn](resOpts)
-                  );
+                  try {
+                    arrOptions = [''].concat(
+                      formFunctions[fldQuery.parseFn](resOpts)
+                    );
+                  } catch (e) {
+                    console.log(e.stack);
+                  }
                 }
                 if (result.options[fldName]) {
                   result.options[fldName].dropdown = arrOptions;
