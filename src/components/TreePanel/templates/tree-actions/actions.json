@@ -11,13 +11,13 @@
         "text": "Create Collection",
         "icon": "pt-icon-add"
     },{
-        "name": "CreateCollection",
-        "text": "Create Collection",
-        "icon": "pt-icon-add"
-    },{
         "name": "setProfilingLevel",
-        "text": "Set Profiling Level",
+        "text": "Set Profiling",
         "icon": "pt-icon-history"
+    },{
+        "name": "DropDatabase",
+        "text": "Drop Database",
+        "icon": "pt-icon-delete"
     }
     ],
     "collection": [{
@@ -40,12 +40,12 @@
     "index": [{
         "name": "DropIndex",
         "text": "Drop Index",
-        "icon": "pt-icon-user"
+        "icon": "pt-icon-delete"
     }],
     "users": [{
         "name": "CreateUser",
         "text": "Create User",
-        "icon": "pt-icon-user"
+        "icon": "pt-icon-new-person"
     }],
     "user": [{
         "name": "AlterUser",
