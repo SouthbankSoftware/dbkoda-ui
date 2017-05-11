@@ -1,7 +1,7 @@
 # @Author: guiguan
 # @Date:   2017-01-09T15:15:34+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-04-10T18:42:16+10:00
+# @Last modified time: 2017-05-12T09:33:52+10:00
 
 
 
@@ -30,3 +30,5 @@ pipeline:
       <@{{build.author}}>: {{{build.message}}}
     when:
       status: [success, failure]
+
+branches: master
