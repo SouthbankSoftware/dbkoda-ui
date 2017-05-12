@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-10T09:29:35+10:00
+ * @Last modified time: 2017-05-12T13:49:00+10:00
  */
 
 import React from 'react';
@@ -30,7 +30,9 @@ export default class Terminal extends React.Component {
     super(props);
     this.state = {
       command: '',
-      historyCursor: 0,
+      historyCursor: this.props.store.outputs.get(
+          this.props.id
+        ).commandHistory.length,
       terminalOptions: {
         mode: 'MongoScript',
         matchBrackets: true,
@@ -161,7 +163,7 @@ export default class Terminal extends React.Component {
   showNextCommand() {
     if (
       this.state.historyCursor <
-      this.props.store.outputs.get(this.props.id).commandHistory.length
+      this.props.store.outputs.get(this.props.id).commandHistory.length - 1
     ) {
       this.state.historyCursor += 1;
       this.updateCommand(
@@ -226,7 +228,10 @@ export default class Terminal extends React.Component {
     if (this.state.command) {
       this.props.store.outputPanel.sendingCommand = this.state.command;
       this.setState({
-        command: ''
+        command: '',
+        historyCursor: this.props.store.outputs.get(
+            this.props.id
+          ).commandHistory.length
       });
       console.log('Send command to editor: ' + this.props.store.outputPanel.sendingCommand);
     }
