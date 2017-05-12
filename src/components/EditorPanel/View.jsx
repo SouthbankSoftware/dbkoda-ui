@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-10T09:34:26+10:00
+ * @Last modified time: 2017-05-12T14:02:34+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -263,7 +263,7 @@ class View extends React.Component {
         () => this.props.store.outputPanel.sendingCommand,
         (sendingCommand) => {
           console.log('reactionToTerminalPush');
-          if (sendingCommand) {
+          if (sendingCommand && this.props.store.editorPanel.activeEditorId == this.props.id) {
             console.log(sendingCommand);
             this.insertAtCursor(sendingCommand);
             this.props.store.outputPanel.sendingCommand = '';

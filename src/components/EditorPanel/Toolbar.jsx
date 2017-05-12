@@ -559,9 +559,10 @@ export default class Toolbar extends React.Component {
       .entries();
     return (
       <nav className="pt-navbar editorToolbar">
-        <div className="pt-navbar-group pt-align-left">
-          <div className="pt-button-group pt-intent-primary">
-            <div className="pt-select pt-intent-primary">
+        <div className="pt-navbar-group pt-align-left leftEditorToolbar">
+          <div className="pt-navbar-heading">Query Input</div>
+          <div className="pt-button-group pt-intent-primary leftButtonGroup">
+            <div className="pt-select pt-intent-primary editorContextDropdownWrapper">
               <select
                 onChange={this.onDropdownChanged}
                 value={this.props.store.editorPanel.activeDropdownId}
@@ -628,7 +629,7 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-button pt-icon-add pt-intent-primary addEditorButton"
+              className="pt-button pt-icon-add circleButton addEditorButton"
               loading={this.props.store.editorToolbar.newConnectionLoading}
               disabled={this.props.store.editorToolbar.noActiveProfile}
               onClick={this.addEditor} />
@@ -640,7 +641,7 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-button pt-icon-document-open pt-intent-primary openFileButton"
+              className="pt-button pt-icon-document-open circleButton openFileButton"
               onClick={this.openFile}
               disabled={this.props.store.editorToolbar.noActiveProfile} />
           </Tooltip>
@@ -651,7 +652,7 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-button pt-icon-floppy-disk pt-intent-primary saveFileButton"
+              className="pt-button pt-icon-floppy-disk circleButton saveFileButton"
               onClick={this.saveFile}
               disabled={this.props.store.editorToolbar.noActiveProfile} />
           </Tooltip>

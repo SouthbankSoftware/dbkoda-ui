@@ -8,7 +8,7 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
-const debug = true;
+const debug = false;
 const templateToBeTested = './src/components/TreeActionPanel/Templates/DropDatabase.hbs';
 const templateInput = require('./DropDatabase.hbs.input.json');
 const hbs = require('handlebars');
@@ -27,7 +27,7 @@ templateInput.Database = randomDatabase;
 // Command to drop the user
 const setupDatabaseCommands = [];
 setupDatabaseCommands.push(sprintf('use %s\n', randomDatabase));
-setupDatabaseCommands.push(sprintf('db.testColleciton.drop();\n'));
+setupDatabaseCommands.push(sprintf('db.testCollection.drop();\n'));
 setupDatabaseCommands.push(sprintf('db.testCollection.insertOne({a:1,b:1,c:{d:1,e:1}});\n'));
 
 // Command that checks the collection exists

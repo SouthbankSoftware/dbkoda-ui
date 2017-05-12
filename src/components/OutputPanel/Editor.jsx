@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-04T09:36:34+10:00
+ * @Last modified time: 2017-05-12T13:32:41+10:00
 */
 
 import React from 'react';
@@ -11,8 +11,10 @@ import { reaction, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
+import 'codemirror/theme/material.css';
 import { Broker, EventType } from '../../helpers/broker';
 import OutputTerminal from './Terminal';
+
 
 require('codemirror/mode/javascript/javascript');
 require('#/common/MongoScript.js');
@@ -38,7 +40,7 @@ export default class Editor extends React.Component {
     if (this.props.store.outputs.get(this.props.id)) {
       this.props.store.outputs.get(this.props.id).cannotShowMore = true;
       this.props.store.outputs.get(this.props.id).showingMore = false;
-      if (this.props.store.outputs.get(this.props.id).output) {
+      if (this.props.id != 'Default' && this.props.store.outputs.get(this.props.id).output) {
         this.props.store.outputs.get(
           this.props.id
         ).output += '** Session Restored **\r';
@@ -80,7 +82,7 @@ export default class Editor extends React.Component {
   componentDidMount() {
     const { props } = this;
     runInAction(() => {
-      if (this.props.initialMsg) {
+      if (this.props.initialMsg && this.props.id != 'Default') {
         this.props.store.outputs.get(
           this.props.id
         ).output += this.props.initialMsg;
@@ -142,7 +144,7 @@ export default class Editor extends React.Component {
   render() {
     const outputOptions = {
       smartIndent: true,
-      theme: 'ambiance',
+      theme: 'material',
       readOnly: true,
       lineWrapping: false,
       tabSize: 2,

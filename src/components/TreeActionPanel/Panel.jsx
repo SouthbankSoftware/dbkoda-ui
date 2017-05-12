@@ -100,12 +100,11 @@ export default class TreeActionPanel extends React.Component {
   render() {
     console.log(this);
     return (
-      <div>
-        {this.bForm &&
-          <View
-            title={this.dynamicForm.title}
-            mobxForm={this.dynamicForm.mobxForm}
-          />}
+      <div className="dynamic-form">
+        {this.bForm && <View
+          title={this.dynamicForm.title}
+          mobxForm={this.dynamicForm.mobxForm}
+        />}
         {!this.bForm &&
           <div>
             <div className="tree-msg-div">

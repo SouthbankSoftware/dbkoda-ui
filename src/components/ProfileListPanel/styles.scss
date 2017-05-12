@@ -1,49 +1,67 @@
-// Theme 1 Colours: These should be externalized eventually:
-//Editor:
-$editorBackground: #202020;
-$editorActiveLine: #303030;
-$editorTextComments: #8B8B8B;
-//NavBars:
-$navbarRightBackground: #494849;
-$navbarRighHeading: #BFBEC0;
-$navbarSecondaryBackground: #323232;
-$navbarLeftBackground: #212E33;
-$navbarLeftHeading: #BFBEC0;
-$panelLeftBackground: #2D3D46;
-//Buttons:
-$buttonPrimaryBackground: #BFBEC0;
-$buttonPrimaryBackgroundHover: #99979b;
-$buttonPrimaryIcon: #58595B;
-$buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #1e282f;
-$buttonSecondaryIcon: #BFBEC0;
-$buttonTertiaryBackground: #202020;
-$buttonTertiaryIcon: #BFBEC0;
-$buttonDangerBackground: #8A4148;
-$buttonDangerIcon: #BFBEC0;
-$selectPrimaryBackground: #313131;
-$searchPrimaryBackground: #BFBEc0;
-$searchPrimaryFontColor: #494849;
-$searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #222222;
-
+@import '../../styles/_defaultTheme.scss';
 .profileListPanel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   background-color: $panelLeftBackground !important;
-}
-.profileListToolbar {
-  background-color: $navbarLeftBackground !important;
-}
+  .profileListToolbar {
+    background-color: $navbarLeftBackground !important;
+    .pt-button {
+      background-color: $buttonSecondaryBackground !important;
+      color: $buttonSecondaryIcon !important;
+      border-radius: 50%;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+    .pt-button:hover {
+      background-color: $buttonSecondaryBackgroundHover !important;
+    }
+    .pt-button.dangerButton {
+      background-color: $buttonDangerBackground !important;
+    }
+    .pt-button.dangerButton:hover {
+      background-color: $buttonDangerBackgroundHover !important;
+    }
+    .pt-button.pt-disabled:hover {
+      background-color: $buttonSecondaryBackground !important;
+    }
+    .pt-button.pt-disabled.dangerButton:hover {
+      background-color: $buttonDangerBackground !important;
+    }
+  }
+  .profileList {
+    flex-grow: 1;
+  }
+  .bp-table-top-container {
+    display: none;
+  }
+  .bp-table-cell {
+    border-bottom: 1px solid $profileListDividerColor;
+    .bp-table-truncated-text {
+      display: table;
+      .profileListing {
+        height: 100%;
+        font: 'Arial';
+        font-style: normal !important;
+        color: $profileListFontColor;
+        font-size: large;
+        vertical-align: middle;
+        display: table-cell;
+      }
+      .profileListing::before {
+        margin-right: 10px;
+        color: $profileListIconColor;
 
-a.pt-intent-primary.secondaryButton {
-  background-color: $buttonSecondaryBackground !important;
-  color: $buttonSecondaryIcon !important;
-}
-
-a.pt-intent-primary.secondaryButton:hover {
-  background-color: $buttonSecondaryBackgroundHover !important;
-  color: $buttonSecondaryIcon !important;
+      }
+    }
+  }
+  .connection-profile-cell-selected {}
+  .bp-table-cell:hover {
+    background-color: $profileListTabHover;
+  }
 }
 
 .closedProfile {
-  color: #494849;
+  color: #696869 !important;
+  font-style: italic !important;
 }
