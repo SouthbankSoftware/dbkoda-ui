@@ -503,11 +503,13 @@ export default class ListView extends React.Component {
         ? 'connection-profile-cell connection-profile-cell-selected'
         : 'connection-profile-cell';
       if (profiles[rowIndex][1].status == 'OPEN') {
-        return <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>{profiles[rowIndex][1].alias}</Cell>;
+        return (<Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
+          <p className="pt-icon-link profileListing">{profiles[rowIndex][1].alias}</p>
+        </Cell>);
       }
       return (
         <Cell className={className}>
-          <i className="closedProfile">{profiles[rowIndex][1].alias}</i>
+          <i className=" pt-icon-link profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );
     };
@@ -523,6 +525,7 @@ export default class ListView extends React.Component {
           renderBodyContextMenu={this.renderBodyContextMenu}
           isRowResizable={false}
           defaultColumnWidth={1024}
+          defaultRowHeight={60}
           onSelection={region => this.onSelection(region)}>
           <Column name="Connection Profiles" renderCell={renderCell} />
         </Table>

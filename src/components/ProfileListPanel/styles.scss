@@ -22,12 +22,42 @@
     .pt-button.dangerButton:hover {
       background-color: $buttonDangerBackgroundHover !important;
     }
+    .pt-button.pt-disabled:hover {
+      background-color: $buttonSecondaryBackground !important;
+    }
+    .pt-button.pt-disabled.dangerButton:hover {
+      background-color: $buttonDangerBackground !important;
+    }
   }
   .profileList {
     flex-grow: 1;
   }
   .bp-table-top-container {
     display: none;
+  }
+  .bp-table-cell {
+    border-bottom: 1px solid $profileListDividerColor;
+    .bp-table-truncated-text {
+      display: table;
+      .profileListing {
+        height: 100%;
+        font: 'Arial';
+        font-style: normal !important;
+        color: $profileListFontColor;
+        font-size: large;
+        vertical-align: middle;
+        display: table-cell;
+      }
+      .profileListing::before {
+        margin-right: 10px;
+        color: $profileListIconColor;
+
+      }
+    }
+  }
+  .connection-profile-cell-selected {}
+  .bp-table-cell:hover {
+    background-color: $profileListTabHover;
   }
 }
 

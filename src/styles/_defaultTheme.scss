@@ -17,6 +17,11 @@ $propFontColor: #aac6e3;
 $stringFontColor: #4caf50;
 $white: #ffffff;
 $black: #000000;
+//Profile List
+$profileListIconColor: rgba(191, 190, 192, 0.3);
+$profileListFontColor: #BFBEC0;
+$profileListDividerColor: rgba(138, 155, 168, 0.3);
+$profileListTabHover: rgba(191, 190, 192, 0.1);
 //Output:
 $terminalBackground: #494849;
 $terminalInput: #202020;
@@ -34,7 +39,7 @@ $buttonPrimaryBackground: #BFBEC0;
 $buttonPrimaryBackgroundHover: #99979b;
 $buttonPrimaryIcon: #58595B;
 $buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #1e282f;
+$buttonSecondaryBackgroundHover: #3D4D56;
 $buttonSecondaryIcon: #BFBEC0;
 $buttonTertiaryBackground: #202020;
 $buttonTertiaryBackgroundHover: #404040;
@@ -51,3 +56,10 @@ $searchSecondaryBackground: #202020;
 $searchSecondaryFontColor: #BFBEC0;
 $downArrow: "\25BE";
 $rightArrow: "\25B8";
+
+
+$newProfileIcon: url('#/icons/new-profile-icon.svg');
+$editProfileIcon: url('#/icons/edit-profile-icon.svg');
+$closeProfileIcon: url('#/close-profile-icon.svg');
+$remove-profile-icon: url('#/remove-profile-icon.svg');
+$profile-icon: url('#/connection-icon.svg')
