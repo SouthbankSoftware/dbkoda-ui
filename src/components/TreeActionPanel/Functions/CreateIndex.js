@@ -24,7 +24,7 @@ export const CreateIndex = {
     },
     dbenvy_indexOptions_parse: (res) => {
         console.log(res);
-        return ([1, -1, '"text"', '"2dsphere"', '"2d"']);
+        return ([1, -1, '"hashed"', '"text"', '"2dsphere"', '"2d"']);
     },
     dbenvy_listdb: common.dbenvy_listdb,
     dbenvy_listdb_parse: common.dbenvy_listdb_parse,

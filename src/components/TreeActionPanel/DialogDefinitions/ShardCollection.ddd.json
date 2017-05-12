@@ -44,8 +44,7 @@
                     "Label": "Ascending?",
                     "type": "Select",
                     "tooltip": "1 for ascending index, -1 for descending index",
-                    "lookup": "dbenvy_indexOptions",
-                    "rules": "integer"
+                    "lookup": "dbenvy_indexOptions" 
                 }
             ]
         },

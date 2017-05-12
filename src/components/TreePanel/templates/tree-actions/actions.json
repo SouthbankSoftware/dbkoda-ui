@@ -1,6 +1,10 @@
 {
     "shard": [],
-    "shards": [],
+    "shards": [{
+        "name": "EnableBalancer",
+        "text": "Enable Balancer",
+        "icon": "pt-icon-split-columns"
+    }],
     "configservers": [],
     "config": [],
     "routers": [],

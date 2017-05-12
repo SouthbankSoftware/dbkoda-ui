@@ -22,7 +22,7 @@ export const ShardCollection = {
     },
     dbenvy_indexOptions_parse: (res) => {
         console.log(res);
-        return ([1, -1]);
+        return ([1, -1, '"hashed"']);
     },
     dbenvyListAttributes: common.dbenvyListAttributes,
     dbenvyListAttributes_parse: common.dbenvyListAttributes_parse
