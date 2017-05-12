@@ -45,7 +45,10 @@ export default class Toolbar extends React.Component {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the New Connection Profile drawer.');
     }
     this.props.store.profileList.selectedProfile = null;
-    this.props.store.showConnectionPane();
+    this
+      .props
+      .store
+      .showConnectionPane();
   }
 
   /**
@@ -64,7 +67,10 @@ export default class Toolbar extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the Edit Connection Profile drawer.');
         }
-        this.props.store.showConnectionPane();
+        this
+          .props
+          .store
+          .showConnectionPane();
       }
     } else {
       if (this.props.store.userPreferences.telemetryEnabled) {
@@ -156,72 +162,71 @@ export default class Toolbar extends React.Component {
     return (
       <nav className="pt-navbar profileListToolbar">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-button-group">
-            <Alert
-              className="pt-dark close-profile-alert-dialog"
-              intent={Intent.PRIMARY}
-              isOpen={this.state.closeConnectionAlert}
-              confirmButtonText="Close Connection"
-              cancelButtonText="Cancel"
-              onConfirm={this.closeProfile}
-              onCancel={this.hideCloseConnectionAlert}>
-              <p>Are you sure you want to close this connection?</p>
-            </Alert>
-            <Alert
-              className="pt-dark remove-profile-alert-dialog"
-              intent={Intent.PRIMARY}
-              isOpen={this.state.removeConnectionAlert}
-              confirmButtonText="Remove Connection"
-              cancelButtonText="Cancel"
-              onConfirm={this.removeProfile}
-              onCancel={this.hideRemoveConnectionAlert}>
-              <p>Are you sure you want to remove this connection?</p>
-            </Alert>
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Create a new Profile"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM_LEFT}>
-              <AnchorButton
-                className="pt-button pt-icon-add pt-intent-primary secondaryButton newProfileButton"
-                onClick={this.newProfile} />
-            </Tooltip>
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Edit a Profile"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
-              <AnchorButton
-                className="pt-button pt-icon-edit pt-intent-primary secondaryButton editProfileButton"
-                onClick={this.editProfile}
-                disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN} />
-            </Tooltip>
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Close a Profile"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
-              <AnchorButton
-                className="pt-icon-remove pt-intent-danger secondaryButton closeProfileButton"
-                loading={this.state.closingProfile}
-                disabled={!selectedProfile || selectedProfile.status === ProfileStatus.CLOSED}
-                onClick={this.showCloseConnectionAlert} />
-            </Tooltip>
-            <Tooltip
-              intent={Intent.PRIMARY}
-              hoverOpenDelay={1000}
-              content="Remove a Profile"
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}>
-              <AnchorButton
-                className="pt-button pt-icon-cross pt-intent-danger secondaryButton removeProfileButton"
-                onClick={this.showRemoveConnectionAlert}
-                disabled={!this.props.store.profileList.selectedProfile || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN} />
-            </Tooltip>
-          </div>
+          <div className="pt-navbar-heading">Connection Profiles</div>
+          <Alert
+            className="pt-dark close-profile-alert-dialog"
+            intent={Intent.PRIMARY}
+            isOpen={this.state.closeConnectionAlert}
+            confirmButtonText="Close Connection"
+            cancelButtonText="Cancel"
+            onConfirm={this.closeProfile}
+            onCancel={this.hideCloseConnectionAlert}>
+            <p>Are you sure you want to close this connection?</p>
+          </Alert>
+          <Alert
+            className="pt-dark remove-profile-alert-dialog"
+            intent={Intent.PRIMARY}
+            isOpen={this.state.removeConnectionAlert}
+            confirmButtonText="Remove Connection"
+            cancelButtonText="Cancel"
+            onConfirm={this.removeProfile}
+            onCancel={this.hideRemoveConnectionAlert}>
+            <p>Are you sure you want to remove this connection?</p>
+          </Alert>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Create a new Profile"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM_LEFT}>
+            <AnchorButton
+              className="pt-icon-add newProfileButton"
+              onClick={this.newProfile} />
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Edit a Profile"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-icon-edit editProfileButton"
+              onClick={this.editProfile}
+              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN} />
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Close a Profile"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-icon-remove dangerButton closeProfileButton"
+              loading={this.state.closingProfile}
+              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.CLOSED}
+              onClick={this.showCloseConnectionAlert} />
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content="Remove a Profile"
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-icon-cross dangerButton removeProfileButton"
+              onClick={this.showRemoveConnectionAlert}
+              disabled={!this.props.store.profileList.selectedProfile || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN} />
+          </Tooltip>
           <span className="pt-navbar-divider" />
           <Tooltip
             intent={Intent.NONE}

@@ -1,59 +1,5 @@
-// @Author: chris
-// @Date:   2017-03-22T12:00:54+11:00
-// @Email:  chris@southbanksoftware.com
-// @Last modified by:   chris
-// @Last modified time: 2017-03-22T17:17:54+11:00
-// Theme 1 Colours: These should be externalized eventually:
-//Tabs:
-$tabFontColor: #8B8B8B;
-$tabBackground: #323232;
-$tabBackgroundSelected: #202020;
-//Editor:
-$editorBackground: #202020;
-$editorActiveLine: #303030;
-$editorSelectText: #404040;
-$editorTextComments: #8B8B8B;
-$editorDefaultFontColor: #FFB795;
-$keywordOne: #179DEA;
-$keywordTwo: #B95CCE;
-$keywordThree: #DB3737;
-$keywordFour: #8A9BA8;
-$propFontColor: #aac6e3;
-$stringFontColor: #4caf50;
-$white: #ffffff;
-$black: #000000;
-//Output:
-$terminalBackground: #494849;
-$terminalInput: #202020;
-$terminalButtonBackground: #BFBEC0;
-$terminalButtonIcon: #58595B;
-//NavBars:
-$navbarRightBackground: #494849;
-$navbarRighHeading: #BFBEC0;
-$navbarSecondaryBackground: #323232;
-$navbarLeftBackground: #212E33;
-$navbarLeftHeading: #BFBEC0;
-$panelLeftBackground: #2D3D46;
-//Buttons:
-$buttonPrimaryBackground: #BFBEC0;
-$buttonPrimaryBackgroundHover: #99979b;
-$buttonPrimaryIcon: #58595B;
-$buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #1e282f;
-$buttonSecondaryIcon: #BFBEC0;
-$buttonTertiaryBackground: #202020;
-$buttonTertiaryIcon: #BFBEC0;
-$buttonDangerBackground: #8A4148;
-$buttonDangerBackgroundHover:#9A5158;
-$buttonDangerIcon: #BFBEC0;
-$selectPrimaryBackground: #313131;
-$selectBorderColor: #515151;
-$searchPrimaryBackground: #BFBEC0;
-$searchPrimaryFontColor: #494849;
-$searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEC0;
-$downArrow: "\25BE";
-$rightArrow: "\25B8";
+@import '../../styles/_defaultTheme.scss';
+
 .outputPanel {
   flex: 1;
   display: flex;
@@ -71,6 +17,7 @@ $rightArrow: "\25B8";
         flex-grow: 1;
         color: $tabFontColor;
         background-color: $tabBackground;
+        border-right: 1px solid $editorBackground;
         outline: unset;
         box-shadow: unset;
       }

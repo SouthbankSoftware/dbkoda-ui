@@ -1,8 +1,27 @@
 // Theme 1 Colours: These should be externalized eventually:
+//Tabs:
+$tabFontColor: #8B8B8B;
+$tabBackground: #323232;
+$tabBackgroundSelected: #202020;
 //Editor:
 $editorBackground: #202020;
 $editorActiveLine: #303030;
+$editorSelectText: #404040;
 $editorTextComments: #8B8B8B;
+$editorDefaultFontColor: #FFB795;
+$keywordOne: #179DEA;
+$keywordTwo: #B95CCE;
+$keywordThree: #DB3737;
+$keywordFour: #8A9BA8;
+$propFontColor: #aac6e3;
+$stringFontColor: #4caf50;
+$white: #ffffff;
+$black: #000000;
+//Output:
+$terminalBackground: #494849;
+$terminalInput: #202020;
+$terminalButtonBackground: #BFBEC0;
+$terminalButtonIcon: #58595B;
 //NavBars:
 $navbarRightBackground: #494849;
 $navbarRighHeading: #BFBEC0;
@@ -18,11 +37,17 @@ $buttonSecondaryBackground: #2D3D46;
 $buttonSecondaryBackgroundHover: #1e282f;
 $buttonSecondaryIcon: #BFBEC0;
 $buttonTertiaryBackground: #202020;
+$buttonTertiaryBackgroundHover: #404040;
+$buttonTertiaryBackgroundDisabled: #303030;
 $buttonTertiaryIcon: #BFBEC0;
 $buttonDangerBackground: #8A4148;
+$buttonDangerBackgroundHover:#9A5158;
 $buttonDangerIcon: #BFBEC0;
 $selectPrimaryBackground: #313131;
-$searchPrimaryBackground: #BFBEc0;
+$selectBorderColor: #515151;
+$searchPrimaryBackground: #BFBEC0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEc0;
+$searchSecondaryFontColor: #BFBEC0;
+$downArrow: "\25BE";
+$rightArrow: "\25B8";

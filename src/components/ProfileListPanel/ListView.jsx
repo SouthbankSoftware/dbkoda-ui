@@ -517,6 +517,7 @@ export default class ListView extends React.Component {
           allowMultipleSelection={false}
           numRows={this.props.store.profiles.size}
           isRowHeaderShown={false}
+          isColumnHeaderShown={false}
           selectionModes={SelectionModes.ROWS_AND_CELLS}
           isColumnResizable={false}
           renderBodyContextMenu={this.renderBodyContextMenu}

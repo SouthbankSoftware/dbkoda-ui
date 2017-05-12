@@ -1,48 +1,5 @@
-// Theme 1 Colours: These should be externalized eventually:
-//Tabs:
-$tabFontColor: #8B8B8B;
-$tabBackground: #323232;
-$tabBackgroundSelected: #202020;
-//Editor:
-$editorBackground: #202020;
-$editorActiveLine: #303030;
-$editorSelectText: #404040;
-$editorTextComments: #8B8B8B;
-$editorDefaultFontColor: #FFB795;
-$keywordOne: #179DEA;
-$keywordTwo: #B95CCE;
-$keywordThree: #DB3737;
-$keywordFour: #8A9BA8;
-$propFontColor: #aac6e3;
-$stringFontColor: #4caf50;
-$white: #ffffff;
-$black: #000000;
-//NavBars:
-$navbarRightBackground: #494849;
-$navbarRighHeading: #BFBEC0;
-$navbarSecondaryBackground: #323232;
-$navbarLeftBackground: #212E33;
-$navbarLeftHeading: #BFBEC0;
-$panelLeftBackground: #2D3D46;
-//Buttons:
-$buttonPrimaryBackground: #BFBEC0;
-$buttonPrimaryBackgroundHover: #99979b;
-$buttonPrimaryIcon: #58595B;
-$buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #1e282f;
-$buttonSecondaryIcon: #BFBEC0;
-$buttonTertiaryBackground: #202020;
-$buttonTertiaryIcon: #BFBEC0;
-$buttonDangerBackground: #8A4148;
-$buttonDangerIcon: #BFBEC0;
-$selectPrimaryBackground: #313131;
-$selectBorderColor: #515151;
-$searchPrimaryBackground: #BFBEC0;
-$searchPrimaryFontColor: #494849;
-$searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEC0;
-$downArrow: "\25BE";
-$rightArrow: "\25B8";
+@import '../../styles/_defaultTheme.scss';
+
 // Panel CSS
 .editorPanel {
   display: flex;
@@ -80,6 +37,7 @@ $rightArrow: "\25B8";
       .pt-tab {
         color: $tabFontColor;
         background-color: $tabBackground;
+        border-right: 1px solid $editorBackground;
         outline: unset;
         box-shadow: unset;
       }
@@ -99,6 +57,9 @@ $rightArrow: "\25B8";
         padding-left: 5px;
         padding-right: 5px;
         flex-grow: 1;
+        button {
+          float: right;
+        }
       }
     }
     .editorTab {
