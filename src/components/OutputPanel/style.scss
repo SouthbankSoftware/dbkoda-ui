@@ -60,7 +60,7 @@
           }
           .pt-button {
             background-color: $terminalButtonBackground;
-            color: $terminalButtonIcon;
+            color: $terminalButtonIcon !important;
             margin-right: 50px;
             margin-top: 10px;
             margin-bottom: 10px;
