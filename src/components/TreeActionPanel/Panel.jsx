@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-11T15:22:43+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-12T11:13:54+10:00
  */
 
 import React from 'react';
@@ -90,7 +90,7 @@ export default class TreeActionPanel extends React.Component {
   render() {
     console.log(this);
     return (
-      <div>
+      <div className="dynamic-form">
         {this.bForm && <View
           title={this.dynamicForm.title}
           mobxForm={this.dynamicForm.mobxForm}

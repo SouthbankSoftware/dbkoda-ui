@@ -1,88 +1,130 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-05-10T16:31:43+10:00
+// @Last modified by:   chris
+// @Last modified time: 2017-05-12T13:05:23+10:00
 
-
-.form-title {
-  text-align: center;
-  margin: 35px 0;
-}
-
-.form-group-inline {
-  display: inline-block !important;
-  vertical-align: top;
-  width: 45%;
-}
-
-.pt-label-r-30 {
-  width: 30%;
-  text-align: right;
-}
-
-.pt-select {
-  height: 30px;
-  width: 170px;
-}
-
-.pt-checkbox-form {
-  width: 72%;
-}
-
-.pt-input {
-  width: 170px;
-}
-
-.pt-numeric-input {
-  width: 170px;
-  .pt-input-group {
-    width: 140px;
+.dynamic-form {
+  div > form {
+    margin: 30px;
   }
-}
 
-.table-field-100 {
-  width: 100% !important;
-}
+  .form-title {
+    text-align: center;
+    margin: 35px 0;
+  }
 
-.table-field-90 {
-  width: 90%
-}
+  .form-group-inline {
+    display: inline-block !important;
+    vertical-align: top;
+    width: 45%;
+  }
 
-.table-field-80 {
-  width: 80%
-}
+  .pt-form-content {
+    width: 70%;
 
-.right-button {
-  float: right;
-  margin: 10px;
-}
+    .pt-input, .pt-select {
+      width: 100%;
+      min-width: 200px;
+    }
 
-.transparent-btn {
-  background-color: transparent;
-  box-shadow: none;
-  border: none;
-}
+    .pt-numeric-input {
+      .pt-input-group {
+        width: calc(100% - 30px);
+      }
+      .pt-input {
+        min-width: 170px;
+        width: 100%;
+      }
+    }
 
-.left {
-  float: left;
-}
+    .pt-popover-target {
+      width: 100%;
+    }
 
-.right {
-  float: right;
-}
+    .pt-checkbox {
+      width: 70%;
+      margin-left: 30%;
+      .pt-control-indicator {
+        width: 16px;
+      }
+    }
+  }
 
-.tooltip-btn {
-  z-index: 9999;
-}
+  fieldset {
+    margin: 0 -15px;
 
-.pt-tooltip-indicator-form {
-    border-bottom: none !important;
-    vertical-align: middle !important;
-}
+    .pt-form-content {
+      width: 100%;
+      margin: 2px;
 
-.pt-form-content-reverse{
-    display: flex;
-    width: 100%;
-    flex-direction: row-reverse;
+      .pt-input, .pt-select, .pt-numeric-input {
+        width: 100%;
+        min-width: 100px;
+      }
+
+      .pt-popover-target {
+        width: 90%;
+      }
+    }
+  }
+
+  .pt-label-r-30 {
+    width: 30%;
+    text-align: left;
+  }
+
+  .pt-select {
+    height: 30px;
+  }
+
+  .pt-checkbox-form {
+    width: 72%;
+  }
+
+  .table-field-100 {
+    width: 100% !important;
+  }
+
+  .table-field-90 {
+    width: 90%
+  }
+
+  .table-field-80 {
+    width: 80%
+  }
+
+  .right-button {
+    float: right;
+    margin: 10px;
+  }
+
+  .transparent-btn {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+
+  .tooltip-btn {
+    z-index: 9999;
+  }
+
+  .pt-tooltip-indicator-form {
+      border-bottom: none !important;
+      vertical-align: middle !important;
+  }
+
+  .pt-form-content-reverse {
+      display: flex;
+      width: 100%;
+      flex-direction: row-reverse;
+  }
 }
