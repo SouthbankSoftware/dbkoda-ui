@@ -11,8 +11,10 @@ import { reaction, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
+import 'codemirror/theme/material.css';
 import { Broker, EventType } from '../../helpers/broker';
 import OutputTerminal from './Terminal';
+
 
 require('codemirror/mode/javascript/javascript');
 require('#/common/MongoScript.js');
@@ -142,7 +144,7 @@ export default class Editor extends React.Component {
   render() {
     const outputOptions = {
       smartIndent: true,
-      theme: 'ambiance',
+      theme: 'material',
       readOnly: true,
       lineWrapping: false,
       tabSize: 2,

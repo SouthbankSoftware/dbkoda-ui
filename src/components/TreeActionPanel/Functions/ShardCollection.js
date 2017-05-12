@@ -8,15 +8,13 @@
 
 import * as common from './Common.js';
 
-export const CreateIndex = {
+export const ShardCollection = {
     // Prefill function for alter user
-    dbenvy_CreateIndexPreFill: (params) => {
+    dbenvy_ShardCollectionPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
-        data.Sparse = false;
         data.Unique = false;
-        data.Background = false;
         return data;
     },
     dbenvy_indexOptions: () => {
@@ -24,12 +22,8 @@ export const CreateIndex = {
     },
     dbenvy_indexOptions_parse: (res) => {
         console.log(res);
-        return ([1, -1, '"text"', '"2dsphere"', '"2d"']);
+        return ([1, -1]);
     },
-    dbenvy_listdb: common.dbenvy_listdb,
-    dbenvy_listdb_parse: common.dbenvy_listdb_parse,
-    dbenvy_listcollections: common.dbenvy_listcollections,
-    dbenvy_listcollections_parse: common.dbenvy_listcollections_parse,
     dbenvyListAttributes: common.dbenvyListAttributes,
     dbenvyListAttributes_parse: common.dbenvyListAttributes_parse
 };

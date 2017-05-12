@@ -1,51 +1,5 @@
-// Theme 1 Colours: These should be externalized eventually:
-//Tabs:
-$tabFontColor: #8B8B8B;
-$tabBackground: #323232;
-$tabBackgroundSelected: #202020;
-//Editor:
-$editorBackground: #202020;
-$editorActiveLine: #303030;
-$editorSelectText: #404040;
-$editorTextComments: #8B8B8B;
-$editorDefaultFontColor: #FFB795;
-$keywordOne: #179DEA;
-$keywordTwo: #B95CCE;
-$keywordThree: #DB3737;
-$keywordFour: #8A9BA8;
-$propFontColor: #aac6e3;
-$stringFontColor: #4caf50;
-$white: #ffffff;
-$black: #000000;
-//NavBars:
-$navbarRightBackground: #494849;
-$navbarRighHeading: #BFBEC0;
-$navbarSecondaryBackground: #323232;
-$navbarLeftBackground: #212E33;
-$navbarLeftHeading: #BFBEC0;
-$panelLeftBackground: #2D3D46;
-//Buttons:
-$buttonPrimaryBackground: #BFBEC0;
-$buttonPrimaryBackgroundHover: #99979b;
-$buttonPrimaryIcon: #58595B;
-$buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #1e282f;
-$buttonSecondaryIcon: #BFBEC0;
-$buttonTertiaryBackground: #202020;
-$buttonTertiaryIcon: #BFBEC0;
-$buttonDangerBackground: #8A4148;
-$buttonDangerIcon: #BFBEC0;
-$selectPrimaryBackground: #313131;
-$searchPrimaryBackground: #BFBEC0;
-$searchPrimaryFontColor: #494849;
-$searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEC0;
+@import '../../styles/_defaultTheme.scss';
 
-
-
-
-$downArrow: "\25BE";
-$rightArrow: "\25B8";
 // Panel CSS
 .editorPanel {
   display: flex;
@@ -56,6 +10,22 @@ $rightArrow: "\25B8";
   }
   .editorToolbar {
     background-color: $navbarRightBackground !important;
+    .leftEditorToolbar {
+      .leftButtonGroup {
+        .editorContextDropdownWrapper {
+          border: 1px solid $selectBorderColor;
+          background-color: $selectPrimaryBackground !important;
+          .editorContextDropdown {
+            outline: unset;
+            background-color: $selectPrimaryBackground;
+            border-right: 1px solid $selectBorderColor !important;
+            padding-right: 24px !important;
+            padding-left: 5px;
+            width: 100%;
+          }
+        }
+      }
+    }
   }
   .editorTabView {
     display: flex;
@@ -63,10 +33,12 @@ $rightArrow: "\25B8";
     flex-grow: 1;
     .pt-tab-list {
       background-color: $tabBackground;
-      margin-left:0px;
+      margin-left: 0px;
       .pt-tab {
+        margin-right: unset;
         color: $tabFontColor;
         background-color: $tabBackground;
+        border-right: 1px solid $editorBackground;
         outline: unset;
         box-shadow: unset;
       }
@@ -75,7 +47,7 @@ $rightArrow: "\25B8";
         background-color: $tabBackgroundSelected;
       }
       .pt-tab:hover {
-        color: $white;
+        color: $white !important;
       }
       .welcomeTab {
         padding-left: 10px;
@@ -86,6 +58,9 @@ $rightArrow: "\25B8";
         padding-left: 5px;
         padding-right: 5px;
         flex-grow: 1;
+        button {
+          float: right;
+        }
       }
     }
     .editorTab {
@@ -145,10 +120,10 @@ $rightArrow: "\25B8";
             padding-left: 20px;
             display: flex;
             flex-direction: column;
-            border-top: 1px solid #4f4f4f;
-            border-left: 1px solid #4f4f4f;
+            border-top: 1px solid #4F4F4F;
+            border-left: 1px solid #4f4F4F;
             height: 100%;
-            .hotkeyItems {
+            F .hotkeyItems {
               display: flex;
               flex-direction: column;
               .hotkeyItem {
@@ -165,7 +140,8 @@ $rightArrow: "\25B8";
         }
       }
     }
-  } //// Code Mirror CSS: ////
+  } 
+  //// Code Mirror CSS: ////
   /////////////////////////////
   div.CodeMirror span.CodeMirror-matchingbracket {
     color: $white !important;
@@ -366,6 +342,3 @@ $rightArrow: "\25B8";
     background-color: $editorSelectText !important;
   }
 }
-
-
-

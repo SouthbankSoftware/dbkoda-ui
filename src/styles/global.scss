@@ -1,48 +1,4 @@
-// Theme 1 Colours: These should be externalized eventually:
-// Theme 1 Colours: These should be externalized eventually:
-//Tabs:
-$tabFontColor: #8B8B8B;
-$tabBackground: #323232;
-$tabBackgroundSelected: #202020;
-//Editor:
-$editorBackground: #202020;
-$editorActiveLine: #303030;
-$editorSelectText: #404040;
-$editorTextComments: #8B8B8B;
-$editorDefaultFontColor: #FFB795;
-$keywordOne: #179DEA;
-$keywordTwo: #B95CCE;
-$keywordThree: #DB3737;
-$keywordFour: #8A9BA8;
-$propFontColor: #aac6e3;
-$stringFontColor: #4caf50;
-$white: #ffffff;
-$black: #000000;
-//NavBars:
-$navbarRightBackground: #494849;
-$navbarRighHeading: #BFBEC0;
-$navbarSecondaryBackground: #323232;
-$navbarLeftBackground: #212E33;
-$navbarLeftHeading: #BFBEC0;
-$panelLeftBackground: #2D3D46;
-//Buttons:
-$buttonPrimaryBackground: #BFBEC0;
-$buttonPrimaryBackgroundHover: #99979b;
-$buttonPrimaryIcon: #58595B;
-$buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #1e282f;
-$buttonSecondaryIcon: #BFBEC0;
-$buttonTertiaryBackground: #202020;
-$buttonTertiaryIcon: #BFBEC0;
-$buttonDangerBackground: #8A4148;
-$buttonDangerIcon: #BFBEC0;
-$selectPrimaryBackground: #313131;
-$searchPrimaryBackground: #BFBEC0;
-$searchPrimaryFontColor: #494849;
-$searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEC0;
-$downArrow: "\25BE";
-$rightArrow: "\25B8";
+@import './_defaultTheme.scss';
 
 body {
   background-color: $panelLeftBackground;
@@ -62,6 +18,36 @@ h2 {
 h3 {
   color: $white;
   margin-top: 4px;
+}
+
+.circleButton {
+  background-color: $buttonTertiaryBackground !important;
+  color: $buttonTertiaryIcon !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.circleButton:hover {
+  background-color: $buttonTertiaryBackgroundHover !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.circleButton.pt-disabled {
+    background-color: $buttonTertiaryBackgroundDisabled !important;
+}
+.circleButton.warningButton {
+  background-color: $keywordThree !important;
+  color: $white !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.circleButton.warningButton:hover {
+  background-color: $buttonTertiaryBackground !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .closedProfile {
@@ -99,10 +85,7 @@ h3 {
   z-index: 20000;
 }
 
-.pt-tab:not([aria-disabled="true"]):hover,
-.pt-tab[aria-selected="true"] {
-  color: $keywordOne;
-}
+
 
 .pt-tabs {
   color: $white;
@@ -151,19 +134,7 @@ h3 {
 .pt-dark pre {
   box-shadow: none !important;
 }
-a.pt-intent-primary {
-  background-color: $buttonPrimaryBackground !important;
-  color: $buttonPrimaryIcon !important;
-}
 
-a.pt-intent-primary:hover {
-  background-color: $buttonPrimaryBackgroundHover !important;
-  color: $buttonPrimaryIcon !important;
-}
-
-a.pt-disabled.pt-intent-primary {
-  background-color: rgba(255, 255, 255, 0.3) !important;
-}
 
 select.pt-intent-primary {
   background-color: $selectPrimaryBackground !important;
@@ -214,4 +185,22 @@ textArea {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+a.pt-intent-primary {
+  background-color: $buttonPrimaryBackground !important;
+  color: $buttonPrimaryIcon !important;
+}
+
+a.pt-intent-primary:hover {
+  background-color: $buttonPrimaryBackgroundHover !important;
+  color: $buttonPrimaryIcon !important;
+}
+
+a.pt-disabled.pt-intent-primary {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.pt-tab:not([aria-disabled="true"]):hover,
+.pt-tab[aria-selected="true"]:hover {
+  color: $buttonSecondaryBackgroundHover !important;
 }
