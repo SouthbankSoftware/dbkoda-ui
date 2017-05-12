@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-12T11:14:23+10:00
+ * @Last modified time: 2017-05-12T16:48:04+10:00
  */
 
 import { DynamicForm } from './Components/DynamicForm';
@@ -61,6 +61,8 @@ export default class FormBuilder {
     }
     if (defField.type == 'Numeric') {
       res.fieldBinding = 'NumericField';
+      res.fieldMin = (Object.prototype.hasOwnProperty.call(defField, 'min')) ? defField.min : null;
+      res.fieldMax = (Object.prototype.hasOwnProperty.call(defField, 'max')) ? defField.max : null;
     }
     if (defField.type == 'Combo') {
       res.fieldBinding = 'ComboField';
@@ -144,6 +146,20 @@ export default class FormBuilder {
 
         if (Object.prototype.hasOwnProperty.call(fld, 'fieldDefault')) {
           result.values[fldName] = fld.fieldDefault;
+        }
+        if (Object.prototype.hasOwnProperty.call(fld, 'fieldMin')) {
+          if (result.options[fldName]) {
+            result.options[fldName].min = fld.fieldMin;
+          } else {
+            result.options[fldName] = { min: fld.fieldMin };
+          }
+        }
+        if (Object.prototype.hasOwnProperty.call(fld, 'fieldMax')) {
+          if (result.options[fldName]) {
+            result.options[fldName].max = fld.fieldMax;
+          } else {
+            result.options[fldName] = { max: fld.fieldMax };
+          }
         }
 
         if (fld.fieldQuery) {
