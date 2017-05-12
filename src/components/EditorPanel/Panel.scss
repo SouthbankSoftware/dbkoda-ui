@@ -35,6 +35,7 @@
       background-color: $tabBackground;
       margin-left: 0px;
       .pt-tab {
+        margin-right: unset;
         color: $tabFontColor;
         background-color: $tabBackground;
         border-right: 1px solid $editorBackground;

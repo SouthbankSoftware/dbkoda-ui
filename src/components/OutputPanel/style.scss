@@ -12,6 +12,7 @@
     flex-direction: column;
     .pt-tab-list {
       .pt-tab {
+        margin-right: unset;
         padding-left: 5px;
         padding-right: 5px;
         flex-grow: 1;
@@ -343,4 +344,8 @@ span.cm-mongos-prompt {
 .CodeMirror,
 .ReactCodeMirror {
   height: 100%;
+}
+
+.notVisible {
+  display: none;
 }
