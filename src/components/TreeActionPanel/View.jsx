@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T16:14:25+10:00
+ * @Last modified time: 2017-05-12T11:13:49+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -17,6 +17,7 @@ import TextField from './Components/TextField';
 import SelectField from './Components/SelectField';
 import BooleanField from './Components/BooleanField';
 import NumericField from './Components/NumericField';
+import ComboField from './Components/ComboField';
 
 import './View.scss';
 
@@ -54,6 +55,8 @@ export default class TreeActionView extends React.Component {
           formFields.push(<BooleanField key={key} field={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'Numeric') {
           formFields.push(<NumericField key={key} field={mobxForm.$(key)} />);
+        } else if (mobxForm.fields.get(key).type == 'Combo') {
+          formFields.push(<ComboField key={key} field={mobxForm.$(key)} />);
         }
       }
     }

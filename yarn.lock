@@ -6876,6 +6876,22 @@ react-addons-test-utils@^15.4.2:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
+react-autosuggest@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/react-autosuggest/-/react-autosuggest-9.0.1.tgz#b56eaf8fc3dd46d36b92c5395b6b07174bc10912"
+  dependencies:
+    prop-types "^15.5.8"
+    react-autowhatever "^10.0.0"
+    shallow-equal "^1.0.0"
+
+react-autowhatever@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/react-autowhatever/-/react-autowhatever-10.0.0.tgz#2d7fd54f0a330e33c06c53a83ef789da0ebb65bf"
+  dependencies:
+    prop-types "^15.5.8"
+    react-themeable "^1.1.0"
+    section-iterator "^2.0.0"
+
 react-base16-styling@^0.5.1:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/react-base16-styling/-/react-base16-styling-0.5.3.tgz#3858f24e9c4dd8cbd3f702f3f74d581ca2917269"
@@ -6993,6 +7009,12 @@ react-test-renderer@^15.4.2:
   dependencies:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
+
+react-themeable@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-themeable/-/react-themeable-1.1.0.tgz#7d4466dd9b2b5fa75058727825e9f152ba379a0e"
+  dependencies:
+    object-assign "^3.0.0"
 
 react@^15.4.1, react@~15.4.2:
   version "15.4.2"
@@ -7398,6 +7420,10 @@ sax@^1.1.4, sax@^1.2.1, sax@~1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.2.tgz#fd8631a23bc7826bef5d871bdb87378c95647828"
 
+section-iterator@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/section-iterator/-/section-iterator-2.0.0.tgz#bf444d7afeeb94ad43c39ad2fb26151627ccba2a"
+
 seek-bzip@^1.0.3:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/seek-bzip/-/seek-bzip-1.0.5.tgz#cfe917cb3d274bcffac792758af53173eb1fabdc"
@@ -7506,6 +7532,10 @@ shallow-clone@^0.1.2:
     lazy-cache "^0.2.3"
     mixin-object "^2.0.1"
 
+shallow-equal@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/shallow-equal/-/shallow-equal-1.0.0.tgz#508d1838b3de590ab8757b011b25e430900945f7"
+
 shebang-command@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz#44aac65b695b03398968c39f363fee5deafdf1ea"
@@ -7520,15 +7550,7 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
 
-shelljs@^0.7.5:
-  version "0.7.6"
-  resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.6.tgz#379cccfb56b91c8601e4793356eb5382924de9ad"
-  dependencies:
-    glob "^7.0.0"
-    interpret "^1.0.0"
-    rechoir "^0.6.2"
-
-shelljs@^0.7.7:
+shelljs@^0.7.5, shelljs@^0.7.7:
   version "0.7.7"
   resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.7.7.tgz#b2f5c77ef97148f4b4f6e22682e10bba8667cff1"
   dependencies:

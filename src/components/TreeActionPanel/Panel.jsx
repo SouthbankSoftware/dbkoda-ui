@@ -3,13 +3,14 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-11T15:22:43+10:00
+ * @Last modified time: 2017-05-12T11:34:57+10:00
  */
 
 import React from 'react';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
+import { DrawerPanes } from '#/common/Constants';
 import View from './View';
 import FormBuilder from './FormBuilder';
 
@@ -24,13 +25,15 @@ export default class TreeActionPanel extends React.Component {
       updateDynamicFormCode,
       this.executeCommand
     );
-    this.formPromise.then((res) => {
-      this.dynamicForm = res;
-      this.showForm(true);
-      this.dynamicForm.getData();
-    }).catch((reason) => {
-      this.updateMsg(reason);
-    });
+    this.formPromise
+      .then((res) => {
+        this.dynamicForm = res;
+        this.showForm(true);
+        this.dynamicForm.getData();
+      })
+      .catch((reason) => {
+        this.updateMsg(reason);
+      });
   }
   executeCommand = (content) => {
     console.log('Query:', content);
@@ -87,17 +90,33 @@ export default class TreeActionPanel extends React.Component {
   @action updateMsg(value) {
     this.msg = value;
   }
+  @action.bound
+  close(e) {
+    e.preventDefault();
+    this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
+    this.props.store.treeActionPanel.treeActionEditorId = '';
+    this.props.store.treeActionPanel.isNewFormValues = false;
+  }
   render() {
     console.log(this);
     return (
       <div>
-        {this.bForm && <View
-          title={this.dynamicForm.title}
-          mobxForm={this.dynamicForm.mobxForm}
-        />}
+        {this.bForm &&
+          <View
+            title={this.dynamicForm.title}
+            mobxForm={this.dynamicForm.mobxForm}
+          />}
         {!this.bForm &&
-          <div className="tree-msg-div">
-            <span>{this.msg}</span>
+          <div>
+            <div className="tree-msg-div">
+              <span>{this.msg}</span>
+            </div>
+            <button
+              className="pt-button pt-intent-primary right-button"
+              onClick={this.close}
+            >
+              Close
+            </button>
           </div>}
       </div>
     );

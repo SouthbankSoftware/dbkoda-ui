@@ -9,7 +9,7 @@
     },
     "Fields": [{
             "name": "Database",
-            "type": "Select",
+            "type": "Combo",
             "readOnly": false,
             "optional": false,
             "rules": "required",
