@@ -7,36 +7,47 @@
     "mongos": [],
     "databases": [],
     "database": [{
-        "name": "CreateCollection",
-        "text": "Create Collection",
-        "icon": "pt-icon-add"
-    },{
-        "name": "setProfilingLevel",
-        "text": "Set Profiling",
-        "icon": "pt-icon-history"
-    },{
-        "name": "DropDatabase",
-        "text": "Drop Database",
-        "icon": "pt-icon-delete"
-    }
+            "name": "CreateCollection",
+            "text": "Create Collection",
+            "icon": "pt-icon-add"
+        }, {
+            "name": "setProfilingLevel",
+            "text": "Set Profiling",
+            "icon": "pt-icon-history"
+        }, {
+            "name": "DropDatabase",
+            "text": "Drop Database",
+            "icon": "pt-icon-delete"
+        },
+        {
+            "name": "EnableSharding",
+            "text": "Enable Sharding",
+            "icon": "pt-icon-split-columns"
+        }
     ],
     "collection": [{
-        "name": "SampleCollections",
-        "text": "Find Attributes",
-        "icon": "pt-icon-search-template"
-    }, {
-        "name": "CreateIndex",
-        "text": "Create Index",
-        "icon": "pt-icon-add"
-    }, {
-        "name": "DropAllIndexes",
-        "text": "Drop All Indexes",
-        "icon": "pt-icon-delete"
-    }, {
-        "name": "DropCollection",
-        "text": "DropCollection",
-        "icon": "pt-icon-delete"
-    }],
+            "name": "SampleCollections",
+            "text": "Find Attributes",
+            "icon": "pt-icon-search-template"
+        }, {
+            "name": "CreateIndex",
+            "text": "Create Index",
+            "icon": "pt-icon-add"
+        }, {
+            "name": "DropAllIndexes",
+            "text": "Drop All Indexes",
+            "icon": "pt-icon-delete"
+        },
+        {
+            "name": "ShardCollection",
+            "text": "Shard Collection",
+            "icon": "pt-icon-split-columns"
+        }, {
+            "name": "DropCollection",
+            "text": "DropCollection",
+            "icon": "pt-icon-delete"
+        }
+    ],
     "index": [{
         "name": "DropIndex",
         "text": "Drop Index",
@@ -48,15 +59,16 @@
         "icon": "pt-icon-new-person"
     }],
     "user": [{
-        "name": "AlterUser",
-        "text": "Alter User",
-        "icon": "pt-icon-user"
-    },
-    {
-        "name": "DropUser",
-        "text": "Drop User",
-        "icon": "pt-icon-user"
-    }],
+            "name": "AlterUser",
+            "text": "Alter User",
+            "icon": "pt-icon-user"
+        },
+        {
+            "name": "DropUser",
+            "text": "Drop User",
+            "icon": "pt-icon-user"
+        }
+    ],
     "replicaset": [],
     "replica_member": []
 }
