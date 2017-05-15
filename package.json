@@ -34,7 +34,7 @@
     "cienvy:dev": "yarn run cienvy:clean && yarn run cienvy:dev:build",
     "cienvy:dev:build": "yarn run cienvy:build -- --source-maps",
     "cienvy:clean": "rimraf .cienvy/lib",
-    "cienvy:build": "NODE_ENV=cienvy babel -d .cienvy/lib .cienvy/src"
+    "cienvy:build": "BABEL_ENV=cienvy babel -d .cienvy/lib .cienvy/src"
   },
   "repository": {
     "type": "git",
@@ -125,6 +125,7 @@
     "rimraf": "^2.5.4",
     "sass-loader": "^6.0.2",
     "shebang-loader": "0.0.1",
+    "shelljs": "^0.7.7",
     "style-loader": "^0.13.1",
     "typescript": "^2.2.2",
     "typescript-eslint-parser": "^2.0.0",
@@ -132,7 +133,6 @@
     "uuid": "^3.0.1",
     "validatorjs": "^3.11.0",
     "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.2",
-    "shelljs": "^0.7.7"
+    "webpack-dev-server": "^2.4.2"
   }
 }
