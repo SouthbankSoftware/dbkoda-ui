@@ -3,14 +3,15 @@
  * @Date:   2017-05-11T09:42:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-12T14:37:26+10:00
+ * @Last modified time: 2017-05-15T16:56:20+10:00
  */
 
 import React from 'react';
-import { observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
-import Autosuggest from 'react-autosuggest';
+import Select from 'react-select';
 import { Intent, Position, Tooltip } from '@blueprintjs/core';
+
+import 'react-select/dist/react-select.css';
 
 @observer
 export default class ComboField extends React.Component {
@@ -28,58 +29,17 @@ export default class ComboField extends React.Component {
     this.setOptions(field.options.dropdown);
   }
 
-  onSuggestionsFetchRequested = ({ value }) => {
-    console.log('------------ getSuggestions for ', value);
-    runInAction('updating suggestions', () => {
-      this.suggestions.clear();
-      const arr = this.getSuggestions(value);
-      arr.forEach((obj) => {
-        console.log(obj);
-        this.suggestions.push(obj);
-      });
-    });
-  };
-
-  onSuggestionsClearRequested = () => {
-    console.log('onSuggestionsClearRequested');
-    this.suggestions.clear();
-  };
-
-  getSuggestionValue = (suggestion) => {
-    console.log('getSuggestionValue', suggestion);
-    return suggestion;
-  };
-
-  getSuggestions = (value) => {
-    const escapedValue = this.escapeRegexCharacters(value.trim());
-
-    if (escapedValue === '') {
-      return [];
-    }
-
-    const regex = new RegExp('^' + escapedValue, 'i');
-
-    return this.options.filter(option => regex.test(option));
-  };
-
   setOptions = (arrOptions) => {
     if (arrOptions) {
-      this.options = arrOptions;
+      this.options = [];
+      arrOptions.forEach((opt) => {
+        this.options.push({ value: opt, label: opt });
+      });
+      // this.options = arrOptions;
     }
   };
 
-  escapeRegexCharacters = (str) => {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  };
-
-  suggestions = observable([]);
   options = [];
-  inputProps;
-
-  renderSuggestion = (suggestion) => {
-    console.log('renderSuggestion:', suggestion);
-    return <span>{suggestion}</span>;
-  };
 
   render() {
     const { field, showLabel, formGroup } = this.props;
@@ -87,7 +47,7 @@ export default class ComboField extends React.Component {
     const fldClassName = formGroup
       ? 'pt-form-group form-group-inline'
       : 'pt-form-group pt-inline';
-    let selectClassName = 'pt-select';
+    let selectClassName = '';
     let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
     if (formGroup) {
       if (field.options && field.options.tooltip) {
@@ -97,29 +57,17 @@ export default class ComboField extends React.Component {
         selectClassName += ' table-field-90';
       }
     }
-    const inputProps = {
-      placeholder: field.placeholder ? field.placeholder : '',
-      value: field.value,
-      onChange: (event, { newValue }) => {
-        console.log('newValue: ', newValue);
-        field.value = newValue;
-        field.state.form.submit();
-      }
+
+    const onChange = (newValue) => {
+      console.log('newValue: ', newValue);
+      field.value = (newValue && newValue.value) ? newValue.value : '';
+      field.state.form.submit();
     };
 
     const getSelectField = () => {
-      console.log('getSelectField:', this.suggestions.peek());
-
       return (
-        <Autosuggest
-          suggestions={this.suggestions.peek()}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={this.getSuggestionValue}
-          renderSuggestion={this.renderSuggestion}
-          inputProps={inputProps}
-          className={selectClassName}
-        />
+        <Select.Creatable className={selectClassName}
+          multi={false} options={this.options} onChange={onChange} value={field.value} />
       );
     };
     return (
