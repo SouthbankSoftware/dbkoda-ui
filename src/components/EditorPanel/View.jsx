@@ -466,7 +466,7 @@ class View extends React.Component {
       .get(this.props.store.editorPanel.activeEditorId);
     if (editor) {
       const shell = editor.shellId;
-      return {id: editor.currentProfile, shell};
+      return {id: editor.profileId, shell};
     }
   }
 
@@ -700,6 +700,13 @@ class View extends React.Component {
     const id = this.props.store.editorToolbar.id;
     const shell = this.props.store.editorToolbar.shellId;
     const editorIndex = this.props.store.editorPanel.activeEditorId;
+    if (!this
+        .props
+        .store
+        .editors
+        .get(editorIndex)) {
+      return;
+    }
     this
       .props
       .store
