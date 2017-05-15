@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-04T21:08:08+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-15T15:26:13+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -91,7 +91,7 @@ export default class Toolbar extends React.Component {
     // will create a new editor.
     this.reactionToNewEditorForTreeAction = reaction(() => this.props.store.editorToolbar.newEditorForTreeAction, () => {
       if (this.props.store.editorToolbar.newEditorForTreeAction) {
-        this.addEditor();
+        this.addEditor({}, true);
       }
     });
   }
@@ -154,11 +154,11 @@ export default class Toolbar extends React.Component {
    * @param {Object} options - options for creating new editor
    * @return {Promise}
    */
-  @action addEditor(options = {}) {
+  @action addEditor(options = {}, selectProfileFromList = false) {
     try {
       this.props.store.editorPanel.creatingNewEditor = true;
       this.setNewEditorLoading(true);
-      const profileTitle = this.props.store.editorPanel.activeDropdownId;
+      const profileTitle = (selectProfileFromList) ? this.props.store.profileList.selectedProfile.id : this.props.store.editorPanel.activeDropdownId;
       let profileId = 'UNKNOWN';
       this
         .props
@@ -269,6 +269,7 @@ export default class Toolbar extends React.Component {
     this.props.store.editorPanel.activeEditorId = editorId;
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
+    this.props.store.editorPanel.activeDropdownId = res.id;
     NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.setNewEditorLoading(false);
     this.props.store.editorToolbar.isActiveExecuting = false;
