@@ -3,7 +3,7 @@
 * @Date:   2017-03-17T10:29:12+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T12:07:38+10:00
+ * @Last modified time: 2017-05-15T12:17:01+10:00
 */
 
 import Templates from '../templates/dragdrop';
@@ -16,7 +16,7 @@ export default class TreeDropActions {
    */
   static getTemplateByType(type) {
     const templateId = Templates[type];
-    const template = require('../templates/dragdrop/'+ templateId); //eslint-disable-line
+    const template = require('../templates/dragdrop/' + templateId); //eslint-disable-line
     return template;
   }
   /**
@@ -27,16 +27,20 @@ export default class TreeDropActions {
   static getContext(treeNode) {
     let context = {};
     switch (treeNode.type) {
-      case 'config': {
-          const server = treeNode.label.split(':');
-          context = { host: server[0], port: server[1]};
-        }
-        break;
+      case 'config':
+      case 'shard': {
+        const server = treeNode.label.split(':');
+        context = { host: server[0], port: server[1] };
+      }
+      break;
       case 'collection':
-        context = {col: treeNode.label, db: treeNode.refParent.text};
+        context = { col: treeNode.label, db: treeNode.refParent.text };
         break;
       case 'index':
-        context = { db: treeNode.refParent.refParent.text, col: treeNode.refParent.text };
+        context = {
+          db: treeNode.refParent.refParent.text,
+          col: treeNode.refParent.text
+        };
         break;
       default:
         context = { text: treeNode.label };
