@@ -34,6 +34,11 @@
             "text": "Find Attributes",
             "icon": "pt-icon-search-template"
         }, {
+            "name": "CollectionStats",
+            "text": "Collection Statistics",
+            "icon": "pt-icon-grouped-bar-chart"
+        },
+        {
             "name": "CreateIndex",
             "text": "Create Index",
             "icon": "pt-icon-add"
@@ -41,6 +46,10 @@
             "name": "DropAllIndexes",
             "text": "Drop All Indexes",
             "icon": "pt-icon-delete"
+        }, {
+            "name": "CompactCollection",
+            "text": "Compact Collection",
+            "icon": "pt-icon-compressed"
         },
         {
             "name": "ShardCollection",
