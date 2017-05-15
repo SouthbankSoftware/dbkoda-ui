@@ -1,7 +1,7 @@
 # @Author: guiguan
 # @Date:   2017-01-09T15:15:34+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-05-15T18:23:23+10:00
+# @Last modified time: 2017-05-15T18:48:11+10:00
 
 
 
@@ -19,6 +19,7 @@ pipeline:
     pull: true
     volumes:
       - cienvy-volumes:/volumes
+    secrets: [SLACK_WEBHOOK]
     webhook: ${SLACK_WEBHOOK}
     channel: ci
     template: >

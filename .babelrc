@@ -42,6 +42,22 @@
         }]],
         "react-hot-loader/babel"
       ]
+    },
+    "cienvy": {
+      "presets": [
+        "es2015",
+        "stage-0"
+      ],
+      "plugins": [
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-async-to-generator",
+        "transform-object-rest-spread",
+        ["babel-plugin-root-import", [{
+          "rootPathPrefix": "~",
+          "rootPathSuffix": "src"
+        }]]
+      ]
     }
   }
 }
