@@ -162,7 +162,7 @@ class View extends React.Component {
           const profileId = editor.profileId;
 
           console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', profileId, '/', shell, ': "', editor.code, '".');
-          Broker.on(EventType.createShellExecutionFinishEvent(profileId, shell), this.finishedExecution);
+
           // Listen for completion
           this
             .props
@@ -216,8 +216,6 @@ class View extends React.Component {
           }
 
           console.log('[', this.props.store.editorPanel.activeDropdownId, ']Sending data to feathers id ', id, '/', shell, ': "', content, '".');
-          // Listen for completion
-          Broker.on(EventType.createShellExecutionFinishEvent(id, shell), this.finishedExecution);
           this
             .props
             .store
@@ -310,12 +308,13 @@ class View extends React.Component {
             this.finishedExecution();
           })
           .catch((reason) => {
-            console.log(`Stopping Execution failed for ${id} / ${shell}!`);
+            console.error(`Stopping Execution failed for ${id} / ${shell}! ${reason.message}`);
             NewToaster.show({
               message: 'Stop Execution Failed! ' + reason,
               intent: Intent.DANGER,
               iconName: 'pt-icon-thumbs-down'
             });
+            this.finishedExecution();
           });
       }
     });
@@ -445,10 +444,18 @@ class View extends React.Component {
         });
     };
     Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain.bind(this));
+    if (this.props.editor) {
+      const {profileId, shellId} = this.props.editor;
+      Broker.on(EventType.createShellExecutionFinishEvent(profileId, shellId), this.finishedExecution);
+    }
   }
 
   componentWillUnmount() {
     Broker.removeListener(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain);
+    if (this.props.editor) {
+      const {profileId, shellId} = this.props.editor;
+      Broker.removeListener(EventType.createShellExecutionFinishEvent(profileId, shellId), this.finishedExecution);
+    }
   }
 
   getActiveProfileId() {
@@ -689,7 +696,7 @@ class View extends React.Component {
   }
 
   @action.bound
-  finishedExecution() {
+  finishedExecution(event) {
     const id = this.props.store.editorToolbar.id;
     const shell = this.props.store.editorToolbar.shellId;
     const editorIndex = this.props.store.editorPanel.activeEditorId;
@@ -699,6 +706,12 @@ class View extends React.Component {
       .editors
       .get(editorIndex)
       .executing = false;
+    const editorValues = this.props.store.editors.values();
+    editorValues.map((v) => {
+      if (v.profileId === event.id && v.shellId === event.shellId) {
+        v.executing = false;
+      }
+    });
     if (this.props.store.editorPanel.activeEditorId == this.props.id) {
       this.props.store.editorToolbar.isActiveExecuting = false;
       this.props.store.editorPanel.stoppingExecution = false;

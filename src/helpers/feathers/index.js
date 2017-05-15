@@ -30,7 +30,7 @@ class FeatherClient {
     });
     this.shellService.on('mongo-execution-end', (output) => {
       const { id, shellId } = output;
-      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId));
+      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
     this.service('files').on('changed', ({_id}) => {
       Broker.emit(EventType.createFileChangedEvent(_id));
