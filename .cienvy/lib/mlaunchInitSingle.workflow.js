@@ -14,4 +14,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (app, cwd, helpers) {
   return helpers.exec('mlaunch init --single');
 };
+
+module.exports = exports['default'];
 //# sourceMappingURL=mlaunchInitSingle.workflow.js.map

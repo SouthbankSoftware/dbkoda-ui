@@ -14,4 +14,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (app, cwd, helpers) {
   return helpers.exec('yarn test');
 };
+
+module.exports = exports['default'];
 //# sourceMappingURL=test.workflow.js.map
