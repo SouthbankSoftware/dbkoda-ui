@@ -112,7 +112,7 @@ export default class Editor extends React.Component {
 
   componentWillUnmount() {
     Broker.removeListener(
-      EventType.createShellOutputEvent(props.profileId, props.shellId),
+      EventType.createShellOutputEvent(this.props.profileId, this.props.shellId),
       this.outputAvailable
     );
   }
