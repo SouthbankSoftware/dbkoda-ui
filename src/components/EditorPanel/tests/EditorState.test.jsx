@@ -4,14 +4,11 @@
 
 import uuidV1 from 'uuid';
 import React from 'react';
-import {shallow, mount} from 'enzyme';
-import {Provider} from 'mobx-react';
+import {shallow} from 'enzyme';
 import {expect} from 'chai';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
-import {useStrict, observable} from 'mobx';
+import {observable, useStrict} from 'mobx';
 import Store from '../../../stores/global';
-import {EditorPanel, EditorToolbar} from '../index.js';
+import {EditorPanel} from '../index.js';
 
 describe('Editor State Tests', () => {
   beforeAll(() => {
