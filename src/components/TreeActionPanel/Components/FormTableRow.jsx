@@ -3,7 +3,7 @@
  * @Date:   2017-04-18T13:51:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T16:43:23+10:00
+ * @Last modified time: 2017-05-15T15:00:45+10:00
  */
 
 import React from 'react';
@@ -13,7 +13,8 @@ import FieldControl from './FieldControls';
 import TextField from './TextField';
 import SelectField from './SelectField';
 import NumericField from './NumericField';
-import BooleanField from './BooleanField'; // eslint-disable-line
+import BooleanField from './BooleanField';
+import ComboField from './ComboField';
 
 export default observer(({ member }) => {
   const rowFields = [];
@@ -25,7 +26,9 @@ export default observer(({ member }) => {
     } else if (col.type == 'Numeric') {
       rowFields.push(<NumericField key={member.id + col.key} field={col} showLabel={false} formGroup />);
     } else if (col.type == 'Boolean') {
-      rowFields.push(<NumericField key={member.id + col.key} field={col} formGroup />);
+      rowFields.push(<BooleanField key={member.id + col.key} field={col} formGroup />);
+    } else if (col.type == 'Combo') {
+      rowFields.push(<ComboField key={member.id + col.key} field={col} showLabel={false} formGroup />);
     }
   });
 
