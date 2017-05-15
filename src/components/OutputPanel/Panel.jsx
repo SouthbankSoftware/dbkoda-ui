@@ -125,6 +125,7 @@ export default class Panel extends React.Component {
               connId={editor[1].currentProfile}
               initialMsg={editor[1].initialMsg}
               shellId={editor[1].shellId}
+              tabClassName={tabClassName}
             />
           }
         />,

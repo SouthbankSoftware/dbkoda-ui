@@ -110,6 +110,13 @@ export default class Editor extends React.Component {
     );
   }
 
+  componentWillUnmount() {
+    Broker.removeListener(
+      EventType.createShellOutputEvent(props.profileId, props.shellId),
+      this.outputAvailable
+    );
+  }
+
   /**
    * Receives output from the server and parses show more text
    * @param {Object} output - An object containing the output from shell commands
