@@ -1,0 +1,13 @@
+# @Author: guiguan
+# @Date:   2017-02-15T07:18:20+11:00
+# @Last modified by:   guiguan
+# @Last modified time: 2017-05-15T18:36:47+10:00
+
+outlinks:
+  - dbenvy
+volumes:
+  - srcNode: yarn-cache
+workflows:
+  - mlaunchInitSingle
+  - install
+  - test
