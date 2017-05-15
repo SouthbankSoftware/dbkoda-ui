@@ -195,6 +195,7 @@ export default class Panel extends React.Component {
                     onDrop={
                   item => this.handleDrop(item)
                 }
+                    editor={tab[1]}
                     ref="defaultEditor" />}>
                   <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
@@ -211,6 +212,7 @@ export default class Panel extends React.Component {
                 panel={<View id={
                 tab[1].id
               }
+                  editor={tab[1]}
                   ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"

@@ -1,14 +1,14 @@
 // @Author: guiguan
 // @Date:   2017-03-07T17:09:22+11:00
-// @Last modified by:   guiguan
-// @Last modified time: 2017-04-30T20:57:16+10:00
+// @Last modified by:   chris
+// @Last modified time: 2017-05-15T10:26:28+10:00
 
 $purpleFont: #b95cce;
 $resizerHoverColor: rgba(97, 114, 126, 0.7);
 
 .Resizer {
   background: rgba(15, 34, 47, 0.2);
-  z-index: 100;
+  z-index: 20;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
