@@ -25,7 +25,7 @@
     "start": "webpack-dev-server --config webpack/webpack.config.js",
     "build": "yarn run clean && rimraf ./dist && webpack --config config/webpack.config.js",
     "preview": "http-server ./dist -p 1234 -c-1",
-    "test": "yarn run jest && yarn run eslint",
+    "test": "yarn run eslint && yarn run jest",
     "eslint": "eslint --ext .jsx --ext .js src/. tests/.",
     "jest": "NODE_ENV=test jest --config jest.json --coverage",
     "docs": "yarn run esdoc && open -b com.google.chrome ./docs/index.html",
