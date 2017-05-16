@@ -3,7 +3,7 @@
  * @Date:   2017-05-03T14:42:55+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T10:18:22+10:00
+ * @Last modified time: 2017-05-16T11:55:08+10:00
  */
 
 import React from 'react';
@@ -30,18 +30,19 @@ export default observer(({
   }
   const getSelectField = (field) => {
     return (
-      <select
-        className={selectClassName}
-        id={field.id}
-        value={field.value}
-        {...field.bind()}
-      >
-        {field.options &&
-          field.options.dropdown &&
-          field.options.dropdown.map(val => (
-            <option key={val} value={val}>{val}</option>
-          ))}
-      </select>
+      <div className={selectClassName}>
+        <select
+          id={field.id}
+          value={field.value}
+          {...field.bind()}
+        >
+          {field.options &&
+            field.options.dropdown &&
+            field.options.dropdown.map(val => (
+              <option key={val} value={val}>{val}</option>
+            ))}
+        </select>
+      </div>
     );
   };
   return (

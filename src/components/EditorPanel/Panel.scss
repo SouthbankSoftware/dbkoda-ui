@@ -1,3 +1,11 @@
+// @Author: Wahaj Shamim <wahaj>
+// @Date:   2017-05-12T16:51:49+10:00
+// @Email:  wahaj@southbanksoftware.com
+// @Last modified by:   wahaj
+// @Last modified time: 2017-05-16T11:03:37+10:00
+
+
+
 @import '../../styles/_defaultTheme.scss';
 
 // Panel CSS
@@ -13,12 +21,12 @@
     .leftEditorToolbar {
       .leftButtonGroup {
         .editorContextDropdownWrapper {
-          border: 1px solid $selectBorderColor;
-          background-color: $selectPrimaryBackground !important;
+          border: 1px solid $selectDarkBorderColor;
+          background-color: $selectDarkPrimaryBackground !important;
           .editorContextDropdown {
             outline: unset;
-            background-color: $selectPrimaryBackground;
-            border-right: 1px solid $selectBorderColor !important;
+            background-color: $selectDarkPrimaryBackground;
+            border-right: 1px solid $selectDarkBorderColor !important;
             padding-right: 24px !important;
             padding-left: 5px;
             width: 100%;
@@ -148,7 +156,7 @@
         }
       }
     }
-  } 
+  }
   //// Code Mirror CSS: ////
   /////////////////////////////
   div.CodeMirror span.CodeMirror-matchingbracket {

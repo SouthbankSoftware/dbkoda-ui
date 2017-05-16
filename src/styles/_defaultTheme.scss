@@ -1,3 +1,11 @@
+// @Author: Wahaj Shamim <wahaj>
+// @Date:   2017-05-12T15:11:29+10:00
+// @Email:  wahaj@southbanksoftware.com
+// @Last modified by:   wahaj
+// @Last modified time: 2017-05-16T12:52:58+10:00
+
+
+
 // Theme 1 Colours: These should be externalized eventually:
 //Tabs:
 $tabFontColor: #8B8B8B;
@@ -17,6 +25,10 @@ $propFontColor: #aac6e3;
 $stringFontColor: #4caf50;
 $white: #ffffff;
 $black: #000000;
+
+$panelLeftBackground: #2D3D46;
+$panelRightBackground: #202020;
+
 //Profile List
 $profileListIconColor: rgba(191, 190, 192, 0.3);
 $profileListFontColor: #BFBEC0;
@@ -33,7 +45,6 @@ $navbarRighHeading: #BFBEC0;
 $navbarSecondaryBackground: #323232;
 $navbarLeftBackground: #212E33;
 $navbarLeftHeading: #BFBEC0;
-$panelLeftBackground: #2D3D46;
 //Buttons:
 $buttonPrimaryBackground: #BFBEC0;
 $buttonPrimaryBackgroundHover: #99979b;
@@ -48,14 +59,50 @@ $buttonTertiaryIcon: #BFBEC0;
 $buttonDangerBackground: #8A4148;
 $buttonDangerBackgroundHover:#9A5158;
 $buttonDangerIcon: #BFBEC0;
-$selectPrimaryBackground: #313131;
-$selectBorderColor: #515151;
+//Searchbox:
 $searchPrimaryBackground: #BFBEC0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
 $searchSecondaryFontColor: #BFBEC0;
 $downArrow: "\25BE";
 $rightArrow: "\25B8";
+
+// Fields:
+// =======
+//
+// Toolbar Fields:
+// ---------------
+$selectDarkPrimaryBackground: #313131;
+$selectDarkBorderColor: #515151;
+
+// Form Fields:
+// ------------
+$fieldGroupPrimaryBackground: #212E33;
+$fieldGroupSecondaryBackground: rgba(33,46,51, 0.5);
+$fieldGroupTertiaryBackground: rgba(33,46,51, 0.15);
+
+// fields are input, numericinput, select, etc
+$fieldHeadingFontColor: #BFBEC0;    // for Form header, and field Labels
+$fieldLabelFontColor: #58585B;      // for Fields with labels like Radio boxes, Check boxes
+$fieldBrightBackgroundColor: #FFFFFF;
+$fieldBrightBorderColor: #FFFFFF;
+$fieldBrightFontColor: #565556;
+$fieldBrightPlaceholderFontColor: rgba(86,85,86, 0.5);
+$fieldBrightIconColor: #2D3D46;
+
+$fieldPrimaryButtonBackground: #212E33;
+$fieldPrimaryButtonHover: #374247;
+$fieldPrimaryButtonActive: #1d292d;
+$fieldPrimaryButtonFontColor: #BFBEC0;
+
+$fieldSecondaryButtonBackground: #8A4148;
+$fieldSecondaryButtonHover: #95545a;
+$fieldSecondaryButtonActive: #7c3a40;
+$fieldSecondaryButtonFontColor: #BFBEC0;
+
+$fieldTertiaryButtonBackground: #2D3D46;
+$fieldTertiaryButtonBorder: #BFBEC0;
+$fieldTertiaryButtonFontColor: #BFBEC0;
 
 
 $newProfileIcon: url('#/icons/new-profile-icon.svg');

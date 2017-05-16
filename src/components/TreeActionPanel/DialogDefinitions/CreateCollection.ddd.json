@@ -9,8 +9,8 @@
     },
     "Fields": [{
             "name": "Database",
-            "type": "Combo",
-            "readOnly": false,
+            "type": "Text",
+            "readOnly": true,
             "optional": false,
             "rules": "required",
             "lookup": "dbenvy_listdb"
