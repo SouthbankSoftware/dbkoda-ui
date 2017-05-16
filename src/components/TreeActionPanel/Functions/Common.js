@@ -41,7 +41,13 @@ export function dbenvy_listcollections_parse(res) { //eslint-disable-line
     });
     return collectionList.sort();
 }
-
+export function dbenvyParameterList() { //eslint-disable-line
+    return ('db.runCommand( { getParameter : "*" })');
+}
+export function dbenvyParameterList_parse(res) {//eslint-disable-line 
+    const params = Object.keys(res);
+    return params;
+}
 export function dbenvyListAttributes(params) {
     const tmpCollection = 'dbenvyTmp' + Math.floor(Math.random() * 10000000);
     let cmd = sprintf('db.getSiblingDB("%s").getCollection("%s").aggregate([{ $sample: {size: 20}},{$out:"%s"}]);',

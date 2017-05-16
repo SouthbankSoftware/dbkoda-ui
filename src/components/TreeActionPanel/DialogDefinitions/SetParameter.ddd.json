@@ -1,0 +1,18 @@
+{
+    "Title": "Set parameter",
+    "Fields": [ 
+        {
+            "name": "Parameter",
+            "label":"Select parameter",
+            "type": "Select" ,
+            "tooltip": "Parameter to alter", 
+            "lookup": "dbenvyParameterList"
+        } ,
+        {
+            "name": "Value",
+            "label": "Show command line options", 
+            "type": "Text" ,
+            "tooltip": "New value for the parameter" 
+        }
+    ]
+}
