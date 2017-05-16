@@ -98,23 +98,6 @@ export default class Panel extends React.Component {
       .editors
       .delete(oldTab.id);
     this.forceUpdate();
-
-    // OLDLOGIC
-    /* console.log(this.props.store.editorPanel.activeEditorId);
-    if ((oldTab.id) == this.props.store.editorPanel.activeEditorId) {
-      this.props.store.editorPanel.activeEditorId = 'Default';
-      this.props.store.editorPanel.isRemovingCurrentTab = true;
-    } else {
-      this.props.store.editorPanel.isRemovingCurrentTab = false;
-    }
-    this.props.store.editorPanel.removingTabId = oldTab.id;
-    console.log('Removing tab id: ' + this.props.store.editorPanel.removingTabId);
-    this
-      .props
-      .store
-      .editors
-      .delete(oldTab.id);
-    this.forceUpdate();*/
   }
 
   /**
