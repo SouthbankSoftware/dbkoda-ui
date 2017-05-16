@@ -3,7 +3,7 @@
  *
  */
 import React from 'react';
-import {Button, Tab2, Tabs2} from '@blueprintjs/core';
+import {Button} from '@blueprintjs/core';
 import './style.scss';
 
 import RawJson from './RawJson';
