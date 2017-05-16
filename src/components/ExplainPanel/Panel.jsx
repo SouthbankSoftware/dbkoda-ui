@@ -17,7 +17,6 @@ export const Header = ({viewType, switchExplainView}) => {
 };
 
 const Panel = ({editor, switchExplainView, viewType}) => {
-  console.log('editor=', editor);
   if (editor.explains && editor.explains.error) {
     return (<div>{editor.explains.error}</div>);
   }
