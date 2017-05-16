@@ -12,7 +12,7 @@ $contentColor: white;
     display: flex;
     flex-direction: row;
     height: 30px;
-    margin: 10px 30px 10px 30px;
+    margin: 10px 10px 0px 10px;
 
     .explain-label {
       color: rgb(180, 180, 180);
@@ -21,6 +21,7 @@ $contentColor: white;
 
     .explain-view-switch-button {
       margin-left: auto;
+      margin-right: 30px;
       background-color: rgb(43, 43, 43) !important;
       border: 1px solid rgb(74, 74, 74);
       width: 85px;
