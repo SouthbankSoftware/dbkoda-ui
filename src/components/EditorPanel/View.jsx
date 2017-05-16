@@ -485,7 +485,7 @@ class View extends React.Component {
    */
   executingExplain(explainParam) {
     console.log('send explain request ', explainParam);
-    if (this.props.store.editorPanel.activeEditorId == this.props.id && explainParam) {
+    if (this.refs.editor && this.props.store.editorPanel.activeEditorId == this.props.id && explainParam) {
       // Determine code to send.
       const editor = this
         .props
@@ -525,7 +525,7 @@ class View extends React.Component {
       editor.executing = true;
       // Send request to feathers client
       const service = featherClient().service('/mongo-sync-execution');
-      const filteredContent = content.replace('\t', '  ');
+      const filteredContent = content.replace(/\t/g, '  ');
       service.timeout = 120000;
       this.props.store.editorToolbar.isActiveExecuting = true;
       service
