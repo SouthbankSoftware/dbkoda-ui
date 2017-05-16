@@ -11,7 +11,6 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
 import {AnchorButton, Checkbox} from '@blueprintjs/core';
-import autobind from 'autobind-decorator';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.

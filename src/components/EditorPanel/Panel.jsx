@@ -108,11 +108,11 @@ export default class Panel extends React.Component {
     this.props.store.editorPanel.removingTabId = true;
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
       const editors = this
-          .props
-          .store
-          .editors
-          .entries();
-        this.props.store.editorPanel.activeEditorId = editors[0][1].id;
+        .props
+        .store
+        .editors
+        .entries();
+      this.props.store.editorPanel.activeEditorId = editors[0][1].id;
     }
     this.forceUpdate();
   }
@@ -255,19 +255,19 @@ export default class Panel extends React.Component {
                   key={tab[1].id}
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
-                  panel={<View id= {
+                  panel={<View id={
                   tab[0]
                 }
-                    title= {
+                    title={
                   tab[1].alias + ' (' + tab[1].fileName + ')'
                 }
-                    onDrop= {
+                    onDrop={
                   item => this.handleDrop(item)
                 }
-                    editor= {
+                    editor={
                   tab[1]
                 }
-                    ref ="defaultEditor" />}>
+                    ref="defaultEditor" />}>
                   <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
                   </Button>
@@ -280,13 +280,13 @@ export default class Panel extends React.Component {
                 key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}
-                panel={<View id ={
+                panel={<View id={
                 tab[1].id
               }
-                  editor ={
+                  editor={
                 tab[1]
               }
-                  ref= "defaultEditor" />}>
+                  ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
                   onClick={() => this.closeTab(tab[1])}>
