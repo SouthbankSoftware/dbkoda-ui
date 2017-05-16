@@ -15,9 +15,6 @@ const jsonHelper = require('../../../helpers/handlebars/json.js');
 
 hbs.registerHelper('json', jsonHelper);
 
-console.log(process.cwd());
-
-
 describe('General database hbr tests', () => {
     beforeAll(() => {});
 
@@ -28,7 +25,7 @@ describe('General database hbr tests', () => {
         const getParametersInput = {};
         getParametersInput.AllParameters = true;
         getParametersInput.getCmdLineOpts = true;
-        const templateToBeTested = './src/components/TreeActionPanel/Templates/getParameters.hbs';
+        const templateToBeTested = './src/components/TreeActionPanel/Templates/GetParameters.hbs';
         fs.readFile(templateToBeTested, (err, template) => {
             if (err) {
               throw err;
