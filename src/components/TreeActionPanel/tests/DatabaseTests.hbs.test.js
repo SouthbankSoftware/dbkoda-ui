@@ -56,7 +56,7 @@ describe('General database hbr tests', () => {
         // Random database for the test
         const getLog = {};
         getLog.logType = 'global';
-        const templateToBeTested = './src/components/TreeActionPanel/Templates/getLog.hbs';
+        const templateToBeTested = './src/components/TreeActionPanel/Templates/GetLog.hbs';
 
         fs.readFile(templateToBeTested, (err, template) => {
             if (err) {
@@ -87,7 +87,7 @@ describe('General database hbr tests', () => {
         const setparameterData = {};
         setparameterData.Parameter = 'logLevel';
         setparameterData.Value = 3;
-        const templateToBeTested = './src/components/TreeActionPanel/Templates/setParameter.hbs';
+        const templateToBeTested = './src/components/TreeActionPanel/Templates/SetParameter.hbs';
 
         fs.readFile(templateToBeTested, (err, template) => {
             if (err) {
