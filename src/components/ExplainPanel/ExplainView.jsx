@@ -11,6 +11,21 @@ import {theme} from './JsonTreeTheme';
 import './style.scss';
 import {Types} from './Types';
 
+
+export const StageProgress = ({stages}) => {
+  console.log('stages ', stages);
+  return (<div className="explain-stage-progress">
+    {
+      stages.map((stage) => {
+        return <div className="explain-stage">
+          {stage.stage}
+        </div>;
+      })
+    }
+  </div>);
+};
+
+
 /**
  * show explain command information
  */
@@ -72,36 +87,7 @@ const WinningPlain = ({explain, type}) => {
     case Types.ALL_PLANS_EXECUTION:
     case Types.EXECUTION_STATS:
       stages = getExecutionStages(explain.executionStats.executionStages);
-      return (<div style={{marginLeft: 10}}>
-        {
-          stages.map((stage) => {
-            return (<div key={'explain-view-' + stage.stage + '-' + getRandomNumber()} style={{display: 'flex'}}>
-              <Popover
-                content={<JSONTree data={stage} invertTheme={false} theme={theme} />}
-                interactionKind={PopoverInteractionKind.CLICK}
-                position={Position.TOP_RIGHT}
-                useSmartPositioning={false}
-                className="explain-stage-popover"
-                popoverClassName="explain-stage-detail-popup"
-              >
-                <Button className="explain-stage-button">{stage.stage}</Button>
-              </Popover>
-              <ul className="explain-output-column-label">
-                <li className="explain-output-list-label">Number Of Returned Document:</li>
-                <li className="explain-output-list-label">Execution Time:</li>
-                <li
-                  className="explain-output-list-label">{stage.stage === 'IXSCAN' ? 'Key Examined:' : 'Doc Examined:'}</li>
-              </ul>
-              <ul className="explain-output-column-content">
-                <li className="explain-output-list-content">{stage.nReturned}</li>
-                <li className="explain-output-list-content">{stage.executionTimeMillisEstimate}</li>
-                <li
-                  className="explain-output-list-content">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</li>
-              </ul>
-            </div>);
-          })
-        }
-      </div>);
+      return (<StageProgress stages={stages} />);
     default:
       stages = getExecutionStages(explain.queryPlanner.winningPlan);
       return (<div style={{marginLeft: 10}}>
@@ -156,11 +142,10 @@ const ExplainView = ({explains}) => {
     return null;
   }
   const output = toJS(explains.output);
+  const stages = getExecutionStages(output.executionStats.executionStages);
+
   return (<div className="explain-view-panel">
-    <ExplainCommandInfo explain={output} command={explains.command} />
-    <div style={{margin: 10}}>Winning Plan</div>
-    <WinningPlain explain={output} type={explains.type} />
-    <GlobalStatistics explains={output} type={explains.type} />
+    <StageProgress stages={stages} />
   </div>);
 };
 

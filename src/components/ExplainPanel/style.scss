@@ -4,8 +4,67 @@ $contentColor: white;
 .explain-panel {
   display: flex;
   flex: 1;
-  flex-direction: row;
+  flex-direction: column;
   overflow-x: scroll;
+  background-color: black;
+
+  .explain-header {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    margin: 10px 30px 10px 30px;
+
+    .explain-label {
+      color: rgb(180, 180, 180);
+      line-height: 30px;
+    }
+
+    .explain-view-switch-button {
+      margin-left: auto;
+      background-color: rgb(43, 43, 43) !important;
+      border: 1px solid rgb(74, 74, 74);
+      width: 85px;
+      height: 30px;
+    }
+  }
+
+  .explain-stage-progress{
+    display: flex;
+    flex-direction: row;
+
+    .explain-stage{
+      flex: 1;
+      position: relative;
+      background: rgb(40,54,61);
+      max-width: 150px;
+      height: 40px;
+      line-height: 40px;
+      margin-right: 30px;
+      text-align: center;
+    }
+
+    .explain-stage:after,
+    .explain-stage:before {
+      content: " ";
+      position: absolute;
+      top: 0;
+      right: -22px;
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 21px solid transparent;
+      border-left: 22px solid rgb(40,54,61);
+      z-index: 2;
+      transition: border-color 0.2s ease;
+    }
+
+    .explain-stage:before {
+      right: auto;
+      left: 0;
+      border-left: 17px solid black;
+      z-index: 0;
+    }
+  }
 
 }
 
@@ -37,7 +96,7 @@ $contentColor: white;
 
 .explain-view-panel {
   flex: 1;
-  background-color: #182026;
+  background-color: black;
   margin: 10px;
 }
 

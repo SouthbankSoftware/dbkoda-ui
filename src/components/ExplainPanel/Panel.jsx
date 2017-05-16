@@ -9,20 +9,23 @@ import './style.scss';
 import RawJson from './RawJson';
 import ExplainView from './ExplainView';
 
-const Panel = ({editor}) => {
+export const Header = ({viewType, switchExplainView}) => {
+  return (<div className="explain-header">
+    <span className="explain-label">Explain</span>
+    <Button className="pt-label explain-view-switch-button" onClick={switchExplainView}>{viewType === 0 ? 'Raw Json' : 'Explain'}</Button>
+  </div>);
+};
+
+const Panel = ({editor, switchExplainView, viewType}) => {
+  console.log('editor=', editor);
   if (editor.explains && editor.explains.error) {
     return (<div>{editor.explains.error}</div>);
   }
   return (<div className="explain-panel">
-    <Tabs2 className="explain-tabs" vertical>
-      <Tab2 className="explain-tab" id={editor.shellId}
-
-        title={<Button className="field-label pt-label explain-tab-title-button">Explain</Button>}
-        panel={<ExplainView explains={editor.explains} />} />
-      <Tab2 className="explain-tab" id={editor.shellId + '-raw-json'}
-        title={<Button className="field-label pt-label explain-tab-title-button">Raw Json</Button>}
-        panel={<RawJson explains={editor.explains} />} />
-    </Tabs2>
+    <Header switchExplainView={switchExplainView} viewType={viewType} />
+    {
+      viewType === 0 ? <ExplainView explains={editor.explains} /> : <RawJson explains={editor.explains} />
+    }
   </div>);
 };
 
