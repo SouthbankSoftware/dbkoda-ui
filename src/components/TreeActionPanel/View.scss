@@ -2,36 +2,10 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-15T16:54:31+10:00
+// @Last modified time: 2017-05-16T14:49:26+10:00
+@import '../../styles/_defaultTheme.scss';
 
-// Theme 1 Colours: These should be externalized eventually:
-//Editor:
-$editorBackground: #202020;
-$editorActiveLine: #303030;
-$editorTextComments: #8B8B8B;
-//NavBars:
-$navbarRightBackground: #494849;
-$navbarRighHeading: #BFBEC0;
-$navbarSecondaryBackground: #323232;
-$navbarLeftBackground: #212E33;
-$navbarLeftHeading: #BFBEC0;
-$panelLeftBackground: #2D3D46;
-//Buttons:
-$buttonPrimaryBackground: #BFBEC0;
-$buttonPrimaryBackgroundHover: #99979b;
-$buttonPrimaryIcon: #58595B;
-$buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #1e282f;
-$buttonSecondaryIcon: #BFBEC0;
-$buttonTertiaryBackground: #202020;
-$buttonTertiaryIcon: #BFBEC0;
-$buttonDangerBackground: #8A4148;
-$buttonDangerIcon: #BFBEC0;
-$selectPrimaryBackground: #313131;
-$searchPrimaryBackground: #BFBEc0;
-$searchPrimaryFontColor: #494849;
-$searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEc0;
+
 .dynamic-form {
   div > form {
     margin: 30px;
@@ -40,6 +14,7 @@ $searchSecondaryFontColor: #BFBEc0;
   .form-title {
     text-align: center;
     margin: 35px 0;
+    color: $fieldHeadingFontColor;
   }
 
   .form-group-inline {
@@ -54,11 +29,21 @@ $searchSecondaryFontColor: #BFBEc0;
     .pt-input, .pt-select {
       width: 100%;
       min-width: 200px;
+      border-radius: 0px;
+      border-style: none;
+      box-shadow: none;
+      background-color: $fieldBrightBackgroundColor !important;
+      color: $fieldBrightFontColor !important;
     }
 
     .pt-numeric-input {
       .pt-input-group {
         width: calc(100% - 30px);
+      }
+      .pt-button-group {
+        .pt-icon-chevron-up, .pt-icon-chevron-down{
+          border-radius: 0px !important;
+        }
       }
       .pt-input {
         min-width: 170px;
@@ -73,14 +58,25 @@ $searchSecondaryFontColor: #BFBEc0;
     .pt-checkbox {
       width: 70%;
       margin-left: 30%;
+      color: $fieldHeadingFontColor;
       .pt-control-indicator {
         width: 16px;
       }
     }
   }
+  .groupFieldSet {
+    margin: 0px -15px 15px -15px;
+    border-style: none;
+    background-color: $fieldGroupPrimaryBackground;
+    .pt-form-group {
+      margin: 0px 5px 15px 5px;
+    }
+  }
 
-  fieldset {
+  .tableFieldSet {
     margin: 0 -15px 15px -15px;
+    border-style: none;
+    background-color: $fieldGroupPrimaryBackground;
 
     .pt-form-content {
       width: 100%;
@@ -96,14 +92,49 @@ $searchSecondaryFontColor: #BFBEc0;
       }
     }
   }
+  .form-button-panel {
+    button {
+      background: none;
+      border-radius: 0px;
+    }
+    button:focus {
+      outline: none;
+    }
+    .pt-intent-success {
+      background-color: $fieldPrimaryButtonBackground;
+      color: $fieldPrimaryButtonFontColor;
+    }
+    .pt-intent-success:hover {
+      background-color: $fieldPrimaryButtonHover;
+    }
+    .pt-intent-success:active {
+      background-color: $fieldPrimaryButtonActive;
+    }
+    .pt-intent-primary {
+      background-color: $fieldSecondaryButtonBackground;
+      color: $fieldSecondaryButtonFontColor;
+    }
+    .pt-intent-primary:hover {
+      background-color: $fieldSecondaryButtonHover;
+    }
+    .pt-intent-primary:active {
+      background-color: $fieldSecondaryButtonActive;
+    }
+  }
 
   .pt-label-r-30 {
     width: 30%;
     text-align: left;
+    color: $fieldHeadingFontColor !important;
   }
 
-  .pt-select {
+  .pt-select select{
     height: 30px;
+    width: 100%;
+    border-radius: 0px;
+    border-style: none;
+    background-color: $fieldBrightBackgroundColor !important;
+    color: $fieldBrightFontColor !important;
   }
 
   .pt-checkbox-form {
@@ -155,7 +186,22 @@ $searchSecondaryFontColor: #BFBEc0;
       width: 100%;
       flex-direction: row-reverse;
   }
+  .Select-control {
+    height: 30px;
+    border: none;
+    background-color: $fieldBrightBackgroundColor;
+    color: $fieldBrightFontColor;
+    border-radius: 0px;
+  }
   .Select-menu-outer {
     z-index: 999 !important;
+  }
+  .Select-placeholder,
+  .Select--single > .Select-control .Select-value {
+    line-height: 30px;
+  }
+  .Select-input {
+    height: 30px;
+    border-radius: 0px;
   }
 }

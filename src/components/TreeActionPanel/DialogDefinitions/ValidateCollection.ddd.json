@@ -1,0 +1,46 @@
+{
+    "Title": "Rename Collection",
+    "DefaultValues": {
+        "function": "dbenvy_ValidateCollectionPreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parentDB"
+        }, {
+            "name": "CollectionName",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true,
+            "rules": "required"
+        },
+        {
+            "name": "CollectionName",
+            "label" : "Collection Name",
+            "type": "Text",
+            "readOnly": true,
+            "rules": "required",
+            "lookup": "dbenvy_listcollections",
+            "lookup_arguments": [{
+                "name": "db",
+                "value": "treeNode.parentDB"
+            }]
+        },
+        {
+            "name": "full",
+            "label": "Full?",
+            "type": "Boolean",
+            "tooltip": "Perform a more thorough scan of data", 
+            "default":false
+        }  ,
+        {
+            "name": "scandata",
+            "label": "Scan Data?",
+            "type": "Boolean",
+            "tooltip": "If false, skips scan of collection without skpping indexes", 
+            "default":false
+        }
+    ]
+}

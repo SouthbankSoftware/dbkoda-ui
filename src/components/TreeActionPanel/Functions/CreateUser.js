@@ -12,9 +12,9 @@ export const CreateUser = {
   // Prefill function for alter user
   dbenvy_CreateUserPreFill: () => {
     const data = {};
-    data.Database = 'test';
+    data.Database = 'admin';
     data.Roles = [];
-    data.Roles.push({ Database:'test', Role:'read'});
+    data.Roles.push({ Database:'admin', Role:'read'});
     return data;
   },
   dbenvy_validateUser: (inputDoc) => {

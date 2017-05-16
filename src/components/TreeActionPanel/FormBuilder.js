@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-12T16:48:04+10:00
+ * @Last modified time: 2017-05-16T14:39:11+10:00
  */
 
 import { DynamicForm } from './Components/DynamicForm';
@@ -187,6 +187,17 @@ export default class FormBuilder {
             setFormOptions(colField, colFieldName);
           }
           result.arrayLast.push(resField.fieldName); // this is utilized after the form has returned the input document for the template
+        } else if (defField.type == 'Group') {
+          for (const member of defField.members) {
+            const memField = this.getField(member, formFunctions);
+            const memFieldName = resField.fieldName +
+              '.' +
+              memField.fieldName;
+            setFormOptions(memField, memFieldName);
+          }
+          if (!defField.label || defField.label == '') {
+            result.labels[resField.fieldName] = '--nolabel--';
+          }
         }
       }
 

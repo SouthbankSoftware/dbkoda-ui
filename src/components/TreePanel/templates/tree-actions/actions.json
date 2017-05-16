@@ -46,10 +46,21 @@
             "name": "DropAllIndexes",
             "text": "Drop All Indexes",
             "icon": "pt-icon-delete"
-        }, {
+        },
+        {
+            "name": "RenameCollection",
+            "text": "Rename Collection",
+            "icon": "pt-icon-exchange"
+        },
+        {
             "name": "CompactCollection",
             "text": "Compact Collection",
             "icon": "pt-icon-compressed"
+        },
+        {
+            "name": "ValidateCollection",
+            "text": "Validate Collection",
+            "icon": "pt-icon-confirm"
         },
         {
             "name": "ShardCollection",

@@ -27,7 +27,7 @@
                     "name": "AttributeName",
                     "label": "Attribute",
                     "tooltip": "Name of the attribute shard upon",
-                    "type": "Select",
+                    "type": "Combo",
                     "lookup": "dbenvyListAttributes",
                     "lookup_arguments": [{
                             "name": "db",
