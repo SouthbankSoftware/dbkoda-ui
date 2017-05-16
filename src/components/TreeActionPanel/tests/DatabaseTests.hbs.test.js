@@ -27,7 +27,7 @@ describe('General database hbr tests', () => {
         getParametersInput.AllParameters = true;
         getParametersInput.getCmdLineOpts = true;
         const templateToBeTested = './src/components/TreeActionPanel/Templates/getParameters.hbs';
-
+        console.log(process.cwd);
         fs.readFile(templateToBeTested, (err, template) => {
             const getParameters = template.toString();
             const getParametersTemplate = hbs.compile(getParameters);
