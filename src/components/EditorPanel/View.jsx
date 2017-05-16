@@ -178,7 +178,7 @@ class View extends React.Component {
             shellId: shell, // eslint-disable-line
             commands: editor
               .code
-              .replace('\t', '  ')
+              .replace(/\t/g, '  ')
           });
           this.props.store.editorPanel.executingEditorAll = false;
         }
@@ -229,7 +229,7 @@ class View extends React.Component {
           service.timeout = 30000;
           service.update(id, {
             shellId: shell, // eslint-disable-line
-            commands: content.replace('\t', '  ')
+            commands: content.replace(/\t/g, '  ')
           });
           this.props.store.editorPanel.executingEditorLines = false;
         }
