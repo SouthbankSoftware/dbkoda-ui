@@ -76,6 +76,48 @@ describe('Miscellaneous collection tests', () => {
             });
     });
 
+    test('Rename Collection', (done) => {
+        const templateToBeTested = './src/components/TreeActionPanel/Templates/RenameCollection.hbs';
+        fs.readFile(templateToBeTested, (err, data) => {
+            if (!err) {
+                const randomCollectionName = 'collection' + Math.floor(Math.random() * 10000000);
+                const templateInput = {};
+                templateInput.Database = 'test';
+                templateInput.CollectionName = randomCollectionName;
+                templateInput.NewCollectionName = randomCollectionName + 'renamed';
+                templateInput.dropTarget = false;
+                const templateSource = data.toString();
+                const compiledTemplate = hbs.compile(templateSource);
+                const RenameCollectionCommands = compiledTemplate(templateInput);
+
+                const validateCollectionCmd = sprintf('\nprint ( "original collection has storage="+(db.%s.stats().size>0));\n',
+                    randomCollectionName);
+                const validateRenamedCollectionCmd = sprintf('\nprint ( "renamed collection has storage="+(db.%s.stats().size>0));\n',
+                    templateInput.NewCollectionName);
+                let mongoCommands = '';
+                mongoCommands += 'use test\n';
+                mongoCommands += sprintf('db.%s.insertOne({a:1})\n', randomCollectionName);
+                mongoCommands += validateCollectionCmd;
+                mongoCommands += RenameCollectionCommands;
+                mongoCommands += validateRenamedCollectionCmd;
+                mongoCommands += sprintf('db.%s.drop()\n', templateInput.NewCollectionName);
+                mongoCommands += '\nexit\n';
+                if (debug) {
+                    console.log(mongoCommands);
+                }
+                const matchString1 = 'original collection has storage=true';
+                const matchString2 = 'renamed collection has storage=true';
+                common
+                    .mongoOutput(mongoCommands)
+                    .then((output) => {
+                        expect(output).toEqual(expect.stringMatching(matchString1));
+                        expect(output).toEqual(expect.stringMatching(matchString2));
+                        done();
+                    });
+            }
+        });
+    });
+
     test('Compact Collection', (done) => {
         const templateToBeTested = './src/components/TreeActionPanel/Templates/CompactCollection.hbs';
         const templateInput = require('./CompactCollection.hbs.input.json');
@@ -99,5 +141,34 @@ describe('Miscellaneous collection tests', () => {
                     });
             }
         });
-    }, 20000);  // compact may take time
+    }, 20000); // compact may take time
+
+    test('Validate Collection', (done) => {
+        const templateToBeTested = './src/components/TreeActionPanel/Templates/ValidateCollection.hbs';
+
+        fs.readFile(templateToBeTested, (err, data) => {
+            if (!err) {
+                const templateInput = {};
+                templateInput.Database = 'test';
+                templateInput.CollectionName = randomCollectionName;
+                templateInput.full = false;
+                templateInput.scandata = true;
+                const templateSource = data.toString();
+                const compiledTemplate = hbs.compile(templateSource);
+                const ValidateCollectionCommands = compiledTemplate(templateInput);
+                let mongoCommands = ValidateCollectionCommands;
+                mongoCommands += '\nexit\n';
+                if (debug) {
+                    console.log(mongoCommands);
+                }
+                const matchString = 'keysPerIndex';
+                common
+                    .mongoOutput(mongoCommands)
+                    .then((output) => {
+                        expect(output).toEqual(expect.stringMatching(matchString));
+                        done();
+                    });
+            }
+        });
+    }); // compact may take time
 });

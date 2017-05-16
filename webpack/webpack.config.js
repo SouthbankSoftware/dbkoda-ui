@@ -1,6 +1,6 @@
 /**
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-04T16:24:11+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-05-16T10:42:46+10:00
  */
 
 const path = require('path');
@@ -39,7 +39,8 @@ module.exports = {
 
     // match the output `publicPath`
     publicPath: '/',
-    port: 3000
+    port: 3000,
+    host: '0.0.0.0'
   },
   module: {
     rules: [

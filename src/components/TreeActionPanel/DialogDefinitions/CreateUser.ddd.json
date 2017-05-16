@@ -8,6 +8,7 @@
             "name": "Database",
             "type": "Select",
             "readOnly": false,
+            "tooltip":"The database which will be used to authenticate the user",
             "lookup": "dbenvy_listdb"
         },
         {
@@ -21,6 +22,7 @@
         },
         {
             "name": "CustomData",
+            "tooltip":"A JSON document containing site-specific information",
             "type": "Text",
             "optional": true
         },
@@ -37,6 +39,5 @@
                 "lookup": "dbenvy_listRoles"
             }]
         }
-    ],
-    "Validate": "dbenvy_validateUser"
+    ] 
 }
