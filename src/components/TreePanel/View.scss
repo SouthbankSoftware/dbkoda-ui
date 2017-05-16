@@ -2,36 +2,9 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-02T09:57:20+10:00
+// @Last modified time: 2017-05-16T11:03:22+10:00
 
-// Theme 1 Colours: These should be externalized eventually:
-//Editor:
-$editorBackground: #202020;
-$editorActiveLine: #303030;
-$editorTextComments: #8B8B8B;
-//NavBars:
-$navbarRightBackground: #494849;
-$navbarRighHeading: #BFBEC0;
-$navbarSecondaryBackground: #323232;
-$navbarLeftBackground: #212E33;
-$navbarLeftHeading: #BFBEC0;
-$panelLeftBackground: #2D3D46;
-//Buttons:
-$buttonPrimaryBackground: #BFBEC0;
-$buttonPrimaryBackgroundHover: #99979b;
-$buttonPrimaryIcon: #58595B;
-$buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #1e282f;
-$buttonSecondaryIcon: #BFBEC0;
-$buttonTertiaryBackground: #202020;
-$buttonTertiaryIcon: #BFBEC0;
-$buttonDangerBackground: #8A4148;
-$buttonDangerIcon: #BFBEC0;
-$selectPrimaryBackground: #313131;
-$searchPrimaryBackground: #BFBEc0;
-$searchPrimaryFontColor: #494849;
-$searchSecondaryBackground: #202020;
-$searchSecondaryFontColor: #BFBEc0;
+@import '../../styles/_defaultTheme.scss';
 
 .treeToolbar {
   background-color: $navbarLeftBackground !important;
