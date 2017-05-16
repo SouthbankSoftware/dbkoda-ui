@@ -33,7 +33,7 @@ export default class Explain extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {viewType: 0};
   }
 
   componentDidMount() {
@@ -74,7 +74,8 @@ export default class Explain extends React.Component {
       explainOutputJson = {
         output: EJSON.parse(parseOutput(output)),
         type: this.explainType,
-        command: this.explainCommand
+        command: this.explainCommand,
+        viewType: 0,
       };
     } catch (err) {
       console.log('err parse explain output ', err, parseOutput(output));
@@ -89,8 +90,17 @@ export default class Explain extends React.Component {
     Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, {id, shell});
   }
 
+  @action.bound
+  switchExplainView() {
+    const {viewType} = this.props.editor.explains;
+    this.props.editor.explains.viewType = 1 - viewType;
+    this.setState({viewType: this.props.editor.explains.viewType});
+  }
+
   render() {
-    return (<Panel editor={this.props.editor} />);
+    return (<Panel editor={this.props.editor}
+      viewType={this.state.viewType}
+      switchExplainView={this.switchExplainView} />);
   }
 
 }
