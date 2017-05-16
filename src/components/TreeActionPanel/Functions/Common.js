@@ -2,9 +2,10 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-05-10T10:33:53+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T11:38:57+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-05-16T21:43:08+10:00
  */
+
 const sprintf = require('sprintf-js').sprintf;
 
 export function dbenvy_listdb(params) { //eslint-disable-line
@@ -44,7 +45,7 @@ export function dbenvy_listcollections_parse(res) { //eslint-disable-line
 export function dbenvyParameterList() { //eslint-disable-line
     return ('db.runCommand( { getParameter : "*" })');
 }
-export function dbenvyParameterList_parse(res) {//eslint-disable-line 
+export function dbenvyParameterList_parse(res) {//eslint-disable-line
     const params = Object.keys(res);
     return params;
 }
