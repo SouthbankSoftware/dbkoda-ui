@@ -15,6 +15,8 @@ const jsonHelper = require('../../../helpers/handlebars/json.js');
 
 hbs.registerHelper('json', jsonHelper);
 
+console.log(process.cwd());
+
 
 describe('General database hbr tests', () => {
     beforeAll(() => {});
@@ -27,8 +29,10 @@ describe('General database hbr tests', () => {
         getParametersInput.AllParameters = true;
         getParametersInput.getCmdLineOpts = true;
         const templateToBeTested = './src/components/TreeActionPanel/Templates/getParameters.hbs';
-        console.log(process.cwd);
         fs.readFile(templateToBeTested, (err, template) => {
+            if (err) {
+              throw err;
+            }
             const getParameters = template.toString();
             const getParametersTemplate = hbs.compile(getParameters);
             const getParametersCommands = getParametersTemplate(getParametersInput);
@@ -58,6 +62,9 @@ describe('General database hbr tests', () => {
         const templateToBeTested = './src/components/TreeActionPanel/Templates/getLog.hbs';
 
         fs.readFile(templateToBeTested, (err, template) => {
+            if (err) {
+              throw err;
+            }
             const getParameters = template.toString();
             const getParametersTemplate = hbs.compile(getParameters);
             const getParametersCommands = getParametersTemplate(getLog);
@@ -86,6 +93,9 @@ describe('General database hbr tests', () => {
         const templateToBeTested = './src/components/TreeActionPanel/Templates/setParameter.hbs';
 
         fs.readFile(templateToBeTested, (err, template) => {
+            if (err) {
+              throw err;
+            }
             const setParameter = template.toString();
             const getParametersTemplate = hbs.compile(setParameter);
             const getParametersCommands = getParametersTemplate(setparameterData);
@@ -114,6 +124,9 @@ describe('General database hbr tests', () => {
         const templateToBeTested = './src/components/TreeActionPanel/Templates/SetLogLevel.hbs';
 
         fs.readFile(templateToBeTested, (err, template) => {
+            if (err) {
+              throw err;
+            }
             const setParameter = template.toString();
             const getParametersTemplate = hbs.compile(setParameter);
             const getParametersCommands = getParametersTemplate(setLogLevelData);
