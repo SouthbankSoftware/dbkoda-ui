@@ -62,22 +62,58 @@ export default class Panel extends React.Component {
    * @param {Object} oldTab - The Id of the tab being removed.
    */
   @action closeTab(oldTab) {
-    // Check if tab to be removed is currenlty selected tab, this will require more
-    // handing in UI.
-    console.log(this.props.store.editorPanel.activeEditorId);
+    // NEWLOGIC Check if closed editor is current editor:
     if ((oldTab.id) == this.props.store.editorPanel.activeEditorId) {
-      this.props.store.editorPanel.activeEditorId = 'Default';
       this.props.store.editorPanel.isRemovingCurrentTab = true;
+      // Check if this is the last tab:
+      if (this.props.store.editors.size == 1) {
+        // Show and select welcome tab
+        this.props.store.welcomePage.isOpen = true;
+        this.props.store.editorPanel.activeEditorId = 'Default';
+      } else {
+        // Show and select first entry in map.
+        console.log('1:', this.props.store.editorPanel.activeEditorId);
+        this.props.store.editorPanel.removingTabId = oldTab.id;
+        this
+          .props
+          .store
+          .editors
+          .delete(oldTab.id);
+        const editors = this
+          .props
+          .store
+          .editors
+          .entries();
+        this.props.store.editorPanel.activeEditorId = editors[0][1].id;
+        console.log('2:', this.props.store.editorPanel.activeEditorId);
+        return;
+      }
     } else {
       this.props.store.editorPanel.isRemovingCurrentTab = false;
     }
     this.props.store.editorPanel.removingTabId = oldTab.id;
-    console.log('Removing tab id: ' + this.props.store.editorPanel.removingTabId);
     this
       .props
       .store
       .editors
       .delete(oldTab.id);
+    this.forceUpdate();
+  }
+
+  /**
+   * Action for closing the welcome Tab
+   */
+  @action.bound closeWelcome() {
+    this.props.store.welcomePage.isOpen = false;
+    this.props.store.editorPanel.removingTabId = true;
+    if (this.props.store.editorPanel.activeEditorId == 'Default') {
+      const editors = this
+        .props
+        .store
+        .editors
+        .entries();
+      this.props.store.editorPanel.activeEditorId = editors[0][1].id;
+    }
     this.forceUpdate();
   }
 
@@ -155,6 +191,42 @@ export default class Panel extends React.Component {
     }
   }
 
+  @action.bound
+  renderWelcome() {
+    if (this.props.store.editors.size == 0) {
+      return (
+        <Tab2
+          className="welcomeTab"
+          id="Default"
+          title="Welcome"
+          panel={<WelcomeView />} />
+      );
+    }
+    if (this.props.store.welcomePage.isOpen) {
+      return (
+        <Tab2
+          className="welcomeTab"
+          id="Default"
+          title="Welcome"
+          panel={<WelcomeView />}>
+          <Button className="pt-minimal" onClick={() => this.closeWelcome()}>
+            <span className="pt-icon-cross" />
+          </Button>
+        </Tab2>
+      );
+    }
+    return (
+      <Tab2
+        className="welcomeTab notVisible"
+        id="Default"
+        title="Welcome"
+        panel={<WelcomeView />}>
+        <Button className="pt-minimal" onClick={() => this.closeWelcome()}>
+          <span className="pt-icon-cross" />
+        </Button>
+      </Tab2>
+    );
+  }
   /**
    * Action for rendering the component.
    */
@@ -174,11 +246,8 @@ export default class Panel extends React.Component {
           animate={this.state.animate}
           onChange={this.changeTab}
           selectedTabId={this.props.store.editorPanel.activeEditorId}>
-          <Tab2
-            className="welcomeTab"
-            id="Default"
-            title="Welcome"
-            panel={<WelcomeView />} /> {editors.map((tab) => {
+          {this.renderWelcome()}
+          {editors.map((tab) => {
             if (tab[1].visible) {
               return (
                 <Tab2
@@ -195,7 +264,9 @@ export default class Panel extends React.Component {
                     onDrop={
                   item => this.handleDrop(item)
                 }
-                    editor={tab[1]}
+                    editor={
+                  tab[1]
+                }
                     ref="defaultEditor" />}>
                   <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
@@ -212,7 +283,9 @@ export default class Panel extends React.Component {
                 panel={<View id={
                 tab[1].id
               }
-                  editor={tab[1]}
+                  editor={
+                tab[1]
+              }
                   ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"

@@ -3,9 +3,6 @@
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
 // @Last modified time: 2017-05-16T12:52:58+10:00
-
-
-
 // Theme 1 Colours: These should be externalized eventually:
 //Tabs:
 $tabFontColor: #8B8B8B;
@@ -25,10 +22,25 @@ $propFontColor: #aac6e3;
 $stringFontColor: #4caf50;
 $white: #ffffff;
 $black: #000000;
-
+//Welcome View:
+$welcomeViewBackgroundColor: #2D3D46;
+$welcomeViewDarkBackgroundColor: #26353c;
+$welcomeViewDividerColor: #9A9A9B;
+$welcomeViewDividerTransparent: rgba(154, 154, 155, 0.4);
+$welcomeViewButtonBorderColor: rgba(154, 154, 155, 0.6);
+$welcomeViewOptoutFontColor: #9A9A9B;
+$welcomeViewButtonHoverColor: #394b59;
+$welcomeViewIconColor: #9A9A9B;
+$welcomeViewIconBG: #212E33;
+$welcomeViewIconBGHover: #313E43;
+$welcomeViewSocialMediaBG: #364951;
+$welcomeViewSocialMediaIcons: #9A9A9B;
+$welcomeViewSocialMediaText: #9A9A9B;
+$welcomeViewFontColor: #BFBEC0;
+$welcomeViewFontColorDark: #AFAEB0;
+$welcomeViewLinkColor: #4b98c6;
 $panelLeftBackground: #2D3D46;
 $panelRightBackground: #202020;
-
 //Profile List
 $profileListIconColor: rgba(191, 190, 192, 0.3);
 $profileListFontColor: #BFBEC0;
@@ -66,7 +78,6 @@ $searchSecondaryBackground: #202020;
 $searchSecondaryFontColor: #BFBEC0;
 $downArrow: "\25BE";
 $rightArrow: "\25B8";
-
 // Fields:
 // =======
 //
@@ -74,37 +85,30 @@ $rightArrow: "\25B8";
 // ---------------
 $selectDarkPrimaryBackground: #313131;
 $selectDarkBorderColor: #515151;
-
 // Form Fields:
 // ------------
 $fieldGroupPrimaryBackground: #212E33;
-$fieldGroupSecondaryBackground: rgba(33,46,51, 0.5);
-$fieldGroupTertiaryBackground: rgba(33,46,51, 0.15);
-
+$fieldGroupSecondaryBackground: rgba(33, 46, 51, 0.5);
+$fieldGroupTertiaryBackground: rgba(33, 46, 51, 0.15);
 // fields are input, numericinput, select, etc
-$fieldHeadingFontColor: #BFBEC0;    // for Form header, and field Labels
-$fieldLabelFontColor: #58585B;      // for Fields with labels like Radio boxes, Check boxes
+$fieldHeadingFontColor: #BFBEC0; // for Form header, and field Labels
+$fieldLabelFontColor: #58585B; // for Fields with labels like Radio boxes, Check boxes
 $fieldBrightBackgroundColor: #FFFFFF;
 $fieldBrightBorderColor: #FFFFFF;
 $fieldBrightFontColor: #565556;
-$fieldBrightPlaceholderFontColor: rgba(86,85,86, 0.5);
+$fieldBrightPlaceholderFontColor: rgba(86, 85, 86, 0.5);
 $fieldBrightIconColor: #2D3D46;
-
 $fieldPrimaryButtonBackground: #212E33;
 $fieldPrimaryButtonHover: #374247;
 $fieldPrimaryButtonActive: #1d292d;
 $fieldPrimaryButtonFontColor: #BFBEC0;
-
 $fieldSecondaryButtonBackground: #8A4148;
 $fieldSecondaryButtonHover: #95545a;
 $fieldSecondaryButtonActive: #7c3a40;
 $fieldSecondaryButtonFontColor: #BFBEC0;
-
 $fieldTertiaryButtonBackground: #2D3D46;
 $fieldTertiaryButtonBorder: #BFBEC0;
 $fieldTertiaryButtonFontColor: #BFBEC0;
-
-
 $newProfileIcon: url('#/icons/new-profile-icon.svg');
 $editProfileIcon: url('#/icons/edit-profile-icon.svg');
 $closeProfileIcon: url('#/close-profile-icon.svg');
