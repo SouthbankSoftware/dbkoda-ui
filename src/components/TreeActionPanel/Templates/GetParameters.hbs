@@ -1,0 +1,8 @@
+
+db.getSiblingDB("admin").
+   runCommand({ {{#if AllParameters}}getParameter: '*'{{else}} getParameter:1,"{{Parameter}}":1{{/if}}    
+   });
+{{#if getCmdLineOpts}}db.getSiblingDB("admin").
+   runCommand({ getCmdLineOpts: 1 } ); {{/if}}   
+
+ 

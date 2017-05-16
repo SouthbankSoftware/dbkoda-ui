@@ -1,0 +1,32 @@
+{
+	"Title": "Logging Level",
+	"DefaultValues": {
+		"function": "dbenvyLoggingLevelPreFill" 
+	},
+	"Fields": [{
+			"name": "verbosity",
+			"label": "Overall Verbosity",
+      "tooltip":"Child entries of -1 inherit this level",
+			"type": "Numeric",
+			"readOnly": false,
+			"rule":"integer|between -1:5"
+		},
+		{
+			"name": "Components",
+			"label": "Log Components",
+			"type": "Table",
+			"columns": [{
+				"name": "Component",
+				"label": "Component",
+				"type": "Text",
+				"readOnly":"true"
+			}, {
+				"name": "Level",
+				"label": "Level",
+				"type": "Numeric",
+				"lookup": "dbenvyLogLevel",
+        "rule":"required|integer|between -1:5"
+			}]
+		}
+	]
+}

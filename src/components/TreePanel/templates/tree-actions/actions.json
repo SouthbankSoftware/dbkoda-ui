@@ -9,7 +9,29 @@
     "config": [],
     "routers": [],
     "mongos": [],
-    "databases": [],
+    "databases": [
+        {
+            "name": "GetParameters",
+            "text": "Get Parameters",
+            "icon": "pt-icon-settings"
+        }
+        ,
+        {
+             "name": "SetParameter",
+            "text": "Set parameter",
+            "icon": "pt-icon-settings"
+        },
+        {
+             "name": "SetLogLevel",
+            "text": "Get/Set Logging levels",
+            "icon": "pt-icon-error"
+        },
+        {
+             "name": "GetLog",
+            "text": "View log entries",
+            "icon": "pt-icon-error"
+        }
+    ],
     "database": [{
             "name": "CreateCollection",
             "text": "Create Collection",
