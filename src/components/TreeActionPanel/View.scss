@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-16T12:44:33+10:00
+// @Last modified time: 2017-05-16T14:49:26+10:00
 @import '../../styles/_defaultTheme.scss';
 
 
@@ -64,9 +64,19 @@
       }
     }
   }
+  .groupFieldSet {
+    margin: 0px -15px 15px -15px;
+    border-style: none;
+    background-color: $fieldGroupPrimaryBackground;
+    .pt-form-group {
+      margin: 0px 5px 15px 5px;
+    }
+  }
 
-  fieldset {
+  .tableFieldSet {
     margin: 0 -15px 15px -15px;
+    border-style: none;
+    background-color: $fieldGroupPrimaryBackground;
 
     .pt-form-content {
       width: 100%;
