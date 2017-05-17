@@ -43,10 +43,12 @@ export function dbenvy_listcollections_parse(res) { //eslint-disable-line
     return collectionList.sort();
 }
 export function dbenvyParameterList() { //eslint-disable-line
-    return ('db.runCommand( { getParameter : "*" })');
+    return ('JSON.stringify(db.getSiblingDB("admin").runCommand( { getParameter : "*" }))');
 }
 export function dbenvyParameterList_parse(res) {//eslint-disable-line
+    console.log('got parameters', res);
     const params = Object.keys(res);
+    console.log(params);
     return params;
 }
 export function dbenvyListAttributes(params) {
