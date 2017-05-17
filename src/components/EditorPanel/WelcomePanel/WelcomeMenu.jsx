@@ -8,12 +8,9 @@
 
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/sort-comp */
-import _ from 'lodash';
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
-import path from 'path';
-import {featherClient} from '~/helpers/feathers';
 import {AnchorButton, Checkbox} from '@blueprintjs/core';
 
 /**
