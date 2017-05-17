@@ -17,7 +17,6 @@ export const Stage = ({stage}) => {
 };
 
 export const StageProgress = ({stages}) => {
-  console.log('stages ', stages);
   return (<div className="explain-stage-progress">
     {
       stages.map((stage) => {
