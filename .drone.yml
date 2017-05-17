@@ -1,7 +1,7 @@
 # @Author: guiguan
 # @Date:   2017-01-09T15:15:34+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-05-16T22:49:42+10:00
+# @Last modified time: 2017-05-18T07:18:35+10:00
 
 
 
@@ -10,7 +10,7 @@ pipeline:
     image: southbanksoftware/cienvy:node-nm-mongo
     pull: true
     volumes:
-      - /Users/guiguan/Documents/Projects/SBS/cienvy-client:/cienvy-client
+      - /Users/admin/docker/cienvy-client:/cienvy-client
       - cienvy-volumes:/volumes
     commands:
       - bash /cienvy-client/bin/cienvy.bash --url=http://172.16.0.1:9090 prepare
