@@ -1,6 +1,6 @@
 $labelColor: #179dea;
 $contentColor: white;
-
+@import "../../styles/_defaultTheme.scss";
 .explain-panel {
   display: flex;
   flex: 1;
@@ -15,28 +15,28 @@ $contentColor: white;
     margin: 10px 10px 0px 10px;
 
     .explain-label {
-      color: rgb(180, 180, 180);
+      color: $explainLabelColor;
       line-height: 30px;
     }
 
     .explain-view-switch-button {
       margin-left: auto;
       margin-right: 30px;
-      background-color: rgb(43, 43, 43) !important;
-      border: 1px solid rgb(74, 74, 74);
+      background-color: $explainSwitchBtnColor !important;
+      border: 1px solid $explainSwitchBtnBorderColor;
       width: 85px;
       height: 30px;
     }
   }
 
-  .explain-stage-progress{
+  .explain-stage-progress {
     display: flex;
     flex-direction: row;
 
-    .explain-stage{
+    .explain-stage {
       flex: 1;
       position: relative;
-      background: rgb(40,54,61);
+      background: $explainStage1Color;
       max-width: 150px;
       height: 35px;
       line-height: 35px;
@@ -55,7 +55,7 @@ $contentColor: white;
       height: 0;
       border-top: 18px solid transparent;
       border-bottom: 18px solid transparent;
-      border-left: 17px solid rgb(40,54,61);
+      border-left: 17px solid $explainStage1Color;
       z-index: 2;
       transition: border-color 0.2s ease;
     }
@@ -66,8 +66,74 @@ $contentColor: white;
       border-left: 17px solid black;
       z-index: 0;
     }
+
+    .explain-stage:nth-child(1n+0) {
+      background: $explainStage1Color;
+    }
+    .explain-stage:nth-child(1n+0):after {
+      border-left-color: $explainStage1Color;
+    }
+
+    .explain-stage:nth-child(2n+0) {
+      background: $explainStage2Color;
+    }
+    .explain-stage:nth-child(2n+0):after {
+      border-left-color: $explainStage2Color;
+    }
+
+    .explain-stage:nth-child(3n+0) {
+      background: $explainStage3Color;
+    }
+    .explain-stage:nth-child(3n+0):after {
+      border-left-color: $explainStage3Color;
+    }
+
+    .explain-stage:nth-child(4n+0) {
+      background: $explainStage4Color;
+    }
+    .explain-stage:nth-child(4n+0):after {
+      border-left-color: $explainStage4Color;
+    }
+
+    .explain-stage:nth-child(5n+0) {
+      background: $explainStage5Color;
+    }
+    .explain-stage:nth-child(5n+0):after {
+      border-left-color: $explainStage5Color;
+    }
   }
 
+  .explain-stages-table {
+    margin-top: 30px;
+
+    .bp-table-column-headers {
+      width: 100%;
+
+      .bp-table-column-header-tr {
+        width: 100% !important;
+
+        .bp-table-header{
+          width: auto;
+        }
+
+        .bp-table-header:nth-child(1) {
+          flex: 1;
+        }
+        .bp-table-header:nth-child(2) {
+          flex: 2;
+        }
+        .bp-table-header:nth-child(3) {
+          flex: 1;
+        }
+        .bp-table-header:nth-child(4) {
+          flex: 1;
+        }
+        .bp-table-header:nth-child(5) {
+          flex: 3;
+        }
+      }
+    }
+  }
 }
 
 .explain-tab {

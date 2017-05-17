@@ -101,13 +101,13 @@ describe('test explain view', () => {
 
     let stages = getExecutionStages(explainOutput.executionStats.executionStages);
     assert.equal(stages.length, 2);
-    assert.equal(stages[0].stage, 'FETCH');
-    assert.equal(stages[1].stage, 'IXSCAN');
+    assert.equal(stages[1].stage, 'FETCH');
+    assert.equal(stages[0].stage, 'IXSCAN');
 
     stages = getExecutionStages(explainOutput.queryPlanner.winningPlan);
     assert.equal(stages.length, 2);
-    assert.equal(stages[0].stage, 'FETCH');
-    assert.equal(stages[1].stage, 'IXSCAN');
+    assert.equal(stages[1].stage, 'FETCH');
+    assert.equal(stages[0].stage, 'IXSCAN');
   });
 
   it('test plain explain output ', () => {

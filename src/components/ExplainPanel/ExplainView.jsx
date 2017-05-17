@@ -4,7 +4,7 @@
 
 import React from 'react';
 import {toJS} from 'mobx';
-
+import {Cell, Column, Table} from '@blueprintjs/table';
 // import {Button, Popover, PopoverInteractionKind, Position} from '@blueprintjs/core';
 // import JSONTree from 'react-json-tree';
 // import {theme} from './JsonTreeTheme';
@@ -17,27 +17,13 @@ export const StageProgress = ({stages}) => {
   return (<div className="explain-stage-progress">
     {
       stages.map((stage) => {
-        return (<div className="explain-stage">
+        return (<div className="explain-stage" key={stage.stage}>
           {stage.stage}
         </div>);
       })
     }
   </div>);
 };
-
-//
-// /**
-//  * find execution state by the given stage name
-//  */
-// export const findExecutionStage = (stages, stage) => {
-//   let currentStage = stages;
-//   while (currentStage) {
-//     if (currentStage.stage === stage) {
-//       return currentStage;
-//     }
-//     currentStage = currentStage.inputStage;
-//   }
-// };
 
 /**
  * get execution stages array
@@ -51,41 +37,22 @@ export const getExecutionStages = (executionStages) => {
       currentStage = currentStage.inputStage;
     }
   }
-  return stages;
+  return stages.reverse();
 };
 
-// /**
-//  * show winning plain
-//  */
-// const WinningPlain = ({explain, type}) => {
-//   let stages;
-//   switch (type) {
-//     case Types.ALL_PLANS_EXECUTION:
-//     case Types.EXECUTION_STATS:
-//       stages = getExecutionStages(explain.executionStats.executionStages);
-//       return (<StageProgress stages={stages} />);
-//     default:
-//       stages = getExecutionStages(explain.queryPlanner.winningPlan);
-//       return (<div style={{marginLeft: 10}}>
-//         {
-//           stages.map((stage, i) => {
-//             return (<div key={'execution-stage'} style={{display: 'flex'}}>
-//               <Popover
-//                 content={<JSONTree data={stages[0]} />}
-//                 interactionKind={PopoverInteractionKind.CLICK}
-//                 popoverClassName="explain-stage-detail-popup"
-//                 position={Position.TOP_RIGHT}
-//                 useSmartPositioning={false}
-//               >
-//                 <Button className="explain-stage-button">{stages[i].stage}</Button>
-//               </Popover>
-//             </div>);
-//           })
-//         }
-//       </div>);
-//   }
-// };
+export const renderCell = (rowIndex) => {
+  return <Cell>{`$${(rowIndex * 10).toFixed(2)}`}</Cell>;
+};
 
+export const StepsTable = (stages) => {
+  return (<div className="explain-stages-table"><Table numRows={stages.length}>
+    <Column name="Seq" renderCell={<div>Seq</div>} />
+    <Column name="Step" renderCell={<div>Step</div>} />
+    <Column name="ms" renderCell={<div>ms</div>} />
+    <Column name="Examined" renderCell={<div>Examined</div>} />
+    <Column name="Comments" renderCell={<div>Comments</div>} />
+  </Table></div>);
+};
 
 const ExplainView = ({explains}) => {
   if (!explains || !explains.output) {
@@ -96,6 +63,7 @@ const ExplainView = ({explains}) => {
 
   return (<div className="explain-view-panel">
     <StageProgress stages={stages} />
+    <StepsTable stages={stages} />
   </div>);
 };
 
