@@ -47,8 +47,8 @@
   },
   "homepage": "https://github.com/SouthbankSoftware/dbenvy-ui#readme",
   "devDependencies": {
-    "@blueprintjs/core": "^1.11.1",
-    "@blueprintjs/table": "^1.9.0",
+    "@blueprintjs/core": "^1.17.1",
+    "@blueprintjs/table": "^1.14.0",
     "autobind-decorator": "^1.3.4",
     "babel-cli": "^6.24.1",
     "babel-core": "^ 6.24.1",
