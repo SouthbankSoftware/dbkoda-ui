@@ -11,7 +11,7 @@ import './style.scss';
 // import {Types} from './Types';
 
 export const Stage = ({stage}) => {
-  return (<div className="explain-stage" key={stage.stage}>
+  return (<div className="explain-stage" >
     {stage.stage}
   </div>);
 };
@@ -21,7 +21,7 @@ export const StageProgress = ({stages}) => {
   return (<div className="explain-stage-progress">
     {
       stages.map((stage) => {
-        return (<Stage stage={stage}/>);
+        return (<Stage stage={stage} key={stage.stage} />);
       })
     }
   </div>);
@@ -79,8 +79,8 @@ const ExplainView = ({explains}) => {
   const stages = getExecutionStages(output.executionStats.executionStages);
 
   return (<div className="explain-view-panel">
-    <StageProgress stages={stages}/>
-    <StepsTable stages={stages}/>
+    <StageProgress stages={stages} />
+    <StepsTable stages={stages} />
   </div>);
 };
 
