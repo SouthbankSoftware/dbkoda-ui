@@ -33,6 +33,7 @@ export default class Store {
 
     @observable welcomePage = observable({
         isOpen: true,
+        newsFeed: [],
         currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
     });
 
