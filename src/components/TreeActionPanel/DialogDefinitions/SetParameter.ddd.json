@@ -3,14 +3,14 @@
     "Fields": [ 
         {
             "name": "Parameter",
-            "label":"Select parameter",
+            "label":"Parameter",
             "type": "Select" ,
             "tooltip": "Parameter to alter", 
             "lookup": "dbenvyParameterList"
         } ,
         {
             "name": "Value",
-            "label": "Show command line options", 
+            "label": "New value", 
             "type": "Text" ,
             "tooltip": "New value for the parameter" 
         }
