@@ -63,7 +63,7 @@ export const StepsTable = ({stages}) => {
           <div className="stage-cell">{stage.executionTimeMillisEstimate}</div>
           <div className="stage-cell">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</div>
           <div className="stage-cell">{stage.nReturned}</div>
-          <div className="stage-cell">{'waiting for comments '}</div>
+          <div className="stage-cell">{generateComments(stage)}</div>
         </div>);
       })
     }
@@ -79,7 +79,6 @@ const ExplainView = ({explains}) => {
   const output = toJS(explains.output);
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
-    console.log('stages ', stages);
     return (<div className="explain-view-panel">
       <StageProgress stages={stages} />
     </div>);
