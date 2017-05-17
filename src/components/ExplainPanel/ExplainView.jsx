@@ -63,7 +63,7 @@ export const StepsTable = ({stages}) => {
           <div className="stage-cell">{stage.executionTimeMillisEstimate}</div>
           <div className="stage-cell">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</div>
           <div className="stage-cell">{stage.nReturned}</div>
-          <div className="stage-cell">{'waiting for comments '}</div>
+          <div className="stage-cell">{generateComments(stage)}</div>
         </div>);
       })
     }
