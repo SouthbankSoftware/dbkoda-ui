@@ -7,9 +7,13 @@
 */
 
 /* eslint-disable react/no-string-refs */
+/* eslint-disable react/sort-comp */
+import _ from 'lodash';
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
+import path from 'path';
+import {featherClient} from '~/helpers/feathers';
 import {AnchorButton, Checkbox} from '@blueprintjs/core';
 
 /**
@@ -25,12 +29,16 @@ export default class Panel extends React.Component {
     this.state = {};
   }
 
+  @action.bound
   openConnection() {
-
-  }
-
-  openFile() {
-
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the New Connection Profile drawer.');
+    }
+    this.props.store.profileList.selectedProfile = null;
+    this
+      .props
+      .store
+      .showConnectionPane();
   }
 
   @action.bound
@@ -59,16 +67,6 @@ export default class Panel extends React.Component {
             <AnchorButton
               className="welcomeMenuButton openConnectionButton"
               onClick={this.openConnection}>Open Connection</AnchorButton>
-          </div>
-          <div className="welcomeButtonWrapper">
-            <AnchorButton
-              className="welcomeMenuButton openFileButton"
-              onClick={this.openFile}>Open File</AnchorButton>
-          </div>
-          <div className="welcomeButtonWrapper">
-            <AnchorButton
-              className="welcomeMenuButton chooseThemeButton"
-              onClick={this.chooseTheme}>Choose Theme</AnchorButton>
           </div>
           <div className="welcomeButtonWrapper">
             <AnchorButton
