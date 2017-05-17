@@ -75,6 +75,9 @@ const ExplainView = ({explains}) => {
     return null;
   }
   const output = toJS(explains.output);
+  if (!output.executionStats) {
+    return (<div />);
+  }
   const stages = getExecutionStages(output.executionStats.executionStages);
 
   return (<div className="explain-view-panel">
