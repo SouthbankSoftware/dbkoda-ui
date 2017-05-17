@@ -13,6 +13,7 @@
         display: none;
     }
     .editorToolbar {
+        overflow-x: scroll;
         background-color: $navbarRightBackground !important;
         .leftEditorToolbar {
             .leftButtonGroup {
