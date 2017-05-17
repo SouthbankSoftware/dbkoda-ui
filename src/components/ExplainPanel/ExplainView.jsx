@@ -70,13 +70,19 @@ export const StepsTable = ({stages}) => {
   </div>);
 };
 
+
+
 const ExplainView = ({explains}) => {
   if (!explains || !explains.output) {
     return null;
   }
   const output = toJS(explains.output);
   if (!output.executionStats) {
-    return (<div />);
+    const stages = getExecutionStages(output.queryPlanner.winningPlan);
+    console.log('stages ', stages);
+    return (<div className="explain-view-panel">
+      <StageProgress stages={stages} />
+    </div>);
   }
   const stages = getExecutionStages(output.executionStats.executionStages);
 
