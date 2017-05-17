@@ -79,7 +79,6 @@ const ExplainView = ({explains}) => {
   const output = toJS(explains.output);
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
-    console.log('stages ', stages);
     return (<div className="explain-view-panel">
       <StageProgress stages={stages} />
     </div>);
