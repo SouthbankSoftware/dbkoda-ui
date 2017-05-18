@@ -43,6 +43,12 @@ export default class Explain extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.editor.explains) {
+      this.setState({viewType: nextProps.editor.explains.viewType});
+    }
+  }
+
   componentWillUnmount() {
     const {editor} = this.props;
     if (editor) {
