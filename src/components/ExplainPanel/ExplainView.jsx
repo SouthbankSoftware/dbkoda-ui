@@ -11,7 +11,7 @@ import './style.scss';
 // import {Types} from './Types';
 
 export const Stage = ({stage}) => {
-  return (<div className="explain-stage" >
+  return (<div className="explain-stage">
     {stage.stage}
   </div>);
 };
@@ -20,7 +20,7 @@ export const StageProgress = ({stages}) => {
   return (<div className="explain-stage-progress">
     {
       stages.map((stage) => {
-        return (<Stage stage={stage} key={stage.stage} />);
+        return (<Stage stage={stage} key={stage.stage}/>);
       })
     }
   </div>);
@@ -42,7 +42,12 @@ export const getExecutionStages = (executionStages) => {
 };
 
 export const generateComments = (stage) => {
-  return 'waiting for comments ' + stage.stage;
+  let comments = 'waiting for comments ' + stage.stage;
+  if (stage.stage.indexOf('SORT_KEY_GENERATOR') >= 0) {
+    comments = 'Generate keys for the next sort step';
+  }
+
+  return comments;
 };
 
 export const StepsTable = ({stages}) => {
@@ -60,9 +65,9 @@ export const StepsTable = ({stages}) => {
         return (<div className="stage-row" key={stage.stage}>
           <div className="stage-cell">{i + 1}</div>
           <div className="stage-cell">{stage.stage}</div>
-          <div className="stage-cell">{stage.executionTimeMillisEstimate}</div>
-          <div className="stage-cell">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</div>
-          <div className="stage-cell">{stage.nReturned}</div>
+          <div className="stage-cell"><div className="text">{stage.executionTimeMillisEstimate}</div></div>
+          <div className="stage-cell"><div className="text">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</div></div>
+          <div className="stage-cell"><div className="text">{stage.nReturned}</div></div>
           <div className="stage-cell">{generateComments(stage)}</div>
         </div>);
       })
@@ -70,7 +75,27 @@ export const StepsTable = ({stages}) => {
   </div>);
 };
 
-
+const StatisicView = ({explains}) => {
+  const {executionStats} = explains;
+  return (<div className="explain-statistic-view">
+    <div className="header">
+      <div>Statistic</div>
+      <div>Value</div>
+    </div>
+    <div className="row">
+      <div>Total Docs Returned</div>
+      <div>{executionStats.nReturned}</div>
+    </div>
+    <div className="row">
+      <div>Total Keys Examined</div>
+      <div>{executionStats.totalKeysExamined}</div>
+    </div>
+    <div className="row">
+      <div>Total Docs Examined</div>
+      <div>{executionStats.totalDocsExamined}</div>
+    </div>
+  </div>);
+}
 
 const ExplainView = ({explains}) => {
   if (!explains || !explains.output) {
@@ -80,14 +105,15 @@ const ExplainView = ({explains}) => {
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     return (<div className="explain-view-panel">
-      <StageProgress stages={stages} />
+      <StageProgress stages={stages}/>
     </div>);
   }
   const stages = getExecutionStages(output.executionStats.executionStages);
 
   return (<div className="explain-view-panel">
-    <StageProgress stages={stages} />
-    <StepsTable stages={stages} />
+    <StageProgress stages={stages}/>
+    <StepsTable stages={stages}/>
+    <StatisicView explains={output}/>
   </div>);
 };
 

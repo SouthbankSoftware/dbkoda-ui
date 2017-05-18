@@ -120,96 +120,113 @@ $contentColor: white;
         padding-right: 10px;
         padding-left: 10px;
       }
-      .column-header:nth-child(1){
+      .column-header:nth-child(1) {
         flex: 1;
       }
-      .column-header:nth-child(2){
+      .column-header:nth-child(2) {
         flex: 2;
       }
-      .column-header:nth-child(3){
+      .column-header:nth-child(3) {
         flex: 1;
       }
-      .column-header:nth-child(4){
+      .column-header:nth-child(4) {
         flex: 1;
       }
-      .column-header:nth-child(5){
+      .column-header:nth-child(5) {
         flex: 1;
       }
-      .column-header:nth-child(6){
+      .column-header:nth-child(6) {
         flex: 3;
       }
     }
     .stage-row {
       display: flex;
-      flex-direction:row;
+      flex-direction: row;
       width: 100%;
-      height: 30px;
+      min-height: 30px;
       line-height: 30px;
 
-      .stage-cell{
+      .stage-cell {
         color: $explainLabelColor;
         padding-right: 10px;
         padding-left: 10px;
         word-break: break-all;
         flex: 1;
       }
-      .stage-cell:nth-child(1){
+      .stage-cell:nth-child(1) {
         flex: 1;
       }
-      .stage-cell:nth-child(2){
+      .stage-cell:nth-child(2) {
         flex: 2;
       }
-      .stage-cell:nth-child(3){
+      .stage-cell:nth-child(3) {
         flex: 1;
+        .text {
+          width: 50px;
+          text-align: right;
+        }
       }
-      .stage-cell:nth-child(4){
+      .stage-cell:nth-child(4) {
         flex: 1;
+        .text {
+          width: 50px;
+          text-align: right;
+        }
       }
-      .stage-cell:nth-child(5){
+      .stage-cell:nth-child(5) {
         flex: 1;
+        .text {
+          width: 50px;
+          text-align: right;
+        }
       }
-      .stage-cell:nth-child(6){
+      .stage-cell:nth-child(6) {
         flex: 3;
       }
     }
-    .stage-row:nth-child(odd){
+    .stage-row:nth-child(odd) {
       background: $explainTableEvenBKColor;
     }
-
-    //.bp-table-container {
-    //  width: 100%;
-    //  background-color: $explainStageTableHeaderColor;
-    //}
-
-    //.bp-table-column-headers {
-    //  width: 100%;
-    //
-    //  .bp-table-column-header-tr {
-    //    width: 100% !important;
-    //    background-color: $explainStageTableHeaderColor;
-    //
-    //    .bp-table-header {
-    //      width: auto !important;
-    //      flex-basis: 0 !important;
-    //    }
-    //
-    //    .bp-table-header:nth-child(1) {
-    //      flex: 1;
-    //    }
-    //    .bp-table-header:nth-child(2) {
-    //      flex: 2;
-    //    }
-    //    .bp-table-header:nth-child(3) {
-    //      flex: 1;
-    //    }
-    //    .bp-table-header:nth-child(4) {
-    //      flex: 1;
-    //    }
-    //    .bp-table-header:nth-child(5) {
-    //      flex: 3;
-    //    }
-    //  }
-    //}
+  }
+  .explain-statistic-view {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    .header {
+      background-color: rgb(85, 108, 82);
+      height: 30px;
+      line-height: 30px;
+      display: flex;
+      flex-direction: row;
+      div {
+        flex: 1;
+        margin-left: 10px;
+        text-align: center;
+        color: $explainLabelColor;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+      min-height: 30px;
+      line-height: 30px;
+      div {
+        flex: 1;
+        margin-left: 10px;
+        color: $explainLabelColor;
+      }
+      div:nth-child(2) {
+        text-align: right;
+        margin-right: 10px;
+      }
+    }
+    .row:nth-child(odd){
+      background-color: $explainTableEvenBKColor;
+    }
   }
 }
 
