@@ -13,6 +13,7 @@
         display: none;
     }
     .editorToolbar {
+        overflow-x: scroll;
         background-color: $navbarRightBackground !important;
         .leftEditorToolbar {
             .leftButtonGroup {
@@ -236,6 +237,8 @@
                                         flex-direction: column;
                                         margin-right: 10px;
                                         a {
+                                            width: 100px;
+                                            border-radius: 50%;
                                             order: 1;
                                             flex-grow: 4;
                                             background-color: $welcomeViewIconBG;
@@ -292,6 +295,24 @@
                                             }
                                         }
                                     }
+                                }
+                            }
+                        }
+                        .learnShortcutsWrapper {
+                            height: 300px;
+                            margin-left: 20px;
+                            .hotkeyItem {
+                                background-color: $welcomeViewIconBG;
+                                margin-top:20px;
+                                margin-right: 50px;
+                                padding: 10px;
+                                border-radius: 0.3em;
+                                .hotkeyTitle {
+                                color: $welcomeViewFontColor;
+                                font-size: 18px;
+                                }
+                                p {
+
                                 }
                             }
                         }

@@ -4,14 +4,14 @@
 
 import React from 'react';
 import {toJS} from 'mobx';
-// import {Button, Popover, PopoverInteractionKind, Position} from '@blueprintjs/core';
-// import JSONTree from 'react-json-tree';
-// import {theme} from './JsonTreeTheme';
+import CodeMirror from 'react-codemirror';
+import CM from 'codemirror';
+import Prettier from 'prettier';
+
 import './style.scss';
-// import {Types} from './Types';
 
 export const Stage = ({stage}) => {
-  return (<div className="explain-stage" >
+  return (<div className="explain-stage">
     {stage.stage}
   </div>);
 };
@@ -42,7 +42,12 @@ export const getExecutionStages = (executionStages) => {
 };
 
 export const generateComments = (stage) => {
-  return 'waiting for comments ' + stage.stage;
+  let comments = 'waiting for comments ' + stage.stage;
+  if (stage.stage.indexOf('SORT_KEY_GENERATOR') >= 0) {
+    comments = 'Generate keys for the next sort step';
+  }
+
+  return comments;
 };
 
 export const StepsTable = ({stages}) => {
@@ -60,9 +65,15 @@ export const StepsTable = ({stages}) => {
         return (<div className="stage-row" key={stage.stage}>
           <div className="stage-cell">{i + 1}</div>
           <div className="stage-cell">{stage.stage}</div>
-          <div className="stage-cell">{stage.executionTimeMillisEstimate}</div>
-          <div className="stage-cell">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</div>
-          <div className="stage-cell">{stage.nReturned}</div>
+          <div className="stage-cell">
+            <div className="text">{stage.executionTimeMillisEstimate}</div>
+          </div>
+          <div className="stage-cell">
+            <div className="text">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</div>
+          </div>
+          <div className="stage-cell">
+            <div className="text">{stage.nReturned}</div>
+          </div>
           <div className="stage-cell">{generateComments(stage)}</div>
         </div>);
       })
@@ -70,24 +81,82 @@ export const StepsTable = ({stages}) => {
   </div>);
 };
 
+const StatisicView = ({explains}) => {
+  const {executionStats} = explains;
+  return (<div className="explain-statistic-view">
+    <div className="header">
+      <div>Statistic</div>
+      <div>Value</div>
+    </div>
+    <div className="row">
+      <div>Total Docs Returned</div>
+      <div>{executionStats.nReturned}</div>
+    </div>
+    <div className="row">
+      <div>Total Keys Examined</div>
+      <div>{executionStats.totalKeysExamined}</div>
+    </div>
+    <div className="row">
+      <div>Total Docs Examined</div>
+      <div>{executionStats.totalDocsExamined}</div>
+    </div>
+  </div>);
+};
 
+const options = {
+  smartIndent: true,
+  theme: 'material',
+  readOnly: true,
+  lineWrapping: false,
+  tabSize: 2,
+  matchBrackets: true,
+  keyMap: 'sublime',
+  mode: 'MongoScript'
+};
+
+const CommandPanel = ({command, namespace}) => {
+  const formatted = Prettier.format(command, {});
+  setTimeout(() => {
+    const cm = this.editor.getCodeMirror();
+    cm.setValue(formatted);
+  }, 500);
+  return (<div className="explain-command-panel">
+    <div className="namespace">
+      <div className="label">Namespace:</div>
+      <div className="value">{namespace}</div>
+    </div>
+    <div className="codemirror">
+      <div className="label">Query:</div>
+      <CodeMirror
+        ref={(cm) => {
+          this.editor = cm;
+        }}
+        codeMirrorInstance={CM}
+        value={command}
+        options={options} />
+    </div>
+  </div>);
+};
 
 const ExplainView = ({explains}) => {
   if (!explains || !explains.output) {
     return null;
   }
   const output = toJS(explains.output);
+  const commandPanel = <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} />;
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     return (<div className="explain-view-panel">
       <StageProgress stages={stages} />
+      {commandPanel}
     </div>);
   }
   const stages = getExecutionStages(output.executionStats.executionStages);
-
   return (<div className="explain-view-panel">
     <StageProgress stages={stages} />
     <StepsTable stages={stages} />
+    <StatisicView explains={output} />
+    {commandPanel}
   </div>);
 };
 

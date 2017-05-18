@@ -133,6 +133,12 @@
     "uuid": "^3.0.1",
     "validatorjs": "^3.11.0",
     "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.4.2",
+    "cldr-data": "^31.0.2",
+    "globalize": "^1.2.3",
+    "globalize-webpack-plugin": "^0.3.12"
+  },
+  "dependencies": {
+    "shelljs": "^0.7.7"
   }
 }

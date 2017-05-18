@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-15T15:26:13+10:00
+ * @Last modified time: 2017-05-18T10:41:41+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -91,7 +91,7 @@ export default class Toolbar extends React.Component {
     // will create a new editor.
     this.reactionToNewEditorForTreeAction = reaction(() => this.props.store.editorToolbar.newEditorForTreeAction, () => {
       if (this.props.store.editorToolbar.newEditorForTreeAction) {
-        this.addEditor({}, true);
+        this.addEditor({});
       }
     });
   }
@@ -154,11 +154,13 @@ export default class Toolbar extends React.Component {
    * @param {Object} options - options for creating new editor
    * @return {Promise}
    */
-  @action addEditor(options = {}, selectProfileFromList = false) {
+  @action addEditor(options = {}) {
     try {
       this.props.store.editorPanel.creatingNewEditor = true;
       this.setNewEditorLoading(true);
-      const profileTitle = (selectProfileFromList) ? this.props.store.profileList.selectedProfile.id : this.props.store.editorPanel.activeDropdownId;
+      const profileTitle = (this.props.store.editorToolbar.newEditorForTreeAction)
+        ? this.props.store.profileList.selectedProfile.id
+        : this.props.store.editorPanel.activeDropdownId;
       let profileId = 'UNKNOWN';
       this
         .props
@@ -497,11 +499,11 @@ export default class Toolbar extends React.Component {
         })
         .catch((err) => {
           console.log('Failed to swap profiles: ', err);
-           runInAction('Revert dropdown change on failure', () => {
-              this.props.store.editorPanel.activeDropdownId = prevDropdown;
-              this.props.store.editorToolbar.currentProfile = prevDropdown;
-            });
-            NewToaster.show({message: 'Could not swap Profiles.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          runInAction('Revert dropdown change on failure', () => {
+            this.props.store.editorPanel.activeDropdownId = prevDropdown;
+            this.props.store.editorToolbar.currentProfile = prevDropdown;
+          });
+          NewToaster.show({message: 'Could not swap Profiles.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           // @TODO - Handle failure.
         });
     }
@@ -657,7 +659,7 @@ export default class Toolbar extends React.Component {
               onClick={this.saveFile}
               disabled={this.props.store.editorToolbar.noActiveProfile} />
           </Tooltip>
-          <Tooltip
+          {/* <Tooltip
             intent={Intent.NONE}
             hoverOpenDelay={1000}
             content="Enter a string to search for Editors"
@@ -672,7 +674,7 @@ export default class Toolbar extends React.Component {
                 dir="auto"
                 onChange={this.onFilterChanged} />
             </div>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       </nav>
     );
