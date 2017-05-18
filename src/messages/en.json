@@ -1,0 +1,8 @@
+{
+  "en": {
+    "output.heading": "Query Output",
+    "output.toolbar.save": "Save Output (Shift + X)",
+    "output.toolbar.showMore": "Show More (Shift + M)",
+    "output.toolbar.clear": "Clear Output Contents (Ctrl + L)"
+  }
+}

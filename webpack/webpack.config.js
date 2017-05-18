@@ -1,11 +1,12 @@
 /**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-05-16T10:42:46+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-17T10:30:28+10:00
  */
 
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const GlobalizePlugin = require('globalize-webpack-plugin');
 
 
 module.exports = {
@@ -22,6 +23,11 @@ module.exports = {
     // bundle the client for hot reloading
     // only- means to only hot reload for successful updates
     'webpack/hot/only-dev-server',
+
+    // Load Globalize so libraries can be built
+    'globalize',
+    'globalize/dist/globalize-runtime/message.js',
+    'globalize/dist/globalize-runtime/date.js',
     './index.jsx'
   ],
   output: {
@@ -108,11 +114,17 @@ module.exports = {
         NODE_ENV: JSON.stringify('development')
       }
     }),
-
     // enable HMR globally
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
-    new HtmlWebpackPlugin({ hash: false, template: './index.html' })
+    new HtmlWebpackPlugin({ hash: false, template: './index.html' }),
+    new GlobalizePlugin({
+      production: false,
+      developmentLocale: 'en',
+      supportedLocales: ['en'],
+      messages: 'src/messages/[locale].json',
+      output: 'i18n/[locale].[hash].js'
+    })
   ],
   node: {
     fs: 'empty',
