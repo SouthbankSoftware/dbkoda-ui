@@ -156,7 +156,7 @@ export default class Store {
     if (this.profiles && this.profiles.size > 0) {
       return new Promise((resolve) => {
         const promises = [];
-        this.profiles.forEach((value, key, _) => {
+        this.profiles.forEach((value) => {
           if (value.status === ProfileStatus.OPEN) {
             // close this connection from feather-client
             const service = featherClient().service('/mongo-connection');
