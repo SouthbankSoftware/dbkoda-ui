@@ -11,7 +11,7 @@
         },
         {
             "name": "Parameter",
-            "label":"Selected parameter(s)",
+            "label":"Parameter",
             "type": "Select" ,
             "tooltip": "Show a single parameter or parameter group", 
             "lookup": "dbenvyParameterList"

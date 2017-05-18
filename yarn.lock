@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@blueprintjs/core@^1.11.1", "@blueprintjs/core@^1.8.0":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-1.11.1.tgz#4140db0bf8825f39e8fdf28de3f19b2d19124ca8"
+"@blueprintjs/core@^1.17.1", "@blueprintjs/core@^1.8.0":
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-1.17.1.tgz#6424480efdcc7341f07fee723dff8de985008e0e"
   dependencies:
     "@types/dom4" "^1.5.20"
     "@types/tether" "^1.1.27"
@@ -15,9 +15,9 @@
     tether "^1.4"
     tslib "^1.5.0"
 
-"@blueprintjs/table@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-1.9.0.tgz#fbc49fa128902766bd782f390e7fcd2838de07c0"
+"@blueprintjs/table@^1.14.0":
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-1.14.0.tgz#0d748cdd19e5a78a8badf94fc8f804848c32d41f"
   dependencies:
     "@blueprintjs/core" "^1.8.0"
     classnames "^2.2"
@@ -5650,10 +5650,6 @@ no-case@^2.2.0:
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.1.tgz#7aeba1c73a52184265554b7dc03baf720df80081"
   dependencies:
     lower-case "^1.1.1"
-
-node-config@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/node-config/-/node-config-0.0.2.tgz#46b40dcfbcb0e66d46a15f81b54eac2130fb150d"
 
 node-fetch@^1.0.1:
   version "1.6.3"

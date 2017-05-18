@@ -13,15 +13,19 @@ export const setProfilingLevel = {
     // Prefill function for alter user
     dbenvy_setProfilingLevelPreFill: (params) => {
         const dbName = params.dbName;
-        const cmd = sprintf('var dbeSpl=db.getSiblingDB("%s").getProfilingStatus();dbeSpl.dbName="%s";dbeSpl;',
+        const cmd = sprintf('var dbeSpl={};if  (db.serverStatus().process!==\'mongos\' ) dbeSpl=db.getSiblingDB("%s").getProfilingStatus(); else dbeSpl.mongos=true;dbeSpl.dbName="%s";dbeSpl;',
             dbName, dbName);
         return cmd;
     },
     dbenvy_setProfilingLevelPreFill_parse: (res) => {
         const outputDoc = {};
-        outputDoc.Database = res.dbName;
-        outputDoc.level = res.was;
-        outputDoc.slowms = res.slowms;
+        if (res.mongos) {
+            outputDoc.Database = 'Not supported on Mongos';
+        } else {
+            outputDoc.Database = res.dbName;
+            outputDoc.level = res.was;
+            outputDoc.slowms = res.slowms;
+        }
         return outputDoc;
     }
 };

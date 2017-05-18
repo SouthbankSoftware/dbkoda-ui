@@ -6,12 +6,13 @@ $contentColor: white;
   flex: 1;
   flex-direction: column;
   overflow-x: scroll;
-  background-color: black;
+  background-color: $explainPanelBKColor;
 
   .explain-header {
     display: flex;
     flex-direction: row;
     height: 30px;
+    min-height: 30px;
     margin: 10px 10px 0px 10px;
 
     .explain-label {
@@ -63,7 +64,7 @@ $contentColor: white;
     .explain-stage:before {
       right: auto;
       left: 0;
-      border-left: 17px solid black;
+      border-left: 17px solid $explainPanelBKColor;
       z-index: 0;
     }
 
@@ -106,33 +107,109 @@ $contentColor: white;
   .explain-stages-table {
     margin-top: 30px;
 
-    .bp-table-column-headers {
+    .stage-header {
+      display: flex;
+      flex-direction: row;
       width: 100%;
-
-      .bp-table-column-header-tr {
-        width: 100% !important;
-
-        .bp-table-header{
-          width: auto;
-        }
-
-        .bp-table-header:nth-child(1) {
-          flex: 1;
-        }
-        .bp-table-header:nth-child(2) {
-          flex: 2;
-        }
-        .bp-table-header:nth-child(3) {
-          flex: 1;
-        }
-        .bp-table-header:nth-child(4) {
-          flex: 1;
-        }
-        .bp-table-header:nth-child(5) {
-          flex: 3;
-        }
+      height: 30px;
+      line-height: 30px;
+      color: $explainLabelColor;
+      .column-header {
+        background-color: $explainStageTableHeaderColor;
+        flex: 1;
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+      .column-header:nth-child(1){
+        flex: 1;
+      }
+      .column-header:nth-child(2){
+        flex: 2;
+      }
+      .column-header:nth-child(3){
+        flex: 1;
+      }
+      .column-header:nth-child(4){
+        flex: 1;
+      }
+      .column-header:nth-child(5){
+        flex: 1;
+      }
+      .column-header:nth-child(6){
+        flex: 3;
       }
     }
+    .stage-row {
+      display: flex;
+      flex-direction:row;
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+
+      .stage-cell{
+        color: $explainLabelColor;
+        padding-right: 10px;
+        padding-left: 10px;
+        word-break: break-all;
+        flex: 1;
+      }
+      .stage-cell:nth-child(1){
+        flex: 1;
+      }
+      .stage-cell:nth-child(2){
+        flex: 2;
+      }
+      .stage-cell:nth-child(3){
+        flex: 1;
+      }
+      .stage-cell:nth-child(4){
+        flex: 1;
+      }
+      .stage-cell:nth-child(5){
+        flex: 1;
+      }
+      .stage-cell:nth-child(6){
+        flex: 3;
+      }
+    }
+    .stage-row:nth-child(odd){
+      background: $explainTableEvenBKColor;
+    }
+
+    //.bp-table-container {
+    //  width: 100%;
+    //  background-color: $explainStageTableHeaderColor;
+    //}
+
+    //.bp-table-column-headers {
+    //  width: 100%;
+    //
+    //  .bp-table-column-header-tr {
+    //    width: 100% !important;
+    //    background-color: $explainStageTableHeaderColor;
+    //
+    //    .bp-table-header {
+    //      width: auto !important;
+    //      flex-basis: 0 !important;
+    //    }
+    //
+    //    .bp-table-header:nth-child(1) {
+    //      flex: 1;
+    //    }
+    //    .bp-table-header:nth-child(2) {
+    //      flex: 2;
+    //    }
+    //    .bp-table-header:nth-child(3) {
+    //      flex: 1;
+    //    }
+    //    .bp-table-header:nth-child(4) {
+    //      flex: 1;
+    //    }
+    //    .bp-table-header:nth-child(5) {
+    //      flex: 3;
+    //    }
+    //  }
+    //}
   }
 }
 
@@ -160,11 +237,12 @@ $contentColor: white;
 
 .explain-json-raw-panel {
   flex: 1;
+  overflow-x: auto;
 }
 
 .explain-view-panel {
   flex: 1;
-  background-color: black;
+  background-color: $explainPanelBKColor;
   margin: 10px;
 }
 

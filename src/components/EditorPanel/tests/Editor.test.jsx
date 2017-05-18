@@ -54,9 +54,5 @@ describe('Toolbar', () => {
   test('has a dropdown', () => {
     expect(app.find('select').length).toEqual(1);
   });
-
-  test('has a search bar', () => {
-    expect(app.find('input').length).toEqual(1);
-  });
 });
 

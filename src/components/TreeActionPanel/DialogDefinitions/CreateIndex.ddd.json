@@ -38,7 +38,7 @@
             "name": "Unique",
             "type": "Boolean",
             "readOnly": false,
-            "tooltip": "Are the values in the index unique",
+            "tooltip": "Are the values in the index unique?",
             "rules": "boolean"
         },
         {
