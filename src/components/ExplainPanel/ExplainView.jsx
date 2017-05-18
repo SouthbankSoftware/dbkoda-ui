@@ -4,11 +4,11 @@
 
 import React from 'react';
 import {toJS} from 'mobx';
-// import {Button, Popover, PopoverInteractionKind, Position} from '@blueprintjs/core';
-// import JSONTree from 'react-json-tree';
-// import {theme} from './JsonTreeTheme';
+import CodeMirror from 'react-codemirror';
+import CM from 'codemirror';
+import Prettier from 'prettier';
+
 import './style.scss';
-// import {Types} from './Types';
 
 export const Stage = ({stage}) => {
   return (<div className="explain-stage">
@@ -20,7 +20,7 @@ export const StageProgress = ({stages}) => {
   return (<div className="explain-stage-progress">
     {
       stages.map((stage) => {
-        return (<Stage stage={stage} key={stage.stage}/>);
+        return (<Stage stage={stage} key={stage.stage} />);
       })
     }
   </div>);
@@ -65,9 +65,15 @@ export const StepsTable = ({stages}) => {
         return (<div className="stage-row" key={stage.stage}>
           <div className="stage-cell">{i + 1}</div>
           <div className="stage-cell">{stage.stage}</div>
-          <div className="stage-cell"><div className="text">{stage.executionTimeMillisEstimate}</div></div>
-          <div className="stage-cell"><div className="text">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</div></div>
-          <div className="stage-cell"><div className="text">{stage.nReturned}</div></div>
+          <div className="stage-cell">
+            <div className="text">{stage.executionTimeMillisEstimate}</div>
+          </div>
+          <div className="stage-cell">
+            <div className="text">{stage.stage === 'IXSCAN' ? stage.keysExamined : stage.docsExamined}</div>
+          </div>
+          <div className="stage-cell">
+            <div className="text">{stage.nReturned}</div>
+          </div>
           <div className="stage-cell">{generateComments(stage)}</div>
         </div>);
       })
@@ -95,25 +101,61 @@ const StatisicView = ({explains}) => {
       <div>{executionStats.totalDocsExamined}</div>
     </div>
   </div>);
-}
+};
+
+const options = {
+  smartIndent: true,
+  theme: 'material',
+  readOnly: true,
+  lineWrapping: false,
+  tabSize: 2,
+  matchBrackets: true,
+  autoCloseBrackets: true,
+  foldOptions: {
+    widget: '...'
+  },
+  foldGutter: true,
+  gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+  keyMap: 'sublime',
+  mode: 'MongoScript'
+};
+
+const CommandPanel = ({command, namespace}) => {
+  const formatted = Prettier.format(command, {});
+  return (<div className="explain-command-panel">
+    <div className="namespace">
+      <div className="label">Namespace:</div>
+      <div className="value">{namespace}</div>
+    </div>
+    <div className="codemirror">
+      <div className="label">Query:</div>
+      <CodeMirror
+        codeMirrorInstance={CM}
+        value={formatted}
+        options={options} />
+    </div>
+  </div>);
+};
 
 const ExplainView = ({explains}) => {
   if (!explains || !explains.output) {
     return null;
   }
   const output = toJS(explains.output);
+  const commandPanel = <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} />;
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     return (<div className="explain-view-panel">
-      <StageProgress stages={stages}/>
+      <StageProgress stages={stages} />
+      {commandPanel}
     </div>);
   }
   const stages = getExecutionStages(output.executionStats.executionStages);
-
   return (<div className="explain-view-panel">
-    <StageProgress stages={stages}/>
-    <StepsTable stages={stages}/>
-    <StatisicView explains={output}/>
+    <StageProgress stages={stages} />
+    <StepsTable stages={stages} />
+    <StatisicView explains={output} />
+    {commandPanel}
   </div>);
 };
 

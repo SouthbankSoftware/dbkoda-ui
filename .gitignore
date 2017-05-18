@@ -6,7 +6,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 dist
-
+.tmp-globalize-webpack
 tmpd*
 # Runtime data
 pids

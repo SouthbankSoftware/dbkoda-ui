@@ -29,7 +29,7 @@ describe('Shard-specific tests', () => {
         if (debug) console.log('MongoDB will be setup on port ' + shardPort);
         shelljs.exec('mkdir ' + tmpDir);
         const command = sprintf('mlaunch init --replicaset --dir %s --port %s ' +
-            ' --nodes 2 --arbiter --sharded 2   --mongos 1 --config 1  --noauth',
+            ' --nodes 2 --arbiter --sharded 2   --mongos 1 --config 1  --noauth --hostname localhost',
             tmpDir, shardPort);
         if (debug) console.log(command);
         shelljs.exec(command);

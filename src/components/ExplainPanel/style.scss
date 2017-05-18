@@ -224,8 +224,31 @@ $contentColor: white;
         margin-right: 10px;
       }
     }
-    .row:nth-child(odd){
+    .row:nth-child(odd) {
       background-color: $explainTableEvenBKColor;
+    }
+  }
+
+  .explain-command-panel {
+    //height: 50px;
+    width: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    .namespace {
+      display: flex;
+      flex-direction: row;
+      height: 20px;
+      .value {
+        flex: 5;
+      }
+    }
+    .codemirror {
+    }
+    .label {
+      color: rgb(22, 160, 187);
+      width: 20px;
     }
   }
 }
@@ -261,6 +284,7 @@ $contentColor: white;
   flex: 1;
   background-color: $explainPanelBKColor;
   margin: 10px;
+  overflow-y: auto;
 }
 
 .explain-not-visible {
