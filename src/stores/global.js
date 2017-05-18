@@ -152,9 +152,12 @@ export default class Store {
   };
 
   @action dump() {
-    console.log(this.profiles);
-    if (this.profiles && this.profiles.size > 0) {
-      return new Promise((resolve) => {
+    return dump(this);
+  }
+
+  closeConnection() {
+    return new Promise((resolve) => {
+      if (this.profiles && this.profiles.size > 0) {
         const promises = [];
         this.profiles.forEach((value) => {
           if (value.status === ProfileStatus.OPEN) {
@@ -170,9 +173,10 @@ export default class Store {
         } else {
           resolve();
         }
-      });
-    }
-    return dump(this);
+      } else {
+        resolve();
+      }
+    });
   }
 
   @action restore(data) {
@@ -258,17 +262,19 @@ export default class Store {
   }
 
   save() {
-    featherClient()
-      .service('files')
-      .create({
-        _id: path.resolve('/tmp/stateStore.json'),
-        content: this.dump()
-      })
-      .then(() => {
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.closeConnection().then(() => {
+      featherClient()
+        .service('files')
+        .create({
+          _id: path.resolve('/tmp/stateStore.json'),
+          content: this.dump()
+        })
+        .then(() => {
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   }
 
   constructor() {
