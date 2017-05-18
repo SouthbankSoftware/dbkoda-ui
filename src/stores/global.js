@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   chris
- * @Last modified time: 2017-05-09T15:46:31+10:00
+ * @Last modified time: 2017-05-17T12:34:37+10:00
  */
 
 import _ from 'lodash';
@@ -13,6 +13,8 @@ import { featherClient } from '~/helpers/feathers';
 import path from 'path';
 import { Broker, EventType } from '../helpers/broker';
 
+const Globalize = require('globalize'); // Globalize doesn't load well with import
+
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 
 let ipcRenderer;
@@ -22,14 +24,15 @@ if (IS_ELECTRON) {
 }
 
 export default class Store {
-    @observable profiles = observable.map();
-    @observable editors = observable.map();
-    @observable outputs = observable.map();
+  @observable locale = 'en';
+  @observable profiles = observable.map();
+  @observable editors = observable.map();
+  @observable outputs = observable.map();
 
-    @observable userPreferences = observable({
-        telemetryEnabled: false,
-        showWelcomePageAtStart: true,
-    });
+  @observable userPreferences = observable({
+    telemetryEnabled: false,
+    showWelcomePageAtStart: true,
+  });
 
     @observable welcomePage = observable({
         isOpen: true,
@@ -101,7 +104,7 @@ export default class Store {
     @observable profileList = observable({
         selectedProfile: null,
         creatingNewProfile: false
-    });
+      });
 
     @observable dragItem = observable({
         dragDrop: false,
@@ -159,68 +162,78 @@ export default class Store {
     }
 
     cleanStore(newStore) {
-        // EditorPanel:
-        newStore.editorPanel.activeDropdownId = 'Default';
-        newStore.editorPanel.activeEditorId = 'Default';
-        newStore.editorPanel.creatingNewEditor = false;
-        newStore.editorPanel.executingEditorAll = false;
-        newStore.editorPanel.executingEditorLines = false;
-        newStore.editorPanel.stoppingExecution = false;
-        newStore.editorPanel.tabFilter = '';
+      if (!newStore.locale) {
+        newStore.locale = 'en';
+      }
+      Globalize.locale(newStore.locale);
 
-        // EditorToolbar:
-        newStore.editorToolbar.currentProfile = 0;
-        newStore.editorToolbar.id = 0;
-        newStore.editorToolbar.shellId = 0;
-        newStore.editorToolbar.isActiveExecuting = false;
-        newStore.editorToolbar.isExplainExecuting = false;
-        newStore.editorToolbar.newConnectionLoading = false;
-        newStore.editorToolbar.noActiveProfile = true;
+      // EditorPanel:
+      newStore.editorPanel.activeDropdownId = 'Default';
+      newStore.editorPanel.activeEditorId = 'Default';
+      newStore.editorPanel.creatingNewEditor = false;
+      newStore.editorPanel.executingEditorAll = false;
+      newStore.editorPanel.executingEditorLines = false;
+      newStore.editorPanel.stoppingExecution = false;
+      newStore.editorPanel.tabFilter = '';
 
-        // Editors:
-        newStore.editors.forEach((value) => {
-            value.executing = false;
-        });
+      // EditorToolbar:
+      newStore.editorToolbar.currentProfile = 0;
+      newStore.editorToolbar.id = 0;
+      newStore.editorToolbar.shellId = 0;
+      newStore.editorToolbar.isActiveExecuting = false;
+      newStore.editorToolbar.isExplainExecuting = false;
+      newStore.editorToolbar.newConnectionLoading = false;
+      newStore.editorToolbar.noActiveProfile = true;
 
-        // Outputs:
-        newStore.outputs.forEach((value, key, map) => {
-            map.set(key, observable(value));
-        });
+      // Editors:
+      newStore.editors.forEach((value) => {
+          value.executing = false;
+      });
 
-        // OutputPanel:
-        newStore.outputPanel.clearingOutput = false;
-        newStore.outputPanel.executingShowMore = false;
-        newStore.outputPanel.executingTerminalCmd = false;
+      // Outputs:
+      newStore.outputs.forEach((value, key, map) => {
+          map.set(key, observable(value));
+      });
 
-        // ProfileList
-        newStore.profileList.creatingNewProfile = false;
+      // OutputPanel:
+      newStore.outputPanel.clearingOutput = false;
+      newStore.outputPanel.executingShowMore = false;
+      newStore.outputPanel.executingTerminalCmd = false;
 
-        // Profiles:
-        newStore.profiles.forEach((value) => {
-            value.status = 'CLOSED';
-        });
+      // ProfileList
+      newStore.profileList.creatingNewProfile = false;
+
+      // Profiles:
+      newStore.profiles.forEach((value) => {
+          value.status = 'CLOSED';
+      });
     }
 
     load() {
         featherClient()
-            .service('files')
-            .get(path.resolve('/tmp/stateStore.json'))
-            .then(({ content }) => {
-                this.restore(content);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-            .then(() => {
-                if (IS_ELECTRON) {
-                    _.delay(
-                        () => {
-                            ipcRenderer.send('appReady');
-                        },
-                        200
-                    );
-                }
-            });
+          .service('files')
+          .get(path.resolve('/tmp/stateStore.json'))
+          .then(({ content }) => {
+              this.restore(content);
+              // Init Globalize required json
+              Globalize.load(
+                require('cldr-data/main/en/ca-gregorian.json'),
+                require('cldr-data/supplemental/likelySubtags.json')
+              );
+          })
+          .catch((err) => {
+              console.log(err);
+          })
+          .then(() => {
+            if (IS_ELECTRON) {
+              _.delay(
+                () => {
+                  ipcRenderer.send('appReady');
+                },
+                200
+              );
+            }
+          });
     }
 
     save() {
