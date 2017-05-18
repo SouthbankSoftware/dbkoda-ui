@@ -230,7 +230,7 @@ $contentColor: white;
   }
 
   .explain-command-panel {
-    //height: 50px;
+    //height: 300px;
     //width: 400px;
     overflow-y: auto;
     display: flex;
@@ -242,6 +242,7 @@ $contentColor: white;
       height: 20px;
       .value {
         margin-left: 20px;
+        color: $explainLabelColor;
       }
     }
     .codemirror {

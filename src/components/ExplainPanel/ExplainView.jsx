@@ -110,12 +110,6 @@ const options = {
   lineWrapping: false,
   tabSize: 2,
   matchBrackets: true,
-  autoCloseBrackets: true,
-  foldOptions: {
-    widget: '...'
-  },
-  foldGutter: true,
-  gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
   keyMap: 'sublime',
   mode: 'MongoScript'
 };

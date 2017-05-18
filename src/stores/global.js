@@ -12,6 +12,7 @@ import {DrawerPanes} from '#/common/Constants';
 import {featherClient} from '~/helpers/feathers';
 import path from 'path';
 import {Broker, EventType} from '../helpers/broker';
+import {ProfileStatus} from '../components/common/Constants';
 
 const Globalize = require('globalize'); // Globalize doesn't load well with import
 
@@ -151,6 +152,26 @@ export default class Store {
   };
 
   @action dump() {
+    console.log(this.profiles);
+    if (this.profiles && this.profiles.size > 0) {
+      return new Promise((resolve) => {
+        const promises = [];
+        this.profiles.forEach((value, key, _) => {
+          if (value.status === ProfileStatus.OPEN) {
+            // close this connection from feather-client
+            const service = featherClient().service('/mongo-connection');
+            if (service) {
+              promises.push(service.remove(value.id));
+            }
+          }
+        });
+        if (promises.length > 0) {
+          Promise.all(promises).then(() => resolve()).catch(() => resolve());
+        } else {
+          resolve();
+        }
+      });
+    }
     return dump(this);
   }
 
