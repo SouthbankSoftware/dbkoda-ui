@@ -231,7 +231,7 @@ $contentColor: white;
 
   .explain-command-panel {
     //height: 50px;
-    width: 400px;
+    //width: 400px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -241,14 +241,13 @@ $contentColor: white;
       flex-direction: row;
       height: 20px;
       .value {
-        flex: 5;
+        margin-left: 20px;
       }
     }
     .codemirror {
     }
     .label {
       color: rgb(22, 160, 187);
-      width: 20px;
     }
   }
 }
