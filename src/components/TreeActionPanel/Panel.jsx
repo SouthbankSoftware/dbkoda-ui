@@ -3,16 +3,18 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-12T11:34:57+10:00
+ * @Last modified time: 2017-05-18T09:59:36+10:00
  */
 
 import React from 'react';
+import EJSON from 'mongodb-extended-json';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import { DrawerPanes } from '#/common/Constants';
 import View from './View';
 import FormBuilder from './FormBuilder';
+
 
 @inject('store')
 @observer
@@ -55,12 +57,12 @@ export default class TreeActionPanel extends React.Component {
           })
           .then((res) => {
             if (typeof res == 'string') {
+              res = res.replace(/[\r\n\t]*/g, '');
               console.log('Result: ', res);
-              res = res.replace(/[\r\n]*/g, '');
               res = res.replace(/ObjectId\((\"\w*\")\)/g, '$1');
               try {
-                const json = JSON.parse(res);
-                resolve(json);
+                const ejson = EJSON.parse(res);
+                resolve(ejson);
               } catch (e) {
                 console.log(e);
                 resolve({});
