@@ -118,10 +118,7 @@ const CommandPanel = ({command, namespace}) => {
   const formatted = Prettier.format(command, {});
   setTimeout(() => {
     const cm = this.editor.getCodeMirror();
-    cm.scrollIntoView({
-      line: cm.lineCount() - 1,
-      ch: 0
-    });
+    cm.setValue(formatted);
   }, 500);
   return (<div className="explain-command-panel">
     <div className="namespace">
@@ -135,7 +132,7 @@ const CommandPanel = ({command, namespace}) => {
           this.editor = cm;
         }}
         codeMirrorInstance={CM}
-        value={formatted}
+        value={command}
         options={options} />
     </div>
   </div>);
