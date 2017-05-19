@@ -6,6 +6,12 @@
         "save": "Save Output (Shift + X)",
         "showMore": "Show More (Shift + M)",
         "clear": "Clear Output Contents (Ctrl + L)"
+      },
+      "editor": {
+        "restoreSession": "** Session Restored **\r"
+      },
+      "terminal": {
+        "execute": "Execute Command (Enter)"
       }
     }
   }
