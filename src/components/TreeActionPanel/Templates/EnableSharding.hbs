@@ -1,1 +1,2 @@
+// Note:  This command will return "no such command" if run in a non-sharded environment
 db.getSiblingDB("admin").runCommand({enableSharding: "{{Database}}"});

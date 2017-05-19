@@ -109,6 +109,7 @@ export default class Store {
 
   @observable dragItem = observable({
     dragDrop: false,
+    dragDropTerminal: false,
     item: null
   });
 

@@ -7,14 +7,13 @@
 */
 
 import React from 'react';
-import { reaction, observable } from 'mobx';
-import { inject, observer } from 'mobx-react';
-import { action, runInAction } from 'mobx';
+import {reaction, observable} from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {action, runInAction} from 'mobx';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/theme/material.css';
-import { Broker, EventType } from '../../helpers/broker';
+import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
-
 
 require('codemirror/mode/javascript/javascript');
 require('#/common/MongoScript.js');
@@ -38,25 +37,42 @@ export default class Editor extends React.Component {
   constructor(props) {
     super(props);
     if (this.props.store.outputs.get(this.props.id)) {
-      this.props.store.outputs.get(this.props.id).cannotShowMore = true;
-      this.props.store.outputs.get(this.props.id).showingMore = false;
+      this
+        .props
+        .store
+        .outputs
+        .get(this.props.id)
+        .cannotShowMore = true;
+      this
+        .props
+        .store
+        .outputs
+        .get(this.props.id)
+        .showingMore = false;
       if (this.props.id != 'Default' && this.props.store.outputs.get(this.props.id).output) {
-        this.props.store.outputs.get(
-          this.props.id
-        ).output += '** Session Restored **\r';
+        this
+          .props
+          .store
+          .outputs
+          .get(this.props.id)
+          .output += '** Session Restored **\r';
       }
     } else {
       console.log(`create new output for ${this.props.id}`);
-      this.props.store.outputs.set(this.props.id, observable({
-        id: this.props.id,
-        connId: this.props.connId,
-        shellId: this.props.shellId,
-        title: this.props.title,
-        output: '',
-        cannotShowMore: true,
-        showingMore: false,
-        commandHistory: []
-      }));
+      this
+        .props
+        .store
+        .outputs
+        .set(this.props.id, observable({
+          id: this.props.id,
+          connId: this.props.connId,
+          shellId: this.props.shellId,
+          title: this.props.title,
+          output: '',
+          cannotShowMore: true,
+          showingMore: false,
+          commandHistory: []
+        }));
     }
 
     /** Reaction to editor tab closing
@@ -64,57 +80,70 @@ export default class Editor extends React.Component {
      *  @param
      *  @param
      */
-    reaction(
-      () => this.props.store.editorPanel.removingTabId,
-      (removingTabId) => {
-        if (removingTabId && this.props.id == removingTabId) {
-          this.props.store.outputs.delete(this.props.id);
-          Broker.removeListener(
-            EventType.createShellOutputEvent(props.profileId, props.shellId),
-            this.outputAvailable
-          );
-        }
-      },
-      { name: 'reactionOutputEditorRemoveTab' }
-    );
+    reaction(() => this.props.store.editorPanel.removingTabId, (removingTabId) => {
+      if (removingTabId && this.props.id == removingTabId) {
+        this
+          .props
+          .store
+          .outputs
+          .delete(this.props.id);
+        Broker.removeListener(EventType.createShellOutputEvent(props.profileId, props.shellId), this.outputAvailable);
+      }
+    }, {name: 'reactionOutputEditorRemoveTab'});
   }
 
   componentDidMount() {
-    const { props } = this;
+    const {props} = this;
     runInAction(() => {
       if (this.props.initialMsg && this.props.id != 'Default') {
-        this.props.store.outputs.get(
-          this.props.id
-        ).output += this.props.initialMsg;
+        this
+          .props
+          .store
+          .outputs
+          .get(this.props.id)
+          .output += this.props.initialMsg;
       }
     });
-    Broker.on(
-      EventType.createShellOutputEvent(props.profileId, props.shellId),
-      this.outputAvailable
-    );
+    Broker.on(EventType.createShellOutputEvent(props.profileId, props.shellId), this.outputAvailable);
+  }
+
+  /**
+   * Action for handling a drop event from a drag-and-drop action.
+   * @param {Object} item - The item being dropped.
+   */
+  @action handleDrop(item) { //eslint-disable-line
+    this.props.store.dragItem.item = item;
+    console.log(this.props.store.dragItem.dragDropTerminal);
+    if (!this.props.store.dragItem.dragDropTerminal) {
+      this.props.store.dragItem.dragDropTerminal = true;
+    } else {
+      this.props.store.dragItem.dragDropTerminal = false;
+      const setDragDropTrueLater = () => { // This hack is done to fix the state in case of exception where the value is preserved as true while it is not draging
+        runInAction('set drag drop to true', () => {
+          this.props.store.dragItem.dragDropTerminal = true;
+        });
+      };
+      setTimeout(setDragDropTrueLater, 500);
+    }
   }
 
   /**
    * Lifecycle method. Updates the scrolling view after render is completed
    */
   componentDidUpdate() {
-    setTimeout(
-      () => {
-        const cm = this.editor.getCodeMirror();
-        cm.scrollIntoView({
-          line: cm.lineCount() - 1,
-          ch: 0
-        });
-      },
-      0
-    );
+    setTimeout(() => {
+      const cm = this
+        .editor
+        .getCodeMirror();
+      cm.scrollIntoView({
+        line: cm.lineCount() - 1,
+        ch: 0
+      });
+    }, 0);
   }
 
   componentWillUnmount() {
-    Broker.removeListener(
-      EventType.createShellOutputEvent(this.props.profileId, this.props.shellId),
-      this.outputAvailable
-    );
+    Broker.removeListener(EventType.createShellOutputEvent(this.props.profileId, this.props.shellId), this.outputAvailable);
   }
 
   /**
@@ -124,27 +153,40 @@ export default class Editor extends React.Component {
   @action.bound
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
-    const totalOutput = this.props.store.outputs.get(this.props.id).output +
-      output.output; // eslint-disable-line
+    const totalOutput = this
+      .props
+      .store
+      .outputs
+      .get(this.props.id)
+      .output + output.output; // eslint-disable-line
 
     // Enable below code when doing pagination, keep only 500 lines on output panel
-    // let outputLines = totalOutput.split('\r');
-    // if (outputLines && outputLines.length >= 500) {
-    //   outputLines = outputLines.slice(Math.max(outputLines.length - 500, 1));
-    //   totalOutput = outputLines.join('\r');
-    // }
-    this.props.store.outputs.get(this.props.id).output = totalOutput;
-    if (
-      output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')
-    ) {
+    // let outputLines = totalOutput.split('\r'); if (outputLines &&
+    // outputLines.length >= 500) {   outputLines =
+    // outputLines.slice(Math.max(outputLines.length - 500, 1));   totalOutput =
+    // outputLines.join('\r'); }
+    this
+      .props
+      .store
+      .outputs
+      .get(this.props.id)
+      .output = totalOutput;
+    if (output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
-      this.props.store.outputs.get(this.props.id).cannotShowMore = false;
-    } else if (
-      this.props.store.outputs.get(this.props.id).cannotShowMore &&
-      output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')
-    ) {
+      this
+        .props
+        .store
+        .outputs
+        .get(this.props.id)
+        .cannotShowMore = false;
+    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
       console.log('cannot show more');
-      this.props.store.outputs.get(this.props.id).cannotShowMore = true;
+      this
+        .props
+        .store
+        .outputs
+        .get(this.props.id)
+        .cannotShowMore = true;
     }
   }
 
@@ -161,11 +203,13 @@ export default class Editor extends React.Component {
         widget: '...'
       },
       foldGutter: true,
-      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+      gutters: [
+        'CodeMirror-linenumbers', 'CodeMirror-foldgutter'
+      ],
       keyMap: 'sublime',
       extraKeys: {
         'Ctrl-Space': 'autocomplete',
-        'Ctrl-Q': function(cm) {
+        'Ctrl-Q': function (cm) {
           cm.foldCode(cm.getCursor());
         }
       },
@@ -176,18 +220,22 @@ export default class Editor extends React.Component {
         <CodeMirror
           autosave
           ref={(c) => {
-            this.editor = c;
-          }}
-          value={this.props.store.outputs.get(this.props.id).output}
-          options={outputOptions}
-        />
+          this.editor = c;
+        }}
+          value={this
+          .props
+          .store
+          .outputs
+          .get(this.props.id)
+          .output}
+          options={outputOptions} />
         <OutputTerminal
           id={this.props.id}
           profileId={this.props.profileId}
           connId={this.props.connId}
           shellId={this.props.shellId}
           title={this.props.title}
-        />
+          onDrop={item => this.handleDrop(item)} />
       </div>
     );
   }

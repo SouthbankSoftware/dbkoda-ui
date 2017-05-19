@@ -47,18 +47,21 @@
         },
         {
             "name": "storageEngine",
+            "label": "Storage Engine options",
             "type": "Text",
             "tooltip": "Storage Engine specific options (JSON)",
             "readOnly": false
         },
         {
             "name": "validator",
+            "label": "Validation document",
             "type": "Text",
             "tooltip": "Document that defines Validation Rule for collection",
             "readOnly": false
         },
         {
             "name": "validationLevel",
+            "label": "Validation Level",
             "type": "Select",
             "tooltip": "Determines how strictly MongoDB applies validation",
             "optional": true,
@@ -67,6 +70,7 @@
         },
         {
             "name": "validationAction",
+            "label": "Validation Action",
             "type": "Select",
              "tooltip": "Error or Warn on invalid documents?",
             "optional": true,

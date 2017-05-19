@@ -3,12 +3,13 @@
 * @Date:   2017-03-10T10:55:54+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-04-21T09:56:46+10:00
+ * @Last modified time: 2017-05-19T11:32:30+10:00
 */
 import ReactDOM from 'react-dom';
 import { assert } from 'chai';
 import { Provider } from 'mobx-react';
 import Store from '~/stores/global';
+import globalizeInit from '#/tests/helpers/globalize.js';
 import { OutputToolbar } from '../index.js';
 
 const jsdom = require('jsdom').jsdom;
@@ -23,6 +24,7 @@ describe('Output Toolbar', () => {
   };
 
   beforeAll(() => {
+    globalizeInit();
     document = jsdom('<div id="container"></div>');
     window = document.defaultView;
     store = new Store();
@@ -60,19 +62,4 @@ describe('Output Toolbar', () => {
     ReactDOM.render(<OutputToolbarWrapper store={store} />, document.getElementById('container'));
     assert(document.querySelector('.saveOutputBtn'));
   });
-});
-
-describe('Output Panel', () => {
-  test('has default tab');
-  test('new tab rendered');
-  test('tab visible');
-  test('tab not visible');
-});
-
-describe('Output Editor', () => {
-  test('updates contents to reflect output');
-  test('clears contents when output is cleared');
-  test('cannot be updated by the user');
-  test('componentDidUpdate()');
-  test('outputAvailable()');
 });
