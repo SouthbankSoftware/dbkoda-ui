@@ -1,3 +1,9 @@
+// @Author: chris
+// @Date:   2017-05-15T09:44:11+10:00
+// @Email:  chris@southbanksoftware.com
+// @Last modified by:   chris
+// @Last modified time: 2017-05-19T14:18:04+10:00
+
 @import '../../styles/_defaultTheme.scss';
 
 .outputPanel {
@@ -58,17 +64,21 @@
             margin-left: 12px;
             height: 30px;
           }
-          .pt-button {
-            background-color: $terminalButtonBackground;
-            color: $terminalButtonIcon !important;
-            margin-right: 50px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            border-top-right-radius: 50%;
-            border-bottom-right-radius: 50%;
+          .executeCmdBtn {
             flex: initial;
             order: 2;
-            width: 20px;
+            width: 40px;
+            height: 50px;
+            .pt-button {
+              background-color: $terminalButtonBackground;
+              color: $terminalButtonIcon !important;
+              width: 20px;
+              border-top-right-radius: 50%;
+              border-bottom-right-radius: 50%;
+              margin-right: 50px;
+              margin-top: 11px;
+              margin-bottom: 11px;
+            }
           }
         }
       }
@@ -78,7 +88,7 @@
     order: 1;
     background-color: $navbarRightBackground !important;
     .pt-align-left {
-      span {  
+      span {
         .pt-button {
         }
         .clearOutputBtn {
