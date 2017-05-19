@@ -1,4 +1,4 @@
 export const theme = {
   scheme: 'dbenvy',
-  base00: '#202020',
+  base00: '#1d1d1d',
 };
