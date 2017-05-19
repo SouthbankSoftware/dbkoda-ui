@@ -1,8 +1,12 @@
 {
   "en": {
-    "output.heading": "Query Output",
-    "output.toolbar.save": "Save Output (Shift + X)",
-    "output.toolbar.showMore": "Show More (Shift + M)",
-    "output.toolbar.clear": "Clear Output Contents (Ctrl + L)"
+    "output": {
+      "heading": "Query Output",
+      "toolbar": {
+        "save": "Save Output (Shift + X)",
+        "showMore": "Show More (Shift + M)",
+        "clear": "Clear Output Contents (Ctrl + L)"
+      }
+    }
   }
 }
