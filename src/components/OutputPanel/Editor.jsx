@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-12T13:32:41+10:00
+ * @Last modified time: 2017-05-19T13:18:49+10:00
 */
 
 import React from 'react';
@@ -15,6 +15,7 @@ import 'codemirror/theme/material.css';
 import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
 
+const Globalize = require('globalize');
 require('codemirror/mode/javascript/javascript');
 require('#/common/MongoScript.js');
 
@@ -55,7 +56,7 @@ export default class Editor extends React.Component {
           .store
           .outputs
           .get(this.props.id)
-          .output += '** Session Restored **\r';
+          .output += Globalize.formatMessage('output/editor/restoreSession');
       }
     } else {
       console.log(`create new output for ${this.props.id}`);

@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-12T13:49:00+10:00
+ * @Last modified time: 2017-05-19T14:10:27+10:00
  */
 
 import React from 'react';
@@ -13,10 +13,11 @@ import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import {action, reaction} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
-import {AnchorButton, ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
+import {AnchorButton, ContextMenuTarget, Intent, Menu, MenuItem, Position, Tooltip} from '@blueprintjs/core';
 import CodeMirror from 'react-codemirror';
 import {Broker, EventType} from '../../helpers/broker';
 
+const Globalize = require('globalize');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/edit/closebrackets.js');
@@ -332,10 +333,19 @@ class Terminal extends React.Component {
           options={this.state.terminalOptions}
           value={this.state.command}
           onChange={value => this.updateCommand(value)} />
-        <AnchorButton
-          className="executeCmdBtn pt-button pt-icon-key-enter"
-          disabled={this.props.store.editorToolbar.noActiveProfile}
-          onClick={this.executeCommand} />
+        <Tooltip
+          className="executeCmdBtn"
+          intent={Intent.PRIMARY}
+          hoverOpenDelay={1000}
+          inline
+          content={Globalize.formatMessage('output/terminal/execute')}
+          tooltipClassName="pt-dark"
+          position={Position.TOP} >
+          <AnchorButton
+            className="pt-button pt-icon-key-enter"
+            disabled={this.props.store.editorToolbar.noActiveProfile}
+            onClick={this.executeCommand} />
+        </Tooltip>
       </div>
     );
   }

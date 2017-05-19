@@ -108,7 +108,7 @@ $contentColor: white;
   }
 
   .explain-stages-table {
-    margin-top: 30px;
+    margin-top: 40px;
 
     .stage-header {
       display: flex;
@@ -191,6 +191,11 @@ $contentColor: white;
       background: $explainTableEvenBKColor;
     }
   }
+  .explain-statistic-container-view {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+  }
   .explain-statistic-view {
     width: 350px;
     display: flex;
@@ -221,6 +226,49 @@ $contentColor: white;
         flex: 1;
         margin-left: 10px;
         color: $explainLabelColor;
+      }
+      div:nth-child(2) {
+        text-align: right;
+        margin-right: 10px;
+      }
+    }
+    .row:nth-child(odd) {
+      background-color: $explainTableEvenBKColor;
+    }
+  }
+
+  .explain-shards-statistic-view {
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 30px;
+    .header {
+      background-color: rgb(80, 90, 108);
+      height: 30px;
+      line-height: 30px;
+      display: flex;
+      flex-direction: row;
+      div {
+        flex: 1;
+        margin-left: 10px;
+        text-align: center;
+        color: $explainLabelColor;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+      min-height: 30px;
+      line-height: 30px;
+      div {
+        flex: 1;
+        margin-left: 10px;
+        color: $explainLabelColor;
+        text-align: center;
       }
       div:nth-child(2) {
         text-align: right;
