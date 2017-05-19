@@ -7,8 +7,9 @@ import {toJS} from 'mobx';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 import Prettier from 'prettier';
-
 import './style.scss';
+
+const Globalize = require('globalize');
 
 export const Stage = ({stage}) => {
   return (<div className="explain-stage">
@@ -97,19 +98,19 @@ const StatisicView = ({explains}) => {
   const {executionStats} = explains;
   return (<div className="explain-statistic-view">
     <div className="header">
-      <div>Statistic</div>
+      <div>{Globalize.formatMessage('explain/view/statisticHeader')}</div>
       <div>Value</div>
     </div>
     <div className="row">
-      <div>Total Docs Returned</div>
+      <div>{Globalize.formatMessage('explain/view/docsReturned')}</div>
       <div>{executionStats.nReturned}</div>
     </div>
     <div className="row">
-      <div>Total Keys Examined</div>
+      <div>{Globalize.formatMessage('explain/view/keysExamined')}</div>
       <div>{executionStats.totalKeysExamined}</div>
     </div>
     <div className="row">
-      <div>Total Docs Examined</div>
+      <div>{Globalize.formatMessage('explain/view/docsExamined')}</div>
       <div>{executionStats.totalDocsExamined}</div>
     </div>
   </div>);
@@ -187,11 +188,11 @@ const CommandPanel = ({command, namespace}) => {
   }, 500);
   return (<div className="explain-command-panel">
     <div className="namespace">
-      <div className="label">Namespace:</div>
+      <div className="label">{Globalize.formatMessage('explain/view/namespaceLabel')}</div>
       <div className="value">{namespace}</div>
     </div>
     <div className="codemirror">
-      <div className="label">Query:</div>
+      <div className="label">{Globalize.formatMessage('explain/view/queryLabel')}</div>
       <CodeMirror
         ref={(cm) => {
           this.editor = cm;

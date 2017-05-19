@@ -5,14 +5,25 @@
 import React from 'react';
 import {Button} from '@blueprintjs/core';
 import './style.scss';
-
 import RawJson from './RawJson';
 import ExplainView from './ExplainView';
 
+const Globalize = require('globalize');
+
 export const Header = ({viewType, switchExplainView}) => {
   return (<div className="explain-header">
-    <span className="explain-label">Explain</span>
-    <Button className="pt-label explain-view-switch-button" onClick={switchExplainView}>{viewType === 0 ? 'Raw Json' : 'Explain'}</Button>
+    <span className="explain-label">
+      {Globalize.formatMessage('explain/heading')}
+    </span>
+    <Button
+      className="pt-label explain-view-switch-button"
+      onClick={switchExplainView}>
+      {
+        viewType === 0 ?
+          Globalize.formatMessage('explain/panel/rawView') :
+          Globalize.formatMessage('explain/panel/explainView')
+      }
+    </Button>
   </div>);
 };
 

@@ -13,6 +13,23 @@
       "terminal": {
         "execute": "Execute Command (Enter)"
       }
+    },
+    "explain": {
+      "heading": "Explain",
+      "parseError": "Failed to parse output JSON",
+      "panel": {
+        "rawView": "Raw Json",
+        "explainView": "Explain"
+      },
+      "view": {
+        "statisticHeader": "Statistic",
+        "valueHeader": "Value",
+        "docsReturned": "Total Docs Returned",
+        "keysExamined": "Total Keys Examined",
+        "docsExamined": "Total Docs Examined",
+        "namespaceLabel": "Namespace:",
+        "queryLabel": "Query:"
+      }
     }
   }
 }
