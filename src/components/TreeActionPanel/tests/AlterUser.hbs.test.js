@@ -64,4 +64,3 @@ test('Alter User template', (done) => {
         }
     });
 });
-

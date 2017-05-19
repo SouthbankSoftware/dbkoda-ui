@@ -25,7 +25,10 @@
     "start": "webpack-dev-server --config webpack/webpack.config.js",
     "build": "yarn run clean && rimraf ./dist && webpack --config config/webpack.config.js",
     "preview": "http-server ./dist -p 1234 -c-1",
-    "test": "yarn run eslint && yarn run jest",
+    "test": "yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
+    "test:dev": "yarn run eslint && yarn run jest",
+    "mlaunch:init": "mlaunch init --single",
+    "mlaunch:clean": "mlaunch kill; rimraf data tmpd*",
     "eslint": "eslint --ext .jsx --ext .js src/. tests/.",
     "jest": "NODE_ENV=test jest --config jest.json --coverage",
     "docs": "yarn run esdoc && open -b com.google.chrome ./docs/index.html",
@@ -137,8 +140,5 @@
     "cldr-data": "^31.0.2",
     "globalize": "^1.2.3",
     "globalize-webpack-plugin": "^0.3.12"
-  },
-  "dependencies": {
-    "shelljs": "^0.7.7"
   }
 }
