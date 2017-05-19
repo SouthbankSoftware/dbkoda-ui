@@ -51,16 +51,15 @@ export const generateComments = (stage) => {
 };
 
 export const StepsTable = ({stages}) => {
-
   const getExamined = (stage) => {
-    if(stage.stage === 'IXSCAN'){
+    if (stage.stage === 'IXSCAN') {
       return stage.keysExamined;
     }
-    if(stage.stage.indexOf('SHARD') >= 0){
+    if (stage.stage.indexOf('SHARD') >= 0) {
       return stage.totalDocsExamined;
     }
     return stage.docsExamined;
-  }
+  };
   return (<div className="explain-stages-table">
     <div className="stage-header">
       <div className="column-header">Seq</div>
