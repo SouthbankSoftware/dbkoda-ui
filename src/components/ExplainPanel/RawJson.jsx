@@ -13,7 +13,11 @@ const RawJson = ({explains}) => {
   }
   const output = toJS(explains.output);
   return (<div className="explain-json-raw-panel">
-    <JSONTree data={output} invertTheme={false} theme={theme} />
+    <JSONTree data={output} invertTheme={false} theme={theme} hideRoot
+      shouldExpandNode={(keyName, data, level) => {
+                return level <= 2;
+              }} />
+
   </div>);
 };
 
