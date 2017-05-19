@@ -140,8 +140,5 @@
     "cldr-data": "^31.0.2",
     "globalize": "^1.2.3",
     "globalize-webpack-plugin": "^0.3.12"
-  },
-  "dependencies": {
-    "shelljs": "^0.7.7"
   }
 }

@@ -18,8 +18,7 @@
         },
         {
             "Role": "clusterAdmin",
-            "Database": "admin",
-            "last": 1
+            "Database": "admin"
         }
     ]
 }
