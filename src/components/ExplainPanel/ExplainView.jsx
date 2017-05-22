@@ -59,7 +59,6 @@ export const StepsTable = ({stages}) => {
     }
     return stage.docsExamined;
   };
-  console.log('get stages ', stages);
   return (<div className="explain-stages-table">
     <div className="stage-header">
       <div className="column-header">Seq</div>
@@ -207,7 +206,7 @@ const ExplainView = ({explains}) => {
     return null;
   }
   const output = toJS(explains.output);
-  const commandPanel = <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} />;
+  const commandPanel = explains.command ? <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} /> : null;
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     return (<div className="explain-view-panel">
