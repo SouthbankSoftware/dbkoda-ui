@@ -21,6 +21,25 @@
         "rawView": "Raw Json",
         "explainView": "Explain"
       },
+      "step": {
+        "fetchFilter": "Documents from previous step were scanned looking for these criteria: {0}.",
+        "fetchIndex": "Retrieved documents from index fetch",
+        "collScanAll": "All documents in the collection where scanned. No filter condition was specified",
+        "collScanFilter": "Documents were scanned looking for these criteria: {0}",
+        "ixscan": "Index {0} was used to find matching values for {1}",
+        "sort": "Documents were sorted on : {0}. Consider creating index on ${0} to support the sort",
+        "limit": "Limited documents returned : {0}",
+        "skip": "Skipped Forward : {0}",
+        "singleShard": "A single shard {0} was involved in the query.",
+        "generateKeys": "Generate keys for the next sort step",
+        "shardingFilter": "The previous operation was sent to one or more shards",
+        "shardMergeSort": "Output from multiple shards was merged and sorted",
+        "shardMerge": "Output from multiple shards was merged",
+        "keepMutations": "Merge in any documents which may have been incorrectly invalidated mid-query",
+        "subplan": "Selected one of multiple possible plans based on $or condition",
+        "eof": "Nothing was found: maybe collection does not exist?",
+        "andSorted": "Output from the previous steps was sort-merged"
+      },
       "view": {
         "statisticHeader": "Statistic",
         "valueHeader": "Value",

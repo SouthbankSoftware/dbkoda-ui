@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-19T14:10:27+10:00
+ * @Last modified time: 2017-05-22T14:02:16+10:00
  */
 
 import React from 'react';
@@ -17,7 +17,6 @@ import {AnchorButton, ContextMenuTarget, Intent, Menu, MenuItem, Position, Toolt
 import CodeMirror from 'react-codemirror';
 import {Broker, EventType} from '../../helpers/broker';
 
-const Globalize = require('globalize');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/edit/closebrackets.js');
@@ -338,7 +337,7 @@ class Terminal extends React.Component {
           intent={Intent.PRIMARY}
           hoverOpenDelay={1000}
           inline
-          content={Globalize.formatMessage('output/terminal/execute')}
+          content={globalString('output/terminal/execute')}
           tooltipClassName="pt-dark"
           position={Position.TOP} >
           <AnchorButton

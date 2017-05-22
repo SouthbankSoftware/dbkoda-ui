@@ -1,4 +1,12 @@
 /**
+ * @Author: chris
+ * @Date:   2017-05-22T13:12:04+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-22T14:01:21+10:00
+ */
+
+/**
  * explain view used to show explain panel
  */
 
@@ -9,8 +17,6 @@ import CM from 'codemirror';
 import Prettier from 'prettier';
 import './style.scss';
 import {generateComments} from './ExplainStep';
-
-const Globalize = require('globalize');
 
 export const Stage = ({stage}) => {
   return (<div className="explain-stage">
@@ -91,19 +97,19 @@ const StatisicView = ({explains}) => {
   const {executionStats} = explains;
   return (<div className="explain-statistic-view">
     <div className="header">
-      <div>{Globalize.formatMessage('explain/view/statisticHeader')}</div>
+      <div>{globalString('explain/view/statisticHeader')}</div>
       <div>Value</div>
     </div>
     <div className="row">
-      <div>{Globalize.formatMessage('explain/view/docsReturned')}</div>
+      <div>{globalString('explain/view/docsReturned')}</div>
       <div>{executionStats.nReturned}</div>
     </div>
     <div className="row">
-      <div>{Globalize.formatMessage('explain/view/keysExamined')}</div>
+      <div>{globalString('explain/view/keysExamined')}</div>
       <div>{executionStats.totalKeysExamined}</div>
     </div>
     <div className="row">
-      <div>{Globalize.formatMessage('explain/view/docsExamined')}</div>
+      <div>{globalString('explain/view/docsExamined')}</div>
       <div>{executionStats.totalDocsExamined}</div>
     </div>
   </div>);
@@ -181,11 +187,11 @@ const CommandPanel = ({command, namespace}) => {
   }, 500);
   return (<div className="explain-command-panel">
     <div className="namespace">
-      <div className="label">{Globalize.formatMessage('explain/view/namespaceLabel')}</div>
+      <div className="label">{globalString('explain/view/namespaceLabel')}</div>
       <div className="value">{namespace}</div>
     </div>
     <div className="codemirror">
-      <div className="label">{Globalize.formatMessage('explain/view/queryLabel')}</div>
+      <div className="label">{globalString('explain/view/queryLabel')}</div>
       <CodeMirror
         ref={(cm) => {
           this.editor = cm;

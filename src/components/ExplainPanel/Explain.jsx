@@ -3,7 +3,7 @@
  * @Date:   2017-04-20T17:58:30+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-19T15:39:25+10:00
+ * @Last modified time: 2017-05-22T13:31:37+10:00
  */
 
 /**
@@ -15,8 +15,6 @@ import {action} from 'mobx';
 import EJSON from 'mongodb-extended-json';
 import Panel from './Panel';
 import {Broker, EventType} from '../../helpers/broker/index';
-
-const Globalize = require('globalize');
 
 export const parseOutput = (output) => {
   return output.replace(/NumberLong\((\d*)\)/g, '$1')
@@ -87,7 +85,7 @@ export default class Explain extends React.Component {
       };
     } catch (err) {
       console.log('err parse explain output ', err, parseOutput(output));
-      explainOutputJson = {error: Globalize.formatMessage('explain/parseError')};
+      explainOutputJson = {error: globalString('explain/parseError')};
     }
     this.props.editors.set(currentEditorId, {
       ...currentEditor,
