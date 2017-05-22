@@ -10,6 +10,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {useStrict} from 'mobx';
 import Store from '~/stores/global';
+import globalizeInit from '#/tests/helpers/globalize.js';
 import {EditorPanel, EditorToolbar} from '../index.js';
 
 describe('Editor Panel', () => {
@@ -17,6 +18,7 @@ describe('Editor Panel', () => {
 
   beforeAll(() => {
     useStrict(true);
+    globalizeInit();
     const store = new Store();
     app = shallow(<EditorPanel.wrappedComponent store={store} />);
   });
@@ -55,4 +57,3 @@ describe('Toolbar', () => {
     expect(app.find('select').length).toEqual(1);
   });
 });
-

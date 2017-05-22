@@ -2,17 +2,17 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-28 16:22:13
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-22T12:44:44+10:00
  */
 
 import React from 'react';
 import {mount} from 'enzyme';
 import {useStrict} from 'mobx';
 import Store from '~/stores/global';
+import globalizeInit from '#/tests/helpers/globalize.js';
 import {expect} from 'chai';
 import {ExplainPopover} from '../index.js';
-
 
 describe('Explain Toolbar Test', () => {
   let app;
@@ -20,6 +20,7 @@ describe('Explain Toolbar Test', () => {
 
   beforeAll(() => {
     useStrict(false);
+    globalizeInit();
     store = new Store();
     app = mount(<ExplainPopover editorToolbar={store.editorToolbar} editorPanel={store.editorPanel} />);
   });
@@ -28,4 +29,3 @@ describe('Explain Toolbar Test', () => {
     expect(app.find('.explainPopover')).to.have.length(1);
   });
 });
-

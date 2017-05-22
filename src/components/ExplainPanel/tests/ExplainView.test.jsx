@@ -1,11 +1,16 @@
 import chai, {assert} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
+import globalizeInit from '#/tests/helpers/globalize.js';
 import {getExecutionStages} from '../ExplainView';
 import {parseOutput} from '../Explain';
 
 chai.use(chaiEnzyme());
 
 describe('test explain view', () => {
+  beforeAll(() => {
+    globalizeInit();
+  });
+
   test('test parse stages output', () => {
     const explainOutput = {
       'queryPlanner': {

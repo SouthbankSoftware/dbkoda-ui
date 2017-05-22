@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T12:49:18+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-22T12:51:18+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -202,24 +202,11 @@ export default class Panel extends React.Component {
           panel={<WelcomeView />} />
       );
     }
-    if (this.props.store.welcomePage.isOpen) {
-      return (
-        <Tab2
-          className="welcomeTab"
-          id="Default"
-          title="Welcome"
-          panel={<WelcomeView />}>
-          <Button className="pt-minimal" onClick={() => this.closeWelcome()}>
-            <span className="pt-icon-cross" />
-          </Button>
-        </Tab2>
-      );
-    }
     return (
       <Tab2
-        className="welcomeTab notVisible"
+        className={(this.props.store.welcomePage.isOpen) ? 'welcomeTab' : 'welcomeTab notVisible'}
         id="Default"
-        title="Welcome"
+        title={globalString('editor/welcome/heading')}
         panel={<WelcomeView />}>
         <Button className="pt-minimal" onClick={() => this.closeWelcome()}>
           <span className="pt-icon-cross" />

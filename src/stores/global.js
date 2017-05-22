@@ -14,12 +14,11 @@ import path from 'path';
 import {Broker, EventType} from '../helpers/broker';
 import {ProfileStatus} from '../components/common/Constants';
 
-const Globalize = require('globalize'); // Globalize doesn't load well with import
+global.Globalize = require('globalize'); // Globalize doesn't load well with import
 
+global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
-
 let ipcRenderer;
-
 if (IS_ELECTRON) {
   ipcRenderer = window.require('electron').ipcRenderer;
 }

@@ -1,5 +1,9 @@
 /**
- * Created by joey on 15/5/17.
+ * @Author: joey
+ * @Date:   2017-05-15T16:33:48+10:00
+ * @Email:  joey@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-22T12:47:31+10:00
  */
 
 import uuidV1 from 'uuid';
@@ -7,12 +11,14 @@ import React from 'react';
 import {shallow} from 'enzyme';
 import {expect} from 'chai';
 import {observable, useStrict} from 'mobx';
+import globalizeInit from '#/tests/helpers/globalize.js';
 import Store from '../../../stores/global';
 import {EditorPanel} from '../index.js';
 
 describe('Editor State Tests', () => {
   beforeAll(() => {
     useStrict(true);
+    globalizeInit();
   });
 
   test('checked tabs with editors in store', () => {
@@ -50,5 +56,3 @@ describe('Editor State Tests', () => {
     expect(tabs).to.have.length(2);
   });
 });
-
-

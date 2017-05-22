@@ -175,7 +175,7 @@ export default class Toolbar extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
         }
-        NewToaster.show({message: 'Cannot create new Editor for "No Active Connection".', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({message: globalString('editor/toolbar/addEditorError'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
         this.onFail();
         this.setNewEditorLoading(false);
         return null;
@@ -272,7 +272,7 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
     this.props.store.editorPanel.activeDropdownId = res.id;
-    NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    NewToaster.show({message: globalString('editor/toolbar/connectionSuccess'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.setNewEditorLoading(false);
     this.props.store.editorToolbar.isActiveExecuting = false;
     if (this.props.store.editorToolbar.newEditorForTreeAction) {
@@ -346,7 +346,7 @@ export default class Toolbar extends React.Component {
         });
       });
     } else {
-      const warningMsg = '`openFile` is not supported in browser UI';
+      const warningMsg = globalString('editor/toolbar/notSupportedInUI', 'openFile');
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, warningMsg);
       }
@@ -392,7 +392,7 @@ export default class Toolbar extends React.Component {
         });
       }
     } else {
-      const warningMsg = '`saveFile` is not supported in browser UI';
+      const warningMsg = globalString('editor/toolbar/notSupportedInUI', 'saveFile');
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, warningMsg);
       }
@@ -405,7 +405,7 @@ export default class Toolbar extends React.Component {
    */
   @action executeLine() {
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      NewToaster.show({message: 'Cannot Execute on Welcome Page.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: globalString('editor/toolbar/cannotExecuteOnWelcome'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
     } else {
       this.props.store.editorPanel.executingEditorLines = true;
     }
@@ -416,7 +416,7 @@ export default class Toolbar extends React.Component {
    */
   @action executeAll() {
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      NewToaster.show({message: 'Cannot Execute on Welcome Page.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: globalString('editor/toolbar/cannotExecuteOnWelcome'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
     } else {
       this.props.store.editorPanel.executingEditorAll = true;
     }
@@ -427,7 +427,6 @@ export default class Toolbar extends React.Component {
    * codemirror instance.
    */
   explainPlan() {
-    // eslint-disable-line class-methods-use-this
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().EDITORS, 'Tried to execute non-implemented explainPlan');
     }
@@ -435,11 +434,10 @@ export default class Toolbar extends React.Component {
   }
 
   /**
-   * NOT YET IMPLEMENTED: Stop the current execution on this connection.
+   * Stop the current execution on this connection.
    */
   @action.bound
   stopExecution() {
-    // eslint-disable-line class-methods-use-this
     this.props.store.editorPanel.stoppingExecution = true;
   }
 
@@ -489,7 +487,7 @@ export default class Toolbar extends React.Component {
               this.props.store.editorPanel.activeDropdownId = prevDropdown;
               this.props.store.editorToolbar.currentProfile = prevDropdown;
             });
-            NewToaster.show({message: 'Could not swap profiles due to SSL differences.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+            NewToaster.show({message: globalString('editor/toolbar/profileSwapSslError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           } else {
             runInAction('Update dropdown on success', () => {
               this.updateCurrentProfile(profile);
@@ -503,7 +501,7 @@ export default class Toolbar extends React.Component {
             this.props.store.editorPanel.activeDropdownId = prevDropdown;
             this.props.store.editorToolbar.currentProfile = prevDropdown;
           });
-          NewToaster.show({message: 'Could not swap Profiles.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          NewToaster.show({message: globalString('editor/toolbar/profileSwapError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           // @TODO - Handle failure.
         });
     }
@@ -588,7 +586,7 @@ export default class Toolbar extends React.Component {
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
-              content="Execute Selected Commands"
+              content={globalString('editor/toolbar/executeSelectedTooltip')}
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
@@ -600,7 +598,7 @@ export default class Toolbar extends React.Component {
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}
-              content="Execute All Commands"
+              content={globalString('editor/toolbar/executeAllTooltip')}
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
@@ -613,7 +611,7 @@ export default class Toolbar extends React.Component {
             <Tooltip
               intent={Intent.DANGER}
               hoverOpenDelay={1000}
-              content="Stop Execution"
+              content={globalString('editor/toolbar/stopExecutionTooltip')}
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
@@ -628,7 +626,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content="Add a new Editor"
+            content={globalString('editor/toolbar/addEditorTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
@@ -640,7 +638,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content="Open a File from Disc"
+            content={globalString('editor/toolbar/openFileTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
@@ -651,7 +649,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content="Save Editor Contents to Disc"
+            content={globalString('editor/toolbar/saveFileTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
@@ -686,7 +684,11 @@ export default class Toolbar extends React.Component {
   renderHotkeys() {
     return (
       <Hotkeys>
-        <Hotkey global combo="shift + n" label="New Editor" onKeyDown={this.addEditor} />
+        <Hotkey
+          global
+          combo="shift + n"
+          label="New Editor"
+          onKeyDown={this.addEditor} />
         <Hotkey
           global
           combo="shift + a"
