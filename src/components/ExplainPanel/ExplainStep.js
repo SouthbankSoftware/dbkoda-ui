@@ -1,9 +1,5 @@
 /**
- * @Author: joey
- * @Date:   2017-05-22T13:12:04+10:00
- * @Email:  joey@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-22T14:04:25+10:00
+ * Created by joey on 22/5/17.
  */
 
 const SINGLE_SHARD = 'SINGLE_SHARD';

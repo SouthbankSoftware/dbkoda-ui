@@ -147,13 +147,12 @@ export const getWorstShardStatistics = (explains) => {
  */
 const ShardStatisticView = ({explains}) => {
   const shardStatistics = getWorstShardStatistics(explains);
-  console.log('get statistics ', shardStatistics);
   return (<div className="explain-shards-statistic-view">
     <div className="header">
-      <div>Shard</div>
-      <div>Examined</div>
-      <div>Returned</div>
-      <div>ms</div>
+      <div>{globalString('explain/statistics/shard')}</div>
+      <div>{globalString('explain/statistics/examined')}</div>
+      <div>{globalString('explain/statistics/returned')}</div>
+      <div>{globalString('explain/statistics/ms')}</div>
     </div>
     {
       shardStatistics.map((shard) => {

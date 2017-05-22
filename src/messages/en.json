@@ -48,6 +48,15 @@
         "docsExamined": "Total Docs Examined",
         "namespaceLabel": "Namespace:",
         "queryLabel": "Query:"
+      },
+      "details": {
+
+      },
+      "statistics":{
+        "shard": "Shard",
+        "examined": "Examined",
+        "returned": "Returned",
+        "ms" : "ms"
       }
     },
     "editor": {
