@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-16T14:03:33+10:00
+ * @Last modified time: 2017-05-22T12:31:00+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -29,6 +29,20 @@ import './View.scss';
 }))
 @observer
 export default class TreeActionView extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {formStyle: { height: (window.innerHeight - 120)}};
+  }
+  componentDidMount() {
+    window.addEventListener('resize', this.onResize.bind(this));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize.bind(this));
+  }
+  onResize(e) {
+    this.setState({formStyle: { height: (e.target.innerHeight - 120)}});
+  }
   @action.bound
   close(e) {
     e.preventDefault();
@@ -66,7 +80,7 @@ export default class TreeActionView extends React.Component {
     return (
       <div className="pt-dark ">
         <h3 className="form-title">{title}</h3>
-        <form onChange={mobxForm.onValueChange(mobxForm)}>
+        <form onChange={mobxForm.onValueChange(mobxForm)} style={this.state.formStyle}>
           {formFields}
           <div className="form-button-panel">
             <button
