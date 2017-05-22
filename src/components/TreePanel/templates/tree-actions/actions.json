@@ -51,10 +51,16 @@
             "icon": "pt-icon-split-columns"
         }
     ],
-    "collection": [{
+    "collection": [
+        {
+            "name": "SimpleQuery",
+            "text": "Simple Query",
+            "icon": "pt-icon-search-template"
+        },
+        {
             "name": "SampleCollections",
             "text": "Find Attributes",
-            "icon": "pt-icon-search-template"
+            "icon": "pt-icon-properties"
         }, {
             "name": "CollectionStats",
             "text": "Collection Statistics",
