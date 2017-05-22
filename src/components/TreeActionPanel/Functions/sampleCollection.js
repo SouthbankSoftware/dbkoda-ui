@@ -21,7 +21,7 @@ dbe.sampleCollection = (dbName, collectionName) => {
             }]).toArray();
     } else {
         data = db.getSiblingDB(dbName).getCollection(collectionName)
-            .find().limit(20).toArray();
+            .find({}, {_id:0}).limit(20).toArray();
     }
 
     const attributes = {};
@@ -54,11 +54,11 @@ dbe.sampleCollection = (dbName, collectionName) => {
         });
     });
     const results = Object.keys(attributes);
-    results.push('_id');
+    results.unshift('_id');
     // console.log('listAttributes returning ' + results.length);
     return results.sort();
 };
 
 dbe.version();
 dbe.majorVersion();
-// dbe.sampleCollection("Sakila", "films")
+dbe.sampleCollection('SampleCollections', 'Sakila_films');

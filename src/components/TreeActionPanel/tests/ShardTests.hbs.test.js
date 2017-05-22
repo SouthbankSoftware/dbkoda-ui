@@ -8,7 +8,7 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
-const debug = true;
+const debug = false;
 const enableShardingTemplate = './src/components/TreeActionPanel/Templates/EnableSharding.hbs';
 const shardCollectionTemplate = './src/components/TreeActionPanel/Templates/ShardCollection.hbs';
 const hbs = require('handlebars');
