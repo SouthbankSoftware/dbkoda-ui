@@ -8,6 +8,7 @@ import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 import Prettier from 'prettier';
 import './style.scss';
+import {generateComments} from './ExplainStep';
 
 const Globalize = require('globalize');
 
@@ -42,15 +43,6 @@ export const getExecutionStages = (executionStages) => {
   return stages.reverse();
 };
 
-export const generateComments = (stage) => {
-  let comments = 'waiting for comments ' + stage.stage;
-  if (stage.stage.indexOf('SORT_KEY_GENERATOR') >= 0) {
-    comments = 'Generate keys for the next sort step';
-  }
-
-  return comments;
-};
-
 export const StepsTable = ({stages}) => {
   const getExamined = (stage) => {
     if (stage.stage === 'IXSCAN') {
@@ -61,6 +53,7 @@ export const StepsTable = ({stages}) => {
     }
     return stage.docsExamined;
   };
+  console.log('get stages ', stages);
   return (<div className="explain-stages-table">
     <div className="stage-header">
       <div className="column-header">Seq</div>
