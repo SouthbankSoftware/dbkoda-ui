@@ -1,0 +1,9 @@
+db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").aggregate([
+  {{#if InitialFilter}} {"$match": { {{#each FilterKeys}} 
+                 "{{AttributeName}}":{{{Value}}}   {{#unless last}},{{/unless}}{{/each}} }}, 
+  {{/if}}
+  {{#each PipeLine}} 
+    {"{{StepName}}": {{{StepValue}}} 
+    }{{#unless last}},
+{{/unless}}{{/each}} 
+]);

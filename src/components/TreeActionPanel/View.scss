@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-22T12:45:53+10:00
+// @Last modified time: 2017-05-22T16:08:00+10:00
 @import '../../styles/_defaultTheme.scss';
 
 
@@ -93,10 +93,10 @@
         width: 90%;
       }
     }
-    .scrollableDiv {
-      max-height: 228px;
-      overflow: auto;
-    }
+    // .scrollableDiv {
+    //   max-height: 228px;
+    //   overflow: auto;
+    // }
   }
   .form-button-panel {
     button {
@@ -201,6 +201,7 @@
   }
   .Select-menu-outer {
     z-index: 999 !important;
+    position: absolute;
   }
   .Select-placeholder,
   .Select--single > .Select-control .Select-value {
