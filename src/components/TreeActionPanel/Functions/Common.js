@@ -52,51 +52,11 @@ export function dbenvyParameterList_parse(res) {//eslint-disable-line
     return params;
 }
 export function dbenvyListAttributes(params) {
-    const tmpCollection = 'dbenvyTmp' + Math.floor(Math.random() * 10000000);
-    let cmd = sprintf('JSON.stringify(db.getSiblingDB("%s").getCollection("%s").aggregate([{ $sample: {size: 20}},{$out:"%s"}]));',
-        params.db, params.collection, tmpCollection);
-    cmd += sprintf('var tmp=db.getSiblingDB("%s").%s.find({},{_id:0}).toArray();',
-        params.db, tmpCollection);
-    cmd += sprintf('db.getSiblingDB("%s").%s.drop();tmp;',
-        params.db, tmpCollection);
+    const cmd = sprintf('dbe.sampleCollection("%s","%s");', params.db, params.collection);
     console.log(cmd);
     return cmd;
 }
 
 export function dbenvyListAttributes_parse(res) { //eslint-disable-line
-    // Print attributes to one level (eg xxx.yyy but not xxx.yyy.zzz)
-    // console.log(res);
-    const attributes = {};
-    res.forEach((doc) => {
-        Object.keys(doc).forEach((key) => {
-            let keytype = typeof doc[key];
-            if (doc[key]) {
-                if (doc[key].constructor === Array) {
-                    keytype = 'array';
-                }
-            }
-            attributes[key] = keytype;
-            if (keytype == 'object') {
-                const obj = doc[key];
-                if (obj) {
-                    Object.keys(obj).forEach((nestedKey) => {
-                        attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
-                    });
-                }
-            } else
-            if (keytype === 'array') {
-                const docarray = doc[key];
-                docarray.forEach((nestedDoc) => {
-                    const obj = nestedDoc;
-                    Object.keys(obj).forEach((nestedKey) => {
-                        attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
-                    });
-                });
-            }
-        });
-    });
-    const results = Object.keys(attributes);
-    results.push('_id');
-    // console.log('listAttributes returning ' + results.length);
-    return results.sort();
+    return res;
 }
