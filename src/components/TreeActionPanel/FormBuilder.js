@@ -3,13 +3,15 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-16T14:39:11+10:00
+ * @Last modified time: 2017-05-22T10:56:47+10:00
  */
 
+import { SyncService } from '#/common/SyncService';
 import { DynamicForm } from './Components/DynamicForm';
 
 export default class FormBuilder {
   treeNode: null;
+  editor: null;
   /**
    * Resolves the definition field into Mobx React Form field
    * @param  {Object} defField      Field object from DDD filter
@@ -72,18 +74,17 @@ export default class FormBuilder {
   /**
    * Function to resolve all the queries for the fieldset one by one
    * @param  {Array}    queries       Array of queries for the fieldset
-   * @param  {Function} executeQuery  Callback function to execute the queries
    * @param  {Object}   result        Result Object to be populated as the queries resolve one by one
    * @return {Promise}                Promise to be resolved after all the queries have been resolved
    */
-  resolveQueries = (queries, executeQuery, result) => {
+  resolveQueries = (queries, result) => {
     return new Promise((resolve, reject) => {
       const query = queries.pop();
-      executeQuery(query)
+      SyncService.executeQuery(query, this.editor.shellId, this.editor.currentProfile)
         .then((res) => {
           result[query] = res;
           if (queries.length > 0) {
-            this.resolveQueries(queries, executeQuery, result)
+            this.resolveQueries(queries, result)
               .then((result) => {
                 resolve(result);
               })
@@ -111,10 +112,9 @@ export default class FormBuilder {
    * Function to get Mobx React Form Fields from the Dialog Defininition document
    * @param  {Object}   ddd           Object containing fields defined in DDD document
    * @param  {Object}   formFunctions Array of function from the supporting DDD file
-   * @param  {Function} executeQuery  Callback function to execute the queries
    * @return {Promise}                Promise to be resolved after all fields has been generated
    */
-  getFieldsFromDefinitions = (ddd, formFunctions, executeQuery) => {
+  getFieldsFromDefinitions = (ddd, formFunctions) => {
     return new Promise((resolve, reject) => {
       const result = {};
       result.fields = [];
@@ -203,7 +203,7 @@ export default class FormBuilder {
 
       // if there are db queries resolve them and update the options for select fields
       if (queries.length > 0) {
-        this.resolveQueries(queries, executeQuery, {})
+        this.resolveQueries(queries, {})
           .then((resQueries) => {
             for (const fldName in queryFieldsHash) {
               if (queryFieldsHash[fldName]) {
@@ -277,13 +277,13 @@ export default class FormBuilder {
    * Function to create a dynamic form based on the tree action.
    * @param  {Object}   treeActionStore       Store which contains all the information about selected tree action
    * @param  {Function} updateDynamicFormCode Callback function to send the generated code back to editor
-   * @param  {Function} executeQuery          Callback function to execute prefetching queries
    * @return {Promise}                        Promise which will be resolved once all the queries for prefetching are resolved.
    */
-  createForm = (treeActionStore, updateDynamicFormCode, executeQuery) => {
+  createForm = (treeActionStore, updateDynamicFormCode, editorForTreeAction) => {
     try {
       const treeAction = treeActionStore.treeAction;
       this.treeNode = treeActionStore.treeNode;
+      this.editor = editorForTreeAction;
       // Load the form definitions dynamically
       const ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
 
@@ -297,7 +297,7 @@ export default class FormBuilder {
 
       return new Promise((resolve, reject) => {
         // get Fields for Mobx React Form
-        this.getFieldsFromDefinitions(ddd, formFunctions, executeQuery)
+        this.getFieldsFromDefinitions(ddd, formFunctions)
           .then((formDefs) => {
             console.log(formDefs);
 
@@ -365,7 +365,7 @@ export default class FormBuilder {
                   } else {
                     parseFunction = defaultParseFunction;
                   }
-                  executeQuery(PrefilledValues).then((res) => {
+                  SyncService.executeQuery(PrefilledValues, this.editor.shellId, this.editor.currentProfile).then((res) => {
                     const parsedValues = parseFunction(res);
                     updatePrefilledData(parsedValues);
                   });

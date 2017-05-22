@@ -53,7 +53,7 @@ export function dbenvyParameterList_parse(res) {//eslint-disable-line
 }
 export function dbenvyListAttributes(params) {
     const tmpCollection = 'dbenvyTmp' + Math.floor(Math.random() * 10000000);
-    let cmd = sprintf('db.getSiblingDB("%s").getCollection("%s").aggregate([{ $sample: {size: 20}},{$out:"%s"}]);',
+    let cmd = sprintf('JSON.stringify(db.getSiblingDB("%s").getCollection("%s").aggregate([{ $sample: {size: 20}},{$out:"%s"}]));',
         params.db, params.collection, tmpCollection);
     cmd += sprintf('var tmp=db.getSiblingDB("%s").%s.find({},{_id:0}).toArray();',
         params.db, tmpCollection);

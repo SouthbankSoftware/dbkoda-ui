@@ -101,7 +101,7 @@ describe('TreeState', () => {
   test('should have one node of "Databases"', () => {
     treeState1.parseJson(treeJson);
     treeState1.setFilter('stat');
-    expect(treeState1.nodes.length).toEqual(1);
+    expect(treeState1.nodes.length).toEqual(2);
   });
 
   test('should have ROOT node of "DBEnvyLoad" with "bstatestat" node as filter', () => {

@@ -1,9 +1,9 @@
 /**
- * @Author: chris
+ * @Author: joey
  * @Date:   2017-05-01T11:45:01+10:00
- * @Email:  chris@southbanksoftware.com
+ * @Email:  joey@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-01T13:55:54+10:00
+ * @Last modified time: 2017-05-22T12:51:07+10:00
  */
 /**
  * explain popover menu
@@ -13,7 +13,6 @@ import {observer} from 'mobx-react';
 import {AnchorButton, Intent, Menu, MenuItem, Popover, Position, Tooltip} from '@blueprintjs/core';
 import {action} from 'mobx';
 import {Broker, EventType} from '../../helpers/broker/index';
-
 
 const QUERY_PLANNER = 'queryPlanner';
 const EXECUTION_STATS = 'executionStats';
@@ -39,11 +38,11 @@ const ExplainMenu = ({editorToolbar}) => {
     menu = null;
   } else {
     menu = (<Menu>
-      <MenuItem className="queryPlannerButton" text="queryPlanner"
+      <MenuItem className="queryPlannerButton" text={globalString('editor/toolbar/explainQuery')}
         onClick={() => sendQueryCommand(QUERY_PLANNER)} />
-      <MenuItem className="executionStatsButton" text="executionStats"
+      <MenuItem className="executionStatsButton" text={globalString('editor/toolbar/explainExecutionStats')}
         onClick={() => sendQueryCommand(EXECUTION_STATS)} />
-      <MenuItem className="allPlansExecutionButton" text="allPlansExecution"
+      <MenuItem className="allPlansExecutionButton" text={globalString('editor/toolbar/explainAllPlans')}
         onClick={() => sendQueryCommand(ALL_PLANS_EXECUTION)} />
     </Menu>);
   }
@@ -57,7 +56,7 @@ export default observer(({editorToolbar}) => (
   <Popover className="explainPopover"
     content={<ExplainMenu editorToolbar={editorToolbar} />}
     position={Position.BOTTOM_RIGHT}>
-    <Tooltip content="Explain"
+    <Tooltip content={globalString('editor/toolbar/explainTooltip')}
       intent={Intent.PRIMARY}
       hoverOpenDelay={1000}
       tooltipClassName="pt-dark"

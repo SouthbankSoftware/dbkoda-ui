@@ -30,6 +30,42 @@
         "namespaceLabel": "Namespace:",
         "queryLabel": "Query:"
       }
+    },
+    "editor": {
+      "toolbar": {
+        "executeSelectedTooltip": "Execute Selected Commands",
+        "executeAllTooltip": "Execute All Commands",
+        "stopExecutionTooltip": "Stop Execution",
+        "explainTooltip": "Explain",
+        "explainQuery": "Query Planner",
+        "explainExecutionStats": "Execution Stats",
+        "explainAllPlans": "All Plans Execution",
+        "addEditorTooltip": "Add a new Editor",
+        "openFileTooltip": "Open a File from Disc",
+        "saveFileTooltip": "Save Editor Contents to Disc",
+        "addEditorError": "Cannot create new Editor for 'No Active Connection'.",
+        "connectionSuccess": "Connection Success!",
+        "profileSwapError": "Could not swap Profiles.",
+        "profileSwapSslError": "Could not swap profiles due to SSL differences.",
+        "notSupportedInUI": "`{0}` is not supported in browser UI",
+        "cannotExecuteOnWelcome": "Cannot Execute on Welcome Page."
+      },
+      "view": {
+        "executionStopped": "Execution Stopped Successfully",
+        "executionStoppedError": "Stop Execution Failed! {0}",
+        "formatError": "Unable to format text, sorry!",
+        "tooManyLintErrors": "Too many Linting Errors on this line...",
+        "menu": {
+          "executeSelected": "Execute Selected",
+          "executeAll": "Execute All",
+          "refresh": "Refresh",
+          "formatAll": "Format All",
+          "formatSelection": "Format Selection"
+        }
+      },
+      "welcome": {
+        "heading": "Welcome"
+      }
     }
   }
 }

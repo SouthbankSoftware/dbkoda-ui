@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-12T14:02:34+10:00
+ * @Last modified time: 2017-05-22T13:15:46+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -295,14 +295,18 @@ class View extends React.Component {
             if (response) {
               NewToaster.show({message: response.result, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
             } else {
-              NewToaster.show({message: 'Execution Stopped Successfully', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+              NewToaster.show({
+                message: globalString('editor/view/executionStopped'),
+                intent: Intent.SUCCESS,
+                iconName: 'pt-icon-thumbs-up'
+              });
             }
             this.finishedExecution();
           })
           .catch((reason) => {
             console.error(`Stopping Execution failed for ${id} / ${shell}! ${reason.message}`);
             NewToaster.show({
-              message: 'Stop Execution Failed! ' + reason,
+              message: globalString('editor/view/executionStoppedError'),
               intent: Intent.DANGER,
               iconName: 'pt-icon-thumbs-down'
             });
@@ -591,7 +595,11 @@ class View extends React.Component {
         .code = beautified;
       cm.setValue(beautified);
     } catch (err) {
-      NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: globalString('editor/view/formatError'),
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down'
+      });
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format All failed with error: ' + err);
       }
@@ -611,7 +619,11 @@ class View extends React.Component {
       const beautified = Prettier.format(cm.getSelection(), {});
       cm.replaceSelection(beautified);
     } catch (err) {
-      NewToaster.show({message: 'Unable to format text, sorry!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: globalString('editor/view/formatError'),
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down'
+      });
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format Selection failed with error: ' + err);
       }
@@ -649,7 +661,7 @@ class View extends React.Component {
           icon.className = 'tooltip lint-error-icon';
           msg.className = 'tooltiptext';
           if (tooltip.innerHTML.length > MAX_LINT_ERROR_CHARACTERS) {
-            tooltip.innerHTML = 'Too many Linting Errors on this line...';
+            tooltip.innerHTML = globalString('editor/view/tooManyLintErrors');
           }
           msg.lintText = tooltip.innerHTML;
           this
@@ -797,27 +809,27 @@ class View extends React.Component {
       <Menu>
         <MenuItem
           onClick={this.executeLine}
-          text="Execute Selected"
+          text={globalString('editor/view/menu/executeSelected')}
           iconName="pt-icon-chevron-right"
           intent={Intent.NONE} />
         <MenuItem
           onClick={this.executeAll}
-          text="Execute All"
+          text={globalString('editor/view/menu/executeAll')}
           iconName="pt-icon-double-chevron-right"
           intent={Intent.NONE} />
         <MenuItem
           onClick={this.refresh}
-          text="Refresh"
+          text={globalString('editor/view/menu/refresh')}
           iconName="pt-icon-refresh"
           intent={Intent.NONE} />
         <MenuItem
           onClick={this.prettifyAll}
-          text="Format All"
+          text={globalString('editor/view/menu/formatAll')}
           iconName="pt-icon-align-left"
           intent={Intent.NONE} />
         <MenuItem
           onClick={this.prettifySelection}
-          text="Format Selection"
+          text={globalString('editor/view/menu/formatSelection')}
           iconName="pt-icon-align-left"
           intent={Intent.NONE} />
       </Menu>
