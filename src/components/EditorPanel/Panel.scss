@@ -15,6 +15,7 @@
   .editorToolbar {
     overflow-x: scroll;
     background-color: $navbarRightBackground !important;
+    min-height: 45px;
     .leftEditorToolbar {
       .leftButtonGroup {
         .editorContextDropdownWrapper {
