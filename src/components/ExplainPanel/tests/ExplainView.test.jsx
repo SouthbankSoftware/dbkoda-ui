@@ -1,20 +1,11 @@
 import React from 'react';
 import chai, {assert, expect} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
-import {mount, shallow} from 'enzyme';
-import uuidV1 from 'uuid';
-
-import {Provider} from 'mobx-react';
-import {observable, runInAction} from 'mobx';
+import {mount} from 'enzyme';
 import globalizeInit from '#/tests/helpers/globalize.js';
-import {getExecutionStages} from '../ExplainView';
+import ExplainView, {getExecutionStages} from '../ExplainView';
 import {parseOutput} from '../Explain';
-import Store from '../../../stores/global';
-import Explain from '../Explain';
-import OutputPanel from '../../outputPanel/Panel';
 import ExplainPanel from '../Panel';
-import {Header} from '../Panel';
-import ExplainView from '../ExplainView';
 
 chai.use(chaiEnzyme());
 
