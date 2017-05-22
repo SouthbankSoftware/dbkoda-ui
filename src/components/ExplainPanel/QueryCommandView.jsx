@@ -22,15 +22,17 @@ const options = {
 
 const QueryCommandView = ({command, namespace}) => {
   let editor;
+  let content = command;
   try {
-    const formatted = Prettier.format(command, {});
-    setTimeout(() => {
-      const cm = editor && editor.getCodeMirror();
-      cm && cm.setValue(formatted);
-    }, 500);
+    content = Prettier.format(command, {});
   } catch (_) {
     // do nothing
+    content = command;
   }
+  setTimeout(() => {
+    const cm = editor && editor.getCodeMirror();
+    cm && cm.setValue(content);
+  }, 500);
   const namespacePanel = namespace ? (<div className="namespace">
     <div className="label">{globalString('explain/view/namespaceLabel')}</div>
     <div className="value">{namespace}</div>
