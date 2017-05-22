@@ -125,6 +125,45 @@
         "defaultUsername": "dbenvy",
         "password": "Password"
       }
+    },
+    "profile": {
+      "noProfile": "No Profile Selected",
+      "notClosed": "Connection is not closed.",
+      "removeSuccess": "Successfully Removed Connection",
+      "connectionProfiles": "Connection Profiles",
+      "menu": {
+        "openConnection": "Open Connection",
+        "closeConnection": "Close Connection",
+        "editProfile": "Edit Profile",
+        "editors": "Editors:",
+        "newWindow": "New Window",
+        "deleteProfile": "Delete Profile"
+      },
+      "closeAlert": {
+        "prompt": "Are you sure you want to close this connection?",
+        "confirmButton": "Close Connection",
+        "cancelButton": "Cancel"
+      },
+      "removeAlert": {
+        "prompt": "Are you sure you want to remove this connection?",
+        "confirmButton": "Remove",
+        "cancelButton": "Cancel"
+      },
+      "openAlert": {
+        "prompt": "Please enter your password for this profile.",
+        "inputPlaceholder": "Enter Password...",
+        "confirmButton": "Open",
+        "cancelButton": "Cancel"
+      },
+      "toolbar": {
+        "connectionClosed": "Connection Closed",
+        "newProfileTooltip": "Create a new Profile",
+        "editProfileTooltip": "Edit a Profile",
+        "closeProfileTooltip": "Close a Profile",
+        "removeProfileTooltip": "Remove a Profile",
+        "searchTooltip": "Enter a string to search for Profiles",
+        "searchPlaceholder": "Filter Profiles..."
+      }
     }
   }
 }

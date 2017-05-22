@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-15 13:34:55
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-07T12:26:50+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-22T17:57:04+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -62,7 +62,7 @@ export default class Toolbar extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to edit active profile..');
         }
-        NewToaster.show({message: 'Connection is not closed.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({message: globalString('profile/not'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       } else {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the Edit Connection Profile drawer.');
@@ -76,7 +76,7 @@ export default class Toolbar extends React.Component {
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to edit with no profile selected.');
       }
-      NewToaster.show({message: 'No Profile Selected!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
   }
 
@@ -95,7 +95,7 @@ export default class Toolbar extends React.Component {
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User removed a profile..');
     }
-    NewToaster.show({message: 'Remove connection success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    NewToaster.show({message: globalString('profile/removeSuccess'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
   }
 
   @autobind
@@ -128,7 +128,7 @@ export default class Toolbar extends React.Component {
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User closed a profile connection.');
           }
-          NewToaster.show({message: 'Connection Closed', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+          NewToaster.show({message: globalString('profile/toolbar/connectionClosed'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })
         .catch((err) => {
@@ -143,7 +143,7 @@ export default class Toolbar extends React.Component {
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to close a connection profile with no profile selected..');
       }
-      NewToaster.show({message: 'No Profile Selected!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
   }
 
@@ -167,26 +167,26 @@ export default class Toolbar extends React.Component {
             className="pt-dark close-profile-alert-dialog"
             intent={Intent.PRIMARY}
             isOpen={this.state.closeConnectionAlert}
-            confirmButtonText="Close Connection"
-            cancelButtonText="Cancel"
+            confirmButtonText={globalString('profile/closeAlert/confirmButton')}
+            cancelButtonText={globalString('profile/closeAlert/cancelButton')}
             onConfirm={this.closeProfile}
             onCancel={this.hideCloseConnectionAlert}>
-            <p>Are you sure you want to close this connection?</p>
+            <p>{globalString('profile/closeAlert/prompt')}</p>
           </Alert>
           <Alert
             className="pt-dark remove-profile-alert-dialog"
             intent={Intent.PRIMARY}
             isOpen={this.state.removeConnectionAlert}
-            confirmButtonText="Remove Connection"
-            cancelButtonText="Cancel"
+            confirmButtonText={globalString('profile/removeAlert/confirmButton')}
+            cancelButtonText={globalString('profile/removeAlert/cancelButton')}
             onConfirm={this.removeProfile}
             onCancel={this.hideRemoveConnectionAlert}>
-            <p>Are you sure you want to remove this connection?</p>
+            <p>{globalString('profile/removeAlert/prompt')}</p>
           </Alert>
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content="Create a new Profile"
+            content={globalString('profile/toolbar/newProfileTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM_LEFT}>
             <AnchorButton
@@ -196,7 +196,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content="Edit a Profile"
+            content={globalString('profile/toolbar/editProfileTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
@@ -207,7 +207,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content="Close a Profile"
+            content={globalString('profile/toolbar/closeProfileTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
@@ -219,7 +219,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content="Remove a Profile"
+            content={globalString('profile/toolbar/removeProfileTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
@@ -231,7 +231,7 @@ export default class Toolbar extends React.Component {
           <Tooltip
             intent={Intent.NONE}
             hoverOpenDelay={1000}
-            content="Enter a string to search for Profiles"
+            content={globalString('profile/toolbar/searchTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <div className="pt-input-group .modifier">
@@ -239,7 +239,7 @@ export default class Toolbar extends React.Component {
               <input
                 className="pt-input"
                 type="search"
-                placeholder="Filter Profiles..."
+                placeholder={globalString('profile/toolbar/searchPlaceholder')}
                 dir="auto"
                 onChange={this.onFilterChanged} />
             </div>
