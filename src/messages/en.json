@@ -29,6 +29,38 @@
         "docsExamined": "Total Docs Examined",
         "namespaceLabel": "Namespace:",
         "queryLabel": "Query:"
+      },
+      "details": {
+
+      },
+      "statistics":{
+        "shard": "Shard",
+        "examined": "Examined",
+        "returned": "Returned",
+        "ms" : "ms"
+      },
+      "comments": {
+        "fetch" : {
+          "index" : "Retrieved documents from index fetch"
+        },
+        "collscan": {
+          "fullscan" : "All documents in the collection where scanned. No filter condition was specified"
+        },
+        "limit" : {
+          "error" : "Limited documents returned : ?"
+        },
+        "skip" :{
+          "error" : "Skiped Forward : ?"
+        },
+        "shard": {
+          "filter" : "The previous operation was sent to one or more shards",
+          "mergesort" : "Output from multiple shards was merged and sorted",
+          "merge" : "Output from multiple shards was merged"
+        },
+        "keepmutation" : "Merge in any documents which may have been incorrectly invalidated mid-query",
+        "subplan": "Selected one of multiple possible plans based on $or condition",
+        "eof": "Nothing was found: maybe collection does not exist?",
+        "andsorted": "Output from the previous steps was sort-merged"
       }
     },
     "editor": {

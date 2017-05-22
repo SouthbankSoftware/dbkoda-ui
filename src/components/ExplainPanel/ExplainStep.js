@@ -26,7 +26,7 @@ const generateFetchComments = (stage) => {
     });
     return `Documents from previous step where scanned looking for these criteria: ${JSON.stringify(filterStr)}.`;
   }
-  return 'Retrieved documents from index fetch';
+  return globalString('explain/comments/fetch/index');
 };
 
 const generateCollScanComments = (stage) => {
@@ -40,7 +40,7 @@ const generateCollScanComments = (stage) => {
     fullScan = true;
   }
   if (fullScan) {
-    return 'All documents in the collection where scanned. No filter condition was specified';
+    return globalString('explain/comments/collscan/fullscan');
   }
   return `Documents were scanned looking for these criteria: ${JSON.stringify(filterStr)}`;
 };
@@ -63,14 +63,14 @@ const generateLimitComments = (stage) => {
   if ('limitAmount' in stage) {
     return `Limited documents returned : ${stage.limitAmount}`;
   }
-  return 'Limited documents returned : ?';
+  return globalString('explain/comments/limit/error');
 };
 
 const generateSkipComments = (stage) => {
   if ('skipAmount' in stage) {
     return `Skiped Forward : ${stage.skipAmount}`;
   }
-  return 'Skiped Forward : ?';
+  return globalString('explain/comments/skip/error');
 };
 
 /**
@@ -96,19 +96,19 @@ export const generateComments = (stage) => {
     case SORT:
       return generateSortComments(stage);
     case SHARDING_FILTER:
-      return 'The previous operation was sent to one or more shards';
+      return globalString('explain/comments/shard/filter');
     case SHARD_MERGE_SORT:
-      return 'Output from multiple shards was merged and sorted';
+      return globalString('explain/comments/shard/mergesort');
     case SHARD_MERGE:
-      return 'Output from multiple shards was merged';
+      return globalString('explain/comments/shard/merge');
     case KEEP_MUTATIONS:
-      return 'Merge in any documents which may have been incorrectly invalidated mid-query';
+      return globalString('explain/comments/keepmutation');
     case SUBPLAN:
-      return 'Selected one of multiple possible plans based on $or condition';
+      return globalString('explain/comments/subplan');
     case EOF:
-      return 'Nothing was found: maybe collection does not exist?';
+      return globalString('explain/comments/eof');
     case AND_SORTED:
-      return 'Output from the previous steps was sort-merged';
+      return globalString('explain/comments/andsorted');
     case LIMIT:
       return generateLimitComments(stage);
     case SKIP:
