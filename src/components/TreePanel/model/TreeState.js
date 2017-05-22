@@ -73,7 +73,7 @@ export default class TreeState {
     } else {
       for (const treeNode of this.treeNodes) {
         treeNode.setFilter(this.filter);
-        if (treeNode.childNodes && treeNode.childNodes.length > 0) {
+        if (treeNode.childNodes) {
           this
             .filteredNodes
             .push(treeNode);
@@ -99,8 +99,11 @@ export default class TreeState {
           this
             .treeNodes
             .push(treeNode);
+        } else if(treeNode.type && treeNode.type == 'users') {
+          this.treeNodes.push(treeNode);
         }
       }
+      console.log('TEST: ', this.treeNodes);
       this.filterNodes();
       this.isNewJsonAvailable = true;
     }
