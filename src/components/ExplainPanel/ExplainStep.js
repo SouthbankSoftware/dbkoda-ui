@@ -26,7 +26,7 @@ const generateFetchComments = (stage) => {
     });
     return `Documents from previous step where scanned looking for these criteria: ${JSON.stringify(filterStr)}. Consider creating covering index on ${Object.keys(stage.filter)}`;
   }
-  return 'Retrieved documents from  index fetch';
+  return 'Retrieved documents from index fetch';
 };
 
 const generateCollScanComments = (stage) => {
@@ -48,7 +48,7 @@ const generateCollScanComments = (stage) => {
 const generateIxscanComments = (stage) => {
   const idxName = stage.indexName || 'Unknown';
   let columnList;
-  if (stage.keyPattern) {
+  if ('keyPattern' in stage) {
     columnList = Object.keys(stage.keyPattern).join(',');
   }
   return `Index ${idxName} was used to find matching values for ${columnList}`;
@@ -60,17 +60,17 @@ const generateSortComments = (stage) => {
 };
 
 const generateLimitComments = (stage) => {
-  if (stage.limitAmount) {
+  if ('limitAmount' in stage) {
     return `Limited documents returned : ${stage.limitAmount}`;
   }
-  return '?';
+  return 'Limited documents returned : ?';
 };
 
 const generateSkipComments = (stage) => {
-  if (stage.skipAmount) {
-    return `Limited documents returned : ${stage.skipAmount}`;
+  if ('skipAmount' in stage) {
+    return `Skiped Forward : ${stage.skipAmount}`;
   }
-  return '?';
+  return 'Skiped Forward : ?';
 };
 
 /**
