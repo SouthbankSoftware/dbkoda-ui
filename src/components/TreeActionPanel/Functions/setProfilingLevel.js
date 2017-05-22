@@ -13,8 +13,7 @@ export const setProfilingLevel = {
     // Prefill function for alter user
     dbenvy_setProfilingLevelPreFill: (params) => {
         const dbName = params.dbName;
-        const cmd = sprintf('var dbeSpl={};if  (db.serverStatus().process!==\'mongos\' ) dbeSpl=db.getSiblingDB("%s").getProfilingStatus(); else dbeSpl.mongos=true;dbeSpl.dbName="%s";dbeSpl;',
-            dbName, dbName);
+        const cmd = sprintf('dbe.profileLevels("%s");', dbName);
         return cmd;
     },
     dbenvy_setProfilingLevelPreFill_parse: (res) => {
