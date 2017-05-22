@@ -12,8 +12,6 @@
  */
 import React from 'react';
 import {Button} from '@blueprintjs/core';
-import CodeMirror from 'react-codemirror';
-import CM from 'codemirror';
 import './style.scss';
 import RawJson from './RawJson';
 import ExplainView from './ExplainView';

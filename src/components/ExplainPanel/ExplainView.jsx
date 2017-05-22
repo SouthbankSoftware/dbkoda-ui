@@ -165,7 +165,7 @@ const ShardStatisticView = ({explains}) => {
 };
 
 const CommandPanel = ({command, namespace}) => {
-  return <QueryCommandView command={command} namespace={namespace}/>;
+  return <QueryCommandView command={command} namespace={namespace} />;
 };
 
 const ExplainView = ({explains}) => {
