@@ -276,6 +276,12 @@ export default class ListView extends React.Component {
           }
           NewToaster.show({message: globalString('profile/toolbar/connectionClosed'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
+          console.log('TEST123: ', this.props.store.profileList.selectedProfile.status);
+          if (this.props.store.profileList.selectedProfile.status == 'CLOSED') {
+            runInAction(() => {
+              this.props.store.treePanel.isRefreshDisabled = true;
+            });
+          }
           this.closeConnectionCloseAlert();
         })
         .catch((err) => {
@@ -503,9 +509,11 @@ export default class ListView extends React.Component {
         ? 'connection-profile-cell connection-profile-cell-selected'
         : 'connection-profile-cell';
       if (profiles[rowIndex][1].status == 'OPEN') {
-        return (<Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-          <p className="pt-icon-link profileListing">{profiles[rowIndex][1].alias}</p>
-        </Cell>);
+        return (
+          <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
+            <p className="pt-icon-link profileListing">{profiles[rowIndex][1].alias}</p>
+          </Cell>
+        );
       }
       return (
         <Cell className={className}>

@@ -20,7 +20,9 @@ global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...p
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 let ipcRenderer;
 if (IS_ELECTRON) {
-  ipcRenderer = window.require('electron').ipcRenderer;
+  ipcRenderer = window
+    .require('electron')
+    .ipcRenderer;
 }
 
 export default class Store {
@@ -29,15 +31,10 @@ export default class Store {
   @observable editors = observable.map();
   @observable outputs = observable.map();
 
-  @observable userPreferences = observable({
-    telemetryEnabled: false,
-    showWelcomePageAtStart: true,
-  });
+  @observable userPreferences = observable({telemetryEnabled: false, showWelcomePageAtStart: true});
 
   @observable welcomePage = observable({
-    isOpen: true,
-    newsFeed: [],
-    currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
+    isOpen: true, newsFeed: [], currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
   });
 
   @observable editorPanel = observable({
@@ -64,13 +61,7 @@ export default class Store {
     newEditorForTreeAction: false
   });
 
-  @observable outputPanel = observable({
-    currentTab: 'Default',
-    clearingOutput: false,
-    executingShowMore: false,
-    executingTerminalCmd: false,
-    sendingCommand: ''
-  });
+  @observable outputPanel = observable({currentTab: 'Default', clearingOutput: false, executingShowMore: false, executingTerminalCmd: false, sendingCommand: ''});
 
   @observable layout = {
     optInVisible: true,
@@ -92,6 +83,11 @@ export default class Store {
     isNewFormValues: false
   };
 
+  @observable treePanel = {
+    isRefreshing: false,
+    isRefreshDisabled: false
+  };
+
   @observable explainPanel = {
     activeId: undefined,
     explainAvailable: false
@@ -101,21 +97,11 @@ export default class Store {
     prompt: 'dbenvy>'
   };
 
-  @observable profileList = observable({
-    selectedProfile: null,
-    creatingNewProfile: false
-  });
+  @observable profileList = observable({selectedProfile: null, creatingNewProfile: false});
 
-  @observable dragItem = observable({
-    dragDrop: false,
-    dragDropTerminal: false,
-    item: null
-  });
+  @observable dragItem = observable({dragDrop: false, dragDropTerminal: false, item: null});
 
-  @observable topology = observable({
-    isChanged: false,
-    json: {}
-  });
+  @observable topology = observable({isChanged: false, json: {}});
 
   @action setDrawerChild = (value) => {
     this.drawer.drawerChild = value;
@@ -159,17 +145,22 @@ export default class Store {
     return new Promise((resolve) => {
       if (this.profiles && this.profiles.size > 0) {
         const promises = [];
-        this.profiles.forEach((value) => {
-          if (value.status === ProfileStatus.OPEN) {
-            // close this connection from feather-client
-            const service = featherClient().service('/mongo-connection');
-            if (service) {
-              promises.push(service.remove(value.id));
+        this
+          .profiles
+          .forEach((value) => {
+            if (value.status === ProfileStatus.OPEN) {
+              // close this connection from feather-client
+              const service = featherClient().service('/mongo-connection');
+              if (service) {
+                promises.push(service.remove(value.id));
+              }
             }
-          }
-        });
+          });
         if (promises.length > 0) {
-          Promise.all(promises).then(() => resolve()).catch(() => resolve());
+          Promise
+            .all(promises)
+            .then(() => resolve())
+            .catch(() => resolve());
         } else {
           resolve();
         }
@@ -211,14 +202,18 @@ export default class Store {
     newStore.editorToolbar.noActiveProfile = true;
 
     // Editors:
-    newStore.editors.forEach((value) => {
-      value.executing = false;
-    });
+    newStore
+      .editors
+      .forEach((value) => {
+        value.executing = false;
+      });
 
     // Outputs:
-    newStore.outputs.forEach((value, key, map) => {
-      map.set(key, observable(value));
-    });
+    newStore
+      .outputs
+      .forEach((value, key, map) => {
+        map.set(key, observable(value));
+      });
 
     // OutputPanel:
     newStore.outputPanel.clearingOutput = false;
@@ -229,9 +224,15 @@ export default class Store {
     newStore.profileList.creatingNewProfile = false;
 
     // Profiles:
-    newStore.profiles.forEach((value) => {
-      value.status = 'CLOSED';
-    });
+    newStore
+      .profiles
+      .forEach((value) => {
+        value.status = 'CLOSED';
+      });
+
+    // Tree Panel:
+    newStore.treePanel.isRefreshing = false;
+    newStore.treePanel.isRefreshDisabled = false;
   }
 
   load() {
@@ -241,40 +242,35 @@ export default class Store {
       .then(({content}) => {
         this.restore(content);
         // Init Globalize required json
-        Globalize.load(
-          require('cldr-data/main/en/ca-gregorian.json'),
-          require('cldr-data/supplemental/likelySubtags.json')
-        );
+        Globalize.load(require('cldr-data/main/en/ca-gregorian.json'), require('cldr-data/supplemental/likelySubtags.json'));
       })
       .catch((err) => {
         console.log(err);
       })
       .then(() => {
         if (IS_ELECTRON) {
-          _.delay(
-            () => {
-              ipcRenderer.send('appReady');
-            },
-            200
-          );
+          _.delay(() => {
+            ipcRenderer.send('appReady');
+          }, 200);
         }
       });
   }
 
   save() {
-    this.closeConnection().then(() => {
-      featherClient()
-        .service('files')
-        .create({
-          _id: path.resolve('/tmp/stateStore.json'),
-          content: this.dump()
-        })
-        .then(() => {
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    this
+      .closeConnection()
+      .then(() => {
+        featherClient()
+          .service('files')
+          .create({
+            _id: path.resolve('/tmp/stateStore.json'),
+            content: this.dump()
+          })
+          .then(() => {})
+          .catch((err) => {
+            console.log(err);
+          });
+      });
   }
 
   constructor() {
