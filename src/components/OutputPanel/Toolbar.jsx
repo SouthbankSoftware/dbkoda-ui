@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-19T14:01:08+10:00
+ * @Last modified time: 2017-05-22T14:02:36+10:00
 */
 
 import React from 'react';
@@ -20,8 +20,6 @@ import {
 } from '@blueprintjs/core';
 import { featherClient } from '~/helpers/feathers';
 import EventLogging from '#/common/logging/EventLogging';
-
-const Globalize = require('globalize');
 
 /**
  * The OutputPanel toolbar, which hold the commands and actions specific to the output panel
@@ -193,12 +191,12 @@ export default class Toolbar extends React.Component {
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">{Globalize.formatMessage('output/heading')}</div>
+          <div className="pt-navbar-heading">{globalString('output/heading')}</div>
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
             inline
-            content={Globalize.formatMessage('output/toolbar/clear')}
+            content={globalString('output/toolbar/clear')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >
@@ -211,7 +209,7 @@ export default class Toolbar extends React.Component {
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
             inline
-            content={Globalize.formatMessage('output/toolbar/showMore')}
+            content={globalString('output/toolbar/showMore')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >
@@ -231,7 +229,7 @@ export default class Toolbar extends React.Component {
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
             inline
-            content={Globalize.formatMessage('output/toolbar/save')}
+            content={globalString('output/toolbar/save')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
           >

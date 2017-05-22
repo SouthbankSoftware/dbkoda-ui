@@ -24,9 +24,9 @@ const generateFetchComments = (stage) => {
     Object.keys(stage.filter).map((filter) => {
       filterStr[filter] = stage.filter[filter];
     });
-    return `Documents from previous step where scanned looking for these criteria: ${JSON.stringify(filterStr)}.`;
+    return globalString('explain/step/fetchFilter', JSON.stringify(filterStr));
   }
-  return globalString('explain/comments/fetch/index');
+  return globalString('explain/step/fetchIndex');
 };
 
 const generateCollScanComments = (stage) => {
@@ -40,9 +40,9 @@ const generateCollScanComments = (stage) => {
     fullScan = true;
   }
   if (fullScan) {
-    return globalString('explain/comments/collscan/fullscan');
+    return globalString('explain/step/collScanAll');
   }
-  return `Documents were scanned looking for these criteria: ${JSON.stringify(filterStr)}`;
+  return globalString('explain/step/collScanFilter', JSON.stringify(filterStr));
 };
 
 const generateIxscanComments = (stage) => {
@@ -51,26 +51,26 @@ const generateIxscanComments = (stage) => {
   if ('keyPattern' in stage) {
     columnList = Object.keys(stage.keyPattern).join(',');
   }
-  return `Index ${idxName} was used to find matching values for ${columnList}`;
+  return globalString('explain/step/ixscan', idxName, columnList);
 };
 
 const generateSortComments = (stage) => {
   const sortPattern = stage.sortPattern;
-  return `Documents were sorted on : ${Object.keys(sortPattern)}. Consider creating index on ${Object.keys(sortPattern)} to support the sort`;
+  return globalString('explain/step/sort', Object.keys(sortPattern));
 };
 
 const generateLimitComments = (stage) => {
   if ('limitAmount' in stage) {
-    return `Limited documents returned : ${stage.limitAmount}`;
+    return globalString('explain/step/limit', stage.limitAmount);
   }
-  return globalString('explain/comments/limit/error');
+  return globalString('explain/step/limit', '?');
 };
 
 const generateSkipComments = (stage) => {
   if ('skipAmount' in stage) {
-    return `Skiped Forward : ${stage.skipAmount}`;
+    return globalString('explain/step/skip', stage.skipAmount);
   }
-  return globalString('explain/comments/skip/error');
+  return globalString('explain/step/skip', '?');
 };
 
 /**
@@ -84,11 +84,11 @@ export const generateComments = (stage) => {
   switch (stageName) {
     case SINGLE_SHARD:
       shard = stage.shards && stage.shards.length > 0 && stage.shards[0];
-      return `A single shard ${shard.shardName} was involved in the query `;
+      return globalString('explain/step/singleShard', shard.shardName);
     case IXSCAN:
       return generateIxscanComments(stage);
     case SORT_KEY_GENERATOR:
-      return 'Generate keys for the next sort step';
+      return globalString('explain/step/generateKeys');
     case COLLSCAN:
       return generateCollScanComments(stage);
     case FETCH:
@@ -96,19 +96,19 @@ export const generateComments = (stage) => {
     case SORT:
       return generateSortComments(stage);
     case SHARDING_FILTER:
-      return globalString('explain/comments/shard/filter');
+      return globalString('explain/step/shardingFilter');
     case SHARD_MERGE_SORT:
-      return globalString('explain/comments/shard/mergesort');
+      return globalString('explain/step/shardMergeSort');
     case SHARD_MERGE:
-      return globalString('explain/comments/shard/merge');
+      return globalString('explain/step/shardMerge');
     case KEEP_MUTATIONS:
-      return globalString('explain/comments/keepmutation');
+      return globalString('explain/step/keepMutations');
     case SUBPLAN:
-      return globalString('explain/comments/subplan');
+      return globalString('explain/step/subplan');
     case EOF:
-      return globalString('explain/comments/eof');
+      return globalString('explain/step/eof');
     case AND_SORTED:
-      return globalString('explain/comments/andsorted');
+      return globalString('explain/step/andSorted');
     case LIMIT:
       return generateLimitComments(stage);
     case SKIP:

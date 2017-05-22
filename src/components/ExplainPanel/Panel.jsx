@@ -1,4 +1,12 @@
 /**
+ * @Author: chris
+ * @Date:   2017-05-19T16:25:22+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-22T14:01:30+10:00
+ */
+
+/**
  * show explain graphically
  *
  */
@@ -8,20 +16,18 @@ import './style.scss';
 import RawJson from './RawJson';
 import ExplainView from './ExplainView';
 
-const Globalize = require('globalize');
-
 export const Header = ({viewType, switchExplainView}) => {
   return (<div className="explain-header">
     <span className="explain-label">
-      {Globalize.formatMessage('explain/heading')}
+      {globalString('explain/heading')}
     </span>
     <Button
       className="pt-label explain-view-switch-button"
       onClick={switchExplainView}>
       {
         viewType === 0 ?
-          Globalize.formatMessage('explain/panel/rawView') :
-          Globalize.formatMessage('explain/panel/explainView')
+          globalString('explain/panel/rawView') :
+          globalString('explain/panel/explainView')
       }
     </Button>
   </div>);
