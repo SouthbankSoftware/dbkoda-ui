@@ -12,11 +12,9 @@
 
 import React from 'react';
 import {toJS} from 'mobx';
-import CodeMirror from 'react-codemirror';
-import CM from 'codemirror';
-import Prettier from 'prettier';
 import './style.scss';
 import {generateComments} from './ExplainStep';
+import QueryCommandView from './QueryCommandView';
 
 export const Stage = ({stage}) => {
   return (<div className="explain-stage">
@@ -166,39 +164,8 @@ const ShardStatisticView = ({explains}) => {
   </div>);
 };
 
-const options = {
-  smartIndent: true,
-  theme: 'material',
-  readOnly: true,
-  lineWrapping: false,
-  tabSize: 2,
-  matchBrackets: true,
-  keyMap: 'sublime',
-  mode: 'MongoScript'
-};
-
 const CommandPanel = ({command, namespace}) => {
-  const formatted = Prettier.format(command, {});
-  setTimeout(() => {
-    const cm = this.editor && this.editor.getCodeMirror();
-    cm && cm.setValue(formatted);
-  }, 500);
-  return (<div className="explain-command-panel">
-    <div className="namespace">
-      <div className="label">{globalString('explain/view/namespaceLabel')}</div>
-      <div className="value">{namespace}</div>
-    </div>
-    <div className="codemirror">
-      <div className="label">{globalString('explain/view/queryLabel')}</div>
-      <CodeMirror
-        ref={(cm) => {
-          this.editor = cm;
-        }}
-        codeMirrorInstance={CM}
-        value={command}
-        options={options} />
-    </div>
-  </div>);
+  return <QueryCommandView command={command} namespace={namespace}/>;
 };
 
 const ExplainView = ({explains}) => {

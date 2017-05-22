@@ -296,11 +296,31 @@ $contentColor: white;
         color: $explainLabelColor;
       }
     }
-    .codemirror {
-    }
     .label {
       color: rgb(22, 160, 187);
     }
+  }
+}
+
+.explain-error-panel{
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
+  background-color: $explainPanelBKColor;
+
+  .header{
+    margin: 20px 0px;
+    color: $explainLabelColor;
+  }
+
+  .output{
+    color: $explainLabelColor;
+    margin: 20px 0px;
+
+  }
+  .label {
+    color: rgb(22, 160, 187);
   }
 }
 

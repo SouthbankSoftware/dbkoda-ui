@@ -12,9 +12,12 @@
  */
 import React from 'react';
 import {Button} from '@blueprintjs/core';
+import CodeMirror from 'react-codemirror';
+import CM from 'codemirror';
 import './style.scss';
 import RawJson from './RawJson';
 import ExplainView from './ExplainView';
+import QueryCommandView from './QueryCommandView';
 
 export const Header = ({viewType, switchExplainView}) => {
   return (<div className="explain-header">
@@ -35,7 +38,12 @@ export const Header = ({viewType, switchExplainView}) => {
 
 const Panel = ({editor, switchExplainView, viewType}) => {
   if (editor.explains && editor.explains.error) {
-    return (<div>{editor.explains.error}</div>);
+    console.log('explain has error ', editor.explains);
+    return (<div className="explain-error-panel">
+      <div className="header">Failed to parse explain output</div>
+      <QueryCommandView command={editor.explains.command} />
+      <div className="output">{editor.explains.output}</div>
+    </div>);
   }
   return (<div className="explain-panel">
     <Header switchExplainView={switchExplainView} viewType={viewType} />
