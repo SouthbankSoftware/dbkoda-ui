@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   chris
- * @Last modified time: 2017-05-10T14:49:05+10:00
+ * @Last modified time: 2017-05-22T16:29:25+10:00
  */
 
 /**
@@ -114,7 +114,7 @@ export class ProfileForm extends MobxReactForm {
         extend: ($validator) => {
           // here we can access the `validatorjs` instance
           const messages = $validator.getMessages('en');
-          messages.required = ':attribute field is required.';
+          messages.required = globalString('connection/form/requiredMessage');
           $validator.setMessages('en', messages);
         },
       },
