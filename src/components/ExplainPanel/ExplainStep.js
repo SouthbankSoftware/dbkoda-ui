@@ -24,7 +24,7 @@ const generateFetchComments = (stage) => {
     Object.keys(stage.filter).map((filter) => {
       filterStr[filter] = stage.filter[filter];
     });
-    return `Documents from previous step where scanned looking for these criteria: ${JSON.stringify(filterStr)}. Consider creating covering index on ${Object.keys(stage.filter)}`;
+    return `Documents from previous step where scanned looking for these criteria: ${JSON.stringify(filterStr)}.`;
   }
   return 'Retrieved documents from index fetch';
 };
