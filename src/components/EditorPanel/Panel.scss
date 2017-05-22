@@ -6,518 +6,530 @@
 @import '../../styles/_defaultTheme.scss';
 // Panel CSS
 .editorPanel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .notVisible {
+    display: none;
+  }
+  .editorToolbar {
+    overflow-x: scroll;
+    height: 80px;
+    background-color: $navbarRightBackground !important;
+    .leftEditorToolbar {
+      .leftButtonGroup {
+        .editorContextDropdownWrapper {
+          border: 1px solid $selectDarkBorderColor;
+          background-color: $selectDarkPrimaryBackground !important;
+          .editorContextDropdown {
+            outline: unset;
+            background-color: $selectDarkPrimaryBackground;
+            border-right: 1px solid $selectDarkBorderColor !important;
+            padding-right: 24px !important;
+            padding-left: 5px;
+            width: 100%;
+          }
+        }
+      }
+      .pt-align-right {
+        span {
+          a {
+            width: 30px;
+            height: 30px;
+          }
+        }
+      }
+    }
+  }
+  .editorTabView {
+    background-color: $editorBackground;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    .notVisible {
-        display: none;
-    }
-    .editorToolbar {
-        overflow-x: scroll;
-        background-color: $navbarRightBackground !important;
-        .leftEditorToolbar {
-            .leftButtonGroup {
-                .editorContextDropdownWrapper {
-                    border: 1px solid $selectDarkBorderColor;
-                    background-color: $selectDarkPrimaryBackground !important;
-                    .editorContextDropdown {
-                        outline: unset;
-                        background-color: $selectDarkPrimaryBackground;
-                        border-right: 1px solid $selectDarkBorderColor !important;
-                        padding-right: 24px !important;
-                        padding-left: 5px;
-                        width: 100%;
-                    }
-                }
-            }
-            .pt-align-right {
-                span {
-                    a {
-                        width: 30px;
-                        height: 30px;
-                    }
-                }
-            }
+    flex-grow: 1;
+    .pt-tab-list {
+      background-color: $tabBackground;
+      margin-left: 0px;
+      .pt-tab {
+        margin-right: unset;
+        color: $tabFontColor;
+        background-color: $tabBackground;
+        border-right: 1px solid $editorBackground;
+        outline: unset;
+        box-shadow: unset;
+      }
+      .pt-tab[aria-selected="true"] {
+        box-shadow: unset;
+        background-color: $tabBackgroundSelected;
+      }
+      .pt-tab:hover {
+        color: $white !important;
+      }
+      .welcomeTab {
+        background-color: $welcomeViewBackgroundColor !important;
+        font-family: unset;
+        padding-left: 10px;
+        padding-right: 5px;
+        flex-grow: initial;
+      }
+      .editorTab {
+        padding-left: 5px;
+        padding-right: 5px;
+        flex-grow: unset;
+        button {
+          float: right;
         }
+      }
     }
-    .editorTabView {
-        background-color: $editorBackground;
+    .editorTab {
+      margin-top: 0px;
+      flex-grow: 1;
+      .editorView {
+        flex: 1;
+        width: 100%;
+      }
+    }
+    .welcomeTab {
+      font-family: "Arial", Arial, Helvetica, sans-serif;
+      background-color: $welcomeViewBackgroundColor;
+      flex-grow: 1;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: scroll;
+      margin-top: 0px;
+      color: $welcomeViewFontColor;
+      .welcomePanelWrapper {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        .pt-tab-list {
-            background-color: $tabBackground;
-            margin-left: 0px;
-            .pt-tab {
-                margin-right: unset;
-                color: $tabFontColor;
-                background-color: $tabBackground;
-                border-right: 1px solid $editorBackground;
-                outline: unset;
-                box-shadow: unset;
-            }
-            .pt-tab[aria-selected="true"] {
-                box-shadow: unset;
-                background-color: $tabBackgroundSelected;
-            }
-            .pt-tab:hover {
-                color: $white !important;
-            }
-            .welcomeTab {
-                background-color: $welcomeViewBackgroundColor !important;
-                font-family: unset;
-                padding-left: 10px;
-                padding-right: 5px;
-                flex-grow: initial;
-            }
-            .editorTab {
-                padding-left: 5px;
-                padding-right: 5px;
-                flex-grow: unset;
-                button {
-                    float: right;
-                }
-            }
+        background-color: $welcomeViewBackgroundColor;
+        margin-top: 30px;
+        margin-left: 30px;
+        margin-bottom: 30px;
+        h1 {
+          color: $welcomeViewFontColor;
+          font-size: 24px;
+          order: 1;
+          font-size: 10;
         }
-        .editorTab {
-            margin-top: 0px;
-            flex-grow: 1;
-            .editorView {
-                flex: 1;
-                width: 100%;
-            }
-        }
-        .welcomeTab {
-            font-family: "Arial", Arial, Helvetica, sans-serif;
-            background-color: $welcomeViewBackgroundColor;
-            flex-grow: 1;
+        .welcomeMiddleSection {
+          order: 2;
+          display: flex;
+          flex-direction: row;
+          .welcomeMenuWrapper {
+            margin-top: 30px;
+            display: flex;
             flex-direction: column;
-            height: 100%;
-            overflow-y: scroll;
-            margin-top: 0px;
-            color: $welcomeViewFontColor;
-            .welcomePanelWrapper {
+            order: 1;
+            flex-grow: 0;
+            flex-shrink: 0;
+            .welcomeMenu {
+              display: flex;
+              padding-right: 10%;
+              border-right: 1px solid $welcomeViewDividerTransparent;
+              flex-grow: 1;
+              flex-shrink: 0;
+              flex-direction: column;
+              h2 {
+                color: $welcomeViewFontColor;
+                font-size: 18px;
+                order: 1;
+                flex-grow: 1;
+              }
+              .welcomeButtons {
+                order: 2;
                 display: flex;
                 flex-direction: column;
-                flex-grow: 1;
-                background-color: $welcomeViewBackgroundColor;
-                margin-top: 30px;
-                margin-left: 30px;
-                margin-bottom: 30px;
-                h1 {
-                    color: $welcomeViewFontColor;
-                    font-size: 24px;
-                    order: 1;
-                    font-size: 10;
+                flex-grow: 5;
+                flex-shrink: 0;
+                .welcomeButtonWrapper {
+                  display: flex;
+                  flex-direction: row;
+                  order: 1;
+                  flex-grow: 1;
+                  flex-shrink: 0;
+                  padding-bottom: 20px;
+                  .welcomeMenuButton {
+                    color: $welcomeViewOptoutFontColor;
+                    flex-grow: 1;
+                    background: unset;
+                    box-shadow: unset;
+                    border: 1px solid $welcomeViewButtonBorderColor;
+                    border-radius: 0.75em;
+                  }
+                  .welcomeMenuButton:hover {
+                    background-color: $welcomeViewButtonHoverColor;
+                  }
                 }
-                .welcomeMiddleSection {
-                    order: 2;
+              }
+              .welcomeMenuOptOut {
+                display: flex;
+                flex-direction: row;
+                margin-top: 5px;
+                order: 3;
+                flex-grow: 1;
+                flex-shrink: 0;
+                color: $welcomeViewButtonBorderColor;
+                span {
+                }
+                p {
+                }
+              }
+            }
+          }
+          .welcomeContentWrapper {
+            width: 600px;
+            margin-top: 30px;
+            order: 2;
+            flex-grow: 1;
+            flex-shrink: 0;
+            .welcomePageContentWrapper {
+              display: flex;
+              flex-direction: row;
+              height: 100%;
+              .welcomePageContentLeft {
+                color: $welcomeViewSocialMediaText;
+                padding-left: 2%;
+                padding-right: 2%;
+                border-right: 1px solid $welcomeViewDividerTransparent;
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+                h2 {
+                  color: $welcomeViewFontColor;
+                  font-size: 18px;
+                }
+                p {
+                  color: $welcomeViewFontColorDark;
+                }
+                .docsList {
+                  display: flex;
+                  flex-direction: column;
+                  .documentationLinkWrapper {
+                    padding-bottom: 10%;
+                    flex-grow: 1;
                     display: flex;
                     flex-direction: row;
-                    .welcomeMenuWrapper {
-                        margin-top: 30px;
-                        display: flex;
-                        flex-direction: column;
-                        order: 1;
-                        flex-grow: 0;
-                        flex-shrink: 0;
-                        .welcomeMenu {
-                            display: flex;
-                            padding-right: 10%;
-                            border-right: 1px solid $welcomeViewDividerTransparent;
-                            flex-grow: 1;
-                            flex-shrink: 0;
-                            flex-direction: column;
-                            h2 {
-                                color: $welcomeViewFontColor;
-                                font-size: 18px;
-                                order: 1;
-                                flex-grow: 1;
-                            }
-                            .welcomeButtons {
-                                order: 2;
-                                display: flex;
-                                flex-direction: column;
-                                flex-grow: 5;
-                                flex-shrink: 0;
-                                .welcomeButtonWrapper {
-                                    display: flex;
-                                    flex-direction: row;
-                                    order: 1;
-                                    flex-grow: 1;
-                                    flex-shrink: 0;
-                                    padding-bottom: 20px;
-                                    .welcomeMenuButton {
-                                        color: $welcomeViewOptoutFontColor;
-                                        flex-grow: 1;
-                                        background: unset;
-                                        box-shadow: unset;
-                                        border: 1px solid $welcomeViewButtonBorderColor;
-                                        border-radius: 0.75em;
-                                    }
-                                    .welcomeMenuButton:hover {
-                                        background-color: $welcomeViewButtonHoverColor;
-                                    }
-                                }
-                            }
-                            .welcomeMenuOptOut {
-                                display: flex;
-                                flex-direction: row;
-                                margin-top: 5px;
-                                order: 3;
-                                flex-grow: 1;
-                                flex-shrink: 0;
-                                color: $welcomeViewButtonBorderColor;
-                                span {}
-                                p {}
-                            }
-                        }
+                    .iconWrapper {
+                      order: 1;
+                      flex-grow: 2;
+                      border-radius: 0.4em;
+                      text-align: center;
+                      .icon {
+                      }
+                      a {
+                        background-color: $welcomeViewIconBG;
+                      }
+                      a:hover {
+                        background-color: $welcomeViewIconBGHover;
+                      }
                     }
-                    .welcomeContentWrapper {
-                        width: 600px;
-                        margin-top: 30px;
-                        order: 2;
-                        flex-grow: 1;
-                        flex-shrink: 0;
-                        .welcomePageContentWrapper {
-                            display: flex;
-                            flex-direction: row;
-                            height: 100%;
-                            .welcomePageContentLeft {
-                                color: $welcomeViewSocialMediaText;
-                                padding-left: 2%;
-                                padding-right: 2%;
-                                border-right: 1px solid $welcomeViewDividerTransparent;
-                                flex-shrink: 0;
-                                display: flex;
-                                flex-direction: column;
-                                h2 {
-                                    color: $welcomeViewFontColor;
-                                    font-size: 18px;
-                                }
-                                p {
-                                    color: $welcomeViewFontColorDark;
-                                }
-                                .docsList {
-                                    display: flex;
-                                    flex-direction: column;
-                                    .documentationLinkWrapper {
-                                        padding-bottom: 10%;
-                                        flex-grow: 1;
-                                        display: flex;
-                                        flex-direction: row;
-                                        .iconWrapper {
-                                            order: 1;
-                                            flex-grow: 2;
-                                            border-radius: 0.4em;
-                                            text-align: center;
-                                            .icon {}
-                                            a {
-                                                background-color: $welcomeViewIconBG;
-                                            }
-                                            a:hover {
-                                                background-color: $welcomeViewIconBGHover;
-                                            }
-                                        }
-                                        p {
-                                            padding-left: 5px;
-                                            flex-grow: 3;
-                                            order: 2;
-                                            text-align: left;
-                                        }
-                                    }
-                                }
-                                .linksList {
-                                    display: flex;
-                                    flex-direction: row;
-                                    flex-grow: 1;
-                                    .linkWrapper {
-                                        flex-grow: 1;
-                                        display: flex;
-                                        flex-direction: column;
-                                        margin-right: 10px;
-                                        a {
-                                            width: 100px;
-                                            border-radius: 50%;
-                                            order: 1;
-                                            flex-grow: 4;
-                                            background-color: $welcomeViewIconBG;
-                                            font-size: 40;
-                                        }
-                                        a:hover {
-                                            background-color: $welcomeViewIconBGHover;
-                                        }
-                                        p {
-                                            flex-grow: 1;
-                                            order: 2;
-                                            text-align: center;
-                                        }
-                                    }
-                                }
-                            }
-                            .welcomePageContentRight {
-                                width: 600px;
-                                padding-left: 5%;
-                                display: flex;
-                                flex-direction: column;
-                                flex-grow: 3;
-                                h2 {
-                                    font-size: 18px;
-                                    color: $welcomeViewFontColor;
-                                }
-                                .feedList {
-                                    .feedItem {
-                                        display: flex;
-                                        flex-direction: row;
-                                        .feedIconWrapper {
-                                            width:30px;
-                                            height:30px;
-                                            margin: 5px;
-                                            padding: 10px;
-                                            background-color: $welcomeViewIconBG;
-                                            color: $welcomeViewIconColor;
-                                        }
-                                        .feedItemContent {
-                                            margin-left: 10px;
-                                            display: flex;
-                                            flex-direction: column;
-                                            .feedItemTitle {
-                                                font-weight: bold;
-                                                font-size: 12;
-                                            }
-                                            .feedItemContent {
-                                                margin-left: 0px;
-                                                width: 600px;
-                                            }
-                                            .feedItemPubDate {
-                                                font-weight: lighter;
-                                                font-size: 8;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        .learnShortcutsWrapper {
-                            height: 300px;
-                            margin-left: 20px;
-                            .hotkeyItem {
-                                background-color: $welcomeViewIconBG;
-                                margin-top:20px;
-                                margin-right: 50px;
-                                padding: 10px;
-                                border-radius: 0.3em;
-                                .hotkeyTitle {
-                                color: $welcomeViewFontColor;
-                                font-size: 18px;
-                                }
-                                p {
-
-                                }
-                            }
-                        }
+                    p {
+                      padding-left: 5px;
+                      flex-grow: 3;
+                      order: 2;
+                      text-align: left;
                     }
+                  }
                 }
+                .linksList {
+                  display: flex;
+                  flex-direction: row;
+                  flex-grow: 1;
+                  .linkWrapper {
+                    flex-grow: 1;
+                    display: flex;
+                    flex-direction: column;
+                    margin-right: 10px;
+                    a {
+                      width: 100px;
+                      border-radius: 50%;
+                      order: 1;
+                      flex-grow: 4;
+                      background-color: $welcomeViewIconBG;
+                      font-size: 40;
+                    }
+                    a:hover {
+                      background-color: $welcomeViewIconBGHover;
+                    }
+                    p {
+                      flex-grow: 1;
+                      order: 2;
+                      text-align: center;
+                    }
+                  }
+                }
+              }
+              .welcomePageContentRight {
+                width: 600px;
+                padding-left: 5%;
+                display: flex;
+                flex-direction: column;
+                flex-grow: 3;
+                h2 {
+                  font-size: 18px;
+                  color: $welcomeViewFontColor;
+                }
+                .feedList {
+                  .feedItem {
+                    display: flex;
+                    flex-direction: row;
+                    .feedIconWrapper {
+                      width: 30px;
+                      height: 30px;
+                      margin: 5px;
+                      padding: 10px;
+                      background-color: $welcomeViewIconBG;
+                      color: $welcomeViewIconColor;
+                    }
+                    .feedItemContent {
+                      margin-left: 10px;
+                      display: flex;
+                      flex-direction: column;
+                      .feedItemTitle {
+                        font-weight: bold;
+                        font-size: 12;
+                      }
+                      .feedItemContent {
+                        margin-left: 0px;
+                        width: 600px;
+                      }
+                      .feedItemPubDate {
+                        font-weight: lighter;
+                        font-size: 8;
+                      }
+                    }
+                  }
+                }
+              }
             }
+            .learnShortcutsWrapper {
+              height: 300px;
+              margin-left: 20px;
+              .hotkeyItem {
+                background-color: $welcomeViewIconBG;
+                margin-top: 20px;
+                margin-right: 50px;
+                padding: 10px;
+                border-radius: 0.3em;
+                .hotkeyTitle {
+                  color: $welcomeViewFontColor;
+                  font-size: 18px;
+                }
+                p {
+
+                }
+              }
+            }
+          }
         }
-    } //// Code Mirror CSS: ////
-    /////////////////////////////
-    div.CodeMirror span.CodeMirror-matchingbracket {
-        color: $white !important;
-        border: 1px solid $keywordFour;
+      }
     }
-    div.CodeMirror span.CodeMirror-nonmatchingbracket {
-        color: $keywordThree !important;
-        border: 1px solid $keywordThree;
+  }
+  //// Code Mirror CSS: ////
+  /////////////////////////////
+  div.CodeMirror span.CodeMirror-matchingbracket {
+    color: $white !important;
+    border: 1px solid $keywordFour;
+  }
+  div.CodeMirror span.CodeMirror-nonmatchingbracket {
+    color: $keywordThree !important;
+    border: 1px solid $keywordThree;
+  }
+  span.cm-property {
+    color: $propFontColor !important;
+  }
+  span.cm-string {
+    color: $stringFontColor !important;
+  }
+  .CodeMirror-overlayscroll-vertical {
+    height: 0% !important;
+  }
+  .CodeMirror-scroll {
+    background-color: $editorBackground;
+    width: 100%;
+  }
+  .CodeMirror,
+  .ReactCodeMirror {
+    height: 100%;
+  }
+  .cm-s-ambiance .CodeMirror-linenumber {
+    color: $white;
+  }
+  .CodeMirror-linebackground {
+    background-color: $editorBackground !important;
+  }
+  .CodeMirror-line {
+    background-color: $editorBackground;
+  }
+  span.cm-mongo-operator {
+    color: $white !important;
+  }
+  .cm-variable {
+    color: $editorDefaultFontColor !important;
+  }
+  span.cm-db {
+    color: $keywordTwo !important;
+  }
+  span.cm-show {
+    color: $keywordOne !important;
+  }
+  span.cm-dbs {
+    color: $keywordTwo !important;
+  }
+  span.cm-use {
+    color: $keywordOne !important;
+  }
+  span.cm-collections {
+    color: $keywordTwo !important;
+  }
+  span.cm-users {
+    color: $keywordTwo !important;
+  }
+  span.cm-roles {
+    color: $keywordTwo !important;
+  }
+  span.cm-profile {
+    color: $keywordTwo !important;
+  }
+  span.cm-databases {
+    color: $keywordTwo !important;
+  }
+  span.cm-it {
+    color: $keywordOne !important;
+  }
+  span.cm-dbenvy-prompt {
+    color: $keywordFour !important;
+  }
+  span.cm-mongos-prompt {
+    color: $keywordFour !important;
+  }
+  .CodeMirror-gutters {
+    background-color: $editorBackground !important;
+    border-right: 1px solid $editorBackground !important;
+    box-shadow: none !important;
+  }
+  .CodeMirror-gutter {
+    background-color: $editorBackground !important;
+  }
+  .CodeMirror-foldmarker {
+    color: $keywordTwo;
+    font-family: arial;
+    line-height: .3;
+    cursor: pointer;
+  }
+  .CodeMirror-foldgutter {
+    width: .7em;
+    margin-right: 5px !important;
+  }
+  .CodeMirror-foldgutter-open {
+    padding-left: 5px !important;
+    padding-left: 5px !important;
+  }
+  .CodeMirrror-foldgutter-folded {
+    padding-left: 5px !important;
+    padding-left: 5px !important;
+  }
+  .cm-s-ambiance .CodeMirror-guttermarker-subtle {
+    color: $white !important;
+    cursor: pointer;
+  }
+  .CodeMirror-foldgutter-open,
+  .CodeMirror-foldgutter-folded {
+    color: #555;
+    cursor: pointer;
+  }
+  .CodeMirror-foldgutter-open:after {
+    content: $downArrow;
+  }
+  .CodeMirror-foldgutter-folded:after {
+    content: $rightArrow;
+  }
+  .CodeMirror-activeline-background {
+    background-color: $editorActiveLine !important;
+  }
+  .CodeMirror-activeline-gutter {
+    background-color: $editorBackground;
+  }
+  .lint-error-icon {
+    color: $keywordThree;
+    font-style: oblique;
+    font-size: 20px;
+    float: right;
+  }
+  .CodeMirror-cursor {
+    border-left: 1px solid $white;
+    border-right: none;
+    width: 0;
+  }
+  /* Shown when moving in bi-directional text */
+  .CodeMirror div.CodeMirror-secondarycursor {
+    border-left: 1px solid silver;
+  }
+  .cm-fat-cursor .CodeMirror-cursor {
+    width: auto;
+    border: 0 !important;
+    background: #7e7;
+  }
+  .cm-fat-cursor div.CodeMirror-cursors {
+    z-index: 1;
+  }
+  .cm-animate-fat-cursor {
+    width: auto;
+    border: 0;
+    -webkit-animation: blink 1.06s steps(1) infinite;
+    -moz-animation: blink 1.06s steps(1) infinite;
+    animation: blink 1.06s steps(1) infinite;
+    background-color: #7e7;
+  }
+  @-moz-keyframes blink {
+    0% {
     }
-    span.cm-property {
-        color: $propFontColor !important;
+    50% {
+      background-color: transparent;
     }
-    span.cm-string {
-        color: $stringFontColor !important;
+    100% {
     }
-    .CodeMirror-overlayscroll-vertical {
-        height: 0% !important;
+  }
+  @-webkit-keyframes blink {
+    0% {
     }
-    .CodeMirror-scroll {
-        background-color: $editorBackground;
-        width: 100%;
+    50% {
+      background-color: transparent;
     }
-    .CodeMirror,
-    .ReactCodeMirror {
-        height: 100%;
+    100% {
     }
-    .cm-s-ambiance .CodeMirror-linenumber {
-        color: $white;
+  }
+  @keyframes blink {
+    0% {
     }
-    .CodeMirror-linebackground {
-        background-color: $editorBackground !important;
+    50% {
+      background-color: transparent;
     }
-    .CodeMirror-line {
-        background-color: $editorBackground;
+    100% {
     }
-    span.cm-mongo-operator {
-        color: $white !important;
-    }
-    .cm-variable {
-        color: $editorDefaultFontColor !important;
-    }
-    span.cm-db {
-        color: $keywordTwo !important;
-    }
-    span.cm-show {
-        color: $keywordOne !important;
-    }
-    span.cm-dbs {
-        color: $keywordTwo !important;
-    }
-    span.cm-use {
-        color: $keywordOne !important;
-    }
-    span.cm-collections {
-        color: $keywordTwo !important;
-    }
-    span.cm-users {
-        color: $keywordTwo !important;
-    }
-    span.cm-roles {
-        color: $keywordTwo !important;
-    }
-    span.cm-profile {
-        color: $keywordTwo !important;
-    }
-    span.cm-databases {
-        color: $keywordTwo !important;
-    }
-    span.cm-it {
-        color: $keywordOne !important;
-    }
-    span.cm-dbenvy-prompt {
-        color: $keywordFour !important;
-    }
-    span.cm-mongos-prompt {
-        color: $keywordFour !important;
-    }
-    .CodeMirror-gutters {
-        background-color: $editorBackground !important;
-        border-right: 1px solid $editorBackground !important;
-        box-shadow: none !important;
-    }
-    .CodeMirror-gutter {
-        background-color: $editorBackground !important;
-    }
-    .CodeMirror-foldmarker {
-        color: $keywordTwo;
-        font-family: arial;
-        line-height: .3;
-        cursor: pointer;
-    }
-    .CodeMirror-foldgutter {
-        width: .7em;
-        margin-right: 5px !important;
-    }
-    .CodeMirror-foldgutter-open {
-        padding-left: 5px !important;
-        padding-left: 5px !important;
-    }
-    .CodeMirrror-foldgutter-folded {
-        padding-left: 5px !important;
-        padding-left: 5px !important;
-    }
-    .cm-s-ambiance .CodeMirror-guttermarker-subtle {
-        color: $white !important;
-        cursor: pointer;
-    }
-    .CodeMirror-foldgutter-open,
-    .CodeMirror-foldgutter-folded {
-        color: #555;
-        cursor: pointer;
-    }
-    .CodeMirror-foldgutter-open:after {
-        content: $downArrow;
-    }
-    .CodeMirror-foldgutter-folded:after {
-        content: $rightArrow;
-    }
-    .CodeMirror-activeline-background {
-        background-color: $editorActiveLine !important;
-    }
-    .CodeMirror-activeline-gutter {
-        background-color: $editorBackground;
-    }
-    .lint-error-icon {
-        color: $keywordThree;
-        font-style: oblique;
-        font-size: 20px;
-        float: right;
-    }
-    .CodeMirror-cursor {
-        border-left: 1px solid $white;
-        border-right: none;
-        width: 0;
-    }
-    /* Shown when moving in bi-directional text */
-    .CodeMirror div.CodeMirror-secondarycursor {
-        border-left: 1px solid silver;
-    }
-    .cm-fat-cursor .CodeMirror-cursor {
-        width: auto;
-        border: 0 !important;
-        background: #7e7;
-    }
-    .cm-fat-cursor div.CodeMirror-cursors {
-        z-index: 1;
-    }
-    .cm-animate-fat-cursor {
-        width: auto;
-        border: 0;
-        -webkit-animation: blink 1.06s steps(1) infinite;
-        -moz-animation: blink 1.06s steps(1) infinite;
-        animation: blink 1.06s steps(1) infinite;
-        background-color: #7e7;
-    }
-    @-moz-keyframes blink {
-        0% {}
-        50% {
-            background-color: transparent;
-        }
-        100% {}
-    }
-    @-webkit-keyframes blink {
-        0% {}
-        50% {
-            background-color: transparent;
-        }
-        100% {}
-    }
-    @keyframes blink {
-        0% {}
-        50% {
-            background-color: transparent;
-        }
-        100% {}
-    }
-    /* Can style cursor different in overwrite (non-insert) mode */
-    .CodeMirror-overwrite .CodeMirror-cursor {}
-    .cm-tab {
-        display: inline-block;
-        text-decoration: inherit;
-    }
-    .CodeMirror-rulers {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -50px;
-        bottom: -20px;
-        overflow: hidden;
-    }
-    .CodeMirror-ruler {
-        border-left: 1px solid #ccc;
-        top: 0;
-        bottom: 0;
-        position: absolute;
-    }
-    .CodeMirror-selectedtext {
-        background-color: $editorSelectText !important;
-    }
+  }
+  /* Can style cursor different in overwrite (non-insert) mode */
+  .CodeMirror-overwrite .CodeMirror-cursor {
+  }
+  .cm-tab {
+    display: inline-block;
+    text-decoration: inherit;
+  }
+  .CodeMirror-rulers {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -50px;
+    bottom: -20px;
+    overflow: hidden;
+  }
+  .CodeMirror-ruler {
+    border-left: 1px solid #ccc;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+  }
+  .CodeMirror-selectedtext {
+    background-color: $editorSelectText !important;
+  }
 }
