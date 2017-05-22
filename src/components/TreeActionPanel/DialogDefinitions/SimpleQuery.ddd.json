@@ -1,0 +1,133 @@
+{
+    "Title": "Simple Query",
+    "AutoExecute": true,
+    "DefaultValues": {
+        "function": "dbenvy_SimpleQueryPreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parentDB"
+        }, {
+            "name": "CollectionName",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true,
+            "rules": "required"
+        },
+        {
+            "name": "CollectionName",
+            "type": "Text",
+            "readOnly": true,
+            "rules": "required"
+        },
+        {
+            "name": "UseOr",
+            "label": "Use Or?",
+            "tooltip": "If true, will us OR across filter conditions",
+            "type": "Boolean",
+            "readOnly": false
+        },
+        {
+            "name": "FilterKeys",
+            "label": "Filter conditions",
+            "type": "Table",
+            "columns": [{
+                    "name": "AttributeName",
+                    "label": "Attribute",
+                    "tooltip": "Name of the attribute to be filtered",
+                    "type": "Combo",
+                    "lookup": "dbenvyListAttributes",
+                    "lookup_arguments": [{
+                            "name": "db",
+                            "value": "treeNode.parentDB"
+                        },
+                        {
+                            "name": "collection",
+                            "value": "treeNode"
+                        }
+                    ]
+
+                },
+                {
+                    "name": "Value",
+                    "Label": "Value to filter",
+                    "type": "Text",
+                    "tooltip": "Enter the value to search for (quote strings please)"
+                }
+            ]
+        },
+        {
+            "name": "IncludeProjection",
+            "type": "Boolean",
+            "label": "Include Projection attributes?",
+            "tooltip": "If true, projected attributes will be included, if false excluded"
+        },
+        {
+            "name": "Projections",
+            "type": "Table",
+            "columns": [{
+                "name": "AttributeName",
+                "label": "Attribute",
+                "tooltip": "Name of the attribute to be Projected",
+                "type": "Combo",
+                "lookup": "dbenvyListAttributes",
+                "lookup_arguments": [{
+                        "name": "db",
+                        "value": "treeNode.parentDB"
+                    },
+                    {
+                        "name": "collection",
+                        "value": "treeNode"
+                    }
+                ]
+            }]
+        },
+        {"name":"Sort",
+        "Label":"Sort results?",
+        "type":"Boolean"},
+        {
+            "name": "SortKeys",
+            "lable": "Sort columns",
+            "type": "Table",
+            "columns": [{
+                    "name": "AttributeName",
+                    "label": "Attribute",
+                    "tooltip": "Name of the attribute to be indexed",
+                    "type": "Combo",
+                    "lookup": "dbenvyListAttributes",
+                    "lookup_arguments": [{
+                            "name": "db",
+                            "value": "treeNode.parentDB"
+                        },
+                        {
+                            "name": "collection",
+                            "value": "treeNode"
+                        }
+                    ]
+
+                },
+                {
+                    "name": "Direction",
+                    "Label": "Ascending?",
+                    "type": "Select",
+                    "tooltip": "1 for ascending sort, -1 for descending sort",
+                    "lookup": "dbenvy_sortOptions" 
+                }
+            ]
+        },
+        {
+            "name": "Limit",
+            "tooltip": "Limit on number of rows returned",
+            "type": "Numeric",
+            "rules": "integer"
+        },
+        {
+            "name": "Count",
+            "tooltip": "Just Return a count of values",
+            "type": "Boolean"
+        }
+    ]
+}

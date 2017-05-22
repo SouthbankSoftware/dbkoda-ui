@@ -2,13 +2,15 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-16T14:49:26+10:00
+// @Last modified time: 2017-05-22T12:45:53+10:00
 @import '../../styles/_defaultTheme.scss';
 
 
 .dynamic-form {
   div > form {
     margin: 30px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .form-title {
@@ -74,7 +76,7 @@
   }
 
   .tableFieldSet {
-    margin: 0 -15px 15px -15px;
+    // margin: 0 -15px 15px -15px;
     border-style: none;
     background-color: $fieldGroupPrimaryBackground;
 
@@ -90,6 +92,10 @@
       .pt-popover-target {
         width: 90%;
       }
+    }
+    .scrollableDiv {
+      max-height: 228px;
+      overflow: auto;
     }
   }
   .form-button-panel {
@@ -146,11 +152,11 @@
   }
 
   .table-field-90 {
-    width: 90%
+    width: 90% !important;
   }
 
   .table-field-80 {
-    width: 80%
+    width: 80% !important;
   }
 
   .right-button {

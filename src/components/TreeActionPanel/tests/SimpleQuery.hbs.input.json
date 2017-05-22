@@ -1,0 +1,22 @@
+{
+    "Database": "test",
+    "CollectionName": "randomCollectionName",
+    "UseOr": true,
+    "FilterKeys": [{
+            "AttributeName": "a",
+            "Value": 1
+        },
+        {
+            "AttributeName": "b",
+            "Value": 3,
+            "last": 1
+        }
+    ],
+    "IncludeProjection": 1,
+    "Projections": [{
+        "AttributeName": "d"
+    }],
+    "Sort":true,
+    "SortKeys":[{"AttributeName":"a","Direction":-1}],
+    "Limit":10,"Count":false
+}
