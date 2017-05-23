@@ -169,9 +169,11 @@
                 flex-grow: 1;
                 flex-shrink: 0;
                 color: $welcomeViewButtonBorderColor;
-                span {
-                }
-                p {
+                .pt-control {
+                  span {
+                             //         border-radius: 50%;
+                  }
+
                 }
               }
             }
@@ -305,8 +307,9 @@
             .learnShortcutsWrapper {
               height: 300px;
               margin-left: 20px;
+              overflow-y: scroll;
               .hotkeyItem {
-                background-color: $welcomeViewIconBG;
+                background-color: $welcomeViewKeyboardShortcutsBG;
                 margin-top: 20px;
                 margin-right: 50px;
                 padding: 10px;
