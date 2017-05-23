@@ -10,5 +10,6 @@ module.exports = {
   protocol,
   host,
   port,
-  url
+  url,
+  storeFile: '/tmp/stateStore.json'
 };
