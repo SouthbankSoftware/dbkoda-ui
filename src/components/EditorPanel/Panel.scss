@@ -242,13 +242,20 @@
                     display: flex;
                     flex-direction: column;
                     margin-right: 10px;
-                    a {
+                    a{
                       width: 100px;
                       border-radius: 50%;
                       order: 1;
                       flex-grow: 4;
                       background-color: $welcomeViewIconBG;
                       font-size: 40;
+                    }
+                    .twitterIcon {
+                      background-image: url('../../styles/icons/arbiters-icon.svg');
+                    }
+                    .gitHubIcon {
+                      background-image: url('../../styles/icons/arbiters-icon.svg');
+
                     }
                     a:hover {
                       background-color: $welcomeViewIconBGHover;
