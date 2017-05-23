@@ -3,14 +3,13 @@
  * @Date:   2017-05-22T09:11:48+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T16:29:16+10:00
+ * @Last modified time: 2017-05-23T17:04:27+10:00
  */
 
 import React from 'react';
 
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { DrawerPanes } from '#/common/Constants';
 import View from './View';
 import DetailsBuilder from './DetailsBuilder';
 
