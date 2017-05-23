@@ -8,7 +8,6 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const GlobalizePlugin = require('globalize-webpack-plugin');
 
-
 module.exports = {
   context: path.resolve(__dirname, '../src'),
   entry: [
@@ -16,12 +15,11 @@ module.exports = {
     'react-hot-loader/patch',
 
     'babel-polyfill',
-    // bundle the client for webpack-dev-server
-    // and connect to the provided endpoint
+    // bundle the client for webpack-dev-server and connect to the provided endpoint
     'webpack-dev-server/client?http://localhost:3000',
 
-    // bundle the client for hot reloading
-    // only- means to only hot reload for successful updates
+    // bundle the client for hot reloading only- means to only hot reload for
+    // successful updates
     'webpack/hot/only-dev-server',
 
     // Load Globalize so libraries can be built
@@ -54,70 +52,66 @@ module.exports = {
         test: /\.(jsx?)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
-      },
-      {
+      }, {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
-      },
-      {
+      }, {
         test: /\.scss$/,
         use: [
           {
             loader: 'style-loader'
-          },
-          {
+          }, {
             loader: 'css-loader',
             options: {
               sourceMap: true
             }
-          },
-          {
+          }, {
             loader: 'sass-loader',
             options: {
               sourceMap: true
             }
           }
         ]
-      },
-      {
-        test: /\.(jpe?g|png|gif|svg)$/i,
+      }, {
+        test: /\.(jpe?g|png|gif)$/i,
+        use: ['file-loader?hash=sha512&digest=hex&name=assets/[hash].[ext]', 'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false']
+      }, {
+        test: /\.(svg)$/i,
         use: [
-          'file-loader?hash=sha512&digest=hex&name=assets/[hash].[ext]',
           {
+            loader: 'file-loader',
+            options: {
+              query: {
+                name: 'assets/[name].[ext]'
+              }
+            }
+          }, {
             loader: 'image-webpack-loader',
-            query: {
-              mozjpeg: {
-                progressive: true,
-              },
-              gifsicle: {
-                interlaced: false,
-              },
-              optipng: {
-                optimizationLevel: 4,
-              },
-              pngquant: {
-                quality: '75-90',
-                speed: 3,
-              },
-            },
+            options: {
+              query: {
+                mozjpeg: {
+                  progressive: true
+                },
+                gifsicle: {
+                  interlaced: true
+                },
+                optipng: {
+                  optimizationLevel: 7
+                }
+              }
+            }
           }
-
         ]
-      },
-      {
-        test: /\.(png|svg|woff|eot|ttf|woff2)(\?.*$|$)/,
+      }, {
+        test: /\.(png|woff|eot|ttf|woff2)(\?.*$|$)/,
         loader: 'url-loader?limit=100000&mimetype=application/font-woff'
-      },
-      {
+      }, {
         test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file-loader?name=images/[hash].[ext]'
-      },
-      {
+      }, {
         test: /\.handlebars|hbs$/,
-        loader: 'handlebars-loader?helperDirs[]=' +
-          path.join(__dirname, '../src/helpers/handlebars')
-      },
-      {
+        loader: 'handlebars-loader?helperDirs[]=' + path.join(__dirname, '../src/helpers/handlebars')
+      }, {
         test: /node_modules\/JSONStream\/index\.js$/,
         use: ['shebang-loader', 'babel-loader']
       }
@@ -135,14 +129,8 @@ module.exports = {
     // enable HMR globally
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
-    new HtmlWebpackPlugin({ hash: false, template: './index.html' }),
-    new GlobalizePlugin({
-      production: false,
-      developmentLocale: 'en',
-      supportedLocales: ['en'],
-      messages: 'src/messages/[locale].json',
-      output: 'i18n/[locale].[hash].js'
-    })
+    new HtmlWebpackPlugin({hash: false, template: './index.html'}),
+    new GlobalizePlugin({production: false, developmentLocale: 'en', supportedLocales: ['en'], messages: 'src/messages/[locale].json', output: 'i18n/[locale].[hash].js'})
   ],
   node: {
     fs: 'empty',

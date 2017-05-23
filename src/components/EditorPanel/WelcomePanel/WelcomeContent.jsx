@@ -86,11 +86,15 @@ export default class WelcomeContent extends React.Component {
             <h2>Links</h2>
             <div className="linksList">
               <div className="linkWrapper">
-                <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-envelope twitterIcon" />
+                <AnchorButton className="gitHubIcon">
+                  <i className="icon twitterIcon" />
+                </AnchorButton>
                 <p>Twitter</p>
               </div>
               <div className="linkWrapper">
-                <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-code gitHubIcon" />
+                <AnchorButton className="gitHubIcon">
+                  <i className="icon gitHubIcon" />
+                </AnchorButton>
                 <p>Github</p>
               </div>
             </div>
