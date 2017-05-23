@@ -164,6 +164,13 @@
         "searchTooltip": "Enter a string to search for Profiles",
         "searchPlaceholder": "Filter Profiles..."
       }
+    },
+    "tree": {
+      "executeButton": "Execute",
+      "closeButton": "Close",
+      "submitButton": "Submit",
+      "genericValidateError": "This is a generic error message!",
+      "fieldRequired": ":attribute field is required."
     }
   }
 }
