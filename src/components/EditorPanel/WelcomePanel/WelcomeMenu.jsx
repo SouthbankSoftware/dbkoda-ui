@@ -39,6 +39,16 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
+  showAtLaunchChanged(event) {
+    console.log(event.target.value);
+    if (this.props.store.userPreferences.showWelcomePageAtStart) {
+      this.props.store.userPreferences.showWelcomePageAtStart = false;
+    } else {
+      this.props.store.userPreferences.showWelcomePageAtStart = true;
+    }
+  }
+
+  @action.bound
   chooseTheme() {
     this.props.store.welcomePage.currentContent = 'Choose Theme';
   }
@@ -77,7 +87,7 @@ export default class Panel extends React.Component {
           </div>
         </div>
         <div className="welcomeMenuOptOut">
-          <Checkbox checked={this.props.store.userPreferences.showWelcomePageAtStart} />
+          <Checkbox checked={this.props.store.userPreferences.showWelcomePageAtStart} onChange={this.showAtLaunchChanged} />
           <p>Show welcome Screen when opening DBEnvy</p>
         </div>
       </div>

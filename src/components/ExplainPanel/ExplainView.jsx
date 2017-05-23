@@ -12,11 +12,9 @@
 
 import React from 'react';
 import {toJS} from 'mobx';
-import CodeMirror from 'react-codemirror';
-import CM from 'codemirror';
-import Prettier from 'prettier';
 import './style.scss';
 import {generateComments} from './ExplainStep';
+import QueryCommandView from './QueryCommandView';
 
 export const Stage = ({stage}) => {
   return (<div className="explain-stage">
@@ -59,7 +57,6 @@ export const StepsTable = ({stages}) => {
     }
     return stage.docsExamined;
   };
-  console.log('get stages ', stages);
   return (<div className="explain-stages-table">
     <div className="stage-header">
       <div className="column-header">Seq</div>
@@ -149,57 +146,26 @@ const ShardStatisticView = ({explains}) => {
   const shardStatistics = getWorstShardStatistics(explains);
   return (<div className="explain-shards-statistic-view">
     <div className="header">
-      <div>{globalString('explain/statistics/shard')}</div>
-      <div>{globalString('explain/statistics/examined')}</div>
-      <div>{globalString('explain/statistics/returned')}</div>
-      <div>{globalString('explain/statistics/ms')}</div>
+      <div className="column">{globalString('explain/statistics/shard')}</div>
+      <div className="column">{globalString('explain/statistics/examined')}</div>
+      <div className="column">{globalString('explain/statistics/returned')}</div>
+      <div className="column">{globalString('explain/statistics/ms')}</div>
     </div>
     {
       shardStatistics.map((shard) => {
         return (<div className="row" key={shard.shardName}>
-          <div>{shard.shardName}</div>
-          <div>{shard.docsExamined}</div>
-          <div>{shard.nReturned}</div>
-          <div>{shard.executionTimeMillisEstimate}</div>
+          <div className="cell">{shard.shardName}</div>
+          <div className="cell">{shard.docsExamined}</div>
+          <div className="cell">{shard.nReturned}</div>
+          <div className="cell">{shard.executionTimeMillisEstimate}</div>
         </div>);
       })
     }
   </div>);
 };
 
-const options = {
-  smartIndent: true,
-  theme: 'material',
-  readOnly: true,
-  lineWrapping: false,
-  tabSize: 2,
-  matchBrackets: true,
-  keyMap: 'sublime',
-  mode: 'MongoScript'
-};
-
 const CommandPanel = ({command, namespace}) => {
-  const formatted = Prettier.format(command, {});
-  setTimeout(() => {
-    const cm = this.editor && this.editor.getCodeMirror();
-    cm && cm.setValue(formatted);
-  }, 500);
-  return (<div className="explain-command-panel">
-    <div className="namespace">
-      <div className="label">{globalString('explain/view/namespaceLabel')}</div>
-      <div className="value">{namespace}</div>
-    </div>
-    <div className="codemirror">
-      <div className="label">{globalString('explain/view/queryLabel')}</div>
-      <CodeMirror
-        ref={(cm) => {
-          this.editor = cm;
-        }}
-        codeMirrorInstance={CM}
-        value={command}
-        options={options} />
-    </div>
-  </div>);
+  return <QueryCommandView command={command} namespace={namespace} />;
 };
 
 const ExplainView = ({explains}) => {
@@ -207,7 +173,7 @@ const ExplainView = ({explains}) => {
     return null;
   }
   const output = toJS(explains.output);
-  const commandPanel = <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} />;
+  const commandPanel = explains.command ? <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} /> : null;
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     return (<div className="explain-view-panel">

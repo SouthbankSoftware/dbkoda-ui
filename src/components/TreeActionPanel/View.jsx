@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-22T12:31:00+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-23T09:48:30+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -88,13 +88,13 @@ export default class TreeActionView extends React.Component {
               disabled={!mobxForm.isValid}
               onClick={this.execute}
             >
-              Execute
+              {globalString('tree/executeButton')}
             </button>
             <button
               className="pt-button pt-intent-primary right-button"
               onClick={this.close}
             >
-              Close
+              {globalString('tree/closeButton')}
             </button>
           </div>
           <p className="pt-form-helper-text">{mobxForm.error}</p>

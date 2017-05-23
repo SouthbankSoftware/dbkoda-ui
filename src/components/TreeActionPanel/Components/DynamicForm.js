@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-12T10:49:33+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-23T09:51:53+10:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -35,7 +35,7 @@ export class DynamicForm extends MobxReactForm {
     // get all form errors
     // console.log('All form errors', form.errors());
     // invalidate the form with a custom error message
-    form.invalidate('This is a generic error message!');
+    form.invalidate(globalString('tree/genericValidateError'));
   }
   onValueChange(form) {
     if (form.isValid) {
@@ -144,7 +144,7 @@ export class DynamicForm extends MobxReactForm {
         package: validatorjs,
         extend: ($validator) => {
           const messages = $validator.getMessages('en');
-          messages.required = ':attribute field is required.';
+          messages.required = globalString('tree/fieldRequired');
           $validator.setMessages('en', messages);
         }
       }

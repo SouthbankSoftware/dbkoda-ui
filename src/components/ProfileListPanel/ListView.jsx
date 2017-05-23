@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-15 13:40:45
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-15 13:40:42
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-23T08:50:01+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -138,7 +138,7 @@ export default class ListView extends React.Component {
     this.props.store.editorPanel.activeEditorId = editorId;
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
-    NewToaster.show({message: 'Connection Success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    NewToaster.show({message: globalString('connection/success'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.props.store.editorToolbar.isActiveExecuting = false;
     if (this.props.store.editorToolbar.newEditorForTreeAction) {
       this.props.store.editorToolbar.newEditorForTreeAction = false;
@@ -196,7 +196,7 @@ export default class ListView extends React.Component {
   @action
   onSuccess(res, data) {
     console.log('connect successfully ', res);
-    let message = 'Connection Success!';
+    let message = globalString('connection/success');
     let position = Position.LEFT_BOTTOM;
     this.props.store.profileList.creatingNewProfile = false;
     if (!data.test) {
@@ -248,7 +248,7 @@ export default class ListView extends React.Component {
         .get(res.id);
       Broker.emit(EventType.NEW_PROFILE_CREATED, this.props.store.profiles.get(res.id));
     } else {
-      message = 'Test ' + message;
+      message = globalString('connection/test', message);
     }
     this.closeOpenConnectionAlert();
     DBenvyToaster(position).show({message, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
@@ -274,8 +274,14 @@ export default class ListView extends React.Component {
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User closed a profile connection.');
           }
-          NewToaster.show({message: 'Connection Closed', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+          NewToaster.show({message: globalString('profile/toolbar/connectionClosed'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
+          console.log('TEST123: ', this.props.store.profileList.selectedProfile.status);
+          if (this.props.store.profileList.selectedProfile.status == 'CLOSED') {
+            runInAction(() => {
+              this.props.store.treePanel.isRefreshDisabled = true;
+            });
+          }
           this.closeConnectionCloseAlert();
         })
         .catch((err) => {
@@ -291,7 +297,7 @@ export default class ListView extends React.Component {
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to close a connection profile with no profile selected..');
       }
-      NewToaster.show({message: 'No Profile Selected!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
     this.closeConnectionCloseAlert();
   }
@@ -341,7 +347,7 @@ export default class ListView extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to edit active profile..');
         }
-        NewToaster.show({message: 'Connection is not closed.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({message: globalString('profile/notClosed'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       } else {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the Edit Connection Profile drawer.');
@@ -355,7 +361,7 @@ export default class ListView extends React.Component {
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to edit with no profile selected.');
       }
-      NewToaster.show({message: 'No Profile Selected!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
   }
 
@@ -369,7 +375,7 @@ export default class ListView extends React.Component {
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User removed a profile..');
     }
-    NewToaster.show({message: 'Remove connection success!', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    NewToaster.show({message: globalString('profile/removeSuccess'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.closeConnectionRemoveAlert();
   }
   @autobind
@@ -433,19 +439,19 @@ export default class ListView extends React.Component {
           <MenuItem
             className="profileListContextMenu openProfile"
             onClick={this.openOpenConnectionAlert}
-            text="Open Connection"
+            text={globalString('profile/menu/openConnection')}
             iconName="pt-icon-unlock"
             intent={Intent.NONE} />
           <MenuItem
             className="profileListContextMenu editProfile"
             onClick={this.editProfile}
-            text="Edit Profile"
+            text={globalString('profile/menu/editProfile')}
             iconName="pt-icon-edit"
             intent={Intent.NONE} />
         </div>
       );
     } else {
-      windows.push((<MenuItem text="Editors:" />));
+      windows.push((<MenuItem text={globalString('profile/menu/editors')} />));
       this
         .props
         .store
@@ -465,13 +471,13 @@ export default class ListView extends React.Component {
           <MenuItem
             className="profileListContextMenu closeProfile"
             onClick={this.openCloseConnectionAlert}
-            text="Close Connection"
+            text={globalString('profile/menu/closeConnection')}
             iconName="pt-icon-lock"
             intent={Intent.NONE} />
           <MenuItem
             className="profileListContextMenu newWindow"
             onClick={this.newEditorWindow}
-            text="New Window"
+            text={globalString('profile/menu/newWindow')}
             iconName="pt-icon-new-text-box"
             intent={Intent.NONE} />
         </div>
@@ -483,7 +489,7 @@ export default class ListView extends React.Component {
         <MenuItem
           className="profileListContextMenu deleteProfile"
           onClick={this.openRemoveConnectionAlert}
-          text="Delete Profile"
+          text={globalString('profile/menu/deleteProfile')}
           iconName="pt-icon-delete"
           intent={Intent.NONE} />
         <MenuDivider /> {windows}
@@ -503,9 +509,11 @@ export default class ListView extends React.Component {
         ? 'connection-profile-cell connection-profile-cell-selected'
         : 'connection-profile-cell';
       if (profiles[rowIndex][1].status == 'OPEN') {
-        return (<Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-          <p className="pt-icon-link profileListing">{profiles[rowIndex][1].alias}</p>
-        </Cell>);
+        return (
+          <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
+            <p className="pt-icon-link profileListing">{profiles[rowIndex][1].alias}</p>
+          </Cell>
+        );
       }
       return (
         <Cell className={className}>
@@ -533,35 +541,34 @@ export default class ListView extends React.Component {
           className="pt-dark close-profile-alert-dialog"
           intent={Intent.PRIMARY}
           isOpen={this.state.isCloseWarningActive}
-          confirmButtonText="Close Connection"
-          cancelButtonText="Cancel"
+          confirmButtonText={globalString('profile/closeAlert/confirmButton')}
+          cancelButtonText={globalString('profile/closeAlert/cancelButton')}
           onConfirm={this.closeProfile}
           onCancel={this.closeConnectionCloseAlert}>
-          <p>Are you sure you want to close this connection?</p>
+          <p>{globalString('profile/closeAlert/prompt')}</p>
         </Alert>
         <Alert
           className="pt-dark remove-profile-alert-dialog"
           intent={Intent.PRIMARY}
           isOpen={this.state.isRemoveWarningActive}
-          confirmButtonText="Remove"
-          cancelButtonText="Cancel"
+          confirmButtonText={globalString('profile/removeAlert/confirmButton')}
+          cancelButtonText={globalString('profile/removeAlert/cancelButton')}
           onConfirm={this.deleteProfile}
           onCancel={this.closeConnectionRemoveAlert}>
-          <p>Are you sure you want to remove this connection?</p>
+          <p>{globalString('profile/removeAlert/prompt')}</p>
         </Alert>
         <Alert
           className="pt-dark open-profile-alert-dialog"
           intent={Intent.PRIMARY}
           isOpen={this.state.isOpenWarningActive}
-          confirmButtonText="Open"
-          cancelButtonText="Cancel"
+          confirmButtonText={globalString('profile/openAlert/confirmButton')}
+          cancelButtonText={globalString('profile/openAlert/cancelButton')}
           onConfirm={this.openProfile}
           onCancel={this.closeOpenConnectionAlert}>
-          <p>
-            Please enter your password for this profile.</p>
+          <p>{globalString('profile/openAlert/prompt')}</p>
           <input
             className="pt-input passwordInput"
-            placeholder="Enter Password..."
+            placeholder={globalString('profile/openAlert/inputPlaceholder')}
             type="password"
             dir="auto"
             onChange={this.setPWText} />

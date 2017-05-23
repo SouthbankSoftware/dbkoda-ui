@@ -7,36 +7,82 @@
 */
 
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { Button, Menu, MenuItem, MenuDivider, Popover, Position } from '@blueprintjs/core';
+import {reaction, runInAction, action} from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {AnchorButton, Position} from '@blueprintjs/core';
 import TreeState from './model/TreeState.js';
+import {featherClient} from '../../helpers/feathers';
+import {DBenvyToaster} from '../common/Toaster';
 
-@inject('treeState')
+@inject(allStores => ({store: allStores.store, treeState: allStores.treeState}))
 @observer
 export default class TreeToolbar extends React.Component {
   static get defaultProps() {
-    return {
-      treeState: undefined,
-    };
+    return {treeState: undefined};
   }
   constructor(props) {
     super(props);
-    this.updateFilter = this.updateFilter.bind(this);
+    this.updateFilter = this
+      .updateFilter
+      .bind(this);
+    this.refresh = this
+      .refresh
+      .bind(this);
+
+    this.reactionToProfile = reaction(() => this.props.store.profileList.selectedProfile, () => this.onSelectProfile());
   }
+
+  @action.bound
+  onSelectProfile() {
+    const profile = this.props.store.profileList.selectedProfile;
+    if (profile) {
+      if (profile.status == 'OPEN') {
+        console.log('TEST OPEN');
+        this.props.store.treePanel.isRefreshDisabled = false;
+      } else {
+        console.log('TEST CLOSED');
+        this.props.store.treePanel.isRefreshDisabled = true;
+      }
+    } else {
+      console.log('TEST CLOSED');
+      this.props.store.treePanel.isRefreshDisabled = true;
+    }
+  }
+
   updateFilter(event) {
-    const value = event.target.value.replace(/ /g, '');
-    this.props.treeState.setFilter(value);
+    const value = event
+      .target
+      .value
+      .replace(/ /g, '');
+    this
+      .props
+      .treeState
+      .setFilter(value);
+  }
+  @action
+  refresh() {
+    this.props.store.treePanel.isRefreshing = true;
+    const profile = this.props.store.profileList.selectedProfile;
+    const service = featherClient().service('/mongo-inspector'); // Calls the controller to load the topology associated with the selected Profile
+    service.timeout = 60000;
+    service
+      .get(profile.id)
+      .then((res) => {
+        this
+          .props
+          .store
+          .updateTopology(res);
+        runInAction(() => {
+          this.props.store.treePanel.isRefreshing = false;
+        });
+      })
+      .catch((err) => {
+        console.log(err.stack);
+        DBenvyToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      });
   }
   render() {
-    const menu = (
-      <Menu className="pt-dark">
-        <MenuItem text="New" />
-        <MenuItem text="Open" />
-        <MenuItem text="Save" />
-        <MenuDivider />
-        <MenuItem text="Settings..." />
-      </Menu>
-    );
+    console.log('Test: ', this.props.store.treePanel.isRefreshDisabled);
     return (
       <nav className=" treeToolbar pt-navbar pt-dark .modifier">
         <div className="pt-navbar-group pt-align-left">
@@ -45,13 +91,14 @@ export default class TreeToolbar extends React.Component {
             className="pt-input"
             placeholder="Search..."
             type="text"
-            onChange={this.updateFilter}
-          />
+            onChange={this.updateFilter} />
         </div>
         <div className="pt-navbar-group pt-align-right">
-          <Popover content={menu} position={Position.BOTTOM_RIGHT}>
-            <Button text="Actions" />
-          </Popover>
+          <AnchorButton
+            className="pt-button pt-icon-refresh refreshTreeButton"
+            onClick={this.refresh}
+            loading={this.props.store.treePanel.isRefreshing}
+            disabled={this.props.store.treePanel.isRefreshDisabled} />
         </div>
       </nav>
     );
@@ -59,5 +106,7 @@ export default class TreeToolbar extends React.Component {
 }
 
 TreeToolbar.propTypes = {
-  treeState: React.PropTypes.instanceOf(TreeState),
+  treeState: React
+    .PropTypes
+    .instanceOf(TreeState)
 };

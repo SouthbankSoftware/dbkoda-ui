@@ -58,5 +58,10 @@ export function dbenvyListAttributes(params) {
 }
 
 export function dbenvyListAttributes_parse(res) { //eslint-disable-line
-    return res;
+    const data = [];
+    console.log('got attributes', res);
+    res.forEach((a) => {
+        data.push(a);
+    });
+    return data;
 }

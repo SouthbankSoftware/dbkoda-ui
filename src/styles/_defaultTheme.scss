@@ -8,6 +8,8 @@
 $tabFontColor: #8B8B8B;
 $tabBackground: #323232;
 $tabBackgroundSelected: #202020;
+$panelLeftBackground: #2D3D46;
+$panelRightBackground: #202020;
 //Editor:
 $editorBackground: #202020;
 $editorActiveLine: #303030;
@@ -24,23 +26,23 @@ $white: #ffffff;
 $black: #000000;
 //Welcome View:
 $welcomeViewBackgroundColor: #212E33;
-$welcomeViewDarkBackgroundColor: #26353c;
+$welcomeViewBrightBackgroundColor: #314249;
 $welcomeViewDividerColor: #9A9A9B;
 $welcomeViewDividerTransparent: rgba(154, 154, 155, 0.4);
 $welcomeViewButtonBorderColor: rgba(154, 154, 155, 0.6);
 $welcomeViewOptoutFontColor: #9A9A9B;
-$welcomeViewButtonHoverColor: #394b59;
-$welcomeViewIconColor: #9A9A9B;
-$welcomeViewIconBG: #2D3D46;
-$welcomeViewIconBGHover: #394b59;
+$welcomeViewButtonHoverColor: #314249;
+$welcomeViewIconColor: #BFBEC0;
+$welcomeViewIconBG: #314249;
+$welcomeViewIconBGHover: #415259;
 $welcomeViewSocialMediaBG: #364951;
 $welcomeViewSocialMediaIcons: #9A9A9B;
 $welcomeViewSocialMediaText: #9A9A9B;
 $welcomeViewFontColor: #BFBEC0;
+$welcomeViewFontColorBright: #9A9A9B;
 $welcomeViewFontColorDark: #AFAEB0;
 $welcomeViewLinkColor: #4b98c6;
-$panelLeftBackground: #2D3D46;
-$panelRightBackground: #202020;
+$welcomeViewKeyboardShortcutsBG: #172023;
 //Profile List
 $profileListIconColor: rgba(191, 190, 192, 0.3);
 $profileListFontColor: #BFBEC0;
@@ -109,11 +111,6 @@ $fieldSecondaryButtonFontColor: #BFBEC0;
 $fieldTertiaryButtonBackground: #2D3D46;
 $fieldTertiaryButtonBorder: #BFBEC0;
 $fieldTertiaryButtonFontColor: #BFBEC0;
-$newProfileIcon: url('#/icons/new-profile-icon.svg');
-$editProfileIcon: url('#/icons/edit-profile-icon.svg');
-$closeProfileIcon: url('#/close-profile-icon.svg');
-$remove-profile-icon: url('#/remove-profile-icon.svg');
-$profile-icon: url('#/connection-icon.svg');
 // explain panel
 $explainLabelColor: rgb(180, 180, 180);
 $explainSwitchBtnColor: rgb(43, 43, 43);

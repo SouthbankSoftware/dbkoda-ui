@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-02T09:38:25+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-22T14:23:36+10:00
  */
 
 /**
@@ -46,7 +46,7 @@ const ConnectionPanel = ({
     profiles.forEach((value) => {
       if (value.alias === data.alias) {
         DBenvyToaster(Position.LEFT_BOTTOM).show({
-          message: 'Alias already existed.',
+          message: globalString('connection/existingAlias'),
           intent: Intent.DANGER,
           iconName: 'pt-icon-thumbs-down',
         });
@@ -66,7 +66,7 @@ const ConnectionPanel = ({
   const onSuccess = action((res, data) => {
     profileList.creatingNewProfile = false;
     console.log('connect successfully ', res);
-    let message = 'Connection Success!';
+    let message = globalString('connection/success');
     let position = Position.LEFT_BOTTOM;
     if (!data.test) {
       if (edit) {
@@ -99,7 +99,7 @@ const ConnectionPanel = ({
       close();
       Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
     } else {
-      message = 'Test ' + message;
+      message = globalString('', message);
     }
     DBenvyToaster(position).show({
       message,
@@ -113,7 +113,7 @@ const ConnectionPanel = ({
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.FAILED,
         EventLogging.getFragmentEnum().PROFILES,
-        'Attempt to create a new profile failed.',
+        globalString('connection/createProfileError'),
       );
     }
     profileList.creatingNewProfile = false;
@@ -121,7 +121,7 @@ const ConnectionPanel = ({
 
   const connect = action((data) => {
     if (!edit && !validateConnectionFormData(data)) {
-      return Promise.reject('Validation failed.');
+      return Promise.reject(globalString('connection/valiationError'));
     }
     const query = {};
     let connectionUrl;
@@ -190,7 +190,7 @@ const ConnectionPanel = ({
       connect={connect}
       profiles={profiles}
       save={save}
-      title={edit ? 'Edit Connection' : 'Create New Connection'}
+      title={edit ? globalString('connection/editHeading') : globalString('connection/createHeading')}
     />
   );
 };

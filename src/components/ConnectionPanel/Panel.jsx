@@ -3,7 +3,7 @@
  * @Date:   2017-04-21T10:47:14+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-10T11:59:23+10:00
+ * @Last modified time: 2017-05-22T14:58:38+10:00
  */
 
 /**
@@ -107,12 +107,12 @@ export default class Panel extends React.Component {
     form.connect = this._connect;
     form.test = this._test;
     form.save = this._save;
-    if (!edit && this.props.form.$('alias').value === 'Connection - 1' && profiles) {
+    if (!edit && this.props.form.$('alias').value === globalString('connection/form/defaultAlias', '1') && profiles) {
       this
         .props
         .form
         .$('alias')
-        .value = 'Connection - ' + (profiles.size + 1);
+        .value = globalString('connection/form/defaultAlias', (profiles.size + 1));
     }
     const formErrors = this._getFormErrors();
 
@@ -172,27 +172,27 @@ export default class Panel extends React.Component {
             <Button
               className="connectButton pt-button pt-intent-success"
               onClick={form.onSubmit}
-              text="Connect"
+              text={globalString('connection/form/connectButton')}
               type="submit"
               disabled={formErrors.length > 0}
               loading={this.state.connecting} />
             <Button
               className="reset-button pt-button pt-intent-warning"
               onClick={form.onReset}
-              text="Reset" />
+              text={globalString('connection/form/resetButton')} />
             <Button
               className="test-button pt-button pt-intent-primary"
               onClick={form.onTest}
-              text="Test"
+              text={globalString('connection/form/testButton')}
               disabled={formErrors.length > 0}
               loading={this.state.testing} />
             <Button
               className="save-button pt-button pt-intent-primary"
-              text="Save"
+              text={globalString('connection/form/saveButton')}
               onClick={form.onSave} />
             <Button
               className="close-button pt-button pt-intent-primary"
-              text="Close"
+              text={globalString('connection/form/closeButton')}
               onClick={this.props.close} />
           </div>
         </form>

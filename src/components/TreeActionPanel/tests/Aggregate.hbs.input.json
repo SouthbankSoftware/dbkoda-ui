@@ -1,0 +1,40 @@
+{
+    "Database": "admin",
+    "CollectionName": "fred",
+    "InitialFilter":true,
+    "FilterKeys": [{
+            "AttributeName": "a",
+            "Value": 1
+        },
+        {
+            "AttributeName": "b",
+            "Value": 3,
+            "last": 1
+        }
+    ],
+    "PipeLine": [{
+            "StepName": "$sample",
+            "StepValue": "{size:N}"
+        },
+        {
+            "StepName": "$match",
+            "StepValue": "{\"attribute\":\"value\"}"
+        },
+        {
+            "StepName": "$project",
+            "StepValue": "{\"attribute\":1,\"attribute\":0}"
+        },
+        {
+            "StepName": "$group",
+            "StepValue": "{\"_id\":{alias:\"$attribute\",alias:\"$attribute\"}"
+        },
+        {
+            "StepName": "$sort",
+            "StepValue": "{\"alias\":1}"
+        },
+        {
+            "StepName": "$unwind",
+            "StepValue": "$alias"
+        }
+    ]
+}
