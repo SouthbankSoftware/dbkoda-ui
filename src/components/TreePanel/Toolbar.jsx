@@ -7,17 +7,9 @@
 */
 
 import React from 'react';
-import {reaction, runInAction, observable, action} from 'mobx';
+import {reaction, runInAction, action} from 'mobx';
 import {inject, observer} from 'mobx-react';
-import {
-  AnchorButton,
-  Button,
-  Menu,
-  MenuItem,
-  MenuDivider,
-  Popover,
-  Position
-} from '@blueprintjs/core';
+import {AnchorButton, Position} from '@blueprintjs/core';
 import TreeState from './model/TreeState.js';
 import {featherClient} from '../../helpers/feathers';
 import {DBenvyToaster} from '../common/Toaster';
