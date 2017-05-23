@@ -15,6 +15,8 @@ import {AnchorButton} from '@blueprintjs/core';
 import {featherClient} from '~/helpers/feathers';
 import TwitterIcon from '../../../styles/icons/twitter-icon.svg';
 import GithubIcon from '../../../styles/icons/github-icon.svg';
+import DocumentIcon from '../../../styles/icons/document-icon.svg';
+import WorldIcon from '../../../styles/icons/world-icon.svg';
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
@@ -74,13 +76,17 @@ export default class WelcomeContent extends React.Component {
             <div className="docsList">
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-document" />
+                  <AnchorButton className="docsIcon">
+                    <DocumentIcon width={30} height={30} />
+                  </AnchorButton>
                 </span>
                 <p>MongoDB Documentation</p>
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-document" />
+                  <AnchorButton className="docsIcon">
+                    <DocumentIcon width={30} height={30} />
+                  </AnchorButton>
                 </span>
                 <p>DBEnvy Release Notes</p>
               </div>
@@ -108,7 +114,9 @@ export default class WelcomeContent extends React.Component {
             <div className="feedList">
               <div className="feedItem firstItem">
                 <div className="pt-icon-large pt-icon- feedIconWrapper">
-                  I
+                  <AnchorButton className="gitHubIcon">
+                    <WorldIcon width={50} height={50} />
+                  </AnchorButton>
                 </div>
                 <div className="feedItemContent">
                   <p className="feedItemTitle">{this.props.store.welcomePage.newsFeed[0].title}</p>
@@ -122,7 +130,9 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="feedItem secondItem">
                 <div className="pt-icon-large pt-icon- feedIconWrapper">
-                  I
+                  <AnchorButton className="gitHubIcon">
+                    <WorldIcon width={50} height={50} />
+                  </AnchorButton>
                 </div>
                 <div className="feedItemContent">
                   <p className="feedItemTitle">{this.props.store.welcomePage.newsFeed[1].title}</p>
@@ -136,7 +146,9 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="feedItem thirdItem">
                 <div className="pt-icon-large pt-icon- feedIconWrapper">
-                  I
+                  <AnchorButton className="gitHubIcon">
+                    <WorldIcon width={50} height={50} />
+                  </AnchorButton>
                 </div>
                 <div className="feedItemContent">
                   <p className="feedItemTitle">{this.props.store.welcomePage.newsFeed[2].title}</p>
