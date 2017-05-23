@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-18T16:52:57+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-19T16:38:46+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-23T09:52:54+10:00
  */
 
 import React from 'react';
@@ -50,7 +50,7 @@ export default observer(({ field, controls = {} }) => (
     {(!controls || controls.onSubmit) &&
       <div className="ctrl">
         <button className="transparent-btn" type="button" onClick={field.onSubmit}>
-          <i className="fa fa-dot-circle-o" /> Submit
+          <i className="fa fa-dot-circle-o" /> {globalString('tree/submitButton')}
         </button>
       </div>}
   </span>
