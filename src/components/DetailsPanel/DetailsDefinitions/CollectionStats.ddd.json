@@ -1,0 +1,27 @@
+{
+	"Title": "Collection Statistics",
+	"DefaultValues": {
+		"function": "dbenvy_CollectionStats",
+		"arguments": [{
+			"name": "ColId",
+			"value": "treeNode"
+		}, {
+			"name": "parentDB",
+			"value": "treeNode.parentDB"
+		}]
+	},
+	"Fields": [
+		{
+			"name": "Statistics",
+			"label": "Statistics",
+			"type": "Table",
+			"columns": [{
+				"name": "statistic",
+				"label": "Statistic"
+			}, {
+				"name": "value",
+				"label": "Value"
+			}]
+		}
+	]
+}

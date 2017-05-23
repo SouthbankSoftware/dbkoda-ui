@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   chris
- * @Last modified time: 2017-05-17T12:34:37+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-23T15:08:36+10:00
  */
 
 import _ from 'lodash';
@@ -86,10 +86,14 @@ export default class Store {
   @observable treeActionPanel = {
     treeNode: null,
     treeAction: null,
-    form: null,
     treeActionEditorId: '',
     formValues: '',
     isNewFormValues: false
+  };
+
+  @observable detailsPanel = {
+    detailsViewInfo: null,
+    activeEditorId: ''
   };
 
   @observable explainPanel = {

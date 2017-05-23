@@ -1,0 +1,61 @@
+// @Author: Wahaj Shamim <wahaj>
+// @Date:   2017-05-23T16:26:14+10:00
+// @Email:  wahaj@southbanksoftware.com
+// @Last modified by:   wahaj
+// @Last modified time: 2017-05-23T16:45:13+10:00
+
+@import '../../styles/_defaultTheme.scss';
+
+.details-view {
+  overflow: auto;
+  width: 100%;
+  .details-title {
+    text-align: center;
+    margin: 35px 0;
+    color: $fieldHeadingFontColor;
+  }
+  .details-fields {
+    display: flex;
+    .detailsFieldSet {
+      margin: 0px 15px 15px 15px;
+      border-style: none;
+      background-color: $fieldGroupPrimaryBackground;
+    }
+    .pt-label-field {
+      text-align: center;
+      margin: 5px 0;
+      color: $fieldHeadingFontColor;
+    }
+  }
+  .form-button-panel {
+    float: right;
+    margin: 20px;
+    button {
+      background: none;
+      border-radius: 0px;
+    }
+    button:focus {
+      outline: none;
+    }
+    .pt-intent-success {
+      background-color: $fieldPrimaryButtonBackground;
+      color: $fieldPrimaryButtonFontColor;
+    }
+    .pt-intent-success:hover {
+      background-color: $fieldPrimaryButtonHover;
+    }
+    .pt-intent-success:active {
+      background-color: $fieldPrimaryButtonActive;
+    }
+    .pt-intent-primary {
+      background-color: $fieldSecondaryButtonBackground;
+      color: $fieldSecondaryButtonFontColor;
+    }
+    .pt-intent-primary:hover {
+      background-color: $fieldSecondaryButtonHover;
+    }
+    .pt-intent-primary:active {
+      background-color: $fieldSecondaryButtonActive;
+    }
+  }
+}
