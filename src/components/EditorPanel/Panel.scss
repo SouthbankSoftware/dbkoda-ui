@@ -65,7 +65,6 @@
         color: $white !important;
       }
       .welcomeTab {
-        flex-direction: unset !important;
         background-color: $welcomeViewBackgroundColor !important;
         font-family: unset;
         padding-left: 10px;
@@ -90,7 +89,6 @@
       }
     }
     .welcomeTab {
-      display: flex;
       font-family: "Arial", Arial, Helvetica, sans-serif;
       background-color: $welcomeViewBackgroundColor;
       flex-grow: 1;
