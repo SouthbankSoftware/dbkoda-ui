@@ -13,6 +13,7 @@ import {featherClient} from '~/helpers/feathers';
 import path from 'path';
 import {Broker, EventType} from '../helpers/broker';
 import {ProfileStatus} from '../components/common/Constants';
+import {storeFile} from '../env';
 
 global.Globalize = require('globalize'); // Globalize doesn't load well with import
 
@@ -235,10 +236,10 @@ export default class Store {
     newStore.treePanel.isRefreshDisabled = false;
   }
 
-  load() {
+  load(filePath) {
     featherClient()
       .service('files')
-      .get(path.resolve('/tmp/stateStore.json'))
+      .get(path.resolve(filePath))
       .then(({content}) => {
         this.restore(content);
         // Init Globalize required json
@@ -276,7 +277,7 @@ export default class Store {
   constructor() {
     Broker.on(EventType.FEATHER_CLIENT_LOADED, (value) => {
       if (value) {
-        this.load();
+        this.load(storeFile);
       }
     });
   }
