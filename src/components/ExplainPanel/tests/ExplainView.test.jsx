@@ -190,5 +190,9 @@ describe('test explain view', () => {
     const app = mount(<ExplainView explains={explain} />);
     expect(app.find('.explain-stage-progress')).to.have.length(1);
     expect(app.find('.explain-shards-statistic-view')).to.have.length(1);
+    expect(app.find('.explain-shards-statistic-view .row')).to.have.length(1);
+    expect(app.find('.explain-shards-statistic-view .row .cell')).to.have.length(4);
+    expect(app.find('.explain-shards-statistic-view .header')).to.have.length(1);
+    expect(app.find('.explain-shards-statistic-view .header .column')).to.have.length(4);
   });
 });

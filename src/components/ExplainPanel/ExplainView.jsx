@@ -146,18 +146,18 @@ const ShardStatisticView = ({explains}) => {
   const shardStatistics = getWorstShardStatistics(explains);
   return (<div className="explain-shards-statistic-view">
     <div className="header">
-      <div>{globalString('explain/statistics/shard')}</div>
-      <div>{globalString('explain/statistics/examined')}</div>
-      <div>{globalString('explain/statistics/returned')}</div>
-      <div>{globalString('explain/statistics/ms')}</div>
+      <div className="column">{globalString('explain/statistics/shard')}</div>
+      <div className="column">{globalString('explain/statistics/examined')}</div>
+      <div className="column">{globalString('explain/statistics/returned')}</div>
+      <div className="column">{globalString('explain/statistics/ms')}</div>
     </div>
     {
       shardStatistics.map((shard) => {
         return (<div className="row" key={shard.shardName}>
-          <div>{shard.shardName}</div>
-          <div>{shard.docsExamined}</div>
-          <div>{shard.nReturned}</div>
-          <div>{shard.executionTimeMillisEstimate}</div>
+          <div className="cell">{shard.shardName}</div>
+          <div className="cell">{shard.docsExamined}</div>
+          <div className="cell">{shard.nReturned}</div>
+          <div className="cell">{shard.executionTimeMillisEstimate}</div>
         </div>);
       })
     }
