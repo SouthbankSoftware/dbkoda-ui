@@ -13,6 +13,8 @@ import {action, runInAction} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {AnchorButton} from '@blueprintjs/core';
 import {featherClient} from '~/helpers/feathers';
+import TwitterIcon from '../../../styles/icons/twitter-icon.svg';
+import GithubIcon from '../../../styles/icons/github-icon.svg';
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
@@ -86,14 +88,14 @@ export default class WelcomeContent extends React.Component {
             <h2>Links</h2>
             <div className="linksList">
               <div className="linkWrapper">
-                <AnchorButton className="gitHubIcon">
-                  <i className="icon twitterIcon" />
+                <AnchorButton className="twitterIcon">
+                  <TwitterIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Twitter</p>
               </div>
               <div className="linkWrapper">
                 <AnchorButton className="gitHubIcon">
-                  <i className="icon gitHubIcon" />
+                  <GithubIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Github</p>
               </div>
@@ -174,11 +176,11 @@ export default class WelcomeContent extends React.Component {
           <h2>Links</h2>
           <div className="linksList">
             <div className="linkWrapper">
-              <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-envelope" />
+              <AnchorButton className="icon twitterIcon" />
               <p>Twitter</p>
             </div>
             <div className="linkWrapper">
-              <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-code" />
+              <AnchorButton className="icon gitHubIcon" />
               <p>Github</p>
             </div>
           </div>

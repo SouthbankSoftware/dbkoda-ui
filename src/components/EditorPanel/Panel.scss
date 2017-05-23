@@ -171,9 +171,8 @@
                 color: $welcomeViewButtonBorderColor;
                 .pt-control {
                   span {
-                             //         border-radius: 50%;
+                    //         border-radius: 50%;
                   }
-
                 }
               }
             }
@@ -216,8 +215,7 @@
                       flex-grow: 2;
                       border-radius: 0.4em;
                       text-align: center;
-                      .icon {
-                      }
+                      .icon {}
                       a {
                         background-color: $welcomeViewIconBG;
                       }
@@ -242,7 +240,7 @@
                     display: flex;
                     flex-direction: column;
                     margin-right: 10px;
-                    a{
+                    a {
                       width: 100px;
                       border-radius: 50%;
                       order: 1;
@@ -251,11 +249,24 @@
                       font-size: 40;
                     }
                     .twitterIcon {
-                      background-image: url('../../styles/icons/arbiters-icon.svg');
+                      position: relative;
+                      svg {
+                        position: absolute;
+                        top: 50%;
+                        bottom: 50%;
+                        transform: translate(-50%, -50%);
+                        fill: $welcomeViewSocialMediaIcons;
+                      }
                     }
                     .gitHubIcon {
-                      background-image: url('../../styles/icons/arbiters-icon.svg');
-
+                      position: relative;
+                      svg {
+                        position: absolute;
+                        top: 50%;
+                        bottom: 50%;
+                        transform: translate(-50%, -50%);
+                        fill: $welcomeViewSocialMediaIcons;
+                      }
                     }
                     a:hover {
                       background-color: $welcomeViewIconBGHover;
@@ -325,17 +336,14 @@
                   color: $welcomeViewFontColor;
                   font-size: 18px;
                 }
-                p {
-
-                }
+                p {}
               }
             }
           }
         }
       }
     }
-  }
-  //// Code Mirror CSS: ////
+  } //// Code Mirror CSS: ////
   /////////////////////////////
   div.CodeMirror span.CodeMirror-matchingbracket {
     color: $white !important;
@@ -492,35 +500,28 @@
     background-color: #7e7;
   }
   @-moz-keyframes blink {
-    0% {
-    }
+    0% {}
     50% {
       background-color: transparent;
     }
-    100% {
-    }
+    100% {}
   }
   @-webkit-keyframes blink {
-    0% {
-    }
+    0% {}
     50% {
       background-color: transparent;
     }
-    100% {
-    }
+    100% {}
   }
   @keyframes blink {
-    0% {
-    }
+    0% {}
     50% {
       background-color: transparent;
     }
-    100% {
-    }
+    100% {}
   }
   /* Can style cursor different in overwrite (non-insert) mode */
-  .CodeMirror-overwrite .CodeMirror-cursor {
-  }
+  .CodeMirror-overwrite .CodeMirror-cursor {}
   .cm-tab {
     display: inline-block;
     text-decoration: inherit;

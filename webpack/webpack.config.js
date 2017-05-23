@@ -79,25 +79,17 @@ module.exports = {
         test: /\.(svg)$/i,
         use: [
           {
-            loader: 'file-loader',
-            options: {
-              query: {
-                name: 'assets/[name].[ext]'
-              }
-            }
+            loader: 'babel-loader'
           }, {
-            loader: 'image-webpack-loader',
-            options: {
-              query: {
-                mozjpeg: {
-                  progressive: true
-                },
-                gifsicle: {
-                  interlaced: true
-                },
-                optipng: {
-                  optimizationLevel: 7
-                }
+            loader: 'react-svg-loader',
+            query: {
+              svgo: {
+                plugins: [
+                  {
+                    removeTitle: false
+                  }
+                ],
+                floatPrecision: 2
               }
             }
           }
