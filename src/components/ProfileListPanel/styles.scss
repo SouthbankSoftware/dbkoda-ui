@@ -31,6 +31,7 @@
   }
   .profileList {
     flex-grow: 1;
+    overflow-y: scroll;
   }
   .bp-table-top-container {
     display: none;

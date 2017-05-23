@@ -13,6 +13,7 @@
 .sb-tree-view {
   overflow: auto !important;
   height: calc(100% - 50px);
+  background-color: $panelLeftBackground;
 }
 
 .tree-msg-div span {
