@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T12:51:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T13:29:18+10:00
+ * @Last modified time: 2017-05-24T14:01:30+10:00
  */
 
 import React from 'react';
@@ -30,7 +30,7 @@ export default observer(({
   );
 
   return (
-    <div>
+    <div className="div-field-container">
       <label htmlFor={field.name} className="pt-label pt-label-field">
         {field.label}
       </label>
@@ -39,7 +39,7 @@ export default observer(({
         width={field.width}
         height={field.height}
         data={data}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
       >
         <XAxis type="number" />
         <YAxis dataKey={field.YAxis.key} type="category" />

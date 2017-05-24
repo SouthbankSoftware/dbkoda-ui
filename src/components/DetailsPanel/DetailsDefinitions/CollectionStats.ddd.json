@@ -30,11 +30,11 @@
 			"XAxis": [{
 				"key": "size",
 				"label": "Size in KBs",
-				"color": "#8884d8"
+				"color": "#382F4B"
 			},{
 				"key": "count",
 				"label": "Count",
-				"color": "#82ca9d"
+				"color": "#76341C"
 				}],
 			"YAxis" :{
 				"key": "name"
