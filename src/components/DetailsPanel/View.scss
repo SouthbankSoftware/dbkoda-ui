@@ -2,7 +2,7 @@
 // @Date:   2017-05-23T16:26:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-23T16:45:13+10:00
+// @Last modified time: 2017-05-24T13:43:56+10:00
 
 @import '../../styles/_defaultTheme.scss';
 
@@ -57,5 +57,9 @@
     .pt-intent-primary:active {
       background-color: $fieldSecondaryButtonActive;
     }
+  }
+
+  .recharts-bar-cursor {
+    fill: $fieldBrightPlaceholderFontColor !important;
   }
 }

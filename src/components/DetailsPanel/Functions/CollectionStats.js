@@ -3,7 +3,7 @@
  * @Date:   2017-05-22T15:30:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T12:32:37+10:00
+ * @Last modified time: 2017-05-24T13:24:51+10:00
  */
 
 export const CollectionStats = {
@@ -34,6 +34,9 @@ export const CollectionStats = {
               if (data.size) {
                 Shard.pctSize = Math.round((shardInfo.size / data.size) * 100);
               }
+            }
+            if (shardInfo.count) {
+              Shard.count = shardInfo.count;
             }
             result.Shards.push(Shard);
           }

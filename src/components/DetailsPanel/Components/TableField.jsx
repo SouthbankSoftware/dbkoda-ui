@@ -3,7 +3,7 @@
  * @Date:   2017-05-23T13:15:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T16:39:51+10:00
+ * @Last modified time: 2017-05-24T12:55:15+10:00
  */
 
 import React from 'react';
@@ -13,8 +13,6 @@ export default observer(({
   field,
   data
 }) => {
-  console.log('TableField field:', field);
-  console.log('TableField data:', data);
   const fldClassName = 'pt-table pt-interactive';
 
   const tableHeaders = [];
