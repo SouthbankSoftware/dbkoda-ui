@@ -17,6 +17,10 @@ import EventLogging from '#/common/logging/EventLogging';
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
+import AddIcon from '../../styles/icons/add-icon.svg';
+import EditProfileIcon from '../../styles/icons/edit-profile-icon.svg';
+import CloseProfileIcon from '../../styles/icons/close-profile-icon.svg';
+import RemoveProfileIcon from '../../styles/icons/remove-profile-icon.svg';
 import './styles.scss';
 
 @inject('store')
@@ -190,8 +194,10 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM_LEFT}>
             <AnchorButton
-              className="pt-icon-add newProfileButton"
-              onClick={this.newProfile} />
+              className="newProfileButton"
+              onClick={this.newProfile}>
+              <AddIcon width={20} height={20} />
+            </AnchorButton>
           </Tooltip>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -200,9 +206,11 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-icon-edit editProfileButton"
+              className="editProfileButton"
               onClick={this.editProfile}
-              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN} />
+              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN}>
+              <EditProfileIcon width={20} height={20} />
+            </AnchorButton>
           </Tooltip>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -211,10 +219,12 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-icon-remove dangerButton closeProfileButton"
+              className=" dangerButton closeProfileButton"
               loading={this.state.closingProfile}
               disabled={!selectedProfile || selectedProfile.status === ProfileStatus.CLOSED}
-              onClick={this.showCloseConnectionAlert} />
+              onClick={this.showCloseConnectionAlert}>
+              <CloseProfileIcon width={20} height={20} />
+            </AnchorButton>
           </Tooltip>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -223,9 +233,11 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-icon-cross dangerButton removeProfileButton"
+              className="dangerButton removeProfileButton"
               onClick={this.showRemoveConnectionAlert}
-              disabled={!this.props.store.profileList.selectedProfile || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN} />
+              disabled={!this.props.store.profileList.selectedProfile || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN}>
+              <RemoveProfileIcon width={20} height={20} />
+            </AnchorButton>
           </Tooltip>
           <span className="pt-navbar-divider" />
           <Tooltip

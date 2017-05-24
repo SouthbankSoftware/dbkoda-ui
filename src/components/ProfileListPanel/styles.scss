@@ -12,6 +12,16 @@
       border-radius: 50%;
       margin-left: 5px;
       margin-right: 5px;
+      position: relative;
+      svg {
+        position: absolute;
+        top: 50%;
+        bottom: 50%;
+        width: 50%;
+        height: 50%;
+        transform: translate(-50%, -50%);
+        fill: $buttonSecondaryIcon;
+      }
     }
     .pt-button:hover {
       background-color: $buttonSecondaryBackgroundHover !important;
@@ -39,7 +49,19 @@
   .bp-table-cell {
     border-bottom: 1px solid $profileListDividerColor;
     .bp-table-truncated-text {
-      display: table;
+      height:100%;
+    
+      display: flex;
+      flex-direction: row;
+      svg {
+        width:40px;
+        height:40px;
+        margin-right: 20px;
+        border-radius: 50%;
+        padding: 3px;
+        border: 1px solid $buttonSecondaryIcon;
+        fill: $buttonSecondaryIcon;
+      }
       .profileListing {
         height: 100%;
         font: 'Arial';
@@ -52,7 +74,6 @@
       .profileListing::before {
         margin-right: 10px;
         color: $profileListIconColor;
-
       }
     }
   }
