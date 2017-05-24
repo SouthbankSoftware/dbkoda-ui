@@ -26,18 +26,21 @@
 		{
 			"name": "Shards",
 			"label": "Shards Statistics",
-			"type": "Table",
-			"columns": [{
-				"name": "name",
-				"label": "Name"
-			}, {
-				"name": "size",
-				"label": "Size in KBs"
+			"type": "BarChart",
+			"XAxis": [{
+				"key": "size",
+				"label": "Size in KBs",
+				"color": "#8884d8"
+			},{
+				"key": "count",
+				"label": "Count",
+				"color": "#82ca9d"
+				}],
+			"YAxis" :{
+				"key": "name"
 			},
-			{
-				"name": "pctSize",
-				"label": "Size in %"
-			}]
+			"width": 600,
+			"height": 300
 		}
 	]
 }
