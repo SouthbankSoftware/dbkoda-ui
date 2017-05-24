@@ -3,7 +3,7 @@
  * @Date:   2017-05-22T09:14:04+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-22T10:56:56+10:00
+ * @Last modified time: 2017-05-24T10:59:28+10:00
  */
 
 
@@ -25,8 +25,9 @@ import { featherClient } from '~/helpers/feathers';
            .then((res) => {
              if (typeof res == 'string') {
                res = res.replace(/[\r\n\t]*/g, '');
-               console.log('Result: ', res);
                res = res.replace(/ObjectId\((\"\w*\")\)/g, '$1');
+               res = res.replace(/NumberLong\(\"(\d*)\"\)/g, '$1');
+               console.log('Result: ', res);
                try {
                  const ejson = EJSON.parse(res);
                  resolve(ejson);
