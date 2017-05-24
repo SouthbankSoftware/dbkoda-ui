@@ -7,8 +7,8 @@
 */
 
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { action, reaction } from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {action, reaction} from 'mobx';
 import {
   HotkeysTarget,
   Hotkeys,
@@ -18,8 +18,11 @@ import {
   AnchorButton,
   Position
 } from '@blueprintjs/core';
-import { featherClient } from '~/helpers/feathers';
+import {featherClient} from '~/helpers/feathers';
 import EventLogging from '#/common/logging/EventLogging';
+import ClearOutputIcon from '../../styles/icons/fix-icon.svg';
+import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
+import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
 
 /**
  * The OutputPanel toolbar, which hold the commands and actions specific to the output panel
@@ -31,89 +34,83 @@ import EventLogging from '#/common/logging/EventLogging';
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
-    this.downloadOutput = this.downloadOutput.bind(this);
+    this.downloadOutput = this
+      .downloadOutput
+      .bind(this);
 
     /**
      * Reaction to fire off execution of ShowMore (it) command
      */
-    reaction(
-      () => this.props.store.outputPanel.executingShowMore,
-      (executingShowMore) => {
-        if (
-          executingShowMore &&
-          !this.props.store.outputs.get(
-            this.props.store.outputPanel.currentTab
-          ).cannotShowMore
-        ) {
-          const command = 'it';
-          console.log(
-            'Sending data to feathers id ',
-            this.props.store.outputs.get(
-              this.props.store.outputPanel.currentTab
-            ).connId,
-            ': ',
-            command,
-            '.'
-          );
-          this.props.store.editorToolbar.isActiveExecuting = true;
-          this.props.store.editors.get(
-            this.props.store.outputPanel.currentTab
-          ).executing = true;
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          service.update(
-            this.props.store.outputs.get(
-              this.props.store.outputPanel.currentTab
-            ).connId,
-            {
-              shellId: this.props.store.outputs.get(
-                this.props.store.outputPanel.currentTab
-              ).shellId,
-              commands: command
-            }
-          );
-          this.props.store.outputs.get(
-            this.props.store.outputPanel.currentTab
-          ).cannotShowMore = true;
-        }
-        this.props.store.outputPanel.executingShowMore = false;
-      },
-      { name: 'reactionOutputToolbarShowMore' }
-    );
+    reaction(() => this.props.store.outputPanel.executingShowMore, (executingShowMore) => {
+      if (executingShowMore && !this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore) {
+        const command = 'it';
+        console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.store.outputPanel.currentTab).connId, ': ', command, '.');
+        this.props.store.editorToolbar.isActiveExecuting = true;
+        this
+          .props
+          .store
+          .editors
+          .get(this.props.store.outputPanel.currentTab)
+          .executing = true;
+        const service = featherClient().service('/mongo-shells');
+        service.timeout = 30000;
+        service.update(this.props.store.outputs.get(this.props.store.outputPanel.currentTab).connId, {
+          shellId: this
+            .props
+            .store
+            .outputs
+            .get(this.props.store.outputPanel.currentTab)
+            .shellId,
+          commands: command
+        });
+        this
+          .props
+          .store
+          .outputs
+          .get(this.props.store.outputPanel.currentTab)
+          .cannotShowMore = true;
+      }
+      this.props.store.outputPanel.executingShowMore = false;
+    }, {name: 'reactionOutputToolbarShowMore'});
 
     /**
      * Reaction to clear the output console
      */
-    reaction(
-      () => this.props.store.outputPanel.clearingOutput,
-      (clearingOutput) => {
-        const currentTab = this.props.store.outputPanel.currentTab;
-        if (clearingOutput && this.props.store.outputs.get(currentTab)) {
-          this.props.store.outputs.get(currentTab).output = '';
-          if (this.props.store.userPreferences.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT,
-              EventLogging.getFragmentEnum().OUTPUT,
-              'User cleared Output'
-            );
-          }
-          this.props.store.outputPanel.clearingOutput = false;
-        } else if (currentTab.indexOf('Explain-') === 0) {
-          // close explain output
-          const editorKey = currentTab.split('Explain-')[1];
-          const editor = this.props.store.editors.get(editorKey);
-          if (editor) {
-            this.props.store.editors.set(editorKey, {
+    reaction(() => this.props.store.outputPanel.clearingOutput, (clearingOutput) => {
+      const currentTab = this.props.store.outputPanel.currentTab;
+      if (clearingOutput && this.props.store.outputs.get(currentTab)) {
+        this
+          .props
+          .store
+          .outputs
+          .get(currentTab)
+          .output = '';
+        if (this.props.store.userPreferences.telemetryEnabled) {
+          EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User cleared Output');
+        }
+        this.props.store.outputPanel.clearingOutput = false;
+      } else if (currentTab.indexOf('Explain-') === 0) {
+        // close explain output
+        const editorKey = currentTab.split('Explain-')[1];
+        const editor = this
+          .props
+          .store
+          .editors
+          .get(editorKey);
+        if (editor) {
+          this
+            .props
+            .store
+            .editors
+            .set(editorKey, {
               ...editor,
               explains: undefined
             });
-            this.props.store.outputPanel.currentTab = editorKey;
-          }
-          this.props.store.outputPanel.clearingOutput = false;
+          this.props.store.outputPanel.currentTab = editorKey;
         }
-      },
-      { name: 'reactionOutputToolbarClearOutput' }
-    );
+        this.props.store.outputPanel.clearingOutput = false;
+      }
+    }, {name: 'reactionOutputToolbarClearOutput'});
   }
 
   /**
@@ -138,27 +135,22 @@ export default class Toolbar extends React.Component {
    */
   downloadOutput() {
     if (this.props.store.userPreferences.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.SAVE_OUTPUT,
-        EventLogging.getFragmentEnum().OUTPUT,
-        'User saved Output'
-      );
+      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.SAVE_OUTPUT, EventLogging.getFragmentEnum().OUTPUT, 'User saved Output');
     }
-    const data = new Blob(
-      [
-        this.props.store.outputs.get(
-          this.props.store.outputPanel.currentTab
-        ).output
-      ],
-      { type: 'text/csv' }
-    );
-    const csvURL = window.URL.createObjectURL(data);
+    const data = new Blob([
+      this
+        .props
+        .store
+        .outputs
+        .get(this.props.store.outputPanel.currentTab)
+        .output
+    ], {type: 'text/csv'});
+    const csvURL = window
+      .URL
+      .createObjectURL(data);
     const tempLink = document.createElement('a');
     tempLink.href = csvURL;
-    tempLink.setAttribute(
-      'download',
-      `output-${this.props.store.outputPanel.currentTab}.js`
-    );
+    tempLink.setAttribute('download', `output-${this.props.store.outputPanel.currentTab}.js`);
     tempLink.click();
   }
 
@@ -169,20 +161,13 @@ export default class Toolbar extends React.Component {
           global
           combo="ctrl + l"
           label="Clear Output"
-          onKeyDown={this.clearOutput}
-        />
-        <Hotkey
-          global
-          combo="shift + m"
-          label="Show More"
-          onKeyDown={this.showMore}
-        />
+          onKeyDown={this.clearOutput} />
+        <Hotkey global combo="shift + m" label="Show More" onKeyDown={this.showMore} />
         <Hotkey
           global
           combo="shift + x"
           label="Save Output"
-          onKeyDown={this.downloadOutput}
-        />
+          onKeyDown={this.downloadOutput} />
       </Hotkeys>
     );
   }
@@ -198,12 +183,12 @@ export default class Toolbar extends React.Component {
             inline
             content={globalString('output/toolbar/clear')}
             tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
+            position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-icon-disable pt-intent-danger circleButton clearOutputBtn"
-              onClick={this.clearOutput}
-            />
+              className="pt-intent-danger circleButton clearOutputBtn"
+              onClick={this.clearOutput}>
+              <ClearOutputIcon className="dbEnvySVG" width={30} height={30} />
+            </AnchorButton>
           </Tooltip>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -211,21 +196,28 @@ export default class Toolbar extends React.Component {
             inline
             content={globalString('output/toolbar/showMore')}
             tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
+            position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-icon-double-chevron-down showMoreBtn circleButton"
+              className="showMoreBtn circleButton"
               onClick={this.showMore}
-              disabled={
-                this.props.store.editorPanel.removingTabId == this.props.store.outputPanel.currentTab ||
-                this.props.store.outputPanel.currentTab == 'Default' ||
-                this.props.store.outputPanel.currentTab.indexOf('Explain') >= 0 ||
-                  this.props.store.outputPanel.currentTab.indexOf('Details') >= 0 ||
-                  this.props.store.outputs.get(
-                    this.props.store.outputPanel.currentTab
-                  ).cannotShowMore
-              }
-            />
+              disabled={this.props.store.editorPanel.removingTabId == this.props.store.outputPanel.currentTab || this.props.store.outputPanel.currentTab == 'Default' || this
+              .props
+              .store
+              .outputPanel
+              .currentTab
+              .indexOf('Explain') >= 0 || this
+              .props
+              .store
+              .outputPanel
+              .currentTab
+              .indexOf('Details') >= 0 || this
+              .props
+              .store
+              .outputs
+              .get(this.props.store.outputPanel.currentTab)
+              .cannotShowMore}>
+              <ShowMoreIcon className="dbEnvySVG" width={30} height={30} />
+            </AnchorButton>
           </Tooltip>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -233,12 +225,12 @@ export default class Toolbar extends React.Component {
             inline
             content={globalString('output/toolbar/save')}
             tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
+            position={Position.BOTTOM}>
             <AnchorButton
-              className="saveOutputBtn pt-icon-floppy-disk circleButton"
-              onClick={this.downloadOutput}
-            />
+              className="saveOutputBtn circleButton"
+              onClick={this.downloadOutput}>
+              <SaveOutputIcon className="dbEnvySVG" width={30} height={30} />
+            </AnchorButton>
           </Tooltip>
         </div>
         <div className="pt-navbar-group pt-right-align" />

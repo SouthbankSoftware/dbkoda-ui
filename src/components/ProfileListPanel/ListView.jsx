@@ -27,7 +27,7 @@ import {ProfileForm} from '../ConnectionPanel/ProfileForm';
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
-import ConnectionIcon from '../../styles/icons/database-icon-1.svg';
+import ConnectionIcon from '../../styles/icons/fix-icon.svg';
 import './styles.scss';
 
 const React = require('react');
