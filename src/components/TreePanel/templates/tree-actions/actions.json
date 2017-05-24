@@ -37,6 +37,13 @@
             "icon": "pt-icon-grouped-bar-chart",
             "view": "details"
 
+        },
+        {
+            "name": "ServerStatistics",
+            "text": "Server Statistics",
+            "icon": "pt-icon-doughnut-chart",
+            "view": "details"
+
         }
     ],
     "database": [{
