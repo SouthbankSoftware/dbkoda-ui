@@ -13,6 +13,10 @@ import {action, runInAction} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {AnchorButton} from '@blueprintjs/core';
 import {featherClient} from '~/helpers/feathers';
+import TwitterIcon from '../../../styles/icons/twitter-icon.svg';
+import GithubIcon from '../../../styles/icons/github-icon.svg';
+import DocumentIcon from '../../../styles/icons/document-icon.svg';
+import WorldIcon from '../../../styles/icons/world-icon.svg';
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
@@ -30,7 +34,7 @@ export default class WelcomeContent extends React.Component {
 
   @action.bound
   renderFeed() {
-    if (!this.state.isFetchingBlogs) {
+    if (!this.state.isFetchingBlogs && this.props.store.editorPanel.activeEditorId == 'Default') {
       this.state.isFetchingBlogs = true;
       setTimeout(() => {
         const service = featherClient().service('blog');
@@ -54,18 +58,15 @@ export default class WelcomeContent extends React.Component {
               });
             });
             this.state.isFetchingBlogs = false;
+            this.render();
           });
-      }, 2000);
+      }, 3000);
     }
   }
 
   render() {
     this.renderFeed();
-    console.log('Feed List: ', this.props.store.welcomePage.newsFeed);
-    const val1 = this.props.store.welcomePage.newsFeed[0];
-    const val2 = this.props.store.welcomePage.newsFeed[1];
-    const val3 = this.props.store.welcomePage.newsFeed[2];
-    if (val3) {
+    if (this.props.store.welcomePage.newsFeed[2]) {
       return (
         <div className="welcomePageContentWrapper">
           <div className="welcomePageContentLeft">
@@ -75,13 +76,17 @@ export default class WelcomeContent extends React.Component {
             <div className="docsList">
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-document" />
+                  <AnchorButton className="docsIcon">
+                    <DocumentIcon width={30} height={30} />
+                  </AnchorButton>
                 </span>
                 <p>MongoDB Documentation</p>
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-document" />
+                  <AnchorButton className="docsIcon">
+                    <DocumentIcon width={30} height={30} />
+                  </AnchorButton>
                 </span>
                 <p>DBEnvy Release Notes</p>
               </div>
@@ -89,11 +94,15 @@ export default class WelcomeContent extends React.Component {
             <h2>Links</h2>
             <div className="linksList">
               <div className="linkWrapper">
-                <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-envelope" />
+                <AnchorButton className="twitterIcon">
+                  <TwitterIcon width={50} height={50} />
+                </AnchorButton>
                 <p>Twitter</p>
               </div>
               <div className="linkWrapper">
-                <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-code" />
+                <AnchorButton className="gitHubIcon">
+                  <GithubIcon width={50} height={50} />
+                </AnchorButton>
                 <p>Github</p>
               </div>
             </div>
@@ -105,44 +114,50 @@ export default class WelcomeContent extends React.Component {
             <div className="feedList">
               <div className="feedItem firstItem">
                 <div className="pt-icon-large pt-icon- feedIconWrapper">
-                  I
+                  <AnchorButton className="gitHubIcon">
+                    <WorldIcon width={50} height={50} />
+                  </AnchorButton>
                 </div>
                 <div className="feedItemContent">
-                  <p className="feedItemTitle">{val1.title}</p>
+                  <p className="feedItemTitle">{this.props.store.welcomePage.newsFeed[0].title}</p>
                   <p
                     className="feedItemContent"
                     dangerouslySetInnerHTML={{
-                    __html: val1.content
+                    __html: this.props.store.welcomePage.newsFeed[0].content
                   }} />
-                  <p className="feedItemPubDate">{val1.pubDate}</p>
+                  <p className="feedItemPubDate">{this.props.store.welcomePage.newsFeed[0].pubDate}</p>
                 </div>
               </div>
               <div className="feedItem secondItem">
                 <div className="pt-icon-large pt-icon- feedIconWrapper">
-                  I
+                  <AnchorButton className="gitHubIcon">
+                    <WorldIcon width={50} height={50} />
+                  </AnchorButton>
                 </div>
                 <div className="feedItemContent">
-                  <p className="feedItemTitle">{val2.title}</p>
+                  <p className="feedItemTitle">{this.props.store.welcomePage.newsFeed[1].title}</p>
                   <p
                     className="feedItemContent"
                     dangerouslySetInnerHTML={{
-                    __html: val2.content
+                    __html: this.props.store.welcomePage.newsFeed[1].content
                   }} />
-                  <p className="feedItemPubDate">{val2.pubDate}</p>
+                  <p className="feedItemPubDate">{this.props.store.welcomePage.newsFeed[1].pubDate}</p>
                 </div>
               </div>
               <div className="feedItem thirdItem">
                 <div className="pt-icon-large pt-icon- feedIconWrapper">
-                  I
+                  <AnchorButton className="gitHubIcon">
+                    <WorldIcon width={50} height={50} />
+                  </AnchorButton>
                 </div>
                 <div className="feedItemContent">
-                  <p className="feedItemTitle">{val3.title}</p>
+                  <p className="feedItemTitle">{this.props.store.welcomePage.newsFeed[2].title}</p>
                   <p
                     className="feedItemContent"
                     dangerouslySetInnerHTML={{
-                    __html: val3.content
+                    __html: this.props.store.welcomePage.newsFeed[2].content
                   }} />
-                  <p className="feedItemPubDate">{val3.pubDate}</p>
+                  <p className="feedItemPubDate">{this.props.store.welcomePage.newsFeed[2].pubDate}</p>
                 </div>
               </div>
             </div>
@@ -173,11 +188,11 @@ export default class WelcomeContent extends React.Component {
           <h2>Links</h2>
           <div className="linksList">
             <div className="linkWrapper">
-              <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-envelope" />
+              <AnchorButton className="icon twitterIcon" />
               <p>Twitter</p>
             </div>
             <div className="linkWrapper">
-              <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-code" />
+              <AnchorButton className="icon gitHubIcon" />
               <p>Github</p>
             </div>
           </div>

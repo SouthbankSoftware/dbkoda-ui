@@ -3,7 +3,7 @@
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-03T12:27:27+10:00
+ * @Last modified time: 2017-05-23T11:59:02+10:00
 */
 
 import React from 'react';
@@ -69,7 +69,12 @@ class DragLabel extends React.Component {
       const afterMatch = strText.slice(matchEnd + 1);
       return <span>{beforeMatch}<mark>{matchText}</mark>{afterMatch}</span>;
     }
-    if (this.props.type == 'shard' || this.props.type == 'config') {
+    if (
+      this.props.type == 'shard' ||
+      this.props.type == 'config' ||
+      this.props.type == 'mongos' ||
+      this.props.type == 'replica_member'
+    ) {
       return this.ServerName;
     }
     return strText;

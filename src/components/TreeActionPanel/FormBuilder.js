@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-22T10:56:47+10:00
+ * @Last modified time: 2017-05-23T11:53:20+10:00
  */
 
 import { SyncService } from '#/common/SyncService';
@@ -384,7 +384,6 @@ export default class FormBuilder {
               }),
               getData: getPrefilledFormData
             };
-            treeActionStore.form = form;
 
             resolve(form);
           })

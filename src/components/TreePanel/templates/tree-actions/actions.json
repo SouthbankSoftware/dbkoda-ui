@@ -64,7 +64,8 @@
         }, {
             "name": "CollectionStats",
             "text": "Collection Statistics",
-            "icon": "pt-icon-grouped-bar-chart"
+            "icon": "pt-icon-grouped-bar-chart",
+            "view": "details"
         },
         {
             "name": "CreateIndex",

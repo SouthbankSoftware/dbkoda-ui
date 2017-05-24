@@ -2,8 +2,8 @@
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-22T14:02:36+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-23T15:39:08+10:00
 */
 
 import React from 'react';
@@ -219,6 +219,8 @@ export default class Toolbar extends React.Component {
               disabled={
                 this.props.store.outputPanel.currentTab.indexOf('Explain') >=
                   0 ||
+                  this.props.store.outputPanel.currentTab.indexOf('Details') >=
+                    0 ||
                   this.props.store.outputs.get(
                     this.props.store.outputPanel.currentTab
                   ).cannotShowMore

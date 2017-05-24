@@ -95,7 +95,7 @@ export default class TreeToolbar extends React.Component {
         </div>
         <div className="pt-navbar-group pt-align-right">
           <AnchorButton
-            className="pt-button pt-icon-refresh pt-intent-primary refreshTreeButton"
+            className="pt-button pt-icon-refresh refreshTreeButton"
             onClick={this.refresh}
             loading={this.props.store.treePanel.isRefreshing}
             disabled={this.props.store.treePanel.isRefreshDisabled} />

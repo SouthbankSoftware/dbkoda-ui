@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-03T09:16:00+10:00
+ * @Last modified time: 2017-05-23T15:31:20+10:00
 */
 
 import React from 'react';
@@ -60,7 +60,8 @@ export default class TreeView extends React.Component {
       () => this.props.store.treeActionPanel.treeActionEditorId,
       () => {
         if (this.props.store.treeActionPanel.treeActionEditorId != '') {
-          this.props.store.showTreeActionPane();
+            this.props.store.showTreeActionPane();
+
           // this.props.store.treeActionPanel.treeActionEditorId = '';  // will update this in the dialog execution.
         }
       }
@@ -71,6 +72,19 @@ export default class TreeView extends React.Component {
     this.reactionToFilter();
     this.reactionToTreeAction();
   }
+  getActionByName(actionName) {
+    if (this.nodeRightClicked) {
+      const Actions = TreeActions[this.nodeRightClicked.type];
+      const namedAction = Actions.find((action) => {
+        return action.name == actionName;
+      });
+      if (namedAction) {
+        return namedAction;
+      }
+    }
+    return null;
+  }
+
   getContextMenu() {
     if (this.nodeRightClicked) {
       const Actions = TreeActions[this.nodeRightClicked.type];
@@ -133,14 +147,38 @@ export default class TreeView extends React.Component {
   };
   handleTreeActionClick = (e: React.MouseEvent) => {
     const action = e._targetInst._currentElement._owner._instance.props.name;
+    this.actionSelected = this.getActionByName(action);
     if (action == 'SampleCollections') {
       this.props.treeState.sampleCollection(this.nodeRightClicked);
     } else if (this.nodeRightClicked) {
-      this.props.store.addNewEditorForTreeAction(this.nodeRightClicked, action);
+      if (this.actionSelected && this.actionSelected.view && this.actionSelected.view == 'details') {
+        this.showDetailsView(this.nodeRightClicked, action);
+      } else {
+        this.props.store.addNewEditorForTreeAction(this.nodeRightClicked, action);
+      }
     }
   };
 
+  showDetailsView = (treeNode, action) => {
+    runInAction('Using active editor for tree details action', () => {
+      this.props.store.treeActionPanel.treeNode = treeNode;
+      this.props.store.treeActionPanel.treeAction = action;
+      const editorId = this.props.store.editorPanel.activeEditorId;
+      if (editorId) {
+        this.props.store.detailsPanel.activeEditorId = editorId;
+        const editor = this.props.store.editors.get(
+          editorId
+        );
+        this.props.store.editors.set(editorId, {
+          ...editor,
+          detailsView: {visible: true, treeNode, treeAction: action}
+        });
+      }
+    });
+  }
+
   nodeRightClicked;
+  actionSelected;
 
   renderContextMenu() {
     return this.getContextMenu();

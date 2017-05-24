@@ -2,13 +2,14 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-04T09:27:34+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-23T16:54:58+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Tab2, Tabs2 } from '@blueprintjs/core';
+import { DetailsPanel } from '#/DetailsPanel';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
@@ -111,6 +112,12 @@ export default class Panel extends React.Component {
           editor[1].explains.active = false;
         });
       }
+      if (editor[1].detailsView && editor[1].detailsView.visible) {
+        runInAction(() => {
+          this.props.store.outputPanel.currentTab = 'Details-' + editor[1].id;
+          editor[1].detailsView.visible = false;
+        });
+      }
       return [
         <Tab2
           className={tabClassName}
@@ -139,6 +146,17 @@ export default class Panel extends React.Component {
           id={'Explain-' + editor[1].id}
           title={'Explain-' + editorTitle}
           panel={<Explain editor={editor[1]} />}
+        />,
+        <Tab2
+          className={
+            editor[1].detailsView && tabClassName !== 'notVisible'
+              ? 'visible'
+              : 'notVisible'
+          }
+          key={'Details-' + editor[1].id}
+          id={'Details-' + editor[1].id}
+          title={'Details-' + editorTitle}
+          panel={<DetailsPanel editor={editor[1]} />}
         />
       ];
     });
