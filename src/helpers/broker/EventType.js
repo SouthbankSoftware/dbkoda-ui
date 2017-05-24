@@ -39,5 +39,9 @@ export default {
   FEATHER_CLIENT_LOADED: 'feather::client::loaded',
   createFileChangedEvent(id) {
     return `fileChanged::${id}`;
+  },
+  SHELL_RECONNECT: 'controller::shell::reconnect',
+  createShellReconnectEvent: (id, shellId) => {
+    return 'controller::shell::reconnect::' + id + '::' + shellId;
   }
 };

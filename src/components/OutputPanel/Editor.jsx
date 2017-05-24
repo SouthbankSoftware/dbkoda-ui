@@ -105,6 +105,7 @@ export default class Editor extends React.Component {
       }
     });
     Broker.on(EventType.createShellOutputEvent(props.profileId, props.shellId), this.outputAvailable);
+    Broker.on(EventType.createShellReconnectEvent(props.profileId, props.shellId), this.onReconnect);
   }
 
   /**
@@ -144,6 +145,24 @@ export default class Editor extends React.Component {
 
   componentWillUnmount() {
     Broker.removeListener(EventType.createShellOutputEvent(this.props.profileId, this.props.shellId), this.outputAvailable);
+    Broker.removeListener(EventType.createShellReconnectEvent(this.props.profileId, this.props.shellId), this.onReconnect);
+  }
+
+  @action.bound
+  onReconnect(output) {
+    console.log('got reconnect output ', output);
+    const totalOutput = this
+        .props
+        .store
+        .outputs
+        .get(this.props.id)
+        .output + output.output;
+    this
+      .props
+      .store
+      .outputs
+      .get(this.props.id)
+      .output = totalOutput;
   }
 
   /**
