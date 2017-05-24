@@ -3,7 +3,7 @@
  * @Date:   2017-05-22T14:42:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T12:30:10+10:00
+ * @Last modified time: 2017-05-24T13:16:49+10:00
  */
 
 
@@ -11,6 +11,7 @@ import React from 'react';
 import { action } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import TableField from './Components/TableField';
+import BarChartField from './Components/BarChartField';
 
 import './View.scss';
 
@@ -38,6 +39,8 @@ export default class DetailsView extends React.Component {
           const fieldData = viewInfo.values[field.name];
           if (field.type == 'Table') {
             detailsFields.push(<TableField key={field.name} field={field} data={fieldData} />);
+          } else if (field.type == 'BarChart') {
+            detailsFields.push(<BarChartField key={field.name} field={field} data={fieldData} />);
           }
         }
       }

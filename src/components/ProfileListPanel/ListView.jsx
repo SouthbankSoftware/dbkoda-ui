@@ -27,6 +27,14 @@ import {ProfileForm} from '../ConnectionPanel/ProfileForm';
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
+import ConnectionIcon from '../../styles/icons/fix-icon.svg';
+import OpenProfileIcon from '../../styles/icons/open-icon.svg';
+import CloseProfileIcon from '../../styles/icons/close-profile-icon.svg';
+import EditProfileIcon from '../../styles/icons/edit-profile-icon.svg';
+import DeleteProfileIcon from '../../styles/icons/remove-profile-icon.svg';
+import DocumentProfileIcon from '../../styles/icons/document-icon.svg';
+import NewDocumentProfileIcon from '../../styles/icons/document-solid-icon.svg';
+
 import './styles.scss';
 
 const React = require('react');
@@ -435,19 +443,23 @@ export default class ListView extends React.Component {
     const windows = [];
     if (profile.status == 'CLOSED') {
       connect = (
-        <div>
-          <MenuItem
-            className="profileListContextMenu openProfile"
-            onClick={this.openOpenConnectionAlert}
-            text={globalString('profile/menu/openConnection')}
-            iconName="pt-icon-unlock"
-            intent={Intent.NONE} />
-          <MenuItem
-            className="profileListContextMenu editProfile"
-            onClick={this.editProfile}
-            text={globalString('profile/menu/editProfile')}
-            iconName="pt-icon-edit"
-            intent={Intent.NONE} />
+        <div className="contextMenuGroup">
+          <div className="menuItemWrapper">
+            <OpenProfileIcon className="dbEnvySVG" width={20} height={20} />
+            <MenuItem
+              className="profileListContextMenu openProfile"
+              onClick={this.openOpenConnectionAlert}
+              text={globalString('profile/menu/openConnection')}
+              intent={Intent.NONE} />
+          </div>
+          <div className="menuItemWrapper">
+            <EditProfileIcon className="dbEnvySVG" width={20} height={20} />
+            <MenuItem
+              className="profileListContextMenu editProfile"
+              onClick={this.editProfile}
+              text={globalString('profile/menu/editProfile')}
+              intent={Intent.NONE} />
+          </div>
         </div>
       );
     } else {
@@ -458,40 +470,50 @@ export default class ListView extends React.Component {
         .editors
         .forEach((value) => {
           if (value.profileId.trim() == this.state.targetProfile.id.trim()) {
-            windows.push((<MenuItem
-              className={'profileListContextMenu editorListing ' + value.fileName}
-              text={value.fileName}
-              iconName="pt-icon-new-text-box"
-              onClick={() => this.swapToEditor(value)}
-              intent={Intent.NONE} />));
+            windows.push((
+              <div className="menuItemWrapper">
+                <DocumentProfileIcon className="dbEnvySVG" width={20} height={20} />
+                <MenuItem
+                  className={'profileListContextMenu editorListing ' + value.fileName}
+                  text={value.fileName}
+                  onClick={() => this.swapToEditor(value)}
+                  intent={Intent.NONE} />
+              </div>
+            ));
           }
         });
       connect = (
-        <div>
-          <MenuItem
-            className="profileListContextMenu closeProfile"
-            onClick={this.openCloseConnectionAlert}
-            text={globalString('profile/menu/closeConnection')}
-            iconName="pt-icon-lock"
-            intent={Intent.NONE} />
-          <MenuItem
-            className="profileListContextMenu newWindow"
-            onClick={this.newEditorWindow}
-            text={globalString('profile/menu/newWindow')}
-            iconName="pt-icon-new-text-box"
-            intent={Intent.NONE} />
+        <div className="contextMenuGroup">
+          <div className="menuItemWrapper">
+            <CloseProfileIcon className="dbEnvySVG" width={20} height={20} />
+            <MenuItem
+              className="profileListContextMenu closeProfile"
+              onClick={this.openCloseConnectionAlert}
+              text={globalString('profile/menu/closeConnection')}
+              intent={Intent.NONE} />
+          </div>
+          <div className="menuItemWrapper">
+            <NewDocumentProfileIcon className="dbEnvySVG" width={20} height={20} />
+            <MenuItem
+              className="profileListContextMenu newWindow"
+              onClick={this.newEditorWindow}
+              text={globalString('profile/menu/newWindow')}
+              intent={Intent.NONE} />
+          </div>
         </div>
       );
     }
     return (
       <Menu className="profileListContextMenu">
         {connect}
-        <MenuItem
-          className="profileListContextMenu deleteProfile"
-          onClick={this.openRemoveConnectionAlert}
-          text={globalString('profile/menu/deleteProfile')}
-          iconName="pt-icon-delete"
-          intent={Intent.NONE} />
+        <div className="menuItemWrapper">
+          <DeleteProfileIcon className="dbEnvySVG" width={20} height={20} />
+          <MenuItem
+            className="profileListContextMenu deleteProfile"
+            onClick={this.openRemoveConnectionAlert}
+            text={globalString('profile/menu/deleteProfile')}
+            intent={Intent.NONE} />
+        </div>
         <MenuDivider /> {windows}
       </Menu>
 
@@ -511,13 +533,15 @@ export default class ListView extends React.Component {
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
           <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-            <p className="pt-icon-link profileListing">{profiles[rowIndex][1].alias}</p>
+            <ConnectionIcon className="dbEnvySVG" width={20} height={20} />
+            <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
         );
       }
       return (
         <Cell className={className}>
-          <i className=" pt-icon-link profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
+          <ConnectionIcon className="dbEnvySVG" width={20} height={20} />
+          <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );
     };

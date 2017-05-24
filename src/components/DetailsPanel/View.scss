@@ -2,13 +2,14 @@
 // @Date:   2017-05-23T16:26:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-23T16:45:13+10:00
+// @Last modified time: 2017-05-24T14:00:24+10:00
 
 @import '../../styles/_defaultTheme.scss';
 
 .details-view {
   overflow: auto;
   width: 100%;
+  background-color: $detailsBackground;
   .details-title {
     text-align: center;
     margin: 35px 0;
@@ -16,8 +17,11 @@
   }
   .details-fields {
     display: flex;
+    .div-field-container {
+      margin: 15px 15px 15px 15px;
+    }
     .detailsFieldSet {
-      margin: 0px 15px 15px 15px;
+      margin: 15px 15px 15px 15px;
       border-style: none;
       background-color: $fieldGroupPrimaryBackground;
     }
@@ -57,5 +61,9 @@
     .pt-intent-primary:active {
       background-color: $fieldSecondaryButtonActive;
     }
+  }
+
+  .recharts-bar-cursor {
+    fill: $fieldBrightPlaceholderFontColor !important;
   }
 }

@@ -3,7 +3,7 @@
  * @Date:   2017-05-23T13:15:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T16:39:51+10:00
+ * @Last modified time: 2017-05-24T14:00:31+10:00
  */
 
 import React from 'react';
@@ -13,9 +13,7 @@ export default observer(({
   field,
   data
 }) => {
-  console.log('TableField field:', field);
-  console.log('TableField data:', data);
-  const fldClassName = 'pt-table pt-interactive';
+  const fldClassName = 'pt-table pt-interactive pt-striped';
 
   const tableHeaders = [];
   const tableRows = [];
@@ -33,7 +31,7 @@ export default observer(({
   }
 
   return (
-    <fieldset className="detailsFieldSet">
+    <div className="div-field-container">
       <label htmlFor={field.name} className="pt-label pt-label-field">
         {field.label}
       </label>
@@ -45,6 +43,6 @@ export default observer(({
           {tableRows}
         </tbody>
       </table>
-    </fieldset>
+    </div>
   );
 });

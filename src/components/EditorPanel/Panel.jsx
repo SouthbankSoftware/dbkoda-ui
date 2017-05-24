@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-24T12:25:33+10:00
+ * @Last modified time: 2017-05-24T13:08:30+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -11,7 +11,6 @@ import React from 'react';
 import {inject, observer, PropTypes} from 'mobx-react';
 import {action, runInAction} from 'mobx';
 import {Button, Tabs2, Tab2, Intent, ContextMenu, Menu, MenuItem} from '@blueprintjs/core';
-import {NewToaster} from '#/common/Toaster';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
@@ -215,8 +214,15 @@ export default class Panel extends React.Component {
    *  @param {String} currentTab - The id of the leftmost tab that will stay open
    */
   closeLeft(currentTab) {
-    console.log(`Close Left of ${currentTab}`);
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+    const editors = this.props.store.editors.entries();
+    editors.every((editor) => {
+      if (editor[1].id != currentTab) {
+        console.log(`Closing Tab ${editor[1].id}`);
+        this.closeTab(editor[1]);
+        return true;
+      }
+      return false;
+    });
   }
 
   /**
@@ -224,8 +230,18 @@ export default class Panel extends React.Component {
    *  @param {String} currentTab - The id of the rightmost tab that will stay open
    */
   closeRight(currentTab) {
-    console.log(`Close Right of ${currentTab}`);
-    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+    const editors = this.props.store.editors.entries();
+    let startClosing = false;
+    editors.map((editor) => {
+      if (editor[1].id != currentTab) {
+        if (startClosing) {
+          console.log(`Closing Tab ${editor[1].id}`);
+          this.closeTab(editor[1]);
+        }
+      } else {
+        startClosing = true;
+      }
+    });
   }
 
   /** Display a right click menu when any of the editor tabs are right clicked
