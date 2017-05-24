@@ -274,6 +274,7 @@ class View extends React.Component {
      */
     const reactionToStopExecution = reaction(() => this.props.store.editorPanel.stoppingExecution, (stoppingExecution) => {
       if (this.props.store.editorPanel.stoppingExecution) {
+        this.props.store.editorPanel.stoppingExecution = false;
         const editor = this
           .props
           .store
