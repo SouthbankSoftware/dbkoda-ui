@@ -49,12 +49,12 @@
   .bp-table-cell {
     border-bottom: 1px solid $profileListDividerColor;
     .bp-table-truncated-text {
-      height:100%;
+      height: 100%;
       display: flex;
       flex-direction: row;
       svg.dbEnvySVG {
-        width:40px;
-        height:40px;
+        width: 40px;
+        height: 40px;
         margin-right: 20px;
         border-radius: 50%;
         padding: 3px;
@@ -85,4 +85,23 @@
 .closedProfile {
   color: #696869 !important;
   font-style: italic !important;
+}
+
+ul.profileListContextMenu {
+  display: flex;
+  flex-direction: column;
+  div.contextMenuGroup {
+    div.menuItemWrapper {
+      display: flex;
+      flex-direction: row;
+      svg.dbEnvySVG {}
+      li {}
+    }
+  }
+  div.menuItemWrapper {
+    display: flex;
+    flex-direction: row;
+    svg.dbEnvySVG {}
+    li {}
+  }
 }

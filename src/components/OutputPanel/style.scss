@@ -68,6 +68,7 @@
             width: 40px;
             height: 50px;
             .pt-button {
+              position: relative;
               background-color: $terminalButtonBackground;
               color: $terminalButtonIcon !important;
               width: 20px;
@@ -76,6 +77,15 @@
               margin-right: 50px;
               margin-top: 11px;
               margin-bottom: 11px;
+              svg.dbEnvySVG {
+                position: absolute;
+                top: 50%;
+                bottom: 50%;
+                transform: translate(-50%, -50%);
+                width: 60%;
+                height: 60%;
+                fill: $buttonPrimaryIcon;
+              }
             }
           }
         }

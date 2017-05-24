@@ -13,9 +13,18 @@ import {DragItemTypes} from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import {action, reaction} from 'mobx';
 import {featherClient} from '~/helpers/feathers';
-import {AnchorButton, ContextMenuTarget, Intent, Menu, MenuItem, Position, Tooltip} from '@blueprintjs/core';
+import {
+  AnchorButton,
+  ContextMenuTarget,
+  Intent,
+  Menu,
+  MenuItem,
+  Position,
+  Tooltip
+} from '@blueprintjs/core';
 import CodeMirror from 'react-codemirror';
 import {Broker, EventType} from '../../helpers/broker';
+import SubmitIcon from '../../styles/icons/execute-command-icon.svg';
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/addon/edit/matchbrackets.js');
@@ -119,9 +128,11 @@ class Terminal extends React.Component {
         console.log('Terminal Id: ', this.props.id);
         console.log('Active Editor Id: ', this.props.store.editorPanel.activeEditorId);
         console.log('Drag Item: ', this.props.store.dragItem.item);
-        this.setState({command: TreeDropActions.getCodeForTreeNode(this.props.store.dragItem.item)});
+        this.setState({
+          command: TreeDropActions.getCodeForTreeNode(this.props.store.dragItem.item)
+        });
       }
-    this.props.store.dragItem.dragDropTerminal = false;
+      this.props.store.dragItem.dragDropTerminal = false;
     });
 
     /**
@@ -339,11 +350,13 @@ class Terminal extends React.Component {
           inline
           content={globalString('output/terminal/execute')}
           tooltipClassName="pt-dark"
-          position={Position.TOP} >
+          position={Position.TOP}>
           <AnchorButton
-            className="pt-button pt-icon-key-enter"
+            className="pt-button"
             disabled={this.props.store.editorToolbar.noActiveProfile}
-            onClick={this.executeCommand} />
+            onClick={this.executeCommand}>
+            <SubmitIcon className="dbEnvySVG" width={30} height={30} />
+          </AnchorButton>
         </Tooltip>
       </div>
     );
