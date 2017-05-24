@@ -138,17 +138,32 @@ export default class TreeView extends React.Component {
         for (const objAction of Actions) {
           // iconName={objAction.icon}
           const icon = this.getIconFor(objAction.icon);
-          Menus.push(
-            <div className="menuItemWrapper">
-              {icon}
-              <MenuItem
-                onClick={this.handleTreeActionClick}
-                text={objAction.text}
-                name={objAction.name}
-                key={objAction.name}
-                intent={Intent.NONE} />
-            </div>
-          );
+          if (icon != null) {
+            Menus.push(
+              <div className="menuItemWrapper">
+                {icon}
+                <MenuItem
+                  onClick={this.handleTreeActionClick}
+                  text={objAction.text}
+                  name={objAction.name}
+                  key={objAction.name}
+                  intent={Intent.NONE} />
+              </div>
+            );
+          } else {
+            Menus.push(
+              <div className="menuItemWrapper">
+                {icon}
+                <MenuItem
+                  onClick={this.handleTreeActionClick}
+                  text={objAction.text}
+                  name={objAction.name}
+                  key={objAction.name}
+                  iconName={objAction.icon}
+                  intent={Intent.NONE} />
+              </div>
+            );
+          }
         }
       }
       return (

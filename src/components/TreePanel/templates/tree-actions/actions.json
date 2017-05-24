@@ -13,23 +13,23 @@
         {
             "name": "GetParameters",
             "text": "Get Parameters",
-            "icon": "settings"
+            "icon": "pt-icon-settings"
         }
         ,
         {
              "name": "SetParameter",
             "text": "Set parameter",
-            "icon": "settings"
+            "icon": "pt-icon-settings"
         },
         {
              "name": "SetLogLevel",
             "text": "Get/Set Logging levels",
-            "icon": "settings"
+            "icon": "pt-icon-settings"
         },
         {
              "name": "GetLog",
             "text": "View log entries",
-             "icon": "document"
+             "icon": "pt-icon-error"
         },
          {
             "name": "TopCollections",
@@ -49,7 +49,7 @@
     "database": [{
             "name": "CreateCollection",
             "text": "Create Collection",
-            "icon": "add"
+            "icon": "pt-icon-add"
         }, {
             "name": "setProfilingLevel",
             "text": "Set Profiling",
@@ -57,12 +57,12 @@
         }, {
             "name": "DropDatabase",
             "text": "Drop Database",
-            "icon": "close"
+            "icon": "pt-icon-delete"
         },
         {
             "name": "EnableSharding",
             "text": "Enable Sharding",
-            "icon": "shards"
+            "icon": "pt-icon-split-columns"
         }
     ],
     "collection": [
@@ -84,46 +84,46 @@
             "name": "CollectionStats",
             "text": "Collection Statistics",
             "icon": "pt-icon-grouped-bar-chart",
-            "view": "details"
+            "view": "pt-icon-properties"
         },
         {
             "name": "CreateIndex",
             "text": "Create Index",
-            "icon": "add"
+            "icon": "pt-icon-add"
         }, {
             "name": "DropAllIndexes",
             "text": "Drop All Indexes",
-            "icon": "close"
+            "icon": "pt-icon-delete"
         },
         {
             "name": "RenameCollection",
             "text": "Rename Collection",
-            "icon": "collection"
+            "icon": "pt-icon-exchange"
         },
         {
             "name": "CompactCollection",
             "text": "Compact Collection",
-            "icon": "collection"
+            "icon": "pt-icon-compressed"
         },
         {
             "name": "ValidateCollection",
             "text": "Validate Collection",
-            "icon": "collection"
+            "icon": "pt-icon-confirm"
         },
         {
             "name": "ShardCollection",
             "text": "Shard Collection",
-            "icon": "shards"
+            "icon": "pt-icon-split-columns"
         }, {
             "name": "DropCollection",
             "text": "Drop Collection",
-            "icon": "close"
+            "icon": "pt-icon-delete"
         }
     ],
     "index": [{
         "name": "DropIndex",
         "text": "Drop Index",
-        "icon": "close"
+        "icon": "pt-icon-delete"
     }],
     "users": [{
         "name": "CreateUser",
