@@ -154,12 +154,14 @@ export default class Editor extends React.Component {
   @action.bound
   onReconnect(output) {
     console.log('got reconnect output ', output);
+    const combineOutput = output.output.join('\r');
     const totalOutput = this
         .props
         .store
         .outputs
         .get(this.props.id)
-        .output + output.output;
+        .output + combineOutput;
+    console.log('output:', combineOutput);
     this
       .props
       .store
