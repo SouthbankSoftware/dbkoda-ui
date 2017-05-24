@@ -1,5 +1,5 @@
 {
-	"Title": "Collection Statistics",
+	"Title": "Collection Statistics for %treeNode.parentDB%.%treeNode%",
 	"DefaultValues": {
 		"function": "dbenvy_CollectionStats",
 		"arguments": [{
@@ -21,6 +21,22 @@
 			}, {
 				"name": "value",
 				"label": "Value"
+			}]
+		},
+		{
+			"name": "Shards",
+			"label": "Shards Statistics",
+			"type": "Table",
+			"columns": [{
+				"name": "name",
+				"label": "Name"
+			}, {
+				"name": "size",
+				"label": "Size in KBs"
+			},
+			{
+				"name": "pctSize",
+				"label": "Size in %"
 			}]
 		}
 	]

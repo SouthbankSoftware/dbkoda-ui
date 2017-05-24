@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-24T12:22:40+10:00
+ * @Last modified time: 2017-05-24T12:25:33+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -290,7 +290,7 @@ export default class Panel extends React.Component {
         title={globalString('editor/welcome/heading')}
         panel={<WelcomeView />}
         >
-        <Button className="pt-minimal" onClick={() => { this.closeWelcome(); }}>
+        <Button className="pt-minimal" onClick={this.closeWelcome}>
           <span className="pt-icon-cross" />
         </Button>
       </Tab2>
