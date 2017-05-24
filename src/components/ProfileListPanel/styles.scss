@@ -52,23 +52,21 @@
       height: 100%;
       display: flex;
       flex-direction: row;
+      line-height: 60px;
       svg.dbEnvySVG {
         width: 40px;
         height: 40px;
-        margin-right: 20px;
+        margin: 10px;
         border-radius: 50%;
         padding: 3px;
         border: 1px solid $buttonSecondaryIcon;
         fill: $buttonSecondaryIcon;
       }
       .profileListing {
-        height: 100%;
         font: 'Arial';
         font-style: normal !important;
         color: $profileListFontColor;
         font-size: large;
-        vertical-align: middle;
-        display: table-cell;
       }
       .profileListing::before {
         margin-right: 10px;
