@@ -58,6 +58,11 @@
             "icon": "pt-icon-search-template"
         },
         {
+            "name": "GroupBy",
+            "text": "Group By Query",
+            "icon": "pt-icon-group-objects"
+        },
+        {
             "name": "SampleCollections",
             "text": "Find Attributes",
             "icon": "pt-icon-properties"
