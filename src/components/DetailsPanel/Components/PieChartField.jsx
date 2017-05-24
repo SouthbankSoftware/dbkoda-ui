@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T15:20:50+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T16:32:20+10:00
+ * @Last modified time: 2017-05-24T16:54:10+10:00
  */
 
 import React from 'react';
@@ -27,7 +27,7 @@ export default observer(({
         <Pie
           cx={field.width / 2}
           cy={field.height / 2}
-          outerRadius={field.width/3}
+          outerRadius={field.width / 3}
           data={data}
           paddingAngle={5}
           label

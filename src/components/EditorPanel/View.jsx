@@ -27,6 +27,7 @@ import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
 
+
 const Prettier = require('prettier');
 const React = require('react');
 const CodeMirror = require('react-codemirror');
@@ -296,11 +297,7 @@ class View extends React.Component {
             if (response) {
               NewToaster.show({message: response.result, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
             } else {
-              NewToaster.show({
-                message: globalString('editor/view/executionStopped'),
-                intent: Intent.SUCCESS,
-                iconName: 'pt-icon-thumbs-up'
-              });
+              NewToaster.show({message: globalString('editor/view/executionStopped'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
             }
             this.finishedExecution({id, shellId: shell});
           })
@@ -596,11 +593,7 @@ class View extends React.Component {
         .code = beautified;
       cm.setValue(beautified);
     } catch (err) {
-      NewToaster.show({
-        message: globalString('editor/view/formatError'),
-        intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
-      });
+      NewToaster.show({message: globalString('editor/view/formatError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format All failed with error: ' + err);
       }
@@ -620,11 +613,7 @@ class View extends React.Component {
       const beautified = Prettier.format(cm.getSelection(), {});
       cm.replaceSelection(beautified);
     } catch (err) {
-      NewToaster.show({
-        message: globalString('editor/view/formatError'),
-        intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
-      });
+      NewToaster.show({message: globalString('editor/view/formatError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format Selection failed with error: ' + err);
       }
@@ -806,31 +795,41 @@ class View extends React.Component {
   renderContextMenu() {
     return (
       <Menu>
-        <MenuItem
-          onClick={this.executeLine}
-          text={globalString('editor/view/menu/executeSelected')}
-          iconName="pt-icon-chevron-right"
-          intent={Intent.NONE} />
-        <MenuItem
-          onClick={this.executeAll}
-          text={globalString('editor/view/menu/executeAll')}
-          iconName="pt-icon-double-chevron-right"
-          intent={Intent.NONE} />
-        <MenuItem
-          onClick={this.refresh}
-          text={globalString('editor/view/menu/refresh')}
-          iconName="pt-icon-refresh"
-          intent={Intent.NONE} />
-        <MenuItem
-          onClick={this.prettifyAll}
-          text={globalString('editor/view/menu/formatAll')}
-          iconName="pt-icon-align-left"
-          intent={Intent.NONE} />
-        <MenuItem
-          onClick={this.prettifySelection}
-          text={globalString('editor/view/menu/formatSelection')}
-          iconName="pt-icon-align-left"
-          intent={Intent.NONE} />
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.executeLine}
+            text={globalString('editor/view/menu/executeSelected')}
+            iconName="pt-icon-chevron-right"
+            intent={Intent.NONE} />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.executeAll}
+            text={globalString('editor/view/menu/executeAll')}
+            iconName="pt-icon-double-chevron-right"
+            intent={Intent.NONE} />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.refresh}
+            text={globalString('editor/view/menu/refresh')}
+            iconName="pt-icon-refresh"
+            intent={Intent.NONE} />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.prettifyAll}
+            text={globalString('editor/view/menu/formatAll')}
+            iconName="pt-icon-align-left"
+            intent={Intent.NONE} />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.prettifySelection}
+            text={globalString('editor/view/menu/formatSelection')}
+            iconName="pt-icon-align-left"
+            intent={Intent.NONE} />
+        </div>
       </Menu>
     );
   }
