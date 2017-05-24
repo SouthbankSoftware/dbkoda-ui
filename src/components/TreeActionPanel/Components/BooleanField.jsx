@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T12:16:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T15:02:13+10:00
+ * @Last modified time: 2017-05-24T16:48:42+10:00
  */
 
 /**
@@ -11,7 +11,7 @@
   * @Date:   2017-04-19T15:43:32+10:00
   * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-09T15:02:13+10:00
+ * @Last modified time: 2017-05-24T16:48:42+10:00
   */
 
 import React from 'react';
@@ -25,7 +25,7 @@ export default observer(({
 }) => {
   const fldClassName = formGroup
     ? 'pt-form-group form-group-inline'
-    : 'pt-form-group pt-inline';
+    : 'pt-form-group pt-inline pt-top-level';
   let inputClassName = '';
   let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
 

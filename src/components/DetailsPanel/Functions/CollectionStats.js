@@ -3,7 +3,7 @@
  * @Date:   2017-05-22T15:30:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T13:24:51+10:00
+ * @Last modified time: 2017-05-24T15:48:48+10:00
  */
 
 export const CollectionStats = {
@@ -24,21 +24,24 @@ export const CollectionStats = {
       }
       if (data[key] && key == 'shards') {
         result.Shards = [];
+        result.ShardsPercentage = [];
         const shards = data[key];
         for (const shardKey in shards) {
           if (shards[shardKey]) {
             const shardInfo = shards[shardKey];
             const Shard = {name: shardKey};
+            const ShardPct = {name: shardKey};
             if (shardInfo.size) {
               Shard.size = shardInfo.size;
               if (data.size) {
-                Shard.pctSize = Math.round((shardInfo.size / data.size) * 100);
+                ShardPct.value = Math.round((shardInfo.size / data.size) * 100);
               }
             }
             if (shardInfo.count) {
               Shard.count = shardInfo.count;
             }
             result.Shards.push(Shard);
+            result.ShardsPercentage.push(ShardPct);
           }
         }
       }
