@@ -99,7 +99,32 @@ describe('Miscellaneous collection tests', () => {
                     });
             }
         });
-    }); // compact may take time
+    });
+
+    test('GroupBy Query', (done) => {
+        const templateToBeTested = './src/components/TreeActionPanel/Templates/GroupBy.hbs';
+        const templateInput = require('./GroupBy.hbs.input.json');
+        fs.readFile(templateToBeTested, (err, data) => {
+            if (!err) {
+                templateInput.CollectionName = randomCollectionName;
+                const templateSource = data.toString();
+                const compiledTemplate = hbs.compile(templateSource);
+                const CompactCollectionCommands = compiledTemplate(templateInput);
+                let mongoCommands = CompactCollectionCommands;
+                mongoCommands += '\nexit\n';
+                if (debug) {
+                    console.log(mongoCommands);
+                }
+                const matchString = 'ThisShouldBeInQuery';
+                common
+                    .mongoOutput(mongoCommands)
+                    .then((output) => {
+                        expect(output).toEqual(expect.stringMatching(matchString));
+                        done();
+                    });
+            }
+        });
+    });
 
     test('Rename Collection', (done) => {
         const templateToBeTested = './src/components/TreeActionPanel/Templates/RenameCollection.hbs';

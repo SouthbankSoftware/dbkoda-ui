@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-22T14:01:08+10:00
+ * @Last modified time: 2017-05-24T11:15:57+10:00
 */
 
 import React from 'react';
@@ -14,6 +14,7 @@ import CodeMirror from 'react-codemirror';
 import 'codemirror/theme/material.css';
 import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
+import {ProfileStatus} from '../common/Constants';
 
 require('codemirror/mode/javascript/javascript');
 require('#/common/MongoScript.js');
@@ -105,6 +106,7 @@ export default class Editor extends React.Component {
       }
     });
     Broker.on(EventType.createShellOutputEvent(props.profileId, props.shellId), this.outputAvailable);
+    Broker.on(EventType.createShellReconnectEvent(props.profileId, props.shellId), this.onReconnect);
   }
 
   /**
@@ -132,18 +134,38 @@ export default class Editor extends React.Component {
    */
   componentDidUpdate() {
     setTimeout(() => {
-      const cm = this
-        .editor
-        .getCodeMirror();
-      cm.scrollIntoView({
-        line: cm.lineCount() - 1,
-        ch: 0
-      });
+      if (this.editor) {
+        const cm = this
+          .editor
+          .getCodeMirror();
+        cm.scrollIntoView({
+          line: cm.lineCount() - 1,
+          ch: 0
+        });
+      }
     }, 0);
   }
 
   componentWillUnmount() {
     Broker.removeListener(EventType.createShellOutputEvent(this.props.profileId, this.props.shellId), this.outputAvailable);
+    Broker.removeListener(EventType.createShellReconnectEvent(this.props.profileId, this.props.shellId), this.onReconnect);
+  }
+
+  @action.bound
+  onReconnect(output) {
+    console.log('got reconnect output ', output);
+    const totalOutput = this
+        .props
+        .store
+        .outputs
+        .get(this.props.id)
+        .output + output.output;
+    this
+      .props
+      .store
+      .outputs
+      .get(this.props.id)
+      .output = totalOutput;
   }
 
   /**
@@ -159,12 +181,11 @@ export default class Editor extends React.Component {
       .outputs
       .get(this.props.id)
       .output + output.output; // eslint-disable-line
-
-    // Enable below code when doing pagination, keep only 500 lines on output panel
-    // let outputLines = totalOutput.split('\r'); if (outputLines &&
-    // outputLines.length >= 500) {   outputLines =
-    // outputLines.slice(Math.max(outputLines.length - 500, 1));   totalOutput =
-    // outputLines.join('\r'); }
+    const profile = this.props.store.profiles.get(output.id);
+    if (profile && profile.status !== ProfileStatus.OPEN) {
+      // the connection has been closed.
+      return;
+    }
     this
       .props
       .store
@@ -179,7 +200,10 @@ export default class Editor extends React.Component {
         .outputs
         .get(this.props.id)
         .cannotShowMore = false;
-    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
+    } else if (
+      this.props.store.outputs.get(this.props.id).cannotShowMore &&
+      output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')
+    ) {
       console.log('cannot show more');
       this
         .props
@@ -215,6 +239,12 @@ export default class Editor extends React.Component {
       },
       mode: 'MongoScript'
     };
+    if (
+      this.props.store.editorPanel.removingTabId == this.props.id ||
+      !this.props.store.outputs.get(this.props.id)
+    ) {
+      return <div className="outputEditor" />;
+    }
     return (
       <div className="outputEditor">
         <CodeMirror

@@ -3,7 +3,7 @@
  * @Date:   2017-05-22T14:34:57+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T15:19:22+10:00
+ * @Last modified time: 2017-05-24T12:27:37+10:00
  */
 
 import { SyncService } from '#/common/SyncService';
@@ -80,6 +80,7 @@ export default class DetailsBuilder {
           )
             .then((res) => {
               const parsedValues = parseFunction(res);
+              console.log('parsedValues: ', parsedValues);
               resolve(parsedValues);
             })
             .catch((reason) => {
@@ -118,17 +119,32 @@ export default class DetailsBuilder {
           fields: ddd.Fields
         };
 
+        if (detailsViewInfo.title.indexOf('%') > 0) {
+          const regTitle = /\%\w*\.*\w*\%/g;
+          const titleArgs = detailsViewInfo.title.match(regTitle).map((value) => {
+            return { name: value, value: value.replace(/%/g, '') };
+          });
+          const titleParams = this.resolveArguments(titleArgs);
+          for (const key in titleParams) {
+            if (titleParams[key]) {
+              detailsViewInfo.title = detailsViewInfo.title.replace(key, titleParams[key]);
+            }
+          }
+        }
+
         const updatePrefilledData = (data) => {
           detailsViewInfo.values = data;
         };
 
-        this.getPrefilledData(ddd, formFunctions).then((detData) => {
-          updatePrefilledData(detData);
-          detailsStore.detailsViewInfo = detailsViewInfo;
-          resolve(detailsViewInfo);
-        }).catch((reason) => {
-          reject('getPrefilledData Error: ' + reason);
-        });
+        this.getPrefilledData(ddd, formFunctions)
+          .then((detData) => {
+            updatePrefilledData(detData);
+            detailsStore.detailsViewInfo = detailsViewInfo;
+            resolve(detailsViewInfo);
+          })
+          .catch((reason) => {
+            reject('getPrefilledData Error: ' + reason);
+          });
       } catch (e) {
         reject('createDetailsView Error: ' + e.message);
       }
