@@ -78,3 +78,42 @@ Resizer.disabled:hover {
   opacity: 1;
   transition: opacity 1s ease;
 }
+
+ul.profileListContextMenu {
+  display: flex;
+  flex-direction: column;
+  div.contextMenuGroup {
+    div.menuItemWrapper {
+      display: flex;
+      flex-direction: row;
+      svg.dbEnvySVG {}
+      li {}
+    }
+  }
+  div.menuItemWrapper {
+    display: flex;
+    flex-direction: row;
+    svg.dbEnvySVG {}
+    li {}
+  }
+}
+
+ul.pt-menu {
+  display: flex;
+  flex-direction: column;
+  div.contextMenuGroup {
+    div.menuItemWrapper {
+      display: flex;
+      flex-direction: row;
+      svg.dbEnvySVG {}
+      li {}
+    }
+  }
+  div.menuItemWrapper {
+    display: flex;
+    flex-direction: row;
+    svg.dbEnvySVG {
+    }
+    li {}
+  }
+}

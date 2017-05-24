@@ -13,29 +13,29 @@
         {
             "name": "GetParameters",
             "text": "Get Parameters",
-            "icon": "pt-icon-settings"
+            "icon": "settings"
         }
         ,
         {
              "name": "SetParameter",
             "text": "Set parameter",
-            "icon": "pt-icon-settings"
+            "icon": "settings"
         },
         {
              "name": "SetLogLevel",
             "text": "Get/Set Logging levels",
-            "icon": "pt-icon-error"
+            "icon": "settings"
         },
         {
              "name": "GetLog",
             "text": "View log entries",
-            "icon": "pt-icon-error"
+            "icon": "document"
         }
     ],
     "database": [{
             "name": "CreateCollection",
             "text": "Create Collection",
-            "icon": "pt-icon-add"
+            "icon": "add"
         }, {
             "name": "setProfilingLevel",
             "text": "Set Profiling",
@@ -75,7 +75,7 @@
         {
             "name": "CreateIndex",
             "text": "Create Index",
-            "icon": "pt-icon-add"
+            "icon": "add"
         }, {
             "name": "DropAllIndexes",
             "text": "Drop All Indexes",
@@ -114,17 +114,17 @@
     "users": [{
         "name": "CreateUser",
         "text": "Create User",
-        "icon": "pt-icon-new-person"
+        "icon": "user"
     }],
     "user": [{
             "name": "AlterUser",
             "text": "Alter User",
-            "icon": "pt-icon-user"
+            "icon": "user"
         },
         {
             "name": "DropUser",
             "text": "Drop User",
-            "icon": "pt-icon-user"
+            "icon": "remove-user"
         }
     ],
     "replicaset": [],

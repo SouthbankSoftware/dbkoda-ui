@@ -10,11 +10,24 @@
 import React from 'react';
 import {inject, observer, PropTypes} from 'mobx-react';
 import {action, runInAction} from 'mobx';
-import {Button, Tabs2, Tab2, Intent, ContextMenu, Menu, MenuItem} from '@blueprintjs/core';
+import {
+  Button,
+  Tabs2,
+  Tab2,
+  Intent,
+  ContextMenu,
+  Menu,
+  MenuItem
+} from '@blueprintjs/core';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView.jsx';
+import CloseTabIcon from '../../styles/icons/close-profile-icon.svg';
+import CloseAllOtherTabsIcon from '../../styles/icons/style-icon.svg';
+import CloseAllTabsIcon from '../../styles/icons/close-profile-icon.svg';
+import CloseAllTabsLeftIcon from '../../styles/icons/fix-icon.svg';
+import CloseAllTabsRightIcon from '../../styles/icons/fix-icon.svg';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -199,7 +212,11 @@ export default class Panel extends React.Component {
    * @param {String} keepTab - The id string of the editor to keep (optional)
    */
   @action.bound closeTabs(keepTab) {
-    const editors = this.props.store.editors.entries();
+    const editors = this
+      .props
+      .store
+      .editors
+      .entries();
     console.log(editors);
     editors.map((editor) => {
       if (editor[1].id != keepTab) {
@@ -214,7 +231,11 @@ export default class Panel extends React.Component {
    *  @param {String} currentTab - The id of the leftmost tab that will stay open
    */
   closeLeft(currentTab) {
-    const editors = this.props.store.editors.entries();
+    const editors = this
+      .props
+      .store
+      .editors
+      .entries();
     editors.every((editor) => {
       if (editor[1].id != currentTab) {
         console.log(`Closing Tab ${editor[1].id}`);
@@ -230,7 +251,11 @@ export default class Panel extends React.Component {
    *  @param {String} currentTab - The id of the rightmost tab that will stay open
    */
   closeRight(currentTab) {
-    const editors = this.props.store.editors.entries();
+    const editors = this
+      .props
+      .store
+      .editors
+      .entries();
     let startClosing = false;
     editors.map((editor) => {
       if (editor[1].id != currentTab) {
@@ -249,37 +274,57 @@ export default class Panel extends React.Component {
    */
   showContextMenu(event) {
     const target = event.target;
-    const tabId = { id: target.getAttribute('data-tab-id') };
+    const tabId = {
+      id: target.getAttribute('data-tab-id')
+    };
     if (tabId) {
       console.log(tabId);
-      ContextMenu.show(<Menu>
-        <MenuItem
-          onClick={() => { (tabId.id === 'Default') ? this.closeWelcome() : this.closeTab(tabId); }}
-          text={globalString('editor/tabMenu/closeTab')}
-          iconName="pt-icon-small-cross"
-          intent={Intent.NONE} />
-        <MenuItem
-          onClick={() => this.closeTabs(tabId.id)}
-          text={globalString('editor/tabMenu/closeOtherTabs')}
-          iconName="pt-icon-cross"
-          intent={Intent.NONE} />
-        <MenuItem
-          onClick={this.closeTabs}
-          text={globalString('editor/tabMenu/closeAllTabs')}
-          iconName="pt-icon-key-delete"
-          intent={Intent.NONE} />
-        <MenuItem
-          onClick={() => { this.closeLeft(tabId.id); }}
-          text={globalString('editor/tabMenu/closeLeft')}
-          iconName="pt-icon-chevron-left"
-          intent={Intent.NONE} />
-        <MenuItem
-          onClick={() => { this.closeRight(tabId.id); }}
-          text={globalString('editor/tabMenu/closeRight')}
-          iconName="pt-icon-chevron-right"
-          intent={Intent.NONE} />
-      </Menu>,
-      {
+      ContextMenu.show(
+        <Menu>
+          <div className="menuItemWrapper">
+            <CloseTabIcon className="dbEnvySVG" width={30} height={30} />
+            <MenuItem
+              onClick={() => {
+            (tabId.id === 'Default')
+              ? this.closeWelcome()
+              : this.closeTab(tabId);
+          }}
+              text={globalString('editor/tabMenu/closeTab')}
+              intent={Intent.NONE} />
+          </div>
+          <div className="menuItemWrapper">
+            <CloseAllOtherTabsIcon className="dbEnvySVG" width={30} height={30} />
+            <MenuItem
+              onClick={() => this.closeTabs(tabId.id)}
+              text={globalString('editor/tabMenu/closeOtherTabs')}
+              intent={Intent.NONE} />
+          </div>
+          <div className="menuItemWrapper">
+            <CloseAllTabsIcon className="dbEnvySVG" width={30} height={30} />
+            <MenuItem
+              onClick={this.closeTabs}
+              text={globalString('editor/tabMenu/closeAllTabs')}
+              intent={Intent.NONE} />
+          </div>
+          <div className="menuItemWrapper">
+            <CloseAllTabsLeftIcon className="dbEnvySVG" width={30} height={30} />
+            <MenuItem
+              onClick={() => {
+            this.closeLeft(tabId.id);
+          }}
+              text={globalString('editor/tabMenu/closeLeft')}
+              intent={Intent.NONE} />
+          </div>
+          <div className="menuItemWrapper">
+            <CloseAllTabsRightIcon className="dbEnvySVG" width={30} height={30} />
+            <MenuItem
+              onClick={() => {
+            this.closeRight(tabId.id);
+          }}
+              text={globalString('editor/tabMenu/closeRight')}
+              intent={Intent.NONE} />
+          </div>
+        </Menu>, {
         left: event.clientX,
         top: event.clientY
       }, () => {
@@ -301,11 +346,12 @@ export default class Panel extends React.Component {
     }
     return (
       <Tab2
-        className={(this.props.store.welcomePage.isOpen) ? 'welcomeTab' : 'welcomeTab notVisible'}
+        className={(this.props.store.welcomePage.isOpen)
+        ? 'welcomeTab'
+        : 'welcomeTab notVisible'}
         id="Default"
         title={globalString('editor/welcome/heading')}
-        panel={<WelcomeView />}
-        >
+        panel={<WelcomeView />}>
         <Button className="pt-minimal" onClick={this.closeWelcome}>
           <span className="pt-icon-cross" />
         </Button>
@@ -340,21 +386,19 @@ export default class Panel extends React.Component {
                   key={tab[1].id}
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
-                  panel={
-                    <View id={
-                        tab[0]
-                      }
-                      title={
-                        tab[1].alias + ' (' + tab[1].fileName + ')'
-                      }
-                      onDrop={
-                        item => this.handleDrop(item)
-                      }
-                      editor={
-                        tab[1]
-                      }
-                      ref="defaultEditor" />
-                  }>
+                  panel={<View id={
+                  tab[0]
+                }
+                    title={
+                  tab[1].alias + ' (' + tab[1].fileName + ')'
+                }
+                    onDrop={
+                  item => this.handleDrop(item)
+                }
+                    editor={
+                  tab[1]
+                }
+                    ref="defaultEditor" />}>
                   <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
                   </Button>
@@ -367,16 +411,13 @@ export default class Panel extends React.Component {
                 key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}
-                panel={
-                  <View
-                    id={
-                      tab[1].id
-                    }
-                    editor={
-                      tab[1]
-                    }
-                    ref="defaultEditor" />
-                }>
+                panel={<View id={
+                tab[1].id
+              }
+                  editor={
+                tab[1]
+              }
+                  ref="defaultEditor" />}>
                 <Button
                   className="pt-intent-primary pt-minimal"
                   onClick={() => this.closeTab(tab[1])}>
