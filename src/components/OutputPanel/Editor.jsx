@@ -161,7 +161,6 @@ export default class Editor extends React.Component {
         .outputs
         .get(this.props.id)
         .output + combineOutput;
-    console.log('output:', combineOutput);
     this
       .props
       .store
