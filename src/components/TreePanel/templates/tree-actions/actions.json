@@ -109,7 +109,7 @@
     "index": [{
         "name": "DropIndex",
         "text": "Drop Index",
-        "icon": "pt-icon-delete"
+        "icon": "close"
     }],
     "users": [{
         "name": "CreateUser",
