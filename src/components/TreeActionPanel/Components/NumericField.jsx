@@ -3,7 +3,7 @@
  * @Date:   2017-05-09T16:07:17+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-12T16:50:07+10:00
+ * @Last modified time: 2017-05-24T16:48:23+10:00
  */
 
 
@@ -13,7 +13,7 @@
   * @Date:   2017-04-19T15:43:32+10:00
   * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-12T16:50:07+10:00
+ * @Last modified time: 2017-05-24T16:48:23+10:00
   */
 
  import React from 'react';
@@ -28,7 +28,7 @@
  }) => {
    const fldClassName = formGroup
      ? 'pt-form-group form-group-inline'
-     : 'pt-form-group pt-inline';
+     : 'pt-form-group pt-inline pt-top-level';
    let inputClassName = '';
    let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
    if (formGroup) {

@@ -41,6 +41,13 @@
 			},
 			"width": 600,
 			"height": 300
+		},
+		{
+			"name": "ShardsPercentage",
+			"label": "Shards Percentage",
+			"type": "PieChart",
+			"width": 300,
+			"height": 300
 		}
 	]
 }

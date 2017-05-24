@@ -165,21 +165,21 @@ $contentColor: white;
       .stage-cell:nth-child(3) {
         flex: 1;
         .text {
-          width: 50px;
+          min-width: 50px;
           text-align: right;
         }
       }
       .stage-cell:nth-child(4) {
         flex: 1;
         .text {
-          width: 50px;
+          min-width: 50px;
           text-align: right;
         }
       }
       .stage-cell:nth-child(5) {
         flex: 1;
         .text {
-          width: 50px;
+          min-width: 50px;
           text-align: right;
         }
       }

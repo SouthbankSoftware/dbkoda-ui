@@ -2,12 +2,13 @@
 // @Date:   2017-05-23T16:26:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-24T14:00:24+10:00
+// @Last modified time: 2017-05-24T16:42:17+10:00
 
 @import '../../styles/_defaultTheme.scss';
 
 .details-view {
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   background-color: $detailsBackground;
   .details-title {
@@ -17,6 +18,8 @@
   }
   .details-fields {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     .div-field-container {
       margin: 15px 15px 15px 15px;
     }
@@ -29,6 +32,17 @@
       text-align: center;
       margin: 5px 0;
       color: $fieldHeadingFontColor;
+    }
+    .pt-striped {
+      tbody tr:nth-child(odd) td {
+        background: #222324 !important;
+      }
+    }
+    .pt-interactive {
+      tbody tr:hover td {
+        background-color: #30363B !important;
+        cursor: pointer;
+      }
     }
   }
   .form-button-panel {
@@ -64,6 +78,12 @@
   }
 
   .recharts-bar-cursor {
-    fill: $fieldBrightPlaceholderFontColor !important;
+    fill: $chartItemHover !important;
+  }
+  .recharts-default-tooltip {
+    background-color: $chartTooltipBackground !important;
+  }
+  .recharts-tooltip-label {
+    color: $fieldBrightFontColor !important;
   }
 }
