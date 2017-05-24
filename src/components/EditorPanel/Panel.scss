@@ -30,13 +30,52 @@
             width: 100%;
           }
         }
-      }
-      .pt-align-right {
         span {
-          a {
-            width: 30px;
-            height: 30px;
+          .pt-button {
+            position: relative;
+            svg {
+              position: absolute;
+              top: 50%;
+              bottom: 50%;
+              transform: translate(-50%, -50%);
+              fill: $buttonPrimaryIcon
+            }
           }
+          .stopExecutionButton svg {
+            fill: $buttonSecondaryIcon;
+            height: 40%;
+            width: 40%;
+          }
+          .executeLineButton svg {
+            height: 45%;
+          }
+        }
+      }
+    }
+    .pt-align-right {
+      span {
+        a {
+          position: relative;
+          background-color: $buttonTertiaryBackground;
+          width: 30px;
+          height: 30px;
+          svg {
+            position: absolute;
+            top: 50%;
+            bottom: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            height: 40%;
+            fill: $buttonTertiaryIcon;
+          }
+        }
+        .saveFileButton svg {
+          width: 60%;
+          height: 60%;
+        }
+        .openFileButton svg {
+          width: 60%;
+          height: 60%;
         }
       }
     }
