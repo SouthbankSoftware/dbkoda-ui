@@ -14,6 +14,7 @@ import CodeMirror from 'react-codemirror';
 import 'codemirror/theme/material.css';
 import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
+import {ProfileStatus} from '../common/Constants';
 
 require('codemirror/mode/javascript/javascript');
 require('#/common/MongoScript.js');
@@ -180,12 +181,11 @@ export default class Editor extends React.Component {
       .outputs
       .get(this.props.id)
       .output + output.output; // eslint-disable-line
-
-    // Enable below code when doing pagination, keep only 500 lines on output panel
-    // let outputLines = totalOutput.split('\r'); if (outputLines &&
-    // outputLines.length >= 500) {   outputLines =
-    // outputLines.slice(Math.max(outputLines.length - 500, 1));   totalOutput =
-    // outputLines.join('\r'); }
+    const profile = this.props.store.profiles.get(output.id);
+    if (profile && profile.status !== ProfileStatus.OPEN) {
+      // the connection has been closed.
+      return;
+    }
     this
       .props
       .store

@@ -27,6 +27,7 @@ import {ProfileForm} from '../ConnectionPanel/ProfileForm';
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
+import ConnectionIcon from '../../styles/icons/database-icon-1.svg';
 import './styles.scss';
 
 const React = require('react');
@@ -511,13 +512,15 @@ export default class ListView extends React.Component {
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
           <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-            <p className="pt-icon-link profileListing">{profiles[rowIndex][1].alias}</p>
+            <ConnectionIcon className="dbEnvySVG" width={20} height={20} />
+            <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
         );
       }
       return (
         <Cell className={className}>
-          <i className=" pt-icon-link profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
+          <ConnectionIcon className="dbEnvySVG" width={20} height={20} />
+          <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );
     };

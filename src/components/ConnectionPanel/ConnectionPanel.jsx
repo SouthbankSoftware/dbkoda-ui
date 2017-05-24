@@ -121,7 +121,7 @@ const ConnectionPanel = ({
 
   const connect = action((data) => {
     if (!edit && !validateConnectionFormData(data)) {
-      return Promise.reject(globalString('connection/valiationError'));
+      return Promise.reject(globalString('connection/validationError'));
     }
     const query = {};
     let connectionUrl;
