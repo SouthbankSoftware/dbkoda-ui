@@ -10,9 +10,18 @@
  */
 import React from 'react';
 import {observer} from 'mobx-react';
-import {AnchorButton, Intent, Menu, MenuItem, Popover, Position, Tooltip} from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Intent,
+  Menu,
+  MenuItem,
+  Popover,
+  Position,
+  Tooltip
+} from '@blueprintjs/core';
 import {action} from 'mobx';
 import {Broker, EventType} from '../../helpers/broker/index';
+import ExplainIcon from '../../styles/icons/explain-query-icon.svg';
 
 const QUERY_PLANNER = 'queryPlanner';
 const EXECUTION_STATS = 'executionStats';
@@ -37,14 +46,22 @@ const ExplainMenu = ({editorToolbar}) => {
   if (editorToolbar.noActiveProfile) {
     menu = null;
   } else {
-    menu = (<Menu>
-      <MenuItem className="queryPlannerButton" text={globalString('editor/toolbar/explainQuery')}
-        onClick={() => sendQueryCommand(QUERY_PLANNER)} />
-      <MenuItem className="executionStatsButton" text={globalString('editor/toolbar/explainExecutionStats')}
-        onClick={() => sendQueryCommand(EXECUTION_STATS)} />
-      <MenuItem className="allPlansExecutionButton" text={globalString('editor/toolbar/explainAllPlans')}
-        onClick={() => sendQueryCommand(ALL_PLANS_EXECUTION)} />
-    </Menu>);
+    menu = (
+      <Menu>
+        <MenuItem
+          className="queryPlannerButton"
+          text={globalString('editor/toolbar/explainQuery')}
+          onClick={() => sendQueryCommand(QUERY_PLANNER)} />
+        <MenuItem
+          className="executionStatsButton"
+          text={globalString('editor/toolbar/explainExecutionStats')}
+          onClick={() => sendQueryCommand(EXECUTION_STATS)} />
+        <MenuItem
+          className="allPlansExecutionButton"
+          text={globalString('editor/toolbar/explainAllPlans')}
+          onClick={() => sendQueryCommand(ALL_PLANS_EXECUTION)} />
+      </Menu>
+    );
   }
   return menu;
 };
@@ -53,17 +70,24 @@ const ExplainMenu = ({editorToolbar}) => {
  * define the popup explain component
  */
 export default observer(({editorToolbar}) => (
-  <Popover className="explainPopover"
-    content={<ExplainMenu editorToolbar={editorToolbar} />}
+  <Popover
+    className="explainPopover"
+    content={<ExplainMenu editorToolbar={
+    editorToolbar
+  } />}
     position={Position.BOTTOM_RIGHT}>
-    <Tooltip content={globalString('editor/toolbar/explainTooltip')}
+    <Tooltip
+      content={globalString('editor/toolbar/explainTooltip')}
       intent={Intent.PRIMARY}
       hoverOpenDelay={1000}
       tooltipClassName="pt-dark"
       position={Position.BOTTOM}>
-      <AnchorButton className="pt-icon-help pt-intent-primary explainPlanButton"
+      <AnchorButton
+        className="pt-intent-primary explainPlanButton"
         loading={editorToolbar.isActiveExecuting}
-        disabled={editorToolbar.noActiveProfile} />
+        disabled={editorToolbar.noActiveProfile}>
+        <ExplainIcon width={20} height={20} />
+      </AnchorButton>
     </Tooltip>
   </Popover>
 ));

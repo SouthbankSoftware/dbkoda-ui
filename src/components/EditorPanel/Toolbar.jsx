@@ -29,6 +29,12 @@ import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
 import ExplainPopover from './ExplainPopover';
+import ExecuteLineIcon from '../../styles/icons/execute-icon.svg';
+import ExecuteAllIcon from '../../styles/icons/execute-all-icon.svg';
+import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
+import AddIcon from '../../styles/icons/add-icon.svg';
+import OpenFileIcon from '../../styles/icons/open-icon.svg';
+import SaveFileIcon from '../../styles/icons/save-icon.svg';
 
 const {dialog, BrowserWindow} = IS_ELECTRON
   ? window
@@ -590,10 +596,12 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-chevron-right pt-intent-primary executeLineButton"
+                className="pt-button pt-intent-primary executeLineButton"
                 onClick={this.executeLine}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
-                disabled={this.props.store.editorToolbar.noActiveProfile} />
+                disabled={this.props.store.editorToolbar.noActiveProfile}>
+                <ExecuteLineIcon width={20} height={20} />
+              </AnchorButton>
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
@@ -602,10 +610,12 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-double-chevron-right pt-intent-primary executeAllButton"
+                className="pt-button pt-intent-primary executeAllButton"
                 onClick={this.executeAll}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
-                disabled={this.props.store.editorToolbar.noActiveProfile} />
+                disabled={this.props.store.editorToolbar.noActiveProfile}>
+                <ExecuteAllIcon width={20} height={20} />
+              </AnchorButton>
             </Tooltip>
             <ExplainPopover editorToolbar={this.props.store.editorToolbar} />
             <Tooltip
@@ -615,10 +625,12 @@ export default class Toolbar extends React.Component {
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}>
               <AnchorButton
-                className="pt-button pt-icon-stop pt-intent-danger stopExecutionButton"
+                className="pt-button pt-intent-danger stopExecutionButton"
                 loading={this.props.store.editorPanel.stoppingExecution}
                 onClick={this.stopExecution}
-                disabled={!this.props.store.editorToolbar.isActiveExecuting} />
+                disabled={!this.props.store.editorToolbar.isActiveExecuting}>
+                <StopExecutionIcon width={20} height={20} />
+              </AnchorButton>
             </Tooltip>
           </div>
         </div>
@@ -630,10 +642,12 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-button pt-icon-add circleButton addEditorButton"
+              className="pt-button circleButton addEditorButton"
               loading={this.props.store.editorToolbar.newConnectionLoading}
               disabled={this.props.store.editorToolbar.noActiveProfile}
-              onClick={this.addEditor} />
+              onClick={this.addEditor}>
+              <AddIcon width={20} height={20} />
+            </AnchorButton>
           </Tooltip>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -642,9 +656,11 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-button pt-icon-document-open circleButton openFileButton"
+              className="pt-button circleButton openFileButton"
               onClick={this.openFile}
-              disabled={this.props.store.editorToolbar.noActiveProfile} />
+              disabled={this.props.store.editorToolbar.noActiveProfile}>
+              <OpenFileIcon width={20} height={20} />
+            </AnchorButton>
           </Tooltip>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -653,9 +669,11 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
             <AnchorButton
-              className="pt-button pt-icon-floppy-disk circleButton saveFileButton"
+              className="pt-button circleButton saveFileButton"
               onClick={this.saveFile}
-              disabled={this.props.store.editorToolbar.noActiveProfile} />
+              disabled={this.props.store.editorToolbar.noActiveProfile}>
+              <SaveFileIcon width={20} height={20} />
+            </AnchorButton>
           </Tooltip>
           {/* <Tooltip
             intent={Intent.NONE}
@@ -684,11 +702,7 @@ export default class Toolbar extends React.Component {
   renderHotkeys() {
     return (
       <Hotkeys>
-        <Hotkey
-          global
-          combo="shift + n"
-          label="New Editor"
-          onKeyDown={this.addEditor} />
+        <Hotkey global combo="shift + n" label="New Editor" onKeyDown={this.addEditor} />
         <Hotkey
           global
           combo="shift + a"

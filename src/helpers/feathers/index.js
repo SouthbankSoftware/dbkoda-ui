@@ -32,6 +32,11 @@ class FeatherClient {
       const { id, shellId } = output;
       Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
+    this.shellService.on('mongo-shell-reconnected', (output) => {
+      console.log('get reconnect event ', output);
+      const { id, shellId } = output;
+      Broker.emit(EventType.createShellReconnectEvent(id, shellId), output);
+    });
     this.service('files').on('changed', ({_id}) => {
       Broker.emit(EventType.createFileChangedEvent(_id));
     });

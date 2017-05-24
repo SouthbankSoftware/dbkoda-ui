@@ -301,16 +301,16 @@ class View extends React.Component {
                 iconName: 'pt-icon-thumbs-up'
               });
             }
-            this.finishedExecution();
+            this.finishedExecution({id, shellId: shell});
           })
           .catch((reason) => {
             console.error(`Stopping Execution failed for ${id} / ${shell}! ${reason.message}`);
             NewToaster.show({
-              message: globalString('editor/view/executionStoppedError'),
+              message: globalString('editor/view/executionStoppedError', reason.message),
               intent: Intent.DANGER,
               iconName: 'pt-icon-thumbs-down'
             });
-            this.finishedExecution();
+            this.finishedExecution({id, shellId: shell});
           });
       }
     });
@@ -695,8 +695,6 @@ class View extends React.Component {
 
   @action.bound
   finishedExecution(event) {
-    const id = this.props.store.editorToolbar.id;
-    const shell = this.props.store.editorToolbar.shellId;
     const editorIndex = this.props.store.editorPanel.activeEditorId;
     if (!this.props.store.editors.get(editorIndex)) {
       return;
