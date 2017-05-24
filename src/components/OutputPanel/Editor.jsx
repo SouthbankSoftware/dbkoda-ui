@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-22T14:01:08+10:00
+ * @Last modified time: 2017-05-24T11:15:57+10:00
 */
 
 import React from 'react';
@@ -133,13 +133,15 @@ export default class Editor extends React.Component {
    */
   componentDidUpdate() {
     setTimeout(() => {
-      const cm = this
-        .editor
-        .getCodeMirror();
-      cm.scrollIntoView({
-        line: cm.lineCount() - 1,
-        ch: 0
-      });
+      if (this.editor) {
+        const cm = this
+          .editor
+          .getCodeMirror();
+        cm.scrollIntoView({
+          line: cm.lineCount() - 1,
+          ch: 0
+        });
+      }
     }, 0);
   }
 
@@ -198,7 +200,10 @@ export default class Editor extends React.Component {
         .outputs
         .get(this.props.id)
         .cannotShowMore = false;
-    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')) {
+    } else if (
+      this.props.store.outputs.get(this.props.id).cannotShowMore &&
+      output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')
+    ) {
       console.log('cannot show more');
       this
         .props
@@ -234,6 +239,12 @@ export default class Editor extends React.Component {
       },
       mode: 'MongoScript'
     };
+    if (
+      this.props.store.editorPanel.removingTabId == this.props.id ||
+      !this.props.store.outputs.get(this.props.id)
+    ) {
+      return <div className="outputEditor" />;
+    }
     return (
       <div className="outputEditor">
         <CodeMirror

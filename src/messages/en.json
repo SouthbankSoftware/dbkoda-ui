@@ -93,6 +93,13 @@
       },
       "welcome": {
         "heading": "Welcome"
+      },
+      "tabMenu": {
+        "closeTab": "Close Tab",
+        "closeOtherTabs": "Close All Other Tabs",
+        "closeAllTabs": "Close All Tabs",
+        "closeLeft": "Close All Tabs To The Left",
+        "closeRight": "Close All Tabs To The Right"
       }
     },
     "connection": {
