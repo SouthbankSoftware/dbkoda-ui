@@ -3,14 +3,15 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-22T12:51:18+10:00
+ * @Last modified time: 2017-05-24T11:53:03+10:00
 */
 
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer, PropTypes} from 'mobx-react';
 import {action, runInAction} from 'mobx';
-import {Button, Tabs2, Tab2} from '@blueprintjs/core';
+import {Button, Tabs2, Tab2, Intent, ContextMenu, Menu, MenuItem} from '@blueprintjs/core';
+import {NewToaster} from '#/common/Toaster';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
@@ -43,6 +44,9 @@ export default class Panel extends React.Component {
       .bind(this);
     this.changeTab = this
       .changeTab
+      .bind(this);
+    this.showContextMenu = this
+      .showContextMenu
       .bind(this);
   }
 
@@ -191,6 +195,82 @@ export default class Panel extends React.Component {
     }
   }
 
+  /**
+   * Close all tabs except for the provided tab id
+   * @param {String} keepTab - The id string of the editor to keep (optional)
+   */
+  @action.bound closeTabs(keepTab) {
+    const editors = this.props.store.editors.entries();
+    console.log(editors);
+    editors.map((editor) => {
+      if (editor[1].id != keepTab) {
+        console.log(`Closing Tab ${editor[1].id}`);
+        this.closeTab(editor[1]);
+      }
+    });
+  }
+
+  /**
+   *  Close all tabs to the left of the current tab
+   *  @param {String} currentTab - The id of the leftmost tab that will stay open
+   */
+  closeLeft(currentTab) {
+    console.log(`Close Left of ${currentTab}`);
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+  }
+
+  /**
+   *  Close all tabs to the right of the current tab
+   *  @param {String} currentTab - The id of the rightmost tab that will stay open
+   */
+  closeRight(currentTab) {
+    console.log(`Close Right of ${currentTab}`);
+    NewToaster.show({message: 'Sorry, not yet implemented!', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+  }
+
+  /** Display a right click menu when any of the editor tabs are right clicked
+   *  @param {SyntheticMouseEvent} event - mouse click event from onContextMenu
+   */
+  showContextMenu(event) {
+    const target = event.target;
+    const tabId = { id: target.getAttribute('data-tab-id') };
+    if (tabId) {
+      ContextMenu.show(<Menu>
+        <MenuItem
+          onClick={() => { (tabId == 'Default') ? this.closeWelcome() : this.closeTab(tabId); }}
+          text={globalString('editor/tabMenu/closeTab')}
+          iconName="pt-icon-small-cross"
+          intent={Intent.NONE} />
+        <MenuItem
+          onClick={() => this.closeTabs(tabId.id)}
+          text={globalString('editor/tabMenu/closeOtherTabs')}
+          iconName="pt-icon-cross"
+          intent={Intent.NONE} />
+        <MenuItem
+          onClick={this.closeTabs}
+          text={globalString('editor/tabMenu/closeAllTabs')}
+          iconName="pt-icon-key-delete"
+          intent={Intent.NONE} />
+        <MenuItem
+          onClick={() => { this.closeLeft(tabId.id); }}
+          text={globalString('editor/tabMenu/closeLeft')}
+          iconName="pt-icon-chevron-left"
+          intent={Intent.NONE} />
+        <MenuItem
+          onClick={() => { this.closeRight(tabId.id); }}
+          text={globalString('editor/tabMenu/closeRight')}
+          iconName="pt-icon-chevron-right"
+          intent={Intent.NONE} />
+      </Menu>,
+      {
+        left: event.clientX,
+        top: event.clientY
+      }, () => {
+        console.log('tab context menu closed');
+      });
+    }
+  }
+
   @action.bound
   renderWelcome() {
     if (this.props.store.editors.size == 0) {
@@ -198,7 +278,7 @@ export default class Panel extends React.Component {
         <Tab2
           className="welcomeTab"
           id="Default"
-          title="Welcome"
+          title={globalString('editor/welcome/heading')}
           panel={<WelcomeView />} />
       );
     }
@@ -207,8 +287,9 @@ export default class Panel extends React.Component {
         className={(this.props.store.welcomePage.isOpen) ? 'welcomeTab' : 'welcomeTab notVisible'}
         id="Default"
         title={globalString('editor/welcome/heading')}
-        panel={<WelcomeView />}>
-        <Button className="pt-minimal" onClick={() => this.closeWelcome()}>
+        panel={<WelcomeView />}
+        >
+        <Button className="pt-minimal" onClick={() => this.closeWelcome}>
           <span className="pt-icon-cross" />
         </Button>
       </Tab2>
@@ -224,7 +305,7 @@ export default class Panel extends React.Component {
       .editors
       .entries();
     return (
-      <div className="pt-dark editorPanel">
+      <div className="pt-dark editorPanel" onContextMenu={this.showContextMenu}>
         <Toolbar executeAll={this.executeAll} newEditor={this.newEditor} ref="toolbar" />
         <Tabs2
           id="EditorTabs"
@@ -242,19 +323,21 @@ export default class Panel extends React.Component {
                   key={tab[1].id}
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
-                  panel={<View id={
-                  tab[0]
-                }
-                    title={
-                  tab[1].alias + ' (' + tab[1].fileName + ')'
-                }
-                    onDrop={
-                  item => this.handleDrop(item)
-                }
-                    editor={
-                  tab[1]
-                }
-                    ref="defaultEditor" />}>
+                  panel={
+                    <View id={
+                        tab[0]
+                      }
+                      title={
+                        tab[1].alias + ' (' + tab[1].fileName + ')'
+                      }
+                      onDrop={
+                        item => this.handleDrop(item)
+                      }
+                      editor={
+                        tab[1]
+                      }
+                      ref="defaultEditor" />
+                  }>
                   <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
                   </Button>
@@ -267,13 +350,16 @@ export default class Panel extends React.Component {
                 key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}
-                panel={<View id={
-                tab[1].id
-              }
-                  editor={
-                tab[1]
-              }
-                  ref="defaultEditor" />}>
+                panel={
+                  <View
+                    id={
+                      tab[1].id
+                    }
+                    editor={
+                      tab[1]
+                    }
+                    ref="defaultEditor" />
+                }>
                 <Button
                   className="pt-intent-primary pt-minimal"
                   onClick={() => this.closeTab(tab[1])}>
