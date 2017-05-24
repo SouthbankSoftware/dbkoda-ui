@@ -1,0 +1,31 @@
+{
+    "Title": "Top Collections",
+    "DefaultValues": {
+        "function": "dbenvy_TopCollections"
+    },
+    "Fields": [{
+        "name": "top",
+        "label": "Top Collections",
+        "type": "Table",
+        "columns": [{
+                "name": "collection",
+                "label": "Collection"
+            }, {
+                "name": "time",
+                "label": "Time (ms)"
+            },
+            {
+                "name": "pctTotal",
+                "label": "Pct of Time"
+            },
+            {
+                "name": "count",
+                "label": "No of operations"
+            },
+            {
+                "name": "readPct",
+                "label": "read Time Pct"
+            }
+        ]
+    }]
+}

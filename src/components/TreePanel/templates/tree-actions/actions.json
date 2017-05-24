@@ -29,7 +29,13 @@
         {
              "name": "GetLog",
             "text": "View log entries",
-            "icon": "pt-icon-error"
+            "icon": "pt-icon-horizontal-bar-chart"
+        },
+         {
+            "name": "TopCollections",
+            "text": "Top Collections",
+            "icon": "pt-icon-grouped-bar-chart",
+            "view": "details"
         }
     ],
     "database": [{
