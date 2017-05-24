@@ -17,6 +17,10 @@ import DocumentIcon from '../../styles/icons/document-solid-icon.svg';
 import UserIcon from '../../styles/icons/users-icon-1.svg';
 import RemoveUserIcon from '../../styles/icons/users-icon-2.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
+import CloseIcon from '../../styles/icons/cross-icon.svg';
+import ShardsIcon from '../../styles/icons/shards-icon-2.svg';
+import CollectionIcon from '../../styles/icons/collection-icon.svg';
+import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
@@ -105,6 +109,14 @@ export default class TreeView extends React.Component {
         return <RemoveUserIcon className="dbEnvySVG" width={20} height={20} />;
       case 'add':
         return <AddIcon className="dbEnvySVG" width={20} height={20} />;
+      case 'close':
+        return <CloseIcon className="dbEnvySVG" width={20} height={20} />;
+      case 'shards':
+        return <ShardsIcon className="dbEnvySVG" width={20} height={20} />;
+      case 'collection':
+        return <CollectionIcon className="dbEnvySVG" width={20} height={20} />;
+      case 'dropdown':
+        return <DropdownIcon className="dbEnvySVG" width={20} height={20} />;
       default:
         return null;
     }

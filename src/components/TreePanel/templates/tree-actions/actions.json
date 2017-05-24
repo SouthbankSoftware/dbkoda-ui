@@ -43,12 +43,12 @@
         }, {
             "name": "DropDatabase",
             "text": "Drop Database",
-            "icon": "pt-icon-delete"
+            "icon": "close"
         },
         {
             "name": "EnableSharding",
             "text": "Enable Sharding",
-            "icon": "pt-icon-split-columns"
+            "icon": "shards"
         }
     ],
     "collection": [
@@ -65,7 +65,7 @@
         {
             "name": "SampleCollections",
             "text": "Find Attributes",
-            "icon": "pt-icon-properties"
+            "icon": "dropdown"
         }, {
             "name": "CollectionStats",
             "text": "Collection Statistics",
@@ -79,31 +79,31 @@
         }, {
             "name": "DropAllIndexes",
             "text": "Drop All Indexes",
-            "icon": "pt-icon-delete"
+            "icon": "close"
         },
         {
             "name": "RenameCollection",
             "text": "Rename Collection",
-            "icon": "pt-icon-exchange"
+            "icon": "collection"
         },
         {
             "name": "CompactCollection",
             "text": "Compact Collection",
-            "icon": "pt-icon-compressed"
+            "icon": "collection"
         },
         {
             "name": "ValidateCollection",
             "text": "Validate Collection",
-            "icon": "pt-icon-confirm"
+            "icon": "collection"
         },
         {
             "name": "ShardCollection",
             "text": "Shard Collection",
-            "icon": "pt-icon-split-columns"
+            "icon": "shards"
         }, {
             "name": "DropCollection",
-            "text": "DropCollection",
-            "icon": "pt-icon-delete"
+            "text": "Drop Collection",
+            "icon": "close"
         }
     ],
     "index": [{
