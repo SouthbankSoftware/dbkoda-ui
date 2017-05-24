@@ -13,7 +13,7 @@
       margin-left: 5px;
       margin-right: 5px;
       position: relative;
-      svg {
+      svg.dbEnvySVG {
         position: absolute;
         top: 50%;
         bottom: 50%;
@@ -50,10 +50,9 @@
     border-bottom: 1px solid $profileListDividerColor;
     .bp-table-truncated-text {
       height:100%;
-    
       display: flex;
       flex-direction: row;
-      svg {
+      svg.dbEnvySVG {
         width:40px;
         height:40px;
         margin-right: 20px;

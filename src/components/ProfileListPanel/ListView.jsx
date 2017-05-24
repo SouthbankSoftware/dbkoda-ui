@@ -512,14 +512,14 @@ export default class ListView extends React.Component {
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
           <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-            <ConnectionIcon width={20} height={20} />
+            <ConnectionIcon className="dbEnvySVG" width={20} height={20} />
             <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
         );
       }
       return (
         <Cell className={className}>
-          <ConnectionIcon width={20} height={20} />
+          <ConnectionIcon className="dbEnvySVG" width={20} height={20} />
           <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );

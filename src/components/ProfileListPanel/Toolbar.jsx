@@ -196,7 +196,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="newProfileButton"
               onClick={this.newProfile}>
-              <AddIcon width={20} height={20} />
+              <AddIcon className="dbEnvySVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -209,7 +209,7 @@ export default class Toolbar extends React.Component {
               className="editProfileButton"
               onClick={this.editProfile}
               disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN}>
-              <EditProfileIcon width={20} height={20} />
+              <EditProfileIcon className="dbEnvySVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -223,7 +223,7 @@ export default class Toolbar extends React.Component {
               loading={this.state.closingProfile}
               disabled={!selectedProfile || selectedProfile.status === ProfileStatus.CLOSED}
               onClick={this.showCloseConnectionAlert}>
-              <CloseProfileIcon width={20} height={20} />
+              <CloseProfileIcon className="dbEnvySVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -236,7 +236,7 @@ export default class Toolbar extends React.Component {
               className="dangerButton removeProfileButton"
               onClick={this.showRemoveConnectionAlert}
               disabled={!this.props.store.profileList.selectedProfile || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN}>
-              <RemoveProfileIcon width={20} height={20} />
+              <RemoveProfileIcon className="dbEnvySVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <span className="pt-navbar-divider" />
