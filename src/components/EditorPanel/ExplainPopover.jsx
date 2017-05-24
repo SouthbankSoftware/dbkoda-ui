@@ -72,7 +72,7 @@ const ExplainMenu = ({editorToolbar}) => {
 export default observer(({editorToolbar}) => (
   <Popover
     className="explainPopover"
-    content={<ExplainMenu editorToolbar ={
+    content={<ExplainMenu editorToolbar={
     editorToolbar
   } />}
     position={Position.BOTTOM_RIGHT}>
