@@ -23,12 +23,6 @@ import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView.jsx';
-import CloseTabIcon from '../../styles/icons/close-profile-icon.svg';
-import CloseAllOtherTabsIcon from '../../styles/icons/style-icon.svg';
-import CloseAllTabsIcon from '../../styles/icons/close-profile-icon.svg';
-import CloseAllTabsLeftIcon from '../../styles/icons/fix-icon.svg';
-import CloseAllTabsRightIcon from '../../styles/icons/fix-icon.svg';
-
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
