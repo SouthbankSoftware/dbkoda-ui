@@ -35,14 +35,14 @@
             "name": "TopCollections",
             "text": "Top Collections",
             "icon": "pt-icon-grouped-bar-chart",
-            "view": "details"
+            "view": "pt-icon-list-detail-view"
 
         },
         {
             "name": "ServerStatistics",
             "text": "Server Statistics",
             "icon": "pt-icon-doughnut-chart",
-            "view": "details"
+            "view": "pt-icon-list-detail-view"
 
         }
     ],
