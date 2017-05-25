@@ -284,10 +284,10 @@ export default class Panel extends React.Component {
           <div className="menuItemWrapper">
             <MenuItem
               onClick={() => {
-            (tabId.id === 'Default')
-              ? this.closeWelcome()
-              : this.closeTab(tabId);
-          }}
+                (tabId.id === 'Default')
+                  ? this.closeWelcome()
+                  : this.closeTab(tabId);
+              }}
               text={globalString('editor/tabMenu/closeTab')}
               iconName="pt-icon-small-cross"
               intent={Intent.NONE} />
@@ -309,8 +309,8 @@ export default class Panel extends React.Component {
           <div className="menuItemWrapper">
             <MenuItem
               onClick={() => {
-            this.closeLeft(tabId.id);
-          }}
+                this.closeLeft(tabId.id);
+              }}
               text={globalString('editor/tabMenu/closeLeft')}
               iconName="pt-icon-chevron-left"
               intent={Intent.NONE} />
@@ -318,8 +318,8 @@ export default class Panel extends React.Component {
           <div className="menuItemWrapper">
             <MenuItem
               onClick={() => {
-            this.closeRight(tabId.id);
-          }}
+                this.closeRight(tabId.id);
+              }}
               text={globalString('editor/tabMenu/closeRight')}
               iconName="pt-icon-chevron-right"
               intent={Intent.NONE} />
@@ -388,16 +388,16 @@ export default class Panel extends React.Component {
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
                   panel={<View id={
                   tab[0]
-                }
+                  }
                     title={
-                  tab[1].alias + ' (' + tab[1].fileName + ')'
-                }
+                      tab[1].alias + ' (' + tab[1].fileName + ')'
+                    }
                     onDrop={
-                  item => this.handleDrop(item)
-                }
+                      item => this.handleDrop(item)
+                    }
                     editor={
-                  tab[1]
-                }
+                      tab[1]
+                    }
                     ref="defaultEditor" />}>
                   <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
