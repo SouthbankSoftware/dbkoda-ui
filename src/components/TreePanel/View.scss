@@ -3,9 +3,7 @@
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
 // @Last modified time: 2017-05-16T11:03:22+10:00
-
 @import '../../styles/_defaultTheme.scss';
-
 .treeToolbar {
   background-color: $navbarLeftBackground !important;
 }
@@ -15,32 +13,54 @@
   height: calc(100% - 50px);
   background-color: $panelLeftBackground;
 }
+
 .treeToolbar {
-    background-color: $navbarLeftBackground !important;
-    .pt-button {
-      background-color: $buttonSecondaryBackground !important;
-      color: $buttonSecondaryIcon !important;
-      border-radius: 50%;
-      margin-left: 5px;
-      margin-right: 5px;
-    }
-    .pt-button:hover {
-      background-color: $buttonSecondaryBackgroundHover !important;
-    }
-    .pt-button.dangerButton {
-      background-color: $buttonDangerBackground !important;
-    }
-    .pt-button.dangerButton:hover {
-      background-color: $buttonDangerBackgroundHover !important;
-    }
-    .pt-button.pt-disabled:hover {
-      background-color: $buttonSecondaryBackground !important;
-    }
-    .pt-button.pt-disabled.dangerButton:hover {
-      background-color: $buttonDangerBackground !important;
+  background-color: $navbarLeftBackground !important;
+  .pt-button {
+    background-color: $buttonSecondaryBackground !important;
+    color: $buttonSecondaryIcon !important;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .pt-button:hover {
+    background-color: $buttonSecondaryBackgroundHover !important;
+  }
+  .pt-button.dangerButton {
+    background-color: $buttonDangerBackground !important;
+  }
+  .pt-button.dangerButton:hover {
+    background-color: $buttonDangerBackgroundHover !important;
+  }
+  .pt-button.pt-disabled:hover {
+    background-color: $buttonSecondaryBackground !important;
+  }
+  .pt-button.pt-disabled.dangerButton:hover {
+    background-color: $buttonDangerBackground !important;
+  }
+}
+
+ul.pt-tree-node-list {
+  li.pt-tree-node {
+    div.pt-tree-node-content {
+      span.pt-tree-node-caret {
+        order: 1;
+      }
+      span.pt-tree-node-label {
+        order: 3;
+      }
+      span.pt-tree-node-secondary-label {
+        order: 2;
+        padding-top: 5px;
+        svg {
+          fill: $profileListFontColor;
+          width: 20px;
+          height: 20px;
+        }
+      }
     }
   }
-
+}
 
 .tree-msg-div span {
   color: white;
@@ -58,4 +78,3 @@
 div.pt-navbar-heading {
   color: $navbarLeftHeading;
 }
-

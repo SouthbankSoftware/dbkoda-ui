@@ -10,6 +10,21 @@ import React from 'react';
 import {observable} from 'mobx';
 
 import DragLabel from './DragLabel.jsx';
+import DatabaseIcon from '../../../styles/icons/database-icon-1.svg';
+import DatabasesIcon from '../../../styles/icons/fix-icon.svg';
+import CollectionIcon from '../../../styles/icons/collection-icon.svg';
+import IndexIcon from '../../../styles/icons/index-icon.svg';
+import UsersIcon from '../../../styles/icons/users-icon-1.svg';
+import UserIcon from '../../../styles/icons/user-icon.svg';
+import ShardsIcon from '../../../styles/icons/fix-icon.svg';
+import ShardIcon from '../../../styles/icons/shards-icon-2.svg';
+import ConfigServersIcon from '../../../styles/icons/config-database-icon-1.svg';
+import ConfigIcon from '../../../styles/icons/fix-icon.svg';
+import RoutersIcon from '../../../styles/icons/fix-icon.svg';
+import MongosIcon from '../../../styles/icons/mongos-icon.svg';
+import PropertiesIcon from '../../../styles/icons/attribute-icon.svg';
+import PropertyIcon from '../../../styles/icons/attributes-icon.svg';
+
 
 export default class TreeNode {
   id;
@@ -17,6 +32,7 @@ export default class TreeNode {
   text;
   type;
   iconName;
+  secondaryLabel;
   allChildNodes;
   childNodes;
   @observable isSelected = false;
@@ -32,7 +48,56 @@ export default class TreeNode {
    */
   constructor(treeJSON, parent) {
     this.type = TreeNode.getNodeType(treeJSON, parent);
-    this.iconName = `pt-icon-${this.type}`;
+    // Add label as secondaryLabel component.
+    switch (this.type) {
+      case 'shards':
+        this.secondaryLabel = <ShardsIcon className="dbEnvySVG shardsIcon" width={30} height={30} />;
+      break;
+      case 'shard':
+        this.secondaryLabel = <ShardIcon className="dbEnvySVG shardIcon" width={30} height={30} />;
+      break;
+      case 'configservers':
+        this.secondaryLabel = <ConfigServersIcon className="dbEnvySVG configServersIcon" width={30} height={30} />;
+      break;
+      case 'config':
+        this.secondaryLabel = <ConfigIcon className="dbEnvySVG configIcon" width={30} height={30} />;
+      break;
+      case 'routers':
+        this.secondaryLabel = <RoutersIcon className="dbEnvySVG routersIcon" width={30} height={30} />;
+      break;
+      case 'mongos':
+        this.secondaryLabel = <MongosIcon className="dbEnvySVG mongosIcon" width={30} height={30} />;
+      break;
+      case 'databases':
+        this.secondaryLabel = <DatabasesIcon className="dbEnvySVG databasesIcon" width={30} height={30} />;
+      break;
+      case 'database':
+        this.secondaryLabel = <DatabaseIcon className="dbEnvySVG databaseIcon" width={30} height={30} />;
+      break;
+      case 'collection':
+        this.secondaryLabel = <CollectionIcon className="dbEnvySVG collectionIcon" width={30} height={30} />;
+      break;
+      case 'index':
+        this.secondaryLabel = <IndexIcon className="dbEnvySVG indexIcon" width={30} height={30} />;
+      break;
+      case 'users':
+        this.secondaryLabel = <UsersIcon className="dbEnvySVG usersIcon" width={30} height={30} />;
+      break;
+      case 'user':
+        this.secondaryLabel = <UserIcon className="dbEnvySVG userIcon" width={30} height={30} />;
+      break;
+      case 'property':
+        this.secondaryLabel = <PropertyIcon className="dbEnvySVG propertyIcon" width={30} height={30} />;
+      break;
+      case 'properties':
+        this.secondaryLabel = <PropertiesIcon className="dbEnvySVG propertiesIcon" width={30} height={30} />;
+      break;
+      default:
+      this.secondaryLabel = null;
+      break;
+    }
+    // this.iconName = `pt-icon-${this.type}`;
+    this.iconName = null;
     if (parent && parent.id != 'root') {
       this.id = `${parent.id}_${treeJSON.text}`;
     } else {

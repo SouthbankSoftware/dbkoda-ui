@@ -265,7 +265,7 @@ export default class TreeState {
             }
 
           } else {
-            childArray.push({text: key, type: 'numerical'});;
+            childArray.push({text: key, type: 'property'});;
           }
           // Create a node
 

@@ -27,7 +27,7 @@ import {ProfileForm} from '../ConnectionPanel/ProfileForm';
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
-import ConnectionIcon from '../../styles/icons/fix-icon.svg';
+import ConnectionIcon from '../../styles/icons/connection-icon.svg';
 import OpenProfileIcon from '../../styles/icons/open-icon.svg';
 import CloseProfileIcon from '../../styles/icons/close-profile-icon.svg';
 import EditProfileIcon from '../../styles/icons/edit-profile-icon.svg';
