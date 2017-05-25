@@ -6,10 +6,10 @@
  * @Last modified time: 2017-05-23T13:26:55+10:00
  */
 
-export const TopCollections = {
+export const ServerStatistics = {
   // Prefill function for alter user
-  dbenvy_TopCollections: () => {
-    return 'dbe.Top()';
+  dbenvy_ServerStatus: () => {
+    return 'dbeSS.serverStatistics()';
   },
   dbenvy_TopCollections_parse: (data) => {
     return data;

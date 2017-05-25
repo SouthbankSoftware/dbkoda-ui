@@ -39,6 +39,13 @@
 
         },
         {
+            "name": "DatabaseStorage",
+            "text": "Database Storage",
+            "icon": "pt-icon-horizontal-bar-chart-desc",
+            "view": "details"
+
+        },
+        {
             "name": "ServerStatistics",
             "text": "Server Statistics",
             "icon": "pt-icon-doughnut-chart",

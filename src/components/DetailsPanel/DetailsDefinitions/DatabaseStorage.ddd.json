@@ -1,0 +1,40 @@
+{
+	"Title": "Database Storage",
+	"DefaultValues": {
+		"function": "dbenvy_DatabaseStorage" 
+	},
+	"Fields": [
+		{
+			"name": "storageByDb",
+			"label": "Size on Disk by Database",
+			"type": "BarChart",
+			"XAxis": [{
+				"key": "sizeOnDisk",
+				"label": "Size in MBs",
+				"color": "#82ca9d"
+			}],
+			"YAxis" :{
+				"key": "name",
+				"label": "Database"
+			},
+			"width": 600,
+			"height": 600
+		},
+		{
+			"name": "shardMap",
+			"label": "Size on Disk by Shard",
+			"type": "BarChart",
+			"XAxis": [{
+				"key": "size",
+				"label": "Size in MBs",
+				"color": "#382F4B"
+			}],
+			"YAxis" :{
+				"key": "shardName",
+				"label": "Shard Name"
+			},
+			"width": 600,
+			"height": 600
+		}
+	]
+}
