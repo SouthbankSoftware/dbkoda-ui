@@ -79,7 +79,7 @@
         {
             "name": "SampleCollections",
             "text": "Find Attributes",
-            "icon": "dropdown"
+            "icon": "pt-icon-properties"
         }, {
             "name": "CollectionStats",
             "text": "Collection Statistics",

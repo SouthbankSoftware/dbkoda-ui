@@ -223,7 +223,7 @@ export default class TreeState {
     //Build tree from JSON object.
     let treeObj = {
       text: 'Attributes',
-      type: 'help',
+      type: 'properties',
       children: []
     };
     console.log('DB Object: ', object);
@@ -257,7 +257,7 @@ export default class TreeState {
               //Object
               let newChild = {
                 text: key,
-                type: 'property',
+                type: 'properties',
                 children: []
               };
               this.traverseObject(obj[key], newChild.children);
