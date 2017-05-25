@@ -282,7 +282,6 @@ export default class Panel extends React.Component {
       ContextMenu.show(
         <Menu>
           <div className="menuItemWrapper">
-            <CloseTabIcon className="dbEnvySVG" width={30} height={30} />
             <MenuItem
               onClick={() => {
             (tabId.id === 'Default')
@@ -290,38 +289,39 @@ export default class Panel extends React.Component {
               : this.closeTab(tabId);
           }}
               text={globalString('editor/tabMenu/closeTab')}
+              iconName="pt-icon-small-cross"
               intent={Intent.NONE} />
           </div>
           <div className="menuItemWrapper">
-            <CloseAllOtherTabsIcon className="dbEnvySVG" width={30} height={30} />
             <MenuItem
               onClick={() => this.closeTabs(tabId.id)}
               text={globalString('editor/tabMenu/closeOtherTabs')}
+              iconName="pt-icon-cross"
               intent={Intent.NONE} />
           </div>
           <div className="menuItemWrapper">
-            <CloseAllTabsIcon className="dbEnvySVG" width={30} height={30} />
             <MenuItem
               onClick={this.closeTabs}
               text={globalString('editor/tabMenu/closeAllTabs')}
+              iconName="pt-icon-key-delete"
               intent={Intent.NONE} />
           </div>
           <div className="menuItemWrapper">
-            <CloseAllTabsLeftIcon className="dbEnvySVG" width={30} height={30} />
             <MenuItem
               onClick={() => {
             this.closeLeft(tabId.id);
           }}
               text={globalString('editor/tabMenu/closeLeft')}
+              iconName="pt-icon-chevron-left"
               intent={Intent.NONE} />
           </div>
           <div className="menuItemWrapper">
-            <CloseAllTabsRightIcon className="dbEnvySVG" width={30} height={30} />
             <MenuItem
               onClick={() => {
             this.closeRight(tabId.id);
           }}
               text={globalString('editor/tabMenu/closeRight')}
+              iconName="pt-icon-chevron-right"
               intent={Intent.NONE} />
           </div>
         </Menu>, {
