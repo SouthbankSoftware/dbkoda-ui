@@ -261,6 +261,7 @@ export default class Toolbar extends React.Component {
         fileName,
         executing: false,
         visible: true,
+        shellVersion: res.shellVersion,
         initialMsg: res.output
           ? res
             .output

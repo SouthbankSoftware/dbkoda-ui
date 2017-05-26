@@ -94,6 +94,8 @@ const ConnectionPanel = ({
         sha: data.sha,
         editorCount: 1,
         initialMsg: res.output ? res.output.join('\r') : '',
+        dbVersion: res.dbVersion,
+        shellVersion: res.shellVersion,
       });
       profileList.selectedProfile = profiles.get(res.id);
       close();
