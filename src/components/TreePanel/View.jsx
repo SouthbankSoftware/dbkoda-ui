@@ -3,14 +3,20 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T15:31:20+10:00
+ * @Last modified time: 2017-05-26T16:33:06+10:00
 */
 
 import React from 'react';
-import {inject} from 'mobx-react';
-import {reaction, runInAction} from 'mobx';
-import {Classes, ITreeNode, Tree} from '@blueprintjs/core';
-import {ContextMenuTarget, Menu, MenuItem, MenuDivider, Intent} from '@blueprintjs/core';
+import { inject } from 'mobx-react';
+import { reaction, runInAction } from 'mobx';
+import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
+import {
+  ContextMenuTarget,
+  Menu,
+  MenuItem,
+  MenuDivider,
+  Intent
+} from '@blueprintjs/core';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
 import DocumentIcon from '../../styles/icons/document-solid-icon.svg';
@@ -25,7 +31,10 @@ import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
 import TreeState from './model/TreeState.js';
 import './View.scss';
 
-@inject(allStores => ({store: allStores.store, treeState: allStores.treeState}))
+@inject(allStores => ({
+  store: allStores.store,
+  treeState: allStores.treeState
+}))
 @ContextMenuTarget
 export default class TreeView extends React.Component {
   static get defaultProps() {
@@ -41,7 +50,7 @@ export default class TreeView extends React.Component {
   constructor(props) {
     super(props);
     this.props.treeState.updateCallback = () => {
-      this.setState({nodes: this.props.treeState.nodes});
+      this.setState({ nodes: this.props.treeState.nodes });
     };
 
     this.props.treeState.updateCallback2 = () => {
@@ -56,28 +65,34 @@ export default class TreeView extends React.Component {
     const onNewJson = () => {
       runInAction('update state var', () => {
         if (this.props.treeState.isNewJsonAvailable) {
-          this.setState({nodes: this.props.treeState.nodes});
+          this.setState({ nodes: this.props.treeState.nodes });
           this.props.treeState.isNewJsonAvailable = false;
         }
       });
     };
-    this.reactionToJson = reaction(() => this.props.treeState.isNewJsonAvailable, () => onNewJson());
-    this.reactionToFilter = reaction(() => this.props.treeState.filter, () => {
-      this.setState({nodes: this.props.treeState.nodes});
-    });
+    this.reactionToJson = reaction(
+      () => this.props.treeState.isNewJsonAvailable,
+      () => onNewJson()
+    );
+    this.reactionToFilter = reaction(
+      () => this.props.treeState.filter,
+      () => {
+        this.setState({ nodes: this.props.treeState.nodes });
+      }
+    );
     onNewJson();
 
-    this.reactionToTreeAction = reaction(() => this.props.store.treeActionPanel.treeActionEditorId, () => {
-      if (this.props.store.treeActionPanel.treeActionEditorId != '') {
-        this
-          .props
-          .store
-          .showTreeActionPane();
+    this.reactionToTreeAction = reaction(
+      () => this.props.store.treeActionPanel.treeActionEditorId,
+      () => {
+        if (this.props.store.treeActionPanel.treeActionEditorId != '') {
+          this.props.store.showTreeActionPane();
 
-        // this.props.store.treeActionPanel.treeActionEditorId = '';  // will update
-        // this in the dialog execution.
+          // this.props.store.treeActionPanel.treeActionEditorId = '';  // will update
+          // this in the dialog execution.
+        }
       }
-    });
+    );
   }
   componentWillUnmount() {
     this.reactionToJson();
@@ -126,113 +141,109 @@ export default class TreeView extends React.Component {
     if (this.nodeRightClicked) {
       const Actions = TreeActions[this.nodeRightClicked.type];
       const Menus = [];
-      Menus.push(<MenuItem
-        onClick={this.handleMakeRoot}
-        text="Make Root Node"
-        key="MakeRoot"
-        name="MakeRoot"
-        iconName="pt-icon-git-new-branch"
-        intent={Intent.NONE} />);
+      Menus.push(
+        <MenuItem
+          onClick={this.handleMakeRoot}
+          text="Make Root Node"
+          key="MakeRoot"
+          name="MakeRoot"
+          iconName="pt-icon-git-new-branch"
+          intent={Intent.NONE}
+        />
+      );
       if (Actions && Actions.length > 0) {
         Menus.push(<MenuDivider key="divider" />);
         for (const objAction of Actions) {
           // iconName={objAction.icon}
-          const icon = this.getIconFor(objAction.icon);
-          if (icon != null) {
-            Menus.push(
-              <div className="menuItemWrapper">
-                {icon}
-                <MenuItem
-                  onClick={this.handleTreeActionClick}
-                  text={objAction.text}
-                  name={objAction.name}
-                  key={objAction.name}
-                  intent={Intent.NONE} />
-              </div>
-            );
+          if (objAction.type && objAction.type == 'divider') {
+            Menus.push(<MenuDivider key={objAction.name} />);
           } else {
-            Menus.push(
-              <div className="menuItemWrapper">
-                {icon}
-                <MenuItem
-                  onClick={this.handleTreeActionClick}
-                  text={objAction.text}
-                  name={objAction.name}
-                  key={objAction.name}
-                  iconName={objAction.icon}
-                  intent={Intent.NONE} />
-              </div>
-            );
+            const icon = this.getIconFor(objAction.icon);
+            if (icon != null) {
+              Menus.push(
+                <div className="menuItemWrapper">
+                  {icon}
+                  <MenuItem
+                    onClick={this.handleTreeActionClick}
+                    text={objAction.text}
+                    name={objAction.name}
+                    key={objAction.name}
+                    intent={Intent.NONE}
+                  />
+                </div>
+              );
+            } else {
+              Menus.push(
+                <div className="menuItemWrapper">
+                  {icon}
+                  <MenuItem
+                    onClick={this.handleTreeActionClick}
+                    text={objAction.text}
+                    name={objAction.name}
+                    key={objAction.name}
+                    iconName={objAction.icon}
+                    intent={Intent.NONE}
+                  />
+                </div>
+              );
+            }
           }
         }
       }
-      return (
-        <Menu>{Menus}</Menu>
-      );
+      return <Menu>{Menus}</Menu>;
     }
   }
   reactionToJson;
   reactionToFilter;
   reactionToTreeAction;
-  handleNodeClick = (nodeData : ITreeNode, _nodePath : number[]) => {
+  handleNodeClick = (nodeData: ITreeNode, _nodePath: number[]) => {
     if (nodeData.text == '...') {
-      this
-        .props
-        .treeState
-        .resetRootNode();
+      this.props.treeState.resetRootNode();
     } else {
-      this
-        .props
-        .treeState
-        .selectNode(nodeData);
+      this.props.treeState.selectNode(nodeData);
     }
-    this.setState({nodes: this.props.treeState.nodes});
+    this.setState({ nodes: this.props.treeState.nodes });
   };
 
-  handleNodeContextMenu = (nodeData : ITreeNode, _nodePath : number[]) => {
+  handleNodeContextMenu = (nodeData: ITreeNode, _nodePath: number[]) => {
     this.nodeRightClicked = nodeData;
-    this
-      .props
-      .treeState
-      .selectNode(nodeData);
-    this.setState({nodes: this.props.treeState.nodes});
+    this.props.treeState.selectNode(nodeData);
+    this.setState({ nodes: this.props.treeState.nodes });
   };
 
-  handleNodeCollapse = (nodeData : ITreeNode) => {
+  handleNodeCollapse = (nodeData: ITreeNode) => {
     nodeData.isExpanded = false;
-    this.setState({nodes: this.props.treeState.nodes});
+    this.setState({ nodes: this.props.treeState.nodes });
   };
 
-  handleNodeExpand = (nodeData : ITreeNode) => {
+  handleNodeExpand = (nodeData: ITreeNode) => {
     nodeData.isExpanded = true;
-    this.setState({nodes: this.props.treeState.nodes});
+    this.setState({ nodes: this.props.treeState.nodes });
   };
 
   handleMakeRoot = () => {
     if (this.nodeRightClicked) {
-      this
-        .props
-        .treeState
-        .selectRootNode(this.nodeRightClicked);
-      this.setState({nodes: this.props.treeState.nodes});
+      this.props.treeState.selectRootNode(this.nodeRightClicked);
+      this.setState({ nodes: this.props.treeState.nodes });
     }
   };
-  handleTreeActionClick = (e : React.MouseEvent) => {
+  handleTreeActionClick = (e: React.MouseEvent) => {
     const action = e._targetInst._currentElement._owner._instance.props.name;
     this.actionSelected = this.getActionByName(action);
     if (action == 'SampleCollections') {
-      this
-        .props
-        .treeState
-        .sampleCollection(this.nodeRightClicked);
+      this.props.treeState.sampleCollection(this.nodeRightClicked);
     } else if (this.nodeRightClicked) {
-      if (this.actionSelected && this.actionSelected.view && this.actionSelected.view == 'details') {
+      if (
+        this.actionSelected &&
+        this.actionSelected.view &&
+        this.actionSelected.view == 'details'
+      ) {
         this.showDetailsView(this.nodeRightClicked, action);
       } else {
-        this
-          .props
-          .store
-          .addNewEditorForTreeAction(this.nodeRightClicked, action);
+        this.props.store.addNewEditorForTreeAction(
+          this.nodeRightClicked,
+          action
+        );
       }
     }
   };
@@ -244,26 +255,18 @@ export default class TreeView extends React.Component {
       const editorId = this.props.store.editorPanel.activeEditorId;
       if (editorId) {
         this.props.store.detailsPanel.activeEditorId = editorId;
-        const editor = this
-          .props
-          .store
-          .editors
-          .get(editorId);
-        this
-          .props
-          .store
-          .editors
-          .set(editorId, {
-            ...editor,
-            detailsView: {
-              visible: true,
-              treeNode,
-              treeAction: action
-            }
-          });
+        const editor = this.props.store.editors.get(editorId);
+        this.props.store.editors.set(editorId, {
+          ...editor,
+          detailsView: {
+            visible: true,
+            treeNode,
+            treeAction: action
+          }
+        });
       }
     });
-  }
+  };
 
   nodeRightClicked;
   actionSelected;
@@ -282,14 +285,13 @@ export default class TreeView extends React.Component {
           onNodeCollapse={this.handleNodeCollapse}
           onNodeExpand={this.handleNodeExpand}
           onNodeContextMenu={this.handleNodeContextMenu}
-          className={classNames} />
+          className={classNames}
+        />
       </div>
     );
   }
 }
 
 TreeView.propTypes = {
-  treeState: React
-    .PropTypes
-    .instanceOf(TreeState)
+  treeState: React.PropTypes.instanceOf(TreeState)
 };

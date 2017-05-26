@@ -35,6 +35,10 @@
 			"icon": "pt-icon-error"
 		},
 		{
+			"type": "divider",
+			"name": "StatisticsDivider"
+		},
+		{
 			"name": "TopCollections",
 			"text": "Top Collections",
 			"icon": "pt-icon-grouped-bar-chart",
