@@ -92,8 +92,10 @@ const ConnectionPanel = ({
         urlRadio: data.urlRadio,
         username: data.username,
         sha: data.sha,
-        editorCount: 1,
         initialMsg: res.output ? res.output.join('\r') : '',
+        dbVersion: res.dbVersion,
+        shellVersion: res.shellVersion,
+        editorCount: 1
       });
       profileList.selectedProfile = profiles.get(res.id);
       close();
