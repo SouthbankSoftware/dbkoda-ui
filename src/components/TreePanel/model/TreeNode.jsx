@@ -24,6 +24,8 @@ import RoutersIcon from '../../../styles/icons/fix-icon.svg';
 import MongosIcon from '../../../styles/icons/mongos-icon.svg';
 import PropertiesIcon from '../../../styles/icons/attribute-icon.svg';
 import PropertyIcon from '../../../styles/icons/attributes-icon.svg';
+import ReplicaSetIcon from '../../../styles/icons/replica-set-icon.svg';
+import ReplicaMemberIcon from '../../../styles/icons/replica-set-icon.svg';
 
 
 export default class TreeNode {
@@ -47,6 +49,10 @@ export default class TreeNode {
    * @param {Object} parent - reference to the parent node
    */
   constructor(treeJSON, parent) {
+    if (!treeJSON) {
+      console.log('huh?:', treeJSON, parent);
+      return;
+    }
     this.type = TreeNode.getNodeType(treeJSON, parent);
     // Add label as secondaryLabel component.
     switch (this.type) {
@@ -91,6 +97,12 @@ export default class TreeNode {
       break;
       case 'properties':
         this.secondaryLabel = <PropertiesIcon className="dbEnvySVG propertiesIcon" width={30} height={30} />;
+      break;
+      case 'replicaset':
+        this.secondaryLabel = <ReplicaSetIcon className="dbEnvySVG replicaSetIcon" width={30} height={30} />;
+      break;
+      case 'replica_member':
+        this.secondaryLabel = <ReplicaMemberIcon className="dbEnvySVG replicaMemberIcon" width={30} height={30} />;
       break;
       default:
       this.secondaryLabel = null;

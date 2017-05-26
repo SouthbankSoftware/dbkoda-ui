@@ -99,8 +99,10 @@ export default class TreeState {
           this
             .treeNodes
             .push(treeNode);
-        } else if(treeNode.type && treeNode.type == 'users') {
-          this.treeNodes.push(treeNode);
+        } else if (treeNode.type && treeNode.type == 'users') {
+          this
+            .treeNodes
+            .push(treeNode);
         }
       }
       console.log('TEST: ', this.treeNodes);
@@ -179,19 +181,27 @@ export default class TreeState {
       commands: queryFirst + querySecond
     })
       .then((res) => {
-        const sampleJSON = this.parseSampleData(res);
-        if (!nodeRightClicked.allChildNodes) {
-          nodeRightClicked.allChildNodes = new Map();
-        }
-        const child = new TreeNode(sampleJSON, nodeRightClicked);
-        nodeRightClicked.isExpanded = true;
-        child.isExpanded = true;
-        nodeRightClicked.setFilter(this.filter);
-        this.updateCallback();
-        nodeRightClicked.isExpanded = true;
-        this.updateCallback();
+        this
+          .parseSampleData(res)
+          .then((sampleJSON) => {
+            if (!nodeRightClicked.allChildNodes) {
+              nodeRightClicked.allChildNodes = new Map();
+            }
+            const child = new TreeNode(sampleJSON, nodeRightClicked);
+            nodeRightClicked.isExpanded = true;
+            child.isExpanded = true;
+            nodeRightClicked.setFilter(this.filter);
+            this.updateCallback();
+            nodeRightClicked.isExpanded = true;
+            this.updateCallback();
+          },
+          (err) => {
+            console.log('Failed: ', err);
+          });
+      },
+      (err) => {
+        console.log('Failed: ', err );
       });
-
   }
 
   /**
@@ -200,41 +210,44 @@ export default class TreeState {
    * @return {Object} - The resulting tree structure.
    */
   parseSampleData(queryResult) {
-    // Create an object as a union of all attributes. Remove db swap. Replace
-    // ObjectID(...) elements.
-    try {
-    queryResult = queryResult.replace(/ObjectId\(/g, '');
-    queryResult = queryResult.replace(/ISODate\(/g, '');
-    queryResult = queryResult.replace(/NumberLong\(/g, '');
-    queryResult = queryResult.replace(/\)/g, '');
+    return new Promise((resolve, reject) => {
+      // Create an object as a union of all attributes. Remove db swap. Replace
+      // ObjectID(...) elements.
+      try {
+        queryResult = queryResult.replace(/ObjectId\(/g, '');
+        queryResult = queryResult.replace(/ISODate\(/g, '');
+        queryResult = queryResult.replace(/NumberLong\(/g, '');
+        queryResult = queryResult.replace(/\)/g, '');
 
-    queryResult = queryResult.split('\n');
-    queryResult.splice(0, 1);
-    console.log('Result Array: ', queryResult);
-    let object = JSON.parse(queryResult[0]);
-    queryResult.forEach((document) => {
-      if (document.length > 1) {
-        document = JSON.parse(document);
-        console.log(document);
-        object = _.merge(object, document);
+        queryResult = queryResult.split('\n');
+        queryResult.splice(0, 1);
+        let object = JSON.parse(queryResult[0]);
+        queryResult.forEach((document) => {
+          if (document.length > 1) {
+            try {
+              document = JSON.parse(document);
+              object = _.merge(object, document);
+            } catch(err) {
+              console.log('Error parsing a document: ', document, err);
+            }
+          }
+        });
+        //Build tree from JSON object.
+        let treeObj = {
+          text: 'Attributes',
+          type: 'properties',
+          children: []
+        };
+        this.traverseObject(object, treeObj.children);
+        console.log('Tree Object: ', treeObj);
+
+        //console.log(keys);
+        resolve(treeObj);
+      } catch (err) {
+        NewToaster.show({message: 'Sorry, sampling of collection failed!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        reject('Sampling of Attributes Failed: ', err);
       }
     });
-
-    //Build tree from JSON object.
-    let treeObj = {
-      text: 'Attributes',
-      type: 'properties',
-      children: []
-    };
-    console.log('DB Object: ', object);
-    this.traverseObject(object, treeObj.children);
-    console.log('Tree Object: ', treeObj);
-
-    //console.log(keys);
-    return treeObj;
-    } catch(err) {
-      NewToaster.show({message: 'Sorry, sampling of collection failed!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-    }
   }
 
   traverseObject(obj, childArray) {
@@ -243,6 +256,7 @@ export default class TreeState {
         .keys(obj)
         .forEach(function (key) {
           if (typeof obj[key] === 'object') {
+            console.log('Parsing: ', obj[key]);
             if (Array.isArray(obj[key])) {
               //Array
               console.log('Object is Array');
@@ -255,6 +269,7 @@ export default class TreeState {
               childArray.push(newChild);
             } else {
               //Object
+              console.log('Object is Object');
               let newChild = {
                 text: key,
                 type: 'properties',
@@ -265,6 +280,7 @@ export default class TreeState {
             }
 
           } else {
+            console.log('Object is Property');
             childArray.push({text: key, type: 'property'});;
           }
           // Create a node

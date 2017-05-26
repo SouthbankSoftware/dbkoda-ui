@@ -15,6 +15,7 @@
 }
 
 .treeToolbar {
+  overflow-x: scroll;
   background-color: $navbarLeftBackground !important;
   .pt-button {
     background-color: $buttonSecondaryBackground !important;
