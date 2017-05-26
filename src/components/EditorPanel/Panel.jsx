@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-25T11:21:21+10:00
+ * @Last modified time: 2017-05-26T10:23:16+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -271,8 +271,8 @@ export default class Panel extends React.Component {
     const tabId = {
       id: target.getAttribute('data-tab-id')
     };
-    if (tabId) {
-      console.log(tabId);
+    if (tabId.id) {
+      console.log(tabId.id);
       ContextMenu.show(
         <Menu className="editorTabContentMenu">
           <div className="menuItemWrapper closeTabItem">
