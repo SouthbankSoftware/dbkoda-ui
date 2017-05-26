@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-26T11:31:21+10:00
+ * @Last modified time: 2017-05-26T11:44:26+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -374,10 +374,7 @@ export default class Panel extends React.Component {
           {this.renderWelcome()}
           {editors.map((tab) => {
             if (tab[1].visible) {
-              const tabClassName =
-                (tab[1].alias).replace(/[\. ]/g, '') +
-                ' ' +
-                (tab[1].fileName).replace(/[\. ]/g, '');
+              const tabClassName = (tab[1].alias).replace(/[\. ]/g, '');
               return (
                 <Tab2
                   className={'editorTab visible ' + tabClassName}
