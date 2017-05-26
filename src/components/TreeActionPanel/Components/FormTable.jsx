@@ -3,7 +3,7 @@
  * @Date:   2017-04-18T13:31:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-26T10:44:56+10:00
+ * @Last modified time: 2017-05-26T11:04:15+10:00
  */
 
 import React from 'react';
@@ -33,7 +33,7 @@ export default observer(({ members }) => {
   }
 
   return (
-    <fieldset className="tableFieldSet">
+    <fieldset className="tableFieldSet" label={members.label ? members.label : members.name}>
 
       <div className="clearfix">
         <div className="left">
