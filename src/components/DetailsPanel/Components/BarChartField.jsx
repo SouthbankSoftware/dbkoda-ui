@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T12:51:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T14:01:30+10:00
+ * @Last modified time: 2017-05-26T11:25:03+10:00
  */
 
 import React from 'react';
@@ -45,7 +45,7 @@ export default observer(({
         <YAxis dataKey={field.YAxis.key} type="category" />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip />
-        <Legend />
+        <Legend iconType="circle" />
         {chartBars}
       </BarChart>
     </div>
