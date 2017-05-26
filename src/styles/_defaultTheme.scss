@@ -2,7 +2,7 @@
 // @Date:   2017-05-12T15:11:29+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-24T16:42:19+10:00
+// @Last modified time: 2017-05-26T09:31:37+10:00
 // Theme 1 Colours: These should be externalized eventually:
 //Tabs:
 $tabFontColor: #8B8B8B;
@@ -126,5 +126,6 @@ $explainTableEvenBKColor: rgb(36, 36, 36);
 $explainPanelBKColor: rgb(29, 29, 29);
 
 $detailsBackground: #1C1D1D;
+$detailsFontColor: #bfbfbf;
 $chartTooltipBackground: rgba(255,255,255, 0.7);
-$chartItemHover: rgba(86, 85, 86, 0.5);
+$chartItemHover: rgba(86, 86, 86, 0.15);

@@ -91,7 +91,7 @@
             "name": "CollectionStats",
             "text": "Collection Statistics",
             "icon": "pt-icon-grouped-bar-chart",
-            "view": "pt-icon-properties"
+            "view": "details"
         },
         {
             "name": "CreateIndex",
