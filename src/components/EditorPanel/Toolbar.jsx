@@ -268,7 +268,7 @@ export default class Toolbar extends React.Component {
             .join('\n')
           : '',
         code: '',
-        path: null
+        path: null,
       }, options)));
     this.props.store.editorPanel.creatingNewEditor = false;
     this.props.store.editorToolbar.noActiveProfile = false;

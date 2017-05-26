@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-26T09:59:02+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-05-26T14:14:08+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -586,14 +586,9 @@ class View extends React.Component {
       .editor
       .getCodeMirror();
     try {
-      const beautified = Prettier.format(this.getCode(), {});
-      this
-        .props
-        .store
-        .editors
-        .get(this.props.id)
-        .code = beautified;
-      cm.setValue(beautified);
+      let beautified = Prettier.format(this.getCode(), {});
+      beautified = beautified.replace(/(\S)(\s+)\.(\S)/g, '$1.$2$3');
+      this.updateCode(beautified);
     } catch (err) {
       NewToaster.show({message: globalString('editor/view/formatError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
@@ -612,7 +607,8 @@ class View extends React.Component {
       .getCodeMirror();
     console.log(cm.getSelection());
     try {
-      const beautified = Prettier.format(cm.getSelection(), {});
+      let beautified = Prettier.format(cm.getSelection(), {});
+      beautified = beautified.replace(/(\S)(\s+)\.(\S)/g, '$1.$2$3');
       cm.replaceSelection(beautified);
     } catch (err) {
       NewToaster.show({message: globalString('editor/view/formatError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
