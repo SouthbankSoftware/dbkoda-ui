@@ -10,7 +10,7 @@ import React from 'react';
 import {observable} from 'mobx';
 
 import DragLabel from './DragLabel.jsx';
-import DatabaseIcon from '../../../styles/icons/database-icon-1.svg';
+import DatabaseIcon from '../../../styles/icons/database-icon-2.svg';
 import DatabasesIcon from '../../../styles/icons/database-icon-3.svg';
 import CollectionIcon from '../../../styles/icons/collection-icon.svg';
 import IndexIcon from '../../../styles/icons/index-icon.svg';

@@ -54,12 +54,12 @@
       flex-direction: row;
       line-height: 60px;
       svg.dbEnvySVG {
-        width: 40px;
-        height: 40px;
-        margin: 10px;
+        width: 4em;
+        height: 4em;
+        margin-top: 0.5em;
+        margin-right: 1em;
         border-radius: 50%;
         padding: 3px;
-        border: 1px solid $buttonSecondaryIcon;
         fill: $buttonSecondaryIcon;
       }
       .profileListing {
