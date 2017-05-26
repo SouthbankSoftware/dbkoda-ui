@@ -3,7 +3,7 @@
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-04-20T14:00:17+10:00
+ * @Last modified time: 2017-05-26T15:37:06+10:00
 */
 
 import React from 'react';
@@ -51,37 +51,34 @@ export default class TreeNode {
    */
   constructor(treeJSON, parent) {
     this.type = TreeNode.getNodeType(treeJSON, parent);
-    if (parent == null) {
-      this.type = 'root_' + this.type;
-    }
     if (this.type == 'root') {
       this.type = 'shards';
     }
     console.log(this.type);
     // Add label as secondaryLabel component.
     switch (this.type) {
-      case 'root_shards':
+      case 'shards':
         this.secondaryLabel = <RootShardsIcon className="dbEnvySVG shardsIcon" width={30} height={30} />;
       break;
-      case 'shards':
+      case 'group_shards':
         this.secondaryLabel = <ShardsIcon className="dbEnvySVG shardsIcon" width={30} height={30} />;
       break;
       case 'shard':
         this.secondaryLabel = <ShardIcon className="dbEnvySVG shardIcon" width={30} height={30} />;
       break;
-      case 'root_configservers':
+      case 'configservers':
         this.secondaryLabel = <ConfigServersIcon className="dbEnvySVG configServersIcon" width={30} height={30} />;
       break;
       case 'config':
         this.secondaryLabel = <ConfigIcon className="dbEnvySVG configIcon" width={30} height={30} />;
       break;
-      case 'root_routers':
+      case 'routers':
         this.secondaryLabel = <RoutersIcon className="dbEnvySVG routersIcon" width={30} height={30} />;
       break;
       case 'mongos':
         this.secondaryLabel = <MongosIcon className="dbEnvySVG mongosIcon" width={30} height={30} />;
       break;
-      case 'root_databases':
+      case 'databases':
         this.secondaryLabel = <DatabasesIcon className="dbEnvySVG databasesIcon" width={30} height={30} />;
       break;
       case 'database':
@@ -93,7 +90,7 @@ export default class TreeNode {
       case 'index':
         this.secondaryLabel = <IndexIcon className="dbEnvySVG indexIcon" width={30} height={30} />;
       break;
-      case 'root_users':
+      case 'users':
         this.secondaryLabel = <UsersIcon className="dbEnvySVG usersIcon" width={30} height={30} />;
       break;
       case 'user':
@@ -105,7 +102,7 @@ export default class TreeNode {
       case 'properties':
         this.secondaryLabel = <PropertiesIcon className="dbEnvySVG propertiesIcon" width={30} height={30} />;
       break;
-      case 'root_replicaset':
+      case 'replicaset':
         this.secondaryLabel = <ReplicaSetIcon className="dbEnvySVG replicaSetIcon" width={30} height={30} />;
       break;
       case 'replica_member':
@@ -200,7 +197,7 @@ export default class TreeNode {
       return treeJSON.type;
     }
     if (parent && parent.id != 'root') {
-      return parent
+      return 'group_' + parent
         .id
         .split('_')[1];
     }
