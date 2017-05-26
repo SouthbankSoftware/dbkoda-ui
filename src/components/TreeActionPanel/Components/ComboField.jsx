@@ -3,7 +3,7 @@
  * @Date:   2017-05-11T09:42:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T16:48:34+10:00
+ * @Last modified time: 2017-05-26T10:27:07+10:00
  */
 
 import React from 'react';
@@ -76,7 +76,7 @@ export default class ComboField extends React.Component {
           <label htmlFor={field.id} className="pt-label pt-label-r-30">
             {field.label}
           </label>}
-        <div className="pt-form-content">
+        <div className="pt-form-content" label={field.label ? field.label : field.name}>
           {field.options &&
             field.options.tooltip &&
             <Tooltip

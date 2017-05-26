@@ -3,7 +3,7 @@
  * @Date:   2017-05-23T13:15:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T14:00:31+10:00
+ * @Last modified time: 2017-05-26T09:42:58+10:00
  */
 
 import React from 'react';
@@ -25,7 +25,11 @@ export default observer(({
   for (const row of data) {
     const tableCells = [];
     for (const header of field.columns) {
-      tableCells.push(<td>{row[header.name]}</td>);
+      if (isNaN(Number(row[header.name]))) {
+        tableCells.push(<td>{row[header.name]}</td>);
+      } else {
+        tableCells.push(<td style={{ textAlign: 'right'}}>{row[header.name]}</td>);
+      }
     }
     tableRows.push(<tr>{tableCells}</tr>);
   }

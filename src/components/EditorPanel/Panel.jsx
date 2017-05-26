@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-24T13:08:30+10:00
+ * @Last modified time: 2017-05-26T11:44:26+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -271,11 +271,11 @@ export default class Panel extends React.Component {
     const tabId = {
       id: target.getAttribute('data-tab-id')
     };
-    if (tabId) {
-      console.log(tabId);
+    if (tabId.id) {
+      console.log(tabId.id);
       ContextMenu.show(
-        <Menu>
-          <div className="menuItemWrapper">
+        <Menu className="editorTabContentMenu">
+          <div className="menuItemWrapper closeTabItem">
             <MenuItem
               onClick={() => {
                 (tabId.id === 'Default')
@@ -286,21 +286,21 @@ export default class Panel extends React.Component {
               iconName="pt-icon-small-cross"
               intent={Intent.NONE} />
           </div>
-          <div className="menuItemWrapper">
+          <div className="menuItemWrapper closeOtherItem">
             <MenuItem
               onClick={() => this.closeTabs(tabId.id)}
               text={globalString('editor/tabMenu/closeOtherTabs')}
               iconName="pt-icon-cross"
               intent={Intent.NONE} />
           </div>
-          <div className="menuItemWrapper">
+          <div className="menuItemWrapper closeAllItem">
             <MenuItem
               onClick={this.closeTabs}
               text={globalString('editor/tabMenu/closeAllTabs')}
               iconName="pt-icon-key-delete"
               intent={Intent.NONE} />
           </div>
-          <div className="menuItemWrapper">
+          <div className="menuItemWrapper closeLeftItem">
             <MenuItem
               onClick={() => {
                 this.closeLeft(tabId.id);
@@ -309,7 +309,7 @@ export default class Panel extends React.Component {
               iconName="pt-icon-chevron-left"
               intent={Intent.NONE} />
           </div>
-          <div className="menuItemWrapper">
+          <div className="menuItemWrapper closeRightItem">
             <MenuItem
               onClick={() => {
                 this.closeRight(tabId.id);
@@ -374,9 +374,10 @@ export default class Panel extends React.Component {
           {this.renderWelcome()}
           {editors.map((tab) => {
             if (tab[1].visible) {
+              const tabClassName = (tab[1].alias).replace(/[\. ]/g, '');
               return (
                 <Tab2
-                  className={'editorTab visible ' + tab[1].alias}
+                  className={'editorTab visible ' + tabClassName}
                   key={tab[1].id}
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
@@ -401,7 +402,7 @@ export default class Panel extends React.Component {
             }
             return (
               <Tab2
-                className={'editorTab notVisible ' + tab[1].alias}
+                className={'editorTab notVisible ' + tabClassName}
                 key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}

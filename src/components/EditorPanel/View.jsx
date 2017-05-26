@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-22T13:15:46+10:00
+ * @Last modified time: 2017-05-26T09:59:02+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -350,8 +350,10 @@ class View extends React.Component {
             .editor
             .getCodeMirror();
           const oldCursor = cm.getCursor();
+          const oldScroll = cm.getScrollInfo();
           cm.setValue(code);
           cm.setCursor(oldCursor);
+          cm.scrollTo(oldScroll.left, oldScroll.top);
         } catch (e) {
           console.log(e);
         }
