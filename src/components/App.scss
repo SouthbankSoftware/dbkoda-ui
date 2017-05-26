@@ -1,7 +1,7 @@
 // @Author: guiguan
 // @Date:   2017-03-07T17:09:22+11:00
-// @Last modified by:   chris
-// @Last modified time: 2017-05-15T10:26:28+10:00
+// @Last modified by:   wahaj
+// @Last modified time: 2017-05-26T16:23:49+10:00
 @import '../styles/_defaultTheme.scss';
 $purpleFont: #b95cce;
 $resizerHoverColor: rgba(97, 114, 126, 0.7);
@@ -106,7 +106,9 @@ ul.pt-menu {
       display: flex;
       flex-direction: row;
       svg.dbEnvySVG {}
-      li {}
+      li {
+        width: 100%;
+      }
     }
   }
   div.menuItemWrapper {
@@ -114,6 +116,8 @@ ul.pt-menu {
     flex-direction: row;
     svg.dbEnvySVG {
     }
-    li {}
+    li {
+      width: 100%;
+    }
   }
 }
