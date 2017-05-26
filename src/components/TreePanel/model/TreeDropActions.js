@@ -3,7 +3,7 @@
 * @Date:   2017-03-17T10:29:12+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-15T12:17:01+10:00
+ * @Last modified time: 2017-05-26T12:36:37+10:00
 */
 
 import Templates from '../templates/dragdrop';
@@ -41,6 +41,9 @@ export default class TreeDropActions {
           db: treeNode.refParent.refParent.text,
           col: treeNode.refParent.text
         };
+        break;
+      case 'user':
+        context = { text: treeNode.label.split('.')[1] };
         break;
       default:
         context = { text: treeNode.label };
