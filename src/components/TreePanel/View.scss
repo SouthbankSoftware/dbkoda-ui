@@ -15,6 +15,7 @@
 }
 
 .treeToolbar {
+  overflow-x: scroll;
   background-color: $navbarLeftBackground !important;
   .pt-button {
     background-color: $buttonSecondaryBackground !important;
@@ -56,6 +57,25 @@ ul.pt-tree-node-list {
           fill: $profileListFontColor;
           width: 20px;
           height: 20px;
+        }
+      }
+    }
+    div.pt-tree-node-content-0 {
+      height: 4em;
+      border-top: 1px solid $profileListDividerColor;
+      span.pt-tree-node-caret {
+        order: 1;
+      }
+      span.pt-tree-node-label {
+        order: 3;
+      }
+      span.pt-tree-node-secondary-label {
+        order: 2;
+        padding-top: 5px;
+        svg {
+          fill: $profileListFontColor;
+          width: 3em;
+          height: 3em;
         }
       }
     }
