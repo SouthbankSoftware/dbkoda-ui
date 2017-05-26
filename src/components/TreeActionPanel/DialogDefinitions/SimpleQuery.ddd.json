@@ -20,6 +20,7 @@
     {
       "name": "CollectionName",
       "type": "Text",
+      "label": "Collection Name",
       "readOnly": true,
       "rules": "required"
     },
