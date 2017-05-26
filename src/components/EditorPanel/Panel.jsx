@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-26T10:23:16+10:00
+ * @Last modified time: 2017-05-26T11:06:20+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -374,9 +374,12 @@ export default class Panel extends React.Component {
           {this.renderWelcome()}
           {editors.map((tab) => {
             if (tab[1].visible) {
+              const tabClassName =
+                (tab[1].alias + tab[1].fileName)
+                .replace(/[\. ]/g, '');
               return (
                 <Tab2
-                  className={'editorTab visible ' + tab[1].alias}
+                  className={'editorTab visible ' + tabClassName}
                   key={tab[1].id}
                   id={tab[1].id}
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
@@ -401,7 +404,7 @@ export default class Panel extends React.Component {
             }
             return (
               <Tab2
-                className={'editorTab notVisible ' + tab[1].alias}
+                className={'editorTab notVisible ' + tabClassName}
                 key={tab[1].id}
                 id={tab[1].id}
                 title={tab[1].alias}
