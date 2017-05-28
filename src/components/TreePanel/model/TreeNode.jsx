@@ -21,11 +21,11 @@ import ShardsIcon from '../../../styles/icons/shards-icon-2.svg';
 import ShardIcon from '../../../styles/icons/shards-icon-1.svg';
 import ConfigServersIcon from '../../../styles/icons/config-database-icon-4.svg';
 import ConfigIcon from '../../../styles/icons/config-database-icon-1.svg';
-import RoutersIcon from '../../../styles/icons/fix-icon.svg';
+import RoutersIcon from '../../../styles/icons/mongos-icon-2.svg';
 import MongosIcon from '../../../styles/icons/mongos-icon.svg';
 import PropertiesIcon from '../../../styles/icons/attribute-icon.svg';
 import PropertyIcon from '../../../styles/icons/attributes-icon.svg';
-import ReplicaSetIcon from '../../../styles/icons/replica-set-icon.svg';
+import ReplicaSetIcon from '../../../styles/icons/replica-set-icon-2.svg';
 import ReplicaMemberIcon from '../../../styles/icons/replica-set-icon.svg';
 
 
