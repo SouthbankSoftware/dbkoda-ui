@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 412 359" style="enable-background:new 0 0 412 359;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:none;}
-</style>
-<g id="Layer_1_1_">
-</g>
-<polygon class="st0" points="48.4,258 106.4,316 199.7,316 226,289.7 121.3,185 "/>
-<path d="M379.5,316H229.4l157.5-157.5c4.1-4.1,4.1-10.8,0-14.9L267.4,24.1c-2-2-4.6-3.1-7.4-3.1s-5.5,1.1-7.4,3.1L26.1,250.5
+  viewBox="0 0 412 359" style="enable-background:new 0 0 412 359;" xml:space="preserve">
+	<g id="Layer_1_1_">
+	</g>
+	<polygon class="st0" points="48.4,258 106.4,316 199.7,316 226,289.7 121.3,185 " />
+	<path d="M379.5,316H229.4l157.5-157.5c4.1-4.1,4.1-10.8,0-14.9L267.4,24.1c-2-2-4.6-3.1-7.4-3.1s-5.5,1.1-7.4,3.1L26.1,250.5
 	c-4.1,4.1-4.1,10.8,0,14.9L94.6,334c2,2,4.6,3.1,7.4,3.1h277.5c5.8,0,10.5-4.7,10.5-10.5C390,320.7,385.3,316,379.5,316z M199.7,316
-	h-93.3l-58-58l72.9-72.9L226,289.7L199.7,316z"/>
+	h-93.3l-58-58l72.9-72.9L226,289.7L199.7,316z" />
 </svg>
