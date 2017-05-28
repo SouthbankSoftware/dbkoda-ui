@@ -54,6 +54,8 @@
       flex-direction: row;
       line-height: 60px;
       svg.dbEnvySVG {
+        stroke: $buttonSecondaryIcon;
+        stroke-width: 6px;
         width: 4em;
         height: 4em;
         margin-top: 0.5em;
@@ -63,10 +65,12 @@
         fill: $buttonSecondaryIcon;
       }
       .profileListing {
-        font: 'Arial';
+        font-family: Arial, Helvetica, sans-serif;
         font-style: normal !important;
         color: $profileListFontColor;
-        font-size: large;
+        letter-spacing: 2px;
+        font-size: 20px;
+
       }
       .profileListing::before {
         margin-right: 10px;
