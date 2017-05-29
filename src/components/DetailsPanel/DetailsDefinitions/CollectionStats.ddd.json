@@ -15,6 +15,7 @@
 			"name": "Statistics",
 			"label": "Statistics",
 			"type": "Table",
+			"width": "30%",
 			"columns": [{
 				"name": "statistic",
 				"label": "Statistic"
@@ -29,24 +30,22 @@
 			"type": "BarChart",
 			"XAxis": [{
 				"key": "size",
-				"label": "Size in KBs",
-				"color": "#382F4B"
+				"label": "Size in KBs"
 			},{
 				"key": "count",
-				"label": "Count",
-				"color": "#76341C"
+				"label": "Count"
 				}],
 			"YAxis" :{
 				"key": "name"
 			},
-			"width": 600,
+			"width": "50%",
 			"height": 300
 		},
 		{
 			"name": "ShardsPercentage",
 			"label": "Shards Percentage",
 			"type": "PieChart",
-			"width": 300,
+			"width": "20%",
 			"height": 300
 		}
 	]

@@ -3,7 +3,7 @@
  * @Date:   2017-05-23T13:15:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-26T09:42:58+10:00
+ * @Last modified time: 2017-05-29T11:43:50+10:00
  */
 
 import React from 'react';
@@ -35,7 +35,7 @@ export default observer(({
   }
 
   return (
-    <div className="div-field-container">
+    <div className="div-field-container" style={field.width && {width: field.width}}>
       <label htmlFor={field.name} className="pt-label pt-label-field">
         {field.label}
       </label>
