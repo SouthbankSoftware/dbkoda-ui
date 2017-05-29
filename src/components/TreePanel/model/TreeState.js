@@ -1,18 +1,27 @@
 /**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-08T11:56:51+11:00
-* @Email:  wahaj@southbanksoftware.com
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-08T11:56:51+11:00
+ * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
  * @Last modified time: 2017-05-10T14:51:55+10:00
-*/
+ */
 
 /* eslint-disable */
 
-import {observable, action} from 'mobx';
+import {
+  observable,
+  action
+} from 'mobx';
 import _ from 'lodash';
-import {featherClient} from '~/helpers/feathers';
-import {NewToaster} from '#/common/Toaster';
-import {Intent} from '@blueprintjs/core';
+import {
+  featherClient
+} from '~/helpers/feathers';
+import {
+  NewToaster
+} from '#/common/Toaster';
+import {
+  Intent
+} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import TreeNode from './TreeNode.jsx';
 
@@ -32,7 +41,9 @@ export default class TreeState {
   constructor() {
     this.treeNodes = [];
     this.filteredNodes = observable([]);
-    this.resetTreeNode = new TreeNode({text: '...'});
+    this.resetTreeNode = new TreeNode({
+      text: '...'
+    });
   }
   @action setProfileId(value) {
     this.profileId = value;
@@ -172,36 +183,57 @@ export default class TreeState {
     const queryFirst = 'use ' + db + '\n'; // eslint-disable-line
     const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 20}})'; //
     const profile = this.updateCallback2();
-
-    const service = featherClient().service('/mongo-sync-execution');
-    service.timeout = 30000;
-    service
-      .update(profile.id, {
-      shellId: profile.shellId, // eslint-disable-line
-      commands: queryFirst + querySecond
-    })
-      .then((res) => {
-        this
-          .parseSampleData(res)
-          .then((sampleJSON) => {
-            if (!nodeRightClicked.allChildNodes) {
-              nodeRightClicked.allChildNodes = new Map();
-            }
-            const child = new TreeNode(sampleJSON, nodeRightClicked);
-            nodeRightClicked.isExpanded = true;
-            child.isExpanded = true;
-            nodeRightClicked.setFilter(this.filter);
-            this.updateCallback();
-            nodeRightClicked.isExpanded = true;
-            this.updateCallback();
-          },
-          (err) => {
-            console.log('Failed: ', err);
-          });
-      },
-      (err) => {
-        console.log('Failed: ', err );
-      });
+    console.log('Prof: ', profile);
+    if (profile.shellVersion) {
+      if (profile.shellVersion.match(/^3.0.*/gi) ||
+        profile.shellVersion.match(/^2.*/gi) ||
+        profile.shellVersion.match(/^1.*/gi)) {
+        console.log('Sample attributes does not support Shell versions lower than 3.1, detected version is: ', profile.shellVersion);
+         NewToaster.show({
+          message: 'Sorry, sampling of collection not currently supported for Mongo shell versions lower than 3.1',
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
+      } else {
+        console.log('huh?');
+        const service = featherClient().service('/mongo-sync-execution');
+        service.timeout = 30000;
+        service
+          .update(profile.id, {
+            shellId: profile.shellId, // eslint-disable-line
+            commands: queryFirst + querySecond
+          })
+          .then((res) => {
+              this
+                .parseSampleData(res)
+                .then((sampleJSON) => {
+                    if (!nodeRightClicked.allChildNodes) {
+                      nodeRightClicked.allChildNodes = new Map();
+                    }
+                    const child = new TreeNode(sampleJSON, nodeRightClicked);
+                    nodeRightClicked.isExpanded = true;
+                    child.isExpanded = true;
+                    nodeRightClicked.setFilter(this.filter);
+                    this.updateCallback();
+                    nodeRightClicked.isExpanded = true;
+                    this.updateCallback();
+                  },
+                  (err) => {
+                    console.log('Failed: ', err);
+                  });
+            },
+            (err) => {
+              console.log('Failed: ', err);
+            });
+      }
+    } else {
+         console.log('Sample Attributes could not determine the shell version, detected version is: ', profile.shellVersion);
+         NewToaster.show({
+          message: 'Sorry, sampling of collections failed as we can not detect a supported Mongo Shell Version',
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
+    }
   }
 
   /**
@@ -227,7 +259,7 @@ export default class TreeState {
             try {
               document = JSON.parse(document);
               object = _.merge(object, document);
-            } catch(err) {
+            } catch (err) {
               console.log('Error parsing a document: ', document, err);
             }
           }
@@ -244,7 +276,11 @@ export default class TreeState {
         //console.log(keys);
         resolve(treeObj);
       } catch (err) {
-        NewToaster.show({message: 'Sorry, sampling of collection failed!', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({
+          message: 'Sorry, sampling of collection failed!',
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
         reject('Sampling of Attributes Failed: ', err);
       }
     });
@@ -281,7 +317,10 @@ export default class TreeState {
 
           } else {
             console.log('Object is Property');
-            childArray.push({text: key, type: 'property'});;
+            childArray.push({
+              text: key,
+              type: 'property'
+            });;
           }
           // Create a node
 
@@ -301,7 +340,7 @@ export default class TreeState {
    * @param  {ITreeNode[]}   nodes    - Nodes array/map to parse
    * @param  {Function} callback - Callback method to execute on each node
    */
-  forEachNode(nodes : ITreeNode[], callback : (node : ITreeNode) => void) {
+  forEachNode(nodes: ITreeNode[], callback: (node: ITreeNode) => void) {
     if (nodes == null) {
       return;
     }
@@ -313,161 +352,159 @@ export default class TreeState {
   }
 
   getDummyResult() {
-    return [
-      {
+    return [{
 
-        'name': 'd',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'g',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'a',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'k',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'l',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'm',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'b',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'c',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'h',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'f',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-        'name': 'e',
-        'age': '1',
-        'height': 123,
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-
-        'name': 'j',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
-        }
-      }, {
-        'name': 'e',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2,
-            'ccc': 3
-          }
-        }
-      }, {
-        'name': 'e',
-        'age': '1',
-        'nested': {
-          'a': 1,
-          'b': {
-            'bb': 1,
-            'bbb': 2
-          }
+      'name': 'd',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
         }
       }
-    ];
+    }, {
+
+      'name': 'g',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'a',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'k',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'l',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'm',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'b',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'c',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'h',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'f',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+      'name': 'e',
+      'age': '1',
+      'height': 123,
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+
+      'name': 'j',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }, {
+      'name': 'e',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2,
+          'ccc': 3
+        }
+      }
+    }, {
+      'name': 'e',
+      'age': '1',
+      'nested': {
+        'a': 1,
+        'b': {
+          'bb': 1,
+          'bbb': 2
+        }
+      }
+    }];
   }
 }
