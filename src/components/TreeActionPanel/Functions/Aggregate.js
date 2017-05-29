@@ -16,34 +16,34 @@ export const Aggregate = {
         Aggregate.executeCommand = cbFuncExecute;
     },
     // Prefill function for alter user
-    dbenvy_AggregatePreFill: (params) => {
+    dbcoda_AggregatePreFill: (params) => {
         return sprintf('dbe.aggregationPreFill("%s","%s")', params.Database, params.CollectionName);
     },
-    dbenvy_AggregatePreFill_parse: (res) => {
+    dbcoda_AggregatePreFill_parse: (res) => {
         res.InitialFilter = false;
         return (res);
     },
-    dbenvy_sortOptions: () => {
+    dbcoda_sortOptions: () => {
         return ('db');
     },
-    dbenvy_sortOptions_parse: (res) => {
+    dbcoda_sortOptions_parse: (res) => {
         console.log(res);
         return ([1, -1]);
     },
-    dbenvyAggSteps: () => {
+    dbcodaAggSteps: () => {
         return ('dbe.aggregationArgs()');
     },
-    dbenvyAggSteps_parse: (res) => {
+    dbcodaAggSteps_parse: (res) => {
         const data = [];
         res.forEach((r) => {
             data.push(r.StepName);
         });
         return (data);
     },
-    dbenvy_listdb: common.dbenvy_listdb,
-    dbenvy_listdb_parse: common.dbenvy_listdb_parse,
-    dbenvy_listcollections: common.dbenvy_listcollections,
-    dbenvy_listcollections_parse: common.dbenvy_listcollections_parse,
-    dbenvyListAttributes: common.dbenvyListAttributes,
-    dbenvyListAttributes_parse: common.dbenvyListAttributes_parse
+    dbcoda_listdb: common.dbcoda_listdb,
+    dbcoda_listdb_parse: common.dbcoda_listdb_parse,
+    dbcoda_listcollections: common.dbcoda_listcollections,
+    dbcoda_listcollections_parse: common.dbcoda_listcollections_parse,
+    dbcodaListAttributes: common.dbcodaListAttributes,
+    dbcodaListAttributes_parse: common.dbcodaListAttributes_parse
 };

@@ -11,11 +11,11 @@
 
 export const EnableBalancer = {
     // Prefill function for alter user
-    dbenvy_EnableBalancerPreFill: () => {
+    dbcoda_EnableBalancerPreFill: () => {
         const cmd = 'sh.getBalancerState()';
         return cmd;
     },
-    dbenvy_EnableBalancerPreFill_parse: (res) => {
+    dbcoda_EnableBalancerPreFill_parse: (res) => {
         const outputDoc = {};
         if (res === true) {
             outputDoc.BalancerState = res;

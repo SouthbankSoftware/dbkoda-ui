@@ -1,7 +1,7 @@
 {
 	"Title": "Alter User",
 	"DefaultValues": {
-		"function": "dbenvy_AlterUserPreFill",
+		"function": "dbcoda_AlterUserPreFill",
 		"arguments": [{
 			"name": "UserId",
 			"value": "treeNode"
@@ -25,7 +25,7 @@
 			"label": "Database",
 			"type": "Select",
 			"readOnly": true,
-			"lookup": "dbenvy_listdb"
+			"lookup": "dbcoda_listdb"
 		},
 		{
 			"name": "UserName",
@@ -52,12 +52,12 @@
 				"name": "Database",
 				"label": "Database",
 				"type": "Select",
-				"lookup": "dbenvy_listdb"
+				"lookup": "dbcoda_listdb"
 			}, {
 				"name": "Role",
 				"label": "Role",
 				"type": "Select",
-				"lookup": "dbenvy_listRoles",
+				"lookup": "dbcoda_listRoles",
 				"lookup_arguments": [{
 					"name": "db",
 					"value": "treeNode.parentDB"
@@ -65,5 +65,5 @@
 			}]
 		}
 	],
-	"Validate": "dbenvy_validateUser"
+	"Validate": "dbcoda_validateUser"
 }

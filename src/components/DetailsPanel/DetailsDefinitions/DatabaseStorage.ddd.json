@@ -1,7 +1,7 @@
 {
 	"Title": "Database Storage",
 	"DefaultValues": {
-		"function": "dbenvy_DatabaseStorage" 
+		"function": "dbcoda_DatabaseStorage" 
 	},
 	"Fields": [
 		{

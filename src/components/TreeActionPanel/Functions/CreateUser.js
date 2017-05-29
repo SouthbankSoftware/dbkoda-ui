@@ -10,21 +10,21 @@ import * as common from './Common.js';
 
 export const CreateUser = {
   // Prefill function for alter user
-  dbenvy_CreateUserPreFill: () => {
+  dbcoda_CreateUserPreFill: () => {
     const data = {};
     data.Database = 'admin';
     data.Roles = [];
     data.Roles.push({ Database:'admin', Role:'read'});
     return data;
   },
-  dbenvy_validateUser: (inputDoc) => {
+  dbcoda_validateUser: (inputDoc) => {
     if (!Object.prototype.hasOwnProperty.call(inputDoc, 'Roles')) {
-      throw new Error('dbenvy: Alter user should include as least one role');
+      throw new Error('dbcoda: Alter user should include as least one role');
     }
     return true;
   },
-  dbenvy_listdb: common.dbenvy_listdb,
-  dbenvy_listdb_parse: common.dbenvy_listdb_parse,
-  dbenvy_listRoles: common.dbenvy_listRoles,
-  dbenvy_listRoles_parse: common.dbenvy_listRoles_parse
+  dbcoda_listdb: common.dbcoda_listdb,
+  dbcoda_listdb_parse: common.dbcoda_listdb_parse,
+  dbcoda_listRoles: common.dbcoda_listRoles,
+  dbcoda_listRoles_parse: common.dbcoda_listRoles_parse
 };

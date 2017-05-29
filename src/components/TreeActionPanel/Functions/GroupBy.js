@@ -17,7 +17,7 @@ export const GroupBy = {
         Aggregate.executeCommand = cbFuncExecute;
     },
     // Prefill function for alter user
-    dbenvy_GroupByPreFill: (params) => {
+    dbcoda_GroupByPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
@@ -33,24 +33,24 @@ export const GroupBy = {
         }];
         return data;
     },
-    dbenvyAggOperators: () => {
+    dbcodaAggOperators: () => {
         return ('db');
     },
-    dbenvyAggOperators_parse: (res) => {
+    dbcodaAggOperators_parse: (res) => {
         if (debug) console.log(res);
         return (['sum', 'max', 'min', 'avg', 'first', 'last']);
     },
-    dbenvy_sortOptions: () => {
+    dbcoda_sortOptions: () => {
         return ('db');
     },
-    dbenvy_sortOptions_parse: (res) => {
+    dbcoda_sortOptions_parse: (res) => {
         console.log(res);
         return ([1, -1]);
     },
-    dbenvy_listdb: common.dbenvy_listdb,
-    dbenvy_listdb_parse: common.dbenvy_listdb_parse,
-    dbenvy_listcollections: common.dbenvy_listcollections,
-    dbenvy_listcollections_parse: common.dbenvy_listcollections_parse,
-    dbenvyListAttributes: common.dbenvyListAttributes,
-    dbenvyListAttributes_parse: common.dbenvyListAttributes_parse
+    dbcoda_listdb: common.dbcoda_listdb,
+    dbcoda_listdb_parse: common.dbcoda_listdb_parse,
+    dbcoda_listcollections: common.dbcoda_listcollections,
+    dbcoda_listcollections_parse: common.dbcoda_listcollections_parse,
+    dbcodaListAttributes: common.dbcodaListAttributes,
+    dbcodaListAttributes_parse: common.dbcodaListAttributes_parse
 };

@@ -10,15 +10,15 @@ import * as common from './Common.js';
 
 export const DropIndex = {
     // Prefill function for alter user
-    dbenvy_DropIndexPreFill: (params) => {
+    dbcoda_DropIndexPreFill: (params) => {
         const outputDoc = {};
         outputDoc.Database = params.Database;
         outputDoc.CollectionName = params.CollectionName;
         outputDoc.IndexName = params.IndexName;
         return outputDoc;
     },
-    dbenvy_listdb: common.dbenvy_listdb,
-    dbenvy_listdb_parse: common.dbenvy_listdb_parse,
-    dbenvy_listcollections: common.dbenvy_listcollections,
-    dbenvy_listcollections_parse: common.dbenvy_listcollections_parse
+    dbcoda_listdb: common.dbcoda_listdb,
+    dbcoda_listdb_parse: common.dbcoda_listdb_parse,
+    dbcoda_listcollections: common.dbcoda_listcollections,
+    dbcoda_listcollections_parse: common.dbcoda_listcollections_parse
 };

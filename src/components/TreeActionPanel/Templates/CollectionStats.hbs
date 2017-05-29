@@ -1,4 +1,4 @@
- function dbenvy_collection_stats(dbName, collectionName) {
+ function dbcoda_collection_stats(dbName, collectionName) {
      const output = {};
      output.h1 = 'Collection statistics ' + dbName + '.' + collectionName;
      output.h2 = 'Latency Statistics';
@@ -29,4 +29,4 @@
      return (output);
  }
                                   
- dbenvy_collection_stats('{{Database}}', '{{CollectionName}}');
+ dbcoda_collection_stats('{{Database}}', '{{CollectionName}}');

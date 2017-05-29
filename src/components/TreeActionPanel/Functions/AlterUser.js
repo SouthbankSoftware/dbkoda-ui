@@ -10,16 +10,16 @@ import * as common from './Common.js';
 
 export const AlterUser = {
   // Prefill function for alter user
-  dbenvy_AlterUserPreFill: (params) => {
+  dbcoda_AlterUserPreFill: (params) => {
     const userId = params.UserId;
     return `db.getSiblingDB("admin").system.users.find({"_id": "${userId}"}).toArray()`;
   },
-  dbenvy_AlterUserPreFill_parse: (userDocs) => {
+  dbcoda_AlterUserPreFill_parse: (userDocs) => {
     console.log(userDocs);
     if (userDocs.length == 0) {
       throw new Error('No user found for Alter User');
     } else if (userDocs.length > 1) {
-      throw new Error('dbenvy: Too many users found for Alter User');
+      throw new Error('dbcoda: Too many users found for Alter User');
     }
     const userDoc = userDocs[0];
     const outputDoc = {};
@@ -37,14 +37,14 @@ export const AlterUser = {
 
     return outputDoc;
   },
-  dbenvy_validateUser: (inputDoc) => {
+  dbcoda_validateUser: (inputDoc) => {
     if (Object.prototype.hasOwnProperty.call(inputDoc, 'Roles') && inputDoc.Roles.length > 0) {
       return true;
     }
-    throw new Error('dbenvy: Alter user should include as least one role');
+    throw new Error('dbcoda: Alter user should include as least one role');
   },
-  dbenvy_listdb: common.dbenvy_listdb,
-  dbenvy_listdb_parse: common.dbenvy_listdb_parse,
-  dbenvy_listRoles: common.dbenvy_listRoles,
-  dbenvy_listRoles_parse: common.dbenvy_listRoles_parse
+  dbcoda_listdb: common.dbcoda_listdb,
+  dbcoda_listdb_parse: common.dbcoda_listdb_parse,
+  dbcoda_listRoles: common.dbcoda_listRoles,
+  dbcoda_listRoles_parse: common.dbcoda_listRoles_parse
 };

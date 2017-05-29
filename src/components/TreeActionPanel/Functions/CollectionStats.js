@@ -14,14 +14,14 @@ export const CollectionStats = {
         CollectionStats.executeCommand = cbFuncExecute;
     },
     // Prefill function for alter user
-    dbenvy_CollectionStatsPreFill: (params) => {
+    dbcoda_CollectionStatsPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
         return data;
     },
-  dbenvy_listdb: common.dbenvy_listdb,
-  dbenvy_listdb_parse: common.dbenvy_listdb_parse,
-  dbenvy_listcollections: common.dbenvy_listcollections,
-  dbenvy_listcollections_parse: common.dbenvy_listcollections_parse
+  dbcoda_listdb: common.dbcoda_listdb,
+  dbcoda_listdb_parse: common.dbcoda_listdb_parse,
+  dbcoda_listcollections: common.dbcoda_listcollections,
+  dbcoda_listcollections_parse: common.dbcoda_listcollections_parse
 };

@@ -8,12 +8,12 @@
 
 export const CollectionStats = {
   // Prefill function for alter user
-  dbenvy_CollectionStats: (params) => {
+  dbcoda_CollectionStats: (params) => {
     const colId = params.ColId;
     const parentDb = params.parentDB;
     return `db.getSiblingDB("${parentDb}").${colId}.stats(1024)`;
   },
-  dbenvy_CollectionStats_parse: (data) => {
+  dbcoda_CollectionStats_parse: (data) => {
     console.log(data);
 
     const result = {};

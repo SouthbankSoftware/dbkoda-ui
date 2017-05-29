@@ -1,7 +1,7 @@
 {
 	"Title": "Logging Level",
 	"DefaultValues": {
-		"function": "dbenvyLoggingLevelPreFill" 
+		"function": "dbcodaLoggingLevelPreFill" 
 	},
 	"Fields": [{
 			"name": "verbosity",
@@ -25,7 +25,7 @@
 				"name": "Level",
 				"label": "Level",
 				"type": "Numeric",
-				"lookup": "dbenvyLogLevel",
+				"lookup": "dbcodaLogLevel",
 				"tooltip": "-1 inherits master verbosity, otherwise 0-5",
         "rule":"required|integer|between -1:5"
 			}]

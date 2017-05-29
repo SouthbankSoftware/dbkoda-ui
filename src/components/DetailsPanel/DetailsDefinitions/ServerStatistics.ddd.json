@@ -1,7 +1,7 @@
 {
 	"Title": "Server Statistics ",
 	"DefaultValues": {
-		"function": "dbenvy_ServerStatus" 
+		"function": "dbcoda_ServerStatus" 
 	},
 	"Fields": [
 		{

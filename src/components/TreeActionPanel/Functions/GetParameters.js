@@ -10,12 +10,12 @@ import * as common from './Common.js';
 
 export const GetParameters = {
     // Prefill function for alter user
-    dbenvy_GetParametersPreFill: () => {
+    dbcoda_GetParametersPreFill: () => {
         const data = {};
         data.AllParameters = true;
         data.getCmdLineOpts = true;
         return data;
     },
-    dbenvyParameterList: common.dbenvyParameterList,
-    dbenvyParameterList_parse: common.dbenvyParameterList_parse
+    dbcodaParameterList: common.dbcodaParameterList,
+    dbcodaParameterList_parse: common.dbcodaParameterList_parse
 };

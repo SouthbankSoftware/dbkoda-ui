@@ -9,6 +9,6 @@
 import * as common from './Common.js';
 
 export const SetParameter = {
-    dbenvyParameterList: common.dbenvyParameterList,
-    dbenvyParameterList_parse: common.dbenvyParameterList_parse
+    dbcodaParameterList: common.dbcodaParameterList,
+    dbcodaParameterList_parse: common.dbcodaParameterList_parse
 };

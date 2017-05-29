@@ -10,15 +10,15 @@
 
 export const GetLog = {
     // Prefill function for alter user
-    dbenvyGetLogPreFill: () => {
+    dbcodaGetLogPreFill: () => {
         const data = {};
         data.logType = 'global';
         return data;
     },
-    dbenvyGetLogArgs: () => {
+    dbcodaGetLogArgs: () => {
         return ('db.adminCommand({getLog: "*" }).names');
     },
-    dbenvyGetLogArgs_parse: (res) => {
+    dbcodaGetLogArgs_parse: (res) => {
         console.log(res);
         return (res);
     }

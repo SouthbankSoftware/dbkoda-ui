@@ -1,7 +1,7 @@
 {
     "Title": "Get parameters",
     "DefaultValues": {
-        "function": "dbenvy_GetParametersPreFill"
+        "function": "dbcoda_GetParametersPreFill"
     },
     "Fields": [{
             "name": "AllParameters",
@@ -14,7 +14,7 @@
             "label":"Parameter",
             "type": "Select" ,
             "tooltip": "Show a single parameter or parameter group", 
-            "lookup": "dbenvyParameterList"
+            "lookup": "dbcodaParameterList"
         } ,
         {
             "name": "getCmdLineOpts",

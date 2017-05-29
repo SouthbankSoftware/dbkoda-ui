@@ -1,7 +1,7 @@
 {
     "Title": "Drop User",
     "DefaultValues": {
-        "function": "dbenvy_DropUserPreFill",
+        "function": "dbcoda_DropUserPreFill",
         "arguments": [{
 			"name": "UserId",
 			"value": "treeNode"
@@ -23,7 +23,7 @@
             "name": "Database",
             "type": "Text",
             "readOnly": true,
-            "lookup": "dbenvy_listdb"
+            "lookup": "dbcoda_listdb"
         },
         {
             "name": "UserName",

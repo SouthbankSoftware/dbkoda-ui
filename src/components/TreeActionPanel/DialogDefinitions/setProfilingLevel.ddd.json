@@ -1,7 +1,7 @@
 {
     "Title": "Set Profiling Level",
     "DefaultValues": {
-        "function": "dbenvy_setProfilingLevelPreFill",
+        "function": "dbcoda_setProfilingLevelPreFill",
         "arguments": [{
             "name": "dbName",
             "value": "treeNode"

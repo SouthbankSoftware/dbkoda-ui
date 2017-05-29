@@ -8,10 +8,10 @@
 
 export const TopCollections = {
   // Prefill function for alter user
-  dbenvy_TopCollections: () => {
+  dbcoda_TopCollections: () => {
     return 'dbe.Top()';
   },
-  dbenvy_TopCollections_parse: (data) => {
+  dbcoda_TopCollections_parse: (data) => {
     return data;
   }
 };

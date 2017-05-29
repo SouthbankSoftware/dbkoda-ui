@@ -1,7 +1,7 @@
 {
     "Title": "Compact Collection",
     "DefaultValues": {
-        "function": "dbenvy_CompactCollectionPreFill",
+        "function": "dbcoda_CompactCollectionPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"
@@ -22,7 +22,7 @@
             "type": "Text",
             "readOnly": true,
             "rules": "required",
-            "lookup": "dbenvy_listcollections",
+            "lookup": "dbcoda_listcollections",
             "lookup_arguments": [{
                 "name": "db",
                 "value": "treeNode.parentDB"

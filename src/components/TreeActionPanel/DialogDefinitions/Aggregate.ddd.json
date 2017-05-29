@@ -2,7 +2,7 @@
     "Title": "Aggregation",
     "AutoExecute": false,
     "DefaultValues": {
-        "function": "dbenvy_AggregatePreFill",
+        "function": "dbcoda_AggregatePreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"
@@ -37,7 +37,7 @@
                     "label": "Attribute",
                     "tooltip": "Name of the attribute to be filtered",
                     "type": "Combo",
-                    "lookup": "dbenvyListAttributes",
+                    "lookup": "dbcodaListAttributes",
                     "lookup_arguments": [{
                             "name": "db",
                             "value": "treeNode.parentDB"
@@ -65,7 +65,7 @@
                     "label": "Step",
                     "tooltip": "Aggregation Steps",
                     "type": "Combo",
-                    "lookup": "dbenvyAggSteps"
+                    "lookup": "dbcodaAggSteps"
                 },
                 {
                     "name": "StepValue",

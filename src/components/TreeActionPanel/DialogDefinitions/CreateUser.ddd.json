@@ -1,7 +1,7 @@
 {
     "Title": "Create User",
     "DefaultValues": {
-        "function":"dbenvy_CreateUserPreFill" 
+        "function":"dbcoda_CreateUserPreFill" 
     },
     "Fields": [
         {
@@ -9,7 +9,7 @@
             "type": "Select",
             "readOnly": false,
             "tooltip":"The database which will be used to authenticate the user",
-            "lookup": "dbenvy_listdb"
+            "lookup": "dbcoda_listdb"
         },
         {
             "name": "UserName",
@@ -32,11 +32,11 @@
             "columns": [{
                 "name": "Database",
                 "type": "Select",
-                "lookup": "dbenvy_listdb"
+                "lookup": "dbcoda_listdb"
             }, {
                 "name": "Role",
                 "type": "Select",
-                "lookup": "dbenvy_listRoles"
+                "lookup": "dbcoda_listRoles"
             }]
         }
     ] 

@@ -9,7 +9,7 @@ import * as common from './Common.js';
 
 export const CreateCollection = {
   // Prefill function for alter user
-  dbenvy_CreateCollectionPreFill: (params) => {
+  dbcoda_CreateCollectionPreFill: (params) => {
     const Database = params.Database;
     const data = {};
     data.Database = Database;
@@ -17,20 +17,20 @@ export const CreateCollection = {
     data.capped = false;
     return data;
   },
-  dbenvy_validationLevel: () => {
+  dbcoda_validationLevel: () => {
     return ('db');
   },
-  dbenvy_validationLevel_parse: (res) => {
+  dbcoda_validationLevel_parse: (res) => {
     console.log(res);
     return (['off', 'moderate', 'severe']);
   },
-  dbenvy_validationAction: () => {
+  dbcoda_validationAction: () => {
     return ('db');
   },
-  dbenvy_validationAction_parse: (res) => {
+  dbcoda_validationAction_parse: (res) => {
     console.log(res);
     return (['error', 'warn']);
   },
-  dbenvy_listdb: common.dbenvy_listdb,
-  dbenvy_listdb_parse: common.dbenvy_listdb_parse
+  dbcoda_listdb: common.dbcoda_listdb,
+  dbcoda_listdb_parse: common.dbcoda_listdb_parse
 };

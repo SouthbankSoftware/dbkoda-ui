@@ -1,7 +1,7 @@
 {
     "Title": "Drop Database",
     "DefaultValues": {
-        "function": "dbenvy_DropDatabasePreFill",
+        "function": "dbcoda_DropDatabasePreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode"

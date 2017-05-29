@@ -10,10 +10,10 @@
 
 export const SetLogLevel = {
     // Prefill function for alter user
-    dbenvyLoggingLevelPreFill: () => {
+    dbcodaLoggingLevelPreFill: () => {
         return 'db.getSiblingDB("admin").runCommand({  getParameter:1,"logComponentVerbosity":1}).logComponentVerbosity';
     },
-    dbenvyLoggingLevelPreFill_parse: (parmDoc) => {
+    dbcodaLoggingLevelPreFill_parse: (parmDoc) => {
         console.log(parmDoc);
         const outputDoc = {};
         outputDoc.verbosity = parmDoc.verbosity;

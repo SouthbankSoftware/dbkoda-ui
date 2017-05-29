@@ -11,12 +11,12 @@ const sprintf = require('sprintf-js').sprintf;
 
 export const setProfilingLevel = {
     // Prefill function for alter user
-    dbenvy_setProfilingLevelPreFill: (params) => {
+    dbcoda_setProfilingLevelPreFill: (params) => {
         const dbName = params.dbName;
         const cmd = sprintf('dbe.profileLevels("%s");', dbName);
         return cmd;
     },
-    dbenvy_setProfilingLevelPreFill_parse: (res) => {
+    dbcoda_setProfilingLevelPreFill_parse: (res) => {
         const outputDoc = {};
         if (res.mongos) {
             outputDoc.Database = 'Not supported on Mongos';

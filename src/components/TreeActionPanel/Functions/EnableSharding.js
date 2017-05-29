@@ -10,7 +10,7 @@
 
 export const EnableSharding = {
     // Prefill function for alter user
-    dbenvy_EnableShardingPreFill: (params) => {
+    dbcoda_EnableShardingPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         return (data);

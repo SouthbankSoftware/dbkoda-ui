@@ -2,7 +2,7 @@
     "Title": "Collection Statistics",
     "AutoExecute":true,
     "DefaultValues": {
-        "function": "dbenvy_CollectionStatsPreFill",
+        "function": "dbcoda_CollectionStatsPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"

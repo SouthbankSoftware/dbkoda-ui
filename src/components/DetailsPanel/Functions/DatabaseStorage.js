@@ -1,10 +1,10 @@
 
 export const DatabaseStorage = {
   // Prefill function for alter user
-  dbenvy_DatabaseStorage: () => {
+  dbcoda_DatabaseStorage: () => {
     return 'dbe.databaseStorage()';
   },
-  dbenvy_DatabaseStorage_parse: (data) => {
+  dbcoda_DatabaseStorage_parse: (data) => {
     const result = {};
     result.storageByDb = [];
     result.shardMap = [];

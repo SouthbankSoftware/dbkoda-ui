@@ -1,7 +1,7 @@
 {
     "Title": "Top Collections",
     "DefaultValues": {
-        "function": "dbenvy_TopCollections"
+        "function": "dbcoda_TopCollections"
     },
     "Fields": [{
         "name": "top",

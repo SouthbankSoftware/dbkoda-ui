@@ -10,7 +10,7 @@ import * as common from './Common.js';
 
 export const ValidateCollection = {
     // Prefill function for alter user
-    dbenvy_ValidateCollectionPreFill: (params) => {
+    dbcoda_ValidateCollectionPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
@@ -18,10 +18,10 @@ export const ValidateCollection = {
         data.scandata = true;
         return data;
     },
-    dbenvy_listdb: common.dbenvy_listdb,
-    dbenvy_listdb_parse: common.dbenvy_listdb_parse,
-    dbenvy_listcollections: common.dbenvy_listcollections,
-    dbenvy_listcollections_parse: common.dbenvy_listcollections_parse,
-    dbenvyListAttributes: common.dbenvyListAttributes,
-    dbenvyListAttributes_parse: common.dbenvyListAttributes_parse
+    dbcoda_listdb: common.dbcoda_listdb,
+    dbcoda_listdb_parse: common.dbcoda_listdb_parse,
+    dbcoda_listcollections: common.dbcoda_listcollections,
+    dbcoda_listcollections_parse: common.dbcoda_listcollections_parse,
+    dbcodaListAttributes: common.dbcodaListAttributes,
+    dbcodaListAttributes_parse: common.dbcodaListAttributes_parse
 };
