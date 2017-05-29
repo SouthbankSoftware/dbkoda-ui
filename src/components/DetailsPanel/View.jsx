@@ -3,7 +3,7 @@
  * @Date:   2017-05-22T14:42:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T15:43:39+10:00
+ * @Last modified time: 2017-05-29T13:56:58+10:00
  */
 
 
@@ -34,16 +34,31 @@ export default class DetailsView extends React.Component {
   render() {
     const { title, viewInfo } = this.props;
     const detailsFields = [];
+    const fldGroups = {};
     if (viewInfo && viewInfo.fields.length > 0) {
       for (const field of viewInfo.fields) {
         if (viewInfo.values[field.name]) {
           const fieldData = viewInfo.values[field.name];
+          let fld;
           if (field.type == 'Table') {
-            detailsFields.push(<TableField key={field.name} field={field} data={fieldData} />);
+            fld = (<TableField key={field.name} field={field} data={fieldData} />);
           } else if (field.type == 'BarChart') {
-            detailsFields.push(<BarChartField key={field.name} field={field} data={fieldData} />);
+            fld = (<BarChartField key={field.name} field={field} data={fieldData} />);
           } else if (field.type == 'PieChart') {
-            detailsFields.push(<PieChartField key={field.name} field={field} data={fieldData} />);
+            fld = (<PieChartField key={field.name} field={field} data={fieldData} />);
+          }
+
+          if (field.groupBy) {
+            if (fldGroups[field.groupBy]) {
+              fldGroups[field.groupBy].push(fld);
+            } else {
+              fldGroups[field.groupBy] = [];
+              fldGroups[field.groupBy].push(fld);
+              const grpDiv = (<div style={field.width && { width: field.width }}>{fldGroups[field.groupBy]}</div>);
+              detailsFields.push(grpDiv);
+            }
+          } else {
+            detailsFields.push(fld);
           }
         }
       }

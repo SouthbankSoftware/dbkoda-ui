@@ -2,7 +2,7 @@
 // @Date:   2017-05-23T16:26:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-26T11:59:32+10:00
+// @Last modified time: 2017-05-29T11:40:21+10:00
 
 @import '../../styles/_defaultTheme.scss';
 
@@ -22,7 +22,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     .div-field-container {
-      margin: 30px;
+      padding: 30px;
     }
     .detailsFieldSet {
       margin: 15px 15px 15px 15px;
@@ -37,6 +37,7 @@
       color: $fieldHeadingFontColor;
     }
     .pt-striped {
+      width: 100%;
       tbody tr:nth-child(odd) td {
         background: #222324 !important;
       }
