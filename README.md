@@ -1,7 +1,7 @@
-# DBEnvy UI
-*DBEnvy UI built with state of the art React stack*
+# dbCoda UI
+*dbCida UI built with state of the art React stack*
 
-[![Build Status](https://drone.hoth.southbanksoftware.com/api/badges/SouthbankSoftware/dbenvy-ui/status.svg)](https://drone.hoth.southbanksoftware.com/SouthbankSoftware/dbenvy-ui)
+[![Build Status](https://drone.hoth.southbanksoftware.com/api/badges/SouthbankSoftware/dbcoda-ui/status.svg)](https://drone.hoth.southbanksoftware.com/SouthbankSoftware/dbcoda-ui)
 
 ## Build tool
 
@@ -25,14 +25,14 @@ You can use `npm` or `yarn` to build the project.
 
 Currently you need to run the Controller seperately to the product.
 
-* Run `npm run start` in the DBEnvy-Controller repository.
-* Run `npm run start` or `yarn start` in the DBEnvy-UI repository.
+* Run `npm run start` in the dbcoda-Controller repository.
+* Run `npm run start` or `yarn start` in the dbcoda-ui repository.
 * **Note**: Currently a new connection can be created by clicking the New Editor button.
 
 The structure of the output structure:
 
 ```text
-dbenvy-ui
+dbcoda-ui
 ├── dist
 │   ├── images
 │   ├── js
