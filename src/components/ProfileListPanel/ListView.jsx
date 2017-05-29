@@ -243,6 +243,8 @@ export default class ListView extends React.Component {
           username: data.username,
           sha: data.sha,
           editorCount: 1,
+          dbVersion: res.dbVersion,
+          shellVersion: res.shellVersion,
           initialMsg: res.output
             ? res
               .output

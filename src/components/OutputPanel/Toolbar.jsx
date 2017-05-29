@@ -20,7 +20,7 @@ import {
 } from '@blueprintjs/core';
 import {featherClient} from '~/helpers/feathers';
 import EventLogging from '#/common/logging/EventLogging';
-import ClearOutputIcon from '../../styles/icons/fix-icon.svg';
+import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
 import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
 

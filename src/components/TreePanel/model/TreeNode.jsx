@@ -11,21 +11,21 @@ import {observable} from 'mobx';
 
 import DragLabel from './DragLabel.jsx';
 import DatabaseIcon from '../../../styles/icons/database-icon-2.svg';
-import DatabasesIcon from '../../../styles/icons/database-icon-3.svg';
+import DatabasesIcon from '../../../styles/icons/database-icon-4.svg';
 import CollectionIcon from '../../../styles/icons/collection-icon.svg';
 import IndexIcon from '../../../styles/icons/index-icon.svg';
-import UsersIcon from '../../../styles/icons/users-icon-3.svg';
+import UsersIcon from '../../../styles/icons/users-icon-4.svg';
 import UserIcon from '../../../styles/icons/user-icon.svg';
-import RootShardsIcon from '../../../styles/icons/shards-icon-3.svg';
+import RootShardsIcon from '../../../styles/icons/shards-icon-4.svg';
 import ShardsIcon from '../../../styles/icons/shards-icon-2.svg';
 import ShardIcon from '../../../styles/icons/shards-icon-1.svg';
-import ConfigServersIcon from '../../../styles/icons/config-database-icon-3.svg';
+import ConfigServersIcon from '../../../styles/icons/config-database-icon-4.svg';
 import ConfigIcon from '../../../styles/icons/config-database-icon-1.svg';
-import RoutersIcon from '../../../styles/icons/fix-icon.svg';
+import RoutersIcon from '../../../styles/icons/mongos-icon-2.svg';
 import MongosIcon from '../../../styles/icons/mongos-icon.svg';
 import PropertiesIcon from '../../../styles/icons/attribute-icon.svg';
 import PropertyIcon from '../../../styles/icons/attributes-icon.svg';
-import ReplicaSetIcon from '../../../styles/icons/replica-set-icon.svg';
+import ReplicaSetIcon from '../../../styles/icons/replica-set-icon-2.svg';
 import ReplicaMemberIcon from '../../../styles/icons/replica-set-icon.svg';
 
 
