@@ -355,7 +355,7 @@ class Terminal extends React.Component {
             className="pt-button"
             disabled={this.props.store.editorToolbar.noActiveProfile}
             onClick={this.executeCommand}>
-            <SubmitIcon className="dbEnvySVG" width={30} height={30} />
+            <SubmitIcon className="dbCodaSVG" width={30} height={30} />
           </AnchorButton>
         </Tooltip>
       </div>

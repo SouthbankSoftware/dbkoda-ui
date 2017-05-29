@@ -12,7 +12,7 @@ import {reaction, runInAction, observable, action} from 'mobx';
 import Store from '~/stores/global';
 import {Intent, Position} from '@blueprintjs/core';
 import {featherClient} from '../../helpers/feathers';
-import {DBenvyToaster} from '../common/Toaster';
+import {DBCodaToaster} from '../common/Toaster';
 import TreeToolbar from './Toolbar.jsx';
 import TreeView from './View.jsx';
 
@@ -61,7 +61,7 @@ export default class TreePanel extends React.Component {
               .catch((err) => {
                 console.log(err.stack);
                 this.updateStatus('FAILED');
-                DBenvyToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+                DBCodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
               });
           }
         } else {

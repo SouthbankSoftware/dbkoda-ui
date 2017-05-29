@@ -60,7 +60,7 @@ Resizer.disabled:hover {
   border-color: transparent;
 }
 
-.optInBoldDBEnvy {
+.optInBoldDBCoda {
   color: $purpleFont !important;
 }
 
@@ -86,14 +86,14 @@ ul.profileListContextMenu {
     div.menuItemWrapper {
       display: flex;
       flex-direction: row;
-      svg.dbEnvySVG {}
+      svg.dbCodaSVG {}
       li {}
     }
   }
   div.menuItemWrapper {
     display: flex;
     flex-direction: row;
-    svg.dbEnvySVG {}
+    svg.dbCodaSVG {}
     li {}
   }
 }
@@ -105,7 +105,7 @@ ul.pt-menu {
     div.menuItemWrapper {
       display: flex;
       flex-direction: row;
-      svg.dbEnvySVG {}
+      svg.dbCodaSVG {}
       li {
         width: 100%;
       }
@@ -114,7 +114,7 @@ ul.pt-menu {
   div.menuItemWrapper {
     display: flex;
     flex-direction: row;
-    svg.dbEnvySVG {
+    svg.dbCodaSVG {
     }
     li {
       width: 100%;

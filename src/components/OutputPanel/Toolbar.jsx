@@ -187,7 +187,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-intent-danger circleButton clearOutputBtn"
               onClick={this.clearOutput}>
-              <ClearOutputIcon className="dbEnvySVG" width={30} height={30} />
+              <ClearOutputIcon className="dbCodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -216,7 +216,7 @@ export default class Toolbar extends React.Component {
               .outputs
               .get(this.props.store.outputPanel.currentTab)
               .cannotShowMore}>
-              <ShowMoreIcon className="dbEnvySVG" width={30} height={30} />
+              <ShowMoreIcon className="dbCodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -229,7 +229,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="saveOutputBtn circleButton"
               onClick={this.downloadOutput}>
-              <SaveOutputIcon className="dbEnvySVG" width={30} height={30} />
+              <SaveOutputIcon className="dbCodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
         </div>

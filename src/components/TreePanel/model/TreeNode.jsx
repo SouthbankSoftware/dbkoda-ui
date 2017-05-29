@@ -58,55 +58,55 @@ export default class TreeNode {
     // Add label as secondaryLabel component.
     switch (this.type) {
       case 'shards':
-        this.secondaryLabel = <RootShardsIcon className="dbEnvySVG shardsIcon" width={30} height={30} />;
+        this.secondaryLabel = <RootShardsIcon className="dbCodaSVG shardsIcon" width={30} height={30} />;
       break;
       case 'group_shards':
-        this.secondaryLabel = <ShardsIcon className="dbEnvySVG shardsIcon" width={30} height={30} />;
+        this.secondaryLabel = <ShardsIcon className="dbCodaSVG shardsIcon" width={30} height={30} />;
       break;
       case 'shard':
-        this.secondaryLabel = <ShardIcon className="dbEnvySVG shardIcon" width={30} height={30} />;
+        this.secondaryLabel = <ShardIcon className="dbCodaSVG shardIcon" width={30} height={30} />;
       break;
       case 'configservers':
-        this.secondaryLabel = <ConfigServersIcon className="dbEnvySVG configServersIcon" width={30} height={30} />;
+        this.secondaryLabel = <ConfigServersIcon className="dbCodaSVG configServersIcon" width={30} height={30} />;
       break;
       case 'config':
-        this.secondaryLabel = <ConfigIcon className="dbEnvySVG configIcon" width={30} height={30} />;
+        this.secondaryLabel = <ConfigIcon className="dbCodaSVG configIcon" width={30} height={30} />;
       break;
       case 'routers':
-        this.secondaryLabel = <RoutersIcon className="dbEnvySVG routersIcon" width={30} height={30} />;
+        this.secondaryLabel = <RoutersIcon className="dbCodaSVG routersIcon" width={30} height={30} />;
       break;
       case 'mongos':
-        this.secondaryLabel = <MongosIcon className="dbEnvySVG mongosIcon" width={30} height={30} />;
+        this.secondaryLabel = <MongosIcon className="dbCodaSVG mongosIcon" width={30} height={30} />;
       break;
       case 'databases':
-        this.secondaryLabel = <DatabasesIcon className="dbEnvySVG databasesIcon" width={30} height={30} />;
+        this.secondaryLabel = <DatabasesIcon className="dbCodaSVG databasesIcon" width={30} height={30} />;
       break;
       case 'database':
-        this.secondaryLabel = <DatabaseIcon className="dbEnvySVG databaseIcon" width={30} height={30} />;
+        this.secondaryLabel = <DatabaseIcon className="dbCodaSVG databaseIcon" width={30} height={30} />;
       break;
       case 'collection':
-        this.secondaryLabel = <CollectionIcon className="dbEnvySVG collectionIcon" width={30} height={30} />;
+        this.secondaryLabel = <CollectionIcon className="dbCodaSVG collectionIcon" width={30} height={30} />;
       break;
       case 'index':
-        this.secondaryLabel = <IndexIcon className="dbEnvySVG indexIcon" width={30} height={30} />;
+        this.secondaryLabel = <IndexIcon className="dbCodaSVG indexIcon" width={30} height={30} />;
       break;
       case 'users':
-        this.secondaryLabel = <UsersIcon className="dbEnvySVG usersIcon" width={30} height={30} />;
+        this.secondaryLabel = <UsersIcon className="dbCodaSVG usersIcon" width={30} height={30} />;
       break;
       case 'user':
-        this.secondaryLabel = <UserIcon className="dbEnvySVG userIcon" width={30} height={30} />;
+        this.secondaryLabel = <UserIcon className="dbCodaSVG userIcon" width={30} height={30} />;
       break;
       case 'property':
-        this.secondaryLabel = <PropertyIcon className="dbEnvySVG propertyIcon" width={30} height={30} />;
+        this.secondaryLabel = <PropertyIcon className="dbCodaSVG propertyIcon" width={30} height={30} />;
       break;
       case 'properties':
-        this.secondaryLabel = <PropertiesIcon className="dbEnvySVG propertiesIcon" width={30} height={30} />;
+        this.secondaryLabel = <PropertiesIcon className="dbCodaSVG propertiesIcon" width={30} height={30} />;
       break;
       case 'replicaset':
-        this.secondaryLabel = <ReplicaSetIcon className="dbEnvySVG replicaSetIcon" width={30} height={30} />;
+        this.secondaryLabel = <ReplicaSetIcon className="dbCodaSVG replicaSetIcon" width={30} height={30} />;
       break;
       case 'replica_member':
-        this.secondaryLabel = <ReplicaMemberIcon className="dbEnvySVG replicaMemberIcon" width={30} height={30} />;
+        this.secondaryLabel = <ReplicaMemberIcon className="dbCodaSVG replicaMemberIcon" width={30} height={30} />;
       break;
       default:
       this.secondaryLabel = null;

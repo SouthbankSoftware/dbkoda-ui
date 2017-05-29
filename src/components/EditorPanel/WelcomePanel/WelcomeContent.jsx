@@ -88,7 +88,7 @@ export default class WelcomeContent extends React.Component {
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
-                <p>DBEnvy Release Notes</p>
+                <p>dbCoda Release Notes</p>
               </div>
             </div>
             <h2>Links</h2>
@@ -182,7 +182,7 @@ export default class WelcomeContent extends React.Component {
               <span className="iconWrapper">
                 <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-document" />
               </span>
-              <p>DBEnvy Release Notes</p>
+              <p>dbCoda Release Notes</p>
             </div>
           </div>
           <h2>Links</h2>

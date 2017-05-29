@@ -33,7 +33,7 @@ export default class Info extends React.Component {
         }, {
           key: 2,
           title: (
-            <a href="https://github.com/SouthbankSoftware/dbenvy">DBEnvy Documentation</a>
+            <a href="https://github.com/SouthbankSoftware/dbcoda">dbCoda Documentation</a>
           ),
           content: ''
         }, {
@@ -54,7 +54,7 @@ export default class Info extends React.Component {
   render() {
     return (
       <div className="pt-dark infoPanel">
-        <h3 className="optInBoldDBEnvy">Getting Started...</h3>
+        <h3 className="optInBoldDBCoda">Getting Started...</h3>
         <div className="hotkeyItems">
           {this
             .state

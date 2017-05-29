@@ -45,7 +45,7 @@ export default class WelcomeView extends React.Component {
       <div className="welcomePanelTabWrapper">
         <div className="welcomePanelWrapper">
           <h1>
-            Welcome To DBEnvy
+            Welcome To dbCoda
           </h1>
           <div className="welcomeMiddleSection">
             <div className="welcomeMenuWrapper">

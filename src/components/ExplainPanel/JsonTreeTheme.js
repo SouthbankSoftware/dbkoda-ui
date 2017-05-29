@@ -1,4 +1,4 @@
 export const theme = {
-  scheme: 'dbenvy',
+  scheme: 'dbcoda',
   base00: '#1d1d1d',
 };

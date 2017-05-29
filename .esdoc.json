@@ -18,7 +18,7 @@
     "includes": ["\\.test.(js|jsx)$"],
     "excludes": ["\\.config\\.(js|jsx)$"]
   },
-  "title": "DBEnvy UI",
+  "title": "dbCoda UI",
   "lint": true,
   "experimentalProposal": {
     "classProperties": true,

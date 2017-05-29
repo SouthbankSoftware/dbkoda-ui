@@ -77,7 +77,7 @@
               margin-right: 50px;
               margin-top: 11px;
               margin-bottom: 11px;
-              svg.dbEnvySVG {
+              svg.dbCodaSVG {
                 position: absolute;
                 top: 50%;
                 bottom: 50%;
@@ -99,7 +99,7 @@
       span {
         .pt-button {
           position: relative;
-          svg.dbEnvySVG {
+          svg.dbCodaSVG {
             position: absolute;
             top: 50%;
             bottom: 50%;
@@ -217,7 +217,7 @@ span.cm-it {
   color: $keywordOne !important;
 }
 
-span.cm-dbenvy-prompt {
+span.cm-dbcoda-prompt {
   color: $keywordFour !important;
 }
 

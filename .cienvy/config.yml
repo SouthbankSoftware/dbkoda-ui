@@ -4,7 +4,7 @@
 # @Last modified time: 2017-05-19T11:55:10+10:00
 
 outlinks:
-  - dbenvy
+  - dbcoda
 volumes:
   - srcNode: yarn-cache
 workflows:

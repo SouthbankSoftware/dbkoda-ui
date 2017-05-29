@@ -601,7 +601,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeLine}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}>
-                <ExecuteLineIcon className="dbEnvySVG" width={20} height={20} />
+                <ExecuteLineIcon className="dbCodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
             <Tooltip
@@ -615,7 +615,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeAll}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}>
-                <ExecuteAllIcon className="dbEnvySVG" width={20} height={20} />
+                <ExecuteAllIcon className="dbCodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
             <ExplainPopover editorToolbar={this.props.store.editorToolbar} />
@@ -630,7 +630,7 @@ export default class Toolbar extends React.Component {
                 loading={this.props.store.editorPanel.stoppingExecution}
                 onClick={this.stopExecution}
                 disabled={!this.props.store.editorToolbar.isActiveExecuting}>
-                <StopExecutionIcon className="dbEnvySVG" width={20} height={20} />
+                <StopExecutionIcon className="dbCodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
           </div>
@@ -647,7 +647,7 @@ export default class Toolbar extends React.Component {
               loading={this.props.store.editorToolbar.newConnectionLoading}
               disabled={this.props.store.editorToolbar.noActiveProfile}
               onClick={this.addEditor}>
-              <AddIcon className="dbEnvySVG" width={20} height={20} />
+              <AddIcon className="dbCodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -660,7 +660,7 @@ export default class Toolbar extends React.Component {
               className="pt-button circleButton openFileButton"
               onClick={this.openFile}
               disabled={this.props.store.editorToolbar.noActiveProfile}>
-              <OpenFileIcon className="dbEnvySVG" width={20} height={20} />
+              <OpenFileIcon className="dbCodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -673,7 +673,7 @@ export default class Toolbar extends React.Component {
               className="pt-button circleButton saveFileButton"
               onClick={this.saveFile}
               disabled={this.props.store.editorToolbar.noActiveProfile}>
-              <SaveFileIcon className="dbEnvySVG" width={20} height={20} />
+              <SaveFileIcon className="dbCodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           {/* <Tooltip

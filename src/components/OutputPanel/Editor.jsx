@@ -203,7 +203,7 @@ export default class Editor extends React.Component {
         .cannotShowMore = false;
     } else if (
       this.props.store.outputs.get(this.props.id).cannotShowMore &&
-      output.output.replace(/^\s+|\s+$/g, '').endsWith('dbenvy>')
+      output.output.replace(/^\s+|\s+$/g, '').endsWith('dbcoda>')
     ) {
       console.log('cannot show more');
       this

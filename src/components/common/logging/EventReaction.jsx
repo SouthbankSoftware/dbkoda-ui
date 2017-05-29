@@ -32,7 +32,7 @@ export default class EventReaction extends React.Component {
     const userPreferencesObserver = observe(store.userPreferences, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
 
     if (this.props.store.userPreferences.telemtryEnabled) {
-      EventLogging.recordEvent(typeEnum.EVENT.APP.OPEN, fragmentEnum.PROFILES, 'DBEnvy App started.', change);
+      EventLogging.recordEvent(typeEnum.EVENT.APP.OPEN, fragmentEnum.PROFILES, 'dbCoda App started.', change);
     }
   }
 

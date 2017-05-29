@@ -33,7 +33,7 @@
         span {
           .pt-button {
             position: relative;
-            svg.dbEnvySVG {
+            svg.dbCodaSVG {
               position: absolute;
               top: 50%;
               bottom: 50%;
@@ -41,12 +41,12 @@
               fill: $buttonPrimaryIcon
             }
           }
-          .stopExecutionButton svg.dbEnvySVG {
+          .stopExecutionButton svg.dbCodaSVG {
             fill: $buttonSecondaryIcon;
             height: 40%;
             width: 40%;
           }
-          .executeLineButton svg.dbEnvySVG {
+          .executeLineButton svg.dbCodaSVG {
             height: 45%;
           }
         }
@@ -59,7 +59,7 @@
           background-color: $buttonTertiaryBackground;
           width: 30px;
           height: 30px;
-          svg.dbEnvySVG {
+          svg.dbCodaSVG {
             position: absolute;
             top: 50%;
             bottom: 50%;
@@ -69,11 +69,11 @@
             fill: $buttonTertiaryIcon;
           }
         }
-        .saveFileButton svg.dbEnvySVG {
+        .saveFileButton svg.dbCodaSVG {
           width: 60%;
           height: 60%;
         }
-        .openFileButton svg.dbEnvySVG {
+        .openFileButton svg.dbCodaSVG {
           width: 60%;
           height: 60%;
         }
@@ -492,7 +492,7 @@
   span.cm-it {
     color: $keywordOne !important;
   }
-  span.cm-dbenvy-prompt {
+  span.cm-dbcoda-prompt {
     color: $keywordFour !important;
   }
   span.cm-mongos-prompt {

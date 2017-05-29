@@ -8,6 +8,6 @@ import {Position, Toaster} from '@blueprintjs/core';
 
 export const NewToaster = Toaster.create({className: 'my-toaster', position: Position.TOP_RIGHT});
 
-export const DBenvyToaster = () => {
-  return Toaster.create({className: 'dbenvy-toaster', position: Position.TOP_RIGHT});
+export const DBCodaToaster = () => {
+  return Toaster.create({className: 'dbcoda-toaster', position: Position.TOP_RIGHT});
 };

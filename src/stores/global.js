@@ -99,7 +99,7 @@ export default class Store {
   };
 
   @observable mongoShellPrompt = {
-    prompt: 'dbenvy>'
+    prompt: 'dbcoda>'
   };
 
   @observable profileList = observable({selectedProfile: null, creatingNewProfile: false});

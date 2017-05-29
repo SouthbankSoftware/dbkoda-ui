@@ -13,7 +13,7 @@ import {action, runInAction, observable} from 'mobx';
 import uuidV1 from 'uuid';
 import autobind from 'autobind-decorator';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
-import {NewToaster, DBenvyToaster} from '#/common/Toaster';
+import {NewToaster, DBCodaToaster} from '#/common/Toaster';
 import {
   Alert,
   Intent,
@@ -194,7 +194,7 @@ export default class ListView extends React.Component {
       console.log(err.stack);
       this.props.store.profileList.creatingNewProfile = false;
       this.closeOpenConnectionAlert();
-      DBenvyToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      DBCodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     });
   }
 
@@ -261,7 +261,7 @@ export default class ListView extends React.Component {
       message = globalString('connection/test', message);
     }
     this.closeOpenConnectionAlert();
-    DBenvyToaster(position).show({message, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    DBCodaToaster(position).show({message, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
   }
 
   @action
@@ -447,7 +447,7 @@ export default class ListView extends React.Component {
       connect = (
         <div className="contextMenuGroup">
           <div className="menuItemWrapper">
-            <OpenProfileIcon className="dbEnvySVG" width={20} height={20} />
+            <OpenProfileIcon className="dbCodaSVG" width={20} height={20} />
             <MenuItem
               className="profileListContextMenu openProfile"
               onClick={this.openOpenConnectionAlert}
@@ -455,7 +455,7 @@ export default class ListView extends React.Component {
               intent={Intent.NONE} />
           </div>
           <div className="menuItemWrapper">
-            <EditProfileIcon className="dbEnvySVG" width={20} height={20} />
+            <EditProfileIcon className="dbCodaSVG" width={20} height={20} />
             <MenuItem
               className="profileListContextMenu editProfile"
               onClick={this.editProfile}
@@ -474,7 +474,7 @@ export default class ListView extends React.Component {
           if (value.profileId.trim() == this.state.targetProfile.id.trim()) {
             windows.push((
               <div className="menuItemWrapper">
-                <DocumentProfileIcon className="dbEnvySVG" width={20} height={20} />
+                <DocumentProfileIcon className="dbCodaSVG" width={20} height={20} />
                 <MenuItem
                   className={'profileListContextMenu editorListing ' + value.fileName}
                   text={value.fileName}
@@ -487,7 +487,7 @@ export default class ListView extends React.Component {
       connect = (
         <div className="contextMenuGroup">
           <div className="menuItemWrapper">
-            <CloseProfileIcon className="dbEnvySVG" width={20} height={20} />
+            <CloseProfileIcon className="dbCodaSVG" width={20} height={20} />
             <MenuItem
               className="profileListContextMenu closeProfile"
               onClick={this.openCloseConnectionAlert}
@@ -495,7 +495,7 @@ export default class ListView extends React.Component {
               intent={Intent.NONE} />
           </div>
           <div className="menuItemWrapper">
-            <NewDocumentProfileIcon className="dbEnvySVG" width={20} height={20} />
+            <NewDocumentProfileIcon className="dbCodaSVG" width={20} height={20} />
             <MenuItem
               className="profileListContextMenu newWindow"
               onClick={this.newEditorWindow}
@@ -509,7 +509,7 @@ export default class ListView extends React.Component {
       <Menu className="profileListContextMenu">
         {connect}
         <div className="menuItemWrapper">
-          <DeleteProfileIcon className="dbEnvySVG" width={20} height={20} />
+          <DeleteProfileIcon className="dbCodaSVG" width={20} height={20} />
           <MenuItem
             className="profileListContextMenu deleteProfile"
             onClick={this.openRemoveConnectionAlert}
@@ -535,14 +535,14 @@ export default class ListView extends React.Component {
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
           <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-            <ConnectionIcon className="dbEnvySVG" width={20} height={20} />
+            <ConnectionIcon className="dbCodaSVG" width={20} height={20} />
             <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
         );
       }
       return (
         <Cell className={className}>
-          <ConnectionIcon className="dbEnvySVG" width={20} height={20} />
+          <ConnectionIcon className="dbCodaSVG" width={20} height={20} />
           <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );

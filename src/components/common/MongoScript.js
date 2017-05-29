@@ -91,7 +91,7 @@ CodeMirror.defineMode("MongoScript", function(config, parserConfig) {
       "databases":MONGO("databases"),
       "it":MONGO("it"),
       "mongos":MONGO("mongos-prompt"),
-      "dbenvy":MONGO("dbenvy-prompt"),
+      "dbcoda":MONGO("dbcoda-prompt"),
       "$eq":OP,
       "$gt":OP,
       "$gte":OP,

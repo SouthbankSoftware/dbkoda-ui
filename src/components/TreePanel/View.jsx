@@ -115,23 +115,23 @@ export default class TreeView extends React.Component {
   getIconFor(iconName) {
     switch (iconName) {
       case 'settings':
-        return <SettingsIcon className="dbEnvySVG" width={20} height={20} />;
+        return <SettingsIcon className="dbCodaSVG" width={20} height={20} />;
       case 'document':
-        return <DocumentIcon className="dbEnvySVG" width={20} height={20} />;
+        return <DocumentIcon className="dbCodaSVG" width={20} height={20} />;
       case 'user':
-        return <UserIcon className="dbEnvySVG" width={20} height={20} />;
+        return <UserIcon className="dbCodaSVG" width={20} height={20} />;
       case 'remove-user':
-        return <RemoveUserIcon className="dbEnvySVG" width={20} height={20} />;
+        return <RemoveUserIcon className="dbCodaSVG" width={20} height={20} />;
       case 'add':
-        return <AddIcon className="dbEnvySVG" width={20} height={20} />;
+        return <AddIcon className="dbCodaSVG" width={20} height={20} />;
       case 'close':
-        return <CloseIcon className="dbEnvySVG" width={20} height={20} />;
+        return <CloseIcon className="dbCodaSVG" width={20} height={20} />;
       case 'shards':
-        return <ShardsIcon className="dbEnvySVG" width={20} height={20} />;
+        return <ShardsIcon className="dbCodaSVG" width={20} height={20} />;
       case 'collection':
-        return <CollectionIcon className="dbEnvySVG" width={20} height={20} />;
+        return <CollectionIcon className="dbCodaSVG" width={20} height={20} />;
       case 'dropdown':
-        return <DropdownIcon className="dbEnvySVG" width={20} height={20} />;
+        return <DropdownIcon className="dbCodaSVG" width={20} height={20} />;
       default:
         return null;
     }

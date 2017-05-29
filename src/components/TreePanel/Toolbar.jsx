@@ -12,7 +12,7 @@ import {inject, observer} from 'mobx-react';
 import {AnchorButton, Position} from '@blueprintjs/core';
 import TreeState from './model/TreeState.js';
 import {featherClient} from '../../helpers/feathers';
-import {DBenvyToaster} from '../common/Toaster';
+import {DBCodaToaster} from '../common/Toaster';
 
 @inject(allStores => ({store: allStores.store, treeState: allStores.treeState}))
 @observer
@@ -78,7 +78,7 @@ export default class TreeToolbar extends React.Component {
       })
       .catch((err) => {
         console.log(err.stack);
-        DBenvyToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        DBCodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       });
   }
   render() {

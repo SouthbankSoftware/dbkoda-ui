@@ -87,13 +87,13 @@ class App extends React.Component {
           <h2>Hey!</h2>
           <p>
             We would like to gather information about how you are using the product so we
-            can make it even more <b className="optInBoldDBEnvy">awesome</b>.
+            can make it even more <b className="optInBoldDBCoda">awesome</b>.
           </p>
           <p>
             Is it okay if we collect some information about how you interact
             with
             {' '}
-            <b className="optInBoldDBEnvy"> DBEnvy </b>
+            <b className="optInBoldDBCoda"> dbCoda </b>
             {' '}
             and send it back to our servers?
           </p>
