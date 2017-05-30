@@ -3,7 +3,7 @@
  * @Date:   2017-05-22T14:42:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-30T11:07:23+10:00
+ * @Last modified time: 2017-05-30T15:01:58+10:00
  */
 
 
@@ -69,14 +69,14 @@ export default class DetailsView extends React.Component {
         <div className="details-fields">
           {detailsFields}
         </div>
-        <div className="form-button-panel">
+        {/* <div className="form-button-panel">
           <button
             className="pt-button pt-intent-primary right-button"
             onClick={this.close}
           >
             Close
           </button>
-        </div>
+        </div>*/}
       </div>
     );
   }
