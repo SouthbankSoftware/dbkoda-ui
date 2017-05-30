@@ -188,7 +188,7 @@ class View extends React.Component {
           }).catch((err) => {
             console.error('execute error:', err);
             runInAction(() => {
-              this.props.store.editorToolbar.isActiveExecuting = false;
+              this.finishedExecution({ id:this.props.store.editorPanel.activeDropdownId, shellId: shell });
               NewToaster.show({
                 message: globalString('editor/toolbar/executionScriptFailed'),
                 intent: Intent.DANGER,
@@ -257,7 +257,7 @@ class View extends React.Component {
           }).catch((err) => {
             console.error('execute error:', err);
             runInAction(() => {
-              this.props.store.editorToolbar.isActiveExecuting = false;
+              this.finishedExecution({ id, shellId: shell });
               NewToaster.show({
                 message: globalString('editor/toolbar/executionScriptFailed'),
                 intent: Intent.DANGER,
