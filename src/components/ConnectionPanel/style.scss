@@ -5,9 +5,17 @@
 // @Last modified time: 2017-05-10T16:52:11+10:00
 @import '../../styles/_defaultTheme.scss';
 .connection-profile {
-  display:flex;
+  display: flex;
   flex-direction: column;
   font-family: Arial, Helvetica, sans-serif;
+  input[type=text]:focus,
+  input[type=number]:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    color: $connectionActiveTextFieldTextColour !important;
+    box-shadow: none !important;
+  }
+  button {
+  }
   h3.form-title {
     font-size: 25px;
     color: $connectionHeaderFontColour;
@@ -16,7 +24,7 @@
   button.close-button {
     background-color: unset;
     background-image: unset;
-    align-self:flex-end;
+    align-self: flex-end;
     box-shadow: unset !important;
     font-size: 25pt;
     font-weight: 100;
@@ -69,6 +77,23 @@
           color: $connectionHeadingsFontColour !important;
           text-align: left;
           margin: 0;
+          span.pt-control-indicator {
+            font-size: unset;
+            font-weight: unset;
+            font-style: unset;
+            box-shadow: unset;
+            line-height: unset;
+            background: unset;
+            box-shadow: unset;
+            font-size: 11pt;
+            color: $connectionCheckboxColour;
+            border-radius: 0;
+            background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+            border: 1px solid $connectionCheckboxColour;
+          }
+          span.pt-control-indicator:hover {
+            background-color: $connectionCheckboxBackgroundColourHover;
+          }
         }
       }
     }
@@ -83,21 +108,60 @@
       label.sha-input {
         font-size: 10pt;
         font-weight: lighter;
-        color: $connectionHeadingsFontColour;
+        color: $connectionHeadingsFontColour !important;
+        text-align: left;
+        margin: 0;
+        span.pt-control-indicator {
+          font-size: unset;
+          font-weight: unset;
+          font-style: unset;
+          box-shadow: unset;
+          line-height: unset;
+          background: unset;
+          box-shadow: unset;
+          font-size: 11pt;
+          color: $connectionCheckboxColour;
+          border-radius: 0;
+          background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+          border: 1px solid $connectionCheckboxColour;
+        }
+        span.pt-control-indicator:hover {
+          background-color: $connectionCheckboxBackgroundColourHover;
+        }
       }
     }
     div.credentials-form {
       display: flex;
       flex-direction: row;
       div.username-input-content {
+        display: flex;
+        flex-direction: column;
         order: 1;
-        flex-shrink: 0;
         flex-grow: 1;
+        flex-shrink: 1;
+        width: 40%;
+        div {
+          display: flex !important;
+          flex-direction: column;
+          input {
+            flex-grow: 1;
+          }
+        }
       }
       div.password-input-content {
+        display: flex;
+        flex-direction: column;
         order: 2;
-        flex-shrink: 0;
         flex-grow: 1;
+        flex-shrink: 1;
+        width: 40%;
+        div {
+          display: flex !important;
+          flex-direction: column;
+          input {
+            flex-grow: 1;
+          }
+        }
       }
     }
     button.connectButton {
@@ -129,9 +193,9 @@
         border: 1px solid $connectionButtonBorderColour;
         box-shadow: unset;
       }
-      button.pt-button:hover { 
-       background-color: $connectionButtonBackgroundColourHover;
-       color: $connectionButtonFontColourHover;
+      button.pt-button:hover {
+        background-color: $connectionButtonBackgroundColourHover;
+        color: $connectionButtonFontColourHover;
       }
       button.reset-button {
         width: 7em !important;
@@ -141,7 +205,7 @@
         border: unset;
         box-shadow: unset;
       }
-      button.reset-button:hover { 
+      button.reset-button:hover {
         background-color: $connectionButtonBackgroundColourResetHover;
         color: $connectionButtonFontColourHover;
       }
