@@ -3,7 +3,7 @@
  * @Date:   2017-04-18T16:52:57+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-23T09:52:54+10:00
+ * @Last modified time: 2017-05-30T15:56:28+10:00
  */
 
 import React from 'react';
@@ -25,7 +25,7 @@ const DataTip = observer(({ text, label, icon, onClick }) => (
     tooltipClassName="pt-dark tooltip-btn"
     position={Position.BOTTOM}>
     <AnchorButton
-      className={`pt-button pt-${icon}`}
+      className={`pt-button pt-${icon} circleButton`}
       onClick={onClick} />
   </Tooltip>
 ));

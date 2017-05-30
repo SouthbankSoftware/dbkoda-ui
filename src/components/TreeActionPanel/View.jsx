@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-23T09:48:30+10:00
+ * @Last modified time: 2017-05-31T09:39:58+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -78,7 +78,7 @@ export default class TreeActionView extends React.Component {
       }
     }
     return (
-      <div className="pt-dark ">
+      <div className="pt-dark form-scrollable">
         <h3 className="form-title">{title}</h3>
         <form onChange={mobxForm.onValueChange(mobxForm)} style={this.state.formStyle}>
           {formFields}
