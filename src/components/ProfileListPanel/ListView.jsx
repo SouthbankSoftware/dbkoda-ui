@@ -275,7 +275,6 @@ export default class ListView extends React.Component {
         .profiles
         .get(res.id);
       Broker.emit(EventType.NEW_PROFILE_CREATED, this.props.store.profiles.get(res.id));
-
     } else {
       message = globalString('connection/test', message);
     }
