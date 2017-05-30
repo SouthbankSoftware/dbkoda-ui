@@ -140,7 +140,9 @@ export default class Toolbar extends React.Component {
         executing: false,
         initialMsg: profile.initialMsg,
         code: '',
-        path: null
+        status: profile.status,
+        path: null,
+        shellVersion: profile.shellVersion,
       }));
       editorPanel.activeEditorId = editorId;
     } else {

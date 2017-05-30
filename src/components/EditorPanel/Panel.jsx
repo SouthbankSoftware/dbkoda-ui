@@ -106,19 +106,19 @@ export default class Panel extends React.Component {
    * @param {Object} oldTab - The Id of the tab being removed.
    */
   @action closeTab(oldTab) {
+    const deletedEditor = this.props.store.editors.get(oldTab.id);
+    console.log('deleted editor ', deletedEditor);
+    if (deletedEditor && deletedEditor.status == ProfileStatus.OPEN) {
+      // close the connection
+      featherClient()
+        .service('/mongo-shells')
+        .remove(deletedEditor.profileId, {query: {shellId: deletedEditor.shellId}})
+        .then(v => console.log('remove shell successfully, ', v))
+        .catch(err => console.error('remove shell failed,', err));
+    }
     // NEWLOGIC Check if closed editor is current editor:
     if ((oldTab.id) == this.props.store.editorPanel.activeEditorId) {
       this.props.store.editorPanel.isRemovingCurrentTab = true;
-      const deletedEditor = this.props.store.editors.get(oldTab.id);
-      console.log('deleted editor ', deletedEditor);
-      if (deletedEditor && deletedEditor.status == ProfileStatus.OPEN) {
-        // close the connection
-        featherClient()
-          .service('/mongo-shells')
-          .remove(deletedEditor.profileId, {query: {shellId: deletedEditor.shellId}})
-          .then(v => console.log('remove shell successfully, ', v))
-          .catch(err => console.error('remove shell failed,', err));
-      }
       // Check if this is the last tab:
       if (this.props.store.editors.size == 1) {
         // Show and select welcome tab
