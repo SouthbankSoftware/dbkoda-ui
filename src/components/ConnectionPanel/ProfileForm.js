@@ -171,10 +171,11 @@ export const Form = {
   }, {
     name: 'username',
     label: 'Username',
-    value: 'dbenvy',
+    placeholder: 'Username',
   }, {
     name: 'password',
     label: 'Password',
+    placeholder: 'Password',
     type: 'password',
   }]
 };
