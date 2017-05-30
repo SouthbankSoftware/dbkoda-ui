@@ -195,7 +195,7 @@ class View extends React.Component {
                 iconName: 'pt-icon-thumbs-down'
               });
             });
-          });;
+          });
           this.props.store.editorPanel.executingEditorAll = false;
         }
       }
@@ -264,7 +264,7 @@ class View extends React.Component {
                 iconName: 'pt-icon-thumbs-down'
               });
             });
-          });;
+          });
           this.props.store.editorPanel.executingEditorLines = false;
         }
       }
