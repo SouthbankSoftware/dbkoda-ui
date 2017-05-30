@@ -1,0 +1,44 @@
+{
+    "Title": "Collection Statistics for database %treeNode%",
+    "DefaultValues": {
+        "function": "dbcoda_DbCollectionStats",
+        "arguments": [{
+            "name": "dbName",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "top5",
+            "label": "Top 5 collections",
+            "type": "BarChart",
+            "XAxis": [{
+                "key": "size",
+                "label": "Size in MBs"
+            }],
+            "YAxis": {
+                "key": "ns"
+            },
+            "width": "50%",
+            "height": 300
+        },
+        {
+            "name": "CollectionDetails",
+            "label": "Collection Details",
+            "type": "Table",
+            "width": "100%",
+            "columns": [{
+                "name": "ns",
+                "label": "Name Space"
+            }, {
+                "name": "count",
+                "label": "Documents"
+            }, {
+                "name": "storageSizeMB",
+                "label": "Storage Size (MB)"
+            }, {
+                "name": "totalIndexSizeMB",
+                "label": "Index Size (MB)"
+            }]
+        }
+    ]
+}
