@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-05-01T01:29:35+10:00
+ * @Last modified time: 2017-05-30T16:49:27+10:00
  */
 
 export default {
@@ -43,5 +43,6 @@ export default {
   SHELL_RECONNECT: 'controller::shell::reconnect',
   createShellReconnectEvent: (id, shellId) => {
     return 'controller::shell::reconnect::' + id + '::' + shellId;
-  }
+  },
+  APP_READY: 'appReady'
 };
