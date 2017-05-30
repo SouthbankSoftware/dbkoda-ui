@@ -2,7 +2,7 @@
 // @Date:   2017-05-12T16:51:49+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-16T11:03:37+10:00
+// @Last modified time: 2017-05-30T11:47:29+10:00
 @import '../../styles/_defaultTheme.scss';
 // Panel CSS
 .editorPanel {
@@ -15,7 +15,7 @@
   .editorToolbar {
     overflow-x: scroll;
     background-color: $navbarRightBackground !important;
-    min-height: 45px;
+    min-height: 50px;
     .leftEditorToolbar {
       .leftButtonGroup {
         .editorContextDropdownWrapper {
