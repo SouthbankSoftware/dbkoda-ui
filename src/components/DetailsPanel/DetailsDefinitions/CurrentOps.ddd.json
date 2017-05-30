@@ -1,0 +1,27 @@
+{
+    "Title": "Current Operations",
+    "DefaultValues": {
+        "function": "dbcoda_CurrentOps"
+    },
+    "Fields": [{
+        "name": "ops",
+        "label": "Current Operations",
+        "type": "Table",
+        "columns": [{
+                "name": "desc",
+                "label": "Operation Name"
+            }, {
+                "name": "secs",
+                "label": "Active Time (sec)"
+            },
+            {
+                "name": "ns",
+                "label": "Name Space"
+            },
+            {
+                "name": "op",
+                "label": "Operation"
+            }
+        ]
+    }]
+}
