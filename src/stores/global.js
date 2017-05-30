@@ -211,6 +211,7 @@ export default class Store {
       .editors
       .forEach((value) => {
         value.executing = false;
+        value.status = ProfileStatus.CLOSED;
       });
 
     // Outputs:
