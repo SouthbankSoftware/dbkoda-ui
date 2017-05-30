@@ -1,5 +1,5 @@
 {
-    "Title": "Top Collections",
+    "Title": "Top Collections by execution time",
     "DefaultValues": {
         "function": "dbcoda_TopCollections"
     },

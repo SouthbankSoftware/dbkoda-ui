@@ -1,13 +1,15 @@
 {
-	"Title": "Database Storage",
+	"Title": "Database storage",
 	"DefaultValues": {
 		"function": "dbcoda_DatabaseStorage"
 	},
 	"Fields": [
 		{
 			"name": "storageByDb",
-			"label": "Size on Disk by Database",
+			"label": "Top 10 databases by storage",
 			"type": "BarChart",
+			"width": "100%",
+			"height":600,
 			"XAxis": [{
 				"key": "sizeOnDisk",
 				"label": "Size in MBs",
@@ -17,9 +19,7 @@
 				"key": "name",
 				"label": "Database",
 				"width": 120
-			},
-			"width": "100%",
-			"height": 600
+			}
 		},
 		{
 			"name": "shardMap",

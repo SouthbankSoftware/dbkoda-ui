@@ -35,6 +35,7 @@ import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
+import {ProfileStatus} from '../common/Constants';
 
 const {dialog, BrowserWindow} = IS_ELECTRON
   ? window
@@ -268,6 +269,7 @@ export default class Toolbar extends React.Component {
             .join('\n')
           : '',
         code: '',
+        status: ProfileStatus.OPEN,
         path: null,
       }, options)));
     this.props.store.editorPanel.creatingNewEditor = false;

@@ -275,6 +275,16 @@ export default class ListView extends React.Component {
         .profiles
         .get(res.id);
       Broker.emit(EventType.NEW_PROFILE_CREATED, this.props.store.profiles.get(res.id));
+      // this.props.store.editors.forEach((value, key) => {
+      //   console.log('xxxx:', key, value);
+      //   if(value.status == ProfileStatus.CLOSED){
+      //     if(value.shellId == res.shellId){
+      //       value.status = ProfileStatus.OPEN;
+      //     }else{
+      //       featherClient().service('mongo-shell')
+      //     }
+      //   }
+      // });
     } else {
       message = globalString('connection/test', message);
     }
