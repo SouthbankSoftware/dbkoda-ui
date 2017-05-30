@@ -7,6 +7,7 @@
         "name": "top",
         "label": "Top Collections",
         "type": "Table",
+        "width": "100%",
         "columns": [{
                 "name": "collection",
                 "label": "Collection"
