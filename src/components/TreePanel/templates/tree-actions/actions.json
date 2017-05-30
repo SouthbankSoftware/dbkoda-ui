@@ -58,6 +58,13 @@
 			"icon": "pt-icon-doughnut-chart",
 			"view": "details"
 
+		},
+		{
+			"name": "CurrentOps",
+			"text": "Current Operations",
+			"icon": "pt-icon-comparison",
+			"view": "details"
+
 		}
 	],
 	"database": [{

@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T12:51:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-30T09:15:17+10:00
+ * @Last modified time: 2017-05-30T14:58:31+10:00
  */
 
 import React from 'react';
@@ -26,12 +26,12 @@ export default observer(({
   console.log('BarChartField field:', field);
   console.log('BarChartField data:', data);
   const COLORS = [
-    '#77173E',
-    '#0D657C',
-    '#607747',
     '#413456',
     '#823C1D',
     '#5D3750',
+    '#77173E',
+    '#0D657C',
+    '#607747',
     '#107BA3',
     '#A01B4C',
     '#1E282D',
@@ -63,7 +63,7 @@ export default observer(({
           margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
         >
           <XAxis type="number" />
-          <YAxis dataKey={field.YAxis.key} type="category" />
+          <YAxis dataKey={field.YAxis.key} width={field.YAxis.width ? field.YAxis.width : 60} type="category" />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend iconType="circle" />

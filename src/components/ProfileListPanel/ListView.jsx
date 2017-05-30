@@ -2,14 +2,14 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-15 13:40:45
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-23T08:50:01+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-30T12:46:23+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 import _ from 'lodash';
 import {inject, observer} from 'mobx-react';
-import {action, runInAction, observable} from 'mobx';
+import {action, reaction, runInAction, observable} from 'mobx';
 import uuidV1 from 'uuid';
 import autobind from 'autobind-decorator';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
@@ -73,6 +73,24 @@ export default class ListView extends React.Component {
       .swapToEditor
       .bind(this);
   }
+  componentWillMount() {
+    this.reactionToEditorToolbarComboChange = reaction(
+      () => this.props.store.editorPanel.activeDropdownId,
+      () => {
+        if (this.props.store.editorPanel.activeDropdownId && this.props.store.editorPanel.activeDropdownId != 'Default') {
+          const editorProfile = this.props.store.profiles.get(this.props.store.editorPanel.activeDropdownId);
+          this.props.store.profileList.selectedProfile = editorProfile;
+          this.forceUpdate();
+        }
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    this.reactionToEditorToolbarComboChange();
+  }
+
+  reactionToEditorToolbarComboChange;
 
   @action
   onSelection(region) {
@@ -257,6 +275,21 @@ export default class ListView extends React.Component {
         .profiles
         .get(res.id);
       Broker.emit(EventType.NEW_PROFILE_CREATED, this.props.store.profiles.get(res.id));
+      this.props.store.editors.forEach((value, _) => {
+        if (value.status == ProfileStatus.CLOSED) {
+          if (value.shellId == res.shellId) {
+            // the default shell is using the same shell id as the profile
+            value.status = ProfileStatus.OPEN;
+          } else {
+            featherClient().service('/mongo-shells').create({id: res.id}, {query:{shellId: value.shellId}})
+              .then((v) => {
+                console.log('connect shell success. ', v);
+                value.status = ProfileStatus.OPEN;
+              })
+              .catch(err => console.error('failed to create shell connection', err));
+          }
+        }
+      });
     } else {
       message = globalString('connection/test', message);
     }

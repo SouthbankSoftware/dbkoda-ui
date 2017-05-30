@@ -2,14 +2,14 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-26T11:44:26+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-30T12:42:57+10:00
 */
 
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer, PropTypes} from 'mobx-react';
-import {action, runInAction} from 'mobx';
+import {action, reaction, runInAction} from 'mobx';
 import {
   Button,
   Tabs2,
@@ -23,6 +23,8 @@ import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView.jsx';
+import {ProfileStatus} from '../common/Constants';
+import {featherClient} from '../../helpers/feathers';
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
@@ -56,6 +58,38 @@ export default class Panel extends React.Component {
       .bind(this);
   }
 
+  componentWillMount() {
+    this.reactionToProfile = reaction(() => this.props.store.profileList.selectedProfile, () => {
+      try {
+        let curEditor;
+        if (this.props.store.editorPanel.activeEditorId != 'Default') {
+          curEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+        }
+
+        if (curEditor && curEditor.profileId == this.props.store.profileList.selectedProfile.id) {
+          console.log('do nothing');
+        } else {
+          const editors = this
+            .props
+            .store
+            .editors
+            .entries();
+          for (const editor of editors) {
+            if (editor[1].profileId == this.props.store.profileList.selectedProfile.id) {
+              this.changeTab(editor[1].id);
+              break;
+            }
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
+  componentWillUnmount() {
+    this.reactionToProfile();
+  }
+  reactionToProfile;
   /**
    * DEPRECATED? Remove this after refactoring.
    * Action for creating a new editor in the MobX store.
@@ -72,6 +106,16 @@ export default class Panel extends React.Component {
    * @param {Object} oldTab - The Id of the tab being removed.
    */
   @action closeTab(oldTab) {
+    const deletedEditor = this.props.store.editors.get(oldTab.id);
+    console.log('deleted editor ', deletedEditor);
+    if (deletedEditor && deletedEditor.status == ProfileStatus.OPEN) {
+      // close the connection
+      featherClient()
+        .service('/mongo-shells')
+        .remove(deletedEditor.profileId, {query: {shellId: deletedEditor.shellId}})
+        .then(v => console.log('remove shell successfully, ', v))
+        .catch(err => console.error('remove shell failed,', err));
+    }
     // NEWLOGIC Check if closed editor is current editor:
     if ((oldTab.id) == this.props.store.editorPanel.activeEditorId) {
       this.props.store.editorPanel.isRemovingCurrentTab = true;

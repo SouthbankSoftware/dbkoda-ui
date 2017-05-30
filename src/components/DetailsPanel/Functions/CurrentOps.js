@@ -7,12 +7,12 @@
  */
 // const Globalize = require('globalize');
 
-export const TopCollections = {
+export const CurrentOps = {
   // Prefill function for alter user
-  dbcoda_TopCollections: () => {
-    return 'dbe.Top()';
+  dbcoda_CurrentOps: () => {
+    return 'dbeOps.printCurrentOps(true,true)';
   },
-  dbcoda_TopCollections_parse: (data) => {
+  dbcoda_CurrentOps_parse: (data) => {
     // data.time = Globalize.formatNumber(data.time);
     // console.log(data.time);
     return data;
