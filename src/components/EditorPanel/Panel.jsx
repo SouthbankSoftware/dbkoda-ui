@@ -2,14 +2,14 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-26T11:44:26+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-05-30T12:42:57+10:00
 */
 
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer, PropTypes} from 'mobx-react';
-import {action, runInAction} from 'mobx';
+import {action, reaction, runInAction} from 'mobx';
 import {
   Button,
   Tabs2,
@@ -56,6 +56,38 @@ export default class Panel extends React.Component {
       .bind(this);
   }
 
+  componentWillMount() {
+    this.reactionToProfile = reaction(() => this.props.store.profileList.selectedProfile, () => {
+      try {
+        let curEditor;
+        if (this.props.store.editorPanel.activeEditorId != 'Default') {
+          curEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+        }
+
+        if (curEditor && curEditor.profileId == this.props.store.profileList.selectedProfile.id) {
+          console.log('do nothing');
+        } else {
+          const editors = this
+            .props
+            .store
+            .editors
+            .entries();
+          for (const editor of editors) {
+            if (editor[1].profileId == this.props.store.profileList.selectedProfile.id) {
+              this.changeTab(editor[1].id);
+              break;
+            }
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
+  componentWillUnmount() {
+    this.reactionToProfile();
+  }
+  reactionToProfile;
   /**
    * DEPRECATED? Remove this after refactoring.
    * Action for creating a new editor in the MobX store.

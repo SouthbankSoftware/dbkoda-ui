@@ -2,7 +2,7 @@
 // @Date:   2017-05-23T16:26:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-29T11:40:21+10:00
+// @Last modified time: 2017-05-30T11:06:54+10:00
 
 @import '../../styles/_defaultTheme.scss';
 
@@ -13,16 +13,17 @@
   width: 100%;
   background-color: $detailsBackground;
   .details-title {
-    text-align: center;
-    margin: 35px 0;
+    margin: 15px 30px 0px 30px;
     color: $fieldHeadingFontColor;
+    font-size: 16px;
+    font-weight: bold;
   }
   .details-fields {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     .div-field-container {
-      padding: 30px;
+      padding: 15px 30px 15px 30px;
     }
     .detailsFieldSet {
       margin: 15px 15px 15px 15px;
@@ -33,11 +34,15 @@
       text-align: left;
       margin: 10px 0 20px 0;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 15px;
       color: $fieldHeadingFontColor;
     }
     .pt-striped {
       width: 100%;
+
+      thead {
+        background-color: #5D3750;
+      }
       tbody tr:nth-child(odd) td {
         background: #222324 !important;
       }
@@ -46,6 +51,10 @@
       }
       th {
         padding-left: 5px !important;
+        font-size: 12px;
+      }
+      td {
+        font-size: 13px;
       }
     }
     .pt-interactive {

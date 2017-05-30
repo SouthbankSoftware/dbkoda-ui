@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T12:51:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-29T14:01:21+10:00
+ * @Last modified time: 2017-05-30T10:59:49+10:00
  */
 
 import React from 'react';
@@ -26,14 +26,16 @@ export default observer(({
   console.log('BarChartField field:', field);
   console.log('BarChartField data:', data);
   const COLORS = [
-    '#6B1635',
-    '#105970',
-    '#556C3F',
-    '#3A2E4B',
-    '#77341B',
-    '#523147',
-    '#465061',
+    '#413456',
+    '#823C1D',
+    '#5D3750',
+    '#77173E',
+    '#0D657C',
+    '#607747',
+    '#107BA3',
+    '#A01B4C',
     '#1E282D',
+    '#465061',
     '#1E423C',
     '#701535'
   ];
