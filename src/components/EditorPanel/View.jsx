@@ -180,6 +180,16 @@ class View extends React.Component {
           commands: editor
             .code
             .replace(/\t/g, '  ')
+        }).catch((err) => {
+          console.error('execute error:', err);
+          runInAction(() => {
+            this.props.store.editorToolbar.isActiveExecuting = false;
+            NewToaster.show({
+              message: globalString('editor/toolbar/executionScriptFailed'),
+              intent: Intent.DANGER,
+              iconName: 'pt-icon-thumbs-down'
+            });
+          });
         });
         this.props.store.editorPanel.executingEditorAll = false;
       }
@@ -231,6 +241,16 @@ class View extends React.Component {
         service.update(id, {
           shellId: shell, // eslint-disable-line
           commands: content.replace(/\t/g, '  ')
+        }).catch((err) => {
+          console.error('execute error:', err);
+          runInAction(() => {
+            this.props.store.editorToolbar.isActiveExecuting = false;
+            NewToaster.show({
+              message: globalString('editor/toolbar/executionScriptFailed'),
+              intent: Intent.DANGER,
+              iconName: 'pt-icon-thumbs-down'
+            });
+          });
         });
         this.props.store.editorPanel.executingEditorLines = false;
       }
