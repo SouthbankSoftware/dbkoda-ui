@@ -223,24 +223,38 @@ export default class Panel extends React.Component {
                 <Input field={form.$('password')} divOnClick={this._onClickUserName} />
               </div>
             )}
-          <Button
-            className="connectButton pt-button pt-intent-success"
-            onClick={form.onSubmit}
-            text={globalString('connection/form/connectButton')}
-            type="submit"
-            disabled={formErrors.length > 0}
-            loading={this.state.connecting} />
+          {(formErrors.length > 0)
+            ? (<Button
+              className="inactive connectButton pt-button pt-intent-success"
+              onClick={form.onSubmit}
+              text={globalString('connection/form/connectButton')}
+              type="submit"
+              disabled={formErrors.length > 0}
+              loading={this.state.connecting} />)
+            : (<Button
+              className="active connectButton pt-button pt-intent-success"
+              onClick={form.onSubmit}
+              text={globalString('connection/form/connectButton')}
+              type="submit"
+              disabled={formErrors.length > 0}
+              loading={this.state.connecting} />)}
           <div className="profile-button-panel">
             <Button
               className="save-button pt-button pt-intent-primary"
               text={globalString('connection/form/saveButton')}
-              onClick={form.onSave} />
-            <Button
-              className="test-button pt-button pt-intent-primary"
-              onClick={form.onTest}
-              text={globalString('connection/form/testButton')}
-              disabled={formErrors.length > 0}
-              loading={this.state.testing} />
+              onClick={form.onSave} /> {(formErrors.length > 0)
+              ? (<Button
+                className="inactive test-button pt-button pt-intent-primary"
+                onClick={form.onTest}
+                text={globalString('connection/form/testButton')}
+                disabled={formErrors.length > 0}
+                loading={this.state.testing} />)
+              : (<Button
+                className="active test-button pt-button pt-intent-primary"
+                onClick={form.onTest}
+                text={globalString('connection/form/testButton')}
+                disabled={formErrors.length > 0}
+                loading={this.state.testing} />)}
             <Button
               className="reset-button pt-button pt-intent-warning"
               onClick={form.onReset}
