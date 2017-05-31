@@ -13,7 +13,7 @@
     display: none;
   }
   .editorToolbar {
-    overflow-x: scroll;
+    overflow-x: hidden;
     background-color: $navbarRightBackground !important;
     min-height: 50px;
     .leftEditorToolbar {

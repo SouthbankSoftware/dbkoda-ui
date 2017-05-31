@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-22T14:02:16+10:00
+ * @Last modified time: 2017-05-31T14:46:51+10:00
  */
 
 import React from 'react';
@@ -88,7 +88,7 @@ class Terminal extends React.Component {
         keyMap: 'sublime',
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
-          'Ctrl-E': () => {
+          'Ctrl-X': () => {
             this.sendCommandToEditor();
           }
         },
