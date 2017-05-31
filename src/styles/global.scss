@@ -199,3 +199,7 @@ a.pt-disabled.pt-intent-primary {
 .pt-tab[aria-selected="true"]:hover {
   color: $buttonSecondaryBackgroundHover !important;
 }
+
+.cm-string.cm-property {
+  color: $propertyStringFontColor !important;
+}
