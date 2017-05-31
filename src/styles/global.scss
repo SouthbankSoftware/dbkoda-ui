@@ -3,11 +3,7 @@
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
 // @Last modified time: 2017-05-16T11:43:32+10:00
-
-
-
 @import './_defaultTheme.scss';
-
 body {
   background-color: $panelRightBackground;
 }
@@ -31,6 +27,7 @@ h3 {
 .pt-toast:first-child {
   margin-top: 100px;
 }
+
 .circleButton {
   background-color: $buttonTertiaryBackground !important;
   color: $buttonTertiaryIcon !important;
@@ -38,15 +35,18 @@ h3 {
   margin-left: 5px;
   margin-right: 5px;
 }
+
 .circleButton:hover {
   background-color: $buttonTertiaryBackgroundHover !important;
   border-radius: 50%;
   margin-left: 5px;
   margin-right: 5px;
 }
+
 .circleButton.pt-disabled {
-    background-color: $buttonTertiaryBackgroundDisabled !important;
+  background-color: $buttonTertiaryBackgroundDisabled !important;
 }
+
 .circleButton.warningButton {
   background-color: $keywordThree !important;
   color: $white !important;
@@ -54,6 +54,7 @@ h3 {
   margin-left: 5px;
   margin-right: 5px;
 }
+
 .circleButton.warningButton:hover {
   background-color: $buttonTertiaryBackground !important;
   border-radius: 50%;
@@ -70,10 +71,11 @@ h3 {
   overflow: hidden;
 }
 
-.RootSplitPane > .Pane1 {
+.RootSplitPane>.Pane1 {
   background-color: $panelLeftBackground;
 }
-.RootSplitPane > .Pane2 {
+
+.RootSplitPane>.Pane2 {
   background-color: $panelRightBackground;
 }
 
@@ -81,11 +83,9 @@ h3 {
   height: 100%;
 }
 
-.dbcoda-toaster{
+.dbcoda-toaster {
   z-index: 20000;
 }
-
-
 
 .pt-tabs {
   color: $white;
@@ -128,13 +128,11 @@ h3 {
   height: 100%;
 }
 
-
 //  //// Global CSS: ////  //
 /////////////////////////////
 .pt-dark pre {
   box-shadow: none !important;
 }
-
 
 select.pt-intent-primary {
   background-color: $selectDarkPrimaryBackground !important;
@@ -186,6 +184,7 @@ textArea {
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+
 a.pt-intent-primary {
   background-color: $buttonPrimaryBackground !important;
   color: $buttonPrimaryIcon !important;

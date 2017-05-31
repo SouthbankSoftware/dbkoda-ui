@@ -25,8 +25,9 @@ export const Stage = ({stage}) => {
 export const StageProgress = ({stages}) => {
   return (<div className="explain-stage-progress">
     {
-      stages.map((stage) => {
-        return (<Stage stage={stage} key={stage.stage} />);
+      stages.map((stage, i) => {
+        const id = i;
+        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} />);
       })
     }
   </div>);
@@ -36,11 +37,20 @@ export const StageProgress = ({stages}) => {
  * get execution stages array
  */
 export const getExecutionStages = (executionStages) => {
-  const stages = [];
+  let stages = [];
   if (executionStages) {
     let currentStage = executionStages;
     while (currentStage) {
       stages.push(currentStage);
+      if (currentStage && currentStage.inputStages && currentStage.inputStages.length > 0) {
+        // search for stage branches
+        const inputStages = currentStage.inputStages;
+        for (let i = 0; i < inputStages.length; i += 1) {
+          const stage = inputStages[i];
+          const branchStages = getExecutionStages(stage);
+          stages = stages.concat(branchStages);
+        }
+      }
       currentStage = currentStage.inputStage;
     }
   }
@@ -68,7 +78,8 @@ export const StepsTable = ({stages}) => {
     </div>
     {
       stages.map((stage, i) => {
-        return (<div className="stage-row" key={stage.stage}>
+        const id = i;
+        return (<div className="stage-row" key={stage.stage + '-' + id}>
           <div className="stage-cell">{i + 1}</div>
           <div className="stage-cell">{stage.stage}</div>
           <div className="stage-cell">
@@ -173,7 +184,8 @@ const ExplainView = ({explains}) => {
     return null;
   }
   const output = toJS(explains.output);
-  const commandPanel = explains.command ? <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} /> : null;
+  const commandPanel = explains.command ?
+    <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} /> : null;
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     return (<div className="explain-view-panel">

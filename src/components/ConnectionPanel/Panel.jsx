@@ -27,8 +27,46 @@ export default class Panel extends React.Component {
     super(props);
     this.state = {
       connecting: false,
-      testing: false
+      testing: false,
+      checkboxHost: true,
+      checkboxUrl: false,
+      checkboxSSL: false,
+      checkboxScram: false
     };
+  }
+
+  @autobind _onClickHost() {
+    this
+      .props
+      .form
+      .$('hostRadio')
+      .set('value', true);
+    this
+      .props
+      .form
+      .$('urlRadio')
+      .set('value', false);
+  }
+
+  @autobind _onClickURL() {
+    this
+      .props
+      .form
+      .$('hostRadio')
+      .set('value', false);
+    this
+      .props
+      .form
+      .$('urlRadio')
+      .set('value', true);
+  }
+
+  @autobind _onClickUserName() {
+    this
+      .props
+      .form
+      .$('sha')
+      .set('value', true);
   }
 
   @autobind _hostRadioOnChange() {
@@ -101,7 +139,6 @@ export default class Panel extends React.Component {
       .props
       .save(data);
   }
-
   render() {
     const {form, edit, title, profiles} = this.props;
     form.connect = this._connect;
@@ -118,68 +155,48 @@ export default class Panel extends React.Component {
 
     return (
       <div className="pt-dark connection-profile">
+        <Button
+          className="close-button pt-button pt-intent-primary"
+          text="X"
+          onClick={this.props.close} />
         <h3 className="form-title">{title}</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
           <Input field={form.$('alias')} showLabel />
-          <div className="pt-form-group pt-inline zero-margin">
+          <div className="hostname-form pt-form-group pt-inline zero-margin">
             <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
-            <Input
-              field={form.$('host')}
-              showLabel
-              disable={!form
-              .$('hostRadio')
-              .get('value')} />
-            <Input
-              field={form.$('port')}
-              showLabel
-              disable={!form
-              .$('hostRadio')
-              .get('value')} />
+            <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} />
+            <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} />
           </div>
-          <div className="pt-form-group pt-inline zero-margin">
+          <div className="url-form pt-form-group pt-inline zero-margin">
             <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
-            <Input
-              field={form.$('url')}
-              showLabel
-              disable={!form
-              .$('urlRadio')
-              .get('value')} />
+            <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} />
           </div>
-          <div className="pt-form-group pt-inline zero-margin">
+          <div className="database-form pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
           </div>
           <div className="profile-separator" />
-          <div className="pt-form-group pt-inline zero-margin">
+          <div className="ssl-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssl')} />
           </div>
           <div className="profile-separator" />
           <Label text="Authentication" />
           <Checkbox field={form.$('sha')} />
-          <Input
-            field={form.$('username')}
-            showLabel
-            disable={!form
-            .$('sha')
-            .get('value')} />
-          <Input
-            field={form.$('password')}
-            showLabel
-            disable={!form
-            .$('sha')
-            .get('value')} />
-
+          <div className="credentials-form">
+            <Input field={form.$('username')} divOnClick={this._onClickUserName} />
+            <Input field={form.$('password')} divOnClick={this._onClickUserName} />
+          </div>
+          <Button
+            className="connectButton pt-button pt-intent-success"
+            onClick={form.onSubmit}
+            text={globalString('connection/form/connectButton')}
+            type="submit"
+            disabled={formErrors.length > 0}
+            loading={this.state.connecting} />
           <div className="profile-button-panel">
             <Button
-              className="connectButton pt-button pt-intent-success"
-              onClick={form.onSubmit}
-              text={globalString('connection/form/connectButton')}
-              type="submit"
-              disabled={formErrors.length > 0}
-              loading={this.state.connecting} />
-            <Button
-              className="reset-button pt-button pt-intent-warning"
-              onClick={form.onReset}
-              text={globalString('connection/form/resetButton')} />
+              className="save-button pt-button pt-intent-primary"
+              text={globalString('connection/form/saveButton')}
+              onClick={form.onSave} />
             <Button
               className="test-button pt-button pt-intent-primary"
               onClick={form.onTest}
@@ -187,13 +204,9 @@ export default class Panel extends React.Component {
               disabled={formErrors.length > 0}
               loading={this.state.testing} />
             <Button
-              className="save-button pt-button pt-intent-primary"
-              text={globalString('connection/form/saveButton')}
-              onClick={form.onSave} />
-            <Button
-              className="close-button pt-button pt-intent-primary"
-              text={globalString('connection/form/closeButton')}
-              onClick={this.props.close} />
+              className="reset-button pt-button pt-intent-warning"
+              onClick={form.onReset}
+              text={globalString('connection/form/resetButton')} />
           </div>
         </form>
         {/* <div className="profile-error-input" style={{ color: Colors.RED2 }}>

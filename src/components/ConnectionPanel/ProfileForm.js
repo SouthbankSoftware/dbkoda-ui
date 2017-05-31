@@ -138,6 +138,7 @@ export const Form = {
   }, {
     name: 'host',
     placeholder: 'Hostname',
+    value: 'localhost',
     type: 'text',
     rules: 'string',
     label: 'Host',
@@ -171,10 +172,11 @@ export const Form = {
   }, {
     name: 'username',
     label: 'Username',
-    value: 'dbenvy',
+    placeholder: 'Username',
   }, {
     name: 'password',
     label: 'Password',
+    placeholder: 'Password',
     type: 'password',
   }]
 };
