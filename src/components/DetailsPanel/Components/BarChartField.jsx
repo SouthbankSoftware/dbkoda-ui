@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T12:51:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-31T13:36:04+10:00
+ * @Last modified time: 2017-05-31T14:21:24+10:00
  */
 
 import React from 'react';
@@ -39,6 +39,12 @@ export default observer(({ field, data }) => {
 
   let chartBars = [];
 
+  let calcBarSize = 0;
+  let bCalcBarSize = false;
+  if (!field.height) {
+    bCalcBarSize = true;
+  }
+
   if (field.groupBy) {
     const cat = field.groupBy;
     const val = field.XAxis.key;
@@ -63,6 +69,9 @@ export default observer(({ field, data }) => {
     data = newData;
     bars = bars.sort();
     chartBars = bars.map((bar, index) => {
+      if (bCalcBarSize) {
+        calcBarSize += (field.XAxis.barSize ? (field.XAxis.barSize + 10) : 40);
+      }
       return (
         <Bar
           dataKey={bar}
@@ -73,14 +82,24 @@ export default observer(({ field, data }) => {
       );
     });
   } else {
-    chartBars = field.XAxis.map((bar, index) => (
-      <Bar
-        dataKey={bar.key}
-        name={bar.label}
-        fill={COLORS[index % COLORS.length]}
-        barSize={bar.barSize}
-      />
-    ));
+    chartBars = field.XAxis.map((bar, index) => {
+      if (bCalcBarSize) {
+        calcBarSize += (bar.barSize ? (bar.barSize + 10) : 40);
+      }
+      return (
+        <Bar
+          dataKey={bar.key}
+          name={bar.label}
+          fill={COLORS[index % COLORS.length]}
+          barSize={bar.barSize}
+        />
+      );
+    });
+  }
+
+  if (bCalcBarSize) {
+    field.height = 60 + (calcBarSize * data.length);
+    console.log(field.height);
   }
 
   return (
