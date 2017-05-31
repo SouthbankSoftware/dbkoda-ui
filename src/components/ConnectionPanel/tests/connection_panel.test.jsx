@@ -37,14 +37,6 @@ describe('New Profile Panel', () => {
     expect(app.find('.alias-label')).to.have.length(1);
   });
 
-  it('user name exist', () => {
-    expect(app.find('.username-label')).to.have.length(1);
-  });
-
-  it('password exist', () => {
-    expect(app.find('.password-label')).to.have.length(1);
-  });
-
   it('database exist', () => {
     expect(app.find('.database-label')).to.have.length(1);
   });
@@ -55,14 +47,5 @@ describe('New Profile Panel', () => {
 
   it('host radio exist', () => {
     expect(app.find('.hostRadio-radio-input')).to.have.length(2);
-  });
-
-  it('button panel exist', () => {
-    expect(app.find('.profile-button-panel')).to.have.length(1);
-    expect(app.find('.profile-button-panel .connectButton')).to.have.length(1);
-    expect(app.find('.profile-button-panel .reset-button')).to.have.length(1);
-    expect(app.find('.profile-button-panel .test-button')).to.have.length(1);
-    expect(app.find('.profile-button-panel .save-button')).to.have.length(1);
-    expect(app.find('.profile-button-panel .close-button')).to.have.length(1);
   });
 });
