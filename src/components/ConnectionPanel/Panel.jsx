@@ -27,10 +27,31 @@ export default class Panel extends React.Component {
     super(props);
     this.state = {
       connecting: false,
-      testing: false
+      testing: false,
+      checkboxHost: true,
+      checkboxUrl: false,
+      checkboxSSL: false,
+      checkboxScram: false
     };
   }
 
+  @autobind onHostChanged() {
+    console.log('Tick host radio button.');
+  }
+  @autobind onPortChanged() {
+    console.log('Tick host radio button.');
+  }
+  @autobind onURLChanged() {
+    console.log('Tick url radio button.');
+  }
+  @autobind onSSLChanged() {
+    console.log('Tick ssl checkbox button.');
+    if (this.state.checkboxSSL) {
+      this.state.checkboxSSL = false;
+    } else {
+      this.state.checkboxSSL = true;
+    }
+  }
   @autobind _hostRadioOnChange() {
     if (!this.props.form.$('hostRadio').get('value')) {
       this
@@ -101,7 +122,6 @@ export default class Panel extends React.Component {
       .props
       .save(data);
   }
-
   render() {
     const {form, edit, title, profiles} = this.props;
     form.connect = this._connect;
@@ -127,49 +147,26 @@ export default class Panel extends React.Component {
           <Input field={form.$('alias')} showLabel />
           <div className="hostname-form pt-form-group pt-inline zero-margin">
             <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
-            <Input
-              field={form.$('host')}
-              showLabel
-              disable={!form
-              .$('hostRadio')
-              .get('value')} />
-            <Input
-              field={form.$('port')}
-              showLabel
-              disable={!form
-              .$('hostRadio')
-              .get('value')} />
+            <Input field={form.$('host')} onChange={this.onHostChanged()} showLabel />
+            <Input field={form.$('port')} onChange={this.onPortChanged()} showLabel />
           </div>
           <div className="url-form pt-form-group pt-inline zero-margin">
             <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
-            <Input
-              field={form.$('url')}
-              showLabel
-              disable={!form
-              .$('urlRadio')
-              .get('value')} />
+            <Input showLabel field={form.$('url')} onChange={this.onURLChanged()} />
           </div>
           <div className="database-form pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
           </div>
           <div className="profile-separator" />
           <div className="ssl-form pt-form-group pt-inline zero-margin">
-            <Checkbox field={form.$('ssl')} />
+            <Checkbox onChange={this.onSSLChanged()} field={form.$('ssl')} />
           </div>
           <div className="profile-separator" />
           <Label text="Authentication" />
           <Checkbox field={form.$('sha')} />
           <div className="credentials-form">
-            <Input
-              field={form.$('username')}
-              disable={!form
-              .$('sha')
-              .get('value')} />
-            <Input
-              field={form.$('password')}
-              disable={!form
-              .$('sha')
-              .get('value')} />
+            <Input field={form.$('username')} />
+            <Input field={form.$('password')} />
           </div>
           <Button
             className="connectButton pt-button pt-intent-success"

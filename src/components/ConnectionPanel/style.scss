@@ -8,10 +8,17 @@
   display: flex;
   flex-direction: column;
   font-family: Arial, Helvetica, sans-serif;
-  input[type=text]:focus,
-  input[type=number]:focus {
-    background-color: $connectionActiveTextFieldBackgroundColour !important;
+  input[type=text],
+  input[type=number],
+  input[type=password] {
+    background: unset;
+    background-color: $connectionTextFieldBackgroundColour !important;
     color: $connectionActiveTextFieldTextColour !important;
+  }
+  input[type=text]:focus,
+  input[type=number]:focus,
+  input[type=password]:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
   button {
@@ -56,6 +63,42 @@
       }
       div.pt-form-content {
         margin-left: 0;
+      }
+    }
+    div.hostname-form {
+      div.hostRadio-input-content {
+        div.pt-form-content {
+          label.hostRadio-radio-input {
+            span.pt-control-indicator {
+              box-shadow: unset;
+              background: unset;
+              background-color: $connectionCheckboxBackgroundColour;
+              color: $connectionCheckboxColour;
+              border: 1px solid $connectionCheckboxColour;
+            }
+            span.pt-control-indicator:focus {
+              outline: none;
+            }
+          }
+        }
+      }
+    }
+    div.url-form {
+      div.urlRadio-input-content {
+        div.pt-form-content {
+          label.urlRadio-radio-input {
+            span.pt-control-indicator {
+              box-shadow: unset;
+              background: unset;
+              background-color: $connectionCheckboxBackgroundColour;
+              color: $connectionCheckboxColour;
+              border: 1px solid $connectionCheckboxColour;
+            }
+            span.pt-control-indicator:focus {
+              outline: none;
+            }
+          }
+        }
       }
     }
     div.database-form {
@@ -212,7 +255,7 @@
     }
   }
   .pt-form-helper-text {
-    color: red !important;
+    color: $connectionWarningFontColour !important;
   }
   .field-inline {
     display: inline-block !important;
