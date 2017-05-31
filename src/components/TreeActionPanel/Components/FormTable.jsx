@@ -3,7 +3,7 @@
  * @Date:   2017-04-18T13:31:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-31T09:38:28+10:00
+ * @Last modified time: 2017-05-31T15:36:40+10:00
  */
 
 import React from 'react';
@@ -50,9 +50,8 @@ export default observer(({ members }) => {
           />
         </div>
       </div>
-
-      <div className="field-group">
-        {labels}
+      {labels}
+      <div className="scrollableDiv field-group">
         {members.map(member => (
           <FormTableRow key={member.id} member={member} />
         ))}

@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-05-31T10:29:32+10:00
+// @Last modified time: 2017-05-31T15:41:09+10:00
 @import '../../styles/_defaultTheme.scss';
 
 
@@ -32,7 +32,11 @@
   .form-group-inline {
     display: inline-block !important;
     vertical-align: top;
-    width: 45%;
+    width: 44%;
+  }
+
+  .pt-form-group {
+    padding: 0 11px;
   }
 
   .pt-form-content {
@@ -72,8 +76,7 @@
     }
 
     .pt-checkbox {
-      width: 70%;
-      margin-left: 30%;
+      width: 100%;
       color: $fieldHeadingFontColor;
       .pt-control-indicator {
         width: 16px;
@@ -91,12 +94,12 @@
 
   .tableFieldSet {
     border-style: none;
+    background-color: $fieldGroupPrimaryBackground;
 
     .tableHeader {
       height: 60px;
       margin-bottom: 5px;
       padding: 15px;
-      background-color: $fieldGroupPrimaryBackground;
 
       .pt-icon-add {
         background-color: $fieldGroupHeaderIcon !important;
@@ -119,24 +122,21 @@
 
     .field-group {
       background-color: $fieldGroupPrimaryBackground;
-      padding: 15px;
+      padding: 0 9px;
 
       .pt-icon-delete {
         color: $fieldGroupListIcon !important;
+        margin: 0;
       }
     }
 
     .pt-form-content {
       width: 100%;
-      margin: 2px;
+      margin: 2px 0;
 
       .pt-input, .pt-select, .pt-numeric-input {
         width: 100%;
-        min-width: 100px;
-      }
-
-      .pt-popover-target {
-        width: 90%;
+        min-width: 95px;
       }
     }
   }
