@@ -161,16 +161,42 @@ export default class Panel extends React.Component {
           onClick={this.props.close} />
         <h3 className="form-title">{title}</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
-          <Input field={form.$('alias')} showLabel />
-          <div className="hostname-form pt-form-group pt-inline zero-margin">
-            <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
-            <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} />
-            <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} />
-          </div>
-          <div className="url-form pt-form-group pt-inline zero-margin">
-            <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
-            <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} />
-          </div>
+          <Input field={form.$('alias')} showLabel /> {this
+            .props
+            .form
+            .$('hostRadio')
+            .get('value')
+            ? (
+              <div className=" active hostname-form pt-form-group pt-inline zero-margin">
+                <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
+                <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} />
+                <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} />
+              </div>
+            )
+            : (
+              <div className=" inactive hostname-form pt-form-group pt-inline zero-margin">
+                <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
+                <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} />
+                <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} />
+              </div>
+            )}
+          {this
+            .props
+            .form
+            .$('urlRadio')
+            .get('value')
+            ? (
+              <div className=" active url-form pt-form-group pt-inline zero-margin">
+                <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
+                <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} />
+              </div>
+            )
+            : (
+              <div className=" inactive url-form pt-form-group pt-inline zero-margin">
+                <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
+                <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} />
+              </div>
+            )}
           <div className="database-form pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
           </div>
@@ -180,11 +206,23 @@ export default class Panel extends React.Component {
           </div>
           <div className="profile-separator" />
           <Label text="Authentication" />
-          <Checkbox field={form.$('sha')} />
-          <div className="credentials-form">
-            <Input field={form.$('username')} divOnClick={this._onClickUserName} />
-            <Input field={form.$('password')} divOnClick={this._onClickUserName} />
-          </div>
+          <Checkbox field={form.$('sha')} /> {this
+            .props
+            .form
+            .$('sha')
+            .get('value')
+            ? (
+              <div className=" active credentials-form">
+                <Input field={form.$('username')} divOnClick={this._onClickUserName} />
+                <Input field={form.$('password')} divOnClick={this._onClickUserName} />
+              </div>
+            )
+            : (
+              <div className=" inactive credentials-form">
+                <Input field={form.$('username')} divOnClick={this._onClickUserName} />
+                <Input field={form.$('password')} divOnClick={this._onClickUserName} />
+              </div>
+            )}
           <Button
             className="connectButton pt-button pt-intent-success"
             onClick={form.onSubmit}
