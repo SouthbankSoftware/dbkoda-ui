@@ -23,19 +23,6 @@ describe('New Connection Profile Panel', () => {
     globalizeInit();
   });
 
-  it('test new connection with default form values', () => {
-    const store = new Store();
-    const form = createForm();
-    const app = mount(<Provider store={store} globalString={globalString} >
-      <Panel form={form} />
-    </Provider>);
-    expect(app.find('.host-input')).to.be.disabled();
-    expect(app.find('.port-input')).to.be.disabled();
-    expect(app.find('.url-input')).to.not.be.disabled();
-    expect(app.find('.username-input')).to.be.disabled();
-    expect(app.find('.password-input')).to.be.disabled();
-  });
-
   it('test new connection with authentication enabled', () => {
     const store = new Store();
     const form = createForm({sha: true});
@@ -54,7 +41,6 @@ describe('New Connection Profile Panel', () => {
     </Provider>);
     expect(app.find('.host-input')).to.not.be.disabled();
     expect(app.find('.port-input')).to.not.be.disabled();
-    expect(app.find('.url-input')).to.be.disabled();
   });
 
 
@@ -64,8 +50,6 @@ describe('New Connection Profile Panel', () => {
     const app = mount(<Provider store={store}>
       <Panel form={form} />
     </Provider>);
-    expect(app.find('.host-input')).to.be.disabled();
-    expect(app.find('.port-input')).to.be.disabled();
     expect(app.find('.url-input')).to.not.be.disabled();
   });
 });

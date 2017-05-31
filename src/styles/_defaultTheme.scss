@@ -1,8 +1,8 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-05-12T15:11:29+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-05-30T09:54:42+10:00
+// @Last modified by:   chris
+// @Last modified time: 2017-05-30T16:07:20+10:00
 // Theme 1 Colours: These should be externalized eventually:
 //Tabs:
 $tabFontColor: #8B8B8B;
@@ -73,6 +73,32 @@ $buttonTertiaryIcon: #8B8B8B;
 $buttonDangerBackground: #8A4148;
 $buttonDangerBackgroundHover: #9A5158;
 $buttonDangerIcon: #BFBEC0;
+// New Connection Panel:
+$connectionHeaderFontColour: #BFBEC0;
+$connectionCloseIconColor: rgba(191, 190, 192, 0.5);
+$connectionCloseIconHover: #BFBEC0;
+$connectionActiveTextFieldBackgroundColour: #FFFFFF;
+$connectionActiveTextFieldTextColour: rgba(86, 85, 86, 0.75);
+$connectionTextFieldBackgroundColour: #88888B;
+$connectionTextFieldFontColour: #BFBEC0;
+$connectionRadioFieldColour: #BFBEC0;
+$connectionHeadingsFontColour: #BFBEC0;
+$connectionSubHeadingsFontColour: #FFFFFF;
+$connectionButtonBackgroundColour: #2D3D46;
+$connectionButtonFontColour: #BFBEC0;
+$connectionButtonFontColourHover: #DFDEE0;
+$connectionButtonBorderColour: rgba(191, 190, 192, 0.5);
+$connectionButtonBackgroundColourHover: #415259;
+$connectionButtonBackgroundColourConnect: #24A26E;
+$connectionButtonBackgroundColourConnectHover: #44B27E;
+$connectionButtonBackgroundColourReset: #8A4148;
+$connectionButtonBackgroundColourResetHover: #9A5158;
+$connectionCheckboxBackgroundColour: #2D3D46;
+$connectionCheckboxBackgroundColourHover: #415259;
+$connectionCheckboxColour: rgba(191, 190, 192, 0.75);
+$connectionWarningFontColour: #9A5158;
+
+
 
 //Searchbox:
 $searchPrimaryBackground: #BFBEC0;
@@ -90,9 +116,12 @@ $selectDarkPrimaryBackground: #313131;
 $selectDarkBorderColor: #515151;
 // Form Fields:
 // ------------
-$fieldGroupPrimaryBackground: #212E33;
+$fieldGroupPrimaryBackground: rgba(33, 46, 51, 0.8);
 $fieldGroupSecondaryBackground: rgba(33, 46, 51, 0.5);
 $fieldGroupTertiaryBackground: rgba(33, 46, 51, 0.15);
+$fieldGroupHeaderIcon: #2D3D46;
+$fieldGroupHeaderDangerIcon: #8A4148;
+$fieldGroupListIcon: #BFBEC0;
 // fields are input, numericinput, select, etc
 $fieldHeadingFontColor: #BFBEC0; // for Form header, and field Labels
 $fieldLabelFontColor: #58585B; // for Fields with labels like Radio boxes, Check boxes

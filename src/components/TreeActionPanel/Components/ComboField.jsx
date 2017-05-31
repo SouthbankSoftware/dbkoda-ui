@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-05-11T09:42:39+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-26T10:27:07+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-30T15:59:54+10:00
  */
 
 import React from 'react';
@@ -46,7 +46,7 @@ export default class ComboField extends React.Component {
 
     const fldClassName = formGroup
       ? 'pt-form-group form-group-inline'
-      : 'pt-form-group pt-inline pt-top-level';
+      : 'pt-form-group pt-top-level';
     let selectClassName = '';
     let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
     if (formGroup) {
@@ -82,6 +82,7 @@ export default class ComboField extends React.Component {
             <Tooltip
               className={tooltipClassName}
               content={field.options.tooltip}
+              hoverOpenDelay={1000}
               inline
               intent={Intent.PRIMARY}
               position={Position.TOP}

@@ -54,7 +54,6 @@ export default class TreeNode {
     if (this.type == 'root') {
       this.type = 'shards';
     }
-    console.log(this.type);
     // Add label as secondaryLabel component.
     switch (this.type) {
       case 'shards':

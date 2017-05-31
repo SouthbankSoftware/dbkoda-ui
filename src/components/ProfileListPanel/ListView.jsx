@@ -164,6 +164,8 @@ export default class ListView extends React.Component {
     this.props.store.editorPanel.activeEditorId = editorId;
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
+    this.props.store.editorPanel.activeDropdownId = res.id;
+    console.log('Test: ', res.id);
     NewToaster.show({message: globalString('connection/success'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.props.store.editorToolbar.isActiveExecuting = false;
     if (this.props.store.editorToolbar.newEditorForTreeAction) {
