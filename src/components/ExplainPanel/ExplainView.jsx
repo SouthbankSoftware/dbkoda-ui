@@ -26,8 +26,8 @@ export const StageProgress = ({stages}) => {
   return (<div className="explain-stage-progress">
     {
       stages.map((stage, i) => {
-        stage.id = i;
-        return (<Stage stage={stage} key={`${stage.stage} - ${stage.id}`} />);
+        const id = i;
+        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} />);
       })
     }
   </div>);
@@ -78,8 +78,8 @@ export const StepsTable = ({stages}) => {
     </div>
     {
       stages.map((stage, i) => {
-        stage.id = i;
-        return (<div className="stage-row" key={stage.stage + '-' + stage.id}>
+        const id = i;
+        return (<div className="stage-row" key={stage.stage + '-' + id}>
           <div className="stage-cell">{i + 1}</div>
           <div className="stage-cell">{stage.stage}</div>
           <div className="stage-cell">
