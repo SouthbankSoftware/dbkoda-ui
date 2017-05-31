@@ -1,16 +1,26 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-05-26T10:50:07+10:00
+// @Last modified by:   chris
+// @Last modified time: 2017-05-31T10:29:32+10:00
 @import '../../styles/_defaultTheme.scss';
 
 
 .dynamic-form {
   div > form {
     margin: 30px;
+  }
+
+  .form-scrollable {
     overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  .form-scrollable:after {
+    display: block;
+    content: "";
+    width: 100%;
+    height: 50px;
   }
 
   .form-title {
@@ -26,7 +36,11 @@
   }
 
   .pt-form-content {
-    width: 70%;
+    width: 100%;
+
+    :disabled {
+      opacity: 0.2;
+    }
 
     .pt-input, .pt-select {
       width: 100%;
@@ -76,10 +90,42 @@
   }
 
   .tableFieldSet {
-    // margin: 0 -15px 15px -15px;
     border-style: none;
-    background-color: $fieldGroupPrimaryBackground;
-    margin: 0 0 15px;
+
+    .tableHeader {
+      height: 60px;
+      margin-bottom: 5px;
+      padding: 15px;
+      background-color: $fieldGroupPrimaryBackground;
+
+      .pt-icon-add {
+        background-color: $fieldGroupHeaderIcon !important;
+        :hover {
+          background-color: #3F545B !important;
+        }
+      }
+
+      .pt-icon-trash {
+        background-color: $fieldGroupHeaderDangerIcon !important;
+        :hover {
+          background-color: #A5535E !important;
+        }
+      }
+
+      .left {
+        padding-top: 6px;
+      }
+    }
+
+    .field-group {
+      background-color: $fieldGroupPrimaryBackground;
+      padding: 15px;
+
+      .pt-icon-delete {
+        color: $fieldGroupListIcon !important;
+      }
+    }
+
     .pt-form-content {
       width: 100%;
       margin: 2px;
@@ -93,15 +139,17 @@
         width: 90%;
       }
     }
-    // .scrollableDiv {
-    //   max-height: 228px;
-    //   overflow: auto;
-    // }
   }
   .form-button-panel {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: $fieldGroupPrimaryBackground;
+
     button {
       background: none;
       border-radius: 0px;
+      position: right;
     }
     button:focus {
       outline: none;
@@ -129,7 +177,7 @@
   }
 
   .pt-label-r-30 {
-    width: 30%;
+    width: 100%;
     text-align: left;
     color: $fieldHeadingFontColor !important;
   }
