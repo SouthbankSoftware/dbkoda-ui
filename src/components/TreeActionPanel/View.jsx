@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-31T10:26:50+10:00
+ * @Last modified time: 2017-05-31T10:32:49+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -32,7 +32,7 @@ export default class TreeActionView extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {formStyle: { height: (window.innerHeight - 230)}};
+    this.state = {formStyle: { height: (window.innerHeight - 210)}};
   }
   componentDidMount() {
     window.addEventListener('resize', this.onResize.bind(this));
@@ -41,7 +41,7 @@ export default class TreeActionView extends React.Component {
     window.removeEventListener('resize', this.onResize.bind(this));
   }
   onResize(e) {
-    this.setState({formStyle: { height: (e.target.innerHeight - 230)}});
+    this.setState({formStyle: { height: (e.target.innerHeight - 210)}});
   }
   @action.bound
   close(e) {
