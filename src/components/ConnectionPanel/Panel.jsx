@@ -35,23 +35,40 @@ export default class Panel extends React.Component {
     };
   }
 
-  @autobind onHostChanged() {
-    console.log('Tick host radio button.');
+  @autobind _onClickHost() {
+    this
+      .props
+      .form
+      .$('hostRadio')
+      .set('value', true);
+    this
+      .props
+      .form
+      .$('urlRadio')
+      .set('value', false);
   }
-  @autobind onPortChanged() {
-    console.log('Tick host radio button.');
+
+  @autobind _onClickURL() {
+    this
+      .props
+      .form
+      .$('hostRadio')
+      .set('value', false);
+    this
+      .props
+      .form
+      .$('urlRadio')
+      .set('value', true);
   }
-  @autobind onURLChanged() {
-    console.log('Tick url radio button.');
+
+  @autobind _onClickUserName() {
+    this
+      .props
+      .form
+      .$('sha')
+      .set('value', true);
   }
-  @autobind onSSLChanged() {
-    console.log('Tick ssl checkbox button.');
-    if (this.state.checkboxSSL) {
-      this.state.checkboxSSL = false;
-    } else {
-      this.state.checkboxSSL = true;
-    }
-  }
+
   @autobind _hostRadioOnChange() {
     if (!this.props.form.$('hostRadio').get('value')) {
       this
@@ -147,26 +164,26 @@ export default class Panel extends React.Component {
           <Input field={form.$('alias')} showLabel />
           <div className="hostname-form pt-form-group pt-inline zero-margin">
             <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
-            <Input field={form.$('host')} onChange={this.onHostChanged()} showLabel />
-            <Input field={form.$('port')} onChange={this.onPortChanged()} showLabel />
+            <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} />
+            <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} />
           </div>
           <div className="url-form pt-form-group pt-inline zero-margin">
             <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
-            <Input showLabel field={form.$('url')} onChange={this.onURLChanged()} />
+            <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} />
           </div>
           <div className="database-form pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
           </div>
           <div className="profile-separator" />
           <div className="ssl-form pt-form-group pt-inline zero-margin">
-            <Checkbox onChange={this.onSSLChanged()} field={form.$('ssl')} />
+            <Checkbox field={form.$('ssl')} />
           </div>
           <div className="profile-separator" />
           <Label text="Authentication" />
           <Checkbox field={form.$('sha')} />
           <div className="credentials-form">
-            <Input field={form.$('username')} />
-            <Input field={form.$('password')} />
+            <Input field={form.$('username')} divOnClick={this._onClickUserName} />
+            <Input field={form.$('password')} divOnClick={this._onClickUserName} />
           </div>
           <Button
             className="connectButton pt-button pt-intent-success"

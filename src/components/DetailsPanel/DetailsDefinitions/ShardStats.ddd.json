@@ -1,0 +1,51 @@
+{
+    "Title": "Shard Statistics",
+    "DefaultValues": {
+        "function": "dbcoda_ShardStats"
+    },
+    "Fields": [{
+            "name": "chunks",
+            "label": "Chunks by shard",
+            "type": "BarChart",
+            "XAxis": [{
+                "key": "chunks",
+                "label": "Number of chunks",
+                "barSize": 20
+            }],
+            "YAxis": {
+                "key": "shard"
+            },
+            "width": "100%",
+						"height": 500
+        }, {
+            "name": "collectionChunks",
+            "label": "Chunks by collection",
+            "type": "BarChart",
+            "groupBy": ["ns", "shard"],
+            "XAxis": {
+                "key": "chunks"
+            },
+            "YAxis": {
+                "key": "ns",
+                "width": 165
+            },
+            "width": "100%",
+            "height": 600
+        },
+        {
+            "name": "threadsByHost",
+            "label": "Threads by shard host",
+            "type": "BarChart",
+            "XAxis": [{
+                "key": "created",
+                "label": "Threads created"
+            }],
+            "YAxis": {
+                "key": "host",
+                "width": 120
+            },
+            "width": "100%",
+            "height": 800
+        }
+    ]
+}

@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T12:51:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-30T14:58:31+10:00
+ * @Last modified time: 2017-05-31T13:36:04+10:00
  */
 
 import React from 'react';
@@ -19,10 +19,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
-export default observer(({
-  field,
-  data
-}) => {
+export default observer(({ field, data }) => {
   console.log('BarChartField field:', field);
   console.log('BarChartField data:', data);
   const COLORS = [
@@ -40,18 +37,56 @@ export default observer(({
     '#701535'
   ];
 
-  const chartBars = field.XAxis.map((bar, index) => (
-    <Bar
-      dataKey={bar.key}
-      name={bar.label}
-      fill={COLORS[index % COLORS.length]}
-    />
-  ));
+  let chartBars = [];
+
+  if (field.groupBy) {
+    const cat = field.groupBy;
+    const val = field.XAxis.key;
+    const newData = [];
+    const hashData = {};
+    let bars = [];
+    for (const obj of data) {
+      if (hashData[obj[cat[0]]]) {
+        const dataObj = hashData[obj[cat[0]]];
+        dataObj[obj[cat[1]]] = obj[val];
+      } else {
+        const newDO = {};
+        newDO[cat[0]] = obj[cat[0]];
+        newDO[obj[cat[1]]] = obj[val];
+        hashData[obj[cat[0]]] = newDO;
+        newData.push(newDO);
+      }
+      if (bars.indexOf(obj[cat[1]]) < 0) {
+        bars.push(obj[cat[1]]);
+      }
+    }
+    data = newData;
+    bars = bars.sort();
+    chartBars = bars.map((bar, index) => {
+      return (
+        <Bar
+          dataKey={bar}
+          name={bar}
+          fill={COLORS[index % COLORS.length]}
+          barSize={field.XAxis.barSize}
+        />
+      );
+    });
+  } else {
+    chartBars = field.XAxis.map((bar, index) => (
+      <Bar
+        dataKey={bar.key}
+        name={bar.label}
+        fill={COLORS[index % COLORS.length]}
+        barSize={bar.barSize}
+      />
+    ));
+  }
 
   return (
     <div
       className="div-field-container"
-      style={field.width && { width: (field.groupBy ? '100%' : field.width) }}
+      style={field.width && { width: field.groupBy ? '100%' : field.width }}
     >
       <label htmlFor={field.name} className="pt-label pt-label-field">
         {field.label}
@@ -63,7 +98,11 @@ export default observer(({
           margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
         >
           <XAxis type="number" />
-          <YAxis dataKey={field.YAxis.key} width={field.YAxis.width ? field.YAxis.width : 60} type="category" />
+          <YAxis
+            dataKey={field.YAxis.key}
+            width={field.YAxis.width ? field.YAxis.width : 60}
+            type="category"
+          />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend iconType="circle" />

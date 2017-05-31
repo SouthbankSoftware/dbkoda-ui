@@ -138,6 +138,7 @@ export const Form = {
   }, {
     name: 'host',
     placeholder: 'Hostname',
+    value: 'localhost',
     type: 'text',
     rules: 'string',
     label: 'Host',
