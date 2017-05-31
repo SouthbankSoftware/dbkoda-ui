@@ -167,6 +167,8 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar profileListToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-navbar-heading">Connection Profiles</div>
+        </div>
+        <div className="pt-navbar-group pt-align-right">
           <Alert
             className="pt-dark close-profile-alert-dialog"
             intent={Intent.PRIMARY}
@@ -193,9 +195,7 @@ export default class Toolbar extends React.Component {
             content={globalString('profile/toolbar/newProfileTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM_LEFT}>
-            <AnchorButton
-              className="newProfileButton"
-              onClick={this.newProfile}>
+            <AnchorButton className="newProfileButton" onClick={this.newProfile}>
               <AddIcon className="dbCodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
@@ -238,23 +238,6 @@ export default class Toolbar extends React.Component {
               disabled={!this.props.store.profileList.selectedProfile || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN}>
               <RemoveProfileIcon className="dbCodaSVG" width={20} height={20} />
             </AnchorButton>
-          </Tooltip>
-          <span className="pt-navbar-divider" />
-          <Tooltip
-            intent={Intent.NONE}
-            hoverOpenDelay={1000}
-            content={globalString('profile/toolbar/searchTooltip')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}>
-            <div className="pt-input-group .modifier">
-              <span className="pt-icon pt-icon-search" />
-              <input
-                className="pt-input"
-                type="search"
-                placeholder={globalString('profile/toolbar/searchPlaceholder')}
-                dir="auto"
-                onChange={this.onFilterChanged} />
-            </div>
           </Tooltip>
         </div>
       </nav>
