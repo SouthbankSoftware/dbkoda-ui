@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-31T09:39:58+10:00
+ * @Last modified time: 2017-05-31T10:26:50+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -32,7 +32,7 @@ export default class TreeActionView extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {formStyle: { height: (window.innerHeight - 120)}};
+    this.state = {formStyle: { height: (window.innerHeight - 230)}};
   }
   componentDidMount() {
     window.addEventListener('resize', this.onResize.bind(this));
@@ -41,7 +41,7 @@ export default class TreeActionView extends React.Component {
     window.removeEventListener('resize', this.onResize.bind(this));
   }
   onResize(e) {
-    this.setState({formStyle: { height: (e.target.innerHeight - 120)}});
+    this.setState({formStyle: { height: (e.target.innerHeight - 230)}});
   }
   @action.bound
   close(e) {
@@ -82,23 +82,23 @@ export default class TreeActionView extends React.Component {
         <h3 className="form-title">{title}</h3>
         <form onChange={mobxForm.onValueChange(mobxForm)} style={this.state.formStyle}>
           {formFields}
-          <div className="form-button-panel">
-            <button
-              className="pt-button pt-intent-success right-button"
-              disabled={!mobxForm.isValid}
-              onClick={this.execute}
-            >
-              {globalString('tree/executeButton')}
-            </button>
-            <button
-              className="pt-button pt-intent-primary right-button"
-              onClick={this.close}
-            >
-              {globalString('tree/closeButton')}
-            </button>
-          </div>
           <p className="pt-form-helper-text">{mobxForm.error}</p>
         </form>
+        <div className="form-button-panel">
+          <button
+            className="pt-button pt-intent-success right-button"
+            disabled={!mobxForm.isValid}
+            onClick={this.execute}
+          >
+            {globalString('tree/executeButton')}
+          </button>
+          <button
+            className="pt-button pt-intent-primary right-button"
+            onClick={this.close}
+          >
+            {globalString('tree/closeButton')}
+          </button>
+        </div>
       </div>
     );
   }
