@@ -71,7 +71,7 @@ const ConnectionPanel = ({
     if (!data.test) {
       if (edit) {
         profiles.delete(selectedProfile.id);
-        Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {id: res.id, shellId: res.shellId, output:res.output.join('\r')});
+        Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {id: res.id, shellId: res.shellId, output:res.output.join('\n')});
       }
       position = Position.RIGHT_TOP;
       form.reset();

@@ -238,7 +238,7 @@ export default class ListView extends React.Component {
         shellId: res.shellId,
         output: res
           .output
-          .join('\r')
+          .join('\n')
       });
       position = Position.RIGHT_TOP;
       this

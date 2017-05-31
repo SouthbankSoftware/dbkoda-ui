@@ -97,12 +97,17 @@ export default class Editor extends React.Component {
     const {props} = this;
     runInAction(() => {
       if (this.props.initialMsg && this.props.id != 'Default') {
+        let tmp = this.props.initialMsg;
+        console.log('TEST: ', this.props.initialMsg);
+        tmp = tmp.replace(/^\n/gm, '');
+        tmp = tmp.replace(/^\r/gm, '');
+        tmp = tmp.replace(/^\r\n/gm, '');
         this
           .props
           .store
           .outputs
           .get(this.props.id)
-          .output += this.props.initialMsg;
+          .output += tmp;
       }
     });
     Broker.on(EventType.createShellOutputEvent(props.profileId, props.shellId), this.outputAvailable);
@@ -154,13 +159,15 @@ export default class Editor extends React.Component {
   @action.bound
   onReconnect(output) {
     console.log('got reconnect output ', output);
-    const combineOutput = output.output.join('\r');
+    const combineOutput = output
+      .output
+      .join('\r');
     const totalOutput = this
-        .props
-        .store
-        .outputs
-        .get(this.props.id)
-        .output + combineOutput;
+      .props
+      .store
+      .outputs
+      .get(this.props.id)
+      .output + combineOutput;
     this
       .props
       .store
@@ -182,7 +189,11 @@ export default class Editor extends React.Component {
       .outputs
       .get(this.props.id)
       .output + output.output; // eslint-disable-line
-    const profile = this.props.store.profiles.get(output.id);
+    const profile = this
+      .props
+      .store
+      .profiles
+      .get(output.id);
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
@@ -201,10 +212,7 @@ export default class Editor extends React.Component {
         .outputs
         .get(this.props.id)
         .cannotShowMore = false;
-    } else if (
-      this.props.store.outputs.get(this.props.id).cannotShowMore && output && output.output &&
-      output.output.replace(/^\s+|\s+$/g, '').endsWith('dbcoda>')
-    ) {
+    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore && output && output.output && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbcoda>')) {
       console.log('cannot show more');
       this
         .props
@@ -243,10 +251,7 @@ export default class Editor extends React.Component {
         json: 'true'
       }
     };
-    if (
-      this.props.store.editorPanel.removingTabId == this.props.id ||
-      !this.props.store.outputs.get(this.props.id)
-    ) {
+    if (this.props.store.editorPanel.removingTabId == this.props.id || !this.props.store.outputs.get(this.props.id)) {
       return <div className="outputEditor" />;
     }
     return (
