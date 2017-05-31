@@ -83,6 +83,7 @@ export default class Explain extends React.Component {
         command: this.explainCommand,
         viewType: 0,
       };
+      console.log('explain:', JSON.stringify(explainOutputJson.output));
     } catch (err) {
       console.log('err parse explain output ', err, parseOutput(output));
       explainOutputJson = {error: globalString('explain/parseError'), command: this.explainCommand, output};
