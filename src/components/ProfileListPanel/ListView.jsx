@@ -577,7 +577,7 @@ export default class ListView extends React.Component {
       }
       return (
         <Cell className={className}>
-          <ConnectionIcon className="dbCodaSVG" width={20} height={20} />
+          <ConnectionIcon className="dbCodaSVG closedProfile" width={20} height={20} />
           <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );

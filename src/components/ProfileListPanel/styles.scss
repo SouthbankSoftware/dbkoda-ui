@@ -4,14 +4,16 @@
 // @Last modified by:   wahaj
 // @Last modified time: 2017-05-30T09:47:28+10:00
 
-
-
 @import '../../styles/_defaultTheme.scss';
 .profileListPanel {
   width: 100%;
   display: flex;
   flex-direction: column;
   background-color: $panelLeftBackground !important;
+  .closedProfile {
+    color: $profileListFontColor;
+    opacity: 0.5;
+  }
   .profileListToolbar {
     background-color: $navbarLeftBackground !important;
     .pt-button {
@@ -91,10 +93,8 @@
   }
   .connection-profile-cell {
     .profileListing {
-      color: $profileListFontColor;
     }
     .closedProfile {
-      color: #696869;
       font-style: italic !important;
     }
   }
@@ -105,7 +105,6 @@
       color: #FFF;
     }
     .closedProfile {
-      color: $profileListFontColor;
       font-style: italic !important;
     }
   }
