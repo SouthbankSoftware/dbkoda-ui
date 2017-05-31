@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-18T13:31:39+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-26T11:04:15+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-05-31T09:38:28+10:00
  */
 
 import React from 'react';
@@ -35,7 +35,7 @@ export default observer(({ members }) => {
   return (
     <fieldset className="tableFieldSet" label={members.label ? members.label : members.name}>
 
-      <div className="clearfix">
+      <div className="clearfix tableHeader">
         <div className="left">
           <b>{members.label}</b>
         </div>
@@ -51,9 +51,8 @@ export default observer(({ members }) => {
         </div>
       </div>
 
-      <hr />
-      {labels}
-      <div className="scrollableDiv">
+      <div className="field-group">
+        {labels}
         {members.map(member => (
           <FormTableRow key={member.id} member={member} />
         ))}
