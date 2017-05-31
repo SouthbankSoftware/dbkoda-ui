@@ -1,0 +1,22 @@
+{
+    "Title": "Replica Set Statistics",
+    "DefaultValues": {
+        "function": "dbcoda_ReplicaStats"
+    },
+    "Fields": [{
+            "name": "lags",
+            "label": "Replica Set Lags",
+            "type": "BarChart",
+            "XAxis": [{
+                "key": "lag",
+                "label": "Lag time (s)",
+                "color": "#82ca9d"
+            }],
+            "YAxis": {
+                "key": "host"
+            },
+            "width": "100%",
+            "height": 250
+        }
+    ]
+}

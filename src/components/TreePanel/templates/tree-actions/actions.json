@@ -4,7 +4,13 @@
 		"name": "EnableBalancer",
 		"text": "Enable Balancer",
 		"icon": "pt-icon-split-columns"
-	}],
+	},{
+			"name": "ShardStats",
+			"text": "Shard Statistics",
+			"icon": "pt-icon-grouped-bar-chart",
+			"view": "details"
+		}
+	],
   "group_shards": [{
 		"name": "EnableBalancer",
 		"text": "Enable Balancer",
@@ -43,7 +49,6 @@
 			"text": "Top Collections",
 			"icon": "pt-icon-grouped-bar-chart",
 			"view": "details"
-
 		},
 		{
 			"name": "DatabaseStorage",
@@ -167,6 +172,11 @@
 			"icon": "remove-user"
 		}
 	],
-	"replicaset": [],
+	"replicaset": [{
+			"name": "ReplicaStats",
+			"text": "Replica Set Statistics",
+			"icon": "pt-icon-grouped-bar-chart",
+			"view": "details"
+		}],
 	"replica_member": []
 }
