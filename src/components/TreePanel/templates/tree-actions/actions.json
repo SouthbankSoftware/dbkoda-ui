@@ -97,7 +97,12 @@
 			"view": "details"
 		}
 	],
-	"collection": [{
+	"collection": [
+		{
+			"name": "SampleCollections",
+			"text": "Find Attributes",
+			"icon": "pt-icon-properties"
+		},{
 			"name": "SimpleQuery",
 			"text": "Simple Query",
 			"icon": "pt-icon-search-template"
@@ -107,10 +112,9 @@
 			"text": "Group By Query",
 			"icon": "pt-icon-group-objects"
 		},
-		{
-			"name": "SampleCollections",
-			"text": "Find Attributes",
-			"icon": "pt-icon-properties"
+				{
+			"type": "divider",
+			"name": "CollectionDivider1"
 		}, {
 			"name": "CollectionStats",
 			"text": "Collection Statistics",
@@ -125,6 +129,10 @@
 			"name": "DropAllIndexes",
 			"text": "Drop All Indexes",
 			"icon": "pt-icon-delete"
+		},
+				{
+			"type": "divider",
+			"name": "CollectionDivider2"
 		},
 		{
 			"name": "RenameCollection",
