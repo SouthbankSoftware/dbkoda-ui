@@ -238,7 +238,10 @@ export default class Editor extends React.Component {
           cm.foldCode(cm.getCursor());
         }
       },
-      mode: 'MongoScript'
+      mode: {
+        name: 'javascript',
+        json: 'true'
+      }
     };
     if (
       this.props.store.editorPanel.removingTabId == this.props.id ||
