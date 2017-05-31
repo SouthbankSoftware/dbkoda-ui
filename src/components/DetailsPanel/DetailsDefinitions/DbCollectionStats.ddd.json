@@ -18,8 +18,7 @@
             "YAxis": {
                 "key": "ns"
             },
-            "width": "50%",
-            "height": 300
+            "width": "50%"
         },
         {
             "name": "CollectionDetails",

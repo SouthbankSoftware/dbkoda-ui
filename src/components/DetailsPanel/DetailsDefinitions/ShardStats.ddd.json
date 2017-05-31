@@ -9,28 +9,12 @@
             "type": "BarChart",
             "XAxis": [{
                 "key": "chunks",
-                "label": "Number of chunks",
-                "barSize": 20
+                "label": "Number of chunks"
             }],
             "YAxis": {
                 "key": "shard"
             },
-            "width": "100%",
-						"height": 500
-        }, {
-            "name": "collectionChunks",
-            "label": "Chunks by collection",
-            "type": "BarChart",
-            "groupBy": ["ns", "shard"],
-            "XAxis": {
-                "key": "chunks"
-            },
-            "YAxis": {
-                "key": "ns",
-                "width": 165
-            },
-            "width": "100%",
-            "height": 600
+            "width": "50%"
         },
         {
             "name": "threadsByHost",
@@ -44,8 +28,20 @@
                 "key": "host",
                 "width": 120
             },
-            "width": "100%",
-            "height": 800
+            "width": "50%"
+        }, {
+            "name": "collectionChunks",
+            "label": "Chunks by collection",
+            "type": "BarChart",
+            "groupBy": ["ns", "shard"],
+            "XAxis": {
+                "key": "chunks"
+            },
+            "YAxis": {
+                "key": "ns",
+                "width": 165
+            },
+            "width": "50%"
         }
     ]
 }

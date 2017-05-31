@@ -38,15 +38,13 @@
 			"YAxis" :{
 				"key": "name"
 			},
-			"width": "50%",
-			"height": 300
+			"width": "50%"
 		},
 		{
 			"name": "ShardsPercentage",
 			"label": "Shards Percentage",
 			"type": "PieChart",
-			"width": "20%",
-			"height": 300
+			"width": "20%"
 		}
 	]
 }
