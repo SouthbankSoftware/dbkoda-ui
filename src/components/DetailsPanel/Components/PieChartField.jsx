@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T15:20:50+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-30T09:15:23+10:00
+ * @Last modified time: 2017-06-01T11:12:50+10:00
  */
 
 import React from 'react';
@@ -37,6 +37,10 @@ export default observer(({
     '#1E423C',
     '#701535'
   ];
+
+  if (!field.height) {
+    field.height = 300;
+  }
 
   return (
     <div
