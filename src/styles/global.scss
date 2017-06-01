@@ -24,8 +24,79 @@ h3 {
   margin-top: 4px;
 }
 
+.pt-popover-content, .pt-popover-arrow {
+  color: $toolTipFontColour !important;
+  background-color: $toolTipBackgroundColour !important;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
 .pt-toast:first-child {
   margin-top: 100px;
+}
+
+.pt-toast {
+  color: unset !important;
+}
+
+.pt-toast.pt-intent-success {
+  background-color: $toastBackgroundColourSuccess !important;
+  color: $toastFontColourSuccess !important;
+  span {
+    color: $toastFontColourSuccess !important;
+  }
+  div {
+    color: unset !important;
+    color: $toastCloseIconColourSuccess !important;
+    button::before {
+      color: $toastCloseIconColourSuccess !important;
+    }
+  }
+}
+
+.pt-toast.pt-intent-warning {
+  background-color: $toastBackgroundColourWarning !important;
+  color: $toastFontColourWarning !important;
+  span {
+    color: $toastFontColourWarning !important;
+  }
+  div {
+    color: unset !important;
+    color: $toastCloseIconColourWarning !important;
+    button::before {
+      color: $toastCloseIconColourWarning !important;
+    }
+  }
+}
+
+.pt-toast.pt-intent-danger {
+  background-color: $toastBackgroundColourDanger !important;
+  color: $toastFontColourDanger !important;
+  span {
+    color: $toastFontColourDanger !important;
+  }
+  div {
+    color: unset !important;
+    color: $toastCloseIconColourDanger !important;
+    button::before {
+      color: $toastCloseIconColourDanger !important;
+    }
+  }
+}
+
+.pt-toast.pt-intent-info {
+  background-color: $toastBackgroundColourInfo !important;
+  color: $toastFontColourInfo !important;
+  span {
+    color: $toastFontColourInfo !important;
+  }
+  div {
+    color: unset !important;
+    color: $toastCloseIconColourInfo !important;
+    button::before {
+      color: $toastCloseIconColourInfo !important;
+    }
+  }
 }
 
 .circleButton {
@@ -202,4 +273,8 @@ a.pt-disabled.pt-intent-primary {
 
 .cm-string.cm-property {
   color: $propertyStringFontColor !important;
+}
+
+.pt-button.pt-disabled {
+  opacity: 0.5;
 }

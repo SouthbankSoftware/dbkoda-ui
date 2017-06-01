@@ -4,7 +4,23 @@
 // @Last modified by:   chris
 // @Last modified time: 2017-05-30T16:07:20+10:00
 // Theme 1 Colours: These should be externalized eventually:
-//Tabs:
+//Toast Notifications:
+$toastBackgroundColourSuccess: #DBEED3;
+$toastFontColourSuccess: #356B36;
+$toastCloseIconColourSuccess: rgba(53, 107, 54, 0.5);
+$toastBackgroundColourWarning: #FCF7DF;
+$toastFontColourWarning: #7F6234;
+$toastCloseIconColourWarning: rgba(127, 98, 52, 0.5);
+$toastBackgroundColourDanger: #F0D9D9;
+$toastFontColourDanger: #9F3C3A;
+$toastCloseIconColourDanger: rgba(159, 60, 58, 0.5);
+$toastBackgroundColourInfo: #D4EAF6;
+$toastFontColourInfo: #2B6584;
+$toastCloseIconColourInfo: rgba(43, 101, 132, 0.5);
+// ToolTips
+$toolTipBackgroundColour: #C0C0C0;
+$toolTipFontColour: #4F4F4F;
+
 $tabFontColor: #8B8B8B;
 $tabBackground: #323232;
 $tabBackgroundSelected: #202020;
@@ -62,17 +78,17 @@ $navbarLeftBackground: #212E33;
 $navbarLeftHeading: #BFBEC0;
 //Buttons:
 $buttonPrimaryBackground: #BFBEC0;
-$buttonPrimaryBackgroundHover: #99979b;
+$buttonPrimaryBackgroundHover: #9E9E9E;
 $buttonPrimaryIcon: #58595B;
 $buttonSecondaryBackground: #2D3D46;
-$buttonSecondaryBackgroundHover: #3D4D56;
+$buttonSecondaryBackgroundHover: #3f545b;
 $buttonSecondaryIcon: #BFBEC0;
 $buttonTertiaryBackground: #202020;
-$buttonTertiaryBackgroundHover: #404040;
+$buttonTertiaryBackgroundHover: #3A3A3A;
 $buttonTertiaryBackgroundDisabled: #303030;
 $buttonTertiaryIcon: #8B8B8B;
 $buttonDangerBackground: #8A4148;
-$buttonDangerBackgroundHover: #9A5158;
+$buttonDangerBackgroundHover: #A5535E;
 $buttonDangerIcon: #BFBEC0;
 // New Connection Panel:
 $connectionHeaderFontColour: #BFBEC0;

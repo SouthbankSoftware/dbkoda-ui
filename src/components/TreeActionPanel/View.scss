@@ -2,7 +2,7 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-05-31T15:41:09+10:00
+// @Last modified time: 2017-06-01T15:50:38+10:00
 @import '../../styles/_defaultTheme.scss';
 
 
@@ -121,7 +121,6 @@
     }
 
     .field-group {
-      background-color: $fieldGroupPrimaryBackground;
       padding: 0 9px;
 
       .pt-icon-delete {
@@ -192,7 +191,31 @@
   }
 
   .pt-checkbox-form {
-    width: 72%;
+    margin-top: 10px;
+
+    .pt-checkbox {
+      font-size: 10pt;
+      font-weight: lighter;
+      color: $connectionHeadingsFontColour !important;
+      text-align: left;
+      .pt-control-indicator {
+        font-size: unset;
+        font-weight: unset;
+        font-style: unset;
+        box-shadow: unset;
+        line-height: unset;
+        background: unset;
+        box-shadow: unset;
+        font-size: 11pt;
+        color: $connectionCheckboxColour;
+        border-radius: 0;
+        background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+        border: 1px solid $connectionCheckboxColour;
+      }
+      .pt-control-indicator:hover {
+        background-color: $connectionCheckboxBackgroundColourHover;
+      }
+    }
   }
 
   .table-field-100 {
