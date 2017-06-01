@@ -62,10 +62,6 @@ h3 {
   margin-right: 5px;
 }
 
-.closedProfile {
-  color: $keywordFour;
-}
-
 .middleRow {
   height: 100%;
   overflow: hidden;
@@ -202,4 +198,8 @@ a.pt-disabled.pt-intent-primary {
 .pt-tab:not([aria-disabled="true"]):hover,
 .pt-tab[aria-selected="true"]:hover {
   color: $buttonSecondaryBackgroundHover !important;
+}
+
+.cm-string.cm-property {
+  color: $propertyStringFontColor !important;
 }
