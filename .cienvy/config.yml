@@ -1,12 +1,12 @@
 # @Author: guiguan
 # @Date:   2017-02-15T07:18:20+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-05-19T11:55:10+10:00
+# @Last modified time: 2017-06-01T17:39:16+10:00
 
 outlinks:
   - dbcoda
 volumes:
-  - srcNode: yarn-cache
+  - type: yarn-cache
 workflows:
   - install
   - test
