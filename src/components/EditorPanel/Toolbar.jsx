@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-18T10:41:41+10:00
+ * @Last modified time: 2017-05-31T14:37:44+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -483,7 +483,7 @@ export default class Toolbar extends React.Component {
     if (profile) {
       // Send Command:
       const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 1000;
+      service.timeout = 5000;
       service
         .update(editor.profileId, {
         shellId: editor.shellId,

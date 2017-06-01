@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T12:00:43+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-01T11:36:04+10:00
+ * @Last modified time: 2017-06-01T11:03:27+10:00
 */
 
 import React from 'react';
@@ -68,10 +68,15 @@ export default class TreeToolbar extends React.Component {
     service
       .get(profile.id)
       .then((res) => {
+        if (
+          this.props.store.profileList.selectedProfile.id ==
+          res.profileId
+        ) {
         this
           .props
           .store
-          .updateTopology(res);
+          .updateTopology(res.result);
+        }
         runInAction(() => {
           this.props.store.treePanel.isRefreshing = false;
         });
