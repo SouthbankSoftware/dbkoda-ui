@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-05-30T16:50:16+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-02T13:41:04+10:00
  */
 
 import _ from 'lodash';
@@ -19,6 +19,8 @@ global.Globalize = require('globalize'); // Globalize doesn't load well with imp
 
 global.globalString = (path, ...params) =>
   Globalize.messageFormatter(path)(...params);
+global.globalNumber = (value, config) =>
+  Globalize.numberFormatter(config)(value);
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 let ipcRenderer;
 if (IS_ELECTRON) {
