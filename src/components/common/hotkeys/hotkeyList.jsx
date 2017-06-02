@@ -126,6 +126,31 @@ export const OutputHotkeys = [
 
 export const EditorHotkeys = [
   {
+    combo: 'meta+F',
+    keys: [
+      'meta', 'f'
+    ],
+    description: 'Search.',
+    action: null, // Placeholder
+  }, {
+    combo: 'meta+B',
+    keys: [
+      'meta', 'b'
+    ],
+    description: 'Format All.',
+    action: null, // Placeholder
+  }, {
+    combo: 'meta+Shift+F',
+    keys: [
+      'meta', 'shift', 'f'
+    ],
+    description: 'Format Selection',
+    action: null, // Placeholder
+  }
+];
+
+export const CodeMirrorHotkeys = [
+    {
     combo: 'control+A', // Standard Linux hotkey.
     keys: [
       'control', 'a'
@@ -195,26 +220,6 @@ export const EditorHotkeys = [
     ],
     description: 'Cut the word before the cursor to clipboard.',
     action: null, // In Codemirror by Default.
-  }, {
-    combo: 'meta+F',
-    keys: [
-      'meta', 'f'
-    ],
-    description: 'Search.',
-    action: null, // Placeholder
-  }, {
-    combo: 'meta+B',
-    keys: [
-      'meta', 'b'
-    ],
-    description: 'Format All.',
-    action: null, // Placeholder
-  }, {
-    combo: 'meta+Shift+F',
-    keys: [
-      'meta', 'shift', 'f'
-    ],
-    description: 'Format Selection',
-    action: null, // Placeholder
   }
 ];
+
