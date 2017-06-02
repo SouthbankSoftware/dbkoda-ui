@@ -147,7 +147,7 @@ export const EditorHotkeys = [
 ];
 
 export const CodeMirrorHotkeys = [
-    {
+  {
     combo: 'control+A', // Standard Linux hotkey.
     keys: [
       'control', 'a'
@@ -217,6 +217,82 @@ export const CodeMirrorHotkeys = [
     ],
     description: 'Cut the word before the cursor to clipboard.',
     action: null, // In Codemirror by Default.
+  },
+  selectAll : {
+    combo: 'Meta + A',
+    keys: [
+      'meta', 'a'
+    ],
+    description: 'Select All'
+  },
+  deleteLine : {
+    combo: 'Meta + D',
+    keys: [
+      'meta', 'd'
+    ],
+    description: 'Delete Current Line.'
+  },
+  undo : {
+    combo: 'Meta + Z',
+    keys: [
+      'meta', 'z'
+    ],
+    description: 'Undo last action.'
+  },
+  redo : {
+    combo: 'Meta + Shift + Z',
+    keys: [
+      'meta', 'shift', 'z'
+    ],
+    description: 'Redo last action.'
+  },
+  goToTop : {
+    combo: 'Meta + UpArrow',
+    keys: [
+      'meta', 'uparrow'
+    ],
+    description: 'Navigate to top of document'
+  },
+  goToEnd : {
+    combo: 'Meta + DownArrow',
+    keys: [
+      'meta', 'downarrow'
+    ],
+    description: 'Navigate to bottom of document'
+  },
+  find : {
+    combo: 'Meta + F',
+    keys: [
+      'meta', 'f'
+    ],
+    description: 'Open find menu.'
+  },
+  findNext : {
+    combo: 'Meta + G',
+    keys: [
+      'meta', 'g'
+    ],
+    description: 'Find the next instance.'
+  },
+  findPrev : {
+    combo: 'Shift + Amd + G',
+    keys: [
+      'meta', 'alt', 'f'
+    ],
+    description: 'Find the previous instance.'
+  },
+  replace : {
+    combo: 'Meta + Alt + F',
+    keys: [
+      'meta', 'alt', 'f'
+    ],
+    description: 'Replace a found instance.'
+  },
+  replaceAll : {
+    combo: 'Shift + Meta + Alt + F',
+    keys: [
+      'shift', 'meta', 'alt', 'f'
+    ],
+    description: 'Replace all found instances.'
   }
 ];
-
