@@ -104,22 +104,23 @@ export const TerminalHotkeys = {
   }
 };
 
-export const OutputHotkeys = [
-  {
+export const OutputHotkeys = {
+  clearOutput: {
     combo: 'control+L', // Standard Linux hotkey.
     keys: [
       'control', 'l'
     ],
     description: 'Clear the Output.',
     action: 'clearOutput', // In Codemirror by Default.
-  }, {
+  },
+  showMore: {
     combo: 'control+M',
     keys: [
       'control', 'm'
     ],
     description: 'Show more (if avaliable).'
   }
-];
+};
 
 export const EditorHotkeys = [
   {
