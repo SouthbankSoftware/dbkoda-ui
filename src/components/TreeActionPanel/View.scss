@@ -2,9 +2,8 @@
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-06-01T15:50:38+10:00
+// @Last modified time: 2017-06-02T11:33:38+10:00
 @import '../../styles/_defaultTheme.scss';
-
 
 .dynamic-form {
   div > form {
@@ -73,14 +72,6 @@
 
     .pt-popover-target {
       width: 100%;
-    }
-
-    .pt-checkbox {
-      width: 100%;
-      color: $fieldHeadingFontColor;
-      .pt-control-indicator {
-        width: 16px;
-      }
     }
   }
   .groupFieldSet {
@@ -190,7 +181,8 @@
     color: $fieldBrightFontColor !important;
   }
 
-  .pt-checkbox-form {
+  .pt-checkbox-form,
+  .pt-form-content-reverse {
     margin-top: 10px;
 
     .pt-checkbox {
@@ -261,7 +253,7 @@
   .pt-form-content-reverse {
       display: flex;
       width: 100%;
-      flex-direction: row-reverse;
+      /*flex-direction: row-reverse;*/
   }
   .Select-control {
     height: 30px;
