@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-05-30T16:50:16+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-06-02T13:36:03+10:00
  */
 
 import _ from 'lodash';
@@ -89,8 +89,10 @@ export default class Store {
     treeNode: null,
     treeAction: null,
     treeActionEditorId: '',
+    newEditorCreated: false,
     formValues: '',
-    isNewFormValues: false
+    isNewFormValues: false,
+    editors: observable.map()
   };
 
   @observable detailsPanel = {
@@ -137,10 +139,13 @@ export default class Store {
     this.setDrawerChild(DrawerPanes.DYNAMIC);
   };
 
-  @action addNewEditorForTreeAction = (treeNode, treeAction) => {
+  @action setTreeAction = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
+  }
+  @action addNewEditorForTreeAction = () => {
     this.editorToolbar.newEditorForTreeAction = true;
+    this.treeActionPanel.newEditorCreated = false;
   };
 
   @action updateDynamicFormCode = (value) => {
