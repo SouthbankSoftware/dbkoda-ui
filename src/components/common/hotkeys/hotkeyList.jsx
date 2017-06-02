@@ -1,6 +1,3 @@
-import React from 'react';
-import HotKey from 'react-shortcut';
-
 export const GlobalHotkeys = {
   createNewProfile: {
     combo: null,
