@@ -143,6 +143,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
+    "react-shortcut": "^1.0.6",
     "react-svg-loader": "^1.1.1"
   }
 }
