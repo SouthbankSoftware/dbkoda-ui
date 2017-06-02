@@ -22,7 +22,7 @@ export const CreateCollection = {
   },
   dbcoda_validationLevel_parse: (res) => {
     console.log(res);
-    return (['off', 'moderate', 'severe']);
+    return (['off', 'moderate', 'strict']);
   },
   dbcoda_validationAction: () => {
     return ('db');
