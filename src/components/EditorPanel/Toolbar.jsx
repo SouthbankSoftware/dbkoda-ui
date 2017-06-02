@@ -10,22 +10,16 @@
 /* eslint-disable react/sort-comp */
 import _ from 'lodash';
 import React from 'react';
+import HotKey from 'react-shortcut';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
 import {action, reaction, observable, runInAction, when} from 'mobx';
 import uuidV1 from 'uuid';
 import path from 'path';
-import {
-  AnchorButton,
-  Intent,
-  Position,
-  Tooltip,
-  Hotkey,
-  Hotkeys,
-  HotkeysTarget
-} from '@blueprintjs/core';
+import {AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
+import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import './Panel.scss';
 import {Broker, EventType} from '../../helpers/broker';
 import ExplainPopover from './ExplainPopover';
@@ -55,7 +49,6 @@ const FILE_FILTERS = [
  */
 @inject('store')
 @observer
-@HotkeysTarget
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
@@ -75,11 +68,8 @@ export default class Toolbar extends React.Component {
     this.onDropdownChanged = this
       .onDropdownChanged
       .bind(this);
-    this.onFilterChanged = this
-      .onFilterChanged
-      .bind(this);
     this.renderHotkeys = this
-      .onFilterChanged
+      .renderHotkeys
       .bind(this);
     this.openFile = this
       .openFile
@@ -142,7 +132,7 @@ export default class Toolbar extends React.Component {
         code: '',
         status: profile.status,
         path: null,
-        shellVersion: profile.shellVersion,
+        shellVersion: profile.shellVersion
       }));
       editorPanel.activeEditorId = editorId;
     } else {
@@ -272,7 +262,7 @@ export default class Toolbar extends React.Component {
           : '',
         code: '',
         status: ProfileStatus.OPEN,
-        path: null,
+        path: null
       }, options)));
     this.props.store.editorPanel.creatingNewEditor = false;
     this.props.store.editorToolbar.noActiveProfile = false;
@@ -696,6 +686,7 @@ export default class Toolbar extends React.Component {
                 onChange={this.onFilterChanged} />
             </div>
           </Tooltip> */}
+          {this.renderHotkeys()}
         </div>
       </nav>
     );
@@ -706,24 +697,32 @@ export default class Toolbar extends React.Component {
    */
   renderHotkeys() {
     return (
-      <Hotkeys>
-        <Hotkey global combo="shift + n" label="New Editor" onKeyDown={this.addEditor} />
-        <Hotkey
-          global
-          combo="shift + a"
-          label="Execute All"
-          onKeyDown={this.executeAll} />
-        <Hotkey
-          global
-          combo="shift + e"
-          label="Execute Selected"
-          onKeyDown={this.executeLine} />
-        <Hotkey
-          global
-          combo="shift + s"
-          label="Stop Execution"
-          onKeyDown={this.stopExecution} />
-      </Hotkeys>
+      <div className="EditorToolbarHotkeys">
+        <HotKey
+          keys={GlobalHotkeys.executeLine.keys}
+          simultaneous
+          onKeysCoincide={this.executeLine} />
+        <HotKey
+          keys={GlobalHotkeys.executeAll.keys}
+          simultaneous
+          onKeysCoincide={this.executeAll} />
+        <HotKey
+          keys={GlobalHotkeys.stopExecution.keys}
+          simultaneous
+          onKeysCoincide={this.stopExecution} />
+        <HotKey
+          keys={GlobalHotkeys.newTab.keys}
+          simultaneous
+          onKeysCoincide={this.addEditor} />
+        <HotKey
+          keys={GlobalHotkeys.openFile.keys}
+          simultaneous
+          onKeysCoincide={this.openFile} />
+        <HotKey
+          keys={GlobalHotkeys.saveFile.keys}
+          simultaneous
+          onKeysCoincide={this.saveFile} />
+      </div>
     );
   }
 }

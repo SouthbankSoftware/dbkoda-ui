@@ -1,209 +1,220 @@
 import React from 'react';
 import HotKey from 'react-shortcut';
 
-export const GlobalHotkeys = [
+export const GlobalHotkeys = {
   createNewProfile: {
     combo: null,
     keys: [],
-    description: 'Create a new Connection Profile',
-    action: null // Placeholder
+    description: 'Create a new Connection Profile'
   },
   closeOrOpenProfile: {
     combo: null,
     keys: [],
-    description: 'Close or Open selected Connection Profile',
-    action: null // Placeholder
+    description: 'Close or Open selected Connection Profile'
   },
   editProfile: {
     combo: null,
     keys: [],
-    description: 'Edit selected Connection Profile',
-    action: null // Placeholder
+    description: 'Edit selected Connection Profile'
   },
-  saveTab: {
-    combo: 'Command+S', // Command should be repleced with OS specific versions.
-    keys: ['command', 's'],
-    description: 'Save current editor Tab.',
-    action: null // Placeholder
+  saveFile: {
+    combo: 'meta+S', // meta should be repleced with OS specific versions.
+    keys: [
+      'meta', 's'
+    ],
+    description: 'Save current editor Tab.'
   },
-  saveAsTab: {
-    combo: 'Command+Shift+S', // Command should be repleced with OS specific versions.
-    keys: ['command', 'shift', 's'],
-    description: 'Save as for current editor Tab.',
-    action: null // Placeholder
+  saveFileAs: {
+    combo: 'meta+Shift+S', // meta should be repleced with OS specific versions.
+    keys: [
+      'meta', 'shift', 's'
+    ],
+    description: 'Save as for current editor Tab.'
   },
   openFile: {
-    combo: 'Command+O',
-    keys: ['command', 'o'],
-    description: 'Open file.',
-    action: null // Placeholder
+    combo: 'meta+O',
+    keys: [
+      'meta', 'o'
+    ],
+    description: 'Open file.'
   },
   newTab: {
-    combo: 'Command+N',
-    keys: ['command', 'n'],
-    description: 'Create new Editor Tab.',
-    action: null // Placeholder
+    combo: 'meta+N',
+    keys: [
+      'meta', 'shift', 'n'
+    ],
+    description: 'Create new Editor Tab.'
   },
   closeTab: {
-    combo: 'Command+W', // Command should be repleced with OS specific versions.
-    keys: ['command', 'w'],
-    description: 'Close current editor Tab.',
-    action: null // Placeholder
+    combo: 'meta+W', // meta should be repleced with OS specific versions.
+    keys: [
+      'meta', 'w'
+    ],
+    description: 'Close current editor Tab.'
   },
   executeAll: {
-    combo: 'Command+E',
-    keys: ['command', 'e'],
-    description: 'Execute All.',
-    action: null // Placeholder
+    combo: 'meta+E',
+    keys: [
+      'meta', 'e'
+    ],
+    description: 'Execute All.'
   },
   executeLine: {
-    combo: 'Command+Shift+E',
-    keys: ['command', 'shift', 'e'],
-    description: 'Execute Currently Selected Text / Line',
-    action: null // Placeholder
+    combo: 'meta+Shift+E',
+    keys: [
+      'meta', 'shift', 'e'
+    ],
+    description: 'Execute Currently Selected Text / Line'
   },
   stopExecution: {
-    combo: 'Command+S',
-    keys: ['command', 's'],
-    description: 'Stop Execution (if running)',
-    action: null // Placeholder
+    combo: 'meta+S',
+    keys: [
+      'meta', 'shift', 's'
+    ],
+    description: 'Stop Execution (if running)'
   },
   refreshTree: {
-    combo: 'Command+Shift+R',
-    keys: ['command', 'shift', 'r'],
-    description: 'Refresh Tree View (if avaliable)',
-    action: null // Placeholder
+    combo: 'meta+Shift+R',
+    keys: [
+      'meta', 'shift', 'r'
+    ],
+    description: 'Refresh Tree View (if avaliable)'
   }
-];
+};
 
-export const TerminalHotkeys = [
-  nextCommand: {
+export const TerminalHotkeys = {
+  nextmeta: {
     combo: 'Down Arrow', // Standard Linux hotkey.
     keys: ['arrowdown'],
-    description: 'Go to the next command in command history.',
-    action: null // Placeholder
+    description: 'Go to the next meta in meta history.'
   },
-  previousCommand: {
+  previousmeta: {
     combo: 'Up Arrow', // Standard Linux hotkey.
     keys: ['arrowup'],
-    description: 'Go to the Previous command in command history.',
-    action: null // Placeholder
+    description: 'Go to the Previous meta in meta history.'
   },
   sendQuery: {
     combo: 'Enter', // Standard Linux hotkey.
     keys: ['enter'],
-    description: 'Send query for execution.',
-    action: null // Placeholder
+    description: 'Send query for execution.'
   },
   clearTerminal: {
-    combo: 'Ctrl+C',
-    keys: ['ctrl', 'c'],
-    description: 'Clear the Terminal.',
-    action: null // Placeholder
+    combo: 'control+C',
+    keys: [
+      'control', 'c'
+    ],
+    description: 'Clear the Terminal.'
   }
-];
+};
 
 export const OutputHotkeys = [
   {
-    combo: 'Ctrl+L', // Standard Linux hotkey.
-    keys: ['ctrl', 'l'],
+    combo: 'control+L', // Standard Linux hotkey.
+    keys: [
+      'control', 'l'
+    ],
     description: 'Clear the Output.',
     action: 'clearOutput', // In Codemirror by Default.
-  },
-  {
-    combo: 'Ctrl+M',
-    keys: ['ctrl', 'm'],
-    description: 'Show more (if avaliable).',
-    action: null // Placeholder
+  }, {
+    combo: 'control+M',
+    keys: [
+      'control', 'm'
+    ],
+    description: 'Show more (if avaliable).'
   }
 ];
 
 export const EditorHotkeys = [
   {
-    combo: 'Ctrl+A', // Standard Linux hotkey.
-    keys: ['ctrl', 'a'],
+    combo: 'control+A', // Standard Linux hotkey.
+    keys: [
+      'control', 'a'
+    ],
     description: 'Move Cursor to start of Line.',
     action: null, // In Codemirror by Default.
-  },
-  {
-    combo: 'Ctrl+E', // Standard Linux hotkey.
-    keys: ['ctrl', 'e'],
+  }, {
+    combo: 'control+E', // Standard Linux hotkey.
+    keys: [
+      'control', 'e'
+    ],
     description: 'Move Cursor to end of Line.',
     action: null, // In Codemirror by Default.
-  },
-  {
-    combo: 'Ctrl+B', // Standard Linux hotkey.
-    keys: ['ctrl', 'b'],
+  }, {
+    combo: 'control+B', // Standard Linux hotkey.
+    keys: [
+      'control', 'b'
+    ],
     description: 'Move Cursor back one character.',
     action: null, // In Codemirror by Default.
-  },
-  {
+  }, {
     combo: 'Alt+B', // Standard Linux hotkey.
-    keys: ['alt', 'b'],
+    keys: [
+      'alt', 'b'
+    ],
     description: 'Move Cursor back one word.',
     action: null, // In Codemirror by Default.
-  },
-  {
-    combo: 'Ctrl+F', // Standard Linux hotkey.
-    keys: ['ctrl', 'f'],
+  }, {
+    combo: 'control+F', // Standard Linux hotkey.
+    keys: [
+      'control', 'f'
+    ],
     description: 'Move Cursor forward one character.',
     action: null, // In Codemirror by Default.
-  },
-  {
-    combo: 'Ctrl+D', // Standard Linux hotkey.
-    keys: ['ctrl', 'd'],
+  }, {
+    combo: 'control+D', // Standard Linux hotkey.
+    keys: [
+      'control', 'd'
+    ],
     description: 'Delete the character under the cursor.',
     action: null, // In Codemirror by Default.
-  },
-  {
+  }, {
     combo: 'Alt+D', // Standard Linux hotkey.
-    keys: ['alt', 'd'],
+    keys: [
+      'alt', 'd'
+    ],
     description: 'Delete the word under the cursor.',
     action: null, // In Codemirror by Default.
-  },
-  {
-    combo: 'Ctrl+H', // Standard Linux hotkey.
-    keys: ['ctrl', 'h'],
+  }, {
+    combo: 'control+H', // Standard Linux hotkey.
+    keys: [
+      'control', 'h'
+    ],
     description: 'Delete the Character before the cursor.',
     action: null, // In Codemirror by Default.
-  },
-  {
-    combo: 'Ctrl+T', // Standard Linux hotkey.
-    keys: ['ctrl', 't'],
+  }, {
+    combo: 'control+T', // Standard Linux hotkey.
+    keys: [
+      'control', 't'
+    ],
     description: 'Swap the last two characters before the cursor.',
     action: null, // In Codemirror by Default.
-  },
-  {
-    combo: 'Ctrl+W', // Standard Linux hotkey.
-    keys: ['ctrl', 'w'],
+  }, {
+    combo: 'control+W', // Standard Linux hotkey.
+    keys: [
+      'control', 'w'
+    ],
     description: 'Cut the word before the cursor to clipboard.',
     action: null, // In Codemirror by Default.
-  },
-  {
-    combo: 'Command+F',
-    keys: ['command', 'f'],
+  }, {
+    combo: 'meta+F',
+    keys: [
+      'meta', 'f'
+    ],
     description: 'Search.',
     action: null, // Placeholder
-  },
-  {
-    combo: 'Command+B',
-    keys: ['command', 'b'],
+  }, {
+    combo: 'meta+B',
+    keys: [
+      'meta', 'b'
+    ],
     description: 'Format All.',
     action: null, // Placeholder
-  },
-  {
-    combo: 'Command+Shift+F',
-    keys: ['command', 'shift', 'f'],
+  }, {
+    combo: 'meta+Shift+F',
+    keys: [
+      'meta', 'shift', 'f'
+    ],
     description: 'Format Selection',
     action: null, // Placeholder
-  },
+  }
 ];
-
-export function getJSXForHotkey(hotkey) {
-  return (
-    <HotKey
-      keys={hotkey.keys}
-      simultaneous
-      onKeysCoincide={hotkey.action} />
-  );
-}
