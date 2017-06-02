@@ -58,6 +58,7 @@
   }
   .bp-table-container {
     outline: none;
+    background-color: $panelLeftBackground !important;
   }
   .bp-table-cell {
     .bp-table-truncated-text {

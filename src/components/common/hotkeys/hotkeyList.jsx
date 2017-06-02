@@ -146,71 +146,68 @@ export const EditorHotkeys = [
   }
 ];
 
-export const CodeMirrorHotkeys = [
-  {
+export const CodeMirrorHotkeys = {
+  moveCursorToStart: {
     combo: 'control+A', // Standard Linux hotkey.
     keys: [
       'control', 'a'
     ],
     description: 'Move Cursor to start of Line.',
     action: null, // In Codemirror by Default.
-  }, {
+  },
+  moveCursorToEnd: {
     combo: 'control+E', // Standard Linux hotkey.
     keys: [
       'control', 'e'
     ],
     description: 'Move Cursor to end of Line.',
     action: null, // In Codemirror by Default.
-  }, {
+  }, moveCursorBackOne: {
     combo: 'control+B', // Standard Linux hotkey.
     keys: [
       'control', 'b'
     ],
     description: 'Move Cursor back one character.',
     action: null, // In Codemirror by Default.
-  }, {
+  }, moveCursorBackOneEnd: {
     combo: 'Alt+B', // Standard Linux hotkey.
     keys: [
       'alt', 'b'
     ],
     description: 'Move Cursor back one word.',
     action: null, // In Codemirror by Default.
-  }, {
+  }, moveCursorForwardOne: {
     combo: 'control+F', // Standard Linux hotkey.
     keys: [
       'control', 'f'
     ],
     description: 'Move Cursor forward one character.',
     action: null, // In Codemirror by Default.
-  }, {
+  }, deleteOneChar: {
     combo: 'control+D', // Standard Linux hotkey.
     keys: [
       'control', 'd'
     ],
     description: 'Delete the character under the cursor.',
     action: null, // In Codemirror by Default.
-  }, {
+  },
+  deleteOneWord: {
     combo: 'Alt+D', // Standard Linux hotkey.
     keys: [
       'alt', 'd'
     ],
     description: 'Delete the word under the cursor.',
     action: null, // In Codemirror by Default.
-  }, {
-    combo: 'control+H', // Standard Linux hotkey.
-    keys: [
-      'control', 'h'
-    ],
-    description: 'Delete the Character before the cursor.',
-    action: null, // In Codemirror by Default.
-  }, {
+  },
+  swapTheLastTwoChar: {
     combo: 'control+T', // Standard Linux hotkey.
     keys: [
       'control', 't'
     ],
     description: 'Swap the last two characters before the cursor.',
     action: null, // In Codemirror by Default.
-  }, {
+  },
+  cutWord: {
     combo: 'control+W', // Standard Linux hotkey.
     keys: [
       'control', 'w'
@@ -295,4 +292,4 @@ export const CodeMirrorHotkeys = [
     ],
     description: 'Replace all found instances.'
   }
-];
+};
