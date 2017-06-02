@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-31T14:37:44+10:00
+ * @Last modified time: 2017-06-02T13:45:52+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -279,6 +279,10 @@ export default class Toolbar extends React.Component {
     if (this.props.store.editorToolbar.newEditorForTreeAction) {
       this.props.store.editorToolbar.newEditorForTreeAction = false;
       this.props.store.treeActionPanel.treeActionEditorId = editorId;
+      this.props.store.treeActionPanel.newEditorCreated = true;
+      const treeEditor = this.props.store.editors.get(editorId);
+      treeEditor.fileName = 'Tree Action';
+      this.props.store.treeActionPanel.editors.set(editorId, treeEditor);
     }
     return editorId;
   }
@@ -387,6 +391,10 @@ export default class Toolbar extends React.Component {
             runInAction('update fileName and path', () => {
               currentEditor.fileName = path.basename(fileName);
               currentEditor.path = fileName;
+              const treeEditor = this.props.store.treeActionPanel.editors.get(currentEditor.id);
+              if (treeEditor) {
+                this.props.store.treeActionPanel.editors.delete(currentEditor.id);
+              }
             });
             this._watchFileBackgroundChange(currentEditor.id);
           }).catch(() => {});

@@ -91,8 +91,10 @@ export default class Store {
     treeNode: null,
     treeAction: null,
     treeActionEditorId: '',
+    newEditorCreated: false,
     formValues: '',
-    isNewFormValues: false
+    isNewFormValues: false,
+    editors: observable.map()
   };
 
   @observable detailsPanel = {
@@ -139,10 +141,13 @@ export default class Store {
     this.setDrawerChild(DrawerPanes.DYNAMIC);
   };
 
-  @action addNewEditorForTreeAction = (treeNode, treeAction) => {
+  @action setTreeAction = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
+  }
+  @action addNewEditorForTreeAction = () => {
     this.editorToolbar.newEditorForTreeAction = true;
+    this.treeActionPanel.newEditorCreated = false;
   };
 
   @action updateDynamicFormCode = (value) => {

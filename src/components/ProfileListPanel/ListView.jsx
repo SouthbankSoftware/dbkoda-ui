@@ -3,7 +3,7 @@
  * @Date:   2017-03-15 13:40:45
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-30T12:46:23+10:00
+ * @Last modified time: 2017-06-02T13:52:41+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -168,10 +168,6 @@ export default class ListView extends React.Component {
     console.log('Test: ', res.id);
     NewToaster.show({message: globalString('connection/success'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.props.store.editorToolbar.isActiveExecuting = false;
-    if (this.props.store.editorToolbar.newEditorForTreeAction) {
-      this.props.store.editorToolbar.newEditorForTreeAction = false;
-      this.props.store.treeActionPanel.treeActionEditorId = editorId;
-    }
     return editorId;
   }
 

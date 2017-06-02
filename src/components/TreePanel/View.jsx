@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-26T16:33:06+10:00
+ * @Last modified time: 2017-06-02T14:48:05+10:00
 */
 
 import React from 'react';
@@ -83,13 +83,10 @@ export default class TreeView extends React.Component {
     onNewJson();
 
     this.reactionToTreeAction = reaction(
-      () => this.props.store.treeActionPanel.treeActionEditorId,
+      () => this.props.store.treeActionPanel.newEditorCreated,
       () => {
-        if (this.props.store.treeActionPanel.treeActionEditorId != '') {
+        if (this.props.store.treeActionPanel.newEditorCreated && this.props.store.treeActionPanel.treeActionEditorId != '') {
           this.props.store.showTreeActionPane();
-
-          // this.props.store.treeActionPanel.treeActionEditorId = '';  // will update
-          // this in the dialog execution.
         }
       }
     );
@@ -240,13 +237,32 @@ export default class TreeView extends React.Component {
       ) {
         this.showDetailsView(this.nodeRightClicked, action);
       } else {
-        this.props.store.addNewEditorForTreeAction(
-          this.nodeRightClicked,
-          action
-        );
+        this.showTreeActionPanel(this.nodeRightClicked, action);
       }
     }
   };
+
+  showTreeActionPanel = (treeNode, action) => {
+    this.props.store.setTreeAction(treeNode, action);
+    const treeEditors = this.props.store.treeActionPanel.editors.entries();
+    let bExistingEditor = false;
+    for (const editor of treeEditors) {
+      console.log('treeEditor[1].currentProfile :', editor[1].currentProfile);
+      if (editor[1].currentProfile == this.props.store.profileList.selectedProfile.id) {
+        bExistingEditor = true;
+        runInAction('update state var', () => {
+          this.props.store.editorPanel.activeEditorId = editor[1].id;
+          this.props.store.treeActionPanel.treeActionEditorId = editor[1].id;
+        });
+        break;
+      }
+    }
+    if (bExistingEditor) {
+      this.props.store.showTreeActionPane();
+    } else {
+      this.props.store.addNewEditorForTreeAction();
+    }
+  }
 
   showDetailsView = (treeNode, action) => {
     runInAction('Using active editor for tree details action', () => {

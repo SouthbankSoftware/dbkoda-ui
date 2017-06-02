@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-31T10:43:51+10:00
+ * @Last modified time: 2017-06-02T14:56:38+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -145,6 +145,11 @@ export default class Panel extends React.Component {
           .entries();
         this.props.store.editorPanel.activeEditorId = editors[0][1].id;
         console.log('2:', this.props.store.editorPanel.activeEditorId);
+
+        const treeEditor = this.props.store.treeActionPanel.editors.get(oldTab.id);
+        if (treeEditor) {
+          this.props.store.treeActionPanel.editors.delete(treeEditor.id);
+        }
         return;
       }
     } else {
@@ -156,6 +161,12 @@ export default class Panel extends React.Component {
       .store
       .editors
       .delete(oldTab.id);
+
+    const treeEditor = this.props.store.treeActionPanel.editors.get(oldTab.id);
+    if (treeEditor) {
+      this.props.store.treeActionPanel.editors.delete(treeEditor.id);
+    }
+
     this.forceUpdate();
   }
 
