@@ -1,77 +1,77 @@
 export const GlobalHotkeys = {
   createNewProfile: {
-    combo: null,
+    combo: 'Undefined.',
     keys: [],
     description: 'Create a new Connection Profile'
   },
   closeOrOpenProfile: {
-    combo: null,
+    combo: 'Undefined',
     keys: [],
     description: 'Close or Open selected Connection Profile'
   },
   editProfile: {
-    combo: null,
+    combo: 'Undefined',
     keys: [],
     description: 'Edit selected Connection Profile'
   },
   saveFile: {
-    combo: 'meta+S', // meta should be repleced with OS specific versions.
+    combo: 'Command + S', // meta should be repleced with OS specific versions.
     keys: [
       'meta', 's'
     ],
     description: 'Save current editor Tab.'
   },
   saveFileAs: {
-    combo: 'meta+Shift+S', // meta should be repleced with OS specific versions.
+    combo: 'Command + Shift + S', // meta should be repleced with OS specific versions.
     keys: [
       'meta', 'shift', 's'
     ],
     description: 'Save as for current editor Tab.'
   },
   openFile: {
-    combo: 'meta+O',
+    combo: 'Command + O',
     keys: [
       'meta', 'o'
     ],
     description: 'Open file.'
   },
   newTab: {
-    combo: 'meta+N',
+    combo: 'Command + N',
     keys: [
       'meta', 'shift', 'n'
     ],
     description: 'Create new Editor Tab.'
   },
   closeTab: {
-    combo: 'meta+W', // meta should be repleced with OS specific versions.
+    combo: 'Command + W', // meta should be repleced with OS specific versions.
     keys: [
       'meta', 'w'
     ],
     description: 'Close current editor Tab.'
   },
   executeAll: {
-    combo: 'meta+E',
+    combo: 'Command + E',
     keys: [
       'meta', 'e'
     ],
     description: 'Execute All.'
   },
   executeLine: {
-    combo: 'meta+Shift+E',
+    combo: 'Command + Shift + E',
     keys: [
       'meta', 'shift', 'e'
     ],
     description: 'Execute Currently Selected Text / Line'
   },
   stopExecution: {
-    combo: 'meta+S',
+    combo: 'Command + S',
     keys: [
       'meta', 'shift', 's'
     ],
     description: 'Stop Execution (if running)'
   },
   refreshTree: {
-    combo: 'meta+Shift+R',
+    combo: 'Command + Shift + R',
     keys: [
       'meta', 'shift', 'r'
     ],
@@ -96,7 +96,7 @@ export const TerminalHotkeys = {
     description: 'Send query for execution.'
   },
   clearTerminal: {
-    combo: 'control+C',
+    combo: 'control + C',
     keys: [
       'control', 'c'
     ],
@@ -106,7 +106,7 @@ export const TerminalHotkeys = {
 
 export const OutputHotkeys = {
   clearOutput: {
-    combo: 'control+L', // Standard Linux hotkey.
+    combo: 'control + L', // Standard Linux hotkey.
     keys: [
       'control', 'l'
     ],
@@ -114,7 +114,7 @@ export const OutputHotkeys = {
     action: 'clearOutput', // In Codemirror by Default.
   },
   showMore: {
-    combo: 'control+M',
+    combo: 'control + M',
     keys: [
       'control', 'm'
     ],
@@ -124,21 +124,21 @@ export const OutputHotkeys = {
 
 export const EditorHotkeys = [
   {
-    combo: 'meta+F',
+    combo: 'Command + F',
     keys: [
       'meta', 'f'
     ],
     description: 'Search.',
     action: null, // Placeholder
   }, {
-    combo: 'meta+B',
+    combo: 'Command + B',
     keys: [
       'meta', 'b'
     ],
     description: 'Format All.',
     action: null, // Placeholder
   }, {
-    combo: 'meta+Shift+F',
+    combo: 'Command + Shift + F',
     keys: [
       'meta', 'shift', 'f'
     ],
@@ -149,7 +149,7 @@ export const EditorHotkeys = [
 
 export const CodeMirrorHotkeys = {
   moveCursorToStart: {
-    combo: 'control+A', // Standard Linux hotkey.
+    combo: 'control + A', // Standard Linux hotkey.
     keys: [
       'control', 'a'
     ],
@@ -157,35 +157,35 @@ export const CodeMirrorHotkeys = {
     action: null, // In Codemirror by Default.
   },
   moveCursorToEnd: {
-    combo: 'control+E', // Standard Linux hotkey.
+    combo: 'control + E', // Standard Linux hotkey.
     keys: [
       'control', 'e'
     ],
     description: 'Move Cursor to end of Line.',
     action: null, // In Codemirror by Default.
   }, moveCursorBackOne: {
-    combo: 'control+B', // Standard Linux hotkey.
+    combo: 'control + B', // Standard Linux hotkey.
     keys: [
       'control', 'b'
     ],
     description: 'Move Cursor back one character.',
     action: null, // In Codemirror by Default.
   }, moveCursorBackOneEnd: {
-    combo: 'Alt+B', // Standard Linux hotkey.
+    combo: 'Alt + B', // Standard Linux hotkey.
     keys: [
       'alt', 'b'
     ],
     description: 'Move Cursor back one word.',
     action: null, // In Codemirror by Default.
   }, moveCursorForwardOne: {
-    combo: 'control+F', // Standard Linux hotkey.
+    combo: 'control + F', // Standard Linux hotkey.
     keys: [
       'control', 'f'
     ],
     description: 'Move Cursor forward one character.',
     action: null, // In Codemirror by Default.
   }, deleteOneChar: {
-    combo: 'control+D', // Standard Linux hotkey.
+    combo: 'control + D', // Standard Linux hotkey.
     keys: [
       'control', 'd'
     ],
@@ -193,7 +193,7 @@ export const CodeMirrorHotkeys = {
     action: null, // In Codemirror by Default.
   },
   deleteOneWord: {
-    combo: 'Alt+D', // Standard Linux hotkey.
+    combo: 'Alt + D', // Standard Linux hotkey.
     keys: [
       'alt', 'd'
     ],
@@ -201,7 +201,7 @@ export const CodeMirrorHotkeys = {
     action: null, // In Codemirror by Default.
   },
   swapTheLastTwoChar: {
-    combo: 'control+T', // Standard Linux hotkey.
+    combo: 'control + T', // Standard Linux hotkey.
     keys: [
       'control', 't'
     ],
@@ -209,7 +209,7 @@ export const CodeMirrorHotkeys = {
     action: null, // In Codemirror by Default.
   },
   cutWord: {
-    combo: 'control+W', // Standard Linux hotkey.
+    combo: 'control + W', // Standard Linux hotkey.
     keys: [
       'control', 'w'
     ],
@@ -217,77 +217,77 @@ export const CodeMirrorHotkeys = {
     action: null, // In Codemirror by Default.
   },
   selectAll : {
-    combo: 'Meta + A',
+    combo: 'Command + A',
     keys: [
       'meta', 'a'
     ],
     description: 'Select All'
   },
   deleteLine : {
-    combo: 'Meta + D',
+    combo: 'Command + D',
     keys: [
       'meta', 'd'
     ],
     description: 'Delete Current Line.'
   },
   undo : {
-    combo: 'Meta + Z',
+    combo: 'Command + Z',
     keys: [
       'meta', 'z'
     ],
     description: 'Undo last action.'
   },
   redo : {
-    combo: 'Meta + Shift + Z',
+    combo: 'Command + Shift + Z',
     keys: [
       'meta', 'shift', 'z'
     ],
     description: 'Redo last action.'
   },
   goToTop : {
-    combo: 'Meta + UpArrow',
+    combo: 'Command + UpArrow',
     keys: [
       'meta', 'uparrow'
     ],
     description: 'Navigate to top of document'
   },
   goToEnd : {
-    combo: 'Meta + DownArrow',
+    combo: 'Command + DownArrow',
     keys: [
       'meta', 'downarrow'
     ],
     description: 'Navigate to bottom of document'
   },
   find : {
-    combo: 'Meta + F',
+    combo: 'Command + F',
     keys: [
       'meta', 'f'
     ],
     description: 'Open find menu.'
   },
   findNext : {
-    combo: 'Meta + G',
+    combo: 'Command + G',
     keys: [
       'meta', 'g'
     ],
     description: 'Find the next instance.'
   },
   findPrev : {
-    combo: 'Shift + Amd + G',
+    combo: 'Shift + Alt +  G',
     keys: [
-      'meta', 'alt', 'f'
+      'shift', 'alt', 'f'
     ],
     description: 'Find the previous instance.'
   },
   replace : {
-    combo: 'Meta + Alt + F',
+    combo: 'Command + Alt + F',
     keys: [
       'meta', 'alt', 'f'
     ],
     description: 'Replace a found instance.'
   },
   replaceAll : {
-    combo: 'Shift + Meta + Alt + F',
+    combo: 'Shift + Command + Alt + F',
     keys: [
       'shift', 'meta', 'alt', 'f'
     ],
