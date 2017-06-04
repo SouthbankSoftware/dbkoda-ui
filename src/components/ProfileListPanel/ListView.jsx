@@ -278,7 +278,7 @@ export default class ListView extends React.Component {
           if (value.shellId == res.shellId) {
             // the default shell is using the same shell id as the profile
             value.status = ProfileStatus.OPEN;
-          } else {
+          } else if (value.profileId === res.id) {
             featherClient().service('/mongo-shells').create({id: res.id}, {query:{shellId: value.shellId}})
               .then((v) => {
                 console.log('connect shell success. ', v);
