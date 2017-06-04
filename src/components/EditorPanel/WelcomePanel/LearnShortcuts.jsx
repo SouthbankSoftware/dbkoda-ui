@@ -9,7 +9,7 @@
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {GlobalHotkeys, TerminalHotkeys, OutputHotkeys, EditorHotkeys, CodeMirrorHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
+import {GlobalHotkeys, TerminalHotkeys, OutputHotkeys, EditorHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -29,7 +29,7 @@ export default class LearnShortcuts extends React.Component {
     const terminalShortcuts = Object.values(TerminalHotkeys);
     const outputShortcuts = Object.values(OutputHotkeys);
     const editorShortcuts = Object.values(EditorHotkeys);
-    const codeMirrorHotkeys = Object.values(CodeMirrorHotkeys);
+    // const codeMirrorHotkeys = Object.values(CodeMirrorHotkeys);
     return (
       <div className="learnShortcutsWrapper">
         <div className="globalHotkeys">

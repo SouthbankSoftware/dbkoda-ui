@@ -28,12 +28,6 @@ import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
 import ConnectionIcon from '../../styles/icons/connection-icon-2.svg';
-import OpenProfileIcon from '../../styles/icons/open-icon.svg';
-import CloseProfileIcon from '../../styles/icons/close-profile-icon.svg';
-import EditProfileIcon from '../../styles/icons/edit-profile-icon.svg';
-import DeleteProfileIcon from '../../styles/icons/remove-profile-icon.svg';
-import DocumentProfileIcon from '../../styles/icons/document-icon.svg';
-import NewDocumentProfileIcon from '../../styles/icons/document-solid-icon.svg';
 
 import './styles.scss';
 
