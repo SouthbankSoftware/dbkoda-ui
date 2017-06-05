@@ -117,8 +117,7 @@ export const generateComments = (stage) => {
     case SORT_MERGE:
       return globalString('explain/step/sortMerge');
     case OR:
-      const stageNum = stage.inputStages ? stage.inputStages.length : 1;
-      return globalString('explain/step/or', stageNum);
+      return globalString('explain/step/or', stage.inputStages ? stage.inputStages.length : 1);
     default:
       return stageName;
   }
