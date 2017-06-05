@@ -18,10 +18,12 @@ $contentColor: white;
     .explain-label {
       color: $explainLabelColor;
       line-height: 30px;
+      font-size: $explainHeaderLabelFontSize;
     }
 
     .explain-view-switch-button {
       margin-left: auto;
+      font-size: $explainLabelFontSize;
       margin-right: 30px;
       background-color: $explainSwitchBtnColor !important;
       border: 1px solid $explainSwitchBtnBorderColor;
@@ -41,12 +43,13 @@ $contentColor: white;
       flex: 1;
       position: relative;
       background: $explainStage1Color;
-      max-width: 150px;
+      max-width: 200px;
       height: 35px;
       line-height: 35px;
       margin-right: 15px;
+      color: $explainLabelColor;
       text-align: center;
-      font-size: x-small;
+      font-size: $explainLabelFontSize;
     }
 
     .explain-stage:after,
@@ -71,39 +74,72 @@ $contentColor: white;
       z-index: 0;
     }
 
-    .explain-stage:nth-child(1n+0) {
-      background: $explainStage1Color;
+    .explain-stage-array{
+      background: $explainStageHeaderBkColor !important;
     }
-    .explain-stage:nth-child(1n+0):after {
-      border-left-color: $explainStage1Color;
-    }
-
-    .explain-stage:nth-child(2n+0) {
-      background: $explainStage2Color;
-    }
-    .explain-stage:nth-child(2n+0):after {
-      border-left-color: $explainStage2Color;
+    .explain-stage-array:after {
+      border-left-color: $explainStageHeaderBkColor !important;
     }
 
-    .explain-stage:nth-child(3n+0) {
-      background: $explainStage3Color;
+    .explain-stage:nth-child(1) {
+      background: $explainStageHeaderBkColor;
     }
-    .explain-stage:nth-child(3n+0):after {
-      border-left-color: $explainStage3Color;
-    }
-
-    .explain-stage:nth-child(4n+0) {
-      background: $explainStage4Color;
-    }
-    .explain-stage:nth-child(4n+0):after {
-      border-left-color: $explainStage4Color;
+    .explain-stage:nth-child(1):after {
+      border-left-color: $explainStageHeaderBkColor;
     }
 
-    .explain-stage:nth-child(5n+0) {
-      background: $explainStage5Color;
+
+    .explain-stage:nth-child(n+2) {
+      background: $explainStageTailBkColor;
     }
-    .explain-stage:nth-child(5n+0):after {
-      border-left-color: $explainStage5Color;
+    .explain-stage:nth-child(n+2):after {
+      border-left-color: $explainStageTailBkColor;
+    }
+
+    //.explain-stage:nth-child(1n+0) {
+    //  background: $explainStageHeaderBkColor;
+    //}
+    //.explain-stage:nth-child(1n+0):after {
+    //  border-left-color: $explainStageHeaderBkColor;
+    //}
+
+    //.explain-stage:nth-child(2n+0) {
+    //  background: $explainStageTailBkColor;
+    //}
+    //.explain-stage:nth-child(2n+0):after {
+    //  border-left-color: $explainStageTailBkColor;
+    //}
+    //
+    //.explain-stage:nth-child(3n+0) {
+    //  background: $explainStage3Color;
+    //}
+    //.explain-stage:nth-child(3n+0):after {
+    //  border-left-color: $explainStage3Color;
+    //}
+    //
+    //.explain-stage:nth-child(4n+0) {
+    //  background: $explainStage4Color;
+    //}
+    //.explain-stage:nth-child(4n+0):after {
+    //  border-left-color: $explainStage4Color;
+    //}
+    //
+    //.explain-stage:nth-child(5n+0) {
+    //  background: $explainStage5Color;
+    //}
+    //.explain-stage:nth-child(5n+0):after {
+    //  border-left-color: $explainStage5Color;
+    //}
+
+    //  tree
+    .explain-stage-tree-root {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      max-width: 200px;
+      .explain-stage:nth-child(n+2) {
+        margin-top: 10px;
+      }
     }
   }
 
@@ -122,6 +158,7 @@ $contentColor: white;
         flex: 1;
         padding-right: 10px;
         padding-left: 10px;
+        font-size: $explainLabelFontSize;
       }
       .column-header:nth-child(1) {
         flex: 1;
@@ -157,6 +194,7 @@ $contentColor: white;
         padding-right: 10px;
         padding-left: 10px;
         word-break: break-word;
+        font-size: $explainLabelFontSize;
         flex: 1;
       }
       .stage-cell:nth-child(1) {
@@ -204,8 +242,9 @@ $contentColor: white;
     display: flex;
     flex-direction: column;
     margin-top: 20px;
+    font-size: $explainLabelFontSize;
     .header {
-      background-color: rgb(85, 108, 82);
+      background-color: $explainStatisticTableHeaderBkColor;
       height: 30px;
       line-height: 30px;
       display: flex;
@@ -246,8 +285,9 @@ $contentColor: white;
     flex-direction: column;
     margin-top: 20px;
     margin-left: 30px;
+    font-size: $explainLabelFontSize;
     .header {
-      background-color: rgb(80, 90, 108);
+      background-color: $explainShardStatisticTableHeaderBkColor;
       height: 30px;
       line-height: 30px;
       display: flex;
@@ -305,19 +345,19 @@ $contentColor: white;
   }
 }
 
-.explain-error-panel{
+.explain-error-panel {
   display: flex;
   flex-direction: column;
   padding: 20px;
   width: 100%;
   background-color: $explainPanelBKColor;
 
-  .header{
+  .header {
     margin: 20px 0px;
     color: $explainLabelColor;
   }
 
-  .output{
+  .output {
     color: $explainLabelColor;
     margin: 20px 0px;
 

@@ -16,18 +16,39 @@ import './style.scss';
 import {generateComments} from './ExplainStep';
 import QueryCommandView from './QueryCommandView';
 
-export const Stage = ({stage}) => {
-  return (<div className="explain-stage">
+export const Stage = ({stage, maxNumChildren}) => {
+  const style = {};
+  let className = 'explain-stage';
+  if (maxNumChildren > 1) {
+    style.marginTop = (maxNumChildren - 1) * 22.5;
+  } else {
+    className += ' explain-stage-array';
+  }
+  return (<div className={className} style={style}>
     {stage.stage}
   </div>);
 };
 
 export const StageProgress = ({stages}) => {
+  let maxNumChildren = 1;
+  stages.map((stage) => {
+    if (stage.constructor === Array && maxNumChildren < stage.length) {
+      maxNumChildren = stage.length;
+    }
+  });
   return (<div className="explain-stage-progress">
     {
       stages.map((stage, i) => {
         const id = i;
-        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} />);
+        if (stage.constructor === Array) {
+          return (<div className="explain-stage-tree-root">{
+            stage.map((s, j) => {
+              const sid = j;
+              return <Stage stage={s} key={`${s.stage} - ${sid}`} maxNumChildren={1} />;
+            })
+          }</div>);
+        }
+        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={maxNumChildren} />);
       })
     }
   </div>);
@@ -37,27 +58,30 @@ export const StageProgress = ({stages}) => {
  * get execution stages array
  */
 export const getExecutionStages = (executionStages) => {
-  let stages = [];
+  const stages = [];
   if (executionStages) {
     let currentStage = executionStages;
     while (currentStage) {
       stages.push(currentStage);
       if (currentStage && currentStage.inputStages && currentStage.inputStages.length > 0) {
-        // search for stage branches
-        const inputStages = currentStage.inputStages;
-        for (let i = 0; i < inputStages.length; i += 1) {
-          const stage = inputStages[i];
-          const branchStages = getExecutionStages(stage);
-          stages = stages.concat(branchStages);
-        }
+        currentStage = currentStage.inputStages;
+      } else {
+        currentStage = currentStage.inputStage;
       }
-      currentStage = currentStage.inputStage;
     }
   }
   return stages.reverse();
 };
 
 export const StepsTable = ({stages}) => {
+  let mergedStages = [];
+  stages.map((stage) => {
+    if (stage.constructor === Array) {
+      mergedStages = mergedStages.concat(stage);
+    } else {
+      mergedStages.push(stage);
+    }
+  });
   const getExamined = (stage) => {
     if (stage.stage === 'IXSCAN') {
       return stage.keysExamined;
@@ -77,7 +101,7 @@ export const StepsTable = ({stages}) => {
       <div className="column-header">Comment</div>
     </div>
     {
-      stages.map((stage, i) => {
+      mergedStages.map((stage, i) => {
         const id = i;
         return (<div className="stage-row" key={stage.stage + '-' + id}>
           <div className="stage-cell">{i + 1}</div>

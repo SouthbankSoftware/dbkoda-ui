@@ -36,7 +36,6 @@ export const Header = ({viewType, switchExplainView}) => {
 
 const Panel = ({editor, switchExplainView, viewType}) => {
   if (editor.explains && editor.explains.error) {
-    console.log('explain has error ', editor.explains);
     return (<div className="explain-error-panel">
       <div className="header">Failed to parse explain output</div>
       <QueryCommandView command={editor.explains.command} />
