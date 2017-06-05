@@ -18,6 +18,7 @@ const EOF = 'EOF';
 const AND_SORTED = 'AND_SORTED';
 const LIMIT = 'LIMIT';
 const SKIP = 'SKIP';
+const OR = 'OR';
 
 const generateFetchComments = (stage) => {
   if (stage.filter) {
@@ -81,7 +82,6 @@ const generateSkipComments = (stage) => {
 export const generateComments = (stage) => {
   const stageName = stage.stage;
   let shard;
-
   switch (stageName) {
     case SINGLE_SHARD:
       shard = stage.shards && stage.shards.length > 0 && stage.shards[0];
@@ -116,6 +116,9 @@ export const generateComments = (stage) => {
       return generateSkipComments(stage);
     case SORT_MERGE:
       return globalString('explain/step/sortMerge');
+    case OR:
+      const stageNum = stage.inputStages ? stage.inputStages.length : 1;
+      return globalString('explain/step/or', stageNum);
     default:
       return stageName;
   }
