@@ -8,6 +8,7 @@ const IXSCAN = 'IXSCAN';
 const COLLSCAN = 'COLLSCAN';
 const FETCH = 'FETCH';
 const SORT = 'SORT';
+const SORT_MERGE = 'SORT_MERGE';
 const SHARDING_FILTER = 'SHARDING_FILTER';
 const SHARD_MERGE_SORT = 'SHARD_MERGE_SORT';
 const SHARD_MERGE = 'SHARD_MERGE';
@@ -113,6 +114,8 @@ export const generateComments = (stage) => {
       return generateLimitComments(stage);
     case SKIP:
       return generateSkipComments(stage);
+    case SORT_MERGE:
+      return globalString('explain/step/sortMerge');
     default:
       return stageName;
   }
