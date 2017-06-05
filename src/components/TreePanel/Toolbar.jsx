@@ -7,9 +7,11 @@
 */
 
 import React from 'react';
+import HotKey from 'react-shortcut';
 import {reaction, runInAction, action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {AnchorButton, Position} from '@blueprintjs/core';
+import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import TreeState from './model/TreeState.js';
 import {featherClient} from '../../helpers/feathers';
 import {DBCodaToaster} from '../common/Toaster';
@@ -61,6 +63,9 @@ export default class TreeToolbar extends React.Component {
   }
   @action
   refresh() {
+    if (this.props.store.treePanel.isRefreshDisabled) {
+      return;
+    }
     this.props.store.treePanel.isRefreshing = true;
     const profile = this.props.store.profileList.selectedProfile;
     const service = featherClient().service('/mongo-inspector'); // Calls the controller to load the topology associated with the selected Profile
@@ -68,14 +73,11 @@ export default class TreeToolbar extends React.Component {
     service
       .get(profile.id)
       .then((res) => {
-        if (
-          this.props.store.profileList.selectedProfile.id ==
-          res.profileId
-        ) {
-        this
-          .props
-          .store
-          .updateTopology(res.result);
+        if (this.props.store.profileList.selectedProfile.id == res.profileId) {
+          this
+            .props
+            .store
+            .updateTopology(res.result);
         }
         runInAction(() => {
           this.props.store.treePanel.isRefreshing = false;
@@ -86,6 +88,18 @@ export default class TreeToolbar extends React.Component {
         DBCodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       });
   }
+
+  renderHotkeys() {
+    return (
+      <div className="TreeToolbarHotKeys">
+        <HotKey
+          keys={GlobalHotkeys.refreshTree.keys}
+          simultaneous
+          onKeysCoincide={this.refresh} />
+      </div>
+    );
+  }
+
   render() {
     console.log('Test: ', this.props.store.treePanel.isRefreshDisabled);
     return (
@@ -105,6 +119,7 @@ export default class TreeToolbar extends React.Component {
             loading={this.props.store.treePanel.isRefreshing}
             disabled={this.props.store.treePanel.isRefreshDisabled} />
         </div>
+        {this.renderHotkeys()}
       </nav>
     );
   }

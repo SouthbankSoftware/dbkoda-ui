@@ -447,7 +447,11 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   stopExecution() {
-    this.props.store.editorPanel.stoppingExecution = true;
+    if (this.props.store.editorToolbar.isActiveExecuting) {
+      this.props.store.editorPanel.stoppingExecution = true;
+    } else {
+       NewToaster.show({message: 'Cannot stop execution. Nothing is executing.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+    }
   }
 
   /**
