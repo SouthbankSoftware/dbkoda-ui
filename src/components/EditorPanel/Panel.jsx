@@ -19,10 +19,13 @@ import {
   Menu,
   MenuItem
 } from '@blueprintjs/core';
+import HotKey from 'react-shortcut';
+import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
 import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView.jsx';
+
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 /**
@@ -50,6 +53,9 @@ export default class Panel extends React.Component {
     this.closeTab = this
       .closeTab
       .bind(this);
+    this.closeActiveTab = this
+      .closeActiveTab
+      .bind(this);
     this.changeTab = this
       .changeTab
       .bind(this);
@@ -67,7 +73,11 @@ export default class Panel extends React.Component {
         }
         let curEditor;
         if (this.props.store.editorPanel.activeEditorId != 'Default') {
-          curEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+          curEditor = this
+            .props
+            .store
+            .editors
+            .get(this.props.store.editorPanel.activeEditorId);
         }
 
         if (curEditor && curEditor.currentProfile == this.props.store.profileList.selectedProfile.id) {
@@ -111,13 +121,21 @@ export default class Panel extends React.Component {
    * @param {Object} oldTab - The Id of the tab being removed.
    */
   @action closeTab(oldTab) {
-    const deletedEditor = this.props.store.editors.get(oldTab.id);
+    const deletedEditor = this
+      .props
+      .store
+      .editors
+      .get(oldTab.id);
     console.log('deleted editor ', deletedEditor);
     if (deletedEditor && deletedEditor.status == ProfileStatus.OPEN) {
       // close the connection
       featherClient()
         .service('/mongo-shells')
-        .remove(deletedEditor.profileId, {query: {shellId: deletedEditor.shellId}})
+        .remove(deletedEditor.profileId, {
+          query: {
+            shellId: deletedEditor.shellId
+          }
+        })
         .then(v => console.log('remove shell successfully, ', v))
         .catch(err => console.error('remove shell failed,', err));
     }
@@ -146,9 +164,19 @@ export default class Panel extends React.Component {
         this.props.store.editorPanel.activeEditorId = editors[0][1].id;
         console.log('2:', this.props.store.editorPanel.activeEditorId);
 
-        const treeEditor = this.props.store.treeActionPanel.editors.get(oldTab.id);
+        const treeEditor = this
+          .props
+          .store
+          .treeActionPanel
+          .editors
+          .get(oldTab.id);
         if (treeEditor) {
-          this.props.store.treeActionPanel.editors.delete(treeEditor.id);
+          this
+            .props
+            .store
+            .treeActionPanel
+            .editors
+            .delete(treeEditor.id);
         }
         return;
       }
@@ -162,9 +190,108 @@ export default class Panel extends React.Component {
       .editors
       .delete(oldTab.id);
 
-    const treeEditor = this.props.store.treeActionPanel.editors.get(oldTab.id);
+    const treeEditor = this
+      .props
+      .store
+      .treeActionPanel
+      .editors
+      .get(oldTab.id);
     if (treeEditor) {
-      this.props.store.treeActionPanel.editors.delete(treeEditor.id);
+      this
+        .props
+        .store
+        .treeActionPanel
+        .editors
+        .delete(treeEditor.id);
+    }
+
+    this.forceUpdate();
+  }
+
+    /**
+   * Action for closing active tab.
+   */
+  @action closeActiveTab() {
+    const deletedEditor = this
+      .props
+      .store
+      .editors
+      .get(this.props.store.editorPanel.activeEditorId);
+    console.log('deleted editor ', deletedEditor);
+    if (deletedEditor && deletedEditor.status == ProfileStatus.OPEN) {
+      // close the connection
+      featherClient()
+        .service('/mongo-shells')
+        .remove(deletedEditor.profileId, {
+          query: {
+            shellId: deletedEditor.shellId
+          }
+        })
+        .then(v => console.log('remove shell successfully, ', v))
+        .catch(err => console.error('remove shell failed,', err));
+    }
+    // NEWLOGIC Check if closed editor is current editor:
+    if (true) {
+      this.props.store.editorPanel.isRemovingCurrentTab = true;
+      // Check if this is the last tab:
+      if (this.props.store.editors.size == 1) {
+        // Show and select welcome tab
+        this.props.store.welcomePage.isOpen = true;
+        this.props.store.editorPanel.activeEditorId = 'Default';
+      } else {
+        // Show and select first entry in map.
+        console.log('1:', this.props.store.editorPanel.activeEditorId);
+        this.props.store.editorPanel.removingTabId = deletedEditor.id;
+        this
+          .props
+          .store
+          .editors
+          .delete(deletedEditor.id);
+        const editors = this
+          .props
+          .store
+          .editors
+          .entries();
+        this.props.store.editorPanel.activeEditorId = editors[0][1].id;
+        console.log('2:', this.props.store.editorPanel.activeEditorId);
+
+        const treeEditor = this
+          .props
+          .store
+          .treeActionPanel
+          .editors
+          .get(deletedEditor.id);
+        if (treeEditor) {
+          this
+            .props
+            .store
+            .treeActionPanel
+            .editors
+            .delete(treeEditor.id);
+        }
+        return;
+      }
+    }
+    this.props.store.editorPanel.removingTabId = deletedEditor.id;
+    this
+      .props
+      .store
+      .editors
+      .delete(deletedEditor.id);
+
+    const treeEditor = this
+      .props
+      .store
+      .treeActionPanel
+      .editors
+      .get(deletedEditor.id);
+    if (treeEditor) {
+      this
+        .props
+        .store
+        .treeActionPanel
+        .editors
+        .delete(treeEditor.id);
     }
 
     this.forceUpdate();
@@ -338,10 +465,10 @@ export default class Panel extends React.Component {
           <div className="menuItemWrapper closeTabItem">
             <MenuItem
               onClick={() => {
-                (tabId.id === 'Default')
-                  ? this.closeWelcome()
-                  : this.closeTab(tabId);
-              }}
+            (tabId.id === 'Default')
+              ? this.closeWelcome()
+              : this.closeTab(tabId);
+          }}
               text={globalString('editor/tabMenu/closeTab')}
               iconName="pt-icon-small-cross"
               intent={Intent.NONE} />
@@ -363,8 +490,8 @@ export default class Panel extends React.Component {
           <div className="menuItemWrapper closeLeftItem">
             <MenuItem
               onClick={() => {
-                this.closeLeft(tabId.id);
-              }}
+            this.closeLeft(tabId.id);
+          }}
               text={globalString('editor/tabMenu/closeLeft')}
               iconName="pt-icon-chevron-left"
               intent={Intent.NONE} />
@@ -372,8 +499,8 @@ export default class Panel extends React.Component {
           <div className="menuItemWrapper closeRightItem">
             <MenuItem
               onClick={() => {
-                this.closeRight(tabId.id);
-              }}
+            this.closeRight(tabId.id);
+          }}
               text={globalString('editor/tabMenu/closeRight')}
               iconName="pt-icon-chevron-right"
               intent={Intent.NONE} />
@@ -412,6 +539,18 @@ export default class Panel extends React.Component {
       </Tab2>
     );
   }
+
+  renderHotkeys() {
+    return (
+      <div className="EditorPanelHotkeys">
+        <HotKey
+          keys={GlobalHotkeys.closeTab.keys}
+          simultaneous
+          onKeysCoincide={this.closeActiveTab} />
+      </div>
+    );
+  }
+
   /**
    * Action for rendering the component.
    */
@@ -443,16 +582,16 @@ export default class Panel extends React.Component {
                   title={tab[1].alias + ' (' + tab[1].fileName + ')'}
                   panel={<View id={
                   tab[0]
-                  }
+                }
                     title={
-                      tab[1].alias + ' (' + tab[1].fileName + ')'
-                    }
+                  tab[1].alias + ' (' + tab[1].fileName + ')'
+                }
                     onDrop={
-                      item => this.handleDrop(item)
-                    }
+                  item => this.handleDrop(item)
+                }
                     editor={
-                      tab[1]
-                    }
+                  tab[1]
+                }
                     ref="defaultEditor" />}>
                   <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
                     <span className="pt-icon-cross" />
@@ -482,6 +621,7 @@ export default class Panel extends React.Component {
             );
           })}
         </Tabs2>
+        {this.renderHotkeys()}
       </div>
     );
   }

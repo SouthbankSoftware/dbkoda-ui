@@ -1,18 +1,8 @@
 export const GlobalHotkeys = {
   createNewProfile: {
-    combo: 'Undefined.',
-    keys: [],
+    combo: 'Control + N.',
+    keys: ['control', 'n'],
     description: 'Create a new Connection Profile'
-  },
-  closeOrOpenProfile: {
-    combo: 'Undefined',
-    keys: [],
-    description: 'Close or Open selected Connection Profile'
-  },
-  editProfile: {
-    combo: 'Undefined',
-    keys: [],
-    description: 'Edit selected Connection Profile'
   },
   saveFile: {
     combo: 'Command + S', // meta should be repleced with OS specific versions.
@@ -22,9 +12,9 @@ export const GlobalHotkeys = {
     description: 'Save current editor Tab.'
   },
   saveFileAs: {
-    combo: 'Command + Shift + S', // meta should be repleced with OS specific versions.
+    combo: 'Control + Shift + S', // meta should be repleced with OS specific versions.
     keys: [
-      'meta', 'shift', 's'
+      'control', 'shift', 's'
     ],
     description: 'Save as for current editor Tab.'
   },
@@ -36,16 +26,16 @@ export const GlobalHotkeys = {
     description: 'Open file.'
   },
   newTab: {
-    combo: 'Command + N',
+    combo: 'Command + Shift + N',
     keys: [
       'meta', 'shift', 'n'
     ],
     description: 'Create new Editor Tab.'
   },
   closeTab: {
-    combo: 'Command + W', // meta should be repleced with OS specific versions.
+    combo: 'Command + Shift + W', // meta should be repleced with OS specific versions.
     keys: [
-      'meta', 'w'
+      'meta', 'shift', 'w'
     ],
     description: 'Close current editor Tab.'
   },
