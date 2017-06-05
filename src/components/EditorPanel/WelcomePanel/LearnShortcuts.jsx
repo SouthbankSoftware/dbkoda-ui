@@ -9,6 +9,7 @@
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import {GlobalHotkeys, TerminalHotkeys, OutputHotkeys, EditorHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -20,60 +21,65 @@ export default class LearnShortcuts extends React.Component {
   static propTypes = {};
   constructor(props) {
     super(props);
-    this.state = {
-      shortcuts: [
-        {
-          indexKey: 1,
-          title: 'Auto-Complete',
-          key: 'Ctrl + Space',
-          description: 'Opens the Auto-Complete Menu in the editor window at your current cursor positio' +
-              'n.'
-        }, {
-          indexKey: 2,
-          title: 'Stop Execution',
-          key: 'Shift + S',
-          description: 'Stop execution of a command in the currently selected editor tab.'
-        }, {
-          indexKey: 3,
-          title: 'Stop Execution',
-          key: 'Shift + S',
-          description: 'Stop execution of a command in the currently selected editor tab.'
-        }, {
-          indexKey: 4,
-          title: 'Stop Execution',
-          key: 'Shift + S',
-          description: 'Stop execution of a command in the currently selected editor tab.'
-        }, {
-          indexKey: 5,
-          title: 'Stop Execution',
-          key: 'Shift + S',
-          description: 'Stop execution of a command in the currently selected editor tab.'
-        }, {
-          indexKey: 6,
-          title: 'Stop Execution',
-          key: 'Shift + S',
-          description: 'Stop execution of a command in the currently selected editor tab.'
-        }
-      ]
-
-    };
+    this.state = {};
   }
 
   render() {
+    const globalShortcuts = Object.values(GlobalHotkeys);
+    const terminalShortcuts = Object.values(TerminalHotkeys);
+    const outputShortcuts = Object.values(OutputHotkeys);
+    const editorShortcuts = Object.values(EditorHotkeys);
+    // const codeMirrorHotkeys = Object.values(CodeMirrorHotkeys);
     return (
       <div className="learnShortcutsWrapper">
-        {this
-          .state
-          .shortcuts
-          .map((item) => {
-            return (
-              <div key={item.indexKey} className="hotkeyItem">
-                <h4 className="hotkeyTitle">{item.title} - {item.key}</h4>
-                <p classNAme="hotkeyDescription>">{item.description}</p>
-              </div>
-            );
-          })
-        }
+        <div className="globalHotkeys">
+          {globalShortcuts
+            .map((item) => {
+              return (
+                <div className="hotkeyItem">
+                  <h4 className="hotkeyTitle">{item.combo}</h4>
+                  <p classNAme="hotkeyDescription>">{item.description}</p>
+                </div>
+              );
+            })
+          }
+        </div>
+        <div className="terminalHotkeys">
+          {terminalShortcuts
+            .map((item) => {
+              return (
+                <div className="hotkeyItem">
+                  <h4 className="hotkeyTitle">{item.combo}</h4>
+                  <p classNAme="hotkeyDescription>">{item.description}</p>
+                </div>
+              );
+            })
+          }
+        </div>
+        <div className="outputHotkeys">
+          {outputShortcuts
+            .map((item) => {
+              return (
+                <div className="hotkeyItem">
+                  <h4 className="hotkeyTitle">{item.combo}</h4>
+                  <p classNAme="hotkeyDescription>">{item.description}</p>
+                </div>
+              );
+            })
+          }
+        </div>
+        <div className="editorHotkeys">
+          {editorShortcuts
+            .map((item) => {
+              return (
+                <div className="hotkeyItem">
+                  <h4 className="hotkeyTitle">{item.combo}</h4>
+                  <p classNAme="hotkeyDescription>">{item.description}</p>
+                </div>
+              );
+            })
+          }
+        </div>
       </div>
     );
   }

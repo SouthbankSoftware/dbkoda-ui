@@ -52,6 +52,17 @@
   .profileList {
     flex-grow: 1;
     overflow-y: scroll;
+    .bp-table-bottom-container {
+      background-color: $panelLeftBackground !important;
+      .bp-table-body {
+        background-color: $panelLeftBackground !important;
+        .bp-table-body-scroll-client {
+          .bp-table-body-virtual-client {
+            background-color: $panelLeftBackground !important;
+          }
+        }
+      }
+    }
   }
   .bp-table-top-container {
     display: none;
@@ -100,7 +111,7 @@
     }
   }
   .connection-profile-cell-selected {
-    background-color: rgba(125, 188, 255, 0.3) !important;
+    background-color: $profileListSelected !important;
     outline: none !important;
     .profileListing {
       color: #FFF;

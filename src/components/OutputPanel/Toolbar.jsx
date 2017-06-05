@@ -7,18 +7,17 @@
 */
 
 import React from 'react';
+import HotKey from 'react-shortcut';
 import {inject, observer} from 'mobx-react';
 import {action, reaction} from 'mobx';
 import {
-  HotkeysTarget,
-  Hotkeys,
-  Hotkey,
   Intent,
   Tooltip,
   AnchorButton,
   Position
 } from '@blueprintjs/core';
 import {featherClient} from '~/helpers/feathers';
+import {OutputHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import EventLogging from '#/common/logging/EventLogging';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
@@ -30,7 +29,6 @@ import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
  */
 @inject('store')
 @observer
-@HotkeysTarget
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
@@ -156,7 +154,19 @@ export default class Toolbar extends React.Component {
 
   renderHotkeys() {
     return (
-      <Hotkeys>
+      <div className="OutputToolbarHotkeys">
+        <HotKey
+          keys={OutputHotkeys.clearOutput.keys}
+          simultaneous
+          onKeysCoincide={this.clearOutput} />
+        <HotKey
+          keys={OutputHotkeys.showMore.keys}
+          simultaneous
+          onKeysCoincide={this.showMore} />
+      </div>
+    );
+
+/*      <Hotkeys>
         <Hotkey
           global
           combo="ctrl + l"
@@ -169,7 +179,7 @@ export default class Toolbar extends React.Component {
           label="Save Output"
           onKeyDown={this.downloadOutput} />
       </Hotkeys>
-    );
+*/
   }
 
   render() {
@@ -234,6 +244,7 @@ export default class Toolbar extends React.Component {
           </Tooltip>
         </div>
         <div className="pt-navbar-group pt-right-align" />
+        {this.renderHotkeys()}
       </nav>
     );
   }

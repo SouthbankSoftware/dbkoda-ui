@@ -28,12 +28,6 @@ import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
 import ConnectionIcon from '../../styles/icons/connection-icon-2.svg';
-import OpenProfileIcon from '../../styles/icons/open-icon.svg';
-import CloseProfileIcon from '../../styles/icons/close-profile-icon.svg';
-import EditProfileIcon from '../../styles/icons/edit-profile-icon.svg';
-import DeleteProfileIcon from '../../styles/icons/remove-profile-icon.svg';
-import DocumentProfileIcon from '../../styles/icons/document-icon.svg';
-import NewDocumentProfileIcon from '../../styles/icons/document-solid-icon.svg';
 
 import './styles.scss';
 
@@ -478,20 +472,20 @@ export default class ListView extends React.Component {
       connect = (
         <div className="contextMenuGroup">
           <div className="menuItemWrapper">
-            <OpenProfileIcon className="dbCodaSVG" width={20} height={20} />
             <MenuItem
               className="profileListContextMenu openProfile"
               onClick={this.openOpenConnectionAlert}
               text={globalString('profile/menu/openConnection')}
-              intent={Intent.NONE} />
+              intent={Intent.NONE}
+              iconName="pt-icon-unlock" />
           </div>
           <div className="menuItemWrapper">
-            <EditProfileIcon className="dbCodaSVG" width={20} height={20} />
             <MenuItem
               className="profileListContextMenu editProfile"
               onClick={this.editProfile}
               text={globalString('profile/menu/editProfile')}
-              intent={Intent.NONE} />
+              intent={Intent.NONE}
+              iconName="pt-icon-edit" />
           </div>
         </div>
       );
@@ -505,12 +499,12 @@ export default class ListView extends React.Component {
           if (value.profileId.trim() == this.state.targetProfile.id.trim()) {
             windows.push((
               <div className="menuItemWrapper">
-                <DocumentProfileIcon className="dbCodaSVG" width={20} height={20} />
                 <MenuItem
                   className={'profileListContextMenu editorListing ' + value.fileName}
                   text={value.fileName}
                   onClick={() => this.swapToEditor(value)}
-                  intent={Intent.NONE} />
+                  intent={Intent.NONE}
+                  iconName="pt-icon-document" />
               </div>
             ));
           }
@@ -518,20 +512,20 @@ export default class ListView extends React.Component {
       connect = (
         <div className="contextMenuGroup">
           <div className="menuItemWrapper">
-            <CloseProfileIcon className="dbCodaSVG" width={20} height={20} />
             <MenuItem
               className="profileListContextMenu closeProfile"
               onClick={this.openCloseConnectionAlert}
               text={globalString('profile/menu/closeConnection')}
-              intent={Intent.NONE} />
+              intent={Intent.NONE}
+              iconName="pt-icon-lock" />
           </div>
           <div className="menuItemWrapper">
-            <NewDocumentProfileIcon className="dbCodaSVG" width={20} height={20} />
             <MenuItem
               className="profileListContextMenu newWindow"
               onClick={this.newEditorWindow}
               text={globalString('profile/menu/newWindow')}
-              intent={Intent.NONE} />
+              intent={Intent.NONE}
+              iconName="pt-icon-new-text-box" />
           </div>
         </div>
       );
@@ -540,12 +534,12 @@ export default class ListView extends React.Component {
       <Menu className="profileListContextMenu">
         {connect}
         <div className="menuItemWrapper">
-          <DeleteProfileIcon className="dbCodaSVG" width={20} height={20} />
           <MenuItem
             className="profileListContextMenu deleteProfile"
             onClick={this.openRemoveConnectionAlert}
             text={globalString('profile/menu/deleteProfile')}
-            intent={Intent.NONE} />
+            intent={Intent.NONE}
+            iconName="pt-icon-delete" />
         </div>
         <MenuDivider /> {windows}
       </Menu>

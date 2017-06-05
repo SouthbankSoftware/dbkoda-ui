@@ -8,12 +8,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 import React from 'react';
+import HotKey from 'react-shortcut';
 import {inject, observer} from 'mobx-react';
 import {action, runInAction} from 'mobx';
 import autobind from 'autobind-decorator';
 import {Alert, AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
+import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
@@ -240,7 +242,20 @@ export default class Toolbar extends React.Component {
             </AnchorButton>
           </Tooltip>
         </div>
+        {this.renderHotkeys()}
       </nav>
     );
   }
+
+    renderHotkeys() {
+    return (
+      <div className="ProfileListToolbarHotkeys">
+        <HotKey
+          keys={GlobalHotkeys.createNewProfile.keys}
+          simultaneous
+          onKeysCoincide={this.newProfile} />
+      </div>
+    );
+  }
+
 }
