@@ -596,7 +596,7 @@ class View extends React.Component {
       // Send request to feathers client
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');
-      service.timeout = 120000;
+      service.timeout = 300000;
       this.props.store.editorToolbar.isActiveExecuting = true;
       service
         .update(id, {

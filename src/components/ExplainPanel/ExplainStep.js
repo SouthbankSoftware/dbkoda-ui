@@ -123,10 +123,7 @@ export const generateComments = (stage) => {
   }
 };
 
-/**
- * get execution stages array
- */
-export const getExecutionStages = (executionStages) => {
+export const getCommonExecutionStages = (executionStages) => {
   const stages = [];
   if (executionStages) {
     let currentStage = executionStages;
@@ -140,4 +137,24 @@ export const getExecutionStages = (executionStages) => {
     }
   }
   return stages.reverse();
+};
+
+export const getShardsExecutionStages = (executionStages) => {
+  if (executionStages && executionStages.shards) {
+    return executionStages.shards.map((shard) => {
+      const stages = shard.winningPlan ? shard.winningPlan : shard.executionStages;
+      return {shardName: shard.shardName, stages: getCommonExecutionStages(stages)};
+    });
+  }
+  return [];
+};
+
+/**
+ * get execution stages array
+ */
+export const getExecutionStages = (executionStages) => {
+  if (executionStages && executionStages.shards) {
+    return getShardsExecutionStages(executionStages);
+  }
+  return getCommonExecutionStages(executionStages);
 };
