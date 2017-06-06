@@ -19,10 +19,13 @@ const getExamined = (stage) => {
 };
 
 const getWorstShardStages = (stages) => {
-  let max = 0;
+  let max = -1;
   let worst = null;
   stages.map((shard) => {
     if (shard.stages && shard.stages.length > 0) {
+      if (worst === null) {
+        worst = shard.stages;
+      }
       if (max < shard.stages[0].executionTimeMillisEstimate) {
         max = shard.stages[0].executionTimeMillisEstimate;
         worst = shard.stages;
@@ -34,6 +37,7 @@ const getWorstShardStages = (stages) => {
 
 export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
   let mergedStages = [];
+  console.log('xxxxx:', stages, shard);
   const fStages = shardMergeStage && shard ? getWorstShardStages(stages) : stages;
   fStages.push(shardMergeStage);
   fStages.map((stage) => {
