@@ -31,7 +31,8 @@ export default class Panel extends React.Component {
       checkboxHost: true,
       checkboxUrl: false,
       checkboxSSL: false,
-      checkboxScram: false
+      checkboxScram: false,
+      hasAliasChanged: false,
     };
   }
 
@@ -134,6 +135,10 @@ export default class Panel extends React.Component {
     return errorMsg;
   }
 
+  @autobind _updateAliasState() {
+    this.state.hasAliasChanged = true;
+  }
+
   @autobind _save(data) {
     this
       .props
@@ -144,12 +149,12 @@ export default class Panel extends React.Component {
     form.connect = this._connect;
     form.test = this._test;
     form.save = this._save;
-    if (!edit && this.props.form.$('alias').value === globalString('connection/form/defaultAlias', '1') && profiles) {
+    if (!edit && this.props.form.$('host') && profiles && !this.state.hasAliasChanged) {
       this
         .props
         .form
         .$('alias')
-        .value = globalString('connection/form/defaultAlias', (profiles.size + 1));
+        .value = this.props.form.$('host').value + ':' + this.props.form.$('port').value + ' - ' + (profiles.size + 1);
     }
     const formErrors = this._getFormErrors();
 
@@ -161,7 +166,7 @@ export default class Panel extends React.Component {
           onClick={this.props.close} />
         <h3 className="form-title">{title}</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
-          <Input field={form.$('alias')} showLabel /> {this
+          <Input field={form.$('alias')} divOnChange={this._updateAliasState} showLabel /> {this
             .props
             .form
             .$('hostRadio')
