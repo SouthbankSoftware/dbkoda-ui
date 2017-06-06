@@ -12,6 +12,7 @@ import {inject, observer} from 'mobx-react';
 import {action, runInAction} from 'mobx';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/theme/material.css';
+import 'codemirror/theme/monokai.css';
 import {Broker, EventType} from '../../helpers/broker';
 import OutputTerminal from './Terminal';
 import {ProfileStatus} from '../common/Constants';
@@ -226,7 +227,7 @@ export default class Editor extends React.Component {
   render() {
     const outputOptions = {
       smartIndent: true,
-      theme: 'material',
+      theme: 'monokai',
       readOnly: true,
       lineWrapping: false,
       tabSize: 2,
