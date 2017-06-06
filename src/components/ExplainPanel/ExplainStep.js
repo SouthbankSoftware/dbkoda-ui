@@ -122,3 +122,22 @@ export const generateComments = (stage) => {
       return stageName;
   }
 };
+
+/**
+ * get execution stages array
+ */
+export const getExecutionStages = (executionStages) => {
+  const stages = [];
+  if (executionStages) {
+    let currentStage = executionStages;
+    while (currentStage) {
+      stages.push(currentStage);
+      if (currentStage && currentStage.inputStages && currentStage.inputStages.length > 0) {
+        currentStage = currentStage.inputStages;
+      } else {
+        currentStage = currentStage.inputStage;
+      }
+    }
+  }
+  return stages.reverse();
+};
