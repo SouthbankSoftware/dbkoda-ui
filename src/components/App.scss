@@ -121,3 +121,7 @@ ul.pt-menu {
     }
   }
 }
+
+div.CodeMirror-activeline {
+  background-color: $editorActiveLine;
+}
