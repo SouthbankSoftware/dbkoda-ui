@@ -473,6 +473,14 @@
   .CodeMirror-line {
     background-color: $editorBackground;
   }
+
+  div.CodeMirror-activeline {
+  background-color: $editorActiveLine !important;
+  pre.CodeMirror-line {
+    background-color: unset !important;
+  }
+}
+
   span.cm-mongo-operator {
     color: $white !important;
   }
