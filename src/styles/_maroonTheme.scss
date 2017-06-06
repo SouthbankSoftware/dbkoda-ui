@@ -65,7 +65,7 @@ $profileListIconColor: rgba(191, 190, 192, 0.3);
 $profileListFontColor: #BFBEC0;
 $profileListDividerColor: rgba(138, 155, 168, 0.3);
 $profileListTabHover: rgba(191, 190, 192, 0.1);
-$profileListSelected: rgba(92, 70, 70, 0.5);
+$profileListSelected: rgba(184, 140, 140, 0.5);
 //Output:
 $terminalBackground: #494849;
 $terminalInput: #202020;
@@ -160,17 +160,23 @@ $fieldTertiaryButtonBackground: #2D3D46;
 $fieldTertiaryButtonBorder: #BFBEC0;
 $fieldTertiaryButtonFontColor: #BFBEC0;
 // explain panel
-$explainLabelColor: rgb(180, 180, 180);
-$explainSwitchBtnColor: rgb(43, 43, 43);
+$explainLabelColor: #BFBEC0;
+$explainSwitchBtnColor: #313131;
 $explainSwitchBtnBorderColor: rgb(74, 74, 74);
+$explainStageHeaderBkColor: #2D3D46;
+$explainStageTailBkColor: #516E72;
 $explainStage1Color: rgb(40, 54, 61);
 $explainStage2Color: rgb(47, 64, 71);
 $explainStage3Color: rgb(57, 77, 83);
 $explainStage4Color: rgb(64, 87, 93);
 $explainStage5Color: rgb(71, 99, 103);
-$explainStageTableHeaderColor: rgb(82, 48, 70);
+$explainStageTableHeaderColor: #5D3750;
 $explainTableEvenBKColor: rgb(36, 36, 36);
 $explainPanelBKColor: rgb(29, 29, 29);
+$explainHeaderLabelFontSize: 15px;
+$explainLabelFontSize: 12px;
+$explainStatisticTableHeaderBkColor: #607747;
+$explainShardStatisticTableHeaderBkColor: #4F5A6E;
 
 $detailsBackground: #1C1D1D;
 $detailsFontColor: #BFBEC0;

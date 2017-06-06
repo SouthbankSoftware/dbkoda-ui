@@ -17,11 +17,13 @@ export default observer(({
   field,
   showLabel = false,
   disable = false,
-  divOnClick = () => {}
+  divOnClick = () => {},
+  divOnFocus = () => {}
 }) => (
   <div // eslint-disable-line
     className={field.name + '-input-content pt-form-group pt-inline'}
-    onClick={divOnClick}>
+    onClick={divOnClick}
+    onFocus={divOnFocus}>
     {showLabel && <label
       className={field.name + '-label pt-label field-inline pt-label-r'}
       htmlFor={field.id}>

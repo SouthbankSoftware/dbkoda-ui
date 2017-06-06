@@ -2,7 +2,7 @@
 // @Date:   2017-05-29T15:22:41+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-30T09:47:28+10:00
+// @Last modified time: 2017-06-06T11:32:29+10:00
 
 @import '../../styles/_defaultTheme.scss';
 .profileListPanel {
@@ -119,6 +119,10 @@
     .closedProfile {
       font-style: italic !important;
     }
+  }
+  .bp-table-selection-region {
+    border: none;
+    background-color: rgba(0,0,0,0);
   }
 }
 
