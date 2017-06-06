@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-06-02T13:45:52+10:00
+ * @Last modified time: 2017-06-06T12:05:13+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -91,6 +91,16 @@ export default class Toolbar extends React.Component {
         this.addEditor({});
       }
     });
+
+    if (IS_ELECTRON) {
+      window.require('electron').ipcRenderer.on('command', (event, message) => {
+        if (message == 'openFile') {
+          this.openFile();
+        } else if (message == 'saveFile') {
+          this.saveFile();
+        }
+      });
+    }
   }
 
   componentWillUnmount() {
