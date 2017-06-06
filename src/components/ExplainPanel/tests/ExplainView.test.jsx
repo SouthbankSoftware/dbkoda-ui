@@ -180,7 +180,7 @@ describe('test explain view', () => {
     const app = mount(<ExplainView explains={explain} />);
     expect(app.find('.explain-stage-progress')).to.have.length(1);
     expect(app.find('.explain-stage')).to.have.length(2);
-    expect(app.find('.explain-stages-table .stage-row')).to.have.length(3);
+    expect(app.find('.explain-stages-table .stage-row')).to.have.length(2);
     expect(app.find('.explain-statistic-view')).to.have.length(1);
     expect(app.find('.explain-statistic-view .row')).to.have.length(3);
   });
@@ -203,6 +203,6 @@ describe('test explain view', () => {
     const explain = {command: undefined, output: jsonData};
     const app = mount(<ExplainView explains={explain} />);
     expect(app.find('.explain-stage')).to.have.length(6);
-    expect(app.find('.explain-stages-table .stage-row')).to.have.length(7);
+    expect(app.find('.explain-stages-table .stage-row')).to.have.length(6);
   });
 });
