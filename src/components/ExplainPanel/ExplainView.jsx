@@ -19,6 +19,7 @@ import {StageStepsTable} from './StageStepsTable';
 import {getExecutionStages} from './ExplainStep';
 import StatisicView from './StatisicView';
 import ShardStatisticView from './ShardStatisticView';
+import ShardsStageProgress from './ShardsStageProgress';
 
 const ExplainView = ({explains}) => {
   if (!explains || !explains.output) {
@@ -28,25 +29,37 @@ const ExplainView = ({explains}) => {
   const commandPanel = explains.command ?
     <QueryCommandView command={explains.command} namespace={output.queryPlanner.namespace} /> : null;
   if (!output.executionStats) {
-    const stages = getExecutionStages(output.queryPlanner.winningPlan);
+    // this is query plain
+    const executionStages = output.queryPlanner.winningPlan;
+    const stages = getExecutionStages(executionStages);
     return (<div className="explain-view-panel">
-      <StageProgress stages={stages} />
-      {commandPanel}
-    </div>);
-  }
-  const stages = getExecutionStages(output.executionStats.executionStages);
-  return (<div className="explain-view-panel">
-    <StageProgress stages={stages} />
-    <StageStepsTable stages={stages} />
-    <div className="explain-statistic-container-view ">
-      <StatisicView explains={output} />
       {
-        output.executionStats.executionStages.shards && output.executionStats.executionStages.shards.length > 0
-          ? <ShardStatisticView explains={output} /> : null
-      }
+          executionStages.shards ? <ShardsStageProgress executionStages={executionStages} shardStages={stages} /> :
+          <StageProgress stages={stages} />
+        }
+      {commandPanel}
     </div>
-    {commandPanel}
-  </div>);
+    );
+  }
+  const executionStages = output.executionStats.executionStages;
+  const stages = getExecutionStages(executionStages);
+  return (
+    <div className="explain-view-panel">
+      {
+        executionStages.shards ? <ShardsStageProgress executionStages={executionStages} shardStages={stages} /> :
+        <StageProgress stages={stages} />
+      }
+      <StageStepsTable stages={stages} shardMergeStage={executionStages} shard={executionStages.shards !== undefined} />
+      <div className="explain-statistic-container-view ">
+        <StatisicView explains={output} />
+        {
+          executionStages.shards && executionStages.shards.length > 0
+            ? <ShardStatisticView explains={output} /> : null
+        }
+      </div>
+      {commandPanel}
+    </div>
+  );
 };
 
 export default ExplainView;

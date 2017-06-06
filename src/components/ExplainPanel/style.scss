@@ -38,11 +38,16 @@ $contentColor: white;
   .explain-stage-progress {
     display: flex;
     flex-direction: row;
-
+    .explain-stage-wrapper {
+      display: flex;
+      flex-direction: row;
+      margin: 5px 0px;
+      flex: 1;
+    }
     .explain-stage {
       flex: 1;
       position: relative;
-      background: $explainStage1Color;
+      background: $explainStageTailBkColor;
       max-width: 200px;
       height: 35px;
       line-height: 35px;
@@ -62,7 +67,7 @@ $contentColor: white;
       height: 0;
       border-top: 18px solid transparent;
       border-bottom: 18px solid transparent;
-      border-left: 17px solid $explainStage1Color;
+      border-left: 17px solid $explainStageTailBkColor;
       z-index: 2;
       transition: border-color 0.2s ease;
     }
@@ -74,61 +79,25 @@ $contentColor: white;
       z-index: 0;
     }
 
-    .explain-stage-array{
+    .explain-stage-array {
       background: $explainStageHeaderBkColor !important;
     }
     .explain-stage-array:after {
       border-left-color: $explainStageHeaderBkColor !important;
     }
 
-    .explain-stage:nth-child(1) {
-      background: $explainStageHeaderBkColor;
-    }
-    .explain-stage:nth-child(1):after {
-      border-left-color: $explainStageHeaderBkColor;
-    }
-
-
-    .explain-stage:nth-child(n+2) {
-      background: $explainStageTailBkColor;
-    }
-    .explain-stage:nth-child(n+2):after {
-      border-left-color: $explainStageTailBkColor;
-    }
-
-    //.explain-stage:nth-child(1n+0) {
+    //.explain-stage:nth-child(1) {
     //  background: $explainStageHeaderBkColor;
     //}
-    //.explain-stage:nth-child(1n+0):after {
+    //.explain-stage:nth-child(1):after {
     //  border-left-color: $explainStageHeaderBkColor;
     //}
-
-    //.explain-stage:nth-child(2n+0) {
+    //
+    //.explain-stage:nth-child(n+2) {
     //  background: $explainStageTailBkColor;
     //}
-    //.explain-stage:nth-child(2n+0):after {
+    //.explain-stage:nth-child(n+2):after {
     //  border-left-color: $explainStageTailBkColor;
-    //}
-    //
-    //.explain-stage:nth-child(3n+0) {
-    //  background: $explainStage3Color;
-    //}
-    //.explain-stage:nth-child(3n+0):after {
-    //  border-left-color: $explainStage3Color;
-    //}
-    //
-    //.explain-stage:nth-child(4n+0) {
-    //  background: $explainStage4Color;
-    //}
-    //.explain-stage:nth-child(4n+0):after {
-    //  border-left-color: $explainStage4Color;
-    //}
-    //
-    //.explain-stage:nth-child(5n+0) {
-    //  background: $explainStage5Color;
-    //}
-    //.explain-stage:nth-child(5n+0):after {
-    //  border-left-color: $explainStage5Color;
     //}
 
     //  tree
@@ -140,6 +109,21 @@ $contentColor: white;
       .explain-stage:nth-child(n+2) {
         margin-top: 10px;
       }
+    }
+  }
+
+  .explain-shards-stage-progress {
+    .explain-stage {
+      flex: 1;
+      position: relative;
+      background: $explainStage1Color;
+      max-width: 200px;
+      height: 35px;
+      line-height: 35px;
+      margin-right: 15px;
+      color: $explainLabelColor;
+      text-align: center;
+      font-size: $explainLabelFontSize;
     }
   }
 

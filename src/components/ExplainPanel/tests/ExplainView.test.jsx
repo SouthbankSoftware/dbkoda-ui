@@ -180,21 +180,9 @@ describe('test explain view', () => {
     const app = mount(<ExplainView explains={explain} />);
     expect(app.find('.explain-stage-progress')).to.have.length(1);
     expect(app.find('.explain-stage')).to.have.length(2);
-    expect(app.find('.explain-stages-table .stage-row')).to.have.length(2);
+    expect(app.find('.explain-stages-table .stage-row')).to.have.length(3);
     expect(app.find('.explain-statistic-view')).to.have.length(1);
     expect(app.find('.explain-statistic-view .row')).to.have.length(3);
-  });
-
-  it('test shard explain', () => {
-    const explain = {'output':{'queryPlanner':{'mongosPlannerVersion':1, 'winningPlan':{'stage':'SINGLE_SHARD', 'shards':[{'shardName':'s0', 'connectionString':'s0/ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37017,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37018,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37019', 'serverInfo':{'host':'ip-172-31-5-162.ap-southeast-2.compute.internal', 'port':37017, 'version':'3.4.0-rc4', 'gitVersion':'cf4d9f77e5bcb609272721bc87b03a795fa21b1f'}, 'plannerVersion':1, 'namespace':'SampleCollections.enron_messages', 'indexFilterSet':false, 'parsedQuery':{'$and':[{'mailbox':{'$eq':'baughman-d'}}, {'subFolder':{'$eq':'enron_power/interviews'}}]}, 'winningPlan':{'stage':'COLLSCAN', 'filter':{'$and':[{'mailbox':{'$eq':'baughman-d'}}, {'subFolder':{'$eq':'enron_power/interviews'}}]}, 'direction':'forward'}, 'rejectedPlans':[]}]}}, 'executionStats':{'nReturned':8, 'executionTimeMillis':67, 'totalKeysExamined':0, 'totalDocsExamined':1001, 'executionStages':{'stage':'SINGLE_SHARD', 'nReturned':8, 'executionTimeMillis':67, 'totalKeysExamined':0, 'totalDocsExamined':1001, 'totalChildMillis':54, 'shards':[{'shardName':'s0', 'executionSuccess':true, 'executionStages':{'stage':'COLLSCAN', 'filter':{'$and':[{'mailbox':{'$eq':'baughman-d'}}, {'subFolder':{'$eq':'enron_power/interviews'}}]}, 'nReturned':8, 'executionTimeMillisEstimate':10, 'works':1003, 'advanced':8, 'needTime':994, 'needYield':0, 'saveState':7, 'restoreState':7, 'isEOF':1, 'invalidates':0, 'direction':'forward', 'docsExamined':1001}}]}, 'allPlansExecution':[{'shardName':'s0', 'allPlans':[]}]}, 'ok':1}, 'type':'allPlansExecution', 'command':'db.enron_messages.find({"$and" : [            {                "mailbox" : "baughman-d"            },            {                "subFolder" : "enron_power/interviews"            }        ]},{}).explain("allPlansExecution")', 'viewType':0};
-    explain.command = undefined;
-    const app = mount(<ExplainView explains={explain} />);
-    expect(app.find('.explain-stage-progress')).to.have.length(1);
-    expect(app.find('.explain-shards-statistic-view')).to.have.length(1);
-    expect(app.find('.explain-shards-statistic-view .row')).to.have.length(1);
-    expect(app.find('.explain-shards-statistic-view .row .cell')).to.have.length(4);
-    expect(app.find('.explain-shards-statistic-view .header')).to.have.length(1);
-    expect(app.find('.explain-shards-statistic-view .header .column')).to.have.length(4);
   });
 
   test('test parse explain json data with branches', () => {
@@ -215,6 +203,6 @@ describe('test explain view', () => {
     const explain = {command: undefined, output: jsonData};
     const app = mount(<ExplainView explains={explain} />);
     expect(app.find('.explain-stage')).to.have.length(6);
-    expect(app.find('.explain-stages-table .stage-row')).to.have.length(6);
+    expect(app.find('.explain-stages-table .stage-row')).to.have.length(7);
   });
 });
