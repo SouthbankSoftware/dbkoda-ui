@@ -37,9 +37,10 @@ const getWorstShardStages = (stages) => {
 
 export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
   let mergedStages = [];
-  console.log('xxxxx:', stages, shard);
   const fStages = shardMergeStage && shard ? getWorstShardStages(stages) : stages;
-  fStages.push(shardMergeStage);
+  if (shard) {
+    fStages.push(shardMergeStage);
+  }
   fStages.map((stage) => {
     if (stage.constructor === Array) {
       mergedStages = mergedStages.concat(stage);
