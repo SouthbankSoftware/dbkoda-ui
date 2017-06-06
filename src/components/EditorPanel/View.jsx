@@ -20,7 +20,6 @@ import { ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
 
 import { DropTarget } from 'react-dnd';
 import 'codemirror/theme/material.css';
-import 'codemirror/theme/monokai.css';
 import { DragItemTypes } from '#/common/Constants.js';
 import { NewToaster } from '#/common/Toaster';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
@@ -110,7 +109,7 @@ class View extends React.Component {
       isLinting: false,
       lintLoops: 0,
       options: {
-        theme: 'monokai',
+        theme: 'material',
         lineNumbers: 'true',
         indentUnit: 2,
         styleActiveLine: 'true',
