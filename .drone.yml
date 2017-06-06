@@ -10,11 +10,10 @@ pipeline:
     image: southbanksoftware/cienvy:node-nm-mongo
     pull: true
     volumes:
-      - /Users/admin/docker/cienvy-client:/cienvy-client
+      - /home/core/cienvy-client:/cienvy-client
       - cienvy-volumes:/volumes
     commands:
-      # - bash /cienvy-client/bin/cienvy.bash --url=http://172.16.0.1:9090 core
-      - tail -f /dev/null
+      - bash /cienvy-client/bin/cienvy.bash --url=http://172.16.0.1:9090 core
   slack_legacy:
     image: plugins/slack
     pull: true
