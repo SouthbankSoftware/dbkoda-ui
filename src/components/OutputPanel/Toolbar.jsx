@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-24T10:53:29+10:00
+ * @Last modified time: 2017-06-05T17:25:58+10:00
 */
 
 import React from 'react';
@@ -106,6 +106,12 @@ export default class Toolbar extends React.Component {
             });
           this.props.store.outputPanel.currentTab = editorKey;
         }
+        this.props.store.outputPanel.clearingOutput = false;
+      } else if (currentTab.indexOf('Details-') === 0) {
+        console.log('Clear Details');
+        this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).detailsView = undefined;
+        const editorKey = currentTab.split('Details-')[1];
+        this.props.store.outputPanel.currentTab = editorKey;
         this.props.store.outputPanel.clearingOutput = false;
       }
     }, {name: 'reactionOutputToolbarClearOutput'});

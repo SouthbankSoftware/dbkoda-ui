@@ -38,7 +38,9 @@
         "keepMutations": "Merge in any documents which may have been incorrectly invalidated mid-query",
         "subplan": "Selected one of multiple possible plans based on $or condition",
         "eof": "Nothing was found: maybe collection does not exist?",
-        "andSorted": "Output from the previous steps was sort-merged"
+        "andSorted": "Output from the previous steps was sort-merged",
+        "sortMerge": "Output from multiple sorts was merged",
+        "or": "Combine document from previous {0} stages"
       },
       "view": {
         "statisticHeader": "Statistic",

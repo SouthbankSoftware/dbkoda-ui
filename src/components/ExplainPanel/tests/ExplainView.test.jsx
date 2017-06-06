@@ -3,9 +3,10 @@ import chai, {assert, expect} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import {mount} from 'enzyme';
 import globalizeInit from '#/tests/helpers/globalize.js';
-import ExplainView, {getExecutionStages} from '../ExplainView';
+import ExplainView from '../ExplainView';
 import {parseOutput} from '../Explain';
 import ExplainPanel from '../Panel';
+import {getExecutionStages} from '../ExplainStep';
 
 chai.use(chaiEnzyme());
 
