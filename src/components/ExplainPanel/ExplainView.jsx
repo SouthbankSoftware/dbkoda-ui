@@ -13,195 +13,12 @@
 import React from 'react';
 import {toJS} from 'mobx';
 import './style.scss';
-import {generateComments} from './ExplainStep';
 import QueryCommandView from './QueryCommandView';
-
-export const Stage = ({stage, maxNumChildren}) => {
-  const style = {};
-  let className = 'explain-stage';
-  if (maxNumChildren > 1) {
-    style.marginTop = (maxNumChildren - 1) * 22.5;
-  } else {
-    className += ' explain-stage-array';
-  }
-  return (<div className={className} style={style}>
-    {stage.stage}
-  </div>);
-};
-
-export const StageProgress = ({stages}) => {
-  let maxNumChildren = 1;
-  stages.map((stage) => {
-    if (stage.constructor === Array && maxNumChildren < stage.length) {
-      maxNumChildren = stage.length;
-    }
-  });
-  return (<div className="explain-stage-progress">
-    {
-      stages.map((stage, i) => {
-        const id = i;
-        if (stage.constructor === Array) {
-          return (<div className="explain-stage-tree-root">{
-            stage.map((s, j) => {
-              const sid = j;
-              return <Stage stage={s} key={`${s.stage} - ${sid}`} maxNumChildren={1} />;
-            })
-          }</div>);
-        }
-        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={maxNumChildren} />);
-      })
-    }
-  </div>);
-};
-
-/**
- * get execution stages array
- */
-export const getExecutionStages = (executionStages) => {
-  const stages = [];
-  if (executionStages) {
-    let currentStage = executionStages;
-    while (currentStage) {
-      stages.push(currentStage);
-      if (currentStage && currentStage.inputStages && currentStage.inputStages.length > 0) {
-        currentStage = currentStage.inputStages;
-      } else {
-        currentStage = currentStage.inputStage;
-      }
-    }
-  }
-  return stages.reverse();
-};
-
-export const StepsTable = ({stages}) => {
-  let mergedStages = [];
-  stages.map((stage) => {
-    if (stage.constructor === Array) {
-      mergedStages = mergedStages.concat(stage);
-    } else {
-      mergedStages.push(stage);
-    }
-  });
-  const getExamined = (stage) => {
-    if (stage.stage === 'IXSCAN') {
-      return stage.keysExamined;
-    }
-    if (stage.stage.indexOf('SHARD') >= 0) {
-      return stage.totalDocsExamined;
-    }
-    return stage.docsExamined;
-  };
-  return (<div className="explain-stages-table">
-    <div className="stage-header">
-      <div className="column-header">Seq</div>
-      <div className="column-header">Step</div>
-      <div className="column-header">ms</div>
-      <div className="column-header">Examined</div>
-      <div className="column-header">Return</div>
-      <div className="column-header">Comment</div>
-    </div>
-    {
-      mergedStages.map((stage, i) => {
-        const id = i;
-        return (<div className="stage-row" key={stage.stage + '-' + id}>
-          <div className="stage-cell">{i + 1}</div>
-          <div className="stage-cell">{stage.stage}</div>
-          <div className="stage-cell">
-            <div className="text">{stage.executionTimeMillisEstimate || stage.executionTimeMillis}</div>
-          </div>
-          <div className="stage-cell">
-            <div className="text">{getExamined(stage)}</div>
-          </div>
-          <div className="stage-cell">
-            <div className="text">{stage.nReturned}</div>
-          </div>
-          <div className="stage-cell">{generateComments(stage)}</div>
-        </div>);
-      })
-    }
-  </div>);
-};
-
-/**
- * common statistic view panel
- */
-const StatisicView = ({explains}) => {
-  const {executionStats} = explains;
-  return (<div className="explain-statistic-view">
-    <div className="header">
-      <div>{globalString('explain/view/statisticHeader')}</div>
-      <div>Value</div>
-    </div>
-    <div className="row">
-      <div>{globalString('explain/view/docsReturned')}</div>
-      <div>{executionStats.nReturned}</div>
-    </div>
-    <div className="row">
-      <div>{globalString('explain/view/keysExamined')}</div>
-      <div>{executionStats.totalKeysExamined}</div>
-    </div>
-    <div className="row">
-      <div>{globalString('explain/view/docsExamined')}</div>
-      <div>{executionStats.totalDocsExamined}</div>
-    </div>
-  </div>);
-};
-
-const getAllShardStatistics = (explains) => {
-  const shards = explains.executionStats.executionStages.shards;
-  const allShards = [];
-  shards.map((shard) => {
-    const oneShard = [];
-    let cursor = shard.executionStages;
-    while (cursor) {
-      oneShard.push(cursor);
-      cursor = cursor.inputStage;
-    }
-    // get the executionTimeMillisEstimate and nReturned from the first child, docsExamined from the deepest child
-    oneShard[0].docsExamined = oneShard[oneShard.length - 1].docsExamined;
-    oneShard[0].shardName = shard.shardName;
-    allShards.push(oneShard);
-  });
-  return allShards;
-};
-
-export const getWorstShardStatistics = (explains) => {
-  const allShards = getAllShardStatistics(explains);
-  const worstShards = [];
-  allShards.map((shards) => {
-    worstShards.push(shards[0]);
-  });
-  return worstShards;
-};
-
-/**
- * shard statistic view panel
- */
-const ShardStatisticView = ({explains}) => {
-  const shardStatistics = getWorstShardStatistics(explains);
-  return (<div className="explain-shards-statistic-view">
-    <div className="header">
-      <div className="column">{globalString('explain/statistics/shard')}</div>
-      <div className="column">{globalString('explain/statistics/examined')}</div>
-      <div className="column">{globalString('explain/statistics/returned')}</div>
-      <div className="column">{globalString('explain/statistics/ms')}</div>
-    </div>
-    {
-      shardStatistics.map((shard) => {
-        return (<div className="row" key={shard.shardName}>
-          <div className="cell">{shard.shardName}</div>
-          <div className="cell">{shard.docsExamined}</div>
-          <div className="cell">{shard.nReturned}</div>
-          <div className="cell">{shard.executionTimeMillisEstimate}</div>
-        </div>);
-      })
-    }
-  </div>);
-};
-
-const CommandPanel = ({command, namespace}) => {
-  return <QueryCommandView command={command} namespace={namespace} />;
-};
+import StageProgress from './StageProgress';
+import {StageStepsTable} from './StageStepsTable';
+import {getExecutionStages} from './ExplainStep';
+import StatisicView from './StatisicView';
+import ShardStatisticView from './ShardStatisticView';
 
 const ExplainView = ({explains}) => {
   if (!explains || !explains.output) {
@@ -209,7 +26,7 @@ const ExplainView = ({explains}) => {
   }
   const output = toJS(explains.output);
   const commandPanel = explains.command ?
-    <CommandPanel command={explains.command} namespace={output.queryPlanner.namespace} /> : null;
+    <QueryCommandView command={explains.command} namespace={output.queryPlanner.namespace} /> : null;
   if (!output.executionStats) {
     const stages = getExecutionStages(output.queryPlanner.winningPlan);
     return (<div className="explain-view-panel">
@@ -220,7 +37,7 @@ const ExplainView = ({explains}) => {
   const stages = getExecutionStages(output.executionStats.executionStages);
   return (<div className="explain-view-panel">
     <StageProgress stages={stages} />
-    <StepsTable stages={stages} />
+    <StageStepsTable stages={stages} />
     <div className="explain-statistic-container-view ">
       <StatisicView explains={output} />
       {

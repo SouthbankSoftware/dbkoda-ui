@@ -18,6 +18,7 @@ const EOF = 'EOF';
 const AND_SORTED = 'AND_SORTED';
 const LIMIT = 'LIMIT';
 const SKIP = 'SKIP';
+const OR = 'OR';
 
 const generateFetchComments = (stage) => {
   if (stage.filter) {
@@ -81,7 +82,6 @@ const generateSkipComments = (stage) => {
 export const generateComments = (stage) => {
   const stageName = stage.stage;
   let shard;
-
   switch (stageName) {
     case SINGLE_SHARD:
       shard = stage.shards && stage.shards.length > 0 && stage.shards[0];
@@ -116,7 +116,28 @@ export const generateComments = (stage) => {
       return generateSkipComments(stage);
     case SORT_MERGE:
       return globalString('explain/step/sortMerge');
+    case OR:
+      return globalString('explain/step/or', stage.inputStages ? stage.inputStages.length : 1);
     default:
       return stageName;
   }
+};
+
+/**
+ * get execution stages array
+ */
+export const getExecutionStages = (executionStages) => {
+  const stages = [];
+  if (executionStages) {
+    let currentStage = executionStages;
+    while (currentStage) {
+      stages.push(currentStage);
+      if (currentStage && currentStage.inputStages && currentStage.inputStages.length > 0) {
+        currentStage = currentStage.inputStages;
+      } else {
+        currentStage = currentStage.inputStage;
+      }
+    }
+  }
+  return stages.reverse();
 };
