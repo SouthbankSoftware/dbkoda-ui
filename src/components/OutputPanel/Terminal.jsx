@@ -3,7 +3,7 @@
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-31T14:46:51+10:00
+ * @Last modified time: 2017-06-06T16:15:04+10:00
  */
 
 import React from 'react';
@@ -144,7 +144,7 @@ class Terminal extends React.Component {
         const command = this.interceptCommand(this.state.command);
         console.log(command);
         if (command) {
-          console.log('Sending data to feathers id ', this.props.connId, ': ', this.props.shellId, command, '.');
+          console.log('Sending data to feathers id ', this.props.profileId, ': ', this.props.shellId, command, '.');
           this.props.store.editorToolbar.isActiveExecuting = true;
           this
             .props
@@ -154,8 +154,8 @@ class Terminal extends React.Component {
             .executing = true;
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
-          Broker.on(EventType.createShellExecutionFinishEvent(this.props.connId, this.props.shellId), this.finishedExecution);
-          service.update(this.props.connId, {
+          Broker.on(EventType.createShellExecutionFinishEvent(this.props.profileId, this.props.shellId), this.finishedExecution);
+          service.update(this.props.profileId, {
             shellId: this.props.shellId,
             commands: command
           });
