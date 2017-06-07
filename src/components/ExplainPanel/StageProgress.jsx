@@ -49,7 +49,7 @@ export default ({stages, shardNames}) => {
                     shardName = shardNames[j];
                   }
                   const sid = j;
-                  return <Stage stage={s} key={`${s && s.stage} - ${sid}`} maxNumChildren={1} head={i === 0} shardName={shardName} />;
+                  return <Stage stage={s} key={`${s && s.stage} - ${sid}`} maxNumChildren={1} head={false} shardName={shardName} />;
                 })
               }
             </div>);
