@@ -55,7 +55,11 @@ export default ({stages, shardNames}) => {
               }
             </div>);
         }
-        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={maxNumChildren} head={i === 0} />);
+        let shardName = '';
+        if (i === 0 && shardNames && shardNames.length > 0) {
+          shardName = shardNames[0];
+        }
+        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={maxNumChildren} head={i === 0} shardName={shardName} />);
       })
     }
   </div>);
