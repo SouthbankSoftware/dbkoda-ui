@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T12:00:43+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-06-01T11:03:27+10:00
+ * @Last modified time: 2017-06-07T08:08:03+10:00
 */
 
 import React from 'react';
@@ -77,7 +77,7 @@ export default class TreeToolbar extends React.Component {
           this
             .props
             .store
-            .updateTopology(res.result);
+            .updateTopology(res);
         }
         runInAction(() => {
           this.props.store.treePanel.isRefreshing = false;

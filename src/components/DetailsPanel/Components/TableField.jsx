@@ -3,7 +3,7 @@
  * @Date:   2017-05-23T13:15:39+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-30T15:24:21+10:00
+ * @Last modified time: 2017-06-07T10:20:40+10:00
  */
 
 import React from 'react';
@@ -26,10 +26,11 @@ export default observer(({
     for (const row of data) {
       const tableCells = [];
       for (const header of field.columns) {
-        const cellVal = row[header.name] + '';
+        let cellVal = row[header.name] + '';
         if (isNaN(Number(cellVal.replace(/,/g, '')))) {
           tableCells.push(<td>{cellVal}</td>);
         } else {
+          cellVal = globalNumber(Number(cellVal.replace(/,/g, '')));
           tableCells.push(<td style={{ textAlign: 'right'}}>{cellVal}</td>);
         }
       }
