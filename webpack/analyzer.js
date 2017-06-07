@@ -2,12 +2,15 @@
  * @Author: guiguan
  * @Date:   2017-06-07T10:53:23+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-06-07T13:57:57+10:00
+ * @Last modified time: 2017-06-07T17:17:56+10:00
  */
 
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const webpackProdConfig = require('./webpack.prod.config');
+const merge = require('webpack-merge');
+const prod = require('./prod');
 
-webpackProdConfig.plugins.push(new BundleAnalyzerPlugin());
-
-module.exports = webpackProdConfig;
+module.exports = merge.strategy({
+  plugins: 'append'
+})(prod, {
+  plugins: [new BundleAnalyzerPlugin()]
+});
