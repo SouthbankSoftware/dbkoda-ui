@@ -8,6 +8,8 @@
 
 import React from 'react';
 import HotKey from 'react-shortcut';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import {reaction, runInAction, action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {AnchorButton, Position} from '@blueprintjs/core';
@@ -32,6 +34,14 @@ export default class TreeToolbar extends React.Component {
       .bind(this);
 
     this.reactionToProfile = reaction(() => this.props.store.profileList.selectedProfile, () => this.onSelectProfile());
+  }
+
+  componentDidMount() {
+    // Add hotkey bindings for this component:
+    Mousetrap.bindGlobal(GlobalHotkeys.refreshTree.keys, this.refresh);
+  }
+  componentWillUnmount() {
+    Mousetrap.unbindGlobal(GlobalHotkeys.refreshTree.keys, this.refresh);
   }
 
   @action.bound
@@ -89,17 +99,6 @@ export default class TreeToolbar extends React.Component {
       });
   }
 
-  renderHotkeys() {
-    return (
-      <div className="TreeToolbarHotKeys">
-        <HotKey
-          keys={GlobalHotkeys.refreshTree.keys}
-          simultaneous
-          onKeysCoincide={this.refresh} />
-      </div>
-    );
-  }
-
   render() {
     console.log('Test: ', this.props.store.treePanel.isRefreshDisabled);
     return (
@@ -119,7 +118,6 @@ export default class TreeToolbar extends React.Component {
             loading={this.props.store.treePanel.isRefreshing}
             disabled={this.props.store.treePanel.isRefreshDisabled} />
         </div>
-        {this.renderHotkeys()}
       </nav>
     );
   }

@@ -7,15 +7,11 @@
 */
 
 import React from 'react';
-import HotKey from 'react-shortcut';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import {inject, observer} from 'mobx-react';
 import {action, reaction} from 'mobx';
-import {
-  Intent,
-  Tooltip,
-  AnchorButton,
-  Position
-} from '@blueprintjs/core';
+import {Intent, Tooltip, AnchorButton, Position} from '@blueprintjs/core';
 import {featherClient} from '~/helpers/feathers';
 import {OutputHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import EventLogging from '#/common/logging/EventLogging';
@@ -109,12 +105,27 @@ export default class Toolbar extends React.Component {
         this.props.store.outputPanel.clearingOutput = false;
       } else if (currentTab.indexOf('Details-') === 0) {
         console.log('Clear Details');
-        this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).detailsView = undefined;
+        this
+          .props
+          .store
+          .editors
+          .get(this.props.store.editorPanel.activeEditorId)
+          .detailsView = undefined;
         const editorKey = currentTab.split('Details-')[1];
         this.props.store.outputPanel.currentTab = editorKey;
         this.props.store.outputPanel.clearingOutput = false;
       }
     }, {name: 'reactionOutputToolbarClearOutput'});
+  }
+
+  componentDidMount() {
+    // Add hotkey bindings for this component:
+    Mousetrap.bindGlobal(OutputHotkeys.clearOutput.keys, this.clearOutput);
+    Mousetrap.bindGlobal(OutputHotkeys.showMore.keys, this.showMore);
+  }
+  componentWillUnmount() {
+    Mousetrap.unbindGlobal(OutputHotkeys.clearOutput.keys, this.clearOutput);
+    Mousetrap.unbindGlobal(OutputHotkeys.showMore.keys, this.showMore);
   }
 
   /**
@@ -156,36 +167,6 @@ export default class Toolbar extends React.Component {
     tempLink.href = csvURL;
     tempLink.setAttribute('download', `output-${this.props.store.outputPanel.currentTab}.js`);
     tempLink.click();
-  }
-
-  renderHotkeys() {
-    return (
-      <div className="OutputToolbarHotkeys">
-        <HotKey
-          keys={OutputHotkeys.clearOutput.keys}
-          simultaneous
-          onKeysCoincide={this.clearOutput} />
-        <HotKey
-          keys={OutputHotkeys.showMore.keys}
-          simultaneous
-          onKeysCoincide={this.showMore} />
-      </div>
-    );
-
-/*      <Hotkeys>
-        <Hotkey
-          global
-          combo="ctrl + l"
-          label="Clear Output"
-          onKeyDown={this.clearOutput} />
-        <Hotkey global combo="shift + m" label="Show More" onKeyDown={this.showMore} />
-        <Hotkey
-          global
-          combo="shift + x"
-          label="Save Output"
-          onKeyDown={this.downloadOutput} />
-      </Hotkeys>
-*/
   }
 
   render() {
@@ -250,7 +231,6 @@ export default class Toolbar extends React.Component {
           </Tooltip>
         </div>
         <div className="pt-navbar-group pt-right-align" />
-        {this.renderHotkeys()}
       </nav>
     );
   }

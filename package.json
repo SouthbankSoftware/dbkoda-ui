@@ -143,6 +143,9 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
+    "mousetrap": "^1.6.1",
+    "mousetrap-global-bind": "^1.1.0",
+    "react-mousetrap": "^0.1.1",
     "react-shortcut": "^1.0.6",
     "react-svg-loader": "^1.1.1"
   }
