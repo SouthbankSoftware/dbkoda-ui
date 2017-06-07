@@ -6,23 +6,13 @@
 // Theme 1 Colours: These should be externalized eventually:
 
 //Theme Colors:
-$panelLeftBackground: #363951;
-$navbarLeftBackground: #272a3a;
-$buttonSecondaryBackground: #272a3a;
-$buttonSecondaryBackgroundHover: #1e202b;
-$welcomeViewButtonHoverColor: #272a3a;
-$welcomeViewBackgroundColor: #070a1a;
-$welcomeViewIconBG: #272a3a;
-$welcomeViewIconBGHover: #272a3a;
-$welcomeViewSocialMediaBG: #272a3a;
-$welcomeViewKeyboardShortcutsBG: #171a2a;
-$profileListTabHover: rgba(39, 42, 58, 0.1);
-$profileListSelected: rgba(39, 42, 58, 0.5);
+$panelLeftBackground: #806e91;
+$navbarLeftBackground: #52465d;
+$buttonSecondaryBackground: #5c4646;
+$buttonSecondaryBackgroundHover: #493939;
 
-$connectionCheckboxBackgroundColour: #363951;
-$connectionCheckboxBackgroundColourHover: #565971;
-$connectionButtonBackgroundColour: #363951;
-$connectionButtonBackgroundColourHover: #565971;
+
+
 
 //Toast Notifications:
 $toastBackgroundColourSuccess: #DBEED3;
@@ -60,22 +50,30 @@ $propertyStringFontColor: #2cee31;
 $white: #ffffff;
 $black: #000000;
 //Welcome View:
+$welcomeViewBackgroundColor: #403749;
 $welcomeViewBrightBackgroundColor: #314249;
 $welcomeViewDividerColor: #9A9A9B;
 $welcomeViewDividerTransparent: rgba(154, 154, 155, 0.4);
 $welcomeViewButtonBorderColor: rgba(154, 154, 155, 0.6);
 $welcomeViewOptoutFontColor: #9A9A9B;
+$welcomeViewButtonHoverColor: #5c4646;
 $welcomeViewIconColor: #BFBEC0;
+$welcomeViewIconBG: #314249;
+$welcomeViewIconBGHover: #415259;
+$welcomeViewSocialMediaBG: #364951;
 $welcomeViewSocialMediaIcons: #9A9A9B;
 $welcomeViewSocialMediaText: #9A9A9B;
 $welcomeViewFontColor: #BFBEC0;
 $welcomeViewFontColorBright: #9A9A9B;
 $welcomeViewFontColorDark: #AFAEB0;
 $welcomeViewLinkColor: #4b98c6;
+$welcomeViewKeyboardShortcutsBG: #1c0606;
 //Profile List
 $profileListIconColor: rgba(191, 190, 192, 0.3);
 $profileListFontColor: #BFBEC0;
 $profileListDividerColor: rgba(138, 155, 168, 0.3);
+$profileListTabHover: rgba(191, 190, 192, 0.1);
+$profileListSelected: rgba(184, 140, 140, 0.5);
 //Output:
 $terminalBackground: #494849;
 $terminalInput: #202020;
@@ -109,15 +107,21 @@ $connectionTextFieldFontColour: #BFBEC0;
 $connectionRadioFieldColour: #BFBEC0;
 $connectionHeadingsFontColour: #BFBEC0;
 $connectionSubHeadingsFontColour: #FFFFFF;
+$connectionButtonBackgroundColour: #5c4646;
 $connectionButtonFontColour: #BFBEC0;
 $connectionButtonFontColourHover: #DFDEE0;
 $connectionButtonBorderColour: rgba(191, 190, 192, 0.5);
+$connectionButtonBackgroundColourHover: #7c6666;
 $connectionButtonBackgroundColourConnect: #24A26E;
 $connectionButtonBackgroundColourConnectHover: #1f7f53;
 $connectionButtonBackgroundColourReset: #8A4148;
 $connectionButtonBackgroundColourResetHover: #663139;
+$connectionCheckboxBackgroundColour: #5c4646;
+$connectionCheckboxBackgroundColourHover: #7c6666;
 $connectionCheckboxColour: rgba(191, 190, 192, 0.75);
 $connectionWarningFontColour: #9A5158;
+
+
 
 //Searchbox:
 $searchPrimaryBackground: #BFBEC0;

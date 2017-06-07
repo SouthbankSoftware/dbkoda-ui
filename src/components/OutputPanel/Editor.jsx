@@ -3,7 +3,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-24T11:15:57+10:00
+ * @Last modified time: 2017-06-06T16:15:03+10:00
 */
 
 import React from 'react';
@@ -271,7 +271,6 @@ export default class Editor extends React.Component {
         <OutputTerminal
           id={this.props.id}
           profileId={this.props.profileId}
-          connId={this.props.connId}
           shellId={this.props.shellId}
           title={this.props.title}
           onDrop={item => this.handleDrop(item)} />

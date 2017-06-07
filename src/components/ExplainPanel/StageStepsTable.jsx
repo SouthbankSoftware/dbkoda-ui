@@ -8,24 +8,47 @@ import './style.scss';
 
 import {generateComments} from './ExplainStep';
 
-export const StageStepsTable = ({stages}) => {
+const getExamined = (stage) => {
+  if (stage.stage === 'IXSCAN') {
+    return stage.keysExamined;
+  }
+  if (!stage.totalDocsExamined) {
+    return stage.docsExamined;
+  }
+  return stage.totalDocsExamined;
+};
+
+const getWorstShardStages = (stages) => {
+  let max = -1;
+  let worst = null;
+  stages.map((shard) => {
+    if (shard.stages && shard.stages.length > 0) {
+      if (worst === null) {
+        worst = shard.stages;
+      }
+      if (max < shard.stages[0].executionTimeMillisEstimate) {
+        max = shard.stages[0].executionTimeMillisEstimate;
+        worst = shard.stages;
+      }
+    }
+  });
+  return worst;
+};
+
+export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
   let mergedStages = [];
-  stages.map((stage) => {
+  const fStages = shardMergeStage && shard ? getWorstShardStages(stages) : stages;
+  if (shard) {
+    fStages.push(shardMergeStage);
+  }
+  fStages.map((stage) => {
     if (stage.constructor === Array) {
       mergedStages = mergedStages.concat(stage);
     } else {
       mergedStages.push(stage);
     }
   });
-  const getExamined = (stage) => {
-    if (stage.stage === 'IXSCAN') {
-      return stage.keysExamined;
-    }
-    if (stage.stage.indexOf('SHARD') >= 0) {
-      return stage.totalDocsExamined;
-    }
-    return stage.docsExamined;
-  };
+
   return (<div className="explain-stages-table">
     <div className="stage-header">
       <div className="column-header">Seq</div>

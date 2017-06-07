@@ -78,7 +78,7 @@ export default class Store {
 
   @observable layout = {
     optInVisible: true,
-    overallSplitPos: '35%',
+    overallSplitPos: '40%',
     leftSplitPos: '50%',
     rightSplitPos: '50%'
   };

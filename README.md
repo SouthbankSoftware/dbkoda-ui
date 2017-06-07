@@ -1,11 +1,11 @@
 # dbCoda UI
 *dbCida UI built with state of the art React stack*
 
-[![Build Status](https://drone.hoth.southbanksoftware.com/api/badges/SouthbankSoftware/dbcoda-ui/status.svg)](https://drone.hoth.southbanksoftware.com/SouthbankSoftware/dbcoda-ui)
+[![Build Status](https://drone.southbanksoftware.com/api/badges/SouthbankSoftware/dbcoda-ui/status.svg)](https://drone.southbanksoftware.com/SouthbankSoftware/dbcoda-ui)
 
 ## Build tool
 
-Webpack is used as build/assemble tool for React.js project. It defines two environments, `dev` and `prod`. 
+Webpack is used as build/assemble tool for React.js project. It defines two environments, `dev` and `prod`.
 
 * Dev:
     A `webpack-dev-server` is used during development mode. All the compiled code are saved in memory.

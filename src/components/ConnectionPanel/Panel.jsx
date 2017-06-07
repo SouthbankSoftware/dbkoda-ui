@@ -31,7 +31,8 @@ export default class Panel extends React.Component {
       checkboxHost: true,
       checkboxUrl: false,
       checkboxSSL: false,
-      checkboxScram: false
+      checkboxScram: false,
+      hasAliasChanged: false,
     };
   }
 
@@ -134,6 +135,10 @@ export default class Panel extends React.Component {
     return errorMsg;
   }
 
+  @autobind _updateAliasState() {
+    this.state.hasAliasChanged = true;
+  }
+
   @autobind _save(data) {
     this
       .props
@@ -144,12 +149,12 @@ export default class Panel extends React.Component {
     form.connect = this._connect;
     form.test = this._test;
     form.save = this._save;
-    if (!edit && this.props.form.$('alias').value === globalString('connection/form/defaultAlias', '1') && profiles) {
+    if (!edit && this.props.form.$('host') && profiles && !this.state.hasAliasChanged) {
       this
         .props
         .form
         .$('alias')
-        .value = globalString('connection/form/defaultAlias', (profiles.size + 1));
+        .value = this.props.form.$('host').value + ':' + this.props.form.$('port').value + ' - ' + (profiles.size + 1);
     }
     const formErrors = this._getFormErrors();
 
@@ -161,7 +166,7 @@ export default class Panel extends React.Component {
           onClick={this.props.close} />
         <h3 className="form-title">{title}</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
-          <Input field={form.$('alias')} showLabel /> {this
+          <Input field={form.$('alias')} divOnChange={this._updateAliasState} showLabel /> {this
             .props
             .form
             .$('hostRadio')
@@ -169,15 +174,15 @@ export default class Panel extends React.Component {
             ? (
               <div className=" active hostname-form pt-form-group pt-inline zero-margin">
                 <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
-                <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} />
-                <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} />
+                <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} divOnFocus={this._onClickHost} />
+                <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} divOnFocus={this._onClickHost} />
               </div>
             )
             : (
               <div className=" inactive hostname-form pt-form-group pt-inline zero-margin">
                 <Radio field={form.$('hostRadio')} onChange={this._hostRadioOnChange} />
-                <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} />
-                <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} />
+                <Input field={form.$('host')} showLabel divOnClick={this._onClickHost} divOnFocus={this._onClickHost} />
+                <Input field={form.$('port')} showLabel divOnClick={this._onClickHost} divOnFocus={this._onClickHost} />
               </div>
             )}
           {this
@@ -188,13 +193,13 @@ export default class Panel extends React.Component {
             ? (
               <div className=" active url-form pt-form-group pt-inline zero-margin">
                 <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
-                <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} />
+                <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} divOnFocus={this._onClickURL} />
               </div>
             )
             : (
               <div className=" inactive url-form pt-form-group pt-inline zero-margin">
                 <Radio field={form.$('urlRadio')} onChange={this._urlRadioOnChange} />
-                <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} />
+                <Input showLabel field={form.$('url')} divOnClick={this._onClickURL} divOnFocus={this._onClickURL} />
               </div>
             )}
           <div className="database-form pt-form-group pt-inline zero-margin">
@@ -213,14 +218,14 @@ export default class Panel extends React.Component {
             .get('value')
             ? (
               <div className=" active credentials-form">
-                <Input field={form.$('username')} divOnClick={this._onClickUserName} />
-                <Input field={form.$('password')} divOnClick={this._onClickUserName} />
+                <Input field={form.$('username')} divOnClick={this._onClickUserName} divOnFocus={this._onClickUserName} />
+                <Input field={form.$('password')} divOnClick={this._onClickUserName} divOnFocus={this._onClickUserName} />
               </div>
             )
             : (
               <div className=" inactive credentials-form">
-                <Input field={form.$('username')} divOnClick={this._onClickUserName} />
-                <Input field={form.$('password')} divOnClick={this._onClickUserName} />
+                <Input field={form.$('username')} divOnClick={this._onClickUserName} divOnFocus={this._onClickUserName} />
+                <Input field={form.$('password')} divOnClick={this._onClickUserName} divOnFocus={this._onClickUserName} />
               </div>
             )}
           {(formErrors.length > 0)
@@ -252,6 +257,7 @@ export default class Panel extends React.Component {
               : (<Button
                 className="active test-button pt-button pt-intent-primary"
                 onClick={form.onTest}
+
                 text={globalString('connection/form/testButton')}
                 disabled={formErrors.length > 0}
                 loading={this.state.testing} />)}
