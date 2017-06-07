@@ -836,6 +836,5 @@ describe('test shard explain view', () => {
     assert.equal(shardStages[2][1].stage, 'SORT_KEY_GENERATOR');
     assert.equal(shardStages[3][0].stage, 'SHARDING_FILTER');
     assert.equal(shardStages[3][1].stage, 'SORT');
-
   });
 });
