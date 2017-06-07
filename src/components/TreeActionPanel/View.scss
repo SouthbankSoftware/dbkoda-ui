@@ -1,13 +1,28 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-03-14T16:09:51+11:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   chris
-// @Last modified time: 2017-06-02T11:33:38+10:00
+// @Last modified by:   wahaj
+// @Last modified time: 2017-06-07T14:28:56+10:00
 @import '../../styles/_defaultTheme.scss';
 
 .dynamic-form {
   div > form {
     margin: 30px;
+  }
+
+  input[type=text],
+  input[type=number],
+  input[type=Numeric],
+  input[type=password] {
+    background: unset;
+    color: $connectionActiveTextFieldTextColour !important;
+  }
+  input[type=text]:focus,
+  input[type=number]:focus,
+  input[type=Numeric]:focus,
+  input[type=password]:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
   }
 
   .form-scrollable {
@@ -51,8 +66,8 @@
       border-radius: 0px;
       border-style: none;
       box-shadow: none;
-      background-color: $fieldBrightBackgroundColor !important;
-      color: $fieldBrightFontColor !important;
+      // background-color: $fieldBrightBackgroundColor !important;
+      // color: $fieldBrightFontColor !important;
     }
 
     .pt-numeric-input {
@@ -258,9 +273,13 @@
   .Select-control {
     height: 30px;
     border: none;
-    background-color: $fieldBrightBackgroundColor;
-    color: $fieldBrightFontColor;
+    background: #BFBEC0 !important;
+    color: $connectionActiveTextFieldTextColour !important;
     border-radius: 0px;
+  }
+  .is-open > .Select-control {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
   }
   .Select-menu-outer {
     z-index: 999 !important;
