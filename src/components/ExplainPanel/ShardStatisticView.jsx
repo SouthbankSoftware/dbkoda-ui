@@ -22,7 +22,7 @@ const getAllShardStatistics = (explains) => {
           examined += input.keysExamined;
           nReturned += input.nReturned;
         });
-        oneShard.push({docsExamined: examined});
+        oneShard.push({docsExamined: examined, nReturned});
       }
       cursor = cursor.inputStage;
     }
