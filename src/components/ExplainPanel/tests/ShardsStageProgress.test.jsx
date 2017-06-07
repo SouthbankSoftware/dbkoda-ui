@@ -1060,6 +1060,6 @@ describe('test shard explain view', () => {
     };
     const stages = getExecutionStages(explain.executionStats.executionStages);
     const shardStages = mergeShardsStages(stages);
-    assert.equal(shardStages.length, 4);
+    assert.equal(shardStages.length, 6);
   });
 });
