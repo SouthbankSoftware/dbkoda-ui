@@ -1,12 +1,13 @@
 /**
- *
- * Created by joey on 22/5/17.
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-06-07T15:03:32+10:00
  */
+
 import React from 'react';
 
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
-import Prettier from 'prettier';
+import Prettier from 'prettier-standalone';
 import './style.scss';
 
 const options = {

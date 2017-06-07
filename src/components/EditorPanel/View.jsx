@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-05-30T13:31:46+10:00
+ * @Last modified time: 2017-06-07T15:02:29+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -27,7 +27,7 @@ import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 
-const Prettier = require('prettier');
+const Prettier = require('prettier-standalone');
 const React = require('react');
 const CodeMirror = require('react-codemirror');
 const CM = require('codemirror');
