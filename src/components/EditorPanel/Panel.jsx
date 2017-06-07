@@ -10,6 +10,8 @@
 import React from 'react';
 import {inject, observer, PropTypes} from 'mobx-react';
 import {action, reaction, runInAction} from 'mobx';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import {
   Button,
   Tabs2,
@@ -19,7 +21,6 @@ import {
   Menu,
   MenuItem
 } from '@blueprintjs/core';
-import HotKey from 'react-shortcut';
 import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import Toolbar from './Toolbar.jsx';
 import View from './View.jsx';
@@ -101,8 +102,14 @@ export default class Panel extends React.Component {
       }
     });
   }
+
+  componentDidMount() {
+    // Add hotkey bindings for this component:
+    Mousetrap.bindGlobal(GlobalHotkeys.closeTab.keys, this.closeActiveTab);
+  }
   componentWillUnmount() {
     this.reactionToProfile();
+    Mousetrap.unbindGlobal(GlobalHotkeys.closeTab.keys, this.closeActiveTab);
   }
   reactionToProfile;
   /**
@@ -208,7 +215,7 @@ export default class Panel extends React.Component {
     this.forceUpdate();
   }
 
-    /**
+  /**
    * Action for closing active tab.
    */
   @action closeActiveTab() {
@@ -540,17 +547,6 @@ export default class Panel extends React.Component {
     );
   }
 
-  renderHotkeys() {
-    return (
-      <div className="EditorPanelHotkeys">
-        <HotKey
-          keys={GlobalHotkeys.closeTab.keys}
-          simultaneous
-          onKeysCoincide={this.closeActiveTab} />
-      </div>
-    );
-  }
-
   /**
    * Action for rendering the component.
    */
@@ -621,7 +617,6 @@ export default class Panel extends React.Component {
             );
           })}
         </Tabs2>
-        {this.renderHotkeys()}
       </div>
     );
   }
