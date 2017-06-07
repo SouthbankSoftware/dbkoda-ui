@@ -36,9 +36,9 @@ export default class LearnShortcuts extends React.Component {
           {globalShortcuts
             .map((item) => {
               return (
-                <div className="hotkeyItem">
+                <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
-                  <p classNAme="hotkeyDescription>">{item.description}</p>
+                  <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
             })
@@ -48,9 +48,9 @@ export default class LearnShortcuts extends React.Component {
           {terminalShortcuts
             .map((item) => {
               return (
-                <div className="hotkeyItem">
+                <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
-                  <p classNAme="hotkeyDescription>">{item.description}</p>
+                  <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
             })
@@ -60,9 +60,9 @@ export default class LearnShortcuts extends React.Component {
           {outputShortcuts
             .map((item) => {
               return (
-                <div className="hotkeyItem">
+                <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
-                  <p classNAme="hotkeyDescription>">{item.description}</p>
+                  <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
             })
@@ -72,9 +72,9 @@ export default class LearnShortcuts extends React.Component {
           {editorShortcuts
             .map((item) => {
               return (
-                <div className="hotkeyItem">
+                <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
-                  <p classNAme="hotkeyDescription>">{item.description}</p>
+                  <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
             })

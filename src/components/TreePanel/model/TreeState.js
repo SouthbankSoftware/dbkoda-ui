@@ -3,7 +3,7 @@
  * @Date:   2017-03-08T11:56:51+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T14:51:55+10:00
+ * @Last modified time: 2017-06-07T09:59:09+10:00
  */
 
 /* eslint-disable */
@@ -27,6 +27,7 @@ import TreeNode from './TreeNode.jsx';
 
 export default class TreeState {
   profileId;
+  topologyProfileId = '';
   treeNodes;
   @observable filteredNodes;
   @observable filter = '';
@@ -96,9 +97,12 @@ export default class TreeState {
    * function to parse json document from the controller
    * @param  {json} treeJson [description]
    */
-  @action parseJson(treeJson) {
+  @action parseJson(treeJson, profileId = '') {
     this.treeJson = treeJson;
     this.treeRoot = undefined;
+    if (profileId != '' && profileId == this.topologyProfileId) {
+      this.preserveState();
+    }
     this
       .filteredNodes
       .clear();
@@ -120,6 +124,10 @@ export default class TreeState {
       this.filterNodes();
       this.isNewJsonAvailable = true;
     }
+    if (profileId != '' && profileId == this.topologyProfileId) {
+      this.restoreState();
+    }
+    this.topologyProfileId = profileId;
   }
   /**
    * function to select a specific node in a tree

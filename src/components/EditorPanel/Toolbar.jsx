@@ -10,7 +10,8 @@
 /* eslint-disable react/sort-comp */
 import _ from 'lodash';
 import React from 'react';
-import HotKey from 'react-shortcut';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import {featherClient} from '~/helpers/feathers';
 import {observer, inject} from 'mobx-react';
 import {action, reaction, observable, runInAction, when} from 'mobx';
@@ -68,9 +69,6 @@ export default class Toolbar extends React.Component {
     this.onDropdownChanged = this
       .onDropdownChanged
       .bind(this);
-    this.renderHotkeys = this
-      .renderHotkeys
-      .bind(this);
     this.openFile = this
       .openFile
       .bind(this);
@@ -93,20 +91,40 @@ export default class Toolbar extends React.Component {
     });
 
     if (IS_ELECTRON) {
-      window.require('electron').ipcRenderer.on('command', (event, message) => {
-        if (message == 'openFile') {
-          this.openFile();
-        } else if (message == 'saveFile') {
-          this.saveFile();
-        }
-      });
+      window
+        .require('electron')
+        .ipcRenderer
+        .on('command', (event, message) => {
+          if (message == 'openFile') {
+            this.openFile();
+          } else if (message == 'saveFile') {
+            this.saveFile();
+          }
+        });
     }
   }
 
   componentWillUnmount() {
     this.reactionToNewEditorForTreeAction();
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeLine.keys, this.executeLine);
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeAll.keys, this.executeAll);
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys, this.stopExecution);
+
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.addEditor.keys, this.addEditor);
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.openFile.keys, this.openFile);
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFile.keys, this.saveFile);
   }
 
+  componentDidMount() {
+    // Add hotkey bindings for this component:
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeLine.keys, this.executeLine);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeAll.keys, this.executeAll);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys, this.stopExecution);
+
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.addEditor.keys, this.addEditor);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.openFile.keys, this.openFile);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFile.keys, this.saveFile);
+  }
   reactionToNewEditorForTreeAction;
 
   /**
@@ -290,9 +308,18 @@ export default class Toolbar extends React.Component {
       this.props.store.editorToolbar.newEditorForTreeAction = false;
       this.props.store.treeActionPanel.treeActionEditorId = editorId;
       this.props.store.treeActionPanel.newEditorCreated = true;
-      const treeEditor = this.props.store.editors.get(editorId);
+      const treeEditor = this
+        .props
+        .store
+        .editors
+        .get(editorId);
       treeEditor.fileName = 'Tree Action';
-      this.props.store.treeActionPanel.editors.set(editorId, treeEditor);
+      this
+        .props
+        .store
+        .treeActionPanel
+        .editors
+        .set(editorId, treeEditor);
     }
     return editorId;
   }
@@ -401,9 +428,19 @@ export default class Toolbar extends React.Component {
             runInAction('update fileName and path', () => {
               currentEditor.fileName = path.basename(fileName);
               currentEditor.path = fileName;
-              const treeEditor = this.props.store.treeActionPanel.editors.get(currentEditor.id);
+              const treeEditor = this
+                .props
+                .store
+                .treeActionPanel
+                .editors
+                .get(currentEditor.id);
               if (treeEditor) {
-                this.props.store.treeActionPanel.editors.delete(currentEditor.id);
+                this
+                  .props
+                  .store
+                  .treeActionPanel
+                  .editors
+                  .delete(currentEditor.id);
               }
             });
             this._watchFileBackgroundChange(currentEditor.id);
@@ -460,7 +497,7 @@ export default class Toolbar extends React.Component {
     if (this.props.store.editorToolbar.isActiveExecuting) {
       this.props.store.editorPanel.stoppingExecution = true;
     } else {
-       NewToaster.show({message: 'Cannot stop execution. Nothing is executing.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: 'Cannot stop execution. Nothing is executing.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
     }
   }
 
@@ -708,43 +745,9 @@ export default class Toolbar extends React.Component {
                 onChange={this.onFilterChanged} />
             </div>
           </Tooltip> */}
-          {this.renderHotkeys()}
+
         </div>
       </nav>
-    );
-  }
-
-  /**
-   * Render function for the hotkeys associated with this component.
-   */
-  renderHotkeys() {
-    return (
-      <div className="EditorToolbarHotkeys">
-        <HotKey
-          keys={GlobalHotkeys.executeLine.keys}
-          simultaneous
-          onKeysCoincide={this.executeLine} />
-        <HotKey
-          keys={GlobalHotkeys.executeAll.keys}
-          simultaneous
-          onKeysCoincide={this.executeAll} />
-        <HotKey
-          keys={GlobalHotkeys.stopExecution.keys}
-          simultaneous
-          onKeysCoincide={this.stopExecution} />
-        <HotKey
-          keys={GlobalHotkeys.newTab.keys}
-          simultaneous
-          onKeysCoincide={this.addEditor} />
-        <HotKey
-          keys={GlobalHotkeys.openFile.keys}
-          simultaneous
-          onKeysCoincide={this.openFile} />
-        <HotKey
-          keys={GlobalHotkeys.saveFile.keys}
-          simultaneous
-          onKeysCoincide={this.saveFile} />
-      </div>
     );
   }
 }
