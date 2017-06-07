@@ -1,7 +1,6 @@
 /**
  * Created by joey on 6/6/17.
  */
-
 // import React from 'react';
 import chai, {assert} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
@@ -369,159 +368,474 @@ describe('test shard explain view', () => {
     const shardStages = mergeShardsStages(stages);
     assert.equal(shardStages.length, 3);
     assert.equal(shardStages[0].length, 3);
-    assert.equal(shardStages[0][0].stage, 'COLLSCAN');
-    assert.equal(shardStages[0][1].stage, 'SHARDING_FILTER');
+    assert.equal(shardStages[0][0], null);
+    assert.equal(shardStages[0][1], null);
     assert.equal(shardStages[0][2].stage, 'COLLSCAN');
     assert.equal(shardStages[1].length, 3);
-    assert.equal(shardStages[1][0].stage, 'SHARDING_FILTER');
-    assert.equal(shardStages[1][1].stage, 'COLLSCAN');
+    assert.equal(shardStages[1][0].stage, 'COLLSCAN');
+    assert.equal(shardStages[1][1], null);
+    assert.equal(shardStages[1][2].stage, 'COLLSCAN');
     assert.equal(shardStages[2].length, 3);
+    assert.equal(shardStages[2][0].stage, 'SHARDING_FILTER');
+    assert.equal(shardStages[2][1].stage, 'SHARDING_FILTER');
     assert.equal(shardStages[2][2].stage, 'SHARDING_FILTER');
   });
 
   test('explain on two shards in a three shards cluster', () => {
     const explain = {
-      'executionStats' :
-        {
-          'nReturned' : 19793,
-          'executionTimeMillis' : 71,
-          'totalKeysExamined' : 0,
-          'totalDocsExamined' : 100000,
-          'executionStages' : {
-            'stage' : 'SHARD_MERGE',
-            'nReturned' : 19793,
-            'executionTimeMillis' : 71,
-            'totalKeysExamined' : 0,
-            'totalDocsExamined' : 100000,
-            'totalChildMillis' : 'NumberLong(127)',
-            'shards' : [
-              {
-                'shardName' : 'shard01',
-                'executionSuccess' : true,
-                'executionStages' : {
-                  'stage' : 'PROJECTION',
-                  'nReturned' : 9958,
-                  'executionTimeMillisEstimate' : 57,
-                  'works' : 50393,
-                  'advanced' : 9958,
-                  'needTime' : 40434,
-                  'needYield' : 0,
-                  'saveState' : 395,
-                  'restoreState' : 395,
-                  'isEOF' : 1,
-                  'invalidates' : 0,
-                  'transformBy' : {
-                    'user.name.first' : 1
-                  },
-                  'inputStage' : {
-                    'stage' : 'SHARDING_FILTER',
-                    'nReturned' : 9958,
-                    'executionTimeMillisEstimate' : 44,
-                    'works' : 50393,
-                    'advanced' : 9958,
-                    'needTime' :
-                      40434,
-                    'needYield' : 0,
-                    'saveState' : 395,
-                    'restoreState' : 395,
-                    'isEOF' : 1,
-                    'invalidates' : 0,
-                    'chunkSkips' : 0,
-                    'inputStage' : {
-                      'stage' : 'COLLSCAN',
-                      'filter' : {
-                        'user.address.city' : {
-                          '$eq' : 'Brooklyn'
-                        }
-                      },
-                      'nReturned' : 9958,
-                      'executionTimeMillisEstimate' : 44,
-                      'works' : 50393,
-                      'advanced' : 9958,
-                      'needTime' : 40434,
-                      'needYield' : 0,
-                      'saveState' : 395,
-                      'restoreState' : 395,
-                      'isEOF' : 1,
-                      'invalidates' : 0,
-                      'direction' : 'forward',
-                      'docsExamined' : 50391
-                    }
-                  }
-                }
-              },
-              {
-                'shardName' : 'shard03',
-                'executionSuccess' : true,
-                'executionStages' : {
-                  'stage' : 'PROJECTION',
-                  'nReturned' : 9835,
-                  'executionTimeMillisEstimate' : 68,
-                  'works' : 49611,
-                  'advanced' : 9835,
-                  'needTime' : 39775,
-                  'needYield' : 0,
-                  'saveState' : 390,
-                  'restoreState' : 390,
-                  'isEOF' : 1,
-                  'invalidates' : 0,
-                  'transformBy' : {
-                    'user.name.first' : 1
-                  },
-                  'inputStage' : {
-                    'stage' : 'SHARDING_FILTER',
-                    'nReturned' : 9835,
-                    'executionTimeMillisEstimate' : 57,
-                    'works' : 49611,
-                    'advanced' : 9835,
-                    'needTime' : 39775,
-                    'needYield' : 0,
-                    'saveState' : 390,
-                    'restoreState' : 390,
-                    'isEOF' : 1,
-                    'invalidates' : 0,
-                    'chunkSkips' : 0,
-                    'inputStage' : {
-                      'stage' : 'COLLSCAN',
-                      'filter' : {
-                        'user.address.city' : {
-                          '$eq' : 'Brooklyn'
-                        }
-                      },
-                      'nReturned' : 9835,
-                      'executionTimeMillisEstimate' : 36,
-                      'works' : 49611,
-                      'advanced' : 9835,
-                      'needTime' : 39775,
-                      'needYield' : 0,
-                      'saveState' : 390,
-                      'restoreState' : 390,
-                      'isEOF' : 1,
-                      'invalidates' : 0,
-                      'direction' : 'forward',
-                      'docsExamined' : 49609
-                    }
+      'executionStats': {
+        'nReturned': 19793,
+        'executionTimeMillis': 71,
+        'totalKeysExamined': 0,
+        'totalDocsExamined': 100000,
+        'executionStages': {
+          'stage': 'SHARD_MERGE',
+          'nReturned': 19793,
+          'executionTimeMillis': 71,
+          'totalKeysExamined': 0,
+          'totalDocsExamined': 100000,
+          'totalChildMillis': 'NumberLong(127)',
+          'shards': [
+            {
+              'shardName': 'shard01',
+              'executionSuccess': true,
+              'executionStages': {
+                'stage': 'PROJECTION',
+                'nReturned': 9958,
+                'executionTimeMillisEstimate': 57,
+                'works': 50393,
+                'advanced': 9958,
+                'needTime': 40434,
+                'needYield': 0,
+                'saveState': 395,
+                'restoreState': 395,
+                'isEOF': 1,
+                'invalidates': 0,
+                'transformBy': {
+                  'user.name.first': 1
+                },
+                'inputStage': {
+                  'stage': 'SHARDING_FILTER',
+                  'nReturned': 9958,
+                  'executionTimeMillisEstimate': 44,
+                  'works': 50393,
+                  'advanced': 9958,
+                  'needTime': 40434,
+                  'needYield': 0,
+                  'saveState': 395,
+                  'restoreState': 395,
+                  'isEOF': 1,
+                  'invalidates': 0,
+                  'chunkSkips': 0,
+                  'inputStage': {
+                    'stage': 'COLLSCAN',
+                    'filter': {
+                      'user.address.city': {
+                        '$eq': 'Brooklyn'
+                      }
+                    },
+                    'nReturned': 9958,
+                    'executionTimeMillisEstimate': 44,
+                    'works': 50393,
+                    'advanced': 9958,
+                    'needTime': 40434,
+                    'needYield': 0,
+                    'saveState': 395,
+                    'restoreState': 395,
+                    'isEOF': 1,
+                    'invalidates': 0,
+                    'direction': 'forward',
+                    'docsExamined': 50391
                   }
                 }
               }
-            ]
-          },
-          'allPlansExecution' : [
-            {
-              'shardName' : 'shard01',
-              'allPlans' : []
             },
             {
-              'shardName' : 'shard03',
-              'allPlans' : []
+              'shardName': 'shard03',
+              'executionSuccess': true,
+              'executionStages': {
+                'stage': 'PROJECTION',
+                'nReturned': 9835,
+                'executionTimeMillisEstimate': 68,
+                'works': 49611,
+                'advanced': 9835,
+                'needTime': 39775,
+                'needYield': 0,
+                'saveState': 390,
+                'restoreState': 390,
+                'isEOF': 1,
+                'invalidates': 0,
+                'transformBy': {
+                  'user.name.first': 1
+                },
+                'inputStage': {
+                  'stage': 'SHARDING_FILTER',
+                  'nReturned': 9835,
+                  'executionTimeMillisEstimate': 57,
+                  'works': 49611,
+                  'advanced': 9835,
+                  'needTime': 39775,
+                  'needYield': 0,
+                  'saveState': 390,
+                  'restoreState': 390,
+                  'isEOF': 1,
+                  'invalidates': 0,
+                  'chunkSkips': 0,
+                  'inputStage': {
+                    'stage': 'COLLSCAN',
+                    'filter': {
+                      'user.address.city': {
+                        '$eq': 'Brooklyn'
+                      }
+                    },
+                    'nReturned': 9835,
+                    'executionTimeMillisEstimate': 36,
+                    'works': 49611,
+                    'advanced': 9835,
+                    'needTime': 39775,
+                    'needYield': 0,
+                    'saveState': 390,
+                    'restoreState': 390,
+                    'isEOF': 1,
+                    'invalidates': 0,
+                    'direction': 'forward',
+                    'docsExamined': 49609
+                  }
+                }
+              }
             }
           ]
         },
-      'ok' : 1
+        'allPlansExecution': [
+          {
+            'shardName': 'shard01',
+            'allPlans': []
+          },
+          {
+            'shardName': 'shard03',
+            'allPlans': []
+          }
+        ]
+      },
+      'ok': 1
     };
     const stages = getExecutionStages(explain.executionStats.executionStages);
     const shardStages = mergeShardsStages(stages);
     assert.equal(shardStages.length, 3);
     assert.equal(shardStages[0].length, 2);
+  });
+
+  test('parse shards with different stage', () => {
+    const explain = {
+      'executionStats': {
+        'nReturned': 1349,
+        'executionTimeMillis': 27,
+        'totalKeysExamined': 668,
+        'totalDocsExamined': 50277,
+        'executionStages': {
+          'stage': 'SHARD_MERGE',
+          'nReturned': 1349,
+          'executionTimeMillis': 27,
+          'totalKeysExamined': 668,
+          'totalDocsExamined': 50277,
+          'totalChildMillis': 'NumberLong(29)',
+          'shards': [
+            {
+              'shardName': 'shard01',
+              'executionSuccess': true,
+              'executionStages': {
+                'stage': 'SHARDING_FILTER',
+                'nReturned': 668,
+                'executionTimeMillisEstimate': 0,
+                'works': 669,
+                'advanced': 668,
+                'needTime': 0,
+                'needYield': 0,
+                'saveState': 5,
+                'restoreState': 5,
+                'isEOF': 1,
+                'invalidates': 0,
+                'chunkSkips': 0,
+                'inputStage': {
+                  'stage': 'FETCH',
+                  'nReturned': 668,
+                  'executionTimeMillisEstimate': 0,
+
+                  'works': 669,
+                  'advanced': 668,
+                  'needTime': 0,
+                  'needYield': 0,
+                  'saveState': 5,
+                  'restoreState': 5,
+                  'isEOF': 1,
+                  'invalidates': 0,
+                  'docsExamined': 668,
+                  'alreadyHasObj': 0,
+                  'inputStage': {
+                    'stage': 'IXSCAN',
+                    'nReturned': 668,
+                    'executionTimeMillisEstimate': 0,
+                    'works': 669,
+                    'advanced': 668,
+                    'needTime': 0,
+                    'needYield': 0,
+                    'saveState': 5,
+                    'restoreState': 5,
+                    'isEOF': 1,
+                    'invalidates': 0,
+                    'keyPattern': {
+                      'user.name.first': 1
+                    },
+                    'indexName': 'user.name.first_1',
+                    'isMultiKey': false,
+                    'multiKeyPaths': {
+                      'user.name.first': []
+                    },
+                    'isUnique': false,
+                    'isSparse': false,
+                    'isPartial': false,
+                    'indexVersion': 2,
+                    'direction': 'forward',
+                    'indexBounds': {
+                      'user.name.first': [
+
+                        '["Hannah", "Hannah"]'
+                      ]
+                    },
+                    'keysExamined': 668,
+                    'seeks': 1,
+                    'dupsTested': 0,
+                    'dupsDropped': 0,
+                    'seenInvalidated': 0
+                  }
+                }
+              }
+            },
+            {
+              'shardName': 'shard03',
+              'executionSuccess': true,
+              'executionStages': {
+                'stage': 'SHARDING_FILTER',
+                'nReturned': 681,
+                'executionTimeMillisEstimate': 25,
+                'works': 49611,
+                'advanced': 681,
+                'needTime': 48929,
+                'needYield': 0,
+                'saveState': 387,
+                'restoreState': 387,
+                'isEOF': 1,
+                'invalidates': 0,
+                'chunkSkips': 0,
+                'inputStage': {
+                  'stage': 'COLLSCAN',
+                  'filter': {
+                    'user.name.first': {
+                      '$eq': 'Hannah'
+                    }
+                  },
+                  'nReturned': 681,
+                  'executionTimeMillisEstimate': 25,
+                  'works': 49611,
+                  'advanced': 681,
+                  'needTime': 48929,
+                  'needYield': 0,
+                  'saveState': 387,
+                  'restoreState': 387,
+                  'isEOF': 1,
+                  'invalidates': 0,
+                  'direction': 'forward',
+                  'docsExamined': 49609
+                }
+              }
+            }
+          ]
+        }
+      },
+      'ok': 1
+    };
+    const stages = getExecutionStages(explain.executionStats.executionStages);
+    const shardStages = mergeShardsStages(stages);
+    assert.equal(shardStages.length, 3);
+    assert.equal(shardStages[0].length, 2);
+    assert.equal(shardStages[0][0].stage, 'IXSCAN');
+    assert.equal(shardStages[0][1], null);
+    assert.equal(shardStages[1].length, 2);
+    assert.equal(shardStages[1][0].stage, 'FETCH');
+    assert.equal(shardStages[1][1].stage, 'COLLSCAN');
+    assert.equal(shardStages[2].length, 2);
+    assert.equal(shardStages[2][0].stage, 'SHARDING_FILTER');
+    assert.equal(shardStages[2][1].stage, 'SHARDING_FILTER');
+  });
+
+  test('parse shards explain result the second shard has more than the first one', () => {
+    const explain = {'executionStats' : {
+      'nReturned' : 1349,
+        'executionTimeMillis' : 32,
+        'totalKeysExamined' : 668,
+        'totalDocsExamined' : 50277,
+        'executionStages' : {
+        'stage' : 'SHARD_MERGE_SORT',
+          'nReturned' : 1349,
+          'executionTimeMillis' : 32,
+          'totalKeysExamined' : 668,
+          'totalDocsExamined' : 50277,
+          'totalChildMillis' : 'NumberLong(33)',
+          'shards' : [
+          {
+            'shardName' : 'shard01',
+            'executionSuccess' : true,
+            'executionStages' : {
+              'stage' : 'SHARDING_FILTER',
+              'nReturned' : 668,
+              'executionTimeMillisEstimate' : 0,
+              'works' : 669,
+              'advanced' : 668,
+              'needTime' : 0,
+              'needYield' : 0,
+              'saveState' : 5,
+              'restoreState' : 5,
+              'isEOF' : 1,
+              'invalidates' : 0,
+              'chunkSkips' : 0,
+              'inputStage' : {
+                'stage' : 'FETCH',
+                'nReturned' : 668,
+                'executionTimeMillisEstimate' : 0,
+                'works' : 669,
+                'advanced' : 668,
+                'needTime' : 0,
+                'needYield' : 0,
+                'saveState' : 5,
+                'restoreState' : 5,
+                'isEOF' : 1,
+                'invalidates' : 0,
+                'docsExamined' : 668,
+                'alreadyHasObj' : 0,
+                'inputStage' : {
+                  'stage' : 'IXSCAN',
+                  'nReturned' : 668,
+                  'executionTimeMillisEstimate' : 0,
+                  'works' : 669,
+                  'advanced' : 668,
+                  'needTime' : 0,
+                  'needYield' : 0,
+                  'saveState' : 5,
+                  'restoreState' : 5,
+                  'isEOF' : 1,
+                  'invalidates' : 0,
+                  'keyPattern' : {
+                    'user.name.first' : 1
+                  },
+                  'indexName' : 'user.name.first_1',
+                  'isMultiKey' : false,
+                  'multiKeyPaths' : {
+                    'user.name.first' : []
+
+                  },
+                  'isUnique' : false,
+                  'isSparse' : false,
+                  'isPartial' : false,
+                  'indexVersion' : 2,
+                  'direction' : 'forward',
+                  'indexBounds' : {
+                    'user.name.first' : [
+                      '["Hannah", "Hannah"]'
+                    ]
+                  },
+                  'keysExamined' : 668,
+                  'seeks' : 1,
+                  'dupsTested' : 0,
+                  'dupsDropped' : 0,
+                  'seenInvalidated' : 0
+                }
+              }
+            }
+          },
+          {
+            'shardName' : 'shard03',
+            'executionSuccess' : true,
+            'executionStages' : {
+              'stage' : 'SORT',
+              'nReturned' : 681,
+              'executionTimeMillisEstimate' : 25,
+              'works' : 50294,
+              'advanced' : 681,
+              'needTime' : 49612,
+              'needYield' : 0,
+              'saveState' : 393,
+              'restoreState' : 393,
+              'isEOF' : 1,
+              'invalidates' : 0,
+              'sortPattern' : {
+                'user.name.first' : 1
+              },
+              'memUsage' : 386946,
+              'memLimit' : 33554432,
+              'inputStage' : {
+                'stage' : 'SORT_KEY_GENERATOR',
+                'nReturned' : 681,
+                'executionTimeMillisEstimate' : 25,
+                'works' : 49612,
+                'advanced' : 681,
+                'needTime' : 48930,
+                'needYield' : 0,
+                'saveState' : 393,
+                'restoreState' : 393,
+                'isEOF' : 1,
+                'invalidates' : 0,
+                'inputStage' : {
+                  'stage' : 'SHARDING_FILTER',
+                  'nReturned' : 681,
+                  'executionTimeMillisEstimate' : 25,
+                  'works' : 49611,
+                  'advanced' : 681,
+                  'needTime' : 48929,
+                  'needYield' : 0,
+                  'saveState' : 393,
+                  'restoreState' : 393,
+                  'isEOF' : 1,
+                  'invalidates' : 0,
+                  'chunkSkips' : 0,
+                  'inputStage' : {
+                    'stage' : 'COLLSCAN',
+                    'filter' : {
+                      'user.name.first' : {
+                        '$eq' : 'Hannah'
+                      }
+                    },
+                    'nReturned' : 681,
+                    'executionTimeMillisEstimate' : 25,
+                    'works' : 49611,
+                    'advanced' : 681,
+                    'needTime' : 48929,
+                    'needYield' : 0,
+                    'saveState' : 393,
+                    'restoreState' : 393,
+                    'isEOF' : 1,
+                    'invalidates' : 0,
+                    'direction' : 'forward',
+                    'docsExamined' : 49609
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }};
+    const stages = getExecutionStages(explain.executionStats.executionStages);
+    const shardStages = mergeShardsStages(stages);
+    assert.equal(shardStages.length, 4);
+    assert.equal(shardStages[0].length, 2);
+    assert.equal(shardStages[0][0], null);
+    assert.equal(shardStages[0][1].stage, 'COLLSCAN');
+    assert.equal(shardStages[1][0].stage, 'IXSCAN');
+    assert.equal(shardStages[1][1].stage, 'SHARDING_FILTER');
+    assert.equal(shardStages[2][0].stage, 'FETCH');
+    assert.equal(shardStages[2][1].stage, 'SORT_KEY_GENERATOR');
+    assert.equal(shardStages[3][0].stage, 'SHARDING_FILTER');
+    assert.equal(shardStages[3][1].stage, 'SORT');
+
   });
 });

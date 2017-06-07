@@ -22,7 +22,7 @@ const getWorstShardStages = (stages) => {
   let max = -1;
   let worst = null;
   stages.map((shard) => {
-    if (shard.stages && shard.stages.length > 0) {
+    if (shard && shard.stages && shard.stages.length > 0) {
       if (worst === null) {
         worst = shard.stages;
       }
@@ -35,6 +35,13 @@ const getWorstShardStages = (stages) => {
   return worst;
 };
 
+/**
+ *
+ * @param stages  the stages array for all stages
+ * @param shard whether it is a shard explain
+ * @param shardMergeStage is the SHARD_MERGE at the last of the explain
+ * @constructor
+ */
 export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
   let mergedStages = [];
   const fStages = shardMergeStage && shard ? getWorstShardStages(stages) : stages;

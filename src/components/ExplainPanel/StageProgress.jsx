@@ -5,22 +5,26 @@
 import React from 'react';
 import './style.scss';
 
-export const Stage = ({stage, maxNumChildren, head}) => {
+export const Stage = ({stage, maxNumChildren, head, shardName = ''}) => {
   const style = {};
-  const className = head ? 'explain-stage explain-stage-array' : 'explain-stage';
+  let className = head ? 'explain-stage explain-stage-array' : 'explain-stage';
+  className = !stage ? 'explain-stage empty-explain-stage' : className;
   if (maxNumChildren > 1) {
-    style.marginTop = (maxNumChildren - 1) * 22.5;
+    style.marginTop = (maxNumChildren - 1) * 35.5;
   }
-  if (!stage || !stage.stage) {
-    return null;
+  const shardStyle = {};
+  if (shardName) {
+    shardStyle.maxWidth = 260;
   }
-  return (<div className="explain-stage-wrapper">
+  const stageName = stage ? stage.stage : '';
+  return (<div className="explain-stage-wrapper" style={shardStyle}>
+    <span className="explain-stage-shard-name" >{shardName}</span>
     <div className={className} style={style}>
-      {stage.stage}
+      {stageName}
     </div></div>);
 };
 
-export default ({stages}) => {
+export default ({stages, shardNames}) => {
   let maxNumChildren = 1;
   stages.map((stage) => {
     if (stage.constructor === Array && maxNumChildren < stage.length) {
@@ -32,12 +36,20 @@ export default ({stages}) => {
       stages.map((stage, i) => {
         const id = i;
         if (stage.constructor === Array) {
+          const style = {};
+          if (i === 0 && shardNames && shardNames.length > 0) {
+            style.maxWidth = 260;
+          }
           return (
-            <div className="explain-stage-tree-root" key={`${id}`}>
+            <div style={style} className="explain-stage-tree-root" key={`${id}`}>
               {
                 stage.map((s, j) => {
+                  let shardName = '';
+                  if (i === 0 && shardNames && shardNames.length > 0) {
+                    shardName = shardNames[j];
+                  }
                   const sid = j;
-                  return <Stage stage={s} key={`${s.stage} - ${sid}`} maxNumChildren={1} head={i === 0} />;
+                  return <Stage stage={s} key={`${s && s.stage} - ${sid}`} maxNumChildren={1} head={i === 0} shardName={shardName} />;
                 })
               }
             </div>);
