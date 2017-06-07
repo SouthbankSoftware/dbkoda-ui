@@ -85,7 +85,6 @@
       "view": {
         "executionStopped": "Execution Stopped Successfully",
         "executionStoppedError": "Stop Execution Failed! {0}",
-        "formatError": "Unable to format text, sorry!",
         "tooManyLintErrors": "Too many Linting Errors on this line...",
         "menu": {
           "executeSelected": "Execute Selected",

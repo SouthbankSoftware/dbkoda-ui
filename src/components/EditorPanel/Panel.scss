@@ -1,8 +1,8 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-05-12T16:51:49+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-05-30T11:47:29+10:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-06-08T09:05:42+10:00
 @import '../../styles/_defaultTheme.scss';
 // Panel CSS
 .editorPanel {
@@ -642,8 +642,9 @@
     bottom: 0;
     position: absolute;
   }
-  .CodeMirror-selectedtext {
-    background-color: $editorSelectText !important;
+  .CodeMirror-lines > div > div:nth-child(3), .CodeMirror-lines > div > div:nth-child(3) div.CodeMirror-selected {
+    z-index: 100 !important;
+    background: $editorSelectText;
   }
 }
 

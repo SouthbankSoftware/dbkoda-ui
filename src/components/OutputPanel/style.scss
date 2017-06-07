@@ -1,8 +1,8 @@
 // @Author: chris
 // @Date:   2017-05-15T09:44:11+10:00
 // @Email:  chris@southbanksoftware.com
-// @Last modified by:   chris
-// @Last modified time: 2017-05-19T14:18:04+10:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-06-08T09:05:53+10:00
 @import '../../styles/_defaultTheme.scss';
 .outputPanel {
   flex: 1;
@@ -371,8 +371,9 @@ span.cm-mongos-prompt {
   position: absolute;
 }
 
-.CodeMirror-selectedtext {
-  background-color: $editorSelectText !important;
+.CodeMirror-lines > div > div:nth-child(3), .CodeMirror-lines > div > div:nth-child(3) div.CodeMirror-selected {
+  z-index: 100 !important;
+  background: $editorSelectText;
 }
 
 .CodeMirror,
