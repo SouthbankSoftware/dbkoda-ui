@@ -21,24 +21,37 @@ const getExamined = (stage) => {
 const getWorstShardStages = (stages) => {
   let max = -1;
   let worst = null;
+  let shardName = null;
   stages.map((shard) => {
-    if (shard.stages && shard.stages.length > 0) {
+    if (shard && shard.stages && shard.stages.length > 0) {
       if (worst === null) {
         worst = shard.stages;
       }
       if (max < shard.stages[0].executionTimeMillisEstimate) {
         max = shard.stages[0].executionTimeMillisEstimate;
         worst = shard.stages;
+        shardName = shard.shardName;
       }
     }
   });
-  return worst;
+  return {shardName, worst};
 };
 
+/**
+ *
+ * @param stages  the stages array for all stages
+ * @param shard whether it is a shard explain
+ * @param shardMergeStage is the SHARD_MERGE at the last of the explain
+ * @constructor
+ */
 export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
   let mergedStages = [];
-  const fStages = shardMergeStage && shard ? getWorstShardStages(stages) : stages;
-  if (shard) {
+  let fStages = stages;
+  let shardName = null;
+  if (shardMergeStage && shard) {
+    const worstShardStages = getWorstShardStages(stages);
+    fStages = worstShardStages.worst;
+    shardName = worstShardStages.shardName;
     fStages.push(shardMergeStage);
   }
   fStages.map((stage) => {
@@ -50,6 +63,7 @@ export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
   });
 
   return (<div className="explain-stages-table">
+    {shard ? <div className="explain-worst-shard-description">{globalString('explain/worst-shard', shardName)}</div> : null}
     <div className="stage-header">
       <div className="column-header">Seq</div>
       <div className="column-header">Step</div>

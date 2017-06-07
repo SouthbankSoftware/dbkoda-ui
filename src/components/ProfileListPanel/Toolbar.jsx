@@ -8,10 +8,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 import React from 'react';
-import HotKey from 'react-shortcut';
 import {inject, observer} from 'mobx-react';
 import {action, runInAction} from 'mobx';
 import autobind from 'autobind-decorator';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import {Alert, AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
@@ -41,6 +42,13 @@ export default class Toolbar extends React.Component {
     this.newProfile = this
       .newProfile
       .bind(this);
+  }
+  componentWillUnmount() {
+    Mousetrap.unbindGlobal(GlobalHotkeys.createNewProfile.keys, this.newProfile);
+  }
+  componentDidMount() {
+    // Add hotkey bindings for this component:
+    Mousetrap.bindGlobal(GlobalHotkeys.createNewProfile.keys, this.newProfile);
   }
 
   /**
@@ -242,20 +250,7 @@ export default class Toolbar extends React.Component {
             </AnchorButton>
           </Tooltip>
         </div>
-        {this.renderHotkeys()}
       </nav>
     );
   }
-
-    renderHotkeys() {
-    return (
-      <div className="ProfileListToolbarHotkeys">
-        <HotKey
-          keys={GlobalHotkeys.createNewProfile.keys}
-          simultaneous
-          onKeysCoincide={this.newProfile} />
-      </div>
-    );
-  }
-
 }

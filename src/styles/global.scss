@@ -2,7 +2,7 @@
 // @Date:   2017-05-12T15:11:29+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-05-16T11:43:32+10:00
+// @Last modified time: 2017-06-07T15:30:20+10:00
 @import './_defaultTheme.scss';
 body {
   background-color: $panelRightBackground;
@@ -286,4 +286,17 @@ a.pt-disabled.pt-intent-primary {
 
 .pt-button.pt-disabled {
   opacity: 0.5;
+}
+
+.pt-control input:focus ~ .pt-control-indicator,
+input[type=radio]:focus,
+input[type=checkbox]:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px $searchPrimaryBackground !important;
+}
+
+button:focus,
+a[role=button]:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
 }

@@ -51,6 +51,7 @@
         "namespaceLabel": "Namespace:",
         "queryLabel": "Query:"
       },
+      "worst-shard" : "{0} is the most time consuming shard.",
       "details": {
 
       },

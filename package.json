@@ -143,6 +143,8 @@
     "url-loader": "^0.5.7",
     "uuid": "^3.0.1",
     "validatorjs": "^3.11.0",
+    "mousetrap": "^1.6.1",
+    "mousetrap-global-bind": "^1.1.0",
     "webpack": "^2.6.1",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dev-server": "^2.4.5",

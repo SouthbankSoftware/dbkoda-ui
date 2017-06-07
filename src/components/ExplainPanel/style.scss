@@ -44,6 +44,11 @@ $contentColor: white;
       margin: 5px 0px;
       flex: 1;
       max-width: 200px;
+      .explain-stage-shard-name {
+        align-self: center;
+        color: $explainLabelColor;
+        margin-top: 10px;
+      }
     }
     .explain-stage {
       flex: 1;
@@ -87,20 +92,12 @@ $contentColor: white;
       border-left-color: $explainStageHeaderBkColor !important;
     }
 
-    //.explain-stage:nth-child(1) {
-    //  background: $explainStageHeaderBkColor;
-    //}
-    //.explain-stage:nth-child(1):after {
-    //  border-left-color: $explainStageHeaderBkColor;
-    //}
-    //
-    //.explain-stage:nth-child(n+2) {
-    //  background: $explainStageTailBkColor;
-    //}
-    //.explain-stage:nth-child(n+2):after {
-    //  border-left-color: $explainStageTailBkColor;
-    //}
-
+    .empty-explain-stage {
+      background-color: transparent !important;
+    }
+    .empty-explain-stage:after {
+      border-left-color: transparent !important;
+    }
     //  tree
     .explain-stage-tree-root {
       display: flex;
@@ -130,6 +127,11 @@ $contentColor: white;
 
   .explain-stages-table {
     margin-top: 40px;
+
+    .explain-worst-shard-description {
+      color: $explainLabelColor;
+      margin-bottom: 10px;
+    }
 
     .stage-header {
       display: flex;
