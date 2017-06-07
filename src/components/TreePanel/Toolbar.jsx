@@ -5,9 +5,7 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2017-06-07T08:08:03+10:00
 */
-
 import React from 'react';
-import HotKey from 'react-shortcut';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import {reaction, runInAction, action} from 'mobx';

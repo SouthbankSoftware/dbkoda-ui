@@ -140,13 +140,10 @@
     "uuid": "^3.0.1",
     "validatorjs": "^3.11.0",
     "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.2"
-  },
-  "dependencies": {
+    "webpack-dev-server": "^2.4.2",
     "mousetrap": "^1.6.1",
     "mousetrap-global-bind": "^1.1.0",
-    "react-mousetrap": "^0.1.1",
-    "react-shortcut": "^1.0.6",
     "react-svg-loader": "^1.1.1"
-  }
+  },
+  "dependencies": {}
 }
