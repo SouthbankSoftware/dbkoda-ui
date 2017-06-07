@@ -1,8 +1,8 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-05-12T15:11:29+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   chris
-// @Last modified time: 2017-05-30T16:07:20+10:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-06-08T09:03:59+10:00
 // Theme 1 Colours: These should be externalized eventually:
 
 //Theme Colors:
@@ -50,7 +50,7 @@ $panelRightBackground: #202020;
 //Editor:
 $editorBackground: #202020;
 $editorActiveLine: #303030;
-$editorSelectText: #404040;
+$editorSelectText: rgba(255, 255, 255, 0.15);
 $editorTextComments: #8B8B8B;
 $editorDefaultFontColor: #FFB795;
 $keywordOne: #179DEA;

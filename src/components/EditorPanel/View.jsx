@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-05-30T13:31:46+10:00
+ * @Last modified time: 2017-06-08T08:49:44+10:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
@@ -27,7 +27,7 @@ import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 
-const Prettier = require('prettier');
+const Prettier = require('prettier-standalone');
 const React = require('react');
 const CodeMirror = require('react-codemirror');
 const CM = require('codemirror');
@@ -36,7 +36,6 @@ require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 require('codemirror/addon/selection/active-line.js');
-require('codemirror/addon/selection/mark-selection.js');
 require('codemirror/addon/display/autorefresh.js');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/edit/closebrackets.js');
@@ -115,7 +114,7 @@ class View extends React.Component {
         styleActiveLine: 'true',
         scrollbarStyle: 'overlay',
         smartIndent: true,
-        styleSelectedText: true,
+        styleSelectedText: false,
         tabSize: 2,
         matchBrackets: true,
         autoCloseBrackets: true,
@@ -182,20 +181,25 @@ class View extends React.Component {
           // Send request to feathers client
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
-          service.update(profileId, {
-            shellId: shell, // eslint-disable-line
-            commands: editor.code.replace(/\t/g, '  ')
-          }).catch((err) => {
-            console.error('execute error:', err);
-            runInAction(() => {
-              this.finishedExecution({ id:this.props.store.editorPanel.activeDropdownId, shellId: shell });
-              NewToaster.show({
-                message: globalString('editor/toolbar/executionScriptFailed'),
-                intent: Intent.DANGER,
-                iconName: 'pt-icon-thumbs-down'
+          service
+            .update(profileId, {
+              shellId: shell, // eslint-disable-line
+              commands: editor.code.replace(/\t/g, '  ')
+            })
+            .catch((err) => {
+              console.error('execute error:', err);
+              runInAction(() => {
+                this.finishedExecution({
+                  id: this.props.store.editorPanel.activeDropdownId,
+                  shellId: shell
+                });
+                NewToaster.show({
+                  message: globalString('editor/toolbar/executionScriptFailed'),
+                  intent: Intent.DANGER,
+                  iconName: 'pt-icon-thumbs-down'
+                });
               });
             });
-          });
           this.props.store.editorPanel.executingEditorAll = false;
         }
       }
@@ -251,20 +255,22 @@ class View extends React.Component {
           // Send request to feathers client
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
-          service.update(id, {
-            shellId: shell, // eslint-disable-line
-            commands: content.replace(/\t/g, '  ')
-          }).catch((err) => {
-            console.error('execute error:', err);
-            runInAction(() => {
-              this.finishedExecution({ id, shellId: shell });
-              NewToaster.show({
-                message: globalString('editor/toolbar/executionScriptFailed'),
-                intent: Intent.DANGER,
-                iconName: 'pt-icon-thumbs-down'
+          service
+            .update(id, {
+              shellId: shell, // eslint-disable-line
+              commands: content.replace(/\t/g, '  ')
+            })
+            .catch((err) => {
+              console.error('execute error:', err);
+              runInAction(() => {
+                this.finishedExecution({ id, shellId: shell });
+                NewToaster.show({
+                  message: globalString('editor/toolbar/executionScriptFailed'),
+                  intent: Intent.DANGER,
+                  iconName: 'pt-icon-thumbs-down'
+                });
               });
             });
-          });
           this.props.store.editorPanel.executingEditorLines = false;
         }
       }
@@ -708,7 +714,7 @@ class View extends React.Component {
       this.updateCode(this._prettify(this.getCode()));
     } catch (err) {
       NewToaster.show({
-        message: globalString('editor/view/formatError'),
+        message: err.message,
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down'
       });
@@ -731,7 +737,7 @@ class View extends React.Component {
       cm.replaceSelection(this._prettify(cm.getSelection()).trim());
     } catch (err) {
       NewToaster.show({
-        message: globalString('editor/view/formatError'),
+        message: err.message,
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down'
       });
@@ -789,7 +795,8 @@ class View extends React.Component {
     });
   }
 
-  @action.bound finishedExecution(event) {
+  @action.bound
+  finishedExecution(event) {
     const editorIndex = this.props.store.editorPanel.activeEditorId;
     if (!this.props.store.editors.get(editorIndex)) {
       return;
@@ -811,7 +818,8 @@ class View extends React.Component {
    * Update the local code state.
    * @param {String} - New code to be entered into the editor.
    */
-  @action updateCode(newCode) {
+  @action
+  updateCode(newCode) {
     this.props.store.editors.get(this.props.id).code = newCode;
     // @TODO -> Re-enable Linting when it is fully functional. if
     // (!this.state.isLinting) {
@@ -874,14 +882,16 @@ class View extends React.Component {
   /**
    * Trigger an executeLine event by updating the MobX global store.
    */
-  @action executeLine() {
+  @action
+  executeLine() {
     this.props.store.editorPanel.executingEditorLines = true;
   }
 
   /**
    * Trigger an executeAll event by updating the MobX global store.
    */
-  @action executeAll() {
+  @action
+  executeAll() {
     this.props.store.editorPanel.executingEditorAll = true;
   }
 

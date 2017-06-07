@@ -1,10 +1,11 @@
 // @Author: guiguan
 // @Date:   2017-03-07T17:09:22+11:00
-// @Last modified by:   wahaj
-// @Last modified time: 2017-05-26T16:23:49+10:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-06-07T18:41:15+10:00
 @import '../styles/_defaultTheme.scss';
 $purpleFont: #b95cce;
-$resizerHoverColor: rgba(97, 114, 126, 0.7);
+// $resizerHoverColor: rgba(97, 114, 126, 0.7);
+$resizerHoverColor: rgba($connectionButtonBackgroundColourHover, 0.7);
 
 .Resizer {
   background: rgba(15, 34, 47, 0.2);
