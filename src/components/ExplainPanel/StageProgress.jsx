@@ -10,11 +10,12 @@ export const Stage = ({stage, maxNumChildren, head, shardName = ''}) => {
   let className = head ? 'explain-stage explain-stage-array' : 'explain-stage';
   className = !stage ? 'explain-stage empty-explain-stage' : className;
   if (maxNumChildren > 1) {
-    style.marginTop = (maxNumChildren - 1) * 35.5;
+    const factor = maxNumChildren % 2 === 0 ? 35.5 : 32.5;
+    style.marginTop = (maxNumChildren - 1) * factor;
   }
   const shardStyle = {};
   if (shardName) {
-    shardStyle.maxWidth = 260;
+    shardStyle.maxWidth = 200;
   }
   const stageName = stage ? stage.stage : '';
   return (<div className="explain-stage-wrapper" style={shardStyle}>
@@ -38,7 +39,7 @@ export default ({stages, shardNames}) => {
         if (stage.constructor === Array) {
           const style = {};
           if (i === 0 && shardNames && shardNames.length > 0) {
-            style.maxWidth = 260;
+            style.maxWidth = 200;
           }
           return (
             <div style={style} className="explain-stage-tree-root" key={`${id}`}>

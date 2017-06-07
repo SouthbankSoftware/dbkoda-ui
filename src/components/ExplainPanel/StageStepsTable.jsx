@@ -75,11 +75,12 @@ export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
     {
       mergedStages.map((stage, i) => {
         const id = i;
+        const ms = stage.executionTimeMillisEstimate !== undefined ? stage.executionTimeMillisEstimate : stage.executionTimeMillis;
         return (<div className="stage-row" key={stage.stage + '-' + id}>
           <div className="stage-cell">{i + 1}</div>
           <div className="stage-cell">{stage.stage}</div>
           <div className="stage-cell">
-            <div className="text">{stage.executionTimeMillisEstimate || stage.executionTimeMillis}</div>
+            <div className="text">{ms}</div>
           </div>
           <div className="stage-cell">
             <div className="text">{getExamined(stage)}</div>

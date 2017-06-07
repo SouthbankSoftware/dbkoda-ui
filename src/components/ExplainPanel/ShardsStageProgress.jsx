@@ -11,6 +11,15 @@ export const mergeShardsStages = (shardStages) => {
   const mergedStages = [];
   let maxLength = 0;
   shardStages.map((stages) => {
+    let ss = [];
+    stages.stages.map((s) => {
+      if (s.constructor === Array) {
+        ss = ss.concat(s);
+      } else {
+        ss.push(s);
+      }
+    });
+    stages.stages = ss;
     if (stages.stages.length > maxLength) {
       maxLength = stages.stages.length;
     }
@@ -36,12 +45,6 @@ export const mergeShardsStages = (shardStages) => {
     });
   });
   return mergedStages;
-  // return mergedStages.map((stages) => {
-  //   const nonNull = _.filter(stages, s => s != null);
-  //   const times = stages.length - nonNull.length;
-  //   _.times(times, () => nonNull.unshift(null));
-  //   return nonNull;
-  // });
 };
 
 export default ({executionStages, shardStages}) => {

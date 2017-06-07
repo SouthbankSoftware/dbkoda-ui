@@ -15,10 +15,19 @@ const getAllShardStatistics = (explains) => {
     let cursor = shard.executionStages;
     while (cursor) {
       oneShard.push(cursor);
+      if (!cursor.inputStage && cursor.inputStages && cursor.inputStages.constructor === Array) {
+        let examined = 0;
+        let nReturned = 0;
+        cursor.inputStages.map((input) => {
+          examined += input.keysExamined;
+          nReturned += input.nReturned;
+        });
+        oneShard.push({docsExamined: examined});
+      }
       cursor = cursor.inputStage;
     }
     // get the executionTimeMillisEstimate and nReturned from the first child, docsExamined from the deepest child
-    oneShard[0].docsExamined = oneShard[oneShard.length - 1].docsExamined;
+    oneShard[0].docsExamined = oneShard[oneShard.length - 1].docsExamined ? oneShard[oneShard.length - 1].docsExamined : oneShard[oneShard.length - 1].keysExamined;
     oneShard[0].shardName = shard.shardName;
     allShards.push(oneShard);
   });
