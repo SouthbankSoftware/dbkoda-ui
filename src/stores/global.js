@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   chris
- * @Last modified time: 2017-06-02T13:41:04+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-06-07T08:43:51+10:00
  */
 
 import _ from 'lodash';
@@ -127,7 +127,7 @@ export default class Store {
     item: null
   });
 
-  @observable topology = observable({ isChanged: false, json: {} });
+  @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
 
   @action setDrawerChild = (value) => {
     this.drawer.drawerChild = value;
@@ -155,8 +155,9 @@ export default class Store {
     this.treeActionPanel.isNewFormValues = true;
   };
 
-  @action updateTopology = (jsonData) => {
-    this.topology.json = jsonData;
+  @action updateTopology = (res) => {
+    this.topology.profileId = res.profileId;
+    this.topology.json = res.result;
     this.topology.isChanged = true;
   };
 

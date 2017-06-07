@@ -3,7 +3,7 @@
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-06-01T11:04:06+10:00
+ * @Last modified time: 2017-06-07T09:57:54+10:00
 */
 
 import React from 'react';
@@ -48,13 +48,14 @@ export default class TreePanel extends React.Component {
                 runInAction(() => {
                   this.props.store.treePanel.isRefreshing = false;
                   this.props.store.treePanel.isRefreshDisabled = false;
+                  this.props.store.topology.isChanged = false;
                 });
 
                 if (
                   this.props.store.profileList.selectedProfile.id ==
                   res.profileId
                 ) {
-                  this.props.store.updateTopology(res.result);
+                  this.props.store.updateTopology(res);
                   this.updateStatus('LOADED');
                 } else {
                   DBCodaToaster(Position.LEFT_BOTTOM).show({
@@ -104,7 +105,7 @@ export default class TreePanel extends React.Component {
           this.props.store.topology.isChanged &&
           this.props.store.topology.json !== null
         ) {
-          this.props.treeState.parseJson(this.props.store.topology.json);
+          this.props.treeState.parseJson(this.props.store.topology.json, this.props.store.topology.profileId);
           runInAction('update topology isChanged', () => {
             this.props.store.topology.isChanged = false;
           });
