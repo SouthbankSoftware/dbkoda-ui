@@ -336,10 +336,12 @@
                         font-size: 40;
                       }
                       .twitterIcon {
-                        width: 100px;
-                        height: 100px;
+                        width: 60px;
+                        height: 60px;
                         position: relative;
                         svg {
+                          width: 40px;
+                          height: 40px;
                           position: absolute;
                           top: 50%;
                           bottom: 50%;
@@ -348,15 +350,34 @@
                         }
                       }
                       .gitHubIcon {
-                        width: 100px;
-                        height: 100px;
+                        width: 60px;
+                        height: 60px;
                         position: relative;
                         svg {
+                          width: 40px;
+                          height: 40px;
                           position: absolute;
                           top: 50%;
                           bottom: 50%;
                           transform: translate(-50%, -50%);
                           fill: $welcomeViewSocialMediaIcons;
+                        }
+                      }
+                      .kodaIcon {
+                        width: 60px;
+                        height: 60px;
+                        position: relative;
+                        svg {
+                          width: 40px;
+                          height: 40px;
+                          position: absolute;
+                          top: 50%;
+                          bottom: 50%;
+                          transform: translate(-50%, -50%);
+                          fill: $welcomeViewSocialMediaIcons;
+                          path.st0 {
+                            fill: none;
+                          }
                         }
                       }
                       a:hover {
@@ -385,19 +406,21 @@
                       display: flex;
                       flex-direction: row;
                       .feedIconWrapper {
-                        width: 50px;
-                        height: 50px;
+                        width: 60px;
+                        height: 60px;
                         order: 1;
                         border-radius: 0.4em;
                         text-align: center;
                         a {
-                          width: 50px;
-                          height: 50px;
+                          width: 60px;
+                          height: 60px;
                           border-radius: 0.4em;
                           background-color: $welcomeViewIconBG;
                           position: relative;
                           text-align: center;
                           svg {
+                            width: 40px;
+                            height: 40px;
                             position: absolute;
                             top: 50%;
                             bottom: 50%;
@@ -489,7 +512,6 @@
   .CodeMirror-line {
     background-color: $editorBackground;
   }
-
   span.cm-mongo-operator {
     color: $white !important;
   }
@@ -582,10 +604,9 @@
   .CodeMirror-activeline-gutter {
     background-color: $editorBackground;
   }
-  .CodeMirror-lines > div > div:nth-child(3) {
+  .CodeMirror-lines>div>div:nth-child(3) {
     z-index: 19 !important;
     background: unset !important;
-
     div.CodeMirror-selected {
       background-color: $editorSelectText;
     }

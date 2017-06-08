@@ -17,6 +17,7 @@ import TwitterIcon from '../../../styles/icons/twitter-icon.svg';
 import GithubIcon from '../../../styles/icons/github-icon.svg';
 import DocumentIcon from '../../../styles/icons/document-icon.svg';
 import WorldIcon from '../../../styles/icons/world-icon.svg';
+import KodaIcon from '../../../styles/icons/dbkoda-logo.svg';
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
@@ -104,6 +105,12 @@ export default class WelcomeContent extends React.Component {
                   <GithubIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Github</p>
+              </div>
+              <div className="linkWrapper">
+                <AnchorButton className="kodaIcon">
+                  <KodaIcon width={50} height={50} />
+                </AnchorButton>
+                <p>dbKoda</p>
               </div>
             </div>
           </div>
