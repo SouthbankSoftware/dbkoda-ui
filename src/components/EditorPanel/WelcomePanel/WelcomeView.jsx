@@ -9,6 +9,7 @@
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import DBKodaIcon from '../../../styles/icons/dbkoda-logo.svg';
 import WelcomeMenu from './WelcomeMenu.jsx';
 import WelcomeContent from './WelcomeContent.jsx';
 import ChooseTheme from './ChooseTheme.jsx';
@@ -44,9 +45,12 @@ export default class WelcomeView extends React.Component {
     return (
       <div className="welcomePanelTabWrapper">
         <div className="welcomePanelWrapper">
-          <h1>
-            Welcome To dbCoda
-          </h1>
+          <div className="welcomeTitleWrapper">
+            <DBKodaIcon className="dbCodaLogo" width={20} height={20} />
+            <h1>
+              Welcome To DBKoda
+            </h1>
+          </div>
           <div className="welcomeMiddleSection">
             <div className="welcomeMenuWrapper">
               <WelcomeMenu />

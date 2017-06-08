@@ -10,6 +10,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import DBKodaIcon from '../../styles/icons/dbkoda-logo.svg';
 import Toolbar from './Toolbar.jsx';
 import ListView from './ListView.jsx';
 import './styles.scss';
@@ -28,6 +29,7 @@ export default class Panel extends React.Component {
       <div className="pt-dark profileListPanel">
         <Toolbar ref="toolbar" />
         <ListView />
+        <DBKodaIcon className="dbCodaLogo" width={20} height={20} />
       </div>
 
     );
