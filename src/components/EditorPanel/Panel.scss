@@ -2,7 +2,7 @@
 // @Date:   2017-05-12T16:51:49+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   guiguan
-// @Last modified time: 2017-06-08T09:05:42+10:00
+// @Last modified time: 2017-06-08T11:51:17+10:00
 @import '../../styles/_defaultTheme.scss';
 // Panel CSS
 .editorPanel {
@@ -489,12 +489,7 @@
   .CodeMirror-line {
     background-color: $editorBackground;
   }
-  div.CodeMirror-activeline {
-    background-color: $editorActiveLine !important;
-    pre.CodeMirror-line {
-      background-color: unset !important;
-    }
-  }
+
   span.cm-mongo-operator {
     color: $white !important;
   }
@@ -578,11 +573,22 @@
   .CodeMirror-foldgutter-folded:after {
     content: $rightArrow;
   }
+  div.CodeMirror-activeline pre.CodeMirror-line {
+    background-color: unset !important;
+  }
   .CodeMirror-activeline-background {
     background-color: $editorActiveLine !important;
   }
   .CodeMirror-activeline-gutter {
     background-color: $editorBackground;
+  }
+  .CodeMirror-lines > div > div:nth-child(3) {
+    z-index: 19 !important;
+    background: unset !important;
+
+    div.CodeMirror-selected {
+      background-color: $editorSelectText;
+    }
   }
   .lint-error-icon {
     color: $keywordThree;
@@ -655,11 +661,6 @@
     top: 0;
     bottom: 0;
     position: absolute;
-  }
-  .CodeMirror-lines>div>div:nth-child(3),
-  .CodeMirror-lines>div>div:nth-child(3) div.CodeMirror-selected {
-    z-index: 100 !important;
-    background: $editorSelectText;
   }
 }
 

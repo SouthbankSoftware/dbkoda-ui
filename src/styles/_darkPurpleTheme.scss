@@ -49,8 +49,8 @@ $tabBackgroundSelected: #202020;
 $panelRightBackground: #202020;
 //Editor:
 $editorBackground: #202020;
-$editorActiveLine: #303030;
-$editorSelectText: rgba(255, 255, 255, 0.15);
+$editorActiveLine: rgba(130, 130, 130, 0.15);
+$editorSelectText: $editorActiveLine;
 $editorTextComments: #8B8B8B;
 $editorDefaultFontColor: #FFB795;
 $keywordOne: #179DEA;
