@@ -2,8 +2,8 @@
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-06T16:15:03+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-06-08T14:46:55+10:00
 */
 
 import React from 'react';
@@ -206,13 +206,19 @@ export default class Editor extends React.Component {
       .output = totalOutput;
     if (output && output.output && output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')) {
       console.log('can show more');
-      this
+      if (this
         .props
         .store
         .outputs
-        .get(this.props.id)
-        .cannotShowMore = false;
-    } else if (this.props.store.outputs.get(this.props.id).cannotShowMore && output && output.output && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbcoda>')) {
+        .get(this.props.id)) {
+          this
+            .props
+            .store
+            .outputs
+            .get(this.props.id)
+            .cannotShowMore = false;
+        }
+    } else if (this.props.store.outputs.get(this.props.id) && this.props.store.outputs.get(this.props.id).cannotShowMore && output && output.output && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbcoda>')) {
       console.log('cannot show more');
       this
         .props
