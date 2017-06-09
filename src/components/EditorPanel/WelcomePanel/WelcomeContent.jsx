@@ -158,7 +158,7 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickReleaseNotes}>
+                  <AnchorButton className="docsIcon" onClick={this.onClickNeedHelp}>
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -166,7 +166,7 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickReleaseNotes}>
+                  <AnchorButton className="docsIcon" onClick={this.onClickLodgeABug}>
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
