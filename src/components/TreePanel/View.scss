@@ -30,26 +30,26 @@
   overflow-x: scroll;
   background-color: $navbarLeftBackground !important;
   .pt-button {
-    background-color: $buttonSecondaryBackground !important;
+    background: $buttonSecondaryBackground !important;
     color: $buttonSecondaryIcon !important;
     border-radius: 50%;
     margin-left: 5px;
     margin-right: 5px;
   }
   .pt-button:hover {
-    background-color: $buttonSecondaryBackgroundHover !important;
+    background: $buttonSecondaryBackgroundHover !important;
   }
   .pt-button.dangerButton {
-    background-color: $buttonDangerBackground !important;
+    background: $buttonDangerBackground !important;
   }
   .pt-button.dangerButton:hover {
-    background-color: $buttonDangerBackgroundHover !important;
+    background: $buttonDangerBackgroundHover !important;
   }
   .pt-button.pt-disabled:hover {
-    background-color: $buttonSecondaryBackground !important;
+    background: $buttonSecondaryBackground !important;
   }
   .pt-button.pt-disabled.dangerButton:hover {
-    background-color: $buttonDangerBackground !important;
+    background: $buttonDangerBackground !important;
   }
   .refreshTreeButton {
     max-width: 30px;

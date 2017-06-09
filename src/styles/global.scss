@@ -321,7 +321,11 @@ a.pt-disabled.pt-intent-primary {
 }
 
 .pt-button.pt-disabled {
-  opacity: 0.5;
+  opacity: 0.2;
+}
+
+.pt-button {
+  box-shadow: unset !important;
 }
 
 .pt-control input:focus~.pt-control-indicator,

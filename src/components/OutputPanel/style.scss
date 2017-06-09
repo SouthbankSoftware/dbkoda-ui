@@ -113,14 +113,14 @@
           }
         }
         .clearOutputBtn {
-          background-color: $buttonDangerBackground !important;
+          background: $buttonDangerBackground !important;
           color: $buttonDangerIcon !important;
           svg.dbCodaSVG {
             fill: $buttonDangerIcon;
           }
         }
         .clearOutputBtn:hover {
-          background-color: $buttonDangerBackgroundHover !important;
+          background: $buttonDangerBackgroundHover !important;
           color: $buttonDangerIcon !important;
         }
       }
