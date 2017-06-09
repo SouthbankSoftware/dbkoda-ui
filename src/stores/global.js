@@ -10,10 +10,8 @@ import { action, observable } from 'mobx';
 import { dump, restore } from 'dumpenvy';
 import { DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
-import path from 'path';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
-import { storeFile } from '../env';
 
 global.Globalize = require('globalize'); // Globalize doesn't load well with import
 
@@ -21,10 +19,20 @@ global.globalString = (path, ...params) =>
   Globalize.messageFormatter(path)(...params);
 global.globalNumber = (value, config) =>
   Globalize.numberFormatter(config)(value);
-global.IS_ELECTRON = _.has(window, 'process.versions.electron');
+
 let ipcRenderer;
+let stateStore;
+
+global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 if (IS_ELECTRON) {
-  ipcRenderer = window.require('electron').ipcRenderer;
+  const electron = window.require('electron');
+
+  ipcRenderer = electron.ipcRenderer;
+
+  const remote = electron.remote;
+
+  global.PATHS = remote.getGlobal('PATHS');
+  stateStore = global.PATHS.stateStore;
 }
 
 export default class Store {
@@ -256,10 +264,10 @@ export default class Store {
     newStore.treePanel.isRefreshDisabled = false;
   }
 
-  load(filePath) {
+  load() {
     featherClient()
       .service('files')
-      .get(path.resolve(filePath))
+      .get(stateStore)
       .then(({ content }) => {
         this.restore(content);
         // Init Globalize required json
@@ -269,7 +277,11 @@ export default class Store {
         );
       })
       .catch((err) => {
-        console.log(err);
+        if (err.code === 404) {
+          console.log('State store doesn\'t exist. A new one will be created after app close or refreshing');
+        } else {
+          console.error(err);
+        }
       })
       .then(() => {
         Broker.emit(EventType.APP_READY);
@@ -286,7 +298,7 @@ export default class Store {
       featherClient()
         .service('files')
         .create({
-          _id: path.resolve('/tmp/stateStore.json'),
+          _id: stateStore,
           content: this.dump()
         })
         .then(() => {})
@@ -299,7 +311,7 @@ export default class Store {
   constructor() {
     Broker.on(EventType.FEATHER_CLIENT_LOADED, (value) => {
       if (value) {
-        this.load(storeFile);
+        this.load();
       }
     });
   }

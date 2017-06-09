@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-06-07T16:45:27+10:00
+ * @Last modified time: 2017-06-09T06:57:30+10:00
  */
 
 const path = require('path');
@@ -20,22 +20,9 @@ module.exports = {
     './index.jsx'
   ],
   output: {
-    path: path.resolve(__dirname, '../dist/'),
-    publicPath: '/',
+    path: path.resolve(__dirname, '../dist/ui/'),
+    publicPath: '/ui/',
     filename: 'app.[hash].js'
-  },
-  devtool: 'source-map',
-  devServer: {
-    // enable HMR on the server
-    hot: true,
-
-    // match the output path
-    contentBase: path.resolve(__dirname, '../dist'),
-
-    // match the output `publicPath`
-    publicPath: '/',
-    port: 3000,
-    host: '0.0.0.0'
   },
   module: {
     rules: [

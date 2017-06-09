@@ -1,8 +1,9 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-06-07T16:49:05+10:00
+ * @Last modified time: 2017-06-09T06:40:45+10:00
  */
 
+const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./common');
@@ -23,6 +24,19 @@ module.exports = merge.strategy({
     // successful updates
     'webpack/hot/only-dev-server'
   ],
+  devtool: 'source-map',
+  devServer: {
+    // enable HMR on the server
+    hot: true,
+
+    // match the output path
+    contentBase: path.resolve(__dirname, '../dist'),
+
+    // match the output `publicPath`
+    publicPath: '/ui/',
+    port: 3000,
+    host: '0.0.0.0'
+  },
   module: {
     rules: [
       {

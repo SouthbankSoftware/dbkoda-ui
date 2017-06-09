@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-06-07T16:55:25+10:00
+ * @Last modified time: 2017-06-09T06:36:28+10:00
  */
 
 const webpack = require('webpack');
@@ -30,6 +30,7 @@ module.exports = merge.strategy({
       }
     ]
   },
+  devtool: 'cheap-source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
