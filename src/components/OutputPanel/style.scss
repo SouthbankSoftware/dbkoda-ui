@@ -1,8 +1,8 @@
 // @Author: chris
 // @Date:   2017-05-15T09:44:11+10:00
 // @Email:  chris@southbanksoftware.com
-// @Last modified by:   guiguan
-// @Last modified time: 2017-06-08T11:53:23+10:00
+// @Last modified by:   wahaj
+// @Last modified time: 2017-06-09T11:27:00+10:00
 @import '../../styles/_defaultTheme.scss';
 .outputPanel {
   flex: 1;
@@ -43,7 +43,15 @@
         order: 3;
         min-height: 0;
         padding-bottom: 30px;
+        .ReactCodeMirror {
+          .CodeMirror {
+            bottom: 20px;
+          }
+        }
         .outputTerminal {
+          .CodeMirror {
+            bottom: 0px;
+          }
           background-color: $terminalBackground;
           position: absolute;
           bottom: 0;

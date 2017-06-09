@@ -3,7 +3,7 @@
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-06-02T14:56:38+10:00
+ * @Last modified time: 2017-06-09T10:20:09+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -93,8 +93,11 @@ export default class Panel extends React.Component {
             console.log('editor[1].currentProfile :', editor[1].currentProfile);
             if (editor[1].currentProfile == this.props.store.profileList.selectedProfile.id) {
               this.changeTab(editor[1].id);
-              break;
+              return;
             }
+          }
+          if (this.props.store.editorToolbar.newEditorForProfileId == '') {
+            this.props.store.editorToolbar.newEditorForProfileId = this.props.store.profileList.selectedProfile.id;
           }
         }
       } catch (e) {

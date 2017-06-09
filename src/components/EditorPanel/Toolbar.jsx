@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-06-06T12:05:13+10:00
+ * @Last modified time: 2017-06-09T11:05:28+10:00
  */
 
 /* eslint-disable react/prop-types */
@@ -90,6 +90,14 @@ export default class Toolbar extends React.Component {
       }
     });
 
+    this.reactionToNewEditorForProfileId = reaction(() => this.props.store.editorToolbar.newEditorForProfileId, () => {
+      if (this.props.store.editorToolbar.newEditorForProfileId != '') {
+        this.props.store.editorPanel.activeDropdownId = this.props.store.editorToolbar.newEditorForProfileId;
+        this.addEditor({});
+        this.props.store.editorToolbar.newEditorForProfileId = '';
+      }
+    });
+
     if (IS_ELECTRON) {
       window
         .require('electron')
@@ -106,6 +114,7 @@ export default class Toolbar extends React.Component {
 
   componentWillUnmount() {
     this.reactionToNewEditorForTreeAction();
+    this.reactionToNewEditorForProfileId();
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeLine.keys, this.executeLine);
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeAll.keys, this.executeAll);
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys, this.stopExecution);
@@ -126,6 +135,7 @@ export default class Toolbar extends React.Component {
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFile.keys, this.saveFile);
   }
   reactionToNewEditorForTreeAction;
+  reactionToNewEditorForProfileId;
 
   /**
    * called when there is new connection profile get created.
