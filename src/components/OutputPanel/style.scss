@@ -2,7 +2,7 @@
 // @Date:   2017-05-15T09:44:11+10:00
 // @Email:  chris@southbanksoftware.com
 // @Last modified by:   guiguan
-// @Last modified time: 2017-06-09T16:12:54+10:00
+// @Last modified time: 2017-06-09T16:32:37+10:00
 @import '../../styles/_defaultTheme.scss';
 .outputPanel {
   flex: 1;
@@ -49,6 +49,9 @@
           }
         }
         .outputTerminal {
+          .CodeMirror-cursor {
+            display: block;
+          }
           .CodeMirror {
             bottom: 0px;
           }
