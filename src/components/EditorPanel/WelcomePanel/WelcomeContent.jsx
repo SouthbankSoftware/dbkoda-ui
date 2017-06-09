@@ -262,26 +262,56 @@ export default class WelcomeContent extends React.Component {
           <div className="docsList">
             <div className="documentationLinkWrapper">
               <span className="iconWrapper">
-                <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-document" />
+                <AnchorButton className="docsIcon" onClikc={this.onClickMongoDocumentation}>
+                  <DocumentIcon width={30} height={30} />
+                </AnchorButton>
               </span>
               <p>MongoDB Documentation</p>
             </div>
             <div className="documentationLinkWrapper">
               <span className="iconWrapper">
-                <AnchorButton className="icon pt-minimal pt-icon-large pt-icon-document" />
+                <AnchorButton className="docsIcon" onClick={this.onClickReleaseNotes}>
+                  <DocumentIcon width={30} height={30} />
+                </AnchorButton>
               </span>
               <p>dbCoda Release Notes</p>
+            </div>
+            <div className="documentationLinkWrapper">
+              <span className="iconWrapper">
+                <AnchorButton className="docsIcon" onClick={this.onClickNeedHelp}>
+                  <DocumentIcon width={30} height={30} />
+                </AnchorButton>
+              </span>
+              <p>Get help on the forum.</p>
+            </div>
+            <div className="documentationLinkWrapper">
+              <span className="iconWrapper">
+                <AnchorButton className="docsIcon" onClick={this.onClickLodgeABug}>
+                  <DocumentIcon width={30} height={30} />
+                </AnchorButton>
+              </span>
+              <p>Found a bug? Let us know!</p>
             </div>
           </div>
           <h2>Links</h2>
           <div className="linksList">
             <div className="linkWrapper">
-              <AnchorButton className="icon twitterIcon" />
+              <AnchorButton className="twitterIcon" onClick={this.onClickTwitter}>
+                <TwitterIcon width={50} height={50} />
+              </AnchorButton>
               <p>Twitter</p>
             </div>
             <div className="linkWrapper">
-              <AnchorButton className="icon gitHubIcon" />
+              <AnchorButton className="gitHubIcon" onClick={this.onClickGithub}>
+                <GithubIcon width={50} height={50} />
+              </AnchorButton>
               <p>Github</p>
+            </div>
+            <div className="linkWrapper">
+              <AnchorButton className="kodaIcon" onClick={this.onClickKoda}>
+                <KodaIcon width={50} height={50} />
+              </AnchorButton>
+              <p>dbKoda</p>
             </div>
           </div>
         </div>
@@ -289,7 +319,6 @@ export default class WelcomeContent extends React.Component {
           <h2>
             News and Updates
           </h2>
-          <div className="feedList" />
         </div>
       </div>
     );
