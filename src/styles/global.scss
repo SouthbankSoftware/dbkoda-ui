@@ -1,8 +1,8 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-05-12T15:11:29+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   guiguan
-// @Last modified time: 2017-06-08T10:59:41+10:00
+// @Last modified by:   wahaj
+// @Last modified time: 2017-06-09T11:35:30+10:00
 @import './_defaultTheme.scss';
 body {
   background-color: $panelRightBackground;
@@ -255,6 +255,10 @@ textArea {
   z-index: 1;
   top: -5px;
   left: 105%;
+}
+
+.pt-overlay-open {
+  z-index: 999;
 }
 
 .tooltip:hover .tooltiptext {

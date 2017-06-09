@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2017-06-07T08:43:51+10:00
+ * @Last modified time: 2017-06-09T10:17:56+10:00
  */
 
 import _ from 'lodash';
@@ -65,7 +65,8 @@ export default class Store {
     isActiveExecuting: false,
     id: 0,
     shellId: 0,
-    newEditorForTreeAction: false
+    newEditorForTreeAction: false,
+    newEditorForProfileId: ''
   });
 
   @observable outputPanel = observable({

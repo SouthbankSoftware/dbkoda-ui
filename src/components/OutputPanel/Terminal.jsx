@@ -2,8 +2,8 @@
  * @Author: chris
  * @Date:   2017-03-22T11:31:55+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-06T16:15:04+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-06-09T11:09:36+10:00
  */
 
 import React from 'react';
@@ -350,7 +350,7 @@ class Terminal extends React.Component {
           inline
           content={globalString('output/terminal/execute')}
           tooltipClassName="pt-dark"
-          position={Position.TOP}>
+          position={Position.LEFT}>
           <AnchorButton
             className="pt-button"
             disabled={this.props.store.editorToolbar.noActiveProfile}
