@@ -40,6 +40,8 @@ $toastCloseIconColourDanger: rgba(159, 60, 58, 0.5);
 $toastBackgroundColourInfo: #D4EAF6;
 $toastFontColourInfo: #2B6584;
 $toastCloseIconColourInfo: rgba(43, 101, 132, 0.5);
+// Dialogs
+$dialogButtonBorder: rgba(154, 154, 155, 0.6);
 // ToolTips
 $toolTipBackgroundColour: #C0C0C0;
 $toolTipFontColour: #4F4F4F;
@@ -121,7 +123,13 @@ $connectionButtonBackgroundColourReset: #8A4148;
 $connectionButtonBackgroundColourResetHover: #663139;
 $connectionCheckboxColour: rgba(191, 190, 192, 0.75);
 $connectionWarningFontColour: #9A5158;
-
+// Tree
+$treeMessageColor: rgba(154, 154, 155, 0.8);
+$treeBorderColor: rgba(154, 154, 155, 0.4);
+$treeIconColor: rgba(154, 154, 155, 0.8);
+$treeIconBGColor: rgba(154, 154, 155, 0.2);
+$treeLoaderColor: rgba(154, 154, 155, 0.8);
+$treeLoaderColorBG: rgba(154, 154, 155, 0.4);
 //Searchbox:
 $searchPrimaryBackground: #BFBEC0;
 $searchPrimaryFontColor: #494849;
