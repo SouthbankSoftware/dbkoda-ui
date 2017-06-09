@@ -7,6 +7,7 @@ import React from 'react';
 import './style.scss';
 
 import {generateComments} from './ExplainStep';
+import {getWorstShardStages} from './Utils';
 
 const getExamined = (stage) => {
   if (stage.stage === 'IXSCAN') {
@@ -16,25 +17,6 @@ const getExamined = (stage) => {
     return stage.docsExamined;
   }
   return stage.totalDocsExamined;
-};
-
-const getWorstShardStages = (stages) => {
-  let max = -1;
-  let worst = null;
-  let shardName = null;
-  stages.map((shard) => {
-    if (shard && shard.stages && shard.stages.length > 0) {
-      if (worst === null) {
-        worst = shard.stages;
-      }
-      if (max < shard.stages[0].executionTimeMillisEstimate) {
-        max = shard.stages[0].executionTimeMillisEstimate;
-        worst = shard.stages;
-        shardName = shard.shardName;
-      }
-    }
-  });
-  return {shardName, worst};
 };
 
 /**
