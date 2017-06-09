@@ -2,8 +2,8 @@
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-05T17:25:58+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-06-08T14:51:36+10:00
 */
 
 import React from 'react';
@@ -36,7 +36,7 @@ export default class Toolbar extends React.Component {
      * Reaction to fire off execution of ShowMore (it) command
      */
     reaction(() => this.props.store.outputPanel.executingShowMore, (executingShowMore) => {
-      if (executingShowMore && !this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore) {
+      if (executingShowMore && this.props.store.outputs.get(this.props.store.outputPanel.currentTab) && !this.props.store.outputs.get(this.props.store.outputPanel.currentTab).cannotShowMore) {
         const command = 'it';
         console.log('Sending data to feathers id ', this.props.store.outputs.get(this.props.store.outputPanel.currentTab).connId, ': ', command, '.');
         this.props.store.editorToolbar.isActiveExecuting = true;
@@ -207,12 +207,18 @@ export default class Toolbar extends React.Component {
               .store
               .outputPanel
               .currentTab
-              .indexOf('Details') >= 0 || this
+              .indexOf('Details') >= 0 || (
+              this
+              .props
+              .store
+              .outputs
+              .get(this.props.store.outputPanel.currentTab) &&
+              this
               .props
               .store
               .outputs
               .get(this.props.store.outputPanel.currentTab)
-              .cannotShowMore}>
+              .cannotShowMore)}>
               <ShowMoreIcon className="dbCodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>

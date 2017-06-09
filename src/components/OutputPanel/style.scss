@@ -2,7 +2,7 @@
 // @Date:   2017-05-15T09:44:11+10:00
 // @Email:  chris@southbanksoftware.com
 // @Last modified by:   guiguan
-// @Last modified time: 2017-06-08T09:05:53+10:00
+// @Last modified time: 2017-06-08T11:53:23+10:00
 @import '../../styles/_defaultTheme.scss';
 .outputPanel {
   flex: 1;
@@ -124,6 +124,14 @@
           color: $buttonDangerIcon !important;
         }
       }
+    }
+  }
+  .CodeMirror-lines > div > div:nth-child(3) {
+    z-index: 19 !important;
+    background: unset !important;
+
+    div.CodeMirror-selected {
+      background-color: $editorSelectText;
     }
   }
 } //// Code Mirror CSS: ////
@@ -279,14 +287,6 @@ span.cm-mongos-prompt {
   content: $rightArrow;
 }
 
-.CodeMirror-activeline-background {
-  background-color: $editorActiveLine !important;
-}
-
-.CodeMirror-activeline-gutter {
-  background-color: $editorBackground;
-}
-
 .lint-error-icon {
   color: $keywordThree;
   font-style: oblique;
@@ -369,11 +369,6 @@ span.cm-mongos-prompt {
   top: 0;
   bottom: 0;
   position: absolute;
-}
-
-.CodeMirror-lines > div > div:nth-child(3), .CodeMirror-lines > div > div:nth-child(3) div.CodeMirror-selected {
-  z-index: 100 !important;
-  background: $editorSelectText;
 }
 
 .CodeMirror,

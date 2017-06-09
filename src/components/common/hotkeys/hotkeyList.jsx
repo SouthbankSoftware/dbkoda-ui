@@ -105,6 +105,10 @@ export const EditorHotkeys = [
     combo: 'Control + Shift + F',
     keys: 'ctrl+shift+f',
     description: 'Format Selection',
+  }, {
+    combo: 'Control + Space',
+    keys: 'ctrl+space',
+    description: 'Auto-Complete',
   }
 ];
 

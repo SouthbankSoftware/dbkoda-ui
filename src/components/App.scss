@@ -1,7 +1,7 @@
 // @Author: guiguan
 // @Date:   2017-03-07T17:09:22+11:00
 // @Last modified by:   guiguan
-// @Last modified time: 2017-06-07T18:41:15+10:00
+// @Last modified time: 2017-06-08T11:48:46+10:00
 @import '../styles/_defaultTheme.scss';
 $purpleFont: #b95cce;
 // $resizerHoverColor: rgba(97, 114, 126, 0.7);
@@ -121,8 +121,4 @@ ul.pt-menu {
       width: 100%;
     }
   }
-}
-
-div.CodeMirror-activeline {
-  background-color: $editorActiveLine;
 }
