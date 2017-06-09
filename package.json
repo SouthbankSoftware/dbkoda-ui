@@ -24,6 +24,7 @@
   "scripts": {
     "postinstall": "yarn run clean && yarn run build",
     "dev": "webpack-dev-server --config webpack/dev.js",
+    "dev:install": "yarn install --ignore-scripts",
     "dev:prod": "yarn run postinstall && yarn start --",
     "dev:analyser": "yarn run dev:analyzer",
     "dev:analyzer": "yarn run clean && webpack --config webpack/analyzer.js",
