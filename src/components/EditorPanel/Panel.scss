@@ -293,10 +293,11 @@
                         border-radius: 0.4em;
                         text-align: center;
                         a {
+                          float: left;
                           width: 50px;
                           height: 50px;
                           border-radius: 0.4em;
-                          background-color: $welcomeViewIconBG;
+                          background: $welcomeViewIconBG;
                           position: relative;
                           text-align: center;
                           svg {
@@ -332,7 +333,7 @@
                         border-radius: 50%;
                         order: 1;
                         flex-grow: 4;
-                        background-color: $welcomeViewIconBG;
+                        background: $welcomeViewIconBG;
                         font-size: 40;
                       }
                       .twitterIcon {
@@ -415,7 +416,7 @@
                           width: 60px;
                           height: 60px;
                           border-radius: 0.4em;
-                          background-color: $welcomeViewIconBG;
+                          background: $welcomeViewIconBG;
                           position: relative;
                           text-align: center;
                           svg {
