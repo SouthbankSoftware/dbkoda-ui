@@ -1,8 +1,8 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-05-29T15:22:41+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-06-06T11:32:29+10:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-06-09T16:48:06+10:00
 
 @import '../../styles/_defaultTheme.scss';
 .profileListPanel {
@@ -67,8 +67,8 @@
   svg.dbCodaLogo {
     opacity: 0.05;
     position: absolute;
-    left: 25%;
-    top: 40%;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
     width: 200px;
     height: 200px;
     path.st0 {
