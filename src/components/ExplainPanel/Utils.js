@@ -2,7 +2,6 @@
  * Created by joey on 6/6/17.
  */
 
-
 export const getWorstStage = (stages) => {
   let max = 0;
   stages.map((stage) => {
