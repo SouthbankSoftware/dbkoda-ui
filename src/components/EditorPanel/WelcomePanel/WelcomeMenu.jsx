@@ -12,6 +12,7 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
 import {AnchorButton, Checkbox} from '@blueprintjs/core';
+import EventLogging from '#/common/logging/EventLogging';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.

@@ -24,6 +24,10 @@ h3 {
   margin-top: 4px;
 }
 
+
+span.Resizer {
+  opacity: 0;
+}
 .pt-popover-content {
   color: $toolTipFontColour !important;
   background-color: $toolTipBackgroundColour !important;
@@ -46,6 +50,38 @@ h3 {
 
 .pt-toast {
   color: unset !important;
+}
+
+div.pt-dialog {
+  background-color: $panelLeftBackground !important;
+  div.pt-alert-footer {
+    button {
+      font-weight: lighter !important;
+      color: $dialogButtonBorder !important;
+      width: 7em !important;
+      border-radius: 0 !important;
+      background-image: unset !important;
+      background-color: $panelLeftBackground !important;
+      border: 1px solid $dialogButtonBorder !important;
+      box-shadow: unset !important;
+    }
+    button.pt-button:hover {
+      background-color: $connectionButtonBackgroundColourHover !important;
+      color: $connectionButtonFontColourHover !important;
+    }
+  }
+  input[type=text],
+  input[type=number],
+  input[type=password] {
+    background: unset;
+    color: $connectionActiveTextFieldTextColour !important;
+  }
+  input[type=text]:focus,
+  input[type=number]:focus,
+  input[type=password]:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
+  }
 }
 
 .pt-toast.pt-intent-success {
@@ -289,10 +325,14 @@ a.pt-disabled.pt-intent-primary {
 }
 
 .pt-button.pt-disabled {
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
-.pt-control input:focus ~ .pt-control-indicator,
+.pt-button {
+  box-shadow: unset !important;
+}
+
+.pt-control input:focus~.pt-control-indicator,
 input[type=radio]:focus,
 input[type=checkbox]:focus {
   outline: none;

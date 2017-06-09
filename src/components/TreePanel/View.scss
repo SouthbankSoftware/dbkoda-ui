@@ -30,26 +30,26 @@
   overflow-x: scroll;
   background-color: $navbarLeftBackground !important;
   .pt-button {
-    background-color: $buttonSecondaryBackground !important;
+    background: $buttonSecondaryBackground !important;
     color: $buttonSecondaryIcon !important;
     border-radius: 50%;
     margin-left: 5px;
     margin-right: 5px;
   }
   .pt-button:hover {
-    background-color: $buttonSecondaryBackgroundHover !important;
+    background: $buttonSecondaryBackgroundHover !important;
   }
   .pt-button.dangerButton {
-    background-color: $buttonDangerBackground !important;
+    background: $buttonDangerBackground !important;
   }
   .pt-button.dangerButton:hover {
-    background-color: $buttonDangerBackgroundHover !important;
+    background: $buttonDangerBackgroundHover !important;
   }
   .pt-button.pt-disabled:hover {
-    background-color: $buttonSecondaryBackground !important;
+    background: $buttonSecondaryBackground !important;
   }
   .pt-button.pt-disabled.dangerButton:hover {
-    background-color: $buttonDangerBackground !important;
+    background: $buttonDangerBackground !important;
   }
   .refreshTreeButton {
     max-width: 30px;
@@ -110,17 +110,65 @@ ul.pt-tree-node-list {
   }
 }
 
-.tree-msg-div span {
-  color: white;
-  padding: 10px 5px;
-  display: block;
-  text-align: center;
-  border: white;
-  border-style: solid;
-  position: absolute;
-  top: 40%;
-  left: 20%;
-  right: 20%;
+.tree-msg-div {
+  margin-top: 20%;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
+  height: 60%;
+  border: 1px solid $treeBorderColor;
+  div.messageWrapper {
+    width: 40%;
+    height: 40%;
+    margin-left: 28%;
+    margin-top: 30%;
+    margin-right: 20%;
+    display: absolute;
+    div.iconWrapper {
+      width: 6em;
+      height: 6em;
+      display: block;
+      text-align: center;
+      margin-left: 30%;
+      border-radius: 50%;
+      background-color: $treeIconBGColor;
+      svg {
+        margin-top: 20%;
+        width: 60%;
+        height: 60%;
+        fill: $treeIconColor;
+        path.st0 {
+          fill: none;
+        }
+      }
+    }
+    div.loader {
+      border: 16px solid $treeLoaderColorBG;
+      border-top: 16px solid $treeLoaderColor;
+      // Second spinning icon: border-bottom: 16px solid $treeLoaderColor;
+      border-radius: 50%;
+      width:  6em;
+      height: 6em;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    span {
+      color: $treeMessageColor;
+      padding: 10px 5px;
+      display: block;
+      text-align: center;
+      top: 50%;
+      left: 0%;
+      right: 20%;
+    }
+  }
 }
 
 div.pt-navbar-heading {
