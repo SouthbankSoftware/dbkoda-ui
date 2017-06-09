@@ -1,8 +1,8 @@
 // @Author: chris
 // @Date:   2017-05-15T09:44:11+10:00
 // @Email:  chris@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-06-09T15:41:30+10:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-06-09T16:12:54+10:00
 @import '../../styles/_defaultTheme.scss';
 .outputPanel {
   flex: 1;
@@ -134,6 +134,15 @@
       }
     }
   }
+  div.CodeMirror-activeline pre.CodeMirror-line {
+    background-color: unset !important;
+  }
+  .CodeMirror-activeline-background {
+    background-color: $editorActiveLine !important;
+  }
+  .CodeMirror-activeline-gutter {
+    background-color: $editorBackground;
+  }
   .CodeMirror-lines > div > div:nth-child(3) {
     z-index: 19 !important;
     background: unset !important;
@@ -141,6 +150,9 @@
     div.CodeMirror-selected {
       background-color: $editorSelectText;
     }
+  }
+  .CodeMirror-cursor {
+    display: none;
   }
 } //// Code Mirror CSS: ////
 /////////////////////////////

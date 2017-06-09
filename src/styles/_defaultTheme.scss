@@ -2,7 +2,7 @@
 // @Date:   2017-05-12T15:11:29+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   guiguan
-// @Last modified time: 2017-06-08T11:58:47+10:00
+// @Last modified time: 2017-06-09T16:04:38+10:00
 // Theme 1 Colours: These should be externalized eventually:
 
 //Theme Colors:
@@ -48,8 +48,8 @@ $tabBackgroundSelected: #202020;
 $panelRightBackground: #202020;
 //Editor:
 $editorBackground: #202020;
-$editorActiveLine: rgba(130, 130, 130, 0.15);
-$editorSelectText: $editorActiveLine;
+$editorActiveLine: rgba(100, 100, 100, 0.15);
+$editorSelectText: rgba(200, 200, 200, 0.15);
 $editorTextComments: #8B8B8B;
 $editorDefaultFontColor: #FFB795;
 $keywordOne: #179DEA;

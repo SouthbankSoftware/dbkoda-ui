@@ -2,8 +2,8 @@
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-06-08T14:46:55+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-06-09T16:08:25+10:00
 */
 
 import React from 'react';
@@ -238,6 +238,7 @@ export default class Editor extends React.Component {
       tabSize: 2,
       matchBrackets: true,
       autoCloseBrackets: true,
+      styleActiveLine: true,
       foldOptions: {
         widget: '...'
       },
