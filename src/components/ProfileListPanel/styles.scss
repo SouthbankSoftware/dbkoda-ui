@@ -1,8 +1,8 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-05-29T15:22:41+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   guiguan
-// @Last modified time: 2017-06-09T16:48:06+10:00
+// @Last modified by:   chris
+// @Last modified time: 2017-06-13T09:42:51+10:00
 
 @import '../../styles/_defaultTheme.scss';
 .profileListPanel {
@@ -137,7 +137,37 @@
   }
 }
 
+.pt-dialog {
+  padding: 20px;
 
+  .dialogButtons {
+    display: inline-block;
+    a.pt-button {
+      border-radius: 0;
+      margin: 10px;
+      float: right;
+    }
+    a.submitButton {
+      font-weight: lighter;
+      color: $buttonTextColour;
+      border-radius: 0;
+      background: unset;
+      background-color: $buttonSuccessBackground;
+      border: unset;
+      -webkit-appearance: unset;
+    }
+    a.submitButton:hover {
+      background-color: $buttonSuccessBackgroundHover;
+    }
+    a.cancelButton {
+      color: $buttonTextColour;
+      background-color: $buttonDangerBackground;
+    }
+    a.cancelButton:hover {
+      background: $buttonDangerBackgroundHover;
+    }
+  }
+}
 
 ul.profileListContextMenu {
   display: flex;
