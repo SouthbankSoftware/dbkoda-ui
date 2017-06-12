@@ -3,7 +3,7 @@
  * @Date:   2017-03-15 13:40:45
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-06-13T09:45:55+10:00
+ * @Last modified time: 2017-06-13T09:58:36+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -15,7 +15,6 @@ import autobind from 'autobind-decorator';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
 import {NewToaster, DBCodaToaster} from '#/common/Toaster';
 import {
-  Alert,
   AnchorButton,
   Dialog,
   Intent,
