@@ -3,7 +3,21 @@
     "DefaultValues": {
         "function": "dbcoda_ShardStats"
     },
-    "Fields": [{
+    "Fields": [
+        {
+            "name": "collectionChunks",
+            "label": "Chunks by collection",
+            "type": "BarChart",
+            "groupBy": ["ns", "shard"],
+            "XAxis": {
+                "key": "chunks"
+            },
+            "YAxis": {
+                "key": "ns",
+                "width": 165
+            },
+            "width": "100%"
+        },{
             "name": "chunks",
             "label": "Chunks by shard",
             "type": "BarChart",
@@ -27,19 +41,6 @@
             "YAxis": {
                 "key": "host",
                 "width": 120
-            },
-            "width": "50%"
-        }, {
-            "name": "collectionChunks",
-            "label": "Chunks by collection",
-            "type": "BarChart",
-            "groupBy": ["ns", "shard"],
-            "XAxis": {
-                "key": "chunks"
-            },
-            "YAxis": {
-                "key": "ns",
-                "width": 165
             },
             "width": "50%"
         }
