@@ -196,14 +196,13 @@ export default class TreeState {
       if (profile.shellVersion.match(/^3.0.*/gi) ||
         profile.shellVersion.match(/^2.*/gi) ||
         profile.shellVersion.match(/^1.*/gi)) {
-        console.log('Sample attributes does not support Shell versions lower than 3.1, detected version is: ', profile.shellVersion);
+        console.log('Sample attributes does not currently support Shell versions lower than 3.1, detected version is: ', profile.shellVersion);
          NewToaster.show({
           message: 'Sorry, sampling of collection not currently supported for Mongo shell versions lower than 3.1',
           intent: Intent.DANGER,
           iconName: 'pt-icon-thumbs-down'
         });
       } else {
-        console.log('huh?');
         const service = featherClient().service('/mongo-sync-execution');
         service.timeout = 30000;
         service
@@ -254,14 +253,17 @@ export default class TreeState {
       // Create an object as a union of all attributes. Remove db swap. Replace
       // ObjectID(...) elements.
       try {
-        queryResult = queryResult.replace(/ObjectId\(/g, '');
-        queryResult = queryResult.replace(/ISODate\(/g, '');
-        queryResult = queryResult.replace(/NumberLong\(/g, '');
-        queryResult = queryResult.replace(/\)/g, '');
-
+        console.log('Q R: ', queryResult);
+        queryResult = queryResult.replace(/ObjectId\("([a-zA-Z0-9]*)"\)/g, '"ObjectId(\'$1\')"');
+        queryResult = queryResult.replace(/ISODate\("([a-zA-Z0-9-:.]*)"\)/g, '"ISODate(\'$1\')"');
+        queryResult = queryResult.replace(/NumberLong\(([a-zA-Z0-9]*)\)/g, '"NumberLong(\'$1\')"');
+        queryResult = queryResult.replace(/NumberLong\("([a-zA-Z0-9]*)"\)/g, '"NumberLong(\'$1\')"');
+        queryResult = queryResult.replace(/Timestamp\(([a-zA-Z0-9.:-_, ]*)\)/g, '"ObjectId(\'$1\')"');
         queryResult = queryResult.split('\n');
         queryResult.splice(0, 1);
+        console.log('Q R[0]: ', queryResult[0]);
         let object = JSON.parse(queryResult[0]);
+        console.log('Object:', object);
         queryResult.forEach((document) => {
           if (document.length > 1) {
             try {

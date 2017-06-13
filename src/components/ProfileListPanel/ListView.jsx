@@ -600,7 +600,7 @@ export default class ListView extends React.Component {
           isColumnResizable={false}
           renderBodyContextMenu={this.renderBodyContextMenu}
           isRowResizable={false}
-          defaultColumnWidth={1024}
+          defaultColumnWidth={100}
           defaultRowHeight={60}
           onSelection={region => this.onSelection(region)}
           selectedRegions={this.state.lastSelectRegion}
