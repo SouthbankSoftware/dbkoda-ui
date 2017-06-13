@@ -83,7 +83,7 @@ describe('test shard explain view', () => {
     const stages = getExecutionStages(explain.queryPlanner.winningPlan);
     assert.equal(stages.length, 1);
     assert.equal(stages[0].shardName, 's0');
-    const shardStages = mergeShardsStages(stages);
+    const shardStages = mergeShardsStages(stages).mergedStages;
     assert.equal(shardStages.length, 1);
     assert.equal(shardStages[0].stage, 'COLLSCAN');
   });
@@ -179,7 +179,7 @@ describe('test shard explain view', () => {
     assert.equal(stages[2].stages[0].stage, 'COLLSCAN');
     assert.equal(stages[2].stages[1].stage, 'SHARDING_FILTER');
 
-    const shardStages = mergeShardsStages(stages);
+    const shardStages = mergeShardsStages(stages).mergedStages;
     assert.equal(shardStages.length, 2);
     assert.equal(shardStages[0].length, 3);
     assert.equal(shardStages[0][0].stage, 'COLLSCAN');
@@ -280,7 +280,7 @@ describe('test shard explain view', () => {
     assert.equal(stages[0].stages.length, 2);
     assert.equal(stages[0].stages[0].stage, 'COLLSCAN');
     assert.equal(stages[0].stages[1].stage, 'SHARDING_FILTER');
-    const shardStages = mergeShardsStages(stages);
+    const shardStages = mergeShardsStages(stages).mergedStages;
     assert.equal(shardStages.length, 2);
     assert.equal(shardStages[0].stage, 'COLLSCAN');
     assert.equal(shardStages[1].stage, 'SHARDING_FILTER');
@@ -365,7 +365,7 @@ describe('test shard explain view', () => {
       'ok': 1
     };
     const stages = getExecutionStages(explain.queryPlanner.winningPlan);
-    const shardStages = mergeShardsStages(stages);
+    const shardStages = mergeShardsStages(stages).mergedStages;
     assert.equal(shardStages.length, 3);
     assert.equal(shardStages[0].length, 3);
     assert.equal(shardStages[0][0], null);
@@ -520,7 +520,7 @@ describe('test shard explain view', () => {
       'ok': 1
     };
     const stages = getExecutionStages(explain.executionStats.executionStages);
-    const shardStages = mergeShardsStages(stages);
+    const shardStages = mergeShardsStages(stages).mergedStages;
     assert.equal(shardStages.length, 3);
     assert.equal(shardStages[0].length, 2);
   });
@@ -655,7 +655,7 @@ describe('test shard explain view', () => {
       'ok': 1
     };
     const stages = getExecutionStages(explain.executionStats.executionStages);
-    const shardStages = mergeShardsStages(stages);
+    const shardStages = mergeShardsStages(stages).mergedStages;
     assert.equal(shardStages.length, 3);
     assert.equal(shardStages[0].length, 2);
     assert.equal(shardStages[0][0].stage, 'IXSCAN');
@@ -827,7 +827,7 @@ describe('test shard explain view', () => {
       }
     };
     const stages = getExecutionStages(explain.executionStats.executionStages);
-    const shardStages = mergeShardsStages(stages);
+    const shardStages = mergeShardsStages(stages).mergedStages;
     assert.equal(shardStages.length, 4);
     assert.equal(shardStages[0].length, 2);
     assert.equal(shardStages[0][0], null);
@@ -1059,7 +1059,7 @@ describe('test shard explain view', () => {
       }
     };
     const stages = getExecutionStages(explain.executionStats.executionStages);
-    const shardStages = mergeShardsStages(stages);
-    assert.equal(shardStages.length, 6);
+    const shardStages = mergeShardsStages(stages).mergedStages;
+    assert.equal(shardStages.length, 5);
   });
 });

@@ -29,7 +29,7 @@ export const Stage = ({stage, maxNumChildren, head, shardName = '', adjustMargin
   </div>);
 };
 
-export default ({stages, shardNames, shardHeight}) => {
+export default ({stages, shardNames}) => {
   let maxNumChildren = 1;
   let innerMaxLength = 1;
   let hasInnerBranch = false;
