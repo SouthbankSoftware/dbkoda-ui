@@ -7,7 +7,6 @@
  */
 
 
-import EJSON from 'mongodb-extended-json';
 import { featherClient } from '~/helpers/feathers';
 
  export const SyncService = {
@@ -29,7 +28,7 @@ import { featherClient } from '~/helpers/feathers';
                res = res.replace(/NumberLong\(\"(\d*)\"\)/g, '$1');
                console.log('Result: ', res);
                try {
-                 const ejson = EJSON.parse(res);
+                 const ejson = JSON.parse(res);
                  resolve(ejson);
                } catch (e) {
                  console.log(e);
