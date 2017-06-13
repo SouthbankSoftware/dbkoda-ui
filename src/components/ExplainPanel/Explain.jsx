@@ -12,7 +12,6 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
-import EJSON from 'mongodb-extended-json';
 import Panel from './Panel';
 import {Broker, EventType} from '../../helpers/broker/index';
 
@@ -78,7 +77,7 @@ export default class Explain extends React.Component {
     let explainOutputJson;
     try {
       explainOutputJson = {
-        output: EJSON.parse(parseOutput(output)),
+        output: JSON.parse(parseOutput(output)),
         type: this.explainType,
         command: this.explainCommand,
         viewType: 0,
