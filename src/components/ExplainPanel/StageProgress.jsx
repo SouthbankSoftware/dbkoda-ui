@@ -105,7 +105,7 @@ export default ({stages, shardNames}) => {
         let marginTop = 0;
         if (hasInnerBranch) {
           length = (maxNumChildren * innerMaxLength) - 1;
-          marginTop = 15;
+          marginTop = 10;
         }
         return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={length}
           head={i === 0} adjustMarginTop={marginTop}
