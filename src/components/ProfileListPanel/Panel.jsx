@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-15 13:33:53
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-15 13:33:46
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-13T16:37:15+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -28,8 +28,8 @@ export default class Panel extends React.Component {
     return (
       <div className="pt-dark profileListPanel">
         <Toolbar ref="toolbar" />
-        <ListView />
         <DBKodaIcon className="dbCodaLogo" width={20} height={20} />
+        <ListView />
       </div>
 
     );

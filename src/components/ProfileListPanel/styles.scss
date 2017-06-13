@@ -2,7 +2,7 @@
 // @Date:   2017-05-29T15:22:41+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-06-13T09:42:51+10:00
+// @Last modified time: 2017-06-13T16:39:24+10:00
 
 @import '../../styles/_defaultTheme.scss';
 .profileListPanel {
@@ -177,18 +177,17 @@
 ul.profileListContextMenu {
   display: flex;
   flex-direction: column;
+
   div.contextMenuGroup {
     div.menuItemWrapper {
       display: flex;
       flex-direction: row;
-      svg.dbCodaSVG {}
       li {}
     }
   }
   div.menuItemWrapper {
     display: flex;
     flex-direction: row;
-    svg.dbCodaSVG {}
     li {}
   }
 }
