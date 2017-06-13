@@ -63,16 +63,28 @@ export default ({stages, shardNames}) => {
               {
                 stage.map((s, j) => {
                   let shardName = '';
-                  if (i === 0 && shardNames && shardNames.length > 0) {
-                    shardName = shardNames[j];
+                  if (i === 0 && s) {
+                    shardName = s.shardName;
                   }
                   const sid = j;
                   if (s && s.constructor === Array) {
-                    return s.map((inner, iid) => {
-                      const innerId = `${sid}-${iid}`;
-                      return (<Stage stage={inner} key={`${s && s.stage} - ${innerId}`} maxNumChildren={1} head={false}
-                        shardName={shardName} />);
-                    });
+                    if (i === 0) {
+                      if (s[0]) {
+                        shardName = s[0].shardName;
+                      } else if (stages[stages.length - 2] && stages[stages.length - 2][j]) {
+                        // if the element is null, find the second last column at the same position on j
+                        shardName = stages[stages.length - 2][j].shardName;
+                      }
+                    }
+                    return (<div style={{display: 'flex'}}>
+                      <span style={{alignSelf: 'center', color: '#BFBEC0'}}>{shardName}</span>
+                      <div style={{flex: 1}}>{s.map((inner, iid) => {
+                        const innerId = `${sid}-${iid}`;
+                        return (
+                          <Stage stage={inner} key={`${s && s.stage} - ${innerId}`} maxNumChildren={1} head={false}
+                          />);
+                      })}</div>
+                    </div>);
                   }
                   if (hasInnerBranch) {
                     const length = columnHasBranch[i] ? 1 : innerMaxLength;
