@@ -3,7 +3,7 @@
  * @Date:   2017-03-15 13:40:45
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-06-13T09:58:36+10:00
+ * @Last modified time: 2017-06-13T14:30:23+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -12,8 +12,11 @@ import {inject, observer} from 'mobx-react';
 import {action, reaction, runInAction, observable} from 'mobx';
 import uuidV1 from 'uuid';
 import autobind from 'autobind-decorator';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
 import {NewToaster, DBCodaToaster} from '#/common/Toaster';
+import {DialogHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import {
   AnchorButton,
   Dialog,
@@ -418,24 +421,34 @@ export default class ListView extends React.Component {
   @autobind
   openCloseConnectionAlert() {
     this.setState({isCloseWarningActive: true});
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
   @autobind
   closeConnectionCloseAlert() {
     this.setState({isCloseWarningActive: false});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
   @autobind
   openRemoveConnectionAlert() {
     this.setState({isRemoveWarningActive: true});
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
   @autobind
   closeConnectionRemoveAlert() {
     this.setState({isRemoveWarningActive: false});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
   @autobind
   openOpenConnectionAlert() {
     if (this.state.targetProfile.sha) {
       this.state.openWithAuthorization = true;
       this.setState({isOpenWarningActive: true});
+      Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
+      Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openProfile);
     } else {
       this.state.openWithAuthorization = false;
       this.openProfile();
@@ -444,6 +457,8 @@ export default class ListView extends React.Component {
   @autobind
   closeOpenConnectionAlert() {
     this.setState({isOpenWarningActive: false});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
   }
   @autobind
   setPWText(event) {
@@ -585,7 +600,7 @@ export default class ListView extends React.Component {
           isColumnResizable={false}
           renderBodyContextMenu={this.renderBodyContextMenu}
           isRowResizable={false}
-          defaultColumnWidth={1024}
+          defaultColumnWidth={100}
           defaultRowHeight={60}
           onSelection={region => this.onSelection(region)}
           selectedRegions={this.state.lastSelectRegion}

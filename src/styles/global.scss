@@ -84,6 +84,11 @@ div.pt-dialog {
   }
 }
 
+.pt-toast {
+  .pt-icon-standard {
+    display: none;
+  }
+}
 .pt-toast.pt-intent-success {
   background-color: $toastBackgroundColourSuccess !important;
   color: $toastFontColourSuccess !important;
@@ -91,8 +96,7 @@ div.pt-dialog {
     color: $toastFontColourSuccess !important;
   }
   div {
-    color: unset !important;
-    color: $toastCloseIconColourSuccess !important;
+    display: none;
     button::before {
       color: $toastCloseIconColourSuccess !important;
     }
@@ -106,8 +110,7 @@ div.pt-dialog {
     color: $toastFontColourWarning !important;
   }
   div {
-    color: unset !important;
-    color: $toastCloseIconColourWarning !important;
+    display: none;
     button::before {
       color: $toastCloseIconColourWarning !important;
     }
@@ -121,6 +124,7 @@ div.pt-dialog {
     color: $toastFontColourDanger !important;
   }
   div {
+    display: none;
     color: unset !important;
     color: $toastCloseIconColourDanger !important;
     button::before {
@@ -136,6 +140,7 @@ div.pt-dialog {
     color: $toastFontColourInfo !important;
   }
   div {
+    display:none;
     color: unset !important;
     color: $toastCloseIconColourInfo !important;
     button::before {
