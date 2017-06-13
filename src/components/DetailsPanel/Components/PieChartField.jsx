@@ -3,7 +3,7 @@
  * @Date:   2017-05-24T15:20:50+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-06-01T11:12:50+10:00
+ * @Last modified time: 2017-06-13T14:05:23+10:00
  */
 
 import React from 'react';
@@ -21,8 +21,8 @@ export default observer(({
   field,
   data
 }) => {
-  console.log('BarChartField field:', field);
-  console.log('BarChartField data:', data);
+  console.log('PieChartField field:', field);
+  console.log('PieChartField data:', data);
   const COLORS = [
     '#77173E',
     '#0D657C',

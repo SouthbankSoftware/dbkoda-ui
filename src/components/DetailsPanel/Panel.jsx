@@ -3,7 +3,7 @@
  * @Date:   2017-05-22T09:11:48+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T17:04:27+10:00
+ * @Last modified time: 2017-06-13T13:52:31+10:00
  */
 
 import React from 'react';
@@ -24,7 +24,11 @@ export default class DetailsPanel extends React.Component {
     this.renderDetails(this.props.editor);
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.editor != nextProps.editor || this.bDetView == false) {
+    console.log('nextProps.isVisible:', nextProps.isVisible);
+    if (!nextProps.isVisible) {
+      this.showView(nextProps.isVisible);
+    }
+    if ((this.props.editor != nextProps.editor || this.bDetView == false) && nextProps.isVisible) {
       this.renderDetails(nextProps.editor);
     }
   }
@@ -71,7 +75,7 @@ export default class DetailsPanel extends React.Component {
     }
   }
   render() {
-    console.log(this);
+    console.log('Details Panel Render:', this);
     return (
       <div className="details-view">
         {this.bDetView &&

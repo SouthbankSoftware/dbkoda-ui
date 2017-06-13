@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T16:54:58+10:00
+ * @Last modified time: 2017-06-13T13:06:05+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -156,7 +156,7 @@ export default class Panel extends React.Component {
           key={'Details-' + editor[1].id}
           id={'Details-' + editor[1].id}
           title={'Details-' + editorTitle}
-          panel={<DetailsPanel editor={editor[1]} />}
+          panel={<DetailsPanel isVisible={this.props.store.outputPanel.currentTab.indexOf('Details') >= 0} editor={editor[1]} />}
         />
       ];
     });
