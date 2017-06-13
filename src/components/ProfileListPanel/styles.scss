@@ -57,8 +57,13 @@
       .bp-table-body {
         background-color: $panelLeftBackground !important;
         .bp-table-body-scroll-client {
+          width: 100% !important;
           .bp-table-body-virtual-client {
+            width: 100% !important;
             background-color: $panelLeftBackground !important;
+            .bp-table-cell {
+              width:100% !important;
+            }
           }
         }
       }
