@@ -3,7 +3,7 @@
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-23T09:47:10+10:00
+ * @Last modified time: 2017-06-09T09:57:43+10:00
  */
 
 import React from 'react';
@@ -82,8 +82,7 @@ export default class TreeActionPanel extends React.Component {
             </div>
             <button
               className="pt-button pt-intent-primary right-button"
-              onClick={this.close}
-            >
+              onClick={this.close}>
               {globalString('tree/closeButton')}
             </button>
           </div>}

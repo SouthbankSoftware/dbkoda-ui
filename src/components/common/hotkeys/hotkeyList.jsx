@@ -263,3 +263,16 @@ export const CodeMirrorHotkeys = {
     description: 'Replace all found instances.'
   }
 };
+
+export const DialogHotkeys = {
+  closeDialog: {
+    combo: 'Escape',
+    keys: 'esc',
+    description: 'Close Dialog'
+  },
+  submitDialog: {
+    combo: 'Enter',
+    keys: 'enter',
+    description: 'Submit Dialog'
+  }
+};

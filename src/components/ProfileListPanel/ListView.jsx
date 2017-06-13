@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-15 13:40:45
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-06-06T11:36:53+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-13T14:30:23+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -12,10 +12,14 @@ import {inject, observer} from 'mobx-react';
 import {action, reaction, runInAction, observable} from 'mobx';
 import uuidV1 from 'uuid';
 import autobind from 'autobind-decorator';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
 import {NewToaster, DBCodaToaster} from '#/common/Toaster';
+import {DialogHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import {
-  Alert,
+  AnchorButton,
+  Dialog,
   Intent,
   Menu,
   MenuItem,
@@ -417,24 +421,34 @@ export default class ListView extends React.Component {
   @autobind
   openCloseConnectionAlert() {
     this.setState({isCloseWarningActive: true});
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
   @autobind
   closeConnectionCloseAlert() {
     this.setState({isCloseWarningActive: false});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
   @autobind
   openRemoveConnectionAlert() {
     this.setState({isRemoveWarningActive: true});
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
   @autobind
   closeConnectionRemoveAlert() {
     this.setState({isRemoveWarningActive: false});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
   @autobind
   openOpenConnectionAlert() {
     if (this.state.targetProfile.sha) {
       this.state.openWithAuthorization = true;
       this.setState({isOpenWarningActive: true});
+      Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
+      Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openProfile);
     } else {
       this.state.openWithAuthorization = false;
       this.openProfile();
@@ -443,6 +457,8 @@ export default class ListView extends React.Component {
   @autobind
   closeOpenConnectionAlert() {
     this.setState({isOpenWarningActive: false});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
   }
   @autobind
   setPWText(event) {
@@ -591,42 +607,73 @@ export default class ListView extends React.Component {
           >
           <Column name="Connection Profiles" renderCell={renderCell} />
         </Table>
-        <Alert
+        <Dialog
           className="pt-dark close-profile-alert-dialog"
           intent={Intent.PRIMARY}
           isOpen={this.state.isCloseWarningActive}
-          confirmButtonText={globalString('profile/closeAlert/confirmButton')}
-          cancelButtonText={globalString('profile/closeAlert/cancelButton')}
-          onConfirm={this.closeProfile}
-          onCancel={this.closeConnectionCloseAlert}>
+          >
           <p>{globalString('profile/closeAlert/prompt')}</p>
-        </Alert>
-        <Alert
+          <div className="dialogButtons">
+            <AnchorButton
+              className="submitButton"
+              type="submit"
+              onClick={this.closeProfile}
+              text={globalString('profile/closeAlert/confirmButton')}
+              />
+            <AnchorButton
+              className="cancelButton"
+              text={globalString('profile/closeAlert/cancelButton')}
+              onClick={this.closeConnectionCloseAlert}
+              />
+          </div>
+        </Dialog>
+        <Dialog
           className="pt-dark remove-profile-alert-dialog"
           intent={Intent.PRIMARY}
-          isOpen={this.state.isRemoveWarningActive}
-          confirmButtonText={globalString('profile/removeAlert/confirmButton')}
-          cancelButtonText={globalString('profile/removeAlert/cancelButton')}
-          onConfirm={this.deleteProfile}
-          onCancel={this.closeConnectionRemoveAlert}>
+          isOpen={this.state.isRemoveWarningActive}>
           <p>{globalString('profile/removeAlert/prompt')}</p>
-        </Alert>
-        <Alert
+          <div className="dialogButtons">
+            <AnchorButton
+              className="submitButton"
+              type="submit"
+              intent={Intent.SUCCESS}
+              onClick={this.deleteProfile}
+              text={globalString('profile/removeAlert/confirmButton')} />
+            <AnchorButton
+              className="cancelButton"
+              intent={Intent.DANGER}
+              onClick={this.closeConnectionRemoveAlert}
+              text={globalString('profile/removeAlert/cancelButton')} />
+          </div>
+        </Dialog>
+        <Dialog
           className="pt-dark open-profile-alert-dialog"
           intent={Intent.PRIMARY}
-          isOpen={this.state.isOpenWarningActive}
-          confirmButtonText={globalString('profile/openAlert/confirmButton')}
-          cancelButtonText={globalString('profile/openAlert/cancelButton')}
-          onConfirm={this.openProfile}
-          onCancel={this.closeOpenConnectionAlert}>
+          isOpen={this.state.isOpenWarningActive}>
           <p>{globalString('profile/openAlert/prompt')}</p>
           <input
+            autoFocus
             className="pt-input passwordInput"
             placeholder={globalString('profile/openAlert/inputPlaceholder')}
             type="password"
             dir="auto"
             onChange={this.setPWText} />
-        </Alert>
+          <div className="dialogButtons">
+            <AnchorButton
+              className="submitButton"
+              intent={Intent.SUCCESS}
+              type="submit"
+              onClick={this.openProfile}
+              text={globalString('profile/openAlert/confirmButton')}
+              />
+            <AnchorButton
+              className="cancelButton"
+              intent={Intent.DANGER}
+              text={globalString('profile/openAlert/cancelButton')}
+              onClick={this.closeOpenConnectionAlert}
+              />
+          </div>
+        </Dialog>
       </div>
     );
   }
