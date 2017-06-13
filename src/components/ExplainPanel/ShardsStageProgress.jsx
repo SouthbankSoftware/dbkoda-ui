@@ -8,16 +8,29 @@ import './style.scss';
 import StageProgress from './StageProgress';
 
 export const mergeShardsStages = (shardStages) => {
+  console.log('merging shard stages ', shardStages);
   const mergedStages = [];
   let maxLength = 0;
+  let maxHeight = 1; // the max height of each shard, it should be 1 unless there is or stage
+  const shardHeight = {}; // store each shard height in case there is an array of stages; otherwise it should be 1
   shardStages.map((stages) => {
-    let ss = [];
+    const ss = [];
     stages.stages.map((s) => {
       if (s.constructor === Array) {
-        ss = ss.concat(s);
+        if (maxHeight < s.length) {
+          maxHeight = s.length;
+        }
+        shardHeight[stages.shardName] = s.length;
+        s.map((innerStage) => {
+          innerStage.shardName = stages.shardName;
+        });
       } else {
-        ss.push(s);
+        s.shardName = stages.shardName;
+        if (!shardHeight[stages.shardName]) {
+          shardHeight[stages.shardName] = 1;
+        }
       }
+      ss.push(s);
     });
     stages.stages = ss;
     if (stages.stages.length > maxLength) {
@@ -25,7 +38,7 @@ export const mergeShardsStages = (shardStages) => {
     }
   });
   if (shardStages.length === 1) {
-    return [].concat(shardStages[0].stages);
+    return {mergedStages: [].concat(shardStages[0].stages)};
   }
   const fillShardStages = shardStages.map((stages) => {
     const filtered = [].concat(stages.stages);
@@ -35,20 +48,42 @@ export const mergeShardsStages = (shardStages) => {
     }
     return {stages: filtered};
   });
-  fillShardStages.map((s, i) => {
+  console.log('file shards', fillShardStages);
+  fillShardStages.map((s) => {
     s.stages.map((st, j) => {
       if (!mergedStages[j]) {
         mergedStages[j] = [];
-        _.times(fillShardStages.length, () => mergedStages[j].push(null));
       }
-      mergedStages[j][i] = st;
+      mergedStages[j].push(st);
     });
   });
-  return mergedStages;
+  const finalStages = mergedStages.map((stages) => {
+    let length = 1;
+    stages.map((subStages) => {
+      if (subStages && subStages.constructor === Array && subStages.length > length) {
+        length = subStages.length;
+      }
+    });
+    return stages.map((subStages) => {
+      if (subStages === null && length > 1) {
+        const newStages = [];
+        _.times(length, () => newStages.push(null));
+        return newStages;
+      }
+      if (subStages && subStages.constructor === Array) {
+        _.times(length - subStages.length, () => subStages.push(null));
+      }
+      return subStages;
+    });
+  });
+  console.log('final stages ', finalStages);
+  return {mergedStages: finalStages, shardHeight};
 };
 
 export default ({executionStages, shardStages}) => {
-  const mergedStages = mergeShardsStages(shardStages).concat([executionStages]);
+  const ms = mergeShardsStages(shardStages);
+  const mergedStages = ms.mergedStages.concat([executionStages]);
   const shardNames = shardStages.map(shard => shard.shardName);
-  return (<StageProgress stages={mergedStages} shardNames={shardNames} />);
+  console.log('merged stages:', mergedStages);
+  return (<StageProgress stages={mergedStages} shardHeight={ms.shardHeight} shardNames={shardNames} />);
 };

@@ -5,7 +5,7 @@
 import React from 'react';
 import './style.scss';
 
-export const Stage = ({stage, maxNumChildren, head, shardName = ''}) => {
+export const Stage = ({stage, maxNumChildren, head, shardName = '', adjustMarginTop = 0}) => {
   const style = {};
   let className = head ? 'explain-stage explain-stage-array' : 'explain-stage';
   className = !stage ? 'explain-stage empty-explain-stage' : className;
@@ -13,23 +13,40 @@ export const Stage = ({stage, maxNumChildren, head, shardName = ''}) => {
     const factor = maxNumChildren % 2 === 0 ? 35.5 : 32.5;
     style.marginTop = (maxNumChildren - 1) * factor;
   }
+  if (adjustMarginTop) {
+    style.marginTop += adjustMarginTop;
+  }
   const shardStyle = {};
   if (shardName) {
     shardStyle.maxWidth = 200;
   }
   const stageName = stage ? stage.stage : '';
   return (<div className="explain-stage-wrapper" style={shardStyle}>
-    <span className="explain-stage-shard-name" >{shardName}</span>
+    <span className="explain-stage-shard-name">{shardName}</span>
     <div className={className} style={style}>
       {stageName}
-    </div></div>);
+    </div>
+  </div>);
 };
 
-export default ({stages, shardNames}) => {
+export default ({stages, shardNames, shardHeight}) => {
   let maxNumChildren = 1;
-  stages.map((stage) => {
+  let innerMaxLength = 1;
+  let hasInnerBranch = false;
+  const columnHasBranch = []; // whether the column has branch stages
+  stages.map((stage, i) => {
+    columnHasBranch[i] = false;
     if (stage.constructor === Array && maxNumChildren < stage.length) {
       maxNumChildren = stage.length;
+      stage.map((inner) => {
+        if (inner) {
+          if (inner.constructor === Array && innerMaxLength < inner.length) {
+            columnHasBranch[i] = true;
+            innerMaxLength = inner.length;
+            hasInnerBranch = true;
+          }
+        }
+      });
     }
   });
   return (<div className="explain-stage-progress">
@@ -50,7 +67,20 @@ export default ({stages, shardNames}) => {
                     shardName = shardNames[j];
                   }
                   const sid = j;
-                  return <Stage stage={s} key={`${s && s.stage} - ${sid}`} maxNumChildren={1} head={false} shardName={shardName} />;
+                  if (s && s.constructor === Array) {
+                    return s.map((inner, iid) => {
+                      const innerId = `${sid}-${iid}`;
+                      return (<Stage stage={inner} key={`${s && s.stage} - ${innerId}`} maxNumChildren={1} head={false}
+                        shardName={shardName} />);
+                    });
+                  }
+                  if (hasInnerBranch) {
+                    const length = columnHasBranch[i] ? 1 : innerMaxLength;
+                    return (<Stage stage={s} key={`${s && s.stage} - ${sid}`} maxNumChildren={length} head={false}
+                      shardName={shardName} />);
+                  }
+                  return (<Stage stage={s} key={`${s && s.stage} - ${sid}`} maxNumChildren={1} head={false}
+                    shardName={shardName} />);
                 })
               }
             </div>);
@@ -59,7 +89,15 @@ export default ({stages, shardNames}) => {
         if (i === 0 && shardNames && shardNames.length > 0) {
           shardName = shardNames[0];
         }
-        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={maxNumChildren} head={i === 0} shardName={shardName} />);
+        let length = maxNumChildren;
+        let marginTop = 0;
+        if (hasInnerBranch) {
+          length = (maxNumChildren * innerMaxLength) - 1;
+          marginTop = 15;
+        }
+        return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={length}
+          head={i === 0} adjustMarginTop={marginTop}
+          shardName={shardName} />);
       })
     }
   </div>);
