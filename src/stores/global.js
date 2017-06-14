@@ -218,6 +218,8 @@ export default class Store {
     }
     Globalize.locale(newStore.locale);
 
+    newStore.layout.alertIsLoading = false;
+
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
     newStore.editorPanel.activeEditorId = 'Default';
