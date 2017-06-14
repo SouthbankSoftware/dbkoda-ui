@@ -5,7 +5,33 @@
 // @Last modified time: 2017-06-09T11:35:30+10:00
 @import './_defaultTheme.scss';
 body {
-  background-color: $panelRightBackground;
+  background-color: $white;
+  overflow: auto !important;
+}
+
+#root div {
+
+}
+
+.treeToolbar, .profileList, .pt-tab-list {
+  overflow: auto !important;
+}
+
+.editorToolbar, .welcomeTab {
+  overflow: hidden !important;
+}
+
+.CodeMirror-scroll {
+  overflow: auto !important;
+}
+
+.horizontal, .welcomePageContentRight, .pt-button, .pt-tree-node-content, .pt-tab
+, .bp-table-body {
+  overflow: hidden !important;
+}
+
+.pt-icon-, .feedIconWrapper, .feedItemContent, .feedItem, .feedList{
+  overflow: unset !important;
 }
 
 h1 {
