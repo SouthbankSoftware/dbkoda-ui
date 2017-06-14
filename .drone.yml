@@ -1,7 +1,7 @@
 # @Author: guiguan
 # @Date:   2017-01-09T15:15:34+11:00
 # @Last modified by:   guiguan
-# @Last modified time: 2017-06-07T00:32:21+10:00
+# @Last modified time: 2017-06-14T15:11:27+10:00
 
 
 
@@ -13,7 +13,7 @@ pipeline:
       - /home/core/cienvy-client:/cienvy-client
       - cienvy-volumes:/volumes
     commands:
-      - bash /cienvy-client/bin/cienvy.bash --url=http://172.16.0.1:9090 core
+      - bash /cienvy-client/bin/cienvy.bash --url=http://172.16.0.1:9090 prepare core
   slack_legacy:
     image: plugins/slack
     pull: true
