@@ -80,7 +80,8 @@
         "profileSwapSslError": "Could not swap profiles due to SSL differences.",
         "notSupportedInUI": "`{0}` is not supported in browser UI",
         "cannotExecuteOnWelcome": "Cannot Execute on Welcome Page.",
-        "executionScriptFailed": "Executing scripts failed"
+        "executionScriptFailed": "Executing scripts failed",
+        "possibleMultiLineCommand": "Could not detect a valid mongo command, please highlight mutli-line commands."
       },
       "view": {
         "executionStopped": "Execution Stopped Successfully",
