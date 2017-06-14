@@ -222,7 +222,7 @@ class View extends React.Component {
           content = cm.getLine(cm.getCursor().line);
           // Quick check if line is a full command:
           if (!content.match(/^ *db./g) && !content.match(/^ *use /g) && !content.match(/^ *show /g)) {
-            NewToaster.show({message: globalString('editor/toolbar/possibleMultiLineCommand'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+            NewToaster.show({message: globalString('editor/toolbar/possibleMultiLineCommand'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
           }
         }
 
