@@ -12,7 +12,18 @@ body {
 #root div {
 
 }
-
+::-webkit-scrollbar {
+  background-color: $white;
+}
+::-webkit-scrollbar-track {
+      background-color: $scrollBarBackground !important;
+}
+::-webkit-scrollbar-thumb {
+      background-color: $scrollBarThumb !important;
+}
+::-webkit-scrollbar-button {
+      background-color: $scrollBarTopAndBottom !important;
+}
 .treeToolbar, .profileList, .pt-tab-list {
   overflow: auto !important;
 }
