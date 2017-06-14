@@ -86,6 +86,7 @@ export default class Store {
   });
 
   @observable layout = {
+    alertIsLoading: false,
     optInVisible: true,
     overallSplitPos: '40%',
     leftSplitPos: '50%',

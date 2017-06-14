@@ -203,6 +203,7 @@ export default class ListView extends React.Component {
     const service = featherClient().service('/mongo-connection');
     service.timeout = 30000;
     console.log('Q: ', query);
+    this.props.store.layout.alertIsLoading = true;
     return service.create({}, {query}).then((res) => {
       this.onSuccess(res, selectedProfile);
     }).catch((err) => {
@@ -301,6 +302,7 @@ export default class ListView extends React.Component {
     const profiles = this.props.store.profiles;
     if (selectedProfile) {
       this.setState({closingProfile: true});
+      this.props.store.layout.alertIsLoading = true;
       featherClient()
         .service('/mongo-connection')
         .remove(selectedProfile.id)
@@ -353,6 +355,7 @@ export default class ListView extends React.Component {
       });
 
       const profileId = this.state.targetProfile.id;
+      this.props.store.layout.alertIsLoading = true;
       return featherClient()
         .service('/mongo-shells')
         .create({id: profileId})
@@ -424,8 +427,9 @@ export default class ListView extends React.Component {
     Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
-  @autobind
+  @action.bound
   closeConnectionCloseAlert() {
+    this.props.store.layout.alertIsLoading = false;
     this.setState({isCloseWarningActive: false});
     Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
@@ -436,8 +440,9 @@ export default class ListView extends React.Component {
     Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
-  @autobind
+  @action.bound
   closeConnectionRemoveAlert() {
+    this.props.store.layout.alertIsLoading = false;
     this.setState({isRemoveWarningActive: false});
     Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
@@ -454,8 +459,9 @@ export default class ListView extends React.Component {
       this.openProfile();
     }
   }
-  @autobind
+  @action.bound
   closeOpenConnectionAlert() {
+    this.props.store.layout.alertIsLoading = false;
     this.setState({isOpenWarningActive: false});
     Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
@@ -589,6 +595,7 @@ export default class ListView extends React.Component {
         </Cell>
       );
     };
+    console.log('TEST: ', this.props.store.layout.alertIsLoading);
     return (
       <div className="profileList">
         <Table
@@ -618,12 +625,14 @@ export default class ListView extends React.Component {
               className="submitButton"
               type="submit"
               onClick={this.closeProfile}
+              loading={this.props.store.layout.alertIsLoading}
               text={globalString('profile/closeAlert/confirmButton')}
               />
             <AnchorButton
               className="cancelButton"
               text={globalString('profile/closeAlert/cancelButton')}
               onClick={this.closeConnectionCloseAlert}
+              loading={this.props.store.layout.alertIsLoading}
               />
           </div>
         </Dialog>
@@ -638,11 +647,13 @@ export default class ListView extends React.Component {
               type="submit"
               intent={Intent.SUCCESS}
               onClick={this.deleteProfile}
+              loading={this.props.store.layout.alertIsLoading}
               text={globalString('profile/removeAlert/confirmButton')} />
             <AnchorButton
               className="cancelButton"
               intent={Intent.DANGER}
               onClick={this.closeConnectionRemoveAlert}
+              loading={this.props.store.layout.alertIsLoading}
               text={globalString('profile/removeAlert/cancelButton')} />
           </div>
         </Dialog>
@@ -664,12 +675,14 @@ export default class ListView extends React.Component {
               intent={Intent.SUCCESS}
               type="submit"
               onClick={this.openProfile}
+              loading={this.props.store.layout.alertIsLoading}
               text={globalString('profile/openAlert/confirmButton')}
               />
             <AnchorButton
               className="cancelButton"
               intent={Intent.DANGER}
               text={globalString('profile/openAlert/cancelButton')}
+              loading={this.props.store.layout.alertIsLoading}
               onClick={this.closeOpenConnectionAlert}
               />
           </div>
