@@ -73,16 +73,17 @@ export default class ListView extends React.Component {
       .bind(this);
   }
   componentWillMount() {
-    this.reactionToEditorToolbarComboChange = reaction(
-      () => this.props.store.editorPanel.activeDropdownId,
-      () => {
-        if (this.props.store.editorPanel.activeDropdownId && this.props.store.editorPanel.activeDropdownId != 'Default') {
-          const editorProfile = this.props.store.profiles.get(this.props.store.editorPanel.activeDropdownId);
-          this.props.store.profileList.selectedProfile = editorProfile;
-          this.forceUpdate();
-        }
+    this.reactionToEditorToolbarComboChange = reaction(() => this.props.store.editorPanel.activeDropdownId, () => {
+      if (this.props.store.editorPanel.activeDropdownId && this.props.store.editorPanel.activeDropdownId != 'Default') {
+        const editorProfile = this
+          .props
+          .store
+          .profiles
+          .get(this.props.store.editorPanel.activeDropdownId);
+        this.props.store.profileList.selectedProfile = editorProfile;
+        this.forceUpdate();
       }
-    );
+    });
   }
 
   componentWillUnmount() {
@@ -164,7 +165,6 @@ export default class ListView extends React.Component {
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
     this.props.store.editorPanel.activeDropdownId = res.id;
-    console.log('Test: ', res.id);
     NewToaster.show({message: globalString('connection/success'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
     this.props.store.editorToolbar.isActiveExecuting = false;
     return editorId;
@@ -273,21 +273,33 @@ export default class ListView extends React.Component {
         .profiles
         .get(res.id);
       Broker.emit(EventType.NEW_PROFILE_CREATED, this.props.store.profiles.get(res.id));
-      this.props.store.editors.forEach((value, _) => {
-        if (value.status == ProfileStatus.CLOSED) {
-          if (value.shellId == res.shellId) {
-            // the default shell is using the same shell id as the profile
-            value.status = ProfileStatus.OPEN;
-          } else if (value.profileId === res.id) {
-            featherClient().service('/mongo-shells').create({id: res.id}, {query:{shellId: value.shellId}})
-              .then((v) => {
-                console.log('connect shell success. ', v);
-                value.status = ProfileStatus.OPEN;
-              })
-              .catch(err => console.error('failed to create shell connection', err));
+      this
+        .props
+        .store
+        .editors
+        .forEach((value, _) => {
+          if (value.status == ProfileStatus.CLOSED) {
+            if (value.shellId == res.shellId) {
+              // the default shell is using the same shell id as the profile
+              value.status = ProfileStatus.OPEN;
+            } else if (value.profileId === res.id) {
+              featherClient()
+                .service('/mongo-shells')
+                .create({
+                  id: res.id
+                }, {
+                  query: {
+                    shellId: value.shellId
+                  }
+                })
+                .then((v) => {
+                  console.log('connect shell success. ', v);
+                  value.status = ProfileStatus.OPEN;
+                })
+                .catch(err => console.error('failed to create shell connection', err));
+            }
           }
-        }
-      });
+        });
     } else {
       message = globalString('connection/test', message);
     }
@@ -318,7 +330,6 @@ export default class ListView extends React.Component {
           }
           NewToaster.show({message: globalString('profile/toolbar/connectionClosed'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
-          console.log('TEST123: ', this.props.store.profileList.selectedProfile.status);
           if (this.props.store.profileList.selectedProfile.status == 'CLOSED') {
             runInAction(() => {
               this.props.store.treePanel.isRefreshDisabled = true;
@@ -595,7 +606,6 @@ export default class ListView extends React.Component {
         </Cell>
       );
     };
-    console.log('TEST: ', this.props.store.layout.alertIsLoading);
     return (
       <div className="profileList">
         <Table
@@ -610,15 +620,13 @@ export default class ListView extends React.Component {
           defaultColumnWidth={100}
           defaultRowHeight={60}
           onSelection={region => this.onSelection(region)}
-          selectedRegions={this.state.lastSelectRegion}
-          >
+          selectedRegions={this.state.lastSelectRegion}>
           <Column name="Connection Profiles" renderCell={renderCell} />
         </Table>
         <Dialog
           className="pt-dark close-profile-alert-dialog"
           intent={Intent.PRIMARY}
-          isOpen={this.state.isCloseWarningActive}
-          >
+          isOpen={this.state.isCloseWarningActive}>
           <p>{globalString('profile/closeAlert/prompt')}</p>
           <div className="dialogButtons">
             <AnchorButton
@@ -626,14 +634,12 @@ export default class ListView extends React.Component {
               type="submit"
               onClick={this.closeProfile}
               loading={this.props.store.layout.alertIsLoading}
-              text={globalString('profile/closeAlert/confirmButton')}
-              />
+              text={globalString('profile/closeAlert/confirmButton')} />
             <AnchorButton
               className="cancelButton"
               text={globalString('profile/closeAlert/cancelButton')}
               onClick={this.closeConnectionCloseAlert}
-              loading={this.props.store.layout.alertIsLoading}
-              />
+              loading={this.props.store.layout.alertIsLoading} />
           </div>
         </Dialog>
         <Dialog
@@ -676,15 +682,13 @@ export default class ListView extends React.Component {
               type="submit"
               onClick={this.openProfile}
               loading={this.props.store.layout.alertIsLoading}
-              text={globalString('profile/openAlert/confirmButton')}
-              />
+              text={globalString('profile/openAlert/confirmButton')} />
             <AnchorButton
               className="cancelButton"
               intent={Intent.DANGER}
               text={globalString('profile/openAlert/cancelButton')}
               loading={this.props.store.layout.alertIsLoading}
-              onClick={this.closeOpenConnectionAlert}
-              />
+              onClick={this.closeOpenConnectionAlert} />
           </div>
         </Dialog>
       </div>
