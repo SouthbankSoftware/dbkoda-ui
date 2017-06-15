@@ -208,7 +208,8 @@ export default class TreeState {
         service
           .update(profile.id, {
             shellId: profile.shellId, // eslint-disable-line
-            commands: queryFirst + querySecond
+            commands: queryFirst + querySecond,
+            responseType: 'text'
           })
           .then((res) => {
               this
