@@ -1,9 +1,9 @@
 export const DatabaseStorage = {
   // Prefill function for alter user
-  dbcoda_DatabaseStorage: () => {
+  dbkoda_DatabaseStorage: () => {
     return 'dbe.databaseStorage()';
   },
-  dbcoda_DatabaseStorage_parse: (data) => {
+  dbkoda_DatabaseStorage_parse: (data) => {
     const result = {};
     const sbdb = []; // tmp store for db storage
     result.shardMap = [];

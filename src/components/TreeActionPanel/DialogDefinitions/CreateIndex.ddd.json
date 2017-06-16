@@ -1,7 +1,7 @@
 {
     "Title": "Create Index",
     "DefaultValues": {
-        "function": "dbcoda_CreateIndexPreFill",
+        "function": "dbkoda_CreateIndexPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"
@@ -22,7 +22,7 @@
             "type": "Text",
             "readOnly": true,
             "rules": "required",
-            "lookup": "dbcoda_listcollections",
+            "lookup": "dbkoda_listcollections",
             "lookup_arguments": [{
                 "name": "db",
                 "value": "treeNode.parentDB"
@@ -78,7 +78,7 @@
                     "label": "Attribute",
                     "tooltip": "Name of the attribute to be indexed",
                     "type": "Combo",
-                    "lookup": "dbcodaListAttributes",
+                    "lookup": "dbkodaListAttributes",
                     "lookup_arguments": [{
                             "name": "db",
                             "value": "treeNode.parentDB"
@@ -93,7 +93,7 @@
                     "Label": "Ascending?",
                     "type": "Select",
                     "tooltip": "1 for ascending index, -1 for descending index",
-                    "lookup": "dbcoda_indexOptions"
+                    "lookup": "dbkoda_indexOptions"
                 }
             ]
         }

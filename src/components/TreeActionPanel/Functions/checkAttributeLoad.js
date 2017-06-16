@@ -1,7 +1,7 @@
 // Run this in mongo to check that we can parse attributes
 // eslint-disable
 
-function dbcodaListAttributes_parse(res) { //eslint-disable-line
+function dbkodaListAttributes_parse(res) { //eslint-disable-line
   // Print attributes to one level (eg xxx.yyy but not xxx.yyy.zzz)
   // console.log(res);
   const attributes = {};
@@ -45,7 +45,7 @@ db.getSiblingDB('SampleCollections').getCollectionNames().forEach((collection) =
       size: 20
     }
   }]).toArray();
-  dbcodaListAttributes_parse(x).forEach((att) => {
+  dbkodaListAttributes_parse(x).forEach((att) => {
     print('   ' + att);
   });
 });

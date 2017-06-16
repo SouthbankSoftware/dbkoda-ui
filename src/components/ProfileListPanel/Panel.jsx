@@ -28,7 +28,7 @@ export default class Panel extends React.Component {
     return (
       <div className="pt-dark profileListPanel">
         <Toolbar ref="toolbar" />
-        <DBKodaIcon className="dbCodaLogo" width={20} height={20} />
+        <DBKodaIcon className="dbKodaLogo" width={20} height={20} />
         <ListView />
       </div>
 

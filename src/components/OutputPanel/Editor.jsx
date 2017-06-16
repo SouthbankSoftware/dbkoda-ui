@@ -218,7 +218,7 @@ export default class Editor extends React.Component {
             .get(this.props.id)
             .cannotShowMore = false;
         }
-    } else if (this.props.store.outputs.get(this.props.id) && this.props.store.outputs.get(this.props.id).cannotShowMore && output && output.output && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbcoda>')) {
+    } else if (this.props.store.outputs.get(this.props.id) && this.props.store.outputs.get(this.props.id).cannotShowMore && output && output.output && output.output.replace(/^\s+|\s+$/g, '').endsWith('dbkoda>')) {
       console.log('cannot show more');
       this
         .props

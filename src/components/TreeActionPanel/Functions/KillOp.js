@@ -9,10 +9,10 @@
 // import * as common from './Common.js';
 
 export const KillOp = {
-  dbcodaOperationList: () => {
+  dbkodaOperationList: () => {
     return 'dbeOps.opForKillList()';
   },
-  dbcodaOperationList_parse: (data) => {
+  dbkodaOperationList_parse: (data) => {
     return (data);
   }
 };

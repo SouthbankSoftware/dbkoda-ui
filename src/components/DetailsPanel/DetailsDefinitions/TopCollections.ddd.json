@@ -1,7 +1,7 @@
 {
     "Title": "Top Collections by execution time",
     "DefaultValues": {
-        "function": "dbcoda_TopCollections"
+        "function": "dbkoda_TopCollections"
     },
     "Fields": [{
         "name": "top",

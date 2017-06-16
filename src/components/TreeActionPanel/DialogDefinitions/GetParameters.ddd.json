@@ -1,7 +1,7 @@
 {
     "Title": "Get parameters",
     "DefaultValues": {
-        "function": "dbcoda_GetParametersPreFill"
+        "function": "dbkoda_GetParametersPreFill"
     },
     "Fields": [{
             "name": "AllParameters",
@@ -14,7 +14,7 @@
             "label":"Parameter",
             "type": "Select" ,
             "tooltip": "Show a single parameter or parameter group", 
-            "lookup": "dbcodaParameterList"
+            "lookup": "dbkodaParameterList"
         } ,
         {
             "name": "getCmdLineOpts",

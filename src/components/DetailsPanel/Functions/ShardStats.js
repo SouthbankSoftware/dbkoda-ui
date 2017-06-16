@@ -8,10 +8,10 @@
 
 export const ShardStats = {
   // Prefill function for alter user
-  dbcoda_ShardStats: () => {
+  dbkoda_ShardStats: () => {
     return 'dbcShards.details()';
   },
-  dbcoda_ShardStats_parse: (data) => {
+  dbkoda_ShardStats_parse: (data) => {
     return data;
   }
 };

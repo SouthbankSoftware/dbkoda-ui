@@ -607,7 +607,7 @@ class View extends React.Component {
       // lazy init [^\S\x0a\x0d] matches whitespaces without line feed with
       // cross-platform support
       const commentMongoCommandLinesRegex = /^[^\S\x0a\x0d]*(?:show|help|use|it|exit)(?:[^\S\x0a\x0d]+\S+|)$/gm;
-      const commentMongoCommandLinesReplacement = '//DBCODA//$&';
+      const commentMongoCommandLinesReplacement = '//DBKODA//$&';
       this._prettify.preprocess = (code) => {
         code = code.replace(commentMongoCommandLinesRegex, commentMongoCommandLinesReplacement);
 
@@ -624,7 +624,7 @@ class View extends React.Component {
     // postprocess result
     if (!this._prettify.postprocess) {
       // lazy init
-      const uncommentMongoCommandLinesRegex = /^[^\S\x0a\x0d]*\/\/DBCODA\/\//gm;
+      const uncommentMongoCommandLinesRegex = /^[^\S\x0a\x0d]*\/\/DBKODA\/\//gm;
       const uncommentMongoCommandLinesReplacement = '';
 
       const fixFunctionChainingRegex = /(\S)(\s+)\.(\S)/g;

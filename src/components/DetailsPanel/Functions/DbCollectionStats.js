@@ -10,10 +10,10 @@ const sprintf = require('sprintf-js').sprintf;
 
 export const DbCollectionStats = {
   // Prefill function for alter user
-  dbcoda_DbCollectionStats: (params) => {
+  dbkoda_DbCollectionStats: (params) => {
     return sprintf('dbeCR.collStats("%s")', params.dbName);
   },
-  dbcoda_DbCollectionStats_parse: (data) => {
+  dbkoda_DbCollectionStats_parse: (data) => {
     // data.time = Globalize.formatNumber(data.time);
     // console.log(data.time);
     const result = {};

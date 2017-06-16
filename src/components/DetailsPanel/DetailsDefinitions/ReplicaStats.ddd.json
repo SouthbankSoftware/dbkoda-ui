@@ -1,7 +1,7 @@
 {
     "Title": "Replica Set Statistics",
     "DefaultValues": {
-        "function": "dbcoda_ReplicaStats"
+        "function": "dbkoda_ReplicaStats"
     },
     "Fields": [{
             "name": "lags",

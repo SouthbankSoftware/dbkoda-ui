@@ -1,7 +1,7 @@
 {
     "Title": "Set Profiling Level",
     "DefaultValues": {
-        "function": "dbcoda_setProfilingLevelPreFill",
+        "function": "dbkoda_setProfilingLevelPreFill",
         "arguments": [{
             "name": "dbName",
             "value": "treeNode"
