@@ -44,7 +44,10 @@ body {
   overflow: hidden !important;
 }
 .Reziser.vertical {
-  width: unset;
+  width: unset !important;
+}
+.Resizer.horizontal {
+  height: unset !important;
 }
 
 .pt-icon-, .feedIconWrapper, .feedItemContent, .feedItem, .feedList{
