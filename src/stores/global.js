@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T18:37:59+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-06-09T10:17:56+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-06-16T15:56:17+10:00
  */
 
 import _ from 'lodash';
@@ -218,7 +218,7 @@ export default class Store {
     }
     Globalize.locale(newStore.locale);
 
-    newStore.layout.
+    newStore.layout.alertIsLoading = false;
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
     newStore.editorPanel.activeEditorId = 'Default';

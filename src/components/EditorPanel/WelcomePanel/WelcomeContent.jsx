@@ -2,8 +2,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-04-10 14:32:37
 * @Email:  mike@southbanksoftware.com
-* @Last modified by:   mike
-* @Last modified time: 2017-04-10 14:32:40
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-06-16T15:58:39+10:00
 */
 
 /* eslint-disable react/no-string-refs */
@@ -142,7 +142,7 @@ export default class WelcomeContent extends React.Component {
             <div className="docsList">
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClikc={this.onClickMongoDocumentation}>
+                  <AnchorButton className="docsIcon" onClick={this.onClickMongoDocumentation}>
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
