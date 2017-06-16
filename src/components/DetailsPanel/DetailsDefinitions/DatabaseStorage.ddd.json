@@ -1,7 +1,7 @@
 {
 	"Title": "Database storage",
 	"DefaultValues": {
-		"function": "dbcoda_DatabaseStorage"
+		"function": "dbkoda_DatabaseStorage"
 	},
 	"Fields": [
 		{

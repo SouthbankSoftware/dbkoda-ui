@@ -88,7 +88,7 @@
               margin-right: 50px;
               margin-top: 11px;
               margin-bottom: 11px;
-              svg.dbCodaSVG {
+              svg.dbKodaSVG {
                 position: absolute;
                 top: 50%;
                 bottom: 50%;
@@ -110,7 +110,7 @@
       span {
         .pt-button {
           position: relative;
-          svg.dbCodaSVG {
+          svg.dbKodaSVG {
             position: absolute;
             top: 50%;
             bottom: 50%;
@@ -126,7 +126,7 @@
         .clearOutputBtn {
           background: $buttonDangerBackground !important;
           color: $buttonDangerIcon !important;
-          svg.dbCodaSVG {
+          svg.dbKodaSVG {
             fill: $buttonDangerIcon;
           }
         }
@@ -251,7 +251,7 @@ span.cm-it {
   color: $keywordOne !important;
 }
 
-span.cm-dbcoda-prompt {
+span.cm-dbkoda-prompt {
   color: $keywordFour !important;
 }
 

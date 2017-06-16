@@ -14,14 +14,14 @@ export const DropAllIndexes = {
         DropAllIndexes.executeCommand = cbFuncExecute;
     },
     // Prefill function for alter user
-    dbcoda_DropAllIndexesPreFill: (params) => {
+    dbkoda_DropAllIndexesPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
         return data;
     },
-  dbcoda_listdb: common.dbcoda_listdb,
-  dbcoda_listdb_parse: common.dbcoda_listdb_parse,
-  dbcoda_listcollections: common.dbcoda_listcollections,
-  dbcoda_listcollections_parse: common.dbcoda_listcollections_parse
+  dbkoda_listdb: common.dbkoda_listdb,
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+  dbkoda_listcollections: common.dbkoda_listcollections,
+  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse
 };

@@ -9,10 +9,10 @@
 
 export const CurrentOps = {
   // Prefill function for alter user
-  dbcoda_CurrentOps: () => {
+  dbkoda_CurrentOps: () => {
     return 'dbeOps.printCurrentOps(true,true)';
   },
-  dbcoda_CurrentOps_parse: (data) => {
+  dbkoda_CurrentOps_parse: (data) => {
     // data.time = Globalize.formatNumber(data.time);
     // console.log(data.time);
     return data;

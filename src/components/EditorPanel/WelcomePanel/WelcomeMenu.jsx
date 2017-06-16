@@ -68,7 +68,7 @@ export default class Panel extends React.Component {
     return (
       <div className="welcomeMenu">
         <h2>
-          Get to know dbCoda!
+          Get to know dbKoda!
         </h2>
         <div className="welcomeButtons">
           <div className="welcomeButtonWrapper">
@@ -89,7 +89,7 @@ export default class Panel extends React.Component {
         </div>
         <div className="welcomeMenuOptOut">
           <Checkbox checked={this.props.store.userPreferences.showWelcomePageAtStart} onChange={this.showAtLaunchChanged} />
-          <p>Show welcome Screen when opening dbCoda</p>
+          <p>Show welcome Screen when opening dbKoda</p>
         </div>
       </div>
     );

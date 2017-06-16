@@ -14,7 +14,7 @@ import {AnchorButton, Position} from '@blueprintjs/core';
 import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import TreeState from './model/TreeState.js';
 import {featherClient} from '../../helpers/feathers';
-import {DBCodaToaster} from '../common/Toaster';
+import {DBKodaToaster} from '../common/Toaster';
 
 @inject(allStores => ({store: allStores.store, treeState: allStores.treeState}))
 @observer
@@ -93,7 +93,7 @@ export default class TreeToolbar extends React.Component {
       })
       .catch((err) => {
         console.log(err.stack);
-        DBCodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        DBKodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       });
   }
 

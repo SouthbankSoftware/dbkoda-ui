@@ -1,7 +1,7 @@
 {
     "Title": "Create User",
     "DefaultValues": {
-        "function":"dbcoda_CreateUserPreFill" 
+        "function":"dbkoda_CreateUserPreFill" 
     },
     "Fields": [
         {
@@ -9,7 +9,7 @@
             "type": "Select",
             "readOnly": false,
             "tooltip":"The database which will be used to authenticate the user",
-            "lookup": "dbcoda_listdb"
+            "lookup": "dbkoda_listdb"
         },
         {
             "name": "UserName",
@@ -32,11 +32,11 @@
             "columns": [{
                 "name": "Database",
                 "type": "Select",
-                "lookup": "dbcoda_listdb"
+                "lookup": "dbkoda_listdb"
             }, {
                 "name": "Role",
                 "type": "Select",
-                "lookup": "dbcoda_listRoles"
+                "lookup": "dbkoda_listRoles"
             }]
         }
     ] 

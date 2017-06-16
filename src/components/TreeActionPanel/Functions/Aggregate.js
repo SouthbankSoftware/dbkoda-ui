@@ -16,34 +16,34 @@ export const Aggregate = {
         Aggregate.executeCommand = cbFuncExecute;
     },
     // Prefill function for alter user
-    dbcoda_AggregatePreFill: (params) => {
+    dbkoda_AggregatePreFill: (params) => {
         return sprintf('dbe.aggregationPreFill("%s","%s")', params.Database, params.CollectionName);
     },
-    dbcoda_AggregatePreFill_parse: (res) => {
+    dbkoda_AggregatePreFill_parse: (res) => {
         res.InitialFilter = false;
         return (res);
     },
-    dbcoda_sortOptions: () => {
+    dbkoda_sortOptions: () => {
         return ('db');
     },
-    dbcoda_sortOptions_parse: (res) => {
+    dbkoda_sortOptions_parse: (res) => {
         console.log(res);
         return ([1, -1]);
     },
-    dbcodaAggSteps: () => {
+    dbkodaAggSteps: () => {
         return ('dbe.aggregationArgs()');
     },
-    dbcodaAggSteps_parse: (res) => {
+    dbkodaAggSteps_parse: (res) => {
         const data = [];
         res.forEach((r) => {
             data.push(r.StepName);
         });
         return (data);
     },
-    dbcoda_listdb: common.dbcoda_listdb,
-    dbcoda_listdb_parse: common.dbcoda_listdb_parse,
-    dbcoda_listcollections: common.dbcoda_listcollections,
-    dbcoda_listcollections_parse: common.dbcoda_listcollections_parse,
-    dbcodaListAttributes: common.dbcodaListAttributes,
-    dbcodaListAttributes_parse: common.dbcodaListAttributes_parse
+    dbkoda_listdb: common.dbkoda_listdb,
+    dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+    dbkoda_listcollections: common.dbkoda_listcollections,
+    dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
+    dbkodaListAttributes: common.dbkodaListAttributes,
+    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
 };

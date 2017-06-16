@@ -1,7 +1,7 @@
 {
 	"Title": "Collection Statistics for %treeNode.parentDB%.%treeNode%",
 	"DefaultValues": {
-		"function": "dbcoda_CollectionStats",
+		"function": "dbkoda_CollectionStats",
 		"arguments": [{
 			"name": "ColId",
 			"value": "treeNode"

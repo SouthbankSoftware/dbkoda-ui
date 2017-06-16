@@ -9,16 +9,16 @@ import * as common from './Common.js';
 
 export const DropUser = {
     // Prefill function for alter user
-    dbcoda_DropUserPreFill: (params) => {
+    dbkoda_DropUserPreFill: (params) => {
         const userId = params.UserId;
         return `db.getSiblingDB("admin").system.users.find({"_id": "${userId}"}).toArray()`;
     },
-    dbcoda_DropUserPreFill_parse: (userDocs) => {
+    dbkoda_DropUserPreFill_parse: (userDocs) => {
         console.log(userDocs);
         if (userDocs.length == 0) {
             throw new Error('No user found for Alter User');
         } else if (userDocs.length > 1) {
-            throw new Error('dbcoda: Too many users found for Alter User');
+            throw new Error('dbkoda: Too many users found for Alter User');
         }
         const userDoc = userDocs[0];
         const outputDoc = {};
@@ -36,8 +36,8 @@ export const DropUser = {
 
         return outputDoc;
     },
-    dbcoda_listdb: common.dbcoda_listdb,
-    dbcoda_listdb_parse: common.dbcoda_listdb_parse,
-    dbcoda_listcollections: common.dbcoda_listcollections,
-    dbcoda_listcollections_parse: common.dbcoda_listcollections_parse
+    dbkoda_listdb: common.dbkoda_listdb,
+    dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+    dbkoda_listcollections: common.dbkoda_listcollections,
+    dbkoda_listcollections_parse: common.dbkoda_listcollections_parse
 };

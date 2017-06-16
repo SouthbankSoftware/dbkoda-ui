@@ -33,7 +33,7 @@
         span {
           .pt-button {
             position: relative;
-            svg.dbCodaSVG {
+            svg.dbKodaSVG {
               position: absolute;
               top: 50%;
               bottom: 50%;
@@ -41,12 +41,12 @@
               fill: $buttonPrimaryIcon
             }
           }
-          .stopExecutionButton svg.dbCodaSVG {
+          .stopExecutionButton svg.dbKodaSVG {
             fill: $buttonSecondaryIcon;
             height: 40%;
             width: 40%;
           }
-          .executeLineButton svg.dbCodaSVG {
+          .executeLineButton svg.dbKodaSVG {
             height: 45%;
           }
         }
@@ -59,7 +59,7 @@
           background-color: $buttonTertiaryBackground;
           width: 30px;
           height: 30px;
-          svg.dbCodaSVG {
+          svg.dbKodaSVG {
             position: absolute;
             top: 50%;
             bottom: 50%;
@@ -69,11 +69,11 @@
             fill: $buttonTertiaryIcon;
           }
         }
-        .saveFileButton svg.dbCodaSVG {
+        .saveFileButton svg.dbKodaSVG {
           width: 60%;
           height: 60%;
         }
-        .openFileButton svg.dbCodaSVG {
+        .openFileButton svg.dbKodaSVG {
           width: 60%;
           height: 60%;
         }
@@ -157,7 +157,7 @@
           .welcomeTitleWrapper {
             display: flex;
             flex-direction: row;
-            svg.dbCodaLogo {
+            svg.dbKodaLogo {
               margin-right: 15px;
               fill: $welcomeViewFontColor;
               width: 50px;
@@ -549,7 +549,7 @@
   span.cm-it {
     color: $keywordOne !important;
   }
-  span.cm-dbcoda-prompt {
+  span.cm-dbkoda-prompt {
     color: $keywordFour !important;
   }
   span.cm-mongos-prompt {

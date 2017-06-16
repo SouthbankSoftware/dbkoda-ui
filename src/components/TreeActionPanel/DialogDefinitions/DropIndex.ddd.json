@@ -1,7 +1,7 @@
 {
     "Title": "Drop Index",
     "DefaultValues": {
-        "function": "dbcoda_DropIndexPreFill",
+        "function": "dbkoda_DropIndexPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"

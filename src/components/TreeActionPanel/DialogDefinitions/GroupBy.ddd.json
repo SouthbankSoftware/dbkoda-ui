@@ -2,7 +2,7 @@
     "Title": "Group By Query",
     "AutoExecute": false,
     "DefaultValues": {
-        "function": "dbcoda_GroupByPreFill",
+        "function": "dbkoda_GroupByPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"
@@ -37,7 +37,7 @@
                     "label": "Attribute",
                     "tooltip": "Name of the attribute to be filtered",
                     "type": "Combo",
-                    "lookup": "dbcodaListAttributes",
+                    "lookup": "dbkodaListAttributes",
                     "lookup_arguments": [{
                             "name": "db",
                             "value": "treeNode.parentDB"
@@ -66,7 +66,7 @@
                 "label": "Attribute",
                 "tooltip": "Name of the attribute to be filtered",
                 "type": "Combo",
-                "lookup": "dbcodaListAttributes",
+                "lookup": "dbkodaListAttributes",
                 "lookup_arguments": [{
                         "name": "db",
                         "value": "treeNode.parentDB"
@@ -88,7 +88,7 @@
                     "label": "Attribute",
                     "tooltip": "Name of the attribute to be filtered",
                     "type": "Combo",
-                    "lookup": "dbcodaListAttributes",
+                    "lookup": "dbkodaListAttributes",
                     "lookup_arguments": [{
                             "name": "db",
                             "value": "treeNode.parentDB"
@@ -105,7 +105,7 @@
                     "Label": "Aggregation",
                     "type": "Combo",
                     "tooltip": "Aggregation Operation",
-                    "lookup": "dbcodaAggOperators"
+                    "lookup": "dbkodaAggOperators"
                 }
             ]
         }, {
@@ -128,7 +128,7 @@
                     "Label": "Sort Direction",
                     "tooltip": "-1 for descending sort, 1 for ascending",
                     "type": "Combo",
-                    "lookup": "dbcoda_sortOptions"
+                    "lookup": "dbkoda_sortOptions"
                 }
             ]
         }

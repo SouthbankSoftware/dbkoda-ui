@@ -10,7 +10,7 @@
 
 export const DropDatabase = {
     // Prefill function for alter user
-    dbcoda_DropDatabasePreFill: (params) => {
+    dbkoda_DropDatabasePreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         return (data);

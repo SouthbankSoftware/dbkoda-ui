@@ -6,7 +6,7 @@
             "label":"Operation to Kill",
             "type": "Combo" ,
             "tooltip": "Choose the operation you want to kill", 
-            "lookup": "dbcodaOperationList"
+            "lookup": "dbkodaOperationList"
         } 
     ]
 }

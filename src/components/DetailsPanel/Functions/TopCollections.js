@@ -9,10 +9,10 @@
 
 export const TopCollections = {
   // Prefill function for alter user
-  dbcoda_TopCollections: () => {
+  dbkoda_TopCollections: () => {
     return 'dbe.Top()';
   },
-  dbcoda_TopCollections_parse: (data) => {
+  dbkoda_TopCollections_parse: (data) => {
     // data.time = Globalize.formatNumber(data.time);
     // console.log(data.time);
     return data;

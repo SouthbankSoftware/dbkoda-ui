@@ -1,7 +1,7 @@
 {
     "Title": "Shard Statistics",
     "DefaultValues": {
-        "function": "dbcoda_ShardStats"
+        "function": "dbkoda_ShardStats"
     },
     "Fields": [
         {

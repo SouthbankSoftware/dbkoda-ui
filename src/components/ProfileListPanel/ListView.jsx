@@ -15,7 +15,7 @@ import autobind from 'autobind-decorator';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import {Cell, Column, SelectionModes, Table} from '@blueprintjs/table';
-import {NewToaster, DBCodaToaster} from '#/common/Toaster';
+import {NewToaster, DBKodaToaster} from '#/common/Toaster';
 import {DialogHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import {
   AnchorButton,
@@ -210,7 +210,7 @@ export default class ListView extends React.Component {
       console.log(err.stack);
       this.props.store.profileList.creatingNewProfile = false;
       this.closeOpenConnectionAlert();
-      DBCodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      DBKodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     });
   }
 
@@ -304,7 +304,7 @@ export default class ListView extends React.Component {
       message = globalString('connection/test', message);
     }
     this.closeOpenConnectionAlert();
-    DBCodaToaster(position).show({message, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    DBKodaToaster(position).show({message, intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
   }
 
   @action
@@ -366,7 +366,6 @@ export default class ListView extends React.Component {
       });
 
       const profileId = this.state.targetProfile.id;
-      this.props.store.layout.alertIsLoading = true;
       return featherClient()
         .service('/mongo-shells')
         .create({id: profileId})
@@ -594,14 +593,14 @@ export default class ListView extends React.Component {
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
           <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-            <ConnectionIcon className="dbCodaSVG" width={20} height={20} />
+            <ConnectionIcon className="dbKodaSVG" width={20} height={20} />
             <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
         );
       }
       return (
         <Cell className={className}>
-          <ConnectionIcon className="dbCodaSVG closedProfile" width={20} height={20} />
+          <ConnectionIcon className="dbKodaSVG closedProfile" width={20} height={20} />
           <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );

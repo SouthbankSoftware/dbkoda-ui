@@ -13,7 +13,7 @@ body {
 
 }
 ::-webkit-scrollbar {
-  background-color: $white;
+  background-color: $scrollBarThumb !important;
 }
 ::-webkit-scrollbar-track {
       background-color: $scrollBarBackground !important;
@@ -23,6 +23,9 @@ body {
 }
 ::-webkit-scrollbar-button {
       background-color: $scrollBarTopAndBottom !important;
+}
+::-webkit-scrollbar-corner {
+  background-color: $scrollBarThumb !important;
 }
 .treeToolbar, .profileList, .pt-tab-list {
   overflow: auto !important;
@@ -39,6 +42,12 @@ body {
 .horizontal, .welcomePageContentRight, .pt-button, .pt-tree-node-content, .pt-tab
 , .bp-table-body {
   overflow: hidden !important;
+}
+.Reziser.vertical {
+  width: unset !important;
+}
+.Resizer.horizontal {
+  height: unset !important;
 }
 
 .pt-icon-, .feedIconWrapper, .feedItemContent, .feedItem, .feedList{
@@ -237,7 +246,7 @@ div.pt-dialog {
   height: 100%;
 }
 
-.dbcoda-toaster {
+.dbkoda-toaster {
   z-index: 20000;
 }
 

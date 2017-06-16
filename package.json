@@ -1,8 +1,8 @@
 {
-  "name": "@southbanksoftware/dbcoda-ui",
-  "gitName": "dbcoda-ui",
-  "fullName": "dbCoda UI",
-  "description": "dbCoda UI built with state of the art React stack",
+  "name": "@southbanksoftware/dbkoda-ui",
+  "gitName": "dbkoda-ui",
+  "fullName": "dbKoda UI",
+  "description": "dbKoda UI built with state of the art React stack",
   "version": "0.1.1",
   "author": {
     "name": "Southbank Software",
@@ -46,14 +46,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SouthbankSoftware/dbcoda-ui.git"
+    "url": "git+https://github.com/SouthbankSoftware/dbkoda-ui.git"
   },
   "license": "BSD",
   "private": true,
   "bugs": {
-    "url": "https://github.com/SouthbankSoftware/dbcoda-ui/issues"
+    "url": "https://github.com/SouthbankSoftware/dbkoda-ui/issues"
   },
-  "homepage": "https://github.com/SouthbankSoftware/dbcoda-ui#readme",
+  "homepage": "https://github.com/SouthbankSoftware/dbkoda-ui#readme",
   "devDependencies": {
     "@blueprintjs/core": "^1.17.1",
     "@blueprintjs/table": "^1.14.0",
@@ -113,6 +113,8 @@
     "mobx-react-devtools": "^4.2.11",
     "mobx-react-form": "^1.20.5",
     "moment": "^2.17.1",
+    "mousetrap": "^1.6.1",
+    "mousetrap-global-bind": "^1.1.0",
     "node-sass": "^4.5.3",
     "package": "^1.0.1",
     "postcss-loader": "^2.0.5",
@@ -140,11 +142,10 @@
     "shebang-loader": "0.0.1",
     "shelljs": "^0.7.7",
     "style-loader": "^0.18.2",
+    "test-utils": "^1.0.0",
     "url-loader": "^0.5.7",
     "uuid": "^3.0.1",
     "validatorjs": "^3.11.0",
-    "mousetrap": "^1.6.1",
-    "mousetrap-global-bind": "^1.1.0",
     "webpack": "^2.6.1",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dev-server": "^2.4.5",

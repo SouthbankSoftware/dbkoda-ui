@@ -8,10 +8,10 @@
 
 export const ReplicaStats = {
   // Prefill function for alter user
-  dbcoda_ReplicaStats: () => {
+  dbkoda_ReplicaStats: () => {
     return 'dbc_rsStats.details()';
   },
-  dbcoda_ReplicaStats_parse: (data) => {
+  dbkoda_ReplicaStats_parse: (data) => {
     return data;
   }
 };

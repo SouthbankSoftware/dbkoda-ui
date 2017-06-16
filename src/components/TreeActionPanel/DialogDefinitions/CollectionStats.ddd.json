@@ -2,7 +2,7 @@
     "Title": "Collection Statistics",
     "AutoExecute":true,
     "DefaultValues": {
-        "function": "dbcoda_CollectionStatsPreFill",
+        "function": "dbkoda_CollectionStatsPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"

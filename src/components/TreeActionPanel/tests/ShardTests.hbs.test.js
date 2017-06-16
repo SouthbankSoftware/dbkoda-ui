@@ -16,31 +16,21 @@ const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const common = require('./common.js');
 const jsonHelper = require('../../../helpers/handlebars/json.js');
-const shelljs = require('shelljs');
+const {launchMongoInstance, killMongoInstance} = require('test-utils');
 
 hbs.registerHelper('json', jsonHelper);
 
 
 const shardPort = Math.floor(Math.random() * 7000) + 6000;
-const tmpDir = 'tmpd' + Math.floor(Math.random() * 10000000);
 
 describe('Shard-specific tests', () => {
     beforeAll(() => {
         if (debug) console.log('MongoDB will be setup on port ' + shardPort);
-        shelljs.exec('mkdir ' + tmpDir);
-        const command = sprintf('mlaunch init --replicaset --dir %s --port %s ' +
-            ' --nodes 2 --arbiter --sharded 2   --mongos 1 --config 1  --noauth --hostname localhost',
-            tmpDir, shardPort);
-        if (debug) console.log(command);
-        shelljs.exec(command);
+        launchMongoInstance('--replicaset', shardPort, ' --nodes 2 --arbiter --sharded 2   --mongos 1 --config 1  --noauth');
     });
 
     afterAll(() => {
-        const command = sprintf('mlaunch stop  --dir %s ',
-            tmpDir);
-        if (debug) console.log(command);
-        shelljs.exec(command);
-        shelljs.exec('rm -rf ' + tmpDir);
+        killMongoInstance(shardPort);
     });
 
     test('Test sharding templates', (done) => {
