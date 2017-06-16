@@ -1,5 +1,5 @@
 # dbKoda UI
-*dbCida UI built with state of the art React stack*
+*dbKoda UI built with state of the art React stack*
 
 [![Build Status](https://drone.southbanksoftware.com/api/badges/SouthbankSoftware/dbkoda-ui/status.svg)](https://drone.southbanksoftware.com/SouthbankSoftware/dbkoda-ui)
 
