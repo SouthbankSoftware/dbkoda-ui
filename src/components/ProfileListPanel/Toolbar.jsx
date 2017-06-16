@@ -206,7 +206,7 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM_LEFT}>
             <AnchorButton className="newProfileButton" onClick={this.newProfile}>
-              <AddIcon className="dbCodaSVG" width={20} height={20} />
+              <AddIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -219,7 +219,7 @@ export default class Toolbar extends React.Component {
               className="editProfileButton"
               onClick={this.editProfile}
               disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN}>
-              <EditProfileIcon className="dbCodaSVG" width={20} height={20} />
+              <EditProfileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -233,7 +233,7 @@ export default class Toolbar extends React.Component {
               loading={this.state.closingProfile}
               disabled={!selectedProfile || selectedProfile.status === ProfileStatus.CLOSED}
               onClick={this.showCloseConnectionAlert}>
-              <CloseProfileIcon className="dbCodaSVG" width={20} height={20} />
+              <CloseProfileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -246,7 +246,7 @@ export default class Toolbar extends React.Component {
               className="dangerButton removeProfileButton"
               onClick={this.showRemoveConnectionAlert}
               disabled={!this.props.store.profileList.selectedProfile || this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN}>
-              <RemoveProfileIcon className="dbCodaSVG" width={20} height={20} />
+              <RemoveProfileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
         </div>

@@ -1,7 +1,7 @@
 {
     "Title": "Create Collection",
     "DefaultValues": {
-        "function": "dbcoda_CreateCollectionPreFill",
+        "function": "dbkoda_CreateCollectionPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode"
@@ -13,7 +13,7 @@
             "readOnly": true,
             "optional": false,
             "rules": "required",
-            "lookup": "dbcoda_listdb"
+            "lookup": "dbkoda_listdb"
         },
         {
             "name": "CollectionName",
@@ -66,7 +66,7 @@
             "tooltip": "Determines how strictly MongoDB applies validation",
             "optional": true,
             "readOnly": false,
-            "lookup": "dbcoda_validationLevel"
+            "lookup": "dbkoda_validationLevel"
         },
         {
             "name": "validationAction",
@@ -75,7 +75,7 @@
              "tooltip": "Error or Warn on invalid documents?",
             "optional": true,
             "readOnly": false,
-            "lookup": "dbcoda_validationAction"
+            "lookup": "dbkoda_validationAction"
         }
     ]
 }

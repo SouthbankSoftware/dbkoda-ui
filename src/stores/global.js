@@ -123,7 +123,7 @@ export default class Store {
   };
 
   @observable mongoShellPrompt = {
-    prompt: 'dbcoda>'
+    prompt: 'dbkoda>'
   };
 
   @observable profileList = observable({
@@ -218,8 +218,7 @@ export default class Store {
     }
     Globalize.locale(newStore.locale);
 
-    newStore.layout.alertIsLoading = false;
-
+    newStore.layout.
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
     newStore.editorPanel.activeEditorId = 'Default';

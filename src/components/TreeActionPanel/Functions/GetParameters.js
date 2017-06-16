@@ -10,12 +10,12 @@ import * as common from './Common.js';
 
 export const GetParameters = {
     // Prefill function for alter user
-    dbcoda_GetParametersPreFill: () => {
+    dbkoda_GetParametersPreFill: () => {
         const data = {};
         data.AllParameters = true;
         data.getCmdLineOpts = true;
         return data;
     },
-    dbcodaParameterList: common.dbcodaParameterList,
-    dbcodaParameterList_parse: common.dbcodaParameterList_parse
+    dbkodaParameterList: common.dbkodaParameterList,
+    dbkodaParameterList_parse: common.dbkodaParameterList_parse
 };

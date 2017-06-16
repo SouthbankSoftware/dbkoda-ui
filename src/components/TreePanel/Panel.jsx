@@ -12,7 +12,7 @@ import {reaction, runInAction, observable, action} from 'mobx';
 import Store from '~/stores/global';
 import {Intent, Position} from '@blueprintjs/core';
 import {featherClient} from '../../helpers/feathers';
-import {DBCodaToaster} from '../common/Toaster';
+import {DBKodaToaster} from '../common/Toaster';
 import ConnectionIcon from '../../styles/icons/connection-icon.svg';
 import TreeToolbar from './Toolbar.jsx';
 import TreeView from './View.jsx';
@@ -62,14 +62,14 @@ export default class TreePanel extends React.Component {
                     .updateTopology(res);
                   this.updateStatus('LOADED');
                 } else {
-                  DBCodaToaster(Position.LEFT_BOTTOM).show({message: 'Profile got changed before loading completes.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+                  DBKodaToaster(Position.LEFT_BOTTOM).show({message: 'Profile got changed before loading completes.', intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
                   this.updateStatus('FAILED');
                 }
               })
               .catch((err) => {
                 console.log(err.stack);
                 this.updateStatus('FAILED');
-                DBCodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+                DBKodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
               });
           }
         } else {

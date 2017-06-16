@@ -18,7 +18,7 @@ import uuidV1 from 'uuid/v1';
 import {createForm, ProfileForm} from './ProfileForm';
 import Panel from './Panel';
 import {featherClient} from '../../helpers/feathers';
-import {DBCodaToaster} from '../common/Toaster';
+import {DBKodaToaster} from '../common/Toaster';
 import {Broker, EventType} from '../../helpers/broker';
 import {ProfileStatus, DrawerPanes} from '.././common/Constants';
 
@@ -45,7 +45,7 @@ const ConnectionPanel = ({
     let validate = true;
     profiles.forEach((value) => {
       if (value.alias === data.alias) {
-        DBCodaToaster(Position.LEFT_BOTTOM).show({
+        DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: globalString('connection/existingAlias'),
           intent: Intent.DANGER,
           iconName: 'pt-icon-thumbs-down',
@@ -103,7 +103,7 @@ const ConnectionPanel = ({
     } else {
       message = globalString('', message);
     }
-    DBCodaToaster(position).show({
+    DBKodaToaster(position).show({
       message,
       intent: Intent.SUCCESS,
       iconName: 'pt-icon-thumbs-up',
@@ -159,7 +159,7 @@ const ConnectionPanel = ({
       .catch((err) => {
         console.log(err.stack);
         onFail();
-        DBCodaToaster(Position.LEFT_BOTTOM).show({
+        DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: err.message,
           intent: Intent.DANGER,
           iconName: 'pt-icon-thumbs-down',

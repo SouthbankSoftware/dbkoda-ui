@@ -86,7 +86,7 @@ export default observer(({editorToolbar}) => (
         className="pt-intent-primary explainPlanButton"
         loading={editorToolbar.isActiveExecuting}
         disabled={editorToolbar.noActiveProfile}>
-        <ExplainIcon className="dbCodaSVG" width={20} height={20} />
+        <ExplainIcon className="dbKodaSVG" width={20} height={20} />
       </AnchorButton>
     </Tooltip>
   </Popover>

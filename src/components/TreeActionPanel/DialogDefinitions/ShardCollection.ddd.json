@@ -1,7 +1,7 @@
 {
     "Title": "Shard Collection",
     "DefaultValues": {
-        "function": "dbcoda_ShardCollectionPreFill",
+        "function": "dbkoda_ShardCollectionPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"
@@ -28,7 +28,7 @@
                     "label": "Attribute",
                     "tooltip": "Name of the attribute shard upon",
                     "type": "Combo",
-                    "lookup": "dbcodaListAttributes",
+                    "lookup": "dbkodaListAttributes",
                     "lookup_arguments": [{
                             "name": "db",
                             "value": "treeNode.parentDB"
@@ -44,7 +44,7 @@
                     "Label": "Ascending?",
                     "type": "Select",
                     "tooltip": "1 for ascending index, -1 for descending index",
-                    "lookup": "dbcoda_indexOptions" 
+                    "lookup": "dbkoda_indexOptions" 
                 }
             ]
         },

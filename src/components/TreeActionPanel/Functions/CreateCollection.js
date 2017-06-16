@@ -9,7 +9,7 @@ import * as common from './Common.js';
 
 export const CreateCollection = {
   // Prefill function for alter user
-  dbcoda_CreateCollectionPreFill: (params) => {
+  dbkoda_CreateCollectionPreFill: (params) => {
     const Database = params.Database;
     const data = {};
     data.Database = Database;
@@ -17,20 +17,20 @@ export const CreateCollection = {
     data.capped = false;
     return data;
   },
-  dbcoda_validationLevel: () => {
+  dbkoda_validationLevel: () => {
     return ('db');
   },
-  dbcoda_validationLevel_parse: (res) => {
+  dbkoda_validationLevel_parse: (res) => {
     console.log(res);
     return (['off', 'moderate', 'strict']);
   },
-  dbcoda_validationAction: () => {
+  dbkoda_validationAction: () => {
     return ('db');
   },
-  dbcoda_validationAction_parse: (res) => {
+  dbkoda_validationAction_parse: (res) => {
     console.log(res);
     return (['error', 'warn']);
   },
-  dbcoda_listdb: common.dbcoda_listdb,
-  dbcoda_listdb_parse: common.dbcoda_listdb_parse
+  dbkoda_listdb: common.dbkoda_listdb,
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse
 };

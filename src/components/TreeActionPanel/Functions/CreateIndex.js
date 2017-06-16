@@ -10,7 +10,7 @@ import * as common from './Common.js';
 
 export const CreateIndex = {
     // Prefill function for alter user
-    dbcoda_CreateIndexPreFill: (params) => {
+    dbkoda_CreateIndexPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
@@ -19,17 +19,17 @@ export const CreateIndex = {
         data.Background = false;
         return data;
     },
-    dbcoda_indexOptions: () => {
+    dbkoda_indexOptions: () => {
         return ('db');
     },
-    dbcoda_indexOptions_parse: (res) => {
+    dbkoda_indexOptions_parse: (res) => {
         console.log(res);
         return ([1, -1, '"hashed"', '"text"', '"2dsphere"', '"2d"']);
     },
-    dbcoda_listdb: common.dbcoda_listdb,
-    dbcoda_listdb_parse: common.dbcoda_listdb_parse,
-    dbcoda_listcollections: common.dbcoda_listcollections,
-    dbcoda_listcollections_parse: common.dbcoda_listcollections_parse,
-    dbcodaListAttributes: common.dbcodaListAttributes,
-    dbcodaListAttributes_parse: common.dbcodaListAttributes_parse
+    dbkoda_listdb: common.dbkoda_listdb,
+    dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+    dbkoda_listcollections: common.dbkoda_listcollections,
+    dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
+    dbkodaListAttributes: common.dbkodaListAttributes,
+    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
 };

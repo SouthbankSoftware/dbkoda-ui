@@ -10,20 +10,20 @@ import * as common from './Common.js';
 
 export const ShardCollection = {
     // Prefill function for alter user
-    dbcoda_ShardCollectionPreFill: (params) => {
+    dbkoda_ShardCollectionPreFill: (params) => {
         const data = {};
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
         data.Unique = false;
         return data;
     },
-    dbcoda_indexOptions: () => {
+    dbkoda_indexOptions: () => {
         return ('db');
     },
-    dbcoda_indexOptions_parse: (res) => {
+    dbkoda_indexOptions_parse: (res) => {
         console.log(res);
         return ([1, -1, '"hashed"']);
     },
-    dbcodaListAttributes: common.dbcodaListAttributes,
-    dbcodaListAttributes_parse: common.dbcodaListAttributes_parse
+    dbkodaListAttributes: common.dbkodaListAttributes,
+    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
 };

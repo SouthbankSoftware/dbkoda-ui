@@ -46,7 +46,7 @@ export default class WelcomeView extends React.Component {
       <div className="welcomePanelTabWrapper">
         <div className="welcomePanelWrapper">
           <div className="welcomeTitleWrapper">
-            <DBKodaIcon className="dbCodaLogo" width={20} height={20} />
+            <DBKodaIcon className="dbKodaLogo" width={20} height={20} />
             <h1>
               Welcome To DBKoda
             </h1>

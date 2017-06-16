@@ -8,10 +8,10 @@
 
 export const ServerStatistics = {
   // Prefill function for alter user
-  dbcoda_ServerStatus: () => {
+  dbkoda_ServerStatus: () => {
     return 'dbeSS.serverStatistics()';
   },
-  dbcoda_TopCollections_parse: (data) => {
+  dbkoda_TopCollections_parse: (data) => {
     return data;
   }
 };

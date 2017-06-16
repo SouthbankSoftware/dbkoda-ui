@@ -1,7 +1,7 @@
 {
     "Title": "Drop User",
     "DefaultValues": {
-        "function": "dbcoda_DropUserPreFill",
+        "function": "dbkoda_DropUserPreFill",
         "arguments": [{
 			"name": "UserId",
 			"value": "treeNode"
@@ -23,7 +23,7 @@
             "name": "Database",
             "type": "Text",
             "readOnly": true,
-            "lookup": "dbcoda_listdb"
+            "lookup": "dbkoda_listdb"
         },
         {
             "name": "UserName",

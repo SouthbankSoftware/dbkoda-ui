@@ -117,7 +117,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('https://github.com/SouthbankSoftware/dbcoda');
+        .openExternal('https://github.com/SouthbankSoftware/dbkoda');
     }
   }
   @action.bound
@@ -154,7 +154,7 @@ export default class WelcomeContent extends React.Component {
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
-                <p>dbCoda Release Notes</p>
+                <p>dbKoda Release Notes</p>
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
@@ -274,7 +274,7 @@ export default class WelcomeContent extends React.Component {
                   <DocumentIcon width={30} height={30} />
                 </AnchorButton>
               </span>
-              <p>dbCoda Release Notes</p>
+              <p>dbKoda Release Notes</p>
             </div>
             <div className="documentationLinkWrapper">
               <span className="iconWrapper">

@@ -1,7 +1,7 @@
 {
     "Title": "Drop Collection",
     "DefaultValues": {
-        "function": "dbcoda_DropCollectionPreFill",
+        "function": "dbkoda_DropCollectionPreFill",
         "arguments": [{
             "name": "Database",
             "value": "treeNode.parentDB"

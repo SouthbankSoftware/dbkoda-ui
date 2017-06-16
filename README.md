@@ -1,7 +1,7 @@
-# dbCoda UI
+# dbKoda UI
 *dbCida UI built with state of the art React stack*
 
-[![Build Status](https://drone.southbanksoftware.com/api/badges/SouthbankSoftware/dbcoda-ui/status.svg)](https://drone.southbanksoftware.com/SouthbankSoftware/dbcoda-ui)
+[![Build Status](https://drone.southbanksoftware.com/api/badges/SouthbankSoftware/dbkoda-ui/status.svg)](https://drone.southbanksoftware.com/SouthbankSoftware/dbkoda-ui)
 
 ## Build tool
 
@@ -25,14 +25,14 @@ You can use `npm` or `yarn` to build the project.
 
 Currently you need to run the Controller seperately to the product.
 
-* Run `npm run start` in the dbcoda-Controller repository.
-* Run `npm run start` or `yarn start` in the dbcoda-ui repository.
+* Run `npm run start` in the dbkoda-Controller repository.
+* Run `npm run start` or `yarn start` in the dbkoda-ui repository.
 * **Note**: Currently a new connection can be created by clicking the New Editor button.
 
 The structure of the output structure:
 
 ```text
-dbcoda-ui
+dbkoda-ui
 ├── dist
 │   ├── images
 │   ├── js

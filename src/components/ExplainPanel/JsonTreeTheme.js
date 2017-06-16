@@ -1,5 +1,5 @@
 export const theme = {
-  scheme: 'dbcoda',
+  scheme: 'dbKoda',
   base00: '#1d1d1d',
   base01: '#383830',
   base02: '#49483e',

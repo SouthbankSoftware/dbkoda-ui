@@ -1,8 +1,8 @@
 {
-  "name": "@southbanksoftware/dbcoda-ui",
-  "gitName": "dbcoda-ui",
-  "fullName": "dbCoda UI",
-  "description": "dbCoda UI built with state of the art React stack",
+  "name": "@southbanksoftware/dbkoda-ui",
+  "gitName": "dbkoda-ui",
+  "fullName": "dbKoda UI",
+  "description": "dbKoda UI built with state of the art React stack",
   "version": "0.1.1",
   "author": {
     "name": "Southbank Software",
@@ -46,14 +46,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SouthbankSoftware/dbcoda-ui.git"
+    "url": "git+https://github.com/SouthbankSoftware/dbkoda-ui.git"
   },
   "license": "BSD",
   "private": true,
   "bugs": {
-    "url": "https://github.com/SouthbankSoftware/dbcoda-ui/issues"
+    "url": "https://github.com/SouthbankSoftware/dbkoda-ui/issues"
   },
-  "homepage": "https://github.com/SouthbankSoftware/dbcoda-ui#readme",
+  "homepage": "https://github.com/SouthbankSoftware/dbkoda-ui#readme",
   "devDependencies": {
     "@blueprintjs/core": "^1.17.1",
     "@blueprintjs/table": "^1.14.0",
