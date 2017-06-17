@@ -9,6 +9,10 @@
         "text": "Shard Statistics",
         "icon": "pt-icon-grouped-bar-chart",
         "view": "details"
+    },{
+        "name": "shstatus",
+        "text": "sh.status()",
+        "icon": "pt-icon-split-columns"
     }],
     "group_shards": [{
         "name": "EnableBalancer",
@@ -187,10 +191,18 @@
         }
     ],
     "replicaset": [{
+        "name": "rsstepdown",
+        "text": "Stepdown primary",
+        "icon": "pt-icon-layout-sorted-clusters"
+    },{
         "name": "ReplicaStats",
         "text": "Replica Set Statistics",
         "icon": "pt-icon-grouped-bar-chart",
         "view": "details"
+    },{
+        "name": "rsstatus",
+        "text": "rs.status()",
+        "icon": "pt-icon-layout-sorted-clusters"
     }],
     "replica_member": []
 }
