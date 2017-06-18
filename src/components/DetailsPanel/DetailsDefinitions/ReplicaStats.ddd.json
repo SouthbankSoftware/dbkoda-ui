@@ -13,7 +13,8 @@
                 "color": "#82ca9d"
             }],
             "YAxis": {
-                "key": "host"
+                "key": "host",
+                "width":300
             },
             "width": "100%"
         },

@@ -17,14 +17,14 @@ export const DbCollectionStats = {
     // data.time = Globalize.formatNumber(data.time);
     // console.log(data.time);
     const result = {};
-    result.top5 = [];
+    result.top10 = [];
     result.CollectionDetails = data.collStats;
     data.collStats.forEach((cs) => {
-      result.top5.push({
+      result.top10.push({
         ns:cs.ns,
         size:cs.storageSizeMB
       });
-    result.top5.slice(0, 5);
+    result.top10 = result.top10.slice(0, 10);
     });
     return result;
   }

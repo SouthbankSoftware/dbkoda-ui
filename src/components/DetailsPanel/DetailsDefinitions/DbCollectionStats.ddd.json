@@ -8,17 +8,19 @@
         }]
     },
     "Fields": [{
-            "name": "top5",
-            "label": "Top 5 collections",
+            "name": "top10",
+            "label": "Top collections",
             "type": "BarChart",
             "XAxis": [{
                 "key": "size",
                 "label": "Size in MBs"
             }],
             "YAxis": {
-                "key": "ns"
+                "key": "ns",
+                "label": "Collection",
+                "width": 300
             },
-            "width": "50%"
+            "width": "100%"
         },
         {
             "name": "CollectionDetails",
