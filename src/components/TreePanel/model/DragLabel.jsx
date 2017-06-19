@@ -2,8 +2,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-15T10:54:51+11:00
 * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T11:59:02+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-19T16:22:04+10:00
 */
 
 import React from 'react';
@@ -73,7 +73,10 @@ class DragLabel extends React.Component {
       this.props.type == 'shard' ||
       this.props.type == 'config' ||
       this.props.type == 'mongos' ||
-      this.props.type == 'replica_member'
+      this.props.type == 'replica_member' ||
+      this.props.type == 'primary' ||
+      this.props.type == 'secondary' ||
+      this.props.type == 'arbiter'
     ) {
       return this.ServerName;
     }

@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-21T12:01:26+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-26T15:33:58+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-19T16:20:49+10:00
  */
 
 
@@ -23,5 +23,8 @@
    users          : 'tree-users-node.hbs',
    user           : 'tree-user-node.hbs',
    replicaset     : 'tree-replicaset-node.hbs',
-   replica_member : 'tree-replica_member-node.hbs'
+   replica_member : 'tree-replica_member-node.hbs',
+   primary        : 'tree-replica_member-node.hbs',
+   secondary      : 'tree-replica_member-node.hbs',
+   arbiter        : 'tree-replica_member-node.hbs'
  };

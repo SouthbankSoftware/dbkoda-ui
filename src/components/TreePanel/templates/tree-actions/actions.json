@@ -204,5 +204,8 @@
         "text": "rs.status()",
         "icon": "pt-icon-layout-sorted-clusters"
     }],
-    "replica_member": []
+    "replica_member": [],
+    "primary": [],
+    "secondary": [],
+    "arbiter": []
 }
