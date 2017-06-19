@@ -2,8 +2,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-08T11:56:51+11:00
 * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-26T15:37:06+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-19T15:39:52+10:00
 */
 
 import React from 'react';
@@ -27,6 +27,9 @@ import PropertiesIcon from '../../../styles/icons/attribute-icon.svg';
 import PropertyIcon from '../../../styles/icons/attributes-icon.svg';
 import ReplicaSetIcon from '../../../styles/icons/replica-set-icon-2.svg';
 import ReplicaMemberIcon from '../../../styles/icons/replica-set-icon.svg';
+import PrimaryIcon from '../../../styles/icons/primary-icon.svg';
+import SecondaryIcon from '../../../styles/icons/secondary-icon.svg';
+import ArbiterIcon from '../../../styles/icons/arbiters-icon.svg';
 
 
 export default class TreeNode {
@@ -103,6 +106,15 @@ export default class TreeNode {
       break;
       case 'replicaset':
         this.secondaryLabel = <ReplicaSetIcon className="dbKodaSVG replicaSetIcon" width={30} height={30} />;
+      break;
+      case 'primary':
+        this.secondaryLabel = <PrimaryIcon className="dbKodaSVG primaryIcon" width={30} height={30} />;
+      break;
+      case 'secondary':
+        this.secondaryLabel = <SecondaryIcon className="dbKodaSVG secondaryIcon" width={30} height={30} />;
+      break;
+      case 'arbiter':
+        this.secondaryLabel = <ArbiterIcon className="dbKodaSVG arbiterIcon" width={30} height={30} />;
       break;
       case 'replica_member':
         this.secondaryLabel = <ReplicaMemberIcon className="dbKodaSVG replicaMemberIcon" width={30} height={30} />;
