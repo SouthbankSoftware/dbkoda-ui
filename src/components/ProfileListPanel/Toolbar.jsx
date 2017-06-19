@@ -3,7 +3,7 @@
  * @Date:   2017-03-15 13:34:55
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-05-22T17:57:04+10:00
+ * @Last modified time: 2017-06-19T15:00:19+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -13,10 +13,10 @@ import {action, runInAction} from 'mobx';
 import autobind from 'autobind-decorator';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
-import {Alert, AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
+import {Dialog, AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {NewToaster} from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
-import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
+import {GlobalHotkeys, DialogHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import {ProfileStatus} from '../common/Constants';
 import {featherClient} from '../../helpers/feathers';
 import {Broker, EventType} from '../../helpers/broker';
@@ -110,16 +110,22 @@ export default class Toolbar extends React.Component {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User removed a profile..');
     }
     NewToaster.show({message: globalString('profile/removeSuccess'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
   @autobind
   showRemoveConnectionAlert() {
     this.setState({removeConnectionAlert: true});
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
   @autobind
   hideRemoveConnectionAlert() {
     this.setState({removeConnectionAlert: false});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
   @action.bound
@@ -159,16 +165,22 @@ export default class Toolbar extends React.Component {
       }
       NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   @autobind
   hideCloseConnectionAlert() {
     this.setState({closeConnectionAlert: false});
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   @autobind
   showCloseConnectionAlert() {
     this.setState({closeConnectionAlert: true});
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   render() {
@@ -179,26 +191,48 @@ export default class Toolbar extends React.Component {
           <div className="pt-navbar-heading">Connection Profiles</div>
         </div>
         <div className="pt-navbar-group pt-align-right">
-          <Alert
+          <Dialog
             className="pt-dark close-profile-alert-dialog"
             intent={Intent.PRIMARY}
-            isOpen={this.state.closeConnectionAlert}
-            confirmButtonText={globalString('profile/closeAlert/confirmButton')}
-            cancelButtonText={globalString('profile/closeAlert/cancelButton')}
-            onConfirm={this.closeProfile}
-            onCancel={this.hideCloseConnectionAlert}>
+            isOpen={this.state.closeConnectionAlert}>
             <p>{globalString('profile/closeAlert/prompt')}</p>
-          </Alert>
-          <Alert
+            <div className="dialogButtons">
+              <AnchorButton
+                className="submitButton"
+                type="submit"
+                intent={Intent.SUCCESS}
+                onClick={this.closeProfile}
+                loading={this.props.store.layout.alertIsLoading}
+                text={globalString('profile/closeAlert/confirmButton')} />
+              <AnchorButton
+                className="cancelButton"
+                intent={Intent.DANGER}
+                text={globalString('profile/closeAlert/cancelButton')}
+                onClick={this.hideCloseConnectionAlert}
+                loading={this.props.store.layout.alertIsLoading} />
+            </div>
+          </Dialog>
+          <Dialog
             className="pt-dark remove-profile-alert-dialog"
             intent={Intent.PRIMARY}
-            isOpen={this.state.removeConnectionAlert}
-            confirmButtonText={globalString('profile/removeAlert/confirmButton')}
-            cancelButtonText={globalString('profile/removeAlert/cancelButton')}
-            onConfirm={this.removeProfile}
-            onCancel={this.hideRemoveConnectionAlert}>
+            isOpen={this.state.removeConnectionAlert}>
             <p>{globalString('profile/removeAlert/prompt')}</p>
-          </Alert>
+            <div className="dialogButtons">
+              <AnchorButton
+                className="submitButton"
+                type="submit"
+                intent={Intent.SUCCESS}
+                onClick={this.removeProfile}
+                loading={this.props.store.layout.alertIsLoading}
+                text={globalString('profile/removeAlert/confirmButton')} />
+              <AnchorButton
+                className="cancelButton"
+                intent={Intent.DANGER}
+                onClick={this.hideRemoveConnectionAlert}
+                loading={this.props.store.layout.alertIsLoading}
+                text={globalString('profile/removeAlert/cancelButton')} />
+            </div>
+          </Dialog>
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}

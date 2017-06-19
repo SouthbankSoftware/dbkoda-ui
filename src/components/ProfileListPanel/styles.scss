@@ -2,7 +2,7 @@
 // @Date:   2017-05-29T15:22:41+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-06-13T16:39:24+10:00
+// @Last modified time: 2017-06-16T15:33:50+10:00
 
 @import '../../styles/_defaultTheme.scss';
 .profileListPanel {
@@ -147,12 +147,12 @@
 
   .dialogButtons {
     display: inline-block;
-    a.pt-button {
+    .pt-button {
       border-radius: 0;
       margin: 10px;
       float: right;
     }
-    a.submitButton {
+    .submitButton {
       font-weight: lighter;
       color: $buttonTextColour;
       border-radius: 0;
@@ -161,15 +161,23 @@
       border: unset;
       -webkit-appearance: unset;
     }
-    a.submitButton:hover {
+    .submitButton:hover {
       background-color: $buttonSuccessBackgroundHover;
     }
-    a.cancelButton {
-      color: $buttonTextColour;
-      background-color: $buttonDangerBackground;
+    .cancelButton {
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 7em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColour;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+      -webkit-appearance: unset;
     }
-    a.cancelButton:hover {
-      background: $buttonDangerBackgroundHover;
+    .cancelButton:hover {
+      background-color: $connectionButtonBackgroundColourHover;
+      color: $connectionButtonFontColourHover;
     }
   }
 }

@@ -3,7 +3,7 @@
  * @Date:   2017-03-15 13:40:45
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-06-13T14:30:23+10:00
+ * @Last modified time: 2017-06-16T15:49:45+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -631,11 +631,13 @@ export default class ListView extends React.Component {
             <AnchorButton
               className="submitButton"
               type="submit"
+              intent={Intent.SUCCESS}
               onClick={this.closeProfile}
               loading={this.props.store.layout.alertIsLoading}
               text={globalString('profile/closeAlert/confirmButton')} />
             <AnchorButton
               className="cancelButton"
+              intent={Intent.DANGER}
               text={globalString('profile/closeAlert/cancelButton')}
               onClick={this.closeConnectionCloseAlert}
               loading={this.props.store.layout.alertIsLoading} />
