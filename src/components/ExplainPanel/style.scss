@@ -53,6 +53,8 @@ $contentColor: white;
     }
     .explain-stage {
       flex: 1;
+      display: flex;
+      flex-direction: row;
       position: relative;
       background: $explainStageTailBkColor;
       max-width: 200px;
@@ -62,9 +64,22 @@ $contentColor: white;
       color: $explainLabelColor;
       text-align: center;
       font-size: $explainLabelFontSize;
+      .stage-label {
+        flex: 1;
+        color: white;
+      }
+      .after {
+        position: absolute;
+        right: -27px;
+        border-left: 17px solid $explainStageTailBkColor;
+        border-top: 17.5px solid transparent;
+        border-bottom: 17.5px solid transparent;
+        top: 0;
+        border-right: 10px solid transparent;
+      }
     }
 
-    .explain-stage:after,
+    //.explain-stage:after,
     .explain-stage:before {
       content: " ";
       position: absolute;
@@ -87,11 +102,11 @@ $contentColor: white;
     }
 
     .explain-stage-array {
-      background: $explainStageHeaderBkColor !important;
+      //background: $explainStageHeaderBkColor !important;
     }
-    .explain-stage-array:after {
-      border-left-color: $explainStageHeaderBkColor !important;
-    }
+    //.explain-stage-array:after {
+    //  border-left-color: $explainStageHeaderBkColor !important;
+    //}
 
     .empty-explain-stage {
       background-color: transparent !important;

@@ -37,3 +37,40 @@ export const getWorstShardStages = (shards) => {
   });
   return {shardName, worst};
 };
+
+export const getStageElapseTime = (stage) => {
+  return stage && stage.executionTimeMillisEstimate !== undefined ? stage.executionTimeMillisEstimate : stage.executionTimeMillis;
+};
+
+export const generateColorValueByTime = (stage, number, max, min) => {
+  console.log('generate ', stage, number, max, min);
+  const yellow = '#f0c419';
+  const red = '#24a26e';
+  const green = '#8a4148';
+  const greenValue = parseInt(green.substr(1, green.length - 1), 16);
+  const redValue = parseInt(red.substr(1, green.length - 1), 16);
+  const stageTime = getStageElapseTime(stage);
+  const defaultColor = '#516E72';
+  if (stage.stage === 'COLLSCAN') {
+    if (stage.docsExamined > stage.nReturned * 2) {
+      return red;
+    }
+  }
+  if (stageTime === max && stageTime > min) {
+    return yellow;
+  }
+  if (stage.stage === 'COLLSCAN' || stage.stage === 'SORT') {
+    return yellow;
+  }
+
+  // const best = 0x8a4148;
+  // const worst = 0x24a26e;
+  if (max === min) {
+    return defaultColor;
+  }
+  const value = parseInt((((getStageElapseTime(stage) - min) * (greenValue - redValue)) / (max - min)) + redValue, 10);
+  console.log('min=', min, ',max=', max, ', red=', redValue + ',green=', greenValue);
+  console.log('stage color calculation:', getStageElapseTime(stage), value);
+  console.log(`#${value.toString(16)}`);
+  return `#${value.toString(16)}`;
+};

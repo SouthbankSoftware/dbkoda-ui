@@ -4,8 +4,9 @@
 
 import React from 'react';
 import './style.scss';
+import {getStageElapseTime, generateColorValueByTime} from './Utils';
 
-export const Stage = ({stage, maxNumChildren, head, shardName = '', adjustMarginTop = 0}) => {
+export const Stage = ({stage, maxNumChildren, head, shardName = '', adjustMarginTop = 0, minElapseTime, maxElapseTime, stageNumber}) => {
   const style = {};
   let className = head ? 'explain-stage explain-stage-array' : 'explain-stage';
   className = !stage ? 'explain-stage empty-explain-stage' : className;
@@ -21,12 +22,35 @@ export const Stage = ({stage, maxNumChildren, head, shardName = '', adjustMargin
     shardStyle.maxWidth = 200;
   }
   const stageName = stage ? stage.stage : '';
+  const color = generateColorValueByTime(stage, stageNumber, maxElapseTime, minElapseTime);
+  console.log('color=', color);
   return (<div className="explain-stage-wrapper" style={shardStyle}>
     <span className="explain-stage-shard-name">{shardName}</span>
-    <div className={className} style={style}>
-      {stageName}
+    <div className={className} style={{...style, backgroundColor: color}}>
+      <div className="stage-label">
+        {stageName}
+      </div>
+      <div className="after" style={{borderLeftColor: color}} />
     </div>
   </div>);
+};
+
+const getMinMaxElapseTime = (stage, minTime, maxTime) => {
+  let minElapseTime = minTime;
+  let maxElapseTime = maxTime;
+  if (minElapseTime === null) {
+    minElapseTime = getStageElapseTime(stage);
+  }
+  if (maxElapseTime == null) {
+    maxElapseTime = getStageElapseTime(stage);
+  }
+  if (minElapseTime > getStageElapseTime(stage)) {
+    minElapseTime = getStageElapseTime(stage);
+  }
+  if (maxElapseTime < getStageElapseTime(stage)) {
+    maxElapseTime = getStageElapseTime(stage);
+  }
+  return {minElapseTime, maxElapseTime};
 };
 
 export default ({stages, shardNames}) => {
@@ -34,6 +58,9 @@ export default ({stages, shardNames}) => {
   let innerMaxLength = 1;
   let hasInnerBranch = false;
   const columnHasBranch = []; // whether the column has branch stages
+  let stageNumber = 0; // the number of all stages
+  let minElapseTime = null;
+  let maxElapseTime = null;
   stages.map((stage, i) => {
     columnHasBranch[i] = false;
     if (stage.constructor === Array && maxNumChildren < stage.length) {
@@ -44,9 +71,22 @@ export default ({stages, shardNames}) => {
             columnHasBranch[i] = true;
             innerMaxLength = inner.length;
             hasInnerBranch = true;
+            stageNumber += inner.length;
+            inner.map((s) => {
+              minElapseTime = getMinMaxElapseTime(s, minElapseTime, maxElapseTime).minElapseTime;
+              maxElapseTime = getMinMaxElapseTime(s, minElapseTime, maxElapseTime).maxElapseTime;
+            });
+          } else {
+            minElapseTime = getMinMaxElapseTime(inner, minElapseTime, maxElapseTime).minElapseTime;
+            maxElapseTime = getMinMaxElapseTime(inner, minElapseTime, maxElapseTime).maxElapseTime;
+            stageNumber += 1;
           }
         }
       });
+    } else {
+      stageNumber += 1;
+      minElapseTime = getMinMaxElapseTime(stage, minElapseTime, maxElapseTime).minElapseTime;
+      maxElapseTime = getMinMaxElapseTime(stage, minElapseTime, maxElapseTime).maxElapseTime;
     }
   });
   return (<div className="explain-stage-progress">
@@ -82,6 +122,7 @@ export default ({stages, shardNames}) => {
                         const innerId = `${sid}-${iid}`;
                         return (
                           <Stage stage={inner} key={`${s && s.stage} - ${innerId}`} maxNumChildren={1} head={false}
+                            minElapseTime={minElapseTime} maxElapseTime={maxElapseTime} stageNumber={stageNumber}
                           />);
                       })}</div>
                     </div>);
@@ -89,9 +130,11 @@ export default ({stages, shardNames}) => {
                   if (hasInnerBranch) {
                     const length = columnHasBranch[i] ? 1 : innerMaxLength;
                     return (<Stage stage={s} key={`${s && s.stage} - ${sid}`} maxNumChildren={length} head={false}
+                      minElapseTime={minElapseTime} maxElapseTime={maxElapseTime} stageNumber={stageNumber}
                       shardName={shardName} />);
                   }
                   return (<Stage stage={s} key={`${s && s.stage} - ${sid}`} maxNumChildren={1} head={false}
+                    minElapseTime={minElapseTime} maxElapseTime={maxElapseTime} stageNumber={stageNumber}
                     shardName={shardName} />);
                 })
               }
@@ -108,6 +151,7 @@ export default ({stages, shardNames}) => {
           marginTop = 10;
         }
         return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={length}
+          minElapseTime={minElapseTime} maxElapseTime={maxElapseTime} stageNumber={stageNumber}
           head={i === 0} adjustMarginTop={marginTop}
           shardName={shardName} />);
       })
