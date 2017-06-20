@@ -27,7 +27,7 @@ export const Stage = ({stage, maxNumChildren, head, shardName = '', adjustMargin
     <span className="explain-stage-shard-name">{shardName}</span>
     <div className={className} style={{...style, backgroundColor: color}}>
       <div className="stage-label">
-        {stageName}{getStageElapseTime(stage)}
+        {stageName}
       </div>
       <div className="after" style={{borderLeftColor: color}} />
     </div>
