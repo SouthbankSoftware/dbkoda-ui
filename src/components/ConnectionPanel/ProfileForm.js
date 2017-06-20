@@ -88,7 +88,7 @@ export class ProfileForm extends MobxReactForm {
     const formValues = {...form.values()};
     return {
       ...formValues,
-      authorization: false,
+      authorization: true,
       test: false,
     };
   }
