@@ -23,12 +23,11 @@ export const Stage = ({stage, maxNumChildren, head, shardName = '', adjustMargin
   }
   const stageName = stage ? stage.stage : '';
   const color = generateColorValueByTime(stage, stageNumber, maxElapseTime, minElapseTime);
-  console.log('color=', color);
   return (<div className="explain-stage-wrapper" style={shardStyle}>
     <span className="explain-stage-shard-name">{shardName}</span>
     <div className={className} style={{...style, backgroundColor: color}}>
       <div className="stage-label">
-        {stageName}
+        {stageName}{getStageElapseTime(stage)}
       </div>
       <div className="after" style={{borderLeftColor: color}} />
     </div>

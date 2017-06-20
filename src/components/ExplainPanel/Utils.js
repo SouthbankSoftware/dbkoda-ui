@@ -42,13 +42,13 @@ export const getStageElapseTime = (stage) => {
   return stage && stage.executionTimeMillisEstimate !== undefined ? stage.executionTimeMillisEstimate : stage.executionTimeMillis;
 };
 
+const coloursTheme = ['#24a26e', '#29bc7f', '#43d698', '#6ddfaf', '#96e8c6', '#debabd', '#ce979c', '#be747c', '#ad525b', '#8a4148'];
+
 export const generateColorValueByTime = (stage, number, max, min) => {
-  console.log('generate ', stage, number, max, min);
   const yellow = '#f0c419';
   const red = '#24a26e';
-  const green = '#8a4148';
-  const greenValue = parseInt(green.substr(1, green.length - 1), 16);
-  const redValue = parseInt(red.substr(1, green.length - 1), 16);
+  const greenValue = 9;
+  const redValue = 0;
   const stageTime = getStageElapseTime(stage);
   const defaultColor = '#516E72';
   if (stage.stage === 'COLLSCAN') {
@@ -56,7 +56,7 @@ export const generateColorValueByTime = (stage, number, max, min) => {
       return red;
     }
   }
-  if (stageTime === max && stageTime > min) {
+  if (stageTime === max && stageTime > min && stage.stage !== 'SHARD_MERGE') {
     return yellow;
   }
   if (stage.stage === 'COLLSCAN' || stage.stage === 'SORT') {
@@ -69,8 +69,5 @@ export const generateColorValueByTime = (stage, number, max, min) => {
     return defaultColor;
   }
   const value = parseInt((((getStageElapseTime(stage) - min) * (greenValue - redValue)) / (max - min)) + redValue, 10);
-  console.log('min=', min, ',max=', max, ', red=', redValue + ',green=', greenValue);
-  console.log('stage color calculation:', getStageElapseTime(stage), value);
-  console.log(`#${value.toString(16)}`);
-  return `#${value.toString(16)}`;
+  return coloursTheme[value];
 };
