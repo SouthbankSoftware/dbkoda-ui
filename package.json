@@ -142,7 +142,7 @@
     "shebang-loader": "0.0.1",
     "shelljs": "^0.7.7",
     "style-loader": "^0.18.2",
-    "test-utils": "^1.0.0",
+    "test-utils": "^1.0.8",
     "url-loader": "^0.5.7",
     "uuid": "^3.0.1",
     "validatorjs": "^3.11.0",
