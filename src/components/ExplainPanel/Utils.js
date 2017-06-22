@@ -51,10 +51,8 @@ export const generateColorValueByTime = (stage, number, max, min) => {
   const greenValue = 9;
   const redValue = 0;
   const defaultColor = green; // '#516E72';
-  if (stage.stage === 'COLLSCAN') {
-    if (stage.docsExamined > stage.nReturned * 1.1) {
-      return red;
-    }
+  if (stage.docsExamined !== undefined && stage.nReturned !== undefined && stage.docsExamined > stage.nReturned * 1.1) {
+    return red;
   }
   // if (stageTime === max && stageTime > min && stage.stage !== 'SHARD_MERGE') {
   //   return yellow;
