@@ -23,7 +23,7 @@ describe('test shard explain view', () => {
           'stage': 'SINGLE_SHARD',
           'shards': [{
             'shardName': 's0',
-            'connectionString': 's0/ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37017,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37018,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37019',
+            'connectionString': 's0/xxxxxxxxxxx.amazonaws.com:37017,xxxxxxxxxxx.amazonaws.com:37018,xxxxxxxxxxx.amazonaws.com:37019',
             'serverInfo': {
               'host': 'ip-172-31-5-162.ap-southeast-2.compute.internal',
               'port': 37017,
@@ -97,7 +97,7 @@ describe('test shard explain view', () => {
           'shards': [
             {
               'shardName': 's0',
-              'connectionString': 's0/ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37017,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37018,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37019',
+              'connectionString': 's0/xxxxxxxxxxx.amazonaws.com:37017,xxxxxxxxxxx.amazonaws.com:37018,xxxxxxxxxxx.amazonaws.com:37019',
               'serverInfo': {
                 'host': 'ip-172-31-5-162.ap-southeast-2.compute.internal',
                 'port': 37017,
@@ -119,7 +119,7 @@ describe('test shard explain view', () => {
             },
             {
               'shardName': 's1',
-              'connectionString': 's1/ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47017,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47018,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47019',
+              'connectionString': 's1/xxxxxxxxxxx.amazonaws.com:47017,xxxxxxxxxxx.amazonaws.com:47018,xxxxxxxxxxx.amazonaws.com:47019',
               'serverInfo': {
                 'host': 'ip-172-31-5-162.ap-southeast-2.compute.internal',
                 'port': 47017,
@@ -141,7 +141,7 @@ describe('test shard explain view', () => {
             },
             {
               'shardName': 's2',
-              'connectionString': 's2/ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47117,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47118,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47119',
+              'connectionString': 's2/xxxxxxxxxxx.amazonaws.com:47117,xxxxxxxxxxx.amazonaws.com:47118,xxxxxxxxxxx.amazonaws.com:47119',
               'serverInfo': {
                 'host': 'ip-172-31-5-162.ap-southeast-2.compute.internal',
                 'port': 47117,
@@ -295,7 +295,7 @@ describe('test shard explain view', () => {
           'shards': [
             {
               'shardName': 's0',
-              'connectionString': 's0/ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37017,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37018,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37019',
+              'connectionString': 's0/xxxxxxxxxxx.amazonaws.com:37017,xxxxxxxxxxx.amazonaws.com:37018,xxxxxxxxxxx.amazonaws.com:37019',
               'serverInfo': {
                 'host': 'ip-172-31-5-162.ap-southeast-2.compute.internal',
                 'port': 37017,
@@ -317,7 +317,7 @@ describe('test shard explain view', () => {
             },
             {
               'shardName': 's1',
-              'connectionString': 's1/ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47017,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47018,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47019',
+              'connectionString': 's1/xxxxxxxxxxx.amazonaws.com:47017,xxxxxxxxxxx.amazonaws.com:47018,xxxxxxxxxxx.amazonaws.com:47019',
               'serverInfo': {
                 'host': 'ip-172-31-5-162.ap-southeast-2.compute.internal',
                 'port': 47017,
@@ -335,7 +335,7 @@ describe('test shard explain view', () => {
             },
             {
               'shardName': 's2',
-              'connectionString': 's2/ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47117,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47118,ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:47119',
+              'connectionString': 's2/xxxxxxxxxxx.amazonaws.com:47117,xxxxxxxxxxx.amazonaws.com:47118,xxxxxxxxxxx.amazonaws.com:47119',
               'serverInfo': {
                 'host': 'ip-172-31-5-162.ap-southeast-2.compute.internal',
                 'port': 47117,
