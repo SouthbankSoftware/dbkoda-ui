@@ -46,19 +46,19 @@ const coloursTheme = ['#24a26e', '#29bc7f', '#43d698', '#6ddfaf', '#96e8c6', '#d
 
 export const generateColorValueByTime = (stage, number, max, min) => {
   const yellow = '#f0c419';
-  const red = '#24a26e';
+  const red = '#8a4148';
+  const green = '#24a26e';
   const greenValue = 9;
   const redValue = 0;
-  const stageTime = getStageElapseTime(stage);
-  const defaultColor = '#516E72';
+  const defaultColor = green; // '#516E72';
   if (stage.stage === 'COLLSCAN') {
-    if (stage.docsExamined > stage.nReturned * 2) {
+    if (stage.docsExamined > stage.nReturned * 1.1) {
       return red;
     }
   }
-  if (stageTime === max && stageTime > min && stage.stage !== 'SHARD_MERGE') {
-    return yellow;
-  }
+  // if (stageTime === max && stageTime > min && stage.stage !== 'SHARD_MERGE') {
+  //   return yellow;
+  // }
   if (stage.stage === 'COLLSCAN' || stage.stage === 'SORT') {
     return yellow;
   }
