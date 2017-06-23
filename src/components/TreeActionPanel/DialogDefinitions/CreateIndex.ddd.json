@@ -42,6 +42,33 @@
             "rules": "boolean"
         },
         {
+            "name": "Keys",
+            "type": "Table",
+            "columns": [{
+                    "name": "AttributeName",
+                    "label": "Attribute",
+                    "tooltip": "Name of the attribute to be indexed",
+                    "type": "Combo",
+                    "lookup": "dbkodaListAttributes",
+                    "lookup_arguments": [{
+                            "name": "db",
+                            "value": "treeNode.parentDB"
+                        },
+                        {"name": "collection",
+                        "value": "treeNode"}
+                    ]
+
+                },
+                {
+                    "name": "Direction",
+                    "Label": "Ascending?",
+                    "type": "Select",
+                    "tooltip": "1 for ascending index, -1 for descending index",
+                    "lookup": "dbkoda_indexOptions"
+                }
+            ]
+        },
+        {
             "name": "Background",
             "label": "Background Build",
             "type": "Boolean",
@@ -69,33 +96,6 @@
             "readOnly": false,
             "tooltip": "Time to Live (TTL) for documents",
             "rules": "integer"
-        },
-        {
-            "name": "Keys",
-            "type": "Table",
-            "columns": [{
-                    "name": "AttributeName",
-                    "label": "Attribute",
-                    "tooltip": "Name of the attribute to be indexed",
-                    "type": "Combo",
-                    "lookup": "dbkodaListAttributes",
-                    "lookup_arguments": [{
-                            "name": "db",
-                            "value": "treeNode.parentDB"
-                        },
-                        {"name": "collection",
-                        "value": "treeNode"}
-                    ]
-
-                },
-                {
-                    "name": "Direction",
-                    "Label": "Ascending?",
-                    "type": "Select",
-                    "tooltip": "1 for ascending index, -1 for descending index",
-                    "lookup": "dbkoda_indexOptions"
-                }
-            ]
         }
     ]
 }

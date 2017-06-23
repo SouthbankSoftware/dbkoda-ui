@@ -21,12 +21,6 @@
             "type": "Text"
         },
         {
-            "name": "CustomData",
-            "tooltip":"A JSON document containing site-specific information",
-            "type": "Text",
-            "optional": true
-        },
-        {
             "name": "Roles",
             "type": "Table",
             "columns": [{
@@ -38,6 +32,12 @@
                 "type": "Select",
                 "lookup": "dbkoda_listRoles"
             }]
+        },
+        {
+            "name": "CustomData",
+            "tooltip":"A JSON document containing site-specific information",
+            "type": "Text",
+            "optional": true
         }
     ] 
 }

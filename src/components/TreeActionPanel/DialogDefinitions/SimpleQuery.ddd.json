@@ -98,7 +98,7 @@
       "columns": [{
           "name": "AttributeName",
           "label": "Attribute",
-          "tooltip": "Name of the attribute to be indexed",
+          "tooltip": "Name of the sort attribute",
           "type": "Combo",
           "lookup": "dbkodaListAttributes",
           "lookup_arguments": [{
