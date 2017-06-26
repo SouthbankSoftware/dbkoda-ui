@@ -17,12 +17,9 @@
     .pt-tab-list {
       .pt-tab {
         margin-right: unset;
-        padding-left: 5px;
-        padding-right: 5px;
         flex-grow: 0;
         color: $tabFontColor;
         background-color: $tabBackground;
-        border-right: 1px solid $editorBackground;
         outline: unset;
         box-shadow: unset;
       }
@@ -156,6 +153,10 @@
   }
   .CodeMirror-cursor {
     display: none;
+  }
+  .CodeMirror-scroll {
+    margin-bottom: unset;
+    padding-bottom: unset;
   }
 } //// Code Mirror CSS: ////
 /////////////////////////////

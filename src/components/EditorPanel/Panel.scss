@@ -92,7 +92,6 @@
         margin-right: unset;
         color: $tabFontColor;
         background-color: $tabBackground;
-        border-right: 1px solid $editorBackground;
         outline: unset;
         box-shadow: unset;
       }
@@ -106,13 +105,9 @@
       .welcomeTab {
         background-color: $welcomeViewBackgroundColor !important;
         font-family: unset;
-        padding-left: 10px;
-        padding-right: 5px;
         flex-grow: initial;
       }
       .editorTab {
-        padding-left: 5px;
-        padding-right: 5px;
         flex-grow: unset;
         button {
           float: right;

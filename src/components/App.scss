@@ -4,11 +4,10 @@
 // @Last modified time: 2017-06-08T11:48:46+10:00
 @import '../styles/_defaultTheme.scss';
 $purpleFont: #b95cce;
-// $resizerHoverColor: rgba(97, 114, 126, 0.7);
 $resizerHoverColor: rgba($connectionButtonBackgroundColourHover, 0.7);
 
 .Resizer {
-  background: rgba(15, 34, 47, 0.2);
+  background: $navbarLeftBackground;
   z-index: 20;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -40,6 +39,7 @@ $resizerHoverColor: rgba($connectionButtonBackgroundColourHover, 0.7);
 }
 
 .Resizer.vertical {
+  width: 11px;
   margin: 0 -5px;
   border-left: 5px solid rgba(255, 255, 255, 0);
   border-right: 5px solid rgba(255, 255, 255, 0);

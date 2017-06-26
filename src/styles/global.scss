@@ -43,12 +43,6 @@ body {
 , .bp-table-body {
   overflow: hidden !important;
 }
-.Reziser.vertical {
-  width: unset !important;
-}
-.Resizer.horizontal {
-  height: unset !important;
-}
 
 .pt-icon-, .feedIconWrapper, .feedItemContent, .feedItem, .feedList{
   overflow: unset !important;
@@ -70,10 +64,6 @@ h3 {
   margin-top: 4px;
 }
 
-
-span.Resizer {
-  opacity: 0;
-}
 .pt-popover-content {
   color: $toolTipFontColour !important;
   background-color: $toolTipBackgroundColour !important;
@@ -128,6 +118,28 @@ div.pt-dialog {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
+}
+
+.pt-tab {
+  padding: 0 8px;
+}
+
+.pt-tab .pt-button.pt-minimal {
+  padding: 0px;
+  margin-right: -10px;
+}
+
+.pt-tab .pt-button.pt-minimal:hover {
+  background: unset;
+  color: $buttonDangerBackground;
+}
+
+.pt-tab {
+  height: 31px;
+}
+
+.pt-dark.pt-navbar, .pt-dark .pt-navbar {
+  box-shadow: none;
 }
 
 .pt-toast {
