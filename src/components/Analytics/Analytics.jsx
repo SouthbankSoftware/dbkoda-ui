@@ -3,10 +3,10 @@
  * @Date:   2017-06-20T15:09:51+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-06-26T10:12:27+10:00
+ * @Last modified time: 2017-06-26T11:38:15+10:00
  */
 import React from 'react';
-import { action, reaction } from 'mobx';
+import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import ReactGA from 'react-ga';
 import { analytics, protocol } from '../../env';
@@ -35,7 +35,6 @@ export default class Analytics extends React.Component {
       });
     }
     ReactGA.set({ page: siteUrl });
-    console.log(`ReactGA page: ${siteUrl}, gaCode: ${gaCode}`);
 
     if (this.props.store.userPreferences.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', 'App Open', 1);
@@ -46,7 +45,7 @@ export default class Analytics extends React.Component {
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      */
-    reaction (() => this.props.store.userPreferences.telemetryEnabled,
+    reaction(() => this.props.store.userPreferences.telemetryEnabled,
       (telemetryEnabled) => {
         if (telemetryEnabled) {
           this._sendEvent(AnalyticsEvents.OPT_IN, 'App', 'Opt In', 1);
@@ -77,7 +76,7 @@ export default class Analytics extends React.Component {
 
   render() {
     return (
-      <div className="analytics"></div>
+      <div className="analytics" />
     );
   }
 }
