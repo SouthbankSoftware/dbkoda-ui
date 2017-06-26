@@ -81,7 +81,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('www.google.com');
+        .openExternal('https://github.com/SouthbankSoftware/dbkoda-mac/releases');
     }
   }
   @action.bound
@@ -90,7 +90,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('www.google.com');
+        .openExternal('https://dbkoda.useresponse.com/');
     }
   }
   @action.bound
@@ -99,7 +99,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('www.google.com');
+        .openExternal('https://github.com/SouthbankSoftware/dbkoda-mac/issues');
     }
   }
   @action.bound
@@ -108,7 +108,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('https://twitter.com');
+        .openExternal('https://twitter.com/db_Koda');
     }
   }
   @action.bound
@@ -117,7 +117,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('https://github.com/SouthbankSoftware/dbkoda');
+        .openExternal('https://github.com/SouthbankSoftware/dbkoda-mac/issues');
     }
   }
   @action.bound
@@ -126,7 +126,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('http://www.dbkoda.com/');
+        .openExternal('http://www.southbanksoftware.github.io/');
     }
   }
 

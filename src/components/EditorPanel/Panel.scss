@@ -157,6 +157,7 @@
           .welcomeTitleWrapper {
             display: flex;
             flex-direction: row;
+            flex-shrink: 0;
             svg.dbKodaLogo {
               margin-right: 15px;
               fill: $welcomeViewFontColor;
@@ -215,6 +216,11 @@
                       box-shadow: unset;
                       border: 1px solid $welcomeViewButtonBorderColor;
                       border-radius: 0.75em;
+                      span {
+                        display: block;
+                        position: relative;
+                        top: 35%;
+                      }
                     }
                     .welcomeMenuButton:hover {
                       background-color: $welcomeViewButtonHoverColor;
@@ -259,6 +265,7 @@
               width: 600px;
               margin-top: 30px;
               order: 2;
+              flex-grow: 1;
               .welcomePageContentWrapper {
                 display: flex;
                 flex-direction: row;
@@ -456,9 +463,47 @@
                 }
               }
               .learnShortcutsWrapper {
+                display: flex;
+                flex-direction: row;
                 height: 100%;
                 margin-left: 20px;
-                overflow-y: scroll;
+                .groupsList {
+                  display: flex;
+                  flex-direction: column;
+                  border-right: 1px solid $welcomeViewDividerTransparent;
+                  padding-right: 5%;
+                  flex-grow: 1;
+                  .welcomeButtonWrapper {
+                    display: flex;
+                    flex-direction: row;
+                    order: 1;
+                    flex-grow: 1;
+                    flex-shrink: 0;
+                    padding-bottom: 20px;
+                    .welcomeMenuButton {
+                      color: $welcomeViewOptoutFontColor;
+                      flex-grow: 1;
+                      background: unset;
+                      box-shadow: unset;
+                      border: 1px solid $welcomeViewButtonBorderColor;
+                      border-radius: 0.75em;
+                      span {
+                        display: block;
+                        position: relative;
+                        top: 35%;
+                      }
+                    }
+                    .welcomeMenuButton:hover {
+                      background-color: $welcomeViewButtonHoverColor;
+                    }
+                  }
+                }
+                .hotkeysList {
+                  padding-left: 5%;
+                  overflow-y: scroll;
+                  flex-grow: 4;
+
+                }
                 .hotkeyItem {
                   background-color: $welcomeViewKeyboardShortcutsBG;
                   margin-top: 20px;

@@ -221,7 +221,13 @@ class View extends React.Component {
           console.log('No Highlighted Text, Executing Line: ', cm.getCursor().line + 1);
           content = cm.getLine(cm.getCursor().line);
           // Quick check if line is a full command:
-          if (!content.match(/^ *db./g) && !content.match(/^ *use /g) && !content.match(/^ *show /g) && !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g)) {
+          if (!content.match(/^ *db./g) &&
+           !content.match(/^ *use /g) &&
+           !content.match(/^ *show /g) &&
+           !content.match(/^ *sh./g) &&
+           !content.match(/^ *rs./g) &&
+           !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
+           !content.match(/^ *[A-Za-z0-9]+.\(.*\);?$/g)) {
             NewToaster.show({message: globalString('editor/toolbar/possibleMultiLineCommand'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
           }
         }
