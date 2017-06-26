@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import { Alert, Intent } from '@blueprintjs/core';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
@@ -19,12 +18,14 @@ import { SidebarPanel } from '#/SidebarPanel';
 import { Analytics } from '#/Analytics';
 import EventReaction from '#/common/logging/EventReaction.jsx';
 
+
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
 import '@blueprintjs/table/dist/table.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';
+import TelemetryConsent from './TelemetryConsent.jsx';
 
 import './App.scss';
 
@@ -76,30 +77,7 @@ class App extends React.Component {
     return (
       <div>
         <Analytics />
-        <Alert
-          className="pt-dark optInAlert"
-          isOpen={this.props.layout.optInVisible}
-          intent={Intent.PRIMARY}
-          iconName="pt-icon-chart"
-          confirmButtonText="Sure!"
-          onConfirm={() => this.closeOptIn(true)}
-          cancelButtonText="No Thanks."
-          onCancel={() => this.closeOptIn(false)}
-        >
-          <h2>Hey!</h2>
-          <p>
-            We would like to gather information about how you are using the product so we
-            can make it even more <b className="optInBoldDBKoda">awesome</b>.
-          </p>
-          <p>
-            Is it okay if we collect some information about how you interact
-            with
-            {' '}
-            <b className="optInBoldDBKoda"> dbKoda </b>
-            {' '}
-            and send it back to our servers?
-          </p>
-        </Alert>
+        <TelemetryConsent />
         <SplitPane
           className="RootSplitPane"
           split="vertical"

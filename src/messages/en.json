@@ -1,5 +1,14 @@
 {
   "en": {
+    "telemetry_dialog": {
+      "header": "Welcome!",
+      "content_first": "We would like to gather information about how you are using the product so we can make it even more awesome.",
+      "content_second": "Is it okay if we collect some information about how you interact with dbKoda and send it back to our servers?",
+      "content_third": "You can read our full privacy policy ",
+      "privacy_link": "here",
+      "button_no": "No Thanks",
+      "button_yes": "Sure"
+    },
     "output": {
       "heading": "Query Output",
       "toolbar": {
