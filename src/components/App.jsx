@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-04-30T20:49:54+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-20T17:33:54+10:00
  */
 
 import React from 'react';
@@ -16,6 +16,7 @@ import DevTools from 'mobx-react-devtools';
 import { EditorPanel } from '#/EditorPanel';
 import { OutputPanel } from '#/OutputPanel';
 import { SidebarPanel } from '#/SidebarPanel';
+import { Analytics } from '#/Analytics';
 import EventReaction from '#/common/logging/EventReaction.jsx';
 
 import 'normalize.css/normalize.css';
@@ -74,6 +75,7 @@ class App extends React.Component {
     });
     return (
       <div>
+        <Analytics />
         <Alert
           className="pt-dark optInAlert"
           isOpen={this.props.layout.optInVisible}
