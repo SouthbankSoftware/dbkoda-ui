@@ -306,7 +306,9 @@ div.pt-dialog {
 //  //// Global CSS: ////  //
 /////////////////////////////
 .pt-dark pre {
-  box-shadow: none !important;
+  box-shadow: unset;
+  background: unset;
+  color: unset;
 }
 
 select.pt-intent-primary {

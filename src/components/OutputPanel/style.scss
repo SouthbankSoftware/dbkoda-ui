@@ -34,6 +34,16 @@
     .pt-tab-panel {
       margin-top: 0px;
       flex-grow: 1;
+
+      .outputEditor > .ReactCodeMirror {
+        height: calc(100% - 4px);
+
+        .CodeMirror-scroll {
+          margin-bottom: unset;
+          padding-bottom: unset;
+        }
+      }
+
       .outputEditor {
         flex: 1;
         width: 100%;
@@ -154,10 +164,6 @@
   .CodeMirror-cursor {
     display: none;
   }
-  .CodeMirror-scroll {
-    margin-bottom: unset;
-    padding-bottom: unset;
-  }
 } //// Code Mirror CSS: ////
 /////////////////////////////
 div.CodeMirror span.CodeMirror-matchingbracket {
@@ -185,11 +191,6 @@ span.cm-string {
 .CodeMirror-scroll {
   background-color: $editorBackground;
   width: 100%;
-}
-
-.CodeMirror,
-.ReactCodeMirror {
-  height: 100%;
 }
 
 .cm-s-ambiance .CodeMirror-linenumber {
@@ -393,11 +394,6 @@ span.cm-mongos-prompt {
   top: 0;
   bottom: 0;
   position: absolute;
-}
-
-.CodeMirror,
-.ReactCodeMirror {
-  height: 100%;
 }
 
 .notVisible {
