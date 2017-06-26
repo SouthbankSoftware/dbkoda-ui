@@ -39,6 +39,10 @@ body {
   overflow: auto !important;
 }
 
+.CodeMirror-scrollbar-filler {
+  background: $scrollBarBackground;
+}
+
 .horizontal, .welcomePageContentRight, .pt-button, .pt-tree-node-content, .pt-tab
 , .bp-table-body {
   overflow: hidden !important;
