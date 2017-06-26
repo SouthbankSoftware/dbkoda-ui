@@ -81,6 +81,9 @@ export default class Toolbar extends React.Component {
     Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
       this.profileCreated(profile);
     });
+    Broker.on(EventType.RECONNECT_PROFILE_CREATED, (profile) => {
+      this.profileCreated(profile);
+    });
 
     // reaction to add a new editor when a new tree action open a new form. This
     // will create a new editor.

@@ -9,6 +9,10 @@ export default {
    */
   NEW_PROFILE_CREATED: 'controller::new-connection-created',
   /**
+   * used when a new connection profile is created
+   */
+  RECONNECT_PROFILE_CREATED: 'controller::re-connection-created',
+  /**
    * event type for shell output message
    */
   SHELL_OUTPUT_AVAILABLE: 'controller::shell::output::available',
