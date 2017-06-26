@@ -3,7 +3,7 @@
  * @Date:   2017-06-20T15:09:51+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-06-26T11:38:15+10:00
+ * @Last modified time: 2017-06-26T14:08:25+10:00
  */
 import React from 'react';
 import { reaction } from 'mobx';
@@ -11,7 +11,7 @@ import { inject, observer } from 'mobx-react';
 import ReactGA from 'react-ga';
 import { analytics, protocol } from '../../env';
 import { AnalyticsEvents } from './Events';
-
+import {Broker, EventType} from '../../helpers/broker';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -37,7 +37,7 @@ export default class Analytics extends React.Component {
     ReactGA.set({ page: siteUrl });
 
     if (this.props.store.userPreferences.telemetryEnabled) {
-      this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', 'App Open', 1);
+      this._sendEvent(AnalyticsEvents.APP_OPEN, 'App');
     }
 
     /**
@@ -48,13 +48,30 @@ export default class Analytics extends React.Component {
     reaction(() => this.props.store.userPreferences.telemetryEnabled,
       (telemetryEnabled) => {
         if (telemetryEnabled) {
-          this._sendEvent(AnalyticsEvents.OPT_IN, 'App', 'Opt In', 1);
+          this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
         } else {
-          this._sendEvent(AnalyticsEvents.OPT_OUT, 'App', 'Opt Out', 1);
+          this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
         }
     }, {name: 'analyticsReactionToTelemetryChange'});
 
     this._sendEvent.bind(this);
+  }
+
+  componentDidMount() {
+    // Setup reaction to NEW_PROFILE_CREATED event
+    Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
+      this.newProfileCreated(profile);
+    });
+  }
+
+  componentWillUnmount() {
+    Broker.off(EventType.NEW_PROFILE_CREATED);
+  }
+
+  newProfileCreated(profile) {
+    console.log(profile);
+    const mongoVersion = profile.shellVersion;
+    this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoVersion);
   }
 
   /**
@@ -65,13 +82,17 @@ export default class Analytics extends React.Component {
    *  @param {String} eventCategory - (Optional) The overarching category of the event type
    */
   _sendEvent(eventType, eventCategory, eventLabel, eventValue) {
-    console.log(`Send event ${eventType} ${eventLabel} ${eventValue} ${eventCategory}`);
-    ReactGA.event({
-      'action': eventType,
+    const event = {
       'category': eventCategory,
-      'label': eventLabel,
-      'value': eventValue
-    });
+      'action': eventType
+    };
+    if (eventLabel) {
+      event.label = eventLabel;
+    }
+    if (eventValue) {
+      event.value = eventValue;
+    }
+    ReactGA.event(event);
   }
 
   render() {
