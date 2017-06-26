@@ -28,7 +28,7 @@ export default class Analytics extends React.Component {
         debug: true,
         titleCase: false,
       });
-    } else if (process.env.NODE_ENV === 'prod') {
+    } else if (process.env.NODE_ENV === 'production') {
       siteUrl = protocol + 'electron.dbkoda.com';
       ReactGA.initialize(gaCode.prod, {
         titleCase: false

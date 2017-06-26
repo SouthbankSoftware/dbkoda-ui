@@ -88,7 +88,8 @@ class App extends React.Component {
         >
           <h2>Hey!</h2>
           <p>
-            We would like to gather information about how you are using the product so we
+            We would like to gather information about how you are using the
+            product so we
             can make it even more <b className="optInBoldDBKoda">awesome</b>.
           </p>
           <p>
@@ -123,9 +124,11 @@ class App extends React.Component {
           </SplitPane>
         </SplitPane>
         <EventReaction />
-        <div className="DevTools">
-          <DevTools position={{ right: -1000, top: 200 }} />
-        </div>
+        {process.env.NODE_ENV !== 'production'
+          ? <div className="DevTools">
+            <DevTools position={{ right: -1000, top: 200 }} />
+          </div>
+          : null}
       </div>
     );
   }
