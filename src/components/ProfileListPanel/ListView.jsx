@@ -3,7 +3,7 @@
  * @Date:   2017-03-15 13:40:45
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-06-16T15:49:45+10:00
+ * @Last modified time: 2017-06-26T16:18:27+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -420,11 +420,12 @@ export default class ListView extends React.Component {
 
   @action
   deleteProfile() {
+    const targetProfile = this.state.targetProfile;
     this
       .props
       .store
       .profiles
-      .delete(this.props.store.profileList.selectedProfile.id);
+      .delete(targetProfile.id);
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User removed a profile..');
     }
