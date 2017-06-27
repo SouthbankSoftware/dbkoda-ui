@@ -134,6 +134,18 @@ export default class Editor extends React.Component {
     Broker.on(EventType.createShellReconnectEvent(props.profileId, props.shellId), this.onReconnect);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const profileId = nextProps.profileId ? nextProps.profileId : this.props.profileId;
+    const shellId = nextProps.shellId ? nextProps.shellId : this.props.shellId;
+    if (this.props.shellId !== shellId || this.props.profileId !== profileId) {
+      // need to register the output listener
+      Broker.removeListener(EventType.createShellOutputEvent(this.props.profileId, this.props.shellId), this.outputAvailable);
+      Broker.removeListener(EventType.createShellReconnectEvent(this.props.profileId, this.props.shellId), this.onReconnect);
+      Broker.on(EventType.createShellOutputEvent(profileId, shellId), this.outputAvailable);
+      Broker.on(EventType.createShellReconnectEvent(profileId, shellId), this.onReconnect);
+    }
+  }
+
   /**
    * Action for handling a drop event from a drag-and-drop action.
    * @param {Object} item - The item being dropped.

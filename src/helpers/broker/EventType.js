@@ -68,5 +68,6 @@ export default {
   createShellReconnectEvent: (id, shellId) => {
     return 'controller::shell::reconnect::' + id + '::' + shellId;
   },
-  APP_READY: 'appReady'
+  APP_READY: 'appReady',
+  SWAP_SHELL_CONNECTION: 'swap::shell::connection'
 };

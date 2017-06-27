@@ -25,7 +25,6 @@
  * @Last modified by:   chris
  * @Last modified time: 2017-06-27T15:29:39+10:00
  */
-
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 import _ from 'lodash';
@@ -33,8 +32,8 @@ import React from 'react';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import {featherClient} from '~/helpers/feathers';
-import {observer, inject} from 'mobx-react';
-import {action, reaction, observable, runInAction, when} from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {action, observable, reaction, runInAction, when} from 'mobx';
 import uuidV1 from 'uuid';
 import path from 'path';
 import {AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
@@ -157,6 +156,7 @@ export default class Toolbar extends React.Component {
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.openFile.keys, this.openFile);
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFile.keys, this.saveFile);
   }
+
   reactionToNewEditorForTreeAction;
   reactionToNewEditorForProfileId;
 
@@ -235,7 +235,11 @@ export default class Toolbar extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
         }
-        NewToaster.show({message: globalString('editor/toolbar/addEditorError'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({
+          message: globalString('editor/toolbar/addEditorError'),
+          intent: Intent.WARNING,
+          iconName: 'pt-icon-thumbs-down'
+        });
         this.onFail();
         this.setNewEditorLoading(false);
         return null;
@@ -334,7 +338,11 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
     this.props.store.editorPanel.activeDropdownId = res.id;
-    NewToaster.show({message: globalString('editor/toolbar/connectionSuccess'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    NewToaster.show({
+      message: globalString('editor/toolbar/connectionSuccess'),
+      intent: Intent.SUCCESS,
+      iconName: 'pt-icon-thumbs-up'
+    });
     this.setNewEditorLoading(false);
     this.props.store.editorToolbar.isActiveExecuting = false;
     if (this.props.store.editorToolbar.newEditorForTreeAction) {
@@ -417,7 +425,8 @@ export default class Toolbar extends React.Component {
             });
           })
             .then(this._watchFileBackgroundChange)
-            .catch(() => {});
+            .catch(() => {
+            });
         });
       });
     } else {
@@ -477,7 +486,8 @@ export default class Toolbar extends React.Component {
               }
             });
             this._watchFileBackgroundChange(currentEditor.id);
-          }).catch(() => {});
+          }).catch(() => {
+          });
         });
       }
     } else {
@@ -494,7 +504,11 @@ export default class Toolbar extends React.Component {
    */
   @action executeLine() {
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      NewToaster.show({message: globalString('editor/toolbar/cannotExecuteOnWelcome'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
+        intent: Intent.WARNING,
+        iconName: 'pt-icon-thumbs-down'
+      });
     } else {
       this.props.store.editorPanel.executingEditorLines = true;
     }
@@ -505,7 +519,11 @@ export default class Toolbar extends React.Component {
    */
   @action executeAll() {
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      NewToaster.show({message: globalString('editor/toolbar/cannotExecuteOnWelcome'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
+        intent: Intent.WARNING,
+        iconName: 'pt-icon-thumbs-down'
+      });
     } else {
       this.props.store.editorPanel.executingEditorAll = true;
     }
@@ -530,7 +548,11 @@ export default class Toolbar extends React.Component {
     if (this.props.store.editorToolbar.isActiveExecuting) {
       this.props.store.editorPanel.stoppingExecution = true;
     } else {
-      NewToaster.show({message: 'Cannot stop execution. Nothing is executing.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: 'Cannot stop execution. Nothing is executing.',
+        intent: Intent.WARNING,
+        iconName: 'pt-icon-thumbs-down'
+      });
     }
   }
 
@@ -568,24 +590,37 @@ export default class Toolbar extends React.Component {
       service.timeout = 5000;
       service
         .update(editor.profileId, {
-        shellId: editor.shellId,
-        newProfile: profile.id,
-        swapProfile: true // eslint-disable-line
-      })
+          shellId: editor.shellId,
+          newProfile: profile.id,
+          swapProfile: true // eslint-disable-line
+        })
         .then((res) => {
-          const match = res.match(/Error/g);
-          if (match) {
-            console.log('Failed to swap profiles: ', res);
-            runInAction('Revert dropdown change on failure', () => {
-              this.props.store.editorPanel.activeDropdownId = prevDropdown;
-              this.props.store.editorToolbar.currentProfile = prevDropdown;
-            });
-            NewToaster.show({message: globalString('editor/toolbar/profileSwapSslError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-          } else {
+        console.log('swap connection response ', res);
+          if (res.shellId) {
+            // a new shell got created.
             runInAction('Update dropdown on success', () => {
-              this.updateCurrentProfile(profile);
+              this.updateCurrentProfile(profile, res.shellId);
             });
             NewToaster.show({message: 'Swapped Profiles.', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+          } else {
+            const match = res.match(/Error/g);
+            if (match) {
+              console.log('Failed to swap profiles: ', res);
+              runInAction('Revert dropdown change on failure', () => {
+                this.props.store.editorPanel.activeDropdownId = prevDropdown;
+                this.props.store.editorToolbar.currentProfile = prevDropdown;
+              });
+              NewToaster.show({
+                message: globalString('editor/toolbar/profileSwapSslError'),
+                intent: Intent.DANGER,
+                iconName: 'pt-icon-thumbs-down'
+              });
+            } else {
+              runInAction('Update dropdown on success', () => {
+                this.updateCurrentProfile(profile);
+              });
+              NewToaster.show({message: 'Swapped Profiles.', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+            }
           }
         })
         .catch((err) => {
@@ -594,26 +629,33 @@ export default class Toolbar extends React.Component {
             this.props.store.editorPanel.activeDropdownId = prevDropdown;
             this.props.store.editorToolbar.currentProfile = prevDropdown;
           });
-          NewToaster.show({message: globalString('editor/toolbar/profileSwapError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          NewToaster.show({
+            message: globalString('editor/toolbar/profileSwapError'),
+            intent: Intent.DANGER,
+            iconName: 'pt-icon-thumbs-down'
+          });
           // @TODO - Handle failure.
         });
     }
   }
 
-  @action updateCurrentProfile(profile) {
-    this
+  @action updateCurrentProfile(profile, shellId = undefined) {
+    const editor = this
       .props
       .store
       .editors
-      .get(this.props.store.editorPanel.activeEditorId)
+      .get(this.props.store.editorPanel.activeEditorId);
+    if (shellId) {
+      editor.shellId = shellId;
+      Broker.emit(EventType.SWAP_SHELL_CONNECTION, {oldId: editor.profileId, oldShellId: editor.shellId, id: profile.id, shellId});
+      editor.profileId = profile.id;
+    }
+    editor
       .currentProfile = profile.id;
-    this
-      .props
-      .store
-      .editors
-      .get(this.props.store.editorPanel.activeEditorId)
+    editor
       .alias = profile.alias;
   }
+
   /**
    * Event triggered when the dropdown changes.
    * @param {Object} event - The event that triggered this action.
@@ -763,21 +805,21 @@ export default class Toolbar extends React.Component {
             </AnchorButton>
           </Tooltip>
           {/* <Tooltip
-            intent={Intent.NONE}
-            hoverOpenDelay={1000}
-            content="Enter a string to search for Editors"
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}>
-            <div className="pt-input-group .modifier">
-              <span className="pt-icon pt-icon-search" />
-              <input
-                className="pt-input secondaryInput"
-                type="search"
-                placeholder="Filter Tabs..."
-                dir="auto"
-                onChange={this.onFilterChanged} />
-            </div>
-          </Tooltip> */}
+           intent={Intent.NONE}
+           hoverOpenDelay={1000}
+           content="Enter a string to search for Editors"
+           tooltipClassName="pt-dark"
+           position={Position.BOTTOM}>
+           <div className="pt-input-group .modifier">
+           <span className="pt-icon pt-icon-search" />
+           <input
+           className="pt-input secondaryInput"
+           type="search"
+           placeholder="Filter Tabs..."
+           dir="auto"
+           onChange={this.onFilterChanged} />
+           </div>
+           </Tooltip> */}
 
         </div>
       </nav>
