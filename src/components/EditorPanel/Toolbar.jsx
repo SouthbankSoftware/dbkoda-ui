@@ -709,7 +709,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeLine}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}>
-                <ExecuteLineIcon className="dbKodaSVG" width={20} height={20}/>
+                <ExecuteLineIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
             <Tooltip
@@ -723,10 +723,10 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeAll}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}>
-                <ExecuteAllIcon className="dbKodaSVG" width={20} height={20}/>
+                <ExecuteAllIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
-            <ExplainPopover editorToolbar={this.props.store.editorToolbar}/>
+            <ExplainPopover editorToolbar={this.props.store.editorToolbar} />
             <Tooltip
               intent={Intent.DANGER}
               hoverOpenDelay={1000}
@@ -738,7 +738,7 @@ export default class Toolbar extends React.Component {
                 loading={this.props.store.editorPanel.stoppingExecution}
                 onClick={this.stopExecution}
                 disabled={!this.props.store.editorToolbar.isActiveExecuting}>
-                <StopExecutionIcon className="dbKodaSVG" width={20} height={20}/>
+                <StopExecutionIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
           </div>
@@ -755,7 +755,7 @@ export default class Toolbar extends React.Component {
               loading={this.props.store.editorToolbar.newConnectionLoading}
               disabled={this.props.store.editorToolbar.noActiveProfile}
               onClick={this.addEditor}>
-              <AddIcon className="dbKodaSVG" width={20} height={20}/>
+              <AddIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -768,7 +768,7 @@ export default class Toolbar extends React.Component {
               className="pt-button circleButton openFileButton"
               onClick={this.openFile}
               disabled={this.props.store.editorToolbar.noActiveProfile}>
-              <OpenFileIcon className="dbKodaSVG" width={20} height={20}/>
+              <OpenFileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           <Tooltip
@@ -781,7 +781,7 @@ export default class Toolbar extends React.Component {
               className="pt-button circleButton saveFileButton"
               onClick={this.saveFile}
               disabled={this.props.store.editorToolbar.noActiveProfile}>
-              <SaveFileIcon className="dbKodaSVG" width={20} height={20}/>
+              <SaveFileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           {/* <Tooltip
