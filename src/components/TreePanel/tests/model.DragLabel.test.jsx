@@ -23,7 +23,7 @@
  * @Date:   2017-03-22T17:09:32+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-03-28T12:51:54+11:00
+ * @Last modified time: 2017-06-27T16:19:33+10:00
  */
 
 import React from 'react';
@@ -37,8 +37,8 @@ import DragLabel from '#/TreePanel/model/DragLabel';
 
 describe('DragLabel', () => {
   const props = {
-    id: 'root_shards_s0_ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37017',
-    label: 'ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com:37017',
+    id: 'id.location.type.host.com:8888',
+    label: 'long.text.label.with.south:8888',
     type: 'shard'
   };
   const props1 = {
@@ -72,7 +72,7 @@ describe('DragLabel', () => {
     const label = mount(
       <DDCDragLabel id={props.id} label={props.label} type={props.type} treeState={treeState} />,
     );
-    expect(label.find('span').text()).toEqual('ec2-13-54-17-227:37017');
+    expect(label.find('span').text()).toEqual('long:8888');
   });
 
   test('matches snapshot', () => {
