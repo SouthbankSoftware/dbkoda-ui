@@ -13,7 +13,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import {inject, PropTypes} from 'mobx-react';
+import {inject, PropTypes, observer} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction, runInAction} from 'mobx';
 import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
@@ -458,6 +458,7 @@ class View extends React.Component {
         });
     };
     Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain.bind(this));
+    Broker.on(EventType.SWAP_SHELL_CONNECTION, this.swapShellConnection.bind(this));
     if (this.props.editor) {
       const {profileId, shellId} = this.props.editor;
       Broker.on(EventType.createShellExecutionFinishEvent(profileId, shellId), this.finishedExecution);
@@ -471,6 +472,7 @@ class View extends React.Component {
       Broker.removeListener(EventType.createShellExecutionFinishEvent(profileId, shellId), this.finishedExecution);
     }
   }
+
 
   getActiveProfileId() {
     const editor = this
@@ -491,6 +493,14 @@ class View extends React.Component {
       .editors
       .get(this.props.id)
       .code;
+  }
+
+  swapShellConnection(event) {
+    const {oldId, oldShellId, id, shellId} = event;
+    if (this.props.editor && oldId === this.props.editor.profileId && oldShellId === this.props.editor.shellId) {
+      Broker.removeListener(EventType.createShellExecutionFinishEvent(this.props.editor.profileId, this.props.editor.shellId), this.finishedExecution);
+      Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
+    }
   }
 
   /**
