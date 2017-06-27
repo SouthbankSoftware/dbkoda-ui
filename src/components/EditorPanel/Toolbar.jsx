@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-06-09T11:05:28+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-27T15:29:39+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -150,7 +150,7 @@ export default class Toolbar extends React.Component {
     let existingEditor = null;
     let profileHasEditor = false;
     editors.forEach((editor) => {
-      if (profile.shellId == editor.shellId) {
+      if (profile.id == editor.profileId) {
         existingEditor = editor;
         profileHasEditor = true;
       }
