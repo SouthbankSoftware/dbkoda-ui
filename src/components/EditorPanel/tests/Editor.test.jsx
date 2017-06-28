@@ -22,8 +22,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-28 16:22:13
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-28T11:02:28+10:00
 */
 
 import React from 'react';
@@ -63,7 +63,7 @@ describe('Toolbar', () => {
   });
 
   test('has buttons', () => {
-    expect(app.find('AnchorButton').length).toEqual(7);
+    expect(app.find('AnchorButton').length).toEqual(8);
   });
 
   test('has disabled buttons', () => {

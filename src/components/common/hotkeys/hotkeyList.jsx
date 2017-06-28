@@ -22,12 +22,17 @@ export const GlobalHotkeys = {
   editorToolbarHotkeys: {
     saveFile: {
       combo: 'Control + S', // meta should be repleced with OS specific versions.
-      keys: 'ctrl-s',
+      keys: 'ctrl+s',
       description: 'Save current editor Tab.'
+    },
+    saveFileAs: {
+      combo: 'Control + Shift + S', // meta should be repleced with OS specific versions.
+      keys: 'ctrl+shift+s',
+      description: 'Save as for current editor Tab.'
     },
     openFile: {
       combo: 'Control + O',
-      keys: 'ctrl-o',
+      keys: 'ctrl+o',
       description: 'Open file.'
     },
     addEditor: {
@@ -46,8 +51,8 @@ export const GlobalHotkeys = {
       description: 'Execute Currently Selected Text / Line'
     },
     stopExecution: {
-      combo: 'Control + Shift + S',
-      keys: 'ctrl+shift+s',
+      combo: 'Control + Shift + T',
+      keys: 'ctrl+shift+t',
       description: 'Stop Execution (if running)'
     }
   },
@@ -55,12 +60,6 @@ export const GlobalHotkeys = {
     combo: 'Control + N.',
     keys: 'ctrl+n',
     description: 'Create a new Connection Profile'
-  },
-
-  saveFileAs: {
-    combo: 'Control + Shift + S', // meta should be repleced with OS specific versions.
-    keys: 'ctrl+shift+s',
-    description: 'Save as for current editor Tab.'
   },
 
   closeTab: {

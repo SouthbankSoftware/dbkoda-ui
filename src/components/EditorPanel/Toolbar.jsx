@@ -23,7 +23,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-06-27T15:29:39+10:00
+ * @Last modified time: 2017-06-28T10:35:17+10:00
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
@@ -49,6 +49,7 @@ import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
+import SaveAsFileIcon from '../../styles/icons/save-as-icon.svg';
 import {ProfileStatus} from '../common/Constants';
 
 const {dialog, BrowserWindow} = IS_ELECTRON
@@ -93,6 +94,9 @@ export default class Toolbar extends React.Component {
       .bind(this);
     this.saveFile = this
       .saveFile
+      .bind(this);
+    this.saveFileAs = this
+      .saveFileAs
       .bind(this);
   }
 
@@ -144,6 +148,7 @@ export default class Toolbar extends React.Component {
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.addEditor.keys, this.addEditor);
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.openFile.keys, this.openFile);
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFile.keys, this.saveFile);
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys, this.saveFileAs);
   }
 
   componentDidMount() {
@@ -155,6 +160,7 @@ export default class Toolbar extends React.Component {
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.addEditor.keys, this.addEditor);
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.openFile.keys, this.openFile);
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFile.keys, this.saveFile);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys, this.saveFileAs);
   }
 
   reactionToNewEditorForTreeAction;
@@ -438,6 +444,11 @@ export default class Toolbar extends React.Component {
     }
   }
 
+  saveFileAs() {
+    this.props.store.editorToolbar.saveAs = true;
+    this.saveFile();
+  }
+
   saveFile() {
     if (IS_ELECTRON) {
       const currentEditor = this
@@ -457,12 +468,13 @@ export default class Toolbar extends React.Component {
             throw err;
           });
       };
-      if (currentEditor.path) {
+      if (currentEditor.path && !this.props.store.editorToolbar.saveAs) {
         _saveFile(currentEditor.path);
       } else {
         dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
           filters: FILE_FILTERS
         }, (fileName) => {
+          this.props.store.editorToolbar.saveAs = false;
           if (!fileName) {
             return;
           }
@@ -800,8 +812,21 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button circleButton saveFileButton"
               onClick={this.saveFile}
-              disabled={this.props.store.editorToolbar.noActiveProfile}>
+              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}>
               <SaveFileIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            content={globalString('editor/toolbar/saveFileTooltip')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}>
+            <AnchorButton
+              className="pt-button circleButton saveFileButton"
+              onClick={this.saveFileAs}
+              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}>
+              <SaveAsFileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
           {/* <Tooltip
