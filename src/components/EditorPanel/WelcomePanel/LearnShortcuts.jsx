@@ -43,7 +43,6 @@ export default class LearnShortcuts extends React.Component {
                       </div>
                     );
                   });
-                  console.log('JSX Object: ', jsxObj);
                   return jsxObj;
   }
 
@@ -72,7 +71,6 @@ export default class LearnShortcuts extends React.Component {
           <div className="globalHotkeys">
             {globalShortcuts
             .map((item) => {
-              console.log(item);
               if ('saveFile' in item) {
                 return;
               }

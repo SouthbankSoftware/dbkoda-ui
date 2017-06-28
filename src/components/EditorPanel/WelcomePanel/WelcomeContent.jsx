@@ -78,6 +78,8 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickReleaseNotes() {
     if (IS_ELECTRON) {
+      const os = require('os').type();
+      console.log(os);
       window
         .require('electron')
         .shell
@@ -96,6 +98,8 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickLodgeABug() {
     if (IS_ELECTRON) {
+      const os = require('os').type();
+      console.log(os);
       window
         .require('electron')
         .shell
@@ -114,10 +118,12 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickGithub() {
     if (IS_ELECTRON) {
+      const os = require('os').type();
+      console.log(os);
       window
         .require('electron')
         .shell
-        .openExternal('https://github.com/SouthbankSoftware/dbkoda-mac/issues');
+        .openExternal('https://github.com/SouthbankSoftware/dbkoda-mac');
     }
   }
   @action.bound
@@ -126,7 +132,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('http://www.southbanksoftware.github.io/');
+        .openExternal('http://southbanksoftware.github.io/');
     }
   }
 
