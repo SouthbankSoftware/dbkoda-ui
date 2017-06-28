@@ -22,7 +22,7 @@ export const GlobalHotkeys = {
   editorToolbarHotkeys: {
     saveFile: {
       combo: 'Control + S', // meta should be repleced with OS specific versions.
-      keys: 'ctrl-s',
+      keys: 'ctrl+s',
       description: 'Save current editor Tab.'
     },
     saveFileAs: {
@@ -32,7 +32,7 @@ export const GlobalHotkeys = {
     },
     openFile: {
       combo: 'Control + O',
-      keys: 'ctrl-o',
+      keys: 'ctrl+o',
       description: 'Open file.'
     },
     addEditor: {
