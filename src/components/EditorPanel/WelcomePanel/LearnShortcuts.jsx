@@ -22,7 +22,7 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {AnchorButton} from '@blueprintjs/core';
-import {GlobalHotkeys, TerminalHotkeys, OutputHotkeys, EditorHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
+import {GlobalHotkeys, TerminalHotkeys, OutputHotkeys, EditorHotkeys, CodeMirrorHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -43,6 +43,7 @@ export default class LearnShortcuts extends React.Component {
     this.showTerminal = this.showTerminal.bind(this);
     this.showOutput = this.showOutput.bind(this);
     this.showEditor = this.showEditor.bind(this);
+    this.showCM = this.showCM.bind(this);
   }
 
   getToolbarHotkeys(item) {
@@ -70,12 +71,16 @@ export default class LearnShortcuts extends React.Component {
   showEditor() {
     this.setState({currentGroup: 'editor'});
   }
+  showCM() {
+    this.setState({currentGroup: 'codemirror'});
+  }
 
   renderHotkeys() {
     const globalShortcuts = Object.values(GlobalHotkeys);
     const terminalShortcuts = Object.values(TerminalHotkeys);
     const outputShortcuts = Object.values(OutputHotkeys);
     const editorShortcuts = Object.values(EditorHotkeys);
+    const codemirrorShortcuts = Object.values(CodeMirrorHotkeys);
     const subkeys = Object.values(GlobalHotkeys.editorToolbarHotkeys);
     switch (this.state.currentGroup) {
       case 'global':
@@ -150,6 +155,21 @@ export default class LearnShortcuts extends React.Component {
           }
         </div>
       );
+      case 'codemirror':
+      return (
+        <div className="codemirrorHotkeys">
+          {codemirrorShortcuts
+            .map((item) => {
+              return (
+                <div className="hotkeyItem" key={item.description}>
+                  <h4 className="hotkeyTitle">{item.combo}</h4>
+                  <p className="hotkeyDescription>">{item.description}</p>
+                </div>
+              );
+            })
+          }
+        </div>
+      );
     }
   }
 
@@ -177,6 +197,11 @@ export default class LearnShortcuts extends React.Component {
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
               onClick={this.showEditor}>Editor</AnchorButton>
+          </div>
+          <div className="welcomeButtonWrapper">
+            <AnchorButton
+              className="welcomeMenuButton welcomePageButton"
+              onClick={this.showCM}>CodeMirror</AnchorButton>
           </div>
         </div>
         <div className="hotkeysList">
