@@ -22,7 +22,7 @@ export default class TelemetryConsent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('https://southbanksoftware.github.io/');
+        .openExternal('https://southbanksoftware.github.io/privacy-policy');
     }
   }
 
