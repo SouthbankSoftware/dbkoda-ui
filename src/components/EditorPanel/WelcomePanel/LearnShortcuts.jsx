@@ -18,14 +18,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-04-10 14:32:37
-* @Email:  mike@southbanksoftware.com
-* @Last modified by:   mike
-* @Last modified time: 2017-04-10 14:32:40
-*/
-
 /* eslint-disable react/no-string-refs */
 import React from 'react';
 import {inject, observer} from 'mobx-react';

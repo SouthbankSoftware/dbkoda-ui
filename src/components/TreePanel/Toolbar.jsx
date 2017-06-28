@@ -67,14 +67,11 @@ export default class TreeToolbar extends React.Component {
     const profile = this.props.store.profileList.selectedProfile;
     if (profile) {
       if (profile.status == 'OPEN') {
-        console.log('TEST OPEN');
         this.props.store.treePanel.isRefreshDisabled = false;
       } else {
-        console.log('TEST CLOSED');
         this.props.store.treePanel.isRefreshDisabled = true;
       }
     } else {
-      console.log('TEST CLOSED');
       this.props.store.treePanel.isRefreshDisabled = true;
     }
   }
@@ -118,7 +115,6 @@ export default class TreeToolbar extends React.Component {
   }
 
   render() {
-    console.log('Test: ', this.props.store.treePanel.isRefreshDisabled);
     return (
       <nav className=" treeToolbar pt-navbar pt-dark .modifier">
         <div className="pt-navbar-group pt-align-left">

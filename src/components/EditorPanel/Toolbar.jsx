@@ -254,7 +254,6 @@ export default class Toolbar extends React.Component {
         .service('/mongo-shells')
         .create({id: profileId})
         .then((res) => {
-          console.log('get response', res);
           return this.setNewEditorState(res, options);
         })
         .catch((err) => {
@@ -607,7 +606,6 @@ export default class Toolbar extends React.Component {
           swapProfile: true // eslint-disable-line
         })
         .then((res) => {
-        console.log('swap connection response ', res);
           if (res.shellId) {
             // a new shell got created.
             runInAction('Update dropdown on success', () => {

@@ -118,7 +118,6 @@ export default class Editor extends React.Component {
     runInAction(() => {
       if (this.props.initialMsg && this.props.id != 'Default') {
         let tmp = this.props.initialMsg;
-        console.log('TEST: ', this.props.initialMsg);
         tmp = tmp.replace(/^\n/gm, '');
         tmp = tmp.replace(/^\r/gm, '');
         tmp = tmp.replace(/^\r\n/gm, '');
