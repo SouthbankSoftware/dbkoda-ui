@@ -280,6 +280,7 @@ export default class TreeState {
         queryResult = queryResult.replace(/NumberLong\(([a-zA-Z0-9]*)\)/g, '"NumberLong(\'$1\')"');
         queryResult = queryResult.replace(/NumberLong\("([a-zA-Z0-9]*)"\)/g, '"NumberLong(\'$1\')"');
         queryResult = queryResult.replace(/Timestamp\(([a-zA-Z0-9.:-_, ]*)\)/g, '"ObjectId(\'$1\')"');
+        queryResult = queryResult.replace(/\r\n/g, "\n").replace(/\n\n/g, "\n").trim();
         queryResult = queryResult.split('\n');
         queryResult.splice(0, 1);
         console.log('Q R[0]: ', queryResult[0]);
