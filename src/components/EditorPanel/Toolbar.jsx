@@ -1,11 +1,30 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-06-09T11:05:28+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-28T10:35:17+10:00
  */
-
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 import _ from 'lodash';
@@ -13,8 +32,8 @@ import React from 'react';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import {featherClient} from '~/helpers/feathers';
-import {observer, inject} from 'mobx-react';
-import {action, reaction, observable, runInAction, when} from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {action, observable, reaction, runInAction, when} from 'mobx';
 import uuidV1 from 'uuid';
 import path from 'path';
 import {AnchorButton, Intent, Position, Tooltip} from '@blueprintjs/core';
@@ -30,6 +49,7 @@ import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
+import SaveAsFileIcon from '../../styles/icons/save-as-icon.svg';
 import {ProfileStatus} from '../common/Constants';
 
 const {dialog, BrowserWindow} = IS_ELECTRON
@@ -75,10 +95,16 @@ export default class Toolbar extends React.Component {
     this.saveFile = this
       .saveFile
       .bind(this);
+    this.saveFileAs = this
+      .saveFileAs
+      .bind(this);
   }
 
   componentWillMount() {
     Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
+      this.profileCreated(profile);
+    });
+    Broker.on(EventType.RECONNECT_PROFILE_CREATED, (profile) => {
       this.profileCreated(profile);
     });
 
@@ -122,6 +148,7 @@ export default class Toolbar extends React.Component {
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.addEditor.keys, this.addEditor);
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.openFile.keys, this.openFile);
     Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFile.keys, this.saveFile);
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys, this.saveFileAs);
   }
 
   componentDidMount() {
@@ -133,7 +160,9 @@ export default class Toolbar extends React.Component {
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.addEditor.keys, this.addEditor);
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.openFile.keys, this.openFile);
     Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFile.keys, this.saveFile);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys, this.saveFileAs);
   }
+
   reactionToNewEditorForTreeAction;
   reactionToNewEditorForProfileId;
 
@@ -147,7 +176,7 @@ export default class Toolbar extends React.Component {
     let existingEditor = null;
     let profileHasEditor = false;
     editors.forEach((editor) => {
-      if (profile.shellId == editor.shellId) {
+      if (profile.id == editor.profileId) {
         existingEditor = editor;
         profileHasEditor = true;
       }
@@ -212,7 +241,11 @@ export default class Toolbar extends React.Component {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT, EventLogging.getFragmentEnum().EDITORS, 'Cannot create new Editor for Default Tab.');
         }
-        NewToaster.show({message: globalString('editor/toolbar/addEditorError'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({
+          message: globalString('editor/toolbar/addEditorError'),
+          intent: Intent.WARNING,
+          iconName: 'pt-icon-thumbs-down'
+        });
         this.onFail();
         this.setNewEditorLoading(false);
         return null;
@@ -311,7 +344,11 @@ export default class Toolbar extends React.Component {
     this.props.store.editorToolbar.currentProfile = res.id;
     this.props.store.editorToolbar.noActiveProfile = false;
     this.props.store.editorPanel.activeDropdownId = res.id;
-    NewToaster.show({message: globalString('editor/toolbar/connectionSuccess'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    NewToaster.show({
+      message: globalString('editor/toolbar/connectionSuccess'),
+      intent: Intent.SUCCESS,
+      iconName: 'pt-icon-thumbs-up'
+    });
     this.setNewEditorLoading(false);
     this.props.store.editorToolbar.isActiveExecuting = false;
     if (this.props.store.editorToolbar.newEditorForTreeAction) {
@@ -394,7 +431,8 @@ export default class Toolbar extends React.Component {
             });
           })
             .then(this._watchFileBackgroundChange)
-            .catch(() => {});
+            .catch(() => {
+            });
         });
       });
     } else {
@@ -404,6 +442,11 @@ export default class Toolbar extends React.Component {
       }
       NewToaster.show({message: warningMsg, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     }
+  }
+
+  saveFileAs() {
+    this.props.store.editorToolbar.saveAs = true;
+    this.saveFile();
   }
 
   saveFile() {
@@ -425,12 +468,13 @@ export default class Toolbar extends React.Component {
             throw err;
           });
       };
-      if (currentEditor.path) {
+      if (currentEditor.path && !this.props.store.editorToolbar.saveAs) {
         _saveFile(currentEditor.path);
       } else {
         dialog.showSaveDialog(BrowserWindow.getFocusedWindow(), {
           filters: FILE_FILTERS
         }, (fileName) => {
+          this.props.store.editorToolbar.saveAs = false;
           if (!fileName) {
             return;
           }
@@ -454,7 +498,8 @@ export default class Toolbar extends React.Component {
               }
             });
             this._watchFileBackgroundChange(currentEditor.id);
-          }).catch(() => {});
+          }).catch(() => {
+          });
         });
       }
     } else {
@@ -471,7 +516,11 @@ export default class Toolbar extends React.Component {
    */
   @action executeLine() {
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      NewToaster.show({message: globalString('editor/toolbar/cannotExecuteOnWelcome'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
+        intent: Intent.WARNING,
+        iconName: 'pt-icon-thumbs-down'
+      });
     } else {
       this.props.store.editorPanel.executingEditorLines = true;
     }
@@ -482,7 +531,11 @@ export default class Toolbar extends React.Component {
    */
   @action executeAll() {
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      NewToaster.show({message: globalString('editor/toolbar/cannotExecuteOnWelcome'), intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
+        intent: Intent.WARNING,
+        iconName: 'pt-icon-thumbs-down'
+      });
     } else {
       this.props.store.editorPanel.executingEditorAll = true;
     }
@@ -507,7 +560,11 @@ export default class Toolbar extends React.Component {
     if (this.props.store.editorToolbar.isActiveExecuting) {
       this.props.store.editorPanel.stoppingExecution = true;
     } else {
-      NewToaster.show({message: 'Cannot stop execution. Nothing is executing.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: 'Cannot stop execution. Nothing is executing.',
+        intent: Intent.WARNING,
+        iconName: 'pt-icon-thumbs-down'
+      });
     }
   }
 
@@ -545,24 +602,37 @@ export default class Toolbar extends React.Component {
       service.timeout = 5000;
       service
         .update(editor.profileId, {
-        shellId: editor.shellId,
-        newProfile: profile.id,
-        swapProfile: true // eslint-disable-line
-      })
+          shellId: editor.shellId,
+          newProfile: profile.id,
+          swapProfile: true // eslint-disable-line
+        })
         .then((res) => {
-          const match = res.match(/Error/g);
-          if (match) {
-            console.log('Failed to swap profiles: ', res);
-            runInAction('Revert dropdown change on failure', () => {
-              this.props.store.editorPanel.activeDropdownId = prevDropdown;
-              this.props.store.editorToolbar.currentProfile = prevDropdown;
-            });
-            NewToaster.show({message: globalString('editor/toolbar/profileSwapSslError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
-          } else {
+        console.log('swap connection response ', res);
+          if (res.shellId) {
+            // a new shell got created.
             runInAction('Update dropdown on success', () => {
-              this.updateCurrentProfile(profile);
+              this.updateCurrentProfile(profile, res.shellId);
             });
             NewToaster.show({message: 'Swapped Profiles.', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+          } else {
+            const match = res.match(/Error/g);
+            if (match) {
+              console.log('Failed to swap profiles: ', res);
+              runInAction('Revert dropdown change on failure', () => {
+                this.props.store.editorPanel.activeDropdownId = prevDropdown;
+                this.props.store.editorToolbar.currentProfile = prevDropdown;
+              });
+              NewToaster.show({
+                message: globalString('editor/toolbar/profileSwapSslError'),
+                intent: Intent.DANGER,
+                iconName: 'pt-icon-thumbs-down'
+              });
+            } else {
+              runInAction('Update dropdown on success', () => {
+                this.updateCurrentProfile(profile);
+              });
+              NewToaster.show({message: 'Swapped Profiles.', intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+            }
           }
         })
         .catch((err) => {
@@ -571,26 +641,33 @@ export default class Toolbar extends React.Component {
             this.props.store.editorPanel.activeDropdownId = prevDropdown;
             this.props.store.editorToolbar.currentProfile = prevDropdown;
           });
-          NewToaster.show({message: globalString('editor/toolbar/profileSwapError'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          NewToaster.show({
+            message: globalString('editor/toolbar/profileSwapError'),
+            intent: Intent.DANGER,
+            iconName: 'pt-icon-thumbs-down'
+          });
           // @TODO - Handle failure.
         });
     }
   }
 
-  @action updateCurrentProfile(profile) {
-    this
+  @action updateCurrentProfile(profile, shellId = undefined) {
+    const editor = this
       .props
       .store
       .editors
-      .get(this.props.store.editorPanel.activeEditorId)
+      .get(this.props.store.editorPanel.activeEditorId);
+    if (shellId) {
+      editor.shellId = shellId;
+      Broker.emit(EventType.SWAP_SHELL_CONNECTION, {oldId: editor.profileId, oldShellId: editor.shellId, id: profile.id, shellId});
+      editor.profileId = profile.id;
+    }
+    editor
       .currentProfile = profile.id;
-    this
-      .props
-      .store
-      .editors
-      .get(this.props.store.editorPanel.activeEditorId)
+    editor
       .alias = profile.alias;
   }
+
   /**
    * Event triggered when the dropdown changes.
    * @param {Object} event - The event that triggered this action.
@@ -735,26 +812,39 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button circleButton saveFileButton"
               onClick={this.saveFile}
-              disabled={this.props.store.editorToolbar.noActiveProfile}>
+              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}>
               <SaveFileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
-          {/* <Tooltip
-            intent={Intent.NONE}
+          <Tooltip
+            intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
-            content="Enter a string to search for Editors"
+            content={globalString('editor/toolbar/saveFileTooltip')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}>
-            <div className="pt-input-group .modifier">
-              <span className="pt-icon pt-icon-search" />
-              <input
-                className="pt-input secondaryInput"
-                type="search"
-                placeholder="Filter Tabs..."
-                dir="auto"
-                onChange={this.onFilterChanged} />
-            </div>
-          </Tooltip> */}
+            <AnchorButton
+              className="pt-button circleButton saveFileButton"
+              onClick={this.saveFileAs}
+              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}>
+              <SaveAsFileIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
+          {/* <Tooltip
+           intent={Intent.NONE}
+           hoverOpenDelay={1000}
+           content="Enter a string to search for Editors"
+           tooltipClassName="pt-dark"
+           position={Position.BOTTOM}>
+           <div className="pt-input-group .modifier">
+           <span className="pt-icon pt-icon-search" />
+           <input
+           className="pt-input secondaryInput"
+           type="search"
+           placeholder="Filter Tabs..."
+           dir="auto"
+           onChange={this.onFilterChanged} />
+           </div>
+           </Tooltip> */}
 
         </div>
       </nav>

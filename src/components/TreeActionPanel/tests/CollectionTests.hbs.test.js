@@ -1,3 +1,23 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
 *  Unit Test for ALter user template
 
@@ -14,13 +34,13 @@ const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const common = require('./common.js');
 const jsonHelper = require('../../../helpers/handlebars/json.js');
+const nodotsHelper = require('../../../helpers/handlebars/nodots.js');
 
 hbs.registerHelper('json', jsonHelper);
+hbs.registerHelper('nodots', nodotsHelper);
 
 // Random collection for the test
 const randomCollectionName = 'collection' + Math.floor(Math.random() * 10000000);
-
-
 
 // Command to drop the user
 

@@ -1,13 +1,38 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 export const GlobalHotkeys = {
   editorToolbarHotkeys: {
     saveFile: {
       combo: 'Control + S', // meta should be repleced with OS specific versions.
-      keys: 'ctrl-s',
+      keys: 'ctrl+s',
       description: 'Save current editor Tab.'
+    },
+    saveFileAs: {
+      combo: 'Control + Shift + S', // meta should be repleced with OS specific versions.
+      keys: 'ctrl+shift+s',
+      description: 'Save as for current editor Tab.'
     },
     openFile: {
       combo: 'Control + O',
-      keys: 'ctrl-o',
+      keys: 'ctrl+o',
       description: 'Open file.'
     },
     addEditor: {
@@ -26,8 +51,8 @@ export const GlobalHotkeys = {
       description: 'Execute Currently Selected Text / Line'
     },
     stopExecution: {
-      combo: 'Control + Shift + S',
-      keys: 'ctrl+shift+s',
+      combo: 'Control + Shift + T',
+      keys: 'ctrl+shift+t',
       description: 'Stop Execution (if running)'
     }
   },
@@ -35,12 +60,6 @@ export const GlobalHotkeys = {
     combo: 'Control + N.',
     keys: 'ctrl+n',
     description: 'Create a new Connection Profile'
-  },
-
-  saveFileAs: {
-    combo: 'Control + Shift + S', // meta should be repleced with OS specific versions.
-    keys: 'ctrl+shift+s',
-    description: 'Save as for current editor Tab.'
   },
 
   closeTab: {

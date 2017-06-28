@@ -1,3 +1,23 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-10T12:33:56+11:00
@@ -112,6 +132,18 @@ export default class Editor extends React.Component {
     });
     Broker.on(EventType.createShellOutputEvent(props.profileId, props.shellId), this.outputAvailable);
     Broker.on(EventType.createShellReconnectEvent(props.profileId, props.shellId), this.onReconnect);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const profileId = nextProps.profileId ? nextProps.profileId : this.props.profileId;
+    const shellId = nextProps.shellId ? nextProps.shellId : this.props.shellId;
+    if (this.props.shellId !== shellId || this.props.profileId !== profileId) {
+      // need to register the output listener
+      Broker.removeListener(EventType.createShellOutputEvent(this.props.profileId, this.props.shellId), this.outputAvailable);
+      Broker.removeListener(EventType.createShellReconnectEvent(this.props.profileId, this.props.shellId), this.onReconnect);
+      Broker.on(EventType.createShellOutputEvent(profileId, shellId), this.outputAvailable);
+      Broker.on(EventType.createShellReconnectEvent(profileId, shellId), this.onReconnect);
+    }
   }
 
   /**

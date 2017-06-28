@@ -1,3 +1,23 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-08T11:56:51+11:00
@@ -260,6 +280,7 @@ export default class TreeState {
         queryResult = queryResult.replace(/NumberLong\(([a-zA-Z0-9]*)\)/g, '"NumberLong(\'$1\')"');
         queryResult = queryResult.replace(/NumberLong\("([a-zA-Z0-9]*)"\)/g, '"NumberLong(\'$1\')"');
         queryResult = queryResult.replace(/Timestamp\(([a-zA-Z0-9.:-_, ]*)\)/g, '"ObjectId(\'$1\')"');
+        queryResult = queryResult.replace(/\r\n/g, "\n").replace(/\n\n/g, "\n").trim();
         queryResult = queryResult.split('\n');
         queryResult.splice(0, 1);
         console.log('Q R[0]: ', queryResult[0]);

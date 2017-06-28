@@ -1,3 +1,23 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 // @Author: chris
 // @Date:   2017-05-15T09:44:11+10:00
 // @Email:  chris@southbanksoftware.com
@@ -17,12 +37,9 @@
     .pt-tab-list {
       .pt-tab {
         margin-right: unset;
-        padding-left: 5px;
-        padding-right: 5px;
         flex-grow: 0;
         color: $tabFontColor;
         background-color: $tabBackground;
-        border-right: 1px solid $editorBackground;
         outline: unset;
         box-shadow: unset;
       }
@@ -37,6 +54,16 @@
     .pt-tab-panel {
       margin-top: 0px;
       flex-grow: 1;
+
+      .outputEditor > .ReactCodeMirror {
+        height: calc(100% - 4px);
+
+        .CodeMirror-scroll {
+          margin-bottom: unset;
+          padding-bottom: unset;
+        }
+      }
+
       .outputEditor {
         flex: 1;
         width: 100%;
@@ -184,11 +211,6 @@ span.cm-string {
 .CodeMirror-scroll {
   background-color: $editorBackground;
   width: 100%;
-}
-
-.CodeMirror,
-.ReactCodeMirror {
-  height: 100%;
 }
 
 .cm-s-ambiance .CodeMirror-linenumber {
@@ -392,11 +414,6 @@ span.cm-mongos-prompt {
   top: 0;
   bottom: 0;
   position: absolute;
-}
-
-.CodeMirror,
-.ReactCodeMirror {
-  height: 100%;
 }
 
 .notVisible {

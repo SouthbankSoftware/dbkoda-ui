@@ -1,3 +1,23 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-05-12T15:11:29+10:00
 // @Email:  wahaj@southbanksoftware.com
@@ -39,15 +59,13 @@ body {
   overflow: auto !important;
 }
 
+.CodeMirror-scrollbar-filler {
+  background: $scrollBarBackground;
+}
+
 .horizontal, .welcomePageContentRight, .pt-button, .pt-tree-node-content, .pt-tab
 , .bp-table-body {
   overflow: hidden !important;
-}
-.Reziser.vertical {
-  width: unset !important;
-}
-.Resizer.horizontal {
-  height: unset !important;
 }
 
 .pt-icon-, .feedIconWrapper, .feedItemContent, .feedItem, .feedList{
@@ -70,10 +88,6 @@ h3 {
   margin-top: 4px;
 }
 
-
-span.Resizer {
-  opacity: 0;
-}
 .pt-popover-content {
   color: $toolTipFontColour !important;
   background-color: $toolTipBackgroundColour !important;
@@ -128,6 +142,28 @@ div.pt-dialog {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
+}
+
+.pt-tab {
+  padding: 0 8px;
+}
+
+.pt-tab .pt-button.pt-minimal {
+  padding: 0px;
+  margin-right: -10px;
+}
+
+.pt-tab .pt-button.pt-minimal:hover {
+  background: unset;
+  color: $buttonDangerBackground;
+}
+
+.pt-tab {
+  height: 31px;
+}
+
+.pt-dark.pt-navbar, .pt-dark .pt-navbar {
+  box-shadow: none;
 }
 
 .pt-toast {
@@ -294,7 +330,9 @@ div.pt-dialog {
 //  //// Global CSS: ////  //
 /////////////////////////////
 .pt-dark pre {
-  box-shadow: none !important;
+  box-shadow: unset;
+  background: unset;
+  color: unset;
 }
 
 select.pt-intent-primary {

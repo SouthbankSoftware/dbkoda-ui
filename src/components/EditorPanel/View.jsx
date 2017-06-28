@@ -1,3 +1,23 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
@@ -13,7 +33,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import {inject, PropTypes} from 'mobx-react';
+import {inject, PropTypes, observer} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction, runInAction} from 'mobx';
 import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
@@ -464,6 +484,7 @@ class View extends React.Component {
         });
     };
     Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain.bind(this));
+    Broker.on(EventType.SWAP_SHELL_CONNECTION, this.swapShellConnection.bind(this));
     if (this.props.editor) {
       const {profileId, shellId} = this.props.editor;
       Broker.on(EventType.createShellExecutionFinishEvent(profileId, shellId), this.finishedExecution);
@@ -477,6 +498,7 @@ class View extends React.Component {
       Broker.removeListener(EventType.createShellExecutionFinishEvent(profileId, shellId), this.finishedExecution);
     }
   }
+
 
   getActiveProfileId() {
     const editor = this
@@ -497,6 +519,14 @@ class View extends React.Component {
       .editors
       .get(this.props.id)
       .code;
+  }
+
+  swapShellConnection(event) {
+    const {oldId, oldShellId, id, shellId} = event;
+    if (this.props.editor && oldId === this.props.editor.profileId && oldShellId === this.props.editor.shellId) {
+      Broker.removeListener(EventType.createShellExecutionFinishEvent(this.props.editor.profileId, this.props.editor.shellId), this.finishedExecution);
+      Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
+    }
   }
 
   /**
