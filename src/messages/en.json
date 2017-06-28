@@ -74,6 +74,7 @@
         "addEditorTooltip": "Add a new Editor",
         "openFileTooltip": "Open a File from Disc",
         "saveFileTooltip": "Save Editor Contents to Disc",
+        "saveFileAsTooltip": "Save Editor As Another File",
         "addEditorError": "Cannot create new Editor for 'No Active Connection'.",
         "connectionSuccess": "Connection Success!",
         "profileSwapError": "Could not swap Profiles.",
