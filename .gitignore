@@ -72,3 +72,5 @@ tsconfig.json
 
 # osx directory service store
 *.DS_Store
+
+nohup\.out
