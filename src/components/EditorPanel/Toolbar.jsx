@@ -450,7 +450,6 @@ export default class Toolbar extends React.Component {
   }
 
   saveFile() {
-    console.log('Save file!');
     if (IS_ELECTRON) {
       const currentEditor = this
         .props
@@ -813,7 +812,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button circleButton saveFileButton"
               onClick={this.saveFile}
-              disabled={this.props.store.editorToolbar.noActiveProfile}>
+              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}>
               <SaveFileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
@@ -826,7 +825,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button circleButton saveFileButton"
               onClick={this.saveFileAs}
-              disabled={this.props.store.editorToolbar.noActiveProfile}>
+              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}>
               <SaveAsFileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
