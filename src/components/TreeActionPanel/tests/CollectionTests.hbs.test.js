@@ -34,13 +34,13 @@ const fs = require('fs');
 const sprintf = require('sprintf-js').sprintf;
 const common = require('./common.js');
 const jsonHelper = require('../../../helpers/handlebars/json.js');
+const nodotsHelper = require('../../../helpers/handlebars/nodots.js');
 
 hbs.registerHelper('json', jsonHelper);
+hbs.registerHelper('nodots', nodotsHelper);
 
 // Random collection for the test
 const randomCollectionName = 'collection' + Math.floor(Math.random() * 10000000);
-
-
 
 // Command to drop the user
 
