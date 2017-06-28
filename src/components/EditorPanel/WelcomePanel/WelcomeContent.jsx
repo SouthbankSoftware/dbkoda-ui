@@ -29,14 +29,12 @@
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/sort-comp */
 import React from 'react';
-import {action, runInAction} from 'mobx';
+import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {AnchorButton} from '@blueprintjs/core';
-import {featherClient} from '~/helpers/feathers';
 import TwitterIcon from '../../../styles/icons/twitter-icon.svg';
 import GithubIcon from '../../../styles/icons/github-icon.svg';
 import DocumentIcon from '../../../styles/icons/document-icon.svg';
-import WorldIcon from '../../../styles/icons/world-icon.svg';
 import KodaIcon from '../../../styles/icons/dbkoda-logo.svg';
 
 /**
