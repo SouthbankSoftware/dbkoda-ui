@@ -489,6 +489,7 @@
                   border-right: 1px solid $welcomeViewDividerTransparent;
                   padding-right: 5%;
                   flex-grow: 1;
+                  overflow-y: scroll;
                   .welcomeButtonWrapper {
                     display: flex;
                     flex-direction: row;
