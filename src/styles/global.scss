@@ -272,6 +272,7 @@ div.pt-dialog {
 
 .RootSplitPane>.Pane1 {
   background-color: $panelLeftBackground;
+  overflow-y: auto;
 }
 
 .RootSplitPane>.Pane2 {
