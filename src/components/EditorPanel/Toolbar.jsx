@@ -261,7 +261,14 @@ export default class Toolbar extends React.Component {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, err.message);
           }
           this.onFail();
-          NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          // Object Object issue
+          console.log(err);
+          if (err.message == '[object Object]') {
+            console.log('Error retrieved from Primus');
+          } else {
+            NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          }
+
           this.setNewEditorLoading(false);
         });
     } catch (err) {

@@ -693,7 +693,7 @@ class View extends React.Component {
     try {
       this.updateCode(this._prettify(this.getCode()));
     } catch (err) {
-      NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format All failed with error: ' + err);
       }
@@ -711,7 +711,7 @@ class View extends React.Component {
     try {
       cm.replaceSelection(this._prettify(cm.getSelection()).trim());
     } catch (err) {
-      NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, 'Format Selection failed with error: ' + err);
       }

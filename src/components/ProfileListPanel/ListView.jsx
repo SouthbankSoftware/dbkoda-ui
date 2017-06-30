@@ -230,7 +230,7 @@ export default class ListView extends React.Component {
       console.log(err.stack);
       this.props.store.profileList.creatingNewProfile = false;
       this.closeOpenConnectionAlert();
-      DBKodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      DBKodaToaster(Position.LEFT_BOTTOM).show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
     });
   }
 
@@ -362,7 +362,7 @@ export default class ListView extends React.Component {
           if (this.props.store.userPreferences.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().PROFILES, err.message);
           }
-          NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           this.setState({closingProfile: false, closeConnectionAlert: false});
           this.closeConnectionCloseAlert();
         });
@@ -398,7 +398,7 @@ export default class ListView extends React.Component {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, err.message);
           }
           this.props.store.editorPanel.creatingNewEditor = false;
-          NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           runInAction(() => {
             this.props.store.editorToolbar.newConnectionLoading = false;
           });
@@ -407,7 +407,7 @@ export default class ListView extends React.Component {
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().EDITORS, err.message);
       }
-      NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       this.props.store.editorPanel.creatingNewEditor = false;
     }
   }
