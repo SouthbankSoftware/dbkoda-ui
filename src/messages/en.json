@@ -192,6 +192,11 @@
       "submitButton": "Submit",
       "genericValidateError": "This is a generic error message!",
       "fieldRequired": ":attribute field is required."
+    },
+    "error": {
+      "connection": {
+        "slave": "connect to slave without slaveOk"
+      }
     }
   }
 }

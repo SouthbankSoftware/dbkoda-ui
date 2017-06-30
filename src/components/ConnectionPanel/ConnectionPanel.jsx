@@ -179,8 +179,9 @@ const ConnectionPanel = ({
       .catch((err) => {
         console.log(err.stack);
         onFail();
+        const message = err.message;
         DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: err.message,
+          message,
           intent: Intent.DANGER,
           iconName: 'pt-icon-thumbs-down',
         });
