@@ -170,11 +170,11 @@ export const Form = {
     label: ':',
   }, {
     name: 'urlRadio',
-    label: 'URL',
+    label: 'URI',
     value: true,
   }, {
     name: 'url',
-    label: 'URL',
+    label: 'URI',
     placeholder: 'mongodb://',
     rules: 'regex:/^mongodb:///',
     value: 'mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com',

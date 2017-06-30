@@ -161,9 +161,7 @@ export default class TreePanel extends React.Component {
         {this.treeStatus == 'FAILED' && <div className="tree-msg-div failedMessage">
           <div className="messageWrapper">
             <div className="iconWrapper">
-              <span style={{
-                color: 'red'
-              }}>
+              <span className="failureText">
                 Failed to load topology.
               </span>
             </div>

@@ -111,7 +111,7 @@ export default class Store {
     optInVisible: true,
     overallSplitPos: '40%',
     leftSplitPos: '50%',
-    rightSplitPos: '50%'
+    rightSplitPos: '60%'
   };
 
   @observable drawer = {
