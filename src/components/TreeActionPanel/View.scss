@@ -180,11 +180,11 @@
       outline: none;
     }
     .pt-intent-success {
-      background-color: $fieldPrimaryButtonBackground;
+      background-color: $connectionButtonBackgroundColourConnect;
       color: $fieldPrimaryButtonFontColor;
     }
     .pt-intent-success:hover {
-      background-color: $fieldPrimaryButtonHover;
+      background-color: $connectionButtonBackgroundColourConnectHover;
     }
     .pt-intent-success:active {
       background-color: $fieldPrimaryButtonActive;
@@ -312,5 +312,13 @@
   .Select-input {
     height: 30px;
     border-radius: 0px;
+  }
+  .circleButton {
+    background: none;
+    background-color: $fieldGroupPrimaryBackground !important;
+  }
+  .circleButton:hover {
+    background: none;
+    background-color: $fieldGroupPrimaryBackground !important;
   }
 }

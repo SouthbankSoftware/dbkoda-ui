@@ -35,6 +35,7 @@
     display: flex;
     flex-direction: column;
     .pt-tab-list {
+      margin-left: 0px;
       .pt-tab {
         margin-right: unset;
         flex-grow: 0;
@@ -93,23 +94,37 @@
           flex-direction: row;
           height: 50px;
           .outputCmdLine {
+            border-bottom-left-radius: 8px;
+            border-top-left-radius: 8px;
             background-color: $terminalInput;
             flex: 1;
             order: 1;
             margin-top: 12px;
             margin-left: 12px;
             height: 30px;
+            .CodeMirror {
+              border-bottom-left-radius: 8px;
+              border-top-left-radius: 8px;
+              div {
+                border-bottom-left-radius: 8px;
+                border-top-left-radius: 8px;
+                .CodeMirror-scroll {
+                  border-radius: 8px;
+                }
+              }
+            }
           }
           .executeCmdBtn {
             flex: initial;
             order: 2;
             width: 40px;
             height: 50px;
+            margin-right: 10px;
             .pt-button {
               position: relative;
               background-color: $terminalButtonBackground;
               color: $terminalButtonIcon !important;
-              width: 20px;
+              width: 35px;
               border-top-right-radius: 50%;
               border-bottom-right-radius: 50%;
               margin-right: 50px;
@@ -318,8 +333,7 @@ span.cm-mongos-prompt {
   cursor: pointer;
 }
 
-.CodeMirror-foldgutter-open,
-.CodeMirror-foldgutter-folded {
+.CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
   color: #555;
   cursor: pointer;
 }
@@ -344,7 +358,6 @@ span.cm-mongos-prompt {
   border-right: none;
   width: 0;
 }
-
 
 /* Shown when moving in bi-directional text */
 
@@ -372,27 +385,33 @@ span.cm-mongos-prompt {
 }
 
 @-moz-keyframes blink {
-  0% {}
+  0% {
+  }
   50% {
     background-color: transparent;
   }
-  100% {}
+  100% {
+  }
 }
 
 @-webkit-keyframes blink {
-  0% {}
+  0% {
+  }
   50% {
     background-color: transparent;
   }
-  100% {}
+  100% {
+  }
 }
 
 @keyframes blink {
-  0% {}
+  0% {
+  }
   50% {
     background-color: transparent;
   }
-  100% {}
+  100% {
+  }
 }
 
 .cm-tab {
