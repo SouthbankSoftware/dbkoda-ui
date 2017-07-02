@@ -60,12 +60,12 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
-  showAtLaunchChanged(event) {
+  telemetryEnabledChanged(event) {
     console.log(event.target.value);
-    if (this.props.store.userPreferences.showWelcomePageAtStart) {
-      this.props.store.userPreferences.showWelcomePageAtStart = false;
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      this.props.store.userPreferences.telemetryEnabled = false;
     } else {
-      this.props.store.userPreferences.showWelcomePageAtStart = true;
+      this.props.store.userPreferences.telemetryEnabled = true;
     }
   }
 
@@ -108,8 +108,8 @@ export default class Panel extends React.Component {
           </div>
         </div>
         <div className="welcomeMenuOptOut">
-          <Checkbox checked={this.props.store.userPreferences.showWelcomePageAtStart} onChange={this.showAtLaunchChanged} />
-          <p>Show welcome Screen when opening dbKoda</p>
+          <Checkbox checked={this.props.store.userPreferences.telemetryEnabled} onChange={this.telemetryEnabledChanged} />
+          <p>Send Telemetry Data to dbKoda?</p>
         </div>
       </div>
     );
