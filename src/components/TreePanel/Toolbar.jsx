@@ -35,6 +35,7 @@ import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
 import TreeState from './model/TreeState.js';
 import {featherClient} from '../../helpers/feathers';
 import {DBKodaToaster} from '../common/Toaster';
+import RefreshIcon from '../../styles/icons/refresh-icon.svg';
 
 @inject(allStores => ({store: allStores.store, treeState: allStores.treeState}))
 @observer
@@ -127,10 +128,12 @@ export default class TreeToolbar extends React.Component {
         </div>
         <div className="pt-navbar-group pt-align-right">
           <AnchorButton
-            className="pt-button pt-icon-refresh refreshTreeButton"
+            className="pt-button refreshTreeButton"
             onClick={this.refresh}
             loading={this.props.store.treePanel.isRefreshing}
-            disabled={this.props.store.treePanel.isRefreshDisabled} />
+            disabled={this.props.store.treePanel.isRefreshDisabled}>
+            <RefreshIcon width={50} height={50} className="dbKodaSVG"/>
+          </AnchorButton>
         </div>
       </nav>
     );

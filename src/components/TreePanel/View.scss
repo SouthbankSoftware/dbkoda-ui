@@ -25,6 +25,8 @@
 // @Last modified time: 2017-06-07T15:19:09+10:00
 @import '../../styles/_defaultTheme.scss';
 .treeToolbar {
+  display:flex;
+  flex-direction: row;
   background-color: $navbarLeftBackground !important;
   input[type=text],
   input[type=number],
@@ -37,6 +39,15 @@
   input[type=password]:focus {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
+  }
+  div.pt-align-right {
+    a.pt-button {
+      svg.dbKodaSVG {
+        width: 20px;
+        height: 20px;
+        fill: $buttonSecondaryIcon;
+      }
+    }
   }
 }
 
@@ -167,10 +178,9 @@ ul.pt-tree-node-list {
     }
     div.loader {
       border: 16px solid $treeLoaderColorBG;
-      border-top: 16px solid $treeLoaderColor;
-      // Second spinning icon: border-bottom: 16px solid $treeLoaderColor;
+      border-top: 16px solid $treeLoaderColor; // Second spinning icon: border-bottom: 16px solid $treeLoaderColor;
       border-radius: 50%;
-      width:  6em;
+      width: 6em;
       height: 6em;
       animation: spin 2s linear infinite;
     }
@@ -200,4 +210,15 @@ div.pt-navbar-heading {
 
 input.pt-input {
   border-radius: 10px, 10px, 10px, 10px;
+}
+
+.pt-button {
+  position: relative;
+  svg.dbKodaSVG {
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    transform: translate(-50%, -50%);
+    fill: $buttonPrimaryIcon
+  }
 }
