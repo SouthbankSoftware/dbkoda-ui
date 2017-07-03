@@ -584,7 +584,8 @@ class View extends React.Component {
       service
         .update(id, {
         shellId: shell, // eslint-disable-line
-        commands: filteredContent
+        commands: filteredContent,
+        responseType: 'explain'
       })
         .then((response) => {
           runInAction(() => {
