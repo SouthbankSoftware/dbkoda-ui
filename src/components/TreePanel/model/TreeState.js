@@ -209,7 +209,7 @@ export default class TreeState {
   sampleCollection(nodeRightClicked) {
     const db = nodeRightClicked.refParent.text;
     const queryFirst = 'use ' + db + '\n'; // eslint-disable-line
-    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 20}})'; //
+    const querySecond = 'db.' + nodeRightClicked.text + '.aggregate({$sample: {size: 20}}).toArray()'; //
     const profile = this.updateCallback2();
     console.log('Prof: ', profile);
     if (profile.shellVersion) {
@@ -283,13 +283,16 @@ export default class TreeState {
         queryResult = queryResult.replace(/\r\n/g, "\n").replace(/\n\n/g, "\n").trim();
         queryResult = queryResult.split('\n');
         queryResult.splice(0, 1);
-        console.log('Q R[0]: ', queryResult[0]);
-        let object = JSON.parse(queryResult[0]);
+        queryResult = queryResult.join('');
+        console.log(queryResult);
+        queryResult = JSON.parse(queryResult);
+
+        let object = queryResult[0];
+        console.log('Q R[0]: ', object);
         console.log('Object:', object);
         queryResult.forEach((document) => {
-          if (document.length > 1) {
+          if (document) {
             try {
-              document = JSON.parse(document);
               object = _.merge(object, document);
             } catch (err) {
               console.log('Error parsing a document: ', document, err);
