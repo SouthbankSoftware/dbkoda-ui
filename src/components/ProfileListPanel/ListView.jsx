@@ -560,7 +560,7 @@ export default class ListView extends React.Component {
               onClick={this.openOpenConnectionAlert}
               text={globalString('profile/menu/openConnection')}
               intent={Intent.NONE}
-              iconName="pt-icon-unlock"/>
+              iconName="pt-icon-unlock" />
           </div>
           <div className="menuItemWrapper">
             <MenuItem
@@ -568,12 +568,12 @@ export default class ListView extends React.Component {
               onClick={this.editProfile}
               text={globalString('profile/menu/editProfile')}
               intent={Intent.NONE}
-              iconName="pt-icon-edit"/>
+              iconName="pt-icon-edit" />
           </div>
         </div>
       );
     } else {
-      windows.push((<MenuItem text={globalString('profile/menu/editors')}/>));
+      windows.push((<MenuItem text={globalString('profile/menu/editors')} />));
       this
         .props
         .store
@@ -587,7 +587,7 @@ export default class ListView extends React.Component {
                   text={value.fileName}
                   onClick={() => this.swapToEditor(value)}
                   intent={Intent.NONE}
-                  iconName="pt-icon-document"/>
+                  iconName="pt-icon-document" />
               </div>
             ));
           }
@@ -600,7 +600,7 @@ export default class ListView extends React.Component {
               onClick={this.openCloseConnectionAlert}
               text={globalString('profile/menu/closeConnection')}
               intent={Intent.NONE}
-              iconName="pt-icon-lock"/>
+              iconName="pt-icon-lock" />
           </div>
           <div className="menuItemWrapper">
             <MenuItem
@@ -608,7 +608,7 @@ export default class ListView extends React.Component {
               onClick={this.newEditorWindow}
               text={globalString('profile/menu/newWindow')}
               intent={Intent.NONE}
-              iconName="pt-icon-new-text-box"/>
+              iconName="pt-icon-new-text-box" />
           </div>
         </div>
       );
@@ -622,7 +622,7 @@ export default class ListView extends React.Component {
             onClick={this.openRemoveConnectionAlert}
             text={globalString('profile/menu/deleteProfile')}
             intent={Intent.NONE}
-            iconName="pt-icon-delete"/>
+            iconName="pt-icon-delete" />
         </div>
         <MenuDivider /> {windows}
       </Menu>
@@ -643,14 +643,14 @@ export default class ListView extends React.Component {
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
           <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-            <ConnectionIcon className="dbKodaSVG" width={20} height={20}/>
+            <ConnectionIcon className="dbKodaSVG" width={20} height={20} />
             <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
         );
       }
       return (
         <Cell className={className}>
-          <ConnectionIcon className="dbKodaSVG closedProfile" width={20} height={20}/>
+          <ConnectionIcon className="dbKodaSVG closedProfile" width={20} height={20} />
           <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );
@@ -670,7 +670,7 @@ export default class ListView extends React.Component {
           defaultRowHeight={60}
           onSelection={region => this.onSelection(region)}
           selectedRegions={this.state.lastSelectRegion}>
-          <Column name="Connection Profiles" renderCell={renderCell}/>
+          <Column name="Connection Profiles" renderCell={renderCell} />
         </Table>
         <Dialog
           className="pt-dark close-profile-alert-dialog"
@@ -684,13 +684,13 @@ export default class ListView extends React.Component {
               intent={Intent.SUCCESS}
               onClick={this.closeProfile}
               loading={this.props.store.layout.alertIsLoading}
-              text={globalString('profile/closeAlert/confirmButton')}/>
+              text={globalString('profile/closeAlert/confirmButton')} />
             <AnchorButton
               className="cancelButton"
               intent={Intent.DANGER}
               text={globalString('profile/closeAlert/cancelButton')}
               onClick={this.closeConnectionCloseAlert}
-              loading={this.props.store.layout.alertIsLoading}/>
+              loading={this.props.store.layout.alertIsLoading} />
           </div>
         </Dialog>
         <Dialog
@@ -705,13 +705,13 @@ export default class ListView extends React.Component {
               intent={Intent.SUCCESS}
               onClick={this.deleteProfile}
               loading={this.props.store.layout.alertIsLoading}
-              text={globalString('profile/removeAlert/confirmButton')}/>
+              text={globalString('profile/removeAlert/confirmButton')} />
             <AnchorButton
               className="cancelButton"
               intent={Intent.DANGER}
               onClick={this.closeConnectionRemoveAlert}
               loading={this.props.store.layout.alertIsLoading}
-              text={globalString('profile/removeAlert/cancelButton')}/>
+              text={globalString('profile/removeAlert/cancelButton')} />
           </div>
         </Dialog>
         <Dialog
@@ -725,7 +725,7 @@ export default class ListView extends React.Component {
             placeholder={globalString('profile/openAlert/inputPlaceholder')}
             type="password"
             dir="auto"
-            onChange={this.setPWText}/>
+            onChange={this.setPWText} />
           <div className="dialogButtons">
             <AnchorButton
               className="submitButton"
@@ -733,13 +733,13 @@ export default class ListView extends React.Component {
               type="submit"
               onClick={this.openProfile}
               loading={this.props.store.layout.alertIsLoading}
-              text={globalString('profile/openAlert/confirmButton')}/>
+              text={globalString('profile/openAlert/confirmButton')} />
             <AnchorButton
               className="cancelButton"
               intent={Intent.DANGER}
               text={globalString('profile/openAlert/cancelButton')}
               loading={this.props.store.layout.alertIsLoading}
-              onClick={this.closeOpenConnectionAlert}/>
+              onClick={this.closeOpenConnectionAlert} />
           </div>
         </Dialog>
       </div>
