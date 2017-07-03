@@ -153,9 +153,9 @@ div.pt-dialog {
   margin-right: -10px;
 }
 
-.pt-tab .pt-button.pt-minimal:hover {
+.pt-tab .pt-button.pt-minimal:hover, .pt-tab .pt-button.pt-minimal:focus {
   background: unset;
-  color: $buttonDangerBackground;
+  box-shadow: none !important;
 }
 
 .pt-tab {
