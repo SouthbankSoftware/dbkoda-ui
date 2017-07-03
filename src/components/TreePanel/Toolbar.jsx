@@ -132,7 +132,7 @@ export default class TreeToolbar extends React.Component {
             onClick={this.refresh}
             loading={this.props.store.treePanel.isRefreshing}
             disabled={this.props.store.treePanel.isRefreshDisabled}>
-            <RefreshIcon width={50} height={50} className="dbKodaSVG"/>
+            <RefreshIcon width={50} height={50} className="dbKodaSVG" />
           </AnchorButton>
         </div>
       </nav>
