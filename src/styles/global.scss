@@ -434,3 +434,7 @@ a[role=button]:focus {
   outline: none;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
 }
+
+.pt-menu-item:hover {
+  background-color: rgba(170, 182, 264, 0.3);
+}

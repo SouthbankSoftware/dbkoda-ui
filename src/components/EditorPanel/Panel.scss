@@ -120,10 +120,25 @@
         background-color: $tabBackgroundSelected;
       }
       .pt-tab:hover {
-        color: $white !important;
+        background-color: $tabBackgroundHover;
+        color: $tabFontColor !important;
       }
       .welcomeTab {
-        background-color: $welcomeViewBackgroundColor !important;
+        background-color: $tabBackground;
+        font-family: unset;
+        flex-grow: initial;
+        button:hover {
+          color: $tabFontColor !important;
+        }
+      }
+      .welcomeTab[aria-selected="true"] {
+        background-color: $welcomeViewBackgroundColor;
+        font-family: unset;
+        flex-grow: initial;
+      }
+      .welcomeTab[aria-selected="true"]:hover {
+        background-color: $welcomeViewBackgroundColor;
+        color: $tabFontColor !important;
         font-family: unset;
         flex-grow: initial;
       }
@@ -131,6 +146,9 @@
         flex-grow: unset;
         button {
           float: right;
+        }
+        button:hover {
+          color: $tabFontColor !important;
         }
       }
     }
@@ -155,6 +173,7 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        margin-left: 60px;
         .welcomePanelWrapper {
           display: flex;
           flex-direction: column;
@@ -191,6 +210,7 @@
             display: flex;
             flex-direction: row;
             flex-grow: 2;
+            flex-wrap: wrap;
             .welcomeMenuWrapper {
               margin-top: 30px;
               display: flex;
@@ -209,7 +229,7 @@
                   color: $welcomeViewFontColor;
                   font-size: 18px;
                   order: 1;
-                  flex-grow: 1;
+                  margin-bottom: 10px;
                 }
                 .welcomeButtons {
                   order: 2;
@@ -221,9 +241,9 @@
                     display: flex;
                     flex-direction: row;
                     order: 1;
-                    flex-grow: 1;
                     flex-shrink: 0;
-                    padding-bottom: 20px;
+                    padding-bottom: 30px;
+                    height: 90px;
                     .welcomeMenuButton {
                       color: $welcomeViewOptoutFontColor;
                       flex-grow: 1;
@@ -240,6 +260,7 @@
                     }
                     .welcomeMenuButton:hover {
                       background-color: $welcomeViewButtonHoverColor;
+                      border: none;
                     }
                   }
                 }
@@ -247,8 +268,6 @@
                   display: flex;
                   flex-direction: row;
                   order: 3;
-                  flex-grow: 1;
-                  flex-shrink: 0;
                   font-size: 10pt;
                   font-weight: lighter;
                   color: $connectionHeadingsFontColour !important;
@@ -288,14 +307,15 @@
                 height: 100%;
                 .welcomePageContentLeft {
                   color: $welcomeViewSocialMediaText;
-                  padding-left: 2%;
-                  padding-right: 2%;
+                  padding-left: 4%;
+                  padding-right: 4%;
                   border-right: 1px solid $welcomeViewDividerTransparent;
                   flex-shrink: 0;
                   flex-direction: column;
                   h2 {
                     color: $welcomeViewFontColor;
                     font-size: 18px;
+                    margin-bottom: 20px;
                   }
                   p {
                     color: $welcomeViewFontColorDark;
@@ -308,6 +328,7 @@
                       flex-grow: 1;
                       display: flex;
                       flex-direction: row;
+                      margin-right: 6%;
                       .iconWrapper {
                         width: 50px;
                         height: 50px;
@@ -364,8 +385,8 @@
                         height: 60px;
                         position: relative;
                         svg {
-                          width: 40px;
-                          height: 40px;
+                          width: 30px;
+                          height: 30px;
                           position: absolute;
                           top: 50%;
                           bottom: 50%;
@@ -378,8 +399,8 @@
                         height: 60px;
                         position: relative;
                         svg {
-                          width: 40px;
-                          height: 40px;
+                          width: 30px;
+                          height: 30px;
                           position: absolute;
                           top: 50%;
                           bottom: 50%;
@@ -392,8 +413,8 @@
                         height: 60px;
                         position: relative;
                         svg {
-                          width: 40px;
-                          height: 40px;
+                          width: 30px;
+                          height: 30px;
                           position: absolute;
                           top: 50%;
                           bottom: 50%;
@@ -411,6 +432,7 @@
                         flex-grow: 1;
                         order: 2;
                         text-align: center;
+                        margin-top: 10%;
                       }
                     }
                   }
@@ -487,23 +509,22 @@
                   display: flex;
                   flex-direction: column;
                   border-right: 1px solid $welcomeViewDividerTransparent;
-                  padding-right: 5%;
-                  flex-grow: 1;
+                  padding-right: 20px;
                   overflow-y: auto;
                   .welcomeButtonWrapper {
                     display: flex;
                     flex-direction: row;
                     order: 1;
-                    flex-grow: 1;
                     flex-shrink: 0;
-                    padding-bottom: 20px;
+                    padding-bottom: 30px;
+                    height: 80px;
                     .welcomeMenuButton {
                       color: $welcomeViewOptoutFontColor;
-                      flex-grow: 1;
                       background: unset;
                       box-shadow: unset;
                       border: 1px solid $welcomeViewButtonBorderColor;
                       border-radius: 0.75em;
+                      width: 120px;
                       span {
                         display: block;
                         position: relative;
@@ -513,6 +534,7 @@
                     }
                     .welcomeMenuButton:hover {
                       background-color: $welcomeViewButtonHoverColor;
+                      border: none;
                     }
                   }
                 }
@@ -525,7 +547,7 @@
                 .hotkeyItem {
                   background-color: $welcomeViewKeyboardShortcutsBG;
                   margin-top: 20px;
-                  margin-right: 50px;
+                  margin-right: 20px;
                   padding: 10px;
                   border-radius: 0.3em;
                   .hotkeyTitle {

@@ -60,13 +60,14 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
-  telemetryEnabledChanged(event) {
-    console.log(event.target.value);
+  telemetryEnabledChanged() {
+    console.log('Telemetry Enabled Before:', this.props.store.userPreferences.telemetryEnabled);
     if (this.props.store.userPreferences.telemetryEnabled) {
       this.props.store.userPreferences.telemetryEnabled = false;
     } else {
       this.props.store.userPreferences.telemetryEnabled = true;
     }
+    console.log('Telemetry Enabled After:', this.props.store.userPreferences.telemetryEnabled);
   }
 
   @action.bound
@@ -85,6 +86,7 @@ export default class Panel extends React.Component {
   }
 
   render() {
+    console.log('Telemetry Enabled:', this.props.store.userPreferences.telemetryEnabled);
     return (
       <div className="welcomeMenu">
         <h2>
