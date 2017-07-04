@@ -28,6 +28,11 @@
 import _ from 'lodash';
 import { action, observable } from 'mobx';
 import { dump, restore } from 'dumpenvy';
+import {
+  serializer,
+  deserializer,
+  postDeserializer
+} from '#/common/mobxDumpenvyExtension';
 import { DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { Broker, EventType } from '../helpers/broker';
@@ -61,18 +66,21 @@ export default class Store {
   @observable editors = observable.map();
   @observable outputs = observable.map();
 
-  @observable userPreferences = observable({
+  @observable
+  userPreferences = observable({
     telemetryEnabled: false,
     showWelcomePageAtStart: true
   });
 
-  @observable welcomePage = observable({
+  @observable
+  welcomePage = observable({
     isOpen: true,
     newsFeed: [],
     currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
   });
 
-  @observable editorPanel = observable({
+  @observable
+  editorPanel = observable({
     creatingNewEditor: false,
     res: null,
     activeEditorId: 'Default',
@@ -86,7 +94,8 @@ export default class Store {
     tabFilter: ''
   });
 
-  @observable editorToolbar = observable({
+  @observable
+  editorToolbar = observable({
     newConnectionLoading: false,
     currentProfile: 0,
     noActiveProfile: true,
@@ -98,7 +107,8 @@ export default class Store {
     saveAs: false
   });
 
-  @observable outputPanel = observable({
+  @observable
+  outputPanel = observable({
     currentTab: 'Default',
     clearingOutput: false,
     executingShowMore: false,
@@ -106,7 +116,8 @@ export default class Store {
     sendingCommand: ''
   });
 
-  @observable layout = {
+  @observable
+  layout = {
     alertIsLoading: false,
     optInVisible: true,
     overallSplitPos: '40%',
@@ -114,11 +125,13 @@ export default class Store {
     rightSplitPos: '60%'
   };
 
-  @observable drawer = {
+  @observable
+  drawer = {
     drawerChild: DrawerPanes.DEFAULT
   };
 
-  @observable treeActionPanel = {
+  @observable
+  treeActionPanel = {
     treeNode: null,
     treeAction: null,
     treeActionEditorId: '',
@@ -128,78 +141,95 @@ export default class Store {
     editors: observable.map()
   };
 
-  @observable detailsPanel = {
+  @observable
+  detailsPanel = {
     detailsViewInfo: null,
     activeEditorId: ''
   };
 
-  @observable treePanel = {
+  @observable
+  treePanel = {
     isRefreshing: false,
     isRefreshDisabled: false
   };
 
-  @observable explainPanel = {
+  @observable
+  explainPanel = {
     activeId: undefined,
     explainAvailable: false
   };
 
-  @observable mongoShellPrompt = {
+  @observable
+  mongoShellPrompt = {
     prompt: 'dbkoda>'
   };
 
-  @observable profileList = observable({
+  @observable
+  profileList = observable({
     selectedProfile: null,
     creatingNewProfile: false
   });
 
-  @observable dragItem = observable({
+  @observable
+  dragItem = observable({
     dragDrop: false,
     dragDropTerminal: false,
     item: null
   });
 
-  @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
+  @observable
+  topology = observable({ isChanged: false, json: {}, profileId: '' });
 
-  @action setDrawerChild = (value) => {
+  @action
+  setDrawerChild = (value) => {
     this.drawer.drawerChild = value;
   };
 
-  @action showConnectionPane = () => {
+  @action
+  showConnectionPane = () => {
     this.setDrawerChild(DrawerPanes.PROFILE);
   };
 
-  @action showTreeActionPane = () => {
+  @action
+  showTreeActionPane = () => {
     this.setDrawerChild(DrawerPanes.DYNAMIC);
   };
 
-  @action setTreeAction = (treeNode, treeAction) => {
+  @action
+  setTreeAction = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
-  }
-  @action addNewEditorForTreeAction = () => {
+  };
+
+  @action
+  addNewEditorForTreeAction = () => {
     this.editorToolbar.newEditorForTreeAction = true;
     this.treeActionPanel.newEditorCreated = false;
   };
 
-  @action updateDynamicFormCode = (value) => {
+  @action
+  updateDynamicFormCode = (value) => {
     this.treeActionPanel.formValues = value;
     this.treeActionPanel.isNewFormValues = true;
   };
 
-  @action updateTopology = (res) => {
+  @action
+  updateTopology = (res) => {
     this.topology.profileId = res.profileId;
     this.topology.json = res.result;
     this.topology.isChanged = true;
   };
 
-  @action addEditor = (withProfile, newRes) => {
+  @action
+  addEditor = (withProfile, newRes) => {
     this.editorPanel.creatingNewEditor = true;
     this.editorPanel.creatingWithProfile = withProfile;
     this.editorPanel.res = newRes;
   };
 
-  @action dump() {
-    return dump(this);
+  @action
+  dump() {
+    return dump(this, { serializer });
   }
 
   closeConnection() {
@@ -226,8 +256,9 @@ export default class Store {
     });
   }
 
-  @action restore(data) {
-    const newStore = restore(data);
+  @action
+  restore(data) {
+    const newStore = restore(data, { deserializer, postDeserializer });
     this.cleanStore(newStore);
     console.log('Restoring Store: ', newStore);
     _.assign(this, newStore);
@@ -301,7 +332,9 @@ export default class Store {
       })
       .catch((err) => {
         if (err.code === 404) {
-          console.log('State store doesn\'t exist. A new one will be created after app close or refreshing');
+          console.log(
+            "State store doesn't exist. A new one will be created after app close or refreshing"
+          );
         } else {
           console.error(err);
         }

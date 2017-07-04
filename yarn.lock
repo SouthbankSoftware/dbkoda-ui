@@ -1834,9 +1834,9 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-colorpicker@^1.0.0:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/codemirror-colorpicker/-/codemirror-colorpicker-1.0.3.tgz#87442a913500764fce1ae45c3145f61c0fba1cfa"
+codemirror-colorpicker@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/codemirror-colorpicker/-/codemirror-colorpicker-1.0.8.tgz#0668e14ddc85c21e2c100f1217f345657a409ba6"
 
 codemirror-formatting@^1.0.0:
   version "1.0.0"
@@ -1853,9 +1853,9 @@ codemirror@3.x:
   version "3.24.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-3.24.0.tgz#335634d8aaf469f2d6968d2bc80417213fba99d6"
 
-codemirror@^5.18.2, codemirror@^5.24.2:
-  version "5.24.2"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.24.2.tgz#b55ca950fa009709c37df68eb133310ed89cf2fe"
+codemirror@^5.18.2, codemirror@^5.27.2:
+  version "5.27.2"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.27.2.tgz#a292d42f079d5b98c68c3146fab99844f3d8776c"
 
 collapse-white-space@^1.0.0:
   version "1.0.2"
@@ -2115,7 +2115,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2:
     create-hash "^1.1.0"
     inherits "^2.0.1"
 
-create-react-class@^15.5.2:
+create-react-class@^15.5.1, create-react-class@^15.5.2:
   version "15.5.3"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.5.3.tgz#fb0f7cae79339e9a179e194ef466efa3923820fe"
   dependencies:
@@ -5510,7 +5510,7 @@ lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
-lodash.isequal@^4.0.0:
+lodash.isequal@^4.0.0, lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
 
@@ -7158,13 +7158,16 @@ react-base16-styling@^0.5.1:
     lodash.flow "^3.3.0"
     pure-color "^1.2.0"
 
-react-codemirror@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-codemirror/-/react-codemirror-0.3.0.tgz#cd6bd6ef458ec1e035cfd8b3fe7b30c8c7883c6c"
+react-codemirror@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-codemirror/-/react-codemirror-1.0.0.tgz#91467b53b1f5d80d916a2fd0b4c7adb85a9001ba"
   dependencies:
     classnames "^2.2.5"
     codemirror "^5.18.2"
+    create-react-class "^15.5.1"
     lodash.debounce "^4.0.8"
+    lodash.isequal "^4.5.0"
+    prop-types "^15.5.4"
 
 react-deep-force-update@^2.0.1:
   version "2.0.1"

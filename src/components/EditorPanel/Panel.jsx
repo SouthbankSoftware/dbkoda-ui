@@ -260,8 +260,8 @@ export default class Panel extends React.Component {
         .then(v => console.log('remove shell successfully, ', v))
         .catch(err => console.error('remove shell failed,', err));
     }
-    // NEWLOGIC Check if closed editor is current editor:
-    if (true) {
+    // TODO Check if closed editor is current editor:
+    // if (true) {
       this.props.store.editorPanel.isRemovingCurrentTab = true;
       // Check if this is the last tab:
       if (this.props.store.editors.size == 1) {
@@ -301,7 +301,7 @@ export default class Panel extends React.Component {
         }
         return;
       }
-    }
+    // }
     this.props.store.editorPanel.removingTabId = deletedEditor.id;
     this
       .props
