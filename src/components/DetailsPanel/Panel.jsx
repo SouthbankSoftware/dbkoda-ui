@@ -23,7 +23,7 @@
  * @Date:   2017-05-22T09:11:48+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-07T11:20:44+10:00
+ * @Last modified time: 2017-07-10T14:02:28+10:00
  */
 
 import React from 'react';
@@ -61,12 +61,18 @@ export default class DetailsPanel extends React.Component {
   detailsPromise;
   detailsViewInfo;
   @observable msg = 'Loading Details...';
+  @observable bLoading = false;
   @observable bDetView = false;
   @action showView(value) {
     this.bDetView = value;
   }
   @action updateMsg(value) {
     this.msg = value;
+    if (value === 'Loading Details...') {
+      this.bLoading = true;
+    } else {
+      this.bLoading = false;
+    }
   }
   @action.bound close(e) {
     if (e) {
@@ -117,8 +123,17 @@ export default class DetailsPanel extends React.Component {
           />}
         {!this.bDetView &&
           <div>
-            <div className="tree-msg-div">
-              <span>{this.msg}</span>
+            <div className="details-msg-div">
+              <div className="messageWrapper">
+                {this.bLoading &&
+                  <div className="iconWrapper">
+                    <div className="loader" />
+                  </div>}
+                {!this.bLoading &&
+                  <span className="failureText">
+                    {this.msg}
+                  </span>}
+              </div>
             </div>
           </div>}
       </div>

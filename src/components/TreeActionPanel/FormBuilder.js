@@ -23,7 +23,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-05T16:25:51+10:00
+ * @Last modified time: 2017-07-10T14:47:55+10:00
  */
 
 import { SyncService } from '#/common/SyncService';
@@ -349,6 +349,7 @@ export default class FormBuilder {
             // Update the form after prefetching the data from controller
             const updatePrefilledData = (data) => {
               form.mobxForm.update(data); //eslint-disable-line
+              form.mobxForm.submit();     //eslint-disable-line
             };
 
             const defaultParseFunction = (values) => {

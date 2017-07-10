@@ -72,6 +72,10 @@
         "ms" : "ms"
       }
     },
+    "details": {
+      "error": "Sorry, we were unable to create the view you asked for due to the following error: {0}",
+      "dddError": "No DefaultValues attribute available in DDD json file."
+    },
     "editor": {
       "toolbar": {
         "executeSelectedTooltip": "Execute Selected Commands",

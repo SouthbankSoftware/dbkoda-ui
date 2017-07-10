@@ -121,7 +121,7 @@ const ConnectionPanel = ({
       close();
       Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
     } else {
-      message = globalString('', message);
+      message = globalString('connection/success');
     }
     DBKodaToaster(position).show({
       message,

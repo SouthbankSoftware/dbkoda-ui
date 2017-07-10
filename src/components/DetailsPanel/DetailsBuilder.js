@@ -23,7 +23,7 @@
  * @Date:   2017-05-22T14:34:57+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-05T15:21:28+10:00
+ * @Last modified time: 2017-07-10T13:48:21+10:00
  */
 
 import { SyncService } from '#/common/SyncService';
@@ -99,9 +99,16 @@ export default class DetailsBuilder {
             this.editor.profileId
           )
             .then((res) => {
-              const parsedValues = parseFunction(res);
-              console.log('parsedValues: ', parsedValues);
-              resolve(parsedValues);
+              try {
+                const parsedValues = parseFunction(res);
+                console.log('parsedValues: ', parsedValues);
+                if (parsedValues.error) {
+                  reject(parsedValues.error);
+                }
+                resolve(parsedValues);
+              } catch (err) {
+                reject('Unable to parse response from the provided parse function.');
+              }
             })
             .catch((reason) => {
               reject('Error in SyncService: ' + reason);
@@ -110,7 +117,7 @@ export default class DetailsBuilder {
           resolve(PrefilledValues);
         }
       } else {
-        reject('No DefaultValues attribute available in DDD json file.');
+        reject(globalString('details/dddError'));
       }
     });
   };
@@ -165,7 +172,7 @@ export default class DetailsBuilder {
             resolve(detailsViewInfo);
           })
           .catch((reason) => {
-            reject('getPrefilledData Error: ' + reason);
+            reject(globalString('details/error', reason));
           });
       } catch (e) {
         reject('createDetailsView Error: ' + e.message);

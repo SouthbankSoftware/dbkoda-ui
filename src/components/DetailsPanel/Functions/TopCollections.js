@@ -23,7 +23,7 @@
  * @Date:   2017-05-22T15:30:25+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-23T13:26:55+10:00
+ * @Last modified time: 2017-07-10T12:10:37+10:00
  */
 // const Globalize = require('globalize');
 
@@ -35,6 +35,9 @@ export const TopCollections = {
   dbkoda_TopCollections_parse: (data) => {
     // data.time = Globalize.formatNumber(data.time);
     // console.log(data.time);
+    if (data && data.top.length == 1 && data.top[0].collection) {
+      return {error: data.top[0].collection};
+    }
     return data;
   }
 };
