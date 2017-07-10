@@ -16,14 +16,12 @@
     "Fields": [{
             "name": "UserId",
             "type": "Text",
-            "readOnly": true,
-            "keyValue": true
+            "readOnly": true
         },
         {
             "name": "Database",
             "type": "Text",
-            "readOnly": true,
-            "lookup": "dbkoda_listdb"
+            "readOnly": true
         },
         {
             "name": "UserName",
