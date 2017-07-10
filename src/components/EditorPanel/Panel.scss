@@ -88,7 +88,6 @@
           background-color: $buttonTertiaryBackground;
           width: 30px;
           height: 30px;
-
           svg.dbKodaSVG {
             position: absolute;
             top: 50%;
@@ -99,7 +98,9 @@
             fill: $buttonTertiaryIcon;
           }
         }
-
+        a:focus {
+          box-shadow: none !important;
+        }
         .saveFileButton svg.dbKodaSVG {
           width: 60%;
           height: 60%;
@@ -358,13 +359,13 @@
                 height: 100%;
 
                 .welcomePageContentLeft {
+                  overflow-y: auto;
                   color: $welcomeViewSocialMediaText;
                   padding-left: 20px;
                   padding-right: 20px;
                   border-right: 1px solid $welcomeViewDividerTransparent;
                   flex-shrink: 0;
                   flex-direction: column;
-
                   h2 {
                     color: $welcomeViewFontColor;
                     font-size: 18px;
@@ -374,7 +375,6 @@
                   p {
                     color: $welcomeViewFontColorDark;
                   }
-
                   .docsList {
                     overflow-y: auto;
                     display: flex;
@@ -385,7 +385,6 @@
                       display: flex;
                       flex-direction: row;
                       margin-right: 6%;
-
                       .iconWrapper {
                         width: 50px;
                         height: 50px;
@@ -393,7 +392,6 @@
                         flex-grow: 2;
                         border-radius: 0.4em;
                         text-align: center;
-
                         a {
                           float: left;
                           width: 50px;
@@ -411,7 +409,9 @@
                             fill: $welcomeViewSocialMediaIcons;
                           }
                         }
-
+                        a:focus {
+                          box-shadow: none !important;
+                        }
                         a:hover {
                           background-color: $welcomeViewIconBGHover;
                         }
@@ -435,7 +435,6 @@
                     .linkWrapper {
                       flex-direction: column;
                       margin-right: 10px;
-
                       a {
                         width: 100px;
                         border-radius: 50%;
@@ -444,7 +443,9 @@
                         background: $welcomeViewIconBG;
                         font-size: 40;
                       }
-
+                      a:focus {
+                          box-shadow: none !important;
+                      }
                       .twitterIcon {
                         width: 60px;
                         height: 60px;
@@ -540,7 +541,6 @@
                           background: $welcomeViewIconBG;
                           position: relative;
                           text-align: center;
-
                           svg {
                             width: 40px;
                             height: 40px;
@@ -551,7 +551,6 @@
                             fill: $welcomeViewSocialMediaIcons;
                           }
                         }
-
                         a:hover {
                           background-color: $welcomeViewIconBGHover;
                         }
