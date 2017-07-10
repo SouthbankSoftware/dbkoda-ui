@@ -37,6 +37,8 @@ export const CreateIndex = {
         data.Sparse = false;
         data.Unique = false;
         data.Background = false;
+        data.Keys = [];
+        data.Keys.push({AttributeName:'_id', Direction:-1});
         return data;
     },
     dbkoda_indexOptions: () => {
