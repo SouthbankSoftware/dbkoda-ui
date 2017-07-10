@@ -1,0 +1,19 @@
+db.getSiblingDB("{{Database}}").createCollection(
+    "{{CollectionName}}" , 
+    {
+         capped: {{capped}} {{#if autoIndexId ~}},
+         autoIndexId: {{autoIndexId}}{{/if ~}}
+{{#if size ~}},
+         size: {{size}}{{/if ~}}
+{{#if max ~}},
+         max: {{max}}{{/if ~}}
+{{#if storageEngine~}},
+         storageEngine: {{storageEngine}}{{/if ~}}
+{{#if validator ~}},
+         validator: {{validator}}{{/if ~}}
+{{#if validationLevel ~}},
+         validationLevel: "{{validationLevel}}"{{/if ~}}
+{{#if validationAction ~}},
+         validationAction: "{{validationAction}}"{{/if ~}}
+
+});

@@ -1,0 +1,907 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/lint/lint.css';
+import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/search/matchesonscrollbar.css';
+import {inject, PropTypes} from 'mobx-react';
+import {featherClient} from '~/helpers/feathers';
+import {action, reaction, runInAction} from 'mobx';
+import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
+import Prettier from 'prettier-standalone';
+import React from 'react';
+import CodeMirrorEditor from '#/common/CodeMirror';
+import CodeMirror from 'codemirror';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/xml/xml';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/addon/selection/active-line.js';
+import 'codemirror/addon/display/autorefresh.js';
+import 'codemirror/addon/edit/matchbrackets.js';
+import 'codemirror/addon/edit/closebrackets.js';
+import 'codemirror/addon/fold/foldcode.js';
+import 'codemirror/addon/fold/foldgutter.js';
+import 'codemirror/addon/fold/brace-fold.js';
+import 'codemirror/addon/fold/comment-fold.js';
+import 'codemirror/addon/fold/xml-fold.js';
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/javascript-hint.js';
+import 'codemirror/addon/search/search.js';
+import 'codemirror/addon/search/searchcursor.js';
+import 'codemirror/addon/search/jump-to-line.js';
+import 'codemirror/addon/dialog/dialog.js';
+import 'codemirror/addon/search/matchesonscrollbar.js';
+import 'codemirror/addon/scroll/annotatescrollbar.js';
+import 'codemirror/addon/scroll/simplescrollbars.js';
+import 'codemirror/keymap/sublime.js';
+import 'codemirror-formatting';
+import '#/common/MongoScript.js';
+
+import { DropTarget } from 'react-dnd';
+import 'codemirror/theme/material.css';
+import { DragItemTypes } from '#/common/Constants.js';
+import { NewToaster } from '#/common/Toaster';
+import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
+import EventLogging from '#/common/logging/EventLogging';
+import './Panel.scss';
+import { Broker, EventType } from '../../helpers/broker';
+
+/**
+ * editorTarget object for helping with drag and drop actions?
+ */
+const editorTarget = {
+  /**
+   * drop method for dropping items into editor.
+   * @param {} props - Properties of the DropTarget.
+   * @param {} monitor - keeps the state of drag process, e.g object which is being dragged
+   */
+  drop(props, monitor) {
+    console.log('DROP monitor.getItem:', monitor.getItem());
+    const item = monitor.getItem();
+    props.onDrop(item);
+  }
+};
+
+/**
+ * Collect the information required by the connector and inject it into the react component as props
+ * @param {} connect - connectors let you assign one of the predefined roles (a drag source, a drag preview, or a drop target) to the DOM nodes
+ * @param {} monitor - keeps the state of drag process, e.g object which is being dragged
+ */
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    isOverCurrent: monitor.isOver({ shallow: true })
+  };
+}
+
+/**
+ * Defines the View for the CodeMirror Editor.
+ */
+@inject('store')
+@ContextMenuTarget
+class View extends React.Component {
+  static propTypes = {
+    store: PropTypes.observableObject.isRequired
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.id = this.props.id;
+    this.editorObject = this.props.store.editors.get(this.id);
+    this.doc = this.editorObject.doc;
+    this.cmOptions = {
+      value: this.doc,
+      theme: 'material',
+      lineNumbers: 'true',
+      indentUnit: 2,
+      styleActiveLine: 'true',
+      scrollbarStyle: 'overlay',
+      smartIndent: true,
+      styleSelectedText: false,
+      tabSize: 2,
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      foldOptions: {
+        widget: '...'
+      },
+      foldGutter: true,
+      gutters: [
+        'CodeMirror-linenumbers',
+        'CodeMirror-foldgutter' // , 'CodeMirror-lint-markers'
+      ],
+      keyMap: 'sublime',
+      extraKeys: {
+        'Ctrl-Space': 'autocomplete',
+        Tab(cm) {
+          cm.replaceSelection('  ');
+        },
+        'Ctrl-Q': function(cm) {
+          cm.foldCode(cm.getCursor());
+        }
+      },
+      mode: 'MongoScript'
+    };
+
+    this.reactions = [];
+
+    // React when a change occurs on the editorPanel.executingEditorAll state.
+    this.reactions.push(
+      reaction(
+        () => this.props.store.editorPanel.executingEditorAll,
+        (executingEditorAll) => {
+          if (
+            this.props.store.editorPanel.activeEditorId === this.props.id &&
+            executingEditorAll === true
+          ) {
+            console.log(this.props.store.editors);
+            console.log(this.props.store.profiles);
+            const editor = this.props.store.editors.get(
+              this.props.store.editorPanel.activeEditorId
+            );
+            const shell = editor.shellId;
+            const profileId = editor.profileId;
+
+            const currEditorValue = this.getEditorValue();
+
+            console.log(
+              '[',
+              this.props.store.editorPanel.activeDropdownId,
+              ']Sending data to feathers id ',
+              profileId,
+              '/',
+              shell,
+              ': "',
+              currEditorValue,
+              '".'
+            );
+
+            // Listen for completion
+            this.props.store.editors.get(editor.id).executing = true;
+            this.props.store.editorToolbar.isActiveExecuting = true;
+            // Send request to feathers client
+            const service = featherClient().service('/mongo-shells');
+            service.timeout = 30000;
+            service
+              .update(profileId, {
+                shellId: shell, // eslint-disable-line
+                commands: currEditorValue.replace(/\t/g, '  ')
+              })
+              .catch((err) => {
+                console.error('execute error:', err);
+                runInAction(() => {
+                  this.finishedExecution({
+                    id: this.props.store.editorPanel.activeDropdownId,
+                    shellId: shell
+                  });
+                  NewToaster.show({
+                    message: globalString('editor/toolbar/executionScriptFailed'),
+                    intent: Intent.DANGER,
+                    iconName: 'pt-icon-thumbs-down'
+                  });
+                });
+              });
+            this.props.store.editorPanel.executingEditorAll = false;
+          }
+        }
+      )
+    );
+
+    // React when a change occurs on the editorPanel.executingEditorLines state.
+    this.reactions.push(
+      reaction(
+        () => this.props.store.editorPanel.executingEditorLines,
+        (executingEditorLines) => {
+          if (
+            this.props.store.editorPanel.activeEditorId === this.props.id &&
+            executingEditorLines === true
+          ) {
+            // Determine code to send.
+            const editor = this.props.store.editors.get(
+              this.props.store.editorPanel.activeEditorId
+            );
+            const shell = editor.shellId;
+            const id = editor.profileId;
+
+            const cm = this.editor.getCodeMirror(); // eslint-disable-line
+            let content = cm.getSelection();
+            if (cm.getSelection().length > 0) {
+              console.log('Executing Highlighted Text.');
+            } else {
+              console.log(
+                'No Highlighted Text, Executing Line: ',
+                cm.getCursor().line + 1
+              );
+              content = cm.getLine(cm.getCursor().line);
+              // Quick check if line is a full command:
+              if (
+                !content.match(/^ *db./g) &&
+                !content.match(/^ *sh./g) &&
+                !content.match(/^ *rs./g) &&
+                !content.match(/^ *db *$/g) &&
+                !content.match(/^ *use /g) &&
+                !content.match(/^ *show /g) &&
+                !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
+                !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
+              ) {
+                NewToaster.show({
+                  message: globalString('editor/toolbar/possibleMultiLineCommand'),
+                  intent: Intent.WARNING,
+                  iconName: 'pEmilt-icon-thumbs-down'
+                });
+              }
+            }
+
+            console.log(
+              '[',
+              this.props.store.editorPanel.activeDropdownId,
+              ']Sending data to feathers id ',
+              id,
+              '/',
+              shell,
+              ': "',
+              content,
+              '".'
+            );
+            this.props.store.editors.get(editor.id).executing = true;
+            this.props.store.editorToolbar.isActiveExecuting = true;
+
+            // Send request to feathers client
+            const service = featherClient().service('/mongo-shells');
+            service.timeout = 30000;
+            service
+              .update(id, {
+                shellId: shell, // eslint-disable-line
+                commands: content.replace(/\t/g, '  ')
+              })
+              .catch((err) => {
+                console.error('execute error:', err);
+                runInAction(() => {
+                  this.finishedExecution({ id, shellId: shell });
+                  NewToaster.show({
+                    message: globalString('editor/toolbar/executionScriptFailed'),
+                    intent: Intent.DANGER,
+                    iconName: 'pt-icon-thumbs-down'
+                  });
+                });
+              });
+            this.props.store.editorPanel.executingEditorLines = false;
+          }
+        }
+      )
+    );
+
+    // React when a change occurs on the dragItem.drapDrop state.
+    this.reactions.push(
+      reaction(
+        () => this.props.store.dragItem.dragDrop,
+        (dragDrop) => {
+          if (
+            this.props.store.editorPanel.activeEditorId === this.props.id &&
+            dragDrop
+          ) {
+            if (this.props.store.dragItem.item) {
+              const item = this.props.store.dragItem.item;
+              this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
+            }
+            this.props.store.dragItem.dragDrop = false;
+          }
+        }
+      )
+    );
+
+    // React when receive and append a command from the output terminal
+    this.reactions.push(
+      reaction(
+        () => this.props.store.outputPanel.sendingCommand,
+        (sendingCommand) => {
+          console.log('reactionToTerminalPush');
+          if (
+            sendingCommand &&
+            this.props.store.editorPanel.activeEditorId === this.props.id
+          ) {
+            console.log(sendingCommand);
+            this.insertAtCursor(sendingCommand);
+            this.props.store.outputPanel.sendingCommand = '';
+          }
+        },
+        { name: 'EditorViewReactionToTerminalPush' }
+      )
+    );
+
+    // React when a change occurs on the editorPanel.stoppingExecution state
+    this.reactions.push(
+      reaction(
+        () => this.props.store.editorPanel.stoppingExecution,
+        (stoppingExecution) => {
+          if (stoppingExecution) {
+            this.props.store.editorPanel.stoppingExecution = false;
+            const editor = this.props.store.editors.get(
+              this.props.store.editorPanel.activeEditorId
+            );
+            const shell = editor.shellId;
+            const id = editor.profileId;
+            console.log(`Stopping Execution of ${id} / ${shell}!`);
+            const service = featherClient().service('/mongo-stop-execution');
+            service.timeout = 1000;
+            service
+              .get(id, {
+                query: {
+                  shellId: shell
+                }
+              })
+              .then((response) => {
+                console.log(`Stopped Execution of ${id} / ${shell}!`);
+                if (response) {
+                  NewToaster.show({
+                    message: response.result,
+                    intent: Intent.SUCCESS,
+                    iconName: 'pt-icon-thumbs-up'
+                  });
+                } else {
+                  NewToaster.show({
+                    message: globalString('editor/view/executionStopped'),
+                    intent: Intent.SUCCESS,
+                    iconName: 'pt-icon-thumbs-up'
+                  });
+                }
+                this.finishedExecution({ id, shellId: shell });
+              })
+              .catch((reason) => {
+                console.error(
+                  `Stopping Execution failed for ${id} / ${shell}! ${reason.message}`
+                );
+                NewToaster.show({
+                  message: globalString(
+                    'editor/view/executionStoppedError',
+                    reason.message
+                  ),
+                  intent: Intent.DANGER,
+                  iconName: 'pt-icon-thumbs-down'
+                });
+                this.finishedExecution({ id, shellId: shell });
+              });
+          }
+        }
+      )
+    );
+
+    // react to tree action change
+    this.reactions.push(
+      reaction(
+        () => this.props.store.treeActionPanel.isNewFormValues,
+        (isNewFormValues) => {
+          if (
+            isNewFormValues &&
+            this.props.store.editorPanel.activeEditorId === this.props.id
+          ) {
+            try {
+              const cm = this.editor.getCodeMirror();
+              cm.setValue(this.props.store.treeActionPanel.formValues);
+              this.setEditorValue(this.props.store.treeActionPanel.formValues);
+            } catch (e) {
+              console.log(e);
+            }
+            this.props.store.treeActionPanel.isNewFormValues = false;
+          }
+        }
+      )
+    );
+
+    // react to active editor change
+    this.reactions.push(
+      reaction(
+        () => this.props.store.editorPanel.activeEditorId,
+        (activeEditorId) => {
+          if (activeEditorId === this.id) {
+            requestAnimationFrame(() => {
+              this.refresh();
+            });
+          }
+        }
+      )
+    );
+
+    this.refresh = this.refresh.bind(this);
+    this.executeLine = this.executeLine.bind(this);
+    this.executeAll = this.executeAll.bind(this);
+    this.prettifyAll = this.prettifyAll.bind(this);
+    this.prettifySelection = this.prettifySelection.bind(this);
+  }
+
+  /**
+   * Component Did mount function, causes CodeMirror to refresh to ensure UI is scaled properly.
+   */
+  componentDidMount() {
+    this.refresh();
+
+    const _updateUnsavedFileIndicator = _.debounce(() => {
+      document.querySelector(`#unsavedFileIndicator_${this.id}`).style.opacity = this.doc.isClean() ? 0 : 1;
+    }, 300);
+    this._updateUnsavedFileIndicator = _updateUnsavedFileIndicator;
+    this.editor.getCodeMirror().on('change', _updateUnsavedFileIndicator);
+
+    _updateUnsavedFileIndicator();
+
+    const _markClean = this.doc.markClean.bind(this.doc);
+    this.doc.markClean = function() {
+      _markClean();
+      _updateUnsavedFileIndicator();
+    };
+
+    if (this.editorObject.path) {
+      this.props.store.watchFileBackgroundChange(this.id);
+    }
+
+    Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain.bind(this));
+    Broker.on(EventType.SWAP_SHELL_CONNECTION, this.swapShellConnection.bind(this));
+    if (this.props.editor) {
+      const { profileId, shellId } = this.props.editor;
+      Broker.on(
+        EventType.createShellExecutionFinishEvent(profileId, shellId),
+        this.finishedExecution
+      );
+    }
+  }
+
+  componentWillUnmount() {
+    _.forEach(this.reactions, r => r());
+
+    this._updateUnsavedFileIndicator.cancel();
+    this.editor.getCodeMirror().off('change', this._updateUnsavedFileIndicator);
+    this._updateUnsavedFileIndicator = null;
+
+    Broker.removeListener(
+      EventType.EXECUTION_EXPLAIN_EVENT,
+      this.executingExplain
+    );
+    if (this.props.editor) {
+      const { profileId, shellId } = this.props.editor;
+      Broker.removeListener(
+        EventType.createShellExecutionFinishEvent(profileId, shellId),
+        this.finishedExecution
+      );
+    }
+  }
+
+  setupAutoCompletion() {
+    CodeMirror.commands.autocomplete = (cm) => {
+      const currentLine = cm.getLine(cm.getCursor().line);
+      console.log('current line:', currentLine);
+      let start = cm.getCursor().ch;
+      let end = start;
+      while (
+        end < currentLine.length &&
+        /[\w|.$]+/.test(currentLine.charAt(end))
+      ) {
+        end -= 1;
+      }
+      while (start && /[\w|.$]+/.test(currentLine.charAt(start - 1))) {
+        start -= 1;
+      }
+      const curWord = start != end && currentLine.slice(start, end);
+      console.log('current word ', curWord);
+      if (!curWord) {
+        return;
+      }
+      const { id, shell } = this.getActiveProfileId();
+      if (!id || !shell) {
+        return;
+      }
+      console.log('send auto complete ', id, shell, curWord);
+      const service = featherClient().service('/mongo-auto-complete');
+      service
+        .get(id, {
+          query: {
+            shellId: shell,
+            command: curWord
+          }
+        })
+        .then((res) => {
+          console.log('write response ', res, cm.getDoc().getCursor());
+          if (res && res.length === 1 && res[0].trim().length === 0) {
+            return;
+          }
+          const cursor = cm.getDoc().getCursor();
+          const from = new CodeMirror.Pos(cursor.line, cursor.ch - curWord.length);
+          const options = {
+            hint() {
+              return {
+                from,
+                to: cm.getDoc().getCursor(),
+                list: res
+              };
+            }
+          };
+          cm.showHint(options);
+        });
+    };
+  }
+
+  getActiveProfileId() {
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+    if (editor) {
+      const shell = editor.shellId;
+      return { id: editor.profileId, shell };
+    }
+  }
+
+  getEditorValue() {
+    return this.doc.getValue();
+  }
+
+  setEditorValue(newValue) {
+    this.doc.setValue(newValue);
+  }
+
+  swapShellConnection(event) {
+    const {oldId, oldShellId, id, shellId} = event;
+    if (this.props.editor && oldId === this.props.editor.profileId && oldShellId === this.props.editor.shellId) {
+      Broker.removeListener(EventType.createShellExecutionFinishEvent(this.props.editor.profileId, this.props.editor.shellId), this.finishedExecution);
+      Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
+    }
+  }
+
+  /**
+   * executing explain parameters
+   * @param explainParam  explain parameter, it could be queryPlanner, executionStats, allPlansExecution
+   */
+  executingExplain(explainParam) {
+    console.log('send explain request ', explainParam);
+    if (
+      this.editor &&
+      this.props.store.editorPanel.activeEditorId == this.props.id &&
+      explainParam
+    ) {
+      // Determine code to send.
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId
+      );
+      const { id, shell } = this.getActiveProfileId();
+
+      const cm = this.editor.getCodeMirror(); // eslint-disable-line
+      let content = cm.getSelection();
+      if (cm.getSelection().length > 0) {
+        console.log('Executing Highlighted Text.');
+      } else {
+        console.log(
+          'No Highlighted Text, Executing Line: ',
+          cm.getCursor().line + 1
+        );
+        content = cm.getLine(cm.getCursor().line);
+      }
+      content = content.replace(/\n/g, '');
+      if (content.indexOf('.explain(') < 0) {
+        if (content.indexOf('count()') > 0) {
+          content = content.replace(
+            /\.count\(\)/,
+            '.explain("' + explainParam + '").count()'
+          );
+        } else if (content.indexOf('.update(') > 0) {
+          content = content.replace(
+            /\.update\(/,
+            '.explain("' + explainParam + '").update('
+          );
+        } else if (content.indexOf('.distinct(') > 0) {
+          content = content.replace(
+            /\.distinct\(/,
+            '.explain("' + explainParam + '").distinct('
+          );
+        } else if (content.indexOf('.aggregate') > 0) {
+          content = content.replace(
+            /\.aggregate\(/,
+            '.explain("' + explainParam + '").aggregate('
+          );
+        } else if (content.match(/;$/)) {
+          content = content.replace(/;$/, '.explain("' + explainParam + '");');
+        } else {
+          content += '.explain("' + explainParam + '")';
+        }
+      }
+
+      console.log(
+        '[',
+        this.props.store.editorPanel.activeDropdownId,
+        ']Sending data to feathers id ',
+        id,
+        '/',
+        shell,
+        ': "',
+        content,
+        '".'
+      );
+
+      editor.executing = true;
+      // Send request to feathers client
+      const service = featherClient().service('/mongo-sync-execution');
+      const filteredContent = content.replace(/\t/g, '  ');
+      service.timeout = 300000;
+      this.props.store.editorToolbar.isActiveExecuting = true;
+      service
+        .update(id, {
+        shellId: shell, // eslint-disable-line
+        commands: filteredContent,
+        responseType: 'explain'
+      })
+        .then((response) => {
+          runInAction(() => {
+            this.props.store.editorToolbar.isActiveExecuting = false;
+            editor.executing = false;
+          });
+          Broker.emit(EventType.EXPLAIN_OUTPUT_AVAILABLE, {
+            id,
+            shell,
+            command: filteredContent,
+            type: explainParam,
+            output: response
+          });
+        })
+        .catch((err) => {
+          console.log('error:', err);
+          NewToaster.show({
+            message: globalString('explain/executionError'),
+            intent: Intent.DANGER,
+            iconName: 'pt-icon-thumbs-down'
+          });
+          runInAction(() => {
+            editor.executing = false;
+            this.props.store.editorToolbar.isActiveExecuting = false;
+          });
+        });
+    }
+  }
+
+  /**
+   * Inserts the text at the current cursor position
+   * @param {String} text - The text to add to the editor.
+   */
+  insertAtCursor(text) {
+    const cm = this.editor.getCodeMirror();
+    cm.replaceSelection(text);
+  }
+
+  /**
+   * Refresh the code mirror instance to account for tab or layout changes.
+   */
+  refresh() {
+    if (this.editor) {
+      const cm = this.editor.getCodeMirror();
+      cm.refresh();
+      cm.focus();
+      this.setupAutoCompletion();
+      cm.scrollIntoView(cm.getCursor());
+    }
+  }
+
+  /**
+   * Prettify provided code
+   *
+   * @param {string} code - input code
+   * @return {string} prettified code
+   */
+  _prettify(code) {
+    // preprocess code
+    if (!this._prettify.preprocess) {
+      // lazy init [^\S\x0a\x0d] matches whitespaces without line feed with
+      // cross-platform support
+      const commentMongoCommandLinesRegex = /^[^\S\x0a\x0d]*(?:show|help|use|it|exit)(?:[^\S\x0a\x0d]+\S+|)$/gm;
+      const commentMongoCommandLinesReplacement = '//DBKODA//$&';
+      this._prettify.preprocess = (code) => {
+        code = code.replace(
+          commentMongoCommandLinesRegex,
+          commentMongoCommandLinesReplacement
+        );
+
+        return code;
+      };
+    }
+    code = this._prettify.preprocess(code);
+
+    // feed into prettier
+    code = Prettier.format(code, {});
+
+    // postprocess result
+    if (!this._prettify.postprocess) {
+      // lazy init
+      const uncommentMongoCommandLinesRegex = /^[^\S\x0a\x0d]*\/\/DBKODA\/\//gm;
+      const uncommentMongoCommandLinesReplacement = '';
+
+      const fixFunctionChainingRegex = /(\S)(\s+)\.(\S)/g;
+      const fixFunctionChainingReplacement = '$1.$2$3';
+
+      this._prettify.postprocess = (code) => {
+        code = code.replace(
+          uncommentMongoCommandLinesRegex,
+          uncommentMongoCommandLinesReplacement
+        );
+
+        code = code.replace(
+          fixFunctionChainingRegex,
+          fixFunctionChainingReplacement
+        );
+
+        return code;
+      };
+    }
+    code = this._prettify.postprocess(code);
+
+    return code;
+  }
+
+  /**
+   * Prettify All code.
+   */
+  prettifyAll() {
+    try {
+      this.setEditorValue(this._prettify(this.getEditorValue()));
+    } catch (err) {
+      NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      if (this.props.store.userPreferences.telemetryEnabled) {
+        EventLogging.recordManualEvent(
+          EventLogging.getTypeEnum().ERROR,
+          EventLogging.getFragmentEnum().EDITORS,
+          'Format All failed with error: ' + err
+        );
+      }
+    }
+  }
+
+  /**
+   * Prettify selected code.
+   */
+  prettifySelection() {
+    const cm = this.editor.getCodeMirror();
+    try {
+      cm.replaceSelection(this._prettify(cm.getSelection()).trim());
+    } catch (err) {
+      NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      if (this.props.store.userPreferences.telemetryEnabled) {
+        EventLogging.recordManualEvent(
+          EventLogging.getTypeEnum().ERROR,
+          EventLogging.getFragmentEnum().EDITORS,
+          'Format Selection failed with error: ' + err
+        );
+      }
+    }
+  }
+
+  @action.bound
+  finishedExecution(event) {
+    const editorIndex = this.props.store.editorPanel.activeEditorId;
+    if (!this.props.store.editors.get(editorIndex)) {
+      return;
+    }
+    this.props.store.editors.get(editorIndex).executing = false;
+    const editorValues = this.props.store.editors.values();
+    editorValues.map((v) => {
+      if (v.profileId === event.id && v.shellId === event.shellId) {
+        v.executing = false;
+      }
+    });
+    if (this.props.store.editorPanel.activeEditorId == this.props.id) {
+      this.props.store.editorToolbar.isActiveExecuting = false;
+      this.props.store.editorPanel.stoppingExecution = false;
+    }
+  }
+
+  /**
+   * Trigger an executeLine event by updating the MobX global store.
+   */
+  @action
+  executeLine() {
+    this.props.store.editorPanel.executingEditorLines = true;
+  }
+
+  /**
+   * Trigger an executeAll event by updating the MobX global store.
+   */
+  @action
+  executeAll() {
+    this.props.store.editorPanel.executingEditorAll = true;
+  }
+
+  /**
+   * Render method for the editor Context Menu.
+   */
+  renderContextMenu() {
+    return (
+      <Menu>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.executeLine}
+            text={globalString('editor/view/menu/executeSelected')}
+            iconName="pt-icon-chevron-right"
+            intent={Intent.NONE}
+          />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.executeAll}
+            text={globalString('editor/view/menu/executeAll')}
+            iconName="pt-icon-double-chevron-right"
+            intent={Intent.NONE}
+          />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.refresh}
+            text={globalString('editor/view/menu/refresh')}
+            iconName="pt-icon-refresh"
+            intent={Intent.NONE}
+          />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.prettifyAll}
+            text={globalString('editor/view/menu/formatAll')}
+            iconName="pt-icon-align-left"
+            intent={Intent.NONE}
+          />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.prettifySelection}
+            text={globalString('editor/view/menu/formatSelection')}
+            iconName="pt-icon-align-left"
+            intent={Intent.NONE}
+          />
+        </div>
+      </Menu>
+    );
+  }
+
+  /**
+   * Render method for the component.
+   */
+  render() {
+    const { connectDropTarget, isOver } = this.props; // eslint-disable-line
+    return connectDropTarget(
+      <div className="editorView">
+        <CodeMirrorEditor
+          ref={ref => (this.editor = ref)}
+          codeMirrorInstance={CodeMirror}
+          options={this.cmOptions}
+        />{' '}
+        {' '}
+        {' '}
+        {isOver &&
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              height: '100%',
+              width: '100%',
+              zIndex: 1,
+              opacity: 0.5,
+              backgroundColor: 'yellow'
+            }}
+          />}
+      </div>
+    );
+  }
+}
+
+export default DropTarget(DragItemTypes.LABEL, editorTarget, collect)(View);

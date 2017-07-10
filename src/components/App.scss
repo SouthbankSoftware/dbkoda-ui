@@ -1,0 +1,206 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @Author: guiguan
+// @Date:   2017-03-07T17:09:22+11:00
+// @Last modified by:   guiguan
+// @Last modified time: 2017-06-08T11:48:46+10:00
+@import '../styles/_defaultTheme.scss';
+$purpleFont: #b95cce;
+$resizerHoverColor: rgba($connectionButtonBackgroundColourHover, 0.7);
+.Resizer {
+  background: $navbarLeftBackground;
+  z-index: 20;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
+}
+
+.Resizer:active,
+.Resizer:hover {
+  -webkit-transition: all 2s ease;
+  transition: all 2s ease;
+}
+
+.Resizer.horizontal {
+  height: 11px;
+  margin: -5px 0;
+  border-top: 5px solid rgba(255, 255, 255, 0);
+  border-bottom: 5px solid rgba(255, 255, 255, 0);
+  cursor: row-resize;
+  width: 100%;
+}
+
+.Resizer.horizontal:active,
+.Resizer.horizontal:hover {
+  border-top: 5px solid $resizerHoverColor;
+  border-bottom: 5px solid $resizerHoverColor;
+}
+
+.Resizer.vertical {
+  width: 11px;
+  margin: 0 -5px;
+  border-left: 5px solid rgba(255, 255, 255, 0);
+  border-right: 5px solid rgba(255, 255, 255, 0);
+  cursor: col-resize;
+}
+
+.Resizer.vertical:active,
+.Resizer.vertical:hover {
+  border-left: 5px solid $resizerHoverColor;
+  border-right: 5px solid $resizerHoverColor;
+}
+
+.Pane .vertical .Pane1 {
+  overflow-y: scroll;
+}
+
+Resizer.disabled {
+  cursor: not-allowed;
+}
+
+Resizer.disabled:hover {
+  border-color: transparent;
+}
+
+.optInBoldDBKoda {
+  color: $purpleFont !important;
+}
+
+.horizontal.Pane2 {
+  background-color: $panelLeftBackground;
+}
+
+.DevTools>div>div:first-child>div {
+  opacity: .15;
+  transform: rotate(90deg);
+  right: -62px !important;
+}
+
+.DevTools>div>div:first-child>div:hover {
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+ul.profileListContextMenu {
+  display: flex;
+  flex-direction: column;
+  div.contextMenuGroup {
+    div.menuItemWrapper {
+      display: flex;
+      flex-direction: row;
+      svg.dbKodaSVG {}
+      li {}
+    }
+  }
+  div.menuItemWrapper {
+    display: flex;
+    flex-direction: row;
+    svg.dbKodaSVG {}
+    li {}
+  }
+}
+
+ul.pt-menu {
+  display: flex;
+  flex-direction: column;
+  div.contextMenuGroup {
+    div.menuItemWrapper {
+      display: flex;
+      flex-direction: row;
+      svg.dbKodaSVG {}
+      li {
+        width: 100%;
+      }
+    }
+  }
+  div.menuItemWrapper {
+    display: flex;
+    flex-direction: row;
+    svg.dbKodaSVG {}
+    li {
+      width: 100%;
+    }
+  }
+}
+
+div.savingDialog {
+  div.dialogButtons {
+    font-family: Arial, Helvetica, sans-serif;
+    h4 {
+      font-size: 12pt;
+    }
+    p {
+
+    }
+    a {
+      color: $buttonTextColour;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: lighter;
+    }
+    a.saveButton {
+      background: unset;
+      border: none;
+      color: $buttonTextColour;
+      background-color: $buttonSuccessBackground;
+    }
+    a.saveButton:hover {
+      background: unset;
+      color: $buttonTextColour;
+      background-color: $buttonSuccessBackgroundHover;
+    }
+    a.cancelButton {
+      font-weight: lighter;
+      color: $connectionButtonFontColour !important;
+      width: 7em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColour !important;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset !important;
+      -webkit-appearance: unset;
+    }
+    a.cancelButton:hover {
+      background: none;
+      border: 1px solid $connectionButtonBackgroundColourHover;
+      background-color: $connectionButtonBackgroundColourHover !important;
+      color: $connectionButtonFontColourHover !important;
+    }
+    a.dontSaveButton {
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 10em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $buttonDangerBackground;
+      box-shadow: unset;
+      -webkit-appearance: unset;
+    }
+    a.dontSaveButton:hover {
+      background: none;
+      color: $connectionButtonFontColour;
+      background-color: $buttonDangerBackgroundHover;
+    }
+  }
+}
+

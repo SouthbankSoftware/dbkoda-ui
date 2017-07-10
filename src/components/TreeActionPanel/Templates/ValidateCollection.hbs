@@ -1,0 +1,5 @@
+
+db.getSiblingDB("{{Database}}").
+   runCommand( { validate: "{{CollectionName}}", 
+                 full: {{full}}, scandata:{{scandata}}  } ); 
+ 

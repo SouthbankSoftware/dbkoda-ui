@@ -1,0 +1,441 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @Author: chris
+// @Date:   2017-05-15T09:44:11+10:00
+// @Email:  chris@southbanksoftware.com
+// @Last modified by:   guiguan
+// @Last modified time: 2017-06-09T16:32:37+10:00
+@import '../../styles/_defaultTheme.scss';
+.outputPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: scroll;
+  .outputTabView {
+    order: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .pt-tab-list {
+      margin-left: 0px;
+      .pt-tab {
+        margin-right: unset;
+        flex-grow: 0;
+        color: $tabFontColor;
+        background-color: $tabBackground;
+        outline: unset;
+        box-shadow: unset;
+      }
+      .pt-tab[aria-selected="true"] {
+        box-shadow: unset;
+        background-color: $tabBackgroundSelected;
+      }
+      .pt-tab:hover {
+        background-color: $tabBackgroundHover;
+        color: $tabFontColor !important;
+      }
+    }
+    .pt-tab-panel {
+      margin-top: 0px;
+      flex-grow: 1;
+
+      .outputEditor > .ReactCodeMirror {
+        height: calc(100% - 4px);
+
+        .CodeMirror-scroll {
+          margin-bottom: unset;
+          padding-bottom: unset;
+        }
+      }
+
+      .outputEditor {
+        flex: 1;
+        width: 100%;
+        order: 3;
+        min-height: 0;
+        padding-bottom: 30px;
+        .ReactCodeMirror {
+          .CodeMirror {
+            top: 0px;
+          }
+        }
+        .outputTerminal {
+          .CodeMirror-cursor {
+            display: block;
+          }
+          .CodeMirror {
+            bottom: 0px;
+          }
+          background-color: $terminalBackground;
+          position: absolute;
+          bottom: 0;
+          z-index: 10;
+          width: 100%;
+          order: 4;
+          flex: 1;
+          display: flex;
+          flex-direction: row;
+          height: 50px;
+          .outputCmdLine {
+            border-bottom-left-radius: 8px;
+            border-top-left-radius: 8px;
+            background-color: $terminalInput;
+            flex: 1;
+            order: 1;
+            margin-top: 12px;
+            margin-left: 12px;
+            height: 30px;
+            .CodeMirror {
+              border-bottom-left-radius: 8px;
+              border-top-left-radius: 8px;
+              div {
+                border-bottom-left-radius: 8px;
+                border-top-left-radius: 8px;
+                .CodeMirror-scroll {
+                  border-radius: 8px;
+                }
+              }
+            }
+          }
+          .executeCmdBtn {
+            flex: initial;
+            order: 2;
+            width: 40px;
+            height: 50px;
+            margin-right: 10px;
+            .pt-button {
+              position: relative;
+              background-color: $terminalButtonBackground;
+              color: $terminalButtonIcon !important;
+              width: 35px;
+              border-top-right-radius: 50%;
+              border-bottom-right-radius: 50%;
+              margin-right: 50px;
+              margin-top: 11px;
+              margin-bottom: 11px;
+              svg.dbKodaSVG {
+                position: absolute;
+                top: 50%;
+                bottom: 50%;
+                transform: translate(-50%, -50%);
+                width: 60%;
+                height: 60%;
+                fill: $buttonPrimaryIcon;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .outputToolbar {
+    order: 1;
+    background-color: $navbarRightBackground !important;
+    .pt-align-left {
+      span {
+        .pt-button {
+          position: relative;
+          svg.dbKodaSVG {
+            position: absolute;
+            top: 50%;
+            bottom: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            fill: $buttonTertiaryIcon;
+            path.st0 {
+              fill: none;
+            }
+          }
+        }
+        .clearOutputBtn {
+          background: $buttonDangerBackground !important;
+          color: $buttonDangerIcon !important;
+          svg.dbKodaSVG {
+            fill: $buttonDangerIcon;
+          }
+        }
+        .clearOutputBtn:hover {
+          background: $buttonDangerBackgroundHover !important;
+          color: $buttonDangerIcon !important;
+        }
+      }
+    }
+  }
+  div.CodeMirror-activeline pre.CodeMirror-line {
+    background-color: unset !important;
+  }
+  .CodeMirror-activeline-background {
+    background-color: $editorActiveLine !important;
+  }
+  .CodeMirror-activeline-gutter {
+    background-color: $editorBackground;
+  }
+  .CodeMirror-lines > div > div:nth-child(3) {
+    z-index: 19 !important;
+    background: unset !important;
+
+    div.CodeMirror-selected {
+      background-color: $editorSelectText;
+    }
+  }
+  .CodeMirror-cursor {
+    display: none;
+  }
+} //// Code Mirror CSS: ////
+/////////////////////////////
+div.CodeMirror span.CodeMirror-matchingbracket {
+  color: $white !important;
+  border: 1px solid $keywordFour;
+}
+
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
+  color: $keywordThree !important;
+  border: 1px solid $keywordThree;
+}
+
+span.cm-property {
+  color: $propFontColor !important;
+}
+
+span.cm-string {
+  color: $stringFontColor !important;
+}
+
+.CodeMirror-overlayscroll-vertical {
+  height: 0% !important;
+}
+
+.CodeMirror-scroll {
+  background-color: $editorBackground;
+  width: 100%;
+}
+
+.cm-s-ambiance .CodeMirror-linenumber {
+  color: $white;
+}
+
+.CodeMirror-linebackground {
+  background-color: $editorBackground !important;
+}
+
+.CodeMirror-line {
+  background-color: $editorBackground;
+}
+
+span.cm-mongo-operator {
+  color: $white !important;
+}
+
+.cm-variable {
+  color: $editorDefaultFontColor !important;
+}
+
+span.cm-db {
+  color: $keywordTwo !important;
+}
+
+span.cm-show {
+  color: $keywordOne !important;
+}
+
+span.cm-dbs {
+  color: $keywordTwo !important;
+}
+
+span.cm-use {
+  color: $keywordOne !important;
+}
+
+span.cm-collections {
+  color: $keywordTwo !important;
+}
+
+span.cm-users {
+  color: $keywordTwo !important;
+}
+
+span.cm-roles {
+  color: $keywordTwo !important;
+}
+
+span.cm-profile {
+  color: $keywordTwo !important;
+}
+
+span.cm-databases {
+  color: $keywordTwo !important;
+}
+
+span.cm-it {
+  color: $keywordOne !important;
+}
+
+span.cm-dbkoda-prompt {
+  color: $keywordFour !important;
+}
+
+span.cm-mongos-prompt {
+  color: $keywordFour !important;
+}
+
+.CodeMirror-gutters {
+  background-color: $editorBackground !important;
+  border-right: 1px solid $editorBackground !important;
+  box-shadow: none !important;
+}
+
+.CodeMirror-gutter {
+  background-color: $editorBackground !important;
+}
+
+.CodeMirror-foldmarker {
+  color: $keywordTwo;
+  font-family: arial;
+  line-height: .3;
+  cursor: pointer;
+}
+
+.CodeMirror-foldgutter {
+  width: .7em;
+  margin-right: 5px !important;
+}
+
+.CodeMirror-foldgutter-open {
+  padding-left: 5px !important;
+  padding-left: 5px !important;
+}
+
+.CodeMirrror-foldgutter-folded {
+  padding-left: 5px !important;
+  padding-left: 5px !important;
+}
+
+.cm-s-ambiance .CodeMirror-guttermarker-subtle {
+  color: $white !important;
+  cursor: pointer;
+}
+
+.CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
+  color: #555;
+  cursor: pointer;
+}
+
+.CodeMirror-foldgutter-open:after {
+  content: $downArrow;
+}
+
+.CodeMirror-foldgutter-folded:after {
+  content: $rightArrow;
+}
+
+.lint-error-icon {
+  color: $keywordThree;
+  font-style: oblique;
+  font-size: 20px;
+  float: right;
+}
+
+.CodeMirror-cursor {
+  border-left: 1px solid $white;
+  border-right: none;
+  width: 0;
+}
+
+/* Shown when moving in bi-directional text */
+
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid silver;
+}
+
+.cm-fat-cursor .CodeMirror-cursor {
+  width: auto;
+  border: 0 !important;
+  background: #7e7;
+}
+
+.cm-fat-cursor div.CodeMirror-cursors {
+  z-index: 1;
+}
+
+.cm-animate-fat-cursor {
+  width: auto;
+  border: 0;
+  -webkit-animation: blink 1.06s steps(1) infinite;
+  -moz-animation: blink 1.06s steps(1) infinite;
+  animation: blink 1.06s steps(1) infinite;
+  background-color: #7e7;
+}
+
+@-moz-keyframes blink {
+  0% {
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+  }
+}
+
+@-webkit-keyframes blink {
+  0% {
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+  }
+}
+
+@keyframes blink {
+  0% {
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+  }
+}
+
+.cm-tab {
+  display: inline-block;
+  text-decoration: inherit;
+}
+
+.CodeMirror-rulers {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -50px;
+  bottom: -20px;
+  overflow: hidden;
+}
+
+.CodeMirror-ruler {
+  border-left: 1px solid #ccc;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+}
+
+.notVisible {
+  display: none;
+}

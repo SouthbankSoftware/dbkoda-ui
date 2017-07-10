@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DragLabel matches snapshot 1`] = `
+<span
+  style={
+    Object {
+      "cursor": "move",
+      "opacity": 1,
+    }
+  }
+>
+  long:8888
+</span>
+`;

@@ -1,0 +1,40 @@
+{
+    "Title": "Drop Index",
+    "DefaultValues": {
+        "function": "dbkoda_DropIndexPreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parentDB"
+        }, 
+        {
+            "name": "CollectionName",
+            "value": "treeNode.parentCOL"
+        },
+        {
+            "name": "IndexName",
+            "value": "treeNode"
+        }
+          ]
+    },
+    "Fields": [
+       {
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true,
+            "keyValue": true
+        },
+      {
+            "name": "CollectionName",
+            "type": "Text",
+            "readOnly": true,
+            "keyValue": true
+        },
+        {
+            "name": "IndexName",
+            "type": "Text",
+            "tooltip": "Name of the index (optional)",
+            "readOnly":true,
+            "keyValue": true
+        }
+    ]
+}

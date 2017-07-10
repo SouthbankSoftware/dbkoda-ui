@@ -1,0 +1,15 @@
+{
+    "Title": "Get Recent Log Entries",
+    "DefaultValues": {
+        "function": "dbkodaGetLogPreFill"
+    },
+    "Fields": [{
+            "name": "logType",
+            "label" : "Log Component",
+            "type": "Combo",
+            "readOnly": false,
+            "tooltip" : "'global' for all log entries, or 'rs' or startupWarnings'",
+            "lookup": "dbkodaGetLogArgs"
+        }  
+    ]
+}

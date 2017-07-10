@@ -1,0 +1,18 @@
+{
+    "Title": "Stepdown primary",
+    "AutoExecute": true,
+    "Fields": [ {
+            "name": "stepdownSecs",
+            "type": "Numeric",
+            "default":60,
+            "tooltip":"Number of seconds the old primary remains ineligible",
+            "readOnly": false 
+        },
+        {
+            "name": "catchUpSecs",
+            "type": "Numeric",
+            "default":10,
+            "tooltip":"Number of seconds to wait for an eligible secondary",
+            "readOnly": false 
+        }]
+}

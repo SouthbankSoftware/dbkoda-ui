@@ -1,0 +1,229 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @Author: Wahaj Shamim <wahaj>
+// @Date:   2017-05-12T15:11:29+10:00
+// @Email:  wahaj@southbanksoftware.com
+// @Last modified by:   chris
+// @Last modified time: 2017-06-13T09:42:25+10:00
+// Theme 1 Colours: These should be externalized eventually:
+
+//Theme Colors:
+$panelLeftBackground: #363951;
+$navbarLeftBackground: #272a3a;
+$buttonSecondaryBackground: #373a4a;
+$buttonSecondaryBackgroundHover: #0e101b;
+$welcomeViewButtonHoverColor: #383e4f;
+$welcomeViewBackgroundColor: #2f3344;
+$welcomeViewIconBG: #272a3a;
+$welcomeViewIconBGHover: #383e4f;
+$welcomeViewSocialMediaBG: #272a3a;
+$welcomeViewKeyboardShortcutsBG: #272a3a;
+$profileListTabHover: rgba(39, 42, 58, 0.2);
+$profileListSelected: rgba(39, 42, 58, 0.5);
+
+// Scroll Bars:
+$scrollBarBackground: #474a5a;
+$scrollBarTopAndBottom: rgba(0, 0, 0, 0.2);
+$scrollBarThumb: #575a6a;
+
+$connectionCheckboxBackgroundColour: #363951;
+$connectionCheckboxBackgroundColourHover: #565971;
+$connectionButtonBackgroundColour: #363951;
+$connectionButtonBackgroundColourHover: #565971;
+// Auto-Complete Menu:
+$hintsBackgroundColor: #272a3a;
+$hintsColor: #BFBEC0;
+$hintsBackgroundActiveColor: #363951;
+
+//Toast Notifications:
+$toastBackgroundColourSuccess: #DBEED3;
+$toastFontColourSuccess: #356B36;
+$toastCloseIconColourSuccess: rgba(53, 107, 54, 0.5);
+$toastBackgroundColourWarning: #FCF7DF;
+$toastFontColourWarning: #7F6234;
+$toastCloseIconColourWarning: rgba(127, 98, 52, 0.5);
+$toastBackgroundColourDanger: #F0D9D9;
+$toastFontColourDanger: #9F3C3A;
+$toastCloseIconColourDanger: rgba(159, 60, 58, 0.5);
+$toastBackgroundColourInfo: #D4EAF6;
+$toastFontColourInfo: #2B6584;
+$toastCloseIconColourInfo: rgba(43, 101, 132, 0.5);
+// Dialogs
+$dialogButtonBorder: rgba(154, 154, 155, 0.6);
+// ToolTips
+$toolTipBackgroundColour: #C0C0C0;
+$toolTipFontColour: #4F4F4F;
+$tabFontColor: #8B8B8B;
+$tabBackground: #323232;
+$tabBackgroundHover: #292929;
+$tabButtonHover: #BFBEC0;
+$tabBackgroundSelected: #202020;
+$panelRightBackground: #202020;
+//Editor:
+$editorBackground: #202020;
+$editorActiveLine: rgba(100, 100, 100, 0.15);
+$editorSelectText: rgba(200, 200, 200, 0.15);
+$editorTextComments: #8B8B8B;
+$editorDefaultFontColor: #FFB795;
+$keywordOne: #179DEA;
+$keywordTwo: #B95CCE;
+$keywordThree: #DB3737;
+$keywordFour: #8A9BA8;
+$propFontColor: #aac6e3;
+$stringFontColor: #3daf41;
+$propertyStringFontColor: #2cee31;
+$white: #ffffff;
+$black: #000000;
+//Welcome View:
+$welcomeViewBrightBackgroundColor: #314249;
+$welcomeViewDividerColor: #9A9A9B;
+$welcomeViewDividerTransparent: rgba(154, 154, 155, 0.4);
+$welcomeViewButtonBorderColor: rgba(154, 154, 155, 0.6);
+$welcomeViewOptoutFontColor: #9A9A9B;
+$welcomeViewIconColor: #BFBEC0;
+$welcomeViewSocialMediaIcons: #9A9A9B;
+$welcomeViewSocialMediaText: #9A9A9B;
+$welcomeViewFontColor: #BFBEC0;
+$welcomeViewFontColorBright: #9A9A9B;
+$welcomeViewFontColorDark: #AFAEB0;
+$welcomeViewLinkColor: #4b98c6;
+//Profile List
+$profileListIconColor: rgba(191, 190, 192, 0.3);
+$profileListFontColor: #BFBEC0;
+$profileListDividerColor: #272a3a;
+//Output:
+$terminalBackground: #494849;
+$terminalInput: #202020;
+$terminalButtonBackground: #BFBEC0;
+$terminalButtonIcon: #58595B;
+//NavBars:
+$navbarRightBackground: #494849;
+$navbarRighHeading: #BFBEC0;
+$navbarSecondaryBackground: #323232;
+$navbarLeftHeading: #BFBEC0;
+//Buttons:
+$buttonTextColour: #BFBEC0;
+$buttonSuccessBackground: #24A26E;
+$buttonSuccessBackgroundHover: #1F7F53;
+$buttonPrimaryBackground: #BFBEC0;
+$buttonPrimaryBackgroundHover: #9E9E9E;
+$buttonPrimaryIcon: #58595B;
+$buttonSecondaryIcon: #BFBEC0;
+$buttonTertiaryBackground: #202020;
+$buttonTertiaryBackgroundHover: #3A3A3A;
+$buttonTertiaryBackgroundDisabled: #303030;
+$buttonTertiaryIcon: #8B8B8B;
+$buttonDangerBackground: #8A4148;
+$buttonDangerBackgroundHover: #663139;
+$buttonDangerIcon: #BFBEC0;
+// New Connection Panel:
+$connectionHeaderFontColour: #BFBEC0;
+$connectionCloseIconColor: rgba(191, 190, 192, 0.5);
+$connectionCloseIconHover: #BFBEC0;
+$connectionActiveTextFieldBackgroundColour: #FFFFFF;
+$connectionActiveTextFieldTextColour: rgba(86, 85, 86, 0.75);
+$connectionTextFieldBackgroundColour: #88888B;
+$connectionTextFieldFontColour: #BFBEC0;
+$connectionRadioFieldColour: #BFBEC0;
+$connectionHeadingsFontColour: #BFBEC0;
+$connectionSubHeadingsFontColour: #FFFFFF;
+$connectionButtonFontColour: #BFBEC0;
+$connectionButtonFontColourHover: #DFDEE0;
+$connectionButtonBorderColour: rgba(191, 190, 192, 0.5);
+$connectionButtonBackgroundColourConnect: #24A26E;
+$connectionButtonBackgroundColourConnectHover: #1f7f53;
+$connectionButtonBackgroundColourReset: #8A4148;
+$connectionButtonBackgroundColourResetHover: #663139;
+$connectionCheckboxColour: rgba(191, 190, 192, 0.75);
+$connectionWarningFontColour: #9A5158;
+// Tree
+$treeMessageColor: rgba(154, 154, 155, 0.8);
+$treeBorderColor: rgba(154, 154, 155, 0.4);
+$treeIconColor: rgba(154, 154, 155, 0.8);
+$treeIconBGColor: rgba(154, 154, 155, 0.2);
+$treeLoaderColor: rgba(154, 154, 155, 0.8);
+$treeLoaderColorBG: rgba(154, 154, 155, 0.4);
+//Searchbox:
+$searchPrimaryBackground: #BFBEC0;
+$searchPrimaryFontColor: #494849;
+$searchSecondaryBackground: #202020;
+$searchSecondaryFontColor: #BFBEC0;
+$downArrow: "\25BE";
+$rightArrow: "\25B8";
+// Fields:
+// =======
+//
+// Toolbar Fields:
+// ---------------
+$selectDarkPrimaryBackground: #313131;
+$selectDarkBorderColor: #515151;
+// Form Fields:
+// ------------
+$fieldGroupPrimaryBackground: rgba(39, 42, 58, 1);
+$fieldGroupSecondaryBackground: rgba(33, 46, 51, 0.5);
+$fieldGroupTertiaryBackground: rgba(33, 46, 51, 0.15);
+$fieldGroupHeaderIcon: #2D3D46;
+$fieldGroupHeaderDangerIcon: #8A4148;
+$fieldGroupListIcon: #BFBEC0;
+// fields are input, numericinput, select, etc
+$fieldHeadingFontColor: #BFBEC0; // for Form header, and field Labels
+$fieldLabelFontColor: #58585B; // for Fields with labels like Radio boxes, Check boxes
+$fieldBrightBackgroundColor: #FFFFFF;
+$fieldBrightBorderColor: #FFFFFF;
+$fieldBrightFontColor: #565556;
+$fieldBrightPlaceholderFontColor: rgba(86, 85, 86, 0.5);
+$fieldBrightIconColor: #2D3D46;
+$fieldPrimaryButtonBackground: #212E33;
+$fieldPrimaryButtonHover: #3a3e51;
+$fieldPrimaryButtonActive: #1d292d;
+$fieldPrimaryButtonFontColor: #BFBEC0;
+$fieldSecondaryButtonBackground: #8A4148;
+$fieldSecondaryButtonHover: #95545a;
+$fieldSecondaryButtonActive: #7c3a40;
+$fieldSecondaryButtonFontColor: #BFBEC0;
+$fieldTertiaryButtonBackground: #2D3D46;
+$fieldTertiaryButtonBorder: #BFBEC0;
+$fieldTertiaryButtonFontColor: #BFBEC0;
+// explain panel
+$explainLabelColor: #BFBEC0;
+$explainSwitchBtnColor: #313131;
+$explainSwitchBtnBorderColor: rgb(74, 74, 74);
+$explainStageHeaderBkColor: #2D3D46;
+$explainStageTailBkColor: #516E72;
+$explainStage1Color: rgb(40, 54, 61);
+$explainStage2Color: rgb(47, 64, 71);
+$explainStage3Color: rgb(57, 77, 83);
+$explainStage4Color: rgb(64, 87, 93);
+$explainStage5Color: rgb(71, 99, 103);
+$explainStageTableHeaderColor: #5D3750;
+$explainTableEvenBKColor: rgb(36, 36, 36);
+$explainPanelBKColor: rgb(29, 29, 29);
+$explainHeaderLabelFontSize: 15px;
+$explainLabelFontSize: 12px;
+$explainStatisticTableHeaderBkColor: #607747;
+$explainShardStatisticTableHeaderBkColor: #4F5A6E;
+$explainStepElapseTimeBestColor: #8a4148;
+$explainStepElapseTimeWorstColor: #24a26e;
+
+$detailsBackground: #1C1D1D;
+$detailsFontColor: #BFBEC0;
+$chartTooltipBackground: rgba(255,255,255, 0.7);
+$chartItemHover: rgba(86, 86, 86, 0.15);

@@ -1,0 +1,69 @@
+{
+    "Title": "Alter User",
+    "DefaultValues": {
+        "function": "dbkoda_AlterUserPreFill",
+        "arguments": [{
+            "name": "UserId",
+            "value": "treeNode"
+        }, {
+            "name": "parentDB",
+            "value": "treeNode.parentDB"
+        }, {
+            "name": "parentCOL",
+            "value": "treeNode.parentCOL"
+        }]
+    },
+    "Fields": [{
+            "name": "UserId",
+            "label": "User ID",
+            "type": "Text",
+            "readOnly": true,
+            "keyValue": true
+        },
+        {
+            "name": "Database",
+            "label": "Database",
+            "type": "Select",
+            "readOnly": true,
+            "lookup": "dbkoda_listdb"
+        },
+        {
+            "name": "UserName",
+            "label": "User Name",
+            "type": "Text",
+            "readOnly": true
+        },
+        {
+            "name": "Password",
+            "label": "Password",
+            "type": "Text"
+        },
+        {
+            "name": "Roles",
+            "label": "Database Roles",
+            "type": "Table",
+            "columns": [{
+                "name": "Database",
+                "label": "Database",
+                "type": "Select",
+                "lookup": "dbkoda_listdb"
+            }, {
+                "name": "Role",
+                "label": "Role",
+                "type": "Select",
+                "lookup": "dbkoda_listRoles",
+                "lookup_arguments": [{
+                    "name": "db",
+                    "value": "treeNode.parentDB"
+                }]
+            }]
+        },
+        {
+            "name": "CustomData",
+            "label": "Custom JSON",
+            "type": "Text",
+            "optional": true
+        }
+    ],
+    "Validate": "dbkoda_validateUser"
+}

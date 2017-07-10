@@ -1,0 +1,9 @@
+{
+    "Title": "sh.status()",
+    "AutoExecute": true,
+    "Fields": [ {
+            "name": " ",
+            "type": "Text",
+            "readOnly": true 
+        }]
+}

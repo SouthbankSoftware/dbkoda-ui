@@ -1,0 +1,490 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+$labelColor: #179dea;
+$contentColor: white;
+@import "../../styles/_defaultTheme.scss";
+.explain-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-x: scroll;
+  background-color: $explainPanelBKColor;
+
+  .explain-header {
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    min-height: 30px;
+    margin: 10px 10px 0px 10px;
+
+    .explain-label {
+      color: $explainLabelColor;
+      line-height: 30px;
+      font-size: $explainHeaderLabelFontSize;
+    }
+
+    .explain-view-switch-button {
+      margin-left: auto;
+      font-size: $explainLabelFontSize;
+      margin-right: 30px;
+      background-color: $explainSwitchBtnColor !important;
+      border: 1px solid $explainSwitchBtnBorderColor;
+      width: 85px;
+      height: 30px;
+      span {
+        color: $explainLabelColor;
+      }
+    }
+  }
+
+  .explain-stage-progress {
+    display: flex;
+    flex-direction: row;
+    .explain-stage-wrapper {
+      display: flex;
+      flex-direction: row;
+      margin: 5px 0px;
+      flex: 1;
+      //max-height: 45px;
+      max-width: 200px;
+      .explain-stage-shard-name {
+        align-self: center;
+        color: $explainLabelColor;
+        margin-top: 0px;
+      }
+    }
+    .explain-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      background: $explainStageTailBkColor;
+      max-width: 200px;
+      height: 35px;
+      line-height: 35px;
+      margin-right: 15px;
+      color: $explainLabelColor;
+      text-align: center;
+      font-size: $explainLabelFontSize;
+      .stage-label {
+        flex: 1;
+        color: white;
+      }
+      .after {
+        position: absolute;
+        right: -27px;
+        border-left: 17px solid $explainStageTailBkColor;
+        border-top: 17.5px solid transparent;
+        border-bottom: 17.5px solid transparent;
+        top: 0;
+        border-right: 10px solid transparent;
+      }
+    }
+
+    //.explain-stage:after,
+    .explain-stage:before {
+      content: " ";
+      position: absolute;
+      top: 0;
+      right: -16px;
+      width: 0;
+      height: 0;
+      border-top: 18px solid transparent;
+      border-bottom: 18px solid transparent;
+      border-left: 17px solid $explainStageTailBkColor;
+      z-index: 2;
+      transition: border-color 0.2s ease;
+    }
+
+    .explain-stage:before {
+      right: auto;
+      left: 0;
+      border-left: 17px solid $explainPanelBKColor;
+      z-index: 0;
+    }
+
+    .explain-stage-array {
+      //background: $explainStageHeaderBkColor !important;
+    }
+    //.explain-stage-array:after {
+    //  border-left-color: $explainStageHeaderBkColor !important;
+    //}
+
+    .empty-explain-stage {
+      background-color: transparent !important;
+    }
+    .empty-explain-stage:after {
+      border-left-color: transparent !important;
+    }
+    //  tree
+    .explain-stage-tree-root {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      max-width: 200px;
+      .explain-stage:nth-child(n+2) {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .explain-shards-stage-progress {
+    .explain-stage {
+      flex: 1;
+      position: relative;
+      background: $explainStage1Color;
+      max-width: 200px;
+      height: 35px;
+      line-height: 35px;
+      margin-right: 15px;
+      color: $explainLabelColor;
+      text-align: center;
+      font-size: $explainLabelFontSize;
+    }
+  }
+
+  .explain-stages-table {
+    margin-top: 40px;
+
+    .explain-worst-shard-description {
+      color: $explainLabelColor;
+      margin-bottom: 10px;
+    }
+
+    .stage-header {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+      color: $explainLabelColor;
+      .column-header {
+        background-color: $explainStageTableHeaderColor;
+        flex: 1;
+        padding-right: 10px;
+        padding-left: 10px;
+        font-size: $explainLabelFontSize;
+      }
+      .column-header:nth-child(1) {
+        flex: 1;
+      }
+      .column-header:nth-child(2) {
+        flex: 2;
+      }
+      .column-header:nth-child(3) {
+        flex: 1;
+        text-align: right;
+      }
+      .column-header:nth-child(4) {
+        flex: 1;
+        text-align: right;
+      }
+      .column-header:nth-child(5) {
+        flex: 1;
+        text-align: right;
+      }
+      .column-header:nth-child(6) {
+        flex: 3;
+      }
+    }
+    .stage-row {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      min-height: 30px;
+      line-height: 30px;
+
+      .stage-cell {
+        color: $explainLabelColor;
+        padding-right: 10px;
+        padding-left: 10px;
+        word-break: break-word;
+        font-size: $explainLabelFontSize;
+        flex: 1;
+      }
+      .stage-cell:nth-child(1) {
+        flex: 1;
+      }
+      .stage-cell:nth-child(2) {
+        flex: 2;
+      }
+      .stage-cell:nth-child(3) {
+        flex: 1;
+        .text {
+          min-width: 50px;
+          text-align: right;
+        }
+      }
+      .stage-cell:nth-child(4) {
+        flex: 1;
+        .text {
+          min-width: 50px;
+          text-align: right;
+        }
+      }
+      .stage-cell:nth-child(5) {
+        flex: 1;
+        .text {
+          min-width: 50px;
+          text-align: right;
+        }
+      }
+      .stage-cell:nth-child(6) {
+        flex: 3;
+      }
+    }
+    .stage-row:nth-child(odd) {
+      background: $explainTableEvenBKColor;
+    }
+  }
+  .explain-statistic-container-view {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+  }
+  .explain-statistic-view {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    font-size: $explainLabelFontSize;
+    .header {
+      background-color: $explainStatisticTableHeaderBkColor;
+      height: 30px;
+      line-height: 30px;
+      display: flex;
+      flex-direction: row;
+      div {
+        flex: 1;
+        margin-left: 10px;
+        text-align: center;
+        color: $explainLabelColor;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+      min-height: 30px;
+      line-height: 30px;
+      div {
+        flex: 1;
+        margin-left: 10px;
+        color: $explainLabelColor;
+      }
+      div:nth-child(2) {
+        text-align: right;
+        margin-right: 10px;
+      }
+    }
+    .row:nth-child(odd) {
+      background-color: $explainTableEvenBKColor;
+    }
+  }
+
+  .explain-shards-statistic-view {
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 30px;
+    font-size: $explainLabelFontSize;
+    .header {
+      background-color: $explainShardStatisticTableHeaderBkColor;
+      height: 30px;
+      line-height: 30px;
+      display: flex;
+      flex-direction: row;
+      div {
+        flex: 1;
+        margin-left: 10px;
+        text-align: center;
+        color: $explainLabelColor;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+      min-height: 30px;
+      line-height: 30px;
+      div {
+        flex: 1;
+        margin-left: 10px;
+        color: $explainLabelColor;
+        text-align: center;
+      }
+      div:nth-child(2) {
+        text-align: right;
+        margin-right: 10px;
+      }
+    }
+    .row:nth-child(odd) {
+      background-color: $explainTableEvenBKColor;
+    }
+  }
+
+  .explain-command-panel {
+    //height: 300px;
+    //width: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    .namespace {
+      display: flex;
+      flex-direction: row;
+      height: 20px;
+      .value {
+        margin-left: 20px;
+        color: $explainLabelColor;
+      }
+    }
+    .label {
+      color: rgb(22, 160, 187);
+    }
+  }
+}
+
+.explain-error-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 100%;
+  background-color: $explainPanelBKColor;
+
+  .header {
+    margin: 20px 0px;
+    color: $explainLabelColor;
+  }
+
+  .output {
+    color: $explainLabelColor;
+    margin: 20px 0px;
+
+  }
+  .label {
+    color: rgb(22, 160, 187);
+  }
+}
+
+.explain-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: scroll;
+  padding: 0 !important;
+}
+
+.explain-tabs {
+  display: flex;
+  flex: 1;
+  order: 2;
+  flex-direction: row;
+  .pt-tab-list {
+    margin: 0;
+  }
+}
+
+.explain-tab-title-button {
+  padding: 0;
+}
+
+.explain-json-raw-panel {
+  flex: 1;
+  overflow-x: auto;
+}
+
+.explain-view-panel {
+  flex: 1;
+  background-color: $explainPanelBKColor;
+  margin: 10px;
+  overflow-y: auto;
+}
+
+.explain-not-visible {
+  display: none;
+}
+
+.explain-visible {
+  display: flex;
+}
+
+.explain-command-info {
+  display: flex;
+  ul li {
+    list-style: none;
+    margin-bottom: 10px;
+  }
+  ul {
+    float: left;
+    padding-left: 10px;
+
+  }
+  ul .label {
+    color: $labelColor;
+  }
+}
+
+.explain-output-list-label {
+  list-style: none;
+  color: $labelColor;
+}
+
+.explain-output-list-content {
+  list-style: none;
+  color: $contentColor;
+  width: 100px;
+  text-align: right;
+}
+
+.explain-output-column-label {
+  float: left;
+  flex: 1;
+}
+
+.explain-output-column-content {
+  float: left;
+  flex: 2;
+
+}
+
+.explain-stage-button {
+  margin-left: 5px;
+  margin-top: 5px;
+  height: 10px;
+}
+
+.explain-stage-detail-popup {
+  padding: 0px;
+  .pt-popover-content ul:first-child {
+    overflow-y: auto;
+    height: 300px;
+  }
+}
+
+.explain-stage-popover {
+  flex: 0.8;
+}

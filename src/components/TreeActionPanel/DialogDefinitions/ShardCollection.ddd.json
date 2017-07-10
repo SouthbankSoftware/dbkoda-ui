@@ -1,0 +1,64 @@
+{
+    "Title": "Shard Collection",
+    "DefaultValues": {
+        "function": "dbkoda_ShardCollectionPreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parentDB"
+        }, {
+            "name": "CollectionName",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true
+        },
+        {
+            "name": "CollectionName",
+            "type": "Text",
+            "readOnly": true
+        },
+        {
+            "name": "Keys",
+            "type": "Table",
+            "columns": [{
+                    "name": "AttributeName",
+                    "label": "Attribute",
+                    "tooltip": "Name of the attribute shard upon",
+                    "type": "Combo",
+                    "lookup": "dbkodaListAttributes",
+                    "lookup_arguments": [{
+                            "name": "db",
+                            "value": "treeNode.parentDB"
+                        },
+                        {
+                            "name": "collection",
+                            "value": "treeNode"
+                        }
+                    ]
+                },
+                {
+                    "name": "Direction",
+                    "Label": "Ascending?",
+                    "type": "Select",
+                    "tooltip": "1 for ascending index, -1 for descending index",
+                    "lookup": "dbkoda_indexOptions" 
+                }
+            ]
+        },
+        {
+            "name": "Unique",
+            "tooltip": "Enforce uniqueness on shard key?",
+            "type": "Boolean"
+        },
+        {
+            "name": "numInitialChunks",
+            "tooltip": "number of initial chunks for empty hashed shard key",
+            "type": "Numeric",
+            "optional": true,
+            "rules": "integer"
+        } 
+    ]
+}

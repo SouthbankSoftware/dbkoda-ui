@@ -1,0 +1,31 @@
+{
+    "Title": "Set Profiling Level",
+    "DefaultValues": {
+        "function": "dbkoda_setProfilingLevelPreFill",
+        "arguments": [{
+            "name": "dbName",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true
+        },
+        {
+            "name": "level",
+            "lable": "Profiling level", 
+            "type": "Numeric",
+            "readOnly": false,
+            "tooltip": "0=off, 1=slow operations, 2=all operations",
+            "rules": "required|integer|between:0,2"
+        },
+        {
+            "name": "slowms",
+            "label" : "Slow threshold (ms)",
+            "type": "Numeric",
+            "tooltip": "Number of milliseconds to define slow operations",
+            "rules": "integer"
+        }
+    ]
+}

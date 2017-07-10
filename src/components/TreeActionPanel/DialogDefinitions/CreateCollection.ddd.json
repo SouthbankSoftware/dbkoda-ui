@@ -1,0 +1,81 @@
+{
+    "Title": "Create Collection",
+    "DefaultValues": {
+        "function": "dbkoda_CreateCollectionPreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true,
+            "optional": false,
+            "rules": "required",
+            "lookup": "dbkoda_listdb"
+        },
+        {
+            "name": "CollectionName",
+            "label": "Collection Name",
+            "type": "Text",
+            "readOnly": false,
+            "rules": "required"
+        },
+        {
+            "name": "capped",
+            "type": "Boolean",
+            "tooltip" : "Capped collections act as fixed size circular buffers",
+            "readOnly": false,
+            "rules": "boolean"
+        },
+        {
+            "name": "size",
+            "label": "Max bytes",
+            "tooltip": "maximum size in bytes for a capped collection",
+            "type": "Numeric",
+            "readOnly": false,
+            "rules": "integer"
+        },
+        {
+            "name": "max",
+            "label": "Max documents",
+            "tooltip": "maximum number of documents in a capped collection",
+            "type": "Numeric",
+            "readOnly": false,
+            "rules": "integer"
+        },
+        {
+            "name": "storageEngine",
+            "label": "Storage Engine options",
+            "type": "Text",
+            "tooltip": "Storage Engine specific options (JSON)",
+            "readOnly": false
+        },
+        {
+            "name": "validator",
+            "label": "Validation document",
+            "type": "Text",
+            "tooltip": "Document that defines Validation Rule for collection",
+            "readOnly": false
+        },
+        {
+            "name": "validationLevel",
+            "label": "Validation Level",
+            "type": "Select",
+            "tooltip": "Determines how strictly MongoDB applies validation",
+            "optional": true,
+            "readOnly": false,
+            "lookup": "dbkoda_validationLevel"
+        },
+        {
+            "name": "validationAction",
+            "label": "Validation Action",
+            "type": "Select",
+             "tooltip": "Error or Warn on invalid documents?",
+            "optional": true,
+            "readOnly": false,
+            "lookup": "dbkoda_validationAction"
+        }
+    ]
+}

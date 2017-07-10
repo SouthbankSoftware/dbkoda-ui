@@ -1,0 +1,79 @@
+{
+    "Title": "Aggregation",
+    "AutoExecute": false,
+    "DefaultValues": {
+        "function": "dbkoda_AggregatePreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parentDB"
+        }, {
+            "name": "CollectionName",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true,
+            "rules": "required"
+        },
+        {
+            "name": "CollectionName",
+            "type": "Text",
+            "readOnly": true,
+            "rules": "required"
+        },
+        {
+          "name":"InitialFilter",
+          "label":"Specify Initial Filter?",
+          "type": "Boolean"
+        },
+        {
+            "name": "FilterKeys",
+            "label": "Initial Filter conditions",
+            "type": "Table",
+            "columns": [{
+                    "name": "AttributeName",
+                    "label": "Attribute",
+                    "tooltip": "Name of the attribute to be filtered",
+                    "type": "Combo",
+                    "lookup": "dbkodaListAttributes",
+                    "lookup_arguments": [{
+                            "name": "db",
+                            "value": "treeNode.parentDB"
+                        },
+                        {
+                            "name": "collection",
+                            "value": "treeNode"
+                        }
+                    ]
+
+                },
+                {
+                    "name": "Value",
+                    "Label": "Value to filter",
+                    "type": "Text",
+                    "tooltip": "Enter the value to search for (quote strings please)"
+                }
+            ]
+        },
+        {
+            "name": "PipeLine",
+            "type": "Table",
+            "columns": [{
+                    "name": "StepName",
+                    "label": "Step",
+                    "tooltip": "Aggregation Steps",
+                    "type": "Combo",
+                    "lookup": "dbkodaAggSteps"
+                },
+                {
+                    "name": "StepValue",
+                    "label": "Arguments",
+                    "tooltip": "Aggregation Step Argument",
+                    "type": "Text"
+                }
+            ]
+        }
+    ]
+}

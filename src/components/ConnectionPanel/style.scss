@@ -1,0 +1,358 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @Author: Wahaj Shamim <wahaj>
+// @Date:   2017-04-10T10:37:14+10:00
+// @Email:  wahaj@southbanksoftware.com
+// @Last modified by:   chris
+// @Last modified time: 2017-05-10T16:52:11+10:00
+@import '../../styles/_defaultTheme.scss';
+.connection-profile {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  .inactive {
+    opacity: 0.5;
+  }
+  input[type=text],
+  input[type=number],
+  input[type=password] {
+    background: unset;
+    color: $connectionActiveTextFieldTextColour !important;
+  }
+  input[type=text]:focus,
+  input[type=number]:focus,
+  input[type=password]:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
+  }
+  button {
+  }
+  h3.form-title {
+    font-size: 25px;
+    color: $connectionHeaderFontColour;
+    font-weight: normal;
+  }
+  button.close-button {
+    background-color: unset;
+    background-image: unset;
+    align-self: flex-end;
+    box-shadow: unset !important;
+    font-size: 25pt;
+    font-weight: 100;
+    color: $connectionCloseIconColor;
+    margin-right: 20px;
+    margin-top: 20px;
+  }
+  button.close-button:hover {
+    color: $connectionCloseIconHover;
+    background-color: unset;
+    background-image: unset;
+    box-shadow: unset;
+    border: unset;
+    border-radius: 50%;
+  }
+  form.profile-form {
+    margin: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    display: flex;
+    flex-direction: column;
+    div.alias-input-content {
+      display: flex;
+      flex-direction: column;
+      label.alias-label {
+        font-size: 12pt;
+        font-weight: normal;
+        color: $connectionHeadingsFontColour;
+      }
+      div.pt-form-content {
+        margin-left: 0;
+      }
+    }
+    div.hostname-form {
+      div.hostRadio-input-content {
+        div.pt-form-content {
+          label.hostRadio-radio-input {
+            span.pt-control-indicator {
+              box-shadow: unset;
+              background: unset;
+              background-color: $connectionCheckboxBackgroundColour;
+              color: $connectionCheckboxColour;
+              border: 1px solid $connectionCheckboxColour;
+            }
+            span.pt-control-indicator:focus {
+              outline: none;
+            }
+          }
+        }
+      }
+    }
+    div.url-form {
+      div.urlRadio-input-content {
+        div.pt-form-content {
+          label.urlRadio-radio-input {
+            span.pt-control-indicator {
+              box-shadow: unset;
+              background: unset;
+              background-color: $connectionCheckboxBackgroundColour;
+              color: $connectionCheckboxColour;
+              border: 1px solid $connectionCheckboxColour;
+            }
+            span.pt-control-indicator:focus {
+              outline: none;
+            }
+          }
+        }
+      }
+    }
+    div.database-form {
+      div.database-input-content {
+        display: flex;
+        flex-direction: column;
+        label.database-label {
+          font-size: 12pt;
+          font-weight: normal;
+          color: $connectionHeadingsFontColour;
+        }
+      }
+    }
+    div.ssl-form {
+      div.ssl-input-content {
+        label.ssl-input {
+          font-size: 10pt;
+          font-weight: lighter;
+          color: $connectionHeadingsFontColour !important;
+          text-align: left;
+          margin: 0;
+          span.pt-control-indicator {
+            font-size: unset;
+            font-weight: unset;
+            font-style: unset;
+            box-shadow: unset;
+            line-height: unset;
+            background: unset;
+            box-shadow: unset;
+            font-size: 11pt;
+            color: $connectionCheckboxColour;
+            border-radius: 0;
+            background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+            border: 1px solid $connectionCheckboxColour;
+          }
+          span.pt-control-indicator:hover {
+            background-color: $connectionCheckboxBackgroundColourHover;
+          }
+        }
+      }
+    }
+    div.undefined {
+      label.pt-label {
+        font-size: 12pt;
+        font-weight: normal;
+        color: $connectionHeadingsFontColour;
+      }
+    }
+    div.sha-input-content {
+      label.sha-input {
+        font-size: 10pt;
+        font-weight: lighter;
+        color: $connectionHeadingsFontColour !important;
+        text-align: left;
+        margin: 0;
+        span.pt-control-indicator {
+          font-size: unset;
+          font-weight: unset;
+          font-style: unset;
+          box-shadow: unset;
+          line-height: unset;
+          background: unset;
+          box-shadow: unset;
+          font-size: 11pt;
+          color: $connectionCheckboxColour;
+          border-radius: 0;
+          background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+          border: 1px solid $connectionCheckboxColour;
+        }
+        span.pt-control-indicator:hover {
+          background-color: $connectionCheckboxBackgroundColourHover;
+        }
+      }
+    }
+    div.credentials-form {
+      display: flex;
+      flex-direction: row;
+      div.username-input-content {
+        display: flex;
+        flex-direction: column;
+        order: 1;
+        flex-grow: 1;
+        flex-shrink: 1;
+        width: 40%;
+        div {
+          display: flex !important;
+          flex-direction: column;
+          input {
+            flex-grow: 1;
+          }
+        }
+      }
+      div.password-input-content {
+        display: flex;
+        flex-direction: column;
+        order: 2;
+        flex-grow: 1;
+        flex-shrink: 1;
+        width: 40%;
+        div {
+          display: flex !important;
+          flex-direction: column;
+          input {
+            flex-grow: 1;
+          }
+        }
+      }
+    }
+    button.connectButton {
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 7em;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColourConnect;
+      border: unset;
+      box-shadow: unset;
+    }
+    button.connectButton:hover {
+      background-color: $connectionButtonBackgroundColourConnectHover;
+      color: $connectionButtonFontColourHover;
+    }
+    div.profile-button-panel {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      margin-top: 40px;
+      button.pt-button {
+        font-weight: lighter;
+        color: $connectionButtonFontColour;
+        width: 7em !important;
+        border-radius: 0;
+        background-image: unset;
+        background-color: $connectionButtonBackgroundColour;
+        border: 1px solid $connectionButtonBorderColour;
+        box-shadow: unset;
+      }
+      button.pt-button:hover {
+        background-color: $connectionButtonBackgroundColourHover;
+        color: $connectionButtonFontColourHover;
+      }
+      button.reset-button {
+        width: 7em !important;
+        border-radius: 0;
+        background-image: unset;
+        background-color: $connectionButtonBackgroundColourReset;
+        border: unset;
+        box-shadow: unset;
+      }
+      button.reset-button:hover {
+        background-color: $connectionButtonBackgroundColourResetHover;
+        color: $connectionButtonFontColourHover;
+      }
+    }
+  }
+  .pt-form-helper-text {
+    color: $connectionWarningFontColour !important;
+  }
+  .field-inline {
+    display: inline-block !important;
+    margin: 0 5px 0 5px;
+  }
+  .zero-margin {
+    margin: 0 !important;
+  }
+  .width-100-pr {
+    width: 100%;
+  }
+  .pt-control {
+    margin-top: 5px;
+  }
+  .profile-title,
+  .form-title {
+    text-align: center;
+    margin: 35px 0;
+  }
+  .profile-separator {
+    height: 1px;
+    background-color: gray;
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+  .profile-button-panel,
+  .form-button-panel {
+    display: flex;
+    flex-direction: row;
+    button {
+      min-width: 30px;
+      margin-left: 10px;
+      padding: 0 5px;
+    }
+  }
+  .profile-error-input {
+    margin: 10px;
+  }
+  .alias-label,
+  .database-label,
+  username-label,
+  password-label {
+    min-width: 55px;
+  }
+  .url-label,
+  .host-label {
+    min-width: 30px;
+  }
+  .alias-input-content,
+  .alias-input-content .pt-form-content,
+  .alias-input,
+  .url-input-content,
+  .url-input-content .pt-form-content,
+  .url-input,
+  .host-input-content,
+  .host-input-content .pt-form-content,
+  .host-input,
+  .database-input-content,
+  .database-input-content .pt-form-content,
+  .database-input {
+    width: 100%;
+  }
+  .port-input {
+    width: 80px;
+  }
+  .port-label {
+    width: 5px;
+    margin: 0 !important;
+  }
+}
+
+.pt-label-r {
+  font-size: 10pt;
+  font-weight: lighter;
+  color: $connectionHeadingsFontColour !important;
+  text-align: left;
+  margin: 0;
+}

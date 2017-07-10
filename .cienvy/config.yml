@@ -1,0 +1,12 @@
+# @Author: guiguan
+# @Date:   2017-02-15T07:18:20+11:00
+# @Last modified by:   guiguan
+# @Last modified time: 2017-06-16T16:31:39+10:00
+
+outlinks:
+  - dbkoda
+volumes:
+  - type: yarn-cache
+workflows:
+  - install
+  - test

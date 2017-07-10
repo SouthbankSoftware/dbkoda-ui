@@ -1,0 +1,245 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @Author: Wahaj Shamim <wahaj>
+// @Date:   2017-05-29T15:22:41+10:00
+// @Email:  wahaj@southbanksoftware.com
+// @Last modified by:   chris
+// @Last modified time: 2017-06-16T15:33:50+10:00
+
+@import '../../styles/_defaultTheme.scss';
+.profileListPanel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: $panelLeftBackground !important;
+  .closedProfile {
+    color: $profileListFontColor;
+    opacity: 0.5;
+  }
+  .profileListToolbar {
+    background-color: $navbarLeftBackground !important;
+    .pt-button {
+      background: $buttonSecondaryBackground !important;
+      color: $buttonSecondaryIcon !important;
+      border-radius: 50%;
+      margin-left: 5px;
+      margin-right: 5px;
+      position: relative;
+      svg.dbKodaSVG {
+        position: absolute;
+        top: 50%;
+        bottom: 50%;
+        width: 50%;
+        height: 50%;
+        transform: translate(-50%, -50%);
+        fill: $buttonSecondaryIcon;
+      }
+    }
+    .pt-button:hover {
+      background: $buttonSecondaryBackgroundHover !important;
+    }
+    .pt-button.dangerButton {
+      background: $buttonDangerBackground !important;
+    }
+    .pt-button.dangerButton:hover {
+      background: $buttonDangerBackgroundHover !important;
+    }
+    .pt-button.pt-disabled:hover {
+      background: $buttonSecondaryBackground !important;
+    }
+    .pt-button.pt-disabled.dangerButton:hover {
+      background: $buttonDangerBackground !important;
+    }
+  }
+  .profileList {
+    flex-grow: 1;
+    overflow-y: scroll;
+    .bp-table-bottom-container {
+      background-color: rgba(0,0,0,0) !important;
+      .bp-table-body {
+        background-color: rgba(0,0,0,0) !important;
+        .bp-table-body-scroll-client {
+          background-color: rgba(0,0,0,0) !important;
+          width: 100% !important;
+          .bp-table-body-virtual-client {
+            width: 100% !important;
+            background-color: rgba(0,0,0,0) !important;
+            .bp-table-cell {
+              background-color: rgba(0,0,0,0);
+              width:100% !important;
+            }
+          }
+        }
+      }
+    }
+  }
+  svg.dbKodaLogo {
+    opacity: 0.03;
+    position: absolute;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    width: 200px;
+    height: 200px;
+    path.st0 {
+      fill: none;
+    }
+  }
+  .bp-table-top-container {
+    display: none;
+  }
+
+  .bp-table-container {
+    outline: none;
+    background-color: rgba(0,0,0,0) !important;
+  }
+  .bp-table-cell {
+    .bp-table-truncated-text {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      line-height: 60px;
+      svg.dbKodaSVG {
+        stroke: $buttonSecondaryIcon;
+        stroke-width: 4px;
+        width: 3.5em;
+        height: 3.5em;
+        margin-top: 1.0em;
+        margin-right: 1em;
+        border-radius: 50%;
+        padding: 3px;
+        fill: $buttonSecondaryIcon;
+      }
+      .profileListing {
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: normal !important;
+        letter-spacing: 0px;
+        font-size: 15px;
+      }
+      .profileListing::before {
+        margin-right: 10px;
+        color: $profileListIconColor;
+      }
+    }
+  }
+  .bp-table-cell:hover {
+    background-color: $profileListTabHover !important;
+  }
+  .connection-profile-cell {
+    .profileListing {
+    }
+    .closedProfile {
+      font-style: italic !important;
+    }
+  }
+  .connection-profile-cell-selected {
+    background-color: $profileListSelected !important;
+    outline: none !important;
+    .profileListing {
+      color: #FFF;
+    }
+    .closedProfile {
+      font-style: italic !important;
+    }
+  }
+  .bp-table-selection-region {
+    border: none;
+    background-color: rgba(0,0,0,0);
+  }
+}
+
+.pt-dialog {
+  padding: 20px;
+  .dialogButtons {
+    display: inline-block;
+    .pt-button {
+      border-radius: 0;
+      margin: 10px;
+      float: right;
+    }
+    .submitButton {
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 10em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $buttonDangerBackground;
+      box-shadow: unset;
+      -webkit-appearance: unset;
+    }
+    .submitButton:hover {
+      background: none;
+      color: $connectionButtonFontColour;
+      background-color: $buttonDangerBackgroundHover;
+    }
+    .openButton {
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 10em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $buttonSuccessBackground;
+      box-shadow: unset;
+      -webkit-appearance: unset;
+    }
+    .openButton:hover {
+      background: none;
+      color: $connectionButtonFontColour;
+      background-color: $buttonSuccessBackgroundHover;
+    }
+    .cancelButton {
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 7em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColour;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+      -webkit-appearance: unset;
+    }
+    .cancelButton:hover {
+      background: none;
+      border: 1px solid $connectionButtonBackgroundColourHover;
+      background-color: $connectionButtonBackgroundColourHover;
+      color: $connectionButtonFontColourHover;
+    }
+  }
+}
+
+ul.profileListContextMenu {
+  display: flex;
+  flex-direction: column;
+
+  div.contextMenuGroup {
+    div.menuItemWrapper {
+      display: flex;
+      flex-direction: row;
+      li {}
+    }
+  }
+  div.menuItemWrapper {
+    display: flex;
+    flex-direction: row;
+    li {}
+  }
+}
+
+

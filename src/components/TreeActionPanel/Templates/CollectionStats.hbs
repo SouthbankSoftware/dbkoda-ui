@@ -1,0 +1,32 @@
+ function dbkoda_collection_stats(dbName, collectionName) {
+     const output = {};
+     output.h1 = 'Collection statistics ' + dbName + '.' + collectionName;
+     output.h2 = 'Latency Statistics';
+     output.table1 = {};
+     output.table1.headings = ['Operation', 'Count', 'total Time', 'Avg time(ms)'];
+     output.table1.rows = [];
+
+
+     print('Warning: only reporting first shard data');
+     const latencyStats = db.getSiblingDB(dbName).getCollection(collectionName)
+         .latencyStats().toArray()[0].latencyStats;
+     
+     Object.keys(latencyStats).forEach((key) => {
+         const latency = latencyStats[key].latency;
+         const ops = latencyStats[key].ops;
+         let avgLatency=0; 
+         if (latency>0)  avgLatency=latency/ops; 
+         output.table1.rows.push([key, ops, latency,avgLatency]);
+     });
+   
+   output.h2 = 'Storage Statistics';
+   output.table2={}
+   output.table2.headings=['Statistic','Value'];
+   const storageStats= db.getSiblingDB(dbName).getCollection(collectionName).stats(); 
+   output.table2.rows=[];
+   output.table2.rows.push(["sharded",storageStats.sharded]);
+   output.table2.rows.push(["capped",storageStats.capped]);
+     return (output);
+ }
+                                  
+ dbkoda_collection_stats('{{Database}}', '{{CollectionName}}');

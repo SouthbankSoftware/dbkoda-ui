@@ -1,0 +1,479 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import './_defaultTheme.scss';
+body {
+  background-color: $panelLeftBackground;
+  overflow: auto !important;
+}
+
+#root div {
+
+}
+::-webkit-scrollbar {
+  background-color: $scrollBarThumb !important;
+}
+::-webkit-scrollbar-track {
+      background-color: $scrollBarBackground !important;
+}
+::-webkit-scrollbar-thumb {
+      background-color: $scrollBarThumb !important;
+}
+::-webkit-scrollbar-button {
+      background-color: $scrollBarTopAndBottom !important;
+}
+::-webkit-scrollbar-corner {
+  background-color: $scrollBarThumb !important;
+}
+.treeToolbar, .profileList, .pt-tab-list {
+  overflow: auto !important;
+}
+
+.editorToolbar, .welcomeTab {
+  overflow: hidden !important;
+}
+
+.CodeMirror-scroll {
+  overflow: auto !important;
+}
+
+.CodeMirror-scrollbar-filler {
+  background: $scrollBarBackground;
+}
+
+.horizontal, .welcomePageContentRight, .pt-button, .pt-tree-node-content, .pt-tab
+, .bp-table-body {
+  overflow: hidden !important;
+}
+
+.pt-icon-, .feedIconWrapper, .feedItemContent, .feedItem, .feedList{
+  overflow: unset !important;
+}
+
+h1 {
+  color: $white;
+  font-size: 40px;
+  margin-top: 4px;
+}
+
+h2 {
+  color: $white;
+  margin-top: 4px;
+}
+
+h3 {
+  color: $white;
+  margin-top: 4px;
+}
+
+.pt-popover-content {
+  color: $toolTipFontColour !important;
+  background-color: $toolTipBackgroundColour !important;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+.pt-popover-arrow {
+  svg {
+    path {
+      fill: $toolTipBackgroundColour !important;
+      color: $toolTipBackgroundColour !important;
+    }
+  }
+}
+
+.pt-toast:first-child {
+  margin-top: 100px;
+}
+
+.pt-toast {
+  color: unset !important;
+}
+
+.unsavedFileIndicator {
+  top: 11.5px;
+  margin: 0px 10px 0 0;
+  width: 7px;
+  height: 7px;
+  background: $buttonDangerBackground;
+  float: left;
+  position: relative;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+div.pt-dialog {
+  background-color: $panelLeftBackground !important;
+  div.pt-alert-footer {
+    button {
+      font-weight: lighter !important;
+      color: $dialogButtonBorder !important;
+      width: 7em !important;
+      border-radius: 0 !important;
+      background-image: unset !important;
+      background-color: $panelLeftBackground !important;
+      border: 1px solid $dialogButtonBorder !important;
+      box-shadow: unset !important;
+    }
+    button.pt-button:hover {
+      background-color: $connectionButtonBackgroundColourHover !important;
+      color: $connectionButtonFontColourHover !important;
+    }
+  }
+  input[type=text],
+  input[type=number],
+  input[type=password] {
+    background: unset;
+    color: $connectionActiveTextFieldTextColour !important;
+  }
+  input[type=text]:focus,
+  input[type=number]:focus,
+  input[type=password]:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
+  }
+}
+
+.pt-tab {
+  padding: 0 8px;
+  user-select: none;
+}
+
+.pt-tab .pt-button.pt-minimal {
+  padding: 0px;
+  margin-right: -10px;
+  line-height: 14px;
+  min-height: 14px;
+  top: 8px;
+}
+
+.pt-tab .pt-button.pt-minimal:hover, .pt-tab .pt-button.pt-minimal:focus {
+  background: unset;
+  box-shadow: none !important;
+}
+
+.pt-tab {
+  height: 31px;
+}
+
+.pt-dark.pt-navbar, .pt-dark .pt-navbar {
+  box-shadow: none;
+}
+
+.pt-toast {
+  .pt-icon-standard {
+    display: none;
+  }
+}
+.pt-toast.pt-intent-success {
+  background-color: $toastBackgroundColourSuccess !important;
+  color: $toastFontColourSuccess !important;
+  span {
+    color: $toastFontColourSuccess !important;
+  }
+  div {
+    display: none;
+    button::before {
+      color: $toastCloseIconColourSuccess !important;
+    }
+  }
+}
+
+.pt-toast.pt-intent-warning {
+  background-color: $toastBackgroundColourWarning !important;
+  color: $toastFontColourWarning !important;
+  span {
+    color: $toastFontColourWarning !important;
+  }
+  div {
+    display: none;
+    button::before {
+      color: $toastCloseIconColourWarning !important;
+    }
+  }
+}
+
+.pt-toast.pt-intent-danger {
+  background-color: $toastBackgroundColourDanger !important;
+  color: $toastFontColourDanger !important;
+  span {
+    color: $toastFontColourDanger !important;
+  }
+  div {
+    display: none;
+    color: unset !important;
+    color: $toastCloseIconColourDanger !important;
+    button::before {
+      color: $toastCloseIconColourDanger !important;
+    }
+  }
+}
+
+.pt-toast.pt-intent-info {
+  background-color: $toastBackgroundColourInfo !important;
+  color: $toastFontColourInfo !important;
+  span {
+    color: $toastFontColourInfo !important;
+  }
+  div {
+    display:none;
+    color: unset !important;
+    color: $toastCloseIconColourInfo !important;
+    button::before {
+      color: $toastCloseIconColourInfo !important;
+    }
+  }
+}
+
+.circleButton {
+  background-color: $buttonTertiaryBackground !important;
+  color: $buttonTertiaryIcon !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.circleButton:hover {
+  background-color: $buttonTertiaryBackgroundHover !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.circleButton.pt-disabled {
+  background-color: $buttonTertiaryBackgroundDisabled !important;
+}
+
+.circleButton.warningButton {
+  background-color: $keywordThree !important;
+  color: $white !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.circleButton.warningButton:hover {
+  background-color: $buttonTertiaryBackground !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.middleRow {
+  height: 100%;
+  overflow: hidden;
+}
+
+.RootSplitPane>.Pane1 {
+  background-color: $panelLeftBackground;
+  overflow-y: auto;
+}
+
+.RootSplitPane>.Pane2 {
+  background-color: $panelRightBackground;
+  overflow-y: auto;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+.dbkoda-toaster {
+  z-index: 20000;
+}
+
+.pt-tabs {
+  color: $white;
+  background-color: $tabBackground;
+}
+
+.pt-tab-panel {
+  flex: 1;
+  display: flex;
+  margin-top: 2px;
+}
+
+.pt-tab {
+  color: $white;
+}
+
+.pt-tab-list {
+  margin-left: 28px;
+  overflow-x: scroll;
+}
+
+.pt-tab-list::-webkit-scrollbar {
+  display: none;
+}
+
+.pt-tab-indicator {
+  background-color: $white;
+}
+
+.pt-select {
+  background-color: $keywordFour !important;
+}
+
+.cm-s-ambiance .CodeMirror-linenumber {
+  color: $white;
+}
+
+.CodeMirror,
+.ReactCodeMirror {
+  height: 100%;
+}
+
+//  //// Global CSS: ////  //
+/////////////////////////////
+.pt-dark pre {
+  box-shadow: unset;
+  background: unset;
+  color: unset;
+}
+
+select.pt-intent-primary {
+  background-color: $selectDarkPrimaryBackground !important;
+  color: $buttonPrimaryBackground !important;
+}
+
+input.pt-input,
+textarea {
+  background-color: $searchPrimaryBackground !important;
+  color: $searchPrimaryFontColor !important;
+}
+
+input.pt-input.secondaryInput,
+textArea {
+  background-color: $searchSecondaryBackground !important;
+  color: $searchSecondaryFontColor !important;
+}
+
+.pt-icon-search {
+  color: $buttonPrimaryIcon !important;
+}
+
+::-webkit-input-placeholder {
+  color: $searchPrimaryFontColor !important;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px solid $keywordThree;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 12px;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 105%;
+}
+
+.pt-overlay-open {
+  z-index: 999;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+a.pt-intent-primary {
+  background-color: $buttonPrimaryBackground !important;
+  color: $buttonPrimaryIcon !important;
+}
+
+a.pt-intent-primary:hover {
+  background-color: $buttonPrimaryBackgroundHover !important;
+  color: $buttonPrimaryIcon !important;
+}
+
+a.pt-disabled.pt-intent-primary {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.pt-tab:not([aria-disabled="true"]):hover,
+.pt-tab[aria-selected="true"]:hover {
+  color: $buttonSecondaryBackgroundHover !important;
+}
+
+.cm-string.cm-property {
+  color: $propertyStringFontColor !important;
+}
+
+.pt-button.pt-disabled {
+  opacity: 0.2;
+}
+
+.pt-button {
+  box-shadow: unset !important;
+}
+
+.pt-control input:focus~.pt-control-indicator,
+input[type=radio]:focus,
+input[type=checkbox]:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px $searchPrimaryBackground !important;
+}
+
+button:focus,
+a[role=button]:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+}
+
+.pt-menu-item:hover {
+  background-color: rgba(170, 182, 264, 0.3);
+}
+
+ul.CodeMirror-hints {
+  border: none;
+  background-color: $hintsBackgroundColor;
+  overflow-y: hidden;
+  li.CodeMirror-hint {
+    color: $hintsColor;
+  }
+  li.CodeMirror-hint-active {
+    background-color:$hintsBackgroundActiveColor;
+  }
+}
+
+
+div.optInDialog {
+  h1 {
+    margin-bottom: 30px;
+  }
+  div.dialogButtons {
+    a.submitButton {
+      background-color: $buttonSuccessBackground !important;
+    }
+    a.submitButton:hover {
+      background-color: $buttonSuccessBackgroundHover !important;
+    }
+  }
+}
