@@ -27,7 +27,6 @@ Currently you need to run the Controller seperately to the product.
 
 * Run `npm run start` in the dbkoda-Controller repository.
 * Run `npm run start` or `yarn start` in the dbkoda-ui repository.
-* **Note**: Currently a new connection can be created by clicking the New Editor button.
 
 The structure of the output structure:
 

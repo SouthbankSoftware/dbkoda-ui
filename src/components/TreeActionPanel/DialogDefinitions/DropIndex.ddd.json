@@ -20,21 +20,18 @@
        {
             "name": "Database",
             "type": "Text",
-            "readOnly": true,
-            "keyValue": true
+            "readOnly": true
         },
       {
             "name": "CollectionName",
             "type": "Text",
-            "readOnly": true,
-            "keyValue": true
+            "readOnly": true
         },
         {
             "name": "IndexName",
             "type": "Text",
             "tooltip": "Name of the index (optional)",
-            "readOnly":true,
-            "keyValue": true
+            "readOnly":true
         }
     ]
 }
