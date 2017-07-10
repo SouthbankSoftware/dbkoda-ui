@@ -33,6 +33,7 @@ import { AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
+import Store from '~/stores/global';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import ExplainPopover from './ExplainPopover';
@@ -222,7 +223,7 @@ export default class Toolbar extends React.Component {
           executing: false,
           initialMsg: profile.initialMsg,
           code: '',
-          doc: observable.ref(this.props.store.createNewDocumentObject()),
+          doc: observable.ref(Store.createNewDocumentObject()),
           status: profile.status,
           path: null,
           shellVersion: profile.shellVersion
@@ -816,7 +817,7 @@ export default class Toolbar extends React.Component {
             hoverOpenDelay={1000}
             content={globalString('editor/toolbar/saveFileTooltip')}
             tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
+            position={Position.BOTTOM_RIGHT}
           >
             <AnchorButton
               className="pt-button circleButton saveFileButton"
