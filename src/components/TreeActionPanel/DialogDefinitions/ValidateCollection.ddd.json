@@ -13,15 +13,13 @@
     "Fields": [{
             "name": "Database",
             "type": "Text",
-            "readOnly": true,
-            "rules": "required"
+            "readOnly": true
         },
         {
             "name": "CollectionName",
             "label" : "Collection Name",
             "type": "Text",
             "readOnly": true,
-            "rules": "required",
             "lookup": "dbkoda_listcollections",
             "lookup_arguments": [{
                 "name": "db",

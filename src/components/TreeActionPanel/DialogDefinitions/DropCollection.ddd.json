@@ -13,15 +13,12 @@
     "Fields": [{
             "name": "Database",
             "type": "Text",
-            "readOnly": false,
-            "rules": "required"
+            "readOnly": true
         },
         {
             "name": "CollectionName",
             "type": "Text",
-            "readOnly": true,
-            "keyValue": true,
-            "rules": "required"
+            "readOnly": true
         }
     ]
 }

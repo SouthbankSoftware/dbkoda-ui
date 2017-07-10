@@ -13,15 +13,13 @@
     "Fields": [{
             "name": "Database",
             "type": "Text",
-            "readOnly": true,
-            "rules": "required"
+            "readOnly": true
         },
         {
             "name": "CollectionName",
-            "label" : "Collection Name",
+            "label": "Collection Name",
             "type": "Text",
             "readOnly": true,
-            "rules": "required",
             "lookup": "dbkoda_listcollections",
             "lookup_arguments": [{
                 "name": "db",
@@ -34,6 +32,6 @@
             "type": "Boolean",
             "default": "force",
             "tooltip": "If true, compact can run on primary in Replica Set"
-        } 
+        }
     ]
 }
