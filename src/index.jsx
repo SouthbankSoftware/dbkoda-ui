@@ -34,6 +34,8 @@ import App from './components/App';
 
 useStrict(true);
 
+const rootEl = document.getElementById('root');
+
 let store;
 
 Broker.once(EventType.APP_READY, () => {
@@ -44,7 +46,7 @@ Broker.once(EventType.APP_READY, () => {
           <Component />
         </Provider>
       </AppContainer>,
-      document.getElementById('root')
+      rootEl
     );
   };
 
@@ -56,6 +58,46 @@ Broker.once(EventType.APP_READY, () => {
       render(App);
     });
   }
+});
+
+window.addEventListener('beforeunload', () => {
+  let shouldUnmount = true;
+
+  if (IS_ELECTRON) {
+    const remote = window.require('electron').remote;
+    const { dialog } = remote;
+    const currentWindow = remote.getCurrentWindow();
+
+    if (
+      !remote.getGlobal('UAT') &&
+      store.hasUnsavedEditorTabs()
+    ) {
+      const response = dialog.showMessageBox(currentWindow, {
+        type: 'question',
+        buttons: ['Yes', 'No'],
+        title: 'Confirm',
+        message:
+          'You have unsaved editor tabs. Are you sure you want to continue?'
+      });
+
+      if (response === 1) {
+        // if 'No' is clicked
+
+        // cancel window unload
+        event.returnValue = false;
+        // cancel our own unload logics
+        shouldUnmount = false;
+      }
+    }
+  }
+
+  if (shouldUnmount) {
+    store.closeConnection();
+    ReactDOM.unmountComponentAtNode(rootEl);
+  }
+
+  // save store anyway
+  store.saveSync();
 });
 
 store = new Store();

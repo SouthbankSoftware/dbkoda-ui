@@ -197,11 +197,11 @@ export default class Toolbar extends React.Component {
    */
   profileCreated(profile) {
     const { editors, editorToolbar, editorPanel } = this.props.store;
-    let existingEditor = null;
+    // let existingEditor = null;
     let profileHasEditor = false;
     editors.forEach((editor) => {
       if (profile.id == editor.profileId) {
-        existingEditor = editor;
+        // existingEditor = editor;
         profileHasEditor = true;
       }
     });
@@ -230,7 +230,7 @@ export default class Toolbar extends React.Component {
       );
       editorPanel.activeEditorId = editorId;
     } else {
-      editorPanel.activeEditorId = existingEditor.id;
+      // editorPanel.activeEditorId = existingEditor.id;
     }
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;

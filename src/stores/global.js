@@ -90,7 +90,9 @@ export default class Store {
     isRemovingCurrentTab: false,
     tabFilter: '',
     showingSavingDialog: false,
-    lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : ''
+    lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : '',
+    shouldScrollToActiveTab: false,
+    tabScrollLeftPosition: 0
   });
 
   @observable
@@ -259,7 +261,7 @@ export default class Store {
             visible: true,
             shellVersion: res.shellVersion,
             initialMsg: res.output ? res.output.join('\n') : '',
-            doc: observable.ref(this.createNewDocumentObject(content)),
+            doc: observable.ref(Store.createNewDocumentObject(content)),
             status: ProfileStatus.OPEN,
             path: null
           },
@@ -272,6 +274,7 @@ export default class Store {
     this.editorToolbar.id = res.id;
     this.editorToolbar.shellId = res.shellId;
     this.editorToolbar.newConnectionLoading = false;
+    this.editorPanel.shouldScrollToActiveTab = true;
     this.editorPanel.activeEditorId = editorId;
     this.editorToolbar.currentProfile = res.id;
     this.editorToolbar.noActiveProfile = false;
@@ -287,15 +290,17 @@ export default class Store {
       treeEditor.fileName = 'Tree Action';
       this.treeActionPanel.editors.set(editorId, treeEditor);
     }
+
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
       intent: Intent.SUCCESS,
       iconName: 'pt-icon-thumbs-up'
     });
+
     return editorId;
   };
 
-  createNewDocumentObject(content = '') {
+  static createNewDocumentObject(content = '') {
     return new Doc(content, 'MongoScript');
   }
 
@@ -391,7 +396,7 @@ export default class Store {
     newStore.layout.alertIsLoading = false;
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
-    newStore.editorPanel.activeEditorId = 'Default';
+    // newStore.editorPanel.activeEditorId = 'Default';
     newStore.editorPanel.creatingNewEditor = false;
     newStore.editorPanel.executingEditorAll = false;
     newStore.editorPanel.executingEditorLines = false;
@@ -401,6 +406,10 @@ export default class Store {
     newStore.editorPanel.lastFileSavingDirectoryPath =
       newStore.editorPanel.lastFileSavingDirectoryPath ||
       (IS_ELECTRON ? global.PATHS.userHome : '');
+    newStore.editorPanel.shouldScrollToActiveTab = false;
+    if (newStore.editorPanel.tabScrollLeftPosition === undefined) {
+      newStore.editorPanel.tabScrollLeftPosition = 0;
+    }
 
     // EditorToolbar:
     newStore.editorToolbar.currentProfile = 0;

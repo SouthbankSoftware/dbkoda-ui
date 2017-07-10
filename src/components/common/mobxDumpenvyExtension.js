@@ -15,6 +15,7 @@ import {
   isObservableObject,
   isBoxedObservable
 } from 'mobx';
+import Store from '~/stores/global';
 import { Doc } from 'codemirror';
 import _ from 'lodash';
 
@@ -66,7 +67,7 @@ export function deserializer(key, value) {
     } else if (value.__dump__ === 'ObservableValue') {
       return observable.shallowBox(value.value);
     } else if (value.__dump__ === 'Doc') {
-      const newDoc = new Doc(value.value);
+      const newDoc = Store.createNewDocumentObject(value.value);
 
       newDoc.setCursor(value.cursor);
       newDoc.setSelections(value.selections);

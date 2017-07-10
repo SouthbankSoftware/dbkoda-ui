@@ -76,17 +76,16 @@ export default class Analytics extends React.Component {
         }
     }, {name: 'analyticsReactionToTelemetryChange'});
 
-    this._sendEvent.bind(this);
+    this._sendEvent = this._sendEvent.bind(this);
+    this.newProfileCreated = this.newProfileCreated.bind(this);
   }
 
   componentDidMount() {
-    Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
-      this.newProfileCreated(profile);
-    });
+    Broker.on(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
   }
 
   componentWillUnmount() {
-    Broker.off(EventType.NEW_PROFILE_CREATED);
+    Broker.off(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
   }
 
   /**

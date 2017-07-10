@@ -39,7 +39,7 @@ import {
   Menu,
   MenuItem,
   Dialog,
-  AnchorButton
+  AnchorButton,
 } from '@blueprintjs/core';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import Toolbar from './Toolbar.jsx';
@@ -57,7 +57,7 @@ import { featherClient } from '../../helpers/feathers';
 @observer
 export default class Panel extends React.Component {
   static propTypes = {
-    store: PropTypes.observableObject.isRequired
+    store: PropTypes.observableObject.isRequired,
   };
   constructor(props) {
     super(props);
@@ -65,7 +65,7 @@ export default class Panel extends React.Component {
       activePanelOnly: false,
       animate: false,
       tabId: 0,
-      vertical: false
+      vertical: false,
     };
 
     this.newEditor = this.newEditor.bind(this);
@@ -75,9 +75,10 @@ export default class Panel extends React.Component {
     this.showContextMenu = this.showContextMenu.bind(this);
     this.onTabScrollLeftBtnClicked = this.onTabScrollLeftBtnClicked.bind(this);
     this.onTabScrollRightBtnClicked = this.onTabScrollRightBtnClicked.bind(
-      this
+      this,
     );
     this.onTabListBtnClicked = this.onTabListBtnClicked.bind(this);
+    this.updateTabScrollPosition = this.updateTabScrollPosition.bind(this);
   }
 
   componentWillMount() {
@@ -90,14 +91,14 @@ export default class Panel extends React.Component {
             this.props.store.editorPanel.activeDropdownId
           ) {
             console.log(
-              'do nothing as the profile might have been swaped by the dropdown.'
+              'do nothing as the profile might have been swaped by the dropdown.',
             );
             return;
           }
           let curEditor;
           if (this.props.store.editorPanel.activeEditorId != 'Default') {
             curEditor = this.props.store.editors.get(
-              this.props.store.editorPanel.activeEditorId
+              this.props.store.editorPanel.activeEditorId,
             );
           }
 
@@ -112,7 +113,7 @@ export default class Panel extends React.Component {
             for (const editor of editors) {
               console.log(
                 'editor[1].currentProfile :',
-                editor[1].currentProfile
+                editor[1].currentProfile,
               );
               if (
                 editor[1].currentProfile ==
@@ -129,18 +130,35 @@ export default class Panel extends React.Component {
         } catch (e) {
           console.log(e);
         }
-      }
+      },
     );
   }
 
   componentDidMount() {
+    this.restoreTabScrollLeftPosition();
     // Add hotkey bindings for this component:
     Mousetrap.bindGlobal(GlobalHotkeys.closeTab.keys, this.closeActiveTab);
   }
+
   componentWillUnmount() {
+    this.saveTabScrollLeftPosition();
     this.reactionToProfile();
     Mousetrap.unbindGlobal(GlobalHotkeys.closeTab.keys, this.closeActiveTab);
   }
+
+  @action
+  saveTabScrollLeftPosition() {
+    this.props.store.editorPanel.tabScrollLeftPosition = this.tabs.tablistElement.scrollLeft;
+  }
+
+  restoreTabScrollLeftPosition() {
+    this.tabs.tablistElement.scrollLeft = this.props.store.editorPanel.tabScrollLeftPosition;
+  }
+
+  componentDidUpdate() {
+    this.updateTabScrollPosition();
+  }
+
   reactionToProfile;
   /**
    * DEPRECATED? Remove this after refactoring.
@@ -171,8 +189,8 @@ export default class Panel extends React.Component {
         .service('/mongo-shells')
         .remove(currEditor.profileId, {
           query: {
-            shellId: currEditor.shellId
-          }
+            shellId: currEditor.shellId,
+          },
         })
         .then(v => console.log('remove shell successfully, ', v))
         .catch(err => console.error('remove shell failed,', err));
@@ -195,7 +213,7 @@ export default class Panel extends React.Component {
         console.log('2:', this.props.store.editorPanel.activeEditorId);
 
         const treeEditor = this.props.store.treeActionPanel.editors.get(
-          currEditor.id
+          currEditor.id,
         );
         if (treeEditor) {
           this.props.store.treeActionPanel.editors.delete(treeEditor.id);
@@ -209,7 +227,7 @@ export default class Panel extends React.Component {
     this.props.store.editors.delete(currEditor.id);
 
     const treeEditor = this.props.store.treeActionPanel.editors.get(
-      currEditor.id
+      currEditor.id,
     );
     if (treeEditor) {
       this.props.store.treeActionPanel.editors.delete(treeEditor.id);
@@ -224,7 +242,7 @@ export default class Panel extends React.Component {
   @action
   closeActiveTab() {
     const deletedEditor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
+      this.props.store.editorPanel.activeEditorId,
     );
     console.log('deleted editor ', deletedEditor);
     if (deletedEditor && deletedEditor.status == ProfileStatus.OPEN) {
@@ -233,8 +251,8 @@ export default class Panel extends React.Component {
         .service('/mongo-shells')
         .remove(deletedEditor.profileId, {
           query: {
-            shellId: deletedEditor.shellId
-          }
+            shellId: deletedEditor.shellId,
+          },
         })
         .then(v => console.log('remove shell successfully, ', v))
         .catch(err => console.error('remove shell failed,', err));
@@ -257,7 +275,7 @@ export default class Panel extends React.Component {
       console.log('2:', this.props.store.editorPanel.activeEditorId);
 
       const treeEditor = this.props.store.treeActionPanel.editors.get(
-        deletedEditor.id
+        deletedEditor.id,
       );
       if (treeEditor) {
         this.props.store.treeActionPanel.editors.delete(treeEditor.id);
@@ -269,7 +287,7 @@ export default class Panel extends React.Component {
     this.props.store.editors.delete(deletedEditor.id);
 
     const treeEditor = this.props.store.treeActionPanel.editors.get(
-      deletedEditor.id
+      deletedEditor.id,
     );
     if (treeEditor) {
       this.props.store.treeActionPanel.editors.delete(treeEditor.id);
@@ -294,67 +312,52 @@ export default class Panel extends React.Component {
 
   /**
    * Action for swapping the currently selected tab.
-   * @param {String} newTab - Id of tab to swap to active.
+   * @param {String} newTabId - Id of tab to swap to active.
    */
   @action
-  changeTab(newTab) {
+  changeTab(newTabId) {
+    const { editorPanel, editorToolbar, editors } = this.props.store;
+
     // Check if last update was a remove for special Handling.
-    if (this.props.store.editorPanel.removingTabId) {
-      this.props.store.editorPanel.removingTabId = false;
-      if (this.props.store.editorPanel.isRemovingCurrentTab) {
-        this.props.store.editorPanel.isRemovingCurrentTab = false;
-        this.props.store.editorPanel.activeEditorId = newTab;
-        this.setState({ tabId: newTab });
+    if (editorPanel.removingTabId) {
+      editorPanel.removingTabId = false;
+      if (editorPanel.isRemovingCurrentTab) {
+        editorPanel.isRemovingCurrentTab = false;
+        editorPanel.activeEditorId = newTabId;
+        this.setState({ tabId: newTabId });
       } else {
         this.setState({ tabId: this.state.tabId });
       }
     } else {
-      this.props.store.editorPanel.activeEditorId = newTab;
-      if (
-        newTab != 'Default' &&
-        this.props.store.editors.get(
-          this.props.store.editorPanel.activeEditorId
-        ).executing == true
-      ) {
-        this.props.store.editorToolbar.isActiveExecuting = true;
+      editorPanel.activeEditorId = newTabId;
+      if (newTabId != 'Default' && editors.get(newTabId).executing == true) {
+        editorToolbar.isActiveExecuting = true;
       } else {
-        this.props.store.editorToolbar.isActiveExecuting = false;
+        editorToolbar.isActiveExecuting = false;
       }
-      this.setState({ tabId: newTab });
-      if (newTab != 'Default') {
-        this.props.store.editorPanel.activeDropdownId = this.props.store.editors.get(
-          newTab
-        ).currentProfile;
+      this.setState({ tabId: newTabId });
+      if (newTabId != 'Default') {
+        const currEditor = editors.get(newTabId);
+        editorPanel.activeDropdownId = currEditor.currentProfile;
         // Check if connection exists or is closed to update dropdown.
-        if (
-          !this.props.store.profiles.get(
-            this.props.store.editorPanel.activeDropdownId
-          )
-        ) {
-          this.props.store.editorPanel.activeDropdownId = 'Default';
+        if (!this.props.store.profiles.get(editorPanel.activeDropdownId)) {
+          editorPanel.activeDropdownId = 'Default';
         } else if (
-          this.props.store.profiles.get(
-            this.props.store.editorPanel.activeDropdownId
-          ).status == 'CLOSED'
+          this.props.store.profiles.get(editorPanel.activeDropdownId).status ==
+          'CLOSED'
         ) {
-          this.props.store.editorPanel.activeDropdownId = 'Default';
+          editorPanel.activeDropdownId = 'Default';
         }
-        this.props.store.editorToolbar.id = this.props.store.editors.get(
-          newTab
-        ).id;
-        this.props.store.editorToolbar.shellId = this.props.store.editors.get(
-          newTab
-        ).shellId;
+        editorToolbar.id = currEditor.id;
+        editorToolbar.shellId = currEditor.shellId;
       }
       console.log(
-        `activeDropdownId: ${this.props.store.editorPanel
-          .activeDropdownId} , id: ${this.props.store.editorToolbar
-          .id}, shellId: ${this.props.store.editorToolbar.shellId}`
+        `activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`,
       );
-      if (this.props.store.editorPanel.activeDropdownId == 'Default') {
-        this.props.store.editorToolbar.noActiveProfile = true;
+      if (editorPanel.activeDropdownId == 'Default') {
+        editorToolbar.noActiveProfile = true;
       } else {
-        this.props.store.editorToolbar.noActiveProfile = false;
+        editorToolbar.noActiveProfile = false;
       }
     }
   }
@@ -494,11 +497,11 @@ export default class Panel extends React.Component {
         </Menu>,
         {
           left: event.clientX,
-          top: event.clientY
+          top: event.clientY,
         },
         () => {
           console.log('tab context menu closed');
-        }
+        },
       );
     }
   }
@@ -576,21 +579,21 @@ export default class Panel extends React.Component {
 
     Mousetrap.bindGlobal(
       DialogHotkeys.submitDialog.keys,
-      onSavingDialogSaveButtonClicked
+      onSavingDialogSaveButtonClicked,
     );
     Mousetrap.bindGlobal(
       DialogHotkeys.closeDialog.keys,
-      onSavingDialogCancelButtonClicked
+      onSavingDialogCancelButtonClicked,
     );
 
     unbindGlobalKeys = () => {
       Mousetrap.unbindGlobal(
         DialogHotkeys.submitDialog.keys,
-        onSavingDialogSaveButtonClicked
+        onSavingDialogSaveButtonClicked,
       );
       Mousetrap.unbindGlobal(
         DialogHotkeys.closeDialog.keys,
-        onSavingDialogCancelButtonClicked
+        onSavingDialogCancelButtonClicked,
       );
     };
 
@@ -599,7 +602,7 @@ export default class Panel extends React.Component {
         <h4>
           {' '}{globalString(
             'editor/savingDialog/title',
-            currentEditor.fileName
+            currentEditor.fileName,
           )}{' '}
         </h4>
         <p>
@@ -644,14 +647,14 @@ export default class Panel extends React.Component {
     const currTabEl = this.getCurrentVisibleLeftmostTabElement();
     const getCurrTabTargetPos = this.getElementScrollLeftTargetPosition.bind(
       this,
-      currTabEl
+      currTabEl,
     );
 
     if (this._isPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)) {
       const prevTabEl = currTabEl.previousSibling;
       if (prevTabEl) {
         this.scrollToTab(
-          this.getElementScrollLeftTargetPosition.bind(this, prevTabEl)
+          this.getElementScrollLeftTargetPosition.bind(this, prevTabEl),
         );
       }
     } else {
@@ -664,14 +667,14 @@ export default class Panel extends React.Component {
     const currTabEl = this.getCurrentVisibleRightmostTabElement();
     const getCurrTabTargetPos = this.getElementScrollRightTargetPosition.bind(
       this,
-      currTabEl
+      currTabEl,
     );
 
     if (this._isPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)) {
       const nextTabEl = currTabEl.nextSibling;
       if (nextTabEl) {
         this.scrollToTab(
-          this.getElementScrollRightTargetPosition.bind(this, nextTabEl)
+          this.getElementScrollRightTargetPosition.bind(this, nextTabEl),
         );
       }
     } else {
@@ -692,9 +695,22 @@ export default class Panel extends React.Component {
       0,
       Math.min(
         el.offsetLeft + el.offsetWidth - tabListEl.clientWidth,
-        this.getScrollLeftMax(tabListEl)
-      )
+        this.getScrollLeftMax(tabListEl),
+      ),
     );
+  }
+
+  @action
+  updateTabScrollPosition() {
+    const { editorPanel } = this.props.store;
+
+    if (editorPanel.shouldScrollToActiveTab) {
+      editorPanel.shouldScrollToActiveTab = false;
+
+      // scroll to active tab
+      const el = document.getElementById(`pt-tab-title_EditorTabs_${editorPanel.activeEditorId}`);
+      this.scrollToTab(this.getElementScrollRightTargetPosition.bind(this, el));
+    }
   }
 
   /**

@@ -58,39 +58,6 @@ class App extends React.Component {
     layout: PropTypes.observableObject.isRequired
   };
 
-  componentDidMount() {
-    if (IS_ELECTRON) {
-      const remote = window.require('electron').remote;
-      const { dialog } = remote;
-      const currentWindow = remote.getCurrentWindow();
-
-      window.addEventListener('beforeunload', (event) => {
-        const store = this.props.store;
-
-        store.closeConnection();
-        store.saveSync();
-
-        if (
-          !remote.getGlobal('UAT') &&
-          this.props.store.hasUnsavedEditorTabs()
-        ) {
-          const response = dialog.showMessageBox(currentWindow, {
-            type: 'question',
-            buttons: ['Yes', 'No'],
-            title: 'Confirm',
-            message:
-              'You have unsaved editor tabs. Are you sure you want to continue?'
-          });
-
-          if (response === 1) {
-            // if 'No' is clicked
-            event.returnValue = false;
-          }
-        }
-      });
-    }
-  }
-
   @action.bound
   updateRightSplitPos(pos) {
     this.props.layout.rightSplitPos = pos;
