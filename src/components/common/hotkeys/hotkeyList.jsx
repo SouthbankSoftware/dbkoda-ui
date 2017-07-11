@@ -40,15 +40,15 @@ export const GlobalHotkeys = {
       keys: 'ctrl+shift+n',
       description: 'Create new Editor Tab.'
     },
-    executeAll: {
-      combo: 'Control + E',
-      keys: 'ctrl+e',
-      description: 'Execute All.'
-    },
     executeLine: {
-      combo: 'Control + Shift + E',
-      keys: 'ctrl+shift+e',
+      combo: 'F7',
+      keys: 'f7',
       description: 'Execute Currently Selected Text / Line'
+    },
+    executeAll: {
+      combo: 'F8',
+      keys: 'f8',
+      description: 'Execute Contents Of Current Editor.'
     },
     stopExecution: {
       combo: 'Control + Shift + T',

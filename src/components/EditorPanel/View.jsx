@@ -75,7 +75,6 @@ const editorTarget = {
    * @param {} monitor - keeps the state of drag process, e.g object which is being dragged
    */
   drop(props, monitor) {
-    console.log('DROP monitor.getItem:', monitor.getItem());
     const item = monitor.getItem();
     props.onDrop(item);
   }
@@ -154,27 +153,12 @@ class View extends React.Component {
             this.props.store.editorPanel.activeEditorId === this.props.id &&
             executingEditorAll === true
           ) {
-            console.log(this.props.store.editors);
-            console.log(this.props.store.profiles);
             const editor = this.props.store.editors.get(
               this.props.store.editorPanel.activeEditorId
             );
             const shell = editor.shellId;
             const profileId = editor.profileId;
-
             const currEditorValue = this.getEditorValue();
-
-            console.log(
-              '[',
-              this.props.store.editorPanel.activeDropdownId,
-              ']Sending data to feathers id ',
-              profileId,
-              '/',
-              shell,
-              ': "',
-              currEditorValue,
-              '".'
-            );
 
             // Listen for completion
             this.props.store.editors.get(editor.id).executing = true;
@@ -251,18 +235,6 @@ class View extends React.Component {
                 });
               }
             }
-
-            console.log(
-              '[',
-              this.props.store.editorPanel.activeDropdownId,
-              ']Sending data to feathers id ',
-              id,
-              '/',
-              shell,
-              ': "',
-              content,
-              '".'
-            );
             this.props.store.editors.get(editor.id).executing = true;
             this.props.store.editorToolbar.isActiveExecuting = true;
 
@@ -315,12 +287,10 @@ class View extends React.Component {
       reaction(
         () => this.props.store.outputPanel.sendingCommand,
         (sendingCommand) => {
-          console.log('reactionToTerminalPush');
           if (
             sendingCommand &&
             this.props.store.editorPanel.activeEditorId === this.props.id
           ) {
-            console.log(sendingCommand);
             this.insertAtCursor(sendingCommand);
             this.props.store.outputPanel.sendingCommand = '';
           }
@@ -341,7 +311,6 @@ class View extends React.Component {
             );
             const shell = editor.shellId;
             const id = editor.profileId;
-            console.log(`Stopping Execution of ${id} / ${shell}!`);
             const service = featherClient().service('/mongo-stop-execution');
             service.timeout = 1000;
             service
@@ -351,7 +320,6 @@ class View extends React.Component {
                 }
               })
               .then((response) => {
-                console.log(`Stopped Execution of ${id} / ${shell}!`);
                 if (response) {
                   NewToaster.show({
                     message: response.result,
@@ -487,7 +455,6 @@ class View extends React.Component {
   setupAutoCompletion() {
     CodeMirror.commands.autocomplete = (cm) => {
       const currentLine = cm.getLine(cm.getCursor().line);
-      console.log('current line:', currentLine);
       let start = cm.getCursor().ch;
       let end = start;
       while (
@@ -500,7 +467,6 @@ class View extends React.Component {
         start -= 1;
       }
       const curWord = start != end && currentLine.slice(start, end);
-      console.log('current word ', curWord);
       if (!curWord) {
         return;
       }
@@ -508,7 +474,6 @@ class View extends React.Component {
       if (!id || !shell) {
         return;
       }
-      console.log('send auto complete ', id, shell, curWord);
       const service = featherClient().service('/mongo-auto-complete');
       service
         .get(id, {
@@ -518,7 +483,6 @@ class View extends React.Component {
           }
         })
         .then((res) => {
-          console.log('write response ', res, cm.getDoc().getCursor());
           if (res && res.length === 1 && res[0].trim().length === 0) {
             return;
           }
@@ -569,7 +533,6 @@ class View extends React.Component {
    * @param explainParam  explain parameter, it could be queryPlanner, executionStats, allPlansExecution
    */
   executingExplain(explainParam) {
-    console.log('send explain request ', explainParam);
     if (
       this.editor &&
       this.props.store.editorPanel.activeEditorId == this.props.id &&
@@ -620,18 +583,6 @@ class View extends React.Component {
           content += '.explain("' + explainParam + '")';
         }
       }
-
-      console.log(
-        '[',
-        this.props.store.editorPanel.activeDropdownId,
-        ']Sending data to feathers id ',
-        id,
-        '/',
-        shell,
-        ': "',
-        content,
-        '".'
-      );
 
       editor.executing = true;
       // Send request to feathers client
