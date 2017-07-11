@@ -21,11 +21,12 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   chris
- * @Last modified time: 2017-06-20T17:33:54+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-11T15:21:47+10:00
  */
 
 import React from 'react';
+import { Broker, EventType } from '~/helpers/broker';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import SplitPane from 'react-split-pane';
@@ -57,7 +58,10 @@ class App extends React.Component {
   static propTypes = {
     layout: PropTypes.observableObject.isRequired
   };
-
+  componentDidMount() {
+    console.log('Emit App Rendered !!!!');
+    Broker.emit(EventType.APP_RENDERED);
+  }
   @action.bound
   updateRightSplitPos(pos) {
     this.props.layout.rightSplitPos = pos;

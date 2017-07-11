@@ -19,8 +19,8 @@
  */
 
 /**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-05-30T16:55:50+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-11T15:21:02+10:00
  */
 
 import Store from '~/stores/global';
@@ -37,6 +37,7 @@ useStrict(true);
 const rootEl = document.getElementById('root');
 
 let store;
+let bAppRendered = false;
 
 Broker.once(EventType.APP_READY, () => {
   const render = (Component) => {
@@ -52,12 +53,27 @@ Broker.once(EventType.APP_READY, () => {
 
   render(App);
 
+  const renderWithCleanStore = () => {
+    if (!bAppRendered) {
+      console.log('Recovering with clean state store.');
+      store = new Store();
+      render(App);
+    }
+  };
+
+  renderWithCleanStore();
+
   // Hot Module Replacement API
   if (module.hot) {
     module.hot.accept('./components/App', () => {
       render(App);
     });
   }
+});
+
+Broker.once(EventType.APP_RENDERED, () => {
+  console.log('App Rendered successfully !!!!!!!');
+  bAppRendered = true;
 });
 
 window.addEventListener('beforeunload', () => {

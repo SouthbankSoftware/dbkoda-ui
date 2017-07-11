@@ -19,8 +19,8 @@
  */
 
 /**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-05-30T16:49:27+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-11T15:01:31+10:00
  */
 
 export default {
@@ -69,5 +69,6 @@ export default {
     return 'controller::shell::reconnect::' + id + '::' + shellId;
   },
   APP_READY: 'appReady',
-  SWAP_SHELL_CONNECTION: 'swap::shell::connection'
+  SWAP_SHELL_CONNECTION: 'swap::shell::connection',
+  APP_RENDERED: 'appRendered'
 };
