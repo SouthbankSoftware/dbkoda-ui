@@ -46,8 +46,9 @@ const ExplainView = ({explains}) => {
     return null;
   }
   const output = toJS(explains.output);
+  const namespace = output.queryPlanner ? output.queryPlanner.namespace : '';
   const commandPanel = explains.command ?
-    <QueryCommandView command={explains.command} namespace={output.queryPlanner.namespace} /> : null;
+    <QueryCommandView command={explains.command} namespace={namespace} /> : null;
   if (!output.executionStats) {
     // this is query plain
     const executionStages = output.queryPlanner.winningPlan;
