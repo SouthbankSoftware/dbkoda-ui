@@ -18,11 +18,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-11T15:21:02+10:00
- */
-
 import Store from '~/stores/global';
 import React from 'react';
 import ReactDOM from 'react-dom';

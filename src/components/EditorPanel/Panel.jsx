@@ -24,7 +24,7 @@
  * @Last modified time: 2017-07-10T13:17:40+10:00
  */
 
-/* eslint-disable react/no-string-refs, react/sort-comp, jsx-a11y/no-static-element-interactions */
+/* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { inject, observer, PropTypes } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
@@ -41,11 +41,12 @@ import {
   Dialog,
   AnchorButton,
 } from '@blueprintjs/core';
-import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
-import Toolbar from './Toolbar.jsx';
-import View from './View.jsx';
+import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
+import FilterList from '#/common/FilterList';
+import Toolbar from './Toolbar';
+import View from './View';
 import './Panel.scss';
-import WelcomeView from './WelcomePanel/WelcomeView.jsx';
+import WelcomeView from './WelcomePanel/WelcomeView';
 
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
@@ -257,8 +258,7 @@ export default class Panel extends React.Component {
         .then(v => console.log('remove shell successfully, ', v))
         .catch(err => console.error('remove shell failed,', err));
     }
-    // TODO Check if closed editor is current editor:
-    // if (true) {
+
     this.props.store.editorPanel.isRemovingCurrentTab = true;
     // Check if this is the last tab:
     if (this.props.store.editors.size == 1) {
@@ -282,7 +282,7 @@ export default class Panel extends React.Component {
       }
       return;
     }
-    // }
+
     this.props.store.editorPanel.removingTabId = deletedEditor.id;
     this.props.store.editors.delete(deletedEditor.id);
 
@@ -638,7 +638,7 @@ export default class Panel extends React.Component {
     );
   }
 
-  _isPosEqual(pos1, pos2, accuracy = 1) {
+  _isScrollPosEqual(pos1, pos2, accuracy = 1) {
     return Math.abs(pos1 - pos2) < accuracy;
   }
 
@@ -650,7 +650,9 @@ export default class Panel extends React.Component {
       currTabEl,
     );
 
-    if (this._isPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)) {
+    if (
+      this._isScrollPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)
+    ) {
       const prevTabEl = currTabEl.previousSibling;
       if (prevTabEl) {
         this.scrollToTab(
@@ -670,7 +672,9 @@ export default class Panel extends React.Component {
       currTabEl,
     );
 
-    if (this._isPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)) {
+    if (
+      this._isScrollPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)
+    ) {
       const nextTabEl = currTabEl.nextSibling;
       if (nextTabEl) {
         this.scrollToTab(
@@ -682,7 +686,31 @@ export default class Panel extends React.Component {
     }
   }
 
-  onTabListBtnClicked() {}
+  onTabListBtnClicked() {
+    const { editors, editorPanel } = this.props.store;
+
+    const tabList = (
+      <FilterList
+        items={editors.values()}
+        getItemTitle={this.getEditorTitle}
+        getItemId={item => item.id}
+        onClick={(item) => {
+          ContextMenu.hide();
+
+          runInAction('Change active tab and scroll to it', () => {
+            editorPanel.shouldScrollToActiveTab = true;
+          });
+          this.changeTab(item.id);
+        }}
+      />
+    );
+    const btnEl = this.tabListBtn.getBoundingClientRect();
+
+    ContextMenu.show(tabList, {
+      left: btnEl.left,
+      top: btnEl.top + btnEl.height,
+    });
+  }
 
   getElementScrollLeftTargetPosition(el) {
     return Math.min(el.offsetLeft, this.getScrollLeftMax());
@@ -708,7 +736,9 @@ export default class Panel extends React.Component {
       editorPanel.shouldScrollToActiveTab = false;
 
       // scroll to active tab
-      const el = document.getElementById(`pt-tab-title_EditorTabs_${editorPanel.activeEditorId}`);
+      const el = document.getElementById(
+        `pt-tab-title_EditorTabs_${editorPanel.activeEditorId}`,
+      );
       this.scrollToTab(this.getElementScrollRightTargetPosition.bind(this, el));
     }
   }
@@ -720,7 +750,7 @@ export default class Panel extends React.Component {
     const el = this.tabs.tablistElement;
     const targetPos = getTargetPos();
 
-    if (this._isPosEqual(el.scrollLeft, targetPos)) return;
+    if (this._isScrollPosEqual(el.scrollLeft, targetPos)) return;
 
     const cosParameter = (el.scrollLeft - targetPos) / 2;
     let scrollCount = 0;
@@ -760,7 +790,10 @@ export default class Panel extends React.Component {
     const tabListEl = this.tabs.tablistElement;
 
     if (
-      this._isPosEqual(tabListEl.scrollLeft, this.getScrollLeftMax(tabListEl))
+      this._isScrollPosEqual(
+        tabListEl.scrollLeft,
+        this.getScrollLeftMax(tabListEl),
+      )
     ) {
       return tabListEl.lastChild;
     }
@@ -768,6 +801,10 @@ export default class Panel extends React.Component {
     const rect = this.tabScrollRightBtn.getBoundingClientRect();
     return document.elementFromPoint(rect.left - 1, rect.top + 2);
   }
+
+  getEditorTitle = (editor) => {
+    return editor.alias + ' (' + editor.fileName + ')';
+  };
 
   /**
    * Action for rendering the component.
@@ -792,53 +829,56 @@ export default class Panel extends React.Component {
         >
           {this.renderWelcome()}
           {editors.map((tab) => {
-            if (tab[1].visible) {
-              const tabClassName = tab[1].alias.replace(/[\. ]/g, '');
-              return (
-                <Tab2
-                  className={'editorTab visible ' + tabClassName}
-                  key={tab[1].id}
-                  id={tab[1].id}
-                  title={tab[1].alias + ' (' + tab[1].fileName + ')'}
-                  panel={
-                    <View
-                      id={tab[0]}
-                      title={tab[1].alias + ' (' + tab[1].fileName + ')'}
-                      onDrop={item => this.handleDrop(item)}
-                      editor={tab[1]}
-                      ref="defaultEditor"
-                    />
-                  }
-                >
-                  {this.renderUnsavedFileIndicator(tab[0])}
-                  <Button
-                    className="pt-minimal"
-                    onClick={() => this.closeTab(tab[1])}
-                  >
-                    <span className="pt-icon-cross" />
-                  </Button>
-                </Tab2>
-              );
-            }
+            // TODO this `visible` is not used anymore. Needs a cleanup
+            // if (tab[1].visible) {
+            const tabClassName = tab[1].alias.replace(/[\. ]/g, '');
+            const editorTitle = this.getEditorTitle(tab[1]);
+
             return (
               <Tab2
-                className={'editorTab notVisible ' + tabClassName}
+                className={'editorTab visible ' + tabClassName}
                 key={tab[1].id}
                 id={tab[1].id}
-                title={tab[1].alias}
+                title={editorTitle}
                 panel={
-                  <View id={tab[1].id} editor={tab[1]} ref="defaultEditor" />
+                  <View
+                    id={tab[0]}
+                    title={editorTitle}
+                    onDrop={item => this.handleDrop(item)}
+                    editor={tab[1]}
+                    ref="defaultEditor"
+                  />
                 }
               >
                 {this.renderUnsavedFileIndicator(tab[0])}
                 <Button
-                  className="pt-intent-primary pt-minimal"
+                  className="pt-minimal"
                   onClick={() => this.closeTab(tab[1])}
                 >
                   <span className="pt-icon-cross" />
                 </Button>
               </Tab2>
             );
+            // }
+            // return (
+            //   <Tab2
+            //     className={'editorTab notVisible ' + tabClassName}
+            //     key={tab[1].id}
+            //     id={tab[1].id}
+            //     title={tab[1].alias}
+            //     panel={
+            //       <View id={tab[1].id} editor={tab[1]} ref="defaultEditor" />
+            //     }
+            //   >
+            //     {this.renderUnsavedFileIndicator(tab[0])}
+            //     <Button
+            //       className="pt-intent-primary pt-minimal"
+            //       onClick={() => this.closeTab(tab[1])}
+            //     >
+            //       <span className="pt-icon-cross" />
+            //     </Button>
+            //   </Tab2>
+            // );
           })}
         </Tabs2>
         <div

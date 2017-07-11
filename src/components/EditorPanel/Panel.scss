@@ -17,14 +17,58 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-// @Author: Wahaj Shamim <wahaj>
-// @Date:   2017-05-12T16:51:49+10:00
-// @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   guiguan
-// @Last modified time: 2017-06-08T11:51:17+10:00
 @import '../../styles/_defaultTheme.scss';
-// Panel CSS
+
+$boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
+
+.FilterList {
+  background: #ffffff;
+  border-radius: 3px;
+  width: 250px;
+  overflow: hidden;
+
+  input.pt-input {
+    outline: none;
+    border-radius: 3px 3px 0 0;
+    background: #ffffff !important;
+    width: 100%;
+    box-shadow: $boxShadow;
+    padding: 0 7px;
+  }
+
+  input.pt-input::placeholder {
+    opacity: 0.3;
+  }
+
+  input:focus {
+    outline: none;
+    background: #ffffff !important;
+    box-shadow: $boxShadow;
+  }
+
+  ul {
+    list-style-type: unset;
+    max-height: 270px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+
+    li {
+      padding: 7px;
+    }
+
+    li:hover {
+      background-color: $menuItemHover;
+    }
+  }
+
+  ul::-webkit-scrollbar {
+    width: 6px;
+  }
+}
+
 .editorPanel {
   display: flex;
   flex-direction: column;
@@ -88,6 +132,7 @@
           background-color: $buttonTertiaryBackground;
           width: 30px;
           height: 30px;
+
           svg.dbKodaSVG {
             position: absolute;
             top: 50%;
@@ -98,9 +143,11 @@
             fill: $buttonTertiaryIcon;
           }
         }
+
         a:focus {
           box-shadow: none !important;
         }
+
         .saveFileButton svg.dbKodaSVG {
           width: 60%;
           height: 60%;
@@ -213,12 +260,14 @@
         flex-direction: column;
         flex-grow: 1;
         margin-left: 50px;
+
         .welcomePanelWrapper {
           display: flex;
           flex-direction: column;
           flex-grow: 1;
           background-color: $welcomeViewBackgroundColor;
-          margin-top: 30px; 
+          margin-top: 30px;
+
           h1 {
             color: $welcomeViewFontColor;
             font-size: 24px;
@@ -262,6 +311,7 @@
               flex-grow: 0;
               flex-shrink: 0;
               width: 210px;
+
               .welcomeMenu {
                 display: flex;
                 padding-right: 20px;
@@ -291,7 +341,8 @@
                     flex-shrink: 0;
                     padding-bottom: 30px;
                     height: 90px;
-                    width:180px;
+                    width: 180px;
+
                     .welcomeMenuButton {
                       color: $welcomeViewOptoutFontColor;
                       flex-grow: 1;
@@ -353,6 +404,7 @@
               width: 500px;
               margin-top: 30px;
               order: 2;
+
               .welcomePageContentWrapper {
                 display: flex;
                 flex-direction: row;
@@ -367,6 +419,7 @@
                   border-right: 1px solid $welcomeViewDividerTransparent;
                   flex-shrink: 0;
                   flex-direction: column;
+
                   h2 {
                     color: $welcomeViewFontColor;
                     font-size: 18px;
@@ -376,16 +429,19 @@
                   p {
                     color: $welcomeViewFontColorDark;
                   }
+
                   .docsList {
                     overflow-y: auto;
                     display: flex;
                     flex-direction: column;
+
                     .documentationLinkWrapper {
                       padding-bottom: 10%;
                       flex-grow: 1;
                       display: flex;
                       flex-direction: row;
                       margin-right: 6%;
+
                       .iconWrapper {
                         width: 50px;
                         height: 50px;
@@ -393,6 +449,7 @@
                         flex-grow: 2;
                         border-radius: 0.4em;
                         text-align: center;
+
                         a {
                           float: left;
                           width: 50px;
@@ -410,9 +467,11 @@
                             fill: $welcomeViewSocialMediaIcons;
                           }
                         }
+
                         a:focus {
                           box-shadow: none !important;
                         }
+
                         a:hover {
                           background-color: $welcomeViewIconBGHover;
                         }
@@ -436,6 +495,7 @@
                     .linkWrapper {
                       flex-direction: column;
                       margin-right: 10px;
+
                       a {
                         width: 100px;
                         border-radius: 50%;
@@ -444,9 +504,11 @@
                         background: $welcomeViewIconBG;
                         font-size: 40;
                       }
+
                       a:focus {
-                          box-shadow: none !important;
+                        box-shadow: none !important;
                       }
+
                       .twitterIcon {
                         width: 60px;
                         height: 60px;
@@ -518,6 +580,7 @@
                   padding-left: 20px;
                   display: flex;
                   flex-direction: column;
+
                   h2 {
                     font-size: 18px;
                     color: $welcomeViewFontColor;
@@ -542,6 +605,7 @@
                           background: $welcomeViewIconBG;
                           position: relative;
                           text-align: center;
+
                           svg {
                             width: 40px;
                             height: 40px;
@@ -552,6 +616,7 @@
                             fill: $welcomeViewSocialMediaIcons;
                           }
                         }
+
                         a:hover {
                           background-color: $welcomeViewIconBGHover;
                         }
@@ -580,18 +645,22 @@
                       }
                     }
                   }
+
                   .newsListWrapper {
                     overflow-y: auto;
+
                     .newsItemWrapper {
                       display: flex;
                       flex-direction: row;
+
                       .newsIconWrapper {
                         background-color: $welcomeViewIconBG;
                         width: 50px;
                         height: 50px;
                         border-radius: 0.4em;
                         text-align: center;
-                        .svgWrapper{
+
+                        .svgWrapper {
                           float: left;
                           width: 50px;
                           height: 50px;
@@ -599,6 +668,7 @@
                           background: $welcomeViewIconBG;
                           position: relative;
                           text-align: center;
+
                           svg {
                             opacity: 0.9;
                             position: absolute;
@@ -606,29 +676,36 @@
                             bottom: 50%;
                             transform: translate(-50%, -50%);
                             fill: $welcomeViewSocialMediaIcons;
+
                             .st0 {
                               fill: none;
                             }
                           }
                         }
+
                         .svgWrapper:hover {
-                          background-color: $welcomeViewIconBGHover;  
+                          background-color: $welcomeViewIconBGHover;
                         }
+
                         .svgWrapper:focus {
                           box-shadow: none !important;
                         }
                       }
+
                       .newsContentWrapper {
                         margin-left: 8px;
+
                         h2.newsTitle {
                           font-size: 16px;
                           line-height: 16px;
                           margin-bottom: 6px;
                         }
+
                         p.newsContent {
                           margin-bottom: 4px;
-                          line-height:14px;
+                          line-height: 14px;
                         }
+
                         p.datePublished {
                           opacity: 0.6;
                         }
@@ -719,7 +796,9 @@
     background-color: $tabBackground;
     line-height: 30px;
     height: 31px;
+    width: 20px;
     font-size: 12px;
+    text-align: center;
   }
 
   .tabControlBtn:hover {
@@ -727,18 +806,17 @@
   }
 
   .tabScrollLeftBtn {
-    left: 0px;
-    padding: 0 4px;
+    left: 0;
   }
 
   .tabScrollRightBtn {
     right: 23px;
-    padding: 0 4px;
   }
 
   .tabListBtn {
     right: 0;
-    padding: 0 7px 0 4px;
+    padding-right: 3px;
+    width: 23px;
   }
 
   //// Code Mirror CSS: ////

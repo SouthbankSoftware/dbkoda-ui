@@ -17,15 +17,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * @Author: Michael Harrison <mike>
- * @Date:   2017-03-15 13:40:45
- * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-27T12:02:40+10:00
- */
+
 /* eslint-disable react/prop-types */
-/* eslint-disable react/sort-comp */
 import {inject, observer} from 'mobx-react';
 import {action, reaction, runInAction} from 'mobx';
 import autobind from 'autobind-decorator';
@@ -498,11 +491,11 @@ export default class ListView extends React.Component {
     this.setState({passwordText: event.target.value});
   }
 
-  @autobind
-  @action
+  @action.bound
   swapToEditor(event) {
     this.props.store.editorToolbar.id = event.id;
     this.props.store.editorToolbar.shellId = event.shellId;
+    this.props.store.editorPanel.shouldScrollToActiveTab = true;
     this.props.store.editorPanel.activeEditorId = event.id;
   }
 

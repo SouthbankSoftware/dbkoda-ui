@@ -18,8 +18,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/sort-comp */
-
 import _ from 'lodash';
 import React from 'react';
 import Mousetrap from 'mousetrap';
@@ -51,8 +49,8 @@ const { dialog, BrowserWindow } = IS_ELECTRON
 const FILE_FILTERS = [
   {
     name: 'JavaScript',
-    extensions: ['js']
-  }
+    extensions: ['js'],
+  },
 ];
 
 /**
@@ -96,7 +94,7 @@ export default class Toolbar extends React.Component {
         if (this.props.store.editorToolbar.newEditorForTreeAction) {
           this.addEditorNoOptions();
         }
-      }
+      },
     );
 
     this.reactionToNewEditorForProfileId = reaction(
@@ -107,7 +105,7 @@ export default class Toolbar extends React.Component {
           this.addEditorNoOptions();
           this.props.store.editorToolbar.newEditorForProfileId = '';
         }
-      }
+      },
     );
 
     if (IS_ELECTRON) {
@@ -126,32 +124,32 @@ export default class Toolbar extends React.Component {
     this.reactionToNewEditorForProfileId();
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
-      this.executeLine
+      this.executeLine,
     );
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeAll.keys,
-      this.executeAll
+      this.executeAll,
     );
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys,
-      this.stopExecution
+      this.stopExecution,
     );
 
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
-      this.addEditorNoOptions
+      this.addEditorNoOptions,
     );
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
-      this.openFile
+      this.openFile,
     );
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.saveFile.keys,
-      this.saveFileHandleError
+      this.saveFileHandleError,
     );
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys,
-      this.saveFileAs
+      this.saveFileAs,
     );
   }
 
@@ -159,32 +157,32 @@ export default class Toolbar extends React.Component {
     // Add hotkey bindings for this component:
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
-      this.executeLine
+      this.executeLine,
     );
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeAll.keys,
-      this.executeAll
+      this.executeAll,
     );
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys,
-      this.stopExecution
+      this.stopExecution,
     );
 
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
-      this.addEditorNoOptions
+      this.addEditorNoOptions,
     );
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
-      this.openFile
+      this.openFile,
     );
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.saveFile.keys,
-      this.saveFileHandleError
+      this.saveFileHandleError,
     );
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys,
-      this.saveFileAs
+      this.saveFileAs,
     );
   }
 
@@ -226,8 +224,8 @@ export default class Toolbar extends React.Component {
           doc: observable.ref(Store.createNewDocumentObject()),
           status: profile.status,
           path: null,
-          shellVersion: profile.shellVersion
-        })
+          shellVersion: profile.shellVersion,
+        }),
       );
       editorPanel.activeEditorId = editorId;
     } else {
@@ -267,13 +265,13 @@ export default class Toolbar extends React.Component {
             EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
               .FAILED_DEFAULT,
             EventLogging.getFragmentEnum().EDITORS,
-            'Cannot create new Editor for Default Tab.'
+            'Cannot create new Editor for Default Tab.',
           );
         }
         NewToaster.show({
           message: globalString('editor/toolbar/addEditorError'),
           intent: Intent.WARNING,
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
         this.props.store.createNewEditorFailed();
         return null;
@@ -289,7 +287,7 @@ export default class Toolbar extends React.Component {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,
               EventLogging.getFragmentEnum().EDITORS,
-              err.message
+              err.message,
             );
           }
           this.props.store.createNewEditorFailed();
@@ -301,7 +299,7 @@ export default class Toolbar extends React.Component {
             NewToaster.show({
               message: 'Error: ' + err.message,
               intent: Intent.DANGER,
-              iconName: 'pt-icon-thumbs-down'
+              iconName: 'pt-icon-thumbs-down',
             });
           }
         });
@@ -310,13 +308,13 @@ export default class Toolbar extends React.Component {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().ERROR,
           EventLogging.getFragmentEnum().EDITORS,
-          err.message
+          err.message,
         );
       }
       NewToaster.show({
         message: err.message,
         intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
+        iconName: 'pt-icon-thumbs-down',
       });
       this.props.store.createNewEditorFailed();
     }
@@ -344,7 +342,7 @@ export default class Toolbar extends React.Component {
         BrowserWindow.getFocusedWindow(),
         {
           properties: ['openFile', 'multiSelections'],
-          filters: FILE_FILTERS
+          filters: FILE_FILTERS,
         },
         (fileNames) => {
           if (!fileNames) {
@@ -358,35 +356,35 @@ export default class Toolbar extends React.Component {
                 if (window.navigator.platform.toLowerCase() === 'win32') {
                   _fileName = _id.substring(
                     _id.lastIndexOf('\\') + 1,
-                    _id.length
+                    _id.length,
                   );
                 }
                 return this.addEditor({
                   content,
                   fileName: _fileName,
-                  path: _id
+                  path: _id,
                 });
               })
               .catch(() => {});
           });
-        }
+        },
       );
     } else {
       const warningMsg = globalString(
         'editor/toolbar/notSupportedInUI',
-        'openFile'
+        'openFile',
       );
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
           EventLogging.getFragmentEnum().EDITORS,
-          warningMsg
+          warningMsg,
         );
       }
       NewToaster.show({
         message: warningMsg,
         intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
+        iconName: 'pt-icon-thumbs-down',
       });
     }
   }
@@ -405,7 +403,7 @@ export default class Toolbar extends React.Component {
       currentEditor =
         currentEditor ||
         this.props.store.editors.get(
-          this.props.store.editorPanel.activeEditorId
+          this.props.store.editorPanel.activeEditorId,
         );
 
       if (!currentEditor) {
@@ -421,7 +419,7 @@ export default class Toolbar extends React.Component {
             NewToaster.show({
               message: err.message,
               intent: Intent.DANGER,
-              iconName: 'pt-icon-thumbs-down'
+              iconName: 'pt-icon-thumbs-down',
             });
             throw err;
           });
@@ -435,9 +433,9 @@ export default class Toolbar extends React.Component {
           {
             defaultPath: path.resolve(
               this.props.store.editorPanel.lastFileSavingDirectoryPath,
-              currentEditor.fileName
+              currentEditor.fileName,
             ),
-            filters: FILE_FILTERS
+            filters: FILE_FILTERS,
           },
           (fileName) => {
             this.props.store.editorToolbar.saveAs = false;
@@ -445,7 +443,7 @@ export default class Toolbar extends React.Component {
               return reject();
             }
             this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(
-              fileName
+              fileName,
             );
             _saveFile(fileName)
               .then(() => {
@@ -454,16 +452,16 @@ export default class Toolbar extends React.Component {
                   if (window.navigator.platform.toLowerCase() === 'win32') {
                     currentEditor.fileName = fileName.substring(
                       fileName.lastIndexOf('\\') + 1,
-                      fileName.length
+                      fileName.length,
                     );
                   }
                   currentEditor.path = fileName;
                   const treeEditor = this.props.store.treeActionPanel.editors.get(
-                    currentEditor.id
+                    currentEditor.id,
                   );
                   if (treeEditor) {
                     this.props.store.treeActionPanel.editors.delete(
-                      currentEditor.id
+                      currentEditor.id,
                     );
                   }
                 });
@@ -471,26 +469,26 @@ export default class Toolbar extends React.Component {
                 resolve();
               })
               .catch(reject);
-          }
+          },
         );
       });
     }
 
     const warningMsg = globalString(
       'editor/toolbar/notSupportedInUI',
-      'saveFile'
+      'saveFile',
     );
     if (this.props.store.userPreferences.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().WARNING,
         EventLogging.getFragmentEnum().EDITORS,
-        warningMsg
+        warningMsg,
       );
     }
     NewToaster.show({
       message: warningMsg,
       intent: Intent.DANGER,
-      iconName: 'pt-icon-thumbs-down'
+      iconName: 'pt-icon-thumbs-down',
     });
 
     return Promise.reject(new Error(warningMsg));
@@ -505,7 +503,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
         intent: Intent.WARNING,
-        iconName: 'pt-icon-thumbs-down'
+        iconName: 'pt-icon-thumbs-down',
       });
     } else {
       this.props.store.editorPanel.executingEditorLines = true;
@@ -521,7 +519,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
         intent: Intent.WARNING,
-        iconName: 'pt-icon-thumbs-down'
+        iconName: 'pt-icon-thumbs-down',
       });
     } else {
       this.props.store.editorPanel.executingEditorAll = true;
@@ -537,13 +535,13 @@ export default class Toolbar extends React.Component {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().WARNING,
         EventLogging.getFragmentEnum().EDITORS,
-        'Tried to execute non-implemented explainPlan'
+        'Tried to execute non-implemented explainPlan',
       );
     }
     NewToaster.show({
       message: 'Sorry, not yet implemented!',
       intent: Intent.WARNING,
-      iconName: 'pt-icon-thumbs-down'
+      iconName: 'pt-icon-thumbs-down',
     });
   }
 
@@ -558,7 +556,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: 'Cannot stop execution. Nothing is executing.',
         intent: Intent.WARNING,
-        iconName: 'pt-icon-thumbs-down'
+        iconName: 'pt-icon-thumbs-down',
       });
     }
   }
@@ -583,10 +581,10 @@ export default class Toolbar extends React.Component {
     // Send command through current editor to swap DB: Get current editor instance:
 
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
+      this.props.store.editorPanel.activeEditorId,
     );
     const profile = this.props.store.profiles.get(
-      this.props.store.editorToolbar.currentProfile
+      this.props.store.editorToolbar.currentProfile,
     );
     if (profile) {
       // Send Command:
@@ -596,7 +594,7 @@ export default class Toolbar extends React.Component {
         .update(editor.profileId, {
           shellId: editor.shellId,
           newProfile: profile.id,
-          swapProfile: true
+          swapProfile: true,
         })
         .then((res) => {
           if (res.shellId) {
@@ -607,7 +605,7 @@ export default class Toolbar extends React.Component {
             NewToaster.show({
               message: 'Swapped Profiles.',
               intent: Intent.SUCCESS,
-              iconName: 'pt-icon-thumbs-up'
+              iconName: 'pt-icon-thumbs-up',
             });
           } else {
             const match = res.match(/Error/g);
@@ -620,7 +618,7 @@ export default class Toolbar extends React.Component {
               NewToaster.show({
                 message: globalString('editor/toolbar/profileSwapSslError'),
                 intent: Intent.DANGER,
-                iconName: 'pt-icon-thumbs-down'
+                iconName: 'pt-icon-thumbs-down',
               });
             } else {
               runInAction('Update dropdown on success', () => {
@@ -629,7 +627,7 @@ export default class Toolbar extends React.Component {
               NewToaster.show({
                 message: 'Swapped Profiles.',
                 intent: Intent.SUCCESS,
-                iconName: 'pt-icon-thumbs-up'
+                iconName: 'pt-icon-thumbs-up',
               });
             }
           }
@@ -643,7 +641,7 @@ export default class Toolbar extends React.Component {
           NewToaster.show({
             message: globalString('editor/toolbar/profileSwapError'),
             intent: Intent.DANGER,
-            iconName: 'pt-icon-thumbs-down'
+            iconName: 'pt-icon-thumbs-down',
           });
           // @TODO - Handle failure.
         });
@@ -653,7 +651,7 @@ export default class Toolbar extends React.Component {
   @action
   updateCurrentProfile(profile, shellId = undefined) {
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
+      this.props.store.editorPanel.activeEditorId,
     );
     if (shellId) {
       editor.shellId = shellId;
@@ -661,7 +659,7 @@ export default class Toolbar extends React.Component {
         oldId: editor.profileId,
         oldShellId: editor.shellId,
         id: profile.id,
-        shellId
+        shellId,
       });
       editor.profileId = profile.id;
     }
