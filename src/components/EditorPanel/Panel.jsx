@@ -774,9 +774,6 @@ export default class Panel extends React.Component {
    */
   render() {
     const editors = this.props.store.editors.entries();
-    this.props.store.editors.forEach((v) => {
-      console.log(v.alias);
-    });
     return (
       <div className="pt-dark editorPanel" onContextMenu={this.showContextMenu}>
         <Toolbar
