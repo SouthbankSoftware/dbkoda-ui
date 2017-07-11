@@ -51,7 +51,6 @@ import 'codemirror/addon/search/jump-to-line.js';
 import 'codemirror/addon/dialog/dialog.js';
 import 'codemirror/addon/search/matchesonscrollbar.js';
 import 'codemirror/addon/scroll/annotatescrollbar.js';
-import 'codemirror/addon/scroll/simplescrollbars.js';
 import 'codemirror/keymap/sublime.js';
 import 'codemirror-formatting';
 import '#/common/MongoScript.js';
@@ -115,7 +114,7 @@ class View extends React.Component {
       lineNumbers: 'true',
       indentUnit: 2,
       styleActiveLine: 'true',
-      scrollbarStyle: 'overlay',
+      scrollbarStyle: null,
       smartIndent: true,
       styleSelectedText: false,
       tabSize: 2,

@@ -255,6 +255,7 @@ export default class Editor extends React.Component {
       matchBrackets: true,
       autoCloseBrackets: true,
       styleActiveLine: true,
+      scrollbarStyle: null,
       foldOptions: {
         widget: '...'
       },
