@@ -195,12 +195,14 @@ class Terminal extends React.Component {
       .terminal
       .getCodeMirror();
     cm.on('keydown', (cm, keyEvent) => {
-      if (keyEvent.keyCode == 38) {
-        // Up
-        this.showPreviousCommand();
-      } else if (keyEvent.keyCode == 40) {
-        // Down
-        this.showNextCommand();
+      if (cm.state.completionActive == null) {
+        if (keyEvent.keyCode == 38) {
+          // Up
+          this.showPreviousCommand();
+        } else if (keyEvent.keyCode == 40) {
+          // Down
+          this.showNextCommand();
+        }
       }
     });
     cm.on('beforeChange', (cm, changeObj) => {
