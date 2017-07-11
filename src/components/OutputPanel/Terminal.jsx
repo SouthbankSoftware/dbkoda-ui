@@ -246,6 +246,7 @@ class Terminal extends React.Component {
       this.state.historyCursor += 1;
       this.updateCommand(this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]);
     } else {
+      this.state.historyCursor = this.props.store.outputs.get(this.props.id).commandHistory.length;
       this.setState({command: ''});
     }
   }
