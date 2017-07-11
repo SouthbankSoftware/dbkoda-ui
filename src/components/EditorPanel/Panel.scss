@@ -350,7 +350,7 @@
             }
 
             .welcomeContentWrapper {
-              width: 600px;
+              width: 500px;
               margin-top: 30px;
               order: 2;
               .welcomePageContentWrapper {
@@ -360,6 +360,7 @@
 
                 .welcomePageContentLeft {
                   overflow-y: auto;
+                  width: 250px;
                   color: $welcomeViewSocialMediaText;
                   padding-left: 20px;
                   padding-right: 20px;
