@@ -202,5 +202,8 @@ div.savingDialog {
       background-color: $buttonDangerBackgroundHover;
     }
   }
+  .CodeMirror {
+    font-family: 'Courier New', 'Courier', 'monospace' !important;
+  }
 }
 

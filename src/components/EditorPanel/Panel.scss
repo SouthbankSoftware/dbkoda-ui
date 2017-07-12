@@ -258,7 +258,6 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                         display: flex;
                         flex-direction: row;
                         flex-grow: 2;
-                        flex-wrap: wrap;
                         .welcomeMenuWrapper {
                             margin-top: 30px;
                             display: flex;
@@ -291,8 +290,8 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                         flex-direction: row;
                                         order: 1;
                                         flex-shrink: 0;
-                                        padding-bottom: 30px;
-                                        height: 90px;
+                                        padding-bottom: 15px;
+                                        height: 60px;
                                         width: 180px;
                                         .welcomeMenuButton {
                                             color: $welcomeViewOptoutFontColor;
@@ -346,7 +345,6 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                             }
                         }
                         .welcomeContentWrapper {
-                            width: 500px;
                             margin-top: 30px;
                             order: 2;
                             .welcomePageContentWrapper {
@@ -375,7 +373,7 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                         display: flex;
                                         flex-direction: column;
                                         .documentationLinkWrapper {
-                                            padding-bottom: 10%;
+                                            padding-bottom: 6px;
                                             flex-grow: 1;
                                             display: flex;
                                             flex-direction: row;
@@ -495,10 +493,13 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                     }
                                 }
                                 .welcomePageContentRight {
-                                    width: 500px;
+                                    padding-right: 15%;
                                     padding-left: 20px;
+                                    flex-grow: 1;
+                                    flex-shrink: 1;
                                     display: flex;
                                     flex-direction: column;
+
                                     h2 {
                                         font-size: 18px;
                                         color: $welcomeViewFontColor;
@@ -507,6 +508,7 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                         .feedItem {
                                             display: flex;
                                             flex-direction: row;
+                                             overflow-x: auto;
                                             .feedIconWrapper {
                                                 width: 60px;
                                                 height: 60px;
@@ -636,7 +638,7 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                         flex-direction: row;
                                         order: 1;
                                         flex-shrink: 0;
-                                        padding-bottom: 30px;
+                                        padding-bottom: 15px;
                                         height: 80px;
                                         .welcomeMenuButton {
                                             color: $welcomeViewOptoutFontColor;
@@ -733,6 +735,7 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
     .CodeMirror,
     .ReactCodeMirror {
         height: 100%;
+        font-family: 'Courier New', 'Courier', 'monospace' !important;
     }
     .cm-s-ambiance .CodeMirror-linenumber {
         color: $white;
