@@ -45,6 +45,7 @@ import '@blueprintjs/table/dist/table.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';
+import '~/styles/fonts/index.css';
 import TelemetryConsent from './TelemetryConsent.jsx';
 
 import './App.scss';
@@ -59,7 +60,6 @@ class App extends React.Component {
     layout: PropTypes.observableObject.isRequired
   };
   componentDidMount() {
-    console.log('Emit App Rendered !!!!');
     Broker.emit(EventType.APP_RENDERED);
   }
   @action.bound
