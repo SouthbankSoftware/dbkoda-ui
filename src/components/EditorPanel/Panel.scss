@@ -676,38 +676,37 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
                             bottom: 50%;
                             transform: translate(-50%, -50%);
                             fill: $welcomeViewSocialMediaIcons;
-
                             .st0 {
                               fill: none;
                             }
                           }
                         }
-
                         .svgWrapper:hover {
                           background-color: $welcomeViewIconBGHover;
                         }
-
                         .svgWrapper:focus {
                           box-shadow: none !important;
                         }
                       }
-
                       .newsContentWrapper {
                         margin-left: 8px;
-
+                        font-family: Arial, Helvetica, sans-serif;
                         h2.newsTitle {
+                          font-family: Arial, Helvetica, sans-serif;
                           font-size: 16px;
                           line-height: 16px;
                           margin-bottom: 6px;
                         }
 
                         p.newsContent {
+                          font-family: Arial, Helvetica, sans-serif;
                           margin-bottom: 4px;
                           line-height: 14px;
                         }
 
                         p.datePublished {
                           opacity: 0.6;
+                          font-family: Arial, Helvetica, sans-serif;
                         }
                       }
                     }
