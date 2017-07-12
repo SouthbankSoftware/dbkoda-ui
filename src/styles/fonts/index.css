@@ -5,10 +5,7 @@
 @font-face {
     font-family: 'Arial';
     src: url('Arial Black.ttf');
-    src: url('Arial Black.eot?#iefix') format('embedded-opentype'),
-         url('Arial Black.woff') format('woff'),
-         url('Arial Black.ttf') format('truetype'),
-         url('Arial Black.svg#ArialBlack') format('svg');
+    src: url('Arial Black.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
