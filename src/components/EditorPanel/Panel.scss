@@ -17,1090 +17,926 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 @import '../../styles/_defaultTheme.scss';
-
-$boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
-
+$boxShadow: 0 0 0 0 rgba(19, 124, 189, 0),
+0 0 0 0 rgba(19, 124, 189, 0),
+inset 0 0 0 1px rgba(16, 22, 26, 0.15),
+inset 0 1px 1px rgba(16, 22, 26, 0.2);
 .FilterList {
-  background: #ffffff;
-  border-radius: 3px;
-  width: 250px;
-  overflow: hidden;
-
-  input.pt-input {
-    outline: none;
-    border-radius: 3px 3px 0 0;
-    background: #ffffff !important;
-    width: 100%;
-    box-shadow: $boxShadow;
-    padding: 0 7px;
-  }
-
-  input.pt-input::placeholder {
-    opacity: 0.3;
-  }
-
-  input:focus {
-    outline: none;
-    background: #ffffff !important;
-    box-shadow: $boxShadow;
-  }
-
-  ul {
-    list-style-type: unset;
-    max-height: 270px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-
-    li {
-      padding: 7px;
+    background: #ffffff;
+    border-radius: 3px;
+    width: 250px;
+    overflow: hidden;
+    input.pt-input {
+        outline: none;
+        border-radius: 3px 3px 0 0;
+        background: #ffffff !important;
+        width: 100%;
+        box-shadow: $boxShadow;
+        padding: 0 7px;
     }
-
-    li:hover {
-      background-color: $menuItemHover;
+    input.pt-input::placeholder {
+        opacity: 0.3;
     }
-  }
-
-  ul::-webkit-scrollbar {
-    width: 6px;
-  }
+    input:focus {
+        outline: none;
+        background: #ffffff !important;
+        box-shadow: $boxShadow;
+    }
+    ul {
+        list-style-type: unset;
+        max-height: 270px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        li {
+            padding: 7px;
+        }
+        li:hover {
+            background-color: $menuItemHover;
+        }
+    }
+    ul::-webkit-scrollbar {
+        width: 6px;
+    }
 }
 
 .editorPanel {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  .notVisible {
-    display: none;
-  }
-
-  .editorToolbar {
-    overflow-x: hidden;
-    background-color: $navbarRightBackground !important;
-    min-height: 50px;
-
-    .leftEditorToolbar {
-      .leftButtonGroup {
-        .editorContextDropdownWrapper {
-          border: 1px solid $selectDarkBorderColor;
-          background-color: $selectDarkPrimaryBackground !important;
-
-          .editorContextDropdown {
-            outline: unset;
-            background-color: $selectDarkPrimaryBackground;
-            border-right: 1px solid $selectDarkBorderColor !important;
-            padding-right: 24px !important;
-            padding-left: 5px !important;
-            width: 100%;
-          }
-        }
-
-        span {
-          .pt-button {
-            position: relative;
-
-            svg.dbKodaSVG {
-              position: absolute;
-              top: 50%;
-              bottom: 50%;
-              transform: translate(-50%, -50%);
-              fill: $buttonPrimaryIcon;
-            }
-          }
-
-          .stopExecutionButton svg.dbKodaSVG {
-            fill: $buttonSecondaryIcon;
-            height: 40%;
-            width: 40%;
-          }
-
-          .executeLineButton svg.dbKodaSVG {
-            height: 45%;
-          }
-        }
-      }
-    }
-
-    .pt-align-right {
-      span {
-        a {
-          position: relative;
-          background-color: $buttonTertiaryBackground;
-          width: 30px;
-          height: 30px;
-
-          svg.dbKodaSVG {
-            position: absolute;
-            top: 50%;
-            bottom: 50%;
-            transform: translate(-50%, -50%);
-            width: 40%;
-            height: 40%;
-            fill: $buttonTertiaryIcon;
-          }
-        }
-
-        a:focus {
-          box-shadow: none !important;
-        }
-
-        .saveFileButton svg.dbKodaSVG {
-          width: 60%;
-          height: 60%;
-        }
-
-        .openFileButton svg.dbKodaSVG {
-          width: 60%;
-          height: 60%;
-        }
-      }
-    }
-  }
-
-  .editorTabView {
-    background-color: $editorBackground;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-
-    .pt-tab-list {
-      height: 31px;
-      background-color: $tabBackground;
-      margin-left: 20px;
-      margin-right: 43px;
-
-      .pt-tab {
-        margin-right: unset;
-        color: $tabFontColor;
-        background-color: $tabBackground;
-        outline: unset;
-        box-shadow: unset;
-      }
-
-      .pt-tab[aria-selected="true"] {
-        box-shadow: unset;
-        background-color: $tabBackgroundSelected;
-      }
-
-      .pt-tab:hover {
-        background-color: $tabBackgroundHover;
-        color: $tabFontColor !important;
-      }
-
-      .welcomeTab {
-        background-color: $tabBackground;
-        font-family: unset;
-        flex-grow: initial;
-
-        button {
-          top: -1px;
-        }
-
-        button:hover {
-          color: $tabButtonHover !important;
-        }
-      }
-
-      .welcomeTab[aria-selected="true"] {
-        background-color: $welcomeViewBackgroundColor;
-        font-family: unset;
-        flex-grow: initial;
-      }
-
-      .welcomeTab[aria-selected="true"]:hover {
-        background-color: $welcomeViewBackgroundColor;
-        color: $tabFontColor !important;
-        font-family: unset;
-        flex-grow: initial;
-
-        button:hover {
-          color: $tabButtonHover !important;
-        }
-      }
-
-      .editorTab {
-        flex-grow: unset;
-
-        button {
-          float: right;
-        }
-
-        button:hover {
-          color: $tabButtonHover !important;
-        }
-      }
+    width: 100%;
+    .notVisible {
+        display: none;
     }
-
-    .editorTab {
-      margin-top: 0;
-      flex-grow: 1;
-
-      .editorView {
-        flex: 1;
-        width: 100%;
-      }
+    .editorToolbar {
+        overflow-x: hidden;
+        background-color: $navbarRightBackground !important;
+        min-height: 50px;
+        .leftEditorToolbar {
+            .leftButtonGroup {
+                .editorContextDropdownWrapper {
+                    border: 1px solid $selectDarkBorderColor;
+                    background-color: $selectDarkPrimaryBackground !important;
+                    .editorContextDropdown {
+                        outline: unset;
+                        background-color: $selectDarkPrimaryBackground;
+                        border-right: 1px solid $selectDarkBorderColor !important;
+                        padding-right: 24px !important;
+                        padding-left: 5px !important;
+                        width: 100%;
+                    }
+                }
+                span {
+                    .pt-button {
+                        position: relative;
+                        svg.dbKodaSVG {
+                            position: absolute;
+                            top: 50%;
+                            bottom: 50%;
+                            transform: translate(-50%, -50%);
+                            fill: $buttonPrimaryIcon;
+                        }
+                    }
+                    .stopExecutionButton svg.dbKodaSVG {
+                        fill: $buttonSecondaryIcon;
+                        height: 40%;
+                        width: 40%;
+                    }
+                    .executeLineButton svg.dbKodaSVG {
+                        height: 45%;
+                    }
+                }
+            }
+        }
+        .pt-align-right {
+            span {
+                a {
+                    position: relative;
+                    background-color: $buttonTertiaryBackground;
+                    width: 30px;
+                    height: 30px;
+                    svg.dbKodaSVG {
+                        position: absolute;
+                        top: 50%;
+                        bottom: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 40%;
+                        height: 40%;
+                        fill: $buttonTertiaryIcon;
+                    }
+                }
+                a:focus {
+                    box-shadow: none !important;
+                }
+                .saveFileButton svg.dbKodaSVG {
+                    width: 60%;
+                    height: 60%;
+                }
+                .openFileButton svg.dbKodaSVG {
+                    width: 60%;
+                    height: 60%;
+                }
+            }
+        }
     }
-
-    .welcomeTab {
-      font-family: "Arial", Arial, Helvetica, sans-serif;
-      background-color: $welcomeViewBackgroundColor;
-      flex-grow: 1;
-      flex-direction: column;
-      height: 100%;
-      overflow-y: scroll;
-      margin-top: 0;
-      color: $welcomeViewFontColor;
-
-      .welcomePanelTabWrapper {
+    .editorTabView {
+        background-color: $editorBackground;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-        margin-left: 50px;
-
-        .welcomePanelWrapper {
-          display: flex;
-          flex-direction: column;
-          flex-grow: 1;
-          background-color: $welcomeViewBackgroundColor;
-          margin-top: 30px;
-
-          h1 {
+        .pt-tab-list {
+            height: 31px;
+            background-color: $tabBackground;
+            margin-left: 20px;
+            margin-right: 43px;
+            .pt-tab {
+                margin-right: unset;
+                color: $tabFontColor;
+                background-color: $tabBackground;
+                outline: unset;
+                box-shadow: unset;
+            }
+            .pt-tab[aria-selected="true"] {
+                box-shadow: unset;
+                background-color: $tabBackgroundSelected;
+            }
+            .pt-tab:hover {
+                background-color: $tabBackgroundHover;
+                color: $tabFontColor !important;
+            }
+            .welcomeTab {
+                background-color: $tabBackground;
+                font-family: unset;
+                flex-grow: initial;
+                button {
+                    top: -1px;
+                }
+                button:hover {
+                    color: $tabButtonHover !important;
+                }
+            }
+            .welcomeTab[aria-selected="true"] {
+                background-color: $welcomeViewBackgroundColor;
+                font-family: unset;
+                flex-grow: initial;
+            }
+            .welcomeTab[aria-selected="true"]:hover {
+                background-color: $welcomeViewBackgroundColor;
+                color: $tabFontColor !important;
+                font-family: unset;
+                flex-grow: initial;
+                button:hover {
+                    color: $tabButtonHover !important;
+                }
+            }
+            .editorTab {
+                flex-grow: unset;
+                button {
+                    float: right;
+                }
+                button:hover {
+                    color: $tabButtonHover !important;
+                }
+            }
+        }
+        .editorTab {
+            margin-top: 0;
+            flex-grow: 1;
+            .editorView {
+                flex: 1;
+                width: 100%;
+            }
+        }
+        .welcomeTab {
+            font-family: "Arial", Arial, Helvetica, sans-serif;
+            background-color: $welcomeViewBackgroundColor;
+            flex-grow: 1;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: scroll;
+            margin-top: 0;
             color: $welcomeViewFontColor;
-            font-size: 24px;
-            order: 1;
-            font-size: 10;
-          }
-
-          .welcomeTitleWrapper {
-            display: flex;
-            flex-direction: row;
-            flex-shrink: 0;
-
-            svg.dbKodaLogo {
-              margin-right: 15px;
-              fill: $welcomeViewFontColor;
-              width: 50px;
-              height: 50px;
-
-              path.st0 {
-                fill: none;
-              }
-            }
-
-            h1 {
-              margin-top: 20px;
-            }
-          }
-
-          .welcomeMiddleSection {
-            order: 2;
-            display: flex;
-            flex-direction: row;
-            flex-grow: 2;
-            flex-wrap: wrap;
-
-            .welcomeMenuWrapper {
-              margin-top: 30px;
-              display: flex;
-              flex-direction: column;
-              order: 1;
-              flex-grow: 0;
-              flex-shrink: 0;
-              width: 210px;
-
-              .welcomeMenu {
+            .welcomePanelTabWrapper {
                 display: flex;
-                padding-right: 20px;
-                border-right: 1px solid $welcomeViewDividerTransparent;
-                flex-grow: 1;
-                flex-shrink: 0;
                 flex-direction: column;
-
-                h2 {
-                  color: $welcomeViewFontColor;
-                  font-size: 18px;
-                  order: 1;
-                  margin-bottom: 10px;
-                }
-
-                .welcomeButtons {
-                  order: 2;
-                  display: flex;
-                  flex-direction: column;
-                  flex-grow: 5;
-                  flex-shrink: 0;
-
-                  .welcomeButtonWrapper {
-                    display: flex;
-                    flex-direction: row;
-                    order: 1;
-                    flex-shrink: 0;
-                    padding-bottom: 30px;
-                    height: 90px;
-                    width: 180px;
-
-                    .welcomeMenuButton {
-                      color: $welcomeViewOptoutFontColor;
-                      flex-grow: 1;
-                      background: unset;
-                      box-shadow: unset;
-                      border: 1px solid $welcomeViewButtonBorderColor;
-                      border-radius: 0.75em;
-
-                      span {
-                        display: block;
-                        position: relative;
-                        top: 35%;
-                        padding-bottom: 10px;
-                      }
-                    }
-
-                    .welcomeMenuButton:hover {
-                      background-color: $welcomeViewButtonHoverColor;
-                      border: none;
-                    }
-                  }
-                }
-
-                .welcomeMenuOptOut {
-                  display: flex;
-                  flex-direction: row;
-                  order: 3;
-                  font-size: 10pt;
-                  font-weight: lighter;
-                  color: $connectionHeadingsFontColour !important;
-                  text-align: left;
-                  margin: 5px 0 0;
-
-                  .pt-control {
-                    span.pt-control-indicator {
-                      font-size: unset;
-                      font-weight: unset;
-                      font-style: unset;
-                      box-shadow: unset;
-                      line-height: unset;
-                      background: unset;
-                      box-shadow: unset;
-                      font-size: 11pt;
-                      color: $connectionCheckboxColour;
-                      border-radius: 0;
-                      background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
-                      border: 1px solid $connectionCheckboxColour;
-                    }
-
-                    span.pt-control-indicator:hover {
-                      background-color: $connectionCheckboxBackgroundColourHover;
-                    }
-                  }
-                }
-              }
-            }
-
-            .welcomeContentWrapper {
-              width: 500px;
-              margin-top: 30px;
-              order: 2;
-
-              .welcomePageContentWrapper {
-                display: flex;
-                flex-direction: row;
-                height: 100%;
-
-                .welcomePageContentLeft {
-                  overflow-y: auto;
-                  width: 250px;
-                  color: $welcomeViewSocialMediaText;
-                  padding-left: 20px;
-                  padding-right: 20px;
-                  border-right: 1px solid $welcomeViewDividerTransparent;
-                  flex-shrink: 0;
-                  flex-direction: column;
-
-                  h2 {
-                    color: $welcomeViewFontColor;
-                    font-size: 18px;
-                    margin-bottom: 20px;
-                  }
-
-                  p {
-                    color: $welcomeViewFontColorDark;
-                  }
-
-                  .docsList {
-                    overflow-y: auto;
+                flex-grow: 1;
+                margin-left: 50px;
+                .welcomePanelWrapper {
                     display: flex;
                     flex-direction: column;
-
-                    .documentationLinkWrapper {
-                      padding-bottom: 10%;
-                      flex-grow: 1;
-                      display: flex;
-                      flex-direction: row;
-                      margin-right: 6%;
-
-                      .iconWrapper {
-                        width: 50px;
-                        height: 50px;
-                        order: 1;
-                        flex-grow: 2;
-                        border-radius: 0.4em;
-                        text-align: center;
-
-                        a {
-                          float: left;
-                          width: 50px;
-                          height: 50px;
-                          border-radius: 0.4em;
-                          background: $welcomeViewIconBG;
-                          position: relative;
-                          text-align: center;
-
-                          svg {
-                            position: absolute;
-                            top: 50%;
-                            bottom: 50%;
-                            transform: translate(-50%, -50%);
-                            fill: $welcomeViewSocialMediaIcons;
-                          }
-                        }
-
-                        a:focus {
-                          box-shadow: none !important;
-                        }
-
-                        a:hover {
-                          background-color: $welcomeViewIconBGHover;
-                        }
-                      }
-
-                      p {
-                        margin-top: 15px;
-                        padding-left: 5px;
-                        flex-grow: 3;
-                        order: 2;
-                        text-align: left;
-                      }
-                    }
-                  }
-
-                  .linksList {
-                    display: flex;
-                    flex-direction: row;
                     flex-grow: 1;
-
-                    .linkWrapper {
-                      flex-direction: column;
-                      margin-right: 10px;
-
-                      a {
-                        width: 100px;
-                        border-radius: 50%;
+                    background-color: $welcomeViewBackgroundColor;
+                    margin-top: 30px;
+                    h1 {
+                        color: $welcomeViewFontColor;
+                        font-size: 24px;
                         order: 1;
-                        flex-grow: 4;
-                        background: $welcomeViewIconBG;
-                        font-size: 40;
-                      }
-
-                      a:focus {
-                        box-shadow: none !important;
-                      }
-
-                      .twitterIcon {
-                        width: 60px;
-                        height: 60px;
-                        position: relative;
-
-                        svg {
-                          width: 30px;
-                          height: 30px;
-                          position: absolute;
-                          top: 50%;
-                          bottom: 50%;
-                          transform: translate(-50%, -50%);
-                          fill: $welcomeViewSocialMediaIcons;
-                        }
-                      }
-
-                      .gitHubIcon {
-                        width: 60px;
-                        height: 60px;
-                        position: relative;
-
-                        svg {
-                          width: 30px;
-                          height: 30px;
-                          position: absolute;
-                          top: 50%;
-                          bottom: 50%;
-                          transform: translate(-50%, -50%);
-                          fill: $welcomeViewSocialMediaIcons;
-                        }
-                      }
-
-                      .kodaIcon {
-                        width: 60px;
-                        height: 60px;
-                        position: relative;
-
-                        svg {
-                          width: 30px;
-                          height: 30px;
-                          position: absolute;
-                          top: 50%;
-                          bottom: 50%;
-                          transform: translate(-50%, -50%);
-                          fill: $welcomeViewSocialMediaIcons;
-
-                          path.st0 {
-                            fill: none;
-                          }
-                        }
-                      }
-
-                      a:hover {
-                        background-color: $welcomeViewIconBGHover;
-                      }
-
-                      p {
-                        flex-grow: 1;
-                        order: 2;
-                        text-align: center;
-                        margin-top: 10%;
-                      }
+                        font-size: 10;
                     }
-                  }
-                }
-
-                .welcomePageContentRight {
-                  width: 500px;
-                  padding-left: 20px;
-                  display: flex;
-                  flex-direction: column;
-
-                  h2 {
-                    font-size: 18px;
-                    color: $welcomeViewFontColor;
-                  }
-
-                  .feedList {
-                    .feedItem {
-                      display: flex;
-                      flex-direction: row;
-
-                      .feedIconWrapper {
-                        width: 60px;
-                        height: 60px;
-                        order: 1;
-                        border-radius: 0.4em;
-                        text-align: center;
-
-                        a {
-                          width: 60px;
-                          height: 60px;
-                          border-radius: 0.4em;
-                          background: $welcomeViewIconBG;
-                          position: relative;
-                          text-align: center;
-
-                          svg {
-                            width: 40px;
-                            height: 40px;
-                            position: absolute;
-                            top: 50%;
-                            bottom: 50%;
-                            transform: translate(-50%, -50%);
-                            fill: $welcomeViewSocialMediaIcons;
-                          }
-                        }
-
-                        a:hover {
-                          background-color: $welcomeViewIconBGHover;
-                        }
-                      }
-
-                      .feedItemContent {
-                        order: 2;
-                        margin-left: 10px;
+                    .welcomeTitleWrapper {
                         display: flex;
-                        flex-direction: column;
-
-                        .feedItemTitle {
-                          font-weight: bold;
-                          font-size: 12;
-                        }
-
-                        .feedItemContent {
-                          margin-left: 0;
-                          width: 600px;
-                        }
-
-                        .feedItemPubDate {
-                          font-weight: lighter;
-                          font-size: 8;
-                        }
-                      }
-                    }
-                  }
-
-                  .newsListWrapper {
-                    overflow-y: auto;
-
-                    .newsItemWrapper {
-                      display: flex;
-                      flex-direction: row;
-
-                      .newsIconWrapper {
-                        background-color: $welcomeViewIconBG;
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 0.4em;
-                        text-align: center;
-
-                        .svgWrapper {
-                          float: left;
-                          width: 50px;
-                          height: 50px;
-                          border-radius: 0.4em;
-                          background: $welcomeViewIconBG;
-                          position: relative;
-                          text-align: center;
-
-                          svg {
-                            opacity: 0.9;
-                            position: absolute;
-                            top: 50%;
-                            bottom: 50%;
-                            transform: translate(-50%, -50%);
-                            fill: $welcomeViewSocialMediaIcons;
-                            .st0 {
-                              fill: none;
+                        flex-direction: row;
+                        flex-shrink: 0;
+                        svg.dbKodaLogo {
+                            margin-right: 15px;
+                            fill: $welcomeViewFontColor;
+                            width: 50px;
+                            height: 50px;
+                            path.st0 {
+                                fill: none;
                             }
-                          }
                         }
-                        .svgWrapper:hover {
-                          background-color: $welcomeViewIconBGHover;
+                        h1 {
+                            margin-top: 20px;
                         }
-                        .svgWrapper:focus {
-                          box-shadow: none !important;
-                        }
-                      }
-                      .newsContentWrapper {
-                        margin-left: 8px;
-                        font-family: 'Arial';
-                        h2.newsTitle {
-                          font-family: 'Arial';
-                          font-size: 16px;
-                          line-height: 16px;
-                          margin-bottom: 6px;
-                        }
-
-                        p.newsContent {
-                          font-family: 'Arial';
-                          margin-bottom: 4px;
-                          line-height: 14px;
-                        }
-
-                        p.datePublished {
-                          opacity: 0.6;
-                          font-family: 'Arial';
-                        }
-                      }
                     }
-                  }
-                }
-              }
-
-              .learnShortcutsWrapper {
-                display: flex;
-                flex-direction: row;
-                height: 100%;
-                margin-left: 20px;
-
-                .groupsList {
-                  display: flex;
-                  flex-direction: column;
-                  border-right: 1px solid $welcomeViewDividerTransparent;
-                  padding-right: 20px;
-                  overflow-y: auto;
-
-                  .welcomeButtonWrapper {
-                    display: flex;
-                    flex-direction: row;
-                    order: 1;
-                    flex-shrink: 0;
-                    padding-bottom: 30px;
-                    height: 80px;
-
-                    .welcomeMenuButton {
-                      color: $welcomeViewOptoutFontColor;
-                      background: unset;
-                      box-shadow: unset;
-                      border: 1px solid $welcomeViewButtonBorderColor;
-                      border-radius: 0.75em;
-                      width: 120px;
-
-                      span {
-                        display: block;
-                        position: relative;
-                        top: 35%;
-                        padding-bottom: 10px;
-                      }
+                    .welcomeMiddleSection {
+                        order: 2;
+                        display: flex;
+                        flex-direction: row;
+                        flex-grow: 2;
+                        flex-wrap: wrap;
+                        .welcomeMenuWrapper {
+                            margin-top: 30px;
+                            display: flex;
+                            flex-direction: column;
+                            order: 1;
+                            flex-grow: 0;
+                            flex-shrink: 0;
+                            width: 210px;
+                            .welcomeMenu {
+                                display: flex;
+                                padding-right: 20px;
+                                border-right: 1px solid $welcomeViewDividerTransparent;
+                                flex-grow: 1;
+                                flex-shrink: 0;
+                                flex-direction: column;
+                                h2 {
+                                    color: $welcomeViewFontColor;
+                                    font-size: 18px;
+                                    order: 1;
+                                    margin-bottom: 10px;
+                                }
+                                .welcomeButtons {
+                                    order: 2;
+                                    display: flex;
+                                    flex-direction: column;
+                                    flex-grow: 5;
+                                    flex-shrink: 0;
+                                    .welcomeButtonWrapper {
+                                        display: flex;
+                                        flex-direction: row;
+                                        order: 1;
+                                        flex-shrink: 0;
+                                        padding-bottom: 30px;
+                                        height: 90px;
+                                        width: 180px;
+                                        .welcomeMenuButton {
+                                            color: $welcomeViewOptoutFontColor;
+                                            flex-grow: 1;
+                                            background: unset;
+                                            box-shadow: unset;
+                                            border: 1px solid $welcomeViewButtonBorderColor;
+                                            border-radius: 0.75em;
+                                            span {
+                                                display: block;
+                                                position: relative;
+                                                top: 35%;
+                                                padding-bottom: 10px;
+                                            }
+                                        }
+                                        .welcomeMenuButton:hover {
+                                            background-color: $welcomeViewButtonHoverColor;
+                                            border: none;
+                                        }
+                                    }
+                                }
+                                .welcomeMenuOptOut {
+                                    display: flex;
+                                    flex-direction: row;
+                                    order: 3;
+                                    font-size: 10pt;
+                                    font-weight: lighter;
+                                    color: $connectionHeadingsFontColour !important;
+                                    text-align: left;
+                                    margin: 5px 0 0;
+                                    .pt-control {
+                                        span.pt-control-indicator {
+                                            font-size: unset;
+                                            font-weight: unset;
+                                            font-style: unset;
+                                            box-shadow: unset;
+                                            line-height: unset;
+                                            background: unset;
+                                            box-shadow: unset;
+                                            font-size: 11pt;
+                                            color: $connectionCheckboxColour;
+                                            border-radius: 0;
+                                            background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+                                            border: 1px solid $connectionCheckboxColour;
+                                        }
+                                        span.pt-control-indicator:hover {
+                                            background-color: $connectionCheckboxBackgroundColourHover;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .welcomeContentWrapper {
+                            width: 500px;
+                            margin-top: 30px;
+                            order: 2;
+                            .welcomePageContentWrapper {
+                                display: flex;
+                                flex-direction: row;
+                                height: 100%;
+                                .welcomePageContentLeft {
+                                    overflow-y: auto;
+                                    width: 250px;
+                                    color: $welcomeViewSocialMediaText;
+                                    padding-left: 20px;
+                                    padding-right: 20px;
+                                    border-right: 1px solid $welcomeViewDividerTransparent;
+                                    flex-shrink: 0;
+                                    flex-direction: column;
+                                    h2 {
+                                        color: $welcomeViewFontColor;
+                                        font-size: 18px;
+                                        margin-bottom: 20px;
+                                    }
+                                    p {
+                                        color: $welcomeViewFontColorDark;
+                                    }
+                                    .docsList {
+                                        overflow-y: auto;
+                                        display: flex;
+                                        flex-direction: column;
+                                        .documentationLinkWrapper {
+                                            padding-bottom: 10%;
+                                            flex-grow: 1;
+                                            display: flex;
+                                            flex-direction: row;
+                                            margin-right: 6%;
+                                            .iconWrapper {
+                                                width: 50px;
+                                                height: 50px;
+                                                order: 1;
+                                                flex-grow: 2;
+                                                border-radius: 0.4em;
+                                                text-align: center;
+                                                a {
+                                                    float: left;
+                                                    width: 50px;
+                                                    height: 50px;
+                                                    border-radius: 0.4em;
+                                                    background: $welcomeViewIconBG;
+                                                    position: relative;
+                                                    text-align: center;
+                                                    svg {
+                                                        position: absolute;
+                                                        top: 50%;
+                                                        bottom: 50%;
+                                                        transform: translate(-50%, -50%);
+                                                        fill: $welcomeViewSocialMediaIcons;
+                                                    }
+                                                }
+                                                a:focus {
+                                                    box-shadow: none !important;
+                                                }
+                                                a:hover {
+                                                    background-color: $welcomeViewIconBGHover;
+                                                }
+                                            }
+                                            p {
+                                                margin-top: 15px;
+                                                padding-left: 5px;
+                                                flex-grow: 3;
+                                                order: 2;
+                                                text-align: left;
+                                            }
+                                        }
+                                    }
+                                    .linksList {
+                                        display: flex;
+                                        flex-direction: row;
+                                        flex-grow: 1;
+                                        .linkWrapper {
+                                            flex-direction: column;
+                                            margin-right: 10px;
+                                            a {
+                                                width: 100px;
+                                                border-radius: 50%;
+                                                order: 1;
+                                                flex-grow: 4;
+                                                background: $welcomeViewIconBG;
+                                                font-size: 40;
+                                            }
+                                            a:focus {
+                                                box-shadow: none !important;
+                                            }
+                                            .twitterIcon {
+                                                width: 60px;
+                                                height: 60px;
+                                                position: relative;
+                                                svg {
+                                                    width: 30px;
+                                                    height: 30px;
+                                                    position: absolute;
+                                                    top: 50%;
+                                                    bottom: 50%;
+                                                    transform: translate(-50%, -50%);
+                                                    fill: $welcomeViewSocialMediaIcons;
+                                                }
+                                            }
+                                            .gitHubIcon {
+                                                width: 60px;
+                                                height: 60px;
+                                                position: relative;
+                                                svg {
+                                                    width: 30px;
+                                                    height: 30px;
+                                                    position: absolute;
+                                                    top: 50%;
+                                                    bottom: 50%;
+                                                    transform: translate(-50%, -50%);
+                                                    fill: $welcomeViewSocialMediaIcons;
+                                                }
+                                            }
+                                            .kodaIcon {
+                                                width: 60px;
+                                                height: 60px;
+                                                position: relative;
+                                                svg {
+                                                    width: 30px;
+                                                    height: 30px;
+                                                    position: absolute;
+                                                    top: 50%;
+                                                    bottom: 50%;
+                                                    transform: translate(-50%, -50%);
+                                                    fill: $welcomeViewSocialMediaIcons;
+                                                    path.st0 {
+                                                        fill: none;
+                                                    }
+                                                }
+                                            }
+                                            a:hover {
+                                                background-color: $welcomeViewIconBGHover;
+                                            }
+                                            p {
+                                                flex-grow: 1;
+                                                order: 2;
+                                                text-align: center;
+                                                margin-top: 10%;
+                                            }
+                                        }
+                                    }
+                                }
+                                .welcomePageContentRight {
+                                    width: 500px;
+                                    padding-left: 20px;
+                                    display: flex;
+                                    flex-direction: column;
+                                    h2 {
+                                        font-size: 18px;
+                                        color: $welcomeViewFontColor;
+                                    }
+                                    .feedList {
+                                        .feedItem {
+                                            display: flex;
+                                            flex-direction: row;
+                                            .feedIconWrapper {
+                                                width: 60px;
+                                                height: 60px;
+                                                order: 1;
+                                                border-radius: 0.4em;
+                                                text-align: center;
+                                                a {
+                                                    width: 60px;
+                                                    height: 60px;
+                                                    border-radius: 0.4em;
+                                                    background: $welcomeViewIconBG;
+                                                    position: relative;
+                                                    text-align: center;
+                                                    svg {
+                                                        width: 40px;
+                                                        height: 40px;
+                                                        position: absolute;
+                                                        top: 50%;
+                                                        bottom: 50%;
+                                                        transform: translate(-50%, -50%);
+                                                        fill: $welcomeViewSocialMediaIcons;
+                                                    }
+                                                }
+                                                a:hover {
+                                                    background-color: $welcomeViewIconBGHover;
+                                                }
+                                            }
+                                            .feedItemContent {
+                                                order: 2;
+                                                margin-left: 10px;
+                                                display: flex;
+                                                flex-direction: column;
+                                                color: $welcomeViewFontColor;
+                                                .feedItemTitle {
+                                                    font-weight: bold;
+                                                    font-size: 12;
+                                                }
+                                                .feedItemContent {
+                                                    margin-left: 0;
+                                                    width: 600px;
+                                                }
+                                                .feedItemPubDate {
+                                                    font-weight: lighter;
+                                                    font-size: 8;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .newsListWrapper {
+                                        overflow-y: auto;
+                                        .newsItemWrapper {
+                                            display: flex;
+                                            flex-direction: row;
+                                            .newsIconWrapper {
+                                                background-color: $welcomeViewIconBG;
+                                                width: 50px;
+                                                height: 50px;
+                                                border-radius: 0.4em;
+                                                text-align: center;
+                                                .svgWrapper {
+                                                    float: left;
+                                                    width: 50px;
+                                                    height: 50px;
+                                                    border-radius: 0.4em;
+                                                    background: $welcomeViewIconBG;
+                                                    position: relative;
+                                                    text-align: center;
+                                                    svg {
+                                                        opacity: 0.9;
+                                                        position: absolute;
+                                                        top: 50%;
+                                                        bottom: 50%;
+                                                        transform: translate(-50%, -50%);
+                                                        fill: $welcomeViewSocialMediaIcons;
+                                                        .st0 {
+                                                            fill: none;
+                                                        }
+                                                    }
+                                                }
+                                                .svgWrapper:hover {
+                                                    background-color: $welcomeViewIconBGHover;
+                                                }
+                                                .svgWrapper:focus {
+                                                    box-shadow: none !important;
+                                                }
+                                            }
+                                            .newsContentWrapper {
+                                                margin-left: 8px;
+                                                font-family: 'Arial';
+                                                color: $welcomeViewFontColorDark;
+                                                h2.newsTitle {
+                                                    color: $welcomeViewFontColorDark;
+                                                    font-family: 'Arial';
+                                                    font-size: 16px;
+                                                    line-height: 16px;
+                                                    margin-bottom: 6px;
+                                                }
+                                                p.newsContent {
+                                                    color: $welcomeViewFontColorDark;
+                                                    font-family: 'Arial';
+                                                    margin-bottom: 4px;
+                                                    line-height: 14px;
+                                                }
+                                                p.datePublished {
+                                                    color: $welcomeViewFontColorDark;
+                                                    opacity: 0.6;
+                                                    font-family: 'Arial';
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .learnShortcutsWrapper {
+                                display: flex;
+                                flex-direction: row;
+                                height: 100%;
+                                margin-left: 20px;
+                                .groupsList {
+                                    display: flex;
+                                    flex-direction: column;
+                                    border-right: 1px solid $welcomeViewDividerTransparent;
+                                    padding-right: 20px;
+                                    overflow-y: auto;
+                                    .welcomeButtonWrapper {
+                                        display: flex;
+                                        flex-direction: row;
+                                        order: 1;
+                                        flex-shrink: 0;
+                                        padding-bottom: 30px;
+                                        height: 80px;
+                                        .welcomeMenuButton {
+                                            color: $welcomeViewOptoutFontColor;
+                                            background: unset;
+                                            box-shadow: unset;
+                                            border: 1px solid $welcomeViewButtonBorderColor;
+                                            border-radius: 0.75em;
+                                            width: 120px;
+                                            span {
+                                                display: block;
+                                                position: relative;
+                                                top: 35%;
+                                                padding-bottom: 10px;
+                                            }
+                                        }
+                                        .welcomeMenuButton:hover {
+                                            background-color: $welcomeViewButtonHoverColor;
+                                            border: none;
+                                        }
+                                    }
+                                }
+                                .hotkeysList {
+                                    padding-left: 5%;
+                                    overflow-y: scroll;
+                                    flex-grow: 4;
+                                }
+                                .hotkeyItem {
+                                    background-color: $welcomeViewKeyboardShortcutsBG;
+                                    margin-top: 20px;
+                                    margin-right: 20px;
+                                    padding: 10px;
+                                    border-radius: 0.3em;
+                                    .hotkeyTitle {
+                                        color: $welcomeViewFontColor;
+                                        font-size: 18px;
+                                    }
+                                    p {}
+                                }
+                            }
+                        }
                     }
-
-                    .welcomeMenuButton:hover {
-                      background-color: $welcomeViewButtonHoverColor;
-                      border: none;
-                    }
-                  }
                 }
-
-                .hotkeysList {
-                  padding-left: 5%;
-                  overflow-y: scroll;
-                  flex-grow: 4;
-
-                }
-
-                .hotkeyItem {
-                  background-color: $welcomeViewKeyboardShortcutsBG;
-                  margin-top: 20px;
-                  margin-right: 20px;
-                  padding: 10px;
-                  border-radius: 0.3em;
-
-                  .hotkeyTitle {
-                    color: $welcomeViewFontColor;
-                    font-size: 18px;
-                  }
-
-                  p {}
-                }
-              }
             }
-          }
         }
-      }
     }
-  }
-
-  .tabControlBtn {
-    position: absolute;
-    top: 50px;
-    cursor: pointer;
-    color: $tabFontColor;
-    background-color: $tabBackground;
-    line-height: 30px;
-    height: 31px;
-    width: 20px;
-    font-size: 12px;
-    text-align: center;
-  }
-
-  .tabControlBtn:hover {
-    color: $tabButtonHover;
-  }
-
-  .tabScrollLeftBtn {
-    left: 0;
-  }
-
-  .tabScrollRightBtn {
-    right: 23px;
-  }
-
-  .tabListBtn {
-    right: 0;
-    padding-right: 3px;
-    width: 23px;
-  }
-
-  //// Code Mirror CSS: ////
-  div.CodeMirror span.CodeMirror-matchingbracket {
-    color: $white !important;
-    border: 1px solid $keywordFour;
-  }
-
-  div.CodeMirror span.CodeMirror-nonmatchingbracket {
-    color: $keywordThree !important;
-    border: 1px solid $keywordThree;
-  }
-
-  span.cm-property {
-    color: $propFontColor !important;
-  }
-
-  span.cm-string {
-    color: $stringFontColor !important;
-  }
-
-  .CodeMirror-overlayscroll-vertical {
-    height: 0 !important;
-  }
-
-  .CodeMirror-scroll {
-    background-color: $editorBackground;
-    width: 100%;
-  }
-
-  .CodeMirror,
-  .ReactCodeMirror {
-    height: 100%;
-  }
-
-  .cm-s-ambiance .CodeMirror-linenumber {
-    color: $white;
-  }
-
-  .CodeMirror-linebackground {
-    background-color: $editorBackground !important;
-  }
-
-  .CodeMirror-line {
-    background-color: $editorBackground;
-  }
-
-  span.cm-mongo-operator {
-    color: $white !important;
-  }
-
-  .cm-variable {
-    color: $editorDefaultFontColor !important;
-  }
-
-  span.cm-db {
-    color: $keywordTwo !important;
-  }
-
-  span.cm-show {
-    color: $keywordOne !important;
-  }
-
-  span.cm-dbs {
-    color: $keywordTwo !important;
-  }
-
-  span.cm-use {
-    color: $keywordOne !important;
-  }
-
-  span.cm-collections {
-    color: $keywordTwo !important;
-  }
-
-  span.cm-users {
-    color: $keywordTwo !important;
-  }
-
-  span.cm-roles {
-    color: $keywordTwo !important;
-  }
-
-  span.cm-profile {
-    color: $keywordTwo !important;
-  }
-
-  span.cm-databases {
-    color: $keywordTwo !important;
-  }
-
-  span.cm-it {
-    color: $keywordOne !important;
-  }
-
-  span.cm-dbkoda-prompt {
-    color: $keywordFour !important;
-  }
-
-  span.cm-mongos-prompt {
-    color: $keywordFour !important;
-  }
-
-  .CodeMirror-gutters {
-    background-color: $editorBackground !important;
-    border-right: 1px solid $editorBackground !important;
-    box-shadow: none !important;
-  }
-
-  .CodeMirror-gutter {
-    background-color: $editorBackground !important;
-  }
-
-  .CodeMirror-foldmarker {
-    color: $keywordTwo;
-    font-family: 'Arial';
-    line-height: 0.3;
-    cursor: pointer;
-  }
-
-  .CodeMirror-foldgutter {
-    width: 0.7em;
-    margin-right: 5px !important;
-  }
-
-  .CodeMirror-foldgutter-open {
-    padding-left: 5px !important;
-    padding-left: 5px !important;
-  }
-
-  .CodeMirrror-foldgutter-folded {
-    padding-left: 5px !important;
-    padding-left: 5px !important;
-  }
-
-  .cm-s-ambiance .CodeMirror-guttermarker-subtle {
-    color: $white !important;
-    cursor: pointer;
-  }
-
-  .CodeMirror-foldgutter-folded,
-  .CodeMirror-foldgutter-open {
-    color: #555;
-    cursor: pointer;
-  }
-
-  .CodeMirror-foldgutter-open:after {
-    content: $downArrow;
-  }
-
-  .CodeMirror-foldgutter-folded:after {
-    content: $rightArrow;
-  }
-
-  div.CodeMirror-activeline pre.CodeMirror-line {
-    background-color: unset !important;
-  }
-
-  .CodeMirror-activeline-background {
-    background-color: $editorActiveLine !important;
-  }
-
-  .CodeMirror-activeline-gutter {
-    background-color: $editorBackground;
-  }
-
-  .CodeMirror-lines > div > div:nth-child(3) {
-    z-index: 19 !important;
-    background: unset !important;
-
-    div.CodeMirror-selected {
-      background-color: $editorSelectText;
+    .tabControlBtn {
+        position: absolute;
+        top: 50px;
+        cursor: pointer;
+        color: $tabFontColor;
+        background-color: $tabBackground;
+        line-height: 30px;
+        height: 31px;
+        width: 20px;
+        font-size: 12px;
+        text-align: center;
     }
-  }
-
-  .lint-error-icon {
-    color: $keywordThree;
-    font-style: oblique;
-    font-size: 20px;
-    float: right;
-  }
-
-  .CodeMirror-cursor {
-    border-left: 1px solid $white;
-    border-right: none;
-    width: 0;
-  }
-  /* Shown when moving in bi-directional text */
-  .CodeMirror div.CodeMirror-secondarycursor {
-    border-left: 1px solid silver;
-  }
-
-  .cm-fat-cursor .CodeMirror-cursor {
-    width: auto;
-    border: 0 !important;
-    background: #7e7;
-  }
-
-  .cm-fat-cursor div.CodeMirror-cursors {
-    z-index: 1;
-  }
-
-  .cm-animate-fat-cursor {
-    width: auto;
-    border: 0;
-    -webkit-animation: blink 1.06s steps(1) infinite;
-    -moz-animation: blink 1.06s steps(1) infinite;
-    animation: blink 1.06s steps(1) infinite;
-    background-color: #7e7;
-  }
-  @-moz-keyframes blink {
-    0% {}
-
-    50% {
-      background-color: transparent;
+    .tabControlBtn:hover {
+        color: $tabButtonHover;
     }
-
-    100% {}
-  }
-  @-webkit-keyframes blink {
-    0% {}
-
-    50% {
-      background-color: transparent;
+    .tabScrollLeftBtn {
+        left: 0;
     }
-
-    100% {}
-  }
-  @keyframes blink {
-    0% {}
-
-    50% {
-      background-color: transparent;
+    .tabScrollRightBtn {
+        right: 23px;
     }
-
-    100% {}
-  }
-  /* Can style cursor different in overwrite (non-insert) mode */
-  .CodeMirror-overwrite .CodeMirror-cursor {}
-
-  .cm-tab {
-    display: inline-block;
-    text-decoration: inherit;
-  }
-
-  .CodeMirror-rulers {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -50px;
-    bottom: -20px;
-    overflow: hidden;
-  }
-
-  .CodeMirror-ruler {
-    border-left: 1px solid #ccc;
-    top: 0;
-    bottom: 0;
-    position: absolute;
-  }
+    .tabListBtn {
+        right: 0;
+        padding-right: 3px;
+        width: 23px;
+    }
+    //// Code Mirror CSS: ////
+    div.CodeMirror span.CodeMirror-matchingbracket {
+        color: $white !important;
+        border: 1px solid $keywordFour;
+    }
+    div.CodeMirror span.CodeMirror-nonmatchingbracket {
+        color: $keywordThree !important;
+        border: 1px solid $keywordThree;
+    }
+    span.cm-property {
+        color: $propFontColor !important;
+    }
+    span.cm-string {
+        color: $stringFontColor !important;
+    }
+    .CodeMirror-overlayscroll-vertical {
+        height: 0 !important;
+    }
+    .CodeMirror-scroll {
+        background-color: $editorBackground;
+        width: 100%;
+    }
+    .CodeMirror,
+    .ReactCodeMirror {
+        height: 100%;
+    }
+    .cm-s-ambiance .CodeMirror-linenumber {
+        color: $white;
+    }
+    .CodeMirror-linebackground {
+        background-color: $editorBackground !important;
+    }
+    .CodeMirror-line {
+        background-color: $editorBackground;
+    }
+    span.cm-mongo-operator {
+        color: $white !important;
+    }
+    .cm-variable {
+        color: $editorDefaultFontColor !important;
+    }
+    span.cm-db {
+        color: $keywordTwo !important;
+    }
+    span.cm-show {
+        color: $keywordOne !important;
+    }
+    span.cm-dbs {
+        color: $keywordTwo !important;
+    }
+    span.cm-use {
+        color: $keywordOne !important;
+    }
+    span.cm-collections {
+        color: $keywordTwo !important;
+    }
+    span.cm-users {
+        color: $keywordTwo !important;
+    }
+    span.cm-roles {
+        color: $keywordTwo !important;
+    }
+    span.cm-profile {
+        color: $keywordTwo !important;
+    }
+    span.cm-databases {
+        color: $keywordTwo !important;
+    }
+    span.cm-it {
+        color: $keywordOne !important;
+    }
+    span.cm-dbkoda-prompt {
+        color: $keywordFour !important;
+    }
+    span.cm-mongos-prompt {
+        color: $keywordFour !important;
+    }
+    .CodeMirror-gutters {
+        background-color: $editorBackground !important;
+        border-right: 1px solid $editorBackground !important;
+        box-shadow: none !important;
+    }
+    .CodeMirror-gutter {
+        background-color: $editorBackground !important;
+    }
+    .CodeMirror-foldmarker {
+        color: $keywordTwo;
+        font-family: 'Arial';
+        line-height: 0.3;
+        cursor: pointer;
+    }
+    .CodeMirror-foldgutter {
+        width: 0.7em;
+        margin-right: 5px !important;
+    }
+    .CodeMirror-foldgutter-open {
+        padding-left: 5px !important;
+        padding-left: 5px !important;
+    }
+    .CodeMirrror-foldgutter-folded {
+        padding-left: 5px !important;
+        padding-left: 5px !important;
+    }
+    .cm-s-ambiance .CodeMirror-guttermarker-subtle {
+        color: $white !important;
+        cursor: pointer;
+    }
+    .CodeMirror-foldgutter-folded,
+    .CodeMirror-foldgutter-open {
+        color: #555;
+        cursor: pointer;
+    }
+    .CodeMirror-foldgutter-open:after {
+        content: $downArrow;
+    }
+    .CodeMirror-foldgutter-folded:after {
+        content: $rightArrow;
+    }
+    div.CodeMirror-activeline pre.CodeMirror-line {
+        background-color: unset !important;
+    }
+    .CodeMirror-activeline-background {
+        background-color: $editorActiveLine !important;
+    }
+    .CodeMirror-activeline-gutter {
+        background-color: $editorBackground;
+    }
+    .CodeMirror-lines>div>div:nth-child(3) {
+        z-index: 19 !important;
+        background: unset !important;
+        div.CodeMirror-selected {
+            background-color: $editorSelectText;
+        }
+    }
+    .lint-error-icon {
+        color: $keywordThree;
+        font-style: oblique;
+        font-size: 20px;
+        float: right;
+    }
+    .CodeMirror-cursor {
+        border-left: 1px solid $white;
+        border-right: none;
+        width: 0;
+    }
+    /* Shown when moving in bi-directional text */
+    .CodeMirror div.CodeMirror-secondarycursor {
+        border-left: 1px solid silver;
+    }
+    .cm-fat-cursor .CodeMirror-cursor {
+        width: auto;
+        border: 0 !important;
+        background: #7e7;
+    }
+    .cm-fat-cursor div.CodeMirror-cursors {
+        z-index: 1;
+    }
+    .cm-animate-fat-cursor {
+        width: auto;
+        border: 0;
+        -webkit-animation: blink 1.06s steps(1) infinite;
+        -moz-animation: blink 1.06s steps(1) infinite;
+        animation: blink 1.06s steps(1) infinite;
+        background-color: #7e7;
+    }
+    @-moz-keyframes blink {
+        0% {}
+        50% {
+            background-color: transparent;
+        }
+        100% {}
+    }
+    @-webkit-keyframes blink {
+        0% {}
+        50% {
+            background-color: transparent;
+        }
+        100% {}
+    }
+    @keyframes blink {
+        0% {}
+        50% {
+            background-color: transparent;
+        }
+        100% {}
+    }
+    /* Can style cursor different in overwrite (non-insert) mode */
+    .CodeMirror-overwrite .CodeMirror-cursor {}
+    .cm-tab {
+        display: inline-block;
+        text-decoration: inherit;
+    }
+    .CodeMirror-rulers {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -50px;
+        bottom: -20px;
+        overflow: hidden;
+    }
+    .CodeMirror-ruler {
+        border-left: 1px solid #ccc;
+        top: 0;
+        bottom: 0;
+        position: absolute;
+    }
 }
 
 label.pt-control {
-  font-size: 10pt;
-  font-weight: lighter;
-  color: $connectionHeadingsFontColour !important;
-  text-align: left;
-  margin: 0;
-
-  span.pt-control-indicator {
-    font-size: unset;
-    font-weight: unset;
-    font-style: unset;
-    box-shadow: unset;
-    line-height: unset;
-    background: unset;
-    box-shadow: unset;
-    font-size: 11pt;
-    color: $connectionCheckboxColour;
-    border-radius: 0;
-    background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
-    border: 1px solid $connectionCheckboxColour;
-  }
-
-  span.pt-control-indicator:hover {
-    background-color: $connectionCheckboxBackgroundColourHover;
-  }
+    font-size: 10pt;
+    font-weight: lighter;
+    color: $connectionHeadingsFontColour !important;
+    text-align: left;
+    margin: 0;
+    span.pt-control-indicator {
+        font-size: unset;
+        font-weight: unset;
+        font-style: unset;
+        box-shadow: unset;
+        line-height: unset;
+        background: unset;
+        box-shadow: unset;
+        font-size: 11pt;
+        color: $connectionCheckboxColour;
+        border-radius: 0;
+        background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+        border: 1px solid $connectionCheckboxColour;
+    }
+    span.pt-control-indicator:hover {
+        background-color: $connectionCheckboxBackgroundColourHover;
+    }
 }

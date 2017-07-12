@@ -1,11 +1,11 @@
 * {
-  font-family: Arial, sans-serif;  
+    font-family: Arial, sans-serif;
 }
 
 @font-face {
     font-family: 'Arial';
-    src: url('Arial Black.ttf');
-    src: url('Arial Black.ttf') format('truetype');
+    src: url('Arial.ttf');
+    src: url('Arial.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
