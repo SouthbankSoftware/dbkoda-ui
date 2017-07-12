@@ -396,7 +396,6 @@ export default class Store {
     newStore.layout.alertIsLoading = false;
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
-    // newStore.editorPanel.activeEditorId = 'Default';
     newStore.editorPanel.creatingNewEditor = false;
     newStore.editorPanel.executingEditorAll = false;
     newStore.editorPanel.executingEditorLines = false;
