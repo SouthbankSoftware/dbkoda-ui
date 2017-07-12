@@ -71,7 +71,7 @@ Broker.once(EventType.APP_RENDERED, () => {
   bAppRendered = true;
 });
 
-window.addEventListener('beforeunload', () => {
+window.addEventListener('beforeunload', (event) => {
   let shouldUnmount = true;
 
   if (IS_ELECTRON) {
