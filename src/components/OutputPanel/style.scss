@@ -28,7 +28,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-x: scroll;
+  overflow-x: auto;
   .outputTabView {
     order: 2;
     flex: 1;
@@ -63,6 +63,7 @@
         .CodeMirror-scroll {
           margin-bottom: unset;
           padding-bottom: unset;
+          height: calc(100% - 16px);
         }
       }
 
