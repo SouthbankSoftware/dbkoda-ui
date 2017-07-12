@@ -121,7 +121,7 @@ export default class Store {
   layout = {
     alertIsLoading: false,
     optInVisible: true,
-    overallSplitPos: '40%',
+    overallSplitPos: '30%',
     leftSplitPos: '50%',
     rightSplitPos: '60%'
   };
