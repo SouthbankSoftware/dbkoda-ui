@@ -4,8 +4,8 @@
 
 @font-face {
     font-family: 'Arial';
-    src: url('Arial.ttf');
-    src: url('Arial.ttf') format('truetype');
+    src: url('Arial.woff2');
+    src: url('Arial.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
