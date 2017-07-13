@@ -313,9 +313,10 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                             }
                                             svg.dbKodaSVG {
                                                 float: left;
-                                                height: 20px;
+                                                height: 16px;
                                                 fill: $welcomeViewSocialMediaIcons;
                                                 margin-left: 10px;
+                                                padding-bottom: 2px;
                                             }
                                         }
                                         .welcomeMenuButton:hover {
@@ -623,7 +624,7 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                                     color: $welcomeViewFontColorDark;
                                                     font-family: 'Arial';
                                                     font-size: 18px;
-                                                    line-height: 16px;
+                                                    line-height: 20px;
                                                     margin-bottom: 12px;
                                                 }
                                                 p.newsContent {
