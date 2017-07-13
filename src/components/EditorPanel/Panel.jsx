@@ -385,53 +385,44 @@ export default class Panel extends React.Component {
 
   /**
    * Close all tabs except for the provided tab id
-   * @param {String} keepTab - The id string of the editor to keep (optional)
+   * @param {String} tabIdToKeep - The id string of the editor to keep (optional)
    */
   @action.bound
-  closeTabs(keepTab) {
-    const editors = this.props.store.editors.entries();
-    console.log(editors);
-    editors.map((editor) => {
-      if (editor[1].id != keepTab) {
-        console.log(`Closing Tab ${editor[1].id}`);
-        this.closeTab(editor[1]);
+  closeTabs(tabIdToKeep) {
+    for (const [id, editor] of this.props.store.editors.entries()) {
+      if (id !== tabIdToKeep) {
+        this.closeTab(editor);
       }
-    });
+    }
   }
 
   /**
    *  Close all tabs to the left of the current tab
-   *  @param {String} currentTab - The id of the leftmost tab that will stay open
+   *  @param {String} currentTabId - The id of the leftmost tab that will stay open
    */
-  closeLeft(currentTab) {
-    const editors = this.props.store.editors.entries();
-    editors.every((editor) => {
-      if (editor[1].id != currentTab) {
-        console.log(`Closing Tab ${editor[1].id}`);
-        this.closeTab(editor[1]);
-        return true;
+  closeLeft(currentTabId) {
+    for (const [id, editor] of this.props.store.editors.entries()) {
+      if (id !== currentTabId) {
+        this.closeTab(editor);
+      } else {
+        break;
       }
-      return false;
-    });
+    }
   }
 
   /**
    *  Close all tabs to the right of the current tab
-   *  @param {String} currentTab - The id of the rightmost tab that will stay open
+   *  @param {String} currentTabId - The id of the rightmost tab that will stay open
    */
-  closeRight(currentTab) {
-    const editors = this.props.store.editors.entries();
+  closeRight(currentTabId) {
     let startClosing = false;
-    editors.map((editor) => {
-      if (editor[1].id != currentTab) {
-        if (startClosing) {
-          console.log(`Closing Tab ${editor[1].id}`);
-          this.closeTab(editor[1]);
-        }
+    for (const [id, editor] of this.props.store.editors.entries()) {
+      if (id !== currentTabId) {
+        if (startClosing) this.closeTab(editor);
       } else {
         startClosing = true;
       }
-    });
+    }
   }
 
   /** Display a right click menu when any of the editor tabs are right clicked
@@ -442,7 +433,7 @@ export default class Panel extends React.Component {
     const tabId = target.getAttribute('data-tab-id');
     const currentEditor = this.props.store.editors.get(tabId);
 
-    if (tabId) {
+    if (tabId && tabId !== 'Default') {
       console.log(tabId);
       ContextMenu.show(
         <Menu className="editorTabContentMenu">
@@ -468,7 +459,7 @@ export default class Panel extends React.Component {
           </div>
           <div className="menuItemWrapper closeAllItem">
             <MenuItem
-              onClick={this.closeTabs}
+              onClick={() => this.closeTabs()}
               text={globalString('editor/tabMenu/closeAllTabs')}
               iconName="pt-icon-key-delete"
               intent={Intent.NONE}
