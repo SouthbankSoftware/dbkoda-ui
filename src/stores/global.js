@@ -27,7 +27,6 @@ import {
   postDeserializer,
 } from '#/common/mobxDumpenvyExtension';
 import { DrawerPanes } from '#/common/Constants';
-import { EOL } from 'os';
 import uuidV1 from 'uuid';
 import { Doc } from 'codemirror';
 import { featherClient } from '~/helpers/feathers';
@@ -57,6 +56,10 @@ if (IS_ELECTRON) {
   global.PATHS = remote.getGlobal('PATHS');
   stateStore = global.PATHS.stateStore;
 }
+
+global.EOL = global.IS_ELECTRON
+  ? window.require('os').EOL
+  : process.platform === 'win32' ? '\r\n' : '\n';
 
 export default class Store {
   @observable locale = 'en';
@@ -312,11 +315,11 @@ export default class Store {
    * @return {string} EOL
    */
   static determineEol(content) {
-    if (!content || content === '') return EOL;
+    if (!content || content === '') return global.EOL;
 
     const eols = content.match(/(?:\r?\n)/g) || [];
 
-    if (eols.length === 0) return EOL;
+    if (eols.length === 0) return global.EOL;
 
     const crlfCount = eols.filter(eol => eol === '\r\n').length;
     const lfCount = eols.length - crlfCount;
