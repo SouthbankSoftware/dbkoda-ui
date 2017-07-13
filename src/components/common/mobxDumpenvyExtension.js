@@ -39,6 +39,7 @@ export function serializer(key, value) {
   } else if (value instanceof Doc) {
     return {
       value: value.getValue(),
+      lineSep: value.lineSep,
       cursor: value.getCursor(),
       selections: value.listSelections(),
       history: _.pick(value.history, [
@@ -69,6 +70,7 @@ export function deserializer(key, value) {
     } else if (value.__dump__ === 'Doc') {
       const newDoc = Store.createNewDocumentObject(value.value);
 
+      newDoc.lineSep = value.lineSep;
       newDoc.setCursor(value.cursor);
       newDoc.setSelections(value.selections);
       newDoc.setHistory(value.history);

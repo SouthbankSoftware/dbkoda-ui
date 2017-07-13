@@ -24,9 +24,10 @@ import { dump, restore } from 'dumpenvy';
 import {
   serializer,
   deserializer,
-  postDeserializer
+  postDeserializer,
 } from '#/common/mobxDumpenvyExtension';
 import { DrawerPanes } from '#/common/Constants';
+import { EOL } from 'os';
 import uuidV1 from 'uuid';
 import { Doc } from 'codemirror';
 import { featherClient } from '~/helpers/feathers';
@@ -66,14 +67,14 @@ export default class Store {
   @observable
   userPreferences = observable({
     telemetryEnabled: null,
-    showWelcomePageAtStart: true
+    showWelcomePageAtStart: true,
   });
 
   @observable
   welcomePage = observable({
     isOpen: true,
     newsFeed: [],
-    currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
+    currentContent: 'Welcome', // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
   });
 
   @observable
@@ -92,7 +93,7 @@ export default class Store {
     showingSavingDialog: false,
     lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : '',
     shouldScrollToActiveTab: false,
-    tabScrollLeftPosition: 0
+    tabScrollLeftPosition: 0,
   });
 
   @observable
@@ -105,7 +106,7 @@ export default class Store {
     shellId: 0,
     newEditorForTreeAction: false,
     newEditorForProfileId: '',
-    saveAs: false
+    saveAs: false,
   });
 
   @observable
@@ -114,7 +115,7 @@ export default class Store {
     clearingOutput: false,
     executingShowMore: false,
     executingTerminalCmd: false,
-    sendingCommand: ''
+    sendingCommand: '',
   });
 
   @observable
@@ -123,12 +124,12 @@ export default class Store {
     optInVisible: true,
     overallSplitPos: '35%',
     leftSplitPos: '50%',
-    rightSplitPos: '60%'
+    rightSplitPos: '60%',
   };
 
   @observable
   drawer = {
-    drawerChild: DrawerPanes.DEFAULT
+    drawerChild: DrawerPanes.DEFAULT,
   };
 
   @observable
@@ -139,7 +140,7 @@ export default class Store {
     newEditorCreated: false,
     formValues: '',
     isNewFormValues: false,
-    editors: observable.map()
+    editors: observable.map(),
   };
 
   @observable
@@ -147,37 +148,37 @@ export default class Store {
     lastTreeAction: null,
     lastTreeNode: null,
     detailsViewInfo: null,
-    activeEditorId: ''
+    activeEditorId: '',
   };
 
   @observable
   treePanel = {
     isRefreshing: false,
-    isRefreshDisabled: false
+    isRefreshDisabled: false,
   };
 
   @observable
   explainPanel = {
     activeId: undefined,
-    explainAvailable: false
+    explainAvailable: false,
   };
 
   @observable
   mongoShellPrompt = {
-    prompt: 'dbkoda>'
+    prompt: 'dbkoda>',
   };
 
   @observable
   profileList = observable({
     selectedProfile: null,
-    creatingNewProfile: false
+    creatingNewProfile: false,
   });
 
   @observable
   dragItem = observable({
     dragDrop: false,
     dragDropTerminal: false,
-    item: null
+    item: null,
   });
 
   @observable
@@ -241,15 +242,20 @@ export default class Store {
   // states could be removed or refactored eventually. Worth checking out when time allows.
   @action
   setNewEditorState = (res, options = {}) => {
-    const { content } = options;
+    const { content = '' } = options;
     options = _.omit(options, ['content']);
     const fileName = `new${this.profiles.get(res.id).editorCount}.js`;
     const editorId = uuidV1();
     this.profiles.get(res.id).editorCount += 1;
+
+    const doc = Store.createNewDocumentObject(content);
+    doc.lineSep = Store.determineEol(content);
+
     this.editors.set(
       editorId,
       observable(
         _.assign(
+          // NOTE this obj should be synced with the one in src/components/EditorPanel/Toolbar.jsx:profileCreated()
           {
             id: editorId,
             alias: this.profiles.get(res.id).alias,
@@ -258,16 +264,15 @@ export default class Store {
             currentProfile: res.id,
             fileName,
             executing: false,
-            visible: true,
             shellVersion: res.shellVersion,
             initialMsg: res.output ? res.output.join('\n') : '',
-            doc: observable.ref(Store.createNewDocumentObject(content)),
+            doc: observable.ref(doc),
             status: ProfileStatus.OPEN,
-            path: null
+            path: null,
           },
-          options
-        )
-      )
+          options,
+        ),
+      ),
     );
     this.editorPanel.creatingNewEditor = false;
     this.editorToolbar.noActiveProfile = false;
@@ -294,11 +299,31 @@ export default class Store {
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
       intent: Intent.SUCCESS,
-      iconName: 'pt-icon-thumbs-up'
+      iconName: 'pt-icon-thumbs-up',
     });
 
     return editorId;
   };
+
+  /**
+   * Determine EOL to be used for given content string
+   *
+   * @param {string} content - content
+   * @return {string} EOL
+   */
+  static determineEol(content) {
+    if (!content || content === '') return EOL;
+
+    const eols = content.match(/(?:\r?\n)/g) || [];
+
+    if (eols.length === 0) return EOL;
+
+    const crlfCount = eols.filter(eol => eol === '\r\n').length;
+    const lfCount = eols.length - crlfCount;
+
+    // majority wins and slightly favour \n
+    return lfCount >= crlfCount ? '\n' : '\r\n';
+  }
 
   static createNewDocumentObject(content = '') {
     return new Doc(content, 'MongoScript');
@@ -324,7 +349,7 @@ export default class Store {
         NewToaster.show({
           message: err.message,
           intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
         throw err;
       });
@@ -350,7 +375,7 @@ export default class Store {
         () => !this.editors.has(editorId),
         () => {
           Broker.off(eventName, handleFileChangedEvent);
-        }
+        },
       );
     }
   };
@@ -471,22 +496,22 @@ export default class Store {
       .service('files')
       .get(stateStore, {
         query: {
-          watching: 'false'
-        }
+          watching: 'false',
+        },
       })
       .then(({ content }) => {
         this.restore(content);
         // Init Globalize required json
         Globalize.load(
           require('cldr-data/main/en/ca-gregorian.json'),
-          require('cldr-data/supplemental/likelySubtags.json')
+          require('cldr-data/supplemental/likelySubtags.json'),
         );
         this.saveUponProfileChange();
       })
       .catch((err) => {
         if (err.code === 404) {
           console.log(
-            "State store doesn't exist. A new one will be created after app close or refreshing"
+            "State store doesn't exist. A new one will be created after app close or refreshing",
           );
         } else {
           console.error(err);
@@ -511,7 +536,7 @@ export default class Store {
       .create({
         _id: stateStore,
         content: this.dump(),
-        watching: false
+        watching: false,
       })
       .then(() => {})
       .catch(console.error);

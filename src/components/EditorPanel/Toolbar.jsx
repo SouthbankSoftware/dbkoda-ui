@@ -203,6 +203,10 @@ export default class Toolbar extends React.Component {
       }
     });
     if (!profileHasEditor) {
+      const content = '';
+      const doc = Store.createNewDocumentObject(content);
+      doc.lineSep = Store.determineEol(content);
+
       const fileName = `new${profile.editorCount}.js`;
       const editorId = uuidV1();
       profile.editorCount += 1;
@@ -215,14 +219,12 @@ export default class Toolbar extends React.Component {
           shellId: profile.shellId,
           currentProfile: profile.id,
           fileName,
-          visible: true,
           executing: false,
-          initialMsg: profile.initialMsg,
-          code: '',
-          doc: observable.ref(Store.createNewDocumentObject()),
-          status: profile.status,
-          path: null,
           shellVersion: profile.shellVersion,
+          initialMsg: profile.initialMsg,
+          doc: observable.ref(doc),
+          status: profile.status,
+          path: null
         }),
       );
       editorPanel.shouldScrollToActiveTab = true;

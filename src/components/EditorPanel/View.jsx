@@ -112,6 +112,7 @@ class View extends React.Component {
       value: this.doc,
       theme: 'material',
       lineNumbers: 'true',
+      lineSeparator: this.doc.lineSep,
       indentUnit: 2,
       styleActiveLine: 'true',
       scrollbarStyle: null,
