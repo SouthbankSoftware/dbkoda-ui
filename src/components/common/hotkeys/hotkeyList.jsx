@@ -20,21 +20,21 @@
 
 export const GlobalHotkeys = {
   editorToolbarHotkeys: {
-    saveFile: {
-      combo: 'Control + S', // meta should be repleced with OS specific versions.
-      keys: 'ctrl+s',
-      description: 'Save current editor Tab.'
-    },
-    saveFileAs: {
-      combo: 'Control + Shift + S', // meta should be repleced with OS specific versions.
-      keys: 'ctrl+shift+s',
-      description: 'Save as for current editor Tab.'
-    },
-    openFile: {
-      combo: 'Control + O',
-      keys: 'ctrl+o',
-      description: 'Open file.'
-    },
+    // saveFile: {
+    //   combo: 'Control + S', // meta should be repleced with OS specific versions.
+    //   keys: 'ctrl+s',
+    //   description: 'Save current editor Tab.'
+    // },
+    // saveFileAs: {
+    //   combo: 'Control + Shift + S', // meta should be repleced with OS specific versions.
+    //   keys: 'ctrl+shift+s',
+    //   description: 'Save as for current editor Tab.'
+    // },
+    // openFile: {
+    //   combo: 'Control + O',
+    //   keys: 'ctrl+o',
+    //   description: 'Open file.'
+    // },
     addEditor: {
       combo: 'Control + Shift + N',
       keys: 'ctrl+shift+n',

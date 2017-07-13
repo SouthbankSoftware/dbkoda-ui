@@ -110,10 +110,12 @@ export default class Toolbar extends React.Component {
 
     if (IS_ELECTRON) {
       window.require('electron').ipcRenderer.on('command', (event, message) => {
-        if (message == 'openFile') {
+        if (message === 'openFile') {
           this.openFile();
-        } else if (message == 'saveFile') {
+        } else if (message === 'saveFile') {
           this.saveFileHandleError();
+        } else if (message === 'saveFileAs') {
+          this.saveFileAs();
         }
       });
     }
@@ -139,18 +141,18 @@ export default class Toolbar extends React.Component {
       GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
       this.addEditorNoOptions,
     );
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
-      this.openFile,
-    );
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.saveFile.keys,
-      this.saveFileHandleError,
-    );
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys,
-      this.saveFileAs,
-    );
+    // Mousetrap.unbindGlobal(
+    //   GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
+    //   this.openFile,
+    // );
+    // Mousetrap.unbindGlobal(
+    //   GlobalHotkeys.editorToolbarHotkeys.saveFile.keys,
+    //   this.saveFileHandleError,
+    // );
+    // Mousetrap.unbindGlobal(
+    //   GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys,
+    //   this.saveFileAs,
+    // );
   }
 
   componentDidMount() {
@@ -172,18 +174,18 @@ export default class Toolbar extends React.Component {
       GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
       this.addEditorNoOptions,
     );
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
-      this.openFile,
-    );
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.saveFile.keys,
-      this.saveFileHandleError,
-    );
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys,
-      this.saveFileAs,
-    );
+    // Mousetrap.bindGlobal(
+    //   GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
+    //   this.openFile,
+    // );
+    // Mousetrap.bindGlobal(
+    //   GlobalHotkeys.editorToolbarHotkeys.saveFile.keys,
+    //   this.saveFileHandleError,
+    // );
+    // Mousetrap.bindGlobal(
+    //   GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys,
+    //   this.saveFileAs,
+    // );
   }
 
   reactionToNewEditorForTreeAction;
