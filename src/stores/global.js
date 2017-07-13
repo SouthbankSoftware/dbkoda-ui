@@ -154,7 +154,7 @@ export default class Store {
   @observable
   treePanel = {
     isRefreshing: false,
-    isRefreshDisabled: false,
+    isRefreshDisabled: true,
   };
 
   @observable
@@ -470,7 +470,7 @@ export default class Store {
 
     // Tree Panel:
     newStore.treePanel.isRefreshing = false;
-    newStore.treePanel.isRefreshDisabled = false;
+    newStore.treePanel.isRefreshDisabled = true;
   }
 
   hasUnsavedEditorTabs() {
