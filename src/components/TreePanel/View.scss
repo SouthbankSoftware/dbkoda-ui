@@ -25,6 +25,8 @@
 // @Last modified time: 2017-06-07T15:19:09+10:00
 @import '../../styles/_defaultTheme.scss';
 .treeToolbar {
+  overflow: hidden !important;
+  height: 70px !important;
   display: flex;
   flex-direction: row;
   background-color: $navbarLeftBackground !important;
@@ -45,6 +47,9 @@
       }
     }
   }
+  div.pt-align-left {
+    margin-top: 5px;
+  }
 }
 
 .sb-tree-view {
@@ -54,7 +59,6 @@
 }
 
 .treeToolbar {
-  overflow-x: scroll;
   background-color: $navbarLeftBackground !important;
   .pt-button {
     background: $buttonSecondaryBackground !important;

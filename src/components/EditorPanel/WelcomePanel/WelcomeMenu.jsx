@@ -33,6 +33,8 @@ import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
 import {AnchorButton, Checkbox} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
+import KeyboardIcon from '../../../styles/icons/keyboard-icon.svg';
+import OpenFolderIcon from '../../../styles/icons/open-folder-icon.svg';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -94,11 +96,6 @@ export default class Panel extends React.Component {
         </h2>
         <div className="welcomeButtons">
           <div className="welcomeButtonWrapper">
-            <AnchorButton
-              className="welcomeMenuButton openConnectionButton"
-              onClick={this.openConnection}>Open Connection</AnchorButton>
-          </div>
-          <div className="welcomeButtonWrapper">
             {(this.props.store.welcomePage.currentContent == 'Welcome')}
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
@@ -106,8 +103,17 @@ export default class Panel extends React.Component {
           </div>
           <div className="welcomeButtonWrapper">
             <AnchorButton
+              className="welcomeMenuButton openConnectionButton"
+              onClick={this.openConnection}>
+              <OpenFolderIcon className="dbKodaSVG" width={30} height={30} />
+              Open Connection</AnchorButton>
+          </div>
+          <div className="welcomeButtonWrapper">
+            <AnchorButton
               className="welcomeMenuButton learnKeyboardShortcutsButton"
-              onClick={this.learnKeyboardShortcuts}>Keyboard Shortcuts</AnchorButton>
+              onClick={this.learnKeyboardShortcuts}>
+              <KeyboardIcon className="dbKodaSVG" width={30} height={30} />
+              Keyboard Shortcuts</AnchorButton>
           </div>
         </div>
         <div className="welcomeMenuOptOut">

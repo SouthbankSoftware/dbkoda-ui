@@ -43,7 +43,7 @@ body {
 ::-webkit-scrollbar-corner {
   background-color: $scrollBarThumb !important;
 }
-.treeToolbar, .profileList, .pt-tab-list {
+.profileList, .pt-tab-list {
   overflow: auto !important;
 }
 
@@ -165,6 +165,9 @@ div.pt-dialog {
   top: 8px;
 }
 
+.CodeMirror-lines:focus {
+    outline: none !important;
+}
 .pt-tab .pt-button.pt-minimal:hover, .pt-tab .pt-button.pt-minimal:focus {
   background: unset;
   box-shadow: none !important;

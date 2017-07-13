@@ -277,7 +277,7 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                     color: $welcomeViewFontColor;
                                     font-size: 18px;
                                     order: 1;
-                                    margin-bottom: 10px;
+                                    margin-bottom: 20px;
                                 }
                                 .welcomeButtons {
                                     order: 2;
@@ -294,6 +294,8 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                         height: 60px;
                                         width: 180px;
                                         .welcomeMenuButton {
+                                            display: flex;
+                                            flex-direction: row;
                                             color: $welcomeViewOptoutFontColor;
                                             flex-grow: 1;
                                             background: unset;
@@ -302,15 +304,23 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                             border-radius: 0.75em;
                                             span {
                                                 display: block;
-                                                font-size: 16px;
+                                                font-size: 14px;
                                                 top: 35%;
                                                 padding-top: 6px;
                                                 padding-bottom: 10px;
+                                                margin-left: 30px;
+                                                text-align: left;
+                                            }
+                                            svg.dbKodaSVG {
+                                                float: left;
+                                                height: 20px;
+                                                fill: $welcomeViewSocialMediaIcons;
+                                                margin-left: 10px;
                                             }
                                         }
                                         .welcomeMenuButton:hover {
                                             background-color: $welcomeViewButtonHoverColor;
-                                            border: none;
+                                            border: 1px solid $welcomeViewButtonHoverColor ;
                                         }
                                     }
                                 }
@@ -353,7 +363,6 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                 flex-direction: row;
                                 height: 100%;
                                 .welcomePageContentLeft {
-                                    overflow-y: auto;
                                     width: 250px;
                                     color: $welcomeViewSocialMediaText;
                                     padding-left: 20px;
@@ -369,32 +378,85 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                     p {
                                         color: $welcomeViewFontColorDark;
                                     }
-                                    .docsList {
+                                    .docsContent {
                                         overflow-y: auto;
-                                        display: flex;
-                                        flex-direction: column;
-                                        .documentationLinkWrapper {
-                                            padding-bottom: 12px;
-                                            flex-grow: 1;
+                                        height: 100%;
+                                        .docsList {
+                                            overflow-y: auto;
                                             display: flex;
-                                            flex-direction: row;
-                                            margin-right: 6%;
-                                            .iconWrapper {
-                                                width: 50px;
-                                                height: 50px;
-                                                order: 1;
-                                                flex-grow: 2;
-                                                border-radius: 0.4em;
-                                                text-align: center;
-                                                a {
-                                                    float: left;
+                                            flex-direction: column;
+                                            .documentationLinkWrapper {
+                                                padding-bottom: 12px;
+                                                flex-grow: 1;
+                                                display: flex;
+                                                flex-direction: row;
+                                                margin-right: 6%;
+                                                .iconWrapper {
                                                     width: 50px;
                                                     height: 50px;
+                                                    order: 1;
+                                                    flex-grow: 2;
                                                     border-radius: 0.4em;
-                                                    background: $welcomeViewIconBGHover;
-                                                    position: relative;
                                                     text-align: center;
+                                                    a {
+                                                        float: left;
+                                                        width: 50px;
+                                                        height: 50px;
+                                                        border-radius: 0.4em;
+                                                        background: $welcomeViewIconBGHover;
+                                                        position: relative;
+                                                        text-align: center;
+                                                        svg {
+                                                            position: absolute;
+                                                            top: 50%;
+                                                            bottom: 50%;
+                                                            transform: translate(-50%, -50%);
+                                                            fill: $welcomeViewSocialMediaIcons;
+                                                        }
+                                                    }
+                                                    a:focus {
+                                                        box-shadow: none !important;
+                                                    }
+                                                    a:hover {
+                                                        background-color: $welcomeViewIconBG;
+                                                    }
+                                                }
+                                                p {
+                                                    padding-left: 16px;
+                                                    padding-top: 6px;
+                                                    padding-bottom: 5px;
+                                                    margin:0px;
+                                                    flex-grow: 3;
+                                                    order: 2;
+                                                    text-align: left;
+                                                }
+                                            }
+                                        }
+                                        .linksList {
+                                            display: flex;
+                                            flex-direction: row;
+                                            flex-grow: 1;
+                                            .linkWrapper {
+                                                flex-direction: column;
+                                                margin-right: 10px;
+                                                a {
+                                                    width: 100px;
+                                                    border-radius: 50%;
+                                                    order: 1;
+                                                    flex-grow: 4;
+                                                    background: $welcomeViewIconBGHover;
+                                                    font-size: 40;
+                                                }
+                                                a:focus {
+                                                    box-shadow: none !important;
+                                                }
+                                                .twitterIcon {
+                                                    width: 60px;
+                                                    height: 60px;
+                                                    position: relative;
                                                     svg {
+                                                        width: 30px;
+                                                        height: 30px;
                                                         position: absolute;
                                                         top: 50%;
                                                         bottom: 50%;
@@ -402,101 +464,52 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                                         fill: $welcomeViewSocialMediaIcons;
                                                     }
                                                 }
-                                                a:focus {
-                                                    box-shadow: none !important;
+                                                .gitHubIcon {
+                                                    width: 60px;
+                                                    height: 60px;
+                                                    position: relative;
+                                                    svg {
+                                                        width: 30px;
+                                                        height: 30px;
+                                                        position: absolute;
+                                                        top: 50%;
+                                                        bottom: 50%;
+                                                        transform: translate(-50%, -50%);
+                                                        fill: $welcomeViewSocialMediaIcons;
+                                                    }
+                                                }
+                                                .kodaIcon {
+                                                    width: 60px;
+                                                    height: 60px;
+                                                    position: relative;
+                                                    svg {
+                                                        width: 30px;
+                                                        height: 30px;
+                                                        position: absolute;
+                                                        top: 50%;
+                                                        bottom: 50%;
+                                                        transform: translate(-50%, -50%);
+                                                        fill: $welcomeViewSocialMediaIcons;
+                                                        path.st0 {
+                                                            fill: none;
+                                                        }
+                                                    }
                                                 }
                                                 a:hover {
                                                     background-color: $welcomeViewIconBG;
                                                 }
-                                            }
-                                            p {
-                                                padding-left: 16px;
-                                                padding-top: 6px;
-                                                padding-bottom: 5px;
-                                                margin:0px;
-                                                flex-grow: 3;
-                                                order: 2;
-                                                text-align: left;
-                                            }
-                                        }
-                                    }
-                                    .linksList {
-                                        display: flex;
-                                        flex-direction: row;
-                                        flex-grow: 1;
-                                        .linkWrapper {
-                                            flex-direction: column;
-                                            margin-right: 10px;
-                                            a {
-                                                width: 100px;
-                                                border-radius: 50%;
-                                                order: 1;
-                                                flex-grow: 4;
-                                                background: $welcomeViewIconBGHover;
-                                                font-size: 40;
-                                            }
-                                            a:focus {
-                                                box-shadow: none !important;
-                                            }
-                                            .twitterIcon {
-                                                width: 60px;
-                                                height: 60px;
-                                                position: relative;
-                                                svg {
-                                                    width: 30px;
-                                                    height: 30px;
-                                                    position: absolute;
-                                                    top: 50%;
-                                                    bottom: 50%;
-                                                    transform: translate(-50%, -50%);
-                                                    fill: $welcomeViewSocialMediaIcons;
+                                                p {
+                                                    flex-grow: 1;
+                                                    order: 2;
+                                                    text-align: center;
+                                                    margin-top: 10%;
                                                 }
-                                            }
-                                            .gitHubIcon {
-                                                width: 60px;
-                                                height: 60px;
-                                                position: relative;
-                                                svg {
-                                                    width: 30px;
-                                                    height: 30px;
-                                                    position: absolute;
-                                                    top: 50%;
-                                                    bottom: 50%;
-                                                    transform: translate(-50%, -50%);
-                                                    fill: $welcomeViewSocialMediaIcons;
-                                                }
-                                            }
-                                            .kodaIcon {
-                                                width: 60px;
-                                                height: 60px;
-                                                position: relative;
-                                                svg {
-                                                    width: 30px;
-                                                    height: 30px;
-                                                    position: absolute;
-                                                    top: 50%;
-                                                    bottom: 50%;
-                                                    transform: translate(-50%, -50%);
-                                                    fill: $welcomeViewSocialMediaIcons;
-                                                    path.st0 {
-                                                        fill: none;
-                                                    }
-                                                }
-                                            }
-                                            a:hover {
-                                                background-color: $welcomeViewIconBG;
-                                            }
-                                            p {
-                                                flex-grow: 1;
-                                                order: 2;
-                                                text-align: center;
-                                                margin-top: 10%;
                                             }
                                         }
                                     }
                                 }
                                 .welcomePageContentRight {
-                                    padding-right: 10%;
+                                    padding-right: 3%;
                                     padding-left: 20px;
                                     flex-grow: 1;
                                     flex-shrink: 1;
@@ -504,6 +517,7 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                     flex-direction: column;
 
                                     h2 {
+                                        margin-bottom: 20px;
                                         font-size: 18px;
                                         color: $welcomeViewFontColor;
                                     }
@@ -526,8 +540,8 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                                     position: relative;
                                                     text-align: center;
                                                     svg {
-                                                        width: 40px;
-                                                        height: 40px;
+                                                        width: 30px;
+                                                        height: 30px;
                                                         position: absolute;
                                                         top: 50%;
                                                         bottom: 50%;
@@ -664,7 +678,7 @@ inset 0 1px 1px rgba(16, 22, 26, 0.2);
                                         }
                                         .welcomeMenuButton:hover {
                                             background-color: $welcomeViewButtonHoverColor;
-                                            border: none;
+                                            border: 1px solid $welcomeViewButtonHoverColor;
                                         }
                                     }
                                 }

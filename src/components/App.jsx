@@ -99,7 +99,7 @@ class App extends React.Component {
           split="vertical"
           defaultSize={defaultOverallSplitPos}
           onDragFinished={this.updateOverallSplitPos}
-          minSize={400}
+          minSize={450}
           maxSize={750}
         >
           <SidebarPanel />
