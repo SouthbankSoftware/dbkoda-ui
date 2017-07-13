@@ -267,6 +267,7 @@ export default class Store {
             currentProfile: res.id,
             fileName,
             executing: false,
+            visible: true,
             shellVersion: res.shellVersion,
             initialMsg: res.output ? res.output.join('\n') : '',
             doc: observable.ref(doc),

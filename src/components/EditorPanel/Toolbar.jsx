@@ -116,6 +116,8 @@ export default class Toolbar extends React.Component {
           this.saveFileHandleError();
         } else if (message === 'saveFileAs') {
           this.saveFileAs();
+        } else if (message === 'newEditor') {
+          this.addEditorNoOptions();
         }
       });
     }
@@ -137,10 +139,10 @@ export default class Toolbar extends React.Component {
       this.stopExecution,
     );
 
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
-      this.addEditorNoOptions,
-    );
+    // Mousetrap.unbindGlobal(
+    //   GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
+    //   this.addEditorNoOptions,
+    // );
     // Mousetrap.unbindGlobal(
     //   GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
     //   this.openFile,
@@ -170,10 +172,10 @@ export default class Toolbar extends React.Component {
       this.stopExecution,
     );
 
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
-      this.addEditorNoOptions,
-    );
+    // Mousetrap.bindGlobal(
+    //   GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
+    //   this.addEditorNoOptions,
+    // );
     // Mousetrap.bindGlobal(
     //   GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
     //   this.openFile,
@@ -221,6 +223,7 @@ export default class Toolbar extends React.Component {
           shellId: profile.shellId,
           currentProfile: profile.id,
           fileName,
+          visible: true,
           executing: false,
           shellVersion: profile.shellVersion,
           initialMsg: profile.initialMsg,

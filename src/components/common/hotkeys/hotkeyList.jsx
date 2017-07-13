@@ -35,11 +35,11 @@ export const GlobalHotkeys = {
     //   keys: 'ctrl+o',
     //   description: 'Open file.'
     // },
-    addEditor: {
-      combo: 'Control + Shift + N',
-      keys: 'ctrl+shift+n',
-      description: 'Create new Editor Tab.'
-    },
+    // addEditor: {
+    //   combo: 'Control + Shift + N',
+    //   keys: 'ctrl+shift+n',
+    //   description: 'Create new Editor Tab.'
+    // },
     executeLine: {
       combo: 'F7',
       keys: 'f7',
