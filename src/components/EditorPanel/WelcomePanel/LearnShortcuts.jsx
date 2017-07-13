@@ -201,7 +201,7 @@ export default class LearnShortcuts extends React.Component {
           <div className="welcomeButtonWrapper">
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
-              onClick={this.showCM}>CodeMirror</AnchorButton>
+              onClick={this.showCM}>Text Editing</AnchorButton>
           </div>
         </div>
         <div className="hotkeysList">
