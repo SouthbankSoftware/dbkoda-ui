@@ -20,26 +20,26 @@
 
 export const GlobalHotkeys = {
   editorToolbarHotkeys: {
-    // saveFile: {
-    //   combo: 'Control + S', // meta should be repleced with OS specific versions.
-    //   keys: 'ctrl+s',
-    //   description: 'Save current editor Tab.'
-    // },
-    // saveFileAs: {
-    //   combo: 'Control + Shift + S', // meta should be repleced with OS specific versions.
-    //   keys: 'ctrl+shift+s',
-    //   description: 'Save as for current editor Tab.'
-    // },
-    // openFile: {
-    //   combo: 'Control + O',
-    //   keys: 'ctrl+o',
-    //   description: 'Open file.'
-    // },
-    // addEditor: {
-    //   combo: 'Control + Shift + N',
-    //   keys: 'ctrl+shift+n',
-    //   description: 'Create new Editor Tab.'
-    // },
+    saveFile: {
+      combo: 'Control/Command + S', // meta should be repleced with OS specific versions.
+      // keys: 'ctrl+s',
+      description: 'Save current editor Tab.'
+    },
+    saveFileAs: {
+      combo: 'Control/Command + Shift + S', // meta should be repleced with OS specific versions.
+      // keys: 'ctrl+shift+s',
+      description: 'Save as for current editor Tab.'
+    },
+    openFile: {
+      combo: 'Control/Command + O',
+      // keys: 'ctrl+o',
+      description: 'Open file.'
+    },
+    addEditor: {
+      combo: 'Control/Command + N',
+      // keys: 'ctrl+shift+n',
+      description: 'Create new Editor Tab.'
+    },
     executeLine: {
       combo: 'F7',
       keys: 'f7',
@@ -57,8 +57,8 @@ export const GlobalHotkeys = {
     }
   },
   createNewProfile: {
-    combo: 'Control + N.',
-    keys: 'ctrl+n',
+    combo: 'Control + Shift + N.',
+    keys: 'ctrl+shift+n',
     description: 'Create a new Connection Profile'
   },
 
