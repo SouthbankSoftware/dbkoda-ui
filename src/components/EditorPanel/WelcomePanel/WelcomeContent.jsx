@@ -164,37 +164,11 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickReleaseNotes() {
     if (IS_ELECTRON) {
-      switch (this.state.os) {
-        case 'mac':
-          window
-            .require('electron')
-            .shell.openExternal(
-              'https://github.com/SouthbankSoftware/dbkoda-mac/releases'
-            );
-          break;
-        case 'win':
-          window
-            .require('electron')
-            .shell.openExternal(
-              'https://github.com/SouthbankSoftware/dbkoda-win/releases'
-            );
-          break;
-        case 'linux':
-          window
-            .require('electron')
-            .shell.openExternal(
-              'https://github.com/SouthbankSoftware/dbkoda-linux/releases'
-            );
-          break;
-        default:
-          console.log('Unable to determine operating System, defaulting to Windows.');
-          window
-            .require('electron')
-            .shell.openExternal(
-              'https://github.com/SouthbankSoftware/dbkoda-win/releases'
-            );
-          break;
-      }
+      window
+        .require('electron')
+        .shell.openExternal(
+          'https://github.com/SouthbankSoftware/dbkoda/blob/master/releaseNotes.md'
+        );
     }
   }
   @action.bound
@@ -209,33 +183,10 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickLodgeABug() {
     if (IS_ELECTRON) {
-      switch (this.state.os) {
-        case 'mac':
-          window
-            .require('electron')
-            .shell
-            .openExternal('https://github.com/SouthbankSoftware/dbkoda-mac/issues');
-          break;
-        case 'win':
-          window
-            .require('electron')
-            .shell
-            .openExternal('https://github.com/SouthbankSoftware/dbkoda-win/issues');
-          break;
-        case 'linux':
-          window
-            .require('electron')
-            .shell
-            .openExternal('https://github.com/SouthbankSoftware/dbkoda-linux/issues');
-          break;
-        default:
-          console.log('Unable to determine operating System, defaulting to Windows.');
-          window
-            .require('electron')
-            .shell
-            .openExternal('https://github.com/SouthbankSoftware/dbkoda-win/issues');
-          break;
-      }
+      window
+        .require('electron')
+        .shell
+        .openExternal('https://southbanksoftware.atlassian.net/projects/DBKODA/issues');
     }
   }
 
@@ -251,33 +202,10 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickGithub() {
     if (IS_ELECTRON) {
-      switch (this.state.os) {
-        case 'mac':
-          window
-            .require('electron')
-            .shell
-            .openExternal('https://github.com/SouthbankSoftware/dbkoda-mac');
-          break;
-        case 'win':
-          window
-            .require('electron')
-            .shell
-            .openExternal('https://github.com/SouthbankSoftware/dbkoda-win');
-          break;
-        case 'linux':
-          window
-            .require('electron')
-            .shell
-            .openExternal('https://github.com/SouthbankSoftware/dbkoda-linux');
-          break;
-        default:
-          console.log('Unable to determine operating System, defaulting to Windows.');
-          window
-            .require('electron')
-            .shell
-            .openExternal('https://github.com/SouthbankSoftware/dbkoda-win');
-          break;
-      }
+      window
+        .require('electron')
+        .shell
+        .openExternal('https://github.com/SouthbankSoftware/dbkoda');
     }
   }
 
