@@ -186,7 +186,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell
-        .openExternal('https://southbanksoftware.atlassian.net/projects/DBKODA/issues');
+        .openExternal('https://dbkoda.useresponse.com/topic/add');
     }
   }
 
