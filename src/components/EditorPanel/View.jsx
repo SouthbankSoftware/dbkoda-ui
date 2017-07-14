@@ -418,7 +418,12 @@ class View extends React.Component {
     };
 
     if (this.editorObject.path) {
-      this.props.store.watchFileBackgroundChange(this.id);
+      const { store } = this.props;
+      store.openFile(this.editorObject.path, ({ content }) => {
+        this.doc.setValue(content);
+        this.doc.markClean();
+        store.watchFileBackgroundChange(this.id);
+      });
     }
 
     Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain.bind(this));
