@@ -27,6 +27,10 @@ body {
 #root div {
 
 }
+
+p, h1, h2, h3, h4 span, .pt-navbar-heading {
+  font-family: Arial;
+}
 ::-webkit-scrollbar {
   background-color: $scrollBarThumb !important;
 }
