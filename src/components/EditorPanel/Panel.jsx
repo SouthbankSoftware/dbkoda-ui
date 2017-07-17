@@ -65,7 +65,6 @@ export default class Panel extends React.Component {
     this.state = {
       activePanelOnly: false,
       animate: false,
-      tabId: 0,
       vertical: false,
     };
 
@@ -170,7 +169,6 @@ export default class Panel extends React.Component {
   newEditor(newId) {
     this.props.store.editorPanel.activeDropdownId = newId;
     this.props.store.editorPanel.activeEditorId = newId;
-    this.setState({ tabId: newId });
   }
 
   /**
@@ -324,9 +322,6 @@ export default class Panel extends React.Component {
       if (editorPanel.isRemovingCurrentTab) {
         editorPanel.isRemovingCurrentTab = false;
         editorPanel.activeEditorId = newTabId;
-        this.setState({ tabId: newTabId });
-      } else {
-        this.setState({ tabId: this.state.tabId });
       }
     } else {
       editorPanel.activeEditorId = newTabId;
@@ -335,7 +330,6 @@ export default class Panel extends React.Component {
       } else {
         editorToolbar.isActiveExecuting = false;
       }
-      this.setState({ tabId: newTabId });
       if (newTabId != 'Default') {
         const currEditor = editors.get(newTabId);
         editorPanel.activeDropdownId = currEditor.currentProfile;

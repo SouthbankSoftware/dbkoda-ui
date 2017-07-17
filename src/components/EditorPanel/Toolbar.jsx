@@ -200,13 +200,14 @@ export default class Toolbar extends React.Component {
    */
   profileCreated(profile) {
     const { editors, editorToolbar, editorPanel } = this.props.store;
-    let profileHasEditor = false;
-    editors.forEach((editor) => {
-      if (profile.id == editor.profileId) {
-        profileHasEditor = true;
+    let targetEditor = null;
+    for (const editor of editors.values()) {
+      if (profile.id === editor.profileId) {
+        targetEditor = editor;
+        break;
       }
-    });
-    if (!profileHasEditor) {
+    }
+    if (!targetEditor) {
       const content = '';
       const doc = Store.createNewDocumentObject(content);
       doc.lineSep = Store.determineEol(content);
@@ -229,12 +230,16 @@ export default class Toolbar extends React.Component {
           initialMsg: profile.initialMsg,
           doc: observable.ref(doc),
           status: profile.status,
-          path: null
+          path: null,
         }),
       );
       editorPanel.shouldScrollToActiveTab = true;
       editorPanel.activeEditorId = editorId;
+    } else if (targetEditor.id !== editorPanel.activeEditorId) {
+      editorPanel.shouldScrollToActiveTab = true;
+      editorPanel.activeEditorId = targetEditor.id;
     }
+
     editorToolbar.noActiveProfile = false;
     editorToolbar.id = profile.id;
     editorToolbar.shellId = profile.shellId;
