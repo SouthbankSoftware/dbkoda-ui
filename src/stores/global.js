@@ -209,8 +209,9 @@ export default class Store {
   };
 
   @action
-  addNewEditorForTreeAction = () => {
+  addNewEditorForTreeAction = ({type = 'shell'}) => {
     this.editorToolbar.newEditorForTreeAction = true;
+    this.editorToolbar.newEditorTypeForTreeAction = type;
     this.treeActionPanel.newEditorCreated = false;
   };
 

@@ -290,7 +290,8 @@ export default class TreeView extends React.Component {
     if (bExistingEditor) {
       this.props.store.showTreeActionPane();
     } else {
-      this.props.store.addNewEditorForTreeAction();
+      const type = action === 'ExportDatabase' ? 'os' : 'shell';
+      this.props.store.addNewEditorForTreeAction(type);
     }
   }
 

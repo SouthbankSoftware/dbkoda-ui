@@ -62,7 +62,7 @@ export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.addEditorNoOptions = this.addEditor.bind(this, undefined);
+    this.addEditorNoOptions = this.addEditor.bind(this);
     this.executeLine = this.executeLine.bind(this);
     this.executeAll = this.executeAll.bind(this);
     this.explainPlan = this.explainPlan.bind(this);
@@ -92,7 +92,7 @@ export default class Toolbar extends React.Component {
       () => this.props.store.editorToolbar.newEditorForTreeAction,
       () => {
         if (this.props.store.editorToolbar.newEditorForTreeAction) {
-          this.addEditorNoOptions();
+          this.addEditorNoOptions({type: this.props.store.editorToolbar.newEditorTypeForTreeAction});
         }
       },
     );
