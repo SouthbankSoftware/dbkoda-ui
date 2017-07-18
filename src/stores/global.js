@@ -273,6 +273,7 @@ export default class Store {
             doc: observable.ref(doc),
             status: ProfileStatus.OPEN,
             path: null,
+            type: options.type
           },
           options,
         ),

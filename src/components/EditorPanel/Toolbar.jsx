@@ -231,6 +231,7 @@ export default class Toolbar extends React.Component {
           doc: observable.ref(doc),
           status: profile.status,
           path: null,
+          type: 'shell',
         }),
       );
       editorPanel.shouldScrollToActiveTab = true;
@@ -268,6 +269,9 @@ export default class Toolbar extends React.Component {
           profileId = value.id;
         }
       });
+      if (!options.type) {
+        options.type = 'shell';
+      }
       if (profileId == 'UNKNOWN') {
         if (this.props.store.userPreferences.telemetryEnabled) {
           EventLogging.recordManualEvent(
