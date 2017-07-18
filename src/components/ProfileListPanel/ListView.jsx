@@ -308,7 +308,7 @@ export default class ListView extends React.Component {
   }
 
   @action
-  newEditorWindow(options = {}) {
+  newEditorWindow() {
     try {
       this.props.store.startCreatingNewEditor();
       const profileTitle = this.props.store.editorToolbar.newEditorForTreeAction
@@ -341,7 +341,7 @@ export default class ListView extends React.Component {
         .service('/mongo-shells')
         .create({ id: profileId })
         .then((res) => {
-          return this.props.store.setNewEditorState(res, options);
+          return this.props.store.setNewEditorState(res, {type: 'shell'});
         })
         .catch((err) => {
           if (this.props.store.userPreferences.telemetryEnabled) {
