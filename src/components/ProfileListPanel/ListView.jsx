@@ -169,11 +169,6 @@ export default class ListView extends React.Component {
     let position = Position.LEFT_BOTTOM;
     this.props.store.profileList.creatingNewProfile = false;
     if (!data.test) {
-      this
-        .props
-        .store
-        .profiles
-        .delete(data.id);
       Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {
         id: res.id,
         shellId: res.shellId,
