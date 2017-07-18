@@ -177,6 +177,8 @@ export default class ListView extends React.Component {
           .join('\n')
       });
       position = Position.RIGHT_TOP;
+      // @TODO -> Someone should go through these and see which are unchanged from a new connection.
+      // @MIKE.
       this
         .props
         .store

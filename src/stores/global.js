@@ -309,6 +309,31 @@ export default class Store {
     return editorId;
   };
 
+  @action
+  openNewAggregateBuilder(nodeRightClicked) {
+    console.log('DEV - Aggregate Builder to be opened for node: ', nodeRightClicked, ' on profile: ', this.profiles.get(this.editorPanel.activeDropdownId));
+
+    // Create a new shell through feathers.
+    return featherClient()
+      .service('/mongo-shells')
+      .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
+      .then((res) => {
+        console.log('DEV - Create new aggregate with editor: ', res);
+        console.log(this.editors);
+      })
+      .catch((err) => {
+        this.createNewEditorFailed();
+        console.error(err);
+        NewToaster.show({
+          message: 'Error: ' + err.message,
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
+      });
+  }
+
+
+
   /**
    * Determine EOL to be used for given content string
    *

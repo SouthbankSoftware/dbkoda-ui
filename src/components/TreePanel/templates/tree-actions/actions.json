@@ -111,7 +111,13 @@
     "collection": [{
             "name": "SampleCollections",
             "text": "Find Attributes",
-            "icon": "pt-icon-properties"
+            "icon": "pt-icon-properties",
+            "noDialog": true
+        }, {
+            "name": "AggregateBuilder",
+            "text": "Aggregate Builder",
+            "icon": "pt-icon-search-template",
+            "noDialog": true
         }, {
             "name": "SimpleQuery",
             "text": "Simple Query",

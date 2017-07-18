@@ -245,10 +245,21 @@ export default class TreeView extends React.Component {
     }
   };
   handleTreeActionClick = (e: React.MouseEvent) => {
+    const noDialog = e._targetInst._currentElement._owner._instance.props.name;
     const action = e._targetInst._currentElement._owner._instance.props.name;
     this.actionSelected = this.getActionByName(action);
-    if (action == 'SampleCollections') {
-      this.props.treeState.sampleCollection(this.nodeRightClicked);
+    if (noDialog) {
+      switch (action) {
+        case 'SampleCollections':
+          this.props.treeState.sampleCollection(this.nodeRightClicked);
+          break;
+        case 'AggregateBuilder':
+          this.props.store.openNewAggregateBuilder(this.nodeRightClicked);
+          break;
+        default:
+          console.error('Tree Action not defined: ', action);
+          break;
+      }
     } else if (this.nodeRightClicked) {
       if (
         this.actionSelected &&
