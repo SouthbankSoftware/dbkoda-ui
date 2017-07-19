@@ -19,11 +19,16 @@
  */
 
 
+import * as common from './Common.js';
+
 export const ExportDatabase = {
   // Prefill function for alter user
-  dbkoda_DropDatabasePreFill: (params) => {
+  dbkoda_ExportDatabasePreFill: (params) => {
+    console.log('xxx:', params);
     const data = {};
     data.Database = params.Database;
     return (data);
-  }
+  },
+  dbkoda_listcollections: common.dbkoda_listcollections,
+  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
 };
