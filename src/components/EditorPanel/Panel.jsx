@@ -43,11 +43,11 @@ import {
 } from '@blueprintjs/core';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
+import AggregateGraphicalBuilder from '#/AggregateViews';
 import Toolbar from './Toolbar';
 import View from './View';
 import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView';
-
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 /**
@@ -830,7 +830,7 @@ export default class Panel extends React.Component {
         title={editorTitle}
         panel={
           <div className="aggregateTabInnerWrapper">
-            <div className="aggregatePanel" />
+            <AggregateGraphicalBuilder className="aggregatePanel" />
             <View
               id={tab[0]}
               className="aggregateEditorPanel"
