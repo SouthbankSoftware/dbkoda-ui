@@ -43,6 +43,7 @@ import {
 } from '@blueprintjs/core';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
+import { DrawerPanes } from '#/common/Constants';
 import { AggregateGraphicalBuilder } from '../AggregateViews';
 import Toolbar from './Toolbar';
 import View from './View';
@@ -177,6 +178,10 @@ export default class Panel extends React.Component {
    */
   @action
   closeTab(currEditor) {
+    // @TODO -> Looks like during it's various reworks this entire function has been broken and stitched back together. Some refactoring needs to occur to ensure that when atab is closed a new tab is selected. @Mike.
+    if (this.props.store.drawer.drawerChild === DrawerPanes.AGGREGATE) {
+      this.props.store.drawer.drawerChild === DrawerPanes.DEFAULT;
+    }
     if (!currEditor.doc.isClean()) {
       this.props.store.editorPanel.showingSavingDialog = true;
       return;
@@ -224,14 +229,12 @@ export default class Panel extends React.Component {
     }
     this.props.store.editorPanel.removingTabId = currEditor.id;
     this.props.store.editors.delete(currEditor.id);
-
     const treeEditor = this.props.store.treeActionPanel.editors.get(
       currEditor.id,
     );
     if (treeEditor) {
       this.props.store.treeActionPanel.editors.delete(treeEditor.id);
     }
-
     this.forceUpdate();
   }
 
@@ -315,7 +318,7 @@ export default class Panel extends React.Component {
   @action
   changeTab(newTabId) {
     const { editorPanel, editorToolbar, editors } = this.props.store;
-
+    const currEditor = editors.get(newTabId);
     // Check if last update was a remove for special Handling.
     if (editorPanel.removingTabId) {
       editorPanel.removingTabId = false;
@@ -331,7 +334,6 @@ export default class Panel extends React.Component {
         editorToolbar.isActiveExecuting = false;
       }
       if (newTabId != 'Default') {
-        const currEditor = editors.get(newTabId);
         editorPanel.activeDropdownId = currEditor.currentProfile;
         // Check if connection exists or is closed to update dropdown.
         if (!this.props.store.profiles.get(editorPanel.activeDropdownId)) {
@@ -352,6 +354,14 @@ export default class Panel extends React.Component {
         editorToolbar.noActiveProfile = true;
       } else {
         editorToolbar.noActiveProfile = false;
+      }
+
+      if (this.props.store.drawer.drawerChild === DrawerPanes.AGGREGATE) {
+        if (currEditor.type !== 'aggregate') {
+          this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+        }
+      } else if (currEditor.type === 'aggregate') {
+        this.props.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
       }
     }
   }
