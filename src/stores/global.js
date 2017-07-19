@@ -248,7 +248,11 @@ export default class Store {
   setNewEditorState = (res, options = {}) => {
     const { content = '' } = options;
     options = _.omit(options, ['content']);
-    const fileName = `new${this.profiles.get(res.id).editorCount}.js`;
+    let fileName = `new${this.profiles.get(res.id).editorCount}.js`;
+    if (options.type === 'aggregate') {
+      fileName = 'Aggregate Builder';
+    }
+
     const editorId = uuidV1();
     this.profiles.get(res.id).editorCount += 1;
 
@@ -313,15 +317,14 @@ export default class Store {
 
   @action
   openNewAggregateBuilder(nodeRightClicked) {
-    console.log('DEV - Aggregate Builder to be opened for node: ', nodeRightClicked, ' on profile: ', this.profiles.get(this.editorPanel.activeDropdownId));
-
+    this.startCreatingNewEditor();
     // Create a new shell through feathers.
     return featherClient()
       .service('/mongo-shells')
       .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
       .then((res) => {
-        console.log('DEV - Create new aggregate with editor: ', res);
-        console.log(this.editors);
+        // Create new editor as normal, but with "aggregate" type.
+        return this.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked});
       })
       .catch((err) => {
         this.createNewEditorFailed();
