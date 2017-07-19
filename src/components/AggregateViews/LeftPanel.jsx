@@ -19,27 +19,35 @@
  */
 
 /**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-15T12:03:27+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-07-19 11:16:52
-*/
+ * @Author: Michael Harrison
+ * @Date:   2017-07-19 11:17:46
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   Mike
+ * @Last modified time: 2017-07-19 11:17:49
+ */
 
+import React from 'react';
+import Palette from './Palette';
+import Details from './Details';
 
+@inject(allStores => ({
+  store: allStores.store,
+}))
+@observer
+export default class LeftPanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-export const DragItemTypes = {
-  LABEL: 'label'
-};
+  render() {
+    return (
+      <div className="AggregateLeftPanel">
+        <h2>Placeholder.</h2>
+        <Palette />
+        <Details />
+      </div>
+    );
+  }
+}
 
-export const ProfileStatus = {
-  OPEN: 'OPEN',
-  CLOSED: 'CLOSED',
-};
-
-export const DrawerPanes = {
-  DEFAULT: 'default',
-  PROFILE: 'profile',
-  DYNAMIC: 'dynamic',
-  AGGREGATE: 'aggregate'
-};

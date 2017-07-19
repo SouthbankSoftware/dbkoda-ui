@@ -35,6 +35,7 @@ import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
 import TreeState from '#/TreePanel/model/TreeState.js';
 import { ConnectionProfilePanel } from '#/ConnectionPanel';
+import { AggregateLeftPanel } from '#/AggregateViews';
 import { TreeActionPanel } from '#/TreeActionPanel';
 import { DrawerPanes } from '#/common/Constants';
 
@@ -94,6 +95,10 @@ export default class Panel extends React.Component {
 
         {drawerChild == DrawerPanes.DYNAMIC &&
           <TreeActionPanel />
+        }
+
+        {drawerChild == DrawerPanes.AGGREGATE &&
+          <AggregateLeftPanel />
         }
       </div>
     );

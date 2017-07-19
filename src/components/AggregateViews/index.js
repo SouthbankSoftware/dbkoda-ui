@@ -19,27 +19,14 @@
  */
 
 /**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-15T12:03:27+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-07-19 11:16:52
-*/
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-07-19 11:15:01
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   Mike
+ * @Last modified time: 2017-07-19 11:15:06
+ */
 
-
-
-export const DragItemTypes = {
-  LABEL: 'label'
-};
-
-export const ProfileStatus = {
-  OPEN: 'OPEN',
-  CLOSED: 'CLOSED',
-};
-
-export const DrawerPanes = {
-  DEFAULT: 'default',
-  PROFILE: 'profile',
-  DYNAMIC: 'dynamic',
-  AGGREGATE: 'aggregate'
-};
+export AggregateDetails from './Details.jsx';
+export AggregateGraphicalBuilder from './GraphicalBuilder.jsx';
+export AggregateLeftPanel from './LeftPanel.jsx';
+export AggregatePalette from './Palette';
