@@ -1,16 +1,32 @@
 {
   "Title": "Export Database",
   "DefaultValues": {
-    "function": "dbkoda_DropDatabasePreFill",
-    "arguments": [{
-      "name": "Database",
-      "value": "treeNode"
-    }]
+    "function": "dbkoda_ExportDatabasePreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode"
+      }
+    ]
   },
-  "Fields": [{
-    "name": "Database",
-    "type": "Text",
-    "readOnly": true
-  }
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true
+    },
+    {
+      "name": "CollectionName",
+      "label": "Collection Name",
+      "type": "Combo",
+      "readOnly": true,
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "treeNode"
+        }
+      ]
+    }
   ]
 }
