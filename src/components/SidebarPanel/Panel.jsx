@@ -37,6 +37,7 @@ import TreeState from '#/TreePanel/model/TreeState.js';
 import { ConnectionProfilePanel } from '#/ConnectionPanel';
 import { TreeActionPanel } from '#/TreeActionPanel';
 import { DrawerPanes } from '#/common/Constants';
+import { BackupRestore } from '../BackupRestore/index';
 
 const splitPane2Style = {
   display: 'flex',
@@ -95,6 +96,9 @@ export default class Panel extends React.Component {
         {drawerChild == DrawerPanes.DYNAMIC &&
           <TreeActionPanel />
         }
+
+        {drawerChild == DrawerPanes.BACKUP_RESTORE && <BackupRestore />}
+
       </div>
     );
   }

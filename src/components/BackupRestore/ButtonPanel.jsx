@@ -17,19 +17,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * Created by joey on 19/7/17.
+ */
 
+import React from 'react';
+import './Buttonpanel.scss';
 
-import {inject} from 'mobx-react';
-import * as common from './Common.js';
-
-export const ExportDatabase = inject(() => ({
-  // Prefill function for alter user
-  dbkoda_ExportDatabasePreFill: (params) => {
-    const data = {};
-    data.Database = params.Database;
-    data.allCollections = true;
-    return (data);
-  },
-  dbkoda_listcollections: common.dbkoda_listcollections,
-  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse
-}));
+export const ButtonPanel = ({close}) => (
+  <div className="form-button-panel">
+    <button className="pt-button pt-intent-success right-button">{globalString('tree/executeButton')}</button>
+    <button className="pt-button pt-intent-primary right-button" onClick={() => close()}>{globalString('tree/closeButton')}</button>
+  </div>
+);

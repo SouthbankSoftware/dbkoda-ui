@@ -41,4 +41,9 @@ export const DrawerPanes = {
   DEFAULT: 'default',
   PROFILE: 'profile',
   DYNAMIC: 'dynamic',
+  BACKUP_RESTORE: 'backup-restore',
+};
+
+export const BackupRestoreActions = {
+  EXPORT_DATABASE: 'ExportDatabase',
 };

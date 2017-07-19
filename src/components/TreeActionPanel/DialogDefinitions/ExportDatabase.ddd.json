@@ -14,17 +14,33 @@
       "name": "Database",
       "type": "Text",
       "readOnly": true
+    },{
+      "name": "allCollections",
+      "type": "Boolean",
+      "readOnly": false,
+      "tooltip": "Backup all collections?",
+      "rules": "boolean"
     },
     {
-      "name": "CollectionName",
-      "label": "Collection Name",
-      "type": "Combo",
-      "readOnly": true,
-      "lookup": "dbkoda_listcollections",
-      "lookup_arguments": [
+      "name": "Collections",
+      "type": "Table",
+      "columns": [
         {
-          "name": "db",
-          "value": "treeNode"
+          "name": "CollectionName",
+          "label": "Collection Name",
+          "tooltip": "Name of the collection to backup",
+          "type": "Combo",
+          "lookup": "dbkoda_listcollections",
+          "lookup_arguments": [
+            {
+              "name": "db",
+              "value": "treeNode"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }
+          ]
         }
       ]
     }

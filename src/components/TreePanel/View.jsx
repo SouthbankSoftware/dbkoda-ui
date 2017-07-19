@@ -28,7 +28,7 @@
 
 import React from 'react';
 import { inject } from 'mobx-react';
-import { reaction, runInAction, observable } from 'mobx';
+import { reaction, runInAction, observable, action } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 import {
   ContextMenuTarget,
@@ -47,6 +47,7 @@ import CloseIcon from '../../styles/icons/cross-icon.svg';
 import ShardsIcon from '../../styles/icons/shards-icon-2.svg';
 import CollectionIcon from '../../styles/icons/collection-icon.svg';
 import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
+import { DrawerPanes } from '../common/Constants';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
@@ -244,11 +245,17 @@ export default class TreeView extends React.Component {
       this.setState({ nodes: this.props.treeState.nodes });
     }
   };
+
+  @action
   handleTreeActionClick = (e: React.MouseEvent) => {
     const action = e._targetInst._currentElement._owner._instance.props.name;
     this.actionSelected = this.getActionByName(action);
     if (action == 'SampleCollections') {
       this.props.treeState.sampleCollection(this.nodeRightClicked);
+    } else if (action === 'ExportDatabase') {
+      this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
+      this.props.store.setTreeAction(this.nodeRightClicked, action);
+      this.props.store.addNewEditorForTreeAction('database-export');
     } else if (this.nodeRightClicked) {
       if (
         this.actionSelected &&
