@@ -209,6 +209,11 @@
       "connection": {
         "slave": "connect to slave without slaveOk"
       }
+    },
+    "backup": {
+      "database": {
+        "title" : "Database Export"
+      }
     }
   }
 }

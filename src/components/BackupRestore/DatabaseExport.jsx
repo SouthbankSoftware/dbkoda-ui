@@ -17,19 +17,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * Created by joey on 19/7/17.
+ */
 
+import React from 'react';
+import {featherClient} from '../../helpers/feathers';
 
-import {inject} from 'mobx-react';
-import * as common from './Common.js';
+import { ButtonPanel } from './ButtonPanel';
+import './DatabaseExport.scss';
 
-export const ExportDatabase = inject(() => ({
-  // Prefill function for alter user
-  dbkoda_ExportDatabasePreFill: (params) => {
-    const data = {};
-    data.Database = params.Database;
-    data.allCollections = true;
-    return (data);
-  },
-  dbkoda_listcollections: common.dbkoda_listcollections,
-  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse
-}));
+export default class DatabaseExport extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {collections: []};
+  }
+
+  componentDidMount() {
+    featherClient()
+      .service('/mongo-shells');
+  }
+
+  render() {
+    return (<div className="database-export-panel">
+      <h3 className="form-title">{globalString('backup/database/title')}</h3>
+      <ButtonPanel close={this.props.close} />
+    </div>);
+  }
+
+}

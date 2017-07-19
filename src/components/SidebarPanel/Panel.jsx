@@ -38,6 +38,7 @@ import { ConnectionProfilePanel } from '#/ConnectionPanel';
 import { AggregateLeftPanel } from '#/AggregateViews';
 import { TreeActionPanel } from '#/TreeActionPanel';
 import { DrawerPanes } from '#/common/Constants';
+import { BackupRestore } from '../BackupRestore/index';
 
 const splitPane2Style = {
   display: 'flex',
@@ -100,6 +101,9 @@ export default class Panel extends React.Component {
         {drawerChild == DrawerPanes.AGGREGATE &&
           <AggregateLeftPanel className="sidebarAggregate" />
         }
+
+        {drawerChild == DrawerPanes.BACKUP_RESTORE && <BackupRestore />}
+
       </div>
     );
   }

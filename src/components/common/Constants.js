@@ -22,8 +22,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-15T12:03:27+11:00
 * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-07-19 11:16:52
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-04-21T09:31:51+10:00
 */
 
 
@@ -41,5 +41,10 @@ export const DrawerPanes = {
   DEFAULT: 'default',
   PROFILE: 'profile',
   DYNAMIC: 'dynamic',
+  BACKUP_RESTORE: 'backup-restore',
   AGGREGATE: 'aggregate'
+};
+
+export const BackupRestoreActions = {
+  EXPORT_DATABASE: 'ExportDatabase'
 };
