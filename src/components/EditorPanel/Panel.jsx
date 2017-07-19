@@ -43,7 +43,7 @@ import {
 } from '@blueprintjs/core';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
-import AggregateGraphicalBuilder from '#/AggregateViews';
+import { AggregateGraphicalBuilder } from '../AggregateViews';
 import Toolbar from './Toolbar';
 import View from './View';
 import './Panel.scss';

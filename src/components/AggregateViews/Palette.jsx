@@ -41,7 +41,7 @@ export default class Palette extends React.Component {
 
   render() {
     return (
-      <div className="AggregatePaletteWrapper">
+      <div className="aggregatePaletteWrapper">
         <h2> Placeholder for Palette </h2>
       </div>
     );

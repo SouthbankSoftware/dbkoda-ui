@@ -41,7 +41,7 @@ export default class Details extends React.Component {
 
   render() {
     return (
-      <div className="AggregateDetailsWrapper">
+      <div className="aggregateDetailsWrapper">
         <h2> Placeholder for Details </h2>
       </div>
     );

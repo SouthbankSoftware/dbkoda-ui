@@ -30,6 +30,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Palette from './Palette';
 import Details from './Details';
+import './style.scss';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -43,8 +44,7 @@ export default class LeftPanel extends React.Component {
 
   render() {
     return (
-      <div className="AggregateLeftPanel">
-        <h2>Placeholder.</h2>
+      <div className="aggregateLeftPanel">
         <Palette />
         <Details />
       </div>

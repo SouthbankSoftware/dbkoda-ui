@@ -305,6 +305,9 @@ export default class Store {
       treeEditor.fileName = 'Tree Action';
       this.treeActionPanel.editors.set(editorId, treeEditor);
     }
+    if (options.type === 'aggregate') {
+      this.drawer.drawerChild = DrawerPanes.AGGREGATE;
+    }
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),

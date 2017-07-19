@@ -72,7 +72,7 @@ export default class Panel extends React.Component {
     });
 
     return (
-      <div>
+      <div className="leftPaneInnerWrapper">
         {drawerChild == DrawerPanes.DEFAULT &&
           <SplitPane
             className="LeftSplitPane"
@@ -98,7 +98,7 @@ export default class Panel extends React.Component {
         }
 
         {drawerChild == DrawerPanes.AGGREGATE &&
-          <AggregateLeftPanel />
+          <AggregateLeftPanel className="sidebarAggregate" />
         }
       </div>
     );

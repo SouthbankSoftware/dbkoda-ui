@@ -28,6 +28,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import './style.scss';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -41,7 +42,7 @@ export default class GraphicalBuilder extends React.Component {
 
   render() {
     return (
-      <div className="AggregateGraphicalBuilderWrapper">
+      <div className="aggregateGraphicalBuilderWrapper">
         <h2> Placeholder for Graphical Builder </h2>
       </div>
     );

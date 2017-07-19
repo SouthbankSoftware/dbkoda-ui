@@ -1,0 +1,31 @@
+@import '../../styles/_defaultTheme.scss';
+
+div.aggregateGraphicalBuilderWrapper {
+  order: 1;
+  flex-grow: 1;
+  background-color: $aggregateViewBackgroundColor;
+  text-align: center;
+  h2 {
+    padding-top: 40%
+  }
+}
+div.Pane.vertical.Pane1 {
+  div.leftPaneInnerWrapper {
+    height: 100%;
+    div.aggregateLeftPanel {
+      display: flex;
+      flex-direction: column;
+      height:100%;
+      div.aggregatePaletteWrapper {
+        order:1;
+        flex-grow: 1;
+        
+      }
+      div.aggregateDetailsWrapper {
+        order: 2;
+        flex-grow: 1;
+      }
+    }
+  }
+}
+
