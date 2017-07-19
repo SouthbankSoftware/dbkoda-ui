@@ -248,7 +248,11 @@ export default class Store {
   setNewEditorState = (res, options = {}) => {
     const { content = '' } = options;
     options = _.omit(options, ['content']);
-    const fileName = `new${this.profiles.get(res.id).editorCount}.js`;
+    let fileName = `new${this.profiles.get(res.id).editorCount}.js`;
+    if (options.type === 'aggregate') {
+      fileName = 'Aggregate Builder';
+    }
+
     const editorId = uuidV1();
     this.profiles.get(res.id).editorCount += 1;
 
@@ -310,6 +314,30 @@ export default class Store {
 
     return editorId;
   };
+
+  @action
+  openNewAggregateBuilder(nodeRightClicked) {
+    this.startCreatingNewEditor();
+    // Create a new shell through feathers.
+    return featherClient()
+      .service('/mongo-shells')
+      .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
+      .then((res) => {
+        // Create new editor as normal, but with "aggregate" type.
+        return this.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked});
+      })
+      .catch((err) => {
+        this.createNewEditorFailed();
+        console.error(err);
+        NewToaster.show({
+          message: 'Error: ' + err.message,
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
+      });
+  }
+
+
 
   /**
    * Determine EOL to be used for given content string

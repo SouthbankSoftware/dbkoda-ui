@@ -130,6 +130,19 @@ export default class TreeView extends React.Component {
     return null;
   }
 
+  getNoDialogByName(actionName) {
+    if (this.nodeRightClicked) {
+      const Actions = TreeActions[this.nodeRightClicked.type];
+      const namedAction = Actions.find((action) => {
+        return action.name == actionName;
+      });
+      if (namedAction) {
+        return namedAction.noDialog;
+      }
+    }
+    return null;
+  }
+
   getIconFor(iconName) {
     switch (iconName) {
       case 'settings':
@@ -249,14 +262,29 @@ export default class TreeView extends React.Component {
   @action
   handleTreeActionClick = (e: React.MouseEvent) => {
     const action = e._targetInst._currentElement._owner._instance.props.name;
+    const noDialog = this.getNoDialogByName(action);
     this.actionSelected = this.getActionByName(action);
-    if (action == 'SampleCollections') {
-      this.props.treeState.sampleCollection(this.nodeRightClicked);
-    } else if (action === 'ExportDatabase') {
-      this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
-      this.props.store.setTreeAction(this.nodeRightClicked, action);
-      this.props.store.addNewEditorForTreeAction('database-export');
+    if (noDialog) {
+      switch (action) {
+        case 'SampleCollections':
+          console.log('Sampling Collections...');
+          this.props.treeState.sampleCollection(this.nodeRightClicked);
+          break;
+        case 'AggregateBuilder':
+          console.log('Aggregate builder...');
+          this.props.store.openNewAggregateBuilder(this.nodeRightClicked);
+          break;
+        case 'ExportDatabase':
+          this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
+          this.props.store.setTreeAction(this.nodeRightClicked, action);
+          this.props.store.addNewEditorForTreeAction('database-export');
+          break;
+        default:
+          console.error('Tree Action not defined: ', action);
+          break;
+      }
     } else if (this.nodeRightClicked) {
+      console.log('huh?');
       if (
         this.actionSelected &&
         this.actionSelected.view &&

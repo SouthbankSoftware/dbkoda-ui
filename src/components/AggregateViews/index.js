@@ -19,32 +19,14 @@
  */
 
 /**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-15T12:03:27+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T09:31:51+10:00
-*/
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-07-19 11:15:01
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   Mike
+ * @Last modified time: 2017-07-19 11:15:06
+ */
 
-
-
-export const DragItemTypes = {
-  LABEL: 'label'
-};
-
-export const ProfileStatus = {
-  OPEN: 'OPEN',
-  CLOSED: 'CLOSED',
-};
-
-export const DrawerPanes = {
-  DEFAULT: 'default',
-  PROFILE: 'profile',
-  DYNAMIC: 'dynamic',
-  BACKUP_RESTORE: 'backup-restore',
-  AGGREGATE: 'aggregate'
-};
-
-export const BackupRestoreActions = {
-  EXPORT_DATABASE: 'ExportDatabase'
-};
+export AggregateDetails from './Details.jsx';
+export AggregateGraphicalBuilder from './GraphicalBuilder.jsx';
+export AggregateLeftPanel from './LeftPanel.jsx';
+export AggregatePalette from './Palette';

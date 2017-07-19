@@ -43,11 +43,11 @@ import {
 } from '@blueprintjs/core';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
+import AggregateGraphicalBuilder from '#/AggregateViews';
 import Toolbar from './Toolbar';
 import View from './View';
 import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView';
-
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 /**
@@ -791,6 +791,68 @@ export default class Panel extends React.Component {
     return editor.alias + ' (' + editor.fileName + ')';
   };
 
+  // Encapsulation for rendering a standard Mongo Shell Tab in the Editor Panel.
+  renderShellTab(tab, tabClassName, editorTitle) {
+    return (
+      <Tab2
+        className={'editorTab visible ' + tabClassName}
+        key={tab[1].id}
+        id={tab[1].id}
+        title={editorTitle}
+        panel={
+          <View
+            id={tab[0]}
+            title={editorTitle}
+            onDrop={item => this.handleDrop(item)}
+            editor={tab[1]}
+            ref="defaultEditor"
+          />
+        }
+      >
+        {this.renderUnsavedFileIndicator(tab[0])}
+        <Button
+          className="pt-minimal"
+          onClick={() => this.closeTab(tab[1])}
+      >
+          <span className="pt-icon-cross" />
+        </Button>
+      </Tab2>
+    );
+  }
+
+  // Encapsulation for rendering an Aggregate Tab in the Editor Panel.
+  renderAggregateTab(tab, tabClassName, editorTitle) {
+    return (
+      <Tab2
+        className={'editorTab aggregateTab visible ' + tabClassName}
+        key={tab[1].id}
+        id={tab[1].id}
+        title={editorTitle}
+        panel={
+          <div className="aggregateTabInnerWrapper">
+            <AggregateGraphicalBuilder className="aggregatePanel" />
+            <View
+              id={tab[0]}
+              className="aggregateEditorPanel"
+              title={editorTitle}
+              onDrop={item => this.handleDrop(item)}
+              editor={tab[1]}
+              ref="defaultEditor"
+            />
+          </div>
+        }
+      >
+        {this.renderUnsavedFileIndicator(tab[0])}
+        <Button
+          className="pt-minimal"
+          onClick={() => this.closeTab(tab[1])}
+      >
+          <span className="pt-icon-cross" />
+        </Button>
+      </Tab2>
+    );
+  }
+
   /**
    * Action for rendering the component.
    */
@@ -818,52 +880,12 @@ export default class Panel extends React.Component {
             // if (tab[1].visible) {
             const tabClassName = tab[1].alias.replace(/[\. ]/g, '');
             const editorTitle = this.getEditorTitle(tab[1]);
-
-            return (
-              <Tab2
-                className={'editorTab visible ' + tabClassName}
-                key={tab[1].id}
-                id={tab[1].id}
-                title={editorTitle}
-                panel={
-                  <View
-                    id={tab[0]}
-                    title={editorTitle}
-                    onDrop={item => this.handleDrop(item)}
-                    editor={tab[1]}
-                    ref="defaultEditor"
-                  />
-                }
-              >
-                {this.renderUnsavedFileIndicator(tab[0])}
-                <Button
-                  className="pt-minimal"
-                  onClick={() => this.closeTab(tab[1])}
-                >
-                  <span className="pt-icon-cross" />
-                </Button>
-              </Tab2>
-            );
-            // }
-            // return (
-            //   <Tab2
-            //     className={'editorTab notVisible ' + tabClassName}
-            //     key={tab[1].id}
-            //     id={tab[1].id}
-            //     title={tab[1].alias}
-            //     panel={
-            //       <View id={tab[1].id} editor={tab[1]} ref="defaultEditor" />
-            //     }
-            //   >
-            //     {this.renderUnsavedFileIndicator(tab[0])}
-            //     <Button
-            //       className="pt-intent-primary pt-minimal"
-            //       onClick={() => this.closeTab(tab[1])}
-            //     >
-            //       <span className="pt-icon-cross" />
-            //     </Button>
-            //   </Tab2>
-            // );
+            switch (tab[1].type) {
+              case 'aggregate':
+                return this.renderAggregateTab(tab, tabClassName, editorTitle);
+              default:
+                return this.renderShellTab(tab, tabClassName, editorTitle);
+            }
           })}
         </Tabs2>
         <div
