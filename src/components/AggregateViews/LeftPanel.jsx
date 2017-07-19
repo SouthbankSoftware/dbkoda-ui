@@ -27,6 +27,7 @@
  */
 
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 import Palette from './Palette';
 import Details from './Details';
 
