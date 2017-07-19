@@ -129,6 +129,19 @@ export default class TreeView extends React.Component {
     return null;
   }
 
+  getNoDialogByName(actionName) {
+    if (this.nodeRightClicked) {
+      const Actions = TreeActions[this.nodeRightClicked.type];
+      const namedAction = Actions.find((action) => {
+        return action.name == actionName;
+      });
+      if (namedAction) {
+        return namedAction.noDialog;
+      }
+    }
+    return null;
+  }
+
   getIconFor(iconName) {
     switch (iconName) {
       case 'settings':
@@ -245,15 +258,19 @@ export default class TreeView extends React.Component {
     }
   };
   handleTreeActionClick = (e: React.MouseEvent) => {
-    const noDialog = e._targetInst._currentElement._owner._instance.props.name;
     const action = e._targetInst._currentElement._owner._instance.props.name;
+    const noDialog = this.getNoDialogByName(action);
     this.actionSelected = this.getActionByName(action);
+    console.log(noDialog);
+    console.log(this.actionSelected);
     if (noDialog) {
       switch (action) {
         case 'SampleCollections':
+        console.log('Sampling Collections...');
           this.props.treeState.sampleCollection(this.nodeRightClicked);
           break;
         case 'AggregateBuilder':
+          console.log('Aggregate builder...');
           this.props.store.openNewAggregateBuilder(this.nodeRightClicked);
           break;
         default:
@@ -261,6 +278,7 @@ export default class TreeView extends React.Component {
           break;
       }
     } else if (this.nodeRightClicked) {
+      console.log('huh?');
       if (
         this.actionSelected &&
         this.actionSelected.view &&
