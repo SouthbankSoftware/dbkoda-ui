@@ -22,26 +22,116 @@
  */
 
 import React from 'react';
+import {Checkbox, Intent, Position, Tooltip} from '@blueprintjs/core';
+
 import {featherClient} from '../../helpers/feathers';
 
-import { ButtonPanel } from './ButtonPanel';
+import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
+
+/**
+ * the option panel for database export
+ * @constructor
+ */
+const Options = ({ssl, allCollections, changeSSL, changeAllCollections}) => {
+  return (
+    <div className="options-panel">
+      <div className="option-item-row">
+        <Tooltip
+          content=""
+          hoverOpenDelay={1000}
+          inline
+          intent={Intent.PRIMARY}
+          position={Position.TOP}
+        >
+          <Checkbox
+            checked={ssl}
+            label={globalString('backup/database/ssl')}
+            onChange={() => changeSSL()}
+          />
+        </Tooltip>
+      </div>
+      <div className="option-item-row">
+        <Tooltip
+          content=""
+          hoverOpenDelay={1000}
+          inline
+          intent={Intent.PRIMARY}
+          position={Position.TOP}
+        >
+          <Checkbox
+            checked={allCollections}
+            label={globalString('backup/database/allCollections')}
+            onChange={() => changeAllCollections()}
+          />
+        </Tooltip>
+      </div>
+    </div>
+  );
+};
+
+const CollectionList = ({collections}) => {
+  return (
+    <div>
+      {
+        collections.map((col, i) => {
+          const id = i;
+          return <div key={id} />;
+        })
+      }
+    </div>
+  );
+};
 
 export default class DatabaseExport extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {collections: []};
+    this.state = {collections: [], ssl: false, allCollections: true, selectedCollections: []};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.treeEditor) {
+      this.fetchCollectionlist(nextProps.treeEditor.shellId);
+    }
   }
 
   componentDidMount() {
+    if (this.props.treeEditor) {
+      this.fetchCollectionlist(this.props.editor.shellId);
+    }
+  }
+
+  fetchCollectionlist(shellId) {
     featherClient()
-      .service('/mongo-shells');
+      .service('/mongo-sync-execution')
+      .update(this.props.profile.id, {
+        shellId,
+        commands: `db.getSiblingDB("${this.props.treeNode.text}").getCollectionNames()`
+      }).then((res) => {
+      this.setState({collections: JSON.parse(res)});
+    });
   }
 
   render() {
+    const db = this.props.treeNode.text;
     return (<div className="database-export-panel">
       <h3 className="form-title">{globalString('backup/database/title')}</h3>
+      <div className="pt-form-group">
+        <label className="pt-label database" htmlFor="database">
+          {globalString('backup/database/db')}
+        </label>
+        <div className="pt-form-content">
+          <input id="example-form-group-input-a" className="pt-input" readOnly type="text" dir="auto" value={db} />
+        </div>
+      </div>
+      <Options ssl={this.state.ssl} allCollections={this.state.allCollections}
+        changeSSL={() => this.setState({ssl: !this.state.ssl})}
+        changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
+      />
+      {
+        !this.state.allCollections ? <CollectionList collections={this.state.selectedCollections} /> : null
+      }
       <ButtonPanel close={this.props.close} />
     </div>);
   }

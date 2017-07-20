@@ -61,15 +61,14 @@
         "namespaceLabel": "Namespace:",
         "queryLabel": "Query:"
       },
-      "worst-shard" : "{0} is the most time consuming shard.",
+      "worst-shard": "{0} is the most time consuming shard.",
       "details": {
-
       },
-      "statistics":{
+      "statistics": {
         "shard": "Shard",
         "examined": "Examined",
         "returned": "Returned",
-        "ms" : "ms"
+        "ms": "ms"
       }
     },
     "details": {
@@ -212,7 +211,10 @@
     },
     "backup": {
       "database": {
-        "title" : "Database Export"
+        "title": "Database Export",
+        "ssl": "SSL",
+        "allCollections": "All Collections",
+        "db": "Database"
       }
     }
   }

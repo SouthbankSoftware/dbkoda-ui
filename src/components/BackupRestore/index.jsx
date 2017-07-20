@@ -23,7 +23,7 @@
 
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {action, computed} from 'mobx';
+import {action, computed, reaction} from 'mobx';
 import DatabaseExport from './DatabaseExport';
 import {BackupRestoreActions, DrawerPanes} from '../common/Constants';
 
@@ -34,6 +34,13 @@ export class BackupRestore extends React.Component {
   constructor(props) {
     super(props);
     this.close = this.close.bind(this);
+    this.state = {editorId: undefined};
+    reaction(
+      () => this.props.store.treeActionPanel.treeActionEditorId,
+      () => {
+        console.log('get treeActionPanel.treeActionEditorId ', this.props.store.treeActionPanel.treeActionEditorId);
+        this.setState({editorId: this.props.store.treeActionPanel.treeActionEditorId});
+      });
   }
 
   @action
@@ -41,13 +48,36 @@ export class BackupRestore extends React.Component {
     this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.store.treeActionPanel.treeActionEditorId) {
+      this.setState({editorId: nextProps.store.treeActionPanel.treeActionEditorId});
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.store.treeActionPanel.treeActionEditorId) {
+      this.setState({editorId: this.props.store.treeActionPanel.treeActionEditorId});
+    }
+  }
+
   @computed get getAction() {
     const {store} = this.props;
     const treeAction = store.treeActionPanel.treeAction;
     const treeNode = store.treeActionPanel.treeNode;
-    console.log('tree action ', treeAction, treeNode);
+    const selectedProfile = this.props.store.profileList.selectedProfile;
+
+    const treeEditors = this.props.store.treeActionPanel.editors.entries();
+    let treeEditor;
+    for (const editor of treeEditors) {
+      if (editor[1].id == this.state.editorId) {
+        treeEditor = editor[1];
+        break;
+      }
+    }
+
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
-      return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} />);
+      return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
+        treeEditor={treeEditor} />);
     }
     return null;
   }
