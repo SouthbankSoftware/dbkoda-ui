@@ -274,11 +274,6 @@ export default class TreeView extends React.Component {
           console.log('Aggregate builder...');
           this.props.store.openNewAggregateBuilder(this.nodeRightClicked);
           break;
-        case 'ExportDatabase':
-          this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
-          this.props.store.setTreeAction(this.nodeRightClicked, action);
-          this.props.store.addNewEditorForTreeAction('database-export');
-          break;
         default:
           console.error('Tree Action not defined: ', action);
           break;
@@ -291,14 +286,19 @@ export default class TreeView extends React.Component {
         this.actionSelected.view == 'details'
       ) {
         this.showDetailsView(this.nodeRightClicked, action);
+      } else if (action === 'ExportDatabase') {
+        this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
+        if (!this.checkExistingEditor()) {
+          this.props.store.setTreeAction(this.nodeRightClicked, action);
+          this.props.store.addNewEditorForTreeAction({type: 'database-export'});
+        }
       } else {
         this.showTreeActionPanel(this.nodeRightClicked, action);
       }
     }
   };
 
-  showTreeActionPanel = (treeNode, action) => {
-    this.props.store.setTreeAction(treeNode, action);
+  checkExistingEditor = () => {
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
     let bExistingEditor = false;
     for (const editor of treeEditors) {
@@ -311,11 +311,16 @@ export default class TreeView extends React.Component {
         break;
       }
     }
-    if (bExistingEditor) {
+    return bExistingEditor;
+  }
+
+  showTreeActionPanel = (treeNode, action) => {
+    this.props.store.setTreeAction(treeNode, action);
+    if (this.checkExistingEditor()) {
       this.props.store.showTreeActionPane();
     } else {
-      const type = action === 'ExportDatabase' ? 'os' : 'shell';
-      this.props.store.addNewEditorForTreeAction(type);
+      const type = action === 'ExportDatabase' ? 'ExportDatabase' : 'shell';
+      this.props.store.addNewEditorForTreeAction({type});
     }
   }
 

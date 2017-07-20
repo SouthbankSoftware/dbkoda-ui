@@ -308,6 +308,9 @@ export default class Store {
     if (options.type === 'aggregate') {
       this.drawer.drawerChild = DrawerPanes.AGGREGATE;
     }
+    if (options.type === 'database-export') {
+      this.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
+    }
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
