@@ -103,9 +103,13 @@ export default class DatabaseExport extends React.Component {
     });
   }
 
-  selectCollection(collection) {
+  selectCollection(collection, i) {
     const selected = this.state.selectedCollections;
-    selected.push(collection);
+    if (i < 0) {
+      selected.push(collection);
+    } else {
+      selected.splice(i, 1, collection);
+    }
     this.setState({selectedCollections: selected});
   }
 

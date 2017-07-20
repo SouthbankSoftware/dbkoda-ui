@@ -26,21 +26,22 @@ import _ from 'lodash';
 
 import './CollectionList.scss';
 
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+
 const Header = () => (
   <div className="header">
     <span className="key">{globalString('backup/database/collection')}</span>
-    <div className="pt-icon-add circleButton" role="button" />
   </div>
 );
 
-const Row = ({options, selectCollection, unSelectCollection, index}) => (
+const Row = ({options, selectCollection, unSelectCollection, index, colName}) => (
   <div className="row">
     <div className="pt-select">
       <select className="select" defaultValue={globalString('backup/database/selectCollection')}
         onChange={(item) => {
-                selectCollection(item.target.value);
+                selectCollection(item.target.value, index);
               }}
-        value={index >= 0 && options.length > index ? options[index] : ''}
+        value={index >= 0 ? colName : ''}
       >
         <option>{globalString('backup/database/selectCollection')}</option>
         {
@@ -51,7 +52,11 @@ const Row = ({options, selectCollection, unSelectCollection, index}) => (
         }
       </select>
     </div>
-    <div className="field-group pt-icon-delete circleButton" role="button" onChange={() => unSelectCollection()} />
+    {
+      index < 0 ? null : <div className="field-group pt-icon-delete circleButton" role="button"
+        onClick={() => unSelectCollection(colName, index)} />
+    }
+
   </div>
 );
 
@@ -62,7 +67,19 @@ export default ({collections, selectedCollections, selectCollection, unSelectCol
   return (
     <div className="collection-list">
       <Header />
-      <Row options={options} selectCollection={selectCollection} index={0} unSelectCollection={unSelectCollection} />
+      {
+        selectedCollections.map((col, i) => {
+          const id = i;
+          const array = options.slice();
+          array.splice(0, 0, col);
+          return (<Row key={id} index={i} colName={col} options={array} selectCollection={selectCollection}
+            unSelectCollection={unSelectCollection} />);
+        })
+      }
+      {
+        options.length > 0 ? <Row options={options} selectCollection={selectCollection} index={-1}
+          unSelectCollection={unSelectCollection} /> : null
+      }
     </div>
   );
 };
