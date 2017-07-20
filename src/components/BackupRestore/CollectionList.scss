@@ -1,0 +1,63 @@
+
+.database-export-panel .collection-list {
+  background-color: #272a3a;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.database-export-panel .collection-list .header {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+  color: #f5f8fa;
+
+  .key {
+    margin-left: 10px;
+  }
+
+  .pt-icon-add {
+    background-color: #2D3D46 !important;
+    margin-left: auto;
+  }
+  .circleButton {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+  }
+  .circleButton:hover {
+    cursor: pointer;
+  }
+  .circleButton:before {
+    color: #bfccd6;
+  }
+  .pt-icon-trash {
+    background-color: #8A4148 !important;
+  }
+}
+
+.database-export-panel .collection-list .row {
+  display: flex;
+  flex-direction: row;
+
+  .pt-select {
+    width: 90%;
+  }
+
+  .select {
+    width: 100%;
+  }
+
+  .circleButton {
+    text-align: center;
+    line-height: 30px;
+    width: 30px;
+  }
+
+  .circleButton:hover {
+    cursor: pointer;
+  }
+
+}

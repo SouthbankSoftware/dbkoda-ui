@@ -28,6 +28,7 @@ import {featherClient} from '../../helpers/feathers';
 
 import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
+import CollectionList from './CollectionList';
 
 /**
  * the option panel for database export
@@ -70,23 +71,12 @@ const Options = ({ssl, allCollections, changeSSL, changeAllCollections}) => {
   );
 };
 
-const CollectionList = ({collections}) => {
-  return (
-    <div>
-      {
-        collections.map((col, i) => {
-          const id = i;
-          return <div key={id} />;
-        })
-      }
-    </div>
-  );
-};
-
 export default class DatabaseExport extends React.Component {
 
   constructor(props) {
     super(props);
+    this.selectCollection = this.selectCollection.bind(this);
+    this.unSelectCollection = this.unSelectCollection.bind(this);
     this.state = {collections: [], ssl: false, allCollections: true, selectedCollections: []};
   }
 
@@ -113,6 +103,18 @@ export default class DatabaseExport extends React.Component {
     });
   }
 
+  selectCollection(collection) {
+    const selected = this.state.selectedCollections;
+    selected.push(collection);
+    this.setState({selectedCollections: selected});
+  }
+
+  unSelectCollection(collection) {
+    const selected = this.state.selectedCollections;
+    selected.splice(selected.indexOf(collection), 1);
+    this.setState({selectedCollections: selected});
+  }
+
   render() {
     const db = this.props.treeNode.text;
     return (<div className="database-export-panel">
@@ -130,7 +132,10 @@ export default class DatabaseExport extends React.Component {
         changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
       />
       {
-        !this.state.allCollections ? <CollectionList collections={this.state.selectedCollections} /> : null
+        !this.state.allCollections ? <CollectionList collections={this.state.collections}
+          selectCollection={this.selectCollection}
+          unSelectCollection={this.unSelectCollection}
+          selectedCollections={this.state.selectedCollections} /> : null
       }
       <ButtonPanel close={this.props.close} />
     </div>);

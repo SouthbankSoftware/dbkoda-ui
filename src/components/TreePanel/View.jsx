@@ -293,6 +293,7 @@ export default class TreeView extends React.Component {
           this.props.store.addNewEditorForTreeAction({type: 'database-export'});
         }
       } else {
+        this.props.store.setTreeAction(this.nodeRightClicked, action);
         this.showTreeActionPanel(this.nodeRightClicked, action);
       }
     }
