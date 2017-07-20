@@ -288,8 +288,8 @@ export default class TreeView extends React.Component {
         this.showDetailsView(this.nodeRightClicked, action);
       } else if (action === 'ExportDatabase') {
         this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
+        this.props.store.setTreeAction(this.nodeRightClicked, action);
         if (!this.checkExistingEditor()) {
-          this.props.store.setTreeAction(this.nodeRightClicked, action);
           this.props.store.addNewEditorForTreeAction({type: 'database-export'});
         }
       } else {
