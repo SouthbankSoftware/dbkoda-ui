@@ -23,6 +23,7 @@
 
 import React from 'react';
 import {Button} from '@blueprintjs/core';
+import mongodbUri from 'mongodb-uri';
 
 import {featherClient} from '../../helpers/feathers';
 
@@ -60,7 +61,7 @@ export default class DatabaseExport extends React.Component {
 
   getCommandObject() {
     const db = this.props.treeNode.text;
-    const {host, port, username, hostRadio} = this.props.profile;
+    const {host, port, username, sha, hostRadio, url, database} = this.props.profile;
     console.log('profile=', this.props.profile);
     const {pretty, jsonArray, directoryPath} = this.state;
     let targetCols = [];
@@ -71,7 +72,37 @@ export default class DatabaseExport extends React.Component {
     }
     const cols = [];
     targetCols.map((col) => {
-      const items = {database: db, collection: col, ssl: this.state.ssl, host, port, username, password:hostRadio, pretty, jsonArray};
+      const items = {database: db, collection: col, ssl: this.state.ssl, username, password:sha, pretty, jsonArray, authDb: database};
+      if (hostRadio) {
+        items.host = host;
+        items.port = port;
+      } else {
+        const uri = mongodbUri.parse(url);
+        if (uri.hosts.length == 1) {
+          items.host = uri.hosts[0].host;
+          items.port = uri.hosts[0].port ? uri.hosts[0].port : '27017';
+        } else {
+          // replica set
+          if (uri.options && uri.options.replicaSet) {
+            let repH = uri.options.replicaSet + '/';
+            uri.hosts.map((h, i) => {
+              repH += h.host;
+              const p = h.port ? h.port : 27017;
+              repH += ':' + p;
+              if (i != uri.hosts.length - 1) {
+                repH += ',';
+              }
+            });
+            items.host = repH;
+          }
+        }
+        if (!sha) {
+          if (uri.username && uri.password) {
+            items.username = uri.username;
+            items.password = uri.password;
+          }
+        }
+      }
       if (directoryPath) {
         items.output = directoryPath + '/' + col + '.json';
       }
@@ -150,6 +181,12 @@ export default class DatabaseExport extends React.Component {
   executing() {
      const generatedCode = this.generateCode(false);
      console.log('generated:', generatedCode);
+     featherClient()
+      .service('/os-execution')
+       .update(this.props.profile.id, {shellId: this.state.editor.shellId, commands: generatedCode})
+       .then((res) => {
+        console.log(res);
+       });
   }
 
   render() {

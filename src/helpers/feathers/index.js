@@ -42,6 +42,7 @@ class FeatherClient {
     this.primus = primus;
     this.feathers = this.feathers.configure(feathers.primus(primus));
     this.shellService = this.feathers.service('/mongo-shells');
+    this.osService = this.feathers.service('/os-execution');
     this.shellService.on('shell-output', (output) => {
       const { id, shellId } = output;
       console.log('got output ', output);
@@ -56,6 +57,17 @@ class FeatherClient {
       console.log('get reconnect event ', output);
       const { id, shellId } = output;
       Broker.emit(EventType.createShellReconnectEvent(id, shellId), output);
+    });
+    this.osService.on('os-command-output', (output) => {
+      console.log('get os output ', output);
+      const { id, shellId } = output;
+      Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
+    });
+    this.osService.on('os-command-finish', (output) => {
+      console.log('get os command finish ', output);
+      const { id, shellId } = output;
+      Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
+      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
     this.service('files').on('changed', ({_id}) => {
       Broker.emit(EventType.createFileChangedEvent(_id));
