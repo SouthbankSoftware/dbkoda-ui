@@ -1,0 +1,30 @@
+// @Author: Wahaj Shamim <wahaj>
+// @Date:   2017-07-21T15:58:09+10:00
+// @Email:  wahaj@southbanksoftware.com
+// @Last modified by:   wahaj
+// @Last modified time: 2017-07-21T16:18:31+10:00
+
+
+
+@import '../../styles/_defaultTheme.scss';
+
+.leftPaneUpdateNotification {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.updateButton {
+  font-weight: lighter;
+  color: $connectionButtonFontColour;
+  width: 100%;
+  border-radius: 5px;
+  background-image: unset;
+  background-color: $connectionButtonBackgroundColour;
+  border: 1px solid $connectionButtonBorderColour;
+  box-shadow: unset;
+}
+.updateButton:hover {
+  background-color: $connectionButtonBackgroundColourHover;
+  color: $connectionButtonFontColourHover;
+}
