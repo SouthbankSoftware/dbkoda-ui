@@ -216,7 +216,9 @@
         "allCollections": "All Collections",
         "db": "Database",
         "collection": "Collection",
-        "selectCollection": "Select a collection"
+        "selectCollection": "Select a collection",
+        "filePath": "File Path",
+        "chooseDirectory": "Choose Directory ..."
       }
     }
   }

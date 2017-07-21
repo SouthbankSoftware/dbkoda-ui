@@ -31,7 +31,6 @@ import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
 
-const template = require('./Template/ExportDatabsae.hbs');
 
 /**
  * the option panel for database export
@@ -93,6 +92,7 @@ export default class DatabaseExport extends React.Component {
     if (this.props.treeEditor) {
       this.fetchCollectionlist(this.props.editor);
     }
+    this.directorySelector.setAttribute('webkitdirectory', '');
   }
 
   generateCode() {
@@ -109,6 +109,7 @@ export default class DatabaseExport extends React.Component {
       cols.push({database: db, collection: col, ssl: this.state.ssl, host, port, username, password});
     });
     const values = {cols};
+    const template = require('./Template/ExportDatabsae.hbs');
     return template(values);
   }
 
@@ -156,7 +157,6 @@ export default class DatabaseExport extends React.Component {
   render() {
     const db = this.props.treeNode.text;
     this.updateEditorCode();
-    console.log('xxxx:', this.props.profile);
     return (<div className="database-export-panel">
       <h3 className="form-title">{globalString('backup/database/title')}</h3>
       <div className="pt-form-group">
@@ -165,6 +165,17 @@ export default class DatabaseExport extends React.Component {
         </label>
         <div className="pt-form-content">
           <input id="example-form-group-input-a" className="pt-input" readOnly type="text" dir="auto" value={db} />
+        </div>
+        <label className="pt-label database" htmlFor="database">
+          {globalString('backup/database/db')}
+        </label>
+        <div className="pt-form-content">
+          <label className="pt-file-upload .modifier" htmlFor="database-export-panel">
+            <input ref={(r) => {
+              this.directorySelector = r;
+            }} onChange={e => console.log('change directory ', e)} type="file" />
+            <span className="pt-file-upload-input">Choose Directory...</span>
+          </label>
         </div>
       </div>
       <Options ssl={this.state.ssl} allCollections={this.state.allCollections}
