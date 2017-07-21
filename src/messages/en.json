@@ -218,7 +218,9 @@
         "collection": "Collection",
         "selectCollection": "Select a collection",
         "filePath": "File Path",
-        "chooseDirectory": "Choose Directory ..."
+        "pretty": "Pretty",
+        "jsonArray": "Json Array",
+        "chooseDirectory": "Choose"
       }
     }
   }
