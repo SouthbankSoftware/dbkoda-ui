@@ -23,7 +23,7 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T14:43:51+10:00
+ * @Last modified time: 2017-07-21T16:52:06+10:00
  */
 
 import React from 'react';
@@ -39,6 +39,9 @@ import { AggregateLeftPanel } from '#/AggregateViews';
 import { TreeActionPanel } from '#/TreeActionPanel';
 import { DrawerPanes } from '#/common/Constants';
 import { BackupRestore } from '../BackupRestore/index';
+import {Button} from '@blueprintjs/core';
+
+import './Panel.scss';
 
 const splitPane2Style = {
   display: 'flex',
@@ -57,9 +60,12 @@ export default class Panel extends React.Component {
     this.state = {};
   }
 
-  @action.bound
-  updateLeftSplitPos(pos) {
+  @action.bound updateLeftSplitPos(pos) {
     this.props.layout.leftSplitPos = pos;
+  }
+
+  @action.bound updateAndRestart() {
+    this.props.store.updateAndRestart();
   }
 
   treeState = new TreeState();
@@ -73,37 +79,41 @@ export default class Panel extends React.Component {
     });
 
     return (
-      <div className="leftPaneInnerWrapper">
-        {drawerChild == DrawerPanes.DEFAULT &&
-          <SplitPane
-            className="LeftSplitPane"
-            split="horizontal"
-            defaultSize={defaultLeftSplitPos}
-            onDragFinished={this.updateLeftSplitPos}
-            minSize={100}
-            maxSize={1000}
-            pane2Style={splitPane2Style}
-          >
-            <ProfileListPanel />
-            <Provider treeState={this.treeState}>
-              <TreePanel />
-            </Provider>
-          </SplitPane>}
+      <div>
+        <div className="leftPaneInnerWrapper">
+          {drawerChild == DrawerPanes.DEFAULT &&
+            <SplitPane
+              className="LeftSplitPane"
+              split="horizontal"
+              defaultSize={defaultLeftSplitPos}
+              onDragFinished={this.updateLeftSplitPos}
+              minSize={100}
+              maxSize={1000}
+              pane2Style={splitPane2Style}
+            >
+              <ProfileListPanel />
+              <Provider treeState={this.treeState}>
+                <TreePanel />
+              </Provider>
+            </SplitPane>}
 
-        {drawerChild == DrawerPanes.PROFILE &&
-          <ConnectionProfilePanel />
-        }
+          {drawerChild == DrawerPanes.PROFILE && <ConnectionProfilePanel />}
 
-        {drawerChild == DrawerPanes.DYNAMIC &&
-          <TreeActionPanel />
-        }
+          {drawerChild == DrawerPanes.DYNAMIC && <TreeActionPanel />}
 
-        {drawerChild == DrawerPanes.AGGREGATE &&
-          <AggregateLeftPanel className="sidebarAggregate" />
-        }
+          {drawerChild == DrawerPanes.AGGREGATE &&
+            <AggregateLeftPanel className="sidebarAggregate" />}
 
-        {drawerChild == DrawerPanes.BACKUP_RESTORE && <BackupRestore />}
+          {drawerChild == DrawerPanes.BACKUP_RESTORE && <BackupRestore />}
 
+        </div>
+        {this.props.store.updateAvailable &&
+          <div className="leftPaneUpdateNotification">
+            <Button
+              className="updateButton pt-button pt-intent-primary"
+              text={'Update Downloaded. Click here to update and restart.'}
+              onClick={this.updateAndRestart} />
+          </div>}
       </div>
     );
   }
