@@ -24,9 +24,9 @@
 import React from 'react';
 import './Buttonpanel.scss';
 
-export const ButtonPanel = ({close, enableConfirm}) => (
+export const ButtonPanel = ({close, enableConfirm, executing}) => (
   <div className="form-button-panel">
-    <button className="pt-button pt-intent-success right-button" disabled={!enableConfirm}>{globalString('tree/executeButton')}</button>
+    <button className="pt-button pt-intent-success right-button" disabled={!enableConfirm}>{globalString('tree/executeButton')} onClick={() => executing()}</button>
     <button className="pt-button pt-intent-primary right-button" onClick={() => close()}>{globalString('tree/closeButton')}</button>
   </div>
 );

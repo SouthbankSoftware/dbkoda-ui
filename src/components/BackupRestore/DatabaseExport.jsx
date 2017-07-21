@@ -42,6 +42,7 @@ export default class DatabaseExport extends React.Component {
     super(props);
     this.selectCollection = this.selectCollection.bind(this);
     this.unSelectCollection = this.unSelectCollection.bind(this);
+    this.executing = this.executing.bind(this);
     this.state = {collections: [], ssl: false, allCollections: true, selectedCollections: [], directoryPath: '', jsonArray: false, pretty: false};
   }
 
@@ -59,7 +60,8 @@ export default class DatabaseExport extends React.Component {
 
   getCommandObject() {
     const db = this.props.treeNode.text;
-    const {host, port, username, password} = this.props.profile;
+    const {host, port, username, hostRadio} = this.props.profile;
+    console.log('profile=', this.props.profile);
     const {pretty, jsonArray, directoryPath} = this.state;
     let targetCols = [];
     if (this.state.allCollections) {
@@ -69,7 +71,7 @@ export default class DatabaseExport extends React.Component {
     }
     const cols = [];
     targetCols.map((col) => {
-      const items = {database: db, collection: col, ssl: this.state.ssl, host, port, username, password, pretty, jsonArray};
+      const items = {database: db, collection: col, ssl: this.state.ssl, host, port, username, password:hostRadio, pretty, jsonArray};
       if (directoryPath) {
         items.output = directoryPath + '/' + col + '.json';
       }
@@ -78,8 +80,8 @@ export default class DatabaseExport extends React.Component {
     return cols;
   }
 
-  generateCode() {
-    const cols = this.getCommandObject();
+  generateCode(hidePwd = true) {
+    const cols = this.getCommandObject(hidePwd);
     const values = {cols};
     const template = require('./Template/ExportDatabsae.hbs');
     return template(values);
@@ -145,6 +147,11 @@ export default class DatabaseExport extends React.Component {
     return this.getCommandObject().length > 0 && this.state.directoryPath;
   }
 
+  executing() {
+     const generatedCode = this.generateCode(false);
+     console.log('generated:', generatedCode);
+  }
+
   render() {
     const db = this.props.treeNode.text;
     this.updateEditorCode();
@@ -177,7 +184,7 @@ export default class DatabaseExport extends React.Component {
           unSelectCollection={this.unSelectCollection}
           selectedCollections={this.state.selectedCollections} /> : null
       }
-      <ButtonPanel close={this.props.close} enableConfirm={this.isExecutable()} />
+      <ButtonPanel close={this.props.close} enableConfirm={this.isExecutable()} executing={this.executing} />
     </div>);
   }
 

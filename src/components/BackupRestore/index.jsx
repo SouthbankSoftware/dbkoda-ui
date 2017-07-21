@@ -38,7 +38,6 @@ export class BackupRestore extends React.Component {
     reaction(
       () => this.props.store.treeActionPanel.treeActionEditorId,
       () => {
-        console.log('get treeActionPanel.treeActionEditorId ', this.props.store.treeActionPanel.treeActionEditorId);
         this.setState({editorId: this.props.store.treeActionPanel.treeActionEditorId});
       });
   }

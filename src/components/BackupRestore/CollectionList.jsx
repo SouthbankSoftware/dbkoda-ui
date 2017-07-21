@@ -63,7 +63,6 @@ const Row = ({options, selectCollection, unSelectCollection, index, colName}) =>
 
 export default ({collections, selectedCollections, selectCollection, unSelectCollection}) => {
   const options = _.filter(collections, a => selectedCollections.indexOf(a) < 0);
-  console.log('get rest collection ', options);
   return (
     <div className="collection-list">
       <Header />
