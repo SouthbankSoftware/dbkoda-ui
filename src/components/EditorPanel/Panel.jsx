@@ -179,16 +179,17 @@ export default class Panel extends React.Component {
   @action
   closeTab(currEditor) {
     // @TODO -> Looks like during it's various reworks this entire function has been broken and stitched back together. Some refactoring needs to occur to ensure that when atab is closed a new tab is selected. @Mike.
-    if (this.props.store.drawer.drawerChild === DrawerPanes.AGGREGATE) {
-      this.props.store.drawer.drawerChild === DrawerPanes.DEFAULT;
-    }
+
+    this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+
+    // If Editor is not clean, prompt for save.
     if (!currEditor.doc.isClean()) {
       this.props.store.editorPanel.showingSavingDialog = true;
       return;
     }
-    console.log('deleted editor ', currEditor);
+
+    // If the editor has an open shell, close it.
     if (currEditor && currEditor.status == ProfileStatus.OPEN) {
-      // close the connection
       featherClient()
         .service('/mongo-shells')
         .remove(currEditor.profileId, {
@@ -199,7 +200,8 @@ export default class Panel extends React.Component {
         .then(v => console.log('remove shell successfully, ', v))
         .catch(err => console.error('remove shell failed,', err));
     }
-    // NEWLOGIC Check if closed editor is current editor:
+
+    // Check if the editor closing is the currently active editor.
     if (currEditor.id == this.props.store.editorPanel.activeEditorId) {
       this.props.store.editorPanel.isRemovingCurrentTab = true;
       // Check if this is the last tab:
@@ -356,12 +358,16 @@ export default class Panel extends React.Component {
         editorToolbar.noActiveProfile = false;
       }
 
-      if (this.props.store.drawer.drawerChild === DrawerPanes.AGGREGATE) {
-        if (currEditor.type !== 'aggregate') {
-          this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
-        }
-      } else if (currEditor.type === 'aggregate') {
+      // Determine whether Left-Side Panel should swap.
+      if (!currEditor && editorPanel.activeDropdownId == 'Default') { // Default Tab.
+        console.log('Moved to Welcome Page.');
+        this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+      } else if (currEditor.type == 'shell') { // Normal Editors
+        this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+      } else if (currEditor.type == 'aggregate') { // Aggregate Editors.
         this.props.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
+      } else { // Default Case.
+        this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
       }
     }
   }
@@ -438,7 +444,6 @@ export default class Panel extends React.Component {
     const currentEditor = this.props.store.editors.get(tabId);
 
     if (tabId && tabId !== 'Default') {
-      console.log(tabId);
       ContextMenu.show(
         <Menu className="editorTabContentMenu">
           <div className="menuItemWrapper closeTabItem">

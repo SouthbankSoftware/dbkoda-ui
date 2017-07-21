@@ -305,8 +305,12 @@ export default class Store {
       treeEditor.fileName = 'Tree Action';
       this.treeActionPanel.editors.set(editorId, treeEditor);
     }
+
+    // Set left Panel State.
     if (options.type === 'aggregate') {
       this.drawer.drawerChild = DrawerPanes.AGGREGATE;
+    } else {
+      this.drawer.drawerChild = DrawerPanes.DEFAULT;
     }
     if (options.type === 'database-export') {
       this.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
@@ -323,6 +327,13 @@ export default class Store {
 
   @action
   openNewAggregateBuilder(nodeRightClicked) {
+    if (this.editorPanel.activeDropdownId === 'Default') {
+      NewToaster.show({
+          message: 'Error: Please select an open connection from the Profile Dropdown.',
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
+    }
     this.startCreatingNewEditor();
     // Create a new shell through feathers.
     return featherClient()

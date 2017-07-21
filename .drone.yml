@@ -27,3 +27,5 @@ pipeline:
       <@{{build.author}}>: {{{build.message}}}
     when:
       status: [success, failure]
+
+branches: master
