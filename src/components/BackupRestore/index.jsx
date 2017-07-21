@@ -64,7 +64,6 @@ export class BackupRestore extends React.Component {
     const {store} = this.props;
     const treeAction = store.treeActionPanel.treeAction;
     const treeNode = store.treeActionPanel.treeNode;
-    console.log('get tree node ', treeNode);
     const selectedProfile = this.props.store.profileList.selectedProfile;
 
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
@@ -78,7 +77,7 @@ export class BackupRestore extends React.Component {
 
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
       return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
-        treeEditor={treeEditor} />);
+        treeEditor={treeEditor} action={treeAction} />);
     }
     return null;
   }

@@ -29,6 +29,9 @@ import {featherClient} from '../../helpers/feathers';
 import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
+import {BackupRestoreActions} from '../common/Constants';
+
+const template = require('./Template/ExportDatabsae.hbs');
 
 /**
  * the option panel for database export
@@ -82,21 +85,52 @@ export default class DatabaseExport extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.treeEditor) {
-      this.fetchCollectionlist(nextProps.treeEditor.shellId);
+      this.fetchCollectionlist(nextProps.treeEditor);
     }
   }
 
   componentDidMount() {
     if (this.props.treeEditor) {
-      this.fetchCollectionlist(this.props.editor.shellId);
+      this.fetchCollectionlist(this.props.editor);
     }
   }
 
-  fetchCollectionlist(shellId) {
+  generateCode() {
+    const db = this.props.treeNode.text;
+    const {host, port, username, password} = this.props.profile;
+    let targetCols = [];
+    if (this.state.allCollections) {
+      targetCols = this.state.collections;
+    } else {
+      targetCols = this.state.selectedCollections;
+    }
+    const cols = [];
+    targetCols.map((col) => {
+      cols.push({database: db, collection: col, ssl: this.state.ssl, host, port, username, password});
+    });
+    const values = {cols};
+    return template(values);
+  }
+
+  updateEditorCode() {
+    if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && this.state.editor && this.state.editor.doc.cm) {
+      const generatedCode = this.generateCode();
+      this.state.editor.doc.cm.setValue(generatedCode);
+    }
+  }
+
+  fetchCollectionlist(editor) {
+    if (editor) {
+      this.setState({editor});
+    }
+    if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
+      const generatedCode = this.generateCode();
+      editor.doc.cm.setValue(generatedCode);
+    }
     featherClient()
       .service('/mongo-sync-execution')
       .update(this.props.profile.id, {
-        shellId,
+        shellId: editor.shellId,
         commands: `db.getSiblingDB("${this.props.treeNode.text}").getCollectionNames()`
       }).then((res) => {
       this.setState({collections: JSON.parse(res)});
@@ -121,6 +155,8 @@ export default class DatabaseExport extends React.Component {
 
   render() {
     const db = this.props.treeNode.text;
+    this.updateEditorCode();
+    console.log('xxxx:', this.props.profile);
     return (<div className="database-export-panel">
       <h3 className="form-title">{globalString('backup/database/title')}</h3>
       <div className="pt-form-group">
