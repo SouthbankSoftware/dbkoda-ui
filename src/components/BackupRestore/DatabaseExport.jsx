@@ -22,7 +22,7 @@
  */
 
 import React from 'react';
-import {Checkbox, Intent, Position, Tooltip} from '@blueprintjs/core';
+import {Button} from '@blueprintjs/core';
 
 import {featherClient} from '../../helpers/feathers';
 
@@ -30,49 +30,11 @@ import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
+import Options from './Options';
 
-const template = require('./Template/ExportDatabsae.hbs');
-
-/**
- * the option panel for database export
- * @constructor
- */
-const Options = ({ssl, allCollections, changeSSL, changeAllCollections}) => {
-  return (
-    <div className="options-panel">
-      <div className="option-item-row">
-        <Tooltip
-          content=""
-          hoverOpenDelay={1000}
-          inline
-          intent={Intent.PRIMARY}
-          position={Position.TOP}
-        >
-          <Checkbox
-            checked={ssl}
-            label={globalString('backup/database/ssl')}
-            onChange={() => changeSSL()}
-          />
-        </Tooltip>
-      </div>
-      <div className="option-item-row">
-        <Tooltip
-          content=""
-          hoverOpenDelay={1000}
-          inline
-          intent={Intent.PRIMARY}
-          position={Position.TOP}
-        >
-          <Checkbox
-            checked={allCollections}
-            label={globalString('backup/database/allCollections')}
-            onChange={() => changeAllCollections()}
-          />
-        </Tooltip>
-      </div>
-    </div>
-  );
-};
+const { dialog, BrowserWindow } = IS_ELECTRON
+  ? window.require('electron').remote
+  : {};
 
 export default class DatabaseExport extends React.Component {
 
@@ -80,7 +42,7 @@ export default class DatabaseExport extends React.Component {
     super(props);
     this.selectCollection = this.selectCollection.bind(this);
     this.unSelectCollection = this.unSelectCollection.bind(this);
-    this.state = {collections: [], ssl: false, allCollections: true, selectedCollections: []};
+    this.state = {collections: [], ssl: false, allCollections: true, selectedCollections: [], directoryPath: '', jsonArray: false, pretty: false};
   }
 
   componentWillReceiveProps(nextProps) {
@@ -95,9 +57,10 @@ export default class DatabaseExport extends React.Component {
     }
   }
 
-  generateCode() {
+  getCommandObject() {
     const db = this.props.treeNode.text;
     const {host, port, username, password} = this.props.profile;
+    const {pretty, jsonArray, directoryPath} = this.state;
     let targetCols = [];
     if (this.state.allCollections) {
       targetCols = this.state.collections;
@@ -106,9 +69,19 @@ export default class DatabaseExport extends React.Component {
     }
     const cols = [];
     targetCols.map((col) => {
-      cols.push({database: db, collection: col, ssl: this.state.ssl, host, port, username, password});
+      const items = {database: db, collection: col, ssl: this.state.ssl, host, port, username, password, pretty, jsonArray};
+      if (directoryPath) {
+        items.output = directoryPath + '/' + col + '.json';
+      }
+      cols.push(items);
     });
+    return cols;
+  }
+
+  generateCode() {
+    const cols = this.getCommandObject();
     const values = {cols};
+    const template = require('./Template/ExportDatabsae.hbs');
     return template(values);
   }
 
@@ -117,6 +90,21 @@ export default class DatabaseExport extends React.Component {
       const generatedCode = this.generateCode();
       this.state.editor.doc.cm.setValue(generatedCode);
     }
+  }
+
+  openFile() {
+    dialog.showOpenDialog(
+      BrowserWindow.getFocusedWindow(),
+      {
+        properties: ['openDirectory'],
+      },
+      (fileNames) => {
+        if (!fileNames || fileNames.length == 0) {
+          return;
+        }
+        this.setState({directoryPath: fileNames[0]});
+      },
+    );
   }
 
   fetchCollectionlist(editor) {
@@ -153,10 +141,13 @@ export default class DatabaseExport extends React.Component {
     this.setState({selectedCollections: selected});
   }
 
+  isExecutable() {
+    return this.getCommandObject().length > 0 && this.state.directoryPath;
+  }
+
   render() {
     const db = this.props.treeNode.text;
     this.updateEditorCode();
-    console.log('xxxx:', this.props.profile);
     return (<div className="database-export-panel">
       <h3 className="form-title">{globalString('backup/database/title')}</h3>
       <div className="pt-form-group">
@@ -164,11 +155,20 @@ export default class DatabaseExport extends React.Component {
           {globalString('backup/database/db')}
         </label>
         <div className="pt-form-content">
-          <input id="example-form-group-input-a" className="pt-input" readOnly type="text" dir="auto" value={db} />
+          <input className="pt-input" readOnly type="text" dir="auto" value={db} />
+        </div>
+        <label className="pt-label database" htmlFor="database">
+          {globalString('backup/database/filePath')}
+        </label>
+        <div className="pt-form-content">
+          <input className="pt-input path-input" type="text" readOnly onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
+          <Button className="browse-directory" onClick={() => this.openFile()}>{globalString('backup/database/chooseDirectory')}</Button>
         </div>
       </div>
-      <Options ssl={this.state.ssl} allCollections={this.state.allCollections}
+      <Options ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
         changeSSL={() => this.setState({ssl: !this.state.ssl})}
+        changePretty={() => this.setState({pretty: !this.state.pretty})}
+        changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
         changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
       />
       {
@@ -177,7 +177,7 @@ export default class DatabaseExport extends React.Component {
           unSelectCollection={this.unSelectCollection}
           selectedCollections={this.state.selectedCollections} /> : null
       }
-      <ButtonPanel close={this.props.close} />
+      <ButtonPanel close={this.props.close} enableConfirm={this.isExecutable()} />
     </div>);
   }
 

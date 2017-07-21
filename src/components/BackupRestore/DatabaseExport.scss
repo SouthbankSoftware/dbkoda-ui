@@ -5,9 +5,16 @@
   color: #BFBEC0;
 }
 
-.database-export-panel{
+.database-export-panel {
   margin: 30px;
 
+  .browse-directory {
+    margin-left: 10px;
+  }
+
+  .path-input{
+    width: 70%;
+  }
 }
 
 .database-export-panel .pt-form-group .database {
