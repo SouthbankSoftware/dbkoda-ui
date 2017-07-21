@@ -141,6 +141,10 @@ export default class DatabaseExport extends React.Component {
     this.setState({selectedCollections: selected});
   }
 
+  isExecutable() {
+    return this.getCommandObject().length > 0 && this.state.directoryPath;
+  }
+
   render() {
     const db = this.props.treeNode.text;
     this.updateEditorCode();
@@ -173,7 +177,7 @@ export default class DatabaseExport extends React.Component {
           unSelectCollection={this.unSelectCollection}
           selectedCollections={this.state.selectedCollections} /> : null
       }
-      <ButtonPanel close={this.props.close} />
+      <ButtonPanel close={this.props.close} enableConfirm={this.isExecutable()} />
     </div>);
   }
 

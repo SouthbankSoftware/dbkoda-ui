@@ -95,4 +95,4 @@ const Options = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCo
   );
 };
 
-export default {Options};
+export default Options;
