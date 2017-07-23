@@ -26,6 +26,7 @@ import {inject, observer} from 'mobx-react';
 import {action, computed, reaction} from 'mobx';
 import DatabaseExport from './DatabaseExport';
 import {BackupRestoreActions, DrawerPanes} from '../common/Constants';
+import {featherClient} from '../../helpers/feathers';
 
 @observer
 @inject('store')
@@ -55,8 +56,18 @@ export class BackupRestore extends React.Component {
 
   componentDidMount() {
     if (this.props.store.treeActionPanel.treeActionEditorId) {
-      this.setState({editorId: this.props.store.treeActionPanel.treeActionEditorId});
+      const editorId = this.props.store.treeActionPanel.treeActionEditorId;
+      this.setState({editorId});
+      featherClient().service('/os-execution').on('os-command-finish', () => {
+        this.setState({commandExecuting: false});
+      });
     }
+  }
+
+  @action.bound
+  runEditorScript() {
+    this.setState({commandExecuting: true});
+    this.props.store.runEditorScript();
   }
 
   @computed get getAction() {
@@ -73,11 +84,10 @@ export class BackupRestore extends React.Component {
         break;
       }
     }
-    console.log('@@@@ ', store.editorToolbar.isActiveExecuting);
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
       return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
-        isActiveExecuting={store.editorToolbar.isActiveExecuting}
-        treeEditor={treeEditor} action={treeAction} runEditorScript={store.runEditorScript} />);
+        isActiveExecuting={this.state.commandExecuting}
+        treeEditor={treeEditor} action={treeAction} runEditorScript={this.runEditorScript} />);
     }
     return null;
   }
