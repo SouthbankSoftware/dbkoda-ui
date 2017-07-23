@@ -292,7 +292,13 @@ export default class TreeView extends React.Component {
         if (!this.checkExistingEditor()) {
           this.props.store.addNewEditorForTreeAction({type: 'os'});
         }
-      } else {
+      } else if (action === 'ExportCollection') {
+        this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
+        this.props.store.setTreeAction(this.nodeRightClicked, action);
+        if (!this.checkExistingEditor()) {
+          this.props.store.addNewEditorForTreeAction({type: 'os'});
+        }
+      }else {
         this.props.store.setTreeAction(this.nodeRightClicked, action);
         this.showTreeActionPanel(this.nodeRightClicked, action);
       }

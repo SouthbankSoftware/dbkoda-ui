@@ -178,14 +178,6 @@ export default class DatabaseExport extends React.Component {
 
   executing() {
     this.props.runEditorScript();
-     // const generatedCode = this.generateCode();
-     // console.log('generated:', generatedCode);
-     // featherClient()
-     //  .service('/os-execution')
-     //   .update(this.props.profile.id, {shellId: this.state.editor.shellId, commands: generatedCode})
-     //   .then((res) => {
-     //    console.log(res);
-     //   });
   }
 
   render() {

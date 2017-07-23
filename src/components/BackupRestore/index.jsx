@@ -88,6 +88,10 @@ export class BackupRestore extends React.Component {
       return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
         isActiveExecuting={this.state.commandExecuting}
         treeEditor={treeEditor} action={treeAction} runEditorScript={this.runEditorScript} />);
+    } else if (treeAction === BackupRestoreActions.EXPORT_COLLECTION) {
+      return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
+        isActiveExecuting={this.state.commandExecuting}
+        treeEditor={treeEditor} action={treeAction} runEditorScript={this.runEditorScript} />);
     }
     return null;
   }
