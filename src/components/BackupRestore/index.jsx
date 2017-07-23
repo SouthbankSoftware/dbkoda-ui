@@ -34,7 +34,7 @@ export class BackupRestore extends React.Component {
   constructor(props) {
     super(props);
     this.close = this.close.bind(this);
-    this.state = {editorId: undefined};
+    this.state = {editorId: undefined, commandExecuting: false};
     reaction(
       () => this.props.store.treeActionPanel.treeActionEditorId,
       () => {
@@ -73,10 +73,11 @@ export class BackupRestore extends React.Component {
         break;
       }
     }
-
+    console.log('@@@@ ', store.editorToolbar.isActiveExecuting);
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
       return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
-        treeEditor={treeEditor} action={treeAction} />);
+        isActiveExecuting={store.editorToolbar.isActiveExecuting}
+        treeEditor={treeEditor} action={treeAction} runEditorScript={store.runEditorScript} />);
     }
     return null;
   }

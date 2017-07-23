@@ -81,9 +81,8 @@ export default class DatabaseExport extends React.Component {
         if (uri.hosts.length == 1) {
           items.host = uri.hosts[0].host;
           items.port = uri.hosts[0].port ? uri.hosts[0].port : '27017';
-        } else {
+        } else if (uri.options && uri.options.replicaSet){
           // replica set
-          if (uri.options && uri.options.replicaSet) {
             let repH = uri.options.replicaSet + '/';
             uri.hosts.map((h, i) => {
               repH += h.host;
@@ -94,7 +93,6 @@ export default class DatabaseExport extends React.Component {
               }
             });
             items.host = repH;
-          }
         }
         if (!sha) {
           if (uri.username && uri.password) {
@@ -111,8 +109,8 @@ export default class DatabaseExport extends React.Component {
     return cols;
   }
 
-  generateCode(hidePwd = true) {
-    const cols = this.getCommandObject(hidePwd);
+  generateCode() {
+    const cols = this.getCommandObject();
     const values = {cols};
     const template = require('./Template/ExportDatabsae.hbs');
     return template(values);
@@ -175,18 +173,19 @@ export default class DatabaseExport extends React.Component {
   }
 
   isExecutable() {
-    return this.getCommandObject().length > 0 && this.state.directoryPath;
+    return this.getCommandObject().length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
   }
 
   executing() {
-     const generatedCode = this.generateCode(false);
-     console.log('generated:', generatedCode);
-     featherClient()
-      .service('/os-execution')
-       .update(this.props.profile.id, {shellId: this.state.editor.shellId, commands: generatedCode})
-       .then((res) => {
-        console.log(res);
-       });
+    this.props.runEditorScript();
+     // const generatedCode = this.generateCode();
+     // console.log('generated:', generatedCode);
+     // featherClient()
+     //  .service('/os-execution')
+     //   .update(this.props.profile.id, {shellId: this.state.editor.shellId, commands: generatedCode})
+     //   .then((res) => {
+     //    console.log(res);
+     //   });
   }
 
   render() {
