@@ -298,7 +298,7 @@ export default class TreeView extends React.Component {
         if (!this.checkExistingEditor()) {
           this.props.store.addNewEditorForTreeAction({type: 'os'});
         }
-      }else {
+      } else {
         this.props.store.setTreeAction(this.nodeRightClicked, action);
         this.showTreeActionPanel(this.nodeRightClicked, action);
       }

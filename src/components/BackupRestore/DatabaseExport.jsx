@@ -81,7 +81,7 @@ export default class DatabaseExport extends React.Component {
         if (uri.hosts.length == 1) {
           items.host = uri.hosts[0].host;
           items.port = uri.hosts[0].port ? uri.hosts[0].port : '27017';
-        } else if (uri.options && uri.options.replicaSet){
+        } else if (uri.options && uri.options.replicaSet) {
           // replica set
             let repH = uri.options.replicaSet + '/';
             uri.hosts.map((h, i) => {
