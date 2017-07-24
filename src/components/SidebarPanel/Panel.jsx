@@ -23,13 +23,14 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-21T16:52:06+10:00
+ * @Last modified time: 2017-07-24T09:34:44+10:00
  */
 
 import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
 import { action, untracked } from 'mobx';
 import SplitPane from 'react-split-pane';
+import {Button} from '@blueprintjs/core';
 
 import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
@@ -39,7 +40,7 @@ import { AggregateLeftPanel } from '#/AggregateViews';
 import { TreeActionPanel } from '#/TreeActionPanel';
 import { DrawerPanes } from '#/common/Constants';
 import { BackupRestore } from '../BackupRestore/index';
-import {Button} from '@blueprintjs/core';
+
 
 import './Panel.scss';
 
