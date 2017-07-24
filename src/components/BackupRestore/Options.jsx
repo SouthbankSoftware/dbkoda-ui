@@ -25,71 +25,107 @@ import React from 'react';
 import {Checkbox, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {BackupRestoreActions} from '../common/Constants';
 
-export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
+const getOptions = (options) => {
   return (
     <div className="options-panel">
-      <div className="option-item-row">
-        <Tooltip
-          content=""
-          hoverOpenDelay={1000}
-          inline
-          intent={Intent.PRIMARY}
-          position={Position.TOP}
-        >
-          <Checkbox
-            checked={ssl}
-            label={globalString('backup/database/ssl')}
-            onChange={() => changeSSL()}
-          />
-        </Tooltip>
-      </div>
-      <div className="option-item-row">
-        <Tooltip
-          content=""
-          hoverOpenDelay={1000}
-          inline
-          intent={Intent.PRIMARY}
-          position={Position.TOP}
-        >
-          <Checkbox
-            checked={allCollections}
-            label={globalString('backup/database/allCollections')}
-            onChange={() => changeAllCollections()}
-          />
-        </Tooltip>
-      </div>
-      <div className="option-item-row">
-        <Tooltip
-          content=""
-          hoverOpenDelay={1000}
-          inline
-          intent={Intent.PRIMARY}
-          position={Position.TOP}
-        >
-          <Checkbox
-            checked={pretty}
-            label={globalString('backup/database/pretty')}
-            onChange={() => changePretty()}
-          />
-        </Tooltip>
-      </div>
-      <div className="option-item-row">
-        <Tooltip
-          content=""
-          hoverOpenDelay={1000}
-          inline
-          intent={Intent.PRIMARY}
-          position={Position.TOP}
-        >
-          <Checkbox
-            checked={jsonArray}
-            label={globalString('backup/database/jsonArray')}
-            onChange={() => changeJsonArray()}
-          />
-        </Tooltip>
-      </div>
+      {
+        options.map((o) => {
+          return (
+            <div className="option-item-row" key={o.id}>
+              <Tooltip
+                content=""
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.TOP}
+              >
+                <Checkbox
+                  checked={o.checked}
+                  label={o.label}
+                  onChange={() => o.onChange()}
+                />
+              </Tooltip>
+            </div>
+          );
+        })
+      }
     </div>
   );
+};
+
+export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
+  const options = [
+    {
+      id: 2,
+      label: globalString('backup/database/allCollections'),
+      onChange: changeAllCollections,
+      checked: allCollections
+    },
+    {
+      id: 1,
+      label: globalString('backup/database/ssl'),
+      onChange: changeSSL,
+      checked: ssl,
+    },
+    {
+      id: 2,
+      label: globalString('backup/database/pretty'),
+      onChange: changePretty,
+      checked: pretty
+    },
+    {
+      id: 3,
+      label: globalString('backup/database/jsonArray'),
+      onChange: changeJsonArray,
+      checked: jsonArray
+    }
+  ];
+  return getOptions(options);
+};
+
+export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRepair, allCollections, changeAllCollections,
+                              oplog, changeOplog, dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
+                              viewsAsCollections, changeViewsAsCollections}) => {
+  const options = [
+    {
+      id: 0,
+      label: globalString('backup/database/allCollections'),
+      onChange: changeAllCollections,
+      checked: allCollections
+    },
+    {
+      id: 1,
+      label: globalString('backup/database/ssl'),
+      onChange: changeSSL,
+      checked: ssl,
+    }, {
+      id: 2,
+      label: 'gzip',
+      onChange: changeGZip,
+      checked: gzip,
+    }, {
+      id: 3,
+      label: globalString('backup/database/repair'),
+      onChange: changeRepair,
+      checked: repair,
+    }, {
+      id: 4,
+      label: 'oplog',
+      onChange: changeOplog,
+      checked: oplog,
+    }, {
+      id: 5,
+      label: 'dumpDbUsersAndRoles',
+      onChange: changeDumpDbUsersAndRoles,
+      checked: dumpDbUsersAndRoles,
+    }, {
+      id: 6,
+      label: 'viewsAsCollections',
+      checked: viewsAsCollections,
+      onChange: changeViewsAsCollections,
+    }
+  ];
+  return getOptions(options);
 };
 
 /**
@@ -98,7 +134,16 @@ export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL
  */
 const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
   if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
-    return ExportOptions({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray});
+    return ExportOptions({
+      ssl,
+      allCollections,
+      pretty,
+      jsonArray,
+      changeSSL,
+      changeAllCollections,
+      changePretty,
+      changeJsonArray
+    });
   }
   return null;
 };

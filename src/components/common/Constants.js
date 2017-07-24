@@ -47,5 +47,7 @@ export const DrawerPanes = {
 
 export const BackupRestoreActions = {
   EXPORT_DATABASE: 'ExportDatabase',
+  DUMP_DATABASE: 'DumpDatabase',
   EXPORT_COLLECTION: 'ExportCollection',
+  DUMP_COLLECTION: 'DumpCollection',
 };
