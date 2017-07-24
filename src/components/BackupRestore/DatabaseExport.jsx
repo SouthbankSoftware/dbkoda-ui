@@ -44,7 +44,7 @@ export default class DatabaseExport extends React.Component {
     this.selectCollection = this.selectCollection.bind(this);
     this.unSelectCollection = this.unSelectCollection.bind(this);
     this.executing = this.executing.bind(this);
-    this.state = {collections: [], ssl: false, allCollections: true, selectedCollections: [], directoryPath: '', jsonArray: false, pretty: false};
+    this.state = {collections: [], ssl: false, allCollections: true, selectedCollections: [], directoryPath: '', jsonArray: false, pretty: false, db:'', collection: ''};
   }
 
   componentWillReceiveProps(nextProps) {
@@ -54,15 +54,35 @@ export default class DatabaseExport extends React.Component {
   }
 
   componentDidMount() {
+    const {treeAction} = this.props;
+    const {db, collection} = this.getSelectedDatabase();
+    this.setState({db, collection, treeAction});
     if (this.props.treeEditor) {
       this.fetchCollectionlist(this.props.editor);
     }
   }
 
+  getSelectedDatabase() {
+    const {treeNode, treeAction} = this.props;
+    let db;
+    let collection = null;
+    if (treeAction === BackupRestoreActions.EXPORT_COLLECTION) {
+      db = treeNode.refParent.text;
+      collection = treeNode.text;
+      const {selectedCollections} = this.state;
+      if (selectedCollections.indexOf(collection) < 0) {
+        selectedCollections.push(collection);
+      }
+      this.setState({selectedCollections, allCollections: false});
+    } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
+      db = treeNode.text;
+    }
+    return {db, collection};
+  }
+
   getCommandObject() {
     const db = this.props.treeNode.text;
     const {host, port, username, sha, hostRadio, url, database} = this.props.profile;
-    console.log('profile=', this.props.profile);
     const {pretty, jsonArray, directoryPath} = this.state;
     let targetCols = [];
     if (this.state.allCollections) {
@@ -72,7 +92,10 @@ export default class DatabaseExport extends React.Component {
     }
     const cols = [];
     targetCols.map((col) => {
-      const items = {database: db, collection: col, ssl: this.state.ssl, username, password:sha, pretty, jsonArray, authDb: database};
+      const items = {database: db, collection: col, ssl: this.state.ssl, username, password:sha, pretty, jsonArray};
+      if (sha) {
+        items.authDb = database;
+      }
       if (hostRadio) {
         items.host = host;
         items.port = port;
@@ -117,7 +140,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   updateEditorCode() {
-    if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && this.state.editor && this.state.editor.doc.cm) {
+    if (this.state.editor && this.state.editor.doc.cm) {
       const generatedCode = this.generateCode();
       this.state.editor.doc.cm.setValue(generatedCode);
     }
@@ -150,13 +173,18 @@ export default class DatabaseExport extends React.Component {
       .service('/mongo-sync-execution')
       .update(this.props.profile.id, {
         shellId: editor.shellId,
-        commands: `db.getSiblingDB("${this.props.treeNode.text}").getCollectionNames()`
+        commands: `db.getSiblingDB("${this.getSelectedDatabase().db}").getCollectionNames()`
       }).then((res) => {
+      console.log('get collection res ', res);
       this.setState({collections: JSON.parse(res)});
     });
   }
 
   selectCollection(collection, i) {
+    if (collection === globalString('backup/database/selectCollection')) {
+      this.unSelectCollection(i);
+      return;
+    }
     const selected = this.state.selectedCollections;
     if (i < 0) {
       selected.push(collection);
@@ -181,7 +209,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   render() {
-    const db = this.props.treeNode.text;
+    const {db} = this.state;
     this.updateEditorCode();
     return (<div className="database-export-panel">
       <h3 className="form-title">{globalString('backup/database/title')}</h3>

@@ -84,6 +84,7 @@ export class BackupRestore extends React.Component {
         break;
       }
     }
+    console.log('tree node:', treeNode);
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
       return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
         isActiveExecuting={this.state.commandExecuting}
