@@ -637,7 +637,9 @@ export default class Store {
     if (IS_ELECTRON) {
       ipcRenderer.once('update', (event, message) => {
         if (message === 'updateReady') {
-          this.updateAvailable = true;
+          runInAction('Update Downloaded and ready to install', () => {
+            this.updateAvailable = true;
+          }
         }
       });
     }
