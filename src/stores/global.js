@@ -1,3 +1,13 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-24T16:42:58+10:00
+ */
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,6 +73,7 @@ global.EOL = global.IS_ELECTRON
 
 export default class Store {
   @observable locale = 'en';
+  @observable updateAvailable = false;
   @observable profiles = observable.map();
   @observable editors = observable.map();
   @observable outputs = observable.map();
@@ -312,7 +323,7 @@ export default class Store {
     } else {
       this.drawer.drawerChild = DrawerPanes.DEFAULT;
     }
-    if (options.type === 'database-export') {
+    if (options.type === 'os') {
       this.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
     }
 
@@ -453,6 +464,11 @@ export default class Store {
         resolve();
       }
     });
+  }
+  @action
+  updateAndRestart() {
+    this.updateAvailable = false;
+    ipcRenderer.send('updateAndRestart');
   }
 
   @action
@@ -618,5 +634,19 @@ export default class Store {
         this.load();
       }
     });
+    if (IS_ELECTRON) {
+      ipcRenderer.once('update', (event, message) => {
+        if (message === 'updateReady') {
+          runInAction('Update Downloaded and ready to install', () => {
+            this.updateAvailable = true;
+          });
+        }
+      });
+    }
+  }
+
+  @action.bound
+  runEditorScript() {
+    this.editorPanel.executingEditorAll = true;
   }
 }

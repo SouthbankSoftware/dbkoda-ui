@@ -47,7 +47,7 @@ import CloseIcon from '../../styles/icons/cross-icon.svg';
 import ShardsIcon from '../../styles/icons/shards-icon-2.svg';
 import CollectionIcon from '../../styles/icons/collection-icon.svg';
 import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
-import { DrawerPanes } from '../common/Constants';
+import { DrawerPanes, BackupRestoreActions } from '../common/Constants';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
@@ -286,11 +286,12 @@ export default class TreeView extends React.Component {
         this.actionSelected.view == 'details'
       ) {
         this.showDetailsView(this.nodeRightClicked, action);
-      } else if (action === 'ExportDatabase') {
+      } else if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION
+                  || action === BackupRestoreActions.DUMP_DATABASE) {
         this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
         this.props.store.setTreeAction(this.nodeRightClicked, action);
         if (!this.checkExistingEditor()) {
-          this.props.store.addNewEditorForTreeAction({type: 'database-export'});
+          this.props.store.addNewEditorForTreeAction({type: 'os'});
         }
       } else {
         this.props.store.setTreeAction(this.nodeRightClicked, action);

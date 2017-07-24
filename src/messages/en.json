@@ -216,7 +216,12 @@
         "allCollections": "All Collections",
         "db": "Database",
         "collection": "Collection",
-        "selectCollection": "Select a collection"
+        "selectCollection": "Select a collection",
+        "filePath": "File Path",
+        "pretty": "Pretty",
+        "jsonArray": "Json Array",
+        "chooseDirectory": "Choose",
+        "repair": "Repair"
       }
     }
   }

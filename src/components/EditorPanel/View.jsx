@@ -164,7 +164,8 @@ class View extends React.Component {
             this.props.store.editors.get(editor.id).executing = true;
             this.props.store.editorToolbar.isActiveExecuting = true;
             // Send request to feathers client
-            const service = featherClient().service('/mongo-shells');
+            const type = editor.type;
+            const service = type && type === 'os' ? featherClient().service('/os-execution') : featherClient().service('/mongo-shells');
             service.timeout = 30000;
             service
               .update(profileId, {
@@ -311,10 +312,11 @@ class View extends React.Component {
             );
             const shell = editor.shellId;
             const id = editor.profileId;
-            const service = featherClient().service('/mongo-stop-execution');
+            const type = editor.type;
+            const service = type && type === 'os' ? featherClient().service('/os-execution') : featherClient().service('/mongo-stop-execution');
             service.timeout = 1000;
             service
-              .get(id, {
+              .remove(id, {
                 query: {
                   shellId: shell
                 }
