@@ -19,33 +19,21 @@
  */
 
 /**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-15T12:03:27+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-21T09:31:51+10:00
+* @Author: Michael Harrison
+* @Date:   2017-07-21 09:47:09
+* @Email:  mike@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2017-07-21 09:47:19
 */
 
-
-
-export const DragItemTypes = {
-  LABEL: 'label',
-  VISUAL_BLOCK: 'visual_block'
-};
-
-export const ProfileStatus = {
-  OPEN: 'OPEN',
-  CLOSED: 'CLOSED',
-};
-
-export const DrawerPanes = {
-  DEFAULT: 'default',
-  PROFILE: 'profile',
-  DYNAMIC: 'dynamic',
-  BACKUP_RESTORE: 'backup-restore',
-  AGGREGATE: 'aggregate'
-};
-
-export const BackupRestoreActions = {
-  EXPORT_DATABASE: 'ExportDatabase'
+export const BlockTypes = {
+  AGGREGATE: {
+    type:'aggregate',
+  },
+  GROUP_BY: {
+    type: 'group_by'
+  },
+  MATCH: {
+    type: 'match'
+  }
 };

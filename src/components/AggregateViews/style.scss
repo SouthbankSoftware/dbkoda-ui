@@ -8,6 +8,29 @@ div.aggregateGraphicalBuilderWrapper {
   h2 {
     padding-top: 40%
   }
+  ul.graphicalBuilderBlockList {
+    display: flex;
+    flex-direction: column;
+    order: 2;
+    flex-grow: 1;
+    list-style-type: none;
+    height: 100%;
+    li.firstBlockTarget {
+      order: 1;
+      flex-grow: 1;
+      flex-shrink: 1;
+      height: 80px;
+    }
+    li.lastBlockTarget {
+      order: 3;
+      flex-grow: 1;
+      flex-shrink: 1;
+      height: 100%;
+    }
+    li.aggregateBlock {
+      order: 2;
+    }
+  }
 }
 div.Pane.vertical.Pane1 {
   div.leftPaneInnerWrapper {
@@ -16,14 +39,70 @@ div.Pane.vertical.Pane1 {
       display: flex;
       flex-direction: column;
       height:100%;
+      font-family: Arial, Helvetica, sans-serif;
       div.aggregatePaletteWrapper {
         order:1;
         flex-grow: 1;
-        
+        color: $navbarLeftHeading;
+        nav.aggregatePaletteToolbar {
+          background-color: $navbarLeftBackground;
+          h2.paletteHeader {
+            color: $navbarLeftHeading;
+            font-size: 24px;
+            padding-top: 10px;
+            text-align: left;
+          }
+        }
+        div.aggregatePaletteContent {
+          p { 
+            padding-top: 10px;
+            padding-left: 10px;
+          }
+          ul.aggregateBlockList {
+            list-style-type: none;
+            li.aggregateBlockWrapper {
+              border: 1px solid $aggregateBlockBorder;
+              margin-bottom: 15px;
+              width: 60%;
+              height: 50px;
+              font-size: 20px;
+              text-align: center;
+              div.aggregateBlock {
+                height: 100%;
+                width:100%;
+                cursor: all-scroll;
+                p.aggregateBlockTitle {
+                  cursor: inherit;
+                  user-select: none;
+                }
+              }
+            }
+            li.aggregateBlockWrapper:hover {
+                background-color: $aggregateBlockBackgroundHover;
+                color: $aggregateBlockFontColorHover;
+            } 
+          }
+        }
       }
       div.aggregateDetailsWrapper {
         order: 2;
         flex-grow: 1;
+        color: $navbarLeftHeading;
+        nav.aggregateDetailsToolbar {
+          background-color: $navbarLeftBackground;
+          h2.currentBlockChoice {
+            color: $navbarLeftHeading;
+            font-size: 24px;
+            padding-top: 10px;
+            text-align: left;
+          }
+        }
+        div.aggregateDetailsContent {
+          p {
+            padding-top: 10px;
+            padding-left: 10px;
+          }
+        }
       }
     }
   }

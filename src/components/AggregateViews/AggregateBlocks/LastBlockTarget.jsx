@@ -20,51 +20,61 @@
 
 /**
  * @Author: Michael Harrison
- * @Date:   2017-07-19 11:17:46
+ * @Date:   2017-07-21 12:36:36
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   Mike
- * @Last modified time: 2017-07-19 11:17:49
+ * @Last modified time: 2017-07-21 12:36:40
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { BlockTypes } from './AggregateBlocks/BlockTypes';
-import './style.scss';
+import { DropTarget } from 'react-dnd';
+import { DragItemTypes } from '#/common/Constants.js';
+import '../style.scss';
+
+/** ===| Drag Drop Functions |=== **/
+const blockTarget = {
+  drop() {
+    return {
+      type: 'lastBlock'
+    };
+  }
+};
+const collectTarget = (connect, monitor) => {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  };
+};
+/** ============================= **/
 
 @inject(allStores => ({
   store: allStores.store,
 }))
 @observer
-export default class Details extends React.Component {
+@DropTarget(DragItemTypes.VISUAL_BLOCK, blockTarget, collectTarget)
+export default class LastBlockTarget extends React.Component {
+  static propTypes = {
+    connectDropTarget: PropTypes.func.isRequired,
+    isOver: PropTypes.bool.isRequired
+  }
   constructor(props) {
     super(props);
     this.state = {
-      currentBlockChoice: {
-        blockType: BlockTypes.AGGREGATE.type
-      }
+      listPosition: props.listPosition,
+      type: props.type,
+      concrete: props.concrete,
     };
   }
 
-  getBlockDetails(block) {
-    return (
-      <div className="aggregateDetailsContent">
-        <p>
-          Some fields will go here based on type {block.blockType}
-        </p>
-      </div>
-    );
-  }
-
   render() {
-    return (
-      <div className="aggregateDetailsWrapper">
-        <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
-          <h2 className="currentBlockChoice">
-            Block Details
-          </h2>
-        </nav>
-        {this.getBlockDetails(this.state.currentBlockChoice)}
-      </div>
+    // Drag Drop Handlers.
+    const connectDropTarget = this.props.connectDropTarget;
+    const isOver = this.props.isOver; // eslint-disable-line
+
+    return connectDropTarget(
+      <li className="lastBlockTarget" />
     );
   }
 }

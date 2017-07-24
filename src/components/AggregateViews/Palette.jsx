@@ -28,6 +28,8 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
+import Block from './AggregateBlocks/Block.jsx';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -39,10 +41,39 @@ export default class Palette extends React.Component {
     this.state = {};
   }
 
+  getBlocksList() {
+    return (
+      <div className="aggregatePaletteContent">
+        <p>
+          Placeholder for a list of avaliable blocks.
+        </p>
+        <ul className="aggregateBlockList">
+          {Object.keys(BlockTypes).map((keyName, index) => {
+            console.log(BlockTypes[keyName].type);
+            return (
+              <li className="aggregateBlockWrapper">
+                <Block
+                  listPosition={index}
+                  type={BlockTypes[keyName].type}
+                  concrete={false}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="aggregatePaletteWrapper">
-        <h2> Placeholder for Palette </h2>
+        <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
+          <h2 className="paletteHeader">
+            Function Library
+          </h2>
+        </nav>
+        {this.getBlocksList()}
       </div>
     );
   }

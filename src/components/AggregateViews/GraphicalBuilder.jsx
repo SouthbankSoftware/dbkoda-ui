@@ -28,6 +28,10 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
+import Block from './AggregateBlocks/Block.jsx';
+import FirstBlockTarget from './AggregateBlocks/FirstBlockTaget.jsx';
+import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
 
 @inject(allStores => ({
@@ -37,13 +41,53 @@ import './style.scss';
 export default class GraphicalBuilder extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      currentBlocks:[
+        {
+          type: BlockTypes.AGGREGATE.type
+        },
+        {
+          type: BlockTypes.GROUP_BY.type
+        },
+        {
+          type: BlockTypes.MATCH.type
+        }
+      ]
+    };
+  }
+
+  /**
+   * Moves two blocks by swapping the indicies of the blocks.
+   * @param {Integer} oldIndex - The index of the block to be moved.
+   * @param {Integer} newIndex - The index where the block is to be moved to.
+   */
+  moveBlock(oldIndex, newIndex) {
+    // Standard array move:
+    if (newIndex >= this.state.currentBlocks.length) {
+      let tmpArray = newIndex - this.state.currentBlocks.length;
+      while ((tmpArray -= 1) + 1) {
+        this.state.currentBlocks.push(undefined);
+      }
+    }
+    this.state.currentBlocks.splice(newIndex, 0, this.state.currentBlocks.splice(oldIndex, 1)[0]);
   }
 
   render() {
     return (
       <div className="aggregateGraphicalBuilderWrapper">
-        <h2> Placeholder for Graphical Builder </h2>
+        <ul className="graphicalBuilderBlockList">
+          <FirstBlockTarget />
+          {this.state.currentBlocks.map((indexValue, index) => {
+            return (
+              <Block
+                listPosition={index}
+                type={indexValue.type}
+                concrete
+              />
+            );
+          })}
+          <LastBlockTarget />
+        </ul>
       </div>
     );
   }
