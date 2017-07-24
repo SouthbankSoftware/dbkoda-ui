@@ -220,7 +220,8 @@
         "filePath": "File Path",
         "pretty": "Pretty",
         "jsonArray": "Json Array",
-        "chooseDirectory": "Choose"
+        "chooseDirectory": "Choose",
+        "repair": "Repair"
       }
     }
   }

@@ -323,7 +323,7 @@ export default class Store {
     } else {
       this.drawer.drawerChild = DrawerPanes.DEFAULT;
     }
-    if (options.type === 'database-export') {
+    if (options.type === 'os') {
       this.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
     }
 
@@ -643,5 +643,10 @@ export default class Store {
         }
       });
     }
+  }
+
+  @action.bound
+  runEditorScript() {
+    this.editorPanel.executingEditorAll = true;
   }
 }

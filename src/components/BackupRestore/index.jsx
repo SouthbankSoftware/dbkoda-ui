@@ -26,6 +26,7 @@ import {inject, observer} from 'mobx-react';
 import {action, computed, reaction} from 'mobx';
 import DatabaseExport from './DatabaseExport';
 import {BackupRestoreActions, DrawerPanes} from '../common/Constants';
+import {featherClient} from '../../helpers/feathers';
 
 @observer
 @inject('store')
@@ -34,11 +35,10 @@ export class BackupRestore extends React.Component {
   constructor(props) {
     super(props);
     this.close = this.close.bind(this);
-    this.state = {editorId: undefined};
+    this.state = {editorId: undefined, commandExecuting: false};
     reaction(
       () => this.props.store.treeActionPanel.treeActionEditorId,
       () => {
-        console.log('get treeActionPanel.treeActionEditorId ', this.props.store.treeActionPanel.treeActionEditorId);
         this.setState({editorId: this.props.store.treeActionPanel.treeActionEditorId});
       });
   }
@@ -56,8 +56,18 @@ export class BackupRestore extends React.Component {
 
   componentDidMount() {
     if (this.props.store.treeActionPanel.treeActionEditorId) {
-      this.setState({editorId: this.props.store.treeActionPanel.treeActionEditorId});
+      const editorId = this.props.store.treeActionPanel.treeActionEditorId;
+      this.setState({editorId});
+      featherClient().service('/os-execution').on('os-command-finish', () => {
+        this.setState({commandExecuting: false});
+      });
     }
+  }
+
+  @action.bound
+  runEditorScript() {
+    this.setState({commandExecuting: true});
+    this.props.store.runEditorScript();
   }
 
   @computed get getAction() {
@@ -74,10 +84,12 @@ export class BackupRestore extends React.Component {
         break;
       }
     }
-
-    if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
+    console.log('tree node:', treeNode);
+    if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.EXPORT_COLLECTION
+      || treeAction === BackupRestoreActions.DUMP_DATABASE || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
       return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
-        treeEditor={treeEditor} action={treeAction} />);
+        isActiveExecuting={this.state.commandExecuting}
+        treeEditor={treeEditor} action={treeAction} runEditorScript={this.runEditorScript} />);
     }
     return null;
   }

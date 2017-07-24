@@ -110,7 +110,12 @@
         {
             "name": "ExportDatabase",
             "text": "Export Database",
-            "icon": "pt-icon-split-columns"
+            "icon": "pt-icon-export"
+        },
+        {
+            "name": "DumpDatabase",
+            "text": "Dump Database",
+            "icon": "pt-icon-export"
         }
     ],
     "collection": [{
@@ -174,6 +179,11 @@
             "name": "DropCollection",
             "text": "Drop Collection",
             "icon": "pt-icon-delete"
+        },
+        {
+            "name": "ExportCollection",
+            "text": "Export Collection",
+            "icon": "pt-icon-export"
         }
     ],
     "index": [{
