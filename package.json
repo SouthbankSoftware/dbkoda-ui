@@ -3,7 +3,7 @@
   "gitName": "dbkoda-ui",
   "fullName": "dbKoda UI",
   "description": "dbKoda UI built with state of the art React stack",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": {
     "name": "Southbank Software",
     "email": "developer@southbanksoftware.com",
@@ -115,6 +115,7 @@
     "moment": "^2.17.1",
     "mousetrap": "^1.6.1",
     "mousetrap-global-bind": "^1.1.0",
+    "node-fetch": "^1.7.1",
     "node-sass": "^4.5.3",
     "package": "^1.0.1",
     "postcss-loader": "^2.0.5",
@@ -127,6 +128,7 @@
     "react-dnd": "^2.2.4",
     "react-dnd-html5-backend": "^2.2.4",
     "react-dom": "~15.4.2",
+    "react-ga": "^2.2.0",
     "react-hot-loader": "next",
     "react-json-tree": "^0.10.7",
     "react-router-dom": "^4.0.0-beta.6",
@@ -150,8 +152,6 @@
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dev-server": "^2.4.5",
     "webpack-merge": "^4.1.0",
-    "node-fetch": "^1.7.1",
-    "react-ga": "^2.2.0",
     "xml2js": "^0.4.17"
   }
 }

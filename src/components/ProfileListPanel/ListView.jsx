@@ -152,7 +152,7 @@ export default class ListView extends React.Component {
       this.props.store.profileList.creatingNewProfile = false;
       this.closeOpenConnectionAlert();
       DBKodaToaster(Position.LEFT_BOTTOM).show({
-        message: 'Error: ' + err.message,
+        message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />), // eslint-disable-line react/no-danger
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down'
       });
