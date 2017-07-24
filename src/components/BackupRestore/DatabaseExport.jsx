@@ -31,7 +31,7 @@ import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
-import Options from './Options';
+import {ExportOptions} from './Options';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -208,6 +208,19 @@ export default class DatabaseExport extends React.Component {
     this.props.runEditorScript();
   }
 
+  getOptions() {
+    const {treeAction} = this.props;
+    if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.EXPORT_DATABASE) {
+      return (<ExportOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
+        changeSSL={() => this.setState({ssl: !this.state.ssl})}
+        changePretty={() => this.setState({pretty: !this.state.pretty})}
+        changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
+        changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
+      />);
+    }
+    return null;
+  }
+
   render() {
     const {db} = this.state;
     this.updateEditorCode();
@@ -228,12 +241,9 @@ export default class DatabaseExport extends React.Component {
           <Button className="browse-directory" onClick={() => this.openFile()}>{globalString('backup/database/chooseDirectory')}</Button>
         </div>
       </div>
-      <Options ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
-        changeSSL={() => this.setState({ssl: !this.state.ssl})}
-        changePretty={() => this.setState({pretty: !this.state.pretty})}
-        changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
-        changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
-      />
+      {
+        this.getOptions()
+      }
       {
         !this.state.allCollections ? <CollectionList collections={this.state.collections}
           selectCollection={this.selectCollection}

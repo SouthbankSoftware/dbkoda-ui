@@ -23,12 +23,9 @@
 
 import React from 'react';
 import {Checkbox, Intent, Position, Tooltip} from '@blueprintjs/core';
+import {BackupRestoreActions} from '../common/Constants';
 
-/**
- * the option panel for database export
- * @constructor
- */
-const Options = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
+export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
   return (
     <div className="options-panel">
       <div className="option-item-row">
@@ -93,6 +90,17 @@ const Options = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCo
       </div>
     </div>
   );
+};
+
+/**
+ * the option panel for database export
+ * @constructor
+ */
+const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
+  if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
+    return ExportOptions({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray});
+  }
+  return null;
 };
 
 export default Options;
