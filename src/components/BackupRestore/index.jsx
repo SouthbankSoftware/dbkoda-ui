@@ -39,7 +39,8 @@ export class BackupRestore extends React.Component {
     reaction(
       () => this.props.store.treeActionPanel.treeActionEditorId,
       () => {
-        this.setState({editorId: this.props.store.treeActionPanel.treeActionEditorId});
+        const editorId = this.props.store.treeActionPanel.treeActionEditorId;
+        this.setState({editorId});
       });
   }
 
@@ -70,6 +71,26 @@ export class BackupRestore extends React.Component {
     this.props.store.runEditorScript();
   }
 
+
+  fetchCollectionlist(editor) {
+    if (editor) {
+      this.setState({editor});
+    }
+    if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
+      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
+      editor.doc.cm.setValue(generatedCode);
+    }
+    featherClient()
+      .service('/mongo-sync-execution')
+      .update(this.props.profile.id, {
+        shellId: editor.shellId,
+        commands: `db.getSiblingDB("${this.getSelectedDatabase().db}").getCollectionNames()`
+      }).then((res) => {
+      console.log('get collection res ', res);
+      this.setState({collections: JSON.parse(res)});
+    });
+  }
+
   @computed get getAction() {
     const {store} = this.props;
     const treeAction = store.treeActionPanel.treeAction;
@@ -83,6 +104,9 @@ export class BackupRestore extends React.Component {
         treeEditor = editor[1];
         break;
       }
+    }
+    if (!treeEditor) {
+      this.fetchCollectionlist(treeEditor);
     }
     console.log('tree node:', treeNode);
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.EXPORT_COLLECTION
