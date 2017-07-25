@@ -50,15 +50,19 @@ export class BackupRestore extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.store.treeActionPanel.treeActionEditorId) {
+    if (nextProps.store.treeActionPanel.treeActionEditorId && !this.state.editorId) {
       this.setState({editorId: nextProps.store.treeActionPanel.treeActionEditorId});
+      const editor = this.getEditorById(nextProps.store.treeActionPanel.treeActionEditorId);
+      this.fetchCollectionlist(editor);
     }
   }
 
   componentDidMount() {
-    if (this.props.store.treeActionPanel.treeActionEditorId) {
+    if (this.props.store.treeActionPanel.treeActionEditorId && !this.state.editorId) {
       const editorId = this.props.store.treeActionPanel.treeActionEditorId;
       this.setState({editorId});
+      const editor = this.getEditorById(editorId);
+      this.fetchCollectionlist(editor);
       featherClient().service('/os-execution').on('os-command-finish', () => {
         this.setState({commandExecuting: false});
       });
@@ -71,24 +75,53 @@ export class BackupRestore extends React.Component {
     this.props.store.runEditorScript();
   }
 
+  getSelectedDatabase() {
+    const {store} = this.props;
+    const treeAction = store.treeActionPanel.treeAction;
+    const treeNode = store.treeActionPanel.treeNode;
+    console.log('tree:', treeNode, treeAction);
+    let db;
+    let collection = null;
+    if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
+      db = treeNode.refParent.text;
+      collection = treeNode.text;
+    } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE) {
+      db = treeNode.text;
+    }
+    return {db, collection};
+  }
 
   fetchCollectionlist(editor) {
     if (editor) {
       this.setState({editor});
     }
     if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
-      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
+      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.store.treeActionPanel.treeAction});
       editor.doc.cm.setValue(generatedCode);
     }
+    const selectedProfile = this.props.store.profileList.selectedProfile;
+    const db = this.getSelectedDatabase().db;
     featherClient()
       .service('/mongo-sync-execution')
-      .update(this.props.profile.id, {
+      .update(selectedProfile.id, {
         shellId: editor.shellId,
-        commands: `db.getSiblingDB("${this.getSelectedDatabase().db}").getCollectionNames()`
+        commands: `db.getSiblingDB("${db}").getCollectionNames()`
       }).then((res) => {
       console.log('get collection res ', res);
       this.setState({collections: JSON.parse(res)});
     });
+  }
+
+  getEditorById(editorId) {
+    const treeEditors = this.props.store.treeActionPanel.editors.entries();
+    let treeEditor;
+    for (const editor of treeEditors) {
+      if (editor[1].id == editorId) {
+        treeEditor = editor[1];
+        break;
+      }
+    }
+    return treeEditor;
   }
 
   @computed get getAction() {
@@ -96,23 +129,13 @@ export class BackupRestore extends React.Component {
     const treeAction = store.treeActionPanel.treeAction;
     const treeNode = store.treeActionPanel.treeNode;
     const selectedProfile = this.props.store.profileList.selectedProfile;
-
-    const treeEditors = this.props.store.treeActionPanel.editors.entries();
-    let treeEditor;
-    for (const editor of treeEditors) {
-      if (editor[1].id == this.state.editorId) {
-        treeEditor = editor[1];
-        break;
-      }
-    }
-    if (!treeEditor) {
-      this.fetchCollectionlist(treeEditor);
-    }
+    const treeEditor = this.getEditorById(this.state.editorId);
     console.log('tree node:', treeNode);
+    const {db, collection} = this.getSelectedDatabase();
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.EXPORT_COLLECTION
       || treeAction === BackupRestoreActions.DUMP_DATABASE || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
       return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
-        isActiveExecuting={this.state.commandExecuting}
+        isActiveExecuting={this.state.commandExecuting} db={db} collections={this.state.collections} colection={collection}
         treeEditor={treeEditor} action={treeAction} runEditorScript={this.runEditorScript} />);
     }
     return null;

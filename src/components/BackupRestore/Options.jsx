@@ -33,7 +33,7 @@ const getOptions = (options) => {
           return (
             <div className="option-item-row" key={o.id}>
               <Tooltip
-                content=""
+                content={o.tooltips}
                 hoverOpenDelay={1000}
                 inline
                 intent={Intent.PRIMARY}
@@ -53,12 +53,13 @@ const getOptions = (options) => {
   );
 };
 
-export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
+export const ExportDBOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
   const options = [
     {
       id: 0,
       label: globalString('backup/database/allCollections'),
       onChange: changeAllCollections,
+      tooltips: '',
       checked: allCollections
     },
     {
@@ -66,17 +67,47 @@ export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL
       label: globalString('backup/database/ssl'),
       onChange: changeSSL,
       checked: ssl,
+      tooltips: '',
     },
     {
       id: 2,
       label: globalString('backup/database/pretty'),
       onChange: changePretty,
+      tooltips: '',
       checked: pretty
     },
     {
       id: 3,
       label: globalString('backup/database/jsonArray'),
       onChange: changeJsonArray,
+      tooltips: '',
+      checked: jsonArray
+    }
+  ];
+  return getOptions(options);
+};
+
+export const ExportCollectionOptions = ({ssl, pretty, jsonArray, changeSSL, changePretty, changeJsonArray}) => {
+  const options = [
+    {
+      id: 1,
+      label: globalString('backup/database/ssl'),
+      onChange: changeSSL,
+      checked: ssl,
+      tooltips: '',
+    },
+    {
+      id: 2,
+      label: globalString('backup/database/pretty'),
+      onChange: changePretty,
+      tooltips: '',
+      checked: pretty
+    },
+    {
+      id: 3,
+      label: globalString('backup/database/jsonArray'),
+      onChange: changeJsonArray,
+      tooltips: '',
       checked: jsonArray
     }
   ];
@@ -84,7 +115,7 @@ export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL
 };
 
 export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRepair, allCollections, changeAllCollections,
-                              oplog, changeOplog, dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
+                              dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
                               viewsAsCollections, changeViewsAsCollections}) => {
   const options = [
     {
@@ -97,31 +128,31 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
       id: 1,
       label: globalString('backup/database/ssl'),
       onChange: changeSSL,
+      tooltips: '',
       checked: ssl,
     }, {
       id: 2,
       label: 'gzip',
       onChange: changeGZip,
+      tooltips: '',
       checked: gzip,
     }, {
       id: 3,
       label: globalString('backup/database/repair'),
       onChange: changeRepair,
+      tooltips: '',
       checked: repair,
     }, {
       id: 4,
-      label: 'oplog',
-      onChange: changeOplog,
-      checked: oplog,
-    }, {
-      id: 5,
       label: 'dumpDbUsersAndRoles',
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
+      tooltips: '',
     }, {
-      id: 6,
+      id: 5,
       label: 'viewsAsCollections',
       checked: viewsAsCollections,
+      tooltips: '',
       onChange: changeViewsAsCollections,
     }
   ];
@@ -134,7 +165,7 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
  */
 export const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
   if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
-    return ExportOptions({
+    return ExportDBOptions({
       ssl,
       allCollections,
       pretty,

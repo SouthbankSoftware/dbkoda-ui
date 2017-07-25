@@ -24,13 +24,11 @@
 import React from 'react';
 import {Button} from '@blueprintjs/core';
 
-import {featherClient} from '../../helpers/feathers';
-
 import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
-import {ExportOptions, DumpOptions} from './Options';
+import {ExportDBOptions, DumpOptions, ExportCollectionOptions} from './Options';
 import {getCommandObject, generateCode} from './CodeGenerator';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
@@ -48,43 +46,30 @@ export default class DatabaseExport extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.treeEditor) {
-      this.fetchCollectionlist(nextProps.treeEditor);
+    if (!this.state.editor || this.state.collections.length === 0) {
+      const collections = nextProps.collections ? nextProps.collections : [];
+      this.setState({collections, editor: nextProps.treeEditor});
     }
   }
 
   componentDidMount() {
-    const {treeAction} = this.props;
-    const {db, collection} = this.getSelectedDatabase();
-    this.setState({db, collection, treeAction});
-    if (this.props.treeEditor) {
-      this.fetchCollectionlist(this.props.editor);
-    }
-  }
-
-  getSelectedDatabase() {
-    const {treeNode, treeAction} = this.props;
-    console.log('tree:', treeNode, treeAction);
-    let db;
-    let collection = null;
+    const {treeAction, db, collection, treeEditor, treeNode} = this.props;
+    this.setState({db, collection, treeAction, editor: treeEditor});
     if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
-      db = treeNode.refParent.text;
-      collection = treeNode.text;
-      const {selectedCollections} = this.state;
-      if (selectedCollections.indexOf(collection) < 0) {
-        selectedCollections.push(collection);
-      }
-      this.setState({selectedCollections, allCollections: false});
-    } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE) {
-      db = treeNode.text;
+      const collection = treeNode.text;
+      const sc = this.state.selectedCollections;
+      sc.push(collection);
+      this.setState({selectedCollections: sc, allCollections: false});
     }
-    return {db, collection};
   }
 
   updateEditorCode() {
     if (this.state.editor && this.state.editor.doc.cm) {
-      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
-      this.state.editor.doc.cm.setValue(generatedCode);
+      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.props.treeAction});
+      const currentCode = this.state.editor.doc.cm.getValue();
+      if (currentCode !== generatedCode) {
+        this.state.editor.doc.cm.setValue(generatedCode);
+      }
     }
   }
 
@@ -101,25 +86,6 @@ export default class DatabaseExport extends React.Component {
         this.setState({directoryPath: fileNames[0]});
       },
     );
-  }
-
-  fetchCollectionlist(editor) {
-    if (editor) {
-      this.setState({editor});
-    }
-    if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
-      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
-      editor.doc.cm.setValue(generatedCode);
-    }
-    featherClient()
-      .service('/mongo-sync-execution')
-      .update(this.props.profile.id, {
-        shellId: editor.shellId,
-        commands: `db.getSiblingDB("${this.getSelectedDatabase().db}").getCollectionNames()`
-      }).then((res) => {
-      console.log('get collection res ', res);
-      this.setState({collections: JSON.parse(res)});
-    });
   }
 
   selectCollection(collection, i) {
@@ -143,7 +109,8 @@ export default class DatabaseExport extends React.Component {
   }
 
   isExecutable() {
-    return getCommandObject({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state}).length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
+    const commandObject = getCommandObject({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.props.treeAction});
+    return commandObject.length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
   }
 
   executing() {
@@ -152,36 +119,55 @@ export default class DatabaseExport extends React.Component {
 
   getOptions() {
     const {treeAction} = this.props;
-    if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.EXPORT_DATABASE
-      ) {
-      return (<ExportOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
-        changeSSL={() => this.setState({ssl: !this.state.ssl})}
-        changePretty={() => this.setState({pretty: !this.state.pretty})}
-        changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
-        changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
-      />);
-    } else if (treeAction === BackupRestoreActions.DUMP_COLLECTION || treeAction === BackupRestoreActions.DUMP_DATABASE) {
-      return (<DumpOptions ssl={this.state.ssl}
-        allCollections={this.state.allCollections}
-        gzip={this.state.gzip}
-        oplog={this.state.oplog}
-        changeOplog={() => this.setState({oplog: !this.state.oplog})}
-        changeSSL={() => this.setState({ssl: !this.state.ssl})}
-        changeGZip={() => this.setState({gzip: !this.state.gzip})}
-        repair={this.state.repair}
-        changeRepair={() => this.setState({repair: !this.state.repair})}
-        dumpDbUsersAndRoles={this.state.dumpDbUsersAndRoles}
-        changeDumpDbUsersAndRoles={() => this.setState({dumpDbUsersAndRoles: !this.state.dumpDbUsersAndRoles})}
-        viewsAsCollections={this.state.viewsAsCollections}
-        changeViewsAsCollections={() => this.setState({viewsAsCollections: !this.state.viewsAsCollections})}
-        changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
-      />);
+    switch (treeAction) {
+      case BackupRestoreActions.EXPORT_DATABASE:
+        return (<ExportDBOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
+          changeSSL={() => this.setState({ssl: !this.state.ssl})}
+          changePretty={() => this.setState({pretty: !this.state.pretty})}
+          changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
+          changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
+        />);
+      case BackupRestoreActions.EXPORT_COLLECTION:
+        return (<ExportCollectionOptions ssl={this.state.ssl} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
+          changeSSL={() => this.setState({ssl: !this.state.ssl})}
+          changePretty={() => this.setState({pretty: !this.state.pretty})}
+          changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
+        />);
+      case BackupRestoreActions.DUMP_DATABASE:
+      case BackupRestoreActions.DUMP_COLLECTION:
+        return (<DumpOptions ssl={this.state.ssl}
+          allCollections={this.state.allCollections}
+          gzip={this.state.gzip}
+          changeSSL={() => this.setState({ssl: !this.state.ssl})}
+          changeGZip={() => this.setState({gzip: !this.state.gzip})}
+          repair={this.state.repair}
+          changeRepair={() => this.setState({repair: !this.state.repair})}
+          dumpDbUsersAndRoles={this.state.dumpDbUsersAndRoles}
+          changeViewsAsCollections={() => this.setState({viewsAsCollections: !this.state.viewsAsCollections})}
+          viewsAsCollections={this.state.viewsAsCollections}
+          changeDumpDbUsersAndRoles={() => {
+            if (!this.state.dumpDbUsersAndRoles) {
+              // when turn on viewsAsCollections, unselect all collection
+              this.setState({allCollections: false});
+            }
+            this.setState({dumpDbUsersAndRoles: !this.state.dumpDbUsersAndRoles});
+          }}
+          changeAllCollections={() => {
+            if (!this.state.allCollections) {
+              // when turn on all collections, unselect viewsAsCollections
+              this.setState({dumpDbUsersAndRoles: false});
+            }
+            this.setState({allCollections: !this.state.allCollections});
+          }}
+        />);
+      default:
+        return null;
     }
-    return null;
   }
 
   render() {
     const {db} = this.state;
+    const {treeAction} = this.props;
     this.updateEditorCode();
     return (<div className="database-export-panel">
       <h3 className="form-title">{globalString('backup/database/title')}</h3>
@@ -199,12 +185,14 @@ export default class DatabaseExport extends React.Component {
           <input className="pt-input path-input" type="text" readOnly onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
           <Button className="browse-directory" onClick={() => this.openFile()}>{globalString('backup/database/chooseDirectory')}</Button>
         </div>
+        <label className={this.state.directoryPath ? '.hide' : 'warning'} htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
       </div>
       {
         this.getOptions()
       }
       {
-        !this.state.allCollections ? <CollectionList collections={this.state.collections}
+        !this.state.allCollections && !this.state.dumpDbUsersAndRoles ? <CollectionList collections={this.state.collections}
+          readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION}
           selectCollection={this.selectCollection}
           unSelectCollection={this.unSelectCollection}
           selectedCollections={this.state.selectedCollections} /> : null
