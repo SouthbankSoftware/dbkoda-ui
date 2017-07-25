@@ -12,7 +12,7 @@
     margin-left: 10px;
   }
 
-  .path-input{
+  .path-input {
     width: 70%;
   }
 }
@@ -29,4 +29,13 @@
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.database-export-panel {
+  .warning {
+    color: red;
+  }
+  .hide {
+    display: none;
+  }
 }

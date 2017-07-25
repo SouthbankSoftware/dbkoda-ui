@@ -109,7 +109,8 @@ export default class DatabaseExport extends React.Component {
   }
 
   isExecutable() {
-    return getCommandObject({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state}).length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
+    const commandObject = getCommandObject({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.props.treeAction});
+    return commandObject.length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
   }
 
   executing() {
@@ -144,13 +145,26 @@ export default class DatabaseExport extends React.Component {
           repair={this.state.repair}
           changeRepair={() => this.setState({repair: !this.state.repair})}
           dumpDbUsersAndRoles={this.state.dumpDbUsersAndRoles}
-          changeDumpDbUsersAndRoles={() => this.setState({dumpDbUsersAndRoles: !this.state.dumpDbUsersAndRoles})}
-          viewsAsCollections={this.state.viewsAsCollections}
           changeViewsAsCollections={() => this.setState({viewsAsCollections: !this.state.viewsAsCollections})}
-          changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
+          viewsAsCollections={this.state.viewsAsCollections}
+          changeDumpDbUsersAndRoles={() => {
+            if (!this.state.dumpDbUsersAndRoles) {
+              // when turn on viewsAsCollections, unselect all collection
+              this.setState({allCollections: false});
+            }
+            this.setState({dumpDbUsersAndRoles: !this.state.dumpDbUsersAndRoles});
+          }}
+          changeAllCollections={() => {
+            if (!this.state.allCollections) {
+              // when turn on all collections, unselect viewsAsCollections
+              this.setState({dumpDbUsersAndRoles: false});
+            }
+            this.setState({allCollections: !this.state.allCollections});
+          }}
         />);
+      default:
+        return null;
     }
-    return null;
   }
 
   render() {
@@ -173,12 +187,13 @@ export default class DatabaseExport extends React.Component {
           <input className="pt-input path-input" type="text" readOnly onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
           <Button className="browse-directory" onClick={() => this.openFile()}>{globalString('backup/database/chooseDirectory')}</Button>
         </div>
+        <label className={this.state.directoryPath ? '.hide' : 'warning'} htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
       </div>
       {
         this.getOptions()
       }
       {
-        !this.state.allCollections ? <CollectionList collections={this.state.collections}
+        !this.state.allCollections && !this.state.dumpDbUsersAndRoles ? <CollectionList collections={this.state.collections}
           readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION}
           selectCollection={this.selectCollection}
           unSelectCollection={this.unSelectCollection}

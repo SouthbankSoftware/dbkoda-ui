@@ -24,10 +24,69 @@
 import mongodbUri from 'mongodb-uri';
 import {BackupRestoreActions} from '../common/Constants';
 
-export const getCommandObject = ({treeNode, profile, state, action}) => {
-  const {pretty, jsonArray, directoryPath, ssl, allCollections, collections, selectedCollections, gzip, repair, oplog, dumpDbUsersAndRoles, viewsAsCollections} = state;
-  const db = treeNode.text;
+const createTemplateObject = (state) => {
+  const {pretty, jsonArray, ssl, db, gzip, repair, oplog, dumpDbUsersAndRoles, viewsAsCollections, profile} = state;
   const {host, port, username, sha, hostRadio, url, database} = profile;
+  const items = {
+    database: db,
+    ssl,
+    username,
+    password: sha,
+    pretty,
+    jsonArray,
+    gzip,
+    repair,
+    oplog,
+    dumpDbUsersAndRoles,
+    viewsAsCollections
+  };
+  if (sha) {
+    items.authDb = database;
+  }
+  if (hostRadio) {
+    items.host = host;
+    items.port = port;
+  } else {
+    const uri = mongodbUri.parse(url);
+    if (uri.hosts.length == 1) {
+      items.host = uri.hosts[0].host;
+      items.port = uri.hosts[0].port ? uri.hosts[0].port : '27017';
+    } else if (uri.options && uri.options.replicaSet) {
+      // replica set
+      let repH = uri.options.replicaSet + '/';
+      uri.hosts.map((h, i) => {
+        repH += h.host;
+        const p = h.port ? h.port : 27017;
+        repH += ':' + p;
+        if (i != uri.hosts.length - 1) {
+          repH += ',';
+        }
+      });
+      items.host = repH;
+    }
+    if (!sha) {
+      if (uri.username && uri.password) {
+        items.username = uri.username;
+        items.password = uri.password;
+      }
+    }
+  }
+  return items;
+};
+
+// const getDirectoryPath = (directoryPath, action) => {
+//   if (directoryPath) {
+//     if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
+//       return directoryPath + '/' + col + '.json';
+//     } else if (action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION) {
+//       return directoryPath;
+//     }
+//   }
+//   return '';
+// }
+
+export const getCommandObject = ({treeNode, profile, state, action}) => {
+  const {directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles} = state;
   let targetCols = [];
   if (allCollections) {
     targetCols = collections;
@@ -35,48 +94,18 @@ export const getCommandObject = ({treeNode, profile, state, action}) => {
     targetCols = selectedCollections;
   }
   const cols = [];
-  targetCols.map((col) => {
-    const items = {database: db, collection: col, ssl, username, password: sha, pretty, jsonArray, gzip, repair, oplog, dumpDbUsersAndRoles, viewsAsCollections};
-    if (sha) {
-      items.authDb = database;
-    }
-    if (hostRadio) {
-      items.host = host;
-      items.port = port;
-    } else {
-      const uri = mongodbUri.parse(url);
-      if (uri.hosts.length == 1) {
-        items.host = uri.hosts[0].host;
-        items.port = uri.hosts[0].port ? uri.hosts[0].port : '27017';
-      } else if (uri.options && uri.options.replicaSet) {
-        // replica set
-        let repH = uri.options.replicaSet + '/';
-        uri.hosts.map((h, i) => {
-          repH += h.host;
-          const p = h.port ? h.port : 27017;
-          repH += ':' + p;
-          if (i != uri.hosts.length - 1) {
-            repH += ',';
-          }
-        });
-        items.host = repH;
-      }
-      if (!sha) {
-        if (uri.username && uri.password) {
-          items.username = uri.username;
-          items.password = uri.password;
-        }
-      }
-    }
-    if (directoryPath) {
-      if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
-        items.output = directoryPath + '/' + col + '.json';
-      } else if (action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION){
-        items.output = directoryPath;
-      }
-    }
+  !dumpDbUsersAndRoles && targetCols.map((col) => {
+    const items = createTemplateObject({...state, profile, db: treeNode.text});
+    items.collection = col;
+    items.output = directoryPath + '/' + col + '.json';
     cols.push(items);
   });
+  if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE) {
+    if (dumpDbUsersAndRoles) {
+      const itm = createTemplateObject({...state, profile, db: treeNode.text});
+      cols.push({...itm, output: directoryPath});
+    }
+  }
   return cols;
 };
 

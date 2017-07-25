@@ -144,18 +144,12 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
       checked: repair,
     }, {
       id: 4,
-      label: 'oplog',
-      onChange: changeOplog,
-      tooltips: '',
-      checked: oplog,
-    }, {
-      id: 5,
       label: 'dumpDbUsersAndRoles',
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
       tooltips: '',
     }, {
-      id: 6,
+      id: 5,
       label: 'viewsAsCollections',
       checked: viewsAsCollections,
       tooltips: '',
