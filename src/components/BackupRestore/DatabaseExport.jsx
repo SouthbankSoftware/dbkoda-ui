@@ -28,7 +28,7 @@ import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
-import {ExportOptions, DumpOptions} from './Options';
+import {ExportDBOptions, DumpOptions, ExportCollectionOptions} from './Options';
 import {getCommandObject, generateCode} from './CodeGenerator';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
@@ -46,7 +46,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.state.editor || !this.state.collections) {
+    if (!this.state.editor || this.state.collections.length === 0) {
       const collections = nextProps.collections ? nextProps.collections : [];
       this.setState({collections, editor: nextProps.treeEditor});
     }
@@ -118,13 +118,18 @@ export default class DatabaseExport extends React.Component {
 
   getOptions() {
     const {treeAction} = this.props;
-    if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.EXPORT_DATABASE
-      ) {
-      return (<ExportOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
+    if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
+      return (<ExportDBOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
         changeSSL={() => this.setState({ssl: !this.state.ssl})}
         changePretty={() => this.setState({pretty: !this.state.pretty})}
         changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
         changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
+      />);
+    } if (treeAction === BackupRestoreActions.EXPORT_COLLECTION) {
+      return (<ExportCollectionOptions ssl={this.state.ssl} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
+        changeSSL={() => this.setState({ssl: !this.state.ssl})}
+        changePretty={() => this.setState({pretty: !this.state.pretty})}
+        changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
       />);
     } else if (treeAction === BackupRestoreActions.DUMP_COLLECTION || treeAction === BackupRestoreActions.DUMP_DATABASE) {
       return (<DumpOptions ssl={this.state.ssl}
@@ -148,6 +153,7 @@ export default class DatabaseExport extends React.Component {
 
   render() {
     const {db} = this.state;
+    const {treeAction} = this.props;
     this.updateEditorCode();
     return (<div className="database-export-panel">
       <h3 className="form-title">{globalString('backup/database/title')}</h3>
@@ -171,6 +177,7 @@ export default class DatabaseExport extends React.Component {
       }
       {
         !this.state.allCollections ? <CollectionList collections={this.state.collections}
+          readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION}
           selectCollection={this.selectCollection}
           unSelectCollection={this.unSelectCollection}
           selectedCollections={this.state.selectedCollections} /> : null

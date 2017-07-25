@@ -53,7 +53,7 @@ const getOptions = (options) => {
   );
 };
 
-export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
+export const ExportDBOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
   const options = [
     {
       id: 0,
@@ -62,6 +62,33 @@ export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL
       tooltips: '',
       checked: allCollections
     },
+    {
+      id: 1,
+      label: globalString('backup/database/ssl'),
+      onChange: changeSSL,
+      checked: ssl,
+      tooltips: '',
+    },
+    {
+      id: 2,
+      label: globalString('backup/database/pretty'),
+      onChange: changePretty,
+      tooltips: '',
+      checked: pretty
+    },
+    {
+      id: 3,
+      label: globalString('backup/database/jsonArray'),
+      onChange: changeJsonArray,
+      tooltips: '',
+      checked: jsonArray
+    }
+  ];
+  return getOptions(options);
+};
+
+export const ExportCollectionOptions = ({ssl, pretty, jsonArray, changeSSL, changePretty, changeJsonArray}) => {
+  const options = [
     {
       id: 1,
       label: globalString('backup/database/ssl'),
@@ -144,7 +171,7 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
  */
 export const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
   if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
-    return ExportOptions({
+    return ExportDBOptions({
       ssl,
       allCollections,
       pretty,

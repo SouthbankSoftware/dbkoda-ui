@@ -34,13 +34,14 @@ const Header = () => (
   </div>
 );
 
-const Row = ({options, selectCollection, unSelectCollection, index, colName}) => (
+const Row = ({options, selectCollection, unSelectCollection, index, colName, readOnly}) => (
   <div className="row">
     <div className="pt-select">
       <select className="select" defaultValue={globalString('backup/database/selectCollection')}
         onChange={(item) => {
                 selectCollection(item.target.value, index);
               }}
+        disabled={readOnly}
         value={index >= 0 ? colName : ''}
       >
         <option>{globalString('backup/database/selectCollection')}</option>
@@ -53,19 +54,15 @@ const Row = ({options, selectCollection, unSelectCollection, index, colName}) =>
       </select>
     </div>
     {
-      index < 0 ? null : <div className="field-group pt-icon-delete circleButton" role="button"
+      index < 0 || readOnly ? null : <div className="field-group pt-icon-delete circleButton" role="button"
         onClick={() => unSelectCollection(colName, index)} />
     }
-
   </div>
 );
 
 
-export default ({collections, selectedCollections, selectCollection, unSelectCollection}) => {
+export default ({collections, selectedCollections, selectCollection, unSelectCollection, readOnly}) => {
   const options = _.filter(collections, a => selectedCollections.indexOf(a) < 0);
-  console.log('options=', options);
-  console.log('render collection list ', collections);
-  console.log('selected collection list ', selectedCollections);
   return (
     <div className="collection-list">
       <Header />
@@ -75,7 +72,7 @@ export default ({collections, selectedCollections, selectCollection, unSelectCol
           const array = options.slice();
           array.splice(0, 0, col);
           return (<Row key={id} index={i} colName={col} options={array} selectCollection={selectCollection}
-            unSelectCollection={unSelectCollection} />);
+            unSelectCollection={unSelectCollection} readOnly={readOnly} />);
         })
       }
       {
