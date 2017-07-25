@@ -23,7 +23,6 @@
 
 import React from 'react';
 import {Button} from '@blueprintjs/core';
-import mongodbUri from 'mongodb-uri';
 
 import {featherClient} from '../../helpers/feathers';
 
@@ -32,6 +31,7 @@ import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
 import {ExportOptions, DumpOptions} from './Options';
+import {getCommandObject, generateCode} from './CodeGenerator';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -81,68 +81,9 @@ export default class DatabaseExport extends React.Component {
     return {db, collection};
   }
 
-  getCommandObject() {
-    const db = this.props.treeNode.text;
-    const {host, port, username, sha, hostRadio, url, database} = this.props.profile;
-    const {pretty, jsonArray, directoryPath} = this.state;
-    let targetCols = [];
-    if (this.state.allCollections) {
-      targetCols = this.state.collections;
-    } else {
-      targetCols = this.state.selectedCollections;
-    }
-    const cols = [];
-    targetCols.map((col) => {
-      const items = {database: db, collection: col, ssl: this.state.ssl, username, password:sha, pretty, jsonArray};
-      if (sha) {
-        items.authDb = database;
-      }
-      if (hostRadio) {
-        items.host = host;
-        items.port = port;
-      } else {
-        const uri = mongodbUri.parse(url);
-        if (uri.hosts.length == 1) {
-          items.host = uri.hosts[0].host;
-          items.port = uri.hosts[0].port ? uri.hosts[0].port : '27017';
-        } else if (uri.options && uri.options.replicaSet) {
-          // replica set
-            let repH = uri.options.replicaSet + '/';
-            uri.hosts.map((h, i) => {
-              repH += h.host;
-              const p = h.port ? h.port : 27017;
-              repH += ':' + p;
-              if (i != uri.hosts.length - 1) {
-                repH += ',';
-              }
-            });
-            items.host = repH;
-        }
-        if (!sha) {
-          if (uri.username && uri.password) {
-            items.username = uri.username;
-            items.password = uri.password;
-          }
-        }
-      }
-      if (directoryPath) {
-        items.output = directoryPath + '/' + col + '.json';
-      }
-      cols.push(items);
-    });
-    return cols;
-  }
-
-  generateCode() {
-    const cols = this.getCommandObject();
-    const values = {cols};
-    const template = require('./Template/ExportDatabsae.hbs');
-    return template(values);
-  }
-
   updateEditorCode() {
     if (this.state.editor && this.state.editor.doc.cm) {
-      const generatedCode = this.generateCode();
+      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
       this.state.editor.doc.cm.setValue(generatedCode);
     }
   }
@@ -167,7 +108,7 @@ export default class DatabaseExport extends React.Component {
       this.setState({editor});
     }
     if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
-      const generatedCode = this.generateCode();
+      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
       editor.doc.cm.setValue(generatedCode);
     }
     featherClient()
@@ -202,7 +143,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   isExecutable() {
-    return this.getCommandObject().length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
+    return getCommandObject({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state}).length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
   }
 
   executing() {
@@ -223,6 +164,8 @@ export default class DatabaseExport extends React.Component {
       return (<DumpOptions ssl={this.state.ssl}
         allCollections={this.state.allCollections}
         gzip={this.state.gzip}
+        oplog={this.state.oplog}
+        changeOplog={() => this.setState({oplog: !this.state.oplog})}
         changeSSL={() => this.setState({ssl: !this.state.ssl})}
         changeGZip={() => this.setState({gzip: !this.state.gzip})}
         repair={this.state.repair}

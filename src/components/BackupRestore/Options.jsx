@@ -56,7 +56,7 @@ const getOptions = (options) => {
 export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
   const options = [
     {
-      id: 2,
+      id: 0,
       label: globalString('backup/database/allCollections'),
       onChange: changeAllCollections,
       checked: allCollections
@@ -132,7 +132,7 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
  * the option panel for database export
  * @constructor
  */
-const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
+export const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
   if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
     return ExportOptions({
       ssl,
@@ -148,4 +148,3 @@ const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, cha
   return null;
 };
 
-export default Options;
