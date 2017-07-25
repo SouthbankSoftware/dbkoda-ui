@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-24T09:49:45+10:00
+ * @Last modified time: 2017-07-24T16:42:58+10:00
  */
 
 
@@ -637,7 +637,9 @@ export default class Store {
     if (IS_ELECTRON) {
       ipcRenderer.once('update', (event, message) => {
         if (message === 'updateReady') {
-          this.updateAvailable = true;
+          runInAction('Update Downloaded and ready to install', () => {
+            this.updateAvailable = true;
+          });
         }
       });
     }
