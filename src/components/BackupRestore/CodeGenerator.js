@@ -22,9 +22,10 @@
  */
 
 import mongodbUri from 'mongodb-uri';
+import {BackupRestoreActions} from '../common/Constants';
 
-export const getCommandObject = ({treeNode, profile, state}) => {
-  const {pretty, jsonArray, directoryPath, ssl, allCollections, collections, selectedCollections} = state;
+export const getCommandObject = ({treeNode, profile, state, action}) => {
+  const {pretty, jsonArray, directoryPath, ssl, allCollections, collections, selectedCollections, gzip, repair, oplog, dumpDbUsersAndRoles, viewsAsCollections} = state;
   const db = treeNode.text;
   const {host, port, username, sha, hostRadio, url, database} = profile;
   let targetCols = [];
@@ -35,7 +36,7 @@ export const getCommandObject = ({treeNode, profile, state}) => {
   }
   const cols = [];
   targetCols.map((col) => {
-    const items = {database: db, collection: col, ssl, username, password:sha, pretty, jsonArray};
+    const items = {database: db, collection: col, ssl, username, password: sha, pretty, jsonArray, gzip, repair, oplog, dumpDbUsersAndRoles, viewsAsCollections};
     if (sha) {
       items.authDb = database;
     }
@@ -68,7 +69,11 @@ export const getCommandObject = ({treeNode, profile, state}) => {
       }
     }
     if (directoryPath) {
-      items.output = directoryPath + '/' + col + '.json';
+      if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
+        items.output = directoryPath + '/' + col + '.json';
+      } else if (action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION){
+        items.output = directoryPath;
+      }
     }
     cols.push(items);
   });
@@ -76,9 +81,19 @@ export const getCommandObject = ({treeNode, profile, state}) => {
 };
 
 export const generateCode = ({treeNode, profile, state, action}) => {
-  console.log('action=', action);
-  const cols = getCommandObject({treeNode, profile, state});
+  const cols = getCommandObject({treeNode, profile, state, action});
   const values = {cols};
-  const template = require('./Template/ExportDatabsae.hbs');
-  return template(values);
+  switch (action) {
+    case BackupRestoreActions.EXPORT_DATABASE:
+    case BackupRestoreActions.EXPORT_COLLECTION: {
+      const template = require('./Template/ExportDatabsae.hbs');
+      return template(values);
+    }
+    case BackupRestoreActions.DUMP_COLLECTION:
+    case BackupRestoreActions.DUMP_DATABASE:
+      const template = require('./Template/DumpDatabsae.hbs');
+      return template(values);
+    default:
+      return '';
+  }
 };

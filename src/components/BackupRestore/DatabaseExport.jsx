@@ -65,7 +65,7 @@ export default class DatabaseExport extends React.Component {
 
   updateEditorCode() {
     if (this.state.editor && this.state.editor.doc.cm) {
-      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
+      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.props.treeAction});
       const currentCode = this.state.editor.doc.cm.getValue();
       if (currentCode !== generatedCode) {
         this.state.editor.doc.cm.setValue(generatedCode);
@@ -118,35 +118,37 @@ export default class DatabaseExport extends React.Component {
 
   getOptions() {
     const {treeAction} = this.props;
-    if (treeAction === BackupRestoreActions.EXPORT_DATABASE) {
-      return (<ExportDBOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
-        changeSSL={() => this.setState({ssl: !this.state.ssl})}
-        changePretty={() => this.setState({pretty: !this.state.pretty})}
-        changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
-        changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
-      />);
-    } if (treeAction === BackupRestoreActions.EXPORT_COLLECTION) {
-      return (<ExportCollectionOptions ssl={this.state.ssl} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
-        changeSSL={() => this.setState({ssl: !this.state.ssl})}
-        changePretty={() => this.setState({pretty: !this.state.pretty})}
-        changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
-      />);
-    } else if (treeAction === BackupRestoreActions.DUMP_COLLECTION || treeAction === BackupRestoreActions.DUMP_DATABASE) {
-      return (<DumpOptions ssl={this.state.ssl}
-        allCollections={this.state.allCollections}
-        gzip={this.state.gzip}
-        oplog={this.state.oplog}
-        changeOplog={() => this.setState({oplog: !this.state.oplog})}
-        changeSSL={() => this.setState({ssl: !this.state.ssl})}
-        changeGZip={() => this.setState({gzip: !this.state.gzip})}
-        repair={this.state.repair}
-        changeRepair={() => this.setState({repair: !this.state.repair})}
-        dumpDbUsersAndRoles={this.state.dumpDbUsersAndRoles}
-        changeDumpDbUsersAndRoles={() => this.setState({dumpDbUsersAndRoles: !this.state.dumpDbUsersAndRoles})}
-        viewsAsCollections={this.state.viewsAsCollections}
-        changeViewsAsCollections={() => this.setState({viewsAsCollections: !this.state.viewsAsCollections})}
-        changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
-      />);
+    switch (treeAction) {
+      case BackupRestoreActions.EXPORT_DATABASE:
+        return (<ExportDBOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
+          changeSSL={() => this.setState({ssl: !this.state.ssl})}
+          changePretty={() => this.setState({pretty: !this.state.pretty})}
+          changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
+          changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
+        />);
+      case BackupRestoreActions.EXPORT_COLLECTION:
+        return (<ExportCollectionOptions ssl={this.state.ssl} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
+          changeSSL={() => this.setState({ssl: !this.state.ssl})}
+          changePretty={() => this.setState({pretty: !this.state.pretty})}
+          changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
+        />);
+      case BackupRestoreActions.DUMP_DATABASE:
+      case BackupRestoreActions.DUMP_COLLECTION:
+        return (<DumpOptions ssl={this.state.ssl}
+          allCollections={this.state.allCollections}
+          gzip={this.state.gzip}
+          oplog={this.state.oplog}
+          changeOplog={() => this.setState({oplog: !this.state.oplog})}
+          changeSSL={() => this.setState({ssl: !this.state.ssl})}
+          changeGZip={() => this.setState({gzip: !this.state.gzip})}
+          repair={this.state.repair}
+          changeRepair={() => this.setState({repair: !this.state.repair})}
+          dumpDbUsersAndRoles={this.state.dumpDbUsersAndRoles}
+          changeDumpDbUsersAndRoles={() => this.setState({dumpDbUsersAndRoles: !this.state.dumpDbUsersAndRoles})}
+          viewsAsCollections={this.state.viewsAsCollections}
+          changeViewsAsCollections={() => this.setState({viewsAsCollections: !this.state.viewsAsCollections})}
+          changeAllCollections={() => this.setState({allCollections: !this.state.allCollections})}
+        />);
     }
     return null;
   }

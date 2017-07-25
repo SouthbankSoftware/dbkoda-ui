@@ -96,7 +96,7 @@ export class BackupRestore extends React.Component {
       this.setState({editor});
     }
     if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
-      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
+      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.store.treeActionPanel.treeAction});
       editor.doc.cm.setValue(generatedCode);
     }
     const selectedProfile = this.props.store.profileList.selectedProfile;
