@@ -74,17 +74,6 @@ const createTemplateObject = (state) => {
   return items;
 };
 
-// const getDirectoryPath = (directoryPath, action) => {
-//   if (directoryPath) {
-//     if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
-//       return directoryPath + '/' + col + '.json';
-//     } else if (action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION) {
-//       return directoryPath;
-//     }
-//   }
-//   return '';
-// }
-
 export const getCommandObject = ({treeNode, profile, state, action}) => {
   const {directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles} = state;
   let targetCols = [];
