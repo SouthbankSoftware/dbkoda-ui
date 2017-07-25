@@ -24,8 +24,6 @@
 import React from 'react';
 import {Button} from '@blueprintjs/core';
 
-import {featherClient} from '../../helpers/feathers';
-
 import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
@@ -48,43 +46,30 @@ export default class DatabaseExport extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.treeEditor) {
-      this.fetchCollectionlist(nextProps.treeEditor);
+    if (!this.state.editor || !this.state.collections) {
+      const collections = nextProps.collections ? nextProps.collections : [];
+      this.setState({collections, editor: nextProps.treeEditor});
     }
   }
 
   componentDidMount() {
-    const {treeAction} = this.props;
-    const {db, collection} = this.getSelectedDatabase();
-    this.setState({db, collection, treeAction});
-    if (this.props.treeEditor) {
-      this.fetchCollectionlist(this.props.editor);
-    }
-  }
-
-  getSelectedDatabase() {
-    const {treeNode, treeAction} = this.props;
-    console.log('tree:', treeNode, treeAction);
-    let db;
-    let collection = null;
+    const {treeAction, db, collection, treeEditor, treeNode} = this.props;
+    this.setState({db, collection, treeAction, editor: treeEditor});
     if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
-      db = treeNode.refParent.text;
-      collection = treeNode.text;
-      const {selectedCollections} = this.state;
-      if (selectedCollections.indexOf(collection) < 0) {
-        selectedCollections.push(collection);
-      }
-      this.setState({selectedCollections, allCollections: false});
-    } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE) {
-      db = treeNode.text;
+      const collection = treeNode.text;
+      const sc = this.state.selectedCollections;
+      sc.push(collection);
+      this.setState({selectedCollections: sc, allCollections: false});
     }
-    return {db, collection};
   }
 
   updateEditorCode() {
     if (this.state.editor && this.state.editor.doc.cm) {
       const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
-      this.state.editor.doc.cm.setValue(generatedCode);
+      const currentCode = this.state.editor.doc.cm.getValue();
+      if (currentCode !== generatedCode) {
+        this.state.editor.doc.cm.setValue(generatedCode);
+      }
     }
   }
 
@@ -101,25 +86,6 @@ export default class DatabaseExport extends React.Component {
         this.setState({directoryPath: fileNames[0]});
       },
     );
-  }
-
-  fetchCollectionlist(editor) {
-    if (editor) {
-      this.setState({editor});
-    }
-    if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
-      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state});
-      editor.doc.cm.setValue(generatedCode);
-    }
-    featherClient()
-      .service('/mongo-sync-execution')
-      .update(this.props.profile.id, {
-        shellId: editor.shellId,
-        commands: `db.getSiblingDB("${this.getSelectedDatabase().db}").getCollectionNames()`
-      }).then((res) => {
-      console.log('get collection res ', res);
-      this.setState({collections: JSON.parse(res)});
-    });
   }
 
   selectCollection(collection, i) {

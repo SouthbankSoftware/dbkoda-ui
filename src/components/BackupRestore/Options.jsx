@@ -33,7 +33,7 @@ const getOptions = (options) => {
           return (
             <div className="option-item-row" key={o.id}>
               <Tooltip
-                content=""
+                content={o.tooltips}
                 hoverOpenDelay={1000}
                 inline
                 intent={Intent.PRIMARY}
@@ -59,6 +59,7 @@ export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL
       id: 0,
       label: globalString('backup/database/allCollections'),
       onChange: changeAllCollections,
+      tooltips: '',
       checked: allCollections
     },
     {
@@ -66,17 +67,20 @@ export const ExportOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL
       label: globalString('backup/database/ssl'),
       onChange: changeSSL,
       checked: ssl,
+      tooltips: '',
     },
     {
       id: 2,
       label: globalString('backup/database/pretty'),
       onChange: changePretty,
+      tooltips: '',
       checked: pretty
     },
     {
       id: 3,
       label: globalString('backup/database/jsonArray'),
       onChange: changeJsonArray,
+      tooltips: '',
       checked: jsonArray
     }
   ];
@@ -97,31 +101,37 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
       id: 1,
       label: globalString('backup/database/ssl'),
       onChange: changeSSL,
+      tooltips: '',
       checked: ssl,
     }, {
       id: 2,
       label: 'gzip',
       onChange: changeGZip,
+      tooltips: '',
       checked: gzip,
     }, {
       id: 3,
       label: globalString('backup/database/repair'),
       onChange: changeRepair,
+      tooltips: '',
       checked: repair,
     }, {
       id: 4,
       label: 'oplog',
       onChange: changeOplog,
+      tooltips: '',
       checked: oplog,
     }, {
       id: 5,
       label: 'dumpDbUsersAndRoles',
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
+      tooltips: '',
     }, {
       id: 6,
       label: 'viewsAsCollections',
       checked: viewsAsCollections,
+      tooltips: '',
       onChange: changeViewsAsCollections,
     }
   ];
