@@ -138,8 +138,6 @@ export default class DatabaseExport extends React.Component {
         return (<DumpOptions ssl={this.state.ssl}
           allCollections={this.state.allCollections}
           gzip={this.state.gzip}
-          oplog={this.state.oplog}
-          changeOplog={() => this.setState({oplog: !this.state.oplog})}
           changeSSL={() => this.setState({ssl: !this.state.ssl})}
           changeGZip={() => this.setState({gzip: !this.state.gzip})}
           repair={this.state.repair}

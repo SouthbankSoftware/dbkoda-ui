@@ -119,9 +119,10 @@ export const generateCode = ({treeNode, profile, state, action}) => {
       return template(values);
     }
     case BackupRestoreActions.DUMP_COLLECTION:
-    case BackupRestoreActions.DUMP_DATABASE:
+    case BackupRestoreActions.DUMP_DATABASE: {
       const template = require('./Template/DumpDatabsae.hbs');
       return template(values);
+    }
     default:
       return '';
   }

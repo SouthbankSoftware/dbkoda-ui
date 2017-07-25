@@ -115,7 +115,7 @@ export const ExportCollectionOptions = ({ssl, pretty, jsonArray, changeSSL, chan
 };
 
 export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRepair, allCollections, changeAllCollections,
-                              oplog, changeOplog, dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
+                              dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
                               viewsAsCollections, changeViewsAsCollections}) => {
   const options = [
     {
