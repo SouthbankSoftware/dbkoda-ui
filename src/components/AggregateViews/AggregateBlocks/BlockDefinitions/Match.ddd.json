@@ -1,0 +1,13 @@
+{
+  "Title": "Match",
+  "DefaultValues": {},
+  "Fields": [
+    {
+      "name": "field",
+      "label": "Field",
+      "type": "Text",
+      "readOnly": false,
+      "keyValue": true
+    }
+  ]
+}

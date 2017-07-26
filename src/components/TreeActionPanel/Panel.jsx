@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-05T15:56:11+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-09T09:57:43+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-26T12:52:15+10:00
  */
 
 import React from 'react';
@@ -46,11 +46,45 @@ export default class TreeActionPanel extends React.Component {
       const editor = this.props.store.editors.get(
         this.props.store.treeActionPanel.treeActionEditorId
       );
+       /**
+       * Resolve the prefetch arguments and return them as params
+       * @param  {Array}  args     Arguments array as provided from DDD file
+       * @return {Object}          Object containing params for prefetch function
+       */
+      const resolveArguments = (args) => {
+        const params = {};
+        if (args.length > 0 && treeActionPanel.treeNode) {
+          for (let i = 0; i < args.length; i += 1) {
+            const arg = args[i];
+            switch (arg.value) {
+              case 'treeNode.parentDB':
+                if (treeActionPanel.treeNode.type == 'user') {
+                  params[arg.name] = treeActionPanel.treeNode.json.db;
+                } else if (treeActionPanel.treeNode.type == 'collection') {
+                  params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
+                } else if (treeActionPanel.treeNode.type == 'index') {
+                  params[arg.name] = treeActionPanel.treeNode.refParent.refParent.json.text;
+                }
+                break;
+
+              case 'treeNode.parentCOL':
+                if (treeActionPanel.treeNode.type == 'index') {
+                  params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
+                }
+                break;
+              default:
+                params[arg.name] = treeActionPanel.treeNode.json.text;
+            }
+          }
+        }
+        return params;
+      };
       const formBuilder = new FormBuilder();
       this.formPromise = formBuilder.createForm(
-        treeActionPanel,
+        resolveArguments,
         updateDynamicFormCode,
-        editor
+        editor,
+        treeActionPanel.treeAction
       );
       this.formPromise
         .then((res) => {

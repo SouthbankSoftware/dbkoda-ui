@@ -28,6 +28,10 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { action } from 'mobx';
+import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
+import Block from './AggregateBlocks/Block.jsx';
+
 
 @inject(allStores => ({
   store: allStores.store,
@@ -39,10 +43,67 @@ export default class Palette extends React.Component {
     this.state = {};
   }
 
+  @action.bound
+  addBlock(blockType, position) {
+    // Check if empty array
+    const tmpArray = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList.slice();
+    if (tmpArray.length === 0) {
+      tmpArray.push({type: blockType});
+    } else if (position === 'START') {
+      tmpArray.unshift({type: blockType});
+    } else if (position === 'END') {
+      tmpArray.push({type: blockType});
+    } else {
+      tmpArray.push({type: blockType});
+      this.moveBlock(tmpArray, tmpArray.length - 1, position);
+    }
+    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
+  }
+
+  moveBlock(array, oldIndex, newIndex) {
+    // Standard array move:
+    if (newIndex >= array.length) {
+      let tmpArray = newIndex - array.length;
+      while ((tmpArray -= 1) + 1) {
+        array.push(undefined);
+      }
+    }
+    array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
+  }
+
+  getBlocksList() {
+    return (
+      <div className="aggregatePaletteContent">
+        <ul className="aggregateBlockList">
+          {Object.keys(BlockTypes).map((keyName, index) => {
+            return (
+              <li
+                key={'key-' + index} //eslint-disable-line
+                className="aggregateBlockWrapper">
+                <Block
+                  key={'key-' + index} //eslint-disable-line
+                  listPosition={index}
+                  type={BlockTypes[keyName].type}
+                  concrete={false}
+                  addBlock={this.addBlock}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="aggregatePaletteWrapper">
-        <h2> Placeholder for Palette </h2>
+        <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
+          <h2 className="paletteHeader">
+            Pipeline Elements
+          </h2>
+        </nav>
+        {this.getBlocksList()}
       </div>
     );
   }

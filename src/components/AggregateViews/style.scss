@@ -1,12 +1,82 @@
 @import '../../styles/_defaultTheme.scss';
 
 div.aggregateGraphicalBuilderWrapper {
+  display: flex;
+  flex-direction: row;
   order: 1;
   flex-grow: 1;
   background-color: $aggregateViewBackgroundColor;
   text-align: center;
   h2 {
     padding-top: 40%
+  }
+  ul.graphicalBuilderBlockList {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    order: 2;
+    flex-grow: 1;
+    list-style-type: none;
+    height: 100%;
+    padding-left: 0px;
+    li.firstBlockTarget {
+      order: -1;
+      height: 150px;
+    }
+    li.lastBlockTarget {
+      order: 3;
+      height: 100%;
+    }
+    div.aggregateBlock {
+      order: 2;
+      height: 50px;
+      margin-left: 50px;
+      width: 190px;
+      div.blockBuilderWrapper {
+        height: 100%;
+        position: relative;
+        svg.dbKodaSVG {
+          position: absolute;
+          width: 180px;
+          left:0px;
+          z-index: 3;
+        }
+        svg.dbKodaSVG:hover {
+          opacity: 0.75;
+        }
+        svg.START {
+
+        }
+        svg.MIDDLE {
+          path.st0 {
+            fill: none;
+          }
+        }
+        svg.END {
+          path.st0 {
+            fill: none;
+          }
+        }
+        p.aggregateBlockTitle {
+          position: absolute;
+          left: 60px;
+          top: 10px;
+          z-index: 5;
+        }
+      }
+    }
+    div.selected_true {
+      svg.dbKodaSVG {
+        circle {
+          fill: white;
+        }
+      }
+    }
+  }
+  div.divider {
+    order: 2;
+    width:15px;
+    background-color: $tabBackground;
   }
 }
 div.Pane.vertical.Pane1 {
@@ -16,16 +86,199 @@ div.Pane.vertical.Pane1 {
       display: flex;
       flex-direction: column;
       height:100%;
+      font-family: Arial, Helvetica, sans-serif;
       div.aggregatePaletteWrapper {
         order:1;
         flex-grow: 1;
-        
+        color: $navbarLeftHeading;
+        nav.aggregatePaletteToolbar {
+          background-color: $navbarLeftBackground;
+          h2.paletteHeader {
+            color: $navbarLeftHeading;
+            font-size: 20px;
+            padding-top: 10px;
+            text-align: left;
+          }
+        }
+        div.aggregatePaletteContent {
+          p { 
+
+          }
+          ul.aggregateBlockList {
+            list-style-type: none;
+            margin-top: 0px;
+            padding-left: 0px;
+            li.aggregateBlockWrapper {
+              border-bottom: 1px solid $aggregateBlockBorder;
+              width: 100%;
+              height: 50px;
+              font-size: 20px;
+              text-align: left;
+              div.aggregateBlock {
+                display: flex;
+                flex-direction: row;
+                height: 100%;
+                width:100%;
+                cursor: all-scroll;
+                flex-grow: 1;
+                div.blockPalletteWrapper {
+                  display: flex;
+                  flex-direction: row;
+                  height: 100%;
+                  width:100%;
+                  cursor: all-scroll;
+                  flex-grow: 1;
+                  svg.dbKodaSVG {
+                  width: 15px;
+                  fill: $aggregateBlockFontColor;
+                  margin-left: 20px;
+                  padding-bottom: 10px;
+                  cursor: copy;
+                  }
+                  svg.dbKodaSVG:hover {
+                    fill: $aggregateBlockFontColorHover;
+                  }
+                  p.aggregateBlockTitle {
+                    cursor: inherit;
+                    user-select: none;
+                    font-size: smaller;
+                    color: $aggregateBlockFontColor;
+                    padding-top: 10px;
+                    padding-left: 10px;
+                  }
+                }
+              }
+            }
+            li.aggregateBlockWrapper:hover {
+                background-color: $aggregateBlockBackgroundHover;
+                color: $aggregateBlockFontColorHover;
+            } 
+          }
+        }
       }
       div.aggregateDetailsWrapper {
         order: 2;
         flex-grow: 1;
+        color: $navbarLeftHeading;
+        nav.aggregateDetailsToolbar {
+          background-color: $navbarLeftBackground;
+          h2.currentBlockChoice {
+            color: $navbarLeftHeading;
+            font-size: 20px;
+            padding-top: 10px;
+            text-align: left;
+          }
+        }
+        div.aggregateDetailsContent {
+          p {
+            padding-top: 10px;
+            padding-left: 10px;
+          }
+        }
       }
     }
   }
 }
 
+svg.color_0 {
+  fill: $colourOne;
+  circle {
+    fill: $highlightOne;
+  }
+}
+svg.color_1 {
+  fill: $colourTwo;
+  circle {
+    fill: $highlightTwo;
+  }
+}
+svg.color_2 {
+  fill: $colourThree;
+  circle {
+    fill: $highlightThree;
+  }
+}
+svg.color_3 {
+  fill: $colourFour;
+  circle {
+    fill: $highlightFour;
+  }
+}
+svg.color_4 {
+  fill: $colourFive;
+  circle {
+    fill: $highlightOne;
+  }
+}
+svg.color_5 {
+  fill: $colourSix;
+  circle {
+    fill: $highlightSix;
+  }
+}
+svg.color_6 {
+  fill: $colourSeven;
+  circle {
+    fill: $highlightSeven;
+  }
+}
+svg.color_7 {
+  fill: $colourEight;
+  circle {
+    fill: $highlightEight;
+  }
+}
+svg.color_8 {
+  fill: $colourNine;
+  circle {
+    fill: $highlightNine;
+  }
+}
+svg.color_9 {
+  fill: $colourTen;
+  circle {
+    fill: $highlightTen;
+  }
+}
+svg.color_10 {
+  fill: $colourEleven;
+  circle {
+    fill: $highlightEleven;
+  }
+}
+svg.color_11 {
+  fill: $colourTwelve;
+  circle {
+    fill: $highlightTwelve;
+  }
+}
+svg.color_12 {
+  fill: $colourThirteen;
+  circle {
+    fill: $highlightThirteen;
+  }
+}
+svg.color_13 {
+  fill: $colourFourteen;
+  circle {
+    fill: $highlightFourteen;
+  }
+}
+svg.color_14 {
+  fill: $colourFifteen;
+  circle {
+    fill: $highlightFifteen;
+  }
+}
+svg.color_15 {
+  fill: $colourSixteen;
+  circle {
+    fill: $highlightSixteen;
+  }
+}
+svg.color_16 {
+  fill: $colourSeventeen;
+  circle {
+    fill: $highlightSeventeen;
+  }
+}
