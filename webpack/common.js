@@ -80,7 +80,10 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    alias: {
+      'handlebars' : 'handlebars/dist/handlebars.js'
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({ hash: false, template: './index.html' }),

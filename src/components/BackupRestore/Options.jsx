@@ -22,13 +22,14 @@
  */
 
 import React from 'react';
-import {Checkbox, Intent, Position, Tooltip} from '@blueprintjs/core';
+import {Checkbox, Intent, Position, Tooltip, NumericInput} from '@blueprintjs/core';
+
 import {BackupRestoreActions} from '../common/Constants';
 import './Options.scss';
 
 const getOptions = (options) => {
   return (
-    <div className="options-panel">
+    <div className="options-panel pt-dark">
       {
         options.map((o, i) => {
           const key = i;
@@ -58,7 +59,14 @@ const getOptions = (options) => {
             return (<div className="pt-form-group" key={key}>
               <div className="pt-form-content option-form">
                 <div className="field-label">{o.label}</div>
-                <input className="pt-input" type={o.inputType ? o.inputType : 'text'} dir="auto" value={o.value} onChange={e => o.onChange(e.target.value)} />
+                {
+                  (!o.inputType || o.inputType === 'text')
+                    && <input className="pt-input" type={o.inputType ? o.inputType : 'text'} dir="auto" value={o.value} onChange={e => o.onChange(e.target.value)} />
+                }
+                {
+                  o.inputType === 'number'
+                    && <NumericInput className="pt-tooltip-indicator number-input" value={o.value} onValueChange={e => o.onChange(e)} />
+                }
               </div>
             </div>);
           }
