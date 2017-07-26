@@ -120,7 +120,7 @@ export const generateCode = ({treeNode, profile, state, action}) => {
     case BackupRestoreActions.EXPORT_DATABASE:
     case BackupRestoreActions.EXPORT_COLLECTION: {
       // const template = require('./Template/ExportDatabsae.hbs');
-      const exportDB = '{{#each cols}} \
+      const exportDB = '{{#each cols}}\
 mongoexport{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if pretty}} --pretty {{/if}}{{#if jsonArray}} --jsonArray {{/if}}{{#if noHeaderLine}} --noHeaderLine {{/if}}{{#if exportType}} --type {{exportType}} {{/if}}{{#if outputFields}} --fields {{outputFields}} {{/if}}{{#if query}} -q {{query}} {{/if}}{{#if readPreference}} --readPreference {{readPreference}} {{/if}}{{#if forceTableScan}} --forceTableScan {{/if}}{{#if skip}} --skip {{skip}}{{/if}}{{#if limit}} --limit {{limit}}{{/if}}{{#if exportSort}} --sort {{exportSort}}{{/if}}{{#if assertExists}} --assertExists{{/if}}{{#if output}} -o {{output}}{{/if}} \
 {{/each}}';
       const template = Handlebars.compile(exportDB);
@@ -129,7 +129,7 @@ mongoexport{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}
     case BackupRestoreActions.DUMP_COLLECTION:
     case BackupRestoreActions.DUMP_DATABASE: {
       // const template = require('./Template/DumpDatabsae.hbs');
-      const dumpDB = '{{#each cols}} \
+      const dumpDB = '{{#each cols}}\
 mongodump{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if gzip}} --gzip {{/if}}{{#if repair}} --repair {{/if}}{{#if oplog}} --oplog {{/if}}{{#if dumpDbUsersAndRoles}} --dumpDbUsersAndRoles {{/if}}{{#if viewsAsCollections}} --viewsAsCollections {{/if}}{{#if output}} -o {{output}}{{/if}} \
 {{/each}}';
       const template = Handlebars.compile(dumpDB);

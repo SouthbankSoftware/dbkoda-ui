@@ -81,6 +81,14 @@
             "name": "KillOp",
             "text": "Kill An Operation",
             "icon": "pt-icon-thumbs-down"
+        },{
+            "name": "DumpServer",
+            "text": "Dump Databases",
+            "icon": "pt-icon-export"
+        },{
+            "name": "ExportServer",
+            "text": "Export Databases",
+            "icon": "pt-icon-export"
         }
     ],
     "database": [{

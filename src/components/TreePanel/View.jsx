@@ -287,7 +287,8 @@ export default class TreeView extends React.Component {
       ) {
         this.showDetailsView(this.nodeRightClicked, action);
       } else if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION
-                  || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION) {
+                  || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION
+                  || action === BackupRestoreActions.EXPORT_SERVER || action === BackupRestoreActions.DUMP_SERVER) {
         this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
         this.props.store.setTreeAction(this.nodeRightClicked, action);
         if (!this.checkExistingEditor()) {
