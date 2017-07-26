@@ -217,12 +217,18 @@
         "db": "Database",
         "collection": "Collection",
         "selectCollection": "Select a collection",
-        "filePath": "File Path",
+        "filePath": "Save Directory Path",
         "pretty": "Pretty",
         "jsonArray": "Json Array",
         "chooseDirectory": "Choose",
         "repair": "Repair (not supported by all storage engines)",
-        "requiredWarning": "This field is required"
+        "requiredWarning": "This field is required",
+        "outputOptions": "Output Options",
+        "queryOptions": "Querying Options",
+        "limit": "Limit <count> ",
+        "skip": "Skip <count> ",
+        "sort": "Sort <json>",
+        "fields": "Fields <field>[,<field>]*"
       }
     }
   }

@@ -24,14 +24,46 @@
 import React from 'react';
 import {Checkbox, Intent, Position, Tooltip} from '@blueprintjs/core';
 import {BackupRestoreActions} from '../common/Constants';
+import './Options.scss';
 
 const getOptions = (options) => {
   return (
     <div className="options-panel">
       {
-        options.map((o) => {
+        options.map((o, i) => {
+          const key = i;
+          if (o.type === 'selection') {
+            const value = o.value;
+            return (<div className="option-item-row" key={key}>
+              <span className="label">{o.label}</span>
+              <div className="pt-select">
+                <select className="select" defaultValue={value.selected}
+                  onChange={(item) => {
+                        o.onChange(item.target.value);
+                      }}
+                  value={value.selected}
+              >
+                  {
+                  value.options.map((o, i) => {
+                    const id = i;
+                    return (<option key={id}>{o}</option>);
+                  })
+                }
+                </select>
+              </div>
+            </div>);
+          } else if (o.type === 'separator') {
+            return (<div className="separator" key={key}>{o.label}</div>);
+          } else if (o.type === 'input') {
+            return (<div className="pt-form-group">
+              <div className="pt-form-content option-form">
+                <div className="field-label">{o.label}</div>
+                <input className="pt-input" type={o.inputType ? o.inputType : 'text'} dir="auto" value={o.value} onChange={e => o.onChange(e.target.value)} />
+              </div>
+            </div>);
+          }
           return (
-            <div className="option-item-row" key={o.id}>
+            <div className="option-item-row" key={key}>
               <Tooltip
                 content={o.tooltips}
                 hoverOpenDelay={1000}
@@ -53,35 +85,95 @@ const getOptions = (options) => {
   );
 };
 
-export const ExportDBOptions = ({ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
+export const AllCollectionOption = ({allCollections, changeAllCollections}) => {
   const options = [
     {
-      id: 0,
       label: globalString('backup/database/allCollections'),
       onChange: changeAllCollections,
       tooltips: '',
       checked: allCollections
-    },
+    }
+    ];
+  return getOptions(options);
+};
+
+export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
+                                  changePretty, changeJsonArray, changeNoHeaderLine, noHeaderLine,
+                                  query, changeQuery, readPreference, changeReadPreference,
+                                  forceTableScan, changeForceTableScan, exportSort, changeExportSort,
+  limit, changeLimit, skip, changeSkip, assertExists, changeAssertExists,
+                                  changeExportType, exportType, outputFields, changeOutputFields}) => {
+  const options = [
     {
-      id: 1,
       label: globalString('backup/database/ssl'),
       onChange: changeSSL,
       checked: ssl,
       tooltips: '',
-    },
-    {
-      id: 2,
+    }, {
+      label: globalString('backup/database/outputOptions'),
+      type: 'separator'
+    }, {
+      label: 'Type',
+      onChange: changeExportType,
+      type: 'selection',
+      value: exportType,
+    }, {
       label: globalString('backup/database/pretty'),
       onChange: changePretty,
       tooltips: '',
       checked: pretty
-    },
-    {
-      id: 3,
+    }, {
       label: globalString('backup/database/jsonArray'),
       onChange: changeJsonArray,
       tooltips: '',
       checked: jsonArray
+    }, {
+      label: 'noHeaderLine',
+      onChange: changeNoHeaderLine,
+      checked: noHeaderLine,
+    }, {
+      label: globalString('backup/database/fields'),
+      type: 'input',
+      value: outputFields,
+      onChange: changeOutputFields,
+    }, {
+      label: globalString('backup/database/queryOptions'),
+      type: 'separator'
+    }, {
+      label: 'forceTableScan',
+      value: forceTableScan,
+      onChange: changeForceTableScan,
+    }, {
+      label: 'assertExists',
+      value: assertExists,
+      onChange: changeAssertExists,
+    }, {
+      label: 'Query',
+      type: 'input',
+      value: query,
+      onChange: changeQuery,
+    }, {
+      label: 'Read Preference',
+      type: 'input',
+      value: readPreference,
+      onChange: changeReadPreference,
+    }, {
+      label: globalString('backup/database/skip'),
+      type: 'input',
+      inputType: 'number',
+      value: skip,
+      onChange: changeSkip,
+    }, {
+      label: globalString('backup/database/limit'),
+      type: 'input',
+      inputType: 'number',
+      value: limit,
+      onChange: changeLimit,
+    }, {
+      label: globalString('backup/database/sort'),
+      type: 'input',
+      value: exportSort,
+      onChange: changeExportSort,
     }
   ];
   return getOptions(options);
@@ -114,16 +206,10 @@ export const ExportCollectionOptions = ({ssl, pretty, jsonArray, changeSSL, chan
   return getOptions(options);
 };
 
-export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRepair, allCollections, changeAllCollections,
+export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRepair,
                               dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
                               viewsAsCollections, changeViewsAsCollections}) => {
   const options = [
-    {
-      id: 0,
-      label: globalString('backup/database/allCollections'),
-      onChange: changeAllCollections,
-      checked: allCollections
-    },
     {
       id: 1,
       label: globalString('backup/database/ssl'),

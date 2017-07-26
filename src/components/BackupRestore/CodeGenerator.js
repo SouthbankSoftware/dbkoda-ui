@@ -25,7 +25,9 @@ import mongodbUri from 'mongodb-uri';
 import {BackupRestoreActions} from '../common/Constants';
 
 const createTemplateObject = (state) => {
-  const {pretty, jsonArray, ssl, db, gzip, repair, oplog, dumpDbUsersAndRoles, viewsAsCollections, profile} = state;
+  const {pretty, jsonArray, ssl, db, gzip, repair, oplog, dumpDbUsersAndRoles, readPreference,
+    forceTableScan, skip, limit, sort, assertExists,
+    viewsAsCollections, profile, noHeaderLine, exportType, outputFields, query} = state;
   const {host, port, username, sha, hostRadio, url, database} = profile;
   const items = {
     database: db,
@@ -38,7 +40,17 @@ const createTemplateObject = (state) => {
     repair,
     oplog,
     dumpDbUsersAndRoles,
-    viewsAsCollections
+    noHeaderLine,
+    viewsAsCollections,
+    exportType: exportType.selected,
+    outputFields,
+    query,
+    readPreference,
+    forceTableScan,
+    skip,
+    limit,
+    sort,
+    assertExists,
   };
   if (sha) {
     items.authDb = database;
