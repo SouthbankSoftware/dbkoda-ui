@@ -25,7 +25,6 @@ import React from 'react';
 import _ from 'lodash';
 
 import './CollectionList.scss';
-import { BackupRestoreActions } from '../common/Constants';
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
