@@ -28,7 +28,6 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import './style.scss';
 
 @inject(allStores => ({
