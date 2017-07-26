@@ -23,16 +23,14 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T11:58:10+10:00
+ * @Last modified time: 2017-07-26T14:02:40+10:00
 */
 
 import React from 'react';
-import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/theme/material.css';
-import { Broker, EventType } from '../../helpers/broker';
 import OutputTerminal from './Terminal';
 
 require('codemirror/mode/javascript/javascript');
@@ -42,14 +40,13 @@ require('#/common/MongoScript.js');
  * Renders the window through which all output is shown for a specific editor
  * instance. Handles connection setup and view scrolling.
  */
- @inject(allStores => ({
-   store: allStores.store,
-   api: allStores.api
- }))
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+}))
 @observer
 export default class Editor extends React.Component {
   /**
-   * Constructor for the OutputEditor class
    * @param {Object} props - The properties passed to the component.
    * Contains:
    *    @param {number} id - The unique id of the allocated editor
@@ -57,35 +54,13 @@ export default class Editor extends React.Component {
    *    @param {number} shellId - The shellId of the allocated connection
    *    @param {Object} store - The mobx global store object (injected)
    */
-  constructor(props) {
-    super(props);
-
-
-    /** Reaction to editor tab closing
-     *
-     *  @param
-     *  @param
-     */
-    // reaction(                                               // TODO: had to implement removeTab api function and delete this reaction
-    //   () => this.props.store.editorPanel.removingTabId,
-    //   (removingTabId) => {
-    //     if (removingTabId && this.props.id == removingTabId) {
-    //       this.props.store.outputs.delete(this.props.id);
-    //       Broker.removeListener(
-    //         EventType.createShellOutputEvent(props.profileId, props.shellId),
-    //         this.outputAvailable
-    //       );
-    //     }
-    //   },
-    //   { name: 'reactionOutputEditorRemoveTab' }
-    // );
-  }
 
   /**
    * Action for handling a drop event from a drag-and-drop action.
    * @param {Object} item - The item being dropped.
    */
-  @action handleDrop(item) {
+  @action
+  handleDrop(item) {
     //eslint-disable-line
     this.props.store.dragItem.item = item;
     console.log(this.props.store.dragItem.dragDropTerminal);
@@ -115,7 +90,7 @@ export default class Editor extends React.Component {
       styleActiveLine: true,
       scrollbarStyle: null,
       foldOptions: {
-        widget: '...'
+        widget: '...',
       },
       foldGutter: true,
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
@@ -124,17 +99,14 @@ export default class Editor extends React.Component {
         'Ctrl-Space': 'autocomplete',
         'Ctrl-Q': function(cm) {
           cm.foldCode(cm.getCursor());
-        }
+        },
       },
       mode: {
         name: 'javascript',
-        json: 'true'
-      }
+        json: 'true',
+      },
     };
-    if (
-      this.props.store.editorPanel.removingTabId == this.props.id ||
-      !this.props.store.outputs.get(this.props.id)
-    ) {
+    if (!this.props.store.outputs.get(this.props.id)) {
       return <div className="outputEditor" />;
     }
     return (

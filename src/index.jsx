@@ -23,12 +23,12 @@
   * @Date:   2017-07-13T10:36:10+10:00
   * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-25T16:49:18+10:00
+ * @Last modified time: 2017-07-26T13:48:06+10:00
   */
 
 
 import Store from '~/stores/global';
-import DataCenter from '~/api/datacenter';
+import DataCenter from '~/api/DataCenter';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import mobx, { useStrict } from 'mobx';
