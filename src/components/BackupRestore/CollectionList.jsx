@@ -76,7 +76,7 @@ export default ({collections, selectedCollections, selectCollection, unSelectCol
         })
       }
       {
-        options.length > 0 ? <Row options={options} selectCollection={selectCollection} index={-1}
+        options.length > 0 && !readOnly ? <Row options={options} selectCollection={selectCollection} index={-1}
           unSelectCollection={unSelectCollection} /> : null
       }
     </div>

@@ -40,6 +40,8 @@ export class BackupRestore extends React.Component {
       () => this.props.store.treeActionPanel.treeActionEditorId,
       () => {
         const editorId = this.props.store.treeActionPanel.treeActionEditorId;
+        const editor = this.getEditorById(editorId);
+        this.fetchCollectionlist(editor);
         this.setState({editorId});
       });
   }
@@ -79,7 +81,6 @@ export class BackupRestore extends React.Component {
     const {store} = this.props;
     const treeAction = store.treeActionPanel.treeAction;
     const treeNode = store.treeActionPanel.treeNode;
-    console.log('tree:', treeNode, treeAction);
     let db;
     let collection = null;
     if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
@@ -92,24 +93,24 @@ export class BackupRestore extends React.Component {
   }
 
   fetchCollectionlist(editor) {
-    if (editor) {
-      this.setState({editor});
-    }
     if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
       const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.store.treeActionPanel.treeAction});
       editor.doc.cm.setValue(generatedCode);
     }
-    const selectedProfile = this.props.store.profileList.selectedProfile;
-    const db = this.getSelectedDatabase().db;
-    featherClient()
-      .service('/mongo-sync-execution')
-      .update(selectedProfile.id, {
-        shellId: editor.shellId,
-        commands: `db.getSiblingDB("${db}").getCollectionNames()`
-      }).then((res) => {
-      console.log('get collection res ', res);
-      this.setState({collections: JSON.parse(res)});
-    });
+    if (editor && !this.state.collections) {
+      this.setState({editor});
+      const selectedProfile = this.props.store.profileList.selectedProfile;
+      const db = this.getSelectedDatabase().db;
+      featherClient()
+        .service('/mongo-sync-execution')
+        .update(selectedProfile.id, {
+          shellId: editor.shellId,
+          commands: `db.getSiblingDB("${db}").getCollectionNames()`
+        }).then((res) => {
+        console.log('get collection res ', res);
+        this.setState({collections: JSON.parse(res)});
+      });
+    }
   }
 
   getEditorById(editorId) {
@@ -130,7 +131,6 @@ export class BackupRestore extends React.Component {
     const treeNode = store.treeActionPanel.treeNode;
     const selectedProfile = this.props.store.profileList.selectedProfile;
     const treeEditor = this.getEditorById(this.state.editorId);
-    console.log('tree node:', treeNode);
     const {db, collection} = this.getSelectedDatabase();
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.EXPORT_COLLECTION
       || treeAction === BackupRestoreActions.DUMP_DATABASE || treeAction === BackupRestoreActions.DUMP_COLLECTION) {

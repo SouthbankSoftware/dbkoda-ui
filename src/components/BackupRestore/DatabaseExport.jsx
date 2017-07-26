@@ -28,7 +28,7 @@ import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
-import {ExportDBOptions, DumpOptions, ExportCollectionOptions, AllCollectionOption} from './Options';
+import {ExportDBOptions, DumpOptions, AllCollectionOption} from './Options';
 import {getCommandObject, generateCode} from './CodeGenerator';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
@@ -122,6 +122,7 @@ export default class DatabaseExport extends React.Component {
     const {treeAction} = this.props;
     switch (treeAction) {
       case BackupRestoreActions.EXPORT_DATABASE:
+      case BackupRestoreActions.EXPORT_COLLECTION:
         return (<ExportDBOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
           changeSSL={() => this.setState({ssl: !this.state.ssl})}
           changePretty={() => this.setState({pretty: !this.state.pretty})}
@@ -152,12 +153,12 @@ export default class DatabaseExport extends React.Component {
           assertExists={this.state.assertExists}
           changeAssertExists={() => this.setState({assertExists: !this.state.assertExists})}
          />);
-      case BackupRestoreActions.EXPORT_COLLECTION:
-        return (<ExportCollectionOptions ssl={this.state.ssl} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
-          changeSSL={() => this.setState({ssl: !this.state.ssl})}
-          changePretty={() => this.setState({pretty: !this.state.pretty})}
-          changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
-        />);
+      // case BackupRestoreActions.EXPORT_COLLECTION:
+      //   return (<ExportCollectionOptions ssl={this.state.ssl} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
+      //     changeSSL={() => this.setState({ssl: !this.state.ssl})}
+      //     changePretty={() => this.setState({pretty: !this.state.pretty})}
+      //     changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
+      //   />);
       case BackupRestoreActions.DUMP_DATABASE:
       case BackupRestoreActions.DUMP_COLLECTION:
         return (<DumpOptions ssl={this.state.ssl}
@@ -190,12 +191,25 @@ export default class DatabaseExport extends React.Component {
     }
   }
 
+  getComponentTitle() {
+    switch (this.props.treeAction) {
+      case BackupRestoreActions.EXPORT_DATABASE:
+      case BackupRestoreActions.EXPORT_COLLECTION:
+        return globalString('backup/database/mongoExport');
+      case BackupRestoreActions.DUMP_COLLECTION:
+      case BackupRestoreActions.DUMP_DATABASE:
+        return globalString('backup/database/mongoDump');
+      default:
+        return '';
+    }
+  }
+
   render() {
     const {db} = this.state;
     const {treeAction} = this.props;
     this.updateEditorCode();
     return (<div className="database-export-panel">
-      <h3 className="form-title">{globalString('backup/database/title')}</h3>
+      <h3 className="form-title">{this.getComponentTitle()}</h3>
       <div className="pt-form-group">
         <label className="pt-label database" htmlFor="database">
           {globalString('backup/database/db')}
@@ -213,14 +227,15 @@ export default class DatabaseExport extends React.Component {
         <label className={this.state.directoryPath ? 'hide' : 'warning'} htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
       </div>
       <div style={{overflowY: 'auto'}}>
-        <AllCollectionOption allCollections={this.state.allCollections}
+        {treeAction !== BackupRestoreActions.EXPORT_COLLECTION && <AllCollectionOption allCollections={this.state.allCollections}
           changeAllCollections={() => {
-          if (!this.state.allCollections) {
-            // when turn on all collections, unselect viewsAsCollections
-            this.setState({dumpDbUsersAndRoles: false});
-          }
-          this.setState({allCollections: !this.state.allCollections});
-        }} />
+                                if (!this.state.allCollections) {
+                                  // when turn on all collections, unselect viewsAsCollections
+                                  this.setState({dumpDbUsersAndRoles: false});
+                                }
+                                this.setState({allCollections: !this.state.allCollections});
+                              }} />
+        }
         {
           !this.state.allCollections && !this.state.dumpDbUsersAndRoles ? <CollectionList collections={this.state.collections}
             readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION}

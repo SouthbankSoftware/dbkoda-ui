@@ -55,7 +55,7 @@ const getOptions = (options) => {
           } else if (o.type === 'separator') {
             return (<div className="separator" key={key}>{o.label}</div>);
           } else if (o.type === 'input') {
-            return (<div className="pt-form-group">
+            return (<div className="pt-form-group" key={key}>
               <div className="pt-form-content option-form">
                 <div className="field-label">{o.label}</div>
                 <input className="pt-input" type={o.inputType ? o.inputType : 'text'} dir="auto" value={o.value} onChange={e => o.onChange(e.target.value)} />
@@ -182,21 +182,18 @@ export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
 export const ExportCollectionOptions = ({ssl, pretty, jsonArray, changeSSL, changePretty, changeJsonArray}) => {
   const options = [
     {
-      id: 1,
       label: globalString('backup/database/ssl'),
       onChange: changeSSL,
       checked: ssl,
       tooltips: '',
     },
     {
-      id: 2,
       label: globalString('backup/database/pretty'),
       onChange: changePretty,
       tooltips: '',
       checked: pretty
     },
     {
-      id: 3,
       label: globalString('backup/database/jsonArray'),
       onChange: changeJsonArray,
       tooltips: '',

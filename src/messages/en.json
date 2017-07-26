@@ -211,7 +211,10 @@
     },
     "backup": {
       "database": {
-        "title": "Database Export",
+        "mongoExport": "Mongo Export",
+        "mongoDump": "Mongo Dump",
+        "mongoImport": "Mongo Import",
+        "mongoRestore": "Mongo Restore",
         "ssl": "SSL",
         "allCollections": "All Collections",
         "db": "Database",
