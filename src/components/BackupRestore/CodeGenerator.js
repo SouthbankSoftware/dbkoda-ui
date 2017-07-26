@@ -25,12 +25,13 @@ import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
 import {BackupRestoreActions} from '../common/Constants';
 import {exportDB, dumpDB, dumpServer} from './Template';
+import {isDumpAction} from './Utils';
 
 const createTemplateObject = (state) => {
-  const {pretty, jsonArray, ssl, db, gzip, repair, oplog, dumpDbUsersAndRoles, readPreference,
+  const {pretty, jsonArray, db, gzip, repair, oplog, dumpDbUsersAndRoles, readPreference,
     forceTableScan, skip, limit, exportSort, assertExists, numParallelCollections,
     viewsAsCollections, profile, noHeaderLine, exportType, outputFields, query} = state;
-  const {host, port, username, sha, hostRadio, url, database} = profile;
+  const {host, port, username, sha, hostRadio, url, database, ssl} = profile;
   const items = {
     database: db,
     ssl,
@@ -81,8 +82,10 @@ const createTemplateObject = (state) => {
     }
     if (!sha) {
       if (uri.username && uri.password) {
+        // fill in the username and password from uri
         items.username = uri.username;
         items.password = uri.password;
+        items.authDb = database;
       }
     }
   }
@@ -98,20 +101,25 @@ export const getCommandObject = ({profile, state, action}) => {
     targetCols = selectedCollections;
   }
   const cols = [];
-  !dumpDbUsersAndRoles && targetCols.map((col) => {
-    const items = createTemplateObject({...state, profile});
-    items.collection = col;
-    if (directoryPath) {
-      if (action === BackupRestoreActions.EXPORT_COLLECTION || action === BackupRestoreActions.EXPORT_DATABASE) {
-        items.output = directoryPath + '/' + col + '.json';
-      } else {
-        items.output = directoryPath;
+  if (!dumpDbUsersAndRoles && !(isDumpAction(action) && allCollections)) {
+    // for dump, dumpDbUsersAndRoles can't be set with collections
+    // for dump, should not split command for all collections
+    targetCols.map((col) => {
+      const items = createTemplateObject({...state, profile});
+      items.collection = col;
+      if (directoryPath) {
+        if (action === BackupRestoreActions.EXPORT_COLLECTION || action === BackupRestoreActions.EXPORT_DATABASE) {
+          items.output = directoryPath + '/' + col + '.json';
+        } else {
+          items.output = directoryPath;
+        }
       }
-    }
-    cols.push(items);
-  });
-  if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE) {
-    if (dumpDbUsersAndRoles) {
+      cols.push(items);
+    });
+  }
+
+  if (isDumpAction(action)) {
+    if (dumpDbUsersAndRoles || allCollections) {
       const itm = createTemplateObject({...state, profile});
       cols.push({...itm, output: directoryPath});
     }

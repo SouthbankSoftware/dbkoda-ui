@@ -59,8 +59,8 @@ export default class DatabaseExport extends React.Component {
   }
 
   componentDidMount() {
-    const { treeAction, db, collection, treeEditor, treeNode } = this.props;
-    this.setState({ db, collection, treeAction, editor: treeEditor });
+    const { treeAction, db, collection, treeEditor, treeNode, profile } = this.props;
+    this.setState({ db, collection, treeAction, editor: treeEditor, ssl: profile.ssl });
     if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
       const collection = treeNode.text;
       const sc = this.state.selectedCollections;
