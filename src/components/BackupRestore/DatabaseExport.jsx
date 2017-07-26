@@ -51,6 +51,9 @@ export default class DatabaseExport extends React.Component {
       const collections = nextProps.collections ? nextProps.collections : [];
       this.setState({collections, editor: nextProps.treeEditor});
     }
+    if (nextProps.db && !this.state.db) {
+      this.setState({db: nextProps.db});
+    }
   }
 
   componentDidMount() {
@@ -205,7 +208,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   render() {
-    const {db} = this.state;
+    const {db} = this.props;
     const {treeAction} = this.props;
     this.updateEditorCode();
     return (<div className="database-export-panel">

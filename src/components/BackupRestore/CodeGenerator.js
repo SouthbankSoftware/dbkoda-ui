@@ -86,7 +86,7 @@ const createTemplateObject = (state) => {
   return items;
 };
 
-export const getCommandObject = ({treeNode, profile, state, action}) => {
+export const getCommandObject = ({profile, state, action}) => {
   const {directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles} = state;
   let targetCols = [];
   if (allCollections) {
@@ -96,14 +96,14 @@ export const getCommandObject = ({treeNode, profile, state, action}) => {
   }
   const cols = [];
   !dumpDbUsersAndRoles && targetCols.map((col) => {
-    const items = createTemplateObject({...state, profile, db: treeNode.text});
+    const items = createTemplateObject({...state, profile});
     items.collection = col;
     items.output = directoryPath + '/' + col + '.json';
     cols.push(items);
   });
   if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE) {
     if (dumpDbUsersAndRoles) {
-      const itm = createTemplateObject({...state, profile, db: treeNode.text});
+      const itm = createTemplateObject({...state, profile});
       cols.push({...itm, output: directoryPath});
     }
   }
