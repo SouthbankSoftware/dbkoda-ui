@@ -20,8 +20,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-07-10T13:17:40+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-26T11:47:34+10:00
  */
 
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
@@ -55,7 +55,10 @@ import { featherClient } from '../../helpers/feathers';
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
  */
-@inject('store')
+ @inject(allStores => ({
+   store: allStores.store,
+   api: allStores.api
+ }))
 @observer
 export default class Panel extends React.Component {
   static propTypes = {

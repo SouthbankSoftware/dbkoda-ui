@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-24T16:42:58+10:00
+ * @Last modified time: 2017-07-26T11:50:12+10:00
  */
 
 
@@ -72,6 +72,7 @@ global.EOL = global.IS_ELECTRON
   : process.platform === 'win32' ? '\r\n' : '\n';
 
 export default class Store {
+  api;
   @observable locale = 'en';
   @observable updateAvailable = false;
   @observable profiles = observable.map();
@@ -295,6 +296,9 @@ export default class Store {
         ),
       ),
     );
+    if (this.api) {
+      this.api.addOutput(this.editors.get(editorId));
+    }
     this.editorPanel.creatingNewEditor = false;
     this.editorToolbar.noActiveProfile = false;
     this.editorToolbar.id = res.id;
@@ -399,7 +403,15 @@ export default class Store {
 
   @action
   dump() {
-    return dump(this, { serializer });
+    // TODO: Remove this after the api has been implemented completely from here
+    const dumpStore = {};
+    _.assign(dumpStore, this);
+    if (dumpStore.api) {
+      delete dumpStore.api;
+    }
+    // Remove till here
+    // return dump(this, { serializer });
+    return dump(dumpStore, { serializer });
   }
 
   openFile = (path, cb) => {
@@ -574,6 +586,10 @@ export default class Store {
           require('cldr-data/supplemental/likelySubtags.json'),
         );
         this.saveUponProfileChange();
+
+        if (this.api) {
+          this.api.init();
+        }
       })
       .catch((err) => {
         if (err.code === 404) {
@@ -648,5 +664,10 @@ export default class Store {
   @action.bound
   runEditorScript() {
     this.editorPanel.executingEditorAll = true;
+  }
+
+  // Temporary setting reference to API in store because most of the action are still here in store.
+  setAPI(apiRef) {
+    this.api = apiRef;
   }
 }
