@@ -23,14 +23,14 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-10T14:47:55+10:00
+ * @Last modified time: 2017-07-26T13:27:40+10:00
  */
 
 import { SyncService } from '#/common/SyncService';
 import { DynamicForm } from './Components/DynamicForm';
 
 export default class FormBuilder {
-  treeNode: null;
+  resolveArguments;
   editor: null;
   /**
    * Resolves the definition field into Mobx React Form field
@@ -260,50 +260,20 @@ export default class FormBuilder {
       }
     });
   };
-  /**
-   * Resolve the prefetch arguments and return them as params
-   * @param  {Array}  args     Arguments array as provided from DDD file
-   * @return {Object}          Object containing params for prefetch function
-   */
-  resolveArguments = (args) => {
-    const params = {};
-    if (args.length > 0 && this.treeNode) {
-      for (let i = 0; i < args.length; i += 1) {
-        const arg = args[i];
-        switch (arg.value) {
-          case 'treeNode.parentDB':
-            if (this.treeNode.type == 'user') {
-              params[arg.name] = this.treeNode.json.db;
-            } else if (this.treeNode.type == 'collection') {
-              params[arg.name] = this.treeNode.refParent.json.text;
-            } else if (this.treeNode.type == 'index') {
-              params[arg.name] = this.treeNode.refParent.refParent.json.text;
-            }
-            break;
 
-          case 'treeNode.parentCOL':
-            if (this.treeNode.type == 'index') {
-              params[arg.name] = this.treeNode.refParent.json.text;
-            }
-            break;
-          default:
-            params[arg.name] = this.treeNode.json.text;
-        }
-      }
-    }
-    return params;
-  };
   /**
    * Function to create a dynamic form based on the tree action.
-   * @param  {Object}   treeActionStore       Store which contains all the information about selected tree action
+   * @param  {Function} resolveArguments      Callback function to get the params for field queried based on the DDD
    * @param  {Function} updateDynamicFormCode Callback function to send the generated code back to editor
+   * @param  {Object}   editorObject          Instance of the editor on which to execute queries
+   * @param  {String}   formAction            Action to load by Form Builder
    * @return {Promise}                        Promise which will be resolved once all the queries for prefetching are resolved.
    */
-  createForm = (treeActionStore, updateDynamicFormCode, editorForTreeAction) => {
+  createForm = (resolveArguments, updateDynamicFormCode, editorObject, formAction) => {
     try {
-      const treeAction = treeActionStore.treeAction;
-      this.treeNode = treeActionStore.treeNode;
-      this.editor = editorForTreeAction;
+      const treeAction = formAction;
+      this.resolveArguments = resolveArguments;
+      this.editor = editorObject;
       // Load the form definitions dynamically
       const ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
 
@@ -332,7 +302,7 @@ export default class FormBuilder {
                   }
                 }
               }
-              if (treeActionStore) {
+              if (updateDynamicFormCode) {
                 const generatedCode = formTemplate(values);
                 updateDynamicFormCode(generatedCode);
               }
