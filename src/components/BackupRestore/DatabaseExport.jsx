@@ -230,7 +230,9 @@ export default class DatabaseExport extends React.Component {
         <label className={this.state.directoryPath ? 'hide' : 'warning'} htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
       </div>
       <div style={{overflowY: 'auto'}}>
-        {treeAction !== BackupRestoreActions.EXPORT_COLLECTION && <AllCollectionOption allCollections={this.state.allCollections}
+        {treeAction !== BackupRestoreActions.EXPORT_COLLECTION
+        && treeAction !== BackupRestoreActions.DUMP_COLLECTION
+        && <AllCollectionOption allCollections={this.state.allCollections}
           changeAllCollections={() => {
                                 if (!this.state.allCollections) {
                                   // when turn on all collections, unselect viewsAsCollections
@@ -241,7 +243,7 @@ export default class DatabaseExport extends React.Component {
         }
         {
           !this.state.allCollections && !this.state.dumpDbUsersAndRoles ? <CollectionList collections={this.state.collections}
-            readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION}
+            readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION}
             selectCollection={this.selectCollection}
             unSelectCollection={this.unSelectCollection}
             selectedCollections={this.state.selectedCollections} /> : null

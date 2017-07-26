@@ -184,6 +184,11 @@
             "name": "ExportCollection",
             "text": "Export Collection",
             "icon": "pt-icon-export"
+        },
+        {
+            "name": "DumpCollection",
+            "text": "Dump Collection",
+            "icon": "pt-icon-export"
         }
     ],
     "index": [{
