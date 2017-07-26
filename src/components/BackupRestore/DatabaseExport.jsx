@@ -185,7 +185,7 @@ export default class DatabaseExport extends React.Component {
           <input className="pt-input path-input" type="text" readOnly onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
           <Button className="browse-directory" onClick={() => this.openFile()}>{globalString('backup/database/chooseDirectory')}</Button>
         </div>
-        <label className={this.state.directoryPath ? '.hide' : 'warning'} htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
+        <label className={this.state.directoryPath ? 'hide' : 'warning'} htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
       </div>
       {
         this.getOptions()
