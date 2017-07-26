@@ -213,38 +213,63 @@ export const ExportCollectionOptions = ({ssl, pretty, jsonArray, changeSSL, chan
 
 export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRepair,
                               dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
+                              numParallelCollections, changeNumParallelCollections,
+                              forceTableScan, changeForceTableScan,
+                              readPreference, changeReadPreference,
+                              query, changeQuery,
                               viewsAsCollections, changeViewsAsCollections}) => {
   const options = [
     {
-      id: 1,
       label: globalString('backup/database/ssl'),
       onChange: changeSSL,
       tooltips: '',
       checked: ssl,
     }, {
-      id: 2,
+      label: globalString('backup/database/outputOptions'),
+      type: 'separator',
+    }, {
       label: 'gzip',
       onChange: changeGZip,
       tooltips: '',
       checked: gzip,
     }, {
-      id: 3,
       label: globalString('backup/database/repair'),
       onChange: changeRepair,
       tooltips: '',
       checked: repair,
     }, {
-      id: 4,
       label: 'dumpDbUsersAndRoles',
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
       tooltips: '',
     }, {
-      id: 5,
       label: 'viewsAsCollections',
       checked: viewsAsCollections,
       tooltips: '',
       onChange: changeViewsAsCollections,
+    }, {
+      label: 'numParallelCollections',
+      onChange: changeNumParallelCollections,
+      type: 'input',
+      inputType: 'number',
+      value: numParallelCollections
+    }, {
+      label: globalString('backup/database/queryOptions'),
+      type: 'separator'
+    }, {
+      label: 'forceTableScan',
+      value: forceTableScan,
+      onChange: changeForceTableScan,
+    }, {
+      label: 'Read Preference',
+      type: 'input',
+      value: readPreference,
+      onChange: changeReadPreference,
+    }, {
+      label: 'Query',
+      type: 'input',
+      value: query,
+      onChange: changeQuery,
     }
   ];
   return getOptions(options);

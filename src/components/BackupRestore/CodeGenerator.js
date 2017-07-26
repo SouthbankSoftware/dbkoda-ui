@@ -24,10 +24,11 @@
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
 import {BackupRestoreActions} from '../common/Constants';
+import {exportDB, dumpDB} from './Template';
 
 const createTemplateObject = (state) => {
   const {pretty, jsonArray, ssl, db, gzip, repair, oplog, dumpDbUsersAndRoles, readPreference,
-    forceTableScan, skip, limit, exportSort, assertExists,
+    forceTableScan, skip, limit, exportSort, assertExists, numParallelCollections,
     viewsAsCollections, profile, noHeaderLine, exportType, outputFields, query} = state;
   const {host, port, username, sha, hostRadio, url, database} = profile;
   const items = {
@@ -52,6 +53,7 @@ const createTemplateObject = (state) => {
     limit,
     exportSort,
     assertExists,
+    numParallelCollections,
   };
   if (sha) {
     items.authDb = database;
@@ -100,7 +102,11 @@ export const getCommandObject = ({profile, state, action}) => {
     const items = createTemplateObject({...state, profile});
     items.collection = col;
     if (directoryPath) {
-      items.output = directoryPath + '/' + col + '.json';
+      if (action === BackupRestoreActions.EXPORT_COLLECTION || action === BackupRestoreActions.EXPORT_DATABASE) {
+        items.output = directoryPath + '/' + col + '.json';
+      } else {
+        items.output = directoryPath;
+      }
     }
     cols.push(items);
   });
@@ -120,18 +126,18 @@ export const generateCode = ({treeNode, profile, state, action}) => {
     case BackupRestoreActions.EXPORT_DATABASE:
     case BackupRestoreActions.EXPORT_COLLECTION: {
       // const template = require('./Template/ExportDatabsae.hbs');
-      const exportDB = '{{#each cols}}\
-mongoexport{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if pretty}} --pretty {{/if}}{{#if jsonArray}} --jsonArray {{/if}}{{#if noHeaderLine}} --noHeaderLine {{/if}}{{#if exportType}} --type {{exportType}} {{/if}}{{#if outputFields}} --fields {{outputFields}} {{/if}}{{#if query}} -q {{query}} {{/if}}{{#if readPreference}} --readPreference {{readPreference}} {{/if}}{{#if forceTableScan}} --forceTableScan {{/if}}{{#if skip}} --skip {{skip}}{{/if}}{{#if limit}} --limit {{limit}}{{/if}}{{#if exportSort}} --sort {{exportSort}}{{/if}}{{#if assertExists}} --assertExists{{/if}}{{#if output}} -o {{output}}{{/if}} \
-{{/each}}';
+//       const exportDB = '{{#each cols}}\
+// mongoexport{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if pretty}} --pretty {{/if}}{{#if jsonArray}} --jsonArray {{/if}}{{#if noHeaderLine}} --noHeaderLine {{/if}}{{#if exportType}} --type {{exportType}} {{/if}}{{#if outputFields}} --fields {{outputFields}} {{/if}}{{#if query}} -q {{query}} {{/if}}{{#if readPreference}} --readPreference {{readPreference}} {{/if}}{{#if forceTableScan}} --forceTableScan {{/if}}{{#if skip}} --skip {{skip}}{{/if}}{{#if limit}} --limit {{limit}}{{/if}}{{#if exportSort}} --sort {{exportSort}}{{/if}}{{#if assertExists}} --assertExists{{/if}}{{#if output}} -o {{output}}{{/if}} \
+// {{/each}}';
       const template = Handlebars.compile(exportDB);
       return template(values);
     }
     case BackupRestoreActions.DUMP_COLLECTION:
     case BackupRestoreActions.DUMP_DATABASE: {
       // const template = require('./Template/DumpDatabsae.hbs');
-      const dumpDB = '{{#each cols}}\
-mongodump{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if gzip}} --gzip {{/if}}{{#if repair}} --repair {{/if}}{{#if oplog}} --oplog {{/if}}{{#if dumpDbUsersAndRoles}} --dumpDbUsersAndRoles {{/if}}{{#if viewsAsCollections}} --viewsAsCollections {{/if}}{{#if output}} -o {{output}}{{/if}} \
-{{/each}}';
+//       const dumpDB = '{{#each cols}}\
+// mongodump{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if gzip}} --gzip {{/if}}{{#if repair}} --repair {{/if}}{{#if oplog}} --oplog {{/if}}{{#if dumpDbUsersAndRoles}} --dumpDbUsersAndRoles {{/if}}{{#if viewsAsCollections}} --viewsAsCollections {{/if}}{{#if output}} -o {{output}}{{/if}} \
+// {{/each}}';
       const template = Handlebars.compile(dumpDB);
       return template(values);
     }

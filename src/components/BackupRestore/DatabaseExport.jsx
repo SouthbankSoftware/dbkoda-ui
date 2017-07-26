@@ -43,7 +43,7 @@ export default class DatabaseExport extends React.Component {
     this.unSelectCollection = this.unSelectCollection.bind(this);
     this.executing = this.executing.bind(this);
     this.state = {collections: [], ssl: false, allCollections: true, selectedCollections: [], exportType:{selected:'json', options:['json', 'csv']},
-      directoryPath: '', jsonArray: false, pretty: false, db:'', collection: ''};
+      directoryPath: '', jsonArray: false, pretty: false, db:'', collection: '', numParallelCollections: 4};
   }
 
   componentWillReceiveProps(nextProps) {
@@ -188,6 +188,14 @@ export default class DatabaseExport extends React.Component {
             }
             this.setState({allCollections: !this.state.allCollections});
           }}
+          numParallelCollections={this.state.numParallelCollections}
+          changeNumParallelCollections={e => this.setState({numParallelCollections: e})}
+          readPreference={this.state.readPreference}
+          changeReadPreference={e => this.setState({readPreference: e})}
+          forceTableScan={this.state.forceTableScan}
+          changeForceTableScan={() => this.setState({forceTableScan: !this.state.forceTableScan})}
+          query={this.state.query}
+          changeQuery={e => this.setState({query: e})}
         />);
       default:
         return null;
