@@ -28,9 +28,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { inject, observer } from 'mobx-react';
+import { inject } from 'mobx-react';
+import { action } from 'mobx';
 import { DragSource, DropTarget } from 'react-dnd';
 import { DragItemTypes } from '#/common/Constants.js';
+import DragIcon from '../../../styles/icons/drag-icon.svg';
+import BlockIcon from '../../../styles/icons/center-block.svg';
+import BlockTopIcon from '../../../styles/icons/round-top-block.svg';
+import BlockBottomIcon from '../../../styles/icons/round-bottom-block.svg';
 import '../style.scss';
 
 /** ===| Drag Drop Functions |=== **/
@@ -43,18 +48,21 @@ const blockSource = {
       position: props.listPosition
     };
   },
+  @action
   endDrag(props, monitor) {
     const item = monitor.getItem();
     const dropResult = monitor.getDropResult();
-    if (dropResult) {
+    if (item.concrete) {
+      // Re-order
+      props.moveBlock(item.position, dropResult.listPosition);
+    } else if (dropResult) {
+      // New Block
       if (dropResult.type === 'firstBlock') {
-        console.log(`Add ${item.type} to start of pipeline.`);
+        props.addBlock(item.type, 'START');
       } else if (dropResult.type === 'lastBlock') {
-        console.log(`Add ${item.type} to end of pipeline.`);
-      } else if (!dropResult.concrete) {
-        console.log(`Can't drop ${item.type} because it is concrete.`);
+        props.addBlock(item.type, 'END');
       } else {
-        console.log(`Dropped ${item.type} into ${dropResult.listPosition}`);
+        props.addBlock(item.type, dropResult.listPosition);
       }
     }
   }
@@ -85,7 +93,6 @@ const collectTarget = (connect, monitor) => {
 @inject(allStores => ({
   store: allStores.store,
 }))
-@observer
 @DragSource(DragItemTypes.VISUAL_BLOCK, blockSource, collectSource)
 @DropTarget(DragItemTypes.VISUAL_BLOCK, blockTarget, collectTarget)
 export default class Block extends React.Component {
@@ -99,8 +106,10 @@ export default class Block extends React.Component {
     super(props);
     this.state = {
       listPosition: props.listPosition,
+      posType: props.positionType,
       type: props.type,
       concrete: props.concrete,
+      color: this.props.color
     };
   }
 
@@ -110,15 +119,49 @@ export default class Block extends React.Component {
     const connectDropTarget = this.props.connectDropTarget;
     const isDragging = this.props.isDragging; // eslint-disable-line
     const isOver = this.props.isOver; // eslint-disable-line
-
-    const classes = 'aggregateBlock ' + this.state.type;
+    this.state.color = 'color_' + this.props.color;
+    const classes = 'aggregateBlock ' + this.state.type + ' ' + this.state.listPosition + ' selected_' + this.props.selected;
+    const blockColorClasses = 'dbKodaSVG ' + this.state.posType + ' ' + this.state.color;
     return connectDragSource(
       connectDropTarget(
-        <li className={classes}>
-          <p className="aggregateBlockTitle">
-            {this.state.type}
-          </p>
-        </li>
+        <div className={classes}>
+          {!this.state.concrete &&
+            <div className="blockPalletteWrapper">
+              <DragIcon width={50} height={50} className="dbKodaSVG" onClick={() => this.props.addBlock(this.state.type, 'END')} />
+              <p className="aggregateBlockTitle">
+                {this.props.type}
+              </p>
+            </div>
+          }
+          {this.state.concrete && this.state.posType === 'MIDDLE' &&
+            <div className="blockBuilderWrapper">
+              <BlockIcon className={blockColorClasses}
+                onClick={() => this.props.onClickCallback(this.state.listPosition)} />
+              <p className="aggregateBlockTitle">
+                {this.props.type}
+              </p>
+            </div>
+          }
+          {this.state.concrete && this.state.posType === 'END' &&
+            <div className="blockBuilderWrapper">
+              <BlockBottomIcon className={blockColorClasses}
+                onClick={() => this.props.onClickCallback(this.state.listPosition)} />
+              <p className="aggregateBlockTitle">
+                {this.props.type}
+              </p>
+            </div>
+          }
+          {this.state.concrete && this.state.posType === 'START' &&
+            <div className="blockBuilderWrapper">
+              <BlockTopIcon className={blockColorClasses}
+                onClick={() => this.props.onClickCallback(this.state.listPosition)} />
+              <p className="aggregateBlockTitle">
+                {this.props.type}
+              </p>
+            </div>
+          }
+
+        </div>
     ));
   }
 }

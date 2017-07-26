@@ -27,8 +27,9 @@
  */
 
 import React from 'react';
+import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
+import { action } from 'mobx';
 import Block from './AggregateBlocks/Block.jsx';
 import FirstBlockTarget from './AggregateBlocks/FirstBlockTaget.jsx';
 import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
@@ -42,34 +43,49 @@ export default class GraphicalBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentBlocks:[
-        {
-          type: BlockTypes.AGGREGATE.type
-        },
-        {
-          type: BlockTypes.GROUP_BY.type
-        },
-        {
-          type: BlockTypes.MATCH.type
-        }
-      ]
+      id: props.id,
+      activeBlockIndex: null,
+      colorMatching: []
     };
   }
 
-  /**
-   * Moves two blocks by swapping the indicies of the blocks.
-   * @param {Integer} oldIndex - The index of the block to be moved.
-   * @param {Integer} newIndex - The index where the block is to be moved to.
-   */
-  moveBlock(oldIndex, newIndex) {
-    // Standard array move:
-    if (newIndex >= this.state.currentBlocks.length) {
-      let tmpArray = newIndex - this.state.currentBlocks.length;
-      while ((tmpArray -= 1) + 1) {
-        this.state.currentBlocks.push(undefined);
+  @action.bound
+  selectBlock(index) {
+    this.setState({activeBlockIndex: index});
+    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList[index];
+    console.log('set block to ', this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock);
+  }
+
+  @action.bound
+  moveBlock(blockFrom, blockTo) {
+    const tmpArray = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList;
+    this.moveBlockHelper(tmpArray, blockFrom, blockTo);
+    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
+    if (this.state.activeBlockIndex === blockFrom) {
+      this.setState({activeBlockIndex: blockTo});
+    } else if (this.state.activeBlockIndex === blockTo && blockTo === 0) {
+      this.setState({activeBlockIndex: blockTo + 1});
+    } else if (this.state.activeBlockIndex === blockTo && blockTo === tmpArray.length - 1) {
+      this.setState({activeBlockIndex: blockTo - 1});
+    } else if (this.state.activeBlockIndex === blockTo) {
+      if (blockFrom > blockTo) {
+        this.setState({activeBlockIndex: blockTo + 1});
+      } else {
+        this.setState({activeBlockIndex: blockTo - 1});
       }
     }
-    this.state.currentBlocks.splice(newIndex, 0, this.state.currentBlocks.splice(oldIndex, 1)[0]);
+    this.forceUpdate();
+  }
+
+  moveBlockHelper(array, oldIndex, newIndex) {
+    // Standard array move:
+    if (newIndex >= array.length) {
+      let tmpArray = newIndex - array.length;
+      while ((tmpArray -= 1) + 1) {
+        array.push(undefined);
+      }
+    }
+    array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
   }
 
   render() {
@@ -77,17 +93,62 @@ export default class GraphicalBuilder extends React.Component {
       <div className="aggregateGraphicalBuilderWrapper">
         <ul className="graphicalBuilderBlockList">
           <FirstBlockTarget />
-          {this.state.currentBlocks.map((indexValue, index) => {
+          {this.props.store.editors.get(this.state.id).blockList.map((indexValue, index) => {
+            // Get Block Type for SVG Render.
+            let posType = 'MIDDLE';
+            if (index >= this.props.store.editors.get(this.state.id).blockList.length - 1) {
+              posType = 'END';
+            } else if (index === 0) {
+              posType = 'START';
+            }
+
+            let blockColor = 0;
+            const blockColorLocation = _.findIndex(this.state.colorMatching, {'type': indexValue.type});
+            // Check if function type already exists
+            if (this.state.colorMatching.length === 0) {
+              this.state.colorMatching.push({'type': indexValue.type, 'color': 0});
+              blockColor = 0;
+            } else if (blockColorLocation !== -1) {
+              // Send through that color for styling.
+              blockColor = this.state.colorMatching[blockColorLocation].color;
+            } else if (
+              (blockColorLocation === -1) &&
+              (this.state.colorMatching.length > 16) &&
+              (this.state.colorMatching.length % 16) === 0) {
+                // Start the color loop again.
+                this.state.colorMatching.push({'type': indexValue.type, 'color': 0});
+                blockColor = 0;
+            } else if (this.state.colorMatching.length > 16 && blockColorLocation === -1) {
+              // Increment on previous value.
+              this.state.colorMatching.push({'type': indexValue.type, 'color': this.state.colorMaching[this.state.colorMatching.length].color + 1});
+              blockColor = this.state.colorMatching.length - 1;
+            } else if (this.state.colorMatching.length < 16 && blockColorLocation === -1) {
+              // Increment on previous value.
+              blockColor = this.state.colorMatching.length;
+              this.state.colorMatching.push({'type': indexValue.type, 'color': blockColor});
+            }
+
+            let isSelected = false;
+            if (this.state.activeBlockIndex === index) {
+              isSelected = true;
+            }
             return (
               <Block
+                key={'key-' + index} //eslint-disable-line
                 listPosition={index}
+                selected={isSelected}
+                positionType={posType}
+                color={blockColor}
                 type={indexValue.type}
+                moveBlock={this.moveBlock}
+                onClickCallback={this.selectBlock}
                 concrete
               />
             );
           })}
           <LastBlockTarget />
         </ul>
+        <div className="divider" />
       </div>
     );
   }

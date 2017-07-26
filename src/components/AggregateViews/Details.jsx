@@ -28,7 +28,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { BlockTypes } from './AggregateBlocks/BlockTypes';
+import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import './style.scss';
 
 @inject(allStores => ({
@@ -38,24 +38,11 @@ import './style.scss';
 export default class Details extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      currentBlockChoice: {
-        blockType: BlockTypes.AGGREGATE.type
-      }
-    };
-  }
-
-  getBlockDetails(block) {
-    return (
-      <div className="aggregateDetailsContent">
-        <p>
-          Some fields will go here based on type {block.blockType}
-        </p>
-      </div>
-    );
+    this.state = {};
   }
 
   render() {
+    console.log(this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock);
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
@@ -63,7 +50,18 @@ export default class Details extends React.Component {
             Block Details
           </h2>
         </nav>
-        {this.getBlockDetails(this.state.currentBlockChoice)}
+        { this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock &&
+          <div className="aggregateDetailsContent">
+            <p>
+              Some fields will go here based on type {this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock.type}
+            </p>
+          </div>}
+        {!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock &&
+          <div className="aggregateDetailsContent">
+            <p>
+              No block selected.
+            </p>
+          </div>}
       </div>
     );
   }

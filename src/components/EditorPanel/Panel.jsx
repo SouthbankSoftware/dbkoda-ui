@@ -845,7 +845,10 @@ export default class Panel extends React.Component {
         title={editorTitle}
         panel={
           <div className="aggregateTabInnerWrapper">
-            <AggregateGraphicalBuilder className="aggregatePanel" />
+            <AggregateGraphicalBuilder
+              className="aggregatePanel"
+              id={tab[0]}
+              editor={tab[1]} />
             <View
               id={tab[0]}
               className="aggregateEditorPanel"

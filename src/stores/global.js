@@ -320,6 +320,7 @@ export default class Store {
     // Set left Panel State.
     if (options.type === 'aggregate') {
       this.drawer.drawerChild = DrawerPanes.AGGREGATE;
+      console.log('Created new aggregation panel');
     } else {
       this.drawer.drawerChild = DrawerPanes.DEFAULT;
     }
@@ -352,7 +353,7 @@ export default class Store {
       .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
       .then((res) => {
         // Create new editor as normal, but with "aggregate" type.
-        return this.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked});
+        return this.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked, blockList: []});
       })
       .catch((err) => {
         this.createNewEditorFailed();

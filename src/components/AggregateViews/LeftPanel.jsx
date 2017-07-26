@@ -28,9 +28,15 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import SplitPane from 'react-split-pane';
 import Palette from './Palette';
 import Details from './Details';
 import './style.scss';
+
+const splitPane2Style = {
+  display: 'flex',
+  flexDirection: 'column'
+};
 
 @inject(allStores => ({
   store: allStores.store,
@@ -45,8 +51,17 @@ export default class LeftPanel extends React.Component {
   render() {
     return (
       <div className="aggregateLeftPanel">
-        <Palette />
-        <Details />
+        <SplitPane
+          className="LeftSplitPane"
+          split="horizontal"
+          defaultSize={500}
+          minSize={250}
+          maxSize={1000}
+          pane2Style={splitPane2Style}
+          >
+          <Palette />
+          <Details />
+        </SplitPane>
       </div>
     );
   }
