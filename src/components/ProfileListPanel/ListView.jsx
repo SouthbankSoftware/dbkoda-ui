@@ -148,7 +148,7 @@ export default class ListView extends React.Component {
     return service.create({}, {query}).then((res) => {
       this.onSuccess(res, selectedProfile);
     }).catch((err) => {
-      console.log(err.stack);
+      console.error(err.stack);
       this.props.store.profileList.creatingNewProfile = false;
       this.closeOpenConnectionAlert();
       DBKodaToaster(Position.LEFT_BOTTOM).show({
