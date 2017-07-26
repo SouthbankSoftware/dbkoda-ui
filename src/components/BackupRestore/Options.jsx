@@ -93,10 +93,10 @@ const getOptions = (options) => {
   );
 };
 
-export const AllCollectionOption = ({allCollections, changeAllCollections}) => {
+export const AllCollectionOption = ({allCollections, changeAllCollections, action}) => {
   const options = [
     {
-      label: globalString('backup/database/allCollections'),
+      label: action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_SERVER ? globalString('backup/database/allDatabases') : globalString('backup/database/allCollections'),
       onChange: changeAllCollections,
       tooltips: '',
       checked: allCollections
@@ -182,30 +182,6 @@ export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
       type: 'input',
       value: exportSort,
       onChange: changeExportSort,
-    }
-  ];
-  return getOptions(options);
-};
-
-export const ExportCollectionOptions = ({ssl, pretty, jsonArray, changeSSL, changePretty, changeJsonArray}) => {
-  const options = [
-    {
-      label: globalString('backup/database/ssl'),
-      onChange: changeSSL,
-      checked: ssl,
-      tooltips: '',
-    },
-    {
-      label: globalString('backup/database/pretty'),
-      onChange: changePretty,
-      tooltips: '',
-      checked: pretty
-    },
-    {
-      label: globalString('backup/database/jsonArray'),
-      onChange: changeJsonArray,
-      tooltips: '',
-      checked: jsonArray
     }
   ];
   return getOptions(options);

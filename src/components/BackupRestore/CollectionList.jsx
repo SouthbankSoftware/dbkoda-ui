@@ -25,26 +25,27 @@ import React from 'react';
 import _ from 'lodash';
 
 import './CollectionList.scss';
+import { BackupRestoreActions } from '../common/Constants';
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-const Header = () => (
+const Header = ({target}) => (
   <div className="header">
-    <span className="key">{globalString('backup/database/collection')}</span>
+    <span className="key">{target === 'server' ? globalString('backup/database/database') : globalString('backup/database/collection')}</span>
   </div>
 );
 
-const Row = ({options, selectCollection, unSelectCollection, index, colName, readOnly}) => (
+const Row = ({options, selectCollection, unSelectCollection, index, colName, readOnly, target}) => (
   <div className="row">
     <div className="pt-select">
-      <select className="select" defaultValue={globalString('backup/database/selectCollection')}
+      <select className="select" defaultValue={target === 'server' ? globalString('backup/database/selectDatabase') : globalString('backup/database/selectCollection')}
         onChange={(item) => {
                 selectCollection(item.target.value, index);
               }}
         disabled={readOnly}
         value={index >= 0 ? colName : ''}
       >
-        <option>{globalString('backup/database/selectCollection')}</option>
+        <option>{globalString(target === 'server' ? globalString('backup/database/selectDatabase') : 'backup/database/selectCollection')}</option>
         {
           options.map((o, i) => {
             const id = i;
@@ -60,12 +61,11 @@ const Row = ({options, selectCollection, unSelectCollection, index, colName, rea
   </div>
 );
 
-
-export default ({collections, selectedCollections, selectCollection, unSelectCollection, readOnly}) => {
+export default ({collections, selectedCollections, selectCollection, unSelectCollection, readOnly, target}) => {
   const options = _.filter(collections, a => selectedCollections.indexOf(a) < 0);
   return (
     <div className="collection-list">
-      <Header />
+      <Header target={target} />
       {
         selectedCollections.map((col, i) => {
           const id = i;

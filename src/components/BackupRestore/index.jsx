@@ -22,11 +22,11 @@
  */
 
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {action, computed, reaction} from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { action, computed, reaction } from 'mobx';
 import DatabaseExport from './DatabaseExport';
-import {BackupRestoreActions, DrawerPanes} from '../common/Constants';
-import {featherClient} from '../../helpers/feathers';
+import { BackupRestoreActions, DrawerPanes } from '../common/Constants';
+import { featherClient } from '../../helpers/feathers';
 
 @observer
 @inject('store')
@@ -35,14 +35,14 @@ export class BackupRestore extends React.Component {
   constructor(props) {
     super(props);
     this.close = this.close.bind(this);
-    this.state = {editorId: undefined, commandExecuting: false};
+    this.state = { editorId: undefined, commandExecuting: false };
     reaction(
       () => this.props.store.treeActionPanel.treeActionEditorId,
       () => {
         const editorId = this.props.store.treeActionPanel.treeActionEditorId;
         const editor = this.getEditorById(editorId);
         this.fetchCollectionlist(editor);
-        this.setState({editorId});
+        this.setState({ editorId });
       });
   }
 
@@ -53,7 +53,7 @@ export class BackupRestore extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.store.treeActionPanel.treeActionEditorId && !this.state.editorId) {
-      this.setState({editorId: nextProps.store.treeActionPanel.treeActionEditorId});
+      this.setState({ editorId: nextProps.store.treeActionPanel.treeActionEditorId });
       const editor = this.getEditorById(nextProps.store.treeActionPanel.treeActionEditorId);
       this.fetchCollectionlist(editor);
     }
@@ -62,23 +62,23 @@ export class BackupRestore extends React.Component {
   componentDidMount() {
     if (this.props.store.treeActionPanel.treeActionEditorId && !this.state.editorId) {
       const editorId = this.props.store.treeActionPanel.treeActionEditorId;
-      this.setState({editorId});
+      this.setState({ editorId });
       const editor = this.getEditorById(editorId);
       this.fetchCollectionlist(editor);
       featherClient().service('/os-execution').on('os-command-finish', () => {
-        this.setState({commandExecuting: false});
+        this.setState({ commandExecuting: false });
       });
     }
   }
 
   @action.bound
   runEditorScript() {
-    this.setState({commandExecuting: true});
+    this.setState({ commandExecuting: true });
     this.props.store.runEditorScript();
   }
 
   getSelectedDatabase() {
-    const {store} = this.props;
+    const { store } = this.props;
     const treeAction = store.treeActionPanel.treeAction;
     const treeNode = store.treeActionPanel.treeNode;
     let db;
@@ -89,27 +89,42 @@ export class BackupRestore extends React.Component {
     } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE) {
       db = treeNode.text;
     }
-    return {db, collection};
+    return { db, collection };
   }
 
   fetchCollectionlist(editor) {
-    if (this.props.action === BackupRestoreActions.EXPORT_DATABASE && editor.doc.cm) {
-      const generatedCode = generateCode({treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.store.treeActionPanel.treeAction});
-      editor.doc.cm.setValue(generatedCode);
-    }
+    const action = this.props.store.treeActionPanel.treeAction;
+    const selectedProfile = this.props.store.profileList.selectedProfile;
     if (editor && !this.state.collections) {
-      this.setState({editor});
-      const selectedProfile = this.props.store.profileList.selectedProfile;
-      const db = this.getSelectedDatabase().db;
-      featherClient()
-        .service('/mongo-sync-execution')
-        .update(selectedProfile.id, {
-          shellId: editor.shellId,
-          commands: `db.getSiblingDB("${db}").getCollectionNames()`
-        }).then((res) => {
-        console.log('get collection res ', res);
-        this.setState({collections: JSON.parse(res)});
-      });
+      this.setState({ editor });
+      if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE
+        || action === BackupRestoreActions.EXPORT_DATABASE) {
+        const db = this.getSelectedDatabase().db;
+        featherClient()
+          .service('/mongo-sync-execution')
+          .update(selectedProfile.id, {
+            shellId: editor.shellId,
+            commands: `db.getSiblingDB("${db}").getCollectionNames()`
+          }).then((res) => {
+            console.log('get collection res ', res);
+            this.setState({collections: JSON.parse(res)});
+           });
+      }
+      if (action === BackupRestoreActions.EXPORT_SERVER || action === BackupRestoreActions.DUMP_SERVER) {
+        featherClient()
+          .service('/mongo-sync-execution')
+          .update(selectedProfile.id, {
+            shellId: editor.shellId,
+            commands: 'db.adminCommand({listDatabases: 1})'
+          }).then((res) => {
+            console.log('get collection res ', res);
+            const dbs = JSON.parse(res).databases;
+            const dbNames = dbs.map((db) => {
+              return db.name;
+            });
+            this.setState({collections: dbNames});
+           });
+      }
     }
   }
 
@@ -126,12 +141,12 @@ export class BackupRestore extends React.Component {
   }
 
   @computed get getAction() {
-    const {store} = this.props;
+    const { store } = this.props;
     const treeAction = store.treeActionPanel.treeAction;
     const treeNode = store.treeActionPanel.treeNode;
     const selectedProfile = this.props.store.profileList.selectedProfile;
     const treeEditor = this.getEditorById(this.state.editorId);
-    const {db, collection} = this.getSelectedDatabase();
+    const { db, collection } = this.getSelectedDatabase();
     if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.EXPORT_COLLECTION
       || treeAction === BackupRestoreActions.DUMP_DATABASE || treeAction === BackupRestoreActions.DUMP_COLLECTION
       || treeAction === BackupRestoreActions.DUMP_SERVER || treeAction === BackupRestoreActions.EXPORT_SERVER) {

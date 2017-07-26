@@ -24,7 +24,7 @@
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
 import {BackupRestoreActions} from '../common/Constants';
-import {exportDB, dumpDB} from './Template';
+import {exportDB, dumpDB, dumpServer} from './Template';
 
 const createTemplateObject = (state) => {
   const {pretty, jsonArray, ssl, db, gzip, repair, oplog, dumpDbUsersAndRoles, readPreference,
@@ -141,6 +141,10 @@ export const generateCode = ({treeNode, profile, state, action}) => {
       const template = Handlebars.compile(dumpDB);
       return template(values);
     }
+    case BackupRestoreActions.DUMP_SERVER: {
+        const template = Handlebars.compile(dumpServer);
+        return template(values);
+      }
     default:
       return '';
   }

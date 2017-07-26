@@ -219,7 +219,9 @@
         "allCollections": "All Collections",
         "db": "Database",
         "collection": "Collection",
+        "database": "Database",
         "selectCollection": "Select a collection",
+        "selectDatabase": "Select a database",
         "filePath": "Save Directory Path",
         "pretty": "Pretty",
         "jsonArray": "Json Array",
@@ -231,7 +233,8 @@
         "limit": "Limit <count> ",
         "skip": "Skip <count> ",
         "sort": "Sort <json>",
-        "fields": "Fields <field>[,<field>]*"
+        "fields": "Fields <field>[,<field>]*",
+        "allDatabases": "All Databases"
       }
     }
   }
