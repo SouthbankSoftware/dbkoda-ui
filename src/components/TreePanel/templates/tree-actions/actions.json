@@ -85,6 +85,10 @@
             "name": "DumpServer",
             "text": "Dump Databases",
             "icon": "pt-icon-export"
+        },{
+            "name": "RestoreServer",
+            "text": "Restore Databases",
+            "icon": "pt-icon-import"
         }
     ],
     "database": [{

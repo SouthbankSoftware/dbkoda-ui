@@ -30,6 +30,7 @@ import CollectionList from './CollectionList';
 import { BackupRestoreActions } from '../common/Constants';
 import { ExportDBOptions, DumpOptions, AllCollectionOption } from './Options';
 import { getCommandObject, generateCode } from './CodeGenerator';
+import { isRestoreAction, isImportAction } from './Utils';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -79,11 +80,12 @@ export default class DatabaseExport extends React.Component {
     }
   }
 
-  openFile() {
+  openFile(action) {
+    const properties = isRestoreAction(action) || isImportAction(action) ? ['openDirectory', 'openFile']: ['openDirectory'];
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {
-        properties: ['openDirectory'],
+        properties,
       },
       (fileNames) => {
         if (!fileNames || fileNames.length == 0) {
@@ -216,6 +218,10 @@ export default class DatabaseExport extends React.Component {
       case BackupRestoreActions.DUMP_DATABASE:
       case BackupRestoreActions.DUMP_SERVER:
         return globalString('backup/database/mongoDump');
+      case BackupRestoreActions.RESTORE_SERVER:
+      case BackupRestoreActions.RESTORE_COLLECTION:
+      case BackupRestoreActions.RESTORE_DATABASE:
+        return globalString('backup/database/mongoRestore');
       default:
         return '';
     }
@@ -240,6 +246,16 @@ export default class DatabaseExport extends React.Component {
     }
   }
 
+  /**
+   * get the save file path label for different actions
+   */
+  getFilePathLabel(action) {
+    if (isRestoreAction(action) || isImportAction(action)) {
+      return globalString('backup/database/openFilePath');
+    }
+    return globalString('backup/database/filePath');
+  }
+
   render() {
     const { treeAction } = this.props;
     this.updateEditorCode();
@@ -248,17 +264,20 @@ export default class DatabaseExport extends React.Component {
       <div className="pt-form-group">
         {this.getDatabaseFieldComponent()}
         <label className="pt-label database" htmlFor="database">
-          {globalString('backup/database/filePath')}
+          {this.getFilePathLabel(treeAction)}
         </label>
         <div className="pt-form-content">
           <input className="pt-inpu  t path-input" type="text" readOnly onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
-          <Button className="browse-directory" onClick={() => this.openFile()}>{globalString('backup/database/chooseDirectory')}</Button>
+          <Button className="browse-directory" onClick={() => this.openFile(treeAction)}>{globalString('backup/database/chooseDirectory')}</Button>
         </div>
         <label className={this.state.directoryPath ? 'hide' : 'warning'} htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
       </div>
       <div style={{ overflowY: 'auto' }}>
         {treeAction !== BackupRestoreActions.EXPORT_COLLECTION
           && treeAction !== BackupRestoreActions.DUMP_COLLECTION
+          && treeAction !== BackupRestoreActions.RESTORE_COLLECTION
+          && treeAction !== BackupRestoreActions.RESTORE_DATABASE
+          && treeAction !== BackupRestoreActions.RESTORE_SERVER
           && <AllCollectionOption allCollections={this.state.allCollections} action={treeAction}
             changeAllCollections={() => {
                    if (!this.state.allCollections) {

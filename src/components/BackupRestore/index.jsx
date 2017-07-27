@@ -157,14 +157,14 @@ export class BackupRestore extends React.Component {
     const selectedProfile = this.props.store.profileList.selectedProfile;
     const treeEditor = this.getEditorById(this.state.editorId);
     const { db, collection } = this.getSelectedDatabase();
-    if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.EXPORT_COLLECTION
-      || treeAction === BackupRestoreActions.DUMP_DATABASE || treeAction === BackupRestoreActions.DUMP_COLLECTION
-      || treeAction === BackupRestoreActions.DUMP_SERVER || treeAction === BackupRestoreActions.EXPORT_SERVER) {
+    // if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.EXPORT_COLLECTION
+    //   || treeAction === BackupRestoreActions.DUMP_DATABASE || treeAction === BackupRestoreActions.DUMP_COLLECTION
+    //   || treeAction === BackupRestoreActions.DUMP_SERVER || treeAction === BackupRestoreActions.EXPORT_SERVER) {
       return (<DatabaseExport treeAction={treeAction} treeNode={treeNode} close={this.close} profile={selectedProfile}
         isActiveExecuting={this.state.commandExecuting} db={db} collections={this.state.collections} colection={collection}
         treeEditor={treeEditor} action={treeAction} runEditorScript={this.runEditorScript} />);
-    }
-    return null;
+    // }
+    // return null;
   }
 
   render() {

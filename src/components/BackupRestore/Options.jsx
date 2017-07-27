@@ -251,6 +251,107 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
   return getOptions(options);
 };
 
+export const restoreOptions = ({ssl, changeSSL, drop, changeDrop, dryRun, changeDryRun, writeConcern, changeWriteConcern,
+              noIndexRestore, changeNoIndexRestore, noOptionsRestore, changeNoOptionsRestore,
+              keepIndexVersion, changeKeepIndexVersion, maintainInsertionOrder, changeMaintainInsertionOrder,
+              numParallelCollections, changeNumParallelCollections,
+              numInsertionWorkersPerCollection, changeNumInsertionWorkersPerCollection,
+              stopOnError, changeStopOnError, bypassDocumentValidation, changeBypassDocumentValidation,
+              objcheck, changeObjcheck, oplogReplay, changeOplogReplay,
+              oplogLimit, changeOplogLimit, restoreDbUsersAndRoles, changeRestoreDbUsersAndRoles,
+              gzip, changeGzip}) => {
+  const options = [
+    {
+      label: globalString('backup/database/ssl'),
+      onChange: changeSSL,
+      tooltips: '',
+      checked: ssl,
+    }, {
+      label: globalString('backup/database/restoreOptions'),
+      type: 'separator',
+    }, {
+      label: 'drop',
+      onChange: changeDrop,
+      tooltips: '',
+      checked: drop,
+    }, {
+      label: 'dryRun',
+      onChange: changeDryRun,
+      tooltips: '',
+      checked: dryRun,
+    }, {
+      label: 'writeConcern',
+      onChange: changeWriteConcern,
+      checked: writeConcern,
+      type: 'input',
+      tooltips: '',
+    }, {
+      label: 'noIndexRestore',
+      checked: noIndexRestore,
+      tooltips: '',
+      onChange: changeNoIndexRestore,
+    }, {
+      label: 'noOptionsRestore',
+      onChange: changeNoOptionsRestore,
+      value: noOptionsRestore
+    }, {
+      label: 'keepIndexVersion',
+      onChange: changeKeepIndexVersion,
+      value: keepIndexVersion
+    }, {
+      label: 'maintainInsertionOrder',
+      onChange: changeMaintainInsertionOrder,
+      value: maintainInsertionOrder
+    }, {
+      label: 'numParallelCollections',
+      onChange: changeNumParallelCollections,
+      value: numParallelCollections,
+      type: 'input',
+      inputType: 'number',
+    }, {
+      label: 'numInsertionWorkersPerCollection',
+      onChange: changeNumInsertionWorkersPerCollection,
+      value: numInsertionWorkersPerCollection,
+      type: 'input',
+      inputType: 'number',
+    }, {
+      label: 'stopOnError',
+      onChange: changeStopOnError,
+      value: stopOnError
+    }, {
+      label: 'bypassDocumentValidation',
+      onChange: changeBypassDocumentValidation,
+      value: bypassDocumentValidation
+    }, {
+      label: globalString('backup/database/inputOptions'),
+      type: 'separator'
+    }, {
+      label: 'objcheck',
+      value: objcheck,
+      onChange: changeObjcheck,
+    }, {
+      label: 'oplogReplay',
+      type: 'input',
+      value: oplogReplay,
+      onChange: changeOplogReplay,
+    }, {
+      label: 'oplogLimit',
+      type: 'input',
+      value: oplogLimit,
+      onChange: changeOplogLimit,
+    }, {
+      label: 'restoreDbUsersAndRoles',
+      value: restoreDbUsersAndRoles,
+      onChange: changeRestoreDbUsersAndRoles,
+    }, {
+      label: 'gzip',
+      value: gzip,
+      onChange: changeGzip,
+    }
+  ];
+  return getOptions(options);
+};
+
 /**
  * the option panel for database export
  * @constructor
