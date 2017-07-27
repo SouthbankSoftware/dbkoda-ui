@@ -24,6 +24,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, computed, reaction } from 'mobx';
+import {Intent} from '@blueprintjs/core';
+import { NewToaster } from '../common/Toaster';
 import DatabaseExport from './DatabaseExport';
 import { BackupRestoreActions, DrawerPanes } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
@@ -65,8 +67,16 @@ export class BackupRestore extends React.Component {
       this.setState({ editorId });
       const editor = this.getEditorById(editorId);
       this.fetchCollectionlist(editor);
-      featherClient().service('/os-execution').on('os-command-finish', () => {
+      featherClient().service('/os-execution').on('os-command-finish', (output) => {
         this.setState({ commandExecuting: false });
+        console.log('get backup command ', output);
+        if (output.code !== 0) {
+          NewToaster.show({
+                    message: globalString('editor/toolbar/executionScriptFailed'),
+                    intent: Intent.DANGER,
+                    iconName: 'pt-icon-thumbs-down'
+                  });
+        }
       });
     }
   }
