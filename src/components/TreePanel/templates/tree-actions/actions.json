@@ -85,10 +85,6 @@
             "name": "DumpServer",
             "text": "Dump Databases",
             "icon": "pt-icon-export"
-        },{
-            "name": "ExportServer",
-            "text": "Export Databases",
-            "icon": "pt-icon-export"
         }
     ],
     "database": [{

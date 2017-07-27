@@ -23,15 +23,15 @@
 
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
-import {BackupRestoreActions} from '../common/Constants';
-import {exportDB, dumpDB, dumpServer} from './Template';
-import {isDumpAction} from './Utils';
+import { BackupRestoreActions } from '../common/Constants';
+import { exportDB, dumpDB, dumpServer } from './Template';
+import { isDumpAction } from './Utils';
 
 const createTemplateObject = (state) => {
-  const {pretty, jsonArray, db, gzip, repair, oplog, dumpDbUsersAndRoles, readPreference,
+  const { pretty, jsonArray, db, gzip, repair, oplog, dumpDbUsersAndRoles, readPreference,
     forceTableScan, skip, limit, exportSort, assertExists, numParallelCollections,
-    viewsAsCollections, profile, noHeaderLine, exportType, outputFields, query} = state;
-  const {host, port, username, sha, hostRadio, url, database, ssl} = profile;
+    viewsAsCollections, profile, noHeaderLine, exportType, outputFields, query } = state;
+  const { host, port, username, sha, hostRadio, url, database, ssl } = profile;
   const items = {
     database: db,
     ssl,
@@ -92,8 +92,36 @@ const createTemplateObject = (state) => {
   return items;
 };
 
-export const getCommandObject = ({profile, state, action}) => {
-  const {directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles} = state;
+
+const getDumpServerCommandObject = ({ profile, state }) => {
+  const { directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles } = state;
+  let targetCols = [];
+  if (allCollections) {
+    targetCols = collections;
+  } else {
+    targetCols = selectedCollections;
+  }
+  const cols = [];
+  if (!dumpDbUsersAndRoles && !allCollections) {
+    targetCols.map((col) => {
+      const items = createTemplateObject({ ...state, profile });
+      items.database = col;
+      if (directoryPath) {
+        items.output = directoryPath;
+      }
+      cols.push(items);
+    });
+  }
+
+    if (dumpDbUsersAndRoles || allCollections) {
+      const itm = createTemplateObject({ ...state, profile, db: null});
+      cols.push({ ...itm, output: directoryPath});
+    }
+  return cols;
+};
+
+const getDBCollectionCommandObject = ({ profile, state, action }) => {
+  const { directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles } = state;
   let targetCols = [];
   if (allCollections) {
     targetCols = collections;
@@ -105,7 +133,7 @@ export const getCommandObject = ({profile, state, action}) => {
     // for dump, dumpDbUsersAndRoles can't be set with collections
     // for dump, should not split command for all collections
     targetCols.map((col) => {
-      const items = createTemplateObject({...state, profile});
+      const items = createTemplateObject({ ...state, profile });
       items.collection = col;
       if (directoryPath) {
         if (action === BackupRestoreActions.EXPORT_COLLECTION || action === BackupRestoreActions.EXPORT_DATABASE) {
@@ -120,39 +148,55 @@ export const getCommandObject = ({profile, state, action}) => {
 
   if (isDumpAction(action)) {
     if (dumpDbUsersAndRoles || allCollections) {
-      const itm = createTemplateObject({...state, profile});
-      cols.push({...itm, output: directoryPath});
+      const itm = createTemplateObject({ ...state, profile});
+      cols.push({ ...itm, output: directoryPath });
     }
   }
   return cols;
 };
 
+export const getCommandObject = ({ profile, state, action }) => {
+  switch (action) {
+    case BackupRestoreActions.DUMP_SERVER:
+      return getDumpServerCommandObject({ profile, state, action });
+    default:
+      return getDBCollectionCommandObject({ profile, state, action });
+  }
+};
+
+
 export const generateCode = ({treeNode, profile, state, action}) => {
-  const cols = getCommandObject({treeNode, profile, state, action});
-  const values = {cols};
+  let cols;
+  if (action === BackupRestoreActions.DUMP_SERVER) {
+    cols = getDumpServerCommandObject({ treeNode, profile, state, action });
+  } else {
+    cols = getCommandObject({ treeNode, profile, state, action });
+  }
+  const values = { cols };
   switch (action) {
     case BackupRestoreActions.EXPORT_DATABASE:
+    case BackupRestoreActions.EXPORT_SERVER:
     case BackupRestoreActions.EXPORT_COLLECTION: {
       // const template = require('./Template/ExportDatabsae.hbs');
-//       const exportDB = '{{#each cols}}\
-// mongoexport{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if pretty}} --pretty {{/if}}{{#if jsonArray}} --jsonArray {{/if}}{{#if noHeaderLine}} --noHeaderLine {{/if}}{{#if exportType}} --type {{exportType}} {{/if}}{{#if outputFields}} --fields {{outputFields}} {{/if}}{{#if query}} -q {{query}} {{/if}}{{#if readPreference}} --readPreference {{readPreference}} {{/if}}{{#if forceTableScan}} --forceTableScan {{/if}}{{#if skip}} --skip {{skip}}{{/if}}{{#if limit}} --limit {{limit}}{{/if}}{{#if exportSort}} --sort {{exportSort}}{{/if}}{{#if assertExists}} --assertExists{{/if}}{{#if output}} -o {{output}}{{/if}} \
-// {{/each}}';
+      //       const exportDB = '{{#each cols}}\
+      // mongoexport{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if pretty}} --pretty {{/if}}{{#if jsonArray}} --jsonArray {{/if}}{{#if noHeaderLine}} --noHeaderLine {{/if}}{{#if exportType}} --type {{exportType}} {{/if}}{{#if outputFields}} --fields {{outputFields}} {{/if}}{{#if query}} -q {{query}} {{/if}}{{#if readPreference}} --readPreference {{readPreference}} {{/if}}{{#if forceTableScan}} --forceTableScan {{/if}}{{#if skip}} --skip {{skip}}{{/if}}{{#if limit}} --limit {{limit}}{{/if}}{{#if exportSort}} --sort {{exportSort}}{{/if}}{{#if assertExists}} --assertExists{{/if}}{{#if output}} -o {{output}}{{/if}} \
+      // {{/each}}';
       const template = Handlebars.compile(exportDB);
       return template(values);
     }
     case BackupRestoreActions.DUMP_COLLECTION:
     case BackupRestoreActions.DUMP_DATABASE: {
       // const template = require('./Template/DumpDatabsae.hbs');
-//       const dumpDB = '{{#each cols}}\
-// mongodump{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if gzip}} --gzip {{/if}}{{#if repair}} --repair {{/if}}{{#if oplog}} --oplog {{/if}}{{#if dumpDbUsersAndRoles}} --dumpDbUsersAndRoles {{/if}}{{#if viewsAsCollections}} --viewsAsCollections {{/if}}{{#if output}} -o {{output}}{{/if}} \
-// {{/each}}';
+      //       const dumpDB = '{{#each cols}}\
+      // mongodump{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if gzip}} --gzip {{/if}}{{#if repair}} --repair {{/if}}{{#if oplog}} --oplog {{/if}}{{#if dumpDbUsersAndRoles}} --dumpDbUsersAndRoles {{/if}}{{#if viewsAsCollections}} --viewsAsCollections {{/if}}{{#if output}} -o {{output}}{{/if}} \
+      // {{/each}}';
       const template = Handlebars.compile(dumpDB);
       return template(values);
     }
     case BackupRestoreActions.DUMP_SERVER: {
-        const template = Handlebars.compile(dumpServer);
-        return template(values);
-      }
+      const template = Handlebars.compile(dumpServer);
+      return template(values);
+    }
     default:
       return '';
   }
