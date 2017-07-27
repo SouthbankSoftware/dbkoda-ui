@@ -24,7 +24,7 @@
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
 import { BackupRestoreActions } from '../common/Constants';
-import { exportDB, dumpDB, dumpServer } from './Template';
+import { exportDB, dumpDB, dumpServer, restoreServer } from './Template';
 import { isDumpAction } from './Utils';
 
 const createTemplateObject = (state) => {
@@ -92,6 +92,10 @@ const createTemplateObject = (state) => {
   return items;
 };
 
+const getRestoreServerCommandObject = ({ profile, state }) => {
+  const itm = createTemplateObject({ ...state, profile, db: null});
+  return [itm];
+};
 
 const getDumpServerCommandObject = ({ profile, state }) => {
   const { directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles } = state;
@@ -196,6 +200,11 @@ export const generateCode = ({treeNode, profile, state, action}) => {
     case BackupRestoreActions.DUMP_SERVER: {
       const template = Handlebars.compile(dumpServer);
       return template(values);
+    }
+    case BackupRestoreActions.RESTORE_SERVER: {
+      cols = getRestoreServerCommandObject({ treeNode, profile, state, action });
+      const template = Handlebars.compile(restoreServer);
+      return template({cols});
     }
     default:
       return '';

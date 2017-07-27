@@ -28,7 +28,7 @@ import { ButtonPanel } from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import { BackupRestoreActions } from '../common/Constants';
-import { ExportDBOptions, DumpOptions, AllCollectionOption } from './Options';
+import { ExportDBOptions, DumpOptions, AllCollectionOption, RestoreOptions } from './Options';
 import { getCommandObject, generateCode } from './CodeGenerator';
 import { isRestoreAction, isImportAction } from './Utils';
 
@@ -81,7 +81,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   openFile(action) {
-    const properties = isRestoreAction(action) || isImportAction(action) ? ['openDirectory', 'openFile']: ['openDirectory'];
+    const properties = isRestoreAction(action) || isImportAction(action) ? ['openDirectory', 'openFile'] : ['openDirectory'];
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {
@@ -161,12 +161,6 @@ export default class DatabaseExport extends React.Component {
           assertExists={this.state.assertExists}
           changeAssertExists={() => this.setState({ assertExists: !this.state.assertExists })}
         />);
-      // case BackupRestoreActions.EXPORT_COLLECTION:
-      //   return (<ExportCollectionOptions ssl={this.state.ssl} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
-      //     changeSSL={() => this.setState({ssl: !this.state.ssl})}
-      //     changePretty={() => this.setState({pretty: !this.state.pretty})}
-      //     changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
-      //   />);
       case BackupRestoreActions.DUMP_DATABASE:
       case BackupRestoreActions.DUMP_COLLECTION:
       case BackupRestoreActions.DUMP_SERVER:
@@ -203,6 +197,42 @@ export default class DatabaseExport extends React.Component {
           query={this.state.query}
           changeQuery={e => this.setState({ query: e })}
         />);
+      case BackupRestoreActions.RESTORE_SERVER:
+          return (<RestoreOptions
+            ssl={this.state.ssl}
+            changeSSL={() => this.setState({ssl: !this.state.ssl})}
+            drop={this.state.drop}
+            changeDrop={() => this.setState({drop: !this.state.drop})}
+            dryRun={this.state.dryRun}
+            changeDryRun={() => this.setState({dryRun: !this.state.dryRun})}
+            writeConcern={this.state.writeConcern}
+            changeWriteConcern={e => this.setState({writeConcern: e})}
+            noIndexRestore={this.state.noIndexRestore}
+            changeNoIndexRestore={() => this.setState({noIndexRestore: !this.state.noIndexRestore})}
+            noOptionsRestore={this.state.noOptionsRestore}
+            changeNoOptionsRestore={() => this.setState({noOptionsRestore: !this.state.noOptionsRestore})}
+            keepIndexVersion={this.state.keepIndexVersion}
+            changeKeepIndexVersion={() => this.setState({keepIndexVersion: !this.state.keepIndexVersion})}
+            maintainInsertionOrder={this.state.maintainInsertionOrder}
+            changeMaintainInsertionOrder={() => this.setState({maintainInsertionOrder: !this.state.maintainInsertionOrder})}
+            numParallelCollections={this.state.numParallelCollections}
+            changeNumParallelCollections={e => this.setState({numParallelCollections: e})}
+            numInsertionWorkersPerCollection={this.state.numInsertionWorkersPerCollection}
+            changeNumInsertionWorkersPerCollection={e => this.setState({numInsertionWorkersPerCollection: e})}
+            stopOnError={this.state.stopOnError}
+            changeStopOnError={() => this.setState({stopOnError: !this.state.stopOnError})}
+            bypassDocumentValidation={this.state.bypassDocumentValidation}
+            changeBypassDocumentValidation={() => this.setState({bypassDocumentValidation: !this.state.bypassDocumentValidation})}
+            objcheck={this.state.objcheck}
+            changeObjcheck={() => this.setState({objcheck: !this.state.objcheck})}
+            oplogReplay={this.state.oplogReplay}
+            changeOplogReplay={() => this.setState({oplogReplay: !this.state.oplogReplay})}
+            oplogLimit={this.state.oplogLimit}
+            changeOplogLimit={e => this.setState({oplogLimit: e})}
+            restoreDbUsersAndRoles={this.state.restoreDbUsersAndRoles}
+            changeRestoreDbUsersAndRoles={() => this.setState({restoreDbUsersAndRoles: !this.state.restoreDbUsersAndRoles})}
+            gzip={this.state.gzip} changeGzip={() => this.setState({gzip: !this.state.gzip})}
+          />);
       default:
         return null;
     }

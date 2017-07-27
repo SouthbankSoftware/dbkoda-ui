@@ -251,7 +251,7 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
   return getOptions(options);
 };
 
-export const restoreOptions = ({ssl, changeSSL, drop, changeDrop, dryRun, changeDryRun, writeConcern, changeWriteConcern,
+export const RestoreOptions = ({ssl, changeSSL, drop, changeDrop, dryRun, changeDryRun, writeConcern, changeWriteConcern,
               noIndexRestore, changeNoIndexRestore, noOptionsRestore, changeNoOptionsRestore,
               keepIndexVersion, changeKeepIndexVersion, maintainInsertionOrder, changeMaintainInsertionOrder,
               numParallelCollections, changeNumParallelCollections,
@@ -309,7 +309,7 @@ export const restoreOptions = ({ssl, changeSSL, drop, changeDrop, dryRun, change
       type: 'input',
       inputType: 'number',
     }, {
-      label: 'numInsertionWorkersPerCollection',
+      label: 'numInsertionWorkers',
       onChange: changeNumInsertionWorkersPerCollection,
       value: numInsertionWorkersPerCollection,
       type: 'input',
