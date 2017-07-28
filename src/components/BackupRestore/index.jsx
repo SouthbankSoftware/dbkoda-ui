@@ -54,10 +54,14 @@ export class BackupRestore extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.store.treeActionPanel.treeActionEditorId && !this.state.editorId) {
-      this.setState({ editorId: nextProps.store.treeActionPanel.treeActionEditorId });
-      const editor = this.getEditorById(nextProps.store.treeActionPanel.treeActionEditorId);
-      this.fetchCollectionlist(editor);
+    const { store } = this.props;
+    const treeAction = store.treeActionPanel.treeAction;
+    if (nextProps.store.treeActionPanel.treeActionEditorId) {
+      if (!this.state.editorId || ((treeAction === BackupRestoreActions.DUMP_DATABASE || treeAction === BackupRestoreActions.EXPORT_DATABASE) && !this.state.collections)) {
+        this.setState({ editorId: nextProps.store.treeActionPanel.treeActionEditorId });
+        const editor = this.getEditorById(nextProps.store.treeActionPanel.treeActionEditorId);
+        this.fetchCollectionlist(editor);
+      }
     }
   }
 
