@@ -28,33 +28,14 @@ import { exportDB, dumpDB, dumpServer, restoreServer } from './Template';
 import { isDumpAction } from './Utils';
 
 const createTemplateObject = (state) => {
-  const { pretty, jsonArray, db, gzip, repair, oplog, dumpDbUsersAndRoles, readPreference,
-    forceTableScan, skip, limit, exportSort, assertExists, numParallelCollections,
-    viewsAsCollections, profile, noHeaderLine, exportType, outputFields, query } = state;
-  const { host, port, username, sha, hostRadio, url, database, ssl } = profile;
+  const { db, profile, exportType } = state;
+  const { host, port, sha, hostRadio, url, database } = profile;
   const items = {
+    ...profile,
+    ...state,
     database: db,
-    ssl,
-    username,
     password: sha,
-    pretty,
-    jsonArray,
-    gzip,
-    repair,
-    oplog,
-    dumpDbUsersAndRoles,
-    noHeaderLine,
-    viewsAsCollections,
     exportType: exportType.selected,
-    outputFields,
-    query,
-    readPreference,
-    forceTableScan,
-    skip,
-    limit,
-    exportSort,
-    assertExists,
-    numParallelCollections,
   };
   if (sha) {
     items.authDb = database;
@@ -94,7 +75,8 @@ const createTemplateObject = (state) => {
 
 const getRestoreServerCommandObject = ({ profile, state }) => {
   const itm = createTemplateObject({ ...state, profile, db: null});
-  return [itm];
+  itm.inputFile = state.directoryPath;
+  return itm;
 };
 
 const getDumpServerCommandObject = ({ profile, state }) => {
@@ -204,7 +186,7 @@ export const generateCode = ({treeNode, profile, state, action}) => {
     case BackupRestoreActions.RESTORE_SERVER: {
       cols = getRestoreServerCommandObject({ treeNode, profile, state, action });
       const template = Handlebars.compile(restoreServer);
-      return template({cols});
+      return template(cols);
     }
     default:
       return '';

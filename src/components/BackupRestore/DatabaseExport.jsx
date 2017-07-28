@@ -117,8 +117,16 @@ export default class DatabaseExport extends React.Component {
   }
 
   isExecutable() {
-    const commandObject = getCommandObject({ treeNode: this.props.treeNode, profile: this.props.profile, state: this.state, action: this.props.treeAction });
-    return commandObject.length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
+    if (this.props.treeAction === BackupRestoreActions.RESTORE_SERVER) {
+      return this.state.directoryPath && !this.props.isActiveExecuting;
+    }
+      const commandObject = getCommandObject({
+        treeNode: this.props.treeNode,
+        profile: this.props.profile,
+        state: this.state,
+        action: this.props.treeAction
+      });
+      return commandObject.length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
   }
 
   executing() {
