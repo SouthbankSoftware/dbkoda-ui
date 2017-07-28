@@ -183,7 +183,8 @@ export const generateCode = ({treeNode, profile, state, action}) => {
       const template = Handlebars.compile(dumpServer);
       return template(values);
     }
-    case BackupRestoreActions.RESTORE_SERVER: {
+    case BackupRestoreActions.RESTORE_SERVER:
+    case BackupRestoreActions.RESTORE_DATABASE: {
       cols = getRestoreServerCommandObject({ treeNode, profile, state, action });
       const template = Handlebars.compile(restoreServer);
       return template(cols);

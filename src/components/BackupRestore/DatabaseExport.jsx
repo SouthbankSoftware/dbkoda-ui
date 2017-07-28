@@ -117,7 +117,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   isExecutable() {
-    if (this.props.treeAction === BackupRestoreActions.RESTORE_SERVER) {
+    if (this.props.treeAction === BackupRestoreActions.RESTORE_SERVER || this.props.treeAction === BackupRestoreActions.RESTORE_DATABASE) {
       return this.state.directoryPath && !this.props.isActiveExecuting;
     }
       const commandObject = getCommandObject({
@@ -138,7 +138,6 @@ export default class DatabaseExport extends React.Component {
     switch (treeAction) {
       case BackupRestoreActions.EXPORT_DATABASE:
       case BackupRestoreActions.EXPORT_COLLECTION:
-      case BackupRestoreActions.EXPORT_SERVER:
         return (<ExportDBOptions ssl={this.state.ssl} allCollections={this.state.allCollections} pretty={this.state.pretty} jsonArray={this.state.jsonArray}
           changeSSL={() => this.setState({ ssl: !this.state.ssl })}
           changePretty={() => this.setState({ pretty: !this.state.pretty })}
@@ -206,6 +205,7 @@ export default class DatabaseExport extends React.Component {
           changeQuery={e => this.setState({ query: e })}
         />);
       case BackupRestoreActions.RESTORE_SERVER:
+      case BackupRestoreActions.RESTORE_DATABASE:
           return (<RestoreOptions
             ssl={this.state.ssl}
             changeSSL={() => this.setState({ssl: !this.state.ssl})}
@@ -271,6 +271,7 @@ export default class DatabaseExport extends React.Component {
       this.props.treeAction === BackupRestoreActions.DUMP_DATABASE ||
       this.props.treeAction === BackupRestoreActions.EXPORT_COLLECTION ||
       this.props.treeAction === BackupRestoreActions.RESTORE_SERVER ||
+      this.props.treeAction === BackupRestoreActions.RESTORE_DATABASE ||
       this.props.treeAction === BackupRestoreActions.EXPORT_DATABASE) {
       let readOnly = true;
       if (this.props.treeAction === BackupRestoreActions.RESTORE_SERVER) {

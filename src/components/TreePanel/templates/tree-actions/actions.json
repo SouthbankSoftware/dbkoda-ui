@@ -124,6 +124,10 @@
             "name": "DumpDatabase",
             "text": "Dump Database",
             "icon": "pt-icon-export"
+        },{
+            "name": "RestoreDatabase",
+            "text": "Restore Database",
+            "icon": "pt-icon-import"
         }
     ],
     "collection": [{

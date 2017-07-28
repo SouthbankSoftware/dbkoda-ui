@@ -96,7 +96,8 @@ export class BackupRestore extends React.Component {
     if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
       db = treeNode.refParent.text;
       collection = treeNode.text;
-    } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE) {
+    } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE
+      || treeAction === BackupRestoreActions.RESTORE_DATABASE) {
       db = treeNode.text;
     }
     return { db, collection };
@@ -120,7 +121,7 @@ export class BackupRestore extends React.Component {
             this.setState({collections: JSON.parse(res)});
            });
       }
-      if (action === BackupRestoreActions.EXPORT_SERVER || action === BackupRestoreActions.DUMP_SERVER) {
+      if (action === BackupRestoreActions.DUMP_SERVER) {
         featherClient()
           .service('/mongo-sync-execution')
           .update(selectedProfile.id, {
