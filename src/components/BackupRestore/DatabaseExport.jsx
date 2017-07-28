@@ -45,7 +45,6 @@ export default class DatabaseExport extends React.Component {
     this.executing = this.executing.bind(this);
     this.state = {
       collections: [],
-      ssl: false,
       allCollections: true,
       selectedCollections: [],
       exportType: {selected: 'json', options: ['json', 'csv']},

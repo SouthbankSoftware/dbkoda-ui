@@ -105,7 +105,7 @@ export const AllCollectionOption = ({allCollections, changeAllCollections, actio
   return getOptions(options);
 };
 
-export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
+export const ExportDBOptions = ({pretty, jsonArray,
                                   changePretty, changeJsonArray, changeNoHeaderLine, noHeaderLine,
                                   query, changeQuery, readPreference, changeReadPreference,
                                   forceTableScan, changeForceTableScan, exportSort, changeExportSort,
@@ -113,11 +113,6 @@ export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
                                   changeExportType, exportType, outputFields, changeOutputFields}) => {
   const options = [
     {
-      label: globalString('backup/database/ssl'),
-      onChange: changeSSL,
-      checked: ssl,
-      tooltips: '',
-    }, {
       label: globalString('backup/database/outputOptions'),
       type: 'separator'
     }, {
@@ -187,7 +182,7 @@ export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
   return getOptions(options);
 };
 
-export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRepair,
+export const DumpOptions = ({gzip, changeGZip, repair, changeRepair,
                               dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
                               numParallelCollections, changeNumParallelCollections,
                               forceTableScan, changeForceTableScan,
@@ -196,11 +191,6 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
                               viewsAsCollections, changeViewsAsCollections}) => {
   const options = [
     {
-      label: globalString('backup/database/ssl'),
-      onChange: changeSSL,
-      tooltips: '',
-      checked: ssl,
-    }, {
       label: globalString('backup/database/outputOptions'),
       type: 'separator',
     }, {
@@ -251,7 +241,7 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
   return getOptions(options);
 };
 
-export const RestoreOptions = ({ssl, changeSSL, drop, changeDrop, dryRun, changeDryRun, writeConcern, changeWriteConcern,
+export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeConcern, changeWriteConcern,
               noIndexRestore, changeNoIndexRestore, noOptionsRestore, changeNoOptionsRestore,
               keepIndexVersion, changeKeepIndexVersion, maintainInsertionOrder, changeMaintainInsertionOrder,
               numParallelCollections, changeNumParallelCollections,
@@ -262,11 +252,6 @@ export const RestoreOptions = ({ssl, changeSSL, drop, changeDrop, dryRun, change
               gzip, changeGzip}) => {
   const options = [
     {
-      label: globalString('backup/database/ssl'),
-      onChange: changeSSL,
-      tooltips: '',
-      checked: ssl,
-    }, {
       label: globalString('backup/database/restoreOptions'),
       type: 'separator',
     }, {
@@ -350,25 +335,5 @@ export const RestoreOptions = ({ssl, changeSSL, drop, changeDrop, dryRun, change
     }
   ];
   return getOptions(options);
-};
-
-/**
- * the option panel for database export
- * @constructor
- */
-export const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
-  if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
-    return ExportDBOptions({
-      ssl,
-      allCollections,
-      pretty,
-      jsonArray,
-      changeSSL,
-      changeAllCollections,
-      changePretty,
-      changeJsonArray
-    });
-  }
-  return null;
 };
 
