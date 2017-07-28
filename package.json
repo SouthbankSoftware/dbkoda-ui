@@ -81,6 +81,7 @@
     "codemirror-highlight": "^1.0.0",
     "cross-env": "^3.1.4",
     "css-loader": "^0.28.4",
+    "d3": "^4.10.0",
     "dumpenvy": "^1.1.0",
     "enzyme": "^2.7.1",
     "esdoc": "^0.5.2",

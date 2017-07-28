@@ -177,7 +177,7 @@ const ConnectionPanel = ({
         onSuccess(res, data);
       })
       .catch((err) => {
-        console.log(err.stack);
+        console.error(err);
         onFail();
         const message = err.message;
         DBKodaToaster(Position.LEFT_BOTTOM).show({
