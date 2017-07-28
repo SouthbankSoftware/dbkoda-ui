@@ -28,3 +28,9 @@ export const isRestoreAction = action => BackupRestoreActions.RESTORE_COLLECTION
 export const isImportAction = action => BackupRestoreActions.IMPORT_COLLECTION === action || action === BackupRestoreActions.IMPORT_DATABASE;
 
 export const isServerAction = action => BackupRestoreActions.DUMP_SERVER === action || BackupRestoreActions.DUMP_SERVER;
+
+export const isCollectionAction = treeAction => treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION
+|| treeAction === BackupRestoreActions.RESTORE_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION;
+
+export const isDatabaseAction = treeAction => treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE
+|| treeAction === BackupRestoreActions.RESTORE_DATABASE || treeAction === BackupRestoreActions.IMPORT_DATABASE;

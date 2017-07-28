@@ -337,3 +337,91 @@ export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeCon
   return getOptions(options);
 };
 
+export const ImportOptions = ({outputFields, changeOutputFields, headerLine, changeHeaderLine, jsonArray, changeJsonArray,
+                                parseGrace, changeParseGrace, exportType, changeExportType,
+                                columnsHaveTypes, changeColumnsHaveTypes,
+                                drop, changeDrop, ignoreBlanks, changeIgnoreBlanks,
+                                maintainInsertionOrder, changeMaintainInsertionOrder,
+                                numInsertionWorkers, changeNumInsertionWorkers,
+                                stopOnError, changeStopOnError, mode, changeMode,
+                                upsertFields, changeUpsertFields, writeConcern, changeWriteConcern,
+                                bypassDocumentValidation, changeBypassDocumentValidation}) => {
+  const options = [
+    {
+      label: globalString('backup/database/inputOptions'),
+      type: 'separator',
+    }, {
+      label: globalString('backup/database/fields'),
+      type: 'input',
+      value: outputFields,
+      onChange: changeOutputFields,
+    }, {
+      label: 'headerLine',
+      onChange: changeHeaderLine,
+      checked: headerLine,
+    }, {
+      label: 'jsonArray',
+      onChange: changeJsonArray,
+      checked: jsonArray,
+    }, {
+      label: 'parseGrace',
+      onChange: changeParseGrace,
+      type: 'selection',
+      value: parseGrace,
+    }, {
+      label: 'Type',
+      onChange: changeExportType,
+      type: 'selection',
+      value: exportType,
+    }, {
+      label: 'columnsHaveTypes',
+      onChange: changeColumnsHaveTypes,
+      type: 'input',
+      value: columnsHaveTypes,
+    }, {
+      label: globalString('backup/database/ingestOptions'),
+      type: 'separator',
+    }, {
+      label: 'drop',
+      onChange: changeDrop,
+      checked: drop,
+    }, {
+      label: 'ignoreBlanks',
+      onChange: changeIgnoreBlanks,
+      checked: ignoreBlanks,
+    }, {
+      label: 'maintainInsertionOrder',
+      onChange: changeMaintainInsertionOrder,
+      checked: maintainInsertionOrder,
+    }, {
+      label: 'numInsertionWorkers',
+      type: 'input',
+      value: numInsertionWorkers,
+      onChange: changeNumInsertionWorkers,
+    }, {
+      label: 'stopOnError',
+      onChange: changeStopOnError,
+      checked: stopOnError,
+    }, {
+      label: 'mode',
+      onChange: changeMode,
+      type: 'selection',
+      value: mode,
+    }, {
+      label: 'upsertFields',
+      type: 'input',
+      value: upsertFields,
+      onChange: changeUpsertFields,
+    }, {
+      label: 'writeConcern',
+      type: 'input',
+      value: writeConcern,
+      onChange: changeWriteConcern,
+    }, {
+      label: 'bypassDocumentValidation',
+      onChange: changeBypassDocumentValidation,
+      checked: bypassDocumentValidation,
+    }
+  ];
+  return getOptions(options);
+}

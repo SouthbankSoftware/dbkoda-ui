@@ -28,7 +28,7 @@ import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
-import {AllCollectionOption, DumpOptions, ExportDBOptions, RestoreOptions} from './Options';
+import {AllCollectionOption, DumpOptions, ExportDBOptions, RestoreOptions, ImportOptions} from './Options';
 import {generateCode, getCommandObject} from './CodeGenerator';
 import {isImportAction, isRestoreAction} from './Utils';
 
@@ -53,7 +53,9 @@ export default class DatabaseExport extends React.Component {
       pretty: false,
       db: '',
       collection: '',
-      numParallelCollections: 4
+      numParallelCollections: 4,
+      mode: {selected: 'insert', options: ['insert', 'upsert', 'merge']},
+      parseGrace: {selected: 'stop', options: ['autoCast', 'skipField', 'skipRow', 'stop']},
     };
   }
 
@@ -101,7 +103,7 @@ export default class DatabaseExport extends React.Component {
     let properties;
     if (action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER) {
       properties = ['openDirectory', 'openFile'];
-    } else if (action === BackupRestoreActions.RESTORE_COLLECTION) {
+    } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_DATABASE) {
       properties = ['openFile'];
     } else {
       properties = ['openDirectory'];
@@ -268,6 +270,51 @@ export default class DatabaseExport extends React.Component {
           changeRestoreDbUsersAndRoles={() => this.setState({restoreDbUsersAndRoles: !this.state.restoreDbUsersAndRoles})}
           gzip={this.state.gzip} changeGzip={() => this.setState({gzip: !this.state.gzip})}
         />);
+      case BackupRestoreActions.IMPORT_COLLECTION:
+        return (<ImportOptions
+          outputFields={this.state.outputFields}
+          changeOutputFields={e => this.setState({outputFields: e})}
+          headerLine={this.state.headerLine}
+          changeHeaderLine={() => this.setState({headerLine: !this.state.headerLine})}
+          jsonArray={this.state.jsonArray}
+          changeJsonArray={() => this.setState({jsonArray: !this.state.jsonArray})}
+          parseGrace={this.state.parseGrace}
+          changeParseGrace={(e) => {
+            const {parseGrace} = this.state;
+            parseGrace.selected = e;
+            this.setState({parseGrace});
+          }}
+          exportType={this.state.exportType}
+          changeExportType={(e) => {
+            const {exportType} = this.state;
+            exportType.selected = e;
+            this.setState({exportType});
+          }}
+          columnsHaveTypes={this.state.columnsHaveTypes}
+          changeColumnsHaveTypes={e => this.setState({columnsHaveTypes: e})}
+          drop={this.state.drop}
+          changeDrop={() => this.setState({drop: !this.state.drop})}
+          ignoreBlanks={this.state.ignoreBlanks}
+          changeIgnoreBlanks={() => this.setState({ignoreBlanks: !this.state.ignoreBlanks})}
+          maintainInsertionOrder={this.state.maintainInsertionOrder}
+          changeMaintainInsertionOrder={() => this.setState({maintainInsertionOrder: !this.state.maintainInsertionOrder})}
+          numInsertionWorkers={this.state.numInsertionWorkers}
+          changeNumInsertionWorkers={() => this.setState({numInsertionWorkers: !this.state.numInsertionWorkers})}
+          stopOnError={this.state.stopOnError}
+          changeStopOnError={() => this.setState({stopOnError: !this.state.stopOnError})}
+          mode={this.state.mode}
+          changeMode={(e) => {
+            const {mode} = this.state;
+            mode.selected = e;
+            this.setState({mode});
+          }}
+          upsertFields={this.state.upsertFields}
+          changeUpsertFields={e => this.setState({upsertFields: e})}
+          changeWriteConcern={e => this.setState({writeConcern:e})}
+          writeConcern={this.state.writeConcern}
+          bypassDocumentValidation={this.state.bypassDocumentValidation}
+          changeBypassDocumentValidation={() => this.setState({bypassDocumentValidation: !this.state.bypassDocumentValidation})}
+        />);
       default:
         return null;
     }
@@ -287,6 +334,9 @@ export default class DatabaseExport extends React.Component {
       case BackupRestoreActions.RESTORE_COLLECTION:
       case BackupRestoreActions.RESTORE_DATABASE:
         return globalString('backup/database/mongoRestore');
+      case BackupRestoreActions.IMPORT_DATABASE:
+      case BackupRestoreActions.IMPORT_COLLECTION:
+        return globalString('backup/database/mongoImport');
       default:
         return '';
     }
@@ -300,6 +350,8 @@ export default class DatabaseExport extends React.Component {
       this.props.treeAction === BackupRestoreActions.RESTORE_SERVER ||
       this.props.treeAction === BackupRestoreActions.RESTORE_DATABASE ||
       this.props.treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
+      this.props.treeAction === BackupRestoreActions.IMPORT_DATABASE ||
+      this.props.treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
       this.props.treeAction === BackupRestoreActions.EXPORT_DATABASE) {
       let readOnly = true;
       if (this.props.treeAction === BackupRestoreActions.RESTORE_SERVER) {
@@ -368,6 +420,8 @@ export default class DatabaseExport extends React.Component {
         && treeAction !== BackupRestoreActions.RESTORE_COLLECTION
         && treeAction !== BackupRestoreActions.RESTORE_DATABASE
         && treeAction !== BackupRestoreActions.RESTORE_SERVER
+        && treeAction !== BackupRestoreActions.IMPORT_DATABASE
+        && treeAction !== BackupRestoreActions.IMPORT_COLLECTION
         && <AllCollectionOption allCollections={this.state.allCollections} action={treeAction}
           changeAllCollections={() => {
                                   if (!this.state.allCollections) {
@@ -380,7 +434,7 @@ export default class DatabaseExport extends React.Component {
         {
           !this.state.allCollections && !this.state.dumpDbUsersAndRoles ?
             <CollectionList collections={this.state.collections}
-              readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION}
+              readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION}
               target={treeAction === BackupRestoreActions.DUMP_SERVER || treeAction === BackupRestoreActions.EXPORT_SERVER ? 'server' : 'database'}
               selectCollection={this.selectCollection}
               unSelectCollection={this.unSelectCollection}

@@ -29,6 +29,7 @@ import { action, computed, reaction } from 'mobx';
 import DatabaseExport from './DatabaseExport';
 import { BackupRestoreActions, DrawerPanes } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
+import { isCollectionAction, isDatabaseAction } from './Utils';
 
 @observer
 @inject('store')
@@ -97,11 +98,10 @@ export class BackupRestore extends React.Component {
     const treeNode = store.treeActionPanel.treeNode;
     let db;
     let collection = null;
-    if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION || treeAction === BackupRestoreActions.RESTORE_COLLECTION) {
+    if (isCollectionAction(treeAction)) {
       db = treeNode.refParent.text;
       collection = treeNode.text;
-    } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE
-      || treeAction === BackupRestoreActions.RESTORE_DATABASE) {
+    } else if (isDatabaseAction(treeAction)) {
       db = treeNode.text;
     }
     return { db, collection };

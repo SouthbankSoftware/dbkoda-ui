@@ -128,6 +128,10 @@
             "name": "RestoreDatabase",
             "text": "Restore Database",
             "icon": "pt-icon-import"
+        }, {
+            "name": "ImportCollection",
+            "text": "Import Collection",
+            "icon": "pt-icon-import"
         }
     ],
     "collection": [{
@@ -204,6 +208,10 @@
         },{
             "name": "RestoreCollection",
             "text": "Restore Collection",
+            "icon": "pt-icon-import"
+        }, {
+            "name": "ImportCollection",
+            "text": "Import Collection",
             "icon": "pt-icon-import"
         }
     ],
