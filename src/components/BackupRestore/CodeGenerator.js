@@ -74,7 +74,7 @@ const createTemplateObject = (state) => {
 };
 
 const getRestoreServerCommandObject = ({ profile, state }) => {
-  const itm = createTemplateObject({ ...state, profile, db: null});
+  const itm = createTemplateObject({ ...state, profile});
   itm.inputFile = state.directoryPath;
   return itm;
 };

@@ -270,14 +270,19 @@ export default class DatabaseExport extends React.Component {
     if (this.props.treeAction === BackupRestoreActions.DUMP_COLLECTION ||
       this.props.treeAction === BackupRestoreActions.DUMP_DATABASE ||
       this.props.treeAction === BackupRestoreActions.EXPORT_COLLECTION ||
+      this.props.treeAction === BackupRestoreActions.RESTORE_SERVER ||
       this.props.treeAction === BackupRestoreActions.EXPORT_DATABASE) {
+      let readOnly = true;
+      if (this.props.treeAction === BackupRestoreActions.RESTORE_SERVER) {
+        readOnly = false;
+      }
       return (
         <div>
           <label className="pt-label database" htmlFor="database">
             {globalString('backup/database/db')}
           </label>
           <div className="pt-form-content">
-            <input className="pt-input" readOnly type="text" dir="auto" value={db} />
+            <input className="pt-input" readOnly={readOnly} type="text" dir="auto" value={db} onChange={e => this.setState({db: e.target.value})} />
           </div>
         </div>
       );
@@ -305,7 +310,7 @@ export default class DatabaseExport extends React.Component {
           {this.getFilePathLabel(treeAction)}
         </label>
         <div className="pt-form-content">
-          <input className="pt-inpu  t path-input" type="text" readOnly onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
+          <input className="pt-input path-input" type="text" readOnly onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
           <Button className="browse-directory" onClick={() => this.openFile(treeAction)}>{globalString('backup/database/chooseDirectory')}</Button>
         </div>
         <label className={this.state.directoryPath ? 'hide' : 'warning'} htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
