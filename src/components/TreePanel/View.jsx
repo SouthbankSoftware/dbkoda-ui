@@ -291,6 +291,7 @@ export default class TreeView extends React.Component {
                   || action === BackupRestoreActions.IMPORT_COLLECTION || action === BackupRestoreActions.IMPORT_DATABASE
                   || action === BackupRestoreActions.DUMP_SERVER
                   || action === BackupRestoreActions.RESTORE_DATABASE
+                  || action === BackupRestoreActions.RESTORE_COLLECTION
                   || action === BackupRestoreActions.RESTORE_SERVER) {
         this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
         this.props.store.setTreeAction(this.nodeRightClicked, action);

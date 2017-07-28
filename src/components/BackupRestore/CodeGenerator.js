@@ -161,7 +161,6 @@ export const generateCode = ({treeNode, profile, state, action}) => {
   const values = { cols };
   switch (action) {
     case BackupRestoreActions.EXPORT_DATABASE:
-    case BackupRestoreActions.EXPORT_SERVER:
     case BackupRestoreActions.EXPORT_COLLECTION: {
       // const template = require('./Template/ExportDatabsae.hbs');
       //       const exportDB = '{{#each cols}}\
@@ -184,6 +183,7 @@ export const generateCode = ({treeNode, profile, state, action}) => {
       return template(values);
     }
     case BackupRestoreActions.RESTORE_SERVER:
+    case BackupRestoreActions.RESTORE_COLLECTION:
     case BackupRestoreActions.RESTORE_DATABASE: {
       cols = getRestoreServerCommandObject({ treeNode, profile, state, action });
       const template = Handlebars.compile(restoreServer);
