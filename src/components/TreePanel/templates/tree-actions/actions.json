@@ -129,7 +129,7 @@
             "text": "Restore Database",
             "icon": "pt-icon-import"
         }, {
-            "name": "ImportCollection",
+            "name": "ImportDatabase",
             "text": "Import Collection",
             "icon": "pt-icon-import"
         }

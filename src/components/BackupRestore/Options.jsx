@@ -36,7 +36,7 @@ const getOptions = (options) => {
           if (o.type === 'selection') {
             const value = o.value;
             return (<div className="option-item-row" key={key}>
-              <span className="label">{o.label}</span>
+              <div className="label field-label">{o.label}</div>
               <div className="pt-select">
                 <select className="select" defaultValue={value.selected}
                   onChange={(item) => {
@@ -424,4 +424,4 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
     }
   ];
   return getOptions(options);
-}
+};

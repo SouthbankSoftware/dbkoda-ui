@@ -24,11 +24,11 @@
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
 import { BackupRestoreActions } from '../common/Constants';
-import { exportDB, dumpDB, dumpServer, restoreServer } from './Template';
+import { exportDB, dumpDB, dumpServer, restoreServer, importCollection } from './Template';
 import { isDumpAction } from './Utils';
 
 const createTemplateObject = (state) => {
-  const { db, profile, exportType } = state;
+  const { db, profile, exportType, parseGrace, mode } = state;
   const { host, port, sha, hostRadio, url, database } = profile;
   const items = {
     ...profile,
@@ -36,6 +36,8 @@ const createTemplateObject = (state) => {
     database: db,
     password: sha,
     exportType: exportType.selected,
+    parseGrace: parseGrace.selected,
+    mode: mode.selected,
   };
   if (sha) {
     items.authDb = database;
@@ -150,6 +152,11 @@ export const getCommandObject = ({ profile, state, action }) => {
   }
 };
 
+const getImportCollectionCommandObject = ({ profile, state }) => {
+  const itm = createTemplateObject({ ...state, profile});
+  itm.inputFile = state.directoryPath;
+  return itm;
+};
 
 export const generateCode = ({treeNode, profile, state, action}) => {
   let cols;
@@ -187,6 +194,12 @@ export const generateCode = ({treeNode, profile, state, action}) => {
     case BackupRestoreActions.RESTORE_DATABASE: {
       cols = getRestoreServerCommandObject({ treeNode, profile, state, action });
       const template = Handlebars.compile(restoreServer);
+      return template(cols);
+    }
+    case BackupRestoreActions.IMPORT_COLLECTION:
+    case BackupRestoreActions.IMPORT_DATABASE: {
+      cols = getImportCollectionCommandObject({treeNode, profile, state, action});
+      const template = Handlebars.compile(importCollection);
       return template(cols);
     }
     default:

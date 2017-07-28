@@ -103,7 +103,7 @@ export default class DatabaseExport extends React.Component {
     let properties;
     if (action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER) {
       properties = ['openDirectory', 'openFile'];
-    } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_DATABASE) {
+    } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_COLLECTION) {
       properties = ['openFile'];
     } else {
       properties = ['openDirectory'];
@@ -271,6 +271,7 @@ export default class DatabaseExport extends React.Component {
           gzip={this.state.gzip} changeGzip={() => this.setState({gzip: !this.state.gzip})}
         />);
       case BackupRestoreActions.IMPORT_COLLECTION:
+      case BackupRestoreActions.IMPORT_DATABASE:
         return (<ImportOptions
           outputFields={this.state.outputFields}
           changeOutputFields={e => this.setState({outputFields: e})}
@@ -389,7 +390,7 @@ export default class DatabaseExport extends React.Component {
       <div className="pt-form-group">
         {this.getDatabaseFieldComponent()}
         {
-          (treeAction === BackupRestoreActions.RESTORE_DATABASE || treeAction === BackupRestoreActions.RESTORE_COLLECTION)
+          (treeAction === BackupRestoreActions.RESTORE_DATABASE || treeAction === BackupRestoreActions.RESTORE_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION || treeAction === BackupRestoreActions.IMPORT_DATABASE)
           && <div style={{marginBottom: 20}}>
             <label className="pt-label database" htmlFor="database">
               {globalString('backup/database/collection')}
@@ -420,7 +421,6 @@ export default class DatabaseExport extends React.Component {
         && treeAction !== BackupRestoreActions.RESTORE_COLLECTION
         && treeAction !== BackupRestoreActions.RESTORE_DATABASE
         && treeAction !== BackupRestoreActions.RESTORE_SERVER
-        && treeAction !== BackupRestoreActions.IMPORT_DATABASE
         && treeAction !== BackupRestoreActions.IMPORT_COLLECTION
         && <AllCollectionOption allCollections={this.state.allCollections} action={treeAction}
           changeAllCollections={() => {
@@ -432,10 +432,10 @@ export default class DatabaseExport extends React.Component {
                                 }} />
         }
         {
-          !this.state.allCollections && !this.state.dumpDbUsersAndRoles ?
+          !this.state.allCollections && !this.state.dumpDbUsersAndRoles && treeAction !== BackupRestoreActions.IMPORT_COLLECTION && treeAction !== BackupRestoreActions.IMPORT_DATABASE ?
             <CollectionList collections={this.state.collections}
-              readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION}
-              target={treeAction === BackupRestoreActions.DUMP_SERVER || treeAction === BackupRestoreActions.EXPORT_SERVER ? 'server' : 'database'}
+              readOnly={treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION || treeAction === BackupRestoreActions.IMPORT_DATABASE}
+              target={treeAction === BackupRestoreActions.DUMP_SERVER ? 'server' : 'database'}
               selectCollection={this.selectCollection}
               unSelectCollection={this.unSelectCollection}
               selectedCollections={this.state.selectedCollections} /> : null
