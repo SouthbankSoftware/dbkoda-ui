@@ -179,11 +179,10 @@ const ConnectionPanel = ({
       .catch((err) => {
         console.error(err);
         onFail();
-        const message = err.message;
         DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message,
+          message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />), // eslint-disable-line react/no-danger
           intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
       });
   });
