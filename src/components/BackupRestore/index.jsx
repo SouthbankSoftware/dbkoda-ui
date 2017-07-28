@@ -24,8 +24,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, computed, reaction } from 'mobx';
-import {Intent} from '@blueprintjs/core';
-import { NewToaster } from '../common/Toaster';
+// import {Intent} from '@blueprintjs/core';
+// import { NewToaster } from '../common/Toaster';
 import DatabaseExport from './DatabaseExport';
 import { BackupRestoreActions, DrawerPanes } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
