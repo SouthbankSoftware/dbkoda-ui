@@ -70,13 +70,13 @@ export class BackupRestore extends React.Component {
       featherClient().service('/os-execution').on('os-command-finish', (output) => {
         this.setState({ commandExecuting: false });
         console.log('get backup command ', output);
-        if (output.code !== 0) {
-          NewToaster.show({
-                    message: globalString('editor/toolbar/executionScriptFailed'),
-                    intent: Intent.DANGER,
-                    iconName: 'pt-icon-thumbs-down'
-                  });
-        }
+        // if (output.code !== 0) {
+        //   NewToaster.show({
+        //             message: globalString('backup/database/executionOSScriptFailed'),
+        //             intent: Intent.DANGER,
+        //             iconName: 'pt-icon-thumbs-down'
+        //           });
+        // }
       });
     }
   }

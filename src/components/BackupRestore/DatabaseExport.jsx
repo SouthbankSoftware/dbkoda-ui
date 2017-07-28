@@ -81,7 +81,14 @@ export default class DatabaseExport extends React.Component {
   }
 
   openFile(action) {
-    const properties = isRestoreAction(action) || isImportAction(action) ? ['openDirectory', 'openFile'] : ['openDirectory'];
+    let properties;
+    if (action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER) {
+      properties = ['openDirectory', 'openFile'];
+    } else if (action === BackupRestoreActions.RESTORE_COLLECTION) {
+      properties = ['openFile'];
+    } else {
+      properties = ['openDirectory'];
+    }
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {
@@ -310,6 +317,18 @@ export default class DatabaseExport extends React.Component {
         <label className="pt-label database" htmlFor="database">
           {this.getFilePathLabel(treeAction)}
         </label>
+        {
+          (treeAction === BackupRestoreActions.RESTORE_DATABASE || treeAction === BackupRestoreActions.RESTORE_COLLECTION)
+            && <div style={{marginBottom: 20}}>
+              <label className="pt-label database" htmlFor="database">
+                {globalString('backup/database/collection')}
+              </label>
+              <div className="pt-form-content">
+                <input className="pt-input" type="text" dir="auto" readOnly={treeAction === BackupRestoreActions.RESTORE_COLLECTION}
+                  onChange={e => this.setState({collection: e.target.value})} />
+              </div>
+            </div>
+        }
         <div className="pt-form-content">
           <input className="pt-input path-input" type="text" readOnly onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
           <Button className="browse-directory" onClick={() => this.openFile(treeAction)}>{globalString('backup/database/chooseDirectory')}</Button>

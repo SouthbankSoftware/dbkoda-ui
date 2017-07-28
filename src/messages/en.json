@@ -238,7 +238,8 @@
         "skip": "Skip <count> ",
         "sort": "Sort <json>",
         "fields": "Fields <field>[,<field>]*",
-        "allDatabases": "All Databases"
+        "allDatabases": "All Databases",
+        "executionOSScriptFailed": "Execution of scripts failed"
       }
     }
   }
