@@ -20,6 +20,7 @@
 
 import React from 'react';
 import * as d3 from 'd3';
+import filesize from 'filesize';
 import './View.scss';
 
 // Breadcrumb dimensions: width, height, spacing, width of tip/tail
@@ -28,6 +29,35 @@ const b = {
   h: 30,
   s: 3,
   t: 10,
+};
+
+const getColour = (startColour) => {
+  if (!getColour._colours) {
+    getColour._idx = 0;
+    // colour palette
+    getColour._colours = [
+      '#ff3700',
+      '#ff8900',
+      '#ffb200',
+      '#fcff00',
+      '#c1ea00',
+      '#40ab00',
+      '#0087ce',
+      '#1335ff',
+      '#3e00a1',
+      '#8800ad',
+      '#ac0041',
+      '#ff0000',
+    ];
+  }
+
+  if (startColour) {
+    getColour._idx = getColour._colours.indexOf(startColour);
+  }
+
+  const colour = getColour._colours[getColour._idx % getColour._colours.length];
+  getColour._idx += 1;
+  return colour;
 };
 
 global.d3 = d3;
@@ -42,21 +72,13 @@ export default class View extends React.Component {
   static defaultProps = {
     width: 750,
     height: 600,
-    // Mapping of step names to colors
-    colors: {
-      home: '#5687d1',
-      product: '#7b615c',
-      search: '#de783b',
-      account: '#6ab975',
-      other: '#a173d1',
-      end: '#666666',
-    },
   };
 
   static PropTypes = {
     width: React.PropTypes.number,
     height: React.PropTypes.number,
-    colors: React.PropTypes.object,
+    data: React.PropTypes.object.isRequired,
+    onClick: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -66,23 +88,20 @@ export default class View extends React.Component {
 
     this.radius = Math.min(width, height) / 2;
 
-    this.toggleLegend = this.toggleLegend.bind(this);
+    // this.toggleLegend = this.toggleLegend.bind(this);
     this.mouseover = this.mouseover.bind(this);
     this.mouseleave = this.mouseleave.bind(this);
     this.breadcrumbPoints = this.breadcrumbPoints.bind(this);
   }
 
-  /**
-   * Total size of all segments; we set this later, after loading the data.
-   */
-  totalSize = 0;
-
   /*
    * Main function to draw and set up the visualization, once we have the data.
    */
   createView() {
-    const { colors } = this.props;
+    // reset colour
+    getColour._idx = 0;
 
+    this.view = d3.select(this.viewEl);
     this.container = d3.select(this.containerEl);
 
     const partition = d3.partition().size([2 * Math.PI, this.radius * this.radius]);
@@ -101,66 +120,96 @@ export default class View extends React.Component {
         return Math.sqrt(d.y1);
       });
 
-    const csv = d3.csvParseRows(require('./csvData').default);
-    const json = this.buildHierarchy(csv);
-
-    // Basic setup of page elements.
-    this.drawLegend();
-    d3.select(this.toggleLegendEl).on('click', this.toggleLegend);
-
     // Turn the data into a d3 hierarchy and calculate the sums.
-    const root = d3
-      .hierarchy(json)
+    let lastParent = null;
+    this.root = d3
+      .hierarchy(this.props.data)
       .sum((d) => {
         return d.size;
       })
       .sort((a, b) => {
         return b.value - a.value;
+      })
+      .each((node) => {
+        // skip root node
+        if (!node.parent) return;
+        if (node.parent !== lastParent) {
+          node.colour = getColour(node.parent.colour);
+        } else {
+          node.colour = getColour();
+        }
+        lastParent = node.parent;
       });
 
     // For efficiency, filter nodes to keep only those large enough to see.
-    const nodes = partition(root).descendants().filter((d) => {
+    const nodes = partition(this.root).descendants().filter((d) => {
       return d.x1 - d.x0 > 0.005; // 0.005 radians = 0.29 degrees
     });
 
-    const updatedSel = this.container.selectAll('path').data(nodes);
-
-    // Add/modify paths
-    updatedSel
+    this.container.selectAll('path').remove();
+    this.container
+      .selectAll('path')
+      .data(nodes)
       .enter()
       .append('svg:path')
-      .attr('display', (d) => {
-        return d.depth ? null : 'none';
-      })
       .attr('d', arc)
       .attr('fill-rule', 'evenodd')
-      .style('fill', (d) => {
-        return colors[d.data.name];
-      })
+      // TODO this default colour #202020 should be linked to $tabBackgroundSelected in theme
+      .style('fill', d => d.colour || '#202020')
       .style('opacity', 1)
-      .on('mouseover', this.mouseover);
-
-    // Prune extraneous paths
-    updatedSel.exit().remove();
+      .on('mouseover', this.mouseover)
+      .on('click', this.props.onClick);
 
     // Add the mouseleave handler to the bounding circle.
     this.container.on('mouseleave', this.mouseleave);
 
-    // Get total size of the tree = value of root node from partition.
-    this.totalSize = this.container.selectAll('path').datum().value;
+    this.updateList(this.root);
+  }
+
+  updateList(d) {
+    // Update list
+    const listSel = d3.select(this.listEl);
+
+    // header
+    listSel.select('thead').selectAll('tr').remove();
+    listSel
+      .select('thead')
+      .selectAll('tr')
+      .data([d])
+      .enter()
+      .append('tr')
+      .classed('darkColor', d => d.colour !== undefined)
+      .style('background-color', d => d.colour || 'none')
+      .html(d => `<th>${d.data.name}</th><th>${filesize(d.value)}</th>`);
+
+    // row
+    listSel.select('tbody').selectAll('tr').remove();
+    if (d.children) {
+      listSel
+        .select('tbody')
+        .selectAll('tr')
+        .data(d.children)
+        .enter()
+        .append('tr')
+        .classed('darkColor', d => d.colour !== undefined)
+        .style('background-color', d => d.colour || 'none')
+        .html(d => `<td>${d.data.name}</td><td>${filesize(d.value)}</td>`);
+    }
   }
 
   // Fade all but the current sequence, and show it in the breadcrumb trail.
   mouseover(d) {
-    const percentage = (100 * d.value / this.totalSize).toPrecision(3);
+    const percentage = (100 * d.value / this.root.value).toPrecision(3);
     let percentageString = percentage + '%';
     if (percentage < 0.1) {
       percentageString = '< 0.1%';
     }
 
-    d3.select('.percentage').text(percentageString);
+    this.view.select('.name').text(d.data.name);
+    this.view.select('.percentage').text(percentageString);
+    this.view.select('.filesize').text(filesize(d.value));
 
-    d3.select('.explanation').style('visibility', '');
+    this.view.select('.explanation').style('visibility', '');
 
     const sequenceArray = d.ancestors().reverse();
     sequenceArray.shift(); // remove root node from the array
@@ -175,6 +224,8 @@ export default class View extends React.Component {
         return sequenceArray.indexOf(node) >= 0;
       })
       .style('opacity', 1);
+
+    this.updateList(d);
   }
 
   /**
@@ -182,7 +233,7 @@ export default class View extends React.Component {
    */
   mouseleave() {
     // Hide the breadcrumb trail
-    d3.select('.trail').style('visibility', 'hidden');
+    this.view.select('.trail').style('visibility', 'hidden');
 
     // Deactivate all segments during transition.
     const paths = this.container.selectAll('path').on('mouseover', null);
@@ -192,7 +243,9 @@ export default class View extends React.Component {
       paths.on('mouseover', this.mouseover);
     });
 
-    d3.select('.explanation').style('visibility', 'hidden');
+    this.view.select('.explanation').style('visibility', 'hidden');
+
+    this.updateList(this.root);
   }
 
   /**
@@ -219,10 +272,8 @@ export default class View extends React.Component {
    * Update the breadcrumb trail to show the current sequence and percentage.
    */
   updateBreadcrumbs(nodeArray, percentageString) {
-    const { colors } = this.props;
-
     // Data join; key function combines name and depth (= position in sequence).
-    const trail = d3.select('.trail').selectAll('g').data(nodeArray, (d) => {
+    const trail = this.view.select('.trail').selectAll('g').data(nodeArray, (d) => {
       return d.data.name + d.depth;
     });
 
@@ -232,9 +283,10 @@ export default class View extends React.Component {
     // Add breadcrumb and label for entering nodes.
     const entering = trail.enter().append('svg:g');
 
-    entering.append('svg:polygon').attr('points', this.breadcrumbPoints).style('fill', (d) => {
-      return colors[d.data.name];
-    });
+    entering
+      .append('svg:polygon')
+      .attr('points', this.breadcrumbPoints)
+      .style('fill', d => d.colour);
 
     entering
       .append('svg:text')
@@ -252,9 +304,8 @@ export default class View extends React.Component {
     });
 
     // Now move and update the percentage at the end.
-    d3
-      .select('.trail')
-      .select('.endlabel')
+    this.view
+      .select('.trail .endlabel')
       .attr('x', (nodeArray.length + 0.5) * (b.w + b.s))
       .attr('y', b.h / 2)
       .attr('dy', '0.35em')
@@ -262,106 +313,7 @@ export default class View extends React.Component {
       .text(percentageString);
 
     // Make the breadcrumb trail visible, if it's hidden.
-    d3.select('.trail').style('visibility', '');
-  }
-
-  drawLegend() {
-    const { colors } = this.props;
-    // Dimensions of legend item: width, height, spacing, radius of rounded rect.
-    const li = {
-      w: 75,
-      h: 30,
-      s: 3,
-      r: 3,
-    };
-
-    const legend = d3
-      .select(this.legendEl)
-      .attr('width', li.w)
-      .attr('height', d3.keys(colors).length * (li.h + li.s));
-
-    const g = legend
-      .selectAll('g')
-      .data(d3.entries(colors))
-      .enter()
-      .append('svg:g')
-      .attr('transform', (d, i) => {
-        return 'translate(0,' + i * (li.h + li.s) + ')';
-      });
-
-    g
-      .append('svg:rect')
-      .attr('rx', li.r)
-      .attr('ry', li.r)
-      .attr('width', li.w)
-      .attr('height', li.h)
-      .style('fill', (d) => {
-        return d.value;
-      });
-
-    g
-      .append('svg:text')
-      .attr('x', li.w / 2)
-      .attr('y', li.h / 2)
-      .attr('dy', '0.35em')
-      .attr('text-anchor', 'middle')
-      .text((d) => {
-        return d.key;
-      });
-  }
-
-  toggleLegend() {
-    const legend = d3.select('.legend');
-    if (legend.style('visibility') == 'hidden') {
-      legend.style('visibility', '');
-    } else {
-      legend.style('visibility', 'hidden');
-    }
-  }
-
-  // Take a 2-column CSV and transform it into a hierarchical structure suitable
-  // for a partition layout. The first column is a sequence of step names, from
-  // root to leaf, separated by hyphens. The second column is a count of how
-  // often that sequence occurred.
-  buildHierarchy(csv) {
-    const root = { name: 'root', children: [] };
-    for (let i = 0; i < csv.length; i += 1) {
-      const sequence = csv[i][0];
-      const size = +csv[i][1];
-      if (isNaN(size)) {
-        // e.g. if this is a header row
-        continue; // eslint-disable-line no-continue
-      }
-      const parts = sequence.split('-');
-      let currentNode = root;
-      for (let j = 0; j < parts.length; j += 1) {
-        const children = currentNode.children;
-        const nodeName = parts[j];
-        let childNode;
-        if (j + 1 < parts.length) {
-          // Not yet at the end of the sequence; move down the tree.
-          let foundChild = false;
-          for (let k = 0; k < children.length; k += 1) {
-            if (children[k].name == nodeName) {
-              childNode = children[k];
-              foundChild = true;
-              break;
-            }
-          }
-          // If we don't already have a child node for this branch, create it.
-          if (!foundChild) {
-            childNode = { name: nodeName, children: [] };
-            children.push(childNode);
-          }
-          currentNode = childNode;
-        } else {
-          // Reached the end of the sequence; create a leaf node.
-          childNode = { name: nodeName, size };
-          children.push(childNode);
-        }
-      }
-    }
-    return root;
+    this.view.select('.trail').style('visibility', '');
   }
 
   componentDidMount() {
@@ -376,7 +328,7 @@ export default class View extends React.Component {
     const { width, height } = this.props;
 
     return (
-      <div className="StorageSunburstView">
+      <div ref={viewEl => (this.viewEl = viewEl)} className="StorageSunburstView">
         <div className="main">
           <div className="sequence">
             <svg className="trail" width={width} height={50}>
@@ -385,9 +337,11 @@ export default class View extends React.Component {
           </div>
           <div className="chart">
             <div className="explanation" style={{ visibility: 'hidden' }}>
+              <span className="name" /> takes
+              <br />
               <span className="percentage" />
               <br />
-              of visits begin with this sequence of pages
+              (<span className="filesize" />) of the total storage
             </div>
             <svg width={width} height={height}>
               <g
@@ -399,15 +353,11 @@ export default class View extends React.Component {
             </svg>
           </div>
         </div>
-        <div className="sidebar">
-          <input
-            ref={toggleLegendEl => (this.toggleLegendEl = toggleLegendEl)}
-            type="checkbox"
-          />{' '}
-          Legend<br />
-          <div className="legend" style={{ visibility: 'hidden' }}>
-            <svg ref={legendEl => (this.legendEl = legendEl)} />
-          </div>
+        <div className="list">
+          <table ref={listEl => (this.listEl = listEl)}>
+            <thead />
+            <tbody />
+          </table>
         </div>
       </div>
     );

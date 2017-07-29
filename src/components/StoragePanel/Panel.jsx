@@ -23,11 +23,52 @@ import StorageSunburstView from '#/common/SunburstView';
 
 import './Panel.scss';
 
+// Raw tree data
+const data = require('./data-big.json');
+
+// Here we make the tree backward navigatable. You can use your own navigation strategy, for example, dynamic loading
+function addParent(data) {
+  if (data.children) {
+    for (const child of data.children) {
+      child.parent = data;
+      addParent(child);
+    }
+  }
+}
+
+addParent(data);
+
+console.log(data);
+
 export default class StoragePanel extends React.Component {
+  state = {
+    data,
+  };
+
   render() {
     return (
       <div className="StoragePanel">
-        <StorageSunburstView />
+        <StorageSunburstView
+          data={this.state.data}
+          onClick={(node) => {
+            // node is a tree Node in d3-hierachy (https://github.com/d3/d3-hierarchy) that just clicked by user
+            const nodeData = node.data;
+
+            if (!node.parent) {
+              // root is clicked, we should move upward in the data tree
+              if (nodeData.parent) {
+                this.setState({
+                  data: nodeData.parent,
+                });
+              }
+            } else {
+              // a child is clicked, we should move downward in the data tree
+              this.setState({
+                data: nodeData,
+              });
+            }
+          }}
+        />
       </div>
     );
   }

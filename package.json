@@ -96,6 +96,7 @@
     "feathers-client": "^1.9.0",
     "feathers-primus": "^2.0.0",
     "file-loader": "^0.11.2",
+    "filesize": "^3.5.10",
     "globalize": "^1.2.3",
     "globalize-webpack-plugin": "^1.0.0",
     "handlebars": "^4.0.10",

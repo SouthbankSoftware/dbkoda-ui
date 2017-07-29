@@ -29,53 +29,59 @@
   .main {
     float: left;
     width: 750px;
-  }
 
-  .sidebar {
-    float: right;
-    width: 100px;
-    color: $navbarLeftHeading;
-  }
+    .sequence {
+      width: 600px;
+      height: 70px;
 
-  .sequence {
-    width: 600px;
-    height: 70px;
-
-    .trail {
-      .endlabel {
-        fill: $navbarLeftHeading;
+      .trail {
+        .endlabel {
+          fill: $navbarLeftHeading;
+        }
       }
     }
-  }
 
-  .legend {
-    padding: 10px 0 0 3px;
-  }
-
-  .legend text,
-  .sequence text {
-    font-weight: 600;
-    fill: $navbarLeftHeading;
-  }
-
-  .chart {
-    position: relative;
-
-    path {
-      stroke: $tabBackgroundSelected;
+    .sequence text {
+      font-weight: 600;
+      fill: $tabBackgroundSelected;
     }
+
+    .chart {
+      position: relative;
+
+      path {
+        stroke: $tabBackgroundSelected;
+      }
+
+      .explanation {
+        position: absolute;
+        top: 260px;
+        left: 305px;
+        width: 140px;
+        text-align: center;
+        color: $navbarLeftHeading;
+
+        .percentage {
+          font-size: 2.5em;
+        }
+      }
+    }
+
   }
 
-  .explanation {
-    position: absolute;
-    top: 260px;
-    left: 305px;
-    width: 140px;
-    text-align: center;
+  .list {
+    margin-top: 10px;
     color: $navbarLeftHeading;
-  }
 
-  .percentage {
-    font-size: 2.5em;
+    .darkColor {
+      color: $tabBackgroundSelected;
+    }
+
+    table {
+      th, td {
+        text-align: left;
+        padding: 2px;
+      }
+    }
   }
 }
