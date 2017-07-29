@@ -495,6 +495,7 @@ export default class Store {
     newStore.editorPanel.stoppingExecution = false;
     newStore.editorPanel.tabFilter = '';
     newStore.editorPanel.showingSavingDialog = false;
+    newStore.editorToolbar.newEditorForTreeAction = false;
     newStore.editorPanel.lastFileSavingDirectoryPath =
       newStore.editorPanel.lastFileSavingDirectoryPath ||
       (IS_ELECTRON ? global.PATHS.userHome : '');

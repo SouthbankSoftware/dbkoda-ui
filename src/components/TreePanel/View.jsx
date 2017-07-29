@@ -259,6 +259,16 @@ export default class TreeView extends React.Component {
     }
   };
 
+  isBackupRestoreAction = (action) => {
+    return action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION
+      || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION
+      || action === BackupRestoreActions.IMPORT_COLLECTION || action === BackupRestoreActions.IMPORT_DATABASE
+      || action === BackupRestoreActions.DUMP_SERVER
+      || action === BackupRestoreActions.RESTORE_DATABASE
+      || action === BackupRestoreActions.RESTORE_COLLECTION
+      || action === BackupRestoreActions.RESTORE_SERVER;
+  }
+
   @action
   handleTreeActionClick = (e: React.MouseEvent) => {
     const action = e._targetInst._currentElement._owner._instance.props.name;
@@ -286,15 +296,14 @@ export default class TreeView extends React.Component {
         this.actionSelected.view == 'details'
       ) {
         this.showDetailsView(this.nodeRightClicked, action);
-      } else if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION
-                  || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION
-                  || action === BackupRestoreActions.IMPORT_COLLECTION || action === BackupRestoreActions.IMPORT_DATABASE
-                  || action === BackupRestoreActions.EXPORT_SERVER || action === BackupRestoreActions.DUMP_SERVER
-                  || action === BackupRestoreActions.RESTORE_SERVER || action === BackupRestoreActions.IMPORT_SERVER) {
+      } else if (this.isBackupRestoreAction(action)) {
         this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
         this.props.store.setTreeAction(this.nodeRightClicked, action);
         if (!this.checkExistingEditor()) {
           this.props.store.addNewEditorForTreeAction({type: 'os'});
+        } else {
+          const eEditor = this.getExistedEditor();
+          eEditor[1].type = 'os';
         }
       } else {
         this.props.store.setTreeAction(this.nodeRightClicked, action);
@@ -317,6 +326,25 @@ export default class TreeView extends React.Component {
       }
     }
     return bExistingEditor;
+  }
+
+  /**
+   * get the tree editor object for the selected profile
+   */
+  getExistedEditor = () => {
+    const treeEditors = this.props.store.treeActionPanel.editors.entries();
+    let eEditor;
+    for (const editor of treeEditors) {
+      if (editor[1].currentProfile == this.props.store.profileList.selectedProfile.id) {
+        eEditor = editor;
+        runInAction('update state var', () => {
+          this.props.store.editorPanel.activeEditorId = editor[1].id;
+          this.props.store.treeActionPanel.treeActionEditorId = editor[1].id;
+        });
+        break;
+      }
+    }
+    return eEditor;
   }
 
   showTreeActionPanel = (treeNode, action) => {

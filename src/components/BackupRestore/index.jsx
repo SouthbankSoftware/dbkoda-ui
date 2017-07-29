@@ -24,11 +24,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, computed, reaction } from 'mobx';
-import {Intent} from '@blueprintjs/core';
-import { NewToaster } from '../common/Toaster';
+// import {Intent} from '@blueprintjs/core';
+// import { NewToaster } from '../common/Toaster';
 import DatabaseExport from './DatabaseExport';
 import { BackupRestoreActions, DrawerPanes } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
+import { isCollectionAction, isDatabaseAction } from './Utils';
 
 @observer
 @inject('store')
@@ -54,10 +55,14 @@ export class BackupRestore extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.store.treeActionPanel.treeActionEditorId && !this.state.editorId) {
-      this.setState({ editorId: nextProps.store.treeActionPanel.treeActionEditorId });
-      const editor = this.getEditorById(nextProps.store.treeActionPanel.treeActionEditorId);
-      this.fetchCollectionlist(editor);
+    const { store } = this.props;
+    const treeAction = store.treeActionPanel.treeAction;
+    if (nextProps.store.treeActionPanel.treeActionEditorId) {
+      if (!this.state.editorId || ((treeAction === BackupRestoreActions.DUMP_DATABASE || treeAction === BackupRestoreActions.EXPORT_DATABASE) && !this.state.collections)) {
+        this.setState({ editorId: nextProps.store.treeActionPanel.treeActionEditorId });
+        const editor = this.getEditorById(nextProps.store.treeActionPanel.treeActionEditorId);
+        this.fetchCollectionlist(editor);
+      }
     }
   }
 
@@ -70,13 +75,13 @@ export class BackupRestore extends React.Component {
       featherClient().service('/os-execution').on('os-command-finish', (output) => {
         this.setState({ commandExecuting: false });
         console.log('get backup command ', output);
-        if (output.code !== 0) {
-          NewToaster.show({
-                    message: globalString('editor/toolbar/executionScriptFailed'),
-                    intent: Intent.DANGER,
-                    iconName: 'pt-icon-thumbs-down'
-                  });
-        }
+        // if (output.code !== 0) {
+        //   NewToaster.show({
+        //             message: globalString('backup/database/executionOSScriptFailed'),
+        //             intent: Intent.DANGER,
+        //             iconName: 'pt-icon-thumbs-down'
+        //           });
+        // }
       });
     }
   }
@@ -93,10 +98,10 @@ export class BackupRestore extends React.Component {
     const treeNode = store.treeActionPanel.treeNode;
     let db;
     let collection = null;
-    if (treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION) {
+    if (isCollectionAction(treeAction)) {
       db = treeNode.refParent.text;
       collection = treeNode.text;
-    } else if (treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE) {
+    } else if (isDatabaseAction(treeAction)) {
       db = treeNode.text;
     }
     return { db, collection };
@@ -120,7 +125,7 @@ export class BackupRestore extends React.Component {
             this.setState({collections: JSON.parse(res)});
            });
       }
-      if (action === BackupRestoreActions.EXPORT_SERVER || action === BackupRestoreActions.DUMP_SERVER) {
+      if (action === BackupRestoreActions.DUMP_SERVER) {
         featherClient()
           .service('/mongo-sync-execution')
           .update(selectedProfile.id, {

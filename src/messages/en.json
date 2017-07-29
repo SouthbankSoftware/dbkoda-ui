@@ -233,12 +233,14 @@
         "outputOptions": "Output Options",
         "inputOptions": "Input Options",
         "queryOptions": "Querying Options",
+        "ingestOptions": "Ingest Options",
         "restoreOptions": "Restore Options",
         "limit": "Limit <count> ",
         "skip": "Skip <count> ",
         "sort": "Sort <json>",
         "fields": "Fields <field>[,<field>]*",
-        "allDatabases": "All Databases"
+        "allDatabases": "All Databases",
+        "executionOSScriptFailed": "Execution of scripts failed"
       }
     }
   }

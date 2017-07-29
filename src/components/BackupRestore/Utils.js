@@ -21,10 +21,16 @@ import {BackupRestoreActions} from '../common/Constants';
 
 export const isDumpAction = action => BackupRestoreActions.DUMP_COLLECTION === action || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_SERVER;
 
-export const isExportAction = action => BackupRestoreActions.EXPORT_COLLECTION === action || action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_SERVER;
+export const isExportAction = action => BackupRestoreActions.EXPORT_COLLECTION === action || action === BackupRestoreActions.EXPORT_DATABASE;
 
 export const isRestoreAction = action => BackupRestoreActions.RESTORE_COLLECTION === action || action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER;
 
-export const isImportAction = action => BackupRestoreActions.IMPORT_COLLECTION === action || action === BackupRestoreActions.IMPORT_DATABASE || action === BackupRestoreActions.IMPORT_SERVER;
+export const isImportAction = action => BackupRestoreActions.IMPORT_COLLECTION === action || action === BackupRestoreActions.IMPORT_DATABASE;
 
 export const isServerAction = action => BackupRestoreActions.DUMP_SERVER === action || BackupRestoreActions.DUMP_SERVER;
+
+export const isCollectionAction = treeAction => treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION
+|| treeAction === BackupRestoreActions.RESTORE_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION;
+
+export const isDatabaseAction = treeAction => treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE
+|| treeAction === BackupRestoreActions.RESTORE_DATABASE || treeAction === BackupRestoreActions.IMPORT_DATABASE;
