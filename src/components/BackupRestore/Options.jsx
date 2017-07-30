@@ -36,7 +36,7 @@ const getOptions = (options) => {
           if (o.type === 'selection') {
             const value = o.value;
             return (<div className="option-item-row" key={key}>
-              <span className="label">{o.label}</span>
+              <div className="label field-label">{o.label}</div>
               <div className="pt-select">
                 <select className="select" defaultValue={value.selected}
                   onChange={(item) => {
@@ -105,7 +105,7 @@ export const AllCollectionOption = ({allCollections, changeAllCollections, actio
   return getOptions(options);
 };
 
-export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
+export const ExportDBOptions = ({pretty, jsonArray,
                                   changePretty, changeJsonArray, changeNoHeaderLine, noHeaderLine,
                                   query, changeQuery, readPreference, changeReadPreference,
                                   forceTableScan, changeForceTableScan, exportSort, changeExportSort,
@@ -113,11 +113,6 @@ export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
                                   changeExportType, exportType, outputFields, changeOutputFields}) => {
   const options = [
     {
-      label: globalString('backup/database/ssl'),
-      onChange: changeSSL,
-      checked: ssl,
-      tooltips: '',
-    }, {
       label: globalString('backup/database/outputOptions'),
       type: 'separator'
     }, {
@@ -187,7 +182,7 @@ export const ExportDBOptions = ({ssl, pretty, jsonArray, changeSSL,
   return getOptions(options);
 };
 
-export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRepair,
+export const DumpOptions = ({gzip, changeGZip, repair, changeRepair,
                               dumpDbUsersAndRoles, changeDumpDbUsersAndRoles,
                               numParallelCollections, changeNumParallelCollections,
                               forceTableScan, changeForceTableScan,
@@ -196,11 +191,6 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
                               viewsAsCollections, changeViewsAsCollections}) => {
   const options = [
     {
-      label: globalString('backup/database/ssl'),
-      onChange: changeSSL,
-      tooltips: '',
-      checked: ssl,
-    }, {
       label: globalString('backup/database/outputOptions'),
       type: 'separator',
     }, {
@@ -251,23 +241,187 @@ export const DumpOptions = ({ssl, changeSSL, gzip, changeGZip, repair, changeRep
   return getOptions(options);
 };
 
-/**
- * the option panel for database export
- * @constructor
- */
-export const Options = ({action, ssl, allCollections, pretty, jsonArray, changeSSL, changeAllCollections, changePretty, changeJsonArray}) => {
-  if (action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION) {
-    return ExportDBOptions({
-      ssl,
-      allCollections,
-      pretty,
-      jsonArray,
-      changeSSL,
-      changeAllCollections,
-      changePretty,
-      changeJsonArray
-    });
-  }
-  return null;
+export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeConcern, changeWriteConcern,
+              noIndexRestore, changeNoIndexRestore, noOptionsRestore, changeNoOptionsRestore,
+              keepIndexVersion, changeKeepIndexVersion, maintainInsertionOrder, changeMaintainInsertionOrder,
+              numParallelCollections, changeNumParallelCollections,
+              numInsertionWorkersPerCollection, changeNumInsertionWorkersPerCollection,
+              stopOnError, changeStopOnError, bypassDocumentValidation, changeBypassDocumentValidation,
+              objcheck, changeObjcheck, oplogReplay, changeOplogReplay,
+              oplogLimit, changeOplogLimit, restoreDbUsersAndRoles, changeRestoreDbUsersAndRoles,
+              gzip, changeGzip}) => {
+  const options = [
+    {
+      label: globalString('backup/database/restoreOptions'),
+      type: 'separator',
+    }, {
+      label: 'drop',
+      onChange: changeDrop,
+      tooltips: '',
+      checked: drop,
+    }, {
+      label: 'dryRun',
+      onChange: changeDryRun,
+      tooltips: '',
+      checked: dryRun,
+    }, {
+      label: 'writeConcern',
+      onChange: changeWriteConcern,
+      checked: writeConcern,
+      type: 'input',
+      tooltips: '',
+    }, {
+      label: 'noIndexRestore',
+      checked: noIndexRestore,
+      tooltips: '',
+      onChange: changeNoIndexRestore,
+    }, {
+      label: 'noOptionsRestore',
+      onChange: changeNoOptionsRestore,
+      value: noOptionsRestore
+    }, {
+      label: 'keepIndexVersion',
+      onChange: changeKeepIndexVersion,
+      value: keepIndexVersion
+    }, {
+      label: 'maintainInsertionOrder',
+      onChange: changeMaintainInsertionOrder,
+      value: maintainInsertionOrder
+    }, {
+      label: 'numParallelCollections',
+      onChange: changeNumParallelCollections,
+      value: numParallelCollections,
+      type: 'input',
+      inputType: 'number',
+    }, {
+      label: 'numInsertionWorkers',
+      onChange: changeNumInsertionWorkersPerCollection,
+      value: numInsertionWorkersPerCollection,
+      type: 'input',
+      inputType: 'number',
+    }, {
+      label: 'stopOnError',
+      onChange: changeStopOnError,
+      value: stopOnError
+    }, {
+      label: 'bypassDocumentValidation',
+      onChange: changeBypassDocumentValidation,
+      value: bypassDocumentValidation
+    }, {
+      label: globalString('backup/database/inputOptions'),
+      type: 'separator'
+    }, {
+      label: 'objcheck',
+      value: objcheck,
+      onChange: changeObjcheck,
+    }, {
+      label: 'oplogReplay',
+      type: 'input',
+      value: oplogReplay,
+      onChange: changeOplogReplay,
+    }, {
+      label: 'oplogLimit',
+      type: 'input',
+      value: oplogLimit,
+      onChange: changeOplogLimit,
+    }, {
+      label: 'restoreDbUsersAndRoles',
+      value: restoreDbUsersAndRoles,
+      onChange: changeRestoreDbUsersAndRoles,
+    }, {
+      label: 'gzip',
+      value: gzip,
+      onChange: changeGzip,
+    }
+  ];
+  return getOptions(options);
 };
 
+export const ImportOptions = ({outputFields, changeOutputFields, headerLine, changeHeaderLine, jsonArray, changeJsonArray,
+                                parseGrace, changeParseGrace, exportType, changeExportType,
+                                columnsHaveTypes, changeColumnsHaveTypes,
+                                drop, changeDrop, ignoreBlanks, changeIgnoreBlanks,
+                                maintainInsertionOrder, changeMaintainInsertionOrder,
+                                numInsertionWorkers, changeNumInsertionWorkers,
+                                stopOnError, changeStopOnError, mode, changeMode,
+                                upsertFields, changeUpsertFields, writeConcern, changeWriteConcern,
+                                bypassDocumentValidation, changeBypassDocumentValidation}) => {
+  const options = [
+    {
+      label: globalString('backup/database/inputOptions'),
+      type: 'separator',
+    }, {
+      label: globalString('backup/database/fields'),
+      type: 'input',
+      value: outputFields,
+      onChange: changeOutputFields,
+    }, {
+      label: 'headerLine',
+      onChange: changeHeaderLine,
+      checked: headerLine,
+    }, {
+      label: 'jsonArray',
+      onChange: changeJsonArray,
+      checked: jsonArray,
+    }, {
+      label: 'parseGrace',
+      onChange: changeParseGrace,
+      type: 'selection',
+      value: parseGrace,
+    }, {
+      label: 'Type',
+      onChange: changeExportType,
+      type: 'selection',
+      value: exportType,
+    }, {
+      label: 'columnsHaveTypes',
+      onChange: changeColumnsHaveTypes,
+      type: 'input',
+      value: columnsHaveTypes,
+    }, {
+      label: globalString('backup/database/ingestOptions'),
+      type: 'separator',
+    }, {
+      label: 'drop',
+      onChange: changeDrop,
+      checked: drop,
+    }, {
+      label: 'ignoreBlanks',
+      onChange: changeIgnoreBlanks,
+      checked: ignoreBlanks,
+    }, {
+      label: 'maintainInsertionOrder',
+      onChange: changeMaintainInsertionOrder,
+      checked: maintainInsertionOrder,
+    }, {
+      label: 'numInsertionWorkers',
+      type: 'input',
+      value: numInsertionWorkers,
+      onChange: changeNumInsertionWorkers,
+    }, {
+      label: 'stopOnError',
+      onChange: changeStopOnError,
+      checked: stopOnError,
+    }, {
+      label: 'mode',
+      onChange: changeMode,
+      type: 'selection',
+      value: mode,
+    }, {
+      label: 'upsertFields',
+      type: 'input',
+      value: upsertFields,
+      onChange: changeUpsertFields,
+    }, {
+      label: 'writeConcern',
+      type: 'input',
+      value: writeConcern,
+      onChange: changeWriteConcern,
+    }, {
+      label: 'bypassDocumentValidation',
+      onChange: changeBypassDocumentValidation,
+      checked: bypassDocumentValidation,
+    }
+  ];
+  return getOptions(options);
+};

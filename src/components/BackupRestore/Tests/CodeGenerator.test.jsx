@@ -159,4 +159,49 @@ describe('test backup restore generator view', () => {
     assert.equal(code.length, 2);
     assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
   });
+
+  test('test mongodump all databases for a server', () => {
+    const profile = {url:'mongodb://user:123456@localhost:27017', database: 'test', ssl: true, hostRadio: false};
+    const state = {directoryPath: '/tmp', allCollections: true, collections: ['col1', 'col2'],
+      query: '{a:a}', exportType: {}, dumpDbUsersAndRoles: false, ssl: false,
+      forceTableScan: true};
+    const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
+    const code = gc.split('\n');
+    assert.equal(code.length, 2);
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o /tmp ');
+  });
+
+  test('test mongodump selected databases for a server', () => {
+    const profile = {url:'mongodb://user:123456@localhost:27017', database: 'test', ssl: true, hostRadio: false};
+    const state = {directoryPath: '/tmp', allCollections: false, collections: ['col1', 'col2'], selectedCollections: ['col1', 'col2'],
+      query: '{a:a}', exportType: {}, dumpDbUsersAndRoles: false, ssl: false,
+      forceTableScan: true};
+    const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
+    const code = gc.split('\n');
+    assert.equal(code.length, 3);
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db col1 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[1], 'mongodump --host localhost --port 27017 --db col2 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o /tmp ');
+  });
+
+  test('test mongodump all databases for a server with dumpDbUsersAndRoles turn on', () => {
+    const profile = {url:'mongodb://user:123456@localhost:27017', database: 'test', ssl: true, hostRadio: false};
+    const state = {directoryPath: '/tmp', allCollections: true, collections: ['col1', 'col2'],
+      query: '{a:a}', exportType: {}, ssl: false, dumpDbUsersAndRoles: true,
+      forceTableScan: true};
+    const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
+    const code = gc.split('\n');
+    assert.equal(code.length, 2);
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
+  });
+
+  test('test mongodump selected databases for a server with dumpDbUsersAndRoles turn on', () => {
+    const profile = {url:'mongodb://user:123456@localhost:27017', database: 'test', ssl: true, hostRadio: false};
+    const state = {directoryPath: '/tmp', allCollections: false, collections: ['col1', 'col2'], selectedCollections: ['col1'],
+      query: '{a:a}', exportType: {}, dumpDbUsersAndRoles: true, ssl: false,
+      forceTableScan: true};
+    const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
+    const code = gc.split('\n');
+    assert.equal(code.length, 2);
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
+  });
 });

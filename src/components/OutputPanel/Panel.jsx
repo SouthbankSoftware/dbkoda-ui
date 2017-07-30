@@ -30,6 +30,7 @@ import { action, reaction, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Tab2, Tabs2 } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
+import { StoragePanel } from '#/StoragePanel';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
@@ -155,10 +156,10 @@ export default class Panel extends React.Component {
           }
         />
       );
-      if (this.props.store.editorPanel.activeEditorId == editor[1].id) {
+      if (this.props.store.editorPanel.activeEditorId === editor[1].id) {
         if (
           editor[1].detailsView &&
-          editor[1].detailsView.currentProfile != editor[1].currentProfile
+          editor[1].detailsView.currentProfile !== editor[1].currentProfile
         ) {
           // This is the condition to switch the editor to first one if the profile got change.
           runInAction(() => {
@@ -198,6 +199,17 @@ export default class Panel extends React.Component {
                 }
                 editor={editor[1]}
               />
+            }
+          />
+        );
+        arrTabs.push(
+          <Tab2
+            className="visible"
+            key={'Storage-' + editor[1].id}
+            id={'Storage-' + editor[1].id}
+            title={'Storage-' + editorTitle}
+            panel={
+              <StoragePanel />
             }
           />
         );

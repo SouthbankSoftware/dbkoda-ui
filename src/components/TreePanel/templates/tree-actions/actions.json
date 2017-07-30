@@ -86,9 +86,9 @@
             "text": "Dump Databases",
             "icon": "pt-icon-export"
         },{
-            "name": "ExportServer",
-            "text": "Export Databases",
-            "icon": "pt-icon-export"
+            "name": "RestoreServer",
+            "text": "Restore Databases",
+            "icon": "pt-icon-import"
         }
     ],
     "database": [{
@@ -124,6 +124,14 @@
             "name": "DumpDatabase",
             "text": "Dump Database",
             "icon": "pt-icon-export"
+        },{
+            "name": "RestoreDatabase",
+            "text": "Restore Database",
+            "icon": "pt-icon-import"
+        }, {
+            "name": "ImportDatabase",
+            "text": "Import Collection",
+            "icon": "pt-icon-import"
         }
     ],
     "collection": [{
@@ -203,6 +211,14 @@
             "name": "DumpCollection",
             "text": "Dump Collection",
             "icon": "pt-icon-export"
+        },{
+            "name": "RestoreCollection",
+            "text": "Restore Collection",
+            "icon": "pt-icon-import"
+        }, {
+            "name": "ImportCollection",
+            "text": "Import Collection",
+            "icon": "pt-icon-import"
         }
     ],
     "index": [{

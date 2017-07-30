@@ -1,0 +1,62 @@
+{
+  "name": "Storage",
+  "children": [{
+    "name": "db 1",
+    "children": [{
+      "name": "col 1",
+      "children": [{
+        "name": "doc 1",
+        "children": [{
+            "name": "field 1",
+            "size": 233
+          },
+          {
+            "name": "field 2",
+            "children": [{
+                "name": "subfield 1",
+                "size": 144
+              },
+              {
+                "name": "subfield 2",
+                "size": 345
+              },
+              {
+                "name": "subfield 3",
+                "size": 177
+              }
+            ]
+          },
+          {
+            "name": "field 3",
+            "size": 899
+          },
+          {
+            "name": "Unexplored",
+            "size": 2311
+          }
+        ]
+      }]
+    }, {
+      "name": "col 2",
+      "size": 1049
+    }, {
+      "name": "col 3",
+      "size": 1232
+    }, {
+      "name": "Unexplored",
+      "size": 887
+    }]
+  }, {
+    "name": "db 2",
+    "size": 777
+  }, {
+    "name": "db 3",
+    "size": 666
+  }, {
+    "name": "db 4",
+    "size": 555
+  }, {
+    "name": "db 5",
+    "size": 444
+  }]
+}
