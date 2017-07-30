@@ -279,7 +279,6 @@ export default class TreeView extends React.Component {
           break;
       }
     } else if (this.nodeRightClicked) {
-      console.log('huh?');
       if (
         this.actionSelected &&
         this.actionSelected.view &&

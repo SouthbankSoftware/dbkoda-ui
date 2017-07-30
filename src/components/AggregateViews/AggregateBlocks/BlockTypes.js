@@ -28,15 +28,24 @@
 
 export const BlockTypes = {
   AGGREGATE: {
-    type:'$aggregate',
+    type:'Aggregate',
     description: 'Basic Sample Aggregate Block.',
+    fields: {
+      aggregate_field: 'placeholder_aggregate'
+    }
   },
   GROUP_BY: {
-    type: '$group_by',
+    type: 'Group_By',
     description: 'Group your results by a certain predicate',
+    fields: {
+      group_by_field: 'placeholder_group_by'
+    }
   },
   MATCH: {
-    type: '$match',
+    type: 'Match',
     description: 'Reduce your pipeline results using a match on a field.',
+    fields: {
+      Field: 'placeholder_field'
+    }
   }
 };

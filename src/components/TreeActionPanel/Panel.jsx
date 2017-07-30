@@ -79,6 +79,7 @@ export default class TreeActionPanel extends React.Component {
         }
         return params;
       };
+
       const formBuilder = new FormBuilder();
       this.formPromise = formBuilder.createForm(
         resolveArguments,

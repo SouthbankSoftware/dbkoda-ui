@@ -48,13 +48,25 @@ export default class Palette extends React.Component {
     // Check if empty array
     const tmpArray = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList.slice();
     if (tmpArray.length === 0) {
-      tmpArray.push({type: blockType});
+      tmpArray.push({
+        type: blockType,
+        fields: BlockTypes[blockType.toUpperCase()].fields
+      });
     } else if (position === 'START') {
-      tmpArray.unshift({type: blockType});
+      tmpArray.unshift({
+        type: blockType,
+        fields: BlockTypes[blockType.toUpperCase()].fields
+      });
     } else if (position === 'END') {
-      tmpArray.push({type: blockType});
+      tmpArray.push({
+        type: blockType,
+        fields: BlockTypes[blockType.toUpperCase()].fields
+      });
     } else {
-      tmpArray.push({type: blockType});
+      tmpArray.push({
+        type: blockType,
+        fields: BlockTypes[blockType.toUpperCase()].fields
+      });
       this.moveBlock(tmpArray, tmpArray.length - 1, position);
     }
     this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;

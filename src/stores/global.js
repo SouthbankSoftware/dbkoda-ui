@@ -108,6 +108,7 @@ export default class Store {
     lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : '',
     shouldScrollToActiveTab: false,
     tabScrollLeftPosition: 0,
+    updateAggregateDetails: false,
   });
 
   @observable
@@ -495,6 +496,7 @@ export default class Store {
     newStore.editorPanel.stoppingExecution = false;
     newStore.editorPanel.tabFilter = '';
     newStore.editorPanel.showingSavingDialog = false;
+    newStore.editorPanel.updateAggregateDetails = false;
     newStore.editorPanel.lastFileSavingDirectoryPath =
       newStore.editorPanel.lastFileSavingDirectoryPath ||
       (IS_ELECTRON ? global.PATHS.userHome : '');

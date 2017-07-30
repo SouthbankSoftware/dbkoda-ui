@@ -1,0 +1,13 @@
+{
+  "Title": "Aggregate",
+  "DefaultValues": {},
+  "Fields": [
+    {
+      "name": "aggregate_field",
+      "label": "aggregate_field",
+      "type": "Text",
+      "readOnly": false,
+      "keyValue": true
+    }
+  ]
+}

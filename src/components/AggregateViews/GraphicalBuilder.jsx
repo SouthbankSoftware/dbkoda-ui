@@ -44,16 +44,19 @@ export default class GraphicalBuilder extends React.Component {
     super(props);
     this.state = {
       id: props.id,
-      activeBlockIndex: null,
+      activeBlockIndex: this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock,
       colorMatching: []
     };
+
+    // Find the active block
   }
 
   @action.bound
   selectBlock(index) {
     this.setState({activeBlockIndex: index});
-    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList[index];
-    console.log('set block to ', this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock);
+    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock = index;
+    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList[index].isSelected = true;
+    this.props.store.editorPanel.updateAggregateDetails = true;
   }
 
   @action.bound
@@ -96,10 +99,10 @@ export default class GraphicalBuilder extends React.Component {
           {this.props.store.editors.get(this.state.id).blockList.map((indexValue, index) => {
             // Get Block Type for SVG Render.
             let posType = 'MIDDLE';
-            if (index >= this.props.store.editors.get(this.state.id).blockList.length - 1) {
-              posType = 'END';
-            } else if (index === 0) {
+            if (index === 0) {
               posType = 'START';
+            } else if (index >= this.props.store.editors.get(this.state.id).blockList.length - 1) {
+              posType = 'END';
             }
 
             let blockColor = 0;

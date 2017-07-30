@@ -271,27 +271,43 @@ export default class FormBuilder {
    */
   createForm = (resolveArguments, updateDynamicFormCode, editorObject, formAction) => {
     try {
-      const treeAction = formAction;
-      this.resolveArguments = resolveArguments;
-      this.editor = editorObject;
-      // Load the form definitions dynamically
-      const ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
+      let treeAction;
+      let ddd;
+      let formFunctions;
+      let formTemplate;
 
-      // Load the form functions to support the definitions dynamically
-      const formFunctions = require('./Functions/' + treeAction + '.js')[     //eslint-disable-line
-        treeAction
-      ];
-
-      // load the form template
-      const formTemplate = require('./Templates/' + treeAction + '.hbs'); //eslint-disable-line
+      if (formAction.aggregate) {
+        treeAction = formAction.action;
+        this.resolveArguments = resolveArguments;
+        this.editor = editorObject;
+        // Load the form definitions dynamically
+        ddd = require('../AggregateViews/AggregateBlocks/BlockDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
+        // Load the form functions to support the definitions dynamically
+        formFunctions = require('../AggregateViews/AggregateBlocks/BlockFunctions/' + treeAction + '.js')[     //eslint-disable-line
+          treeAction
+        ];
+        // load the form template
+        formTemplate = require('../AggregateViews/AggregateBlocks/BlockTemplates/' + treeAction + '.hbs'); //eslint-disable-line
+      } else {
+        treeAction = formAction;
+        this.resolveArguments = resolveArguments;
+        this.editor = editorObject;
+        // Load the form definitions dynamically
+        ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
+        // Load the form functions to support the definitions dynamically
+        formFunctions = require('./Functions/' + treeAction + '.js')[     //eslint-disable-line
+          treeAction
+        ];
+        // load the form template
+        formTemplate = require('./Templates/' + treeAction + '.hbs'); //eslint-disable-line
+      }
 
       return new Promise((resolve, reject) => {
         // get Fields for Mobx React Form
         this.getFieldsFromDefinitions(ddd, formFunctions)
           .then((formDefs) => {
-            console.log(formDefs);
-
             // callback function to get the updated values from the form
+            // @TODO @MIKE -> Upgrade this for handling with aggregate.
             const formValueUpdates = (values) => {
               console.log('form new values:', values);
               if (formDefs.arrayLast.length > 0) {
@@ -303,8 +319,12 @@ export default class FormBuilder {
                 }
               }
               if (updateDynamicFormCode) {
-                const generatedCode = formTemplate(values);
-                updateDynamicFormCode(generatedCode);
+                if (formAction.aggregate) {
+                  updateDynamicFormCode(generatedCode);
+                } else {
+                  const generatedCode = formTemplate(values);
+                  updateDynamicFormCode(generatedCode);
+                }
               }
             };
 

@@ -1,0 +1,13 @@
+{
+  "Title": "Group By",
+  "DefaultValues": {},
+  "Fields": [
+    {
+      "name": "group_by_field",
+      "label": "group_by_field",
+      "type": "Text",
+      "readOnly": false,
+      "keyValue": true
+    }
+  ]
+}

@@ -28,6 +28,9 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { action, observable, reaction } from 'mobx';
+import FormBuilder from '#/TreeActionPanel/FormBuilder';
+import View from '#/TreeActionPanel/View';
 import './style.scss';
 
 @inject(allStores => ({
@@ -37,11 +40,108 @@ import './style.scss';
 export default class Details extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      form: null,
+      previousActiveBlock: null
+    };
+    this.reactionToUpdateDetails = reaction(
+      () => this.props.store.editorPanel.updateAggregateDetails,
+      () => this.updateDetails()
+    );
+
+    // Get variables for action:
+    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    /**
+     * Resolve the prefetch arguments and return them as params
+     * @param  {Array}  args     Arguments array as provided from DDD file
+     * @return {Object}          Object containing params for prefetch function
+     */
+    this.resolveArguments = (args) => {
+      const params = {};
+      if (args.length > 0 && treeActionPanel.treeNode) {
+        for (let i = 0; i < args.length; i += 1) {
+          const arg = args[i];
+          switch (arg.value) {
+            case 'treeNode.parentDB':
+              if (treeActionPanel.treeNode.type == 'user') {
+                params[arg.name] = treeActionPanel.treeNode.json.db;
+              } else if (treeActionPanel.treeNode.type == 'collection') {
+                params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
+              } else if (treeActionPanel.treeNode.type == 'index') {
+                params[arg.name] = treeActionPanel.treeNode.refParent.refParent.json.text;
+              }
+              break;
+
+            case 'treeNode.parentCOL':
+              if (treeActionPanel.treeNode.type == 'index') {
+                params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
+              }
+              break;
+            default:
+              params[arg.name] = treeActionPanel.treeNode.json.text;
+          }
+        }
+      }
+      return params;
+    };
+    this.formBuilder = new FormBuilder();
   }
 
+  componentWillUnmount() {
+    this.reactionToUpdateDetails();
+  }
+  updateDetails() {
+    if (this.props.store.editorPanel.updateAggregateDetails) {
+      this.props.store.editorPanel.updateAggregateDetails = false;
+      this.forceUpdate();
+      // Current hack to handle the async nature of the mobx form builder.
+      _.delay(() => {
+        this.forceUpdate();
+      }, 100);
+    }
+  }
+
+  updateBlockFields(fields) {
+    console.log('Updating Fields:', fields);
+  }
+
+  formPromise;
+  dynamicForm;
+  @observable msg = '';
+  @observable bForm = false;
+  @action showForm(value) {
+    this.bForm = value;
+  }
+  @action updateMsg(value) {
+    this.msg = value;
+  }
   render() {
-    console.log(this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock);
+    const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const blockIndex = activeEditor.selectedBlock;
+    const activeBlock = activeEditor.blockList[blockIndex];
+    // Check if activeBlock has changed, if so, rebuild the form.
+    if (activeBlock && activeBlock !== this.state.previousActiveBlock) {
+      this.state.previousActiveBlock = activeBlock;
+      this.formPromise = this.formBuilder.createForm(
+        this.resolveArguments,
+        this.updateDynamicFormCode,
+        this.editor,
+        {
+          action: activeBlock.type,
+          aggregate: true
+        }
+     );
+      this.formPromise
+        .then((res) => {
+          this.dynamicForm = res;
+          this.showForm(true);
+          this.setState({form: this.dynamicForm});
+          this.dynamicForm.getData();
+        })
+        .catch((reason) => {
+          this.updateMsg(reason);
+        });
+    }
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
@@ -49,13 +149,26 @@ export default class Details extends React.Component {
             Block Details
           </h2>
         </nav>
-        { this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock &&
+        { activeBlock &&
           <div className="aggregateDetailsContent">
             <p>
-              Some fields will go here based on type {this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock.type}
+              Some fields will go here based on type {activeBlock.type}
             </p>
+            <div className="dynamic-form">
+              {this.state.form && <View
+                title={this.state.form.title}
+                mobxForm={this.state.form.mobxForm}
+                isAggregate
+              />}
+              {!this.bForm &&
+                <div>
+                  <div className="tree-msg-div">
+                    <span>{this.msg}</span>
+                  </div>
+                </div>}
+            </div>
           </div>}
-        {!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock &&
+        { !activeBlock &&
           <div className="aggregateDetailsContent">
             <p>
               No block selected.

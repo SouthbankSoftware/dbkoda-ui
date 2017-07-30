@@ -104,6 +104,7 @@ export default class TreeActionView extends React.Component {
           {formFields}
           <p className="pt-form-helper-text">{mobxForm.error}</p>
         </form>
+        { !this.props.isAggregate &&
         <div className="form-button-panel">
           <button
             className="pt-button pt-intent-success right-button"
@@ -119,6 +120,7 @@ export default class TreeActionView extends React.Component {
             {globalString('tree/closeButton')}
           </button>
         </div>
+        }
       </div>
     );
   }

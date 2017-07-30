@@ -121,7 +121,7 @@ export default class Block extends React.Component {
     const isOver = this.props.isOver; // eslint-disable-line
     this.state.color = 'color_' + this.props.color;
     const classes = 'aggregateBlock ' + this.state.type + ' ' + this.state.listPosition + ' selected_' + this.props.selected;
-    const blockColorClasses = 'dbKodaSVG ' + this.state.posType + ' ' + this.state.color;
+    const blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
     return connectDragSource(
       connectDropTarget(
         <div className={classes}>
@@ -133,30 +133,30 @@ export default class Block extends React.Component {
               </p>
             </div>
           }
-          {this.state.concrete && this.state.posType === 'MIDDLE' &&
+          {this.state.concrete && this.props.positionType === 'MIDDLE' &&
             <div className="blockBuilderWrapper">
               <BlockIcon className={blockColorClasses}
                 onClick={() => this.props.onClickCallback(this.state.listPosition)} />
               <p className="aggregateBlockTitle">
-                {this.props.type}
+                ${this.props.type.toLowerCase()}
               </p>
             </div>
           }
-          {this.state.concrete && this.state.posType === 'END' &&
+          {this.state.concrete && this.props.positionType === 'END' &&
             <div className="blockBuilderWrapper">
               <BlockBottomIcon className={blockColorClasses}
                 onClick={() => this.props.onClickCallback(this.state.listPosition)} />
               <p className="aggregateBlockTitle">
-                {this.props.type}
+                ${this.props.type.toLowerCase()}
               </p>
             </div>
           }
-          {this.state.concrete && this.state.posType === 'START' &&
+          {this.state.concrete && this.props.positionType === 'START' &&
             <div className="blockBuilderWrapper">
               <BlockTopIcon className={blockColorClasses}
                 onClick={() => this.props.onClickCallback(this.state.listPosition)} />
               <p className="aggregateBlockTitle">
-                {this.props.type}
+                ${this.props.type.toLowerCase()}
               </p>
             </div>
           }
