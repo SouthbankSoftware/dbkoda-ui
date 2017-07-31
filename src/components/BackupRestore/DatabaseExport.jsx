@@ -79,7 +79,7 @@ export default class DatabaseExport extends React.Component {
       sc.push(collection);
       this.setState({selectedCollections: sc, allCollections: false});
     }
-    if (treeAction === BackupRestoreActions.RESTORE_COLLECTION) {
+    if (treeAction === BackupRestoreActions.RESTORE_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION) {
       this.setState({collection: treeNode.text});
     }
   }
