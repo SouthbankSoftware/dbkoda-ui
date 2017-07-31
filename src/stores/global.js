@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T11:50:12+10:00
+ * @Last modified time: 2017-07-31T10:41:08+10:00
  */
 
 
@@ -37,7 +37,6 @@ import {
   postDeserializer,
 } from '#/common/mobxDumpenvyExtension';
 import { DrawerPanes } from '#/common/Constants';
-import uuidV1 from 'uuid';
 import { Doc } from 'codemirror';
 import { featherClient } from '~/helpers/feathers';
 import { Intent } from '@blueprintjs/core';
@@ -254,91 +253,6 @@ export default class Store {
     this.editorPanel.creatingNewEditor = true;
     this.editorToolbar.newConnectionLoading = true;
   };
-  // Setting up editor after successful response from Controller, it's more than possible some of these
-  // states could be removed or refactored eventually. Worth checking out when time allows.
-  @action
-  setNewEditorState = (res, options = {}) => {
-    const { content = '' } = options;
-    options = _.omit(options, ['content']);
-    let fileName = `new${this.profiles.get(res.id).editorCount}.js`;
-    if (options.type === 'aggregate') {
-      fileName = 'Aggregate Builder';
-    }
-
-    const editorId = uuidV1();
-    this.profiles.get(res.id).editorCount += 1;
-
-    const doc = Store.createNewDocumentObject(content);
-    doc.lineSep = Store.determineEol(content);
-
-    this.editors.set(
-      editorId,
-      observable(
-        _.assign(
-          // NOTE this obj should be synced with the one in src/components/EditorPanel/Toolbar.jsx:profileCreated()
-          {
-            id: editorId,
-            alias: this.profiles.get(res.id).alias,
-            profileId: res.id,
-            shellId: res.shellId,
-            currentProfile: res.id,
-            fileName,
-            executing: false,
-            visible: true,
-            shellVersion: res.shellVersion,
-            initialMsg: res.output ? res.output.join('\n') : '',
-            doc: observable.ref(doc),
-            status: ProfileStatus.OPEN,
-            path: null,
-            type: options.type
-          },
-          options,
-        ),
-      ),
-    );
-    if (this.api) {
-      this.api.addOutput(this.editors.get(editorId));
-    }
-    this.editorPanel.creatingNewEditor = false;
-    this.editorToolbar.noActiveProfile = false;
-    this.editorToolbar.id = res.id;
-    this.editorToolbar.shellId = res.shellId;
-    this.editorToolbar.newConnectionLoading = false;
-    this.editorPanel.shouldScrollToActiveTab = true;
-    this.editorPanel.activeEditorId = editorId;
-    this.editorToolbar.currentProfile = res.id;
-    this.editorToolbar.noActiveProfile = false;
-    this.editorPanel.activeDropdownId = res.id;
-    this.newConnectionLoading = false;
-    this.editorToolbar.isActiveExecuting = false;
-
-    if (this.editorToolbar.newEditorForTreeAction) {
-      this.editorToolbar.newEditorForTreeAction = false;
-      this.treeActionPanel.treeActionEditorId = editorId;
-      this.treeActionPanel.newEditorCreated = true;
-      const treeEditor = this.editors.get(editorId);
-      treeEditor.fileName = 'Tree Action';
-      this.treeActionPanel.editors.set(editorId, treeEditor);
-    }
-
-    // Set left Panel State.
-    if (options.type === 'aggregate') {
-      this.drawer.drawerChild = DrawerPanes.AGGREGATE;
-    } else {
-      this.drawer.drawerChild = DrawerPanes.DEFAULT;
-    }
-    if (options.type === 'os') {
-      this.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
-    }
-
-    NewToaster.show({
-      message: globalString('editor/toolbar/connectionSuccess'),
-      intent: Intent.SUCCESS,
-      iconName: 'pt-icon-thumbs-up',
-    });
-
-    return editorId;
-  };
 
   @action
   openNewAggregateBuilder(nodeRightClicked) {
@@ -356,10 +270,10 @@ export default class Store {
       .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
       .then((res) => {
         // Create new editor as normal, but with "aggregate" type.
-        return this.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked});
+        return this.api.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked});
       })
       .catch((err) => {
-        this.createNewEditorFailed();
+        this.api.createNewEditorFailed();
         console.error(err);
         NewToaster.show({
           message: 'Error: ' + err.message,
@@ -394,12 +308,6 @@ export default class Store {
   static createNewDocumentObject(content = '') {
     return new Doc(content, 'MongoScript');
   }
-
-  @action
-  createNewEditorFailed = () => {
-    this.editorPanel.creatingNewEditor = false;
-    this.editorToolbar.newConnectionLoading = false;
-  };
 
   @action
   dump() {

@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T13:35:57+10:00
+ * @Last modified time: 2017-07-31T09:45:19+10:00
  */
 
  import { action, observable } from 'mobx';
@@ -12,10 +12,12 @@
 
 export default class OutputApi {
   store;
+  api;
   outputHash;
 
-  constructor(store) {
+  constructor(store, api) {
     this.store = store;
+    this.api = api;
     this.outputHash = {};
 
     this.init = this.init.bind(this);
