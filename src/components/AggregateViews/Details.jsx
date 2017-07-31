@@ -101,8 +101,15 @@ export default class Details extends React.Component {
     }
   }
 
-  updateBlockFields(fields) {
-    console.log('Updating Fields:', fields);
+  // Triggered when a mobx field is changed, this will update the store to reflect the new values.
+  @action.bound
+  updateBlockFields(fields, editorObject) {
+    const selectedBlock = editorObject.selectedBlock;
+    for (const key in fields) {
+      if (Object.prototype.hasOwnProperty.call(fields, key)) {
+        editorObject.blockList[selectedBlock].fields[key] = fields[key];
+      }
+    }
   }
 
   formPromise;
@@ -124,7 +131,7 @@ export default class Details extends React.Component {
       this.state.previousActiveBlock = activeBlock;
       this.formPromise = this.formBuilder.createForm(
         this.resolveArguments,
-        this.updateDynamicFormCode,
+        this.updateBlockFields,
         this.editor,
         {
           action: activeBlock.type,

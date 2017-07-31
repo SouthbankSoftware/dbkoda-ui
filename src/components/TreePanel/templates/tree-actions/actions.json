@@ -141,12 +141,6 @@
             "noDialog": true
         },
         {
-            "name": "AggregateBuilder",
-            "text": "Aggregate Builder",
-            "icon": "pt-icon-properties",
-            "noDialog": true
-        },
-        {
             "name": "SimpleQuery",
             "text": "Simple Query",
             "icon": "pt-icon-search-template"

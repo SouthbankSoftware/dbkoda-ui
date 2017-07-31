@@ -307,9 +307,8 @@ export default class FormBuilder {
         this.getFieldsFromDefinitions(ddd, formFunctions)
           .then((formDefs) => {
             // callback function to get the updated values from the form
-            // @TODO @MIKE -> Upgrade this for handling with aggregate.
+            // @TODO @MIKE -> Upgrade this to update global state of form for later.
             const formValueUpdates = (values) => {
-              console.log('form new values:', values);
               if (formDefs.arrayLast.length > 0) {
                 for (const fld of formDefs.arrayLast) {
                   if (values[fld].length > 0) {
@@ -320,7 +319,7 @@ export default class FormBuilder {
               }
               if (updateDynamicFormCode) {
                 if (formAction.aggregate) {
-                  updateDynamicFormCode(generatedCode);
+                  updateDynamicFormCode(values, editorObject);
                 } else {
                   const generatedCode = formTemplate(values);
                   updateDynamicFormCode(generatedCode);
@@ -347,8 +346,14 @@ export default class FormBuilder {
             };
 
             // check if definitions has a keyField for prefetching data and send request to controller
+            // Method for pre-filling form:
+            // @TODO @MIKE-> Updgrade this to fill form with data from aggregate global store if it exsits.
             const getPrefilledFormData = () => {
-              if (ddd.DefaultValues) {
+              if (formAction.aggregate) {
+                console.log('Pre-fill forms with data:', editorObject.blockList[editorObject.selectedBlock].fields);
+                const blockFields = editorObject.blockList[editorObject.selectedBlock].fields;
+                updatePrefilledData(blockFields);
+              } else if (ddd.DefaultValues) {
                 let params = {};
                 if (ddd.DefaultValues.arguments) {
                   const args = ddd.DefaultValues.arguments;
@@ -395,7 +400,6 @@ export default class FormBuilder {
               }),
               getData: getPrefilledFormData
             };
-
             resolve(form);
           })
           .catch((reason) => {
