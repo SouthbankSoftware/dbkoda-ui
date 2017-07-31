@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T16:03:56+10:00
+ * @Last modified time: 2017-07-31T16:18:46+10:00
  */
 
 
@@ -34,14 +34,12 @@ import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { featherClient } from '~/helpers/feathers';
 import { inject, observer } from 'mobx-react';
-import { action, observable, reaction, runInAction } from 'mobx';
-import uuidV1 from 'uuid';
+import { action, reaction, runInAction } from 'mobx';
 import path from 'path';
 import { AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
-import Store from '~/stores/global';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import ExplainPopover from './ExplainPopover';
