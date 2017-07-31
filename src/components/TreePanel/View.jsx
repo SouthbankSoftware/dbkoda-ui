@@ -23,7 +23,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-06T10:10:18+10:00
+ * @Last modified time: 2017-07-31T15:30:05+10:00
 */
 
 import React from 'react';
@@ -54,7 +54,8 @@ import './View.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  treeState: allStores.treeState
+  treeState: allStores.treeState,
+  api: allStores.api
 }))
 @ContextMenuTarget
 export default class TreeView extends React.Component {
@@ -102,20 +103,10 @@ export default class TreeView extends React.Component {
       }
     );
     onNewJson();
-
-    this.reactionToTreeAction = reaction(
-      () => this.props.store.treeActionPanel.newEditorCreated,
-      () => {
-        if (this.props.store.treeActionPanel.newEditorCreated && this.props.store.treeActionPanel.treeActionEditorId != '') {
-          this.props.store.showTreeActionPane();
-        }
-      }
-    );
   }
   componentWillUnmount() {
     this.reactionToJson();
     this.reactionToFilter();
-    this.reactionToTreeAction();
   }
   getActionByName(actionName) {
     if (this.nodeRightClicked) {
@@ -291,7 +282,7 @@ export default class TreeView extends React.Component {
         this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
         this.props.store.setTreeAction(this.nodeRightClicked, action);
         if (!this.checkExistingEditor()) {
-          this.props.store.addNewEditorForTreeAction({type: 'os'});
+          this.props.api.addNewEditorForTreeAction({type: 'os'});
         }
       } else {
         this.props.store.setTreeAction(this.nodeRightClicked, action);
@@ -322,7 +313,7 @@ export default class TreeView extends React.Component {
       this.props.store.showTreeActionPane();
     } else {
       const type = action === 'ExportDatabase' ? 'ExportDatabase' : 'shell';
-      this.props.store.addNewEditorForTreeAction({type});
+      this.props.api.addNewEditorForTreeAction({type});
     }
   }
 

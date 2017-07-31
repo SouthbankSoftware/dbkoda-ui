@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T10:41:08+10:00
+ * @Last modified time: 2017-07-31T15:42:08+10:00
  */
 
 
@@ -217,13 +217,6 @@ export default class Store {
   setTreeAction = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
-  };
-
-  @action
-  addNewEditorForTreeAction = ({type = 'shell'}) => {
-    this.editorToolbar.newEditorForTreeAction = true;
-    this.editorToolbar.newEditorTypeForTreeAction = type;
-    this.treeActionPanel.newEditorCreated = false;
   };
 
   @action

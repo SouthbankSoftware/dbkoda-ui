@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T10:26:08+10:00
+ * @Last modified time: 2017-07-31T15:28:44+10:00
  */
 
 
@@ -99,17 +99,6 @@ export default class Toolbar extends React.Component {
       this.profileCreated(profile);
     });
 
-    // reaction to add a new editor when a new tree action open a new form. This
-    // will create a new editor.
-    this.reactionToNewEditorForTreeAction = reaction(
-      () => this.props.store.editorToolbar.newEditorForTreeAction,
-      () => {
-        if (this.props.store.editorToolbar.newEditorForTreeAction) {
-          this.props.api.addEditor({type: this.props.store.editorToolbar.newEditorTypeForTreeAction});
-        }
-      },
-    );
-
     this.reactionToNewEditorForProfileId = reaction(
       () => this.props.store.editorToolbar.newEditorForProfileId,
       () => {
@@ -137,7 +126,6 @@ export default class Toolbar extends React.Component {
   }
 
   componentWillUnmount() {
-    this.reactionToNewEditorForTreeAction();
     this.reactionToNewEditorForProfileId();
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
