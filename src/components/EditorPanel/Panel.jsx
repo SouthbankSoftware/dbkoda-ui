@@ -21,7 +21,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T13:58:34+10:00
+ * @Last modified time: 2017-07-31T16:12:41+10:00
  */
 
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
@@ -333,7 +333,7 @@ export default class Panel extends React.Component {
       }
     } else {
       editorPanel.activeEditorId = newTabId;
-      if (newTabId != 'Default' && editors.get(newTabId).executing == true) {
+      if (newTabId != 'Default' && editors.get(newTabId) && editors.get(newTabId).executing == true) {
         editorToolbar.isActiveExecuting = true;
       } else {
         editorToolbar.isActiveExecuting = false;

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T15:42:08+10:00
+ * @Last modified time: 2017-07-31T16:08:28+10:00
  */
 
 
@@ -274,32 +274,6 @@ export default class Store {
           iconName: 'pt-icon-thumbs-down'
         });
       });
-  }
-
-
-
-  /**
-   * Determine EOL to be used for given content string
-   *
-   * @param {string} content - content
-   * @return {string} EOL
-   */
-  static determineEol(content) {
-    if (!content || content === '') return global.EOL;
-
-    const eols = content.match(/(?:\r?\n)/g) || [];
-
-    if (eols.length === 0) return global.EOL;
-
-    const crlfCount = eols.filter(eol => eol === '\r\n').length;
-    const lfCount = eols.length - crlfCount;
-
-    // majority wins and slightly favour \n
-    return lfCount >= crlfCount ? '\n' : '\r\n';
-  }
-
-  static createNewDocumentObject(content = '') {
-    return new Doc(content, 'MongoScript');
   }
 
   @action

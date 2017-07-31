@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T14:57:33+10:00
+ * @Last modified time: 2017-07-31T16:00:12+10:00
  */
 
 
@@ -33,6 +33,8 @@ export default class DataCenter {
     this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
 
     this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);
+
+    this.profileCreated = this.profileApi.profileCreated.bind(this);
   }
 
   init() {

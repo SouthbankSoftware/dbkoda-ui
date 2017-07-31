@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T15:28:44+10:00
+ * @Last modified time: 2017-07-31T16:03:56+10:00
  */
 
 
@@ -89,14 +89,12 @@ export default class Toolbar extends React.Component {
         }
       });
     this.saveFileAs = this.saveFileAs.bind(this);
-  }
 
-  componentWillMount() {
     Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
-      this.profileCreated(profile);
+      this.props.api.profileCreated(profile);
     });
     Broker.on(EventType.RECONNECT_PROFILE_CREATED, (profile) => {
-      this.profileCreated(profile);
+      this.props.api.profileCreated(profile);
     });
 
     this.reactionToNewEditorForProfileId = reaction(
@@ -109,7 +107,9 @@ export default class Toolbar extends React.Component {
         }
       },
     );
+  }
 
+  componentWillMount() {
     if (IS_ELECTRON) {
       window.require('electron').ipcRenderer.on('command', (event, message) => {
         if (message === 'openFile') {
@@ -191,65 +191,7 @@ export default class Toolbar extends React.Component {
     // );
   }
 
-  reactionToNewEditorForTreeAction;
   reactionToNewEditorForProfileId;
-
-  /**
-   * called when there is new connection profile get created.
-   *
-   * @param profile the newly created connection profile
-   */
-  profileCreated(profile) {
-    const { editors, editorToolbar, editorPanel } = this.props.store;
-    let targetEditor = null;
-    for (const editor of editors.values()) {
-      if (profile.id === editor.profileId) {
-        targetEditor = editor;
-        break;
-      }
-    }
-    if (!targetEditor) {
-      const content = '';
-      const doc = Store.createNewDocumentObject(content);
-      doc.lineSep = Store.determineEol(content);
-
-      const fileName = `new${profile.editorCount}.js`;
-      const editorId = uuidV1();
-      profile.editorCount += 1;
-      editors.set(
-        editorId,
-        observable({
-          id: editorId,
-          alias: profile.alias,
-          profileId: profile.id,
-          shellId: profile.shellId,
-          currentProfile: profile.id,
-          fileName,
-          visible: true,
-          executing: false,
-          shellVersion: profile.shellVersion,
-          initialMsg: profile.initialMsg,
-          doc: observable.ref(doc),
-          status: profile.status,
-          path: null,
-          type: 'shell',
-        }),
-      );
-      editorPanel.shouldScrollToActiveTab = true;
-      editorPanel.activeEditorId = editorId;
-    } else if (targetEditor.id !== editorPanel.activeEditorId) {
-      editorPanel.shouldScrollToActiveTab = true;
-      editorPanel.activeEditorId = targetEditor.id;
-    }
-
-    editorToolbar.noActiveProfile = false;
-    editorToolbar.id = profile.id;
-    editorToolbar.shellId = profile.shellId;
-    editorToolbar.newConnectionLoading = false;
-    editorPanel.activeDropdownId = profile.id;
-    editorToolbar.currentProfile = profile.id;
-    editorToolbar.noActiveProfile = false;
-  }
 
   @action
   onFail() {

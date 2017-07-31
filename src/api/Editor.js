@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T09:52:54+10:00
+ * @Last modified time: 2017-07-31T15:58:08+10:00
  */
 
  import { action, observable } from 'mobx';
@@ -182,6 +182,7 @@ export default class EditorApi {
       const treeEditor = this.store.editors.get(editorId);
       treeEditor.fileName = 'Tree Action';
       this.store.treeActionPanel.editors.set(editorId, treeEditor);
+      this.store.showTreeActionPane();
     }
 
     // Set left Panel State.
