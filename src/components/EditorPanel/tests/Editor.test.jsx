@@ -22,16 +22,19 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-28T11:02:28+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-01T13:05:05+10:00
 */
 
 import React from 'react';
 import {shallow, mount} from 'enzyme';
+import toJson from 'enzyme-to-json';
 import {useStrict} from 'mobx';
 import Store from '~/stores/global';
+import DataCenter from '~/api/DataCenter';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import {EditorPanel, EditorToolbar} from '../index.js';
+
 
 describe('Editor Panel', () => {
   let app;
@@ -40,7 +43,9 @@ describe('Editor Panel', () => {
     useStrict(true);
     globalizeInit();
     const store = new Store();
-    app = shallow(<EditorPanel.wrappedComponent store={store} />);
+    const api = new DataCenter(store);
+    app = shallow(<EditorPanel.wrappedComponent store={store} api={api} />);
+    console.log(toJson(app));
   });
 
   test('has tabs', () => {
@@ -48,18 +53,20 @@ describe('Editor Panel', () => {
   });
 
   test('has a toolbar', () => {
-    expect(app.find('inject-Toolbar-with-store').length).toEqual(1);
+    expect(app.find('inject-Toolbar').length).toEqual(1);
   });
 });
 
 describe('Toolbar', () => {
   let app;
   let store;
+  let api;
 
   beforeAll(() => {
     useStrict(false);
     store = new Store();
-    app = mount(<EditorToolbar.wrappedComponent store={store} />);
+    api = new DataCenter(store);
+    app = mount(<EditorToolbar.wrappedComponent store={store} api={api} />);
   });
 
   test('has buttons', () => {

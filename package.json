@@ -84,6 +84,7 @@
     "d3": "^4.10.0",
     "dumpenvy": "^1.1.0",
     "enzyme": "^2.7.1",
+    "enzyme-to-json": "^1.5.1",
     "esdoc": "^0.5.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
