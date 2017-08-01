@@ -74,6 +74,11 @@ export default class Palette extends React.Component {
       this.moveBlock(tmpArray, tmpArray.length - 1, position);
     }
     this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
+    // If no block is selected, select the new block.
+    if (!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock) {
+      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock = 0;
+    }
+    this.props.store.editorPanel.updateAggregateDetails = true;
   }
 
   moveBlock(array, oldIndex, newIndex) {

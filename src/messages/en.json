@@ -209,7 +209,7 @@
         "slave": "connect to slave without slaveOk"
       }
     },
-    "backup": { // @Guy -> This is where the messages for the import/export fields are.
+    "backup": {
       "database": {
         "mongoExport": "Mongo Export",
         "mongoDump": "Mongo Dump",

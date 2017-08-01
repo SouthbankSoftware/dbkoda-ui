@@ -42,7 +42,8 @@ export default class Details extends React.Component {
     super(props);
     this.state = {
       form: null,
-      previousActiveBlock: null
+      previousActiveBlock: null,
+      reproduceCode: false
     };
     this.reactionToUpdateDetails = reaction(
       () => this.props.store.editorPanel.updateAggregateDetails,
@@ -93,6 +94,7 @@ export default class Details extends React.Component {
   updateDetails() {
     if (this.props.store.editorPanel.updateAggregateDetails) {
       this.props.store.editorPanel.updateAggregateDetails = false;
+      this.state.reproduceCode = true;
       this.forceUpdate();
       // Current hack to handle the async nature of the mobx form builder.
       _.delay(() => {
@@ -143,8 +145,10 @@ export default class Details extends React.Component {
     const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     const blockIndex = activeEditor.selectedBlock;
     const activeBlock = activeEditor.blockList[blockIndex];
+
     // Check if activeBlock has changed, if so, rebuild the form.
-    if (activeBlock && activeBlock !== this.state.previousActiveBlock) {
+    if (activeBlock && (activeBlock !== this.state.previousActiveBlock || this.state.reproduceCode)) {
+      this.state.reproduceCode = false;
       this.state.previousActiveBlock = activeBlock;
       this.formPromise = this.formBuilder.createForm(
         this.resolveArguments,

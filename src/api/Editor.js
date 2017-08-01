@@ -200,7 +200,8 @@ export default class EditorApi {
       intent: Intent.SUCCESS,
       iconName: 'pt-icon-thumbs-up',
     });
-
+    console.log(editorId);
+    console.log('I got to 1A:', editorId);
     return editorId;
   };
 }

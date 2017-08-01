@@ -145,6 +145,12 @@
             "text": "Simple Query",
             "icon": "pt-icon-search-template"
         },
+        { 
+            "name": "AggregateBuilder", 
+            "text": "Aggregate Builder", 
+            "icon": "pt-icon-properties", 
+            "noDialog": true 
+        }, 
         {
             "name": "GroupBy",
             "text": "Group By Query",

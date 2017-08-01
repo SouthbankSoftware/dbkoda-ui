@@ -77,6 +77,8 @@ export default class GraphicalBuilder extends React.Component {
         this.setState({activeBlockIndex: blockTo - 1});
       }
     }
+    this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock = this.state.activeBlockIndex;
+    this.props.store.editorPanel.updateAggregateDetails = true;
     this.forceUpdate();
   }
 
@@ -132,9 +134,11 @@ export default class GraphicalBuilder extends React.Component {
             }
 
             let isSelected = false;
-            if (this.state.activeBlockIndex === index) {
+            if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock === index) {
               isSelected = true;
             }
+            console.log(index);
+            console.log(isSelected);
             return (
               <Block
                 key={'key-' + index} //eslint-disable-line
