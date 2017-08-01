@@ -151,6 +151,7 @@ export default class GraphicalBuilder extends React.Component {
           })}
           <LastBlockTarget />
         </ul>
+        <div className="divider" />
       </div>
     );
   }

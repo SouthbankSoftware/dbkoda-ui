@@ -108,7 +108,6 @@ export default class Store {
     shouldScrollToActiveTab: false,
     tabScrollLeftPosition: 0,
     updateAggregateDetails: false,
-    updateAggregateCode: false,
   });
 
   @observable

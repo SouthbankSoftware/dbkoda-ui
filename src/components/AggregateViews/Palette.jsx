@@ -50,26 +50,22 @@ export default class Palette extends React.Component {
     if (tmpArray.length === 0) {
       tmpArray.push({
         type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false
+        fields: BlockTypes[blockType.toUpperCase()].fields
       });
     } else if (position === 'START') {
       tmpArray.unshift({
         type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false
+        fields: BlockTypes[blockType.toUpperCase()].fields
       });
     } else if (position === 'END') {
       tmpArray.push({
         type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false
+        fields: BlockTypes[blockType.toUpperCase()].fields
       });
     } else {
       tmpArray.push({
         type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false
+        fields: BlockTypes[blockType.toUpperCase()].fields
       });
       this.moveBlock(tmpArray, tmpArray.length - 1, position);
     }

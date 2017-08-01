@@ -307,6 +307,7 @@ export default class FormBuilder {
         this.getFieldsFromDefinitions(ddd, formFunctions)
           .then((formDefs) => {
             // callback function to get the updated values from the form
+            // @TODO @MIKE -> Upgrade this to update global state of form for later.
             const formValueUpdates = (values) => {
               if (formDefs.arrayLast.length > 0) {
                 for (const fld of formDefs.arrayLast) {
@@ -346,14 +347,13 @@ export default class FormBuilder {
 
             // check if definitions has a keyField for prefetching data and send request to controller
             // Method for pre-filling form:
-            // @TODO @MIKE-> Updgrade this to fill form with data from aggregate global store if it exsits, otherwise use prefill.
+            // @TODO @MIKE-> Updgrade this to fill form with data from aggregate global store if it exsits.
             const getPrefilledFormData = () => {
-              if (formAction.aggregate && editorObject.blockList[editorObject.selectedBlock].modified) {
-                // Prefill fields with data from store.
+              if (formAction.aggregate) {
+                console.log('Pre-fill forms with data:', editorObject.blockList[editorObject.selectedBlock].fields);
                 const blockFields = editorObject.blockList[editorObject.selectedBlock].fields;
                 updatePrefilledData(blockFields);
               } else if (ddd.DefaultValues) {
-                // Else fill with default values.
                 let params = {};
                 if (ddd.DefaultValues.arguments) {
                   const args = ddd.DefaultValues.arguments;

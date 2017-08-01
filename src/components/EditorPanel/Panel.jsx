@@ -28,7 +28,6 @@
 import React from 'react';
 import { inject, observer, PropTypes } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
-import SplitPane from 'react-split-pane';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import {
@@ -52,12 +51,6 @@ import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView';
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
-
-const splitPane2Style = {
-  display: 'flex',
-  flexDirection: 'column'
-};
-
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
@@ -855,27 +848,18 @@ export default class Panel extends React.Component {
         title={editorTitle}
         panel={
           <div className="aggregateTabInnerWrapper">
-            <SplitPane
-              className="LeftSplitPane"
-              split="vertical"
-              defaultSize={500}
-              minSize={250}
-              maxSize={750}
-              pane2Style={splitPane2Style}
-              >
-              <AggregateGraphicalBuilder
-                className="aggregatePanel"
-                id={tab[0]}
-                editor={tab[1]} />
-              <View
-                id={tab[0]}
-                className="aggregateEditorPanel"
-                title={editorTitle}
-                onDrop={item => this.handleDrop(item)}
-                editor={tab[1]}
-                ref="defaultEditor"
-              />
-            </SplitPane>
+            <AggregateGraphicalBuilder
+              className="aggregatePanel"
+              id={tab[0]}
+              editor={tab[1]} />
+            <View
+              id={tab[0]}
+              className="aggregateEditorPanel"
+              title={editorTitle}
+              onDrop={item => this.handleDrop(item)}
+              editor={tab[1]}
+              ref="defaultEditor"
+            />
           </div>
         }
       >
