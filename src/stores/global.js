@@ -259,7 +259,6 @@ export default class Store {
     }
     this.startCreatingNewEditor();
     // Create a new shell through feathers.
-    console.log(this.profiles.get(this.editorPanel.activeDropdownId).id);
     return featherClient()
       .service('/mongo-shells')
       .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
@@ -268,7 +267,6 @@ export default class Store {
         return this.api.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked, blockList: []});
       })
       .catch((err) => {
-        console.log(err);
         this.api.createNewEditorFailed();
         console.error(err);
         NewToaster.show({

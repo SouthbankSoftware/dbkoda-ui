@@ -137,8 +137,6 @@ export default class GraphicalBuilder extends React.Component {
             if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock === index) {
               isSelected = true;
             }
-            console.log(index);
-            console.log(isSelected);
             return (
               <Block
                 key={'key-' + index} //eslint-disable-line
