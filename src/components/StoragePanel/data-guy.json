@@ -1,0 +1,1856 @@
+{
+	"name": "total",
+	"children": [
+		{
+			"name": "DBEnvyLoad",
+			"children": [
+				{
+					"name": "bstatestat",
+					"children": [
+						{
+							"name": "data",
+							"size": 4096.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 4096.0
+								},
+								{
+									"name": "statid_1",
+									"size": 4096.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "counters",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "customers",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.6457728e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 1.08544e+06
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "orders",
+					"children": [
+						{
+							"name": "data",
+							"size": 9.643855872e+09
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "CustId_1",
+									"size": 8.43739136e+08
+								},
+								{
+									"name": "_id_",
+									"size": 1.558003712e+09
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "products",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.400832e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 114688.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "enron",
+			"children": [
+				{
+					"name": "collSampleTest",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "messages",
+					"children": [
+						{
+							"name" : "data",
+							"size" : 514162688
+						},
+						{
+							"name" : "indexes",
+							"children" : [
+								{
+									"name" : "_id_",
+									"size" : 3403776
+								},
+								{
+									"name" : "body_text",
+									"size" : 402219008
+								},
+								{
+									"name" : "headers.Message-ID_1",
+									"size" : 9687040
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "shardedMessages",
+					"children": [
+						{
+							"name": "data",
+							"size": 4.00637952e+08
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 2.838528e+06
+								},
+								{
+									"name": "filename_1",
+									"size": 2.363392e+06
+								},
+								{
+									"name": "headers.From_1",
+									"size": 2.490368e+06
+								},
+								{
+									"name": "headers.Subject_1",
+									"size": 4.911104e+06
+								},
+								{
+									"name": "headers.To_1",
+									"size": 1.6125952e+07
+								},
+								{
+									"name": "mailbox_1",
+									"size": 929792.0
+								},
+								{
+									"name": "subFolder_1",
+									"size": 1.531904e+06
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ShardedGraphTest",
+			"children": [
+				{
+					"name": "graphTest",
+					"children": [
+						{
+							"name": "data",
+							"size": 5.4341632e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 8.945664e+06
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "graphTestIndex",
+					"children": [
+						{
+							"name": "data",
+							"size": 5.4358016e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 8.925184e+06
+								},
+								{
+									"name": "person_1",
+									"size": 1.1776e+07
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "graphTestShard",
+					"children": [
+						{
+							"name": "data",
+							"size": 6.9640192e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 1.1251712e+07
+								},
+								{
+									"name": "person_1",
+									"size": 1.4995456e+07
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "SampleCollections",
+			"children": [
+				{
+					"name": "DBEnvyLoad_customers",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.642496e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 1.10592e+06
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "DBEnvyLoad_orders",
+					"children": [
+						{
+							"name": "data",
+							"size": 847872.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 122880.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "DBEnvyLoad_products",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.4077952e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 1.110016e+06
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "GraphTest_smallGTest",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "New Collection name",
+					"children": [
+						{
+							"name": "data",
+							"size": 4096.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 4096.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Sakila_customers",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.765376e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Sakila_films",
+					"children": [
+						{
+							"name": "data",
+							"size": 311296.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "and_sorted_test",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.2976128e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 7.983104e+06
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "crunchbase_database",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.90464e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "enron_messages",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.785856e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 40960.0
+								},
+								{
+									"name": "filename_1",
+									"size": 24576.0
+								},
+								{
+									"name": "headers.From_1",
+									"size": 28672.0
+								},
+								{
+									"name": "headers.Subject_1",
+									"size": 45056.0
+								},
+								{
+									"name": "headers.To_1",
+									"size": 114688.0
+								},
+								{
+									"name": "mailbox_1",
+									"size": 20480.0
+								},
+								{
+									"name": "subFolder_1",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "explains",
+					"children": [
+						{
+							"name": "data",
+							"size": 9.211904e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 380928.0
+								},
+								{
+									"name": "user.age_1",
+									"size": 217088.0
+								},
+								{
+									"name": "user.gender_1",
+									"size": 24576.0
+								},
+								{
+									"name": "user.name.first_1",
+									"size": 53248.0
+								},
+								{
+									"name": "user.name.last_1",
+									"size": 94208.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "mongomart_cart",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "mongomart_item",
+					"children": [
+						{
+							"name": "data",
+							"size": 20480.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "samples_friends",
+					"children": [
+						{
+							"name": "data",
+							"size": 65536.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "samples_pokemon",
+					"children": [
+						{
+							"name": "data",
+							"size": 32768.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "savedPlans",
+					"children": [
+						{
+							"name": "data",
+							"size": 20480.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "serverStats",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "video_movieDetails",
+					"children": [
+						{
+							"name": "data",
+							"size": 925696.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 40960.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "video_movies",
+					"children": [
+						{
+							"name": "data",
+							"size": 188416.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 49152.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "video_reviews",
+					"children": [
+						{
+							"name": "data",
+							"size": 20480.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "pcat",
+			"children": [
+				{
+					"name": "companies",
+					"children": [
+						{
+							"name": "data",
+							"size": 3.5520512e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 200704.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "products",
+					"children": [
+						{
+							"name": "data",
+							"size": 32768.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "SampleData",
+			"children": [
+				{
+					"name": "enron_messages",
+					"children": [
+						{
+							"name": "data",
+							"size": 2.5747456e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 167936.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "test",
+			"children": [
+				{
+					"name": "bstatestat",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								},
+								{
+									"name": "statid_1",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "collSampleTest",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "companies",
+					"children": [
+						{
+							"name": "data",
+							"size": 9.089024e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 65536.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "fred",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "inspections",
+					"children": [
+						{
+							"name": "data",
+							"size": 9.99424e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 692224.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "blog",
+			"children": [
+				{
+					"name": "posts",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.1280384e+07
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "sessions",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "users",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "config",
+			"children": [
+				{
+					"name": "actionlog",
+					"children": [
+						{
+							"name": "data",
+							"size": 663552.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 348160.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "changelog",
+					"children": [
+						{
+							"name": "data",
+							"size": 2.912256e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 1.261568e+06
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "chunks",
+					"children": [
+						{
+							"name": "data",
+							"size": 94208.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 53248.0
+								},
+								{
+									"name": "ns_1_min_1",
+									"size": 53248.0
+								},
+								{
+									"name": "ns_1_shard_1_min_1",
+									"size": 53248.0
+								},
+								{
+									"name": "ns_1_lastmod_1",
+									"size": 45056.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "collections",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "databases",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "lockpings",
+					"children": [
+						{
+							"name": "data",
+							"size": 53248.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 53248.0
+								},
+								{
+									"name": "ping_1",
+									"size": 90112.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "locks",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								},
+								{
+									"name": "ts_1",
+									"size": 36864.0
+								},
+								{
+									"name": "state_1_process_1",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "migrations",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								},
+								{
+									"name": "ns_1_min_1",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "mongos",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "settings",
+					"children": [
+						{
+							"name": "data",
+							"size": 32768.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "shards",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								},
+								{
+									"name": "host_1",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "tags",
+					"children": [
+						{
+							"name": "data",
+							"size": 4096.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 4096.0
+								},
+								{
+									"name": "ns_1_min_1",
+									"size": 4096.0
+								},
+								{
+									"name": "ns_1_tag_1",
+									"size": 4096.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "version",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "m101",
+			"children": [
+				{
+					"name": "albums",
+					"children": [
+						{
+							"name": "data",
+							"size": 659456.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								},
+								{
+									"name": "tags_1",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "animals",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "fruit",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "funnynumbers",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "hw1",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "images",
+					"children": [
+						{
+							"name": "data",
+							"size": 2.678784e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 884736.0
+								},
+								{
+									"name": "tags_1",
+									"size": 1.298432e+06
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "scores",
+					"children": [
+						{
+							"name": "data",
+							"size": 45056.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 24576.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "stuff",
+					"children": [
+						{
+							"name": "data",
+							"size": 45056.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								},
+								{
+									"name": "a_1_b_1",
+									"size": 20480.0
+								},
+								{
+									"name": "a_1_c_1",
+									"size": 20480.0
+								},
+								{
+									"name": "a_1_b_1_c_-1",
+									"size": 24576.0
+								},
+								{
+									"name": "c_1",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "test1",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "test2",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "test3",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Sakila",
+			"children": [
+				{
+					"name": "customers",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.773568e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "films",
+					"children": [
+						{
+							"name": "data",
+							"size": 311296.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								},
+								{
+									"name": "Title_1",
+									"size": 32768.0
+								},
+								{
+									"name": "Category_1",
+									"size": 20480.0
+								},
+								{
+									"name": "Rating_1",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "stores",
+					"children": [
+						{
+							"name": "data",
+							"size": 102400.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "course",
+			"children": [
+				{
+					"name": "grades",
+					"children": [
+						{
+							"name": "data",
+							"size": 40960.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "hello",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "zips",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.425408e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 286720.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "zips",
+			"children": [
+				{
+					"name": "zips",
+					"children": [
+						{
+							"name": "data",
+							"size": 1.425408e+06
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 286720.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"children": [
+				{
+					"name": "shardedMessages",
+					"children": [
+						{
+							"name": "data",
+							"size": 4096.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 4096.0
+								},
+								{
+									"name": "body_1",
+									"size": 4096.0
+								},
+								{
+									"name": "filename_1",
+									"size": 4096.0
+								},
+								{
+									"name": "headers.To_1",
+									"size": 4096.0
+								},
+								{
+									"name": "headers.From_1",
+									"size": 4096.0
+								},
+								{
+									"name": "headers.Subject_1",
+									"size": 4096.0
+								},
+								{
+									"name": "mailbox_1",
+									"size": 4096.0
+								},
+								{
+									"name": "subFolder_1",
+									"size": 4096.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "system.users",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "system.version",
+					"children": [
+						{
+							"name": "data",
+							"size": 32768.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 32768.0
+								},
+								{
+									"name": "incompatible_with_version_32",
+									"size": 32768.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "users",
+					"children": [
+						{
+							"name": "data",
+							"size": 4096.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 4096.0
+								},
+								{
+									"name": "user.age_1",
+									"size": 4096.0
+								},
+								{
+									"name": "user.name.first_1",
+									"size": 4096.0
+								},
+								{
+									"name": "user.name.last_1",
+									"size": 4096.0
+								},
+								{
+									"name": "user.age_1_user.name.last_1",
+									"size": 4096.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "school",
+			"children": [
+				{
+					"name": "product",
+					"children": [
+						{
+							"name": "data",
+							"size": 36864.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "students",
+					"children": [
+						{
+							"name": "data",
+							"size": 45056.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "savedPlans",
+			"children": [
+				{
+					"name": "plans",
+					"children": [
+						{
+							"name": "data",
+							"size": 49152.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 36864.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "students",
+			"children": [
+				{
+					"name": "grades",
+					"children": [
+						{
+							"name": "data",
+							"size": 53248.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 20480.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "small_zips",
+			"children": [
+				{
+					"name": "zips",
+					"children": [
+						{
+							"name": "data",
+							"size": 24576.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "NGDBDemo",
+			"children": [
+				{
+					"name": "test",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "sampleTest",
+			"children": [
+				{
+					"name": "sampleCollection",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "test1",
+			"children": [
+				{
+					"name": "cars",
+					"children": [
+						{
+							"name": "data",
+							"size": 16384.0
+						},
+						{
+							"name": "indexes",
+							"children": [
+								{
+									"name": "_id_",
+									"size": 16384.0
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

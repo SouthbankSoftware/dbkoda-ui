@@ -24,7 +24,7 @@ import StorageSunburstView from '#/common/SunburstView';
 import './Panel.scss';
 
 // Raw tree data
-const data = require('./data-big.json');
+const data = require('./data-guy.json');
 
 // Here we make the tree backward navigatable. You can use your own navigation strategy, for example, dynamic loading
 function addParent(data) {
