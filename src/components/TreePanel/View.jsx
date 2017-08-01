@@ -23,7 +23,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T15:30:05+10:00
+ * @Last modified time: 2017-08-01T10:36:32+10:00
 */
 
 import React from 'react';
@@ -312,7 +312,7 @@ export default class TreeView extends React.Component {
     if (this.checkExistingEditor()) {
       this.props.store.showTreeActionPane();
     } else {
-      const type = action === 'ExportDatabase' ? 'ExportDatabase' : 'shell';
+      const type = action === 'ExportDatabase' ? 'ExportDatabase' : 'TreeAction';
       this.props.api.addNewEditorForTreeAction({type});
     }
   }

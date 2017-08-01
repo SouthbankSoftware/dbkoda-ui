@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T15:58:08+10:00
+ * @Last modified time: 2017-08-01T10:32:36+10:00
  */
 
  import { action, observable } from 'mobx';
@@ -182,17 +182,17 @@ export default class EditorApi {
       const treeEditor = this.store.editors.get(editorId);
       treeEditor.fileName = 'Tree Action';
       this.store.treeActionPanel.editors.set(editorId, treeEditor);
-      this.store.showTreeActionPane();
     }
 
     // Set left Panel State.
     if (options.type === 'aggregate') {
       this.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
+    } else if (options.type === 'TreeAction') {
+      this.store.drawer.drawerChild = DrawerPanes.DYNAMIC;
+    } else if (options.type === 'os') {
+      this.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
     } else {
       this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
-    }
-    if (options.type === 'os') {
-      this.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
     }
 
     NewToaster.show({

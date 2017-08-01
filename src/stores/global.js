@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T16:08:28+10:00
+ * @Last modified time: 2017-08-01T10:21:27+10:00
  */
 
 
@@ -37,7 +37,6 @@ import {
   postDeserializer,
 } from '#/common/mobxDumpenvyExtension';
 import { DrawerPanes } from '#/common/Constants';
-import { Doc } from 'codemirror';
 import { featherClient } from '~/helpers/feathers';
 import { Intent } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
@@ -142,9 +141,9 @@ export default class Store {
   };
 
   @observable
-  drawer = {
+  drawer = observable({
     drawerChild: DrawerPanes.DEFAULT,
-  };
+  });
 
   @observable
   treeActionPanel = {
