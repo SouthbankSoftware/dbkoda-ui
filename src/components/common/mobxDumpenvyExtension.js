@@ -23,8 +23,8 @@
  *
  * @Author: guiguan
  * @Date:   2017-03-29T13:25:34+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-03-29T15:54:46+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-31T16:08:13+10:00
  */
 
 import {
@@ -35,7 +35,7 @@ import {
   isObservableObject,
   isBoxedObservable
 } from 'mobx';
-import Store from '~/stores/global';
+import StaticApi from '~/api/static';
 import { Doc } from 'codemirror';
 import _ from 'lodash';
 
@@ -88,7 +88,7 @@ export function deserializer(key, value) {
     } else if (value.__dump__ === 'ObservableValue') {
       return observable.shallowBox(value.value);
     } else if (value.__dump__ === 'Doc') {
-      const newDoc = Store.createNewDocumentObject(value.value);
+      const newDoc = StaticApi.createNewDocumentObject(value.value);
 
       newDoc.lineSep = value.lineSep;
       newDoc.setCursor(value.cursor);

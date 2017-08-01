@@ -1,3 +1,13 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-31T16:18:46+10:00
+ */
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,14 +34,12 @@ import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { featherClient } from '~/helpers/feathers';
 import { inject, observer } from 'mobx-react';
-import { action, observable, reaction, runInAction } from 'mobx';
-import uuidV1 from 'uuid';
+import { action, reaction, runInAction } from 'mobx';
 import path from 'path';
 import { AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
-import Store from '~/stores/global';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import ExplainPopover from './ExplainPopover';
@@ -56,13 +64,16 @@ const FILE_FILTERS = [
 /**
  * Defines the Toolbar for the Tabbed Editor Panel.
  */
-@inject('store')
+ @inject(allStores => ({
+   store: allStores.store,
+   api: allStores.api,
+ }))
 @observer
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.addEditorNoOptions = this.addEditor.bind(this);
+    // this.addEditorNoOptions = this.addEditor.bind(this);
     this.executeLine = this.executeLine.bind(this);
     this.executeAll = this.executeAll.bind(this);
     this.explainPlan = this.explainPlan.bind(this);
@@ -76,38 +87,27 @@ export default class Toolbar extends React.Component {
         }
       });
     this.saveFileAs = this.saveFileAs.bind(this);
-  }
 
-  componentWillMount() {
     Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
-      this.profileCreated(profile);
+      this.props.api.profileCreated(profile);
     });
     Broker.on(EventType.RECONNECT_PROFILE_CREATED, (profile) => {
-      this.profileCreated(profile);
+      this.props.api.profileCreated(profile);
     });
-
-    // reaction to add a new editor when a new tree action open a new form. This
-    // will create a new editor.
-    this.reactionToNewEditorForTreeAction = reaction(
-      () => this.props.store.editorToolbar.newEditorForTreeAction,
-      () => {
-        if (this.props.store.editorToolbar.newEditorForTreeAction) {
-          this.addEditorNoOptions({type: this.props.store.editorToolbar.newEditorTypeForTreeAction});
-        }
-      },
-    );
 
     this.reactionToNewEditorForProfileId = reaction(
       () => this.props.store.editorToolbar.newEditorForProfileId,
       () => {
         if (this.props.store.editorToolbar.newEditorForProfileId != '') {
           this.props.store.editorPanel.activeDropdownId = this.props.store.editorToolbar.newEditorForProfileId;
-          this.addEditorNoOptions();
+          this.props.api.addEditor();
           this.props.store.editorToolbar.newEditorForProfileId = '';
         }
       },
     );
+  }
 
+  componentWillMount() {
     if (IS_ELECTRON) {
       window.require('electron').ipcRenderer.on('command', (event, message) => {
         if (message === 'openFile') {
@@ -117,14 +117,13 @@ export default class Toolbar extends React.Component {
         } else if (message === 'saveFileAs') {
           this.saveFileAs();
         } else if (message === 'newEditor') {
-          this.addEditorNoOptions();
+          this.props.api.addEditor();
         }
       });
     }
   }
 
   componentWillUnmount() {
-    this.reactionToNewEditorForTreeAction();
     this.reactionToNewEditorForProfileId();
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
@@ -141,7 +140,7 @@ export default class Toolbar extends React.Component {
 
     // Mousetrap.unbindGlobal(
     //   GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
-    //   this.addEditorNoOptions,
+    //   this.props.api.addEditor,
     // );
     // Mousetrap.unbindGlobal(
     //   GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
@@ -174,7 +173,7 @@ export default class Toolbar extends React.Component {
 
     // Mousetrap.bindGlobal(
     //   GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
-    //   this.addEditorNoOptions,
+    //   this.props.api.addEditor,
     // );
     // Mousetrap.bindGlobal(
     //   GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
@@ -190,159 +189,7 @@ export default class Toolbar extends React.Component {
     // );
   }
 
-  reactionToNewEditorForTreeAction;
   reactionToNewEditorForProfileId;
-
-  /**
-   * called when there is new connection profile get created.
-   *
-   * @param profile the newly created connection profile
-   */
-  profileCreated(profile) {
-    const { editors, editorToolbar, editorPanel } = this.props.store;
-    let targetEditor = null;
-    for (const editor of editors.values()) {
-      if (profile.id === editor.profileId) {
-        targetEditor = editor;
-        break;
-      }
-    }
-    if (!targetEditor) {
-      const content = '';
-      const doc = Store.createNewDocumentObject(content);
-      doc.lineSep = Store.determineEol(content);
-
-      const fileName = `new${profile.editorCount}.js`;
-      const editorId = uuidV1();
-      profile.editorCount += 1;
-      editors.set(
-        editorId,
-        observable({
-          id: editorId,
-          alias: profile.alias,
-          profileId: profile.id,
-          shellId: profile.shellId,
-          currentProfile: profile.id,
-          fileName,
-          visible: true,
-          executing: false,
-          shellVersion: profile.shellVersion,
-          initialMsg: profile.initialMsg,
-          doc: observable.ref(doc),
-          status: profile.status,
-          path: null,
-          type: 'shell',
-        }),
-      );
-      editorPanel.shouldScrollToActiveTab = true;
-      editorPanel.activeEditorId = editorId;
-    } else if (targetEditor.id !== editorPanel.activeEditorId) {
-      editorPanel.shouldScrollToActiveTab = true;
-      editorPanel.activeEditorId = targetEditor.id;
-    }
-
-    editorToolbar.noActiveProfile = false;
-    editorToolbar.id = profile.id;
-    editorToolbar.shellId = profile.shellId;
-    editorToolbar.newConnectionLoading = false;
-    editorPanel.activeDropdownId = profile.id;
-    editorToolbar.currentProfile = profile.id;
-    editorToolbar.noActiveProfile = false;
-  }
-
-  /**
-   * Method for adding a new editor to an existing connection.
-   *
-   * @param {Object} options - options for creating new editor
-   * @return {Promise}
-   */
-  @action
-  addEditor(options = {}) {
-    try {
-      this.props.store.startCreatingNewEditor();
-      const profileTitle = this.props.store.editorToolbar.newEditorForTreeAction
-        ? this.props.store.profileList.selectedProfile.id
-        : this.props.store.editorPanel.activeDropdownId;
-      let profileId = 'UNKNOWN';
-      this.props.store.profiles.forEach((value) => {
-        if (value.id == profileTitle) {
-          profileId = value.id;
-        }
-      });
-      if (!options.type) {
-        options.type = 'shell';
-      }
-      if (profileId == 'UNKNOWN') {
-        if (this.props.store.userPreferences.telemetryEnabled) {
-          EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
-              .FAILED_DEFAULT,
-            EventLogging.getFragmentEnum().EDITORS,
-            'Cannot create new Editor for Default Tab.',
-          );
-        }
-        NewToaster.show({
-          message: globalString('editor/toolbar/addEditorError'),
-          intent: Intent.WARNING,
-          iconName: 'pt-icon-thumbs-down',
-        });
-        this.props.store.createNewEditorFailed();
-        return null;
-      }
-      return featherClient()
-        .service('/mongo-shells')
-        .create({ id: profileId })
-        .then((res) => {
-          return this.props.store.setNewEditorState(res, options);
-        })
-        .catch((err) => {
-          if (this.props.store.userPreferences.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().ERROR,
-              EventLogging.getFragmentEnum().EDITORS,
-              err.message,
-            );
-          }
-          this.props.store.createNewEditorFailed();
-          // Object Object issue
-          console.log(err);
-          if (err.message == '[object Object]') {
-            console.log('Error retrieved from Primus');
-          } else {
-            NewToaster.show({
-              message: 'Error: ' + err.message,
-              intent: Intent.DANGER,
-              iconName: 'pt-icon-thumbs-down',
-            });
-          }
-        });
-    } catch (err) {
-      if (this.props.store.userPreferences.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          err.message,
-        );
-      }
-      NewToaster.show({
-        message: err.message,
-        intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down',
-      });
-      this.props.store.createNewEditorFailed();
-    }
-  }
-
-  /**
-   * Action for setting if the new Editor is loading.
-   * //TODO Note: This function exists only because of an issue with MobX strict mode in callbacks.
-   * Guan has found a solution to this using runInAction (@Mike, Replace this some time.)
-   * @param {Boolean} isLoading - Is the editor loading.
-   */
-  @action
-  setNewEditorLoading(isLoading) {
-    this.props.store.editorToolbar.newConnectionLoading = isLoading;
-  }
 
   @action
   onFail() {
@@ -372,7 +219,7 @@ export default class Toolbar extends React.Component {
                     _id.length,
                   );
                 }
-                return this.addEditor({
+                return this.props.api.addEditor({
                   content,
                   fileName: _fileName,
                   path: _id,
@@ -803,7 +650,7 @@ export default class Toolbar extends React.Component {
               className="pt-button circleButton addEditorButton"
               loading={this.props.store.editorToolbar.newConnectionLoading}
               disabled={this.props.store.editorToolbar.noActiveProfile}
-              onClick={this.addEditorNoOptions}
+              onClick={this.props.api.addEditor}
             >
               <AddIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>

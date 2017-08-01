@@ -18,7 +18,17 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ /**
+  * @Author: Wahaj Shamim <wahaj>
+  * @Date:   2017-07-13T10:36:10+10:00
+  * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-26T13:48:06+10:00
+  */
+
+
 import Store from '~/stores/global';
+import DataCenter from '~/api/DataCenter';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import mobx, { useStrict } from 'mobx';
@@ -32,13 +42,14 @@ useStrict(true);
 const rootEl = document.getElementById('root');
 
 let store;
+let api;
 let bAppRendered = false;
 
 Broker.once(EventType.APP_READY, () => {
   const render = (Component) => {
     ReactDOM.render(
       <AppContainer>
-        <Provider store={store}>
+        <Provider store={store} api={api}>
           <Component />
         </Provider>
       </AppContainer>,
@@ -52,6 +63,8 @@ Broker.once(EventType.APP_READY, () => {
     if (!bAppRendered) {
       console.log('Recovering with clean state store.');
       store = new Store();
+      api = new DataCenter(store);
+      store.setAPI(api);    // TODO: Remove this line after complete migration to API
       render(App);
     }
   };
@@ -112,6 +125,8 @@ window.addEventListener('beforeunload', (event) => {
 });
 
 store = new Store();
-
+api = new DataCenter(store);
+store.setAPI(api);    // TODO: Remove this line after complete migration to API
+window.api = api;
 window.store = store;
 window.mobx = mobx;

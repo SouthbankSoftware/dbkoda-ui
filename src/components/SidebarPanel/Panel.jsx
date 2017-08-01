@@ -23,7 +23,7 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-24T09:34:44+10:00
+ * @Last modified time: 2017-08-01T10:22:01+10:00
  */
 
 import React from 'react';
@@ -72,7 +72,6 @@ export default class Panel extends React.Component {
   treeState = new TreeState();
   render() {
     const { layout, drawer } = this.props;
-    const drawerChild = drawer.drawerChild;
     let defaultLeftSplitPos;
 
     untracked(() => {
@@ -82,7 +81,7 @@ export default class Panel extends React.Component {
     return (
       <div>
         <div className="leftPaneInnerWrapper">
-          {drawerChild == DrawerPanes.DEFAULT &&
+          {drawer.drawerChild == DrawerPanes.DEFAULT &&
             <SplitPane
               className="LeftSplitPane"
               split="horizontal"
@@ -98,14 +97,14 @@ export default class Panel extends React.Component {
               </Provider>
             </SplitPane>}
 
-          {drawerChild == DrawerPanes.PROFILE && <ConnectionProfilePanel />}
+          {drawer.drawerChild == DrawerPanes.PROFILE && <ConnectionProfilePanel />}
 
-          {drawerChild == DrawerPanes.DYNAMIC && <TreeActionPanel />}
+          {drawer.drawerChild == DrawerPanes.DYNAMIC && <TreeActionPanel />}
 
-          {drawerChild == DrawerPanes.AGGREGATE &&
+          {drawer.drawerChild == DrawerPanes.AGGREGATE &&
             <AggregateLeftPanel className="sidebarAggregate" />}
 
-          {drawerChild == DrawerPanes.BACKUP_RESTORE && <BackupRestore />}
+          {drawer.drawerChild == DrawerPanes.BACKUP_RESTORE && <BackupRestore />}
 
         </div>
         {this.props.store.updateAvailable &&

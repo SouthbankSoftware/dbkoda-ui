@@ -1,3 +1,13 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-31T10:19:16+10:00
+ */
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,7 +49,10 @@ import './styles.scss';
 
 const React = require('react');
 
-@inject('store')
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+}))
 @observer
 export default class ListView extends React.Component {
   constructor(props) {
@@ -60,9 +73,6 @@ export default class ListView extends React.Component {
       .bind(this);
     this.closeProfile = this
       .closeProfile
-      .bind(this);
-    this.newEditorWindow = this
-      .newEditorWindow
       .bind(this);
     this.editProfile = this
       .editProfile
@@ -305,80 +315,6 @@ export default class ListView extends React.Component {
   }
 
   @action
-  newEditorWindow() {
-    try {
-      this.props.store.startCreatingNewEditor();
-      const profileTitle = this.props.store.editorToolbar.newEditorForTreeAction
-        ? this.props.store.profileList.selectedProfile.id
-        : this.props.store.editorPanel.activeDropdownId;
-      let profileId = 'UNKNOWN';
-      this.props.store.profiles.forEach((value) => {
-        if (value.id == profileTitle) {
-          profileId = value.id;
-        }
-      });
-      if (profileId == 'UNKNOWN') {
-        if (this.props.store.userPreferences.telemetryEnabled) {
-          EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
-              .FAILED_DEFAULT,
-            EventLogging.getFragmentEnum().EDITORS,
-            'Cannot create new Editor for Default Tab.'
-          );
-        }
-        NewToaster.show({
-          message: globalString('editor/toolbar/addEditorError'),
-          intent: Intent.WARNING,
-          iconName: 'pt-icon-thumbs-down'
-        });
-        this.props.store.createNewEditorFailed();
-        return null;
-      }
-      return featherClient()
-        .service('/mongo-shells')
-        .create({ id: profileId })
-        .then((res) => {
-          return this.props.store.setNewEditorState(res, {type: 'shell'});
-        })
-        .catch((err) => {
-          if (this.props.store.userPreferences.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().ERROR,
-              EventLogging.getFragmentEnum().EDITORS,
-              err.message
-            );
-          }
-          this.props.store.createNewEditorFailed();
-          // Object Object issue
-          console.log(err);
-          if (err.message == '[object Object]') {
-            console.log('Error retrieved from Primus');
-          } else {
-            NewToaster.show({
-              message: 'Error: ' + err.message,
-              intent: Intent.DANGER,
-              iconName: 'pt-icon-thumbs-down'
-            });
-          }
-        });
-    } catch (err) {
-      if (this.props.store.userPreferences.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          err.message
-        );
-      }
-      NewToaster.show({
-        message: err.message,
-        intent: Intent.DANGER,
-        iconName: 'pt-icon-thumbs-down'
-      });
-      this.props.store.createNewEditorFailed();
-    }
-  }
-
-  @action
   editProfile() {
     const selectedProfile = this.state.targetProfile;
     this.props.store.profileList.selectedProfile = selectedProfile;
@@ -564,7 +500,7 @@ export default class ListView extends React.Component {
           <div className="menuItemWrapper">
             <MenuItem
               className="profileListContextMenu newWindow"
-              onClick={this.newEditorWindow}
+              onClick={this.props.api.addEditor}
               text={globalString('profile/menu/newWindow')}
               intent={Intent.NONE}
               iconName="pt-icon-new-text-box" />

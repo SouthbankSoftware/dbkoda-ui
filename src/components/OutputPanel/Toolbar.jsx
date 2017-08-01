@@ -23,7 +23,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-06-08T14:51:36+10:00
+ * @Last modified time: 2017-07-26T13:59:48+10:00
 */
 
 import React from 'react';
@@ -217,7 +217,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="showMoreBtn circleButton"
               onClick={this.showMore}
-              disabled={this.props.store.editorPanel.removingTabId == this.props.store.outputPanel.currentTab || this.props.store.outputPanel.currentTab == 'Default' || this
+              disabled={this.props.store.outputPanel.currentTab == 'Default' || this
               .props
               .store
               .outputPanel

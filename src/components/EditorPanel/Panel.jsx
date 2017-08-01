@@ -20,8 +20,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-07-10T13:17:40+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-07-31T16:12:41+10:00
  */
 
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
@@ -55,7 +55,10 @@ import { featherClient } from '../../helpers/feathers';
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
  */
-@inject('store')
+ @inject(allStores => ({
+   store: allStores.store,
+   api: allStores.api
+ }))
 @observer
 export default class Panel extends React.Component {
   static propTypes = {
@@ -212,7 +215,7 @@ export default class Panel extends React.Component {
       } else {
         // Show and select first entry in map.
         console.log('1:', this.props.store.editorPanel.activeEditorId);
-        this.props.store.editorPanel.removingTabId = currEditor.id;
+        this.props.api.removeOutput(currEditor);
         this.props.store.editors.delete(currEditor.id);
         const editors = this.props.store.editors.entries();
         this.props.store.editorPanel.activeEditorId = editors[0][1].id;
@@ -229,7 +232,7 @@ export default class Panel extends React.Component {
     } else {
       this.props.store.editorPanel.isRemovingCurrentTab = false;
     }
-    this.props.store.editorPanel.removingTabId = currEditor.id;
+    this.props.api.removeOutput(currEditor);
     this.props.store.editors.delete(currEditor.id);
     const treeEditor = this.props.store.treeActionPanel.editors.get(
       currEditor.id,
@@ -271,7 +274,7 @@ export default class Panel extends React.Component {
     } else {
       // Show and select first entry in map.
       console.log('1:', this.props.store.editorPanel.activeEditorId);
-      this.props.store.editorPanel.removingTabId = deletedEditor.id;
+      this.props.api.removeOutput(deletedEditor);
       this.props.store.editors.delete(deletedEditor.id);
       const editors = this.props.store.editors.entries();
       this.props.store.editorPanel.activeEditorId = editors[0][1].id;
@@ -286,7 +289,7 @@ export default class Panel extends React.Component {
       return;
     }
 
-    this.props.store.editorPanel.removingTabId = deletedEditor.id;
+    this.props.api.removeOutput(deletedEditor);
     this.props.store.editors.delete(deletedEditor.id);
 
     const treeEditor = this.props.store.treeActionPanel.editors.get(
@@ -305,7 +308,7 @@ export default class Panel extends React.Component {
   @action.bound
   closeWelcome() {
     this.props.store.welcomePage.isOpen = false;
-    this.props.store.editorPanel.removingTabId = true;
+    this.props.store.editorPanel.removingTabId = true; // TODO: There shouldn't be an output visible for the welcome page. Have tp replace this logic with this.props.api.removeOutput(deletedEditor);
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
       const editors = this.props.store.editors.entries();
       this.props.store.editorPanel.activeEditorId = editors[0][1].id;
@@ -330,7 +333,7 @@ export default class Panel extends React.Component {
       }
     } else {
       editorPanel.activeEditorId = newTabId;
-      if (newTabId != 'Default' && editors.get(newTabId).executing == true) {
+      if (newTabId != 'Default' && editors.get(newTabId) && editors.get(newTabId).executing == true) {
         editorToolbar.isActiveExecuting = true;
       } else {
         editorToolbar.isActiveExecuting = false;
