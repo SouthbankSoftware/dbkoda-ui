@@ -84,11 +84,11 @@
         },{
             "name": "DumpServer",
             "text": "Dump Databases",
-            "icon": "pt-icon-export"
+            "icon": "pt-icon-import"
         },{
             "name": "RestoreServer",
             "text": "Restore Databases",
-            "icon": "pt-icon-import"
+            "icon": "pt-icon-export"
         }
     ],
     "database": [{
@@ -117,21 +117,21 @@
         },
         {
             "name": "ExportDatabase",
-            "text": "Export Database",
-            "icon": "pt-icon-export"
+            "text": "Export Collections",
+            "icon": "pt-icon-import"
         },
         {
             "name": "DumpDatabase",
             "text": "Dump Database",
-            "icon": "pt-icon-export"
+            "icon": "pt-icon-import"
         },{
             "name": "RestoreDatabase",
             "text": "Restore Database",
-            "icon": "pt-icon-import"
+            "icon": "pt-icon-export"
         }, {
             "name": "ImportDatabase",
-            "text": "Import Collection",
-            "icon": "pt-icon-import"
+            "text": "Import Collections",
+            "icon": "pt-icon-export"
         }
     ],
     "collection": [{
@@ -199,20 +199,20 @@
         {
             "name": "ExportCollection",
             "text": "Export Collection",
-            "icon": "pt-icon-export"
+            "icon": "pt-icon-import"
         },
         {
             "name": "DumpCollection",
             "text": "Dump Collection",
-            "icon": "pt-icon-export"
+            "icon": "pt-icon-import"
         },{
             "name": "RestoreCollection",
             "text": "Restore Collection",
-            "icon": "pt-icon-import"
+            "icon": "pt-icon-export"
         }, {
             "name": "ImportCollection",
             "text": "Import Collection",
-            "icon": "pt-icon-import"
+            "icon": "pt-icon-export"
         }
     ],
     "index": [{
