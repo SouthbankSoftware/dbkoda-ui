@@ -76,3 +76,5 @@ tsconfig.json
 *.DS_Store
 
 nohup\.out
+
+yarn\.lock
