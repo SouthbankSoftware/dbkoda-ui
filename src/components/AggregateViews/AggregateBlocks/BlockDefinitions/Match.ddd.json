@@ -3,8 +3,8 @@
   "DefaultValues": {},
   "Fields": [
     {
-      "name": "field",
-      "label": "Field",
+      "name": "Expression",
+      "label": "Expression",
       "type": "Text",
       "readOnly": false,
       "keyValue": true

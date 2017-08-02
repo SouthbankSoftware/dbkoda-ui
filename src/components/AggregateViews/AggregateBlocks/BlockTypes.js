@@ -27,25 +27,32 @@
 */
 
 export const BlockTypes = {
-  AGGREGATE: {
-    type:'Aggregate',
-    description: 'Basic Sample Aggregate Block.',
-    fields: {
-      aggregate_field: 'placeholder_aggregate'
-    }
-  },
-  GROUP_BY: {
-    type: 'Group_By',
+  GROUP: {
+    type: 'Group',
     description: 'Group your results by a certain predicate',
     fields: {
-      group_by_field: 'placeholder_group_by'
+      ID: '',
     }
   },
   MATCH: {
     type: 'Match',
     description: 'Reduce your pipeline results using a match on a field.',
     fields: {
-      Field: 'placeholder_field'
+      Expression: ''
+    }
+  },
+  SORT: {
+    type: 'Sort',
+    description: 'Sort the results from your pipeline',
+    fields: {
+      Expression: ''
+    }
+  },
+  PROJECT: {
+    type: 'Project',
+    description: 'Project your results.',
+    fields: {
+      Expression: ''
     }
   }
 };

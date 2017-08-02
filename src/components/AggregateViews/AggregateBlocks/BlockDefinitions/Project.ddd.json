@@ -1,10 +1,10 @@
 {
-  "Title": "Aggregate",
+  "Title": "Project",
   "DefaultValues": {},
   "Fields": [
     {
-      "name": "aggregate_field",
-      "label": "aggregate_field",
+      "name": "Expression",
+      "label": "Expression",
       "type": "Text",
       "readOnly": false,
       "keyValue": true
