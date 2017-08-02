@@ -19,6 +19,6 @@
  */
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
-export const Match = {
+export const Project = {
   dbkodaListAttributes: common.dbkodaListAttributes,
 };

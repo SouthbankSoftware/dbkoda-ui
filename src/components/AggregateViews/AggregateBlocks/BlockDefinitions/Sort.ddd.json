@@ -1,10 +1,10 @@
 {
-  "Title": "Group By",
+  "Title": "Sort",
   "DefaultValues": {},
   "Fields": [
     {
-      "name": "group_by_field",
-      "label": "group_by_field",
+      "name": "Expression",
+      "label": "Expression",
       "type": "Text",
       "readOnly": false,
       "keyValue": true

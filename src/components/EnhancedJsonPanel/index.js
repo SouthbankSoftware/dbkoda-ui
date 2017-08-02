@@ -16,43 +16,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @Author: Chris Trott <chris>
+ * @Date:   2017-03-07T10:53:19+11:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-07-19T12:34:59+10:00
  */
 
-/**
-* @Author: Michael Harrison
-* @Date:   2017-07-21 09:47:09
-* @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-07-21 09:47:19
-*/
-
-export const BlockTypes = {
-  GROUP: {
-    type: 'Group',
-    description: 'Group your results by a certain predicate',
-    fields: {
-      ID: '',
-    }
-  },
-  MATCH: {
-    type: 'Match',
-    description: 'Reduce your pipeline results using a match on a field.',
-    fields: {
-      Expression: ''
-    }
-  },
-  SORT: {
-    type: 'Sort',
-    description: 'Sort the results from your pipeline',
-    fields: {
-      Expression: ''
-    }
-  },
-  PROJECT: {
-    type: 'Project',
-    description: 'Project your results.',
-    fields: {
-      Expression: ''
-    }
-  }
-};
+ export EnhancedJson from './Panel.jsx';
