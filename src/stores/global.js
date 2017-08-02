@@ -108,6 +108,7 @@ export default class Store {
     shouldScrollToActiveTab: false,
     tabScrollLeftPosition: 0,
     updateAggregateDetails: false,
+    updateAggregateCode: false,
   });
 
   @observable
@@ -263,7 +264,7 @@ export default class Store {
       .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
       .then((res) => {
         // Create new editor as normal, but with "aggregate" type.
-        return this.api.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked});
+        return this.api.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked, blockList: []});
       })
       .catch((err) => {
         this.api.createNewEditorFailed();

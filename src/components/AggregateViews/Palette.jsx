@@ -50,26 +50,35 @@ export default class Palette extends React.Component {
     if (tmpArray.length === 0) {
       tmpArray.push({
         type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields
+        fields: BlockTypes[blockType.toUpperCase()].fields,
+        modified: false
       });
     } else if (position === 'START') {
       tmpArray.unshift({
         type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields
+        fields: BlockTypes[blockType.toUpperCase()].fields,
+        modified: false
       });
     } else if (position === 'END') {
       tmpArray.push({
         type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields
+        fields: BlockTypes[blockType.toUpperCase()].fields,
+        modified: false
       });
     } else {
       tmpArray.push({
         type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields
+        fields: BlockTypes[blockType.toUpperCase()].fields,
+        modified: false
       });
       this.moveBlock(tmpArray, tmpArray.length - 1, position);
     }
     this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
+    // If no block is selected, select the new block.
+    if (!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock) {
+      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock = 0;
+    }
+    this.props.store.editorPanel.updateAggregateDetails = true;
   }
 
   moveBlock(array, oldIndex, newIndex) {

@@ -138,7 +138,6 @@ export default class EditorApi {
       editorId,
       observable(
         _.assign(
-          // NOTE this obj should be synced with the one in src/components/EditorPanel/Toolbar.jsx:profileCreated()
           {
             id: editorId,
             alias: this.store.profiles.get(res.id).alias,
@@ -200,7 +199,6 @@ export default class EditorApi {
       intent: Intent.SUCCESS,
       iconName: 'pt-icon-thumbs-up',
     });
-
     return editorId;
   };
 }

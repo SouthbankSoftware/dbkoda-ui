@@ -42,7 +42,8 @@ export default class Details extends React.Component {
     super(props);
     this.state = {
       form: null,
-      previousActiveBlock: null
+      previousActiveBlock: null,
+      reproduceCode: false
     };
     this.reactionToUpdateDetails = reaction(
       () => this.props.store.editorPanel.updateAggregateDetails,
@@ -93,6 +94,7 @@ export default class Details extends React.Component {
   updateDetails() {
     if (this.props.store.editorPanel.updateAggregateDetails) {
       this.props.store.editorPanel.updateAggregateDetails = false;
+      this.state.reproduceCode = true;
       this.forceUpdate();
       // Current hack to handle the async nature of the mobx form builder.
       _.delay(() => {
@@ -105,11 +107,28 @@ export default class Details extends React.Component {
   @action.bound
   updateBlockFields(fields, editorObject) {
     const selectedBlock = editorObject.selectedBlock;
+    editorObject.blockList[selectedBlock].modified = true;
     for (const key in fields) {
       if (Object.prototype.hasOwnProperty.call(fields, key)) {
         editorObject.blockList[selectedBlock].fields[key] = fields[key];
       }
     }
+
+    // Update Editor Contents.
+    this.props.store.treeActionPanel.formValues = this.generateCode(editorObject);
+    this.props.store.treeActionPanel.isNewFormValues = true;
+  }
+
+  generateCode(editorObject) {
+    let codeString = 'db.collection.aggregate([\n';
+    editorObject.blockList.map((block) => {
+      console.log(block);
+      const formTemplate = require('./AggregateBlocks/BlockTemplates/' + block.type + '.hbs'); // eslint-disable-line
+      codeString += formTemplate(block.fields) + '\n';
+    });
+
+    codeString += ']);';
+    return codeString;
   }
 
   formPromise;
@@ -126,8 +145,10 @@ export default class Details extends React.Component {
     const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     const blockIndex = activeEditor.selectedBlock;
     const activeBlock = activeEditor.blockList[blockIndex];
+
     // Check if activeBlock has changed, if so, rebuild the form.
-    if (activeBlock && activeBlock !== this.state.previousActiveBlock) {
+    if (activeBlock && (activeBlock !== this.state.previousActiveBlock || this.state.reproduceCode)) {
+      this.state.reproduceCode = false;
       this.state.previousActiveBlock = activeBlock;
       this.formPromise = this.formBuilder.createForm(
         this.resolveArguments,
@@ -158,9 +179,6 @@ export default class Details extends React.Component {
         </nav>
         { activeBlock &&
           <div className="aggregateDetailsContent">
-            <p>
-              Some fields will go here based on type {activeBlock.type}
-            </p>
             <div className="dynamic-form">
               {this.state.form && <View
                 title={this.state.form.title}
