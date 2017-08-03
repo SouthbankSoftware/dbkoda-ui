@@ -44,7 +44,7 @@ const Row = ({options, selectCollection, unSelectCollection, index, colName, rea
         disabled={readOnly}
         value={index >= 0 ? colName : ''}
       >
-        <option>{globalString(target === 'server' ? globalString('backuprestore/selectDatabase') : 'backuprestore/selectCollection')}</option>
+        <option>{target === 'server' ? globalString('backuprestore/selectDatabase') : globalString('backuprestore/selectCollection')}</option>
         {
           options.map((o, i) => {
             const id = i;
@@ -71,12 +71,12 @@ export default ({collections, selectedCollections, selectCollection, unSelectCol
           const array = options.slice();
           array.splice(0, 0, col);
           return (<Row key={id} index={i} colName={col} options={array} selectCollection={selectCollection}
-            unSelectCollection={unSelectCollection} readOnly={readOnly} />);
+            unSelectCollection={unSelectCollection} readOnly={readOnly} target={target} />);
         })
       }
       {
         options.length > 0 && !readOnly ? <Row options={options} selectCollection={selectCollection} index={-1}
-          unSelectCollection={unSelectCollection} /> : null
+          unSelectCollection={unSelectCollection} target={target} /> : null
       }
     </div>
   );
