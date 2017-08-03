@@ -278,15 +278,15 @@
         },
         "limit": {
           "label": "Limit <count>",
-          "tooltip": ""
+          "tooltip": "Limit <count>"
         },
         "skip": {
           "label": "Skip <count>",
-          "tooltip": ""
+          "tooltip": "Skip <count>"
         },
         "sort": {
           "label": "Sort <json>",
-          "tooltip": ""
+          "tooltip": "Sort <json>"
         },
         "fields": {
           "label": "Fields <field>[,<field>]*",
@@ -411,6 +411,10 @@
         "upsertFields": {
           "label": "upsertFields",
           "tooltip": "upsertFields"
+        },
+        "noHeaderLine": {
+          "label": "noHeaderLine",
+          "tooltip": "noHeaderLine"
         }
       }
     }
