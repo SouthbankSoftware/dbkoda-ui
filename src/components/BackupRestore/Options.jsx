@@ -27,6 +27,8 @@ import {Checkbox, Intent, Position, Tooltip, NumericInput} from '@blueprintjs/co
 import {BackupRestoreActions} from '../common/Constants';
 import './Options.scss';
 
+const TooltipDelay = 1000;
+
 const getOptions = (options) => {
   return (
     <div className="options-panel pt-dark">
@@ -36,7 +38,15 @@ const getOptions = (options) => {
           if (o.type === 'selection') {
             const value = o.value;
             return (<div className="option-item-row" key={key}>
-              <div className="label field-label">{o.label}</div>
+              <Tooltip
+                content={o.tooltips}
+                hoverOpenDelay={TooltipDelay}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.TOP}
+              >
+                <div className="label field-label">{o.label}</div>
+              </Tooltip>
               <div className="pt-select">
                 <select className="select" defaultValue={value.selected}
                   onChange={(item) => {
@@ -58,7 +68,13 @@ const getOptions = (options) => {
           } else if (o.type === 'input') {
             return (<div className="pt-form-group" key={key}>
               <div className="pt-form-content option-form">
-                <div className="field-label">{o.label}</div>
+                <Tooltip content={o.tooltips}
+                  hoverOpenDelay={TooltipDelay}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.TOP}>
+                  <div className="field-label">{o.label}</div>
+                </Tooltip>
                 {
                   (!o.inputType || o.inputType === 'text')
                     && <input className="pt-input" type={o.inputType ? o.inputType : 'text'} dir="auto" value={o.value} onChange={e => o.onChange(e.target.value)} />
@@ -74,7 +90,7 @@ const getOptions = (options) => {
             <div className="option-item-row" key={key}>
               <Tooltip
                 content={o.tooltips}
-                hoverOpenDelay={1000}
+                hoverOpenDelay={TooltipDelay}
                 inline
                 intent={Intent.PRIMARY}
                 position={Position.TOP}
@@ -128,7 +144,7 @@ export const ExportDBOptions = ({pretty, jsonArray,
     }, {
       label: globalString('backup/database/jsonArray'),
       onChange: changeJsonArray,
-      tooltips: '',
+      tooltips: globalString('backup/tooltips/jsonArray'),
       checked: jsonArray
     }, {
       label: 'noHeaderLine',
@@ -139,24 +155,25 @@ export const ExportDBOptions = ({pretty, jsonArray,
       type: 'input',
       value: outputFields,
       onChange: changeOutputFields,
+      tooltips: globalString('backup/tooltips/fields')
     }, {
       label: globalString('backup/database/queryOptions'),
       type: 'separator'
     }, {
-      label: 'forceTableScan',
+      label: globalString('backup/database/forceTableScan'),
       value: forceTableScan,
       onChange: changeForceTableScan,
     }, {
-      label: 'assertExists',
+      label: globalString('backup/database/assertExists'),
       value: assertExists,
       onChange: changeAssertExists,
     }, {
-      label: 'Query',
+      label: globalString('backup/database/query'),
       type: 'input',
       value: query,
       onChange: changeQuery,
     }, {
-      label: 'Read Preference',
+      label: globalString('backup/database/readPreference'),
       type: 'input',
       value: readPreference,
       onChange: changeReadPreference,
@@ -204,17 +221,17 @@ export const DumpOptions = ({gzip, changeGZip, repair, changeRepair,
       tooltips: '',
       checked: repair,
     }, {
-      label: 'dumpDbUsersAndRoles',
+      label: globalString('backup/database/dumpDbUsersAndRoles'),
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
       tooltips: '',
     }, {
-      label: 'viewsAsCollections',
+      label: globalString('backup/database/viewsAsCollections'),
       checked: viewsAsCollections,
       tooltips: '',
       onChange: changeViewsAsCollections,
     }, {
-      label: 'numParallelCollections',
+      label: globalString('backup/database/numParallelCollections'),
       onChange: changeNumParallelCollections,
       type: 'input',
       inputType: 'number',
@@ -223,16 +240,16 @@ export const DumpOptions = ({gzip, changeGZip, repair, changeRepair,
       label: globalString('backup/database/queryOptions'),
       type: 'separator'
     }, {
-      label: 'forceTableScan',
+      label: globalString('backup/database/forceTableScan'),
       value: forceTableScan,
       onChange: changeForceTableScan,
     }, {
-      label: 'Read Preference',
+      label: globalString('backup/database/readPreference'),
       type: 'input',
       value: readPreference,
       onChange: changeReadPreference,
     }, {
-      label: 'Query',
+      label: globalString('backup/database/query'),
       type: 'input',
       value: query,
       onChange: changeQuery,
@@ -255,81 +272,81 @@ export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeCon
       label: globalString('backup/database/restoreOptions'),
       type: 'separator',
     }, {
-      label: 'drop',
+      label: globalString('backup/database/drop'),
       onChange: changeDrop,
       tooltips: '',
       checked: drop,
     }, {
-      label: 'dryRun',
+      label: globalString('backup/database/dryRun'),
       onChange: changeDryRun,
       tooltips: '',
       checked: dryRun,
     }, {
-      label: 'writeConcern',
+      label: globalString('backup/database/writeConcern'),
       onChange: changeWriteConcern,
       checked: writeConcern,
       type: 'input',
       tooltips: '',
     }, {
-      label: 'noIndexRestore',
+      label: globalString('backup/database/noIndexRestore'),
       checked: noIndexRestore,
       tooltips: '',
       onChange: changeNoIndexRestore,
     }, {
-      label: 'noOptionsRestore',
+      label: globalString('backup/database/noOptionsRestore'),
       onChange: changeNoOptionsRestore,
       value: noOptionsRestore
     }, {
-      label: 'keepIndexVersion',
+      label: globalString('backup/database/keepIndexVersion'),
       onChange: changeKeepIndexVersion,
       value: keepIndexVersion
     }, {
-      label: 'maintainInsertionOrder',
+      label: globalString('backup/database/maintainInsertionOrder'),
       onChange: changeMaintainInsertionOrder,
       value: maintainInsertionOrder
     }, {
-      label: 'numParallelCollections',
+      label: globalString('backup/database/numParallelCollections'),
       onChange: changeNumParallelCollections,
       value: numParallelCollections,
       type: 'input',
       inputType: 'number',
     }, {
-      label: 'numInsertionWorkers',
+      label: globalString('backup/database/numInsertionWorkers'),
       onChange: changeNumInsertionWorkersPerCollection,
       value: numInsertionWorkersPerCollection,
       type: 'input',
       inputType: 'number',
     }, {
-      label: 'stopOnError',
+      label: globalString('backup/database/stopOnError'),
       onChange: changeStopOnError,
       value: stopOnError
     }, {
-      label: 'bypassDocumentValidation',
+      label: globalString('backup/database/bypassDocumentValidation'),
       onChange: changeBypassDocumentValidation,
       value: bypassDocumentValidation
     }, {
       label: globalString('backup/database/inputOptions'),
       type: 'separator'
     }, {
-      label: 'objcheck',
+      label: globalString('backup/database/objcheck'),
       value: objcheck,
       onChange: changeObjcheck,
     }, {
-      label: 'oplogReplay',
+      label: globalString('backup/database/oplogReplay'),
       type: 'input',
       value: oplogReplay,
       onChange: changeOplogReplay,
     }, {
-      label: 'oplogLimit',
+      label: globalString('backup/database/oplogLimit'),
       type: 'input',
       value: oplogLimit,
       onChange: changeOplogLimit,
     }, {
-      label: 'restoreDbUsersAndRoles',
+      label: globalString('backup/database/restoreDbUsersAndRoles'),
       value: restoreDbUsersAndRoles,
       onChange: changeRestoreDbUsersAndRoles,
     }, {
-      label: 'gzip',
+      label: globalString('backup/database/gzip'),
       value: gzip,
       onChange: changeGzip,
     }
@@ -356,25 +373,26 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
       value: outputFields,
       onChange: changeOutputFields,
     }, {
-      label: 'headerLine',
+      label: globalString('backup/database/headerLine'),
       onChange: changeHeaderLine,
       checked: headerLine,
     }, {
-      label: 'jsonArray',
+      label: globalString('backup/database/jsonArray'),
       onChange: changeJsonArray,
       checked: jsonArray,
     }, {
-      label: 'parseGrace',
+      label: globalString('backup/database/parseGrace'),
       onChange: changeParseGrace,
       type: 'selection',
       value: parseGrace,
+      tooltips: globalString('backup/tooltips/parseGrace')
     }, {
-      label: 'Type',
+      label: globalString('backup/database/type'),
       onChange: changeExportType,
       type: 'selection',
       value: exportType,
     }, {
-      label: 'columnsHaveTypes',
+      label: globalString('backup/database/columnsHaveTypes'),
       onChange: changeColumnsHaveTypes,
       type: 'input',
       value: columnsHaveTypes,
@@ -382,43 +400,43 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
       label: globalString('backup/database/ingestOptions'),
       type: 'separator',
     }, {
-      label: 'drop',
+      label: globalString('backup/database/drop'),
       onChange: changeDrop,
       checked: drop,
     }, {
-      label: 'ignoreBlanks',
+      label: globalString('backup/database/ignoreBlanks'),
       onChange: changeIgnoreBlanks,
       checked: ignoreBlanks,
     }, {
-      label: 'maintainInsertionOrder',
+      label: globalString('backup/database/maintainInsertionOrder'),
       onChange: changeMaintainInsertionOrder,
       checked: maintainInsertionOrder,
     }, {
-      label: 'numInsertionWorkers',
+      label: globalString('backup/database/numInsertionWorkers'),
       type: 'input',
       value: numInsertionWorkers,
       onChange: changeNumInsertionWorkers,
     }, {
-      label: 'stopOnError',
+      label: globalString('backup/database/stopOnError'),
       onChange: changeStopOnError,
       checked: stopOnError,
     }, {
-      label: 'mode',
+      label: globalString('backup/database/mode'),
       onChange: changeMode,
       type: 'selection',
       value: mode,
     }, {
-      label: 'upsertFields',
+      label: globalString('backup/database/upsertFields'),
       type: 'input',
       value: upsertFields,
       onChange: changeUpsertFields,
     }, {
-      label: 'writeConcern',
+      label: globalString('backup/database/writeConcern'),
       type: 'input',
       value: writeConcern,
       onChange: changeWriteConcern,
     }, {
-      label: 'bypassDocumentValidation',
+      label: globalString('backup/database/bypassDocumentValidation'),
       onChange: changeBypassDocumentValidation,
       checked: bypassDocumentValidation,
     }

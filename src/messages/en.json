@@ -240,7 +240,40 @@
         "sort": "Sort <json>",
         "fields": "Fields <field>[,<field>]*",
         "allDatabases": "All Databases",
-        "executionOSScriptFailed": "Execution of scripts failed"
+        "executionOSScriptFailed": "Execution of scripts failed",
+        "forceTableScan": "forceTableScan",
+        "assertExists": "assertExists",
+        "query": "Query",
+        "readPreference": "Read Preference",
+        "dumpDbUsersAndRoles": "dumpDbUsersAndRoles",
+        "viewsAsCollections": "viewsAsCollections",
+        "numParallelCollections": "numParallelCollections",
+        "drop": "drop",
+        "dryRun": "dryRun",
+        "writeConcern": "writeConcern",
+        "noIndexRestore": "noIndexRestore",
+        "noOptionsRestore": "noOptionsRestore",
+        "keepIndexVersion": "keepIndexVersion",
+        "maintainInsertionOrder": "maintainInsertionOrder",
+        "numInsertionWorkers": "numInsertionWorkers",
+        "stopOnError":"stopOnError",
+        "bypassDocumentValidation": "bypassDocumentValidation",
+        "objcheck": "objcheck",
+        "oplogReplay": "oplogReplay",
+        "oplogLimit": "oplogLimit",
+        "restoreDbUsersAndRoles": "restoreDbUsersAndRoles",
+        "gzip": "gzip",
+        "headerLine": "headerLine",
+        "parseGrace": "parseGrace",
+        "type": "Type",
+        "columnsHaveTypes": "columnsHaveTypes",
+        "ignoreBlanks": "ignoreBlanks",
+        "mode": "mode",
+        "upsertFields": "upsertFields"
+      },
+      "tooltips": {
+        "jsonArray": "output to a JSON array",
+        "fields": "comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
       }
     }
   }
