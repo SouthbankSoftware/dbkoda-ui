@@ -112,7 +112,7 @@ const getOptions = (options) => {
 export const AllCollectionOption = ({allCollections, changeAllCollections, action}) => {
   const options = [
     {
-      label: action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_SERVER ? globalString('backup/database/allDatabases') : globalString('backup/database/allCollections'),
+      label: action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_SERVER ? globalString('backuprestore/parameters/allDatabases/label') : globalString('backuprestore/parameters/allCollections/label'),
       onChange: changeAllCollections,
       tooltips: '',
       checked: allCollections
@@ -129,7 +129,7 @@ export const ExportDBOptions = ({pretty, jsonArray,
                                   changeExportType, exportType, outputFields, changeOutputFields}) => {
   const options = [
     {
-      label: globalString('backup/database/outputOptions'),
+      label: globalString('backuprestore/parameters/outputOptions/label'),
       type: 'separator'
     }, {
       label: 'Type',
@@ -137,60 +137,60 @@ export const ExportDBOptions = ({pretty, jsonArray,
       type: 'selection',
       value: exportType,
     }, {
-      label: globalString('backup/database/pretty'),
+      label: globalString('backuprestore/parameters/pretty/label'),
       onChange: changePretty,
       tooltips: '',
       checked: pretty
     }, {
-      label: globalString('backup/database/jsonArray'),
+      label: globalString('backuprestore/parameters/jsonArray/label'),
       onChange: changeJsonArray,
-      tooltips: globalString('backup/tooltips/jsonArray'),
+      tooltips: globalString('backuprestore/parameters/jsonArray/tooltip'),
       checked: jsonArray
     }, {
       label: 'noHeaderLine',
       onChange: changeNoHeaderLine,
       checked: noHeaderLine,
     }, {
-      label: globalString('backup/database/fields'),
+      label: globalString('backuprestore/parameters/fields/label'),
       type: 'input',
       value: outputFields,
       onChange: changeOutputFields,
-      tooltips: globalString('backup/tooltips/fields')
+      tooltips: globalString('backuprestore/parameters/fields/tooltip')
     }, {
-      label: globalString('backup/database/queryOptions'),
+      label: globalString('backuprestore/parameters/queryOptions/label'),
       type: 'separator'
     }, {
-      label: globalString('backup/database/forceTableScan'),
+      label: globalString('backuprestore/parameters/forceTableScan/label'),
       value: forceTableScan,
       onChange: changeForceTableScan,
     }, {
-      label: globalString('backup/database/assertExists'),
+      label: globalString('backuprestore/parameters/assertExists/label'),
       value: assertExists,
       onChange: changeAssertExists,
     }, {
-      label: globalString('backup/database/query'),
+      label: globalString('backuprestore/parameters/query/label'),
       type: 'input',
       value: query,
       onChange: changeQuery,
     }, {
-      label: globalString('backup/database/readPreference'),
+      label: globalString('backuprestore/parameters/readPreference/label'),
       type: 'input',
       value: readPreference,
       onChange: changeReadPreference,
     }, {
-      label: globalString('backup/database/skip'),
+      label: globalString('backuprestore/parameters/skip/label'),
       type: 'input',
       inputType: 'number',
       value: skip,
       onChange: changeSkip,
     }, {
-      label: globalString('backup/database/limit'),
+      label: globalString('backuprestore/parameters/limit/label'),
       type: 'input',
       inputType: 'number',
       value: limit,
       onChange: changeLimit,
     }, {
-      label: globalString('backup/database/sort'),
+      label: globalString('backuprestore/parameters/sort/label'),
       type: 'input',
       value: exportSort,
       onChange: changeExportSort,
@@ -208,7 +208,7 @@ export const DumpOptions = ({gzip, changeGZip, repair, changeRepair,
                               viewsAsCollections, changeViewsAsCollections}) => {
   const options = [
     {
-      label: globalString('backup/database/outputOptions'),
+      label: globalString('backuprestore/parameters/outputOptions/label'),
       type: 'separator',
     }, {
       label: 'gzip',
@@ -216,40 +216,40 @@ export const DumpOptions = ({gzip, changeGZip, repair, changeRepair,
       tooltips: '',
       checked: gzip,
     }, {
-      label: globalString('backup/database/repair'),
+      label: globalString('backuprestore/parameters/repair/label'),
       onChange: changeRepair,
       tooltips: '',
       checked: repair,
     }, {
-      label: globalString('backup/database/dumpDbUsersAndRoles'),
+      label: globalString('backuprestore/parameters/dumpDbUsersAndRoles/label'),
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
       tooltips: '',
     }, {
-      label: globalString('backup/database/viewsAsCollections'),
+      label: globalString('backuprestore/parameters/viewsAsCollections/label'),
       checked: viewsAsCollections,
       tooltips: '',
       onChange: changeViewsAsCollections,
     }, {
-      label: globalString('backup/database/numParallelCollections'),
+      label: globalString('backuprestore/parameters/numParallelCollections/label'),
       onChange: changeNumParallelCollections,
       type: 'input',
       inputType: 'number',
       value: numParallelCollections
     }, {
-      label: globalString('backup/database/queryOptions'),
+      label: globalString('backuprestore/parameters/queryOptions/label'),
       type: 'separator'
     }, {
-      label: globalString('backup/database/forceTableScan'),
+      label: globalString('backuprestore/parameters/forceTableScan/label'),
       value: forceTableScan,
       onChange: changeForceTableScan,
     }, {
-      label: globalString('backup/database/readPreference'),
+      label: globalString('backuprestore/parameters/readPreference/label'),
       type: 'input',
       value: readPreference,
       onChange: changeReadPreference,
     }, {
-      label: globalString('backup/database/query'),
+      label: globalString('backuprestore/parameters/query/label'),
       type: 'input',
       value: query,
       onChange: changeQuery,
@@ -269,84 +269,84 @@ export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeCon
               gzip, changeGzip}) => {
   const options = [
     {
-      label: globalString('backup/database/restoreOptions'),
+      label: globalString('backuprestore/parameters/restoreOptions/label'),
       type: 'separator',
     }, {
-      label: globalString('backup/database/drop'),
+      label: globalString('backuprestore/parameters/drop/label'),
       onChange: changeDrop,
       tooltips: '',
       checked: drop,
     }, {
-      label: globalString('backup/database/dryRun'),
+      label: globalString('backuprestore/parameters/dryRun/label'),
       onChange: changeDryRun,
       tooltips: '',
       checked: dryRun,
     }, {
-      label: globalString('backup/database/writeConcern'),
+      label: globalString('backuprestore/parameters/writeConcern/label'),
       onChange: changeWriteConcern,
       checked: writeConcern,
       type: 'input',
       tooltips: '',
     }, {
-      label: globalString('backup/database/noIndexRestore'),
+      label: globalString('backuprestore/parameters/noIndexRestore/label'),
       checked: noIndexRestore,
       tooltips: '',
       onChange: changeNoIndexRestore,
     }, {
-      label: globalString('backup/database/noOptionsRestore'),
+      label: globalString('backuprestore/parameters/noOptionsRestore/label'),
       onChange: changeNoOptionsRestore,
       value: noOptionsRestore
     }, {
-      label: globalString('backup/database/keepIndexVersion'),
+      label: globalString('backuprestore/parameters/keepIndexVersion/label'),
       onChange: changeKeepIndexVersion,
       value: keepIndexVersion
     }, {
-      label: globalString('backup/database/maintainInsertionOrder'),
+      label: globalString('backuprestore/parameters/maintainInsertionOrder/label'),
       onChange: changeMaintainInsertionOrder,
       value: maintainInsertionOrder
     }, {
-      label: globalString('backup/database/numParallelCollections'),
+      label: globalString('backuprestore/parameters/numParallelCollections/label'),
       onChange: changeNumParallelCollections,
       value: numParallelCollections,
       type: 'input',
       inputType: 'number',
     }, {
-      label: globalString('backup/database/numInsertionWorkers'),
+      label: globalString('backuprestore/parameters/numInsertionWorkers/label'),
       onChange: changeNumInsertionWorkersPerCollection,
       value: numInsertionWorkersPerCollection,
       type: 'input',
       inputType: 'number',
     }, {
-      label: globalString('backup/database/stopOnError'),
+      label: globalString('backuprestore/parameters/stopOnError/label'),
       onChange: changeStopOnError,
       value: stopOnError
     }, {
-      label: globalString('backup/database/bypassDocumentValidation'),
+      label: globalString('backuprestore/parameters/bypassDocumentValidation/label'),
       onChange: changeBypassDocumentValidation,
       value: bypassDocumentValidation
     }, {
-      label: globalString('backup/database/inputOptions'),
+      label: globalString('backuprestore/parameters/inputOptions/label'),
       type: 'separator'
     }, {
-      label: globalString('backup/database/objcheck'),
+      label: globalString('backuprestore/parameters/objcheck/label'),
       value: objcheck,
       onChange: changeObjcheck,
     }, {
-      label: globalString('backup/database/oplogReplay'),
+      label: globalString('backuprestore/parameters/oplogReplay/label'),
       type: 'input',
       value: oplogReplay,
       onChange: changeOplogReplay,
     }, {
-      label: globalString('backup/database/oplogLimit'),
+      label: globalString('backuprestore/parameters/oplogLimit/label'),
       type: 'input',
       value: oplogLimit,
       onChange: changeOplogLimit,
     }, {
-      label: globalString('backup/database/restoreDbUsersAndRoles'),
+      label: globalString('backuprestore/parameters/restoreDbUsersAndRoles/label'),
       value: restoreDbUsersAndRoles,
       onChange: changeRestoreDbUsersAndRoles,
     }, {
-      label: globalString('backup/database/gzip'),
+      label: globalString('backuprestore/parameters/gzip/label'),
       value: gzip,
       onChange: changeGzip,
     }
@@ -365,78 +365,78 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
                                 bypassDocumentValidation, changeBypassDocumentValidation}) => {
   const options = [
     {
-      label: globalString('backup/database/inputOptions'),
+      label: globalString('backuprestore/parameters/inputOptions/label'),
       type: 'separator',
     }, {
-      label: globalString('backup/database/fields'),
+      label: globalString('backuprestore/parameters/fields/label'),
       type: 'input',
       value: outputFields,
       onChange: changeOutputFields,
     }, {
-      label: globalString('backup/database/headerLine'),
+      label: globalString('backuprestore/parameters/headerLine/label'),
       onChange: changeHeaderLine,
       checked: headerLine,
     }, {
-      label: globalString('backup/database/jsonArray'),
+      label: globalString('backuprestore/parameters/jsonArray/label'),
       onChange: changeJsonArray,
       checked: jsonArray,
     }, {
-      label: globalString('backup/database/parseGrace'),
+      label: globalString('backuprestore/parameters/parseGrace/label'),
       onChange: changeParseGrace,
       type: 'selection',
       value: parseGrace,
-      tooltips: globalString('backup/tooltips/parseGrace')
+      tooltips: globalString('backuprestore/parameters/parseGrace/tooltip')
     }, {
-      label: globalString('backup/database/type'),
+      label: globalString('backuprestore/parameters/type/label'),
       onChange: changeExportType,
       type: 'selection',
       value: exportType,
     }, {
-      label: globalString('backup/database/columnsHaveTypes'),
+      label: globalString('backuprestore/parameters/columnsHaveTypes/label'),
       onChange: changeColumnsHaveTypes,
       type: 'input',
       value: columnsHaveTypes,
     }, {
-      label: globalString('backup/database/ingestOptions'),
+      label: globalString('backuprestore/parameters/ingestOptions/label'),
       type: 'separator',
     }, {
-      label: globalString('backup/database/drop'),
+      label: globalString('backuprestore/parameters/drop/label'),
       onChange: changeDrop,
       checked: drop,
     }, {
-      label: globalString('backup/database/ignoreBlanks'),
+      label: globalString('backuprestore/parameters/ignoreBlanks/label'),
       onChange: changeIgnoreBlanks,
       checked: ignoreBlanks,
     }, {
-      label: globalString('backup/database/maintainInsertionOrder'),
+      label: globalString('backuprestore/parameters/maintainInsertionOrder/label'),
       onChange: changeMaintainInsertionOrder,
       checked: maintainInsertionOrder,
     }, {
-      label: globalString('backup/database/numInsertionWorkers'),
+      label: globalString('backuprestore/parameters/numInsertionWorkers/label'),
       type: 'input',
       value: numInsertionWorkers,
       onChange: changeNumInsertionWorkers,
     }, {
-      label: globalString('backup/database/stopOnError'),
+      label: globalString('backuprestore/parameters/stopOnError/label'),
       onChange: changeStopOnError,
       checked: stopOnError,
     }, {
-      label: globalString('backup/database/mode'),
+      label: globalString('backuprestore/parameters/mode/label'),
       onChange: changeMode,
       type: 'selection',
       value: mode,
     }, {
-      label: globalString('backup/database/upsertFields'),
+      label: globalString('backuprestore/parameters/upsertFields/label'),
       type: 'input',
       value: upsertFields,
       onChange: changeUpsertFields,
     }, {
-      label: globalString('backup/database/writeConcern'),
+      label: globalString('backuprestore/parameters/writeConcern/label'),
       type: 'input',
       value: writeConcern,
       onChange: changeWriteConcern,
     }, {
-      label: globalString('backup/database/bypassDocumentValidation'),
+      label: globalString('backuprestore/parameters/bypassDocumentValidation/label'),
       onChange: changeBypassDocumentValidation,
       checked: bypassDocumentValidation,
     }

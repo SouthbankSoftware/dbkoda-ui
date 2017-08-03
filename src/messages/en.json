@@ -209,71 +209,209 @@
         "slave": "connect to slave without slaveOk"
       }
     },
-    "backup": {
-      "database": {
-        "mongoExport": "Mongo Export",
-        "mongoDump": "Mongo Dump",
-        "mongoImport": "Mongo Import",
-        "mongoRestore": "Mongo Restore",
-        "ssl": "SSL",
-        "allCollections": "All Collections",
-        "db": "Database",
-        "collection": "Collection",
-        "database": "Database",
-        "selectCollection": "Select a collection",
-        "selectDatabase": "Select a database",
-        "filePath": "Save Directory Path",
-        "openFilePath": "Directory or file to restore",
-        "importFilePath": "File to restore",
-        "pretty": "Pretty",
-        "jsonArray": "Json Array",
-        "chooseDirectory": "Choose",
-        "repair": "Repair (not supported by all storage engines)",
-        "requiredWarning": "This field is required",
-        "outputOptions": "Output Options",
-        "inputOptions": "Input Options",
-        "queryOptions": "Querying Options",
-        "ingestOptions": "Ingest Options",
-        "restoreOptions": "Restore Options",
-        "limit": "Limit <count> ",
-        "skip": "Skip <count> ",
-        "sort": "Sort <json>",
-        "fields": "Fields <field>[,<field>]*",
-        "allDatabases": "All Databases",
-        "executionOSScriptFailed": "Execution of scripts failed",
-        "forceTableScan": "forceTableScan",
-        "assertExists": "assertExists",
-        "query": "Query",
-        "readPreference": "Read Preference",
-        "dumpDbUsersAndRoles": "dumpDbUsersAndRoles",
-        "viewsAsCollections": "viewsAsCollections",
-        "numParallelCollections": "numParallelCollections",
-        "drop": "drop",
-        "dryRun": "dryRun",
-        "writeConcern": "writeConcern",
-        "noIndexRestore": "noIndexRestore",
-        "noOptionsRestore": "noOptionsRestore",
-        "keepIndexVersion": "keepIndexVersion",
-        "maintainInsertionOrder": "maintainInsertionOrder",
-        "numInsertionWorkers": "numInsertionWorkers",
-        "stopOnError":"stopOnError",
-        "bypassDocumentValidation": "bypassDocumentValidation",
-        "objcheck": "objcheck",
-        "oplogReplay": "oplogReplay",
-        "oplogLimit": "oplogLimit",
-        "restoreDbUsersAndRoles": "restoreDbUsersAndRoles",
-        "gzip": "gzip",
-        "headerLine": "headerLine",
-        "parseGrace": "parseGrace",
-        "type": "Type",
-        "columnsHaveTypes": "columnsHaveTypes",
-        "ignoreBlanks": "ignoreBlanks",
-        "mode": "mode",
-        "upsertFields": "upsertFields"
-      },
-      "tooltips": {
-        "jsonArray": "output to a JSON array",
-        "fields": "comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
+    "backuprestore": {
+      "mongoExport": "Mongo Export",
+      "mongoDump": "Mongo Dump",
+      "mongoImport": "Mongo Import",
+      "mongoRestore": "Mongo Restore",
+      "database": "Database",
+      "collection": "Collection",
+      "selectDatabase": "Select Database",
+      "selectCollection": "Select Collection",
+      "openFilePath": "Open File Path",
+      "filePath": "File Path",
+      "chooseDirectory": "Choose",
+      "requiredWarning": "This field is required",
+      "executionOSScriptFailed": "Executing command failed",
+      "parameters": {
+        "ssl": {
+          "label": "SSL",
+          "tooltip": "ssl"
+        },
+        "allCollections": {
+          "label": "allCollections",
+          "tooltip": "allCollections"
+        },
+        "db": {
+          "label": "db",
+          "tooltip": "database"
+        },
+        "collection": {
+          "label": "collection",
+          "tooltip": "collection"
+        },
+        "importFilePath": {
+          "label": "File to restore",
+          "tooltip": "File to restore"
+        },
+        "pretty": {
+          "label": "pretty",
+          "tooltip": "pretty"
+        },
+        "jsonArray": {
+          "label": "jsonArray",
+          "tooltip": "output to a JSON array"
+        },
+        "repair": {
+          "label": "Repair",
+          "tooltip": "Repair (not supported by all storage engines)"
+        },
+        "outputOptions": {
+          "label": "outputOptions",
+          "tooltip": "outputOptions"
+        },
+        "inputOptions": {
+          "label": "inputOptions",
+          "tooltip": "inputOptions"
+        },
+        "queryOptions": {
+          "label": "queryOptions",
+          "tooltip": "queryOptions"
+        },
+        "ingestOptions": {
+          "label": "Ingest Options",
+          "tooltip": "ingestOptions"
+        },
+        "restoreOptions": {
+          "label": "Restore Options",
+          "tooltip": "Restore Options"
+        },
+        "limit": {
+          "label": "Limit <count>",
+          "tooltip": ""
+        },
+        "skip": {
+          "label": "Skip <count>",
+          "tooltip": ""
+        },
+        "sort": {
+          "label": "Sort <json>",
+          "tooltip": ""
+        },
+        "fields": {
+          "label": "Fields <field>[,<field>]*",
+          "tooltip": "comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
+        },
+        "allDatabases": {
+          "label": "All Database",
+          "tooltip": "All Database"
+        },
+        "forceTableScan": {
+          "label": "forceTableScan",
+          "tooltip": "forceTableScan"
+        },
+        "assertExists": {
+          "label": "assertExists",
+          "tooltip": "assertExists"
+        },
+        "query": {
+          "label": "Query",
+          "tooltip": "Query"
+        },
+        "readPreference": {
+          "label": "readPreference",
+          "tooltip": "readPreference"
+        },
+        "dumpDbUsersAndRoles": {
+          "label": "dumpDbUsersAndRoles",
+          "tooltip": "dumpDbUsersAndRoles"
+        },
+        "viewsAsCollections": {
+          "label": "viewsAsCollections",
+          "tooltip": "viewsAsCollections"
+        },
+        "numParallelCollections": {
+          "label": "numParallelCollections",
+          "tooltip": "numParallelCollections"
+        },
+        "drop": {
+          "label": "drop",
+          "tooltip": "drop"
+        },
+        "dryRun": {
+          "label": "dryRun",
+          "tooltip": "dryRun"
+        },
+        "writeConcern": {
+          "label": "writeConcern",
+          "tooltip": "writeConcern"
+        },
+        "noIndexRestore": {
+          "label": "noIndexRestore",
+          "tooltip": "noIndexRestore"
+        },
+        "noOptionsRestore": {
+          "label": "noOptionsRestore",
+          "tooltip": "noOptionsRestore"
+        },
+        "keepIndexVersion": {
+          "label": "keepIndexVersion",
+          "tooltip": "keepIndexVersion"
+        },
+        "maintainInsertionOrder": {
+          "label": "maintainInsertionOrder",
+          "tooltip": "maintainInsertionOrder"
+        },
+        "numInsertionWorkers": {
+          "label": "numInsertionWorkers",
+          "tooltip": "numInsertionWorkers"
+        },
+        "stopOnError": {
+          "label": "stopOnError",
+          "tooltip": "stopOnError"
+        },
+        "bypassDocumentValidation": {
+          "label": "bypassDocumentValidation",
+          "tooltip": "bypassDocumentValidation"
+        },
+        "objcheck": {
+          "label": "objcheck",
+          "tooltip": "objcheck"
+        },
+        "oplogReplay": {
+          "label": "oplogReplay",
+          "tooltip": "oplogReplay"
+        },
+        "oplogLimit": {
+          "label": "oplogLimit",
+          "tooltip": "oplogLimit"
+        },
+        "restoreDbUsersAndRoles": {
+          "label": "restoreDbUsersAndRoles",
+          "tooltip": "restoreDbUsersAndRoles"
+        },
+        "gzip": {
+          "label": "gzip",
+          "tooltip": "gzip"
+        },
+        "headerLine": {
+          "label": "headerLine",
+          "tooltip": "headerLine"
+        },
+        "parseGrace": {
+          "label": "parseGrace",
+          "tooltip": "parseGrace"
+        },
+        "type": {
+          "label": "Type",
+          "tooltip": "Type"
+        },
+        "columnsHaveTypes": {
+          "label": "columnsHaveTypes",
+          "tooltip": "columnsHaveTypes"
+        },
+        "ignoreBlanks": {
+          "label": "ignoreBlanks",
+          "tooltip": "ignoreBlanks"
+        },
+        "mode": {
+          "label": "mode",
+          "tooltip": "mode"
+        },
+        "upsertFields": {
+          "label": "upsertFields",
+          "tooltip": "upsertFields"
+        }
       }
     }
   }

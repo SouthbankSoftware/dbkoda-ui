@@ -30,21 +30,21 @@ import './CollectionList.scss';
 
 const Header = ({target}) => (
   <div className="header">
-    <span className="key">{target === 'server' ? globalString('backup/database/database') : globalString('backup/database/collection')}</span>
+    <span className="key">{target === 'server' ? globalString('backuprestore/database') : globalString('backuprestore/collection')}</span>
   </div>
 );
 
 const Row = ({options, selectCollection, unSelectCollection, index, colName, readOnly, target}) => (
   <div className="row">
     <div className="pt-select">
-      <select className="select" defaultValue={target === 'server' ? globalString('backup/database/selectDatabase') : globalString('backup/database/selectCollection')}
+      <select className="select" defaultValue={target === 'server' ? globalString('backuprestore/selectDatabase') : globalString('backuprestore/selectCollection')}
         onChange={(item) => {
                 selectCollection(item.target.value, index);
               }}
         disabled={readOnly}
         value={index >= 0 ? colName : ''}
       >
-        <option>{globalString(target === 'server' ? globalString('backup/database/selectDatabase') : 'backup/database/selectCollection')}</option>
+        <option>{globalString(target === 'server' ? globalString('backuprestore/selectDatabase') : 'backuprestore/selectCollection')}</option>
         {
           options.map((o, i) => {
             const id = i;

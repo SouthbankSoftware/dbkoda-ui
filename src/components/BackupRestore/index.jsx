@@ -77,7 +77,7 @@ export class BackupRestore extends React.Component {
         console.log('get backup command ', output);
         // if (output.code !== 0) {
         //   NewToaster.show({
-        //             message: globalString('backup/database/executionOSScriptFailed'),
+        //             message: globalString('backuprestore/executionOSScriptFailed'),
         //             intent: Intent.DANGER,
         //             iconName: 'pt-icon-thumbs-down'
         //           });

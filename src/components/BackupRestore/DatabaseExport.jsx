@@ -123,7 +123,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   selectCollection(collection, i) {
-    if (collection === globalString('backup/database/selectCollection')) {
+    if (collection === globalString('backuprestore/selectCollection')) {
       this.unSelectCollection(i);
       return;
     }
@@ -326,18 +326,18 @@ export default class DatabaseExport extends React.Component {
       case BackupRestoreActions.EXPORT_DATABASE:
       case BackupRestoreActions.EXPORT_COLLECTION:
       case BackupRestoreActions.EXPORT_SERVER:
-        return globalString('backup/database/mongoExport');
+        return globalString('backuprestore/mongoExport');
       case BackupRestoreActions.DUMP_COLLECTION:
       case BackupRestoreActions.DUMP_DATABASE:
       case BackupRestoreActions.DUMP_SERVER:
-        return globalString('backup/database/mongoDump');
+        return globalString('backuprestore/mongoDump');
       case BackupRestoreActions.RESTORE_SERVER:
       case BackupRestoreActions.RESTORE_COLLECTION:
       case BackupRestoreActions.RESTORE_DATABASE:
-        return globalString('backup/database/mongoRestore');
+        return globalString('backuprestore/mongoRestore');
       case BackupRestoreActions.IMPORT_DATABASE:
       case BackupRestoreActions.IMPORT_COLLECTION:
-        return globalString('backup/database/mongoImport');
+        return globalString('backuprestore/mongoImport');
       default:
         return '';
     }
@@ -361,7 +361,7 @@ export default class DatabaseExport extends React.Component {
       return (
         <div>
           <label className="pt-label database" htmlFor="database">
-            {globalString('backup/database/db')}
+            {globalString('backuprestore/parameters/db/label')}
           </label>
           <div className="pt-form-content">
             <input className="pt-input" readOnly={readOnly} type="text" dir="auto" value={db}
@@ -377,9 +377,9 @@ export default class DatabaseExport extends React.Component {
    */
   getFilePathLabel(action) {
     if (isRestoreAction(action) || isImportAction(action)) {
-      return globalString('backup/database/openFilePath');
+      return globalString('backuprestore/openFilePath');
     }
-    return globalString('backup/database/filePath');
+    return globalString('backuprestore/filePath');
   }
 
   render() {
@@ -393,7 +393,7 @@ export default class DatabaseExport extends React.Component {
           (treeAction === BackupRestoreActions.RESTORE_DATABASE || treeAction === BackupRestoreActions.RESTORE_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION || treeAction === BackupRestoreActions.IMPORT_DATABASE)
           && <div style={{marginBottom: 20}}>
             <label className="pt-label database" htmlFor="database">
-              {globalString('backup/database/collection')}
+              {globalString('backuprestore/collection')}
             </label>
             <div className="pt-form-content">
               <input className="pt-input" type="text" dir="auto"
@@ -410,10 +410,10 @@ export default class DatabaseExport extends React.Component {
           <input className="pt-input path-input" type="text" readOnly
             onClick={e => this.setState({directoryPath: e.target.value})} value={this.state.directoryPath} />
           <Button className="browse-directory"
-            onClick={() => this.openFile(treeAction)}>{globalString('backup/database/chooseDirectory')}</Button>
+            onClick={() => this.openFile(treeAction)}>{globalString('backuprestore/chooseDirectory')}</Button>
         </div>
         <label className={this.state.directoryPath ? 'hide' : 'warning'}
-          htmlFor="database">{globalString('backup/database/requiredWarning')}</label>
+          htmlFor="database">{globalString('backuprestore/requiredWarning')}</label>
       </div>
       <div style={{overflowY: 'auto'}}>
         {treeAction !== BackupRestoreActions.EXPORT_COLLECTION
