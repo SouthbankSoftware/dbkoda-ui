@@ -47,6 +47,8 @@ import { EnhancedJson } from '../EnhancedJsonPanel';
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
+    this.updateJsonView = this.updateJsonView.bind(this);
+    this.state = { enhancedJson: '' };
     /**
      * Reaction function for when the active editorPanel is changed,
      * update the active outputPanel
@@ -104,6 +106,11 @@ export default class Panel extends React.Component {
     });
   }
 
+  updateJsonView(jsonStr) {
+    this.setState({ enhancedJson: jsonStr });
+    this.changeTab('EnhancedJson-' + this.props.store.outputPanel.currentTab);
+  }
+
   /**
    * Updates the active tab state for the Output view
    * @param {string} newTab - The html id of the new active tab
@@ -153,6 +160,7 @@ export default class Panel extends React.Component {
               initialMsg={editor[1].initialMsg}
               shellId={editor[1].shellId}
               tabClassName={tabClassName}
+              updateJsonView={this.updateJsonView}
             />
           }
         />
@@ -167,15 +175,14 @@ export default class Panel extends React.Component {
             this.props.store.outputPanel.currentTab = editor[1].id;
           });
         }
-        if (process.env.NODE_ENV === 'development') {
-          const jsonStr = `{ "_id": ObjectId("123445567890"), "name": "A Regular Document", "description": "<p class="someClass">This is just a regular document value, but if you click on the value or elipsis you can read all of this nonsense, but you already know that don't you because you're reading this now.</p>", "longNumber": NumberLong("12345678910"), "decimalNumber": NumberDecimal("123.0987654"), "binaryData": BinData("123aBd5647658Fxntg3242123aBd5647658Fxntg3242123aBd5647658Fxntg3242123aBd5647658Fxntg3242123aBd5647658Fxntg3242123aBd5647658Fxntg3242123aBd5647658Fxntg3242"), "created_at" : "Fri May 25 20:03:23 UTC 2007", "arrayItems":[{ "name": "Item 1" }, { "name": "Item 2" }] }`; // eslint-disable-line
+        if (process.env.NODE_ENV === 'development' && this.state.enhancedJson) {
           arrTabs.push(
             <Tab2
               className={(tabClassName !== 'notVisible') ? 'visible' : 'notVisible'}
               key={'EnhancedJson-' + editor[1].id}
               id={'EnhancedJson-' + editor[1].id}
               title={'EnhancedJson-' + editorTitle}
-              panel={<EnhancedJson currentJson={jsonStr} />}
+              panel={<EnhancedJson currentJson={this.state.enhancedJson} />}
             />
           );
         }

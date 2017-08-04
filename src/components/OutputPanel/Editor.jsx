@@ -16,12 +16,11 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
-* @Author: Chris Trott <chris>
-* @Date:   2017-03-10T12:33:56+11:00
-* @Email:  chris@southbanksoftware.com
+ *
+ *
+ * @Author: Chris Trott <chris>
+ * @Date:   2017-03-10T12:33:56+11:00
+ * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
  * @Last modified time: 2017-07-26T14:02:40+10:00
 */
@@ -30,6 +29,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
+import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
 import 'codemirror/theme/material.css';
 import OutputTerminal from './Terminal';
 
@@ -45,6 +45,7 @@ require('#/common/MongoScript.js');
   api: allStores.api,
 }))
 @observer
+@ContextMenuTarget
 export default class Editor extends React.Component {
   /**
    * @param {Object} props - The properties passed to the component.
@@ -54,6 +55,11 @@ export default class Editor extends React.Component {
    *    @param {number} shellId - The shellId of the allocated connection
    *    @param {Object} store - The mobx global store object (injected)
    */
+
+   constructor(props) {
+     super(props);
+     this.renderContextMenu = this.renderContextMenu.bind(this);
+   }
 
   /**
    * Action for handling a drop event from a drag-and-drop action.
@@ -76,6 +82,34 @@ export default class Editor extends React.Component {
       };
       setTimeout(setDragDropTrueLater, 500);
     }
+  }
+
+  renderContextMenu(event) {
+    let target = event.target;
+    const hasClass = (element, className) => {
+      return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
+    };
+    while (!hasClass(target, 'CodeMirror-line')) {
+      if (hasClass(target, 'CodeMirror')) {
+        break;
+      }
+      target = target.parentNode;
+    }
+
+    return (
+      <Menu className="editorTabContentMenu">
+        <div className="menuItemWrapper showJsonView">
+          <MenuItem
+            onClick={() => {
+              this.props.updateJsonView(target.textContent);
+            }}
+            text={globalString('output/editor/contextJson')}
+            iconName="pt-icon-small-cross"
+            intent={Intent.NONE}
+          />
+        </div>
+      </Menu>
+    );
   }
 
   render() {
