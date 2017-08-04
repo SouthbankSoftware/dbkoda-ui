@@ -100,7 +100,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   openFile(action) {
-    let properties;
+    let properties = [];
     if (action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER) {
       properties = ['openDirectory', 'openFile'];
     } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_COLLECTION) {
@@ -108,6 +108,8 @@ export default class DatabaseExport extends React.Component {
     } else {
       properties = ['openDirectory'];
     }
+    properties.push('createDirectory');
+    properties.push('promptToCreate');
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {

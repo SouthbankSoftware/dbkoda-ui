@@ -229,7 +229,7 @@
           "tooltip": "ssl"
         },
         "allCollections": {
-          "label": "allCollections",
+          "label": "All Collections",
           "tooltip": "allCollections"
         },
         "db": {
