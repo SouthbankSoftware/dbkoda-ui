@@ -17,7 +17,8 @@
         "clear": "Clear Output Contents (Ctrl + L)"
       },
       "editor": {
-        "restoreSession": "** Session Restored **\r"
+        "restoreSession": "** Session Restored **\r",
+        "contextJson": "Enhanced JSON View"
       },
       "terminal": {
         "execute": "Execute Command (Enter)"

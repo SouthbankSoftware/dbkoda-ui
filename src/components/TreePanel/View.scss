@@ -27,7 +27,6 @@
 
 .treeToolbar {
   overflow: hidden !important;
-  height: 70px !important;
   display: flex;
   flex-direction: row;
   background-color: $navbarLeftBackground !important;
@@ -47,7 +46,6 @@
   }
 
   div.pt-align-right {
-    margin-top: 5px;
     a.pt-button {
       svg.dbKodaSVG {
         width: 20px;
@@ -58,7 +56,6 @@
   }
 
   div.pt-align-left {
-    margin-top: 5px;
   }
 }
 

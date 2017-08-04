@@ -47,10 +47,7 @@ export default class Panel extends React.Component {
       .replace(/<(.*)>/gm, (contents) => {
         return contents.replace(/(<[^>])*\/([^>]>)*/gm, '$1\\\/$2')
           .replace(/="([^"]*)"/gm, '=\\\"$1\\\"');
-          // TODO Replace quotes not in tags?
-          // .replace(/(<[^<>]*)"([^<>]*)"([^<>]*>)/gm, '$1&quot;$2&quot;$3')
       });
-    console.log(json);
     json = JSON.parse(json);
     return json;
   }
