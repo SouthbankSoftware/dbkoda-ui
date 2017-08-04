@@ -1,3 +1,11 @@
+// @Author: Wahaj Shamim <wahaj>
+// @Date:   2017-08-01T10:50:03+10:00
+// @Email:  wahaj@southbanksoftware.com
+// @Last modified by:   wahaj
+// @Last modified time: 2017-08-04T15:08:27+10:00
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,4 +33,76 @@
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+
+  .details-msg-div {
+    overflow-y: auto;
+    left: calc(10%);
+    top: calc(25%);
+    width: 80%;
+    height: 256px;
+    position: absolute;
+    //border: 1px solid $treeBorderColor;
+    div.messageWrapper {
+      left: calc(17%);
+      top: 0px;
+      width: 66%;
+      height: 254px;
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      div.iconWrapper {
+        left: calc(50% - 50px);
+        top: calc(50% - 50px);
+        width: 100px;
+        height: 100px;
+        order:1;
+        position:absolute;
+        text-align: center;
+        border-radius: 50%;
+        background-color: $treeIconBGColor;
+        span.failureText {
+          color: $toastFontColourDanger;
+        }
+        svg {
+          margin-top: 20%;
+          width: 60%;
+          height: 60%;
+          fill: $treeIconColor;
+          path.st0 {
+            fill: none;
+          }
+        }
+      }
+      div.loader {
+        border: 16px solid $treeLoaderColorBG;
+        border-top: 16px
+          solid
+          $treeLoaderColor; // Second spinning icon: border-bottom: 16px solid $treeLoaderColor;
+        border-radius: 50%;
+        width:100px;
+        height:100px;
+        order:1;
+        position:relative;
+        animation: spin 2s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      span {
+        order: 2;
+        position:absolute;
+        color: $treeMessageColor;
+        padding: 10px 5px;
+        display: block;
+        text-align: center;
+        top: 40%;
+        width: 100%;
+      }
+    }
+  }
 }

@@ -68,6 +68,12 @@
 
         },
         {
+            "name": "DbStorageStats",
+            "text": "Storage Drill Down",
+            "icon": "pt-icon-pie-chart",
+            "noDialog": true
+        },
+        {
             "type": "divider",
             "name": "OperationsDivider"
         },

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-01T10:21:27+10:00
+ * @Last modified time: 2017-08-04T11:52:43+10:00
  */
 
 
@@ -164,6 +164,11 @@ export default class Store {
     lastTreeNode: null,
     detailsViewInfo: null,
     activeEditorId: '',
+  };
+
+  @observable
+  storagePanel = {
+    selectedDatabase: null,
   };
 
   @observable
