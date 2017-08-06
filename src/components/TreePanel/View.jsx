@@ -23,7 +23,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-01T11:00:32+10:00
+ * @Last modified time: 2017-08-04T14:35:05+10:00
 */
 
 import React from 'react';
@@ -275,6 +275,10 @@ export default class TreeView extends React.Component {
           console.log('Aggregate builder...');
           this.props.store.openNewAggregateBuilder(this.nodeRightClicked);
           break;
+        case 'DbStorageStats':
+          console.log('DrillDown View...');
+          this.showStorageStatsView();
+          break;
         default:
           console.error('Tree Action not defined: ', action);
           break;
@@ -364,6 +368,21 @@ export default class TreeView extends React.Component {
           }
         }));
       }
+    });
+  };
+
+  showStorageStatsView = () => {
+    runInAction('Using Active profile to store statistics', () => {
+      const selectedProfile = this.props.store.profileList.selectedProfile;
+      console.log(selectedProfile);
+      this.props.store.profileList.selectedProfile = observable({
+        ...selectedProfile,
+        storageView: {
+          visible: true,
+          shouldFocus: true
+        },
+      });
+      this.props.store.profiles.set(selectedProfile.id, this.props.store.profileList.selectedProfile);
     });
   };
 

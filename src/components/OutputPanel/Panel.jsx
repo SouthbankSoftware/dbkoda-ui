@@ -23,7 +23,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-07T14:10:32+10:00
+ * @Last modified time: 2017-08-04T14:43:15+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -222,20 +222,31 @@ export default class Panel extends React.Component {
             }
           />
         );
-        arrTabs.push(
-          <Tab2
-            className="visible"
-            key={'Storage-' + editor[1].id}
-            id={'Storage-' + editor[1].id}
-            title={'Storage-' + editorTitle}
-            panel={
-              <StoragePanel />
-            }
-          />
-        );
       }
       return arrTabs;
     });
+    const profileTabs = [];
+    const selectedProfile = this.props.store.profileList.selectedProfile;
+    if (selectedProfile && selectedProfile.storageView && selectedProfile.storageView.visible) {
+      profileTabs.push(
+        <Tab2
+          className="visible"
+          key={'Storage-' + selectedProfile.id}
+          id={'Storage-' + selectedProfile.id}
+          title={'Storage-' + selectedProfile.alias}
+          panel={
+            <StoragePanel />
+          }
+        />
+      );
+      tabs.push(profileTabs);
+      if (selectedProfile.storageView.shouldFocus) {
+        runInAction(() => {
+          this.props.store.outputPanel.currentTab = 'Storage-' + selectedProfile.id;
+          this.props.store.profileList.selectedProfile.storageView.shouldFocus = false;
+        });
+      }
+    }
     return [].concat(...tabs);
   }
 
