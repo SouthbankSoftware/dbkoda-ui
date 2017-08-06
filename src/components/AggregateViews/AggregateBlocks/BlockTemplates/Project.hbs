@@ -1,1 +1,6 @@
-{  $project:  {{{Expression}}}  }
+    { $project: { 
+      {{#each Keys}}
+      {{AttributeName}}: { {{Value}} },
+      {{/each}}   
+    }
+  },

@@ -1,6 +1,5 @@
 {
   "Title": "Group By",
-  "DefaultValues": {},
   "Fields": [
     {
       "name": "ID",
@@ -10,25 +9,25 @@
       "keyValue": true
     },
     {
-      "name": "Attributes",
-      "label": "Group by Attributes",
+      "name": "GroupBy",
+      "label": "Group By",
       "type": "Table",
-      "columns": [{
-          "name": "Attribute",
-          "label": "Attribute",
-          "type": "Select",
-          "lookup": "dbkodaListAttributes",
-          "lookup_arguments": [{
-                  "name": "db",
-                  "value": "database"
-              },
-              {"name": "collection",
-              "value": "collection"}
-          ]
-      }, {
+      "columns": [
+        {
+          "name": "FieldName",
+          "label": "Field Name",
+          "type": "Text"
+        },
+        {
+          "name": "Accumulator",
+          "label": "Accumulator",
+          "type": "Text"
+        }, 
+        {
           "name": "Expression",
           "label": "Expression",
           "type": "Text"
-      }]
+        }
+      ]
   }]
 }
