@@ -1,7 +1,7 @@
   { $group: { 
-      _id: {{ID}},
+      _id: {{{ID}}},
       {{#each GroupBy}}
-      {{FieldName}}: { {{Accumulator}}: {{Expression}} },
+      {{{FieldName}}}: { {{{Accumulator}}}: {{{Expression}}} },
       {{/each}}   
     }
   },
