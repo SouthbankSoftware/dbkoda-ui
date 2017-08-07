@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-07T14:52:34+10:00
+ * @Last modified time: 2017-08-08T09:37:55+10:00
  */
 
 /*
@@ -113,6 +113,7 @@ export default class StoragePanel extends React.Component {
               this.showLoading(false);
               if (!nodeData.children) {
                 nodeData.children = res;
+                nodeData.size = 0;
                 this.addParent(nodeData);
               }
               resolve(true);
