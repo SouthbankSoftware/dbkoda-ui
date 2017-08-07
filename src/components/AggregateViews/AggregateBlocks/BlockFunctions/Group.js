@@ -19,6 +19,8 @@
  */
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
-export const GroupBy = {
+export const Group = {
+  // Prefill function for alter user
   dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
 };

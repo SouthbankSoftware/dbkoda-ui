@@ -275,7 +275,6 @@ export default class FormBuilder {
       let ddd;
       let formFunctions;
       let formTemplate;
-
       if (formAction.aggregate) {
         treeAction = formAction.action;
         this.resolveArguments = resolveArguments;
@@ -304,6 +303,7 @@ export default class FormBuilder {
 
       return new Promise((resolve, reject) => {
         // get Fields for Mobx React Form
+
         this.getFieldsFromDefinitions(ddd, formFunctions)
           .then((formDefs) => {
             // callback function to get the updated values from the form
@@ -371,7 +371,6 @@ export default class FormBuilder {
                 } else {
                   PrefilledValues = formFunctions[ddd.DefaultValues.function]();
                 }
-
                 if (typeof PrefilledValues === 'string') {
                   let parseFunction;
                   if (formFunctions[ddd.DefaultValues.function + '_parse']) {

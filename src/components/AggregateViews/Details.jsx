@@ -52,34 +52,28 @@ export default class Details extends React.Component {
 
     // Get variables for action:
     this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+
     /**
      * Resolve the prefetch arguments and return them as params
      * @param  {Array}  args     Arguments array as provided from DDD file
      * @return {Object}          Object containing params for prefetch function
      */
     this.resolveArguments = (args) => {
+      console.log(this.editor.collection);
+      console.log(this.editor.database);
       const params = {};
-      if (args.length > 0 && treeActionPanel.treeNode) {
+      if (args.length > 0) {
         for (let i = 0; i < args.length; i += 1) {
           const arg = args[i];
           switch (arg.value) {
-            case 'treeNode.parentDB':
-              if (treeActionPanel.treeNode.type == 'user') {
-                params[arg.name] = treeActionPanel.treeNode.json.db;
-              } else if (treeActionPanel.treeNode.type == 'collection') {
-                params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
-              } else if (treeActionPanel.treeNode.type == 'index') {
-                params[arg.name] = treeActionPanel.treeNode.refParent.refParent.json.text;
-              }
+            case 'collection':
+              params[arg.name] = this.currentCollection;
               break;
-
-            case 'treeNode.parentCOL':
-              if (treeActionPanel.treeNode.type == 'index') {
-                params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
-              }
+            case 'database':
+              params[arg.name] = this.currentDB;
               break;
             default:
-              params[arg.name] = treeActionPanel.treeNode.json.text;
+              console.error('Invalid arguments to Aggregate Block (This should not really happen :( - ', args);
           }
         }
       }
@@ -120,9 +114,8 @@ export default class Details extends React.Component {
   }
 
   generateCode(editorObject) {
-    let codeString = 'db.collection.aggregate([\n';
+    let codeString = 'use ' + this.currentDB + ';\ndb.' + this.currentCollection + '.aggregate([\n';
     editorObject.blockList.map((block) => {
-      console.log(block);
       const formTemplate = require('./AggregateBlocks/BlockTemplates/' + block.type + '.hbs'); // eslint-disable-line
       codeString += formTemplate(block.fields) + '\n';
     });
@@ -143,6 +136,9 @@ export default class Details extends React.Component {
   }
   render() {
     const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    console.log(this.editor.collection);
+    this.currentDB = this.editor.collection.refParent.text;
+    this.currentCollection = this.editor.collection.text;
     const blockIndex = activeEditor.selectedBlock;
     const activeBlock = activeEditor.blockList[blockIndex];
 
