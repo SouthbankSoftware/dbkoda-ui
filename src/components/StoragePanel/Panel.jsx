@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-07T11:51:51+10:00
+ * @Last modified time: 2017-08-07T14:52:34+10:00
  */
 
 /*
@@ -115,7 +115,7 @@ export default class StoragePanel extends React.Component {
                 nodeData.children = res;
                 this.addParent(nodeData);
               }
-              resolve(nodeData);
+              resolve(true);
               // this.setStorageData(res);
               // this.storageData = res;
             } catch (err) {
@@ -160,10 +160,9 @@ export default class StoragePanel extends React.Component {
       this.bLoading = false;
     }
   }
-  onChildClick = (node) => {
+  onChildDblClick = (node) => {
     // node is a tree Node in d3-hierachy (https://github.com/d3/d3-hierarchy) that just clicked by user
     const nodeData = node.data;
-    console.log('node Clicked: ', nodeData);
     if (!node.parent) {
       // root is clicked, we should move upward in the data tree
       if (nodeData.parent) {
@@ -173,32 +172,39 @@ export default class StoragePanel extends React.Component {
       }
     } else {
       // a child is clicked, we should move downward in the data tree
-      if (                                                        //eslint-disable-line
-        nodeData.name == 'data' &&
-        nodeData.parent &&
-        nodeData.parent.parent &&
-        nodeData.parent.parent.parent &&
-        nodeData.parent.parent.parent.name == 'total'
-      ) {
-        this.loadChildData(
-          nodeData.parent.parent.name,
-          nodeData.parent.name,
-          nodeData,
-        )
-          .then((resNodeData) => {
-            this.setState({
-              data: resNodeData,
-            });
-          })
-          .catch((reason) => {
-            this.updateMsg(reason);
-          });
-      } else {
-        this.setState({
-          data: nodeData,
+      this.setState({
+        data: nodeData,
+      });
+    }
+  };
+
+  onChildClick = (node) => {
+    const nodeData = node.data;
+    console.log('node Clicked: ', nodeData);
+    if (
+      nodeData.name == 'data' &&
+      nodeData.parent &&
+      nodeData.parent.parent &&
+      nodeData.parent.parent.parent &&
+      nodeData.parent.parent.parent.name == 'total'
+    ) {
+      this.loadChildData(
+        nodeData.parent.parent.name,
+        nodeData.parent.name,
+        nodeData,
+      )
+        .then((res) => {
+          if (res) {
+            this.forceUpdate();
+          }
+          // this.setState({
+          //   data: resNodeData,
+          // });
+        })
+        .catch((reason) => {
+          this.updateMsg(reason);
         });
       }
-    }
   };
 
   render() {
@@ -219,6 +225,7 @@ export default class StoragePanel extends React.Component {
           <StorageSunburstView
             data={this.state.data}
             onClick={this.onChildClick}
+            onDblClick={this.onChildDblClick}
           />}
         {!this.bStorageView &&
           <div>

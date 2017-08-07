@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-07T14:04:37+10:00
+ * @Last modified time: 2017-08-07T17:34:52+10:00
  */
 
 
@@ -89,6 +89,7 @@ export default class View extends React.Component {
     height: React.PropTypes.number,
     data: React.PropTypes.object.isRequired,
     onClick: React.PropTypes.func,
+    onDblClick: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -138,7 +139,7 @@ export default class View extends React.Component {
         return d.size;
       })
       .sort((a, b) => {
-        return b.value - a.value;
+        return a.data.name.localeCompare(b.data.name);
       })
       .each((node) => {
         // skip root node
@@ -149,6 +150,9 @@ export default class View extends React.Component {
           node.colour = getColour();
         }
         lastParent = node.parent;
+      })
+      .sort((a, b) => {
+        return b.value - a.value;
       });
 
     // For efficiency, filter nodes to keep only those large enough to see.
@@ -168,7 +172,8 @@ export default class View extends React.Component {
       .style('fill', d => d.colour || '#202020')
       .style('opacity', 1)
       .on('mouseover', this.mouseover)
-      .on('click', this.props.onClick);
+      .on('click', this.props.onClick)
+      .on('dblclick', this.props.onDblClick);
 
     // Add the mouseleave handler to the bounding circle.
     this.container.on('mouseleave', this.mouseleave);
