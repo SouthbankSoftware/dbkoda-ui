@@ -28,9 +28,10 @@
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { Tab2, Tabs2 } from '@blueprintjs/core';
+import { Tab2, Tabs2, Intent } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
+import { NewToaster } from '#/common/Toaster';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
@@ -107,8 +108,13 @@ export default class Panel extends React.Component {
   }
 
   updateJsonView(jsonStr) {
-    this.setState({ enhancedJson: jsonStr });
-    this.changeTab('EnhancedJson-' + this.props.store.outputPanel.currentTab);
+    if (jsonStr) {
+      this.setState({ enhancedJson: jsonStr });
+      this.changeTab('EnhancedJson-' + this.props.store.outputPanel.currentTab);
+    } else {
+      // Show toaster notification, stating the document could not be parsed
+      NewToaster.show({ message: 'Could not parse a document from the selected text', intent: Intent.DANGER, icon: '' });
+    }
   }
 
   /**
