@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-07T12:07:15+10:00
+ * @Last modified time: 2017-08-07T14:04:37+10:00
  */
 
 
@@ -265,9 +265,10 @@ export default class View extends React.Component {
     const points = [];
 
     points.push('0,0');
-    points.push(b.w + ',0');
-    points.push(b.w + b.t + ',' + b.h / 2);
-    points.push(b.w + ',' + b.h);
+    const bw = this.getBreadcrumbWidth(d);
+    points.push(bw + ',0');
+    points.push(bw + b.t + ',' + b.h / 2);
+    points.push(bw + ',' + b.h);
     points.push('0,' + b.h);
 
     if (i > 0) {
@@ -276,6 +277,10 @@ export default class View extends React.Component {
     }
 
     return points.join(' ');
+  }
+
+  getBreadcrumbWidth(d) {
+    return (d.data && d.data.name) ? ((d.data.name.length * 8) + 10) : b.w;
   }
 
   /**
@@ -300,7 +305,9 @@ export default class View extends React.Component {
 
     entering
       .append('svg:text')
-      .attr('x', (b.w + b.t) / 2)
+      .attr('x', (d) => {
+        return (this.getBreadcrumbWidth(d) + b.t) / 2;
+      })
       .attr('y', b.h / 2)
       .attr('dy', '0.35em')
       .attr('text-anchor', 'middle')
@@ -309,14 +316,17 @@ export default class View extends React.Component {
       });
 
     // Merge enter and update selections; set position for all nodes.
+    let lastPos = 0;
     entering.merge(trail).attr('transform', (d, i) => {
-      return 'translate(' + i * (b.w + b.s) + ', 0)';
+      const strTranslate = 'translate(' + ((i * b.s) + lastPos) + ', 0)';
+      lastPos += this.getBreadcrumbWidth(d);
+      return strTranslate;
     });
 
     // Now move and update the percentage at the end.
     this.view
       .select('.trail .endlabel')
-      .attr('x', (nodeArray.length + 0.5) * (b.w + b.s))
+      .attr('x', ((nodeArray.length + 0.5) * b.s) + (lastPos + 30))
       .attr('y', b.h / 2)
       .attr('dy', '0.35em')
       .attr('text-anchor', 'middle')
