@@ -33,7 +33,14 @@
       flex-direction: row;
     }
   }
-  .number-input .pt-input-group input{
+  .number-input .pt-input-group input {
     padding-right: 10px !important;
   }
+  .pt-transition-container {
+    width: 100% !important;
+  }
+  //.pt-popover-content {
+  //  white-space: pre-wrap;
+  //  width: 100%;
+  //}
 }

@@ -303,15 +303,15 @@
         },
         "assertExists": {
           "label": "assertExists",
-          "tooltip": "assertExists"
+          "tooltip": "if specified, export fails if the collection does not exist (default: false)"
         },
         "query": {
           "label": "Query",
-          "tooltip": "Query"
+          "tooltip": "query filter, as a JSON string, e.g., '\\{x:\\{$gt:1\\}\\}'"
         },
         "readPreference": {
           "label": "readPreference",
-          "tooltip": "readPreference"
+          "tooltip": "specify either a preference name or a preference json object"
         },
         "dumpDbUsersAndRoles": {
           "label": "dumpDbUsersAndRoles",
@@ -355,7 +355,7 @@
         },
         "numInsertionWorkers": {
           "label": "numInsertionWorkers",
-          "tooltip": "numInsertionWorkers"
+          "tooltip": "number of insert operations to run concurrently per collection (1 by default) (default: 1)"
         },
         "stopOnError": {
           "label": "stopOnError",
