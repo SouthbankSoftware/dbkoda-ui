@@ -59,6 +59,7 @@ export default class Editor extends React.Component {
    constructor(props) {
      super(props);
      this.renderContextMenu = this.renderContextMenu.bind(this);
+     this.getLineText = this.getLineText.bind(this);
    }
 
   /**
@@ -84,24 +85,53 @@ export default class Editor extends React.Component {
     }
   }
 
-  renderContextMenu(event) {
-    let target = event.target;
-    const hasClass = (element, className) => {
-      return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
-    };
-    while (!hasClass(target, 'CodeMirror-line')) {
-      if (hasClass(target, 'CodeMirror')) {
-        break;
-      }
-      target = target.parentNode;
+  getClickedDocument(target, coords) {
+    const cm = this.editor.getCodeMirror();
+    const lineNumber = cm.lineAtHeight(coords.y);
+    const startLine = cm.getLine(lineNumber);
+    // There is a selection in CodeMirror
+    if (cm.somethingSelected()) {
+      return cm.getSelection();
     }
+    // This is a single-line document
+    if (startLine[0] === '{' && startLine[startLine.length - 1] === '}') {
+      return startLine;
+    }
+    // Parse Multi-line documents
+    return (
+      this.getLineText(cm, lineNumber - 1, -1) +
+        this.getLineText(cm, lineNumber, 1)
+    );
+  }
+
+  getLineText(cm, lineNumber, direction) {
+    let line = cm.getLine(lineNumber);
+    console.log(line);
+    const indentation = line.search(/\S|$/);
+    const brace = direction === -1 ? '{' : '}';
+
+    if (indentation < 1 && line[0] === brace) {
+      return line;
+    }
+
+    if (direction === -1) {
+      line = this.getLineText(cm, lineNumber + direction, direction) + line;
+    } else {
+      line += this.getLineText(cm, lineNumber + direction, direction);
+    }
+
+    return line;
+  }
+
+  renderContextMenu(event) {
+    const coords = { x: event.clientX, y: event.clientY };
 
     return (
       <Menu className="editorTabContentMenu">
         <div className="menuItemWrapper showJsonView">
           <MenuItem
             onClick={() => {
-              this.props.updateJsonView(target.textContent);
+              this.props.updateJsonView(this.getClickedDocument(event.target, coords));
             }}
             text={globalString('output/editor/contextJson')}
             iconName="pt-icon-small-cross"
