@@ -2,7 +2,7 @@
 // @Date:   2017-08-01T10:50:03+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-08-04T15:08:27+10:00
+// @Last modified time: 2017-08-07T11:56:23+10:00
 
 
 
@@ -103,6 +103,34 @@
         top: 40%;
         width: 100%;
       }
+    }
+  }
+
+  .storageToolbar {
+    background-color: $tabBackgroundSelected !important;
+
+    .pt-button {
+      background: $buttonSecondaryBackground !important;
+      color: $buttonSecondaryIcon !important;
+      border-radius: 50%;
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    .pt-button:hover {
+      background: $buttonSecondaryBackgroundHover !important;
+    }
+    div.pt-align-right {
+      a.pt-button {
+        svg.dbKodaSVG {
+          width: 20px;
+          height: 20px;
+          fill: $buttonSecondaryIcon;
+        }
+      }
+    }
+    .refreshButton {
+      max-width: 30px;
     }
   }
 }

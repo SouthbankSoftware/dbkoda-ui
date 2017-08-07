@@ -23,7 +23,7 @@
  * @Date:   2017-05-22T09:14:04+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-24T10:59:28+10:00
+ * @Last modified time: 2017-08-07T11:09:15+10:00
  */
 
 
@@ -34,7 +34,7 @@ import { featherClient } from '~/helpers/feathers';
      console.log('Query:', query);
      if (shellId && profileId && shellId != '' && profileId != '') {
        const service = featherClient().service('/mongo-sync-execution');
-       service.timeout = 30000;
+       service.timeout = 60000;
        return new Promise((resolve, reject) => {
          service
            .update(profileId, {

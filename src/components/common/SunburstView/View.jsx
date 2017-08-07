@@ -1,3 +1,13 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-08-01T10:50:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-07T12:07:15+10:00
+ */
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,18 +46,18 @@ const getColour = (startColour) => {
     getColour._idx = 0;
     // colour palette
     getColour._colours = [
-      '#ff3700',
-      '#ff8900',
-      '#ffb200',
-      '#fcff00',
-      '#c1ea00',
-      '#40ab00',
-      '#0087ce',
-      '#1335ff',
-      '#3e00a1',
-      '#8800ad',
-      '#ac0041',
-      '#ff0000',
+      '#77173E',
+      '#0D657C',
+      '#607747',
+      '#413456',
+      '#823C1D',
+      '#5D3750',
+      '#107BA3',
+      '#A01B4C',
+      '#1E282D',
+      '#465061',
+      '#1E423C',
+      '#701535'
     ];
   }
 
