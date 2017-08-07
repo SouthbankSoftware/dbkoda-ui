@@ -177,6 +177,11 @@ div.Pane.vertical.Pane1 {
           }
         }
       }
+      fieldset[label="Group By"] {
+        .form-group-inline {
+          width: 31%;
+        }
+      }
     }
   }
 }
@@ -283,3 +288,4 @@ svg.color_16 {
     fill: $highlightSeventeen;
   }
 }
+
