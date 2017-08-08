@@ -1,5 +1,9 @@
 {
   "en": {
+    "aggregate_builder": {
+      "show_left_panel": "Show Panel",
+      "hide_left_panel": "Hide Panel"
+    },
     "telemetry_dialog": {
       "header": "Welcome!",
       "content_first": "We would like to gather information about how you are using the product so we can make it even more awesome.",

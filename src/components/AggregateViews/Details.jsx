@@ -29,6 +29,11 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable, reaction } from 'mobx';
+import {
+  AnchorButton,
+  Intent
+} from '@blueprintjs/core';
+import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
 import './style.scss';
@@ -134,6 +139,13 @@ export default class Details extends React.Component {
   @action updateMsg(value) {
     this.msg = value;
   }
+
+  @action.bound
+  onHideLeftPanelClicked() {
+    console.log('Debug: Hide left Panel');
+    this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
+  }
+
   render() {
     const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     console.log(this.editor.collection);
@@ -195,6 +207,11 @@ export default class Details extends React.Component {
               No block selected.
             </p>
           </div>}
+          <AnchorButton
+            className="hideLeftPanelButton"
+            intent={Intent.SUCCESS}
+            text={globalString('aggregate_builder/hide_left_panel')}
+            onClick={this.onHideLeftPanelClicked} />
       </div>
     );
   }

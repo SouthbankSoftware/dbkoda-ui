@@ -8,6 +8,11 @@ div.aggregateGraphicalBuilderWrapper {
   background-color: $aggregateViewBackgroundColor;
   text-align: center;
   height: 85%;
+  a.showLeftPanelButton {
+   position: absolute;
+   top: 10px;
+   left: 10px;
+  }
   h2 {
     padding-top: 40%
   }
@@ -175,6 +180,14 @@ div.Pane.vertical.Pane1 {
             padding-top: 10px;
             padding-left: 10px;
           }
+        }
+        a.hideLeftPanelButton {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          float: right;
+          margin-right: 20px;
+          margin-bottom: 20px;
         }
       }
       fieldset[label="Group By"] {

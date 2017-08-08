@@ -62,6 +62,7 @@ export default class LeftPanel extends React.Component {
           <Palette />
           <Details />
         </SplitPane>
+
       </div>
     );
   }

@@ -30,6 +30,11 @@ import React from 'react';
 import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
+import {
+  AnchorButton,
+  Intent,
+} from '@blueprintjs/core';
+import { DrawerPanes } from '#/common/Constants';
 import Block from './AggregateBlocks/Block.jsx';
 import FirstBlockTarget from './AggregateBlocks/FirstBlockTaget.jsx';
 import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
@@ -93,9 +98,22 @@ export default class GraphicalBuilder extends React.Component {
     array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
   }
 
+  @action.bound
+  onShowLeftPanelClicked() {
+    console.log('Debug: Show left Panel');
+    this.props.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
+  }
+
   render() {
     return (
       <div className="aggregateGraphicalBuilderWrapper">
+        { this.props.store.drawer.drawerChild === DrawerPanes.DEFAULT &&
+          <AnchorButton
+            className="showLeftPanelButton"
+            intent={Intent.SUCCESS}
+            text={globalString('aggregate_builder/show_left_panel')}
+            onClick={this.onShowLeftPanelClicked} />
+        }
         <ul className="graphicalBuilderBlockList">
           <FirstBlockTarget />
           {this.props.store.editors.get(this.state.id).blockList.map((indexValue, index) => {
