@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-04T15:59:02+10:00
+ * @Last modified time: 2017-08-08T09:37:55+10:00
  */
 
 /*
@@ -31,7 +31,8 @@ import StorageSunburstView from '#/common/SunburstView';
 import { SyncService } from '#/common/SyncService';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
-
+import {AnchorButton} from '@blueprintjs/core';
+import RefreshIcon from '~/styles/icons/refresh-icon.svg';
 import './Panel.scss';
 
 // Raw tree data
@@ -49,13 +50,16 @@ export default class StoragePanel extends React.Component {
         children: [],
       },
     };
-
+    this.loadData = this.loadData.bind(this);
     this.loadData();
   }
   @action
   loadData() {
     const selectedProfile = this.props.store.profileList.selectedProfile;
-    if (!selectedProfile || (selectedProfile && selectedProfile.status != 'OPEN')) {
+    if (
+      !selectedProfile ||
+      (selectedProfile && selectedProfile.status != 'OPEN')
+    ) {
       this.props.store.profileList.selectedProfile.storageView.visible = false;
       return;
     }
@@ -70,13 +74,12 @@ export default class StoragePanel extends React.Component {
       )
         .then((res) => {
           try {
-            const newData = res;
-            this.addParent(newData);
-            this.setState({ data: newData });
-            this.showLoading(false);
-            this.showView(true);
+            this.setStorageData(res);
+            this.storageData = res;
           } catch (err) {
-            this.updateMsg('Unable to parse response from the query. ' + err.message);
+            this.updateMsg(
+              'Unable to parse response from the query. ' + err.message,
+            );
           }
         })
         .catch((reason) => {
@@ -84,6 +87,50 @@ export default class StoragePanel extends React.Component {
         });
     }
   }
+  setStorageData(data) {
+    const newData = data;
+    this.addParent(newData);
+    this.setState({ data: newData });
+    this.showLoading(false);
+    this.showView(true);
+  }
+  loadChildData(db, col, nodeData) {
+    console.log('db:', db, ', col:', col);
+
+    return new Promise((resolve, reject) => {
+      const editorId = this.props.store.editorPanel.activeEditorId;
+      if (editorId) {
+        this.showLoading(true);
+        const editor = this.props.store.editors.get(editorId);
+        SyncService.executeQuery(
+          'dbe.collectionStorageAnalysis("' + db + '", "' + col + '" , 1000)',
+          editor.shellId,
+          editor.profileId,
+        )
+          .then((res) => {
+            try {
+              console.log('storageAnalysis:', res);
+              this.showLoading(false);
+              if (!nodeData.children) {
+                nodeData.children = res;
+                nodeData.size = 0;
+                this.addParent(nodeData);
+              }
+              resolve(true);
+              // this.setStorageData(res);
+              // this.storageData = res;
+            } catch (err) {
+              reject('Unable to parse response from the query. ' + err.message);
+            }
+          })
+          .catch((reason) => {
+            reject('Error in SyncService: ' + reason);
+          });
+      }
+    });
+  }
+  storageData; // Keeps original storage Data to revert to from child node.
+  childData;
   @observable msg = 'Loading Storage View...';
   @observable bLoading = false;
   @observable bStorageView = false;
@@ -114,10 +161,9 @@ export default class StoragePanel extends React.Component {
       this.bLoading = false;
     }
   }
-  onChildClick = (node) => {
+  onChildDblClick = (node) => {
     // node is a tree Node in d3-hierachy (https://github.com/d3/d3-hierarchy) that just clicked by user
     const nodeData = node.data;
-    console.log('node Clicked: ', nodeData);
     if (!node.parent) {
       // root is clicked, we should move upward in the data tree
       if (nodeData.parent) {
@@ -133,14 +179,54 @@ export default class StoragePanel extends React.Component {
     }
   };
 
+  onChildClick = (node) => {
+    const nodeData = node.data;
+    console.log('node Clicked: ', nodeData);
+    if (
+      nodeData.name == 'data' &&
+      nodeData.parent &&
+      nodeData.parent.parent &&
+      nodeData.parent.parent.parent &&
+      nodeData.parent.parent.parent.name == 'total'
+    ) {
+      this.loadChildData(
+        nodeData.parent.parent.name,
+        nodeData.parent.name,
+        nodeData,
+      )
+        .then((res) => {
+          if (res) {
+            this.forceUpdate();
+          }
+          // this.setState({
+          //   data: resNodeData,
+          // });
+        })
+        .catch((reason) => {
+          this.updateMsg(reason);
+        });
+      }
+  };
+
   render() {
     console.log('testing storage panel render function.....');
     return (
       <div className="StoragePanel">
+        <nav className="storageToolbar pt-navbar pt-dark">
+          <div className="pt-navbar-group pt-align-right">
+            <AnchorButton
+              className="refreshButton"
+              onClick={this.loadData}
+              loading={this.bLoading}>
+              <RefreshIcon width={50} height={50} className="dbKodaSVG" />
+            </AnchorButton>
+          </div>
+        </nav>
         {this.bStorageView &&
           <StorageSunburstView
             data={this.state.data}
             onClick={this.onChildClick}
+            onDblClick={this.onChildDblClick}
           />}
         {!this.bStorageView &&
           <div>
