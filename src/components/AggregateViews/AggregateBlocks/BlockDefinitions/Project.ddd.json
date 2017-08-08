@@ -7,20 +7,21 @@
       "type": "Table",
       "columns": [
         {
-          "name": "AttributeName",
-          "label": "Attribute",
-          "type": "Combo",
-          "lookup": "dbkodaListAttributes",
-          "lookup_arguments": [
-              { "name": "db", "value": "database"},
-              { "name": "collection", "value": "collection"}
-          ]
-        }, 
-        {
-          "name": "Value",
-          "label": "Project",
-          "type": "Text"
-        }
-      ]
-  }]
+        "name": "AttributeName",
+        "label": "Attribute",
+        "tooltip": "Name of the attribute to be Projected",
+        "type": "Combo",
+        "lookup": "dbkodaListAttributes",
+        "lookup_arguments": [{
+            "name": "db",
+            "value": "treeNode.parentDB"
+          },
+          {
+            "name": "collection",
+            "value": "treeNode"
+          }
+        ]
+      }]
+    }
+  ]
 }
