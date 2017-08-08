@@ -181,7 +181,10 @@ export default class Panel extends React.Component {
             this.props.store.outputPanel.currentTab = editor[1].id;
           });
         }
-        if (process.env.NODE_ENV === 'development' && this.state.enhancedJson) {
+        if (
+          process.env.NODE_ENV === 'development' &&
+          this.props.store.outputPanel.currentJson
+        ) {
           arrTabs.push(
             <Tab2
               className={(tabClassName !== 'notVisible') ? 'visible' : 'notVisible'}

@@ -159,6 +159,7 @@
   },
   "dependencies": {
     "mongodb-uri": "^0.9.7",
-    "react-json-view": "^1.10.12"
+    "react-json-view": "^1.10.12",
+    "worker-loader": "^0.8.1"
   }
 }

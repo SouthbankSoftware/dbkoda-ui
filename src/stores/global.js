@@ -131,6 +131,7 @@ export default class Store {
     executingShowMore: false,
     executingTerminalCmd: false,
     sendingCommand: '',
+    currentJson: '',
   });
 
   @observable
