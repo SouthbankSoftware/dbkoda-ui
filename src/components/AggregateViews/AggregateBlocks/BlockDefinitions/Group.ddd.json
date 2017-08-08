@@ -1,33 +1,56 @@
 {
-  "Title": "Group By",
+  "Title": "Group",
   "Fields": [
-    {
-      "name": "ID",
-      "label": "_id",
-      "type": "Text",
-      "readOnly": false,
-      "keyValue": true
-    },
-    {
-      "name": "GroupBy",
-      "label": "Group By",
-      "type": "Table",
-      "columns": [
         {
-          "name": "FieldName",
-          "label": "Field Name",
-          "type": "Text"
+            "name": "GroupByKeys",
+            "label": "Columns To Group By",
+            "type": "Table",
+            "columns": [{
+                "name": "AttributeName",
+                "label": "Attribute",
+                "tooltip": "Name of the attribute to be filtered",
+                "type": "Combo",
+                "lookup": "dbkodaListAttributes",
+                "lookup_arguments": [{
+                        "name": "db",
+                        "value": "treeNode.parentDB"
+                    },
+                    {
+                        "name": "collection",
+                        "value": "treeNode"
+                    }
+                ]
+
+            }]
         },
         {
-          "name": "Accumulator",
-          "label": "Accumulator",
-          "type": "Text"
-        }, 
-        {
-          "name": "Expression",
-          "label": "Expression",
-          "type": "Text"
+            "name": "AggregateKeys",
+            "label": "Columns To Aggregate",
+            "type": "Table",
+            "columns": [{
+                    "name": "AttributeName",
+                    "label": "Attribute",
+                    "tooltip": "Name of the attribute to be filtered",
+                    "type": "Combo",
+                    "lookup": "dbkodaListAttributes",
+                    "lookup_arguments": [{
+                            "name": "db",
+                            "value": "treeNode.parentDB"
+                        },
+                        {
+                            "name": "collection",
+                            "value": "treeNode"
+                        }
+                    ]
+
+                },
+                {
+                    "name": "Aggregation",
+                    "Label": "Aggregation",
+                    "type": "Combo",
+                    "tooltip": "Aggregation Operation",
+                    "lookup": "dbkodaAggOperators"
+                }]
         }
-      ]
-  }]
+  ]
 }

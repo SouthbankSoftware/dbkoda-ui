@@ -6,7 +6,7 @@
  * @Last modified time: 2017-07-31T09:45:19+10:00
  */
 
- import { action, observable } from 'mobx';
+ import { action, observable, runInAction } from 'mobx';
  import { Broker, EventType } from '~/helpers/broker';
  import { ProfileStatus } from '#/common/Constants';
 
@@ -147,4 +147,21 @@ export default class OutputApi {
     this.store.outputs.get(outputId).output = totalOutput;
   }
 
+  @action.bound
+  shellResultToJson(jsonStr) {
+    this.store.outputPanel.currentTab =
+      'EnhancedJson-' + this.store.outputPanel.currentTab;
+    this.store.outputPanel.currentJson = '';
+    // TODO Show loading in Enhanced JSON View
+    const ParseWorker = require('worker-loader!./workers/json-parse.js'); // eslint-disable-line
+    const parseWorker = new ParseWorker();
+    parseWorker.postMessage({ 'cmd': 'start', 'jsonStr': jsonStr });
+    parseWorker.addEventListener('message', (e) => {
+      runInAction(() => {
+        console.log(e.data);
+        this.store.outputPanel.currentJson = e.data;
+        // TODO Hide loading in Enhanced JSON View
+      });
+    });
+  }
 }

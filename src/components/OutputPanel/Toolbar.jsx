@@ -134,6 +134,13 @@ export default class Toolbar extends React.Component {
         const editorKey = currentTab.split('Details-')[1];
         this.props.store.outputPanel.currentTab = editorKey;
         this.props.store.outputPanel.clearingOutput = false;
+      } else if (currentTab.indexOf('EnhancedJson-') === 0) {
+        this.props.store.outputPanel.currentJson = '';
+        this.props.store.outputPanel.clearingOutput = false;
+        const editorKey = currentTab.split('EnhancedJson-')[1];
+        this.props.store.outputPanel.currentTab = editorKey;
+        console.log('JSON Viewer Cleared');
+        console.log(this.props.store.outputPanel.currentJson);
       }
     }, {name: 'reactionOutputToolbarClearOutput'});
   }

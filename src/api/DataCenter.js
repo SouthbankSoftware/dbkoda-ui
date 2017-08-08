@@ -27,6 +27,7 @@ export default class DataCenter {
 
     this.addOutput = this.outputApi.addOutput.bind(this);
     this.removeOutput = this.outputApi.removeOutput.bind(this);
+    this.shellResultToJson = this.outputApi.shellResultToJson.bind(this);
 
     this.addEditor = this.editorApi.addEditor.bind(this);
     this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);

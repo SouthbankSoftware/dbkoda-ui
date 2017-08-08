@@ -1,7 +1,4 @@
-  { $group: { 
-      _id: {{{ID}}},
-      {{#each GroupBy}}
-      {{{FieldName}}}: { {{{Accumulator}}}: {{{Expression}}} },
-      {{/each}}   
-    }
-  },
+ {$group:{ _id:{ {{#each GroupByKeys}}"{{nodots AttributeName}}":"${{AttributeName}}" {{#unless last}},{{/unless}}{{/each}}
+                  }, 
+              "count":{$sum:1}{{#each AggregateKeys}},
+              "{{AttributeName}}-{{Aggregation}}":{${{Aggregation}}:"${{AttributeName}}"} {{/each}}

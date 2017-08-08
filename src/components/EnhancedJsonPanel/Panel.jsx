@@ -34,33 +34,18 @@ import './style.scss';
  * Displays JSON in an enhanced form
  *
  */
-@inject('store')
+@inject(allStores => ({
+  store: allStores.store
+}))
 @observer
 export default class Panel extends React.Component {
-  parseEJSON(eJson) {
-    // TODO Put this in a webworker so we don't lock the UI with large docs
-    let json = eJson.replace(/ObjectId\("([0-9a-z]*)"\)/gm, '"$1"')
-      .replace(/NumberLong\("([0-9]*)"\)/gm, '$1')
-      .replace(/NumberDecimal\("([0-9.]*)"\)/gm, '$1')
-      .replace(/BinData\("([0-9a-zA-Z]*)"\)/gm, '"$1"')
-      .replace(/ISODate\("([0-9a-zA-Z\-:]*)"\)/gm, '"$1"')
-      .replace(/Timestamp\("([0-9], *)"\)/gm, '"$1"')
-      .replace(/\n/gm, '')
-      .replace(/<(.*)>/gm, (contents) => {
-        return contents.replace(/(<[^>])*\/([^>]>)*/gm, '$1\\\/$2')
-          .replace(/="([^"]*)"/gm, '=\\\"$1\\\"');
-      });
-    console.log(json);
-    json = JSON.parse(json);
-    return json;
-  }
-
   render() {
     return (<div className="enhanced-json-panel">
-      <ReactJson src={this.parseEJSON(this.props.currentJson)}
-        theme="monokai"
+      <ReactJson src={this.props.store.outputPanel.currentJson}
+        theme="hopscotch"
         indentWidth={2}
-        collapseStringsAfterLength={20}
+        collapsed={2}
+        collapseStringsAfterLength={40}
         enableClipboard
         displayObjectSize
         displayDataTypes={false}
