@@ -22,16 +22,15 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-04T14:43:15+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-09T12:02:26+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { Tab2, Tabs2, Intent } from '@blueprintjs/core';
+import { Tab2, Tabs2 } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
-import { NewToaster } from '#/common/Toaster';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
@@ -48,7 +47,6 @@ import { EnhancedJson } from '../EnhancedJsonPanel';
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.updateJsonView = this.updateJsonView.bind(this);
     this.state = { enhancedJson: '' };
     /**
      * Reaction function for when the active editorPanel is changed,
@@ -107,16 +105,6 @@ export default class Panel extends React.Component {
     });
   }
 
-  updateJsonView(jsonStr) {
-    if (jsonStr) {
-      this.setState({ enhancedJson: jsonStr });
-      this.changeTab('EnhancedJson-' + this.props.store.outputPanel.currentTab);
-    } else {
-      // Show toaster notification, stating the document could not be parsed
-      NewToaster.show({ message: 'Could not parse a document from the selected text', intent: Intent.DANGER, icon: '' });
-    }
-  }
-
   /**
    * Updates the active tab state for the Output view
    * @param {string} newTab - The html id of the new active tab
@@ -166,7 +154,6 @@ export default class Panel extends React.Component {
               initialMsg={editor[1].initialMsg}
               shellId={editor[1].shellId}
               tabClassName={tabClassName}
-              updateJsonView={this.updateJsonView}
             />
           }
         />
@@ -181,14 +168,17 @@ export default class Panel extends React.Component {
             this.props.store.outputPanel.currentTab = editor[1].id;
           });
         }
-        if (process.env.NODE_ENV === 'development' && this.state.enhancedJson) {
+        if (
+          process.env.NODE_ENV === 'development' &&
+          this.props.store.outputs.get(editor[1].id).enhancedJson
+        ) {
           arrTabs.push(
             <Tab2
               className={(tabClassName !== 'notVisible') ? 'visible' : 'notVisible'}
               key={'EnhancedJson-' + editor[1].id}
               id={'EnhancedJson-' + editor[1].id}
               title={'EnhancedJson-' + editorTitle}
-              panel={<EnhancedJson currentJson={this.state.enhancedJson} />}
+              panel={<EnhancedJson enhancedJson={this.props.store.outputs.get(editor[1].id).enhancedJson} />}
             />
           );
         }

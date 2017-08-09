@@ -22,8 +22,8 @@
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T13:59:48+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-09T11:58:40+10:00
 */
 
 import React from 'react';
@@ -134,6 +134,11 @@ export default class Toolbar extends React.Component {
         const editorKey = currentTab.split('Details-')[1];
         this.props.store.outputPanel.currentTab = editorKey;
         this.props.store.outputPanel.clearingOutput = false;
+      } else if (currentTab.indexOf('EnhancedJson-') === 0) {
+        const editorKey = currentTab.split('EnhancedJson-')[1];
+        this.props.store.outputs.get(editorKey).enhancedJson = '';
+        this.props.store.outputPanel.clearingOutput = false;
+        this.props.store.outputPanel.currentTab = editorKey;
       }
     }, {name: 'reactionOutputToolbarClearOutput'});
   }

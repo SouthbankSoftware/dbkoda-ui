@@ -21,8 +21,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T14:02:40+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-09T12:01:45+10:00
 */
 
 import React from 'react';
@@ -59,7 +59,7 @@ export default class Editor extends React.Component {
    constructor(props) {
      super(props);
      this.renderContextMenu = this.renderContextMenu.bind(this);
-     this.getLineText = this.getLineText.bind(this);
+     this._getLineText = this._getLineText.bind(this);
    }
 
   /**
@@ -99,14 +99,13 @@ export default class Editor extends React.Component {
     }
     // Parse Multi-line documents
     return (
-      this.getLineText(cm, lineNumber - 1, -1) +
-        this.getLineText(cm, lineNumber, 1)
+      this._getLineText(cm, lineNumber - 1, -1) +
+        this._getLineText(cm, lineNumber, 1)
     );
   }
 
-  getLineText(cm, lineNumber, direction) {
+  _getLineText(cm, lineNumber, direction) {
     let line = cm.getLine(lineNumber);
-    console.log(line);
     const indentation = line.search(/\S|$/);
     const brace = direction === -1 ? '{' : '}';
 
@@ -115,9 +114,9 @@ export default class Editor extends React.Component {
     }
 
     if (direction === -1) {
-      line = this.getLineText(cm, lineNumber + direction, direction) + line;
+      line = this._getLineText(cm, lineNumber + direction, direction) + line;
     } else {
-      line += this.getLineText(cm, lineNumber + direction, direction);
+      line += this._getLineText(cm, lineNumber + direction, direction);
     }
 
     return line;
@@ -125,13 +124,14 @@ export default class Editor extends React.Component {
 
   renderContextMenu(event) {
     const coords = { x: event.clientX, y: event.clientY };
+    const currentJson = this.getClickedDocument(event.target, coords);
 
     return (
       <Menu className="editorTabContentMenu">
         <div className="menuItemWrapper showJsonView">
           <MenuItem
             onClick={() => {
-              this.props.updateJsonView(this.getClickedDocument(event.target, coords));
+              this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson');
             }}
             text={globalString('output/editor/contextJson')}
             iconName="pt-icon-small-cross"

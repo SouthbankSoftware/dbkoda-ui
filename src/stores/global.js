@@ -1,13 +1,3 @@
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-04T11:52:43+10:00
- */
-
-
-
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,6 +16,12 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-09T09:50:01+10:00
  */
 
 import _ from 'lodash';
@@ -131,6 +127,13 @@ export default class Store {
     executingShowMore: false,
     executingTerminalCmd: false,
     sendingCommand: '',
+    /*
+    jsonView - (index: connectionId) {
+      enhancedJson: {object}, - the JSON used in the Enhanced JSON View
+      tableJson: {object} - the JSON used in the Table View
+    }
+    */
+    jsonView: observable.map(),
   });
 
   @observable
