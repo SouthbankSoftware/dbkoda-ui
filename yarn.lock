@@ -8967,9 +8967,9 @@ test-exclude@^4.1.1:
     read-pkg-up "^1.0.1"
     require-main-filename "^1.0.1"
 
-test-utils@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/test-utils/-/test-utils-1.0.16.tgz#7c64fe8c3564b1f8fe4a369b968aa40ae9b61bdd"
+test-utils@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/test-utils/-/test-utils-1.0.18.tgz#1eddb75ef66b4014f27135b59bbab2a68b7d197e"
   dependencies:
     shelljs "^0.7.8"
 
