@@ -23,7 +23,7 @@
  * @Date:   2017-05-22T09:14:04+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-07T11:09:15+10:00
+ * @Last modified time: 2017-08-08T11:23:06+10:00
  */
 
 
@@ -46,6 +46,7 @@ import { featherClient } from '~/helpers/feathers';
                res = res.replace(/[\r\n\t]*/g, '');
                res = res.replace(/ObjectId\((\"\w*\")\)/g, '$1');
                res = res.replace(/NumberLong\(\"(\d*)\"\)/g, '$1');
+               res = res.replace(/\bNaN\b/g, '"NaN"')
                console.log('Result: ', res);
                try {
                  const ejson = JSON.parse(res);
