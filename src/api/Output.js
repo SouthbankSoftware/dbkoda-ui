@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T09:45:19+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-09T10:29:19+10:00
  */
 
  import { action, observable, runInAction } from 'mobx';
@@ -64,6 +64,8 @@ export default class OutputApi {
             cannotShowMore: true,
             showingMore: false,
             commandHistory: [],
+            enhancedJson: '',
+            tableJson: '',
           }),
         );
 
@@ -148,18 +150,19 @@ export default class OutputApi {
   }
 
   @action.bound
-  shellResultToJson(jsonStr) {
+  initJsonView(jsonStr, outputId, displayType) {
+    console.log(`initJsonView(jsonStr,${outputId},${displayType})`);
     this.store.outputPanel.currentTab =
       'EnhancedJson-' + this.store.outputPanel.currentTab;
-    this.store.outputPanel.currentJson = '';
+    this.store.outputs.get(outputId).enhancedJson = '';
     // TODO Show loading in Enhanced JSON View
     const ParseWorker = require('worker-loader!./workers/json-parse.js'); // eslint-disable-line
     const parseWorker = new ParseWorker();
     parseWorker.postMessage({ 'cmd': 'start', 'jsonStr': jsonStr });
     parseWorker.addEventListener('message', (e) => {
       runInAction(() => {
-        console.log(e.data);
-        this.store.outputPanel.currentJson = e.data;
+        this.store.outputs.get(outputId).enhancedJson = e.data;
+        console.log(this.store.outputs.get(outputId).enhancedJson);
         // TODO Hide loading in Enhanced JSON View
       });
     });
