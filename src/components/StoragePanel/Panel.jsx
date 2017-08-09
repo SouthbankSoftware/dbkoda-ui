@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-08T09:37:55+10:00
+ * @Last modified time: 2017-08-08T14:54:52+10:00
  */
 
 /*
@@ -31,7 +31,7 @@ import StorageSunburstView from '#/common/SunburstView';
 import { SyncService } from '#/common/SyncService';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import {AnchorButton} from '@blueprintjs/core';
+import { AnchorButton } from '@blueprintjs/core';
 import RefreshIcon from '~/styles/icons/refresh-icon.svg';
 import './Panel.scss';
 
@@ -45,10 +45,8 @@ export default class StoragePanel extends React.Component {
     super(props);
 
     this.state = {
-      data: {
-        name: 'total',
-        children: [],
-      },
+      data: {},
+      selectedNode: null,
     };
     this.loadData = this.loadData.bind(this);
     this.loadData();
@@ -90,13 +88,14 @@ export default class StoragePanel extends React.Component {
   setStorageData(data) {
     const newData = data;
     this.addParent(newData);
-    this.setState({ data: newData });
+    this.setState({
+      data: newData
+    });
     this.showLoading(false);
     this.showView(true);
   }
   loadChildData(db, col, nodeData) {
     console.log('db:', db, ', col:', col);
-
     return new Promise((resolve, reject) => {
       const editorId = this.props.store.editorPanel.activeEditorId;
       if (editorId) {
@@ -113,12 +112,12 @@ export default class StoragePanel extends React.Component {
               this.showLoading(false);
               if (!nodeData.children) {
                 nodeData.children = res;
-                nodeData.size = 0;
+                if (this.getChildrenSize(nodeData) > 0) {
+                  nodeData.size = 0;
+                }
                 this.addParent(nodeData);
               }
               resolve(true);
-              // this.setStorageData(res);
-              // this.storageData = res;
             } catch (err) {
               reject('Unable to parse response from the query. ' + err.message);
             }
@@ -134,7 +133,21 @@ export default class StoragePanel extends React.Component {
   @observable msg = 'Loading Storage View...';
   @observable bLoading = false;
   @observable bStorageView = false;
-
+  // This function calculates the sum of the child size attribute
+  getChildrenSize(nodeData) {
+    let size = 0;
+    if (nodeData.children) {
+      for (const child of nodeData.children) {
+        if (isNaN(child.size)) {
+          child.size = 0;
+        }
+        size += this.getChildrenSize(child);
+      }
+    } else {
+      size += nodeData.size;
+    }
+    return size;
+  }
   // Here we make the tree backward navigatable. You can use your own navigation strategy, for example, dynamic loading
   addParent(data) {
     if (data.children) {
@@ -163,25 +176,23 @@ export default class StoragePanel extends React.Component {
   }
   onChildDblClick = (node) => {
     // node is a tree Node in d3-hierachy (https://github.com/d3/d3-hierarchy) that just clicked by user
-    const nodeData = node.data;
-    if (!node.parent) {
+    if (this.state.selectedNode == node) {
       // root is clicked, we should move upward in the data tree
-      if (nodeData.parent) {
+      if (node.parent) {
         this.setState({
-          data: nodeData.parent,
+          selectedNode: node.parent,
         });
       }
     } else {
       // a child is clicked, we should move downward in the data tree
       this.setState({
-        data: nodeData,
+        selectedNode: node,
       });
     }
   };
 
   onChildClick = (node) => {
     const nodeData = node.data;
-    console.log('node Clicked: ', nodeData);
     if (
       nodeData.name == 'data' &&
       nodeData.parent &&
@@ -196,6 +207,7 @@ export default class StoragePanel extends React.Component {
       )
         .then((res) => {
           if (res) {
+            console.log('Extended Data Loaded');
             this.forceUpdate();
           }
           // this.setState({
@@ -205,7 +217,7 @@ export default class StoragePanel extends React.Component {
         .catch((reason) => {
           this.updateMsg(reason);
         });
-      }
+    }
   };
 
   render() {
@@ -217,7 +229,8 @@ export default class StoragePanel extends React.Component {
             <AnchorButton
               className="refreshButton"
               onClick={this.loadData}
-              loading={this.bLoading}>
+              loading={this.bLoading}
+            >
               <RefreshIcon width={50} height={50} className="dbKodaSVG" />
             </AnchorButton>
           </div>
@@ -225,10 +238,11 @@ export default class StoragePanel extends React.Component {
         {this.bStorageView &&
           <StorageSunburstView
             data={this.state.data}
+            selectedNode={this.state.selectedNode}
             onClick={this.onChildClick}
             onDblClick={this.onChildDblClick}
           />}
-        {!this.bStorageView &&
+        {this.bLoading &&
           <div>
             <div className="details-msg-div">
               <div className="messageWrapper">
@@ -237,6 +251,7 @@ export default class StoragePanel extends React.Component {
                     <div className="loader" />
                   </div>}
                 {!this.bLoading &&
+                  !this.bStorageView &&
                   <span className="failureText">
                     {this.msg}
                   </span>}

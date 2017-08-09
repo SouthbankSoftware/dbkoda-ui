@@ -3,10 +3,8 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-07T17:34:52+10:00
+ * @Last modified time: 2017-08-09T16:46:02+10:00
  */
-
-
 
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
@@ -46,23 +44,37 @@ const getColour = (startColour) => {
     getColour._idx = 0;
     // colour palette
     getColour._colours = [
-      '#77173E',
-      '#0D657C',
-      '#607747',
-      '#413456',
-      '#823C1D',
-      '#5D3750',
-      '#107BA3',
-      '#A01B4C',
-      '#1E282D',
-      '#465061',
-      '#1E423C',
-      '#701535'
+      '#594746',
+      '#794025',
+      '#2c4b44',
+      '#406e65',
+      '#018b93',
+      '#3ab262',
+      '#65764c',
+      '#132c70',
+      '#365f87',
+      '#37799e',
+      '#3d7789',
+      '#436fb6',
+      '#1fb2e5',
+      '#515a6c',
+      '#4f6680',
+      '#6562a0',
+      '#7040a3',
+      '#ac8bc0',
+      '#58394f',
+      '#6d203e',
+      '#92294c',
+      '#d2499b',
+      '#e26847',
+      '#e0a767',
+      '#a5a11b',
+      '#58595b',
     ];
   }
 
   if (startColour) {
-    getColour._idx = getColour._colours.indexOf(startColour);
+    getColour._idx = getColour._colours.indexOf(startColour) + 1;
   }
 
   const colour = getColour._colours[getColour._idx % getColour._colours.length];
@@ -88,6 +100,7 @@ export default class View extends React.Component {
     width: React.PropTypes.number,
     height: React.PropTypes.number,
     data: React.PropTypes.object.isRequired,
+    selectedNode: React.PropTypes.object.isRequired,
     onClick: React.PropTypes.func,
     onDblClick: React.PropTypes.func,
   };
@@ -103,42 +116,51 @@ export default class View extends React.Component {
     this.mouseover = this.mouseover.bind(this);
     this.mouseleave = this.mouseleave.bind(this);
     this.breadcrumbPoints = this.breadcrumbPoints.bind(this);
+    this.updateData = this.updateData.bind(this);
+    if (props.data) {
+      this.state = {
+        data: props.data,
+      };
+      this.updateData();
+    }
   }
 
-  /*
-   * Main function to draw and set up the visualization, once we have the data.
-   */
-  createView() {
-    // reset colour
-    getColour._idx = 0;
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps:', nextProps);
 
-    this.view = d3.select(this.viewEl);
-    this.container = d3.select(this.containerEl);
+    if (this.dataRoot && nextProps.data) {
+      const newDataRoot = d3.hierarchy(nextProps.data);
+      if (
+        newDataRoot.descendants().length != this.dataRoot.descendants().length
+      ) {
+        console.log('newDataRoot: ', newDataRoot);
+        this.setState({
+          data: nextProps.data,
+        });
+        this.lastSelectedRoot = this.root;
+        this.root = null;
+        this.dataRoot = null;
+      }
+    }
+    if (this.dataRoot && nextProps.selectedNode) {
+      console.log('path:', this.dataRoot.path(nextProps.selectedNode));
+      if (this.props.selectedNode != nextProps.selectedNode) {
+        this.root = nextProps.selectedNode;
+        this.createView();
+      }
+    }
+  }
 
-    const partition = d3.partition().size([2 * Math.PI, this.radius * this.radius]);
-    const arc = d3
-      .arc()
-      .startAngle((d) => {
-        return d.x0;
-      })
-      .endAngle((d) => {
-        return d.x1;
-      })
-      .innerRadius((d) => {
-        return Math.sqrt(d.y0);
-      })
-      .outerRadius((d) => {
-        return Math.sqrt(d.y1);
-      });
-
+  updateData() {
     // Turn the data into a d3 hierarchy and calculate the sums.
     let lastParent = null;
-    this.root = d3
-      .hierarchy(this.props.data)
+    this.dataRoot = d3
+      .hierarchy(this.state.data)
       .sum((d) => {
         return d.size;
       })
       .sort((a, b) => {
+        // sorting alphabatically to keep the colors same even after additional data ia populated
         return a.data.name.localeCompare(b.data.name);
       })
       .each((node) => {
@@ -152,7 +174,65 @@ export default class View extends React.Component {
         lastParent = node.parent;
       })
       .sort((a, b) => {
-        return b.value - a.value;
+        return b.value - a.value; // sorting on value to draw the chart
+      });
+
+    if (this.lastSelectedRoot) {
+      console.log('test path:', this.dataRoot.path(this.lastSelectedRoot));
+      const arrNodes = [];
+      let lastRootData = this.lastSelectedRoot.data;
+      while (lastRootData.parent != null) {
+        arrNodes.push(lastRootData.name);
+        lastRootData = lastRootData.parent;
+      }
+      console.log('test hierarchy of data', arrNodes);
+      let newRoot = this.dataRoot;
+      while (arrNodes.length > 0) {
+        const nodeVal = arrNodes.pop();
+        for (const childNode of newRoot.children) {
+          if (childNode.data.name == nodeVal) {
+            newRoot = childNode;
+            break;
+          }
+        }
+      }
+      if (newRoot) {
+        this.root = newRoot;
+      }
+      this.lastSelectedRoot = null;
+    }
+
+    if (!this.root) {
+      this.root = this.dataRoot;
+    }
+  }
+
+  /*
+   * Main function to draw and set up the visualization, once we have the data.
+   */
+  createView() {
+    // reset colour
+    getColour._idx = 0;
+
+    this.view = d3.select(this.viewEl);
+    this.container = d3.select(this.containerEl);
+    const divisor = this.root.depth == 0 ? 1 : 1 + this.root.depth * 0.5;
+    const partition = d3
+      .partition()
+      .size([2 * Math.PI, this.radius * this.radius / divisor]);
+    const arc = d3
+      .arc()
+      .startAngle((d) => {
+        return d.x0;
+      })
+      .endAngle((d) => {
+        return d.x1;
+      })
+      .innerRadius((d) => {
+        return Math.sqrt(d.y0);
+      })
+      .outerRadius((d) => {
+        return Math.sqrt(d.y1);
       });
 
     // For efficiency, filter nodes to keep only those large enough to see.
@@ -193,7 +273,7 @@ export default class View extends React.Component {
       .data([d])
       .enter()
       .append('tr')
-      .classed('darkColor', d => d.colour !== undefined)
+      .classed('theadRowColor', d => d.colour !== undefined)
       .style('background-color', d => d.colour || 'none')
       .html(d => `<th>${d.data.name}</th><th>${filesize(d.value)}</th>`);
 
@@ -206,7 +286,7 @@ export default class View extends React.Component {
         .data(d.children)
         .enter()
         .append('tr')
-        .classed('darkColor', d => d.colour !== undefined)
+        .classed('tbodyRowColor', d => d.colour !== undefined)
         .style('background-color', d => d.colour || 'none')
         .html(d => `<td>${d.data.name}</td><td>${filesize(d.value)}</td>`);
     }
@@ -285,7 +365,7 @@ export default class View extends React.Component {
   }
 
   getBreadcrumbWidth(d) {
-    return (d.data && d.data.name) ? ((d.data.name.length * 8) + 10) : b.w;
+    return d.data && d.data.name ? d.data.name.length * 8 + 10 : b.w;
   }
 
   /**
@@ -293,9 +373,12 @@ export default class View extends React.Component {
    */
   updateBreadcrumbs(nodeArray, percentageString) {
     // Data join; key function combines name and depth (= position in sequence).
-    const trail = this.view.select('.trail').selectAll('g').data(nodeArray, (d) => {
-      return d.data.name + d.depth;
-    });
+    const trail = this.view
+      .select('.trail')
+      .selectAll('g')
+      .data(nodeArray, (d) => {
+        return d.data.name + d.depth;
+      });
 
     // Remove exiting nodes.
     trail.exit().remove();
@@ -323,7 +406,7 @@ export default class View extends React.Component {
     // Merge enter and update selections; set position for all nodes.
     let lastPos = 0;
     entering.merge(trail).attr('transform', (d, i) => {
-      const strTranslate = 'translate(' + ((i * b.s) + lastPos) + ', 0)';
+      const strTranslate = 'translate(' + (i * b.s + lastPos) + ', 0)';
       lastPos += this.getBreadcrumbWidth(d);
       return strTranslate;
     });
@@ -331,7 +414,7 @@ export default class View extends React.Component {
     // Now move and update the percentage at the end.
     this.view
       .select('.trail .endlabel')
-      .attr('x', ((nodeArray.length + 0.5) * b.s) + (lastPos + 30))
+      .attr('x', (nodeArray.length + 0.5) * b.s + (lastPos + 30))
       .attr('y', b.h / 2)
       .attr('dy', '0.35em')
       .attr('text-anchor', 'middle')
@@ -346,14 +429,20 @@ export default class View extends React.Component {
   }
 
   componentDidUpdate() {
+    this.updateData();
     this.createView();
+
+    console.log('View Updated!!!!');
   }
 
   render() {
     const { width, height } = this.props;
 
     return (
-      <div ref={viewEl => (this.viewEl = viewEl)} className="StorageSunburstView">
+      <div
+        ref={viewEl => (this.viewEl = viewEl)}
+        className="StorageSunburstView"
+      >
         <div className="main">
           <div className="sequence">
             <svg className="trail" width={width} height={50}>

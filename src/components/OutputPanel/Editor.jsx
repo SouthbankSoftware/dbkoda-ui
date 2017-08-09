@@ -21,8 +21,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T14:02:40+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-09T12:01:45+10:00
 */
 
 import React from 'react';
@@ -131,7 +131,7 @@ export default class Editor extends React.Component {
         <div className="menuItemWrapper showJsonView">
           <MenuItem
             onClick={() => {
-              this.props.api.shellResultToJson(currentJson);
+              this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson');
             }}
             text={globalString('output/editor/contextJson')}
             iconName="pt-icon-small-cross"

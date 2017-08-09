@@ -22,26 +22,21 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-07-19T12:34:59+10:00
+ * @Last modified time: 2017-08-09T10:01:34+10:00
  */
 
 import React from 'react';
-import { inject, observer } from 'mobx-react';
 import ReactJson from 'react-json-view';
 import './style.scss';
 
 /**
- * Displays JSON in an enhanced form
- *
+ * Displays JSON in an enhanced form as a seperate output tab
+ *  enhancedJson -
  */
-@inject(allStores => ({
-  store: allStores.store
-}))
-@observer
 export default class Panel extends React.Component {
   render() {
     return (<div className="enhanced-json-panel">
-      <ReactJson src={this.props.store.outputPanel.currentJson}
+      <ReactJson src={this.props.enhancedJson}
         theme="hopscotch"
         indentWidth={2}
         collapsed={2}
