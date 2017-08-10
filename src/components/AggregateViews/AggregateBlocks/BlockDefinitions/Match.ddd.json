@@ -20,11 +20,11 @@
           "lookup": "dbkodaListAttributes",
           "lookup_arguments": [{
               "name": "db",
-              "value": "treeNode.parentDB"
+              "value": "database"
             },
             {
               "name": "collection",
-              "value": "treeNode"
+              "value": "collection"
             }
           ]
 

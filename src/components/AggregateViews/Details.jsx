@@ -64,8 +64,7 @@ export default class Details extends React.Component {
      * @return {Object}          Object containing params for prefetch function
      */
     this.resolveArguments = (args) => {
-      console.log(this.editor.collection);
-      console.log(this.editor.database);
+      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
       const params = {};
       if (args.length > 0) {
         for (let i = 0; i < args.length; i += 1) {
@@ -76,6 +75,14 @@ export default class Details extends React.Component {
               break;
             case 'database':
               params[arg.name] = this.currentDB;
+              break;
+            case 'prevAttributes':
+              // Check if attributeList has been gathered, if so, return, if not, wait.
+              while (!editor.blockList[editor.selectedBlock].attributeList) {
+                console.log('!!!!');
+                sleep(100);
+              }
+              params[arg.name] = editor.blockList[editor.selectedBlock].attributeList;
               break;
             default:
               console.error('Invalid arguments to Aggregate Block (This should not really happen :( - ', args);
@@ -122,7 +129,7 @@ export default class Details extends React.Component {
     let codeString = 'use ' + this.currentDB + ';\ndb.' + this.currentCollection + '.aggregate([\n';
     editorObject.blockList.map((block) => {
       const formTemplate = require('./AggregateBlocks/BlockTemplates/' + block.type + '.hbs'); // eslint-disable-line
-      codeString += formTemplate(block.fields) + '\n';
+      codeString += formTemplate(block.fields) + ',\n';
     });
 
     codeString += ']);';
@@ -148,7 +155,6 @@ export default class Details extends React.Component {
 
   render() {
     const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-    console.log(this.editor.collection);
     this.currentDB = this.editor.collection.refParent.text;
     this.currentCollection = this.editor.collection.text;
     const blockIndex = activeEditor.selectedBlock;
@@ -178,6 +184,7 @@ export default class Details extends React.Component {
           this.updateMsg(reason);
         });
     }
+
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
@@ -207,11 +214,11 @@ export default class Details extends React.Component {
               No block selected.
             </p>
           </div>}
-          <AnchorButton
-            className="hideLeftPanelButton"
-            intent={Intent.SUCCESS}
-            text={globalString('aggregate_builder/hide_left_panel')}
-            onClick={this.onHideLeftPanelClicked} />
+        <AnchorButton
+          className="hideLeftPanelButton"
+          intent={Intent.SUCCESS}
+          text={globalString('aggregate_builder/hide_left_panel')}
+          onClick={this.onHideLeftPanelClicked} />
       </div>
     );
   }

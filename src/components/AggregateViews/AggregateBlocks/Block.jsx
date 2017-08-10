@@ -108,6 +108,7 @@ export default class Block extends React.Component {
       listPosition: props.listPosition,
       posType: props.positionType,
       type: props.type,
+      status: props.status,
       concrete: props.concrete,
       color: this.props.color
     };
@@ -121,7 +122,12 @@ export default class Block extends React.Component {
     const isOver = this.props.isOver; // eslint-disable-line
     this.state.color = 'color_' + this.props.color;
     const classes = 'aggregateBlock ' + this.state.type + ' ' + this.state.listPosition + ' selected_' + this.props.selected;
-    const blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
+    let blockColorClasses;
+    if (this.state.status === 'pending') {
+      blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' invalid';
+    } else {
+      blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
+    }
     return connectDragSource(
       connectDropTarget(
         <div className={classes}>

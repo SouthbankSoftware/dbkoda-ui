@@ -28,9 +28,11 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action } from 'mobx';
+import { featherClient } from '~/helpers/feathers';
+import { action, runInAction } from 'mobx';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import Block from './AggregateBlocks/Block.jsx';
+import { AggregateCommands } from './AggregateCommands.js';
 
 
 @inject(allStores => ({
@@ -74,11 +76,83 @@ export default class Palette extends React.Component {
       this.moveBlock(tmpArray, tmpArray.length - 1, position);
     }
     this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).blockList = tmpArray;
-    // If no block is selected, select the new block.
-    if (!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock) {
-      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock = 0;
+
+    // Add initial block attributes to newly created block.
+    this.getBlockAttributes(position);
+    // Add block to shell object.
+    this.addBlockToShell(blockType, position);
+  }
+
+  @action.bound
+  getBlockAttributes(position) {
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    if (position === 'END') {
+      position = editor.blockList.length - 1;
+    } else if (position === 'START') {
+      position = 0;
     }
-    this.props.store.editorPanel.updateAggregateDetails = true;
+    // First block, set attributes list to all attributes:
+    const service = featherClient().service('/mongo-sync-execution');
+    service.timeout = 30000;
+    service
+      .update(editor.profileId, {
+        shellId: editor.shellId, // eslint-disable-line
+        commands: AggregateCommands.GET_ATTRIBUTES(editor.aggregateID, position)
+      })
+    .then((res) => {
+      editor.blockList[position].attributeList = res;
+      // If no block is selected, select the new block.
+      if (!this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock) {
+        runInAction(() => {
+          this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock = 0;
+          this.props.store.editorPanel.updateAggregateDetails = true;
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
+
+  @action.bound
+  addBlockToShell(blockType, position) {
+    // First add initial Step JSON to block object in MobX.
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    if (position === 'END') {
+      position = editor.blockList.length - 1;
+    } else if (position === 'START') {
+      position = 0;
+    }
+    const formTemplate = require('./AggregateBlocks/BlockTemplates/' + blockType + '.hbs'); //eslint-disable-line
+    let generatedCode = formTemplate();
+    generatedCode = generatedCode.replace(/(\$[A-Za-z0-9]*)/g, '\"$1\"');
+    generatedCode = generatedCode.replace(/(\_[A-Za-z0-9]*)/g, '\"$1\"');
+    generatedCode = JSON.parse(generatedCode);
+    editor.blockList[position].stepJSON = generatedCode;
+
+    // Determine if block is valid (Is the previous block valid)
+    if (position === 0) {
+      editor.blockList[position].status = 'valid';
+    } else if (editor.blockList[position - 1].status === 'valid') {
+      editor.blockList[position].status = 'pending';
+    } else if (editor.blockList[position - 1].status === 'pending') {
+      editor.blockList[position].status = 'pending';
+    }
+
+    // Secondly add initial step JSON to block object in Shell Object.
+    const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 30000;
+      service
+        .update(editor.profileId, {
+          shellId: editor.shellId, // eslint-disable-line
+          commands: AggregateCommands.ADD_STEP(editor.aggregateID, generatedCode, position)
+        })
+      .then((res) => {
+        console.log('Debug: result from add step: ', res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   moveBlock(array, oldIndex, newIndex) {

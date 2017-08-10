@@ -198,7 +198,12 @@ div.Pane.vertical.Pane1 {
     }
   }
 }
-
+svg.invalid {
+  fill: $aggregateBlockBackgroundInvalid;
+  circle {
+    fill: $aggregateBlockBackgroundHighlight;
+  }
+}
 svg.color_0 {
   fill: $colourOne;
   circle {

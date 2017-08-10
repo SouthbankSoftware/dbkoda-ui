@@ -2,24 +2,32 @@
   "Title": "Sort",
   "DefaultValues": {},
   "Fields": [
+    {
+      "name": "SortKeys",
+      "label": "Columns To Sort by",
+      "type": "Table",
+      "columns": [
         {
-            "name": "SortKeys",
-            "label": "Columns To Sort by",
-            "type": "Table",
-            "columns": [{
-                    "name": "AttributeName",
-                    "label": "Attribute",
-                    "tooltip": "Name of the attribute to be Sorted (from previous step)",
-                    "type": "Text"
-                },
-                {
-                    "name": "Direction",
-                    "Label": "Sort Direction",
-                    "tooltip": "-1 for descending sort, 1 for ascending",
-                    "type": "Combo",
-                    "lookup": "dbkoda_sortOptions"
-                }
-            ]
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be Sorted (from previous step)",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributesAgg",
+          "lookup_arguments": [
+            {
+              "name": "prevAttributes",
+              "value": "prevAttributes"
+            }
+          ]
+        },
+        {
+          "name": "Direction",
+          "Label": "Sort Direction",
+          "tooltip": "-1 for descending sort, 1 for ascending",
+          "type": "Combo",
+          "lookup": "dbkoda_sortOptions"
         }
+      ]
+    }
   ]
 }

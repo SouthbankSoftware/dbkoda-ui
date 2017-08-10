@@ -100,32 +100,51 @@ export default class FormBuilder {
   resolveQueries = (queries, result) => {
     return new Promise((resolve, reject) => {
       const query = queries.pop();
-      SyncService.executeQuery(query, this.editor.shellId, this.editor.profileId)
-        .then((res) => {
-          result[query] = res;
-          if (queries.length > 0) {
-            this.resolveQueries(queries, result)
-              .then((result) => {
-                resolve(result);
-              })
-              .catch((reason) => {
-                console.log(
-                  'resolveQueries:',
-                  'Handle rejected promise (' + reason + ') here.'
-                );
-                reject(reason);
-              });
-          } else {
-            resolve(result);
-          }
-        })
-        .catch((reason) => {
-          console.log(
-            'resolveQueries:',
-            'Handle rejected promise (' + reason + ') here.'
-          );
-          reject(reason);
-        });
+      if (query.dontRun) {
+        result[query] = query;
+        if (queries.length > 0) {
+          this.resolveQueries(queries, result)
+            .then((result) => {
+              resolve(result);
+            })
+            .catch((reason) => {
+              console.log(
+                'resolveQueries:',
+                'Handle rejected promise (' + reason + ') here.'
+              );
+              reject(reason);
+            });
+        } else {
+          resolve(query);
+        }
+      } else {
+        SyncService.executeQuery(query, this.editor.shellId, this.editor.profileId)
+          .then((res) => {
+            result[query] = res;
+            if (queries.length > 0) {
+              this.resolveQueries(queries, result)
+                .then((result) => {
+                  resolve(result);
+                })
+                .catch((reason) => {
+                  console.log(
+                    'resolveQueries:',
+                    'Handle rejected promise (' + reason + ') here.'
+                  );
+                  reject(reason);
+                });
+            } else {
+              resolve(result);
+            }
+          })
+          .catch((reason) => {
+            console.log(
+              'resolveQueries:',
+              'Handle rejected promise (' + reason + ') here.'
+            );
+            reject(reason);
+          });
+      }
     });
   };
   /**
@@ -228,8 +247,16 @@ export default class FormBuilder {
             for (const fldName in queryFieldsHash) {
               if (queryFieldsHash[fldName]) {
                 const fldQuery = queryFieldsHash[fldName];
-                const resOpts = resQueries[fldQuery.query];
+                let resOpts = resQueries[fldQuery.query];
                 let arrOptions = [];
+                if (resQueries === fldQuery.query) {
+                  resOpts = resQueries;
+                } else if (resQueries === queryFieldsHash[fldName].query) {
+                  resOpts = resQueries;
+                } else if (!resOpts) {
+                  resOpts = resQueries;
+                }
+                console.log('!: ', resOpts);
                 if (formFunctions[fldQuery.parseFn]) {
                   try {
                     arrOptions = [''].concat(
@@ -244,6 +271,7 @@ export default class FormBuilder {
                 } else {
                   result.options[fldName] = { dropdown: arrOptions };
                 }
+                console.log(result.options[fldName]);
               }
             }
             resolve(result);

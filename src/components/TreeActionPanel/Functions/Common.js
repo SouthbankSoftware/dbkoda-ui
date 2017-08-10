@@ -79,9 +79,16 @@ export function dbkodaListAttributes(params) {
 
 export function dbkodaListAttributes_parse(res) { //eslint-disable-line
     const data = [];
-    console.log('got attributes', res);
     res.forEach((a) => {
         data.push(a);
     });
     return data;
+}
+
+export function dbkodaListAttributesAgg(params) {
+    params.dontRun = true;
+    return params;
+}
+export function dbkodaListAttributesAgg_parse(res) { //eslint-disable-line
+    return JSON.parse(res.prevAttributes);
 }

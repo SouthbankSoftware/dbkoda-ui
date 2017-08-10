@@ -21,5 +21,7 @@ import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const Project = {
   dbkodaListAttributes: common.dbkodaListAttributes,
-  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
+  dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse
 };

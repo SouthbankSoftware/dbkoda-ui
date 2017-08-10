@@ -14,15 +14,28 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
- * You shouldhave received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
-export const Group = {
-  // Prefill function for alter user
-  dbkodaListAttributes: common.dbkodaListAttributes,
-  dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
-  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
-  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse
+/**
+* @Author: Michael Harrison
+* @Date:   2017-08-08 17:04:16
+* @Email:  mike@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2017-08-08 17:04:26
+*/
+
+
+
+export const AggregateCommands = {
+  NEW_AGG_BUILDER: (db, coll) => {
+    return 'dbk_agg.newAggBuilder(\'' + db + '\',\'' + coll + '\')';
+  },
+  ADD_STEP: (id, stepJSON) => {
+    return 'dbk_agg.addStep(\'' + id + '\',' + JSON.stringify(stepJSON) + ')';
+  },
+  GET_ATTRIBUTES: (id, stepIndex) => {
+    return 'dbk_agg.getAttributes(\'' + id + '\',\'' + stepIndex + '\')';
+  },
 };

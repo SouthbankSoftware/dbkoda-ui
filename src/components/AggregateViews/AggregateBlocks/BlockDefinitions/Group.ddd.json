@@ -10,14 +10,10 @@
                 "label": "Attribute",
                 "tooltip": "Name of the attribute to be filtered",
                 "type": "Combo",
-                "lookup": "dbkodaListAttributes",
+                "lookup": "dbkodaListAttributesAgg",
                 "lookup_arguments": [{
-                        "name": "db",
-                        "value": "treeNode.parentDB"
-                    },
-                    {
-                        "name": "collection",
-                        "value": "treeNode"
+                        "name": "prevAttributes",
+                        "value": "prevAttributes"
                     }
                 ]
 
@@ -32,14 +28,10 @@
                     "label": "Attribute",
                     "tooltip": "Name of the attribute to be filtered",
                     "type": "Combo",
-                    "lookup": "dbkodaListAttributes",
+                    "lookup": "dbkodaListAttributesAgg",
                     "lookup_arguments": [{
-                            "name": "db",
-                            "value": "treeNode.parentDB"
-                        },
-                        {
-                            "name": "collection",
-                            "value": "treeNode"
+                        "name": "prevAttributes",
+                        "value": "prevAttributes"
                         }
                     ]
 

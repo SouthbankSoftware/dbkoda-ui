@@ -35,10 +35,12 @@ import {
   Intent,
 } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
+import { featherClient } from '~/helpers/feathers';
 import Block from './AggregateBlocks/Block.jsx';
 import FirstBlockTarget from './AggregateBlocks/FirstBlockTaget.jsx';
 import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
+import { AggregateCommands } from './AggregateCommands.js';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -50,10 +52,33 @@ export default class GraphicalBuilder extends React.Component {
     this.state = {
       id: props.id,
       activeBlockIndex: this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).selectedBlock,
-      colorMatching: []
+      colorMatching: [],
+      db: props.db,
+      collection: props.collection
     };
 
-    // Find the active block
+    // Set up the aggregate builder in the shell.
+    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    this.profileId = this.editor.profileId;
+    this.shell = this.editor.shellId;
+    this.currentDB = this.editor.collection.refParent.text;
+    this.currentCollection = this.editor.collection.text;
+
+    // Add aggregate object to shell.
+    const service = featherClient().service('/mongo-sync-execution');
+    service.timeout = 30000;
+    service
+      .update(this.profileId, {
+        shellId: this.shell, // eslint-disable-line
+        commands: AggregateCommands.NEW_AGG_BUILDER(this.currentDB, this.currentCollection)
+      })
+    .then((res) => {
+      this.editor.aggregateID = res;
+      console.log('Debug: New Aggregate Builder Registered on Shell: ', res);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   }
 
   @action.bound
@@ -163,6 +188,7 @@ export default class GraphicalBuilder extends React.Component {
                 positionType={posType}
                 color={blockColor}
                 type={indexValue.type}
+                status={indexValue.status}
                 moveBlock={this.moveBlock}
                 onClickCallback={this.selectBlock}
                 concrete
