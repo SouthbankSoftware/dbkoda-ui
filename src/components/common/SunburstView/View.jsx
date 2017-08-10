@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-09T16:46:02+10:00
+ * @Last modified time: 2017-08-10T18:33:25+10:00
  */
 
 /*
@@ -103,6 +103,7 @@ export default class View extends React.Component {
     selectedNode: React.PropTypes.object.isRequired,
     onClick: React.PropTypes.func,
     onDblClick: React.PropTypes.func,
+    onBreadCrumbClick: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -117,6 +118,7 @@ export default class View extends React.Component {
     this.mouseleave = this.mouseleave.bind(this);
     this.breadcrumbPoints = this.breadcrumbPoints.bind(this);
     this.updateData = this.updateData.bind(this);
+
     if (props.data) {
       this.state = {
         data: props.data,
@@ -126,31 +128,31 @@ export default class View extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps:', nextProps);
-
     if (this.dataRoot && nextProps.data) {
+      // This codition checks if new data is available and we have to recompute the hierarchy
       const newDataRoot = d3.hierarchy(nextProps.data);
       if (
         newDataRoot.descendants().length != this.dataRoot.descendants().length
       ) {
-        console.log('newDataRoot: ', newDataRoot);
         this.setState({
           data: nextProps.data,
         });
-        this.lastSelectedRoot = this.root;
+        this.lastSelectedRoot = this.root; // keeping the reference of last selected node so that we can redraw the view at similar node level after new hierarchy is computed
         this.root = null;
         this.dataRoot = null;
       }
     }
     if (this.dataRoot && nextProps.selectedNode) {
-      console.log('path:', this.dataRoot.path(nextProps.selectedNode));
+      // Changing the root to redraw the chart without recalculating the hierarchy when drill down the chart.
       if (this.props.selectedNode != nextProps.selectedNode) {
         this.root = nextProps.selectedNode;
         this.createView();
       }
     }
   }
-
+  /*
+   * Main function to set up the data and hierarchy
+   */
   updateData() {
     // Turn the data into a d3 hierarchy and calculate the sums.
     let lastParent = null;
@@ -178,7 +180,7 @@ export default class View extends React.Component {
       });
 
     if (this.lastSelectedRoot) {
-      console.log('test path:', this.dataRoot.path(this.lastSelectedRoot));
+      // the logic in this condition is to keep the drill downed node selected in case the data is changed because of the extended data.
       const arrNodes = [];
       let lastRootData = this.lastSelectedRoot.data;
       while (lastRootData.parent != null) {
@@ -208,7 +210,7 @@ export default class View extends React.Component {
   }
 
   /*
-   * Main function to draw and set up the visualization, once we have the data.
+   * Main function to draw visualization, once we have the data.
    */
   createView() {
     // reset colour
@@ -258,9 +260,32 @@ export default class View extends React.Component {
     // Add the mouseleave handler to the bounding circle.
     this.container.on('mouseleave', this.mouseleave);
 
+    const sequenceArray = this.root.ancestors().reverse();
+    this.updateBreadcrumbs(sequenceArray, this.getPercentageString());
+
+    this.updateExplanation(this.root, this.getPercentageString());
+
     this.updateList(this.root);
   }
-
+  getPercentageString(d, bTotal) {
+    console.log('test DDDDDD:', d);
+    let percentage;
+    if (d && bTotal) {                  // calculate the percentage of selected node w.r.t. Total Storage
+      percentage = (100 * d.value / this.dataRoot.value).toPrecision(3);
+    } else if (d && d != this.root) {   // calculate the percentage of selected node w.r.t. selected root
+      percentage = (100 * d.value / this.root.value).toPrecision(3);
+    } else {                            // calculate the percentage of selected root node w.r.t. Total Storage
+      percentage = (100 * this.root.value / this.dataRoot.value).toPrecision(3);
+    }
+    let percentageString = percentage + '%';
+    if (percentage < 0.1) {
+      percentageString = '< 0.1%';
+    }
+    return percentageString;
+  }
+  /*
+   * Update the table with the actual values of data volume.
+   */
   updateList(d) {
     // Update list
     const listSel = d3.select(this.listEl);
@@ -291,24 +316,29 @@ export default class View extends React.Component {
         .html(d => `<td>${d.data.name}</td><td>${filesize(d.value)}</td>`);
     }
   }
-
-  // Fade all but the current sequence, and show it in the breadcrumb trail.
-  mouseover(d) {
-    const percentage = (100 * d.value / this.root.value).toPrecision(3);
-    let percentageString = percentage + '%';
-    if (percentage < 0.1) {
-      percentageString = '< 0.1%';
-    }
-
+  /*
+   * Function to update the explanation text which is shown in the middle of the chart.
+   */
+  updateExplanation(d, percentageString) {
     this.view.select('.name').text(d.data.name);
     this.view.select('.percentage').text(percentageString);
     this.view.select('.filesize').text(filesize(d.value));
+    if (d === this.root) {
+      this.view.select('.parent').text(this.dataRoot.data.name);
+    } else {
+      this.view.select('.parent').text(this.root.data.name);
+    }
 
     this.view.select('.explanation').style('visibility', '');
+  }
+
+  // Fade all but the current sequence, and show it in the breadcrumb trail.
+  mouseover(d) {
+    this.updateExplanation(d, this.getPercentageString(d));
 
     const sequenceArray = d.ancestors().reverse();
-    sequenceArray.shift(); // remove root node from the array
-    this.updateBreadcrumbs(sequenceArray, percentageString);
+    // sequenceArray.shift(); // remove root node from the array
+    this.updateBreadcrumbs(sequenceArray, this.getPercentageString(d, true));
 
     // Fade all the segments.
     const paths = this.container.selectAll('path').style('opacity', 0.3);
@@ -327,8 +357,13 @@ export default class View extends React.Component {
    * Restore everything to full opacity when moving off the visualization.
    */
   mouseleave() {
-    // Hide the breadcrumb trail
-    this.view.select('.trail').style('visibility', 'hidden');
+    const sequenceArray = this.root.ancestors().reverse();
+    // sequenceArray.shift(); // remove root node from the array
+    this.updateBreadcrumbs(sequenceArray, this.getPercentageString());
+
+    this.updateExplanation(this.root, this.getPercentageString());
+
+    this.updateList(this.root);
 
     // Deactivate all segments during transition.
     const paths = this.container.selectAll('path').on('mouseover', null);
@@ -337,10 +372,6 @@ export default class View extends React.Component {
     paths.transition().duration(1000).style('opacity', 1).on('end', () => {
       paths.on('mouseover', this.mouseover);
     });
-
-    this.view.select('.explanation').style('visibility', 'hidden');
-
-    this.updateList(this.root);
   }
 
   /**
@@ -389,7 +420,8 @@ export default class View extends React.Component {
     entering
       .append('svg:polygon')
       .attr('points', this.breadcrumbPoints)
-      .style('fill', d => d.colour);
+      .style('fill', d => d.colour)
+      .on('click', this.props.onBreadCrumbClick);
 
     entering
       .append('svg:text')
@@ -401,7 +433,8 @@ export default class View extends React.Component {
       .attr('text-anchor', 'middle')
       .text((d) => {
         return d.data.name;
-      });
+      })
+      .on('click', this.props.onBreadCrumbClick);
 
     // Merge enter and update selections; set position for all nodes.
     let lastPos = 0;
@@ -431,8 +464,6 @@ export default class View extends React.Component {
   componentDidUpdate() {
     this.updateData();
     this.createView();
-
-    console.log('View Updated!!!!');
   }
 
   render() {
@@ -455,7 +486,8 @@ export default class View extends React.Component {
               <br />
               <span className="percentage" />
               <br />
-              (<span className="filesize" />) of the total storage
+              (<span className="filesize" />) of the <span className="parent" />{' '}
+              storage
             </div>
             <svg width={width} height={height}>
               <g
