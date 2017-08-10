@@ -1,1 +1,7 @@
-  { $lookup:  { {{#if UseOr}}"$or":[{{/if}} {{#each FilterKeys}}{{#if ../UseOr}}{ {{/if}}{{#if AttributeName}}"{{AttributeName}}":{{{Value}}} {{/if}} {{#if ../UseOr}} }{{/if}}{{#unless last}},{{/unless}}{{/each}}{{#if UseOr}}]{{/if}} }  },
+  { $lookup:
+     {from: {{{collection}}},
+       localField: {{{localField}}},
+       foreignField: {{{foreignField}}},
+       as: {{{outputField}}}
+     }
+}

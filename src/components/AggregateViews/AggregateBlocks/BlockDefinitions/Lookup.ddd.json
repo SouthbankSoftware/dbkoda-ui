@@ -1,41 +1,34 @@
 {
   "Title": "Lookkup",
   "DefaultValues": {},
-  "Fields": [
-    {
-      "name": "UseOr",
-      "label": "Use Or?",
-      "tooltip": "If true, will us OR across filter conditions",
-      "type": "Boolean"
+  "Fields": [{
+      "name": "collection",
+      "label": "Collection to join to",
+      "tooltip": "Lookup data in this collection",
+      "type": "Text",
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [{
+        "name": "db",
+        "value": "treeNode.parentDB"
+      }]
     },
     {
-      "name": "FilterKeys",
-      "label": "Filter conditions",
-      "type": "Table",
-      "columns": [{
-          "name": "AttributeName",
-          "label": "Attribute",
-          "tooltip": "Name of the attribute to be filtered",
-          "type": "Combo",
-          "lookup": "dbkodaListAttributes",
-          "lookup_arguments": [{
-              "name": "db",
-              "value": "treeNode.parentDB"
-            },
-            {
-              "name": "collection",
-              "value": "treeNode"
-            }
-          ]
-
-        },
-        {
-          "name": "Value",
-          "label": "Value to filter",
-          "type": "Text",
-          "tooltip": "Enter the value to search for (quote strings please)"
-        }
-      ]
+      "name": "localField",
+      "label": "local Field",
+      "tooltip": "Data in the pipeline to use for join",
+      "type": "Text"
+    },
+    {
+      "name": "foreignField",
+      "label": "Foriegn Field",
+      "tooltip": "Data from the collection to use for join",
+      "type": "Text"
+    },
+    {
+      "name": "outputField",
+      "label": "Output field",
+      "tooltip": "Array variable that will recieve the data",
+      "type": "Text"
     }
   ]
 }

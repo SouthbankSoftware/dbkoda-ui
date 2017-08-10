@@ -125,8 +125,8 @@ export const BlockTypes = {
       Expression: ''
     }
   },
-  GACET: {
-    type: 'Gacet',
+  FACET: {
+    type: 'Facet',
     description: 'Gacet',
     fields: {
       Expression: ''
