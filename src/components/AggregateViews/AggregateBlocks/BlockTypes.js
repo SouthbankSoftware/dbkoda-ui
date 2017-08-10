@@ -54,5 +54,12 @@ export const BlockTypes = {
     fields: {
       Expression: ''
     }
+  },
+  UNWIND: {
+    type: 'Unwind',
+    description: 'Unwind an array of data',
+    fields: {
+      Expression: ''
+    }
   }
 };

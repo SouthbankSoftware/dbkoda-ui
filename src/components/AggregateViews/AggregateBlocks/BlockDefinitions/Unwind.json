@@ -1,0 +1,10 @@
+{
+    "Title": "UnWind",
+    "Fields": [{
+        "name": "UnWindAttribute",
+        "label": "Attribute to be unwound",
+        "type": "Combo",
+        "tooltip": "Name of the attribute to be uwound"
+
+    }]
+}

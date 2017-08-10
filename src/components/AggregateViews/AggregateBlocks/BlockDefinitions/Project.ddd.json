@@ -1,27 +1,39 @@
 {
   "Title": "Project",
-  "Fields": [
-    {
-      "name": "Keys",
-      "label": "Project Fields",
-      "type": "Table",
-      "columns": [
-        {
-        "name": "AttributeName",
-        "label": "Attribute",
-        "tooltip": "Name of the attribute to be Projected",
-        "type": "Combo",
-        "lookup": "dbkodaListAttributes",
-        "lookup_arguments": [{
-            "name": "db",
-            "value": "treeNode.parentDB"
-          },
+  "Fields": [{
+        "name": "Projections",
+        "label": "Project Fields",
+        "type": "Table",
+        "columns": [{
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be Projected",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributes",
+          "lookup_arguments": [{
+              "name": "db",
+              "value": "treeNode.parentDB"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }]},
           {
-            "name": "collection",
-            "value": "treeNode"
-          }
-        ]
-      }]
-    }
-  ]
-}
+              "name": "AttributeSource",
+              "label": "Source or indicator",
+              "tooltip": "1,0 or source of projected Attribute",
+              "type": "Combo",
+              "lookup": "dbkodaListAttributes",
+              "lookup_arguments": [{
+                  "name": "db",
+                  "value": "treeNode.parentDB"
+                },
+                {
+                  "name": "collection",
+                  "value": "treeNode"
+                }
+              ]
+            }
+          ]
+        }]
+      }
