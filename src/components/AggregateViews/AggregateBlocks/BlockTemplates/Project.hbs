@@ -1,4 +1,4 @@
-    { $project: { 
-        {{#each Projections}}  "{{AttributeName}}":1 {{#unless last}},{{/unless}} {{/each}} 
+    { $project: { {{#each Projections}}
+        "{{AttributeName}}":{{{AttributeSource}}} {{#unless last}},{{/unless}} {{/each}} 
     }
   }

@@ -1,0 +1,34 @@
+{
+  "Title": "Lookkup",
+  "DefaultValues": {},
+  "Fields": [{
+      "name": "collection",
+      "label": "Collection to join to",
+      "tooltip": "Lookup data in this collection",
+      "type": "Text",
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [{
+        "name": "db",
+        "value": "treeNode.parentDB"
+      }]
+    },
+    {
+      "name": "localField",
+      "label": "local Field",
+      "tooltip": "Data in the pipeline to use for join",
+      "type": "Text"
+    },
+    {
+      "name": "foreignField",
+      "label": "Foriegn Field",
+      "tooltip": "Data from the collection to use for join",
+      "type": "Text"
+    },
+    {
+      "name": "outputField",
+      "label": "Output field",
+      "tooltip": "Array variable that will recieve the data",
+      "type": "Text"
+    }
+  ]
+}

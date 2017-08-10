@@ -1,0 +1,11 @@
+{
+  "Title": "Limit",
+  "DefaultValues": {},
+  "Fields": [{
+    "name": "limit",
+    "label": "Limit",
+    "tooltip": "Limit results of this step to first N documents ",
+    "type": "Numeric",
+    "rules": "integer"
+  }]
+}

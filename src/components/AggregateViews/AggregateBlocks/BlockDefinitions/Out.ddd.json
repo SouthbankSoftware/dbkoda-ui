@@ -1,0 +1,13 @@
+{
+  "Title": "Out",
+  "DefaultValues": {},
+  "Fields": [
+
+    {
+      "name": "output-collection",
+      "label": "Output Collection",
+      "type": "Text",
+      "tooltip": "Name of a collection to store the output"
+    }
+  ]
+}

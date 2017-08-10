@@ -1,0 +1,10 @@
+{
+  "Title": "Count",
+  "DefaultValues": {},
+  "Fields": [{
+    "name": "count",
+    "label": "Count Label",
+    "type": "Text",
+    "tooltip": "Attribute that will be assigned the count"
+  }]
+}
