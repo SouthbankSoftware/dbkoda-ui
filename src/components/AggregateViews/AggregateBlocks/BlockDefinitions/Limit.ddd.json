@@ -1,0 +1,41 @@
+{
+  "Title": "Limit",
+  "DefaultValues": {},
+  "Fields": [
+    {
+      "name": "UseOr",
+      "label": "Use Or?",
+      "tooltip": "If true, will us OR across filter conditions",
+      "type": "Boolean"
+    },
+    {
+      "name": "FilterKeys",
+      "label": "Filter conditions",
+      "type": "Table",
+      "columns": [{
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be filtered",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributes",
+          "lookup_arguments": [{
+              "name": "db",
+              "value": "treeNode.parentDB"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }
+          ]
+
+        },
+        {
+          "name": "Value",
+          "label": "Value to filter",
+          "type": "Text",
+          "tooltip": "Enter the value to search for (quote strings please)"
+        }
+      ]
+    }
+  ]
+}

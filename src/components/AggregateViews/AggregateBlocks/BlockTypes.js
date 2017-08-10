@@ -19,12 +19,12 @@
  */
 
 /**
-* @Author: Michael Harrison
-* @Date:   2017-07-21 09:47:09
-* @Email:  mike@southbanksoftware.com
+ * @Author: Michael Harrison
+ * @Date:   2017-07-21 09:47:09
+ * @Email:  mike@southbanksoftware.com
  * @Last modified by:   mike
  * @Last modified time: 2017-07-21 09:47:19
-*/
+ */
 
 export const BlockTypes = {
   GROUP: {
@@ -58,6 +58,90 @@ export const BlockTypes = {
   UNWIND: {
     type: 'Unwind',
     description: 'Unwind an array of data',
+    fields: {
+      Expression: ''
+    }
+  },
+  LIMIT: {
+    type: 'Limit',
+    description: 'Limit',
+    fields: {
+      Expression: ''
+    }
+  },
+  SKIP: {
+    type: 'Skip',
+    description: 'Skip',
+    fields: {
+      Expression: ''
+    }
+  },
+  SAMPLE: {
+    type: 'Sample',
+    description: 'Sample',
+    fields: {
+      Expression: ''
+    }
+  },
+  ADDFIELDS: {
+    type: 'AddFields',
+    description: 'AddFields',
+    fields: {
+      Expression: ''
+    }
+  },
+  LOOKUP: {
+    type: 'Lookup',
+    description: 'Lookup',
+    fields: {
+      Expression: ''
+    }
+  },
+  GRAPHLOOKUP: {
+    type: 'GraphLookup',
+    description: 'GraphLookup',
+    fields: {
+      Expression: ''
+    }
+  },
+  COUNT: {
+    type: 'Count',
+    description: 'Count',
+    fields: {
+      Expression: ''
+    }
+  },
+  SORTBYCOUNT: {
+    type: 'SortByCount',
+    description: 'SortByCount',
+    fields: {
+      Expression: ''
+    }
+  },
+  BUCKET: {
+    type: 'Bucket',
+    description: 'Bucket',
+    fields: {
+      Expression: ''
+    }
+  },
+  GACET: {
+    type: 'Gacet',
+    description: 'Gacet',
+    fields: {
+      Expression: ''
+    }
+  },
+  REDACT: {
+    type: 'Redact',
+    description: 'Redact',
+    fields: {
+      Expression: ''
+    }
+  },
+  OUT: {
+    type: 'Out',
+    description: 'Out',
     fields: {
       Expression: ''
     }

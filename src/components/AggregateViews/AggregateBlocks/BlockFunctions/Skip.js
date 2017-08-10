@@ -19,10 +19,6 @@
  */
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
-export const Unwind = {
+export const Skip = {
   dbkodaListAttributes: common.dbkodaListAttributes,
-  /* dbkodaListPipelineAttributes: (params) => {
-    console.log(params);
-    return (['$column1', '$column2', '$a.column3', '$b.column4']);
-  }, */
 };
