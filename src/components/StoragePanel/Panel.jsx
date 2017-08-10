@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-08T14:54:52+10:00
+ * @Last modified time: 2017-08-10T17:45:44+10:00
  */
 
 /*
@@ -174,6 +174,13 @@ export default class StoragePanel extends React.Component {
       this.bLoading = false;
     }
   }
+  onChartBreadCrumbClick = (node) => {
+    if (this.state.selectedNode != node) {
+      this.setState({
+        selectedNode: node,
+      });
+    }
+  }
   onChildDblClick = (node) => {
     // node is a tree Node in d3-hierachy (https://github.com/d3/d3-hierarchy) that just clicked by user
     if (this.state.selectedNode == node) {
@@ -241,6 +248,7 @@ export default class StoragePanel extends React.Component {
             selectedNode={this.state.selectedNode}
             onClick={this.onChildClick}
             onDblClick={this.onChildDblClick}
+            onBreadCrumbClick={this.onChartBreadCrumbClick}
           />}
         {this.bLoading &&
           <div>
