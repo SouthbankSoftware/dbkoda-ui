@@ -46,7 +46,7 @@ import { featherClient } from '~/helpers/feathers';
                res = res.replace(/[\r\n\t]*/g, '');
                res = res.replace(/ObjectId\((\"\w*\")\)/g, '$1');
                res = res.replace(/NumberLong\(\"(\d*)\"\)/g, '$1');
-               res = res.replace(/\bNaN\b/g, '"NaN"')
+               res = res.replace(/\bNaN\b/g, '"NaN"');
                console.log('Result: ', res);
                try {
                  const ejson = JSON.parse(res);
