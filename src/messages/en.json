@@ -231,7 +231,7 @@
       "parameters": {
         "ssl": {
           "label": "SSL",
-          "tooltip": "ssl"
+          "tooltip": "Connect to mongod or mongos using SSL"
         },
         "allCollections": {
           "label": "All Collections",
@@ -251,7 +251,7 @@
         },
         "pretty": {
           "label": "pretty",
-          "tooltip": "pretty"
+          "tooltip": "Format output using .pretty()"
         },
         "jsonArray": {
           "label": "jsonArray",
@@ -283,15 +283,15 @@
         },
         "limit": {
           "label": "Limit <count>",
-          "tooltip": "Limit <count>"
+          "tooltip": "Limit on total documents returned <count>"
         },
         "skip": {
           "label": "Skip <count>",
-          "tooltip": "Skip <count>"
+          "tooltip": "Skip forward before exporting documents<count>"
         },
         "sort": {
           "label": "Sort <json>",
-          "tooltip": "Sort <json>"
+          "tooltip": "Sort condition for documents <json>"
         },
         "fields": {
           "label": "Fields <field>[,<field>]*",
@@ -303,7 +303,7 @@
         },
         "forceTableScan": {
           "label": "forceTableScan",
-          "tooltip": "forceTableScan"
+          "tooltip": "perform a collection scan, not an _id index scan"
         },
         "assertExists": {
           "label": "assertExists",
@@ -319,43 +319,43 @@
         },
         "dumpDbUsersAndRoles": {
           "label": "dumpDbUsersAndRoles",
-          "tooltip": "dumpDbUsersAndRoles"
+          "tooltip": "Include user and role definitions for a database dump"
         },
         "viewsAsCollections": {
           "label": "viewsAsCollections",
-          "tooltip": "viewsAsCollections"
+          "tooltip": "Export views as collections (eg, materialize the view)"
         },
         "numParallelCollections": {
           "label": "numParallelCollections",
-          "tooltip": "numParallelCollections"
+          "tooltip": "Number of parallel threads for operation"
         },
         "drop": {
           "label": "drop",
-          "tooltip": "drop"
+          "tooltip": "Drop collections before restoring"
         },
         "dryRun": {
           "label": "dryRun",
-          "tooltip": "dryRun"
+          "tooltip": "Don't actually import data - produce report only"
         },
         "writeConcern": {
           "label": "writeConcern",
-          "tooltip": "writeConcern"
+          "tooltip": "Write concern document for restore operations"
         },
         "noIndexRestore": {
           "label": "noIndexRestore",
-          "tooltip": "noIndexRestore"
+          "tooltip": "Do not restore indexes"
         },
         "noOptionsRestore": {
           "label": "noOptionsRestore",
-          "tooltip": "noOptionsRestore"
+          "tooltip": "Do not restore Collection options"
         },
         "keepIndexVersion": {
           "label": "keepIndexVersion",
-          "tooltip": "keepIndexVersion"
+          "tooltip": "Do not upgrade index on restore"
         },
         "maintainInsertionOrder": {
           "label": "maintainInsertionOrder",
-          "tooltip": "maintainInsertionOrder"
+          "tooltip": "Make sure documents are restored in the order they appear in backup"
         },
         "numInsertionWorkers": {
           "label": "numInsertionWorkers",
@@ -363,35 +363,35 @@
         },
         "stopOnError": {
           "label": "stopOnError",
-          "tooltip": "stopOnError"
+          "tooltip": "Halt the restore upon any error"
         },
         "bypassDocumentValidation": {
           "label": "bypassDocumentValidation",
-          "tooltip": "bypassDocumentValidation"
+          "tooltip": "do not process Document validation rules during the restore"
         },
         "objcheck": {
           "label": "objcheck",
-          "tooltip": "objcheck"
+          "tooltip": "validate all documents to avoid invalid documents"
         },
         "oplogReplay": {
           "label": "oplogReplay",
-          "tooltip": "oplogReplay"
+          "tooltip": "Replay oplogs entires from oplog.bson"
         },
         "oplogLimit": {
           "label": "oplogLimit",
-          "tooltip": "oplogLimit"
+          "tooltip": "Only apply oplog entiries with a lesser timestamp"
         },
         "restoreDbUsersAndRoles": {
           "label": "restoreDbUsersAndRoles",
-          "tooltip": "restoreDbUsersAndRoles"
+          "tooltip": "Restore database user and role definitions"
         },
         "gzip": {
           "label": "gzip",
-          "tooltip": "gzip"
+          "tooltip": "Compress or decompress dumps using GZIP"
         },
         "headerLine": {
           "label": "headerLine",
-          "tooltip": "headerLine"
+          "tooltip": "import CSV or TSV have headers in first line"
         },
         "parseGrace": {
           "label": "parseGrace",
@@ -399,27 +399,27 @@
         },
         "type": {
           "label": "Type",
-          "tooltip": "Type"
+          "tooltip": "FIle format"
         },
         "columnsHaveTypes": {
           "label": "columnsHaveTypes",
-          "tooltip": "columnsHaveTypes"
+          "tooltip": "Field list includes data types (name.type)"
         },
         "ignoreBlanks": {
           "label": "ignoreBlanks",
-          "tooltip": "ignoreBlanks"
+          "tooltip": "ignore balnk fields in input stream (don't create docs)"
         },
         "mode": {
           "label": "mode",
-          "tooltip": "mode"
+          "tooltip": "Insert, upsert or merge documents"
         },
         "upsertFields": {
           "label": "upsertFields",
-          "tooltip": "upsertFields"
+          "tooltip": "List of fields that specify query (matching) portion of upsert operation"
         },
         "noHeaderLine": {
           "label": "noHeaderLine",
-          "tooltip": "noHeaderLine"
+          "tooltip": "Don't create header lines in exported data"
         }
       }
     }

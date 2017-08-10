@@ -23,7 +23,7 @@ export const exportDB = '{{#each cols}}\n' +
 + '{{/each}}';
 
 export const dumpDB = '{{#each cols}}\n' +
-'mongodump{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if gzip}} --gzip{{/if}}{{#if repair}} --repair{{/if}}{{#if oplog}} --oplog{{/if}}{{#if dumpDbUsersAndRoles}} --dumpDbUsersAndRoles{{/if}}{{#if viewsAsCollections}} --viewsAsCollections{{/if}}{{#if numParallelCollections}} --numParallelCollections {{numParallelCollections}}{{/if}}{{#if query}} -q {{query}}{{/if}}{{#if readPreference}} --readPreference{{readPreference}}{{/if}}{{#if forceTableScan}} --forceTableScan{{/if}}{{#if output}} -o {{output}}{{/if}} \n'
+'mongodump{{#if host}} --host {{host}}{{/if}}{{#if port}} --port {{port}}{{/if}} --db {{database}}{{#if username}} -u {{username}}{{/if}}{{#if password}} -p ******{{/if}}{{#if ssl}} --ssl{{/if}}{{#if collection}} --collection {{collection}}{{/if}}{{#if authDb}} --authenticationDatabase {{authDb}}{{/if}}{{#if gzip}} --gzip{{/if}}{{#if repair}} --repair{{/if}}{{#if oplog}} --oplog{{/if}}{{#if dumpDbUsersAndRoles}} --dumpDbUsersAndRoles{{/if}}{{#if viewsAsCollections}} --viewsAsCollections{{/if}}{{#if numParallelCollections}} --numParallelCollections {{numParallelCollections}}{{/if}}{{#if query}} -q {{query}}{{/if}}{{#if readPreference}} --readPreference {{readPreference}}{{/if}}{{#if forceTableScan}} --forceTableScan{{/if}}{{#if output}} -o {{output}}{{/if}} \n'
 + '{{/each}}';
 
 export const dumpServer = '{{#each cols}}\n' +

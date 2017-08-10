@@ -353,7 +353,6 @@ export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeCon
     }, {
       label: globalString('backuprestore/parameters/oplogReplay/label'),
       tooltips: globalString('backuprestore/parameters/oplogReplay/tooltip'),
-      type: 'input',
       value: oplogReplay,
       onChange: changeOplogReplay,
     }, {
