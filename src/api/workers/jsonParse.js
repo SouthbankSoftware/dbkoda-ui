@@ -22,7 +22,7 @@
  * @Date:   2017-08-08T15:59:13+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T12:57:37+10:00
+ * @Last modified time: 2017-08-11T16:06:22+10:00
  */
 
 self.addEventListener('message', (e) => {
@@ -100,5 +100,5 @@ JSOL.parse = function(text) {
        .replace(/\w*\s*\:/g, ':'))) {
     return (new Function('return ' + text))();  // eslint-disable-line
   }
-  throw new Error('Invalid JSOL: ' + text);
+  throw new Error('Invalid JSON: ' + text);
 };

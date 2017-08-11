@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T09:42:43+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T15:56:00+10:00
+ * @Last modified time: 2017-08-11T16:06:02+10:00
  */
 
 import { Doc } from 'codemirror';
@@ -33,7 +33,7 @@ export default class StaticApi {
     return new Doc(content, 'MongoScript');
   }
 
-  static parseShellJson(jsonStr, success, error) {
+  static parseShellJson(jsonStr) {
     return new Promise((resolve, reject) => {
       const ParseWorker = require('worker-loader!./workers/jsonParse.js'); // eslint-disable-line
       const parseWorker = new ParseWorker();
