@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-10T17:45:44+10:00
+ * @Last modified time: 2017-08-11T16:22:57+10:00
  */
 
 /*
@@ -214,7 +214,6 @@ export default class StoragePanel extends React.Component {
       )
         .then((res) => {
           if (res) {
-            console.log('Extended Data Loaded');
             this.forceUpdate();
           }
           // this.setState({
@@ -228,7 +227,6 @@ export default class StoragePanel extends React.Component {
   };
 
   render() {
-    console.log('testing storage panel render function.....');
     return (
       <div className="StoragePanel">
         <nav className="storageToolbar pt-navbar pt-dark">

@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-10T18:33:25+10:00
+ * @Last modified time: 2017-08-11T16:25:01+10:00
  */
 
 /*
@@ -145,7 +145,11 @@ export default class View extends React.Component {
     if (this.dataRoot && nextProps.selectedNode) {
       // Changing the root to redraw the chart without recalculating the hierarchy when drill down the chart.
       if (this.props.selectedNode != nextProps.selectedNode) {
-        this.root = nextProps.selectedNode;
+        if (nextProps.selectedNode.parent == null) {
+          this.root = this.dataRoot;
+        } else {
+          this.root = nextProps.selectedNode;
+        }
         this.createView();
       }
     }
@@ -187,7 +191,6 @@ export default class View extends React.Component {
         arrNodes.push(lastRootData.name);
         lastRootData = lastRootData.parent;
       }
-      console.log('test hierarchy of data', arrNodes);
       let newRoot = this.dataRoot;
       while (arrNodes.length > 0) {
         const nodeVal = arrNodes.pop();
@@ -268,7 +271,6 @@ export default class View extends React.Component {
     this.updateList(this.root);
   }
   getPercentageString(d, bTotal) {
-    console.log('test DDDDDD:', d);
     let percentage;
     if (d && bTotal) {                  // calculate the percentage of selected node w.r.t. Total Storage
       percentage = (100 * d.value / this.dataRoot.value).toPrecision(3);
