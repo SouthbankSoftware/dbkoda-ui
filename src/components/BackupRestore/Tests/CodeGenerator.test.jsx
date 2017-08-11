@@ -24,7 +24,6 @@
 import chai, {assert} from 'chai';
 
 import chaiEnzyme from 'chai-enzyme';
-// import {mount} from 'enzyme';
 import globalizeInit from '../../tests/helpers/globalize.js';
 
 import {generateCode} from '../CodeGenerator';

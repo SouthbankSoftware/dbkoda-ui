@@ -30,7 +30,7 @@ import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
 import {AllCollectionOption, DumpOptions, ExportDBOptions, RestoreOptions, ImportOptions} from './Options';
 import {generateCode, getCommandObject} from './CodeGenerator';
-import {isImportAction, isRestoreAction} from './Utils';
+import {isImportAction, isRestoreAction, getDialogProperites} from './Utils';
 
 const {dialog, BrowserWindow} = IS_ELECTRON
   ? window.require('electron').remote
@@ -100,16 +100,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   openFile(action) {
-    let properties = [];
-    if (action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER) {
-      properties = ['openDirectory', 'openFile'];
-    } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_COLLECTION) {
-      properties = ['openFile'];
-    } else {
-      properties = ['openDirectory'];
-    }
-    properties.push('createDirectory');
-    properties.push('promptToCreate');
+    const properties = getDialogProperites(action);
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {
@@ -144,9 +135,14 @@ export default class DatabaseExport extends React.Component {
     this.setState({selectedCollections: selected});
   }
 
+  /**
+   * whether the execute button can be clicked
+   *
+   * @returns {*}
+   */
   isExecutable() {
     if (isRestoreAction(this.props.treeAction)) {
-      return this.state.directoryPath && !this.props.isActiveExecuting;
+      return this.state.directoryPath;
     }
     const commandObject = getCommandObject({
       treeNode: this.props.treeNode,
@@ -154,7 +150,7 @@ export default class DatabaseExport extends React.Component {
       state: this.state,
       action: this.props.treeAction
     });
-    return commandObject.length > 0 && this.state.directoryPath && !this.props.isActiveExecuting;
+    return commandObject.length > 0 && this.state.directoryPath;
   }
 
   executing() {
