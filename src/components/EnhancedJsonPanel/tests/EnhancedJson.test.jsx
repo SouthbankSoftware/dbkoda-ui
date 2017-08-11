@@ -17,34 +17,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  *
- *
- * @Author: Chris Trott <chris>
- * @Date:   2017-03-07T10:53:19+11:00
+ * @Author: chris
+ * @Date:   2017-08-10T13:30:31+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-10T14:03:39+10:00
+ * @Last modified time: 2017-08-10T14:22:34+10:00
  */
 
 import React from 'react';
-import ReactJson from 'react-json-view';
-import './style.scss';
+import { shallow } from 'enzyme';
+import { useStrict } from 'mobx';
+// import globalizeInit from '#/tests/helpers/globalize.js';
+import EnhancedJson from '../index.js';
 
-/**
- * Displays JSON in an enhanced form as a seperate output tab
- *  enhancedJson - a JSON object to be represented in the output tab
- */
-export default class Panel extends React.Component {
-  render() {
-    return (<div className="enhanced-json-panel">
-      <ReactJson src={this.props.enhancedJson}
-        theme="hopscotch"
-        indentWidth={2}
-        collapsed={2}
-        collapseStringsAfterLength={40}
-        enableClipboard
-        displayObjectSize
-        displayDataTypes={false}
-         />
-    </div>);
-  }
-}
+describe('Enhanced JSON Tab', () => {
+  let app;
+  const testJson = {};
+
+  beforeAll(() => {
+    useStrict(true);
+    // globalizeInit();
+    app = shallow(<EnhancedJson.wrappedComponent enhancedJson={testJson} />);
+  });
+
+  test('can render', () => {
+    expect(app.find('.react-json-view').length).toEqual(1);
+  });
+});
