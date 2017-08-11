@@ -1,14 +1,37 @@
-/**
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-09T10:29:19+10:00
+ * @Last modified time: 2017-08-11T15:55:28+10:00
  */
 
- import { action, observable, runInAction } from 'mobx';
- import { Broker, EventType } from '~/helpers/broker';
- import { ProfileStatus } from '#/common/Constants';
+import { action, observable, runInAction } from 'mobx';
+import { Broker, EventType } from '~/helpers/broker';
+import { ProfileStatus } from '#/common/Constants';
+
+import { NewToaster } from '#/common/Toaster';
+import { Intent } from '@blueprintjs/core';
+import StaticApi from './static';
 
 export default class OutputApi {
   store;
@@ -151,20 +174,21 @@ export default class OutputApi {
 
   @action.bound
   initJsonView(jsonStr, outputId, displayType) {
-    console.log(`initJsonView(jsonStr,${outputId},${displayType})`);
     this.store.outputPanel.currentTab =
       'EnhancedJson-' + this.store.outputPanel.currentTab;
-    this.store.outputs.get(outputId).enhancedJson = '';
-    // TODO Show loading in Enhanced JSON View
-    const ParseWorker = require('worker-loader!./workers/json-parse.js'); // eslint-disable-line
-    const parseWorker = new ParseWorker();
-    parseWorker.postMessage({ 'cmd': 'start', 'jsonStr': jsonStr });
-    parseWorker.addEventListener('message', (e) => {
+    this.store.outputs.get(outputId)[displayType] = '';
+    const json = StaticApi.parseShellJson(jsonStr).then((result) => {
       runInAction(() => {
-        this.store.outputs.get(outputId).enhancedJson = e.data;
-        console.log(this.store.outputs.get(outputId).enhancedJson);
-        // TODO Hide loading in Enhanced JSON View
+        this.store.outputs.get(outputId)[displayType] = result;
+      });
+    }, (error) => {
+      runInAction(() => {
+        NewToaster.show({ message: 'Could not parse a document from the selected text. ' + error, intent: Intent.DANGER, icon: '' });
+        this.store.outputPanel.currentTab =
+          this.store.outputPanel.currentTab
+            .replace(/EnhancedJson-/, '');
       });
     });
+    this.store.outputs.get(outputId)[displayType] = json;
   }
 }
