@@ -21,23 +21,24 @@
  * @Date:   2017-08-10T13:30:31+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-10T14:22:34+10:00
+ * @Last modified time: 2017-08-11T15:41:10+10:00
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { useStrict } from 'mobx';
 // import globalizeInit from '#/tests/helpers/globalize.js';
-import EnhancedJson from '../index.js';
+import Panel from '../Panel';
 
 describe('Enhanced JSON Tab', () => {
   let app;
-  const testJson = {};
+  const testJson = { 'key': 'value' };
+  console.log(Panel);
 
   beforeAll(() => {
     useStrict(true);
     // globalizeInit();
-    app = shallow(<EnhancedJson.wrappedComponent enhancedJson={testJson} />);
+    app = mount(<Panel enhancedJson={testJson} />);
   });
 
   test('can render', () => {
