@@ -1,1 +1,19 @@
-  { $graphLookup:  { {{#if UseOr}}"$or":[{{/if}} {{#each FilterKeys}}{{#if ../UseOr}}{ {{/if}}{{#if AttributeName}}"{{AttributeName}}":{{{Value}}} {{/if}} {{#if ../UseOr}} }{{/if}}{{#unless last}},{{/unless}}{{/each}}{{#if UseOr}}]{{/if}} }  },
+  {
+   $graphLookup: {
+     {{#if collection              ~}}  from: {{{collection}}},
+      {{/if }}
+      {{#if startWith              ~}}  startWith: {{{startWith}}}, 
+      {{/if }}
+      {{#if connectFromField       ~}}  connectFromField: {{{connectFromField}}}, 
+      {{/if }}
+      {{#if connectToField         ~}}  connectToField: {{{connectToField}}}, 
+      {{/if }}
+      {{#if maxDepth               ~}}  maxDepth: {{{maxDepth}}}, 
+      {{/if }}
+      {{#if depthField              ~}} depthField: {{{depthField}}}, 
+      {{/if }}
+      {{#if restrictSearchWithMatch ~}} restrictSearchWithMatch: {{{restrictSearchWithMatch}}}, 
+      {{/if }}
+      {{#if as                      ~}} as: {{{as}}} {{/if }}
+   }
+}

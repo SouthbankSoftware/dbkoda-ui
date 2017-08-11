@@ -1,22 +1,15 @@
 {
     "Title": "Unwind",
-    "DefaultValues": {},
+    "DefaultValues": {"function":"$dbkodaUnWindPreFill"},
     "Fields": [{
-
         "name": "UnWindAttribute",
         "label": "Array value to unwind",
         "tooltip": "Enter the array value you wish to unwind",
         "type": "Combo",
-        "lookup": "dbkodaListAttributes",
+        "lookup": "dbkodaListAttributesAgg",
         "lookup_arguments": [{
-                "name": "db",
-                "value": "treeNode.parentDB"
-            },
-            {
-                "name": "collection",
-                "value": "treeNode"
-            }
-        ]
-
+            "name": "prevAttributes",
+            "value": "prevAttributes"
+        }]
     }]
 }

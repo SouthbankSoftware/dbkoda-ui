@@ -21,4 +21,5 @@ import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const Facet = {
   dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkoda_listcollections: common.dbkoda_listcollections
 };

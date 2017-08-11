@@ -17,17 +17,12 @@
           "label": "Attribute",
           "tooltip": "Name of the attribute to be filtered",
           "type": "Combo",
-          "lookup": "dbkodaListAttributes",
-          "lookup_arguments": [{
-              "name": "db",
-              "value": "database"
-            },
-            {
-              "name": "collection",
-              "value": "collection"
-            }
-          ]
-
+                "lookup": "dbkodaListAttributesAgg",
+                "lookup_arguments": [{
+                        "name": "prevAttributes",
+                        "value": "prevAttributes"
+                    }
+                ]
         },
         {
           "name": "Value",

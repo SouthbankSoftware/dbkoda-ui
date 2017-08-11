@@ -1,41 +1,53 @@
 {
   "Title": "GraphLookup",
-  "DefaultValues": {},
-  "Fields": [
-    {
-      "name": "UseOr",
-      "label": "Use Or?",
-      "tooltip": "If true, will us OR across filter conditions",
-      "type": "Boolean"
+  "DefaultValues": {}, 
+  "Fields": [{
+      "name": "collection",
+      "label": "Collection to join to",
+      "tooltip": "Lookup data in this collection",
+      "type": "Text"
     },
     {
-      "name": "FilterKeys",
-      "label": "Filter conditions",
-      "type": "Table",
-      "columns": [{
-          "name": "AttributeName",
-          "label": "Attribute",
-          "tooltip": "Name of the attribute to be filtered",
-          "type": "Combo",
-          "lookup": "dbkodaListAttributes",
-          "lookup_arguments": [{
-              "name": "db",
-              "value": "treeNode.parentDB"
-            },
-            {
-              "name": "collection",
-              "value": "treeNode"
-            }
-          ]
-
-        },
-        {
-          "name": "Value",
-          "label": "Value to filter",
-          "type": "Text",
-          "tooltip": "Enter the value to search for (quote strings please)"
-        }
-      ]
+      "name": "startWith",
+      "label": "Starting value ",
+      "tooltip": "Value that defines the top of the graph",
+      "type": "Text"
+    },
+    {
+      "name": "connectFromField",
+      "label": "connect From Field",
+      "tooltip": "Field in the parent document",
+      "type": "Text"
+    },
+    {
+      "name": "connectToField",
+      "label": "connect To Field",
+      "tooltip": "Field in the child document",
+      "type": "Text"
+    },
+    {
+      "name": "as",
+      "label": "as",
+      "tooltip": "Field which will receive the graph output",
+      "type": "Text"
+    },
+    {
+      "name": "maxDepth",
+      "label": "max Depth",
+      "tooltip": "maximum depth of the graph",
+      "type": "Text"
+    },
+    {
+      "name": "depthField",
+      "label": "Depth field",
+      "tooltip": "output Field that will hold the depth",
+      "type": "Text"
+    },
+    {
+      "name": "restrictSearchWithMatch",
+      "label": "Restrict search with Match",
+      "tooltip": "Query filter that further restricts output",
+      "type": "Text"
     }
   ]
 }
