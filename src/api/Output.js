@@ -22,7 +22,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T14:50:08+10:00
+ * @Last modified time: 2017-08-11T15:55:28+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -177,7 +177,7 @@ export default class OutputApi {
     this.store.outputPanel.currentTab =
       'EnhancedJson-' + this.store.outputPanel.currentTab;
     this.store.outputs.get(outputId)[displayType] = '';
-    const json = StaticApi.parseShellJson(jsonStr, (result) => {
+    const json = StaticApi.parseShellJson(jsonStr).then((result) => {
       runInAction(() => {
         this.store.outputs.get(outputId)[displayType] = result;
       });
