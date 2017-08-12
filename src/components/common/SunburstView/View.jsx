@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-11T16:25:01+10:00
+ * @Last modified time: 2017-08-11T16:58:14+10:00
  */
 
 /*
@@ -272,11 +272,14 @@ export default class View extends React.Component {
   }
   getPercentageString(d, bTotal) {
     let percentage;
-    if (d && bTotal) {                  // calculate the percentage of selected node w.r.t. Total Storage
+    if (d && bTotal) {
+      // calculate the percentage of selected node w.r.t. Total Storage
       percentage = (100 * d.value / this.dataRoot.value).toPrecision(3);
-    } else if (d && d != this.root) {   // calculate the percentage of selected node w.r.t. selected root
+    } else if (d && d != this.root) {
+      // calculate the percentage of selected node w.r.t. selected root
       percentage = (100 * d.value / this.root.value).toPrecision(3);
-    } else {                            // calculate the percentage of selected root node w.r.t. Total Storage
+    } else {
+      // calculate the percentage of selected root node w.r.t. Total Storage
       percentage = (100 * this.root.value / this.dataRoot.value).toPrecision(3);
     }
     let percentageString = percentage + '%';
@@ -302,6 +305,9 @@ export default class View extends React.Component {
       .append('tr')
       .classed('theadRowColor', d => d.colour !== undefined)
       .style('background-color', d => d.colour || 'none')
+      .style('color', (d) => {
+        return this.getTextColor(d.colour);
+      })
       .html(d => `<th>${d.data.name}</th><th>${filesize(d.value)}</th>`);
 
     // row
@@ -315,6 +321,9 @@ export default class View extends React.Component {
         .append('tr')
         .classed('tbodyRowColor', d => d.colour !== undefined)
         .style('background-color', d => d.colour || 'none')
+        .style('color', (d) => {
+          return this.getTextColor(d.colour);
+        })
         .html(d => `<td>${d.data.name}</td><td>${filesize(d.value)}</td>`);
     }
   }
@@ -330,7 +339,9 @@ export default class View extends React.Component {
     } else {
       this.view.select('.parent').text(this.root.data.name);
     }
-
+    this.view
+      .select('.explanation')
+      .style('color', this.getTextColor(this.root.colour));
     this.view.select('.explanation').style('visibility', '');
   }
 
@@ -397,6 +408,21 @@ export default class View extends React.Component {
     return points.join(' ');
   }
 
+  getTextColor(hex) {
+    const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (rgb) {
+      const o = Math.round(
+        (parseInt(rgb[1], 16) * 299 +
+          parseInt(rgb[2], 16) * 587 +
+          parseInt(rgb[3], 16) * 114) /
+          1000,
+      );
+      if (o > 125) {
+        return '#202020';
+      }
+    }
+    return '#BFBEC0';
+  }
   getBreadcrumbWidth(d) {
     return d.data && d.data.name ? d.data.name.length * 8 + 10 : b.w;
   }
@@ -435,6 +461,9 @@ export default class View extends React.Component {
       .attr('text-anchor', 'middle')
       .text((d) => {
         return d.data.name;
+      })
+      .style('fill', (d) => {
+        return this.getTextColor(d.colour);
       })
       .on('click', this.props.onBreadCrumbClick);
 
