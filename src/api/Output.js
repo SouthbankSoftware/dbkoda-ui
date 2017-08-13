@@ -22,7 +22,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T16:43:40+10:00
+ * @Last modified time: 2017-08-14T09:15:17+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -184,7 +184,7 @@ export default class OutputApi {
     }, (error) => {
       runInAction(() => {
         NewToaster.show({
-          message: globalString('output/editor/parseJsonError') + error.substring(0,50),
+          message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
           intent: Intent.DANGER,
           icon: ''
         });

@@ -23,7 +23,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T16:29:37+10:00
+ * @Last modified time: 2017-08-14T09:15:43+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -180,7 +180,7 @@ export default class Panel extends React.Component {
               key={'EnhancedJson-' + editor[1].id}
               id={'EnhancedJson-' + editor[1].id}
               title={'EnhancedJson-' + editorTitle}
-              panel={(loading)?<p>Loading...</p>:<EnhancedJson enhancedJson={this.props.store.outputs.get(editor[1].id).enhancedJson} />}
+              panel={(loading) ? <p>Loading...</p> : <EnhancedJson enhancedJson={this.props.store.outputs.get(editor[1].id).enhancedJson} />}
             />
           );
         }
