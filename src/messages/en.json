@@ -22,7 +22,8 @@
       },
       "editor": {
         "restoreSession": "** Session Restored **\r",
-        "contextJson": "Enhanced JSON View"
+        "contextJson": "Enhanced JSON View",
+        "parseJsonError": "Could not parse a document from the selected text. "
       },
       "terminal": {
         "execute": "Execute Command (Enter)"

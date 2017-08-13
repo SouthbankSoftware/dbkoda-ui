@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-09T12:01:45+10:00
+ * @Last modified time: 2017-08-11T16:22:47+10:00
 */
 
 import React from 'react';
@@ -127,7 +127,7 @@ export default class Editor extends React.Component {
     const currentJson = this.getClickedDocument(event.target, coords);
 
     return (
-      <Menu className="editorTabContentMenu">
+      <Menu className="outputContextMenu">
         <div className="menuItemWrapper showJsonView">
           <MenuItem
             onClick={() => {
