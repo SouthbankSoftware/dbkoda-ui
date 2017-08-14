@@ -41,7 +41,12 @@
                     "Label": "Aggregation",
                     "type": "Combo",
                     "tooltip": "Aggregation Operation",
-                    "lookup": "dbkodaAggOperators"
+                    "lookup": "dbkodaAggOperators",
+                    "lookup_arguments": [{
+                        "name": "db",
+                        "value": "database"
+                        }
+                    ]
                 }]
         }
   ]
