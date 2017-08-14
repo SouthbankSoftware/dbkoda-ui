@@ -16,14 +16,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
+ *
+ *
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-14T09:15:43+10:00
+ * @Last modified time: 2017-08-14T13:34:41+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -47,7 +46,9 @@ import { EnhancedJson } from '../EnhancedJsonPanel';
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { enhancedJson: '' };
+    this.editorRefs = [];
+    this.setEditorRef = this.setEditorRef.bind(this);
+    this.getDocumentAtLine = this.getDocumentAtLine.bind(this);
     /**
      * Reaction function for when the active editorPanel is changed,
      * update the active outputPanel
@@ -105,6 +106,50 @@ export default class Panel extends React.Component {
     });
   }
 
+  setEditorRef(editorId, cmRef) {
+    this.editorRefs[editorId] = cmRef;
+  }
+
+  getDocumentAtLine(editorId, lineNumber) {
+    const cm = this.editorRefs[editorId].getCodeMirror();
+    const startLine = cm.getLine(lineNumber);
+    // There is a selection in CodeMirror
+    if (cm.somethingSelected()) {
+      return cm.getSelection();
+    }
+    // This is a single-line document
+    if (startLine[0] === '{') {
+      if (startLine[startLine.length - 1] === '}') {
+        return startLine;
+      }
+      // Only need to iterate downwards
+      return this._getLineText(cm, lineNumber, 1);
+    }
+    // Parse Multi-line documents
+    return (
+      this._getLineText(cm, lineNumber - 1, -1) +
+        this._getLineText(cm, lineNumber, 1)
+    );
+  }
+
+  _getLineText(cm, lineNumber, direction) {
+    let line = cm.getLine(lineNumber);
+    const indentation = line.search(/\S|$/);
+    const brace = direction === -1 ? '{' : '}';
+
+    if (indentation < 1 && line[0] === brace) {
+      return line;
+    }
+
+    if (direction === -1) {
+      line = this._getLineText(cm, lineNumber + direction, direction) + line;
+    } else {
+      line += this._getLineText(cm, lineNumber + direction, direction);
+    }
+
+    return line;
+  }
+
   /**
    * Updates the active tab state for the Output view
    * @param {string} newTab - The html id of the new active tab
@@ -154,6 +199,8 @@ export default class Panel extends React.Component {
               initialMsg={editor[1].initialMsg}
               shellId={editor[1].shellId}
               tabClassName={tabClassName}
+              setEditorRef={this.setEditorRef}
+              getDocumentAtLine={this.getDocumentAtLine}
             />
           }
         />
@@ -267,7 +314,13 @@ export default class Panel extends React.Component {
             key={0}
             className={defaultVisible}
             id="Default"
-            panel={<OutputEditor title="Default" id="Default" shellId={0} />}
+            panel={
+              <OutputEditor
+                title="Default"
+                id="Default"
+                shellId={0}
+                setEditorRef={this.setEditorRef} />
+            }
             title="Default"
           />
           {this.renderTabs(this.props.store.editors.entries())}

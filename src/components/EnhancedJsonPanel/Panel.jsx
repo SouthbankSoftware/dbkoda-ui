@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-10T14:03:39+10:00
+ * @Last modified time: 2017-08-14T09:50:06+10:00
  */
 
 import React from 'react';
@@ -34,8 +34,19 @@ import './style.scss';
  *  enhancedJson - a JSON object to be represented in the output tab
  */
 export default class Panel extends React.Component {
+  getNextDoc() {
+    console.log('next');
+  }
+
+  getPreviousDoc() {
+    console.log('prev');
+  }
+
   render() {
+    console.log(this.props.enhancedJson);
     return (<div className="enhanced-json-panel">
+      <button type="button" id="enhancedJsonPrevBtn" className="pt-button pt-icon-arrow-left" onClick={this.getPreviousDoc}>Previous</button>
+      <button type="button" id="enhancedJsonNextBtn" className="pt-button pt-icon-arrow-right" onClick={this.getNextDoc}>Next</button>
       <ReactJson src={this.props.enhancedJson}
         theme="hopscotch"
         indentWidth={2}
