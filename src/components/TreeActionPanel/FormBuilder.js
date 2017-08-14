@@ -256,7 +256,6 @@ export default class FormBuilder {
                 } else if (!resOpts) {
                   resOpts = resQueries;
                 }
-                console.log('!: ', resOpts);
                 if (formFunctions[fldQuery.parseFn]) {
                   try {
                     arrOptions = [''].concat(
@@ -271,7 +270,6 @@ export default class FormBuilder {
                 } else {
                   result.options[fldName] = { dropdown: arrOptions };
                 }
-                console.log(result.options[fldName]);
               }
             }
             resolve(result);

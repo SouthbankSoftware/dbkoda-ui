@@ -36,6 +36,7 @@ import DragIcon from '../../../styles/icons/drag-icon.svg';
 import BlockIcon from '../../../styles/icons/center-block.svg';
 import BlockTopIcon from '../../../styles/icons/round-top-block.svg';
 import BlockBottomIcon from '../../../styles/icons/round-bottom-block.svg';
+import CloseIcon from '../../../styles/icons/close-profile-icon.svg';
 import '../style.scss';
 
 /** ===| Drag Drop Functions |=== **/
@@ -123,10 +124,13 @@ export default class Block extends React.Component {
     this.state.color = 'color_' + this.props.color;
     const classes = 'aggregateBlock ' + this.state.type + ' ' + this.state.listPosition + ' selected_' + this.props.selected;
     let blockColorClasses;
-    if (this.state.status === 'pending') {
+    let closeColorClasses;
+    if (this.props.status === 'pending') {
       blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' invalid';
+      closeColorClasses = 'closeBlockIcon invalid';
     } else {
       blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
+      closeColorClasses = 'closeBlockIcon ' + this.state.color;
     }
     return connectDragSource(
       connectDropTarget(
@@ -146,6 +150,8 @@ export default class Block extends React.Component {
               <p className="aggregateBlockTitle">
                 ${this.props.type.toLowerCase()}
               </p>
+              <CloseIcon className={closeColorClasses}
+                onClick={() => this.props.onClickCloseCallback(this.state.listPosition)} />
             </div>
           }
           {this.state.concrete && this.props.positionType === 'END' &&
@@ -155,6 +161,8 @@ export default class Block extends React.Component {
               <p className="aggregateBlockTitle">
                 ${this.props.type.toLowerCase()}
               </p>
+              <CloseIcon className={closeColorClasses}
+                onClick={() => this.props.onClickCloseCallback(this.state.listPosition)} />
             </div>
           }
           {this.state.concrete && this.props.positionType === 'START' &&
@@ -164,6 +172,8 @@ export default class Block extends React.Component {
               <p className="aggregateBlockTitle">
                 ${this.props.type.toLowerCase()}
               </p>
+              <CloseIcon className={closeColorClasses}
+                onClick={() => this.props.onClickCloseCallback(this.state.listPosition)} />
             </div>
           }
 
