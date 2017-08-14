@@ -18,14 +18,13 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /**
+/**
   * @Author: Wahaj Shamim <wahaj>
   * @Date:   2017-07-13T10:36:10+10:00
   * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
  * @Last modified time: 2017-07-26T13:48:06+10:00
   */
-
 
 import Store from '~/stores/global';
 import DataCenter from '~/api/DataCenter';
@@ -53,7 +52,7 @@ Broker.once(EventType.APP_READY, () => {
           <Component />
         </Provider>
       </AppContainer>,
-      rootEl
+      rootEl,
     );
   };
 
@@ -64,13 +63,12 @@ Broker.once(EventType.APP_READY, () => {
       console.log('Recovering with clean state store.');
       store = new Store();
       api = new DataCenter(store);
-      store.setAPI(api);    // TODO: Remove this line after complete migration to API
+      store.setAPI(api); // TODO: Remove this line after complete migration to API
       render(App);
     }
   };
 
   renderWithCleanStore();
-
   // Hot Module Replacement API
   if (module.hot) {
     module.hot.accept('./components/App', () => {
@@ -92,16 +90,13 @@ window.addEventListener('beforeunload', (event) => {
     const { dialog } = remote;
     const currentWindow = remote.getCurrentWindow();
 
-    if (
-      !remote.getGlobal('UAT') &&
-      store.hasUnsavedEditorTabs()
-    ) {
+    if (!remote.getGlobal('UAT') && store.hasUnsavedEditorTabs()) {
       const response = dialog.showMessageBox(currentWindow, {
         type: 'question',
         buttons: ['Yes', 'No'],
         title: 'Confirm',
         message:
-          'You have unsaved editor tabs. Are you sure you want to continue?'
+          'You have unsaved editor tabs. Are you sure you want to continue?',
       });
 
       if (response === 1) {
@@ -126,7 +121,7 @@ window.addEventListener('beforeunload', (event) => {
 
 store = new Store();
 api = new DataCenter(store);
-store.setAPI(api);    // TODO: Remove this line after complete migration to API
+store.setAPI(api); // TODO: Remove this line after complete migration to API
 window.api = api;
 window.store = store;
 window.mobx = mobx;
