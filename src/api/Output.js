@@ -22,7 +22,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T15:55:28+10:00
+ * @Last modified time: 2017-08-14T09:15:17+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -177,18 +177,21 @@ export default class OutputApi {
     this.store.outputPanel.currentTab =
       'EnhancedJson-' + this.store.outputPanel.currentTab;
     this.store.outputs.get(outputId)[displayType] = '';
-    const json = StaticApi.parseShellJson(jsonStr).then((result) => {
+    StaticApi.parseShellJson(jsonStr).then((result) => {
       runInAction(() => {
         this.store.outputs.get(outputId)[displayType] = result;
       });
     }, (error) => {
       runInAction(() => {
-        NewToaster.show({ message: 'Could not parse a document from the selected text. ' + error, intent: Intent.DANGER, icon: '' });
+        NewToaster.show({
+          message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+          intent: Intent.DANGER,
+          icon: ''
+        });
         this.store.outputPanel.currentTab =
           this.store.outputPanel.currentTab
             .replace(/EnhancedJson-/, '');
       });
     });
-    this.store.outputs.get(outputId)[displayType] = json;
   }
 }

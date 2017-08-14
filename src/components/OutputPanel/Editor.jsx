@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-09T12:01:45+10:00
+ * @Last modified time: 2017-08-14T12:43:43+10:00
 */
 
 import React from 'react';
@@ -56,11 +56,15 @@ export default class Editor extends React.Component {
    *    @param {Object} store - The mobx global store object (injected)
    */
 
-   constructor(props) {
-     super(props);
-     this.renderContextMenu = this.renderContextMenu.bind(this);
-     this._getLineText = this._getLineText.bind(this);
-   }
+  constructor(props) {
+    super(props);
+    this.renderContextMenu = this.renderContextMenu.bind(this);
+    this.getClickedDocument = this.getClickedDocument.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.setEditorRef(this.props.id, this.editor);
+  }
 
   /**
    * Action for handling a drop event from a drag-and-drop action.
@@ -85,49 +89,18 @@ export default class Editor extends React.Component {
     }
   }
 
-  getClickedDocument(target, coords) {
+  getClickedDocument(coords) {
     const cm = this.editor.getCodeMirror();
     const lineNumber = cm.lineAtHeight(coords.y);
-    const startLine = cm.getLine(lineNumber);
-    // There is a selection in CodeMirror
-    if (cm.somethingSelected()) {
-      return cm.getSelection();
-    }
-    // This is a single-line document
-    if (startLine[0] === '{' && startLine[startLine.length - 1] === '}') {
-      return startLine;
-    }
-    // Parse Multi-line documents
-    return (
-      this._getLineText(cm, lineNumber - 1, -1) +
-        this._getLineText(cm, lineNumber, 1)
-    );
-  }
-
-  _getLineText(cm, lineNumber, direction) {
-    let line = cm.getLine(lineNumber);
-    const indentation = line.search(/\S|$/);
-    const brace = direction === -1 ? '{' : '}';
-
-    if (indentation < 1 && line[0] === brace) {
-      return line;
-    }
-
-    if (direction === -1) {
-      line = this._getLineText(cm, lineNumber + direction, direction) + line;
-    } else {
-      line += this._getLineText(cm, lineNumber + direction, direction);
-    }
-
-    return line;
+    return this.props.getDocumentAtLine(this.props.id, lineNumber);
   }
 
   renderContextMenu(event) {
     const coords = { x: event.clientX, y: event.clientY };
-    const currentJson = this.getClickedDocument(event.target, coords);
+    const currentJson = this.getClickedDocument(coords);
 
     return (
-      <Menu className="editorTabContentMenu">
+      <Menu className="outputContextMenu">
         <div className="menuItemWrapper showJsonView">
           <MenuItem
             onClick={() => {
