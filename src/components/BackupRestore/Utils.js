@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import os from 'os';
 import {BackupRestoreActions} from '../common/Constants';
 
 export const isDumpAction = action => BackupRestoreActions.DUMP_COLLECTION === action || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_SERVER;
@@ -34,3 +36,22 @@ export const isCollectionAction = treeAction => treeAction === BackupRestoreActi
 
 export const isDatabaseAction = treeAction => treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE
 || treeAction === BackupRestoreActions.RESTORE_DATABASE || treeAction === BackupRestoreActions.IMPORT_DATABASE;
+
+export const getDialogProperites = (action) => {
+  let properties = [];
+  if (action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER) {
+    if (os.platform() === 'darwin') {
+      properties = ['openDirectory', 'openFile'];
+    } else {
+      // On Windows and Linux an open dialog can not be both a file selector and a directory selector, so if you set properties to ['openFile', 'openDirectory'] on these platforms, a directory selector will be shown.
+      properties = ['openDirectory'];
+    }
+  } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_COLLECTION) {
+    properties = ['openFile'];
+  } else {
+    properties = ['openDirectory'];
+  }
+  properties.push('createDirectory');
+  properties.push('promptToCreate');
+  return properties;
+};
