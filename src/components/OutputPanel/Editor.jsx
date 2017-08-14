@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T16:22:47+10:00
+ * @Last modified time: 2017-08-14T10:01:04+10:00
 */
 
 import React from 'react';
@@ -94,8 +94,12 @@ export default class Editor extends React.Component {
       return cm.getSelection();
     }
     // This is a single-line document
-    if (startLine[0] === '{' && startLine[startLine.length - 1] === '}') {
-      return startLine;
+    if (startLine[0] === '{') {
+      if (startLine[startLine.length - 1] === '}') {
+        return startLine;
+      }
+      // Only need to iterate downwards
+      return this._getLineText(cm, lineNumber, 1);
     }
     // Parse Multi-line documents
     return (
