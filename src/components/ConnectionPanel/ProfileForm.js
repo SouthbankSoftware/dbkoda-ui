@@ -32,7 +32,6 @@ import _ from 'lodash';
 import autobind from 'autobind-decorator';
 
 export class ProfileForm extends MobxReactForm {
-
   static mongoProtocol = 'mongodb://';
 
   onInit() {
@@ -40,24 +39,24 @@ export class ProfileForm extends MobxReactForm {
 
     this.$('hostRadio').observe({
       key: 'value',
-      call: ({form, change}) => {
+      call: ({ form, change }) => {
         this.addHostRules(form, change.newValue);
         form.validate();
       },
     });
     this.$('urlRadio').observe({
       key: 'value',
-      call: ({form, change}) => {
+      call: ({ form, change }) => {
         this.addUrlRules(form, change.newValue);
         form.validate();
       },
     });
     this.$('sha').observe({
       key: 'value',
-      call: ({form, change}) => {
+      call: ({ form, change }) => {
         this.addAuthenticationRules(form, change.newValue);
         form.validate();
-      }
+      },
     });
   }
 
@@ -91,21 +90,21 @@ export class ProfileForm extends MobxReactForm {
 
   @autobind
   onSuccess(form) {
-    this.connect({...this.createFormData(form), test: false});
+    this.connect({ ...this.createFormData(form), test: false });
   }
 
   @autobind
   onTest() {
-    this.test({...this.createFormData(this), test: true});
+    this.test({ ...this.createFormData(this), test: true });
   }
 
   @autobind
   onSave() {
-    this.save({...this.createFormData(this)});
+    this.save({ ...this.createFormData(this) });
   }
 
   createFormData(form) {
-    const formValues = {...form.values()};
+    const formValues = { ...form.values() };
     return {
       ...formValues,
       authorization: true,
@@ -140,65 +139,76 @@ export class ProfileForm extends MobxReactForm {
       },
     };
   }
-
 }
 
 export const Form = {
-  fields: [{
-    name: 'alias',
-    label: 'Alias',
-    placeholder: 'Alias',
-    value: 'Connection - 1',
-    type: 'text',
-    rules: 'required|string',
-  }, {
-    name: 'hostRadio',
-    value: false,
-    label: 'Host',
-  }, {
-    name: 'host',
-    placeholder: 'Hostname',
-    value: 'localhost',
-    type: 'text',
-    rules: 'string',
-    label: 'Host',
-  }, {
-    name: 'port',
-    type: 'number',
-    rules: 'numeric',
-    value: '27017',
-    label: ':',
-  }, {
-    name: 'urlRadio',
-    label: 'URI',
-    value: true,
-  }, {
-    name: 'url',
-    label: 'URI',
-    placeholder: 'mongodb://',
-    rules: 'regex:/^mongodb:///',
-    value: 'mongodb://',
-  }, {
-    name: 'database',
-    label: 'Database',
-    value: 'admin',
-  }, {
-    name: 'ssl',
-    label: 'SSL',
-  }, {
-    name: 'sha',
-    value: false,
-    label: 'SCRAM-SHA-1(username/password)',
-  }, {
-    name: 'username',
-    label: 'Username',
-    placeholder: 'Username',
-  }, {
-    name: 'password',
-    label: 'Password',
-    placeholder: 'Password',
-    type: 'password',
-  }]
+  fields: [
+    {
+      name: 'alias',
+      label: 'Alias',
+      placeholder: 'Alias',
+      value: 'Connection - 1',
+      type: 'text',
+      rules: 'required|string',
+    },
+    {
+      name: 'hostRadio',
+      value: false,
+      label: 'Host',
+    },
+    {
+      name: 'host',
+      placeholder: 'Hostname',
+      value: 'localhost',
+      type: 'text',
+      rules: 'string',
+      label: 'Host',
+    },
+    {
+      name: 'port',
+      type: 'number',
+      rules: 'numeric',
+      value: '27017',
+      label: ':',
+    },
+    {
+      name: 'urlRadio',
+      label: 'URI',
+      value: true,
+    },
+    {
+      name: 'url',
+      label: 'URI',
+      placeholder: 'mongodb://',
+      rules: 'regex:/^mongodb:///',
+      value: 'mongodb://',
+    },
+    {
+      name: 'database',
+      label: 'Database',
+      value: 'admin',
+    },
+    {
+      name: 'ssl',
+      label: 'SSL',
+    },
+    {
+      name: 'sha',
+      value: false,
+      label: 'SCRAM-SHA-1(username/password)',
+    },
+    {
+      name: 'username',
+      label: 'Username',
+      placeholder: 'Username',
+    },
+    {
+      name: 'password',
+      label: 'Password',
+      placeholder: 'Password',
+      type: 'password',
+    },
+  ],
 };
 
 export const createFormFromProfile = (profile) => {
@@ -223,6 +233,7 @@ export const createFormFromProfile = (profile) => {
  * @param formData
  */
 export const createForm = (profile = null) => {
-  const formData = profile === null ? Form.fields : createFormFromProfile(profile);
-  return new ProfileForm({fields: formData});
+  const formData =
+    profile === null ? Form.fields : createFormFromProfile(profile);
+  return new ProfileForm({ fields: formData });
 };
