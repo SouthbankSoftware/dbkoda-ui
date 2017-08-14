@@ -38,4 +38,7 @@ export const AggregateCommands = {
   GET_ATTRIBUTES: (id, stepIndex) => {
     return 'dbk_agg.getAttributes(\'' + id + '\',\'' + stepIndex + '\')';
   },
+  SET_ALL_STEPS: (id, stepArray) => {
+    return 'dbk_agg.setAllSteps(\'' + id + '\',' + stepArray + ')';
+  }
 };

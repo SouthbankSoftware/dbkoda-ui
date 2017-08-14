@@ -9,12 +9,12 @@ div.aggregateGraphicalBuilderWrapper {
   text-align: center;
   height: 85%;
   a.showLeftPanelButton {
-   position: absolute;
-   top: 10px;
-   left: 10px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
   }
   h2 {
-    padding-top: 40%
+    padding-top: 40%;
   }
   ul.graphicalBuilderBlockList {
     overflow-y: auto;
@@ -44,14 +44,13 @@ div.aggregateGraphicalBuilderWrapper {
         svg.dbKodaSVG {
           position: absolute;
           width: 180px;
-          left:0px;
+          left: 0px;
           z-index: 3;
         }
         svg.dbKodaSVG:hover {
           opacity: 0.75;
         }
         svg.START {
-
         }
         svg.MIDDLE {
           path.st0 {
@@ -64,10 +63,21 @@ div.aggregateGraphicalBuilderWrapper {
           }
         }
         p.aggregateBlockTitle {
+          pointer-events: none;
           position: absolute;
           left: 60px;
           top: 10px;
           z-index: 5;
+        }
+        svg.closeBlockIcon {
+          position: absolute;
+          width: 25px;
+          left: 145px;
+          top: 10px;
+          z-index: 5;
+        }
+        svg.closeBlockIcon:hover {
+          fill: $white;
         }
       }
     }
@@ -81,7 +91,7 @@ div.aggregateGraphicalBuilderWrapper {
   }
   div.divider {
     order: 2;
-    width:15px;
+    width: 15px;
     background-color: $tabBackground;
   }
 }
@@ -91,10 +101,10 @@ div.Pane.vertical.Pane1 {
     div.aggregateLeftPanel {
       display: flex;
       flex-direction: column;
-      height:100%;
+      height: 100%;
       font-family: Arial, Helvetica, sans-serif;
       div.aggregatePaletteWrapper {
-        order:1;
+        order: 1;
         flex-grow: 1;
         color: $navbarLeftHeading;
         nav.aggregatePaletteToolbar {
@@ -107,8 +117,9 @@ div.Pane.vertical.Pane1 {
           }
         }
         div.aggregatePaletteContent {
-          p { 
-
+          height: 100%;
+          overflow: auto;
+          p {
           }
           ul.aggregateBlockList {
             list-style-type: none;
@@ -124,27 +135,28 @@ div.Pane.vertical.Pane1 {
                 display: flex;
                 flex-direction: row;
                 height: 100%;
-                width:100%;
+                width: 100%;
                 cursor: all-scroll;
                 flex-grow: 1;
                 div.blockPalletteWrapper {
                   display: flex;
                   flex-direction: row;
                   height: 100%;
-                  width:100%;
+                  width: 100%;
                   cursor: all-scroll;
                   flex-grow: 1;
                   svg.dbKodaSVG {
-                  width: 15px;
-                  fill: $aggregateBlockFontColor;
-                  margin-left: 20px;
-                  padding-bottom: 10px;
-                  cursor: copy;
+                    width: 15px;
+                    fill: $aggregateBlockFontColor;
+                    margin-left: 20px;
+                    padding-bottom: 10px;
+                    cursor: copy;
                   }
                   svg.dbKodaSVG:hover {
                     fill: $aggregateBlockFontColorHover;
                   }
                   p.aggregateBlockTitle {
+                    pointer-events: none;
                     cursor: inherit;
                     user-select: none;
                     font-size: smaller;
@@ -156,9 +168,9 @@ div.Pane.vertical.Pane1 {
               }
             }
             li.aggregateBlockWrapper:hover {
-                background-color: $aggregateBlockBackgroundHover;
-                color: $aggregateBlockFontColorHover;
-            } 
+              background-color: $aggregateBlockBackgroundHover;
+              color: $aggregateBlockFontColorHover;
+            }
           }
         }
       }
@@ -231,7 +243,7 @@ svg.color_3 {
 svg.color_4 {
   fill: $colourFive;
   circle {
-    fill: $highlightOne;
+    fill: $highlightFive;
   }
 }
 svg.color_5 {
@@ -307,3 +319,78 @@ svg.color_16 {
   }
 }
 
+svg.closeBlockIcon.color_0 {
+  fill: $highlightOne;
+}
+svg.closeBlockIcon.color_1 {
+  fill: $highlightTwo;
+}
+svg.closeBlockIcon.color_2 {
+  fill: $highlightThree;
+}
+svg.closeBlockIcon.color_3 {
+  fill: $highlightFour;
+}
+svg.closeBlockIcon.color_4 {
+  fill: $highlightFive;
+}
+svg.closeBlockIcon.color_5 {
+  fill: $highlightSix;
+}
+svg.closeBlockIcon.color_6 {
+  fill: $highlightSeven;
+}
+svg.closeBlockIcon.color_7 {
+  fill: $highlightEight;
+}
+svg.closeBlockIcon.color_8 {
+  fill: $highlightNine;
+}
+svg.closeBlockIcon.color_9 {
+  fill: $colourTen;
+  circle {
+    fill: $highlightTen;
+  }
+}
+svg.closeBlockIcon.color_10 {
+  fill: $colourEleven;
+  circle {
+    fill: $highlightEleven;
+  }
+}
+svg.closeBlockIcon.color_11 {
+  fill: $colourTwelve;
+  circle {
+    fill: $highlightTwelve;
+  }
+}
+svg.closeBlockIcon.color_12 {
+  fill: $colourThirteen;
+  circle {
+    fill: $highlightThirteen;
+  }
+}
+svg.closeBlockIcon.color_13 {
+  fill: $colourFourteen;
+  circle {
+    fill: $highlightFourteen;
+  }
+}
+svg.closeBlockIcon.color_14 {
+  fill: $colourFifteen;
+  circle {
+    fill: $highlightFifteen;
+  }
+}
+svg.closeBlockIcon.color_15 {
+  fill: $colourSixteen;
+  circle {
+    fill: $highlightSixteen;
+  }
+}
+svg.closeBlockIconcolor_16 {
+  fill: $colourSeventeen;
+  circle {
+    fill: $highlightSeventeen;
+  }
+}
