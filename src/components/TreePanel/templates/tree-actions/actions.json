@@ -160,6 +160,12 @@
       "noDialog": true
     },
     {
+      "name": "AggregateBuilder",
+      "text": "Aggregate Builder",
+      "icon": "pt-icon-search-template",
+      "noDialog": true
+    },
+    {
       "name": "SimpleQuery",
       "text": "Simple Query",
       "icon": "pt-icon-search-template"

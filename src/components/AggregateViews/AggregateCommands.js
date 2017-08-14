@@ -26,19 +26,20 @@
  * @Last modified time: 2017-08-08 17:04:26
 */
 
-
-
 export const AggregateCommands = {
   NEW_AGG_BUILDER: (db, coll) => {
-    return 'dbk_agg.newAggBuilder(\'' + db + '\',\'' + coll + '\')';
+    return "dbk_agg.newAggBuilder('" + db + "','" + coll + "')";
   },
   ADD_STEP: (id, stepJSON) => {
-    return 'dbk_agg.addStep(\'' + id + '\',' + JSON.stringify(stepJSON) + ')';
+    return "dbk_agg.addStep('" + id + "'," + JSON.stringify(stepJSON) + ')';
   },
   GET_ATTRIBUTES: (id, stepIndex) => {
-    return 'dbk_agg.getAttributes(\'' + id + '\',\'' + stepIndex + '\')';
+    return "dbk_agg.getAttributes('" + id + "','" + stepIndex + "')";
   },
   SET_ALL_STEPS: (id, stepArray) => {
-    return 'dbk_agg.setAllSteps(\'' + id + '\',' + stepArray + ')';
-  }
+    return "dbk_agg.setAllSteps('" + id + "',[" + stepArray + '])';
+  },
+  GET_STATUS: (id) => {
+    return "dbk_agg.getAggStatus('" + id + "')";
+  },
 };

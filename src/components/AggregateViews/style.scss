@@ -11,7 +11,8 @@ div.aggregateGraphicalBuilderWrapper {
   a.showLeftPanelButton {
     position: absolute;
     top: 10px;
-    left: 10px;
+    left: 80%;
+    z-index: 10;
   }
   h2 {
     padding-top: 40%;
@@ -177,6 +178,7 @@ div.Pane.vertical.Pane1 {
       div.aggregateDetailsWrapper {
         order: 2;
         flex-grow: 1;
+        overflow-y: auto;
         color: $navbarLeftHeading;
         nav.aggregateDetailsToolbar {
           background-color: $navbarLeftBackground;
@@ -188,6 +190,13 @@ div.Pane.vertical.Pane1 {
           }
         }
         div.aggregateDetailsContent {
+          div {
+            div {
+              form {
+                height: unset;
+              }
+            }
+          }
           p {
             padding-top: 10px;
             padding-left: 10px;
