@@ -1,29 +1,36 @@
 {
   "shard": [],
-  "shards": [{
-    "name": "EnableBalancer",
-    "text": "Enable Balancer",
-    "icon": "pt-icon-split-columns"
-  }, {
-    "name": "ShardStats",
-    "text": "Shard Statistics",
-    "icon": "pt-icon-grouped-bar-chart",
-    "view": "details"
-  }, {
-    "name": "shstatus",
-    "text": "sh.status()",
-    "icon": "pt-icon-split-columns"
-  }],
-  "group_shards": [{
-    "name": "EnableBalancer",
-    "text": "Enable Balancer",
-    "icon": "pt-icon-split-columns"
-  }],
+  "shards": [
+    {
+      "name": "EnableBalancer",
+      "text": "Enable Balancer",
+      "icon": "pt-icon-split-columns"
+    },
+    {
+      "name": "ShardStats",
+      "text": "Shard Statistics",
+      "icon": "pt-icon-grouped-bar-chart",
+      "view": "details"
+    },
+    {
+      "name": "shstatus",
+      "text": "sh.status()",
+      "icon": "pt-icon-split-columns"
+    }
+  ],
+  "group_shards": [
+    {
+      "name": "EnableBalancer",
+      "text": "Enable Balancer",
+      "icon": "pt-icon-split-columns"
+    }
+  ],
   "configservers": [],
   "config": [],
   "routers": [],
   "mongos": [],
-  "databases": [{
+  "databases": [
+    {
       "name": "GetParameters",
       "text": "Get Parameters",
       "icon": "pt-icon-settings"
@@ -58,14 +65,12 @@
       "text": "Database Storage",
       "icon": "pt-icon-horizontal-bar-chart-desc",
       "view": "details"
-
     },
     {
       "name": "ServerStatistics",
       "text": "Server Statistics",
       "icon": "pt-icon-doughnut-chart",
       "view": "details"
-
     },
     {
       "name": "DbStorageStats",
@@ -87,25 +92,30 @@
       "name": "KillOp",
       "text": "Kill An Operation",
       "icon": "pt-icon-thumbs-down"
-    }, {
+    },
+    {
       "name": "DumpServer",
       "text": "Dump Databases",
       "icon": "pt-icon-import"
-    }, {
+    },
+    {
       "name": "RestoreServer",
       "text": "Restore Databases",
       "icon": "pt-icon-export"
     }
   ],
-  "database": [{
+  "database": [
+    {
       "name": "CreateCollection",
       "text": "Create Collection",
       "icon": "pt-icon-add"
-    }, {
+    },
+    {
       "name": "setProfilingLevel",
       "text": "Set Profiling",
       "icon": "pt-icon-history"
-    }, {
+    },
+    {
       "name": "DropDatabase",
       "text": "Drop Database",
       "icon": "pt-icon-delete"
@@ -130,26 +140,23 @@
       "name": "DumpDatabase",
       "text": "Dump Database",
       "icon": "pt-icon-import"
-    }, {
+    },
+    {
       "name": "RestoreDatabase",
       "text": "Restore Database",
       "icon": "pt-icon-export"
-    }, {
+    },
+    {
       "name": "ImportDatabase",
       "text": "Import Collections",
       "icon": "pt-icon-export"
     }
   ],
-  "collection": [{
+  "collection": [
+    {
       "name": "SampleCollections",
       "text": "Find Attributes",
       "icon": "pt-icon-properties",
-      "noDialog": true
-    },
-    {
-      "name": "AggregateBuilder",
-      "text": "Aggregate Builder",
-      "icon": "pt-icon-search-template",
       "noDialog": true
     },
     {
@@ -165,7 +172,8 @@
     {
       "type": "divider",
       "name": "CollectionDivider1"
-    }, {
+    },
+    {
       "name": "CollectionStats",
       "text": "Collection Statistics",
       "icon": "pt-icon-grouped-bar-chart",
@@ -175,7 +183,8 @@
       "name": "CreateIndex",
       "text": "Create Index",
       "icon": "pt-icon-add"
-    }, {
+    },
+    {
       "name": "DropAllIndexes",
       "text": "Drop All Indexes",
       "icon": "pt-icon-delete"
@@ -203,7 +212,8 @@
       "name": "ShardCollection",
       "text": "Shard Collection",
       "icon": "pt-icon-split-columns"
-    }, {
+    },
+    {
       "name": "DropCollection",
       "text": "Drop Collection",
       "icon": "pt-icon-delete"
@@ -217,27 +227,34 @@
       "name": "DumpCollection",
       "text": "Dump Collection",
       "icon": "pt-icon-import"
-    }, {
+    },
+    {
       "name": "RestoreCollection",
       "text": "Restore Collection",
       "icon": "pt-icon-export"
-    }, {
+    },
+    {
       "name": "ImportCollection",
       "text": "Import Collection",
       "icon": "pt-icon-export"
     }
   ],
-  "index": [{
-    "name": "DropIndex",
-    "text": "Drop Index",
-    "icon": "pt-icon-delete"
-  }],
-  "users": [{
-    "name": "CreateUser",
-    "text": "Create User",
-    "icon": "user"
-  }],
-  "user": [{
+  "index": [
+    {
+      "name": "DropIndex",
+      "text": "Drop Index",
+      "icon": "pt-icon-delete"
+    }
+  ],
+  "users": [
+    {
+      "name": "CreateUser",
+      "text": "Create User",
+      "icon": "user"
+    }
+  ],
+  "user": [
+    {
       "name": "AlterUser",
       "text": "Alter User",
       "icon": "user"
@@ -248,20 +265,24 @@
       "icon": "remove-user"
     }
   ],
-  "replicaset": [{
-    "name": "rsstepdown",
-    "text": "Stepdown primary",
-    "icon": "pt-icon-layout-sorted-clusters"
-  }, {
-    "name": "ReplicaStats",
-    "text": "Replica Set Statistics",
-    "icon": "pt-icon-grouped-bar-chart",
-    "view": "details"
-  }, {
-    "name": "rsstatus",
-    "text": "rs.status()",
-    "icon": "pt-icon-layout-sorted-clusters"
-  }],
+  "replicaset": [
+    {
+      "name": "rsstepdown",
+      "text": "Stepdown primary",
+      "icon": "pt-icon-layout-sorted-clusters"
+    },
+    {
+      "name": "ReplicaStats",
+      "text": "Replica Set Statistics",
+      "icon": "pt-icon-grouped-bar-chart",
+      "view": "details"
+    },
+    {
+      "name": "rsstatus",
+      "text": "rs.status()",
+      "icon": "pt-icon-layout-sorted-clusters"
+    }
+  ],
   "replica_member": [],
   "primary": [],
   "secondary": [],
