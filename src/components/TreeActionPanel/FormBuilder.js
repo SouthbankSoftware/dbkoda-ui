@@ -100,7 +100,9 @@ export default class FormBuilder {
   resolveQueries = (queries, result) => {
     return new Promise((resolve, reject) => {
       const query = queries.pop();
+      console.log(query);
       if (query.dontRun) {
+        console.log('DONT RUN');
         result[query] = query;
         if (queries.length > 0) {
           this.resolveQueries(queries, result)

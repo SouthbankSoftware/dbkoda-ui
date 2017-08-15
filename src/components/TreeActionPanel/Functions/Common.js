@@ -31,7 +31,7 @@
 
 const sprintf = require('sprintf-js').sprintf;
 
-const debug = false;
+const debug = true;
 
 export function dbkoda_listdb(params) {
   //eslint-disable-line
@@ -108,8 +108,23 @@ export function dbkodaListAttributesAgg(params) {
   return params;
 }
 export function dbkodaListAttributesAgg_parse(res) {
-  console.log('Res for parsing: ', res);
+  if (debug) console.log('Res for parsing: ', res);
   return JSON.parse(res.prevAttributes);
+}
+
+export function dbkodaListAttributesProject(params) {
+  params.dontRun = true;
+  return params;
+}
+export function dbkodaListAttributesProject_parse(res) {
+  if (debug) console.log('Res for parsing: ', res);
+  return JSON.parse(res.prevAttributes);
+
+  /* if (debug) console.log('dklapp Res for parsing: ', res);
+  const output = JSON.parse(res.prevAttributes);
+  output.unshift('NewAttributeName');
+  if (debug) console.log('output: ', output);
+  return output; */
 }
 
 export function dbkodaAggOperators(params) {
@@ -132,4 +147,14 @@ export function dbkodaMatchOperators_parse(res) {
   //eslint-disable-line
   if (debug) console.log(res);
   return ['$eq', '$gt', '$gte', '$in', '$lt', '$lte', '$ne'];
+}
+
+export function dbkoda_sortOptions(params) {
+  params.dontRun = true;
+  return params;
+}
+
+export function dbkoda_sortOptions_parse(res) {
+  if (debug) console.log(res);
+  return ([1, -1]);
 }

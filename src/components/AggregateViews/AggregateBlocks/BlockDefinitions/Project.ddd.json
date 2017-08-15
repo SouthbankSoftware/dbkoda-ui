@@ -9,7 +9,7 @@
         "label": "Attribute",
         "tooltip": "Name of the attribute to be Projected",
         "type": "Combo",
-        "lookup": "dbkodaListAttributesAgg",
+        "lookup": "dbkodaListAttributesProject",
         "lookup_arguments": [{
           "name": "prevAttributes",
           "value": "prevAttributes"
