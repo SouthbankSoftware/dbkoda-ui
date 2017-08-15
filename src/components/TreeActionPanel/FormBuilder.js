@@ -26,6 +26,8 @@
  * @Last modified time: 2017-07-26T13:27:40+10:00
  */
 
+/* eslint import/no-dynamic-require: warn */
+
 import { SyncService } from '#/common/SyncService';
 import { DynamicForm } from './Components/DynamicForm';
 
