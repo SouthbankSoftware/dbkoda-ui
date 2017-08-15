@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-15T13:38:17+10:00
+ * @Last modified time: 2017-08-15T14:48:04+10:00
  */
 
 import React from 'react';
@@ -83,20 +83,16 @@ export default class Panel extends React.Component {
         <div className="pt-navbar-group pt-align-left">
           <button type="button"
             id="enhancedJsonPrevBtn"
-            className="pt-button pt-icon-arrow-left"
+            className="pt-button pt-icon-chevron-left"
             onClick={this.getPreviousDoc}
-            disabled={!this.state.morePrevious}>
-            Previous
-          </button>
+            disabled={!this.state.morePrevious} />
         </div>
         <div className="pt-navbar-group pt-align-right">
           <button type="button"
             id="enhancedJsonNextBtn"
-            className="pt-button pt-icon-arrow-right"
+            className="pt-button pt-icon-chevron-right"
             onClick={this.getNextDoc}
-            disabled={!this.state.moreNext}>
-            Next
-          </button>
+            disabled={!this.state.moreNext} />
         </div>
         <div className="pt-navbar-group collapse-group">
           <div className="pt-navbar-heading">Expand </div>
@@ -122,7 +118,7 @@ export default class Panel extends React.Component {
           </button>
         </div>
       </nav>
-      <ReactJson className="enhanced-json-body"
+      <ReactJson
         src={this.props.enhancedJson.json}
         theme="hopscotch"
         indentWidth={2}
