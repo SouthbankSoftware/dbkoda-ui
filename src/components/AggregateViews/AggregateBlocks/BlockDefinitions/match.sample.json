@@ -1,0 +1,12 @@
+{
+    "UseOr":false,
+    "FilterKeys":[ {
+        "AttributeName":"a",
+        "Value":"1"
+    },
+    {
+        "AttributeName":"b",
+        "Value":"2"
+    }
+    ]
+}

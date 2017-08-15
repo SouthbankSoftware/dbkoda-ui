@@ -1,1 +1,7 @@
-  { $match:  { {{#if UseOr}}"$or":[{{/if}} {{#each FilterKeys}}{{#if ../UseOr}}{ {{/if}}{{#if AttributeName}}"{{AttributeName}}":{{{Value}}} {{/if}} {{#if ../UseOr}} }{{/if}}{{#unless last}},{{/unless}}{{/each}}{{#if UseOr}}]{{/if}} }  }
+  { $match:  { 
+      {{#if UseOr}}"$or" {{else}} "$and" {{/if}} :[
+      {{#each FilterKeys}} "{{AttributeName}}":{{{Value}}}  {{#unless last}},{{/unless}}{{/each}}
+      ]  
+    }  
+  }
+  
