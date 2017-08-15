@@ -6,7 +6,7 @@
       "name": "UseOr",
       "label": "Use Or?",
       "tooltip": "If true, will us OR across filter conditions",
-      "type": "Boolean"
+      "type": "Boolean", "default":false
     },
     {
       "name": "FilterKeys",
