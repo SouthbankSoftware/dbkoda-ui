@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-01T10:32:36+10:00
+ * @Last modified time: 2017-08-15T11:10:53+10:00
  */
 
  import { action, observable } from 'mobx';
@@ -37,6 +37,10 @@ export default class EditorApi {
   @action
   addEditor(options = {}) {
     try {
+      let editorOptions = {};
+      if (options.constructor.name == 'Object') {
+        editorOptions = options;
+      }
       this.store.startCreatingNewEditor();
       const profileTitle = this.store.editorToolbar.newEditorForTreeAction
         ? this.store.profileList.selectedProfile.id
@@ -47,8 +51,8 @@ export default class EditorApi {
           profileId = value.id;
         }
       });
-      if (!options.type) {
-        options.type = 'shell';
+      if (!editorOptions.type) {
+        editorOptions.type = 'shell';
       }
       if (profileId == 'UNKNOWN') {
         if (this.store.userPreferences.telemetryEnabled) {
@@ -71,7 +75,7 @@ export default class EditorApi {
         .service('/mongo-shells')
         .create({ id: profileId })
         .then((res) => {
-          return this.setNewEditorState(res, options);
+          return this.setNewEditorState(res, editorOptions);
         })
         .catch((err) => {
           if (this.store.userPreferences.telemetryEnabled) {
