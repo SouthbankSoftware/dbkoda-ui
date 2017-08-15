@@ -109,8 +109,9 @@ export default class GraphicalBuilder extends React.Component {
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
           res.stepAttributes.map((indexValue, index) => {
-            // Result value should be an Array.
-            if (indexValue.constructor === Array) {
+            if (index === res.stepAttributes.length - 1) {
+              console.log('LAST');
+            } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
@@ -120,9 +121,6 @@ export default class GraphicalBuilder extends React.Component {
                 console.error('Result[', index, '] is invalid: ', indexValue);
                 editor.blockList[index].status = 'pending';
               }
-            } else {
-              console.error('Result[', index, '] is unknown: ', indexValue);
-              editor.blockList[index].status = 'pending';
             }
           });
 
@@ -200,8 +198,9 @@ export default class GraphicalBuilder extends React.Component {
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
           res.stepAttributes.map((indexValue, index) => {
-            // Result value should be an Array.
-            if (indexValue.constructor === Array) {
+            if (index === res.stepAttributes.length - 1) {
+              console.log('LAST');
+            } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
@@ -211,9 +210,6 @@ export default class GraphicalBuilder extends React.Component {
                 console.error('Result[', index, '] is invalid: ', indexValue);
                 editor.blockList[index].status = 'pending';
               }
-            } else {
-              console.error('Result[', index, '] is unknown: ', indexValue);
-              editor.blockList[index].status = 'pending';
             }
           });
 
@@ -258,8 +254,9 @@ export default class GraphicalBuilder extends React.Component {
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
           res.stepAttributes.map((indexValue, index) => {
-            // Result value should be an Array.
-            if (indexValue.constructor === Array) {
+            if (index === res.stepAttributes.length - 1) {
+              console.log('LAST');
+            } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
@@ -269,9 +266,6 @@ export default class GraphicalBuilder extends React.Component {
                 console.error('Result[', index, '] is invalid: ', indexValue);
                 editor.blockList[index].status = 'pending';
               }
-            } else {
-              console.error('Result[', index, '] is unknown: ', indexValue);
-              editor.blockList[index].status = 'pending';
             }
           });
 

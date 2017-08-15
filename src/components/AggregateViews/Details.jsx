@@ -29,10 +29,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable, reaction } from 'mobx';
-import {
-  AnchorButton,
-  Intent
-} from '@blueprintjs/core';
+import { AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
@@ -48,15 +45,17 @@ export default class Details extends React.Component {
     this.state = {
       form: null,
       previousActiveBlock: null,
-      reproduceCode: false
+      reproduceCode: false,
     };
     this.reactionToUpdateDetails = reaction(
       () => this.props.store.editorPanel.updateAggregateDetails,
-      () => this.updateDetails()
+      () => this.updateDetails(),
     );
 
     // Get variables for action:
-    this.editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    this.editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    );
 
     /**
      * Resolve the prefetch arguments and return them as params
@@ -64,7 +63,9 @@ export default class Details extends React.Component {
      * @return {Object}          Object containing params for prefetch function
      */
     this.resolveArguments = (args) => {
-      const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
       const params = {};
       if (args.length > 0) {
         for (let i = 0; i < args.length; i += 1) {
@@ -79,13 +80,16 @@ export default class Details extends React.Component {
             case 'prevAttributes':
               // Check if attributeList has been gathered, if so, return, if not, wait.
               while (!editor.blockList[editor.selectedBlock].attributeList) {
-                console.log('!!!!');
-                sleep(100);
+                console.log('Waiting for attributes...');
               }
-              params[arg.name] = editor.blockList[editor.selectedBlock].attributeList;
+              params[arg.name] =
+                editor.blockList[editor.selectedBlock].attributeList;
               break;
             default:
-              console.error('Invalid arguments to Aggregate Block (This should not really happen :( - ', args);
+              console.error(
+                'Invalid arguments to Aggregate Block (This should not really happen :( - ',
+                args,
+              );
           }
         }
       }
@@ -121,14 +125,23 @@ export default class Details extends React.Component {
     }
 
     // Update Editor Contents.
-    this.props.store.treeActionPanel.formValues = this.generateCode(editorObject);
+    this.props.store.treeActionPanel.formValues = this.generateCode(
+      editorObject,
+    );
     this.props.store.treeActionPanel.isNewFormValues = true;
   }
 
   generateCode(editorObject) {
-    let codeString = 'use ' + this.currentDB + ';\ndb.' + this.currentCollection + '.aggregate([\n';
+    let codeString =
+      'use ' +
+      this.currentDB +
+      ';\ndb.' +
+      this.currentCollection +
+      '.aggregate([\n';
     editorObject.blockList.map((block) => {
-      const formTemplate = require('./AggregateBlocks/BlockTemplates/' + block.type + '.hbs'); // eslint-disable-line
+      const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
+        block.type +
+        '.hbs'); // eslint-disable-line
       codeString += formTemplate(block.fields) + ',\n';
     });
 
@@ -140,10 +153,12 @@ export default class Details extends React.Component {
   dynamicForm;
   @observable msg = '';
   @observable bForm = false;
-  @action showForm(value) {
+  @action
+  showForm(value) {
     this.bForm = value;
   }
-  @action updateMsg(value) {
+  @action
+  updateMsg(value) {
     this.msg = value;
   }
 
@@ -154,14 +169,20 @@ export default class Details extends React.Component {
   }
 
   render() {
-    const activeEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const activeEditor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    );
     this.currentDB = this.editor.collection.refParent.text;
     this.currentCollection = this.editor.collection.text;
     const blockIndex = activeEditor.selectedBlock;
     const activeBlock = activeEditor.blockList[blockIndex];
 
     // Check if activeBlock has changed, if so, rebuild the form.
-    if (activeBlock && (activeBlock !== this.state.previousActiveBlock || this.state.reproduceCode)) {
+    if (
+      activeBlock &&
+      (activeBlock !== this.state.previousActiveBlock ||
+        this.state.reproduceCode)
+    ) {
       this.state.reproduceCode = false;
       this.state.previousActiveBlock = activeBlock;
       this.formPromise = this.formBuilder.createForm(
@@ -170,14 +191,14 @@ export default class Details extends React.Component {
         this.editor,
         {
           action: activeBlock.type,
-          aggregate: true
-        }
-     );
+          aggregate: true,
+        },
+      );
       this.formPromise
         .then((res) => {
           this.dynamicForm = res;
           this.showForm(true);
-          this.setState({form: this.dynamicForm});
+          this.setState({ form: this.dynamicForm });
           this.dynamicForm.getData();
         })
         .catch((reason) => {
@@ -188,39 +209,38 @@ export default class Details extends React.Component {
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
-          <h2 className="currentBlockChoice">
-            Block Details
-          </h2>
+          <h2 className="currentBlockChoice">Block Details</h2>
         </nav>
-        { activeBlock &&
+        {activeBlock &&
           <div className="aggregateDetailsContent">
             <div className="dynamic-form">
-              {this.state.form && <View
-                title={this.state.form.title}
-                mobxForm={this.state.form.mobxForm}
-                isAggregate
-              />}
+              {this.state.form &&
+                <View
+                  title={this.state.form.title}
+                  mobxForm={this.state.form.mobxForm}
+                  isAggregate
+                />}
               {!this.bForm &&
                 <div>
                   <div className="tree-msg-div">
-                    <span>{this.msg}</span>
+                    <span>
+                      {this.msg}
+                    </span>
                   </div>
                 </div>}
             </div>
           </div>}
-        { !activeBlock &&
+        {!activeBlock &&
           <div className="aggregateDetailsContent">
-            <p>
-              No block selected.
-            </p>
+            <p>No block selected.</p>
           </div>}
         <AnchorButton
           className="hideLeftPanelButton"
           intent={Intent.SUCCESS}
           text={globalString('aggregate_builder/hide_left_panel')}
-          onClick={this.onHideLeftPanelClicked} />
+          onClick={this.onHideLeftPanelClicked}
+        />
       </div>
     );
   }
 }
-
