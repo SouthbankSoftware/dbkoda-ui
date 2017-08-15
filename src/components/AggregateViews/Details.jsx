@@ -26,6 +26,8 @@
  * @Last modified time: 2017-07-19 11:17:49
  */
 
+/* eslint import/no-dynamic-require: warn */
+
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable, reaction } from 'mobx';
