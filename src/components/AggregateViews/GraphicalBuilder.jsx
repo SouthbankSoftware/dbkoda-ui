@@ -417,7 +417,6 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   updateResultsOutput(editor, stepId) {
-    console.log('csetOutput: ', this.props.store.outputs.get(editor.id));
     const output = this.props.store.outputs.get(editor.id);
     output.output =
       'Example of Result at current Stage: \n' +
@@ -435,9 +434,13 @@ export default class GraphicalBuilder extends React.Component {
         ),
       })
       .then((res) => {
-        console.log(res);
         runInAction('Update Graphical Builder', () => {
-          output.output += res;
+          // res = res.substring(1, res.length - 1);
+          // res = res.split(',');
+          res = JSON.parse(res);
+          res.map((indexValue) => {
+            output.output += JSON.stringify(indexValue) + '\n';
+          });
         });
       })
       .catch((e) => {
