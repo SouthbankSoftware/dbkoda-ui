@@ -80,7 +80,6 @@ export default class GraphicalBuilder extends React.Component {
       })
       .then((res) => {
         this.editor.aggregateID = res;
-        console.log('Debug: New Aggregate Builder Registered on Shell: ', res);
       })
       .catch((err) => {
         console.error(err);
@@ -122,6 +121,9 @@ export default class GraphicalBuilder extends React.Component {
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].status = 'pending';
               }
             }
@@ -207,10 +209,16 @@ export default class GraphicalBuilder extends React.Component {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].status = 'pending';
               }
             }
@@ -263,10 +271,16 @@ export default class GraphicalBuilder extends React.Component {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].status = 'pending';
               }
             }
