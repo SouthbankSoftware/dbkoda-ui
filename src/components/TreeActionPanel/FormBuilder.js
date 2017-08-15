@@ -83,8 +83,12 @@ export default class FormBuilder {
     }
     if (defField.type == 'Numeric') {
       res.fieldBinding = 'NumericField';
-      res.fieldMin = (Object.prototype.hasOwnProperty.call(defField, 'min')) ? defField.min : null;
-      res.fieldMax = (Object.prototype.hasOwnProperty.call(defField, 'max')) ? defField.max : null;
+      res.fieldMin = Object.prototype.hasOwnProperty.call(defField, 'min')
+        ? defField.min
+        : null;
+      res.fieldMax = Object.prototype.hasOwnProperty.call(defField, 'max')
+        ? defField.max
+        : null;
     }
     if (defField.type == 'Combo') {
       res.fieldBinding = 'ComboField';
@@ -100,9 +104,7 @@ export default class FormBuilder {
   resolveQueries = (queries, result) => {
     return new Promise((resolve, reject) => {
       const query = queries.pop();
-      console.log(query);
       if (query.dontRun) {
-        console.log('DONT RUN');
         result[query] = query;
         if (queries.length > 0) {
           this.resolveQueries(queries, result)
@@ -112,7 +114,7 @@ export default class FormBuilder {
             .catch((reason) => {
               console.log(
                 'resolveQueries:',
-                'Handle rejected promise (' + reason + ') here.'
+                'Handle rejected promise (' + reason + ') here.',
               );
               reject(reason);
             });
@@ -120,7 +122,11 @@ export default class FormBuilder {
           resolve(query);
         }
       } else {
-        SyncService.executeQuery(query, this.editor.shellId, this.editor.profileId)
+        SyncService.executeQuery(
+          query,
+          this.editor.shellId,
+          this.editor.profileId,
+        )
           .then((res) => {
             result[query] = res;
             if (queries.length > 0) {
@@ -131,7 +137,7 @@ export default class FormBuilder {
                 .catch((reason) => {
                   console.log(
                     'resolveQueries:',
-                    'Handle rejected promise (' + reason + ') here.'
+                    'Handle rejected promise (' + reason + ') here.',
                   );
                   reject(reason);
                 });
@@ -142,7 +148,7 @@ export default class FormBuilder {
           .catch((reason) => {
             console.log(
               'resolveQueries:',
-              'Handle rejected promise (' + reason + ') here.'
+              'Handle rejected promise (' + reason + ') here.',
             );
             reject(reason);
           });
@@ -209,7 +215,7 @@ export default class FormBuilder {
           }
           queryFieldsHash[fldName] = {
             query: fld.fieldQuery,
-            parseFn: fld.fieldParseFn
+            parseFn: fld.fieldParseFn,
           };
         }
       };
@@ -222,18 +228,15 @@ export default class FormBuilder {
         if (defField.type == 'Table') {
           for (const col of defField.columns) {
             const colField = this.getField(col, formFunctions);
-            const colFieldName = resField.fieldName +
-              '[].' +
-              colField.fieldName;
+            const colFieldName =
+              resField.fieldName + '[].' + colField.fieldName;
             setFormOptions(colField, colFieldName);
           }
           result.arrayLast.push(resField.fieldName); // this is utilized after the form has returned the input document for the template
         } else if (defField.type == 'Group') {
           for (const member of defField.members) {
             const memField = this.getField(member, formFunctions);
-            const memFieldName = resField.fieldName +
-              '.' +
-              memField.fieldName;
+            const memFieldName = resField.fieldName + '.' + memField.fieldName;
             setFormOptions(memField, memFieldName);
           }
           if (!defField.label || defField.label == '') {
@@ -261,7 +264,7 @@ export default class FormBuilder {
                 if (formFunctions[fldQuery.parseFn]) {
                   try {
                     arrOptions = [''].concat(
-                      formFunctions[fldQuery.parseFn](resOpts)
+                      formFunctions[fldQuery.parseFn](resOpts),
                     );
                   } catch (e) {
                     console.log(e.stack);
@@ -279,7 +282,7 @@ export default class FormBuilder {
           .catch((reason) => {
             console.log(
               'getFieldsFromDefinitions:',
-              'Handle rejected promise (' + reason + ') here.'
+              'Handle rejected promise (' + reason + ') here.',
             );
             reject(reason);
           });
@@ -297,7 +300,12 @@ export default class FormBuilder {
    * @param  {String}   formAction            Action to load by Form Builder
    * @return {Promise}                        Promise which will be resolved once all the queries for prefetching are resolved.
    */
-  createForm = (resolveArguments, updateDynamicFormCode, editorObject, formAction) => {
+  createForm = (
+    resolveArguments,
+    updateDynamicFormCode,
+    editorObject,
+    formAction,
+  ) => {
     try {
       let treeAction;
       let ddd;
@@ -308,13 +316,17 @@ export default class FormBuilder {
         this.resolveArguments = resolveArguments;
         this.editor = editorObject;
         // Load the form definitions dynamically
-        ddd = require('../AggregateViews/AggregateBlocks/BlockDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
+        ddd = require('../AggregateViews/AggregateBlocks/BlockDefinitions/' +
+          treeAction +
+          '.ddd.json'); //eslint-disable-line
         // Load the form functions to support the definitions dynamically
-        formFunctions = require('../AggregateViews/AggregateBlocks/BlockFunctions/' + treeAction + '.js')[     //eslint-disable-line
-          treeAction
-        ];
+        formFunctions = require('../AggregateViews/AggregateBlocks/BlockFunctions/' +
+          treeAction +
+          '.js')[treeAction]; //eslint-disable-line
         // load the form template
-        formTemplate = require('../AggregateViews/AggregateBlocks/BlockTemplates/' + treeAction + '.hbs'); //eslint-disable-line
+        formTemplate = require('../AggregateViews/AggregateBlocks/BlockTemplates/' +
+          treeAction +
+          '.hbs'); //eslint-disable-line
       } else {
         treeAction = formAction;
         this.resolveArguments = resolveArguments;
@@ -322,7 +334,7 @@ export default class FormBuilder {
         // Load the form definitions dynamically
         ddd = require('./DialogDefinitions/' + treeAction + '.ddd.json'); //eslint-disable-line
         // Load the form functions to support the definitions dynamically
-        formFunctions = require('./Functions/' + treeAction + '.js')[     //eslint-disable-line
+        formFunctions = require('./Functions/' + treeAction + '.js')[ //eslint-disable-line
           treeAction
         ];
         // load the form template
@@ -365,7 +377,7 @@ export default class FormBuilder {
             // Update the form after prefetching the data from controller
             const updatePrefilledData = (data) => {
               form.mobxForm.update(data); //eslint-disable-line
-              form.mobxForm.submit();     //eslint-disable-line
+              form.mobxForm.submit(); //eslint-disable-line
             };
 
             const defaultParseFunction = (values) => {
@@ -376,9 +388,13 @@ export default class FormBuilder {
             // Method for pre-filling form:
             // @TODO @MIKE-> Updgrade this to fill form with data from aggregate global store if it exsits, otherwise use prefill.
             const getPrefilledFormData = () => {
-              if (formAction.aggregate && editorObject.blockList[editorObject.selectedBlock].modified) {
+              if (
+                formAction.aggregate &&
+                editorObject.blockList[editorObject.selectedBlock].modified
+              ) {
                 // Prefill fields with data from store.
-                const blockFields = editorObject.blockList[editorObject.selectedBlock].fields;
+                const blockFields =
+                  editorObject.blockList[editorObject.selectedBlock].fields;
                 updatePrefilledData(blockFields);
               } else if (ddd.DefaultValues) {
                 // Else fill with default values.
@@ -394,7 +410,7 @@ export default class FormBuilder {
                   ddd.DefaultValues.arguments.length > 0
                 ) {
                   PrefilledValues = formFunctions[ddd.DefaultValues.function](
-                    params
+                    params,
                   );
                 } else {
                   PrefilledValues = formFunctions[ddd.DefaultValues.function]();
@@ -402,13 +418,16 @@ export default class FormBuilder {
                 if (typeof PrefilledValues === 'string') {
                   let parseFunction;
                   if (formFunctions[ddd.DefaultValues.function + '_parse']) {
-                    parseFunction = formFunctions[
-                      ddd.DefaultValues.function + '_parse'
-                    ];
+                    parseFunction =
+                      formFunctions[ddd.DefaultValues.function + '_parse'];
                   } else {
                     parseFunction = defaultParseFunction;
                   }
-                  SyncService.executeQuery(PrefilledValues, this.editor.shellId, this.editor.profileId).then((res) => {
+                  SyncService.executeQuery(
+                    PrefilledValues,
+                    this.editor.shellId,
+                    this.editor.profileId,
+                  ).then((res) => {
                     const parsedValues = parseFunction(res);
                     updatePrefilledData(parsedValues);
                   });
@@ -423,16 +442,16 @@ export default class FormBuilder {
               title: ddd.Title,
               mobxForm: new DynamicForm(formDefs, {
                 updates: formValueUpdates,
-                validate: formInputValidate
+                validate: formInputValidate,
               }),
-              getData: getPrefilledFormData
+              getData: getPrefilledFormData,
             };
             resolve(form);
           })
           .catch((reason) => {
             console.log(
               'CreateForm:',
-              'Handle rejected promise (' + reason + ') here.'
+              'Handle rejected promise (' + reason + ') here.',
             );
             reject(reason);
           });

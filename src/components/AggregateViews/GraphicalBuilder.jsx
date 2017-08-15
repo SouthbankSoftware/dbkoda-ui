@@ -132,13 +132,10 @@ export default class GraphicalBuilder extends React.Component {
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
             // 4.a Yes - Update Results.
-            console.log(
-              'updateResults: ',
-              editor.blockList[editor.selectedBlock],
-            );
+            this.updateResultsOutput(editor, editor.selectedBlock);
           } else {
             // 4.b No - Clear Results.
-            console.log('clearResults: ');
+            this.clearResultsOutput(editor);
           }
 
           runInAction('Update Graphical Builder', () => {
@@ -227,14 +224,12 @@ export default class GraphicalBuilder extends React.Component {
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
             // 4.a Yes - Update Results.
-            console.log(
-              'updateResults: ',
-              editor.blockList[editor.selectedBlock],
-            );
+            this.updateResultsOutput(editor, editor.selectedBlock);
           } else {
             // 4.b No - Clear Results.
-            console.log('clearResults: ');
+            this.clearResultsOutput(editor);
           }
+
           runInAction('Update Graphical Builder', () => {
             this.props.store.editorPanel.updateAggregateDetails = true;
             this.forceUpdate();
@@ -295,17 +290,15 @@ export default class GraphicalBuilder extends React.Component {
             }
           }
 
-          // 5. Is the current block valid?.
+          // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
-            // 5.a Yes - Update Results.
-            console.log(
-              'updateResults: ',
-              editor.blockList[editor.selectedBlock],
-            );
+            // 4.a Yes - Update Results.
+            this.updateResultsOutput(editor.selectedBlock);
           } else {
             // 4.b No - Clear Results.
-            console.log('clearResults: ');
+            this.clearResultsOutput(editor);
           }
+
           runInAction('Update Graphical Builder', () => {
             this.props.store.editorPanel.updateAggregateDetails = true;
             this.forceUpdate();
@@ -403,6 +396,53 @@ export default class GraphicalBuilder extends React.Component {
           console.error(e);
         });
     });
+  }
+
+  /**
+   * Clear the output tab since no results are avaliable.
+   *
+   * @param {Object} Editor - The editor to update the output for.
+   */
+  @action.bound
+  clearResultsOutput(editor) {
+    console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
+    const output = this.props.store.outputs.get(editor.id);
+    output.output = 'Currently No Results to Display.';
+  }
+
+  /**
+   * Updates the output tab to reflect the results for the current step.
+   *
+   * @param {Object} Editor - The editor to update the output for.
+   */
+  @action.bound
+  updateResultsOutput(editor, stepId) {
+    console.log('csetOutput: ', this.props.store.outputs.get(editor.id));
+    const output = this.props.store.outputs.get(editor.id);
+    output.output =
+      'Example of Result at current Stage: \n' +
+      '----------------------------------  \n\n';
+
+    const service = featherClient().service('/mongo-sync-execution');
+    service.timeout = 30000;
+    service
+      .update(editor.profileId, {
+        shellId: editor.shellId, // eslint-disable-line
+        commands: AggregateCommands.GET_RESULTS(
+          editor.aggregateID,
+          stepId + 1,
+          false,
+        ),
+      })
+      .then((res) => {
+        console.log(res);
+        runInAction('Update Graphical Builder', () => {
+          output.output += res;
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   render() {

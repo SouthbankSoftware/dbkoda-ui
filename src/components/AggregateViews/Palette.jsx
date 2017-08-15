@@ -108,6 +108,7 @@ export default class Palette extends React.Component {
             } else {
               this.addBlockToEditor(blockType, position, null);
             }
+            this.clearResultsOutput(editor);
           } else {
             // Check for error.
             console.error('updateResultSet: ', res);
@@ -358,6 +359,18 @@ export default class Palette extends React.Component {
         </ul>
       </div>
     );
+  }
+
+  /**
+   * Clear the output tab since no results are avaliable.
+   *
+   * @param {Object} Editor - The editor to update the output for.
+   */
+  @action.bound
+  clearResultsOutput(editor) {
+    console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
+    const output = this.props.store.outputs.get(editor.id);
+    output.output = 'Currently No Results to Display.';
   }
 
   render() {

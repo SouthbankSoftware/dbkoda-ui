@@ -108,7 +108,6 @@ export function dbkodaListAttributesAgg(params) {
   return params;
 }
 export function dbkodaListAttributesAgg_parse(res) {
-  if (debug) console.log('Res for parsing: ', res);
   return JSON.parse(res.prevAttributes);
 }
 
@@ -156,5 +155,5 @@ export function dbkoda_sortOptions(params) {
 
 export function dbkoda_sortOptions_parse(res) {
   if (debug) console.log(res);
-  return ([1, -1]);
+  return [1, -1];
 }
