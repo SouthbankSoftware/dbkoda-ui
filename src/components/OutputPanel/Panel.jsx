@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-15T09:02:02+10:00
+ * @Last modified time: 2017-08-15T11:26:50+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -170,9 +170,13 @@ export default class Panel extends React.Component {
     const indentation = line.search(/\S|$/);
     const brace = direction === -1 ? '{' : '}';
 
-    if (indentation < 1 && line[0] === brace) {
-      direction === -1 ? lines.start = lineNumber : lines.end = lineNumber;
-      return line;
+    if (indentation < 1) {
+      if (line[0] === brace) {
+        direction === -1 ? lines.start = lineNumber : lines.end = lineNumber;
+        return line;
+      }
+      lines.status = 'Invalid';
+      return '';
     }
 
     if (direction === -1) {
