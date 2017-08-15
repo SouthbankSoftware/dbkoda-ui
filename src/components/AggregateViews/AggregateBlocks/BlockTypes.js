@@ -27,18 +27,18 @@
  */
 
 export const BlockTypes = {
-  GROUP: {
-    type: 'Group',
-    description: 'Group your results by a certain predicate',
-    fields: {
-      ID: '',
-    }
-  },
   MATCH: {
     type: 'Match',
     description: 'Reduce your pipeline results using a match on a field.',
     fields: {
       Expression: ''
+    }
+  },
+   GROUP: {
+    type: 'Group',
+    description: 'Group your results by a certain predicate',
+    fields: {
+      ID: '',
     }
   },
   SORT: {

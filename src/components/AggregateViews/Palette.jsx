@@ -26,7 +26,7 @@
  * @Last modified time: 2017-07-19 11:17:49
  */
 
-/* eslint import/no-dynamic-require: warn */
+/* eslint import/no-dynamic-require: 0 */
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
@@ -77,23 +77,24 @@ export default class Palette extends React.Component {
     } else {
       this.updateShellPipeline().then(() => {
         this.updateResultSet().then((res) => {
-          if (res.constructor === Array) {
-            console.log('updatedShellPipeline: ', res);
-            // 3.b Update valid state for each block in list.
-            res.map((indexValue, index) => {
-              // Result value should be a string.
-              if (indexValue.constructor === String) {
+          console.log('updateResultSet:', JSON.parse(res));
+          res = JSON.parse(res);
+          if (res.stepAttributes.constructor === Array) {
+            // 3. Update Valid for each block.
+            res.stepAttributes.map((indexValue, index) => {
+              // Result value should be an Array.
+              if (indexValue.constructor === Array) {
                 // Check for error result.
-                if (indexValue.search('E QUERY') === -1) {
-                  console.log('Result[', index, ']: ', indexValue);
+                if (res.stepCodes[index] === 0) {
+                  console.log('Result[', index, '] is valid: ', indexValue);
                   editor.blockList[index].attributeList = indexValue;
                   editor.blockList[index].status = 'valid';
                 } else {
-                  console.error('Result[', index, ']: ', indexValue);
+                  console.error('Result[', index, '] is invalid: ', indexValue);
                   editor.blockList[index].status = 'pending';
                 }
               } else {
-                console.error('Result[', index, ']: ', indexValue);
+                console.error('Result[', index, '] is unknown: ', indexValue);
                 editor.blockList[index].status = 'pending';
               }
             });

@@ -3,39 +3,45 @@
   "DefaultValues": {},
   "Fields": [
     {
-      "name": "UseOr",
-      "label": "Use Or?",
-      "tooltip": "If true, will us OR across filter conditions",
-      "type": "Boolean"
+      "name": "groupBy",
+      "label": "Group By Expression",
+      "tooltip": "Group by expression",
+      "type": "Text"
     },
     {
-      "name": "FilterKeys",
-      "label": "Filter conditions",
+      "name": "lowerBounds",
+      "label": "Lower Bucket bounds",
       "type": "Table",
       "columns": [{
-          "name": "AttributeName",
-          "label": "Attribute",
-          "tooltip": "Name of the attribute to be filtered",
-          "type": "Combo",
-          "lookup": "dbkodaListAttributes",
-          "lookup_arguments": [{
-              "name": "db",
-              "value": "treeNode.parentDB"
-            },
-            {
-              "name": "collection",
-              "value": "treeNode"
-            }
-          ]
-
+          "name": "lowerBound",
+          "label": "lower bound",
+          "tooltip": "Lower bound for the bucket",
+          "type": "Text"
+        }]
+      },
+    {
+      "name": "defaultValue",
+      "label": "Default value",
+      "tooltip": "Value for objects not falling into a definied bucket",
+      "type": "Text"
+    },
+    {
+      "name": "outputVars",
+      "label": "Aggregations for each bucket",
+      "type": "Table",
+      "columns": [{
+          "name": "varName",
+          "label": "attribute Name",
+          "tooltip": "Name for the new variable ",
+          "type": "Text"
         },
-        {
-          "name": "Value",
-          "label": "Value to filter",
-          "type": "Text",
-          "tooltip": "Enter the value to search for (quote strings please)"
-        }
-      ]
+      {
+          "name": "varExpression",
+          "label": "attribute expression",
+          "tooltip": "aggregate style expression",
+          "type": "Text"
+        }]
     }
   ]
+
 }

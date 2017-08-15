@@ -1,26 +1,19 @@
 {
   "Title": "Project",
-  "Fields": [
-    {
-      "name": "Keys",
-      "label": "Project Fields",
-      "type": "Table",
-      "columns": [
-        {
+  "Fields": [{
+    "name": "Keys",
+    "label": "Project Fields",
+    "type": "Table",
+    "columns": [{
         "name": "AttributeName",
         "label": "Attribute",
         "tooltip": "Name of the attribute to be Projected",
         "type": "Combo",
-        "lookup": "dbkodaListAttributes",
+        "lookup": "dbkodaListAttributesAgg",
         "lookup_arguments": [{
-            "name": "db",
-            "value": "database"
-          },
-          {
-            "name": "collection",
-            "value": "collection"
-          }
-        ]
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }]
       },
       {
         "name": "AttributeProjectionValue",
@@ -28,7 +21,6 @@
         "tooltip": "Expression for projection",
         "type": "Text"
       }
-      ]
-    }
-  ]
+    ]
+  }]
 }

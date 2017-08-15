@@ -17,29 +17,26 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
-* @Author: Michael Harrison
-* @Date:   2017-08-08 17:04:16
-* @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-08-08 17:04:26
-*/
+ * Created by joey on 11/8/17.
+ */
 
-export const AggregateCommands = {
-  NEW_AGG_BUILDER: (db, coll) => {
-    return "dbk_agg.newAggBuilder('" + db + "','" + coll + "')";
-  },
-  ADD_STEP: (id, stepJSON) => {
-    return "dbk_agg.addStep('" + id + "'," + JSON.stringify(stepJSON) + ')';
-  },
-  GET_ATTRIBUTES: (id, stepIndex) => {
-    return "dbk_agg.getAttributes('" + id + "','" + stepIndex + "')";
-  },
-  SET_ALL_STEPS: (id, stepArray) => {
-    return "dbk_agg.setAllSteps('" + id + "',[" + stepArray + '])';
-  },
-  GET_STATUS: (id) => {
-    return "dbk_agg.getAggStatus('" + id + "')";
-  },
-};
+import {assert} from 'chai';
+
+import {getDialogProperites} from '../Utils';
+import {BackupRestoreActions} from '../../common/Constants';
+import globalizeInit from '../../tests/helpers/globalize.js';
+
+describe('test utils class', () => {
+  beforeAll(() => {
+    globalizeInit();
+  });
+
+  test('test get dialog properties', () => {
+    const properites = getDialogProperites(BackupRestoreActions.IMPORT_COLLECTION);
+    assert.equal(properites.length, 3);
+    assert.equal(properties[0], 'openFile');
+    assert.equal(properties[1], 'createDirectory');
+    assert.equal(properties[2], 'promptToCreate');
+  });
+});

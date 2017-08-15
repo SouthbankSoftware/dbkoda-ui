@@ -1,1 +1,12 @@
-  { $bucket:  { {{#if UseOr}}"$or":[{{/if}} {{#each FilterKeys}}{{#if ../UseOr}}{ {{/if}}{{#if AttributeName}}"{{AttributeName}}":{{{Value}}} {{/if}} {{#if ../UseOr}} }{{/if}}{{#unless last}},{{/unless}}{{/each}}{{#if UseOr}}]{{/if}} }  },
+{
+  $bucket: {
+      groupBy: {{{groupBy}}}, 
+      {{#if defaultValue}} default: {{{defaultValue}}} , 
+      {{/if ~}}
+      {{#if outputVars}}  output: {
+        {{#each outputVars}} {{varName}} :{{{varExpression}}} {{#unless last}},{{/unless}}{{/each}},
+      }, 
+      {{/if ~}}
+      boundaries: [ {{#each lowerBounds}} {{lowerBound}}  {{#unless last}},{{/unless}}{{/each}} ]
+   }
+}

@@ -33,21 +33,21 @@ import { DropTarget } from 'react-dnd';
 import { DragItemTypes } from '#/common/Constants.js';
 import '../style.scss';
 
-/** ===| Drag Drop Functions |=== **/
+/** ===| Drag Drop Functions |=== * */
 const blockTarget = {
   drop() {
     return {
-      type: 'firstBlock'
+      type: 'firstBlock',
     };
-  }
+  },
 };
 const collectTarget = (connect, monitor) => {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
+    isOver: monitor.isOver(),
   };
 };
-/** ============================= **/
+/** ============================= * */
 
 @inject(allStores => ({
   store: allStores.store,
@@ -57,8 +57,8 @@ const collectTarget = (connect, monitor) => {
 export default class FirstBlockTarget extends React.Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired
-  }
+    isOver: PropTypes.bool.isRequired,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -73,9 +73,6 @@ export default class FirstBlockTarget extends React.Component {
     const connectDropTarget = this.props.connectDropTarget;
     const isOver = this.props.isOver; // eslint-disable-line
 
-    return connectDropTarget(
-      <li className="firstBlockTarget" />
-    );
+    return connectDropTarget(<li className="firstBlockTarget" />);
   }
 }
-

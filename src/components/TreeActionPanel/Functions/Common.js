@@ -92,3 +92,13 @@ export function dbkodaListAttributesAgg(params) {
 export function dbkodaListAttributesAgg_parse(res) { //eslint-disable-line
     return JSON.parse(res.prevAttributes);
 }
+
+export function dbkodaAggOperators(params) {
+      params.dontRun = true;
+      return (params);
+    }
+
+export function dbkodaAggOperators_parse (res) { //eslint-disable-line
+        if (false) console.log(res);
+        return (['sum', 'max', 'min', 'avg', 'first', 'last']);
+    }

@@ -14,7 +14,7 @@
         },
         {
           "name": "Expression",
-          "label": "Value to filter",
+          "label": "Definition",
           "type": "Text",
           "tooltip": "Enter an aggregate expression "
         }

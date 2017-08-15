@@ -26,7 +26,7 @@
  * @Last modified time: 2017-07-19 11:17:49
  */
 
-/* eslint import/no-dynamic-require: warn */
+/* eslint import/no-dynamic-require: 0 */
 
 import React from 'react';
 import _ from 'lodash';
@@ -104,24 +104,24 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps.
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', res);
-        if (res.constructor === Array) {
-          console.log('updatedShellPipeline: ', res);
+        console.log('updateResultSet:', JSON.parse(res));
+        res = JSON.parse(res);
+        if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
-          res.map((indexValue, index) => {
-            // Result value should be a string.
-            if (indexValue.constructor === String) {
+          res.stepAttributes.map((indexValue, index) => {
+            // Result value should be an Array.
+            if (indexValue.constructor === Array) {
               // Check for error result.
-              if (indexValue.search('E QUERY') === -1) {
-                console.log('Result[', index, ']: ', indexValue);
+              if (res.stepCodes[index] === 0) {
+                console.log('Result[', index, '] is valid: ', indexValue);
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
-                console.error('Result[', index, ']: ', indexValue);
+                console.error('Result[', index, '] is invalid: ', indexValue);
                 editor.blockList[index].status = 'pending';
               }
             } else {
-              console.error('Result[', index, ']: ', indexValue);
+              console.error('Result[', index, '] is unknown: ', indexValue);
               editor.blockList[index].status = 'pending';
             }
           });
@@ -194,26 +194,25 @@ export default class GraphicalBuilder extends React.Component {
     this.moveBlockInEditor(blockFrom, blockTo);
     // 2. Update Shell Steps
     this.updateShellPipeline().then(() => {
-      // 3. Update Valid for each.
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', res);
-        if (res.constructor === Array) {
-          console.log('updatedShellPipeline: ', res);
+        console.log('updateResultSet:', JSON.parse(res));
+        res = JSON.parse(res);
+        if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
-          res.map((indexValue, index) => {
-            // Result value should be a string.
-            if (indexValue.constructor === String) {
+          res.stepAttributes.map((indexValue, index) => {
+            // Result value should be an Array.
+            if (indexValue.constructor === Array) {
               // Check for error result.
-              if (indexValue.search('E QUERY') === -1) {
-                console.log('Result[', index, ']: ', indexValue);
+              if (res.stepCodes[index] === 0) {
+                console.log('Result[', index, '] is valid: ', indexValue);
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
-                console.error('Result[', index, ']: ', indexValue);
+                console.error('Result[', index, '] is invalid: ', indexValue);
                 editor.blockList[index].status = 'pending';
               }
             } else {
-              console.error('Result[', index, ']: ', indexValue);
+              console.error('Result[', index, '] is unknown: ', indexValue);
               editor.blockList[index].status = 'pending';
             }
           });
@@ -254,23 +253,24 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps.
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', res);
-        if (res.constructor === Array) {
+        console.log('updateResultSet:', JSON.parse(res));
+        res = JSON.parse(res);
+        if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
-          res.map((indexValue, index) => {
-            // Result value should be a string.
-            if (indexValue.constructor === String) {
+          res.stepAttributes.map((indexValue, index) => {
+            // Result value should be an Array.
+            if (indexValue.constructor === Array) {
               // Check for error result.
-              if (indexValue.search('E QUERY') === -1) {
-                console.log('Result[', index, ']: ', indexValue);
+              if (res.stepCodes[index] === 0) {
+                console.log('Result[', index, '] is valid: ', indexValue);
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
-                console.error('Result[', index, ']: ', indexValue);
+                console.error('Result[', index, '] is invalid: ', indexValue);
                 editor.blockList[index].status = 'pending';
               }
             } else {
-              console.error('Result[', index, ']: ', indexValue);
+              console.error('Result[', index, '] is unknown: ', indexValue);
               editor.blockList[index].status = 'pending';
             }
           });
@@ -297,7 +297,7 @@ export default class GraphicalBuilder extends React.Component {
           }
         } else {
           // Check for error.
-          console.error('updateResultSet: ', res);
+          console.error('updateResultSet: ', JSON.parse(res));
         }
       });
     });
@@ -343,7 +343,6 @@ export default class GraphicalBuilder extends React.Component {
           console.error('Block generated invalid JSON: ', block);
         }
       });
-      console.log('stepArray: ', stepArray);
       // Update steps in Shell:
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 30000;
@@ -374,34 +373,20 @@ export default class GraphicalBuilder extends React.Component {
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
       );
-      const results = [];
-
-      for (
-        let blockPosition = 0;
-        blockPosition < editor.blockList.length;
-        blockPosition += 1
-      ) {
-        // Update steps in Shell:
-        const service = featherClient().service('/mongo-sync-execution');
-        service.timeout = 30000;
-        service
-          .update(editor.profileId, {
-            shellId: editor.shellId, // eslint-disable-line
-            commands: AggregateCommands.GET_ATTRIBUTES(
-              editor.aggregateID,
-              blockPosition,
-            ),
-          })
-          .then((res) => {
-            results.push(res);
-            if (blockPosition === editor.blockList.length - 1) {
-              resolve(results);
-            }
-          })
-          .catch((e) => {
-            results.push(e);
-          });
-      }
+      // Update steps in Shell:
+      const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 30000;
+      service
+        .update(editor.profileId, {
+          shellId: editor.shellId, // eslint-disable-line
+          commands: AggregateCommands.GET_STATUS(editor.aggregateID),
+        })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     });
   }
 

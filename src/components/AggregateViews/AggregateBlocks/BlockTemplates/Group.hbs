@@ -3,5 +3,5 @@
         {{#each GroupByKeys}}"{{nodots AttributeName}}":"${{AttributeName}}" {{#unless last}},{{/unless}}{{/each}}
     }, 
     "count":{$sum:1}{{#each AggregateKeys}},
-    "{{AttributeName}}-{{Aggregation}}":{${{Aggregation}}:"${{AttributeName}}"} {{/each}}
+    "{{nodots AttributeName}}-{{Aggregation}}":{${{Aggregation}}:"${{AttributeName}}"} {{/each}}
  }}
