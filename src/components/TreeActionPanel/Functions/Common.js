@@ -33,8 +33,9 @@ const sprintf = require('sprintf-js').sprintf;
 
 const debug = false;
 
-export function dbkoda_listdb(params) { //eslint-disable-line
-    return 'db.adminCommand({listDatabases: 1})';
+export function dbkoda_listdb(params) {
+  //eslint-disable-line
+  return 'db.adminCommand({listDatabases: 1})';
 }
 export function dbkoda_listdb_parse(res) {
   //eslint-disable-line
@@ -107,6 +108,7 @@ export function dbkodaListAttributesAgg(params) {
   return params;
 }
 export function dbkodaListAttributesAgg_parse(res) {
+  console.log(res.prevAttributes);
   return JSON.parse(res.prevAttributes);
 }
 
@@ -122,11 +124,12 @@ export function dbkodaAggOperators_parse(res) {
 }
 
 export function dbkodaMatchOperators(params) {
-      params.dontRun = true;
-      return (params);
+  params.dontRun = true;
+  return params;
 }
 
-export function dbkodaMatchOperators_parse (res) { //eslint-disable-line
-        if (debug) console.log(res);
-        return (['$eq', '$gt', '$gte', '$in', '$lt', '$lte', '$ne']);
+export function dbkodaMatchOperators_parse(res) {
+  //eslint-disable-line
+  if (debug) console.log(res);
+  return ['$eq', '$gt', '$gte', '$in', '$lt', '$lte', '$ne'];
 }
