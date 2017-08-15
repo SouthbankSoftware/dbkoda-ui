@@ -22,7 +22,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-14T09:15:17+10:00
+ * @Last modified time: 2017-08-14T15:21:39+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -173,13 +173,19 @@ export default class OutputApi {
   }
 
   @action.bound
-  initJsonView(jsonStr, outputId, displayType) {
-    this.store.outputPanel.currentTab =
-      'EnhancedJson-' + this.store.outputPanel.currentTab;
+  initJsonView(jsonStr, outputId, displayType, lines) {
+    if (this.store.outputPanel.currentTab.indexOf('EnhancedJson-')) {
+      this.store.outputPanel.currentTab =
+        'EnhancedJson-' + this.store.outputPanel.currentTab;
+    }
     this.store.outputs.get(outputId)[displayType] = '';
     StaticApi.parseShellJson(jsonStr).then((result) => {
       runInAction(() => {
-        this.store.outputs.get(outputId)[displayType] = result;
+        this.store.outputs.get(outputId)[displayType] = {
+          json: result,
+          firstLine: lines.start,
+          lastLine: lines.end
+        };
       });
     }, (error) => {
       runInAction(() => {

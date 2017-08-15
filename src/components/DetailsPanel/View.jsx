@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-05-22T14:42:47+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-04T13:32:04+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-15T10:45:12+10:00
  */
 
 
@@ -88,7 +88,7 @@ export default class DetailsView extends React.Component {
           >
             Close
           </button>
-        </div>*/}
+        </div> */}
       </div>
     );
   }

@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-14T12:43:43+10:00
+ * @Last modified time: 2017-08-14T16:04:54+10:00
 */
 
 import React from 'react';
@@ -89,22 +89,24 @@ export default class Editor extends React.Component {
     }
   }
 
-  getClickedDocument(coords) {
+  getClickedDocument(coords, lines) {
     const cm = this.editor.getCodeMirror();
     const lineNumber = cm.lineAtHeight(coords.y);
-    return this.props.getDocumentAtLine(this.props.id, lineNumber);
+    return this.props.getDocumentAtLine(this.props.id, lineNumber, lines);
   }
 
   renderContextMenu(event) {
     const coords = { x: event.clientX, y: event.clientY };
-    const currentJson = this.getClickedDocument(coords);
+    const lines = { start: 0, end: 0, status: '' };
+    const currentJson = this.getClickedDocument(coords, lines);
+    console.log(lines);
 
     return (
       <Menu className="outputContextMenu">
         <div className="menuItemWrapper showJsonView">
           <MenuItem
             onClick={() => {
-              this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson');
+              this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
             }}
             text={globalString('output/editor/contextJson')}
             iconName="pt-icon-small-cross"

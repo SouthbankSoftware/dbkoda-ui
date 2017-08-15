@@ -21,23 +21,23 @@
  * @Date:   2017-08-10T13:30:31+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T15:41:10+10:00
+ * @Last modified time: 2017-08-14T15:04:49+10:00
  */
 
 import React from 'react';
 import { mount } from 'enzyme';
 import { useStrict } from 'mobx';
-// import globalizeInit from '#/tests/helpers/globalize.js';
+import globalizeInit from '#/tests/helpers/globalize.js';
 import Panel from '../Panel';
 
 describe('Enhanced JSON Tab', () => {
   let app;
-  const testJson = { 'key': 'value' };
+  const testJson = { 'json': {'key': 'value'} };
   console.log(Panel);
 
   beforeAll(() => {
     useStrict(true);
-    // globalizeInit();
+    globalizeInit();
     app = mount(<Panel enhancedJson={testJson} />);
   });
 

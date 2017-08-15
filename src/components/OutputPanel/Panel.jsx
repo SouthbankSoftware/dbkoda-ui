@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-14T13:34:41+10:00
+ * @Last modified time: 2017-08-15T09:02:02+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -132,41 +132,53 @@ export default class Panel extends React.Component {
     this.editorRefs[editorId] = cmRef;
   }
 
-  getDocumentAtLine(editorId, lineNumber) {
+  getDocumentAtLine(editorId, lineNumber, lines) {
     const cm = this.editorRefs[editorId].getCodeMirror();
     const startLine = cm.getLine(lineNumber);
+    if (!startLine) {
+      lines.status = 'Invalid';
+      return '';
+    }
     // There is a selection in CodeMirror
     if (cm.somethingSelected()) {
       return cm.getSelection();
     }
-    // This is a single-line document
     if (startLine[0] === '{') {
+      // This is a single-line document
       if (startLine[startLine.length - 1] === '}') {
+        lines.start = lineNumber;
+        lines.end = lineNumber;
         return startLine;
       }
-      // Only need to iterate downwards
-      return this._getLineText(cm, lineNumber, 1);
+      // This is the start of a document, only parse downwards
+      lines.start = lineNumber;
+      return this._getLineText(cm, lineNumber, 1, lines);
     }
     // Parse Multi-line documents
     return (
-      this._getLineText(cm, lineNumber - 1, -1) +
-        this._getLineText(cm, lineNumber, 1)
+      this._getLineText(cm, lineNumber - 1, -1, lines) +
+        this._getLineText(cm, lineNumber, 1, lines)
     );
   }
 
-  _getLineText(cm, lineNumber, direction) {
+  _getLineText(cm, lineNumber, direction, lines) {
     let line = cm.getLine(lineNumber);
+    if (!line) {
+      lines.status = 'Invalid';
+      return '';
+    }
     const indentation = line.search(/\S|$/);
     const brace = direction === -1 ? '{' : '}';
 
     if (indentation < 1 && line[0] === brace) {
+      direction === -1 ? lines.start = lineNumber : lines.end = lineNumber;
       return line;
     }
 
     if (direction === -1) {
-      line = this._getLineText(cm, lineNumber + direction, direction) + line;
+      line = this._getLineText(cm, lineNumber + direction, direction, lines) + line;
     } else {
-      line += this._getLineText(cm, lineNumber + direction, direction);
+      line += this._getLineText(cm, lineNumber + direction, direction, lines);
     }
 
     return line;
@@ -223,6 +235,8 @@ export default class Panel extends React.Component {
                 initialMsg={editor[1].initialMsg}
                 shellId={editor[1].shellId}
                 tabClassName={tabClassName}
+                setEditorRef={this.setEditorRef}
+                getDocumentAtLine={this.getDocumentAtLine}
               />
             }
           />,
@@ -241,7 +255,6 @@ export default class Panel extends React.Component {
           this.props.store.outputs.get(editor[1].id).enhancedJson
         ) {
           const loading = this.props.store.outputs.get(editor[1].id).enhancedJson === '';
-          console.log(loading);
           arrTabs.push(
             <Tab2
               className={
@@ -250,7 +263,13 @@ export default class Panel extends React.Component {
               key={'EnhancedJson-' + editor[1].id}
               id={'EnhancedJson-' + editor[1].id}
               title={'EnhancedJson-' + editorTitle}
-              panel={(loading) ? <p>Loading...</p> : <EnhancedJson enhancedJson={this.props.store.outputs.get(editor[1].id).enhancedJson} />}
+              panel={
+                (loading) ? <p>Loading...</p> :
+                <EnhancedJson
+                  outputId={editor[1].id}
+                  enhancedJson={this.props.store.outputs.get(editor[1].id).enhancedJson}
+                  getDocumentAtLine={this.getDocumentAtLine} />
+              }
             />
           );
         }

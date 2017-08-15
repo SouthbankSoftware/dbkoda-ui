@@ -22,10 +22,11 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-14T09:50:06+10:00
+ * @Last modified time: 2017-08-15T09:19:30+10:00
  */
 
 import React from 'react';
+import { inject } from 'mobx-react';
 import ReactJson from 'react-json-view';
 import './style.scss';
 
@@ -33,24 +34,67 @@ import './style.scss';
  * Displays JSON in an enhanced form as a seperate output tab
  *  enhancedJson - a JSON object to be represented in the output tab
  */
+ @inject(allStores => ({
+   api: allStores.api,
+ }))
 export default class Panel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { morePrevious: true, moreNext: true, collapseDepth: 1 };
+    this.getNextDoc = this.getNextDoc.bind(this);
+    this.getPreviousDoc = this.getPreviousDoc.bind(this);
+  }
+
   getNextDoc() {
-    console.log('next');
+    const lineNumber = this.props.enhancedJson.lastLine + 1;
+    const lines = { start: 0, end: 0, status: '' };
+    let currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, lines);
+    if (lines.status === 'Invalid') {
+      lines.status = '';
+      currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber + 3, lines);
+      if (lines.status === 'Invalid') {
+        this.setState({ moreNext: false });
+        return;
+      }
+    }
+    this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
   }
 
   getPreviousDoc() {
-    console.log('prev');
+    const lineNumber = this.props.enhancedJson.firstLine - 1;
+    const lines = { start: 0, end: 0, status: '' };
+    let currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, lines);
+    if (lines.status === 'Invalid') {
+      lines.status = '';
+      currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber - 3, lines);
+      if (lines.status === 'Invalid') {
+        this.setState({ morePrevious: false });
+        return;
+      }
+    }
+    this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
   }
 
   render() {
-    console.log(this.props.enhancedJson);
     return (<div className="enhanced-json-panel">
-      <button type="button" id="enhancedJsonPrevBtn" className="pt-button pt-icon-arrow-left" onClick={this.getPreviousDoc}>Previous</button>
-      <button type="button" id="enhancedJsonNextBtn" className="pt-button pt-icon-arrow-right" onClick={this.getNextDoc}>Next</button>
-      <ReactJson src={this.props.enhancedJson}
+      <button type="button"
+        id="enhancedJsonPrevBtn"
+        className="pt-button pt-icon-arrow-left"
+        onClick={this.getPreviousDoc}
+        disabled={!this.state.morePrevious}>
+        Previous
+      </button>
+      <button type="button"
+        id="enhancedJsonNextBtn"
+        className="pt-button pt-icon-arrow-right"
+        onClick={this.getNextDoc}
+        disabled={!this.state.moreNext}>
+        Next
+      </button>
+      <ReactJson src={this.props.enhancedJson.json}
         theme="hopscotch"
         indentWidth={2}
-        collapsed={2}
+        collapsed={this.state.collapseDepth}
         collapseStringsAfterLength={40}
         enableClipboard
         displayObjectSize
