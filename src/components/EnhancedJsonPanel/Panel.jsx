@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-15T11:45:16+10:00
+ * @Last modified time: 2017-08-15T13:38:17+10:00
  */
 
 import React from 'react';
@@ -79,21 +79,51 @@ export default class Panel extends React.Component {
 
   render() {
     return (<div className="enhanced-json-panel">
-      <button type="button"
-        id="enhancedJsonPrevBtn"
-        className="pt-button pt-icon-arrow-left"
-        onClick={this.getPreviousDoc}
-        disabled={!this.state.morePrevious}>
-        Previous
-      </button>
-      <button type="button"
-        id="enhancedJsonNextBtn"
-        className="pt-button pt-icon-arrow-right"
-        onClick={this.getNextDoc}
-        disabled={!this.state.moreNext}>
-        Next
-      </button>
-      <ReactJson src={this.props.enhancedJson.json}
+      <nav className="pt-navbar pt-dark">
+        <div className="pt-navbar-group pt-align-left">
+          <button type="button"
+            id="enhancedJsonPrevBtn"
+            className="pt-button pt-icon-arrow-left"
+            onClick={this.getPreviousDoc}
+            disabled={!this.state.morePrevious}>
+            Previous
+          </button>
+        </div>
+        <div className="pt-navbar-group pt-align-right">
+          <button type="button"
+            id="enhancedJsonNextBtn"
+            className="pt-button pt-icon-arrow-right"
+            onClick={this.getNextDoc}
+            disabled={!this.state.moreNext}>
+            Next
+          </button>
+        </div>
+        <div className="pt-navbar-group collapse-group">
+          <div className="pt-navbar-heading">Expand </div>
+          <button type="button"
+            className={(this.state.collapseDepth === 1) ? 'pt-button active' : 'pt-button'}
+            onClick={() => (this.setState({ collapseDepth: 1 }))}>
+            1
+          </button>
+          <button type="button"
+            className={(this.state.collapseDepth === 2) ? 'pt-button active' : 'pt-button'}
+            onClick={() => (this.setState({ collapseDepth: 2 }))}>
+            2
+          </button>
+          <button type="button"
+            className={(this.state.collapseDepth === 3) ? 'pt-button active' : 'pt-button'}
+            onClick={() => (this.setState({ collapseDepth: 3 }))}>
+            3
+          </button>
+          <button type="button"
+            className={(this.state.collapseDepth === false) ? 'pt-button active' : 'pt-button'}
+            onClick={() => (this.setState({ collapseDepth: false }))}>
+            All
+          </button>
+        </div>
+      </nav>
+      <ReactJson className="enhanced-json-body"
+        src={this.props.enhancedJson.json}
         theme="hopscotch"
         indentWidth={2}
         collapsed={this.state.collapseDepth}

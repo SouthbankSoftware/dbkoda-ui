@@ -21,30 +21,26 @@
  * @Date:   2017-05-15T09:44:11+10:00
  * @Email:  chris@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-08-14T11:31:36+10:00
+// @Last modified time: 2017-08-15T13:27:01+10:00
  */
 
 @import '../../styles/_defaultTheme.scss';
-
 .enhanced-json-panel {
   width: 100%;
-  padding: 15px;
   background-color: $tabBackgroundSelected;
   overflow-y: scroll;
 
-  .object-key-val {
-    width: 100%;
-    background-color: $tabBackgroundSelected;
-    padding-top: 15px;
+  .pt-navbar.pt-dark {
+    background-color: #272a3a;
   }
+  .collapse-group {
+    width: 30%;
+    margin-left: 30%;
+    margin-right: 30%;
 
-  .string-value {
-    width: 100%;
-    word-wrap: break-word;
-  }
-
-  #enhancedJsonNextBtn {
-    float: right;
+    button.pt-button {
+      width: 3.5em !important;
+    }
   }
   #enhancedJsonNextBtn.pt-icon-arrow-right::before {
     content: "";
@@ -59,7 +55,6 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
   }
-
   button.pt-button {
     font-weight: lighter;
     color: $connectionButtonFontColour;
@@ -73,5 +68,24 @@
   button.pt-button:hover {
     background-color: $connectionButtonBackgroundColourHover;
     color: $connectionButtonFontColourHover;
+  }
+  button.pt-button.active {
+    background-color: $connectionButtonFontColourHover;
+    color: $connectionButtonBackgroundColourHover;
+  }
+
+  .enhanced-json-body {
+    padding: 15px;
+  }
+
+  .object-key-val {
+    width: 100%;
+    background-color: $tabBackgroundSelected;
+    padding-top: 15px;
+  }
+
+  .string-value {
+    width: 100%;
+    word-wrap: break-word;
   }
 }
