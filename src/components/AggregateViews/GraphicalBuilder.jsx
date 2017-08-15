@@ -104,17 +104,20 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps.
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', JSON.parse(res));
         res = JSON.parse(res);
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
+          console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
             if (index === res.stepAttributes.length - 1) {
-              console.log('LAST');
+              // Not empty now.
             } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
@@ -193,13 +196,13 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', JSON.parse(res));
         res = JSON.parse(res);
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
+          console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
             if (index === res.stepAttributes.length - 1) {
-              console.log('LAST');
+              // Not empty now.
             } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
@@ -249,13 +252,13 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps.
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', JSON.parse(res));
         res = JSON.parse(res);
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
+          console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
             if (index === res.stepAttributes.length - 1) {
-              console.log('LAST');
+              // Not empty now.
             } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
@@ -289,6 +292,10 @@ export default class GraphicalBuilder extends React.Component {
             // 4.b No - Clear Results.
             console.log('clearResults: ');
           }
+          runInAction('Update Graphical Builder', () => {
+            this.props.store.editorPanel.updateAggregateDetails = true;
+            this.forceUpdate();
+          });
         } else {
           // Check for error.
           console.error('updateResultSet: ', JSON.parse(res));

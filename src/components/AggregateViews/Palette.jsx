@@ -83,6 +83,7 @@ export default class Palette extends React.Component {
             // 3. Update Valid for each block.
             res.stepAttributes.map((indexValue, index) => {
               if (index === res.stepAttributes.length - 1) {
+                // No longer empty.
               } else if (indexValue.constructor === Array) {
                 // Check for error result.
                 if (res.stepCodes[index] === 0) {

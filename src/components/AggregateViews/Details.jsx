@@ -88,6 +88,7 @@ export default class Details extends React.Component {
               ) {
                 myCount += 1;
               }
+              console.log(editor.blockList[editor.selectedBlock].attributeList);
               params[arg.name] =
                 editor.blockList[editor.selectedBlock].attributeList;
               break;
