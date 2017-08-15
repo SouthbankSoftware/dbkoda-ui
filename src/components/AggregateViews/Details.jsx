@@ -69,6 +69,7 @@ export default class Details extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
       const params = {};
+      let myCount = 1;
       if (args.length > 0) {
         for (let i = 0; i < args.length; i += 1) {
           const arg = args[i];
@@ -80,9 +81,12 @@ export default class Details extends React.Component {
               params[arg.name] = this.currentDB;
               break;
             case 'prevAttributes':
-              // Check if attributeList has been gathered, if so, return, if not, wait.
-              while (!editor.blockList[editor.selectedBlock].attributeList) {
-                console.log('Waiting for attributes...');
+              // Check if attributeList has been gathered, if so, return, if not, wait
+              while (
+                !editor.blockList[editor.selectedBlock].attributeList &&
+                myCount < 10000
+              ) {
+                myCount += 1;
               }
               params[arg.name] =
                 editor.blockList[editor.selectedBlock].attributeList;
