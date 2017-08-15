@@ -107,7 +107,7 @@ export function dbkodaListAttributesAgg(params) {
   return params;
 }
 export function dbkodaListAttributesAgg_parse(res) {
-  return res.prevAttributes;
+  return JSON.parse(res.prevAttributes);
 }
 
 export function dbkodaAggOperators(params) {
