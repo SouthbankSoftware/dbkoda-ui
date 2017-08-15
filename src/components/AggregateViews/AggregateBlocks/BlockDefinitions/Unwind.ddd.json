@@ -1,6 +1,6 @@
 {
     "Title": "Unwind",
-    "DefaultValues": {"function":"$dbkodaUnWindPreFill"},
+    "DefaultValues": {},
     "Fields": [{
         "name": "UnWindAttribute",
         "label": "Array value to unwind",
@@ -8,8 +8,9 @@
         "type": "Combo",
         "lookup": "dbkodaListAttributesAgg",
         "lookup_arguments": [{
-            "name": "prevAttributes",
-            "value": "prevAttributes"
-        }]
+                "name": "prevAttributes",
+                "value": "prevAttributes"
+            }
+        ]
     }]
 }

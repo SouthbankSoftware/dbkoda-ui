@@ -19,8 +19,14 @@
         "name": "AttributeProjectionValue",
         "label": "Expression",
         "tooltip": "Expression for projection",
-        "type": "Text"
+        "type": "Combo",
+        "lookup": "dbkodaListAttributesProjectTarget",
+        "lookup_arguments": [{
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }]
       }
     ]
   }]
 }
+ 

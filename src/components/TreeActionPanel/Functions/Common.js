@@ -110,20 +110,33 @@ export function dbkodaListAttributesAgg(params) {
 export function dbkodaListAttributesAgg_parse(res) {
   return JSON.parse(res.prevAttributes);
 }
-
+// Right side of a project - either an existing or new attribute name
 export function dbkodaListAttributesProject(params) {
   params.dontRun = true;
   return params;
 }
 export function dbkodaListAttributesProject_parse(res) {
-  if (debug) console.log('Res for parsing: ', res);
-  return JSON.parse(res.prevAttributes);
-
-  /* if (debug) console.log('dklapp Res for parsing: ', res);
+ if (debug) console.log('dklapp Res for parsing: ', res);
   const output = JSON.parse(res.prevAttributes);
   output.unshift('NewAttributeName');
   if (debug) console.log('output: ', output);
-  return output; */
+  return output;
+}
+// Left side of a project - either an existing attribute with "$" or 1 or 0
+export function dbkodaListAttributesProjectTarget(params) {
+  params.dontRun = true;
+  return params;
+}
+export function dbkodaListAttributesProjectTarget_parse(res) {
+ if (debug) console.log('dklapp Res for parsing: ', res);
+  const output = JSON.parse(res.prevAttributes);
+  for (let idx = 0; idx < output.length; idx += 1) {
+    output[idx] = '"$' + output[idx] + '"';
+  }
+  output.unshift('1');
+  output.unshift('0');
+  if (debug) console.log('target output: ', output);
+  return output;
 }
 
 export function dbkodaAggOperators(params) {
