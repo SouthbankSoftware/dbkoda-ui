@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-15T11:26:50+10:00
+ * @Last modified time: 2017-08-15T11:32:01+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -258,7 +258,6 @@ export default class Panel extends React.Component {
           process.env.NODE_ENV === 'development' &&
           this.props.store.outputs.get(editor[1].id).enhancedJson
         ) {
-          const loading = this.props.store.outputs.get(editor[1].id).enhancedJson === '';
           arrTabs.push(
             <Tab2
               className={
@@ -268,7 +267,6 @@ export default class Panel extends React.Component {
               id={'EnhancedJson-' + editor[1].id}
               title={'EnhancedJson-' + editorTitle}
               panel={
-                (loading) ? <p>Loading...</p> :
                 <EnhancedJson
                   outputId={editor[1].id}
                   enhancedJson={this.props.store.outputs.get(editor[1].id).enhancedJson}
