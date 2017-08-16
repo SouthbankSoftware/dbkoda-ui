@@ -22,7 +22,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-15T11:31:30+10:00
+ * @Last modified time: 2017-08-16T12:13:18+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -132,8 +132,8 @@ export default class OutputApi {
     // Parse output for string 'Type "it" for more'
     const outputId = this.outputHash[output.id + output.shellId];
 
-    console.log(outputId);
-    console.log('TEST OUTPUT: =>> ', output.output);
+    // console.log(outputId);
+    // console.log('TEST OUTPUT: =>> ', output.output);
 
     const totalOutput = this.store.outputs.get(outputId).output + output.output;
     const profile = this.store.profiles.get(output.id);
@@ -174,9 +174,10 @@ export default class OutputApi {
 
   @action.bound
   initJsonView(jsonStr, outputId, displayType, lines) {
+    const tabPrefix = (displayType === 'enhancedJson') ?
+      'EnhancedJson-' : 'TableView-';
     if (this.store.outputPanel.currentTab.indexOf('EnhancedJson-')) {
-      this.store.outputPanel.currentTab =
-        'EnhancedJson-' + this.store.outputPanel.currentTab;
+      this.store.outputPanel.currentTab = tabPrefix + this.store.outputPanel.currentTab;
     }
     StaticApi.parseShellJson(jsonStr).then((result) => {
       runInAction(() => {
@@ -195,7 +196,7 @@ export default class OutputApi {
         });
         this.store.outputPanel.currentTab =
           this.store.outputPanel.currentTab
-            .replace(/EnhancedJson-/, '');
+            .replace(tabPrefix, '');
       });
     });
   }

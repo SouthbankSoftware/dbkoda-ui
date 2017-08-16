@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-15T14:48:04+10:00
+ * @Last modified time: 2017-08-15T16:37:34+10:00
  */
 
 import React from 'react';
@@ -48,7 +48,6 @@ export default class Panel extends React.Component {
   getNextDoc() {
     const lineNumber = this.props.enhancedJson.lastLine + 1;
     const lines = { start: 0, end: 0, status: '' };
-    this.setState({ morePrevious: true, moreNext: true });
     let currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, lines);
     if (lines.status === 'Invalid') {
       lines.status = '';
@@ -58,13 +57,13 @@ export default class Panel extends React.Component {
         return;
       }
     }
+    this.setState({ morePrevious: true, moreNext: true });
     this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
   }
 
   getPreviousDoc() {
     const lineNumber = this.props.enhancedJson.firstLine - 1;
     const lines = { start: 0, end: 0, status: '' };
-    this.setState({ morePrevious: true, moreNext: true });
     let currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, lines);
     if (lines.status === 'Invalid') {
       lines.status = '';
@@ -74,6 +73,7 @@ export default class Panel extends React.Component {
         return;
       }
     }
+    this.setState({ morePrevious: true, moreNext: true });
     this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
   }
 
@@ -83,14 +83,14 @@ export default class Panel extends React.Component {
         <div className="pt-navbar-group pt-align-left">
           <button type="button"
             id="enhancedJsonPrevBtn"
-            className="pt-button pt-icon-chevron-left"
+            className="pt-button pt-icon-large pt-icon-chevron-left"
             onClick={this.getPreviousDoc}
             disabled={!this.state.morePrevious} />
         </div>
         <div className="pt-navbar-group pt-align-right">
           <button type="button"
             id="enhancedJsonNextBtn"
-            className="pt-button pt-icon-chevron-right"
+            className="pt-button pt-icon-large pt-icon-chevron-right"
             onClick={this.getNextDoc}
             disabled={!this.state.moreNext} />
         </div>

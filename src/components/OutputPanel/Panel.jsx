@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-15T11:32:01+10:00
+ * @Last modified time: 2017-08-16T12:12:02+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -36,6 +36,7 @@ import './style.scss';
 import { Explain } from '../ExplainPanel/index';
 import { Broker, EventType } from '../../helpers/broker';
 import { EnhancedJson } from '../EnhancedJsonPanel';
+import { TableView } from '../TableViewPanel';
 
 /**
  * The main panel for the Output view, this handles tabbing,
@@ -254,10 +255,7 @@ export default class Panel extends React.Component {
             this.props.store.outputPanel.currentTab = editor[1].id;
           });
         }
-        if (
-          process.env.NODE_ENV === 'development' &&
-          this.props.store.outputs.get(editor[1].id).enhancedJson
-        ) {
+        if (this.props.store.outputs.get(editor[1].id).enhancedJson) {
           arrTabs.push(
             <Tab2
               className={
@@ -270,6 +268,24 @@ export default class Panel extends React.Component {
                 <EnhancedJson
                   outputId={editor[1].id}
                   enhancedJson={this.props.store.outputs.get(editor[1].id).enhancedJson}
+                  getDocumentAtLine={this.getDocumentAtLine} />
+              }
+            />
+          );
+        }
+        if (this.props.store.outputs.get(editor[1].id).tableJson) {
+          arrTabs.push(
+            <Tab2
+              className={
+                tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
+              }
+              key={'TableView-' + editor[1].id}
+              id={'TableView-' + editor[1].id}
+              title={'TableView-' + editorTitle}
+              panel={
+                <TableView
+                  outputId={editor[1].id}
+                  tableJson={this.props.store.outputs.get(editor[1].id).tableJson}
                   getDocumentAtLine={this.getDocumentAtLine} />
               }
             />

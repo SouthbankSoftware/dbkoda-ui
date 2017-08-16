@@ -21,7 +21,7 @@
  * @Date:   2017-05-15T09:44:11+10:00
  * @Email:  chris@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-08-15T14:47:21+10:00
+// @Last modified time: 2017-08-15T16:29:37+10:00
  */
 
 @import '../../styles/_defaultTheme.scss';
@@ -45,23 +45,10 @@
       width: 3.5em !important;
     }
   }
-  #enhancedJsonNextBtn.pt-icon-chevron-right::before {
-    content: "";
-  }
-  #enhancedJsonNextBtn.pt-icon-chevron-right::after {
-    content: "\E695";
-    line-height: 1;
-    font-family: "Icons16", sans-serif;
-    margin-left: 7px;
-    font-size: 16px;
-    font-weight: 400;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-  }
   button.pt-button {
     font-weight: lighter;
     color: $connectionButtonFontColour;
-    width: 7em !important;
+    width: 3.5em !important;
     border-radius: 0;
     background-image: unset !important;
     background-color: #272a3a !important;
