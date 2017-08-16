@@ -22,7 +22,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-16T12:13:18+10:00
+ * @Last modified time: 2017-08-16T14:27:28+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -176,7 +176,7 @@ export default class OutputApi {
   initJsonView(jsonStr, outputId, displayType, lines) {
     const tabPrefix = (displayType === 'enhancedJson') ?
       'EnhancedJson-' : 'TableView-';
-    if (this.store.outputPanel.currentTab.indexOf('EnhancedJson-')) {
+    if (this.store.outputPanel.currentTab.indexOf(tabPrefix)) {
       this.store.outputPanel.currentTab = tabPrefix + this.store.outputPanel.currentTab;
     }
     StaticApi.parseShellJson(jsonStr).then((result) => {
@@ -196,7 +196,7 @@ export default class OutputApi {
         });
         this.store.outputPanel.currentTab =
           this.store.outputPanel.currentTab
-            .replace(tabPrefix, '');
+            .split(tabPrefix)[1];
       });
     });
   }
