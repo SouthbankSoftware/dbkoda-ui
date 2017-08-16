@@ -1,16 +1,19 @@
 {
   "Title": "Lookup",
   "DefaultValues": {},
-  "Fields": [{
+  "Fields": [
+    {
       "name": "collection",
       "label": "Collection to join to",
       "tooltip": "Lookup data in this collection",
       "type": "Combo",
       "lookup": "dbkoda_listcollections",
-      "lookup_arguments": [{
-        "name": "db",
-        "value": "database"
-      }]
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "database"
+        }
+      ]
     },
     {
       "name": "localField",
@@ -18,16 +21,30 @@
       "tooltip": "Data in the pipeline to use for join",
       "type": "Combo",
       "lookup": "dbkodaListAttributesAgg",
-      "lookup_arguments": [{
-        "name": "prevAttributes",
-        "value": "prevAttributes"
-      }]
+      "lookup_arguments": [
+        {
+          "name": "prevAttributes",
+          "value": "prevAttributes"
+        }
+      ]
     },
     {
       "name": "foreignField",
       "label": "Foriegn Field",
       "tooltip": "Data from the collection to use for join",
-      "type": "Text"
+      "type": "Combo",
+      "lookup": "dbkodaListAttributes",
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "database"
+        },
+        {
+          "name": "collection",
+          "value": "collection",
+          "reference": "collection"
+        }
+      ]
     },
     {
       "name": "outputField",

@@ -2,7 +2,8 @@
   "en": {
     "aggregate_builder": {
       "show_left_panel": "Show Panel",
-      "hide_left_panel": "Hide Panel"
+      "hide_left_panel": "Hide Panel",
+      "code_it_yourself": "BYO Code"
     },
     "telemetry_dialog": {
       "header": "Welcome!",
@@ -69,8 +70,7 @@
         "queryLabel": "Query:"
       },
       "worst-shard": "{0} is the most time consuming shard.",
-      "details": {
-      },
+      "details": {},
       "statistics": {
         "shard": "Shard",
         "examined": "Examined",
