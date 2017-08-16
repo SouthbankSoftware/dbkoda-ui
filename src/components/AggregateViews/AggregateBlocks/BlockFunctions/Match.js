@@ -23,5 +23,7 @@ export const Match = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
-  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse
+  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
+  dbkodaMatchOperators: common.dbkodaMatchOperators,
+  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
 };

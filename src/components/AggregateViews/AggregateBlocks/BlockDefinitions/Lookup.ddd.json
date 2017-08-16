@@ -27,7 +27,18 @@
       "name": "foreignField",
       "label": "Foriegn Field",
       "tooltip": "Data from the collection to use for join",
-      "type": "Text"
+      "type": "Combo",
+      "lookup": "dbkodaListAttributes",
+      "lookup_arguments": [{
+          "name": "db",
+          "value": "database"
+        },
+        {
+          "name": "collection",
+          "value": "collection",
+          "reference": "collection"
+        }
+      ]
     },
     {
       "name": "outputField",

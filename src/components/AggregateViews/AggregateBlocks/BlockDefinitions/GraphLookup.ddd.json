@@ -1,17 +1,23 @@
 {
   "Title": "GraphLookup",
-  "DefaultValues": {}, 
-  "Fields": [{
-    "name": "collection",
-    "label": "Collection to join to",
-    "tooltip": "Lookup data in this collection",
-    "type": "Combo",
-    "lookup": "dbkoda_listcollections",
-    "lookup_arguments": [{
-      "name": "db",
-      "value": "database"
+  "DefaultValues": {
+    "function": "dbkodaGraphLookupPrefill",
+    "arguments": [{
+      "name": "collection",
+      "value": "collection"
     }]
   },
+  "Fields": [{
+      "name": "collection",
+      "label": "Collection to join to",
+      "tooltip": "Lookup data in this collection",
+      "type": "Combo",
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [{
+        "name": "db",
+        "value": "database"
+      }]
+    },
     {
       "name": "startWith",
       "label": "Starting value ",
@@ -44,20 +50,22 @@
       "name": "as",
       "label": "as",
       "tooltip": "Field which will receive the graph output",
-      "type": "Text" 
+      "type": "Text",
+      "default": "GraphOutput"
     },
     {
       "name": "maxDepth",
       "label": "max Depth",
       "tooltip": "maximum depth of the graph",
       "type": "Numeric",
-      "default":1
+      "default": 1
     },
     {
       "name": "depthField",
       "label": "Depth field",
       "tooltip": "output Field that will hold the depth",
-      "type": "Text" 
+      "type": "Text",
+      "default": "Depth"
     },
     {
       "name": "restrictSearchWithMatch",

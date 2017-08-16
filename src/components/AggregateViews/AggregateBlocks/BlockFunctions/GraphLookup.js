@@ -28,4 +28,11 @@ export const GraphLookup = {
   dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
   dbkodaAggOperators: common.dbkodaAggOperators,
   dbkodaAggOperators_parse: common.dbkodaAggOperators_parse,
+  dbkodaGraphLookupPreFill: (params) => {
+    data = {};
+    data.collection = params.collection;
+    data.as = 'GraphOutput';
+    data.depthField = 'Depth';
+    return data;
+  }
 };
