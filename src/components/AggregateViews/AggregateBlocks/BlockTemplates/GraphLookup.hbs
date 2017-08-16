@@ -1,19 +1,19 @@
   {
    $graphLookup: {
-     {{#if collection              ~}}  from: {{{collection}}},
+     {{#if collection              ~}}  from: "{{{collection}}}",
       {{/if }}
       {{#if startWith              ~}}  startWith: {{{startWith}}}, 
       {{/if }}
-      {{#if connectFromField       ~}}  connectFromField: {{{connectFromField}}}, 
+      {{#if connectFromField       ~}}  connectFromField: "{{{connectFromField}}}", 
       {{/if }}
-      {{#if connectToField         ~}}  connectToField: {{{connectToField}}}, 
+      {{#if connectToField         ~}}  connectToField: "{{{connectToField}}}", 
       {{/if }}
       {{#if maxDepth               ~}}  maxDepth: {{{maxDepth}}}, 
       {{/if }}
-      {{#if depthField              ~}} depthField: {{{depthField}}}, 
+      {{#if depthField              ~}} depthField: "{{{depthField}}}", 
       {{/if }}
       {{#if restrictSearchWithMatch ~}} restrictSearchWithMatch: {{{restrictSearchWithMatch}}}, 
       {{/if }}
-      {{#if as                      ~}} as: {{{as}}} {{/if }}
+      {{#if as                      ~}} as: "{{{as}}}" {{/if }}
    }
 }

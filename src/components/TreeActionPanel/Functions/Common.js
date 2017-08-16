@@ -73,6 +73,24 @@ export function dbkoda_listcollections_parse(res) {
   });
   return collectionList.sort();
 }
+
+export function dbkoda_listcollectionsAgg(params) {
+  //eslint-disable-line
+  const cmd = 'db.getSiblingDB("' + params.db + '").getCollectionNames()';
+  if (debug) console.log('listCollAgg:', cmd);
+  return cmd;
+}
+
+export function dbkoda_listcollectionsAgg_parse(res) {
+  //eslint-disable-line
+  const collectionList = [];
+  res.forEach((d) => {
+    collectionList.push(d);
+  });
+  if (debug) console.log('listCollAgg:', collectionList.sort());
+  return JSON.parse(collectionList.sort());
+}
+
 export function dbkodaParameterList() {
   //eslint-disable-line
   return 'JSON.stringify(db.getSiblingDB("admin").runCommand( { getParameter : "*" }))';
