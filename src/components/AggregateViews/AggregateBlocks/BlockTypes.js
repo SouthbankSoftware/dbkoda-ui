@@ -83,13 +83,6 @@ export const BlockTypes = {
       Expression: ''
     }
   },
-  ADDFIELDS: {
-    type: 'AddFields',
-    description: 'AddFields',
-    fields: {
-      Expression: ''
-    }
-  },
   LOOKUP: {
     type: 'Lookup',
     description: 'Lookup',
@@ -107,6 +100,13 @@ export const BlockTypes = {
   COUNT: {
     type: 'Count',
     description: 'Count',
+    fields: {
+      Expression: ''
+    }
+  },
+  ADDFIELDS: {
+    type: 'AddFields',
+    description: 'AddFields',
     fields: {
       Expression: ''
     }

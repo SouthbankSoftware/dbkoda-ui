@@ -14,16 +14,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
- * You shouldhave received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @Author: chris
+ * @Date:   2017-08-16T12:03:18+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-16T12:05:16+10:00
  */
-import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
-export const Match = {
-  dbkodaListAttributes: common.dbkodaListAttributes,
-  dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
-  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
-  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
-  dbkodaMatchOperators: common.dbkodaMatchOperators,
-  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
-};
+export TableView from './Panel.jsx';

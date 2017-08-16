@@ -161,6 +161,7 @@
     "global": "^4.3.2",
     "mongodb-uri": "^0.9.7",
     "react-json-view": "^1.10.12",
+    "react-json-viewer": "^1.6.1",
     "worker-loader": "^0.8.1"
   }
 }

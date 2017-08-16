@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-14T16:04:54+10:00
+ * @Last modified time: 2017-08-16T11:56:20+10:00
 */
 
 import React from 'react';
@@ -109,7 +109,17 @@ export default class Editor extends React.Component {
               this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
             }}
             text={globalString('output/editor/contextJson')}
-            iconName="pt-icon-small-cross"
+            iconName="pt-icon-panel-stats"
+            intent={Intent.NONE}
+          />
+        </div>
+        <div className="menuItemWrapper showTableView">
+          <MenuItem
+            onClick={() => {
+              this.props.api.initJsonView(currentJson, this.props.id, 'tableJson', lines);
+            }}
+            text={globalString('output/editor/contextTable')}
+            iconName="pt-icon-th"
             intent={Intent.NONE}
           />
         </div>
