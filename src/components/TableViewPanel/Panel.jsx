@@ -22,11 +22,10 @@
  * @Date:   2017-08-16T12:05:28+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-16T14:03:30+10:00
+ * @Last modified time: 2017-08-16T14:07:24+10:00
  */
 
 import React from 'react';
-import { inject } from 'mobx-react';
 import JSONViewer from 'react-json-viewer';
 import './style.scss';
 
