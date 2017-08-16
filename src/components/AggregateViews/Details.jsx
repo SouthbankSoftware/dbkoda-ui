@@ -73,29 +73,46 @@ export default class Details extends React.Component {
       if (args.length > 0) {
         for (let i = 0; i < args.length; i += 1) {
           const arg = args[i];
-          switch (arg.value) {
-            case 'collection':
-              params[arg.name] = this.currentCollection;
-              break;
-            case 'database':
-              params[arg.name] = this.currentDB;
-              break;
-            case 'prevAttributes':
-              // Check if attributeList has been gathered, if so, return, if not, wait
-              while (
-                !editor.blockList[editor.selectedBlock].attributeList &&
-                myCount < 10000
-              ) {
-                myCount += 1;
-              }
-              params[arg.name] =
-                editor.blockList[editor.selectedBlock].attributeList;
-              break;
-            default:
-              console.error(
-                'Invalid arguments to Aggregate Block (This should not really happen :( - ',
-                args,
-              );
+          if (arg.reference) {
+            // Field references another field in the form.
+            params[arg.name] =
+              editor.blockList[editor.selectedBlock].fields[arg.reference];
+            // Create a list of references so the editor knows when to re-fetch results.
+            if (editor.blockList[editor.selectedBlock].references) {
+              editor.blockList[editor.selectedBlock].references[
+                arg.reference
+              ] = true;
+            } else {
+              editor.blockList[editor.selectedBlock].references = {};
+              editor.blockList[editor.selectedBlock].references[
+                arg.reference
+              ] = true;
+            }
+          } else {
+            switch (arg.value) {
+              case 'collection':
+                params[arg.name] = this.currentCollection;
+                break;
+              case 'database':
+                params[arg.name] = this.currentDB;
+                break;
+              case 'prevAttributes':
+                // Check if attributeList has been gathered, if so, return, if not, wait
+                while (
+                  !editor.blockList[editor.selectedBlock].attributeList &&
+                  myCount < 10000
+                ) {
+                  myCount += 1;
+                }
+                params[arg.name] =
+                  editor.blockList[editor.selectedBlock].attributeList;
+                break;
+              default:
+                console.error(
+                  'Invalid arguments to Aggregate Block (This should not really happen :( - ',
+                  args,
+                );
+            }
           }
         }
       }
@@ -126,7 +143,15 @@ export default class Details extends React.Component {
     editorObject.blockList[selectedBlock].modified = true;
     for (const key in fields) {
       if (Object.prototype.hasOwnProperty.call(fields, key)) {
+        // If any of the block fields have changed, and are a reference, re-render the details panel.
+        const oldKey = editorObject.blockList[selectedBlock].fields[key];
         editorObject.blockList[selectedBlock].fields[key] = fields[key];
+        if (!(oldKey === fields[key])) {
+          if (editorObject.blockList[selectedBlock].references[key]) {
+            this.state.form = null;
+            this.props.store.editorPanel.updateAggregateDetails = true;
+          }
+        }
       }
     }
 
