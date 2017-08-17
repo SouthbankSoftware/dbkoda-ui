@@ -21,8 +21,8 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-04-10T10:37:14+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   chris
-// @Last modified time: 2017-05-10T16:52:11+10:00
+// @Last modified by:   wahaj
+// @Last modified time: 2017-08-17T10:38:55+10:00
 @import '../../styles/_defaultTheme.scss';
 .connection-profile {
   display: flex;
@@ -195,6 +195,28 @@
         }
       }
     }
+    div.ssh-form {
+      div.remoteHost-input-content {
+        display: flex;
+        flex-direction: column;
+      }
+      div.sshPort-input-content {
+        display: flex;
+        flex-direction: column;
+      }
+      div.remotePort-input-content {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    div.remoteuser-form {
+      div.remoteUser-input-content {
+        label.remoteUser-label {
+          width: 80px;
+          text-align: right;
+        }
+      }
+    }
     div.credentials-form {
       display: flex;
       flex-direction: row;
@@ -337,11 +359,27 @@
   .host-input,
   .database-input-content,
   .database-input-content .pt-form-content,
-  .database-input {
+  .database-input,
+  .remoteUser-input-content,
+  .remoteUser-input-content .pt-form-content,
+  .remoteUser-input,
+  .remotePass-input-content,
+  .remotePass-input-content .pt-form-content,
+  .remotePass-input,
+  .sshKeyFile-input-content,
+  .sshKeyFile-input-content .pt-form-content,
+  .sshKeyFile-input,
+  .passPhrase-input-content,
+  .passPhrase-input-content .pt-form-content,
+  .passPhrase-input,
+  {
     width: 100%;
   }
-  .port-input {
+  .port-input, .sshPort-input, .remotePort-input  {
     width: 80px;
+  }
+  .remoteHost-input {
+    width: 145px;
   }
   .port-label {
     width: 5px;

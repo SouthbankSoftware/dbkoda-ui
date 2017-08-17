@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-22T14:23:36+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-17T17:01:41+10:00
  */
 
 /**
@@ -112,6 +112,16 @@ const ConnectionPanel = ({
         urlRadio: data.urlRadio,
         username: data.username,
         sha: data.sha,
+        ssh: data.ssh,
+        remoteHost: data.remoteHost,
+        sshPort: data.sshPort,
+        remotePort: data.remotePort,
+        remoteUser: data.remoteUser,
+        passRadio: data.passRadio,
+        remotePass: data.remotePass,
+        keyRadio: data.keyRadio,
+        sshKeyFile: data.sshKeyFile,
+        passPhrase: data.passPhrase,
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
@@ -168,6 +178,33 @@ const ConnectionPanel = ({
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
     }
+
+    if (data.ssh) {
+      query.ssh = data.ssh;
+      query.remoteHost = data.remoteHost;
+      query.sshPort = data.sshPort;
+      query.remotePort = data.remotePort;
+      query.remoteUser = data.remoteUser;
+      query.localHost = data.host;
+      query.localPort = data.port;
+      if (data.passRadio) {
+        query.remotePass = data.remotePass;
+      } else if (data.keyRadio) {
+        query.sshKeyFile = data.sshKeyFile;
+        query.passPhrase = data.passPhrase;
+      }
+    }
+
+    // query.ssh = true;
+    // query.sshKeyFile = '/Users/wahaj/.ssh/id_rsa';
+    // query.passPhrase = 'DBEnvy2016';
+    // query.remoteUser = 'parallels';
+    // query.remotePass = 'secret';
+    // query.remoteHost = '10.211.55.8';
+    // query.remotePort = '27017';
+    // query.localHost = data.host;
+    // query.localPort = data.port;
+
     profileList.creatingNewProfile = true;
     console.log('Q: ', query);
     const service = featherClient().service('/mongo-connection');

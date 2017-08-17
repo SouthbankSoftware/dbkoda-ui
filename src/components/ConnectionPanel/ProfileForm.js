@@ -19,8 +19,8 @@
  */
 
 /**
- * @Last modified by:   chris
- * @Last modified time: 2017-05-22T16:29:25+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-17T11:01:13+10:00
  */
 
 /**
@@ -55,6 +55,13 @@ export class ProfileForm extends MobxReactForm {
       key: 'value',
       call: ({ form, change }) => {
         this.addAuthenticationRules(form, change.newValue);
+        form.validate();
+      },
+    });
+    this.$('ssh').observe({
+      key: 'value',
+      call: ({ form, change }) => {
+        console.log('ssh Value:', change.newValue);
         form.validate();
       },
     });
@@ -208,6 +215,65 @@ export const Form = {
       placeholder: 'Password',
       type: 'password',
     },
+    {
+      name: 'ssh',
+      value: false,
+      label: 'SSH Tunnel',
+    },
+    {
+      name: 'remoteHost',
+      placeholder: 'Remote Host',
+      type: 'text',
+      rules: 'string',
+      label: 'Host',
+    },
+    {
+      name: 'sshPort',
+      placeholder: 'SSH Port',
+      type: 'number',
+      rules: 'numeric',
+      value: '22',
+      label: 'SSH Port',
+    },
+    {
+      name: 'remotePort',
+      type: 'number',
+      rules: 'numeric',
+      value: '27017',
+      label: 'Remote Port',
+    },
+    {
+      name: 'remoteUser',
+      label: 'Username',
+      placeholder: 'Remote Username',
+    },
+    {
+      name: 'passRadio',
+      value: false,
+      label: 'Password',
+    },
+    {
+      name: 'remotePass',
+      label: 'Password',
+      placeholder: 'Remote Password',
+      type: 'password',
+    },
+    {
+      name: 'keyRadio',
+      value: true,
+      label: 'Key',
+    },
+    {
+      name: 'sshKeyFile',
+      label: 'Key',
+      placeholder: 'Private Key File',
+    },
+    {
+      name: 'passPhrase',
+      label: 'Phrase',
+      placeholder: 'Passphrase(optional)',
+      type: 'password',
+    },
   ],
 };
 
@@ -224,6 +290,16 @@ export const createFormFromProfile = (profile) => {
   fields[8].value = profile.sha;
   fields[9].value = profile.username;
   fields[10].value = profile.password;
+  fields[11].value = profile.ssh;
+  fields[12].value = profile.remoteHost;
+  fields[13].value = profile.sshPort;
+  fields[14].value = profile.remotePort;
+  fields[15].value = profile.remoteUser;
+  fields[16].value = profile.passRadio;
+  fields[17].value = profile.remotePass;
+  fields[18].value = profile.keyRadio;
+  fields[19].value = profile.sshKeyFile;
+  fields[20].value = profile.passPhrase;
   return fields;
 };
 
