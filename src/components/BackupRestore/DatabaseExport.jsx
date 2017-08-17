@@ -22,7 +22,7 @@
  */
 
 import React from 'react';
-import path from 'path';
+import os from 'os';
 import {Button} from '@blueprintjs/core';
 
 import {ButtonPanel} from './ButtonPanel';
@@ -136,8 +136,10 @@ export default class DatabaseExport extends React.Component {
         if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE
           || action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_COLLECTION
           || action === BackupRestoreActions.EXPORT_DATABASE) {
-          f = path.join(fileNames[0], 'dump');
+            console.log('platform ', os.release());
+          f = os.release().indexOf('Windows') >= 0 ? fileNames[0] + '\\dump' : fileNames[0] + '/dump';
         }
+
         this.setState({directoryPath: f});
       },
     );
