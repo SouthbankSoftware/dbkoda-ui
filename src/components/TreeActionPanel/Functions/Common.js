@@ -26,12 +26,12 @@
  * @Last modified time: 2017-05-16T21:43:08+10:00
  */
 
-/* eslint camelcase: warn */
+/* eslint camelcase: off */
 /* eslint no-unused-vars: warn */
 
 const sprintf = require('sprintf-js').sprintf;
 
-const debug = true;
+const debug = false;
 
 export function dbkoda_listdb(params) {
   //eslint-disable-line
@@ -164,7 +164,7 @@ export function dbkodaAggOperators(params) {
 
 export function dbkodaAggOperators_parse(res) {
   //eslint-disable-line
-  if (false) console.log(res);
+  if (debug) console.log(res);
   return ['sum', 'max', 'min', 'avg', 'first', 'last'];
 }
 

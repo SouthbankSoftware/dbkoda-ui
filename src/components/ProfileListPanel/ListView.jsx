@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T10:19:16+10:00
+ * @Last modified time: 2017-08-17T17:09:56+10:00
  */
 
 
@@ -149,6 +149,21 @@ export default class ListView extends React.Component {
     if (selectedProfile) {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
+    }
+    if (selectedProfile.ssh) {
+      query.ssh = selectedProfile.ssh;
+      query.remoteHost = selectedProfile.remoteHost;
+      query.sshPort = selectedProfile.sshPort;
+      query.remotePort = selectedProfile.remotePort;
+      query.remoteUser = selectedProfile.remoteUser;
+      query.localHost = selectedProfile.host;
+      query.localPort = selectedProfile.port;
+      if (selectedProfile.passRadio) {
+        query.remotePass = selectedProfile.remotePass;
+      } else if (selectedProfile.keyRadio) {
+        query.sshKeyFile = selectedProfile.sshKeyFile;
+        query.passPhrase = selectedProfile.passPhrase;
+      }
     }
     this.props.store.profileList.creatingNewProfile = true;
     const service = featherClient().service('/mongo-connection');

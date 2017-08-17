@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-21T10:47:14+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-22T14:58:38+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-17T19:57:23+10:00
  */
 
 /**
@@ -37,6 +37,7 @@ import { Button } from '@blueprintjs/core';
 import _ from 'lodash';
 import Radio from './Radio';
 import Input from './Input';
+import FileInput from './FileInput';
 import Checkbox from './Checkbox';
 import './style.scss';
 import Label from './Label';
@@ -98,6 +99,42 @@ export default class Panel extends React.Component {
   }
 
   @autobind
+  _passRadioOnChange() {
+    if (!this.props.form.$('passRadio').get('value')) {
+      this.props.form
+        .$('passRadio')
+        .set('value', !this.props.form.$('passRadio').get('value'));
+      this.props.form
+        .$('keyRadio')
+        .set('value', !this.props.form.$('passRadio').get('value'));
+    }
+  }
+
+  @autobind
+  _keyRadioOnChange() {
+    if (!this.props.form.$('keyRadio').get('value')) {
+      this.props.form
+        .$('passRadio')
+        .set('value', !this.props.form.$('passRadio').get('value'));
+      this.props.form
+        .$('keyRadio')
+        .set('value', !this.props.form.$('passRadio').get('value'));
+    }
+  }
+
+  @autobind
+  _onClickRemotePass() {
+    this.props.form.$('passRadio').set('value', true);
+    this.props.form.$('keyRadio').set('value', false);
+  }
+
+  @autobind
+  _onClickKey() {
+    this.props.form.$('passRadio').set('value', false);
+    this.props.form.$('keyRadio').set('value', true);
+  }
+
+  @autobind
   _connect(data) {
     this.setState({ connecting: true });
     this.props
@@ -144,46 +181,41 @@ export default class Panel extends React.Component {
     form.save = this._save;
     if (
       !edit &&
-      this.props.form.$('hostRadio').get('value') &&
+      form.$('hostRadio').get('value') &&
       profiles &&
       !this.state.hasAliasChanged
     ) {
-      this.props.form.$('alias').value =
-        this.props.form.$('host').value +
+      form.$('alias').value =
+        form.$('host').value +
         ':' +
-        this.props.form.$('port').value +
+        form.$('port').value +
         ' - ' +
         (profiles.size + 1);
     } else if (
       !edit &&
-      this.props.form.$('urlRadio').get('value') &&
+      form.$('urlRadio').get('value') &&
       profiles &&
       !this.state.hasAliasChanged
     ) {
-      console.log(this.props.form.$('url').get('value').length);
-      if (this.props.form.$('url').get('value').length > 25) {
-        if (this.props.form.$('url').value.split('//').length > 1) {
-          this.props.form.$('alias').value = this.props.form
+      console.log(form.$('url').get('value').length);
+      if (form.$('url').get('value').length > 25) {
+        if (form.$('url').value.split('//').length > 1) {
+          form.$('alias').value = form
             .$('url')
             .value.split('//')[1]
             .substring(0, 25);
         } else {
-          this.props.form.$('alias').value = this.props.form
-            .$('url')
-            .value.substring(0, 25);
+          form.$('alias').value = form.$('url').value.substring(0, 25);
         }
-      } else if (this.props.form.$('url').value.split('//').length > 1) {
-        console.log(this.props.form.$('url').value.split('//')[1]);
-        if (this.props.form.$('url').value.split('//')[1] === '') {
-          this.props.form.$('alias').value =
-            'New Profile - ' + (profiles.size + 1);
+      } else if (form.$('url').value.split('//').length > 1) {
+        console.log(form.$('url').value.split('//')[1]);
+        if (form.$('url').value.split('//')[1] === '') {
+          form.$('alias').value = 'New Profile - ' + (profiles.size + 1);
         } else {
-          this.props.form.$('alias').value = this.props.form
-            .$('url')
-            .value.split('//')[1];
+          form.$('alias').value = form.$('url').value.split('//')[1];
         }
       } else {
-        this.props.form.$('alias').value = this.props.form.$('url').value;
+        form.$('alias').value = form.$('url').value;
       }
     }
 
@@ -205,71 +237,102 @@ export default class Panel extends React.Component {
             divOnChange={this._updateAliasState}
             showLabel
           />{' '}
-          {this.props.form.$('hostRadio').get('value')
-            ? <div className=" active hostname-form pt-form-group pt-inline zero-margin">
-              <Radio
-                field={form.$('hostRadio')}
-                onChange={this._hostRadioOnChange}
-                />
-              <Input
-                field={form.$('host')}
-                showLabel
-                divOnClick={this._onClickHost}
-                divOnFocus={this._onClickHost}
-                />
-              <Input
-                field={form.$('port')}
-                showLabel
-                divOnClick={this._onClickHost}
-                divOnFocus={this._onClickHost}
-                />
-            </div>
-            : <div className=" inactive hostname-form pt-form-group pt-inline zero-margin">
-              <Radio
-                field={form.$('hostRadio')}
-                onChange={this._hostRadioOnChange}
-                />
-              <Input
-                field={form.$('host')}
-                showLabel
-                divOnClick={this._onClickHost}
-                divOnFocus={this._onClickHost}
-                />
-              <Input
-                field={form.$('port')}
-                showLabel
-                divOnClick={this._onClickHost}
-                divOnFocus={this._onClickHost}
-                />
-            </div>}
-          {this.props.form.$('urlRadio').get('value')
-            ? <div className=" active url-form pt-form-group pt-inline zero-margin">
-              <Radio
-                field={form.$('urlRadio')}
-                onChange={this._urlRadioOnChange}
-                />
-              <Input
-                showLabel
-                field={form.$('url')}
-                divOnClick={this._onClickURL}
-                divOnFocus={this._onClickURL}
-                />
-            </div>
-            : <div className=" inactive url-form pt-form-group pt-inline zero-margin">
-              <Radio
-                field={form.$('urlRadio')}
-                onChange={this._urlRadioOnChange}
-                />
-              <Input
-                showLabel
-                field={form.$('url')}
-                divOnClick={this._onClickURL}
-                divOnFocus={this._onClickURL}
-                />
-            </div>}
+          <div
+            className={
+              (form.$('hostRadio').get('value') ? ' active' : ' inactive') +
+              ' hostname-form pt-form-group pt-inline zero-margin'
+            }
+          >
+            <Radio
+              field={form.$('hostRadio')}
+              onChange={this._hostRadioOnChange}
+            />
+            <Input
+              field={form.$('host')}
+              showLabel
+              divOnClick={this._onClickHost}
+              divOnFocus={this._onClickHost}
+            />
+            <Input
+              field={form.$('port')}
+              showLabel
+              divOnClick={this._onClickHost}
+              divOnFocus={this._onClickHost}
+            />
+          </div>
+          <div
+            className={
+              (form.$('urlRadio').get('value') ? ' active' : ' inactive') +
+              ' url-form pt-form-group pt-inline zero-margin'
+            }
+          >
+            <Radio
+              field={form.$('urlRadio')}
+              onChange={this._urlRadioOnChange}
+            />
+            <Input
+              showLabel
+              field={form.$('url')}
+              divOnClick={this._onClickURL}
+              divOnFocus={this._onClickURL}
+            />
+          </div>
           <div className="database-form pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
           </div>
+          <div className="profile-separator" />
+          <div className="ssh-form pt-form-group pt-inline zero-margin">
+            <Checkbox field={form.$('ssh')} />{' '}
+          </div>
+          {form.$('ssh').get('value') &&
+            <div>
+              <div className="ssh-form pt-form-group pt-inline zero-margin">
+                <Input field={form.$('remoteHost')} showLabel />
+                <Input field={form.$('sshPort')} showLabel />
+                <Input field={form.$('remotePort')} showLabel />
+              </div>
+              <div className="remoteuser-form pt-form-group pt-inline zero-margin">
+                <Input field={form.$('remoteUser')} showLabel />
+              </div>
+              <div
+                className={
+                  (form.$('passRadio').get('value') ? ' active' : ' inactive') +
+                  ' remotepass-form pt-form-group pt-inline zero-margin'
+                }
+              >
+                <Radio
+                  field={form.$('passRadio')}
+                  onChange={this._passRadioOnChange}
+                />
+                <Input
+                  field={form.$('remotePass')}
+                  divOnClick={this._onClickRemotePass}
+                  divOnFocus={this._onClickRemotePass}
+                />
+              </div>
+              <div
+                className={
+                  (form.$('keyRadio').get('value') ? ' active' : ' inactive') +
+                  ' remotePass-form pt-form-group pt-inline zero-margin'
+                }
+              >
+                <Radio
+                  field={form.$('keyRadio')}
+                  onChange={this._keyRadioOnChange}
+                />
+
+                <FileInput field={form.$('sshKeyFile')}
+                  divOnClick={this._onClickKey}
+                  divOnFocus={this._onClickKey}
+                  />
+
+                <Input
+                  field={form.$('passPhrase')}
+                  divOnClick={this._onClickKey}
+                  divOnFocus={this._onClickKey}
+                />
+              </div>
+            </div>}
           <div className="profile-separator" />
           <div className="ssl-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssl')} />
@@ -277,69 +340,50 @@ export default class Panel extends React.Component {
           <div className="profile-separator" />
           <Label text="Authentication" />
           <Checkbox field={form.$('sha')} />{' '}
-          {this.props.form.$('sha').get('value')
-            ? <div className=" active credentials-form">
-              <Input
-                field={form.$('username')}
-                divOnClick={this._onClickUserName}
-                divOnFocus={this._onClickUserName}
-                />
-              <Input
-                field={form.$('password')}
-                divOnClick={this._onClickUserName}
-                divOnFocus={this._onClickUserName}
-                />
-            </div>
-            : <div className=" inactive credentials-form">
-              <Input
-                field={form.$('username')}
-                divOnClick={this._onClickUserName}
-                divOnFocus={this._onClickUserName}
-                />
-              <Input
-                field={form.$('password')}
-                divOnClick={this._onClickUserName}
-                divOnFocus={this._onClickUserName}
-                />
-            </div>}
-          {formErrors.length > 0
-            ? <Button
-              className="inactive connectButton pt-button pt-intent-success"
-              onClick={form.onSubmit}
-              text={globalString('connection/form/connectButton')}
-              type="submit"
-              disabled={formErrors.length > 0}
-              loading={this.state.connecting}
-              />
-            : <Button
-              className="active connectButton pt-button pt-intent-success"
-              onClick={form.onSubmit}
-              text={globalString('connection/form/connectButton')}
-              type="submit"
-              disabled={formErrors.length > 0}
-              loading={this.state.connecting}
-              />}
+          <div
+            className={
+              (form.$('sha').get('value') ? ' active' : ' inactive') +
+              ' credentials-form'
+            }
+          >
+            <Input
+              field={form.$('username')}
+              divOnClick={this._onClickUserName}
+              divOnFocus={this._onClickUserName}
+            />
+            <Input
+              field={form.$('password')}
+              divOnClick={this._onClickUserName}
+              divOnFocus={this._onClickUserName}
+            />
+          </div>
+          <Button
+            className={
+              (formErrors.length > 0 ? 'inactive' : 'active') +
+              ' connectButton pt-button pt-intent-success'
+            }
+            onClick={form.onSubmit}
+            text={globalString('connection/form/connectButton')}
+            type="submit"
+            disabled={formErrors.length > 0}
+            loading={this.state.connecting}
+          />
           <div className="profile-button-panel">
             <Button
               className="save-button pt-button pt-intent-primary"
               text={globalString('connection/form/saveButton')}
               onClick={form.onSave}
             />{' '}
-            {formErrors.length > 0
-              ? <Button
-                className="inactive test-button pt-button pt-intent-primary"
-                onClick={form.onTest}
-                text={globalString('connection/form/testButton')}
-                disabled={formErrors.length > 0}
-                loading={this.state.testing}
-                />
-              : <Button
-                className="active test-button pt-button pt-intent-primary"
-                onClick={form.onTest}
-                text={globalString('connection/form/testButton')}
-                disabled={formErrors.length > 0}
-                loading={this.state.testing}
-                />}
+            <Button
+              className={
+                (formErrors.length > 0 ? 'inactive' : 'active') +
+                ' test-button pt-button pt-intent-primary'
+              }
+              onClick={form.onTest}
+              text={globalString('connection/form/testButton')}
+              disabled={formErrors.length > 0}
+              loading={this.state.testing}
+            />
             <Button
               className="reset-button pt-button pt-intent-warning"
               onClick={form.onReset}
@@ -347,12 +391,6 @@ export default class Panel extends React.Component {
             />
           </div>
         </form>
-        {/* <div className="profile-error-input" style={{ color: Colors.RED2 }}>
-          {formErrors.map((error) => {
-            return <div key="profile-error"><strong>{error}</strong></div>;
-          })}
-
-        </div> */}
       </div>
     );
   }
