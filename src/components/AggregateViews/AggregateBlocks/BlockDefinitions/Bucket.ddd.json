@@ -1,24 +1,28 @@
 {
   "Title": "Bucket",
   "DefaultValues": {},
-  "Fields": [
-    {
+  "Fields": [{
       "name": "groupBy",
       "label": "Group By Expression",
       "tooltip": "Group by expression",
-      "type": "Text"
+      "type": "Combo",
+      "lookup": "dbkodaListAttributesAgg",
+      "lookup_arguments": [{
+        "name": "prevAttributes",
+        "value": "prevAttributes"
+      }]
     },
     {
       "name": "lowerBounds",
       "label": "Lower Bucket bounds",
       "type": "Table",
       "columns": [{
-          "name": "lowerBound",
-          "label": "lower bound",
-          "tooltip": "Lower bound for the bucket",
-          "type": "Text"
-        }]
-      },
+        "name": "lowerBound",
+        "label": "lower bound",
+        "tooltip": "Lower bound for the bucket",
+        "type": "Text"
+      }]
+    },
     {
       "name": "defaultValue",
       "label": "Default value",
@@ -26,21 +30,32 @@
       "type": "Text"
     },
     {
-      "name": "outputVars",
-      "label": "Aggregations for each bucket",
+      "name": "AggregateKeys",
+      "label": "Columns To Aggregate",
       "type": "Table",
       "columns": [{
-          "name": "varName",
-          "label": "attribute Name",
-          "tooltip": "Name for the new variable ",
-          "type": "Text"
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be filtered",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributesAgg",
+          "lookup_arguments": [{
+            "name": "prevAttributes",
+            "value": "prevAttributes"
+          }]
         },
-      {
-          "name": "varExpression",
-          "label": "attribute expression",
-          "tooltip": "aggregate style expression",
-          "type": "Text"
-        }]
+        {
+          "name": "Aggregation",
+          "Label": "Aggregation",
+          "type": "Combo",
+          "tooltip": "Aggregation Operation",
+          "lookup": "dbkodaAggOperators",
+          "lookup_arguments": [{
+            "name": "db",
+            "value": "database"
+          }]
+        }
+      ]
     }
   ]
 
