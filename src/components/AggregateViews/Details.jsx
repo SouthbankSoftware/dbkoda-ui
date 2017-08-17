@@ -35,6 +35,7 @@ import { AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
+import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import './style.scss';
 
 @inject(allStores => ({
@@ -238,7 +239,14 @@ export default class Details extends React.Component {
           this.updateMsg(reason);
         });
     }
-
+    let maxColumns = 2;
+    if (this.state.form) {
+      maxColumns = BlockTypes[this.state.form.title.toUpperCase()].columns;
+      if (!maxColumns) {
+        maxColumns = 2;
+      }
+    }
+    console.log(maxColumns);
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
@@ -246,7 +254,7 @@ export default class Details extends React.Component {
         </nav>
         {activeBlock &&
           <div className="aggregateDetailsContent">
-            <div className="dynamic-form">
+            <div className={'dynamic-form columns-' + maxColumns + '-max'}>
               {this.state.form &&
                 <View
                   title={this.state.form.title}
