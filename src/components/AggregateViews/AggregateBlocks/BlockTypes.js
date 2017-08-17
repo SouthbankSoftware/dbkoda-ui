@@ -125,6 +125,13 @@ export const BlockTypes = {
       Expression: ''
     }
   },
+  BUCKETAUTO: {
+    type: 'BucketAuto',
+    description: 'BucketAuto',
+    fields: {
+      Expression: ''
+    }
+  },
   FACET: {
     type: 'Facet',
     description: 'Gacet',
