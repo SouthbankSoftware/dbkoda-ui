@@ -19,9 +19,35 @@
  */
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
-export const SortByCount = {
+export const BucketAuto = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
   dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
+  dbkodaAggOperators: common.dbkodaAggOperators,
+  dbkodaAggOperators_parse: common.dbkodaAggOperators_parse,
+  dbkodaGranularityLookup: (params) => {
+    params.dontRun = true;
+    return params;
+  },
+  dbkodaGranularityLookup_parse: (res) => {
+    //eslint-disable-line
+    const debug = false;
+    if (debug) console.log(res);
+    const granularities = ['R5',
+      'R10',
+      'R20',
+      'R40',
+      'R80',
+      '1-2-5',
+      'E6',
+      'E12',
+      'E24',
+      'E48',
+      'E96',
+      'E192',
+      'POWERSOF2'
+    ];
+    return granularities;
+  }
 };

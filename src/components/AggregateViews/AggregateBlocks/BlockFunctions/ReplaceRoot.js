@@ -19,7 +19,7 @@
  */
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
-export const SortByCount = {
+export const ReplaceRoot = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,

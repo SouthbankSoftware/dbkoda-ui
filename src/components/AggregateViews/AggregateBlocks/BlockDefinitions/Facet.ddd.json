@@ -3,37 +3,20 @@
   "DefaultValues": {},
   "Fields": [
     {
-      "name": "UseOr",
-      "label": "Use Or?",
-      "tooltip": "If true, will us OR across filter conditions",
-      "type": "Boolean"
-    },
-    {
-      "name": "FilterKeys",
-      "label": "Filter conditions",
+      "name": "Facet",
+      "label": "Facets",
       "type": "Table",
       "columns": [{
           "name": "AttributeName",
           "label": "Attribute",
-          "tooltip": "Name of the attribute to be filtered",
-          "type": "Combo",
-          "lookup": "dbkodaListAttributes",
-          "lookup_arguments": [{
-              "name": "db",
-              "value": "treeNode.parentDB"
-            },
-            {
-              "name": "collection",
-              "value": "treeNode"
-            }
-          ]
-
+          "tooltip": "Name of the new Attribute",
+          "type": "Text" 
         },
         {
-          "name": "Value",
-          "label": "Value to filter",
+          "name": "Pipeline",
+          "label": "Pipeline",
           "type": "Text",
-          "tooltip": "Enter the value to search for (quote strings please)"
+          "tooltip": "Enter an aggregate pipeline"
         }
       ]
     }

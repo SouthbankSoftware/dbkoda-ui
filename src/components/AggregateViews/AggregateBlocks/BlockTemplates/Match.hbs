@@ -1,4 +1,5 @@
   { $match:{ {{#if UseOr}}"$or"{{else}}"$and"{{/if}}:[
-        {{#each FilterKeys}} { "{{AttributeName}}":{{{Value}}} } {{#unless last}},{{/unless}}{{/each}}]      
+        {{#each FilterKeys}} { "{{AttributeName}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
+        {{/each}}]      
       }
   }
