@@ -448,7 +448,7 @@ export default class DatabaseExport extends React.Component {
           </label>
           <div className="pt-form-content">
             <input
-              className="pt-input"
+              className="pt-input db-backup-input"
               readOnly={readOnly}
               type="text"
               dir="auto"
@@ -507,7 +507,7 @@ export default class DatabaseExport extends React.Component {
           </label>
           <div className="pt-form-content">
             <input
-              className="pt-input path-input"
+              className="pt-input path-input db-backup-path-input"
               type="text"
               readOnly
               onClick={e => this.setState({ directoryPath: e.target.value })}

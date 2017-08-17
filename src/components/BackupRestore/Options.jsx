@@ -98,6 +98,7 @@ const getOptions = (options) => {
                 <Checkbox
                   checked={o.checked}
                   label={o.label}
+                  className={`db-backup-${o.name}`}
                   onChange={() => o.onChange()}
                 />
               </Tooltip>
@@ -282,42 +283,50 @@ export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeCon
     {
       label: globalString('backuprestore/parameters/restoreOptions/label'),
       type: 'separator',
+      name: 'separator'
     }, {
       label: globalString('backuprestore/parameters/drop/label'),
       onChange: changeDrop,
       tooltips: globalString('backuprestore/parameters/drop/tooltip'),
       checked: drop,
+      name: 'drop'
     }, {
       label: globalString('backuprestore/parameters/dryRun/label'),
       onChange: changeDryRun,
       tooltips: globalString('backuprestore/parameters/dryRun/tooltip'),
       checked: dryRun,
+      name: 'dry-run',
     }, {
       label: globalString('backuprestore/parameters/writeConcern/label'),
       onChange: changeWriteConcern,
       checked: writeConcern,
       type: 'input',
+      name: 'write-concern',
       tooltips: globalString('backuprestore/parameters/writeConcern/tooltip'),
     }, {
       label: globalString('backuprestore/parameters/noIndexRestore/label'),
       checked: noIndexRestore,
+      name: 'no-index-restore',
       tooltips: globalString('backuprestore/parameters/noIndexRestore/tooltip'),
       onChange: changeNoIndexRestore,
     }, {
       label: globalString('backuprestore/parameters/noOptionsRestore/label'),
       onChange: changeNoOptionsRestore,
       value: noOptionsRestore,
+      name: 'no-options-restore',
       tooltips: globalString('backuprestore/parameters/noOptionsRestore/tooltip'),
     }, {
       label: globalString('backuprestore/parameters/keepIndexVersion/label'),
       tooltips: globalString('backuprestore/parameters/keepIndexVersion/tooltip'),
       onChange: changeKeepIndexVersion,
-      value: keepIndexVersion
+      value: keepIndexVersion,
+      name: 'keep-index-version',
     }, {
       label: globalString('backuprestore/parameters/maintainInsertionOrder/label'),
       tooltips: globalString('backuprestore/parameters/maintainInsertionOrder/tooltip'),
       onChange: changeMaintainInsertionOrder,
-      value: maintainInsertionOrder
+      value: maintainInsertionOrder,
+      name: 'maintain-insertion-order'
     }, {
       label: globalString('backuprestore/parameters/numParallelCollections/label'),
       tooltips: globalString('backuprestore/parameters/numParallelCollections/tooltip'),
@@ -325,6 +334,7 @@ export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeCon
       value: numParallelCollections,
       type: 'input',
       inputType: 'number',
+      name: 'num-parallel-collections',
     }, {
       label: globalString('backuprestore/parameters/numInsertionWorkers/label'),
       tooltips: globalString('backuprestore/parameters/numInsertionWorkers/tooltip'),
@@ -332,16 +342,19 @@ export const RestoreOptions = ({drop, changeDrop, dryRun, changeDryRun, writeCon
       value: numInsertionWorkersPerCollection,
       type: 'input',
       inputType: 'number',
+      name: 'num-insertion-workers',
     }, {
       label: globalString('backuprestore/parameters/stopOnError/label'),
       tooltips: globalString('backuprestore/parameters/stopOnError/tooltip'),
       onChange: changeStopOnError,
-      value: stopOnError
+      value: stopOnError,
+      name: 'stop-on-error',
     }, {
       label: globalString('backuprestore/parameters/bypassDocumentValidation/label'),
       tooltips: globalString('backuprestore/parameters/bypassDocumentValidation/tooltip'),
       onChange: changeBypassDocumentValidation,
-      value: bypassDocumentValidation
+      value: bypassDocumentValidation,
+      name: 'bypass-document-validation',
     }, {
       label: globalString('backuprestore/parameters/inputOptions/label'),
       type: 'separator'
