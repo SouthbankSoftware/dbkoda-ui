@@ -29,7 +29,7 @@ import {ButtonPanel} from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
 import {BackupRestoreActions} from '../common/Constants';
-import {AllCollectionOption, DumpOptions, ExportDBOptions, ImportOptions, RestoreOptions,} from './Options';
+import {AllCollectionOption, DumpOptions, ExportDBOptions, ImportOptions, RestoreOptions, } from './Options';
 import {generateCode, getCommandObject} from './CodeGenerator';
 import {getDialogProperites, isImportAction, isRestoreAction} from './Utils';
 
@@ -486,23 +486,23 @@ export default class DatabaseExport extends React.Component {
             treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
             treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
             treeAction === BackupRestoreActions.IMPORT_DATABASE) &&
-          <div style={{marginBottom: 20}}>
-            <label className="pt-label database" htmlFor="database">
-              {globalString('backuprestore/collection')}
-            </label>
-            <div className="pt-form-content">
-              <input
-                className="pt-input"
-                type="text"
-                dir="auto"
-                readOnly={
+            <div style={{marginBottom: 20}}>
+              <label className="pt-label database" htmlFor="database">
+                {globalString('backuprestore/collection')}
+              </label>
+              <div className="pt-form-content">
+                <input
+                  className="pt-input"
+                  type="text"
+                  dir="auto"
+                  readOnly={
                   treeAction === BackupRestoreActions.RESTORE_COLLECTION
                 }
-                value={this.state.collection}
-                onChange={e => this.setState({collection: e.target.value})}
+                  value={this.state.collection}
+                  onChange={e => this.setState({collection: e.target.value})}
               />
-            </div>
-          </div>}
+              </div>
+            </div>}
           <label className="pt-label database" htmlFor="database">
             {this.getFilePathLabel(treeAction)}
           </label>
