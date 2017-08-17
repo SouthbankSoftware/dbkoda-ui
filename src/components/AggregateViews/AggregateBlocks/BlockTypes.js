@@ -83,13 +83,6 @@ export const BlockTypes = {
       Expression: ''
     }
   },
-  ADDFIELDS: {
-    type: 'AddFields',
-    description: 'AddFields',
-    fields: {
-      Expression: ''
-    }
-  },
   LOOKUP: {
     type: 'Lookup',
     description: 'Lookup',
@@ -111,6 +104,20 @@ export const BlockTypes = {
       Expression: ''
     }
   },
+  OUT: {
+    type: 'Out',
+    description: 'Out',
+    fields: {
+      Expression: ''
+    }
+  },
+  ADDFIELDS: {
+    type: 'AddFields',
+    description: 'AddFields',
+    fields: {
+      Expression: ''
+    }
+  },
   SORTBYCOUNT: {
     type: 'SortByCount',
     description: 'SortByCount',
@@ -125,9 +132,23 @@ export const BlockTypes = {
       Expression: ''
     }
   },
+  BUCKETAUTO: {
+    type: 'BucketAuto',
+    description: 'BucketAuto',
+    fields: {
+      Expression: ''
+    }
+  },
+  REPLACEROOT: {
+    type: 'ReplaceRoot',
+    description: 'ReplaceRoot',
+    fields: {
+      Expression: ''
+    }
+  },
   FACET: {
     type: 'Facet',
-    description: 'Gacet',
+    description: 'Facet',
     fields: {
       Expression: ''
     }
@@ -135,13 +156,6 @@ export const BlockTypes = {
   REDACT: {
     type: 'Redact',
     description: 'Redact',
-    fields: {
-      Expression: ''
-    }
-  },
-  OUT: {
-    type: 'Out',
-    description: 'Out',
     fields: {
       Expression: ''
     }

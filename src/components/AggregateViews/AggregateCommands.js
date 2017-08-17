@@ -42,4 +42,9 @@ export const AggregateCommands = {
   GET_STATUS: (id) => {
     return "dbk_agg.getAggStatus('" + id + "')";
   },
+  GET_RESULTS: (id, stepIndex, reset) => {
+    return (
+      "dbk_agg.getResults('" + id + "','" + stepIndex + "','" + reset + "')"
+    );
+  },
 };

@@ -35,7 +35,7 @@ import {
   Menu,
   MenuItem,
   MenuDivider,
-  Intent
+  Intent,
 } from '@blueprintjs/core';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
@@ -55,7 +55,7 @@ import './View.scss';
 @inject(allStores => ({
   store: allStores.store,
   treeState: allStores.treeState,
-  api: allStores.api
+  api: allStores.api,
 }))
 @ContextMenuTarget
 export default class TreeView extends React.Component {
@@ -64,9 +64,9 @@ export default class TreeView extends React.Component {
       treeState: {},
       store: {
         treeActionPanel: {
-          treeActionEditorId: ''
-        }
-      }
+          treeActionEditorId: '',
+        },
+      },
     };
   }
   constructor(props) {
@@ -80,7 +80,7 @@ export default class TreeView extends React.Component {
     };
 
     this.state = {
-      nodes: this.props.treeState.nodes
+      nodes: this.props.treeState.nodes,
     };
   }
   componentWillMount() {
@@ -94,13 +94,13 @@ export default class TreeView extends React.Component {
     };
     this.reactionToJson = reaction(
       () => this.props.treeState.isNewJsonAvailable,
-      () => onNewJson()
+      () => onNewJson(),
     );
     this.reactionToFilter = reaction(
       () => this.props.treeState.filter,
       () => {
         this.setState({ nodes: this.props.treeState.nodes });
-      }
+      },
     );
     onNewJson();
   }
@@ -171,7 +171,7 @@ export default class TreeView extends React.Component {
           name="MakeRoot"
           iconName="pt-icon-git-new-branch"
           intent={Intent.NONE}
-        />
+        />,
       );
       if (Actions && Actions.length > 0) {
         Menus.push(<MenuDivider key="divider" />);
@@ -192,7 +192,7 @@ export default class TreeView extends React.Component {
                     key={objAction.name}
                     intent={Intent.NONE}
                   />
-                </div>
+                </div>,
               );
             } else {
               Menus.push(
@@ -206,13 +206,17 @@ export default class TreeView extends React.Component {
                     iconName={objAction.icon}
                     intent={Intent.NONE}
                   />
-                </div>
+                </div>,
               );
             }
           }
         }
       }
-      return <Menu>{Menus}</Menu>;
+      return (
+        <Menu>
+          {Menus}
+        </Menu>
+      );
     }
   }
   reactionToJson;
@@ -251,14 +255,19 @@ export default class TreeView extends React.Component {
   };
 
   isBackupRestoreAction = (action) => {
-    return action === BackupRestoreActions.EXPORT_DATABASE || action === BackupRestoreActions.EXPORT_COLLECTION
-      || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_COLLECTION
-      || action === BackupRestoreActions.IMPORT_COLLECTION || action === BackupRestoreActions.IMPORT_DATABASE
-      || action === BackupRestoreActions.DUMP_SERVER
-      || action === BackupRestoreActions.RESTORE_DATABASE
-      || action === BackupRestoreActions.RESTORE_COLLECTION
-      || action === BackupRestoreActions.RESTORE_SERVER;
-  }
+    return (
+      action === BackupRestoreActions.EXPORT_DATABASE ||
+      action === BackupRestoreActions.EXPORT_COLLECTION ||
+      action === BackupRestoreActions.DUMP_DATABASE ||
+      action === BackupRestoreActions.DUMP_COLLECTION ||
+      action === BackupRestoreActions.IMPORT_COLLECTION ||
+      action === BackupRestoreActions.IMPORT_DATABASE ||
+      action === BackupRestoreActions.DUMP_SERVER ||
+      action === BackupRestoreActions.RESTORE_DATABASE ||
+      action === BackupRestoreActions.RESTORE_COLLECTION ||
+      action === BackupRestoreActions.RESTORE_SERVER
+    );
+  };
 
   @action
   handleTreeActionClick = (e: React.MouseEvent) => {
@@ -268,15 +277,12 @@ export default class TreeView extends React.Component {
     if (noDialog) {
       switch (action) {
         case 'SampleCollections':
-          console.log('Sampling Collections...');
           this.props.treeState.sampleCollection(this.nodeRightClicked);
           break;
         case 'AggregateBuilder':
-          console.log('Aggregate builder...');
           this.props.store.openNewAggregateBuilder(this.nodeRightClicked);
           break;
         case 'DbStorageStats':
-          console.log('DrillDown View...');
           this.showStorageStatsView();
           break;
         default:
@@ -294,7 +300,7 @@ export default class TreeView extends React.Component {
         this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
         this.props.store.setTreeAction(this.nodeRightClicked, action);
         if (!this.checkExistingEditor()) {
-          this.props.api.addNewEditorForTreeAction({type: 'os'});
+          this.props.api.addNewEditorForTreeAction({ type: 'os' });
         } else {
           const eEditor = this.getExistedEditor();
           eEditor[1].type = 'os';
@@ -310,7 +316,10 @@ export default class TreeView extends React.Component {
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
     let bExistingEditor = false;
     for (const editor of treeEditors) {
-      if (editor[1].currentProfile == this.props.store.profileList.selectedProfile.id) {
+      if (
+        editor[1].currentProfile ==
+        this.props.store.profileList.selectedProfile.id
+      ) {
         bExistingEditor = true;
         runInAction('update state var', () => {
           this.props.store.editorPanel.activeEditorId = editor[1].id;
@@ -320,7 +329,7 @@ export default class TreeView extends React.Component {
       }
     }
     return bExistingEditor;
-  }
+  };
 
   /**
    * get the tree editor object for the selected profile
@@ -329,7 +338,10 @@ export default class TreeView extends React.Component {
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
     let eEditor;
     for (const editor of treeEditors) {
-      if (editor[1].currentProfile == this.props.store.profileList.selectedProfile.id) {
+      if (
+        editor[1].currentProfile ==
+        this.props.store.profileList.selectedProfile.id
+      ) {
         eEditor = editor;
         runInAction('update state var', () => {
           this.props.store.editorPanel.activeEditorId = editor[1].id;
@@ -339,17 +351,18 @@ export default class TreeView extends React.Component {
       }
     }
     return eEditor;
-  }
+  };
 
   showTreeActionPanel = (treeNode, action) => {
     this.props.store.setTreeAction(treeNode, action);
     if (this.checkExistingEditor()) {
       this.props.store.showTreeActionPane();
     } else {
-      const type = action === 'ExportDatabase' ? 'ExportDatabase' : 'TreeAction';
-      this.props.api.addNewEditorForTreeAction({type});
+      const type =
+        action === 'ExportDatabase' ? 'ExportDatabase' : 'TreeAction';
+      this.props.api.addNewEditorForTreeAction({ type });
     }
-  }
+  };
 
   showDetailsView = (treeNode, action) => {
     runInAction('Using active editor for tree details action', () => {
@@ -358,15 +371,18 @@ export default class TreeView extends React.Component {
       const editorId = this.props.store.editorPanel.activeEditorId;
       if (editorId) {
         const editor = this.props.store.editors.get(editorId);
-        this.props.store.editors.set(editorId, observable({
-          ...editor,
-          detailsView: {
-            visible: true,
-            treeNode,
-            treeAction: action,
-            currentProfile: editor.currentProfile
-          }
-        }));
+        this.props.store.editors.set(
+          editorId,
+          observable({
+            ...editor,
+            detailsView: {
+              visible: true,
+              treeNode,
+              treeAction: action,
+              currentProfile: editor.currentProfile,
+            },
+          }),
+        );
       }
     });
   };
@@ -379,10 +395,13 @@ export default class TreeView extends React.Component {
         ...selectedProfile,
         storageView: {
           visible: true,
-          shouldFocus: true
+          shouldFocus: true,
         },
       });
-      this.props.store.profiles.set(selectedProfile.id, this.props.store.profileList.selectedProfile);
+      this.props.store.profiles.set(
+        selectedProfile.id,
+        this.props.store.profileList.selectedProfile,
+      );
     });
   };
 
@@ -411,5 +430,5 @@ export default class TreeView extends React.Component {
 }
 
 TreeView.propTypes = {
-  treeState: React.PropTypes.instanceOf(TreeState)
+  treeState: React.PropTypes.instanceOf(TreeState),
 };

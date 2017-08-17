@@ -21,16 +21,53 @@
  * @Date:   2017-05-15T09:44:11+10:00
  * @Email:  chris@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-08-14T11:31:36+10:00
+// @Last modified time: 2017-08-15T16:29:37+10:00
  */
 
 @import '../../styles/_defaultTheme.scss';
-
 .enhanced-json-panel {
   width: 100%;
-  padding: 15px;
   background-color: $tabBackgroundSelected;
   overflow-y: scroll;
+
+  .pt-navbar.pt-dark {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #272a3a;
+  }
+  .collapse-group {
+    width: 30%;
+    margin-left: 30%;
+    margin-right: 30%;
+
+    button.pt-button {
+      width: 3.5em !important;
+    }
+  }
+  button.pt-button {
+    font-weight: lighter;
+    color: $connectionButtonFontColour;
+    width: 3.5em !important;
+    border-radius: 0;
+    background-image: unset !important;
+    background-color: #272a3a !important;
+    border: 1px solid $connectionButtonBorderColour;
+    box-shadow: unset;
+  }
+  button.pt-button:hover {
+    background-color: $connectionButtonBackgroundColourHover !important;
+    color: $connectionButtonFontColourHover;
+  }
+  button.pt-button.active {
+    background-color: $connectionButtonFontColourHover !important;
+    color: $connectionButtonBackgroundColourHover;
+  }
+
+  .react-json-view {
+    margin: 15px;
+    margin-top: 55px;
+  }
 
   .object-key-val {
     width: 100%;
@@ -41,37 +78,5 @@
   .string-value {
     width: 100%;
     word-wrap: break-word;
-  }
-
-  #enhancedJsonNextBtn {
-    float: right;
-  }
-  #enhancedJsonNextBtn.pt-icon-arrow-right::before {
-    content: "";
-  }
-  #enhancedJsonNextBtn.pt-icon-arrow-right::after {
-    content: "\2192";
-    line-height: 1;
-    font-family: "Icons16", sans-serif;
-    margin-left: 7px;
-    font-size: 16px;
-    font-weight: 400;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  button.pt-button {
-    font-weight: lighter;
-    color: $connectionButtonFontColour;
-    width: 7em !important;
-    border-radius: 0;
-    background-image: unset;
-    background-color: $tabBackgroundSelected;
-    border: 1px solid $connectionButtonBorderColour;
-    box-shadow: unset;
-  }
-  button.pt-button:hover {
-    background-color: $connectionButtonBackgroundColourHover;
-    color: $connectionButtonFontColourHover;
   }
 }

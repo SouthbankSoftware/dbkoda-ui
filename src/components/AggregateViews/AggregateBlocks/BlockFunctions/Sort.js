@@ -23,5 +23,7 @@ export const Sort = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
-  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse
+  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
+  dbkoda_sortOptions: common.dbkoda_sortOptions,
+   dbkoda_sortOptions_parse: common.dbkoda_sortOptions_parse,
 };

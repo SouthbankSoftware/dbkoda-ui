@@ -83,7 +83,7 @@ export default class Palette extends React.Component {
             // 3. Update Valid for each block.
             res.stepAttributes.map((indexValue, index) => {
               if (index === res.stepAttributes.length - 1) {
-                console.log('LAST');
+                // No longer empty.
               } else if (indexValue.constructor === Array) {
                 // Check for error result.
                 if (res.stepCodes[index] === 0) {
@@ -108,6 +108,7 @@ export default class Palette extends React.Component {
             } else {
               this.addBlockToEditor(blockType, position, null);
             }
+            this.clearResultsOutput(editor);
           } else {
             // Check for error.
             console.error('updateResultSet: ', res);
@@ -179,7 +180,6 @@ export default class Palette extends React.Component {
           commands: AggregateCommands.GET_STATUS(editor.aggregateID),
         })
         .then((res) => {
-          console.log(res);
           resolve(res);
         })
         .catch((e) => {
@@ -199,7 +199,6 @@ export default class Palette extends React.Component {
   @action.bound
   getBlockAttributes(position) {
     return new Promise((resolve, reject) => {
-      console.log('GetBlockAttributes Start');
       // Get the relevant editor object.
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
@@ -272,7 +271,6 @@ export default class Palette extends React.Component {
    */
   @action.bound
   addBlockToEditor(blockType, position, attributeList) {
-    console.log('addBlockToEditor Start');
     // Get relevant editor.
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -361,6 +359,18 @@ export default class Palette extends React.Component {
         </ul>
       </div>
     );
+  }
+
+  /**
+   * Clear the output tab since no results are avaliable.
+   *
+   * @param {Object} Editor - The editor to update the output for.
+   */
+  @action.bound
+  clearResultsOutput(editor) {
+    console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
+    const output = this.props.store.outputs.get(editor.id);
+    output.output = 'Currently No Results to Display.';
   }
 
   render() {

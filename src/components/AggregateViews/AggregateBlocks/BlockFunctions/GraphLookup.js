@@ -19,7 +19,20 @@
  */
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
-export const Facet = {
+export const GraphLookup = {
   dbkodaListAttributes: common.dbkodaListAttributes,
-  dbkoda_listcollections: common.dbkoda_listcollections
+  dbkoda_listcollections: common.dbkoda_listcollections,
+  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
+  dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
+  dbkodaAggOperators: common.dbkodaAggOperators,
+  dbkodaAggOperators_parse: common.dbkodaAggOperators_parse,
+  dbkodaGraphLookupPreFill: (params) => {
+    data = {};
+    data.collection = params.collection;
+    data.as = 'GraphOutput';
+    data.depthField = 'Depth';
+    return data;
+  }
 };

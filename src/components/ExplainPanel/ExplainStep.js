@@ -137,7 +137,10 @@ export const generateComments = (stage) => {
     case SORT_MERGE:
       return globalString('explain/step/sortMerge');
     case OR:
-      return globalString('explain/step/or', stage.inputStages ? stage.inputStages.length : 1);
+      return globalString(
+        'explain/step/or',
+        stage.inputStages ? stage.inputStages.length : 1,
+      );
     default:
       return stageName;
   }
@@ -149,7 +152,11 @@ export const getCommonExecutionStages = (executionStages) => {
     let currentStage = executionStages;
     while (currentStage) {
       stages.push(currentStage);
-      if (currentStage && currentStage.inputStages && currentStage.inputStages.length > 0) {
+      if (
+        currentStage &&
+        currentStage.inputStages &&
+        currentStage.inputStages.length > 0
+      ) {
         currentStage = currentStage.inputStages;
       } else {
         currentStage = currentStage.inputStage;
@@ -162,8 +169,13 @@ export const getCommonExecutionStages = (executionStages) => {
 export const getShardsExecutionStages = (executionStages) => {
   if (executionStages && executionStages.shards) {
     return executionStages.shards.map((shard) => {
-      const stages = shard.winningPlan ? shard.winningPlan : shard.executionStages;
-      return {shardName: shard.shardName, stages: getCommonExecutionStages(stages)};
+      const stages = shard.winningPlan
+        ? shard.winningPlan
+        : shard.executionStages;
+      return {
+        shardName: shard.shardName,
+        stages: getCommonExecutionStages(stages),
+      };
     });
   }
   return [];

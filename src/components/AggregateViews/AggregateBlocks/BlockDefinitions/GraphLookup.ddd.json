@@ -1,11 +1,22 @@
 {
   "Title": "GraphLookup",
-  "DefaultValues": {}, 
+  "DefaultValues": {
+    "function": "dbkodaGraphLookupPrefill",
+    "arguments": [{
+      "name": "collection",
+      "value": "collection"
+    }]
+  },
   "Fields": [{
       "name": "collection",
       "label": "Collection to join to",
       "tooltip": "Lookup data in this collection",
-      "type": "Text"
+      "type": "Combo",
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [{
+        "name": "db",
+        "value": "database"
+      }]
     },
     {
       "name": "startWith",
@@ -17,31 +28,44 @@
       "name": "connectFromField",
       "label": "connect From Field",
       "tooltip": "Field in the parent document",
-      "type": "Text"
+      "type": "Combo",
+      "lookup": "dbkodaListAttributesAgg",
+      "lookup_arguments": [{
+        "name": "prevAttributes",
+        "value": "prevAttributes"
+      }]
     },
     {
       "name": "connectToField",
       "label": "connect To Field",
       "tooltip": "Field in the child document",
-      "type": "Text"
+      "type": "Combo",
+      "lookup": "dbkodaListAttributesAgg",
+      "lookup_arguments": [{
+        "name": "prevAttributes",
+        "value": "prevAttributes"
+      }]
     },
     {
       "name": "as",
       "label": "as",
       "tooltip": "Field which will receive the graph output",
-      "type": "Text"
+      "type": "Text",
+      "default": "GraphOutput"
     },
     {
       "name": "maxDepth",
       "label": "max Depth",
       "tooltip": "maximum depth of the graph",
-      "type": "Text"
+      "type": "Numeric",
+      "default": 1
     },
     {
       "name": "depthField",
       "label": "Depth field",
       "tooltip": "output Field that will hold the depth",
-      "type": "Text"
+      "type": "Text",
+      "default": "Depth"
     },
     {
       "name": "restrictSearchWithMatch",

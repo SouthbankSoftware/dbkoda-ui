@@ -29,7 +29,7 @@
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import {inject, observer} from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import DBKodaIcon from '../../styles/icons/dbkoda-logo.svg';
 import Toolbar from './Toolbar.jsx';
 import ListView from './ListView.jsx';
@@ -38,7 +38,6 @@ import './styles.scss';
 @inject('store')
 @observer
 export default class Panel extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {};
@@ -51,7 +50,6 @@ export default class Panel extends React.Component {
         <DBKodaIcon className="dbKodaLogo" width={20} height={20} />
         <ListView />
       </div>
-
     );
   }
 }

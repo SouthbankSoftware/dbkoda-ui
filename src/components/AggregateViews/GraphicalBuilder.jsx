@@ -80,7 +80,6 @@ export default class GraphicalBuilder extends React.Component {
       })
       .then((res) => {
         this.editor.aggregateID = res;
-        console.log('Debug: New Aggregate Builder Registered on Shell: ', res);
       })
       .catch((err) => {
         console.error(err);
@@ -104,21 +103,27 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps.
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', JSON.parse(res));
         res = JSON.parse(res);
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
+          console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
             if (index === res.stepAttributes.length - 1) {
-              console.log('LAST');
+              // Not empty now.
             } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].status = 'pending';
               }
             }
@@ -127,13 +132,10 @@ export default class GraphicalBuilder extends React.Component {
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
             // 4.a Yes - Update Results.
-            console.log(
-              'updateResults: ',
-              editor.blockList[editor.selectedBlock],
-            );
+            this.updateResultsOutput(editor, editor.selectedBlock);
           } else {
             // 4.b No - Clear Results.
-            console.log('clearResults: ');
+            this.clearResultsOutput(editor);
           }
 
           runInAction('Update Graphical Builder', () => {
@@ -193,21 +195,27 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', JSON.parse(res));
         res = JSON.parse(res);
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
+          console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
             if (index === res.stepAttributes.length - 1) {
-              console.log('LAST');
+              // Not empty now.
             } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].status = 'pending';
               }
             }
@@ -216,14 +224,12 @@ export default class GraphicalBuilder extends React.Component {
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
             // 4.a Yes - Update Results.
-            console.log(
-              'updateResults: ',
-              editor.blockList[editor.selectedBlock],
-            );
+            this.updateResultsOutput(editor, editor.selectedBlock);
           } else {
             // 4.b No - Clear Results.
-            console.log('clearResults: ');
+            this.clearResultsOutput(editor);
           }
+
           runInAction('Update Graphical Builder', () => {
             this.props.store.editorPanel.updateAggregateDetails = true;
             this.forceUpdate();
@@ -249,21 +255,27 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps.
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log('updateResultSet:', JSON.parse(res));
         res = JSON.parse(res);
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
+          console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
             if (index === res.stepAttributes.length - 1) {
-              console.log('LAST');
+              // Not empty now.
             } else if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].attributeList = indexValue;
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
+                if (!(typeof indexValue === 'string')) {
+                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+                }
                 editor.blockList[index].status = 'pending';
               }
             }
@@ -278,17 +290,19 @@ export default class GraphicalBuilder extends React.Component {
             }
           }
 
-          // 5. Is the current block valid?.
+          // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
-            // 5.a Yes - Update Results.
-            console.log(
-              'updateResults: ',
-              editor.blockList[editor.selectedBlock],
-            );
+            // 4.a Yes - Update Results.
+            this.updateResultsOutput(editor.selectedBlock);
           } else {
             // 4.b No - Clear Results.
-            console.log('clearResults: ');
+            this.clearResultsOutput(editor);
           }
+
+          runInAction('Update Graphical Builder', () => {
+            this.props.store.editorPanel.updateAggregateDetails = true;
+            this.forceUpdate();
+          });
         } else {
           // Check for error.
           console.error('updateResultSet: ', JSON.parse(res));
@@ -382,6 +396,56 @@ export default class GraphicalBuilder extends React.Component {
           console.error(e);
         });
     });
+  }
+
+  /**
+   * Clear the output tab since no results are avaliable.
+   *
+   * @param {Object} Editor - The editor to update the output for.
+   */
+  @action.bound
+  clearResultsOutput(editor) {
+    console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
+    const output = this.props.store.outputs.get(editor.id);
+    output.output = 'Currently No Results to Display.';
+  }
+
+  /**
+   * Updates the output tab to reflect the results for the current step.
+   *
+   * @param {Object} Editor - The editor to update the output for.
+   */
+  @action.bound
+  updateResultsOutput(editor, stepId) {
+    const output = this.props.store.outputs.get(editor.id);
+    output.output =
+      'Example of Result at current Stage: \n' +
+      '----------------------------------  \n\n';
+
+    const service = featherClient().service('/mongo-sync-execution');
+    service.timeout = 30000;
+    service
+      .update(editor.profileId, {
+        shellId: editor.shellId, // eslint-disable-line
+        commands: AggregateCommands.GET_RESULTS(
+          editor.aggregateID,
+          stepId + 1,
+          false,
+        ),
+      })
+      .then((res) => {
+        runInAction('Update Graphical Builder', () => {
+          // res = res.substring(1, res.length - 1);
+          // res = res.split(',');
+          res = JSON.parse(res);
+          res.map((indexValue) => {
+            output.output += JSON.stringify(indexValue) + '\n';
+          });
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   }
 
   render() {

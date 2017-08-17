@@ -23,5 +23,9 @@ export const Project = {
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
-  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse
+  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
+  dbkodaListAttributesProject_parse: common.dbkodaListAttributesProject_parse,
+  dbkodaListAttributesProject: common.dbkodaListAttributesProject,
+  dbkodaListAttributesProjectTarget: common.dbkodaListAttributesProjectTarget,
+  dbkodaListAttributesProjectTarget_parse: common.dbkodaListAttributesProjectTarget_parse
 };

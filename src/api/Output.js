@@ -22,7 +22,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-14T15:21:39+10:00
+ * @Last modified time: 2017-08-16T14:27:28+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -132,8 +132,8 @@ export default class OutputApi {
     // Parse output for string 'Type "it" for more'
     const outputId = this.outputHash[output.id + output.shellId];
 
-    console.log(outputId);
-    console.log('TEST OUTPUT: =>> ', output.output);
+    // console.log(outputId);
+    // console.log('TEST OUTPUT: =>> ', output.output);
 
     const totalOutput = this.store.outputs.get(outputId).output + output.output;
     const profile = this.store.profiles.get(output.id);
@@ -174,11 +174,11 @@ export default class OutputApi {
 
   @action.bound
   initJsonView(jsonStr, outputId, displayType, lines) {
-    if (this.store.outputPanel.currentTab.indexOf('EnhancedJson-')) {
-      this.store.outputPanel.currentTab =
-        'EnhancedJson-' + this.store.outputPanel.currentTab;
+    const tabPrefix = (displayType === 'enhancedJson') ?
+      'EnhancedJson-' : 'TableView-';
+    if (this.store.outputPanel.currentTab.indexOf(tabPrefix)) {
+      this.store.outputPanel.currentTab = tabPrefix + this.store.outputPanel.currentTab;
     }
-    this.store.outputs.get(outputId)[displayType] = '';
     StaticApi.parseShellJson(jsonStr).then((result) => {
       runInAction(() => {
         this.store.outputs.get(outputId)[displayType] = {
@@ -196,7 +196,7 @@ export default class OutputApi {
         });
         this.store.outputPanel.currentTab =
           this.store.outputPanel.currentTab
-            .replace(/EnhancedJson-/, '');
+            .split(tabPrefix)[1];
       });
     });
   }

@@ -30,14 +30,17 @@
  * explain component is used to handle explain output
  */
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {action, observable } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { action, observable } from 'mobx';
 import Panel from './Panel';
-import {Broker, EventType} from '../../helpers/broker/index';
+import { Broker, EventType } from '../../helpers/broker/index';
 
 export const parseOutput = (output) => {
-  return output.replace(/NumberLong\((\d*)\)/g, '$1')
-    .replace(/\n/g, '').replace(/\s/g, '').replace(/\r/g, '')
+  return output
+    .replace(/NumberLong\((\d*)\)/g, '$1')
+    .replace(/\n/g, '')
+    .replace(/\s/g, '')
+    .replace(/\r/g, '')
     .replace(/:(\/[^\/]*\/)/g, ':"$1"');
 };
 
@@ -48,35 +51,40 @@ export const parseOutput = (output) => {
 }))
 @observer
 export default class Explain extends React.Component {
-
   constructor(props) {
     super(props);
 
-    this.state = {viewType: 0};
+    this.state = { viewType: 0 };
   }
 
   componentDidMount() {
-    const {editor} = this.props;
+    const { editor } = this.props;
     if (editor) {
-      Broker.on(EventType.EXPLAIN_OUTPUT_AVAILABLE, this.explainOutputAvailable);
+      Broker.on(
+        EventType.EXPLAIN_OUTPUT_AVAILABLE,
+        this.explainOutputAvailable,
+      );
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.editor.explains) {
-      this.setState({viewType: nextProps.editor.explains.viewType});
+      this.setState({ viewType: nextProps.editor.explains.viewType });
     }
   }
 
   componentWillUnmount() {
-    const {editor} = this.props;
+    const { editor } = this.props;
     if (editor) {
-      Broker.removeListener(EventType.EXPLAIN_OUTPUT_AVAILABLE, this.explainOutputAvailable);
+      Broker.removeListener(
+        EventType.EXPLAIN_OUTPUT_AVAILABLE,
+        this.explainOutputAvailable,
+      );
     }
   }
 
   @action.bound
-  explainOutputAvailable({id, shell, command, type, output}) {
+  explainOutputAvailable({ id, shell, command, type, output }) {
     this.explainCommand = command;
     this.explainOutput = '';
     this.explainType = type;
@@ -103,30 +111,44 @@ export default class Explain extends React.Component {
         viewType: 0,
       };
       if (!explainOutputJson.output || !explainOutputJson.output.queryPlanner) {
-        explainOutputJson = {error: globalString('explain/parseError'), command: this.explainCommand, output: parseOutput(output)};
+        explainOutputJson = {
+          error: globalString('explain/parseError'),
+          command: this.explainCommand,
+          output: parseOutput(output),
+        };
       }
     } catch (err) {
       console.log('err parse explain output ', err, output);
-      explainOutputJson = {error: globalString('explain/parseError'), command: this.explainCommand, output: parseOutput(output)};
+      explainOutputJson = {
+        error: globalString('explain/parseError'),
+        command: this.explainCommand,
+        output: parseOutput(output),
+      };
     }
-    this.props.editors.set(currentEditorId, observable({
-      ...currentEditor,
-      explains: explainOutputJson,
-    }));
-    Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, {id, shell});
+    this.props.editors.set(
+      currentEditorId,
+      observable({
+        ...currentEditor,
+        explains: explainOutputJson,
+      }),
+    );
+    Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, { id, shell });
   }
 
   @action.bound
   switchExplainView() {
-    const {viewType} = this.props.editor.explains;
+    const { viewType } = this.props.editor.explains;
     this.props.editor.explains.viewType = 1 - viewType;
-    this.setState({viewType: this.props.editor.explains.viewType});
+    this.setState({ viewType: this.props.editor.explains.viewType });
   }
 
   render() {
-    return (<Panel editor={this.props.editor}
-      viewType={this.state.viewType}
-      switchExplainView={this.switchExplainView} />);
+    return (
+      <Panel
+        editor={this.props.editor}
+        viewType={this.state.viewType}
+        switchExplainView={this.switchExplainView}
+      />
+    );
   }
-
 }

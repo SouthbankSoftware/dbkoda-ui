@@ -21,4 +21,9 @@ import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const Bucket = {
   dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
+  dbkodaAggOperators: common.dbkodaAggOperators,
+  dbkodaAggOperators_parse: common.dbkodaAggOperators_parse,
 };

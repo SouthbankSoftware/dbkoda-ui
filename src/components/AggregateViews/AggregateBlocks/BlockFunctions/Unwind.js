@@ -21,13 +21,7 @@ import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const Unwind = {
   dbkodaListAttributes: common.dbkodaListAttributes,
-    dbkodaUnwindPreFill: () => {
-    const data = {};
-    data.UnWindAttribute = '$ArrayToUnwind';
-    return data;
-  },
-  /* dbkodaListPipelineAttributes: (params) => {
-    console.log(params);
-    return (['$column1', '$column2', '$a.column3', '$b.column4']);
-  }, */
+  dbkodaListAttributesAgg: common.dbkodaListAttributesAgg,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaListAttributesAgg_parse: common.dbkodaListAttributesAgg_parse,
 };

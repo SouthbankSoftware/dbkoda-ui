@@ -1,10 +1,10 @@
 {
-    "Title": "Unwind",
+    "Title": "ReplaceRoot",
     "DefaultValues": {},
     "Fields": [{
-        "name": "UnWindAttribute",
-        "label": "Array value to unwind",
-        "tooltip": "Enter the array value you wish to unwind",
+        "name": "Attribute",
+        "label": "Embedded document to promote",
+        "tooltip": "Choose an embedded document to be promoted",
         "type": "Combo",
         "lookup": "dbkodaListAttributesAgg",
         "lookup_arguments": [{

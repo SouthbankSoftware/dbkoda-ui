@@ -23,7 +23,7 @@
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-09T11:58:40+10:00
+ * @Last modified time: 2017-08-16T14:26:22+10:00
 */
 
 import React from 'react';
@@ -137,6 +137,11 @@ export default class Toolbar extends React.Component {
       } else if (currentTab.indexOf('EnhancedJson-') === 0) {
         const editorKey = currentTab.split('EnhancedJson-')[1];
         this.props.store.outputs.get(editorKey).enhancedJson = '';
+        this.props.store.outputPanel.clearingOutput = false;
+        this.props.store.outputPanel.currentTab = editorKey;
+      } else if (currentTab.indexOf('TableView-') === 0) {
+        const editorKey = currentTab.split('TableView-')[1];
+        this.props.store.outputs.get(editorKey).tableJson = '';
         this.props.store.outputPanel.clearingOutput = false;
         this.props.store.outputPanel.currentTab = editorKey;
       }
