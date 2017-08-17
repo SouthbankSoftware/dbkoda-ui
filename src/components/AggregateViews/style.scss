@@ -206,6 +206,14 @@ div.Pane.vertical.Pane1 {
           margin-right: 20px;
           margin-bottom: 20px;
         }
+        a.byoCode {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          float: left;
+          margin-right: 20px;
+          margin-bottom: 20px;
+        }
       }
       fieldset[label="Group By"] {
         .form-group-inline {
