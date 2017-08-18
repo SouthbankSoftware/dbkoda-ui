@@ -30,134 +30,135 @@ export const BlockTypes = {
   MATCH: {
     type: 'Match',
     description: 'Reduce your pipeline results using a match on a field.',
+    columns: 3,
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
-   GROUP: {
+  GROUP: {
     type: 'Group',
     description: 'Group your results by a certain predicate',
     fields: {
       ID: '',
-    }
+    },
   },
   SORT: {
     type: 'Sort',
     description: 'Sort the results from your pipeline',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   PROJECT: {
     type: 'Project',
     description: 'Project your results.',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   UNWIND: {
     type: 'Unwind',
     description: 'Unwind an array of data',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   LIMIT: {
     type: 'Limit',
     description: 'Limit',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   SKIP: {
     type: 'Skip',
     description: 'Skip',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   SAMPLE: {
     type: 'Sample',
     description: 'Sample',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   LOOKUP: {
     type: 'Lookup',
     description: 'Lookup',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   GRAPHLOOKUP: {
     type: 'GraphLookup',
     description: 'GraphLookup',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   COUNT: {
     type: 'Count',
     description: 'Count',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   OUT: {
     type: 'Out',
     description: 'Out',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   ADDFIELDS: {
     type: 'AddFields',
     description: 'AddFields',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   SORTBYCOUNT: {
     type: 'SortByCount',
     description: 'SortByCount',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   BUCKET: {
     type: 'Bucket',
     description: 'Bucket',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   BUCKETAUTO: {
     type: 'BucketAuto',
     description: 'BucketAuto',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   REPLACEROOT: {
     type: 'ReplaceRoot',
     description: 'ReplaceRoot',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   FACET: {
     type: 'Facet',
     description: 'Facet',
     fields: {
-      Expression: ''
-    }
+      Expression: '',
+    },
   },
   REDACT: {
     type: 'Redact',
     description: 'Redact',
     fields: {
-      Expression: ''
-    }
-  }
+      Expression: '',
+    },
+  },
 };

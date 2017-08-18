@@ -35,6 +35,7 @@ import { AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
+import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import './style.scss';
 
 @inject(allStores => ({
@@ -201,6 +202,11 @@ export default class Details extends React.Component {
     this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
   }
 
+  @action.bound
+  byoCode() {
+    console.log('Debug: byoCode');
+  }
+
   render() {
     const activeEditor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -238,7 +244,14 @@ export default class Details extends React.Component {
           this.updateMsg(reason);
         });
     }
-
+    let maxColumns = 2;
+    if (this.state.form) {
+      maxColumns = BlockTypes[this.state.form.title.toUpperCase()].columns;
+      if (!maxColumns) {
+        maxColumns = 2;
+      }
+    }
+    console.log(maxColumns);
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
@@ -246,7 +259,7 @@ export default class Details extends React.Component {
         </nav>
         {activeBlock &&
           <div className="aggregateDetailsContent">
-            <div className="dynamic-form">
+            <div className={'dynamic-form columns-' + maxColumns + '-max'}>
               {this.state.form &&
                 <View
                   title={this.state.form.title}
@@ -273,6 +286,13 @@ export default class Details extends React.Component {
           text={globalString('aggregate_builder/hide_left_panel')}
           onClick={this.onHideLeftPanelClicked}
         />
+        {activeBlock &&
+          <AnchorButton
+            className="hideLeftPanelButton"
+            intent={Intent.SUCCESS}
+            text={globalString('aggregate_builder/byo_code')}
+            onClick={this.byoCode}
+          />}
       </div>
     );
   }

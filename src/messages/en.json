@@ -3,7 +3,7 @@
     "aggregate_builder": {
       "show_left_panel": "Show Panel",
       "hide_left_panel": "Hide Panel",
-      "code_it_yourself": "BYO Code"
+      "byo_code": "BYO Code"
     },
     "telemetry_dialog": {
       "header": "Welcome!",

@@ -206,6 +206,14 @@ div.Pane.vertical.Pane1 {
           margin-right: 20px;
           margin-bottom: 20px;
         }
+        a.byoCode {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          float: left;
+          margin-right: 20px;
+          margin-bottom: 20px;
+        }
       }
       fieldset[label="Group By"] {
         .form-group-inline {
@@ -215,6 +223,35 @@ div.Pane.vertical.Pane1 {
     }
   }
 }
+
+div.aggregateDetailsContent {
+  div.columns-1-max {
+    div.pt-form-group {
+      width: 96%;
+    }
+  }
+  div.columns-2-max {
+    div.pt-form-group {
+      width: 44%;
+    }
+  }
+  div.columns-3-max {
+    div.pt-form-group {
+      width: 32%;
+    }
+  }
+  div.columns-4-max {
+    div.pt-form-group {
+      width: 20%;
+    }
+  }
+}
+
+label[for="last"] {
+  display: none;
+  padding: none;
+}
+
 svg.invalid {
   fill: $aggregateBlockBackgroundInvalid;
   circle {
