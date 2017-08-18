@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-18T10:00:20+10:00
+ * @Last modified time: 2017-08-18T16:35:09+10:00
  */
 
 /*
@@ -229,16 +229,16 @@ export default class StoragePanel extends React.Component {
   render() {
     return (
       <div className="StoragePanel">
-        <nav className="storageToolbar pt-navbar pt-dark">
+        {!this.bLoading && <nav className="storageToolbar pt-navbar pt-dark">
           <div className="pt-navbar-group pt-align-right">
-            {!this.bLoading && <AnchorButton
+            <AnchorButton
               className="refreshButton"
               onClick={this.loadData}
             >
               <RefreshIcon width={50} height={50} className="dbKodaSVG" />
-            </AnchorButton>}
+            </AnchorButton>
           </div>
-        </nav>
+        </nav>}
         {this.bStorageView &&
           <StorageSunburstView
             data={this.state.data}
@@ -246,6 +246,7 @@ export default class StoragePanel extends React.Component {
             onClick={this.onChildClick}
             onDblClick={this.onChildDblClick}
             onBreadCrumbClick={this.onChartBreadCrumbClick}
+            store={this.props.store}
           />}
         {this.bLoading &&
           <div>
