@@ -80,7 +80,7 @@ export default class GraphicalBuilder extends React.Component {
         ),
       })
       .then((res) => {
-        this.editor.aggregateID = res;
+        this.editor.aggregateID = res.id;
         if (this.editor.blockList.length === 0) {
           this.addStartBlock();
         }
