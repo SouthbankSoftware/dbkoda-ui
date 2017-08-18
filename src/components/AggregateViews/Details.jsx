@@ -294,7 +294,7 @@ export default class Details extends React.Component {
         />
         {activeBlock &&
           <AnchorButton
-            className="hideLeftPanelButton"
+            className="byoCodeButton"
             intent={Intent.SUCCESS}
             text={globalString('aggregate_builder/byo_code')}
             onClick={this.byoCode}
