@@ -96,7 +96,6 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   addStartBlock() {
     this.getBlockAttributes(0).then((res) => {
-      // 3.a Add to Editor
       this.addBlockToEditor('Start', 0, res);
     });
   }
@@ -153,6 +152,7 @@ export default class GraphicalBuilder extends React.Component {
     editor.blockList[position].attributeList = attributeList;
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
+    this.selectBlock(0);
 
     console.log('addBlockToEditor:', editor);
   }
@@ -418,7 +418,7 @@ export default class GraphicalBuilder extends React.Component {
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
             // 4.a Yes - Update Results.
-            this.updateResultsOutput(editor.selectedBlock);
+            this.updateResultsOutput(editor, editor.selectedBlock);
           } else {
             // 4.b No - Clear Results.
             this.clearResultsOutput(editor);
@@ -466,41 +466,37 @@ export default class GraphicalBuilder extends React.Component {
       );
       const stepArray = [];
       console.log(editor.blockList.length);
-      if (editor.blockList.length === 1) {
-        resolve();
-      } else {
-        editor.blockList.map((block) => {
-          if (block.type !== 'Start') {
-            const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
-              block.type +
-              '.hbs');
-            const stepJSON = formTemplate(block.fields);
-            try {
-              stepArray.push(stepJSON.replace(/\n/g, ' '));
-            } catch (e) {
-              console.error('Block generated invalid JSON: ', block);
-            }
+      editor.blockList.map((block) => {
+        if (block.type !== 'Start') {
+          const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
+            block.type +
+            '.hbs');
+          const stepJSON = formTemplate(block.fields);
+          try {
+            stepArray.push(stepJSON.replace(/\n/g, ' '));
+          } catch (e) {
+            console.error('Block generated invalid JSON: ', block);
           }
+        }
+      });
+      // Update steps in Shell:
+      console.log('updatingShellPipeline: ', stepArray);
+      const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 30000;
+      service
+        .update(editor.profileId, {
+          shellId: editor.shellId, // eslint-disable-line
+          commands: AggregateCommands.SET_ALL_STEPS(
+            editor.aggregateID,
+            stepArray,
+          ),
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((e) => {
+          reject(e);
         });
-        // Update steps in Shell:
-        console.log('updatingShellPipeline: ', stepArray);
-        const service = featherClient().service('/mongo-sync-execution');
-        service.timeout = 30000;
-        service
-          .update(editor.profileId, {
-            shellId: editor.shellId, // eslint-disable-line
-            commands: AggregateCommands.SET_ALL_STEPS(
-              editor.aggregateID,
-              stepArray,
-            ),
-          })
-          .then(() => {
-            resolve();
-          })
-          .catch((e) => {
-            reject(e);
-          });
-      }
     });
   }
 
