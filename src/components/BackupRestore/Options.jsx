@@ -86,8 +86,9 @@ const getOptions = (options) => {
               </div>
             </div>);
           }
+          console.log('checkbox value ', o);
           return (
-            <div className="option-item-row" key={key}>
+            <div className="option-item-row pt-form-group" key={key}>
               <Tooltip
                 content={o.tooltips}
                 hoverOpenDelay={TooltipDelay}
@@ -116,7 +117,8 @@ export const AllCollectionOption = ({allCollections, changeAllCollections, actio
       label: action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_SERVER ? globalString('backuprestore/parameters/allDatabases/label') : globalString('backuprestore/parameters/allCollections/label'),
       onChange: changeAllCollections,
       tooltips: '',
-      checked: allCollections
+      checked: allCollections,
+      name: 'all-collections'
     }
     ];
   return getOptions(options);
@@ -223,28 +225,33 @@ export const DumpOptions = ({gzip, changeGZip, repair, changeRepair,
       tooltips: globalString('backuprestore/parameters/gzip/tooltip'),
       onChange: changeGZip,
       checked: gzip,
+      name: 'gzip',
     }, {
       label: globalString('backuprestore/parameters/repair/label'),
       onChange: changeRepair,
       tooltips: globalString('backuprestore/parameters/repair/tooltip'),
       checked: repair,
+      name: 'repair',
     }, {
       label: globalString('backuprestore/parameters/dumpDbUsersAndRoles/label'),
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
       tooltips: globalString('backuprestore/parameters/dumpDbUsersAndRoles/tooltip'),
+      name: 'dump-db-users-and-roles',
     }, {
       label: globalString('backuprestore/parameters/viewsAsCollections/label'),
       checked: viewsAsCollections,
       tooltips: globalString('backuprestore/parameters/viewsAsCollections/tooltip'),
       onChange: changeViewsAsCollections,
+      name: 'views-as-collections',
     }, {
       label: globalString('backuprestore/parameters/numParallelCollections/label'),
       tooltips: globalString('backuprestore/parameters/numParallelCollections/tooltip'),
       onChange: changeNumParallelCollections,
       type: 'input',
       inputType: 'number',
-      value: numParallelCollections
+      value: numParallelCollections,
+      name: 'num-parallel-collections',
     }, {
       label: globalString('backuprestore/parameters/queryOptions/label'),
       type: 'separator'
@@ -253,18 +260,21 @@ export const DumpOptions = ({gzip, changeGZip, repair, changeRepair,
       tooltips: globalString('backuprestore/parameters/forceTableScan/tooltip'),
       value: forceTableScan,
       onChange: changeForceTableScan,
+      name: 'force-table-scan',
     }, {
       label: globalString('backuprestore/parameters/readPreference/label'),
       tooltips: globalString('backuprestore/parameters/readPreference/tooltip'),
       type: 'input',
       value: readPreference,
       onChange: changeReadPreference,
+      name: 'read-preference',
     }, {
       label: globalString('backuprestore/parameters/query/label'),
       tooltips: globalString('backuprestore/parameters/query/tooltip'),
       type: 'input',
       value: query,
       onChange: changeQuery,
+      name: 'query',
     }
   ];
   return getOptions(options);

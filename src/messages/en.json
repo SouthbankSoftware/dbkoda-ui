@@ -241,7 +241,7 @@
           "tooltip": "allCollections"
         },
         "db": {
-          "label": "db",
+          "label": "Database",
           "tooltip": "database"
         },
         "collection": {
