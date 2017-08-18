@@ -2,7 +2,7 @@
 // @Date:   2017-08-01T10:50:03+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-08-18T10:12:25+10:00
+// @Last modified time: 2017-08-18T16:30:51+10:00
 
 
 
@@ -41,6 +41,7 @@
     width: 100%;
     height: calc(100% - 81px);
     position: absolute;
+    background-color: rgba(100,100,100,0.25);
     //border: 1px solid $treeBorderColor;
     div.messageWrapper {
       left: calc(17%);
