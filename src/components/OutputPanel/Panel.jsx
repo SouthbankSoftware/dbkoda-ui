@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-16T12:12:02+10:00
+ * @Last modified time: 2017-08-18T16:19:22+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -133,9 +133,17 @@ export default class Panel extends React.Component {
     this.editorRefs[editorId] = cmRef;
   }
 
-  getDocumentAtLine(editorId, lineNumber, lines) {
+  getDocumentAtLine(editorId, lineNumber, direction, lines) {
     const cm = this.editorRefs[editorId].getCodeMirror();
     const startLine = cm.getLine(lineNumber);
+
+    if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {
+      if (!direction) {
+        direction = 1;
+      }
+      return this.getDocumentAtLine(editorId, lineNumber + direction, direction, lines);
+    }
+
     if (!startLine) {
       lines.status = 'Invalid';
       return '';

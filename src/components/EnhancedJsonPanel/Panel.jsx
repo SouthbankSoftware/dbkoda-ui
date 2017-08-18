@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-15T16:37:34+10:00
+ * @Last modified time: 2017-08-18T16:22:34+10:00
  */
 
 import React from 'react';
@@ -48,14 +48,10 @@ export default class Panel extends React.Component {
   getNextDoc() {
     const lineNumber = this.props.enhancedJson.lastLine + 1;
     const lines = { start: 0, end: 0, status: '' };
-    let currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, lines);
+    const currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, 1, lines);
     if (lines.status === 'Invalid') {
-      lines.status = '';
-      currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber + 3, lines);
-      if (lines.status === 'Invalid') {
-        this.setState({ moreNext: false });
-        return;
-      }
+      this.setState({ moreNext: false });
+      return;
     }
     this.setState({ morePrevious: true, moreNext: true });
     this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
@@ -64,14 +60,10 @@ export default class Panel extends React.Component {
   getPreviousDoc() {
     const lineNumber = this.props.enhancedJson.firstLine - 1;
     const lines = { start: 0, end: 0, status: '' };
-    let currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, lines);
+    const currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, -1, lines);
     if (lines.status === 'Invalid') {
-      lines.status = '';
-      currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber - 3, lines);
-      if (lines.status === 'Invalid') {
-        this.setState({ morePrevious: false });
-        return;
-      }
+      this.setState({ morePrevious: false });
+      return;
     }
     this.setState({ morePrevious: true, moreNext: true });
     this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);

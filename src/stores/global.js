@@ -21,7 +21,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-09T09:50:01+10:00
+ * @Last modified time: 2017-08-18T14:53:32+10:00
  */
 
 import _ from 'lodash';
@@ -127,13 +127,6 @@ export default class Store {
     executingShowMore: false,
     executingTerminalCmd: false,
     sendingCommand: '',
-    /*
-    jsonView - (index: connectionId) {
-      enhancedJson: {object}, - the JSON used in the Enhanced JSON View
-      tableJson: {object} - the JSON used in the Table View
-    }
-    */
-    jsonView: observable.map(),
   });
 
   @observable
