@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-11T16:58:14+10:00
+ * @Last modified time: 2017-08-18T11:32:02+10:00
  */
 
 /*
@@ -171,7 +171,10 @@ export default class View extends React.Component {
       })
       .each((node) => {
         // skip root node
-        if (!node.parent) return;
+        if (!node.parent) {
+          node.colour = '#494849';
+          return;
+        }
         if (node.parent !== lastParent) {
           node.colour = getColour(node.parent.colour);
         } else {
@@ -304,27 +307,59 @@ export default class View extends React.Component {
       .enter()
       .append('tr')
       .classed('theadRowColor', d => d.colour !== undefined)
-      .style('background-color', d => d.colour || 'none')
-      .style('color', (d) => {
-        return this.getTextColor(d.colour);
-      })
-      .html(d => `<th>${d.data.name}</th><th>${filesize(d.value)}</th>`);
+      // .style('background-color', d => d.colour || 'none')
+      .style('color', '#FFFFFF')
+      .html(d => `<th><svg width="20" height="20"></svg></th><th>${d.data.name}</th><th>${filesize(d.value)}</th>`)
+      .select('svg')
+      .append('g')
+      .append('circle')
+      .attr('cx', 10)
+      .attr('cy', 10)
+      .attr('r', '6px')
+      .style('fill', d => d.colour || '#000');
 
     // row
     listSel.select('tbody').selectAll('tr').remove();
     if (d.children) {
-      listSel
+      const tr = listSel
         .select('tbody')
         .selectAll('tr')
         .data(d.children)
         .enter()
         .append('tr')
-        .classed('tbodyRowColor', d => d.colour !== undefined)
-        .style('background-color', d => d.colour || 'none')
-        .style('color', (d) => {
-          return this.getTextColor(d.colour);
-        })
-        .html(d => `<td>${d.data.name}</td><td>${filesize(d.value)}</td>`);
+        .classed('tbodyRow', true);
+        // .style('background-color', d => d.colour || 'none')
+        // .style('color', (d) => {
+        //   return this.getTextColor(d.colour);
+        // })
+        // .html(d => `<td>${d.data.name}</td><td>${filesize(d.value)}</td>`);
+        const td = tr
+        .append('td');
+
+        td.append('svg')
+        .attr('width', 20)
+        .attr('height', 20)
+        .append('g')
+        // .selectAll('rect')
+        // .enter()
+        .append('circle')
+        .attr('cx', 10)
+        .attr('cy', 10)
+        .attr('r', '6px')
+        .style('fill', d => d.colour || '#000');
+
+        tr
+        .append('td')
+        .classed('tdDataName', true)
+        .text((d) => {
+          return d.data.name;
+        });
+
+        tr.append('td')
+        .classed('tdDataSize', true)
+        .text((d) => {
+          return filesize(d.value);
+        });
     }
   }
   /*
@@ -421,7 +456,7 @@ export default class View extends React.Component {
         return '#202020';
       }
     }
-    return '#BFBEC0';
+    return '#FFFFFF';
   }
   getBreadcrumbWidth(d) {
     return d.data && d.data.name ? d.data.name.length * 8 + 10 : b.w;
@@ -530,6 +565,7 @@ export default class View extends React.Component {
             </svg>
           </div>
         </div>
+        <div className="chartSeperator" />
         <div className="list">
           <table ref={listEl => (this.listEl = listEl)}>
             <thead />

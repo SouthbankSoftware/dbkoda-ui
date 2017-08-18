@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-11T16:22:57+10:00
+ * @Last modified time: 2017-08-18T10:00:20+10:00
  */
 
 /*
@@ -231,13 +231,12 @@ export default class StoragePanel extends React.Component {
       <div className="StoragePanel">
         <nav className="storageToolbar pt-navbar pt-dark">
           <div className="pt-navbar-group pt-align-right">
-            <AnchorButton
+            {!this.bLoading && <AnchorButton
               className="refreshButton"
               onClick={this.loadData}
-              loading={this.bLoading}
             >
               <RefreshIcon width={50} height={50} className="dbKodaSVG" />
-            </AnchorButton>
+            </AnchorButton>}
           </div>
         </nav>
         {this.bStorageView &&

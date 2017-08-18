@@ -2,7 +2,7 @@
 // @Date:   2017-08-01T10:50:03+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-08-09T16:39:54+10:00
+// @Last modified time: 2017-08-18T12:22:14+10:00
 
 
 
@@ -31,16 +31,17 @@
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
   font-weight: 400;
-  width: 960px;
-  height: 700px;
+  width: calc(100% - 60px);
+  height: calc(100%);
+  display: flex;
 
   .main {
     float: left;
-    width: 750px;
-
+    width: calc(100% - 400px);
     .sequence {
       width: 600px;
       height: 70px;
+      padding-top: 10px;
 
       .trail {
         .endlabel {
@@ -76,16 +77,35 @@
     }
 
   }
+  .chartSeperator {
+    display: inline-block;
+    position: relative;
+    height: calc(80%);
+    background-color: gray;
+    width: 1px;
+    margin: 0 70px 0 0px;
+    top: calc(10%);
+  }
 
   .list {
-    margin-top: 10px;
-    color: $navbarLeftHeading;
+    display: inline-block;
+    top: calc(10%);
+    position: relative;
+    color: #BFBEC0;
+    max-height: calc(79%);
+    overflow: auto;
 
     .darkColor {
       color: $tabBackgroundSelected;
     }
-    .tbodyRowColor {
+    .tbodyRow {
       color: '#ffffff';
+      .tdDataName {
+        width: 150px;
+      }
+      .tdDataSize {
+        width: 100px;
+      }
     }
     .theadRowColor {
       color: $navbarLeftHeading;
@@ -97,5 +117,9 @@
         padding: 2px;
       }
     }
+  }
+
+  .list::-webkit-scrollbar {
+      width: 5px;
   }
 }

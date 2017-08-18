@@ -2,7 +2,7 @@
 // @Date:   2017-08-01T10:50:03+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-08-07T11:56:23+10:00
+// @Last modified time: 2017-08-18T10:12:25+10:00
 
 
 
@@ -36,15 +36,15 @@
 
   .details-msg-div {
     overflow-y: auto;
-    left: calc(10%);
-    top: calc(25%);
-    width: 80%;
-    height: 256px;
+    left: 0px;
+    top: 81px;
+    width: 100%;
+    height: calc(100% - 81px);
     position: absolute;
     //border: 1px solid $treeBorderColor;
     div.messageWrapper {
       left: calc(17%);
-      top: 0px;
+      top: calc(35%);
       width: 66%;
       height: 254px;
       position: absolute;
@@ -107,6 +107,8 @@
   }
 
   .storageToolbar {
+    width: 60px;
+    float: right;
     background-color: $tabBackgroundSelected !important;
 
     .pt-button {

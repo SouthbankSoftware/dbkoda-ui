@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-15T11:10:53+10:00
+ * @Last modified time: 2017-08-18T09:16:30+10:00
  */
 
  import { action, observable } from 'mobx';
@@ -85,7 +85,7 @@ export default class EditorApi {
               err.message,
             );
           }
-          this.store.createNewEditorFailed();
+          this.createNewEditorFailed();
           // Object Object issue
           console.log(err);
           if (err.message == '[object Object]') {
