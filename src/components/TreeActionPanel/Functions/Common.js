@@ -126,7 +126,11 @@ export function dbkodaListAttributesAgg(params) {
   return params;
 }
 export function dbkodaListAttributesAgg_parse(res) {
-  return JSON.parse(res.prevAttributes);
+  console.log(res);
+  if (typeof res.prevAttributes === 'string') {
+    return JSON.parse(res.prevAttributes);
+  }
+  return res.prevAttributes;
 }
 // Right side of a project - either an existing or new attribute name
 export function dbkodaListAttributesProject(params) {
@@ -134,8 +138,11 @@ export function dbkodaListAttributesProject(params) {
   return params;
 }
 export function dbkodaListAttributesProject_parse(res) {
- if (debug) console.log('dklapp Res for parsing: ', res);
-  const output = JSON.parse(res.prevAttributes);
+  if (typeof res.prevAttributes === 'string') {
+    const output = JSON.parse(res.prevAttributes);
+  } else {
+    const output = res.prevAttributes;
+  }
   output.unshift('NewAttributeName');
   if (debug) console.log('output: ', output);
   return output;
@@ -146,8 +153,11 @@ export function dbkodaListAttributesProjectTarget(params) {
   return params;
 }
 export function dbkodaListAttributesProjectTarget_parse(res) {
- if (debug) console.log('dklapp Res for parsing: ', res);
-  const output = JSON.parse(res.prevAttributes);
+  if (typeof res.prevAttributes === 'string') {
+    const output = JSON.parse(res.prevAttributes);
+  } else {
+    const output = res.prevAttributes;
+  }
   for (let idx = 0; idx < output.length; idx += 1) {
     output[idx] = '"$' + output[idx] + '"';
   }

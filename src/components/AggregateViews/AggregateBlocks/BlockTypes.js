@@ -27,6 +27,13 @@
  */
 
 export const BlockTypes = {
+  START: {
+    type: 'Start',
+    description: 'Start block for config.',
+    fields: {
+      Expression: '',
+    },
+  },
   MATCH: {
     type: 'Match',
     description: 'Reduce your pipeline results using a match on a field.',

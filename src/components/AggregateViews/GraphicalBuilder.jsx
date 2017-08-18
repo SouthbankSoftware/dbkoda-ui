@@ -36,6 +36,7 @@ import { AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import Block from './AggregateBlocks/Block.jsx';
+import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import FirstBlockTarget from './AggregateBlocks/FirstBlockTaget.jsx';
 import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
@@ -80,10 +81,116 @@ export default class GraphicalBuilder extends React.Component {
       })
       .then((res) => {
         this.editor.aggregateID = res;
+        if (this.editor.blockList.length === 0) {
+          this.addStartBlock();
+        }
       })
       .catch((err) => {
         console.error(err);
       });
+  }
+
+  /**
+   * Function for adding a start block and setting up agg builder.
+   */
+  @action.bound
+  addStartBlock() {
+    this.getBlockAttributes(0).then((res) => {
+      // 3.a Add to Editor
+      this.addBlockToEditor('Start', 0, res);
+    });
+  }
+
+  /**
+   * Add a single block to the editor object.
+   * @param {blockType} - The type of block to be added.
+   * @param {position} - Where the block should be inserted.
+   * @param {attributes} - List of avaliable attributes for the .ddd
+   */
+  @action.bound
+  addBlockToEditor(blockType, position, attributeList) {
+    // Get relevant editor.
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    );
+
+    // Update block list for editor as required.
+    const tmpArray = this.props.store.editors
+      .get(this.props.store.editorPanel.activeEditorId)
+      .blockList.slice();
+    if (tmpArray.length === 0) {
+      tmpArray.push({
+        type: blockType,
+        fields: BlockTypes[blockType.toUpperCase()].fields,
+        modified: false,
+      });
+    } else if (position === 'START') {
+      tmpArray.unshift({
+        type: blockType,
+        fields: BlockTypes[blockType.toUpperCase()].fields,
+        modified: false,
+      });
+    } else if (position === 'END') {
+      tmpArray.push({
+        type: blockType,
+        fields: BlockTypes[blockType.toUpperCase()].fields,
+        modified: false,
+      });
+    } else {
+      tmpArray.push({
+        type: blockType,
+        fields: BlockTypes[blockType.toUpperCase()].fields,
+        modified: false,
+      });
+      this.moveBlock(tmpArray, tmpArray.length - 1, position);
+    }
+    this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    ).blockList = tmpArray;
+
+    // Update block attributes
+    editor.blockList[position].status = 'pending';
+    editor.blockList[position].attributeList = attributeList;
+    editor.selectedBlock = position;
+    this.props.store.editorPanel.updateAggregateDetails = true;
+
+    console.log('addBlockToEditor:', editor);
+  }
+  /**
+   * Fetch the block attributes from the shell object.
+   * Gets results for all previous stages and attributes avaliable for
+   * the new block.
+   * @param {position} - The position of the block to get avaliable attributes for.
+   * @returns {Promise} - A promise resolving the attributes from the shell.
+   */
+  @action.bound
+  getBlockAttributes(position) {
+    return new Promise((resolve, reject) => {
+      // Get the relevant editor object.
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      // Fetch response from shell object for all steps up to position - 1
+      const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 30000;
+      service
+        .update(editor.profileId, {
+          shellId: editor.shellId, // eslint-disable-line
+          commands: AggregateCommands.GET_ATTRIBUTES(
+            editor.aggregateID,
+            position,
+          ),
+        })
+        .then((res) => {
+          // Check attribute List to see if we have valid attributes returned.
+          console.log('GetBlockAttributes: ', res);
+          resolve(res);
+        })
+        .catch((err) => {
+          console.error(err);
+          reject(err);
+        });
+    });
   }
 
   @action.bound
@@ -108,16 +215,19 @@ export default class GraphicalBuilder extends React.Component {
           // 3. Update Valid for each block.
           console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
-            if (index === res.stepAttributes.length - 1) {
-              // Not empty now.
-            } else if (indexValue.constructor === Array) {
+            let attributeIndex = index;
+            if (index > 0) {
+              attributeIndex = index - 1;
+            }
+            if (indexValue.constructor === Array) {
               // Check for error result.
               if (res.stepCodes[index] === 0) {
                 console.log('Result[', index, '] is valid: ', indexValue);
                 if (!(typeof indexValue === 'string')) {
                   indexValue = '[ "' + indexValue.join('", "') + '"]';
                 }
-                editor.blockList[index].attributeList = indexValue;
+                editor.blockList[index].attributeList =
+                  res.stepAttributes[attributeIndex];
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
@@ -190,6 +300,11 @@ export default class GraphicalBuilder extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
+    if (blockTo === 0) {
+      blockTo = 1;
+    } else if (!blockTo) {
+      return null;
+    }
     console.log('moveBlock: ', blockFrom, ', ', blockTo);
     this.moveBlockInEditor(blockFrom, blockTo);
     // 2. Update Shell Steps
@@ -200,6 +315,10 @@ export default class GraphicalBuilder extends React.Component {
           // 3. Update Valid for each block.
           console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
+            let attributeIndex = index;
+            if (index > 0) {
+              attributeIndex = index - 1;
+            }
             if (index === res.stepAttributes.length - 1) {
               // Not empty now.
             } else if (indexValue.constructor === Array) {
@@ -209,7 +328,8 @@ export default class GraphicalBuilder extends React.Component {
                 if (!(typeof indexValue === 'string')) {
                   indexValue = '[ "' + indexValue.join('", "') + '"]';
                 }
-                editor.blockList[index].attributeList = indexValue;
+                editor.blockList[index].attributeList =
+                  res.stepAttributes[attributeIndex];
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
@@ -260,6 +380,10 @@ export default class GraphicalBuilder extends React.Component {
           // 3. Update Valid for each block.
           console.log('updateResultSet:', res);
           res.stepAttributes.map((indexValue, index) => {
+            let attributeIndex = index;
+            if (index > 0) {
+              attributeIndex = index - 1;
+            }
             if (index === res.stepAttributes.length - 1) {
               // Not empty now.
             } else if (indexValue.constructor === Array) {
@@ -269,7 +393,8 @@ export default class GraphicalBuilder extends React.Component {
                 if (!(typeof indexValue === 'string')) {
                   indexValue = '[ "' + indexValue.join('", "') + '"]';
                 }
-                editor.blockList[index].attributeList = indexValue;
+                editor.blockList[index].attributeList =
+                  res.stepAttributes[attributeIndex];
                 editor.blockList[index].status = 'valid';
               } else {
                 console.error('Result[', index, '] is invalid: ', indexValue);
@@ -340,34 +465,42 @@ export default class GraphicalBuilder extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
       const stepArray = [];
-      editor.blockList.map((block) => {
-        const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
-          block.type +
-          '.hbs');
-        const stepJSON = formTemplate(block.fields);
-        try {
-          stepArray.push(stepJSON.replace(/\n/g, ' '));
-        } catch (e) {
-          console.error('Block generated invalid JSON: ', block);
-        }
-      });
-      // Update steps in Shell:
-      const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
-      service
-        .update(editor.profileId, {
-          shellId: editor.shellId, // eslint-disable-line
-          commands: AggregateCommands.SET_ALL_STEPS(
-            editor.aggregateID,
-            stepArray,
-          ),
-        })
-        .then(() => {
-          resolve();
-        })
-        .catch((e) => {
-          reject(e);
+      console.log(editor.blockList.length);
+      if (editor.blockList.length === 1) {
+        resolve();
+      } else {
+        editor.blockList.map((block) => {
+          if (block.type !== 'Start') {
+            const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
+              block.type +
+              '.hbs');
+            const stepJSON = formTemplate(block.fields);
+            try {
+              stepArray.push(stepJSON.replace(/\n/g, ' '));
+            } catch (e) {
+              console.error('Block generated invalid JSON: ', block);
+            }
+          }
         });
+        // Update steps in Shell:
+        console.log('updatingShellPipeline: ', stepArray);
+        const service = featherClient().service('/mongo-sync-execution');
+        service.timeout = 30000;
+        service
+          .update(editor.profileId, {
+            shellId: editor.shellId, // eslint-disable-line
+            commands: AggregateCommands.SET_ALL_STEPS(
+              editor.aggregateID,
+              stepArray,
+            ),
+          })
+          .then(() => {
+            resolve();
+          })
+          .catch((e) => {
+            reject(e);
+          });
+      }
     });
   }
 
@@ -429,7 +562,7 @@ export default class GraphicalBuilder extends React.Component {
         shellId: editor.shellId, // eslint-disable-line
         commands: AggregateCommands.GET_RESULTS(
           editor.aggregateID,
-          stepId + 1,
+          stepId,
           false,
         ),
       })
