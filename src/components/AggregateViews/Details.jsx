@@ -166,17 +166,24 @@ export default class Details extends React.Component {
   }
 
   generateCode(editorObject) {
-    let codeString =
-      'use ' +
-      this.currentDB +
-      ';\ndb.' +
-      this.currentCollection +
-      '.aggregate([\n';
+    let codeString = 'use ' + this.currentDB + ';\n';
+    if (
+      editorObject.blockList &&
+      editorObject.blockList[0] &&
+      editorObject.blockList[0].type.toUpperCase() === 'START'
+    ) {
+      const formTemplate = require('./AggregateBlocks/BlockTemplates/Start.hbs');
+      codeString += formTemplate(editorObject.blockList[0].fields) + ';\n';
+    }
+    codeString += 'db.' + this.currentCollection + '.aggregate([\n';
+
     editorObject.blockList.map((block) => {
-      const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
-        block.type +
-        '.hbs'); // eslint-disable-line
-      codeString += formTemplate(block.fields) + ',\n';
+      if (!(block.type.toUpperCase() === 'START')) {
+        const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
+          block.type +
+          '.hbs'); // eslint-disable-line
+        codeString += formTemplate(block.fields) + ',\n';
+      }
     });
 
     codeString += ']);';
@@ -251,7 +258,6 @@ export default class Details extends React.Component {
         maxColumns = 2;
       }
     }
-    console.log(maxColumns);
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">

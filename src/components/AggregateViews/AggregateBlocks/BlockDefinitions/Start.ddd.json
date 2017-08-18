@@ -1,0 +1,12 @@
+{
+  "Title": "Start",
+  "DefaultValues": {},
+  "Fields": [
+    {
+      "name": "expression",
+      "label": "Test expression",
+      "tooltip": "A test expression",
+      "type": "Text"
+    }
+  ]
+}

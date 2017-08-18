@@ -59,7 +59,7 @@ export default class Palette extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       ).blockList.length;
     } else if (position === 'START') {
-      position = 0;
+      position = 1;
     }
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -101,7 +101,7 @@ export default class Palette extends React.Component {
             if (
               editor.blockList[editor.blockList.length - 1].status === 'valid'
             ) {
-              this.getBlockAttributes(position).then((res) => {
+              this.getBlockAttributes(position - 1).then((res) => {
                 // 3.a Add to Editor
                 this.addBlockToEditor(blockType, position, res);
               });
@@ -130,34 +130,43 @@ export default class Palette extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
       const stepArray = [];
-      editor.blockList.map((block) => {
-        const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
-          block.type +
-          '.hbs');
-        const stepJSON = formTemplate(block.fields);
-        try {
-          stepArray.push(stepJSON.replace(/\n/g, ' '));
-        } catch (e) {
-          console.error('Block generated invalid JSON: ', block);
-        }
-      });
-      // Update steps in Shell:
-      const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
-      service
-        .update(editor.profileId, {
-          shellId: editor.shellId, // eslint-disable-line
-          commands: AggregateCommands.SET_ALL_STEPS(
-            editor.aggregateID,
-            stepArray,
-          ),
-        })
-        .then(() => {
-          resolve();
-        })
-        .catch((e) => {
-          reject(e);
+      console.log(editor.blockList.length);
+      if (editor.blockList.length === 1) {
+        console.log('???');
+        resolve();
+      } else {
+        editor.blockList.map((block) => {
+          if (!(block.type === 'Start')) {
+            const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
+              block.type +
+              '.hbs');
+            const stepJSON = formTemplate(block.fields);
+            try {
+              stepArray.push(stepJSON.replace(/\n/g, ' '));
+            } catch (e) {
+              console.error('Block generated invalid JSON: ', block);
+            }
+          }
         });
+        // Update steps in Shell:
+        console.log('updatingShellPipeline: ', stepArray);
+        const service = featherClient().service('/mongo-sync-execution');
+        service.timeout = 30000;
+        service
+          .update(editor.profileId, {
+            shellId: editor.shellId, // eslint-disable-line
+            commands: AggregateCommands.SET_ALL_STEPS(
+              editor.aggregateID,
+              stepArray,
+            ),
+          })
+          .then(() => {
+            resolve();
+          })
+          .catch((e) => {
+            reject(e);
+          });
+      }
     });
   }
 
@@ -312,6 +321,7 @@ export default class Palette extends React.Component {
 
     // Update block attributes
     editor.blockList[position].status = 'pending';
+    console.log(attributeList);
     editor.blockList[position].attributeList = attributeList;
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
@@ -341,20 +351,22 @@ export default class Palette extends React.Component {
       <div className="aggregatePaletteContent">
         <ul className="aggregateBlockList">
           {Object.keys(BlockTypes).map((keyName, index) => {
-            return (
-              <li
-                key={'key-' + index} //eslint-disable-line
-                className="aggregateBlockWrapper"
-              >
-                <Block
+            if (!(BlockTypes[keyName].type.toUpperCase() === 'START')) {
+              return (
+                <li
                   key={'key-' + index} //eslint-disable-line
-                  listPosition={index}
-                  type={BlockTypes[keyName].type}
-                  concrete={false}
-                  addBlock={this.addBlock}
-                />
-              </li>
-            );
+                  className="aggregateBlockWrapper"
+                >
+                  <Block
+                    key={'key-' + index} //eslint-disable-line
+                    listPosition={index}
+                    type={BlockTypes[keyName].type}
+                    concrete={false}
+                    addBlock={this.addBlock}
+                  />
+                </li>
+              );
+            }
           })}
         </ul>
       </div>

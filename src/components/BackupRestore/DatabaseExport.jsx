@@ -50,6 +50,7 @@ export default class DatabaseExport extends React.Component {
       exportType: {selected: 'json', options: ['json', 'csv']},
       directoryPath: '',
       jsonArray: false,
+      gzip: false,
       pretty: false,
       db: '',
       collection: '',
@@ -132,17 +133,21 @@ export default class DatabaseExport extends React.Component {
         if (!fileNames || fileNames.length == 0) {
           return;
         }
-        let f = fileNames[0];
-        if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE
-          || action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_COLLECTION
-          || action === BackupRestoreActions.EXPORT_DATABASE) {
-            console.log('platform ', os.release());
-          f = os.release().indexOf('Windows') >= 0 ? fileNames[0] + '\\dump' : fileNames[0] + '/dump';
-        }
-
-        this.setState({directoryPath: f});
+        const f = fileNames[0];
+        this.setPathValue(f, action);
       },
     );
+  }
+
+  setPathValue(f, action) {
+    if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE
+      || action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_COLLECTION
+      || action === BackupRestoreActions.EXPORT_DATABASE) {
+      console.log('platform ', os.release());
+      f = os.release().indexOf('Windows') >= 0 ? f + '\\dump' : f + '/dump';
+    }
+
+    this.setState({directoryPath: f});
   }
 
   selectCollection(collection, i) {
@@ -451,7 +456,7 @@ export default class DatabaseExport extends React.Component {
           </label>
           <div className="pt-form-content">
             <input
-              className="pt-input db-backup-input"
+              className="pt-input db-backup-input db-backup-database-input"
               readOnly={readOnly}
               type="text"
               dir="auto"
@@ -512,8 +517,7 @@ export default class DatabaseExport extends React.Component {
             <input
               className="pt-input path-input db-backup-path-input"
               type="text"
-              readOnly
-              onClick={e => this.setState({directoryPath: e.target.value})}
+              onChange={e => this.setState({'directoryPath': e.target.value})}
               value={this.state.directoryPath}
             />
             <Button

@@ -115,7 +115,52 @@ export default class Block extends React.Component {
     };
   }
 
+  renderStartBlock() {
+    const connectDragSource = this.props.connectDragSource; // eslint-disable-line
+    const connectDropTarget = this.props.connectDropTarget;
+    const isDragging = this.props.isDragging; // eslint-disable-line
+    const isOver = this.props.isOver; // eslint-disable-line
+    this.state.color = 'color_' + this.props.color;
+    const classes =
+      'aggregateBlock ' +
+      this.state.type +
+      ' ' +
+      this.state.listPosition +
+      ' selected_' +
+      this.props.selected;
+    let blockColorClasses;
+    let closeColorClasses; //eslint-disable-line
+    if (this.props.status === 'pending') {
+      blockColorClasses = 'dbKodaSVG ' + this.props.positionType + ' invalid';
+      closeColorClasses = 'closeBlockIcon invalid';
+    } else {
+      blockColorClasses =
+        'dbKodaSVG ' + this.props.positionType + ' ' + this.state.color;
+      closeColorClasses = 'closeBlockIcon ' + this.state.color;
+    }
+
+    return connectDropTarget(
+      <div className={classes}>
+        {this.state.concrete &&
+          this.props.positionType === 'START' &&
+          <div className="blockBuilderWrapper">
+            <BlockTopIcon
+              className={blockColorClasses}
+              onClick={() =>
+                this.props.onClickCallback(this.state.listPosition)}
+            />
+            <p className="aggregateBlockTitle">
+              {this.props.type}
+            </p>
+          </div>}
+      </div>,
+    );
+  }
+
   render() {
+    if (this.props.type.toUpperCase() === 'START') {
+      return this.renderStartBlock();
+    }
     // Drag Drop Handlers.
     const connectDragSource = this.props.connectDragSource;
     const connectDropTarget = this.props.connectDropTarget;
