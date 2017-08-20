@@ -82,16 +82,25 @@ export default class Palette extends React.Component {
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
             res.stepAttributes.map((indexValue, index) => {
-              if (index === res.stepAttributes.length - 1) {
-                // No longer empty.
-              } else if (indexValue.constructor === Array) {
+              let attributeIndex = index;
+              if (index > 0) {
+                attributeIndex = index - 1;
+              }
+              if (indexValue.constructor === Array) {
                 // Check for error result.
                 if (res.stepCodes[index] === 0) {
                   console.log('Result[', index, '] is valid: ', indexValue);
-                  editor.blockList[index].attributeList = indexValue;
+                  if (!(typeof indexValue === 'string')) {
+                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+                  }
+                  editor.blockList[index].attributeList =
+                    res.stepAttributes[attributeIndex];
                   editor.blockList[index].status = 'valid';
                 } else {
                   console.error('Result[', index, '] is invalid: ', indexValue);
+                  if (!(typeof indexValue === 'string')) {
+                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+                  }
                   editor.blockList[index].status = 'pending';
                 }
               }

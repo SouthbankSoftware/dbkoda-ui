@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-18T11:32:02+10:00
+ * @Last modified time: 2017-08-18T16:26:53+10:00
  */
 
 /*
@@ -29,6 +29,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 import filesize from 'filesize';
+import { observe } from 'mobx';
 import './View.scss';
 
 // Breadcrumb dimensions: width, height, spacing, width of tip/tail
@@ -108,23 +109,47 @@ export default class View extends React.Component {
 
   constructor(props) {
     super(props);
+    let { width, height } = props;
+    let radius = Math.min(width, height) / 2;
+    const store = this.props.store;
+    const dimentions = this.getDimentions(store);
+    if (dimentions) {
+      width = dimentions.width;
+      height = dimentions.height;
+      radius = dimentions.radius;
+    }
 
-    const { width, height } = props;
-
-    this.radius = Math.min(width, height) / 2;
-
-    // this.toggleLegend = this.toggleLegend.bind(this);
     this.mouseover = this.mouseover.bind(this);
     this.mouseleave = this.mouseleave.bind(this);
     this.breadcrumbPoints = this.breadcrumbPoints.bind(this);
     this.updateData = this.updateData.bind(this);
-
+    this.handleResize = this.handleResize.bind(this);
     if (props.data) {
       this.state = {
         data: props.data,
+        radius,
+        width,
+        height,
       };
       this.updateData();
     }
+    observe(store.layout, (change) => {
+      console.log(change);
+      this.handleResize();
+    });
+  }
+
+  getDimentions(store) {
+    const result = {};
+    if (store && store.layout) {
+      result.width = window.innerWidth - store.layout.overallSplitPos - 400; // 400 is the size of the right side table
+      result.height = window.innerHeight - store.layout.rightSplitPos - 81; // 81 is the height of tabbar and output panel top bar
+      result.width -= 80; // reduction of 80 pixels for spacing on left and right
+      result.height -= 80; // reduction of 80 pixels for top hierarchy
+      result.radius = Math.min(result.width, result.height) / 2;
+      return result;
+    }
+    return null;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -227,7 +252,7 @@ export default class View extends React.Component {
     const divisor = this.root.depth == 0 ? 1 : 1 + this.root.depth * 0.5;
     const partition = d3
       .partition()
-      .size([2 * Math.PI, this.radius * this.radius / divisor]);
+      .size([2 * Math.PI, this.state.radius * this.state.radius / divisor]);
     const arc = d3
       .arc()
       .startAngle((d) => {
@@ -307,9 +332,12 @@ export default class View extends React.Component {
       .enter()
       .append('tr')
       .classed('theadRowColor', d => d.colour !== undefined)
-      // .style('background-color', d => d.colour || 'none')
       .style('color', '#FFFFFF')
-      .html(d => `<th><svg width="20" height="20"></svg></th><th>${d.data.name}</th><th>${filesize(d.value)}</th>`)
+      .html(
+        d =>
+          `<th><svg width="20" height="20"></svg></th><th>${d.data
+            .name}</th><th>${filesize(d.value)}</th>`,
+      )
       .select('svg')
       .append('g')
       .append('circle')
@@ -328,38 +356,26 @@ export default class View extends React.Component {
         .enter()
         .append('tr')
         .classed('tbodyRow', true);
-        // .style('background-color', d => d.colour || 'none')
-        // .style('color', (d) => {
-        //   return this.getTextColor(d.colour);
-        // })
-        // .html(d => `<td>${d.data.name}</td><td>${filesize(d.value)}</td>`);
-        const td = tr
-        .append('td');
+      const td = tr.append('td');
 
-        td.append('svg')
+      td
+        .append('svg')
         .attr('width', 20)
         .attr('height', 20)
         .append('g')
-        // .selectAll('rect')
-        // .enter()
         .append('circle')
         .attr('cx', 10)
         .attr('cy', 10)
         .attr('r', '6px')
         .style('fill', d => d.colour || '#000');
 
-        tr
-        .append('td')
-        .classed('tdDataName', true)
-        .text((d) => {
-          return d.data.name;
-        });
+      tr.append('td').classed('tdDataName', true).text((d) => {
+        return d.data.name;
+      });
 
-        tr.append('td')
-        .classed('tdDataSize', true)
-        .text((d) => {
-          return filesize(d.value);
-        });
+      tr.append('td').classed('tdDataSize', true).text((d) => {
+        return filesize(d.value);
+      });
     }
   }
   /*
@@ -522,8 +538,18 @@ export default class View extends React.Component {
     // Make the breadcrumb trail visible, if it's hidden.
     this.view.select('.trail').style('visibility', '');
   }
-
+  handleResize() {
+    const dimentions = this.getDimentions(this.props.store);
+    if (dimentions) {
+      this.setState({
+        width: dimentions.width,
+        height: dimentions.height,
+        radius: dimentions.radius,
+      });
+    }
+  }
   componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
     this.createView();
   }
 
@@ -532,9 +558,12 @@ export default class View extends React.Component {
     this.createView();
   }
 
-  render() {
-    const { width, height } = this.props;
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
 
+  render() {
+    const { width, height } = this.state;
     return (
       <div
         ref={viewEl => (this.viewEl = viewEl)}
@@ -547,7 +576,14 @@ export default class View extends React.Component {
             </svg>
           </div>
           <div className="chart">
-            <div className="explanation" style={{ visibility: 'hidden' }}>
+            <div
+              className="explanation"
+              style={{
+                visibility: 'hidden',
+                top: height / 2 - 40 + 'px',
+                left: width / 2 - 70 + 'px',
+              }}
+            >
               <span className="name" /> takes
               <br />
               <span className="percentage" />
@@ -560,7 +596,7 @@ export default class View extends React.Component {
                 ref={containerEl => (this.containerEl = containerEl)}
                 transform={`translate(${width / 2}, ${height / 2})`}
               >
-                <circle r={this.radius} style={{ opacity: 0 }} />
+                <circle r={this.state.radius} style={{ opacity: 0 }} />
               </g>
             </svg>
           </div>
