@@ -80,7 +80,8 @@ export default class GraphicalBuilder extends React.Component {
         ),
       })
       .then((res) => {
-        this.editor.aggregateID = res.id;
+        console.log(res);
+        this.editor.aggregateID = JSON.parse(res).id;
         if (this.editor.blockList.length === 0) {
           this.addStartBlock();
         }
@@ -210,6 +211,7 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps.
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
+        console.log(res);
         res = JSON.parse(res);
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
