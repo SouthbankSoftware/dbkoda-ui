@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-16T11:56:20+10:00
+ * @Last modified time: 2017-08-18T15:58:42+10:00
 */
 
 import React from 'react';
@@ -92,7 +92,7 @@ export default class Editor extends React.Component {
   getClickedDocument(coords, lines) {
     const cm = this.editor.getCodeMirror();
     const lineNumber = cm.lineAtHeight(coords.y);
-    return this.props.getDocumentAtLine(this.props.id, lineNumber, lines);
+    return this.props.getDocumentAtLine(this.props.id, lineNumber, 0, lines);
   }
 
   renderContextMenu(event) {
