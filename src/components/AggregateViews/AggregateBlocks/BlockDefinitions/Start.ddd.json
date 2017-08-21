@@ -3,10 +3,18 @@
   "DefaultValues": {},
   "Fields": [
     {
-      "name": "expression",
-      "label": "Test expression",
-      "tooltip": "A test expression",
-      "type": "Text"
+      "name": "SampleSize",
+      "label": "Sample Size",
+      "tooltip": "Size of the sample used to preview results",
+      "type": "Numeric",
+      "default": 1000
+    },
+    {
+      "name": "DiskUsage",
+      "label": "Disk Usage",
+      "tooltip": "Overflow to disk if neccessary?",
+      "type": "Boolean",
+      "default": true
     }
   ]
 }
