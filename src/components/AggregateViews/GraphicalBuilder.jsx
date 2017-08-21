@@ -582,6 +582,7 @@ export default class GraphicalBuilder extends React.Component {
   /**
    * Sends a request to controller to update config for agg builder.
    * 
+   * @return {Promise} promise - The promise resolving the config update.
    */
   @action.bound
   updateConfig() {
@@ -597,7 +598,6 @@ export default class GraphicalBuilder extends React.Component {
           editor.aggConfig = startCommands;
         } else if (!(editor.aggConfig === startCommands)) {
           // Config has changed, send request and update config.
-          sconsole.log('UPDATED CONFIG');
           editor.aggConfig = startCommands;
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 30000;
