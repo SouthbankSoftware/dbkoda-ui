@@ -3,7 +3,7 @@
  * @Date:   2017-08-17T17:35:04+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-17T20:05:17+10:00
+ * @Last modified time: 2017-08-21T12:56:01+10:00
  */
 
 import React from 'react';
@@ -52,6 +52,7 @@ export default class FileInput extends React.Component {
               {field.value != '' ? field.value : 'Private Key...'}
             </span>
           </label>
+          <p className="pt-form-helper-text">{field.error}</p>
         </div>
       </div>
     );

@@ -22,7 +22,7 @@
 // @Date:   2017-04-10T10:37:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-08-17T10:38:55+10:00
+// @Last modified time: 2017-08-21T13:01:08+10:00
 @import '../../styles/_defaultTheme.scss';
 .connection-profile {
   display: flex;
@@ -30,6 +30,9 @@
   font-family: Arial, Helvetica, sans-serif;
   .inactive {
     opacity: 0.5;
+  }
+  .pt-form-group.pt-inline {
+    align-items: stretch;
   }
   input[type=text],
   input[type=number],
@@ -360,26 +363,36 @@
   .database-input-content,
   .database-input-content .pt-form-content,
   .database-input,
+  .remoteHost-input-content,
+  .remoteHost-input-content .pt-form-content,
+  .remoteHost-input,
   .remoteUser-input-content,
   .remoteUser-input-content .pt-form-content,
   .remoteUser-input,
   .remotePass-input-content,
   .remotePass-input-content .pt-form-content,
   .remotePass-input,
-  .sshKeyFile-input-content,
   .sshKeyFile-input-content .pt-form-content,
   .sshKeyFile-input,
-  .passPhrase-input-content,
   .passPhrase-input-content .pt-form-content,
   .passPhrase-input,
+  .pt-file-upload,
   {
     width: 100%;
+  }
+  .sshKeyFile-input-content
+  {
+    width: 60%;
+  }
+  .passPhrase-input-content
+  {
+    width: 40%;
   }
   .port-input, .sshPort-input, .remotePort-input  {
     width: 80px;
   }
-  .remoteHost-input {
-    width: 145px;
+  .remoteHost-input-content {
+    padding-right: 10px;
   }
   .port-label {
     width: 5px;
