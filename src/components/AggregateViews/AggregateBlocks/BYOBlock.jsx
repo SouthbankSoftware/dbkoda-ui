@@ -24,7 +24,7 @@ import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
 import { inject, observer } from 'mobx-react';
-import { action, runInAction } from 'mobx';
+import { action } from 'mobx';
 import React from 'react';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
