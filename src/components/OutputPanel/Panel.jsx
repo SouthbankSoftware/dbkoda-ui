@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-18T16:19:22+10:00
+ * @Last modified time: 2017-08-21T13:47:22+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -136,15 +136,14 @@ export default class Panel extends React.Component {
   getDocumentAtLine(editorId, lineNumber, direction, lines) {
     const cm = this.editorRefs[editorId].getCodeMirror();
     const startLine = cm.getLine(lineNumber);
-
+    // Skip these lines to continue reading result set
     if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {
       if (!direction) {
         direction = 1;
       }
       return this.getDocumentAtLine(editorId, lineNumber + direction, direction, lines);
     }
-
-    if (!startLine) {
+    if (!startLine || startLine.indexOf('dbKoda>') !== -1) {
       lines.status = 'Invalid';
       return '';
     }
@@ -176,24 +175,30 @@ export default class Panel extends React.Component {
       lines.status = 'Invalid';
       return '';
     }
-    const indentation = line.search(/\S|$/);
-    const brace = direction === -1 ? '{' : '}';
-
-    if (indentation < 1) {
-      if (line[0] === brace) {
-        direction === -1 ? lines.start = lineNumber : lines.end = lineNumber;
+    if (direction === -1 && line[0] === '{') {
+      const prevLine = cm.getLine(lineNumber - 1).trim();
+      if (prevLine && prevLine[prevLine.length - 1] === '}' ||
+        !['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
+        prevLine.indexOf('dbKoda>') >= 0
+      ) {
+        lines.start = lineNumber;
         return line;
       }
-      lines.status = 'Invalid';
-      return '';
+    } else if (direction === 1 && line[line.length - 1] === '}') {
+      const nextLine = cm.getLine(lineNumber + 1).trim();
+      if (
+        nextLine && nextLine[0] === '{' ||
+        ![']', ',', '}'].includes(nextLine[0])
+      ) {
+        lines.end = lineNumber;
+        return line;
+      }
     }
-
     if (direction === -1) {
       line = this._getLineText(cm, lineNumber + direction, direction, lines) + line;
     } else {
       line += this._getLineText(cm, lineNumber + direction, direction, lines);
     }
-
     return line;
   }
 
