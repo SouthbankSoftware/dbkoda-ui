@@ -172,11 +172,14 @@ div.Pane.vertical.Pane1 {
         }
       }
       div.aggregateDetailsWrapper {
+        display: flex;
+        flex-direction: column;
         order: 2;
         flex-grow: 1;
         overflow-y: auto;
         color: $navbarLeftHeading;
         nav.aggregateDetailsToolbar {
+          order: 1;
           background-color: $navbarLeftBackground;
           h2.currentBlockChoice {
             color: $navbarLeftHeading;
@@ -186,6 +189,9 @@ div.Pane.vertical.Pane1 {
           }
         }
         div.aggregateDetailsContent {
+          order: 2;
+          div.editorView {
+          }
           div {
             div {
               form {
@@ -201,7 +207,7 @@ div.Pane.vertical.Pane1 {
         a.hideLeftPanelButton {
           position: absolute;
           bottom: 0;
-          right: 0;
+          right: 10px;
           float: right;
           margin-right: 20px;
           margin-bottom: 20px;
@@ -209,7 +215,7 @@ div.Pane.vertical.Pane1 {
         a.byoCodeButton {
           position: absolute;
           bottom: 0;
-          left: 0;
+          left: 10px;
           float: left;
           margin-right: 20px;
           margin-bottom: 20px;

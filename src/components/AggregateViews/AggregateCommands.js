@@ -47,4 +47,7 @@ export const AggregateCommands = {
       "dbk_agg.getResults('" + id + "','" + stepIndex + "','" + reset + "')"
     );
   },
+  VALIDATE_STEP: (step) => {
+    return 'dbk_agg.validateStep(' + step + ')';
+  },
 };
