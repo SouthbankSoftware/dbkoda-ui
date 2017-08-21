@@ -80,7 +80,6 @@ export default class GraphicalBuilder extends React.Component {
         ),
       })
       .then((res) => {
-        console.log(res);
         this.editor.aggregateID = JSON.parse(res).id;
         if (this.editor.blockList.length === 0) {
           this.addStartBlock();
@@ -211,7 +210,6 @@ export default class GraphicalBuilder extends React.Component {
     // 2. Update Shell Steps.
     this.updateShellPipeline().then(() => {
       this.updateResultSet().then((res) => {
-        console.log(res);
         res = JSON.parse(res);
         if (res.stepAttributes.constructor === Array) {
           // 3. Update Valid for each block.
@@ -494,7 +492,9 @@ export default class GraphicalBuilder extends React.Component {
           ),
         })
         .then(() => {
-          resolve();
+          this.updateConfig().then((res) => {
+            resolve(res);
+          });
         })
         .catch((e) => {
           reject(e);
@@ -577,6 +577,48 @@ export default class GraphicalBuilder extends React.Component {
       .catch((e) => {
         console.error(e);
       });
+  }
+
+  /**
+   * Sends a request to controller to update config for agg builder.
+   * 
+   * @return {Promise} promise - The promise resolving the config update.
+   */
+  @action.bound
+  updateConfig() {
+    return new Promise((resolve, reject) => {
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      if (editor.blockList[0]) {
+        const formTemplate = require('./AggregateBlocks/BlockTemplates/Start.hbs');
+        const startCommands = formTemplate(editor.blockList[0].fields) + ';\n';
+        if (!editor.aggConfig) {
+          // First setup for config, set.
+          editor.aggConfig = startCommands;
+        } else if (!(editor.aggConfig === startCommands)) {
+          // Config has changed, send request and update config.
+          editor.aggConfig = startCommands;
+          const service = featherClient().service('/mongo-sync-execution');
+          service.timeout = 30000;
+          service
+            .update(editor.profileId, {
+              shellId: editor.shellId, // eslint-disable-line
+              commands: startCommands,
+            })
+            .then((res) => {
+              console.log(res);
+              resolve(res);
+            })
+            .catch((e) => {
+              console.error(e);
+              reject();
+            });
+        }
+        // Else, do nothing.
+        resolve();
+      }
+    });
   }
 
   render() {

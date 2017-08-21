@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-17T11:01:13+10:00
+ * @Last modified time: 2017-08-21T12:50:02+10:00
  */
 
 /**
@@ -61,7 +61,7 @@ export class ProfileForm extends MobxReactForm {
     this.$('ssh').observe({
       key: 'value',
       call: ({ form, change }) => {
-        console.log('ssh Value:', change.newValue);
+        this.addSshRules(form, change.newValue);
         form.validate();
       },
     });
@@ -92,6 +92,51 @@ export class ProfileForm extends MobxReactForm {
     } else {
       form.$('host').set('rules', '');
       form.$('port').set('rules', '');
+    }
+  }
+
+  addSshRules(form, value) {
+    if (value) {
+      form.$('remoteHost').set('rules', 'required|string');
+      form.$('sshPort').set('rules', 'required|numeric');
+      form.$('remotePort').set('rules', 'required|numeric');
+      form.$('remoteUser').set('rules', 'required|string');
+      this.$('keyRadio').observe({
+        key: 'value',
+        call: ({ form, change }) => {
+          this.addKeyRules(form, change.newValue);
+          form.validate();
+        },
+      });
+      this.$('passRadio').observe({
+        key: 'value',
+        call: ({ form, change }) => {
+          this.addRemotePassRules(form, change.newValue);
+          form.validate();
+        },
+      });
+    } else {
+      form.$('remoteHost').set('rules', '');
+      form.$('sshPort').set('rules', '');
+      form.$('remotePort').set('rules', '');
+      form.$('remoteUser').set('rules', '');
+    }
+    this.addKeyRules(form, form.$('keyRadio').value);
+    this.addRemotePassRules(form, form.$('passRadio').value);
+  }
+
+  addKeyRules(form, value) {
+    if (value) {
+      form.$('sshKeyFile').set('rules', 'required|string');
+    } else {
+      form.$('sshKeyFile').set('rules', '');
+    }
+  }
+  addRemotePassRules(form, value) {
+    if (value) {
+      form.$('remotePass').set('rules', 'required|string');
+    } else {
+      form.$('remotePass').set('rules', '');
     }
   }
 
