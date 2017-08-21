@@ -208,7 +208,7 @@ export default class GraphicalBuilder extends React.Component {
     ).blockList[index].isSelected = true;
 
     // 2. Update Shell Steps.
-    this.updateShellPipeline().then((res) => {
+    this.updateShellPipeline(true).then((res) => {
       if (res && res.unableToUpdateSteps) {
         // Partial update
         console.log('Unable to complete full update!');
@@ -331,7 +331,7 @@ export default class GraphicalBuilder extends React.Component {
     }
     this.moveBlockInEditor(blockFrom, blockTo);
     // 2. Update Shell Steps
-    this.updateShellPipeline().then((res) => {
+    this.updateShellPipeline(true).then((res) => {
       if (res && res.unableToUpdateSteps) {
         // Partial update
         console.log('Unable to complete full update:', editor.blockList);
@@ -414,7 +414,7 @@ export default class GraphicalBuilder extends React.Component {
     // 1. Remove from Editor Structure.
     editor.blockList.splice(blockPosition, 1);
     // 2. Update Shell Steps.
-    this.updateShellPipeline().then((res) => {
+    this.updateShellPipeline(false).then((res) => {
       if (res && res.unableToUpdateSteps) {
         // Partial update
         console.log('Unable to complete full update!');
@@ -582,7 +582,7 @@ export default class GraphicalBuilder extends React.Component {
    * @returns {Promise} - A promise with the result of the shell update.
    */
   @action.bound
-  updateShellPipeline() {
+  updateShellPipeline(preserve) {
     return new Promise((resolve, reject) => {
       // Assemble Step Array.
       const editor = this.props.store.editors.get(
@@ -621,6 +621,7 @@ export default class GraphicalBuilder extends React.Component {
               commands: AggregateCommands.SET_ALL_STEPS(
                 editor.aggregateID,
                 stepArray,
+                preserve
               ),
             })
             .then(() => {
@@ -640,7 +641,34 @@ export default class GraphicalBuilder extends React.Component {
               block.status = 'valid';
             }
           });
-          resolve({ unableToUpdateSteps: true });
+          // Update only first N blocks.
+          const validArray = stepArray.slice(0, res.firstInvalid);
+                    // Update steps in Shell:
+          console.log('updatingShellPipeline: ', stepArray);
+          const service = featherClient().service('/mongo-sync-execution');
+          service.timeout = 30000;
+          service
+            .update(editor.profileId, {
+              shellId: editor.shellId, // eslint-disable-line
+              commands: AggregateCommands.SET_ALL_STEPS(
+                editor.aggregateID,
+                validArray,
+                true
+              ),
+            })
+            .then(() => {
+              this.updateConfig().then((res) => {
+                if (res) {
+                  res.unableToUpdateSteps = true;
+                resolve(res);
+                } else {
+                  resolve({unableToUpdateSteps: true});
+                }
+              });
+            })
+            .catch((e) => {
+              reject(e);
+            });
         }
       });
     });
