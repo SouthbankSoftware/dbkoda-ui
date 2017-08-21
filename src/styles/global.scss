@@ -2,7 +2,7 @@
 // @Date:   2017-07-17T12:55:19+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-08-21T12:24:43+10:00
+// @Last modified time: 2017-08-21T15:17:07+10:00
 
 
 
@@ -370,8 +370,7 @@ select.pt-intent-primary {
 }
 
 input.pt-input,
-textarea,
-.pt-file-upload-input {
+textarea {
   background-color: $searchPrimaryBackground !important;
   color: $searchPrimaryFontColor !important;
 }

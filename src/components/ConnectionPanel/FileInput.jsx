@@ -3,12 +3,12 @@
  * @Date:   2017-08-17T17:35:04+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-21T12:56:01+10:00
+ * @Last modified time: 2017-08-21T15:27:05+10:00
  */
 
 import React from 'react';
 import { observer } from 'mobx-react';
-// import { Radio } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import './style.scss';
 
 @observer
@@ -24,7 +24,6 @@ export default class FileInput extends React.Component {
       properties: [
         'openFile',
         'showHiddenFiles',
-        // ,'openDirectory', 'multiSelections'
       ],
     });
 
@@ -37,22 +36,27 @@ export default class FileInput extends React.Component {
     const { field } = this.props;
     return (
       <div // eslint-disable-line
-        className={field.name + '-input-content'}
+        className={field.name + '-input-content pt-form-group pt-inline'}
         onClick={this.onInputClick}
         onFocus={this.props.divOnFocus}
       >
-        <div className="pt-form-content">
-          <label className="pt-file-upload" htmlFor={field.name}>
-            <input
-              type="file"
-              onChange={this.onChange}
-              onClick={this.onInputClick}
-            />
-            <span className="pt-file-upload-input">
-              {field.value != '' ? field.value : 'Private Key...'}
-            </span>
-          </label>
-          <p className="pt-form-helper-text">{field.error}</p>
+        <div className="pt-form-content field-inline">
+          <input
+            className={field.name + '-input pt-input'}
+            type="text"
+            value={field.value}
+            placeholder={field.placeholder}
+            disabled="disabled"
+            style={{ cursor: 'pointer' }}
+          />
+          <p className="pt-form-helper-text">
+            {field.error}
+          </p>
+        </div>
+        <div className="field-inline">
+          <Button className="browse-directory" onClick={() => {}}>
+            {'Browse'}
+          </Button>
         </div>
       </div>
     );
