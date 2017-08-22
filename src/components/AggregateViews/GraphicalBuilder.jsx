@@ -208,52 +208,76 @@ export default class GraphicalBuilder extends React.Component {
     ).blockList[index].isSelected = true;
 
     // 2. Update Shell Steps.
-    this.updateShellPipeline().then(() => {
-      this.updateResultSet().then((res) => {
-        res = JSON.parse(res);
-        if (res.stepAttributes.constructor === Array) {
-          // 3. Update Valid for each block.
-          console.log('updateResultSet:', res);
-          res.stepAttributes.map((indexValue, index) => {
-            let attributeIndex = index;
-            if (index > 0) {
-              attributeIndex = index - 1;
-            }
-            if (indexValue.constructor === Array) {
-              // Check for error result.
-              if (res.stepCodes[index] === 0) {
-                console.log('Result[', index, '] is valid: ', indexValue);
-                if (!(typeof indexValue === 'string')) {
-                  indexValue = '[ "' + indexValue.join('", "') + '"]';
-                }
-                editor.blockList[index].attributeList =
-                  res.stepAttributes[attributeIndex];
-                editor.blockList[index].status = 'valid';
-              } else {
-                console.error('Result[', index, '] is invalid: ', indexValue);
-                if (!(typeof indexValue === 'string')) {
-                  indexValue = '[ "' + indexValue.join('", "') + '"]';
-                }
-                editor.blockList[index].status = 'pending';
-              }
-            }
-          });
+    this.updateShellPipeline(true).then((res) => {
+      if (res && res.unableToUpdateSteps) {
+        // Partial update
+        console.log('Unable to complete full update!');
 
-          // 4. Is the current block valid?.
-          if (editor.blockList[editor.selectedBlock].status === 'valid') {
-            // 4.a Yes - Update Results.
-            this.updateResultsOutput(editor, editor.selectedBlock);
-          } else {
-            // 4.b No - Clear Results.
-            this.clearResultsOutput(editor);
-          }
-
-          runInAction('Update Graphical Builder', () => {
-            this.props.store.editorPanel.updateAggregateDetails = true;
-            this.forceUpdate();
-          });
+        // 4. Is the current block valid?.
+        if (editor.blockList[editor.selectedBlock].status === 'valid') {
+          // 4.a Yes - Update Results.
+          this.updateResultsOutput(editor, editor.selectedBlock);
+        } else {
+          // 4.b No - Clear Results.
+          this.clearResultsOutput(editor);
         }
-      });
+
+        runInAction('Update Graphical Builder', () => {
+          this.props.store.editorPanel.updateAggregateDetails = true;
+          this.forceUpdate();
+        });
+      } else {
+        // All steps validated, full update.
+        this.updateResultSet().then((res) => {
+          res = JSON.parse(res);
+          if (res.stepAttributes.constructor === Array) {
+            // 3. Update Valid for each block.
+            console.log('updateResultSet:', res);
+            res.stepAttributes.map((indexValue, index) => {
+              let attributeIndex = index;
+              if (index > 0) {
+                attributeIndex = index - 1;
+              }
+              if (indexValue.constructor === Array) {
+                // Check for error result.
+                if (res.stepCodes[index] === 0) {
+                  if (!(typeof indexValue === 'string')) {
+                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+                  }
+                  editor.blockList[index].attributeList =
+                    res.stepAttributes[attributeIndex];
+                  editor.blockList[index].status = 'valid';
+                } else {
+                  if (!(typeof indexValue === 'string')) {
+                    console.error(
+                      'Result[',
+                      index,
+                      '] is invalid: ',
+                      indexValue,
+                    );
+                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+                  }
+                  editor.blockList[index].status = 'pending';
+                }
+              }
+            });
+
+            // 4. Is the current block valid?.
+            if (editor.blockList[editor.selectedBlock].status === 'valid') {
+              // 4.a Yes - Update Results.
+              this.updateResultsOutput(editor, editor.selectedBlock);
+            } else {
+              // 4.b No - Clear Results.
+              this.clearResultsOutput(editor);
+            }
+
+            runInAction('Update Graphical Builder', () => {
+              this.props.store.editorPanel.updateAggregateDetails = true;
+              this.forceUpdate();
+            });
+          }
+        });
+      }
     });
   }
 
@@ -305,57 +329,74 @@ export default class GraphicalBuilder extends React.Component {
     } else if (!blockTo) {
       return null;
     }
-    console.log('moveBlock: ', blockFrom, ', ', blockTo);
     this.moveBlockInEditor(blockFrom, blockTo);
     // 2. Update Shell Steps
-    this.updateShellPipeline().then(() => {
-      this.updateResultSet().then((res) => {
-        res = JSON.parse(res);
-        if (res.stepAttributes.constructor === Array) {
-          // 3. Update Valid for each block.
-          console.log('updateResultSet:', res);
-          res.stepAttributes.map((indexValue, index) => {
-            let attributeIndex = index;
-            if (index > 0) {
-              attributeIndex = index - 1;
-            }
-            if (index === res.stepAttributes.length - 1) {
-              // Not empty now.
-            } else if (indexValue.constructor === Array) {
-              // Check for error result.
-              if (res.stepCodes[index] === 0) {
-                console.log('Result[', index, '] is valid: ', indexValue);
-                if (!(typeof indexValue === 'string')) {
-                  indexValue = '[ "' + indexValue.join('", "') + '"]';
-                }
-                editor.blockList[index].attributeList =
-                  res.stepAttributes[attributeIndex];
-                editor.blockList[index].status = 'valid';
-              } else {
-                console.error('Result[', index, '] is invalid: ', indexValue);
-                if (!(typeof indexValue === 'string')) {
-                  indexValue = '[ "' + indexValue.join('", "') + '"]';
-                }
-                editor.blockList[index].status = 'pending';
-              }
-            }
-          });
+    this.updateShellPipeline(true).then((res) => {
+      if (res && res.unableToUpdateSteps) {
+        // Partial update
+        console.log('Unable to complete full update:', editor.blockList);
 
-          // 4. Is the current block valid?.
-          if (editor.blockList[editor.selectedBlock].status === 'valid') {
-            // 4.a Yes - Update Results.
-            this.updateResultsOutput(editor, editor.selectedBlock);
-          } else {
-            // 4.b No - Clear Results.
-            this.clearResultsOutput(editor);
-          }
-
-          runInAction('Update Graphical Builder', () => {
-            this.props.store.editorPanel.updateAggregateDetails = true;
-            this.forceUpdate();
-          });
+        // 4. Is the current block valid?.
+        if (editor.blockList[editor.selectedBlock].status === 'valid') {
+          // 4.a Yes - Update Results.
+          this.updateResultsOutput(editor, editor.selectedBlock);
+        } else {
+          // 4.b No - Clear Results.
+          this.clearResultsOutput(editor);
         }
-      });
+
+        runInAction('Update Graphical Builder', () => {
+          this.props.store.editorPanel.updateAggregateDetails = true;
+          this.forceUpdate();
+        });
+      } else {
+        this.updateResultSet().then((res) => {
+          res = JSON.parse(res);
+          if (res.stepAttributes.constructor === Array) {
+            // 3. Update Valid for each block.
+            console.log('updateResultSet:', res);
+            res.stepAttributes.map((indexValue, index) => {
+              let attributeIndex = index;
+              if (index > 0) {
+                attributeIndex = index - 1;
+              }
+              if (index === res.stepAttributes.length - 1) {
+                // Not empty now.
+              } else if (indexValue.constructor === Array) {
+                // Check for error result.
+                if (res.stepCodes[index] === 0) {
+                  if (!(typeof indexValue === 'string')) {
+                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+                  }
+                  editor.blockList[index].attributeList =
+                    res.stepAttributes[attributeIndex];
+                  editor.blockList[index].status = 'valid';
+                } else {
+                  console.error('Result[', index, '] is invalid: ', indexValue);
+                  if (!(typeof indexValue === 'string')) {
+                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+                  }
+                  editor.blockList[index].status = 'pending';
+                }
+              }
+            });
+
+            // 4. Is the current block valid?.
+            if (editor.blockList[editor.selectedBlock].status === 'valid') {
+              // 4.a Yes - Update Results.
+              this.updateResultsOutput(editor, editor.selectedBlock);
+            } else {
+              // 4.b No - Clear Results.
+              this.clearResultsOutput(editor);
+            }
+
+            runInAction('Update Graphical Builder', () => {
+              this.props.store.editorPanel.updateAggregateDetails = true;
+              this.forceUpdate();
+            });
+          }
+        });
+      }
     });
   }
 
@@ -373,66 +414,92 @@ export default class GraphicalBuilder extends React.Component {
     // 1. Remove from Editor Structure.
     editor.blockList.splice(blockPosition, 1);
     // 2. Update Shell Steps.
-    this.updateShellPipeline().then(() => {
-      this.updateResultSet().then((res) => {
-        res = JSON.parse(res);
-        if (res.stepAttributes.constructor === Array) {
-          // 3. Update Valid for each block.
-          console.log('updateResultSet:', res);
-          res.stepAttributes.map((indexValue, index) => {
-            let attributeIndex = index;
-            if (index > 0) {
-              attributeIndex = index - 1;
-            }
-            if (index === res.stepAttributes.length - 1) {
-              // Not empty now.
-            } else if (indexValue.constructor === Array) {
-              // Check for error result.
-              if (res.stepCodes[index] === 0) {
-                console.log('Result[', index, '] is valid: ', indexValue);
-                if (!(typeof indexValue === 'string')) {
-                  indexValue = '[ "' + indexValue.join('", "') + '"]';
+    this.updateShellPipeline(false).then((res) => {
+      if (res && res.unableToUpdateSteps) {
+        // Partial update
+        console.log('Unable to complete full update!');
+
+        // 4. Was the block removed the selected block?.
+        if (blockPosition === editor.selectedBlock) {
+          // 4.a Yes - Set selected block to current - 1.
+          editor.selectedBlock -= 1;
+          if (editor.selectedBlock < 0) {
+            editor.selectedBlock = 0;
+          }
+        }
+        // 4. Is the current block valid?.
+        if (editor.blockList[editor.selectedBlock].status === 'valid') {
+          // 4.a Yes - Update Results.
+          this.updateResultsOutput(editor, editor.selectedBlock);
+        } else {
+          // 4.b No - Clear Results.
+          this.clearResultsOutput(editor);
+        }
+
+        runInAction('Update Graphical Builder', () => {
+          this.props.store.editorPanel.updateAggregateDetails = true;
+          this.forceUpdate();
+        });
+      } else {
+        this.updateResultSet().then((res) => {
+          res = JSON.parse(res);
+          if (res.stepAttributes.constructor === Array) {
+            // 3. Update Valid for each block.
+            console.log('updateResultSet:', res);
+            res.stepAttributes.map((indexValue, index) => {
+              let attributeIndex = index;
+              if (index > 0) {
+                attributeIndex = index - 1;
+              }
+              if (index === res.stepAttributes.length - 1) {
+                // Not empty now.
+              } else if (indexValue.constructor === Array) {
+                // Check for error result.
+                if (res.stepCodes[index] === 0) {
+                  if (!(typeof indexValue === 'string')) {
+                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+                  }
+                  editor.blockList[index].attributeList =
+                    res.stepAttributes[attributeIndex];
+                  editor.blockList[index].status = 'valid';
+                } else {
+                  console.error('Result[', index, '] is invalid: ', indexValue);
+                  if (!(typeof indexValue === 'string')) {
+                    indexValue = '[ "' + indexValue.join('", "') + '"]';
+                  }
+                  editor.blockList[index].status = 'pending';
                 }
-                editor.blockList[index].attributeList =
-                  res.stepAttributes[attributeIndex];
-                editor.blockList[index].status = 'valid';
-              } else {
-                console.error('Result[', index, '] is invalid: ', indexValue);
-                if (!(typeof indexValue === 'string')) {
-                  indexValue = '[ "' + indexValue.join('", "') + '"]';
-                }
-                editor.blockList[index].status = 'pending';
+              }
+            });
+
+            // 4. Was the block removed the selected block?.
+            if (blockPosition === editor.selectedBlock) {
+              // 4.a Yes - Set selected block to current - 1.
+              editor.selectedBlock -= 1;
+              if (editor.selectedBlock < 0) {
+                editor.selectedBlock = 0;
               }
             }
-          });
 
-          // 4. Was the block removed the selected block?.
-          if (blockPosition === editor.selectedBlock) {
-            // 4.a Yes - Set selected block to current - 1.
-            editor.selectedBlock -= 1;
-            if (editor.selectedBlock < 0) {
-              editor.selectedBlock = 0;
+            // 4. Is the current block valid?.
+            if (editor.blockList[editor.selectedBlock].status === 'valid') {
+              // 4.a Yes - Update Results.
+              this.updateResultsOutput(editor, editor.selectedBlock);
+            } else {
+              // 4.b No - Clear Results.
+              this.clearResultsOutput(editor);
             }
-          }
 
-          // 4. Is the current block valid?.
-          if (editor.blockList[editor.selectedBlock].status === 'valid') {
-            // 4.a Yes - Update Results.
-            this.updateResultsOutput(editor, editor.selectedBlock);
+            runInAction('Update Graphical Builder', () => {
+              this.props.store.editorPanel.updateAggregateDetails = true;
+              this.forceUpdate();
+            });
           } else {
-            // 4.b No - Clear Results.
-            this.clearResultsOutput(editor);
+            // Check for error.
+            console.error('updateResultSet: ', JSON.parse(res));
           }
-
-          runInAction('Update Graphical Builder', () => {
-            this.props.store.editorPanel.updateAggregateDetails = true;
-            this.forceUpdate();
-          });
-        } else {
-          // Check for error.
-          console.error('updateResultSet: ', JSON.parse(res));
-        }
-      });
+        });
+      }
     });
   }
 
@@ -454,51 +521,157 @@ export default class GraphicalBuilder extends React.Component {
   }
 
   /**
+   * Validates that a step is valid before setting all steps in the pipeline.
+   * 
+   * @param {Object} step - The Step object to be validated.
+   * @return {Boolean} - Whether or not the step is valid.
+   */
+  validateBlock(step) {
+    return new Promise((resolve) => {
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 30000;
+      service
+        .update(editor.profileId, {
+          shellId: editor.shellId, // eslint-disable-line
+          commands: AggregateCommands.VALIDATE_STEP(step),
+        })
+        .then((res) => {
+          res = JSON.parse(res);
+          if (res.type === 'object') {
+            resolve(true);
+          } else {
+            console.error(res);
+            resolve(false);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(e);
+        });
+    });
+  }
+
+  validateAllBlocks(stepArray) {
+    return new Promise((resolve) => {
+      const returnObject = {
+        areAllValid: true,
+        firstInvalid: -1,
+      };
+
+      stepArray.map((step, stepIndex) => {
+        const newStep = step.replace(/,\s*$/, '');
+        this.validateBlock(newStep).then((res) => {
+          if (res === false) {
+            resolve({
+              areAllValid: false,
+              firstInvalid: stepIndex,
+            });
+          }
+          if (stepIndex === stepArray.length - 1) {
+            resolve(returnObject);
+          }
+        });
+      });
+    });
+  }
+
+  /**
    * Updates the shell pipeline with all the existing steps.
    * @returns {Promise} - A promise with the result of the shell update.
    */
   @action.bound
-  updateShellPipeline() {
+  updateShellPipeline(preserve) {
     return new Promise((resolve, reject) => {
       // Assemble Step Array.
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
       );
       const stepArray = [];
-      console.log(editor.blockList.length);
       editor.blockList.map((block) => {
         if (block.type !== 'Start') {
-          const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
-            block.type +
-            '.hbs');
-          const stepJSON = formTemplate(block.fields);
-          try {
+          if (block.byoCode) {
+            const stepJSON = block.code;
             stepArray.push(stepJSON.replace(/\n/g, ' '));
-          } catch (e) {
-            console.error('Block generated invalid JSON: ', block);
+          } else {
+            const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
+              block.type +
+              '.hbs');
+            const stepJSON = formTemplate(block.fields);
+            try {
+              stepArray.push(stepJSON.replace(/\n/g, ' '));
+            } catch (e) {
+              console.error('Block generated invalid JSON: ', block);
+            }
           }
         }
       });
-      // Update steps in Shell:
-      console.log('updatingShellPipeline: ', stepArray);
-      const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
-      service
-        .update(editor.profileId, {
-          shellId: editor.shellId, // eslint-disable-line
-          commands: AggregateCommands.SET_ALL_STEPS(
-            editor.aggregateID,
-            stepArray,
-          ),
-        })
-        .then(() => {
-          this.updateConfig().then((res) => {
-            resolve(res);
+
+      // Before setting all steps, validate steps:
+      this.validateAllBlocks(stepArray).then((res) => {
+        if (res.areAllValid === true) {
+          // Update steps in Shell:
+          console.log('updatingShellPipeline: ', stepArray);
+          const service = featherClient().service('/mongo-sync-execution');
+          service.timeout = 30000;
+          service
+            .update(editor.profileId, {
+              shellId: editor.shellId, // eslint-disable-line
+              commands: AggregateCommands.SET_ALL_STEPS(
+                editor.aggregateID,
+                stepArray,
+                preserve
+              ),
+            })
+            .then(() => {
+              this.updateConfig().then((res) => {
+                resolve(res);
+              });
+            })
+            .catch((e) => {
+              reject(e);
+            });
+        } else {
+          // There is an invalid step, mark it and update each step.
+          editor.blockList.map((block, blockIndex) => {
+            if (blockIndex > res.firstInvalid) {
+              block.status = 'pending';
+            } else {
+              block.status = 'valid';
+            }
           });
-        })
-        .catch((e) => {
-          reject(e);
-        });
+          // Update only first N blocks.
+          const validArray = stepArray.slice(0, res.firstInvalid);
+                    // Update steps in Shell:
+          console.log('updatingShellPipeline: ', stepArray);
+          const service = featherClient().service('/mongo-sync-execution');
+          service.timeout = 30000;
+          service
+            .update(editor.profileId, {
+              shellId: editor.shellId, // eslint-disable-line
+              commands: AggregateCommands.SET_ALL_STEPS(
+                editor.aggregateID,
+                validArray,
+                true
+              ),
+            })
+            .then(() => {
+              this.updateConfig().then((res) => {
+                if (res) {
+                  res.unableToUpdateSteps = true;
+                resolve(res);
+                } else {
+                  resolve({unableToUpdateSteps: true});
+                }
+              });
+            })
+            .catch((e) => {
+              reject(e);
+            });
+        }
+      });
     });
   }
 
@@ -536,7 +709,6 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   clearResultsOutput(editor) {
-    console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
     const output = this.props.store.outputs.get(editor.id);
     output.output = 'Currently No Results to Display.';
   }

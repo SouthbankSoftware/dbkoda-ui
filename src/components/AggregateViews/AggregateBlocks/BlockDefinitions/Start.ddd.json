@@ -7,7 +7,7 @@
       "label": "Sample Size",
       "tooltip": "Size of the sample used to preview results",
       "type": "Numeric",
-      "default": 1000
+      "default": 100
     },
     {
       "name": "DiskUsage",

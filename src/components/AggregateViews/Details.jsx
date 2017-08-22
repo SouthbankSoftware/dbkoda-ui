@@ -36,6 +36,7 @@ import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
+import BYOBlock from './AggregateBlocks/BYOBlock.jsx';
 import './style.scss';
 
 @inject(allStores => ({
@@ -157,7 +158,6 @@ export default class Details extends React.Component {
         }
       }
     }
-
     // Update Editor Contents.
     this.props.store.treeActionPanel.formValues = this.generateCode(
       editorObject,
@@ -166,23 +166,39 @@ export default class Details extends React.Component {
   }
 
   generateCode(editorObject) {
-    let codeString = 'use ' + this.currentDB + ';\n';
+    const os = require('os').release();
+    let newLine = '\n';
+    if (os.match(/Win/gi)) {
+      newLine = '\r\n';
+    }
+
+    let codeString =
+      'use ' + editorObject.collection.refParent.text + ';' + newLine;
+
+    // First add Start block.
     if (
       editorObject.blockList &&
       editorObject.blockList[0] &&
       editorObject.blockList[0].type.toUpperCase() === 'START'
     ) {
       const formTemplate = require('./AggregateBlocks/BlockTemplates/Start.hbs');
-      codeString += formTemplate(editorObject.blockList[0].fields) + ';\n';
+      codeString +=
+        formTemplate(editorObject.blockList[0].fields) + ';' + newLine;
     }
-    codeString += 'db.' + this.currentCollection + '.aggregate([\n';
+    codeString +=
+      'db.' + editorObject.collection.text + '.aggregate([' + newLine;
 
+    // Then add all other blocks.
     editorObject.blockList.map((block) => {
       if (!(block.type.toUpperCase() === 'START')) {
-        const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
-          block.type +
-          '.hbs'); // eslint-disable-line
-        codeString += formTemplate(block.fields) + ',\n';
+        if (block.byoCode) {
+          codeString += block.code + ',' + newLine;
+        } else {
+          const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
+            block.type +
+            '.hbs'); // eslint-disable-line
+          codeString += formTemplate(block.fields) + ',' + newLine;
+        }
       }
     });
 
@@ -211,7 +227,22 @@ export default class Details extends React.Component {
 
   @action.bound
   byoCode() {
-    console.log('Debug: byoCode');
+    // Get current block.
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    );
+    editor.blockList[editor.selectedBlock].byoCode = true;
+    this.forceUpdate();
+  }
+
+  @action.bound
+  nonBYOCode() {
+    // Get current block.
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    );
+    editor.blockList[editor.selectedBlock].byoCode = false;
+    this.forceUpdate();
   }
 
   render() {
@@ -222,6 +253,32 @@ export default class Details extends React.Component {
     this.currentCollection = this.editor.collection.text;
     const blockIndex = activeEditor.selectedBlock;
     const activeBlock = activeEditor.blockList[blockIndex];
+
+    // Check if this is a BYOcode block, if so, render BYO fragment.
+    if (activeBlock && activeBlock.byoCode) {
+      return (
+        <div className="aggregateDetailsWrapper">
+          <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
+            <h2 className="currentBlockChoice">Block Details</h2>
+          </nav>
+          <div className="aggregateDetailsContent">
+            <BYOBlock onChangeCallback={this.generateCode} />
+            <AnchorButton
+              className="hideLeftPanelButton"
+              intent={Intent.SUCCESS}
+              text={globalString('aggregate_builder/hide_left_panel')}
+              onClick={this.onHideLeftPanelClicked}
+            />
+            <AnchorButton
+              className="byoCodeButton"
+              intent={Intent.SUCCESS}
+              text={globalString('aggregate_builder/form_code')}
+              onClick={this.nonBYOCode}
+            />
+          </div>
+        </div>
+      );
+    }
 
     // Check if activeBlock has changed, if so, rebuild the form.
     if (
@@ -293,6 +350,7 @@ export default class Details extends React.Component {
           onClick={this.onHideLeftPanelClicked}
         />
         {activeBlock &&
+          activeBlock.type.toUpperCase() !== 'START' &&
           <AnchorButton
             className="byoCodeButton"
             intent={Intent.SUCCESS}

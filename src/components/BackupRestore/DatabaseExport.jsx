@@ -499,7 +499,7 @@ export default class DatabaseExport extends React.Component {
               </label>
               <div className="pt-form-content">
                 <input
-                  className="pt-input"
+                  className="pt-input db-backup-collection-input"
                   type="text"
                   dir="auto"
                   readOnly={
