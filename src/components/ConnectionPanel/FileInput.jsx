@@ -3,7 +3,7 @@
  * @Date:   2017-08-17T17:35:04+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-21T15:27:05+10:00
+ * @Last modified time: 2017-08-22T12:09:48+10:00
  */
 
 import React from 'react';
@@ -44,9 +44,7 @@ export default class FileInput extends React.Component {
           <input
             className={field.name + '-input pt-input'}
             type="text"
-            value={field.value}
-            placeholder={field.placeholder}
-            disabled="disabled"
+            {...field.bind()} // eslint-disable-line
             style={{ cursor: 'pointer' }}
           />
           <p className="pt-form-helper-text">

@@ -23,7 +23,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-17T17:01:41+10:00
+ * @Last modified time: 2017-08-21T15:51:16+10:00
  */
 
 /**
@@ -194,16 +194,6 @@ const ConnectionPanel = ({
         query.passPhrase = data.passPhrase;
       }
     }
-
-    // query.ssh = true;
-    // query.sshKeyFile = '/Users/wahaj/.ssh/id_rsa';
-    // query.passPhrase = 'DBEnvy2016';
-    // query.remoteUser = 'parallels';
-    // query.remotePass = 'secret';
-    // query.remoteHost = '10.211.55.8';
-    // query.remotePort = '27017';
-    // query.localHost = data.host;
-    // query.localPort = data.port;
 
     profileList.creatingNewProfile = true;
     console.log('Q: ', query);
