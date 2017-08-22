@@ -27,18 +27,21 @@
  */
 
 import React from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import Select from 'react-select';
 import { Intent, Position, Tooltip } from '@blueprintjs/core';
 
 import 'react-select/dist/react-select.css';
 
+@inject(allStores => ({
+  store: allStores.store,
+}))
 @observer
 export default class ComboField extends React.Component {
   static get defaultProps() {
     return {
       showLabel: true,
-      formGroup: false
+      formGroup: false,
     };
   }
 
@@ -79,15 +82,48 @@ export default class ComboField extends React.Component {
     }
 
     const onChange = (newValue) => {
-      console.log('newValue: ', newValue);
-      field.value = (newValue && newValue.value) ? newValue.value : '';
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      if (this.options[0].value !== '') {
+        // A new option has been added.
+        if (editor.type === 'aggregate') {
+          const block = editor.blockList[editor.selectedBlock];
+          // Do custom fields exist
+          if (block.customFields) {
+            if (block.customFields[field.path.replace(/.[0-9]./g, '[].')]) {
+              block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
+                newValue.value,
+              );
+            } else {
+              block.customFields[field.path.replace(/.[0-9]./g, '[].')] = [];
+              block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
+                newValue.value,
+              );
+            }
+          } else {
+            block.customFields = {};
+            block.customFields[field.path.replace(/.[0-9]./g, '[].')] = [];
+            block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
+              newValue.value,
+            );
+          }
+        }
+      }
+
+      field.value = newValue && newValue.value ? newValue.value : '';
       field.state.form.submit();
     };
 
     const getSelectField = () => {
       return (
-        <Select.Creatable className={selectClassName}
-          multi={false} options={this.options} onChange={onChange} value={field.value} />
+        <Select.Creatable
+          className={selectClassName}
+          multi={false}
+          options={this.options}
+          onChange={onChange}
+          value={field.value}
+        />
       );
     };
     return (
@@ -96,7 +132,10 @@ export default class ComboField extends React.Component {
           <label htmlFor={field.id} className="pt-label pt-label-r-30">
             {field.label}
           </label>}
-        <div className="pt-form-content" label={field.label ? field.label : field.name}>
+        <div
+          className="pt-form-content"
+          label={field.label ? field.label : field.name}
+        >
           {field.options &&
             field.options.tooltip &&
             <Tooltip
@@ -110,7 +149,9 @@ export default class ComboField extends React.Component {
               {getSelectField()}
             </Tooltip>}
           {(!field.options || !field.options.tooltip) && getSelectField()}
-          <p className="pt-form-helper-text">{field.error}</p>
+          <p className="pt-form-helper-text">
+            {field.error}
+          </p>
         </div>
       </div>
     );

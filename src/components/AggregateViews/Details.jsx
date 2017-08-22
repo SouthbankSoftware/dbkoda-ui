@@ -65,6 +65,7 @@ export default class Details extends React.Component {
      * Resolve the prefetch arguments and return them as params
      * @param  {Array}  args     Arguments array as provided from DDD file
      * @return {Object}          Object containing params for prefetch function
+     * 
      */
     this.resolveArguments = (args) => {
       const editor = this.props.store.editors.get(
@@ -145,10 +146,9 @@ export default class Details extends React.Component {
     editorObject.blockList[selectedBlock].modified = true;
     for (const key in fields) {
       if (Object.prototype.hasOwnProperty.call(fields, key)) {
-        console.log(editorObject.blockList[selectedBlock]);
-        console.log(fields[key]);
         const oldKey = editorObject.blockList[selectedBlock].fields[key];
         editorObject.blockList[selectedBlock].fields[key] = fields[key];
+
         if (!(oldKey === fields[key])) {
           if (editorObject.blockList[selectedBlock].references) {
             if (editorObject.blockList[selectedBlock].references[key]) {

@@ -527,7 +527,7 @@ export default class GraphicalBuilder extends React.Component {
    * @return {Boolean} - Whether or not the step is valid.
    */
   validateBlock(step) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
       );
@@ -548,7 +548,7 @@ export default class GraphicalBuilder extends React.Component {
           }
         })
         .catch((e) => {
-          console.log(e);
+          console.error(e);
           reject(e);
         });
     });
@@ -622,7 +622,7 @@ export default class GraphicalBuilder extends React.Component {
               commands: AggregateCommands.SET_ALL_STEPS(
                 editor.aggregateID,
                 stepArray,
-                preserve
+                preserve,
               ),
             })
             .then(() => {
@@ -644,7 +644,7 @@ export default class GraphicalBuilder extends React.Component {
           });
           // Update only first N blocks.
           const validArray = stepArray.slice(0, res.firstInvalid);
-                    // Update steps in Shell:
+          // Update steps in Shell:
           console.log('updatingShellPipeline: ', stepArray);
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 30000;
@@ -654,16 +654,16 @@ export default class GraphicalBuilder extends React.Component {
               commands: AggregateCommands.SET_ALL_STEPS(
                 editor.aggregateID,
                 validArray,
-                true
+                true,
               ),
             })
             .then(() => {
               this.updateConfig().then((res) => {
                 if (res) {
                   res.unableToUpdateSteps = true;
-                resolve(res);
+                  resolve(res);
                 } else {
-                  resolve({unableToUpdateSteps: true});
+                  resolve({ unableToUpdateSteps: true });
                 }
               });
             })

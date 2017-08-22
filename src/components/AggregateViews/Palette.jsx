@@ -346,7 +346,6 @@ export default class Palette extends React.Component {
 
     // Update block attributes
     editor.blockList[position].status = 'pending';
-    console.log(attributeList);
     editor.blockList[position].attributeList = attributeList;
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
