@@ -333,12 +333,14 @@ export default class Details extends React.Component {
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
           <h2 className="currentBlockChoice">Block Details</h2>
         </nav>
-        <h2 className="aggregateBlockType">
-          {activeBlock.type}
-        </h2>
-        <p className="aggregateBlockDescription">
-          {BlockTypes[activeBlock.type.toUpperCase()].description}
-        </p>
+        {activeBlock &&
+          <h2 className="aggregateBlockType">
+            {activeBlock.type}
+          </h2>}
+        {activeBlock &&
+          <p className="aggregateBlockDescription">
+            {BlockTypes[activeBlock.type.toUpperCase()].description}
+          </p>}
         {activeBlock &&
           <div className="aggregateDetailsContent">
             <div className={'dynamic-form columns-' + maxColumns + '-max'}>
