@@ -18,6 +18,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* eslint import/no-dynamic-require: warn */
+
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
@@ -60,7 +62,10 @@ export default class BYOBlock extends React.Component {
     this.block = this.editor.blockList[this.editor.selectedBlock];
     this.currentCollection = this.props.currentCollection;
     if (!this.block.code) {
-      this.block.code = ' ';
+      const formTemplate = require('./BlockTemplates/' +
+        this.block.type +
+        '.hbs');
+      this.block.code = formTemplate(this.block.fields);
     }
     this.cmOptions = {
       value: this.block.code,

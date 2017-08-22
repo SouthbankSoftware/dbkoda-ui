@@ -190,8 +190,6 @@ div.Pane.vertical.Pane1 {
         }
         div.aggregateDetailsContent {
           order: 2;
-          div.editorView {
-          }
           div {
             div {
               form {
@@ -440,5 +438,14 @@ svg.closeBlockIconcolor_16 {
   fill: $colourSeventeen;
   circle {
     fill: $highlightSeventeen;
+  }
+}
+
+.Pane2 {
+  div.editorView {
+    overflow-y: auto;
+    .ReactCodeMirror {
+      height: 90%;
+    }
   }
 }
