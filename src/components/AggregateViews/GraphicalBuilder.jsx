@@ -539,7 +539,8 @@ export default class GraphicalBuilder extends React.Component {
           commands: AggregateCommands.VALIDATE_STEP(step),
         })
         .then((res) => {
-          if (res === 'object') {
+          res = JSON.parse(res);
+          if (res.type === 'object') {
             resolve(true);
           } else {
             console.error(res);
