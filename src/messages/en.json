@@ -4,7 +4,8 @@
       "show_left_panel": "Show Panel",
       "hide_left_panel": "Hide Panel",
       "byo_code": "BYO Code",
-      "form_code": "Code Form"
+      "form_code": "Code Form",
+      "no_active_connection": "Shell has lost Aggregate Builder, please start again."
     },
     "telemetry_dialog": {
       "header": "Welcome!",

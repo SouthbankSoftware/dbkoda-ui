@@ -145,12 +145,13 @@ export default class Details extends React.Component {
     editorObject.blockList[selectedBlock].modified = true;
     for (const key in fields) {
       if (Object.prototype.hasOwnProperty.call(fields, key)) {
+        console.log(editorObject.blockList[selectedBlock]);
+        console.log(fields[key]);
         const oldKey = editorObject.blockList[selectedBlock].fields[key];
         editorObject.blockList[selectedBlock].fields[key] = fields[key];
         if (!(oldKey === fields[key])) {
           if (editorObject.blockList[selectedBlock].references) {
             if (editorObject.blockList[selectedBlock].references[key]) {
-              console.log('Update!');
               this.state.form = null;
               this.props.store.editorPanel.updateAggregateDetails = true;
             }
@@ -210,7 +211,6 @@ export default class Details extends React.Component {
       editorObject.blockList[0] &&
       editorObject.blockList[0].type.toUpperCase() === 'START'
     ) {
-      console.log(editorObject.blockList[0].fields);
       codeString +=
         'allowDiskUse: ' + editorObject.blockList[0].fields.DiskUsage;
     }

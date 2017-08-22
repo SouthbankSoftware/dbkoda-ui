@@ -29,9 +29,11 @@
 /* eslint import/no-dynamic-require: 0 */
 
 import React from 'react';
+import { NewToaster } from '#/common/Toaster';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import { action } from 'mobx';
+import { Intent } from '@blueprintjs/core';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import Block from './AggregateBlocks/Block.jsx';
 import { AggregateCommands } from './AggregateCommands.js';
@@ -68,6 +70,7 @@ export default class Palette extends React.Component {
     console.log('Block added to position: ', position);
     // 1. Is this the first added block?
     if (position === 0) {
+      position = 1;
       // a First block.
       // 2.a Get attributes.
       this.getBlockAttributes(position).then((res) => {
@@ -76,53 +79,62 @@ export default class Palette extends React.Component {
       });
     } else {
       this.updateShellPipeline().then(() => {
-        this.updateResultSet().then((res) => {
-          console.log('updateResultSet:', JSON.parse(res));
-          res = JSON.parse(res);
-          if (res.stepAttributes.constructor === Array) {
-            // 3. Update Valid for each block.
-            res.stepAttributes.map((indexValue, index) => {
-              let attributeIndex = index;
-              if (index > 0) {
-                attributeIndex = index - 1;
-              }
-              if (indexValue.constructor === Array) {
-                // Check for error result.
-                if (res.stepCodes[index] === 0) {
-                  console.log('Result[', index, '] is valid: ', indexValue);
-                  if (!(typeof indexValue === 'string')) {
-                    indexValue = '[ "' + indexValue.join('", "') + '"]';
-                  }
-                  editor.blockList[index].attributeList =
-                    res.stepAttributes[attributeIndex];
-                  editor.blockList[index].status = 'valid';
-                } else {
-                  console.error('Result[', index, '] is invalid: ', indexValue);
-                  if (!(typeof indexValue === 'string')) {
-                    indexValue = '[ "' + indexValue.join('", "') + '"]';
-                  }
-                  editor.blockList[index].status = 'pending';
+        this.updateResultSet()
+          .then((res) => {
+            console.log('updateResultSet:', JSON.parse(res));
+            res = JSON.parse(res);
+            if (res.stepAttributes.constructor === Array) {
+              // 3. Update Valid for each block.
+              res.stepAttributes.map((indexValue, index) => {
+                let attributeIndex = index;
+                if (index > 0) {
+                  attributeIndex = index - 1;
                 }
-              }
-            });
-
-            // 4.b Is the current latest step valid?
-            if (
-              editor.blockList[editor.blockList.length - 1].status === 'valid'
-            ) {
-              this.getBlockAttributes(position - 1).then((res) => {
-                // 3.a Add to Editor
-                this.addBlockToEditor(blockType, position, res);
+                if (indexValue.constructor === Array) {
+                  // Check for error result.
+                  if (res.stepCodes[index] === 0) {
+                    console.log('Result[', index, '] is valid: ', indexValue);
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    editor.blockList[index].attributeList =
+                      res.stepAttributes[attributeIndex];
+                    editor.blockList[index].status = 'valid';
+                  } else {
+                    console.error(
+                      'Result[',
+                      index,
+                      '] is invalid: ',
+                      indexValue,
+                    );
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    editor.blockList[index].status = 'pending';
+                  }
+                }
               });
+
+              // 4.b Is the current latest step valid?
+              if (
+                editor.blockList[editor.blockList.length - 1].status === 'valid'
+              ) {
+                this.getBlockAttributes(position - 1).then((res) => {
+                  // 3.a Add to Editor
+                  this.addBlockToEditor(blockType, position, res);
+                });
+              } else {
+                this.addBlockToEditor(blockType, position, null);
+              }
+              this.clearResultsOutput(editor);
             } else {
-              this.addBlockToEditor(blockType, position, null);
+              // Check for error.
+              console.error('updateResultSet: ', res);
             }
-            this.clearResultsOutput(editor);
-          } else {
-            // Check for error.
-            console.error('updateResultSet: ', res);
-          }
-        });
+          })
+          .catch((e) => {
+            console.error(e);
+          });
       });
     }
   }
@@ -141,7 +153,6 @@ export default class Palette extends React.Component {
       const stepArray = [];
       console.log(editor.blockList.length);
       if (editor.blockList.length === 1) {
-        console.log('???');
         resolve();
       } else {
         editor.blockList.map((block) => {
@@ -185,7 +196,7 @@ export default class Palette extends React.Component {
    */
   @action.bound
   updateResultSet() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
       );
@@ -202,6 +213,11 @@ export default class Palette extends React.Component {
         })
         .catch((e) => {
           console.error(e);
+          NewToaster.show({
+            message: globalString('aggregate_builder/no_active_connection'),
+            intent: Intent.DANGER,
+            iconName: 'pt-icon-thumbs-down',
+          });
           reject(e);
         });
     });
