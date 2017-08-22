@@ -202,7 +202,20 @@ export default class Details extends React.Component {
       }
     });
 
-    codeString += ']);';
+    codeString += '],';
+    codeString += '{';
+
+    if (
+      editorObject.blockList &&
+      editorObject.blockList[0] &&
+      editorObject.blockList[0].type.toUpperCase() === 'START'
+    ) {
+      console.log(editorObject.blockList[0].fields);
+      codeString +=
+        'allowDiskUse: ' + editorObject.blockList[0].fields.DiskUsage;
+    }
+    codeString += '}';
+    codeString += ');';
     return codeString;
   }
 
@@ -320,15 +333,17 @@ export default class Details extends React.Component {
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
           <h2 className="currentBlockChoice">Block Details</h2>
         </nav>
+        <h2 className="aggregateBlockType">
+          {activeBlock.type}
+        </h2>
+        <p className="aggregateBlockDescription">
+          {BlockTypes[activeBlock.type.toUpperCase()].description}
+        </p>
         {activeBlock &&
           <div className="aggregateDetailsContent">
             <div className={'dynamic-form columns-' + maxColumns + '-max'}>
               {this.state.form &&
-                <View
-                  title={this.state.form.title}
-                  mobxForm={this.state.form.mobxForm}
-                  isAggregate
-                />}
+                <View mobxForm={this.state.form.mobxForm} isAggregate />}
               {!this.bForm &&
                 <div>
                   <div className="tree-msg-div">

@@ -188,8 +188,19 @@ div.Pane.vertical.Pane1 {
             text-align: left;
           }
         }
-        div.aggregateDetailsContent {
+        h2.aggregateBlockType {
+          margin-top: 20px;
           order: 2;
+          text-align: -webkit-center;
+        }
+        p.aggregateBlockDescription {
+          margin-top: 10px;
+          margin-bottom: 0px;
+          order: 3;
+          text-align: -webkit-center;
+        }
+        div.aggregateDetailsContent {
+          order: 4;
           div {
             div {
               form {
