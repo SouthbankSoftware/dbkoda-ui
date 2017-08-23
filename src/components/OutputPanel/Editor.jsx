@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-18T15:58:42+10:00
+ * @Last modified time: 2017-08-23T09:40:05+10:00
 */
 
 import React from 'react';
@@ -99,7 +99,6 @@ export default class Editor extends React.Component {
     const coords = { x: event.clientX, y: event.clientY };
     const lines = { start: 0, end: 0, status: '' };
     const currentJson = this.getClickedDocument(coords, lines);
-    console.log(lines);
 
     return (
       <Menu className="outputContextMenu">
