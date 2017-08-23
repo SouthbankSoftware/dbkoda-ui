@@ -292,7 +292,6 @@ export default class FormBuilder {
                 });
               });
             }
-            console.log(result);
             resolve(result);
           })
           .catch((reason) => {
@@ -374,8 +373,10 @@ export default class FormBuilder {
               }
               if (updateDynamicFormCode) {
                 if (formAction.aggregate) {
+                  console.log(values);
                   updateDynamicFormCode(values, editorObject);
                 } else {
+                  console.log(values);
                   const generatedCode = formTemplate(values);
                   updateDynamicFormCode(generatedCode);
                 }

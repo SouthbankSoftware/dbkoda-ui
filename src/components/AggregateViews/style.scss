@@ -454,9 +454,6 @@ svg.closeBlockIconcolor_16 {
 
 .Pane2 {
   div.editorView {
-    overflow-y: auto;
-    .ReactCodeMirror {
-      height: 90%;
-    }
+    height: 100%;
   }
 }
