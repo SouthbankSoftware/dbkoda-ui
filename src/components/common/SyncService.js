@@ -23,7 +23,7 @@
  * @Date:   2017-05-22T09:14:04+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-08T11:23:06+10:00
+ * @Last modified time: 2017-08-23T14:09:37+10:00
  */
 
 
@@ -52,8 +52,7 @@ import { featherClient } from '~/helpers/feathers';
                  const ejson = JSON.parse(res);
                  resolve(ejson);
                } catch (e) {
-                 console.log(e);
-                 resolve({});
+                 resolve(res);
                }
              } else {
                resolve(res);

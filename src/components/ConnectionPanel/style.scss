@@ -22,7 +22,7 @@
 // @Date:   2017-04-10T10:37:14+10:00
 // @Email:  wahaj@southbanksoftware.com
 // @Last modified by:   wahaj
-// @Last modified time: 2017-08-21T13:01:08+10:00
+// @Last modified time: 2017-08-23T15:16:56+10:00
 @import '../../styles/_defaultTheme.scss';
 .connection-profile {
   display: flex;
@@ -198,28 +198,21 @@
         }
       }
     }
-    div.ssh-form {
+    div.remoteHost-form {
       div.remoteHost-input-content {
-        display: flex;
-        flex-direction: column;
-      }
-      div.sshPort-input-content {
-        display: flex;
-        flex-direction: column;
-      }
-      div.remotePort-input-content {
-        display: flex;
-        flex-direction: column;
+        label.remoteHost-label {
+          width: 80px;
+        }
       }
     }
     div.remoteuser-form {
       div.remoteUser-input-content {
         label.remoteUser-label {
           width: 80px;
-          text-align: right;
         }
       }
     }
+
     div.credentials-form {
       display: flex;
       flex-direction: row;
@@ -388,11 +381,8 @@
   {
     width: 40%;
   }
-  .port-input, .sshPort-input, .remotePort-input  {
+  .port-input {
     width: 80px;
-  }
-  .remoteHost-input-content {
-    padding-right: 10px;
   }
   .port-label {
     width: 5px;

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-17T17:09:56+10:00
+ * @Last modified time: 2017-08-23T14:53:51+10:00
  */
 
 
@@ -132,6 +132,22 @@ export default class ListView extends React.Component {
     } else if (selectedProfile.urlRadio) {
       connectionUrl = selectedProfile.url;
     }
+    if (selectedProfile.ssh) {
+      query.ssh = selectedProfile.ssh;
+      query.remoteHost = selectedProfile.host;
+      query.remotePort = selectedProfile.port;
+      query.sshHost = selectedProfile.remoteHost;
+      query.remoteUser = selectedProfile.remoteUser;
+      query.localHost = '127.0.0.1';
+      query.localPort = ProfileForm.getRandomPort();
+      connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+      if (selectedProfile.passRadio) {
+        query.remotePass = selectedProfile.remotePass;
+      } else if (selectedProfile.keyRadio) {
+        query.sshKeyFile = selectedProfile.sshKeyFile;
+        query.passPhrase = selectedProfile.passPhrase;
+      }
+    }
     if (selectedProfile.sha) {
       query.username = selectedProfile.username;
       query.password = newPassword;
@@ -149,21 +165,6 @@ export default class ListView extends React.Component {
     if (selectedProfile) {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
-    }
-    if (selectedProfile.ssh) {
-      query.ssh = selectedProfile.ssh;
-      query.remoteHost = selectedProfile.remoteHost;
-      query.sshPort = selectedProfile.sshPort;
-      query.remotePort = selectedProfile.remotePort;
-      query.remoteUser = selectedProfile.remoteUser;
-      query.localHost = selectedProfile.host;
-      query.localPort = selectedProfile.port;
-      if (selectedProfile.passRadio) {
-        query.remotePass = selectedProfile.remotePass;
-      } else if (selectedProfile.keyRadio) {
-        query.sshKeyFile = selectedProfile.sshKeyFile;
-        query.passPhrase = selectedProfile.passPhrase;
-      }
     }
     this.props.store.profileList.creatingNewProfile = true;
     const service = featherClient().service('/mongo-connection');
