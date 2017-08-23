@@ -22,10 +22,10 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-23T10:47:26+10:00
+ * @Last modified time: 2017-08-23T12:06:36+10:00
  */
 import React from 'react';
-import { action, reaction, runInAction } from 'mobx';
+import { action, reaction, runInAction, toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Tab2, Tabs2 } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
@@ -299,7 +299,7 @@ export default class Panel extends React.Component {
               panel={
                 <EnhancedJson
                   outputId={editor[1].id}
-                  enhancedJson={this.props.store.outputs.get(editor[1].id).enhancedJson}
+                  enhancedJson={toJS(this.props.store.outputs.get(editor[1].id).enhancedJson)}
                   getDocumentAtLine={this.getDocumentAtLine} />
               }
             />
