@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-23T09:48:15+10:00
+ * @Last modified time: 2017-08-23T10:47:26+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -189,6 +189,9 @@ export default class Panel extends React.Component {
     let line = cm.getLine(lineNumber);
     if (!line) {
       lines.status = 'Invalid';
+      return '';
+    }
+    if (line.indexOf('dbKoda>') === 0) {
       return '';
     }
     if (direction === -1 && line[0] === '{') {
