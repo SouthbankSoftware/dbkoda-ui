@@ -203,4 +203,15 @@ describe('test backup restore generator view', () => {
     assert.equal(code.length, 2);
     assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
   });
+
+  test('test export mongodb with query including quites', () => {
+    const profile = {url:'mongodb://user:123456@localhost:27017', database: 'test', ssl: true, hostRadio: false};
+    const state = {directoryPath: '/tmp', allCollections: false, collections: ['col1'], selectedCollections: ['col1'],
+      query: '{a:"a"}', exportType: {}, dumpDbUsersAndRoles: true, ssl: false,
+      forceTableScan: true};
+    const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
+    const code = gc.split('\n');
+    assert.equal(code.length, 2);
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:"a"} --forceTableScan -o /tmp ');
+  });
 });
