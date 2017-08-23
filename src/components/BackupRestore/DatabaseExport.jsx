@@ -143,7 +143,6 @@ export default class DatabaseExport extends React.Component {
     if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE
       || action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_COLLECTION
       || action === BackupRestoreActions.EXPORT_DATABASE) {
-      console.log('platform ', os.release());
       f = os.release().indexOf('Windows') >= 0 ? f + '\\dump' : f + '/dump';
     }
 
@@ -540,6 +539,7 @@ export default class DatabaseExport extends React.Component {
           treeAction !== BackupRestoreActions.RESTORE_COLLECTION &&
           treeAction !== BackupRestoreActions.RESTORE_DATABASE &&
           treeAction !== BackupRestoreActions.RESTORE_SERVER &&
+          treeAction !== BackupRestoreActions.IMPORT_DATABASE &&
           treeAction !== BackupRestoreActions.IMPORT_COLLECTION &&
           <AllCollectionOption
             allCollections={this.state.allCollections}
