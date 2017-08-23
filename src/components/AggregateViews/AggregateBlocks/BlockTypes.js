@@ -37,7 +37,7 @@ export const BlockTypes = {
   MATCH: {
     type: 'Match',
     description: 'Reduce your pipeline results using a match on a field.',
-    columns: 3,
+    columns: 2,
     fields: {
       Expression: '',
     },
@@ -58,7 +58,7 @@ export const BlockTypes = {
   },
   PROJECT: {
     type: 'Project',
-    description: 'Project your results.',
+    description: 'Select and/or rename columns',
     fields: {
       Expression: '',
     },
@@ -72,98 +72,98 @@ export const BlockTypes = {
   },
   LIMIT: {
     type: 'Limit',
-    description: 'Limit',
+    description: 'Limit the results to a specific number of documents',
     fields: {
       Expression: '',
     },
   },
   SKIP: {
     type: 'Skip',
-    description: 'Skip',
+    description: 'Skip ahead in the results',
     fields: {
       Expression: '',
     },
   },
   SAMPLE: {
     type: 'Sample',
-    description: 'Sample',
+    description: 'Obtain a random sample of databases',
     fields: {
       Expression: '',
     },
   },
   LOOKUP: {
     type: 'Lookup',
-    description: 'Lookup',
+    description: 'Join one collection to another',
     fields: {
       Expression: '',
     },
   },
   GRAPHLOOKUP: {
     type: 'GraphLookup',
-    description: 'GraphLookup',
+    description: 'Perform a recursive graph join',
     fields: {
       Expression: '',
     },
   },
   COUNT: {
     type: 'Count',
-    description: 'Count',
+    description: 'Count the number of documents',
     fields: {
       Expression: '',
     },
   },
   OUT: {
     type: 'Out',
-    description: 'Out',
+    description: 'Send the output to a new collection',
     fields: {
       Expression: '',
     },
   },
   ADDFIELDS: {
     type: 'AddFields',
-    description: 'AddFields',
+    description: 'Add derived fields to your results',
     fields: {
       Expression: '',
     },
   },
   SORTBYCOUNT: {
     type: 'SortByCount',
-    description: 'SortByCount',
+    description: 'Perform a group,count and sort in a single step',
     fields: {
       Expression: '',
     },
   },
   BUCKET: {
     type: 'Bucket',
-    description: 'Bucket',
+    description: 'Aggregate data into range groups',
     fields: {
       Expression: '',
     },
   },
   BUCKETAUTO: {
     type: 'BucketAuto',
-    description: 'BucketAuto',
+    description: 'Aggregate data into equally size groups',
     fields: {
       Expression: '',
     },
   },
   REPLACEROOT: {
     type: 'ReplaceRoot',
-    description: 'ReplaceRoot',
+    description: 'Promote an embedded document to the top level',
     fields: {
       Expression: '',
     },
   },
   FACET: {
     type: 'Facet',
-    description: 'Facet',
+    description: 'Process multiple pipelines in a single stage',
     fields: {
       Expression: '',
     },
   },
   REDACT: {
     type: 'Redact',
-    description: 'Redact',
+    description: 'Restrict visibility of items',
     fields: {
       Expression: '',
     },

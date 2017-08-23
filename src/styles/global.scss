@@ -4,8 +4,6 @@
 // @Last modified by:   wahaj
 // @Last modified time: 2017-08-21T15:17:07+10:00
 
-
-
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,17 +31,27 @@ body {
 }
 
 #root div {
-
 }
 
-p, h1, h2, h3, h4 span, .pt-navbar-heading {
+.aggregateTabInnerWrapper {
+  .vertical {
+    position: unset !important;
+  }
+}
+
+p,
+h1,
+h2,
+h3,
+h4 span,
+.pt-navbar-heading {
   font-family: Arial;
 }
 ::-webkit-scrollbar {
   background-color: $scrollBarThumb !important;
 }
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: $scrollBarBackground !important;
 }
 ::-webkit-scrollbar-thumb {
@@ -55,11 +63,13 @@ p, h1, h2, h3, h4 span, .pt-navbar-heading {
 ::-webkit-scrollbar-corner {
   background-color: $scrollBarThumb !important;
 }
-.profileList, .pt-tab-list {
+.profileList,
+.pt-tab-list {
   overflow: auto !important;
 }
 
-.editorToolbar, .welcomeTab {
+.editorToolbar,
+.welcomeTab {
   overflow: hidden !important;
 }
 
@@ -71,12 +81,20 @@ p, h1, h2, h3, h4 span, .pt-navbar-heading {
   background: $scrollBarBackground;
 }
 
-.horizontal, .welcomePageContentRight, .pt-button, .pt-tree-node-content, .pt-tab
-, .bp-table-body {
+.horizontal,
+.welcomePageContentRight,
+.pt-button,
+.pt-tree-node-content,
+.pt-tab,
+.bp-table-body {
   overflow: hidden !important;
 }
 
-.pt-icon-, .feedIconWrapper, .feedItemContent, .feedItem, .feedList{
+.pt-icon-,
+.feedIconWrapper,
+.feedItemContent,
+.feedItem,
+.feedList {
   overflow: unset !important;
 }
 
@@ -178,9 +196,10 @@ div.pt-dialog {
 }
 
 .CodeMirror-lines:focus {
-    outline: none !important;
+  outline: none !important;
 }
-.pt-tab .pt-button.pt-minimal:hover, .pt-tab .pt-button.pt-minimal:focus {
+.pt-tab .pt-button.pt-minimal:hover,
+.pt-tab .pt-button.pt-minimal:focus {
   background: unset;
   box-shadow: none !important;
 }
@@ -189,7 +208,8 @@ div.pt-dialog {
   height: 31px;
 }
 
-.pt-dark.pt-navbar, .pt-dark .pt-navbar {
+.pt-dark.pt-navbar,
+.pt-dark .pt-navbar {
   box-shadow: none;
 }
 
@@ -249,7 +269,7 @@ div.pt-dialog {
     color: $toastFontColourInfo !important;
   }
   div {
-    display:none;
+    display: none;
     color: unset !important;
     color: $toastCloseIconColourInfo !important;
     button::before {
@@ -297,12 +317,12 @@ div.pt-dialog {
   overflow: hidden;
 }
 
-.RootSplitPane>.Pane1 {
+.RootSplitPane > .Pane1 {
   background-color: $panelLeftBackground;
   overflow-y: auto;
 }
 
-.RootSplitPane>.Pane2 {
+.RootSplitPane > .Pane2 {
   background-color: $panelRightBackground;
   overflow-y: auto;
 }
@@ -450,7 +470,7 @@ a.pt-disabled.pt-intent-primary {
   box-shadow: unset !important;
 }
 
-.pt-control input:focus~.pt-control-indicator,
+.pt-control input:focus ~ .pt-control-indicator,
 input[type=radio]:focus,
 input[type=checkbox]:focus {
   outline: none;
@@ -475,10 +495,9 @@ ul.CodeMirror-hints {
     color: $hintsColor;
   }
   li.CodeMirror-hint-active {
-    background-color:$hintsBackgroundActiveColor;
+    background-color: $hintsBackgroundActiveColor;
   }
 }
-
 
 div.optInDialog {
   h1 {

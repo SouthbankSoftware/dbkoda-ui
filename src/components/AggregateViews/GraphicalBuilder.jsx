@@ -560,7 +560,9 @@ export default class GraphicalBuilder extends React.Component {
         areAllValid: true,
         firstInvalid: -1,
       };
-
+      if (stepArray.length === 0) {
+        resolve(returnObject);
+      }
       stepArray.map((step, stepIndex) => {
         const newStep = step.replace(/,\s*$/, '');
         this.validateBlock(newStep).then((res) => {
@@ -590,6 +592,7 @@ export default class GraphicalBuilder extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
       const stepArray = [];
+      console.log('TEST A');
       editor.blockList.map((block) => {
         if (block.type !== 'Start') {
           if (block.byoCode) {
@@ -609,8 +612,10 @@ export default class GraphicalBuilder extends React.Component {
         }
       });
 
+      console.log('TEST B');
       // Before setting all steps, validate steps:
       this.validateAllBlocks(stepArray).then((res) => {
+        console.log('TEST C');
         if (res.areAllValid === true) {
           // Update steps in Shell:
           console.log('updatingShellPipeline: ', stepArray);
