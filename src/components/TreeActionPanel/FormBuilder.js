@@ -279,18 +279,19 @@ export default class FormBuilder {
                 }
               }
             }
-
-            const block = this.editor.blockList[this.editor.selectedBlock];
-            if (this.editor.aggregateID && block.customFields) {
-              console.log(block.customFields);
-              Object.keys(block.customFields).map((field) => {
-                // Merge array
-                console.log(field);
-                console.log(result.options[field]);
-                block.customFields[field].map((value) => {
-                  result.options[field].dropdown.unshift(value);
+            if (this.editor.type.toUpperCase() === 'AGGREGATE') {
+              const block = this.editor.blockList[this.editor.selectedBlock];
+              if (this.editor.aggregateID && block.customFields) {
+                console.log(block.customFields);
+                Object.keys(block.customFields).map((field) => {
+                  // Merge array
+                  console.log(field);
+                  console.log(result.options[field]);
+                  block.customFields[field].map((value) => {
+                    result.options[field].dropdown.unshift(value);
+                  });
                 });
-              });
+              }
             }
             resolve(result);
           })
@@ -373,10 +374,8 @@ export default class FormBuilder {
               }
               if (updateDynamicFormCode) {
                 if (formAction.aggregate) {
-                  console.log(values);
                   updateDynamicFormCode(values, editorObject);
                 } else {
-                  console.log(values);
                   const generatedCode = formTemplate(values);
                   updateDynamicFormCode(generatedCode);
                 }
