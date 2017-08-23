@@ -23,7 +23,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-21T15:51:16+10:00
+ * @Last modified time: 2017-08-23T14:54:20+10:00
  */
 
 /**
@@ -114,8 +114,6 @@ const ConnectionPanel = ({
         sha: data.sha,
         ssh: data.ssh,
         remoteHost: data.remoteHost,
-        sshPort: data.sshPort,
-        remotePort: data.remotePort,
         remoteUser: data.remoteUser,
         passRadio: data.passRadio,
         remotePass: data.remotePass,
@@ -162,6 +160,22 @@ const ConnectionPanel = ({
     } else if (data.urlRadio) {
       connectionUrl = data.url;
     }
+    if (data.ssh) {
+      query.ssh = data.ssh;
+      query.remoteHost = data.host;
+      query.remotePort = data.port;
+      query.sshHost = data.remoteHost;
+      query.remoteUser = data.remoteUser;
+      query.localHost = '127.0.0.1';
+      query.localPort = ProfileForm.getRandomPort();
+      connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+      if (data.passRadio) {
+        query.remotePass = data.remotePass;
+      } else if (data.keyRadio) {
+        query.sshKeyFile = data.sshKeyFile;
+        query.passPhrase = data.passPhrase;
+      }
+    }
     if (data.sha) {
       query.username = data.username;
       query.password = data.password;
@@ -169,6 +183,7 @@ const ConnectionPanel = ({
     if (data.ssl) {
       connectionUrl.indexOf('?') > 0 ? connectionUrl += '&ssl=true' : connectionUrl += '?ssl=true';
     }
+
     query.database = data.database;
     query.url = connectionUrl;
     query.ssl = data.ssl;
@@ -177,22 +192,6 @@ const ConnectionPanel = ({
     if (selectedProfile) {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
-    }
-
-    if (data.ssh) {
-      query.ssh = data.ssh;
-      query.remoteHost = data.remoteHost;
-      query.sshPort = data.sshPort;
-      query.remotePort = data.remotePort;
-      query.remoteUser = data.remoteUser;
-      query.localHost = data.host;
-      query.localPort = data.port;
-      if (data.passRadio) {
-        query.remotePass = data.remotePass;
-      } else if (data.keyRadio) {
-        query.sshKeyFile = data.sshKeyFile;
-        query.passPhrase = data.passPhrase;
-      }
     }
 
     profileList.creatingNewProfile = true;
@@ -230,6 +229,8 @@ const ConnectionPanel = ({
     profiles.set(profile.id, profile);
     close();
   });
+
+
 
   return (
     <Panel

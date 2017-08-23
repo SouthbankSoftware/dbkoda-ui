@@ -23,7 +23,7 @@
  * @Date:   2017-04-21T10:47:14+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-17T19:57:23+10:00
+ * @Last modified time: 2017-08-23T15:19:01+10:00
  */
 
 /**
@@ -286,10 +286,8 @@ export default class Panel extends React.Component {
           </div>
           {form.$('ssh').get('value') &&
             <div>
-              <div className="ssh-form pt-form-group pt-inline zero-margin">
+              <div className="remoteHost-form pt-form-group pt-inline zero-margin">
                 <Input field={form.$('remoteHost')} showLabel />
-                <Input field={form.$('sshPort')} showLabel />
-                <Input field={form.$('remotePort')} showLabel />
               </div>
               <div className="remoteuser-form pt-form-group pt-inline zero-margin">
                 <Input field={form.$('remoteUser')} showLabel />

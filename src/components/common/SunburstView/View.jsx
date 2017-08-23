@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-18T16:26:53+10:00
+ * @Last modified time: 2017-08-23T16:26:52+10:00
  */
 
 /*
@@ -142,8 +142,10 @@ export default class View extends React.Component {
   getDimentions(store) {
     const result = {};
     if (store && store.layout) {
-      result.width = window.innerWidth - store.layout.overallSplitPos - 400; // 400 is the size of the right side table
-      result.height = window.innerHeight - store.layout.rightSplitPos - 81; // 81 is the height of tabbar and output panel top bar
+      const leftSidebarWidth = isNaN(store.layout.overallSplitPos) ? (window.innerWidth * 0.35) : store.layout.overallSplitPos;
+      const topBarsHeight = isNaN(store.layout.rightSplitPos) ? (window.innerHeight * 0.6) : store.layout.rightSplitPos;
+      result.width = window.innerWidth - leftSidebarWidth - 400; // 400 is the size of the right side table
+      result.height = window.innerHeight - topBarsHeight - 81; // 81 is the height of tabbar and output panel top bar
       result.width -= 80; // reduction of 80 pixels for spacing on left and right
       result.height -= 80; // reduction of 80 pixels for top hierarchy
       result.radius = Math.min(result.width, result.height) / 2;

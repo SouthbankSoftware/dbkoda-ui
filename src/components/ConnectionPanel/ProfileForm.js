@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-21T12:50:02+10:00
+ * @Last modified time: 2017-08-23T15:15:10+10:00
  */
 
 /**
@@ -33,6 +33,10 @@ import autobind from 'autobind-decorator';
 
 export class ProfileForm extends MobxReactForm {
   static mongoProtocol = 'mongodb://';
+
+  static getRandomPort = () => {
+    return Math.floor(Math.random() * 7000) + 6000;
+  };
 
   onInit() {
     // add dynamic validation on each field
@@ -98,8 +102,6 @@ export class ProfileForm extends MobxReactForm {
   addSshRules(form, value) {
     if (value) {
       form.$('remoteHost').set('rules', 'required|string');
-      form.$('sshPort').set('rules', 'required|numeric');
-      form.$('remotePort').set('rules', 'required|numeric');
       form.$('remoteUser').set('rules', 'required|string');
       this.$('keyRadio').observe({
         key: 'value',
@@ -117,8 +119,6 @@ export class ProfileForm extends MobxReactForm {
       });
     } else {
       form.$('remoteHost').set('rules', '');
-      form.$('sshPort').set('rules', '');
-      form.$('remotePort').set('rules', '');
       form.$('remoteUser').set('rules', '');
     }
     this.addKeyRules(form, form.$('keyRadio').value);
@@ -267,25 +267,10 @@ export const Form = {
     },
     {
       name: 'remoteHost',
-      placeholder: 'Remote Host',
+      placeholder: 'SSH Host',
       type: 'text',
       rules: 'string',
-      label: 'Host',
-    },
-    {
-      name: 'sshPort',
-      placeholder: 'SSH Port',
-      type: 'number',
-      rules: 'numeric',
-      value: '22',
-      label: 'SSH Port',
-    },
-    {
-      name: 'remotePort',
-      type: 'number',
-      rules: 'numeric',
-      value: '27017',
-      label: 'Remote Port',
+      label: 'SSH Host',
     },
     {
       name: 'remoteUser',
@@ -337,14 +322,12 @@ export const createFormFromProfile = (profile) => {
   fields[10].value = profile.password;
   fields[11].value = profile.ssh;
   fields[12].value = profile.remoteHost;
-  fields[13].value = profile.sshPort;
-  fields[14].value = profile.remotePort;
-  fields[15].value = profile.remoteUser;
-  fields[16].value = profile.passRadio;
-  fields[17].value = profile.remotePass;
-  fields[18].value = profile.keyRadio;
-  fields[19].value = profile.sshKeyFile;
-  fields[20].value = profile.passPhrase;
+  fields[13].value = profile.remoteUser;
+  fields[14].value = profile.passRadio;
+  fields[15].value = profile.remotePass;
+  fields[16].value = profile.keyRadio;
+  fields[17].value = profile.sshKeyFile;
+  fields[18].value = profile.passPhrase;
   return fields;
 };
 
