@@ -369,6 +369,7 @@ export default class FormBuilder {
                   if (values[fld].length > 0) {
                     const idx = values[fld].length - 1;
                     values[fld][idx].last = 1;
+                    console.log('Set Last');
                   }
                 }
               }
