@@ -539,7 +539,12 @@ export default class GraphicalBuilder extends React.Component {
           commands: AggregateCommands.VALIDATE_STEP(step),
         })
         .then((res) => {
-          res = JSON.parse(res);
+          try {
+            res = JSON.parse(res);
+          } catch (e) {
+            console.error(res);
+            resolve(false);
+          }
           if (res.type === 'object') {
             resolve(true);
           } else {
@@ -592,7 +597,6 @@ export default class GraphicalBuilder extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
       const stepArray = [];
-      console.log('TEST A');
       editor.blockList.map((block) => {
         if (block.type !== 'Start') {
           if (block.byoCode) {
@@ -612,10 +616,8 @@ export default class GraphicalBuilder extends React.Component {
         }
       });
 
-      console.log('TEST B');
       // Before setting all steps, validate steps:
       this.validateAllBlocks(stepArray).then((res) => {
-        console.log('TEST C');
         if (res.areAllValid === true) {
           // Update steps in Shell:
           console.log('updatingShellPipeline: ', stepArray);
