@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-18T09:16:30+10:00
+ * @Last modified time: 2017-08-23T12:11:15+10:00
  */
 
  import { action, observable } from 'mobx';
@@ -13,7 +13,7 @@
  import { NewToaster } from '#/common/Toaster';
  import EventLogging from '#/common/logging/EventLogging';
  import { ProfileStatus } from '#/common/Constants';
- import { DrawerPanes } from '#/common/Constants';
+ import { EditorTypes, DrawerPanes } from '#/common/Constants';
 
  import StaticApi from './static';
 
@@ -181,18 +181,22 @@ export default class EditorApi {
     if (this.store.editorToolbar.newEditorForTreeAction) {
       this.store.editorToolbar.newEditorForTreeAction = false;
       this.store.treeActionPanel.treeActionEditorId = editorId;
-      this.store.treeActionPanel.newEditorCreated = true;
       const treeEditor = this.store.editors.get(editorId);
-      treeEditor.fileName = 'Tree Action';
+      if (treeEditor.type === EditorTypes.TREE_ACTION) {
+        treeEditor.fileName = 'Tree Action';
+      } else if (treeEditor.type === EditorTypes.SHELL_COMMAND) {
+        treeEditor.fileName = 'Shell Command';
+      }
+
       this.store.treeActionPanel.editors.set(editorId, treeEditor);
     }
 
     // Set left Panel State.
-    if (options.type === 'aggregate') {
+    if (options.type === EditorTypes.AGGREGATE) {
       this.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
-    } else if (options.type === 'TreeAction') {
+    } else if (options.type === EditorTypes.TREE_ACTION) {
       this.store.drawer.drawerChild = DrawerPanes.DYNAMIC;
-    } else if (options.type === 'os') {
+    } else if (options.type === EditorTypes.SHELL_COMMAND) {
       this.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
     } else {
       this.store.drawer.drawerChild = DrawerPanes.DEFAULT;

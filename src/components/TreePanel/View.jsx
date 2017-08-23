@@ -23,7 +23,7 @@
 * @Date:   2017-03-07T11:39:01+11:00
 * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-04T14:35:05+10:00
+ * @Last modified time: 2017-08-23T12:03:05+10:00
 */
 
 import React from 'react';
@@ -47,7 +47,7 @@ import CloseIcon from '../../styles/icons/cross-icon.svg';
 import ShardsIcon from '../../styles/icons/shards-icon-2.svg';
 import CollectionIcon from '../../styles/icons/collection-icon.svg';
 import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
-import { DrawerPanes, BackupRestoreActions } from '../common/Constants';
+import { EditorTypes, BackupRestoreActions } from '../common/Constants';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
@@ -221,7 +221,7 @@ export default class TreeView extends React.Component {
   }
   reactionToJson;
   reactionToFilter;
-  reactionToTreeAction;
+
   handleNodeClick = (nodeData: ITreeNode, _nodePath: number[]) => {
     if (nodeData.text == '...') {
       this.props.treeState.resetRootNode();
@@ -297,28 +297,20 @@ export default class TreeView extends React.Component {
       ) {
         this.showDetailsView(this.nodeRightClicked, action);
       } else if (this.isBackupRestoreAction(action)) {
-        this.props.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
-        this.props.store.setTreeAction(this.nodeRightClicked, action);
-        if (!this.checkExistingEditor()) {
-          this.props.api.addNewEditorForTreeAction({ type: 'os' });
-        } else {
-          const eEditor = this.getExistedEditor();
-          eEditor[1].type = 'os';
-        }
+        this.showTreeActionPanel(this.nodeRightClicked, action, EditorTypes.SHELL_COMMAND);
       } else {
-        this.props.store.setTreeAction(this.nodeRightClicked, action);
-        this.showTreeActionPanel(this.nodeRightClicked, action);
+        this.showTreeActionPanel(this.nodeRightClicked, action, EditorTypes.TREE_ACTION);
       }
     }
   };
 
-  checkExistingEditor = () => {
+  checkExistingEditor = (editorType) => {
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
     let bExistingEditor = false;
     for (const editor of treeEditors) {
       if (
         editor[1].currentProfile ==
-        this.props.store.profileList.selectedProfile.id
+        this.props.store.profileList.selectedProfile.id && editor[1].type == editorType
       ) {
         bExistingEditor = true;
         runInAction('update state var', () => {
@@ -331,36 +323,12 @@ export default class TreeView extends React.Component {
     return bExistingEditor;
   };
 
-  /**
-   * get the tree editor object for the selected profile
-   */
-  getExistedEditor = () => {
-    const treeEditors = this.props.store.treeActionPanel.editors.entries();
-    let eEditor;
-    for (const editor of treeEditors) {
-      if (
-        editor[1].currentProfile ==
-        this.props.store.profileList.selectedProfile.id
-      ) {
-        eEditor = editor;
-        runInAction('update state var', () => {
-          this.props.store.editorPanel.activeEditorId = editor[1].id;
-          this.props.store.treeActionPanel.treeActionEditorId = editor[1].id;
-        });
-        break;
-      }
-    }
-    return eEditor;
-  };
-
-  showTreeActionPanel = (treeNode, action) => {
+  showTreeActionPanel = (treeNode, action, editorType) => {
     this.props.store.setTreeAction(treeNode, action);
-    if (this.checkExistingEditor()) {
-      this.props.store.showTreeActionPane();
+    if (this.checkExistingEditor(editorType)) {
+      this.props.store.showTreeActionPane(editorType);
     } else {
-      const type =
-        action === 'ExportDatabase' ? 'ExportDatabase' : 'TreeAction';
-      this.props.api.addNewEditorForTreeAction({ type });
+      this.props.api.addNewEditorForTreeAction({ type: editorType });
     }
   };
 

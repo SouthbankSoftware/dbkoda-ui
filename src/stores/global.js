@@ -20,8 +20,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-08-18T14:53:32+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-23T12:03:47+10:00
  */
 
 import _ from 'lodash';
@@ -32,7 +32,7 @@ import {
   deserializer,
   postDeserializer,
 } from '#/common/mobxDumpenvyExtension';
-import { DrawerPanes } from '#/common/Constants';
+import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { Intent } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
@@ -148,7 +148,7 @@ export default class Store {
     treeNode: null,
     treeAction: null,
     treeActionEditorId: '',
-    newEditorCreated: false,
+    // newEditorCreated: false,
     formValues: '',
     isNewFormValues: false,
     editors: observable.map(),
@@ -211,8 +211,12 @@ export default class Store {
   };
 
   @action
-  showTreeActionPane = () => {
-    this.setDrawerChild(DrawerPanes.DYNAMIC);
+  showTreeActionPane = (type) => {
+    if (type == EditorTypes.TREE_ACTION) {
+      this.setDrawerChild(DrawerPanes.DYNAMIC);
+    } else if (type == EditorTypes.SHELL_COMMAND) {
+      this.setDrawerChild(DrawerPanes.BACKUP_RESTORE);
+    }
   };
 
   @action
