@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-21T13:47:22+10:00
+ * @Last modified time: 2017-08-23T09:48:15+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction } from 'mobx';
@@ -152,21 +152,37 @@ export default class Panel extends React.Component {
       return cm.getSelection();
     }
     if (startLine[0] === '{') {
-      // This is a single-line document
-      if (startLine[startLine.length - 1] === '}') {
+      const prevLine = cm.getLine(lineNumber - 1).trim();
+      const nextLine = cm.getLine(lineNumber + 1).trim();
+      if (
+        startLine[startLine.length - 1] === '}' &&
+        (!['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
+        prevLine.indexOf('dbKoda>') === 0)
+      ) {
+        if (
+          nextLine && nextLine[0] === '{' ||
+          ![']', ',', '}'].includes(nextLine[0])
+        ) {
+          // This is a single-line document
+          lines.start = lineNumber;
+          lines.end = lineNumber;
+          return startLine;
+        }
+        // This is the start of a document, only parse downwards
         lines.start = lineNumber;
-        lines.end = lineNumber;
-        return startLine;
+        return this._getLineText(cm, lineNumber, 1, lines);
       }
-      // This is the start of a document, only parse downwards
-      lines.start = lineNumber;
-      return this._getLineText(cm, lineNumber, 1, lines);
     }
     // Parse Multi-line documents
-    return (
-      this._getLineText(cm, lineNumber - 1, -1, lines) +
-        this._getLineText(cm, lineNumber, 1, lines)
-    );
+    if (direction === 0) {
+      return (
+        this._getLineText(cm, lineNumber - 1, -1, lines) +
+          this._getLineText(cm, lineNumber, 1, lines)
+      );
+    }
+    // Direction is 1 or -1 (we came from the Next/Prev buttons)
+    direction === -1 ? lines.end = lineNumber : lines.start = lineNumber;
+    return this._getLineText(cm, lineNumber, direction, lines);
   }
 
   _getLineText(cm, lineNumber, direction, lines) {

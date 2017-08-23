@@ -279,20 +279,20 @@ export default class FormBuilder {
                 }
               }
             }
-
-            const block = this.editor.blockList[this.editor.selectedBlock];
-            if (this.editor.aggregateID && block.customFields) {
-              console.log(block.customFields);
-              Object.keys(block.customFields).map((field) => {
-                // Merge array
-                console.log(field);
-                console.log(result.options[field]);
-                block.customFields[field].map((value) => {
-                  result.options[field].dropdown.unshift(value);
+            if (this.editor.type.toUpperCase() === 'AGGREGATE') {
+              const block = this.editor.blockList[this.editor.selectedBlock];
+              if (this.editor.aggregateID && block.customFields) {
+                console.log(block.customFields);
+                Object.keys(block.customFields).map((field) => {
+                  // Merge array
+                  console.log(field);
+                  console.log(result.options[field]);
+                  block.customFields[field].map((value) => {
+                    result.options[field].dropdown.unshift(value);
+                  });
                 });
-              });
+              }
             }
-            console.log(result);
             resolve(result);
           })
           .catch((reason) => {
