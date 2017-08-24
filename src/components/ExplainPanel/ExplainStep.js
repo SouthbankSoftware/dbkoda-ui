@@ -22,6 +22,8 @@
  * Created by joey on 22/5/17.
  */
 
+import _ from 'lodash';
+
 const SINGLE_SHARD = 'SINGLE_SHARD';
 const SORT_KEY_GENERATOR = 'SORT_KEY_GENERATOR';
 const IXSCAN = 'IXSCAN';
@@ -29,6 +31,7 @@ const COLLSCAN = 'COLLSCAN';
 const FETCH = 'FETCH';
 const SORT = 'SORT';
 const SORT_MERGE = 'SORT_MERGE';
+const PROJECTION = 'PROJECTION';
 const SHARDING_FILTER = 'SHARDING_FILTER';
 const SHARD_MERGE_SORT = 'SHARD_MERGE_SORT';
 const SHARD_MERGE = 'SHARD_MERGE';
@@ -95,6 +98,20 @@ const generateSkipComments = (stage) => {
   return globalString('explain/step/skip', '?');
 };
 
+const generateProjectionComments = (stage) => {
+  console.log('project comments', stage);
+  let comments = stage.stage;
+  if ('transformBy' in stage) {
+    comments = 'Project for ';
+    const keys = [];
+    _.forOwn(stage.transformBy, (_, key) => {
+      keys.push(key);
+    });
+    comments += keys.join(', ');
+  }
+  return comments;
+};
+
 /**
  * generate comments for the given stage.
  *
@@ -136,6 +153,8 @@ export const generateComments = (stage) => {
       return generateSkipComments(stage);
     case SORT_MERGE:
       return globalString('explain/step/sortMerge');
+    case PROJECTION:
+      return generateProjectionComments(stage);
     case OR:
       return globalString(
         'explain/step/or',
