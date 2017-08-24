@@ -109,11 +109,6 @@
       ]
     },
     {
-      "name": "Sort",
-      "label": "Sort results?",
-      "type": "Boolean"
-    },
-    {
       "name": "SortKeys",
       "lable": "Sort columns",
       "type": "Table",
