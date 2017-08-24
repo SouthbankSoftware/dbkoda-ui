@@ -771,22 +771,21 @@ export default class GraphicalBuilder extends React.Component {
       );
       if (editor.blockList[0]) {
         const formTemplate = require('./AggregateBlocks/BlockTemplates/Start.hbs');
-        const startCommands = formTemplate(editor.blockList[0].fields) + ';\n';
-        if (!editor.aggConfig) {
-          // First setup for config, set.
-          editor.aggConfig = startCommands;
-        } else if (!(editor.aggConfig === startCommands)) {
+        let startCommands = formTemplate(editor.blockList[0].fields) + ';\n';
+        if (!editor.aggConfig || !(editor.aggConfig === startCommands)) {
           // Config has changed, send request and update config.
           editor.aggConfig = startCommands;
+          startCommands = startCommands.replace(/\n/g, '').replace(/\r/g, '');
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 30000;
           service
             .update(editor.profileId, {
               shellId: editor.shellId, // eslint-disable-line
               commands: startCommands,
+              responseType: 'text',
             })
             .then((res) => {
-              console.log(res);
+              console.log('updatedConfig: ', res);
               resolve(res);
             })
             .catch((e) => {
