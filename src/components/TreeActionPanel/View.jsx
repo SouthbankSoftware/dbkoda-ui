@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-31T10:32:49+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-24T13:54:38+10:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -54,11 +54,23 @@ export default class TreeActionView extends React.Component {
 
     this.state = {formStyle: { height: (window.innerHeight - 210)}};
   }
+  handleKeyPress(event) {
+  // [Enter] should not submit the form.
+  if (event.keyCode === 13) {
+    event.preventDefault();
+  }
+}
   componentDidMount() {
     window.addEventListener('resize', this.onResize.bind(this));
+    if (this.treeActionForm) {
+      this.treeActionForm.addEventListener('keypress', this.handleKeyPress);
+    }
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.onResize.bind(this));
+    if (this.treeActionForm) {
+      this.treeActionForm.removeEventListener('keypress', this.handleKeyPress);
+    }
   }
   onResize(e) {
     this.setState({formStyle: { height: (e.target.innerHeight - 210)}});
@@ -100,7 +112,7 @@ export default class TreeActionView extends React.Component {
     return (
       <div className="pt-dark form-scrollable">
         <h3 className="form-title">{title}</h3>
-        <form onChange={mobxForm.onValueChange(mobxForm)} style={this.state.formStyle}>
+        <form ref={(f) => { this.treeActionForm = f; }} onChange={mobxForm.onValueChange(mobxForm)} style={this.state.formStyle}>
           {formFields}
           <p className="pt-form-helper-text">{mobxForm.error}</p>
         </form>

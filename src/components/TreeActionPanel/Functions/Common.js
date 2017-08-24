@@ -140,7 +140,7 @@ export function dbkodaListAttributesProject_parse(res) {
   console.log(res);
   let output = res.prevAttributes;
   if (typeof res.prevAttributes === 'string') {
-     output = JSON.parse(res.prevAttributes);
+    output = JSON.parse(res.prevAttributes);
   }
   output.unshift('NewAttributeName');
   if (debug) console.log('output: ', output);
@@ -155,7 +155,7 @@ export function dbkodaListAttributesProjectTarget_parse(res) {
   console.log(res);
   let output = res.prevAttributes;
   if (typeof res.prevAttributes === 'string') {
-     output = JSON.parse(res.prevAttributes);
+    output = JSON.parse(res.prevAttributes);
   }
   for (let idx = 0; idx < output.length; idx += 1) {
     output[idx] = '"$' + output[idx] + '"';
