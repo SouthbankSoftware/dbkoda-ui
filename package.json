@@ -37,6 +37,7 @@
     "mlaunch:clean": "mlaunch kill; rimraf data tmpd*",
     "eslint": "eslint --ext .jsx --ext .js src/. tests/.",
     "jest": "NODE_ENV=test jest --config jest.json --coverage",
+    "test:win": "jest --config jest.json --coverage",
     "docs": "yarn run esdoc && open -b com.google.chrome ./docs/index.html",
     "esdoc": "rimraf docs && esdoc -c .esdoc.json",
     "cienvy:dev": "yarn run cienvy:clean && yarn run cienvy:dev:build",
