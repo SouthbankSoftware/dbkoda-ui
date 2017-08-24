@@ -4,19 +4,20 @@
   "UseOr": true,
   "FilterKeys": [{
       "AttributeName": "a",
+      "Operator":"$eq",
       "Value": 1
     },
     {
       "AttributeName": "b",
+      "Operator":"$eq",
       "Value": 3,
       "last": 1
     }
   ],
-  "IncludeProjection": true,
   "Projections": [{
-    "AttributeName": "d"
+    "AttributeName": "d",
+    "AttributeProjectionValue":1
   }],
-  "Sort": true,
   "SortKeys": [{
     "AttributeName": "a",
     "Direction": -1
