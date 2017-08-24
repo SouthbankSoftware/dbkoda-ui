@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-18T16:22:34+10:00
+ * @Last modified time: 2017-08-24T16:42:17+10:00
  */
 
 import React from 'react';
@@ -112,7 +112,24 @@ export default class Panel extends React.Component {
       </nav>
       <ReactJson
         src={this.props.enhancedJson.json}
-        theme="hopscotch"
+        theme={{
+          base00: '#fff',
+          base01: '#fff',
+          base02: 'rgb(64, 110, 101)',
+          base03: '#fff',
+          base04: 'rgb(44, 75, 68)',
+          base05: '#fff',
+          base06: '#fff',
+          base07: '#FFB795',
+          base08: 'rgb(1, 139, 147)',
+          base09: 'rgb(58, 178, 98)',
+          base0A: '#fff',
+          base0B: 'rgb(1, 139, 147)',
+          base0C: '#575a6a',
+          base0D: '#fff',
+          base0E: '#363951',
+          base0F: 'rgb(1, 139, 147)'
+        }}
         indentWidth={2}
         collapsed={this.state.collapseDepth}
         collapseStringsAfterLength={40}
@@ -123,3 +140,21 @@ export default class Panel extends React.Component {
     </div>);
   }
 }
+/*  Theme guide:
+  base00: Default Background (Overwritten by styles)
+  base01: Lighter Background
+  base02: NULL background, Expand line (Selection background)
+  base03: ? (Comments, Invisibles, Line Highlighting)
+  base04: Item count text (Dark Foreground)
+  base05: ? (Default Foreground)
+  base06: ? (Light Foreground)
+  base07: Key text (Light Background)
+  base08: ? (Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted)
+  base09: String values (Integers, Boolean, Constants, XML Attributes, Markup Link Url)
+  base0A: NULL text (Classes, Markup Bold, Search Text Background)
+  base0B: Floating point text (Strings, Inherited Class, Markup Code, Diff Inserted)
+  base0C: Array Index text (Support, Regular Expressions, Escape Characters, Markup Quotes)
+  base0D: Expanded arrows (Functions, Methods, Attribute IDs, Headings)
+  base0E: Boolean text, Closed Arrows (Keywords, Storage, Selector, Markup Italic, Diff Changed)
+  base0F: Copy icon, also Integer text (Deprecated, Opening/Closing Embedded Language Tags)
+ */
