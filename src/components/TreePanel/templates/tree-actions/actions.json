@@ -31,6 +31,12 @@
   "mongos": [],
   "databases": [
     {
+      "name": "DbStorageStats",
+      "text": "Database Storage",
+      "icon": "pt-icon-pie-chart",
+      "noDialog": true
+    },
+    {
       "name": "GetParameters",
       "text": "Get Parameters",
       "icon": "pt-icon-settings"
@@ -43,7 +49,7 @@
     {
       "name": "SetLogLevel",
       "text": "Get/Set Logging levels",
-      "icon": "pt-icon-settings"
+      "icon": "pt-icon-issue"
     },
     {
       "name": "GetLog",
@@ -61,22 +67,10 @@
       "view": "details"
     },
     {
-      "name": "DatabaseStorage",
-      "text": "Database Storage",
-      "icon": "pt-icon-horizontal-bar-chart-desc",
-      "view": "details"
-    },
-    {
       "name": "ServerStatistics",
       "text": "Server Statistics",
       "icon": "pt-icon-doughnut-chart",
       "view": "details"
-    },
-    {
-      "name": "DbStorageStats",
-      "text": "Storage Drill Down",
-      "icon": "pt-icon-pie-chart",
-      "noDialog": true
     },
     {
       "type": "divider",
@@ -160,20 +154,15 @@
       "noDialog": true
     },
     {
-      "name": "AggregateBuilder",
-      "text": "Aggregate Builder",
-      "icon": "pt-icon-search-template",
-      "noDialog": true
-    },
-    {
       "name": "SimpleQuery",
       "text": "Simple Query",
       "icon": "pt-icon-search-template"
     },
     {
-      "name": "GroupBy",
-      "text": "Group By Query",
-      "icon": "pt-icon-group-objects"
+      "name": "AggregateBuilder",
+      "text": "Aggregate Builder",
+      "icon": "pt-icon-sort",
+      "noDialog": true
     },
     {
       "type": "divider",

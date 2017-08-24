@@ -50,7 +50,17 @@
               "value": "treeNode"
             }
           ]
-
+        },
+        {
+          "name": "Operator",
+          "label": "Operator",
+          "tooltip": "Operator to apply to value",
+          "type": "Combo",
+          "lookup": "dbkodaMatchOperators",
+          "lookup_arguments": [{
+            "name": "db",
+            "value": "database"
+          }]
         },
         {
           "name": "Value",
@@ -61,35 +71,42 @@
       ]
     },
     {
-      "name": "IncludeProjection",
-      "type": "Boolean",
-      "label": "Include Projection attributes?",
-      "tooltip": "If true, projected attributes will be included, if false excluded"
-    },
-    {
       "name": "Projections",
+      "label": "Project Fields",
       "type": "Table",
       "columns": [{
-        "name": "AttributeName",
-        "label": "Attribute",
-        "tooltip": "Name of the attribute to be Projected",
-        "type": "Combo",
-        "lookup": "dbkodaListAttributes",
-        "lookup_arguments": [{
-            "name": "db",
-            "value": "treeNode.parentDB"
-          },
-          {
-            "name": "collection",
-            "value": "treeNode"
-          }
-        ]
-      }]
-    },
-    {
-      "name": "Sort",
-      "label": "Sort results?",
-      "type": "Boolean"
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be Projected",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributes",
+          "lookup_arguments": [{
+              "name": "db",
+              "value": "treeNode.parentDB"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }
+          ]
+        },
+        {
+          "name": "AttributeProjectionValue",
+          "label": "Expression",
+          "tooltip": "Expression for projection",
+          "type": "Combo",
+          "lookup": "dbkodaListProjections",
+          "lookup_arguments": [{
+              "name": "db",
+              "value": "treeNode.parentDB"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "SortKeys",
