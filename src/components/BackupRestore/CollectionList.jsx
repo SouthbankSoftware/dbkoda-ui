@@ -37,7 +37,7 @@ const Header = ({target}) => (
 const Row = ({options, selectCollection, unSelectCollection, index, colName, readOnly, target}) => (
   <div className="row">
     <div className="pt-select">
-      <select className="select" defaultValue={target === 'server' ? globalString('backuprestore/selectDatabase') : globalString('backuprestore/selectCollection')}
+      <select className="select db-backup-list-select" defaultValue={target === 'server' ? globalString('backuprestore/selectDatabase') : globalString('backuprestore/selectCollection')}
         onChange={(item) => {
                 selectCollection(item.target.value, index);
               }}
