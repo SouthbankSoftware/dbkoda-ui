@@ -372,7 +372,6 @@ export default class FormBuilder {
                     if (values[fld][idx - 1] && values[fld][idx - 1].last) {
                       values[fld][idx - 1].last = 0;
                     }
-                    console.log('Set Last:', values);
                   }
                 }
               }

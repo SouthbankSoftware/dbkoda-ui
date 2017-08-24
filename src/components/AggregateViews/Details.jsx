@@ -193,7 +193,9 @@ export default class Details extends React.Component {
     editorObject.blockList.map((block) => {
       if (!(block.type.toUpperCase() === 'START')) {
         if (block.byoCode) {
-          codeString += block.code + ',' + newLine;
+          block.code.replace(/\r\n/g, newLine);
+          block.code.replace(/\n/g, newLine);
+          codeString += block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
         } else {
           const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
             block.type +
