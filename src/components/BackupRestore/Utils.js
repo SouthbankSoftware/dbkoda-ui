@@ -46,7 +46,7 @@ export const getDialogProperites = (action) => {
       // On Windows and Linux an open dialog can not be both a file selector and a directory selector, so if you set properties to ['openFile', 'openDirectory'] on these platforms, a directory selector will be shown.
       properties = ['openDirectory'];
     }
-  } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_COLLECTION) {
+  } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_COLLECTION || action === BackupRestoreActions.IMPORT_DATABASE) {
     properties = ['openFile'];
   } else {
     properties = ['openDirectory'];

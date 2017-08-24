@@ -20,7 +20,7 @@
 /**
  * Created by joey on 24/7/17.
  */
-
+import os from 'os';
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
 import { BackupRestoreActions } from '../common/Constants';
@@ -126,7 +126,7 @@ const getDBCollectionCommandObject = ({ profile, state, action }) => {
       items.collection = col;
       if (directoryPath) {
         if (action === BackupRestoreActions.EXPORT_COLLECTION || action === BackupRestoreActions.EXPORT_DATABASE) {
-          items.output = directoryPath + '/' + col + '.json';
+          items.output = os.release().indexOf('Windows') >= 0 ? directoryPath + '\\' + col + '.json' : directoryPath + '/' + col + '.json';
         } else {
           items.output = directoryPath;
         }
@@ -144,19 +144,21 @@ const getDBCollectionCommandObject = ({ profile, state, action }) => {
   return cols;
 };
 
-export const getCommandObject = ({ profile, state, action }) => {
-  switch (action) {
-    case BackupRestoreActions.DUMP_SERVER:
-      return getDumpServerCommandObject({ profile, state, action });
-    default:
-      return getDBCollectionCommandObject({ profile, state, action });
-  }
-};
-
 const getImportCollectionCommandObject = ({ profile, state }) => {
   const itm = createTemplateObject({ ...state, profile});
   itm.inputFile = state.directoryPath;
   return itm;
+};
+
+export const getCommandObject = ({ profile, state, action }) => {
+  switch (action) {
+    case BackupRestoreActions.DUMP_SERVER:
+      return getDumpServerCommandObject({ profile, state, action });
+    case BackupRestoreActions.IMPORT_DATABASE:
+      return [getImportCollectionCommandObject({ profile, state })];
+    default:
+      return getDBCollectionCommandObject({ profile, state, action });
+  }
 };
 
 export const generateCode = ({treeNode, profile, state, action}) => {
