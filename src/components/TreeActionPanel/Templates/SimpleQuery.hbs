@@ -1,4 +1,6 @@
 db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").find(
-  { {{#if UseOr}}"$or":[{{/if}} {{#each FilterKeys}}{{#if ../UseOr}}{ {{/if}}{{#if AttributeName}}"{{AttributeName}}":{{{Value}}} {{/if}} {{#if ../UseOr}} }{{/if}}{{#unless last}},{{/unless}}{{/each}}{{#if UseOr}}]{{/if}} },
-  { {{#each Projections}}{{#if AttributeName}} "{{AttributeName}}":{{#if ../IncludeProjection}}1{{else}}0{{/if}}{{/if}}{{#unless last}},{{/unless}} {{/each}} }){{#if Sort}}.sort({
+  { {{#if FilterKeys}} {{#if UseOr}}"$or"{{else}}"$and"{{/if}}:[
+        {{#each FilterKeys}} { "{{AttributeName}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
+        {{/each}}] {{/if}} },    
+       { {{#each Projections}}{{#if AttributeName}} "{{AttributeName}}":{{AttributeProjectionValue}} {{/if}}{{#unless last}},{{/unless}} {{/each}} }){{#if Sort}}.sort({
     {{#each SortKeys}} "{{AttributeName}}":{{Direction}}{{#unless last}},{{/unless}}{{/each}} }){{/if}}{{#if Limit}}.limit({{Limit}}){{/if}}{{#if Count}}.count(){{/if}};

@@ -28,6 +28,8 @@
 
 import * as common from './Common.js';
 
+// const sprintf = require('sprintf-js').sprintf;
+
 export const SimpleQuery = {
     executeCommand: null,
     setExecuteFunction: (cbFuncExecute) => {
@@ -53,10 +55,18 @@ export const SimpleQuery = {
         console.log(res);
         return ([1, -1]);
     },
+    dbkodaListProjections: () => {
+        return ('db');
+    },
+    dbkodaListProjections_parse: () => {
+        return ['0', '1'];
+    },
     dbkoda_listdb: common.dbkoda_listdb,
     dbkoda_listdb_parse: common.dbkoda_listdb_parse,
     dbkoda_listcollections: common.dbkoda_listcollections,
     dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
     dbkodaListAttributes: common.dbkodaListAttributes,
-    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
+    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+    dbkodaMatchOperators: common.dbkodaMatchOperators,
+    dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse
 };
