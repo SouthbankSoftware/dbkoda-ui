@@ -48,7 +48,7 @@ const getOptions = (options) => {
                 <div className="label field-label">{o.label}</div>
               </Tooltip>
               <div className="pt-select">
-                <select className="select" defaultValue={value.selected}
+                <select className={`select db-backup-${o.name}`} defaultValue={value.selected}
                   onChange={(item) => {
                         o.onChange(item.target.value);
                       }}
