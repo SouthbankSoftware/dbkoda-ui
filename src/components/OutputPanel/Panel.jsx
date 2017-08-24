@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-23T12:06:36+10:00
+ * @Last modified time: 2017-08-24T10:25:37+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction, toJS } from 'mobx';
@@ -175,6 +175,14 @@ export default class Panel extends React.Component {
     }
     // Parse Multi-line documents
     if (direction === 0) {
+      const prevLine = cm.getLine(lineNumber - 1).trim();
+      if (
+        prevLine[prevLine.length - 1] === '}' &&
+        !['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
+        prevLine.indexOf('dbKoda>') === 0
+      ) {
+        return this._getLineText(cm, lineNumber, 1, lines);
+      }
       return (
         this._getLineText(cm, lineNumber - 1, -1, lines) +
           this._getLineText(cm, lineNumber, 1, lines)
