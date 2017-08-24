@@ -31,6 +31,7 @@
 import React from 'react';
 import { NewToaster } from '#/common/Toaster';
 import { inject, observer } from 'mobx-react';
+import ReactExpandableListView from 'react-expandable-listview';
 import { featherClient } from '~/helpers/feathers';
 import { action } from 'mobx';
 import { Intent } from '@blueprintjs/core';
@@ -47,6 +48,7 @@ export default class Palette extends React.Component {
     super(props);
     this.updateShellPipeline = this.updateShellPipeline.bind(this);
     this.state = {};
+    this.blockList = this.getBlockList();
   }
 
   @action.bound
@@ -137,6 +139,112 @@ export default class Palette extends React.Component {
           });
       });
     }
+  }
+
+  /**
+   * Gets a list of block types and converts it into a object that the listView can use.
+   * 
+   * @TODO: Now that we are grouping the block list and
+   * each block may have multiple groups, I should
+   * refactor this to just parse a list of "groups" and
+   * build them.
+   * @return {Object} - The list of block types.
+   */
+  getBlockList() {
+    const dataObj = [
+      {
+        headerName: 'Common',
+        isOpened: false,
+        height: 20,
+        isReactComponent: true,
+        items: [],
+      },
+      {
+        headerName: 'Query and Aggregate',
+        isOpened: false,
+        height: 20,
+        isReactComponent: true,
+        items: [],
+      },
+      {
+        headerName: 'Group and Join',
+        isOpened: false,
+        height: 20,
+        isReactComponent: true,
+        items: [],
+      },
+      {
+        headerName: 'Transform',
+        isOpened: false,
+        height: 20,
+        isReactComponent: true,
+        items: [],
+      },
+      {
+        headerName: 'Other',
+        isOpened: false,
+        height: 20,
+        isReactComponent: true,
+        items: [],
+      },
+      {
+        headerName: 'All',
+        isOpened: false,
+        height: 20,
+        isReactComponent: true,
+        items: [],
+      },
+    ];
+
+    const groupsArray = {
+      common: [],
+      queryAndAggregate: [],
+      groupAndJoin: [],
+      transform: [],
+      other: [],
+    };
+
+    // For each object in the block types
+    Object.keys(BlockTypes).map((keyName, index) => {
+      if (!(BlockTypes[keyName].type.toUpperCase() === 'START')) {
+        // Push item to all group.
+        dataObj[5].items.push(
+          <Block
+            key={'key-' + index} //eslint-disable-line
+            listPosition={index}
+            type={BlockTypes[keyName].type}
+            concrete={false}
+            addBlock={this.addBlock}
+          />,
+        );
+        // For each tag in groups array, add to group.
+        BlockTypes[keyName].groups.map((group) => {
+          groupsArray[group].push(
+            <Block
+              key={'key-' + index} //eslint-disable-line
+              listPosition={index}
+              type={BlockTypes[keyName].type}
+              concrete={false}
+              addBlock={this.addBlock}
+            />,
+          );
+        });
+      }
+    });
+    dataObj[0].items = groupsArray.common;
+    dataObj[1].items = groupsArray.queryAndAggregate;
+    dataObj[2].items = groupsArray.groupAndJoin;
+    dataObj[3].items = groupsArray.transform;
+    dataObj[4].items = groupsArray.other;
+    console.log('!!!');
+    console.log(dataObj);
+    dataObj[0].height = dataObj[0].items.length * 50;
+    dataObj[1].height = dataObj[1].items.length * 50;
+    dataObj[2].height = dataObj[2].items.length * 50;
+    dataObj[3].height = dataObj[3].items.length * 50;
+    dataObj[4].height = dataObj[4].items.length * 50;
+    dataObj[5].height = dataObj[5].items.length * 50;
+    return dataObj;
   }
 
   /**
@@ -410,12 +518,17 @@ export default class Palette extends React.Component {
   }
 
   render() {
+    console.log(this.blockList);
     return (
       <div className="aggregatePaletteWrapper">
         <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
           <h2 className="paletteHeader">Pipeline Elements</h2>
         </nav>
-        {this.getBlocksList()}
+        <ReactExpandableListView
+          data={this.blockList}
+          headerAttName="headerName"
+          itemsAttName="items"
+        />
       </div>
     );
   }

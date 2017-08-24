@@ -278,18 +278,20 @@ export default class Details extends React.Component {
           </nav>
           <div className="aggregateDetailsContent">
             <BYOBlock onChangeCallback={this.generateCode} />
-            <AnchorButton
-              className="hideLeftPanelButton"
-              intent={Intent.SUCCESS}
-              text={globalString('aggregate_builder/hide_left_panel')}
-              onClick={this.onHideLeftPanelClicked}
-            />
-            <AnchorButton
-              className="byoCodeButton"
-              intent={Intent.SUCCESS}
-              text={globalString('aggregate_builder/form_code')}
-              onClick={this.nonBYOCode}
-            />
+            <div className="bottomToolbar">
+              <AnchorButton
+                className="hideLeftPanelButton"
+                intent={Intent.SUCCESS}
+                text={globalString('aggregate_builder/hide_left_panel')}
+                onClick={this.onHideLeftPanelClicked}
+              />
+              <AnchorButton
+                className="byoCodeButton"
+                intent={Intent.SUCCESS}
+                text={globalString('aggregate_builder/form_code')}
+                onClick={this.nonBYOCode}
+              />
+            </div>
           </div>
         </div>
       );
@@ -335,16 +337,16 @@ export default class Details extends React.Component {
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
           <h2 className="currentBlockChoice">Block Details</h2>
         </nav>
-        {activeBlock &&
-          <h2 className="aggregateBlockType">
-            {activeBlock.type}
-          </h2>}
-        {activeBlock &&
-          <p className="aggregateBlockDescription">
-            {BlockTypes[activeBlock.type.toUpperCase()].description}
-          </p>}
-        {activeBlock &&
-          <div className="aggregateDetailsContent">
+        <div className="aggregateDetailsContent">
+          {activeBlock &&
+            <h2 className="aggregateBlockType">
+              {activeBlock.type}
+            </h2>}
+          {activeBlock &&
+            <p className="aggregateBlockDescription">
+              {BlockTypes[activeBlock.type.toUpperCase()].description}
+            </p>}
+          {activeBlock &&
             <div className={'dynamic-form columns-' + maxColumns + '-max'}>
               {this.state.form &&
                 <View mobxForm={this.state.form.mobxForm} isAggregate />}
@@ -356,26 +358,28 @@ export default class Details extends React.Component {
                     </span>
                   </div>
                 </div>}
-            </div>
-          </div>}
+            </div>}
+        </div>
         {!activeBlock &&
           <div className="aggregateDetailsContent">
             <p>No block selected.</p>
           </div>}
-        <AnchorButton
-          className="hideLeftPanelButton"
-          intent={Intent.SUCCESS}
-          text={globalString('aggregate_builder/hide_left_panel')}
-          onClick={this.onHideLeftPanelClicked}
-        />
-        {activeBlock &&
-          activeBlock.type.toUpperCase() !== 'START' &&
+        <div className="bottomToolbar">
           <AnchorButton
-            className="byoCodeButton"
+            className="hideLeftPanelButton"
             intent={Intent.SUCCESS}
-            text={globalString('aggregate_builder/byo_code')}
-            onClick={this.byoCode}
-          />}
+            text={globalString('aggregate_builder/hide_left_panel')}
+            onClick={this.onHideLeftPanelClicked}
+          />
+          {activeBlock &&
+            activeBlock.type.toUpperCase() !== 'START' &&
+            <AnchorButton
+              className="byoCodeButton"
+              intent={Intent.SUCCESS}
+              text={globalString('aggregate_builder/byo_code')}
+              onClick={this.byoCode}
+            />}
+        </div>
       </div>
     );
   }
