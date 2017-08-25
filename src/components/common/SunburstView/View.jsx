@@ -3,7 +3,7 @@
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T16:26:52+10:00
+ * @Last modified time: 2017-08-25T15:02:42+10:00
  */
 
 /*
@@ -518,6 +518,7 @@ export default class View extends React.Component {
       .style('fill', (d) => {
         return this.getTextColor(d.colour);
       })
+      .style('cursor', 'pointer')
       .on('click', this.props.onBreadCrumbClick);
 
     // Merge enter and update selections; set position for all nodes.
@@ -566,6 +567,7 @@ export default class View extends React.Component {
 
   render() {
     const { width, height } = this.state;
+    const trailWidth = width + 400;
     return (
       <div
         ref={viewEl => (this.viewEl = viewEl)}
@@ -573,7 +575,7 @@ export default class View extends React.Component {
       >
         <div className="main">
           <div className="sequence">
-            <svg className="trail" width={width} height={50}>
+            <svg className="trail" width={trailWidth} height={50}>
               <text className="endlabel" />
             </svg>
           </div>
