@@ -25,6 +25,7 @@ rules:
   global-require: 0
   consistent-return: 0
   quote-props: 0
+  linebreak-style: 0
   no-underscore-dangle: 0
   prefer-const: [error, {ignoreReadBeforeAssign: true}]
   max-len: 0
