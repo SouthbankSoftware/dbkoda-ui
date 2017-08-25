@@ -23,7 +23,7 @@
  * @Date:   2017-05-09T09:20:44+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T13:27:40+10:00
+ * @Last modified time: 2017-08-25T12:22:04+10:00
  */
 
 /* eslint import/no-dynamic-require: warn */
@@ -57,6 +57,9 @@ export default class FormBuilder {
     }
     if (Object.prototype.hasOwnProperty.call(defField, 'default')) {
       res.fieldDefault = defField.default;
+    }
+    if (Object.prototype.hasOwnProperty.call(defField, 'defaultValue')) {
+      res.fieldDefaultValue = defField.defaultValue;
     }
     if (defField.rules) {
       if (res.fieldRules && res.fieldRules.length > 0) {
@@ -208,6 +211,13 @@ export default class FormBuilder {
             result.options[fldName].max = fld.fieldMax;
           } else {
             result.options[fldName] = { max: fld.fieldMax };
+          }
+        }
+        if (Object.prototype.hasOwnProperty.call(fld, 'fieldDefaultValue')) {
+          if (result.options[fldName]) {
+            result.options[fldName].defaultValue = fld.fieldDefaultValue;
+          } else {
+            result.options[fldName] = { defaultValue: fld.fieldDefaultValue };
           }
         }
 

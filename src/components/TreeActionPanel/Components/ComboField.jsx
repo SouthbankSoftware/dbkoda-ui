@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-05-11T09:42:39+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-30T15:59:54+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-25T12:27:36+10:00
  */
 
 import React from 'react';
@@ -48,7 +48,6 @@ export default class ComboField extends React.Component {
   constructor(props) {
     super(props);
     const { field } = this.props;
-
     this.setOptions(field.options.dropdown);
   }
 
@@ -116,6 +115,9 @@ export default class ComboField extends React.Component {
     };
 
     const getSelectField = () => {
+      if (field.value == '' && field.options.defaultValue) {
+        field.value = field.options.defaultValue;
+      }
       return (
         <Select.Creatable
           className={selectClassName}
