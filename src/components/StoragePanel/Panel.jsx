@@ -3,7 +3,7 @@
  * @Date:   2017-08-02T10:00:30+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-18T16:35:09+10:00
+ * @Last modified time: 2017-08-25T15:00:08+10:00
  */
 
 /*
@@ -205,7 +205,8 @@ export default class StoragePanel extends React.Component {
       nodeData.parent &&
       nodeData.parent.parent &&
       nodeData.parent.parent.parent &&
-      nodeData.parent.parent.parent.name == 'total'
+      nodeData.parent.parent.parent.name == 'total' &&
+      !nodeData.children
     ) {
       this.loadChildData(
         nodeData.parent.parent.name,
