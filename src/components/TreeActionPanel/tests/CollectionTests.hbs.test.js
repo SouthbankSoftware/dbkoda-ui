@@ -27,7 +27,7 @@
 //
 // Unit test for AlterUser template
 //
-const debug = false;
+const debug = true;
 
 const hbs = require('handlebars');
 const fs = require('fs');
@@ -99,31 +99,6 @@ describe('Miscellaneous collection tests', () => {
     test('Query Collection', (done) => {
         const templateToBeTested = './src/components/TreeActionPanel/Templates/SimpleQuery.hbs';
         const templateInput = require('./SimpleQuery.hbs.input.json');
-        fs.readFile(templateToBeTested, (err, data) => {
-            if (!err) {
-                templateInput.CollectionName = randomCollectionName;
-                const templateSource = data.toString();
-                const compiledTemplate = hbs.compile(templateSource);
-                const CompactCollectionCommands = compiledTemplate(templateInput);
-                let mongoCommands = CompactCollectionCommands;
-                mongoCommands += '\nexit\n';
-                if (debug) {
-                    console.log(mongoCommands);
-                }
-                const matchString = 'ThisShouldBeInQuery';
-                common
-                    .mongoOutput(mongoCommands)
-                    .then((output) => {
-                        expect(output).toEqual(expect.stringMatching(matchString));
-                        done();
-                    });
-            }
-        });
-    });
-
-    test('GroupBy Query', (done) => {
-        const templateToBeTested = './src/components/TreeActionPanel/Templates/GroupBy.hbs';
-        const templateInput = require('./GroupBy.hbs.input.json');
         fs.readFile(templateToBeTested, (err, data) => {
             if (!err) {
                 templateInput.CollectionName = randomCollectionName;
