@@ -23,7 +23,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T14:54:20+10:00
+ * @Last modified time: 2017-08-25T16:09:51+10:00
  */
 
 /**
@@ -119,7 +119,6 @@ const ConnectionPanel = ({
         remotePass: data.remotePass,
         keyRadio: data.keyRadio,
         sshKeyFile: data.sshKeyFile,
-        passPhrase: data.passPhrase,
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
