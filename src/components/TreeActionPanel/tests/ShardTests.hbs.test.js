@@ -43,10 +43,13 @@ hbs.registerHelper('json', jsonHelper);
 
 const shardPort = Math.floor(Math.random() * 7000) + 6000;
 
+global.jasmine.DEFAULT_TIMEOUT_INTERVAL = 40000;
+
 describe('Shard-specific tests', () => {
-    beforeAll(() => {
+    beforeAll((done) => {
         if (debug) console.log('MongoDB will be setup on port ' + shardPort);
         launchMongoInstance('--replicaset', shardPort, ' --nodes 2 --arbiter --sharded 2   --mongos 1 --config 1  --noauth');
+        setTimeout(() => done(), 30000);
     });
 
     afterAll(() => {
