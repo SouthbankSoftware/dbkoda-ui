@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T14:53:51+10:00
+ * @Last modified time: 2017-08-25T16:09:45+10:00
  */
 
 
@@ -226,6 +226,13 @@ export default class ListView extends React.Component {
           urlRadio: data.urlRadio,
           username: data.username,
           sha: data.sha,
+          ssh: data.ssh,
+          remoteHost: data.remoteHost,
+          remoteUser: data.remoteUser,
+          passRadio: data.passRadio,
+          remotePass: data.remotePass,
+          keyRadio: data.keyRadio,
+          sshKeyFile: data.sshKeyFile,
           editorCount: 1,
           dbVersion: res.dbVersion,
           shellVersion: res.shellVersion,
