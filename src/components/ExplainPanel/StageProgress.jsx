@@ -42,13 +42,11 @@ export const Stage = ({stage, maxNumChildren, head, shardName = '', adjustMargin
     }
   }
   if (adjustMarginTop) {
-    console.log('before style ', style.marginTop);
     if (!style.marginTop) {
       style.marginTop = adjustMarginTop;
     } else {
       style.marginTop += adjustMarginTop;
     }
-    console.log('stype margin top ', style.marginTop, adjustMarginTop);
   }
   const shardStyle = {};
   if (shardName) {
@@ -176,30 +174,30 @@ export default ({stages, shardNames, shardNumber}) => {
         if (i === 0 && shardNames && shardNames.length > 0) {
           shardName = shardNames[0];
         }
-        let length = maxNumChildren;
         let marginTop = 0;
-        if (hasInnerBranch) {
-          marginTop = 10;
-        }
         if (shardNumber > 1) {
-          let numBefore = shardNumber % 2 === 0 ? shardNumber / 2 - 1 : shardNumber / 2;
-          numBefore = parseInt(numBefore, 10);
-          let shardMarginTop = innerMaxLength * 45;
-          if (innerMaxLength > 1) {
-            shardMarginTop += (innerMaxLength + 1) * 5;
+          marginTop = 10;
+          if (shardNumber % 2 !== 0) {
+            let numBefore = shardNumber / 2;
+            numBefore = parseInt(numBefore, 10);
+            let shardMarginTop = innerMaxLength * 45;
+            if (innerMaxLength > 1) {
+              shardMarginTop += (innerMaxLength + 1) * 5;
+            } else {
+              shardMarginTop += 5;
+            }
+            if (innerMaxLength % 2 !== 0) {
+              marginTop = numBefore * shardMarginTop + parseInt(innerMaxLength / 2, 10) * 45 + 15;
+            } else {
+              marginTop = numBefore * shardMarginTop + parseInt(innerMaxLength / 2, 10) * 35;
+            }
           } else {
-            shardMarginTop += 5;
-          }
-          if (innerMaxLength % 2 !== 0) {
-            marginTop = numBefore * shardMarginTop + parseInt(innerMaxLength / 2, 10) * 45 + 15;
-          } else {
-            marginTop = numBefore * shardMarginTop + parseInt(innerMaxLength / 2, 10) * 35;
+            const numBefore = parseInt(shardNumber / 2, 10);
+            const shardMarginTop = innerMaxLength * 45 + (innerMaxLength + 1) * 5;
+            marginTop += shardMarginTop * numBefore - 25;
           }
           maxNumChildren = 1;
-        } else {
-
         }
-        console.log('margin top', marginTop);
         return (<Stage stage={stage} key={`${stage.stage} - ${id}`} maxNumChildren={maxNumChildren}
           minElapseTime={minElapseTime} maxElapseTime={maxElapseTime} stageNumber={stageNumber}
           head={i === 0} adjustMarginTop={marginTop} innerMaxLength={innerMaxLength}
