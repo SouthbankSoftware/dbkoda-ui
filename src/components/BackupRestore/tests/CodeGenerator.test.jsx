@@ -50,8 +50,8 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.EXPORT_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 3);
-    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 -o /tmp/col1.json ');
-    assert.equal(code[1], 'mongoexport --host localhost --port 27017 --db  -u user --collection col2 -o /tmp/col2.json ');
+    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 -o "/tmp/col1.json" ');
+    assert.equal(code[1], 'mongoexport --host localhost --port 27017 --db  -u user --collection col2 -o "/tmp/col2.json" ');
   });
 
   test('test mongoexport database generator selected collections', () => {
@@ -60,7 +60,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.EXPORT_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 --jsonArray -o /tmp/col1.json ');
+    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 --jsonArray -o "/tmp/col1.json" ');
   });
 
   test('test mongoexport database generator with options', () => {
@@ -70,7 +70,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.EXPORT_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 --pretty --jsonArray --noHeaderLine -o /tmp/col1.json ');
+    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 --pretty --jsonArray --noHeaderLine -o "/tmp/col1.json" ');
   });
 
   test('test mongoexport database generator with output options', () => {
@@ -79,7 +79,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.EXPORT_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 3);
-    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 --pretty --jsonArray --noHeaderLine -q {a:a} -o /tmp/col1.json ');
+    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 --pretty --jsonArray --noHeaderLine -q {a:a} -o "/tmp/col1.json" ');
   });
 
   test('test mongoexport database generator with querying options', () => {
@@ -90,7 +90,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.EXPORT_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 3);
-    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 --pretty --jsonArray --noHeaderLine -q {a:a} --forceTableScan --skip 10 --limit 20 --assertExists -o /tmp/col1.json ');
+    assert.equal(code[0], 'mongoexport --host localhost --port 27017 --db  -u user --collection col1 --pretty --jsonArray --noHeaderLine -q {a:a} --forceTableScan --skip 10 --limit 20 --assertExists -o "/tmp/col1.json" ');
   });
 
   test('test mongodump database generator general', () => {
@@ -101,7 +101,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump database generator with selected collection', () => {
@@ -112,7 +112,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user --collection col2 -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user --collection col2 -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump database generator with dumpDbUsersAndRoles', () => {
@@ -123,7 +123,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump database generator with credential', () => {
@@ -134,7 +134,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -p ****** --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -p ****** --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump database generator with credential and url', () => {
@@ -145,7 +145,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -p ****** --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -p ****** --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump database generator for profile ssl', () => {
@@ -156,7 +156,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_DATABASE, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db  -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump all databases for a server', () => {
@@ -167,7 +167,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump selected databases for a server', () => {
@@ -178,8 +178,8 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 3);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db col1 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o /tmp ');
-    assert.equal(code[1], 'mongodump --host localhost --port 27017 --db col2 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 --db col1 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o "/tmp" ');
+    assert.equal(code[1], 'mongodump --host localhost --port 27017 --db col2 -u user -p ****** --ssl --authenticationDatabase test -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump all databases for a server with dumpDbUsersAndRoles turn on', () => {
@@ -190,7 +190,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test mongodump selected databases for a server with dumpDbUsersAndRoles turn on', () => {
@@ -201,7 +201,7 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:a} --forceTableScan -o "/tmp" ');
   });
 
   test('test export mongodb with query including quites', () => {
@@ -212,6 +212,6 @@ describe('test backup restore generator view', () => {
     const gc = generateCode({treeNode:{text:'db1'}, action: BackupRestoreActions.DUMP_SERVER, profile, state});
     const code = gc.split('\n');
     assert.equal(code.length, 2);
-    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:"a"} --forceTableScan -o /tmp ');
+    assert.equal(code[0], 'mongodump --host localhost --port 27017 -u user -p ****** --ssl --authenticationDatabase test --dumpDbUsersAndRoles -q {a:"a"} --forceTableScan -o "/tmp" ');
   });
 });

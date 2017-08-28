@@ -236,6 +236,7 @@ export default class Panel extends React.Component {
             field={form.$('alias')}
             divOnChange={this._updateAliasState}
             showLabel
+            autoFocus
           />{' '}
           <div
             className={
@@ -252,7 +253,6 @@ export default class Panel extends React.Component {
               showLabel
               divOnClick={this._onClickHost}
               divOnFocus={this._onClickHost}
-              autoFocus
             />
             <Input
               field={form.$('port')}
