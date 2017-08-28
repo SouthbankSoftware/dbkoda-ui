@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T16:00:12+10:00
+ * @Last modified time: 2017-08-28T15:45:29+10:00
  */
 
 
@@ -28,6 +28,7 @@ export default class DataCenter {
     this.addOutput = this.outputApi.addOutput.bind(this);
     this.removeOutput = this.outputApi.removeOutput.bind(this);
     this.initJsonView = this.outputApi.initJsonView.bind(this);
+    this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(this);
 
     this.addEditor = this.editorApi.addEditor.bind(this);
     this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);
