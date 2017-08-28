@@ -199,20 +199,25 @@ export default class Details extends React.Component {
     editorObject.blockList.map((block, index) => {
       if (!(block.type.toUpperCase() === 'START')) {
         if (block.byoCode) {
-          block.code.replace(/\r\n/g, newLine);
-          block.code.replace(/\n/g, newLine);
-          if (index >= selectedBlockIndex) {
-            codeString +=
-              '/*' + block.code.replace(/\r\n/g, /newLine/) + ', */' + newLine;
-          } else {
-            codeString +=
-              block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+          if (block.code) {
+            block.code.replace(/\r\n/g, newLine);
+            block.code.replace(/\n/g, newLine);
+            if (index > selectedBlockIndex) {
+              codeString +=
+                '/*' +
+                block.code.replace(/\r\n/g, /newLine/) +
+                ', */' +
+                newLine;
+            } else {
+              codeString +=
+                block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+            }
           }
         } else {
           const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
             block.type +
             '.hbs');
-          if (index >= selectedBlockIndex) {
+          if (index > selectedBlockIndex) {
             codeString += '/*' + formTemplate(block.fields) + ', */' + newLine;
           } else {
             codeString += formTemplate(block.fields) + ',' + newLine;
@@ -234,7 +239,6 @@ export default class Details extends React.Component {
     }
     codeString += '}';
     codeString += ');';
-    console.log(codeString);
     return codeString;
   }
 
