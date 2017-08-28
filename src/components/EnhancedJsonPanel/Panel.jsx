@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-24T16:42:17+10:00
+ * @Last modified time: 2017-08-28T09:13:36+10:00
  */
 
 import React from 'react';
@@ -72,17 +72,16 @@ export default class Panel extends React.Component {
   render() {
     return (<div className="enhanced-json-panel">
       <nav className="pt-navbar pt-dark">
-        <div className="pt-navbar-group pt-align-left">
+        <div className="pt-navbar-group pt-align-left previous-button">
           <button type="button"
-            id="enhancedJsonPrevBtn"
+            id="prevBtn"
             className="pt-button pt-icon-large pt-icon-chevron-left"
             onClick={this.getPreviousDoc}
             disabled={!this.state.morePrevious} />
         </div>
         <div className="pt-navbar-group pt-align-right">
           <button type="button"
-            id="enhancedJsonNextBtn"
-            className="pt-button pt-icon-large pt-icon-chevron-right"
+            className="pt-button pt-icon-large pt-icon-chevron-right next-button"
             onClick={this.getNextDoc}
             disabled={!this.state.moreNext} />
         </div>
@@ -117,17 +116,17 @@ export default class Panel extends React.Component {
           base01: '#fff',
           base02: 'rgb(64, 110, 101)',
           base03: '#fff',
-          base04: 'rgb(44, 75, 68)',
+          base04: 'rgb(93, 92, 93)',
           base05: '#fff',
           base06: '#fff',
           base07: '#FFB795',
           base08: 'rgb(1, 139, 147)',
           base09: 'rgb(58, 178, 98)',
-          base0A: '#fff',
+          base0A: 'rgb(191, 204, 214)',
           base0B: 'rgb(1, 139, 147)',
           base0C: '#575a6a',
-          base0D: '#fff',
-          base0E: '#363951',
+          base0D: '#535253',
+          base0E: '#535253',
           base0F: 'rgb(1, 139, 147)'
         }}
         indentWidth={2}

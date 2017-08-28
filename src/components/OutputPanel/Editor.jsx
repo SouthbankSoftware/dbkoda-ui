@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-23T09:40:05+10:00
+ * @Last modified time: 2017-08-28T11:11:21+10:00
 */
 
 import React from 'react';
@@ -100,19 +100,22 @@ export default class Editor extends React.Component {
     const lines = { start: 0, end: 0, status: '' };
     const currentJson = this.getClickedDocument(coords, lines);
 
-    return (
-      <Menu className="outputContextMenu">
-        <div className="menuItemWrapper showJsonView">
-          <MenuItem
-            onClick={() => {
-              this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
-            }}
-            text={globalString('output/editor/contextJson')}
-            iconName="pt-icon-panel-stats"
-            intent={Intent.NONE}
-          />
-        </div>
-        <div className="menuItemWrapper showTableView">
+    const menuItems = [];
+    menuItems.push(
+      <div className="menuItemWrapper showJsonView" id="showJsonViewMenuItem">
+        <MenuItem
+          onClick={() => {
+            this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
+          }}
+          text={globalString('output/editor/contextJson')}
+          iconName="pt-icon-panel-stats"
+          intent={Intent.NONE}
+        />
+      </div>
+    );
+    if (process.env.NODE_ENV === 'development') {
+      menuItems.push(
+        <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
           <MenuItem
             onClick={() => {
               this.props.api.initJsonView(currentJson, this.props.id, 'tableJson', lines);
@@ -122,6 +125,12 @@ export default class Editor extends React.Component {
             intent={Intent.NONE}
           />
         </div>
+      );
+    }
+
+    return (
+      <Menu className="outputContextMenu">
+        { menuItems }
       </Menu>
     );
   }
