@@ -23,7 +23,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-28T09:42:59+10:00
+ * @Last modified time: 2017-08-28T14:57:08+10:00
  */
 
 /**
@@ -123,10 +123,10 @@ const ConnectionPanel = ({
         shellVersion: res.shellVersion,
         editorCount: 1
       };
-      if (data.passPhrase && data.passPhrase != '') {
+      if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
         profile.bPassPhrase = true;
       }
-      if (data.remotePass && data.remotePass != '') {
+      if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
           profile.bRemotePass = true;
       }
       profiles.set(res.id, profile);

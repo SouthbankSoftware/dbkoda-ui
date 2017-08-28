@@ -21,11 +21,15 @@
  * @Date:   2017-05-15T09:44:11+10:00
  * @Email:  chris@southbanksoftware.com
 // @Last modified by:   chris
-// @Last modified time: 2017-08-25T11:45:31+10:00
+// @Last modified time: 2017-08-28T15:13:20+10:00
  */
 
 @import '../../styles/_defaultTheme.scss';
 .enhanced-json-panel {
+  ::selection {
+    background: rgba(200, 200, 200, 0.15);
+  }
+  
   width: 100%;
   background-color: $tabBackgroundSelected;
   overflow-y: scroll;
