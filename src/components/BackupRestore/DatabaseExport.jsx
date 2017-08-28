@@ -488,8 +488,7 @@ export default class DatabaseExport extends React.Component {
         </h3>
         <div className="pt-form-group">
           {this.getDatabaseFieldComponent()}
-          {(treeAction === BackupRestoreActions.RESTORE_DATABASE ||
-            treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
+          {(treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
             treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
             treeAction === BackupRestoreActions.IMPORT_DATABASE) &&
             <div style={{marginBottom: 20}}>
