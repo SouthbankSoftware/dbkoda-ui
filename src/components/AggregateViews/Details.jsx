@@ -30,7 +30,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, runInAction } from 'mobx';
 import { AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
@@ -292,6 +292,14 @@ export default class Details extends React.Component {
 
     // Check if this is a BYOcode block, if so, render BYO fragment.
     if (activeBlock && activeBlock.byoCode) {
+      // Update Handlebars first:
+      // Update Editor Contents.
+      runInAction(() => {
+        this.props.store.treeActionPanel.formValues = this.generateCode(
+          activeEditor,
+        );
+        this.props.store.treeActionPanel.isNewFormValues = true;
+      });
       return (
         <div className="aggregateDetailsWrapper">
           <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
