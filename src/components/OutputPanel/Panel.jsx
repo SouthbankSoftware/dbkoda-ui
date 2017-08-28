@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-24T10:25:37+10:00
+ * @Last modified time: 2017-08-28T10:25:13+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction, toJS } from 'mobx';
@@ -313,7 +313,10 @@ export default class Panel extends React.Component {
             />
           );
         }
-        if (this.props.store.outputs.get(editor[1].id).tableJson) {
+        if (
+          this.props.store.outputs.get(editor[1].id).tableJson &&
+          process.env.NODE_ENV === 'development'
+        ) {
           arrTabs.push(
             <Tab2
               className={
