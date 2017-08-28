@@ -34,9 +34,10 @@ describe('test utils class', () => {
 
   test('test get dialog properties', () => {
     const properties = getDialogProperites(BackupRestoreActions.IMPORT_COLLECTION);
-    assert.equal(properties.length, 3);
+    assert.equal(properties.length, 4);
     assert.equal(properties[0], 'openFile');
-    assert.equal(properties[1], 'createDirectory');
-    assert.equal(properties[2], 'promptToCreate');
+    assert.equal(properties[1], 'openDirectory');
+    assert.equal(properties[2], 'createDirectory');
+    assert.equal(properties[3], 'promptToCreate');
   });
 });

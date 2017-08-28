@@ -18,7 +18,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import os from 'os';
 import {BackupRestoreActions} from '../common/Constants';
 
 export const isDumpAction = action => BackupRestoreActions.DUMP_COLLECTION === action || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_SERVER;
@@ -40,14 +39,10 @@ export const isDatabaseAction = treeAction => treeAction === BackupRestoreAction
 export const getDialogProperites = (action) => {
   let properties = [];
   if (action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER) {
-    if (os.platform() === 'darwin') {
-      properties = ['openDirectory', 'openFile'];
-    } else {
       // On Windows and Linux an open dialog can not be both a file selector and a directory selector, so if you set properties to ['openFile', 'openDirectory'] on these platforms, a directory selector will be shown.
-      properties = ['openDirectory'];
-    }
+    properties = ['openDirectory'];
   } else if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_COLLECTION || action === BackupRestoreActions.IMPORT_DATABASE) {
-    properties = ['openFile'];
+    properties = ['openFile', 'openDirectory'];
   } else {
     properties = ['openDirectory'];
   }
