@@ -35,7 +35,7 @@ import { inject, observer } from 'mobx-react';
 import ReactExpandableListView from 'react-expandable-listview';
 import { featherClient } from '~/helpers/feathers';
 import { action, runInAction } from 'mobx';
-import { Intent, ITreeNode, Tree } from '@blueprintjs/core';
+import { Intent, ITreeNode, Tree, Tooltip, Position } from '@blueprintjs/core';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import Block from './AggregateBlocks/Block.jsx';
 import { AggregateCommands } from './AggregateCommands.js';
@@ -203,19 +203,7 @@ export default class Palette extends React.Component {
         // Push item to all group.
         dataObj[5].childNodes.push({
           label: (
-            <Block
-              key={'key-' + index} //eslint-disable-line
-              listPosition={index}
-              type={BlockTypes[keyName].type}
-              concrete={false}
-              addBlock={this.addBlock}
-            />
-          ),
-        });
-        // For each tag in groups array, add to group.
-        BlockTypes[keyName].groups.map((group) => {
-          groupsArray[group].push({
-            label: (
+            <Tooltip content={BlockTypes[keyName].description}>
               <Block
                 key={'key-' + index} //eslint-disable-line
                 listPosition={index}
@@ -223,6 +211,25 @@ export default class Palette extends React.Component {
                 concrete={false}
                 addBlock={this.addBlock}
               />
+            </Tooltip>
+          ),
+        });
+        // For each tag in groups array, add to group.
+        BlockTypes[keyName].groups.map((group) => {
+          groupsArray[group].push({
+            label: (
+              <Tooltip
+                content={BlockTypes[keyName].description}
+                position={Position.right}
+              >
+                <Block
+                  key={'key-' + index} //eslint-disable-line
+                  listPosition={index}
+                  type={BlockTypes[keyName].type}
+                  concrete={false}
+                  addBlock={this.addBlock}
+                />
+              </Tooltip>
             ),
           });
         });
@@ -482,7 +489,7 @@ export default class Palette extends React.Component {
   clearResultsOutput(editor) {
     console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
     const output = this.props.store.outputs.get(editor.id);
-    output.output = 'Currently No Results to Display.';
+    output.output = globalString('aggregate_builder/block_not_yet_valid');
   }
 
   @action.bound
@@ -509,11 +516,12 @@ export default class Palette extends React.Component {
   }
 
   render() {
-    console.log(this.blockList);
     return (
       <div className="aggregatePaletteWrapper">
         <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
-          <h2 className="paletteHeader">Pipeline Elements</h2>
+          <h2 className="paletteHeader">
+            {globalString('aggregate_builder/palette_title')}
+          </h2>
         </nav>
         <Tree
           contents={this.blockList}

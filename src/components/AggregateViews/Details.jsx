@@ -274,7 +274,9 @@ export default class Details extends React.Component {
       return (
         <div className="aggregateDetailsWrapper">
           <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
-            <h2 className="currentBlockChoice">Block Details</h2>
+            <h2 className="currentBlockChoice">
+              {' '}{globalString('aggregate_builder/details_title')}
+            </h2>
           </nav>
           <div className="aggregateDetailsContent">
             <BYOBlock onChangeCallback={this.generateCode} />
@@ -335,7 +337,9 @@ export default class Details extends React.Component {
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
-          <h2 className="currentBlockChoice">Block Details</h2>
+          <h2 className="currentBlockChoice">
+            {globalString('aggregate_builder/details_title')}
+          </h2>
         </nav>
         <div className="aggregateDetailsContent">
           {activeBlock &&
@@ -362,7 +366,9 @@ export default class Details extends React.Component {
         </div>
         {!activeBlock &&
           <div className="aggregateDetailsContent">
-            <p>No block selected.</p>
+            <p>
+              {' '}{globalString('aggregate_builder/no_block_selected')}
+            </p>
           </div>}
         <div className="bottomToolbar">
           <AnchorButton

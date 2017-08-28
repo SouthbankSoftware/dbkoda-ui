@@ -1,6 +1,9 @@
 {
   "en": {
     "aggregate_builder": {
+      "palette_title": "Pipeline Palette",
+      "details_title": "Stage Details",
+      "no_block_selected": "No Stage Selected",
       "show_left_panel": "Show Panel",
       "hide_left_panel": "Hide Panel",
       "byo_code": "BYO Code",
@@ -9,7 +12,10 @@
       "import_button": "Import",
       "import_failed": "Sorry, failed to import that file!",
       "import_passed": "Import succeeded.",
-      "export_button": "Export"
+      "export_button": "Export",
+      "no_valid_output": "Cannot display results at this stage, Block probably does not produce valid results.\nPipeline stages detected as invalid will be gray.",
+      "block_not_yet_valid": "Please fill in Stage details and click on the stage to see results.",
+      "valid_output": "Example of Result at current Stage: \n  ----------------------------------  \n\n"
     },
     "telemetry_dialog": {
       "header": "Welcome!",

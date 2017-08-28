@@ -130,6 +130,7 @@ div.Pane.vertical.Pane1 {
       height: 100%;
       font-family: Arial, Helvetica, sans-serif;
       div.aggregatePaletteWrapper {
+        overflow-y: auto;
         order: 1;
         flex-grow: 1;
         color: $navbarLeftHeading;
@@ -147,6 +148,12 @@ div.Pane.vertical.Pane1 {
             .pt-tree-node {
               .pt-tree-node-content-0 {
                 height: 60px;
+                span.pt-tree-node-caret {
+                  color: $navbarLeftHeading;
+                }
+                span.pt-tree-node-label {
+                  font-size: 16px;
+                }
               }
               .pt-collapse {
                 .pt-collapse-body {
@@ -173,7 +180,7 @@ div.Pane.vertical.Pane1 {
                               flex-grow: 1;
                               svg.dbKodaSVG {
                                 width: 15px;
-                                fill: $aggregateBlockFontColor;
+                                fill: $navbarLeftHeading;
                                 margin-left: 20px;
                                 padding-bottom: 10px;
                                 cursor: copy;
@@ -186,7 +193,7 @@ div.Pane.vertical.Pane1 {
                                 cursor: inherit;
                                 user-select: none;
                                 font-size: smaller;
-                                color: $aggregateBlockFontColor;
+                                color: $navbarLeftHeading;
                                 padding-top: 10px;
                                 padding-left: 10px;
                               }
@@ -530,6 +537,9 @@ svg.closeBlockIconcolor_16 {
   }
 }
 .aggregateTabInnerWrapper {
+  .Pane1 {
+    border-right: 2px solid $navbarSecondaryBackground;
+  }
   .Pane2 {
     div.editorView {
       height: 100%;
