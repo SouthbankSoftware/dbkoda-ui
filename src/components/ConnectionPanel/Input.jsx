@@ -39,7 +39,8 @@ export default observer(({
   disable = false,
   divOnClick = () => {},
   divOnFocus = () => {},
-  divOnChange = () => {}
+  divOnChange = () => {},
+  autoFocus = false,
 }) => (
   <div // eslint-disable-line
     className={field.name + '-input-content pt-form-group pt-inline'}
@@ -57,7 +58,8 @@ export default observer(({
         {...field.bind()}
         disabled={disable
         ? 'disabled'
-        : ''} />
+        : ''}
+        autoFocus={autoFocus} />
       <p className="pt-form-helper-text">{field.error}</p>
     </div>
   </div>
