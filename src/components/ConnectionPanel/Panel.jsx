@@ -252,6 +252,7 @@ export default class Panel extends React.Component {
               showLabel
               divOnClick={this._onClickHost}
               divOnFocus={this._onClickHost}
+              autoFocus
             />
             <Input
               field={form.$('port')}

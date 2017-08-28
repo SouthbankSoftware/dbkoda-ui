@@ -23,7 +23,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-25T16:09:51+10:00
+ * @Last modified time: 2017-08-28T09:42:59+10:00
  */
 
 /**
@@ -95,7 +95,7 @@ const ConnectionPanel = ({
       }
       position = Position.RIGHT_TOP;
       form.reset();
-      profiles.set(res.id, {
+      const profile = {
         id: res.id,
         shellId: res.shellId,
         password: null,
@@ -116,14 +116,20 @@ const ConnectionPanel = ({
         remoteHost: data.remoteHost,
         remoteUser: data.remoteUser,
         passRadio: data.passRadio,
-        remotePass: data.remotePass,
         keyRadio: data.keyRadio,
         sshKeyFile: data.sshKeyFile,
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
         editorCount: 1
-      });
+      };
+      if (data.passPhrase && data.passPhrase != '') {
+        profile.bPassPhrase = true;
+      }
+      if (data.remotePass && data.remotePass != '') {
+          profile.bRemotePass = true;
+      }
+      profiles.set(res.id, profile);
       profileList.selectedProfile = profiles.get(res.id);
       close();
       Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
