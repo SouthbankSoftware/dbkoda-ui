@@ -31,7 +31,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { action, runInAction, observable } from 'mobx';
+import { action, runInAction } from 'mobx';
 import path from 'path';
 import { AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
