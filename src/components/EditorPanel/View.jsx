@@ -1,3 +1,13 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-24T14:46:20+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-28T15:47:05+10:00
+ */
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -95,7 +105,10 @@ function collect(connect, monitor) {
 /**
  * Defines the View for the CodeMirror Editor.
  */
-@inject('store')
+ @inject(allStores => ({
+   store: allStores.store,
+   api: allStores.api,
+ }))
 @ContextMenuTarget
 class View extends React.Component {
   static propTypes = {
@@ -532,6 +545,7 @@ class View extends React.Component {
     if (this.props.editor && oldId === this.props.editor.profileId && oldShellId === this.props.editor.shellId) {
       Broker.removeListener(EventType.createShellExecutionFinishEvent(this.props.editor.profileId, this.props.editor.shellId), this.finishedExecution);
       Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
+      this.props.api.swapOutputShellConnection(event);
     }
   }
 
