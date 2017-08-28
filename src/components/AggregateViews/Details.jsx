@@ -166,6 +166,11 @@ export default class Details extends React.Component {
     this.props.store.treeActionPanel.isNewFormValues = true;
   }
 
+  /**
+   * Generates valid Mongo Code using Handlebars and the Details MobX-Form.
+   * 
+   * @param {Object} editorObject - Editor Object to generate handlebars code for.
+   */
   generateCode(editorObject) {
     const os = require('os').release();
     let newLine = '\n';
@@ -189,18 +194,29 @@ export default class Details extends React.Component {
     codeString +=
       'db.' + editorObject.collection.text + '.aggregate([' + newLine;
 
+    const selectedBlockIndex = editorObject.selectedBlock;
     // Then add all other blocks.
-    editorObject.blockList.map((block) => {
+    editorObject.blockList.map((block, index) => {
       if (!(block.type.toUpperCase() === 'START')) {
         if (block.byoCode) {
           block.code.replace(/\r\n/g, newLine);
           block.code.replace(/\n/g, newLine);
-          codeString += block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+          if (index >= selectedBlockIndex) {
+            codeString +=
+              '/*' + block.code.replace(/\r\n/g, /newLine/) + ', */' + newLine;
+          } else {
+            codeString +=
+              block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+          }
         } else {
           const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
             block.type +
-            '.hbs'); // eslint-disable-line
-          codeString += formTemplate(block.fields) + ',' + newLine;
+            '.hbs');
+          if (index >= selectedBlockIndex) {
+            codeString += '/*' + formTemplate(block.fields) + ', */' + newLine;
+          } else {
+            codeString += formTemplate(block.fields) + ',' + newLine;
+          }
         }
       }
     });
@@ -218,6 +234,7 @@ export default class Details extends React.Component {
     }
     codeString += '}';
     codeString += ');';
+    console.log(codeString);
     return codeString;
   }
 
@@ -236,7 +253,6 @@ export default class Details extends React.Component {
 
   @action.bound
   onHideLeftPanelClicked() {
-    console.log('Debug: Hide left Panel');
     this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
   }
 
@@ -247,6 +263,7 @@ export default class Details extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
     editor.blockList[editor.selectedBlock].byoCode = true;
+    editor.blockList[editor.selectedBlock].code = false;
     this.forceUpdate();
   }
 
