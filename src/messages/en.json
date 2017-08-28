@@ -192,8 +192,12 @@
         "cancelButton": "Cancel"
       },
       "openAlert": {
-        "prompt": "Please enter your password for this profile.",
-        "inputPlaceholder": "Enter Password...",
+        "passwordPrompt": "Please enter your password for this profile.",
+        "passwordPlaceholder": "Enter Password...",
+        "remotePassPrompt": "Please enter your password for the ssh tunnel.",
+        "remotePassPlaceholder": "Enter SSH Password...",
+        "passPhrasePrompt": "Please enter your passphrase for the ssh tunnel private key.",
+        "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
         "confirmButton": "Open",
         "cancelButton": "Cancel"
       },
