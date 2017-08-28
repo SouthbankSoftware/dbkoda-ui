@@ -205,7 +205,7 @@ export const Form = {
     },
     {
       name: 'hostRadio',
-      value: false,
+      value: true,
       label: 'Host',
     },
     {
@@ -226,7 +226,7 @@ export const Form = {
     {
       name: 'urlRadio',
       label: 'URI',
-      value: true,
+      value: false,
     },
     {
       name: 'url',
