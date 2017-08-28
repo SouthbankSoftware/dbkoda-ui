@@ -1,11 +1,22 @@
 {
   "en": {
     "aggregate_builder": {
+      "palette_title": "Pipeline Palette",
+      "details_title": "Stage Details",
+      "no_block_selected": "No Stage Selected",
       "show_left_panel": "Show Panel",
       "hide_left_panel": "Hide Panel",
       "byo_code": "BYO Code",
       "form_code": "Code Form",
-      "no_active_connection": "Shell has lost Aggregate Builder, please start again."
+      "no_active_connection": "Shell has lost Aggregate Builder, please start again.",
+      "import_button": "Import",
+      "import_failed": "Sorry, failed to import that file!",
+      "import_passed": "Import succeeded.",
+      "export_passed": "Export Complete.",
+      "export_button": "Export",
+      "no_valid_output": "Cannot display results at this stage, Block probably does not produce valid results.\nPipeline stages detected as invalid will be gray.",
+      "block_not_yet_valid": "Please fill in Stage details and click on the stage to see results.",
+      "valid_output": "Example of Result at current Stage: \n  ----------------------------------  \n\n"
     },
     "telemetry_dialog": {
       "header": "Welcome!",
@@ -192,8 +203,12 @@
         "cancelButton": "Cancel"
       },
       "openAlert": {
-        "prompt": "Please enter your password for this profile.",
-        "inputPlaceholder": "Enter Password...",
+        "passwordPrompt": "Please enter your password for this profile.",
+        "passwordPlaceholder": "Enter Password...",
+        "remotePassPrompt": "Please enter your password for the ssh tunnel.",
+        "remotePassPlaceholder": "Enter SSH Password...",
+        "passPhrasePrompt": "Please enter your passphrase for the ssh tunnel private key.",
+        "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
         "confirmButton": "Open",
         "cancelButton": "Cancel"
       },

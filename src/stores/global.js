@@ -257,10 +257,11 @@ export default class Store {
   openNewAggregateBuilder(nodeRightClicked) {
     if (this.editorPanel.activeDropdownId === 'Default') {
       NewToaster.show({
-          message: 'Error: Please select an open connection from the Profile Dropdown.',
-          intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down'
-        });
+        message:
+          'Error: Please select an open connection from the Profile Dropdown.',
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down',
+      });
     }
     this.startCreatingNewEditor();
     // Create a new shell through feathers.
@@ -269,7 +270,14 @@ export default class Store {
       .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
       .then((res) => {
         // Create new editor as normal, but with "aggregate" type.
-        return this.api.setNewEditorState(res, {type: 'aggregate', collection: nodeRightClicked, blockList: []});
+        return this.api.setNewEditorState(res, {
+          type: 'aggregate',
+          collection: {
+            text: nodeRightClicked.text,
+            refParent: { text: nodeRightClicked.refParent.text },
+          },
+          blockList: [],
+        });
       })
       .catch((err) => {
         this.api.createNewEditorFailed();
@@ -277,7 +285,7 @@ export default class Store {
         NewToaster.show({
           message: 'Error: ' + err.message,
           intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
       });
   }

@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-08-16T14:27:28+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-28T16:23:48+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -45,6 +45,7 @@ export default class OutputApi {
 
     this.init = this.init.bind(this);
     this.configureOutputs = this.configureOutputs.bind(this);
+    this.swapOutputShellConnection = this.swapOutputShellConnection.bind(this);
   }
 
   init() {
@@ -117,12 +118,43 @@ export default class OutputApi {
   @action.bound
   removeOutput(editor) {
     this.store.outputs.delete(editor.id);
+    delete this.outputHash[editor.profileId + editor.shellId];
     Broker.removeListener(
       EventType.createShellOutputEvent(editor.profileId, editor.shellId),
       this.outputAvailable
     );
     Broker.removeListener(
       EventType.createShellReconnectEvent(editor.profileId, editor.shellId),
+      this.onReconnect
+    );
+  }
+
+  @action.bound
+  swapOutputShellConnection(event) {
+    const {oldId, oldShellId, id, shellId} = event;
+
+    console.log(this.outputHash);
+    console.log(event);
+
+    const outputId = this.outputHash[oldId + oldShellId];
+    delete this.outputHash[oldId + oldShellId];
+    Broker.removeListener(
+      EventType.createShellOutputEvent(oldId, oldShellId),
+      this.outputAvailable
+    );
+    Broker.removeListener(
+      EventType.createShellReconnectEvent(oldId, oldShellId),
+      this.onReconnect
+    );
+
+    this.outputHash[id + shellId] = outputId;
+
+    Broker.on(
+      EventType.createShellOutputEvent(id, shellId),
+      this.outputAvailable,
+    );
+    Broker.on(
+      EventType.createShellReconnectEvent(id, shellId),
       this.onReconnect
     );
   }

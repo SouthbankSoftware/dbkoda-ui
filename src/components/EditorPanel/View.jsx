@@ -1,3 +1,13 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-24T14:46:20+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-28T15:47:05+10:00
+ */
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -16,8 +26,10 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-28T16:49:10+10:00
  */
-
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
@@ -95,7 +107,10 @@ function collect(connect, monitor) {
 /**
  * Defines the View for the CodeMirror Editor.
  */
-@inject('store')
+ @inject(allStores => ({
+   store: allStores.store,
+   api: allStores.api,
+ }))
 @ContextMenuTarget
 class View extends React.Component {
   static propTypes = {
@@ -524,7 +539,10 @@ class View extends React.Component {
   }
 
   setEditorValue(newValue) {
+    const cm = this.doc.cm;
+    const scrollInfo = cm.getScrollInfo();
     this.doc.setValue(newValue);
+    cm.scrollTo(scrollInfo.left, scrollInfo.top);
   }
 
   swapShellConnection(event) {
@@ -532,6 +550,7 @@ class View extends React.Component {
     if (this.props.editor && oldId === this.props.editor.profileId && oldShellId === this.props.editor.shellId) {
       Broker.removeListener(EventType.createShellExecutionFinishEvent(this.props.editor.profileId, this.props.editor.shellId), this.finishedExecution);
       Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
+      this.props.api.swapOutputShellConnection(event);
     }
   }
 

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-28T09:42:48+10:00
+ * @Last modified time: 2017-08-28T14:47:14+10:00
  */
 
 /*
@@ -67,9 +67,11 @@ export default class ListView extends React.Component {
       targetProfile: null,
       isCloseWarningActive: false,
       isRemoveWarningActive: false,
-      openWithAuthorization: false,
+      isOpenWarningActive: false,
       passwordText: null,
       lastSelectRegion: null,
+      remotePass: null,
+      passPhrase: null,
     };
     this.renderBodyContextMenu = this.renderBodyContextMenu.bind(this);
     this.openProfile = this.openProfile.bind(this);
@@ -118,6 +120,8 @@ export default class ListView extends React.Component {
   openProfile() {
     const selectedProfile = this.state.targetProfile;
     const newPassword = this.state.passwordText;
+    const usrRemotePass = this.state.remotePass;
+    const usrPassPhrase = this.state.passPhrase;
     console.log(selectedProfile);
     let connectionUrl;
     let query = {}; // eslint-disable-line
@@ -141,10 +145,10 @@ export default class ListView extends React.Component {
       connectionUrl =
         ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       if (selectedProfile.passRadio) {
-        query.remotePass = selectedProfile.remotePass;
+        query.remotePass = usrRemotePass;
       } else if (selectedProfile.keyRadio) {
         query.sshKeyFile = selectedProfile.sshKeyFile;
-        query.passPhrase = selectedProfile.passPhrase;
+        query.passPhrase = usrPassPhrase;
       }
     }
     if (selectedProfile.sha) {
@@ -180,11 +184,7 @@ export default class ListView extends React.Component {
         this.props.store.profileList.creatingNewProfile = false;
         this.closeOpenConnectionAlert();
         DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: (
-            <span
-              dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }}
-            />
-          ), // eslint-disable-line react/no-danger
+          message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />), // eslint-disable-line react/no-danger
           intent: Intent.DANGER,
           iconName: 'pt-icon-thumbs-down',
         });
@@ -237,11 +237,11 @@ export default class ListView extends React.Component {
         shellVersion: res.shellVersion,
         initialMsg: res.output ? res.output.join('\r') : '',
       };
-      if (data.passPhrase && data.passPhrase != '') {
+      if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
         profile.bPassPhrase = true;
       }
-      if (data.remotePass && data.remotePass != '') {
-          profile.bRemotePass = true;
+      if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
+        profile.bRemotePass = true;
       }
       this.props.store.profiles.set(res.id, profile);
       this.props.store.profileList.selectedProfile = this.props.store.profiles.get(
@@ -469,8 +469,7 @@ export default class ListView extends React.Component {
 
   @autobind
   openOpenConnectionAlert() {
-    if (this.state.targetProfile.sha) {
-      this.state.openWithAuthorization = true;
+    if (this.state.targetProfile.sha || this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass) {
       this.setState({ isOpenWarningActive: true });
       Mousetrap.bindGlobal(
         DialogHotkeys.closeDialog.keys,
@@ -478,7 +477,6 @@ export default class ListView extends React.Component {
       );
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openProfile);
     } else {
-      this.state.openWithAuthorization = false;
       this.openProfile();
     }
   }
@@ -718,17 +716,48 @@ export default class ListView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isOpenWarningActive}
         >
-          <p>
-            {globalString('profile/openAlert/prompt')}
-          </p>
-          <input
-            autoFocus
-            className="pt-input passwordInput"
-            placeholder={globalString('profile/openAlert/inputPlaceholder')}
-            type="password"
-            dir="auto"
-            onChange={this.setPWText}
-          />
+          {this.state.targetProfile && this.state.targetProfile.sha &&
+            <div className="dialogContent">
+              <p>
+                {globalString('profile/openAlert/passwordPrompt')}
+              </p>
+              <input
+                autoFocus
+                className="pt-input passwordInput"
+                placeholder={globalString('profile/openAlert/passwordPlaceholder')}
+                type="password"
+                dir="auto"
+                onChange={this.setPWText}
+              />
+            </div>}
+          {this.state.targetProfile && this.state.targetProfile.bRemotePass &&
+            <div className="dialogContent">
+              <p>
+                {globalString('profile/openAlert/remotePassPrompt')}
+              </p>
+              <input
+                autoFocus={!this.state.targetProfile.sha}
+                className="pt-input remotePassInput"
+                placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
+                type="password"
+                dir="auto"
+                onChange={(event) => { this.setState({ remotePass: event.target.value }); }}
+              />
+            </div>}
+          {this.state.targetProfile && this.state.targetProfile.bPassPhrase &&
+            <div className="dialogContent">
+              <p>
+                {globalString('profile/openAlert/passPhrasePrompt')}
+              </p>
+              <input
+                autoFocus={!this.state.targetProfile.sha && !this.state.targetProfile.bRemotePass}
+                className="pt-input passPhraseInput"
+                placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
+                type="password"
+                dir="auto"
+                onChange={(event) => { this.setState({ passPhrase: event.target.value }); }}
+              />
+            </div>}
           <div className="dialogButtons">
             <AnchorButton
               className="openButton"

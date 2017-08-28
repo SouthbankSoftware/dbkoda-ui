@@ -21,8 +21,8 @@
 // @Author: Wahaj Shamim <wahaj>
 // @Date:   2017-05-29T15:22:41+10:00
 // @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   chris
-// @Last modified time: 2017-06-16T15:33:50+10:00
+// @Last modified by:   wahaj
+// @Last modified time: 2017-08-28T12:38:52+10:00
 
 @import '../../styles/_defaultTheme.scss';
 .profileListPanel {
@@ -167,6 +167,12 @@
 
 .pt-dialog {
   padding: 20px;
+  .dialogContent {
+    width: 100%;
+    .pt-input {
+      width: 100%
+    }
+  }
   .dialogButtons {
     display: inline-block;
     .pt-button {
@@ -241,5 +247,3 @@ ul.profileListContextMenu {
     li {}
   }
 }
-
-

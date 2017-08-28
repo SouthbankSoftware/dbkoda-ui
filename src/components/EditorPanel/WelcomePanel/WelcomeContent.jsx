@@ -31,9 +31,9 @@
 import React from 'react';
 import fetch from 'node-fetch';
 import xml2js from 'xml2js';
-import {action} from 'mobx';
-import {inject, observer} from 'mobx-react';
-import {AnchorButton} from '@blueprintjs/core';
+import { action } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { AnchorButton } from '@blueprintjs/core';
 import TwitterIcon from '../../../styles/icons/twitter-icon.svg';
 import GithubIcon from '../../../styles/icons/github-icon.svg';
 import DocumentIcon from '../../../styles/icons/document-icon.svg';
@@ -55,17 +55,17 @@ export default class WelcomeContent extends React.Component {
       newsJSX: null,
     };
     const os = require('os').release();
-    if (os.match(/Mac/ig)) {
+    if (os.match(/Mac/gi)) {
       this.state.os = 'mac';
-    } else if (os.match(/Win/ig)) {
+    } else if (os.match(/Win/gi)) {
       this.state.os = 'win';
-    } else if (os.match(/Lin/ig)) {
+    } else if (os.match(/Lin/gi)) {
       this.state.os = 'linux';
     }
   }
 
   componentWillMount() {
-        fetch(FEED_URL)
+    fetch(FEED_URL)
       .then((res) => {
         return res.text();
       })
@@ -73,14 +73,9 @@ export default class WelcomeContent extends React.Component {
         xml2js.parseString(body, (err, result) => {
           // Create new array of objects from results.
           if (err) {
-            console.log('Error parsing News: ' + err);
+            console.error('Error parsing News: ' + err);
           }
-          console.log(result);
-          const newsPosts = [
-            {},
-            {},
-            {}
-          ];
+          const newsPosts = [{}, {}, {}];
           for (let i = 0; i < 3; i += 1) {
             newsPosts[i].title = result.feed.entry[i].title[0]._;
             newsPosts[i].summary = result.feed.entry[i].summary[0]._;
@@ -133,22 +128,20 @@ export default class WelcomeContent extends React.Component {
             // Parse date into readable format.
             newsPosts[i].link = result.feed.entry[i].link[0].$.href;
           }
-          this.setState({newsJSX: newsPosts});
+          this.setState({ newsJSX: newsPosts });
         });
       })
       .catch((error) => {
-        console.log('Error fetching news: ' + error);
+        console.error('Error fetching news: ' + error);
       });
   }
 
   @action.bound
   onClickBlog(number) {
-    console.log(number);
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell
-        .openExternal(this.state.newsJSX[number].link);
+        .shell.openExternal(this.state.newsJSX[number].link);
     }
   }
 
@@ -157,8 +150,7 @@ export default class WelcomeContent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell
-        .openExternal('https://docs.mongodb.com/');
+        .shell.openExternal('https://docs.mongodb.com/');
     }
   }
   @action.bound
@@ -167,7 +159,7 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell.openExternal(
-          'https://github.com/SouthbankSoftware/dbkoda/blob/master/releaseNotes.md'
+          'https://github.com/SouthbankSoftware/dbkoda/blob/master/releaseNotes.md',
         );
     }
   }
@@ -176,8 +168,7 @@ export default class WelcomeContent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell
-        .openExternal('https://dbkoda.useresponse.com/');
+        .shell.openExternal('https://dbkoda.useresponse.com/');
     }
   }
   @action.bound
@@ -185,8 +176,7 @@ export default class WelcomeContent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell
-        .openExternal('https://dbkoda.useresponse.com/topic/add');
+        .shell.openExternal('https://dbkoda.useresponse.com/topic/add');
     }
   }
 
@@ -195,8 +185,7 @@ export default class WelcomeContent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell
-        .openExternal('https://twitter.com/db_Koda');
+        .shell.openExternal('https://twitter.com/db_Koda');
     }
   }
   @action.bound
@@ -204,8 +193,7 @@ export default class WelcomeContent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell
-        .openExternal('https://github.com/SouthbankSoftware/dbkoda');
+        .shell.openExternal('https://github.com/SouthbankSoftware/dbkoda');
     }
   }
 
@@ -214,24 +202,23 @@ export default class WelcomeContent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell
-        .openExternal('http://southbanksoftware.github.io/');
+        .shell.openExternal('http://southbanksoftware.github.io/');
     }
   }
 
   render() {
-    console.log(this.state.newsJSX);
     return (
       <div className="welcomePageContentWrapper">
         <div className="welcomePageContentLeft">
-          <h2>
-            Documentation
-          </h2>
+          <h2>Documentation</h2>
           <div className="docsContent">
             <div className="docsList">
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickMongoDocumentation}>
+                  <AnchorButton
+                    className="docsIcon"
+                    onClick={this.onClickMongoDocumentation}
+                  >
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -239,7 +226,10 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickReleaseNotes}>
+                  <AnchorButton
+                    className="docsIcon"
+                    onClick={this.onClickReleaseNotes}
+                  >
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -247,7 +237,10 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickNeedHelp}>
+                  <AnchorButton
+                    className="docsIcon"
+                    onClick={this.onClickNeedHelp}
+                  >
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -255,7 +248,10 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickLodgeABug}>
+                  <AnchorButton
+                    className="docsIcon"
+                    onClick={this.onClickLodgeABug}
+                  >
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -265,13 +261,19 @@ export default class WelcomeContent extends React.Component {
             <h2>Links</h2>
             <div className="linksList">
               <div className="linkWrapper">
-                <AnchorButton className="twitterIcon" onClick={this.onClickTwitter}>
+                <AnchorButton
+                  className="twitterIcon"
+                  onClick={this.onClickTwitter}
+                >
                   <TwitterIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Twitter</p>
               </div>
               <div className="linkWrapper">
-                <AnchorButton className="gitHubIcon" onClick={this.onClickGithub}>
+                <AnchorButton
+                  className="gitHubIcon"
+                  onClick={this.onClickGithub}
+                >
                   <GithubIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Github</p>
@@ -286,14 +288,15 @@ export default class WelcomeContent extends React.Component {
           </div>
         </div>
         <div className="welcomePageContentRight">
-          <h2>
-            News
-          </h2>
-          { this.state.newsJSX &&
+          <h2>News</h2>
+          {this.state.newsJSX &&
             <div className="newsListWrapper">
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(0)}>
+                  <AnchorButton
+                    className="svgWrapper"
+                    onClick={() => this.onClickBlog(0)}
+                  >
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
@@ -305,13 +308,20 @@ export default class WelcomeContent extends React.Component {
                     {this.state.newsJSX[0].summary}
                   </p>
                   <p className="datePublished">
-                    {this.state.newsJSX[0].published.month + ' ' + this.state.newsJSX[0].published.day + ' ' + this.state.newsJSX[0].published.year}
+                    {this.state.newsJSX[0].published.month +
+                      ' ' +
+                      this.state.newsJSX[0].published.day +
+                      ' ' +
+                      this.state.newsJSX[0].published.year}
                   </p>
                 </div>
               </div>
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(1)}>
+                  <AnchorButton
+                    className="svgWrapper"
+                    onClick={() => this.onClickBlog(1)}
+                  >
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
@@ -323,13 +333,20 @@ export default class WelcomeContent extends React.Component {
                     {this.state.newsJSX[1].summary}
                   </p>
                   <p className="datePublished">
-                    {this.state.newsJSX[1].published.month + ' ' + this.state.newsJSX[1].published.day + ' ' + this.state.newsJSX[1].published.year}
+                    {this.state.newsJSX[1].published.month +
+                      ' ' +
+                      this.state.newsJSX[1].published.day +
+                      ' ' +
+                      this.state.newsJSX[1].published.year}
                   </p>
                 </div>
               </div>
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(2)}>
+                  <AnchorButton
+                    className="svgWrapper"
+                    onClick={() => this.onClickBlog(2)}
+                  >
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
@@ -341,12 +358,15 @@ export default class WelcomeContent extends React.Component {
                     {this.state.newsJSX[2].summary}
                   </p>
                   <p className="datePublished">
-                    {this.state.newsJSX[2].published.month + ' ' + this.state.newsJSX[2].published.day + ' ' + this.state.newsJSX[2].published.year}
+                    {this.state.newsJSX[2].published.month +
+                      ' ' +
+                      this.state.newsJSX[2].published.day +
+                      ' ' +
+                      this.state.newsJSX[2].published.year}
                   </p>
                 </div>
               </div>
-            </div>
-          }
+            </div>}
         </div>
       </div>
     );

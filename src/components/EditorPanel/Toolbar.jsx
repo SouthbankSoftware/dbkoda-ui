@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T16:18:46+10:00
+ * @Last modified time: 2017-08-28T16:20:38+10:00
  */
 
 
@@ -514,13 +514,13 @@ export default class Toolbar extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
     if (shellId) {
-      editor.shellId = shellId;
       Broker.emit(EventType.SWAP_SHELL_CONNECTION, {
         oldId: editor.profileId,
         oldShellId: editor.shellId,
         id: profile.id,
         shellId,
       });
+      editor.shellId = shellId;
       editor.profileId = profile.id;
     }
     editor.currentProfile = profile.id;

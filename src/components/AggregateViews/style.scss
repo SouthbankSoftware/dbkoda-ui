@@ -7,25 +7,39 @@ div.aggregateGraphicalBuilderWrapper {
   flex-grow: 1;
   background-color: $aggregateViewBackgroundColor;
   text-align: center;
-  height: 85%;
-  a.showLeftPanelButton {
-    top: 10px;
-    left: 5px;
-    height: 20px;
-    width: 120px;
-    z-index: 10;
-    font-weight: lighter;
-    color: $connectionButtonFontColour;
-    border: 1px solid $welcomeViewButtonHoverColor !important;
-    border-radius: 0;
-    background-image: unset;
-    background-color: $editorBackground;
-    border: unset;
-    box-shadow: unset;
-  }
-  a.showLeftPanelButton:hover {
-    background-color: $welcomeViewButtonHoverColor;
-    border: 1px solid $welcomeViewButtonHoverColor;
+  height: 100%;
+  div.topButtons {
+    display: flex;
+    flex-direction: row;
+    a {
+      top: 10px;
+      height: 20px;
+      width: 100px;
+      margin-right: 5px;
+      margin-left: 5px;
+      z-index: 10;
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      border: 1px solid $welcomeViewButtonHoverColor !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $editorBackground;
+      border: unset;
+      box-shadow: unset;
+    }
+    a.showLeftPanelButton {
+      order: 1;
+    }
+    a.importButton {
+      order: 2;
+    }
+    a.exportButton {
+      order: 3;
+    }
+    a:hover {
+      background-color: $welcomeViewButtonHoverColor;
+      border: 1px solid $welcomeViewButtonHoverColor;
+    }
   }
   h2 {
     padding-top: 40%;
@@ -116,6 +130,7 @@ div.Pane.vertical.Pane1 {
       height: 100%;
       font-family: Arial, Helvetica, sans-serif;
       div.aggregatePaletteWrapper {
+        overflow-y: auto;
         order: 1;
         flex-grow: 1;
         color: $navbarLeftHeading;
@@ -128,62 +143,66 @@ div.Pane.vertical.Pane1 {
             text-align: left;
           }
         }
-        div.expandable-listview_outerDiv {
-          overflow: auto;
-          height: 100%;
-          ul.expandable-listview_ul {
-            padding-left: 0px;
-            list-style-type: none;
-            div {
-              li {
-                border-bottom: 1px solid $treeBorderColor;
-                padding-left: 10px;
-                div {
-                  span {
-                    span {
-                      div.aggregateBlock {
-                        display: flex;
-                        flex-direction: row;
-                        width: 100%;
-                        height: 30px;
-                        font-size: 18px;
-                        cursor: all-scroll;
-                        flex-grow: 1;
-                        div.blockPalletteWrapper {
-                          display: flex;
-                          flex-direction: row;
-                          height: 100%;
-                          width: 100%;
-                          cursor: all-scroll;
-                          flex-grow: 1;
-                          svg.dbKodaSVG {
-                            width: 15px;
-                            fill: $aggregateBlockFontColor;
-                            margin-left: 20px;
-                            padding-bottom: 10px;
-                            cursor: copy;
-                          }
-                          svg.dbKodaSVG:hover {
-                            fill: $aggregateBlockFontColorHover;
-                          }
-                          p.aggregateBlockTitle {
-                            pointer-events: none;
-                            cursor: inherit;
-                            user-select: none;
-                            font-size: smaller;
-                            color: $aggregateBlockFontColor;
-                            padding-top: 10px;
-                            padding-left: 10px;
+        .palletteTree {
+          .pt-tree-root {
+            .pt-tree-node {
+              .pt-tree-node-content-0 {
+                height: 60px;
+                span.pt-tree-node-caret {
+                  color: $navbarLeftHeading;
+                }
+                span.pt-tree-node-label {
+                  font-size: 16px;
+                }
+              }
+              .pt-collapse {
+                .pt-collapse-body {
+                  .pt-tree-node-list {
+                    .pt-tree-node {
+                      height: 40px;
+                      .pt-tree-node-content {
+                        .pt-tree-node-label {
+                          height: 40px;
+                          div.aggregateBlock {
+                            display: flex;
+                            flex-direction: row;
+                            width: 100%;
+                            height: 30px;
+                            font-size: 18px;
+                            cursor: all-scroll;
+                            flex-grow: 1;
+                            div.blockPalletteWrapper {
+                              display: flex;
+                              flex-direction: row;
+                              height: 100%;
+                              width: 100%;
+                              cursor: all-scroll;
+                              flex-grow: 1;
+                              svg.dbKodaSVG {
+                                width: 15px;
+                                fill: $navbarLeftHeading;
+                                margin-left: 20px;
+                                padding-bottom: 10px;
+                                cursor: copy;
+                              }
+                              svg.dbKodaSVG:hover {
+                                fill: $aggregateBlockFontColorHover;
+                              }
+                              p.aggregateBlockTitle {
+                                pointer-events: none;
+                                cursor: inherit;
+                                user-select: none;
+                                font-size: smaller;
+                                color: $navbarLeftHeading;
+                                padding-top: 10px;
+                                padding-left: 10px;
+                              }
+                            }
                           }
                         }
                       }
                     }
                   }
-                }
-                div.expandable-listview_listHeader {
-                  padding-top: 10px;
-                  height: 40px;
-                  font-size: 18px;
                 }
               }
             }
@@ -243,7 +262,7 @@ div.Pane.vertical.Pane1 {
           div {
             div {
               form {
-                height: unset;
+                height: unset !important;
               }
             }
           }
@@ -518,6 +537,9 @@ svg.closeBlockIconcolor_16 {
   }
 }
 .aggregateTabInnerWrapper {
+  .Pane1 {
+    border-right: 2px solid $navbarSecondaryBackground;
+  }
   .Pane2 {
     div.editorView {
       height: 100%;

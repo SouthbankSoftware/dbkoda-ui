@@ -29,7 +29,7 @@
 export const BlockTypes = {
   START: {
     type: 'Start',
-    description: 'Start block for config.',
+    description: 'Use this block to configure your pipeline before it begins.',
     fields: {
       Expression: '',
     },
