@@ -106,7 +106,7 @@ export const BlockTypes = {
   },
   LOOKUP: {
     type: 'Lookup',
-    groups: ['groupAndJoin'],
+    groups: ['common', 'groupAndJoin'],
     description: 'Join one collection to another',
     fields: {
       Expression: '',
@@ -114,7 +114,7 @@ export const BlockTypes = {
   },
   GRAPHLOOKUP: {
     type: 'GraphLookup',
-    groups: ['common', 'groupAndJoin'],
+    groups: ['groupAndJoin'],
     description: 'Perform a recursive graph join',
     fields: {
       Expression: '',
