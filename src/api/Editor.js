@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T12:11:15+10:00
+ * @Last modified time: 2017-08-29T13:35:29+10:00
  */
 
  import { action, observable } from 'mobx';
@@ -27,6 +27,7 @@ export default class EditorApi {
     this.addEditor = this.addEditor.bind(this);
     this.createNewEditorFailed = this.createNewEditorFailed.bind(this);
     this.setNewEditorState = this.setNewEditorState.bind(this);
+    this.removeEditor = this.removeEditor.bind(this);
   }
   /**
    * Method for adding a new editor to an existing connection.
@@ -208,5 +209,68 @@ export default class EditorApi {
       iconName: 'pt-icon-thumbs-up',
     });
     return editorId;
+  };
+
+  @action
+  removeEditor = (currEditor) => {
+    // @TODO -> Looks like during it's various reworks this entire function has been broken and stitched back together. Some refactoring needs to occur to ensure that when atab is closed a new tab is selected. @Mike.
+
+    this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+    console.log('deleted editor ', currEditor);
+    // If Editor is not clean, prompt for save.
+    if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
+      this.store.editorPanel.showingSavingDialog = true;
+      return;
+    }
+
+    // If the editor has an open shell, close it.
+    if (currEditor && currEditor.status == ProfileStatus.OPEN) {
+      featherClient()
+        .service('/mongo-shells')
+        .remove(currEditor.profileId, {
+          query: {
+            shellId: currEditor.shellId,
+          },
+        })
+        .then(v => console.log('remove shell successfully, ', v))
+        .catch(err => console.error('remove shell failed,', err));
+    }
+
+    // Check if the editor closing is the currently active editor.
+    if (currEditor.id == this.store.editorPanel.activeEditorId) {
+      this.store.editorPanel.isRemovingCurrentTab = true;
+      // Check if this is the last tab:
+      if (this.store.editors.size == 1) {
+        // Show and select welcome tab
+        this.store.welcomePage.isOpen = true;
+        this.store.editorPanel.activeEditorId = 'Default';
+      } else {
+        // Show and select first entry in map.
+        console.log('1:', this.store.editorPanel.activeEditorId);
+        this.api.removeOutput(currEditor);
+        this.store.editors.delete(currEditor.id);
+        const editors = this.store.editors.entries();
+        this.store.editorPanel.activeEditorId = editors[0][1].id;
+        console.log('2:', this.store.editorPanel.activeEditorId);
+
+        const treeEditor = this.store.treeActionPanel.editors.get(
+          currEditor.id,
+        );
+        if (treeEditor) {
+          this.store.treeActionPanel.editors.delete(treeEditor.id);
+        }
+        return;
+      }
+    } else {
+      this.store.editorPanel.isRemovingCurrentTab = false;
+    }
+    this.api.removeOutput(currEditor);
+    this.store.editors.delete(currEditor.id);
+    const treeEditor = this.store.treeActionPanel.editors.get(
+      currEditor.id,
+    );
+    if (treeEditor) {
+      this.store.treeActionPanel.editors.delete(treeEditor.id);
+    }
   };
 }

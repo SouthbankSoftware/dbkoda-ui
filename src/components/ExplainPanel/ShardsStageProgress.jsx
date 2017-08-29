@@ -105,5 +105,5 @@ export default ({executionStages, shardStages}) => {
   const mergedStages = ms.mergedStages.concat([executionStages]);
   const shardNames = shardStages.map(shard => shard.shardName);
   console.log('merged stages:', mergedStages);
-  return (<StageProgress stages={mergedStages} shardHeight={ms.shardHeight} shardNames={shardNames} />);
+  return (<StageProgress stages={mergedStages} shardHeight={ms.shardHeight} shardNames={shardNames} shardNumber={shardStages.length} />);
 };

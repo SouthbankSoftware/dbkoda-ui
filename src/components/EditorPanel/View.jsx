@@ -3,7 +3,7 @@
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-28T15:47:05+10:00
+ * @Last modified time: 2017-08-29T12:46:33+10:00
  */
 
 
@@ -421,7 +421,10 @@ class View extends React.Component {
     this.refresh();
 
     const _updateUnsavedFileIndicator = _.debounce(() => {
-      document.querySelector(`#unsavedFileIndicator_${this.id}`).style.opacity = this.doc.isClean() ? 0 : 1;
+      const elem = document.querySelector(`#unsavedFileIndicator_${this.id}`);
+      if (elem) {
+        elem.style.opacity = this.doc.isClean() ? 0 : 1;
+      }
     }, 300);
     this._updateUnsavedFileIndicator = _updateUnsavedFileIndicator;
     this.editor.getCodeMirror().on('change', _updateUnsavedFileIndicator);

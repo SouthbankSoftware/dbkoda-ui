@@ -1,3 +1,13 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-08-17T20:17:15+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-29T13:22:57+10:00
+ */
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,12 +37,15 @@ import { action, computed, reaction } from 'mobx';
 // import {Intent} from '@blueprintjs/core';
 // import { NewToaster } from '../common/Toaster';
 import DatabaseExport from './DatabaseExport';
-import { BackupRestoreActions, DrawerPanes } from '../common/Constants';
+import { BackupRestoreActions, DrawerPanes, EditorTypes } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { isCollectionAction, isDatabaseAction } from './Utils';
 
 @observer
-@inject('store')
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+}))
 export class BackupRestore extends React.Component {
   constructor(props) {
     super(props);
@@ -52,6 +65,11 @@ export class BackupRestore extends React.Component {
   @action
   close() {
     this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
+    const editorId = this.props.store.treeActionPanel.treeActionEditorId;
+    const editor = this.getEditorById(editorId);
+    if (editor) {
+      this.props.api.removeEditor(editor);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -166,7 +184,7 @@ export class BackupRestore extends React.Component {
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
     let treeEditor;
     for (const editor of treeEditors) {
-      if (editor[1].id == editorId) {
+      if (editor[1].id == editorId && editor[1].type === EditorTypes.SHELL_COMMAND) {
         treeEditor = editor[1];
         break;
       }

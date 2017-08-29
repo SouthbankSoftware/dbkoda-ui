@@ -21,7 +21,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T16:12:41+10:00
+ * @Last modified time: 2017-08-29T14:40:22+10:00
  */
 
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
@@ -134,7 +134,7 @@ export default class Panel extends React.Component {
                 return;
               }
             }
-            if (this.props.store.editorToolbar.newEditorForProfileId == '') {
+            if (this.props.store.editorToolbar.newEditorForProfileId == '' && this.props.store.profileList.selectedProfile.status == 'OPEN') {
               this.props.store.editorToolbar.newEditorForProfileId = this.props.store.profileList.selectedProfile.id;
             }
           }
@@ -188,65 +188,7 @@ export default class Panel extends React.Component {
    */
   @action
   closeTab(currEditor) {
-    // @TODO -> Looks like during it's various reworks this entire function has been broken and stitched back together. Some refactoring needs to occur to ensure that when atab is closed a new tab is selected. @Mike.
-
-    this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
-
-    // If Editor is not clean, prompt for save.
-    if (!currEditor.doc.isClean()) {
-      this.props.store.editorPanel.showingSavingDialog = true;
-      return;
-    }
-
-    // If the editor has an open shell, close it.
-    if (currEditor && currEditor.status == ProfileStatus.OPEN) {
-      featherClient()
-        .service('/mongo-shells')
-        .remove(currEditor.profileId, {
-          query: {
-            shellId: currEditor.shellId,
-          },
-        })
-        .then(v => console.log('remove shell successfully, ', v))
-        .catch(err => console.error('remove shell failed,', err));
-    }
-
-    // Check if the editor closing is the currently active editor.
-    if (currEditor.id == this.props.store.editorPanel.activeEditorId) {
-      this.props.store.editorPanel.isRemovingCurrentTab = true;
-      // Check if this is the last tab:
-      if (this.props.store.editors.size == 1) {
-        // Show and select welcome tab
-        this.props.store.welcomePage.isOpen = true;
-        this.props.store.editorPanel.activeEditorId = 'Default';
-      } else {
-        // Show and select first entry in map.
-        console.log('1:', this.props.store.editorPanel.activeEditorId);
-        this.props.api.removeOutput(currEditor);
-        this.props.store.editors.delete(currEditor.id);
-        const editors = this.props.store.editors.entries();
-        this.props.store.editorPanel.activeEditorId = editors[0][1].id;
-        console.log('2:', this.props.store.editorPanel.activeEditorId);
-
-        const treeEditor = this.props.store.treeActionPanel.editors.get(
-          currEditor.id,
-        );
-        if (treeEditor) {
-          this.props.store.treeActionPanel.editors.delete(treeEditor.id);
-        }
-        return;
-      }
-    } else {
-      this.props.store.editorPanel.isRemovingCurrentTab = false;
-    }
-    this.props.api.removeOutput(currEditor);
-    this.props.store.editors.delete(currEditor.id);
-    const treeEditor = this.props.store.treeActionPanel.editors.get(
-      currEditor.id,
-    );
-    if (treeEditor) {
-      this.props.store.treeActionPanel.editors.delete(treeEditor.id);
-    }
+    this.props.api.removeEditor(currEditor);
     this.forceUpdate();
   }
 
@@ -258,53 +200,8 @@ export default class Panel extends React.Component {
     const deletedEditor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
-    console.log('deleted editor ', deletedEditor);
-    if (deletedEditor && deletedEditor.status == ProfileStatus.OPEN) {
-      // close the connection
-      featherClient()
-        .service('/mongo-shells')
-        .remove(deletedEditor.profileId, {
-          query: {
-            shellId: deletedEditor.shellId,
-          },
-        })
-        .then(v => console.log('remove shell successfully, ', v))
-        .catch(err => console.error('remove shell failed,', err));
-    }
 
-    this.props.store.editorPanel.isRemovingCurrentTab = true;
-    // Check if this is the last tab:
-    if (this.props.store.editors.size == 1) {
-      // Show and select welcome tab
-      this.props.store.welcomePage.isOpen = true;
-      this.props.store.editorPanel.activeEditorId = 'Default';
-    } else {
-      // Show and select first entry in map.
-      console.log('1:', this.props.store.editorPanel.activeEditorId);
-      this.props.api.removeOutput(deletedEditor);
-      this.props.store.editors.delete(deletedEditor.id);
-      const editors = this.props.store.editors.entries();
-      this.props.store.editorPanel.activeEditorId = editors[0][1].id;
-      console.log('2:', this.props.store.editorPanel.activeEditorId);
-
-      const treeEditor = this.props.store.treeActionPanel.editors.get(
-        deletedEditor.id,
-      );
-      if (treeEditor) {
-        this.props.store.treeActionPanel.editors.delete(treeEditor.id);
-      }
-      return;
-    }
-
-    this.props.api.removeOutput(deletedEditor);
-    this.props.store.editors.delete(deletedEditor.id);
-
-    const treeEditor = this.props.store.treeActionPanel.editors.get(
-      deletedEditor.id,
-    );
-    if (treeEditor) {
-      this.props.store.treeActionPanel.editors.delete(treeEditor.id);
-    }
+    this.props.api.removeEditor(deletedEditor);
 
     this.forceUpdate();
   }
@@ -330,7 +227,7 @@ export default class Panel extends React.Component {
   @action
   changeTab(newTabId) {
     const { editorPanel, editorToolbar, editors } = this.props.store;
-    const currEditor = editors.get(newTabId);
+    let currEditor = editors.get(newTabId);
     // Check if last update was a remove for special Handling.
     if (editorPanel.removingTabId) {
       editorPanel.removingTabId = false;
@@ -339,7 +236,13 @@ export default class Panel extends React.Component {
         editorPanel.activeEditorId = newTabId;
       }
     } else {
-      editorPanel.activeEditorId = newTabId;
+      if (newTabId != 'Default' && !currEditor && editors.get(editorPanel.activeEditorId)) {
+        currEditor = editors.get(editorPanel.activeEditorId);
+        newTabId = editorPanel.activeEditorId;
+      } else {
+        editorPanel.activeEditorId = newTabId;
+      }
+
       if (newTabId != 'Default' && editors.get(newTabId) && editors.get(newTabId).executing == true) {
         editorToolbar.isActiveExecuting = true;
       } else {

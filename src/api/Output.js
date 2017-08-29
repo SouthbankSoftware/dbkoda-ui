@@ -22,7 +22,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-28T16:23:48+10:00
+ * @Last modified time: 2017-08-28T16:37:43+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -60,7 +60,7 @@ export default class OutputApi {
 
   @action.bound
   addOutput = (editor) => {
-    this.outputHash[editor.profileId + editor.shellId] = editor.id;
+    this.outputHash[editor.profileId + '|' + editor.shellId] = editor.id;
 
     try {
       if (this.store.outputs.get(editor.id)) {
@@ -118,7 +118,7 @@ export default class OutputApi {
   @action.bound
   removeOutput(editor) {
     this.store.outputs.delete(editor.id);
-    delete this.outputHash[editor.profileId + editor.shellId];
+    delete this.outputHash[editor.profileId + '|' + editor.shellId];
     Broker.removeListener(
       EventType.createShellOutputEvent(editor.profileId, editor.shellId),
       this.outputAvailable
@@ -133,11 +133,8 @@ export default class OutputApi {
   swapOutputShellConnection(event) {
     const {oldId, oldShellId, id, shellId} = event;
 
-    console.log(this.outputHash);
-    console.log(event);
-
-    const outputId = this.outputHash[oldId + oldShellId];
-    delete this.outputHash[oldId + oldShellId];
+    const outputId = this.outputHash[oldId + '|' + oldShellId];
+    delete this.outputHash[oldId + '|' + oldShellId];
     Broker.removeListener(
       EventType.createShellOutputEvent(oldId, oldShellId),
       this.outputAvailable
@@ -147,7 +144,7 @@ export default class OutputApi {
       this.onReconnect
     );
 
-    this.outputHash[id + shellId] = outputId;
+    this.outputHash[id + '|' + shellId] = outputId;
 
     Broker.on(
       EventType.createShellOutputEvent(id, shellId),
@@ -162,7 +159,7 @@ export default class OutputApi {
   @action.bound
   outputAvailable(output) {
     // Parse output for string 'Type "it" for more'
-    const outputId = this.outputHash[output.id + output.shellId];
+    const outputId = this.outputHash[output.id + '|' + output.shellId];
 
     // console.log(outputId);
     // console.log('TEST OUTPUT: =>> ', output.output);
@@ -197,7 +194,7 @@ export default class OutputApi {
 
   @action.bound
   onReconnect(output) {
-    const outputId = this.outputHash[output.id + output.shellId];
+    const outputId = this.outputHash[output.id + '|' + output.shellId];
     console.log('got reconnect output ', output);
     const combineOutput = output.output.join('\r');
     const totalOutput = this.store.outputs.get(outputId).output + combineOutput;
