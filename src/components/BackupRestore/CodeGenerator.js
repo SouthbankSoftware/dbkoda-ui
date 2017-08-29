@@ -63,6 +63,7 @@ const createTemplateObject = (state) => {
         }
       });
       items.host = repH;
+      items.port = undefined;
     }
     if (!sha) {
       if (uri.username && uri.password) {
