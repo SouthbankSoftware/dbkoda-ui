@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T11:29:20+10:00
+ * @Last modified time: 2017-08-29T13:35:29+10:00
  */
 
  import { action, observable } from 'mobx';
@@ -218,7 +218,7 @@ export default class EditorApi {
     this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     console.log('deleted editor ', currEditor);
     // If Editor is not clean, prompt for save.
-    if (!currEditor.doc.isClean()) {
+    if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
       this.store.editorPanel.showingSavingDialog = true;
       return;
     }
