@@ -21,7 +21,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T14:40:22+10:00
+ * @Last modified time: 2017-08-29T15:38:18+10:00
  */
 
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
@@ -53,17 +53,17 @@ import WelcomeView from './WelcomePanel/WelcomeView';
 
 const splitPane2Style = {
   display: 'flex',
-  flexDirection: 'column'
+  flexDirection: 'column',
 };
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
  */
- @inject(allStores => ({
-   store: allStores.store,
-   api: allStores.api
- }))
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+}))
 @observer
 export default class Panel extends React.Component {
   static propTypes = {
@@ -132,7 +132,10 @@ export default class Panel extends React.Component {
                 return;
               }
             }
-            if (this.props.store.editorToolbar.newEditorForProfileId == '' && this.props.store.profileList.selectedProfile.status == 'OPEN') {
+            if (
+              this.props.store.editorToolbar.newEditorForProfileId == '' &&
+              this.props.store.profileList.selectedProfile.status == 'OPEN'
+            ) {
               this.props.store.editorToolbar.newEditorForProfileId = this.props.store.profileList.selectedProfile.id;
             }
           }
@@ -226,60 +229,69 @@ export default class Panel extends React.Component {
   changeTab(newTabId) {
     const { editorPanel, editorToolbar, editors } = this.props.store;
     let currEditor = editors.get(newTabId);
-    // Check if last update was a remove for special Handling.
+    // Condition specific to closing welcome tab
     if (editorPanel.removingTabId) {
       editorPanel.removingTabId = false;
       if (editorPanel.isRemovingCurrentTab) {
         editorPanel.isRemovingCurrentTab = false;
-        editorPanel.activeEditorId = newTabId;
       }
-    } else {
-      if (newTabId != 'Default' && !currEditor && editors.get(editorPanel.activeEditorId)) {
+      // Condition where you close the welcome tab and it should focus any other open tab
+      if (!currEditor && editors.get(editorPanel.activeEditorId)) {
         currEditor = editors.get(editorPanel.activeEditorId);
         newTabId = editorPanel.activeEditorId;
-      } else {
-        editorPanel.activeEditorId = newTabId;
       }
+    }
+    if (newTabId != 'Default') {
+      // Condition where you close a tab and any other open tab should be selected
+      if (!currEditor && editors.get(editorPanel.activeEditorId)) {
+        currEditor = editors.get(editorPanel.activeEditorId);
+        newTabId = editorPanel.activeEditorId;
+      } else if (!currEditor && !editors.get(editorPanel.activeEditorId)) { // Condition where you have closed the last open tab and welcome tab should be selected
+        newTabId = 'Default';
+      }
+    }
 
-      if (newTabId != 'Default' && editors.get(newTabId) && editors.get(newTabId).executing == true) {
-        editorToolbar.isActiveExecuting = true;
-      } else {
-        editorToolbar.isActiveExecuting = false;
-      }
-      if (newTabId != 'Default') {
-        editorPanel.activeDropdownId = currEditor.currentProfile;
-        // Check if connection exists or is closed to update dropdown.
-        if (!this.props.store.profiles.get(editorPanel.activeDropdownId)) {
-          editorPanel.activeDropdownId = 'Default';
-        } else if (
-          this.props.store.profiles.get(editorPanel.activeDropdownId).status ==
-          'CLOSED'
-        ) {
-          editorPanel.activeDropdownId = 'Default';
-        }
-        editorToolbar.id = currEditor.id;
-        editorToolbar.shellId = currEditor.shellId;
-      }
-      console.log(
-        `activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`,
-      );
-      if (editorPanel.activeDropdownId == 'Default') {
-        editorToolbar.noActiveProfile = true;
-      } else {
-        editorToolbar.noActiveProfile = false;
-      }
+    editorPanel.activeEditorId = newTabId;
 
-      // Determine whether Left-Side Panel should swap.
-      if (!currEditor && editorPanel.activeDropdownId == 'Default') { // Default Tab.
-        console.log('Moved to Welcome Page.');
-        this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
-      } else if (currEditor.type == 'shell') { // Normal Editors
-        this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
-      } else if (currEditor.type == 'aggregate') { // Aggregate Editors.
-        this.props.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
-      } else { // Default Case.
-        this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+    if (newTabId != 'Default' && editors.get(newTabId) && editors.get(newTabId).executing == true) {
+      editorToolbar.isActiveExecuting = true;
+    } else {
+      editorToolbar.isActiveExecuting = false;
+    }
+    if (newTabId != 'Default') {
+      editorPanel.activeDropdownId = currEditor.currentProfile;
+      // Check if connection exists or is closed to update dropdown.
+      if (!this.props.store.profiles.get(editorPanel.activeDropdownId)) {
+        editorPanel.activeDropdownId = 'Default';
+      } else if (this.props.store.profiles.get(editorPanel.activeDropdownId).status == 'CLOSED') {
+        editorPanel.activeDropdownId = 'Default';
       }
+      editorToolbar.id = currEditor.id;
+      editorToolbar.shellId = currEditor.shellId;
+    } else {
+      editorPanel.activeDropdownId = 'Default';
+    }
+    console.log(`activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`,);
+    if (editorPanel.activeDropdownId == 'Default') {
+      editorToolbar.noActiveProfile = true;
+    } else {
+      editorToolbar.noActiveProfile = false;
+    }
+
+    // Determine whether Left-Side Panel should swap.
+    if (!currEditor && editorPanel.activeDropdownId == 'Default') {
+      // Default Tab.
+      console.log('Moved to Welcome Page.');
+      this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+    } else if (currEditor.type == 'shell') {
+      // Normal Editors
+      this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+    } else if (currEditor.type == 'aggregate') {
+      // Aggregate Editors.
+      this.props.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
+    } else {
+      // Default Case.
+      this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     }
   }
 
@@ -432,9 +444,11 @@ export default class Panel extends React.Component {
     return (
       <Tab2
         className={
-          this.props.store.welcomePage.isOpen
-            ? 'welcomeTab'
-            : 'welcomeTab notVisible'
+          this.props.store.welcomePage.isOpen ? (
+            'welcomeTab'
+          ) : (
+            'welcomeTab notVisible'
+          )
         }
         id="Default"
         title={globalString('editor/welcome/heading')}
@@ -511,14 +525,13 @@ export default class Panel extends React.Component {
     return (
       <Dialog className="pt-dark savingDialog" intent={Intent.PRIMARY} isOpen>
         <h4>
-          {' '}{globalString(
+          {' '}
+          {globalString(
             'editor/savingDialog/title',
             currentEditor.fileName,
           )}{' '}
         </h4>
-        <p>
-          {' '}{globalString('editor/savingDialog/message')}{' '}
-        </p>
+        <p> {globalString('editor/savingDialog/message')} </p>
         <div className="dialogButtons">
           <AnchorButton
             className="saveButton"
@@ -736,10 +749,7 @@ export default class Panel extends React.Component {
         }
       >
         {this.renderUnsavedFileIndicator(tab[0])}
-        <Button
-          className="pt-minimal"
-          onClick={() => this.closeTab(tab[1])}
-      >
+        <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
           <span className="pt-icon-cross" />
         </Button>
       </Tab2>
@@ -763,11 +773,12 @@ export default class Panel extends React.Component {
               minSize={250}
               maxSize={750}
               pane2Style={splitPane2Style}
-              >
+            >
               <AggregateGraphicalBuilder
                 className="aggregatePanel"
                 id={tab[0]}
-                editor={tab[1]} />
+                editor={tab[1]}
+              />
               <View
                 id={tab[0]}
                 className="aggregateEditorPanel"
@@ -781,10 +792,7 @@ export default class Panel extends React.Component {
         }
       >
         {this.renderUnsavedFileIndicator(tab[0])}
-        <Button
-          className="pt-minimal"
-          onClick={() => this.closeTab(tab[1])}
-      >
+        <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
           <span className="pt-icon-cross" />
         </Button>
       </Tab2>
@@ -841,9 +849,9 @@ export default class Panel extends React.Component {
           className="pt-icon-menu tabControlBtn tabListBtn"
           onClick={this.onTabListBtnClicked}
         />
-        {this.props.store.editorPanel.showingSavingDialog
-          ? this.renderSavingDialog()
-          : null}
+        {this.props.store.editorPanel.showingSavingDialog ? (
+          this.renderSavingDialog()
+        ) : null}
       </div>
     );
   }
