@@ -1,3 +1,13 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-08-29T12:59:18+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-29T13:59:27+10:00
+ */
+
+
+
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,7 +39,7 @@ import {isDumpAction} from './Utils';
 
 const createTemplateObject = (state) => {
   const {db, profile, exportType, parseGrace, mode} = state;
-  const {host, port, sha, hostRadio, url, database, ssl} = profile;
+  const {host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort} = profile;
   const items = {
     ...profile,
     ...state,
@@ -44,8 +54,13 @@ const createTemplateObject = (state) => {
     items.authDb = database;
   }
   if (hostRadio) {
-    items.host = host;
-    items.port = port;
+    if (ssh) {
+      items.host = '127.0.0.1';
+      items.port = sshLocalPort;
+    } else {
+      items.host = host;
+      items.port = port;
+    }
   } else {
     const uri = mongodbUri.parse(url);
     if (uri.hosts.length == 1) {

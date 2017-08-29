@@ -23,7 +23,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-28T14:57:08+10:00
+ * @Last modified time: 2017-08-29T13:56:39+10:00
  */
 
 /**
@@ -115,6 +115,7 @@ const ConnectionPanel = ({
         ssh: data.ssh,
         remoteHost: data.remoteHost,
         remoteUser: data.remoteUser,
+        sshLocalPort: data.sshLocalPort,
         passRadio: data.passRadio,
         keyRadio: data.keyRadio,
         sshKeyFile: data.sshKeyFile,
@@ -172,7 +173,8 @@ const ConnectionPanel = ({
       query.sshHost = data.remoteHost;
       query.remoteUser = data.remoteUser;
       query.localHost = '127.0.0.1';
-      query.localPort = ProfileForm.getRandomPort();
+      data.sshLocalPort = ProfileForm.getRandomPort();
+      query.localPort = data.sshLocalPort;
       connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       if (data.passRadio) {
         query.remotePass = data.remotePass;

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-28T14:47:14+10:00
+ * @Last modified time: 2017-08-29T13:56:38+10:00
  */
 
 /*
@@ -141,7 +141,8 @@ export default class ListView extends React.Component {
       query.sshHost = selectedProfile.remoteHost;
       query.remoteUser = selectedProfile.remoteUser;
       query.localHost = '127.0.0.1';
-      query.localPort = ProfileForm.getRandomPort();
+      selectedProfile.sshLocalPort = ProfileForm.getRandomPort();
+      query.localPort = selectedProfile.sshLocalPort;
       connectionUrl =
         ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       if (selectedProfile.passRadio) {
@@ -229,6 +230,7 @@ export default class ListView extends React.Component {
         ssh: data.ssh,
         remoteHost: data.remoteHost,
         remoteUser: data.remoteUser,
+        sshLocalPort: data.sshLocalPort,
         passRadio: data.passRadio,
         keyRadio: data.keyRadio,
         sshKeyFile: data.sshKeyFile,
