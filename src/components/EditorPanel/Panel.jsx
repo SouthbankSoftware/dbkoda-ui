@@ -50,8 +50,6 @@ import Toolbar from './Toolbar';
 import View from './View';
 import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView';
-import { ProfileStatus } from '../common/Constants';
-import { featherClient } from '../../helpers/feathers';
 
 const splitPane2Style = {
   display: 'flex',

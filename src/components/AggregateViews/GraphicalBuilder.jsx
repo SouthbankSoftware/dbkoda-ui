@@ -1021,7 +1021,7 @@ export default class GraphicalBuilder extends React.Component {
       this.updateShellPipeline(false).then((res) => {
         if (res && res.unableToUpdateSteps) {
           // Partial update
-          if(this.debug) console.error('Unable to complete full update!');
+          if (this.debug) console.error('Unable to complete full update!');
           // 4. Was the block removed the selected block?.
           if (blockPosition === editor.selectedBlock) {
             // 4.a Yes - Set selected block to current - 1.
