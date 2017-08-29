@@ -23,13 +23,13 @@
 import os from 'os';
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
-import { BackupRestoreActions } from '../common/Constants';
-import { exportDB, dumpDB, dumpServer, restoreServer, importCollection } from './Template';
-import { isDumpAction } from './Utils';
+import {BackupRestoreActions} from '../common/Constants';
+import {dumpDB, dumpServer, exportDB, importCollection, restoreServer} from './Template';
+import {isDumpAction} from './Utils';
 
 const createTemplateObject = (state) => {
-  const { db, profile, exportType, parseGrace, mode } = state;
-  const { host, port, sha, hostRadio, url, database, ssl } = profile;
+  const {db, profile, exportType, parseGrace, mode} = state;
+  const {host, port, sha, hostRadio, url, database, ssl} = profile;
   const items = {
     ...profile,
     ...state,
@@ -77,14 +77,14 @@ const createTemplateObject = (state) => {
   return items;
 };
 
-const getRestoreServerCommandObject = ({ profile, state }) => {
-  const itm = createTemplateObject({ ...state, profile});
+const getRestoreServerCommandObject = ({profile, state}) => {
+  const itm = createTemplateObject({...state, profile});
   itm.inputFile = state.directoryPath;
   return itm;
 };
 
-const getDumpServerCommandObject = ({ profile, state }) => {
-  const { directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles } = state;
+const getDumpServerCommandObject = ({profile, state}) => {
+  const {directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles} = state;
   let targetCols = [];
   if (allCollections) {
     targetCols = collections;
@@ -94,7 +94,7 @@ const getDumpServerCommandObject = ({ profile, state }) => {
   const cols = [];
   if (!dumpDbUsersAndRoles && !allCollections) {
     targetCols.map((col) => {
-      const items = createTemplateObject({ ...state, profile });
+      const items = createTemplateObject({...state, profile});
       items.database = col;
       if (directoryPath) {
         items.output = directoryPath;
@@ -103,15 +103,15 @@ const getDumpServerCommandObject = ({ profile, state }) => {
     });
   }
 
-    if (dumpDbUsersAndRoles || allCollections) {
-      const itm = createTemplateObject({ ...state, profile, db: null});
-      cols.push({ ...itm, output: directoryPath});
-    }
+  if (dumpDbUsersAndRoles || allCollections) {
+    const itm = createTemplateObject({...state, profile, db: null});
+    cols.push({...itm, output: directoryPath});
+  }
   return cols;
 };
 
-const getDBCollectionCommandObject = ({ profile, state, action }) => {
-  const { directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles } = state;
+const getDBCollectionCommandObject = ({profile, state, action}) => {
+  const {directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles} = state;
   let targetCols = [];
   if (allCollections) {
     targetCols = collections;
@@ -123,7 +123,7 @@ const getDBCollectionCommandObject = ({ profile, state, action }) => {
     // for dump, dumpDbUsersAndRoles can't be set with collections
     // for dump, should not split command for all collections
     targetCols.map((col) => {
-      const items = createTemplateObject({ ...state, profile });
+      const items = createTemplateObject({...state, profile});
       items.collection = col;
       if (directoryPath) {
         if (action === BackupRestoreActions.EXPORT_COLLECTION || action === BackupRestoreActions.EXPORT_DATABASE) {
@@ -138,38 +138,60 @@ const getDBCollectionCommandObject = ({ profile, state, action }) => {
 
   if (isDumpAction(action)) {
     if (dumpDbUsersAndRoles || allCollections) {
-      const itm = createTemplateObject({ ...state, profile});
-      cols.push({ ...itm, output: directoryPath });
+      const itm = createTemplateObject({...state, profile});
+      cols.push({...itm, output: directoryPath});
     }
   }
   return cols;
 };
 
-const getImportCollectionCommandObject = ({ profile, state }) => {
-  const itm = createTemplateObject({ ...state, profile});
+const getImportCollectionCommandObject = ({profile, state}) => {
+  const itm = createTemplateObject({...state, profile});
   itm.inputFile = state.directoryPath;
   return itm;
 };
 
-export const getCommandObject = ({ profile, state, action }) => {
+export const getCommandObject = ({profile, state, action}) => {
   switch (action) {
     case BackupRestoreActions.DUMP_SERVER:
-      return getDumpServerCommandObject({ profile, state, action });
+      return getDumpServerCommandObject({profile, state, action});
     case BackupRestoreActions.IMPORT_DATABASE:
-      return [getImportCollectionCommandObject({ profile, state })];
+      return [getImportCollectionCommandObject({profile, state})];
     default:
-      return getDBCollectionCommandObject({ profile, state, action });
+      return getDBCollectionCommandObject({profile, state, action});
   }
 };
 
-export const generateCode = ({treeNode, profile, state, action}) => {
+export const filterOutParameters = ({cols, shellVersion}) => {
+  if (shellVersion) {
+    const ver = parseFloat(shellVersion.substring(0, 3), 10);
+    const deleteKeys = ['parseGrace', 'mode'];
+    if (ver < 3.4) {
+      deleteKeys.map((key) => {
+        if (cols[key]) {
+          delete cols[key];
+        }
+      });
+    }
+  }
+  return cols;
+};
+
+export const generateCode = ({treeNode, profile, state, action, shellVersion}) => {
   let cols;
   if (action === BackupRestoreActions.DUMP_SERVER) {
-    cols = getDumpServerCommandObject({ treeNode, profile, state, action });
+    cols = getDumpServerCommandObject({treeNode, profile, state, action});
   } else {
-    cols = getCommandObject({ treeNode, profile, state, action });
+    cols = getCommandObject({treeNode, profile, state, action});
   }
-  const values = { cols };
+  if (cols.constructor === Array) {
+    cols = cols.map((col) => {
+      return filterOutParameters({cols: col, shellVersion});
+    });
+  } else {
+    cols = filterOutParameters({cols, shellVersion});
+  }
+  const values = {cols};
   switch (action) {
     case BackupRestoreActions.EXPORT_DATABASE:
     case BackupRestoreActions.EXPORT_COLLECTION: {
@@ -188,13 +210,15 @@ export const generateCode = ({treeNode, profile, state, action}) => {
     case BackupRestoreActions.RESTORE_SERVER:
     case BackupRestoreActions.RESTORE_COLLECTION:
     case BackupRestoreActions.RESTORE_DATABASE: {
-      cols = getRestoreServerCommandObject({ treeNode, profile, state, action });
+      cols = getRestoreServerCommandObject({treeNode, profile, state, action});
+      cols = filterOutParameters({cols, shellVersion});
       const template = Handlebars.compile(restoreServer);
       return template(cols);
     }
     case BackupRestoreActions.IMPORT_COLLECTION:
     case BackupRestoreActions.IMPORT_DATABASE: {
       cols = getImportCollectionCommandObject({treeNode, profile, state, action});
+      cols = filterOutParameters({cols, shellVersion});
       const template = Handlebars.compile(importCollection);
       return template(cols);
     }

@@ -114,6 +114,7 @@ export default class DatabaseExport extends React.Component {
         profile: this.props.profile,
         state: this.state,
         action: this.props.treeAction,
+        shellVersion: this.props.profile.shellVersion,
       });
       const currentCode = this.state.editor.doc.cm.getValue();
       if (currentCode !== generatedCode) {
@@ -347,6 +348,7 @@ export default class DatabaseExport extends React.Component {
       case BackupRestoreActions.IMPORT_DATABASE:
         return (
           <ImportOptions
+            shellVersion={this.props.profile.shellVersion}
             outputFields={this.state.outputFields}
             changeOutputFields={e => this.setState({outputFields: e})}
             headerLine={this.state.headerLine}

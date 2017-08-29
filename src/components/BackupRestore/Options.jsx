@@ -22,6 +22,7 @@
  */
 
 import React from 'react';
+import _ from 'lodash';
 import {Checkbox, Intent, Position, Tooltip, NumericInput} from '@blueprintjs/core';
 
 import {BackupRestoreActions} from '../common/Constants';
@@ -423,8 +424,9 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
                                 numInsertionWorkers, changeNumInsertionWorkers,
                                 stopOnError, changeStopOnError, mode, changeMode,
                                 upsertFields, changeUpsertFields, writeConcern, changeWriteConcern,
+                                shellVersion,
                                 bypassDocumentValidation, changeBypassDocumentValidation}) => {
-  const options = [
+  let options = [
     {
       label: globalString('backuprestore/parameters/inputOptions/label'),
       type: 'separator',
@@ -531,5 +533,11 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
       name: 'bypass-document-validation',
     }
   ];
+  if (shellVersion) {
+    const ver = parseFloat(shellVersion.substring(0, 3), 10);
+    if (ver < 3.4) {
+      options = _.filter(options, o => o.name !== 'parse-grace' && o.name !== 'mode');
+    }
+  }
   return getOptions(options);
 };
