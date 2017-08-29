@@ -26,8 +26,10 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Last modified by:   chris
+ * @Last modified time: 2017-08-28T16:49:10+10:00
  */
-
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
@@ -540,7 +542,10 @@ class View extends React.Component {
   }
 
   setEditorValue(newValue) {
+    const cm = this.doc.cm;
+    const scrollInfo = cm.getScrollInfo();
     this.doc.setValue(newValue);
+    cm.scrollTo(scrollInfo.left, scrollInfo.top);
   }
 
   swapShellConnection(event) {

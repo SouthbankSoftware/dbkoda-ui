@@ -27,14 +27,15 @@
  */
 
 /* eslint import/no-dynamic-require: 0 */
+/* eslint no-unused-vars: warn */
 
 import React from 'react';
 import { NewToaster } from '#/common/Toaster';
 import { inject, observer } from 'mobx-react';
 import ReactExpandableListView from 'react-expandable-listview';
 import { featherClient } from '~/helpers/feathers';
-import { action } from 'mobx';
-import { Intent } from '@blueprintjs/core';
+import { action, runInAction } from 'mobx';
+import { Intent, ITreeNode, Tree, Tooltip, Position } from '@blueprintjs/core';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import Block from './AggregateBlocks/Block.jsx';
 import { AggregateCommands } from './AggregateCommands.js';
@@ -69,7 +70,7 @@ export default class Palette extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
 
-    console.log('Block added to position: ', position);
+    if (this.debug) console.log('Block added to position: ', position);
     // 1. Is this the first added block?
     if (position === 0) {
       position = 1;
@@ -83,7 +84,7 @@ export default class Palette extends React.Component {
       this.updateShellPipeline().then(() => {
         this.updateResultSet()
           .then((res) => {
-            console.log('updateResultSet:', JSON.parse(res));
+            if (this.debug) console.log('updateResultSet:', JSON.parse(res));
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
@@ -95,13 +96,15 @@ export default class Palette extends React.Component {
                 if (indexValue.constructor === Array) {
                   // Check for error result.
                   if (res.stepCodes[index] === 0) {
-                    console.log('Result[', index, '] is valid: ', indexValue);
+                    if (this.debug) console.log('Result[', index, '] is valid: ', indexValue);
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
-                    editor.blockList[index].attributeList =
-                      res.stepAttributes[attributeIndex];
-                    editor.blockList[index].status = 'valid';
+                    runInAction('Update Graphical Builder', () => {
+                      editor.blockList[index].attributeList =
+                        res.stepAttributes[attributeIndex];
+                      editor.blockList[index].status = 'valid';
+                    });
                   } else {
                     console.error(
                       'Result[',
@@ -112,7 +115,9 @@ export default class Palette extends React.Component {
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
-                    editor.blockList[index].status = 'pending';
+                    runInAction('Update Graphical Builder', () => {
+                      editor.blockList[index].status = 'pending';
+                    });
                   }
                 }
               });
@@ -153,46 +158,34 @@ export default class Palette extends React.Component {
   getBlockList() {
     const dataObj = [
       {
-        headerName: 'Common',
-        isOpened: false,
-        height: 20,
-        isReactComponent: true,
-        items: [],
+        hasCaret: true,
+        label: 'Common',
+        childNodes: [],
       },
       {
-        headerName: 'Query and Aggregate',
-        isOpened: false,
-        height: 20,
-        isReactComponent: true,
-        items: [],
+        hasCaret: true,
+        label: 'Query and Aggregate',
+        childNodes: [],
       },
       {
-        headerName: 'Group and Join',
-        isOpened: false,
-        height: 20,
-        isReactComponent: true,
-        items: [],
+        hasCaret: true,
+        label: 'Group and Join',
+        childNodes: [],
       },
       {
-        headerName: 'Transform',
-        isOpened: false,
-        height: 20,
-        isReactComponent: true,
-        items: [],
+        hasCaret: true,
+        label: 'Transform',
+        childNodes: [],
       },
       {
-        headerName: 'Other',
-        isOpened: false,
-        height: 20,
-        isReactComponent: true,
-        items: [],
+        hasCaret: true,
+        label: 'Other',
+        childNodes: [],
       },
       {
-        headerName: 'All',
-        isOpened: false,
-        height: 20,
-        isReactComponent: true,
-        items: [],
+        hasCaret: true,
+        label: 'All',
+        childNodes: [],
       },
     ];
 
@@ -208,42 +201,51 @@ export default class Palette extends React.Component {
     Object.keys(BlockTypes).map((keyName, index) => {
       if (!(BlockTypes[keyName].type.toUpperCase() === 'START')) {
         // Push item to all group.
-        dataObj[5].items.push(
-          <Block
-            key={'key-' + index} //eslint-disable-line
-            listPosition={index}
-            type={BlockTypes[keyName].type}
-            concrete={false}
-            addBlock={this.addBlock}
-          />,
-        );
+        dataObj[5].childNodes.push({
+          label: (
+            <Tooltip content={BlockTypes[keyName].description}>
+              <Block
+                key={'key-' + index} //eslint-disable-line
+                listPosition={index}
+                type={BlockTypes[keyName].type}
+                concrete={false}
+                addBlock={this.addBlock}
+              />
+            </Tooltip>
+          ),
+        });
         // For each tag in groups array, add to group.
         BlockTypes[keyName].groups.map((group) => {
-          groupsArray[group].push(
-            <Block
-              key={'key-' + index} //eslint-disable-line
-              listPosition={index}
-              type={BlockTypes[keyName].type}
-              concrete={false}
-              addBlock={this.addBlock}
-            />,
-          );
+          groupsArray[group].push({
+            label: (
+              <Tooltip
+                content={BlockTypes[keyName].description}
+                position={Position.right}
+              >
+                <Block
+                  key={'key-' + index} //eslint-disable-line
+                  listPosition={index}
+                  type={BlockTypes[keyName].type}
+                  concrete={false}
+                  addBlock={this.addBlock}
+                />
+              </Tooltip>
+            ),
+          });
         });
       }
     });
-    dataObj[0].items = groupsArray.common;
-    dataObj[1].items = groupsArray.queryAndAggregate;
-    dataObj[2].items = groupsArray.groupAndJoin;
-    dataObj[3].items = groupsArray.transform;
-    dataObj[4].items = groupsArray.other;
-    console.log('!!!');
-    console.log(dataObj);
-    dataObj[0].height = dataObj[0].items.length * 50;
-    dataObj[1].height = dataObj[1].items.length * 50;
-    dataObj[2].height = dataObj[2].items.length * 50;
-    dataObj[3].height = dataObj[3].items.length * 50;
-    dataObj[4].height = dataObj[4].items.length * 50;
-    dataObj[5].height = dataObj[5].items.length * 50;
+    dataObj[0].childNodes = groupsArray.common;
+    dataObj[1].childNodes = groupsArray.queryAndAggregate;
+    dataObj[2].childNodes = groupsArray.groupAndJoin;
+    dataObj[3].childNodes = groupsArray.transform;
+    dataObj[4].childNodes = groupsArray.other;
+    dataObj[0].height = dataObj[0].childNodes.length * 50;
+    dataObj[1].height = dataObj[1].childNodes.length * 50;
+    dataObj[2].height = dataObj[2].childNodes.length * 50;
+    dataObj[3].height = dataObj[3].childNodes.length * 50;
+    dataObj[4].height = dataObj[4].childNodes.length * 50;
+    dataObj[5].height = dataObj[5].childNodes.length * 50;
     return dataObj;
   }
 
@@ -259,7 +261,6 @@ export default class Palette extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
       const stepArray = [];
-      console.log(editor.blockList.length);
       if (editor.blockList.length === 1) {
         resolve();
       } else {
@@ -277,7 +278,7 @@ export default class Palette extends React.Component {
           }
         });
         // Update steps in Shell:
-        console.log('updatingShellPipeline: ', stepArray);
+        if (this.debug) console.log('updatingShellPipeline: ', stepArray);
         const service = featherClient().service('/mongo-sync-execution');
         service.timeout = 30000;
         service
@@ -358,7 +359,7 @@ export default class Palette extends React.Component {
         })
         .then((res) => {
           // Check attribute List to see if we have valid attributes returned.
-          console.log('GetBlockAttributes: ', res);
+          if (this.debug) console.log('GetBlockAttributes: ', res);
           resolve(res);
         })
         .catch((err) => {
@@ -398,7 +399,7 @@ export default class Palette extends React.Component {
         ),
       })
       .then((res) => {
-        console.log('Debug: result from add step: ', res);
+        if (this.debug) console.log('Debug: result from add step: ', res);
       })
       .catch((err) => {
         console.error(err);
@@ -458,7 +459,7 @@ export default class Palette extends React.Component {
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
 
-    console.log('addBlockToEditor:', editor);
+    if (this.debug) console.log('addBlockToEditor:', editor);
   }
 
   @action.bound
@@ -478,33 +479,6 @@ export default class Palette extends React.Component {
     array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
   }
 
-  getBlocksList() {
-    return (
-      <div className="aggregatePaletteContent">
-        <ul className="aggregateBlockList">
-          {Object.keys(BlockTypes).map((keyName, index) => {
-            if (!(BlockTypes[keyName].type.toUpperCase() === 'START')) {
-              return (
-                <li
-                  key={'key-' + index} //eslint-disable-line
-                  className="aggregateBlockWrapper"
-                >
-                  <Block
-                    key={'key-' + index} //eslint-disable-line
-                    listPosition={index}
-                    type={BlockTypes[keyName].type}
-                    concrete={false}
-                    addBlock={this.addBlock}
-                  />
-                </li>
-              );
-            }
-          })}
-        </ul>
-      </div>
-    );
-  }
-
   /**
    * Clear the output tab since no results are avaliable.
    *
@@ -512,22 +486,48 @@ export default class Palette extends React.Component {
    */
   @action.bound
   clearResultsOutput(editor) {
-    console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
+    if (this.debug) console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
     const output = this.props.store.outputs.get(editor.id);
-    output.output = 'Currently No Results to Display.';
+    output.output = globalString('aggregate_builder/block_not_yet_valid');
+  }
+
+  @action.bound
+  handleNodeClick(nodeData, _nodePath, e) {
+    // const originallySelected = nodeData.isSelected;
+    // if (!e.shiftKey) {
+    //   this.forEachNode(this.state.nodes, n => (n.isSelected = false));
+    // }
+    // nodeData.isSelected =
+    //   originallySelected == null ? true : !originallySelected;
+    // this.setState(this.state);
+  }
+
+  @action.bound
+  handleNodeCollapse(nodeData) {
+    nodeData.isExpanded = false;
+    this.setState(this.state);
+  }
+
+  @action.bound
+  handleNodeExpand(nodeData) {
+    nodeData.isExpanded = true;
+    this.setState(this.state);
   }
 
   render() {
-    console.log(this.blockList);
     return (
       <div className="aggregatePaletteWrapper">
         <nav className="aggregatePaletteToolbar pt-navbar pt-dark">
-          <h2 className="paletteHeader">Pipeline Elements</h2>
+          <h2 className="paletteHeader">
+            {globalString('aggregate_builder/palette_title')}
+          </h2>
         </nav>
-        <ReactExpandableListView
-          data={this.blockList}
-          headerAttName="headerName"
-          itemsAttName="items"
+        <Tree
+          contents={this.blockList}
+          onNodeClick={this.handleNodeClick}
+          onNodeCollapse={this.handleNodeCollapse}
+          onNodeExpand={this.handleNodeExpand}
+          className="palletteTree"
         />
       </div>
     );

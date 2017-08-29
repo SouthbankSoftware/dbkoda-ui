@@ -30,7 +30,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, runInAction } from 'mobx';
 import { AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
@@ -166,6 +166,11 @@ export default class Details extends React.Component {
     this.props.store.treeActionPanel.isNewFormValues = true;
   }
 
+  /**
+   * Generates valid Mongo Code using Handlebars and the Details MobX-Form.
+   * 
+   * @param {Object} editorObject - Editor Object to generate handlebars code for.
+   */
   generateCode(editorObject) {
     const os = require('os').release();
     let newLine = '\n';
@@ -189,18 +194,34 @@ export default class Details extends React.Component {
     codeString +=
       'db.' + editorObject.collection.text + '.aggregate([' + newLine;
 
+    const selectedBlockIndex = editorObject.selectedBlock;
     // Then add all other blocks.
-    editorObject.blockList.map((block) => {
+    editorObject.blockList.map((block, index) => {
       if (!(block.type.toUpperCase() === 'START')) {
         if (block.byoCode) {
-          block.code.replace(/\r\n/g, newLine);
-          block.code.replace(/\n/g, newLine);
-          codeString += block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+          if (block.code) {
+            block.code.replace(/\r\n/g, newLine);
+            block.code.replace(/\n/g, newLine);
+            if (index > selectedBlockIndex) {
+              codeString +=
+                '/*' +
+                block.code.replace(/\r\n/g, /newLine/) +
+                ', */' +
+                newLine;
+            } else {
+              codeString +=
+                block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+            }
+          }
         } else {
           const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
             block.type +
-            '.hbs'); // eslint-disable-line
-          codeString += formTemplate(block.fields) + ',' + newLine;
+            '.hbs');
+          if (index > selectedBlockIndex) {
+            codeString += '/*' + formTemplate(block.fields) + ', */' + newLine;
+          } else {
+            codeString += formTemplate(block.fields) + ',' + newLine;
+          }
         }
       }
     });
@@ -236,7 +257,6 @@ export default class Details extends React.Component {
 
   @action.bound
   onHideLeftPanelClicked() {
-    console.log('Debug: Hide left Panel');
     this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
   }
 
@@ -247,6 +267,7 @@ export default class Details extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
     editor.blockList[editor.selectedBlock].byoCode = true;
+    editor.blockList[editor.selectedBlock].code = false;
     this.forceUpdate();
   }
 
@@ -271,10 +292,20 @@ export default class Details extends React.Component {
 
     // Check if this is a BYOcode block, if so, render BYO fragment.
     if (activeBlock && activeBlock.byoCode) {
+      // Update Handlebars first:
+      // Update Editor Contents.
+      runInAction(() => {
+        this.props.store.treeActionPanel.formValues = this.generateCode(
+          activeEditor,
+        );
+        this.props.store.treeActionPanel.isNewFormValues = true;
+      });
       return (
         <div className="aggregateDetailsWrapper">
           <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
-            <h2 className="currentBlockChoice">Block Details</h2>
+            <h2 className="currentBlockChoice">
+              {' '}{globalString('aggregate_builder/details_title')}
+            </h2>
           </nav>
           <div className="aggregateDetailsContent">
             <BYOBlock onChangeCallback={this.generateCode} />
@@ -335,7 +366,9 @@ export default class Details extends React.Component {
     return (
       <div className="aggregateDetailsWrapper">
         <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
-          <h2 className="currentBlockChoice">Block Details</h2>
+          <h2 className="currentBlockChoice">
+            {globalString('aggregate_builder/details_title')}
+          </h2>
         </nav>
         <div className="aggregateDetailsContent">
           {activeBlock &&
@@ -362,7 +395,9 @@ export default class Details extends React.Component {
         </div>
         {!activeBlock &&
           <div className="aggregateDetailsContent">
-            <p>No block selected.</p>
+            <p>
+              {' '}{globalString('aggregate_builder/no_block_selected')}
+            </p>
           </div>}
         <div className="bottomToolbar">
           <AnchorButton
