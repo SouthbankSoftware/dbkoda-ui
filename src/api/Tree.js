@@ -15,11 +15,9 @@ import { action } from 'mobx';
    constructor(store, api) {
      this.store = store;
      this.api = api;
-
-     this.addNewEditorForTreeAction = this.addNewEditorForTreeAction.bind(this);
    }
 
-   @action
+   @action.bound
    addNewEditorForTreeAction = (options = {type: 'TreeAction'}) => {
      this.store.editorToolbar.newEditorForTreeAction = true;
      this.api.addEditor({type: options.type});

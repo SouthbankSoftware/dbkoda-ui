@@ -271,7 +271,7 @@ export default class Panel extends React.Component {
     } else {
       editorPanel.activeDropdownId = 'Default';
     }
-    console.log(`activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`,);
+    console.log(`activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`);
     if (editorPanel.activeDropdownId == 'Default') {
       editorToolbar.noActiveProfile = true;
     } else {

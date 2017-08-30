@@ -17,8 +17,6 @@ export default class ProfileApi {
   constructor(store, api) {
     this.store = store;
     this.api = api;
-
-    this.profileCreated = this.profileCreated.bind(this);
   }
 
   /**
@@ -26,7 +24,7 @@ export default class ProfileApi {
     *
     * @param profile the newly created connection profile
     */
-  @action
+  @action.bound
   profileCreated(profile) {
     const { editors, editorToolbar, editorPanel } = this.store;
     let targetEditor = null;

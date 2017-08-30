@@ -45,7 +45,6 @@ export default class OutputApi {
 
     this.init = this.init.bind(this);
     this.configureOutputs = this.configureOutputs.bind(this);
-    this.swapOutputShellConnection = this.swapOutputShellConnection.bind(this);
   }
 
   init() {
@@ -59,7 +58,7 @@ export default class OutputApi {
   }
 
   @action.bound
-  addOutput = (editor) => {
+  addOutput(editor) {
     this.outputHash[editor.profileId + '|' + editor.shellId] = editor.id;
 
     try {

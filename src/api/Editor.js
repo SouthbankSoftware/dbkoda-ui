@@ -23,11 +23,6 @@ export default class EditorApi {
   constructor(store, api) {
     this.store = store;
     this.api = api;
-
-    this.addEditor = this.addEditor.bind(this);
-    this.createNewEditorFailed = this.createNewEditorFailed.bind(this);
-    this.setNewEditorState = this.setNewEditorState.bind(this);
-    this.removeEditor = this.removeEditor.bind(this);
   }
   /**
    * Method for adding a new editor to an existing connection.
@@ -35,7 +30,7 @@ export default class EditorApi {
    * @param {Object} options - options for creating new editor
    * @return {Promise}
    */
-  @action
+  @action.bound
   addEditor(options = {}) {
     try {
       let editorOptions = {};
@@ -116,16 +111,16 @@ export default class EditorApi {
     }
   }
 
-  @action
-  createNewEditorFailed = () => {
+  @action.bound
+  createNewEditorFailed() {
     this.store.editorPanel.creatingNewEditor = false;
     this.store.editorToolbar.newConnectionLoading = false;
   };
 
   // Setting up editor after successful response from Controller, it's more than possible some of these
   // states could be removed or refactored eventually. Worth checking out when time allows.
-  @action
-  setNewEditorState = (res, options = {}) => {
+  @action.bound
+  setNewEditorState(res, options = {}) {
     const { content = '' } = options;
     options = _.omit(options, ['content']);
     let fileName = `new${this.store.profiles.get(res.id).editorCount}.js`;
@@ -211,8 +206,8 @@ export default class EditorApi {
     return editorId;
   };
 
-  @action
-  removeEditor = (currEditor) => {
+  @action.bound
+  removeEditor(currEditor) {
     // @TODO -> Looks like during it's various reworks this entire function has been broken and stitched back together. Some refactoring needs to occur to ensure that when atab is closed a new tab is selected. @Mike.
 
     this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
