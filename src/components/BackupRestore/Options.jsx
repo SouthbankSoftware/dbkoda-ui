@@ -42,6 +42,7 @@ const getOptions = (options) => {
             const value = o.value;
             return (<div className="option-item-row" key={key}>
               <Tooltip
+                className="parameter-tooltip"
                 content={o.tooltips}
                 hoverOpenDelay={TooltipDelay}
                 inline
@@ -74,6 +75,7 @@ const getOptions = (options) => {
             return (<div className="pt-form-group" key={key}>
               <div className="pt-form-content option-form">
                 <Tooltip content={o.tooltips}
+                  className="parameter-tooltip"
                   hoverOpenDelay={TooltipDelay}
                   inline
                   intent={Intent.PRIMARY}
@@ -95,6 +97,7 @@ const getOptions = (options) => {
           return (
             <div className="option-item-row pt-form-group" key={key}>
               <Tooltip
+                className="parameter-tooltip"
                 content={o.tooltips}
                 hoverOpenDelay={TooltipDelay}
                 inline
@@ -437,13 +440,6 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
       label: globalString('backuprestore/parameters/inputOptions/label'),
       type: 'separator',
     }, {
-      label: globalString('backuprestore/parameters/fields/label'),
-      tooltips: globalString('backuprestore/parameters/fields/tooltip'),
-      type: 'input',
-      value: outputFields,
-      onChange: changeOutputFields,
-      name: 'output-fields',
-    }, {
       label: globalString('backuprestore/parameters/jsonArray/label'),
       tooltips: globalString('backuprestore/parameters/jsonArray/tooltip'),
       onChange: changeJsonArray,
@@ -477,6 +473,13 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
       type: 'input',
       value: columnsHaveTypes,
       name: 'columns-have-types',
+    }, {
+      label: globalString('backuprestore/parameters/fields/label'),
+      tooltips: globalString('backuprestore/parameters/fields/tooltip'),
+      type: 'input',
+      value: outputFields,
+      onChange: changeOutputFields,
+      name: 'output-fields',
     }, {
       label: globalString('backuprestore/parameters/ingestOptions/label'),
       type: 'separator',
