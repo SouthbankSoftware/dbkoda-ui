@@ -346,6 +346,7 @@ export default class GraphicalBuilder extends React.Component {
     this.moveBlockInEditor(blockFrom, blockTo);
     // 2. Update Shell Steps
     this.updateShellPipeline(true).then((res) => {
+      if (this.debug) console.log('Res: ', res);
       if (res && res.unableToUpdateSteps) {
         // Partial update
         if (this.debug) console.log('Unable to complete full update:', editor.blockList);
@@ -364,6 +365,8 @@ export default class GraphicalBuilder extends React.Component {
           this.forceUpdate();
         });
       } else {
+        if (this.debug) console.log('Res: ', res);
+        if (this.debug) console.log('Able to complete full update:', editor.blockList);
         this.updateResultSet().then((res) => {
           res = JSON.parse(res);
           if (res.stepAttributes.constructor === Array) {
@@ -382,7 +385,7 @@ export default class GraphicalBuilder extends React.Component {
                   if (!(typeof indexValue === 'string')) {
                     indexValue = '[ "' + indexValue.join('", "') + '"]';
                   }
-                  runInAction('Update Graphical Builder', () => {
+                  runInAction('Update Block Status - Valid', () => {
                     editor.blockList[index].attributeList =
                     res.stepAttributes[attributeIndex];
                   editor.blockList[index].status = 'valid';
@@ -392,7 +395,9 @@ export default class GraphicalBuilder extends React.Component {
                   if (!(typeof indexValue === 'string')) {
                     indexValue = '[ "' + indexValue.join('", "') + '"]';
                   }
-                  runInAction('Update Graphical Builder', () => {
+                  runInAction('Update Block Status - Invalid', () => {
+                    editor.blockList[index].attributeList =
+                    res.stepAttributes[attributeIndex];
                     editor.blockList[index].status = 'pending';
                   });
                 }
@@ -488,6 +493,8 @@ export default class GraphicalBuilder extends React.Component {
                     indexValue = '[ "' + indexValue.join('", "') + '"]';
                   }
                   runInAction('Update Graphical Builder', () => {
+                    editor.blockList[index].attributeList =
+                    res.stepAttributes[attributeIndex];
                     editor.blockList[index].status = 'pending';
                   });
                 }
@@ -564,6 +571,7 @@ export default class GraphicalBuilder extends React.Component {
             res = JSON.parse(res);
           } catch (e) {
             console.error(res);
+            console.error('Error validating step: ', step);
             resolve(false);
           }
           if (res.type === 'object') {
@@ -1013,7 +1021,7 @@ export default class GraphicalBuilder extends React.Component {
       this.updateShellPipeline(false).then((res) => {
         if (res && res.unableToUpdateSteps) {
           // Partial update
-          console.error('Unable to complete full update!');
+          if (this.debug) console.error('Unable to complete full update!');
           // 4. Was the block removed the selected block?.
           if (blockPosition === editor.selectedBlock) {
             // 4.a Yes - Set selected block to current - 1.
@@ -1036,6 +1044,7 @@ export default class GraphicalBuilder extends React.Component {
             reject();
           });
         } else {
+          if (this.debug) console.error('Able to complete full update!');
           this.updateResultSet().then((res) => {
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {

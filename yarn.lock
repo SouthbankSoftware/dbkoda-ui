@@ -7583,8 +7583,8 @@ react-base16-styling@^0.5.1, react-base16-styling@^0.5.3:
     pure-color "^1.2.0"
 
 "react-codemirror@github:SouthbankSoftware/react-codemirror":
-  version "0.3.0"
-  resolved "https://codeload.github.com/SouthbankSoftware/react-codemirror/tar.gz/8f82bcfd7626523721ddc0603b9935d34384a5e4"
+  version "0.3.1"
+  resolved "https://codeload.github.com/SouthbankSoftware/react-codemirror/tar.gz/8ea9ea04b24c6404cf3b8eba61bb037de9d42482"
   dependencies:
     classnames "^2.2.5"
     codemirror "^5.18.2"

@@ -58,6 +58,7 @@ if (IS_ELECTRON) {
   const remote = electron.remote;
 
   global.PATHS = remote.getGlobal('PATHS');
+  global.GetRandomPort = remote.getGlobal('getRandomPort');
   stateStore = global.PATHS.stateStore;
 }
 

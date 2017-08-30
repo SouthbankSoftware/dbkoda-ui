@@ -34,9 +34,12 @@ import autobind from 'autobind-decorator';
 export class ProfileForm extends MobxReactForm {
   static mongoProtocol = 'mongodb://';
 
-  static getRandomPort = () => {
-    return Math.floor(Math.random() * 7000) + 6000;
-  };
+  static getRandomPort() {
+    if (GetRandomPort) {
+      return GetRandomPort(6000, 7000, '127.0.0.1');
+    }
+    return new Promise().resolve(Math.floor(Math.random() * 7000) + 6000);
+  }
 
   onInit() {
     // add dynamic validation on each field
