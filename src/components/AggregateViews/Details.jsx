@@ -271,7 +271,12 @@ export default class Details extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
     editor.blockList[editor.selectedBlock].byoCode = true;
-    editor.blockList[editor.selectedBlock].code = false;
+    const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
+      editor.blockList[editor.selectedBlock].type +
+      '.hbs');
+    editor.blockList[editor.selectedBlock].code = formTemplate(
+      editor.blockList[editor.selectedBlock].fields,
+    );
     this.forceUpdate();
   }
 
