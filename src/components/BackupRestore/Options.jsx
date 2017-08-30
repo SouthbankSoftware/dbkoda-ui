@@ -29,12 +29,14 @@ import {BackupRestoreActions} from '../common/Constants';
 import './Options.scss';
 
 const TooltipDelay = 1000;
+const HoverCloseDelay = 10;
 
 const getOptions = (options) => {
+  const filterOptions = _.filter(options, o => !o.hide);
   return (
     <div className="options-panel pt-dark">
       {
-        options.map((o, i) => {
+        filterOptions.map((o, i) => {
           const key = i;
           if (o.type === 'selection') {
             const value = o.value;
@@ -45,6 +47,8 @@ const getOptions = (options) => {
                 inline
                 intent={Intent.PRIMARY}
                 position={Position.TOP}
+                hoverCloseDelay={HoverCloseDelay}
+
               >
                 <div className="label field-label">{o.label}</div>
               </Tooltip>
@@ -73,6 +77,7 @@ const getOptions = (options) => {
                   hoverOpenDelay={TooltipDelay}
                   inline
                   intent={Intent.PRIMARY}
+                  hoverCloseDelay={HoverCloseDelay}
                   position={Position.TOP}>
                   <div className="field-label">{o.label}</div>
                 </Tooltip>
@@ -95,6 +100,7 @@ const getOptions = (options) => {
                 inline
                 intent={Intent.PRIMARY}
                 position={Position.TOP}
+                hoverCloseDelay={HoverCloseDelay}
               >
                 <Checkbox
                   checked={o.checked}
@@ -438,12 +444,6 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
       onChange: changeOutputFields,
       name: 'output-fields',
     }, {
-      label: globalString('backuprestore/parameters/headerLine/label'),
-      tooltips: globalString('backuprestore/parameters/headerLine/tooltip'),
-      onChange: changeHeaderLine,
-      checked: headerLine,
-      name: 'change-header-line',
-    }, {
       label: globalString('backuprestore/parameters/jsonArray/label'),
       tooltips: globalString('backuprestore/parameters/jsonArray/tooltip'),
       onChange: changeJsonArray,
@@ -463,6 +463,13 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
       type: 'selection',
       value: exportType,
       name: 'export-type',
+    }, {
+      label: globalString('backuprestore/parameters/headerLine/label'),
+      tooltips: globalString('backuprestore/parameters/headerLine/tooltip'),
+      onChange: changeHeaderLine,
+      checked: headerLine,
+      name: 'change-header-line',
+      hide: exportType.selected === 'json',
     }, {
       label: globalString('backuprestore/parameters/columnsHaveTypes/label'),
       tooltips: globalString('backuprestore/parameters/columnsHaveTypes/tooltip'),
@@ -495,6 +502,7 @@ export const ImportOptions = ({outputFields, changeOutputFields, headerLine, cha
       label: globalString('backuprestore/parameters/numInsertionWorkers/label'),
       tooltips: globalString('backuprestore/parameters/numInsertionWorkers/tooltip'),
       type: 'input',
+      inputType: 'number',
       value: numInsertionWorkers,
       onChange: changeNumInsertionWorkers,
       name: 'num-insertion-workers',
