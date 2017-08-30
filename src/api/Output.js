@@ -110,9 +110,9 @@ export default class OutputApi {
     );
     Broker.on(
       EventType.createShellReconnectEvent(editor.profileId, editor.shellId),
-      this.onReconnect
+      this.onReconnect,
     );
-  };
+  }
 
   @action.bound
   removeOutput(editor) {
@@ -120,27 +120,27 @@ export default class OutputApi {
     delete this.outputHash[editor.profileId + '|' + editor.shellId];
     Broker.removeListener(
       EventType.createShellOutputEvent(editor.profileId, editor.shellId),
-      this.outputAvailable
+      this.outputAvailable,
     );
     Broker.removeListener(
       EventType.createShellReconnectEvent(editor.profileId, editor.shellId),
-      this.onReconnect
+      this.onReconnect,
     );
   }
 
   @action.bound
   swapOutputShellConnection(event) {
-    const {oldId, oldShellId, id, shellId} = event;
+    const { oldId, oldShellId, id, shellId } = event;
 
     const outputId = this.outputHash[oldId + '|' + oldShellId];
     delete this.outputHash[oldId + '|' + oldShellId];
     Broker.removeListener(
       EventType.createShellOutputEvent(oldId, oldShellId),
-      this.outputAvailable
+      this.outputAvailable,
     );
     Broker.removeListener(
       EventType.createShellReconnectEvent(oldId, oldShellId),
-      this.onReconnect
+      this.onReconnect,
     );
 
     this.outputHash[id + '|' + shellId] = outputId;
@@ -151,7 +151,7 @@ export default class OutputApi {
     );
     Broker.on(
       EventType.createShellReconnectEvent(id, shellId),
-      this.onReconnect
+      this.onReconnect,
     );
   }
 
@@ -202,30 +202,36 @@ export default class OutputApi {
 
   @action.bound
   initJsonView(jsonStr, outputId, displayType, lines) {
-    const tabPrefix = (displayType === 'enhancedJson') ?
-      'EnhancedJson-' : 'TableView-';
+    const tabPrefix =
+      displayType === 'enhancedJson' ? 'EnhancedJson-' : 'TableView-';
     if (this.store.outputPanel.currentTab.indexOf(tabPrefix)) {
-      this.store.outputPanel.currentTab = tabPrefix + this.store.outputPanel.currentTab;
+      this.store.outputPanel.currentTab =
+        tabPrefix + this.store.outputPanel.currentTab;
     }
-    StaticApi.parseShellJson(jsonStr).then((result) => {
-      runInAction(() => {
-        this.store.outputs.get(outputId)[displayType] = {
-          json: result,
-          firstLine: lines.start,
-          lastLine: lines.end
-        };
-      });
-    }, (error) => {
-      runInAction(() => {
-        NewToaster.show({
-          message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
-          intent: Intent.DANGER,
-          icon: ''
+    StaticApi.parseShellJson(jsonStr).then(
+      (result) => {
+        runInAction(() => {
+          this.store.outputs.get(outputId)[displayType] = {
+            json: result,
+            firstLine: lines.start,
+            lastLine: lines.end,
+          };
         });
-        this.store.outputPanel.currentTab =
-          this.store.outputPanel.currentTab
-            .split(tabPrefix)[1];
-      });
-    });
+      },
+      (error) => {
+        runInAction(() => {
+          NewToaster.show({
+            message:
+              globalString('output/editor/parseJsonError') +
+              error.substring(0, 50),
+            intent: Intent.DANGER,
+            icon: '',
+          });
+          this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
+            tabPrefix,
+          )[1];
+        });
+      },
+    );
   }
 }

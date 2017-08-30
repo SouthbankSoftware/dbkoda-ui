@@ -115,7 +115,7 @@ export default class EditorApi {
   createNewEditorFailed() {
     this.store.editorPanel.creatingNewEditor = false;
     this.store.editorToolbar.newConnectionLoading = false;
-  };
+  }
 
   // Setting up editor after successful response from Controller, it's more than possible some of these
   // states could be removed or refactored eventually. Worth checking out when time allows.
@@ -204,7 +204,7 @@ export default class EditorApi {
       iconName: 'pt-icon-thumbs-up',
     });
     return editorId;
-  };
+  }
 
   @action.bound
   removeEditor(currEditor) {
@@ -267,5 +267,5 @@ export default class EditorApi {
     if (treeEditor) {
       this.store.treeActionPanel.editors.delete(treeEditor.id);
     }
-  };
+  }
 }
