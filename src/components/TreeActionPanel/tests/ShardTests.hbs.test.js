@@ -50,7 +50,7 @@ global.jasmine.DEFAULT_TIMEOUT_INTERVAL = 180000;
 describe('Shard-specific tests', () => {
     beforeAll((done) => {
         if (debug) console.log('MongoDB will be setup on port ' + shardPort);
-        const timeout = os.platform() === 'win32' ? 60000 : 10000;
+        const timeout = os.platform() === 'win32' ? 120000 : 10000;
         launchMongoInstance('--replicaset', shardPort, ' --nodes 2 --arbiter --sharded 2   --mongos 1 --config 1  --noauth');
         setTimeout(() => done(), timeout);
     });
