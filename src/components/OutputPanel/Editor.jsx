@@ -126,6 +126,18 @@ export default class Editor extends React.Component {
           />
         </div>
       );
+      menuItems.push(
+        <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
+          <MenuItem
+            onClick={() => {
+              this.props.api.initJsonView(currentJson, this.props.id, 'chartJson', lines);
+            }}
+            text={globalString('output/editor/contextChart')}
+            iconName="pt-icon-th"
+            intent={Intent.NONE}
+          />
+        </div>
+      );
     }
 
     return (
