@@ -52,6 +52,9 @@ const createTemplateObject = (state) => {
   };
   if (sha) {
     items.authDb = database;
+  } else {
+    delete items.username;
+    delete items.password;
   }
   if (hostRadio) {
     if (ssh) {
