@@ -155,7 +155,7 @@ const ConnectionPanel = ({
     profileList.creatingNewProfile = false;
   });
 
-  const connect = action((data) => {
+  const connect = action(async (data) => {
     if (!edit && !validateConnectionFormData(data)) {
       return Promise.reject(globalString('connection/validationError'));
     }
@@ -173,7 +173,7 @@ const ConnectionPanel = ({
       query.sshHost = data.remoteHost;
       query.remoteUser = data.remoteUser;
       query.localHost = '127.0.0.1';
-      data.sshLocalPort = ProfileForm.getRandomPort();
+      data.sshLocalPort = await ProfileForm.getRandomPort();
       query.localPort = data.sshLocalPort;
       connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       if (data.passRadio) {
@@ -253,6 +253,7 @@ const ConnectionPanel = ({
 };
 
 export default inject(allStores => ({
+  store: allStores.store,
   profiles: allStores.store.profiles,
   profileList: allStores.store.profileList,
   setDrawerChild: allStores.store.setDrawerChild,

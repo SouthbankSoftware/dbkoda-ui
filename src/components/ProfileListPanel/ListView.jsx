@@ -117,7 +117,7 @@ export default class ListView extends React.Component {
   }
 
   @action
-  openProfile() {
+  async openProfile() {
     const selectedProfile = this.state.targetProfile;
     const newPassword = this.state.passwordText;
     const usrRemotePass = this.state.remotePass;
@@ -141,7 +141,7 @@ export default class ListView extends React.Component {
       query.sshHost = selectedProfile.remoteHost;
       query.remoteUser = selectedProfile.remoteUser;
       query.localHost = '127.0.0.1';
-      selectedProfile.sshLocalPort = ProfileForm.getRandomPort();
+      selectedProfile.sshLocalPort = await ProfileForm.getRandomPort();
       query.localPort = selectedProfile.sshLocalPort;
       connectionUrl =
         ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
@@ -174,7 +174,9 @@ export default class ListView extends React.Component {
     const service = featherClient().service('/mongo-connection');
     service.timeout = 30000;
     console.log('Q: ', query);
-    this.props.store.layout.alertIsLoading = true;
+    runInAction(() => {
+      this.props.store.layout.alertIsLoading = true;
+    });
     return service
       .create({}, { query })
       .then((res) => {
