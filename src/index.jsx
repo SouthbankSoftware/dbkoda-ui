@@ -45,6 +45,17 @@ let api;
 let bAppRendered = false;
 
 Broker.once(EventType.APP_READY, () => {
+  if (store) {
+    console.log('Last Store Version:', store.version);
+    // if (!store.version) {
+    //   store = new Store();
+    //   api = new DataCenter(store);
+    //   store.setAPI(api);
+    // }
+    // else if (store.version != global.version) {  // Have to define and read the version from global variables
+
+    // }
+  }
   const render = (Component) => {
     ReactDOM.render(
       <AppContainer>
