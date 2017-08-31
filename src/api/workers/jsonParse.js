@@ -22,7 +22,7 @@
  * @Date:   2017-08-08T15:59:13+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T16:06:22+10:00
+ * @Last modified time: 2017-08-31T09:06:04+10:00
  */
 
 self.addEventListener('message', (e) => {
@@ -32,7 +32,7 @@ self.addEventListener('message', (e) => {
     .replace(/NumberLong\("([0-9]*)"\)/gm, '$1')
     .replace(/NumberDecimal\("([0-9.]*)"\)/gm, '$1')
     .replace(/BinData\("([0-9a-zA-Z]*)"\)/gm, '"$1"')
-    .replace(/ISODate\("([0-9a-zA-Z\-:]*)"\)/gm, '"$1"')
+    .replace(/ISODate\("([0-9a-zA-Z\-:\.]*)"\)/gm, '"$1"')
     .replace(/Timestamp\("([0-9], *)"\)/gm, '"$1"')
     .replace(/\n/gm, '')
     .replace(/<(.*)>/gm, (contents) => {
