@@ -30,8 +30,8 @@
     "output": {
       "heading": "Query Output",
       "toolbar": {
-        "save": "Save Output (Shift + X)",
-        "showMore": "Show More (Shift + M)",
+        "save": "Save Output",
+        "showMore": "Show More (Ctrl + M)",
         "clear": "Clear Output Contents (Ctrl + L)"
       },
       "editor": {
