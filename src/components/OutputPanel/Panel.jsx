@@ -30,6 +30,7 @@ import { inject, observer } from 'mobx-react';
 import { Tab2, Tabs2 } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
+import { ChartPanel } from '#/ChartPanel';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
@@ -330,6 +331,24 @@ export default class Panel extends React.Component {
                   outputId={editor[1].id}
                   tableJson={this.props.store.outputs.get(editor[1].id).tableJson}
                   getDocumentAtLine={this.getDocumentAtLine} />
+              }
+            />
+          );
+        }
+        if (
+          this.props.store.outputs.get(editor[1].id).chartJson &&
+          process.env.NODE_ENV === 'development'
+        ) {
+          arrTabs.push(
+            <Tab2
+              className={
+                tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
+              }
+              key={'ChartView-' + editor[1].id}
+              id={'ChartView-' + editor[1].id}
+              title={'ChartView-' + editorTitle}
+              panel={
+                <ChartPanel data={this.props.store.outputs.get(editor[1].id).chartJson} />
               }
             />
           );

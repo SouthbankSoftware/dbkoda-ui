@@ -144,6 +144,11 @@ export default class Toolbar extends React.Component {
         this.props.store.outputs.get(editorKey).tableJson = '';
         this.props.store.outputPanel.clearingOutput = false;
         this.props.store.outputPanel.currentTab = editorKey;
+      } else if (currentTab.startsWith('ChartView-')) {
+        const editorKey = currentTab.split('ChartView-')[1];
+        this.props.store.outputs.get(editorKey).chartJson = '';
+        this.props.store.outputPanel.clearingOutput = false;
+        this.props.store.outputPanel.currentTab = editorKey;
       }
     }, {name: 'reactionOutputToolbarClearOutput'});
   }

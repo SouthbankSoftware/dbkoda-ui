@@ -38,6 +38,7 @@
         "restoreSession": "** Session Restored **\r",
         "contextJson": "Enhanced JSON View",
         "contextTable": "JSON Table View",
+        "contextChart": "Chart View",
         "parseJsonError": "Could not parse a document from the selected text. "
       },
       "terminal": {
