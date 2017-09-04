@@ -19,40 +19,17 @@
  */
 
 import React from 'react';
-import SplitPane from 'react-split-pane';
-import DataTree from './DataTree';
-import BarChart from './BarChart';
-import './Panel.scss';
 
-export default class ChartPanel extends React.Component {
-  static defaultProps = {};
-
-  static PropTypes = {
-    data: React.PropTypes.object.isRequired,
-  };
-
+export default class DataTree extends React.Component {
+  // static defaultProps = {};
+  //
+  // static PropTypes = {};
+  //
   // constructor(props) {
   //   super(props);
   // }
 
   render() {
-    return (
-      <div className="ChartPanel">
-        <SplitPane
-          className="SplitPane"
-          split="vertical"
-          defaultSize={250}
-          minSize={50}
-          maxSize={1000}
-          pane2Style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <DataTree />
-          <BarChart />
-        </SplitPane>
-      </div>
-    );
+    return <div className="DataTree" />;
   }
 }

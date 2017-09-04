@@ -130,7 +130,21 @@ export default class Editor extends React.Component {
         <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
           <MenuItem
             onClick={() => {
-              this.props.api.initJsonView(currentJson, this.props.id, 'chartJson', lines);
+              // TODO connect to real json
+              // this.props.api.initJsonView(currentJson, this.props.id, 'chartJson', lines);
+
+              // Test drive: connect to DBEnvyLoad_orders.json
+              const data = require('#/ChartPanel/DBEnvyLoad_orders.json');
+
+              runInAction(() => {
+                this.props.store.outputs.get(this.props.id).chartJson = {
+                  json: data,
+                  firstLine: lines.start,
+                  lastLine: lines.end,
+                };
+
+                this.props.store.outputPanel.currentTab = 'ChartView-' + this.props.store.outputPanel.currentTab;
+              });
             }}
             text={globalString('output/editor/contextChart')}
             iconName="pt-icon-th"

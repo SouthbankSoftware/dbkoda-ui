@@ -197,9 +197,8 @@ export default class OutputApi {
       tabPrefix = 'ChartView-';
     }
 
-    // TODO this might be buggy as currentTab might already be prefixed
-    if (this.store.outputPanel.currentTab.indexOf(tabPrefix)) {
-      this.store.outputPanel.currentTab = tabPrefix + this.store.outputPanel.currentTab;
+    if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
+      this.store.outputPanel.currentTab = tabPrefix + outputId;
     }
 
     StaticApi.parseShellJson(jsonStr).then(

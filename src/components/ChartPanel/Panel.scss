@@ -25,4 +25,20 @@
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+
+  .DataTree, .BarChart {
+  }
+
+  .recharts-bar-cursor {
+    fill: $chartItemHover !important;
+  }
+  .recharts-default-tooltip {
+    background-color: $chartTooltipBackground !important;
+  }
+  .recharts-tooltip-label {
+    color: $fieldBrightFontColor !important;
+  }
+  .recharts-legend-item-text {
+    color: $detailsFontColor !important;
+  }
 }
