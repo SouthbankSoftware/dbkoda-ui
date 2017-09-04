@@ -1,4 +1,5 @@
-/*
+/* @flow
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,13 +19,17 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import * as React from 'react';
 import SplitPane from 'react-split-pane';
 import DataTree from './DataTree';
 import BarChart from './BarChart';
 import './Panel.scss';
 
-export default class ChartPanel extends React.Component {
+type Props = {
+  data: {}
+};
+
+export default class ChartPanel extends React.Component<Props> {
   static defaultProps = {};
 
   static PropTypes = {
