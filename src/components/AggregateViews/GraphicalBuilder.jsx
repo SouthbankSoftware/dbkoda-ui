@@ -71,7 +71,7 @@ export default class GraphicalBuilder extends React.Component {
       db: props.db,
       collection: props.collection,
     };
-    this.debug = false;
+    this.debug = true;
     // Set up the aggregate builder in the shell.
     this.editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -113,6 +113,87 @@ export default class GraphicalBuilder extends React.Component {
     });
   }
 
+  @action.bound
+  addBlock(block, position) {
+    return new Promise((resolve, reject) => {
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+
+      if (this.debug) console.log('[ADDBLOCK] - Adding block to position: ', position);
+      this.updateShellPipeline().then(() => {
+        this.updateResultSet()
+          .then((res) => {
+            if (this.debug) console.log('[ADDBLOCK] - updateResultSet:', JSON.parse(res));
+            res = JSON.parse(res);
+            if (res.stepAttributes.constructor === Array) {
+              // 3. Update Valid for each block.
+              res.stepAttributes.map((indexValue, index) => {
+                let attributeIndex = index;
+                if (index > 0) {
+                  attributeIndex = index - 1;
+                }
+                if (indexValue.constructor === Array) {
+                  // Check for error result.
+                  if (res.stepCodes[index] === 0) {
+                    if (this.debug) {
+                      console.log('Result[', index, '] is valid: ', indexValue);
+                    }
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    runInAction('Update Graphical Builder', () => {
+                      editor.blockList[index].attributeList =
+                        res.stepAttributes[attributeIndex];
+                      editor.blockList[index].status = 'valid';
+                    });
+                  } else {
+                    console.error(
+                      'Result[',
+                      index,
+                      '] is invalid: ',
+                      indexValue,
+                    );
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    runInAction('Update Graphical Builder', () => {
+                      editor.blockList[index].status = 'pending';
+                    });
+                  }
+                }
+              });
+
+              // 4.b Is the current latest step valid?
+              if (
+                editor.blockList[editor.blockList.length - 1].status === 'valid'
+              ) {
+                this.getBlockAttributes(position - 1).then((res) => {
+                  // 3.a Add to Editor
+                  this.addBlockToEditor(block.type, position, res, true, block).then(() => {
+                    resolve();
+                    });
+                });
+              } else {
+                this.addBlockToEditor(block.type, position, null, true, block).then(() => {
+                  resolve();
+                });
+              }
+              this.clearResultsOutput(editor);
+            } else {
+              // Check for error.
+              console.error('updateResultSet: ', res);
+              reject();
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+            reject();
+          });
+      });
+    });
+  }
+
   /**
    * Add a single block to the editor object.
    * @param {blockType} - The type of block to be added.
@@ -120,12 +201,12 @@ export default class GraphicalBuilder extends React.Component {
    * @param {attributes} - List of avaliable attributes for the .ddd
    */
   @action.bound
-  addBlockToEditor(blockType, position, attributeList) {
+  addBlockToEditor(blockType, position, attributeList, isImport, block) {
+    return new Promise((resolve) => {
     // Get relevant editor.
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
-
     // Update block list for editor as required.
     const tmpArray = this.props.store.editors
       .get(this.props.store.editorPanel.activeEditorId)
@@ -154,8 +235,13 @@ export default class GraphicalBuilder extends React.Component {
         fields: BlockTypes[blockType.toUpperCase()].fields,
         modified: false,
       });
-      this.moveBlock(tmpArray, tmpArray.length - 1, position);
+      if (isImport) {
+        this.moveImportBlock(tmpArray, tmpArray.length - 1, position);
+      } else {
+        this.moveBlock(tmpArray, tmpArray.length - 1, position);
+      }
     }
+
     this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     ).blockList = tmpArray;
@@ -165,7 +251,18 @@ export default class GraphicalBuilder extends React.Component {
     editor.blockList[position].attributeList = attributeList;
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
-    this.selectBlock(0);
+    this.selectBlock(position).then(() => {
+      console.log('[ADDBLOCKTOEDITOR] - Done adding Block: ', editor.blockList[editor.selectedBlock]);
+      if (block) {
+        console.log('[ADDBLOCKTOEDITOR] - Adding fields to block...');
+        console.log('[ADDBLOCKTOEDITOR] - fields:', editor.blockList[position].fields);
+        console.log('[ADDBLOCKTOEDITOR] - block:', block.fields);
+        // Iterate through each field and add the appropriate values.
+        // tmpArray[position].fields = block.fields;
+      }
+      resolve();
+    });
+  });
   }
   /**
    * Fetch the block attributes from the shell object.
@@ -206,6 +303,7 @@ export default class GraphicalBuilder extends React.Component {
 
   @action.bound
   selectBlock(index) {
+    return new Promise((resolve) => {
     // 1. Update Editor List.
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -222,8 +320,7 @@ export default class GraphicalBuilder extends React.Component {
     this.updateShellPipeline(true).then((res) => {
       if (res && res.unableToUpdateSteps) {
         // Partial update
-        if (this.debug) console.log('Unable to complete full update!');
-
+        console.log('[SELECT] - Unable to fully update steps: ', res);
         // 4. Is the current block valid?.
         if (editor.blockList[editor.selectedBlock].status === 'valid') {
           // 4.a Yes - Update Results.
@@ -243,7 +340,7 @@ export default class GraphicalBuilder extends React.Component {
           res = JSON.parse(res);
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
-            if (this.debug) console.log('updateResultSet:', res);
+            if (this.debug) console.log('[SELECT] - updateResultSet:', res);
             res.stepAttributes.map((indexValue, index) => {
               let attributeIndex = index;
               if (index > 0) {
@@ -257,8 +354,8 @@ export default class GraphicalBuilder extends React.Component {
                   }
                   runInAction('Update Graphical Builder', () => {
                     editor.blockList[index].attributeList =
-                    res.stepAttributes[attributeIndex];
-                  editor.blockList[index].status = 'valid';
+                      res.stepAttributes[attributeIndex];
+                    editor.blockList[index].status = 'valid';
                   });
                 } else {
                   if (!(typeof indexValue === 'string')) {
@@ -288,11 +385,14 @@ export default class GraphicalBuilder extends React.Component {
             runInAction('Update Graphical Builder', () => {
               this.props.store.editorPanel.updateAggregateDetails = true;
               this.forceUpdate();
+              if (this.debug) console.log('[SELECT] - Selecting block: ', index);
+              resolve();
             });
           }
         });
       }
     });
+  });
   }
 
   @action.bound
@@ -334,6 +434,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   moveBlock(blockFrom, blockTo) {
+    return new Promise((resolve) => {
     // 1. Update Editor (moveBlock)
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -349,7 +450,9 @@ export default class GraphicalBuilder extends React.Component {
       if (this.debug) console.log('Res: ', res);
       if (res && res.unableToUpdateSteps) {
         // Partial update
-        if (this.debug) console.log('Unable to complete full update:', editor.blockList);
+        if (this.debug) {
+          console.log('Unable to complete full update:', editor.blockList);
+        }
 
         // 4. Is the current block valid?.
         if (editor.blockList[editor.selectedBlock].status === 'valid') {
@@ -366,7 +469,9 @@ export default class GraphicalBuilder extends React.Component {
         });
       } else {
         if (this.debug) console.log('Res: ', res);
-        if (this.debug) console.log('Able to complete full update:', editor.blockList);
+        if (this.debug) {
+          console.log('Able to complete full update:', editor.blockList);
+        }
         this.updateResultSet().then((res) => {
           res = JSON.parse(res);
           if (res.stepAttributes.constructor === Array) {
@@ -387,8 +492,8 @@ export default class GraphicalBuilder extends React.Component {
                   }
                   runInAction('Update Block Status - Valid', () => {
                     editor.blockList[index].attributeList =
-                    res.stepAttributes[attributeIndex];
-                  editor.blockList[index].status = 'valid';
+                      res.stepAttributes[attributeIndex];
+                    editor.blockList[index].status = 'valid';
                   });
                 } else {
                   console.error('Result[', index, '] is invalid: ', indexValue);
@@ -397,7 +502,7 @@ export default class GraphicalBuilder extends React.Component {
                   }
                   runInAction('Update Block Status - Invalid', () => {
                     editor.blockList[index].attributeList =
-                    res.stepAttributes[attributeIndex];
+                      res.stepAttributes[attributeIndex];
                     editor.blockList[index].status = 'pending';
                   });
                 }
@@ -416,11 +521,27 @@ export default class GraphicalBuilder extends React.Component {
             runInAction('Update Graphical Builder', () => {
               this.props.store.editorPanel.updateAggregateDetails = true;
               this.forceUpdate();
+              resolve();
             });
           }
         });
       }
     });
+  });
+  }
+
+  /**
+   *
+   */
+  moveImportBlock(array, oldIndex, newIndex) {
+    // Standard array move:
+    if (newIndex >= array.length) {
+      let tmpArray = newIndex - array.length;
+      while ((tmpArray -= 1) + 1) {
+        array.push(undefined);
+      }
+    }
+    array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
   }
 
   /**
@@ -484,8 +605,8 @@ export default class GraphicalBuilder extends React.Component {
                   }
                   runInAction('Update Graphical Builder', () => {
                     editor.blockList[index].attributeList =
-                    res.stepAttributes[attributeIndex];
-                  editor.blockList[index].status = 'valid';
+                      res.stepAttributes[attributeIndex];
+                    editor.blockList[index].status = 'valid';
                   });
                 } else {
                   console.error('Result[', index, '] is invalid: ', indexValue);
@@ -494,7 +615,7 @@ export default class GraphicalBuilder extends React.Component {
                   }
                   runInAction('Update Graphical Builder', () => {
                     editor.blockList[index].attributeList =
-                    res.stepAttributes[attributeIndex];
+                      res.stepAttributes[attributeIndex];
                     editor.blockList[index].status = 'pending';
                   });
                 }
@@ -534,6 +655,7 @@ export default class GraphicalBuilder extends React.Component {
 
   moveBlockHelper(array, oldIndex, newIndex) {
     // Standard array move:
+    console.log('!!! PALETTE !!!');
     if (newIndex >= array.length) {
       let tmpArray = newIndex - array.length;
       while ((tmpArray -= 1) + 1) {
@@ -759,8 +881,7 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   updateResultsOutput(editor, stepId) {
     const output = this.props.store.outputs.get(editor.id);
-    output.output =
-      globalString('aggregate_builder/valid_output');
+    output.output = globalString('aggregate_builder/valid_output');
 
     const service = featherClient().service('/mongo-sync-execution');
     service.timeout = 30000;
@@ -806,7 +927,8 @@ export default class GraphicalBuilder extends React.Component {
           _.forEach(fileNames, (v) => {
             this.props.store
               .openFile(v, ({ _id, content }) => {
-                this.importFile(JSON.parse(content));
+                const contentObject = JSON.parse(content);
+                this.importFile(contentObject);
               })
               .catch(() => {});
           });
@@ -916,7 +1038,6 @@ export default class GraphicalBuilder extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
       const exportObject = {
-        shellObject: {},
         editorObject: {
           aggConfig: editor.aggConfig,
           aggregateID: editor.aggregateID,
@@ -925,36 +1046,13 @@ export default class GraphicalBuilder extends React.Component {
           selectedBlock: editor.selectedBlock,
         },
       };
-
-      // Fetch shell object and place into new struct before resolving.
-      const service = featherClient().service('/mongo-sync-execution');
-      service.timeout = 30000;
-      service
-        .update(editor.profileId, {
-          shellId: editor.shellId, // eslint-disable-line
-          commands: AggregateCommands.GET_AGG_OBJECT(editor.aggregateID),
-        })
-        .then((res) => {
-          const parsedRes = JSON.parse(res);
-          exportObject.shellObject = {
-            dbName: parsedRes.dbName,
-            collectionName: parsedRes.collectionName,
-            steps: parsedRes.steps,
-            stepCodes: parsedRes.stepCodes,
-            stepAttributes: parsedRes.stepAttributes,
-            stepResults: []
-          };
-          resolve(exportObject);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+      resolve(exportObject);
     });
   }
 
   /**
    * 
-   * @param {Object} contentObject - Object containing the aggregate builder t
+   * @param {Object} contentObject - Object containing the aggregate builder for
    * import.
    */
   @action.bound
@@ -966,42 +1064,52 @@ export default class GraphicalBuilder extends React.Component {
     let isValid;
     if (
       contentObject.editorObject &&
-      contentObject.shellObject &&
       contentObject.editorObject.blockList &&
-      contentObject.editorObject.collection &&
-      contentObject.shellObject.steps
+      contentObject.editorObject.collection
     ) {
       isValid = true;
     } else {
       isValid = false;
     }
-
     if (isValid) {
       // Remove all Blocks.
-      this.removeAllBlocks().then(this.addNewBlocks).then(() => {
-        NewToaster.show({
-          message: globalString('aggregate_builder/import_passed'),
-          intent: Intent.SUCCESS,
-          iconName: 'pt-icon-thumbs-up',
+      this.removeAllBlocks()
+        .then(() => {
+          this.addNewBlocks(contentObject);
+        })
+        .then(() => {
+          NewToaster.show({
+            message: globalString('aggregate_builder/import_passed'),
+            intent: Intent.SUCCESS,
+            iconName: 'pt-icon-thumbs-up',
+          });
+          this.forceUpdate();
+        })
+        .catch((err) => {
+          NewToaster.show({
+            message: globalString('aggregate_builder/import_failed'),
+            intent: Intent.DANGER,
+            iconName: 'pt-icon-thumbs-down',
+          });
+          this.forceUpdate();
+          console.error(err);
         });
-        this.forceUpdate();
-      }).catch((err) => {
-        NewToaster.show({
-          message: globalString('aggregate_builder/import_failed'),
-          intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down',
-        });
-        this.forceUpdate();
-        console.error(err);
-      });
 
-          // runInAction('Update Graphical Builder', () => {
-          //   editor.aggregateID = 1;
-          //   editor.aggConfig = contentObject.editorObject.aggConfig;
-          //   this.convertToObservable(contentObject.editorObject.blockList);
-          //   editor.collection = contentObject.editorObject.collection;
-          //   editor.selectedBlock = contentObject.editorObject.selectedBlock;
-          // });
+      // runInAction('Update Graphical Builder', () => {
+      //   editor.aggregateID = 1;
+      //   editor.aggConfig = contentObject.editorObject.aggConfig;
+      //   this.convertToObservable(contentObject.editorObject.blockList);
+      //   editor.collection = contentObject.editorObject.collection;
+      //   editor.selectedBlock = contentObject.editorObject.selectedBlock;
+      // });
+    } else {
+      NewToaster.show({
+        message: globalString('aggregate_builder/import_failed'),
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down',
+      });
+      this.forceUpdate();
+      console.error('Invalid import object: ', contentObject);
     }
   }
 
@@ -1044,12 +1152,11 @@ export default class GraphicalBuilder extends React.Component {
             reject();
           });
         } else {
-          if (this.debug) console.error('Able to complete full update!');
           this.updateResultSet().then((res) => {
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
-              if (this.debug) console.log('updateResultSet:', res);
+              if (this.debug) console.log('[REMOVEALLBLOCKS] - updateResultSet:', res);
               res.stepAttributes.map((indexValue, index) => {
                 let attributeIndex = index;
                 if (index > 0) {
@@ -1065,11 +1172,16 @@ export default class GraphicalBuilder extends React.Component {
                     }
                     runInAction('Update Graphical Builder', () => {
                       editor.blockList[index].attributeList =
-                      res.stepAttributes[attributeIndex];
-                    editor.blockList[index].status = 'valid';
+                        res.stepAttributes[attributeIndex];
+                      editor.blockList[index].status = 'valid';
                     });
                   } else {
-                    console.error('Result[', index, '] is invalid: ', indexValue);
+                    console.error(
+                      'Result[',
+                      index,
+                      '] is invalid: ',
+                      indexValue,
+                    );
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -1101,9 +1213,6 @@ export default class GraphicalBuilder extends React.Component {
           });
         }
       });
-
-      // Verify.
-      resolve();
     });
   }
 
@@ -1111,106 +1220,33 @@ export default class GraphicalBuilder extends React.Component {
    * Adds new blocks from an imported file.
    */
   @action.bound
-  addNewBlocks() {
+  addNewBlocks(contentObject) {
     return new Promise((resolve) => {
-      resolve();
-    });
-  }
-
-
-
-  @action.bound
-  addBlock(blockType, position) {
-    if (
-      this.props.store.editors.get(this.props.store.editorPanel.activeEditorId)
-        .blockList.length === 0
-    ) {
-      position = 0;
-    } else if (position === 'END') {
-      position = this.props.store.editors.get(
+      const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
-      ).blockList.length;
-    } else if (position === 'START') {
-      position = 1;
-    }
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
+      );
+      const importBlockList = contentObject.editorObject.blockList;
+      let count = 0;
 
-    if (this.debug) console.log('Block added to position: ', position);
-    // 1. Is this the first added block?
-    if (position === 0) {
-      position = 1;
-      // a First block.
-      // 2.a Get attributes.
-      this.getBlockAttributes(position).then((res) => {
-        // 3.a Add to Editor
-        this.addBlockToEditor(blockType, position, res);
-      });
-    } else {
-      this.updateShellPipeline().then(() => {
-        this.updateResultSet()
-          .then((res) => {
-            if (this.debug) console.log('updateResultSet:', JSON.parse(res));
-            res = JSON.parse(res);
-            if (res.stepAttributes.constructor === Array) {
-              // 3. Update Valid for each block.
-              res.stepAttributes.map((indexValue, index) => {
-                let attributeIndex = index;
-                if (index > 0) {
-                  attributeIndex = index - 1;
-                }
-                if (indexValue.constructor === Array) {
-                  // Check for error result.
-                  if (res.stepCodes[index] === 0) {
-                    if (this.debug) console.log('Result[', index, '] is valid: ', indexValue);
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Graphical Builder', () => {
-                      editor.blockList[index].attributeList =
-                        res.stepAttributes[attributeIndex];
-                      editor.blockList[index].status = 'valid';
-                    });
-                  } else {
-                    console.error(
-                      'Result[',
-                      index,
-                      '] is invalid: ',
-                      indexValue,
-                    );
-                    if (!(typeof indexValue === 'string')) {
-                      indexValue = '[ "' + indexValue.join('", "') + '"]';
-                    }
-                    runInAction('Update Graphical Builder', () => {
-                      editor.blockList[index].status = 'pending';
-                    });
-                  }
-                }
-              });
-
-              // 4.b Is the current latest step valid?
-              if (
-                editor.blockList[editor.blockList.length - 1].status === 'valid'
-              ) {
-                this.getBlockAttributes(position - 1).then((res) => {
-                  // 3.a Add to Editor
-                  this.addBlockToEditor(blockType, position, res);
-                });
-              } else {
-                this.addBlockToEditor(blockType, position, null);
-              }
-              this.clearResultsOutput(editor);
+      // Function for running through the promises synchronously.
+      const importBlock = (blocks) => {
+        let p = Promise.resolve();
+        blocks.forEach((block) => {
+          p = p.then(() => {
+            if (count === 0) {
+               count += 1;
             } else {
-              // Check for error.
-              console.error('updateResultSet: ', res);
+              return this.addBlock(block, count).then(() => {
+                count += 1;
+              });
             }
-          })
-          .catch((e) => {
-            console.error(e);
           });
-      });
-    }
+        });
+        return p;
+      };
+
+      importBlock(importBlockList);
+    });
   }
 
   /**
@@ -1257,28 +1293,26 @@ export default class GraphicalBuilder extends React.Component {
     return (
       <div className="aggregateGraphicalBuilderWrapper">
         <div className="topButtons">
-          {this.props.store.drawer.drawerChild === DrawerPanes.DEFAULT &&
+          {this.props.store.drawer.drawerChild === DrawerPanes.DEFAULT && (
             <AnchorButton
               className="showLeftPanelButton"
               intent={Intent.SUCCESS}
               text={globalString('aggregate_builder/show_left_panel')}
               onClick={this.onShowLeftPanelClicked}
-            />}
-            {false && //eslint-disable-line
-            <AnchorButton
-              className="importButton"
-              intent={Intent.SUCCESS}
-              text={globalString('aggregate_builder/import_button')}
-              onClick={this.onImportButtonClicked}
-            />}
-          {false &&
+            />
+          )}
+          <AnchorButton
+            className="importButton"
+            intent={Intent.SUCCESS}
+            text={globalString('aggregate_builder/import_button')}
+            onClick={this.onImportButtonClicked}
+          />
           <AnchorButton
             className="exportButton"
             intent={Intent.SUCCESS}
             text={globalString('aggregate_builder/export_button')}
             onClick={this.onExportButtonClicked}
           />
-            }
         </div>
         <ul className="graphicalBuilderBlockList">
           <FirstBlockTarget />

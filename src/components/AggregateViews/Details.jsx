@@ -298,7 +298,10 @@ export default class Details extends React.Component {
     this.currentCollection = this.editor.collection.text;
     const blockIndex = activeEditor.selectedBlock;
     const activeBlock = activeEditor.blockList[blockIndex];
-
+    runInAction(() => {
+      this.props.store.editorPanel.updateAggregateDetails = false;
+    });
+    console.log('[DETAILS] - block fields: ', activeBlock);
     // Check if this is a BYOcode block, if so, render BYO fragment.
     if (activeBlock && activeBlock.byoCode) {
       // Update Handlebars first:
@@ -313,7 +316,8 @@ export default class Details extends React.Component {
         <div className="aggregateDetailsWrapper">
           <nav className="aggregateDetailsToolbar pt-navbar pt-dark">
             <h2 className="currentBlockChoice">
-              {' '}{globalString('aggregate_builder/details_title')}
+              {' '}
+              {globalString('aggregate_builder/details_title')}
             </h2>
           </nav>
           <div className="aggregateDetailsContent">
@@ -380,34 +384,34 @@ export default class Details extends React.Component {
           </h2>
         </nav>
         <div className="aggregateDetailsContent">
-          {activeBlock &&
-            <h2 className="aggregateBlockType">
-              {activeBlock.type}
-            </h2>}
-          {activeBlock &&
+          {activeBlock && (
+            <h2 className="aggregateBlockType">{activeBlock.type}</h2>
+          )}
+          {activeBlock && (
             <p className="aggregateBlockDescription">
               {BlockTypes[activeBlock.type.toUpperCase()].description}
-            </p>}
-          {activeBlock &&
+            </p>
+          )}
+          {activeBlock && (
             <div className={'dynamic-form columns-' + maxColumns + '-max'}>
-              {this.state.form &&
-                <View mobxForm={this.state.form.mobxForm} isAggregate />}
-              {!this.bForm &&
+              {this.state.form && (
+                <View mobxForm={this.state.form.mobxForm} isAggregate />
+              )}
+              {!this.bForm && (
                 <div>
                   <div className="tree-msg-div">
-                    <span>
-                      {this.msg}
-                    </span>
+                    <span>{this.msg}</span>
                   </div>
-                </div>}
-            </div>}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-        {!activeBlock &&
+        {!activeBlock && (
           <div className="aggregateDetailsContent">
-            <p>
-              {' '}{globalString('aggregate_builder/no_block_selected')}
-            </p>
-          </div>}
+            <p> {globalString('aggregate_builder/no_block_selected')}</p>
+          </div>
+        )}
         <div className="bottomToolbar">
           <AnchorButton
             className="hideLeftPanelButton"
@@ -416,13 +420,14 @@ export default class Details extends React.Component {
             onClick={this.onHideLeftPanelClicked}
           />
           {activeBlock &&
-            activeBlock.type.toUpperCase() !== 'START' &&
+          activeBlock.type.toUpperCase() !== 'START' && (
             <AnchorButton
               className="byoCodeButton"
               intent={Intent.SUCCESS}
               text={globalString('aggregate_builder/byo_code')}
               onClick={this.byoCode}
-            />}
+            />
+          )}
         </div>
       </div>
     );
