@@ -71,7 +71,7 @@ export default class GraphicalBuilder extends React.Component {
       db: props.db,
       collection: props.collection,
     };
-    this.debug = true;
+    this.debug = false;
     // Set up the aggregate builder in the shell.
     this.editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -252,10 +252,10 @@ export default class GraphicalBuilder extends React.Component {
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
     this.selectBlock(position).then(() => {
-      console.log('[ADDBLOCKTOEDITOR] - Done adding Block: ', editor.blockList[editor.selectedBlock]);
+      if (this.debug) console.log('[ADDBLOCKTOEDITOR] - Done adding Block: ', editor.blockList[editor.selectedBlock]);
       if (block) {
-        console.log('[ADDBLOCKTOEDITOR] - Adding fields to block...');
-        console.log('[ADDBLOCKTOEDITOR] - before:', editor.blockList[position].fields);
+        if (this.debug) console.log('[ADDBLOCKTOEDITOR] - Adding fields to block...');
+        if (this.debug) console.log('[ADDBLOCKTOEDITOR] - before:', editor.blockList[position].fields);
         // Iterate through each field in block.fields and add the appropriate values.
         // tmpArray[position].fields = block.fields;
         for (const key in block.fields) {
@@ -271,7 +271,7 @@ export default class GraphicalBuilder extends React.Component {
             }
           }
         }
-        console.log('[ADDBLOCKTOEDITOR] - after:', editor.blockList[position].fields);
+        if (this.debug) console.log('[ADDBLOCKTOEDITOR] - after:', editor.blockList[position].fields);
       }
       resolve();
     });
@@ -321,6 +321,7 @@ export default class GraphicalBuilder extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
+    this.setOutputLoading(editor.id);
     this.setState({ activeBlockIndex: index });
     this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -718,6 +719,14 @@ export default class GraphicalBuilder extends React.Component {
         })
         .catch((e) => {
           console.error(e);
+          if (e.code === 400) {
+            NewToaster.show({
+              message: globalString('aggregate_builder/no_active_connection'),
+              intent: Intent.DANGER,
+              iconName: 'pt-icon-thumbs-down',
+            });
+            this.setOutputBroken();
+          }
           reject(e);
         });
     });
@@ -910,6 +919,9 @@ export default class GraphicalBuilder extends React.Component {
       .then((res) => {
         runInAction('Update Graphical Builder', () => {
           res = JSON.parse(res);
+          if (res.length === 0) {
+            output.output = globalString('aggregate_builder/no_output');
+          }
           res.map((indexValue) => {
             output.output += JSON.stringify(indexValue) + '\n';
           });
@@ -918,6 +930,28 @@ export default class GraphicalBuilder extends React.Component {
       .catch((e) => {
         console.error(e);
       });
+  }
+
+   /**
+   * Sets the output to loading while it fetches results.
+   * 
+   * @param {Object} editorId - The editor to update the output for.
+   */
+  @action.bound
+  setOutputLoading(editorId) {
+    const output = this.props.store.outputs.get(editorId);
+    output.output = globalString('aggregate_builder/loading_output');
+  }
+
+  /**
+   * Sets the output to loading while it fetches results.
+   * 
+   * @param {Object} editorId - The editor to update the output for.
+   */
+  @action.bound
+  setOutputBroken(editorId) {
+    const output = this.props.store.outputs.get(editorId);
+    output.output = globalString('aggregate_builder/failed_output');
   }
 
   /**

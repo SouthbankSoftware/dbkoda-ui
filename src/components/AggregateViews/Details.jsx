@@ -60,6 +60,7 @@ export default class Details extends React.Component {
     this.editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
+    this.debug = false;
 
     /**
      * Resolve the prefetch arguments and return them as params
@@ -107,10 +108,12 @@ export default class Details extends React.Component {
                 ) {
                   myCount += 1;
                 }
-                console.log(
-                  'Serving attributes: ',
-                  editor.blockList[editor.selectedBlock].attributeList,
-                );
+                if (this.debug) {
+                  console.log(
+                    'Serving attributes: ',
+                    editor.blockList[editor.selectedBlock].attributeList,
+                  );
+                }
                 params[arg.name] =
                   editor.blockList[editor.selectedBlock].attributeList;
                 break;
@@ -301,7 +304,9 @@ export default class Details extends React.Component {
     runInAction(() => {
       this.props.store.editorPanel.updateAggregateDetails = false;
     });
-    console.log('[DETAILS] - block fields: ', activeBlock);
+    if (this.debug) {
+      console.log('[DETAILS] - block fields: ', activeBlock);
+    }
     // Check if this is a BYOcode block, if so, render BYO fragment.
     if (activeBlock && activeBlock.byoCode) {
       // Update Handlebars first:
