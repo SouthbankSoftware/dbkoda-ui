@@ -255,10 +255,23 @@ export default class GraphicalBuilder extends React.Component {
       console.log('[ADDBLOCKTOEDITOR] - Done adding Block: ', editor.blockList[editor.selectedBlock]);
       if (block) {
         console.log('[ADDBLOCKTOEDITOR] - Adding fields to block...');
-        console.log('[ADDBLOCKTOEDITOR] - fields:', editor.blockList[position].fields);
-        console.log('[ADDBLOCKTOEDITOR] - block:', block.fields);
-        // Iterate through each field and add the appropriate values.
+        console.log('[ADDBLOCKTOEDITOR] - before:', editor.blockList[position].fields);
+        // Iterate through each field in block.fields and add the appropriate values.
         // tmpArray[position].fields = block.fields;
+        for (const key in block.fields) {
+          if (block.fields.hasOwnProperty(key)) { // eslint-disable-line
+            // Check if field is an array:
+            if (typeof block.fields[key] === 'object') {
+              // For each property in the object.
+              block.fields[key].forEach((value) => {
+                editor.blockList[position].fields[key].push(value);
+              });
+            } else {
+              editor.blockList[position].fields[key] = block.fields[key];
+            }
+          }
+        }
+        console.log('[ADDBLOCKTOEDITOR] - after:', editor.blockList[position].fields);
       }
       resolve();
     });
