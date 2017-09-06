@@ -117,7 +117,7 @@
         "notSupportedInUI": "`{0}` is not supported in browser UI",
         "cannotExecuteOnWelcome": "Cannot Execute on Welcome Page.",
         "executionScriptFailed": "Execution of scripts failed, do you have an active connection?",
-        "possibleMultiLineCommand": "Could not detect a valid mongo command, please highlight mutli-line commands."
+        "possibleMultiLineCommand": "Could not detect a valid mongo command, please highlight multi-line commands."
       },
       "view": {
         "executionStopped": "Execution Stopped Successfully",
@@ -232,7 +232,7 @@
     },
     "error": {
       "connection": {
-        "slave": "connect to slave without slaveOk"
+        "slave": "Connected to slave without slaveOk"
       }
     },
     "backuprestore": {
@@ -316,7 +316,7 @@
         },
         "fields": {
           "label": "Fields <field>[,<field>]*",
-          "tooltip": "comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
+          "tooltip": "Comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
         },
         "allDatabases": {
           "label": "All Database",
@@ -324,19 +324,19 @@
         },
         "forceTableScan": {
           "label": "forceTableScan",
-          "tooltip": "perform a collection scan, not an _id index scan"
+          "tooltip": "Perform a collection scan, not an _id index scan"
         },
         "assertExists": {
           "label": "assertExists",
-          "tooltip": "if specified, export fails if the collection does not exist (default: false)"
+          "tooltip": "If specified, export fails if the collection does not exist (default: false)"
         },
         "query": {
           "label": "Query",
-          "tooltip": "query filter, as a JSON string, e.g., '\\{x:\\{$gt:1\\}\\}'"
+          "tooltip": "Query filter, as a JSON string, e.g., '\\{x:\\{$gt:1\\}\\}'"
         },
         "readPreference": {
           "label": "readPreference",
-          "tooltip": "specify either a preference name or a preference json object"
+          "tooltip": "Specify either a preference name or a preference json object"
         },
         "dumpDbUsersAndRoles": {
           "label": "dumpDbUsersAndRoles",
@@ -380,7 +380,7 @@
         },
         "numInsertionWorkers": {
           "label": "numInsertionWorkers",
-          "tooltip": "number of insert operations to run concurrently per collection (1 by default) (default: 1)"
+          "tooltip": "Number of insert operations to run concurrently per collection (1 by default) (default: 1)"
         },
         "stopOnError": {
           "label": "stopOnError",
@@ -388,11 +388,11 @@
         },
         "bypassDocumentValidation": {
           "label": "bypassDocumentValidation",
-          "tooltip": "do not process Document validation rules during the restore"
+          "tooltip": "Do not process Document validation rules during the restore"
         },
         "objcheck": {
           "label": "objcheck",
-          "tooltip": "validate all documents to avoid invalid documents"
+          "tooltip": "Validate all documents to avoid invalid documents"
         },
         "oplogReplay": {
           "label": "oplogReplay",
@@ -400,7 +400,7 @@
         },
         "oplogLimit": {
           "label": "oplogLimit",
-          "tooltip": "Only apply oplog entiries with a lesser timestamp"
+          "tooltip": "Only apply oplog entries with a lesser timestamp"
         },
         "restoreDbUsersAndRoles": {
           "label": "restoreDbUsersAndRoles",
@@ -412,7 +412,7 @@
         },
         "headerLine": {
           "label": "headerLine",
-          "tooltip": "import CSV or TSV have headers in first line"
+          "tooltip": "Import CSV or TSV have headers in first line"
         },
         "parseGrace": {
           "label": "parseGrace",
@@ -420,7 +420,7 @@
         },
         "type": {
           "label": "Type",
-          "tooltip": "FIle format"
+          "tooltip": "File format"
         },
         "columnsHaveTypes": {
           "label": "columnsHaveTypes",
@@ -428,7 +428,7 @@
         },
         "ignoreBlanks": {
           "label": "ignoreBlanks",
-          "tooltip": "ignore balnk fields in input stream (don't create docs)"
+          "tooltip": "Ignore balnk fields in input stream (don't create docs)"
         },
         "mode": {
           "label": "mode",
