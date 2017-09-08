@@ -147,6 +147,7 @@
     "react-json-view": "^1.10.12",
     "react-json-viewer": "^1.6.1",
     "react-motion": "^0.5.0",
+    "react-resize-detector": "^0.6.0",
     "react-router-dom": "^4.0.0-beta.6",
     "react-select": "^1.0.0-rc.4",
     "react-shortcut": "^1.0.6",
