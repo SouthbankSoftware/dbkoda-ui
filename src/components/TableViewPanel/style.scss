@@ -30,4 +30,47 @@
   width: 100%;
   background-color: $tabBackgroundSelected;
   overflow-y: scroll;
+
+  table {
+    margin: 20px;
+    margin-left: 10px;
+    font-size: 14px;
+    border-collapse: collapse;
+    thead {
+      tr {
+        background-color: $highlightThree;
+        th {
+          border: 1px solid $tableCellBorder !important;
+          background-color: $highlightThree;
+          span {
+            color: $tableHeaderText !important;
+            font-weight: 400;
+          }
+        }
+        th:hover {
+          background-color: $colourThree;
+        }
+      }
+    }
+    tbody {
+      tr {
+        background-color: $tableBackgroundOdd;
+        td {
+          border: 1px solid $tableCellBorder !important;
+          span {
+            color: $tableBodyText !important;
+          }
+        }
+      }
+      tr:nth-child(even) {
+        background-color: $tableBackgroundEven;
+      }
+      tr:hover {
+        background-color: $tableBackgroundOddHover;
+      }
+      tr:nth-child(even):hover {
+        background-color: $tableBackgroundEvenHover;
+      }
+    }
+  }
 }
