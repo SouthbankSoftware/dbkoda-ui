@@ -412,6 +412,7 @@ class View extends React.Component {
     this.executeAll = this.executeAll.bind(this);
     this.prettifyAll = this.prettifyAll.bind(this);
     this.prettifySelection = this.prettifySelection.bind(this);
+    this.translateToNativeCode = this.translateToNativeCode.bind(this);
   }
 
   /**
@@ -768,6 +769,17 @@ class View extends React.Component {
   }
 
   @action.bound
+  translateToNativeCode() {
+    const cm = this.editor.getCodeMirror();
+    const shellCode = cm.getSelection();
+
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+    this.props.store.outputs.get(editor.id).output += '\n' + shellCode;
+  }
+
+  @action.bound
   finishedExecution(event) {
     const editorIndex = this.props.store.editorPanel.activeEditorId;
     if (!this.props.store.editors.get(editorIndex)) {
@@ -844,6 +856,14 @@ class View extends React.Component {
           <MenuItem
             onClick={this.prettifySelection}
             text={globalString('editor/view/menu/formatSelection')}
+            iconName="pt-icon-align-left"
+            intent={Intent.NONE}
+          />
+        </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.translateToNativeCode}
+            text={globalString('editor/view/menu/translateSelection')}
             iconName="pt-icon-align-left"
             intent={Intent.NONE}
           />
