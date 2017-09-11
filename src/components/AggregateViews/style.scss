@@ -537,12 +537,19 @@ svg.closeBlockIconcolor_16 {
   }
 }
 .aggregateTabInnerWrapper {
-  .Pane1 {
-    border-right: 2px solid $navbarSecondaryBackground;
-  }
   .Pane2 {
     div.editorView {
       height: 100%;
     }
+  }
+
+  .SplitPane.LeftSplitPane.vertical {
+    // fix resizer hidden problem
+    right: auto !important;
+    overflow: unset !important;
+  }
+
+  .Resizer {
+    background-color: $navbarSecondaryBackground;
   }
 }

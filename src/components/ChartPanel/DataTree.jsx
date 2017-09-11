@@ -1,4 +1,5 @@
-/*
+/* @flow
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,18 +19,93 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
+import * as React from 'react';
+import { Tree } from '@blueprintjs/core';
 
-export default class DataTree extends React.Component {
+type Props = {};
+
+export default class DataTree extends React.Component<Props> {
   // static defaultProps = {};
-  //
-  // static PropTypes = {};
-  //
+
   // constructor(props) {
   //   super(props);
   // }
 
   render() {
-    return <div className="DataTree" />;
+    return (
+      <div className="DataTree">
+        <Tree
+          contents={[
+            {
+              hasCaret: false,
+              iconName: 'pt-icon-numerical',
+              label: '_id',
+            },
+            {
+              hasCaret: false,
+              iconName: 'pt-icon-numerical',
+              label: 'CustId',
+            },
+            {
+              iconName: 'pt-icon-folder-open',
+              isExpanded: true,
+              label: 'lineItems',
+              childNodes: [
+                {
+                  iconName: 'pt-icon-folder-open',
+                  isExpanded: true,
+                  label: '0',
+                  childNodes: [
+                    {
+                      hasCaret: false,
+                      iconName: 'pt-icon-numerical',
+                      label: 'prodId',
+                    },
+                    {
+                      hasCaret: false,
+                      iconName: 'pt-icon-font',
+                      label: 'prodName',
+                    },
+                    {
+                      hasCaret: false,
+                      iconName: 'pt-icon-numerical',
+                      label: 'prodCount',
+                    },
+                    {
+                      hasCaret: false,
+                      iconName: 'pt-icon-numerical',
+                      label: 'Cost',
+                    },
+                  ],
+                },
+                {
+                  iconName: 'pt-icon-folder-close',
+                  isExpanded: false,
+                  label: '1',
+                  childNodes: [],
+                },
+                {
+                  iconName: 'pt-icon-folder-close',
+                  isExpanded: false,
+                  label: '2',
+                  childNodes: [],
+                },
+                {
+                  iconName: 'pt-icon-folder-close',
+                  isExpanded: false,
+                  label: '3',
+                  childNodes: [],
+                },
+              ],
+            },
+            {
+              hasCaret: false,
+              iconName: 'pt-icon-font',
+              label: 'orderStatus',
+            },
+          ]}
+        />
+      </div>
+    );
   }
 }
