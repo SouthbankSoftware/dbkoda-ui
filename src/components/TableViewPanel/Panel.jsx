@@ -58,7 +58,6 @@ export default class Panel extends React.Component {
     this.forceUpdate();
   }
   render() {
-    console.log(this.props.tableJson.json);
     if (this.props.tableJson.json === false) {
       return (
         <div className="table-json-panel">

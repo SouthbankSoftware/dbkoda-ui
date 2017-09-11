@@ -91,7 +91,6 @@ export default class Panel extends React.Component {
 
   @action.bound
   explainOutputAvailable({ id, shell }) {
-    console.log('explain output available ', id, shell);
     const editors = this.props.store.editors.entries();
     const that = this;
     editors.map((editor) => {
@@ -333,7 +332,6 @@ export default class Panel extends React.Component {
           this.props.store.outputs.get(editor[1].id).tableJson &&
           process.env.NODE_ENV === 'development'
         ) {
-          console.log(this.props.store.outputs.get(editor[1].id).tableJson);
           arrTabs.push(
             <Tab2
               className={

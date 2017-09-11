@@ -50,7 +50,6 @@ export default class StaticApi {
   }
 
   static parseTableJson(jsonStr, lines, cm, outputId) {
-    console.log('[parseTableJson] Getting JSON for table..');
     return new Promise((resolve, reject) => {
       this.findResultSet(jsonStr, lines, cm, outputId)
         .then((res) => {
@@ -72,7 +71,6 @@ export default class StaticApi {
   }
 
   static findResultSet(jsonStr, lines, cm, outputId) {
-    console.log('[findResultSet] Identifying result set...');
     return new Promise((resolve, reject) => {
       const linesAbove = _.clone(lines);
       const linesBelow = _.clone(lines);
@@ -82,7 +80,6 @@ export default class StaticApi {
       // Get document at line one above, keep doing this until we reach an invalid line.
 
       // Get document above our starting point.
-      console.log('Searching for lines above...');
       while (linesAbove.status !== 'Invalid' && totalDocumentCount < 500) {
         const docAbove = this.getDocumentAtLine(
           outputId,
@@ -94,7 +91,6 @@ export default class StaticApi {
         // Check if valid
         if (linesAbove.status === 'Invalid') {
           // We have reached an end point.
-          console.log('TOP: ', linesAbove);
         } else {
           // Add to JSON and then keep going.
           documentsAbove.push(docAbove);
@@ -102,7 +98,6 @@ export default class StaticApi {
         }
       }
       // Get document below our starting point.
-      console.log('Searching for lines below...');
       while (linesBelow.status !== 'Invalid' && totalDocumentCount < 500) {
         const docBelow = this.getDocumentAtLine(
           outputId,
@@ -114,7 +109,6 @@ export default class StaticApi {
         // Check if valid
         if (linesBelow.status === 'Invalid') {
           // We have reached an end point.
-          console.log('BOTTOM: ', linesBelow);
         } else {
           // Add to JSON and then keep going.
           documentsBelow.push(docBelow);
