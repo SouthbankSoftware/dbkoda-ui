@@ -41,7 +41,6 @@
     margin-left: 10px;
     font-size: 14px;
     border-collapse: collapse;
-    line-height: 30px;
     thead {
       tr {
         background-color: $highlightThree;
@@ -65,6 +64,7 @@
           border: 1px solid $tableCellBorder !important;
           span {
             color: $tableBodyText !important;
+            line-height: 14px;
           }
           div.deepObjectWrapper {
             span {

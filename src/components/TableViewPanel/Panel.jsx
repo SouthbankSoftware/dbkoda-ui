@@ -26,7 +26,7 @@
  */
 
 import React from 'react';
-import { mobx, action } from 'mobx';
+import { action } from 'mobx';
 import JSONViewer from './react-json-viewer/JSONViewer.jsx';
 
 import './style.scss';

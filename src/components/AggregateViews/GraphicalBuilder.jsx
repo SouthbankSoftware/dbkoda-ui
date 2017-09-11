@@ -1268,10 +1268,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   addNewBlocks(contentObject) {
-    return new Promise((resolve) => {
-      const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
-      );
+    return new Promise(() => {
       const importBlockList = contentObject.editorObject.blockList;
       let count = 0;
 

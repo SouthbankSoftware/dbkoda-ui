@@ -269,7 +269,7 @@ export default class ListView extends React.Component {
                 },
               },
             )
-            .then((v) => {
+            .then(() => {
               value.status = ProfileStatus.OPEN;
             })
             .catch(err =>

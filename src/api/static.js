@@ -71,7 +71,7 @@ export default class StaticApi {
   }
 
   static findResultSet(jsonStr, lines, cm, outputId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const linesAbove = _.clone(lines);
       const linesBelow = _.clone(lines);
       const documentsAbove = [];
