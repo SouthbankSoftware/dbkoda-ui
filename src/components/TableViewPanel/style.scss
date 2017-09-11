@@ -30,12 +30,18 @@
   width: 100%;
   background-color: $tabBackgroundSelected;
   overflow-y: scroll;
-
+  h2.errorMessage {
+    color: $tableHeaderText;
+    margin-left: 4%;
+    margin-top: 4%;
+    width: 60%;
+  }
   table {
     margin: 20px;
     margin-left: 10px;
     font-size: 14px;
     border-collapse: collapse;
+    line-height: 30px;
     thead {
       tr {
         background-color: $highlightThree;
@@ -59,6 +65,13 @@
           border: 1px solid $tableCellBorder !important;
           span {
             color: $tableBodyText !important;
+          }
+          div.deepObjectWrapper {
+            span {
+            }
+            table {
+              margin: 0px;
+            }
           }
         }
       }
