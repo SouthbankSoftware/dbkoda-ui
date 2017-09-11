@@ -30,4 +30,60 @@
   width: 100%;
   background-color: $tabBackgroundSelected;
   overflow-y: scroll;
+  h2.errorMessage {
+    color: $tableHeaderText;
+    margin-left: 4%;
+    margin-top: 4%;
+    width: 60%;
+  }
+  table {
+    margin: 20px;
+    margin-left: 10px;
+    font-size: 14px;
+    border-collapse: collapse;
+    thead {
+      tr {
+        background-color: $highlightThree;
+        th {
+          border: 1px solid $tableCellBorder !important;
+          background-color: $highlightThree;
+          span {
+            color: $tableHeaderText !important;
+            font-weight: 400;
+          }
+        }
+        th:hover {
+          background-color: $colourThree;
+        }
+      }
+    }
+    tbody {
+      tr {
+        background-color: $tableBackgroundOdd;
+        td {
+          border: 1px solid $tableCellBorder !important;
+          span {
+            color: $tableBodyText !important;
+            line-height: 14px;
+          }
+          div.deepObjectWrapper {
+            span {
+            }
+            table {
+              margin: 0px;
+            }
+          }
+        }
+      }
+      tr:nth-child(even) {
+        background-color: $tableBackgroundEven;
+      }
+      tr:hover {
+        background-color: $tableBackgroundOddHover;
+      }
+      tr:nth-child(even):hover {
+        background-color: $tableBackgroundEvenHover;
+      }
+    }
+  }
 }

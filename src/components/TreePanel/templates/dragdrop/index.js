@@ -23,7 +23,7 @@
  * @Date:   2017-03-21T12:01:26+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-06-19T16:20:49+10:00
+ * @Last modified time: 2017-09-07T17:54:16+10:00
  */
 
 
@@ -42,6 +42,8 @@
    index          : 'tree-index-node.hbs',
    users          : 'tree-users-node.hbs',
    user           : 'tree-user-node.hbs',
+   roles          : 'tree-roles-node.hbs',
+   role           : 'tree-role-node.hbs',
    replicaset     : 'tree-replicaset-node.hbs',
    replica_member : 'tree-replica_member-node.hbs',
    primary        : 'tree-replica_member-node.hbs',

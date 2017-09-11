@@ -175,8 +175,8 @@ $searchPrimaryBackground: #bfbec0;
 $searchPrimaryFontColor: #494849;
 $searchSecondaryBackground: #202020;
 $searchSecondaryFontColor: #bfbec0;
-$downArrow: "\25BE";
-$rightArrow: "\25B8";
+$downArrow: '\25BE';
+$rightArrow: '\25B8';
 // Fields:
 // =======
 //
@@ -238,6 +238,17 @@ $chartTooltipBackground: rgba(255, 255, 255, 0.7);
 $chartItemHover: rgba(86, 86, 86, 0.15);
 
 $menuItemHover: rgba(170, 182, 264, 0.3);
+
+// Table JSON View
+$tableHeaderBackground: #5d3750;
+$tableBackgroundOdd: #202020;
+$tableBackgroundOddHover: #262626;
+$tableBackgroundEven: #282828;
+$tableBackgroundEvenHover: #2f2f2f;
+
+$tableHeaderText: #bfbec0;
+$tableBodyText: #bfbec0;
+$tableCellBorder: rgba(191, 190, 192, 0.25);
 
 // Visual Tools Color Palette
 $colourOne: #00b4e9;

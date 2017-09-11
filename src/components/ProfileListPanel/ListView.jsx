@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T13:56:38+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-09-11T10:27:15+10:00
  */
 
 /*
@@ -122,7 +122,6 @@ export default class ListView extends React.Component {
     const newPassword = this.state.passwordText;
     const usrRemotePass = this.state.remotePass;
     const usrPassPhrase = this.state.passPhrase;
-    console.log(selectedProfile);
     let connectionUrl;
     let query = {}; // eslint-disable-line
     if (selectedProfile.hostRadio) {
@@ -173,7 +172,6 @@ export default class ListView extends React.Component {
     this.props.store.profileList.creatingNewProfile = true;
     const service = featherClient().service('/mongo-connection');
     service.timeout = 30000;
-    console.log('Q: ', query);
     runInAction(() => {
       this.props.store.layout.alertIsLoading = true;
     });
@@ -199,7 +197,6 @@ export default class ListView extends React.Component {
    */
   @action
   onSuccess(res, data) {
-    console.log('connect successfully ', res);
     let message = globalString('connection/success');
     let position = Position.LEFT_BOTTOM;
     this.props.store.profileList.creatingNewProfile = false;
@@ -256,7 +253,6 @@ export default class ListView extends React.Component {
         this.props.store.profiles.get(res.id),
       );
       this.props.store.editors.forEach((value, _) => {
-        console.log('open editor:', value);
         if (value.shellId == res.shellId) {
           // the default shell is using the same shell id as the profile
           value.status = ProfileStatus.OPEN;
@@ -273,8 +269,7 @@ export default class ListView extends React.Component {
                 },
               },
             )
-            .then((v) => {
-              console.log('connect shell success. ', v);
+            .then(() => {
               value.status = ProfileStatus.OPEN;
             })
             .catch(err =>
@@ -295,7 +290,6 @@ export default class ListView extends React.Component {
 
   @action
   closeProfile() {
-    console.log('Close Profile: ', this.state.targetProfile);
     const selectedProfile = this.state.targetProfile;
     const profiles = this.props.store.profiles;
     if (selectedProfile) {

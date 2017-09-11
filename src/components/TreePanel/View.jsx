@@ -16,14 +16,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-07T11:39:01+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T12:03:05+10:00
+ *
+ *
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-07T11:39:01+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-09-11T09:07:31+10:00
 */
 
 import React from 'react';

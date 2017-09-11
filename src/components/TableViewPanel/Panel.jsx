@@ -26,14 +26,57 @@
  */
 
 import React from 'react';
-import JSONViewer from 'react-json-viewer';
+import { action } from 'mobx';
+import JSONViewer from './react-json-viewer/JSONViewer.jsx';
+
 import './style.scss';
 
 export default class Panel extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      hideDeep: true,
+      arrayState: { 0: true },
+    };
+  }
+
+  @action.bound
+  onHeaderClick(string) {
+    if (false) console.log(string);
+  }
+  @action.bound
+  toggleShowDeep(number) {
+    if (typeof this.state.arrayState[number] === 'undefined') {
+      this.state.arrayState[number] = true;
+    }
+
+    if (this.state.arrayState[number]) {
+      this.state.arrayState[number] = false;
+    } else {
+      this.state.arrayState[number] = true;
+    }
+    this.forceUpdate();
+  }
   render() {
-    return (<div className="table-json-panel">
-      <JSONViewer
-        json={this.props.tableJson.json} />
-    </div>);
+    if (this.props.tableJson.json === false) {
+      return (
+        <div className="table-json-panel">
+          <h2 className="errorMessage">
+            {globalString('output/editor/tabularError')}
+          </h2>
+        </div>
+      );
+    }
+    return (
+      <div className="table-json-panel">
+        <JSONViewer
+          json={this.props.tableJson.json}
+          onHeaderClick={this.onHeaderClick}
+          toggleShowDeep={this.toggleShowDeep}
+          hideDeep={this.state.hideDeep}
+          arrayState={this.state.arrayState}
+        />
+      </div>
+    );
   }
 }

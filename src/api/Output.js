@@ -65,8 +65,13 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
-          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
+        if (
+          editor.id != 'Default' &&
+          this.store.outputs.get(editor.id).output
+        ) {
+          this.store.outputs.get(editor.id).output += globalString(
+            'output/editor/restoreSession',
+          );
         }
       } else {
         console.log(`create new output for ${editor.id}`);
@@ -133,12 +138,21 @@ export default class OutputApi {
       EventType.createShellOutputEvent(oldId, oldShellId),
       this.outputAvailable,
     );
-    Broker.removeListener(EventType.createShellReconnectEvent(oldId, oldShellId), this.onReconnect);
+    Broker.removeListener(
+      EventType.createShellReconnectEvent(oldId, oldShellId),
+      this.onReconnect,
+    );
 
     this.outputHash[id + '|' + shellId] = outputId;
 
-    Broker.on(EventType.createShellOutputEvent(id, shellId), this.outputAvailable);
-    Broker.on(EventType.createShellReconnectEvent(id, shellId), this.onReconnect);
+    Broker.on(
+      EventType.createShellOutputEvent(id, shellId),
+      this.outputAvailable,
+    );
+    Broker.on(
+      EventType.createShellReconnectEvent(id, shellId),
+      this.onReconnect,
+    );
   }
 
   @action.bound
@@ -187,7 +201,7 @@ export default class OutputApi {
   }
 
   @action.bound
-  initJsonView(jsonStr, outputId, displayType, lines) {
+  initJsonView(jsonStr, outputId, displayType, lines, editor, singleDoc) {
     let tabPrefix;
     if (displayType === 'enhancedJson') {
       tabPrefix = 'EnhancedJson-';
@@ -199,6 +213,17 @@ export default class OutputApi {
 
     if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
       this.store.outputPanel.currentTab = tabPrefix + outputId;
+    }
+
+    if (displayType === 'tableJson') {
+      return this.initJsonTableView(
+        jsonStr,
+        outputId,
+        displayType,
+        lines,
+        editor.getCodeMirror(),
+        singleDoc,
+      );
     }
 
     StaticApi.parseShellJson(jsonStr).then(
@@ -215,7 +240,9 @@ export default class OutputApi {
         runInAction(
           () => {
             NewToaster.show({
-              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+              message:
+                globalString('output/editor/parseJsonError') +
+                error.substring(0, 50),
               intent: Intent.DANGER,
               icon: '',
             });
@@ -223,7 +250,9 @@ export default class OutputApi {
           (error) => {
             runInAction(() => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -235,5 +264,101 @@ export default class OutputApi {
         );
       },
     );
+  }
+
+  /**
+   * Creates and fills a new output with a tabular view of the selected JSON Data.
+   * 
+   * @param {String} jsonStr - The JSON string that triggered the table view.
+   * @param {String} outputId - The ID of the output to create a new view for,
+   * @param {Object} lines - The lines in codemirror to be searched.
+   */
+  @action.bound
+  initJsonTableView(jsonStr, outputId, displayType, lines, cm, singleLine) {
+    if (singleLine) {
+      // Single line implemention
+      StaticApi.parseShellJson(jsonStr).then(
+        (result) => {
+          runInAction(() => {
+            this.store.outputs.get(outputId)[displayType] = {
+              json: result,
+              firstLine: lines.start,
+              lastLine: lines.end,
+            };
+          });
+        },
+        (error) => {
+          runInAction(
+            () => {
+              NewToaster.show({
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
+                intent: Intent.DANGER,
+                icon: '',
+              });
+            },
+            (error) => {
+              runInAction(() => {
+                NewToaster.show({
+                  message:
+                    globalString('output/editor/parseJsonError') +
+                    error.substring(0, 50),
+                  intent: Intent.DANGER,
+                  icon: '',
+                });
+                this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
+                  tabPrefix,
+                )[1];
+              });
+            },
+          );
+        },
+      );
+    } else {
+      StaticApi.parseTableJson(jsonStr, lines, cm, outputId).then(
+        (result) => {
+          runInAction(() => {
+            this.store.outputs.get(outputId)[displayType] = {
+              json: result,
+              firstLine: lines.start,
+              lastLine: lines.end,
+            };
+          });
+        },
+        (error) => {
+          runInAction(
+            () => {
+              NewToaster.show({
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
+                intent: Intent.DANGER,
+                icon: '',
+              });
+              this.store.outputs.get(outputId)[displayType] = {
+                json: false,
+                firstLine: false,
+                lastLine: false,
+              };
+            },
+            (error) => {
+              runInAction(() => {
+                NewToaster.show({
+                  message:
+                    globalString('output/editor/parseJsonError') +
+                    error.substring(0, 50),
+                  intent: Intent.DANGER,
+                  icon: '',
+                });
+                this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
+                  tabPrefix,
+                )[1];
+              });
+            },
+          );
+        },
+      );
+    }
   }
 }

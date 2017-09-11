@@ -105,29 +105,68 @@ export default class Editor extends React.Component {
       <div className="menuItemWrapper showJsonView" id="showJsonViewMenuItem">
         <MenuItem
           onClick={() => {
-            this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
+            this.props.api.initJsonView(
+              currentJson,
+              this.props.id,
+              'enhancedJson',
+              lines,
+            );
           }}
           text={globalString('output/editor/contextJson')}
           iconName="pt-icon-panel-stats"
           intent={Intent.NONE}
         />
-      </div>
+      </div>,
     );
     if (process.env.NODE_ENV === 'development') {
       menuItems.push(
-        <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
+        <div
+          className="menuItemWrapper showTableView"
+          id="showTableViewMenuItem"
+        >
           <MenuItem
-            onClick={() => {
-              this.props.api.initJsonView(currentJson, this.props.id, 'tableJson', lines);
-            }}
-            text={globalString('output/editor/contextTable')}
             iconName="pt-icon-th"
+            text={globalString('output/editor/contextTable')}
             intent={Intent.NONE}
-          />
-        </div>
+          >
+            <MenuItem
+              onClick={() => {
+                this.props.api.initJsonView(
+                  currentJson,
+                  this.props.id,
+                  'tableJson',
+                  lines,
+                  this.editor,
+                  true,
+                );
+              }}
+              text={globalString('output/editor/contextTableSingle')}
+              iconName="pt-icon-th"
+              intent={Intent.NONE}
+            />
+            <MenuItem
+              onClick={() => {
+                this.props.api.initJsonView(
+                  currentJson,
+                  this.props.id,
+                  'tableJson',
+                  lines,
+                  this.editor,
+                  false,
+                );
+              }}
+              text={globalString('output/editor/contextTableMulti')}
+              iconName="pt-icon-th"
+              intent={Intent.NONE}
+            />
+          </MenuItem>
+        </div>,
       );
       menuItems.push(
-        <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
+        <div
+          className="menuItemWrapper showChartView"
+          id="showChartViewMenuItem"
+        >
           <MenuItem
             onClick={() => {
               // TODO connect to real json
@@ -143,22 +182,19 @@ export default class Editor extends React.Component {
                   lastLine: lines.end,
                 };
 
-                this.props.store.outputPanel.currentTab = 'ChartView-' + this.props.store.outputPanel.currentTab;
+                this.props.store.outputPanel.currentTab =
+                  'ChartView-' + this.props.store.outputPanel.currentTab;
               });
             }}
             text={globalString('output/editor/contextChart')}
             iconName="pt-icon-th"
             intent={Intent.NONE}
           />
-        </div>
+        </div>,
       );
     }
 
-    return (
-      <Menu className="outputContextMenu">
-        { menuItems }
-      </Menu>
-    );
+    return <Menu className="outputContextMenu">{menuItems}</Menu>;
   }
 
   render() {

@@ -50,8 +50,14 @@
         "restoreSession": "** Session Restored **\r",
         "contextJson": "Enhanced JSON View",
         "contextTable": "JSON Table View",
+        "contextTableSingle": "Single Document",
+        "contextTableMulti": "Multi-Document",
         "contextChart": "Chart View",
-        "parseJsonError": "Could not parse a document from the selected text. "
+        "parseJsonError": "Could not parse a document from the selected text.",
+        "tabularError":
+          "Unable to find a result set for that line, please right click on a JSON document",
+        "hide": "Hide",
+        "expand": "Expand"
       },
       "terminal": {
         "execute": "Execute Command (Enter)"

@@ -16,15 +16,14 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-17T10:29:12+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-09-11T09:07:51+10:00
  */
-
-/**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-17T10:29:12+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-26T12:36:37+10:00
-*/
 
 import Templates from '../templates/dragdrop';
 
