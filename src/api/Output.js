@@ -286,6 +286,7 @@ export default class OutputApi {
               lastLine: lines.end,
             };
           });
+          console.log(result);
         },
         (error) => {
           runInAction(
@@ -318,6 +319,7 @@ export default class OutputApi {
     } else {
       StaticApi.parseTableJson(jsonStr, lines, cm, outputId).then(
         (result) => {
+          console.log('!!! 1 - ', result);
           runInAction(() => {
             this.store.outputs.get(outputId)[displayType] = {
               json: result,
@@ -327,6 +329,7 @@ export default class OutputApi {
           });
         },
         (error) => {
+          console.log('!!! 2 - ', error);
           runInAction(
             () => {
               NewToaster.show({

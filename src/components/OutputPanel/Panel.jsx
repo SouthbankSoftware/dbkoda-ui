@@ -138,11 +138,20 @@ export default class Panel extends React.Component {
     const cm = this.editorRefs[editorId].getCodeMirror();
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
-    if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {
+    if (
+      ['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(
+        startLine,
+      )
+    ) {
       if (!direction) {
         direction = 1;
       }
-      return this.getDocumentAtLine(editorId, lineNumber + direction, direction, lines);
+      return this.getDocumentAtLine(
+        editorId,
+        lineNumber + direction,
+        direction,
+        lines,
+      );
     }
     if (!startLine || startLine.indexOf('dbKoda>') !== -1) {
       lines.status = 'Invalid';
@@ -158,10 +167,10 @@ export default class Panel extends React.Component {
       if (
         startLine[startLine.length - 1] === '}' &&
         (!['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
-        prevLine.indexOf('dbKoda>') === 0)
+          prevLine.indexOf('dbKoda>') === 0)
       ) {
         if (
-          nextLine && nextLine[0] === '{' ||
+          (nextLine && nextLine[0] === '{') ||
           ![']', ',', '}'].includes(nextLine[0])
         ) {
           // This is a single-line document
@@ -178,8 +187,8 @@ export default class Panel extends React.Component {
     if (direction === 0) {
       const prevLine = cm.getLine(lineNumber - 1).trim();
       if (
-        prevLine[prevLine.length - 1] === '}' &&
-        !['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
+        (prevLine[prevLine.length - 1] === '}' &&
+          !['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1])) ||
         prevLine.indexOf('dbKoda>') === 0
       ) {
         lines.start = lineNumber;
@@ -187,11 +196,11 @@ export default class Panel extends React.Component {
       }
       return (
         this._getLineText(cm, lineNumber - 1, -1, lines) +
-          this._getLineText(cm, lineNumber, 1, lines)
+        this._getLineText(cm, lineNumber, 1, lines)
       );
     }
     // Direction is 1 or -1 (we came from the Next/Prev buttons)
-    direction === -1 ? lines.end = lineNumber : lines.start = lineNumber;
+    direction === -1 ? (lines.end = lineNumber) : (lines.start = lineNumber);
     return this._getLineText(cm, lineNumber, direction, lines);
   }
 
@@ -206,7 +215,8 @@ export default class Panel extends React.Component {
     }
     if (direction === -1 && line[0] === '{') {
       const prevLine = cm.getLine(lineNumber - 1).trim();
-      if (prevLine && prevLine[prevLine.length - 1] === '}' ||
+      if (
+        (prevLine && prevLine[prevLine.length - 1] === '}') ||
         !['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
         prevLine.indexOf('dbKoda>') >= 0
       ) {
@@ -216,7 +226,7 @@ export default class Panel extends React.Component {
     } else if (direction === 1 && line[line.length - 1] === '}') {
       const nextLine = cm.getLine(lineNumber + 1).trim();
       if (
-        nextLine && nextLine[0] === '{' ||
+        (nextLine && nextLine[0] === '{') ||
         ![']', ',', '}'].includes(nextLine[0])
       ) {
         lines.end = lineNumber;
@@ -224,7 +234,8 @@ export default class Panel extends React.Component {
       }
     }
     if (direction === -1) {
-      line = this._getLineText(cm, lineNumber + direction, direction, lines) + line;
+      line =
+        this._getLineText(cm, lineNumber + direction, direction, lines) + line;
     } else {
       line += this._getLineText(cm, lineNumber + direction, direction, lines);
     }
@@ -309,16 +320,20 @@ export default class Panel extends React.Component {
               panel={
                 <EnhancedJson
                   outputId={editor[1].id}
-                  enhancedJson={toJS(this.props.store.outputs.get(editor[1].id).enhancedJson)}
-                  getDocumentAtLine={this.getDocumentAtLine} />
+                  enhancedJson={toJS(
+                    this.props.store.outputs.get(editor[1].id).enhancedJson,
+                  )}
+                  getDocumentAtLine={this.getDocumentAtLine}
+                />
               }
-            />
+            />,
           );
         }
         if (
           this.props.store.outputs.get(editor[1].id).tableJson &&
           process.env.NODE_ENV === 'development'
         ) {
+          console.log(this.props.store.outputs.get(editor[1].id).tableJson);
           arrTabs.push(
             <Tab2
               className={
@@ -330,10 +345,13 @@ export default class Panel extends React.Component {
               panel={
                 <TableView
                   outputId={editor[1].id}
-                  tableJson={this.props.store.outputs.get(editor[1].id).tableJson}
-                  getDocumentAtLine={this.getDocumentAtLine} />
+                  tableJson={toJS(
+                    this.props.store.outputs.get(editor[1].id).tableJson,
+                  )}
+                  getDocumentAtLine={this.getDocumentAtLine}
+                />
               }
-            />
+            />,
           );
         }
         if (
@@ -349,17 +367,21 @@ export default class Panel extends React.Component {
               id={'ChartView-' + editor[1].id}
               title={'ChartView-' + editorTitle}
               panel={
-                <ChartPanel data={this.props.store.outputs.get(editor[1].id).chartJson} />
+                <ChartPanel
+                  data={this.props.store.outputs.get(editor[1].id).chartJson}
+                />
               }
-            />
+            />,
           );
         }
         arrTabs.push(
           <Tab2
             className={
-              editor[1].explains && tabClassName !== 'notVisible'
-                ? 'visible'
-                : 'notVisible'
+              editor[1].explains && tabClassName !== 'notVisible' ? (
+                'visible'
+              ) : (
+                'notVisible'
+              )
             }
             key={'Explain-' + editor[1].id}
             id={'Explain-' + editor[1].id}
@@ -372,9 +394,12 @@ export default class Panel extends React.Component {
             className={
               editor[1].detailsView &&
               tabClassName !== 'notVisible' &&
-              editor[1].detailsView.currentProfile == editor[1].currentProfile
-                ? 'visible'
-                : 'notVisible'
+              editor[1].detailsView.currentProfile ==
+                editor[1].currentProfile ? (
+                'visible'
+              ) : (
+                'notVisible'
+              )
             }
             key={'Details-' + editor[1].id}
             id={'Details-' + editor[1].id}
@@ -445,7 +470,8 @@ export default class Panel extends React.Component {
                 title="Default"
                 id="Default"
                 shellId={0}
-                setEditorRef={this.setEditorRef} />
+                setEditorRef={this.setEditorRef}
+              />
             }
             title="Default"
           />
