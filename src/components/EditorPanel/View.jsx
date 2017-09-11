@@ -886,7 +886,6 @@ class View extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId
     );
-    let cmComponent = ''
     if (editor.openTranslator) {
       return connectDropTarget(<div className="editorView">
         <SplitPane
