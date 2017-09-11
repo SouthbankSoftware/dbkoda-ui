@@ -21,42 +21,85 @@
 
 import * as React from 'react';
 import SplitPane from 'react-split-pane';
+import ReactResizeDetector from 'react-resize-detector';
+import _ from 'lodash';
 import DataTree from './DataTree';
 import BarChart from './BarChart';
 import './Panel.scss';
 
+const DEBOUNCE_DELAY = 100;
+
 type Props = {
-  data: {}
+  dataTreeDefaultWidth: ?number,
 };
 
-export default class ChartPanel extends React.Component<Props> {
-  static defaultProps = {};
+type State = {
+  dataTreeWidth: number,
+  barChartWidth: number,
+  barChartHeight: number,
+};
 
-  static PropTypes = {
-    data: React.PropTypes.object.isRequired,
+export default class ChartPanel extends React.Component<Props, State> {
+  static defaultProps = {
+    dataTreeDefaultWidth: 250,
   };
 
-  // constructor(props) {
-  //   super(props);
-  // }
+  state = {
+    dataTreeWidth: this.props.dataTreeDefaultWidth || 0,
+    barChartWidth: 0,
+    barChartHeight: 0,
+  };
+
+  _onSplitPaneResize = _.debounce((width: number) => {
+    const { dataTreeWidth, barChartWidth } = this.state;
+
+    this.setState({ dataTreeWidth: width, barChartWidth: dataTreeWidth + barChartWidth - width });
+  }, DEBOUNCE_DELAY);
+
+  _onPanelResize = _.debounce((width: number, height: number) => {
+    const { dataTreeWidth } = this.state;
+
+    this.setState({ barChartWidth: width - dataTreeWidth, barChartHeight: height });
+  }, DEBOUNCE_DELAY);
 
   render() {
+    const { dataTreeWidth, barChartWidth, barChartHeight } = this.state;
+
     return (
       <div className="ChartPanel">
         <SplitPane
           className="SplitPane"
           split="vertical"
-          defaultSize={250}
+          defaultSize={dataTreeWidth}
           minSize={50}
           maxSize={1000}
           pane2Style={{
             display: 'flex',
             flexDirection: 'column',
           }}
+          onChange={this._onSplitPaneResize}
         >
           <DataTree />
-          <BarChart />
+          <BarChart
+            width={barChartWidth}
+            height={barChartHeight}
+            data={[
+              { name: 'Prod A', prodCount: 4000, Cost: 2400, amt: 2400 },
+              { name: 'Prod B', prodCount: 3000, Cost: 1398, amt: 2210 },
+              { name: 'Prod C', prodCount: 2000, Cost: 9800, amt: 2290 },
+              { name: 'Prod D', prodCount: 2780, Cost: 3908, amt: 2000 },
+              { name: 'Prod E', prodCount: 1890, Cost: 4800, amt: 2181 },
+              { name: 'Prod F', prodCount: 2390, Cost: 3800, amt: 2500 },
+              { name: 'Prod G', prodCount: 3490, Cost: 4300, amt: 2100 },
+            ]}
+          />
         </SplitPane>
+        <ReactResizeDetector
+          className="BarChart"
+          handleWidth
+          handleHeight
+          onResize={this._onPanelResize}
+        />
       </div>
     );
   }

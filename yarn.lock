@@ -6532,9 +6532,9 @@ moment@^2.17.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
-mongo-shell-translator@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/mongo-shell-translator/-/mongo-shell-translator-0.0.1.tgz#c8dab538a6fb6c9ecbb75763d4370b467ad8c2db"
+mongo-shell-translator@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/mongo-shell-translator/-/mongo-shell-translator-0.0.6.tgz#65ac19b11c3e6be86070c002cca9b4da64733fcd"
   dependencies:
     babel-preset-stage-0 "^6.24.1"
     cross-env "^5.0.5"
@@ -8146,6 +8146,12 @@ react-resize-detector@0.4.1:
   resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-0.4.1.tgz#19f8b993e1e869e2879344e20dc23c4fac28b256"
   dependencies:
     prop-types "^15.5.8"
+
+react-resize-detector@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-0.6.0.tgz#7625d60edf6d89c812d4833d49ef53696dd9bca9"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-router-dom@4.2.0:
   version "4.2.0"

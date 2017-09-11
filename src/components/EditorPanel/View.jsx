@@ -39,10 +39,12 @@ import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction, runInAction} from 'mobx';
 import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
+import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';
 import React from 'react';
 import CodeMirrorEditor from '#/common/CodeMirror';
 import CodeMirror from 'codemirror';
+import {MongoShellTranslator} from 'mongo-shell-translator';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/markdown/markdown';
@@ -776,7 +778,11 @@ class View extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId
     );
-    this.props.store.outputs.get(editor.id).output += '\n' + shellCode;
+    if (editor) {
+      editor.openTranslator = true;
+      const translator = new MongoShellTranslator();
+      this.props.store.outputs.get(editor.id).output += '\n' + translator.translate(shellCode);
+    }
   }
 
   @action.bound
@@ -877,6 +883,28 @@ class View extends React.Component {
    */
   render() {
     const { connectDropTarget, isOver } = this.props; // eslint-disable-line
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+    let cmComponent = ''
+    if (editor.openTranslator) {
+      return connectDropTarget(<div className="editorView">
+        <SplitPane
+          split="vertical"
+          defaultSize={1000}
+          minSize={250}
+          maxSize={1000}>
+          <CodeMirrorEditor
+            ref={ref => (this.editor = ref)}
+            codeMirrorInstance={CodeMirror}
+            options={this.cmOptions}
+          />
+          <div>
+            this is right panel
+          </div>
+        </SplitPane>
+      </div>);
+    }
     return connectDropTarget(
       <div className="editorView">
         <CodeMirrorEditor
