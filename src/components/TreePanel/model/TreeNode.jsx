@@ -16,15 +16,14 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-08T11:56:51+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-09-11T12:22:36+10:00
  */
-
-/**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-08T11:56:51+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-06-30T09:11:38+10:00
-*/
 
 import React from 'react';
 import { observable } from 'mobx';
@@ -36,6 +35,8 @@ import CollectionIcon from '../../../styles/icons/collection-icon.svg';
 import IndexIcon from '../../../styles/icons/index-icon.svg';
 import UsersIcon from '../../../styles/icons/users-icon-4.svg';
 import UserIcon from '../../../styles/icons/user-icon.svg';
+import RolesIcon from '../../../styles/icons/users-icon-4.svg';
+import RoleIcon from '../../../styles/icons/user-icon.svg';
 import RootShardsIcon from '../../../styles/icons/shards-icon-4.svg';
 import ShardsIcon from '../../../styles/icons/shards-icon-2.svg';
 import ShardIcon from '../../../styles/icons/shards-icon-1.svg';
@@ -167,6 +168,16 @@ export default class TreeNode {
         this.secondaryLabel = (
           <UserIcon className="dbKodaSVG userIcon" width={30} height={30} />
         );
+        break;
+      case 'roles':
+        this.secondaryLabel = (
+          <RolesIcon className="dbKodaSVG rolesIcon" width={30} height={30} />
+        );
+        break;
+      case 'role':
+      this.secondaryLabel = (
+        <RoleIcon className="dbKodaSVG roleIcon" width={30} height={30} />
+      );
         break;
       case 'property':
         this.secondaryLabel = (
