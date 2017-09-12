@@ -269,6 +269,20 @@
         "slave": "Connected to slave without slaveOk"
       }
     },
+    "translator": {
+      "tooltip": {
+        "callback": "Use callback",
+        "promise": "Use promise",
+        "await": "Use await",
+        "close": "Close Translator"
+      },
+      "label": {
+        "syntax": "Syntax ",
+        "callback": "C",
+        "promise": "P",
+        "await": "A"
+      }
+    },
     "backuprestore": {
       "mongoExport": "Mongo Export",
       "mongoDump": "Mongo Dump",

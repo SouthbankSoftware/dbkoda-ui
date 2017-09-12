@@ -774,19 +774,26 @@ class View extends React.Component {
   @action.bound
   translateToNativeCode() {
     const cm = this.editor.getCodeMirror();
-    const shellCode = cm.getSelection();
-
+    let shellCode = cm.getSelection();
+    if (!shellCode) {
+      // if there is no selection, translate all code on the editor
+      shellCode = this.getEditorValue();
+    }
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId
     );
     if (editor) {
       editor.openTranslator = true;
       const translator = new MongoShellTranslator();
-      const transCode = translator.translate(shellCode);
-      this.props.store.outputs.get(editor.id).output += '\n' + transCode;
-      editor.nativeCode = transCode;
-      editor.shellCode = shellCode;
-      this.setState({openTranslator: true});
+      try {
+        const transCode = translator.translate(shellCode);
+        // this.props.store.outputs.get(editor.id).output += '\n' + transCode;
+        editor.nativeCode = transCode;
+        editor.shellCode = shellCode;
+        this.setState({openTranslator: true});
+      } catch (err) {
+        console.error('failed to translate the selected code ');
+      }
     }
   }
 
@@ -883,6 +890,15 @@ class View extends React.Component {
     );
   }
 
+  @action.bound
+  closeTranslatorPanel() {
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+    editor.openTranslator = false;
+    this.setState({openTranslator: false});
+  }
+
   /**
    * Render method for the component.
    */
@@ -892,17 +908,19 @@ class View extends React.Component {
       this.props.store.editorPanel.activeEditorId
     );
     if (editor && editor.openTranslator) {
-      return connectDropTarget(<div className="editorView">
+      return connectDropTarget(<div className="editorView translator-open">
         <SplitPane
           split="vertical"
-          defaultSize={500}
-          minSize={250}>
+          primary="second"
+          defaultSize={512}
+          minSize={200}>
           <CodeMirrorEditor
             ref={ref => (this.editor = ref)}
             codeMirrorInstance={CodeMirror}
             options={this.cmOptions}
           />
-          <TranslatorPanel value={editor.shellCode} syntax="cb" />
+          <TranslatorPanel value={editor.shellCode} syntax="cb"
+            closePanel={this.closeTranslatorPanel} />
         </SplitPane>
       </div>);
     }

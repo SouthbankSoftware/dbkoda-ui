@@ -25,38 +25,18 @@ import React from 'react';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
-
+import {ContextMenuTarget} from '@blueprintjs/core';
 
 import 'codemirror/theme/material.css';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/xml/xml';
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/addon/selection/active-line.js';
-import 'codemirror/addon/display/autorefresh.js';
-import 'codemirror/addon/edit/matchbrackets.js';
-import 'codemirror/addon/edit/closebrackets.js';
-import 'codemirror/addon/fold/foldcode.js';
-import 'codemirror/addon/fold/foldgutter.js';
-import 'codemirror/addon/fold/brace-fold.js';
-import 'codemirror/addon/fold/comment-fold.js';
-import 'codemirror/addon/fold/xml-fold.js';
-import 'codemirror/addon/hint/show-hint.js';
-import 'codemirror/addon/hint/javascript-hint.js';
-import 'codemirror/addon/search/search.js';
-import 'codemirror/addon/search/searchcursor.js';
-import 'codemirror/addon/search/jump-to-line.js';
-import 'codemirror/addon/dialog/dialog.js';
-import 'codemirror/addon/search/matchesonscrollbar.js';
-import 'codemirror/addon/scroll/annotatescrollbar.js';
-import 'codemirror/keymap/sublime.js';
-import 'codemirror-formatting';
 import CMOptions from './CMOptions';
 import './translator.scss';
 
+@ContextMenuTarget
 export default class TranslatorPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {syntax: SyntaxType.callback, value: ''};
+    this.state = {syntax: SyntaxType.callback, value: '', shellCode: ''};
+    this.syntaxChange = this.syntaxChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,31 +44,48 @@ export default class TranslatorPanel extends React.Component {
       this.setState({syntax: nextProps.syntax});
     }
     if (nextProps.value !== this.state.value) {
+      this.setState({shellCode: nextProps.value});
       this.translate(this.state.syntax, nextProps.value);
     }
   }
 
   componentDidMount() {
+    this.setState({shellCode: this.props.value});
     this.translate(this.state.syntax, this.props.value);
   }
 
   translate(syntax, value) {
     const translator = new MongoShellTranslator(syntax);
     const newValue = translator.translate(value, syntax);
-    this.setState({value: newValue});
+    this.setState({value: newValue, syntax});
+  }
+
+  syntaxChange(e) {
+    this.translate(e.target.value, this.state.shellCode);
+    this.setState({syntax: e.target.value});
+  }
+
+  renderContextMenu() {
+    return (<div />);
   }
 
   render() {
     const {value} = this.state;
+    console.log('value=', value);
     const options = {...CMOptions, readOnly: true};
-    const cbClassName = this.state.syntax === SyntaxType.callback ? 'pt-button pt-active' : 'pt-button';
-    const proClassName = this.state.syntax === SyntaxType.promise ? 'pt-button pt-active' : 'pt-button';
-    const asClassName = this.state.syntax === SyntaxType.await ? 'pt-button pt-active' : 'pt-button';
     return (<div className="translate-codemirror">
-      <div className="pt-button-group pt-vertical">
-        <button type="button" className={cbClassName} onClick={() => this.translate(SyntaxType.callback, this.state.value)}>CB</button>
-        <button type="button" className={proClassName} onClick={() => this.translate(SyntaxType.promise, this.state.value)}>PRO</button>
-        <button type="button" className={asClassName} onClick={() => this.translate(SyntaxType.await, this.state.value)}>A/S</button>
+      <div className="syntax-selection">
+        <div className="pt-label">Syntax</div>
+        <div className="pt-select">
+          <select
+            onChange={this.syntaxChange}
+            className="pt-intent-primary"
+          >
+            <option value={SyntaxType.callback}>{globalString('translator/tooltip/callback')}</option>
+            <option value={SyntaxType.promise}>{globalString('translator/tooltip/promise')}</option>
+            <option value={SyntaxType.await}>{globalString('translator/tooltip/await')}</option>
+          </select>
+        </div>
       </div>
       <CodeMirror
         options={options}

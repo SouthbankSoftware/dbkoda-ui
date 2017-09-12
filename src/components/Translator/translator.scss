@@ -1,7 +1,18 @@
 
 .translate-codemirror {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   margin-left: 30px;
 
+}
+
+.syntax-selection {
+  display: flex;
+  flex-direction: row;
+
+  .pt-label {
+    align-self: center;
+    color: #bfbec0;
+    margin-right: 10px;
+  }
 }
