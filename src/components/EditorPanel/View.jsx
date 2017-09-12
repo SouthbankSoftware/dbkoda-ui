@@ -77,6 +77,7 @@ import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
+import {TranslatorPanel} from '../Translator';
 
 /**
  * editorTarget object for helping with drag and drop actions?
@@ -781,7 +782,11 @@ class View extends React.Component {
     if (editor) {
       editor.openTranslator = true;
       const translator = new MongoShellTranslator();
-      this.props.store.outputs.get(editor.id).output += '\n' + translator.translate(shellCode);
+      const transCode = translator.translate(shellCode);
+      this.props.store.outputs.get(editor.id).output += '\n' + transCode;
+      editor.nativeCode = transCode;
+      editor.shellCode = shellCode;
+      this.setState({openTranslator: true});
     }
   }
 
@@ -886,21 +891,18 @@ class View extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId
     );
-    if (editor.openTranslator) {
+    if (editor && editor.openTranslator) {
       return connectDropTarget(<div className="editorView">
         <SplitPane
           split="vertical"
-          defaultSize={1000}
-          minSize={250}
-          maxSize={1000}>
+          defaultSize={500}
+          minSize={250}>
           <CodeMirrorEditor
             ref={ref => (this.editor = ref)}
             codeMirrorInstance={CodeMirror}
             options={this.cmOptions}
           />
-          <div>
-            this is right panel
-          </div>
+          <TranslatorPanel value={editor.shellCode} syntax="cb" />
         </SplitPane>
       </div>);
     }
