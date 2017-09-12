@@ -75,6 +75,61 @@ export default class JSONViewer extends Component {
   }
 
   arrayToTable(obj) {
+    this.state.renderArrayCount += 1;
+    const currentInt = this.state.renderArrayCount;
+    let showCurrentInt = this.props.arrayState[currentInt];
+    if (typeof showCurrentInt === 'undefined') {
+      showCurrentInt = true;
+    } else if (showCurrentInt === false) {
+      showCurrentInt = false;
+    } else if (showCurrentInt === true) {
+      showCurrentInt = true;
+    }
+    if (this.state.deep && !showCurrentInt) {
+      // Hide this objects.
+      if (this.debug) console.log('Array ', currentInt, ' is hidden');
+      return (
+        <span
+          className="expandButton"
+          onClick={() => this.props.toggleShowDeep(currentInt)}
+        >
+          {globalString('output/editor/expand')}
+        </span>
+      );
+    } else if (this.state.deep && showCurrentInt) {
+      //Show deep objects
+      if (this.debug) console.log('Array ', currentInt, ' is visible');
+      if (getType(obj) === 'Array' && obj.length === ZERO) {
+        return '[ ]';
+      }
+      return (
+        <div className="deepObjectWrapper">
+          <span
+            className="hideButton"
+            onClick={() => this.props.toggleShowDeep(currentInt)}
+          >
+            {globalString('output/editor/hide')}
+          </span>
+          <table {...this.props.tableProps}>
+            <tbody>
+              {loopObject(obj, (v, key) => {
+                return (
+                  <tr {...this.props.trProps}>
+                    <td
+                      onClick={() => this.props.onCellClick('cell in array')}
+                      {...this.props.tdProps}
+                      style={this.constructor.styles.td}
+                    >{`${key}`}</td>
+                    {this.renderTd(v, key)}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
     if (getType(obj) === 'Array' && obj.length === ZERO) {
       return '[ ]';
     }
@@ -168,8 +223,11 @@ export default class JSONViewer extends Component {
       // Hide this objects.
       if (this.debug) console.log('Array ', currentInt, ' is hidden');
       return (
-        <span onClick={() => this.props.toggleShowDeep(currentInt)}>
-          {globalString('output/editor/hide')}
+        <span
+          className="expandButton"
+          onClick={() => this.props.toggleShowDeep(currentInt)}
+        >
+          {globalString('output/editor/expand')}
         </span>
       );
     } else if (this.state.deep && showCurrentInt) {
@@ -177,8 +235,11 @@ export default class JSONViewer extends Component {
       if (this.debug) console.log('Array ', currentInt, ' is visible');
       return (
         <div className="deepObjectWrapper">
-          <span onClick={() => this.props.toggleShowDeep(currentInt)}>
-            {globalString('output/editor/expand')}
+          <span
+            className="hideButton"
+            onClick={() => this.props.toggleShowDeep(currentInt)}
+          >
+            {globalString('output/editor/hide')}
           </span>
           <table {...this.props.tableProps}>
             {this.renderHeaderByKeys(Object.keys(getFirstEle(aob)))}
