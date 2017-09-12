@@ -23,7 +23,6 @@
 
 
 export default {
-  value: this.doc,
   theme: 'material',
   lineNumbers: 'true',
   indentUnit: 2,
