@@ -158,7 +158,8 @@
           "executeAll": "Execute All",
           "refresh": "Refresh",
           "formatAll": "Format All",
-          "formatSelection": "Format Selection"
+          "formatSelection": "Format Selection",
+          "translateSelection": "Transalate to Native Code"
         }
       },
       "welcome": {

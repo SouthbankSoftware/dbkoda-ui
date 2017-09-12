@@ -39,10 +39,12 @@ import {inject, PropTypes} from 'mobx-react';
 import {featherClient} from '~/helpers/feathers';
 import {action, reaction, runInAction} from 'mobx';
 import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
+import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';
 import React from 'react';
 import CodeMirrorEditor from '#/common/CodeMirror';
 import CodeMirror from 'codemirror';
+import {MongoShellTranslator} from 'mongo-shell-translator';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/markdown/markdown';
@@ -75,6 +77,7 @@ import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
+import {TranslatorPanel} from '../Translator';
 
 /**
  * editorTarget object for helping with drag and drop actions?
@@ -412,6 +415,7 @@ class View extends React.Component {
     this.executeAll = this.executeAll.bind(this);
     this.prettifyAll = this.prettifyAll.bind(this);
     this.prettifySelection = this.prettifySelection.bind(this);
+    this.translateToNativeCode = this.translateToNativeCode.bind(this);
   }
 
   /**
@@ -768,6 +772,25 @@ class View extends React.Component {
   }
 
   @action.bound
+  translateToNativeCode() {
+    const cm = this.editor.getCodeMirror();
+    const shellCode = cm.getSelection();
+
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+    if (editor) {
+      editor.openTranslator = true;
+      const translator = new MongoShellTranslator();
+      const transCode = translator.translate(shellCode);
+      this.props.store.outputs.get(editor.id).output += '\n' + transCode;
+      editor.nativeCode = transCode;
+      editor.shellCode = shellCode;
+      this.setState({openTranslator: true});
+    }
+  }
+
+  @action.bound
   finishedExecution(event) {
     const editorIndex = this.props.store.editorPanel.activeEditorId;
     if (!this.props.store.editors.get(editorIndex)) {
@@ -848,6 +871,14 @@ class View extends React.Component {
             intent={Intent.NONE}
           />
         </div>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.translateToNativeCode}
+            text={globalString('editor/view/menu/translateSelection')}
+            iconName="pt-icon-align-left"
+            intent={Intent.NONE}
+          />
+        </div>
       </Menu>
     );
   }
@@ -857,6 +888,24 @@ class View extends React.Component {
    */
   render() {
     const { connectDropTarget, isOver } = this.props; // eslint-disable-line
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+    if (editor && editor.openTranslator) {
+      return connectDropTarget(<div className="editorView">
+        <SplitPane
+          split="vertical"
+          defaultSize={500}
+          minSize={250}>
+          <CodeMirrorEditor
+            ref={ref => (this.editor = ref)}
+            codeMirrorInstance={CodeMirror}
+            options={this.cmOptions}
+          />
+          <TranslatorPanel value={editor.shellCode} syntax="cb" />
+        </SplitPane>
+      </div>);
+    }
     return connectDropTarget(
       <div className="editorView">
         <CodeMirrorEditor
