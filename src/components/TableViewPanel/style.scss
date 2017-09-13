@@ -66,11 +66,41 @@
             color: $tableBodyText !important;
             line-height: 14px;
           }
+          span.string {
+            color: $colourFourteen !important;
+          }
+          span.number {
+            color: $colourFifteen !important;
+          }
+          span.noWrap {
+            white-space: nowrap;
+          }
+          span.expandButton {
+            margin-left: 20%;
+            cursor: n-resize;
+            padding: 4px;
+            padding-left: 8px;
+            padding-right: 8px;
+            border: 1px solid $tableCellBorder !important;
+          }
+          span.expandButton:hover {
+            background-color: $welcomeViewButtonHoverColor;
+          }
           div.deepObjectWrapper {
-            span {
+            span.hideButton {
+              margin-left: 40%;
+              cursor: s-resize;
+              padding: 4px;
+              padding-left: 8px;
+              padding-right: 8px;
+              border: 1px solid $tableCellBorder !important;
+            }
+            span.hideButton:hover {
+              background-color: $welcomeViewButtonHoverColor;
             }
             table {
               margin: 0px;
+              margin-top: 8px;
             }
           }
         }
