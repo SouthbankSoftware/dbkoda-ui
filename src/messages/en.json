@@ -277,7 +277,7 @@
         "close": "Close Translator"
       },
       "label": {
-        "syntax": "Syntax ",
+        "syntax": "Syntax Selection",
         "callback": "C",
         "promise": "P",
         "await": "A"
