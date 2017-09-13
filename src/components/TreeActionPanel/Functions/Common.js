@@ -58,6 +58,20 @@ export function dbkoda_listRoles_parse(res) {
   });
   return roleList.sort();
 }
+
+export function dbkoda_listActions() {
+  return 'db.getSiblingDB("admin").getRoles({rolesInfo: 1, showPrivileges: true, showBuiltinRoles: true})';
+}
+export function dbkoda_listActions_parse(res) {
+  console.log(res);
+  const actions = res.map((role) => {
+    return role.privileges;
+  });
+  console.log(actions);
+  const uniqueActions = [...new Set(res)];
+  return uniqueActions;
+}
+
 export function dbkoda_listcollections(params) {
   //eslint-disable-line
   const cmd = 'db.getSiblingDB("' + params.db + '").getCollectionNames()';

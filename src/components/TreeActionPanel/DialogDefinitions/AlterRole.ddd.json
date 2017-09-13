@@ -1,0 +1,8 @@
+{
+  "Title": "Alter Role",
+  "Fields": [{
+      "name": "RoleName",
+      "type": "Text",
+      "readOnly": true
+    }]
+}

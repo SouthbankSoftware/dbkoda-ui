@@ -1,0 +1,48 @@
+{
+    "Title": "Create Role",
+    "DefaultValues": {
+        "function":"dbkoda_CreateRolePreFill"
+    },
+    "Fields": [
+        {
+            "name": "Database",
+            "type": "Select",
+            "readOnly": false,
+            "tooltip": "The database which will be associated with the Role",
+            "lookup": "dbkoda_listdb"
+        },
+        {
+            "name": "RoleName",
+            "type": "Text",
+            "readOnly": false
+        },
+        {
+            "name": "Roles",
+            "type": "Table",
+            "columns": [{
+                "name": "Database",
+                "type": "Select",
+                "lookup": "dbkoda_listdb"
+            },
+            {
+                "name": "Role",
+                "type": "Select",
+                "lookup": "dbkoda_listRoles"
+            }]
+        },
+        {
+          "name": "Privileges",
+          "type": "Table",
+          "columns": [{
+              "name": "Resource",
+              "type": "Text"
+            },
+            {
+              "name": "Actions",
+              "type": "Select",
+              "multi": true,
+              "lookup": "dbkoda_listActions"
+            }]
+        }
+    ]
+}

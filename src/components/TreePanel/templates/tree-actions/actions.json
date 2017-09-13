@@ -265,42 +265,17 @@
       "name": "CreateRole",
       "text": "Create Role",
       "icon": "user"
-    },
-    {
-      "name": "DropAllRoles",
-      "text": "Drop All Roles",
-      "icon": "user"
     }
   ],
   "role": [
     {
-      "name": "UpdateRole",
-      "text": "Update Role",
+      "name": "AlterRole",
+      "text": "Alter Role",
       "icon": "user"
     },
     {
       "name": "DropRole",
       "text": "Drop Role",
-      "icon": "user"
-    },
-    {
-      "name": "GrantPrivileges",
-      "text": "Grant Privileges",
-      "icon": "user"
-    },
-    {
-      "name": "RevokePrivileges",
-      "text": "Revoke Privileges",
-      "icon": "user"
-    },
-    {
-      "name": "GrantRoles",
-      "text": "Grant Roles",
-      "icon": "user"
-    },
-    {
-      "name": "RevokeRoles",
-      "text": "Revoke Roles",
       "icon": "user"
     }
   ],

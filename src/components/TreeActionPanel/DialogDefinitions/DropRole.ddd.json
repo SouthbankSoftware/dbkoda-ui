@@ -1,0 +1,18 @@
+{
+  "Title": "Drop Role",
+  "DefaultValues": {
+    "function": "dbkoda_DropRolePreFill",
+    "arguments": [{
+      "name": "RoleName",
+      "value": "treeNode"
+    }]
+  },
+  "Fields": [
+    {
+      "name": "RoleName",
+      "type": "Text",
+      "readOnly": true,
+      "tooltip": "The name of the role to be dropped"
+    }
+  ]
+}
