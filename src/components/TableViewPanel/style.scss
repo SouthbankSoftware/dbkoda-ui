@@ -35,6 +35,7 @@ div.tableViewWrapper {
     padding-bottom: 6px;
     padding-left: 20px;
     background-color: $navbarTertiaryBackground;
+    border-bottom: 1px solid $navbarSecondaryBackground;
     a.pt-button {
       order: 1;
       margin-right: 10px;
