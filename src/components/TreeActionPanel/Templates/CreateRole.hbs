@@ -4,7 +4,7 @@ db.getSiblingDB("{{Database}}").createRole({
       { role:"{{Role}}", db: "{{Database}}" } {{#unless last}},{{/unless}}
     {{/each}} ],
     privileges: [ {{#each Privileges}}
-      { resource: "{{Resource}}", actions: [ "{{Action}}"] } {{#unless last}},{{/unless}}
+      { resource: {{Resource}}, actions: [ "{{Actions}}" ] } {{#unless last}},{{/unless}}
     {{/each}} ]
   },
   {  w: "majority" }

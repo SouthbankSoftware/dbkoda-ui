@@ -37,6 +37,7 @@ export function dbkoda_listdb(params) {
   //eslint-disable-line
   return 'db.adminCommand({listDatabases: 1})';
 }
+
 export function dbkoda_listdb_parse(res) {
   //eslint-disable-line
   const dblist = [];
@@ -45,11 +46,13 @@ export function dbkoda_listdb_parse(res) {
   });
   return dblist.sort();
 }
+
 export function dbkoda_listRoles(params) {
   //eslint-disable-line
   const db = params && params.db ? params.db : 'admin';
   return `db.getSiblingDB("${db}").getRoles({rolesInfo: 1, showPrivileges: false, showBuiltinRoles: true})`;
 }
+
 export function dbkoda_listRoles_parse(res) {
   //eslint-disable-line
   const roleList = [];
@@ -62,14 +65,18 @@ export function dbkoda_listRoles_parse(res) {
 export function dbkoda_listActions() {
   return 'db.getSiblingDB("admin").getRoles({rolesInfo: 1, showPrivileges: true, showBuiltinRoles: true})';
 }
+
 export function dbkoda_listActions_parse(res) {
-  console.log(res);
-  const actions = res.map((role) => {
-    return role.privileges;
+  let actions = res.map((role) => {
+    return role.privileges.map((actions) => {
+      return actions.actions;
+    });
   });
-  console.log(actions);
-  const uniqueActions = [...new Set(res)];
-  return uniqueActions;
+  actions = _.flatten(actions);
+  actions = _.flatten(actions);
+  actions = [...new Set(actions)];  // Get unique actions
+  actions.sort();
+  return actions;
 }
 
 export function dbkoda_listcollections(params) {
@@ -109,6 +116,7 @@ export function dbkodaParameterList() {
   //eslint-disable-line
   return 'JSON.stringify(db.getSiblingDB("admin").runCommand( { getParameter : "*" }))';
 }
+
 export function dbkodaParameterList_parse(res) {
   //eslint-disable-line
   console.log('got parameters', res);
@@ -116,6 +124,7 @@ export function dbkodaParameterList_parse(res) {
   console.log(params);
   return params;
 }
+
 export function dbkodaListAttributes(params) {
   const cmd = sprintf(
     'dbe.sampleCollection("%s","%s");',
@@ -139,17 +148,20 @@ export function dbkodaListAttributesAgg(params) {
   params.dontRun = true;
   return params;
 }
+
 export function dbkodaListAttributesAgg_parse(res) {
   if (typeof res.prevAttributes === 'string') {
     return JSON.parse(res.prevAttributes);
   }
   return res.prevAttributes;
 }
+
 // Right side of a project - either an existing or new attribute name
 export function dbkodaListAttributesProject(params) {
   params.dontRun = true;
   return params;
 }
+
 export function dbkodaListAttributesProject_parse(res) {
   console.log(res);
   let output = res.prevAttributes;
@@ -160,11 +172,13 @@ export function dbkodaListAttributesProject_parse(res) {
   if (debug) console.log('output: ', output);
   return output;
 }
+
 // Left side of a project - either an existing attribute with "$" or 1 or 0
 export function dbkodaListAttributesProjectTarget(params) {
   params.dontRun = true;
   return params;
 }
+
 export function dbkodaListAttributesProjectTarget_parse(res) {
   console.log(res);
   let output = res.prevAttributes;
