@@ -33,7 +33,7 @@ import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import path from 'path';
-import { AnchorButton, Intent } from '@blueprintjs/core';
+import { Alert, AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
 import { featherClient } from '~/helpers/feathers';
@@ -70,6 +70,7 @@ export default class GraphicalBuilder extends React.Component {
       colorMatching: [],
       db: props.db,
       collection: props.collection,
+      loading: false
     };
     this.debug = false;
     // Set up the aggregate builder in the shell.
@@ -954,11 +955,22 @@ export default class GraphicalBuilder extends React.Component {
     output.output = globalString('aggregate_builder/failed_output');
   }
 
+  @action.bound
+  onImportButtonClickedFirst() {
+    this.setState({isImportAlertOpen: true});
+  }
+
+  @action.bound
+  handleCloseAlert() {
+    this.setState({isImportAlertOpen: false});
+  }
+
   /**
    * Import an aggregate builder.
    */
   @action.bound
   onImportButtonClicked() {
+    this.setState({isImportAlertOpen: false});
     if (IS_ELECTRON) {
       dialog.showOpenDialog(
         BrowserWindow.getFocusedWindow(),
@@ -1040,6 +1052,11 @@ export default class GraphicalBuilder extends React.Component {
           },
           (fileName) => {
             if (!fileName) {
+              NewToaster.show({
+                message: globalString('aggregate_builder/no_active_connection'),
+                intent: Intent.SUCCESS,
+                iconName: 'pt-icon-thumbs-up',
+              });
               return reject();
             }
             this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(
@@ -1238,7 +1255,9 @@ export default class GraphicalBuilder extends React.Component {
                   }
                 }
               });
-              editor.selectedBlock = 0;
+              runInAction('Set Selected Aggregate Block to 0', () => {
+                editor.selectedBlock = 0;
+              });
               // 4. Is the current block valid?.
               if (editor.blockList[editor.selectedBlock].status === 'valid') {
                 // 4.a Yes - Update Results.
@@ -1349,7 +1368,7 @@ export default class GraphicalBuilder extends React.Component {
             className="importButton"
             intent={Intent.SUCCESS}
             text={globalString('aggregate_builder/import_button')}
-            onClick={this.onImportButtonClicked}
+            onClick={this.onImportButtonClickedFirst}
           />
           <AnchorButton
             className="exportButton"
@@ -1358,6 +1377,15 @@ export default class GraphicalBuilder extends React.Component {
             onClick={this.onExportButtonClicked}
           />
         </div>
+        <Alert
+          className="importAlert"
+          isOpen={this.state.isImportAlertOpen}
+          confirmButtonText={globalString('aggregate_builder/alerts/okay')}
+          onConfirm={this.onImportButtonClicked}
+          cancelButtonText={globalString('aggregate_builder/alerts/cancel')}
+          onCancel={this.handleCloseAlert}>
+          <p>{globalString('aggregate_builder/alerts/importWarningText')}</p>
+        </Alert>
         <ul className="graphicalBuilderBlockList">
           <FirstBlockTarget />
           {this.props.store.editors

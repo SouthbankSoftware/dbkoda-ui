@@ -26,7 +26,13 @@
       "loading_output":
         "  Loading results...\n  ----------------------------------  ",
       "failed_output":
-        "  Failed to fetch results\n  ----------------------------------  "
+        "  Failed to fetch results\n  ----------------------------------  ",
+      "alerts": {
+        "importWarningText":
+          " Warning, your current aggregate builder will be lost on import, please export your builder before importing a new one. ",
+        "cancel": "Cancel",
+        "okay": "Okay"
+      }
     },
     "telemetry_dialog": {
       "header": "Welcome!",

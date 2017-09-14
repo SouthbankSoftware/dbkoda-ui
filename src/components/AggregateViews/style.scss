@@ -1,5 +1,17 @@
 @import '../../styles/_defaultTheme.scss';
 
+div.importAlert {
+  color: $defaultFontColor;
+  div.pt-alert-footer {
+    button.pt-button {
+      color: $defaultFontColor !important;
+    }
+    button.pt-button:hover {
+      background-clip: unset;
+    }
+  }
+}
+
 div.aggregateGraphicalBuilderWrapper {
   display: flex;
   flex-direction: column;
@@ -315,7 +327,7 @@ div.Pane.vertical.Pane1 {
           }
         }
       }
-      fieldset[label="Group By"] {
+      fieldset[label='Group By'] {
         .form-group-inline {
           width: 31%;
         }
@@ -347,7 +359,7 @@ div.aggregateDetailsContent {
   }
 }
 
-label[for="last"] {
+label[for='last'] {
   display: none;
   padding: none;
 }
