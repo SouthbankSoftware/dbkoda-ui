@@ -22,7 +22,7 @@
  * @Date:   2017-09-13 15:21:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   mike
- * @Last modified time: 2017-09-13 15:21:05
+ * @Last modified time: 2017-09-15 12:35:07
  */
 
 import React from 'react';
@@ -42,14 +42,18 @@ export default class Toolbar extends React.Component {
           className="pt-button pt-intent-primary expandAllButton"
           onClick={this.props.expandAll}
         >
-          Expand All
+          {globalString('output/editor/expandAll')}
         </AnchorButton>
         <AnchorButton
           className="pt-button pt-intent-primary collapseAllButton"
           onClick={this.props.collapseAll}
         >
-          Collapse All
+          {globalString('output/editor/collapseAll')}
         </AnchorButton>
+        <p className="docCount">
+          {globalString('output/editor/numOfDocs')}{' '}
+          <b>{this.props.totalDocs}</b>
+        </p>
       </div>
     );
   }

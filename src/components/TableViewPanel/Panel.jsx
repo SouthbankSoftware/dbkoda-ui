@@ -22,7 +22,7 @@
  * @Date:   2017-08-16T12:05:28+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   mike
- * @Last modified time: 2017-09-13 15:23:46
+ * @Last modified time: 2017-09-15 12:35:13
  */
 
 /* eslint no-prototype-builtins:warn */
@@ -43,12 +43,22 @@ export default class Panel extends React.Component {
       collapseAll: false,
       arrayState: { 0: true },
     };
+
+    // Enables developer console logging.
+    this.debug = false;
   }
 
   @action.bound
   onHeaderClick(string) {
-    if (false) console.log(string);
+    if (this.debug) console.log('Clicked header: ', string);
   }
+
+  @action.bound
+  updateNestedState(number, state) {
+    if (this.debug) console.log('Set ', number, 'to ', state);
+    this.state.arrayState[number] = state;
+  }
+
   @action.bound
   toggleShowDeep(number) {
     if (typeof this.state.arrayState[number] === 'undefined') {
@@ -65,21 +75,26 @@ export default class Panel extends React.Component {
 
   @action.bound
   collapseAll() {
-    for (let i = 0; i < this.props.tableJson.json.length + 2; i += 1) {
-      this.state.arrayState[i] = false;
-    }
-    this.forceUpdate();
+    // for (let i = 0; i < this.props.tableJson.json.length + 2; i += 1) {
+    //   this.state.arrayState[i] = false;
+    // }
+    this.setState({ collapseAll: true });
   }
 
   @action.bound
   expandAll() {
-    for (let i = 0; i < this.props.tableJson.json.length + 2; i += 1) {
-      this.state.arrayState[i] = true;
-    }
-    this.forceUpdate();
+    // for (let i = 0; i < this.props.tableJson.json.length + 2; i += 1) {
+    //   this.state.arrayState[i] = true;
+    // }
+    this.setState({ expandAll: true });
   }
 
   render() {
+    const expand = this.state.expandAll;
+    const collapse = this.state.collapseAll;
+    this.state.expandAll = false;
+    this.state.collapseAll = false;
+
     if (this.props.tableJson.json === false) {
       return (
         <div className="table-json-panel">
@@ -89,16 +104,24 @@ export default class Panel extends React.Component {
         </div>
       );
     }
+    if (this.debug) console.log(this.state.arrayState);
     return (
       <div className="tableViewWrapper">
-        <Toolbar expandAll={this.expandAll} collapseAll={this.collapseAll} />
+        <Toolbar
+          expandAll={this.expandAll}
+          collapseAll={this.collapseAll}
+          totalDocs={this.props.tableJson.json.length}
+        />
         <div className="table-json-panel">
           <JSONViewer
             json={this.props.tableJson.json}
             onHeaderClick={this.onHeaderClick}
             toggleShowDeep={this.toggleShowDeep}
+            updateNestedState={this.updateNestedState}
             hideDeep={this.state.hideDeep}
             arrayState={this.state.arrayState}
+            expandAll={expand}
+            collapseAll={collapse}
           />
         </div>
       </div>

@@ -65,7 +65,10 @@
         "tabularError":
           "Unable to find a result set for that line, please right click on a JSON document",
         "hide": "Hide",
-        "expand": "Expand"
+        "expand": "Show",
+        "collapseAll": "Collapse All",
+        "expandAll": "Expand All",
+        "numOfDocs": "Number of Documents: "
       },
       "terminal": {
         "execute": "Execute Command (Enter)"

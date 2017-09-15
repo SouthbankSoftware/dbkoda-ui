@@ -57,11 +57,25 @@ div.tableViewWrapper {
     a.pt-button:hover {
       background-color: $buttonTertiaryBackgroundHoverBright !important;
     }
+    p.docCount {
+      order: 2;
+      margin: unset;
+      padding: unset;
+      font-weight: lighter;
+      padding-top: 6px;
+      color: $navbarRighHeading;
+      margin-left: auto;
+      margin-right: 6px;
+      b {
+        color: $navbarRighHeading;
+        font-weight: bolder;
+      }
+    }
   }
   .table-json-panel {
     background-color: $tabBackgroundSelected;
     overflow-y: scroll;
-    height: 86%;
+    height: 94%;
     h2.errorMessage {
       color: $tableHeaderText;
       margin-left: 4%;
@@ -75,17 +89,18 @@ div.tableViewWrapper {
       border-collapse: collapse;
       thead {
         tr {
-          background-color: $highlightThree;
+          background-color: $highlightOne;
+          border-bottom: 2px solid $tabBackgroundSelected;
           th {
-            border: 1px solid $tableCellBorder !important;
-            background-color: $highlightThree;
+            border: unset !important;
+            background-color: $highlightOne;
             span {
-              color: $tableHeaderText !important;
+              color: $white !important;
               font-weight: 400;
             }
           }
           th:hover {
-            background-color: $colourThree;
+            background-color: $colourOne;
           }
         }
       }
@@ -93,46 +108,61 @@ div.tableViewWrapper {
         tr {
           background-color: $tableBackgroundOdd;
           td {
-            border: 1px solid $tableCellBorder !important;
+            border: unset !important;
             span {
               color: $tableBodyText !important;
               line-height: 14px;
             }
             span.string {
-              color: $colourFourteen !important;
+              color: $tableBodyText !important;
             }
             span.number {
-              color: $colourFifteen !important;
+              color: $tableBodyText !important;
             }
             span.noWrap {
               white-space: nowrap;
             }
             span.expandButton {
-              margin-left: 20%;
-              cursor: n-resize;
+              cursor: default;
               padding: 4px;
-              padding-left: 8px;
-              padding-right: 8px;
-              border: 1px solid $tableCellBorder !important;
+              padding-left: 12px;
+              padding-right: 12px;
+              border: 1px solid $navbarRightBackground;
+              border-radius: 0.5em;
+              width: 100px;
+              background-color: $navbarRightBackground;
             }
             span.expandButton:hover {
-              background-color: $welcomeViewButtonHoverColor;
+              background-color: $tableButtonHover;
             }
             div.deepObjectWrapper {
+              margin-top: 12px;
+              margin-bottom: 4px;
               span.hideButton {
-                margin-left: 40%;
-                cursor: s-resize;
+                cursor: default;
                 padding: 4px;
-                padding-left: 8px;
-                padding-right: 8px;
-                border: 1px solid $tableCellBorder !important;
+                padding-left: 22px;
+                padding-right: 22px;
+                border: 1px solid $tableBodyText;
+                border-radius: 0.5em;
+                width: 100px;
               }
               span.hideButton:hover {
-                background-color: $welcomeViewButtonHoverColor;
+                background-color: $navbarRightBackground;
               }
               table {
                 margin: 0px;
-                margin-top: 8px;
+                margin-top: 14px;
+                thead {
+                  tr {
+                    th {
+                      background-color: $colourThree;
+                      span {
+                        color: $white !important;
+                      }
+                    }
+                  }
+                }
               }
             }
           }
