@@ -34,6 +34,7 @@ $welcomeViewKeyboardShortcutsBG: #272a3a;
 $aggregateViewBackgroundColor: #2f3344;
 $profileListTabHover: rgba(39, 42, 58, 0.2);
 $profileListSelected: rgba(39, 42, 58, 0.5);
+$defaultFontColor: #bfbec0;
 
 // Scroll Bars:
 $scrollBarBackground: #474a5a;
@@ -123,7 +124,7 @@ $navbarRightBackground: #494849;
 $navbarRighHeading: #bfbec0;
 $navbarSecondaryBackground: #323232;
 $navbarLeftHeading: #bfbec0;
-$navbarTertiaryBackground: #222222;
+$navbarTertiaryBackground: #202020;
 //Buttons:
 $buttonTextColour: #bfbec0;
 $buttonSuccessBackground: #24a26e;
@@ -238,14 +239,14 @@ $menuItemHover: rgba(170, 182, 264, 0.3);
 
 // Table JSON View
 $tableHeaderBackground: #5d3750;
-$tableBackgroundOdd: #202020;
-$tableBackgroundOddHover: #262626;
-$tableBackgroundEven: #282828;
-$tableBackgroundEvenHover: #2f2f2f;
-
+$tableBackgroundOdd: #282828;
+$tableBackgroundOddHover: #363636;
+$tableBackgroundEven: #202020;
+$tableBackgroundEvenHover: #363636;
 $tableHeaderText: #bfbec0;
 $tableBodyText: #bfbec0;
 $tableCellBorder: rgba(191, 190, 192, 0.25);
+$tableButtonHover: #696869;
 
 // Visual Tools Color Palette
 $colourOne: #00b4e9;

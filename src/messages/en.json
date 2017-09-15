@@ -10,6 +10,8 @@
       "form_code": "Code Form",
       "no_active_connection":
         "dbKoda has lost connection to your Mongo Shell.\n Please close or export this aggregation and then import it or start again.",
+      "no_active_connection_for_import":
+        "Cannot import without an active connection.",
       "import_button": "Import",
       "import_failed": "Sorry, failed to import that file!",
       "import_passed": "Import succeeded.",
@@ -26,7 +28,13 @@
       "loading_output":
         "  Loading results...\n  ----------------------------------  ",
       "failed_output":
-        "  Failed to fetch results\n  ----------------------------------  "
+        "  Failed to fetch results\n  ----------------------------------  ",
+      "alerts": {
+        "importWarningText":
+          " Warning, your current aggregate builder will be lost on import, please export your builder before importing a new one. ",
+        "cancel": "Cancel",
+        "okay": "Okay"
+      }
     },
     "telemetry_dialog": {
       "header": "Welcome!",
@@ -57,7 +65,10 @@
         "tabularError":
           "Unable to find a result set for that line, please right click on a JSON document",
         "hide": "Hide",
-        "expand": "Expand"
+        "expand": "Show",
+        "collapseAll": "Collapse All",
+        "expandAll": "Expand All",
+        "numOfDocs": "Number of Documents: "
       },
       "terminal": {
         "execute": "Execute Command (Enter)"

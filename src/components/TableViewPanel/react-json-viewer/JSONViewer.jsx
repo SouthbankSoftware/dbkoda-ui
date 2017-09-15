@@ -1,3 +1,28 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* eslint jsx-a11y/no-static-element-interactions: 0 */
+/* eslint react/require-default-props: 0 */
+/* eslint react/forbid-prop-types: 0 */
+/* eslint react/no-array-index-key: 0 */
+
 import React, { Component } from 'react';
 import ValueViewer from './ValueViewer';
 import {
@@ -7,9 +32,6 @@ import {
   checkIfArrayIsAOB,
   checkIfObjectIsOOB,
 } from './util';
-
-/* eslint-disable */
-const ZERO = 0;
 
 export default class JSONViewer extends Component {
   constructor(props, context) {
@@ -79,15 +101,22 @@ export default class JSONViewer extends Component {
     const currentInt = this.state.renderArrayCount;
     let showCurrentInt = this.props.arrayState[currentInt];
     if (typeof showCurrentInt === 'undefined') {
-      showCurrentInt = true;
+      showCurrentInt = false;
     } else if (showCurrentInt === false) {
       showCurrentInt = false;
     } else if (showCurrentInt === true) {
       showCurrentInt = true;
     }
+    if (this.props.collapseAll === true) showCurrentInt = false;
+    if (this.props.expandAll === true) showCurrentInt = true;
+
+    this.props.updateNestedState(currentInt, showCurrentInt);
+
     if (this.state.deep && !showCurrentInt) {
       // Hide this objects.
-      if (this.debug) console.log('Array ', currentInt, ' is hidden');
+      if (this.debug) {
+        console.log('Array ', currentInt, ' is hidden (', showCurrentInt, ')');
+      }
       return (
         <span
           className="expandButton"
@@ -97,9 +126,11 @@ export default class JSONViewer extends Component {
         </span>
       );
     } else if (this.state.deep && showCurrentInt) {
-      //Show deep objects
-      if (this.debug) console.log('Array ', currentInt, ' is visible');
-      if (getType(obj) === 'Array' && obj.length === ZERO) {
+      // Show deep objects
+      if (this.debug) {
+        console.log('Array ', currentInt, ' is visible (', showCurrentInt, ')');
+      }
+      if (getType(obj) === 'Array' && obj.length === 0) {
         return '[ ]';
       }
       return (
@@ -130,7 +161,7 @@ export default class JSONViewer extends Component {
       );
     }
 
-    if (getType(obj) === 'Array' && obj.length === ZERO) {
+    if (getType(obj) === 'Array' && obj.length === 0) {
       return '[ ]';
     }
     return (
@@ -213,12 +244,18 @@ export default class JSONViewer extends Component {
     const currentInt = this.state.renderArrayCount;
     let showCurrentInt = this.props.arrayState[currentInt];
     if (typeof showCurrentInt === 'undefined') {
-      showCurrentInt = true;
+      showCurrentInt = false;
     } else if (showCurrentInt === false) {
       showCurrentInt = false;
     } else if (showCurrentInt === true) {
       showCurrentInt = true;
     }
+    // Button override.
+    if (this.props.collapseAll === true) showCurrentInt = false;
+    if (this.props.expandAll === true) showCurrentInt = true;
+
+    this.props.updateNestedState(currentInt, showCurrentInt);
+
     if (this.state.deep && !showCurrentInt) {
       // Hide this objects.
       if (this.debug) console.log('Array ', currentInt, ' is hidden');
@@ -231,7 +268,7 @@ export default class JSONViewer extends Component {
         </span>
       );
     } else if (this.state.deep && showCurrentInt) {
-      //Show deep objects
+      // Show deep objects
       if (this.debug) console.log('Array ', currentInt, ' is visible');
       return (
         <div className="deepObjectWrapper">
@@ -257,27 +294,26 @@ export default class JSONViewer extends Component {
           </table>
         </div>
       );
-    } else {
-      // Root level object
-      if (this.debug) console.log('Root level object.');
-      this.state.deep = true;
-      return (
-        <table {...this.props.tableProps}>
-          {this.renderHeaderByKeys(Object.keys(getFirstEle(aob)))}
-          <tbody {...this.props.tbodyProps}>
-            {loopObject(aob, (row, j) => {
-              return (
-                <tr {...this.props.trProps} key={j}>
-                  {loopObject(getFirstEle(aob), (val, key) => {
-                    return this.renderTd(row[key], key);
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      );
     }
+    // Root level object
+    if (this.debug) console.log('Root level object.');
+    this.state.deep = true;
+    return (
+      <table {...this.props.tableProps}>
+        {this.renderHeaderByKeys(Object.keys(getFirstEle(aob)))}
+        <tbody {...this.props.tbodyProps}>
+          {loopObject(aob, (row, j) => {
+            return (
+              <tr {...this.props.trProps} key={j}>
+                {loopObject(getFirstEle(aob), (val, key) => {
+                  return this.renderTd(row[key], key);
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
   }
 
   render() {
