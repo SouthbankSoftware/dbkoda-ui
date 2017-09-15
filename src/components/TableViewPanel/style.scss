@@ -89,18 +89,18 @@ div.tableViewWrapper {
       border-collapse: collapse;
       thead {
         tr {
-          background-color: $highlightOne;
+          background-color: $colourSeven !important;
           border-bottom: 2px solid $tabBackgroundSelected;
           th {
             border: unset !important;
-            background-color: $highlightOne;
+            background-color: $colourSeven;
             span {
               color: $white !important;
               font-weight: 400;
             }
           }
           th:hover {
-            background-color: $colourOne;
+            background-color: $highlightSeven;
           }
         }
       }
@@ -157,10 +157,13 @@ div.tableViewWrapper {
                 thead {
                   tr {
                     th {
-                      background-color: $colourThree;
+                      background-color: $colourSixteen;
                       span {
                         color: $white !important;
                       }
+                    }
+                    th:hover {
+                      background-color: $highlightSixteen;
                     }
                   }
                 }
