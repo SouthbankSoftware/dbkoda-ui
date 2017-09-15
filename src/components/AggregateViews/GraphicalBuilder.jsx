@@ -966,7 +966,16 @@ export default class GraphicalBuilder extends React.Component {
 
   @action.bound
   onImportButtonClickedFirst() {
-    this.setState({isImportAlertOpen: true});
+    // Check if connection is open first.
+    if (this.props.store.editorPanel.activeDropdownId === 'Default') {
+      NewToaster.show({
+        message: globalString('aggregate_builder/no_active_connection_for_import'),
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down',
+      });
+    } else {
+      this.setState({isImportAlertOpen: true});
+    }
   }
 
   @action.bound
@@ -1063,12 +1072,7 @@ export default class GraphicalBuilder extends React.Component {
           },
           (fileName) => {
             if (!fileName) {
-              NewToaster.show({
-                message: globalString('aggregate_builder/no_active_connection'),
-                intent: Intent.SUCCESS,
-                iconName: 'pt-icon-thumbs-up',
-              });
-              return reject();
+             reject();
             }
             this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(
               fileName,

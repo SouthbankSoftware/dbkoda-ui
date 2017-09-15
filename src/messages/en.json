@@ -10,6 +10,8 @@
       "form_code": "Code Form",
       "no_active_connection":
         "dbKoda has lost connection to your Mongo Shell.\n Please close or export this aggregation and then import it or start again.",
+      "no_active_connection_for_import":
+        "Cannot import without an active connection.",
       "import_button": "Import",
       "import_failed": "Sorry, failed to import that file!",
       "import_passed": "Import succeeded.",
