@@ -20,7 +20,8 @@
 
 /* eslint jsx-a11y/no-static-element-interactions: warn */
 /* eslint react/require-default-props: 0 */
-/* eslint react/forbid-prop-types */
+/* eslint react/forbid-prop-types: 0 */
+
 import React, { Component } from 'react';
 import ValueViewer from './ValueViewer';
 import {
@@ -99,7 +100,7 @@ export default class JSONViewer extends Component {
     const currentInt = this.state.renderArrayCount;
     let showCurrentInt = this.props.arrayState[currentInt];
     if (typeof showCurrentInt === 'undefined') {
-      showCurrentInt = true;
+      showCurrentInt = false;
     } else if (showCurrentInt === false) {
       showCurrentInt = false;
     } else if (showCurrentInt === true) {
@@ -112,7 +113,9 @@ export default class JSONViewer extends Component {
 
     if (this.state.deep && !showCurrentInt) {
       // Hide this objects.
-      if (this.debug) console.log('Array ', currentInt, ' is hidden');
+      if (this.debug) {
+        console.log('Array ', currentInt, ' is hidden (', showCurrentInt, ')');
+      }
       return (
         <span
           className="expandButton"
@@ -123,7 +126,9 @@ export default class JSONViewer extends Component {
       );
     } else if (this.state.deep && showCurrentInt) {
       // Show deep objects
-      if (this.debug) console.log('Array ', currentInt, ' is visible');
+      if (this.debug) {
+        console.log('Array ', currentInt, ' is visible (', showCurrentInt, ')');
+      }
       if (getType(obj) === 'Array' && obj.length === 0) {
         return '[ ]';
       }
@@ -238,7 +243,7 @@ export default class JSONViewer extends Component {
     const currentInt = this.state.renderArrayCount;
     let showCurrentInt = this.props.arrayState[currentInt];
     if (typeof showCurrentInt === 'undefined') {
-      showCurrentInt = true;
+      showCurrentInt = false;
     } else if (showCurrentInt === false) {
       showCurrentInt = false;
     } else if (showCurrentInt === true) {

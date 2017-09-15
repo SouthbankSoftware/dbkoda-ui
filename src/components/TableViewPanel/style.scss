@@ -109,6 +109,7 @@ div.tableViewWrapper {
           background-color: $tableBackgroundOdd;
           td {
             border: unset !important;
+            vertical-align: baseline;
             span {
               color: $tableBodyText !important;
               line-height: 14px;
