@@ -70,7 +70,7 @@ export default class GraphicalBuilder extends React.Component {
       colorMatching: [],
       db: props.db,
       collection: props.collection,
-      loading: false
+      isLoading: false
     };
     this.debug = false;
     // Set up the aggregate builder in the shell.
@@ -265,7 +265,9 @@ export default class GraphicalBuilder extends React.Component {
             if (typeof block.fields[key] === 'object') {
               // For each property in the object.
               block.fields[key].forEach((value) => {
-                editor.blockList[position].fields[key].push(value);
+                if (editor.blockList[position].fields[key]) {
+                  editor.blockList[position].fields[key].push(value);
+                }
               });
             } else {
               editor.blockList[position].fields[key] = block.fields[key];
@@ -315,6 +317,13 @@ export default class GraphicalBuilder extends React.Component {
     });
   }
 
+  /**
+   * Used to select a block and set it as the current, then update
+   * the relevant other panels.
+   * 
+   * @param {Integer} index - The index of the block to be seleceted
+   * @return {Promise} - Returns a new promise objectfor completion of the block selection.
+   */
   @action.bound
   selectBlock(index) {
     return new Promise((resolve) => {
@@ -647,7 +656,7 @@ export default class GraphicalBuilder extends React.Component {
             }
 
             // 4. Is the current block valid?.
-            if (editor.blockList[editor.selectedBlock].status === 'valid') {
+            if (editor.blockList[editor.selectedBlock] && editor.blockList[editor.selectedBlock].status === 'valid') {
               // 4.a Yes - Update Results.
               this.updateResultsOutput(editor, editor.selectedBlock);
             } else {
@@ -986,6 +995,8 @@ export default class GraphicalBuilder extends React.Component {
           _.forEach(fileNames, (v) => {
             this.props.store
               .openFile(v, ({ _id, content }) => {
+                this.setState({isLoading: true});
+                console.log(this.state.isLoading);
                 const contentObject = JSON.parse(content);
                 this.importFile(contentObject);
               })
@@ -1139,14 +1150,11 @@ export default class GraphicalBuilder extends React.Component {
       // Remove all Blocks.
       this.removeAllBlocks()
         .then(() => {
-          this.addNewBlocks(contentObject);
+          this.addNewBlocks(contentObject).then(() => {
+            console.log('!!!- End -!!!');
+          });
         })
         .then(() => {
-          NewToaster.show({
-            message: globalString('aggregate_builder/import_passed'),
-            intent: Intent.SUCCESS,
-            iconName: 'pt-icon-thumbs-up',
-          });
           this.forceUpdate();
         })
         .catch((err) => {
@@ -1155,23 +1163,17 @@ export default class GraphicalBuilder extends React.Component {
             intent: Intent.DANGER,
             iconName: 'pt-icon-thumbs-down',
           });
+          this.setState({isLoading: false});
           this.forceUpdate();
           console.error(err);
         });
-
-      // runInAction('Update Graphical Builder', () => {
-      //   editor.aggregateID = 1;
-      //   editor.aggConfig = contentObject.editorObject.aggConfig;
-      //   this.convertToObservable(contentObject.editorObject.blockList);
-      //   editor.collection = contentObject.editorObject.collection;
-      //   editor.selectedBlock = contentObject.editorObject.selectedBlock;
-      // });
     } else {
       NewToaster.show({
         message: globalString('aggregate_builder/import_failed'),
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down',
       });
+      this.setState({isLoading: false});
       this.forceUpdate();
       console.error('Invalid import object: ', contentObject);
     }
@@ -1307,10 +1309,21 @@ export default class GraphicalBuilder extends React.Component {
         });
         return p;
       };
-
-      importBlock(importBlockList);
-    });
-  }
+      return importBlock(importBlockList).then(() => {
+        if (this.debug) console.log('[addNewBlocks] - Finished importing aggBuilder.');
+        // Select last block.
+        if (this.debug) console.log('[addNewBlocks] - Selecting last Block (', count, ').');
+        this.selectBlock(count - 1).then(() => {
+          NewToaster.show({
+            message: globalString('aggregate_builder/import_passed'),
+            intent: Intent.SUCCESS,
+            iconName: 'pt-icon-thumbs-up',
+          });
+          this.setState({isLoading: false});
+        });
+      });
+  });
+}
 
   /**
    * Sends a request to controller to update config for agg builder.
@@ -1386,97 +1399,104 @@ export default class GraphicalBuilder extends React.Component {
           onCancel={this.handleCloseAlert}>
           <p>{globalString('aggregate_builder/alerts/importWarningText')}</p>
         </Alert>
-        <ul className="graphicalBuilderBlockList">
-          <FirstBlockTarget />
-          {this.props.store.editors
-            .get(this.state.id)
-            .blockList.map((indexValue, index) => {
-              // Get Block Type for SVG Render.
-              let posType = 'MIDDLE';
-              if (index === 0) {
-                posType = 'START';
-              } else if (
-                index >=
-                this.props.store.editors.get(this.state.id).blockList.length - 1
-              ) {
-                posType = 'END';
-              }
+        {
+          !this.state.isLoading ? (
+            <ul className="graphicalBuilderBlockList">
+              <FirstBlockTarget />
+              {this.props.store.editors
+                .get(this.state.id)
+                .blockList.map((indexValue, index) => {
+                  // Get Block Type for SVG Render.
+                  let posType = 'MIDDLE';
+                  if (index === 0) {
+                    posType = 'START';
+                  } else if (
+                    index >=
+                    this.props.store.editors.get(this.state.id).blockList.length - 1
+                  ) {
+                    posType = 'END';
+                  }
 
-              let blockColor = 0;
-              const blockColorLocation = _.findIndex(this.state.colorMatching, {
-                type: indexValue.type,
-              });
-              // Check if function type already exists
-              if (this.state.colorMatching.length === 0) {
-                this.state.colorMatching.push({
-                  type: indexValue.type,
-                  color: 0,
-                });
-                blockColor = 0;
-              } else if (blockColorLocation !== -1) {
-                // Send through that color for styling.
-                blockColor = this.state.colorMatching[blockColorLocation].color;
-              } else if (
-                blockColorLocation === -1 &&
-                this.state.colorMatching.length > 16 &&
-                this.state.colorMatching.length % 16 === 0
-              ) {
-                // Start the color loop again.
-                this.state.colorMatching.push({
-                  type: indexValue.type,
-                  color: 0,
-                });
-                blockColor = 0;
-              } else if (
-                this.state.colorMatching.length > 16 &&
-                blockColorLocation === -1
-              ) {
-                // Increment on previous value.
-                this.state.colorMatching.push({
-                  type: indexValue.type,
-                  color:
-                    this.state.colorMaching[this.state.colorMatching.length]
-                      .color + 1,
-                });
-                blockColor = this.state.colorMatching.length - 1;
-              } else if (
-                this.state.colorMatching.length < 16 &&
-                blockColorLocation === -1
-              ) {
-                // Increment on previous value.
-                blockColor = this.state.colorMatching.length;
-                this.state.colorMatching.push({
-                  type: indexValue.type,
-                  color: blockColor,
-                });
-              }
+                  let blockColor = 0;
+                  const blockColorLocation = _.findIndex(this.state.colorMatching, {
+                    type: indexValue.type,
+                  });
+                  // Check if function type already exists
+                  if (this.state.colorMatching.length === 0) {
+                    this.state.colorMatching.push({
+                      type: indexValue.type,
+                      color: 0,
+                    });
+                    blockColor = 0;
+                  } else if (blockColorLocation !== -1) {
+                    // Send through that color for styling.
+                    blockColor = this.state.colorMatching[blockColorLocation].color;
+                  } else if (
+                    blockColorLocation === -1 &&
+                    this.state.colorMatching.length > 16 &&
+                    this.state.colorMatching.length % 16 === 0
+                  ) {
+                    // Start the color loop again.
+                    this.state.colorMatching.push({
+                      type: indexValue.type,
+                      color: 0,
+                    });
+                    blockColor = 0;
+                  } else if (
+                    this.state.colorMatching.length > 16 &&
+                    blockColorLocation === -1
+                  ) {
+                    // Increment on previous value.
+                    this.state.colorMatching.push({
+                      type: indexValue.type,
+                      color:
+                        this.state.colorMaching[this.state.colorMatching.length]
+                          .color + 1,
+                    });
+                    blockColor = this.state.colorMatching.length - 1;
+                  } else if (
+                    this.state.colorMatching.length < 16 &&
+                    blockColorLocation === -1
+                  ) {
+                    // Increment on previous value.
+                    blockColor = this.state.colorMatching.length;
+                    this.state.colorMatching.push({
+                      type: indexValue.type,
+                      color: blockColor,
+                    });
+                  }
 
-              let isSelected = false;
-              if (
-                this.props.store.editors.get(
-                  this.props.store.editorPanel.activeEditorId,
-                ).selectedBlock === index
-              ) {
-                isSelected = true;
-              }
-              return (
-                <Block
-                  key={'key-' + index} //eslint-disable-line
-                  listPosition={index}
-                  selected={isSelected}
-                  positionType={posType}
-                  color={blockColor}
-                  type={indexValue.type}
-                  status={indexValue.status}
-                  moveBlock={this.moveBlock}
-                  onClickCallback={this.selectBlock}
-                  onClickCloseCallback={this.removeBlock}
-                  concrete
-                />
-              );
-            })}
-          <LastBlockTarget />
-        </ul>
+                  let isSelected = false;
+                  if (
+                    this.props.store.editors.get(
+                      this.props.store.editorPanel.activeEditorId,
+                    ).selectedBlock === index
+                  ) {
+                    isSelected = true;
+                  }
+                  return (
+                    <Block
+                      key={'key-' + index} //eslint-disable-line
+                      listPosition={index}
+                      selected={isSelected}
+                      positionType={posType}
+                      color={blockColor}
+                      type={indexValue.type}
+                      status={indexValue.status}
+                      moveBlock={this.moveBlock}
+                      onClickCallback={this.selectBlock}
+                      onClickCloseCallback={this.removeBlock}
+                      concrete
+                    />
+                  );
+                })}
+              <LastBlockTarget />
+            </ul>
+          ) : (
+            <div className="loaderWrapper">
+              <div className="loader" />
+            </div>
+          )}
       </div>
     );
   }
