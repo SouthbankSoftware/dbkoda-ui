@@ -18,9 +18,10 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint jsx-a11y/no-static-element-interactions: warn */
+/* eslint jsx-a11y/no-static-element-interactions: 0 */
 /* eslint react/require-default-props: 0 */
 /* eslint react/forbid-prop-types: 0 */
+/* eslint jsx-a11y/no-static-element-interactions: 0 */
 
 import React, { Component } from 'react';
 import ValueViewer from './ValueViewer';
