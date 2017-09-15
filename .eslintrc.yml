@@ -67,6 +67,7 @@ rules:
   no-use-before-define: [error, {functions: false, classes: true}]
   no-mixed-operators: 0
   no-return-assign: [error, except-parens]
+  no-prototype-builtins: 0
 plugins: [react, import]
 settings:
   import/resolver:
