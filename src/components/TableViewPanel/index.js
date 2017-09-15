@@ -26,3 +26,4 @@
  */
 
 export TableView from './Panel.jsx';
+export TableViewToolbar from './Toolbar.jsx';

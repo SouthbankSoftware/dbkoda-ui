@@ -44,7 +44,6 @@ import Prettier from 'prettier-standalone';
 import React from 'react';
 import CodeMirrorEditor from '#/common/CodeMirror';
 import CodeMirror from 'codemirror';
-import {MongoShellTranslator} from 'mongo-shell-translator';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/markdown/markdown';
@@ -784,11 +783,7 @@ class View extends React.Component {
     );
     if (editor) {
       editor.openTranslator = true;
-      const translator = new MongoShellTranslator();
       try {
-        const transCode = translator.translate(shellCode);
-        // this.props.store.outputs.get(editor.id).output += '\n' + transCode;
-        editor.nativeCode = transCode;
         editor.shellCode = shellCode;
         this.setState({openTranslator: true});
       } catch (err) {

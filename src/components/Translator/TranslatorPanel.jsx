@@ -25,11 +25,13 @@ import React from 'react';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
-import {ContextMenuTarget} from '@blueprintjs/core';
+import {ContextMenuTarget, Button, Intent, Position} from '@blueprintjs/core';
+import Prettier from 'prettier-standalone';
 
 import 'codemirror/theme/material.css';
 import CMOptions from './CMOptions';
 import './translator.scss';
+import {DBKodaToaster} from '../common/Toaster';
 
 @ContextMenuTarget
 export default class TranslatorPanel extends React.Component {
@@ -56,7 +58,25 @@ export default class TranslatorPanel extends React.Component {
 
   translate(syntax, value) {
     const translator = new MongoShellTranslator(syntax);
-    const newValue = translator.translate(value, syntax);
+    let newValue = null;
+    try {
+      newValue = translator.translate(value, syntax);
+    } catch (_err) {
+      // failed to translate code
+      DBKodaToaster(Position.RIGHT_TOP).show({
+        message: (<span dangerouslySetInnerHTML={{ __html: 'Error: Failed to translate shell script.' }} />), // eslint-disable-line react/no-danger
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down'
+      });
+    }
+    if (newValue === null) {
+      return;
+    }
+    try {
+      newValue = Prettier.format(newValue, {});
+    } catch (_err) {
+      //
+    }
     this.setState({value: newValue, syntax});
   }
 
@@ -73,7 +93,7 @@ export default class TranslatorPanel extends React.Component {
     const {value} = this.state;
     console.log('value=', value);
     const options = {...CMOptions, readOnly: true};
-    return (<div className="translate-codemirror">
+    return (<div className="ReactCodeMirror translate-codemirror">
       <div className="syntax-selection">
         <div className="pt-label">Syntax</div>
         <div className="pt-select">
@@ -86,8 +106,10 @@ export default class TranslatorPanel extends React.Component {
             <option value={SyntaxType.await}>{globalString('translator/tooltip/await')}</option>
           </select>
         </div>
+        <Button className="close-btn pt-icon-cross" onClick={() => this.props.closePanel()} />
       </div>
       <CodeMirror
+        className="CodeMirror-scroll"
         options={options}
         codeMirrorInstance={CM} value={value} />
     </div>);

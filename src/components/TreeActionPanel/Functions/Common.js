@@ -74,7 +74,7 @@ export function dbkoda_listActions_parse(res) {
   });
   actions = _.flatten(actions);
   actions = _.flatten(actions);
-  actions = [...new Set(actions)];  // Get unique actions
+  actions = [...new Set(actions)]; // Get unique actions
   actions.sort();
   return actions;
 }

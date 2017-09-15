@@ -21,13 +21,16 @@
  * @Author: chris
  * @Date:   2017-08-16T12:05:28+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-08-16T14:07:24+10:00
+ * @Last modified by:   mike
+ * @Last modified time: 2017-09-13 15:23:46
  */
+
+/* eslint no-prototype-builtins:warn */
 
 import React from 'react';
 import { action } from 'mobx';
 import JSONViewer from './react-json-viewer/JSONViewer.jsx';
+import Toolbar from './Toolbar.jsx';
 
 import './style.scss';
 
@@ -36,6 +39,8 @@ export default class Panel extends React.Component {
     super(props, context);
     this.state = {
       hideDeep: true,
+      expandAll: false,
+      collapseAll: false,
       arrayState: { 0: true },
     };
   }
@@ -57,6 +62,23 @@ export default class Panel extends React.Component {
     }
     this.forceUpdate();
   }
+
+  @action.bound
+  collapseAll() {
+    for (let i = 0; i < this.props.tableJson.json.length + 2; i += 1) {
+      this.state.arrayState[i] = false;
+    }
+    this.forceUpdate();
+  }
+
+  @action.bound
+  expandAll() {
+    for (let i = 0; i < this.props.tableJson.json.length + 2; i += 1) {
+      this.state.arrayState[i] = true;
+    }
+    this.forceUpdate();
+  }
+
   render() {
     if (this.props.tableJson.json === false) {
       return (
@@ -68,14 +90,17 @@ export default class Panel extends React.Component {
       );
     }
     return (
-      <div className="table-json-panel">
-        <JSONViewer
-          json={this.props.tableJson.json}
-          onHeaderClick={this.onHeaderClick}
-          toggleShowDeep={this.toggleShowDeep}
-          hideDeep={this.state.hideDeep}
-          arrayState={this.state.arrayState}
-        />
+      <div className="tableViewWrapper">
+        <Toolbar expandAll={this.expandAll} collapseAll={this.collapseAll} />
+        <div className="table-json-panel">
+          <JSONViewer
+            json={this.props.tableJson.json}
+            onHeaderClick={this.onHeaderClick}
+            toggleShowDeep={this.toggleShowDeep}
+            hideDeep={this.state.hideDeep}
+            arrayState={this.state.arrayState}
+          />
+        </div>
       </div>
     );
   }

@@ -25,94 +25,126 @@
  */
 
 @import '../../styles/_defaultTheme.scss';
-
-.table-json-panel {
+div.tableViewWrapper {
   width: 100%;
-  background-color: $tabBackgroundSelected;
-  overflow-y: scroll;
-  h2.errorMessage {
-    color: $tableHeaderText;
-    margin-left: 4%;
-    margin-top: 4%;
-    width: 60%;
-  }
-  table {
-    margin: 20px;
-    margin-left: 10px;
-    font-size: 14px;
-    border-collapse: collapse;
-    thead {
-      tr {
-        background-color: $highlightThree;
-        th {
-          border: 1px solid $tableCellBorder !important;
-          background-color: $highlightThree;
-          span {
-            color: $tableHeaderText !important;
-            font-weight: 400;
-          }
-        }
-        th:hover {
-          background-color: $colourThree;
-        }
+  height: 100%;
+  .toolbarWrapper {
+    display: flex;
+    flex-direction: row;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 20px;
+    background-color: $navbarTertiaryBackground;
+    a.pt-button {
+      order: 1;
+      margin-right: 10px;
+      color: $navbarRighHeading !important;
+      background-color: $navbarTertiaryBackground !important;
+      background: unset;
+      box-shadow: unset;
+      border: 1px solid $navbarRighHeading;
+      border-radius: 0px;
+
+      span {
+        font-size: 14px;
+        top: 35%;
+        padding-top: 6px;
+        padding-bottom: 10px;
+        text-align: left;
       }
     }
-    tbody {
-      tr {
-        background-color: $tableBackgroundOdd;
-        td {
-          border: 1px solid $tableCellBorder !important;
-          span {
-            color: $tableBodyText !important;
-            line-height: 14px;
-          }
-          span.string {
-            color: $colourFourteen !important;
-          }
-          span.number {
-            color: $colourFifteen !important;
-          }
-          span.noWrap {
-            white-space: nowrap;
-          }
-          span.expandButton {
-            margin-left: 20%;
-            cursor: n-resize;
-            padding: 4px;
-            padding-left: 8px;
-            padding-right: 8px;
+    a.pt-button:hover {
+      background-color: $buttonTertiaryBackgroundHoverBright !important;
+    }
+  }
+  .table-json-panel {
+    background-color: $tabBackgroundSelected;
+    overflow-y: scroll;
+    height: 86%;
+    h2.errorMessage {
+      color: $tableHeaderText;
+      margin-left: 4%;
+      margin-top: 4%;
+      width: 60%;
+    }
+    table {
+      margin: 20px;
+      margin-left: 10px;
+      font-size: 14px;
+      border-collapse: collapse;
+      thead {
+        tr {
+          background-color: $highlightThree;
+          th {
             border: 1px solid $tableCellBorder !important;
+            background-color: $highlightThree;
+            span {
+              color: $tableHeaderText !important;
+              font-weight: 400;
+            }
           }
-          span.expandButton:hover {
-            background-color: $welcomeViewButtonHoverColor;
+          th:hover {
+            background-color: $colourThree;
           }
-          div.deepObjectWrapper {
-            span.hideButton {
-              margin-left: 40%;
-              cursor: s-resize;
+        }
+      }
+      tbody {
+        tr {
+          background-color: $tableBackgroundOdd;
+          td {
+            border: 1px solid $tableCellBorder !important;
+            span {
+              color: $tableBodyText !important;
+              line-height: 14px;
+            }
+            span.string {
+              color: $colourFourteen !important;
+            }
+            span.number {
+              color: $colourFifteen !important;
+            }
+            span.noWrap {
+              white-space: nowrap;
+            }
+            span.expandButton {
+              margin-left: 20%;
+              cursor: n-resize;
               padding: 4px;
               padding-left: 8px;
               padding-right: 8px;
               border: 1px solid $tableCellBorder !important;
             }
-            span.hideButton:hover {
+            span.expandButton:hover {
               background-color: $welcomeViewButtonHoverColor;
             }
-            table {
-              margin: 0px;
-              margin-top: 8px;
+            div.deepObjectWrapper {
+              span.hideButton {
+                margin-left: 40%;
+                cursor: s-resize;
+                padding: 4px;
+                padding-left: 8px;
+                padding-right: 8px;
+                border: 1px solid $tableCellBorder !important;
+              }
+              span.hideButton:hover {
+                background-color: $welcomeViewButtonHoverColor;
+              }
+              table {
+                margin: 0px;
+                margin-top: 8px;
+              }
             }
           }
         }
-      }
-      tr:nth-child(even) {
-        background-color: $tableBackgroundEven;
-      }
-      tr:hover {
-        background-color: $tableBackgroundOddHover;
-      }
-      tr:nth-child(even):hover {
-        background-color: $tableBackgroundEvenHover;
+        tr:nth-child(even) {
+          background-color: $tableBackgroundEven;
+        }
+        tr:hover {
+          background-color: $tableBackgroundOddHover;
+        }
+        tr:nth-child(even):hover {
+          background-color: $tableBackgroundEvenHover;
+        }
       }
     }
   }

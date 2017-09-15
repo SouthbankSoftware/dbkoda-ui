@@ -281,6 +281,9 @@
         "callback": "C",
         "promise": "P",
         "await": "A"
+      },
+      "error": {
+        "tranlate_failed": "Failed to translate the script"
       }
     },
     "backuprestore": {
