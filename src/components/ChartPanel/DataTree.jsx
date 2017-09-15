@@ -22,6 +22,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import { Tree, ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
+import escapeStringRegexp from 'escape-string-regexp';
 import type { ChartComponent, ChartComponentName } from './BarChart';
 import './DataTree.scss';
 
@@ -94,15 +95,21 @@ export default class DataTree extends React.Component<Props, State> {
         // unload
         const node = this._searchForChartComponent(chartComponent, this.state.nodes);
         if (node != null) {
-          node.secondaryLabel = undefined;
-          node.isSelected = false;
+          node.secondaryLabel = DataTree._removeSecondaryLabel(
+            node.secondaryLabel,
+            chartComponent.name,
+          );
+          node.isSelected = Boolean(node.secondaryLabel);
         }
       }
       if (nextChartComponent) {
         // load
         const node = this._searchForChartComponent(nextChartComponent, this.state.nodes);
         if (node != null) {
-          node.secondaryLabel = DataTree._getSecondaryLabel(nextChartComponent.name);
+          node.secondaryLabel = DataTree._addSecondaryLabel(
+            node.secondaryLabel,
+            nextChartComponent.name,
+          );
           node.isSelected = true;
         }
       }
@@ -125,6 +132,27 @@ export default class DataTree extends React.Component<Props, State> {
     });
 
     return result;
+  }
+
+  static _addSecondaryLabel(label: ?string, target: ChartComponentName): string {
+    const result = label || '';
+    const newLabel = DataTree._getSecondaryLabel(target);
+    return result ? result + ', ' + newLabel : newLabel;
+  }
+
+  static _removeSecondaryLabel(label: ?string, target: ChartComponentName): ?string {
+    if (!label) {
+      return null;
+    }
+
+    return (
+      label
+        .replace(
+          new RegExp(`(?:, )?${escapeStringRegexp(DataTree._getSecondaryLabel(target))}`, 'g'),
+          '',
+        )
+        .replace(/^, /, '') || null
+    );
   }
 
   static _getSecondaryLabel(target: ChartComponentName): string {
@@ -151,7 +179,7 @@ export default class DataTree extends React.Component<Props, State> {
         const { chartComponentX, chartComponentY, chartComponentCenter } = this.props;
         _.forEach([chartComponentX, chartComponentY, chartComponentCenter], (v) => {
           if (v && v.valueSchemaPath === newPrefix) {
-            secondaryLabel = DataTree._getSecondaryLabel(v.name);
+            secondaryLabel = (secondaryLabel ? ', ' : '') + DataTree._getSecondaryLabel(v.name);
             shouldBeExpanded = true;
             return false;
           }
