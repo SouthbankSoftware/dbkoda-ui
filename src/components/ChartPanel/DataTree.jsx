@@ -20,90 +20,266 @@
  */
 
 import * as React from 'react';
-import { Tree } from '@blueprintjs/core';
+import _ from 'lodash';
+import { Tree, ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
+import type { ChartComponent, ChartComponentName } from './BarChart';
+import './DataTree.scss';
 
-type Props = {};
+type ITreeNode = { [string]: any };
+export type Schema = { [string]: string };
+export type ChartComponentOperation = {
+  action: 'load' | 'unload',
+  target: ChartComponentName,
+};
+export type ChartComponentChangeHandler = (
+  operation: ChartComponentOperation,
+  valueSchemaPath: $PropertyType<ChartComponent, 'valueSchemaPath'>,
+  valueType: $PropertyType<ChartComponent, 'valueType'>,
+) => void;
+export type GetAllowedChartComponentOperations = (
+  targetValueSchemaPath: string,
+  targetValueType: 'string' | 'number',
+) => ChartComponentOperation[];
 
-export default class DataTree extends React.Component<Props> {
-  // static defaultProps = {};
+type Props = {
+  schema: Schema,
+  chartComponentX: ?ChartComponent,
+  chartComponentY: ?ChartComponent,
+  chartComponentCenter: ?ChartComponent,
+  onChartComponentChange: ChartComponentChangeHandler,
+  getAllowedChartComponentOperations: GetAllowedChartComponentOperations,
+};
 
-  // constructor(props) {
-  //   super(props);
-  // }
+type State = {
+  nodes: ITreeNode[],
+};
+
+export default class DataTree extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    const { schema } = props;
+
+    this.state = {
+      nodes: this._generateTreeNodes(schema),
+    };
+  }
+
+  componentWillReceiveProps({
+    schema: nextSchema,
+    chartComponentX: nextChartComponentX,
+    chartComponentY: nextChartComponentY,
+    chartComponentCenter: nextChartComponentCenter,
+  }: Props) {
+    const { schema, chartComponentX, chartComponentY, chartComponentCenter } = this.props;
+
+    if (!_.isEqual(schema, nextSchema)) {
+      // update tree nodes when necessary
+      this.setState({
+        nodes: this._generateTreeNodes(schema),
+      });
+    } else {
+      this._checkAndUpdateTreeForChartComponent(chartComponentX, nextChartComponentX);
+      this._checkAndUpdateTreeForChartComponent(chartComponentY, nextChartComponentY);
+      this._checkAndUpdateTreeForChartComponent(chartComponentCenter, nextChartComponentCenter);
+    }
+  }
+
+  _checkAndUpdateTreeForChartComponent(
+    chartComponent: ?ChartComponent,
+    nextChartComponent: ?ChartComponent,
+  ): void {
+    if (!_.isEqual(chartComponent, nextChartComponent)) {
+      if (chartComponent) {
+        // unload
+        const node = this._searchForChartComponent(chartComponent, this.state.nodes);
+        if (node != null) {
+          node.secondaryLabel = undefined;
+          node.isSelected = false;
+        }
+      }
+      if (nextChartComponent) {
+        // load
+        const node = this._searchForChartComponent(nextChartComponent, this.state.nodes);
+        if (node != null) {
+          node.secondaryLabel = DataTree._getSecondaryLabel(nextChartComponent.name);
+          node.isSelected = true;
+        }
+      }
+    }
+  }
+
+  _searchForChartComponent(component: ChartComponent, nodes: ITreeNode[]): ?ITreeNode {
+    let result: ?ITreeNode = null;
+
+    _.forEach(nodes, (v) => {
+      if (v.type === 'object') {
+        result = this._searchForChartComponent(component, v.childNodes);
+        if (result) {
+          return false;
+        }
+      } else if (v.id === component.valueSchemaPath) {
+        result = v;
+        return false;
+      }
+    });
+
+    return result;
+  }
+
+  static _getSecondaryLabel(target: ChartComponentName): string {
+    if (target === 'x') {
+      return 'X axis';
+    } else if (target === 'y') {
+      return 'Y axis';
+    }
+    return 'Center';
+  }
+
+  _generateTreeNodesInternal(
+    schema: Schema,
+    prefix: string,
+  ): { shouldBeExpanded: boolean, nodes: ITreeNode[] } {
+    const nodes: ITreeNode[] = [];
+    let shouldBeExpanded = false;
+
+    _.forOwn(schema, (v: string | Schema, k: string) => {
+      let node;
+      const newPrefix = prefix ? `${prefix}.${k}` : k;
+      let secondaryLabel: ?string = null;
+      const getSecondaryLabel = () => {
+        const { chartComponentX, chartComponentY, chartComponentCenter } = this.props;
+        _.forEach([chartComponentX, chartComponentY, chartComponentCenter], (v) => {
+          if (v && v.valueSchemaPath === newPrefix) {
+            secondaryLabel = DataTree._getSecondaryLabel(v.name);
+            shouldBeExpanded = true;
+            return false;
+          }
+        });
+      };
+
+      if (typeof v === 'object') {
+        const { shouldBeExpanded: childShouldBeExpanded, nodes } = this._generateTreeNodesInternal(
+          v,
+          newPrefix,
+        );
+        shouldBeExpanded = shouldBeExpanded || childShouldBeExpanded;
+        node = {
+          iconName: 'pt-icon-folder-close',
+          isExpanded: childShouldBeExpanded,
+          childNodes: nodes,
+          type: 'object',
+        };
+      } else if (v === 'string') {
+        node = {
+          hasCaret: false,
+          iconName: 'pt-icon-font',
+          type: 'string',
+        };
+        getSecondaryLabel();
+      } else if (v === 'number') {
+        node = {
+          hasCaret: false,
+          iconName: 'pt-icon-numerical',
+          type: 'number',
+        };
+        getSecondaryLabel();
+      }
+
+      if (node) {
+        _.assign(
+          node,
+          {
+            id: newPrefix,
+            label: k,
+          },
+          secondaryLabel
+            ? {
+                isSelected: true,
+                secondaryLabel,
+              }
+            : {},
+        );
+        nodes.push(node);
+      }
+    });
+
+    return { shouldBeExpanded, nodes };
+  }
+
+  _generateTreeNodes(schema: Schema) {
+    return this._generateTreeNodesInternal(schema, '').nodes;
+  }
+
+  _onNodeCollapse = (node: ITreeNode) => {
+    node.iconName = 'pt-icon-folder-close';
+    node.isExpanded = false;
+    this.setState(this.state);
+  };
+
+  _onNodeExpand = (node: ITreeNode) => {
+    node.iconName = 'pt-icon-folder-open';
+    node.isExpanded = true;
+    this.setState(this.state);
+  };
+
+  _onNodeContextMenu = (node: ITreeNode, _nodePath: number[], e: SyntheticMouseEvent<*>) => {
+    e.preventDefault();
+
+    const { id, type } = node;
+    const { onChartComponentChange, getAllowedChartComponentOperations } = this.props;
+
+    if (type !== 'string' && type !== 'number') {
+      return;
+    }
+
+    const menu = (
+      <Menu>
+        {_.map(getAllowedChartComponentOperations(id, type), (v, i) => {
+          let compDesc;
+
+          if (v.target === 'x') {
+            compDesc = 'X axis';
+          } else if (v.target === 'y') {
+            compDesc = 'Y axis';
+          } else {
+            compDesc = 'center';
+          }
+
+          let text;
+
+          if (v.action === 'load') {
+            text = `Load to ${compDesc}`;
+          } else {
+            text = `Unload from ${compDesc}`;
+          }
+
+          return (
+            <MenuItem
+              key={i}
+              onClick={() => {
+                onChartComponentChange(v, id, type);
+              }}
+              text={text}
+            />
+          );
+        })}
+      </Menu>
+    );
+
+    ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
+  };
 
   render() {
+    const { nodes } = this.state;
+
     return (
       <div className="DataTree">
         <Tree
-          contents={[
-            {
-              hasCaret: false,
-              iconName: 'pt-icon-numerical',
-              label: '_id',
-            },
-            {
-              hasCaret: false,
-              iconName: 'pt-icon-numerical',
-              label: 'CustId',
-            },
-            {
-              iconName: 'pt-icon-folder-open',
-              isExpanded: true,
-              label: 'lineItems',
-              childNodes: [
-                {
-                  iconName: 'pt-icon-folder-open',
-                  isExpanded: true,
-                  label: '0',
-                  childNodes: [
-                    {
-                      hasCaret: false,
-                      iconName: 'pt-icon-numerical',
-                      label: 'prodId',
-                    },
-                    {
-                      hasCaret: false,
-                      iconName: 'pt-icon-font',
-                      label: 'prodName',
-                    },
-                    {
-                      hasCaret: false,
-                      iconName: 'pt-icon-numerical',
-                      label: 'prodCount',
-                    },
-                    {
-                      hasCaret: false,
-                      iconName: 'pt-icon-numerical',
-                      label: 'Cost',
-                    },
-                  ],
-                },
-                {
-                  iconName: 'pt-icon-folder-close',
-                  isExpanded: false,
-                  label: '1',
-                  childNodes: [],
-                },
-                {
-                  iconName: 'pt-icon-folder-close',
-                  isExpanded: false,
-                  label: '2',
-                  childNodes: [],
-                },
-                {
-                  iconName: 'pt-icon-folder-close',
-                  isExpanded: false,
-                  label: '3',
-                  childNodes: [],
-                },
-              ],
-            },
-            {
-              hasCaret: false,
-              iconName: 'pt-icon-font',
-              label: 'orderStatus',
-            },
-          ]}
+          contents={nodes}
+          onNodeCollapse={this._onNodeCollapse}
+          onNodeExpand={this._onNodeExpand}
+          onNodeContextMenu={this._onNodeContextMenu}
         />
       </div>
     );

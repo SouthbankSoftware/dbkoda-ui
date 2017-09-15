@@ -16,3 +16,18 @@
     margin-right: 10px;
   }
 }
+
+.translator-open .ReactCodeMirror {
+  .syntax-selection {
+    .close-btn {
+      margin-left: auto;
+      margin-right: 20px;
+    }
+  }
+  .CodeMirror-simplescroll-vertical {
+    height: 0px;
+  }
+  .CodeMirror-scroll {
+    height: 90%;
+  }
+}

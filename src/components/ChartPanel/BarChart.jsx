@@ -20,17 +20,37 @@
  */
 
 import * as React from 'react';
+import _ from 'lodash';
 import { BarChart as RBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import styles from './BarChart.scss';
+
+const COLOUR_PALETTE: string[] = _.values(styles);
+const MARGIN = { top: 20, right: 20, left: 10, bottom: 30 };
+
+export type ChartComponentName = 'x' | 'y' | 'center';
+export type ChartComponent = {
+  name: ChartComponentName,
+  valueSchemaPath: string,
+  valueType: 'string' | 'number',
+  values?: string[],
+};
+type ChartDataElement = string | number | { [string]: number };
+export type ChartData = { x: ChartDataElement, y: ChartDataElement }[];
 
 type Props = {
-  data: {}[],
+  data: ChartData,
+  componentX: ChartComponent,
+  componentY: ChartComponent,
+  componentCenter: ChartComponent,
   width: number,
   height: number,
 };
 
-export default class BarChart extends React.Component<Props> {
+export default class BarChart extends React.PureComponent<Props> {
   render() {
-    const { data, width, height } = this.props;
+    const { data, componentX, componentY, componentCenter, width, height } = this.props;
+
+    const centerDataKeyPrefix = componentX.valueType === 'string' ? 'y.' : 'x.';
 
     return (
       <div className="BarChart">
@@ -38,15 +58,43 @@ export default class BarChart extends React.Component<Props> {
           width={width}
           height={height}
           data={data}
-          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          margin={MARGIN}
+          layout={componentX.valueType === 'string' ? 'horizontal' : 'vertical'}
         >
-          <XAxis dataKey="name" />
-          <YAxis />
+          {componentX.valueType === 'string'
+            ? <XAxis type="category" dataKey="x" />
+            : <XAxis type="number" />}
+          {componentY.valueType === 'string'
+            ? <YAxis type="category" dataKey="y" />
+            : <YAxis type="number" />}
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
-          <Bar dataKey="prodCount" stackId="a" fill="#8884d8" />
-          <Bar dataKey="Cost" stackId="a" fill="#82ca9d" />
+          <text
+            textAnchor="middle"
+            transform={`translate(20, ${height / 2 - 30})rotate(-90)`}
+            fill="#666"
+          >
+            {componentY.valueSchemaPath}
+          </text>
+          <text
+            textAnchor="middle"
+            transform={`translate(${width / 2 - 10}, ${height - 10})`}
+            fill="#666"
+          >
+            {componentX.valueSchemaPath}
+          </text>
+          {componentCenter.values &&
+            _.map(componentCenter.values, (v, i) =>
+              <Bar
+                key={v}
+                dataKey={`${centerDataKeyPrefix}${v}`}
+                stackId="a"
+                name={v}
+                fill={COLOUR_PALETTE[i % COLOUR_PALETTE.length]}
+                isAnimationActive={false}
+              />,
+            )}
         </RBarChart>
       </div>
     );

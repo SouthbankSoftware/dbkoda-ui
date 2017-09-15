@@ -21,29 +21,38 @@
 @import "../../styles/_defaultTheme.scss";
 
 .ChartPanel {
-  background: $tabBackgroundSelected;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  ul.pt-tree-node-list li.pt-tree-node div.pt-tree-node-content-0 {
-    letter-spacing: normal;
-    height: 30px;
-    border: none;
-    padding-left: 10px;
+  .BarChart {
+    .recharts-bar-cursor {
+      fill: $chartItemHover !important;
+    }
+    .recharts-default-tooltip {
+      background-color: $chartTooltipBackground !important;
+    }
+    .recharts-tooltip-label {
+      color: $fieldBrightFontColor !important;
+    }
+    .recharts-legend-item-text {
+      color: $detailsFontColor !important;
+    }
   }
+}
 
-  .Resizer {
-    background-color: $navbarSecondaryBackground;
-  }
-
-  .SplitPane.SplitPane.vertical {
-    // fix resizer hidden problem
-    right: auto !important;
-  }
-
-  .DataTree, .BarChart {
-    width: 100%;
-    height: 100%;
-  }
+:export {
+  colourOne: $colourOne;
+  colourTwo: $colourTwo;
+  colourThree: $colourThree;
+  colourFour: $colourFour;
+  colourFive: $colourFive;
+  colourSix: $colourSix;
+  colourSeven: $colourSeven;
+  colourEight: $colourEight;
+  colourNine: $colourNine;
+  colourTen: $colourTen;
+  colourEleven: $colourEleven;
+  colourTwelve: $colourTwelve;
+  colourThirteen: $colourThirteen;
+  colourFourteen: $colourFourteen;
+  colourFifteen: $colourFifteen;
+  colourSixteen: $colourSixteen;
+  colourSeventeen: $colourSeventeen;
 }

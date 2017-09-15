@@ -31,6 +31,7 @@ import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
 import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
 import 'codemirror/theme/material.css';
+// import objHash from 'object-hash';
 import OutputTerminal from './Terminal';
 
 require('codemirror/mode/javascript/javascript');
@@ -173,13 +174,18 @@ export default class Editor extends React.Component {
               // this.props.api.initJsonView(currentJson, this.props.id, 'chartJson', lines);
 
               // Test drive: connect to DBEnvyLoad_orders.json
-              const data = require('#/ChartPanel/DBEnvyLoad_orders.json');
+              const data = require('#/ChartPanel/sampleData.json');
+
+              // const t0 = performance.now();
+              // const hash = objHash(data);
+              const hash = 'some_cheap_hash_here';
+              // const t1 = performance.now();
+              // console.debug(`Hashing took ${t1 - t0} ms`);
 
               runInAction(() => {
                 this.props.store.outputs.get(this.props.id).chartJson = {
-                  json: data,
-                  firstLine: lines.start,
-                  lastLine: lines.end,
+                  data,
+                  hash,
                 };
 
                 this.props.store.outputPanel.currentTab =

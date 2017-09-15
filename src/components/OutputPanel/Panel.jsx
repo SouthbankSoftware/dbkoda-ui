@@ -356,6 +356,7 @@ export default class Panel extends React.Component {
           this.props.store.outputs.get(editor[1].id).chartJson &&
           process.env.NODE_ENV === 'development'
         ) {
+          const { data, hash } = this.props.store.outputs.get(editor[1].id).chartJson;
           arrTabs.push(
             <Tab2
               className={
@@ -365,9 +366,7 @@ export default class Panel extends React.Component {
               id={'ChartView-' + editor[1].id}
               title={'ChartView-' + editorTitle}
               panel={
-                <ChartPanel
-                  data={this.props.store.outputs.get(editor[1].id).chartJson}
-                />
+                <ChartPanel data={data} hash={hash} />
               }
             />,
           );
