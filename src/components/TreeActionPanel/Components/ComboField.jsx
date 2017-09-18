@@ -84,7 +84,12 @@ export default class ComboField extends React.Component {
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
       );
-      if (this.options[0].value !== '') {
+      if (field.options.multi) {
+        if (newValue[0].value == '' && newValue.length > 1) {
+          newValue.shift();
+        }
+        field.value = newValue;
+      } else if (this.options[0].value !== '') {
         // A new option has been added.
         if (editor.type === 'aggregate') {
           const block = editor.blockList[editor.selectedBlock];
@@ -108,9 +113,8 @@ export default class ComboField extends React.Component {
             );
           }
         }
+        field.value = newValue && newValue.value ? newValue.value : '';
       }
-
-      field.value = newValue && newValue.value ? newValue.value : '';
       field.state.form.submit();
     };
 
@@ -121,7 +125,7 @@ export default class ComboField extends React.Component {
       return (
         <Select.Creatable
           className={selectClassName}
-          multi={false}
+          multi={field.options.multi}
           options={this.options}
           onChange={onChange}
           value={field.value}

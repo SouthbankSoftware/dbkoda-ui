@@ -1,8 +1,67 @@
 {
   "Title": "Alter Role",
-  "Fields": [{
+  "DefaultValues": {
+    "function": "dbkoda_AlterRolePreFill",
+    "arguments": [{
+        "name": "RoleName",
+        "value": "treeNode"
+      },
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      }
+    ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Select",
+      "readOnly": false,
+      "tooltip": "The database which will be associated with the Role",
+      "lookup": "dbkoda_listdb"
+    },
+    {
       "name": "RoleName",
       "type": "Text",
       "readOnly": true
+    },
+    {
+      "name": "Roles",
+      "type": "Table",
+      "columns": [{
+          "name": "Database",
+          "type": "Select",
+          "readOnly": false,
+          "lookup": "dbkoda_listdb"
+        },
+        {
+          "name": "Role",
+          "type": "Select",
+          "readOnly": false,
+          "lookup": "dbkoda_listRoles"
+        }]
+    },
+    {
+      "name": "Privileges",
+      "type": "Table",
+      "columns": [{
+          "name": "Database",
+          "type": "Select",
+          "lookup": "dbkoda_listdb"
+        },
+        {
+          "name": "Collection",
+          "type": "Text"
+        },
+        {
+          "name": "Cluster",
+          "type": "Boolean"
+        },
+        {
+          "name": "Actions",
+          "type": "Combo",
+          "multi": true,
+          "lookup": "dbkoda_listActions"
+        }]
     }]
 }

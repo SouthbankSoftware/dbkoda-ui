@@ -1,11 +1,15 @@
-db.getSiblingDB("{{Database}}").createRole({
-    createRole: "{{RoleName}}",
+db.getSiblingDB("{{Database}}").updateRole(
+  "{{RoleName}}",
+  {
     roles: [ {{#each Roles}}
-      { role:"{{Role}}", db: "{{Database}}" } {{#unless last}},{{/unless}}
+      { role:"{{Role}}", db: "{{Database}}" } {{#unless @last}},{{/unless}}
     {{/each}} ],
     privileges: [ {{#each Privileges}}
-      { resource: "{{Resource}}", actions: [ "{{Action}}"] } {{#unless last}},{{/unless}}
-    {{/each}} ]
+      {
+        resource: { {{#if Cluster}}cluster: true{{else}}db: "{{Database}}", collection: "{{Collection}}"{{/if}} },
+        actions: [ {{#each Actions}}"{{this.value}}"{{#unless @last}},{{/unless}}{{/each}} ]
+      }{{#unless @last}},{{/unless}}{{/each}}
+    ]
   },
   {  w: "majority" }
 );

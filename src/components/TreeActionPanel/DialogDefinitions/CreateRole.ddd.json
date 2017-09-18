@@ -1,7 +1,7 @@
 {
     "Title": "Create Role",
     "DefaultValues": {
-        "function":"dbkoda_CreateRolePreFill"
+        "function": "dbkoda_CreateRolePreFill"
     },
     "Fields": [
         {
@@ -22,11 +22,13 @@
             "columns": [{
                 "name": "Database",
                 "type": "Select",
+                "readOnly": false,
                 "lookup": "dbkoda_listdb"
             },
             {
                 "name": "Role",
                 "type": "Select",
+                "readOnly": false,
                 "lookup": "dbkoda_listRoles"
             }]
         },
@@ -34,12 +36,21 @@
           "name": "Privileges",
           "type": "Table",
           "columns": [{
-              "name": "Resource",
+              "name": "Database",
+              "type": "Select",
+              "lookup": "dbkoda_listdb"
+            },
+            {
+              "name": "Collection",
               "type": "Text"
             },
             {
+              "name": "Cluster",
+              "type": "Boolean"
+            },
+            {
               "name": "Actions",
-              "type": "Select",
+              "type": "Combo",
               "multi": true,
               "lookup": "dbkoda_listActions"
             }]

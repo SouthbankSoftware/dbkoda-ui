@@ -97,6 +97,10 @@ export default class FormBuilder {
     }
     if (defField.type == 'Combo') {
       res.fieldBinding = 'ComboField';
+      res.multi = defField.multi;
+    }
+    if (defField.type == 'MultiCombo') {
+      res.fieldBinding = 'MultiComboField';
     }
     return res;
   };
@@ -218,6 +222,14 @@ export default class FormBuilder {
             result.options[fldName].defaultValue = fld.fieldDefaultValue;
           } else {
             result.options[fldName] = { defaultValue: fld.fieldDefaultValue };
+          }
+        }
+        if (Object.prototype.hasOwnProperty.call(fld, 'multi')) {
+          console.log(fld);
+          if (result.options[fldName]) {
+            result.options[fldName].multi = fld.multi;
+          } else {
+            result.options[fldName] = { multi: fld.multi };
           }
         }
 
