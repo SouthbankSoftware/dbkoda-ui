@@ -243,6 +243,7 @@ class View extends React.Component {
                 !content.match(/^ *db *$/g) &&
                 !content.match(/^ *use /g) &&
                 !content.match(/^ *show /g) &&
+                !content.match(/^ *it /g) &&
                 !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
                 !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
               ) {

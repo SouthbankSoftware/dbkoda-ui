@@ -84,7 +84,7 @@ export default class StaticApi {
         const docAbove = this.getDocumentAtLine(
           outputId,
           linesAbove.start - 1,
-          0,
+          -1,
           linesAbove,
           cm,
         );
@@ -102,7 +102,7 @@ export default class StaticApi {
         const docBelow = this.getDocumentAtLine(
           outputId,
           linesBelow.end + 1,
-          0,
+          1,
           linesBelow,
           cm,
         );
