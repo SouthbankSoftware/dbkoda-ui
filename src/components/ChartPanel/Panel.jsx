@@ -81,73 +81,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       chartWidth: 0,
       chartHeight: 0,
       schema: this._generateDataSchema(data),
-      // chartData: [
-      //   {
-      //     x: 'a',
-      //     y: {
-      //       z1: 12,
-      //       z2: 23,
-      //       z3: 0,
-      //     },
-      //   },
-      //   {
-      //     x: 'b',
-      //     y: {
-      //       z1: 33,
-      //       z2: 22,
-      //       z3: 6,
-      //     },
-      //   },
-      //   {
-      //     x: 'c',
-      //     y: {
-      //       z1: 24,
-      //       z2: 17,
-      //       z3: 88,
-      //     },
-      //   },
-      //   {
-      //     x: 'd',
-      //     y: {
-      //       z1: 15,
-      //       z2: 28,
-      //       z3: 33,
-      //     },
-      //   },
-      //   {
-      //     x: 'e',
-      //     y: {
-      //       z1: 32,
-      //       z2: 23,
-      //       z3: 16,
-      //     },
-      //   },
-      //   {
-      //     x: 'f',
-      //     y: {
-      //       z1: 5,
-      //       z2: 38,
-      //       z3: 21,
-      //     },
-      //   },
-      //   {
-      //     x: 'g',
-      //     y: {
-      //       z1: 19,
-      //       z2: 28,
-      //       z3: 34,
-      //     },
-      //   },
-      // ],
       barChartData: this._generateChartData(),
-      // chartComponentX: { name: 'x', valueSchemaPath: 'invoiceDate.$date', valueType: 'string' },
-      // chartComponentY: { name: 'y', valueSchemaPath: 'lineItems.2.prodCount', valueType: 'number' },
-      // chartComponentCenter: {
-      //   name: 'center',
-      //   valueSchemaPath: 'orderStatus',
-      //   valueType: 'string',
-      //   values: ['z1', 'z2', 'z3'],
-      // },
       chartComponentX: null,
       chartComponentY: null,
       chartComponentCenter: null,
@@ -250,7 +184,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     // scan through data
     const chartDataMap: Map<string, { [string]: number }> = new Map();
     const numericalBinMap: Map<string, boolean> = new Map();
-    _.forEach(data, (v) => {
+    _.forEach(data, (v: {}) => {
       let categoricalValue =
         categoricalComponent.valueSchemaPath === 'default'
           ? 'default'
@@ -384,18 +318,18 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
         newState.chartComponentCenter = barChartData.componentCenter;
       }
     } else if (target === 'x') {
-        const { chartComponentY, chartComponentCenter } = this.state;
-        barChartData = this._generateChartData(null, chartComponentY, chartComponentCenter);
-        newState.chartComponentX = null;
-      } else if (target === 'y') {
-        const { chartComponentX, chartComponentCenter } = this.state;
-        barChartData = this._generateChartData(chartComponentX, null, chartComponentCenter);
-        newState.chartComponentY = null;
-      } else {
-        const { chartComponentX, chartComponentY } = this.state;
-        barChartData = this._generateChartData(chartComponentX, chartComponentY, null);
-        newState.chartComponentCenter = null;
-      }
+      const { chartComponentY, chartComponentCenter } = this.state;
+      barChartData = this._generateChartData(null, chartComponentY, chartComponentCenter);
+      newState.chartComponentX = null;
+    } else if (target === 'y') {
+      const { chartComponentX, chartComponentCenter } = this.state;
+      barChartData = this._generateChartData(chartComponentX, null, chartComponentCenter);
+      newState.chartComponentY = null;
+    } else {
+      const { chartComponentX, chartComponentY } = this.state;
+      barChartData = this._generateChartData(chartComponentX, chartComponentY, null);
+      newState.chartComponentCenter = null;
+    }
 
     newState.barChartData = barChartData;
     this.setState(newState);

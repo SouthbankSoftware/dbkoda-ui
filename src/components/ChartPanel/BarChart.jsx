@@ -35,7 +35,7 @@ export type ChartComponent = {
   values?: string[],
 };
 type ChartDataElement = string | number | { [string]: number };
-export type ChartData = { x: ChartDataElement, y: ChartDataElement }[];
+export type ChartData = { ['x' | 'y']: ChartDataElement }[];
 
 type Props = {
   data: ChartData,

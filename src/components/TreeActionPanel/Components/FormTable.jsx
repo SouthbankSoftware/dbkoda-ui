@@ -44,16 +44,29 @@ export default observer(({ members }) => {
       });
     })[0];
     for (const lbl of cols) {
-      labels.push(
-        <div key={'lbl' + lbl} className="pt-form-group form-group-inline">
-          <label htmlFor={lbl}>{lbl}</label>
-        </div>
-      );
+      if (lbl !== 'last') {
+        labels.push(
+          <div key={'lbl' + lbl} className="pt-form-group form-group-inline">
+            <label htmlFor={lbl}>{lbl}</label>
+          </div>,
+        );
+      }
     }
+    labels.push(
+      <div
+        key="lblCtrl"
+        className="pt-form-group form-group-inline table-field-15"
+      >
+        <label htmlFor="ctrl" style={{ display: 'hidden' }} />
+      </div>,
+    );
   }
 
   return (
-    <fieldset className="tableFieldSet" label={members.label ? members.label : members.name}>
+    <fieldset
+      className="tableFieldSet"
+      label={members.label ? members.label : members.name}
+    >
 
       <div className="clearfix tableHeader">
         <div className="left">
@@ -65,12 +78,14 @@ export default observer(({ members }) => {
             field={members}
             controls={{
               onAdd: true,
-              onClear: true
+              onClear: true,
             }}
           />
         </div>
       </div>
-      {labels}
+      <div className="tableColumnHeader">
+        {labels}
+      </div>
       <div className="scrollableDiv field-group">
         {members.map(member => (
           <FormTableRow key={member.id} member={member} />
