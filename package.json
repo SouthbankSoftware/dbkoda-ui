@@ -41,7 +41,7 @@
     "docs": "yarn run esdoc && open -b com.google.chrome ./docs/index.html",
     "esdoc": "rimraf docs && esdoc -c .esdoc.json",
     "flow": "flow",
-    "flow:install": "flow-typed install",
+    "flow:install": "flow-typed install --overwrite --skip",
     "cienvy:dev": "yarn run cienvy:clean && yarn run cienvy:dev:build",
     "cienvy:dev:build": "yarn run cienvy:build -- --source-maps",
     "cienvy:clean": "rimraf .cienvy/lib",
