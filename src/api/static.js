@@ -8,6 +8,10 @@
 
 import { Doc } from 'codemirror';
 import _ from 'lodash';
+import { NewToaster } from '#/common/Toaster';
+import { Intent } from '@blueprintjs/core';
+
+const MAX_DOCUMENTS = 500;
 
 export default class StaticApi {
   /**
@@ -79,26 +83,11 @@ export default class StaticApi {
       let totalDocumentCount = 0;
       // Get document at line one above, keep doing this until we reach an invalid line.
 
-      // Get document above our starting point.
-      while (linesAbove.status !== 'Invalid' && totalDocumentCount < 500) {
-        const docAbove = this.getDocumentAtLine(
-          outputId,
-          linesAbove.start - 1,
-          -1,
-          linesAbove,
-          cm,
-        );
-        // Check if valid
-        if (linesAbove.status === 'Invalid') {
-          // We have reached an end point.
-        } else {
-          // Add to JSON and then keep going.
-          documentsAbove.push(docAbove);
-          totalDocumentCount += 1;
-        }
-      }
       // Get document below our starting point.
-      while (linesBelow.status !== 'Invalid' && totalDocumentCount < 500) {
+      while (
+        linesBelow.status !== 'Invalid' &&
+        totalDocumentCount < MAX_DOCUMENTS
+      ) {
         const docBelow = this.getDocumentAtLine(
           outputId,
           linesBelow.end + 1,
@@ -114,7 +103,46 @@ export default class StaticApi {
           documentsBelow.push(docBelow);
           totalDocumentCount += 1;
         }
+        if (totalDocumentCount === MAX_DOCUMENTS) {
+          // Toaster Notification
+          NewToaster.show({
+            message: globalString('output/editor/exceededMaxDocs'),
+            intent: Intent.WARNING,
+            iconName: 'pt-icon-thumbs-down',
+          });
+        }
       }
+
+            // Get document above our starting point.
+            while (
+        linesAbove.status !== 'Invalid' &&
+        totalDocumentCount < MAX_DOCUMENTS
+      ) {
+        const docAbove = this.getDocumentAtLine(
+          outputId,
+          linesAbove.start - 1,
+          -1,
+          linesAbove,
+          cm,
+        );
+        // Check if valid
+        if (linesAbove.status === 'Invalid') {
+          // We have reached an end point.
+        } else {
+          // Add to JSON and then keep going.
+          documentsAbove.push(docAbove);
+          totalDocumentCount += 1;
+        }
+        if (totalDocumentCount === MAX_DOCUMENTS) {
+          // Toaster Notification
+          NewToaster.show({
+            message: globalString('output/editor/exceededMaxDocs'),
+            intent: Intent.WARNING,
+            iconName: 'pt-icon-thumbs-down',
+          });
+        }
+      }
+      
       const finalDocument =
         '[' +
         documentsAbove

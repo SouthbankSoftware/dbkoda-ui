@@ -68,7 +68,9 @@
         "expand": "Show",
         "collapseAll": "Collapse All",
         "expandAll": "Expand All",
-        "numOfDocs": "Number of Documents: "
+        "numOfDocs": "Number of Documents: ",
+        "exceededMaxDocs":
+          "Table View is currently limited to 500 documents at a time, please narrow your query."
       },
       "terminal": {
         "execute": "Execute Command (Enter)"
