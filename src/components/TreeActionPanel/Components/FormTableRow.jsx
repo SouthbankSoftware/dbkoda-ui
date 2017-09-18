@@ -53,7 +53,7 @@ export default observer(({ member }) => {
   });
 
   return (
-    <div>
+    <div className="tableFields">
       {rowFields}
       <FieldControl
         field={member}

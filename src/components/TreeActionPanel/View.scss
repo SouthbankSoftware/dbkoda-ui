@@ -66,7 +66,7 @@
   .form-group-inline {
     display: inline-block !important;
     vertical-align: top;
-    width: 44%;
+    width: 100%;
   }
 
   .pt-form-group {
@@ -144,6 +144,14 @@
       .left {
         padding-top: 6px;
       }
+    }
+
+    .tableColumnHeader {
+      display: flex;
+    }
+
+    .tableFields {
+      display: flex;
     }
 
     .field-group {
@@ -255,6 +263,10 @@
 
   .table-field-80 {
     width: 80% !important;
+  }
+
+  .table-field-15 {
+    width: 15% !important;
   }
 
   .right-button {
