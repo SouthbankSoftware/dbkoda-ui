@@ -213,7 +213,7 @@ export function dbkodaMatchOperators(params) {
 export function dbkodaMatchOperators_parse(res) {
   //eslint-disable-line
   if (debug) console.log(res);
-  return ['$eq', '$gt', '$gte', '$in', '$lt', '$lte', '$ne'];
+  return ['$eq', '$gt', '$gte', '$in', '$lt', '$lte', '$ne', '$nin', '$regex'];
 }
 
 export function dbkoda_sortOptions(params) {

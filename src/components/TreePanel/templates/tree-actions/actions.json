@@ -136,13 +136,13 @@
       "icon": "pt-icon-import"
     },
     {
-      "name": "RestoreDatabase",
-      "text": "Restore Database",
+      "name": "ImportDatabase",
+      "text": "Import Collections",
       "icon": "pt-icon-export"
     },
     {
-      "name": "ImportDatabase",
-      "text": "Import Collections",
+      "name": "RestoreDatabase",
+      "text": "Restore Database",
       "icon": "pt-icon-export"
     }
   ],
