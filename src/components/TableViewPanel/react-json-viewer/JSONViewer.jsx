@@ -24,6 +24,8 @@
 /* eslint react/no-array-index-key: 0 */
 
 import React, { Component } from 'react';
+import { action } from 'mobx';
+import { ContextMenu, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 import ValueViewer from './ValueViewer';
 import {
   loopObject,
@@ -32,7 +34,6 @@ import {
   checkIfArrayIsAOB,
   checkIfObjectIsOOB,
 } from './util';
-import RowWrapper from './RowWrapper';
 
 export default class JSONViewer extends Component {
   constructor(props, context) {
@@ -40,6 +41,7 @@ export default class JSONViewer extends Component {
     this.state = {
       deep: false,
       renderArrayCount: 0,
+      isContextMenuOpen: false,
     };
 
     this.debug = false;
@@ -306,7 +308,13 @@ export default class JSONViewer extends Component {
           {loopObject(aob, (row, j) => {
             if (this.debug) console.log('Rendering row ', j);
             return (
-              <tr {...this.props.trProps} key={j}>
+              <tr
+                {...this.props.trProps}
+                key={j}
+                onContextMenu={(e) => {
+                  this.showContextMenu(e, j, row);
+                }}
+              >
                 {loopObject(getFirstEle(aob), (val, key) => {
                   return this.renderTd(row[key], key);
                 })}
@@ -316,6 +324,29 @@ export default class JSONViewer extends Component {
         </tbody>
       </table>
     );
+  }
+
+  @action.bound
+  showContextMenu(e, row, json) {
+    // must prevent default to cancel parent's context menu
+
+    if (true || this.debug) {
+      console.log(e);
+      console.log(row);
+      console.log(json);
+    }
+    // invoke static API, getting coordinates from mouse event
+    ContextMenu.show(
+      <Menu>
+        <MenuItem iconName="search-around" text="Enhanced JSON View" />
+        <MenuDivider />
+        <MenuItem disabled text={'Clicked on node ' + row} />
+      </Menu>,
+      { left: e.clientX, top: e.clientY },
+      () => this.setState({ isContextMenuOpen: false }),
+    );
+    // indicate that context menu is open so we can add a CSS class to this element
+    this.setState({ isContextMenuOpen: true });
   }
 
   render() {
