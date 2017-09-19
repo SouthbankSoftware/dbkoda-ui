@@ -113,6 +113,8 @@ export default class ComboField extends React.Component {
             );
           }
         }
+      }
+      if (!field.options.multi) {
         field.value = newValue && newValue.value ? newValue.value : '';
       }
       field.state.form.submit();
