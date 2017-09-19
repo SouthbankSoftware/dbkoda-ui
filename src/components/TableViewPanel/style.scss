@@ -119,6 +119,10 @@ div.tableViewWrapper {
         }
       }
       tbody {
+        div {
+          tr.rowWrapper {
+          }
+        }
         tr {
           background-color: $tableBackgroundOdd;
           td {

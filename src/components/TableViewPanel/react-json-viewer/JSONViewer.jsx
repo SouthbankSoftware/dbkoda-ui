@@ -32,6 +32,7 @@ import {
   checkIfArrayIsAOB,
   checkIfObjectIsOOB,
 } from './util';
+import RowWrapper from './RowWrapper';
 
 export default class JSONViewer extends Component {
   constructor(props, context) {
@@ -303,6 +304,7 @@ export default class JSONViewer extends Component {
         {this.renderHeaderByKeys(Object.keys(getFirstEle(aob)))}
         <tbody {...this.props.tbodyProps}>
           {loopObject(aob, (row, j) => {
+            if (this.debug) console.log('Rendering row ', j);
             return (
               <tr {...this.props.trProps} key={j}>
                 {loopObject(getFirstEle(aob), (val, key) => {

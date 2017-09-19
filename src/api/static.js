@@ -82,6 +82,20 @@ export default class StaticApi {
       const documentsBelow = [];
       let totalDocumentCount = 0;
       // Get document at line one above, keep doing this until we reach an invalid line.
+      if (this.debug) console.log(jsonStr);
+      // Check if the captured right click string has accidentally grabbed previous characters
+      if (!jsonStr.match(/^ *{/gim)) {
+        // Probably invalid, let's see if there is something valid in there.
+        if (jsonStr.match(/^.*{.*}/gim)) {
+          // Lets try removing the incorrect json before hand.
+          console.warn('Initial: ', jsonStr);
+          jsonStr = jsonStr.replace(/^.*\);?/gm, '');
+          console.warn(
+            'Right click action returned invalid result, tried replacing.',
+          );
+          console.warn('Replaced: ', jsonStr);
+        }
+      }
 
       // Get document below our starting point.
       while (
@@ -95,6 +109,12 @@ export default class StaticApi {
           linesBelow,
           cm,
         );
+        if (!docBelow.match(/^ *{/gm)) {
+          // Probably not Valid.
+          if (this.debug) console.log(docBelow, ' is not valid (below).');
+          linesBelow.status = 'Invalid';
+        }
+
         // Check if valid
         if (linesBelow.status === 'Invalid') {
           // We have reached an end point.
@@ -113,8 +133,8 @@ export default class StaticApi {
         }
       }
 
-            // Get document above our starting point.
-            while (
+      // Get document above our starting point.
+      while (
         linesAbove.status !== 'Invalid' &&
         totalDocumentCount < MAX_DOCUMENTS
       ) {
@@ -125,6 +145,12 @@ export default class StaticApi {
           linesAbove,
           cm,
         );
+        if (!docAbove.match(/^ *{/gm)) {
+          // Probably not Valid.
+          if (this.debug) console.log(docAbove, ' is not valid (above).');
+          linesAbove.status = 'Invalid';
+        }
+
         // Check if valid
         if (linesAbove.status === 'Invalid') {
           // We have reached an end point.
@@ -142,7 +168,7 @@ export default class StaticApi {
           });
         }
       }
-      
+
       const finalDocument =
         '[' +
         documentsAbove
