@@ -120,12 +120,15 @@ export class ProfileForm extends MobxReactForm {
           form.validate();
         },
       });
+      this.addKeyRules(form, form.$('keyRadio').value);
+      this.addRemotePassRules(form, form.$('passRadio').value);
     } else {
       form.$('remoteHost').set('rules', '');
       form.$('remoteUser').set('rules', '');
+      this.addKeyRules(form, false);
+      this.addRemotePassRules(form, false);
     }
-    this.addKeyRules(form, form.$('keyRadio').value);
-    this.addRemotePassRules(form, form.$('passRadio').value);
+    form.validate();
   }
 
   addKeyRules(form, value) {
@@ -245,6 +248,7 @@ export const Form = {
     },
     {
       name: 'ssl',
+      value: false,
       label: 'SSL',
     },
     {
