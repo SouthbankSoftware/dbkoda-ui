@@ -184,7 +184,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     // scan through data
     const chartDataMap: Map<string, { [string]: number }> = new Map();
     const numericalBinMap: Map<string, boolean> = new Map();
-    _.forEach(data, (v: {}) => {
+    _.forEach(data, (v) => {
       let categoricalValue =
         categoricalComponent.valueSchemaPath === 'default'
           ? 'default'

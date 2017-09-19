@@ -31,8 +31,8 @@
     "start": "http-server ./dist -p 3000 -c-1",
     "clean": "rimraf ./dist rmdir",
     "build": "webpack --config webpack/prod.js --optimize-minimize",
-    "test": "yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
-    "test:dev": "yarn run eslint && yarn run jest",
+    "test": "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
+    "test:dev": "yarn flow && yarn run eslint && yarn run jest",
     "mlaunch:init": "mlaunch init --single",
     "mlaunch:clean": "mlaunch kill; rimraf data tmpd*",
     "eslint": "eslint --ext .jsx --ext .js src/. tests/.",
@@ -41,7 +41,7 @@
     "docs": "yarn run esdoc && open -b com.google.chrome ./docs/index.html",
     "esdoc": "rimraf docs && esdoc -c .esdoc.json",
     "flow": "flow",
-    "flow:install": "flow-typed install",
+    "flow:install": "flow-typed install --overwrite --skip",
     "cienvy:dev": "yarn run cienvy:clean && yarn run cienvy:dev:build",
     "cienvy:dev:build": "yarn run cienvy:build -- --source-maps",
     "cienvy:clean": "rimraf .cienvy/lib",
@@ -173,5 +173,14 @@
     "webpack-merge": "^4.1.0",
     "worker-loader": "^0.8.1",
     "xml2js": "^0.4.17"
+  },
+  "dependencies": {
+    "global": "^4.3.2",
+    "mongodb-uri": "^0.9.7",
+    "react-expandable-listview": "^0.6.1",
+    "react-json-view": "^1.10.12",
+    "react-json-viewer": "^1.6.1",
+    "react-motion": "^0.5.0",
+    "worker-loader": "^0.8.1"
   }
 }

@@ -21,12 +21,11 @@
 
 import * as React from 'react';
 import _ from 'lodash';
-import { Tree, ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
+import { type ITreeNode, Tree, ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
 import escapeStringRegexp from 'escape-string-regexp';
 import type { ChartComponent, ChartComponentName } from './BarChart';
 import './DataTree.scss';
 
-type ITreeNode = { [string]: any };
 export type Schema = { [string]: string };
 export type ChartComponentOperation = {
   action: 'load' | 'unload',
@@ -116,7 +115,7 @@ export default class DataTree extends React.Component<Props, State> {
     }
   }
 
-  _searchForChartComponent(component: ChartComponent, nodes: ITreeNode[]): ?ITreeNode {
+  _searchForChartComponent(component: ChartComponent, nodes: ?ITreeNode[]): ?ITreeNode {
     let result: ?ITreeNode = null;
 
     _.forEach(nodes, (v) => {
@@ -168,6 +167,7 @@ export default class DataTree extends React.Component<Props, State> {
     schema: Schema,
     prefix: string,
   ): { shouldBeExpanded: boolean, nodes: ITreeNode[] } {
+    // $FlowIssue
     const nodes: ITreeNode[] = [];
     let shouldBeExpanded = false;
 
@@ -254,8 +254,13 @@ export default class DataTree extends React.Component<Props, State> {
   _onNodeContextMenu = (node: ITreeNode, _nodePath: number[], e: SyntheticMouseEvent<*>) => {
     e.preventDefault();
 
-    const { id, type } = node;
+    if (!node.type) {
+      return;
+    }
+
+    const { id } = node;
     const { onChartComponentChange, getAllowedChartComponentOperations } = this.props;
+    const type = node.type;
 
     if (type !== 'string' && type !== 'number') {
       return;
@@ -263,7 +268,7 @@ export default class DataTree extends React.Component<Props, State> {
 
     const menu = (
       <Menu>
-        {_.map(getAllowedChartComponentOperations(id, type), (v, i) => {
+        {_.map(getAllowedChartComponentOperations(String(id), type), (v, i) => {
           let compDesc;
 
           if (v.target === 'x') {
@@ -286,7 +291,7 @@ export default class DataTree extends React.Component<Props, State> {
             <MenuItem
               key={i}
               onClick={() => {
-                onChartComponentChange(v, id, type);
+                onChartComponentChange(v, String(id), type);
               }}
               text={text}
             />
