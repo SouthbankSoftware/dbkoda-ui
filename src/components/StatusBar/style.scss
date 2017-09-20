@@ -1,0 +1,40 @@
+@import '../../styles/_defaultTheme.scss';
+div.statusPanel {
+  display: flex;
+  flex-direction: row;
+  div.float_left {
+    display: flex;
+    justify-content: flex-start;
+    flex-grow: 1;
+    order: 1;
+    padding-left: 10px;
+  }
+  div.float_right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-grow: 1;
+    order: 2;
+    padding-right: 10px;
+    a.pt-button {
+      background: unset;
+      height: 30px;
+      color: $defaultFontColor;
+      border: 1px solid $defaultFontColor;
+      border-radius: 0.5em;
+      background-color: $navbarLeftBackground;
+      padding-left: 4px;
+      padding-right: 4px;
+      margin-top: 5px;
+      span {
+        font-size: 12px;
+      }
+    }
+    a.pt-button:hover {
+      background-color: $navbarLeftBackgroundSecondary;
+    }
+    a.feedbackButton {
+      margin-right: 10px;
+    }
+  }
+}

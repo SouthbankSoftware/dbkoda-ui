@@ -515,6 +515,14 @@
           "tooltip": "Don't create header lines in exported data"
         }
       }
+    },
+    "status_bar": {
+      "feedback": {
+        "button_title": "Feedback"
+      },
+      "support_bundle": {
+        "button_title": "Support Bundle"
+      }
     }
   }
 }

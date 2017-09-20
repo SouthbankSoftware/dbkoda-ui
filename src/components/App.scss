@@ -87,13 +87,13 @@ Resizer.disabled:hover {
   background-color: $panelLeftBackground;
 }
 
-.DevTools>div>div:first-child>div {
-  opacity: .15;
+.DevTools > div > div:first-child > div {
+  opacity: 0.15;
   transform: rotate(90deg);
   right: -62px !important;
 }
 
-.DevTools>div>div:first-child>div:hover {
+.DevTools > div > div:first-child > div:hover {
   opacity: 1;
   transition: opacity 1s ease;
 }
@@ -105,15 +105,19 @@ ul.profileListContextMenu {
     div.menuItemWrapper {
       display: flex;
       flex-direction: row;
-      svg.dbKodaSVG {}
-      li {}
+      svg.dbKodaSVG {
+      }
+      li {
+      }
     }
   }
   div.menuItemWrapper {
     display: flex;
     flex-direction: row;
-    svg.dbKodaSVG {}
-    li {}
+    svg.dbKodaSVG {
+    }
+    li {
+    }
   }
 }
 
@@ -124,7 +128,8 @@ ul.pt-menu {
     div.menuItemWrapper {
       display: flex;
       flex-direction: row;
-      svg.dbKodaSVG {}
+      svg.dbKodaSVG {
+      }
       li {
         width: 100%;
       }
@@ -133,7 +138,8 @@ ul.pt-menu {
   div.menuItemWrapper {
     display: flex;
     flex-direction: row;
-    svg.dbKodaSVG {}
+    svg.dbKodaSVG {
+    }
     li {
       width: 100%;
     }
@@ -147,7 +153,6 @@ div.savingDialog {
       font-size: 12pt;
     }
     p {
-
     }
     a {
       color: $buttonTextColour;
@@ -201,4 +206,19 @@ div.savingDialog {
   .CodeMirror {
     font-family: 'Courier New', 'Courier', 'monospace' !important;
   }
+}
+
+.RootSplitPane {
+  height: calc(100% - 30px);
+}
+
+.statusPanel {
+  order: 2;
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  z-index: 20;
+  bottom: 0px;
+  background-color: $navbarLeftBackground;
+  color: $defaultFontColor;
 }
