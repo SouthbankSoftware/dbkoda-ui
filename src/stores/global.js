@@ -512,11 +512,11 @@ export default class Store {
           console.log(
             "State store doesn't exist. A new one will be created after app close or refreshing",
           );
+          Broker.emit(EventType.APP_READY);
         } else {
           console.error(err);
+          Broker.emit(EventType.APP_CRASHED);
         }
-
-        Broker.emit(EventType.APP_CRASHED);
       });
   }
 
