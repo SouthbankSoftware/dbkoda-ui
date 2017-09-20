@@ -105,6 +105,7 @@ Broker.once(EventType.APP_CRASHED, () => {
 
       dialog.showMessageBox(currentWindow, {
         title: 'Error',
+        buttons: ['OK'],
         message:
           err.message,
       });
