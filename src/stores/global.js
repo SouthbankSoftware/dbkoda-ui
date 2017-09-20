@@ -461,9 +461,14 @@ export default class Store {
   }
 
   backup() {
-    const stateStoreDir = path.dirname(stateStore);
+    console.log(stateStore);
+    let stateStorePath = stateStore;
+    if (process.platform === 'win32') {
+      stateStorePath = stateStorePath.replace(/\\/g, '/');
+    }
+    const stateStoreDir = path.dirname(stateStorePath);
     const dateStr = moment().format('DD-MM-YYYY_HH-mm-ss');
-    const backupPath = path.resolve(stateStoreDir, `stateStore.${dateStr}.json`);
+    const backupPath = path.join(stateStoreDir, `stateStore.${dateStr}.json`);
     return featherClient()
       .service('files')
       .get(stateStore, {
