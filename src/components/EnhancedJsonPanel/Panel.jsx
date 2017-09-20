@@ -34,9 +34,9 @@ import './style.scss';
  * Displays JSON in an enhanced form as a seperate output tab
  *  enhancedJson - a JSON object to be represented in the output tab
  */
- @inject(allStores => ({
-   api: allStores.api,
- }))
+@inject(allStores => ({
+  api: allStores.api,
+}))
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
@@ -48,95 +48,161 @@ export default class Panel extends React.Component {
   getNextDoc() {
     const lineNumber = this.props.enhancedJson.lastLine + 1;
     const lines = { start: 0, end: 0, status: '' };
-    const currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, 1, lines);
+    const currentJson = this.props.getDocumentAtLine(
+      this.props.outputId,
+      lineNumber,
+      1,
+      lines,
+    );
     if (lines.status === 'Invalid') {
       this.setState({ moreNext: false });
       return;
     }
     this.setState({ morePrevious: true, moreNext: true });
-    this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
+    this.props.api.initJsonView(
+      currentJson,
+      this.props.outputId,
+      'enhancedJson',
+      lines,
+    );
   }
 
   getPreviousDoc() {
     const lineNumber = this.props.enhancedJson.firstLine - 1;
     const lines = { start: 0, end: 0, status: '' };
-    const currentJson = this.props.getDocumentAtLine(this.props.outputId, lineNumber, -1, lines);
+    const currentJson = this.props.getDocumentAtLine(
+      this.props.outputId,
+      lineNumber,
+      -1,
+      lines,
+    );
     if (lines.status === 'Invalid') {
       this.setState({ morePrevious: false });
       return;
     }
     this.setState({ morePrevious: true, moreNext: true });
-    this.props.api.initJsonView(currentJson, this.props.outputId, 'enhancedJson', lines);
+    this.props.api.initJsonView(
+      currentJson,
+      this.props.outputId,
+      'enhancedJson',
+      lines,
+    );
   }
 
   render() {
-    return (<div className="enhanced-json-panel">
-      <nav className="pt-navbar pt-dark">
-        <div className="pt-navbar-group pt-align-left previous-button">
-          <button type="button"
-            id="prevBtn"
-            className="pt-button pt-icon-large pt-icon-chevron-left"
-            onClick={this.getPreviousDoc}
-            disabled={!this.state.morePrevious} />
-        </div>
-        <div className="pt-navbar-group pt-align-right">
-          <button type="button"
-            className="pt-button pt-icon-large pt-icon-chevron-right next-button"
-            onClick={this.getNextDoc}
-            disabled={!this.state.moreNext} />
-        </div>
-        <div className="pt-navbar-group collapse-group">
-          <div className="pt-navbar-heading">Expand </div>
-          <button type="button"
-            className={(this.state.collapseDepth === 1) ? 'pt-button active' : 'pt-button'}
-            onClick={() => (this.setState({ collapseDepth: 1 }))}>
-            1
-          </button>
-          <button type="button"
-            className={(this.state.collapseDepth === 2) ? 'pt-button active' : 'pt-button'}
-            onClick={() => (this.setState({ collapseDepth: 2 }))}>
-            2
-          </button>
-          <button type="button"
-            className={(this.state.collapseDepth === 3) ? 'pt-button active' : 'pt-button'}
-            onClick={() => (this.setState({ collapseDepth: 3 }))}>
-            3
-          </button>
-          <button type="button"
-            className={(this.state.collapseDepth === false) ? 'pt-button active' : 'pt-button'}
-            onClick={() => (this.setState({ collapseDepth: false }))}>
-            All
-          </button>
-        </div>
-      </nav>
-      <ReactJson
-        src={this.props.enhancedJson.json}
-        theme={{
-          base00: '#fff',
-          base01: '#fff',
-          base02: 'rgb(64, 110, 101)',
-          base03: '#fff',
-          base04: 'rgb(93, 92, 93)',
-          base05: '#fff',
-          base06: '#fff',
-          base07: '#FFB795',
-          base08: 'rgb(1, 139, 147)',
-          base09: 'rgb(58, 178, 98)',
-          base0A: 'rgb(191, 204, 214)',
-          base0B: 'rgb(1, 139, 147)',
-          base0C: '#575a6a',
-          base0D: '#535253',
-          base0E: '#535253',
-          base0F: 'rgb(1, 139, 147)'
-        }}
-        indentWidth={2}
-        collapsed={this.state.collapseDepth}
-        collapseStringsAfterLength={40}
-        enableClipboard
-        displayObjectSize
-        displayDataTypes={false}
-         />
-    </div>);
+    let renderButtons = true;
+    if (this.props.enhancedJson.status === 'SINGLE') {
+      renderButtons = false;
+    }
+    return (
+      <div className="enhanced-json-panel">
+        <nav className="pt-navbar pt-dark">
+          <div className="pt-navbar-group pt-align-left previous-button">
+            {renderButtons && (
+              <button
+                type="button"
+                id="prevBtn"
+                className="pt-button pt-icon-large pt-icon-chevron-left"
+                onClick={this.getPreviousDoc}
+                disabled={!this.state.morePrevious}
+              />
+            )}
+          </div>
+          <div className="pt-navbar-group pt-align-right">
+            {renderButtons && (
+              <button
+                type="button"
+                className="pt-button pt-icon-large pt-icon-chevron-right next-button"
+                onClick={this.getNextDoc}
+                disabled={!this.state.moreNext}
+              />
+            )}
+          </div>
+          <div className="pt-navbar-group collapse-group">
+            <div className="pt-navbar-heading">Expand </div>
+            <button
+              type="button"
+              className={
+                this.state.collapseDepth === 1 ? (
+                  'pt-button active'
+                ) : (
+                  'pt-button'
+                )
+              }
+              onClick={() => this.setState({ collapseDepth: 1 })}
+            >
+              1
+            </button>
+            <button
+              type="button"
+              className={
+                this.state.collapseDepth === 2 ? (
+                  'pt-button active'
+                ) : (
+                  'pt-button'
+                )
+              }
+              onClick={() => this.setState({ collapseDepth: 2 })}
+            >
+              2
+            </button>
+            <button
+              type="button"
+              className={
+                this.state.collapseDepth === 3 ? (
+                  'pt-button active'
+                ) : (
+                  'pt-button'
+                )
+              }
+              onClick={() => this.setState({ collapseDepth: 3 })}
+            >
+              3
+            </button>
+            <button
+              type="button"
+              className={
+                this.state.collapseDepth === false ? (
+                  'pt-button active'
+                ) : (
+                  'pt-button'
+                )
+              }
+              onClick={() => this.setState({ collapseDepth: false })}
+            >
+              All
+            </button>
+          </div>
+        </nav>
+        <ReactJson
+          src={this.props.enhancedJson.json}
+          theme={{
+            base00: '#fff',
+            base01: '#fff',
+            base02: 'rgb(64, 110, 101)',
+            base03: '#fff',
+            base04: 'rgb(93, 92, 93)',
+            base05: '#fff',
+            base06: '#fff',
+            base07: '#FFB795',
+            base08: 'rgb(1, 139, 147)',
+            base09: 'rgb(58, 178, 98)',
+            base0A: 'rgb(191, 204, 214)',
+            base0B: 'rgb(1, 139, 147)',
+            base0C: '#575a6a',
+            base0D: '#535253',
+            base0E: '#535253',
+            base0F: 'rgb(1, 139, 147)',
+          }}
+          indentWidth={2}
+          collapsed={this.state.collapseDepth}
+          collapseStringsAfterLength={40}
+          enableClipboard
+          displayObjectSize
+          displayDataTypes={false}
+        />
+      </div>
+    );
   }
 }
 /*  Theme guide:

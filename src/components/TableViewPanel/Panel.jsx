@@ -29,11 +29,16 @@
 
 import React from 'react';
 import { action } from 'mobx';
+import { inject } from 'mobx-react';
 import JSONViewer from './react-json-viewer/JSONViewer.jsx';
 import Toolbar from './Toolbar.jsx';
 
 import './style.scss';
 
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+}))
 export default class Panel extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -89,6 +94,22 @@ export default class Panel extends React.Component {
     this.setState({ expandAll: true });
   }
 
+  @action.bound
+  openEnhancedJsonView(json) {
+    json = JSON.stringify(json);
+    this.props.api.initJsonView(
+      json,
+      this.props.store.editorPanel.activeEditorId,
+      'enhancedJson',
+      {
+        start: 0,
+        end: 0,
+        status: '',
+        type: 'SINGLE',
+      },
+    );
+  }
+
   render() {
     const expand = this.state.expandAll;
     const collapse = this.state.collapseAll;
@@ -120,6 +141,7 @@ export default class Panel extends React.Component {
             updateNestedState={this.updateNestedState}
             hideDeep={this.state.hideDeep}
             arrayState={this.state.arrayState}
+            openEnhancedJsonView={this.openEnhancedJsonView}
             expandAll={expand}
             collapseAll={collapse}
           />

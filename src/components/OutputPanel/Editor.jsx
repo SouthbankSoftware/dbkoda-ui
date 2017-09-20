@@ -100,7 +100,6 @@ export default class Editor extends React.Component {
     const coords = { x: event.clientX, y: event.clientY };
     const lines = { start: 0, end: 0, status: '' };
     const currentJson = this.getClickedDocument(coords, lines);
-    console.log(currentJson);
 
     const menuItems = [];
     menuItems.push(

@@ -330,7 +330,7 @@ export default class JSONViewer extends Component {
   showContextMenu(e, row, json) {
     // must prevent default to cancel parent's context menu
 
-    if (true || this.debug) {
+    if (this.debug) {
       console.log(e);
       console.log(row);
       console.log(json);
@@ -338,9 +338,13 @@ export default class JSONViewer extends Component {
     // invoke static API, getting coordinates from mouse event
     ContextMenu.show(
       <Menu>
-        <MenuItem iconName="search-around" text="Enhanced JSON View" />
+        <MenuItem
+          iconName="search-around"
+          text="Enhanced JSON View"
+          onClick={() => this.props.openEnhancedJsonView(json)}
+        />
         <MenuDivider />
-        <MenuItem disabled text={'Clicked on node ' + row} />
+        <MenuItem disabled text={'Clicked on row ' + row + 1} />
       </Menu>,
       { left: e.clientX, top: e.clientY },
       () => this.setState({ isContextMenuOpen: false }),
