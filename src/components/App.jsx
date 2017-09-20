@@ -77,7 +77,10 @@ class App extends React.Component {
     this.props.store.userPreferences.telemetryEnabled = bool;
     this.props.store.layout.optInVisible = false;
   }
-
+  unstable_handleError(...v) { //eslint-disable-line
+    console.log(...v);
+    Broker.emit(EventType.APP_CRASHED);
+  }
   render() {
     const { layout } = this.props;
     const splitPane2Style = {
