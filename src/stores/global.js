@@ -36,6 +36,8 @@ import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { Intent } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
+import moment from 'moment';
+import path from 'path';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
 
@@ -458,6 +460,20 @@ export default class Store {
     return !isClean;
   }
 
+  backup() {
+    const stateStoreDir = path.dirname(stateStore);
+    const dateStr = moment().format('DD-MM-YYYY_HH-mm-ss');
+    const backupPath = path.resolve(stateStoreDir, `stateStore.${dateStr}.json`);
+    return featherClient()
+      .service('files')
+      .get(stateStore, {
+        query: {
+          copyTo: backupPath,
+          watching: 'false',
+        },
+      });
+  }
+
   /**
    * Load state store from user fs
    *
@@ -483,6 +499,8 @@ export default class Store {
         if (this.api) {
           this.api.init();
         }
+
+        Broker.emit(EventType.APP_READY);
       })
       .catch((err) => {
         if (err.code === 404) {
@@ -492,14 +510,8 @@ export default class Store {
         } else {
           console.error(err);
         }
-      })
-      .then(() => {
-        Broker.emit(EventType.APP_READY);
-        if (IS_ELECTRON) {
-          _.delay(() => {
-            ipcRenderer.send(EventType.APP_READY);
-          }, 200);
-        }
+
+        Broker.emit(EventType.APP_CRASHED);
       });
   }
 

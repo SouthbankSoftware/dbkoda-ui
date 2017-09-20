@@ -42,9 +42,11 @@ const rootEl = document.getElementById('root');
 
 let store;
 let api;
-let bAppRendered = false;
 
-Broker.once(EventType.APP_READY, () => {
+const electron = window.require('electron');
+const ipcRenderer = electron.ipcRenderer;
+
+const renderApp = () => {
   if (store) {
     console.log('Last Store Version:', store.version);
     // if (!store.version) {
@@ -68,29 +70,46 @@ Broker.once(EventType.APP_READY, () => {
   };
 
   render(App);
-
-  const renderWithCleanStore = () => {
-    if (!bAppRendered) {
-      console.log('Recovering with clean state store.');
-      store = new Store();
-      api = new DataCenter(store);
-      store.setAPI(api); // TODO: Remove this line after complete migration to API
-      render(App);
-    }
-  };
-
-  renderWithCleanStore();
   // Hot Module Replacement API
   if (module.hot) {
     module.hot.accept('./components/App', () => {
       render(App);
     });
   }
-});
+
+  if (IS_ELECTRON) {
+    ipcRenderer.send(EventType.APP_READY);
+  }
+};
+
+Broker.once(EventType.APP_READY, renderApp);
 
 Broker.once(EventType.APP_RENDERED, () => {
   console.log('App Rendered successfully !!!!!!!');
-  bAppRendered = true;
+});
+
+Broker.once(EventType.APP_CRASHED, () => {
+  console.log('Woah...App Crashed !!!!!!!');
+  if (IS_ELECTRON) {
+    // make a backup of the old stateStore
+    store.backup().then(() => {
+      store = new Store();
+      api = new DataCenter(store);
+      store.setAPI(api); // TODO: Remove this line after complete migration to API
+      store.saveSync();
+      ipcRenderer.send(EventType.APP_CRASHED);
+    }).catch((err) => {
+      const remote = window.require('electron').remote;
+      const { dialog } = remote;
+      const currentWindow = remote.getCurrentWindow();
+
+      dialog.showMessageBox(currentWindow, {
+        title: 'Error',
+        message:
+          err.message,
+      });
+    });
+  }
 });
 
 window.addEventListener('beforeunload', (event) => {
