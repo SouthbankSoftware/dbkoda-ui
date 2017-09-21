@@ -37,7 +37,6 @@ import { featherClient } from '~/helpers/feathers';
 import { Intent } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
-import path from 'path';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
 
@@ -49,7 +48,7 @@ global.globalNumber = (value, config) =>
   Globalize.numberFormatter(config)(value);
 
 let ipcRenderer;
-let stateStore;
+let stateStorePath;
 
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 if (IS_ELECTRON) {
@@ -61,7 +60,7 @@ if (IS_ELECTRON) {
 
   global.PATHS = remote.getGlobal('PATHS');
   global.GetRandomPort = remote.getGlobal('getRandomPort');
-  stateStore = global.PATHS.stateStore;
+  stateStorePath = global.PATHS.stateStore;
 }
 
 global.EOL = global.IS_ELECTRON
@@ -461,17 +460,23 @@ export default class Store {
   }
 
   backup() {
-    const stateStoreDir = path.dirname(stateStore);
-    const dateStr = moment().format('DD-MM-YYYY_HH-mm-ss');
-    const backupPath = path.resolve(stateStoreDir, `stateStore.${dateStr}.json`);
-    return featherClient()
-      .service('files')
-      .get(stateStore, {
-        query: {
-          copyTo: backupPath,
-          watching: 'false',
-        },
-      });
+    if (IS_ELECTRON) {
+      const path = window.require('path');
+
+      const stateStoreDir = path.dirname(stateStorePath);
+      const dateStr = moment().format('DD-MM-YYYY_HH-mm-ss');
+      const backupPath = path.resolve(stateStoreDir, `stateStore.${dateStr}.json`);
+      return featherClient()
+        .service('files')
+        .get(stateStorePath, {
+          query: {
+            copyTo: backupPath,
+            watching: 'false',
+          },
+        });
+    }
+
+    return Promise.reject(new Error('Backup only supported in Electron'));
   }
 
   /**
@@ -482,7 +487,7 @@ export default class Store {
   load() {
     featherClient()
       .service('files')
-      .get(stateStore, {
+      .get(stateStorePath, {
         query: {
           watching: 'false',
         },
@@ -507,11 +512,11 @@ export default class Store {
           console.log(
             "State store doesn't exist. A new one will be created after app close or refreshing",
           );
+          Broker.emit(EventType.APP_READY);
         } else {
           console.error(err);
+          Broker.emit(EventType.APP_CRASHED);
         }
-
-        Broker.emit(EventType.APP_CRASHED);
       });
   }
 
@@ -522,7 +527,7 @@ export default class Store {
     return featherClient()
       .service('files')
       .create({
-        _id: stateStore,
+        _id: stateStorePath,
         content: this.dump(),
         watching: false,
       })
@@ -538,7 +543,7 @@ export default class Store {
       const fs = window.require('fs');
 
       const content = this.dump();
-      fs.writeFileSync(stateStore, content);
+      fs.writeFileSync(stateStorePath, content);
     }
   }
 
