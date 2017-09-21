@@ -474,9 +474,9 @@ export default class Store {
             watching: 'false',
           },
         });
-    } else {
-      return Promise.reject(new Error('Backup only supported in Electron'));
     }
+
+    return Promise.reject(new Error('Backup only supported in Electron'));
   }
 
   /**
