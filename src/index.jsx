@@ -70,15 +70,21 @@ const renderApp = () => {
   };
 
   render(App);
-  // Hot Module Replacement API
-  if (module.hot) {
-    module.hot.accept('./components/App', () => {
-      render(App);
-    });
-  }
 
-  if (IS_ELECTRON) {
-    ipcRenderer.send(EventType.APP_READY);
+  // if any exception happens in non-byo mode, code beyond this point won't get executed
+
+  if (process.env.NODE_ENV === 'development') {
+    // Hot Module Replacement API
+    if (module.hot) {
+      module.hot.accept('./components/App', () => {
+        render(App);
+      });
+    }
+
+    // developers should see the red screen of death ASAP
+    if (IS_ELECTRON) {
+      ipcRenderer.send(EventType.APP_READY);
+    }
   }
 };
 
@@ -86,6 +92,10 @@ Broker.once(EventType.APP_READY, renderApp);
 
 Broker.once(EventType.APP_RENDERED, () => {
   console.log('App Rendered successfully !!!!!!!');
+
+  if (IS_ELECTRON) {
+    ipcRenderer.send(EventType.APP_READY);
+  }
 });
 
 Broker.once(EventType.APP_CRASHED, () => {
@@ -105,6 +115,7 @@ Broker.once(EventType.APP_CRASHED, () => {
 
       dialog.showMessageBox(currentWindow, {
         title: 'Error',
+        buttons: ['OK'],
         message:
           err.message,
       });
