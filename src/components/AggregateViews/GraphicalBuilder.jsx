@@ -68,7 +68,6 @@ export default class GraphicalBuilder extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       ).selectedBlock,
       colorMatching: [],
-      db: props.db,
       collection: props.collection,
       isLoading: false
     };
