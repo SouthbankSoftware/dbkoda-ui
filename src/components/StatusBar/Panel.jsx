@@ -20,15 +20,18 @@
  *
  * @Author: mike
  * @Date:   2017-09-20 10:35:04
- * @Email:  chris@southbanksoftware.com
+ * @Email:  mike@southbanksoftware.com
  * @Last modified by:   mike
  * @Last modified time: 2017-09-20 10:35:00
  */
 
 /* eslint no-prototype-builtins:warn */
+/* eslint jsx-a11y/no-static-element-interactions:warn */
 
 import React from 'react';
-import { AnchorButton, Intent } from '@blueprintjs/core';
+import { action } from 'mobx';
+
+import { AnchorButton, Intent, Alert } from '@blueprintjs/core';
 import './style.scss';
 
 export default class Panel extends React.Component {
@@ -36,17 +39,206 @@ export default class Panel extends React.Component {
     super(props);
 
     this.state = {
-      debug: false,
+      isLodgeBugAlertOpen: false,
+      isLodgeBugPending: false,
+      isFeedbackAlertOpen: false,
+      isSupportBundleReady: false,
+      os: false,
+      debug: true, // Enable for additional logging comments during development.
     };
+    const os = require('os').release();
+    if (os.match(/Mac/gi)) {
+      this.state.os = 'mac';
+    } else if (os.match(/Win/gi)) {
+      this.state.os = 'win';
+    } else if (os.match(/Lin/gi)) {
+      this.state.os = 'linux';
+    }
   }
 
-  onClickFeedback() {}
+  @action.bound
+  onClickBugForum() {
+    const subject = globalString(
+      'status_bar/support_bundle/forum/default_subject',
+    );
+    const url = 'https://dbkoda.useresponse.com/topic/add?title=' + subject;
+    if (IS_ELECTRON) {
+      window.require('electron').shell.openExternal(url);
+    }
+  }
 
-  onClickSupportBundle() {}
+  @action.bound
+  onClickBugEmail() {
+    const subject = globalString(
+      'status_bar/support_bundle/email/default_subject',
+    );
+    const body = globalString('status_bar/support_bundle/email/default_body');
+    const mailToString =
+      'mailto:support@dbKoda.com?subject=' +
+      subject +
+      '&body=' +
+      body +
+      '&attachment%3D%22~%2F.dbKoda%2FsupportBundle%22';
+    if (IS_ELECTRON) {
+      window.require('electron').shell.openExternal(mailToString);
+    }
+  }
+
+  @action.bound
+  onClickFeedback() {
+    this.setState({ isFeedbackAlertOpen: true });
+  }
+
+  @action.bound
+  onConfirmFeedback() {
+    this.setState({ isFeedbackAlertOpen: false });
+  }
+
+  @action.bound
+  onCancelFeedback() {
+    this.setState({ isFeedbackAlertOpen: false });
+  }
+
+  @action.bound
+  onClickSupportBundle() {
+    this.setState({ isLodgeBugAlertOpen: true });
+  }
+
+  @action.bound
+  onCancelLodgeBug() {
+    this.setState({ isLodgeBugPending: false });
+    this.setState({ isLodgeBugAlertOpen: false });
+    this.setState({ isSupportBundleReady: false });
+  }
+
+  @action.bound
+  onConfirmLodgeBug() {
+    if (this.state.isSupportBundleReady) {
+      // Close dialogue.
+      this.setState({ isSupportBundleReady: false });
+      this.setState({ isLodgeBugAlertOpen: false });
+    } else {
+      this.setState({ isLodgeBugPending: true });
+      this.getSupportBundle().then((filePath) => {
+        if (this.state.debug) console.log('Support Bundle Created');
+        if (IS_ELECTRON) {
+          if (this.state.debug) console.log('OS Detected: ', this.state.os);
+          if (!filePath) {
+            filePath = '/Users/mike/.dbKoda/';
+            console.error('Did not recieve a file path back from controller');
+          }
+          window.require('electron').shell.showItemInFolder(filePath);
+        }
+        this.setState({ isLodgeBugPending: false });
+        this.setState({ isSupportBundleReady: true });
+      });
+    }
+  }
+
+  @action.bound
+  openDirectoryFAQ() {
+    if (IS_ELECTRON) {
+      window
+        .require('electron')
+        .shell.openExternal(
+          'https://dbkoda.useresponse.com/knowledge-base/article/how-do-i-generate-a-support-bundle',
+        );
+    }
+  }
+
+  @action.bound
+  getSupportBundle() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 3000);
+    });
+  }
+
+  @action.bound
+  renderAlerts() {
+    return (
+      <div className="SupportBundleAlerts">
+        <Alert
+          className="lodgeBugAlert"
+          isOpen={this.state.isLodgeBugAlertOpen}
+          confirmButtonText={globalString('general/confirm')}
+          onConfirm={this.onConfirmLodgeBug}
+          cancelButtonText={globalString('general/cancel')}
+          onCancel={this.onCancelLodgeBug}
+        >
+          {this.state.isSupportBundleReady ? (
+            <div className="supportBundleFinished">
+              <p className="supportBundleFinishedText">
+                {globalString(
+                  'status_bar/support_bundle/finished_text_default',
+                )}
+                <b className="directoryFAQLink" onClick={this.openDirectoryFAQ}>
+                  {globalString('status_bar/support_bundle/directory_faq_link')}
+                </b>
+              </p>
+              <AnchorButton
+                className="forumButton"
+                intent={Intent.NONE}
+                text={globalString('status_bar/support_bundle/forum/button')}
+                onClick={this.onClickBugForum}
+              />
+              <AnchorButton
+                className="emailButton"
+                intent={Intent.NONE}
+                text={globalString('status_bar/support_bundle/email/button')}
+                onClick={this.onClickBugEmail}
+              />
+            </div>
+          ) : (
+            <p>{globalString('status_bar/support_bundle/alert_text')}</p>
+          )}
+          {this.state.isLodgeBugPending && (
+            <div className="loaderWrapper">
+              <div className="loader" />
+            </div>
+          )}
+        </Alert>
+        <Alert
+          className="feedbackAlert"
+          isOpen={this.state.isFeedbackAlertOpen}
+          confirmButtonText={globalString('general/confirm')}
+          onConfirm={this.onConfirmFeedback}
+          cancelButtonText={globalString('general/cancel')}
+          onCancel={this.onCancelFeedback}
+        >
+          <p>{globalString('status_bar/feedback/alert_text')}</p>
+          <div className="npsButtons">
+            <AnchorButton
+              className="detractorButton"
+              intent={Intent.NONE}
+              text=":("
+              onClick={this.onClickFeedbackDetractor}
+            />
+            <AnchorButton
+              className="passiveButton"
+              intent={Intent.NONE}
+              text=":|"
+              onClick={this.onClickFeedbackPassive}
+            />
+            <AnchorButton
+              className="advocateButton"
+              intent={Intent.NONE}
+              text=":)"
+              onClick={this.onClickFeedbackAdvocate}
+            />
+          </div>
+          <p>{globalString('status_bar/feedback/additional_comments_label')}</p>
+          <textarea className="additionalComments" />
+        </Alert>
+      </div>
+    );
+  }
 
   render() {
     return (
       <div className="statusPanel">
+        {this.renderAlerts()}
         <div className="float_left" />
         <div className="float_right">
           <AnchorButton

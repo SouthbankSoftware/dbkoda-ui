@@ -38,3 +38,69 @@ div.statusPanel {
     }
   }
 }
+
+.pt-alert.lodgeBugAlert {
+  div.pt-alert-body {
+    div.pt-alert-contents {
+      margin-bottom: 30px;
+      div.supportBundleFinished {
+        p.supportBundleFinishedText {
+          font-weight: lighter;
+          b {
+            font-weight: bolder;
+            cursor: pointer;
+          }
+        }
+        a.pt-button {
+          margin-right: 10px;
+          font-weight: lighter !important;
+          color: $defaultFontColor !important;
+          width: 7em !important;
+          background-image: unset !important;
+          background-color: $panelLeftBackground !important;
+          border: 1px solid $dialogButtonBorder !important;
+          box-shadow: unset !important;
+        }
+        a.pt-button:hover {
+          background-color: $connectionButtonBackgroundColourHover !important;
+          color: $connectionButtonFontColourHover !important;
+        }
+      }
+    }
+  }
+  color: $defaultFontColor;
+  div.loaderWrapper {
+    width: 100%;
+    height: 200px;
+    margin-top: -100px;
+    div.loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -50px;
+      margin-left: -50px;
+      border: 16px solid $treeLoaderColorBG;
+      border-top: 16px solid $treeLoaderColor;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      order: 1;
+      position: relative;
+      animation: spin 2s linear infinite;
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.pt-alert.feedbackAlert {
+  color: $defaultFontColor;
+}
