@@ -21,14 +21,13 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-28T16:37:43+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-23T07:26:02+10:00
  */
 
 import { action, observable, runInAction } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
 import { ProfileStatus } from '#/common/Constants';
-
 import { NewToaster } from '#/common/Toaster';
 import { Intent } from '@blueprintjs/core';
 import StaticApi from './static';
@@ -209,8 +208,6 @@ export default class OutputApi {
       tabPrefix = 'EnhancedJson-';
     } else if (displayType === 'tableJson') {
       tabPrefix = 'TableView-';
-    } else {
-      tabPrefix = 'ChartView-';
     }
 
     if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
@@ -279,7 +276,7 @@ export default class OutputApi {
 
   /**
    * Creates and fills a new output with a tabular view of the selected JSON Data.
-   * 
+   *
    * @param {String} jsonStr - The JSON string that triggered the table view.
    * @param {String} outputId - The ID of the output to create a new view for,
    * @param {Object} lines - The lines in codemirror to be searched.
@@ -353,6 +350,7 @@ export default class OutputApi {
                 lastLine: false,
               };
             },
+            // FIXME what does this second function mean?
             (error) => {
               runInAction(() => {
                 NewToaster.show({

@@ -21,8 +21,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-08-28T11:11:21+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-23T07:25:53+10:00
 */
 
 import React from 'react';
@@ -30,6 +30,8 @@ import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
 import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
+import StaticApi from '~/api/static';
+import { NewToaster } from '#/common/Toaster';
 import 'codemirror/theme/material.css';
 // import objHash from 'object-hash';
 import OutputTerminal from './Terminal';
@@ -170,27 +172,31 @@ export default class Editor extends React.Component {
         >
           <MenuItem
             onClick={() => {
-              // TODO connect to real json
-              // this.props.api.initJsonView(currentJson, this.props.id, 'chartJson', lines);
+              StaticApi.parseTableJson(currentJson, lines, this.editor.getCodeMirror(), this.props.id)
+                .then((result) => {
+                  runInAction(() => {
+                    this.props.store.outputs.get(this.props.id).chartJson = {
+                      data: result,
+                      hash: Date.now().toString(),
+                    };
 
-              // Test drive: connect to DBEnvyLoad_orders.json
-              const data = require('#/ChartPanel/sampleData.json');
+                    this.props.store.outputPanel.currentTab =
+                      'ChartView-' + this.props.store.outputPanel.currentTab;
+                  });
+                })
+                .catch((err) => {
+                  runInAction(() => {
+                    NewToaster.show({
+                      message: globalString('output/editor/parseJsonError') + err.substring(0, 50),
+                      intent: Intent.DANGER,
+                      icon: '',
+                    });
+                  });
+                });
 
-              // const t0 = performance.now();
-              // const hash = objHash(data);
-              const hash = 'some_cheap_hash_here';
-              // const t1 = performance.now();
-              // console.debug(`Hashing took ${t1 - t0} ms`);
 
-              runInAction(() => {
-                this.props.store.outputs.get(this.props.id).chartJson = {
-                  data,
-                  hash,
-                };
-
-                this.props.store.outputPanel.currentTab =
-                  'ChartView-' + this.props.store.outputPanel.currentTab;
-              });
+              // const data = require('#/ChartPanel/sampleData.json');
+              // const hash = 'some_cheap_hash_here';
             }}
             text={globalString('output/editor/contextChart')}
             iconName="pt-icon-th"
