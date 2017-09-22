@@ -370,6 +370,9 @@ div.pt-dialog {
 .cm-s-ambiance .CodeMirror-linenumber {
   color: $white;
 }
+span.cm-error {
+  background-color: unset !important;
+}
 
 .CodeMirror,
 .ReactCodeMirror {
