@@ -22,7 +22,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-23T07:25:53+10:00
+ * @Last modified time: 2017-09-23T07:30:55+10:00
 */
 
 import React from 'react';
@@ -33,7 +33,6 @@ import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
 import StaticApi from '~/api/static';
 import { NewToaster } from '#/common/Toaster';
 import 'codemirror/theme/material.css';
-// import objHash from 'object-hash';
 import OutputTerminal from './Terminal';
 
 require('codemirror/mode/javascript/javascript');
@@ -193,10 +192,6 @@ export default class Editor extends React.Component {
                     });
                   });
                 });
-
-
-              // const data = require('#/ChartPanel/sampleData.json');
-              // const hash = 'some_cheap_hash_here';
             }}
             text={globalString('output/editor/contextChart')}
             iconName="pt-icon-th"
