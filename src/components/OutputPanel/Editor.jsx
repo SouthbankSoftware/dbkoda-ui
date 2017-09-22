@@ -1,4 +1,10 @@
 /*
+ * @Author: Chris Trott <chris>
+ * @Date:   2017-03-10T12:33:56+11:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-23T07:48:01+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,14 +22,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Chris Trott <chris>
- * @Date:   2017-03-10T12:33:56+11:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-09-23T07:30:55+10:00
-*/
+ */
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
@@ -107,12 +106,7 @@ export default class Editor extends React.Component {
       <div className="menuItemWrapper showJsonView" id="showJsonViewMenuItem">
         <MenuItem
           onClick={() => {
-            this.props.api.initJsonView(
-              currentJson,
-              this.props.id,
-              'enhancedJson',
-              lines,
-            );
+            this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
           }}
           text={globalString('output/editor/contextJson')}
           iconName="pt-icon-panel-stats"
@@ -122,10 +116,7 @@ export default class Editor extends React.Component {
     );
     if (process.env.NODE_ENV === 'development') {
       menuItems.push(
-        <div
-          className="menuItemWrapper showTableView"
-          id="showTableViewMenuItem"
-        >
+        <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
           <MenuItem
             iconName="pt-icon-th"
             text={globalString('output/editor/contextTable')}
@@ -165,13 +156,15 @@ export default class Editor extends React.Component {
         </div>,
       );
       menuItems.push(
-        <div
-          className="menuItemWrapper showChartView"
-          id="showChartViewMenuItem"
-        >
+        <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
           <MenuItem
             onClick={() => {
-              StaticApi.parseTableJson(currentJson, lines, this.editor.getCodeMirror(), this.props.id)
+              StaticApi.parseTableJson(
+                currentJson,
+                lines,
+                this.editor.getCodeMirror(),
+                this.props.id,
+              )
                 .then((result) => {
                   runInAction(() => {
                     this.props.store.outputs.get(this.props.id).chartJson = {
