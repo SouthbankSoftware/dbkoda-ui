@@ -1,4 +1,10 @@
 /*
+ * @Author: Chris Trott <chris>
+ * @Date:   2017-03-10T12:33:56+11:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-23T07:48:01+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,22 +22,16 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Chris Trott <chris>
- * @Date:   2017-03-10T12:33:56+11:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-08-28T11:11:21+10:00
-*/
+ */
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import CodeMirror from 'react-codemirror';
 import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
+import StaticApi from '~/api/static';
+import { NewToaster } from '#/common/Toaster';
 import 'codemirror/theme/material.css';
-// import objHash from 'object-hash';
 import OutputTerminal from './Terminal';
 
 require('codemirror/mode/javascript/javascript');
@@ -106,12 +106,7 @@ export default class Editor extends React.Component {
       <div className="menuItemWrapper showJsonView" id="showJsonViewMenuItem">
         <MenuItem
           onClick={() => {
-            this.props.api.initJsonView(
-              currentJson,
-              this.props.id,
-              'enhancedJson',
-              lines,
-            );
+            this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
           }}
           text={globalString('output/editor/contextJson')}
           iconName="pt-icon-panel-stats"
@@ -121,10 +116,7 @@ export default class Editor extends React.Component {
     );
     if (process.env.NODE_ENV === 'development') {
       menuItems.push(
-        <div
-          className="menuItemWrapper showTableView"
-          id="showTableViewMenuItem"
-        >
+        <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
           <MenuItem
             iconName="pt-icon-th"
             text={globalString('output/editor/contextTable')}
@@ -164,33 +156,35 @@ export default class Editor extends React.Component {
         </div>,
       );
       menuItems.push(
-        <div
-          className="menuItemWrapper showChartView"
-          id="showChartViewMenuItem"
-        >
+        <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
           <MenuItem
             onClick={() => {
-              // TODO connect to real json
-              // this.props.api.initJsonView(currentJson, this.props.id, 'chartJson', lines);
+              StaticApi.parseTableJson(
+                currentJson,
+                lines,
+                this.editor.getCodeMirror(),
+                this.props.id,
+              )
+                .then((result) => {
+                  runInAction(() => {
+                    this.props.store.outputs.get(this.props.id).chartJson = {
+                      data: result,
+                      hash: Date.now().toString(),
+                    };
 
-              // Test drive: connect to DBEnvyLoad_orders.json
-              const data = require('#/ChartPanel/sampleData.json');
-
-              // const t0 = performance.now();
-              // const hash = objHash(data);
-              const hash = 'some_cheap_hash_here';
-              // const t1 = performance.now();
-              // console.debug(`Hashing took ${t1 - t0} ms`);
-
-              runInAction(() => {
-                this.props.store.outputs.get(this.props.id).chartJson = {
-                  data,
-                  hash,
-                };
-
-                this.props.store.outputPanel.currentTab =
-                  'ChartView-' + this.props.store.outputPanel.currentTab;
-              });
+                    this.props.store.outputPanel.currentTab =
+                      'ChartView-' + this.props.store.outputPanel.currentTab;
+                  });
+                })
+                .catch((err) => {
+                  runInAction(() => {
+                    NewToaster.show({
+                      message: globalString('output/editor/parseJsonError') + err.substring(0, 50),
+                      intent: Intent.DANGER,
+                      icon: '',
+                    });
+                  });
+                });
             }}
             text={globalString('output/editor/contextChart')}
             iconName="pt-icon-th"

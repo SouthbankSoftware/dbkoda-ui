@@ -130,7 +130,6 @@
     "mousetrap-global-bind": "^1.1.0",
     "node-fetch": "^1.7.1",
     "node-sass": "^4.5.3",
-    "object-hash": "^1.1.8",
     "package": "^1.0.1",
     "postcss-loader": "^2.0.5",
     "precss": "^1.4.0",

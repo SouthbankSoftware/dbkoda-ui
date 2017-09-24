@@ -1,4 +1,10 @@
 /*
+ * @Author: Michael Harrison
+ * @Date:   2017-07-19 11:17:46
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-22T16:03:54+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,14 +24,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: Michael Harrison
- * @Date:   2017-07-19 11:17:46
- * @Email:  mike@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2017-07-19 11:17:49
- */
-
 /* eslint import/no-dynamic-require: 0 */
 
 import React from 'react';
@@ -43,6 +41,7 @@ import FirstBlockTarget from './AggregateBlocks/FirstBlockTaget.jsx';
 import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
 import { AggregateCommands } from './AggregateCommands.js';
+import GenerateChartCheckbox from './GenerateChartCheckbox';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -319,7 +318,7 @@ export default class GraphicalBuilder extends React.Component {
   /**
    * Used to select a block and set it as the current, then update
    * the relevant other panels.
-   * 
+   *
    * @param {Integer} index - The index of the block to be seleceted
    * @return {Promise} - Returns a new promise objectfor completion of the block selection.
    */
@@ -695,7 +694,7 @@ export default class GraphicalBuilder extends React.Component {
 
   /**
    * Validates that a step is valid before setting all steps in the pipeline.
-   * 
+   *
    * @param {Object} step - The Step object to be validated.
    * @return {Boolean} - Whether or not the step is valid.
    */
@@ -943,7 +942,7 @@ export default class GraphicalBuilder extends React.Component {
 
    /**
    * Sets the output to loading while it fetches results.
-   * 
+   *
    * @param {Object} editorId - The editor to update the output for.
    */
   @action.bound
@@ -954,7 +953,7 @@ export default class GraphicalBuilder extends React.Component {
 
   /**
    * Sets the output to loading while it fetches results.
-   * 
+   *
    * @param {Object} editorId - The editor to update the output for.
    */
   @action.bound
@@ -1107,7 +1106,7 @@ export default class GraphicalBuilder extends React.Component {
 
   /**
    * Function to convert the relevant objects into an exportable format for saving.
-   * @returns {Promise} - Promise containing the resultant contents of the exportable 
+   * @returns {Promise} - Promise containing the resultant contents of the exportable
    * file.
    */
   getFileContent() {
@@ -1129,7 +1128,7 @@ export default class GraphicalBuilder extends React.Component {
   }
 
   /**
-   * 
+   *
    * @param {Object} contentObject - Object containing the aggregate builder for
    * import.
    */
@@ -1184,7 +1183,7 @@ export default class GraphicalBuilder extends React.Component {
 
   /**
    * Removes all blocks from the editor to prepare it for an import.
-   * 
+   *
    * @return {Promise} - Promise object containing a successful purging of the blocks.
    */
   removeAllBlocks() {
@@ -1330,7 +1329,7 @@ export default class GraphicalBuilder extends React.Component {
 
   /**
    * Sends a request to controller to update config for agg builder.
-   * 
+   *
    * @return {Promise} promise - The promise resolving the config update.
    */
   @action.bound
@@ -1494,6 +1493,7 @@ export default class GraphicalBuilder extends React.Component {
                   );
                 })}
               <LastBlockTarget />
+              <GenerateChartCheckbox />
             </ul>
           ) : (
             <div className="loaderWrapper">

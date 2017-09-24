@@ -1,0 +1,39 @@
+/**
+ * @Author: guiguan
+ * @Date:   2017-09-22T16:07:12+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-22T17:10:53+10:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+@import '../../styles/_defaultTheme.scss';
+
+label.GenerateChartCheckbox {
+  span.pt-control-indicator {
+    border-radius: 0 !important;
+    background-color: $editorBackground !important;
+  }
+
+  bottom: 0;
+  left: 0;
+  margin: 5px !important;
+  position: absolute;
+  background-color: $editorBackground;
+  z-index: 5;
+}
