@@ -54,6 +54,9 @@ export default observer(({
   } else {
     inputClassName += ' pt-checkbox-form';
   }
+  if (!field.value) {
+    field.value = false;
+  }
 
   return (
     <div className={fldClassName}>
