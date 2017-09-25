@@ -24,11 +24,13 @@
  * @Last modified time: 2017-09-13T09:05:09+10:00
  */
 
+import * as common from './Common.js';
+
 export const DropRole = {
   // Prefill function for create role
   dbkoda_DropRolePreFill: (params) => {
     const data = {};
-    console.log(params);
+    data.Database = params.parentDB;
     data.RoleName = params.RoleName;
     return data;
   },
@@ -37,5 +39,7 @@ export const DropRole = {
       throw new Error('dbkoda: Drop Role requires the name of the role to drop');
     }
     return true;
-  }
+  },
+  dbkoda_listdb: common.dbkoda_listdb,
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse
 };

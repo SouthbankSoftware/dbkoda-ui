@@ -1,7 +1,12 @@
 {
     "Title": "Create Role",
     "DefaultValues": {
-        "function": "dbkoda_CreateRolePreFill"
+        "function": "dbkoda_CreateRolePreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parent"
+          }
+        ]
     },
     "Fields": [
         {
@@ -38,15 +43,20 @@
           "columns": [{
               "name": "Database",
               "type": "Select",
+              "tooltip": "Applies actions to the Database",
               "lookup": "dbkoda_listdb"
             },
             {
               "name": "Collection",
-              "type": "Text"
+              "type": "Text",
+              "tooltip": "Applies actions to the Collection"
             },
             {
               "name": "Cluster",
-              "type": "Boolean"
+              "type": "Boolean",
+              "readOnly": false,
+              "tooltip": "Applies actions to the cluster (Overrides Database and Collection)",
+              "rules": "boolean"
             },
             {
               "name": "Actions",
