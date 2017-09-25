@@ -30,7 +30,7 @@
 
 import React from 'react';
 import { action } from 'mobx';
-
+import { featherClient } from '~/helpers/feathers';
 import { AnchorButton, Intent, Alert } from '@blueprintjs/core';
 import './style.scss';
 
@@ -149,9 +149,19 @@ export default class Panel extends React.Component {
   @action.bound
   getSupportBundle() {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
+      // Send request to feathers supportBundle Service
+      const service = featherClient().service('/supportBundle');
+      service.timeout = 30000;
+      service
+        .get()
+        .then((result) => {
+          console.log(result);
+          resolve(result);
+        })
+        .catch((err) => {
+          console.error(err);
+          reject(err);
+        });
     });
   }
 

@@ -45,10 +45,11 @@ div.statusPanel {
       margin-bottom: 30px;
       div.supportBundleFinished {
         p.supportBundleFinishedText {
-          font-weight: lighter;
+          font-weight: 100;
           b {
-            font-weight: bolder;
+            font-weight: bold;
             cursor: pointer;
+            text-decoration: underline;
           }
         }
         a.pt-button {
