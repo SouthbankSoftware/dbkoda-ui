@@ -245,6 +245,7 @@ class View extends React.Component {
                 !content.match(/^ *show /g) &&
                 !content.match(/^ *it */g) &&
                 !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
+                !content.match(/^ *var/g) &&
                 !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
               ) {
                 NewToaster.show({
@@ -915,7 +916,8 @@ class View extends React.Component {
             codeMirrorInstance={CodeMirror}
             options={this.cmOptions}
           />
-          <TranslatorPanel value={editor.shellCode} syntax="cb"
+          <TranslatorPanel value={editor.shellCode} syntax="cb" profileId={editor.profileId}
+            shellId={editor.shellId}
             closePanel={this.closeTranslatorPanel} />
         </SplitPane>
       </div>);

@@ -37,6 +37,7 @@ import { EditorPanel } from '#/EditorPanel';
 import { OutputPanel } from '#/OutputPanel';
 import { SidebarPanel } from '#/SidebarPanel';
 import { Analytics } from '#/Analytics';
+import { StatusPanel } from '#/StatusBar';
 import EventReaction from '#/common/logging/EventReaction.jsx';
 
 import 'normalize.css/normalize.css';
@@ -51,12 +52,12 @@ import './App.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  layout: allStores.store.layout
+  layout: allStores.store.layout,
 }))
 @observer
 class App extends React.Component {
   static propTypes = {
-    layout: PropTypes.observableObject.isRequired
+    layout: PropTypes.observableObject.isRequired,
   };
   componentDidMount() {
     Broker.emit(EventType.APP_RENDERED);
@@ -84,7 +85,7 @@ class App extends React.Component {
     const { layout } = this.props;
     const splitPane2Style = {
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
     };
     let defaultOverallSplitPos;
     let defaultRightSplitPos;
@@ -119,12 +120,13 @@ class App extends React.Component {
             <OutputPanel />
           </SplitPane>
         </SplitPane>
+        <StatusPanel className="statusPanel" />
         <EventReaction />
-        {process.env.NODE_ENV !== 'production'
-          ? <div className="DevTools">
+        {process.env.NODE_ENV !== 'production' ? (
+          <div className="DevTools">
             <DevTools position={{ right: -1000, top: 200 }} />
           </div>
-          : null}
+        ) : null}
       </div>
     );
   }

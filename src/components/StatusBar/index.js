@@ -17,29 +17,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @Author: chris
- * @Date:   2017-09-12T09:19:17+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-09-13T09:05:09+10:00
+ *
+ * @Author: mike
+ * @Date:   2017-09-20 10:34:01
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2017-09-20 10:34:08
  */
 
-import * as common from './Common.js';
-
-export const DropRole = {
-  // Prefill function for create role
-  dbkoda_DropRolePreFill: (params) => {
-    const data = {};
-    data.Database = params.parentDB;
-    data.RoleName = params.RoleName;
-    return data;
-  },
-  dbkoda_validateDropRole: (inputDoc) => {
-    if (!Object.prototype.hasOwnProperty.call(inputDoc, 'RoleName')) {
-      throw new Error('dbkoda: Drop Role requires the name of the role to drop');
-    }
-    return true;
-  },
-  dbkoda_listdb: common.dbkoda_listdb,
-  dbkoda_listdb_parse: common.dbkoda_listdb_parse
-};
+export StatusPanel from './Panel.jsx';
