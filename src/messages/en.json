@@ -1,5 +1,9 @@
 {
   "en": {
+    "general": {
+      "confirm": "Okay",
+      "cancel": "Cancel"
+    },
     "aggregate_builder": {
       "palette_title": "Pipeline Palette",
       "details_title": "Stage Details",
@@ -514,6 +518,33 @@
         "noHeaderLine": {
           "label": "noHeaderLine",
           "tooltip": "Don't create header lines in exported data"
+        }
+      }
+    },
+    "status_bar": {
+      "feedback": {
+        "button_title": "Feedback",
+        "alert_text": "Please let us know what you think of dbKoda.",
+        "additional_comments_label": "Additional Comments:"
+      },
+      "support_bundle": {
+        "button_title": "Lodge Bug",
+        "alert_text":
+          "Pressing okay will cause the application to bundle up some logs about your experience into a compressed file, this file can then be uploaded to the dbKoda team to help solve your bug. This may take a small amount of time.",
+        "finished_text_default":
+          "Support bundle has been created and is avaliable in your dbKoda directory. Please select one of the options below to send us your support bundle. Directory for support bundle is documented ",
+        "directory_faq_link": "here.",
+        "forum": {
+          "button": "Forum",
+          "default_subject":
+            "dbKoda%20Bug%20-%20%7BYour%20Bug%20Title%20Here%7D"
+        },
+        "email": {
+          "button": "Email",
+          "default_subject":
+            "dbKoda%20Bug%20-%20%7BYour%20Bug%20Title%20Here%7D",
+          "default_body":
+            "Please%20Describe%20your%20Bug%20or%20Issue%20Below%3A%0A%0A%0APlease%20Attach%20your%20Support%20Bundle%20to%20this%20document along with any%20other%20relevant%20files%20or%20photos.%2C%20Support%20Bundle%20location%20is%20documented%20here%3A%20https%3A%2F%2Fdbkoda.useresponse.com%2Fknowledge-base%2Farticle%2Fhow-do-i-generate-a-support-bundle%0A%0A%0AKind%20Regards%2C%0A%7BYour%20Name%7D"
         }
       }
     }

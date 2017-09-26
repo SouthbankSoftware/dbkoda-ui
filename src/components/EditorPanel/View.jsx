@@ -245,6 +245,7 @@ class View extends React.Component {
                 !content.match(/^ *show /g) &&
                 !content.match(/^ *it */g) &&
                 !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
+                !content.match(/^ *var/g) &&
                 !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
               ) {
                 NewToaster.show({
