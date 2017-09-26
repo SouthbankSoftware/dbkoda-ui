@@ -32,7 +32,7 @@ import Prettier from 'prettier-standalone';
 import 'codemirror/theme/material.css';
 import CMOptions from './CMOptions';
 import './translator.scss';
-import {DBKodaToaster, NewToaster} from '../common/Toaster';
+import {DBKodaToaster} from '../common/Toaster';
 import {featherClient} from '../../helpers/feathers';
 
 @ContextMenuTarget
@@ -149,7 +149,7 @@ export default class TranslatorPanel extends React.Component {
       <CodeMirror
         className="CodeMirror-scroll"
         options={options}
-        onChange={(doc) => this.setState({value: doc})}
+        onChange={doc => this.setState({value: doc})}
         codeMirrorInstance={CM} value={value} />
     </div>);
   }
