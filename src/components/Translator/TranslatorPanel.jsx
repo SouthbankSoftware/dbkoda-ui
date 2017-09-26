@@ -32,7 +32,7 @@ import Prettier from 'prettier-standalone';
 import 'codemirror/theme/material.css';
 import CMOptions from './CMOptions';
 import './translator.scss';
-import {DBKodaToaster} from '../common/Toaster';
+import {DBKodaToaster, NewToaster} from '../common/Toaster';
 import {featherClient} from '../../helpers/feathers';
 
 @ContextMenuTarget
@@ -91,11 +91,17 @@ export default class TranslatorPanel extends React.Component {
   executeCommands() {
     console.log('execute commands ', this.state.value);
     const service = featherClient().service('/mongo-driver');
-    service.update(this.props.profileId, {commands: this.state.value})
+    service.timeout = 30000;
+    service.update(this.props.profileId, {commands: this.state.value, shellId: this.props.shellId})
       .then((doc) => {
         console.log('execute response ', doc);
       }).catch((err) => {
-        console.error(err);
+        console.error(err.message);
+        DBKodaToaster(Position.RIGHT_TOP).show({
+          message: (<span dangerouslySetInnerHTML={{__html: err.message}} />), // eslint-disable-line react/no-danger
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
     });
   }
 
@@ -134,7 +140,7 @@ export default class TranslatorPanel extends React.Component {
   render() {
     const {value} = this.state;
     console.log('value=', value);
-    const options = {...CMOptions, readOnly: true};
+    const options = {...CMOptions};
     return (<div className="ReactCodeMirror translate-codemirror">
       <div className="syntax-selection">
 
@@ -143,6 +149,7 @@ export default class TranslatorPanel extends React.Component {
       <CodeMirror
         className="CodeMirror-scroll"
         options={options}
+        onChange={(doc) => this.setState({value: doc})}
         codeMirrorInstance={CM} value={value} />
     </div>);
   }
@@ -151,9 +158,11 @@ export default class TranslatorPanel extends React.Component {
 TranslatorPanel.defaultProps = {
   value: '',
   profileId: '',
+  shellId: '',
 };
 
 TranslatorPanel.propTypes = {
   value: React.PropTypes.string,
   profileId: React.PropTypes.string.required,
+  shellId: React.PropTypes.string.required,
 };
