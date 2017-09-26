@@ -25,7 +25,7 @@ import React from 'react';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
-import {ContextMenuTarget, Button, Intent, Position} from '@blueprintjs/core';
+import {Button, ContextMenuTarget, Intent, Position} from '@blueprintjs/core';
 import Prettier from 'prettier-standalone';
 
 import 'codemirror/theme/material.css';
@@ -64,7 +64,7 @@ export default class TranslatorPanel extends React.Component {
     } catch (_err) {
       // failed to translate code
       DBKodaToaster(Position.RIGHT_TOP).show({
-        message: (<span dangerouslySetInnerHTML={{ __html: 'Error: Failed to translate shell script.' }} />), // eslint-disable-line react/no-danger
+        message: (<span dangerouslySetInnerHTML={{__html: 'Error: Failed to translate shell script.'}} />), // eslint-disable-line react/no-danger
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down'
       });
@@ -89,12 +89,9 @@ export default class TranslatorPanel extends React.Component {
     return (<div />);
   }
 
-  render() {
-    const {value} = this.state;
-    console.log('value=', value);
-    const options = {...CMOptions, readOnly: true};
-    return (<div className="ReactCodeMirror translate-codemirror">
-      <div className="syntax-selection">
+  renderSyntaxSelection() {
+    return (
+      <div>
         <div className="pt-label">Syntax</div>
         <div className="pt-select">
           <select
@@ -106,6 +103,16 @@ export default class TranslatorPanel extends React.Component {
             <option value={SyntaxType.await}>{globalString('translator/tooltip/await')}</option>
           </select>
         </div>
+      </div>);
+  }
+
+  render() {
+    const {value} = this.state;
+    console.log('value=', value);
+    const options = {...CMOptions, readOnly: true};
+    return (<div className="ReactCodeMirror translate-codemirror">
+      <div className="syntax-selection">
+
         <Button className="close-btn pt-icon-cross" onClick={() => this.props.closePanel()} />
       </div>
       <CodeMirror

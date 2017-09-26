@@ -6472,9 +6472,9 @@ moment@^2.17.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
-mongo-shell-translator@0.0.1-alpha.12:
-  version "0.0.1-alpha.12"
-  resolved "https://registry.yarnpkg.com/mongo-shell-translator/-/mongo-shell-translator-0.0.1-alpha.12.tgz#edbaee28583e0e4c282465b6975b9fcacdab44e8"
+mongo-shell-translator@0.0.1-alpha.14:
+  version "0.0.1-alpha.14"
+  resolved "https://registry.yarnpkg.com/mongo-shell-translator/-/mongo-shell-translator-0.0.1-alpha.14.tgz#25ed30443a9279fe6372f5f2af2596c2af74c9d7"
   dependencies:
     babel-preset-stage-0 "^6.24.1"
     cross-env "^5.0.5"
@@ -7974,7 +7974,7 @@ react-dnd@^2.2.4:
     lodash "^4.2.0"
     prop-types "^15.5.8"
 
-react-dom@15.6.1, react-dom@^15.4.2:
+react-dom@15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
   dependencies:
@@ -7983,7 +7983,7 @@ react-dom@15.6.1, react-dom@^15.4.2:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-react-dom@^15.4.1, react-dom@~15.4.2:
+react-dom@^15.4.1, react-dom@^15.4.2, react-dom@~15.4.2:
   version "15.4.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.2.tgz#015363f05b0a1fd52ae9efdd3a0060d90695208f"
   dependencies:
