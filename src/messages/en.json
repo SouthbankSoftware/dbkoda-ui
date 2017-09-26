@@ -297,7 +297,8 @@
       },
       "error": {
         "tranlate_failed": "Failed to translate the script"
-      }
+      },
+      "execute": "Execute Commands"
     },
     "backuprestore": {
       "mongoExport": "Mongo Export",

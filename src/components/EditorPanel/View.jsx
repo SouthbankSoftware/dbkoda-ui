@@ -915,7 +915,7 @@ class View extends React.Component {
             codeMirrorInstance={CodeMirror}
             options={this.cmOptions}
           />
-          <TranslatorPanel value={editor.shellCode} syntax="cb"
+          <TranslatorPanel value={editor.shellCode} syntax="cb" profileId={editor.profileId}
             closePanel={this.closeTranslatorPanel} />
         </SplitPane>
       </div>);

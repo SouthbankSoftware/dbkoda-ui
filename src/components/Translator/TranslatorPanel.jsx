@@ -24,21 +24,22 @@
 import React from 'react';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
+import {action} from 'mobx';
 import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
-import {Button, ContextMenuTarget, Intent, Position} from '@blueprintjs/core';
+import {Button, ContextMenuTarget, Intent, Position, MenuItem, Menu} from '@blueprintjs/core';
 import Prettier from 'prettier-standalone';
 
 import 'codemirror/theme/material.css';
 import CMOptions from './CMOptions';
 import './translator.scss';
 import {DBKodaToaster} from '../common/Toaster';
+import {featherClient} from '../../helpers/feathers';
 
 @ContextMenuTarget
 export default class TranslatorPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {syntax: SyntaxType.callback, value: '', shellCode: ''};
-    this.syntaxChange = this.syntaxChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,13 +81,37 @@ export default class TranslatorPanel extends React.Component {
     this.setState({value: newValue, syntax});
   }
 
+  @action.bound
   syntaxChange(e) {
     this.translate(e.target.value, this.state.shellCode);
     this.setState({syntax: e.target.value});
   }
 
+  @action.bound
+  executeCommands() {
+    console.log('execute commands ', this.state.value);
+    const service = featherClient().service('/mongo-driver');
+    service.update(this.props.profileId, {commands: this.state.value})
+      .then((doc) => {
+        console.log('execute response ', doc);
+      }).catch((err) => {
+        console.error(err);
+    });
+  }
+
   renderContextMenu() {
-    return (<div />);
+    return (
+      <Menu>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.executeCommands}
+            text={globalString('editor/view/menu/executeSelected')}
+            iconName="pt-icon-chevron-right"
+            intent={Intent.NONE}
+          />
+        </div>
+      </Menu>
+    );
   }
 
   renderSyntaxSelection() {
@@ -125,8 +150,10 @@ export default class TranslatorPanel extends React.Component {
 
 TranslatorPanel.defaultProps = {
   value: '',
+  profileId: '',
 };
 
 TranslatorPanel.propTypes = {
   value: React.PropTypes.string,
+  profileId: React.PropTypes.string.required,
 };
