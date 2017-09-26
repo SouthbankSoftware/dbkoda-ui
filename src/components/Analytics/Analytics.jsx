@@ -108,11 +108,21 @@ export default class Analytics extends React.Component {
    * @param {String} comments - Any additional comments to be sent with the feedback.
    */
   feedbackEvent(feedback) {
-    this._sendEvent(
-      AnalyticsEvents[feedback.type],
-      'Comments',
-      feedback.comments,
-    );
+    let type;
+    switch (feedback.type) {
+      case 'PositiveFeedback':
+        type = AnalyticsEvents.FEEDBACK_POSITIVE;
+        break;
+      case 'NegativeFeedback':
+        type = AnalyticsEvents.FEEDBACK_NEGATIVE;
+        break;
+      case 'NeutralFeedback':
+        type = AnalyticsEvents.FEEDBACK_NEUTRAL;
+        break;
+      default:
+        break;
+    }
+    this._sendEvent(type, 'Feedback', feedback.comments);
   }
 
   /**
