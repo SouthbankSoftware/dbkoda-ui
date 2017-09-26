@@ -30,11 +30,16 @@
 
 import React from 'react';
 import { action } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import { AnchorButton, Intent, Alert, EditableText } from '@blueprintjs/core';
 import { Broker, EventType } from '~/helpers/broker';
 import './style.scss';
 
+@inject(allStores => ({
+  store: allStores.store,
+}))
+@observer
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
@@ -290,7 +295,9 @@ export default class Panel extends React.Component {
     return (
       <div className="statusPanel">
         {this.renderAlerts()}
-        <div className="float_left" />
+        <div className="float_left">
+          <span className="productVersion">{this.props.store.version}</span>
+        </div>
         <div className="float_right">
           <AnchorButton
             className="feedbackButton"

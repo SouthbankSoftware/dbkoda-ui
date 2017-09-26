@@ -35,5 +35,6 @@ module.exports = {
     FEEDBACK_POSITIVE: 'PositiveFeedback',
     FEEDBACK_NEUTRAL: 'NeutralFeedback',
     FEEDBACK_NEGATIVE: 'NegativeFeedback',
+    KEY_FEATURE_USED: 'KeyFeatureUsed',
   },
 };

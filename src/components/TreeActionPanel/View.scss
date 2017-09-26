@@ -30,17 +30,17 @@
     margin: 30px;
   }
 
-  input[type=text],
-  input[type=number],
-  input[type=Numeric],
-  input[type=password] {
+  input[type='text'],
+  input[type='number'],
+  input[type='Numeric'],
+  input[type='password'] {
     background: unset;
     color: $connectionActiveTextFieldTextColour !important;
   }
-  input[type=text]:focus,
-  input[type=number]:focus,
-  input[type=Numeric]:focus,
-  input[type=password]:focus {
+  input[type='text']:focus,
+  input[type='number']:focus,
+  input[type='Numeric']:focus,
+  input[type='password']:focus {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
@@ -52,7 +52,7 @@
 
   .form-scrollable:after {
     display: block;
-    content: "";
+    content: '';
     width: 100%;
     height: 50px;
   }
@@ -80,7 +80,8 @@
       opacity: 0.5;
     }
 
-    .pt-input, .pt-select {
+    .pt-input,
+    .pt-select {
       width: 100%;
       min-width: 200px;
       border-radius: 0px;
@@ -95,7 +96,8 @@
         width: calc(100% - 30px);
       }
       .pt-button-group {
-        .pt-icon-chevron-up, .pt-icon-chevron-down{
+        .pt-icon-chevron-up,
+        .pt-icon-chevron-down {
           border-radius: 0px !important;
         }
       }
@@ -130,14 +132,14 @@
       .pt-icon-add {
         background-color: $fieldGroupHeaderIcon !important;
         :hover {
-          background-color: #3F545B !important;
+          background-color: #3f545b !important;
         }
       }
 
       .pt-icon-trash {
         background-color: $fieldGroupHeaderDangerIcon !important;
         :hover {
-          background-color: #A5535E !important;
+          background-color: #a5535e !important;
         }
       }
 
@@ -167,7 +169,9 @@
       width: 100%;
       margin: 2px 0;
 
-      .pt-input, .pt-select, .pt-numeric-input {
+      .pt-input,
+      .pt-select,
+      .pt-numeric-input {
         width: 100%;
         min-width: 95px;
       }
@@ -215,7 +219,7 @@
     color: $fieldHeadingFontColor !important;
   }
 
-  .pt-select select{
+  .pt-select select {
     height: 30px;
     width: 100%;
     border-radius: 0px;
@@ -293,19 +297,19 @@
   }
 
   .pt-tooltip-indicator-form {
-      border-bottom: none !important;
-      vertical-align: middle !important;
+    border-bottom: none !important;
+    vertical-align: middle !important;
   }
 
   .pt-form-content-reverse {
-      display: flex;
-      width: 100%;
-      /*flex-direction: row-reverse;*/
+    display: flex;
+    width: 100%;
+    /*flex-direction: row-reverse;*/
   }
   .Select-control {
     height: 30px;
     border: none;
-    background: #BFBEC0 !important;
+    background: #bfbec0 !important;
     color: $connectionActiveTextFieldTextColour !important;
     border-radius: 0px;
   }

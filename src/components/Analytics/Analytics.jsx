@@ -83,6 +83,7 @@ export default class Analytics extends React.Component {
     this._sendEvent = this._sendEvent.bind(this);
     this.newProfileCreated = this.newProfileCreated.bind(this);
     this.feedbackEvent = this.feedbackEvent.bind(this);
+    this.keyFeatureEvent = this.keyFeatureEvent.bind(this);
   }
 
   componentDidMount() {
@@ -124,6 +125,12 @@ export default class Analytics extends React.Component {
         break;
     }
     this._sendEvent(type, 'Feedback', feedback.comments);
+  }
+
+  keyFeatureEvent(feature) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
+    }
   }
 
   /**
