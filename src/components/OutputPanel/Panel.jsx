@@ -21,8 +21,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-09-05T13:11:17+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-26T17:30:03+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction, toJS } from 'mobx';
@@ -353,20 +353,21 @@ export default class Panel extends React.Component {
           );
         }
         if (
-          this.props.store.outputs.get(editor[1].id).chartJson &&
+          this.props.store.outputs.get(editor[1].id).chartPanel &&
           process.env.NODE_ENV === 'development'
         ) {
-          const { data, hash } = this.props.store.outputs.get(editor[1].id).chartJson;
+          const editorId = editor[1].id;
+          const tabId = `Chart-${editorId}`;
+
           arrTabs.push(
             <Tab2
               className={
                 tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
               }
-              key={'ChartView-' + editor[1].id}
-              id={'ChartView-' + editor[1].id}
-              title={'ChartView-' + editorTitle}
+              id={tabId}
+              title="Chart"
               panel={
-                <ChartPanel data={data} hash={hash} />
+                <ChartPanel editorId={editorId} />
               }
             />,
           );

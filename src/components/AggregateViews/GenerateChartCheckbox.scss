@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-09-22T16:07:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-22T17:10:53+10:00
+ * @Last modified time: 2017-09-26T10:45:46+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,17 @@ label.GenerateChartCheckbox {
   span.pt-control-indicator {
     border-radius: 0 !important;
     background-color: $editorBackground !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: $connectionHeadingsFontColour !important;
+    font-size: 14px !important;
+    line-height: 14px !important;
+    outline: none;
+  }
+
+  input:focus ~ .pt-control-indicator, input[type=checkbox]:focus {
+    outline: none !important;
+    box-shadow: unset !important;
   }
 
   bottom: 0;

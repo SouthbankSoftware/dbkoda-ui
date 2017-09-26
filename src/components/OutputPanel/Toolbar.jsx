@@ -22,8 +22,8 @@
 * @Author: Chris Trott <chris>
 * @Date:   2017-03-10T12:33:56+11:00
 * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-08-16T14:26:22+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-26T15:55:26+10:00
 */
 
 import React from 'react';
@@ -144,9 +144,9 @@ export default class Toolbar extends React.Component {
         this.props.store.outputs.get(editorKey).tableJson = '';
         this.props.store.outputPanel.clearingOutput = false;
         this.props.store.outputPanel.currentTab = editorKey;
-      } else if (currentTab.startsWith('ChartView-')) {
-        const editorKey = currentTab.split('ChartView-')[1];
-        this.props.store.outputs.get(editorKey).chartJson = '';
+      } else if (currentTab.startsWith('Chart-')) {
+        const editorKey = currentTab.split('Chart-')[1];
+        this.props.store.outputs.get(editorKey).chartJson = null;
         this.props.store.outputPanel.clearingOutput = false;
         this.props.store.outputPanel.currentTab = editorKey;
       }
