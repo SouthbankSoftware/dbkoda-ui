@@ -64,6 +64,8 @@ export default class TreeActionPanel extends React.Component {
                   params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
                 } else if (treeActionPanel.treeNode.type == 'index') {
                   params[arg.name] = treeActionPanel.treeNode.refParent.refParent.json.text;
+                } else if (treeActionPanel.treeNode.type == 'role') {
+                  params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
                 }
                 break;
 

@@ -29,10 +29,7 @@ import * as common from './Common.js';
 export const AlterRole = {
   // Prefill function for alter role
   dbkoda_AlterRolePreFill: (params) => {
-    if (!params.Database) {
-      params.Database = 'admin';
-    }
-    return `db.getSiblingDB("${params.Database}").getRole("${params.RoleName}", { showPrivileges: true, showBuiltinRoles: false })`;
+    return `db.getSiblingDB("${params.parentDB}").getRole("${params.RoleName}", { showPrivileges: true, showBuiltinRoles: false })`;
   },
   dbkoda_AlterRolePreFill_parse: (roleDoc) => {
     console.log(roleDoc);
