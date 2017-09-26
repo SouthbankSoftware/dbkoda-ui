@@ -65,7 +65,6 @@ export default class ComboField extends React.Component {
 
   render() {
     const { field, showLabel, formGroup } = this.props;
-
     const fldClassName = formGroup
       ? 'pt-form-group form-group-inline'
       : 'pt-form-group pt-top-level';
@@ -84,12 +83,7 @@ export default class ComboField extends React.Component {
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
       );
-      if (field.options.multi) {
-        if (newValue[0].value == '' && newValue.length > 1) {
-          newValue.shift();
-        }
-        field.value = newValue;
-      } else if (this.options[0].value !== '') {
+      if (this.options[0].value !== '') {
         // A new option has been added.
         if (editor.type === 'aggregate') {
           const block = editor.blockList[editor.selectedBlock];
@@ -114,7 +108,15 @@ export default class ComboField extends React.Component {
           }
         }
       }
-      if (!field.options.multi) {
+      if (field.options.multi) {
+        if (newValue.length == 0) {
+          newValue.push({ label: '', value: '' });
+        } else if (newValue[0].value == '' && newValue.length > 1) {
+          newValue.shift();
+        }
+        field.value = newValue;
+        console.log(field.value);
+      } else {
         field.value = newValue && newValue.value ? newValue.value : '';
       }
       field.state.form.submit();

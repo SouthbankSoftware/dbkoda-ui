@@ -99,9 +99,6 @@ export default class FormBuilder {
       res.fieldBinding = 'ComboField';
       res.multi = defField.multi;
     }
-    if (defField.type == 'MultiCombo') {
-      res.fieldBinding = 'MultiComboField';
-    }
     return res;
   };
   /**
