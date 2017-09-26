@@ -3,7 +3,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-23T07:48:01+10:00
+ * @Last modified time: 2017-09-26T16:01:21+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -159,21 +159,17 @@ export default class Editor extends React.Component {
         <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
           <MenuItem
             onClick={() => {
+              const editorId = this.props.id;
+
               StaticApi.parseTableJson(
                 currentJson,
                 lines,
                 this.editor.getCodeMirror(),
-                this.props.id,
+                editorId,
               )
                 .then((result) => {
                   runInAction(() => {
-                    this.props.store.outputs.get(this.props.id).chartJson = {
-                      data: result,
-                      hash: Date.now().toString(),
-                    };
-
-                    this.props.store.outputPanel.currentTab =
-                      'ChartView-' + this.props.store.outputPanel.currentTab;
+                    this.props.api.outputApi.showChartPanel(editorId, result);
                   });
                 })
                 .catch((err) => {

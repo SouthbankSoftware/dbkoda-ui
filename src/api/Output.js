@@ -22,10 +22,10 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-23T07:26:02+10:00
+ * @Last modified time: 2017-09-26T15:49:52+10:00
  */
 
-import { action, observable, runInAction } from 'mobx';
+import { action, observable, runInAction, extendObservable } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
 import { ProfileStatus } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
@@ -369,5 +369,33 @@ export default class OutputApi {
         },
       );
     }
+  }
+
+  @action.bound
+  showChartPanel(editorId, data) {
+    const { outputs, outputPanel } = this.store;
+    const output = outputs.get(editorId);
+
+    if (!output.chartPanel) {
+      extendObservable(output, {
+        chartPanel: observable.shallowObject({
+          data,
+          dataTreeWidth: 250, // default dataTreeWidth
+          chartWidth: 0,
+          chartHeight: 0,
+          schema: null,
+          barChartData: null,
+          chartComponentX: null,
+          chartComponentY: null,
+          chartComponentCenter: null,
+        })
+      });
+    } else {
+      _.assign(output.chartPanel, {
+        data
+      });
+    }
+
+    outputPanel.currentTab = `Chart-${editorId}`;
   }
 }

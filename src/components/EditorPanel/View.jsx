@@ -917,6 +917,7 @@ class View extends React.Component {
             options={this.cmOptions}
           />
           <TranslatorPanel value={editor.shellCode} syntax="cb" profileId={editor.profileId}
+            shellId={editor.shellId}
             closePanel={this.closeTranslatorPanel} />
         </SplitPane>
       </div>);
