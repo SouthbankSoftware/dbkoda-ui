@@ -30,6 +30,7 @@
 import React from 'react';
 import { action } from 'mobx';
 import { inject } from 'mobx-react';
+import { Broker, EventType } from '~/helpers/broker';
 import JSONViewer from './react-json-viewer/JSONViewer.jsx';
 import Toolbar from './Toolbar.jsx';
 
@@ -51,6 +52,7 @@ export default class Panel extends React.Component {
 
     // Enables developer console logging.
     this.debug = false;
+    Broker.emit(EventType.FEATURE_USE, 'TableView');
   }
 
   @action.bound

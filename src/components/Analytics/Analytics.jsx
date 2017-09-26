@@ -89,11 +89,13 @@ export default class Analytics extends React.Component {
   componentDidMount() {
     Broker.on(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
     Broker.on(EventType.FEEDBACK, this.feedbackEvent);
+    Broker.on(EventType.FEATURE_USE, this.keyFeatureEvent);
   }
 
   componentWillUnmount() {
     Broker.off(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
     Broker.off(EventType.FEEDBACK, this.feedbackEvent);
+    Broker.off(EventType.FEATURE_USE, this.keyFeatureEvent);
   }
 
   /**

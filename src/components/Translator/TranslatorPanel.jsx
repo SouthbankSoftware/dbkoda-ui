@@ -26,6 +26,7 @@ import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 import {action} from 'mobx';
 import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
+import { Broker, EventType } from '~/helpers/broker';
 import {Button, ContextMenuTarget, Intent, Position, MenuItem, Menu} from '@blueprintjs/core';
 import Prettier from 'prettier-standalone';
 
@@ -40,6 +41,7 @@ export default class TranslatorPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {syntax: SyntaxType.callback, value: '', shellCode: ''};
+    Broker.emit(EventType.FEATURE_USE, 'NodeTranslator');
   }
 
   componentWillReceiveProps(nextProps) {
