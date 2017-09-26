@@ -22,7 +22,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-26T17:30:03+10:00
+ * @Last modified time: 2017-09-27T07:49:45+10:00
  */
 import React from 'react';
 import { action, reaction, runInAction, toJS } from 'mobx';
@@ -365,6 +365,7 @@ export default class Panel extends React.Component {
                 tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
               }
               id={tabId}
+              key={tabId}
               title="Chart"
               panel={
                 <ChartPanel editorId={editorId} />
