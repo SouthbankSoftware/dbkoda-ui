@@ -56,10 +56,11 @@ export default class Analytics extends React.Component {
     }
     ReactGA.set({ page: siteUrl });
 
+    const appVersion = this.props.store.version;
+
     if (this.props.store.userPreferences.telemetryEnabled) {
-      // TODO Get shellVersion
-      const shellVersion = '';
-      this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', shellVersion);
+      // TODO Get App Version
+      this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', appVersion);
     }
 
     /**
