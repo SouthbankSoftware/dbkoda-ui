@@ -31,6 +31,9 @@ module.exports = {
     OPT_IN: 'OptIn',
     OPT_OUT: 'OptOut',
     APP_OPEN: 'AppOpen',
-    NEW_PROFILE: 'NewProfile'
-  }
+    NEW_PROFILE: 'NewProfile',
+    FEEDBACK_POSITIVE: 'PositiveFeedback',
+    FEEDBACK_NEUTRAL: 'NeutralFeedback',
+    FEEDBACK_NEGATIVE: 'NegativeFeedback',
+  },
 };

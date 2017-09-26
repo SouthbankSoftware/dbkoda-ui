@@ -104,4 +104,62 @@ div.statusPanel {
 
 .pt-alert.feedbackAlert {
   color: $defaultFontColor;
+  div.pt-alert-body {
+    div.pt-alert-contents {
+      p {
+      }
+      div.additionalComments {
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
+      div.npsButtons {
+        display: flex;
+        flex-direction: row;
+        a.pt-button {
+          margin-right: 10px;
+          background: unset;
+          border: 1px solid $defaultFontColor;
+          color: $defaultFontColor !important;
+          border-radius: 0.5em;
+        }
+        a.pt-button:hover {
+          background-color: $connectionButtonBackgroundColourHover !important;
+          color: $connectionButtonFontColourHover !important;
+        }
+      }
+    }
+  }
+  div.pt-alert-footer {
+  }
+  .pt-editable-placeholder {
+    border-radius: 0.5em;
+    padding: 5px;
+    background-color: $navbarLeftBackground;
+    color: $defaultFontColor;
+  }
+
+  .pt-editable-text {
+    border-radius: 0.5em;
+    padding: 5px;
+    background-color: $navbarLeftBackground;
+    color: $defaultFontColor;
+  }
+
+  .pt-editable-editing {
+    border-radius: 0.5em;
+    padding: 5px;
+    background-color: $navbarLeftBackground;
+    color: $defaultFontColor;
+    .pt-editable-input {
+      background-color: $navbarLeftBackground !important;
+      color: $defaultFontColor !important;
+      height: 90% !important;
+    }
+  }
+
+  .pt-editable-editing:before {
+    border: unset;
+    background: unset;
+    box-shadow: unset;
+  }
 }

@@ -31,7 +31,8 @@
 import React from 'react';
 import { action } from 'mobx';
 import { featherClient } from '~/helpers/feathers';
-import { AnchorButton, Intent, Alert } from '@blueprintjs/core';
+import { AnchorButton, Intent, Alert, EditableText } from '@blueprintjs/core';
+import { Broker, EventType } from '~/helpers/broker';
 import './style.scss';
 
 export default class Panel extends React.Component {
@@ -44,6 +45,7 @@ export default class Panel extends React.Component {
       isFeedbackAlertOpen: false,
       isSupportBundleReady: false,
       os: false,
+      feedbackComments: '',
       debug: true, // Enable for additional logging comments during development.
     };
     const os = require('os').release();
@@ -136,6 +138,30 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
+  onClickFeedbackDetractor() {
+    Broker.emit(EventType.FEEDBACK, {
+      type: 'NegativeFeedback',
+      comments: this.state.feedbackComments,
+    });
+  }
+
+  @action.bound
+  onClickFeedbackPassive() {
+    Broker.emit(EventType.FEEDBACK, {
+      type: 'NeutralFeedback',
+      comments: this.state.feedbackComments,
+    });
+  }
+
+  @action.bound
+  onClickFeedbackAdvocate() {
+    Broker.emit(EventType.FEEDBACK, {
+      type: 'PositiveFeedback',
+      comments: this.state.feedbackComments,
+    });
+  }
+
+  @action.bound
   openDirectoryFAQ() {
     if (IS_ELECTRON) {
       window
@@ -144,6 +170,11 @@ export default class Panel extends React.Component {
           'https://dbkoda.useresponse.com/knowledge-base/article/how-do-i-generate-a-support-bundle',
         );
     }
+  }
+
+  @action.bound
+  updateFeedBack(string) {
+    this.setState({ feedbackComments: string });
   }
 
   @action.bound
@@ -218,6 +249,18 @@ export default class Panel extends React.Component {
           onCancel={this.onCancelFeedback}
         >
           <p>{globalString('status_bar/feedback/alert_text')}</p>
+          <p>{globalString('status_bar/feedback/additional_comments_label')}</p>
+          <EditableText
+            multiline
+            minLines={4}
+            maxLines={4}
+            maxLength={256}
+            value={this.state.feedbackComments}
+            onChange={this.updateFeedBack}
+            intent={Intent.NONE}
+            placeholder="Please place and additional comments here."
+            className="additionalComments"
+          />
           <div className="npsButtons">
             <AnchorButton
               className="detractorButton"
@@ -238,8 +281,6 @@ export default class Panel extends React.Component {
               onClick={this.onClickFeedbackAdvocate}
             />
           </div>
-          <p>{globalString('status_bar/feedback/additional_comments_label')}</p>
-          <textarea className="additionalComments" />
         </Alert>
       </div>
     );
