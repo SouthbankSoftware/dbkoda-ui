@@ -55,6 +55,7 @@ export default class Explain extends React.Component {
     super(props);
 
     this.state = { viewType: 0 };
+    Broker.emit(EventType.FEATURE_USE, 'ExplainView');
   }
 
   componentDidMount() {

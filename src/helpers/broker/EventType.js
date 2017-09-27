@@ -73,4 +73,5 @@ export default {
   APP_RENDERED: 'appRendered',
   APP_CRASHED: 'appCrashed',
   FEEDBACK: 'feedback',
+  FEATURE_USE: 'feature::use',
 };

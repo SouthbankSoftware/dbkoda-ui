@@ -296,7 +296,9 @@ export default class Panel extends React.Component {
       <div className="statusPanel">
         {this.renderAlerts()}
         <div className="float_left">
-          <span className="productVersion">{this.props.store.version}</span>
+          <span className="productVersion">
+            {'v' + this.props.store.version}
+          </span>
         </div>
         <div className="float_right">
           <AnchorButton
