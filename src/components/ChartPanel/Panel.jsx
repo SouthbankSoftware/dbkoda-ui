@@ -133,7 +133,11 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   get barChartData(): BarChartData {
     const { chartComponentX, chartComponentY, chartComponentCenter } = this.props.store.chartPanel;
 
-    return this._generateChartData(chartComponentX, chartComponentY, chartComponentCenter);
+    return this._generateChartData(
+      chartComponentX,
+      chartComponentY,
+      chartComponentCenter,
+    );
   }
 
   _getComponentsForBarChart(
@@ -241,7 +245,8 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       }
 
       if (numericalBin !== 'other') {
-        const size = numericalBinMap.size - (numericalBinMap.has('other') ? 1 : 0);
+        const size =
+          numericalBinMap.size - (numericalBinMap.has('other') ? 1 : 0);
         if (size >= CHART_CENTER_LIMIT) {
           // limit exceeded, show as `other`
           numericalBin = 'other';
@@ -267,7 +272,10 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     // convert to ChartData
     const chartData = [];
     for (const [k, v] of chartDataMap.entries()) {
-      chartData.push({ [categoricalComponent.name]: k, [numericalComponent.name]: v });
+      chartData.push({
+        [categoricalComponent.name]: k,
+        [numericalComponent.name]: v,
+      });
     }
 
     chartComponentCenter.values = [...numericalBinMap.keys()];
@@ -360,31 +368,46 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
 
     const { chartComponentX, chartComponentY, chartComponentCenter } = this.props.store.chartPanel;
 
-    if (chartComponentX && chartComponentX.valueSchemaPath === targetValueSchemaPath) {
+    if (
+      chartComponentX &&
+      chartComponentX.valueSchemaPath === targetValueSchemaPath
+    ) {
       operations.push({
         action: 'unload',
         target: 'x',
       });
-    } else if (!chartComponentY || chartComponentY.valueType !== targetValueType) {
+    } else if (
+      !chartComponentY ||
+      chartComponentY.valueType !== targetValueType
+    ) {
       operations.push({
         action: 'load',
         target: 'x',
       });
     }
 
-    if (chartComponentY && chartComponentY.valueSchemaPath === targetValueSchemaPath) {
+    if (
+      chartComponentY &&
+      chartComponentY.valueSchemaPath === targetValueSchemaPath
+    ) {
       operations.push({
         action: 'unload',
         target: 'y',
       });
-    } else if (!chartComponentX || chartComponentX.valueType !== targetValueType) {
+    } else if (
+      !chartComponentX ||
+      chartComponentX.valueType !== targetValueType
+    ) {
       operations.push({
         action: 'load',
         target: 'y',
       });
     }
 
-    if (chartComponentCenter && chartComponentCenter.valueSchemaPath === targetValueSchemaPath) {
+    if (
+      chartComponentCenter &&
+      chartComponentCenter.valueSchemaPath === targetValueSchemaPath
+    ) {
       operations.push({
         action: 'unload',
         target: 'center',
@@ -428,12 +451,20 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
           <DataTree
             schema={schema}
             onChartComponentChange={this._onChartComponentChange}
-            getAllowedChartComponentOperations={this._getAllowedChartComponentOperations}
+            getAllowedChartComponentOperations={
+              this._getAllowedChartComponentOperations
+            }
             chartComponentX={chartComponentX}
             chartComponentY={chartComponentY}
             chartComponentCenter={chartComponentCenter}
           />
-          {<BarChart width={chartWidth} height={chartHeight} {...barChartData} />}
+          {
+            <BarChart
+              width={chartWidth}
+              height={chartHeight}
+              {...barChartData}
+            />
+          }
         </SplitPane>
         <ReactResizeDetector
           ref={ref => (this.resizeDetector = ref)}

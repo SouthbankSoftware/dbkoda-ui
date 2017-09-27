@@ -27,6 +27,7 @@
 
 import React from 'react';
 import { inject } from 'mobx-react';
+import { Broker, EventType } from '~/helpers/broker';
 import ReactJson from 'react-json-view';
 import './style.scss';
 
@@ -43,6 +44,7 @@ export default class Panel extends React.Component {
     this.state = { morePrevious: true, moreNext: true, collapseDepth: 1 };
     this.getNextDoc = this.getNextDoc.bind(this);
     this.getPreviousDoc = this.getPreviousDoc.bind(this);
+    Broker.emit(EventType.FEATURE_USE, 'EnhancedJSONView');
   }
 
   getNextDoc() {

@@ -8,6 +8,9 @@ div.statusPanel {
     flex-grow: 1;
     order: 1;
     padding-left: 10px;
+    span.productVersion {
+      padding-top: 10px;
+    }
   }
   div.float_right {
     display: flex;
