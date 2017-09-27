@@ -247,6 +247,11 @@ export const Form = {
       value: 'admin',
     },
     {
+      name: 'authenticationDatabase',
+      label: 'Authentication Database',
+      value: 'admin',
+    },
+    {
       name: 'ssl',
       value: false,
       label: 'SSL',
@@ -323,6 +328,7 @@ export const createFormFromProfile = (profile) => {
   fields[4].value = profile.urlRadio;
   fields[5].value = profile.url;
   fields[6].value = profile.database;
+  fields[19].value = profile.authenticationDatabase;
   fields[7].value = profile.ssl;
   fields[8].value = profile.sha;
   fields[9].value = profile.username;

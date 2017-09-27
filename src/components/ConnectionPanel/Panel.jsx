@@ -228,9 +228,7 @@ export default class Panel extends React.Component {
           text="X"
           onClick={this.props.close}
         />
-        <h3 className="form-title">
-          {title}
-        </h3>
+        <h3 className="form-title">{title}</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
           <Input
             field={form.$('alias')}
@@ -281,11 +279,14 @@ export default class Panel extends React.Component {
           <div className="database-form pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
           </div>
+          <div className="authentication-database-form pt-form-group pt-inline zero-margin">
+            <Input field={form.$('authenticationDatabase')} showLabel />
+          </div>
           <div className="profile-separator" />
           <div className="ssh-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssh')} />{' '}
           </div>
-          {form.$('ssh').get('value') &&
+          {form.$('ssh').get('value') && (
             <div>
               <div className="remoteHost-form pt-form-group pt-inline zero-margin">
                 <Input field={form.$('remoteHost')} showLabel />
@@ -320,10 +321,11 @@ export default class Panel extends React.Component {
                   onChange={this._keyRadioOnChange}
                 />
 
-                <FileInput field={form.$('sshKeyFile')}
+                <FileInput
+                  field={form.$('sshKeyFile')}
                   divOnClick={this._onClickKey}
                   divOnFocus={this._onClickKey}
-                  />
+                />
 
                 <Input
                   field={form.$('passPhrase')}
@@ -331,7 +333,8 @@ export default class Panel extends React.Component {
                   divOnFocus={this._onClickKey}
                 />
               </div>
-            </div>}
+            </div>
+          )}
           <div className="profile-separator" />
           <div className="ssl-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssl')} />

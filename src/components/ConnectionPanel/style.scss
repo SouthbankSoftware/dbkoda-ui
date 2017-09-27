@@ -34,15 +34,15 @@
   .pt-form-group.pt-inline {
     align-items: stretch;
   }
-  input[type=text],
-  input[type=number],
-  input[type=password] {
+  input[type='text'],
+  input[type='number'],
+  input[type='password'] {
     background: unset;
     color: $connectionActiveTextFieldTextColour !important;
   }
-  input[type=text]:focus,
-  input[type=number]:focus,
-  input[type=password]:focus {
+  input[type='text']:focus,
+  input[type='number']:focus,
+  input[type='password']:focus {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
@@ -131,6 +131,17 @@
         display: flex;
         flex-direction: column;
         label.database-label {
+          font-size: 12pt;
+          font-weight: normal;
+          color: $connectionHeadingsFontColour;
+        }
+      }
+    }
+    div.authentication-database-form {
+      div.authenticationDatabase-input-content {
+        display: flex;
+        flex-direction: column;
+        label.authenticationDatabase-label {
           font-size: 12pt;
           font-weight: normal;
           color: $connectionHeadingsFontColour;
@@ -369,16 +380,13 @@
   .sshKeyFile-input,
   .passPhrase-input-content .pt-form-content,
   .passPhrase-input,
-  .pt-file-upload,
-  {
+  .pt-file-upload {
     width: 100%;
   }
-  .sshKeyFile-input-content
-  {
+  .sshKeyFile-input-content {
     width: 60%;
   }
-  .passPhrase-input-content
-  {
+  .passPhrase-input-content {
     width: 40%;
   }
   .port-input {
