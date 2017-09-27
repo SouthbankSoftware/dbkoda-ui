@@ -200,6 +200,7 @@ const ConnectionPanel = ({
     }
 
     query.database = data.database;
+    query.authenticationDatabase = data.authenticationDatabase;
     query.url = connectionUrl;
     query.ssl = data.ssl;
     query.test = data.test;
