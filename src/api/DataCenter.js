@@ -11,6 +11,7 @@ import OutputApi from './Output';
 import EditorApi from './Editor';
 import ProfileApi from './Profile';
 import TreeApi from './Tree';
+import DrillApi from './Drill';
 
 export default class DataCenter {
   store;
@@ -22,22 +23,30 @@ export default class DataCenter {
     this.editorApi = new EditorApi(store, this);
     this.profileApi = new ProfileApi(store, this);
     this.treeApi = new TreeApi(store, this);
+    this.drillApi = new DrillApi(store, this);
 
     this.init = this.init.bind(this);
 
+    // Output API public functions
     this.addOutput = this.outputApi.addOutput.bind(this);
     this.removeOutput = this.outputApi.removeOutput.bind(this);
     this.initJsonView = this.outputApi.initJsonView.bind(this);
     this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(this);
 
+    // Editor API public functions
     this.addEditor = this.editorApi.addEditor.bind(this);
     this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);
     this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
     this.removeEditor = this.editorApi.removeEditor.bind(this);
 
+    // Tree API public functions
     this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);
 
+    // Profile API public functions
     this.profileCreated = this.profileApi.profileCreated.bind(this);
+
+    // Drill API public functions
+    this.addNewEditorForDrill = this.drillApi.addNewEditorForDrill.bind(this);
   }
 
   init() {

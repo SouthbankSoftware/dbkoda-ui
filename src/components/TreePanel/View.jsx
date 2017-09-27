@@ -284,6 +284,9 @@ export default class TreeView extends React.Component {
         case 'DbStorageStats':
           this.showStorageStatsView();
           break;
+        case 'DrillDatabase':
+          this.props.api.addNewEditorForDrill({db: this.nodeRightClicked.text});
+          break;
         default:
           console.error('Tree Action not defined: ', action);
           break;
