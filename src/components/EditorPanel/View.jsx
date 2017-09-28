@@ -6,8 +6,6 @@
  * @Last modified time: 2017-08-29T12:46:33+10:00
  */
 
-
-
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,10 +33,10 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
 import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
-import {inject, PropTypes} from 'mobx-react';
-import {featherClient} from '~/helpers/feathers';
-import {action, reaction, runInAction} from 'mobx';
-import {ContextMenuTarget, Intent, Menu, MenuItem} from '@blueprintjs/core';
+import { inject, PropTypes } from 'mobx-react';
+import { featherClient } from '~/helpers/feathers';
+import { action, reaction, runInAction } from 'mobx';
+import { ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';
 import React from 'react';
@@ -46,6 +44,7 @@ import CodeMirrorEditor from '#/common/CodeMirror';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/xml/xml';
+import 'codemirror/mode/sql/sql';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/addon/selection/active-line.js';
 import 'codemirror/addon/display/autorefresh.js';
@@ -70,13 +69,13 @@ import '#/common/MongoScript.js';
 
 import { DropTarget } from 'react-dnd';
 import 'codemirror/theme/material.css';
-import { DragItemTypes } from '#/common/Constants.js';
+import { DragItemTypes, EditorTypes } from '#/common/Constants.js';
 import { NewToaster } from '#/common/Toaster';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
 import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
-import {TranslatorPanel} from '../Translator';
+import { TranslatorPanel } from '../Translator';
 
 /**
  * editorTarget object for helping with drag and drop actions?
@@ -90,7 +89,7 @@ const editorTarget = {
   drop(props, monitor) {
     const item = monitor.getItem();
     props.onDrop(item);
-  }
+  },
 };
 
 /**
@@ -102,21 +101,21 @@ function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-    isOverCurrent: monitor.isOver({ shallow: true })
+    isOverCurrent: monitor.isOver({ shallow: true }),
   };
 }
 
 /**
  * Defines the View for the CodeMirror Editor.
  */
- @inject(allStores => ({
-   store: allStores.store,
-   api: allStores.api,
- }))
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+}))
 @ContextMenuTarget
 class View extends React.Component {
   static propTypes = {
-    store: PropTypes.observableObject.isRequired
+    store: PropTypes.observableObject.isRequired,
   };
 
   constructor(props) {
@@ -139,12 +138,12 @@ class View extends React.Component {
       matchBrackets: true,
       autoCloseBrackets: true,
       foldOptions: {
-        widget: '...'
+        widget: '...',
       },
       foldGutter: true,
       gutters: [
         'CodeMirror-linenumbers',
-        'CodeMirror-foldgutter' // , 'CodeMirror-lint-markers'
+        'CodeMirror-foldgutter', // , 'CodeMirror-lint-markers'
       ],
       keyMap: 'sublime',
       extraKeys: {
@@ -154,9 +153,9 @@ class View extends React.Component {
         },
         'Ctrl-Q': function(cm) {
           cm.foldCode(cm.getCursor());
-        }
+        },
       },
-      mode: 'MongoScript'
+      mode: this.editorObject.type == EditorTypes.DRILL ? 'sql' : 'MongoScript',
     };
 
     this.reactions = [];
@@ -171,7 +170,7 @@ class View extends React.Component {
             executingEditorAll === true
           ) {
             const editor = this.props.store.editors.get(
-              this.props.store.editorPanel.activeEditorId
+              this.props.store.editorPanel.activeEditorId,
             );
             const shell = editor.shellId;
             const profileId = editor.profileId;
@@ -182,31 +181,71 @@ class View extends React.Component {
             this.props.store.editorToolbar.isActiveExecuting = true;
             // Send request to feathers client
             const type = editor.type;
-            const service = type && type === 'os' ? featherClient().service('/os-execution') : featherClient().service('/mongo-shells');
-            service.timeout = 30000;
-            service
-              .update(profileId, {
-                shellId: shell, // eslint-disable-line
-                commands: currEditorValue.replace(/\t/g, '  ')
-              })
-              .catch((err) => {
-                console.error('execute error:', err);
-                runInAction(() => {
-                  this.finishedExecution({
-                    id: this.props.store.editorPanel.activeDropdownId,
-                    shellId: shell
+            if (type == EditorTypes.DRILL) {
+              const service = featherClient().service('/drill');
+              service.timeout = 30000;
+              console.log(currEditorValue.replace(/\t/g, '  ').split('\n'));
+              service
+                .update(shell, {
+                  queries: currEditorValue.replace(/\t/g, '  ').split('\n'),
+                })
+                .then((res) => {
+                  console.log('queries result:', res);
+                  const output = {};
+                  output.id = editor.id;
+                  output.profileId = profileId;
+                  output.output = JSON.stringify(res);
+                  this.props.api.drillOutputAvailable(output);
+                  runInAction(() => {
+                    this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editorToolbar.isActiveExecuting = false;
                   });
-                  NewToaster.show({
-                    message: globalString('editor/toolbar/executionScriptFailed'),
-                    intent: Intent.DANGER,
-                    iconName: 'pt-icon-thumbs-down'
+                })
+                .catch((err) => {
+                  console.error('execute error:', err);
+                  runInAction(() => {
+                    this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editorToolbar.isActiveExecuting = false;
+                    NewToaster.show({
+                      message: globalString(
+                        'editor/toolbar/executionScriptFailed',
+                      ),
+                      intent: Intent.DANGER,
+                      iconName: 'pt-icon-thumbs-down',
+                    });
                   });
                 });
-              });
+            } else {
+              const service = type && type === 'os'
+                ? featherClient().service('/os-execution')
+                : featherClient().service('/mongo-shells');
+              service.timeout = 30000;
+              service
+                .update(profileId, {
+                  shellId: shell, // eslint-disable-line
+                  commands: currEditorValue.replace(/\t/g, '  '),
+                })
+                .catch((err) => {
+                  console.error('execute error:', err);
+                  runInAction(() => {
+                    this.finishedExecution({
+                      id: this.props.store.editorPanel.activeDropdownId,
+                      shellId: shell,
+                    });
+                    NewToaster.show({
+                      message: globalString(
+                        'editor/toolbar/executionScriptFailed',
+                      ),
+                      intent: Intent.DANGER,
+                      iconName: 'pt-icon-thumbs-down',
+                    });
+                  });
+                });
+            }
             this.props.store.editorPanel.executingEditorAll = false;
           }
-        }
-      )
+        },
+      ),
     );
 
     // React when a change occurs on the editorPanel.executingEditorLines state.
@@ -220,7 +259,7 @@ class View extends React.Component {
           ) {
             // Determine code to send.
             const editor = this.props.store.editors.get(
-              this.props.store.editorPanel.activeEditorId
+              this.props.store.editorPanel.activeEditorId,
             );
             const shell = editor.shellId;
             const id = editor.profileId;
@@ -232,7 +271,7 @@ class View extends React.Component {
             } else {
               console.log(
                 'No Highlighted Text, Executing Line: ',
-                cm.getCursor().line + 1
+                cm.getCursor().line + 1,
               );
               content = cm.getLine(cm.getCursor().line);
               // Quick check if line is a full command:
@@ -248,9 +287,11 @@ class View extends React.Component {
                 !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
               ) {
                 NewToaster.show({
-                  message: globalString('editor/toolbar/possibleMultiLineCommand'),
+                  message: globalString(
+                    'editor/toolbar/possibleMultiLineCommand',
+                  ),
                   intent: Intent.WARNING,
-                  iconName: 'pEmilt-icon-thumbs-down'
+                  iconName: 'pEmilt-icon-thumbs-down',
                 });
               }
             }
@@ -263,23 +304,25 @@ class View extends React.Component {
             service
               .update(id, {
                 shellId: shell, // eslint-disable-line
-                commands: content.replace(/\t/g, '  ')
+                commands: content.replace(/\t/g, '  '),
               })
               .catch((err) => {
                 console.error('execute error:', err);
                 runInAction(() => {
                   this.finishedExecution({ id, shellId: shell });
                   NewToaster.show({
-                    message: globalString('editor/toolbar/executionScriptFailed'),
+                    message: globalString(
+                      'editor/toolbar/executionScriptFailed',
+                    ),
                     intent: Intent.DANGER,
-                    iconName: 'pt-icon-thumbs-down'
+                    iconName: 'pt-icon-thumbs-down',
                   });
                 });
               });
             this.props.store.editorPanel.executingEditorLines = false;
           }
-        }
-      )
+        },
+      ),
     );
 
     // React when a change occurs on the dragItem.drapDrop state.
@@ -297,8 +340,8 @@ class View extends React.Component {
             }
             this.props.store.dragItem.dragDrop = false;
           }
-        }
-      )
+        },
+      ),
     );
 
     // React when receive and append a command from the output terminal
@@ -314,8 +357,8 @@ class View extends React.Component {
             this.props.store.outputPanel.sendingCommand = '';
           }
         },
-        { name: 'EditorViewReactionToTerminalPush' }
-      )
+        { name: 'EditorViewReactionToTerminalPush' },
+      ),
     );
 
     // React when a change occurs on the editorPanel.stoppingExecution state
@@ -326,52 +369,54 @@ class View extends React.Component {
           if (stoppingExecution) {
             this.props.store.editorPanel.stoppingExecution = false;
             const editor = this.props.store.editors.get(
-              this.props.store.editorPanel.activeEditorId
+              this.props.store.editorPanel.activeEditorId,
             );
             const shell = editor.shellId;
             const id = editor.profileId;
             const type = editor.type;
-            const service = type && type === 'os' ? featherClient().service('/os-execution') : featherClient().service('/mongo-stop-execution');
+            const service = type && type === 'os'
+              ? featherClient().service('/os-execution')
+              : featherClient().service('/mongo-stop-execution');
             service.timeout = 1000;
             service
               .remove(id, {
                 query: {
-                  shellId: shell
-                }
+                  shellId: shell,
+                },
               })
               .then((response) => {
                 if (response) {
                   NewToaster.show({
                     message: response.result,
                     intent: Intent.SUCCESS,
-                    iconName: 'pt-icon-thumbs-up'
+                    iconName: 'pt-icon-thumbs-up',
                   });
                 } else {
                   NewToaster.show({
                     message: globalString('editor/view/executionStopped'),
                     intent: Intent.SUCCESS,
-                    iconName: 'pt-icon-thumbs-up'
+                    iconName: 'pt-icon-thumbs-up',
                   });
                 }
                 this.finishedExecution({ id, shellId: shell });
               })
               .catch((reason) => {
                 console.error(
-                  `Stopping Execution failed for ${id} / ${shell}! ${reason.message}`
+                  `Stopping Execution failed for ${id} / ${shell}! ${reason.message}`,
                 );
                 NewToaster.show({
                   message: globalString(
                     'editor/view/executionStoppedError',
-                    reason.message
+                    reason.message,
                   ),
                   intent: Intent.DANGER,
-                  iconName: 'pt-icon-thumbs-down'
+                  iconName: 'pt-icon-thumbs-down',
                 });
                 this.finishedExecution({ id, shellId: shell });
               });
           }
-        }
-      )
+        },
+      ),
     );
 
     // react to tree action change
@@ -392,8 +437,8 @@ class View extends React.Component {
             }
             this.props.store.treeActionPanel.isNewFormValues = false;
           }
-        }
-      )
+        },
+      ),
     );
 
     // react to active editor change
@@ -406,8 +451,8 @@ class View extends React.Component {
               this.refresh();
             });
           }
-        }
-      )
+        },
+      ),
     );
 
     this.refresh = this.refresh.bind(this);
@@ -424,12 +469,15 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
 
-    const _updateUnsavedFileIndicator = _.debounce(() => {
-      const elem = document.querySelector(`#unsavedFileIndicator_${this.id}`);
-      if (elem) {
-        elem.style.opacity = this.doc.isClean() ? 0 : 1;
-      }
-    }, 300);
+    const _updateUnsavedFileIndicator = _.debounce(
+      () => {
+        const elem = document.querySelector(`#unsavedFileIndicator_${this.id}`);
+        if (elem) {
+          elem.style.opacity = this.doc.isClean() ? 0 : 1;
+        }
+      },
+      300,
+    );
     this._updateUnsavedFileIndicator = _updateUnsavedFileIndicator;
     this.editor.getCodeMirror().on('change', _updateUnsavedFileIndicator);
 
@@ -450,13 +498,19 @@ class View extends React.Component {
       });
     }
 
-    Broker.on(EventType.EXECUTION_EXPLAIN_EVENT, this.executingExplain.bind(this));
-    Broker.on(EventType.SWAP_SHELL_CONNECTION, this.swapShellConnection.bind(this));
+    Broker.on(
+      EventType.EXECUTION_EXPLAIN_EVENT,
+      this.executingExplain.bind(this),
+    );
+    Broker.on(
+      EventType.SWAP_SHELL_CONNECTION,
+      this.swapShellConnection.bind(this),
+    );
     if (this.props.editor) {
       const { profileId, shellId } = this.props.editor;
       Broker.on(
         EventType.createShellExecutionFinishEvent(profileId, shellId),
-        this.finishedExecution
+        this.finishedExecution,
       );
     }
   }
@@ -470,13 +524,13 @@ class View extends React.Component {
 
     Broker.removeListener(
       EventType.EXECUTION_EXPLAIN_EVENT,
-      this.executingExplain
+      this.executingExplain,
     );
     if (this.props.editor) {
       const { profileId, shellId } = this.props.editor;
       Broker.removeListener(
         EventType.createShellExecutionFinishEvent(profileId, shellId),
-        this.finishedExecution
+        this.finishedExecution,
       );
     }
   }
@@ -487,8 +541,7 @@ class View extends React.Component {
       let start = cm.getCursor().ch;
       let end = start;
       while (
-        end < currentLine.length &&
-        /[\w|.$]+/.test(currentLine.charAt(end))
+        end < currentLine.length && /[\w|.$]+/.test(currentLine.charAt(end))
       ) {
         end -= 1;
       }
@@ -508,23 +561,26 @@ class View extends React.Component {
         .get(id, {
           query: {
             shellId: shell,
-            command: curWord
-          }
+            command: curWord,
+          },
         })
         .then((res) => {
           if (res && res.length === 1 && res[0].trim().length === 0) {
             return;
           }
           const cursor = cm.getDoc().getCursor();
-          const from = new CodeMirror.Pos(cursor.line, cursor.ch - curWord.length);
+          const from = new CodeMirror.Pos(
+            cursor.line,
+            cursor.ch - curWord.length,
+          );
           const options = {
             hint() {
               return {
                 from,
                 to: cm.getDoc().getCursor(),
-                list: res
+                list: res,
               };
-            }
+            },
           };
           cm.showHint(options);
         });
@@ -533,7 +589,7 @@ class View extends React.Component {
 
   getActiveProfileId() {
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
+      this.props.store.editorPanel.activeEditorId,
     );
     if (editor) {
       const shell = editor.shellId;
@@ -553,10 +609,23 @@ class View extends React.Component {
   }
 
   swapShellConnection(event) {
-    const {oldId, oldShellId, id, shellId} = event;
-    if (this.props.editor && oldId === this.props.editor.profileId && oldShellId === this.props.editor.shellId) {
-      Broker.removeListener(EventType.createShellExecutionFinishEvent(this.props.editor.profileId, this.props.editor.shellId), this.finishedExecution);
-      Broker.on(EventType.createShellExecutionFinishEvent(id, shellId), this.finishedExecution);
+    const { oldId, oldShellId, id, shellId } = event;
+    if (
+      this.props.editor &&
+      oldId === this.props.editor.profileId &&
+      oldShellId === this.props.editor.shellId
+    ) {
+      Broker.removeListener(
+        EventType.createShellExecutionFinishEvent(
+          this.props.editor.profileId,
+          this.props.editor.shellId,
+        ),
+        this.finishedExecution,
+      );
+      Broker.on(
+        EventType.createShellExecutionFinishEvent(id, shellId),
+        this.finishedExecution,
+      );
       this.props.api.swapOutputShellConnection(event);
     }
   }
@@ -573,7 +642,7 @@ class View extends React.Component {
     ) {
       // Determine code to send.
       const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId
+        this.props.store.editorPanel.activeEditorId,
       );
       const { id, shell } = this.getActiveProfileId();
 
@@ -584,7 +653,7 @@ class View extends React.Component {
       } else {
         console.log(
           'No Highlighted Text, Executing Line: ',
-          cm.getCursor().line + 1
+          cm.getCursor().line + 1,
         );
         content = cm.getLine(cm.getCursor().line);
       }
@@ -593,22 +662,22 @@ class View extends React.Component {
         if (content.indexOf('count()') > 0) {
           content = content.replace(
             /\.count\(\)/,
-            '.explain("' + explainParam + '").count()'
+            '.explain("' + explainParam + '").count()',
           );
         } else if (content.indexOf('.update(') > 0) {
           content = content.replace(
             /\.update\(/,
-            '.explain("' + explainParam + '").update('
+            '.explain("' + explainParam + '").update(',
           );
         } else if (content.indexOf('.distinct(') > 0) {
           content = content.replace(
             /\.distinct\(/,
-            '.explain("' + explainParam + '").distinct('
+            '.explain("' + explainParam + '").distinct(',
           );
         } else if (content.indexOf('.aggregate') > 0) {
           content = content.replace(
             /\.aggregate\(/,
-            '.explain("' + explainParam + '").aggregate('
+            '.explain("' + explainParam + '").aggregate(',
           );
         } else if (content.match(/;$/)) {
           content = content.replace(/;$/, '.explain("' + explainParam + '");');
@@ -625,10 +694,10 @@ class View extends React.Component {
       this.props.store.editorToolbar.isActiveExecuting = true;
       service
         .update(id, {
-        shellId: shell, // eslint-disable-line
-        commands: filteredContent,
-        responseType: 'explain'
-      })
+          shellId: shell, // eslint-disable-line
+          commands: filteredContent,
+          responseType: 'explain',
+        })
         .then((response) => {
           runInAction(() => {
             this.props.store.editorToolbar.isActiveExecuting = false;
@@ -639,7 +708,7 @@ class View extends React.Component {
             shell,
             command: filteredContent,
             type: explainParam,
-            output: response
+            output: response,
           });
         })
         .catch((err) => {
@@ -647,7 +716,7 @@ class View extends React.Component {
           NewToaster.show({
             message: globalString('explain/executionError'),
             intent: Intent.DANGER,
-            iconName: 'pt-icon-thumbs-down'
+            iconName: 'pt-icon-thumbs-down',
           });
           runInAction(() => {
             editor.executing = false;
@@ -695,7 +764,7 @@ class View extends React.Component {
       this._prettify.preprocess = (code) => {
         code = code.replace(
           commentMongoCommandLinesRegex,
-          commentMongoCommandLinesReplacement
+          commentMongoCommandLinesReplacement,
         );
 
         return code;
@@ -718,12 +787,12 @@ class View extends React.Component {
       this._prettify.postprocess = (code) => {
         code = code.replace(
           uncommentMongoCommandLinesRegex,
-          uncommentMongoCommandLinesReplacement
+          uncommentMongoCommandLinesReplacement,
         );
 
         code = code.replace(
           fixFunctionChainingRegex,
-          fixFunctionChainingReplacement
+          fixFunctionChainingReplacement,
         );
 
         return code;
@@ -741,12 +810,16 @@ class View extends React.Component {
     try {
       this.setEditorValue(this._prettify(this.getEditorValue()));
     } catch (err) {
-      NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: 'Error: ' + err.message,
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down',
+      });
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().ERROR,
           EventLogging.getFragmentEnum().EDITORS,
-          'Format All failed with error: ' + err
+          'Format All failed with error: ' + err,
         );
       }
     }
@@ -760,12 +833,16 @@ class View extends React.Component {
     try {
       cm.replaceSelection(this._prettify(cm.getSelection()).trim());
     } catch (err) {
-      NewToaster.show({message: 'Error: ' + err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({
+        message: 'Error: ' + err.message,
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down',
+      });
       if (this.props.store.userPreferences.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().ERROR,
           EventLogging.getFragmentEnum().EDITORS,
-          'Format Selection failed with error: ' + err
+          'Format Selection failed with error: ' + err,
         );
       }
     }
@@ -780,13 +857,13 @@ class View extends React.Component {
       shellCode = this.getEditorValue();
     }
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
+      this.props.store.editorPanel.activeEditorId,
     );
     if (editor) {
       editor.openTranslator = true;
       try {
         editor.shellCode = shellCode;
-        this.setState({openTranslator: true});
+        this.setState({ openTranslator: true });
       } catch (err) {
         console.error('failed to translate the selected code ');
       }
@@ -815,16 +892,14 @@ class View extends React.Component {
   /**
    * Trigger an executeLine event by updating the MobX global store.
    */
-  @action
-  executeLine() {
+  @action executeLine() {
     this.props.store.editorPanel.executingEditorLines = true;
   }
 
   /**
    * Trigger an executeAll event by updating the MobX global store.
    */
-  @action
-  executeAll() {
+  @action executeAll() {
     this.props.store.editorPanel.executingEditorAll = true;
   }
 
@@ -889,10 +964,10 @@ class View extends React.Component {
   @action.bound
   closeTranslatorPanel() {
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
+      this.props.store.editorPanel.activeEditorId,
     );
     editor.openTranslator = false;
-    this.setState({openTranslator: false});
+    this.setState({ openTranslator: false });
   }
 
   /**
@@ -901,24 +976,30 @@ class View extends React.Component {
   render() {
     const { connectDropTarget, isOver } = this.props; // eslint-disable-line
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
+      this.props.store.editorPanel.activeEditorId,
     );
     if (editor && editor.openTranslator) {
-      return connectDropTarget(<div className="editorView translator-open">
-        <SplitPane
-          split="vertical"
-          primary="second"
-          defaultSize={512}
-          minSize={200}>
-          <CodeMirrorEditor
-            ref={ref => (this.editor = ref)}
-            codeMirrorInstance={CodeMirror}
-            options={this.cmOptions}
-          />
-          <TranslatorPanel value={editor.shellCode} syntax="cb"
-            closePanel={this.closeTranslatorPanel} />
-        </SplitPane>
-      </div>);
+      return connectDropTarget(
+        <div className="editorView translator-open">
+          <SplitPane
+            split="vertical"
+            primary="second"
+            defaultSize={512}
+            minSize={200}
+          >
+            <CodeMirrorEditor
+              ref={ref => (this.editor = ref)}
+              codeMirrorInstance={CodeMirror}
+              options={this.cmOptions}
+            />
+            <TranslatorPanel
+              value={editor.shellCode}
+              syntax="cb"
+              closePanel={this.closeTranslatorPanel}
+            />
+          </SplitPane>
+        </div>,
+      );
     }
     return connectDropTarget(
       <div className="editorView">
@@ -926,7 +1007,8 @@ class View extends React.Component {
           ref={ref => (this.editor = ref)}
           codeMirrorInstance={CodeMirror}
           options={this.cmOptions}
-        />{' '}
+        />
+        {' '}
         {' '}
         {' '}
         {isOver &&
@@ -939,10 +1021,10 @@ class View extends React.Component {
               width: '100%',
               zIndex: 1,
               opacity: 0.5,
-              backgroundColor: 'yellow'
+              backgroundColor: 'yellow',
             }}
           />}
-      </div>
+      </div>,
     );
   }
 }

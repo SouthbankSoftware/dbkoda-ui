@@ -32,12 +32,15 @@ export default class DataCenter {
     this.removeOutput = this.outputApi.removeOutput.bind(this);
     this.initJsonView = this.outputApi.initJsonView.bind(this);
     this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(this);
+    this.addDrillOutput = this.outputApi.addDrillOutput.bind(this);
+    this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
 
     // Editor API public functions
     this.addEditor = this.editorApi.addEditor.bind(this);
     this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);
     this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
     this.removeEditor = this.editorApi.removeEditor.bind(this);
+    this.addDrillEditor = this.editorApi.addDrillEditor.bind(this);
 
     // Tree API public functions
     this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);
@@ -47,6 +50,8 @@ export default class DataCenter {
 
     // Drill API public functions
     this.addNewEditorForDrill = this.drillApi.addNewEditorForDrill.bind(this);
+    this.checkForExistingDrillProfile = this.drillApi.checkForExistingDrillProfile.bind(this);
+    this.openEditorWithDrillProfileId = this.drillApi.openEditorWithDrillProfileId.bind(this);
   }
 
   init() {

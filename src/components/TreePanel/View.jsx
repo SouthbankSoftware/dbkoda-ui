@@ -35,6 +35,8 @@ import {
   MenuItem,
   MenuDivider,
   Intent,
+  AnchorButton,
+  Dialog
 } from '@blueprintjs/core';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
@@ -80,6 +82,8 @@ export default class TreeView extends React.Component {
 
     this.state = {
       nodes: this.props.treeState.nodes,
+      isPasswordDialogVisible: false,
+      remotePass: null,
     };
   }
   componentWillMount() {
@@ -211,11 +215,7 @@ export default class TreeView extends React.Component {
           }
         }
       }
-      return (
-        <Menu>
-          {Menus}
-        </Menu>
-      );
+      return <Menu>{Menus}</Menu>;
     }
   }
   reactionToJson;
@@ -285,7 +285,7 @@ export default class TreeView extends React.Component {
           this.showStorageStatsView();
           break;
         case 'DrillDatabase':
-          this.props.api.addNewEditorForDrill({db: this.nodeRightClicked.text});
+          this.openDrillEditor();
           break;
         default:
           console.error('Tree Action not defined: ', action);
@@ -299,9 +299,17 @@ export default class TreeView extends React.Component {
       ) {
         this.showDetailsView(this.nodeRightClicked, action);
       } else if (this.isBackupRestoreAction(action)) {
-        this.showTreeActionPanel(this.nodeRightClicked, action, EditorTypes.SHELL_COMMAND);
+        this.showTreeActionPanel(
+          this.nodeRightClicked,
+          action,
+          EditorTypes.SHELL_COMMAND,
+        );
       } else {
-        this.showTreeActionPanel(this.nodeRightClicked, action, EditorTypes.TREE_ACTION);
+        this.showTreeActionPanel(
+          this.nodeRightClicked,
+          action,
+          EditorTypes.TREE_ACTION,
+        );
       }
     }
   };
@@ -312,7 +320,8 @@ export default class TreeView extends React.Component {
     for (const editor of treeEditors) {
       if (
         editor[1].currentProfile ==
-        this.props.store.profileList.selectedProfile.id && editor[1].type == editorType
+          this.props.store.profileList.selectedProfile.id &&
+        editor[1].type == editorType
       ) {
         bExistingEditor = true;
         runInAction('update state var', () => {
@@ -375,6 +384,31 @@ export default class TreeView extends React.Component {
     });
   };
 
+  openDrillEditor = () => {
+    const drillProfileId = this.props.api.checkForExistingDrillProfile({ db: this.nodeRightClicked.text });
+    if (!drillProfileId) {
+      if (
+        this.props.store.profileList.selectedProfile &&
+        this.props.store.profileList.selectedProfile.status == 'OPEN'
+      ) {
+        if (this.props.store.profileList.selectedProfile.sha) {
+          this.setState({ isPasswordDialogVisible: true });
+        } else {
+          this.props.api.addNewEditorForDrill({ db: this.nodeRightClicked.text });
+        }
+      }
+    } else {
+      this.props.api.openEditorWithDrillProfileId(drillProfileId);
+    }
+  };
+  closePasswordDialog = () => {
+    this.setState({ isPasswordDialogVisible: false });
+  };
+
+  openDrillEditorWithPass = () => {
+    this.props.api.addNewEditorForDrill({ db: this.nodeRightClicked.text, pass: this.state.remotePass });
+  };
+
   nodeRightClicked;
   actionSelected;
 
@@ -394,6 +428,42 @@ export default class TreeView extends React.Component {
           onNodeContextMenu={this.handleNodeContextMenu}
           className={classNames}
         />
+        <Dialog
+          className="pt-dark open-profile-alert-dialog"
+          intent={Intent.PRIMARY}
+          isOpen={this.state.isPasswordDialogVisible}
+        >
+          <div className="dialogContent">
+            <p>{globalString('profile/openAlert/passwordPrompt')}</p>
+            <input
+              autoFocus
+              className="pt-input passwordInput"
+              placeholder={globalString(
+                'profile/openAlert/passwordPlaceholder',
+              )}
+              type="password"
+              dir="auto"
+              onChange={(event) => {
+                this.setState({ remotePass: event.target.value });
+              }}
+            />
+          </div>
+          <div className="dialogButtons">
+            <AnchorButton
+              className="openButton"
+              intent={Intent.SUCCESS}
+              type="submit"
+              onClick={this.openDrillEditorWithPass}
+              text={globalString('profile/openAlert/confirmButton')}
+            />
+            <AnchorButton
+              className="cancelButton"
+              intent={Intent.DANGER}
+              text={globalString('profile/openAlert/cancelButton')}
+              onClick={this.closePasswordDialog}
+            />
+          </div>
+        </Dialog>
       </div>
     );
   }
