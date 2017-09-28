@@ -75,6 +75,11 @@ export default class Panel extends React.Component {
   }
 
   @autobind
+  _onClickAuthDB() {
+    this.props.form.$('sha').set('value', true);
+  }
+
+  @autobind
   _hostRadioOnChange() {
     if (!this.props.form.$('hostRadio').get('value')) {
       this.props.form
@@ -279,9 +284,6 @@ export default class Panel extends React.Component {
           <div className="database-form pt-form-group pt-inline zero-margin">
             <Input field={form.$('database')} showLabel />
           </div>
-          <div className="authentication-database-form pt-form-group pt-inline zero-margin">
-            <Input field={form.$('authenticationDatabase')} showLabel />
-          </div>
           <div className="profile-separator" />
           <div className="ssh-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssh')} />{' '}
@@ -339,7 +341,12 @@ export default class Panel extends React.Component {
           <div className="ssl-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssl')} />
           </div>
-          <div className="sslAllowInvalidCertificates-form pt-form-group pt-inline zero-margin">
+          <div
+            className={
+              (form.$('ssl').get('value') ? ' active' : ' inactive') +
+              ' sslAllowInvalidCertificates-form pt-form-group pt-inline zero-margin'
+            }
+          >
             <Checkbox field={form.$('sslAllowInvalidCertificates')} />
           </div>
           <div className="profile-separator" />
@@ -358,6 +365,19 @@ export default class Panel extends React.Component {
             />
             <Input
               field={form.$('password')}
+              divOnClick={this._onClickUserName}
+              divOnFocus={this._onClickUserName}
+            />
+          </div>
+          <div
+            className={
+              (form.$('sha').get('value') ? ' active' : ' inactive') +
+              ' authentication-database-form pt-form-group pt-inline zero-margin'
+            }
+          >
+            <Input
+              field={form.$('authenticationDatabase')}
+              showLabel
               divOnClick={this._onClickUserName}
               divOnFocus={this._onClickUserName}
             />

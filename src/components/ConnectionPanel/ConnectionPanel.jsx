@@ -193,6 +193,8 @@ const ConnectionPanel = ({
     if (data.sha) {
       query.username = data.username;
       query.password = data.password;
+      query.password = data.password;
+      query.authenticationDatabase = data.authenticationDatabase;
     }
     if (data.ssl) {
       connectionUrl.indexOf('?') > 0
@@ -201,7 +203,6 @@ const ConnectionPanel = ({
     }
 
     query.database = data.database;
-    query.authenticationDatabase = data.authenticationDatabase;
     query.url = connectionUrl;
     query.ssl = data.ssl;
     query.sslAllowInvalidCertificates = data.sslAllowInvalidCertificates;

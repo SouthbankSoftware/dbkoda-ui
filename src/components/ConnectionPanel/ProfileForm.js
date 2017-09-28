@@ -86,9 +86,11 @@ export class ProfileForm extends MobxReactForm {
     if (value) {
       form.$('username').set('rules', 'required|string');
       form.$('password').set('rules', 'required|string');
+      form.$('authenticationDatabase').set('rules', 'string');
     } else {
       form.$('username').set('rules', '');
       form.$('password').set('rules', '');
+      form.$('authenticationDatabase').set('rules', '');
     }
   }
 
@@ -249,7 +251,6 @@ export const Form = {
     {
       name: 'authenticationDatabase',
       label: 'Authentication Database',
-      value: '',
     },
     {
       name: 'ssl',
