@@ -148,9 +148,65 @@
         }
       }
     }
+    div.ssh-form {
+      div.ssh-input-content {
+        label.ssh-input {
+          font-size: 10pt;
+          font-weight: lighter;
+          color: $connectionHeadingsFontColour !important;
+          text-align: left;
+          margin: 0;
+          span.pt-control-indicator {
+            font-size: unset;
+            font-weight: unset;
+            font-style: unset;
+            box-shadow: unset;
+            line-height: unset;
+            background: unset;
+            box-shadow: unset;
+            font-size: 11pt;
+            color: $connectionCheckboxColour;
+            border-radius: 0;
+            background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+            border: 1px solid $connectionCheckboxColour;
+          }
+          span.pt-control-indicator:hover {
+            background-color: $connectionCheckboxBackgroundColourHover;
+          }
+        }
+      }
+    }
     div.ssl-form {
       div.ssl-input-content {
         label.ssl-input {
+          font-size: 10pt;
+          font-weight: lighter;
+          color: $connectionHeadingsFontColour !important;
+          text-align: left;
+          margin: 0;
+          span.pt-control-indicator {
+            font-size: unset;
+            font-weight: unset;
+            font-style: unset;
+            box-shadow: unset;
+            line-height: unset;
+            background: unset;
+            box-shadow: unset;
+            font-size: 11pt;
+            color: $connectionCheckboxColour;
+            border-radius: 0;
+            background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+            border: 1px solid $connectionCheckboxColour;
+          }
+          span.pt-control-indicator:hover {
+            background-color: $connectionCheckboxBackgroundColourHover;
+          }
+        }
+      }
+    }
+    div.sslAllowInvalidCertificates-form {
+      div.sslAllowInvalidCertificates-input-content {
+        label.sslAllowInvalidCertificates-input {
           font-size: 10pt;
           font-weight: lighter;
           color: $connectionHeadingsFontColour !important;

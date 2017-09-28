@@ -339,6 +339,9 @@ export default class Panel extends React.Component {
           <div className="ssl-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssl')} />
           </div>
+          <div className="sslAllowInvalidCertificates-form pt-form-group pt-inline zero-margin">
+            <Checkbox field={form.$('sslAllowInvalidCertificates')} />
+          </div>
           <div className="profile-separator" />
           <Label text="Authentication" />
           <Checkbox field={form.$('sha')} />{' '}

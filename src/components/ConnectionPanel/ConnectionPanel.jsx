@@ -112,6 +112,7 @@ const ConnectionPanel = ({
         hostRadio: data.hostRadio,
         port: data.port,
         ssl: data.ssl,
+        sslAllowInvalidCertificates: data.sslAllowInvalidCertificates,
         test: data.test,
         url: data.url,
         urlRadio: data.urlRadio,
@@ -203,6 +204,7 @@ const ConnectionPanel = ({
     query.authenticationDatabase = data.authenticationDatabase;
     query.url = connectionUrl;
     query.ssl = data.ssl;
+    query.sslAllowInvalidCertificates = data.sslAllowInvalidCertificates;
     query.test = data.test;
     query.authorization = data.authorization;
     if (selectedProfile) {
