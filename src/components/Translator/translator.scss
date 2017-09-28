@@ -19,9 +19,12 @@
 
 .translator-open .ReactCodeMirror {
   .syntax-selection {
+    .nodejs-driver {
+      align-self: center;
+    }
     .close-btn {
-      margin-left: auto;
-      margin-right: 20px;
+      margin-left: 20px;
+      margin-right: auto;
     }
   }
   .CodeMirror-simplescroll-vertical {

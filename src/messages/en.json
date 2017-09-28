@@ -297,7 +297,8 @@
         "syntax": "Syntax Selection",
         "callback": "C",
         "promise": "P",
-        "await": "A"
+        "await": "A",
+        "driver-code": "Node.js Driver Code"
       },
       "error": {
         "tranlate_failed": "Failed to translate the script"
