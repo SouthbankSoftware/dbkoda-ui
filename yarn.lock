@@ -6472,15 +6472,16 @@ moment@^2.17.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
-mongo-shell-translator@0.0.1-alpha.21:
-  version "0.0.1-alpha.21"
-  resolved "https://registry.yarnpkg.com/mongo-shell-translator/-/mongo-shell-translator-0.0.1-alpha.21.tgz#98de3be483ba26dcf34804ec39aeaac8011f6e37"
+mongo-shell-translator@0.0.1-alpha.24:
+  version "0.0.1-alpha.24"
+  resolved "https://registry.yarnpkg.com/mongo-shell-translator/-/mongo-shell-translator-0.0.1-alpha.24.tgz#f97d5eb4cdf6707fe7b6fd4164323ed41b4f2d0a"
   dependencies:
     babel-preset-stage-0 "^6.24.1"
     cross-env "^5.0.5"
     escodegen "^1.8.1"
     esprima "^4.0.0"
     estraverse "^4.2.0"
+    lodash "^4.17.4"
     mongodb "^2.2.31"
     react "15.6.1"
     react-dom "15.6.1"

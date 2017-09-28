@@ -177,6 +177,7 @@ export default class FormBuilder {
       result.disabled = {};
       result.bindings = {};
       result.arrayLast = []; // an object to keep reference of array fields to add last element later before sending to the template.
+      result.multiCombo = []; // an object to keep reference of fields which are multi value combo fields
       result.options = {};
       result.values = {};
 
@@ -222,12 +223,12 @@ export default class FormBuilder {
           }
         }
         if (Object.prototype.hasOwnProperty.call(fld, 'multi')) {
-          console.log(fld);
           if (result.options[fldName]) {
             result.options[fldName].multi = fld.multi;
           } else {
             result.options[fldName] = { multi: fld.multi };
           }
+          result.multiCombo.push(fldName);
         }
 
         if (fld.fieldQuery) {
@@ -381,6 +382,28 @@ export default class FormBuilder {
 
         this.getFieldsFromDefinitions(ddd, formFunctions)
           .then((formDefs) => {
+            const traverseMultiCombo = (fldArray, frmVals, bMerge = true) => {
+              if (fldArray.length > 1) {
+                let pFld = fldArray.shift();
+                if (pFld.indexOf('[]') > 0) {
+                  pFld = pFld.replace('[]', '');
+                  for (const cFlds of frmVals[pFld]) {
+                    traverseMultiCombo(fldArray, cFlds, bMerge);
+                  }
+                } else {
+                  traverseMultiCombo(fldArray, frmVals[pFld], bMerge);
+                }
+              } else {
+                const mFld = fldArray.shift();
+                if (bMerge) {
+                  if (frmVals[mFld].length > 0) {
+                    frmVals[mFld] = frmVals[mFld].join('|');
+                  }
+                } else {
+                    frmVals[mFld] = frmVals[mFld].split('|');
+                }
+              }
+            };
             // callback function to get the updated values from the form
             const formValueUpdates = (values) => {
               if (formDefs.arrayLast.length > 0) {
@@ -391,6 +414,18 @@ export default class FormBuilder {
                     if (values[fld][idx - 1] && values[fld][idx - 1].last) {
                       values[fld][idx - 1].last = 0;
                     }
+                  }
+                }
+              }
+
+              if (formDefs.multiCombo.length > 0) {
+                for (const fld of formDefs.multiCombo) {
+                  console.log(fld);
+                  if (fld.indexOf('.') > 0) { // support for one child field so we can handle multiCombo in table/group fields
+                    const arrCFlds = fld.split('.');
+                    traverseMultiCombo(arrCFlds, values, false);
+                  } else {
+                    traverseMultiCombo([fld], values, false);
                   }
                 }
               }
@@ -414,6 +449,17 @@ export default class FormBuilder {
 
             // Update the form after prefetching the data from controller
             const updatePrefilledData = (data) => {
+              if (formDefs.multiCombo.length > 0) {
+                for (const fld of formDefs.multiCombo) {
+                  console.log(fld);
+                  if (fld.indexOf('.') > 0) { // support for one child field so we can handle multiCombo in table/group fields
+                    const arrCFlds = fld.split('.');
+                    traverseMultiCombo(arrCFlds, data);
+                  } else {
+                    traverseMultiCombo([fld], data);
+                  }
+                }
+              }
               form.mobxForm.update(data); //eslint-disable-line
               form.mobxForm.submit(); //eslint-disable-line
             };

@@ -1,4 +1,10 @@
 /*
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-26T12:18:37+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-27T17:24:30+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,13 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-26T12:18:37+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-09-26T15:49:52+10:00
  */
 
 import { action, observable, runInAction, extendObservable } from 'mobx';
@@ -66,13 +65,8 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (
-          editor.id != 'Default' &&
-          this.store.outputs.get(editor.id).output
-        ) {
-          this.store.outputs.get(editor.id).output += globalString(
-            'output/editor/restoreSession',
-          );
+        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
+          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
         if (this.debug) console.log(`create new output for ${editor.id}`);
@@ -139,21 +133,12 @@ export default class OutputApi {
       EventType.createShellOutputEvent(oldId, oldShellId),
       this.outputAvailable,
     );
-    Broker.removeListener(
-      EventType.createShellReconnectEvent(oldId, oldShellId),
-      this.onReconnect,
-    );
+    Broker.removeListener(EventType.createShellReconnectEvent(oldId, oldShellId), this.onReconnect);
 
     this.outputHash[id + '|' + shellId] = outputId;
 
-    Broker.on(
-      EventType.createShellOutputEvent(id, shellId),
-      this.outputAvailable,
-    );
-    Broker.on(
-      EventType.createShellReconnectEvent(id, shellId),
-      this.onReconnect,
-    );
+    Broker.on(EventType.createShellOutputEvent(id, shellId), this.outputAvailable);
+    Broker.on(EventType.createShellReconnectEvent(id, shellId), this.onReconnect);
   }
 
   @action.bound
@@ -248,9 +233,7 @@ export default class OutputApi {
         runInAction(
           () => {
             NewToaster.show({
-              message:
-                globalString('output/editor/parseJsonError') +
-                error.substring(0, 50),
+              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
               intent: Intent.DANGER,
               icon: '',
             });
@@ -258,9 +241,7 @@ export default class OutputApi {
           (error) => {
             runInAction(() => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -299,9 +280,7 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -309,9 +288,7 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message:
-                    globalString('output/editor/parseJsonError') +
-                    error.substring(0, 50),
+                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                   intent: Intent.DANGER,
                   icon: '',
                 });
@@ -338,9 +315,7 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -354,9 +329,7 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message:
-                    globalString('output/editor/parseJsonError') +
-                    error.substring(0, 50),
+                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                   intent: Intent.DANGER,
                   icon: '',
                 });
@@ -372,27 +345,30 @@ export default class OutputApi {
   }
 
   @action.bound
-  showChartPanel(editorId, data) {
+  showChartPanel(editorId, data, loading = false) {
     const { outputs, outputPanel } = this.store;
     const output = outputs.get(editorId);
 
     if (!output.chartPanel) {
       extendObservable(output, {
-        chartPanel: observable.shallowObject({
-          data,
-          dataTreeWidth: 250, // default dataTreeWidth
-          chartWidth: 0,
-          chartHeight: 0,
-          schema: null,
-          barChartData: null,
-          chartComponentX: null,
-          chartComponentY: null,
-          chartComponentCenter: null,
-        })
+        chartPanel: observable.shallowObject(
+          // this object must conform Store type defined at `src/components/ChartPanel/Panel.jsx:60`
+          {
+            data,
+            dataTreeWidth: 250, // default dataTreeWidth
+            chartWidth: 0,
+            chartHeight: 0,
+            chartComponentX: null,
+            chartComponentY: null,
+            chartComponentCenter: null,
+            loading,
+          },
+        ),
       });
     } else {
       _.assign(output.chartPanel, {
-        data
+        data,
+        loading,
       });
     }
 

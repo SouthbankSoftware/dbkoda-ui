@@ -3,7 +3,7 @@
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-22T16:03:54+10:00
+ * @Last modified time: 2017-09-27T16:04:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -1497,7 +1497,7 @@ export default class GraphicalBuilder extends React.Component {
                   );
                 })}
               <LastBlockTarget />
-              <GenerateChartCheckbox />
+              <GenerateChartCheckbox connectionId={this.props.editor.currentProfile} editorId={this.props.editor.id} />
             </ul>
           ) : (
             <div className="loaderWrapper">

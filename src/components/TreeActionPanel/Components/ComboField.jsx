@@ -78,7 +78,10 @@ export default class ComboField extends React.Component {
         selectClassName += ' table-field-90';
       }
     }
-
+    this.multiValues = null;
+    if (field.options.multi) {
+      this.multiValues = field.value.split('|');
+    }
     const onChange = (newValue) => {
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
@@ -114,7 +117,10 @@ export default class ComboField extends React.Component {
         } else if (newValue[0].value == '' && newValue.length > 1) {
           newValue.shift();
         }
-        field.value = newValue;
+        const arrValues = newValue.map((obj) => {
+          return obj.value;
+        });
+        field.value = arrValues.join('|');
         console.log(field.value);
       } else {
         field.value = newValue && newValue.value ? newValue.value : '';
@@ -132,7 +138,7 @@ export default class ComboField extends React.Component {
           multi={field.options.multi}
           options={this.options}
           onChange={onChange}
-          value={field.value}
+          value={(field.options.multi) ? this.multiValues : field.value}
         />
       );
     };

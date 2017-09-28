@@ -29,6 +29,9 @@ import * as common from './Common.js';
 export const CreateRole = {
   // Prefill function for create role
   dbkoda_CreateRolePreFill: (params) => {
+    if (params.Database === 'Roles') {
+      params.Database = '';
+    }
     const data = {};
     data.Database = params.Database;
     data.Roles = [];
