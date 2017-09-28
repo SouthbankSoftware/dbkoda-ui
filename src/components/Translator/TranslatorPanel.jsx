@@ -114,7 +114,7 @@ export default class TranslatorPanel extends React.Component {
           <MenuItem
             onClick={this.executeCommands}
             text={globalString('editor/view/menu/executeSelected')}
-            iconName="pt-icon-chevron-right"
+            iconName="pt-icon-double-chevron-right"
             intent={Intent.NONE}
           />
         </div>
@@ -141,11 +141,10 @@ export default class TranslatorPanel extends React.Component {
 
   render() {
     const {value} = this.state;
-    console.log('value=', value);
     const options = {...CMOptions};
     return (<div className="ReactCodeMirror translate-codemirror">
       <div className="syntax-selection">
-
+        <div className="nodejs-driver">{globalString('translator/label/driver-code')}</div>
         <Button className="close-btn pt-icon-cross" onClick={() => this.props.closePanel()} />
       </div>
       <CodeMirror
