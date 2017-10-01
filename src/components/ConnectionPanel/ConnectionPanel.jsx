@@ -85,7 +85,6 @@ const ConnectionPanel = ({
    */
   const onSuccess = action((res, data) => {
     profileList.creatingNewProfile = false;
-    console.log('connect successfully ', res);
     let message = globalString('connection/success');
     let position = Position.LEFT_BOTTOM;
     if (!data.test) {
