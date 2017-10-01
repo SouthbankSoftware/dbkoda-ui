@@ -64,6 +64,7 @@ export default class TranslatorPanel extends React.Component {
     let newValue = null;
     try {
       newValue = translator.translate(value, syntax);
+      console.log('translated ', value, newValue);
     } catch (_err) {
       // failed to translate code
       DBKodaToaster(Position.RIGHT_TOP).show({
