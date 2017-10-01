@@ -106,7 +106,12 @@ export default class Editor extends React.Component {
       <div className="menuItemWrapper showJsonView" id="showJsonViewMenuItem">
         <MenuItem
           onClick={() => {
-            this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
+            this.props.api.initJsonView(
+              currentJson,
+              this.props.id,
+              'enhancedJson',
+              lines,
+            );
           }}
           text={globalString('output/editor/contextJson')}
           iconName="pt-icon-panel-stats"
@@ -114,81 +119,81 @@ export default class Editor extends React.Component {
         />
       </div>,
     );
-    if (process.env.NODE_ENV === 'development') {
-      menuItems.push(
-        <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
-          <MenuItem
-            iconName="pt-icon-th"
-            text={globalString('output/editor/contextTable')}
-            intent={Intent.NONE}
-          >
-            <MenuItem
-              onClick={() => {
-                this.props.api.initJsonView(
-                  currentJson,
-                  this.props.id,
-                  'tableJson',
-                  lines,
-                  this.editor,
-                  true,
-                );
-              }}
-              text={globalString('output/editor/contextTableSingle')}
-              iconName="pt-icon-th"
-              intent={Intent.NONE}
-            />
-            <MenuItem
-              onClick={() => {
-                this.props.api.initJsonView(
-                  currentJson,
-                  this.props.id,
-                  'tableJson',
-                  lines,
-                  this.editor,
-                  false,
-                );
-              }}
-              text={globalString('output/editor/contextTableMulti')}
-              iconName="pt-icon-th"
-              intent={Intent.NONE}
-            />
-          </MenuItem>
-        </div>,
-      );
-      menuItems.push(
-        <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
+    menuItems.push(
+      <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
+        <MenuItem
+          iconName="pt-icon-th"
+          text={globalString('output/editor/contextTable')}
+          intent={Intent.NONE}
+        >
           <MenuItem
             onClick={() => {
-              const editorId = this.props.id;
-
-              StaticApi.parseTableJson(
+              this.props.api.initJsonView(
                 currentJson,
+                this.props.id,
+                'tableJson',
                 lines,
-                this.editor.getCodeMirror(),
-                editorId,
-              )
-                .then((result) => {
-                  runInAction(() => {
-                    this.props.api.outputApi.showChartPanel(editorId, result);
-                  });
-                })
-                .catch((err) => {
-                  runInAction(() => {
-                    NewToaster.show({
-                      message: globalString('output/editor/parseJsonError') + err.substring(0, 50),
-                      intent: Intent.DANGER,
-                      icon: '',
-                    });
-                  });
-                });
+                this.editor,
+                true,
+              );
             }}
-            text={globalString('output/editor/contextChart')}
+            text={globalString('output/editor/contextTableSingle')}
             iconName="pt-icon-th"
             intent={Intent.NONE}
           />
-        </div>,
-      );
-    }
+          <MenuItem
+            onClick={() => {
+              this.props.api.initJsonView(
+                currentJson,
+                this.props.id,
+                'tableJson',
+                lines,
+                this.editor,
+                false,
+              );
+            }}
+            text={globalString('output/editor/contextTableMulti')}
+            iconName="pt-icon-th"
+            intent={Intent.NONE}
+          />
+        </MenuItem>
+      </div>,
+    );
+    menuItems.push(
+      <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
+        <MenuItem
+          onClick={() => {
+            const editorId = this.props.id;
+
+            StaticApi.parseTableJson(
+              currentJson,
+              lines,
+              this.editor.getCodeMirror(),
+              editorId,
+            )
+              .then((result) => {
+                runInAction(() => {
+                  this.props.api.outputApi.showChartPanel(editorId, result);
+                });
+              })
+              .catch((err) => {
+                runInAction(() => {
+                  NewToaster.show({
+                    message:
+                      globalString('output/editor/parseJsonError') +
+                      err.substring(0, 50),
+                    intent: Intent.DANGER,
+                    icon: '',
+                  });
+                });
+              });
+          }}
+          text={globalString('output/editor/contextChart')}
+          iconName="pt-icon-th"
+          intent={Intent.NONE}
+        />
+      </div>,
+    );
 
     return <Menu className="outputContextMenu">{menuItems}</Menu>;
   }
