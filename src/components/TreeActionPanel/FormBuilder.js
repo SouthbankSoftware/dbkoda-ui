@@ -420,7 +420,6 @@ export default class FormBuilder {
 
               if (formDefs.multiCombo.length > 0) {
                 for (const fld of formDefs.multiCombo) {
-                  console.log(fld);
                   if (fld.indexOf('.') > 0) { // support for one child field so we can handle multiCombo in table/group fields
                     const arrCFlds = fld.split('.');
                     traverseMultiCombo(arrCFlds, values, false);
