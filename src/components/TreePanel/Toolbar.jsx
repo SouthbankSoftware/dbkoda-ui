@@ -28,31 +28,35 @@
 import React from 'react';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
-import {reaction, runInAction, action} from 'mobx';
-import {inject, observer} from 'mobx-react';
-import {AnchorButton, Position} from '@blueprintjs/core';
-import {GlobalHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
+import { reaction, runInAction, action } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { AnchorButton, Position } from '@blueprintjs/core';
+import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import TreeState from './model/TreeState.js';
-import {featherClient} from '../../helpers/feathers';
-import {DBKodaToaster} from '../common/Toaster';
+import { featherClient } from '../../helpers/feathers';
+import { DBKodaToaster } from '../common/Toaster';
 import RefreshIcon from '../../styles/icons/refresh-icon.svg';
 
-@inject(allStores => ({store: allStores.store, treeState: allStores.treeState}))
+const MAX_PROFILE_NAME_DISPLAYED = 28;
+
+@inject(allStores => ({
+  store: allStores.store,
+  treeState: allStores.treeState,
+}))
 @observer
 export default class TreeToolbar extends React.Component {
   static get defaultProps() {
-    return {treeState: undefined};
+    return { treeState: undefined };
   }
   constructor(props) {
     super(props);
-    this.updateFilter = this
-      .updateFilter
-      .bind(this);
-    this.refresh = this
-      .refresh
-      .bind(this);
+    this.updateFilter = this.updateFilter.bind(this);
+    this.refresh = this.refresh.bind(this);
 
-    this.reactionToProfile = reaction(() => this.props.store.profileList.selectedProfile, () => this.onSelectProfile());
+    this.reactionToProfile = reaction(
+      () => this.props.store.profileList.selectedProfile,
+      () => this.onSelectProfile(),
+    );
   }
 
   componentDidMount() {
@@ -78,14 +82,8 @@ export default class TreeToolbar extends React.Component {
   }
 
   updateFilter(event) {
-    const value = event
-      .target
-      .value
-      .replace(/ /g, '');
-    this
-      .props
-      .treeState
-      .setFilter(value);
+    const value = event.target.value.replace(/ /g, '');
+    this.props.treeState.setFilter(value);
   }
   @action
   refresh() {
@@ -100,10 +98,7 @@ export default class TreeToolbar extends React.Component {
       .get(profile.id)
       .then((res) => {
         if (this.props.store.profileList.selectedProfile.id == res.profileId) {
-          this
-            .props
-            .store
-            .updateTopology(res);
+          this.props.store.updateTopology(res);
         }
         runInAction(() => {
           this.props.store.treePanel.isRefreshing = false;
@@ -111,7 +106,11 @@ export default class TreeToolbar extends React.Component {
       })
       .catch((err) => {
         console.log(err.stack);
-        DBKodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        DBKodaToaster(Position.LEFT_BOTTOM).show({
+          message: err.message,
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down',
+        });
       });
   }
 
@@ -119,19 +118,31 @@ export default class TreeToolbar extends React.Component {
     return (
       <nav className=" treeToolbar pt-navbar pt-dark .modifier">
         <div className="pt-navbar-group pt-align-left">
-          <div className="pt-navbar-heading">{this.props.treeState.profileAlias}</div>
+          <div className="pt-navbar-heading">
+            {this.props.treeState.profileAlias.length >=
+            MAX_PROFILE_NAME_DISPLAYED ? (
+              this.props.treeState.profileAlias.substring(
+                0,
+                MAX_PROFILE_NAME_DISPLAYED,
+              ) + '...'
+            ) : (
+              this.props.treeState.profileAlias
+            )}
+          </div>
           <input
             className="pt-input"
             placeholder="Search..."
             type="text"
-            onChange={this.updateFilter} />
+            onChange={this.updateFilter}
+          />
         </div>
         <div className="pt-navbar-group pt-align-right">
           <AnchorButton
             className="pt-button refreshTreeButton"
             onClick={this.refresh}
             loading={this.props.store.treePanel.isRefreshing}
-            disabled={this.props.store.treePanel.isRefreshDisabled}>
+            disabled={this.props.store.treePanel.isRefreshDisabled}
+          >
             <RefreshIcon width={50} height={50} className="dbKodaSVG" />
           </AnchorButton>
         </div>
@@ -141,7 +152,5 @@ export default class TreeToolbar extends React.Component {
 }
 
 TreeToolbar.propTypes = {
-  treeState: React
-    .PropTypes
-    .instanceOf(TreeState)
+  treeState: React.PropTypes.instanceOf(TreeState),
 };
