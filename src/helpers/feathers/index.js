@@ -51,7 +51,10 @@ class FeatherClient {
     });
     this.shellService.on('mongo-execution-end', (output) => {
       const { id, shellId } = output;
-      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
+      Broker.emit(
+        EventType.createShellExecutionFinishEvent(id, shellId),
+        output,
+      );
     });
     this.shellService.on('mongo-shell-reconnected', (output) => {
       console.log('get reconnect event ', output);
@@ -67,9 +70,12 @@ class FeatherClient {
       console.log('get os command finish ', output);
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
-      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
+      Broker.emit(
+        EventType.createShellExecutionFinishEvent(id, shellId),
+        output,
+      );
     });
-    this.service('files').on('changed', ({_id}) => {
+    this.service('files').on('changed', ({ _id }) => {
       Broker.emit(EventType.createFileChangedEvent(_id));
     });
   }
@@ -78,6 +84,7 @@ class FeatherClient {
     if (!this.primus) {
       return null;
     }
+    Broker.emit(EventType.CONTROLLER_ACTIVITY, service);
     return this.feathers.service(service);
   }
 
@@ -92,7 +99,6 @@ export const featherClient = () => {
   // instance.configurePrimus(new Primus(url));
   return instance;
 };
-
 
 let times = 0;
 const loadPrimus = () => {

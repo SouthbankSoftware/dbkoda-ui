@@ -84,18 +84,21 @@ export default class Analytics extends React.Component {
     this.newProfileCreated = this.newProfileCreated.bind(this);
     this.feedbackEvent = this.feedbackEvent.bind(this);
     this.keyFeatureEvent = this.keyFeatureEvent.bind(this);
+    this.controllerActivity = this.controllerActivity.bind(this);
   }
 
   componentDidMount() {
     Broker.on(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
     Broker.on(EventType.FEEDBACK, this.feedbackEvent);
     Broker.on(EventType.FEATURE_USE, this.keyFeatureEvent);
+    Broker.on(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
   }
 
   componentWillUnmount() {
     Broker.off(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
     Broker.off(EventType.FEEDBACK, this.feedbackEvent);
     Broker.off(EventType.FEATURE_USE, this.keyFeatureEvent);
+    Broker.off(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
   }
 
   /**
@@ -127,6 +130,17 @@ export default class Analytics extends React.Component {
         break;
     }
     this._sendEvent(type, 'Feedback', feedback.comments);
+  }
+
+  /**
+   * 
+   * function to be called when activity goes to the controller.
+   * @param {String} service - The service type that has been called.
+   */
+  controllerActivity(service) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
+    }
   }
 
   keyFeatureEvent(feature) {

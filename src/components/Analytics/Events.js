@@ -36,5 +36,6 @@ module.exports = {
     FEEDBACK_NEUTRAL: 'NeutralFeedback',
     FEEDBACK_NEGATIVE: 'NegativeFeedback',
     KEY_FEATURE_USED: 'KeyFeatureUsed',
+    CONTROLLER_ACTIVITY: 'ControllerActivity',
   },
 };

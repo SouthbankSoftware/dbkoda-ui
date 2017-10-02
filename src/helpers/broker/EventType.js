@@ -74,4 +74,5 @@ export default {
   APP_CRASHED: 'appCrashed',
   FEEDBACK: 'feedback',
   FEATURE_USE: 'feature::use',
+  CONTROLLER_ACTIVITY: 'controller::activity',
 };
