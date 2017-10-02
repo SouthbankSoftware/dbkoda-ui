@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
- * @Date:   2017-09-22T16:07:12+10:00
+ * @Date:   2017-10-02T13:50:52+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-26T10:45:46+10:00
+ * @Last modified time: 2017-10-02T14:00:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -22,29 +22,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-@import '../../styles/_defaultTheme.scss';
 
-label.GenerateChartCheckbox {
-  span.pt-control-indicator {
-    border-radius: 0 !important;
-    background-color: $editorBackground !important;
-    background-image: none !important;
-    box-shadow: none !important;
-    color: $connectionHeadingsFontColour !important;
-    font-size: 14px !important;
-    line-height: 14px !important;
-    outline: none;
-  }
-
-  input:focus ~ .pt-control-indicator, input[type=checkbox]:focus {
-    outline: none !important;
-    box-shadow: unset !important;
-  }
-
-  bottom: 0;
-  left: 0;
-  margin: 5px !important;
-  position: absolute;
-  background-color: $editorBackground;
-  z-index: 5;
-}
+declare function globalString(path: string, ...params: *[]): string;
+declare function globalNumber(value: number, config?: {}): string;
