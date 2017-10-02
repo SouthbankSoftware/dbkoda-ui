@@ -293,7 +293,7 @@ export default class EditorApi {
             executing: false,
             visible: true,
             shellVersion: profile.shellVersion,
-            initialMsg: '',//profile.output ? profile.output.join('\n') : '',
+            initialMsg: '', // profile.output ? profile.output.join('\n') : '',
             doc: observable.ref(doc),
             status: ProfileStatus.OPEN,
             path: null,

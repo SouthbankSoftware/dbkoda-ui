@@ -184,7 +184,7 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log(currEditorValue.replace(/\t/g, '  ').split('\n'));
+              console.log('queries: ', currEditorValue.replace(/\t/g, '  ').split('\n'));
               service
                 .update(shell, {
                   queries: currEditorValue.replace(/\t/g, '  ').split('\n'),
@@ -262,7 +262,7 @@ class View extends React.Component {
               this.props.store.editorPanel.activeEditorId,
             );
             const shell = editor.shellId;
-            const id = editor.profileId;
+            const profileId = editor.profileId;
 
             const cm = this.editor.getCodeMirror(); // eslint-disable-line
             let content = cm.getSelection();
@@ -274,6 +274,46 @@ class View extends React.Component {
                 cm.getCursor().line + 1,
               );
               content = cm.getLine(cm.getCursor().line);
+            }
+            this.props.store.editors.get(editor.id).executing = true;
+            this.props.store.editorToolbar.isActiveExecuting = true;
+
+            const type = editor.type;
+            if (type == EditorTypes.DRILL) {
+              const service = featherClient().service('/drill');
+              service.timeout = 30000;
+              console.log('queries:', content.replace(/\t/g, '  ').split('\n'));
+              service
+                .update(shell, {
+                  queries: content.replace(/\t/g, '  ').split('\n'),
+                })
+                .then((res) => {
+                  console.log('queries result:', res);
+                  const output = {};
+                  output.id = editor.id;
+                  output.profileId = profileId;
+                  output.output = JSON.stringify(res);
+                  this.props.api.drillOutputAvailable(output);
+                  runInAction(() => {
+                    this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editorToolbar.isActiveExecuting = false;
+                  });
+                })
+                .catch((err) => {
+                  console.error('execute error:', err);
+                  runInAction(() => {
+                    this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editorToolbar.isActiveExecuting = false;
+                    NewToaster.show({
+                      message: globalString(
+                        'editor/toolbar/executionScriptFailed',
+                      ),
+                      intent: Intent.DANGER,
+                      iconName: 'pt-icon-thumbs-down',
+                    });
+                  });
+                });
+            } else {
               // Quick check if line is a full command:
               if (
                 !content.match(/^ *db./g) &&
@@ -294,22 +334,18 @@ class View extends React.Component {
                   iconName: 'pEmilt-icon-thumbs-down',
                 });
               }
-            }
-            this.props.store.editors.get(editor.id).executing = true;
-            this.props.store.editorToolbar.isActiveExecuting = true;
-
-            // Send request to feathers client
+              // Send request to feathers client
             const service = featherClient().service('/mongo-shells');
             service.timeout = 30000;
             service
-              .update(id, {
+              .update(profileId, {
                 shellId: shell, // eslint-disable-line
                 commands: content.replace(/\t/g, '  '),
               })
               .catch((err) => {
                 console.error('execute error:', err);
                 runInAction(() => {
-                  this.finishedExecution({ id, shellId: shell });
+                  this.finishedExecution({ id: profileId, shellId: shell });
                   NewToaster.show({
                     message: globalString(
                       'editor/toolbar/executionScriptFailed',
@@ -319,6 +355,7 @@ class View extends React.Component {
                   });
                 });
               });
+            }
             this.props.store.editorPanel.executingEditorLines = false;
           }
         },

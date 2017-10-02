@@ -407,6 +407,7 @@ export default class TreeView extends React.Component {
 
   openDrillEditorWithPass = () => {
     this.props.api.addNewEditorForDrill({ db: this.nodeRightClicked.text, pass: this.state.remotePass });
+    this.setState({ isPasswordDialogVisible: false });
   };
 
   nodeRightClicked;

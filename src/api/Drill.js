@@ -60,7 +60,7 @@ export default class DrillApi {
 
   createDrillConnection(query, profile) {
     const service = featherClient().service('/drill');
-    service.timeout = 60000;
+    service.timeout = 90000;
     return service
       .create(query)
       .then((res) => {
