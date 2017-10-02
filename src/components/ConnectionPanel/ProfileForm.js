@@ -327,27 +327,9 @@ export const Form = {
 
 export const createFormFromProfile = (profile) => {
   const fields = JSON.parse(JSON.stringify(Form.fields));
-  fields[0].value = profile.alias;
-  fields[1].value = profile.hostRadio;
-  fields[2].value = profile.host;
-  fields[3].value = profile.port;
-  fields[4].value = profile.urlRadio;
-  fields[5].value = profile.url;
-  fields[6].value = profile.database;
-  fields[19].value = profile.authenticationDatabase;
-  fields[7].value = profile.ssl;
-  fields[20].value = profile.sslAllowInvalidCertificates;
-  fields[8].value = profile.sha;
-  fields[9].value = profile.username;
-  fields[10].value = profile.password;
-  fields[11].value = profile.ssh;
-  fields[12].value = profile.remoteHost;
-  fields[13].value = profile.remoteUser;
-  fields[14].value = profile.passRadio;
-  fields[15].value = profile.remotePass;
-  fields[16].value = profile.keyRadio;
-  fields[17].value = profile.sshKeyFile;
-  fields[18].value = profile.passPhrase;
+  fields.forEach((field) => {
+    field.value = profile[field.name];
+  });
   return fields;
 };
 

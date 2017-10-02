@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-05-01T01:35:50+10:00
+ * @Last modified time: 2017-10-02T16:40:37+11:00
  */
 
 import load from 'little-loader';
@@ -77,6 +77,9 @@ class FeatherClient {
     });
     this.service('files').on('changed', ({ _id }) => {
       Broker.emit(EventType.createFileChangedEvent(_id));
+    });
+    this.service('aggregators').on('result', ({editorId, result}) => {
+      Broker.emit(EventType.createAggregatorResultReceived(editorId), result);
     });
   }
 

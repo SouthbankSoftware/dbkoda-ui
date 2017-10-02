@@ -3,7 +3,7 @@
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-27T16:04:47+10:00
+ * @Last modified time: 2017-10-02T14:10:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,7 +42,7 @@ import FirstBlockTarget from './AggregateBlocks/FirstBlockTaget.jsx';
 import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
 import { AggregateCommands } from './AggregateCommands.js';
-import GenerateChartCheckbox from './GenerateChartCheckbox';
+import GenerateChartButton from './GenerateChartButton';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -1497,13 +1497,16 @@ export default class GraphicalBuilder extends React.Component {
                   );
                 })}
               <LastBlockTarget />
-              <GenerateChartCheckbox connectionId={this.props.editor.currentProfile} editorId={this.props.editor.id} />
             </ul>
           ) : (
             <div className="loaderWrapper">
               <div className="loader" />
             </div>
           )}
+        <GenerateChartButton
+          connectionId={this.props.editor.currentProfile}
+          editorId={this.props.editor.id}
+        />
       </div>
     );
   }

@@ -19,8 +19,8 @@
  */
 
 /**
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-11T15:01:31+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-02T15:51:14+11:00
  */
 
 export default {
@@ -64,6 +64,7 @@ export default {
   createFileChangedEvent(id) {
     return `fileChanged::${id}`;
   },
+  createAggregatorResultReceived: editorId => `aggregator::result-received::${editorId}`,
   SHELL_RECONNECT: 'controller::shell::reconnect',
   createShellReconnectEvent: (id, shellId) => {
     return 'controller::shell::reconnect::' + id + '::' + shellId;

@@ -66,7 +66,7 @@ export default class Details extends React.Component {
      * Resolve the prefetch arguments and return them as params
      * @param  {Array}  args     Arguments array as provided from DDD file
      * @return {Object}          Object containing params for prefetch function
-     * 
+     *
      */
     this.resolveArguments = (args) => {
       const editor = this.props.store.editors.get(
@@ -175,7 +175,7 @@ export default class Details extends React.Component {
 
   /**
    * Generates valid Mongo Code using Handlebars and the Details MobX-Form.
-   * 
+   *
    * @param {Object} editorObject - Editor Object to generate handlebars code for.
    */
   generateCode(editorObject) {
@@ -221,6 +221,7 @@ export default class Details extends React.Component {
             }
           }
         } else {
+          // eslint-disable-next-line
           const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
             block.type +
             '.hbs');
@@ -274,6 +275,7 @@ export default class Details extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
     editor.blockList[editor.selectedBlock].byoCode = true;
+    // eslint-disable-next-line
     const formTemplate = require('./AggregateBlocks/BlockTemplates/' +
       editor.blockList[editor.selectedBlock].type +
       '.hbs');
