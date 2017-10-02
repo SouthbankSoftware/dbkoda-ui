@@ -1,4 +1,10 @@
 /*
+ * @Author: Chris Trott <chris>
+ * @Date:   2017-03-07T10:53:19+11:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-27T10:37:37+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,14 +22,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Chris Trott <chris>
- * @Date:   2017-03-07T10:53:19+11:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-09-05T13:11:17+10:00
  */
+
 import React from 'react';
 import { action, reaction, runInAction, toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -68,25 +68,13 @@ export default class Panel extends React.Component {
   }
 
   componentWillMount() {
-    Broker.on(
-      EventType.EXPLAIN_OUTPUT_PARSED,
-      this.explainOutputAvailable.bind(this),
-    );
-    Broker.on(
-      EventType.SHELL_OUTPUT_AVAILABLE,
-      this.shellOutputAvailable.bind(this),
-    );
+    Broker.on(EventType.EXPLAIN_OUTPUT_PARSED, this.explainOutputAvailable.bind(this));
+    Broker.on(EventType.SHELL_OUTPUT_AVAILABLE, this.shellOutputAvailable.bind(this));
   }
 
   componentWillUnmount() {
-    Broker.removeListener(
-      EventType.EXPLAIN_OUTPUT_PARSED,
-      this.explainOutputAvailable.bind(this),
-    );
-    Broker.removeListener(
-      EventType.SHELL_OUTPUT_AVAILABLE,
-      this.shellOutputAvailable.bind(this),
-    );
+    Broker.removeListener(EventType.EXPLAIN_OUTPUT_PARSED, this.explainOutputAvailable.bind(this));
+    Broker.removeListener(EventType.SHELL_OUTPUT_AVAILABLE, this.shellOutputAvailable.bind(this));
   }
 
   @action.bound
@@ -137,20 +125,11 @@ export default class Panel extends React.Component {
     const cm = this.editorRefs[editorId].getCodeMirror();
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
-    if (
-      ['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(
-        startLine,
-      )
-    ) {
+    if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {
       if (!direction) {
         direction = 1;
       }
-      return this.getDocumentAtLine(
-        editorId,
-        lineNumber + direction,
-        direction,
-        lines,
-      );
+      return this.getDocumentAtLine(editorId, lineNumber + direction, direction, lines);
     }
     if (!startLine || startLine.indexOf('dbKoda>') !== -1) {
       lines.status = 'Invalid';
@@ -168,10 +147,7 @@ export default class Panel extends React.Component {
         (!['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
           prevLine.indexOf('dbKoda>') === 0)
       ) {
-        if (
-          (nextLine && nextLine[0] === '{') ||
-          ![']', ',', '}'].includes(nextLine[0])
-        ) {
+        if ((nextLine && nextLine[0] === '{') || ![']', ',', '}'].includes(nextLine[0])) {
           // This is a single-line document
           lines.start = lineNumber;
           lines.end = lineNumber;
@@ -224,17 +200,13 @@ export default class Panel extends React.Component {
       }
     } else if (direction === 1 && line[line.length - 1] === '}') {
       const nextLine = cm.getLine(lineNumber + 1).trim();
-      if (
-        (nextLine && nextLine[0] === '{') ||
-        ![']', ',', '}'].includes(nextLine[0])
-      ) {
+      if ((nextLine && nextLine[0] === '{') || ![']', ',', '}'].includes(nextLine[0])) {
         lines.end = lineNumber;
         return line;
       }
     }
     if (direction === -1) {
-      line =
-        this._getLineText(cm, lineNumber + direction, direction, lines) + line;
+      line = this._getLineText(cm, lineNumber + direction, direction, lines) + line;
     } else {
       line += this._getLineText(cm, lineNumber + direction, direction, lines);
     }
@@ -257,36 +229,38 @@ export default class Panel extends React.Component {
   renderTabs(editors) {
     const tabs = editors.map((editor) => {
       const arrTabs = [];
-      const editorTitle = editor[1].alias + ' (' + editor[1].fileName + ')';
+      const editorId = editor[1].id;
 
       let tabClassName = 'notVisible';
-      if (this.props.store.editorPanel.activeEditorId === editor[1].id) {
+      if (this.props.store.editorPanel.activeEditorId === editorId) {
         tabClassName = 'visible';
       }
       if (editor[1].explains && editor[1].explains.active) {
         runInAction(() => {
-          this.props.store.outputPanel.currentTab = 'Explain-' + editor[1].id;
+          this.props.store.outputPanel.currentTab = 'Explain-' + editorId;
           editor[1].explains.active = false;
         });
       }
       if (editor[1].detailsView && editor[1].detailsView.visible) {
         runInAction(() => {
-          this.props.store.outputPanel.currentTab = 'Details-' + editor[1].id;
+          this.props.store.outputPanel.currentTab = 'Details-' + editorId;
           editor[1].detailsView.visible = false;
         });
       }
 
-      if (this.props.store.editorPanel.activeEditorId === editor[1].id) {
+      if (this.props.store.editorPanel.activeEditorId === editorId) {
+        const title = 'Raw';
+
         arrTabs.push(
           <Tab2
             className={tabClassName}
-            key={editor[1].id}
-            id={editor[1].id}
-            title={editorTitle}
+            key={editorId}
+            id={editorId}
+            title={title}
             panel={
               <OutputEditor
-                title={editorTitle}
-                id={editor[1].id}
+                title={title}
+                id={editorId}
                 profileId={editor[1].profileId}
                 connId={editor[1].currentProfile}
                 initialMsg={editor[1].initialMsg}
@@ -304,24 +278,22 @@ export default class Panel extends React.Component {
         ) {
           // This is the condition to switch the editor to first one if the profile got change.
           runInAction(() => {
-            this.props.store.outputPanel.currentTab = editor[1].id;
+            this.props.store.outputPanel.currentTab = editorId;
           });
         }
-        if (this.props.store.outputs.get(editor[1].id).enhancedJson) {
+        if (this.props.store.outputs.get(editorId).enhancedJson) {
+          const tabId = `EnhancedJson-${editorId}`;
+
           arrTabs.push(
             <Tab2
-              className={
-                tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
-              }
-              key={'EnhancedJson-' + editor[1].id}
-              id={'EnhancedJson-' + editor[1].id}
-              title={'EnhancedJson-' + editorTitle}
+              className={tabClassName !== 'notVisible' ? 'visible' : 'notVisible'}
+              key={tabId}
+              id={tabId}
+              title="Enhanced JSON"
               panel={
                 <EnhancedJson
-                  outputId={editor[1].id}
-                  enhancedJson={toJS(
-                    this.props.store.outputs.get(editor[1].id).enhancedJson,
-                  )}
+                  outputId={editorId}
+                  enhancedJson={toJS(this.props.store.outputs.get(editorId).enhancedJson)}
                   getDocumentAtLine={this.getDocumentAtLine}
                 />
               }
@@ -329,23 +301,21 @@ export default class Panel extends React.Component {
           );
         }
         if (
-          this.props.store.outputs.get(editor[1].id).tableJson &&
+          this.props.store.outputs.get(editorId).tableJson &&
           process.env.NODE_ENV === 'development'
         ) {
+          const tabId = `TableView-${editorId}`;
+
           arrTabs.push(
             <Tab2
-              className={
-                tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
-              }
-              key={'TableView-' + editor[1].id}
-              id={'TableView-' + editor[1].id}
-              title={'TableView-' + editorTitle}
+              className={tabClassName !== 'notVisible' ? 'visible' : 'notVisible'}
+              key={tabId}
+              id={tabId}
+              title="Table"
               panel={
                 <TableView
-                  outputId={editor[1].id}
-                  tableJson={toJS(
-                    this.props.store.outputs.get(editor[1].id).tableJson,
-                  )}
+                  outputId={editorId}
+                  tableJson={toJS(this.props.store.outputs.get(editorId).tableJson)}
                   getDocumentAtLine={this.getDocumentAtLine}
                 />
               }
@@ -353,75 +323,66 @@ export default class Panel extends React.Component {
           );
         }
         if (
-          this.props.store.outputs.get(editor[1].id).chartJson &&
+          this.props.store.outputs.get(editorId).chartPanel &&
           process.env.NODE_ENV === 'development'
         ) {
-          const { data, hash } = this.props.store.outputs.get(editor[1].id).chartJson;
+          const tabId = `Chart-${editorId}`;
+
+          arrTabs.push(
+            <Tab2
+              className={tabClassName !== 'notVisible' ? 'visible' : 'notVisible'}
+              id={tabId}
+              key={tabId}
+              title="Chart"
+              panel={<ChartPanel editorId={editorId} />}
+            />,
+          );
+        }
+        {
+          const tabId = `Explain-${editorId}`;
+
           arrTabs.push(
             <Tab2
               className={
-                tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
+                editor[1].explains && tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
               }
-              key={'ChartView-' + editor[1].id}
-              id={'ChartView-' + editor[1].id}
-              title={'ChartView-' + editorTitle}
+              key={tabId}
+              id={tabId}
+              title="Explain"
+              panel={<Explain editor={editor[1]} />}
+            />,
+          );
+        }
+        {
+          const tabId = `Details-${editorId}`;
+
+          arrTabs.push(
+            <Tab2
+              className={
+                editor[1].detailsView &&
+                tabClassName !== 'notVisible' &&
+                editor[1].detailsView.currentProfile == editor[1].currentProfile
+                  ? 'visible'
+                  : 'notVisible'
+              }
+              key={tabId}
+              id={tabId}
+              title="Details"
               panel={
-                <ChartPanel data={data} hash={hash} />
+                <DetailsPanel
+                  isVisible={this.props.store.outputPanel.currentTab.indexOf('Details') >= 0}
+                  editor={editor[1]}
+                />
               }
             />,
           );
         }
-        arrTabs.push(
-          <Tab2
-            className={
-              editor[1].explains && tabClassName !== 'notVisible' ? (
-                'visible'
-              ) : (
-                'notVisible'
-              )
-            }
-            key={'Explain-' + editor[1].id}
-            id={'Explain-' + editor[1].id}
-            title={'Explain-' + editorTitle}
-            panel={<Explain editor={editor[1]} />}
-          />,
-        );
-        arrTabs.push(
-          <Tab2
-            className={
-              editor[1].detailsView &&
-              tabClassName !== 'notVisible' &&
-              editor[1].detailsView.currentProfile ==
-                editor[1].currentProfile ? (
-                'visible'
-              ) : (
-                'notVisible'
-              )
-            }
-            key={'Details-' + editor[1].id}
-            id={'Details-' + editor[1].id}
-            title={'Details-' + editorTitle}
-            panel={
-              <DetailsPanel
-                isVisible={
-                  this.props.store.outputPanel.currentTab.indexOf('Details') >=
-                  0
-                }
-                editor={editor[1]}
-              />
-            }
-          />,
-        );
       }
       return arrTabs;
     });
     const profileTabs = [];
     const selectedProfile = this.props.store.profileList.selectedProfile;
-    if (
-      selectedProfile &&
-      selectedProfile.storageView &&
-      selectedProfile.storageView.visible
-    ) {
+    if (selectedProfile && selectedProfile.storageView && selectedProfile.storageView.visible) {
       profileTabs.push(
         <Tab2
           className="visible"
@@ -434,8 +395,7 @@ export default class Panel extends React.Component {
       tabs.push(profileTabs);
       if (selectedProfile.storageView.shouldFocus) {
         runInAction(() => {
-          this.props.store.outputPanel.currentTab =
-            'Storage-' + selectedProfile.id;
+          this.props.store.outputPanel.currentTab = 'Storage-' + selectedProfile.id;
           this.props.store.profileList.selectedProfile.storageView.shouldFocus = false;
         });
       }
@@ -446,9 +406,7 @@ export default class Panel extends React.Component {
   render() {
     // Toolbar must be rendered after tabs for initialisation purposes
     const defaultVisible =
-      this.props.store.editorPanel.activeEditorId == 'Default'
-        ? 'visible'
-        : 'notVisible';
+      this.props.store.editorPanel.activeEditorId == 'Default' ? 'visible' : 'notVisible';
     return (
       <div className="pt-dark outputPanel">
         <Tabs2

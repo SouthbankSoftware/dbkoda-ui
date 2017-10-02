@@ -1,4 +1,10 @@
-/* @flow
+/**
+ * @flow
+ *
+ * @Author: guiguan
+ * @Date:   2017-09-21T15:25:12+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-27T18:17:06+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -23,6 +29,8 @@ import * as React from 'react';
 import SplitPane from 'react-split-pane';
 import ReactResizeDetector from 'react-resize-detector';
 import _ from 'lodash';
+import { action, computed, reaction } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import DataTree, {
   type Schema,
   type ChartComponentChangeHandler,
@@ -48,59 +56,122 @@ type BarChartData = {
   componentY: ChartComponent,
   componentCenter: ChartComponent,
 };
+type SelectedComponents = {
+  chartComponentX?: ChartComponent,
+  chartComponentY?: ChartComponent,
+  chartComponentCenter?: ChartComponent,
+};
+type DataSchema = {
+  schema: Schema,
+  selectedComponents: SelectedComponents,
+};
+
+type Store = {
+  chartPanel: {
+    data: Data,
+    dataTreeWidth: number,
+    chartWidth: number,
+    chartHeight: number,
+    chartComponentX: ?ChartComponent,
+    chartComponentY: ?ChartComponent,
+    chartComponentCenter: ?ChartComponent,
+    loading: boolean,
+  },
+  outputPanel: {
+    currentTab: string,
+  },
+};
 
 type Props = {
-  dataTreeDefaultWidth: ?number,
-  data: Data,
-  hash: string, // used to do change detection
+  store: Store,
+  editorId: string,
+  tabId: string,
 };
 
-type State = {
-  dataTreeWidth: number,
-  chartWidth: number,
-  chartHeight: number,
-  schema: Schema,
-  barChartData: ?BarChartData,
-  chartComponentX: ?ChartComponent,
-  chartComponentY: ?ChartComponent,
-  chartComponentCenter: ?ChartComponent,
-};
+type State = {};
 
-export default class ChartPanel extends React.PureComponent<Props, State> {
-  static defaultProps = {
-    dataTreeDefaultWidth: 250,
+// $FlowIssue
+@inject(({ store }, props) => {
+  const { editorId } = props;
+
+  return {
+    store: {
+      chartPanel: store.outputs.get(editorId).chartPanel,
+      outputPanel: store.outputPanel,
+    },
+    editorId,
+    tabId: `Chart-${editorId}`,
   };
+})
+@observer
+export default class ChartPanel extends React.PureComponent<Props, State> {
+  reactions = [];
+  resizeDetector: React.ElementRef<*>;
 
   constructor(props: Props) {
     super(props);
 
-    const { dataTreeDefaultWidth, data } = props;
-
-    this.state = {
-      dataTreeWidth: dataTreeDefaultWidth || 0,
-      chartWidth: 0,
-      chartHeight: 0,
-      schema: this._generateDataSchema(data),
-      barChartData: this._generateChartData(),
-      chartComponentX: null,
-      chartComponentY: null,
-      chartComponentCenter: null,
-    };
+    this.reactions.push(
+      reaction(
+        () => this.selectedComponents,
+        selectedComponents => this._autoSelectComponents(selectedComponents),
+      ),
+    );
   }
 
-  componentWillReceiveProps({ data, hash: nextHash }: Props) {
-    const { hash } = this.props;
-    if (hash !== nextHash) {
-      // update schema when necessary
-      this.setState({
-        schema: this._generateDataSchema(data),
-        barChartData: this._generateChartData(),
-        chartComponentX: null,
-        chartComponentY: null,
-        chartComponentCenter: null,
-      });
-    }
+  componentDidMount() {
+    this.reactions.push(
+      reaction(
+        () => {
+          const { store: { outputPanel: { currentTab } }, tabId } = this.props;
+
+          return currentTab === tabId;
+        },
+        (isActive) => {
+          if (isActive) {
+            // fix container size undetected issue when this component is mounted behind the scene
+            this.resizeDetector.componentDidMount();
+          }
+        },
+      ),
+    );
   }
+
+  componentWillUnmount() {
+    _.forEach(this.reactions, r => r());
+  }
+
+  // $FlowIssue
+  @computed
+  get dataSchema(): DataSchema {
+    const { data } = this.props.store.chartPanel;
+
+    return this._generateDataSchema(data);
+  }
+
+  // $FlowIssue
+  @computed
+  get schema(): Schema {
+    return this.dataSchema.schema;
+  }
+
+  // $FlowIssue
+  @computed
+  get selectedComponents(): SelectedComponents {
+    return this.dataSchema.selectedComponents;
+  }
+
+  // $FlowIssue
+  @computed
+  get barChartData(): BarChartData {
+    const { chartComponentX, chartComponentY, chartComponentCenter } = this.props.store.chartPanel;
+
+    return this._generateChartData(chartComponentX, chartComponentY, chartComponentCenter);
+  }
+
+  _autoSelectComponents = action((selectedComponents: SelectedComponents) => {
+    _.assign(this.props.store.chartPanel, selectedComponents);
+  });
 
   _getComponentsForBarChart(
     chartComponentX: ?ChartComponent,
@@ -164,7 +235,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     y: ?ChartComponent,
     center: ?ChartComponent,
   ): BarChartData {
-    const { data } = this.props;
+    const { data } = this.props.store.chartPanel;
     const {
       chartComponentX,
       chartComponentY,
@@ -233,7 +304,10 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     // convert to ChartData
     const chartData = [];
     for (const [k, v] of chartDataMap.entries()) {
-      chartData.push({ [categoricalComponent.name]: k, [numericalComponent.name]: v });
+      chartData.push({
+        [categoricalComponent.name]: k,
+        [numericalComponent.name]: v,
+      });
     }
 
     chartComponentCenter.values = [...numericalBinMap.keys()];
@@ -248,92 +322,131 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
 
   _generateDataSchema(data: Data) {
     const obj = _.head(data);
+    const selectedComponents = {};
 
-    return this._generateObjectSchema(obj);
+    const schema = this._generateObjectSchema(obj, '', selectedComponents);
+
+    return {
+      schema,
+      selectedComponents,
+    };
   }
 
-  _generateObjectSchema(obj: {}) {
+  _fillSelectedComponents(
+    name: string,
+    type: 'string' | 'number',
+    schemaPath: string,
+    selectedComponents,
+  ) {
+    if (name.toLowerCase().endsWith('id')) {
+      // skip fields end with id
+      return;
+    }
+
+    let hasSelected = false;
+
+    if (!selectedComponents.chartComponentX) {
+      if (
+        !selectedComponents.chartComponentY ||
+        selectedComponents.chartComponentY.valueType !== type
+      ) {
+        selectedComponents.chartComponentX = {
+          name: 'x',
+          valueSchemaPath: schemaPath,
+          valueType: type,
+        };
+        hasSelected = true;
+      }
+    }
+
+    if (!hasSelected && !selectedComponents.chartComponentY) {
+      if (
+        !selectedComponents.chartComponentX ||
+        selectedComponents.chartComponentX.valueType !== type
+      ) {
+        selectedComponents.chartComponentY = {
+          name: 'y',
+          valueSchemaPath: schemaPath,
+          valueType: type,
+        };
+        hasSelected = true;
+      }
+    }
+
+    if (!hasSelected && !selectedComponents.chartComponentCenter && type === 'string') {
+      selectedComponents.chartComponentCenter = {
+        name: 'center',
+        valueSchemaPath: schemaPath,
+        valueType: type,
+      };
+    }
+  }
+
+  _generateObjectSchema(obj: {}, prefix: string, selectedComponents: SelectedComponents) {
     const schema = {};
 
     _.forOwn(obj, (v: mixed, k: string) => {
+      const newPrefix = prefix ? `${prefix}.${k}` : k;
+
       if (typeof v === 'string') {
         schema[k] = 'string';
+        this._fillSelectedComponents(k, 'string', newPrefix, selectedComponents);
       } else if (typeof v === 'number') {
         schema[k] = 'number';
+        this._fillSelectedComponents(k, 'number', newPrefix, selectedComponents);
       } else if (typeof v === 'object' && v !== null) {
-        schema[k] = this._generateObjectSchema(v);
+        schema[k] = this._generateObjectSchema(v, newPrefix, selectedComponents);
       }
     });
 
     return schema;
   }
 
-  _onSplitPaneResize = _.debounce((width: number) => {
-    const { dataTreeWidth, chartWidth } = this.state;
+  _onSplitPaneResize = _.debounce(
+    action((width: number) => {
+      const { dataTreeWidth, chartWidth } = this.props.store.chartPanel;
 
-    this.setState({ dataTreeWidth: width, chartWidth: dataTreeWidth + chartWidth - width });
-  }, DEBOUNCE_DELAY);
+      _.assign(this.props.store.chartPanel, {
+        dataTreeWidth: width,
+        chartWidth: dataTreeWidth + chartWidth - width,
+      });
+    }),
+    DEBOUNCE_DELAY,
+  );
 
-  _onPanelResize = _.debounce((width: number, height: number) => {
-    const { dataTreeWidth } = this.state;
+  _onPanelResize = _.debounce(
+    action((width: number, height: number) => {
+      const { dataTreeWidth } = this.props.store.chartPanel;
 
-    this.setState({ chartWidth: width - dataTreeWidth, chartHeight: height });
-  }, DEBOUNCE_DELAY);
+      _.assign(this.props.store.chartPanel, {
+        chartWidth: width - dataTreeWidth,
+        chartHeight: height,
+      });
+    }),
+    DEBOUNCE_DELAY,
+  );
 
-  _onChartComponentChange: ChartComponentChangeHandler = (
-    operation,
-    valueSchemaPath,
-    valueType,
-  ) => {
-    console.log(operation, valueSchemaPath, valueType);
+  _onChartComponentChange: ChartComponentChangeHandler = action(
+    (operation, valueSchemaPath, valueType) => {
+      const { action, target } = operation;
 
-    const { action, target } = operation;
-    let barChartData: ?BarChartData = null;
-    const newState = {};
-
-    if (action === 'load') {
-      if (target === 'x') {
-        const { chartComponentY, chartComponentCenter } = this.state;
-        barChartData = this._generateChartData(
-          { name: 'x', valueSchemaPath, valueType },
-          chartComponentY,
-          chartComponentCenter,
-        );
-        newState.chartComponentX = barChartData.componentX;
-      } else if (target === 'y') {
-        const { chartComponentX, chartComponentCenter } = this.state;
-        barChartData = this._generateChartData(
-          chartComponentX,
-          { name: 'y', valueSchemaPath, valueType },
-          chartComponentCenter,
-        );
-        newState.chartComponentY = barChartData.componentY;
+      if (action === 'load') {
+        if (target === 'x') {
+          this.props.store.chartPanel.chartComponentX = { name: 'x', valueSchemaPath, valueType };
+        } else if (target === 'y') {
+          this.props.store.chartPanel.chartComponentY = { name: 'y', valueSchemaPath, valueType };
+        } else {
+          this.props.store.chartPanel.chartComponentCenter = {
+            name: 'center',
+            valueSchemaPath,
+            valueType,
+          };
+        }
       } else {
-        const { chartComponentX, chartComponentY } = this.state;
-        barChartData = this._generateChartData(chartComponentX, chartComponentY, {
-          name: 'center',
-          valueSchemaPath,
-          valueType,
-        });
-        newState.chartComponentCenter = barChartData.componentCenter;
+        this.props.store.chartPanel[`chartComponent${_.upperFirst(target)}`] = null;
       }
-    } else if (target === 'x') {
-      const { chartComponentY, chartComponentCenter } = this.state;
-      barChartData = this._generateChartData(null, chartComponentY, chartComponentCenter);
-      newState.chartComponentX = null;
-    } else if (target === 'y') {
-      const { chartComponentX, chartComponentCenter } = this.state;
-      barChartData = this._generateChartData(chartComponentX, null, chartComponentCenter);
-      newState.chartComponentY = null;
-    } else {
-      const { chartComponentX, chartComponentY } = this.state;
-      barChartData = this._generateChartData(chartComponentX, chartComponentY, null);
-      newState.chartComponentCenter = null;
-    }
-
-    newState.barChartData = barChartData;
-    this.setState(newState);
-  };
+    },
+  );
 
   /**
    * Define inter chart component constraints
@@ -348,7 +461,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       return operations;
     }
 
-    const { chartComponentX, chartComponentY, chartComponentCenter } = this.state;
+    const { chartComponentX, chartComponentY, chartComponentCenter } = this.props.store.chartPanel;
 
     if (chartComponentX && chartComponentX.valueSchemaPath === targetValueSchemaPath) {
       operations.push({
@@ -390,43 +503,50 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   };
 
   render() {
-    // const { data } = this.props;
     const {
       dataTreeWidth,
       chartWidth,
       chartHeight,
-      schema,
-      barChartData,
       chartComponentX,
       chartComponentY,
       chartComponentCenter,
-    } = this.state;
+      loading,
+    } = this.props.store.chartPanel;
+
+    const { schema, barChartData } = this;
 
     return (
       <div className="ChartPanel">
-        <SplitPane
-          className="SplitPane"
-          split="vertical"
-          defaultSize={dataTreeWidth}
-          minSize={50}
-          maxSize={1000}
-          pane2Style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-          onChange={this._onSplitPaneResize}
-        >
-          <DataTree
-            schema={schema}
-            onChartComponentChange={this._onChartComponentChange}
-            getAllowedChartComponentOperations={this._getAllowedChartComponentOperations}
-            chartComponentX={chartComponentX}
-            chartComponentY={chartComponentY}
-            chartComponentCenter={chartComponentCenter}
-          />
-          {<BarChart width={chartWidth} height={chartHeight} {...barChartData} />}
-        </SplitPane>
+        {loading ? (
+          <div className="loaderWrapper">
+            <div className="loader" />
+          </div>
+        ) : (
+          <SplitPane
+            className="SplitPane"
+            split="vertical"
+            defaultSize={dataTreeWidth}
+            minSize={50}
+            maxSize={1000}
+            pane2Style={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onChange={this._onSplitPaneResize}
+          >
+            <DataTree
+              schema={schema}
+              onChartComponentChange={this._onChartComponentChange}
+              getAllowedChartComponentOperations={this._getAllowedChartComponentOperations}
+              chartComponentX={chartComponentX}
+              chartComponentY={chartComponentY}
+              chartComponentCenter={chartComponentCenter}
+            />
+            {<BarChart width={chartWidth} height={chartHeight} {...barChartData} />}
+          </SplitPane>
+        )}
         <ReactResizeDetector
+          ref={ref => (this.resizeDetector = ref)}
           className="BarChart"
           handleWidth
           handleHeight

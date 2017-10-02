@@ -75,6 +75,11 @@ export default class Panel extends React.Component {
   }
 
   @autobind
+  _onClickAuthDB() {
+    this.props.form.$('sha').set('value', true);
+  }
+
+  @autobind
   _hostRadioOnChange() {
     if (!this.props.form.$('hostRadio').get('value')) {
       this.props.form
@@ -228,9 +233,7 @@ export default class Panel extends React.Component {
           text="X"
           onClick={this.props.close}
         />
-        <h3 className="form-title">
-          {title}
-        </h3>
+        <h3 className="form-title">{title}</h3>
         <form className="profile-form" onSubmit={form.onSubmit}>
           <Input
             field={form.$('alias')}
@@ -285,7 +288,7 @@ export default class Panel extends React.Component {
           <div className="ssh-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssh')} />{' '}
           </div>
-          {form.$('ssh').get('value') &&
+          {form.$('ssh').get('value') && (
             <div>
               <div className="remoteHost-form pt-form-group pt-inline zero-margin">
                 <Input field={form.$('remoteHost')} showLabel />
@@ -320,10 +323,11 @@ export default class Panel extends React.Component {
                   onChange={this._keyRadioOnChange}
                 />
 
-                <FileInput field={form.$('sshKeyFile')}
+                <FileInput
+                  field={form.$('sshKeyFile')}
                   divOnClick={this._onClickKey}
                   divOnFocus={this._onClickKey}
-                  />
+                />
 
                 <Input
                   field={form.$('passPhrase')}
@@ -331,10 +335,19 @@ export default class Panel extends React.Component {
                   divOnFocus={this._onClickKey}
                 />
               </div>
-            </div>}
+            </div>
+          )}
           <div className="profile-separator" />
           <div className="ssl-form pt-form-group pt-inline zero-margin">
             <Checkbox field={form.$('ssl')} />
+          </div>
+          <div
+            className={
+              (form.$('ssl').get('value') ? ' active' : ' inactive') +
+              ' sslAllowInvalidCertificates-form pt-form-group pt-inline zero-margin'
+            }
+          >
+            <Checkbox field={form.$('sslAllowInvalidCertificates')} />
           </div>
           <div className="profile-separator" />
           <Label text="Authentication" />
@@ -352,6 +365,19 @@ export default class Panel extends React.Component {
             />
             <Input
               field={form.$('password')}
+              divOnClick={this._onClickUserName}
+              divOnFocus={this._onClickUserName}
+            />
+          </div>
+          <div
+            className={
+              (form.$('sha').get('value') ? ' active' : ' inactive') +
+              ' authentication-database-form pt-form-group pt-inline zero-margin'
+            }
+          >
+            <Input
+              field={form.$('authenticationDatabase')}
+              showLabel
               divOnClick={this._onClickUserName}
               divOnFocus={this._onClickUserName}
             />

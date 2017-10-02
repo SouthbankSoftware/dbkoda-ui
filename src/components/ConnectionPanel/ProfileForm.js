@@ -86,9 +86,11 @@ export class ProfileForm extends MobxReactForm {
     if (value) {
       form.$('username').set('rules', 'required|string');
       form.$('password').set('rules', 'required|string');
+      form.$('authenticationDatabase').set('rules', 'string');
     } else {
       form.$('username').set('rules', '');
       form.$('password').set('rules', '');
+      form.$('authenticationDatabase').set('rules', '');
     }
   }
 
@@ -247,9 +249,18 @@ export const Form = {
       value: 'admin',
     },
     {
+      name: 'authenticationDatabase',
+      label: 'Authentication Database',
+    },
+    {
       name: 'ssl',
       value: false,
       label: 'SSL',
+    },
+    {
+      name: 'sslAllowInvalidCertificates',
+      value: false,
+      label: 'Allow Invalid Certificates',
     },
     {
       name: 'sha',
@@ -323,7 +334,9 @@ export const createFormFromProfile = (profile) => {
   fields[4].value = profile.urlRadio;
   fields[5].value = profile.url;
   fields[6].value = profile.database;
+  fields[19].value = profile.authenticationDatabase;
   fields[7].value = profile.ssl;
+  fields[20].value = profile.sslAllowInvalidCertificates;
   fields[8].value = profile.sha;
   fields[9].value = profile.username;
   fields[10].value = profile.password;

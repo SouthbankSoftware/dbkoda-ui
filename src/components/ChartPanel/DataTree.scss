@@ -1,4 +1,9 @@
-/*
+/**
+ * @Author: guiguan
+ * @Date:   2017-09-21T15:25:12+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-09-27T09:36:50+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -25,6 +30,7 @@
      .pt-tree-node-secondary-label {
        order: 4 !important;
        padding-top: 0 !important;
+       white-space: nowrap;
      }
    }
  }

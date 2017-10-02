@@ -3,7 +3,7 @@
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-22T16:03:54+10:00
+ * @Last modified time: 2017-09-27T16:04:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@ import path from 'path';
 import { Alert, AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
+import { Broker, EventType } from '~/helpers/broker';
 import { featherClient } from '~/helpers/feathers';
 import Block from './AggregateBlocks/Block.jsx';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
@@ -70,6 +71,9 @@ export default class GraphicalBuilder extends React.Component {
       collection: props.collection,
       isLoading: false
     };
+
+    Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
+
     this.debug = false;
     // Set up the aggregate builder in the shell.
     this.editor = this.props.store.editors.get(
@@ -1493,7 +1497,7 @@ export default class GraphicalBuilder extends React.Component {
                   );
                 })}
               <LastBlockTarget />
-              <GenerateChartCheckbox />
+              <GenerateChartCheckbox connectionId={this.props.editor.currentProfile} editorId={this.props.editor.id} />
             </ul>
           ) : (
             <div className="loaderWrapper">

@@ -30,24 +30,24 @@
  * create new profile form and handle connection
  */
 import React from 'react';
-import {action} from 'mobx';
-import {inject, observer} from 'mobx-react';
-import {Intent, Position} from '@blueprintjs/core';
+import { action } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { Intent, Position } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import uuidV1 from 'uuid/v1';
-import {createForm, ProfileForm} from './ProfileForm';
+import { createForm, ProfileForm } from './ProfileForm';
 import Panel from './Panel';
-import {featherClient} from '../../helpers/feathers';
-import {DBKodaToaster} from '../common/Toaster';
-import {Broker, EventType} from '../../helpers/broker';
-import {ProfileStatus, DrawerPanes} from '.././common/Constants';
+import { featherClient } from '../../helpers/feathers';
+import { DBKodaToaster } from '../common/Toaster';
+import { Broker, EventType } from '../../helpers/broker';
+import { ProfileStatus, DrawerPanes } from '.././common/Constants';
 
 const ConnectionPanel = ({
-                           profiles,
-                           profileList,
-                           setDrawerChild,
-                           userPreferences,
-                         }) => {
+  profiles,
+  profileList,
+  setDrawerChild,
+  userPreferences,
+}) => {
   const selectedProfile = profileList.selectedProfile;
   let edit = false;
   if (profileList.selectedProfile) {
@@ -91,7 +91,11 @@ const ConnectionPanel = ({
     if (!data.test) {
       if (edit) {
         profiles.delete(selectedProfile.id);
-        Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {id: res.id, shellId: res.shellId, output:res.output.join('\n')});
+        Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {
+          id: res.id,
+          shellId: res.shellId,
+          output: res.output.join('\n'),
+        });
       }
       position = Position.RIGHT_TOP;
       form.reset();
@@ -101,12 +105,14 @@ const ConnectionPanel = ({
         password: null,
         status: ProfileStatus.OPEN,
         database: data.database,
+        authenticationDatabase: data.authenticationDatabase,
         alias: data.alias,
         authorization: data.authorization,
         host: data.host,
         hostRadio: data.hostRadio,
         port: data.port,
         ssl: data.ssl,
+        sslAllowInvalidCertificates: data.sslAllowInvalidCertificates,
         test: data.test,
         url: data.url,
         urlRadio: data.urlRadio,
@@ -122,13 +128,13 @@ const ConnectionPanel = ({
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
-        editorCount: 1
+        editorCount: 1,
       };
       if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
         profile.bPassPhrase = true;
       }
       if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
-          profile.bRemotePass = true;
+        profile.bRemotePass = true;
       }
       profiles.set(res.id, profile);
       profileList.selectedProfile = profiles.get(res.id);
@@ -175,7 +181,8 @@ const ConnectionPanel = ({
       query.localHost = '127.0.0.1';
       data.sshLocalPort = await ProfileForm.getRandomPort();
       query.localPort = data.sshLocalPort;
-      connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+      connectionUrl =
+        ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       if (data.passRadio) {
         query.remotePass = data.remotePass;
       } else if (data.keyRadio) {
@@ -186,14 +193,19 @@ const ConnectionPanel = ({
     if (data.sha) {
       query.username = data.username;
       query.password = data.password;
+      query.password = data.password;
+      query.authenticationDatabase = data.authenticationDatabase;
     }
     if (data.ssl) {
-      connectionUrl.indexOf('?') > 0 ? connectionUrl += '&ssl=true' : connectionUrl += '?ssl=true';
+      connectionUrl.indexOf('?') > 0
+        ? (connectionUrl += '&ssl=true')
+        : (connectionUrl += '?ssl=true');
     }
 
     query.database = data.database;
     query.url = connectionUrl;
     query.ssl = data.ssl;
+    query.sslAllowInvalidCertificates = data.sslAllowInvalidCertificates;
     query.test = data.test;
     query.authorization = data.authorization;
     if (selectedProfile) {
@@ -202,10 +214,10 @@ const ConnectionPanel = ({
     }
 
     profileList.creatingNewProfile = true;
-    console.log('Q: ', query);
     const service = featherClient().service('/mongo-connection');
     service.timeout = 30000;
-    return service.create({}, {query})
+    return service
+      .create({}, { query })
       .then((res) => {
         onSuccess(res, data);
       })
@@ -213,15 +225,19 @@ const ConnectionPanel = ({
         console.error(err);
         onFail();
         DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />), // eslint-disable-line react/no-danger
+          message: (
+            <span
+              dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }}
+            />
+          ), // eslint-disable-line react/no-danger
           intent: Intent.DANGER,
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
       });
   });
 
   const save = action((formData) => {
-    const profile = {...formData, status: ProfileStatus.CLOSED};
+    const profile = { ...formData, status: ProfileStatus.CLOSED };
     if (edit) {
       profile.id = selectedProfile.id;
       profile.shellId = selectedProfile.shellId;
@@ -237,8 +253,6 @@ const ConnectionPanel = ({
     close();
   });
 
-
-
   return (
     <Panel
       form={form}
@@ -247,7 +261,13 @@ const ConnectionPanel = ({
       connect={connect}
       profiles={profiles}
       save={save}
-      title={edit ? globalString('connection/editHeading') : globalString('connection/createHeading')}
+      title={
+        edit ? (
+          globalString('connection/editHeading')
+        ) : (
+          globalString('connection/createHeading')
+        )
+      }
     />
   );
 };

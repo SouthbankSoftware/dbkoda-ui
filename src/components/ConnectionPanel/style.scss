@@ -34,15 +34,15 @@
   .pt-form-group.pt-inline {
     align-items: stretch;
   }
-  input[type=text],
-  input[type=number],
-  input[type=password] {
+  input[type='text'],
+  input[type='number'],
+  input[type='password'] {
     background: unset;
     color: $connectionActiveTextFieldTextColour !important;
   }
-  input[type=text]:focus,
-  input[type=number]:focus,
-  input[type=password]:focus {
+  input[type='text']:focus,
+  input[type='number']:focus,
+  input[type='password']:focus {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
@@ -137,9 +137,76 @@
         }
       }
     }
+    div.authentication-database-form {
+      div.authenticationDatabase-input-content {
+        display: flex;
+        flex-direction: column;
+        label.authenticationDatabase-label {
+          font-size: 12pt;
+          font-weight: normal;
+          color: $connectionHeadingsFontColour;
+        }
+      }
+    }
+    div.ssh-form {
+      div.ssh-input-content {
+        label.ssh-input {
+          font-size: 10pt;
+          font-weight: lighter;
+          color: $connectionHeadingsFontColour !important;
+          text-align: left;
+          margin: 0;
+          span.pt-control-indicator {
+            font-size: unset;
+            font-weight: unset;
+            font-style: unset;
+            box-shadow: unset;
+            line-height: unset;
+            background: unset;
+            box-shadow: unset;
+            font-size: 11pt;
+            color: $connectionCheckboxColour;
+            border-radius: 0;
+            background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+            border: 1px solid $connectionCheckboxColour;
+          }
+          span.pt-control-indicator:hover {
+            background-color: $connectionCheckboxBackgroundColourHover;
+          }
+        }
+      }
+    }
     div.ssl-form {
       div.ssl-input-content {
         label.ssl-input {
+          font-size: 10pt;
+          font-weight: lighter;
+          color: $connectionHeadingsFontColour !important;
+          text-align: left;
+          margin: 0;
+          span.pt-control-indicator {
+            font-size: unset;
+            font-weight: unset;
+            font-style: unset;
+            box-shadow: unset;
+            line-height: unset;
+            background: unset;
+            box-shadow: unset;
+            font-size: 11pt;
+            color: $connectionCheckboxColour;
+            border-radius: 0;
+            background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+            border: 1px solid $connectionCheckboxColour;
+          }
+          span.pt-control-indicator:hover {
+            background-color: $connectionCheckboxBackgroundColourHover;
+          }
+        }
+      }
+    }
+    div.sslAllowInvalidCertificates-form {
+      div.sslAllowInvalidCertificates-input-content {
+        label.sslAllowInvalidCertificates-input {
           font-size: 10pt;
           font-weight: lighter;
           color: $connectionHeadingsFontColour !important;
@@ -369,16 +436,13 @@
   .sshKeyFile-input,
   .passPhrase-input-content .pt-form-content,
   .passPhrase-input,
-  .pt-file-upload,
-  {
+  .pt-file-upload {
     width: 100%;
   }
-  .sshKeyFile-input-content
-  {
+  .sshKeyFile-input-content {
     width: 60%;
   }
-  .passPhrase-input-content
-  {
+  .passPhrase-input-content {
     width: 40%;
   }
   .port-input {

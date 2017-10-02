@@ -31,6 +31,7 @@ import StorageSunburstView from '#/common/SunburstView';
 import { SyncService } from '#/common/SyncService';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import { Broker, EventType } from '~/helpers/broker';
 import { AnchorButton } from '@blueprintjs/core';
 import RefreshIcon from '~/styles/icons/refresh-icon.svg';
 import './Panel.scss';
@@ -49,6 +50,7 @@ export default class StoragePanel extends React.Component {
       selectedNode: null,
     };
     this.loadData = this.loadData.bind(this);
+    Broker.emit(EventType.FEATURE_USE, 'StorageView');
     this.loadData();
   }
   @action
@@ -89,7 +91,7 @@ export default class StoragePanel extends React.Component {
     const newData = data;
     this.addParent(newData);
     this.setState({
-      data: newData
+      data: newData,
     });
     this.showLoading(false);
     this.showView(true);
@@ -180,7 +182,7 @@ export default class StoragePanel extends React.Component {
         selectedNode: node,
       });
     }
-  }
+  };
   onChildDblClick = (node) => {
     // node is a tree Node in d3-hierachy (https://github.com/d3/d3-hierarchy) that just clicked by user
     if (this.state.selectedNode == node) {
@@ -230,17 +232,16 @@ export default class StoragePanel extends React.Component {
   render() {
     return (
       <div className="StoragePanel">
-        {!this.bLoading && <nav className="storageToolbar pt-navbar pt-dark">
-          <div className="pt-navbar-group pt-align-right">
-            <AnchorButton
-              className="refreshButton"
-              onClick={this.loadData}
-            >
-              <RefreshIcon width={50} height={50} className="dbKodaSVG" />
-            </AnchorButton>
-          </div>
-        </nav>}
-        {this.bStorageView &&
+        {!this.bLoading && (
+          <nav className="storageToolbar pt-navbar pt-dark">
+            <div className="pt-navbar-group pt-align-right">
+              <AnchorButton className="refreshButton" onClick={this.loadData}>
+                <RefreshIcon width={50} height={50} className="dbKodaSVG" />
+              </AnchorButton>
+            </div>
+          </nav>
+        )}
+        {this.bStorageView && (
           <StorageSunburstView
             data={this.state.data}
             selectedNode={this.state.selectedNode}
@@ -248,23 +249,25 @@ export default class StoragePanel extends React.Component {
             onDblClick={this.onChildDblClick}
             onBreadCrumbClick={this.onChartBreadCrumbClick}
             store={this.props.store}
-          />}
-        {this.bLoading &&
+          />
+        )}
+        {this.bLoading && (
           <div>
             <div className="details-msg-div">
               <div className="messageWrapper">
-                {this.bLoading &&
+                {this.bLoading && (
                   <div className="iconWrapper">
                     <div className="loader" />
-                  </div>}
+                  </div>
+                )}
                 {!this.bLoading &&
-                  !this.bStorageView &&
-                  <span className="failureText">
-                    {this.msg}
-                  </span>}
+                !this.bStorageView && (
+                  <span className="failureText">{this.msg}</span>
+                )}
               </div>
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }

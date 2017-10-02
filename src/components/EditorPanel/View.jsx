@@ -324,6 +324,7 @@ class View extends React.Component {
                 !content.match(/^ *show /g) &&
                 !content.match(/^ *it */g) &&
                 !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
+                !content.match(/^ *var/g) &&
                 !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
               ) {
                 NewToaster.show({
@@ -1016,27 +1017,22 @@ class View extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
     if (editor && editor.openTranslator) {
-      return connectDropTarget(
-        <div className="editorView translator-open">
-          <SplitPane
-            split="vertical"
-            primary="second"
-            defaultSize={512}
-            minSize={200}
-          >
-            <CodeMirrorEditor
-              ref={ref => (this.editor = ref)}
-              codeMirrorInstance={CodeMirror}
-              options={this.cmOptions}
-            />
-            <TranslatorPanel
-              value={editor.shellCode}
-              syntax="cb"
-              closePanel={this.closeTranslatorPanel}
-            />
-          </SplitPane>
-        </div>,
-      );
+      return connectDropTarget(<div className="editorView translator-open">
+        <SplitPane
+          split="vertical"
+          primary="second"
+          defaultSize={512}
+          minSize={200}>
+          <CodeMirrorEditor
+            ref={ref => (this.editor = ref)}
+            codeMirrorInstance={CodeMirror}
+            options={this.cmOptions}
+          />
+          <TranslatorPanel value={editor.shellCode} syntax="cb" profileId={editor.profileId}
+            shellId={editor.shellId}
+            closePanel={this.closeTranslatorPanel} />
+        </SplitPane>
+      </div>);
     }
     return connectDropTarget(
       <div className="editorView">

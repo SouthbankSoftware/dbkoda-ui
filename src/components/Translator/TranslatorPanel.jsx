@@ -24,21 +24,24 @@
 import React from 'react';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
+import {action} from 'mobx';
 import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
-import {ContextMenuTarget, Button, Intent, Position} from '@blueprintjs/core';
+import { Broker, EventType } from '~/helpers/broker';
+import {Button, ContextMenuTarget, Intent, Position, MenuItem, Menu} from '@blueprintjs/core';
 import Prettier from 'prettier-standalone';
 
 import 'codemirror/theme/material.css';
 import CMOptions from './CMOptions';
 import './translator.scss';
 import {DBKodaToaster} from '../common/Toaster';
+import {featherClient} from '../../helpers/feathers';
 
 @ContextMenuTarget
 export default class TranslatorPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {syntax: SyntaxType.callback, value: '', shellCode: ''};
-    this.syntaxChange = this.syntaxChange.bind(this);
+    Broker.emit(EventType.FEATURE_USE, 'NodeTranslator');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -61,10 +64,11 @@ export default class TranslatorPanel extends React.Component {
     let newValue = null;
     try {
       newValue = translator.translate(value, syntax);
+      console.log('translated ', value, newValue);
     } catch (_err) {
       // failed to translate code
       DBKodaToaster(Position.RIGHT_TOP).show({
-        message: (<span dangerouslySetInnerHTML={{ __html: 'Error: Failed to translate shell script.' }} />), // eslint-disable-line react/no-danger
+        message: (<span dangerouslySetInnerHTML={{__html: 'Error: Failed to translate shell script.'}} />), // eslint-disable-line react/no-danger
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down'
       });
@@ -80,21 +84,48 @@ export default class TranslatorPanel extends React.Component {
     this.setState({value: newValue, syntax});
   }
 
+  @action.bound
   syntaxChange(e) {
     this.translate(e.target.value, this.state.shellCode);
     this.setState({syntax: e.target.value});
   }
 
-  renderContextMenu() {
-    return (<div />);
+  @action.bound
+  executeCommands() {
+    console.log('execute commands ', this.state.value);
+    const service = featherClient().service('/mongo-driver');
+    service.timeout = 30000;
+    service.update(this.props.profileId, {commands: this.state.value, shellId: this.props.shellId})
+      .then((doc) => {
+        console.log('execute response ', doc);
+      }).catch((err) => {
+        console.error(err.message);
+        DBKodaToaster(Position.RIGHT_TOP).show({
+          message: (<span dangerouslySetInnerHTML={{__html: err.message}} />), // eslint-disable-line react/no-danger
+          intent: Intent.DANGER,
+          iconName: 'pt-icon-thumbs-down'
+        });
+    });
   }
 
-  render() {
-    const {value} = this.state;
-    console.log('value=', value);
-    const options = {...CMOptions, readOnly: true};
-    return (<div className="ReactCodeMirror translate-codemirror">
-      <div className="syntax-selection">
+  renderContextMenu() {
+    return (
+      <Menu>
+        <div className="menuItemWrapper">
+          <MenuItem
+            onClick={this.executeCommands}
+            text={globalString('editor/view/menu/executeSelected')}
+            iconName="pt-icon-double-chevron-right"
+            intent={Intent.NONE}
+          />
+        </div>
+      </Menu>
+    );
+  }
+
+  renderSyntaxSelection() {
+    return (
+      <div>
         <div className="pt-label">Syntax</div>
         <div className="pt-select">
           <select
@@ -106,11 +137,21 @@ export default class TranslatorPanel extends React.Component {
             <option value={SyntaxType.await}>{globalString('translator/tooltip/await')}</option>
           </select>
         </div>
+      </div>);
+  }
+
+  render() {
+    const {value} = this.state;
+    const options = {...CMOptions};
+    return (<div className="ReactCodeMirror translate-codemirror">
+      <div className="syntax-selection">
+        <div className="nodejs-driver">{globalString('translator/label/driver-code')}</div>
         <Button className="close-btn pt-icon-cross" onClick={() => this.props.closePanel()} />
       </div>
       <CodeMirror
         className="CodeMirror-scroll"
         options={options}
+        onChange={doc => this.setState({value: doc})}
         codeMirrorInstance={CM} value={value} />
     </div>);
   }
@@ -118,8 +159,12 @@ export default class TranslatorPanel extends React.Component {
 
 TranslatorPanel.defaultProps = {
   value: '',
+  profileId: '',
+  shellId: '',
 };
 
 TranslatorPanel.propTypes = {
   value: React.PropTypes.string,
+  profileId: React.PropTypes.string.required,
+  shellId: React.PropTypes.string.required,
 };

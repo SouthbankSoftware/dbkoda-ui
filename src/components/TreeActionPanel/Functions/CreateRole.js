@@ -28,11 +28,14 @@ import * as common from './Common.js';
 
 export const CreateRole = {
   // Prefill function for create role
-  dbkoda_CreateRolePreFill: () => {
+  dbkoda_CreateRolePreFill: (params) => {
+    if (params.Database === 'Roles') {
+      params.Database = '';
+    }
     const data = {};
-    data.Database = 'admin';
+    data.Database = params.Database;
     data.Roles = [];
-    data.Roles.push({ Database:'admin', Role:'read'});
+    data.Privileges = [];
     return data;
   },
   dbkoda_validateRole: (inputDoc) => {
