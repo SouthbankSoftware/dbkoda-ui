@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-22T15:52:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-02T15:30:41+11:00
+ * @Last modified time: 2017-10-02T16:51:26+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,6 +30,8 @@ import { AnchorButton, Intent } from '@blueprintjs/core';
 import { inject } from 'mobx-react';
 // $FlowFixMe
 import { NewToaster } from '#/common/Toaster';
+// $FlowFixMe
+import { Broker, EventType } from '~/helpers/broker';
 import _ from 'lodash';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
@@ -65,6 +67,22 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
   parserRegex = /use\s+(\S+)\s*;[^]*db\.(\S+)\.aggregate\(\s*(\[[^]*\])\s*,\s*({[^]*})\s*\)\s*;/;
   commentStripperRegex = /\/\*[^]*\*\//g;
 
+  constructor(props: Props) {
+    super(props);
+
+    Broker.on(
+      EventType.createAggregatorResultReceived(props.editorId),
+      this._onAggregatorResultReceived,
+    );
+  }
+
+  componentWillUnmount() {
+    Broker.off(
+      EventType.createAggregatorResultReceived(this.props.editorId),
+      this._onAggregatorResultReceived,
+    );
+  }
+
   _stripComment = (comment: string) => {
     return comment.replace(this.commentStripperRegex, '');
   };
@@ -80,6 +98,15 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
       intent: Intent.DANGER,
       iconName: 'pt-icon-thumbs-down',
     });
+  };
+
+  _onAggregatorResultReceived = (result) => {
+    if (typeof result === 'string') {
+      this._handleError(new Error(result));
+    } else {
+      // $FlowFixMe
+      api.outputApi.showChartPanel(this.props.editorId, result);
+    }
   };
 
   _generateChart = () => {
@@ -106,15 +133,12 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
       featherClient()
         .service('aggregators')
         .create({
+          editorId,
           connectionId,
           database,
           collection,
           pipeline,
           options,
-        })
-        .then((result) => {
-          // $FlowFixMe
-          api.outputApi.showChartPanel(editorId, result);
         })
         .catch(this._handleError);
     } else {

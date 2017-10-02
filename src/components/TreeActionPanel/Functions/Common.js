@@ -35,6 +35,7 @@ const debug = false;
 
 export function dbkoda_listdb(params) {
   //eslint-disable-line
+  console.log(params);
   return 'db.adminCommand({listDatabases: 1})';
 }
 

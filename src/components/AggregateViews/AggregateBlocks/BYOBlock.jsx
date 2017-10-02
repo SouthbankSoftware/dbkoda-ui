@@ -62,6 +62,7 @@ export default class BYOBlock extends React.Component {
     this.block = this.editor.blockList[this.editor.selectedBlock];
     this.currentCollection = this.props.currentCollection;
     if (!this.block.code) {
+      // eslint-disable-next-line
       const formTemplate = require('./BlockTemplates/' +
         this.block.type +
         '.hbs');

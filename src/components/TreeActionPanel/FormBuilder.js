@@ -354,17 +354,20 @@ export default class FormBuilder {
         this.resolveArguments = resolveArguments;
         this.editor = editorObject;
         // Load the form definitions dynamically
+        // eslint-disable-next-line
         ddd = require('../AggregateViews/AggregateBlocks/BlockDefinitions/' +
           treeAction +
-          '.ddd.json'); //eslint-disable-line
+          '.ddd.json');
         // Load the form functions to support the definitions dynamically
+        // eslint-disable-next-line
         formFunctions = require('../AggregateViews/AggregateBlocks/BlockFunctions/' +
           treeAction +
-          '.js')[treeAction]; //eslint-disable-line
+          '.js')[treeAction];
         // load the form template
+        // eslint-disable-next-line
         formTemplate = require('../AggregateViews/AggregateBlocks/BlockTemplates/' +
           treeAction +
-          '.hbs'); //eslint-disable-line
+          '.hbs');
       } else {
         treeAction = formAction;
         this.resolveArguments = resolveArguments;
@@ -402,7 +405,7 @@ export default class FormBuilder {
                     frmVals[mFld] = frmVals[mFld].join('|');
                   }
                 } else {
-                    frmVals[mFld] = frmVals[mFld].split('|');
+                  frmVals[mFld] = frmVals[mFld].split('|');
                 }
               }
             };
@@ -422,7 +425,8 @@ export default class FormBuilder {
 
               if (formDefs.multiCombo.length > 0) {
                 for (const fld of formDefs.multiCombo) {
-                  if (fld.indexOf('.') > 0) { // support for one child field so we can handle multiCombo in table/group fields
+                  if (fld.indexOf('.') > 0) {
+                    // support for one child field so we can handle multiCombo in table/group fields
                     const arrCFlds = fld.split('.');
                     traverseMultiCombo(arrCFlds, values, false);
                   } else {
@@ -453,7 +457,8 @@ export default class FormBuilder {
               if (formDefs.multiCombo.length > 0) {
                 for (const fld of formDefs.multiCombo) {
                   console.log(fld);
-                  if (fld.indexOf('.') > 0) { // support for one child field so we can handle multiCombo in table/group fields
+                  if (fld.indexOf('.') > 0) {
+                    // support for one child field so we can handle multiCombo in table/group fields
                     const arrCFlds = fld.split('.');
                     traverseMultiCombo(arrCFlds, data);
                   } else {
