@@ -183,34 +183,40 @@ export default class TreeView extends React.Component {
           if (objAction.type && objAction.type == 'divider') {
             Menus.push(<MenuDivider key={objAction.name} />);
           } else {
-            const icon = this.getIconFor(objAction.icon);
-            if (icon != null) {
-              Menus.push(
-                <div className="menuItemWrapper">
-                  {icon}
-                  <MenuItem
-                    onClick={this.handleTreeActionClick}
-                    text={objAction.text}
-                    name={objAction.name}
-                    key={objAction.name}
-                    intent={Intent.NONE}
-                  />
-                </div>,
-              );
-            } else {
-              Menus.push(
-                <div className="menuItemWrapper">
-                  {icon}
-                  <MenuItem
-                    onClick={this.handleTreeActionClick}
-                    text={objAction.text}
-                    name={objAction.name}
-                    key={objAction.name}
-                    iconName={objAction.icon}
-                    intent={Intent.NONE}
-                  />
-                </div>,
-              );
+            let bDevOnlyFeature = false;
+            if (process.env.NODE_ENV !== 'development' && objAction.development) {
+              bDevOnlyFeature = true;
+            }
+            if (!bDevOnlyFeature) {
+              const icon = this.getIconFor(objAction.icon);
+              if (icon != null) {
+                Menus.push(
+                  <div className="menuItemWrapper">
+                    {icon}
+                    <MenuItem
+                      onClick={this.handleTreeActionClick}
+                      text={objAction.text}
+                      name={objAction.name}
+                      key={objAction.name}
+                      intent={Intent.NONE}
+                    />
+                  </div>,
+                );
+              } else {
+                Menus.push(
+                  <div className="menuItemWrapper">
+                    {icon}
+                    <MenuItem
+                      onClick={this.handleTreeActionClick}
+                      text={objAction.text}
+                      name={objAction.name}
+                      key={objAction.name}
+                      iconName={objAction.icon}
+                      intent={Intent.NONE}
+                    />
+                  </div>,
+                );
+              }
             }
           }
         }
