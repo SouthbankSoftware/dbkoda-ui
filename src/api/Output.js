@@ -53,7 +53,11 @@ export default class OutputApi {
 
   configureOutputs() {
     this.store.editors.entries().map((editor) => {
-      this.addOutput(editor[1]);
+      if (editor[1].type == EditorTypes.DRILL) {
+        this.addDrillOutput(editor[1]);
+      } else {
+        this.addOutput(editor[1]);
+      }
     });
   }
 
@@ -186,6 +190,64 @@ export default class OutputApi {
     this.store.outputs.get(outputId).output = totalOutput;
   }
 
+  @action.bound
+  addDrillOutput(editor) {
+    // this.outputHash[editor.profileId + '|' + editor.id] = editor.id;
+
+    try {
+      if (this.store.outputs.get(editor.id)) {
+        this.store.outputs.get(editor.id).cannotShowMore = true;
+        this.store.outputs.get(editor.id).showingMore = false;
+        if (
+          editor.id != 'Default' &&
+          this.store.outputs.get(editor.id).output
+        ) {
+          this.store.outputs.get(editor.id).output += globalString(
+            'output/editor/restoreSession',
+          );
+        }
+      } else {
+        console.log(`create new output for ${editor.id}`);
+        const editorTitle = editor.alias + ' (' + editor.fileName + ')';
+        this.store.outputs.set(
+          editor.id,
+          observable({
+            id: editor.id,
+            connId: editor.currentProfile,
+            title: editorTitle,
+            output: '',
+            cannotShowMore: true,
+            showingMore: false,
+            commandHistory: [],
+          }),
+        );
+
+        if (editor.initialMsg && editor.id != 'Default') {
+          let tmp = editor.initialMsg;
+          tmp = tmp.replace(/^\n/gm, '');
+          tmp = tmp.replace(/^\r/gm, '');
+          tmp = tmp.replace(/^\r\n/gm, '');
+          this.store.outputs.get(editor.id).output += tmp;
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  @action.bound
+  drillOutputAvailable(output) {
+    const profile = this.store.profiles.get(output.profileId);
+    const editor = this.store.editors.get(output.id);
+    const totalOutput =
+      this.store.outputs.get(output.id).output +
+      editor.doc.lineSep +
+      output.output;
+    if (profile && profile.status !== ProfileStatus.OPEN) {
+      // the connection has been closed.
+      return;
+    }
+    this.store.outputs.get(output.id).output = totalOutput;
+  }
   @action.bound
   initJsonView(jsonStr, outputId, displayType, lines, editor, singleDoc) {
     let tabPrefix;

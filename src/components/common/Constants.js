@@ -42,7 +42,8 @@ export const EditorTypes = {
   DEFAULT: 'default',
   TREE_ACTION: 'TreeAction',
   SHELL_COMMAND: 'os',
-  AGGREGATE: 'aggregate'
+  AGGREGATE: 'aggregate',
+  DRILL: 'drill'
 };
 
 export const DrawerPanes = {

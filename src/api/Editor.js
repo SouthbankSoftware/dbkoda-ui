@@ -268,4 +268,73 @@ export default class EditorApi {
       this.store.treeActionPanel.editors.delete(treeEditor.id);
     }
   }
+  @action.bound
+  addDrillEditor(profile, options = {}) {
+    const content = '';
+    const fileName = `new${this.store.profiles.get(profile.id).editorCount} (drill).js`;
+
+    const editorId = uuidV1();
+    this.store.profiles.get(profile.id).editorCount += 1;
+
+    const doc = StaticApi.createNewDocumentObject(content);
+    doc.lineSep = StaticApi.determineEol(content);
+
+    this.store.editors.set(
+      editorId,
+      observable(
+        _.assign(
+          {
+            id: editorId,
+            alias: this.store.profiles.get(profile.id).alias,
+            profileId: profile.id,
+            shellId: options.shellId,
+            currentProfile: profile.id,
+            fileName,
+            executing: false,
+            visible: true,
+            shellVersion: profile.shellVersion,
+            initialMsg: '', // profile.output ? profile.output.join('\n') : '',
+            doc: observable.ref(doc),
+            status: ProfileStatus.OPEN,
+            path: null,
+            type: options.type
+          },
+          options,
+        ),
+      ),
+    );
+    if (this.api) {
+      this.api.addDrillOutput(this.store.editors.get(editorId));
+    }
+    this.store.editorPanel.creatingNewEditor = false;
+    this.store.editorToolbar.noActiveProfile = false;
+    this.store.editorToolbar.id = profile.id;
+    this.store.editorToolbar.shellId = options.shellId;
+    this.store.editorToolbar.newConnectionLoading = false;
+    this.store.editorPanel.shouldScrollToActiveTab = true;
+    this.store.editorPanel.activeEditorId = editorId;
+    this.store.editorToolbar.currentProfile = profile.id;
+    this.store.editorToolbar.noActiveProfile = false;
+    this.store.editorPanel.activeDropdownId = profile.id;
+    this.store.newConnectionLoading = false;
+    this.store.editorToolbar.isActiveExecuting = false;
+
+    // Set left Panel State.
+    if (options.type === EditorTypes.AGGREGATE) {
+      this.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
+    } else if (options.type === EditorTypes.TREE_ACTION) {
+      this.store.drawer.drawerChild = DrawerPanes.DYNAMIC;
+    } else if (options.type === EditorTypes.SHELL_COMMAND) {
+      this.store.drawer.drawerChild = DrawerPanes.BACKUP_RESTORE;
+    } else {
+      this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+    }
+
+    NewToaster.show({
+      message: globalString('editor/toolbar/connectionSuccess'),
+      intent: Intent.SUCCESS,
+      iconName: 'pt-icon-thumbs-up',
+    });
+    return editorId;
+  }
 }

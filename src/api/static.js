@@ -14,6 +14,7 @@ import { Intent } from '@blueprintjs/core';
 const MAX_DOCUMENTS = 500;
 
 export default class StaticApi {
+  static mongoProtocol = 'mongodb://';
   /**
    * Determine EOL to be used for given content string
    *
