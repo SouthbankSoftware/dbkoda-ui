@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-22T16:01:13+10:00
+ * @Last modified time: 2017-10-02T14:01:42+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -82,6 +82,8 @@ declare module '@blueprintjs/core' {
   declare export var Menu;
   declare export var MenuItem;
   declare export var Checkbox;
+  declare export var AnchorButton;
+  declare export var Intent;
 
   declare export default any;
 }

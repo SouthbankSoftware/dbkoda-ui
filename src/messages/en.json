@@ -17,6 +17,7 @@
       "no_active_connection_for_import":
         "Cannot import without an active connection.",
       "import_button": "Import",
+      "generate_chart_button": "Generate Chart",
       "import_failed": "Sorry, failed to import that file!",
       "import_passed": "Import succeeded.",
       "export_passed": "Export Complete.",
@@ -38,7 +39,8 @@
           " Warning, your current aggregate builder will be lost on import, please export your builder before importing a new one. ",
         "cancel": "Cancel",
         "okay": "Okay"
-      }
+      },
+      "invalid_aggregation_code": "Invalid aggregation code. Please check syntax."
     },
     "telemetry_dialog": {
       "header": "Welcome!",
