@@ -1,0 +1,44 @@
+/**
+ * @Author: guiguan
+ * @Date:   2017-09-22T16:07:12+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-02T14:19:51+11:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+@import '../../styles/_defaultTheme.scss';
+
+.pt-button.pt-intent-success.GenerateChartButton {
+  bottom: 0;
+  left: 0;
+  margin: 5px !important;
+  position: absolute;
+  background-color: $editorBackground;
+  background-image: unset;
+  border: 1px solid #383e4f !important;
+  border-radius: 0;
+  font-weight: lighter;
+  color: $connectionButtonFontColour;
+  z-index: 10;
+}
+
+.pt-button.pt-intent-success.GenerateChartButton:hover {
+  background-color: $welcomeViewButtonHoverColor;
+  border: 1px solid $welcomeViewButtonHoverColor;
+}
