@@ -42,6 +42,9 @@ import Checkbox from './Checkbox';
 import './style.scss';
 import Label from './Label';
 
+const MAX_URL_ALIAS_LENGTH = 25;
+const MAX_HOSTNAME_ALIAS_LENGTH = 20;
+
 @observer
 export default class Panel extends React.Component {
   constructor(props) {
@@ -190,12 +193,21 @@ export default class Panel extends React.Component {
       profiles &&
       !this.state.hasAliasChanged
     ) {
-      form.$('alias').value =
-        form.$('host').value +
-        ':' +
-        form.$('port').value +
-        ' - ' +
-        (profiles.size + 1);
+      if (form.$('host').get('value').length > MAX_HOSTNAME_ALIAS_LENGTH) {
+        form.$('alias').value =
+          form.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
+          ':' +
+          form.$('port').value +
+          ' - ' +
+          (profiles.size + 1);
+      } else {
+        form.$('alias').value =
+          form.$('host').value +
+          ':' +
+          form.$('port').value +
+          ' - ' +
+          (profiles.size + 1);
+      }
     } else if (
       !edit &&
       form.$('urlRadio').get('value') &&
@@ -203,14 +215,16 @@ export default class Panel extends React.Component {
       !this.state.hasAliasChanged
     ) {
       console.log(form.$('url').get('value').length);
-      if (form.$('url').get('value').length > 25) {
+      if (form.$('url').get('value').length > MAX_URL_ALIAS_LENGTH) {
         if (form.$('url').value.split('//').length > 1) {
           form.$('alias').value = form
             .$('url')
             .value.split('//')[1]
-            .substring(0, 25);
+            .substring(0, MAX_URL_ALIAS_LENGTH);
         } else {
-          form.$('alias').value = form.$('url').value.substring(0, 25);
+          form.$('alias').value = form
+            .$('url')
+            .value.substring(0, MAX_URL_ALIAS_LENGTH);
         }
       } else if (form.$('url').value.split('//').length > 1) {
         console.log(form.$('url').value.split('//')[1]);
