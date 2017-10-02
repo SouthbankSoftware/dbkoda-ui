@@ -97,7 +97,9 @@ export default class FormBuilder {
     }
     if (defField.type == 'Combo') {
       res.fieldBinding = 'ComboField';
-      res.multi = defField.multi;
+      if (Object.prototype.hasOwnProperty.call(defField, 'multi')) {
+        res.multi = defField.multi;
+      }
     }
     return res;
   };
