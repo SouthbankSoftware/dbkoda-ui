@@ -32,10 +32,9 @@
 import React from 'react';
 import { NewToaster } from '#/common/Toaster';
 import { inject, observer } from 'mobx-react';
-import ReactExpandableListView from 'react-expandable-listview';
 import { featherClient } from '~/helpers/feathers';
 import { action, runInAction } from 'mobx';
-import { Intent, ITreeNode, Tree, Tooltip, Position } from '@blueprintjs/core';
+import { Intent, Tree, Tooltip, Position } from '@blueprintjs/core';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import Block from './AggregateBlocks/Block.jsx';
 import { AggregateCommands } from './AggregateCommands.js';
@@ -148,7 +147,7 @@ export default class Palette extends React.Component {
 
   /**
    * Gets a list of block types and converts it into a object that the listView can use.
-   * 
+   *
    * @TODO: Now that we are grouping the block list and
    * each block may have multiple groups, I should
    * refactor this to just parse a list of "groups" and
@@ -493,6 +492,7 @@ export default class Palette extends React.Component {
 
   @action.bound
   handleNodeClick(nodeData, _nodePath, e) {
+    console.log(e);
     // const originallySelected = nodeData.isSelected;
     // if (!e.shiftKey) {
     //   this.forEachNode(this.state.nodes, n => (n.isSelected = false));
