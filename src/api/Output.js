@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-27T17:24:30+10:00
+ * @Last modified time: 2017-10-03T11:52:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -69,8 +69,13 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
-          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
+        if (
+          editor.id != 'Default' &&
+          this.store.outputs.get(editor.id).output
+        ) {
+          this.store.outputs.get(editor.id).output += globalString(
+            'output/editor/restoreSession',
+          );
         }
       } else {
         if (this.debug) console.log(`create new output for ${editor.id}`);
@@ -137,12 +142,21 @@ export default class OutputApi {
       EventType.createShellOutputEvent(oldId, oldShellId),
       this.outputAvailable,
     );
-    Broker.removeListener(EventType.createShellReconnectEvent(oldId, oldShellId), this.onReconnect);
+    Broker.removeListener(
+      EventType.createShellReconnectEvent(oldId, oldShellId),
+      this.onReconnect,
+    );
 
     this.outputHash[id + '|' + shellId] = outputId;
 
-    Broker.on(EventType.createShellOutputEvent(id, shellId), this.outputAvailable);
-    Broker.on(EventType.createShellReconnectEvent(id, shellId), this.onReconnect);
+    Broker.on(
+      EventType.createShellOutputEvent(id, shellId),
+      this.outputAvailable,
+    );
+    Broker.on(
+      EventType.createShellReconnectEvent(id, shellId),
+      this.onReconnect,
+    );
   }
 
   @action.bound
@@ -295,7 +309,9 @@ export default class OutputApi {
         runInAction(
           () => {
             NewToaster.show({
-              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+              message:
+                globalString('output/editor/parseJsonError') +
+                error.substring(0, 50),
               intent: Intent.DANGER,
               icon: '',
             });
@@ -303,7 +319,9 @@ export default class OutputApi {
           (error) => {
             runInAction(() => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -323,6 +341,8 @@ export default class OutputApi {
    * @param {String} jsonStr - The JSON string that triggered the table view.
    * @param {String} outputId - The ID of the output to create a new view for,
    * @param {Object} lines - The lines in codemirror to be searched.
+   * @param {Object} cm - The Codemirror instance to collect information from.
+   * @param {Boolean} singleLine - Whether or not this is a single line (true) or a result set (false)
    */
   @action.bound
   initJsonTableView(jsonStr, outputId, displayType, lines, cm, singleLine) {
@@ -342,7 +362,9 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -350,7 +372,9 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                  message:
+                    globalString('output/editor/parseJsonError') +
+                    error.substring(0, 50),
                   intent: Intent.DANGER,
                   icon: '',
                 });
@@ -377,7 +401,9 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -391,7 +417,9 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                  message:
+                    globalString('output/editor/parseJsonError') +
+                    error.substring(0, 50),
                   intent: Intent.DANGER,
                   icon: '',
                 });
@@ -404,6 +432,23 @@ export default class OutputApi {
         },
       );
     }
+  }
+
+  /**
+   *
+   * Simple helper method to create a JSON Table Output given just an array of json objects.
+   * @param { Object[] } JSONArray - The array of JSON Documents to render in a table view.
+   * @param { String } outputId - The id of the output to create a new table view for.
+   */
+  @action.bound
+  createJSONTableViewFromJSONArray(JSONArray, outputId) {
+    runInAction(() => {
+      this.store.outputs.get(outputId).tableJson = {
+        json: JSONArray,
+        firstLine: 0,
+        lastLine: 0,
+      };
+    });
   }
 
   @action.bound
