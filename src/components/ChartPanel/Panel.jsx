@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-27T18:17:06+10:00
+ * @Last modified time: 2017-10-03T11:10:50+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -43,6 +43,7 @@ import './Panel.scss';
 const DEBOUNCE_DELAY = 100;
 const CHART_XY_LIMIT = 20;
 const CHART_CENTER_LIMIT = 10;
+export const DEFAULT_AXIS_VALUE_SCHEMA_PATH = '[[DEFAULT]]';
 
 type Data = {}[];
 type ChartComponents = {
@@ -170,7 +171,15 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   }
 
   _autoSelectComponents = action((selectedComponents: SelectedComponents) => {
-    _.assign(this.props.store.chartPanel, selectedComponents);
+    _.assign(
+      this.props.store.chartPanel,
+      {
+        chartComponentX: null,
+        chartComponentY: null,
+        chartComponentCenter: null,
+      },
+      selectedComponents,
+    );
   });
 
   _getComponentsForBarChart(
@@ -186,14 +195,14 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       // use x as default categorical axis
       resultChartComponents.chartComponentX = {
         name: 'x',
-        valueSchemaPath: 'default',
+        valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
         valueType: 'string',
       };
     } else {
       // use x as default numerical axis
       resultChartComponents.chartComponentX = {
         name: 'x',
-        valueSchemaPath: 'default',
+        valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
         valueType: 'number',
       };
     }
@@ -204,14 +213,14 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       // use y as default numerical axis
       resultChartComponents.chartComponentY = {
         name: 'y',
-        valueSchemaPath: 'default',
+        valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
         valueType: 'number',
       };
     } else {
       // use y as default categorical axis
       resultChartComponents.chartComponentY = {
         name: 'y',
-        valueSchemaPath: 'default',
+        valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
         valueType: 'string',
       };
     }
@@ -222,7 +231,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       // use default center
       resultChartComponents.chartComponentCenter = {
         name: 'center',
-        valueSchemaPath: 'default',
+        valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
         valueType: 'string',
       };
     }
@@ -257,15 +266,15 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     const numericalBinMap: Map<string, boolean> = new Map();
     _.forEach(data, (v) => {
       let categoricalValue =
-        categoricalComponent.valueSchemaPath === 'default'
-          ? 'default'
+        categoricalComponent.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
+          ? ''
           : _.get(v, categoricalComponent.valueSchemaPath, 'other'); // treat missing value as `other`
       const numericalValue =
-        numericalComponent.valueSchemaPath === 'default'
+        numericalComponent.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
           ? 1
           : _.get(v, numericalComponent.valueSchemaPath, 0);
       let numericalBin =
-        chartComponentCenter.valueSchemaPath === 'default'
+        chartComponentCenter.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
           ? 'default'
           : _.get(v, chartComponentCenter.valueSchemaPath, 'other'); // treat missing value as `other`
 

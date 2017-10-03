@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-27T16:16:54+10:00
+ * @Last modified time: 2017-10-03T11:03:18+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import { BarChart as RBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { DEFAULT_AXIS_VALUE_SCHEMA_PATH } from './Panel';
 import styles from './BarChart.scss';
 
 const COLOUR_PALETTE: string[] = _.values(styles);
@@ -67,12 +68,16 @@ export default class BarChart extends React.PureComponent<Props> {
           margin={MARGIN}
           layout={componentX.valueType === 'string' ? 'horizontal' : 'vertical'}
         >
-          {componentX.valueType === 'string'
-            ? <XAxis type="category" dataKey="x" />
-            : <XAxis type="number" />}
-          {componentY.valueType === 'string'
-            ? <YAxis type="category" dataKey="y" />
-            : <YAxis type="number" />}
+          {componentX.valueType === 'string' ? (
+            <XAxis type="category" dataKey="x" />
+          ) : (
+            <XAxis type="number" />
+          )}
+          {componentY.valueType === 'string' ? (
+            <YAxis type="category" dataKey="y" />
+          ) : (
+            <YAxis type="number" />
+          )}
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
@@ -81,17 +86,21 @@ export default class BarChart extends React.PureComponent<Props> {
             transform={`translate(20, ${height / 2 - 30})rotate(-90)`}
             fill="#666"
           >
-            {componentY.valueSchemaPath}
+            {componentY.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
+              ? componentY.valueType === 'string' ? '' : 'count'
+              : componentY.valueSchemaPath}
           </text>
           <text
             textAnchor="middle"
             transform={`translate(${width / 2 - 10}, ${height - 10})`}
             fill="#666"
           >
-            {componentX.valueSchemaPath}
+            {componentX.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
+              ? componentX.valueType === 'string' ? '' : 'count'
+              : componentX.valueSchemaPath}
           </text>
           {componentCenter.values &&
-            _.map(componentCenter.values, (v, i) =>
+            _.map(componentCenter.values, (v, i) => (
               <Bar
                 key={v}
                 dataKey={`${centerDataKeyPrefix}${v}`}
@@ -99,8 +108,8 @@ export default class BarChart extends React.PureComponent<Props> {
                 name={v}
                 fill={COLOUR_PALETTE[i % COLOUR_PALETTE.length]}
                 isAnimationActive={false}
-              />,
-            )}
+              />
+            ))}
         </RBarChart>
       </div>
     );
