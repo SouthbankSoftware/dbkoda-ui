@@ -1,8 +1,8 @@
 db.getSiblingDB("{{Database}}").createRole({
     createRole: "{{RoleName}}",
-    roles: [ {{#each Roles}}
-      { role:"{{Role}}", db: "{{Database}}" } {{#unless @last}},{{/unless}}
-    {{/each}} ],
+    roles: [  {{#each Roles }}
+            { role:"{{Role}}", db: "{{Database}}" } {{#unless @last ~}},{{/unless ~}}
+    {{/each ~}} ],
     privileges: [ {{#each Privileges}}
       {
         resource: { {{#if Cluster}}cluster: true{{else}}db: "{{Database}}", collection: "{{Collection}}"{{/if}} },
