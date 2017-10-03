@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-27T17:24:30+10:00
+ * @Last modified time: 2017-10-03T11:52:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,7 @@
 
 import { action, observable, runInAction, extendObservable } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
-import { ProfileStatus } from '#/common/Constants';
+import { EditorTypes, ProfileStatus } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
 import { Intent } from '@blueprintjs/core';
 import StaticApi from './static';
@@ -435,7 +435,7 @@ export default class OutputApi {
   }
 
   /**
-   * 
+   *
    * Simple helper method to create a JSON Table Output given just an array of json objects.
    * @param { Object[] } JSONArray - The array of JSON Documents to render in a table view.
    * @param { String } outputId - The id of the output to create a new table view for.
