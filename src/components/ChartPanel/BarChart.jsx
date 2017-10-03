@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-03T11:03:18+11:00
+ * @Last modified time: 2017-10-03T14:25:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,7 @@ import styles from './BarChart.scss';
 
 const COLOUR_PALETTE: string[] = _.values(styles);
 const MARGIN = { top: 20, right: 20, left: 10, bottom: 30 };
+const Y_AXIS_TICK_MAX_LEN = 9;
 
 export type ChartComponentName = 'x' | 'y' | 'center';
 export type ChartComponent = {
@@ -52,6 +53,35 @@ type Props = {
   width: number,
   height: number,
 };
+
+class YAxisTick extends React.PureComponent<{}> {
+  _formatYAxisTick = (tick: string) => {
+    if (tick.length > Y_AXIS_TICK_MAX_LEN) {
+      return tick.slice(0, Y_AXIS_TICK_MAX_LEN);
+    }
+    return tick;
+  };
+
+  render() {
+    const { x, y, dy, stroke, payload } = this.props;
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text
+          x={0}
+          y={0}
+          dy={dy}
+          textAnchor="end"
+          fill="#666"
+          transform="rotate(-60)"
+          stroke={stroke}
+        >
+          {this._formatYAxisTick(String(payload.value))}
+        </text>
+      </g>
+    );
+  }
+}
 
 export default class BarChart extends React.PureComponent<Props> {
   render() {
@@ -74,9 +104,13 @@ export default class BarChart extends React.PureComponent<Props> {
             <XAxis type="number" />
           )}
           {componentY.valueType === 'string' ? (
-            <YAxis type="category" dataKey="y" />
+            <YAxis
+              type="category"
+              dataKey="y"
+              tick={<YAxisTick />}
+            />
           ) : (
-            <YAxis type="number" />
+            <YAxis type="number" tick={<YAxisTick />} />
           )}
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
