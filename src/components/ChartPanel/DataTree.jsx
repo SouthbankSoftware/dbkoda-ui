@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-04T16:57:44+11:00
+ * @Last modified time: 2017-10-04T17:11:03+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -174,6 +174,7 @@ export default class DataTree extends React.Component<Props, State> {
             nextChartComponent.name,
           );
           node.isSelected = true;
+          node.className = nextChartComponent.name;
         }
       }
     }
