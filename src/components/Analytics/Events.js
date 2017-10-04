@@ -31,6 +31,8 @@ module.exports = {
     OPT_IN: 'OptIn',
     OPT_OUT: 'OptOut',
     APP_OPEN: 'AppOpen',
-    NEW_PROFILE: 'NewProfile'
-  }
+    NEW_PROFILE: 'NewProfile',
+    KEY_FEATURE_USED: 'KeyFeatureUsed',
+    CONTROLLER_ACTIVITY: 'ControllerActivity',
+  },
 };

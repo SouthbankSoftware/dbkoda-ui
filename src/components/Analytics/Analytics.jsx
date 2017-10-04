@@ -31,7 +31,7 @@ import { inject, observer } from 'mobx-react';
 import ReactGA from 'react-ga';
 import { analytics, protocol } from '../../env';
 import { AnalyticsEvents } from './Events';
-import {Broker, EventType} from '../../helpers/broker';
+import { Broker, EventType } from '../../helpers/broker';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -51,7 +51,7 @@ export default class Analytics extends React.Component {
     } else if (process.env.NODE_ENV === 'production') {
       siteUrl = protocol + 'electron.dbkoda.com';
       ReactGA.initialize(gaCode.prod, {
-        titleCase: false
+        titleCase: false,
       });
     }
     ReactGA.set({ page: siteUrl });
@@ -67,25 +67,32 @@ export default class Analytics extends React.Component {
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      */
-    reaction(() => this.props.store.userPreferences.telemetryEnabled,
+    reaction(
+      () => this.props.store.userPreferences.telemetryEnabled,
       (telemetryEnabled) => {
         if (telemetryEnabled) {
           this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
         } else {
           this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
         }
-    }, {name: 'analyticsReactionToTelemetryChange'});
+      },
+      { name: 'analyticsReactionToTelemetryChange' },
+    );
 
     this._sendEvent = this._sendEvent.bind(this);
     this.newProfileCreated = this.newProfileCreated.bind(this);
+    this.keyFeatureEvent = this.keyFeatureEvent.bind(this);
+    this.controllerActivity = this.controllerActivity.bind(this);
   }
 
   componentDidMount() {
     Broker.on(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
+    Broker.on(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
   }
 
   componentWillUnmount() {
     Broker.off(EventType.NEW_PROFILE_CREATED, this.newProfileCreated);
+    Broker.off(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
   }
 
   /**
@@ -98,6 +105,23 @@ export default class Analytics extends React.Component {
   }
 
   /**
+   * 
+   * function to be called when activity goes to the controller.
+   * @param {String} service - The service type that has been called.
+   */
+  controllerActivity(service) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
+    }
+  }
+
+  keyFeatureEvent(feature) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
+    }
+  }
+
+  /**
    *  Function to send an event to the analytics service
    *  @param {AnalyticsEvent} eventType - The AnalyticsEvent type that relates to this event
    *  @param {String} eventLabel - (Optional) The 'label' of the event (could be an item it relates to)
@@ -106,8 +130,8 @@ export default class Analytics extends React.Component {
    */
   _sendEvent(eventType, eventCategory, eventLabel, eventValue) {
     const event = {
-      'category': eventCategory,
-      'action': eventType
+      category: eventCategory,
+      action: eventType,
     };
     if (eventLabel) {
       event.label = eventLabel;
@@ -119,8 +143,6 @@ export default class Analytics extends React.Component {
   }
 
   render() {
-    return (
-      <div className="analytics" />
-    );
+    return <div className="analytics" />;
   }
 }

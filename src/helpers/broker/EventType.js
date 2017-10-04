@@ -71,5 +71,7 @@ export default {
   APP_READY: 'appReady',
   SWAP_SHELL_CONNECTION: 'swap::shell::connection',
   APP_RENDERED: 'appRendered',
-  APP_CRASHED: 'appCrashed'
+  APP_CRASHED: 'appCrashed',
+  FEATURE_USE: 'feature::use',
+  CONTROLLER_ACTIVITY: 'controller::activity',
 };
