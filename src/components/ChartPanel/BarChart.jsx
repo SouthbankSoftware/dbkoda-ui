@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-03T14:25:19+11:00
+ * @Last modified time: 2017-10-03T20:30:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -52,9 +52,10 @@ type Props = {
   componentCenter: ChartComponent,
   width: number,
   height: number,
+  setBarChartGrid: (ref: React.ElementRef<*>) => void,
 };
 
-class YAxisTick extends React.PureComponent<{}> {
+class YAxisTick extends React.PureComponent<*> {
   _formatYAxisTick = (tick: string) => {
     if (tick.length > Y_AXIS_TICK_MAX_LEN) {
       return tick.slice(0, Y_AXIS_TICK_MAX_LEN);
@@ -84,8 +85,18 @@ class YAxisTick extends React.PureComponent<{}> {
 }
 
 export default class BarChart extends React.PureComponent<Props> {
+  grid: React.ElementRef<*>;
+
   render() {
-    const { data, componentX, componentY, componentCenter, width, height } = this.props;
+    const {
+      data,
+      componentX,
+      componentY,
+      componentCenter,
+      width,
+      height,
+      setBarChartGrid,
+    } = this.props;
 
     const centerDataKeyPrefix = componentX.valueType === 'string' ? 'y.' : 'x.';
 
@@ -104,15 +115,11 @@ export default class BarChart extends React.PureComponent<Props> {
             <XAxis type="number" />
           )}
           {componentY.valueType === 'string' ? (
-            <YAxis
-              type="category"
-              dataKey="y"
-              tick={<YAxisTick />}
-            />
+            <YAxis type="category" dataKey="y" tick={<YAxisTick />} />
           ) : (
             <YAxis type="number" tick={<YAxisTick />} />
           )}
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid ref={ref => setBarChartGrid(ref)} strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
           <text

@@ -1,4 +1,9 @@
-/*
+/**
+ * @Author: guiguan
+ * @Date:   2017-09-21T15:25:12+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-03T20:13:40+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,7 +22,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 @import "../../styles/_defaultTheme.scss";
 
 .ChartPanel {
@@ -25,12 +29,15 @@
     .recharts-bar-cursor {
       fill: $chartItemHover !important;
     }
+
     .recharts-default-tooltip {
       background-color: $chartTooltipBackground !important;
     }
+
     .recharts-tooltip-label {
       color: $fieldBrightFontColor !important;
     }
+
     .recharts-legend-item-text {
       color: $detailsFontColor !important;
     }

@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-03T11:10:50+11:00
+ * @Last modified time: 2017-10-04T16:04:21+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,8 +36,11 @@ import DataTree, {
   type ChartComponentChangeHandler,
   type GetAllowedChartComponentOperations,
   type ChartComponentOperation,
+  type DragAndDropHandler,
 } from './DataTree';
 import BarChart, { type ChartData, type ChartComponent } from './BarChart';
+import BarChartOverlay from './BarChartOverlay';
+import DataTreeDataNodeDragLayer from './DataTreeDataNodeDragLayer';
 import './Panel.scss';
 
 const DEBOUNCE_DELAY = 100;
@@ -89,7 +92,11 @@ type Props = {
   tabId: string,
 };
 
-type State = {};
+type State = {
+  isDragging: boolean,
+  valueSchemaPath: ?string,
+  valueType: ?string,
+};
 
 // $FlowIssue
 @inject(({ store }, props) => {
@@ -108,6 +115,7 @@ type State = {};
 export default class ChartPanel extends React.PureComponent<Props, State> {
   reactions = [];
   resizeDetector: React.ElementRef<*>;
+  barChartGrid: React.ElementRef<*>;
 
   constructor(props: Props) {
     super(props);
@@ -118,6 +126,12 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
         selectedComponents => this._autoSelectComponents(selectedComponents),
       ),
     );
+
+    this.state = {
+      isDragging: false,
+      valueSchemaPath: null,
+      valueType: null,
+    };
   }
 
   componentDidMount() {
@@ -511,6 +525,22 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     return operations;
   };
 
+  _setBarChartGrid = (ref: React.ElementRef<*>) => {
+    this.barChartGrid = ref;
+  };
+
+  _getBarChartGrid = (): React.ElementRef<*> => {
+    return this.barChartGrid;
+  };
+
+  _onDragAndDrop: DragAndDropHandler = (isDragging, valueSchemaPath, valueType) => {
+    this.setState({
+      isDragging,
+      valueSchemaPath,
+      valueType,
+    });
+  };
+
   render() {
     const {
       dataTreeWidth,
@@ -523,6 +553,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     } = this.props.store.chartPanel;
 
     const { schema, barChartData } = this;
+    const { isDragging, valueSchemaPath, valueType } = this.state;
 
     return (
       <div className="ChartPanel">
@@ -547,13 +578,30 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
               schema={schema}
               onChartComponentChange={this._onChartComponentChange}
               getAllowedChartComponentOperations={this._getAllowedChartComponentOperations}
+              onDragAndDrop={this._onDragAndDrop}
               chartComponentX={chartComponentX}
               chartComponentY={chartComponentY}
               chartComponentCenter={chartComponentCenter}
             />
-            {<BarChart width={chartWidth} height={chartHeight} {...barChartData} />}
+            <div>
+              <BarChart
+                width={chartWidth}
+                height={chartHeight}
+                setBarChartGrid={this._setBarChartGrid}
+                {...barChartData}
+              />
+              {isDragging ? (
+                <BarChartOverlay
+                  getBarChartGrid={this._getBarChartGrid}
+                  getAllowedChartComponentOperations={this._getAllowedChartComponentOperations}
+                  valueSchemaPath={valueSchemaPath}
+                  valueType={valueType}
+                />
+              ) : null}
+            </div>
           </SplitPane>
         )}
+        <DataTreeDataNodeDragLayer />
         <ReactResizeDetector
           ref={ref => (this.resizeDetector = ref)}
           className="BarChart"

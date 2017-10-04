@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-27T16:42:21+10:00
+ * @Last modified time: 2017-10-04T16:57:44+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,10 @@ import * as React from 'react';
 import _ from 'lodash';
 import { type ITreeNode, Tree, ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
 import escapeStringRegexp from 'escape-string-regexp';
+import { DragSource } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
+// $FlowFixMe
+import { DragItemTypes } from '#/common/Constants.js';
 import type { ChartComponent, ChartComponentName } from './BarChart';
 import './DataTree.scss';
 
@@ -46,6 +50,11 @@ export type GetAllowedChartComponentOperations = (
   targetValueSchemaPath: string,
   targetValueType: 'string' | 'number',
 ) => ChartComponentOperation[];
+export type DragAndDropHandler = (
+  isDragging: boolean,
+  valueSchemaPath: ?string,
+  valueType: 'string' | 'number' | null,
+) => void;
 
 type Props = {
   schema: Schema,
@@ -54,11 +63,60 @@ type Props = {
   chartComponentCenter: ?ChartComponent,
   onChartComponentChange: ChartComponentChangeHandler,
   getAllowedChartComponentOperations: GetAllowedChartComponentOperations,
+  onDragAndDrop: DragAndDropHandler,
 };
 
 type State = {
   nodes: ITreeNode[],
 };
+
+const dataTreeSource = {
+  beginDrag(props) {
+    const { valueSchemaPath, valueType, onDragAndDrop } = props;
+
+    onDragAndDrop(true, valueSchemaPath, valueType);
+
+    return {
+      valueSchemaPath,
+      valueType,
+    };
+  },
+
+  endDrag(props, monitor) {
+    const { valueSchemaPath, valueType, onDragAndDrop, onChartComponentChange } = props;
+
+    if (monitor.didDrop()) {
+      const { target } = monitor.getDropResult();
+      onChartComponentChange({ action: 'load', target }, valueSchemaPath, valueType);
+    }
+
+    onDragAndDrop(false, null, null);
+  },
+};
+
+// $FlowIssue
+@DragSource(DragItemTypes.CHART_DATA_TREE_NODE, dataTreeSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  connectDragPreview: connect.dragPreview(),
+  isDragging: monitor.isDragging(),
+}))
+class DraggableLabel extends React.PureComponent<*> {
+  componentDidMount() {
+    // Use empty image as a drag preview so browsers don't draw it
+    // and we can draw whatever we want on the custom drag layer instead.
+    this.props.connectDragPreview(getEmptyImage(), {
+      // IE fallback: specify that we'd rather screenshot the node
+      // when it already knows it's being dragged so we can hide it with CSS.
+      captureDraggingState: true,
+    });
+  }
+
+  render() {
+    const { connectDragSource, children } = this.props;
+
+    return connectDragSource(<span className="DraggableLabel">{children}</span>);
+  }
+}
 
 export default class DataTree extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -121,7 +179,7 @@ export default class DataTree extends React.Component<Props, State> {
     }
   }
 
-  _searchForChartComponent(component: ChartComponent, nodes: ?ITreeNode[]): ?ITreeNode {
+  _searchForChartComponent(component: ChartComponent, nodes: ?(ITreeNode[])): ?ITreeNode {
     let result: ?ITreeNode = null;
 
     _.forEach(nodes, (v) => {
@@ -181,12 +239,14 @@ export default class DataTree extends React.Component<Props, State> {
       let node;
       const newPrefix = prefix ? `${prefix}.${k}` : k;
       let secondaryLabel: ?string = null;
+      let classname: ?string = null;
       const getSecondaryLabel = () => {
         const { chartComponentX, chartComponentY, chartComponentCenter } = this.props;
         _.forEach([chartComponentX, chartComponentY, chartComponentCenter], (v) => {
           if (v && v.valueSchemaPath === newPrefix) {
             secondaryLabel = (secondaryLabel ? ', ' : '') + DataTree._getSecondaryLabel(v.name);
             shouldBeExpanded = true;
+            classname = v.name;
             return false;
           }
         });
@@ -199,24 +259,43 @@ export default class DataTree extends React.Component<Props, State> {
         );
         shouldBeExpanded = shouldBeExpanded || childShouldBeExpanded;
         node = {
-          iconName: 'pt-icon-folder-close',
+          iconName: `pt-icon-folder-${childShouldBeExpanded ? 'open' : 'close'}`,
           isExpanded: childShouldBeExpanded,
           childNodes: nodes,
           type: 'object',
+          label: k,
         };
-      } else if (v === 'string') {
+      } else {
+        const { onDragAndDrop, onChartComponentChange } = this.props;
+
         node = {
           hasCaret: false,
-          iconName: 'pt-icon-font',
-          type: 'string',
+          label: (
+            <DraggableLabel
+              valueSchemaPath={newPrefix}
+              valueType={v}
+              onDragAndDrop={onDragAndDrop}
+              onChartComponentChange={onChartComponentChange}
+            >
+              {k}
+            </DraggableLabel>
+          ),
         };
-        getSecondaryLabel();
-      } else if (v === 'number') {
-        node = {
-          hasCaret: false,
-          iconName: 'pt-icon-numerical',
-          type: 'number',
-        };
+
+        if (v === 'string') {
+          _.assign(node, {
+            iconName: 'pt-icon-font',
+            type: 'string',
+          });
+        } else if (v === 'number') {
+          _.assign(node, {
+            iconName: 'pt-icon-numerical',
+            type: 'number',
+          });
+        } else {
+          console.error(`Unsupported data tree node type: ${v}`);
+        }
+
         getSecondaryLabel();
       }
 
@@ -225,12 +304,12 @@ export default class DataTree extends React.Component<Props, State> {
           node,
           {
             id: newPrefix,
-            label: k,
           },
           secondaryLabel
             ? {
                 isSelected: true,
                 secondaryLabel,
+                className: classname
               }
             : {},
         );

@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
- * @Date:   2017-09-21T15:25:12+10:00
+ * @Date:   2017-10-04T00:41:01+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-04T17:05:16+11:00
+ * @Last modified time: 2017-10-04T01:47:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -23,30 +23,14 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- @import "../../styles/_defaultTheme.scss";
-
- .ChartPanel {
-   .DataTree {
-     .pt-tree-node-secondary-label {
-       order: 4 !important;
-       padding-top: 0 !important;
-       white-space: nowrap;
-     }
-
-     .DraggableLabel {
-       cursor: move;
-     }
-
-     .x.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayXAxis;
-     }
-
-     .y.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayYAxis;
-     }
-
-     .center.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayCenter;
-     }
-   }
- }
+.ChartPanel {
+  .DataTreeDataNodeDragLayer {
+    position: fixed;
+    pointer-events: none;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

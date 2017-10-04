@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
- * @Date:   2017-09-21T15:25:12+10:00
+ * @Date:   2017-10-03T20:03:24+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-04T17:05:16+11:00
+ * @Last modified time: 2017-10-04T17:01:53+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -22,31 +22,49 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+@import "../../styles/_defaultTheme.scss";
 
- @import "../../styles/_defaultTheme.scss";
+.ChartPanel {
+  .BarChartOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
 
- .ChartPanel {
-   .DataTree {
-     .pt-tree-node-secondary-label {
-       order: 4 !important;
-       padding-top: 0 !important;
-       white-space: nowrap;
-     }
+    g {
+      path {
+        opacity: 0.6;
+        transition: all 0.3s ease-out;
+      }
 
-     .DraggableLabel {
-       cursor: move;
-     }
+      text {
+        opacity: 0.9;
+        fill: #ffffff;
+        text-anchor: middle;
+        alignment-baseline: middle;
+      }
+    }
 
-     .x.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayXAxis;
-     }
+    g.over {
+      path {
+        opacity: 0.8;
+      }
 
-     .y.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayYAxis;
-     }
+      text {
+        opacity: 1;
+      }
+    }
 
-     .center.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayCenter;
-     }
-   }
- }
+    .YAxis {
+      fill: $overlayYAxis;
+    }
+
+    .XAxis {
+      fill: $overlayXAxis;
+    }
+
+    .Center {
+      fill: $overlayCenter;
+    }
+  }
+}

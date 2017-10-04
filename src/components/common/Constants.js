@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-15T12:03:27+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-04T01:51:29+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,19 +24,10 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-15T12:03:27+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T12:02:49+10:00
-*/
-
-
-
 export const DragItemTypes = {
   LABEL: 'label',
-  VISUAL_BLOCK: 'visual_block'
+  VISUAL_BLOCK: 'visual_block',
+  CHART_DATA_TREE_NODE: 'chart_data_tree_node'
 };
 
 export const ProfileStatus = {
