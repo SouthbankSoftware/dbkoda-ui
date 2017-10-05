@@ -168,15 +168,15 @@ div.pt-dialog {
       color: $connectionButtonFontColourHover !important;
     }
   }
-  input[type=text],
-  input[type=number],
-  input[type=password] {
+  input[type='text'],
+  input[type='number'],
+  input[type='password'] {
     background: unset;
     color: $connectionActiveTextFieldTextColour !important;
   }
-  input[type=text]:focus,
-  input[type=number]:focus,
-  input[type=password]:focus {
+  input[type='text']:focus,
+  input[type='number']:focus,
+  input[type='password']:focus {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
@@ -453,8 +453,8 @@ a.pt-disabled.pt-intent-primary {
   background-color: rgba(255, 255, 255, 0.3) !important;
 }
 
-.pt-tab:not([aria-disabled="true"]):hover,
-.pt-tab[aria-selected="true"]:hover {
+.pt-tab:not([aria-disabled='true']):hover,
+.pt-tab[aria-selected='true']:hover {
   color: $buttonSecondaryBackgroundHover !important;
 }
 
@@ -471,14 +471,14 @@ a.pt-disabled.pt-intent-primary {
 }
 
 .pt-control input:focus ~ .pt-control-indicator,
-input[type=radio]:focus,
-input[type=checkbox]:focus {
+input[type='radio']:focus,
+input[type='checkbox']:focus {
   outline: none;
   box-shadow: 0 0 0 1px $searchPrimaryBackground !important;
 }
 
 button:focus,
-a[role=button]:focus {
+a[role='button']:focus {
   outline: none;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
 }
@@ -509,6 +509,14 @@ div.optInDialog {
     }
     a.submitButton:hover {
       background-color: $buttonSuccessBackgroundHover !important;
+    }
+  }
+  div.dialogButtons.false {
+    a.submitButton {
+      background-color: $buttonDangerBackground !important;
+    }
+    a.submitButton:hover {
+      background-color: $buttonDangerBackgroundHover !important;
     }
   }
 }

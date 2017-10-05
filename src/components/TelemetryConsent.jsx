@@ -25,15 +25,18 @@
  * @Last modified time: 2017-03-28 16:14:04
  */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import {observer, inject} from 'mobx-react';
-import {action} from 'mobx';
-import {Intent, Dialog, AnchorButton} from '@blueprintjs/core';
+import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
+import { Intent, Dialog, AnchorButton, Switch } from '@blueprintjs/core';
 
 const React = require('react');
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  */
-@inject(allStores => ({store: allStores.store, layout: allStores.store.layout}))
+@inject(allStores => ({
+  store: allStores.store,
+  layout: allStores.store.layout,
+}))
 @observer
 export default class TelemetryConsent extends React.Component {
   @action.bound
@@ -41,20 +44,27 @@ export default class TelemetryConsent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell
-        .openExternal('https://southbanksoftware.github.io/privacy-policy');
+        .shell.openExternal(
+          'https://southbanksoftware.github.io/privacy-policy',
+        );
     }
   }
 
   @action.bound
-  closeDialog() {
-    this.props.store.userPreferences.telemetryEnabled = false;
-    this.props.layout.optInVisible = false;
+  handleSwitch(e) {
+    console.log(e);
+    if (this.props.store.userPreferences.telemetryEnabled === false) {
+      this.props.store.userPreferences.telemetryEnabled = true;
+    } else {
+      this.props.store.userPreferences.telemetryEnabled = false;
+      if (IS_ELECTRON) {
+        window.require('electron').shell.beep();
+      }
+    }
   }
 
   @action.bound
   acceptDialog() {
-    this.props.store.userPreferences.telemetryEnabled = true;
     this.props.layout.optInVisible = false;
   }
 
@@ -64,27 +74,36 @@ export default class TelemetryConsent extends React.Component {
         className="pt-dark optInDialog"
         intent={Intent.PRIMARY}
         iconName="pt-icon-chart"
-        isOpen={this.props.layout.optInVisible}>
+        isOpen={this.props.layout.optInVisible}
+      >
         <h1>{globalString('telemetry_dialog/header')} </h1>
         <p> {globalString('telemetry_dialog/content_first')} </p>
         <p> {globalString('telemetry_dialog/content_second')} </p>
-        <p> {globalString('telemetry_dialog/content_third')}
-          <a onClick={this.openPrivacyPolicy}>{globalString('telemetry_dialog/privacy_link')}</a>
+        <p>
+          {' '}
+          {globalString('telemetry_dialog/content_third')}
+          <a onClick={this.openPrivacyPolicy}>
+            {globalString('telemetry_dialog/privacy_link')}
+          </a>
         </p>
-        <div className="dialogButtons">
+        <div
+          className={
+            'dialogButtons ' + this.props.store.userPreferences.telemetryEnabled
+          }
+        >
           <AnchorButton
             className="submitButton"
             type="submit"
             intent={Intent.SUCCESS}
             onClick={this.acceptDialog}
-            text={globalString('telemetry_dialog/button_yes')} />
-          <AnchorButton
-            className="cancelButton"
-            intent={Intent.DANGER}
-            onClick={this.closeDialog}
-            text={globalString('telemetry_dialog/button_no')} />
+            text={globalString('telemetry_dialog/button_yes')}
+          />
+          <Switch
+            checked={this.props.store.userPreferences.telemetryEnabled}
+            label="Enable Telemetry"
+            onChange={this.handleSwitch}
+          />
         </div>
-
       </Dialog>
     );
   }

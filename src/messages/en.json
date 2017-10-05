@@ -8,24 +8,31 @@
       "hide_left_panel": "Hide Panel",
       "byo_code": "BYO Code",
       "form_code": "Code Form",
-      "no_active_connection": "Shell has lost Aggregate Builder, please start again.",
+      "no_active_connection":
+        "Shell has lost Aggregate Builder, please start again.",
       "import_button": "Import",
       "import_failed": "Sorry, failed to import that file!",
       "import_passed": "Import succeeded.",
       "export_passed": "Export Complete.",
       "export_button": "Export",
-      "no_valid_output": "Cannot display results at this stage, Block probably does not produce valid results.\nPipeline stages detected as invalid will be gray.",
-      "block_not_yet_valid": "Please fill in Stage details and click on the stage to see results.",
-      "valid_output": "Example of Result at current Stage: \n  ----------------------------------  \n\n"
+      "no_valid_output":
+        "Cannot display results at this stage, Block probably does not produce valid results.\nPipeline stages detected as invalid will be gray.",
+      "block_not_yet_valid":
+        "Please fill in Stage details and click on the stage to see results.",
+      "valid_output":
+        "Example of Result at current Stage: \n  ----------------------------------  \n\n"
     },
     "telemetry_dialog": {
-      "header": "Welcome!",
-      "content_first": "We would like to gather information about how you are using the product so we can make it even more awesome.",
-      "content_second": "Is it okay if we collect some information about how you interact with dbKoda and send it back to our servers?",
-      "content_third": "You can read our full privacy policy ",
-      "privacy_link": "here",
+      "header": "Hi There!",
+      "content_first":
+        "dbKoda is still a work in progress, but we want to make sure that every iteration and change we make is a step towards the tool you need (as well as just being even more awesome).",
+      "content_second":
+        "To help us accomplish our goal of user-driven development, dbKoda may send some telemetry back to our developers to help then fix and improve the product. This data is anonymous, and will not contain any information about your data, only information about how you use the product will be send back. If you don't want to send us any of this data, please uncheck the box on this dialog, or in the Welcome Menu at any time.",
+      "content_third":
+        "We also encourage all user feedback (positive and negative) by navigating to our website from the Welcome Menu. You can read our full privacy policy ",
+      "privacy_link": "at this link",
       "button_no": "No Thanks",
-      "button_yes": "Sure"
+      "button_yes": "Okay"
     },
     "output": {
       "heading": "Query Output",
@@ -53,21 +60,28 @@
         "explainView": "Explain"
       },
       "step": {
-        "fetchFilter": "Documents from previous step were scanned looking for these criteria: {0}.",
+        "fetchFilter":
+          "Documents from previous step were scanned looking for these criteria: {0}.",
         "fetchIndex": "Retrieved documents from index fetch",
-        "collScanAll": "All documents in the collection where scanned. No filter condition was specified",
-        "collScanFilter": "Documents were scanned looking for these criteria: {0}",
+        "collScanAll":
+          "All documents in the collection where scanned. No filter condition was specified",
+        "collScanFilter":
+          "Documents were scanned looking for these criteria: {0}",
         "ixscan": "Index {0} was used to find matching values for {1}",
-        "sort": "Documents were sorted on : {0}. Consider creating index on ${0} to support the sort",
+        "sort":
+          "Documents were sorted on : {0}. Consider creating index on ${0} to support the sort",
         "limit": "Limited documents returned : {0}",
         "skip": "Skipped Forward : {0}",
         "singleShard": "A single shard {0} was involved in the query.",
         "generateKeys": "Generate keys for the next sort step",
-        "shardingFilter": "The previous operation was sent to one or more shards",
+        "shardingFilter":
+          "The previous operation was sent to one or more shards",
         "shardMergeSort": "Output from multiple shards was merged and sorted",
         "shardMerge": "Output from multiple shards was merged",
-        "keepMutations": "Merge in any documents which may have been incorrectly invalidated mid-query",
-        "subplan": "Selected one of multiple possible plans based on $or condition",
+        "keepMutations":
+          "Merge in any documents which may have been incorrectly invalidated mid-query",
+        "subplan":
+          "Selected one of multiple possible plans based on $or condition",
         "eof": "Nothing was found: maybe collection does not exist?",
         "andSorted": "Output from the previous steps was sort-merged",
         "sortMerge": "Output from multiple sorts was merged",
@@ -93,7 +107,8 @@
       }
     },
     "details": {
-      "error": "Sorry, we were unable to create the view you asked for due to the following error: {0}",
+      "error":
+        "Sorry, we were unable to create the view you asked for due to the following error: {0}",
       "dddError": "No DefaultValues attribute available in DDD json file."
     },
     "editor": {
@@ -109,14 +124,18 @@
         "openFileTooltip": "Open File",
         "saveFileTooltip": "Save to File",
         "saveFileAsTooltip": "Save to Another File",
-        "addEditorError": "Cannot create new Editor for 'No Active Connection'.",
+        "addEditorError":
+          "Cannot create new Editor for 'No Active Connection'.",
         "connectionSuccess": "Connection Success!",
         "profileSwapError": "Could not swap Profiles.",
-        "profileSwapSslError": "Could not swap profiles due to SSL differences.",
+        "profileSwapSslError":
+          "Could not swap profiles due to SSL differences.",
         "notSupportedInUI": "`{0}` is not supported in browser UI",
         "cannotExecuteOnWelcome": "Cannot Execute on Welcome Page.",
-        "executionScriptFailed": "Execution of scripts failed, do you have an active connection?",
-        "possibleMultiLineCommand": "Could not detect a valid mongo command, please highlight mutli-line commands."
+        "executionScriptFailed":
+          "Execution of scripts failed, do you have an active connection?",
+        "possibleMultiLineCommand":
+          "Could not detect a valid mongo command, please highlight mutli-line commands."
       },
       "view": {
         "executionStopped": "Execution Stopped Successfully",
@@ -142,7 +161,8 @@
       },
       "savingDialog": {
         "title": "'{0}' has changes.",
-        "message": "Do you want to save these changes? All changes will be lost if you close this tab without saving.",
+        "message":
+          "Do you want to save these changes? All changes will be lost if you close this tab without saving.",
         "dontSave": "Don't Save",
         "cancel": "Cancel",
         "save": "Save"
@@ -169,7 +189,8 @@
         "port": ":",
         "defaultPort": "27017",
         "url": "URL",
-        "defaultUrl": "mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com",
+        "defaultUrl":
+          "mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com",
         "database": "Database",
         "defaultDatabase": "admin",
         "ssl": "SSL",
@@ -207,7 +228,8 @@
         "passwordPlaceholder": "Enter Password...",
         "remotePassPrompt": "Please enter your password for the ssh tunnel.",
         "remotePassPlaceholder": "Enter SSH Password...",
-        "passPhrasePrompt": "Please enter your passphrase for the ssh tunnel private key.",
+        "passPhrasePrompt":
+          "Please enter your passphrase for the ssh tunnel private key.",
         "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
         "confirmButton": "Open",
         "cancelButton": "Cancel"
@@ -315,7 +337,8 @@
         },
         "fields": {
           "label": "Fields <field>[,<field>]*",
-          "tooltip": "comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
+          "tooltip":
+            "comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
         },
         "allDatabases": {
           "label": "All Database",
@@ -327,15 +350,18 @@
         },
         "assertExists": {
           "label": "assertExists",
-          "tooltip": "if specified, export fails if the collection does not exist (default: false)"
+          "tooltip":
+            "if specified, export fails if the collection does not exist (default: false)"
         },
         "query": {
           "label": "Query",
-          "tooltip": "query filter, as a JSON string, e.g., '\\{x:\\{$gt:1\\}\\}'"
+          "tooltip":
+            "query filter, as a JSON string, e.g., '\\{x:\\{$gt:1\\}\\}'"
         },
         "readPreference": {
           "label": "readPreference",
-          "tooltip": "specify either a preference name or a preference json object"
+          "tooltip":
+            "specify either a preference name or a preference json object"
         },
         "dumpDbUsersAndRoles": {
           "label": "dumpDbUsersAndRoles",
@@ -375,11 +401,13 @@
         },
         "maintainInsertionOrder": {
           "label": "maintainInsertionOrder",
-          "tooltip": "Make sure documents are restored in the order they appear in backup"
+          "tooltip":
+            "Make sure documents are restored in the order they appear in backup"
         },
         "numInsertionWorkers": {
           "label": "numInsertionWorkers",
-          "tooltip": "number of insert operations to run concurrently per collection (1 by default) (default: 1)"
+          "tooltip":
+            "number of insert operations to run concurrently per collection (1 by default) (default: 1)"
         },
         "stopOnError": {
           "label": "stopOnError",
@@ -387,7 +415,8 @@
         },
         "bypassDocumentValidation": {
           "label": "bypassDocumentValidation",
-          "tooltip": "do not process Document validation rules during the restore"
+          "tooltip":
+            "do not process Document validation rules during the restore"
         },
         "objcheck": {
           "label": "objcheck",
@@ -435,7 +464,8 @@
         },
         "upsertFields": {
           "label": "upsertFields",
-          "tooltip": "List of fields that specify query (matching) portion of upsert operation"
+          "tooltip":
+            "List of fields that specify query (matching) portion of upsert operation"
         },
         "noHeaderLine": {
           "label": "noHeaderLine",
