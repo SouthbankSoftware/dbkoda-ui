@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-10-03T20:03:24+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-04T17:01:53+11:00
+ * @Last modified time: 2017-10-05T10:23:44+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,6 +38,7 @@
       }
 
       text {
+        font-size: 15px;
         opacity: 0.9;
         fill: #ffffff;
         text-anchor: middle;
@@ -65,6 +66,18 @@
 
     .Center {
       fill: $overlayCenter;
+    }
+
+    .YAxis.over {
+      fill: $treeNodeYAxis;
+    }
+
+    .XAxis.over {
+      fill: $treeNodeXAxis;
+    }
+
+    .Center.over {
+      fill: $treeNodeCenter;
     }
   }
 }

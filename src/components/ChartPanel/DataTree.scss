@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-04T17:05:16+11:00
+ * @Last modified time: 2017-10-05T09:42:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,15 +38,15 @@
      }
 
      .x.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayXAxis;
+       background-color: $treeNodeXAxis;
      }
 
      .y.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayYAxis;
+       background-color: $treeNodeYAxis;
      }
 
      .center.pt-tree-node.pt-tree-node-selected > .pt-tree-node-content {
-       background-color: $overlayCenter;
+       background-color: $treeNodeCenter;
      }
    }
  }
