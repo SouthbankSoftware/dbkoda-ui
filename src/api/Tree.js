@@ -7,19 +7,70 @@
  */
 
 import { action } from 'mobx';
+import { Broker, EventType } from '~/helpers/broker';
+import { featherClient } from '~/helpers/feathers';
 
- export default class TreeApi {
-   store;
-   api;
+export default class TreeApi {
+  store;
+  api;
 
-   constructor(store, api) {
-     this.store = store;
-     this.api = api;
-   }
+  constructor(store, api) {
+    this.store = store;
+    this.api = api;
+  }
 
-   @action.bound
-   addNewEditorForTreeAction = (options = {type: 'TreeAction'}) => {
-     this.store.editorToolbar.newEditorForTreeAction = true;
-     this.api.addEditor({type: options.type});
-   };
- }
+  @action.bound
+  addNewEditorForTreeAction = (options = { type: 'TreeAction' }) => {
+    this.store.editorToolbar.newEditorForTreeAction = true;
+    this.api.addEditor({ type: options.type });
+  };
+
+  @action.bound
+  openNewTableViewForCollection(targetData, limit, skip) {
+    // Set up broken to listen on result.
+    const editor = this.store.editors.get(
+      this.store.editorPanel.activeEditorId,
+    );
+    Broker.on(
+      EventType.createAggregatorResultReceived(editor.id + '_table'),
+      this._onAggregatorResultReceived,
+    );
+
+    // Send request to Feathers:
+    featherClient()
+      .service('aggregators')
+      .create({
+        editorId: editor.id + '_table',
+        connectionId: editor.currentProfile,
+        database: targetData.database,
+        collection: targetData.collection,
+        pipeline: [{ $limit: limit }],
+        options: { allowDiskUse: true },
+      })
+      .catch(this._handleError);
+    // Render Table:
+    this.api.outputApi.createJSONTableViewFromJSONArray(
+      [{ loading: 'isLoading' }],
+      editor.id,
+    );
+  }
+
+  @action.bound
+  _onAggregatorResultReceived(result) {
+    const editor = this.store.editors.get(
+      this.store.editorPanel.activeEditorId,
+    );
+
+    this.api.outputApi.createJSONTableViewFromJSONArray(result, editor.id);
+
+    Broker.off(
+      EventType.createAggregatorResultReceived(editor.id + '_table'),
+      this._onAggregatorResultReceived,
+    );
+  }
+
+  @action.bound
+  _handleError(error) {
+    console.error(error);
+  }
+}

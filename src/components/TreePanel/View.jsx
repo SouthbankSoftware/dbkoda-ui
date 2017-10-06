@@ -36,7 +36,7 @@ import {
   MenuDivider,
   Intent,
   AnchorButton,
-  Dialog
+  Dialog,
 } from '@blueprintjs/core';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
@@ -48,7 +48,11 @@ import CloseIcon from '../../styles/icons/cross-icon.svg';
 import ShardsIcon from '../../styles/icons/shards-icon-2.svg';
 import CollectionIcon from '../../styles/icons/collection-icon.svg';
 import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
-import { EditorTypes, BackupRestoreActions } from '../common/Constants';
+import {
+  EditorTypes,
+  BackupRestoreActions,
+  TableViewConstants,
+} from '../common/Constants';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
@@ -184,7 +188,10 @@ export default class TreeView extends React.Component {
             Menus.push(<MenuDivider key={objAction.name} />);
           } else {
             let bDevOnlyFeature = false;
-            if (process.env.NODE_ENV !== 'development' && objAction.development) {
+            if (
+              process.env.NODE_ENV !== 'development' &&
+              objAction.development
+            ) {
               bDevOnlyFeature = true;
             }
             if (!bDevOnlyFeature) {
@@ -293,6 +300,15 @@ export default class TreeView extends React.Component {
         case 'DrillDatabase':
           this.openDrillEditor();
           break;
+        case 'TableView':
+          this.props.api.treeApi.openNewTableViewForCollection(
+            {
+              collection: this.nodeRightClicked.text,
+              database: this.nodeRightClicked.refParent.text,
+            },
+            TableViewConstants.DEFAULT_MAX_ROWS,
+          );
+          break;
         default:
           console.error('Tree Action not defined: ', action);
           break;
@@ -391,7 +407,9 @@ export default class TreeView extends React.Component {
   };
 
   openDrillEditor = () => {
-    const drillProfileId = this.props.api.checkForExistingDrillProfile({ db: this.nodeRightClicked.text });
+    const drillProfileId = this.props.api.checkForExistingDrillProfile({
+      db: this.nodeRightClicked.text,
+    });
     if (!drillProfileId) {
       if (
         this.props.store.profileList.selectedProfile &&
@@ -400,7 +418,9 @@ export default class TreeView extends React.Component {
         if (this.props.store.profileList.selectedProfile.sha) {
           this.setState({ isPasswordDialogVisible: true });
         } else {
-          this.props.api.addNewEditorForDrill({ db: this.nodeRightClicked.text });
+          this.props.api.addNewEditorForDrill({
+            db: this.nodeRightClicked.text,
+          });
         }
       }
     } else {
@@ -412,7 +432,10 @@ export default class TreeView extends React.Component {
   };
 
   openDrillEditorWithPass = () => {
-    this.props.api.addNewEditorForDrill({ db: this.nodeRightClicked.text, pass: this.state.remotePass });
+    this.props.api.addNewEditorForDrill({
+      db: this.nodeRightClicked.text,
+      pass: this.state.remotePass,
+    });
     this.setState({ isPasswordDialogVisible: false });
   };
 

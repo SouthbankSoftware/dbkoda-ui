@@ -114,7 +114,7 @@ export default class TranslatorPanel extends React.Component {
         <div className="menuItemWrapper">
           <MenuItem
             onClick={this.executeCommands}
-            text={globalString('editor/view/menu/executeSelected')}
+            text={globalString('editor/view/menu/executeAll')}
             iconName="pt-icon-double-chevron-right"
             intent={Intent.NONE}
           />
