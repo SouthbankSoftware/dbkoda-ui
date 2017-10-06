@@ -48,7 +48,11 @@ import CloseIcon from '../../styles/icons/cross-icon.svg';
 import ShardsIcon from '../../styles/icons/shards-icon-2.svg';
 import CollectionIcon from '../../styles/icons/collection-icon.svg';
 import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
-import { EditorTypes, BackupRestoreActions } from '../common/Constants';
+import {
+  EditorTypes,
+  BackupRestoreActions,
+  TableViewConstants,
+} from '../common/Constants';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
@@ -297,10 +301,13 @@ export default class TreeView extends React.Component {
           this.openDrillEditor();
           break;
         case 'TableView':
-          this.props.api.treeApi.openNewTableViewForCollection({
-            collection: this.nodeRightClicked.text,
-            database: this.nodeRightClicked.refParent.text,
-          });
+          this.props.api.treeApi.openNewTableViewForCollection(
+            {
+              collection: this.nodeRightClicked.text,
+              database: this.nodeRightClicked.refParent.text,
+            },
+            TableViewConstants.DEFAULT_MAX_ROWS,
+          );
           break;
         default:
           console.error('Tree Action not defined: ', action);

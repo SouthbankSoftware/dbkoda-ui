@@ -237,7 +237,7 @@ export default class OutputApi {
               json: [],
               firstLine: 0,
               lastLine: 0,
-            }
+            },
           }),
         );
 
@@ -449,6 +449,12 @@ export default class OutputApi {
   @action.bound
   createJSONTableViewFromJSONArray(JSONArray, outputId) {
     runInAction(() => {
+      const tabPrefix = 'TableView-';
+
+      if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
+        this.store.outputPanel.currentTab = tabPrefix + outputId;
+      }
+
       this.store.outputs.get(outputId).tableJson = {
         json: JSONArray,
         firstLine: 0,

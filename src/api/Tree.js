@@ -26,7 +26,7 @@ export default class TreeApi {
   };
 
   @action.bound
-  openNewTableViewForCollection(targetData) {
+  openNewTableViewForCollection(targetData, limit, skip) {
     // Set up broken to listen on result.
     const editor = this.store.editors.get(
       this.store.editorPanel.activeEditorId,
@@ -44,7 +44,7 @@ export default class TreeApi {
         connectionId: editor.currentProfile,
         database: targetData.database,
         collection: targetData.collection,
-        pipeline: [],
+        pipeline: [{ $limit: limit }],
         options: { allowDiskUse: true },
       })
       .catch(this._handleError);
@@ -57,7 +57,9 @@ export default class TreeApi {
     const editor = this.store.editors.get(
       this.store.editorPanel.activeEditorId,
     );
-    console.log(result);
+
+    this.api.outputApi.createJSONTableViewFromJSONArray(result, editor.id);
+
     Broker.off(
       EventType.createAggregatorResultReceived(editor.id + '_table'),
       this._onAggregatorResultReceived,
