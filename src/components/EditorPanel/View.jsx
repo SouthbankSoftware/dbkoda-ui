@@ -194,7 +194,7 @@ class View extends React.Component {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
-                  output.output = JSON.stringify(res);
+                  output.output = res; // JSON.stringify(res);
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
@@ -292,7 +292,7 @@ class View extends React.Component {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
-                  output.output = JSON.stringify(res);
+                  output.output = res; // JSON.stringify(res);
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;

@@ -31,6 +31,7 @@ import { Tab2, Tabs2 } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
 import { ChartPanel } from '#/ChartPanel';
+import { EditorTypes } from '#/common/Constants.js';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
@@ -249,29 +250,30 @@ export default class Panel extends React.Component {
       }
 
       if (this.props.store.editorPanel.activeEditorId === editorId) {
-        const title = 'Raw';
-
-        arrTabs.push(
-          <Tab2
-            className={tabClassName}
-            key={editorId}
-            id={editorId}
-            title={title}
-            panel={
-              <OutputEditor
-                title={title}
-                id={editorId}
-                profileId={editor[1].profileId}
-                connId={editor[1].currentProfile}
-                initialMsg={editor[1].initialMsg}
-                shellId={editor[1].shellId}
-                tabClassName={tabClassName}
-                setEditorRef={this.setEditorRef}
-                getDocumentAtLine={this.getDocumentAtLine}
-              />
-            }
-          />,
-        );
+        if (editor[1].type !== EditorTypes.DRILL) {
+          const title = 'Raw';
+          arrTabs.push(
+            <Tab2
+              className={tabClassName}
+              key={editorId}
+              id={editorId}
+              title={title}
+              panel={
+                <OutputEditor
+                  title={title}
+                  id={editorId}
+                  profileId={editor[1].profileId}
+                  connId={editor[1].currentProfile}
+                  initialMsg={editor[1].initialMsg}
+                  shellId={editor[1].shellId}
+                  tabClassName={tabClassName}
+                  setEditorRef={this.setEditorRef}
+                  getDocumentAtLine={this.getDocumentAtLine}
+                />
+              }
+            />,
+          );
+        }
         if (
           editor[1].detailsView &&
           editor[1].detailsView.currentProfile !== editor[1].currentProfile
@@ -321,6 +323,12 @@ export default class Panel extends React.Component {
               }
             />,
           );
+
+          if (editor[1].type === EditorTypes.DRILL) {
+            runInAction(() => {
+              this.props.store.outputPanel.currentTab = tabId;
+            });
+          }
         }
         if (
           this.props.store.outputs.get(editorId).chartPanel &&
