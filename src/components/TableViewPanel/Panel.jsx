@@ -114,7 +114,6 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    console.log(this.props.tableJson.json);
     if (this.props.tableJson.json[0].loading === 'isLoading') {
       // Probably loading. ;)
       this.state.isLoading = true;

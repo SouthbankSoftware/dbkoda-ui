@@ -67,3 +67,8 @@ export const BackupRestoreActions = {
 export const TableViewConstants = {
   DEFAULT_MAX_ROWS: 200,
 };
+
+export const OutputToolbarContexts = {
+  DEFAULT: 'Default',
+  TABLE_VIEW: 'TableView',
+};
