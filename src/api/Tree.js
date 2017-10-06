@@ -49,7 +49,10 @@ export default class TreeApi {
       })
       .catch(this._handleError);
     // Render Table:
-    this.api.outputApi.createJSONTableViewFromJSONArray([{}], editor.id);
+    this.api.outputApi.createJSONTableViewFromJSONArray(
+      [{ loading: 'isLoading' }],
+      editor.id,
+    );
   }
 
   @action.bound
