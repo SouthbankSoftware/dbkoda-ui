@@ -254,19 +254,20 @@ export default class OutputApi {
     }
   }
   @action.bound
-  drillOutputAvailable(output) {
-    const profile = this.store.profiles.get(output.profileId);
-    // const editor = this.store.editors.get(output.id);
-    // const totalOutput =
-    //   this.store.outputs.get(output.id).output +
-    //   editor.doc.lineSep +
-    //   output.output;
+  drillOutputAvailable(res) {
+    const profile = this.store.profiles.get(res.profileId);
+    const strOutput = JSON.stringify(res.output);
+    const editor = this.store.editors.get(res.id);
+    const totalOutput =
+      this.store.outputs.get(res.id).output +
+      editor.doc.lineSep +
+      strOutput;
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
     }
-    // this.store.outputs.get(output.id).output = totalOutput;
-    this.createJSONTableViewFromJSONArray(output.output, output.id);
+    this.store.outputs.get(res.id).output = totalOutput;
+    this.createJSONTableViewFromJSONArray(res.output, res.id);
   }
   @action.bound
   initJsonView(jsonStr, outputId, displayType, lines, editor, singleDoc) {
