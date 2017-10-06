@@ -25,12 +25,12 @@
     "telemetry_dialog": {
       "header": "Hi There!",
       "content_first":
-        "dbKoda is still a work in progress, but we want to make sure that every iteration and change we make is a step towards the tool you need (as well as just being even more awesome).",
+        "Thanks for downloading and installing dbKoda - we need your help to make it better, so we  collect statistics on product utilization so we can work out how to best invest our efforts on improving the product.",
       "content_second":
-        "To help us accomplish our goal of user-driven development, dbKoda may send some telemetry back to our developers to help then fix and improve the product. This data is anonymous, and will not contain any information about your data, only information about how you use the product will be send back. If you don't want to send us any of this data, please uncheck the box on this dialog, or in the Welcome Menu at any time.",
+        "These statistics only include information about how often various parts of the product are used and NEVER include anything personally identifiable or even anything specific to your usage of the product. We just collect feature usage counters.",
       "content_third":
-        "We also encourage all user feedback (positive and negative) by navigating to our website from the Welcome Menu. You can read our full privacy policy ",
-      "privacy_link": "at this link",
+        "We use the Google Analytics API to collect these statistics which is used by zillions (OK, tens of millions) of websites. ",
+      "privacy_link": "See our privacy policy for more details.",
       "button_no": "No Thanks",
       "button_yes": "Okay"
     },
