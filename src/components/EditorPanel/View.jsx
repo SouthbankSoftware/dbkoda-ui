@@ -184,17 +184,21 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log('queries: ', currEditorValue.replace(/\t/g, '  ').split('\n'));
+              let queries = currEditorValue.replace(/\t/g, '  ').split('\n');
+              queries = queries.filter((query) => {
+                return (query.trim().length > 0);
+              });
+              console.log('queries: ', queries);
               service
                 .update(shell, {
-                  queries: currEditorValue.replace(/\t/g, '  ').split('\n'),
+                  queries,
                 })
                 .then((res) => {
                   console.log('queries result:', res);
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
-                  output.output = JSON.stringify(res);
+                  output.output = res; // JSON.stringify(res);
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
@@ -292,7 +296,7 @@ class View extends React.Component {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
-                  output.output = JSON.stringify(res);
+                  output.output = res; // JSON.stringify(res);
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;

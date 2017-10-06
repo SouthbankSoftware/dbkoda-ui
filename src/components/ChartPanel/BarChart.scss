@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-03T20:13:40+11:00
+ * @Last modified time: 2017-10-05T23:30:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,20 +26,21 @@
 
 .ChartPanel {
   .BarChart {
-    .recharts-bar-cursor {
-      fill: $chartItemHover !important;
+    .recharts-tooltip-cursor {
+      fill: rgba($defaultChartPanelText, 0.15) !important;
     }
 
     .recharts-default-tooltip {
-      background-color: $chartTooltipBackground !important;
+      background-color: $chartPanelTooltipBackground !important;
+      border: none !important;
     }
 
     .recharts-tooltip-label {
-      color: $fieldBrightFontColor !important;
+      color: $chartPanelTooltipTitle !important;
     }
 
     .recharts-legend-item-text {
-      color: $detailsFontColor !important;
+      color: $defaultChartPanelText !important;
     }
   }
 }
@@ -62,4 +63,5 @@
   colourFifteen: $colourFifteen;
   colourSixteen: $colourSixteen;
   colourSeventeen: $colourSeventeen;
+  defaultChartPanelText: $defaultChartPanelText;
 }

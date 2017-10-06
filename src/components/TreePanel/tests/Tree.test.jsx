@@ -35,6 +35,7 @@ import Store from '~/stores/global';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TempTopology from '~/stores/TempTopology.js';
 import TreeState from '#/TreePanel/model/TreeState';
+import globalizeInit from '#/tests/helpers/globalize.js';
 import {TreeView, TreeToolbar} from '../index.js';
 
 describe('Tree View and Toolbar', () => {
@@ -59,6 +60,7 @@ describe('Tree View and Toolbar', () => {
 
   beforeAll(() => {
     useStrict(true);
+    globalizeInit();
   });
 
   test('set a filter in toolbar', () => {
