@@ -233,6 +233,11 @@ export default class OutputApi {
             cannotShowMore: true,
             showingMore: false,
             commandHistory: [],
+            tableJson: {
+              json: [],
+              firstLine: 0,
+              lastLine: 0,
+            }
           }),
         );
 
@@ -251,16 +256,17 @@ export default class OutputApi {
   @action.bound
   drillOutputAvailable(output) {
     const profile = this.store.profiles.get(output.profileId);
-    const editor = this.store.editors.get(output.id);
-    const totalOutput =
-      this.store.outputs.get(output.id).output +
-      editor.doc.lineSep +
-      output.output;
+    // const editor = this.store.editors.get(output.id);
+    // const totalOutput =
+    //   this.store.outputs.get(output.id).output +
+    //   editor.doc.lineSep +
+    //   output.output;
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
     }
-    this.store.outputs.get(output.id).output = totalOutput;
+    // this.store.outputs.get(output.id).output = totalOutput;
+    this.createJSONTableViewFromJSONArray(output.output, output.id);
   }
   @action.bound
   initJsonView(jsonStr, outputId, displayType, lines, editor, singleDoc) {
