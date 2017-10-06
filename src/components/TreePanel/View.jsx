@@ -36,7 +36,7 @@ import {
   MenuDivider,
   Intent,
   AnchorButton,
-  Dialog
+  Dialog,
 } from '@blueprintjs/core';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
@@ -184,7 +184,10 @@ export default class TreeView extends React.Component {
             Menus.push(<MenuDivider key={objAction.name} />);
           } else {
             let bDevOnlyFeature = false;
-            if (process.env.NODE_ENV !== 'development' && objAction.development) {
+            if (
+              process.env.NODE_ENV !== 'development' &&
+              objAction.development
+            ) {
               bDevOnlyFeature = true;
             }
             if (!bDevOnlyFeature) {
@@ -293,6 +296,12 @@ export default class TreeView extends React.Component {
         case 'DrillDatabase':
           this.openDrillEditor();
           break;
+        case 'TableView':
+          this.props.api.treeApi.openNewTableViewForCollection({
+            collection: this.nodeRightClicked.text,
+            database: this.nodeRightClicked.refParent.text,
+          });
+          break;
         default:
           console.error('Tree Action not defined: ', action);
           break;
@@ -391,7 +400,9 @@ export default class TreeView extends React.Component {
   };
 
   openDrillEditor = () => {
-    const drillProfileId = this.props.api.checkForExistingDrillProfile({ db: this.nodeRightClicked.text });
+    const drillProfileId = this.props.api.checkForExistingDrillProfile({
+      db: this.nodeRightClicked.text,
+    });
     if (!drillProfileId) {
       if (
         this.props.store.profileList.selectedProfile &&
@@ -400,7 +411,9 @@ export default class TreeView extends React.Component {
         if (this.props.store.profileList.selectedProfile.sha) {
           this.setState({ isPasswordDialogVisible: true });
         } else {
-          this.props.api.addNewEditorForDrill({ db: this.nodeRightClicked.text });
+          this.props.api.addNewEditorForDrill({
+            db: this.nodeRightClicked.text,
+          });
         }
       }
     } else {
@@ -412,7 +425,10 @@ export default class TreeView extends React.Component {
   };
 
   openDrillEditorWithPass = () => {
-    this.props.api.addNewEditorForDrill({ db: this.nodeRightClicked.text, pass: this.state.remotePass });
+    this.props.api.addNewEditorForDrill({
+      db: this.nodeRightClicked.text,
+      pass: this.state.remotePass,
+    });
     this.setState({ isPasswordDialogVisible: false });
   };
 

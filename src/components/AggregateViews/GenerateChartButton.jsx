@@ -63,7 +63,10 @@ type State = {};
     api,
   };
 })
-export default class GenerateChartButton extends React.PureComponent<Props, State> {
+export default class GenerateChartButton extends React.PureComponent<
+  Props,
+  State,
+> {
   parserRegex = /use\s+(\S+)\s*;[^]*db\.(\S+)\.aggregate\(\s*(\[[^]*\])\s*,\s*({[^]*})\s*\)\s*;/;
   commentStripperRegex = /\/\*[^]*\*\//g;
 
@@ -105,6 +108,7 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
       this._handleError(new Error(result));
     } else {
       // $FlowFixMe
+      console.log(result);
       api.outputApi.showChartPanel(this.props.editorId, result);
     }
   };
@@ -122,7 +126,9 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
       const options = this._strToJson(matches[4]);
 
       if (!_.isArray(pipeline) || !_.isObject(options)) {
-        this._handleError(new Error(globalString('aggregate_builder/invalid_aggregation_code')));
+        this._handleError(
+          new Error(globalString('aggregate_builder/invalid_aggregation_code')),
+        );
         return;
       }
 
@@ -142,7 +148,9 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
         })
         .catch(this._handleError);
     } else {
-      this._handleError(new Error(globalString('aggregate_builder/invalid_aggregation_code')));
+      this._handleError(
+        new Error(globalString('aggregate_builder/invalid_aggregation_code')),
+      );
     }
   };
 
