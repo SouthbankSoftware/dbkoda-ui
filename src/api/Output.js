@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-03T11:52:46+11:00
+ * @Last modified time: 2017-10-06T11:10:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -457,24 +457,31 @@ export default class OutputApi {
     const output = outputs.get(editorId);
 
     if (!output.chartPanel) {
+      // first time
       extendObservable(output, {
         chartPanel: observable.shallowObject(
-          // this object must conform Store type defined at `src/components/ChartPanel/Panel.jsx:60`
+          // this object must conform Store type defined at `src/components/ChartPanel/Panel.jsx`
           {
             data,
             dataTreeWidth: 250, // default dataTreeWidth
             chartWidth: 0,
             chartHeight: 0,
-            chartComponentX: null,
-            chartComponentY: null,
-            chartComponentCenter: null,
+            chartComponentX: false, // set all three components to false to enable auto selection
+            chartComponentY: false,
+            chartComponentCenter: false,
+            showOtherInCategoricalAxis: true,
+            showOtherInCenter: true,
             loading,
           },
         ),
       });
     } else {
+      // re-entrant
       _.assign(output.chartPanel, {
         data,
+        chartComponentX: false, // set all three components to false to enable auto selection
+        chartComponentY: false,
+        chartComponentCenter: false,
         loading,
       });
     }

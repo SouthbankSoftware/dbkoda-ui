@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-03T20:30:08+11:00
+ * @Last modified time: 2017-10-06T13:13:00+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,10 +28,12 @@
 import * as React from 'react';
 import _ from 'lodash';
 import { BarChart as RBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { DEFAULT_AXIS_VALUE_SCHEMA_PATH } from './Panel';
+import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
+import { DEFAULT_AXIS_VALUE_SCHEMA_PATH, OTHER_CATEGORY_LABEL } from './Panel';
 import styles from './BarChart.scss';
 
-const COLOUR_PALETTE: string[] = _.values(styles);
+// $FlowFixMe
+const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) => k.startsWith('colour'));
 const MARGIN = { top: 20, right: 20, left: 10, bottom: 30 };
 const Y_AXIS_TICK_MAX_LEN = 9;
 
@@ -53,6 +55,10 @@ type Props = {
   width: number,
   height: number,
   setBarChartGrid: (ref: React.ElementRef<*>) => void,
+  showOtherInCategoricalAxis: boolean,
+  showOtherInCenter: boolean,
+  onToggleShowOtherInCategoricalAxis: () => void,
+  onToggleShowOtherInCenter: () => void,
 };
 
 class YAxisTick extends React.PureComponent<*> {
@@ -73,7 +79,7 @@ class YAxisTick extends React.PureComponent<*> {
           y={0}
           dy={dy}
           textAnchor="end"
-          fill="#666"
+          fill={styles.defaultChartPanelText}
           transform="rotate(-60)"
           stroke={stroke}
         >
@@ -87,6 +93,35 @@ class YAxisTick extends React.PureComponent<*> {
 export default class BarChart extends React.PureComponent<Props> {
   grid: React.ElementRef<*>;
 
+  _onContextMenu = (e: SyntheticMouseEvent<*>) => {
+    const {
+      componentX,
+      showOtherInCategoricalAxis,
+      showOtherInCenter,
+      onToggleShowOtherInCategoricalAxis,
+      onToggleShowOtherInCenter,
+    } = this.props;
+
+    const menu = (
+      <Menu>
+        <MenuItem
+          onClick={onToggleShowOtherInCategoricalAxis}
+          text={`${showOtherInCategoricalAxis
+            ? 'Hide'
+            : 'Show'} ${OTHER_CATEGORY_LABEL} in ${componentX.valueType === 'string'
+            ? 'X Axis'
+            : 'Y Axis'}`}
+        />
+        <MenuItem
+          onClick={onToggleShowOtherInCenter}
+          text={`${showOtherInCenter ? 'Hide' : 'Show'} ${OTHER_CATEGORY_LABEL} in Center`}
+        />
+      </Menu>
+    );
+
+    ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
+  };
+
   render() {
     const {
       data,
@@ -98,10 +133,10 @@ export default class BarChart extends React.PureComponent<Props> {
       setBarChartGrid,
     } = this.props;
 
-    const centerDataKeyPrefix = componentX.valueType === 'string' ? 'y.' : 'x.';
+    const centerDataKey = componentX.valueType === 'string' ? 'y' : 'x';
 
     return (
-      <div className="BarChart">
+      <div className="BarChart" onContextMenu={this._onContextMenu}>
         <RBarChart
           width={width}
           height={height}
@@ -119,13 +154,17 @@ export default class BarChart extends React.PureComponent<Props> {
           ) : (
             <YAxis type="number" tick={<YAxisTick />} />
           )}
-          <CartesianGrid ref={ref => setBarChartGrid(ref)} strokeDasharray="3 3" />
+          <CartesianGrid
+            ref={ref => setBarChartGrid(ref)}
+            stroke={styles.defaultChartPanelText}
+            strokeDasharray="3 3"
+          />
           <Tooltip />
-          <Legend />
+          {componentCenter.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH ? null : <Legend />}
           <text
             textAnchor="middle"
             transform={`translate(20, ${height / 2 - 30})rotate(-90)`}
-            fill="#666"
+            fill={styles.defaultChartPanelText}
           >
             {componentY.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
               ? componentY.valueType === 'string' ? '' : 'count'
@@ -134,23 +173,28 @@ export default class BarChart extends React.PureComponent<Props> {
           <text
             textAnchor="middle"
             transform={`translate(${width / 2 - 10}, ${height - 10})`}
-            fill="#666"
+            fill={styles.defaultChartPanelText}
           >
             {componentX.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
               ? componentX.valueType === 'string' ? '' : 'count'
               : componentX.valueSchemaPath}
           </text>
           {componentCenter.values &&
-            _.map(componentCenter.values, (v, i) => (
-              <Bar
-                key={v}
-                dataKey={`${centerDataKeyPrefix}${v}`}
-                stackId="a"
-                name={v}
-                fill={COLOUR_PALETTE[i % COLOUR_PALETTE.length]}
-                isAnimationActive={false}
-              />
-            ))}
+            _.map(componentCenter.values, (v, i) => {
+              return (
+                <Bar
+                  key={v}
+                  dataKey={(data) => {
+                    const value = data[centerDataKey][v];
+                    return value === undefined ? null : value;
+                  }}
+                  stackId="a"
+                  name={v === DEFAULT_AXIS_VALUE_SCHEMA_PATH ? '' : v}
+                  fill={COLOUR_PALETTE[i % COLOUR_PALETTE.length]}
+                  isAnimationActive={false}
+                />
+              );
+            })}
         </RBarChart>
       </div>
     );
