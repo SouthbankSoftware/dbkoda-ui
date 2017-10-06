@@ -232,7 +232,7 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-navbar-heading">
-            {globalString('output/heading')}
+            {globalString('output/headings/table')}
           </div>
           <Tooltip
             intent={Intent.PRIMARY}
@@ -273,7 +273,7 @@ export default class Toolbar extends React.Component {
           <nav className="pt-navbar pt-dark .modifier outputToolbar">
             <div className="pt-navbar-group pt-align-left">
               <div className="pt-navbar-heading">
-                {globalString('output/heading')}
+                {globalString('output/headings/default')}
               </div>
               <Tooltip
                 intent={Intent.PRIMARY}
