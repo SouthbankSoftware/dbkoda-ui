@@ -100,8 +100,10 @@ export default class Analytics extends React.Component {
    *  @param {Object} profile - An object that represents the newly created profile
    */
   newProfileCreated(profile) {
-    const mongoVersion = profile.dbVersion;
-    this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoVersion);
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      const mongoVersion = profile.dbVersion;
+      this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoVersion);
+    }
   }
 
   /**
