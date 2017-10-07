@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-04T17:11:03+11:00
+ * @Last modified time: 2017-10-07T11:55:11+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,16 +27,17 @@
 
 import * as React from 'react';
 import _ from 'lodash';
-import { type ITreeNode, Tree, ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
+import { type ITreeNode, Tree, ContextMenu, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 import escapeStringRegexp from 'escape-string-regexp';
 import { DragSource } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 // $FlowFixMe
 import { DragItemTypes } from '#/common/Constants.js';
 import type { ChartComponent, ChartComponentName } from './BarChart';
+import type { SelectedComponents } from './Panel';
 import './DataTree.scss';
 
-export type Schema = { [string]: string };
+export type Schema = { [string]: string | Schema };
 export type ChartComponentOperation = {
   action: 'load' | 'unload',
   target: ChartComponentName,
@@ -55,6 +56,10 @@ export type DragAndDropHandler = (
   valueSchemaPath: ?string,
   valueType: 'string' | 'number' | null,
 ) => void;
+export type SchemaPathTypeChangeHandler = (
+  valueSchemaPath: string,
+  newValuePath: 'string' | 'number',
+) => void;
 
 type Props = {
   schema: Schema,
@@ -64,6 +69,7 @@ type Props = {
   onChartComponentChange: ChartComponentChangeHandler,
   getAllowedChartComponentOperations: GetAllowedChartComponentOperations,
   onDragAndDrop: DragAndDropHandler,
+  onSchemaPathTypeChange: SchemaPathTypeChangeHandler,
 };
 
 type State = {
@@ -122,10 +128,14 @@ export default class DataTree extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const { schema } = props;
+    const { schema, chartComponentX, chartComponentY, chartComponentCenter } = props;
 
     this.state = {
-      nodes: this._generateTreeNodes(schema),
+      nodes: this._generateTreeNodes(schema, {
+        chartComponentX,
+        chartComponentY,
+        chartComponentCenter,
+      }),
     };
   }
 
@@ -137,10 +147,14 @@ export default class DataTree extends React.Component<Props, State> {
   }: Props) {
     const { schema, chartComponentX, chartComponentY, chartComponentCenter } = this.props;
 
-    if (!_.isEqual(schema, nextSchema)) {
+    if (schema !== nextSchema) {
       // update tree nodes when necessary
       this.setState({
-        nodes: this._generateTreeNodes(nextSchema),
+        nodes: this._generateTreeNodes(nextSchema, {
+          chartComponentX: nextChartComponentX,
+          chartComponentY: nextChartComponentY,
+          chartComponentCenter: nextChartComponentCenter,
+        }),
       });
     } else {
       this._checkAndUpdateTreeForChartComponent(chartComponentX, nextChartComponentX);
@@ -231,6 +245,7 @@ export default class DataTree extends React.Component<Props, State> {
   _generateTreeNodesInternal(
     schema: Schema,
     prefix: string,
+    selectedComponents: SelectedComponents,
   ): { shouldBeExpanded: boolean, nodes: ITreeNode[] } {
     // $FlowIssue
     const nodes: ITreeNode[] = [];
@@ -242,8 +257,7 @@ export default class DataTree extends React.Component<Props, State> {
       let secondaryLabel: ?string = null;
       let classname: ?string = null;
       const getSecondaryLabel = () => {
-        const { chartComponentX, chartComponentY, chartComponentCenter } = this.props;
-        _.forEach([chartComponentX, chartComponentY, chartComponentCenter], (v) => {
+        _.forEach(selectedComponents, (v) => {
           if (v && v.valueSchemaPath === newPrefix) {
             secondaryLabel = (secondaryLabel ? ', ' : '') + DataTree._getSecondaryLabel(v.name);
             shouldBeExpanded = true;
@@ -257,6 +271,7 @@ export default class DataTree extends React.Component<Props, State> {
         const { shouldBeExpanded: childShouldBeExpanded, nodes } = this._generateTreeNodesInternal(
           v,
           newPrefix,
+          selectedComponents,
         );
         shouldBeExpanded = shouldBeExpanded || childShouldBeExpanded;
         node = {
@@ -310,7 +325,7 @@ export default class DataTree extends React.Component<Props, State> {
             ? {
                 isSelected: true,
                 secondaryLabel,
-                className: classname
+                className: classname,
               }
             : {},
         );
@@ -321,8 +336,8 @@ export default class DataTree extends React.Component<Props, State> {
     return { shouldBeExpanded, nodes };
   }
 
-  _generateTreeNodes(schema: Schema) {
-    return this._generateTreeNodesInternal(schema, '').nodes;
+  _generateTreeNodes(schema: Schema, selectedComponents: SelectedComponents) {
+    return this._generateTreeNodesInternal(schema, '', selectedComponents).nodes;
   }
 
   _onNodeCollapse = (node: ITreeNode) => {
@@ -340,21 +355,23 @@ export default class DataTree extends React.Component<Props, State> {
   _onNodeContextMenu = (node: ITreeNode, _nodePath: number[], e: SyntheticMouseEvent<*>) => {
     e.preventDefault();
 
-    if (!node.type) {
+    // $FlowFixMe
+    const { id, type: valueType } = node;
+
+    if (!valueType || (valueType !== 'string' && valueType !== 'number')) {
       return;
     }
 
-    const { id } = node;
-    const { onChartComponentChange, getAllowedChartComponentOperations } = this.props;
-    const type = node.type;
-
-    if (type !== 'string' && type !== 'number') {
-      return;
-    }
+    const valueSchemaPath = String(id);
+    const {
+      onChartComponentChange,
+      getAllowedChartComponentOperations,
+      onSchemaPathTypeChange,
+    } = this.props;
 
     const menu = (
       <Menu>
-        {_.map(getAllowedChartComponentOperations(String(id), type), (v, i) => {
+        {_.map(getAllowedChartComponentOperations(valueSchemaPath, valueType), (v, i) => {
           let compDesc;
 
           if (v.target === 'x') {
@@ -376,13 +393,17 @@ export default class DataTree extends React.Component<Props, State> {
           return (
             <MenuItem
               key={i}
-              onClick={() => {
-                onChartComponentChange(v, String(id), type);
-              }}
+              onClick={() => onChartComponentChange(v, valueSchemaPath, valueType)}
               text={text}
             />
           );
         })}
+        <MenuDivider />
+        <MenuItem
+          onClick={() =>
+            onSchemaPathTypeChange(valueSchemaPath, valueType === 'string' ? 'number' : 'string')}
+          text={`Treat as ${valueType === 'string' ? 'numerical' : 'categorical'} data`}
+        />
       </Menu>
     );
 

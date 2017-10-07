@@ -2,7 +2,7 @@
 # @Date:   2016-06-02T14:58:00+10:00
 # @Email:  root@guiguan.net
 # @Last modified by:   guiguan
-# @Last modified time: 2017-09-27T09:49:43+10:00
+# @Last modified time: 2017-10-06T18:36:50+11:00
 
 extends: airbnb
 parser: babel-eslint
@@ -12,6 +12,7 @@ env:
   jest: true
   es6: true
 rules:
+  no-continue: 0
   arrow-body-style: 0
   key-spacing: 0
   object-property-newline: 0
