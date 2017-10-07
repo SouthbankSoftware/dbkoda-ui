@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-07T11:28:47+11:00
+ * @Last modified time: 2017-10-08T10:48:13+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -121,6 +121,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   reactions = [];
   resizeDetector: React.ElementRef<*>;
   barChartGrid: React.ElementRef<*>;
+  fetchNumValueRegex = /[^\d.+-]/g;
 
   constructor(props: Props) {
     super(props);
@@ -391,6 +392,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     const fetchNumValue = (doc, valueSchemaPath, defaultValue) => {
       let result = _.get(doc, valueSchemaPath, defaultValue);
       if (!_.isNumber(result)) {
+        result = result.replace(this.fetchNumValueRegex, '');
         result = _.toNumber(result);
       }
       return _.isFinite(result)
@@ -799,22 +801,19 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   _onSchemaPathTypeChange = action((valueSchemaPath, newType) => {
     const { chartPanel } = this.props.store;
     const { chartComponentX, chartComponentY, chartComponentCenter, schemaTypeFilter } = chartPanel;
-    let targetToUnload = null;
 
-    // whether to unload? be smart :P
+    // update selected components
     for (const c of [chartComponentX, chartComponentY, chartComponentCenter]) {
       if (c && c.valueSchemaPath === valueSchemaPath) {
         if ((c.name === 'x' && !chartComponentY) || (c.name === 'y' && !chartComponentX)) {
+          chartPanel[`chartComponent${_.upperFirst(c.name)}`] = _.assign(_.clone(c), {
+            valueType: newType,
+          });
           continue;
         }
-        targetToUnload = c.name;
+        chartPanel[`chartComponent${_.upperFirst(c.name)}`] = null;
         break;
       }
-    }
-
-    // unload
-    if (targetToUnload) {
-      chartPanel[`chartComponent${_.upperFirst(targetToUnload)}`] = null;
     }
 
     // add to type filter
