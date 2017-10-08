@@ -3,21 +3,14 @@
   "gitName": "dbkoda-ui",
   "fullName": "dbKoda UI",
   "description": "dbKoda UI built with state of the art React stack",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "author": {
     "name": "Southbank Software",
     "email": "developer@southbanksoftware.com",
     "url": "http://southbanksoftware.com"
   },
   "main": "dist/index.html",
-  "keywords": [
-    "React",
-    "React-Router",
-    "MobX",
-    "Webpack",
-    "ES6",
-    "ES7"
-  ],
+  "keywords": ["React", "React-Router", "MobX", "Webpack", "ES6", "ES7"],
   "engines": {
     "node": ">= 7.2.1"
   },
@@ -31,7 +24,8 @@
     "start": "http-server ./dist -p 3000 -c-1",
     "clean": "rimraf ./dist rmdir",
     "build": "webpack --config webpack/prod.js --optimize-minimize",
-    "test": "yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
+    "test":
+      "yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
     "test:dev": "yarn run eslint && yarn run jest",
     "mlaunch:init": "mlaunch init --single",
     "mlaunch:clean": "mlaunch kill; rimraf data tmpd*",
