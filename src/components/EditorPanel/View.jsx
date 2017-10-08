@@ -184,7 +184,7 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              let queries = currEditorValue.replace(/\t/g, '  ').split('\n');
+              let queries = currEditorValue.replace(/\t/g, '  ').split(';');
               queries = queries.filter((query) => {
                 return (query.trim().length > 0);
               });
@@ -286,7 +286,7 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log('queries:', content.replace(/\t/g, '  ').split('\n'));
+              console.log('queries:', content.replace(/\t/g, '  ').split(';'));
               service
                 .update(shell, {
                   queries: content.replace(/\t/g, '  ').split('\n'),
