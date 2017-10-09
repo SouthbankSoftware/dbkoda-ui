@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T10:27:05+11:00
+ * @Last modified time: 2017-10-09T16:39:34+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,7 @@ import { Broker, EventType } from '~/helpers/broker';
 import { EditorTypes, ProfileStatus } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
 import { Intent } from '@blueprintjs/core';
+import { type ChartPanelStore } from '#/ChartPanel';
 import StaticApi from './static';
 
 export default class OutputApi {
@@ -69,13 +70,8 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (
-          editor.id != 'Default' &&
-          this.store.outputs.get(editor.id).output
-        ) {
-          this.store.outputs.get(editor.id).output += globalString(
-            'output/editor/restoreSession',
-          );
+        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
+          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
         if (this.debug) console.log(`create new output for ${editor.id}`);
@@ -142,21 +138,12 @@ export default class OutputApi {
       EventType.createShellOutputEvent(oldId, oldShellId),
       this.outputAvailable,
     );
-    Broker.removeListener(
-      EventType.createShellReconnectEvent(oldId, oldShellId),
-      this.onReconnect,
-    );
+    Broker.removeListener(EventType.createShellReconnectEvent(oldId, oldShellId), this.onReconnect);
 
     this.outputHash[id + '|' + shellId] = outputId;
 
-    Broker.on(
-      EventType.createShellOutputEvent(id, shellId),
-      this.outputAvailable,
-    );
-    Broker.on(
-      EventType.createShellReconnectEvent(id, shellId),
-      this.onReconnect,
-    );
+    Broker.on(EventType.createShellOutputEvent(id, shellId), this.outputAvailable);
+    Broker.on(EventType.createShellReconnectEvent(id, shellId), this.onReconnect);
   }
 
   @action.bound
@@ -212,13 +199,8 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (
-          editor.id != 'Default' &&
-          this.store.outputs.get(editor.id).output
-        ) {
-          this.store.outputs.get(editor.id).output += globalString(
-            'output/editor/restoreSession',
-          );
+        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
+          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
         console.log(`create new output for ${editor.id}`);
@@ -258,10 +240,7 @@ export default class OutputApi {
     const profile = this.store.profiles.get(res.profileId);
     const strOutput = JSON.stringify(res.output);
     const editor = this.store.editors.get(res.id);
-    const totalOutput =
-      this.store.outputs.get(res.id).output +
-      editor.doc.lineSep +
-      strOutput;
+    const totalOutput = this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
@@ -316,9 +295,7 @@ export default class OutputApi {
         runInAction(
           () => {
             NewToaster.show({
-              message:
-                globalString('output/editor/parseJsonError') +
-                error.substring(0, 50),
+              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
               intent: Intent.DANGER,
               icon: '',
             });
@@ -326,9 +303,7 @@ export default class OutputApi {
           (error) => {
             runInAction(() => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -369,9 +344,7 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -379,9 +352,7 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message:
-                    globalString('output/editor/parseJsonError') +
-                    error.substring(0, 50),
+                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                   intent: Intent.DANGER,
                   icon: '',
                 });
@@ -408,9 +379,7 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -424,9 +393,7 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message:
-                    globalString('output/editor/parseJsonError') +
-                    error.substring(0, 50),
+                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                   intent: Intent.DANGER,
                   icon: '',
                 });
@@ -465,41 +432,37 @@ export default class OutputApi {
   }
 
   @action.bound
-  showChartPanel(editorId, data, loading = false) {
+  showChartPanel(editorId, data, state: ComponentState, error: ?string = null) {
     const { outputs, outputPanel } = this.store;
     const output = outputs.get(editorId);
+    const common = {
+      data,
+      schemaRef: null, // set null to rebuild schema
+      chartComponentX: false, // set all three components to false to enable auto selection
+      chartComponentY: false,
+      chartComponentCenter: false,
+      state,
+      error,
+    };
 
     if (!output.chartPanel) {
       // first time
+
+      // this object must conform Store type defined at `src/components/ChartPanel/Panel.jsx`
+      const chartPanelStore: ChartPanelStore = _.assign(common, {
+        dataTreeWidth: 250, // default dataTreeWidth
+        chartWidth: 0,
+        chartHeight: 0,
+        showOtherInCategoricalAxis: true,
+        showOtherInCenter: true,
+      });
+
       extendObservable(output, {
-        chartPanel: observable.shallowObject(
-          // this object must conform Store type defined at `src/components/ChartPanel/Panel.jsx`
-          {
-            data,
-            schemaRef: null, // set null to rebuild schema
-            dataTreeWidth: 250, // default dataTreeWidth
-            chartWidth: 0,
-            chartHeight: 0,
-            chartComponentX: false, // set all three components to false to enable auto selection
-            chartComponentY: false,
-            chartComponentCenter: false,
-            showOtherInCategoricalAxis: true,
-            showOtherInCenter: true,
-            loading,
-          },
-        ),
+        chartPanel: observable.shallowObject(chartPanelStore),
       });
     } else {
       // re-entrant
-      _.assign(output.chartPanel, {
-        data,
-        schemaRef: null,
-        chartComponentX: false, // set all three components to false to enable auto selection
-        chartComponentY: false,
-        chartComponentCenter: false,
-        schemaTypeFilter: observable.shallowMap(),
-        loading,
-      });
+      _.assign(output.chartPanel, common);
     }
 
     outputPanel.currentTab = `Chart-${editorId}`;

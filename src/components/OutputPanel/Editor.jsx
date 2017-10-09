@@ -3,7 +3,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-09-26T16:01:21+10:00
+ * @Last modified time: 2017-10-09T16:44:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -106,12 +106,7 @@ export default class Editor extends React.Component {
       <div className="menuItemWrapper showJsonView" id="showJsonViewMenuItem">
         <MenuItem
           onClick={() => {
-            this.props.api.initJsonView(
-              currentJson,
-              this.props.id,
-              'enhancedJson',
-              lines,
-            );
+            this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
           }}
           text={globalString('output/editor/contextJson')}
           iconName="pt-icon-panel-stats"
@@ -165,26 +160,24 @@ export default class Editor extends React.Component {
           onClick={() => {
             const editorId = this.props.id;
 
-            StaticApi.parseTableJson(
-              currentJson,
-              lines,
-              this.editor.getCodeMirror(),
-              editorId,
-            )
+            StaticApi.parseTableJson(currentJson, lines, this.editor.getCodeMirror(), editorId)
               .then((result) => {
                 runInAction(() => {
-                  this.props.api.outputApi.showChartPanel(editorId, result);
+                  this.props.api.outputApi.showChartPanel(editorId, result, 'loaded');
                 });
               })
               .catch((err) => {
+                const message = globalString('output/editor/parseJsonError') + err.substring(0, 50);
                 runInAction(() => {
                   NewToaster.show({
-                    message:
-                      globalString('output/editor/parseJsonError') +
-                      err.substring(0, 50),
+                    message,
                     intent: Intent.DANGER,
                     icon: '',
                   });
+                });
+
+                runInAction(() => {
+                  this.props.api.outputApi.showChartPanel(editorId, {}, 'error', message);
                 });
               });
           }}

@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-22T15:52:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-02T16:51:26+11:00
+ * @Last modified time: 2017-10-09T16:41:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,10 +63,7 @@ type State = {};
     api,
   };
 })
-export default class GenerateChartButton extends React.PureComponent<
-  Props,
-  State,
-> {
+export default class GenerateChartButton extends React.PureComponent<Props, State> {
   parserRegex = /use\s+(\S+)\s*;[^]*db\.(\S+)\.aggregate\(\s*(\[[^]*\])\s*,\s*({[^]*})\s*\)\s*;/;
   commentStripperRegex = /\/\*[^]*\*\//g;
 
@@ -101,15 +98,21 @@ export default class GenerateChartButton extends React.PureComponent<
       intent: Intent.DANGER,
       iconName: 'pt-icon-thumbs-down',
     });
+
+    const { api } = this.props;
+
+    // $FlowFixMe
+    api.outputApi.showChartPanel(this.props.editorId, {}, 'error', error.message);
   };
 
   _onAggregatorResultReceived = (result) => {
     if (typeof result === 'string') {
       this._handleError(new Error(result));
     } else {
+      const { api } = this.props;
+
       // $FlowFixMe
-      console.log(result);
-      api.outputApi.showChartPanel(this.props.editorId, result);
+      api.outputApi.showChartPanel(this.props.editorId, result, 'loaded');
     }
   };
 
@@ -126,16 +129,14 @@ export default class GenerateChartButton extends React.PureComponent<
       const options = this._strToJson(matches[4]);
 
       if (!_.isArray(pipeline) || !_.isObject(options)) {
-        this._handleError(
-          new Error(globalString('aggregate_builder/invalid_aggregation_code')),
-        );
+        this._handleError(new Error(globalString('aggregate_builder/invalid_aggregation_code')));
         return;
       }
 
       const { editorId, api } = this.props;
 
       // $FlowFixMe
-      api.outputApi.showChartPanel(editorId, {}, true);
+      api.outputApi.showChartPanel(editorId, {}, 'loading');
       featherClient()
         .service('aggregators')
         .create({
@@ -148,9 +149,7 @@ export default class GenerateChartButton extends React.PureComponent<
         })
         .catch(this._handleError);
     } else {
-      this._handleError(
-        new Error(globalString('aggregate_builder/invalid_aggregation_code')),
-      );
+      this._handleError(new Error(globalString('aggregate_builder/invalid_aggregation_code')));
     }
   };
 

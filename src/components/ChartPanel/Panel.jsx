@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T14:17:36+11:00
+ * @Last modified time: 2017-10-09T16:52:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,6 +32,10 @@ import _ from 'lodash';
 import { action, computed, reaction } from 'mobx';
 import shallowEqualObjects from 'shallow-equal/objects';
 import { inject, observer } from 'mobx-react';
+// $FlowIssue
+import ErrorView from '#/common/ErrorView';
+// $FlowIssue
+import LoadingView from '#/common/LoadingView';
 import DataTree, {
   type Schema,
   type ChartComponentChangeHandler,
@@ -80,21 +84,23 @@ type DataSchema = {
 export type SchemaRef = {
   schema: Schema,
 };
+export type ChartPanelStore = {
+  data: Data,
+  schemaRef: SchemaRef,
+  dataTreeWidth: number,
+  chartWidth: number,
+  chartHeight: number,
+  chartComponentX: ?ChartComponent | false,
+  chartComponentY: ?ChartComponent | false,
+  chartComponentCenter: ?ChartComponent | false,
+  showOtherInCategoricalAxis: boolean,
+  showOtherInCenter: boolean,
+  state: ComponentState,
+  error: ?string,
+};
 
 type Store = {
-  chartPanel: {
-    data: Data,
-    schemaRef: SchemaRef,
-    dataTreeWidth: number,
-    chartWidth: number,
-    chartHeight: number,
-    chartComponentX: ?ChartComponent | false,
-    chartComponentY: ?ChartComponent | false,
-    chartComponentCenter: ?ChartComponent | false,
-    showOtherInCategoricalAxis: boolean,
-    showOtherInCenter: boolean,
-    loading: boolean,
-  },
+  chartPanel: ChartPanelStore,
   outputPanel: {
     currentTab: string,
   },
@@ -864,7 +870,8 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       chartHeight,
       showOtherInCategoricalAxis,
       showOtherInCenter,
-      loading,
+      state,
+      error,
     } = this.props.store.chartPanel;
 
     const { schemaRef, barChartData } = this;
@@ -874,10 +881,12 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
 
     return (
       <div className="ChartPanel">
-        {loading ? (
-          <div className="loaderWrapper">
-            <div className="loader" />
-          </div>
+        {state !== 'loaded' ? (
+          state === 'loading' ? (
+            <LoadingView />
+          ) : (
+            <ErrorView error={error} />
+          )
         ) : (
           <SplitPane
             className="SplitPane"
