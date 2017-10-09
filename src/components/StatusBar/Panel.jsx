@@ -26,7 +26,7 @@
  */
 
 /* eslint no-prototype-builtins:warn */
-/* eslint jsx-a11y/no-static-element-interactions:warn */
+/* eslint jsx-a11y/no-static-element-interactions: 0 */
 
 import React from 'react';
 import { action } from 'mobx';
@@ -34,7 +34,17 @@ import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import { AnchorButton, Intent, Alert, EditableText } from '@blueprintjs/core';
 import { Broker, EventType } from '~/helpers/broker';
+import HappyIcon from '../../styles/icons/happy.svg';
+import NeutralIcon from '../../styles/icons/neutral.svg';
+import SadIcon from '../../styles/icons/sad.svg';
+import BugIcon from '../../styles/icons/error.svg';
 import './style.scss';
+
+const FeedbackTypes = {
+  POSITIVE: 'PositiveFeedback',
+  NEUTRAL: 'NeutralFeedback',
+  NEGATIVE: 'NegativeFeedback',
+};
 
 @inject(allStores => ({
   store: allStores.store,
@@ -51,6 +61,7 @@ export default class Panel extends React.Component {
       isSupportBundleReady: false,
       os: false,
       feedbackComments: '',
+      feedbackType: '',
       debug: true, // Enable for additional logging comments during development.
     };
     const os = require('os').release();
@@ -98,12 +109,18 @@ export default class Panel extends React.Component {
 
   @action.bound
   onConfirmFeedback() {
+    Broker.emit(EventType.FEEDBACK, {
+      type: this.state.feedbackType,
+      comments: this.state.feedbackComments,
+    });
     this.setState({ isFeedbackAlertOpen: false });
   }
 
   @action.bound
   onCancelFeedback() {
     this.setState({ isFeedbackAlertOpen: false });
+    this.state.feedbackType = '';
+    this.state.feedbackComments = '';
   }
 
   @action.bound
@@ -144,26 +161,17 @@ export default class Panel extends React.Component {
 
   @action.bound
   onClickFeedbackDetractor() {
-    Broker.emit(EventType.FEEDBACK, {
-      type: 'NegativeFeedback',
-      comments: this.state.feedbackComments,
-    });
+    this.setState({ feedbackType: FeedbackTypes.NEGATIVE });
   }
 
   @action.bound
   onClickFeedbackPassive() {
-    Broker.emit(EventType.FEEDBACK, {
-      type: 'NeutralFeedback',
-      comments: this.state.feedbackComments,
-    });
+    this.setState({ feedbackType: FeedbackTypes.NEUTRAL });
   }
 
   @action.bound
   onClickFeedbackAdvocate() {
-    Broker.emit(EventType.FEEDBACK, {
-      type: 'PositiveFeedback',
-      comments: this.state.feedbackComments,
-    });
+    this.setState({ feedbackType: FeedbackTypes.POSITIVE });
   }
 
   @action.bound
@@ -248,7 +256,7 @@ export default class Panel extends React.Component {
         <Alert
           className="feedbackAlert"
           isOpen={this.state.isFeedbackAlertOpen}
-          confirmButtonText={globalString('general/confirm')}
+          confirmButtonText={globalString('general/send')}
           onConfirm={this.onConfirmFeedback}
           cancelButtonText={globalString('general/cancel')}
           onCancel={this.onCancelFeedback}
@@ -267,24 +275,39 @@ export default class Panel extends React.Component {
             className="additionalComments"
           />
           <div className="npsButtons">
-            <AnchorButton
-              className="detractorButton"
+            <div
+              className={
+                this.state.feedbackType === FeedbackTypes.NEGATIVE
+                  ? 'active'
+                  : 'inactive'
+              }
               intent={Intent.NONE}
-              text=":("
               onClick={this.onClickFeedbackDetractor}
-            />
-            <AnchorButton
-              className="passiveButton"
+            >
+              <SadIcon width={20} height={20} />
+            </div>
+            <div
+              className={
+                this.state.feedbackType === FeedbackTypes.NEUTRAL
+                  ? 'active'
+                  : 'inactive'
+              }
               intent={Intent.NONE}
-              text=":|"
               onClick={this.onClickFeedbackPassive}
-            />
-            <AnchorButton
-              className="advocateButton"
+            >
+              <NeutralIcon width={20} height={20} />
+            </div>
+            <div
+              className={
+                this.state.feedbackType === FeedbackTypes.POSITIVE
+                  ? 'active'
+                  : 'inactive'
+              }
               intent={Intent.NONE}
-              text=":)"
               onClick={this.onClickFeedbackAdvocate}
-            />
+            >
+              <HappyIcon width={20} height={20} />
+            </div>
           </div>
         </Alert>
       </div>
@@ -301,18 +324,21 @@ export default class Panel extends React.Component {
           </span>
         </div>
         <div className="float_right">
-          <AnchorButton
+          <div
             className="feedbackButton"
             intent={Intent.NONE}
-            text={globalString('status_bar/feedback/button_title')}
             onClick={this.onClickFeedback}
-          />
-          <AnchorButton
+          >
+            <HappyIcon width={10} height={10} />
+          </div>
+          <div
             className="lodgeBugButton"
             intent={Intent.NONE}
             text={globalString('status_bar/support_bundle/button_title')}
             onClick={this.onClickSupportBundle}
-          />
+          >
+            <BugIcon width={10} height={10} />
+          </div>
         </div>
       </div>
     );
