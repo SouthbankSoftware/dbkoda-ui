@@ -1021,6 +1021,10 @@ class View extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
     if (editor && editor.openTranslator) {
+      let cm = null;
+      if (this.editor) {
+        cm = this.editor.getCodeMirror();
+      }
       return connectDropTarget(<div className="editorView translator-open">
         <SplitPane
           split="vertical"
@@ -1033,7 +1037,7 @@ class View extends React.Component {
             options={this.cmOptions}
           />
           <TranslatorPanel value={editor.shellCode} syntax="cb" profileId={editor.profileId}
-            shellId={editor.shellId}
+            shellId={editor.shellId} editorCodeMirror={cm}
             closePanel={this.closeTranslatorPanel} />
         </SplitPane>
       </div>);
