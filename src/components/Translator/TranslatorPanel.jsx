@@ -66,6 +66,10 @@ export default class TranslatorPanel extends React.Component {
       newValue = translator.translate(value, syntax);
       console.log('translated ', value, newValue);
     } catch (_err) {
+      console.error(_err);
+      if (_err.lineNumber !== undefined) {
+        console.log('cm:', CM);
+      }
       // failed to translate code
       DBKodaToaster(Position.RIGHT_TOP).show({
         message: (<span dangerouslySetInnerHTML={{__html: 'Error: Failed to translate shell script.'}} />), // eslint-disable-line react/no-danger
