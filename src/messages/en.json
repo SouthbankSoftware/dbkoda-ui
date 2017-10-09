@@ -40,7 +40,8 @@
         "cancel": "Cancel",
         "okay": "Okay"
       },
-      "invalid_aggregation_code": "Invalid aggregation code. Please check syntax."
+      "invalid_aggregation_code":
+        "Invalid aggregation code. Please check syntax."
     },
     "telemetry_dialog": {
       "header": "Welcome!",
@@ -54,7 +55,10 @@
       "button_yes": "Sure"
     },
     "output": {
-      "heading": "Query Output",
+      "headings": {
+        "default": "Query Output",
+        "table": "Table Output"
+      },
       "toolbar": {
         "save": "Save Output",
         "showMore": "Show More (Ctrl + M)",

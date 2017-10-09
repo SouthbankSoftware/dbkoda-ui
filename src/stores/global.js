@@ -360,7 +360,9 @@ export default class Store {
           }
         });
         if (promises.length > 0) {
-          Promise.all(promises).then(() => resolve()).catch(() => resolve());
+          Promise.all(promises)
+            .then(() => resolve())
+            .catch(() => resolve());
         } else {
           resolve();
         }
@@ -465,7 +467,10 @@ export default class Store {
 
       const stateStoreDir = path.dirname(stateStorePath);
       const dateStr = moment().format('DD-MM-YYYY_HH-mm-ss');
-      const backupPath = path.resolve(stateStoreDir, `stateStore.${dateStr}.json`);
+      const backupPath = path.resolve(
+        stateStoreDir,
+        `stateStore.${dateStr}.json`,
+      );
       return featherClient()
         .service('files')
         .get(stateStorePath, {

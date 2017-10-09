@@ -47,6 +47,7 @@ export default class Panel extends React.Component {
       hideDeep: true,
       expandAll: false,
       collapseAll: false,
+      isLoading: false,
       arrayState: { 0: true },
     };
 
@@ -113,6 +114,23 @@ export default class Panel extends React.Component {
   }
 
   render() {
+    if (this.props.tableJson.json[0].loading === 'isLoading') {
+      // Probably loading. ;)
+      this.state.isLoading = true;
+    } else {
+      this.state.isLoading = false;
+    }
+
+    if (this.state.isLoading) {
+      return (
+        <div className="table-json-panel">
+          <div className="loaderWrapper">
+            <div className="loader" />
+          </div>
+        </div>
+      );
+    }
+
     const expand = this.state.expandAll;
     const collapse = this.state.collapseAll;
     this.state.expandAll = false;

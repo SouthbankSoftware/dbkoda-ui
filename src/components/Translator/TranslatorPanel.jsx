@@ -66,9 +66,17 @@ export default class TranslatorPanel extends React.Component {
       newValue = translator.translate(value, syntax);
       console.log('translated ', value, newValue);
     } catch (_err) {
+      console.error(_err);
+      let msg = 'Error: Failed to translate shell script.';
+      if (_err.lineNumber !== undefined && _err.description) {
+        console.log('cm:', this.codeMirror);
+        msg += `<br>${_err.description} on line ${_err.lineNumber}`;
+        this.codeMirror.codeMirror.focus();
+        this.codeMirror.codeMirror.setCursor({line: _err.lineNumber});
+      }
       // failed to translate code
       DBKodaToaster(Position.RIGHT_TOP).show({
-        message: (<span dangerouslySetInnerHTML={{__html: 'Error: Failed to translate shell script.'}} />), // eslint-disable-line react/no-danger
+        message: (<span dangerouslySetInnerHTML={{__html: msg}} />), // eslint-disable-line react/no-danger
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down'
       });
@@ -114,7 +122,7 @@ export default class TranslatorPanel extends React.Component {
         <div className="menuItemWrapper">
           <MenuItem
             onClick={this.executeCommands}
-            text={globalString('editor/view/menu/executeSelected')}
+            text={globalString('editor/view/menu/executeAll')}
             iconName="pt-icon-double-chevron-right"
             intent={Intent.NONE}
           />
@@ -150,6 +158,10 @@ export default class TranslatorPanel extends React.Component {
       </div>
       <CodeMirror
         className="CodeMirror-scroll"
+        ref={(r) => {
+            this.codeMirror = r;
+          }
+        }
         options={options}
         onChange={doc => this.setState({value: doc})}
         codeMirrorInstance={CM} value={value} />

@@ -172,6 +172,12 @@
       "noDialog": true
     },
     {
+      "name": "TableView",
+      "text": "View as Table",
+      "icon": "pt-icon-th",
+      "noDialog": true
+    },
+    {
       "type": "divider",
       "name": "CollectionDivider1"
     },
