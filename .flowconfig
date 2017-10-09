@@ -18,3 +18,4 @@ suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 suppress_type=$FlowFixMe
 munge_underscores=true
+unsafe.enable_getters_and_setters=true

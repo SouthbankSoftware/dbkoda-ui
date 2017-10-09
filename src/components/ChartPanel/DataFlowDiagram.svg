@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="36.5 12.5 719 653.5" width="719pt" height="653.5pt" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata> Produced by OmniGraffle 7.4.3 
+    <dc:date>2017-10-08 06:43:31 +0000</dc:date>
+  </metadata>
+  <defs>
+    <font-face font-family="Helvetica" font-size="12" units-per-em="1000" underline-position="-75.68359" underline-thickness="49.316406" slope="0" x-height="522.9492" cap-height="717.28516" ascent="770.0195" descent="-229.98047" font-weight="500">
+      <font-face-src>
+        <font-face-name name="Helvetica"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Helvetica Neue" font-size="16" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="500">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="black">
+      <g>
+        <path d="M 8 0 L 0 -3 L 0 3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker_2" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="#0096ff">
+      <g>
+        <path d="M 8 0 L 0 -3 L 0 3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+  </defs>
+  <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+    <title>Canvas 1</title>
+    <rect fill="white" width="719" height="653.5"/>
+    <g>
+      <title>Layer 1</title>
+      <path d="M 347.5 79 L 458.5 79 C 461.2614 79 463.5 81.23858 463.5 84 L 463.5 624.5 C 463.5 627.2614 461.2614 629.5 458.5 629.5 L 347.5 629.5 C 344.73858 629.5 342.5 627.2614 342.5 624.5 L 342.5 84 C 342.5 81.23858 344.73858 79 347.5 79 Z" fill="white"/>
+      <path d="M 347.5 79 L 458.5 79 C 461.2614 79 463.5 81.23858 463.5 84 L 463.5 624.5 C 463.5 627.2614 461.2614 629.5 458.5 629.5 L 347.5 629.5 C 344.73858 629.5 342.5 627.2614 342.5 624.5 L 342.5 84 C 342.5 81.23858 344.73858 79 347.5 79 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(347.5 84)" fill="black">
+        <tspan font-family="Helvetica" font-size="12" font-weight="500" x="27.817383" y="11" textLength="55.365234">Computed</tspan>
+      </text>
+      <circle cx="403" cy="155.5" r="51.50008" fill="white"/>
+      <circle cx="403" cy="155.5" r="51.50008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(366.8 146.276)" fill="black">
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" fill="black" x="8.04" y="15" textLength="56.32">schema</tspan>
+      </text>
+      <circle cx="403" cy="569" r="51.50008" fill="white"/>
+      <circle cx="403" cy="569" r="51.50008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(366.8 550.552)" fill="black">
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" fill="black" x="4.792" y="15" textLength="62.816">barChart</tspan>
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" fill="black" x="19.456" y="33.448" textLength="33.488">Data</tspan>
+      </text>
+      <circle cx="403" cy="352" r="51.50008" fill="white"/>
+      <circle cx="403" cy="352" r="51.50008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(366.8 333.552)" fill="black">
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="2.408" y="15" textLength="67.584">compone</tspan>
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="25.232" y="33.448" textLength="21.936">nts</tspan>
+      </text>
+      <line x1="403" y1="207.00003" x2="403" y2="290.59997" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path d="M 639 79 L 750 79 C 752.7614 79 755 81.23858 755 84 L 755 624.5 C 755 627.2614 752.7614 629.5 750 629.5 L 639 629.5 C 636.2386 629.5 634 627.2614 634 624.5 L 634 84 C 634 81.23858 636.2386 79 639 79 Z" fill="white"/>
+      <path d="M 639 79 L 750 79 C 752.7614 79 755 81.23858 755 84 L 755 624.5 C 755 627.2614 752.7614 629.5 750 629.5 L 639 629.5 C 636.2386 629.5 634 627.2614 634 624.5 L 634 84 C 634 81.23858 636.2386 79 639 79 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(639 84)" fill="black">
+        <tspan font-family="Helvetica" font-size="12" font-weight="500" x="21.811523" y="11" textLength="67.37695">Presentation</tspan>
+      </text>
+      <circle cx="694.5" cy="155.5" r="51.50008" fill="white"/>
+      <circle cx="694.5" cy="155.5" r="51.50008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(658.3 146.276)" fill="black">
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="4.488" y="15" textLength="42.672">DataT</tspan>
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="45.688" y="15" textLength="5.328">r</tspan>
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="50.728" y="15" textLength="17.184">ee</tspan>
+      </text>
+      <circle cx="694.5" cy="569" r="51.50008" fill="white"/>
+      <circle cx="694.5" cy="569" r="51.50008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(658.3 559.776)" fill="black">
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="4.056" y="15" textLength="64.288">BarChart</tspan>
+      </text>
+      <line x1="454.5" y1="569" x2="633.1" y2="569" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="454.5" y1="155.5" x2="633.1" y2="155.5" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path d="M 42 13 L 153 13 C 155.76142 13 158 15.238576 158 18 L 158 660.5 C 158 663.2614 155.76142 665.5 153 665.5 L 42 665.5 C 39.238576 665.5 37 663.2614 37 660.5 L 37 18 C 37 15.238576 39.238576 13 42 13 Z" fill="white"/>
+      <path d="M 42 13 L 153 13 C 155.76142 13 158 15.238576 158 18 L 158 660.5 C 158 663.2614 155.76142 665.5 153 665.5 L 42 665.5 C 39.238576 665.5 37 663.2614 37 660.5 L 37 18 C 37 15.238576 39.238576 13 42 13 Z" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(42 18)" fill="black">
+        <tspan font-family="Helvetica" font-size="12" font-weight="500" x="40.828125" y="11" textLength="29.34375">Mobx</tspan>
+      </text>
+      <circle cx="97.5" cy="352" r="51.50008" fill="white"/>
+      <circle cx="97.5" cy="352" r="51.50008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(61.3 342.776)" fill="black">
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" fill="black" x="20.344" y="15" textLength="31.712">data</tspan>
+      </text>
+      <circle cx="97.5" cy="605" r="51.50008" fill="white"/>
+      <circle cx="97.5" cy="605" r="51.50008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(61.3 586.552)" fill="black">
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="2.408" y="15" textLength="67.584">compone</tspan>
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="25.232" y="33.448" textLength="21.936">nts</tspan>
+      </text>
+      <circle cx="97.5" cy="89.5" r="51.50008" fill="white"/>
+      <circle cx="97.5" cy="89.5" r="51.50008" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <text transform="translate(61.3 80.276)" fill="black">
+        <tspan font-family="Helvetica Neue" font-size="16" font-weight="500" x="8.04" y="15" textLength="56.32">schema</tspan>
+      </text>
+      <line x1="147.84473" y1="100.37644" x2="342.9785" y2="142.533" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path d="M 374.35253 112.69137 C 353.1173 87.34631 319.9611 58.32138 274.5 48.5 C 230.79617 39.058255 186.09774 49.60608 152.55283 62.363215" marker-end="url(#FilledArrow_Marker_2)" stroke="#0096ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="140.82282" y1="324.13443" x2="351.35085" y2="188.72114" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="445.7115" y1="323.2082" x2="643.5795" y2="189.82549" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="444.31566" y1="382.75643" x2="645.24314" y2="532.33194" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path d="M 351.7897 357.47154 C 316.20174 364.73663 266.99444 381.4956 220.5 420 C 173.58262 458.85465 141.38731 509.9478 121.73982 548.59304" marker-end="url(#FilledArrow_Marker_2)" stroke="#0096ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line x1="139.49269" y1="381.82787" x2="352.9362" y2="533.43914" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path d="M 137.16694 572.1498 L 257.714 472.3187 C 254.20596 468.0827 262.67795 461.0666 266.186 465.3026 L 355.70827 391.16467" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+  </g>
+</svg>
