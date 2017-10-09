@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-10-09T15:41:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T16:59:56+11:00
+ * @Last modified time: 2017-10-09T17:35:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,7 @@
  */
 
 import * as React from 'react';
-import ErrorIcon from '~/styles/icons/error.svg';
+import ErrorIcon from '~/styles/icons/error-icon.svg';
 import './View.scss';
 
 type Props = {

@@ -2,7 +2,8 @@
   "en": {
     "general": {
       "confirm": "Okay",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "send": "Send"
     },
     "aggregate_builder": {
       "palette_title": "Pipeline Palette",
