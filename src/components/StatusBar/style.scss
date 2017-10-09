@@ -9,7 +9,6 @@ div.statusPanel {
     order: 1;
     padding-left: 10px;
     span.productVersion {
-      padding-top: 10px;
     }
   }
   div.float_right {
@@ -18,26 +17,35 @@ div.statusPanel {
     justify-content: flex-end;
     flex-grow: 1;
     order: 2;
-    padding-right: 10px;
-    a.pt-button {
+    div {
       background: unset;
-      height: 30px;
       color: $defaultFontColor;
-      border: 1px solid $defaultFontColor;
-      border-radius: 0.5em;
+      border-left: 1px solid $welcomeViewDividerTransparent;
       background-color: $navbarLeftBackground;
-      padding-left: 4px;
-      padding-right: 4px;
-      margin-top: 5px;
-      span {
-        font-size: 12px;
+      width: 30px;
+      padding-left: 7px;
+      svg {
+        height: 16px;
+        width: 16px;
+        padding-top: 2px;
+        color: $defaultFontColor;
+        fill: $defaultFontColor;
+        path.p1 {
+          fill: $defaultFontColor;
+        }
       }
     }
-    a.pt-button:hover {
+    div:hover {
       background-color: $navbarLeftBackgroundSecondary;
+      svg {
+        path.p1 {
+          fill: white;
+        }
+      }
     }
-    a.feedbackButton {
-      margin-right: 10px;
+    div.feedbackButton {
+    }
+    div.lodgeBugButton {
     }
   }
 }
@@ -118,16 +126,27 @@ div.statusPanel {
       div.npsButtons {
         display: flex;
         flex-direction: row;
-        a.pt-button {
+        div {
           margin-right: 10px;
-          background: unset;
-          border: 1px solid $defaultFontColor;
-          color: $defaultFontColor !important;
-          border-radius: 0.5em;
+          svg {
+            path.p1 {
+              fill: $defaultFontColor;
+            }
+          }
         }
-        a.pt-button:hover {
-          background-color: $connectionButtonBackgroundColourHover !important;
-          color: $connectionButtonFontColourHover !important;
+        div.active {
+          svg {
+            path.p1 {
+              fill: $white;
+            }
+          }
+        }
+        div:hover {
+          svg {
+            path.p1 {
+              fill: white;
+            }
+          }
         }
       }
     }

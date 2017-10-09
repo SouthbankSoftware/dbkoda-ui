@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-06T12:28:45+11:00
+ * @Last modified time: 2017-10-09T16:52:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,8 +29,13 @@ import * as React from 'react';
 import SplitPane from 'react-split-pane';
 import ReactResizeDetector from 'react-resize-detector';
 import _ from 'lodash';
-import { action, computed, reaction, runInAction } from 'mobx';
+import { action, computed, reaction } from 'mobx';
+import shallowEqualObjects from 'shallow-equal/objects';
 import { inject, observer } from 'mobx-react';
+// $FlowIssue
+import ErrorView from '#/common/ErrorView';
+// $FlowIssue
+import LoadingView from '#/common/LoadingView';
 import DataTree, {
   type Schema,
   type ChartComponentChangeHandler,
@@ -49,6 +54,11 @@ const CENTER_LIMIT = 20;
 const MISSING_CATEGORY_LABEL = '`missing'; // must be unique
 export const OTHER_CATEGORY_LABEL = '`other'; // must be unique
 export const DEFAULT_AXIS_VALUE_SCHEMA_PATH = '[[DEFAULT]]'; // must be unique
+const CLEAN_SCHEMA_PATH_REGEX = /\.childSchema/g;
+
+export function getDisplaySchemaPath(schemaPath: string) {
+  return schemaPath.replace(CLEAN_SCHEMA_PATH_REGEX, '');
+}
 
 type Data = {}[];
 type ChartComponents = {
@@ -62,29 +72,35 @@ type BarChartData = {
   componentY: ChartComponent,
   componentCenter: ChartComponent,
 };
-type AutoSelectedComponents = {
-  chartComponentX?: ChartComponent,
-  chartComponentY?: ChartComponent,
-  chartComponentCenter?: ChartComponent,
+export type SelectedComponents = {
+  chartComponentX: ?ChartComponent,
+  chartComponentY: ?ChartComponent,
+  chartComponentCenter: ?ChartComponent,
 };
 type DataSchema = {
   schema: Schema,
-  autoSelectedComponents: AutoSelectedComponents,
+  autoSelectedComponents: SelectedComponents,
+};
+export type SchemaRef = {
+  schema: Schema,
+};
+export type ChartPanelStore = {
+  data: Data,
+  schemaRef: SchemaRef,
+  dataTreeWidth: number,
+  chartWidth: number,
+  chartHeight: number,
+  chartComponentX: ?ChartComponent | false,
+  chartComponentY: ?ChartComponent | false,
+  chartComponentCenter: ?ChartComponent | false,
+  showOtherInCategoricalAxis: boolean,
+  showOtherInCenter: boolean,
+  state: ComponentState,
+  error: ?string,
 };
 
 type Store = {
-  chartPanel: {
-    data: Data,
-    dataTreeWidth: number,
-    chartWidth: number,
-    chartHeight: number,
-    chartComponentX: ?ChartComponent | false,
-    chartComponentY: ?ChartComponent | false,
-    chartComponentCenter: ?ChartComponent | false,
-    showOtherInCategoricalAxis: boolean,
-    showOtherInCenter: boolean,
-    loading: boolean,
-  },
+  chartPanel: ChartPanelStore,
   outputPanel: {
     currentTab: string,
   },
@@ -120,6 +136,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   reactions = [];
   resizeDetector: React.ElementRef<*>;
   barChartGrid: React.ElementRef<*>;
+  fetchNumValueRegex = /[^\d.+-]/g;
 
   constructor(props: Props) {
     super(props);
@@ -132,17 +149,6 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    // this.reactions.push(
-    //   reaction(
-    //     () => this.autoSelectedComponents,
-    //     autoSelectedComponents => this._autoSelectComponents(autoSelectedComponents),
-    //     // $FlowFixMe
-    //     {
-    //       fireImmediately: true,
-    //     },
-    //   ),
-    // );
-
     this.reactions.push(
       reaction(
         () => {
@@ -174,24 +180,56 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
 
   // $FlowIssue
   @computed
-  get schema(): Schema {
-    return this.dataSchema.schema;
+  get schemaRef(): SchemaRef {
+    const { schemaRef } = this.props.store.chartPanel;
+
+    if (schemaRef) {
+      return schemaRef;
+    }
+
+    const { schema } = this.dataSchema;
+    const newSchemaRef = {
+      schema,
+    };
+    setTimeout(() => (this.schemaRef = newSchemaRef));
+    return newSchemaRef;
+  }
+  set schemaRef(schemaRef: SchemaRef) {
+    const { chartPanel } = this.props.store;
+
+    chartPanel.schemaRef = schemaRef;
   }
 
   // $FlowIssue
-  @computed
-  get autoSelectedComponents(): AutoSelectedComponents {
-    return this.dataSchema.autoSelectedComponents;
+  @computed.equals(shallowEqualObjects)
+  get selectedComponents(): SelectedComponents {
+    const { chartComponentX, chartComponentY, chartComponentCenter } = this.props.store.chartPanel;
+
+    if (chartComponentX === false && chartComponentY === false && chartComponentCenter === false) {
+      // use auto selection
+      const result = this.dataSchema.autoSelectedComponents;
+
+      // make sure we update after render to preserve unidirectional data flow
+      setTimeout(() => (this.selectedComponents = result));
+
+      return result;
+    }
+
+    // $FlowFixMe
+    return {
+      chartComponentX,
+      chartComponentY,
+      chartComponentCenter,
+    };
+  }
+  set selectedComponents(selectedComponents: SelectedComponents) {
+    _.assign(this.props.store.chartPanel, selectedComponents);
   }
 
   // $FlowIssue
   @computed
   get _barChartData(): BarChartData {
-    const {
-      chartComponentX,
-      chartComponentY,
-      chartComponentCenter,
-    } = this._applyAutoSelectedComponents();
+    const { chartComponentX, chartComponentY, chartComponentCenter } = this.selectedComponents;
 
     return this._generateChartData(chartComponentX, chartComponentY, chartComponentCenter);
   }
@@ -240,51 +278,6 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       componentCenter: resultComponentCenter,
     };
   }
-
-  _applyAutoSelectedComponents = (
-    updateStore = false,
-  ): {
-    chartComponentX: ?ChartComponent,
-    chartComponentY: ?ChartComponent,
-    chartComponentCenter: ?ChartComponent,
-  } => {
-    const { chartComponentX, chartComponentY, chartComponentCenter } = this.props.store.chartPanel;
-
-    if (chartComponentX === false && chartComponentY === false && chartComponentCenter === false) {
-      // use auto selection
-      const result = _.assign(
-        {
-          chartComponentX: null,
-          chartComponentY: null,
-          chartComponentCenter: null,
-        },
-        this.autoSelectedComponents,
-      );
-
-      if (updateStore) {
-        // update mobx store here
-
-        // make sure we update after render to preserve unidirectional data flow
-        setTimeout(() => {
-          const msg = 'Auto select chart components';
-          console.debug(msg);
-          runInAction(msg, () => {
-            _.assign(this.props.store.chartPanel, result);
-          });
-        });
-      }
-
-      return result;
-    }
-
-    const falseToNull = comp => (comp === false ? null : comp);
-
-    return {
-      chartComponentX: falseToNull(chartComponentX),
-      chartComponentY: falseToNull(chartComponentY),
-      chartComponentCenter: falseToNull(chartComponentCenter),
-    };
-  };
 
   _getComponentsForBarChart(
     chartComponentX: ?ChartComponent | false,
@@ -379,6 +372,9 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       chartComponentX,
       chartComponentY,
     );
+    const categoricalComponentDataPath = getDisplaySchemaPath(categoricalComponent.valueSchemaPath);
+    const numericalComponentDataPath = getDisplaySchemaPath(numericalComponent.valueSchemaPath);
+    const chartComponentCenterDataPath = getDisplaySchemaPath(chartComponentCenter.valueSchemaPath);
 
     /* scan through data to build categorical axis map */
     type Center = {
@@ -396,19 +392,39 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     let categoricalAxisSum = 0;
     let currSum = 0;
 
-    _.forEach(data, (v) => {
+    const fetchNumValue = (doc, dataPath, defaultValue) => {
+      let result = _.get(doc, dataPath, defaultValue);
+      if (!_.isNumber(result)) {
+        result = result.replace(this.fetchNumValueRegex, '');
+        result = _.toNumber(result);
+      }
+      return _.isFinite(result)
+        ? result
+        : defaultValue; /* treat Infinity, -Infinity and NaN as defaultValue */
+    };
+
+    const fetchStrValue = (doc, dataPath, defaultValue) =>
+      String(_.get(doc, dataPath, defaultValue));
+
+    const fetchValues = (doc): [string, number, string] => {
       const categoricalValue =
-        categoricalComponent.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
+        categoricalComponentDataPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
           ? ''
-          : _.get(v, categoricalComponent.valueSchemaPath, MISSING_CATEGORY_LABEL);
+          : fetchStrValue(doc, categoricalComponentDataPath, MISSING_CATEGORY_LABEL);
       const numericalValue =
-        numericalComponent.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
+        numericalComponentDataPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
           ? 1
-          : _.get(v, numericalComponent.valueSchemaPath, 0);
+          : fetchNumValue(doc, numericalComponentDataPath, 0);
       const numericalBin =
-        chartComponentCenter.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
+        chartComponentCenterDataPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
           ? DEFAULT_AXIS_VALUE_SCHEMA_PATH
-          : _.get(v, chartComponentCenter.valueSchemaPath, MISSING_CATEGORY_LABEL);
+          : fetchStrValue(doc, chartComponentCenterDataPath, MISSING_CATEGORY_LABEL);
+
+      return [categoricalValue, numericalValue, numericalBin];
+    };
+
+    _.forEach(data, (v) => {
+      const [categoricalValue, numericalValue, numericalBin] = fetchValues(v);
 
       categoricalAxisSum += numericalValue;
 
@@ -565,9 +581,13 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
 
   _generateDataSchema(data: Data) {
     const obj = _.head(data);
-    const autoSelectedComponents = {};
+    const autoSelectedComponents = {
+      chartComponentX: null,
+      chartComponentY: null,
+      chartComponentCenter: null,
+    };
 
-    const schema = this._generateObjectSchema(obj, '', autoSelectedComponents);
+    const [, schema] = this._generateObjectSchema(obj, '', autoSelectedComponents);
 
     return {
       schema,
@@ -580,13 +600,11 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     type: 'string' | 'number',
     schemaPath: string,
     autoSelectedComponents,
-  ) {
+  ): ?ChartComponent {
     if (name.toLowerCase().endsWith('id')) {
       // skip fields end with id
-      return;
+      return null;
     }
-
-    let hasSelected = false;
 
     if (!autoSelectedComponents.chartComponentX) {
       if (
@@ -598,11 +616,11 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
           valueSchemaPath: schemaPath,
           valueType: type,
         };
-        hasSelected = true;
+        return autoSelectedComponents.chartComponentX;
       }
     }
 
-    if (!hasSelected && !autoSelectedComponents.chartComponentY) {
+    if (!autoSelectedComponents.chartComponentY) {
       if (
         !autoSelectedComponents.chartComponentX ||
         autoSelectedComponents.chartComponentX.valueType !== type
@@ -612,37 +630,72 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
           valueSchemaPath: schemaPath,
           valueType: type,
         };
-        hasSelected = true;
+        return autoSelectedComponents.chartComponentY;
       }
     }
 
-    if (!hasSelected && !autoSelectedComponents.chartComponentCenter && type === 'string') {
+    if (!autoSelectedComponents.chartComponentCenter && type === 'string') {
       autoSelectedComponents.chartComponentCenter = {
         name: 'center',
         valueSchemaPath: schemaPath,
         valueType: type,
       };
+      return autoSelectedComponents.chartComponentCenter;
     }
   }
 
-  _generateObjectSchema(obj: {}, prefix: string, autoSelectedComponents: AutoSelectedComponents) {
+  _generateObjectSchema(
+    obj: {},
+    prefix: string,
+    autoSelectedComponents: SelectedComponents,
+  ): [boolean, Schema] {
     const schema = {};
+    let shouldBeExpanded = false;
 
     _.forOwn(obj, (v: mixed, k: string) => {
       const newPrefix = prefix ? `${prefix}.${k}` : k;
+      let type = typeof v;
 
-      if (typeof v === 'string') {
-        schema[k] = 'string';
-        this._fillAutoSelectedComponents(k, 'string', newPrefix, autoSelectedComponents);
-      } else if (typeof v === 'number') {
-        schema[k] = 'number';
-        this._fillAutoSelectedComponents(k, 'number', newPrefix, autoSelectedComponents);
-      } else if (typeof v === 'object' && v !== null) {
-        schema[k] = this._generateObjectSchema(v, newPrefix, autoSelectedComponents);
+      if (type === 'object') {
+        if (v) {
+          const [childShouldBeExpanded, childSchema] = this._generateObjectSchema(
+            // $FlowIssue
+            v,
+            `${newPrefix}.childSchema`,
+            autoSelectedComponents,
+          );
+
+          shouldBeExpanded = shouldBeExpanded || childShouldBeExpanded;
+
+          schema[k] = {
+            path: newPrefix,
+            type: 'object',
+            dataTreePath: null,
+            isExpanded: childShouldBeExpanded,
+            childSchema,
+          };
+        }
+      } else {
+        type = _.includes(['string', 'number'], type) ? type : 'string'; // treat all other types as strings
+        const selectedCompnent = this._fillAutoSelectedComponents(
+          k,
+          // $FlowIssue
+          type,
+          newPrefix,
+          autoSelectedComponents,
+        );
+
+        shouldBeExpanded = shouldBeExpanded || !!selectedCompnent;
+
+        schema[k] = {
+          path: newPrefix,
+          type,
+          dataTreePath: null,
+        };
       }
     });
 
-    return schema;
+    return [shouldBeExpanded, schema];
   }
 
   _onSplitPaneResize = _.debounce(
@@ -781,6 +834,35 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     chartPanel.showOtherInCenter = !chartPanel.showOtherInCenter;
   });
 
+  _onSchemaPathTypeChange = action((valueSchemaPath, newType) => {
+    const { chartPanel } = this.props.store;
+    const { chartComponentX, chartComponentY, chartComponentCenter, schemaRef } = chartPanel;
+
+    // update selected components
+    for (const c of [chartComponentX, chartComponentY, chartComponentCenter]) {
+      if (c && c.valueSchemaPath === valueSchemaPath) {
+        if ((c.name === 'x' && !chartComponentY) || (c.name === 'y' && !chartComponentX)) {
+          chartPanel[`chartComponent${_.upperFirst(c.name)}`] = _.assign(_.clone(c), {
+            valueType: newType,
+          });
+          continue;
+        }
+        chartPanel[`chartComponent${_.upperFirst(c.name)}`] = null;
+        break;
+      }
+    }
+
+    // add to type filter
+    const { schema } = schemaRef;
+    const schemaPath = `${valueSchemaPath}.type`;
+    if (_.has(schema, schemaPath)) {
+      _.set(schema, schemaPath, newType);
+      this.schemaRef = { schema };
+    } else {
+      console.error('Unexpected schema inconsistency');
+    }
+  });
+
   render() {
     const {
       dataTreeWidth,
@@ -788,24 +870,23 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       chartHeight,
       showOtherInCategoricalAxis,
       showOtherInCenter,
-      loading,
+      state,
+      error,
     } = this.props.store.chartPanel;
 
-    const { schema, barChartData } = this;
+    const { schemaRef, barChartData } = this;
     const { isDragging, valueSchemaPath, valueType } = this.state;
 
-    const {
-      chartComponentX,
-      chartComponentY,
-      chartComponentCenter,
-    } = this._applyAutoSelectedComponents(true);
+    const { chartComponentX, chartComponentY, chartComponentCenter } = this.selectedComponents;
 
     return (
       <div className="ChartPanel">
-        {loading ? (
-          <div className="loaderWrapper">
-            <div className="loader" />
-          </div>
+        {state !== 'loaded' ? (
+          state === 'loading' ? (
+            <LoadingView />
+          ) : (
+            <ErrorView error={error} />
+          )
         ) : (
           <SplitPane
             className="SplitPane"
@@ -820,10 +901,11 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
             onChange={this._onSplitPaneResize}
           >
             <DataTree
-              schema={schema}
+              schemaRef={schemaRef}
               onChartComponentChange={this._onChartComponentChange}
               getAllowedChartComponentOperations={this._getAllowedChartComponentOperations}
               onDragAndDrop={this._onDragAndDrop}
+              onSchemaPathTypeChange={this._onSchemaPathTypeChange}
               chartComponentX={chartComponentX}
               chartComponentY={chartComponentY}
               chartComponentCenter={chartComponentCenter}

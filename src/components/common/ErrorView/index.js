@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
- * @Date:   2017-09-21T15:25:12+10:00
+ * @Date:   2017-10-09T15:42:26+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T15:54:17+11:00
+ * @Last modified time: 2017-10-09T15:48:32+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -23,6 +23,4 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-declare module 'CSSModule' {
-  declare module.exports: { [key: string]: string };
-}
+export default from './View';

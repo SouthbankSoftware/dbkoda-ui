@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   viewBox="0 0 506.66666 508"
+   height="508"
+   width="506.66666"
+   xml:space="preserve"
+   id="svg2"
+   version="1.1"><metadata
+     id="metadata8"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+     id="defs6" /><g
+     transform="matrix(1.3333333,0,0,-1.3333333,0,508)"
+     id="g10"><g
+       transform="scale(0.1)"
+       id="g12"><path
+        class="p1"
+         id="path14"
+         style="fill:#ffc10e;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="M 3791.45,1905.71 C 3791.45,858.762 2942.7,10.0117 1895.74,10.0117 848.75,10.0117 0,858.762 0,1905.71 c 0,1047 848.75,1895.75 1895.74,1895.75 1046.96,0 1895.71,-848.75 1895.71,-1895.75 z" /><path
+         id="path16"
+         style="fill:#333333;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="M 3065.31,1904.46 C 3054.65,1258.88 2541.21,745.48 1895.62,734.82 1250,724.148 736.371,1274.97 725.98,1904.46 c -1.601,96.41 -151.289,96.57 -149.691,0 11.992,-727.34 591.951,-1307.3 1319.301,-1319.288 727.46,-12 1307.65,609.998 1319.37,1319.288 1.6,96.57 -148.05,96.41 -149.65,0 z" /><path
+         id="path18"
+         style="fill:#333333;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="m 1617.23,2559.66 c 0,-164.45 -133.28,-297.74 -297.74,-297.74 -164.41,0 -297.73,133.29 -297.73,297.74 0,164.41 133.32,297.69 297.73,297.69 164.46,0 297.74,-133.28 297.74,-297.69 z" /><path
+         id="path20"
+         style="fill:#333333;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         d="m 2743.05,2559.66 c 0,-164.45 -133.32,-297.74 -297.74,-297.74 -164.41,0 -297.73,133.29 -297.73,297.74 0,164.41 133.32,297.69 297.73,297.69 164.42,0 297.74,-133.28 297.74,-297.69 z" /></g></g></svg>
