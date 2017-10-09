@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-06T16:33:29+11:00
+ * @Last modified time: 2017-10-09T10:27:05+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -469,13 +469,13 @@ export default class OutputApi {
           // this object must conform Store type defined at `src/components/ChartPanel/Panel.jsx`
           {
             data,
+            schemaRef: null, // set null to rebuild schema
             dataTreeWidth: 250, // default dataTreeWidth
             chartWidth: 0,
             chartHeight: 0,
             chartComponentX: false, // set all three components to false to enable auto selection
             chartComponentY: false,
             chartComponentCenter: false,
-            schemaTypeFilter: observable.shallowMap(),
             showOtherInCategoricalAxis: true,
             showOtherInCenter: true,
             loading,
@@ -486,6 +486,7 @@ export default class OutputApi {
       // re-entrant
       _.assign(output.chartPanel, {
         data,
+        schemaRef: null,
         chartComponentX: false, // set all three components to false to enable auto selection
         chartComponentY: false,
         chartComponentCenter: false,

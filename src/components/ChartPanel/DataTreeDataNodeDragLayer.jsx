@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-10-04T00:40:35+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-04T01:18:49+11:00
+ * @Last modified time: 2017-10-09T13:07:59+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,7 @@
 
 import * as React from 'react';
 import { DragLayer } from 'react-dnd';
+import { getDisplaySchemaPath } from './Panel';
 import './DataTreeDataNodeDragLayer.scss';
 
 function getItemStyles(props) {
@@ -61,7 +62,7 @@ export default class DataTreeDataNodeDragLayer extends React.PureComponent<*> {
 
     return (
       <div className="DataTreeDataNodeDragLayer">
-        <div style={getItemStyles(this.props)}>{item.valueSchemaPath}</div>
+        <div style={getItemStyles(this.props)}>{getDisplaySchemaPath(item.valueSchemaPath)}</div>
       </div>
     );
   }

@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-07T11:55:11+11:00
+ * @Last modified time: 2017-10-09T13:50:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,10 +34,24 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 // $FlowFixMe
 import { DragItemTypes } from '#/common/Constants.js';
 import type { ChartComponent, ChartComponentName } from './BarChart';
-import type { SelectedComponents } from './Panel';
+import type { SchemaRef } from './Panel';
 import './DataTree.scss';
 
-export type Schema = { [string]: string | Schema };
+export type Schema = {
+  [string]:
+    | {
+        path: string,
+        type: 'string' | 'number',
+        dataTreePath: ?string, // updated by DataTree
+      }
+    | {
+        path: string,
+        type: 'object',
+        dataTreePath: ?string, // updated by DataTree
+        isExpanded: boolean, // updated by Panel & DataTree
+        childSchema: Schema,
+      },
+};
 export type ChartComponentOperation = {
   action: 'load' | 'unload',
   target: ChartComponentName,
@@ -62,7 +76,7 @@ export type SchemaPathTypeChangeHandler = (
 ) => void;
 
 type Props = {
-  schema: Schema,
+  schemaRef: SchemaRef,
   chartComponentX: ?ChartComponent,
   chartComponentY: ?ChartComponent,
   chartComponentCenter: ?ChartComponent,
@@ -128,49 +142,79 @@ export default class DataTree extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const { schema, chartComponentX, chartComponentY, chartComponentCenter } = props;
+    const { schemaRef: { schema }, chartComponentX, chartComponentY, chartComponentCenter } = props;
+    const nodes = this._buildTreeFromSchema(schema);
+    this._checkAndUpdateTreeForChartComponent(null, chartComponentX, schema, nodes);
+    this._checkAndUpdateTreeForChartComponent(null, chartComponentY, schema, nodes);
+    this._checkAndUpdateTreeForChartComponent(null, chartComponentCenter, schema, nodes);
 
     this.state = {
-      nodes: this._generateTreeNodes(schema, {
-        chartComponentX,
-        chartComponentY,
-        chartComponentCenter,
-      }),
+      nodes,
     };
   }
 
   componentWillReceiveProps({
-    schema: nextSchema,
+    schemaRef: nextSchemaRef,
     chartComponentX: nextChartComponentX,
     chartComponentY: nextChartComponentY,
     chartComponentCenter: nextChartComponentCenter,
   }: Props) {
-    const { schema, chartComponentX, chartComponentY, chartComponentCenter } = this.props;
+    const {
+      schemaRef: prevSchemaRef,
+      chartComponentX,
+      chartComponentY,
+      chartComponentCenter,
+    } = this.props;
 
-    if (schema !== nextSchema) {
+    let nodes;
+    let schema;
+    let loadOnly = false;
+
+    if (prevSchemaRef !== nextSchemaRef) {
+      const { schema: nextSchema } = nextSchemaRef;
       // update tree nodes when necessary
-      this.setState({
-        nodes: this._generateTreeNodes(nextSchema, {
-          chartComponentX: nextChartComponentX,
-          chartComponentY: nextChartComponentY,
-          chartComponentCenter: nextChartComponentCenter,
-        }),
-      });
+      nodes = this._buildTreeFromSchema(nextSchema);
+      schema = nextSchema;
+      loadOnly = true;
     } else {
-      this._checkAndUpdateTreeForChartComponent(chartComponentX, nextChartComponentX);
-      this._checkAndUpdateTreeForChartComponent(chartComponentY, nextChartComponentY);
-      this._checkAndUpdateTreeForChartComponent(chartComponentCenter, nextChartComponentCenter);
+      nodes = this.state.nodes;
+      schema = prevSchemaRef.schema;
     }
+
+    this._checkAndUpdateTreeForChartComponent(
+      loadOnly ? null : chartComponentX,
+      nextChartComponentX,
+      schema,
+      nodes,
+    );
+    this._checkAndUpdateTreeForChartComponent(
+      loadOnly ? null : chartComponentY,
+      nextChartComponentY,
+      schema,
+      nodes,
+    );
+    this._checkAndUpdateTreeForChartComponent(
+      loadOnly ? null : chartComponentCenter,
+      nextChartComponentCenter,
+      schema,
+      nodes,
+    );
+
+    this.setState({
+      nodes,
+    });
   }
 
   _checkAndUpdateTreeForChartComponent(
     chartComponent: ?ChartComponent,
     nextChartComponent: ?ChartComponent,
+    schema: Schema,
+    nodes: ITreeNode[],
   ): void {
     if (!_.isEqual(chartComponent, nextChartComponent)) {
       if (chartComponent) {
         // unload
-        const node = this._searchForChartComponent(chartComponent, this.state.nodes);
+        const node = this._getTreeNodeForChartComponent(chartComponent, schema, nodes);
         if (node != null) {
           node.secondaryLabel = DataTree._removeSecondaryLabel(
             node.secondaryLabel,
@@ -181,7 +225,7 @@ export default class DataTree extends React.Component<Props, State> {
       }
       if (nextChartComponent) {
         // load
-        const node = this._searchForChartComponent(nextChartComponent, this.state.nodes);
+        const node = this._getTreeNodeForChartComponent(nextChartComponent, schema, nodes);
         if (node != null) {
           node.secondaryLabel = DataTree._addSecondaryLabel(
             node.secondaryLabel,
@@ -194,22 +238,20 @@ export default class DataTree extends React.Component<Props, State> {
     }
   }
 
-  _searchForChartComponent(component: ChartComponent, nodes: ?(ITreeNode[])): ?ITreeNode {
-    let result: ?ITreeNode = null;
+  _getTreeNodeForChartComponent(
+    component: ChartComponent,
+    schema: Schema,
+    nodes: ITreeNode[],
+  ): ?ITreeNode {
+    const { valueSchemaPath } = component;
 
-    _.forEach(nodes, (v) => {
-      if (v.type === 'object') {
-        result = this._searchForChartComponent(component, v.childNodes);
-        if (result) {
-          return false;
-        }
-      } else if (v.id === component.valueSchemaPath) {
-        result = v;
-        return false;
-      }
-    });
+    const dataTreePath = _.get(schema, `${valueSchemaPath}.dataTreePath`);
+    if (!dataTreePath) {
+      console.error('Missing dataTreePath in schema');
+      return null;
+    }
 
-    return result;
+    return _.get(nodes, dataTreePath, null);
   }
 
   static _addSecondaryLabel(label: ?string, target: ChartComponentName): string {
@@ -242,43 +284,25 @@ export default class DataTree extends React.Component<Props, State> {
     return 'Center';
   }
 
-  _generateTreeNodesInternal(
-    schema: Schema,
-    prefix: string,
-    selectedComponents: SelectedComponents,
-  ): { shouldBeExpanded: boolean, nodes: ITreeNode[] } {
+  _buildTreeFromSchema = (schema: Schema, prefix: string = ''): ITreeNode[] => {
     // $FlowIssue
     const nodes: ITreeNode[] = [];
-    let shouldBeExpanded = false;
+    let index = 0;
 
-    _.forOwn(schema, (v: string | Schema, k: string) => {
+    _.forOwn(schema, (v, k: string) => {
+      const { path, type } = v;
       let node;
-      const newPrefix = prefix ? `${prefix}.${k}` : k;
-      let secondaryLabel: ?string = null;
-      let classname: ?string = null;
-      const getSecondaryLabel = () => {
-        _.forEach(selectedComponents, (v) => {
-          if (v && v.valueSchemaPath === newPrefix) {
-            secondaryLabel = (secondaryLabel ? ', ' : '') + DataTree._getSecondaryLabel(v.name);
-            shouldBeExpanded = true;
-            classname = v.name;
-            return false;
-          }
-        });
-      };
+      const newPrefix = prefix ? `${prefix}.${index}` : `${index}`;
 
-      if (typeof v === 'object') {
-        const { shouldBeExpanded: childShouldBeExpanded, nodes } = this._generateTreeNodesInternal(
-          v,
-          newPrefix,
-          selectedComponents,
-        );
-        shouldBeExpanded = shouldBeExpanded || childShouldBeExpanded;
+      if (type === 'object') {
+        const { isExpanded, childSchema } = v;
+
+        const nodes = this._buildTreeFromSchema(childSchema, `${newPrefix}.childNodes`);
         node = {
-          iconName: `pt-icon-folder-${childShouldBeExpanded ? 'open' : 'close'}`,
-          isExpanded: childShouldBeExpanded,
+          iconName: `pt-icon-folder-${isExpanded ? 'open' : 'close'}`,
+          isExpanded,
           childNodes: nodes,
-          type: 'object',
+          type,
           label: k,
         };
       } else {
@@ -288,8 +312,8 @@ export default class DataTree extends React.Component<Props, State> {
           hasCaret: false,
           label: (
             <DraggableLabel
-              valueSchemaPath={newPrefix}
-              valueType={v}
+              valueSchemaPath={path}
+              valueType={type}
               onDragAndDrop={onDragAndDrop}
               onChartComponentChange={onChartComponentChange}
             >
@@ -298,55 +322,64 @@ export default class DataTree extends React.Component<Props, State> {
           ),
         };
 
-        if (v === 'string') {
+        if (type === 'string') {
           _.assign(node, {
             iconName: 'pt-icon-font',
             type: 'string',
           });
-        } else if (v === 'number') {
+        } else if (type === 'number') {
           _.assign(node, {
             iconName: 'pt-icon-numerical',
             type: 'number',
           });
         } else {
+          _.assign(node, {
+            iconName: 'pt-icon-error',
+            type,
+          });
           console.error(`Unsupported data tree node type: ${v}`);
         }
-
-        getSecondaryLabel();
       }
 
-      if (node) {
-        _.assign(
-          node,
-          {
-            id: newPrefix,
-          },
-          secondaryLabel
-            ? {
-                isSelected: true,
-                secondaryLabel,
-                className: classname,
-              }
-            : {},
-        );
-        nodes.push(node);
-      }
+      v.dataTreePath = newPrefix;
+      index += 1;
+
+      _.assign(node, {
+        id: path,
+      });
+      nodes.push(node);
     });
 
-    return { shouldBeExpanded, nodes };
-  }
-
-  _generateTreeNodes(schema: Schema, selectedComponents: SelectedComponents) {
-    return this._generateTreeNodesInternal(schema, '', selectedComponents).nodes;
-  }
+    return nodes;
+  };
 
   _onNodeCollapse = (node: ITreeNode) => {
+    const { schemaRef: { schema } } = this.props;
+    const { id } = node;
+
+    const schemaNode = _.get(schema, String(id));
+    if (schemaNode) {
+      schemaNode.isExpanded = false;
+    } else {
+      console.error('Missing schema node');
+    }
+
     node.iconName = 'pt-icon-folder-close';
     node.isExpanded = false;
     this.setState(this.state);
   };
 
   _onNodeExpand = (node: ITreeNode) => {
+    const { schemaRef: { schema } } = this.props;
+    const { id } = node;
+
+    const schemaNode = _.get(schema, String(id));
+    if (schemaNode) {
+      schemaNode.isExpanded = true;
+    } else {
+      console.error('Missing schema node');
+    }
+
     node.iconName = 'pt-icon-folder-open';
     node.isExpanded = true;
     this.setState(this.state);

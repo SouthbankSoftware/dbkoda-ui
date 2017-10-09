@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-06T13:13:00+11:00
+ * @Last modified time: 2017-10-09T13:11:14+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,7 +29,11 @@ import * as React from 'react';
 import _ from 'lodash';
 import { BarChart as RBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
-import { DEFAULT_AXIS_VALUE_SCHEMA_PATH, OTHER_CATEGORY_LABEL } from './Panel';
+import {
+  DEFAULT_AXIS_VALUE_SCHEMA_PATH,
+  OTHER_CATEGORY_LABEL,
+  getDisplaySchemaPath,
+} from './Panel';
 import styles from './BarChart.scss';
 
 // $FlowFixMe
@@ -168,7 +172,7 @@ export default class BarChart extends React.PureComponent<Props> {
           >
             {componentY.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
               ? componentY.valueType === 'string' ? '' : 'count'
-              : componentY.valueSchemaPath}
+              : getDisplaySchemaPath(componentY.valueSchemaPath)}
           </text>
           <text
             textAnchor="middle"
@@ -177,7 +181,7 @@ export default class BarChart extends React.PureComponent<Props> {
           >
             {componentX.valueSchemaPath === DEFAULT_AXIS_VALUE_SCHEMA_PATH
               ? componentX.valueType === 'string' ? '' : 'count'
-              : componentX.valueSchemaPath}
+              : getDisplaySchemaPath(componentX.valueSchemaPath)}
           </text>
           {componentCenter.values &&
             _.map(componentCenter.values, (v, i) => {
