@@ -68,11 +68,13 @@ export default class TranslatorPanel extends React.Component {
     } catch (_err) {
       console.error(_err);
       let msg = 'Error: Failed to translate shell script.';
-      if (_err.lineNumber !== undefined && _err.description) {
+      if (_err.lineNumber > 0 && _err.description) {
         console.log('cm:', this.codeMirror);
         msg += `<br>${_err.description} on line ${_err.lineNumber}`;
-        this.codeMirror.codeMirror.focus();
-        this.codeMirror.codeMirror.setCursor({line: _err.lineNumber});
+        if (this.props.editorCodeMirror) {
+          this.props.editorCodeMirror.focus();
+          this.props.editorCodeMirror.setCursor({line: _err.lineNumber - 1});
+        }
       }
       // failed to translate code
       DBKodaToaster(Position.RIGHT_TOP).show({
