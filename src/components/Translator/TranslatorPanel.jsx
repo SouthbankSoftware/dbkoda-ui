@@ -60,14 +60,22 @@ export default class TranslatorPanel extends React.Component {
     this.translate(this.state.syntax, this.props.value);
   }
 
-  translate(syntax, value) {
-    const newSyntaxErrors = [];
-    const translator = new MongoShellTranslator(syntax);
+  componentWillUnmount(){
+    this.clearErrors();
+  }
+
+  clearErrors() {
     if (this.props.editorCodeMirror) {
       _.times(this.props.editorCodeMirror.lineCount(), (l) => {
         this.props.editorCodeMirror.removeLineClass(l, 'background', 'error-syntax-translator');
       });
     }
+  }
+
+  translate(syntax, value) {
+    const newSyntaxErrors = [];
+    const translator = new MongoShellTranslator(syntax);
+    this.clearErrors();
     let newValue = null;
     try {
       newValue = translator.translate(value, syntax);
