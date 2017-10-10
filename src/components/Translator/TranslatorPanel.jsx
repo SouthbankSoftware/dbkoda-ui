@@ -29,6 +29,7 @@ import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
 import { Broker, EventType } from '~/helpers/broker';
 import {Button, ContextMenuTarget, Intent, Position, MenuItem, Menu} from '@blueprintjs/core';
 import Prettier from 'prettier-standalone';
+import _ from 'lodash';
 
 import 'codemirror/theme/material.css';
 import CMOptions from './CMOptions';
@@ -40,7 +41,7 @@ import {featherClient} from '../../helpers/feathers';
 export default class TranslatorPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {syntax: SyntaxType.callback, value: '', shellCode: ''};
+    this.state = {syntax: SyntaxType.callback, value: '', shellCode: '', syntaxErrors: []};
     Broker.emit(EventType.FEATURE_USE, 'NodeTranslator');
   }
 
@@ -60,7 +61,13 @@ export default class TranslatorPanel extends React.Component {
   }
 
   translate(syntax, value) {
+    const newSyntaxErrors = [];
     const translator = new MongoShellTranslator(syntax);
+    if (this.props.editorCodeMirror) {
+      _.times(this.props.editorCodeMirror.lineCount(), (l) => {
+        this.props.editorCodeMirror.removeLineClass(l, 'background', 'error-syntax-translator');
+      });
+    }
     let newValue = null;
     try {
       newValue = translator.translate(value, syntax);
@@ -68,11 +75,15 @@ export default class TranslatorPanel extends React.Component {
     } catch (_err) {
       console.error(_err);
       let msg = 'Error: Failed to translate shell script.';
-      if (_err.lineNumber !== undefined && _err.description) {
+      if (_err.lineNumber > 0 && _err.description) {
         console.log('cm:', this.codeMirror);
         msg += `<br>${_err.description} on line ${_err.lineNumber}`;
-        this.codeMirror.codeMirror.focus();
-        this.codeMirror.codeMirror.setCursor({line: _err.lineNumber});
+        if (this.props.editorCodeMirror) {
+          this.props.editorCodeMirror.focus();
+          this.props.editorCodeMirror.setCursor({line: _err.lineNumber - 1});
+          this.props.editorCodeMirror.addLineClass(_err.lineNumber - 1, 'background', 'error-syntax-translator');
+          newSyntaxErrors.push({lineNumber: _err.lineNumber - 1});
+        }
       }
       // failed to translate code
       DBKodaToaster(Position.RIGHT_TOP).show({
@@ -81,6 +92,7 @@ export default class TranslatorPanel extends React.Component {
         iconName: 'pt-icon-thumbs-down'
       });
     }
+    this.setState({syntaxErrors : newSyntaxErrors});
     if (newValue === null) {
       return;
     }

@@ -43,8 +43,14 @@
         background-color: $tabBackground;
         outline: unset;
         box-shadow: unset;
+        button {
+          float: right;
+        }
+        button:hover {
+          color: $tabButtonHover !important;
+        }
       }
-      .pt-tab[aria-selected="true"] {
+      .pt-tab[aria-selected='true'] {
         box-shadow: unset;
         background-color: $tabBackgroundSelected;
       }
@@ -311,12 +317,12 @@ span.cm-mongos-prompt {
 .CodeMirror-foldmarker {
   color: $keywordTwo;
   font-family: arial;
-  line-height: .3;
+  line-height: 0.3;
   cursor: pointer;
 }
 
 .CodeMirror-foldgutter {
-  width: .7em;
+  width: 0.7em;
   margin-right: 5px !important;
 }
 
@@ -335,7 +341,8 @@ span.cm-mongos-prompt {
   cursor: pointer;
 }
 
-.CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
+.CodeMirror-foldgutter-open,
+.CodeMirror-foldgutter-folded {
   color: #555;
   cursor: pointer;
 }
