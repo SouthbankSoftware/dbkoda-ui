@@ -31,7 +31,13 @@ import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { inject, observer } from 'mobx-react';
 import { action, reaction } from 'mobx';
-import { Intent, Tooltip, AnchorButton, Position } from '@blueprintjs/core';
+import {
+  Intent,
+  Tooltip,
+  AnchorButton,
+  Position,
+  EditableText,
+} from '@blueprintjs/core';
 import { featherClient } from '~/helpers/feathers';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import EventLogging from '#/common/logging/EventLogging';
@@ -41,6 +47,7 @@ import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
 import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
 import ExpandIcon from '../../styles/icons/code-folder-icon.svg';
 import CollapseIcon from '../../styles/icons/code-folder-right-icon.svg';
+import RefreshIcon from '../../styles/icons/refresh-icon.svg';
 
 /**
  * The OutputPanel toolbar, which hold the commands and actions specific to the output panel
@@ -56,6 +63,9 @@ export default class Toolbar extends React.Component {
     super(props);
     this.state = {
       context: OutputToolbarContexts.DEFAULT,
+      tableToolbar: {
+        limit: '2000',
+      },
     };
     this.downloadOutput = this.downloadOutput.bind(this);
 
@@ -233,6 +243,9 @@ export default class Toolbar extends React.Component {
    * Render function for a Table View Toolbar.
    */
   renderTableToolbar() {
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    );
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
@@ -282,6 +295,43 @@ export default class Toolbar extends React.Component {
               onClick={this.props.api.outputApi.collapseAllInTableView}
             >
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <span className="docLimitLabel">Document Limit: </span>
+          <EditableText
+            minLines={1}
+            maxLines={1}
+            maxLength={9}
+            placeholder="2000"
+            value={this.state.tableToolbar.limit}
+            onChange={(string) => {
+              this.setState({ tableToolbar: { limit: string } });
+            }}
+            intent={Intent.NONE}
+            className="limit"
+          />
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/tableToolbar/refresh')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="refreshButton circleButton"
+              onClick={() => {
+                console.log(this.props.store.outputs.get(editor.id));
+                this.props.api.treeApi.openNewTableViewForCollection(
+                  {
+                    collection: this.nodeRightClicked.text,
+                    database: this.nodeRightClicked.refParent.text,
+                  },
+                  TableViewConstants.DEFAULT_MAX_ROWS,
+                );
+              }}
+            >
+              <RefreshIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
         </div>
