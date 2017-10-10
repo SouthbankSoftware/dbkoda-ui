@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-10T15:41:04+11:00
+ * @Last modified time: 2017-10-10T21:43:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -49,7 +49,7 @@ import DataTreeDataNodeDragLayer from './DataTreeDataNodeDragLayer';
 import './Panel.scss';
 
 const DEBOUNCE_DELAY = 100;
-const CATEGORICAL_AXIS_LIMIT = 50;
+const CATEGORICAL_AXIS_LIMIT = 60;
 const CENTER_LIMIT = 20;
 const SCHEMA_SAMPLING_PERCENTAGE = 10; // 10%
 const MISSING_CATEGORY_LABEL = '`missing'; // must be unique
