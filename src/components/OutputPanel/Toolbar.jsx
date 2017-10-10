@@ -39,12 +39,17 @@ import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
 import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
+import ExpandIcon from '../../styles/icons/code-folder-icon.svg';
+import CollapseIcon from '../../styles/icons/code-folder-right-icon.svg';
 
 /**
  * The OutputPanel toolbar, which hold the commands and actions specific to the output panel
  *  @param {Object} props - Holds the properties store (injected) and id (passed)
  */
-@inject('store')
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+}))
 @observer
 export default class Toolbar extends React.Component {
   constructor(props) {
@@ -247,6 +252,36 @@ export default class Toolbar extends React.Component {
               onClick={this.downloadOutput}
             >
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/tableToolbar/expandAll')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="expandAllButton circleButton"
+              onClick={this.props.api.outputApi.expandAllInTableView}
+            >
+              <ExpandIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/tableToolbar/collapseAll')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="collapseAllButton circleButton"
+              onClick={this.props.api.outputApi.collapseAllInTableView}
+            >
+              <CollapseIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
         </div>
