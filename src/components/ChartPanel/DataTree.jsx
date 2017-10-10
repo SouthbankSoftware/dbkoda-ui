@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-10T15:04:29+11:00
+ * @Last modified time: 2017-10-10T16:00:50+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -106,8 +106,8 @@ const dataTreeSource = {
     const { valueSchemaPath, valueType, onDragAndDrop, onChartComponentChange } = props;
 
     if (monitor.didDrop()) {
-      const { target } = monitor.getDropResult();
-      onChartComponentChange({ action: 'load', target }, valueSchemaPath, valueType);
+      const { target, action } = monitor.getDropResult();
+      onChartComponentChange({ action, target }, valueSchemaPath, valueType);
     }
 
     onDragAndDrop(false, null, null);
