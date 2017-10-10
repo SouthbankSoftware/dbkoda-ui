@@ -152,7 +152,7 @@ export default class EditorApi {
             doc: observable.ref(doc),
             status: ProfileStatus.OPEN,
             path: null,
-            type: options.type
+            type: options.type,
           },
           options,
         ),

@@ -483,7 +483,7 @@ class View extends React.Component {
       ),
     );
 
-    // react to active editor change
+    // react to syntax error change
     this.reactions.push(
       reaction(
         () => this.props.store.editorPanel.activeEditorId,
@@ -1020,7 +1020,7 @@ class View extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
-    if (editor && editor.openTranslator) {
+    if (editor && editor.openTranslator && this.editor) {
       let cm = null;
       if (this.editor) {
         cm = this.editor.getCodeMirror();
@@ -1037,7 +1037,7 @@ class View extends React.Component {
             options={this.cmOptions}
           />
           <TranslatorPanel value={editor.shellCode} syntax="cb" profileId={editor.profileId}
-            shellId={editor.shellId} editorCodeMirror={cm}
+            shellId={editor.shellId} editorCodeMirror={cm} editor={editor}
             closePanel={this.closeTranslatorPanel} />
         </SplitPane>
       </div>);
