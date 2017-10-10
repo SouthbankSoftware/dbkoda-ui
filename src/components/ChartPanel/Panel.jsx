@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T16:52:41+11:00
+ * @Last modified time: 2017-10-10T13:34:27+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -51,6 +51,7 @@ import './Panel.scss';
 const DEBOUNCE_DELAY = 100;
 const CATEGORICAL_AXIS_LIMIT = 50;
 const CENTER_LIMIT = 20;
+const SCHEMA_SAMPLING_PERCENTAGE = 10; // 10%
 const MISSING_CATEGORY_LABEL = '`missing'; // must be unique
 export const OTHER_CATEGORY_LABEL = '`other'; // must be unique
 export const DEFAULT_AXIS_VALUE_SCHEMA_PATH = '[[DEFAULT]]'; // must be unique
@@ -117,6 +118,16 @@ type State = {
   valueSchemaPath: ?string,
   valueType: ?string,
 };
+
+class SampleResultLeaf {
+  string: number = 0;
+  number: number = 0;
+
+  constructor(srcType: 'string' | 'number') {
+    // $FlowIssue
+    this[srcType] += 1;
+  }
+}
 
 // $FlowIssue
 @inject(({ store }, props) => {
@@ -395,7 +406,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     const fetchNumValue = (doc, dataPath, defaultValue) => {
       let result = _.get(doc, dataPath, defaultValue);
       if (!_.isNumber(result)) {
-        result = result.replace(this.fetchNumValueRegex, '');
+        result = String(result).replace(this.fetchNumValueRegex, '');
         result = _.toNumber(result);
       }
       return _.isFinite(result)
@@ -579,15 +590,49 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
     };
   }
 
+  _sampleData(data: Data): {} {
+    const size = data.length;
+    const result = {};
+
+    if (size === 0) {
+      return result;
+    }
+
+    const sampleSize = Math.max(Math.round(size * SCHEMA_SAMPLING_PERCENTAGE / 100), 1);
+    const step = Math.floor(size / sampleSize);
+
+    for (let i = 0; i * step < size; i += 1) {
+      _.mergeWith(result, data[i], (objValue, srcValue) => {
+        let srcType = typeof srcValue;
+
+        if (srcType === 'object' && srcValue !== null) {
+          return undefined;
+        }
+
+        srcType = srcType === 'number' ? srcType : 'string'; // treat all other types as strings
+
+        if (objValue === undefined) {
+          return new SampleResultLeaf(srcType);
+        }
+
+        objValue[srcType] += 1;
+
+        return objValue;
+      });
+    }
+
+    return result;
+  }
+
   _generateDataSchema(data: Data) {
-    const obj = _.head(data);
+    const sampleResults = this._sampleData(data);
     const autoSelectedComponents = {
       chartComponentX: null,
       chartComponentY: null,
       chartComponentCenter: null,
     };
 
-    const [, schema] = this._generateObjectSchema(obj, '', autoSelectedComponents);
+    const [, schema] = this._generateObjectSchema(sampleResults, '', autoSelectedComponents);
 
     return {
       schema,
@@ -645,38 +690,20 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   }
 
   _generateObjectSchema(
-    obj: {},
+    sampleResults: {},
     prefix: string,
     autoSelectedComponents: SelectedComponents,
   ): [boolean, Schema] {
     const schema = {};
     let shouldBeExpanded = false;
 
-    _.forOwn(obj, (v: mixed, k: string) => {
+    _.forOwn(sampleResults, (v: mixed, k: string) => {
       const newPrefix = prefix ? `${prefix}.${k}` : k;
-      let type = typeof v;
 
-      if (type === 'object') {
-        if (v) {
-          const [childShouldBeExpanded, childSchema] = this._generateObjectSchema(
-            // $FlowIssue
-            v,
-            `${newPrefix}.childSchema`,
-            autoSelectedComponents,
-          );
+      if (v instanceof SampleResultLeaf) {
+        const { string, number } = v;
+        const type = string >= number ? 'string' : 'number';
 
-          shouldBeExpanded = shouldBeExpanded || childShouldBeExpanded;
-
-          schema[k] = {
-            path: newPrefix,
-            type: 'object',
-            dataTreePath: null,
-            isExpanded: childShouldBeExpanded,
-            childSchema,
-          };
-        }
-      } else {
-        type = _.includes(['string', 'number'], type) ? type : 'string'; // treat all other types as strings
         const selectedCompnent = this._fillAutoSelectedComponents(
           k,
           // $FlowIssue
@@ -691,6 +718,23 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
           path: newPrefix,
           type,
           dataTreePath: null,
+        };
+      } else {
+        const [childShouldBeExpanded, childSchema] = this._generateObjectSchema(
+          // $FlowIssue
+          v,
+          `${newPrefix}.childSchema`,
+          autoSelectedComponents,
+        );
+
+        shouldBeExpanded = shouldBeExpanded || childShouldBeExpanded;
+
+        schema[k] = {
+          path: newPrefix,
+          type: 'object',
+          dataTreePath: null,
+          isExpanded: childShouldBeExpanded,
+          childSchema,
         };
       }
     });

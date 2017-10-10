@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-05T23:30:10+11:00
+ * @Last modified time: 2017-10-10T13:53:29+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -46,22 +46,26 @@
 }
 
 :export {
-  colourOne: $colourOne;
-  colourTwo: $colourTwo;
-  colourThree: $colourThree;
-  colourFour: $colourFour;
-  colourFive: $colourFive;
-  colourSix: $colourSix;
-  colourSeven: $colourSeven;
-  colourEight: $colourEight;
-  colourNine: $colourNine;
-  colourTen: $colourTen;
-  colourEleven: $colourEleven;
-  colourTwelve: $colourTwelve;
-  colourThirteen: $colourThirteen;
-  colourFourteen: $colourFourteen;
-  colourFifteen: $colourFifteen;
-  colourSixteen: $colourSixteen;
-  colourSeventeen: $colourSeventeen;
+  colour1: $colourOne;
+  colour2: $colourTwo;
+  colour3: $colourThree;
+  colour4: $colourFour;
+  colour5: $colourFive;
+  colour6: $colourSix;
+  colour7: $colourSeven;
+  colour8: $colourEight;
+  colour9: $colourNine;
+  colour10: $colourTen;
+  colour11: $colourEleven;
+  colour12: $colourTwelve;
+  colour13: $colourThirteen;
+  colour14: $colourFourteen;
+  colour15: $colourFifteen;
+  colour16: $colourSixteen;
+  colour17: $colourSeventeen;
+  colour18: lighten($colourOne, 10%);
+  colour19: lighten($colourTwo, 10%);
+  colour20: lighten($colourThree, 10%);
+  colour21: darken($defaultChartPanelText, 10%);
   defaultChartPanelText: $defaultChartPanelText;
 }
