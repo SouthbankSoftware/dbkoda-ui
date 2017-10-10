@@ -26,7 +26,7 @@ export default class TreeApi {
   };
 
   @action.bound
-  openNewTableViewForCollection(targetData, limit, skip) {
+  openNewTableViewForCollection(targetData, limit) {
     // Set up broken to listen on result.
     const editor = this.store.editors.get(
       this.store.editorPanel.activeEditorId,

@@ -38,7 +38,7 @@ export default class Toolbar extends React.Component {
   render() {
     return (
       <div className="toolbarWrapper">
-        <AnchorButton
+        {/* <AnchorButton
           className="pt-button pt-intent-primary expandAllButton"
           onClick={this.props.expandAll}
         >
@@ -49,7 +49,7 @@ export default class Toolbar extends React.Component {
           onClick={this.props.collapseAll}
         >
           {globalString('output/editor/collapseAll')}
-        </AnchorButton>
+        </AnchorButton> */}
         <p className="docCount">
           {globalString('output/editor/numOfDocs')}{' '}
           <b>{this.props.totalDocs}</b>

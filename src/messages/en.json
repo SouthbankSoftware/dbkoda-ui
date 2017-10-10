@@ -63,7 +63,11 @@
       "toolbar": {
         "save": "Save Output",
         "showMore": "Show More (Ctrl + M)",
-        "clear": "Clear Output Contents (Ctrl + L)"
+        "clear": "Clear Output Contents (Ctrl + L)",
+        "tableToolbar": {
+          "expandAll": "Expand all Rows in the table",
+          "collapseAll": "Collapse all rows in the table"
+        }
       },
       "editor": {
         "restoreSession": "** Session Restored **\r",
