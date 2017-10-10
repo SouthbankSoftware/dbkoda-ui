@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-10T14:54:06+11:00
+ * @Last modified time: 2017-10-10T15:41:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -772,17 +772,21 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
       const { action, target } = operation;
 
       if (action === 'load') {
-        if (target === 'x') {
-          chartPanel.chartComponentX = { name: 'x', valueSchemaPath, valueType };
-        } else if (target === 'y') {
-          chartPanel.chartComponentY = { name: 'y', valueSchemaPath, valueType };
-        } else {
-          chartPanel.chartComponentCenter = {
-            name: 'center',
-            valueSchemaPath,
-            valueType,
-          };
+        const { chartComponentX, chartComponentY, chartComponentCenter } = chartPanel;
+        const components = [chartComponentX, chartComponentY, chartComponentCenter];
+
+        for (const c of components) {
+          if (c && c.name !== target && c.valueSchemaPath === valueSchemaPath) {
+            // unload
+            chartPanel[`chartComponent${_.upperFirst(c.name)}`] = null;
+          }
         }
+
+        chartPanel[`chartComponent${_.upperFirst(target)}`] = {
+          name: target,
+          valueSchemaPath,
+          valueType,
+        };
       } else if (target === 'all') {
         _.assign(chartPanel, {
           chartComponentX: null,
@@ -816,8 +820,9 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
         target: 'x',
       });
     } else if (
-      (!chartComponentY || chartComponentY.valueType !== targetValueType) &&
-      (!chartComponentCenter || chartComponentCenter.valueSchemaPath !== targetValueSchemaPath)
+      !chartComponentY ||
+      chartComponentY.valueType !== targetValueType ||
+      chartComponentY.valueSchemaPath === targetValueSchemaPath
     ) {
       operations.push({
         action: 'load',
@@ -831,8 +836,9 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
         target: 'y',
       });
     } else if (
-      (!chartComponentX || chartComponentX.valueType !== targetValueType) &&
-      (!chartComponentCenter || chartComponentCenter.valueSchemaPath !== targetValueSchemaPath)
+      !chartComponentX ||
+      chartComponentX.valueType !== targetValueType ||
+      chartComponentX.valueSchemaPath === targetValueSchemaPath
     ) {
       operations.push({
         action: 'load',
@@ -845,11 +851,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
         action: 'unload',
         target: 'center',
       });
-    } else if (
-      targetValueType === 'string' &&
-      (!chartComponentX || chartComponentX.valueSchemaPath !== targetValueSchemaPath) &&
-      (!chartComponentY || chartComponentY.valueSchemaPath !== targetValueSchemaPath)
-    ) {
+    } else if (targetValueType === 'string') {
       operations.push({
         action: 'load',
         target: 'center',
