@@ -26,8 +26,7 @@
  */
 
 import React from 'react';
-import { inject, observer, PropTypes } from 'mobx-react';
-import { Button, Checkbox } from '@blueprintjs/core';
+import { inject, observer } from 'mobx-react';
 import ConfigDatabaseIcon from '~/styles/icons/config-database-icon-1.svg';
 import ErrorView from '#/common/ErrorView';
 import Menu from './Menu.jsx';
@@ -41,7 +40,7 @@ import './Panel.scss';
 export default class View extends React.Component {
   getConfigForm() {
     let form;
-    switch(this.props.store.configPage.selectedMenu) {
+    switch (this.props.store.configPage.selectedMenu) {
       case 'Application':
         form = <div>Application Settings Here!</div>;
         break;

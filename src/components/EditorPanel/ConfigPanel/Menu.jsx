@@ -44,7 +44,7 @@ export default class Menu extends React.Component {
   }
 
   @action
-  changeMenuSelected(menuName, e) {
+  changeMenuSelected(menuName) {
     this.props.store.configPage.selectedMenu = menuName;
   }
 
@@ -58,7 +58,7 @@ export default class Menu extends React.Component {
           tooltipClassName="pt-dark"
           position={Position.TOP}
         >
-          <AnchorButton className={this.getItemClass('Application')} onClick={(e) => this.changeMenuSelected('Application')}>
+          <AnchorButton className={this.getItemClass('Application')} onClick={() => this.changeMenuSelected('Application')}>
             <ApplicationIcon className="dbKodaSVG" width={20} height={20} />
           </AnchorButton>
         </Tooltip>
@@ -69,7 +69,7 @@ export default class Menu extends React.Component {
           tooltipClassName="pt-dark"
           position={Position.TOP}
         >
-          <AnchorButton className={this.getItemClass('Paths')} onClick={(e) => this.changeMenuSelected('Paths')}>
+          <AnchorButton className={this.getItemClass('Paths')} onClick={() => this.changeMenuSelected('Paths')}>
             <PathsIcon className="dbKodaSVG" width={20} height={20} />
           </AnchorButton>
         </Tooltip>
