@@ -16,15 +16,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-04-10 14:32:37
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-09-28T11:48:19+10:00
  */
-
-/**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-04-10 14:32:37
-* @Email:  mike@southbanksoftware.com
-* @Last modified by:   mike
-* @Last modified time: 2017-04-10 14:32:40
-*/
 
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/sort-comp */
@@ -35,6 +33,7 @@ import {AnchorButton, Checkbox} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import KeyboardIcon from '../../../styles/icons/keyboard-icon.svg';
 import OpenFolderIcon from '../../../styles/icons/open-folder-icon.svg';
+import ConfigDatabaseIcon from '../../../styles/icons/config-database-icon-2.svg';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -87,6 +86,12 @@ export default class Panel extends React.Component {
     this.props.store.welcomePage.currentContent = 'Keyboard Shortcuts';
   }
 
+  @action.bound
+  openConfigTab() {
+    this.props.store.configPage.isOpen = true;
+    this.props.store.editorPanel.activeEditorId = 'Config';
+  }
+
   render() {
     console.log('Telemetry Enabled:', this.props.store.userPreferences.telemetryEnabled);
     return (
@@ -116,10 +121,23 @@ export default class Panel extends React.Component {
               Keyboard Shortcuts</AnchorButton>
           </div>
         </div>
-        <div className="welcomeMenuOptOut">
-          <Checkbox checked={this.props.store.userPreferences.telemetryEnabled} onChange={this.telemetryEnabledChanged} />
-          <p>Send Telemetry Data to dbKoda?</p>
-        </div>
+        {
+          process.env.NODE_ENV === 'development' &&
+          <div className="welcomeMenuConfig">
+            <div className="welcomeButtons">
+              <div className="welcomeButtonWrapper">
+                <AnchorButton className="welcomeMenuButton openConfigBtn" onClick={this.openConfigTab}>
+                  <ConfigDatabaseIcon className="dbKodaSVG" width={30} height={30} />
+                  Preferences
+                </AnchorButton>
+              </div>
+            </div>
+          </div>
+        }
+        {
+          process.env.NODE_ENV !== 'development' &&
+          <div className="welcomeMenuOptOut"><Checkbox checked={this.props.store.userPreferences.telemetryEnabled} onChange={this.telemetryEnabledChanged} /><p>Send Telemetry Data to dbKoda?</p></div>
+        }
       </div>
     );
   }

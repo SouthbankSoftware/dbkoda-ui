@@ -1,0 +1,80 @@
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../../../styles/_defaultTheme.scss';
+
+.configContentWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 25px;
+  .configLeftMenuWrapper .configMenu {
+    width: 250px;
+    border-right: 1px solid $selectDarkBorderColor;
+
+    .pt-button {
+      width: 100px;
+      height: 100px;
+      border-radius: 0;
+      opacity: 0.5;
+      .dbKodaSVG {
+        width: 80px;
+        height: 80px;
+      }
+    }
+    .pt-button.selected {
+      opacity: 1.0;
+    }
+    .menuItemApplication {
+      background-color: #7fa5ad;
+      .st0{fill:#CCD1D9;}
+      .st1{fill:#E6E9ED;}
+      .st2{fill:#656D78;}
+      .st3{fill:#434A54;}
+      .st4{fill:#FC6E51;}
+      .st5{fill:#AC92EB;}
+      .st6{fill:#48CFAD;}
+      .st7{fill:#5D9CEC;}
+      .st8{fill:#FFCE54;}
+      .st9{fill:#ED5564;}
+    }
+    .menuItemApplication:hover {
+      background-color: #70a0a0;
+    }
+    .menuItemPaths {
+      background-color: #cf7769;
+      .st0{fill:#FABE5C;}
+      .st1{fill:#5C6F74;}
+      .st2{fill:#203F49;}
+      .st3{fill:#FBDF65;}
+    }
+    .menuItemPaths:hover {
+      background-color: #c07060;
+    }
+    .menuItem2 {
+      background-color: #adc88f;
+    }
+    .menuItem3 {
+      background-color: #837395;
+    }
+  }
+  .configRightFormWrapper {
+    margin-left: 50px;
+  }
+}
