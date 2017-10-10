@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T13:50:31+11:00
+ * @Last modified time: 2017-10-10T15:04:29+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -54,12 +54,12 @@ export type Schema = {
 };
 export type ChartComponentOperation = {
   action: 'load' | 'unload',
-  target: ChartComponentName,
+  target: ChartComponentName | 'all',
 };
 export type ChartComponentChangeHandler = (
   operation: ChartComponentOperation,
-  valueSchemaPath: $PropertyType<ChartComponent, 'valueSchemaPath'>,
-  valueType: $PropertyType<ChartComponent, 'valueType'>,
+  valueSchemaPath: ?$PropertyType<ChartComponent, 'valueSchemaPath'>,
+  valueType: ?$PropertyType<ChartComponent, 'valueType'>,
 ) => void;
 export type GetAllowedChartComponentOperations = (
   targetValueSchemaPath: string,
@@ -390,57 +390,102 @@ export default class DataTree extends React.Component<Props, State> {
 
     // $FlowFixMe
     const { id, type: valueType } = node;
+    let menu;
+
+    const createUnloadAllMenuItem = () => {
+      const { onChartComponentChange } = this.props;
+
+      return (
+        <MenuItem
+          onClick={() => onChartComponentChange({ action: 'unload', target: 'all' }, null, null)}
+          text="Unload all"
+        />
+      );
+    };
 
     if (!valueType || (valueType !== 'string' && valueType !== 'number')) {
-      return;
+      const { chartComponentX, chartComponentY, chartComponentCenter } = this.props;
+
+      if (chartComponentX || chartComponentY || chartComponentCenter) {
+        menu = <Menu>{createUnloadAllMenuItem()}</Menu>;
+      }
+    } else {
+      const valueSchemaPath = String(id);
+      const {
+        chartComponentX,
+        chartComponentY,
+        chartComponentCenter,
+        onChartComponentChange,
+        getAllowedChartComponentOperations,
+        onSchemaPathTypeChange,
+      } = this.props;
+
+      let shouldShowUnloadAllMenuItem;
+
+      if (!(chartComponentX || chartComponentY || chartComponentCenter)) {
+        shouldShowUnloadAllMenuItem = false;
+      } else {
+        shouldShowUnloadAllMenuItem = true;
+
+        const components = [chartComponentX, chartComponentY, chartComponentCenter];
+
+        outer: for (let i = 0; i < components.length; i += 1) {
+          const component = components[i];
+          if (component && component.valueSchemaPath === valueSchemaPath) {
+            for (let j = 0; j < components.length; j += 1) {
+              if (j !== i && components[j]) {
+                break outer;
+              }
+            }
+            shouldShowUnloadAllMenuItem = false;
+            break;
+          }
+        }
+      }
+
+      menu = (
+        <Menu>
+          {_.map(getAllowedChartComponentOperations(valueSchemaPath, valueType), (v, i) => {
+            let compDesc;
+
+            if (v.target === 'x') {
+              compDesc = 'X axis';
+            } else if (v.target === 'y') {
+              compDesc = 'Y axis';
+            } else {
+              compDesc = 'center';
+            }
+
+            let text;
+
+            if (v.action === 'load') {
+              text = `Load to ${compDesc}`;
+            } else {
+              text = `Unload from ${compDesc}`;
+            }
+
+            return (
+              <MenuItem
+                key={i}
+                onClick={() => onChartComponentChange(v, valueSchemaPath, valueType)}
+                text={text}
+              />
+            );
+          })}
+          {shouldShowUnloadAllMenuItem ? createUnloadAllMenuItem() : null}
+          <MenuDivider />
+          <MenuItem
+            onClick={() =>
+              onSchemaPathTypeChange(valueSchemaPath, valueType === 'string' ? 'number' : 'string')}
+            text={`Treat as ${valueType === 'string' ? 'numerical' : 'categorical'} data`}
+          />
+        </Menu>
+      );
     }
 
-    const valueSchemaPath = String(id);
-    const {
-      onChartComponentChange,
-      getAllowedChartComponentOperations,
-      onSchemaPathTypeChange,
-    } = this.props;
-
-    const menu = (
-      <Menu>
-        {_.map(getAllowedChartComponentOperations(valueSchemaPath, valueType), (v, i) => {
-          let compDesc;
-
-          if (v.target === 'x') {
-            compDesc = 'X axis';
-          } else if (v.target === 'y') {
-            compDesc = 'Y axis';
-          } else {
-            compDesc = 'center';
-          }
-
-          let text;
-
-          if (v.action === 'load') {
-            text = `Load to ${compDesc}`;
-          } else {
-            text = `Unload from ${compDesc}`;
-          }
-
-          return (
-            <MenuItem
-              key={i}
-              onClick={() => onChartComponentChange(v, valueSchemaPath, valueType)}
-              text={text}
-            />
-          );
-        })}
-        <MenuDivider />
-        <MenuItem
-          onClick={() =>
-            onSchemaPathTypeChange(valueSchemaPath, valueType === 'string' ? 'number' : 'string')}
-          text={`Treat as ${valueType === 'string' ? 'numerical' : 'categorical'} data`}
-        />
-      </Menu>
-    );
-
-    ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
+    if (menu) {
+      ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
+    }
   };
 
   render() {

@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-10T13:34:27+11:00
+ * @Last modified time: 2017-10-10T14:54:06+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -768,22 +768,29 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
 
   _onChartComponentChange: ChartComponentChangeHandler = action(
     (operation, valueSchemaPath, valueType) => {
+      const { chartPanel } = this.props.store;
       const { action, target } = operation;
 
       if (action === 'load') {
         if (target === 'x') {
-          this.props.store.chartPanel.chartComponentX = { name: 'x', valueSchemaPath, valueType };
+          chartPanel.chartComponentX = { name: 'x', valueSchemaPath, valueType };
         } else if (target === 'y') {
-          this.props.store.chartPanel.chartComponentY = { name: 'y', valueSchemaPath, valueType };
+          chartPanel.chartComponentY = { name: 'y', valueSchemaPath, valueType };
         } else {
-          this.props.store.chartPanel.chartComponentCenter = {
+          chartPanel.chartComponentCenter = {
             name: 'center',
             valueSchemaPath,
             valueType,
           };
         }
+      } else if (target === 'all') {
+        _.assign(chartPanel, {
+          chartComponentX: null,
+          chartComponentY: null,
+          chartComponentCenter: null,
+        });
       } else {
-        this.props.store.chartPanel[`chartComponent${_.upperFirst(target)}`] = null;
+        chartPanel[`chartComponent${_.upperFirst(target)}`] = null;
       }
     },
   );
