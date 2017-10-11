@@ -194,6 +194,11 @@
       "welcome": {
         "heading": "Welcome"
       },
+      "config": {
+        "heading": "Preferences",
+        "menuApplication": "Application",
+        "menuPaths": "Paths"
+      },
       "tabMenu": {
         "closeTab": "Close Tab",
         "closeOtherTabs": "Close All Other Tabs",

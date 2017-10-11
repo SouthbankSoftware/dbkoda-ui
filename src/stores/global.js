@@ -90,6 +90,12 @@ export default class Store {
   });
 
   @observable
+  configPage = observable({
+    isOpen: true,
+    selectedMenu: 'Paths'
+  });
+
+  @observable
   editorPanel = observable({
     creatingNewEditor: false,
     res: null,

@@ -50,6 +50,7 @@ import Toolbar from './Toolbar';
 import View from './View';
 import './Panel.scss';
 import WelcomeView from './WelcomePanel/WelcomeView';
+import { ConfigView } from './ConfigPanel';
 
 const splitPane2Style = {
   display: 'flex',
@@ -222,6 +223,20 @@ export default class Panel extends React.Component {
   }
 
   /**
+   * Action for closing the config Tab
+   */
+  @action.bound
+  closeConfig() {
+    this.props.store.configPage.isOpen = false;
+    this.props.store.editorPanel.removingTabId = true;
+    if (this.props.store.editorPanel.activeEditorId == 'Config') {
+      const editors = this.props.store.editors.entries();
+      this.props.store.editorPanel.activeEditorId = editors[0][1].id;
+    }
+    this.forceUpdate();
+  }
+
+  /**
    * Action for swapping the currently selected tab.
    * @param {String} newTabId - Id of tab to swap to active.
    */
@@ -241,7 +256,7 @@ export default class Panel extends React.Component {
         newTabId = editorPanel.activeEditorId;
       }
     }
-    if (newTabId != 'Default') {
+    if (newTabId != 'Default' && newTabId != 'Config') {
       // Condition where you close a tab and any other open tab should be selected
       if (!currEditor && editors.get(editorPanel.activeEditorId)) {
         currEditor = editors.get(editorPanel.activeEditorId);
@@ -252,13 +267,14 @@ export default class Panel extends React.Component {
     }
 
     editorPanel.activeEditorId = newTabId;
+    console.log(editorPanel.activeEditorId);
 
     if (newTabId != 'Default' && editors.get(newTabId) && editors.get(newTabId).executing == true) {
       editorToolbar.isActiveExecuting = true;
     } else {
       editorToolbar.isActiveExecuting = false;
     }
-    if (newTabId != 'Default') {
+    if (newTabId != 'Default' && newTabId != 'Config') {
       editorPanel.activeDropdownId = currEditor.currentProfile;
       // Check if connection exists or is closed to update dropdown.
       if (!this.props.store.profiles.get(editorPanel.activeDropdownId)) {
@@ -272,7 +288,8 @@ export default class Panel extends React.Component {
       editorPanel.activeDropdownId = 'Default';
     }
     console.log(`activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`);
-    if (editorPanel.activeDropdownId == 'Default') {
+    if (editorPanel.activeDropdownId == 'Default' ||
+        editorPanel.activeDropdownId == 'Config') {
       editorToolbar.noActiveProfile = true;
     } else {
       editorToolbar.noActiveProfile = false;
@@ -282,6 +299,8 @@ export default class Panel extends React.Component {
     if (!currEditor && editorPanel.activeDropdownId == 'Default') {
       // Default Tab.
       console.log('Moved to Welcome Page.');
+      this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
+    } else if (!currEditor && editorPanel.activeDropdownId === 'Config') {
       this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     } else if (currEditor.type == 'shell') {
       // Normal Editors
@@ -730,6 +749,25 @@ export default class Panel extends React.Component {
     return editor.alias + ' (' + editor.fileName + ')';
   };
 
+  /**
+   * Render the configuration/preferences window
+   */
+  @action.bound
+  renderConfigTab() {
+    return (
+      <Tab2
+        className="configTab"
+        id="Config"
+        title={globalString('editor/config/heading')}
+        panel={<ConfigView title={globalString('editor/config/heading')} />}
+        >
+        <Button className="pt-minimal" onClick={this.closeConfig}>
+          <span className="pt-icon-cross" />
+        </Button>
+      </Tab2>
+    );
+  }
+
   // Encapsulation for rendering a standard Mongo Shell Tab in the Editor Panel.
   renderShellTab(tab, tabClassName, editorTitle) {
     return (
@@ -821,6 +859,11 @@ export default class Panel extends React.Component {
           selectedTabId={this.props.store.editorPanel.activeEditorId}
         >
           {this.renderWelcome()}
+          {
+            process.env.NODE_ENV === 'development' &&
+            this.props.store.configPage.isOpen &&
+            this.renderConfigTab()
+          }
           {editors.map((tab) => {
             // TODO this `visible` is not used anymore. Needs a cleanup
             // if (tab[1].visible) {
