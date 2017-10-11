@@ -192,7 +192,7 @@ export default class OutputApi {
   }
 
   @action.bound
-  addDrillOutput(editor) {
+  addDrillOutput(editor, initialOutput = null) {
     // this.outputHash[editor.profileId + '|' + editor.id] = editor.id;
 
     try {
@@ -204,6 +204,7 @@ export default class OutputApi {
         }
       } else {
         console.log(`create new output for ${editor.id}`);
+        const outputJSON = (initialOutput != null) ? initialOutput : {loading: 'isLoaded'}
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
         this.store.outputs.set(
           editor.id,
@@ -216,7 +217,7 @@ export default class OutputApi {
             showingMore: false,
             commandHistory: [],
             tableJson: {
-              json: [],
+              json: [outputJSON],
               firstLine: 0,
               lastLine: 0,
             },

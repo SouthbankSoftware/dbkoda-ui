@@ -270,7 +270,15 @@ export default class EditorApi {
   }
   @action.bound
   addDrillEditor(profile, options = {}) {
-    const content = '';
+    const content = `/* Welcome to dbKoda Apache Drill integration
+// From here, you can use SQL to query your MongoDB collections
+// See http://bit.ly/dbKodadrill for an FAQ item on this topic.
+//
+// Type "SHOW TABLES" to get a list of collections that can be queried.
+//
+// Try "SELECT * FROM tablename LIMIT 10" to see table data
+*/
+SHOW TABLES`;
     const fileName = `new${this.store.profiles.get(profile.id).editorCount} (drill).js`;
 
     const editorId = uuidV1();
@@ -304,7 +312,7 @@ export default class EditorApi {
       ),
     );
     if (this.api) {
-      this.api.addDrillOutput(this.store.editors.get(editorId));
+      this.api.addDrillOutput(this.store.editors.get(editorId), options.output);
     }
     this.store.editorPanel.creatingNewEditor = false;
     this.store.editorToolbar.noActiveProfile = false;

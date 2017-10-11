@@ -48,37 +48,46 @@ export default class DrillApi {
     if (this.profileDBHash[profDB]) {
       console.log('editor jdbc id:', this.profileDBHash[profDB].id);
       openEditorWithDrillProfileId(this.profileDBHash[profDB]);
+      if (options.cbFunc) {
+        options.cbFunc();
+      }
     } else {
-      this.createDrillConnection(query, profile);
+      this.createDrillConnection(query, profile, options);
     }
   };
 
   @action.bound openEditorWithDrillProfileId = (drillJdbcConnection) => {
     console.log(drillJdbcConnection.id, drillJdbcConnection.profile);
-    this.api.addDrillEditor(drillJdbcConnection.profile, {shellId: drillJdbcConnection.id, type: EditorTypes.DRILL});
+    this.api.addDrillEditor(drillJdbcConnection.profile, {shellId: drillJdbcConnection.id, type: EditorTypes.DRILL, output: drillJdbcConnection.output});
   };
 
-  createDrillConnection(query, profile) {
+  createDrillConnection(query, profile, options) {
     const service = featherClient().service('/drill');
     service.timeout = 90000;
     return service
       .create(query)
       .then((res) => {
-        this.onDrillConnectionSuccess(res, query, profile);
+        this.onDrillConnectionSuccess(res, query, profile, options);
       })
       .catch((err) => {
         console.error(err);
-        this.onFail();
+        this.onFail(options);
       });
   }
 
-  onDrillConnectionSuccess(res, query, profile) {
+  onDrillConnectionSuccess(res, query, profile, options) {
     console.log('Drill service result:', res);
     const profDB = query.alias + '|' + query.db;
-    this.profileDBHash[profDB] = {id: res.id, profile};
+    this.profileDBHash[profDB] = {id: res.id, output: res.output, profile};
     this.openEditorWithDrillProfileId(this.profileDBHash[profDB]);
+    if (options.cbFunc) {
+      options.cbFunc('success');
+    }
   }
-  onFail() {
+  onFail(options) {
     console.log('failed to launch or connect to drill');
+    if (options.cbFunc) {
+      options.cbFunc('error');
+    }
   }
 }
