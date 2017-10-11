@@ -204,7 +204,7 @@ export default class OutputApi {
         }
       } else {
         console.log(`create new output for ${editor.id}`);
-        const outputJSON = (initialOutput != null) ? initialOutput : {loading: 'isLoaded'}
+        const outputJSON = (initialOutput != null) ? initialOutput : {loading: 'isLoaded'};
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
         this.store.outputs.set(
           editor.id,
