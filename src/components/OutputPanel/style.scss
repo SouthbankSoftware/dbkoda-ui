@@ -185,6 +185,48 @@
           color: $buttonDangerIcon !important;
         }
       }
+      span.docLimitLabel {
+        margin-left: 8px;
+        margin-right: 8px;
+        color: $defaultFontColor;
+      }
+      div.limit {
+        background-color: $searchPrimaryBackground !important;
+        color: $searchPrimaryFontColor !important;
+        border-radius: 0.25em;
+        outline: unset;
+        box-shadow: unset;
+        :before {
+          outline: unset;
+          box-shadow: unset;
+        }
+        span {
+          outline: unset;
+          box-shadow: unset;
+          color: $searchPrimaryFontColor;
+        }
+        span:focus {
+          outline: unset;
+          box-shadow: unset;
+        }
+        input {
+          background-color: $searchPrimaryBackground !important;
+          color: $searchPrimaryFontColor;
+          outline: unset;
+          box-shadow: unset;
+        }
+        input:focus {
+          background-color: $fieldBrightBackgroundColor !important;
+        }
+      }
+      div.limit:before {
+        outline: unset;
+        box-shadow: unset;
+      }
+      div.limit:focus {
+        outline: unset;
+        box-shadow: unset;
+      }
     }
   }
   div.CodeMirror-activeline pre.CodeMirror-line {

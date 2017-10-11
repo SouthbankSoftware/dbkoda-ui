@@ -271,7 +271,7 @@ export default class Panel extends React.Component {
             value={this.state.feedbackComments}
             onChange={this.updateFeedBack}
             intent={Intent.NONE}
-            placeholder="Please place and additional comments here."
+            placeholder="Please place any additional comments here and select the icon below that represents your feelings on the product."
             className="additionalComments"
           />
           <div className="npsButtons">

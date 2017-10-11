@@ -31,6 +31,9 @@ export default class TreeApi {
     const editor = this.store.editors.get(
       this.store.editorPanel.activeEditorId,
     );
+    this.store.outputs.get(editor.id).tableJson.collection =
+      targetData.collection;
+    this.store.outputs.get(editor.id).tableJson.database = targetData.database;
     Broker.on(
       EventType.createAggregatorResultReceived(editor.id + '_table'),
       this._onAggregatorResultReceived,

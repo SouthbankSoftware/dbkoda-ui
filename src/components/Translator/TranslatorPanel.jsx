@@ -60,7 +60,7 @@ export default class TranslatorPanel extends React.Component {
     this.translate(this.state.syntax, this.props.value);
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.clearErrors();
   }
 

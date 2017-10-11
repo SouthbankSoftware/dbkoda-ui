@@ -27,6 +27,7 @@
   */
 
 import Store from '~/stores/global';
+import Config from '~/stores/config';
 import DataCenter from '~/api/DataCenter';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -42,6 +43,7 @@ const rootEl = document.getElementById('root');
 
 let store;
 let api;
+let config;
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -61,7 +63,7 @@ const renderApp = () => {
   const render = (Component) => {
     ReactDOM.render(
       <AppContainer>
-        <Provider store={store} api={api}>
+        <Provider store={store} api={api} config={config}>
           <Component />
         </Provider>
       </AppContainer>,
@@ -92,7 +94,7 @@ Broker.once(EventType.APP_READY, renderApp);
 
 Broker.once(EventType.APP_RENDERED, () => {
   console.log('App Rendered successfully !!!!!!!');
-
+  config.load();
   if (IS_ELECTRON) {
     ipcRenderer.send(EventType.APP_READY);
   }
@@ -105,6 +107,7 @@ Broker.once(EventType.APP_CRASHED, () => {
     store.backup().then(() => {
       store = new Store();
       api = new DataCenter(store);
+      config = new Config();
       store.setAPI(api); // TODO: Remove this line after complete migration to API
       store.saveSync();
       ipcRenderer.send(EventType.APP_CRASHED);
@@ -162,6 +165,7 @@ window.addEventListener('beforeunload', (event) => {
 
 store = new Store();
 api = new DataCenter(store);
+config = new Config();
 store.setAPI(api); // TODO: Remove this line after complete migration to API
 window.api = api;
 window.store = store;

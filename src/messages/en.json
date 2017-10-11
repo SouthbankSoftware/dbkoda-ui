@@ -66,7 +66,8 @@
         "clear": "Clear Output Contents (Ctrl + L)",
         "tableToolbar": {
           "expandAll": "Expand all Rows in the table",
-          "collapseAll": "Collapse all rows in the table"
+          "collapseAll": "Collapse all rows in the table",
+          "refresh": "Refresh results in table."
         }
       },
       "editor": {
@@ -192,6 +193,11 @@
       },
       "welcome": {
         "heading": "Welcome"
+      },
+      "config": {
+        "heading": "Preferences",
+        "menuApplication": "Application",
+        "menuPaths": "Paths"
       },
       "tabMenu": {
         "closeTab": "Close Tab",
