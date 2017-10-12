@@ -76,5 +76,29 @@
   }
   .configRightFormWrapper {
     margin-left: 50px;
+    width: 100%;
+    .formContentWrapper {
+      display: table;
+      width: 100%;
+      .form-row {
+        display: table-row;
+        margin: 12px;
+        height: 30px;
+        label {
+          display: table-cell;
+          font-size: 12pt;
+          vertical-align: middle;
+          width: 30%;
+          max-width: max-content;
+        }
+        input {
+          display: table-cell;
+          width: 60%;
+        }
+        .pt-checkbox .pt-control-indicator {
+          margin: 5px;
+        }
+      }
+    }
   }
 }
