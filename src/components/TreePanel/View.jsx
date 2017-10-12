@@ -38,6 +38,8 @@ import {
   AnchorButton,
   Dialog,
 } from '@blueprintjs/core';
+import { NewToaster } from '#/common/Toaster';
+import LoadingView from '#/common/LoadingView';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
 import DocumentIcon from '../../styles/icons/document-solid-icon.svg';
@@ -87,6 +89,7 @@ export default class TreeView extends React.Component {
     this.state = {
       nodes: this.props.treeState.nodes,
       isPasswordDialogVisible: false,
+      isLoadingDialogVisible: false,
       remotePass: null,
     };
   }
@@ -418,13 +421,31 @@ export default class TreeView extends React.Component {
         if (this.props.store.profileList.selectedProfile.sha) {
           this.setState({ isPasswordDialogVisible: true });
         } else {
+          this.setState({ isLoadingDialogVisible: true});
           this.props.api.addNewEditorForDrill({
             db: this.nodeRightClicked.text,
+            cbFunc: this.onDrillEditorAdded,
           });
         }
       }
     } else {
       this.props.api.openEditorWithDrillProfileId(drillProfileId);
+    }
+  };
+  onDrillEditorAdded = (response) => {
+    this.setState({ isLoadingDialogVisible: false});
+    if (response === 'error') {
+      NewToaster.show({
+        message: 'Unable to add drill editor',
+        intent: Intent.DANGER,
+        iconName: 'pt-icon-thumbs-down',
+      });
+    } else {
+      NewToaster.show({
+        message: 'Drill Editor added successfully !',
+        intent: Intent.SUCCESS,
+        iconName: 'pt-icon-thumbs-up',
+      });
     }
   };
   closePasswordDialog = () => {
@@ -435,6 +456,7 @@ export default class TreeView extends React.Component {
     this.props.api.addNewEditorForDrill({
       db: this.nodeRightClicked.text,
       pass: this.state.remotePass,
+      cbFunc: this.onDrillEditorAdded,
     });
     this.setState({ isPasswordDialogVisible: false });
   };
@@ -458,6 +480,18 @@ export default class TreeView extends React.Component {
           onNodeContextMenu={this.handleNodeContextMenu}
           className={classNames}
         />
+        <Dialog
+          className="pt-dark open-profile-alert-dialog"
+          intent={Intent.PRIMARY}
+          isOpen={this.state.isLoadingDialogVisible}
+        >
+          <div className="dialogContent" style={{height: '120px'}}>
+            <p>Starting Apache Drill...</p>
+            <br />
+            <p>Note: This process might take almost 2 minutes on first start.</p>
+          </div>
+          <LoadingView />
+        </Dialog>
         <Dialog
           className="pt-dark open-profile-alert-dialog"
           intent={Intent.PRIMARY}

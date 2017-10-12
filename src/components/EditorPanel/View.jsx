@@ -57,6 +57,7 @@ import 'codemirror/addon/fold/comment-fold.js';
 import 'codemirror/addon/fold/xml-fold.js';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/javascript-hint.js';
+import 'codemirror/addon/hint/sql-hint.js';
 import 'codemirror/addon/search/search.js';
 import 'codemirror/addon/search/searchcursor.js';
 import 'codemirror/addon/search/jump-to-line.js';
@@ -155,7 +156,7 @@ class View extends React.Component {
           cm.foldCode(cm.getCursor());
         },
       },
-      mode: this.editorObject.type == EditorTypes.DRILL ? 'sql' : 'MongoScript',
+      mode: this.editorObject.type == EditorTypes.DRILL ? 'text/x-mariadb' : 'MongoScript',
     };
 
     this.reactions = [];
