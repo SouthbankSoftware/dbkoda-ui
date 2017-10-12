@@ -49,6 +49,7 @@ export default class View extends React.Component {
   @action.bound
   updateValue(name, value) {
     this.props.config.settings[name] = value;
+    this.props.config.save();
   }
 
   getConfigForm() {
@@ -68,8 +69,6 @@ export default class View extends React.Component {
   }
 
   render() {
-    console.log(this.props.config.configInit);
-    console.log(this.props.store.configPage.selectedMenu);
     /* if(!this.props.config.configInit) {
       return (<div className="configPanelTabWrapper">
         <div className="configPanelWrapper">

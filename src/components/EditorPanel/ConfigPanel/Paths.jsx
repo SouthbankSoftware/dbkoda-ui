@@ -46,7 +46,6 @@ export default class Paths extends React.Component {
   }
 
   render() {
-    console.log(this.props.config.settings);
     return (
       <div className="formContentWrapper">
         <div className="form-row">
