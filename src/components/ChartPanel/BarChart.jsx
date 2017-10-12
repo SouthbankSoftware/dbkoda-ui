@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T13:11:14+11:00
+ * @Last modified time: 2017-10-13T10:38:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -113,12 +113,12 @@ export default class BarChart extends React.PureComponent<Props> {
           text={`${showOtherInCategoricalAxis
             ? 'Hide'
             : 'Show'} ${OTHER_CATEGORY_LABEL} in ${componentX.valueType === 'string'
-            ? 'X Axis'
-            : 'Y Axis'}`}
+            ? 'X axis'
+            : 'Y axis'}`}
         />
         <MenuItem
           onClick={onToggleShowOtherInCenter}
-          text={`${showOtherInCenter ? 'Hide' : 'Show'} ${OTHER_CATEGORY_LABEL} in Center`}
+          text={`${showOtherInCenter ? 'Hide' : 'Show'} ${OTHER_CATEGORY_LABEL} in center`}
         />
       </Menu>
     );
