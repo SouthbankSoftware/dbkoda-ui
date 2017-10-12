@@ -36,7 +36,9 @@ export default class Config {
   @observable configInit;
   @observable settings = {
     @observable mongoCmd: '',
-    @observable drillCmd: ''
+    @observable drillCmd: '',
+    @observable telemetryEnabled: null,
+    @observable showWelcomePageAtStart: true
   };
 
   constructor() {
@@ -48,6 +50,13 @@ export default class Config {
     };
     const eventName = EventType.createFileChangedEvent(this.configFilePath);
     Broker.on(eventName, handleConfigFileChange);
+  }
+
+  setDefaults() {
+    this.settings.telemetryEnabled = true;
+    this.settings.showWelcomePageAtStart = true;
+    this.settings.mongoCmd = '';
+    this.settings.drillCmd = '';
   }
 
   load() {

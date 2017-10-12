@@ -47,12 +47,15 @@ export default class Application extends React.Component {
   }
 
   render() {
-    console.log(this.props.config.settings);
     return (
       <div className="formContentWrapper">
         <div className="form-row">
           <label htmlFor="telemetryEnabled">Send Telemetry Data to dbKoda</label>
           <Checkbox type="text" id="telemetryEnabled" checked={this.props.config.settings.telemetryEnabled} onChange={this.onCheckboxToggle} />
+        </div>
+        <div className="form-row">
+          <label htmlFor="showWelcomePageAtStart">Show Welcome Page on Startup</label>
+          <Checkbox type="text" id="showWelcomePageAtStart" checked={this.props.config.settings.showWelcomePageAtStart} onChange={this.onCheckboxToggle} />
         </div>
       </div>
     );
