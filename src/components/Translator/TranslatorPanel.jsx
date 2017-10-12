@@ -139,7 +139,7 @@ export default class TranslatorPanel extends React.Component {
   renderContextMenu() {
     return (
       <Menu>
-        <div className="menuItemWrapper">
+        <div className="menuItemWrapper translate-to-native-driver">
           <MenuItem
             onClick={this.executeCommands}
             text={globalString('editor/view/menu/executeAll')}

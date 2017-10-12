@@ -991,7 +991,7 @@ class View extends React.Component {
             intent={Intent.NONE}
           />
         </div>
-        <div className="menuItemWrapper">
+        <div className="menuItemWrapper translator">
           <MenuItem
             onClick={this.translateToNativeCode}
             text={globalString('editor/view/menu/translateSelection')}
