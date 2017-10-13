@@ -26,10 +26,13 @@
  */
 
 import React from 'react';
+import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import ConfigDatabaseIcon from '~/styles/icons/config-database-icon-1.svg';
 import ErrorView from '#/common/ErrorView';
-import Menu from './Menu.jsx';
+import Menu from './Menu';
+import Application from './Application';
+import Paths from './Paths';
 import './Panel.scss';
 
 @inject(allStores => ({
@@ -38,14 +41,25 @@ import './Panel.scss';
 }))
 @observer
 export default class View extends React.Component {
+  constructor(props) {
+    super(props);
+    this.getConfigForm = this.getConfigForm.bind(this);
+  }
+
+  @action.bound
+  updateValue(name, value) {
+    this.props.config.settings[name] = value;
+    this.props.config.save();
+  }
+
   getConfigForm() {
     let form;
     switch (this.props.store.configPage.selectedMenu) {
       case 'Application':
-        form = <div>Application Settings Here!</div>;
+        form = <Application updateValue={this.updateValue} />;
         break;
       case 'Paths':
-        form = <div>Paths Settings Here!</div>;
+        form = <Paths updateValue={this.updateValue} />;
         break;
       default:
         form = <ErrorView error="Unknown menu item selection." />;
@@ -55,8 +69,6 @@ export default class View extends React.Component {
   }
 
   render() {
-    console.log(this.props.config.configInit);
-    console.log(this.props.store.configPage.selectedMenu);
     /* if(!this.props.config.configInit) {
       return (<div className="configPanelTabWrapper">
         <div className="configPanelWrapper">

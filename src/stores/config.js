@@ -28,6 +28,7 @@ import { observable, runInAction } from 'mobx';
 import yaml from 'js-yaml';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
+import { Intent } from '@blueprintjs/core';
 import { Broker, EventType } from '../helpers/broker';
 
 export default class Config {
@@ -35,20 +36,27 @@ export default class Config {
   @observable configInit;
   @observable settings = {
     @observable mongoCmd: '',
-    @observable drillCmd: ''
+    @observable drillCmd: '',
+    @observable telemetryEnabled: null,
+    @observable showWelcomePageAtStart: true
   };
 
   constructor() {
     this.configFilePath = global.PATHS.configPath;
     this.configInit = false;
-    console.log(this.configFilePath);
+
     const handleConfigFileChange = () => {
-      runInAction('Apply changes to config from yaml file', () => {
-        this.load();
-      });
+      this.load();
     };
     const eventName = EventType.createFileChangedEvent(this.configFilePath);
     Broker.on(eventName, handleConfigFileChange);
+  }
+
+  setDefaults() {
+    this.settings.telemetryEnabled = true;
+    this.settings.showWelcomePageAtStart = true;
+    this.settings.mongoCmd = '';
+    this.settings.drillCmd = '';
   }
 
   load() {
@@ -58,9 +66,11 @@ export default class Config {
       .service('files')
       .get(this.configFilePath)
       .then((file) => {
-        this.settings = yaml.safeLoad(file.content);
-        this.configInit = true;
-        console.log('Config loaded successfully!');
+        runInAction('Apply changes to config from yaml file', () => {
+          this.settings = yaml.safeLoad(file.content);
+          if (!this.configInit) { this.configInit = true; }
+          console.log('Config loaded successfully!');
+        });
       })
       .catch((e) => {
         console.error(e);
@@ -70,7 +80,6 @@ export default class Config {
           iconName: 'pt-icon-thumbs-down',
         });
       });
-    // Read settings and apply to corresponding properties
   }
 
   save() {
