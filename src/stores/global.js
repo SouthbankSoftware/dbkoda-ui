@@ -20,8 +20,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T12:03:47+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-13T15:48:48+11:00
  */
 
 import _ from 'lodash';
@@ -108,7 +108,7 @@ export default class Store {
     removingTabId: false,
     isRemovingCurrentTab: false,
     tabFilter: '',
-    showingSavingDialog: false,
+    showingSavingDialogEditorIds: [],
     lastFileSavingDirectoryPath: IS_ELECTRON ? global.PATHS.userHome : '',
     shouldScrollToActiveTab: false,
     tabScrollLeftPosition: 0,
@@ -405,7 +405,7 @@ export default class Store {
     newStore.editorPanel.executingEditorLines = false;
     newStore.editorPanel.stoppingExecution = false;
     newStore.editorPanel.tabFilter = '';
-    newStore.editorPanel.showingSavingDialog = false;
+    newStore.editorPanel.showingSavingDialogEditorIds = observable.shallowArray();
     newStore.editorPanel.updateAggregateDetails = false;
     newStore.editorToolbar.newEditorForTreeAction = false;
     newStore.editorPanel.lastFileSavingDirectoryPath =

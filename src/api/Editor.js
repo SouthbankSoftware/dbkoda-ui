@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T13:35:29+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-13T15:50:37+11:00
  */
 
  import { action, observable } from 'mobx';
@@ -214,7 +214,7 @@ export default class EditorApi {
     console.log('deleted editor ', currEditor);
     // If Editor is not clean, prompt for save.
     if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
-      this.store.editorPanel.showingSavingDialog = true;
+      this.store.editorPanel.showingSavingDialogEditorIds.push(currEditor.id);
       return;
     }
 

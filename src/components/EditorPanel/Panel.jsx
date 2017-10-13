@@ -20,8 +20,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T15:38:18+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-13T16:04:12+11:00
  */
 
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
@@ -498,7 +498,7 @@ export default class Panel extends React.Component {
   @action.bound
   onSavingDialogCancelButtonClicked(unbindGlobalKeys) {
     unbindGlobalKeys();
-    this.props.store.editorPanel.showingSavingDialog = false;
+    this.props.store.editorPanel.showingSavingDialogEditorIds.shift();
   }
 
   @action.bound
@@ -509,8 +509,8 @@ export default class Panel extends React.Component {
   }
 
   renderSavingDialog() {
-    const { editorPanel: { activeEditorId }, editors } = this.props.store;
-    const currentEditor = editors.get(activeEditorId);
+    const { editorPanel: { showingSavingDialogEditorIds }, editors } = this.props.store;
+    const currentEditor = editors.get(showingSavingDialogEditorIds[0]);
 
     let unbindGlobalKeys;
 
@@ -892,7 +892,7 @@ export default class Panel extends React.Component {
           className="pt-icon-menu tabControlBtn tabListBtn"
           onClick={this.onTabListBtnClicked}
         />
-        {this.props.store.editorPanel.showingSavingDialog ? (
+        {this.props.store.editorPanel.showingSavingDialogEditorIds.length > 0 ? (
           this.renderSavingDialog()
         ) : null}
       </div>
