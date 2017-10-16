@@ -77,12 +77,6 @@ export default class Store {
   @observable outputs = observable.map();
 
   @observable
-  userPreferences = observable({
-    telemetryEnabled: true,
-    showWelcomePageAtStart: true
-  });
-
-  @observable
   welcomePage = observable({
     isOpen: true,
     newsFeed: [],
