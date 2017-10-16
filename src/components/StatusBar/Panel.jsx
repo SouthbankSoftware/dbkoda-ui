@@ -305,7 +305,6 @@ export default class Panel extends React.Component {
                   ? 'active'
                   : 'inactive'
               }
-              intent={Intent.NONE}
               onClick={this.onClickFeedbackDetractor}
             >
               <SadIcon width={20} height={20} />
@@ -316,7 +315,6 @@ export default class Panel extends React.Component {
                   ? 'active'
                   : 'inactive'
               }
-              intent={Intent.NONE}
               onClick={this.onClickFeedbackPassive}
             >
               <NeutralIcon width={20} height={20} />
@@ -327,7 +325,6 @@ export default class Panel extends React.Component {
                   ? 'active'
                   : 'inactive'
               }
-              intent={Intent.NONE}
               onClick={this.onClickFeedbackAdvocate}
             >
               <HappyIcon width={20} height={20} />
@@ -348,19 +345,10 @@ export default class Panel extends React.Component {
           </span>
         </div>
         <div className="float_right">
-          <div
-            className="feedbackButton"
-            intent={Intent.NONE}
-            onClick={this.onClickFeedback}
-          >
+          <div className="feedbackButton" onClick={this.onClickFeedback}>
             <HappyIcon width={10} height={10} />
           </div>
-          <div
-            className="lodgeBugButton"
-            intent={Intent.NONE}
-            text={globalString('status_bar/support_bundle/button_title')}
-            onClick={this.onClickSupportBundle}
-          >
+          <div className="lodgeBugButton" onClick={this.onClickSupportBundle}>
             <BugIcon width={10} height={10} />
           </div>
         </div>
