@@ -41,7 +41,8 @@ import {
 import { featherClient } from '~/helpers/feathers';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import EventLogging from '#/common/logging/EventLogging';
-import { OutputToolbarContexts } from '../common/Constants';
+import { Broker, EventType } from '~/helpers/broker';
+import { OutputToolbarContexts, TableViewConstants } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
 import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
@@ -64,7 +65,7 @@ export default class Toolbar extends React.Component {
     this.state = {
       context: OutputToolbarContexts.DEFAULT,
       tableToolbar: {
-        limit: '2000',
+        limit: '200',
       },
     };
     this.downloadOutput = this.downloadOutput.bind(this);
@@ -246,6 +247,8 @@ export default class Toolbar extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
+
+    console.log(this.props.store.outputs.get(editor.id));
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
@@ -277,7 +280,14 @@ export default class Toolbar extends React.Component {
           >
             <AnchorButton
               className="expandAllButton circleButton"
-              onClick={this.props.api.outputApi.expandAllInTableView}
+              onClick={() => {
+                Broker.emit(
+                  EventType.TABLE_VIEW_EXPAND_ALL,
+                  this.props.store.editors.get(
+                    this.props.store.editorPanel.activeEditorId,
+                  ).id + '_table',
+                );
+              }}
             >
               <ExpandIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
@@ -292,48 +302,65 @@ export default class Toolbar extends React.Component {
           >
             <AnchorButton
               className="collapseAllButton circleButton"
-              onClick={this.props.api.outputApi.collapseAllInTableView}
+              onClick={() => {
+                Broker.emit(
+                  EventType.TABLE_VIEW_COLLAPSE_ALL,
+                  this.props.store.editors.get(
+                    this.props.store.editorPanel.activeEditorId,
+                  ).id + '_table',
+                );
+              }}
             >
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
-          <span className="docLimitLabel">Document Limit: </span>
-          <EditableText
-            minLines={1}
-            maxLines={1}
-            maxLength={9}
-            placeholder="2000"
-            value={this.state.tableToolbar.limit}
-            onChange={(string) => {
-              this.setState({ tableToolbar: { limit: string } });
-            }}
-            intent={Intent.NONE}
-            className="limit"
-          />
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            inline
-            content={globalString('output/toolbar/tableToolbar/refresh')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="refreshButton circleButton"
-              onClick={() => {
-                console.log(this.props.store.outputs.get(editor.id));
-                this.props.api.treeApi.openNewTableViewForCollection(
-                  {
-                    collection: this.nodeRightClicked.text,
-                    database: this.nodeRightClicked.refParent.text,
-                  },
-                  TableViewConstants.DEFAULT_MAX_ROWS,
-                );
-              }}
-            >
-              <RefreshIcon className="dbKodaSVG" width={30} height={30} />
-            </AnchorButton>
-          </Tooltip>
+          {this.props.store.outputs.get(editor.id).tableJson.database && (
+            <div>
+              <span className="docLimitLabel">Document Limit: </span>
+              <EditableText
+                minLines={1}
+                maxLines={1}
+                maxLength={9}
+                placeholder="200"
+                value={this.state.tableToolbar.limit}
+                onChange={(string) => {
+                  string = parseInt(string, 10);
+                  if (!string) {
+                    string = 0;
+                  }
+                  this.setState({ tableToolbar: { limit: string } });
+                }}
+                intent={Intent.NONE}
+                className="limit"
+              />
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/tableToolbar/refresh')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="refreshButton circleButton"
+                  onClick={() => {
+                    console.log(this.props.store.outputs.get(editor.id));
+                    this.props.api.treeApi.openNewTableViewForCollection(
+                      {
+                        collection: this.props.store.outputs.get(editor.id)
+                          .tableJson.collection,
+                        database: this.props.store.outputs.get(editor.id)
+                          .tableJson.database,
+                      },
+                      this.state.tableToolbar.limit,
+                    );
+                  }}
+                >
+                  <RefreshIcon className="dbKodaSVG" width={30} height={30} />
+                </AnchorButton>
+              </Tooltip>
+            </div>
+          )}
         </div>
         <div className="pt-navbar-group pt-right-align" />
       </nav>

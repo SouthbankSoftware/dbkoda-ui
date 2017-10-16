@@ -54,6 +54,42 @@ export default class Panel extends React.Component {
     // Enables developer console logging.
     this.debug = false;
     Broker.emit(EventType.FEATURE_USE, 'TableView');
+
+    Broker.on(
+      EventType.TABLE_VIEW_COLLAPSE_ALL(
+        this.props.store.editors.get(
+          this.props.store.editorPanel.activeEditorId,
+        ).id + '_table',
+      ),
+      this.collapseAll,
+    );
+    Broker.on(
+      EventType.TABLE_VIEW_EXPAND_ALL(
+        this.props.store.editors.get(
+          this.props.store.editorPanel.activeEditorId,
+        ).id + '_table',
+      ),
+      this.expandAll,
+    );
+  }
+
+  componentWillUnmount() {
+    Broker.off(
+      EventType.TABLE_VIEW_COLLAPSE_ALL(
+        this.props.store.editors.get(
+          this.props.store.editorPanel.activeEditorId,
+        ).id + '_table',
+      ),
+      this.collapseAll,
+    );
+    Broker.off(
+      EventType.TABLE_VIEW_EXPAND_ALL(
+        this.props.store.editors.get(
+          this.props.store.editorPanel.activeEditorId,
+        ).id + '_table',
+      ),
+      this.expandAll,
+    );
   }
 
   @action.bound

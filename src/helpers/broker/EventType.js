@@ -78,4 +78,6 @@ export default {
   FEATURE_USE: 'feature::use',
   CONTROLLER_ACTIVITY: 'controller::activity',
   TABLE_VIEW_RESULT: editorId => `table-view::result-recieved::${editorId}`,
+  TABLE_VIEW_COLLAPSE_ALL: editorId => `table-view::collapse-all::${editorId}`,
+  TABLE_VIEW_EXPAND_ALL: editorId => `table-view::expand-all::${editorId}`,
 };

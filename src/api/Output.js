@@ -70,8 +70,13 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
-          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
+        if (
+          editor.id != 'Default' &&
+          this.store.outputs.get(editor.id).output
+        ) {
+          this.store.outputs.get(editor.id).output += globalString(
+            'output/editor/restoreSession',
+          );
         }
       } else {
         if (this.debug) console.log(`create new output for ${editor.id}`);
@@ -138,12 +143,21 @@ export default class OutputApi {
       EventType.createShellOutputEvent(oldId, oldShellId),
       this.outputAvailable,
     );
-    Broker.removeListener(EventType.createShellReconnectEvent(oldId, oldShellId), this.onReconnect);
+    Broker.removeListener(
+      EventType.createShellReconnectEvent(oldId, oldShellId),
+      this.onReconnect,
+    );
 
     this.outputHash[id + '|' + shellId] = outputId;
 
-    Broker.on(EventType.createShellOutputEvent(id, shellId), this.outputAvailable);
-    Broker.on(EventType.createShellReconnectEvent(id, shellId), this.onReconnect);
+    Broker.on(
+      EventType.createShellOutputEvent(id, shellId),
+      this.outputAvailable,
+    );
+    Broker.on(
+      EventType.createShellReconnectEvent(id, shellId),
+      this.onReconnect,
+    );
   }
 
   @action.bound
@@ -199,12 +213,18 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
-          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
+        if (
+          editor.id != 'Default' &&
+          this.store.outputs.get(editor.id).output
+        ) {
+          this.store.outputs.get(editor.id).output += globalString(
+            'output/editor/restoreSession',
+          );
         }
       } else {
         console.log(`create new output for ${editor.id}`);
-        const outputJSON = (initialOutput != null) ? initialOutput : {loading: 'isLoaded'};
+        const outputJSON =
+          initialOutput != null ? initialOutput : { loading: 'isLoaded' };
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
         this.store.outputs.set(
           editor.id,
@@ -241,7 +261,8 @@ export default class OutputApi {
     const profile = this.store.profiles.get(res.profileId);
     const strOutput = JSON.stringify(res.output);
     const editor = this.store.editors.get(res.id);
-    const totalOutput = this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
+    const totalOutput =
+      this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
@@ -296,7 +317,9 @@ export default class OutputApi {
         runInAction(
           () => {
             NewToaster.show({
-              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+              message:
+                globalString('output/editor/parseJsonError') +
+                error.substring(0, 50),
               intent: Intent.DANGER,
               icon: '',
             });
@@ -304,7 +327,9 @@ export default class OutputApi {
           (error) => {
             runInAction(() => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -345,7 +370,9 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -353,7 +380,9 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                  message:
+                    globalString('output/editor/parseJsonError') +
+                    error.substring(0, 50),
                   intent: Intent.DANGER,
                   icon: '',
                 });
@@ -380,7 +409,9 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 intent: Intent.DANGER,
                 icon: '',
               });
@@ -394,7 +425,9 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                  message:
+                    globalString('output/editor/parseJsonError') +
+                    error.substring(0, 50),
                   intent: Intent.DANGER,
                   icon: '',
                 });
@@ -416,19 +449,34 @@ export default class OutputApi {
    * @param { String } outputId - The id of the output to create a new table view for.
    */
   @action.bound
-  createJSONTableViewFromJSONArray(JSONArray, outputId) {
-    runInAction(() => {
-      const tabPrefix = 'TableView-';
+  createJSONTableViewFromJSONArray(JSONArray, outputId, targetData) {
+    return new Promise((resolve) => {
+      runInAction(() => {
+        const tabPrefix = 'TableView-';
 
-      if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
-        this.store.outputPanel.currentTab = tabPrefix + outputId;
-      }
-
-      this.store.outputs.get(outputId).tableJson = {
-        json: JSONArray,
-        firstLine: 0,
-        lastLine: 0,
-      };
+        if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
+          this.store.outputPanel.currentTab = tabPrefix + outputId;
+        }
+        console.log('!!! - ', targetData);
+        if (targetData) {
+          this.store.outputs.get(outputId).tableJson = {
+            json: JSONArray,
+            firstLine: 0,
+            lastLine: 0,
+            collection: targetData.collection,
+            database: targetData.database,
+          };
+        } else {
+          this.store.outputs.get(outputId).tableJson = {
+            json: JSONArray,
+            firstLine: 0,
+            lastLine: 0,
+            collection: null,
+            database: null,
+          };
+        }
+        resolve();
+      });
     });
   }
 
