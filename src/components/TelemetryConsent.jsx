@@ -33,7 +33,11 @@ const React = require('react');
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  */
-@inject(allStores => ({store: allStores.store, layout: allStores.store.layout}))
+@inject(allStores => ({
+  store: allStores.store,
+  layout: allStores.store.layout,
+  config: allStores.config,
+}))
 @observer
 export default class TelemetryConsent extends React.Component {
   @action.bound
@@ -48,13 +52,13 @@ export default class TelemetryConsent extends React.Component {
 
   @action.bound
   closeDialog() {
-    this.props.store.userPreferences.telemetryEnabled = false;
+    this.props.config.settings.telemetryEnabled = false;
     this.props.layout.optInVisible = false;
   }
 
   @action.bound
   acceptDialog() {
-    this.props.store.userPreferences.telemetryEnabled = true;
+    this.props.config.settings.telemetryEnabled = true;
     this.props.layout.optInVisible = false;
   }
 

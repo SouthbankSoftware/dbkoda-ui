@@ -16,9 +16,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
+ *
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
@@ -276,5 +275,5 @@ export default inject(allStores => ({
   profiles: allStores.store.profiles,
   profileList: allStores.store.profileList,
   setDrawerChild: allStores.store.setDrawerChild,
-  userPreferences: allStores.store.userPreferences,
+  userPreferences: allStores.config.settings,
 }))(observer(ConnectionPanel));

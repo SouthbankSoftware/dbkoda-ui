@@ -1,4 +1,23 @@
-/**
+/*
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
@@ -20,9 +39,11 @@
 export default class EditorApi {
   store;
   api;
-  constructor(store, api) {
+  config;
+  constructor(store, api, config) {
     this.store = store;
     this.api = api;
+    this.config = config;
   }
   /**
    * Method for adding a new editor to an existing connection.
@@ -51,7 +72,7 @@ export default class EditorApi {
         editorOptions.type = 'shell';
       }
       if (profileId == 'UNKNOWN') {
-        if (this.store.userPreferences.telemetryEnabled) {
+        if (this.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
             EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
               .FAILED_DEFAULT,
@@ -74,7 +95,7 @@ export default class EditorApi {
           return this.setNewEditorState(res, editorOptions);
         })
         .catch((err) => {
-          if (this.store.userPreferences.telemetryEnabled) {
+          if (this.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,
               EventLogging.getFragmentEnum().EDITORS,
@@ -95,7 +116,7 @@ export default class EditorApi {
           }
         });
     } catch (err) {
-      if (this.store.userPreferences.telemetryEnabled) {
+      if (this.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().ERROR,
           EventLogging.getFragmentEnum().EDITORS,

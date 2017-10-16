@@ -164,9 +164,10 @@ window.addEventListener('beforeunload', (event) => {
 });
 
 store = new Store();
-api = new DataCenter(store);
 config = new Config();
+api = new DataCenter(store, config);
 store.setAPI(api); // TODO: Remove this line after complete migration to API
 window.api = api;
 window.store = store;
+window.config = config;
 window.mobx = mobx;

@@ -37,7 +37,10 @@ const instance = false;
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  */
-@inject('store')
+ @inject(allStores => ({
+   store: allStores.store,
+   config: allStores.config,
+ }))
 @observer
 export default class EventReaction extends React.Component {
   constructor(props) {
@@ -51,13 +54,13 @@ export default class EventReaction extends React.Component {
     const profileOutputObserver = observe(store.outputPanel, change => this.observeOutputPanel(change, typeEnum, fragmentEnum));
     const userPreferencesObserver = observe(store.userPreferences, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
 
-    if (this.props.store.userPreferences.telemtryEnabled) {
+    if (this.props.config.settings.telemtryEnabled) {
       EventLogging.recordEvent(typeEnum.EVENT.APP.OPEN, fragmentEnum.PROFILES, 'dbKoda App started.', change);
     }
   }
 
   observeEditorPanel(change, typeEnum, fragmentEnum) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       switch (change.type) {
         case 'update':
           switch (change.name) {
@@ -104,7 +107,7 @@ export default class EventReaction extends React.Component {
   }
 
   observeProfilePanel(change, typeEnum, fragmentEnum) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       switch (change.type) {
         case 'update':
           switch (change.name) {
@@ -131,7 +134,7 @@ export default class EventReaction extends React.Component {
   }
 
   observeOutputPanel(change, typeEnum, fragmentEnum) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       switch (change.type) {
         case 'update':
           switch (change.name) {
@@ -162,7 +165,7 @@ export default class EventReaction extends React.Component {
   }
 
   observeUserPreferences(change, typeEnum, fragmentEnum) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       switch (change.type) {
         case 'update':
           switch (change.name) {

@@ -76,11 +76,11 @@ export default class Store {
   @observable editors = observable.map();
   @observable outputs = observable.map();
 
-  @observable
+  /* @observable
   userPreferences = observable({
     telemetryEnabled: null,
     showWelcomePageAtStart: true,
-  });
+  }); */
 
   @observable
   welcomePage = observable({

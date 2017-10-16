@@ -1,11 +1,3 @@
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-24T14:46:20+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T12:46:33+10:00
- */
-
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,9 +17,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  *
+ *
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-24T14:46:20+10:00
+ * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-28T16:49:10+10:00
+ * @Last modified time: 2017-10-13T13:58:12+11:00
  */
+
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/lint/lint.css';
@@ -858,7 +855,7 @@ class View extends React.Component {
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down',
       });
-      if (this.props.store.userPreferences.telemetryEnabled) {
+      if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().ERROR,
           EventLogging.getFragmentEnum().EDITORS,
@@ -881,7 +878,7 @@ class View extends React.Component {
         intent: Intent.DANGER,
         iconName: 'pt-icon-thumbs-down',
       });
-      if (this.props.store.userPreferences.telemetryEnabled) {
+      if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().ERROR,
           EventLogging.getFragmentEnum().EDITORS,
