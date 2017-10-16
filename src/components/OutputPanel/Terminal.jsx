@@ -48,7 +48,8 @@ import SubmitIcon from '../../styles/icons/execute-command-icon.svg';
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/addon/edit/matchbrackets.js');
-require('codemirror/addon/edit/closebrackets.js');
+// Patched for codemirror@5.28.0. Need to check this file when upgrade codemirror
+import '#/common/closebrackets.js';
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/javascript-hint.js');
 require('codemirror/keymap/sublime.js');

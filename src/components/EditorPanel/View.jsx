@@ -49,7 +49,8 @@ import 'codemirror/mode/markdown/markdown';
 import 'codemirror/addon/selection/active-line.js';
 import 'codemirror/addon/display/autorefresh.js';
 import 'codemirror/addon/edit/matchbrackets.js';
-import 'codemirror/addon/edit/closebrackets.js';
+// Patched for codemirror@5.28.0. Need to check this file when upgrade codemirror
+import '#/common/closebrackets.js';
 import 'codemirror/addon/fold/foldcode.js';
 import 'codemirror/addon/fold/foldgutter.js';
 import 'codemirror/addon/fold/brace-fold.js';
