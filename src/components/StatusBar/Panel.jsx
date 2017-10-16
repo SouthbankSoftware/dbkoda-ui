@@ -34,6 +34,7 @@ import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import { AnchorButton, Intent, Alert, EditableText } from '@blueprintjs/core';
 import { Broker, EventType } from '~/helpers/broker';
+import { NewToaster } from '#/common/Toaster';
 import HappyIcon from '../../styles/icons/happy.svg';
 import NeutralIcon from '../../styles/icons/neutral.svg';
 import SadIcon from '../../styles/icons/sad.svg';
@@ -113,6 +114,11 @@ export default class Panel extends React.Component {
       type: this.state.feedbackType,
       comments: this.state.feedbackComments,
     });
+    NewToaster.show({
+      message: globalString('status_bar/feedback/toaster_confirm'),
+      intent: Intent.SUCCESS,
+      iconName: 'pt-icon-thumbs-up',
+    });
     this.setState({ isFeedbackAlertOpen: false });
   }
 
@@ -143,19 +149,33 @@ export default class Panel extends React.Component {
       this.setState({ isLodgeBugAlertOpen: false });
     } else {
       this.setState({ isLodgeBugPending: true });
-      this.getSupportBundle().then((filePath) => {
-        if (this.state.debug) console.log('Support Bundle Created');
-        if (IS_ELECTRON) {
-          if (this.state.debug) console.log('OS Detected: ', this.state.os);
-          if (!filePath) {
-            filePath = '/Users/mike/.dbKoda/';
-            console.error('Did not recieve a file path back from controller');
+      this.getSupportBundle()
+        .then((filePath) => {
+          if (this.state.debug) console.log('Support Bundle Created');
+          if (IS_ELECTRON) {
+            if (this.state.debug) console.log('OS Detected: ', this.state.os);
+            if (!filePath) {
+              filePath = '/Users/mike/.dbKoda/';
+              console.error('Did not recieve a file path back from controller');
+            }
+            window.require('electron').shell.showItemInFolder(filePath);
           }
-          window.require('electron').shell.showItemInFolder(filePath);
-        }
-        this.setState({ isLodgeBugPending: false });
-        this.setState({ isSupportBundleReady: true });
-      });
+          this.setState({ isLodgeBugPending: false });
+          this.setState({ isSupportBundleReady: true });
+        })
+        .catch((err) => {
+          this.setState({ isLodgeBugPending: false });
+          this.setState({ isSupportBundleReady: false });
+          NewToaster.show({
+            message: (
+              <span
+                dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }}
+              />
+            ),
+            intent: Intent.DANGER,
+            iconName: 'pt-icon-thumbs-up',
+          });
+        });
     }
   }
 
@@ -199,7 +219,11 @@ export default class Panel extends React.Component {
       service
         .get()
         .then((result) => {
-          console.log(result);
+          NewToaster.show({
+            message: globalString('status_bar/support_bundle/toaster_confirm'),
+            intent: Intent.SUCCESS,
+            iconName: 'pt-icon-thumbs-up',
+          });
           resolve(result);
         })
         .catch((err) => {

@@ -543,10 +543,12 @@
       "feedback": {
         "button_title": "Feedback",
         "alert_text": "Please let us know what you think of dbKoda.",
-        "additional_comments_label": "Additional Comments:"
+        "additional_comments_label": "Additional Comments:",
+        "toaster_confirm": "Thankyou for your feedback!"
       },
       "support_bundle": {
         "button_title": "Lodge Bug",
+        "toaster_confirm": "Support Bundle Created.",
         "alert_text":
           "Pressing okay will cause the application to bundle up some logs about your experience into a compressed file, this file can then be uploaded to the dbKoda team to help solve your bug. This may take a small amount of time.",
         "finished_text_default":
