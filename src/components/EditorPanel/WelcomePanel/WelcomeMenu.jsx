@@ -39,7 +39,11 @@ import ConfigDatabaseIcon from '../../../styles/icons/config-database-icon-2.svg
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
  */
-@inject('store')
+ @inject(allStores => ({
+   store: allStores.store,
+   api: allStores.api,
+   config: allStores.config,
+ }))
 @observer
 export default class Panel extends React.Component {
   static propTypes = {};
@@ -50,7 +54,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   openConnection() {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the New Connection Profile drawer.');
     }
     this.props.store.profileList.selectedProfile = null;
@@ -62,13 +66,13 @@ export default class Panel extends React.Component {
 
   @action.bound
   telemetryEnabledChanged() {
-    console.log('Telemetry Enabled Before:', this.props.store.userPreferences.telemetryEnabled);
-    if (this.props.store.userPreferences.telemetryEnabled) {
-      this.props.store.userPreferences.telemetryEnabled = false;
+    console.log('Telemetry Enabled Before:', this.props.config.settings.telemetryEnabled);
+    if (this.props.config.settings.telemetryEnabled) {
+      this.props.config.settings.telemetryEnabled = false;
     } else {
-      this.props.store.userPreferences.telemetryEnabled = true;
+      this.props.config.settings.telemetryEnabled = true;
     }
-    console.log('Telemetry Enabled After:', this.props.store.userPreferences.telemetryEnabled);
+    console.log('Telemetry Enabled After:', this.props.config.settings.telemetryEnabled);
   }
 
   @action.bound
@@ -93,7 +97,7 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    console.log('Telemetry Enabled:', this.props.store.userPreferences.telemetryEnabled);
+    console.log('Telemetry Enabled:', this.props.config.settings.telemetryEnabled);
     return (
       <div className="welcomeMenu">
         <h2>
@@ -136,7 +140,7 @@ export default class Panel extends React.Component {
         }
         {
           process.env.NODE_ENV !== 'development' &&
-          <div className="welcomeMenuOptOut"><Checkbox checked={this.props.store.userPreferences.telemetryEnabled} onChange={this.telemetryEnabledChanged} /><p>Send Telemetry Data to dbKoda?</p></div>
+          <div className="welcomeMenuOptOut"><Checkbox checked={this.props.config.settings.telemetryEnabled} onChange={this.telemetryEnabledChanged} /><p>Send Telemetry Data to dbKoda?</p></div>
         }
       </div>
     );

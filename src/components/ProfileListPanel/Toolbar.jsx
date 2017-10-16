@@ -46,7 +46,10 @@ import CloseProfileIcon from '../../styles/icons/close-profile-icon.svg';
 import RemoveProfileIcon from '../../styles/icons/remove-profile-icon.svg';
 import './styles.scss';
 
-@inject('store')
+@inject(allStores => ({
+  store: allStores.store,
+  config: allStores.config,
+}))
 @observer
 export default class Toolbar extends React.Component {
   constructor(props) {
@@ -75,7 +78,7 @@ export default class Toolbar extends React.Component {
    * Action for opening the new Profile Drawer.
    */
   @action newProfile() {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the New Connection Profile drawer.');
     }
     this.props.store.profileList.selectedProfile = null;
@@ -93,12 +96,12 @@ export default class Toolbar extends React.Component {
     const {selectedProfile} = this.props.store.profileList;
     if (selectedProfile) {
       if (selectedProfile.status === ProfileStatus.OPEN) {
-        if (this.props.store.userPreferences.telemetryEnabled) {
+        if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to edit active profile..');
         }
         NewToaster.show({message: globalString('profile/not'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
       } else {
-        if (this.props.store.userPreferences.telemetryEnabled) {
+        if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the Edit Connection Profile drawer.');
         }
         this
@@ -107,7 +110,7 @@ export default class Toolbar extends React.Component {
           .showConnectionPane();
       }
     } else {
-      if (this.props.store.userPreferences.telemetryEnabled) {
+      if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to edit with no profile selected.');
       }
       NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
@@ -126,7 +129,7 @@ export default class Toolbar extends React.Component {
       .profiles
       .delete(this.props.store.profileList.selectedProfile.id);
     this.hideRemoveConnectionAlert();
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User removed a profile..');
     }
     NewToaster.show({message: globalString('profile/removeSuccess'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
@@ -165,7 +168,7 @@ export default class Toolbar extends React.Component {
             profiles.set(selectedProfile.id, selectedProfile);
           });
           this.setState({closingProfile: false, closeConnectionAlert: false});
-          if (this.props.store.userPreferences.telemetryEnabled) {
+          if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User closed a profile connection.');
           }
           NewToaster.show({message: globalString('profile/toolbar/connectionClosed'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
@@ -173,14 +176,14 @@ export default class Toolbar extends React.Component {
         })
         .catch((err) => {
           console.log('error:', err);
-          if (this.props.store.userPreferences.telemetryEnabled) {
+          if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().PROFILES, err.message);
           }
           NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
           this.setState({closingProfile: false, closeConnectionAlert: false});
         });
     } else {
-      if (this.props.store.userPreferences.telemetryEnabled) {
+      if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to close a connection profile with no profile selected..');
       }
       NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});

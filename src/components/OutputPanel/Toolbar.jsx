@@ -57,6 +57,7 @@ import RefreshIcon from '../../styles/icons/refresh-icon.svg';
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
+  config: allStores.config,
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -136,7 +137,7 @@ export default class Toolbar extends React.Component {
         const currentTab = this.props.store.outputPanel.currentTab;
         if (clearingOutput && this.props.store.outputs.get(currentTab)) {
           this.props.store.outputs.get(currentTab).output = '';
-          if (this.props.store.userPreferences.telemetryEnabled) {
+          if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT,
               EventLogging.getFragmentEnum().OUTPUT,
@@ -216,7 +217,7 @@ export default class Toolbar extends React.Component {
    * Downloads the current contents of the Output Editor to a file
    */
   downloadOutput() {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.SAVE_OUTPUT,
         EventLogging.getFragmentEnum().OUTPUT,
