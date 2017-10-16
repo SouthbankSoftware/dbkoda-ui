@@ -89,7 +89,8 @@
     }
     cm.operation(function() {
       // patch start
-      cm.replaceSelection(`${cm.lineSeparator().repeat(2)}`, null);
+      var linesep = cm.lineSeparator() || '\n';
+      cm.replaceSelection(linesep.repeat(2), null);
       // patch end
       cm.execCommand("goCharLeft");
       ranges = cm.listSelections();
