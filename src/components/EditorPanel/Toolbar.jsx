@@ -1,13 +1,3 @@
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-28T16:20:38+10:00
- */
-
-
-
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,6 +16,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-10-13T13:57:02+11:00
  */
 
 import _ from 'lodash';
@@ -234,7 +231,7 @@ export default class Toolbar extends React.Component {
         'editor/toolbar/notSupportedInUI',
         'openFile',
       );
-      if (this.props.store.userPreferences.telemetryEnabled) {
+      if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
           EventLogging.getFragmentEnum().EDITORS,
@@ -338,7 +335,7 @@ export default class Toolbar extends React.Component {
       'editor/toolbar/notSupportedInUI',
       'saveFile',
     );
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().WARNING,
         EventLogging.getFragmentEnum().EDITORS,
@@ -391,7 +388,7 @@ export default class Toolbar extends React.Component {
    * codemirror instance.
    */
   explainPlan() {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().WARNING,
         EventLogging.getFragmentEnum().EDITORS,

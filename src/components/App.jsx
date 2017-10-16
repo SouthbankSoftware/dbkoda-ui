@@ -16,13 +16,12 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
+ *
+ *
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-11T15:21:47+10:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-10-16T09:15:20+11:00
  */
 
 import React from 'react';
@@ -53,6 +52,7 @@ import './App.scss';
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
+  config: allStores.config,
 }))
 @observer
 class App extends React.Component {
@@ -74,7 +74,7 @@ class App extends React.Component {
 
   @action.bound
   closeOptIn(bool) {
-    this.props.store.userPreferences.telemetryEnabled = bool;
+    this.props.config.settings.telemetryEnabled = bool;
     this.props.store.layout.optInVisible = false;
   }
   unstable_handleError(...v) { //eslint-disable-line

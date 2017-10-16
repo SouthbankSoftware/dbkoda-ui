@@ -35,6 +35,7 @@ import { Broker, EventType } from '../../helpers/broker';
 
 @inject(allStores => ({
   store: allStores.store,
+  config: allStores.config
 }))
 @observer
 export default class Analytics extends React.Component {
@@ -58,7 +59,7 @@ export default class Analytics extends React.Component {
 
     const appVersion = this.props.store.version;
 
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       // TODO Get App Version
       this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', appVersion);
     }
@@ -69,7 +70,7 @@ export default class Analytics extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     reaction(
-      () => this.props.store.userPreferences.telemetryEnabled,
+      () => this.props.config.settings.telemetryEnabled,
       (telemetryEnabled) => {
         if (telemetryEnabled) {
           this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
@@ -133,18 +134,18 @@ export default class Analytics extends React.Component {
   }
 
   /**
-   * 
+   *
    * function to be called when activity goes to the controller.
    * @param {String} service - The service type that has been called.
    */
   controllerActivity(service) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
     }
   }
 
   keyFeatureEvent(feature) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
     }
   }

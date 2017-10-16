@@ -58,6 +58,7 @@ const React = require('react');
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
+  config: allStores.config,
 }))
 @observer
 export default class ListView extends React.Component {
@@ -305,7 +306,7 @@ export default class ListView extends React.Component {
             profiles.set(selectedProfile.id, selectedProfile);
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
-          if (this.props.store.userPreferences.telemetryEnabled) {
+          if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE,
               EventLogging.getFragmentEnum().PROFILES,
@@ -327,7 +328,7 @@ export default class ListView extends React.Component {
         })
         .catch((err) => {
           console.log('error:', err);
-          if (this.props.store.userPreferences.telemetryEnabled) {
+          if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,
               EventLogging.getFragmentEnum().PROFILES,
@@ -343,7 +344,7 @@ export default class ListView extends React.Component {
           this.closeConnectionCloseAlert();
         });
     } else {
-      if (this.props.store.userPreferences.telemetryEnabled) {
+      if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
           EventLogging.getFragmentEnum().PROFILES,
@@ -365,7 +366,7 @@ export default class ListView extends React.Component {
     this.props.store.profileList.selectedProfile = selectedProfile;
     if (selectedProfile) {
       if (selectedProfile.status === ProfileStatus.OPEN) {
-        if (this.props.store.userPreferences.telemetryEnabled) {
+        if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
             EventLogging.getTypeEnum().WARNING,
             EventLogging.getFragmentEnum().PROFILES,
@@ -378,7 +379,7 @@ export default class ListView extends React.Component {
           iconName: 'pt-icon-thumbs-down',
         });
       } else {
-        if (this.props.store.userPreferences.telemetryEnabled) {
+        if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
             EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE
               .OPEN_DIALOG,
@@ -389,7 +390,7 @@ export default class ListView extends React.Component {
         this.props.store.showConnectionPane();
       }
     } else {
-      if (this.props.store.userPreferences.telemetryEnabled) {
+      if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
           EventLogging.getFragmentEnum().PROFILES,
@@ -408,7 +409,7 @@ export default class ListView extends React.Component {
   deleteProfile() {
     const targetProfile = this.state.targetProfile;
     this.props.store.profiles.delete(targetProfile.id);
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE,
         EventLogging.getFragmentEnum().PROFILES,
@@ -511,7 +512,7 @@ export default class ListView extends React.Component {
     const profiles = this.props.store.profiles.entries();
     const profile = profiles[context.regions[0].rows[0]][1];
     this.state.targetProfile = profile;
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.OPEN_CONTEXT_MENU,
         EventLogging.getFragmentEnum().PROFILES,
