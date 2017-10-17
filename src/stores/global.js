@@ -130,6 +130,8 @@ export default class Store {
     executingShowMore: false,
     executingTerminalCmd: false,
     sendingCommand: '',
+    collapseTable: false,
+    expandTable: false,
   });
 
   @observable

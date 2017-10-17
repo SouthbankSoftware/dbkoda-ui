@@ -28,7 +28,7 @@
 /* eslint no-prototype-builtins:warn */
 
 import React from 'react';
-import { action } from 'mobx';
+import { action, reaction, runInAction } from 'mobx';
 import { inject } from 'mobx-react';
 import { Broker, EventType } from '~/helpers/broker';
 import JSONViewer from './react-json-viewer/JSONViewer.jsx';
@@ -54,9 +54,34 @@ export default class Panel extends React.Component {
     // Enables developer console logging.
     this.debug = false;
     Broker.emit(EventType.FEATURE_USE, 'TableView');
+
+    console.log(this.props.store);
+    console.log(this.props.store.outputPanel);
+    console.log(this.props.store.outputPanel.expandTable);
+    if (
+      this.props.store.outputPanel.expandTable ||
+      this.props.store.outputPanel.collapseTable
+    ) {
+      this.props.store.outputPanel.expandTable = false;
+      this.props.store.outputPanel.collapseTable = false;
+    }
+    this.reactionToExpandAll = reaction(
+      () => this.props.store.outputPanel.expandTable,
+      () => this.expandAll(),
+    );
+
+    this.reactionToCollapseAll = reaction(
+      () => this.props.store.outputPanel.collapseTable,
+      () => this.collapseAll(),
+    );
   }
 
-  componentWillUnmount() {}
+  componentDidMount() {}
+
+  componentWillUnmount() {
+    this.reactionToExpandAll();
+    this.reactionToCollapseAll();
+  }
 
   @action.bound
   onHeaderClick(string) {
@@ -85,18 +110,22 @@ export default class Panel extends React.Component {
 
   @action.bound
   collapseAll() {
-    // for (let i = 0; i < this.props.tableJson.json.length + 2; i += 1) {
-    //   this.state.arrayState[i] = false;
-    // }
-    this.setState({ collapseAll: true });
+    if (this.props.store.outputPanel.collapseTable) {
+      this.setState({ collapseAll: true });
+      runInAction(() => {
+        this.props.store.outputPanel.collapseTable = false;
+      });
+    }
   }
 
   @action.bound
   expandAll() {
-    // for (let i = 0; i < this.props.tableJson.json.length + 2; i += 1) {
-    //   this.state.arrayState[i] = true;
-    // }
-    this.setState({ expandAll: true });
+    if (this.props.store.outputPanel.expandTable) {
+      this.setState({ expandAll: true });
+      runInAction(() => {
+        this.props.store.outputPanel.expandTable = false;
+      });
+    }
   }
 
   @action.bound

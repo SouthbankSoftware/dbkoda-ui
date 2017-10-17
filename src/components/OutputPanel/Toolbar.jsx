@@ -30,7 +30,7 @@ import React from 'react';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { inject, observer } from 'mobx-react';
-import { action, reaction } from 'mobx';
+import { action, runInAction, reaction } from 'mobx';
 import {
   Intent,
   Tooltip,
@@ -41,7 +41,6 @@ import {
 import { featherClient } from '~/helpers/feathers';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import EventLogging from '#/common/logging/EventLogging';
-import { Broker, EventType } from '~/helpers/broker';
 import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
@@ -66,7 +65,7 @@ export default class Toolbar extends React.Component {
     this.state = {
       context: OutputToolbarContexts.DEFAULT,
       tableToolbar: {
-        limit: '200',
+        limit: 200,
       },
     };
     this.downloadOutput = this.downloadOutput.bind(this);
@@ -217,13 +216,6 @@ export default class Toolbar extends React.Component {
    * Downloads the current contents of the Output Editor to a file
    */
   downloadOutput() {
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.SAVE_OUTPUT,
-        EventLogging.getFragmentEnum().OUTPUT,
-        'User saved Output',
-      );
-    }
     const data = new Blob(
       [
         this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
@@ -266,7 +258,9 @@ export default class Toolbar extends React.Component {
           >
             <AnchorButton
               className="saveOutputBtn circleButton"
-              onClick={this.downloadOutput}
+              onClick={() => {
+                this.props.api.outputApi.saveTableData();
+              }}
             >
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
@@ -282,7 +276,10 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="expandAllButton circleButton"
               onClick={() => {
-                console.log('expand!');
+                runInAction(() => {
+                  this.props.store.outputPanel.expandTable = false;
+                  this.props.store.outputPanel.expandTable = true;
+                });
               }}
             >
               <ExpandIcon className="dbKodaSVG" width={30} height={30} />
@@ -299,7 +296,10 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="collapseAllButton circleButton"
               onClick={() => {
-                console.log('collapse!');
+                runInAction(() => {
+                  this.props.store.outputPanel.collapseTable = false;
+                  this.props.store.outputPanel.collapseTable = true;
+                });
               }}
             >
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
@@ -317,7 +317,7 @@ export default class Toolbar extends React.Component {
                 onChange={(string) => {
                   string = parseInt(string, 10);
                   if (!string) {
-                    string = 0;
+                    string = '';
                   }
                   this.setState({ tableToolbar: { limit: string } });
                 }}
@@ -335,7 +335,9 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="refreshButton circleButton"
                   onClick={() => {
-                    console.log(this.props.store.outputs.get(editor.id));
+                    if (!this.state.tableToolbar.limit) {
+                      this.state.tableToolbar.limit = 200;
+                    }
                     this.props.api.treeApi.openNewTableViewForCollection(
                       {
                         collection: this.props.store.outputs.get(editor.id)
