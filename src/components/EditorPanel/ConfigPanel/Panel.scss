@@ -16,8 +16,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @Author: chris
+ * @Date:   2017-10-17T12:21:59+11:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-10-17T14:48:13+11:00
  */
-
 @import '../../../styles/_defaultTheme.scss';
 
 .configContentWrapper {
@@ -98,6 +103,10 @@
         .pt-checkbox .pt-control-indicator {
           margin: 5px;
         }
+      }
+      .unsavedFileIndicator {
+        opacity: 1;
+        float: right;
       }
     }
   }

@@ -22,7 +22,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-09-27T10:40:53+10:00
+ * @Last modified time: 2017-10-17T14:47:46+11:00
  */
 
 import React from 'react';
@@ -46,11 +46,11 @@ export default class Application extends React.Component {
     return (
       <div className="formContentWrapper">
         <div className="form-row">
-          <label htmlFor="telemetryEnabled">Send Telemetry Data to dbKoda</label>
+          { this.props.renderFieldLabel('telemetryEnabled') }
           <Checkbox type="text" id="telemetryEnabled" checked={this.props.settings.telemetryEnabled} onChange={this.onCheckboxToggle} />
         </div>
         <div className="form-row">
-          <label htmlFor="showWelcomePageAtStart">Show Welcome Page on Startup</label>
+          { this.props.renderFieldLabel('showWelcomePageAtStart') }
           <Checkbox type="text" id="showWelcomePageAtStart" checked={this.props.settings.showWelcomePageAtStart} onChange={this.onCheckboxToggle} />
         </div>
       </div>

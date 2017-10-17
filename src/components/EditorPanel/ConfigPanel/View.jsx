@@ -22,11 +22,11 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-09-27T10:40:53+10:00
+ * @Last modified time: 2017-10-17T14:47:21+11:00
  */
 
 import React from 'react';
-import { action, toJS, observable } from 'mobx';
+import { action, toJS, observable, reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton, Intent } from '@blueprintjs/core';
 import ConfigDatabaseIcon from '~/styles/icons/config-database-icon-1.svg';
@@ -44,13 +44,24 @@ import './Panel.scss';
 export default class View extends React.Component {
   newSettings;
   changedFields;
+  reactionToConfig;
 
   constructor(props) {
     super(props);
     // Create a clone of the config so we can track changes from the original
     this.newSettings = observable(toJS(this.props.config.settings));
-    this.changedFields = [];
+    this.changedFields = observable([]);
     this.getConfigForm = this.getConfigForm.bind(this);
+    this.reactionToConfig = reaction(
+      () => this.props.config.settings,
+      () => {
+        // Need to iterate rather than replace to preserve observable state of props
+        for (const field in this.props.config.settings) {
+          if (Object.prototype.hasOwnProperty.call(this.props.config.settings, field)) {
+            this.newSettings[field] = this.props.config.settings[field];
+          }
+        }
+      });
   }
 
   @action.bound
@@ -68,6 +79,17 @@ export default class View extends React.Component {
   saveConfig() {
     this.props.config.settings = this.newSettings;
     this.props.config.save();
+    this.changedFields = observable([]);
+  }
+
+  @action.bound
+  renderFieldLabel(fieldName) {
+    return (<label htmlFor="fieldName">
+      { globalString(`editor/config/${fieldName}`) }
+      { (this.changedFields.indexOf(fieldName) !== -1) &&
+        <div id={`unsavedFileIndicator_${fieldName}`}
+          className="unsavedFileIndicator" /> }
+    </label>);
   }
 
   getConfigForm() {
@@ -76,12 +98,14 @@ export default class View extends React.Component {
       case 'Application':
         form = (<Application updateValue={this.updateValue}
           settings={this.newSettings}
-          changedFields={this.changedFields} />);
+          changedFields={this.changedFields}
+          renderFieldLabel={this.renderFieldLabel} />);
         break;
       case 'Paths':
         form = (<Paths updateValue={this.updateValue}
           settings={this.newSettings}
-          changedFields={this.changedFields} />);
+          changedFields={this.changedFields}
+          renderFieldLabel={this.renderFieldLabel} />);
         break;
       default:
         form = <ErrorView error="Unknown menu item selection." />;

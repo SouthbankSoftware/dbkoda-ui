@@ -22,7 +22,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-09-27T10:40:53+10:00
+ * @Last modified time: 2017-10-17T14:46:50+11:00
  */
 
 import React from 'react';
@@ -45,11 +45,11 @@ export default class Paths extends React.Component {
     return (
       <div className="formContentWrapper">
         <div className="form-row">
-          <label htmlFor="mongoCmd">Mongo Path:</label>
+          { this.props.renderFieldLabel('mongoCmd') }
           <input type="text" id="mongoCmd" value={this.props.settings.mongoCmd} onChange={this.onPathEntered} />
         </div>
         <div className="form-row">
-          <label htmlFor="drillCmd">Drill Path: </label>
+          { this.props.renderFieldLabel('drillCmd') }
           <input type="text" id="drillCmd" value={this.props.settings.drillCmd} onChange={this.onPathEntered} />
         </div>
       </div>

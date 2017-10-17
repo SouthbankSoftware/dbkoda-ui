@@ -197,7 +197,11 @@
       "config": {
         "heading": "Preferences",
         "menuApplication": "Application",
-        "menuPaths": "Paths"
+        "menuPaths": "Paths",
+        "telemetryEnabled": "Send Telemetry Data to dbKoda",
+        "showWelcomePageAtStart": "Show Welcome Page on Startup",
+        "mongoCmd": "Mongo Path",
+        "drillCmd": "Drill Path"
       },
       "tabMenu": {
         "closeTab": "Close Tab",
