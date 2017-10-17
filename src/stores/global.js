@@ -76,12 +76,6 @@ export default class Store {
   @observable editors = observable.map();
   @observable outputs = observable.map();
 
-  /* @observable
-  userPreferences = observable({
-    telemetryEnabled: null,
-    showWelcomePageAtStart: true,
-  }); */
-
   @observable
   welcomePage = observable({
     isOpen: true,
@@ -92,7 +86,7 @@ export default class Store {
   @observable
   configPage = observable({
     isOpen: true,
-    selectedMenu: 'Paths'
+    selectedMenu: 'Paths',
   });
 
   @observable

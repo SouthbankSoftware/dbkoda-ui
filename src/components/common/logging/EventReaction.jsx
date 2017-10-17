@@ -16,13 +16,12 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
+ *
+ *
  * @Author: mike
  * @Date:   2017-03-28 16:13:50
- * @Last modified by:   mike
- * @Last modified time: 2017-03-28 16:14:04
+ * @Last modified by:   chris
+ * @Last modified time: 2017-10-17T10:33:12+11:00
  */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable no-unused-vars */
@@ -52,7 +51,7 @@ export default class EventReaction extends React.Component {
     const editorPanelObserver = observe(store.editorPanel, change => this.observeEditorPanel(change, typeEnum, fragmentEnum));
     const profilePanelObserver = observe(store.profileList, change => this.observeProfilePanel(change, typeEnum, fragmentEnum));
     const profileOutputObserver = observe(store.outputPanel, change => this.observeOutputPanel(change, typeEnum, fragmentEnum));
-    const userPreferencesObserver = observe(store.userPreferences, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
+    const userPreferencesObserver = observe(config.settings, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
 
     if (this.props.config.settings.telemtryEnabled) {
       EventLogging.recordEvent(typeEnum.EVENT.APP.OPEN, fragmentEnum.PROFILES, 'dbKoda App started.', change);

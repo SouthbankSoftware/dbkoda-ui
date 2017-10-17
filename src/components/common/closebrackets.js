@@ -2,8 +2,10 @@
  * Patched for codemirror@5.28.0 to support Windows linesep
  *
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-10T16:00:50+11:00
+ * @Last modified time: 2017-10-17T10:44:36+11:00
  */
+
+ /* eslint-disable */
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
