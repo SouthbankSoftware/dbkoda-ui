@@ -43,17 +43,16 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import CodeMirror from 'react-codemirror';
-import {Broker, EventType} from '../../helpers/broker';
-import SubmitIcon from '../../styles/icons/execute-command-icon.svg';
-
-require('codemirror/mode/javascript/javascript');
-require('codemirror/addon/edit/matchbrackets.js');
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/addon/edit/matchbrackets.js';
 // Patched for codemirror@5.28.0. Need to check this file when upgrade codemirror
 import '#/common/closebrackets.js';
-require('codemirror/addon/hint/show-hint.js');
-require('codemirror/addon/hint/javascript-hint.js');
-require('codemirror/keymap/sublime.js');
-require('#/common/MongoScript.js');
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/javascript-hint.js';
+import 'codemirror/keymap/sublime.js';
+import '#/common/MongoScript.js';
+import {Broker, EventType} from '../../helpers/broker';
+import SubmitIcon from '../../styles/icons/execute-command-icon.svg';
 
 /**
  * terminalTarger object for helping with drag and drop actions?
