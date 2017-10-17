@@ -6472,9 +6472,9 @@ moment@^2.17.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
-mongo-shell-translator@0.0.1-alpha.50:
-  version "0.0.1-alpha.50"
-  resolved "https://registry.yarnpkg.com/mongo-shell-translator/-/mongo-shell-translator-0.0.1-alpha.50.tgz#c83df0191af2ec2bb59a11a59fd60d9793c69412"
+mongo-shell-translator@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/mongo-shell-translator/-/mongo-shell-translator-0.1.0.tgz#184282fce48ace3a89cbc5926404893f9deb03f1"
   dependencies:
     babel-preset-stage-0 "^6.24.1"
     cross-env "^5.0.5"
