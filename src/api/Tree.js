@@ -49,7 +49,6 @@ export default class TreeApi {
       })
       .catch(this._handleError);
     // Render Table:
-    console.log('!!!' - targetData);
     this.api.outputApi.createJSONTableViewFromJSONArray(
       [{ loading: 'isLoading' }],
       editor.id,

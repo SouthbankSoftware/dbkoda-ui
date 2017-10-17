@@ -282,12 +282,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="expandAllButton circleButton"
               onClick={() => {
-                Broker.emit(
-                  EventType.TABLE_VIEW_EXPAND_ALL,
-                  this.props.store.editors.get(
-                    this.props.store.editorPanel.activeEditorId,
-                  ).id + '_table',
-                );
+                console.log('expand!');
               }}
             >
               <ExpandIcon className="dbKodaSVG" width={30} height={30} />
@@ -304,12 +299,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="collapseAllButton circleButton"
               onClick={() => {
-                Broker.emit(
-                  EventType.TABLE_VIEW_COLLAPSE_ALL,
-                  this.props.store.editors.get(
-                    this.props.store.editorPanel.activeEditorId,
-                  ).id + '_table',
-                );
+                console.log('collapse!');
               }}
             >
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
