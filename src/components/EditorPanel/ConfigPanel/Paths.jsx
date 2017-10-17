@@ -26,12 +26,8 @@
  */
 
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 
-@inject(allStores => ({
-  store: allStores.store,
-  config: allStores.config
-}))
 @observer
 export default class Paths extends React.Component {
   constructor(props) {
@@ -50,11 +46,11 @@ export default class Paths extends React.Component {
       <div className="formContentWrapper">
         <div className="form-row">
           <label htmlFor="mongoCmd">Mongo Path:</label>
-          <input type="text" id="mongoCmd" value={this.props.config.settings.mongoCmd} onChange={this.onPathEntered} />
+          <input type="text" id="mongoCmd" value={this.props.settings.mongoCmd} onChange={this.onPathEntered} />
         </div>
         <div className="form-row">
           <label htmlFor="drillCmd">Drill Path: </label>
-          <input type="text" id="drillCmd" value={this.props.config.settings.drillCmd} onChange={this.onPathEntered} />
+          <input type="text" id="drillCmd" value={this.props.settings.drillCmd} onChange={this.onPathEntered} />
         </div>
       </div>
     );

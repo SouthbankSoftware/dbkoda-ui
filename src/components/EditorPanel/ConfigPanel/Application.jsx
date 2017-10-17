@@ -26,13 +26,9 @@
  */
 
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { Checkbox } from '@blueprintjs/core';
 
-@inject(allStores => ({
-  store: allStores.store,
-  config: allStores.config
-}))
 @observer
 export default class Application extends React.Component {
   constructor(props) {
@@ -51,11 +47,11 @@ export default class Application extends React.Component {
       <div className="formContentWrapper">
         <div className="form-row">
           <label htmlFor="telemetryEnabled">Send Telemetry Data to dbKoda</label>
-          <Checkbox type="text" id="telemetryEnabled" checked={this.props.config.settings.telemetryEnabled} onChange={this.onCheckboxToggle} />
+          <Checkbox type="text" id="telemetryEnabled" checked={this.props.settings.telemetryEnabled} onChange={this.onCheckboxToggle} />
         </div>
         <div className="form-row">
           <label htmlFor="showWelcomePageAtStart">Show Welcome Page on Startup</label>
-          <Checkbox type="text" id="showWelcomePageAtStart" checked={this.props.config.settings.showWelcomePageAtStart} onChange={this.onCheckboxToggle} />
+          <Checkbox type="text" id="showWelcomePageAtStart" checked={this.props.settings.showWelcomePageAtStart} onChange={this.onCheckboxToggle} />
         </div>
       </div>
     );

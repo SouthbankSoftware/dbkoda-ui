@@ -102,3 +102,17 @@
     }
   }
 }
+.configContentFooter {
+  width: 75%;
+  .saveBtn {
+    float: right;
+    font-weight: lighter;
+    color: $connectionButtonFontColour;
+    width: 7em;
+    border-radius: 0;
+    background-image: unset;
+    background-color: $connectionButtonBackgroundColourConnect;
+    border: unset;
+    box-shadow: unset;
+  }
+}

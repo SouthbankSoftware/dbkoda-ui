@@ -42,7 +42,9 @@ export default class Config {
   };
 
   constructor() {
-    this.configFilePath = global.PATHS.configPath;
+    if (global.PATHS) {
+      this.configFilePath = global.PATHS.configPath;
+    }
     this.configInit = false;
 
     const handleConfigFileChange = () => {
@@ -61,6 +63,7 @@ export default class Config {
 
   load() {
     console.log('Load from config.yml');
+    if (!this.configFilePath) { return; }
     // Call controller file get service
     featherClient()
       .service('files')
@@ -84,6 +87,7 @@ export default class Config {
 
   save() {
     console.log('Save to config.yml');
+    if (!this.configFilePath) { return; }
     try {
       return featherClient()
         .service('files')
