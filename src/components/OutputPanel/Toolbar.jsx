@@ -42,7 +42,7 @@ import { featherClient } from '~/helpers/feathers';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import EventLogging from '#/common/logging/EventLogging';
 import { Broker, EventType } from '~/helpers/broker';
-import { OutputToolbarContexts, TableViewConstants } from '../common/Constants';
+import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
 import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
