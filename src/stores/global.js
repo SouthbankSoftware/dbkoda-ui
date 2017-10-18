@@ -368,6 +368,7 @@ export default class Store {
         } else {
           resolve();
         }
+        this.api.deleteProfileFromDrill({removeAll:true});
       } else {
         resolve();
       }
