@@ -487,10 +487,12 @@ export default class TreeView extends React.Component {
         >
           <div className="dialogContent" style={{height: '120px'}}>
             <p>Starting Apache Drill...</p>
+            <LoadingView />
+            <br />
             <br />
             <p>Note: This process might take almost 2 minutes on first start.</p>
           </div>
-          <LoadingView />
+          
         </Dialog>
         <Dialog
           className="pt-dark open-profile-alert-dialog"

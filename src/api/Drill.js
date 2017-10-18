@@ -14,12 +14,19 @@ export default class DrillApi {
   }
   @action.bound
   checkForExistingDrillProfile = (options = {}) => {
+    // Options will contain options.db
     const profile = this.store.profileList.selectedProfile;
-    let profDB = profile.alias.replace(/:/g, '-').replace(/\s/g, '');
-    profDB += '|';
-    profDB += options.db ? options.db : 'admin';
-    return this.profileDBHash[profDB];
+    const profileAlias = profile.alias.replace(/:/g, '-').replace(/\s/g, '');
+    const profileDB = options.db ? options.db : 'admin';
+    if (
+      this.profileDBHash[profileAlias] &&
+      this.profileDBHash[profileAlias][profileDB]
+    ) {
+      return this.profileDBHash[profileAlias][profileDB];
+    }
+    return null;
   };
+
   @action.bound
   addNewEditorForDrill = (options = {}) => {
     // should have options.db equals to selectedTreeNode.text
@@ -28,8 +35,7 @@ export default class DrillApi {
     const profile = this.store.profileList.selectedProfile;
     query.alias = profile.alias.replace(/:/g, '-').replace(/\s/g, '');
     if (options.pass) {
-      query.url =
-        StaticApi.mongoProtocol +
+      query.url = StaticApi.mongoProtocol +
         profile.username +
         ':' +
         options.pass +
@@ -39,29 +45,14 @@ export default class DrillApi {
         profile.port +
         '/';
     } else {
-      query.url =
-        StaticApi.mongoProtocol + profile.host + ':' + profile.port + '/';
+      query.url = StaticApi.mongoProtocol +
+        profile.host +
+        ':' +
+        profile.port +
+        '/';
     }
     query.db = options.db ? options.db : 'admin';
 
-    const profDB = query.alias + '|' + query.db;
-    if (this.profileDBHash[profDB]) {
-      console.log('editor jdbc id:', this.profileDBHash[profDB].id);
-      openEditorWithDrillProfileId(this.profileDBHash[profDB]);
-      if (options.cbFunc) {
-        options.cbFunc();
-      }
-    } else {
-      this.createDrillConnection(query, profile, options);
-    }
-  };
-
-  @action.bound openEditorWithDrillProfileId = (drillJdbcConnection) => {
-    console.log(drillJdbcConnection.id, drillJdbcConnection.profile);
-    this.api.addDrillEditor(drillJdbcConnection.profile, {shellId: drillJdbcConnection.id, type: EditorTypes.DRILL, output: drillJdbcConnection.output});
-  };
-
-  createDrillConnection(query, profile, options) {
     const service = featherClient().service('/drill');
     service.timeout = 90000;
     return service
@@ -71,23 +62,76 @@ export default class DrillApi {
       })
       .catch((err) => {
         console.error(err);
-        this.onFail(options);
+        this.onFailCreate(options);
       });
-  }
+  };
 
   onDrillConnectionSuccess(res, query, profile, options) {
     console.log('Drill service result:', res);
-    const profDB = query.alias + '|' + query.db;
-    this.profileDBHash[profDB] = {id: res.id, output: res.output, profile};
-    this.openEditorWithDrillProfileId(this.profileDBHash[profDB]);
+    this.profileDBHash[query.alias] = {};
+    this.profileDBHash[query.alias][query.db] = {
+      id: res.id,
+      output: res.output,
+      profile,
+    };
+    this.openEditorWithDrillProfileId(
+      this.profileDBHash[query.alias][query.db],
+    );
     if (options.cbFunc) {
       options.cbFunc('success');
     }
   }
-  onFail(options) {
+
+  onFailCreate(options) {
     console.log('failed to launch or connect to drill');
     if (options.cbFunc) {
       options.cbFunc('error');
     }
+  }
+
+  @action.bound
+  openEditorWithDrillProfileId = (drillJdbcConnection) => {
+    console.log(drillJdbcConnection.id, drillJdbcConnection.profile);
+    this.api.addDrillEditor(drillJdbcConnection.profile, {
+      shellId: drillJdbcConnection.id,
+      type: EditorTypes.DRILL,
+      output: drillJdbcConnection.output,
+    });
+  };
+
+  @action.bound
+  deleteProfileFromDrill = (options = {}) => {
+    const query = {};
+    const profile = (options.profile) ? options.profile : this.store.profileList.selectedProfile;
+    query.alias = profile.alias.replace(/:/g, '-').replace(/\s/g, '');
+
+    if (options.removeAll) {
+      query.removeAll = true;
+    }
+    if (this.profileDBHash[query.alias] || query.removeAll) {
+      const service = featherClient().service('/drill');
+      service.timeout = 90000;
+      return service
+        .remove(query)
+        .then((res) => {
+          this.onDrillConnectionDeleteSuccess(res, query);
+        })
+        .catch((err) => {
+          this.onFailDelete(err);
+        });
+    }
+  };
+
+  onDrillConnectionDeleteSuccess(res, query) {
+    console.log('Drill delete service result:', res);
+    if (res && query.removeAll) {
+      this.profileDBHash = {};
+    } else {
+      delete this.profileDBHash[query.alias];
+    }
+  }
+
+  onFailDelete(options) {
+    console.log('failed to launch or connect to drill: ', options);
   }
 }
