@@ -31,7 +31,6 @@
 import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { Intent, Position } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import uuidV1 from 'uuid/v1';
 import { createForm, ProfileForm } from './ProfileForm';
@@ -228,7 +227,7 @@ const ConnectionPanel = ({
               dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }}
             />
           ), // eslint-disable-line react/no-danger
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       });

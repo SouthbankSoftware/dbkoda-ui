@@ -28,7 +28,6 @@ import { action, observable, runInAction, extendObservable } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
 import { EditorTypes, ProfileStatus } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
-import { Intent } from '@blueprintjs/core';
 import { type ChartPanelStore } from '#/ChartPanel';
 import StaticApi from './static';
 

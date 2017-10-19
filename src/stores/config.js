@@ -28,17 +28,17 @@ import { observable, runInAction } from 'mobx';
 import yaml from 'js-yaml';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
-import { Intent } from '@blueprintjs/core';
 import { Broker, EventType } from '../helpers/broker';
 
 export default class Config {
   configFilePath;
   @observable configInit;
-  @observable settings = {
+  @observable
+  settings = {
     @observable mongoCmd: '',
     @observable drillCmd: '',
     @observable telemetryEnabled: null,
-    @observable showWelcomePageAtStart: true
+    @observable showWelcomePageAtStart: true,
   };
 
   constructor() {
@@ -63,7 +63,9 @@ export default class Config {
 
   load() {
     console.log('Load from config.yml');
-    if (!this.configFilePath) { return; }
+    if (!this.configFilePath) {
+      return;
+    }
     // Call controller file get service
     featherClient()
       .service('files')
@@ -71,7 +73,9 @@ export default class Config {
       .then((file) => {
         runInAction('Apply changes to config from yaml file', () => {
           this.settings = yaml.safeLoad(file.content);
-          if (!this.configInit) { this.configInit = true; }
+          if (!this.configInit) {
+            this.configInit = true;
+          }
           console.log('Config loaded successfully!');
         });
       })
@@ -87,7 +91,9 @@ export default class Config {
 
   save() {
     console.log('Save to config.yml');
-    if (!this.configFilePath) { return; }
+    if (!this.configFilePath) {
+      return;
+    }
     try {
       return featherClient()
         .service('files')
