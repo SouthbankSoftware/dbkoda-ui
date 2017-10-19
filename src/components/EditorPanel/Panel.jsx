@@ -227,11 +227,16 @@ export default class Panel extends React.Component {
    */
   @action.bound
   closeConfig() {
+    console.log('closeconfig');
     this.props.store.configPage.isOpen = false;
     this.props.store.editorPanel.removingTabId = true;
-    if (this.props.store.editorPanel.activeEditorId == 'Config') {
-      const editors = this.props.store.editors.entries();
-      this.props.store.editorPanel.activeEditorId = editors[0][1].id;
+    if (this.props.store.editorPanel.activeEditorId === 'Config') {
+      if (this.props.store.welcomePage.isOpen) {
+        this.changeTab('Default');
+      } else {
+        const editors = this.props.store.editors.entries();
+        this.props.store.editorPanel.activeEditorId = editors[0][1].id;
+      }
     }
     this.forceUpdate();
   }
@@ -244,6 +249,10 @@ export default class Panel extends React.Component {
   changeTab(newTabId) {
     const { editorPanel, editorToolbar, editors } = this.props.store;
     let currEditor = editors.get(newTabId);
+    // An unknown bug causes changeTab('Config') to be called after Config tab is closed.
+    if (newTabId === 'Config' && !this.props.store.configPage.isOpen) {
+      return;
+    }
     // Condition specific to closing welcome tab
     if (editorPanel.removingTabId) {
       editorPanel.removingTabId = false;

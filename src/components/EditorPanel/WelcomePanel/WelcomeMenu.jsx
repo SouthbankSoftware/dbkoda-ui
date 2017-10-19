@@ -124,20 +124,16 @@ export default class Panel extends React.Component {
               <KeyboardIcon className="dbKodaSVG" width={30} height={30} />
               Keyboard Shortcuts</AnchorButton>
           </div>
-        </div>
-        {
-          process.env.NODE_ENV === 'development' &&
-          <div className="welcomeMenuConfig">
-            <div className="welcomeButtons">
-              <div className="welcomeButtonWrapper">
-                <AnchorButton className="welcomeMenuButton openConfigBtn" onClick={this.openConfigTab}>
-                  <ConfigDatabaseIcon className="dbKodaSVG" width={30} height={30} />
-                  Preferences
-                </AnchorButton>
-              </div>
+          {
+            process.env.NODE_ENV === 'development' &&
+            <div className="welcomeButtonWrapper">
+              <AnchorButton className="welcomeMenuButton openConfigBtn" onClick={this.openConfigTab}>
+                <ConfigDatabaseIcon className="dbKodaSVG" width={30} height={30} />
+                Preferences
+              </AnchorButton>
             </div>
-          </div>
-        }
+          }
+        </div>
         {
           process.env.NODE_ENV !== 'development' &&
           <div className="welcomeMenuOptOut"><Checkbox checked={this.props.config.settings.telemetryEnabled} onChange={this.telemetryEnabledChanged} /><p>Send Telemetry Data to dbKoda?</p></div>

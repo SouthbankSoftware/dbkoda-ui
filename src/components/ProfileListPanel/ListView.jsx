@@ -319,6 +319,7 @@ export default class ListView extends React.Component {
             iconName: 'pt-icon-thumbs-up',
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
+          this.props.api.deleteProfileFromDrill({profile: selectedProfile});
           if (this.props.store.profileList.selectedProfile.status == 'CLOSED') {
             runInAction(() => {
               this.props.store.treePanel.isRefreshDisabled = true;

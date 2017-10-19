@@ -73,6 +73,7 @@ export default class DataCenter {
     this.addNewEditorForDrill = this.drillApi.addNewEditorForDrill.bind(this);
     this.checkForExistingDrillProfile = this.drillApi.checkForExistingDrillProfile.bind(this);
     this.openEditorWithDrillProfileId = this.drillApi.openEditorWithDrillProfileId.bind(this);
+    this.deleteProfileFromDrill = this.drillApi.deleteProfileFromDrill.bind(this);
   }
 
   init() {
