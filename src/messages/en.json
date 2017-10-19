@@ -24,36 +24,23 @@
       "export_passed": "Export Complete.",
       "export_button": "Export",
       "no_valid_output":
-        "  Cannot display results at this stage, Block probably does not produce valid results.\n  Pipeline stages detected as invalid will be gray.\n  ----------------------------------  ",
+        "Cannot display results at this stage, Block probably does not produce valid results.\nPipeline stages detected as invalid will be gray.",
       "block_not_yet_valid":
-        "  Please fill in Stage details and click on the stage to see results.\n  ----------------------------------  ",
+        "Please fill in Stage details and click on the stage to see results.",
       "valid_output":
-        "  Example of Result at current Stage: \n  ----------------------------------  \n",
-      "no_output":
-        "  No results to display at current stage in pipeline.\n  Perhaps your pipeline returns no results, or is filtering out all results.\n  You can also increase your sample size in the 'Start' step to increase results of accuracy.\n  ----------------------------------  ",
-      "loading_output":
-        "  Loading results...\n  ----------------------------------  ",
-      "failed_output":
-        "  Failed to fetch results\n  ----------------------------------  ",
-      "alerts": {
-        "importWarningText":
-          " Warning, your current aggregate builder will be lost on import, please export your builder before importing a new one. ",
-        "cancel": "Cancel",
-        "okay": "Okay"
-      },
-      "invalid_aggregation_code":
-        "Invalid aggregation code. Please check syntax."
+        "Example of Result at current Stage: \n  ----------------------------------  \n\n"
     },
     "telemetry_dialog": {
-      "header": "Welcome!",
+      "header": "Hi There!",
       "content_first":
-        "We would like to gather information about how you are using the product so we can make it even more awesome.",
+        "Thanks for downloading and installing dbKoda - we need your help to make it better, so we  collect statistics on product utilization so we can work out how to best invest our efforts on improving the product.",
       "content_second":
-        "Is it okay if we collect some information about how you interact with dbKoda and send it back to our servers?",
-      "content_third": "You can read our full privacy policy ",
-      "privacy_link": "here",
+        "These statistics only include information about how often various parts of the product are used and NEVER include anything personally identifiable or even anything specific to your usage of the product. We just collect feature usage counters.",
+      "content_third":
+        "We use the Google Analytics API to collect these statistics which is used by zillions (OK, tens of millions) of websites. ",
+      "privacy_link": "See our privacy policy for more details.",
       "button_no": "No Thanks",
-      "button_yes": "Sure"
+      "button_yes": "Okay"
     },
     "output": {
       "headings": {

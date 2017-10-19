@@ -32,6 +32,7 @@ import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import EventLogging from '#/common/logging/EventLogging';
+import { Position } from '@blueprintjs/core';
 import uuidV1 from 'uuid/v1';
 import { createForm, ProfileForm } from './ProfileForm';
 import Panel from './Panel';

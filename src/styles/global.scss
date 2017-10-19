@@ -522,4 +522,12 @@ div.optInDialog {
       background-color: $buttonSuccessBackgroundHover !important;
     }
   }
+  div.dialogButtons.false {
+    a.submitButton {
+      background-color: $buttonDangerBackground !important;
+    }
+    a.submitButton:hover {
+      background-color: $buttonDangerBackgroundHover !important;
+    }
+  }
 }

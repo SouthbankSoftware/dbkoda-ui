@@ -203,11 +203,23 @@ div.savingDialog {
       background-color: $buttonDangerBackgroundHover;
     }
   }
+  div.dialogButtons.false {
+    a.saveButton {
+      background: unset;
+      border: none;
+      color: $buttonTextColour;
+      background-color: $buttonDangerBackground;
+    }
+    a.saveButton:hover {
+      background: unset;
+      color: $buttonTextColour;
+      background-color: $buttonDangerBackgroundHover;
+    }
+  }
   .CodeMirror {
     font-family: 'Courier New', 'Courier', 'monospace' !important;
   }
 }
-
 .RootSplitPane {
   height: calc(100% - 20px) !important;
 }

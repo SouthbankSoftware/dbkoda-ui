@@ -69,11 +69,17 @@ global.EOL = global.IS_ELECTRON
 export default class Store {
   api;
   @observable locale = 'en';
-  @observable version = '0.7.2';
+  @observable version = '0.7.3';
   @observable updateAvailable = false;
   @observable profiles = observable.map();
   @observable editors = observable.map();
   @observable outputs = observable.map();
+
+  @observable
+  userPreferences = observable({
+    telemetryEnabled: true,
+    showWelcomePageAtStart: true,
+  });
 
   @observable
   welcomePage = observable({
