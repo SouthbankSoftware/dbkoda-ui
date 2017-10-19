@@ -61,10 +61,10 @@ const FILE_FILTERS = [
 /**
  * Defines the Toolbar for the Tabbed Editor Panel.
  */
- @inject(allStores => ({
-   store: allStores.store,
-   api: allStores.api,
- }))
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+}))
 @observer
 export default class Toolbar extends React.Component {
   constructor(props) {
@@ -240,7 +240,7 @@ export default class Toolbar extends React.Component {
       }
       NewToaster.show({
         message: warningMsg,
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }
@@ -275,7 +275,7 @@ export default class Toolbar extends React.Component {
           .catch((err) => {
             NewToaster.show({
               message: err.message,
-              intent: Intent.DANGER,
+              className: 'danger',
               iconName: 'pt-icon-thumbs-down',
             });
             throw err;
@@ -344,7 +344,7 @@ export default class Toolbar extends React.Component {
     }
     NewToaster.show({
       message: warningMsg,
-      intent: Intent.DANGER,
+      className: 'danger',
       iconName: 'pt-icon-thumbs-down',
     });
 
@@ -359,7 +359,7 @@ export default class Toolbar extends React.Component {
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
       NewToaster.show({
         message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
-        intent: Intent.WARNING,
+        className: 'warning',
         iconName: 'pt-icon-thumbs-down',
       });
     } else {
@@ -375,7 +375,7 @@ export default class Toolbar extends React.Component {
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
       NewToaster.show({
         message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
-        intent: Intent.WARNING,
+        className: 'warning',
         iconName: 'pt-icon-thumbs-down',
       });
     } else {
@@ -397,7 +397,7 @@ export default class Toolbar extends React.Component {
     }
     NewToaster.show({
       message: 'Sorry, not yet implemented!',
-      intent: Intent.WARNING,
+      className: 'warning',
       iconName: 'pt-icon-thumbs-down',
     });
   }
@@ -412,7 +412,7 @@ export default class Toolbar extends React.Component {
     } else {
       NewToaster.show({
         message: 'Cannot stop execution. Nothing is executing.',
-        intent: Intent.WARNING,
+        className: 'warning',
         iconName: 'pt-icon-thumbs-down',
       });
     }
@@ -461,7 +461,7 @@ export default class Toolbar extends React.Component {
             });
             NewToaster.show({
               message: 'Swapped Profiles.',
-              intent: Intent.SUCCESS,
+              className: 'success',
               iconName: 'pt-icon-thumbs-up',
             });
           } else {
@@ -474,7 +474,7 @@ export default class Toolbar extends React.Component {
               });
               NewToaster.show({
                 message: globalString('editor/toolbar/profileSwapSslError'),
-                intent: Intent.DANGER,
+                className: 'danger',
                 iconName: 'pt-icon-thumbs-down',
               });
             } else {
@@ -483,7 +483,7 @@ export default class Toolbar extends React.Component {
               });
               NewToaster.show({
                 message: 'Swapped Profiles.',
-                intent: Intent.SUCCESS,
+                className: 'success',
                 iconName: 'pt-icon-thumbs-up',
               });
             }
@@ -497,7 +497,7 @@ export default class Toolbar extends React.Component {
           });
           NewToaster.show({
             message: globalString('editor/toolbar/profileSwapError'),
-            intent: Intent.DANGER,
+            className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
           // @TODO - Handle failure.

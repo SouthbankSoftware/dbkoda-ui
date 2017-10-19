@@ -95,7 +95,7 @@ export default class Palette extends React.Component {
                 if (indexValue.constructor === Array) {
                   // Check for error result.
                   if (res.stepCodes[index] === 0) {
-                    if (this.debug) console.log('Result[', index, '] is valid: ', indexValue);
+                    if (this.debug) { console.log('Result[', index, '] is valid: ', indexValue); }
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -323,7 +323,7 @@ export default class Palette extends React.Component {
           console.error(e);
           NewToaster.show({
             message: globalString('aggregate_builder/no_active_connection'),
-            intent: Intent.DANGER,
+            className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
           reject(e);
@@ -485,7 +485,7 @@ export default class Palette extends React.Component {
    */
   @action.bound
   clearResultsOutput(editor) {
-    if (this.debug) console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
+    if (this.debug) { console.log('clearOutput: ', this.props.store.outputs.get(editor.id)); }
     const output = this.props.store.outputs.get(editor.id);
     output.output = globalString('aggregate_builder/block_not_yet_valid');
   }

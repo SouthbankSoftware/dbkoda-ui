@@ -25,16 +25,16 @@
  * @Last modified time: 2017-10-13T15:50:37+11:00
  */
 
- import { action, observable } from 'mobx';
- import uuidV1 from 'uuid';
- import { Intent } from '@blueprintjs/core';
- import { featherClient } from '~/helpers/feathers';
- import { NewToaster } from '#/common/Toaster';
- import EventLogging from '#/common/logging/EventLogging';
- import { ProfileStatus } from '#/common/Constants';
- import { EditorTypes, DrawerPanes } from '#/common/Constants';
+import { action, observable } from 'mobx';
+import uuidV1 from 'uuid';
+import { Intent } from '@blueprintjs/core';
+import { featherClient } from '~/helpers/feathers';
+import { NewToaster } from '#/common/Toaster';
+import EventLogging from '#/common/logging/EventLogging';
+import { ProfileStatus } from '#/common/Constants';
+import { EditorTypes, DrawerPanes } from '#/common/Constants';
 
- import StaticApi from './static';
+import StaticApi from './static';
 
 export default class EditorApi {
   store;
@@ -82,7 +82,7 @@ export default class EditorApi {
         }
         NewToaster.show({
           message: globalString('editor/toolbar/addEditorError'),
-          intent: Intent.WARNING,
+          className: 'warning',
           iconName: 'pt-icon-thumbs-down',
         });
         this.createNewEditorFailed();
@@ -110,7 +110,7 @@ export default class EditorApi {
           } else {
             NewToaster.show({
               message: 'Error: ' + err.message,
-              intent: Intent.DANGER,
+              className: 'danger',
               iconName: 'pt-icon-thumbs-down',
             });
           }
@@ -125,7 +125,7 @@ export default class EditorApi {
       }
       NewToaster.show({
         message: err.message,
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
       this.createNewEditorFailed();
@@ -221,8 +221,8 @@ export default class EditorApi {
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
-      intent: Intent.SUCCESS,
       iconName: 'pt-icon-thumbs-up',
+      className: 'success',
     });
     return editorId;
   }
@@ -234,7 +234,10 @@ export default class EditorApi {
     this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     console.log('deleted editor ', currEditor);
     // If Editor is not clean, prompt for save.
-    if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
+    if (
+      !currEditor.doc.isClean() &&
+      currEditor.type != EditorTypes.SHELL_COMMAND
+    ) {
       this.store.editorPanel.showingSavingDialogEditorIds.push(currEditor.id);
       return;
     }
@@ -282,9 +285,7 @@ export default class EditorApi {
     }
     this.api.removeOutput(currEditor);
     this.store.editors.delete(currEditor.id);
-    const treeEditor = this.store.treeActionPanel.editors.get(
-      currEditor.id,
-    );
+    const treeEditor = this.store.treeActionPanel.editors.get(currEditor.id);
     if (treeEditor) {
       this.store.treeActionPanel.editors.delete(treeEditor.id);
     }
@@ -300,7 +301,8 @@ export default class EditorApi {
 // Try "SELECT * FROM tablename LIMIT 10" to see table data
 */
 SHOW TABLES`;
-    const fileName = `new${this.store.profiles.get(profile.id).editorCount} (drill).js`;
+    const fileName = `new${this.store.profiles.get(profile.id)
+      .editorCount} (drill).js`;
 
     const editorId = uuidV1();
     this.store.profiles.get(profile.id).editorCount += 1;
@@ -326,7 +328,7 @@ SHOW TABLES`;
             doc: observable.ref(doc),
             status: ProfileStatus.OPEN,
             path: null,
-            type: options.type
+            type: options.type,
           },
           options,
         ),
@@ -361,8 +363,8 @@ SHOW TABLES`;
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
-      intent: Intent.SUCCESS,
       iconName: 'pt-icon-thumbs-up',
+      className: 'success',
     });
     return editorId;
   }

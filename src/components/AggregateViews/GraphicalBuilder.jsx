@@ -734,7 +734,7 @@ export default class GraphicalBuilder extends React.Component {
           if (e.code === 400) {
             NewToaster.show({
               message: globalString('aggregate_builder/no_active_connection'),
-              intent: Intent.DANGER,
+              className: 'danger',
               iconName: 'pt-icon-thumbs-down',
             });
             this.setOutputBroken();
@@ -972,7 +972,7 @@ export default class GraphicalBuilder extends React.Component {
     if (this.props.store.editorPanel.activeDropdownId === 'Default') {
       NewToaster.show({
         message: globalString('aggregate_builder/no_active_connection_for_import'),
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     } else {
@@ -1022,7 +1022,7 @@ export default class GraphicalBuilder extends React.Component {
       );
       NewToaster.show({
         message: warningMsg,
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }
@@ -1054,7 +1054,7 @@ export default class GraphicalBuilder extends React.Component {
           .catch((err) => {
             NewToaster.show({
               message: err.message,
-              intent: Intent.DANGER,
+              className: 'danger',
               iconName: 'pt-icon-thumbs-down',
             });
             throw err;
@@ -1084,7 +1084,7 @@ export default class GraphicalBuilder extends React.Component {
                 .then(() => {
                   NewToaster.show({
                     message: globalString('aggregate_builder/export_passed'),
-                    intent: Intent.SUCCESS,
+                    className: 'success',
                     iconName: 'pt-icon-thumbs-up',
                   });
                   runInAction('update fileName and path', () => {
@@ -1166,7 +1166,7 @@ export default class GraphicalBuilder extends React.Component {
         .catch((err) => {
           NewToaster.show({
             message: globalString('aggregate_builder/import_failed'),
-            intent: Intent.DANGER,
+            className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
           this.setState({isLoading: false});
@@ -1176,7 +1176,7 @@ export default class GraphicalBuilder extends React.Component {
     } else {
       NewToaster.show({
         message: globalString('aggregate_builder/import_failed'),
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
       this.setState({isLoading: false});
@@ -1322,7 +1322,7 @@ export default class GraphicalBuilder extends React.Component {
         this.selectBlock(count - 1).then(() => {
           NewToaster.show({
             message: globalString('aggregate_builder/import_passed'),
-            intent: Intent.SUCCESS,
+            className: 'success',
             iconName: 'pt-icon-thumbs-up',
           });
           this.setState({isLoading: false});

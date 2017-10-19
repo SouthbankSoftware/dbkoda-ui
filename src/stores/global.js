@@ -264,7 +264,7 @@ export default class Store {
       NewToaster.show({
         message:
           'Error: Please select an open connection from the Profile Dropdown.',
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }
@@ -289,7 +289,7 @@ export default class Store {
         console.error(err);
         NewToaster.show({
           message: 'Error: ' + err.message,
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       });
@@ -316,7 +316,7 @@ export default class Store {
       .catch((err) => {
         NewToaster.show({
           message: err.message,
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
         throw err;

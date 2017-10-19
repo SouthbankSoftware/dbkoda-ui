@@ -95,7 +95,7 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
     console.error(error);
     NewToaster.show({
       message: error.message,
-      intent: Intent.DANGER,
+      className: 'danger',
       iconName: 'pt-icon-thumbs-down',
     });
 

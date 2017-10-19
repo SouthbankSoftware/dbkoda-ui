@@ -437,13 +437,13 @@ export default class TreeView extends React.Component {
     if (response === 'error') {
       NewToaster.show({
         message: 'Unable to add drill editor',
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     } else {
       NewToaster.show({
         message: 'Drill Editor added successfully !',
-        intent: Intent.SUCCESS,
+        className: 'success',
         iconName: 'pt-icon-thumbs-up',
       });
     }

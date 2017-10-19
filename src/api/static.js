@@ -128,7 +128,7 @@ export default class StaticApi {
           // Toaster Notification
           NewToaster.show({
             message: globalString('output/editor/exceededMaxDocs'),
-            intent: Intent.WARNING,
+            className: 'warning',
             iconName: 'pt-icon-thumbs-down',
           });
         }

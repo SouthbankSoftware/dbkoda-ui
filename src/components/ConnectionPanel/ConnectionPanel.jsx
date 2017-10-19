@@ -66,7 +66,7 @@ const ConnectionPanel = ({
       if (value.alias === data.alias) {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: globalString('connection/existingAlias'),
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
         validate = false;
@@ -143,7 +143,7 @@ const ConnectionPanel = ({
     }
     DBKodaToaster(position).show({
       message,
-      intent: Intent.SUCCESS,
+      className: 'success',
       iconName: 'pt-icon-thumbs-up',
     });
   });
@@ -260,11 +260,9 @@ const ConnectionPanel = ({
       profiles={profiles}
       save={save}
       title={
-        edit ? (
-          globalString('connection/editHeading')
-        ) : (
-          globalString('connection/createHeading')
-        )
+        edit
+          ? globalString('connection/editHeading')
+          : globalString('connection/createHeading')
       }
     />
   );

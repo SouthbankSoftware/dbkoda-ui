@@ -82,14 +82,18 @@ export default class TreePanel extends React.Component {
                     .updateTopology(res);
                   this.updateStatus('LOADED');
                 } else {
-                  DBKodaToaster(Position.LEFT_BOTTOM).show({message: 'Profile got changed before loading completes.', intent: Intent.WARNING, iconName: 'pt-icon-thumbs-down'});
+                  DBKodaToaster(Position.LEFT_BOTTOM).show({message: 'Profile got changed before loading completes.', 
+                  className: 'warning',
+                   iconName: 'pt-icon-thumbs-down'});
                   this.updateStatus('FAILED');
                 }
               })
               .catch((err) => {
                 console.log(err.stack);
                 this.updateStatus('FAILED');
-                DBKodaToaster(Position.LEFT_BOTTOM).show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+                DBKodaToaster(Position.LEFT_BOTTOM).show({message: err.message,
+                   className: 'danger',
+                    iconName: 'pt-icon-thumbs-down'});
               });
           }
         } else {

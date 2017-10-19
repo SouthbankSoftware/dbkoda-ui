@@ -6,8 +6,6 @@
  * @Last modified time: 2017-08-29T13:22:57+10:00
  */
 
-
-
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -37,7 +35,11 @@ import { action, computed, reaction } from 'mobx';
 // import {Intent} from '@blueprintjs/core';
 // import { NewToaster } from '../common/Toaster';
 import DatabaseExport from './DatabaseExport';
-import { BackupRestoreActions, DrawerPanes, EditorTypes } from '../common/Constants';
+import {
+  BackupRestoreActions,
+  DrawerPanes,
+  EditorTypes,
+} from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { isCollectionAction, isDatabaseAction } from './Utils';
 
@@ -107,13 +109,6 @@ export class BackupRestore extends React.Component {
         .on('os-command-finish', (output) => {
           this.setState({ commandExecuting: false });
           console.log('get backup command ', output);
-          // if (output.code !== 0) {
-          //   NewToaster.show({
-          //             message: globalString('backuprestore/executionOSScriptFailed'),
-          //             intent: Intent.DANGER,
-          //             iconName: 'pt-icon-thumbs-down'
-          //           });
-          // }
         });
     }
   }
@@ -184,7 +179,10 @@ export class BackupRestore extends React.Component {
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
     let treeEditor;
     for (const editor of treeEditors) {
-      if (editor[1].id == editorId && editor[1].type === EditorTypes.SHELL_COMMAND) {
+      if (
+        editor[1].id == editorId &&
+        editor[1].type === EditorTypes.SHELL_COMMAND
+      ) {
         treeEditor = editor[1];
         break;
       }
@@ -223,10 +221,6 @@ export class BackupRestore extends React.Component {
   }
 
   render() {
-    return (
-      <div className="backup-restore-panel">
-        {this.getAction}
-      </div>
-    );
+    return <div className="backup-restore-panel">{this.getAction}</div>;
   }
 }

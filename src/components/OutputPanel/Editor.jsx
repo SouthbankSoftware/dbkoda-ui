@@ -171,7 +171,7 @@ export default class Editor extends React.Component {
                 runInAction(() => {
                   NewToaster.show({
                     message,
-                    intent: Intent.DANGER,
+                    className:'danger',
                     icon: '',
                   });
                 });

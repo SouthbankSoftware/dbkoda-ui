@@ -99,7 +99,9 @@ export default class Toolbar extends React.Component {
         if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to edit active profile..');
         }
-        NewToaster.show({message: globalString('profile/not'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+        NewToaster.show({message: globalString('profile/not'),
+         className: 'danger',
+          iconName: 'pt-icon-thumbs-down'});
       } else {
         if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the Edit Connection Profile drawer.');
@@ -113,7 +115,9 @@ export default class Toolbar extends React.Component {
       if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to edit with no profile selected.');
       }
-      NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: globalString('profile/noProfile'),
+       className: 'danger',
+        iconName: 'pt-icon-thumbs-down'});
     }
   }
 
@@ -132,7 +136,9 @@ export default class Toolbar extends React.Component {
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User removed a profile..');
     }
-    NewToaster.show({message: globalString('profile/removeSuccess'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+    NewToaster.show({message: globalString('profile/removeSuccess'), 
+    className: 'success',
+     iconName: 'pt-icon-thumbs-up'});
     Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
@@ -171,7 +177,9 @@ export default class Toolbar extends React.Component {
           if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE, EventLogging.getFragmentEnum().PROFILES, 'User closed a profile connection.');
           }
-          NewToaster.show({message: globalString('profile/toolbar/connectionClosed'), intent: Intent.SUCCESS, iconName: 'pt-icon-thumbs-up'});
+          NewToaster.show({message: globalString('profile/toolbar/connectionClosed'),
+          className: 'success',
+           iconName: 'pt-icon-thumbs-up'});
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })
         .catch((err) => {
@@ -179,14 +187,18 @@ export default class Toolbar extends React.Component {
           if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(EventLogging.getTypeEnum().ERROR, EventLogging.getFragmentEnum().PROFILES, err.message);
           }
-          NewToaster.show({message: err.message, intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+          NewToaster.show({message: err.message,
+             className: 'danger',
+              iconName: 'pt-icon-thumbs-down'});
           this.setState({closingProfile: false, closeConnectionAlert: false});
         });
     } else {
       if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(EventLogging.getTypeEnum().WARNING, EventLogging.getFragmentEnum().PROFILES, 'User attempted to close a connection profile with no profile selected..');
       }
-      NewToaster.show({message: globalString('profile/noProfile'), intent: Intent.DANGER, iconName: 'pt-icon-thumbs-down'});
+      NewToaster.show({message: globalString('profile/noProfile'),
+       className: 'danger',
+        iconName: 'pt-icon-thumbs-down'});
     }
     Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);

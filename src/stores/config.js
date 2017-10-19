@@ -79,7 +79,7 @@ export default class Config {
         console.error(e);
         NewToaster.show({
           message: `Reading config.yml failed: ${e.message}`,
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       });
@@ -104,7 +104,7 @@ export default class Config {
       console.error(e);
       NewToaster.show({
         message: `Saving config.yml failed: ${e.message}`,
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }
