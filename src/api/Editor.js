@@ -27,7 +27,6 @@
 
 import { action, observable } from 'mobx';
 import uuidV1 from 'uuid';
-import { Intent } from '@blueprintjs/core';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';

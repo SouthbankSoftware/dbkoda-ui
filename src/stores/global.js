@@ -34,7 +34,6 @@ import {
 } from '#/common/mobxDumpenvyExtension';
 import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
-import { Intent } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
 import { Broker, EventType } from '../helpers/broker';

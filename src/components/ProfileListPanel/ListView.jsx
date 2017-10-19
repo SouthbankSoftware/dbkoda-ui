@@ -375,7 +375,7 @@ export default class ListView extends React.Component {
         }
         NewToaster.show({
           message: globalString('profile/notClosed'),
-          className: 'danger'
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       } else {

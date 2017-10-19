@@ -27,21 +27,24 @@
 */
 
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {reaction, runInAction, observable, action} from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { reaction, runInAction, observable, action } from 'mobx';
 import Store from '~/stores/global';
-import {Intent, Position} from '@blueprintjs/core';
-import {featherClient} from '../../helpers/feathers';
-import {DBKodaToaster} from '../common/Toaster';
+import { Position } from '@blueprintjs/core';
+import { featherClient } from '../../helpers/feathers';
+import { DBKodaToaster } from '../common/Toaster';
 import ConnectionIcon from '../../styles/icons/connection-icon.svg';
 import TreeToolbar from './Toolbar.jsx';
 import TreeView from './View.jsx';
 
-@inject(allStores => ({store: allStores.store, treeState: allStores.treeState}))
+@inject(allStores => ({
+  store: allStores.store,
+  treeState: allStores.treeState,
+}))
 @observer
 export default class TreePanel extends React.Component {
   static get defaultProps() {
-    return {store: undefined};
+    return { store: undefined };
   }
   // constructor(props) {   super(props);   if (this.props.store.topology.json !==
   // null) {     this.props.treeState.parseJson(this.props.store.topology.json); }
@@ -50,19 +53,13 @@ export default class TreePanel extends React.Component {
     const onSelectProfile = () => {
       const profile = this.props.store.profileList.selectedProfile;
       if (profile) {
-        this
-          .props
-          .treeState
-          .setProfileAlias(profile.alias);
+        this.props.treeState.setProfileAlias(profile.alias);
         if (profile.status == 'OPEN') {
           if (this.props.treeState.profileId == profile.id) {
             this.updateStatus('LOADED');
           } else {
             this.updateStatus('LOADING');
-            this
-              .props
-              .treeState
-              .setProfileId(profile.id);
+            this.props.treeState.setProfileId(profile.id);
             const service = featherClient().service('/mongo-inspector'); // Calls the controller to load the topology associated with the selected Profile
             service.timeout = 60000;
             this.props.store.treePanel.isRefreshing = true;
@@ -75,25 +72,29 @@ export default class TreePanel extends React.Component {
                   this.props.store.topology.isChanged = false;
                 });
 
-                if (this.props.store.profileList.selectedProfile.id == res.profileId) {
-                  this
-                    .props
-                    .store
-                    .updateTopology(res);
+                if (
+                  this.props.store.profileList.selectedProfile.id ==
+                  res.profileId
+                ) {
+                  this.props.store.updateTopology(res);
                   this.updateStatus('LOADED');
                 } else {
-                  DBKodaToaster(Position.LEFT_BOTTOM).show({message: 'Profile got changed before loading completes.', 
-                  className: 'warning',
-                   iconName: 'pt-icon-thumbs-down'});
+                  DBKodaToaster(Position.LEFT_BOTTOM).show({
+                    message: 'Profile got changed before loading completes.',
+                    className: 'warning',
+                    iconName: 'pt-icon-thumbs-down',
+                  });
                   this.updateStatus('FAILED');
                 }
               })
               .catch((err) => {
                 console.log(err.stack);
                 this.updateStatus('FAILED');
-                DBKodaToaster(Position.LEFT_BOTTOM).show({message: err.message,
-                   className: 'danger',
-                    iconName: 'pt-icon-thumbs-down'});
+                DBKodaToaster(Position.LEFT_BOTTOM).show({
+                  message: err.message,
+                  className: 'danger',
+                  iconName: 'pt-icon-thumbs-down',
+                });
               });
           }
         } else {
@@ -109,23 +110,32 @@ export default class TreePanel extends React.Component {
      * @param  {function} this - condition to react on change
      * @param  {function} if   - Reaction callback Function
      */
-    this.reactionToProfile = reaction(() => this.props.store.profileList.selectedProfile, () => onSelectProfile());
+    this.reactionToProfile = reaction(
+      () => this.props.store.profileList.selectedProfile,
+      () => onSelectProfile(),
+    );
     /**
      * Reaction to update tree when topology is changed
      * @param  {function} this Condition to react on changed
      * @param  {function} if   Reaction callback function
      */
-    this.reactionToTopology = reaction(() => this.props.store.topology.isChanged, () => {
-      if (this.props.store.topology.isChanged && this.props.store.topology.json !== null) {
-        this
-          .props
-          .treeState
-          .parseJson(this.props.store.topology.json, this.props.store.topology.profileId);
-        runInAction('update topology isChanged', () => {
-          this.props.store.topology.isChanged = false;
-        });
-      }
-    });
+    this.reactionToTopology = reaction(
+      () => this.props.store.topology.isChanged,
+      () => {
+        if (
+          this.props.store.topology.isChanged &&
+          this.props.store.topology.json !== null
+        ) {
+          this.props.treeState.parseJson(
+            this.props.store.topology.json,
+            this.props.store.topology.profileId,
+          );
+          runInAction('update topology isChanged', () => {
+            this.props.store.topology.isChanged = false;
+          });
+        }
+      },
+    );
 
     onSelectProfile();
   }
@@ -133,7 +143,8 @@ export default class TreePanel extends React.Component {
     this.reactionToProfile();
     this.reactionToTopology();
   }
-  @action updateStatus(value) {
+  @action
+  updateStatus(value) {
     this.treeStatus = value;
   }
   reactionToProfile;
@@ -141,35 +152,40 @@ export default class TreePanel extends React.Component {
   @observable treeStatus = 'NEW';
   render() {
     const divStyle = {
-      height: '100%'
+      height: '100%',
     };
     console.log(this.treeStatus);
     return (
       <div style={divStyle}>
-        <TreeToolbar /> {this.treeStatus == 'NOPROFILE' && <div className="tree-msg-div noProfileMessage">
-          <div className="messageWrapper">
-            <div className="iconWrapper">
-              <ConnectionIcon width={50} height={50} className="dbKodaLogo" />
+        <TreeToolbar />{' '}
+        {this.treeStatus == 'NOPROFILE' && (
+          <div className="tree-msg-div noProfileMessage">
+            <div className="messageWrapper">
+              <div className="iconWrapper">
+                <ConnectionIcon width={50} height={50} className="dbKodaLogo" />
+              </div>
+              <span>An active connection is required to view topology.</span>
             </div>
-            <span>An active connection is required to view topology.</span>
           </div>
-        </div>}
-        {this.treeStatus == 'LOADING' && <div className="tree-msg-div loadingMessage">
-          <div className="messageWrapper">
-            <div className="iconWrapper">
-              <div className="loader" />
+        )}
+        {this.treeStatus == 'LOADING' && (
+          <div className="tree-msg-div loadingMessage">
+            <div className="messageWrapper">
+              <div className="iconWrapper">
+                <div className="loader" />
+              </div>
+              <span>Loading topology...</span>
             </div>
-            <span>Loading topology...</span>
           </div>
-        </div>}
-        {this.treeStatus == 'FAILED' && <div className="tree-msg-div failedMessage">
-          <div className="messageWrapper">
-            <div className="iconWrapper" />
-            <span className="failureText">
-                Failed to load topology.
-              </span>
+        )}
+        {this.treeStatus == 'FAILED' && (
+          <div className="tree-msg-div failedMessage">
+            <div className="messageWrapper">
+              <div className="iconWrapper" />
+              <span className="failureText">Failed to load topology.</span>
+            </div>
           </div>
-        </div>}
+        )}
         {this.treeStatus == 'LOADED' && <TreeView />}
       </div>
     );
@@ -177,7 +193,5 @@ export default class TreePanel extends React.Component {
 }
 
 TreePanel.propTypes = {
-  store: React
-    .PropTypes
-    .instanceOf(Store)
+  store: React.PropTypes.instanceOf(Store),
 };

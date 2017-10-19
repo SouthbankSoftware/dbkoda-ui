@@ -373,7 +373,7 @@ export default class OutputApi {
                 message:
                   globalString('output/editor/parseJsonError') +
                   error.substring(0, 50),
-                className: 'danger'
+                className: 'danger',
                 icon: '',
               });
             },
@@ -383,7 +383,7 @@ export default class OutputApi {
                   message:
                     globalString('output/editor/parseJsonError') +
                     error.substring(0, 50),
-                  className:'danger',
+                  className: 'danger',
                   icon: '',
                 });
                 this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
