@@ -34,6 +34,7 @@ import path from 'path';
 import { Alert, AnchorButton, Intent } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
+import ErrorView from '#/common/ErrorView';
 import { Broker, EventType } from '~/helpers/broker';
 import { featherClient } from '~/helpers/feathers';
 import Block from './AggregateBlocks/Block.jsx';
@@ -43,6 +44,7 @@ import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
 import { AggregateCommands } from './AggregateCommands.js';
 import GenerateChartButton from './GenerateChartButton';
+
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -69,7 +71,8 @@ export default class GraphicalBuilder extends React.Component {
       ).selectedBlock,
       colorMatching: [],
       collection: props.collection,
-      isLoading: false
+      isLoading: true,
+      failed: false
     };
 
     Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
@@ -84,6 +87,9 @@ export default class GraphicalBuilder extends React.Component {
     this.currentDB = this.editor.collection.refParent.text;
     this.currentCollection = this.editor.collection.text;
 
+    // Set loading icon in graphical builder!
+
+
     // Add aggregate object to shell.
     const service = featherClient().service('/mongo-sync-execution');
     service.timeout = 30000;
@@ -97,11 +103,14 @@ export default class GraphicalBuilder extends React.Component {
       })
       .then((res) => {
         this.editor.aggregateID = JSON.parse(res).id;
+        this.state.isLoading = false;
         if (this.editor.blockList.length === 0) {
           this.addStartBlock();
         }
       })
       .catch((err) => {
+        this.state.isLoading = false;
+        this.setState({failed: true});
         console.error(err);
       });
   }
@@ -1372,6 +1381,15 @@ export default class GraphicalBuilder extends React.Component {
   }
 
   render() {
+    if (this.state.failed) {
+      return (
+        <div className="aggregateGraphicalBuilderWrapper">
+          <ErrorView
+            title={globalString('aggregate_builder/alerts/failed_title')}
+            error={globalString('aggregate_builder/alerts/failed_message')} />
+        </div>
+      );
+    }
     return (
       <div className="aggregateGraphicalBuilderWrapper">
         <div className="topButtons">

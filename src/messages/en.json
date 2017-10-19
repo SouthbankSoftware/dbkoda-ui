@@ -24,11 +24,28 @@
       "export_passed": "Export Complete.",
       "export_button": "Export",
       "no_valid_output":
-        "Cannot display results at this stage, Block probably does not produce valid results.\nPipeline stages detected as invalid will be gray.",
+        "  Cannot display results at this stage, Block probably does not produce valid results.\n  Pipeline stages detected as invalid will be gray.\n  ----------------------------------  ",
       "block_not_yet_valid":
-        "Please fill in Stage details and click on the stage to see results.",
+        "  Please fill in Stage details and click on the stage to see results.\n  ----------------------------------  ",
       "valid_output":
-        "Example of Result at current Stage: \n  ----------------------------------  \n\n"
+        "  Example of Result at current Stage: \n  ----------------------------------  \n",
+      "no_output":
+        "  No results to display at current stage in pipeline.\n  Perhaps your pipeline returns no results, or is filtering out all results.\n  You can also increase your sample size in the 'Start' step to increase results of accuracy.\n  ----------------------------------  ",
+      "loading_output":
+        "  Loading results...\n  ----------------------------------  ",
+      "failed_output":
+        "  Failed to fetch results\n  ----------------------------------  ",
+      "alerts": {
+        "importWarningText":
+          " Warning, your current aggregate builder will be lost on import, please export your builder before importing a new one. ",
+        "cancel": "Cancel",
+        "okay": "Okay",
+        "failed_title": "Aggregation Failed",
+        "failed_message":
+          "Aggregation failed on that collection for an unknown reason, please raise a bug using the support bundle button in the bottom right corner of the screen."
+      },
+      "invalid_aggregation_code":
+        "Invalid aggregation code. Please check syntax."
     },
     "telemetry_dialog": {
       "header": "Hi There!",
