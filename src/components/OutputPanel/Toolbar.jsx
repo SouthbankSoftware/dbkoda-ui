@@ -248,6 +248,8 @@ export default class Toolbar extends React.Component {
           <div className="pt-navbar-heading">
             {globalString('output/headings/table')}
           </div>
+        </div>
+        <div className="pt-navbar-group pt-align-right">
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
@@ -355,7 +357,6 @@ export default class Toolbar extends React.Component {
             </div>
           )}
         </div>
-        <div className="pt-navbar-group pt-right-align" />
       </nav>
     );
   }
@@ -380,6 +381,8 @@ export default class Toolbar extends React.Component {
               <div className="pt-navbar-heading">
                 {globalString('output/headings/default')}
               </div>
+            </div>
+            <div className="pt-navbar-group pt-align-right">
               <Tooltip
                 intent={Intent.PRIMARY}
                 hoverOpenDelay={1000}
@@ -449,7 +452,6 @@ export default class Toolbar extends React.Component {
                 </AnchorButton>
               </Tooltip>
             </div>
-            <div className="pt-navbar-group pt-right-align" />
           </nav>
         );
     }

@@ -179,8 +179,10 @@ div.Pane.vertical.Pane1 {
           background-color: $navbarLeftBackground;
           h2.paletteHeader {
             color: $navbarLeftHeading;
-            font-size: 20px;
-            padding-top: 10px;
+            font-size: 16px !important;
+            margin-top: 0px;
+            margin-bottom: 10px;
+            padding-top: 16px;
             text-align: left;
           }
         }
@@ -279,17 +281,21 @@ div.Pane.vertical.Pane1 {
         nav.aggregateDetailsToolbar {
           order: 1;
           background-color: $navbarLeftBackground;
+          height: 50px;
           h2.currentBlockChoice {
             color: $navbarLeftHeading;
-            font-size: 20px;
-            padding-top: 10px;
+            font-size: 16px;
+            padding-top: 12px;
             text-align: left;
+            margin-top: 13px;
+            margin-bottom: 13px;
           }
         }
         h2.aggregateBlockType {
           margin-top: 20px;
           order: 2;
           text-align: -webkit-center;
+          color: $defaultFontColor;
         }
         p.aggregateBlockDescription {
           margin-top: 10px;

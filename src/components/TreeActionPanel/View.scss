@@ -126,14 +126,16 @@
 
     .tableHeader {
       height: 60px;
-      margin-bottom: 5px;
+      margin-bottom: 15px;
       padding: 15px;
+      border-bottom: 1px solid $fieldGroupTitleUnderline;
 
       .pt-icon-add {
+        background: unset !important;
         background-color: $fieldGroupHeaderIcon !important;
-        :hover {
-          background-color: #3f545b !important;
-        }
+      }
+      .pt-icon-add:hover {
+        background-color: #272a3a !important;
       }
 
       .pt-icon-trash {
@@ -141,6 +143,9 @@
         :hover {
           background-color: #a5535e !important;
         }
+      }
+      .pt-icon-trash:hover::before {
+        color: $white !important;
       }
 
       .left {
@@ -162,6 +167,10 @@
       .pt-icon-delete {
         color: $fieldGroupListIcon !important;
         margin: 0;
+        background: unset !important;
+      }
+      .pt-icon-delete:hover::before {
+        color: $white !important;
       }
     }
 
@@ -311,7 +320,10 @@
     border: none;
     background: #bfbec0 !important;
     color: $connectionActiveTextFieldTextColour !important;
-    border-radius: 0px;
+    border-radius: 0.4em;
+  }
+  .Select-clear-zone {
+    display: none;
   }
   .is-open > .Select-control {
     background-color: $connectionActiveTextFieldBackgroundColour !important;

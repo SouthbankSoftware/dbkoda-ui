@@ -341,7 +341,7 @@ export default class Panel extends React.Component {
         {this.renderAlerts()}
         <div className="float_left">
           <span className="productVersion">
-            {'v' + this.props.store.version}
+            {'dbKoda: v' + this.props.store.version}
           </span>
         </div>
         <div className="float_right">
