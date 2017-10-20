@@ -52,21 +52,24 @@ div.aggregateGraphicalBuilderWrapper {
   div.topButtons {
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
+    width: 85%;
     a {
       top: 10px;
-      height: 20px;
-      width: 100px;
       margin-right: 5px;
       margin-left: 5px;
       z-index: 10;
       font-weight: lighter;
-      color: $connectionButtonFontColour;
+      color: $defaultFontColor;
       border: 1px solid $welcomeViewButtonHoverColor !important;
-      border-radius: 0;
+      border-radius: 1em;
       background-image: unset;
-      background-color: $editorBackground;
+      background-color: $aggregateBlockBackgroundInvalid !important;
       border: unset;
       box-shadow: unset;
+      svg {
+        fill: $defaultFontColor !important;
+      }
     }
     a.showLeftPanelButton {
       order: 1;
@@ -78,8 +81,7 @@ div.aggregateGraphicalBuilderWrapper {
       order: 3;
     }
     a:hover {
-      background-color: $welcomeViewButtonHoverColor;
-      border: 1px solid $welcomeViewButtonHoverColor;
+      background-color: $aggregateBlockBackgroundHighlight !important;
     }
   }
   h2 {
@@ -138,8 +140,8 @@ div.aggregateGraphicalBuilderWrapper {
         }
         svg.closeBlockIcon {
           position: absolute;
-          width: 25px;
-          left: 145px;
+          width: 20px;
+          left: 155px;
           top: 10px;
           z-index: 5;
         }
@@ -524,6 +526,9 @@ svg.color_16 {
   }
 }
 
+svg.closeBlockIcon.invalid {
+  fill: $aggregateBlockBackgroundHighlight;
+}
 svg.closeBlockIcon.color_0 {
   fill: $highlightOne;
 }

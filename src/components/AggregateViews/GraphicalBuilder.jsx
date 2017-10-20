@@ -31,7 +31,7 @@ import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import path from 'path';
-import { Alert, AnchorButton, Intent } from '@blueprintjs/core';
+import { Alert, AnchorButton, Intent, Tooltip, Position } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
 import ErrorView from '#/common/ErrorView';
@@ -44,6 +44,9 @@ import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
 import { AggregateCommands } from './AggregateCommands.js';
 import GenerateChartButton from './GenerateChartButton';
+import ShowIcon from '../../styles/icons/show-icon.svg';
+import ImportIcon from '../../styles/icons/import-icon.svg';
+import ExportIcon from '../../styles/icons/export-icon.svg';
 
 
 const { dialog, BrowserWindow } = IS_ELECTRON
@@ -1394,25 +1397,59 @@ export default class GraphicalBuilder extends React.Component {
       <div className="aggregateGraphicalBuilderWrapper">
         <div className="topButtons">
           {this.props.store.drawer.drawerChild === DrawerPanes.DEFAULT && (
-            <AnchorButton
-              className="showLeftPanelButton"
-              intent={Intent.SUCCESS}
-              text={globalString('aggregate_builder/show_left_panel')}
-              onClick={this.onShowLeftPanelClicked}
-            />
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('aggregate_builder/show_left_panel')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+              >
+              <AnchorButton
+                className="showLeftPanelButton circleButton"
+                intent={Intent.SUCCESS}
+                onClick={this.onShowLeftPanelClicked}
+              >
+                <ShowIcon className="dbKodaSVG" width={20} height={20} />
+              </AnchorButton>
+            </Tooltip>
           )}
-          <AnchorButton
-            className="importButton"
-            intent={Intent.SUCCESS}
-            text={globalString('aggregate_builder/import_button')}
-            onClick={this.onImportButtonClickedFirst}
-          />
-          <AnchorButton
-            className="exportButton"
-            intent={Intent.SUCCESS}
-            text={globalString('aggregate_builder/export_button')}
-            onClick={this.onExportButtonClicked}
-          />
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('aggregate_builder/import_button')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+              >
+            <AnchorButton
+              className="importButton circleButton"
+              intent={Intent.SUCCESS}
+              onClick={this.onImportButtonClickedFirst}
+            >
+              <ImportIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('aggregate_builder/export_button')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="exportButton circleButton"
+              intent={Intent.SUCCESS}
+              onClick={this.onExportButtonClicked}
+            >
+              <ExportIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
+          <GenerateChartButton
+            connectionId={this.props.editor.currentProfile}
+            editorId={this.props.editor.id}
+        />
         </div>
         <Alert
           className="importAlert"
@@ -1521,10 +1558,6 @@ export default class GraphicalBuilder extends React.Component {
               <div className="loader" />
             </div>
           )}
-        <GenerateChartButton
-          connectionId={this.props.editor.currentProfile}
-          editorId={this.props.editor.id}
-        />
       </div>
     );
   }

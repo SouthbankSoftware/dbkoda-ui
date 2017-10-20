@@ -26,7 +26,7 @@
  */
 
 import * as React from 'react';
-import { AnchorButton, Intent } from '@blueprintjs/core';
+import { AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { inject } from 'mobx-react';
 // $FlowFixMe
 import { NewToaster } from '#/common/Toaster';
@@ -36,6 +36,7 @@ import _ from 'lodash';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 import './GenerateChartButton.scss';
+import ChartIcon from '../../styles/icons/chart-icon.svg';
 
 type Store = {
   doc: {
@@ -63,7 +64,10 @@ type State = {};
     api,
   };
 })
-export default class GenerateChartButton extends React.PureComponent<Props, State> {
+export default class GenerateChartButton extends React.PureComponent<
+  Props,
+  State,
+> {
   parserRegex = /use\s+(\S+)\s*;[^]*db\.(\S+)\.aggregate\(\s*(\[[^]*\])\s*,\s*({[^]*})\s*\)\s*;/;
   commentStripperRegex = /\/\*[^]*\*\//g;
 
@@ -102,7 +106,12 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
     const { api } = this.props;
 
     // $FlowFixMe
-    api.outputApi.showChartPanel(this.props.editorId, {}, 'error', error.message);
+    api.outputApi.showChartPanel(
+      this.props.editorId,
+      {},
+      'error',
+      error.message,
+    );
   };
 
   _onAggregatorResultReceived = (result) => {
@@ -129,7 +138,9 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
       const options = this._strToJson(matches[4]);
 
       if (!_.isArray(pipeline) || !_.isObject(options)) {
-        this._handleError(new Error(globalString('aggregate_builder/invalid_aggregation_code')));
+        this._handleError(
+          new Error(globalString('aggregate_builder/invalid_aggregation_code')),
+        );
         return;
       }
 
@@ -149,18 +160,30 @@ export default class GenerateChartButton extends React.PureComponent<Props, Stat
         })
         .catch(this._handleError);
     } else {
-      this._handleError(new Error(globalString('aggregate_builder/invalid_aggregation_code')));
+      this._handleError(
+        new Error(globalString('aggregate_builder/invalid_aggregation_code')),
+      );
     }
   };
 
   render() {
     return (
-      <AnchorButton
-        className="GenerateChartButton"
-        intent={Intent.SUCCESS}
-        text={globalString('aggregate_builder/generate_chart_button')}
-        onClick={this._generateChart}
-      />
+      <Tooltip
+        intent={Intent.PRIMARY}
+        hoverOpenDelay={1000}
+        inline
+        content={globalString('aggregate_builder/generate_chart_button')}
+        tooltipClassName="pt-dark"
+        position={Position.BOTTOM}
+      >
+        <AnchorButton
+          className="GenerateChartButton"
+          intent={Intent.SUCCESS}
+          onClick={this._generateChart}
+        >
+          <ChartIcon className="dbKodaSVG" width={20} height={20} />
+        </AnchorButton>
+      </Tooltip>
     );
   }
 }
