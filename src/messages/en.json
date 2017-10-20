@@ -9,10 +9,10 @@
       "palette_title": "Pipeline Palette",
       "details_title": "Stage Details",
       "no_block_selected": "No Stage Selected",
-      "show_left_panel": "Show Panel",
-      "hide_left_panel": "Hide Panel",
-      "byo_code": "BYO Code",
-      "form_code": "Code Form",
+      "show_left_panel": "Show Left Hand Aggregate Panel",
+      "hide_left_panel": "Hide Left Hand Aggregate Panel",
+      "byo_code": "Code it Yourself!",
+      "form_code": "Code it with a Form",
       "no_active_connection":
         "dbKoda has lost connection to your Mongo Shell.\n Please close or export this aggregation and then import it or start again.",
       "no_active_connection_for_import":

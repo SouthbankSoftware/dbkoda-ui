@@ -31,12 +31,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable, reaction, runInAction } from 'mobx';
-import { AnchorButton, Intent } from '@blueprintjs/core';
+import { AnchorButton, Intent, Tooltip, Position } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import FormBuilder from '#/TreeActionPanel/FormBuilder';
 import View from '#/TreeActionPanel/View';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import BYOBlock from './AggregateBlocks/BYOBlock.jsx';
+import CodeIcon from '../../styles/icons/code-icon.svg';
+import HideIcon from '../../styles/icons/hide-icon.svg';
 import './style.scss';
 
 @inject(allStores => ({
@@ -326,23 +328,46 @@ export default class Details extends React.Component {
               {' '}
               {globalString('aggregate_builder/details_title')}
             </h2>
+            <div className="pt-align-right">
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('aggregate_builder/hide_left_panel')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="hideLeftPanelButton circleButton"
+                  intent={Intent.SUCCESS}
+                  onClick={this.onHideLeftPanelClicked}
+                >
+                  <HideIcon className="dbKodaSVG" width={50} height={50} />
+                </AnchorButton>
+              </Tooltip>
+              {activeBlock &&
+                activeBlock.type.toUpperCase() !== 'START' && (
+                  <Tooltip
+                    intent={Intent.PRIMARY}
+                    hoverOpenDelay={1000}
+                    inline
+                    content={globalString('aggregate_builder/byo_code')}
+                    tooltipClassName="pt-dark"
+                    position={Position.BOTTOM}
+                  >
+                    <AnchorButton
+                      className="byoCodeButton circleButton"
+                      intent={Intent.SUCCESS}
+                      onClick={this.nonBYOCode}
+                    >
+                      <CodeIcon className="dbKodaSVG" width={50} height={50} />
+                    </AnchorButton>
+                  </Tooltip>
+                )}
+            </div>
           </nav>
           <div className="aggregateDetailsContent">
             <BYOBlock onChangeCallback={this.generateCode} />
-            <div className="bottomToolbar">
-              <AnchorButton
-                className="hideLeftPanelButton"
-                intent={Intent.SUCCESS}
-                text={globalString('aggregate_builder/hide_left_panel')}
-                onClick={this.onHideLeftPanelClicked}
-              />
-              <AnchorButton
-                className="byoCodeButton"
-                intent={Intent.SUCCESS}
-                text={globalString('aggregate_builder/form_code')}
-                onClick={this.nonBYOCode}
-              />
-            </div>
           </div>
         </div>
       );
@@ -389,6 +414,43 @@ export default class Details extends React.Component {
           <h2 className="currentBlockChoice">
             {globalString('aggregate_builder/details_title')}
           </h2>
+          <div className="pt-align-right">
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('aggregate_builder/hide_left_panel')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+            >
+              <AnchorButton
+                className="hideLeftPanelButton circleButton"
+                intent={Intent.SUCCESS}
+                onClick={this.onHideLeftPanelClicked}
+              >
+                <HideIcon className="dbKodaSVG" width={50} height={50} />
+              </AnchorButton>
+            </Tooltip>
+            {activeBlock &&
+              activeBlock.type.toUpperCase() !== 'START' && (
+                <Tooltip
+                  intent={Intent.PRIMARY}
+                  hoverOpenDelay={1000}
+                  inline
+                  content={globalString('aggregate_builder/byo_code')}
+                  tooltipClassName="pt-dark"
+                  position={Position.BOTTOM}
+                >
+                  <AnchorButton
+                    className="byoCodeButton circleButton"
+                    intent={Intent.SUCCESS}
+                    onClick={this.byoCode}
+                  >
+                    <CodeIcon className="dbKodaSVG" width={50} height={50} />
+                  </AnchorButton>
+                </Tooltip>
+              )}
+          </div>
         </nav>
         <div className="aggregateDetailsContent">
           {activeBlock && (
@@ -419,23 +481,6 @@ export default class Details extends React.Component {
             <p> {globalString('aggregate_builder/no_block_selected')}</p>
           </div>
         )}
-        <div className="bottomToolbar">
-          <AnchorButton
-            className="hideLeftPanelButton"
-            intent={Intent.SUCCESS}
-            text={globalString('aggregate_builder/hide_left_panel')}
-            onClick={this.onHideLeftPanelClicked}
-          />
-          {activeBlock &&
-          activeBlock.type.toUpperCase() !== 'START' && (
-            <AnchorButton
-              className="byoCodeButton"
-              intent={Intent.SUCCESS}
-              text={globalString('aggregate_builder/byo_code')}
-              onClick={this.byoCode}
-            />
-          )}
-        </div>
       </div>
     );
   }

@@ -282,13 +282,29 @@ div.Pane.vertical.Pane1 {
           order: 1;
           background-color: $navbarLeftBackground;
           height: 50px;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          flex-shrink: 0;
           h2.currentBlockChoice {
             color: $navbarLeftHeading;
             font-size: 16px;
-            padding-top: 12px;
+            padding-top: 14px;
             text-align: left;
-            margin-top: 13px;
-            margin-bottom: 13px;
+          }
+          div.pt-align-right {
+            padding-top: 10px;
+            a.pt-button {
+              background: unset;
+              background-color: $fieldGroupHeaderIcon !important;
+              svg {
+                fill: $defaultFontColor;
+                width: 20px;
+              }
+            }
+            a.pt-button:hover {
+              background-color: $fieldGroupHeaderIconHover !important;
+            }
           }
         }
         h2.aggregateBlockType {
