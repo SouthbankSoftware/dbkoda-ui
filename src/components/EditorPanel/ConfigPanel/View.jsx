@@ -26,11 +26,12 @@
  */
 
 import React from 'react';
-import { action, toJS, observable, reaction } from 'mobx';
+import { action, toJS, reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton, Intent } from '@blueprintjs/core';
 import ConfigDatabaseIcon from '~/styles/icons/config-database-icon-1.svg';
 import ErrorView from '#/common/ErrorView';
+import LoadingView from '#/common/LoadingView';
 import Menu from './Menu';
 import Application from './Application';
 import Paths from './Paths';
@@ -43,50 +44,51 @@ import './Panel.scss';
 @observer
 export default class View extends React.Component {
   newSettings;
-  changedFields;
   reactionToConfig;
 
   constructor(props) {
     super(props);
-    // Create a clone of the config so we can track changes from the original
-    this.newSettings = observable(toJS(this.props.config.settings));
-    this.changedFields = observable([]);
+    this.state = {
+      changedFields: [],
+      newSettings: toJS(this.props.config.settings)
+    };
     this.getConfigForm = this.getConfigForm.bind(this);
+    this.updateValue = this.updateValue.bind(this);
+    this.renderFieldLabel = this.renderFieldLabel.bind(this);
     this.reactionToConfig = reaction(
       () => this.props.config.settings,
       () => {
-        // Need to iterate rather than replace to preserve observable state of props
-        for (const field in this.props.config.settings) {
-          if (Object.prototype.hasOwnProperty.call(this.props.config.settings, field)) {
-            this.newSettings[field] = this.props.config.settings[field];
-          }
-        }
+        this.setState({ newSettings: toJS(this.props.config.settings) });
       });
   }
 
-  @action.bound
   updateValue(name, value) {
-    this.newSettings[name] = value;
-    const changedIndex = this.changedFields.indexOf(name);
+    const updatedSettings = { ...this.state.newSettings };
+    updatedSettings[name] = value;
+    this.setState({ newSettings: updatedSettings });
+    const changedIndex = this.state.changedFields.indexOf(name);
     if (changedIndex === -1) {
-      this.changedFields.push(name);
-    } else if (this.newSettings[name] === this.props.config.settings[name]) {
-      this.changedFields.splice(changedIndex, 1);
+      this.setState({
+        changedFields: [...this.state.changedFields, name]
+      });
+    } else if (value === this.props.config.settings[name]) {
+      const newFields = this.state.changedFields.slice();
+      newFields.splice(changedIndex, 1);
+      this.setState({ changedFields: newFields });
     }
   }
 
   @action.bound
   saveConfig() {
-    this.props.config.settings = this.newSettings;
+    this.props.config.settings = this.state.newSettings;
     this.props.config.save();
-    this.changedFields = observable([]);
+    this.setState({ changedFields: [] });
   }
 
-  @action.bound
   renderFieldLabel(fieldName) {
     return (<label htmlFor="fieldName">
       { globalString(`editor/config/${fieldName}`) }
-      { (this.changedFields.indexOf(fieldName) !== -1) &&
+      { (this.state.changedFields.indexOf(fieldName) !== -1) &&
         <div id={`unsavedFileIndicator_${fieldName}`}
           className="unsavedFileIndicator" /> }
     </label>);
@@ -97,14 +99,14 @@ export default class View extends React.Component {
     switch (this.props.store.configPage.selectedMenu) {
       case 'Application':
         form = (<Application updateValue={this.updateValue}
-          settings={this.newSettings}
-          changedFields={this.changedFields}
+          settings={this.state.newSettings}
+          changedFields={this.state.changedFields}
           renderFieldLabel={this.renderFieldLabel} />);
         break;
       case 'Paths':
         form = (<Paths updateValue={this.updateValue}
-          settings={this.newSettings}
-          changedFields={this.changedFields}
+          settings={this.state.newSettings}
+          changedFields={this.state.changedFields}
           renderFieldLabel={this.renderFieldLabel} />);
         break;
       default:
@@ -115,23 +117,12 @@ export default class View extends React.Component {
   }
 
   render() {
-    /* if(!this.props.config.configInit) {
-      return (<div className="configPanelTabWrapper">
-        <div className="configPanelWrapper">
-          <div className="configTitleWrapper">
-            <h1><ConfigDatabaseIcon className="dbKodaSVG" width={25} height={25} /> {this.props.title}</h1>
-          </div>
-          <div className="configContentWrapper">
-            <LoadingView />
-          </div>
-        </div>
-      </div>);
-    } */
     return (
       <div className="configPanelTabWrapper">
         <div className="configPanelWrapper">
           <div className="configTitleWrapper">
             <h1><ConfigDatabaseIcon className="dbKodaSVG" width={25} height={25} /> {this.props.title}</h1>
+            {false && <LoadingView />}
           </div>
           <div className="configContentWrapper">
             <div className="configLeftMenuWrapper" width={25}>
