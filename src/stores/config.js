@@ -24,7 +24,7 @@
  * @Last modified time: 2017-10-03T15:35:19+11:00
  */
 
-import { observable, runInAction } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import yaml from 'js-yaml';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
@@ -32,7 +32,7 @@ import { Broker, EventType } from '../helpers/broker';
 
 export default class Config {
   configFilePath;
-  @observable configInit;
+  @observable loading;
   @observable
   settings = {
     @observable mongoCmd: '',
@@ -45,7 +45,7 @@ export default class Config {
     if (global.PATHS) {
       this.configFilePath = global.PATHS.configPath;
     }
-    this.configInit = false;
+    this.loading = false;
 
     const handleConfigFileChange = () => {
       this.load();
@@ -61,6 +61,7 @@ export default class Config {
     this.settings.drillCmd = '';
   }
 
+  @action.bound
   load() {
     console.log('Load from config.yml');
     if (!this.configFilePath) {
@@ -73,8 +74,10 @@ export default class Config {
       .then((file) => {
         runInAction('Apply changes to config from yaml file', () => {
           this.settings = yaml.safeLoad(file.content);
-          if (!this.configInit) {
-            this.configInit = true;
+          if (this.loading) {
+            runInAction(() => {
+              this.loading = false;
+            });
           }
           console.log('Config loaded successfully!');
         });
@@ -89,7 +92,9 @@ export default class Config {
       });
   }
 
+  @action.bound
   save() {
+    this.loading = true;
     console.log('Save to config.yml');
     if (!this.configFilePath) {
       return;
@@ -104,6 +109,9 @@ export default class Config {
         })
         .then(() => {
           console.log('config.yml updated');
+          runInAction(() => {
+            this.loading = false;
+          });
         })
         .catch(console.error);
     } catch (e) {

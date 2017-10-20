@@ -82,13 +82,24 @@
   .configRightFormWrapper {
     margin-left: 50px;
     width: 100%;
+    button.pt-button.formButton {
+      margin-left: 5px;
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 7em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColour;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+    }
     .formContentWrapper {
       display: table;
       width: 100%;
       .form-row {
         display: table-row;
         margin: 12px;
-        height: 30px;
+        height: 35px;
         label {
           display: table-cell;
           font-size: 12pt;

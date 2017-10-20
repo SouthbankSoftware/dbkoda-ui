@@ -27,6 +27,12 @@
 
 import React from 'react';
 import { observer } from 'mobx-react';
+import { Button } from '@blueprintjs/core';
+import path from 'path';
+
+const { dialog, BrowserWindow } = IS_ELECTRON
+  ? window.require('electron').remote
+  : {};
 
 @observer
 export default class Paths extends React.Component {
@@ -41,16 +47,38 @@ export default class Paths extends React.Component {
     this.props.updateValue(fieldName, fieldValue);
   }
 
+  openPath(fieldName) {
+    const existingPath = (this.props.settings[fieldName]) ?
+      path.resolve(this.props.settings[fieldName]) : '';
+    if (IS_ELECTRON) {
+      dialog.showOpenDialog(
+        BrowserWindow.getFocusedWindow(),
+        {
+          defaultPath: existingPath,
+          properties: ['openFile'],
+        },
+        (fileName) => {
+          if (!fileName) {
+            return;
+          }
+          this.props.updateValue(fieldName, fileName[0]);
+        }
+      );
+    }
+  }
+
   render() {
     return (
       <div className="formContentWrapper">
         <div className="form-row">
           { this.props.renderFieldLabel('mongoCmd') }
           <input type="text" id="mongoCmd" value={this.props.settings.mongoCmd} onChange={this.onPathEntered} />
+          <Button className="formButton" onClick={() => { this.openPath('mongoCmd'); }}>Browse</Button>
         </div>
         <div className="form-row">
           { this.props.renderFieldLabel('drillCmd') }
           <input type="text" id="drillCmd" value={this.props.settings.drillCmd} onChange={this.onPathEntered} />
+          <Button className="formButton" onClick={() => { this.openPath('drillCmd'); }}>Browse</Button>
         </div>
       </div>
     );
