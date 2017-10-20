@@ -46,6 +46,7 @@
     border-radius: 0px;
   }
   input[type='Numeric'] {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
     border-top-left-radius: 0.4em !important;
     border-top-right-radius: 0em !important;
     border-bottom-left-radius: 0.4em !important;
@@ -109,12 +110,13 @@
         width: calc(50% - 30px);
       }
       .pt-button-group {
+        border-left: 1px solid $defaultFontColor;
         .pt-icon-chevron-up,
         .pt-icon-chevron-down {
           background: unset !important;
           box-shadow: none !important;
           background-color: $white !important;
-          color: $connectionTextFieldBackgroundColour !important;
+          color: $defaultFontColor !important;
         }
         .pt-icon-chevron-up::before,
         .pt-icon-chevron-down::before {

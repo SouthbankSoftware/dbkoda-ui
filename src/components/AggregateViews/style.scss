@@ -1,5 +1,7 @@
 @import '../../styles/_defaultTheme.scss';
-
+.pt-tree-node-content-1:hover {
+  background-color: $aggregateBlockBackgroundHover !important;
+}
 div.importAlert {
   color: $defaultFontColor;
   div.pt-alert-footer {
@@ -193,12 +195,24 @@ div.Pane.vertical.Pane1 {
             .pt-tree-node {
               .pt-tree-node-content-0 {
                 height: 60px;
+                border-top: 1px solid $aggregateBlockBorder;
                 span.pt-tree-node-caret {
                   color: $navbarLeftHeading;
+                  border: 1px solid $defaultFontColor;
+                  border-radius: 1em;
+                  margin-left: 20px;
+                  margin-right: 10px;
+                }
+                span.pt-tree-node-caret:hover {
+                  background-color: $defaultFontColor;
+                  color: $aggregateBlockBackgroundHover;
                 }
                 span.pt-tree-node-label {
                   font-size: 16px;
                 }
+              }
+              .pt-tree-node-content-0:hover {
+                background-color: $aggregateBlockBackgroundHover !important;
               }
               .pt-collapse {
                 .pt-collapse-body {
@@ -245,6 +259,9 @@ div.Pane.vertical.Pane1 {
                             }
                           }
                         }
+                      }
+                      pt-tree-node-content:hover {
+                        background-color: $aggregateBlockBackgroundHover !important;
                       }
                     }
                   }
