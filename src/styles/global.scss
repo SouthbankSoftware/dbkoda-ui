@@ -218,62 +218,70 @@ div.pt-dialog {
     display: none;
   }
 }
-.pt-toast.pt-intent-success {
+.pt-toast.success {
   background-color: $toastBackgroundColourSuccess !important;
   color: $toastFontColourSuccess !important;
   span {
     color: $toastFontColourSuccess !important;
   }
   div {
-    display: none;
     button::before {
       color: $toastCloseIconColourSuccess !important;
+    }
+    button:focus {
+      outline-style: none;
     }
   }
 }
 
-.pt-toast.pt-intent-warning {
+.pt-toast.warning {
   background-color: $toastBackgroundColourWarning !important;
   color: $toastFontColourWarning !important;
   span {
     color: $toastFontColourWarning !important;
   }
   div {
-    display: none;
     button::before {
       color: $toastCloseIconColourWarning !important;
+    }
+    button:focus {
+      outline-style: none;
     }
   }
 }
 
-.pt-toast.pt-intent-danger {
+.pt-toast.danger {
   background-color: $toastBackgroundColourDanger !important;
   color: $toastFontColourDanger !important;
   span {
     color: $toastFontColourDanger !important;
   }
   div {
-    display: none;
     color: unset !important;
     color: $toastCloseIconColourDanger !important;
     button::before {
       color: $toastCloseIconColourDanger !important;
     }
+    button:focus {
+      outline-style: none;
+    }
   }
 }
 
-.pt-toast.pt-intent-info {
+.pt-toast.info {
   background-color: $toastBackgroundColourInfo !important;
   color: $toastFontColourInfo !important;
   span {
     color: $toastFontColourInfo !important;
   }
   div {
-    display: none;
     color: unset !important;
     color: $toastCloseIconColourInfo !important;
     button::before {
       color: $toastCloseIconColourInfo !important;
+    }
+    button:focus {
+      outline-style: none;
     }
   }
 }
@@ -399,7 +407,7 @@ textarea {
 }
 
 input.pt-input.secondaryInput,
-textArea {
+textarea {
   background-color: $searchSecondaryBackground !important;
   color: $searchSecondaryFontColor !important;
 }
@@ -512,6 +520,14 @@ div.optInDialog {
     }
     a.submitButton:hover {
       background-color: $buttonSuccessBackgroundHover !important;
+    }
+  }
+  div.dialogButtons.false {
+    a.submitButton {
+      background-color: $buttonDangerBackground !important;
+    }
+    a.submitButton:hover {
+      background-color: $buttonDangerBackgroundHover !important;
     }
   }
 }

@@ -193,14 +193,42 @@ export default class Panel extends React.Component {
       profiles &&
       !this.state.hasAliasChanged
     ) {
-      if (form.$('host').get('value').length > MAX_HOSTNAME_ALIAS_LENGTH) {
+      console.log('!!!-', form.$('username').get('value'), '-!!!');
+      if (
+        form.$('host').get('value').length > MAX_HOSTNAME_ALIAS_LENGTH &&
+        form.$('username').get('value').length > 0
+      ) {
+        console.log('a');
+        form.$('alias').value =
+          form.$('username').get('value') +
+          '@' +
+          form.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
+          ':' +
+          form.$('port').value +
+          ' - ' +
+          (profiles.size + 1);
+      } else if (
+        form.$('host').get('value').length > MAX_HOSTNAME_ALIAS_LENGTH
+      ) {
+        console.log('b');
         form.$('alias').value =
           form.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
           ':' +
           form.$('port').value +
           ' - ' +
           (profiles.size + 1);
+      } else if (form.$('username').get('value').length > 0) {
+        console.log('c');
+        form.$('alias').value =
+          form.$('username').get('value') +
+          '@' +
+          form.$('host').value +
+          ':' +
+          form.$('port').value +
+          ' - ' +
+          (profiles.size + 1);
       } else {
+        console.log('d');
         form.$('alias').value =
           form.$('host').value +
           ':' +

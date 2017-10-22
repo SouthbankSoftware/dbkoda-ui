@@ -421,7 +421,7 @@ export default class TreeView extends React.Component {
         if (this.props.store.profileList.selectedProfile.sha) {
           this.setState({ isPasswordDialogVisible: true });
         } else {
-          this.setState({ isLoadingDialogVisible: true});
+          this.setState({ isLoadingDialogVisible: true });
           this.props.api.addNewEditorForDrill({
             db: this.nodeRightClicked.text,
             cbFunc: this.onDrillEditorAdded,
@@ -433,17 +433,17 @@ export default class TreeView extends React.Component {
     }
   };
   onDrillEditorAdded = (response) => {
-    this.setState({ isLoadingDialogVisible: false});
+    this.setState({ isLoadingDialogVisible: false });
     if (response === 'error') {
       NewToaster.show({
         message: 'Unable to add drill editor',
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     } else {
       NewToaster.show({
         message: 'Drill Editor added successfully !',
-        intent: Intent.SUCCESS,
+        className: 'success',
         iconName: 'pt-icon-thumbs-up',
       });
     }
@@ -485,14 +485,15 @@ export default class TreeView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isLoadingDialogVisible}
         >
-          <div className="dialogContent" style={{height: '120px'}}>
+          <div className="dialogContent" style={{ height: '120px' }}>
             <p>Starting Apache Drill...</p>
             <LoadingView />
             <br />
             <br />
-            <p>Note: This process might take almost 2 minutes on first start.</p>
+            <p>
+              Note: This process might take almost 2 minutes on first start.
+            </p>
           </div>
-          
         </Dialog>
         <Dialog
           className="pt-dark open-profile-alert-dialog"

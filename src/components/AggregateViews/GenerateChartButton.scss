@@ -27,12 +27,12 @@
 .pt-button.pt-intent-success.GenerateChartButton {
   bottom: 0;
   left: 0;
-  margin: 5px !important;
+  margin: 0px, 5px, 5px, 5px !important;
   position: absolute;
   background-color: $editorBackground;
   background-image: unset;
   border: 1px solid #383e4f !important;
-  border-radius: 0;
+  border-radius: 1em;
   font-weight: lighter;
   color: $connectionButtonFontColour;
   z-index: 10;

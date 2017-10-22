@@ -24,28 +24,28 @@
  * @Last modified time: 2017-10-03T15:35:19+11:00
  */
 
-import { observable, runInAction } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import yaml from 'js-yaml';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
-import { Intent } from '@blueprintjs/core';
 import { Broker, EventType } from '../helpers/broker';
 
 export default class Config {
   configFilePath;
-  @observable configInit;
-  @observable settings = {
+  @observable loading;
+  @observable
+  settings = {
     @observable mongoCmd: '',
     @observable drillCmd: '',
     @observable telemetryEnabled: null,
-    @observable showWelcomePageAtStart: true
+    @observable showWelcomePageAtStart: true,
   };
 
   constructor() {
     if (global.PATHS) {
       this.configFilePath = global.PATHS.configPath;
     }
-    this.configInit = false;
+    this.loading = false;
 
     const handleConfigFileChange = () => {
       this.load();
@@ -61,9 +61,12 @@ export default class Config {
     this.settings.drillCmd = '';
   }
 
+  @action.bound
   load() {
     console.log('Load from config.yml');
-    if (!this.configFilePath) { return; }
+    if (!this.configFilePath) {
+      return;
+    }
     // Call controller file get service
     featherClient()
       .service('files')
@@ -71,7 +74,11 @@ export default class Config {
       .then((file) => {
         runInAction('Apply changes to config from yaml file', () => {
           this.settings = yaml.safeLoad(file.content);
-          if (!this.configInit) { this.configInit = true; }
+          if (this.loading) {
+            runInAction(() => {
+              this.loading = false;
+            });
+          }
           console.log('Config loaded successfully!');
         });
       })
@@ -79,15 +86,19 @@ export default class Config {
         console.error(e);
         NewToaster.show({
           message: `Reading config.yml failed: ${e.message}`,
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       });
   }
 
+  @action.bound
   save() {
+    this.loading = true;
     console.log('Save to config.yml');
-    if (!this.configFilePath) { return; }
+    if (!this.configFilePath) {
+      return;
+    }
     try {
       return featherClient()
         .service('files')
@@ -98,13 +109,16 @@ export default class Config {
         })
         .then(() => {
           console.log('config.yml updated');
+          runInAction(() => {
+            this.loading = false;
+          });
         })
         .catch(console.error);
     } catch (e) {
       console.error(e);
       NewToaster.show({
         message: `Saving config.yml failed: ${e.message}`,
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }

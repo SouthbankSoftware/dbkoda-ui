@@ -213,7 +213,7 @@ class View extends React.Component {
                       message: globalString(
                         'editor/toolbar/executionScriptFailed',
                       ),
-                      intent: Intent.DANGER,
+                      className: 'danger',
                       iconName: 'pt-icon-thumbs-down',
                     });
                   });
@@ -239,7 +239,7 @@ class View extends React.Component {
                       message: globalString(
                         'editor/toolbar/executionScriptFailed',
                       ),
-                      intent: Intent.DANGER,
+                      className: 'danger',
                       iconName: 'pt-icon-thumbs-down',
                     });
                   });
@@ -311,7 +311,7 @@ class View extends React.Component {
                       message: globalString(
                         'editor/toolbar/executionScriptFailed',
                       ),
-                      intent: Intent.DANGER,
+                      className: 'danger',
                       iconName: 'pt-icon-thumbs-down',
                     });
                   });
@@ -334,7 +334,7 @@ class View extends React.Component {
                   message: globalString(
                     'editor/toolbar/possibleMultiLineCommand',
                   ),
-                  intent: Intent.WARNING,
+                  className: 'warning',
                   iconName: 'pEmilt-icon-thumbs-down',
                 });
               }
@@ -354,7 +354,7 @@ class View extends React.Component {
                     message: globalString(
                       'editor/toolbar/executionScriptFailed',
                     ),
-                    intent: Intent.DANGER,
+                    className: 'danger',
                     iconName: 'pt-icon-thumbs-down',
                   });
                 });
@@ -429,13 +429,13 @@ class View extends React.Component {
                 if (response) {
                   NewToaster.show({
                     message: response.result,
-                    intent: Intent.SUCCESS,
+                    className: 'success',
                     iconName: 'pt-icon-thumbs-up',
                   });
                 } else {
                   NewToaster.show({
                     message: globalString('editor/view/executionStopped'),
-                    intent: Intent.SUCCESS,
+                    className: 'success',
                     iconName: 'pt-icon-thumbs-up',
                   });
                 }
@@ -450,7 +450,7 @@ class View extends React.Component {
                     'editor/view/executionStoppedError',
                     reason.message,
                   ),
-                  intent: Intent.DANGER,
+                  className: 'danger',
                   iconName: 'pt-icon-thumbs-down',
                 });
                 this.finishedExecution({ id, shellId: shell });
@@ -756,7 +756,7 @@ class View extends React.Component {
           console.log('error:', err);
           NewToaster.show({
             message: globalString('explain/executionError'),
-            intent: Intent.DANGER,
+            className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
           runInAction(() => {
@@ -853,7 +853,7 @@ class View extends React.Component {
     } catch (err) {
       NewToaster.show({
         message: 'Error: ' + err.message,
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
       if (this.props.config.settings.telemetryEnabled) {
@@ -876,7 +876,7 @@ class View extends React.Component {
     } catch (err) {
       NewToaster.show({
         message: 'Error: ' + err.message,
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
       if (this.props.config.settings.telemetryEnabled) {

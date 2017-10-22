@@ -31,9 +31,10 @@ import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import path from 'path';
-import { Alert, AnchorButton, Intent } from '@blueprintjs/core';
+import { Alert, AnchorButton, Intent, Tooltip, Position } from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
+import ErrorView from '#/common/ErrorView';
 import { Broker, EventType } from '~/helpers/broker';
 import { featherClient } from '~/helpers/feathers';
 import Block from './AggregateBlocks/Block.jsx';
@@ -43,6 +44,10 @@ import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
 import { AggregateCommands } from './AggregateCommands.js';
 import GenerateChartButton from './GenerateChartButton';
+import ShowIcon from '../../styles/icons/show-icon.svg';
+import ImportIcon from '../../styles/icons/import-icon.svg';
+import ExportIcon from '../../styles/icons/export-icon.svg';
+
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -69,7 +74,8 @@ export default class GraphicalBuilder extends React.Component {
       ).selectedBlock,
       colorMatching: [],
       collection: props.collection,
-      isLoading: false
+      isLoading: true,
+      failed: false
     };
 
     Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
@@ -84,6 +90,9 @@ export default class GraphicalBuilder extends React.Component {
     this.currentDB = this.editor.collection.refParent.text;
     this.currentCollection = this.editor.collection.text;
 
+    // Set loading icon in graphical builder!
+
+
     // Add aggregate object to shell.
     const service = featherClient().service('/mongo-sync-execution');
     service.timeout = 30000;
@@ -97,11 +106,14 @@ export default class GraphicalBuilder extends React.Component {
       })
       .then((res) => {
         this.editor.aggregateID = JSON.parse(res).id;
+        this.state.isLoading = false;
         if (this.editor.blockList.length === 0) {
           this.addStartBlock();
         }
       })
       .catch((err) => {
+        this.state.isLoading = false;
+        this.setState({failed: true});
         console.error(err);
       });
   }
@@ -734,7 +746,7 @@ export default class GraphicalBuilder extends React.Component {
           if (e.code === 400) {
             NewToaster.show({
               message: globalString('aggregate_builder/no_active_connection'),
-              intent: Intent.DANGER,
+              className: 'danger',
               iconName: 'pt-icon-thumbs-down',
             });
             this.setOutputBroken();
@@ -972,7 +984,7 @@ export default class GraphicalBuilder extends React.Component {
     if (this.props.store.editorPanel.activeDropdownId === 'Default') {
       NewToaster.show({
         message: globalString('aggregate_builder/no_active_connection_for_import'),
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     } else {
@@ -1022,7 +1034,7 @@ export default class GraphicalBuilder extends React.Component {
       );
       NewToaster.show({
         message: warningMsg,
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }
@@ -1054,7 +1066,7 @@ export default class GraphicalBuilder extends React.Component {
           .catch((err) => {
             NewToaster.show({
               message: err.message,
-              intent: Intent.DANGER,
+              className: 'danger',
               iconName: 'pt-icon-thumbs-down',
             });
             throw err;
@@ -1084,7 +1096,7 @@ export default class GraphicalBuilder extends React.Component {
                 .then(() => {
                   NewToaster.show({
                     message: globalString('aggregate_builder/export_passed'),
-                    intent: Intent.SUCCESS,
+                    className: 'success',
                     iconName: 'pt-icon-thumbs-up',
                   });
                   runInAction('update fileName and path', () => {
@@ -1166,7 +1178,7 @@ export default class GraphicalBuilder extends React.Component {
         .catch((err) => {
           NewToaster.show({
             message: globalString('aggregate_builder/import_failed'),
-            intent: Intent.DANGER,
+            className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
           this.setState({isLoading: false});
@@ -1176,7 +1188,7 @@ export default class GraphicalBuilder extends React.Component {
     } else {
       NewToaster.show({
         message: globalString('aggregate_builder/import_failed'),
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
       this.setState({isLoading: false});
@@ -1322,7 +1334,7 @@ export default class GraphicalBuilder extends React.Component {
         this.selectBlock(count - 1).then(() => {
           NewToaster.show({
             message: globalString('aggregate_builder/import_passed'),
-            intent: Intent.SUCCESS,
+            className: 'success',
             iconName: 'pt-icon-thumbs-up',
           });
           this.setState({isLoading: false});
@@ -1372,29 +1384,72 @@ export default class GraphicalBuilder extends React.Component {
   }
 
   render() {
+    if (this.state.failed) {
+      return (
+        <div className="aggregateGraphicalBuilderWrapper">
+          <ErrorView
+            title={globalString('aggregate_builder/alerts/failed_title')}
+            error={globalString('aggregate_builder/alerts/failed_message')} />
+        </div>
+      );
+    }
     return (
       <div className="aggregateGraphicalBuilderWrapper">
         <div className="topButtons">
           {this.props.store.drawer.drawerChild === DrawerPanes.DEFAULT && (
-            <AnchorButton
-              className="showLeftPanelButton"
-              intent={Intent.SUCCESS}
-              text={globalString('aggregate_builder/show_left_panel')}
-              onClick={this.onShowLeftPanelClicked}
-            />
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('aggregate_builder/show_left_panel')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
+              >
+              <AnchorButton
+                className="showLeftPanelButton circleButton"
+                intent={Intent.SUCCESS}
+                onClick={this.onShowLeftPanelClicked}
+              >
+                <ShowIcon className="dbKodaSVG" width={20} height={20} />
+              </AnchorButton>
+            </Tooltip>
           )}
-          <AnchorButton
-            className="importButton"
-            intent={Intent.SUCCESS}
-            text={globalString('aggregate_builder/import_button')}
-            onClick={this.onImportButtonClickedFirst}
-          />
-          <AnchorButton
-            className="exportButton"
-            intent={Intent.SUCCESS}
-            text={globalString('aggregate_builder/export_button')}
-            onClick={this.onExportButtonClicked}
-          />
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('aggregate_builder/import_button')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+              >
+            <AnchorButton
+              className="importButton circleButton"
+              intent={Intent.SUCCESS}
+              onClick={this.onImportButtonClickedFirst}
+            >
+              <ImportIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('aggregate_builder/export_button')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="exportButton circleButton"
+              intent={Intent.SUCCESS}
+              onClick={this.onExportButtonClicked}
+            >
+              <ExportIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
+          <GenerateChartButton
+            connectionId={this.props.editor.currentProfile}
+            editorId={this.props.editor.id}
+        />
         </div>
         <Alert
           className="importAlert"
@@ -1503,10 +1558,6 @@ export default class GraphicalBuilder extends React.Component {
               <div className="loader" />
             </div>
           )}
-        <GenerateChartButton
-          connectionId={this.props.editor.currentProfile}
-          editorId={this.props.editor.id}
-        />
       </div>
     );
   }

@@ -96,7 +96,7 @@ export default class TranslatorPanel extends React.Component {
       // failed to translate code
       DBKodaToaster(Position.RIGHT_TOP).show({
         message: (<span dangerouslySetInnerHTML={{__html: msg}} />), // eslint-disable-line react/no-danger
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down'
       });
     }
@@ -130,7 +130,7 @@ export default class TranslatorPanel extends React.Component {
         console.error(err.message);
         DBKodaToaster(Position.RIGHT_TOP).show({
           message: (<span dangerouslySetInnerHTML={{__html: err.message}} />), // eslint-disable-line react/no-danger
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });
     });

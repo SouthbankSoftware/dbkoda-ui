@@ -9,10 +9,10 @@
       "palette_title": "Pipeline Palette",
       "details_title": "Stage Details",
       "no_block_selected": "No Stage Selected",
-      "show_left_panel": "Show Panel",
-      "hide_left_panel": "Hide Panel",
-      "byo_code": "BYO Code",
-      "form_code": "Code Form",
+      "show_left_panel": "Show Left Hand Aggregate Panel",
+      "hide_left_panel": "Hide Left Hand Aggregate Panel",
+      "byo_code": "Code it Yourself!",
+      "form_code": "Code it with a Form",
       "no_active_connection":
         "dbKoda has lost connection to your Mongo Shell.\n Please close or export this aggregation and then import it or start again.",
       "no_active_connection_for_import":
@@ -39,21 +39,25 @@
         "importWarningText":
           " Warning, your current aggregate builder will be lost on import, please export your builder before importing a new one. ",
         "cancel": "Cancel",
-        "okay": "Okay"
+        "okay": "Okay",
+        "failed_title": "Aggregation Failed",
+        "failed_message":
+          "Aggregation failed on that collection for an unknown reason, please raise a bug using the support bundle button in the bottom right corner of the screen."
       },
       "invalid_aggregation_code":
         "Invalid aggregation code. Please check syntax."
     },
     "telemetry_dialog": {
-      "header": "Welcome!",
+      "header": "Hi There!",
       "content_first":
-        "We would like to gather information about how you are using the product so we can make it even more awesome.",
+        "Thanks for downloading and installing dbKoda - we need your help to make it better, so we  collect statistics on product utilization so we can work out how to best invest our efforts on improving the product.",
       "content_second":
-        "Is it okay if we collect some information about how you interact with dbKoda and send it back to our servers?",
-      "content_third": "You can read our full privacy policy ",
-      "privacy_link": "here",
+        "These statistics only include information about how often various parts of the product are used and NEVER include anything personally identifiable or even anything specific to your usage of the product. We just collect feature usage counters.",
+      "content_third":
+        "We use the Google Analytics API to collect these statistics which is used by zillions (OK, tens of millions) of websites. ",
+      "privacy_link": "See our privacy policy for more details.",
       "button_no": "No Thanks",
-      "button_yes": "Sure"
+      "button_yes": "Okay"
     },
     "output": {
       "headings": {
@@ -261,7 +265,7 @@
         "closeConnection": "Close Connection",
         "editProfile": "Edit Profile",
         "editors": "Editors:",
-        "newWindow": "New Window",
+        "newWindow": "New Editor",
         "deleteProfile": "Delete Profile"
       },
       "closeAlert": {

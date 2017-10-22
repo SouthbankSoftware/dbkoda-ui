@@ -35,7 +35,7 @@ import { Broker, EventType } from '../../helpers/broker';
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config
+  config: allStores.config,
 }))
 @observer
 export default class Analytics extends React.Component {
@@ -107,8 +107,27 @@ export default class Analytics extends React.Component {
    *  @param {Object} profile - An object that represents the newly created profile
    */
   newProfileCreated(profile) {
-    const mongoVersion = profile.dbVersion;
-    this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoVersion);
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      const mongoVersion = profile.dbVersion;
+      this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoVersion);
+    }
+  }
+
+  /**
+   * 
+   * function to be called when activity goes to the controller.
+   * @param {String} service - The service type that has been called.
+   */
+  controllerActivity(service) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
+    }
+  }
+
+  keyFeatureEvent(feature) {
+    if (this.props.store.userPreferences.telemetryEnabled) {
+      this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
+    }
   }
 
   /**
@@ -131,23 +150,6 @@ export default class Analytics extends React.Component {
         break;
     }
     this._sendEvent(type, 'Feedback', feedback.comments);
-  }
-
-  /**
-   *
-   * function to be called when activity goes to the controller.
-   * @param {String} service - The service type that has been called.
-   */
-  controllerActivity(service) {
-    if (this.props.config.settings.telemetryEnabled) {
-      this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
-    }
-  }
-
-  keyFeatureEvent(feature) {
-    if (this.props.config.settings.telemetryEnabled) {
-      this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
-    }
   }
 
   /**

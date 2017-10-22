@@ -34,7 +34,6 @@ import {
 } from '#/common/mobxDumpenvyExtension';
 import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
-import { Intent } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
 import { Broker, EventType } from '../helpers/broker';
@@ -70,11 +69,17 @@ global.EOL = global.IS_ELECTRON
 export default class Store {
   api;
   @observable locale = 'en';
-  @observable version = '0.7.2';
+  @observable version = '0.7.3';
   @observable updateAvailable = false;
   @observable profiles = observable.map();
   @observable editors = observable.map();
   @observable outputs = observable.map();
+
+  @observable
+  userPreferences = observable({
+    telemetryEnabled: true,
+    showWelcomePageAtStart: true,
+  });
 
   @observable
   welcomePage = observable({
@@ -264,7 +269,7 @@ export default class Store {
       NewToaster.show({
         message:
           'Error: Please select an open connection from the Profile Dropdown.',
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }
@@ -289,7 +294,7 @@ export default class Store {
         console.error(err);
         NewToaster.show({
           message: 'Error: ' + err.message,
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       });
@@ -316,7 +321,7 @@ export default class Store {
       .catch((err) => {
         NewToaster.show({
           message: err.message,
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
         throw err;

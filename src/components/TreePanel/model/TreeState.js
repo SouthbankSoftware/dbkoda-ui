@@ -219,7 +219,7 @@ export default class TreeState {
         console.log('Sample attributes does not currently support Shell versions lower than 3.1, detected version is: ', profile.shellVersion);
          NewToaster.show({
           message: 'Sorry, sampling of collection not currently supported for Mongo shell versions lower than 3.1',
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });
       } else {
@@ -253,7 +253,7 @@ export default class TreeState {
          console.log('Sample Attributes could not determine the shell version, detected version is: ', profile.shellVersion);
          NewToaster.show({
           message: 'Sorry, sampling of collections failed as we can not detect a supported Mongo Shell Version',
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });
     }
@@ -285,7 +285,7 @@ export default class TreeState {
       } catch (err) {
         NewToaster.show({
           message: 'Sorry, sampling of collection failed! Please try again.',
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });
         reject('Sampling of Attributes Failed: ', err);

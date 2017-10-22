@@ -9,7 +9,6 @@
 import { Doc } from 'codemirror';
 import _ from 'lodash';
 import { NewToaster } from '#/common/Toaster';
-import { Intent } from '@blueprintjs/core';
 
 const MAX_DOCUMENTS = 500;
 
@@ -128,7 +127,7 @@ export default class StaticApi {
           // Toaster Notification
           NewToaster.show({
             message: globalString('output/editor/exceededMaxDocs'),
-            intent: Intent.WARNING,
+            className: 'warning',
             iconName: 'pt-icon-thumbs-down',
           });
         }
@@ -164,7 +163,7 @@ export default class StaticApi {
           // Toaster Notification
           NewToaster.show({
             message: globalString('output/editor/exceededMaxDocs'),
-            intent: Intent.WARNING,
+            className: 'warning',
             iconName: 'pt-icon-thumbs-down',
           });
         }

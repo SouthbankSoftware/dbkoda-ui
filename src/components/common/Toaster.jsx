@@ -24,10 +24,16 @@
  * @Last modified by:   mike
  * @Last modified time: 2017-03-28 16:22:02
  */
-import {Position, Toaster} from '@blueprintjs/core';
+import { Position, Toaster } from '@blueprintjs/core';
 
-export const NewToaster = Toaster.create({className: 'my-toaster', position: Position.TOP_RIGHT});
+export const NewToaster = Toaster.create({
+  className: 'dbkoda-toaster',
+  position: Position.TOP_RIGHT,
+});
 
 export const DBKodaToaster = () => {
-  return Toaster.create({className: 'dbkoda-toaster', position: Position.TOP_RIGHT});
+  return Toaster.create({
+    className: 'dbkoda-toaster',
+    position: Position.TOP_RIGHT,
+  });
 };

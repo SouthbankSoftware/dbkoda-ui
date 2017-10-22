@@ -187,7 +187,7 @@ export default class ListView extends React.Component {
         this.closeOpenConnectionAlert();
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />), // eslint-disable-line react/no-danger
-          intent: Intent.DANGER,
+          classNAme: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       });
@@ -284,7 +284,7 @@ export default class ListView extends React.Component {
     this.closeOpenConnectionAlert();
     DBKodaToaster(position).show({
       message,
-      intent: Intent.SUCCESS,
+      className: 'success',
       iconName: 'pt-icon-thumbs-up',
     });
   }
@@ -315,7 +315,7 @@ export default class ListView extends React.Component {
           }
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
-            intent: Intent.SUCCESS,
+            className: 'success ',
             iconName: 'pt-icon-thumbs-up',
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
@@ -338,7 +338,7 @@ export default class ListView extends React.Component {
           }
           NewToaster.show({
             message: 'Error: ' + err.message,
-            intent: Intent.DANGER,
+            className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
@@ -354,7 +354,7 @@ export default class ListView extends React.Component {
       }
       NewToaster.show({
         message: globalString('profile/noProfile'),
-        intent: Intent.DANGER,
+        classNAme: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }
@@ -376,7 +376,7 @@ export default class ListView extends React.Component {
         }
         NewToaster.show({
           message: globalString('profile/notClosed'),
-          intent: Intent.DANGER,
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       } else {
@@ -400,7 +400,7 @@ export default class ListView extends React.Component {
       }
       NewToaster.show({
         message: globalString('profile/noProfile'),
-        intent: Intent.DANGER,
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }
@@ -419,7 +419,7 @@ export default class ListView extends React.Component {
     }
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
-      intent: Intent.SUCCESS,
+      className: 'success',
       iconName: 'pt-icon-thumbs-up',
     });
     this.closeConnectionRemoveAlert();

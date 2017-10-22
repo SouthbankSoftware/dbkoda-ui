@@ -43,6 +43,20 @@
   input[type='password']:focus {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
+    border-radius: 0px;
+  }
+  input[type='Numeric'] {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    border-top-left-radius: 0.4em !important;
+    border-top-right-radius: 0em !important;
+    border-bottom-left-radius: 0.4em !important;
+    border-bottom-right-radius: 0em !important;
+  }
+  input[type='Numeric']:focus {
+    border-top-left-radius: 0.4em !important;
+    border-top-right-radius: 0em !important;
+    border-bottom-left-radius: 0.4em !important;
+    border-bottom-right-radius: 0em !important;
   }
 
   .form-scrollable {
@@ -93,17 +107,40 @@
 
     .pt-numeric-input {
       .pt-input-group {
-        width: calc(100% - 30px);
+        width: calc(50% - 30px);
       }
       .pt-button-group {
+        border-left: 1px solid $defaultFontColor;
         .pt-icon-chevron-up,
         .pt-icon-chevron-down {
-          border-radius: 0px !important;
+          background: unset !important;
+          box-shadow: none !important;
+          background-color: $white !important;
+          color: $defaultFontColor !important;
+        }
+        .pt-icon-chevron-up::before,
+        .pt-icon-chevron-down::before {
+          color: $defaultFontColor !important;
+        }
+        .pt-icon-chevron-up {
+        }
+        .pt-icon-chevron-down {
         }
       }
       .pt-input {
         min-width: 170px;
         width: 100%;
+      }
+    }
+
+    .pt-numeric-input:focus {
+      .pt-button-group {
+        .pt-icon-chevron-up {
+          background-color: $connectionActiveTextFieldBackgroundColour !important;
+        }
+        .pt-icon-chevron-down {
+          background-color: $connectionActiveTextFieldBackgroundColour !important;
+        }
       }
     }
 
@@ -126,14 +163,16 @@
 
     .tableHeader {
       height: 60px;
-      margin-bottom: 5px;
+      margin-bottom: 15px;
       padding: 15px;
+      border-bottom: 1px solid $fieldGroupTitleUnderline;
 
       .pt-icon-add {
+        background: unset !important;
         background-color: $fieldGroupHeaderIcon !important;
-        :hover {
-          background-color: #3f545b !important;
-        }
+      }
+      .pt-icon-add:hover {
+        background-color: #272a3a !important;
       }
 
       .pt-icon-trash {
@@ -141,6 +180,9 @@
         :hover {
           background-color: #a5535e !important;
         }
+      }
+      .pt-icon-trash:hover::before {
+        color: $white !important;
       }
 
       .left {
@@ -162,6 +204,10 @@
       .pt-icon-delete {
         color: $fieldGroupListIcon !important;
         margin: 0;
+        background: unset !important;
+      }
+      .pt-icon-delete:hover::before {
+        color: $white !important;
       }
     }
 
@@ -172,7 +218,7 @@
       .pt-input,
       .pt-select,
       .pt-numeric-input {
-        width: 100%;
+        width: 40%;
         min-width: 95px;
       }
     }
@@ -311,7 +357,10 @@
     border: none;
     background: #bfbec0 !important;
     color: $connectionActiveTextFieldTextColour !important;
-    border-radius: 0px;
+    border-radius: 0.4em;
+  }
+  .Select-clear-zone {
+    display: none;
   }
   .is-open > .Select-control {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
