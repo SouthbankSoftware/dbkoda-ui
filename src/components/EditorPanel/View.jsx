@@ -318,28 +318,32 @@ class View extends React.Component {
                 });
             } else {
               // Quick check if line is a full command:
-              if (
-                !content.match(/^ *db./g) &&
-                !content.match(/^ *sh./g) &&
-                !content.match(/^ *rs./g) &&
-                !content.match(/^ *db *$/g) &&
-                !content.match(/^ *use /g) &&
-                !content.match(/^ *show /g) &&
-                !content.match(/^ *it */g) &&
-                !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
-                !content.match(/^ *var/g) &&
-                !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
-              ) {
-                NewToaster.show({
-                  message: globalString(
-                    'editor/toolbar/possibleMultiLineCommand',
-                  ),
-                  className: 'warning',
-                  iconName: 'pEmilt-icon-thumbs-down',
-                });
+              if (type !== 'os') {
+                if (
+                  !content.match(/^ *db./g) &&
+                  !content.match(/^ *sh./g) &&
+                  !content.match(/^ *rs./g) &&
+                  !content.match(/^ *db *$/g) &&
+                  !content.match(/^ *use /g) &&
+                  !content.match(/^ *show /g) &&
+                  !content.match(/^ *it */g) &&
+                  !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
+                  !content.match(/^ *var/g) &&
+                  !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
+                ) {
+                  NewToaster.show({
+                    message: globalString(
+                      'editor/toolbar/possibleMultiLineCommand',
+                    ),
+                    className: 'warning',
+                    iconName: 'pEmilt-icon-thumbs-down',
+                  });
+                }
               }
               // Send request to feathers client
-            const service = featherClient().service('/mongo-shells');
+            const service = type && type === 'os'
+                ? featherClient().service('/os-execution')
+                : featherClient().service('/mongo-shells');
             service.timeout = 30000;
             service
               .update(profileId, {
