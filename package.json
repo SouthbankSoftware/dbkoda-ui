@@ -30,7 +30,7 @@
     "dev:analyzer": "yarn run clean && webpack --config webpack/analyzer.js",
     "start": "http-server ./dist -p 3000 -c-1",
     "clean": "rimraf ./dist rmdir",
-    "build": "webpack --config webpack/prod.js --optimize-minimize",
+    "build": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack/prod.js --optimize-minimize",
     "test": "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
     "test:dev": "yarn flow && yarn run eslint && yarn run jest",
     "mlaunch:init": "mlaunch init --single",
