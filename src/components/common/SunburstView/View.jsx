@@ -30,7 +30,9 @@ import React from 'react';
 import * as d3 from 'd3';
 import filesize from 'filesize';
 import { observe } from 'mobx';
+import { debounce } from 'lodash';
 import './View.scss';
+
 
 // Breadcrumb dimensions: width, height, spacing, width of tip/tail
 const b = {
@@ -552,7 +554,7 @@ export default class View extends React.Component {
     }
   }
   componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', debounce(this.handleResize, 400));
     this.createView();
   }
 
