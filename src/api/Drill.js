@@ -12,11 +12,14 @@ export default class DrillApi {
     this.store = store;
     this.api = api;
   }
+  getDrillCompatibleAlias(alias) {
+    return alias.replace(/\.|:/g, '-').replace(/\s/g, '');
+  }
   @action.bound
   checkForExistingDrillProfile = (options = {}) => {
     // Options will contain options.db
     const profile = this.store.profileList.selectedProfile;
-    const profileAlias = profile.alias.replace(/:/g, '-').replace(/\s/g, '');
+    const profileAlias = this.getDrillCompatibleAlias(profile.alias);
     const profileDB = options.db ? options.db : 'admin';
     if (
       this.profileDBHash[profileAlias] &&
@@ -33,7 +36,7 @@ export default class DrillApi {
     // options.type = EditorTypes.DRILL;
     const query = {};
     const profile = this.store.profileList.selectedProfile;
-    query.alias = profile.alias.replace(/:/g, '-').replace(/\s/g, '');
+    query.alias = this.getDrillCompatibleAlias(profile.alias);
     if (options.pass) {
       query.url = StaticApi.mongoProtocol +
         profile.username +
@@ -103,7 +106,7 @@ export default class DrillApi {
   deleteProfileFromDrill = (options = {}) => {
     const query = {};
     const profile = (options.profile) ? options.profile : this.store.profileList.selectedProfile;
-    query.alias = profile.alias.replace(/:/g, '-').replace(/\s/g, '');
+    query.alias = this.getDrillCompatibleAlias(profile.alias);
 
     if (options.removeAll) {
       query.removeAll = true;
