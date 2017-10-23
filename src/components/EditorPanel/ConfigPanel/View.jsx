@@ -22,7 +22,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-10-17T14:47:21+11:00
+ * @Last modified time: 2017-10-23T15:44:29+11:00
  */
 
 import React from 'react';
@@ -122,7 +122,7 @@ export default class View extends React.Component {
         <div className="configPanelWrapper">
           <div className="configTitleWrapper">
             <h1><ConfigDatabaseIcon className="dbKodaSVG" width={25} height={25} /> {this.props.title}</h1>
-            {false && <LoadingView />}
+            { false && <LoadingView /> }
           </div>
           <div className="configContentWrapper">
             <div className="configLeftMenuWrapper" width={25}>
