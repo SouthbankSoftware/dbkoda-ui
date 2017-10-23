@@ -29,6 +29,12 @@
   display: flex;
   flex-direction: row;
   margin-top: 25px;
+  .loadingWrapper {
+    position: relative;
+    float: right;
+    width: 50px;
+    height: 50px;
+  }
   .configLeftMenuWrapper .configMenu {
     width: 250px;
     border-right: 1px solid $selectDarkBorderColor;

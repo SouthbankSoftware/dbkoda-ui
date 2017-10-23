@@ -231,7 +231,7 @@ export default class OutputApi {
             id: editor.id,
             connId: editor.currentProfile,
             title: editorTitle,
-            output: '',
+            output: JSON.stringify(outputJSON, null, 2),
             cannotShowMore: true,
             showingMore: false,
             commandHistory: [],
@@ -258,7 +258,7 @@ export default class OutputApi {
   @action.bound
   drillOutputAvailable(res) {
     const profile = this.store.profiles.get(res.profileId);
-    const strOutput = JSON.stringify(res.output);
+    const strOutput = JSON.stringify(res.output, null, 2);
     const editor = this.store.editors.get(res.id);
     const totalOutput =
       this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;

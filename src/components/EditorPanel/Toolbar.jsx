@@ -22,7 +22,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-10-13T13:57:02+11:00
+ * @Last modified time: 2017-10-23T15:45:03+11:00
  */
 
 import _ from 'lodash';
@@ -115,6 +115,8 @@ export default class Toolbar extends React.Component {
           this.saveFileAs();
         } else if (message === 'newEditor') {
           this.props.api.addEditor();
+        } else if (message === 'openPreferences') {
+          this.props.api.openConfigTab();
         }
       });
     }

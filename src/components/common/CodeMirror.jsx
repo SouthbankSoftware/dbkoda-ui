@@ -71,6 +71,7 @@ const CodeMirror = createReactClass({
   componentDidMount() {
     const CodeMirror = this.getCodeMirrorInstance();
     this.codeMirror = new CodeMirror(this.editorElement, this.props.options);
+    this.codeMirror.setOption('mode', this.props.options.mode); // for some unknown reason, the constructor on the above line is not setting the mode correctly
     this.codeMirror.on('change', this.codemirrorValueChanged);
     this.codeMirror.on('cursorActivity', this.cursorActivity);
     this.codeMirror.on('focus', this.focusChanged.bind(this, true));

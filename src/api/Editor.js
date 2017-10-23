@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-10-13T15:50:37+11:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-10-23T15:45:17+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -129,6 +129,12 @@ export default class EditorApi {
       });
       this.createNewEditorFailed();
     }
+  }
+
+  @action.bound
+  openConfigTab() {
+    this.store.configPage.isOpen = true;
+    this.store.editorPanel.activeEditorId = 'Config';
   }
 
   @action.bound

@@ -168,6 +168,13 @@ export default class Panel extends React.Component {
     this.closingTab = true;
   }
 
+  @action.bound
+  closeStorageView() {
+    this.props.store.profileList.selectedProfile.storageView.visible = false;
+    this.changeTab(this.props.store.editorPanel.activeEditorId);
+    this.closingTab = true;
+  }
+
   setEditorRef(editorId, cmRef) {
     this.editorRefs[editorId] = cmRef;
   }
@@ -276,6 +283,13 @@ export default class Panel extends React.Component {
     } else {
       this.props.store.outputPanel.currentTab = newTab;
       if (this.debug) console.log('Changing Tab to ', newTab);
+      if (newTab.indexOf('Explain') < 0 && newTab.indexOf('Details') < 0 && newTab.indexOf('EnhancedJson') < 0 && newTab.indexOf('TableView') < 0 && newTab.indexOf('Chart') < 0 && newTab.indexOf('Storage') < 0 ) {
+        if (this.editorRefs[newTab]) {
+          const cm = this.editorRefs[newTab].getCodeMirror();
+          cm.refresh();
+          cm.focus();
+        }
+      }
     }
   }
 
@@ -476,7 +490,11 @@ export default class Panel extends React.Component {
           id={'Storage-' + selectedProfile.id}
           title={'Storage-' + selectedProfile.alias}
           panel={<StoragePanel />}
-        />,
+        >
+          <Button className="pt-minimal" onClick={() => this.closeStorageView()}>
+            <span className="pt-icon-cross" />
+          </Button>
+        </Tab2>
       );
       tabs.push(profileTabs);
       if (selectedProfile.storageView.shouldFocus) {

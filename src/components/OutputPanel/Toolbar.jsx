@@ -179,6 +179,10 @@ export default class Toolbar extends React.Component {
           this.props.store.outputs.get(editorKey).chartPanel = null;
           this.props.store.outputPanel.clearingOutput = false;
           this.props.store.outputPanel.currentTab = editorKey;
+        } else if (currentTab.startsWith('Storage-')) {
+          this.props.store.profileList.selectedProfile.storageView.visible = false;
+          this.props.store.outputPanel.clearingOutput = false;
+          this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
         }
       },
       { name: 'reactionOutputToolbarClearOutput' },
