@@ -21,8 +21,8 @@
  * @Author: mike
  * @Date:   2017-09-20 10:35:04
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-09-20 10:35:00
+ * @Last modified by:   chris
+ * @Last modified time: 2017-10-23T15:45:47+11:00
  */
 
 /* eslint no-prototype-builtins:warn */
@@ -49,6 +49,7 @@ const FeedbackTypes = {
 
 @inject(allStores => ({
   store: allStores.store,
+  api: allStores.api,
 }))
 @observer
 export default class Panel extends React.Component {
@@ -345,6 +346,9 @@ export default class Panel extends React.Component {
           </span>
         </div>
         <div className="float_right">
+          <div className="configButton" onClick={this.props.api.openConfigTab}>
+            <span className="pt-icon-cog" />
+          </div>
           <div className="feedbackButton" onClick={this.onClickFeedback}>
             <HappyIcon width={10} height={10} />
           </div>

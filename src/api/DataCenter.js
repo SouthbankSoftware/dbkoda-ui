@@ -22,7 +22,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-10-13T13:46:52+11:00
+ * @Last modified time: 2017-10-23T15:45:28+11:00
  */
 
 
@@ -62,6 +62,7 @@ export default class DataCenter {
     this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
     this.removeEditor = this.editorApi.removeEditor.bind(this);
     this.addDrillEditor = this.editorApi.addDrillEditor.bind(this);
+    this.openConfigTab = this.editorApi.openConfigTab.bind(this);
 
     // Tree API public functions
     this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);

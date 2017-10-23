@@ -21,7 +21,7 @@
  * @Date:   2017-04-10 14:32:37
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-09-28T11:48:19+10:00
+ * @Last modified time: 2017-10-23T15:45:39+11:00
  */
 
 /* eslint-disable react/no-string-refs */
@@ -90,12 +90,6 @@ export default class Panel extends React.Component {
     this.props.store.welcomePage.currentContent = 'Keyboard Shortcuts';
   }
 
-  @action.bound
-  openConfigTab() {
-    this.props.store.configPage.isOpen = true;
-    this.props.store.editorPanel.activeEditorId = 'Config';
-  }
-
   render() {
     console.log('Telemetry Enabled:', this.props.config.settings.telemetryEnabled);
     return (
@@ -127,7 +121,7 @@ export default class Panel extends React.Component {
           {
             process.env.NODE_ENV === 'development' &&
             <div className="welcomeButtonWrapper">
-              <AnchorButton className="welcomeMenuButton openConfigBtn" onClick={this.openConfigTab}>
+              <AnchorButton className="welcomeMenuButton openConfigBtn" onClick={this.props.api.openConfigTab}>
                 <ConfigDatabaseIcon className="dbKodaSVG" width={30} height={30} />
                 Preferences
               </AnchorButton>
