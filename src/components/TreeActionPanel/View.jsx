@@ -45,21 +45,21 @@ import './View.scss';
 @inject(allStores => ({
   setDrawerChild: allStores.store.setDrawerChild,
   treeActionPanel: allStores.store.treeActionPanel,
-  editorPanel: allStores.store.editorPanel,
+  editorPanel: allStores.store.editorPanel
 }))
 @observer
 export default class TreeActionView extends React.Component {
   constructor(props) {
     super(props);
-    this.props.treeActionPanel.refreshTreeAfterExecution = false;
-    this.state = { formStyle: { height: window.innerHeight - 210 } };
+
+    this.state = {formStyle: { height: (window.innerHeight - 210)}};
   }
   handleKeyPress(event) {
-    // [Enter] should not submit the form.
-    if (event.keyCode === 13) {
-      event.preventDefault();
-    }
+  // [Enter] should not submit the form.
+  if (event.keyCode === 13) {
+    event.preventDefault();
   }
+}
   componentDidMount() {
     window.addEventListener('resize', this.onResize.bind(this));
     if (this.treeActionForm) {
@@ -73,7 +73,7 @@ export default class TreeActionView extends React.Component {
     }
   }
   onResize(e) {
-    this.setState({ formStyle: { height: e.target.innerHeight - 210 } });
+    this.setState({formStyle: { height: (e.target.innerHeight - 210)}});
   }
   @action.bound
   close(e) {
@@ -86,12 +86,6 @@ export default class TreeActionView extends React.Component {
   execute(e) {
     e.preventDefault();
     this.props.editorPanel.executingEditorAll = true;
-    console.log(this.props.treeActionPanel.refreshTreeAfterExecution);
-    if (this.props.treeActionPanel.refreshTreeAfterExecution === true) {
-      this.props.treeActionPanel.refreshTreeAfterExecution = false;
-    }
-    this.props.treeActionPanel.refreshTreeAfterExecution = true;
-    this.props.treeActionPanel.refreshTree = false;
   }
   render() {
     const { mobxForm, title } = this.props;
@@ -118,33 +112,27 @@ export default class TreeActionView extends React.Component {
     return (
       <div className="pt-dark form-scrollable">
         <h3 className="form-title">{title}</h3>
-        <form
-          ref={(f) => {
-            this.treeActionForm = f;
-          }}
-          onChange={mobxForm.onValueChange(mobxForm)}
-          style={this.state.formStyle}
-        >
+        <form ref={(f) => { this.treeActionForm = f; }} onChange={mobxForm.onValueChange(mobxForm)} style={this.state.formStyle}>
           {formFields}
           <p className="pt-form-helper-text">{mobxForm.error}</p>
         </form>
-        {!this.props.isAggregate && (
-          <div className="form-button-panel">
-            <button
-              className="pt-button pt-intent-success right-button"
-              disabled={!mobxForm.isValid}
-              onClick={this.execute}
-            >
-              {globalString('tree/executeButton')}
-            </button>
-            <button
-              className="pt-button pt-intent-primary right-button"
-              onClick={this.close}
-            >
-              {globalString('tree/closeButton')}
-            </button>
-          </div>
-        )}
+        { !this.props.isAggregate &&
+        <div className="form-button-panel">
+          <button
+            className="pt-button pt-intent-success right-button"
+            disabled={!mobxForm.isValid}
+            onClick={this.execute}
+          >
+            {globalString('tree/executeButton')}
+          </button>
+          <button
+            className="pt-button pt-intent-primary right-button"
+            onClick={this.close}
+          >
+            {globalString('tree/closeButton')}
+          </button>
+        </div>
+        }
       </div>
     );
   }

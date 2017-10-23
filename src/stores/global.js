@@ -162,7 +162,6 @@ export default class Store {
     formValues: '',
     isNewFormValues: false,
     editors: observable.map(),
-    refreshTreeAfterExecution: false
   };
 
   @observable
