@@ -199,6 +199,7 @@ class View extends React.Component {
                   output.profileId = profileId;
                   output.output = res; // JSON.stringify(res);
                   this.props.api.drillOutputAvailable(output);
+
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
@@ -246,6 +247,12 @@ class View extends React.Component {
                 });
             }
             this.props.store.editorPanel.executingEditorAll = false;
+            if (this.props.store.treeActionPanel.refreshTreeAfterExecution === true) {
+              console.log('Refresh Tree After Executing.');
+              this.props.store.treeActionPanel.refreshTreeAfterExecution = false;
+              console.log(this.props.store.treeActionPanel.refreshTree);
+              this.props.store.treeActionPanel.refreshTree = true;
+            }
           }
         },
       ),

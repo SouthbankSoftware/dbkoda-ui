@@ -57,6 +57,17 @@ export default class TreeToolbar extends React.Component {
       () => this.props.store.profileList.selectedProfile,
       () => this.onSelectProfile(),
     );
+    this.reactionToRefresh = reaction(
+      () => this.props.store.treeActionPanel.refreshTree,
+      () => {
+        console.log(this.props.store.treeActionPanel.refreshTree);
+        if (this.props.store.treeActionPanel.refreshTree === true) {
+          console.log('Refresh Tree');
+          this.refresh();
+          this.props.store.treeActionPanel.refreshTree = false;
+        }
+      },
+    );
   }
 
   componentDidMount() {
@@ -120,14 +131,12 @@ export default class TreeToolbar extends React.Component {
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-navbar-heading">
             {this.props.treeState.profileAlias.length >=
-            MAX_PROFILE_NAME_DISPLAYED ? (
-              this.props.treeState.profileAlias.substring(
-                0,
-                MAX_PROFILE_NAME_DISPLAYED,
-              ) + '...'
-            ) : (
-              this.props.treeState.profileAlias
-            )}
+            MAX_PROFILE_NAME_DISPLAYED
+              ? this.props.treeState.profileAlias.substring(
+                  0,
+                  MAX_PROFILE_NAME_DISPLAYED,
+                ) + '...'
+              : this.props.treeState.profileAlias}
           </div>
           <input
             className="pt-input"
