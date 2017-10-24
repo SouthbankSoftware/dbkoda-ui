@@ -1,6 +1,9 @@
 @import '../../styles/_defaultTheme.scss';
+.pt-tree-node-content:hover {
+  background-color: unset !important;
+}
 .pt-tree-node-content-1:hover {
-  background-color: $aggregateBlockBackgroundHover !important;
+  background-color: $aggregateBlockBackgroundHoverSecondary !important;
 }
 div.importAlert {
   color: $defaultFontColor;
@@ -204,6 +207,8 @@ div.Pane.vertical.Pane1 {
                   margin-right: 10px;
                 }
                 span.pt-tree-node-caret:hover {
+                }
+                span.pt-tree-node-caret-open {
                   background-color: $defaultFontColor;
                   color: $aggregateBlockBackgroundHover;
                 }
@@ -260,12 +265,14 @@ div.Pane.vertical.Pane1 {
                           }
                         }
                       }
-                      pt-tree-node-content:hover {
-                        background-color: $aggregateBlockBackgroundHover !important;
-                      }
                     }
                   }
                 }
+              }
+            }
+            .pt-tree-node-expanded {
+              .pt-tree-node-content-0 {
+                background-color: $aggregateBlockBackgroundHover !important;
               }
             }
           }
