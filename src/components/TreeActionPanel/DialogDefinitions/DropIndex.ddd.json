@@ -1,37 +1,39 @@
 {
-    "Title": "Drop Index",
-    "DefaultValues": {
-        "function": "dbkoda_DropIndexPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parentDB"
-        }, 
-        {
-            "name": "CollectionName",
-            "value": "treeNode.parentCOL"
-        },
-        {
-            "name": "IndexName",
-            "value": "treeNode"
-        }
-          ]
-    },
-    "Fields": [
-       {
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true
-        },
+  "Title": "Drop Index",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_DropIndexPreFill",
+    "arguments": [
       {
-            "name": "CollectionName",
-            "type": "Text",
-            "readOnly": true
-        },
-        {
-            "name": "IndexName",
-            "type": "Text",
-            "tooltip": "Name of the index (optional)",
-            "readOnly":true
-        }
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode.parentCOL"
+      },
+      {
+        "name": "IndexName",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true
+    },
+    {
+      "name": "CollectionName",
+      "type": "Text",
+      "readOnly": true
+    },
+    {
+      "name": "IndexName",
+      "type": "Text",
+      "tooltip": "Name of the index (optional)",
+      "readOnly": true
+    }
+  ]
 }

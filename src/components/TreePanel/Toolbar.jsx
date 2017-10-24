@@ -115,19 +115,22 @@ export default class TreeToolbar extends React.Component {
   }
 
   render() {
+    if (this.props.store.treeActionPanel.refreshTree) {
+      this.refresh();
+      this.props.store.treeActionPanel.refreshOnExecution = false;
+      this.props.store.treeActionPanel.refreshTree = false;
+    }
     return (
       <nav className=" treeToolbar pt-navbar pt-dark .modifier">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-navbar-heading">
             {this.props.treeState.profileAlias.length >=
-            MAX_PROFILE_NAME_DISPLAYED ? (
-              this.props.treeState.profileAlias.substring(
-                0,
-                MAX_PROFILE_NAME_DISPLAYED,
-              ) + '...'
-            ) : (
-              this.props.treeState.profileAlias
-            )}
+            MAX_PROFILE_NAME_DISPLAYED
+              ? this.props.treeState.profileAlias.substring(
+                  0,
+                  MAX_PROFILE_NAME_DISPLAYED,
+                ) + '...'
+              : this.props.treeState.profileAlias}
           </div>
           <input
             className="pt-input"

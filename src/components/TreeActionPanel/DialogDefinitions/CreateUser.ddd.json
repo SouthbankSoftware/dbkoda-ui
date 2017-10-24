@@ -1,43 +1,47 @@
 {
-    "Title": "Create User",
-    "DefaultValues": {
-        "function":"dbkoda_CreateUserPreFill" 
+  "Title": "Create User",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_CreateUserPreFill"
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Select",
+      "readOnly": false,
+      "tooltip": "The database which will be used to authenticate the user",
+      "lookup": "dbkoda_listdb"
     },
-    "Fields": [
+    {
+      "name": "UserName",
+      "type": "Text",
+      "readOnly": false
+    },
+    {
+      "name": "Password",
+      "type": "Text"
+    },
+    {
+      "name": "Roles",
+      "type": "Table",
+      "columns": [
         {
-            "name": "Database",
-            "type": "Select",
-            "readOnly": false,
-            "tooltip":"The database which will be used to authenticate the user",
-            "lookup": "dbkoda_listdb"
+          "name": "Database",
+          "type": "Select",
+          "lookup": "dbkoda_listdb"
         },
         {
-            "name": "UserName",
-            "type": "Text",
-            "readOnly": false
-        },
-        {
-            "name": "Password",
-            "type": "Text"
-        },
-        {
-            "name": "Roles",
-            "type": "Table",
-            "columns": [{
-                "name": "Database",
-                "type": "Select",
-                "lookup": "dbkoda_listdb"
-            }, {
-                "name": "Role",
-                "type": "Select",
-                "lookup": "dbkoda_listRoles"
-            }]
-        },
-        {
-            "name": "CustomData",
-            "tooltip":"A JSON document containing site-specific information",
-            "type": "Text",
-            "optional": true
+          "name": "Role",
+          "type": "Select",
+          "lookup": "dbkoda_listRoles"
         }
-    ] 
+      ]
+    },
+    {
+      "name": "CustomData",
+      "tooltip": "A JSON document containing site-specific information",
+      "type": "Text",
+      "optional": true
+    }
+  ]
 }

@@ -1,24 +1,29 @@
 {
-    "Title": "Drop Collection",
-    "DefaultValues": {
-        "function": "dbkoda_DropCollectionPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parentDB"
-        }, {
-            "name": "CollectionName",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true
-        },
-        {
-            "name": "CollectionName",
-            "type": "Text",
-            "readOnly": true
-        }
+  "Title": "Drop Collection",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_DropCollectionPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true
+    },
+    {
+      "name": "CollectionName",
+      "type": "Text",
+      "readOnly": true
+    }
+  ]
 }
