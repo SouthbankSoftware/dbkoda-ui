@@ -149,8 +149,7 @@
       "name": "DrillDatabase",
       "text": "Query Database with Drill",
       "icon": "pt-icon-add",
-      "noDialog": true,
-      "development": true
+      "noDialog": true
     }
   ],
   "collection": [
