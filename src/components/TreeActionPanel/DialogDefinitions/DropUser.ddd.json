@@ -1,31 +1,38 @@
 {
-    "Title": "Drop User",
-    "DefaultValues": {
-        "function": "dbkoda_DropUserPreFill",
-        "arguments": [{
-			"name": "UserId",
-			"value": "treeNode"
-		}, {
-			"name": "parentDB",
-			"value": "treeNode.parentDB"
-		}, {
-			"name": "parentCOL",
-			"value": "treeNode.parentCOL"
-		}]
+  "Title": "Drop User",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_DropUserPreFill",
+    "arguments": [
+      {
+        "name": "UserId",
+        "value": "treeNode"
+      },
+      {
+        "name": "parentDB",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "parentCOL",
+        "value": "treeNode.parentCOL"
+      }
+    ]
+  },
+  "Fields": [
+    {
+      "name": "UserId",
+      "type": "Text",
+      "readOnly": true
     },
-    "Fields": [{
-            "name": "UserId",
-            "type": "Text",
-            "readOnly": true
-        },
-        {
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true
-        },
-        {
-            "name": "UserName",
-            "type": "Text",
-            "readOnly": true
-        }]
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true
+    },
+    {
+      "name": "UserName",
+      "type": "Text",
+      "readOnly": true
+    }
+  ]
 }

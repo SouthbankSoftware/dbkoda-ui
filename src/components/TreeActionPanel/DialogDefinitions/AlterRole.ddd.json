@@ -1,8 +1,10 @@
 {
   "Title": "Alter Role",
+  "AutoRefresh": true,
   "DefaultValues": {
     "function": "dbkoda_AlterRolePreFill",
-    "arguments": [{
+    "arguments": [
+      {
         "name": "RoleName",
         "value": "treeNode"
       },
@@ -28,7 +30,8 @@
     {
       "name": "Roles",
       "type": "Table",
-      "columns": [{
+      "columns": [
+        {
           "name": "Database",
           "type": "Select",
           "readOnly": false,
@@ -39,12 +42,14 @@
           "type": "Select",
           "readOnly": false,
           "lookup": "dbkoda_listRoles"
-        }]
+        }
+      ]
     },
     {
       "name": "Privileges",
       "type": "Table",
-      "columns": [{
+      "columns": [
+        {
           "name": "Database",
           "type": "Select",
           "lookup": "dbkoda_listdb",
@@ -59,7 +64,8 @@
           "name": "Cluster",
           "type": "Boolean",
           "readOnly": false,
-          "tooltip": "Applies actions to the cluster (Overrides Database and Collection)",
+          "tooltip":
+            "Applies actions to the cluster (Overrides Database and Collection)",
           "rules": "boolean"
         },
         {
@@ -67,6 +73,8 @@
           "type": "Combo",
           "multi": true,
           "lookup": "dbkoda_listActions"
-        }]
-    }]
+        }
+      ]
+    }
+  ]
 }

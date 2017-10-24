@@ -47,7 +47,16 @@ export default class Palette extends React.Component {
   constructor(props) {
     super(props);
     this.updateShellPipeline = this.updateShellPipeline.bind(this);
-    this.state = {};
+    this.state = {
+      expanded: {
+        common: true,
+        queryAndAggregate: false,
+        groupAndJoin: false,
+        transform: false,
+        other: false,
+        all: false,
+      },
+    };
     this.blockList = this.getBlockList();
   }
 
@@ -147,6 +156,20 @@ export default class Palette extends React.Component {
     }
   }
 
+  @action.bound
+  onExpand(nodeName) {
+    console.log('Expanding ', nodeName);
+    this.state.expanded[nodeName] = true;
+    this.forceUpdate();
+  }
+
+  @action.bound
+  onCollapse(nodeName) {
+    console.log('Collapse ', nodeName);
+    this.state.expanded[nodeName] = false;
+    this.forceUpdate();
+  }
+
   /**
    * Gets a list of block types and converts it into a object that the listView can use.
    *
@@ -162,31 +185,49 @@ export default class Palette extends React.Component {
         hasCaret: true,
         label: 'Common',
         childNodes: [],
+        onExpand: () => this.onExpand('common'),
+        onCollapse: () => this.onCollapse('common'),
+        isExpanded: this.state.expanded.common,
       },
       {
         hasCaret: true,
         label: 'Query and Aggregate',
         childNodes: [],
+        onExpand: () => this.onExpand('queryAndAggregate'),
+        onCollapse: () => this.onCollapse('queryAndAggregate'),
+        isExpanded: this.state.expanded.queryAndAggregate,
       },
       {
         hasCaret: true,
         label: 'Group and Join',
         childNodes: [],
+        onExpand: () => this.onExpand('groupAndJoin'),
+        onCollapse: () => this.onCollapse('groupAndJoin'),
+        isExpanded: this.state.expanded.groupAndJoin,
       },
       {
         hasCaret: true,
         label: 'Transform',
         childNodes: [],
+        onExpand: () => this.onExpand('transform'),
+        onCollapse: () => this.onCollapse('transform'),
+        isExpanded: this.state.expanded.transform,
       },
       {
         hasCaret: true,
         label: 'Other',
         childNodes: [],
+        onExpand: () => this.onExpand('other'),
+        onCollapse: () => this.onCollapse('other'),
+        isExpanded: this.state.expanded.other,
       },
       {
         hasCaret: true,
         label: 'All',
         childNodes: [],
+        onExpand: () => this.onExpand('all'),
+        onCollapse: () => this.onCollapse('all'),
+        isExpanded: this.state.expanded.all,
       },
     ];
 
@@ -496,14 +537,11 @@ export default class Palette extends React.Component {
 
   @action.bound
   handleNodeClick(nodeData, _nodePath, e) {
-    console.log(e);
-    // const originallySelected = nodeData.isSelected;
-    // if (!e.shiftKey) {
-    //   this.forEachNode(this.state.nodes, n => (n.isSelected = false));
-    // }
-    // nodeData.isSelected =
-    //   originallySelected == null ? true : !originallySelected;
-    // this.setState(this.state);
+    if (nodeData.isExpanded) {
+      this.handleNodeCollapse(nodeData);
+    } else {
+      this.handleNodeExpand(nodeData);
+    }
   }
 
   @action.bound
@@ -519,6 +557,7 @@ export default class Palette extends React.Component {
   }
 
   render() {
+    console.log(this.blockList);
     return (
       <div className="aggregatePaletteWrapper">
         <nav className="aggregatePaletteToolbar pt-navbar pt-dark">

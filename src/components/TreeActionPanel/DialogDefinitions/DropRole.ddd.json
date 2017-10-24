@@ -1,24 +1,26 @@
 {
   "Title": "Drop Role",
+  "AutoRefresh": true,
   "DefaultValues": {
     "function": "dbkoda_DropRolePreFill",
-    "arguments": [{
-      "name": "parentDB",
-      "value": "treeNode.parentDB"
-    },
-    {
-      "name": "RoleName",
-      "value": "treeNode"
-    }
-  ]
+    "arguments": [
+      {
+        "name": "parentDB",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "RoleName",
+        "value": "treeNode"
+      }
+    ]
   },
   "Fields": [
     {
-        "name": "Database",
-        "type": "Select",
-        "readOnly": true,
-        "tooltip": "The database which contains the role",
-        "lookup": "dbkoda_listdb"
+      "name": "Database",
+      "type": "Select",
+      "readOnly": true,
+      "tooltip": "The database which contains the role",
+      "lookup": "dbkoda_listdb"
     },
     {
       "name": "RoleName",

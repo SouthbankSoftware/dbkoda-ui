@@ -162,6 +162,7 @@ export default class Store {
     formValues: '',
     isNewFormValues: false,
     editors: observable.map(),
+    refreshOnExecution: false,
   };
 
   @observable
@@ -373,7 +374,7 @@ export default class Store {
         } else {
           resolve();
         }
-        this.api.deleteProfileFromDrill({removeAll:true});
+        this.api.deleteProfileFromDrill({ removeAll: true });
       } else {
         resolve();
       }

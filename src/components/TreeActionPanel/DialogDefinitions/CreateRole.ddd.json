@@ -1,69 +1,76 @@
 {
-    "Title": "Create Role",
-    "DefaultValues": {
-        "function": "dbkoda_CreateRolePreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parent"
-          }
-        ]
-    },
-    "Fields": [
-        {
-            "name": "Database",
-            "type": "Select",
-            "readOnly": false,
-            "tooltip": "The database which will be associated with the Role",
-            "lookup": "dbkoda_listdb"
-        },
-        {
-            "name": "RoleName",
-            "type": "Text",
-            "readOnly": false
-        },
-        {
-            "name": "Roles",
-            "type": "Table",
-            "columns": [{
-                "name": "Database",
-                "type": "Select",
-                "readOnly": false,
-                "lookup": "dbkoda_listdb"
-            },
-            {
-                "name": "Role",
-                "type": "Select",
-                "readOnly": false,
-                "lookup": "dbkoda_listRoles"
-            }]
-        },
-        {
-          "name": "Privileges",
-          "type": "Table",
-          "columns": [{
-              "name": "Database",
-              "type": "Select",
-              "tooltip": "Applies actions to the Database",
-              "lookup": "dbkoda_listdb"
-            },
-            {
-              "name": "Collection",
-              "type": "Text",
-              "tooltip": "Applies actions to the Collection"
-            },
-            {
-              "name": "Cluster",
-              "type": "Boolean",
-              "readOnly": false,
-              "tooltip": "Applies actions to the cluster (Overrides Database and Collection)",
-              "rules": "boolean"
-            },
-            {
-              "name": "Actions",
-              "type": "Combo",
-              "multi": true,
-              "lookup": "dbkoda_listActions"
-            }]
-        }
+  "Title": "Create Role",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_CreateRolePreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parent"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Select",
+      "readOnly": false,
+      "tooltip": "The database which will be associated with the Role",
+      "lookup": "dbkoda_listdb"
+    },
+    {
+      "name": "RoleName",
+      "type": "Text",
+      "readOnly": false
+    },
+    {
+      "name": "Roles",
+      "type": "Table",
+      "columns": [
+        {
+          "name": "Database",
+          "type": "Select",
+          "readOnly": false,
+          "lookup": "dbkoda_listdb"
+        },
+        {
+          "name": "Role",
+          "type": "Select",
+          "readOnly": false,
+          "lookup": "dbkoda_listRoles"
+        }
+      ]
+    },
+    {
+      "name": "Privileges",
+      "type": "Table",
+      "columns": [
+        {
+          "name": "Database",
+          "type": "Select",
+          "tooltip": "Applies actions to the Database",
+          "lookup": "dbkoda_listdb"
+        },
+        {
+          "name": "Collection",
+          "type": "Text",
+          "tooltip": "Applies actions to the Collection"
+        },
+        {
+          "name": "Cluster",
+          "type": "Boolean",
+          "readOnly": false,
+          "tooltip":
+            "Applies actions to the cluster (Overrides Database and Collection)",
+          "rules": "boolean"
+        },
+        {
+          "name": "Actions",
+          "type": "Combo",
+          "multi": true,
+          "lookup": "dbkoda_listActions"
+        }
+      ]
+    }
+  ]
 }

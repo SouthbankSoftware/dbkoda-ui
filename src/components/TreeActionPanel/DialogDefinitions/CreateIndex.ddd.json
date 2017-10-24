@@ -1,101 +1,111 @@
 {
-    "Title": "Create Index",
-    "DefaultValues": {
-        "function": "dbkoda_CreateIndexPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parentDB"
-        }, {
-            "name": "CollectionName",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true,
-            "rules": "required"
-        },
-        {
-            "name": "CollectionName",
-            "label" : "Collection Name",
-            "type": "Text",
-            "readOnly": true,
-            "rules": "required",
-            "lookup": "dbkoda_listcollections",
-            "lookup_arguments": [{
-                "name": "db",
-                "value": "treeNode.parentDB"
-            }]
-        },
-        {
-            "name": "IndexName",
-            "label": "Index Name (optional)",
-            "type": "Text",
-            "tooltip": "Name of the index (optional)"
-        },
-        {
-            "name": "Unique",
-            "type": "Boolean",
-            "readOnly": false,
-            "tooltip": "Are the values in the index unique?",
-            "rules": "boolean"
-        },
-        {
-            "name": "Keys",
-            "type": "Table",
-            "columns": [{
-                    "name": "AttributeName",
-                    "label": "Attribute",
-                    "tooltip": "Name of the attribute to be indexed",
-                    "type": "Combo",
-                    "lookup": "dbkodaListAttributes",
-                    "lookup_arguments": [{
-                            "name": "db",
-                            "value": "treeNode.parentDB"
-                        },
-                        {"name": "collection",
-                        "value": "treeNode"}
-                    ]
-
-                },
-                {
-                    "name": "Direction",
-                    "Label": "Ascending?",
-                    "type": "Select",
-                    "tooltip": "1 for ascending index, -1 for descending index",
-                    "lookup": "dbkoda_indexOptions"
-                }
-            ]
-        },
-        {
-            "name": "Background",
-            "label": "Background Build",
-            "type": "Boolean",
-            "readOnly": false,
-            "tooltip": "Build index in the background?",
-            "rules": "boolean"
-        },
-        {
-            "name": "Sparse",
-            "type": "Boolean",
-            "readOnly": false,
-            "tooltip": "Only index documents that contain the field"
-        },
-        {
-            "name": "partialFilterExpression",
-            "label": "Partial Filter",
-            "type": "Text",
-            "readOnly": false,
-            "tooltip": "filter condition that limits index scope"
-        },
-        {
-            "name": "expireAfterSeconds",
-            "label": "Expire After Seconds",
-            "type": "Numeric",
-            "readOnly": false,
-            "tooltip": "Time to Live (TTL) for documents",
-            "rules": "integer"
-        }
+  "Title": "Create Index",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_CreateIndexPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required"
+    },
+    {
+      "name": "CollectionName",
+      "label": "Collection Name",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required",
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "treeNode.parentDB"
+        }
+      ]
+    },
+    {
+      "name": "IndexName",
+      "label": "Index Name (optional)",
+      "type": "Text",
+      "tooltip": "Name of the index (optional)"
+    },
+    {
+      "name": "Unique",
+      "type": "Boolean",
+      "readOnly": false,
+      "tooltip": "Are the values in the index unique?",
+      "rules": "boolean"
+    },
+    {
+      "name": "Keys",
+      "type": "Table",
+      "columns": [
+        {
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be indexed",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributes",
+          "lookup_arguments": [
+            {
+              "name": "db",
+              "value": "treeNode.parentDB"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }
+          ]
+        },
+        {
+          "name": "Direction",
+          "Label": "Ascending?",
+          "type": "Select",
+          "tooltip": "1 for ascending index, -1 for descending index",
+          "lookup": "dbkoda_indexOptions"
+        }
+      ]
+    },
+    {
+      "name": "Background",
+      "label": "Background Build",
+      "type": "Boolean",
+      "readOnly": false,
+      "tooltip": "Build index in the background?",
+      "rules": "boolean"
+    },
+    {
+      "name": "Sparse",
+      "type": "Boolean",
+      "readOnly": false,
+      "tooltip": "Only index documents that contain the field"
+    },
+    {
+      "name": "partialFilterExpression",
+      "label": "Partial Filter",
+      "type": "Text",
+      "readOnly": false,
+      "tooltip": "filter condition that limits index scope"
+    },
+    {
+      "name": "expireAfterSeconds",
+      "label": "Expire After Seconds",
+      "type": "Numeric",
+      "readOnly": false,
+      "tooltip": "Time to Live (TTL) for documents",
+      "rules": "integer"
+    }
+  ]
 }

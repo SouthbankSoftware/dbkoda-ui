@@ -1,44 +1,51 @@
 {
-    "Title": "Rename Collection",
-    "DefaultValues": {
-        "function": "dbkoda_RenameCollectionPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parentDB"
-        }, {
-            "name": "CollectionName",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true,
-            "rules": "required"
-        },
-        {
-            "name": "CollectionName",
-            "label" : "Collection Name",
-            "type": "Text",
-            "readOnly": true,
-            "rules": "required",
-            "lookup": "dbkoda_listcollections",
-            "lookup_arguments": [{
-                "name": "db",
-                "value": "treeNode.parentDB"
-            }]
-        },
-        {
-            "name": "NewCollectionName",
-            "label": "New Collection Name",
-            "type": "Text" 
-        },
-        {
-            "name": "dropTarget",
-            "label": "Drop target collection?",
-            "type": "Boolean",
-            "tooltip": "Danger!  If true, destination will be dropped before Rename", 
-            "default":false
-        }  
+  "Title": "Rename Collection",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_RenameCollectionPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required"
+    },
+    {
+      "name": "CollectionName",
+      "label": "Collection Name",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required",
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "treeNode.parentDB"
+        }
+      ]
+    },
+    {
+      "name": "NewCollectionName",
+      "label": "New Collection Name",
+      "type": "Text"
+    },
+    {
+      "name": "dropTarget",
+      "label": "Drop target collection?",
+      "type": "Boolean",
+      "tooltip": "Danger!  If true, destination will be dropped before Rename",
+      "default": false
+    }
+  ]
 }

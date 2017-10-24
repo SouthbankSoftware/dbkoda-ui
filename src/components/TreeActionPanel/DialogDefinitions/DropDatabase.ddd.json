@@ -1,16 +1,20 @@
 {
-    "Title": "Drop Database",
-    "DefaultValues": {
-        "function": "dbkoda_DropDatabasePreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true
-        }
+  "Title": "Drop Database",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_DropDatabasePreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true
+    }
+  ]
 }
