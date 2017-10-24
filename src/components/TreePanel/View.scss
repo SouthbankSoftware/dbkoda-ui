@@ -66,6 +66,9 @@
 }
 
 .treeToolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   background-color: $navbarLeftBackground !important;
 
   .pt-button {
@@ -98,6 +101,7 @@
 
   .refreshTreeButton {
     max-width: 30px;
+    float: right;
   }
 }
 
