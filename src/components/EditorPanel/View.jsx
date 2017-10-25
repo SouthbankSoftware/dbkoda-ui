@@ -183,9 +183,13 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              let queries = currEditorValue.replace(/\t/g, '  ').split(';');
+              console.log('test comments removal: ', currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1'));
+              let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').split(';');
               queries = queries.filter((query) => {
                 return (query.trim().length > 0);
+              });
+              queries = queries.map((query) => {
+                return query.trim();
               });
               console.log('queries: ', queries);
               service
