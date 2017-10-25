@@ -34,6 +34,7 @@ import FieldControl from './FieldControls';
 
 export default observer(({ members }) => {
   const labels = [];
+  console.log('wahaj test table: ', members);
   if (members.value && members.value.length > 0) {
     const cols = members.map((member) => {
       return member.map((fld) => {
@@ -62,6 +63,17 @@ export default observer(({ members }) => {
     );
   }
 
+  let tableHeaderClassname = 'tableColumnHeader';
+  let tableContentClassname = 'scrollableDiv field-group';
+
+  if (members.options && members.options.maxColumns) {
+    tableHeaderClassname += ' columns-' + members.options.maxColumns + '-max';
+    tableContentClassname += ' columns-' + members.options.maxColumns + '-max';
+  } else {
+    tableHeaderClassname += ' columns-2-max';
+    tableContentClassname += ' columns-2-max';
+  }
+
   return (
     <fieldset
       className="tableFieldSet"
@@ -83,10 +95,10 @@ export default observer(({ members }) => {
           />
         </div>
       </div>
-      <div className="tableColumnHeader">
+      <div className={tableHeaderClassname}>
         {labels}
       </div>
-      <div className="scrollableDiv field-group">
+      <div className={tableContentClassname}>
         {members.map(member => (
           <FormTableRow key={member.id} member={member} />
         ))}

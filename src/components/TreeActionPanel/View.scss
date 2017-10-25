@@ -190,14 +190,6 @@
       }
     }
 
-    .tableColumnHeader {
-      display: flex;
-    }
-
-    .tableFields {
-      display: flex;
-    }
-
     .field-group {
       padding: 0 9px;
 
@@ -220,6 +212,31 @@
       .pt-numeric-input {
         width: 40%;
         min-width: 95px;
+      }
+    }
+
+    div.columns-1-max {
+      div.pt-form-group {
+        width: 96%;
+        padding: 0;
+      }
+    }
+    div.columns-2-max {
+      div.pt-form-group {
+        width: 44%;
+        padding: 0
+      }
+    }
+    div.columns-3-max {
+      div.pt-form-group {
+        width: 30%;
+        padding: 0
+      }
+    }
+    div.columns-4-max {
+      div.pt-form-group {
+        width: 20%;
+        padding: 0
       }
     }
   }
