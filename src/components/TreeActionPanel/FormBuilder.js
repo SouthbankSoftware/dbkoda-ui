@@ -101,6 +101,11 @@ export default class FormBuilder {
         res.multi = defField.multi;
       }
     }
+    if (defField.type == 'Table') {
+      if (Object.prototype.hasOwnProperty.call(defField, 'maxColumns')) {
+        res.maxColumns = defField.maxColumns;
+      }
+    }
     return res;
   };
   /**
@@ -231,6 +236,13 @@ export default class FormBuilder {
             result.options[fldName] = { multi: fld.multi };
           }
           result.multiCombo.push(fldName);
+        }
+        if (Object.prototype.hasOwnProperty.call(fld, 'maxColumns')) {
+          if (result.options[fldName]) {
+            result.options[fldName].maxColumns = fld.maxColumns;
+          } else {
+            result.options[fldName] = { maxColumns: fld.maxColumns };
+          }
         }
 
         if (fld.fieldQuery) {
