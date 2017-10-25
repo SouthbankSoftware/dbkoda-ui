@@ -26,37 +26,30 @@
  */
 
 import React from 'react';
-import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import ApplicationIcon from '~/styles/icons/menu-application-icon.svg';
-import PathsIcon from '~/styles/icons/menu-paths-icon.svg';
-import MenuItem from './MenuItem';
+import { AnchorButton, Tooltip, Intent, Position } from '@blueprintjs/core';
 
 @inject(allStores => ({
   store: allStores.store
 }))
 @observer
-export default class Menu extends React.Component {
-  @action.bound
-  isItemSelected(itemName) {
-    return (this.props.selectedMenu === itemName);
-  }
-
-  @action.bound
-  changeMenuSelected(menuName) {
-    this.props.store.configPage.selectedMenu = menuName;
-  }
-
+export default class MenuItem extends React.Component {
   render() {
-    return (
-      <div className="configMenu">
-        <MenuItem name="Application" isSelected={this.isItemSelected} changeMenu={this.changeMenuSelected}>
-          <ApplicationIcon className="dbKodaSVG" width={20} height={20} />
-        </MenuItem>
-        <MenuItem name="Paths" isSelected={this.isItemSelected} changeMenu={this.changeMenuSelected}>
-          <PathsIcon className="dbKodaSVG" width={20} height={20} />
-        </MenuItem>
-      </div>
-    );
+    const itemClass = this.props.isSelected(this.props.name) ?
+      'menuItem selected' :
+      'menuItem';
+    return (<div className={itemClass}>
+      <Tooltip
+        intent={Intent.PRIMARY}
+        hoverOpenDelay={1000}
+        content={this.props.name}
+        tooltipClassName="pt-dark"
+        position={Position.TOP}
+      >
+        <AnchorButton className={`menuItem${this.props.name}`} onClick={() => this.props.changeMenu(this.props.name)}>
+          { this.props.children }
+        </AnchorButton>
+      </Tooltip>
+    </div>);
   }
 }

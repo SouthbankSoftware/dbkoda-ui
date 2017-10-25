@@ -25,6 +25,11 @@
  */
 @import '../../../styles/_defaultTheme.scss';
 
+$menuColor1: #7fa5ad;
+$menuColor2: #cf7769;
+$menuColor3: #adc88f;
+$menuColor4: #837395;
+
 .configContentWrapper {
   display: flex;
   flex-direction: row;
@@ -36,9 +41,17 @@
     height: 50px;
   }
   .configLeftMenuWrapper .configMenu {
+    display: flex;
+    flex-direction: row;
     width: 250px;
     border-right: 1px solid $selectDarkBorderColor;
-
+    .menuItem {
+      width: 100px;
+      height: 100px;
+    }
+    .menuItem:hover {
+      background-color: darken(#2e3042, 15%);
+    }
     .pt-button {
       width: 100px;
       height: 100px;
@@ -49,11 +62,11 @@
         height: 80px;
       }
     }
-    .pt-button.selected {
+    .menuItem.selected .pt-button {
       opacity: 1.0;
     }
-    .menuItemApplication {
-      background-color: #7fa5ad;
+    .menuItem .menuItemApplication {
+      background-color: $menuColor1;
       .st0{fill:#CCD1D9;}
       .st1{fill:#E6E9ED;}
       .st2{fill:#656D78;}
@@ -65,24 +78,18 @@
       .st8{fill:#FFCE54;}
       .st9{fill:#ED5564;}
     }
-    .menuItemApplication:hover {
-      background-color: #70a0a0;
-    }
-    .menuItemPaths {
-      background-color: #cf7769;
+    .menuItem .menuItemPaths {
+      background-color: $menuColor2;
       .st0{fill:#FABE5C;}
       .st1{fill:#5C6F74;}
       .st2{fill:#203F49;}
       .st3{fill:#FBDF65;}
     }
-    .menuItemPaths:hover {
-      background-color: #c07060;
+    .menuItem .menuItem2 {
+      background-color: $menuColor3;
     }
-    .menuItem2 {
-      background-color: #adc88f;
-    }
-    .menuItem3 {
-      background-color: #837395;
+    .menuItem .menuItem3 {
+      background-color: $menuColor4;
     }
   }
   .configRightFormWrapper {

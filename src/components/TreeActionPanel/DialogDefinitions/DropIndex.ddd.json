@@ -1,6 +1,5 @@
 {
   "Title": "Drop Index",
-  "AutoRefresh": true,
   "DefaultValues": {
     "function": "dbkoda_DropIndexPreFill",
     "arguments": [

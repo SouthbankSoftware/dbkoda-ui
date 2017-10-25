@@ -270,7 +270,8 @@ export default class Panel extends React.Component {
       if (!currEditor && editors.get(editorPanel.activeEditorId)) {
         currEditor = editors.get(editorPanel.activeEditorId);
         newTabId = editorPanel.activeEditorId;
-      } else if (!currEditor && !editors.get(editorPanel.activeEditorId)) { // Condition where you have closed the last open tab and welcome tab should be selected
+      } else if (!currEditor && !editors.get(editorPanel.activeEditorId)) {
+        // Condition where you have closed the last open tab and welcome tab should be selected
         newTabId = 'Default';
       }
     }
@@ -278,7 +279,11 @@ export default class Panel extends React.Component {
     editorPanel.activeEditorId = newTabId;
     console.log(editorPanel.activeEditorId);
 
-    if (newTabId != 'Default' && editors.get(newTabId) && editors.get(newTabId).executing == true) {
+    if (
+      newTabId != 'Default' &&
+      editors.get(newTabId) &&
+      editors.get(newTabId).executing == true
+    ) {
       editorToolbar.isActiveExecuting = true;
     } else {
       editorToolbar.isActiveExecuting = false;
@@ -288,7 +293,10 @@ export default class Panel extends React.Component {
       // Check if connection exists or is closed to update dropdown.
       if (!this.props.store.profiles.get(editorPanel.activeDropdownId)) {
         editorPanel.activeDropdownId = 'Default';
-      } else if (this.props.store.profiles.get(editorPanel.activeDropdownId).status == 'CLOSED') {
+      } else if (
+        this.props.store.profiles.get(editorPanel.activeDropdownId).status ==
+        'CLOSED'
+      ) {
         editorPanel.activeDropdownId = 'Default';
       }
       editorToolbar.id = currEditor.id;
@@ -296,9 +304,13 @@ export default class Panel extends React.Component {
     } else {
       editorPanel.activeDropdownId = 'Default';
     }
-    console.log(`activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`);
-    if (editorPanel.activeDropdownId == 'Default' ||
-        editorPanel.activeDropdownId == 'Config') {
+    console.log(
+      `activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`,
+    );
+    if (
+      editorPanel.activeDropdownId == 'Default' ||
+      editorPanel.activeDropdownId == 'Config'
+    ) {
       editorToolbar.noActiveProfile = true;
     } else {
       editorToolbar.noActiveProfile = false;
@@ -472,11 +484,9 @@ export default class Panel extends React.Component {
     return (
       <Tab2
         className={
-          this.props.store.welcomePage.isOpen ? (
-            'welcomeTab'
-          ) : (
-            'welcomeTab notVisible'
-          )
+          this.props.store.welcomePage.isOpen
+            ? 'welcomeTab'
+            : 'welcomeTab notVisible'
         }
         id="Default"
         title={globalString('editor/welcome/heading')}
@@ -518,7 +528,10 @@ export default class Panel extends React.Component {
   }
 
   renderSavingDialog() {
-    const { editorPanel: { showingSavingDialogEditorIds }, editors } = this.props.store;
+    const {
+      editorPanel: { showingSavingDialogEditorIds },
+      editors,
+    } = this.props.store;
     const currentEditor = editors.get(showingSavingDialogEditorIds[0]);
 
     let unbindGlobalKeys;
@@ -769,7 +782,7 @@ export default class Panel extends React.Component {
         id="Config"
         title={globalString('editor/config/heading')}
         panel={<ConfigView title={globalString('editor/config/heading')} />}
-        >
+      >
         <Button className="pt-minimal" onClick={this.closeConfig}>
           <span className="pt-icon-cross" />
         </Button>
@@ -868,11 +881,9 @@ export default class Panel extends React.Component {
           selectedTabId={this.props.store.editorPanel.activeEditorId}
         >
           {this.renderWelcome()}
-          {
-            process.env.NODE_ENV === 'development' &&
+          {process.env.NODE_ENV === 'development' &&
             this.props.store.configPage.isOpen &&
-            this.renderConfigTab()
-          }
+            this.renderConfigTab()}
           {editors.map((tab) => {
             // TODO this `visible` is not used anymore. Needs a cleanup
             // if (tab[1].visible) {
@@ -888,12 +899,12 @@ export default class Panel extends React.Component {
         </Tabs2>
         <div
           ref={ref => (this.tabScrollLeftBtn = ref)}
-          className="pt-icon-chevron-left tabControlBtn tabScrollLeftBtn"
+          className="pt-icon-caret-left tabControlBtn tabScrollLeftBtn"
           onClick={this.onTabScrollLeftBtnClicked}
         />
         <div
           ref={ref => (this.tabScrollRightBtn = ref)}
-          className="pt-icon-chevron-right tabControlBtn tabScrollRightBtn"
+          className="pt-icon-caret-right tabControlBtn tabScrollRightBtn"
           onClick={this.onTabScrollRightBtnClicked}
         />
         <div
@@ -901,9 +912,9 @@ export default class Panel extends React.Component {
           className="pt-icon-menu tabControlBtn tabListBtn"
           onClick={this.onTabListBtnClicked}
         />
-        {this.props.store.editorPanel.showingSavingDialogEditorIds.length > 0 ? (
-          this.renderSavingDialog()
-        ) : null}
+        {this.props.store.editorPanel.showingSavingDialogEditorIds.length > 0
+          ? this.renderSavingDialog()
+          : null}
       </div>
     );
   }

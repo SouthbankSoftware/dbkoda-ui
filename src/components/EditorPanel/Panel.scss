@@ -154,7 +154,20 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
         margin-right: unset;
         color: $tabFontColor;
         background-color: $tabBackground;
-        border-right: 1px solid $tabBackgroundHover !important;
+        /* border-right: 1px solid linear-gradient(rgba(0, 0, 0, 0), ) !important; */
+        /* border-right: 1px solid $tabBackgroundHover !important; */
+
+        border-right-width: 1px;
+        border-right-style: solid;
+        border-image: linear-gradient(
+            to bottom,
+            transparent,
+            #292929 10px,
+            #292929 90%,
+            transparent 1%
+          )
+          1 100% 1 100%;
+
         outline: unset;
         box-shadow: unset;
       }
@@ -748,9 +761,13 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
   }
   .tabScrollLeftBtn {
     left: 0;
+    border-right: 1px solid rgba(139, 139, 139, 0.5);
   }
   .tabScrollRightBtn {
     right: 23px;
+    width: 25px;
+    border-left: 1px solid rgba(139, 139, 139, 0.5);
+    border-right: 1px solid rgba(139, 139, 139, 0.5);
   }
   .tabListBtn {
     right: 0;
