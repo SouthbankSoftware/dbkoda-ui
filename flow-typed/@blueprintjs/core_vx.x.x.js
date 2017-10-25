@@ -84,6 +84,8 @@ declare module '@blueprintjs/core' {
   declare export var Checkbox;
   declare export var AnchorButton;
   declare export var Intent;
+  declare export var Position;
+  declare export var Tooltip;
   declare export var MenuDivider;
 
   declare export default any;

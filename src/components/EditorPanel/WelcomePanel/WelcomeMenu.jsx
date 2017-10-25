@@ -21,7 +21,7 @@
  * @Date:   2017-04-10 14:32:37
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-10-23T15:45:39+11:00
+ * @Last modified time: 2017-10-25T12:09:41+11:00
  */
 
 /* eslint-disable react/no-string-refs */
@@ -29,7 +29,7 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {action} from 'mobx';
-import {AnchorButton, Checkbox} from '@blueprintjs/core';
+import {AnchorButton} from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import KeyboardIcon from '../../../styles/icons/keyboard-icon.svg';
 import OpenFolderIcon from '../../../styles/icons/open-folder-icon.svg';
@@ -118,20 +118,13 @@ export default class Panel extends React.Component {
               <KeyboardIcon className="dbKodaSVG" width={30} height={30} />
               Keyboard Shortcuts</AnchorButton>
           </div>
-          {
-            process.env.NODE_ENV === 'development' &&
-            <div className="welcomeButtonWrapper">
-              <AnchorButton className="welcomeMenuButton openConfigBtn" onClick={this.props.api.openConfigTab}>
-                <ConfigDatabaseIcon className="dbKodaSVG" width={30} height={30} />
-                Preferences
-              </AnchorButton>
-            </div>
-          }
+          <div className="welcomeButtonWrapper">
+            <AnchorButton className="welcomeMenuButton openConfigBtn" onClick={this.props.api.openConfigTab}>
+              <ConfigDatabaseIcon className="dbKodaSVG" width={30} height={30} />
+              Preferences
+            </AnchorButton>
+          </div>
         </div>
-        {
-          process.env.NODE_ENV !== 'development' &&
-          <div className="welcomeMenuOptOut"><Checkbox checked={this.props.config.settings.telemetryEnabled} onChange={this.telemetryEnabledChanged} /><p>Send Telemetry Data to dbKoda?</p></div>
-        }
       </div>
     );
   }
