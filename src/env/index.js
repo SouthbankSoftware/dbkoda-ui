@@ -19,12 +19,12 @@
  */
 
 /**
- * @Last modified by:   chris
- * @Last modified time: 2017-06-26T11:34:03+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-25T11:42:31+11:00
  */
 
 const protocol = 'http://';
-const host = 'localhost';
+const host = '127.0.0.1';
 const port = 3030;
 const url = protocol + host + ':' + port;
 const analytics = {

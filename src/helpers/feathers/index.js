@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-02T16:40:37+11:00
+ * @Last modified time: 2017-10-25T14:46:32+11:00
  */
 
 import load from 'little-loader';
@@ -51,10 +51,7 @@ class FeatherClient {
     });
     this.shellService.on('mongo-execution-end', (output) => {
       const { id, shellId } = output;
-      Broker.emit(
-        EventType.createShellExecutionFinishEvent(id, shellId),
-        output,
-      );
+      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
     this.shellService.on('mongo-shell-reconnected', (output) => {
       console.log('get reconnect event ', output);
@@ -70,15 +67,12 @@ class FeatherClient {
       console.log('get os command finish ', output);
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
-      Broker.emit(
-        EventType.createShellExecutionFinishEvent(id, shellId),
-        output,
-      );
+      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
     this.service('files').on('changed', ({ _id }) => {
       Broker.emit(EventType.createFileChangedEvent(_id));
     });
-    this.service('aggregators').on('result', ({editorId, result}) => {
+    this.service('aggregators').on('result', ({ editorId, result }) => {
       Broker.emit(EventType.createAggregatorResultReceived(editorId), result);
     });
   }
@@ -107,7 +101,18 @@ let times = 0;
 const loadPrimus = () => {
   load(url + '/dist/primus.js', (err) => {
     if (!err) {
-      const primus = new Primus(url);
+      const primus = new Primus(url, {
+        strategy: ['online', 'timeout', 'disconnect'],
+      });
+      // remove native online/offline event so that when disconnected, ui is still connected to
+      // controller. we may need to rethink this after we build our cloud solution
+      if (window.addEventListener) {
+        window.removeEventListener('offline', primus.offlineHandler);
+        window.removeEventListener('online', primus.onlineHandler);
+      } else if (document.body.attachEvent) {
+        document.body.detachEvent('onoffline', primus.offlineHandler);
+        document.body.detachEvent('ononline', primus.onlineHandler);
+      }
       featherClient().configurePrimus(primus);
       console.log('load primus successfully.');
       Broker.emit(EventType.FEATHER_CLIENT_LOADED, true);
