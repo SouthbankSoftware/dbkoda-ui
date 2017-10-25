@@ -57,8 +57,7 @@ export default class Config {
   setDefaults() {
     this.settings.telemetryEnabled = true;
     this.settings.showWelcomePageAtStart = true;
-    this.settings.mongoCmd = '';
-    this.settings.drillCmd = '';
+    // NOTE: Don't change paths, that's just super annoying
   }
 
   @action.bound

@@ -15,7 +15,6 @@
     "node": ">= 7.2.1"
   },
   "scripts": {
-    "postinstall": "yarn run clean && yarn run build",
     "dev": "webpack-dev-server --config webpack/dev.js",
     "dev:install": "yarn install --ignore-scripts",
     "dev:prod": "yarn run postinstall && yarn start --",
@@ -23,7 +22,8 @@
     "dev:analyzer": "yarn run clean && webpack --config webpack/analyzer.js",
     "start": "http-server ./dist -p 3000 -c-1",
     "clean": "rimraf ./dist rmdir",
-    "build": "node --max_old_space_size=1024 ./node_modules/webpack/bin/webpack.js --config webpack/prod.js --optimize-minimize",
+    "cbuild": "yarn run clean && yarn run build",
+    "build": "webpack --config webpack/prod.js --optimize-minimize",
     "test": "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
     "test:dev": "yarn flow && yarn run eslint && yarn run jest",
     "mlaunch:init": "mlaunch init --single",
