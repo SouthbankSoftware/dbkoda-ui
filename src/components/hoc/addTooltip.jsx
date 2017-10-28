@@ -5,7 +5,7 @@
  * @Date:   2017-10-28T16:11:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-28T16:25:55+11:00
+ * @Last modified time: 2017-10-28T23:49:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,6 +30,12 @@ import * as React from 'react';
 import { Intent, Position, Tooltip } from '@blueprintjs/core';
 import { branch } from 'recompose';
 
+/**
+ * Add a blueprint Tooltip to a component when tooltip message is not null
+ *
+ * @see https://github.com/SouthbankSoftware/dbkoda-ui/blob/master/src/components/EditorPanel/Panel.jsx#L717
+ * @param tooltip - function to map component properties to tooltip message
+ */
 export default (tooltip: (props: Object) => ?string) =>
   branch(
     props => !!tooltip(props),
