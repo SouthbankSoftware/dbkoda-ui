@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-23T15:45:03+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-28T17:15:03+11:00
  */
 
 import _ from 'lodash';
@@ -47,9 +47,7 @@ import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
 
-const { dialog, BrowserWindow } = IS_ELECTRON
-  ? window.require('electron').remote
-  : {};
+const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
 const FILE_FILTERS = [
   {
@@ -104,88 +102,45 @@ export default class Toolbar extends React.Component {
     );
   }
 
-  componentWillMount() {
+  handleMainProcessCommand = (event, message) => {
+    if (message === 'openFile') {
+      this.openFile();
+    } else if (message === 'saveFile') {
+      this.saveFileHandleError();
+    } else if (message === 'saveFileAs') {
+      this.saveFileAs();
+    } else if (message === 'newEditor') {
+      this.props.api.addEditor();
+    } else if (message === 'openPreferences') {
+      this.props.api.openConfigTab();
+    }
+  };
+
+  componentDidMount() {
+    // Add hotkey bindings for this component:
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeLine.keys, this.executeLine);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeAll.keys, this.executeAll);
+    Mousetrap.bindGlobal(GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys, this.stopExecution);
+
     if (IS_ELECTRON) {
-      window.require('electron').ipcRenderer.on('command', (event, message) => {
-        if (message === 'openFile') {
-          this.openFile();
-        } else if (message === 'saveFile') {
-          this.saveFileHandleError();
-        } else if (message === 'saveFileAs') {
-          this.saveFileAs();
-        } else if (message === 'newEditor') {
-          this.props.api.addEditor();
-        } else if (message === 'openPreferences') {
-          this.props.api.openConfigTab();
-        }
-      });
+      window.require('electron').ipcRenderer.on('command', this.handleMainProcessCommand);
     }
   }
 
   componentWillUnmount() {
     this.reactionToNewEditorForProfileId();
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
-      this.executeLine,
-    );
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.executeAll.keys,
-      this.executeAll,
-    );
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeLine.keys, this.executeLine);
+    Mousetrap.unbindGlobal(GlobalHotkeys.editorToolbarHotkeys.executeAll.keys, this.executeAll);
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys,
       this.stopExecution,
     );
 
-    // Mousetrap.unbindGlobal(
-    //   GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
-    //   this.props.api.addEditor,
-    // );
-    // Mousetrap.unbindGlobal(
-    //   GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
-    //   this.openFile,
-    // );
-    // Mousetrap.unbindGlobal(
-    //   GlobalHotkeys.editorToolbarHotkeys.saveFile.keys,
-    //   this.saveFileHandleError,
-    // );
-    // Mousetrap.unbindGlobal(
-    //   GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys,
-    //   this.saveFileAs,
-    // );
-  }
-
-  componentDidMount() {
-    // Add hotkey bindings for this component:
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
-      this.executeLine,
-    );
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.executeAll.keys,
-      this.executeAll,
-    );
-    Mousetrap.bindGlobal(
-      GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys,
-      this.stopExecution,
-    );
-
-    // Mousetrap.bindGlobal(
-    //   GlobalHotkeys.editorToolbarHotkeys.addEditor.keys,
-    //   this.props.api.addEditor,
-    // );
-    // Mousetrap.bindGlobal(
-    //   GlobalHotkeys.editorToolbarHotkeys.openFile.keys,
-    //   this.openFile,
-    // );
-    // Mousetrap.bindGlobal(
-    //   GlobalHotkeys.editorToolbarHotkeys.saveFile.keys,
-    //   this.saveFileHandleError,
-    // );
-    // Mousetrap.bindGlobal(
-    //   GlobalHotkeys.editorToolbarHotkeys.saveFileAs.keys,
-    //   this.saveFileAs,
-    // );
+    if (IS_ELECTRON) {
+      window
+        .require('electron')
+        .ipcRenderer.removeListener('command', this.handleMainProcessCommand);
+    }
   }
 
   reactionToNewEditorForProfileId;
@@ -213,10 +168,7 @@ export default class Toolbar extends React.Component {
               .openFile(v, ({ _id, content }) => {
                 let _fileName = path.basename(_id);
                 if (window.navigator.platform.toLowerCase() === 'win32') {
-                  _fileName = _id.substring(
-                    _id.lastIndexOf('\\') + 1,
-                    _id.length,
-                  );
+                  _fileName = _id.substring(_id.lastIndexOf('\\') + 1, _id.length);
                 }
                 return this.props.api.addEditor({
                   content,
@@ -229,10 +181,7 @@ export default class Toolbar extends React.Component {
         },
       );
     } else {
-      const warningMsg = globalString(
-        'editor/toolbar/notSupportedInUI',
-        'openFile',
-      );
+      const warningMsg = globalString('editor/toolbar/notSupportedInUI', 'openFile');
       if (this.props.config.settings.telemetryEnabled) {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
@@ -260,10 +209,7 @@ export default class Toolbar extends React.Component {
   saveFile(currentEditor) {
     if (IS_ELECTRON) {
       currentEditor =
-        currentEditor ||
-        this.props.store.editors.get(
-          this.props.store.editorPanel.activeEditorId,
-        );
+        currentEditor || this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
       if (!currentEditor) {
         return Promise.reject();
@@ -301,9 +247,7 @@ export default class Toolbar extends React.Component {
             if (!fileName) {
               return reject();
             }
-            this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(
-              fileName,
-            );
+            this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(fileName);
             _saveFile(fileName)
               .then(() => {
                 runInAction('update fileName and path', () => {
@@ -315,13 +259,9 @@ export default class Toolbar extends React.Component {
                     );
                   }
                   currentEditor.path = fileName;
-                  const treeEditor = this.props.store.treeActionPanel.editors.get(
-                    currentEditor.id,
-                  );
+                  const treeEditor = this.props.store.treeActionPanel.editors.get(currentEditor.id);
                   if (treeEditor) {
-                    this.props.store.treeActionPanel.editors.delete(
-                      currentEditor.id,
-                    );
+                    this.props.store.treeActionPanel.editors.delete(currentEditor.id);
                   }
                 });
                 this.props.store.watchFileBackgroundChange(currentEditor.id);
@@ -333,10 +273,7 @@ export default class Toolbar extends React.Component {
       });
     }
 
-    const warningMsg = globalString(
-      'editor/toolbar/notSupportedInUI',
-      'saveFile',
-    );
+    const warningMsg = globalString('editor/toolbar/notSupportedInUI', 'saveFile');
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().WARNING,
@@ -439,12 +376,8 @@ export default class Toolbar extends React.Component {
     }
     // Send command through current editor to swap DB: Get current editor instance:
 
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
-    const profile = this.props.store.profiles.get(
-      this.props.store.editorToolbar.currentProfile,
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    const profile = this.props.store.profiles.get(this.props.store.editorToolbar.currentProfile);
     if (profile) {
       // Send Command:
       const service = featherClient().service('/mongo-sync-execution');
@@ -509,9 +442,7 @@ export default class Toolbar extends React.Component {
 
   @action
   updateCurrentProfile(profile, shellId = undefined) {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
+    const editor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
     if (shellId) {
       Broker.emit(EventType.SWAP_SHELL_CONNECTION, {
         oldId: editor.profileId,
@@ -628,11 +559,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.stopExecution}
                 disabled={!this.props.store.editorToolbar.isActiveExecuting}
               >
-                <StopExecutionIcon
-                  className="dbKodaSVG"
-                  width={20}
-                  height={20}
-                />
+                <StopExecutionIcon className="dbKodaSVG" width={20} height={20} />
               </AnchorButton>
             </Tooltip>
           </div>
@@ -679,9 +606,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="pt-button circleButton saveFileButton"
               onClick={this.saveFileHandleError}
-              disabled={
-                this.props.store.editorPanel.activeEditorId === 'Default'
-              }
+              disabled={this.props.store.editorPanel.activeEditorId === 'Default'}
             >
               <SaveFileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
