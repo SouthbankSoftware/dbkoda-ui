@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-05T14:22:40+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-28T16:44:10+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,12 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-05T14:22:40+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-10-13T16:04:12+11:00
  */
 
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
@@ -42,6 +42,7 @@ import {
   Dialog,
   AnchorButton,
 } from '@blueprintjs/core';
+import addTooltip from '#/hoc/addTooltip';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
 import { DrawerPanes } from '#/common/Constants';
@@ -84,9 +85,7 @@ export default class Panel extends React.Component {
     this.changeTab = this.changeTab.bind(this);
     this.showContextMenu = this.showContextMenu.bind(this);
     this.onTabScrollLeftBtnClicked = this.onTabScrollLeftBtnClicked.bind(this);
-    this.onTabScrollRightBtnClicked = this.onTabScrollRightBtnClicked.bind(
-      this,
-    );
+    this.onTabScrollRightBtnClicked = this.onTabScrollRightBtnClicked.bind(this);
     this.onTabListBtnClicked = this.onTabListBtnClicked.bind(this);
     this.updateTabScrollPosition = this.updateTabScrollPosition.bind(this);
   }
@@ -100,35 +99,24 @@ export default class Panel extends React.Component {
             this.props.store.profileList.selectedProfile.id ==
             this.props.store.editorPanel.activeDropdownId
           ) {
-            console.log(
-              'do nothing as the profile might have been swaped by the dropdown.',
-            );
+            console.log('do nothing as the profile might have been swaped by the dropdown.');
             return;
           }
           let curEditor;
           if (this.props.store.editorPanel.activeEditorId != 'Default') {
-            curEditor = this.props.store.editors.get(
-              this.props.store.editorPanel.activeEditorId,
-            );
+            curEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
           }
 
           if (
             curEditor &&
-            curEditor.currentProfile ==
-              this.props.store.profileList.selectedProfile.id
+            curEditor.currentProfile == this.props.store.profileList.selectedProfile.id
           ) {
             console.log('do nothing');
           } else {
             const editors = this.props.store.editors.entries();
             for (const editor of editors) {
-              console.log(
-                'editor[1].currentProfile :',
-                editor[1].currentProfile,
-              );
-              if (
-                editor[1].currentProfile ==
-                this.props.store.profileList.selectedProfile.id
-              ) {
+              console.log('editor[1].currentProfile :', editor[1].currentProfile);
+              if (editor[1].currentProfile == this.props.store.profileList.selectedProfile.id) {
                 this.changeTab(editor[1].id);
                 return;
               }
@@ -199,9 +187,7 @@ export default class Panel extends React.Component {
    */
   @action
   closeActiveTab() {
-    const deletedEditor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
+    const deletedEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
 
     this.props.api.removeEditor(deletedEditor);
 
@@ -279,11 +265,7 @@ export default class Panel extends React.Component {
     editorPanel.activeEditorId = newTabId;
     console.log(editorPanel.activeEditorId);
 
-    if (
-      newTabId != 'Default' &&
-      editors.get(newTabId) &&
-      editors.get(newTabId).executing == true
-    ) {
+    if (newTabId != 'Default' && editors.get(newTabId) && editors.get(newTabId).executing == true) {
       editorToolbar.isActiveExecuting = true;
     } else {
       editorToolbar.isActiveExecuting = false;
@@ -293,10 +275,7 @@ export default class Panel extends React.Component {
       // Check if connection exists or is closed to update dropdown.
       if (!this.props.store.profiles.get(editorPanel.activeDropdownId)) {
         editorPanel.activeDropdownId = 'Default';
-      } else if (
-        this.props.store.profiles.get(editorPanel.activeDropdownId).status ==
-        'CLOSED'
-      ) {
+      } else if (this.props.store.profiles.get(editorPanel.activeDropdownId).status == 'CLOSED') {
         editorPanel.activeDropdownId = 'Default';
       }
       editorToolbar.id = currEditor.id;
@@ -307,10 +286,7 @@ export default class Panel extends React.Component {
     console.log(
       `activeDropdownId: ${editorPanel.activeDropdownId} , id: ${editorToolbar.id}, shellId: ${editorToolbar.shellId}`,
     );
-    if (
-      editorPanel.activeDropdownId == 'Default' ||
-      editorPanel.activeDropdownId == 'Config'
-    ) {
+    if (editorPanel.activeDropdownId == 'Default' || editorPanel.activeDropdownId == 'Config') {
       editorToolbar.noActiveProfile = true;
     } else {
       editorToolbar.noActiveProfile = false;
@@ -412,9 +388,7 @@ export default class Panel extends React.Component {
           <div className="menuItemWrapper closeTabItem">
             <MenuItem
               onClick={() => {
-                tabId === 'Default'
-                  ? this.closeWelcome()
-                  : this.closeTab(currentEditor);
+                tabId === 'Default' ? this.closeWelcome() : this.closeTab(currentEditor);
               }}
               text={globalString('editor/tabMenu/closeTab')}
               iconName="pt-icon-small-cross"
@@ -483,11 +457,7 @@ export default class Panel extends React.Component {
     }
     return (
       <Tab2
-        className={
-          this.props.store.welcomePage.isOpen
-            ? 'welcomeTab'
-            : 'welcomeTab notVisible'
-        }
+        className={this.props.store.welcomePage.isOpen ? 'welcomeTab' : 'welcomeTab notVisible'}
         id="Default"
         title={globalString('editor/welcome/heading')}
         panel={<WelcomeView />}
@@ -528,10 +498,7 @@ export default class Panel extends React.Component {
   }
 
   renderSavingDialog() {
-    const {
-      editorPanel: { showingSavingDialogEditorIds },
-      editors,
-    } = this.props.store;
+    const { editorPanel: { showingSavingDialogEditorIds }, editors } = this.props.store;
     const currentEditor = editors.get(showingSavingDialogEditorIds[0]);
 
     let unbindGlobalKeys;
@@ -543,35 +510,17 @@ export default class Panel extends React.Component {
     const onSavingDialogDontSaveButtonClicked = () =>
       this.onSavingDialogDontSaveButtonClicked(unbindGlobalKeys, currentEditor);
 
-    Mousetrap.bindGlobal(
-      DialogHotkeys.submitDialog.keys,
-      onSavingDialogSaveButtonClicked,
-    );
-    Mousetrap.bindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      onSavingDialogCancelButtonClicked,
-    );
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, onSavingDialogSaveButtonClicked);
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, onSavingDialogCancelButtonClicked);
 
     unbindGlobalKeys = () => {
-      Mousetrap.unbindGlobal(
-        DialogHotkeys.submitDialog.keys,
-        onSavingDialogSaveButtonClicked,
-      );
-      Mousetrap.unbindGlobal(
-        DialogHotkeys.closeDialog.keys,
-        onSavingDialogCancelButtonClicked,
-      );
+      Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, onSavingDialogSaveButtonClicked);
+      Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, onSavingDialogCancelButtonClicked);
     };
 
     return (
       <Dialog className="pt-dark savingDialog" intent={Intent.PRIMARY} isOpen>
-        <h4>
-          {' '}
-          {globalString(
-            'editor/savingDialog/title',
-            currentEditor.fileName,
-          )}{' '}
-        </h4>
+        <h4> {globalString('editor/savingDialog/title', currentEditor.fileName)} </h4>
         <p> {globalString('editor/savingDialog/message')} </p>
         <div className="dialogButtons">
           <AnchorButton
@@ -598,9 +547,7 @@ export default class Panel extends React.Component {
   }
 
   renderUnsavedFileIndicator(id) {
-    return (
-      <div id={`unsavedFileIndicator_${id}`} className="unsavedFileIndicator" />
-    );
+    return <div id={`unsavedFileIndicator_${id}`} className="unsavedFileIndicator" />;
   }
 
   _isScrollPosEqual(pos1, pos2, accuracy = 1) {
@@ -610,19 +557,12 @@ export default class Panel extends React.Component {
   onTabScrollLeftBtnClicked() {
     const tabListEl = this.tabs.tablistElement;
     const currTabEl = this.getCurrentVisibleLeftmostTabElement();
-    const getCurrTabTargetPos = this.getElementScrollLeftTargetPosition.bind(
-      this,
-      currTabEl,
-    );
+    const getCurrTabTargetPos = this.getElementScrollLeftTargetPosition.bind(this, currTabEl);
 
-    if (
-      this._isScrollPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)
-    ) {
+    if (this._isScrollPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)) {
       const prevTabEl = currTabEl.previousSibling;
       if (prevTabEl) {
-        this.scrollToTab(
-          this.getElementScrollLeftTargetPosition.bind(this, prevTabEl),
-        );
+        this.scrollToTab(this.getElementScrollLeftTargetPosition.bind(this, prevTabEl));
       }
     } else {
       this.scrollToTab(getCurrTabTargetPos);
@@ -632,19 +572,12 @@ export default class Panel extends React.Component {
   onTabScrollRightBtnClicked() {
     const tabListEl = this.tabs.tablistElement;
     const currTabEl = this.getCurrentVisibleRightmostTabElement();
-    const getCurrTabTargetPos = this.getElementScrollRightTargetPosition.bind(
-      this,
-      currTabEl,
-    );
+    const getCurrTabTargetPos = this.getElementScrollRightTargetPosition.bind(this, currTabEl);
 
-    if (
-      this._isScrollPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)
-    ) {
+    if (this._isScrollPosEqual(tabListEl.scrollLeft, getCurrTabTargetPos(), 5)) {
       const nextTabEl = currTabEl.nextSibling;
       if (nextTabEl) {
-        this.scrollToTab(
-          this.getElementScrollRightTargetPosition.bind(this, nextTabEl),
-        );
+        this.scrollToTab(this.getElementScrollRightTargetPosition.bind(this, nextTabEl));
       }
     } else {
       this.scrollToTab(getCurrTabTargetPos);
@@ -701,9 +634,7 @@ export default class Panel extends React.Component {
       editorPanel.shouldScrollToActiveTab = false;
 
       // scroll to active tab
-      const el = document.getElementById(
-        `pt-tab-title_EditorTabs_${editorPanel.activeEditorId}`,
-      );
+      const el = document.getElementById(`pt-tab-title_EditorTabs_${editorPanel.activeEditorId}`);
       this.scrollToTab(this.getElementScrollRightTargetPosition.bind(this, el));
     }
   }
@@ -731,9 +662,7 @@ export default class Panel extends React.Component {
         return;
       }
 
-      el.scrollLeft =
-        targetPos +
-        Math.round(cosParameter + cosParameter * Math.cos(scrollCount));
+      el.scrollLeft = targetPos + Math.round(cosParameter + cosParameter * Math.cos(scrollCount));
       oldTimestamp = newTimestamp;
 
       window.requestAnimationFrame(step);
@@ -754,12 +683,7 @@ export default class Panel extends React.Component {
   getCurrentVisibleRightmostTabElement() {
     const tabListEl = this.tabs.tablistElement;
 
-    if (
-      this._isScrollPosEqual(
-        tabListEl.scrollLeft,
-        this.getScrollLeftMax(tabListEl),
-      )
-    ) {
+    if (this._isScrollPosEqual(tabListEl.scrollLeft, this.getScrollLeftMax(tabListEl))) {
       return tabListEl.lastChild;
     }
 
@@ -790,40 +714,47 @@ export default class Panel extends React.Component {
     );
   }
 
+  TabHeader = observer(
+    addTooltip(({ editor }) => editor.path)(({ editor, editorTitle }) => (
+      <div>
+        {editorTitle}
+        {this.renderUnsavedFileIndicator(editor.id)}
+        <Button className="pt-minimal" onClick={() => this.closeTab(editor)}>
+          <span className="pt-icon-cross" />
+        </Button>
+      </div>
+    )),
+  );
+
   // Encapsulation for rendering a standard Mongo Shell Tab in the Editor Panel.
-  renderShellTab(tab, tabClassName, editorTitle) {
+  renderShellTab([id, editorObj], tabClassName, editorTitle) {
     return (
       <Tab2
         className={'editorTab visible ' + tabClassName}
-        key={tab[1].id}
-        id={tab[1].id}
-        title={editorTitle}
+        key={id}
+        id={id}
+        title={<this.TabHeader editor={editorObj} editorTitle={editorTitle} />}
         panel={
           <View
-            id={tab[0]}
+            id={id}
             title={editorTitle}
             onDrop={item => this.handleDrop(item)}
-            editor={tab[1]}
+            editor={editorObj}
             ref="defaultEditor"
           />
         }
-      >
-        {this.renderUnsavedFileIndicator(tab[0])}
-        <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
-          <span className="pt-icon-cross" />
-        </Button>
-      </Tab2>
+      />
     );
   }
 
   // Encapsulation for rendering an Aggregate Tab in the Editor Panel.
-  renderAggregateTab(tab, tabClassName, editorTitle) {
+  renderAggregateTab([id, editorObj], tabClassName, editorTitle) {
     return (
       <Tab2
         className={'editorTab aggregateTab visible ' + tabClassName}
-        key={tab[1].id}
-        id={tab[1].id}
-        title={editorTitle}
+        key={id}
+        id={id}
+        title={<this.TabHeader editor={editorObj} editorTitle={editorTitle} />}
         panel={
           <div className="aggregateTabInnerWrapper">
             <SplitPane
@@ -834,28 +765,19 @@ export default class Panel extends React.Component {
               maxSize={750}
               pane2Style={splitPane2Style}
             >
-              <AggregateGraphicalBuilder
-                className="aggregatePanel"
-                id={tab[0]}
-                editor={tab[1]}
-              />
+              <AggregateGraphicalBuilder className="aggregatePanel" id={id} editor={editorObj} />
               <View
-                id={tab[0]}
+                id={id}
                 className="aggregateEditorPanel"
                 title={editorTitle}
                 onDrop={item => this.handleDrop(item)}
-                editor={tab[1]}
+                editor={editorObj}
                 ref="defaultEditor"
               />
             </SplitPane>
           </div>
         }
-      >
-        {this.renderUnsavedFileIndicator(tab[0])}
-        <Button className="pt-minimal" onClick={() => this.closeTab(tab[1])}>
-          <span className="pt-icon-cross" />
-        </Button>
-      </Tab2>
+      />
     );
   }
 
@@ -884,17 +806,19 @@ export default class Panel extends React.Component {
           {process.env.NODE_ENV === 'development' &&
             this.props.store.configPage.isOpen &&
             this.renderConfigTab()}
-          {editors.map((tab) => {
-            // TODO this `visible` is not used anymore. Needs a cleanup
-            // if (tab[1].visible) {
-            const tabClassName = tab[1].alias.replace(/[\. ]/g, '');
-            const editorTitle = this.getEditorTitle(tab[1]);
-            switch (tab[1].type) {
+          {editors.map((editor) => {
+            const [, editorObj] = editor;
+            const tabClassName = editorObj.alias.replace(/[\. ]/g, '');
+            const editorTitle = this.getEditorTitle(editorObj);
+            let comp;
+            switch (editorObj.type) {
               case 'aggregate':
-                return this.renderAggregateTab(tab, tabClassName, editorTitle);
+                comp = this.renderAggregateTab(editor, tabClassName, editorTitle);
+                break;
               default:
-                return this.renderShellTab(tab, tabClassName, editorTitle);
+                comp = this.renderShellTab(editor, tabClassName, editorTitle);
             }
+            return comp;
           })}
         </Tabs2>
         <div

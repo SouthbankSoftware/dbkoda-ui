@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-23T15:45:17+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-28T14:03:22+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -172,6 +172,7 @@ export default class EditorApi {
             currentProfile: res.id,
             fileName,
             executing: false,
+            // TODO this `visible` is not used anymore. Needs a cleanup
             visible: true,
             shellVersion: res.shellVersion,
             initialMsg: res.output ? res.output.join('\n') : '',
