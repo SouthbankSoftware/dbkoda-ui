@@ -405,8 +405,10 @@ export default class FormBuilder {
                 if (pFld.indexOf('[]') > 0) {
                   pFld = pFld.replace('[]', '');
                   for (const cFlds of frmVals[pFld]) {
-                    traverseMultiCombo(fldArray, cFlds, bMerge);
+                    const cloneFldArray = fldArray.slice(0); // done the clone because parent field is an array and has multiple childs
+                    traverseMultiCombo(cloneFldArray, cFlds, bMerge);
                   }
+                  fldArray.shift();
                 } else {
                   traverseMultiCombo(fldArray, frmVals[pFld], bMerge);
                 }
@@ -417,7 +419,10 @@ export default class FormBuilder {
                     frmVals[mFld] = frmVals[mFld].join('|');
                   }
                 } else {
-                  frmVals[mFld] = frmVals[mFld].split('|');
+                  console.log(mFld, bMerge);
+                  if (mFld && frmVals[mFld]) {
+                    frmVals[mFld] = frmVals[mFld].split('|');
+                  }
                 }
               }
             };
