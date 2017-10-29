@@ -173,7 +173,7 @@ export default class GenerateChartButton extends React.PureComponent<
         hoverOpenDelay={1000}
         inline
         content={globalString('aggregate_builder/generate_chart_button')}
-        tooltipClassName="pt-dark"
+        tooltipClassName="pt-dark generateChartTooltip"
         position={Position.BOTTOM}
       >
         <AnchorButton
