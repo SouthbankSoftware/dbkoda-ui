@@ -1,10 +1,4 @@
 @import '../../styles/_defaultTheme.scss';
-.pt-tree-node-content:hover {
-  background-color: unset !important;
-}
-.pt-tree-node-content-1:hover {
-  background-color: $aggregateBlockBackgroundHoverSecondary !important;
-}
 div.importAlert {
   color: $defaultFontColor;
   div.pt-alert-footer {
@@ -178,6 +172,12 @@ div.Pane.vertical.Pane1 {
       height: 100%;
       font-family: Arial, Helvetica, sans-serif;
       div.aggregatePaletteWrapper {
+        .pt-tree-node-content:hover {
+          background-color: unset;
+        }
+        .pt-tree-node-content-1:hover {
+          background-color: $aggregateBlockBackgroundHoverSecondary !important;
+        }
         overflow-y: auto;
         order: 1;
         flex-grow: 1;

@@ -252,65 +252,6 @@ export default class Toolbar extends React.Component {
           <div className="pt-navbar-heading">
             {globalString('output/headings/table')}
           </div>
-        </div>
-        <div className="pt-navbar-group pt-align-right">
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            inline
-            content={globalString('output/toolbar/save')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="saveOutputBtn circleButton"
-              onClick={() => {
-                this.props.api.outputApi.saveTableData();
-              }}
-            >
-              <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
-            </AnchorButton>
-          </Tooltip>
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            inline
-            content={globalString('output/toolbar/tableToolbar/expandAll')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="expandAllButton circleButton"
-              onClick={() => {
-                runInAction(() => {
-                  this.props.store.outputPanel.expandTable = false;
-                  this.props.store.outputPanel.expandTable = true;
-                });
-              }}
-            >
-              <ExpandIcon className="dbKodaSVG" width={30} height={30} />
-            </AnchorButton>
-          </Tooltip>
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            inline
-            content={globalString('output/toolbar/tableToolbar/collapseAll')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="collapseAllButton circleButton"
-              onClick={() => {
-                runInAction(() => {
-                  this.props.store.outputPanel.collapseTable = false;
-                  this.props.store.outputPanel.collapseTable = true;
-                });
-              }}
-            >
-              <CollapseIcon className="dbKodaSVG" width={30} height={30} />
-            </AnchorButton>
-          </Tooltip>
           {this.props.store.outputs.get(editor.id).tableJson.database && (
             <div>
               <span className="docLimitLabel">Document Limit: </span>
@@ -330,6 +271,29 @@ export default class Toolbar extends React.Component {
                 intent={Intent.NONE}
                 className="limit"
               />
+            </div>
+          )}
+        </div>
+        <div className="pt-navbar-group pt-align-right">
+          {/* <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/save')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="saveOutputBtn circleButton"
+              onClick={() => {
+                this.props.api.outputApi.saveTableData();
+              }}
+            >
+              <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip> */}
+          {this.props.store.outputs.get(editor.id).tableJson.database && (
+            <div>
               <Tooltip
                 intent={Intent.PRIMARY}
                 hoverOpenDelay={1000}
@@ -360,6 +324,48 @@ export default class Toolbar extends React.Component {
               </Tooltip>
             </div>
           )}
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/tableToolbar/expandAll')}
+            tooltipClassName="pt-dark"
+            className="expandWrapper"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="expandAllButton circleButton"
+              onClick={() => {
+                runInAction(() => {
+                  this.props.store.outputPanel.expandTable = false;
+                  this.props.store.outputPanel.expandTable = true;
+                });
+              }}
+            >
+              <ExpandIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/tableToolbar/collapseAll')}
+            tooltipClassName="pt-dark"
+            className="collapseWrapper"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="collapseAllButton circleButton"
+              onClick={() => {
+                runInAction(() => {
+                  this.props.store.outputPanel.collapseTable = false;
+                  this.props.store.outputPanel.collapseTable = true;
+                });
+              }}
+            >
+              <CollapseIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
         </div>
       </nav>
     );

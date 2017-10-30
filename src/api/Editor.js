@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-28T08:56:08+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-30T17:02:56+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,22 +22,15 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-28T08:56:08+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-10-28T14:03:22+11:00
  */
 
 import { action, observable } from 'mobx';
 import uuidV1 from 'uuid';
-import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
-import { ProfileStatus } from '#/common/Constants';
-import { EditorTypes, DrawerPanes } from '#/common/Constants';
+import { EditorTypes, DrawerPanes, ProfileStatus } from '#/common/Constants';
+import { featherClient } from '~/helpers/feathers';
+import camelise from '~/helpers/camelise';
 
 import StaticApi from './static';
 
@@ -68,13 +67,12 @@ export default class EditorApi {
         }
       });
       if (!editorOptions.type) {
-        editorOptions.type = 'shell';
+        editorOptions.type = EditorTypes.DEFAULT;
       }
       if (profileId == 'UNKNOWN') {
         if (this.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
-              .FAILED_DEFAULT,
+            EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT,
             EventLogging.getFragmentEnum().EDITORS,
             'Cannot create new Editor for Default Tab.',
           );
@@ -143,19 +141,69 @@ export default class EditorApi {
     this.store.editorToolbar.newConnectionLoading = false;
   }
 
+  /**
+   * Get unsaved editor internal file name, a unique integer for the specified editor type
+   *
+   * @param type - editor type
+   * @return an integer that is larger than any of the unsaved editor file names
+   */
+  getUnsavedEditorInternalFileName(type: string): number {
+    let largestFileName = -1;
+
+    for (const editor of this.store.editors.values()) {
+      if (!editor.path && editor.type === type && editor.fileName > largestFileName) {
+        largestFileName = editor.fileName;
+      }
+    }
+
+    largestFileName += 1;
+    return largestFileName;
+  }
+
+  /**
+   * Get unsaved editor suggested file name when saving
+   *
+   * @param editor - editor Object
+   * @return suggested file name
+   */
+  getUnsavedEditorSuggestedFileName(editor: {}): string {
+    return camelise(`new${this.getEditorDisplayName(editor)}`) + '.js';
+  }
+
+  /**
+   * Get editor display name. For example, tab title of an editor
+   *
+   * @param editor - editor Object
+   * @return display name
+   */
+  getEditorDisplayName(editor: {}): string {
+    if (editor.path) {
+      return editor.fileName;
+    }
+
+    let prefix = null;
+    if (editor.type === EditorTypes.TREE_ACTION) {
+      prefix = 'Tree Action';
+    } else if (editor.type === EditorTypes.SHELL_COMMAND) {
+      prefix = 'Shell Command';
+    } else if (editor.type === EditorTypes.AGGREGATE) {
+      prefix = 'Aggregate Builder';
+    } else if (editor.type === EditorTypes.DRILL) {
+      prefix = 'Drill';
+    }
+
+    return prefix ? `${prefix} - ${editor.fileName}` : editor.fileName;
+  }
+
   // Setting up editor after successful response from Controller, it's more than possible some of these
   // states could be removed or refactored eventually. Worth checking out when time allows.
   @action.bound
   setNewEditorState(res, options = {}) {
     const { content = '' } = options;
     options = _.omit(options, ['content']);
-    let fileName = `new${this.store.profiles.get(res.id).editorCount}.js`;
-    if (options.type === 'aggregate') {
-      fileName = 'Aggregate Builder';
-    }
+    const fileName = this.getUnsavedEditorInternalFileName(options.type);
 
     const editorId = uuidV1();
-    this.store.profiles.get(res.id).editorCount += 1;
 
     const doc = StaticApi.createNewDocumentObject(content);
     doc.lineSep = StaticApi.determineEol(content);
@@ -205,12 +253,6 @@ export default class EditorApi {
       this.store.editorToolbar.newEditorForTreeAction = false;
       this.store.treeActionPanel.treeActionEditorId = editorId;
       const treeEditor = this.store.editors.get(editorId);
-      if (treeEditor.type === EditorTypes.TREE_ACTION) {
-        treeEditor.fileName = 'Tree Action';
-      } else if (treeEditor.type === EditorTypes.SHELL_COMMAND) {
-        treeEditor.fileName = 'Shell Command';
-      }
-
       this.store.treeActionPanel.editors.set(editorId, treeEditor);
     }
 
@@ -240,10 +282,7 @@ export default class EditorApi {
     this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     console.log('deleted editor ', currEditor);
     // If Editor is not clean, prompt for save.
-    if (
-      !currEditor.doc.isClean() &&
-      currEditor.type != EditorTypes.SHELL_COMMAND
-    ) {
+    if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
       this.store.editorPanel.showingSavingDialogEditorIds.push(currEditor.id);
       return;
     }
@@ -278,9 +317,7 @@ export default class EditorApi {
         this.store.editorPanel.activeEditorId = editors[0][1].id;
         console.log('2:', this.store.editorPanel.activeEditorId);
 
-        const treeEditor = this.store.treeActionPanel.editors.get(
-          currEditor.id,
-        );
+        const treeEditor = this.store.treeActionPanel.editors.get(currEditor.id);
         if (treeEditor) {
           this.store.treeActionPanel.editors.delete(treeEditor.id);
         }
@@ -307,11 +344,9 @@ export default class EditorApi {
 // Try "SELECT * FROM tablename LIMIT 10" to see table data
 */
 SHOW TABLES`;
-    const fileName = `new${this.store.profiles.get(profile.id)
-      .editorCount} (drill).js`;
+    const fileName = this.getUnsavedEditorInternalFileName(options.type);
 
     const editorId = uuidV1();
-    this.store.profiles.get(profile.id).editorCount += 1;
 
     const doc = StaticApi.createNewDocumentObject(content);
     doc.lineSep = StaticApi.determineEol(content);

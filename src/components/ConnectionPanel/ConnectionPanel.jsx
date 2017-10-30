@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T13:56:39+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-30T14:10:52+11:00
  */
 
 /**
@@ -126,7 +126,6 @@ const ConnectionPanel = ({
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
-        editorCount: 1,
       };
       if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
         profile.bPassPhrase = true;

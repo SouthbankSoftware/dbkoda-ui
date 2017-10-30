@@ -18,6 +18,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* eslint no-unused-vars: warn */
+
 /**
  * @Author: chris
  * @Date:   2017-03-22T11:31:55+11:00
@@ -27,12 +29,12 @@
  */
 
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {DropTarget} from 'react-dnd';
-import {DragItemTypes} from '#/common/Constants.js';
+import { inject, observer } from 'mobx-react';
+import { DropTarget } from 'react-dnd';
+import { DragItemTypes } from '#/common/Constants.js';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
-import {action, reaction} from 'mobx';
-import {featherClient} from '~/helpers/feathers';
+import { action, reaction } from 'mobx';
+import { featherClient } from '~/helpers/feathers';
 import {
   AnchorButton,
   ContextMenuTarget,
@@ -40,7 +42,7 @@ import {
   Menu,
   MenuItem,
   Position,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/mode/javascript/javascript';
@@ -51,7 +53,7 @@ import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/javascript-hint.js';
 import 'codemirror/keymap/sublime.js';
 import '#/common/MongoScript.js';
-import {Broker, EventType} from '../../helpers/broker';
+import { Broker, EventType } from '../../helpers/broker';
 import SubmitIcon from '../../styles/icons/execute-command-icon.svg';
 
 /**
@@ -67,7 +69,7 @@ const terminalTarget = {
     console.log('DROP  Terminal monitor.getItem:', monitor.getItem());
     const item = monitor.getItem();
     props.onDrop(item);
-  }
+  },
 };
 
 /**
@@ -79,7 +81,7 @@ function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-    isOverCurrent: monitor.isOver({shallow: true})
+    isOverCurrent: monitor.isOver({ shallow: true }),
   };
 }
 
@@ -91,12 +93,7 @@ class Terminal extends React.Component {
     super(props);
     this.state = {
       command: '',
-      historyCursor: this
-        .props
-        .store
-        .outputs
-        .get(this.props.id)
-        .commandHistory
+      historyCursor: this.props.store.outputs.get(this.props.id).commandHistory
         .length,
       terminalOptions: {
         mode: 'MongoScript',
@@ -110,80 +107,93 @@ class Terminal extends React.Component {
           'Ctrl-Space': 'autocomplete',
           'Ctrl-X': () => {
             this.sendCommandToEditor();
-          }
+          },
         },
         smartIndent: true,
         theme: 'ambiance',
-        typescript: true
-      }
+        typescript: true,
+      },
     };
 
-    this.updateCommand = this
-      .updateCommand
-      .bind(this);
-    this.interceptCommand = this
-      .interceptCommand
-      .bind(this);
-    this.showPreviousCommand = this
-      .showPreviousCommand
-      .bind(this);
-    this.showNextCommand = this
-      .showNextCommand
-      .bind(this);
-    this.updateHistory = this
-      .updateHistory
-      .bind(this);
+    this.updateCommand = this.updateCommand.bind(this);
+    this.interceptCommand = this.interceptCommand.bind(this);
+    this.showPreviousCommand = this.showPreviousCommand.bind(this);
+    this.showNextCommand = this.showNextCommand.bind(this);
+    this.updateHistory = this.updateHistory.bind(this);
 
     /**
      * Reaction function for when a change occurs on the dragItem.drapDrop state.
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
      */
-    const reactionToDragDrop = reaction( //eslint-disable-line
-    // eslint-disable-line
-    () => this.props.store.dragItem.dragDropTerminal, (dragDropTerminal) => { //eslint-disable-line
-      // eslint-disable-line
-      if (this.props.store.editorPanel.activeEditorId == this.props.id && this.props.store.dragItem.dragDropTerminal) {
-        console.log('Terminal Title:', this.props.title);
-        console.log('Terminal Id: ', this.props.id);
-        console.log('Active Editor Id: ', this.props.store.editorPanel.activeEditorId);
-        console.log('Drag Item: ', this.props.store.dragItem.item);
-        this.setState({
-          command: TreeDropActions.getCodeForTreeNode(this.props.store.dragItem.item)
-        });
-      }
-      this.props.store.dragItem.dragDropTerminal = false;
-    });
+    const reactionToDragDrop = reaction(
+      () => this.props.store.dragItem.dragDropTerminal,
+      (dragDropTerminal) => {
+        if (
+          this.props.store.editorPanel.activeEditorId == this.props.id &&
+          this.props.store.dragItem.dragDropTerminal
+        ) {
+          console.log('Terminal Title:', this.props.title);
+          console.log('Terminal Id: ', this.props.id);
+          console.log(
+            'Active Editor Id: ',
+            this.props.store.editorPanel.activeEditorId,
+          );
+          console.log('Drag Item: ', this.props.store.dragItem.item);
+          this.setState({
+            command: TreeDropActions.getCodeForTreeNode(
+              this.props.store.dragItem.item,
+            ),
+          });
+        }
+        this.props.store.dragItem.dragDropTerminal = false;
+      },
+    );
 
     /**
      * Reaction to fire off execution of Terminal Commands
      */
-    reaction(() => this.props.store.outputPanel.executingTerminalCmd, (executingTerminalCmd) => {
-      if (executingTerminalCmd && this.props.id == this.props.store.editorPanel.activeEditorId) {
-        this.updateHistory(this.state.command);
-        const command = this.interceptCommand(this.state.command);
-        console.log(command);
-        if (command) {
-          console.log('Sending data to feathers id ', this.props.profileId, ': ', this.props.shellId, command, '.');
-          this.props.store.editorToolbar.isActiveExecuting = true;
-          this
-            .props
-            .store
-            .editors
-            .get(this.props.id)
-            .executing = true;
-          const service = featherClient().service('/mongo-shells');
-          service.timeout = 30000;
-          Broker.on(EventType.createShellExecutionFinishEvent(this.props.profileId, this.props.shellId), this.finishedExecution);
-          service.update(this.props.profileId, {
-            shellId: this.props.shellId,
-            commands: command
-          });
+    reaction(
+      () => this.props.store.outputPanel.executingTerminalCmd,
+      (executingTerminalCmd) => {
+        if (
+          executingTerminalCmd &&
+          this.props.id == this.props.store.editorPanel.activeEditorId
+        ) {
+          this.updateHistory(this.state.command);
+          const command = this.interceptCommand(this.state.command);
+          console.log(command);
+          if (command) {
+            console.log(
+              'Sending data to feathers id ',
+              this.props.profileId,
+              ': ',
+              this.props.shellId,
+              command,
+              '.',
+            );
+            this.props.store.editorToolbar.isActiveExecuting = true;
+            this.props.store.editors.get(this.props.id).executing = true;
+            const service = featherClient().service('/mongo-shells');
+            service.timeout = 30000;
+            Broker.on(
+              EventType.createShellExecutionFinishEvent(
+                this.props.profileId,
+                this.props.shellId,
+              ),
+              this.finishedExecution,
+            );
+            service.update(this.props.profileId, {
+              shellId: this.props.shellId,
+              commands: command,
+            });
+          }
+          this.setState({ command: '' });
+          this.props.store.outputPanel.executingTerminalCmd = false;
         }
-        this.setState({command: ''});
-        this.props.store.outputPanel.executingTerminalCmd = false;
-      }
-    }, {name: 'reactionOutputTerminalExecuteCmd'});
+      },
+      { name: 'reactionOutputTerminalExecuteCmd' },
+    );
   }
 
   /**
@@ -191,9 +201,7 @@ class Terminal extends React.Component {
    * post-render, tapping into CodeMirror's js API
    */
   componentDidMount() {
-    const cm = this
-      .terminal
-      .getCodeMirror();
+    const cm = this.terminal.getCodeMirror();
     cm.on('keydown', (cm, keyEvent) => {
       if (cm.state.completionActive == null) {
         if (keyEvent.keyCode == 38) {
@@ -207,9 +215,10 @@ class Terminal extends React.Component {
     });
     cm.on('beforeChange', (cm, changeObj) => {
       // If typed new line, attempt submit
-      const typedNewLine = changeObj.origin == '+input' && typeof changeObj.text == 'object' && changeObj
-        .text
-        .join('') == '';
+      const typedNewLine =
+        changeObj.origin == '+input' &&
+        typeof changeObj.text == 'object' &&
+        changeObj.text.join('') == '';
       if (typedNewLine) {
         if (this.props.store.editorToolbar.noActiveProfile) {
           return changeObj.cancel();
@@ -218,11 +227,12 @@ class Terminal extends React.Component {
         return changeObj.cancel();
       }
       // Remove pasted new lines
-      const pastedNewLine = changeObj.origin == 'paste' && typeof changeObj.text == 'object' && changeObj.text.length > 1;
+      const pastedNewLine =
+        changeObj.origin == 'paste' &&
+        typeof changeObj.text == 'object' &&
+        changeObj.text.length > 1;
       if (pastedNewLine) {
-        const newText = changeObj
-          .text
-          .join(' ');
+        const newText = changeObj.text.join(' ');
         return changeObj.update(null, null, [newText]);
       }
       // Otherwise allow input untouched
@@ -236,7 +246,11 @@ class Terminal extends React.Component {
   showPreviousCommand() {
     if (this.state.historyCursor > 0) {
       this.state.historyCursor -= 1;
-      this.updateCommand(this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]);
+      this.updateCommand(
+        this.props.store.outputs.get(this.props.id).commandHistory[
+          this.state.historyCursor
+        ],
+      );
     }
   }
 
@@ -244,12 +258,21 @@ class Terminal extends React.Component {
    * Get a more recent command from the history
    */
   showNextCommand() {
-    if (this.state.historyCursor < this.props.store.outputs.get(this.props.id).commandHistory.length - 1) {
+    if (
+      this.state.historyCursor <
+      this.props.store.outputs.get(this.props.id).commandHistory.length - 1
+    ) {
       this.state.historyCursor += 1;
-      this.updateCommand(this.props.store.outputs.get(this.props.id).commandHistory[this.state.historyCursor]);
+      this.updateCommand(
+        this.props.store.outputs.get(this.props.id).commandHistory[
+          this.state.historyCursor
+        ],
+      );
     } else {
-      this.state.historyCursor = this.props.store.outputs.get(this.props.id).commandHistory.length;
-      this.setState({command: ''});
+      this.state.historyCursor = this.props.store.outputs.get(
+        this.props.id,
+      ).commandHistory.length;
+      this.setState({ command: '' });
     }
   }
 
@@ -257,20 +280,10 @@ class Terminal extends React.Component {
    * Adds a command to the commandHistory and updates the historyCursor
    */
   updateHistory(command) {
-    this
-      .props
-      .store
-      .outputs
-      .get(this.props.id)
-      .commandHistory
-      .push(command);
-    this.state.historyCursor = this
-      .props
-      .store
-      .outputs
-      .get(this.props.id)
-      .commandHistory
-      .length;
+    this.props.store.outputs.get(this.props.id).commandHistory.push(command);
+    this.state.historyCursor = this.props.store.outputs.get(
+      this.props.id,
+    ).commandHistory.length;
   }
 
   /**
@@ -278,7 +291,7 @@ class Terminal extends React.Component {
    * @param {string} newCmd - The updated code to be stored in state
    */
   updateCommand(newCmd) {
-    this.setState({command: newCmd});
+    this.setState({ command: newCmd });
   }
 
   /**
@@ -286,7 +299,7 @@ class Terminal extends React.Component {
    */
   @action.bound
   executeCommand() {
-    console.log('Set executingTerminalCmd = true');
+    Broker.emit(EventType.FEATURE_USE, 'Terminal');
     if (this.state.command) {
       this.props.store.outputPanel.executingTerminalCmd = true;
     }
@@ -316,26 +329,19 @@ class Terminal extends React.Component {
       this.props.store.outputPanel.sendingCommand = this.state.command;
       this.setState({
         command: '',
-        historyCursor: this
-          .props
-          .store
-          .outputs
-          .get(this.props.id)
-          .commandHistory
-          .length
+        historyCursor: this.props.store.outputs.get(this.props.id)
+          .commandHistory.length,
       });
-      console.log('Send command to editor: ' + this.props.store.outputPanel.sendingCommand);
+      console.log(
+        'Send command to editor: ' +
+          this.props.store.outputPanel.sendingCommand,
+      );
     }
   }
 
   @action.bound
   finishedExecution() {
-    this
-      .props
-      .store
-      .editors
-      .get(this.props.id)
-      .executing = false;
+    this.props.store.editors.get(this.props.id).executing = false;
     if (this.props.store.editorPanel.activeEditorId == this.props.id) {
       this.props.store.editorToolbar.isActiveExecuting = false;
       this.props.store.editorPanel.stoppingExecution = false;
@@ -349,23 +355,25 @@ class Terminal extends React.Component {
           onClick={this.sendCommandToEditor}
           text="Send Command to Editor"
           iconName="pt-icon-chevron-up"
-          intent={Intent.NONE} />
+          intent={Intent.NONE}
+        />
       </Menu>
     );
   }
 
   render() {
-    const {connectDropTarget, isOver} = this.props; // eslint-disable-line
+    const { connectDropTarget, isOver } = this.props; // eslint-disable-line
     return connectDropTarget(
       <div className="outputTerminal">
         <CodeMirror
           className="outputCmdLine"
           ref={(c) => {
-          this.terminal = c;
-        }}
+            this.terminal = c;
+          }}
           options={this.state.terminalOptions}
           value={this.state.command}
-          onChange={value => this.updateCommand(value)} />
+          onChange={value => this.updateCommand(value)}
+        />
         <Tooltip
           className="executeCmdBtn"
           intent={Intent.PRIMARY}
@@ -373,17 +381,21 @@ class Terminal extends React.Component {
           inline
           content={globalString('output/terminal/execute')}
           tooltipClassName="pt-dark"
-          position={Position.TOP_RIGHT}>
+          position={Position.TOP_RIGHT}
+        >
           <AnchorButton
             className="pt-button"
             disabled={this.props.store.editorToolbar.noActiveProfile}
-            onClick={this.executeCommand}>
+            onClick={this.executeCommand}
+          >
             <SubmitIcon className="dbKodaSVG" width={30} height={30} />
           </AnchorButton>
         </Tooltip>
-      </div>
+      </div>,
     );
   }
 }
 
-export default DropTarget(DragItemTypes.LABEL, terminalTarget, collect)(Terminal);
+export default DropTarget(DragItemTypes.LABEL, terminalTarget, collect)(
+  Terminal,
+);

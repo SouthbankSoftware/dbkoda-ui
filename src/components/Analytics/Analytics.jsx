@@ -108,8 +108,21 @@ export default class Analytics extends React.Component {
    */
   newProfileCreated(profile) {
     if (this.props.store.userPreferences.telemetryEnabled) {
-      const mongoVersion = profile.dbVersion;
-      this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoVersion);
+      console.log(profile);
+      let mongoInfo =
+        '{ dbVersion: ' +
+        profile.dbVersion +
+        ', shellVersion: ' +
+        profile.shellVersion +
+        ', authorization: ' +
+        profile.authorization;
+      if (profile.hostRadio) {
+        mongoInfo += ', connectionType: hostname';
+      } else {
+        mongoInfo += ', connectionType: url';
+      }
+      mongoInfo += ', ssl: ' + profile.ssl + ', ssh: ' + profile.ssh + '}';
+      this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoInfo);
     }
   }
 

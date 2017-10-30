@@ -29,6 +29,7 @@ import React from 'react';
 import { inject } from 'mobx-react';
 import { reaction, runInAction, observable, action } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
+import { Broker, EventType } from '~/helpers/broker';
 import {
   ContextMenuTarget,
   Menu,
@@ -317,6 +318,7 @@ export default class TreeView extends React.Component {
           break;
       }
     } else if (this.nodeRightClicked) {
+      Broker.emit(EventType.FEATURE_USE, 'TreeAction_' + action);
       if (
         this.actionSelected &&
         this.actionSelected.view &&
