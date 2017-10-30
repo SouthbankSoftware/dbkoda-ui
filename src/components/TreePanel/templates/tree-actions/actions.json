@@ -144,12 +144,6 @@
       "name": "RestoreDatabase",
       "text": "Restore Database",
       "icon": "pt-icon-export"
-    },
-    {
-      "name": "DrillDatabase",
-      "text": "Query Database with Drill",
-      "icon": "pt-icon-add",
-      "noDialog": true
     }
   ],
   "collection": [
