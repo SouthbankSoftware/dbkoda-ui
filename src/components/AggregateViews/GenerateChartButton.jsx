@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-22T15:52:04+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T16:41:57+11:00
+ * @Last modified time: 2017-10-31T10:55:42+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -64,10 +64,7 @@ type State = {};
     api,
   };
 })
-export default class GenerateChartButton extends React.PureComponent<
-  Props,
-  State,
-> {
+export default class GenerateChartButton extends React.PureComponent<Props, State> {
   parserRegex = /use\s+(\S+)\s*;[^]*db\.(\S+)\.aggregate\(\s*(\[[^]*\])\s*,\s*({[^]*})\s*\)\s*;/;
   commentStripperRegex = /\/\*[^]*\*\//g;
 
@@ -106,12 +103,7 @@ export default class GenerateChartButton extends React.PureComponent<
     const { api } = this.props;
 
     // $FlowFixMe
-    api.outputApi.showChartPanel(
-      this.props.editorId,
-      {},
-      'error',
-      error.message,
-    );
+    api.outputApi.showChartPanel(this.props.editorId, {}, 'error', error.message);
   };
 
   _onAggregatorResultReceived = (result) => {
@@ -134,13 +126,18 @@ export default class GenerateChartButton extends React.PureComponent<
       const { connectionId } = this.props;
       const database = matches[1];
       const collection = matches[2];
-      const pipeline = this._strToJson(this._stripComment(matches[3]));
-      const options = this._strToJson(matches[4]);
+      let pipeline;
+      let options;
+      try {
+        pipeline = this._strToJson(this._stripComment(matches[3]));
+        options = this._strToJson(matches[4]);
+      } catch (error) {
+        this._handleError(error);
+        return;
+      }
 
       if (!_.isArray(pipeline) || !_.isObject(options)) {
-        this._handleError(
-          new Error(globalString('aggregate_builder/invalid_aggregation_code')),
-        );
+        this._handleError(new Error(globalString('aggregate_builder/invalid_aggregation_code')));
         return;
       }
 
@@ -160,9 +157,7 @@ export default class GenerateChartButton extends React.PureComponent<
         })
         .catch(this._handleError);
     } else {
-      this._handleError(
-        new Error(globalString('aggregate_builder/invalid_aggregation_code')),
-      );
+      this._handleError(new Error(globalString('aggregate_builder/invalid_aggregation_code')));
     }
   };
 
