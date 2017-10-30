@@ -35,6 +35,8 @@ import { inject, observer } from 'mobx-react';
 // $FlowIssue
 import ErrorView from '#/common/ErrorView';
 // $FlowIssue
+import { Broker, EventType } from '~/helpers/broker';
+// $FlowIssue
 import LoadingView from '#/common/LoadingView';
 import DataTree, {
   type Schema,
@@ -160,6 +162,7 @@ export default class ChartPanel extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    Broker.emit(EventType.FEATURE_USE, 'ChartView');
     this.reactions.push(
       reaction(
         () => {

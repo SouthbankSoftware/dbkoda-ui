@@ -174,7 +174,7 @@ class View extends React.Component {
             const shell = editor.shellId;
             const profileId = editor.profileId;
             const currEditorValue = this.getEditorValue();
-
+            Broker.emit(EventType.FEATURE_USE, 'ExecuteAll');
             // Listen for completion
             this.props.store.editors.get(editor.id).executing = true;
             this.props.store.editorToolbar.isActiveExecuting = true;
@@ -305,7 +305,9 @@ class View extends React.Component {
             let content = cm.getSelection();
             if (cm.getSelection().length > 0) {
               console.log('Executing Highlighted Text.');
+              Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
             } else {
+              Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
               console.log(
                 'No Highlighted Text, Executing Line: ',
                 cm.getCursor().line + 1,
