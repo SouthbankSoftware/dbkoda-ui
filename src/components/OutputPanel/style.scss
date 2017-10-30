@@ -185,6 +185,8 @@
           color: $buttonDangerIcon !important;
         }
       }
+    }
+    .pt-align-left {
       span.docLimitLabel {
         margin-left: 8px;
         margin-right: 8px;
@@ -204,6 +206,7 @@
           outline: unset;
           box-shadow: unset;
           color: $searchPrimaryFontColor;
+          padding-left: 4px;
         }
         span:focus {
           outline: unset;
@@ -214,6 +217,7 @@
           color: $searchPrimaryFontColor;
           outline: unset;
           box-shadow: unset;
+          padding-left: 4px;
         }
         input:focus {
           background-color: $fieldBrightBackgroundColor !important;

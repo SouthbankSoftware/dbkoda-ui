@@ -252,6 +252,27 @@ export default class Toolbar extends React.Component {
           <div className="pt-navbar-heading">
             {globalString('output/headings/table')}
           </div>
+          {this.props.store.outputs.get(editor.id).tableJson.database && (
+            <div>
+              <span className="docLimitLabel">Document Limit: </span>
+              <EditableText
+                minLines={1}
+                maxLines={1}
+                maxLength={9}
+                placeholder="200"
+                value={this.state.tableToolbar.limit}
+                onChange={(string) => {
+                  string = parseInt(string, 10);
+                  if (!string) {
+                    string = '';
+                  }
+                  this.setState({ tableToolbar: { limit: string } });
+                }}
+                intent={Intent.NONE}
+                className="limit"
+              />
+            </div>
+          )}
         </div>
         <div className="pt-navbar-group pt-align-right">
           {/* <Tooltip
@@ -271,6 +292,38 @@ export default class Toolbar extends React.Component {
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip> */}
+          {this.props.store.outputs.get(editor.id).tableJson.database && (
+            <div>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/tableToolbar/refresh')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="refreshButton circleButton"
+                  onClick={() => {
+                    if (!this.state.tableToolbar.limit) {
+                      this.state.tableToolbar.limit = 200;
+                    }
+                    this.props.api.treeApi.openNewTableViewForCollection(
+                      {
+                        collection: this.props.store.outputs.get(editor.id)
+                          .tableJson.collection,
+                        database: this.props.store.outputs.get(editor.id)
+                          .tableJson.database,
+                      },
+                      this.state.tableToolbar.limit,
+                    );
+                  }}
+                >
+                  <RefreshIcon className="dbKodaSVG" width={30} height={30} />
+                </AnchorButton>
+              </Tooltip>
+            </div>
+          )}
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
@@ -313,55 +366,6 @@ export default class Toolbar extends React.Component {
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
-          {this.props.store.outputs.get(editor.id).tableJson.database && (
-            <div>
-              <span className="docLimitLabel">Document Limit: </span>
-              <EditableText
-                minLines={1}
-                maxLines={1}
-                maxLength={9}
-                placeholder="200"
-                value={this.state.tableToolbar.limit}
-                onChange={(string) => {
-                  string = parseInt(string, 10);
-                  if (!string) {
-                    string = '';
-                  }
-                  this.setState({ tableToolbar: { limit: string } });
-                }}
-                intent={Intent.NONE}
-                className="limit"
-              />
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/tableToolbar/refresh')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="refreshButton circleButton"
-                  onClick={() => {
-                    if (!this.state.tableToolbar.limit) {
-                      this.state.tableToolbar.limit = 200;
-                    }
-                    this.props.api.treeApi.openNewTableViewForCollection(
-                      {
-                        collection: this.props.store.outputs.get(editor.id)
-                          .tableJson.collection,
-                        database: this.props.store.outputs.get(editor.id)
-                          .tableJson.database,
-                      },
-                      this.state.tableToolbar.limit,
-                    );
-                  }}
-                >
-                  <RefreshIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-            </div>
-          )}
         </div>
       </nav>
     );
