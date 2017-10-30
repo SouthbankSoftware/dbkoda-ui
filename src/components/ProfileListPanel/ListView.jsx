@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-09-11T10:27:15+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-30T15:59:58+11:00
  */
 
 /*
@@ -234,7 +234,6 @@ export default class ListView extends React.Component {
         passRadio: data.passRadio,
         keyRadio: data.keyRadio,
         sshKeyFile: data.sshKeyFile,
-        editorCount: 1,
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
         initialMsg: res.output ? res.output.join('\r') : '',
@@ -546,6 +545,8 @@ export default class ListView extends React.Component {
         </div>
       );
     } else {
+      const { api: { getEditorDisplayName } } = this.props;
+
       windows.push(<MenuItem text={globalString('profile/menu/editors')} />);
       this.props.store.editors.forEach((value) => {
         if (value.profileId.trim() == this.state.targetProfile.id.trim()) {
@@ -555,7 +556,7 @@ export default class ListView extends React.Component {
                 className={
                   'profileListContextMenu editorListing ' + value.fileName
                 }
-                text={value.fileName}
+                text={getEditorDisplayName(value)}
                 onClick={() => this.swapToEditor(value)}
                 intent={Intent.NONE}
                 iconName="pt-icon-document"

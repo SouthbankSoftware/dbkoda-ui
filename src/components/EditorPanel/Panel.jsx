@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-30T10:13:24+11:00
+ * @Last modified time: 2017-10-30T16:56:44+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -45,7 +45,7 @@ import {
 import addTooltip from '#/hoc/addTooltip';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
-import { DrawerPanes } from '#/common/Constants';
+import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { AggregateGraphicalBuilder } from '../AggregateViews';
 import Toolbar from './Toolbar';
 import View from './View';
@@ -299,10 +299,10 @@ export default class Panel extends React.Component {
       this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     } else if (!currEditor && editorPanel.activeDropdownId === 'Config') {
       this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
-    } else if (currEditor.type == 'shell') {
+    } else if (currEditor.type == EditorTypes.DEFAULT) {
       // Normal Editors
       this.props.store.drawer.drawerChild = DrawerPanes.DEFAULT;
-    } else if (currEditor.type == 'aggregate') {
+    } else if (currEditor.type == EditorTypes.AGGREGATE) {
       // Aggregate Editors.
       this.props.store.drawer.drawerChild = DrawerPanes.AGGREGATE;
     } else {
@@ -521,7 +521,7 @@ export default class Panel extends React.Component {
 
     return (
       <Dialog className="pt-dark savingDialog" intent={Intent.PRIMARY} isOpen>
-        <h4> {globalString('editor/savingDialog/title', currentEditor.fileName)} </h4>
+        <h4> {globalString('editor/savingDialog/title', this.getEditorTitle(currentEditor))} </h4>
         <p> {globalString('editor/savingDialog/message')} </p>
         <div className="dialogButtons">
           <AnchorButton
@@ -693,7 +693,8 @@ export default class Panel extends React.Component {
   }
 
   getEditorTitle = (editor) => {
-    return editor.alias + ' (' + editor.fileName + ')';
+    const { api: { getEditorDisplayName } } = this.props;
+    return editor.alias + ' (' + getEditorDisplayName(editor) + ')';
   };
 
   /**

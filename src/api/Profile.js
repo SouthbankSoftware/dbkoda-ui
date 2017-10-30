@@ -2,12 +2,13 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T16:13:21+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-30T16:04:21+11:00
  */
 
 import { action, observable } from 'mobx';
 import uuidV1 from 'uuid';
+import { EditorTypes } from '#/common/Constants';
 import StaticApi from './static';
 
 export default class ProfileApi {
@@ -39,9 +40,8 @@ export default class ProfileApi {
       const doc = StaticApi.createNewDocumentObject(content);
       doc.lineSep = StaticApi.determineEol(content);
 
-      const fileName = `new${profile.editorCount}.js`;
+      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(EditorTypes.DEFAULT);
       const editorId = uuidV1();
-      profile.editorCount += 1;
       editors.set(
         editorId,
         observable({
@@ -58,7 +58,7 @@ export default class ProfileApi {
           doc: observable.ref(doc),
           status: profile.status,
           path: null,
-          type: 'shell',
+          type: EditorTypes.DEFAULT,
         }),
       );
       if (this.api) {
