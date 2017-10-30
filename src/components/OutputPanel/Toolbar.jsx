@@ -254,7 +254,7 @@ export default class Toolbar extends React.Component {
           </div>
         </div>
         <div className="pt-navbar-group pt-align-right">
-          <Tooltip
+          {/* <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
             inline
@@ -270,13 +270,14 @@ export default class Toolbar extends React.Component {
             >
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
             inline
             content={globalString('output/toolbar/tableToolbar/expandAll')}
             tooltipClassName="pt-dark"
+            className="expandWrapper"
             position={Position.BOTTOM}
           >
             <AnchorButton
@@ -297,6 +298,7 @@ export default class Toolbar extends React.Component {
             inline
             content={globalString('output/toolbar/tableToolbar/collapseAll')}
             tooltipClassName="pt-dark"
+            className="collapseWrapper"
             position={Position.BOTTOM}
           >
             <AnchorButton
