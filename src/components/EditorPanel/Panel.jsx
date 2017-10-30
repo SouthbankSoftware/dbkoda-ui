@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-28T16:44:10+11:00
+ * @Last modified time: 2017-10-30T10:13:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -379,7 +379,8 @@ export default class Panel extends React.Component {
    */
   showContextMenu(event) {
     const target = event.target;
-    const tabId = target.getAttribute('data-tab-id');
+    const tabId =
+      target.getAttribute('data-tab-id') || target.parentElement.getAttribute('data-tab-id');
     const currentEditor = this.props.store.editors.get(tabId);
 
     if (tabId && tabId !== 'Default') {
