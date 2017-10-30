@@ -193,12 +193,10 @@ export default class Panel extends React.Component {
       profiles &&
       !this.state.hasAliasChanged
     ) {
-      console.log('!!!-', form.$('username').get('value'), '-!!!');
       if (
         form.$('host').get('value').length > MAX_HOSTNAME_ALIAS_LENGTH &&
         form.$('username').get('value').length > 0
       ) {
-        console.log('a');
         form.$('alias').value =
           form.$('username').get('value') +
           '@' +
@@ -210,7 +208,6 @@ export default class Panel extends React.Component {
       } else if (
         form.$('host').get('value').length > MAX_HOSTNAME_ALIAS_LENGTH
       ) {
-        console.log('b');
         form.$('alias').value =
           form.$('host').value.substring(0, MAX_HOSTNAME_ALIAS_LENGTH) +
           ':' +
@@ -218,7 +215,6 @@ export default class Panel extends React.Component {
           ' - ' +
           (profiles.size + 1);
       } else if (form.$('username').get('value').length > 0) {
-        console.log('c');
         form.$('alias').value =
           form.$('username').get('value') +
           '@' +
@@ -228,7 +224,6 @@ export default class Panel extends React.Component {
           ' - ' +
           (profiles.size + 1);
       } else {
-        console.log('d');
         form.$('alias').value =
           form.$('host').value +
           ':' +
@@ -242,7 +237,6 @@ export default class Panel extends React.Component {
       profiles &&
       !this.state.hasAliasChanged
     ) {
-      console.log(form.$('url').get('value').length);
       if (form.$('url').get('value').length > MAX_URL_ALIAS_LENGTH) {
         if (form.$('url').value.split('//').length > 1) {
           form.$('alias').value = form
@@ -255,7 +249,6 @@ export default class Panel extends React.Component {
             .value.substring(0, MAX_URL_ALIAS_LENGTH);
         }
       } else if (form.$('url').value.split('//').length > 1) {
-        console.log(form.$('url').value.split('//')[1]);
         if (form.$('url').value.split('//')[1] === '') {
           form.$('alias').value = 'New Profile - ' + (profiles.size + 1);
         } else {

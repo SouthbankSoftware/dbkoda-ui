@@ -29,6 +29,7 @@ import React from 'react';
 import { inject } from 'mobx-react';
 import { reaction, runInAction, observable, action } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
+
 import {
   ContextMenuTarget,
   Menu,
@@ -40,6 +41,7 @@ import {
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import LoadingView from '#/common/LoadingView';
+import { Analytics } from '#/Analytics';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
 import DocumentIcon from '../../styles/icons/document-solid-icon.svg';
@@ -289,6 +291,12 @@ export default class TreeView extends React.Component {
     const action = e._targetInst._currentElement._owner._instance.props.name;
     const noDialog = this.getNoDialogByName(action);
     this.actionSelected = this.getActionByName(action);
+    console.log(
+      'Action: ',
+      action,
+      'NodeRightClicked: ',
+      this.nodeRightClicked,
+    );
     if (noDialog) {
       switch (action) {
         case 'SampleCollections':
