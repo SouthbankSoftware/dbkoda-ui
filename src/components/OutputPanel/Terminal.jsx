@@ -18,6 +18,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* eslint no-unused-vars: warn */
+
 /**
  * @Author: chris
  * @Date:   2017-03-22T11:31:55+11:00
@@ -125,12 +127,8 @@ class Terminal extends React.Component {
      * @param {function()} - The reaction to any change on the state.
      */
     const reactionToDragDrop = reaction(
-      //eslint-disable-line
-      // eslint-disable-line
       () => this.props.store.dragItem.dragDropTerminal,
       (dragDropTerminal) => {
-        //eslint-disable-line
-        // eslint-disable-line
         if (
           this.props.store.editorPanel.activeEditorId == this.props.id &&
           this.props.store.dragItem.dragDropTerminal
