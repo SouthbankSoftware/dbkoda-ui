@@ -75,6 +75,7 @@ import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import { TranslatorPanel } from '../Translator';
+import { insertExplainOnCommand } from '../ExplainPanel/Utils';
 
 /**
  * editorTarget object for helping with drag and drop actions?
@@ -737,33 +738,34 @@ class View extends React.Component {
         content = cm.getLine(cm.getCursor().line);
       }
       content = content.replace(/\n/g, '');
-      if (content.indexOf('.explain(') < 0) {
-        if (content.indexOf('count()') > 0) {
-          content = content.replace(
-            /\.count\(\)/,
-            '.explain("' + explainParam + '").count()',
-          );
-        } else if (content.indexOf('.update(') > 0) {
-          content = content.replace(
-            /\.update\(/,
-            '.explain("' + explainParam + '").update(',
-          );
-        } else if (content.indexOf('.distinct(') > 0) {
-          content = content.replace(
-            /\.distinct\(/,
-            '.explain("' + explainParam + '").distinct(',
-          );
-        } else if (content.indexOf('.aggregate') > 0) {
-          content = content.replace(
-            /\.aggregate\(/,
-            '.explain("' + explainParam + '").aggregate(',
-          );
-        } else if (content.match(/;$/)) {
-          content = content.replace(/;$/, '.explain("' + explainParam + '");');
-        } else {
-          content += '.explain("' + explainParam + '")';
-        }
-      }
+      content = insertExplainOnCommand(content);
+      // if (content.indexOf('.explain(') < 0) {
+      //   if (content.indexOf('count()') > 0) {
+      //     content = content.replace(
+      //       /\.count\(\)/,
+      //       '.explain("' + explainParam + '").count()',
+      //     );
+      //   } else if (content.indexOf('.update(') > 0) {
+      //     content = content.replace(
+      //       /\.update\(/,
+      //       '.explain("' + explainParam + '").update(',
+      //     );
+      //   } else if (content.indexOf('.distinct(') > 0) {
+      //     content = content.replace(
+      //       /\.distinct\(/,
+      //       '.explain("' + explainParam + '").distinct(',
+      //     );
+      //   } else if (content.indexOf('.aggregate') > 0) {
+      //     content = content.replace(
+      //       /\.aggregate\(/,
+      //       '.explain("' + explainParam + '").aggregate(',
+      //     );
+      //   } else if (content.match(/;$/)) {
+      //     content = content.replace(/;$/, '.explain("' + explainParam + '");');
+      //   } else {
+      //     content += '.explain("' + explainParam + '")';
+      //   }
+      // }
 
       editor.executing = true;
       // Send request to feathers client

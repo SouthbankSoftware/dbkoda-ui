@@ -22,6 +22,11 @@
  * Created by joey on 6/6/17.
  */
 
+import _ from 'lodash';
+
+const esprima = require('esprima');
+const escodegen = require('escodegen');
+
 export const getWorstStage = (stages) => {
   let max = 0;
   stages.map((stage) => {
@@ -91,4 +96,141 @@ export const generateColorValueByTime = (stage, number, max, min) => {
   }
   const value = parseInt((((getStageElapseTime(stage) - min) * (greenValue - redValue)) / (max - min)) + redValue, 10);
   return coloursTheme[value];
+};
+
+const findMongoCommandFromMemberExpress = (exp) => {
+  const callee = exp.callee;
+  let memberExp = callee;
+  let parent = callee;
+  const commands = [];
+  while (memberExp && memberExp.type === esprima.Syntax.MemberExpression) {
+    if (memberExp.property && memberExp.property.type === esprima.Syntax.Identifier) {
+      const cmd = {name: memberExp.property.name, parent};
+      parent = memberExp;
+      if (memberExp.object && memberExp.object.type === esprima.Syntax.CallExpression) {
+        memberExp = memberExp.object.callee;
+      } else {
+        memberExp = memberExp.object;
+      }
+      cmd.ast = memberExp;
+      commands.push(cmd);
+    }
+  }
+  return {commands};
+};
+
+const findRootExpression = (ast) => {
+  if (ast.type === esprima.Syntax.Program && ast.body && ast.body.length === 1) {
+    const script = ast.body[0];
+    if (script.type === esprima.Syntax.ExpressionStatement) {
+      if (script.expression.type === esprima.Syntax.CallExpression) {
+        return script.expression;
+      } else if (script.expression.type === esprima.Syntax.AssignmentExpression) {
+        return script.expression.right;
+      }
+    } else if (script.type === esprima.Syntax.VariableDeclaration && script.declarations && script.declarations.length > 0) {
+      return script.declarations[0].init;
+    }
+  }
+  return {};
+};
+
+export const findMongoCommand = (commandAst) => {
+  if (commandAst.type === esprima.Syntax.Program && commandAst.body && commandAst.body.length === 1) {
+    const script = commandAst.body[0];
+    if (script.type === esprima.Syntax.ExpressionStatement) {
+      if (script.expression.type === esprima.Syntax.CallExpression) {
+        return findMongoCommandFromMemberExpress(script.expression);
+      } else if (script.expression.type === esprima.Syntax.AssignmentExpression) {
+        return findMongoCommandFromMemberExpress(script.expression.right);
+      }
+    } else if (script.type === esprima.Syntax.VariableDeclaration && script.declarations && script.declarations.length > 0) {
+      return findMongoCommandFromMemberExpress(script.declarations[0].init);
+    }
+  }
+  return {};
+};
+
+const findMatchedCommand = (commands) => {
+  const supportedCmds = ['find', 'count', 'distinct', 'update'];
+  let value = null;
+  supportedCmds.forEach((c) => {
+    const matched = _.find(commands, {name: c});
+    if (matched) {
+      value = matched;
+    }
+  });
+  return value;
+};
+
+const explainAst = (explainParam) => {
+  return {
+    type: esprima.Syntax.CallExpression,
+    callee: {
+      type: esprima.Syntax.MemberExpression,
+      object: null,
+      property: {
+        type: esprima.Syntax.Identifier,
+        name: 'explain',
+      }
+    },
+    arguments: [
+      {
+        type: esprima.Syntax.Literal,
+        value: explainParam,
+      }
+    ]
+  };
+};
+
+export const insertExplainToAggregate = (root) => {
+  if (root && root.arguments) {
+    root.arguments.push({
+      type: esprima.Syntax.ObjectExpression,
+      properties: [
+        {
+          type: esprima.Syntax.Property,
+          key: {
+            type: esprima.Syntax.Identifier,
+            name: 'explain',
+          },
+          value: {
+            type: esprima.Syntax.Literal,
+            value: true,
+            raw: 'true',
+          }
+        }
+      ]
+    });
+  }
+};
+
+export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') => {
+  try {
+    const parsed = esprima.parseScript(command);
+    const root = findRootExpression(parsed);
+    const {commands} = findMongoCommandFromMemberExpress(root);
+
+    if (!_.find(commands, {name: 'explain'})) {
+      const matchedCmd = findMatchedCommand(commands);
+      if (matchedCmd) {
+        const parent = matchedCmd.parent;
+        const explainObj = explainAst(explainParam);
+        explainObj.callee.object = matchedCmd.ast;
+        parent.object = explainObj;
+        return escodegen.generate(parsed);
+      }
+      const aggregate = _.find(commands, {name: 'aggregate'});
+      if (aggregate) {
+        insertExplainToAggregate(root);
+        return escodegen.generate(parsed);
+      }
+    }
+  } catch (err) {
+    console.error('failed to parse script ', command);
+  }
+  if (command.match(/;$/)) {
+    return command.replace(/;$/, '.explain("' + explainParam + '");');
+  }
+  return command + '.explain("' + explainParam + '")';
 };
