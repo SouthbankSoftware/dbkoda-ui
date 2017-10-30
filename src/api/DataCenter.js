@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-23T15:45:28+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-30T15:38:23+11:00
  */
 
 
@@ -60,6 +60,9 @@ export default class DataCenter {
     this.addEditor = this.editorApi.addEditor.bind(this);
     this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);
     this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
+    this.getUnsavedEditorInternalFileName = this.editorApi.getUnsavedEditorInternalFileName.bind(this);
+    this.getUnsavedEditorSuggestedFileName = this.editorApi.getUnsavedEditorSuggestedFileName.bind(this);
+    this.getEditorDisplayName = this.editorApi.getEditorDisplayName.bind(this);
     this.removeEditor = this.editorApi.removeEditor.bind(this);
     this.addDrillEditor = this.editorApi.addDrillEditor.bind(this);
     this.openConfigTab = this.editorApi.openConfigTab.bind(this);

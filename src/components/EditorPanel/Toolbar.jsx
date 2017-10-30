@@ -22,7 +22,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-28T17:15:03+11:00
+ * @Last modified time: 2017-10-30T15:55:58+11:00
  */
 
 import _ from 'lodash';
@@ -229,16 +229,20 @@ export default class Toolbar extends React.Component {
             throw err;
           });
       };
+
       if (currentEditor.path && !this.props.store.editorToolbar.saveAs) {
         return _saveFile(currentEditor.path);
       }
+
+      const { api: { getUnsavedEditorSuggestedFileName } } = this.props;
+
       return new Promise((resolve, reject) => {
         dialog.showSaveDialog(
           BrowserWindow.getFocusedWindow(),
           {
             defaultPath: path.resolve(
               this.props.store.editorPanel.lastFileSavingDirectoryPath,
-              currentEditor.fileName,
+              getUnsavedEditorSuggestedFileName(currentEditor),
             ),
             filters: FILE_FILTERS,
           },
