@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2017-07-11T17:33:29+10:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-10-31T14:14:13+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -20,6 +26,7 @@
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
+import fuzzysearch from 'fuzzysearch';
 
 export default class FilterList extends React.Component {
   static defaultProps = {
@@ -58,12 +65,10 @@ export default class FilterList extends React.Component {
   }
 
   filterList = (event) => {
+    const target = event.target.value.toLowerCase();
     let updatedList = this.props.items;
-    updatedList = updatedList.filter(
-      item =>
-        this.getItemTitle(item)
-          .toLowerCase()
-          .search(event.target.value.toLowerCase()) !== -1,
+    updatedList = updatedList.filter(item =>
+      fuzzysearch(target, this.getItemTitle(item).toLowerCase()),
     );
     this.setState({ items: updatedList });
   };
@@ -73,7 +78,12 @@ export default class FilterList extends React.Component {
 
     return (
       <div className="FilterList">
-        <input className="pt-input" type="text" placeholder="Search tabs..." onChange={this.filterList} />
+        <input
+          className="pt-input"
+          type="text"
+          placeholder="Search tabs..."
+          onChange={this.filterList}
+        />
         <ul>
           {this.state.items.map((item) => {
             const itemTitle = this.getItemTitle(item);
