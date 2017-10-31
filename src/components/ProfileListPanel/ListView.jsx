@@ -180,7 +180,7 @@ export default class ListView extends React.Component {
         this.closeOpenConnectionAlert();
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: <span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />, // eslint-disable-line react/no-danger
-          classNAme: 'danger',
+          className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
       });
@@ -300,7 +300,7 @@ export default class ListView extends React.Component {
           }
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
-            className: 'success ',
+            className: 'success',
             iconName: 'pt-icon-thumbs-up',
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
@@ -339,7 +339,7 @@ export default class ListView extends React.Component {
       }
       NewToaster.show({
         message: globalString('profile/noProfile'),
-        classNAme: 'danger',
+        className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     }

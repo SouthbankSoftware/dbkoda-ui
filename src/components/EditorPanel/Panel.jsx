@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-30T16:56:44+11:00
+ * @Last modified time: 2017-10-31T13:30:40+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -68,9 +68,12 @@ const splitPane2Style = {
 }))
 @observer
 export default class Panel extends React.Component {
+  reactions = [];
+
   static propTypes = {
     store: PropTypes.observableObject.isRequired,
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -87,51 +90,72 @@ export default class Panel extends React.Component {
     this.onTabScrollLeftBtnClicked = this.onTabScrollLeftBtnClicked.bind(this);
     this.onTabScrollRightBtnClicked = this.onTabScrollRightBtnClicked.bind(this);
     this.onTabListBtnClicked = this.onTabListBtnClicked.bind(this);
-    this.updateTabScrollPosition = this.updateTabScrollPosition.bind(this);
-  }
 
-  componentWillMount() {
-    this.reactionToProfile = reaction(
-      () => this.props.store.profileList.selectedProfile,
-      () => {
-        try {
-          if (
-            this.props.store.profileList.selectedProfile.id ==
-            this.props.store.editorPanel.activeDropdownId
-          ) {
-            console.log('do nothing as the profile might have been swaped by the dropdown.');
-            return;
-          }
-          let curEditor;
-          if (this.props.store.editorPanel.activeEditorId != 'Default') {
-            curEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-          }
+    this.reactions.push(
+      reaction(
+        () => this.props.store.profileList.selectedProfile,
+        () => {
+          try {
+            if (
+              this.props.store.profileList.selectedProfile.id ==
+              this.props.store.editorPanel.activeDropdownId
+            ) {
+              console.log('do nothing as the profile might have been swaped by the dropdown.');
+              return;
+            }
+            let curEditor;
+            if (this.props.store.editorPanel.activeEditorId != 'Default') {
+              curEditor = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+            }
 
-          if (
-            curEditor &&
-            curEditor.currentProfile == this.props.store.profileList.selectedProfile.id
-          ) {
-            console.log('do nothing');
-          } else {
-            const editors = this.props.store.editors.entries();
-            for (const editor of editors) {
-              console.log('editor[1].currentProfile :', editor[1].currentProfile);
-              if (editor[1].currentProfile == this.props.store.profileList.selectedProfile.id) {
-                this.changeTab(editor[1].id);
-                return;
+            if (
+              curEditor &&
+              curEditor.currentProfile == this.props.store.profileList.selectedProfile.id
+            ) {
+              console.log('do nothing');
+            } else {
+              const editors = this.props.store.editors.entries();
+              for (const editor of editors) {
+                console.log('editor[1].currentProfile :', editor[1].currentProfile);
+                if (editor[1].currentProfile == this.props.store.profileList.selectedProfile.id) {
+                  this.changeTab(editor[1].id);
+                  return;
+                }
+              }
+              if (
+                this.props.store.editorToolbar.newEditorForProfileId == '' &&
+                this.props.store.profileList.selectedProfile.status == 'OPEN'
+              ) {
+                this.props.store.editorToolbar.newEditorForProfileId = this.props.store.profileList.selectedProfile.id;
               }
             }
-            if (
-              this.props.store.editorToolbar.newEditorForProfileId == '' &&
-              this.props.store.profileList.selectedProfile.status == 'OPEN'
-            ) {
-              this.props.store.editorToolbar.newEditorForProfileId = this.props.store.profileList.selectedProfile.id;
-            }
+          } catch (e) {
+            console.error(e);
           }
-        } catch (e) {
-          console.log(e);
-        }
-      },
+        },
+      ),
+    );
+
+    this.reactions.push(
+      reaction(
+        () => this.props.store.editorPanel.shouldScrollToActiveTab,
+        (shouldScrollToActiveTab) => {
+          const { editorPanel } = this.props.store;
+
+          if (shouldScrollToActiveTab) {
+            editorPanel.shouldScrollToActiveTab = false;
+
+            // scroll to active tab
+            const el = document.getElementById(
+              `pt-tab-title_EditorTabs_${editorPanel.activeEditorId}`,
+            );
+            this.scrollToTab(this.getElementScrollRightTargetPosition.bind(this, el));
+          }
+        },
+        {
+          delay: 100,
+        },
+      ),
     );
   }
 
@@ -143,7 +167,7 @@ export default class Panel extends React.Component {
 
   componentWillUnmount() {
     this.saveTabScrollLeftPosition();
-    this.reactionToProfile();
+    _.forEach(this.reactions, r => r());
     Mousetrap.unbindGlobal(GlobalHotkeys.closeTab.keys, this.closeActiveTab);
   }
 
@@ -156,11 +180,6 @@ export default class Panel extends React.Component {
     this.tabs.tablistElement.scrollLeft = this.props.store.editorPanel.tabScrollLeftPosition;
   }
 
-  componentDidUpdate() {
-    this.updateTabScrollPosition();
-  }
-
-  reactionToProfile;
   /**
    * DEPRECATED? Remove this after refactoring.
    * Action for creating a new editor in the MobX store.
@@ -606,7 +625,7 @@ export default class Panel extends React.Component {
     const btnEl = this.tabListBtn.getBoundingClientRect();
 
     ContextMenu.show(tabList, {
-      left: btnEl.left,
+      left: btnEl.left + btnEl.width / 2,
       top: btnEl.top + btnEl.height,
     });
   }
@@ -671,9 +690,17 @@ export default class Panel extends React.Component {
     window.requestAnimationFrame(step);
   }
 
+  getTabTitleContainerElementFromPoint(x: number, y: number): HTMLElement {
+    let target = document.elementFromPoint(x, y);
+    while (target && target.getAttribute('role') !== 'tab') {
+      target = target.parentElement;
+    }
+    return target;
+  }
+
   getCurrentVisibleLeftmostTabElement() {
     const rect = this.tabScrollLeftBtn.getBoundingClientRect();
-    return document.elementFromPoint(rect.left + rect.width + 2, rect.top + 2);
+    return this.getTabTitleContainerElementFromPoint(rect.left + rect.width + 2, rect.top + 2);
   }
 
   getScrollLeftMax(tabListEl = this.tabs.tablistElement) {
@@ -689,7 +716,7 @@ export default class Panel extends React.Component {
     }
 
     const rect = this.tabScrollRightBtn.getBoundingClientRect();
-    return document.elementFromPoint(rect.left - 1, rect.top + 2);
+    return this.getTabTitleContainerElementFromPoint(rect.left - 1, rect.top + 2);
   }
 
   getEditorTitle = (editor) => {
@@ -805,8 +832,7 @@ export default class Panel extends React.Component {
           selectedTabId={this.props.store.editorPanel.activeEditorId}
         >
           {this.renderWelcome()}
-          {this.props.store.configPage.isOpen &&
-            this.renderConfigTab()}
+          {this.props.store.configPage.isOpen && this.renderConfigTab()}
           {editors.map((editor) => {
             const [, editorObj] = editor;
             const tabClassName = editorObj.alias.replace(/[\. ]/g, '');

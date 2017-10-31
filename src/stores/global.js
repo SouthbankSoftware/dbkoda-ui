@@ -69,7 +69,7 @@ global.EOL = global.IS_ELECTRON
 export default class Store {
   api;
   @observable locale = 'en';
-  @observable version = '0.7.3';
+  @observable version = '0.8.0';
   @observable updateAvailable = false;
   @observable profiles = observable.map();
   @observable editors = observable.map();
@@ -401,6 +401,10 @@ export default class Store {
     Globalize.locale(newStore.locale);
 
     newStore.layout.alertIsLoading = false;
+
+    // Version:
+    newStore.version = '0.8.0';
+
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
     newStore.editorPanel.creatingNewEditor = false;

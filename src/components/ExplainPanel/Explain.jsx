@@ -118,7 +118,8 @@ export default class Explain extends React.Component {
         };
       }
     } catch (err) {
-      console.log('err parse explain output ', err, output);
+      console.error('err parse explain output ', err);
+      console.error(output);
       explainOutputJson = {
         error: globalString('explain/parseError'),
         command: this.explainCommand,
