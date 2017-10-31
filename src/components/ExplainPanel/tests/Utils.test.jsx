@@ -112,7 +112,7 @@ describe('test explain utils functions', () => {
 
   it('test insert explain on aggregate', () => {
     let code = insertExplainOnCommand('db.test.aggregate([])');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain("queryPlanner").aggregate([])')));
+    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain().aggregate([])')));
 
     code = insertExplainOnCommand('db.orders.aggregate(\n' +
       '                     [\n' +
@@ -121,7 +121,7 @@ describe('test explain utils functions', () => {
       '                       { $sort: { total: -1 } }\n' +
       '                     ],\n' +
       '                   )');
-    assert.equal(code, escodegen.generate(esprima.parse('db.orders.explain("queryPlanner").aggregate(\n' +
+    assert.equal(code, escodegen.generate(esprima.parse('db.orders.explain().aggregate(\n' +
       '                     [\n' +
       '                       { $match: { status: "A" } },\n' +
       '                       { $group: { _id: "$cust_id", total: { $sum: "$amount" } } },\n' +
