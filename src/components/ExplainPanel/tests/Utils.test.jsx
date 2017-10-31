@@ -95,6 +95,19 @@ describe('test explain utils functions', () => {
 
     code = insertExplainOnCommand('db.test.invalid()');
     assert.equal(code, 'db.test.invalid().explain("queryPlanner")');
+
+    code = insertExplainOnCommand('db.users.find().sort({"user.age":1})');
+    assert.equal(code, escodegen.generate(esprima.parse('db.users.explain("queryPlanner").find().sort({"user.age":1})')));
+
+    code = insertExplainOnCommand('db.users.find().sort({"user.age":1}).limit(100)');
+    assert.equal(code, escodegen.generate(esprima.parse('db.users.explain("queryPlanner").find().sort({"user.age":1}).limit(100)')));
+  });
+
+  test('already has explain', () => {
+    let code = insertExplainOnCommand('db.explains.explain().find().sort({"user.age":1})');
+    assert.equal(code, 'db.explains.explain().find().sort({"user.age":1})');
+    code = insertExplainOnCommand('db.explains.explain("executionStats").find()');
+    assert.equal(code, 'db.explains.explain("executionStats").find()');
   });
 
   it('test insert explain on aggregate', () => {

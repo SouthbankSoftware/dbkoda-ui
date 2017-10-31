@@ -101,18 +101,18 @@ export const generateColorValueByTime = (stage, number, max, min) => {
 const findMongoCommandFromMemberExpress = (exp) => {
   const callee = exp.callee;
   let memberExp = callee;
-  let parent = callee;
+  let parent = exp;
   const commands = [];
   while (memberExp && memberExp.type === esprima.Syntax.MemberExpression) {
     if (memberExp.property && memberExp.property.type === esprima.Syntax.Identifier) {
       const cmd = {name: memberExp.property.name, parent};
       parent = memberExp;
+      cmd.ast = memberExp;
       if (memberExp.object && memberExp.object.type === esprima.Syntax.CallExpression) {
         memberExp = memberExp.object.callee;
       } else {
         memberExp = memberExp.object;
       }
-      cmd.ast = memberExp;
       commands.push(cmd);
     }
   }
@@ -214,23 +214,25 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
     if (!_.find(commands, {name: 'explain'})) {
       const matchedCmd = findMatchedCommand(commands);
       if (matchedCmd) {
-        const parent = matchedCmd.parent;
         const explainObj = explainAst(explainParam);
-        explainObj.callee.object = matchedCmd.ast;
-        parent.object = explainObj;
+        explainObj.callee.object = matchedCmd.ast.object;
+        matchedCmd.ast.object = explainObj;
         return escodegen.generate(parsed);
       }
+
       const aggregate = _.find(commands, {name: 'aggregate'});
       if (aggregate) {
         insertExplainToAggregate(root);
         return escodegen.generate(parsed);
       }
+
+      if (command.match(/;$/)) {
+        return command.replace(/;$/, '.explain("' + explainParam + '");');
+      }
+      return command + '.explain("' + explainParam + '")';
     }
   } catch (err) {
     console.error('failed to parse script ', command);
   }
-  if (command.match(/;$/)) {
-    return command.replace(/;$/, '.explain("' + explainParam + '");');
-  }
-  return command + '.explain("' + explainParam + '")';
+  return command;
 };
