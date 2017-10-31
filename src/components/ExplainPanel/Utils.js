@@ -152,7 +152,7 @@ export const findMongoCommand = (commandAst) => {
 };
 
 const findMatchedCommand = (commands) => {
-  const supportedCmds = ['find', 'count', 'distinct', 'update'];
+  const supportedCmds = ['find', 'count', 'distinct', 'update', 'aggregate'];
   let value = null;
   supportedCmds.forEach((c) => {
     const matched = _.find(commands, {name: c});
@@ -238,11 +238,11 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
         return escodegen.generate(parsed);
       }
 
-      const aggregate = _.find(commands, {name: 'aggregate'});
-      if (aggregate) {
-        insertExplainToAggregate(root);
-        return escodegen.generate(parsed);
-      }
+      // const aggregate = _.find(commands, {name: 'aggregate'});
+      // if (aggregate) {
+      //   insertExplainToAggregate(root);
+      //   return escodegen.generate(parsed);
+      // }
 
       if (command.match(/;$/)) {
         return command.replace(/;$/, '.explain("' + explainParam + '");');

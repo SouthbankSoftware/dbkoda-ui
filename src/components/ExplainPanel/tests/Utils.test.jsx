@@ -112,7 +112,7 @@ describe('test explain utils functions', () => {
 
   it('test insert explain on aggregate', () => {
     let code = insertExplainOnCommand('db.test.aggregate([])');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.aggregate([], {explain: true})')));
+    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain("queryPlanner").aggregate([])')));
 
     code = insertExplainOnCommand('db.orders.aggregate(\n' +
       '                     [\n' +
@@ -121,29 +121,12 @@ describe('test explain utils functions', () => {
       '                       { $sort: { total: -1 } }\n' +
       '                     ],\n' +
       '                   )');
-    assert.equal(code, escodegen.generate(esprima.parse('db.orders.aggregate(\n' +
+    assert.equal(code, escodegen.generate(esprima.parse('db.orders.explain("queryPlanner").aggregate(\n' +
       '                     [\n' +
       '                       { $match: { status: "A" } },\n' +
       '                       { $group: { _id: "$cust_id", total: { $sum: "$amount" } } },\n' +
       '                       { $sort: { total: -1 } }\n' +
       '                     ],\n' +
-      '                     {\n' +
-      '                       explain: true\n' +
-      '                     }\n' +
       '                   )')));
-  });
-
-  it('test insert explain on aggregate with existed parameter', () => {
-    const aggCode = 'db.explains.aggregate([\n' +
-      '  { $match:{ "$and":[\n' +
-      '         { "user.age":{ $gte:3 } } \n' +
-      '        ]      \n' +
-      '      }\n' +
-      '  },\n' +
-      '],{allowDiskUse: true})';
-    const code = insertExplainOnCommand(aggCode);
-    const ast = esprima.parse(code);
-    assert.equal('explain', ast.body[0].expression.arguments[1].properties[1].key.name);
-    assert.equal(true, ast.body[0].expression.arguments[1].properties[1].value.value);
   });
 });
