@@ -185,10 +185,11 @@ const explainAst = (explainParam) => {
 
 export const insertExplainToAggregate = (root) => {
   if (root && root.arguments) {
-    root.arguments.push({
-      type: esprima.Syntax.ObjectExpression,
-      properties: [
-        {
+    if (root.arguments.length > 1) {
+      // insert into the second argument
+      const second = root.arguments[1];
+      if (second && second.type === esprima.Syntax.ObjectExpression && second.properties) {
+        second.properties.push({
           type: esprima.Syntax.Property,
           key: {
             type: esprima.Syntax.Identifier,
@@ -196,12 +197,29 @@ export const insertExplainToAggregate = (root) => {
           },
           value: {
             type: esprima.Syntax.Literal,
-            value: true,
-            raw: 'true',
+            value: true
           }
-        }
-      ]
-    });
+        });
+      }
+    } else {
+      root.arguments.push({
+        type: esprima.Syntax.ObjectExpression,
+        properties: [
+          {
+            type: esprima.Syntax.Property,
+            key: {
+              type: esprima.Syntax.Identifier,
+              name: 'explain',
+            },
+            value: {
+              type: esprima.Syntax.Literal,
+              value: true,
+              raw: 'true',
+            }
+          }
+        ]
+      });
+    }
   }
 };
 
