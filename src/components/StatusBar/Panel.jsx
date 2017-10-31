@@ -243,18 +243,33 @@ export default class Panel extends React.Component {
           isOpen={this.state.isLodgeBugAlertOpen}
           confirmButtonText={globalString('general/confirm')}
           onConfirm={this.onConfirmLodgeBug}
-          cancelButtonText={globalString('general/cancel')}
-          onCancel={this.onCancelLodgeBug}
         >
           {this.state.isSupportBundleReady ? (
             <div className="supportBundleFinished">
               <p className="supportBundleFinishedText">
                 {globalString(
-                  'status_bar/support_bundle/finished_text_default',
+                  'status_bar/support_bundle/finished_text_default_one',
+                )}
+              </p>
+              <p className="supportBundleFinishedText">
+                {globalString(
+                  'status_bar/support_bundle/finished_text_default_two',
+                )}
+                <br />
+                {globalString(
+                  'status_bar/support_bundle/finished_text_default_three',
+                )}
+              </p>
+              <p className="supportBundleFinishedText">
+                {globalString(
+                  'status_bar/support_bundle/finished_text_default_four',
                 )}
                 <b className="directoryFAQLink" onClick={this.openDirectoryFAQ}>
                   {globalString('status_bar/support_bundle/directory_faq_link')}
                 </b>
+                {globalString(
+                  'status_bar/support_bundle/finished_text_default_five',
+                )}
               </p>
               <AnchorButton
                 className="forumButton"
