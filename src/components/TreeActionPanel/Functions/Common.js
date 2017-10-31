@@ -36,13 +36,13 @@ const debug = false;
 export function dbkoda_listdb(params) {
   //eslint-disable-line
   console.log(params);
-  return 'db.adminCommand({listDatabases: 1})';
+  return 'db.adminCommand({listDatabases: 1}).databases';
 }
 
 export function dbkoda_listdb_parse(res) {
   //eslint-disable-line
   const dblist = [];
-  res.databases.forEach((d) => {
+  res.forEach((d) => {
     dblist.push(d.name);
   });
   return dblist.sort();
