@@ -3,10 +3,8 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-30T15:59:58+11:00
- */
-
-/*
+ * @Last modified time: 2017-10-31T10:47:12+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -126,11 +124,7 @@ export default class ListView extends React.Component {
     let connectionUrl;
     let query = {}; // eslint-disable-line
     if (selectedProfile.hostRadio) {
-      connectionUrl =
-        ProfileForm.mongoProtocol +
-        selectedProfile.host +
-        ':' +
-        selectedProfile.port;
+      connectionUrl = ProfileForm.mongoProtocol + selectedProfile.host + ':' + selectedProfile.port;
     } else if (selectedProfile.urlRadio) {
       connectionUrl = selectedProfile.url;
     }
@@ -143,8 +137,7 @@ export default class ListView extends React.Component {
       query.localHost = '127.0.0.1';
       selectedProfile.sshLocalPort = await ProfileForm.getRandomPort();
       query.localPort = selectedProfile.sshLocalPort;
-      connectionUrl =
-        ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+      connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       if (selectedProfile.passRadio) {
         query.remotePass = usrRemotePass;
       } else if (selectedProfile.keyRadio) {
@@ -186,7 +179,7 @@ export default class ListView extends React.Component {
         this.props.store.profileList.creatingNewProfile = false;
         this.closeOpenConnectionAlert();
         DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />), // eslint-disable-line react/no-danger
+          message: <span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />, // eslint-disable-line react/no-danger
           classNAme: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
@@ -245,13 +238,8 @@ export default class ListView extends React.Component {
         profile.bRemotePass = true;
       }
       this.props.store.profiles.set(res.id, profile);
-      this.props.store.profileList.selectedProfile = this.props.store.profiles.get(
-        res.id,
-      );
-      Broker.emit(
-        EventType.RECONNECT_PROFILE_CREATED,
-        this.props.store.profiles.get(res.id),
-      );
+      this.props.store.profileList.selectedProfile = this.props.store.profiles.get(res.id);
+      Broker.emit(EventType.RECONNECT_PROFILE_CREATED, this.props.store.profiles.get(res.id));
       this.props.store.editors.forEach((value, _) => {
         if (value.shellId == res.shellId) {
           // the default shell is using the same shell id as the profile
@@ -272,9 +260,7 @@ export default class ListView extends React.Component {
             .then(() => {
               value.status = ProfileStatus.OPEN;
             })
-            .catch(err =>
-              console.error('failed to create shell connection', err),
-            );
+            .catch(err => console.error('failed to create shell connection', err));
         }
       });
     } else {
@@ -318,7 +304,7 @@ export default class ListView extends React.Component {
             iconName: 'pt-icon-thumbs-up',
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
-          this.props.api.deleteProfileFromDrill({profile: selectedProfile});
+          this.props.api.deleteProfileFromDrill({ profile: selectedProfile });
           if (this.props.store.profileList.selectedProfile.status == 'CLOSED') {
             runInAction(() => {
               this.props.store.treePanel.isRefreshDisabled = true;
@@ -327,7 +313,7 @@ export default class ListView extends React.Component {
           this.closeConnectionCloseAlert();
         })
         .catch((err) => {
-          console.log('error:', err);
+          console.error('error:', err);
           if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,
@@ -381,8 +367,7 @@ export default class ListView extends React.Component {
       } else {
         if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE
-              .OPEN_DIALOG,
+            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG,
             EventLogging.getFragmentEnum().PROFILES,
             'User opened the Edit Connection Profile drawer.',
           );
@@ -427,10 +412,7 @@ export default class ListView extends React.Component {
   @autobind
   openCloseConnectionAlert() {
     this.setState({ isCloseWarningActive: true });
-    Mousetrap.bindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.closeConnectionCloseAlert,
-    );
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
@@ -438,20 +420,14 @@ export default class ListView extends React.Component {
   closeConnectionCloseAlert() {
     this.props.store.layout.alertIsLoading = false;
     this.setState({ isCloseWarningActive: false });
-    Mousetrap.unbindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.closeConnectionCloseAlert,
-    );
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   @autobind
   openRemoveConnectionAlert() {
     this.setState({ isRemoveWarningActive: true });
-    Mousetrap.bindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.closeConnectionRemoveAlert,
-    );
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
 
@@ -459,21 +435,19 @@ export default class ListView extends React.Component {
   closeConnectionRemoveAlert() {
     this.props.store.layout.alertIsLoading = false;
     this.setState({ isRemoveWarningActive: false });
-    Mousetrap.unbindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.closeConnectionRemoveAlert,
-    );
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
 
   @autobind
   openOpenConnectionAlert() {
-    if (this.state.targetProfile.sha || this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass) {
+    if (
+      this.state.targetProfile.sha ||
+      this.state.targetProfile.bPassPhrase ||
+      this.state.targetProfile.bRemotePass
+    ) {
       this.setState({ isOpenWarningActive: true });
-      Mousetrap.bindGlobal(
-        DialogHotkeys.closeDialog.keys,
-        this.closeOpenConnectionAlert,
-      );
+      Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openProfile);
     } else {
       this.openProfile();
@@ -484,14 +458,8 @@ export default class ListView extends React.Component {
   closeOpenConnectionAlert() {
     this.props.store.layout.alertIsLoading = false;
     this.setState({ isOpenWarningActive: false });
-    Mousetrap.unbindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.closeOpenConnectionAlert,
-    );
-    Mousetrap.unbindGlobal(
-      DialogHotkeys.submitDialog.keys,
-      this.openConnection,
-    );
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
   }
 
   @autobind
@@ -553,9 +521,7 @@ export default class ListView extends React.Component {
           windows.push(
             <div className="menuItemWrapper">
               <MenuItem
-                className={
-                  'profileListContextMenu editorListing ' + value.fileName
-                }
+                className={'profileListContextMenu editorListing ' + value.fileName}
                 text={getEditorDisplayName(value)}
                 onClick={() => this.swapToEditor(value)}
                 intent={Intent.NONE}
@@ -579,7 +545,7 @@ export default class ListView extends React.Component {
           <div className="menuItemWrapper">
             <MenuItem
               className="profileListContextMenu newWindow"
-              onClick={this.props.api.addEditor}
+              onClick={() => this.props.api.addEditor({ profileId: profile.id })}
               text={globalString('profile/menu/newWindow')}
               intent={Intent.NONE}
               iconName="pt-icon-new-text-box"
@@ -611,34 +577,21 @@ export default class ListView extends React.Component {
       const className =
         this.props.store.profileList &&
         this.props.store.profileList.selectedProfile &&
-        profiles[rowIndex][1].id ===
-          this.props.store.profileList.selectedProfile.id
+        profiles[rowIndex][1].id === this.props.store.profileList.selectedProfile.id
           ? 'connection-profile-cell connection-profile-cell-selected'
           : 'connection-profile-cell';
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
-          <Cell
-            className={
-              className + ' profileListItem ' + profiles[rowIndex][1].alias
-            }
-          >
+          <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
             <ConnectionIcon className="dbKodaSVG" width={20} height={20} />
-            <p className="profileListing">
-              {profiles[rowIndex][1].alias}
-            </p>
+            <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
         );
       }
       return (
         <Cell className={className}>
-          <ConnectionIcon
-            className="dbKodaSVG closedProfile"
-            width={20}
-            height={20}
-          />
-          <i className="profileListing closedProfile">
-            {profiles[rowIndex][1].alias}
-          </i>
+          <ConnectionIcon className="dbKodaSVG closedProfile" width={20} height={20} />
+          <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
         </Cell>
       );
     };
@@ -665,9 +618,7 @@ export default class ListView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isCloseWarningActive}
         >
-          <p>
-            {globalString('profile/closeAlert/prompt')}
-          </p>
+          <p>{globalString('profile/closeAlert/prompt')}</p>
           <div className="dialogButtons">
             <AnchorButton
               className="submitButton"
@@ -691,9 +642,7 @@ export default class ListView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isRemoveWarningActive}
         >
-          <p>
-            {globalString('profile/removeAlert/prompt')}
-          </p>
+          <p>{globalString('profile/removeAlert/prompt')}</p>
           <div className="dialogButtons">
             <AnchorButton
               className="submitButton"
@@ -717,48 +666,52 @@ export default class ListView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isOpenWarningActive}
         >
-          {this.state.targetProfile && this.state.targetProfile.sha &&
-            <div className="dialogContent">
-              <p>
-                {globalString('profile/openAlert/passwordPrompt')}
-              </p>
-              <input
-                autoFocus
-                className="pt-input passwordInput"
-                placeholder={globalString('profile/openAlert/passwordPlaceholder')}
-                type="password"
-                dir="auto"
-                onChange={this.setPWText}
-              />
-            </div>}
-          {this.state.targetProfile && this.state.targetProfile.bRemotePass &&
-            <div className="dialogContent">
-              <p>
-                {globalString('profile/openAlert/remotePassPrompt')}
-              </p>
-              <input
-                autoFocus={!this.state.targetProfile.sha}
-                className="pt-input remotePassInput"
-                placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
-                type="password"
-                dir="auto"
-                onChange={(event) => { this.setState({ remotePass: event.target.value }); }}
-              />
-            </div>}
-          {this.state.targetProfile && this.state.targetProfile.bPassPhrase &&
-            <div className="dialogContent">
-              <p>
-                {globalString('profile/openAlert/passPhrasePrompt')}
-              </p>
-              <input
-                autoFocus={!this.state.targetProfile.sha && !this.state.targetProfile.bRemotePass}
-                className="pt-input passPhraseInput"
-                placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
-                type="password"
-                dir="auto"
-                onChange={(event) => { this.setState({ passPhrase: event.target.value }); }}
-              />
-            </div>}
+          {this.state.targetProfile &&
+            this.state.targetProfile.sha && (
+              <div className="dialogContent">
+                <p>{globalString('profile/openAlert/passwordPrompt')}</p>
+                <input
+                  autoFocus
+                  className="pt-input passwordInput"
+                  placeholder={globalString('profile/openAlert/passwordPlaceholder')}
+                  type="password"
+                  dir="auto"
+                  onChange={this.setPWText}
+                />
+              </div>
+            )}
+          {this.state.targetProfile &&
+            this.state.targetProfile.bRemotePass && (
+              <div className="dialogContent">
+                <p>{globalString('profile/openAlert/remotePassPrompt')}</p>
+                <input
+                  autoFocus={!this.state.targetProfile.sha}
+                  className="pt-input remotePassInput"
+                  placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
+                  type="password"
+                  dir="auto"
+                  onChange={(event) => {
+                    this.setState({ remotePass: event.target.value });
+                  }}
+                />
+              </div>
+            )}
+          {this.state.targetProfile &&
+            this.state.targetProfile.bPassPhrase && (
+              <div className="dialogContent">
+                <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
+                <input
+                  autoFocus={!this.state.targetProfile.sha && !this.state.targetProfile.bRemotePass}
+                  className="pt-input passPhraseInput"
+                  placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
+                  type="password"
+                  dir="auto"
+                  onChange={(event) => {
+                    this.setState({ passPhrase: event.target.value });
+                  }}
+                />
+              </div>
+            )}
           <div className="dialogButtons">
             <AnchorButton
               className="openButton"
