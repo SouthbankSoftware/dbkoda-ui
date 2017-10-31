@@ -41,8 +41,10 @@
         "cancel": "Cancel",
         "okay": "Okay",
         "failed_title": "Aggregation Failed",
+        "failed_message_unknown":
+          "Apologies, Aggregation failed on that collection for an unknown reason, please raise a bug using the support bundle button in the bottom right corner of the screen.",
         "failed_message":
-          "Aggregation failed on that collection for an unknown reason, please raise a bug using the support bundle button in the bottom right corner of the screen."
+          "Apologies, Aggregation has lost connection with the Mongo shell, please restart Aggregation builder from the tree context menu."
       },
       "invalid_aggregation_code":
         "Invalid aggregation code. Please check syntax."
@@ -559,9 +561,14 @@
         "toaster_confirm": "Support Bundle Created.",
         "alert_text":
           "Pressing okay will cause the application to bundle up some logs about your experience into a compressed file, this file can then be uploaded to the dbKoda team to help solve your bug. This may take a small amount of time.",
-        "finished_text_default":
-          "Support bundle has been created and is avaliable in your dbKoda directory. Please select one of the options below to send us your support bundle. Directory for support bundle is documented ",
-        "directory_faq_link": "here.",
+        "finished_text_default_one":
+          "A Support Bundle has been created and is avaliable in your dbKoda directory;",
+        "finished_text_default_two": "  $HOMEPATH%\\\\.dbKoda on Windows",
+        "finished_text_default_three": "  $HOME/.dbKoda on Mac and Linux.",
+        "finished_text_default_four":
+          "Please select one of the options below to send us your support bundle. See ",
+        "directory_faq_link": "this link ",
+        "finished_text_default_five": "for more information.",
         "forum": {
           "button": "Forum",
           "default_subject":
@@ -572,7 +579,7 @@
           "default_subject":
             "dbKoda%20Bug%20-%20%7BYour%20Bug%20Title%20Here%7D",
           "default_body":
-            "Please%20Describe%20your%20Bug%20or%20Issue%20Below%3A%0A%0A%0APlease%20Attach%20your%20Support%20Bundle%20to%20this%20document along with any%20other%20relevant%20files%20or%20photos.%2C%20Support%20Bundle%20location%20is%20documented%20here%3A%20https%3A%2F%2Fdbkoda.useresponse.com%2Fknowledge-base%2Farticle%2Fhow-do-i-generate-a-support-bundle%0A%0A%0AKind%20Regards%2C%0A%7BYour%20Name%7D"
+            "Please%20Describe%20your%20Bug%20or%20Issue%20Below%3A%0A%0A%0APlease%20Attach%20your%20Support%20Bundle%20to%20this%20document along with any%20other%20relevant%20files%20or%20photos.%20Support%20Bundle%20location%20is%20documented%20here%3A%20https%3A%2F%2Fdbkoda.useresponse.com%2Fknowledge-base%2Farticle%2Fhow-do-i-generate-a-support-bundle%0A%0A%0AKind%20Regards%2C%0A%7BYour%20Name%7D"
         }
       }
     }

@@ -60,7 +60,7 @@
   }
 
   .form-scrollable {
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
   }
 
@@ -224,19 +224,19 @@
     div.columns-2-max {
       div.pt-form-group {
         width: 44%;
-        padding: 0
+        padding: 0;
       }
     }
     div.columns-3-max {
       div.pt-form-group {
         width: 30%;
-        padding: 0
+        padding: 0;
       }
     }
     div.columns-4-max {
       div.pt-form-group {
         width: 20%;
-        padding: 0
+        padding: 0;
       }
     }
   }
@@ -386,6 +386,10 @@
   .Select-menu-outer {
     z-index: 999 !important;
     position: absolute;
+    max-height: 130px;
+    .Select-menu {
+      max-height: 130px;
+    }
   }
   .Select-placeholder,
   .Select--single > .Select-control .Select-value {

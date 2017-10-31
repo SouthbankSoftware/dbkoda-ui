@@ -75,7 +75,9 @@ export default class GraphicalBuilder extends React.Component {
       colorMatching: [],
       collection: props.collection,
       isLoading: true,
-      failed: false
+      failed: false,
+      failureReason: 'Unknown'
+
     };
 
     Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
@@ -112,6 +114,11 @@ export default class GraphicalBuilder extends React.Component {
         }
       })
       .catch((err) => {
+        if (err.message.includes('Connection does not exist')) {
+          this.state.failureReason = 'ConnectionDoesNotExist';
+        } else {
+          this.state.failureReason = 'Unknown';
+        }
         this.state.isLoading = false;
         this.setState({failed: true});
         console.error(err);
@@ -1385,13 +1392,22 @@ export default class GraphicalBuilder extends React.Component {
 
   render() {
     if (this.state.failed) {
-      return (
-        <div className="aggregateGraphicalBuilderWrapper">
-          <ErrorView
-            title={globalString('aggregate_builder/alerts/failed_title')}
-            error={globalString('aggregate_builder/alerts/failed_message')} />
-        </div>
-      );
+      if (this.state.failureReason === 'ConnectionDoesNotExist') {
+        return (
+          <div className="aggregateGraphicalBuilderWrapper">
+            <ErrorView
+              title={globalString('aggregate_builder/alerts/failed_title')}
+              error={globalString('aggregate_builder/alerts/failed_message')} />
+          </div>
+        );
+      }
+        return (
+          <div className="aggregateGraphicalBuilderWrapper">
+            <ErrorView
+              title={globalString('aggregate_builder/alerts/failed_title')}
+              error={globalString('aggregate_builder/alerts/failed_message_unknown')} />
+          </div>
+        );
     }
     return (
       <div className="aggregateGraphicalBuilderWrapper">
