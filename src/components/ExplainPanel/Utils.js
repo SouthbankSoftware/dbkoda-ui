@@ -152,7 +152,7 @@ export const findMongoCommand = (commandAst) => {
 };
 
 const findMatchedCommand = (commands) => {
-  const supportedCmds = ['find', 'count', 'distinct', 'update'];
+  const supportedCmds = ['find', 'count', 'distinct', 'update', 'aggregate'];
   let value = null;
   supportedCmds.forEach((c) => {
     const matched = _.find(commands, {name: c});
@@ -164,6 +164,13 @@ const findMatchedCommand = (commands) => {
 };
 
 const explainAst = (explainParam) => {
+  const args = [];
+  if (explainParam) {
+    args.push({
+      type: esprima.Syntax.Literal,
+      value: explainParam,
+    });
+  }
   return {
     type: esprima.Syntax.CallExpression,
     callee: {
@@ -174,12 +181,7 @@ const explainAst = (explainParam) => {
         name: 'explain',
       }
     },
-    arguments: [
-      {
-        type: esprima.Syntax.Literal,
-        value: explainParam,
-      }
-    ]
+    arguments: args
   };
 };
 
@@ -232,17 +234,17 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
     if (!_.find(commands, {name: 'explain'})) {
       const matchedCmd = findMatchedCommand(commands);
       if (matchedCmd) {
-        const explainObj = explainAst(explainParam);
+        const explainObj = matchedCmd.name === 'aggregate' ? explainAst() : explainAst(explainParam);
         explainObj.callee.object = matchedCmd.ast.object;
         matchedCmd.ast.object = explainObj;
         return escodegen.generate(parsed);
       }
 
-      const aggregate = _.find(commands, {name: 'aggregate'});
-      if (aggregate) {
-        insertExplainToAggregate(root);
-        return escodegen.generate(parsed);
-      }
+      // const aggregate = _.find(commands, {name: 'aggregate'});
+      // if (aggregate) {
+      //   insertExplainToAggregate(root);
+      //   return escodegen.generate(parsed);
+      // }
 
       if (command.match(/;$/)) {
         return command.replace(/;$/, '.explain("' + explainParam + '");');

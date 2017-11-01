@@ -739,7 +739,6 @@ class View extends React.Component {
         );
         content = cm.getLine(cm.getCursor().line);
       }
-      content = content.replace(/\n/g, '');
       content = insertExplainOnCommand(content, explainParam);
       editor.executing = true;
       // Send request to feathers client

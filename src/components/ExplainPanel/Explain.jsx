@@ -32,6 +32,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
+import _ from 'lodash';
 import Panel from './Panel';
 import { Broker, EventType } from '../../helpers/broker/index';
 
@@ -110,13 +111,28 @@ export default class Explain extends React.Component {
         command: this.explainCommand,
         viewType: 0,
       };
-      if (!explainOutputJson.output || !explainOutputJson.output.queryPlanner) {
-        explainOutputJson = {
-          error: globalString('explain/parseError'),
-          command: this.explainCommand,
-          output: parseOutput(output),
-        };
-      }
+      if (explainOutputJson.output.stages && explainOutputJson.output.stages.length > 0) {
+        // this is aggregate framework explain output, convert stages to regular stage
+        const aggStages = explainOutputJson.output.stages;
+        const converted = {queryPlanner: {winningPlan: {}}};
+        aggStages.reverse().forEach((stage) => {
+          _.values(stage).forEach((v) => {
+            _.keys(v).forEach((k) => {
+              if (k === 'queryPlanner') {
+                converted.queryPlanner = v.queryPlanner;
+              }
+            });
+          });
+        });
+        console.log('converted ', converted);
+        explainOutputJson.output = converted;
+      } else if (!explainOutputJson.output || !explainOutputJson.output.queryPlanner) {
+          explainOutputJson = {
+            error: globalString('explain/parseError'),
+            command: this.explainCommand,
+            output: parseOutput(output),
+          };
+        }
     } catch (err) {
       console.error('err parse explain output ', err);
       console.error(output);
