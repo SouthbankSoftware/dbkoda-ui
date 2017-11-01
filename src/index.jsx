@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-13T10:36:10+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-01T13:20:38+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,14 +23,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/**
-  * @Author: Wahaj Shamim <wahaj>
-  * @Date:   2017-07-13T10:36:10+10:00
-  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-26T13:48:06+10:00
-  */
 
 import Store from '~/stores/global';
 import Config from '~/stores/config';
@@ -51,14 +49,6 @@ const ipcRenderer = electron.ipcRenderer;
 const renderApp = () => {
   if (store) {
     console.log('Last Store Version:', store.version);
-    // if (!store.version) {
-    //   store = new Store();
-    //   api = new DataCenter(store);
-    //   store.setAPI(api);
-    // }
-    // else if (store.version != global.version) {  // Have to define and read the version from global variables
-
-    // }
   }
   const render = (Component) => {
     ReactDOM.render(
@@ -104,25 +94,27 @@ Broker.once(EventType.APP_CRASHED, () => {
   console.log('Woah...App Crashed !!!!!!!');
   if (IS_ELECTRON) {
     // make a backup of the old stateStore
-    store.backup().then(() => {
-      store = new Store();
-      api = new DataCenter(store);
-      config = new Config();
-      store.setAPI(api); // TODO: Remove this line after complete migration to API
-      store.saveSync();
-      ipcRenderer.send(EventType.APP_CRASHED);
-    }).catch((err) => {
-      const remote = window.require('electron').remote;
-      const { dialog } = remote;
-      const currentWindow = remote.getCurrentWindow();
+    store
+      .backup()
+      .then(() => {
+        store = new Store();
+        api = new DataCenter(store);
+        config = new Config();
+        store.setAPI(api); // TODO: Remove this line after complete migration to API
+        store.saveSync();
+        ipcRenderer.send(EventType.APP_CRASHED);
+      })
+      .catch((err) => {
+        const remote = window.require('electron').remote;
+        const { dialog } = remote;
+        const currentWindow = remote.getCurrentWindow();
 
-      dialog.showMessageBox(currentWindow, {
-        title: 'Error',
-        buttons: ['OK'],
-        message:
-          err.message,
+        dialog.showMessageBox(currentWindow, {
+          title: 'Error',
+          buttons: ['OK'],
+          message: err.message,
+        });
       });
-    });
   }
 });
 
@@ -139,8 +131,7 @@ window.addEventListener('beforeunload', (event) => {
         type: 'question',
         buttons: ['Yes', 'No'],
         title: 'Confirm',
-        message:
-          'You have unsaved editor tabs. Are you sure you want to continue?',
+        message: 'You have unsaved editor tabs. Are you sure you want to continue?',
       });
 
       if (response === 1) {

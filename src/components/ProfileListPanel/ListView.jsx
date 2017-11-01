@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-31T10:47:12+11:00
+ * @Last modified time: 2017-11-01T14:04:33+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -517,7 +517,7 @@ export default class ListView extends React.Component {
 
       windows.push(<MenuItem text={globalString('profile/menu/editors')} />);
       this.props.store.editors.forEach((value) => {
-        if (value.profileId.trim() == this.state.targetProfile.id.trim()) {
+        if (value.currentProfile.trim() == this.state.targetProfile.id.trim()) {
           windows.push(
             <div className="menuItemWrapper">
               <MenuItem
