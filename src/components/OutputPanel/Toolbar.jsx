@@ -252,6 +252,25 @@ export default class Toolbar extends React.Component {
           <div className="pt-navbar-heading">
             {globalString('output/headings/table')}
           </div>
+        </div>
+        <div className="pt-navbar-group pt-align-right">
+          {/* <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/save')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="saveOutputBtn circleButton"
+              onClick={() => {
+                this.props.api.outputApi.saveTableData();
+              }}
+            >
+              <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip> */}
           {this.props.store.outputs.get(editor.id).tableJson.database && (
             <div>
               <span className="docLimitLabel">Document Limit: </span>
@@ -273,25 +292,6 @@ export default class Toolbar extends React.Component {
               />
             </div>
           )}
-        </div>
-        <div className="pt-navbar-group pt-align-right">
-          {/* <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            inline
-            content={globalString('output/toolbar/save')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="saveOutputBtn circleButton"
-              onClick={() => {
-                this.props.api.outputApi.saveTableData();
-              }}
-            >
-              <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
-            </AnchorButton>
-          </Tooltip> */}
           {this.props.store.outputs.get(editor.id).tableJson.database && (
             <div>
               <Tooltip

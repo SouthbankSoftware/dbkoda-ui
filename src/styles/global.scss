@@ -124,7 +124,7 @@ h3 {
 .pt-popover-arrow {
   svg {
     path {
-      fill: $toolTipBackgroundColour !important;
+      fill: #ffffff !important;
       color: $toolTipBackgroundColour !important;
     }
   }
@@ -155,16 +155,19 @@ div.pt-dialog {
   div.pt-alert-footer {
     button {
       font-weight: lighter !important;
-      color: $dialogButtonBorder !important;
+      color: $dialogButtonBorder;
       width: 7em !important;
-      border-radius: 0 !important;
       background-image: unset !important;
-      background-color: $panelLeftBackground !important;
+      background-color: $panelLeftBackground;
       border: 1px solid $dialogButtonBorder !important;
       box-shadow: unset !important;
+      border-top-left-radius: 1em;
+      border-bottom-left-radius: 1em;
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
     }
     button.pt-button:hover {
-      background-color: $connectionButtonBackgroundColourHover !important;
+      background-color: $connectionButtonBackgroundColourHover;
       color: $connectionButtonFontColourHover !important;
     }
   }

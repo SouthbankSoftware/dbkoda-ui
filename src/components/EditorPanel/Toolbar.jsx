@@ -525,12 +525,13 @@ export default class Toolbar extends React.Component {
               position={Position.BOTTOM}
             >
               <AnchorButton
-                className="pt-button pt-intent-primary executeLineButton"
+                className="pt-button pt-intent-primary executeLineButton pt-icon-chevron-right"
                 onClick={this.executeLine}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}
+                
               >
-                <ExecuteLineIcon className="dbKodaSVG" width={20} height={20} />
+                {/* // <ExecuteLineIcon className="dbKodaSVG" width={20} height={20} /> */}
               </AnchorButton>
             </Tooltip>
             <Tooltip
@@ -541,12 +542,12 @@ export default class Toolbar extends React.Component {
               position={Position.BOTTOM}
             >
               <AnchorButton
-                className="pt-button pt-intent-primary executeAllButton"
+                className="pt-button pt-intent-primary executeAllButton pt-icon-double-chevron-right"
                 onClick={this.executeAll}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}
               >
-                <ExecuteAllIcon className="dbKodaSVG" width={20} height={20} />
+                {/* <ExecuteAllIcon className="dbKodaSVG" width={20} height={20} /> */}
               </AnchorButton>
             </Tooltip>
             <ExplainPopover editorToolbar={this.props.store.editorToolbar} />
