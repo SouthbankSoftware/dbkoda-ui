@@ -65,6 +65,10 @@ export default class Panel extends React.Component {
       feedbackComments: '',
       feedbackType: '',
       debug: true, // Enable for additional logging comments during development.
+      updateStatusMsg: '',
+      isUpdateAvailable: false,
+      isUpdateDownloaded: false,
+      isUpdateDownloading: false,
     };
     const os = require('os').release();
     if (os.match(/Mac/gi)) {
@@ -73,6 +77,48 @@ export default class Panel extends React.Component {
       this.state.os = 'win';
     } else if (os.match(/Lin/gi)) {
       this.state.os = 'linux';
+    }
+  }
+
+  componentDidMount() {
+    if (IS_ELECTRON) {
+      window.require('electron').ipcRenderer.on('updateStatus', this.handleMainProcessCommand);
+    }
+  }
+
+  handleMainProcessCommand = (event, message) => {
+    if (message === 'CHECKING') {
+      this.setState({ updateStatusMsg: 'Checking for Updates...' });
+    } else if (message === 'AVAILABLE') {
+      this.setState({ updateStatusMsg: 'Update Available.', isUpdateAvailable: true });
+    } else if (message === 'NOT_AVAILABLE') {
+      this.setState({ updateStatusMsg: 'No Updates Available.' });
+    } else if (message === 'ERROR') {
+      this.setState({ updateStatusMsg: 'Error checking for Updates.' });
+    } else if (message === 'DOWNLOADED') {
+      this.setState({ updateStatusMsg: 'Update Downloaded.', isUpdateDownloaded: true, isUpdateDownloading: false });
+    } else if (message.indexOf('DOWNLOADING') >= 0) {
+      this.setState({ updateStatusMsg: 'Downloading update ' + message.split(' ')[1], isUpdateDownloading: true});
+    }
+  };
+
+  @action.bound
+  onClickUpdateBtn() {
+    const remote = window.require('electron').remote;
+    if (this.state.isUpdateDownloaded) {
+        const installUpdate = remote.getGlobal('InstallUpdate');
+        installUpdate().then((result) => {
+          if (result) {
+            this.setState({ isUpdateDownloaded: false });
+          }
+        }).catch(reason => console.log('user click no:', reason));
+    } else if (this.state.isUpdateAvailable) {
+        const downloadUpdate = remote.getGlobal('DownloadUpdate');
+        downloadUpdate().then((result) => {
+          if (result) {
+            this.setState({ isUpdateAvailable: false });
+          }
+        }).catch(reason => console.log('user click no:', reason));
     }
   }
 
@@ -352,6 +398,10 @@ export default class Panel extends React.Component {
   }
 
   render() {
+    let updateBtnClassNames = 'updateButton';
+    if (this.state.isUpdateAvailable || this.state.isUpdateDownloaded) {
+      updateBtnClassNames += ' updateGreen';
+    }
     return (
       <div className="statusPanel">
         {this.renderAlerts()}
@@ -359,6 +409,11 @@ export default class Panel extends React.Component {
           <span className="productVersion">
             {'dbKoda: v' + this.props.store.version}
           </span>
+          {(this.state.isUpdateAvailable || this.state.isUpdateDownloaded || this.state.isUpdateDownloading) &&
+            <div className={updateBtnClassNames} onClick={this.onClickUpdateBtn}>
+              <span>{this.state.updateStatusMsg}</span>
+            </div>
+          }
         </div>
         <div className="float_right">
           <div className="configButton" onClick={this.props.api.openConfigTab}>

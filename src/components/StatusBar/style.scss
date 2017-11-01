@@ -8,7 +8,26 @@ div.statusPanel {
     flex-grow: 1;
     order: 1;
     padding-left: 10px;
+    div {
+      background: unset;
+      color: $defaultFontColor;
+      border: none;
+      border-radius: 0px;
+      background-color: $navbarLeftBackground;
+      width: 30px;
+      padding-left: 7px;
+    }
     span.productVersion {
+    }
+    div.updateButton {
+      margin-left: 10px;
+      width: 50%;
+    }
+    div.updateGreen {
+      color: mediumseagreen;
+      span {
+        cursor: pointer;
+      }
     }
   }
   div.float_right {
