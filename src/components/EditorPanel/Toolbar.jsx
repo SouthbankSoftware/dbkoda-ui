@@ -40,8 +40,6 @@ import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import ExplainPopover from './ExplainPopover';
-import ExecuteLineIcon from '../../styles/icons/execute-icon.svg';
-import ExecuteAllIcon from '../../styles/icons/execute-all-icon.svg';
 import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
@@ -529,7 +527,6 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeLine}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}
-                
               >
                 {/* // <ExecuteLineIcon className="dbKodaSVG" width={20} height={20} /> */}
               </AnchorButton>
