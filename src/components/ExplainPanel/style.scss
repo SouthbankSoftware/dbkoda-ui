@@ -383,7 +383,9 @@ $contentColor: white;
   .output {
     color: $explainLabelColor;
     margin: 20px 0px;
-
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .label {
     color: rgb(22, 160, 187);

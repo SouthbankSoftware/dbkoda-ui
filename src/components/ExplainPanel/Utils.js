@@ -234,7 +234,7 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
     if (!_.find(commands, {name: 'explain'})) {
       const matchedCmd = findMatchedCommand(commands);
       if (matchedCmd) {
-        const explainObj = matchedCmd.name === 'aggregate'? explainAst(): explainAst(explainParam);
+        const explainObj = matchedCmd.name === 'aggregate' ? explainAst() : explainAst(explainParam);
         explainObj.callee.object = matchedCmd.ast.object;
         matchedCmd.ast.object = explainObj;
         return escodegen.generate(parsed);

@@ -129,4 +129,61 @@ describe('test explain utils functions', () => {
       '                     ],\n' +
       '                   )')));
   });
+
+  it('tst insert complicated aggregate explain', () => {
+    const agg = 'db.orders.aggregate([\n' +
+      '           {$sample:{size:1000}},\n' +
+      '           {$match:{orderStatus:"C"}},\n' +
+      '           {$project:{CustId:1,lineItems:1}},\n' +
+      '           {$unwind:"$lineItems"},\n' +
+      '           {$group:{_id:{ CustId:"$CustId",ProdId:"$lineItems.prodId"},\n' +
+      '                     "prodCount":{$sum:"$lineItems.prodCount"},\n' +
+      '                     "prodCost":{$sum:"$lineItems.Cost"}}},\n' +
+      '           {$sort:{prodCost:-1}},\n' +
+      '           {$limit:10},\n' +
+      '           {$lookup:{\n' +
+      '                       from: "customers",\n' +
+      '                         as: "c",\n' +
+      '                 localField: "_id.CustId",\n' +
+      '               foreignField: "_id"\n' +
+      '           } },\n' +
+      '           {$lookup:{\n' +
+      '                       from: "products",\n' +
+      '                       as: "p",\n' +
+      '                 localField: "_id.ProdId",\n' +
+      '               foreignField: "_id"\n' +
+      '           }},\n' +
+      '           {$unwind:"$p"},{$unwind:"$c"}, //Get rid of single element arrays\n' +
+      '           {$project:{"Customer":"$c.CustomerName","Product":"$p.ProductName",\n' +
+      '                      prodCount:1,prodCost:1,_id:0}}\n' +
+      '       ]);';
+    const code = insertExplainOnCommand(agg, 'queryPlanner');
+    const expected = 'db.orders.explain().aggregate([\n' +
+      '           {$sample:{size:1000}},\n' +
+      '           {$match:{orderStatus:"C"}},\n' +
+      '           {$project:{CustId:1,lineItems:1}},\n' +
+      '           {$unwind:"$lineItems"},\n' +
+      '           {$group:{_id:{ CustId:"$CustId",ProdId:"$lineItems.prodId"},\n' +
+      '                     "prodCount":{$sum:"$lineItems.prodCount"},\n' +
+      '                     "prodCost":{$sum:"$lineItems.Cost"}}},\n' +
+      '           {$sort:{prodCost:-1}},\n' +
+      '           {$limit:10},\n' +
+      '           {$lookup:{\n' +
+      '                       from: "customers",\n' +
+      '                         as: "c",\n' +
+      '                 localField: "_id.CustId",\n' +
+      '               foreignField: "_id"\n' +
+      '           } },\n' +
+      '           {$lookup:{\n' +
+      '                       from: "products",\n' +
+      '                       as: "p",\n' +
+      '                 localField: "_id.ProdId",\n' +
+      '               foreignField: "_id"\n' +
+      '           }},\n' +
+      '           {$unwind:"$p"},{$unwind:"$c"}, //Get rid of single element arrays\n' +
+      '           {$project:{"Customer":"$c.CustomerName","Product":"$p.ProductName",\n' +
+      '                      prodCount:1,prodCost:1,_id:0}}\n' +
+      '       ]);';
+    assert.equal(code, escodegen.generate(esprima.parse(expected)));
+  });
 });
