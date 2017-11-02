@@ -92,6 +92,7 @@ export default class ListView extends React.Component {
             this.props.store.editorPanel.activeDropdownId,
           );
           this.props.store.profileList.selectedProfile = editorProfile;
+          this.setState({ lastSelectRegion: null });
           this.forceUpdate();
         }
       },
@@ -106,6 +107,7 @@ export default class ListView extends React.Component {
 
   @action
   onSelection(region) {
+    console.log('region: ', JSON.stringify(region));
     if (region.length == 0) {
       return;
     }
