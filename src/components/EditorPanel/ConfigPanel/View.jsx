@@ -136,7 +136,7 @@ export default class View extends React.Component {
             <AnchorButton className="saveBtn"
               intent={Intent.SUCCESS}
               onClick={this.saveConfig}
-              text="Save" />
+              text="Apply" />
           </div>
         </div>
       </div>

@@ -75,6 +75,7 @@ class App extends React.Component {
   @action.bound
   closeOptIn(bool) {
     this.props.config.settings.telemetryEnabled = bool;
+    this.props.config.settings.save();
     this.props.store.layout.optInVisible = false;
   }
   unstable_handleError(...v) { //eslint-disable-line

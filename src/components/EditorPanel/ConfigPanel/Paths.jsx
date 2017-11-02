@@ -68,17 +68,20 @@ export default class Paths extends React.Component {
   }
 
   render() {
+    /*
+    Add this back in after drill is complete
+    <div className="form-row">
+      { this.props.renderFieldLabel('drillCmd') }
+      <input type="text" id="drillCmd" value={this.props.settings.drillCmd} onChange={this.onPathEntered} />
+      <Button className="formButton" onClick={() => { this.openPath('drillCmd'); }}>Browse</Button>
+    </div>
+    */
     return (
       <div className="formContentWrapper">
         <div className="form-row">
           { this.props.renderFieldLabel('mongoCmd') }
           <input type="text" id="mongoCmd" value={this.props.settings.mongoCmd} onChange={this.onPathEntered} />
           <Button className="formButton" onClick={() => { this.openPath('mongoCmd'); }}>Browse</Button>
-        </div>
-        <div className="form-row">
-          { this.props.renderFieldLabel('drillCmd') }
-          <input type="text" id="drillCmd" value={this.props.settings.drillCmd} onChange={this.onPathEntered} />
-          <Button className="formButton" onClick={() => { this.openPath('drillCmd'); }}>Browse</Button>
         </div>
       </div>
     );

@@ -49,10 +49,6 @@ export default class Application extends React.Component {
           { this.props.renderFieldLabel('telemetryEnabled') }
           <Checkbox type="text" id="telemetryEnabled" checked={this.props.settings.telemetryEnabled} onChange={this.onCheckboxToggle} />
         </div>
-        <div className="form-row">
-          { this.props.renderFieldLabel('showWelcomePageAtStart') }
-          <Checkbox type="text" id="showWelcomePageAtStart" checked={this.props.settings.showWelcomePageAtStart} onChange={this.onCheckboxToggle} />
-        </div>
       </div>
     );
   }
