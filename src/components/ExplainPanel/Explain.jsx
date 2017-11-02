@@ -124,7 +124,6 @@ export default class Explain extends React.Component {
             });
           });
         });
-        console.log('converted ', converted);
         explainOutputJson.output = converted;
       } else if (!explainOutputJson.output || !explainOutputJson.output.queryPlanner) {
           explainOutputJson = {
