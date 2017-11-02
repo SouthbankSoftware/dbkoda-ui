@@ -215,6 +215,15 @@ export default class StaticApi {
       return cm.getSelection();
     }
     if (startLine[0] === '{') {
+      if (!cm.getLine(lineNumber - 1) || !cm.getLine(lineNumber + 1)) {
+        console.error(
+          'Tried to parse a non-existing line at',
+          lineNumber,
+          ' + or - 1',
+        );
+        lines.start = lineNumber;
+        return this._getLineText(cm, lineNumber, 1, lines);
+      }
       const prevLine = cm.getLine(lineNumber - 1).trim();
       const nextLine = cm.getLine(lineNumber + 1).trim();
       if (
