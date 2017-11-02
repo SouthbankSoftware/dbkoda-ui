@@ -121,6 +121,12 @@ ul.profileListContextMenu {
   }
 }
 
+.pt-popover-content {
+  .pt-menu {
+    background: #ffffff;
+    color: #182026;
+  }
+}
 ul.pt-menu {
   display: flex;
   flex-direction: column;
@@ -164,6 +170,10 @@ div.savingDialog {
       border: none;
       color: $buttonTextColour;
       background-color: $buttonSuccessBackground;
+      border-top-left-radius: 1em;
+      border-bottom-left-radius: 1em;
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
     }
     a.saveButton:hover {
       background: unset;
@@ -180,6 +190,10 @@ div.savingDialog {
       border: 1px solid $connectionButtonBorderColour;
       box-shadow: unset !important;
       -webkit-appearance: unset;
+      border-top-left-radius: 1em;
+      border-bottom-left-radius: 1em;
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
     }
     a.cancelButton:hover {
       background: none;
@@ -196,6 +210,10 @@ div.savingDialog {
       background-color: $buttonDangerBackground;
       box-shadow: unset;
       -webkit-appearance: unset;
+      border-top-left-radius: 1em;
+      border-bottom-left-radius: 1em;
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
     }
     a.dontSaveButton:hover {
       background: none;
@@ -222,6 +240,10 @@ div.savingDialog {
 }
 .RootSplitPane {
   height: calc(100% - 20px) !important;
+}
+
+.pt-dialog {
+  top: 33%;
 }
 
 .statusPanel {

@@ -73,18 +73,18 @@
     flex-grow: 1;
     overflow-y: scroll;
     .bp-table-bottom-container {
-      background-color: rgba(0,0,0,0) !important;
+      background-color: rgba(0, 0, 0, 0) !important;
       .bp-table-body {
-        background-color: rgba(0,0,0,0) !important;
+        background-color: rgba(0, 0, 0, 0) !important;
         .bp-table-body-scroll-client {
-          background-color: rgba(0,0,0,0) !important;
+          background-color: rgba(0, 0, 0, 0) !important;
           width: 100% !important;
           .bp-table-body-virtual-client {
             width: 100% !important;
-            background-color: rgba(0,0,0,0) !important;
+            background-color: rgba(0, 0, 0, 0) !important;
             .bp-table-cell {
-              background-color: rgba(0,0,0,0);
-              width:100% !important;
+              background-color: rgba(0, 0, 0, 0);
+              width: 100% !important;
             }
           }
         }
@@ -108,7 +108,7 @@
 
   .bp-table-container {
     outline: none;
-    background-color: rgba(0,0,0,0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
   }
   .bp-table-cell {
     .bp-table-truncated-text {
@@ -121,7 +121,7 @@
         stroke-width: 4px;
         width: 3.5em;
         height: 3.5em;
-        margin-top: 1.0em;
+        margin-top: 1em;
         margin-right: 1em;
         border-radius: 50%;
         padding: 3px;
@@ -153,15 +153,19 @@
     background-color: $profileListSelected !important;
     outline: none !important;
     .profileListing {
-      color: #FFF;
+      color: #fff;
     }
     .closedProfile {
       font-style: italic !important;
     }
+    div {
+      svg {
+      }
+    }
   }
   .bp-table-selection-region {
     border: none;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
   }
 }
 
@@ -170,7 +174,7 @@
   .dialogContent {
     width: 100%;
     .pt-input {
-      width: 100%
+      width: 100%;
     }
   }
   .dialogButtons {
@@ -238,12 +242,14 @@ ul.profileListContextMenu {
     div.menuItemWrapper {
       display: flex;
       flex-direction: row;
-      li {}
+      li {
+      }
     }
   }
   div.menuItemWrapper {
     display: flex;
     flex-direction: row;
-    li {}
+    li {
+    }
   }
 }

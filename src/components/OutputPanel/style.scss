@@ -157,36 +157,6 @@
     order: 1;
     background-color: $navbarRightBackground !important;
     .pt-align-right {
-      span {
-        .pt-button {
-          position: relative;
-          svg.dbKodaSVG {
-            position: absolute;
-            top: 50%;
-            bottom: 50%;
-            transform: translate(-50%, -50%);
-            width: 60%;
-            height: 60%;
-            fill: $buttonTertiaryIcon;
-            path.st0 {
-              fill: none;
-            }
-          }
-        }
-        .clearOutputBtn {
-          background: $buttonDangerBackground !important;
-          color: $buttonDangerIcon !important;
-          svg.dbKodaSVG {
-            fill: $buttonDangerIcon;
-          }
-        }
-        .clearOutputBtn:hover {
-          background: $buttonDangerBackgroundHover !important;
-          color: $buttonDangerIcon !important;
-        }
-      }
-    }
-    .pt-align-left {
       span.docLimitLabel {
         margin-left: 8px;
         margin-right: 8px;
@@ -198,6 +168,7 @@
         border-radius: 0.25em;
         outline: unset;
         box-shadow: unset;
+        margin-right: 8px;
         :before {
           outline: unset;
           box-shadow: unset;
@@ -231,6 +202,36 @@
         outline: unset;
         box-shadow: unset;
       }
+      span {
+        .pt-button {
+          position: relative;
+          svg.dbKodaSVG {
+            position: absolute;
+            top: 50%;
+            bottom: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            height: 40%;
+            fill: $buttonTertiaryIcon;
+            path.st0 {
+              fill: none;
+            }
+          }
+        }
+        .clearOutputBtn {
+          background: $buttonDangerBackground !important;
+          color: $buttonDangerIcon !important;
+          svg.dbKodaSVG {
+            fill: $buttonDangerIcon;
+          }
+        }
+        .clearOutputBtn:hover {
+          background: $buttonDangerBackgroundHover !important;
+          color: $buttonDangerIcon !important;
+        }
+      }
+    }
+    .pt-align-left {
     }
   }
   div.CodeMirror-activeline pre.CodeMirror-line {

@@ -29,7 +29,7 @@
   ::selection {
     background: rgba(200, 200, 200, 0.15);
   }
-  
+
   width: 100%;
   background-color: $tabBackgroundSelected;
   overflow-y: scroll;
@@ -38,7 +38,7 @@
     position: absolute;
     left: 0;
     right: 0;
-    background-color: #272a3a;
+    background-color: $navbarOutputBackground;
   }
   .collapse-group {
     width: 30%;
@@ -56,17 +56,17 @@
     width: 3.5em !important;
     border-radius: 0;
     background-image: unset !important;
-    background-color: #272a3a !important;
-    border: 1px solid $connectionButtonBorderColour;
+    background-color: $navbarOutputBackground !important;
+    border: 1px solid rgba(139, 139, 139, 0.3);
     box-shadow: unset;
   }
   button.pt-button:hover {
-    background-color: $connectionButtonBackgroundColourHover !important;
-    color: $connectionButtonFontColourHover;
+    background-color: rgba(139, 139, 139, 0.3) !important;
+    color: rgba(139, 139, 139, 1) !important;
   }
   button.pt-button.active {
-    background-color: $connectionButtonFontColourHover !important;
-    color: $connectionButtonBackgroundColourHover;
+    background-color: rgba(139, 139, 139, 0.3) !important;
+    color: rgba(139, 139, 139, 1) !important;
   }
 
   .react-json-view {
@@ -78,6 +78,12 @@
     width: 100%;
     background-color: $tabBackgroundSelected;
     padding-top: 15px;
+  }
+
+  .object-content {
+    div {
+      border-left-color: $buttonTertiaryIcon !important;
+    }
   }
 
   .string-value {
