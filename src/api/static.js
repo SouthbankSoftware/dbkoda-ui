@@ -215,7 +215,7 @@ export default class StaticApi {
       return cm.getSelection();
     }
     if (startLine[0] === '{') {
-      if (!cm.getLine(lineNumber - 1) || !cm.getLine(lineNumber + 1)) {
+      if (!cm.getLine(lineNumber - 1)) {
         console.info(
           'Tried to parse a non-existing line at',
           lineNumber,
