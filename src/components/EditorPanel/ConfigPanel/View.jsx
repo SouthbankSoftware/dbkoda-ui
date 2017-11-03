@@ -30,8 +30,10 @@ import { action, toJS, reaction, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton, Intent } from '@blueprintjs/core';
 import ConfigDatabaseIcon from '~/styles/icons/config-database-icon-1.svg';
+import { featherClient } from '~/helpers/feathers';
 import ErrorView from '#/common/ErrorView';
 import LoadingView from '#/common/LoadingView';
+import { NewToaster } from '#/common/Toaster';
 import Menu from './Menu';
 import Application from './Application';
 import Paths from './Paths';
@@ -70,8 +72,32 @@ export default class View extends React.Component {
     }
   }
 
+  verifyMongoCmd(path) {
+    featherClient()
+        .service('mongo-cmd-validators')
+        .create({ 'mongoCmdPath': path })
+        .then((mongoCmdVersion) => {
+          return mongoCmdVersion;
+        })
+        .catch((err) => {
+          NewToaster.show({
+            message: 'Could not verify mongo binary location: ' + err.message,
+            className: 'danger',
+            iconName: 'pt-icon-thumbs-down',
+          });
+          return false;
+        });
+  }
+
   @action.bound
   saveConfig() {
+    if (this.props.store.configPage.changedFields.indexOf('mongoCmd') >= 0) {
+      // Verify mongo version in controller
+      const mongoPath = this.props.store.configPage.newSettings.mongoCmd;
+      if (!this.verifyMongoCmd(mongoPath)) {
+        return;
+      }
+    }
     this.props.config.settings = observable(toJS(this.props.store.configPage.newSettings));
     this.props.config.save();
     this.props.store.configPage.changedFields = [];
@@ -80,7 +106,8 @@ export default class View extends React.Component {
   renderFieldLabel(fieldName) {
     return (<label htmlFor="fieldName">
       { globalString(`editor/config/${fieldName}`) }
-      { (this.props.store.configPage.changedFields.indexOf(fieldName) !== -1) &&
+      { this.props.store.configPage.changedFields &&
+        (this.props.store.configPage.changedFields.indexOf(fieldName) !== -1) &&
         <div id={`unsavedFileIndicator_${fieldName}`}
           className="unsavedFileIndicator" /> }
     </label>);
