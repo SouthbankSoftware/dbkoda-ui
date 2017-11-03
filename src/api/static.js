@@ -216,10 +216,10 @@ export default class StaticApi {
     }
     if (startLine[0] === '{') {
       if (!cm.getLine(lineNumber - 1) || !cm.getLine(lineNumber + 1)) {
-        console.error(
+        console.info(
           'Tried to parse a non-existing line at',
           lineNumber,
-          ' + or - 1',
+          ' + or - 1 : Ending parsing at this line.',
         );
         lines.start = lineNumber;
         return this._getLineText(cm, lineNumber, 1, lines);
