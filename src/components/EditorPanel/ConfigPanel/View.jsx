@@ -106,8 +106,7 @@ export default class View extends React.Component {
   renderFieldLabel(fieldName) {
     return (<label htmlFor="fieldName">
       { globalString(`editor/config/${fieldName}`) }
-      { this.props.store.configPage.changedFields &&
-        (this.props.store.configPage.changedFields.indexOf(fieldName) !== -1) &&
+      { (this.props.store.configPage.changedFields.indexOf(fieldName) !== -1) &&
         <div id={`unsavedFileIndicator_${fieldName}`}
           className="unsavedFileIndicator" /> }
     </label>);
