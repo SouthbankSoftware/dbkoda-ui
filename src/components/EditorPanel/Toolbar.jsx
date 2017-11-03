@@ -382,6 +382,7 @@ export default class Toolbar extends React.Component {
     const profile = this.props.store.profiles.get(this.props.store.editorToolbar.currentProfile);
     if (profile) {
       // Send Command:
+      Broker.emit(EventType.FEATURE_USE, 'ContextDropdown');
       const service = featherClient().service('/mongo-sync-execution');
       service.timeout = 5000;
       service

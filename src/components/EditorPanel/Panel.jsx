@@ -27,7 +27,7 @@
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { inject, observer, PropTypes } from 'mobx-react';
-import { action, reaction, runInAction } from 'mobx';
+import { action, reaction, runInAction, observable, toJS } from 'mobx';
 import SplitPane from 'react-split-pane';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
@@ -65,6 +65,7 @@ const splitPane2Style = {
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
+  config: allStores.config,
 }))
 @observer
 export default class Panel extends React.Component {
@@ -233,6 +234,12 @@ export default class Panel extends React.Component {
   @action.bound
   closeConfig() {
     console.log('closeconfig');
+    if (this.props.store.configPage.changedFields.length > 0) {
+      // TODO Warn about unsaved changes
+      console.log('Warn about unsaved changes!');
+      this.props.store.editorPanel.showingSavingDialogEditorIds.push('Config');
+      return;
+    }
     this.props.store.configPage.isOpen = false;
     this.props.store.editorPanel.removingTabId = true;
     if (this.props.store.editorPanel.activeEditorId === 'Config') {
@@ -492,16 +499,23 @@ export default class Panel extends React.Component {
   @action.bound
   onSavingDialogSaveButtonClicked(unbindGlobalKeys, currentEditor) {
     this.onSavingDialogCancelButtonClicked(unbindGlobalKeys);
-    this.toolbar.wrappedInstance
-      .saveFile()
-      .then(() => {
-        this.closeTab(currentEditor);
-      })
-      .catch((e) => {
-        if (e) {
-          console.error(e);
-        }
-      });
+    if (!currentEditor) {
+      this.props.config.settings = observable(toJS(this.props.store.configPage.newSettings));
+      this.props.store.configPage.changedFields = [];
+      this.props.config.save();
+      this.closeConfig();
+    } else {
+      this.toolbar.wrappedInstance
+        .saveFile()
+        .then(() => {
+          this.closeTab(currentEditor);
+        })
+        .catch((e) => {
+          if (e) {
+            console.error(e);
+          }
+        });
+    }
   }
 
   @action.bound
@@ -513,8 +527,13 @@ export default class Panel extends React.Component {
   @action.bound
   onSavingDialogDontSaveButtonClicked(unbindGlobalKeys, currentEditor) {
     this.onSavingDialogCancelButtonClicked(unbindGlobalKeys);
-    currentEditor.doc.markClean();
-    this.closeTab(currentEditor);
+    if (!currentEditor) {
+      this.props.store.configPage.changedFields = [];
+      this.closeConfig();
+    } else {
+      currentEditor.doc.markClean();
+      this.closeTab(currentEditor);
+    }
   }
 
   renderSavingDialog() {
@@ -721,6 +740,9 @@ export default class Panel extends React.Component {
 
   getEditorTitle = (editor) => {
     const { api: { getEditorDisplayName } } = this.props;
+    if (!editor) {
+      return 'Preferences';
+    }
     return editor.alias + ' (' + getEditorDisplayName(editor) + ')';
   };
 
