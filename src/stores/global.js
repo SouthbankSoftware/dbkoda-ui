@@ -92,6 +92,8 @@ export default class Store {
   configPage = observable({
     isOpen: true,
     selectedMenu: 'Paths',
+    changedFields: observable.map(),
+    newSettings: observable.map(),
   });
 
   @observable

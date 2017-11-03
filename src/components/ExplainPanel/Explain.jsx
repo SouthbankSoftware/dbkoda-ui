@@ -92,7 +92,7 @@ export default class Explain extends React.Component {
     let currentEditorId = false;
     let currentEditor = null;
     this.props.editors.forEach((value, key) => {
-      if (value.currentProfile === id && value.shellId === shell) {
+      if (value.profileId === id && value.shellId === shell) {
         currentEditorId = key;
         currentEditor = value;
       }
@@ -124,7 +124,6 @@ export default class Explain extends React.Component {
             });
           });
         });
-        console.log('converted ', converted);
         explainOutputJson.output = converted;
       } else if (!explainOutputJson.output || !explainOutputJson.output.queryPlanner) {
           explainOutputJson = {
