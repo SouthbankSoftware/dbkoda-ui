@@ -422,8 +422,7 @@ export default class Panel extends React.Component {
           );
         }
         if (
-          this.props.store.outputs.get(editorId).tableJson &&
-          process.env.NODE_ENV === 'development'
+          this.props.store.outputs.get(editorId).tableJson
         ) {
           const tabId = `TableView-${editorId}`;
 
