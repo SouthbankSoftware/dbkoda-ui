@@ -50,6 +50,7 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.props.store.configPage.newSettings = observable(toJS(this.props.config.settings));
+    this.checkConfig = this.checkConfig.bind(this);
     this.getConfigForm = this.getConfigForm.bind(this);
     this.renderFieldLabel = this.renderFieldLabel.bind(this);
     this.reactionToConfig = reaction(
@@ -77,7 +78,10 @@ export default class View extends React.Component {
         .service('mongo-cmd-validators')
         .create({ 'mongoCmdPath': path })
         .then((mongoCmdVersion) => {
-          return mongoCmdVersion;
+          console.log('Verified mongoCmd: ', mongoCmdVersion);
+          if (mongoCmdVersion.mongoCmdVersion) {
+            this.saveConfig();
+          }
         })
         .catch((err) => {
           NewToaster.show({
@@ -91,16 +95,18 @@ export default class View extends React.Component {
 
   @action.bound
   saveConfig() {
-    if (this.props.store.configPage.changedFields.indexOf('mongoCmd') >= 0) {
-      // Verify mongo version in controller
-      const mongoPath = this.props.store.configPage.newSettings.mongoCmd;
-      if (!this.verifyMongoCmd(mongoPath)) {
-        return;
-      }
-    }
     this.props.config.settings = observable(toJS(this.props.store.configPage.newSettings));
     this.props.config.save();
     this.props.store.configPage.changedFields = [];
+  }
+
+  checkConfig() {
+    if (this.props.store.configPage.changedFields.indexOf('mongoCmd') >= 0) {
+      const mongoPath = this.props.store.configPage.newSettings.mongoCmd;
+      this.verifyMongoCmd(mongoPath);
+    } else {
+      this.saveConfig();
+    }
   }
 
   renderFieldLabel(fieldName) {
@@ -153,7 +159,7 @@ export default class View extends React.Component {
           <div className="configContentFooter">
             <AnchorButton className="saveBtn"
               intent={Intent.SUCCESS}
-              onClick={this.saveConfig}
+              onClick={this.checkConfig}
               text="Apply" />
           </div>
         </div>
