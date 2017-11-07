@@ -1082,12 +1082,16 @@ export default class GraphicalBuilder extends React.Component {
 
       return new Promise((resolve, reject) => {
         // Show electron dialog to get the path.
+        console.log(typeof this.props.store.editorPanel.lastFileSavingDirectoryPath);
+        console.log(this.props.store.editorPanel.lastFileSavingDirectoryPath);
+        console.log(typeof currentEditor.fileName);
+        console.log(currentEditor.fileName);
         dialog.showSaveDialog(
           BrowserWindow.getFocusedWindow(),
           {
             defaultPath: path.resolve(
               this.props.store.editorPanel.lastFileSavingDirectoryPath,
-              currentEditor.fileName,
+              String(currentEditor.fileName),
             ),
             filters: FILE_FILTERS,
           },
