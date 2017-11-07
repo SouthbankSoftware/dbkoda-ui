@@ -76,7 +76,6 @@ const ConnectionPanel = ({
   };
 
   const close = action(() => {
-    console.log('close connection panel');
     setDrawerChild(DrawerPanes.DEFAULT);
   });
   /**

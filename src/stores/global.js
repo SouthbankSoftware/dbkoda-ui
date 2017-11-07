@@ -392,7 +392,6 @@ export default class Store {
   restore(data) {
     const newStore = restore(data, { deserializer, postDeserializer });
     this.cleanStore(newStore);
-    console.log('Restoring Store: ', newStore);
     _.assign(this, newStore);
   }
 

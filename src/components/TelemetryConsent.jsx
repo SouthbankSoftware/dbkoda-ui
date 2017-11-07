@@ -22,7 +22,7 @@
  * @Author: mike
  * @Date:   2017-03-28 16:13:50
  * @Last modified by:   mike
- * @Last modified time: 2017-03-28 16:14:04
+ * @Last modified time: 2017-11-08 10:15:01
  */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { observer, inject } from 'mobx-react';
@@ -36,9 +36,15 @@ const React = require('react');
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
+  config: allStores.config,
 }))
 @observer
 export default class TelemetryConsent extends React.Component {
+  constructor() {
+    super();
+    this.optIn = true;
+  }
+
   @action.bound
   openPrivacyPolicy() {
     if (IS_ELECTRON) {
@@ -51,8 +57,7 @@ export default class TelemetryConsent extends React.Component {
   }
 
   @action.bound
-  handleSwitch(e) {
-    console.log(e);
+  handleSwitch() {
     if (this.props.store.userPreferences.telemetryEnabled === false) {
       this.props.store.userPreferences.telemetryEnabled = true;
     } else {
@@ -65,7 +70,10 @@ export default class TelemetryConsent extends React.Component {
 
   @action.bound
   acceptDialog() {
+    console.log('Was: ', this.props.config.settings.telemetryEnabled);
+    this.props.config.settings.telemetryEnabled = this.props.store.userPreferences.telemetryEnabled;
     this.props.layout.optInVisible = false;
+    console.log('Is: ', this.props.config.settings.telemetryEnabled);
   }
 
   render() {
@@ -73,7 +81,6 @@ export default class TelemetryConsent extends React.Component {
       <Dialog
         className="pt-dark optInDialog"
         intent={Intent.PRIMARY}
-        iconName="pt-icon-chart"
         isOpen={this.props.layout.optInVisible}
       >
         <h1>{globalString('telemetry_dialog/header')} </h1>
@@ -99,6 +106,7 @@ export default class TelemetryConsent extends React.Component {
             text={globalString('telemetry_dialog/button_yes')}
           />
           <Switch
+            className="optInSwitch"
             checked={this.props.store.userPreferences.telemetryEnabled}
             label="Enable Telemetry"
             onChange={this.handleSwitch}

@@ -92,15 +92,6 @@ export default class Toolbar extends React.Component {
             .cannotShowMore
         ) {
           const command = 'it';
-          console.log(
-            'Sending data to feathers id ',
-            this.props.store.outputs.get(
-              this.props.store.outputPanel.currentTab,
-            ).connId,
-            ': ',
-            command,
-            '.',
-          );
           this.props.store.editorToolbar.isActiveExecuting = true;
           this.props.store.editors.get(
             this.props.store.outputPanel.currentTab,
@@ -157,7 +148,6 @@ export default class Toolbar extends React.Component {
           }
           this.props.store.outputPanel.clearingOutput = false;
         } else if (currentTab.indexOf('Details-') === 0) {
-          console.log('Clear Details');
           this.props.store.editors.get(
             this.props.store.editorPanel.activeEditorId,
           ).detailsView = undefined;
@@ -212,7 +202,6 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   showMore() {
-    console.log('executingShowMore = true');
     this.props.store.outputPanel.executingShowMore = true;
   }
 
@@ -245,7 +234,6 @@ export default class Toolbar extends React.Component {
       this.props.store.editorPanel.activeEditorId,
     );
 
-    console.log(this.props.store.outputs.get(editor.id));
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
@@ -373,7 +361,6 @@ export default class Toolbar extends React.Component {
 
   render() {
     const currentOutput = this.props.store.outputPanel.currentTab;
-    console.log(currentOutput);
     // Determine toolbar context.
     if (currentOutput.startsWith('TableView-')) {
       this.state.context = OutputToolbarContexts.TABLE_VIEW;

@@ -37,7 +37,6 @@ import { OutputPanel } from '#/OutputPanel';
 import { SidebarPanel } from '#/SidebarPanel';
 import { Analytics } from '#/Analytics';
 import { StatusPanel } from '#/StatusBar';
-import EventReaction from '#/common/logging/EventReaction.jsx';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -78,7 +77,8 @@ class App extends React.Component {
     this.props.config.settings.save();
     this.props.store.layout.optInVisible = false;
   }
-  unstable_handleError(...v) { //eslint-disable-line
+  unstable_handleError(...v) {
+    //eslint-disable-line
     console.log(...v);
     Broker.emit(EventType.APP_CRASHED);
   }
@@ -122,7 +122,6 @@ class App extends React.Component {
           </SplitPane>
         </SplitPane>
         <StatusPanel className="statusPanel" />
-        <EventReaction />
         {process.env.NODE_ENV !== 'production' ? (
           <div className="DevTools">
             <DevTools position={{ right: -1000, top: 200 }} />
