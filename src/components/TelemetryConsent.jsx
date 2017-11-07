@@ -70,10 +70,8 @@ export default class TelemetryConsent extends React.Component {
 
   @action.bound
   acceptDialog() {
-    console.log('Was: ', this.props.config.settings.telemetryEnabled);
     this.props.config.settings.telemetryEnabled = this.props.store.userPreferences.telemetryEnabled;
     this.props.layout.optInVisible = false;
-    console.log('Is: ', this.props.config.settings.telemetryEnabled);
   }
 
   render() {
