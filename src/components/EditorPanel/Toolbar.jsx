@@ -478,7 +478,6 @@ export default class Toolbar extends React.Component {
             className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
-          // @TODO - Handle failure.
         });
     }
   }

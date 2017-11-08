@@ -249,33 +249,6 @@ class View extends React.Component {
             }
             if (this.props.store.treeActionPanel.refreshOnExecution) {
               this.props.store.treeActionPanel.refreshTree = true;
-/*            @TODO -> Does this still need to be here? Otherwise remove.
-              if (this.props.store.treePanel.isRefreshDisabled) {
-                return;
-              }
-              this.props.store.treePanel.isRefreshing = true;
-              const profile = this.props.store.profileList.selectedProfile;
-              const service = featherClient().service('/mongo-inspector'); // Calls the controller to load the topology associated with the selected Profile
-              service.timeout = 60000;
-              service
-                .get(profile.id)
-                .then((res) => {
-                  if (this.props.store.profileList.selectedProfile.id == res.profileId) {
-                    console.log('Updating topology: ', res);
-                    this.props.store.updateTopology(res);
-                  }
-                  runInAction(() => {
-                    this.props.store.treePanel.isRefreshing = false;
-                  });
-                })
-                .catch((err) => {
-                  console.log(err.stack);
-                  DBKodaToaster(Position.LEFT_BOTTOM).show({
-                    message: err.message,
-                    className: 'danger',
-                    iconName: 'pt-icon-thumbs-down',
-                  });
-                }); */
             }
             this.props.store.editorPanel.executingEditorAll = false;
           }
@@ -720,9 +693,7 @@ class View extends React.Component {
 
       const cm = this.editor.getCodeMirror(); // eslint-disable-line
       let content = cm.getSelection();
-      if (cm.getSelection().length > 0) {
-        // @TODO -> Remove this, it's not needed.
-      } else {
+      if ((cm.getSelection().length > 0) === false) {
         content = cm.getLine(cm.getCursor().line);
       }
       content = insertExplainOnCommand(content, explainParam);

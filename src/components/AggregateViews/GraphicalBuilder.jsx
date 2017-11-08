@@ -1144,9 +1144,7 @@ export default class GraphicalBuilder extends React.Component {
       // Remove all Blocks.
       this.removeAllBlocks()
         .then(() => {
-          this.addNewBlocks(contentObject).then(() => {
-            // @TODO -> Can probably remove this then statement.
-          });
+          this.addNewBlocks(contentObject);
         })
         .then(() => {
           this.forceUpdate();

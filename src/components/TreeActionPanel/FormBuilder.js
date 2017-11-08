@@ -469,7 +469,6 @@ export default class FormBuilder {
 
             // check if definitions has a keyField for prefetching data and send request to controller
             // Method for pre-filling form:
-            // @TODO @MIKE-> Updgrade this to fill form with data from aggregate global store if it exsits, otherwise use prefill.
             const getPrefilledFormData = () => {
               if (
                 formAction.aggregate &&

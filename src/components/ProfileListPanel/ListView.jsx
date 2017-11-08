@@ -213,7 +213,6 @@ export default class ListView extends React.Component {
       });
       position = Position.RIGHT_TOP;
       // @TODO -> Someone should go through these and see which are unchanged from a new connection.
-      // @MIKE.
       const profile = {
         id: res.id,
         shellId: res.shellId,
