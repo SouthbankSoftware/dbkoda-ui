@@ -34,13 +34,11 @@ export const CollectionStats = {
     return `db.getSiblingDB("${parentDb}").${colId}.stats(1024)`;
   },
   dbkoda_CollectionStats_parse: (data) => {
-    console.log(data);
-
     const result = {};
     result.Statistics = [];
     for (const key in data) {
       if ({}.hasOwnProperty.call(data, key) && typeof data[key] != 'object') {
-        result.Statistics.push({statistic: key, value: (data[key] + '')});
+        result.Statistics.push({ statistic: key, value: data[key] + '' });
       }
       if (data[key] && key == 'shards') {
         result.Shards = [];
@@ -49,12 +47,12 @@ export const CollectionStats = {
         for (const shardKey in shards) {
           if (shards[shardKey]) {
             const shardInfo = shards[shardKey];
-            const Shard = {name: shardKey};
-            const ShardPct = {name: shardKey};
+            const Shard = { name: shardKey };
+            const ShardPct = { name: shardKey };
             if (shardInfo.size) {
               Shard.size = shardInfo.size;
               if (data.size) {
-                ShardPct.value = Math.round((shardInfo.size / data.size) * 100);
+                ShardPct.value = Math.round(shardInfo.size / data.size * 100);
               }
             }
             if (shardInfo.count) {
@@ -68,5 +66,5 @@ export const CollectionStats = {
     }
 
     return result;
-  }
+  },
 };

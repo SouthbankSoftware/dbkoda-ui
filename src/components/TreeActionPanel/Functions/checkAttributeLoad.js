@@ -20,10 +20,11 @@
 
 // Run this in mongo to check that we can parse attributes
 // eslint-disable
+/* eslint camelcase:warn */
 
-function dbkodaListAttributes_parse(res) { //eslint-disable-line
+function dbkodaListAttributes_parse(res) {
+  //eslint-disable-line
   // Print attributes to one level (eg xxx.yyy but not xxx.yyy.zzz)
-  // console.log(res);
   const attributes = {};
   res.forEach((doc) => {
     Object.keys(doc).forEach((key) => {
@@ -41,8 +42,7 @@ function dbkodaListAttributes_parse(res) { //eslint-disable-line
             attributes[key + '.' + nestedKey] = typeof obj[nestedKey];
           });
         }
-      } else
-      if (keytype === 'array') {
+      } else if (keytype === 'array') {
         const docarray = doc[key];
         docarray.forEach((nestedDoc) => {
           const obj = nestedDoc;
@@ -54,18 +54,26 @@ function dbkodaListAttributes_parse(res) { //eslint-disable-line
     });
   });
   const results = Object.keys(attributes).sort();
- // console.log('listAttributes returning ' + results.length);
   return results;
 }
 
-db.getSiblingDB('SampleCollections').getCollectionNames().forEach((collection) => {
-  print(collection);
-  const x = db.getSiblingDB('SampleCollections').getCollection(collection).aggregate([{
-    $sample: {
-      size: 20
-    }
-  }]).toArray();
-  dbkodaListAttributes_parse(x).forEach((att) => {
-    print('   ' + att);
+db
+  .getSiblingDB('SampleCollections')
+  .getCollectionNames()
+  .forEach((collection) => {
+    print(collection);
+    const x = db
+      .getSiblingDB('SampleCollections')
+      .getCollection(collection)
+      .aggregate([
+        {
+          $sample: {
+            size: 20,
+          },
+        },
+      ])
+      .toArray();
+    dbkodaListAttributes_parse(x).forEach((att) => {
+      print('   ' + att);
+    });
   });
-});

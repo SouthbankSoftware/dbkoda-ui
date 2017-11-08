@@ -55,9 +55,6 @@ export default class Panel extends React.Component {
     this.debug = false;
     Broker.emit(EventType.FEATURE_USE, 'TableView');
 
-    console.log(this.props.store);
-    console.log(this.props.store.outputPanel);
-    console.log(this.props.store.outputPanel.expandTable);
     if (
       this.props.store.outputPanel.expandTable ||
       this.props.store.outputPanel.collapseTable

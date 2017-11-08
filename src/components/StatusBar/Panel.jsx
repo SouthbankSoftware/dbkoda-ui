@@ -198,9 +198,7 @@ export default class Panel extends React.Component {
       this.setState({ isLodgeBugPending: true });
       this.getSupportBundle()
         .then((filePath) => {
-          if (this.state.debug) console.log('Support Bundle Created');
           if (IS_ELECTRON) {
-            if (this.state.debug) console.log('OS Detected: ', this.state.os);
             if (!filePath) {
               filePath = '/Users/mike/.dbKoda/';
               console.error('Did not recieve a file path back from controller');

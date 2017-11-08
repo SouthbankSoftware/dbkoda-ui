@@ -142,11 +142,9 @@ export default class GraphicalBuilder extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
 
-      if (this.debug) console.log('[ADDBLOCK] - Adding block to position: ', position);
       this.updateShellPipeline().then(() => {
         this.updateResultSet()
           .then((res) => {
-            if (this.debug) console.log('[ADDBLOCK] - updateResultSet:', JSON.parse(res));
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
@@ -158,9 +156,6 @@ export default class GraphicalBuilder extends React.Component {
                 if (indexValue.constructor === Array) {
                   // Check for error result.
                   if (res.stepCodes[index] === 0) {
-                    if (this.debug) {
-                      console.log('Result[', index, '] is valid: ', indexValue);
-                    }
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -274,12 +269,7 @@ export default class GraphicalBuilder extends React.Component {
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
     this.selectBlock(position).then(() => {
-      if (this.debug) console.log('[ADDBLOCKTOEDITOR] - Done adding Block: ', editor.blockList[editor.selectedBlock]);
       if (block) {
-        if (this.debug) console.log('[ADDBLOCKTOEDITOR] - Adding fields to block...');
-        if (this.debug) console.log('[ADDBLOCKTOEDITOR] - before:', editor.blockList[position].fields);
-        // Iterate through each field in block.fields and add the appropriate values.
-        // tmpArray[position].fields = block.fields;
         for (const key in block.fields) {
           if (block.fields.hasOwnProperty(key)) { // eslint-disable-line
             // Check if field is an array:
@@ -295,7 +285,6 @@ export default class GraphicalBuilder extends React.Component {
             }
           }
         }
-        if (this.debug) console.log('[ADDBLOCKTOEDITOR] - after:', editor.blockList[position].fields);
       }
       resolve();
     });
@@ -328,7 +317,6 @@ export default class GraphicalBuilder extends React.Component {
         })
         .then((res) => {
           // Check attribute List to see if we have valid attributes returned.
-          if (this.debug) console.log('GetBlockAttributes: ', res);
           resolve(res);
         })
         .catch((err) => {
@@ -365,7 +353,7 @@ export default class GraphicalBuilder extends React.Component {
     this.updateShellPipeline(true).then((res) => {
       if (res && res.unableToUpdateSteps) {
         // Partial update
-        console.log('[SELECT] - Unable to fully update steps: ', res);
+        console.error('[SELECT] - Unable to fully update steps: ', res);
         // 4. Is the current block valid?.
         if (editor.blockList[editor.selectedBlock].status === 'valid') {
           // 4.a Yes - Update Results.
@@ -385,7 +373,6 @@ export default class GraphicalBuilder extends React.Component {
           res = JSON.parse(res);
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
-            if (this.debug) console.log('[SELECT] - updateResultSet:', res);
             res.stepAttributes.map((indexValue, index) => {
               let attributeIndex = index;
               if (index > 0) {
@@ -430,7 +417,6 @@ export default class GraphicalBuilder extends React.Component {
             runInAction('Update Graphical Builder', () => {
               this.props.store.editorPanel.updateAggregateDetails = true;
               this.forceUpdate();
-              if (this.debug) console.log('[SELECT] - Selecting block: ', index);
               resolve();
             });
           }
@@ -492,13 +478,7 @@ export default class GraphicalBuilder extends React.Component {
     this.moveBlockInEditor(blockFrom, blockTo);
     // 2. Update Shell Steps
     this.updateShellPipeline(true).then((res) => {
-      if (this.debug) console.log('Res: ', res);
       if (res && res.unableToUpdateSteps) {
-        // Partial update
-        if (this.debug) {
-          console.log('Unable to complete full update:', editor.blockList);
-        }
-
         // 4. Is the current block valid?.
         if (editor.blockList[editor.selectedBlock].status === 'valid') {
           // 4.a Yes - Update Results.
@@ -513,15 +493,10 @@ export default class GraphicalBuilder extends React.Component {
           this.forceUpdate();
         });
       } else {
-        if (this.debug) console.log('Res: ', res);
-        if (this.debug) {
-          console.log('Able to complete full update:', editor.blockList);
-        }
         this.updateResultSet().then((res) => {
           res = JSON.parse(res);
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
-            if (this.debug) console.log('updateResultSet:', res);
             res.stepAttributes.map((indexValue, index) => {
               let attributeIndex = index;
               if (index > 0) {
@@ -599,7 +574,6 @@ export default class GraphicalBuilder extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
-    if (this.debug) console.log('removeBlock: ', blockPosition);
     // 1. Remove from Editor Structure.
     editor.blockList.splice(blockPosition, 1);
     // 2. Update Shell Steps.
@@ -634,7 +608,6 @@ export default class GraphicalBuilder extends React.Component {
           res = JSON.parse(res);
           if (res.stepAttributes.constructor === Array) {
             // 3. Update Valid for each block.
-            if (this.debug) console.log('updateResultSet:', res);
             res.stepAttributes.map((indexValue, index) => {
               let attributeIndex = index;
               if (index > 0) {
@@ -700,7 +673,6 @@ export default class GraphicalBuilder extends React.Component {
 
   moveBlockHelper(array, oldIndex, newIndex) {
     // Standard array move:
-    console.log('!!! PALETTE !!!');
     if (newIndex >= array.length) {
       let tmpArray = newIndex - array.length;
       while ((tmpArray -= 1) + 1) {
@@ -824,7 +796,6 @@ export default class GraphicalBuilder extends React.Component {
       this.validateAllBlocks(stepArray).then((res) => {
         if (res.areAllValid === true) {
           // Update steps in Shell:
-          if (this.debug) console.log('updatingShellPipeline: ', stepArray);
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 30000;
           service
@@ -857,7 +828,6 @@ export default class GraphicalBuilder extends React.Component {
           // Update only first N blocks.
           const validArray = stepArray.slice(0, res.firstInvalid);
           // Update steps in Shell:
-          if (this.debug) console.log('updatingShellPipeline: ', stepArray);
           const service = featherClient().service('/mongo-sync-execution');
           service.timeout = 30000;
           service
@@ -1026,7 +996,6 @@ export default class GraphicalBuilder extends React.Component {
             this.props.store
               .openFile(v, ({ _id, content }) => {
                 this.setState({isLoading: true});
-                console.log(this.state.isLoading);
                 const contentObject = JSON.parse(content);
                 this.importFile(contentObject);
               })
@@ -1176,7 +1145,7 @@ export default class GraphicalBuilder extends React.Component {
       this.removeAllBlocks()
         .then(() => {
           this.addNewBlocks(contentObject).then(() => {
-            console.log('!!!- End -!!!');
+            // @TODO -> Can probably remove this then statement.
           });
         })
         .then(() => {
@@ -1247,7 +1216,6 @@ export default class GraphicalBuilder extends React.Component {
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
-              if (this.debug) console.log('[REMOVEALLBLOCKS] - updateResultSet:', res);
               res.stepAttributes.map((indexValue, index) => {
                 let attributeIndex = index;
                 if (index > 0) {
@@ -1335,9 +1303,7 @@ export default class GraphicalBuilder extends React.Component {
         return p;
       };
       return importBlock(importBlockList).then(() => {
-        if (this.debug) console.log('[addNewBlocks] - Finished importing aggBuilder.');
         // Select last block.
-        if (this.debug) console.log('[addNewBlocks] - Selecting last Block (', count, ').');
         this.selectBlock(count - 1).then(() => {
           NewToaster.show({
             message: globalString('aggregate_builder/import_passed'),

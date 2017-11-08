@@ -184,7 +184,6 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log('test comments removal: ', currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1'));
               let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').split(';');
               queries = queries.filter((query) => {
                 return (query.trim().length > 0);
@@ -192,13 +191,11 @@ class View extends React.Component {
               queries = queries.map((query) => {
                 return query.trim();
               });
-              console.log('queries: ', queries);
               service
                 .update(shell, {
                   queries,
                 })
                 .then((res) => {
-                  console.log('queries result:', res);
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
@@ -250,10 +247,10 @@ class View extends React.Component {
                   });
                 });
             }
-            console.log('!!! - Update Tree Topology: ', this.props.store.treeActionPanel.refreshOnExecution);
             if (this.props.store.treeActionPanel.refreshOnExecution) {
               this.props.store.treeActionPanel.refreshTree = true;
-/*               if (this.props.store.treePanel.isRefreshDisabled) {
+/*            @TODO -> Does this still need to be here? Otherwise remove.
+              if (this.props.store.treePanel.isRefreshDisabled) {
                 return;
               }
               this.props.store.treePanel.isRefreshing = true;
@@ -305,14 +302,9 @@ class View extends React.Component {
             const cm = this.editor.getCodeMirror(); // eslint-disable-line
             let content = cm.getSelection();
             if (cm.getSelection().length > 0) {
-              console.log('Executing Highlighted Text.');
               Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
             } else {
               Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
-              console.log(
-                'No Highlighted Text, Executing Line: ',
-                cm.getCursor().line + 1,
-              );
               content = cm.getLine(cm.getCursor().line);
             }
             this.props.store.editors.get(editor.id).executing = true;
@@ -322,13 +314,11 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log('queries:', content.replace(/\t/g, '  ').split(';'));
               service
                 .update(shell, {
                   queries: content.replace(/\t/g, '  ').split('\n'),
                 })
                 .then((res) => {
-                  console.log('queries result:', res);
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
@@ -515,7 +505,7 @@ class View extends React.Component {
               cm.setValue(this.props.store.treeActionPanel.formValues);
               this.setEditorValue(this.props.store.treeActionPanel.formValues);
             } catch (e) {
-              console.log(e);
+              console.error(e);
             }
             this.props.store.treeActionPanel.isNewFormValues = false;
           }
@@ -731,12 +721,8 @@ class View extends React.Component {
       const cm = this.editor.getCodeMirror(); // eslint-disable-line
       let content = cm.getSelection();
       if (cm.getSelection().length > 0) {
-        console.log('Executing Highlighted Text.');
+        // @TODO -> Remove this, it's not needed.
       } else {
-        console.log(
-          'No Highlighted Text, Executing Line: ',
-          cm.getCursor().line + 1,
-        );
         content = cm.getLine(cm.getCursor().line);
       }
       content = insertExplainOnCommand(content, explainParam);
@@ -766,7 +752,7 @@ class View extends React.Component {
           });
         })
         .catch((err) => {
-          console.log('error:', err);
+          console.error('error:', err);
           NewToaster.show({
             message: globalString('explain/executionError'),
             className: 'danger',

@@ -99,7 +99,6 @@ const generateSkipComments = (stage) => {
 };
 
 const generateProjectionComments = (stage) => {
-  console.log('project comments', stage);
   let comments = stage.stage;
   if ('transformBy' in stage) {
     comments = 'Project for ';

@@ -29,17 +29,16 @@
 // import * as common from './Common.js';
 
 export const GetLog = {
-    // Prefill function for alter user
-    dbkodaGetLogPreFill: () => {
-        const data = {};
-        data.logType = 'global';
-        return data;
-    },
-    dbkodaGetLogArgs: () => {
-        return ('db.adminCommand({getLog: "*" }).names');
-    },
-    dbkodaGetLogArgs_parse: (res) => {
-        console.log(res);
-        return (res);
-    }
+  // Prefill function for alter user
+  dbkodaGetLogPreFill: () => {
+    const data = {};
+    data.logType = 'global';
+    return data;
+  },
+  dbkodaGetLogArgs: () => {
+    return 'db.adminCommand({getLog: "*" }).names';
+  },
+  dbkodaGetLogArgs_parse: (res) => {
+    return res;
+  },
 };

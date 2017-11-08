@@ -28,36 +28,35 @@
 import * as common from './Common.js';
 
 export const DropUser = {
-    // Prefill function for alter user
-    dbkoda_DropUserPreFill: (params) => {
-        const userId = params.UserId;
-        return `db.getSiblingDB("admin").system.users.find({"_id": "${userId}"}).toArray()`;
-    },
-    dbkoda_DropUserPreFill_parse: (userDocs) => {
-        console.log(userDocs);
-        if (userDocs.length == 0) {
-            throw new Error('No user found for Alter User');
-        } else if (userDocs.length > 1) {
-            throw new Error('dbkoda: Too many users found for Alter User');
-        }
-        const userDoc = userDocs[0];
-        const outputDoc = {};
-        outputDoc.UserId = userDoc._id;
-        outputDoc.Database = userDoc.db;
-        outputDoc.UserName = userDoc.user;
-        // outputDoc.CustomData = userDoc.customData;
-        outputDoc.Roles = [];
-        userDoc.roles.forEach((role) => {
-            outputDoc.Roles.push({
-                Database: role.db,
-                Role: role.role,
-            });
-        });
+  // Prefill function for alter user
+  dbkoda_DropUserPreFill: (params) => {
+    const userId = params.UserId;
+    return `db.getSiblingDB("admin").system.users.find({"_id": "${userId}"}).toArray()`;
+  },
+  dbkoda_DropUserPreFill_parse: (userDocs) => {
+    if (userDocs.length == 0) {
+      throw new Error('No user found for Alter User');
+    } else if (userDocs.length > 1) {
+      throw new Error('dbkoda: Too many users found for Alter User');
+    }
+    const userDoc = userDocs[0];
+    const outputDoc = {};
+    outputDoc.UserId = userDoc._id;
+    outputDoc.Database = userDoc.db;
+    outputDoc.UserName = userDoc.user;
+    // outputDoc.CustomData = userDoc.customData;
+    outputDoc.Roles = [];
+    userDoc.roles.forEach((role) => {
+      outputDoc.Roles.push({
+        Database: role.db,
+        Role: role.role,
+      });
+    });
 
-        return outputDoc;
-    },
-    dbkoda_listdb: common.dbkoda_listdb,
-    dbkoda_listdb_parse: common.dbkoda_listdb_parse,
-    dbkoda_listcollections: common.dbkoda_listcollections,
-    dbkoda_listcollections_parse: common.dbkoda_listcollections_parse
+    return outputDoc;
+  },
+  dbkoda_listdb: common.dbkoda_listdb,
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+  dbkoda_listcollections: common.dbkoda_listcollections,
+  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
 };

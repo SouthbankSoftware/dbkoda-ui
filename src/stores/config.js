@@ -62,7 +62,6 @@ export default class Config {
 
   @action.bound
   load() {
-    console.log('Load from config.yml');
     if (!this.configFilePath) {
       return;
     }
@@ -78,7 +77,6 @@ export default class Config {
               this.loading = false;
             });
           }
-          console.log('Config loaded successfully!');
         });
       })
       .catch((e) => {
@@ -94,7 +92,6 @@ export default class Config {
   @action.bound
   save() {
     this.loading = true;
-    console.log('Save to config.yml');
     if (!this.configFilePath) {
       return;
     }
@@ -107,7 +104,6 @@ export default class Config {
           watching: false,
         })
         .then(() => {
-          console.log('config.yml updated');
           NewToaster.show({
             message: 'Config.yml successfully updated',
             className: 'success',

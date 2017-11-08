@@ -29,25 +29,24 @@
 // import * as common from './Common.js';
 
 export const SetLogLevel = {
-    // Prefill function for alter user
-    dbkodaLoggingLevelPreFill: () => {
-        return 'db.getSiblingDB("admin").runCommand({  getParameter:1,"logComponentVerbosity":1}).logComponentVerbosity';
-    },
-    dbkodaLoggingLevelPreFill_parse: (parmDoc) => {
-        console.log(parmDoc);
-        const outputDoc = {};
-        outputDoc.verbosity = parmDoc.verbosity;
-        // outputDoc.CustomData = userDoc.customData;
-        outputDoc.Components = [];
-        Object.keys(parmDoc).forEach((component) => {
-            if (component !== 'verbosity') {
-                outputDoc.Components.push({
-                    Component: component,
-                    Level: parmDoc[component].verbosity,
-                });
-            }
+  // Prefill function for alter user
+  dbkodaLoggingLevelPreFill: () => {
+    return 'db.getSiblingDB("admin").runCommand({  getParameter:1,"logComponentVerbosity":1}).logComponentVerbosity';
+  },
+  dbkodaLoggingLevelPreFill_parse: (parmDoc) => {
+    const outputDoc = {};
+    outputDoc.verbosity = parmDoc.verbosity;
+    // outputDoc.CustomData = userDoc.customData;
+    outputDoc.Components = [];
+    Object.keys(parmDoc).forEach((component) => {
+      if (component !== 'verbosity') {
+        outputDoc.Components.push({
+          Component: component,
+          Level: parmDoc[component].verbosity,
         });
+      }
+    });
 
-        return outputDoc;
-    }
+    return outputDoc;
+  },
 };

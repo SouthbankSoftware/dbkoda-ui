@@ -105,7 +105,7 @@ export default class TreeToolbar extends React.Component {
         });
       })
       .catch((err) => {
-        console.log(err.stack);
+        console.error(err.stack);
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: err.message,
           className: 'danger',

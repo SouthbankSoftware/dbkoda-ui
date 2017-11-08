@@ -25,25 +25,25 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2017-05-10T12:27:05+10:00
  */
+/* eslint no-unused-vars:warn */
 
 import * as common from './Common.js';
 
 export const ShardCollection = {
-    // Prefill function for alter user
-    dbkoda_ShardCollectionPreFill: (params) => {
-        const data = {};
-        data.Database = params.Database;
-        data.CollectionName = params.CollectionName;
-        data.Unique = false;
-        return data;
-    },
-    dbkoda_indexOptions: () => {
-        return ('db');
-    },
-    dbkoda_indexOptions_parse: (res) => {
-        console.log(res);
-        return ([1, -1, '"hashed"']);
-    },
-    dbkodaListAttributes: common.dbkodaListAttributes,
-    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse
+  // Prefill function for alter user
+  dbkoda_ShardCollectionPreFill: (params) => {
+    const data = {};
+    data.Database = params.Database;
+    data.CollectionName = params.CollectionName;
+    data.Unique = false;
+    return data;
+  },
+  dbkoda_indexOptions: () => {
+    return 'db';
+  },
+  dbkoda_indexOptions_parse: (res) => {
+    return [1, -1, '"hashed"'];
+  },
+  dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
 };

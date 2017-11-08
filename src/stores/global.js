@@ -528,7 +528,7 @@ export default class Store {
       })
       .catch((err) => {
         if (err.code === 404) {
-          console.log(
+          console.error(
             "State store doesn't exist. A new one will be created after app close or refreshing",
           );
           Broker.emit(EventType.APP_READY);

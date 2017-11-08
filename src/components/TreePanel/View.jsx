@@ -362,9 +362,6 @@ export default class TreeView extends React.Component {
   };
 
   showTreeActionPanel = (treeNode, action, editorType) => {
-    console.log(treeNode);
-    console.log(action);
-    console.log(editorType);
     this.props.store.setTreeAction(treeNode, action);
     if (this.checkExistingEditor(editorType)) {
       this.props.store.showTreeActionPane(editorType);
@@ -399,7 +396,6 @@ export default class TreeView extends React.Component {
   showStorageStatsView = () => {
     runInAction('Using Active profile to store statistics', () => {
       const selectedProfile = this.props.store.profileList.selectedProfile;
-      console.log(selectedProfile);
       this.props.store.profileList.selectedProfile = observable({
         ...selectedProfile,
         storageView: {

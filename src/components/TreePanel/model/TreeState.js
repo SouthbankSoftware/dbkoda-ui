@@ -28,20 +28,11 @@
 
 /* eslint-disable */
 
-import {
-  observable,
-  action
-} from 'mobx';
+import { observable, action } from 'mobx';
 import _ from 'lodash';
-import {
-  featherClient
-} from '~/helpers/feathers';
-import {
-  NewToaster
-} from '#/common/Toaster';
-import {
-  Intent
-} from '@blueprintjs/core';
+import { featherClient } from '~/helpers/feathers';
+import { NewToaster } from '#/common/Toaster';
+import { Intent } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import TreeNode from './TreeNode.jsx';
 
@@ -63,52 +54,46 @@ export default class TreeState {
     this.treeNodes = [];
     this.filteredNodes = observable([]);
     this.resetTreeNode = new TreeNode({
-      text: '...'
+      text: '...',
     });
   }
-  @action setProfileId(value) {
+  @action
+  setProfileId(value) {
     this.profileId = value;
   }
   /**
    * set the selected profile alias to be shown in toolbar
    * @param {string}  - text of profile alias
    */
-  @action setProfileAlias(value) {
+  @action
+  setProfileAlias(value) {
     this.profileAlias = value;
   }
   /**
    * Set the filter value for the tree nodes and executes the function to filter treeNodes.
    * @param {string}  - text to filter and highlight
    */
-  @action setFilter(value) {
+  @action
+  setFilter(value) {
     this.filter = value.toLowerCase();
     this.filterNodes();
   }
   /**
    * Function to perform the filter action on the treeNodes.
    */
-  @action filterNodes() {
-    this
-      .filteredNodes
-      .clear();
+  @action
+  filterNodes() {
+    this.filteredNodes.clear();
     if (this.treeRoot) {
-      this
-        .filteredNodes
-        .push(this.resetTreeNode);
-      this
-        .treeRoot
-        .setFilter(this.filter);
+      this.filteredNodes.push(this.resetTreeNode);
+      this.treeRoot.setFilter(this.filter);
       this.treeRoot.isExpanded = true;
-      this
-        .filteredNodes
-        .push(this.treeRoot);
+      this.filteredNodes.push(this.treeRoot);
     } else {
       for (const treeNode of this.treeNodes) {
         treeNode.setFilter(this.filter);
         if (treeNode.childNodes) {
-          this
-            .filteredNodes
-            .push(treeNode);
+          this.filteredNodes.push(treeNode);
         }
       }
     }
@@ -117,30 +102,24 @@ export default class TreeState {
    * function to parse json document from the controller
    * @param  {json} treeJson [description]
    */
-  @action parseJson(treeJson, profileId = '') {
+  @action
+  parseJson(treeJson, profileId = '') {
     this.treeJson = treeJson;
     this.treeRoot = undefined;
     if (profileId != '' && profileId == this.topologyProfileId) {
       this.preserveState();
     }
-    this
-      .filteredNodes
-      .clear();
+    this.filteredNodes.clear();
     if (this.treeJson.length && this.treeJson.length > 0) {
       this.treeNodes = [];
       for (const node of this.treeJson) {
         const treeNode = new TreeNode(node);
         if (treeNode.allChildNodes && treeNode.allChildNodes.size > 0) {
-          this
-            .treeNodes
-            .push(treeNode);
+          this.treeNodes.push(treeNode);
         } else if (treeNode.type && treeNode.type == 'users') {
-          this
-            .treeNodes
-            .push(treeNode);
+          this.treeNodes.push(treeNode);
         }
       }
-      console.log('TEST: ', this.treeNodes);
       this.filterNodes();
       this.isNewJsonAvailable = true;
     }
@@ -153,9 +132,10 @@ export default class TreeState {
    * function to select a specific node in a tree
    * @param  {TreeNode} nodeData treeNode which has been clicked by the userPreferences
    */
-  @action selectNode(nodeData) {
+  @action
+  selectNode(nodeData) {
     // const originallySelected = nodeData.isSelected;
-    this.forEachNode(this.nodes, (n) => {
+    this.forEachNode(this.nodes, n => {
       n.isSelected = false;
     });
     nodeData.isSelected = true; // originallySelected == null ? true : !originallySelected;
@@ -164,7 +144,8 @@ export default class TreeState {
    * Set the root node of the tree
    * @param  {treeNode} nodeData treeNode which has been selected by the user
    */
-  @action selectRootNode(nodeData) {
+  @action
+  selectRootNode(nodeData) {
     this.preserveState();
     this.treeRoot = nodeData;
     this.filterNodes();
@@ -172,7 +153,8 @@ export default class TreeState {
   /**
    * Reset the root node to display the complete topology of the selected profile
    */
-  @action resetRootNode() {
+  @action
+  resetRootNode() {
     this.treeRoot = undefined;
     this.filterNodes();
     this.restoreState();
@@ -180,24 +162,22 @@ export default class TreeState {
   /**
    * Save the state of tree for future restoration
    */
-  @action preserveState() {
+  @action
+  preserveState() {
     this.previousState = new Map();
     for (const child of this.treeNodes) {
-      this
-        .previousState
-        .set(child.id, child.StateObject);
+      this.previousState.set(child.id, child.StateObject);
     }
   }
   /**
    * Restores the tree state to a previous state
    * @return {[type]} [description]
    */
-  @action restoreState() {
+  @action
+  restoreState() {
     if (this.previousState && this.previousState.size > 0) {
       for (const child of this.treeNodes) {
-        const lastState = this
-          .previousState
-          .get(child.id);
+        const lastState = this.previousState.get(child.id);
         child.StateObject = lastState;
       }
     }
@@ -209,53 +189,72 @@ export default class TreeState {
   sampleCollection(nodeRightClicked) {
     const db = nodeRightClicked.refParent.text;
     const queryFirst = 'use ' + db + '\n'; // eslint-disable-line
-    const querySecond = 'db.' + nodeRightClicked.text + '.find().limit(20).toArray()'; //
+    const querySecond =
+      'db.' + nodeRightClicked.text + '.find().limit(20).toArray()'; //
     const profile = this.updateCallback2();
-    console.log('Prof: ', profile);
     if (profile.shellVersion) {
-      if (profile.shellVersion.match(/^3.0.*/gi) ||
+      if (
+        profile.shellVersion.match(/^3.0.*/gi) ||
         profile.shellVersion.match(/^2.*/gi) ||
-        profile.shellVersion.match(/^1.*/gi)) {
-        console.log('Sample attributes does not currently support Shell versions lower than 3.1, detected version is: ', profile.shellVersion);
-         NewToaster.show({
-          message: 'Sorry, sampling of collection not currently supported for Mongo shell versions lower than 3.1',
+        profile.shellVersion.match(/^1.*/gi)
+      ) {
+        console.error(
+          'Sample attributes does not currently support Shell versions lower than 3.1, detected version is: ',
+          profile.shellVersion,
+        );
+        NewToaster.show({
+          message:
+            'Sorry, sampling of collection not currently supported for Mongo shell versions lower than 3.1',
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
       } else {
         const service = featherClient().service('/tree-actions');
         service.timeout = 30000;
-        service.get(profile.id, {query:{type:'attributes', db, collection: nodeRightClicked.text}})
-          .then((res) => {
-              this
-                .parseSampleData(res)
-                .then((sampleJSON) => {
-                    if (!nodeRightClicked.allChildNodes) {
-                      nodeRightClicked.allChildNodes = new Map();
-                    }
-                    const child = new TreeNode(sampleJSON, nodeRightClicked);
-                    nodeRightClicked.isExpanded = true;
-                    child.isExpanded = true;
-                    nodeRightClicked.setFilter(this.filter);
-                    this.updateCallback();
-                    nodeRightClicked.isExpanded = true;
-                    this.updateCallback();
-                  },
-                  (err) => {
-                    console.log('Failed: ', err);
-                  });
+        service
+          .get(profile.id, {
+            query: {
+              type: 'attributes',
+              db,
+              collection: nodeRightClicked.text,
             },
-            (err) => {
-              console.log('Failed: ', err);
-            });
+          })
+          .then(
+            res => {
+              this.parseSampleData(res).then(
+                sampleJSON => {
+                  if (!nodeRightClicked.allChildNodes) {
+                    nodeRightClicked.allChildNodes = new Map();
+                  }
+                  const child = new TreeNode(sampleJSON, nodeRightClicked);
+                  nodeRightClicked.isExpanded = true;
+                  child.isExpanded = true;
+                  nodeRightClicked.setFilter(this.filter);
+                  this.updateCallback();
+                  nodeRightClicked.isExpanded = true;
+                  this.updateCallback();
+                },
+                err => {
+                  console.error('Failed: ', err);
+                },
+              );
+            },
+            err => {
+              console.error('Failed: ', err);
+            },
+          );
       }
     } else {
-         console.log('Sample Attributes could not determine the shell version, detected version is: ', profile.shellVersion);
-         NewToaster.show({
-          message: 'Sorry, sampling of collections failed as we can not detect a supported Mongo Shell Version',
-          className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
-        });
+      console.error(
+        'Sample Attributes could not determine the shell version, detected version is: ',
+        profile.shellVersion,
+      );
+      NewToaster.show({
+        message:
+          'Sorry, sampling of collections failed as we can not detect a supported Mongo Shell Version',
+        className: 'danger',
+        iconName: 'pt-icon-thumbs-down',
+      });
     }
   }
 
@@ -269,24 +268,21 @@ export default class TreeState {
       // Create an object as a union of all attributes. Remove db swap. Replace
       // ObjectID(...) elements.
       try {
-        console.log('Q R: ', queryResult);
         let object = queryResult;
         //Build tree from JSON object.
         let treeObj = {
           text: 'Attributes',
           type: 'properties',
-          children: []
+          children: [],
         };
         this.traverseObject(object, treeObj.children);
-        console.log('Tree Object: ', treeObj);
 
-        //console.log(keys);
         resolve(treeObj);
       } catch (err) {
         NewToaster.show({
           message: 'Sorry, sampling of collection failed! Please try again.',
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
         reject('Sampling of Attributes Failed: ', err);
       }
@@ -295,43 +291,37 @@ export default class TreeState {
 
   traverseObject(obj, childArray) {
     if (obj) {
-      Object
-        .keys(obj)
-        .forEach(function (key) {
+      Object.keys(obj).forEach(
+        function(key) {
           if (typeof obj[key] === 'object') {
-            console.log('Parsing: ', obj[key]);
             if (Array.isArray(obj[key])) {
               //Array
-              console.log('Object is Array');
               let newChild = {
                 text: key + ' (array)',
                 type: 'properties',
-                children: []
+                children: [],
               };
               this.traverseObject(obj[key][0], newChild.children);
               childArray.push(newChild);
             } else {
               //Object
-              console.log('Object is Object');
               let newChild = {
                 text: key,
                 type: 'properties',
-                children: []
+                children: [],
               };
               this.traverseObject(obj[key], newChild.children);
               childArray.push(newChild);
             }
-
           } else {
-            console.log('Object is Property');
             childArray.push({
               text: key,
-              type: 'property'
-            });;
+              type: 'property',
+            });
           }
           // Create a node
-
-        }.bind(this));
+        }.bind(this),
+      );
     }
   }
 
@@ -359,159 +349,163 @@ export default class TreeState {
   }
 
   getDummyResult() {
-    return [{
-
-      'name': 'd',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'g',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'a',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'k',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'l',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'm',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'b',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'c',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'h',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'f',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-      'name': 'e',
-      'age': '1',
-      'height': 123,
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-
-      'name': 'j',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }, {
-      'name': 'e',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2,
-          'ccc': 3
-        }
-      }
-    }, {
-      'name': 'e',
-      'age': '1',
-      'nested': {
-        'a': 1,
-        'b': {
-          'bb': 1,
-          'bbb': 2
-        }
-      }
-    }];
+    return [
+      {
+        name: 'd',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'g',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'a',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'k',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'l',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'm',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'b',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'c',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'h',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'f',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'e',
+        age: '1',
+        height: 123,
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'j',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+      {
+        name: 'e',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+            ccc: 3,
+          },
+        },
+      },
+      {
+        name: 'e',
+        age: '1',
+        nested: {
+          a: 1,
+          b: {
+            bb: 1,
+            bbb: 2,
+          },
+        },
+      },
+    ];
   }
 }

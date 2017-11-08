@@ -68,19 +68,11 @@ export default class Panel extends React.Component {
 
   @action.bound
   telemetryEnabledChanged() {
-    console.log(
-      'Telemetry Enabled Before:',
-      this.props.config.settings.telemetryEnabled,
-    );
     if (this.props.config.settings.telemetryEnabled) {
       this.props.config.settings.telemetryEnabled = false;
     } else {
       this.props.config.settings.telemetryEnabled = true;
     }
-    console.log(
-      'Telemetry Enabled After:',
-      this.props.config.settings.telemetryEnabled,
-    );
   }
 
   @action.bound
