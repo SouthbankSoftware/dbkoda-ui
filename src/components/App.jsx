@@ -24,6 +24,8 @@
  * @Last modified time: 2017-10-16T09:15:20+11:00
  */
 
+/* eslint camelcase:warn */
+
 import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
 import { DragDropContext } from 'react-dnd';
@@ -78,7 +80,6 @@ class App extends React.Component {
     this.props.store.layout.optInVisible = false;
   }
   unstable_handleError(...v) {
-    //eslint-disable-line
     console.log(...v);
     Broker.emit(EventType.APP_CRASHED);
   }
