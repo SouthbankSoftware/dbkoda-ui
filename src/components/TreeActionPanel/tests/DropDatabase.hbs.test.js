@@ -28,7 +28,6 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
-const debug = false;
 const templateToBeTested =
   './src/components/TreeActionPanel/Templates/DropDatabase.hbs';
 const templateInput = require('./DropDatabase.hbs.input.json');
@@ -74,7 +73,6 @@ test('Drop Database template', (done) => {
       mongoCommands += DropDatabaseCommands;
       mongoCommands += validateDbCmd;
       mongoCommands += '\nexit\n';
-      if (debug) console.log(mongoCommands);
       const matchString = sprintf('database has collections=1', randomDatabase); // database were created
       const matchString2 = sprintf(
         'database has collections=0',

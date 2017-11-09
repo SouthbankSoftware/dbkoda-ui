@@ -75,7 +75,8 @@ export default class DetailsBuilder {
 
         let PrefilledValues;
         if (
-          ddd.DefaultValues.arguments && ddd.DefaultValues.arguments.length > 0
+          ddd.DefaultValues.arguments &&
+          ddd.DefaultValues.arguments.length > 0
         ) {
           PrefilledValues = formFunctions[ddd.DefaultValues.function](params);
         } else {
@@ -85,9 +86,8 @@ export default class DetailsBuilder {
         if (typeof PrefilledValues === 'string') {
           let parseFunction;
           if (formFunctions[ddd.DefaultValues.function + '_parse']) {
-            parseFunction = formFunctions[
-              ddd.DefaultValues.function + '_parse'
-            ];
+            parseFunction =
+              formFunctions[ddd.DefaultValues.function + '_parse'];
           } else {
             parseFunction = (values) => {
               return values;
@@ -96,18 +96,19 @@ export default class DetailsBuilder {
           SyncService.executeQuery(
             PrefilledValues,
             this.editor.shellId,
-            this.editor.profileId
+            this.editor.profileId,
           )
             .then((res) => {
               try {
                 const parsedValues = parseFunction(res);
-                console.log('parsedValues: ', parsedValues);
                 if (parsedValues.error) {
                   reject(parsedValues.error);
                 }
                 resolve(parsedValues);
               } catch (err) {
-                reject('Unable to parse response from the provided parse function.');
+                reject(
+                  'Unable to parse response from the provided parse function.',
+                );
               }
             })
             .catch((reason) => {
@@ -143,7 +144,7 @@ export default class DetailsBuilder {
 
         const detailsViewInfo = {
           title: ddd.Title,
-          fields: ddd.Fields
+          fields: ddd.Fields,
         };
 
         if (detailsViewInfo.title.indexOf('%') > 0) {
@@ -154,7 +155,10 @@ export default class DetailsBuilder {
           const titleParams = this.resolveArguments(titleArgs);
           for (const key in titleParams) {
             if (titleParams[key]) {
-              detailsViewInfo.title = detailsViewInfo.title.replace(key, titleParams[key]);
+              detailsViewInfo.title = detailsViewInfo.title.replace(
+                key,
+                titleParams[key],
+              );
             }
           }
         }

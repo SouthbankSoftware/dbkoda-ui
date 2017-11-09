@@ -5,6 +5,7 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2017-08-22T12:09:48+10:00
  */
+/* eslint no-unused-vars:warn */
 
 import React from 'react';
 import { observer } from 'mobx-react';
@@ -14,21 +15,17 @@ import './style.scss';
 @observer
 export default class FileInput extends React.Component {
   onChange = (value) => {
-    console.log('onChange:', value);
+    // @TODO -> Is this needed, only had a comment in it?
   };
   onInputClick = () => {
     this.props.divOnClick();
     const electron = window.require('electron');
     const remote = electron.remote;
     const file = remote.dialog.showOpenDialog({
-      properties: [
-        'openFile',
-        'showHiddenFiles',
-      ],
+      properties: ['openFile', 'showHiddenFiles'],
     });
 
     if (file !== undefined) {
-      console.log(file[0]);
       this.props.field.value = file[0];
     }
   };
@@ -47,9 +44,7 @@ export default class FileInput extends React.Component {
             {...field.bind()} // eslint-disable-line
             style={{ cursor: 'pointer' }}
           />
-          <p className="pt-form-helper-text">
-            {field.error}
-          </p>
+          <p className="pt-form-helper-text">{field.error}</p>
         </div>
         <div className="field-inline">
           <Button className="browse-directory" onClick={() => {}}>

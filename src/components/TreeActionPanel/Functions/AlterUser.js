@@ -35,7 +35,6 @@ export const AlterUser = {
     return `db.getSiblingDB("admin").system.users.find({"_id": "${userId}"}).toArray()`;
   },
   dbkoda_AlterUserPreFill_parse: (userDocs) => {
-    console.log(userDocs);
     if (userDocs.length == 0) {
       throw new Error('No user found for Alter User');
     } else if (userDocs.length > 1) {
@@ -58,7 +57,10 @@ export const AlterUser = {
     return outputDoc;
   },
   dbkoda_validateUser: (inputDoc) => {
-    if (Object.prototype.hasOwnProperty.call(inputDoc, 'Roles') && inputDoc.Roles.length > 0) {
+    if (
+      Object.prototype.hasOwnProperty.call(inputDoc, 'Roles') &&
+      inputDoc.Roles.length > 0
+    ) {
       return true;
     }
     throw new Error('dbkoda: Alter user should include as least one role');
@@ -66,5 +68,5 @@ export const AlterUser = {
   dbkoda_listdb: common.dbkoda_listdb,
   dbkoda_listdb_parse: common.dbkoda_listdb_parse,
   dbkoda_listRoles: common.dbkoda_listRoles,
-  dbkoda_listRoles_parse: common.dbkoda_listRoles_parse
+  dbkoda_listRoles_parse: common.dbkoda_listRoles_parse,
 };

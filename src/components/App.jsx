@@ -25,6 +25,7 @@
  */
 
 /* eslint camelcase:warn */
+/* eslint no-unused-vars:warn */
 
 import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
@@ -80,7 +81,6 @@ class App extends React.Component {
     this.props.store.layout.optInVisible = false;
   }
   unstable_handleError(...v) {
-    console.log(...v);
     Broker.emit(EventType.APP_CRASHED);
   }
   render() {

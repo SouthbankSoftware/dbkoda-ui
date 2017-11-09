@@ -21,6 +21,8 @@
  * Created by joey on 12/9/17.
  */
 
+ /* eslint no-unused-vars:warn */
+
 import React from 'react';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
@@ -79,12 +81,10 @@ export default class TranslatorPanel extends React.Component {
     let newValue = null;
     try {
       newValue = translator.translate(value, syntax);
-      console.log('translated ', value, newValue);
     } catch (_err) {
       console.error(_err);
       let msg = 'Error: Failed to translate shell script.';
       if (_err.lineNumber > 0 && _err.description) {
-        console.log('cm:', this.codeMirror);
         msg += `<br>${_err.description} on line ${_err.lineNumber}`;
         if (this.props.editorCodeMirror) {
           this.props.editorCodeMirror.focus();
@@ -120,12 +120,10 @@ export default class TranslatorPanel extends React.Component {
 
   @action.bound
   executeCommands() {
-    console.log('execute commands ', this.state.value);
     const service = featherClient().service('/mongo-driver');
     service.timeout = 30000;
     service.update(this.props.profileId, {commands: this.state.value, shellId: this.props.shellId})
       .then((doc) => {
-        console.log('execute response ', doc);
       }).catch((err) => {
         console.error(err.message);
         DBKodaToaster(Position.RIGHT_TOP).show({

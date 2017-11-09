@@ -125,10 +125,6 @@ export default class FormBuilder {
               resolve(result);
             })
             .catch((reason) => {
-              console.log(
-                'resolveQueries:',
-                'Handle rejected promise (' + reason + ') here.',
-              );
               reject(reason);
             });
         } else {
@@ -148,10 +144,6 @@ export default class FormBuilder {
                   resolve(result);
                 })
                 .catch((reason) => {
-                  console.log(
-                    'resolveQueries:',
-                    'Handle rejected promise (' + reason + ') here.',
-                  );
                   reject(reason);
                 });
             } else {
@@ -159,10 +151,6 @@ export default class FormBuilder {
             }
           })
           .catch((reason) => {
-            console.log(
-              'resolveQueries:',
-              'Handle rejected promise (' + reason + ') here.',
-            );
             reject(reason);
           });
       }
@@ -303,7 +291,7 @@ export default class FormBuilder {
                       formFunctions[fldQuery.parseFn](resOpts),
                     );
                   } catch (e) {
-                    console.log(e.stack);
+                    console.error(e.stack);
                   }
                 }
                 if (result.options[fldName]) {
@@ -316,11 +304,7 @@ export default class FormBuilder {
             if (this.editor.type.toUpperCase() === 'AGGREGATE') {
               const block = this.editor.blockList[this.editor.selectedBlock];
               if (this.editor.aggregateID && block.customFields) {
-                console.log(block.customFields);
                 Object.keys(block.customFields).map((field) => {
-                  // Merge array
-                  console.log(field);
-                  console.log(result.options[field]);
                   block.customFields[field].map((value) => {
                     result.options[field].dropdown.unshift(value);
                   });
@@ -330,10 +314,6 @@ export default class FormBuilder {
             resolve(result);
           })
           .catch((reason) => {
-            console.log(
-              'getFieldsFromDefinitions:',
-              'Handle rejected promise (' + reason + ') here.',
-            );
             reject(reason);
           });
       } else {
@@ -418,11 +398,8 @@ export default class FormBuilder {
                   if (frmVals[mFld].length > 0) {
                     frmVals[mFld] = frmVals[mFld].join('|');
                   }
-                } else {
-                  console.log(mFld, bMerge);
-                  if (mFld && frmVals[mFld]) {
-                    frmVals[mFld] = frmVals[mFld].split('|');
-                  }
+                } else if (mFld && frmVals[mFld]) {
+                  frmVals[mFld] = frmVals[mFld].split('|');
                 }
               }
             };
@@ -473,7 +450,6 @@ export default class FormBuilder {
             const updatePrefilledData = (data) => {
               if (formDefs.multiCombo.length > 0) {
                 for (const fld of formDefs.multiCombo) {
-                  console.log(fld);
                   if (fld.indexOf('.') > 0) {
                     // support for one child field so we can handle multiCombo in table/group fields
                     const arrCFlds = fld.split('.');
@@ -555,10 +531,6 @@ export default class FormBuilder {
             resolve(form);
           })
           .catch((reason) => {
-            console.log(
-              'CreateForm:',
-              'Handle rejected promise (' + reason + ') here.',
-            );
             reject(reason);
           });
       });

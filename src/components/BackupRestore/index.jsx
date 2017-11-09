@@ -28,6 +28,7 @@
 /**
  * Created by joey on 19/7/17.
  */
+/* eslint no-unused-vars:warn */
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
@@ -108,7 +109,6 @@ export class BackupRestore extends React.Component {
         .service('/os-execution')
         .on('os-command-finish', (output) => {
           this.setState({ commandExecuting: false });
-          console.log('get backup command ', output);
         });
     }
   }
@@ -152,7 +152,6 @@ export class BackupRestore extends React.Component {
             commands: `db.getSiblingDB("${db}").getCollectionNames()`,
           })
           .then((res) => {
-            console.log('get collection res ', res);
             this.setState({ collections: JSON.parse(res) });
           });
       }
@@ -164,7 +163,6 @@ export class BackupRestore extends React.Component {
             commands: 'db.adminCommand({listDatabases: 1})',
           })
           .then((res) => {
-            console.log('get collection res ', res);
             const dbs = JSON.parse(res).databases;
             const dbNames = dbs.map((db) => {
               return db.name;

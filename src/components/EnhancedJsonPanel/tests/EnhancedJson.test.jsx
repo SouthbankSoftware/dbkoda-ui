@@ -32,8 +32,7 @@ import Panel from '../Panel';
 
 describe('Enhanced JSON Tab', () => {
   let app;
-  const testJson = { 'json': {'key': 'value'} };
-  console.log(Panel);
+  const testJson = { json: { key: 'value' } };
 
   beforeAll(() => {
     useStrict(true);

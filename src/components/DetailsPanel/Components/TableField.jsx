@@ -29,10 +29,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 
-export default observer(({
-  field,
-  data
-}) => {
+export default observer(({ field, data }) => {
   const fldClassName = 'pt-table pt-interactive pt-striped';
 
   const tableHeaders = [];
@@ -51,29 +48,26 @@ export default observer(({
           tableCells.push(<td>{cellVal}</td>);
         } else {
           cellVal = globalNumber(Number(cellVal.replace(/,/g, '')));
-          tableCells.push(<td style={{ textAlign: 'right'}}>{cellVal}</td>);
+          tableCells.push(<td style={{ textAlign: 'right' }}>{cellVal}</td>);
         }
       }
       tableRows.push(<tr>{tableCells}</tr>);
     }
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 
-
-
   return (
-    <div className="div-field-container" style={field.width && {width: field.width}}>
+    <div
+      className="div-field-container"
+      style={field.width && { width: field.width }}
+    >
       <label htmlFor={field.name} className="pt-label pt-label-field">
         {field.label}
       </label>
       <table className={fldClassName}>
-        <thead>
-          {tableHeaders}
-        </thead>
-        <tbody>
-          {tableRows}
-        </tbody>
+        <thead>{tableHeaders}</thead>
+        <tbody>{tableRows}</tbody>
       </table>
     </div>
   );

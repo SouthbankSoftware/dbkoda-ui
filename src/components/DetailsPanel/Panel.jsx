@@ -46,7 +46,6 @@ export default class DetailsPanel extends React.Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps.isVisible:', nextProps.isVisible);
     if (!nextProps.isVisible) {
       this.showView(nextProps.isVisible);
     }
@@ -101,7 +100,6 @@ export default class DetailsPanel extends React.Component {
         );
         this.detailsPromise
           .then((res) => {
-            console.log('Details View Info: ', res);
             this.detailsViewInfo = res;
             this.showView(true);
           })

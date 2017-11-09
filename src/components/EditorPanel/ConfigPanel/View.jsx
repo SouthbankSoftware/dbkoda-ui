@@ -41,7 +41,7 @@ import './Panel.scss';
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config
+  config: allStores.config,
 }))
 @observer
 export default class View extends React.Component {
@@ -49,21 +49,28 @@ export default class View extends React.Component {
 
   constructor(props) {
     super(props);
-    this.props.store.configPage.newSettings = observable(toJS(this.props.config.settings));
+    this.props.store.configPage.newSettings = observable(
+      toJS(this.props.config.settings),
+    );
     this.checkConfig = this.checkConfig.bind(this);
     this.getConfigForm = this.getConfigForm.bind(this);
     this.renderFieldLabel = this.renderFieldLabel.bind(this);
     this.reactionToConfig = reaction(
       () => this.props.config.settings,
       () => {
-        this.props.store.configPage.newSettings = observable(toJS(this.props.config.settings));
-      });
+        this.props.store.configPage.newSettings = observable(
+          toJS(this.props.config.settings),
+        );
+      },
+    );
   }
 
   @action.bound
   updateValue(name, value) {
     this.props.store.configPage.newSettings[name] = value;
-    const changedIndex = this.props.store.configPage.changedFields.indexOf(name);
+    const changedIndex = this.props.store.configPage.changedFields.indexOf(
+      name,
+    );
     if (changedIndex === -1) {
       this.props.store.configPage.changedFields.push(name);
     } else if (value === this.props.config.settings[name]) {
@@ -75,27 +82,28 @@ export default class View extends React.Component {
 
   verifyMongoCmd(path) {
     featherClient()
-        .service('mongo-cmd-validators')
-        .create({ 'mongoCmdPath': path })
-        .then((mongoCmdVersion) => {
-          console.log('Verified mongoCmd: ', mongoCmdVersion);
-          if (mongoCmdVersion.mongoCmdVersion) {
-            this.saveConfig();
-          }
-        })
-        .catch((err) => {
-          NewToaster.show({
-            message: 'Could not verify mongo binary location: ' + err.message,
-            className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
-          });
-          return false;
+      .service('mongo-cmd-validators')
+      .create({ mongoCmdPath: path })
+      .then((mongoCmdVersion) => {
+        if (mongoCmdVersion.mongoCmdVersion) {
+          this.saveConfig();
+        }
+      })
+      .catch((err) => {
+        NewToaster.show({
+          message: 'Could not verify mongo binary location: ' + err.message,
+          className: 'danger',
+          iconName: 'pt-icon-thumbs-down',
         });
+        return false;
+      });
   }
 
   @action.bound
   saveConfig() {
-    this.props.config.settings = observable(toJS(this.props.store.configPage.newSettings));
+    this.props.config.settings = observable(
+      toJS(this.props.store.configPage.newSettings),
+    );
     this.props.config.save();
     this.props.store.configPage.changedFields = [];
   }
@@ -110,28 +118,42 @@ export default class View extends React.Component {
   }
 
   renderFieldLabel(fieldName) {
-    return (<label htmlFor="fieldName">
-      { globalString(`editor/config/${fieldName}`) }
-      { (this.props.store.configPage.changedFields.indexOf(fieldName) !== -1) &&
-        <div id={`unsavedFileIndicator_${fieldName}`}
-          className="unsavedFileIndicator" /> }
-    </label>);
+    return (
+      <label htmlFor="fieldName">
+        {globalString(`editor/config/${fieldName}`)}
+        {this.props.store.configPage.changedFields.indexOf(fieldName) !==
+          -1 && (
+          <div
+            id={`unsavedFileIndicator_${fieldName}`}
+            className="unsavedFileIndicator"
+          />
+        )}
+      </label>
+    );
   }
 
   getConfigForm() {
     let form;
     switch (this.props.store.configPage.selectedMenu) {
       case 'Application':
-        form = (<Application updateValue={this.updateValue}
-          settings={this.props.store.configPage.newSettings}
-          changedFields={this.props.store.configPage.changedFields}
-          renderFieldLabel={this.renderFieldLabel} />);
+        form = (
+          <Application
+            updateValue={this.updateValue}
+            settings={this.props.store.configPage.newSettings}
+            changedFields={this.props.store.configPage.changedFields}
+            renderFieldLabel={this.renderFieldLabel}
+          />
+        );
         break;
       case 'Paths':
-        form = (<Paths updateValue={this.updateValue}
-          settings={this.props.store.configPage.newSettings}
-          changedFields={this.props.store.configPage.changedFields}
-          renderFieldLabel={this.renderFieldLabel} />);
+        form = (
+          <Paths
+            updateValue={this.updateValue}
+            settings={this.props.store.configPage.newSettings}
+            changedFields={this.props.store.configPage.changedFields}
+            renderFieldLabel={this.renderFieldLabel}
+          />
+        );
         break;
       default:
         form = <ErrorView error="Unknown menu item selection." />;
@@ -145,22 +167,31 @@ export default class View extends React.Component {
       <div className="configPanelTabWrapper">
         <div className="configPanelWrapper">
           <div className="configTitleWrapper">
-            <h1><ConfigDatabaseIcon className="dbKodaSVG" width={25} height={25} /> {this.props.title}</h1>
-            { false && <LoadingView /> }
+            <h1>
+              <ConfigDatabaseIcon
+                className="dbKodaSVG"
+                width={25}
+                height={25}
+              />{' '}
+              {this.props.title}
+            </h1>
+            {false && <LoadingView />}
           </div>
           <div className="configContentWrapper">
             <div className="configLeftMenuWrapper" width={25}>
               <Menu selectedMenu={this.props.store.configPage.selectedMenu} />
             </div>
             <div className="configRightFormWrapper" width={75}>
-              { this.getConfigForm() }
+              {this.getConfigForm()}
             </div>
           </div>
           <div className="configContentFooter">
-            <AnchorButton className="saveBtn"
+            <AnchorButton
+              className="saveBtn"
               intent={Intent.SUCCESS}
               onClick={this.checkConfig}
-              text="Apply" />
+              text="Apply"
+            />
           </div>
         </div>
       </div>

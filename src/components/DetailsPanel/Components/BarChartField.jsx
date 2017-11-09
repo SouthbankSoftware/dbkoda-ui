@@ -36,12 +36,10 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from 'recharts';
 
 export default observer(({ field, data }) => {
-  console.log('BarChartField field:', field);
-  console.log('BarChartField data:', data);
   const COLORS = [
     '#413456',
     '#823C1D',
@@ -54,7 +52,7 @@ export default observer(({ field, data }) => {
     '#1E282D',
     '#465061',
     '#1E423C',
-    '#701535'
+    '#701535',
   ];
 
   let chartBars = [];
@@ -90,7 +88,7 @@ export default observer(({ field, data }) => {
     bars = bars.sort();
     chartBars = bars.map((bar, index) => {
       if (bCalcBarSize) {
-        calcBarSize += (field.XAxis.barSize ? (field.XAxis.barSize + 10) : 40);
+        calcBarSize += field.XAxis.barSize ? field.XAxis.barSize + 10 : 40;
       }
       return (
         <Bar
@@ -104,7 +102,7 @@ export default observer(({ field, data }) => {
   } else {
     chartBars = field.XAxis.map((bar, index) => {
       if (bCalcBarSize) {
-        calcBarSize += (bar.barSize ? (bar.barSize + 10) : 40);
+        calcBarSize += bar.barSize ? bar.barSize + 10 : 40;
       }
       return (
         <Bar
@@ -118,8 +116,7 @@ export default observer(({ field, data }) => {
   }
 
   if (bCalcBarSize) {
-    field.height = 60 + (calcBarSize * data.length);
-    console.log(field.height);
+    field.height = 60 + calcBarSize * data.length;
   }
 
   return (

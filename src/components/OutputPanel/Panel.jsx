@@ -125,16 +125,6 @@ export default class Panel extends React.Component {
 
   @action.bound
   closeTab(editorId, tabType) {
-    if (this.debug) console.log('Close Tab: ', editorId, ' - ', tabType);
-    if (this.debug) {
-      console.log('Outputs : ', this.props.store.outputs.get(editorId));
-    }
-    if (this.debug) {
-      console.log('Editor : ', this.props.store.editors.get(editorId));
-    }
-    if (this.debug) {
-      console.log('Active Output : ', this.props.store.outputPanel.currentTab);
-    }
     switch (tabType) {
       case 'tableJSON':
         this.props.store.outputs.get(editorId).tableJson = null;
@@ -162,10 +152,9 @@ export default class Panel extends React.Component {
     }
 
     // Set new active output and stop change tab from executing..
-    this.props.store.outputPanel.currentTab = this.props.store.outputs.get(editorId).id;
-    if (this.debug) {
-      console.log('New Active Output : ', this.props.store.outputPanel.currentTab);
-    }
+    this.props.store.outputPanel.currentTab = this.props.store.outputs.get(
+      editorId,
+    ).id;
     this.closingTab = true;
   }
 
@@ -283,7 +272,6 @@ export default class Panel extends React.Component {
       this.closingTab = false;
     } else {
       this.props.store.outputPanel.currentTab = newTab;
-      if (this.debug) console.log('Changing Tab to ', newTab);
       if (
         newTab.indexOf('Explain') < 0 &&
         newTab.indexOf('Details') < 0 &&

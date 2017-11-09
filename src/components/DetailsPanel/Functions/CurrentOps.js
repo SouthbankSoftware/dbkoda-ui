@@ -34,7 +34,6 @@ export const CurrentOps = {
   },
   dbkoda_CurrentOps_parse: (data) => {
     // data.time = Globalize.formatNumber(data.time);
-    // console.log(data.time);
     return data;
-  }
+  },
 };

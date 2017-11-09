@@ -73,7 +73,6 @@ export default class OutputApi {
           this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
-        if (this.debug) console.log(`create new output for ${editor.id}`);
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
         this.store.outputs.set(
           editor.id,
@@ -100,7 +99,7 @@ export default class OutputApi {
         }
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
 
     Broker.on(
@@ -150,9 +149,6 @@ export default class OutputApi {
     // Parse output for string 'Type "it" for more'
     const outputId = this.outputHash[output.id + '|' + output.shellId];
 
-    // console.log(outputId);
-    // console.log('TEST OUTPUT: =>> ', output.output);
-
     const totalOutput = this.store.outputs.get(outputId).output + output.output;
     const profile = this.store.profiles.get(output.id);
     if (profile && profile.status !== ProfileStatus.OPEN) {
@@ -165,7 +161,6 @@ export default class OutputApi {
       output.output &&
       output.output.replace(/^\s+|\s+$/g, '').includes('Type "it" for more')
     ) {
-      if (this.debug) console.log('can show more');
       if (this.store.outputs.get(outputId)) {
         this.store.outputs.get(outputId).cannotShowMore = false;
       }
@@ -176,7 +171,6 @@ export default class OutputApi {
       output.output &&
       output.output.replace(/^\s+|\s+$/g, '').endsWith('dbkoda>')
     ) {
-      if (this.debug) console.log('cannot show more');
       this.store.outputs.get(outputId).cannotShowMore = true;
     }
   }
@@ -184,7 +178,6 @@ export default class OutputApi {
   @action.bound
   onReconnect(output) {
     const outputId = this.outputHash[output.id + '|' + output.shellId];
-    if (this.debug) console.log('got reconnect output ', output);
     const combineOutput = output.output.join('\r');
     const totalOutput = this.store.outputs.get(outputId).output + combineOutput;
     this.store.outputs.get(outputId).output = totalOutput;
@@ -202,8 +195,8 @@ export default class OutputApi {
           this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
-        console.log(`create new output for ${editor.id}`);
-        const outputJSON = initialOutput != null ? initialOutput : { loading: 'isLoaded' };
+        const outputJSON =
+          initialOutput != null ? initialOutput : { loading: 'isLoaded' };
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
         this.store.outputs.set(
           editor.id,
@@ -232,7 +225,7 @@ export default class OutputApi {
         }
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   @action.bound
@@ -423,7 +416,6 @@ export default class OutputApi {
         if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
           this.store.outputPanel.currentTab = tabPrefix + outputId;
         }
-        console.log('!!! - ', targetData);
         if (targetData) {
           this.store.outputs.get(outputId).tableJson = {
             json: JSONArray,
