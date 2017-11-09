@@ -83,7 +83,6 @@ const renderApp = () => {
 Broker.once(EventType.APP_READY, renderApp);
 
 Broker.once(EventType.APP_RENDERED, () => {
-  console.log('App Rendered successfully !!!!!!!');
   config.load();
   if (IS_ELECTRON) {
     ipcRenderer.send(EventType.APP_READY);
@@ -91,7 +90,7 @@ Broker.once(EventType.APP_RENDERED, () => {
 });
 
 Broker.once(EventType.APP_CRASHED, () => {
-  console.log('Woah...App Crashed !!!!!!!');
+  console.error('Woah...App Crashed !!!!!!!');
   if (IS_ELECTRON) {
     // make a backup of the old stateStore
     store
@@ -131,7 +130,8 @@ window.addEventListener('beforeunload', (event) => {
         type: 'question',
         buttons: ['Yes', 'No'],
         title: 'Confirm',
-        message: 'You have unsaved editor tabs. Are you sure you want to continue?',
+        message:
+          'You have unsaved editor tabs. Are you sure you want to continue?',
       });
 
       if (response === 1) {

@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2017-11-08T15:07:55+11:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-08T15:09:25+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,17 +24,4 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- /* eslint no-unused-vars:warn */
-const file = process.argv[2];
-const sprintf = require('sprintf-js').sprintf;
-/*eslint-disable */
-let ddd = require('./' + file); // eslint-disable-line no-dynamic-require
-/*eslint-enable */
-ddd.Fields.forEach((f) => {
-  const line = sprintf(
-    '{{#if %s ~}},\n\t\t %s: {{%s}}{{/if ~}}',
-    f.name,
-    f.name,
-    f.name,
-  );
-});
+export Terminal from './Panel';

@@ -28,7 +28,6 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
-const debug = false;
 const templateToBeTested =
   './src/components/TreeActionPanel/Templates/DropCollection.hbs';
 const templateInput = require('./DropCollection.hbs.input.json');
@@ -75,7 +74,6 @@ test('Drop all index template', (done) => {
       mongoCommands += DropCollectionCommands;
       mongoCommands += validateCollectionCmd;
       mongoCommands += '\nexit\n';
-      if (debug) console.log(mongoCommands);
       const matchString = sprintf(
         'collection has storage=true',
         randomCollectionName,

@@ -21,7 +21,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-13T15:48:48+11:00
+ * @Last modified time: 2017-11-09T11:29:07+11:00
  */
 
 import _ from 'lodash';
@@ -69,11 +69,12 @@ global.EOL = global.IS_ELECTRON
 export default class Store {
   api;
   @observable locale = 'en';
-  @observable version = '0.8.0';
+  @observable version = '0.8.1';
   @observable updateAvailable = false;
   @observable profiles = observable.map();
   @observable editors = observable.map();
   @observable outputs = observable.map();
+  @observable sshShells = observable.shallowMap();
 
   @observable
   userPreferences = observable({
@@ -392,7 +393,6 @@ export default class Store {
   restore(data) {
     const newStore = restore(data, { deserializer, postDeserializer });
     this.cleanStore(newStore);
-    console.log('Restoring Store: ', newStore);
     _.assign(this, newStore);
   }
 
@@ -405,7 +405,7 @@ export default class Store {
     newStore.layout.alertIsLoading = false;
 
     // Version:
-    newStore.version = '0.8.0';
+    newStore.version = '0.8.1';
 
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
@@ -529,7 +529,7 @@ export default class Store {
       })
       .catch((err) => {
         if (err.code === 404) {
-          console.log(
+          console.error(
             "State store doesn't exist. A new one will be created after app close or refreshing",
           );
           Broker.emit(EventType.APP_READY);

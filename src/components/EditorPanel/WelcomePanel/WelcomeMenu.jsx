@@ -27,9 +27,9 @@
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/sort-comp */
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {action} from 'mobx';
-import {AnchorButton} from '@blueprintjs/core';
+import { inject, observer } from 'mobx-react';
+import { action } from 'mobx';
+import { AnchorButton } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import KeyboardIcon from '../../../styles/icons/keyboard-icon.svg';
 import OpenFolderIcon from '../../../styles/icons/open-folder-icon.svg';
@@ -39,11 +39,11 @@ import ConfigDatabaseIcon from '../../../styles/icons/config-database-icon-2.svg
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
  */
- @inject(allStores => ({
-   store: allStores.store,
-   api: allStores.api,
-   config: allStores.config,
- }))
+@inject(allStores => ({
+  store: allStores.store,
+  api: allStores.api,
+  config: allStores.config,
+}))
 @observer
 export default class Panel extends React.Component {
   static propTypes = {};
@@ -55,24 +55,24 @@ export default class Panel extends React.Component {
   @action.bound
   openConnection() {
     if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.OPEN_DIALOG, EventLogging.getFragmentEnum().PROFILES, 'User opened the New Connection Profile drawer.');
+      EventLogging.recordManualEvent(
+        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE
+          .OPEN_DIALOG,
+        EventLogging.getFragmentEnum().PROFILES,
+        'User opened the New Connection Profile drawer.',
+      );
     }
     this.props.store.profileList.selectedProfile = null;
-    this
-      .props
-      .store
-      .showConnectionPane();
+    this.props.store.showConnectionPane();
   }
 
   @action.bound
   telemetryEnabledChanged() {
-    console.log('Telemetry Enabled Before:', this.props.config.settings.telemetryEnabled);
     if (this.props.config.settings.telemetryEnabled) {
       this.props.config.settings.telemetryEnabled = false;
     } else {
       this.props.config.settings.telemetryEnabled = true;
     }
-    console.log('Telemetry Enabled After:', this.props.config.settings.telemetryEnabled);
   }
 
   @action.bound
@@ -91,36 +91,47 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    console.log('Telemetry Enabled:', this.props.config.settings.telemetryEnabled);
     return (
       <div className="welcomeMenu">
-        <h2>
-          Get to know dbKoda!
-        </h2>
+        <h2>Get to know dbKoda!</h2>
         <div className="welcomeButtons">
           <div className="welcomeButtonWrapper">
-            {(this.props.store.welcomePage.currentContent == 'Welcome')}
+            {this.props.store.welcomePage.currentContent == 'Welcome'}
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
-              onClick={this.welcomePage}>Welcome Page</AnchorButton>
+              onClick={this.welcomePage}
+            >
+              Welcome Page
+            </AnchorButton>
           </div>
           <div className="welcomeButtonWrapper">
             <AnchorButton
               className="welcomeMenuButton openConnectionButton"
-              onClick={this.openConnection}>
+              onClick={this.openConnection}
+            >
               <OpenFolderIcon className="dbKodaSVG" width={30} height={30} />
-              Open Connection</AnchorButton>
+              Open Connection
+            </AnchorButton>
           </div>
           <div className="welcomeButtonWrapper">
             <AnchorButton
               className="welcomeMenuButton learnKeyboardShortcutsButton"
-              onClick={this.learnKeyboardShortcuts}>
+              onClick={this.learnKeyboardShortcuts}
+            >
               <KeyboardIcon className="dbKodaSVG" width={30} height={30} />
-              Keyboard Shortcuts</AnchorButton>
+              Keyboard Shortcuts
+            </AnchorButton>
           </div>
           <div className="welcomeButtonWrapper">
-            <AnchorButton className="welcomeMenuButton openConfigBtn" onClick={this.props.api.openConfigTab}>
-              <ConfigDatabaseIcon className="dbKodaSVG" width={30} height={30} />
+            <AnchorButton
+              className="welcomeMenuButton openConfigBtn"
+              onClick={this.props.api.openConfigTab}
+            >
+              <ConfigDatabaseIcon
+                className="dbKodaSVG"
+                width={30}
+                height={30}
+              />
               Preferences
             </AnchorButton>
           </div>

@@ -34,7 +34,6 @@ import FieldControl from './FieldControls';
 
 export default observer(({ members }) => {
   const labels = [];
-  console.log('wahaj test table: ', members);
   if (members.value && members.value.length > 0) {
     const cols = members.map((member) => {
       return member.map((fld) => {
@@ -79,7 +78,6 @@ export default observer(({ members }) => {
       className="tableFieldSet"
       label={members.label ? members.label : members.name}
     >
-
       <div className="clearfix tableHeader">
         <div className="left">
           <b>{members.label}</b>
@@ -95,15 +93,12 @@ export default observer(({ members }) => {
           />
         </div>
       </div>
-      <div className={tableHeaderClassname}>
-        {labels}
-      </div>
+      <div className={tableHeaderClassname}>{labels}</div>
       <div className={tableContentClassname}>
         {members.map(member => (
           <FormTableRow key={member.id} member={member} />
         ))}
       </div>
-
     </fieldset>
   );
 });

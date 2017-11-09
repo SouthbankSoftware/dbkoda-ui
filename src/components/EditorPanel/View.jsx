@@ -184,7 +184,6 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log('test comments removal: ', currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1'));
               let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').split(';');
               queries = queries.filter((query) => {
                 return (query.trim().length > 0);
@@ -192,13 +191,11 @@ class View extends React.Component {
               queries = queries.map((query) => {
                 return query.trim();
               });
-              console.log('queries: ', queries);
               service
                 .update(shell, {
                   queries,
                 })
                 .then((res) => {
-                  console.log('queries result:', res);
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
@@ -250,35 +247,8 @@ class View extends React.Component {
                   });
                 });
             }
-            console.log('!!! - Update Tree Topology: ', this.props.store.treeActionPanel.refreshOnExecution);
             if (this.props.store.treeActionPanel.refreshOnExecution) {
               this.props.store.treeActionPanel.refreshTree = true;
-/*               if (this.props.store.treePanel.isRefreshDisabled) {
-                return;
-              }
-              this.props.store.treePanel.isRefreshing = true;
-              const profile = this.props.store.profileList.selectedProfile;
-              const service = featherClient().service('/mongo-inspector'); // Calls the controller to load the topology associated with the selected Profile
-              service.timeout = 60000;
-              service
-                .get(profile.id)
-                .then((res) => {
-                  if (this.props.store.profileList.selectedProfile.id == res.profileId) {
-                    console.log('Updating topology: ', res);
-                    this.props.store.updateTopology(res);
-                  }
-                  runInAction(() => {
-                    this.props.store.treePanel.isRefreshing = false;
-                  });
-                })
-                .catch((err) => {
-                  console.log(err.stack);
-                  DBKodaToaster(Position.LEFT_BOTTOM).show({
-                    message: err.message,
-                    className: 'danger',
-                    iconName: 'pt-icon-thumbs-down',
-                  });
-                }); */
             }
             this.props.store.editorPanel.executingEditorAll = false;
           }
@@ -305,14 +275,9 @@ class View extends React.Component {
             const cm = this.editor.getCodeMirror(); // eslint-disable-line
             let content = cm.getSelection();
             if (cm.getSelection().length > 0) {
-              console.log('Executing Highlighted Text.');
               Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
             } else {
               Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
-              console.log(
-                'No Highlighted Text, Executing Line: ',
-                cm.getCursor().line + 1,
-              );
               content = cm.getLine(cm.getCursor().line);
             }
             this.props.store.editors.get(editor.id).executing = true;
@@ -322,13 +287,11 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log('queries:', content.replace(/\t/g, '  ').split(';'));
               service
                 .update(shell, {
                   queries: content.replace(/\t/g, '  ').split('\n'),
                 })
                 .then((res) => {
-                  console.log('queries result:', res);
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
@@ -515,7 +478,7 @@ class View extends React.Component {
               cm.setValue(this.props.store.treeActionPanel.formValues);
               this.setEditorValue(this.props.store.treeActionPanel.formValues);
             } catch (e) {
-              console.log(e);
+              console.error(e);
             }
             this.props.store.treeActionPanel.isNewFormValues = false;
           }
@@ -730,13 +693,7 @@ class View extends React.Component {
 
       const cm = this.editor.getCodeMirror(); // eslint-disable-line
       let content = cm.getSelection();
-      if (cm.getSelection().length > 0) {
-        console.log('Executing Highlighted Text.');
-      } else {
-        console.log(
-          'No Highlighted Text, Executing Line: ',
-          cm.getCursor().line + 1,
-        );
+      if ((cm.getSelection().length > 0) === false) {
         content = cm.getLine(cm.getCursor().line);
       }
       content = insertExplainOnCommand(content, explainParam);
@@ -766,7 +723,7 @@ class View extends React.Component {
           });
         })
         .catch((err) => {
-          console.log('error:', err);
+          console.error('error:', err);
           NewToaster.show({
             message: globalString('explain/executionError'),
             className: 'danger',

@@ -263,6 +263,9 @@ export default class TreeNode {
       parent.allChildNodes.set(this.id, this);
     }
     this.text = treeJSON.text;
+    if (!this.text) {
+      this.text = '';
+    }
     this.json = treeJSON;
     this.label = (
       <DragLabel

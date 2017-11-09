@@ -121,7 +121,6 @@ export default class ComboField extends React.Component {
           return obj.value;
         });
         field.value = arrValues.join('|');
-        console.log(field.value);
       } else {
         field.value = newValue && newValue.value ? newValue.value : '';
       }
@@ -138,36 +137,36 @@ export default class ComboField extends React.Component {
           multi={field.options.multi}
           options={this.options}
           onChange={onChange}
-          value={(field.options.multi) ? this.multiValues : field.value}
+          value={field.options.multi ? this.multiValues : field.value}
         />
       );
     };
     return (
       <div className={fldClassName}>
-        {showLabel &&
+        {showLabel && (
           <label htmlFor={field.id} className="pt-label pt-label-r-30">
             {field.label}
-          </label>}
+          </label>
+        )}
         <div
           className="pt-form-content"
           label={field.label ? field.label : field.name}
         >
           {field.options &&
-            field.options.tooltip &&
-            <Tooltip
-              className={tooltipClassName}
-              content={field.options.tooltip}
-              hoverOpenDelay={1000}
-              inline
-              intent={Intent.PRIMARY}
-              position={Position.TOP}
-            >
-              {getSelectField()}
-            </Tooltip>}
+            field.options.tooltip && (
+              <Tooltip
+                className={tooltipClassName}
+                content={field.options.tooltip}
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.TOP}
+              >
+                {getSelectField()}
+              </Tooltip>
+            )}
           {(!field.options || !field.options.tooltip) && getSelectField()}
-          <p className="pt-form-helper-text">
-            {field.error}
-          </p>
+          <p className="pt-form-helper-text">{field.error}</p>
         </div>
       </div>
     );

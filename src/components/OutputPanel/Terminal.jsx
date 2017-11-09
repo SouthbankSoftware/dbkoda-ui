@@ -66,7 +66,6 @@ const terminalTarget = {
    * @param {} monitor - keeps the state of drag process, e.g object which is being dragged
    */
   drop(props, monitor) {
-    console.log('DROP  Terminal monitor.getItem:', monitor.getItem());
     const item = monitor.getItem();
     props.onDrop(item);
   },
@@ -133,13 +132,6 @@ class Terminal extends React.Component {
           this.props.store.editorPanel.activeEditorId == this.props.id &&
           this.props.store.dragItem.dragDropTerminal
         ) {
-          console.log('Terminal Title:', this.props.title);
-          console.log('Terminal Id: ', this.props.id);
-          console.log(
-            'Active Editor Id: ',
-            this.props.store.editorPanel.activeEditorId,
-          );
-          console.log('Drag Item: ', this.props.store.dragItem.item);
           this.setState({
             command: TreeDropActions.getCodeForTreeNode(
               this.props.store.dragItem.item,
@@ -162,16 +154,7 @@ class Terminal extends React.Component {
         ) {
           this.updateHistory(this.state.command);
           const command = this.interceptCommand(this.state.command);
-          console.log(command);
           if (command) {
-            console.log(
-              'Sending data to feathers id ',
-              this.props.profileId,
-              ': ',
-              this.props.shellId,
-              command,
-              '.',
-            );
             this.props.store.editorToolbar.isActiveExecuting = true;
             this.props.store.editors.get(this.props.id).executing = true;
             const service = featherClient().service('/mongo-shells');
@@ -332,10 +315,6 @@ class Terminal extends React.Component {
         historyCursor: this.props.store.outputs.get(this.props.id)
           .commandHistory.length,
       });
-      console.log(
-        'Send command to editor: ' +
-          this.props.store.outputPanel.sendingCommand,
-      );
     }
   }
 

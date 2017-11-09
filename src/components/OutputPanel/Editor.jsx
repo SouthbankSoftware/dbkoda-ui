@@ -75,7 +75,6 @@ export default class Editor extends React.Component {
   handleDrop(item) {
     //eslint-disable-line
     this.props.store.dragItem.item = item;
-    console.log(this.props.store.dragItem.dragDropTerminal);
     if (!this.props.store.dragItem.dragDropTerminal) {
       this.props.store.dragItem.dragDropTerminal = true;
     } else {
@@ -106,7 +105,12 @@ export default class Editor extends React.Component {
       <div className="menuItemWrapper showJsonView" id="showJsonViewMenuItem">
         <MenuItem
           onClick={() => {
-            this.props.api.initJsonView(currentJson, this.props.id, 'enhancedJson', lines);
+            this.props.api.initJsonView(
+              currentJson,
+              this.props.id,
+              'enhancedJson',
+              lines,
+            );
           }}
           text={globalString('output/editor/contextJson')}
           iconName="pt-icon-panel-stats"
@@ -160,24 +164,40 @@ export default class Editor extends React.Component {
           onClick={() => {
             const editorId = this.props.id;
 
-            StaticApi.parseTableJson(currentJson, lines, this.editor.getCodeMirror(), editorId)
+            StaticApi.parseTableJson(
+              currentJson,
+              lines,
+              this.editor.getCodeMirror(),
+              editorId,
+            )
               .then((result) => {
                 runInAction(() => {
-                  this.props.api.outputApi.showChartPanel(editorId, result, 'loaded');
+                  this.props.api.outputApi.showChartPanel(
+                    editorId,
+                    result,
+                    'loaded',
+                  );
                 });
               })
               .catch((err) => {
-                const message = globalString('output/editor/parseJsonError') + err.substring(0, 50);
+                const message =
+                  globalString('output/editor/parseJsonError') +
+                  err.substring(0, 50);
                 runInAction(() => {
                   NewToaster.show({
                     message,
-                    className:'danger',
+                    className: 'danger',
                     icon: '',
                   });
                 });
 
                 runInAction(() => {
-                  this.props.api.outputApi.showChartPanel(editorId, {}, 'error', message);
+                  this.props.api.outputApi.showChartPanel(
+                    editorId,
+                    {},
+                    'error',
+                    message,
+                  );
                 });
               });
           }}

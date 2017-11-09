@@ -173,8 +173,6 @@ export class ProfileForm extends MobxReactForm {
   }
 
   onError(form) {
-    // get all form errors
-    console.log('All form errors', form.errors());
     // invalidate the form with a custom error message
     const errorMsg = [];
     const error = form.errors();

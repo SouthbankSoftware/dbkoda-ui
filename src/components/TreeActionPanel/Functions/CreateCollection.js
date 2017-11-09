@@ -25,6 +25,7 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2017-05-09T13:25:50+10:00
  */
+/* eslint no-unused-vars:warn */
 import * as common from './Common.js';
 
 export const CreateCollection = {
@@ -38,19 +39,17 @@ export const CreateCollection = {
     return data;
   },
   dbkoda_validationLevel: () => {
-    return ('db');
+    return 'db';
   },
   dbkoda_validationLevel_parse: (res) => {
-    console.log(res);
-    return (['off', 'moderate', 'strict']);
+    return ['off', 'moderate', 'strict'];
   },
   dbkoda_validationAction: () => {
-    return ('db');
+    return 'db';
   },
   dbkoda_validationAction_parse: (res) => {
-    console.log(res);
-    return (['error', 'warn']);
+    return ['error', 'warn'];
   },
   dbkoda_listdb: common.dbkoda_listdb,
-  dbkoda_listdb_parse: common.dbkoda_listdb_parse
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse,
 };
