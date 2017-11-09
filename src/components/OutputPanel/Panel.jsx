@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-11T10:45:31+11:00
+ * @Last modified time: 2017-11-09T14:47:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,7 @@ import { Tab2, Tabs2, Button } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
 import { ChartPanel } from '#/ChartPanel';
+import { Terminal } from '#/Terminal';
 import { EditorTypes } from '#/common/Constants.js';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
@@ -44,7 +45,7 @@ import { TableView } from '../TableViewPanel';
  * The main panel for the Output view, this handles tabbing,
  * and parents the editor and toolbar components
  */
-@inject('store')
+@inject('store', 'api')
 @observer
 export default class Panel extends React.Component {
   constructor(props) {
@@ -73,25 +74,13 @@ export default class Panel extends React.Component {
   }
 
   componentWillMount() {
-    Broker.on(
-      EventType.EXPLAIN_OUTPUT_PARSED,
-      this.explainOutputAvailable.bind(this),
-    );
-    Broker.on(
-      EventType.SHELL_OUTPUT_AVAILABLE,
-      this.shellOutputAvailable.bind(this),
-    );
+    Broker.on(EventType.EXPLAIN_OUTPUT_PARSED, this.explainOutputAvailable.bind(this));
+    Broker.on(EventType.SHELL_OUTPUT_AVAILABLE, this.shellOutputAvailable.bind(this));
   }
 
   componentWillUnmount() {
-    Broker.removeListener(
-      EventType.EXPLAIN_OUTPUT_PARSED,
-      this.explainOutputAvailable.bind(this),
-    );
-    Broker.removeListener(
-      EventType.SHELL_OUTPUT_AVAILABLE,
-      this.shellOutputAvailable.bind(this),
-    );
+    Broker.removeListener(EventType.EXPLAIN_OUTPUT_PARSED, this.explainOutputAvailable.bind(this));
+    Broker.removeListener(EventType.SHELL_OUTPUT_AVAILABLE, this.shellOutputAvailable.bind(this));
   }
 
   @action.bound
@@ -173,14 +162,9 @@ export default class Panel extends React.Component {
     }
 
     // Set new active output and stop change tab from executing..
-    this.props.store.outputPanel.currentTab = this.props.store.outputs.get(
-      editorId,
-    ).id;
+    this.props.store.outputPanel.currentTab = this.props.store.outputs.get(editorId).id;
     if (this.debug) {
-      console.log(
-        'New Active Output : ',
-        this.props.store.outputPanel.currentTab,
-      );
+      console.log('New Active Output : ', this.props.store.outputPanel.currentTab);
     }
     this.closingTab = true;
   }
@@ -200,20 +184,11 @@ export default class Panel extends React.Component {
     const cm = this.editorRefs[editorId].getCodeMirror();
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
-    if (
-      ['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(
-        startLine,
-      )
-    ) {
+    if (['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(startLine)) {
       if (!direction) {
         direction = 1;
       }
-      return this.getDocumentAtLine(
-        editorId,
-        lineNumber + direction,
-        direction,
-        lines,
-      );
+      return this.getDocumentAtLine(editorId, lineNumber + direction, direction, lines);
     }
     if (!startLine || startLine.indexOf('dbKoda>') !== -1) {
       lines.status = 'Invalid';
@@ -231,10 +206,7 @@ export default class Panel extends React.Component {
         (!['[', ',', ':', '{'].includes(prevLine[prevLine.length - 1]) ||
           prevLine.indexOf('dbKoda>') === 0)
       ) {
-        if (
-          (nextLine && nextLine[0] === '{') ||
-          ![']', ',', '}'].includes(nextLine[0])
-        ) {
+        if ((nextLine && nextLine[0] === '{') || ![']', ',', '}'].includes(nextLine[0])) {
           // This is a single-line document
           lines.start = lineNumber;
           lines.end = lineNumber;
@@ -287,17 +259,13 @@ export default class Panel extends React.Component {
       }
     } else if (direction === 1 && line[line.length - 1] === '}') {
       const nextLine = cm.getLine(lineNumber + 1).trim();
-      if (
-        (nextLine && nextLine[0] === '{') ||
-        ![']', ',', '}'].includes(nextLine[0])
-      ) {
+      if ((nextLine && nextLine[0] === '{') || ![']', ',', '}'].includes(nextLine[0])) {
         lines.end = lineNumber;
         return line;
       }
     }
     if (direction === -1) {
-      line =
-        this._getLineText(cm, lineNumber + direction, direction, lines) + line;
+      line = this._getLineText(cm, lineNumber + direction, direction, lines) + line;
     } else {
       line += this._getLineText(cm, lineNumber + direction, direction, lines);
     }
@@ -396,18 +364,14 @@ export default class Panel extends React.Component {
 
           arrTabs.push(
             <Tab2
-              className={
-                tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
-              }
+              className={tabClassName !== 'notVisible' ? 'visible' : 'notVisible'}
               key={tabId}
               id={tabId}
               title="Enhanced JSON"
               panel={
                 <EnhancedJson
                   outputId={editorId}
-                  enhancedJson={toJS(
-                    this.props.store.outputs.get(editorId).enhancedJson,
-                  )}
+                  enhancedJson={toJS(this.props.store.outputs.get(editorId).enhancedJson)}
                   getDocumentAtLine={this.getDocumentAtLine}
                 />
               }
@@ -421,42 +385,30 @@ export default class Panel extends React.Component {
             </Tab2>,
           );
         }
-        if (
-          this.props.store.outputs.get(editorId).tableJson
-        ) {
+        if (this.props.store.outputs.get(editorId).tableJson) {
           const tabId = `TableView-${editorId}`;
 
           arrTabs.push(
             <Tab2
-              className={
-                tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
-              }
+              className={tabClassName !== 'notVisible' ? 'visible' : 'notVisible'}
               key={tabId}
               id={tabId}
               title="Table"
               panel={
                 <TableView
                   outputId={editorId}
-                  tableJson={toJS(
-                    this.props.store.outputs.get(editorId).tableJson,
-                  )}
+                  tableJson={toJS(this.props.store.outputs.get(editorId).tableJson)}
                   getDocumentAtLine={this.getDocumentAtLine}
                 />
               }
             >
-              <Button
-                className="pt-minimal"
-                onClick={() => this.closeTab(editorId, 'tableJSON')}
-              >
+              <Button className="pt-minimal" onClick={() => this.closeTab(editorId, 'tableJSON')}>
                 <span className="pt-icon-cross" />
               </Button>
             </Tab2>,
           );
 
-          if (
-            editor[1].type === EditorTypes.DRILL &&
-            this.lastEditorId !== editorId
-          ) {
+          if (editor[1].type === EditorTypes.DRILL && this.lastEditorId !== editorId) {
             runInAction(() => {
               this.props.store.outputPanel.currentTab = tabId;
             });
@@ -467,18 +419,13 @@ export default class Panel extends React.Component {
 
           arrTabs.push(
             <Tab2
-              className={
-                tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
-              }
+              className={tabClassName !== 'notVisible' ? 'visible' : 'notVisible'}
               id={tabId}
               key={tabId}
               title="Chart"
               panel={<ChartPanel editorId={editorId} />}
             >
-              <Button
-                className="pt-minimal"
-                onClick={() => this.closeTab(editorId, 'chartPanel')}
-              >
+              <Button className="pt-minimal" onClick={() => this.closeTab(editorId, 'chartPanel')}>
                 <span className="pt-icon-cross" />
               </Button>
             </Tab2>,
@@ -490,9 +437,7 @@ export default class Panel extends React.Component {
           arrTabs.push(
             <Tab2
               className={
-                editor[1].explains && tabClassName !== 'notVisible'
-                  ? 'visible'
-                  : 'notVisible'
+                editor[1].explains && tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
               }
               key={tabId}
               id={tabId}
@@ -525,19 +470,12 @@ export default class Panel extends React.Component {
               title="Details"
               panel={
                 <DetailsPanel
-                  isVisible={
-                    this.props.store.outputPanel.currentTab.indexOf(
-                      'Details',
-                    ) >= 0
-                  }
+                  isVisible={this.props.store.outputPanel.currentTab.indexOf('Details') >= 0}
                   editor={editor[1]}
                 />
               }
             >
-              <Button
-                className="pt-minimal"
-                onClick={() => this.closeTab(editorId, 'detailsView')}
-              >
+              <Button className="pt-minimal" onClick={() => this.closeTab(editorId, 'detailsView')}>
                 <span className="pt-icon-cross" />
               </Button>
             </Tab2>,
@@ -549,45 +487,71 @@ export default class Panel extends React.Component {
     });
     const profileTabs = [];
     const selectedProfile = this.props.store.profileList.selectedProfile;
-    if (
-      selectedProfile &&
-      selectedProfile.storageView &&
-      selectedProfile.storageView.visible
-    ) {
-      profileTabs.push(
-        <Tab2
-          className="visible"
-          key={'Storage-' + selectedProfile.id}
-          id={'Storage-' + selectedProfile.id}
-          title={'Storage-' + selectedProfile.alias}
-          panel={<StoragePanel />}
-        >
-          <Button
-            className="pt-minimal"
-            onClick={() => this.closeStorageView()}
+
+    if (selectedProfile) {
+      if (selectedProfile.storageView && selectedProfile.storageView.visible) {
+        profileTabs.push(
+          <Tab2
+            className="visible"
+            key={'Storage-' + selectedProfile.id}
+            id={'Storage-' + selectedProfile.id}
+            title={'Storage-' + selectedProfile.alias}
+            panel={<StoragePanel />}
           >
-            <span className="pt-icon-cross" />
-          </Button>
-        </Tab2>,
-      );
-      tabs.push(profileTabs);
-      if (selectedProfile.storageView.shouldFocus) {
-        runInAction(() => {
-          this.props.store.outputPanel.currentTab =
-            'Storage-' + selectedProfile.id;
-          this.props.store.profileList.selectedProfile.storageView.shouldFocus = false;
-        });
+            <Button className="pt-minimal" onClick={() => this.closeStorageView()}>
+              <span className="pt-icon-cross" />
+            </Button>
+          </Tab2>,
+        );
+
+        if (selectedProfile.storageView.shouldFocus) {
+          runInAction(() => {
+            this.props.store.outputPanel.currentTab = 'Storage-' + selectedProfile.id;
+            this.props.store.profileList.selectedProfile.storageView.shouldFocus = false;
+          });
+        }
       }
+
+      // render SSH shells for selected profile
+      const { sshShells } = this.props.store;
+      const sshShellsForProfileId = sshShells.get(selectedProfile.id);
+      if (sshShellsForProfileId) {
+        for (const sshShell of sshShellsForProfileId.values()) {
+          const tabId = `SSH-${selectedProfile.id}-${sshShell.id}`;
+
+          profileTabs.push(
+            <Tab2
+              className="visible"
+              key={tabId}
+              id={tabId}
+              title={`SSH - ${sshShell.id}`}
+              panel={<Terminal />}
+            >
+              <Button
+                className="pt-minimal"
+                onClick={() => {
+                  const { removeSshShell } = this.props.api;
+
+                  removeSshShell(selectedProfile.id, sshShell.id);
+                }}
+              >
+                <span className="pt-icon-cross" />
+              </Button>
+            </Tab2>,
+          );
+        }
+      }
+
+      tabs.push(profileTabs);
     }
-    return [].concat(...tabs);
+
+    return tabs;
   }
 
   render() {
     // Toolbar must be rendered after tabs for initialisation purposes
     const defaultVisible =
-      this.props.store.editorPanel.activeEditorId == 'Default'
-        ? 'visible'
-        : 'notVisible';
+      this.props.store.editorPanel.activeEditorId == 'Default' ? 'visible' : 'notVisible';
     return (
       <div className="pt-dark outputPanel">
         <Tabs2

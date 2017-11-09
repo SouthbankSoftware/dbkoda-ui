@@ -10,11 +10,19 @@
     "url": "http://southbanksoftware.com"
   },
   "main": "dist/index.html",
-  "keywords": ["React", "React-Router", "MobX", "Webpack", "ES6", "ES7"],
+  "keywords": [
+    "React",
+    "React-Router",
+    "MobX",
+    "Webpack",
+    "ES6",
+    "ES7"
+  ],
   "engines": {
     "node": ">= 7.2.1"
   },
   "scripts": {
+    "postinstall": "yarn upgrade xterm && cd node_modules/xterm && yarn install",
     "dev": "webpack-dev-server --config webpack/dev.js",
     "dev:install": "yarn install --ignore-scripts",
     "dev:prod": "yarn run postinstall && yarn start --",
@@ -24,8 +32,7 @@
     "clean": "rimraf ./dist rmdir",
     "cbuild": "yarn run clean && yarn run build",
     "build": "webpack --config webpack/prod.js --optimize-minimize",
-    "test":
-      "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
+    "test": "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
     "test:dev": "yarn flow && yarn run eslint && yarn run jest",
     "mlaunch:init": "mlaunch init --single",
     "mlaunch:clean": "mlaunch kill; rimraf data tmpd*",
@@ -85,6 +92,7 @@
     "enzyme": "^2.7.1",
     "enzyme-to-json": "^1.5.1",
     "escape-string-regexp": "^1.0.5",
+    "escodegen": "^1.9.0",
     "esdoc": "^0.5.2",
     "eslint": "^4.4.1",
     "eslint-config-airbnb": "^14.1.0",
@@ -92,14 +100,15 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
+    "esprima": "^4.0.0",
     "eventemitter2": "^4.0.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "feathers-client": "^2.4.0",
     "feathers-primus": "^2.2.0",
     "file-loader": "^0.11.2",
     "filesize": "^3.5.10",
-    "flow-bin": "^0.54.1",
-    "flow-typed": "^2.1.5",
+    "flow-bin": "^0.58.0",
+    "flow-typed": "^2.2.3",
     "fuzzysearch": "^1.0.3",
     "global": "^4.3.2",
     "globalize": "^1.2.3",
@@ -169,10 +178,7 @@
     "webpack-dev-server": "^2.4.5",
     "webpack-merge": "^4.1.0",
     "worker-loader": "^0.8.1",
-    "xml2js": "^0.4.17"
-  },
-  "dependencies": {
-    "escodegen": "^1.9.0",
-    "esprima": "^4.0.0"
+    "xml2js": "^0.4.17",
+    "xterm": "https://github.com/guiguan/xterm.js.git"
   }
 }
