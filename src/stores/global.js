@@ -21,7 +21,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-13T15:48:48+11:00
+ * @Last modified time: 2017-11-09T11:29:07+11:00
  */
 
 import _ from 'lodash';
@@ -74,6 +74,7 @@ export default class Store {
   @observable profiles = observable.map();
   @observable editors = observable.map();
   @observable outputs = observable.map();
+  @observable sshShells = observable.shallowMap();
 
   @observable
   userPreferences = observable({

@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T16:39:34+11:00
+ * @Last modified time: 2017-11-09T14:46:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -69,13 +69,8 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (
-          editor.id != 'Default' &&
-          this.store.outputs.get(editor.id).output
-        ) {
-          this.store.outputs.get(editor.id).output += globalString(
-            'output/editor/restoreSession',
-          );
+        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
+          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
@@ -141,21 +136,12 @@ export default class OutputApi {
       EventType.createShellOutputEvent(oldId, oldShellId),
       this.outputAvailable,
     );
-    Broker.removeListener(
-      EventType.createShellReconnectEvent(oldId, oldShellId),
-      this.onReconnect,
-    );
+    Broker.removeListener(EventType.createShellReconnectEvent(oldId, oldShellId), this.onReconnect);
 
     this.outputHash[id + '|' + shellId] = outputId;
 
-    Broker.on(
-      EventType.createShellOutputEvent(id, shellId),
-      this.outputAvailable,
-    );
-    Broker.on(
-      EventType.createShellReconnectEvent(id, shellId),
-      this.onReconnect,
-    );
+    Broker.on(EventType.createShellOutputEvent(id, shellId), this.outputAvailable);
+    Broker.on(EventType.createShellReconnectEvent(id, shellId), this.onReconnect);
   }
 
   @action.bound
@@ -205,13 +191,8 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (
-          editor.id != 'Default' &&
-          this.store.outputs.get(editor.id).output
-        ) {
-          this.store.outputs.get(editor.id).output += globalString(
-            'output/editor/restoreSession',
-          );
+        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
+          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
         const outputJSON =
@@ -252,8 +233,7 @@ export default class OutputApi {
     const profile = this.store.profiles.get(res.profileId);
     const strOutput = JSON.stringify(res.output, null, 2);
     const editor = this.store.editors.get(res.id);
-    const totalOutput =
-      this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
+    const totalOutput = this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
@@ -308,9 +288,7 @@ export default class OutputApi {
         runInAction(
           () => {
             NewToaster.show({
-              message:
-                globalString('output/editor/parseJsonError') +
-                error.substring(0, 50),
+              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
               className: 'danger',
               icon: '',
             });
@@ -318,9 +296,7 @@ export default class OutputApi {
           (error) => {
             runInAction(() => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 className: 'danger',
                 icon: '',
               });
@@ -361,9 +337,7 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 className: 'danger',
                 icon: '',
               });
@@ -371,9 +345,7 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message:
-                    globalString('output/editor/parseJsonError') +
-                    error.substring(0, 50),
+                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                   className: 'danger',
                   icon: '',
                 });
@@ -400,9 +372,7 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 className: 'danger',
                 icon: '',
               });
@@ -416,9 +386,7 @@ export default class OutputApi {
             (error) => {
               runInAction(() => {
                 NewToaster.show({
-                  message:
-                    globalString('output/editor/parseJsonError') +
-                    error.substring(0, 50),
+                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                   className: 'danger',
                   icon: '',
                 });
@@ -505,5 +473,55 @@ export default class OutputApi {
     }
 
     outputPanel.currentTab = `Chart-${editorId}`;
+  }
+
+  _generateSshShellId(sshShellsForProfileId: ObservableMap): number {
+    let largestId = -1;
+
+    for (const sshShell of sshShellsForProfileId.values()) {
+      const id = Number(sshShell.id);
+      if (id > largestId) {
+        largestId = id;
+      }
+    }
+
+    largestId += 1;
+    return largestId;
+  }
+
+  @action.bound
+  addSshShell(profileId: string) {
+    const { sshShells, outputPanel } = this.store;
+    let sshShellsForProfileId = sshShells.get(profileId);
+
+    if (!sshShellsForProfileId) {
+      sshShellsForProfileId = observable.shallowMap();
+      sshShells.set(profileId, sshShellsForProfileId);
+    }
+
+    const newSshShellId = String(this._generateSshShellId(sshShellsForProfileId));
+
+    sshShellsForProfileId.set(newSshShellId, {
+      id: newSshShellId,
+    });
+
+    outputPanel.currentTab = `SSH-${profileId}-${newSshShellId}`;
+  }
+
+  @action.bound
+  removeSshShell(profileId: string, sshShellId: string) {
+    const { sshShells } = this.store;
+    const sshShellsForId = sshShells.get(profileId);
+
+    if (!sshShellsForId) return;
+
+    sshShellsForId.delete(sshShellId);
+  }
+
+  @action.bound
+  clearSshShellsForProfile(profileId: string) {
+    const { sshShells } = this.store;
+
+    sshShells.delete(profileId);
   }
 }

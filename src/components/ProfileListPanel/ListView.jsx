@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-01T14:04:33+11:00
+ * @Last modified time: 2017-11-09T13:58:58+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -409,8 +409,12 @@ export default class ListView extends React.Component {
 
   @action
   deleteProfile() {
-    const targetProfile = this.state.targetProfile;
-    this.props.store.profiles.delete(targetProfile.id);
+    const { id: profileId } = this.state.targetProfile;
+    const { store: { profiles }, api } = this.props;
+
+    profiles.delete(profileId);
+    api.clearSshShellsForProfile(profileId);
+
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE,
@@ -588,6 +592,19 @@ export default class ListView extends React.Component {
               onClick={() =>
                 this.props.api.addEditor({ profileId: profile.id })}
               text={globalString('profile/menu/newWindow')}
+              intent={Intent.NONE}
+              iconName="pt-icon-new-text-box"
+            />
+          </div>
+          <div className="menuItemWrapper">
+            <MenuItem
+              className="profileListContextMenu newSshShell"
+              onClick={() => {
+                const { addSshShell } = this.props.api;
+
+                addSshShell(profile.id);
+              }}
+              text={globalString('profile/menu/newSshShell')}
               intent={Intent.NONE}
               iconName="pt-icon-new-text-box"
             />
