@@ -27,6 +27,7 @@
  */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
+/* eslint no-unused-vars:warn */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
@@ -199,13 +200,11 @@ export default class Toolbar extends React.Component {
     const { selectedProfile } = this.props.store.profileList;
     const { profiles } = this.props.store;
     if (selectedProfile) {
-      console.log('close profile ', selectedProfile.id);
       this.setState({ closingProfile: true });
       featherClient()
         .service('/mongo-connection')
         .remove(selectedProfile.id)
         .then((v) => {
-          console.log('got close response ', v);
           runInAction(() => {
             selectedProfile.status = ProfileStatus.CLOSED;
             profiles.set(selectedProfile.id, selectedProfile);
@@ -226,7 +225,7 @@ export default class Toolbar extends React.Component {
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })
         .catch((err) => {
-          console.log('error:', err);
+          console.error('error:', err);
           if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,

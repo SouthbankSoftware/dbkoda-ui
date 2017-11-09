@@ -28,7 +28,6 @@ import './style.scss';
 import StageProgress from './StageProgress';
 
 export const mergeShardsStages = (shardStages) => {
-  console.log('merging shard stages ', shardStages);
   const mergedStages = [];
   let maxLength = 0;
   let maxHeight = 1; // the max height of each shard, it should be 1 unless there is or stage
@@ -58,7 +57,7 @@ export const mergeShardsStages = (shardStages) => {
     }
   });
   if (shardStages.length === 1) {
-    return {mergedStages: [].concat(shardStages[0].stages)};
+    return { mergedStages: [].concat(shardStages[0].stages) };
   }
   const fillShardStages = shardStages.map((stages) => {
     const filtered = [].concat(stages.stages);
@@ -66,9 +65,8 @@ export const mergeShardsStages = (shardStages) => {
     if (filtered.length < maxLength) {
       _.times(maxLength - length, () => filtered.unshift(null));
     }
-    return {stages: filtered};
+    return { stages: filtered };
   });
-  console.log('file shards', fillShardStages);
   fillShardStages.map((s) => {
     s.stages.map((st, j) => {
       if (!mergedStages[j]) {
@@ -80,7 +78,11 @@ export const mergeShardsStages = (shardStages) => {
   const finalStages = mergedStages.map((stages) => {
     let length = 1;
     stages.map((subStages) => {
-      if (subStages && subStages.constructor === Array && subStages.length > length) {
+      if (
+        subStages &&
+        subStages.constructor === Array &&
+        subStages.length > length
+      ) {
         length = subStages.length;
       }
     });
@@ -96,14 +98,19 @@ export const mergeShardsStages = (shardStages) => {
       return subStages;
     });
   });
-  console.log('final stages ', finalStages);
-  return {mergedStages: finalStages, shardHeight};
+  return { mergedStages: finalStages, shardHeight };
 };
 
-export default ({executionStages, shardStages}) => {
+export default ({ executionStages, shardStages }) => {
   const ms = mergeShardsStages(shardStages);
   const mergedStages = ms.mergedStages.concat([executionStages]);
   const shardNames = shardStages.map(shard => shard.shardName);
-  console.log('merged stages:', mergedStages);
-  return (<StageProgress stages={mergedStages} shardHeight={ms.shardHeight} shardNames={shardNames} shardNumber={shardStages.length} />);
+  return (
+    <StageProgress
+      stages={mergedStages}
+      shardHeight={ms.shardHeight}
+      shardNames={shardNames}
+      shardNumber={shardStages.length}
+    />
+  );
 };

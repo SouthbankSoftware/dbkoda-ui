@@ -68,7 +68,8 @@ export default class EditorApi {
       if (!store.profiles.has(profileId)) {
         if (this.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR.FAILED_DEFAULT,
+            EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
+              .FAILED_DEFAULT,
             EventLogging.getFragmentEnum().EDITORS,
             'Cannot create new Editor for Default Tab.',
           );
@@ -96,10 +97,10 @@ export default class EditorApi {
             );
           }
           this.createNewEditorFailed();
-          // Object Object issue
-          console.log(err);
+          // @TODO -> Object Object issue
+          console.error(err);
           if (err.message == '[object Object]') {
-            console.log('Error retrieved from Primus');
+            console.error('Error retrieved from Primus');
           } else {
             NewToaster.show({
               message: 'Error: ' + err.message,
@@ -147,7 +148,11 @@ export default class EditorApi {
     let largestFileName = -1;
 
     for (const editor of this.store.editors.values()) {
-      if (!editor.path && editor.type === type && editor.fileName > largestFileName) {
+      if (
+        !editor.path &&
+        editor.type === type &&
+        editor.fileName > largestFileName
+      ) {
         largestFileName = editor.fileName;
       }
     }
@@ -276,9 +281,11 @@ export default class EditorApi {
     // @TODO -> Looks like during it's various reworks this entire function has been broken and stitched back together. Some refactoring needs to occur to ensure that when atab is closed a new tab is selected. @Mike.
 
     this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
-    console.log('deleted editor ', currEditor);
     // If Editor is not clean, prompt for save.
-    if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
+    if (
+      !currEditor.doc.isClean() &&
+      currEditor.type != EditorTypes.SHELL_COMMAND
+    ) {
       this.store.editorPanel.showingSavingDialogEditorIds.push(currEditor.id);
       return;
     }
@@ -292,7 +299,7 @@ export default class EditorApi {
             shellId: currEditor.shellId,
           },
         })
-        .then(v => console.log('remove shell successfully, ', v))
+        .then()
         .catch(err => console.error('remove shell failed,', err));
     }
 
@@ -306,14 +313,14 @@ export default class EditorApi {
         this.store.editorPanel.activeEditorId = 'Default';
       } else {
         // Show and select first entry in map.
-        console.log('1:', this.store.editorPanel.activeEditorId);
         this.api.removeOutput(currEditor);
         this.store.editors.delete(currEditor.id);
         const editors = this.store.editors.entries();
         this.store.editorPanel.activeEditorId = editors[0][1].id;
-        console.log('2:', this.store.editorPanel.activeEditorId);
 
-        const treeEditor = this.store.treeActionPanel.editors.get(currEditor.id);
+        const treeEditor = this.store.treeActionPanel.editors.get(
+          currEditor.id,
+        );
         if (treeEditor) {
           this.store.treeActionPanel.editors.delete(treeEditor.id);
         }

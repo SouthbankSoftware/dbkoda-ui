@@ -47,18 +47,19 @@ export default class TreeDropActions {
     let context = {};
     switch (treeNode.type) {
       case 'config':
-      case 'shard': {
-        const server = treeNode.label.split(':');
-        context = { host: server[0], port: server[1] };
-      }
-      break;
+      case 'shard':
+        {
+          const server = treeNode.label.split(':');
+          context = { host: server[0], port: server[1] };
+        }
+        break;
       case 'collection':
         context = { col: treeNode.label, db: treeNode.refParent.text };
         break;
       case 'index':
         context = {
           db: treeNode.refParent.refParent.text,
-          col: treeNode.refParent.text
+          col: treeNode.refParent.text,
         };
         break;
       case 'user':
@@ -81,7 +82,7 @@ export default class TreeDropActions {
       const template = TreeDropActions.getTemplateByType(treeNode.type);
       return template(context);
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return '';
     }
   }

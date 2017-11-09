@@ -82,7 +82,6 @@ export default class StaticApi {
       const documentsBelow = [];
       let totalDocumentCount = 0;
       // Get document at line one above, keep doing this until we reach an invalid line.
-      if (this.debug) console.log(jsonStr);
       // Check if the captured right click string has accidentally grabbed previous characters
       if (!jsonStr.match(/^ *{/gim)) {
         // Probably invalid, let's see if there is something valid in there.
@@ -111,7 +110,6 @@ export default class StaticApi {
         );
         if (!docBelow.match(/^ *{/gm)) {
           // Probably not Valid.
-          if (this.debug) console.log(docBelow, ' is not valid (below).');
           linesBelow.status = 'Invalid';
         }
 
@@ -147,7 +145,6 @@ export default class StaticApi {
         );
         if (!docAbove.match(/^ *{/gm)) {
           // Probably not Valid.
-          if (this.debug) console.log(docAbove, ' is not valid (above).');
           linesAbove.status = 'Invalid';
         }
 

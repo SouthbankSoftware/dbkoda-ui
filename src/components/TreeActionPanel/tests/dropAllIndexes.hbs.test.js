@@ -28,7 +28,6 @@
 // Unit test for AlterUser template
 //
 // TODO: Fix dependency on local mongo (use mlaunch?)
-const debug = false;
 const templateToBeTested =
   './src/components/TreeActionPanel/Templates/DropAllIndexes.hbs';
 const templateInput = require('./DropAllIndexes.hbs.input.json');
@@ -91,7 +90,6 @@ test('Drop all index template', (done) => {
       mongoCommands += validateIndexCmd;
       mongoCommands += DropIndexCommands;
       mongoCommands += dropCollectionCmd + '\nexit\n';
-      if (debug) console.log(mongoCommands);
       const matchString = sprintf('3 Indexes created'); // indexes were created
       const matchString2 = 'non-_id indexes dropped for collection'; // indexes were dropped
       common.mongoOutput(mongoCommands).then((output) => {

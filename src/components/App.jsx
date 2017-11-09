@@ -24,6 +24,9 @@
  * @Last modified time: 2017-10-16T09:15:20+11:00
  */
 
+/* eslint camelcase:warn */
+/* eslint no-unused-vars:warn */
+
 import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
 import { DragDropContext } from 'react-dnd';
@@ -37,7 +40,6 @@ import { OutputPanel } from '#/OutputPanel';
 import { SidebarPanel } from '#/SidebarPanel';
 import { Analytics } from '#/Analytics';
 import { StatusPanel } from '#/StatusBar';
-import EventReaction from '#/common/logging/EventReaction.jsx';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -78,8 +80,7 @@ class App extends React.Component {
     this.props.config.settings.save();
     this.props.store.layout.optInVisible = false;
   }
-  unstable_handleError(...v) { //eslint-disable-line
-    console.log(...v);
+  unstable_handleError(...v) {
     Broker.emit(EventType.APP_CRASHED);
   }
   render() {
@@ -122,7 +123,6 @@ class App extends React.Component {
           </SplitPane>
         </SplitPane>
         <StatusPanel className="statusPanel" />
-        <EventReaction />
         {process.env.NODE_ENV !== 'production' ? (
           <div className="DevTools">
             <DevTools position={{ right: -1000, top: 200 }} />

@@ -116,10 +116,6 @@ export default class JSONViewer extends Component {
     this.props.updateNestedState(currentInt, showCurrentInt);
 
     if (this.state.deep && !showCurrentInt) {
-      // Hide this objects.
-      if (this.debug) {
-        console.log('Array ', currentInt, ' is hidden (', showCurrentInt, ')');
-      }
       return (
         <span
           className="expandButton"
@@ -130,9 +126,6 @@ export default class JSONViewer extends Component {
       );
     } else if (this.state.deep && showCurrentInt) {
       // Show deep objects
-      if (this.debug) {
-        console.log('Array ', currentInt, ' is visible (', showCurrentInt, ')');
-      }
       if (getType(obj) === 'Array' && obj.length === 0) {
         return '[ ]';
       }
@@ -261,7 +254,6 @@ export default class JSONViewer extends Component {
 
     if (this.state.deep && !showCurrentInt) {
       // Hide this objects.
-      if (this.debug) console.log('Array ', currentInt, ' is hidden');
       return (
         <span
           className="expandButton"
@@ -272,7 +264,6 @@ export default class JSONViewer extends Component {
       );
     } else if (this.state.deep && showCurrentInt) {
       // Show deep objects
-      if (this.debug) console.log('Array ', currentInt, ' is visible');
       return (
         <div className="deepObjectWrapper">
           <span
@@ -299,14 +290,12 @@ export default class JSONViewer extends Component {
       );
     }
     // Root level object
-    if (this.debug) console.log('Root level object.');
     this.state.deep = true;
     return (
       <table {...this.props.tableProps}>
         {this.renderHeaderByKeys(Object.keys(getFirstEle(aob)))}
         <tbody {...this.props.tbodyProps}>
           {loopObject(aob, (row, j) => {
-            if (this.debug) console.log('Rendering row ', j);
             return (
               <tr
                 {...this.props.trProps}
@@ -328,13 +317,6 @@ export default class JSONViewer extends Component {
 
   @action.bound
   showContextMenu(e, row, json) {
-    // must prevent default to cancel parent's context menu
-
-    if (this.debug) {
-      console.log(e);
-      console.log(row);
-      console.log(json);
-    }
     // invoke static API, getting coordinates from mouse event
     ContextMenu.show(
       <Menu>

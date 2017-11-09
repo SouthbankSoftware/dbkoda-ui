@@ -34,7 +34,6 @@ import { DrawerPanes } from '#/common/Constants';
 import View from './View';
 import FormBuilder from './FormBuilder';
 
-
 @inject('store')
 @observer
 export default class TreeActionPanel extends React.Component {
@@ -44,9 +43,9 @@ export default class TreeActionPanel extends React.Component {
     const profile = this.props.store.profileList.selectedProfile;
     if (profile && profile.status == 'OPEN') {
       const editor = this.props.store.editors.get(
-        this.props.store.treeActionPanel.treeActionEditorId
+        this.props.store.treeActionPanel.treeActionEditorId,
       );
-       /**
+      /**
        * Resolve the prefetch arguments and return them as params
        * @param  {Array}  args     Arguments array as provided from DDD file
        * @return {Object}          Object containing params for prefetch function
@@ -61,17 +60,21 @@ export default class TreeActionPanel extends React.Component {
                 if (treeActionPanel.treeNode.type == 'user') {
                   params[arg.name] = treeActionPanel.treeNode.json.db;
                 } else if (treeActionPanel.treeNode.type == 'collection') {
-                  params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
+                  params[arg.name] =
+                    treeActionPanel.treeNode.refParent.json.text;
                 } else if (treeActionPanel.treeNode.type == 'index') {
-                  params[arg.name] = treeActionPanel.treeNode.refParent.refParent.json.text;
+                  params[arg.name] =
+                    treeActionPanel.treeNode.refParent.refParent.json.text;
                 } else if (treeActionPanel.treeNode.type == 'role') {
-                  params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
+                  params[arg.name] =
+                    treeActionPanel.treeNode.refParent.json.text;
                 }
                 break;
 
               case 'treeNode.parentCOL':
                 if (treeActionPanel.treeNode.type == 'index') {
-                  params[arg.name] = treeActionPanel.treeNode.refParent.json.text;
+                  params[arg.name] =
+                    treeActionPanel.treeNode.refParent.json.text;
                 }
                 break;
               default:
@@ -87,7 +90,7 @@ export default class TreeActionPanel extends React.Component {
         resolveArguments,
         updateDynamicFormCode,
         editor,
-        treeActionPanel.treeAction
+        treeActionPanel.treeAction,
       );
       this.formPromise
         .then((res) => {
@@ -111,10 +114,12 @@ export default class TreeActionPanel extends React.Component {
   dynamicForm;
   @observable msg = '';
   @observable bForm = false;
-  @action showForm(value) {
+  @action
+  showForm(value) {
     this.bForm = value;
   }
-  @action updateMsg(value) {
+  @action
+  updateMsg(value) {
     this.msg = value;
   }
   @action.bound
@@ -125,24 +130,27 @@ export default class TreeActionPanel extends React.Component {
     this.props.store.treeActionPanel.isNewFormValues = false;
   }
   render() {
-    console.log(this);
     return (
       <div className="dynamic-form">
-        {this.bForm && <View
-          title={this.dynamicForm.title}
-          mobxForm={this.dynamicForm.mobxForm}
-        />}
-        {!this.bForm &&
+        {this.bForm && (
+          <View
+            title={this.dynamicForm.title}
+            mobxForm={this.dynamicForm.mobxForm}
+          />
+        )}
+        {!this.bForm && (
           <div>
             <div className="tree-msg-div">
               <span>{this.msg}</span>
             </div>
             <button
               className="pt-button pt-intent-primary right-button"
-              onClick={this.close}>
+              onClick={this.close}
+            >
               {globalString('tree/closeButton')}
             </button>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }

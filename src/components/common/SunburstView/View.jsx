@@ -25,6 +25,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+/* eslint no-unused-vars:warn */
 
 import React from 'react';
 import * as d3 from 'd3';
@@ -32,7 +33,6 @@ import filesize from 'filesize';
 import { observe } from 'mobx';
 import { debounce } from 'lodash';
 import './View.scss';
-
 
 // Breadcrumb dimensions: width, height, spacing, width of tip/tail
 const b = {
@@ -136,7 +136,6 @@ export default class View extends React.Component {
       this.updateData();
     }
     observe(store.layout, (change) => {
-      console.log(change);
       this.handleResize();
     });
   }
@@ -144,8 +143,12 @@ export default class View extends React.Component {
   getDimentions(store) {
     const result = {};
     if (store && store.layout) {
-      const leftSidebarWidth = isNaN(store.layout.overallSplitPos) ? (window.innerWidth * 0.35) : store.layout.overallSplitPos;
-      const topBarsHeight = isNaN(store.layout.rightSplitPos) ? (window.innerHeight * 0.6) : store.layout.rightSplitPos;
+      const leftSidebarWidth = isNaN(store.layout.overallSplitPos)
+        ? window.innerWidth * 0.35
+        : store.layout.overallSplitPos;
+      const topBarsHeight = isNaN(store.layout.rightSplitPos)
+        ? window.innerHeight * 0.6
+        : store.layout.rightSplitPos;
       result.width = window.innerWidth - leftSidebarWidth - 400; // 400 is the size of the right side table
       result.height = window.innerHeight - topBarsHeight - 81; // 81 is the height of tabbar and output panel top bar
       result.width -= 80; // reduction of 80 pixels for spacing on left and right
@@ -273,9 +276,11 @@ export default class View extends React.Component {
       });
 
     // For efficiency, filter nodes to keep only those large enough to see.
-    const nodes = partition(this.root).descendants().filter((d) => {
-      return d.x1 - d.x0 > 0.005; // 0.005 radians = 0.29 degrees
-    });
+    const nodes = partition(this.root)
+      .descendants()
+      .filter((d) => {
+        return d.x1 - d.x0 > 0.005; // 0.005 radians = 0.29 degrees
+      });
 
     this.container.selectAll('path').remove();
     this.container
@@ -328,7 +333,10 @@ export default class View extends React.Component {
     const listSel = d3.select(this.listEl);
 
     // header
-    listSel.select('thead').selectAll('tr').remove();
+    listSel
+      .select('thead')
+      .selectAll('tr')
+      .remove();
     listSel
       .select('thead')
       .selectAll('tr')
@@ -351,7 +359,10 @@ export default class View extends React.Component {
       .style('fill', d => d.colour || '#000');
 
     // row
-    listSel.select('tbody').selectAll('tr').remove();
+    listSel
+      .select('tbody')
+      .selectAll('tr')
+      .remove();
     if (d.children) {
       const tr = listSel
         .select('tbody')
@@ -373,13 +384,19 @@ export default class View extends React.Component {
         .attr('r', '6px')
         .style('fill', d => d.colour || '#000');
 
-      tr.append('td').classed('tdDataName', true).text((d) => {
-        return d.data.name;
-      });
+      tr
+        .append('td')
+        .classed('tdDataName', true)
+        .text((d) => {
+          return d.data.name;
+        });
 
-      tr.append('td').classed('tdDataSize', true).text((d) => {
-        return filesize(d.value);
-      });
+      tr
+        .append('td')
+        .classed('tdDataSize', true)
+        .text((d) => {
+          return filesize(d.value);
+        });
     }
   }
   /*
@@ -437,9 +454,13 @@ export default class View extends React.Component {
     const paths = this.container.selectAll('path').on('mouseover', null);
 
     // Transition each segment to full opacity and then reactivate it.
-    paths.transition().duration(1000).style('opacity', 1).on('end', () => {
-      paths.on('mouseover', this.mouseover);
-    });
+    paths
+      .transition()
+      .duration(1000)
+      .style('opacity', 1)
+      .on('end', () => {
+        paths.on('mouseover', this.mouseover);
+      });
   }
 
   /**

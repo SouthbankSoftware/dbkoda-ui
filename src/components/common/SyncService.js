@@ -31,7 +31,6 @@ import { featherClient } from '~/helpers/feathers';
 
  export const SyncService = {
    executeQuery: (query, shellId, profileId) => {
-     console.log('Query:', query);
      if (shellId && profileId && shellId != '' && profileId != '') {
        const service = featherClient().service('/mongo-sync-execution');
        service.timeout = 60000;
@@ -49,7 +48,6 @@ import { featherClient } from '~/helpers/feathers';
                res = res.replace(/NumberLong\(\"?(\d*)\"?\)/g, '$1');
                res = res.replace(/Timestamp\((\d*)[\w|\W]*?\)/g, '$1');
                res = res.replace(/\bNaN\b/g, '"NaN"');
-               console.log('Result: ', res);
                try {
                  const ejson = JSON.parse(res);
                  resolve(ejson);
@@ -61,10 +59,6 @@ import { featherClient } from '~/helpers/feathers';
              }
            })
            .catch((reason) => {
-             console.log(
-               'executeCommand:',
-               'Handle rejected promise (' + reason + ') here.'
-             );
              reject(reason);
            });
        });

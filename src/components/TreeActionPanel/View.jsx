@@ -87,11 +87,9 @@ export default class TreeActionView extends React.Component {
   execute(e) {
     e.preventDefault();
     this.props.editorPanel.executingEditorAll = true;
-    console.log(this.props.treeActionPanel);
     const treeActionDefinition = require('./DialogDefinitions/' +
       this.props.treeActionPanel.treeAction +
       '.ddd.json');
-    console.log(treeActionDefinition);
     if (treeActionDefinition.AutoRefresh) {
       this.props.treeActionPanel.refreshOnExecution = true;
     }

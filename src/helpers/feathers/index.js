@@ -45,7 +45,6 @@ class FeatherClient {
     this.osService = this.feathers.service('/os-execution');
     this.shellService.on('shell-output', (output) => {
       const { id, shellId } = output;
-      console.log('got output ', output);
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
       Broker.emit(EventType.SHELL_OUTPUT_AVAILABLE, output);
     });
@@ -54,17 +53,14 @@ class FeatherClient {
       Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
     this.shellService.on('mongo-shell-reconnected', (output) => {
-      console.log('get reconnect event ', output);
       const { id, shellId } = output;
       Broker.emit(EventType.createShellReconnectEvent(id, shellId), output);
     });
     this.osService.on('os-command-output', (output) => {
-      console.log('get os output ', output);
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
     });
     this.osService.on('os-command-finish', (output) => {
-      console.log('get os command finish ', output);
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
       Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
@@ -114,7 +110,6 @@ const loadPrimus = () => {
         document.body.detachEvent('ononline', primus.onlineHandler);
       }
       featherClient().configurePrimus(primus);
-      console.log('load primus successfully.');
       Broker.emit(EventType.FEATHER_CLIENT_LOADED, true);
     } else {
       times += 1;
@@ -123,7 +118,6 @@ const loadPrimus = () => {
           loadPrimus();
         }, 3000);
       } else {
-        console.log('load primus failed.');
         Broker.emit(EventType.FEATHER_CLIENT_LOADED, false);
       }
     }

@@ -108,7 +108,6 @@ export default class Analytics extends React.Component {
    */
   newProfileCreated(profile) {
     if (this.props.store.userPreferences.telemetryEnabled) {
-      console.log(profile);
       let mongoInfo =
         '{ dbVersion: ' +
         profile.dbVersion +

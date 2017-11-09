@@ -34,15 +34,10 @@ import {
   Cell,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from 'recharts';
 
-export default observer(({
-  field,
-  data
-}) => {
-  console.log('PieChartField field:', field);
-  console.log('PieChartField data:', data);
+export default observer(({ field, data }) => {
   const COLORS = [
     '#77173E',
     '#0D657C',
@@ -55,7 +50,7 @@ export default observer(({
     '#1E282D',
     '#465061',
     '#1E423C',
-    '#701535'
+    '#701535',
   ];
 
   if (!field.height) {
@@ -65,19 +60,14 @@ export default observer(({
   return (
     <div
       className="div-field-container"
-      style={field.width && { width: (field.groupBy ? '100%' : field.width) }}
+      style={field.width && { width: field.groupBy ? '100%' : field.width }}
     >
       <label htmlFor={field.name} className="pt-label pt-label-field">
         {field.label}
       </label>
       <ResponsiveContainer width="100%" height={field.height}>
         <PieChart>
-          <Pie
-            outerRadius="60%"
-            data={data}
-            paddingAngle={5}
-            label
-          >
+          <Pie outerRadius="60%" data={data} paddingAngle={5} label>
             {data.map((entry, index) => (
               <Cell fill={COLORS[index % COLORS.length]} strokeWidth={0} />
             ))}

@@ -61,31 +61,26 @@ export class DynamicForm extends MobxReactForm {
     if (form.isValid) {
       form.submit();
     }
-    // console.log('Testing change:', this.values());
   }
-  onFieldChange = field =>
-    (e) => {
-      e.preventDefault();
-      field.onChange(e);
-      field.state.form.submit();
-    };
-  onFieldClick = field =>
-    () => {
-      field.state.form.submit();
-    };
+  onFieldChange = field => (e) => {
+    e.preventDefault();
+    field.onChange(e);
+    field.state.form.submit();
+  };
+  onFieldClick = field => () => {
+    field.state.form.submit();
+  };
   onFieldValueChange = (value, field) => {
     field.value = value;
     field.state.form.submit();
   };
-  onNumericValueChange = field =>
-    (value) => {
-      field.value = value;
-      field.state.form.submit();
-    };
-  onComboValueChange = field =>
-   (event, { newValue }) => {
-     field.value = newValue;
-     field.state.form.submit();
+  onNumericValueChange = field => (value) => {
+    field.value = value;
+    field.state.form.submit();
+  };
+  onComboValueChange = field => (event, { newValue }) => {
+    field.value = newValue;
+    field.state.form.submit();
   };
   bindings() {
     return {
@@ -100,7 +95,7 @@ export class DynamicForm extends MobxReactForm {
         onChange: $try(props.onChange, this.onFieldChange(field)),
         onBlur: $try(props.onBlur, field.onBlur),
         onFocus: $try(props.onFocus, field.onFocus),
-        autoFocus: $try(props.autoFocus, field.autoFocus)
+        autoFocus: $try(props.autoFocus, field.autoFocus),
       }),
       BooleanField: ({ $try, field, props }) => ({
         type: $try(props.type, field.type),
@@ -114,7 +109,7 @@ export class DynamicForm extends MobxReactForm {
         onClick: $try(props.onClick, this.onFieldClick(field)),
         onBlur: $try(props.onBlur, field.onBlur),
         onFocus: $try(props.onFocus, field.onFocus),
-        autoFocus: $try(props.autoFocus, field.autoFocus)
+        autoFocus: $try(props.autoFocus, field.autoFocus),
       }),
       SelectField: ({ $try, field, props }) => ({
         type: $try(props.type, field.type),
@@ -127,7 +122,7 @@ export class DynamicForm extends MobxReactForm {
         onChange: $try(props.onChange, this.onFieldChange(field)),
         onBlur: $try(props.onBlur, field.onBlur),
         onFocus: $try(props.onFocus, field.onFocus),
-        autoFocus: $try(props.autoFocus, field.autoFocus)
+        autoFocus: $try(props.autoFocus, field.autoFocus),
       }),
       ComboField: ({ $try, field, props }) => ({
         type: $try(props.type, field.type),
@@ -140,7 +135,7 @@ export class DynamicForm extends MobxReactForm {
         onChange: $try(props.onChange, this.onComboValueChange(field)),
         onBlur: $try(props.onBlur, field.onBlur),
         onFocus: $try(props.onFocus, field.onFocus),
-        autoFocus: $try(props.autoFocus, field.autoFocus)
+        autoFocus: $try(props.autoFocus, field.autoFocus),
       }),
       NumericField: ({ $try, field, props }) => ({
         type: $try(props.type, field.type),
@@ -154,8 +149,11 @@ export class DynamicForm extends MobxReactForm {
         onBlur: $try(props.onBlur, field.onBlur),
         onFocus: $try(props.onFocus, field.onFocus),
         autoFocus: $try(props.autoFocus, field.autoFocus),
-        onValueChange: $try(props.onValueChange, this.onNumericValueChange(field))
-      })
+        onValueChange: $try(
+          props.onValueChange,
+          this.onNumericValueChange(field),
+        ),
+      }),
     };
   }
   plugins() {
@@ -166,8 +164,8 @@ export class DynamicForm extends MobxReactForm {
           const messages = $validator.getMessages('en');
           messages.required = globalString('tree/fieldRequired');
           $validator.setMessages('en', messages);
-        }
-      }
+        },
+      },
     };
   }
 }

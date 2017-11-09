@@ -88,7 +88,7 @@ export default class TreePanel extends React.Component {
                 }
               })
               .catch((err) => {
-                console.log(err.stack);
+                console.error(err.stack);
                 this.updateStatus('FAILED');
                 DBKodaToaster(Position.LEFT_BOTTOM).show({
                   message: err.message,
@@ -154,7 +154,6 @@ export default class TreePanel extends React.Component {
     const divStyle = {
       height: '100%',
     };
-    console.log(this.treeStatus);
     return (
       <div style={divStyle}>
         <TreeToolbar />{' '}

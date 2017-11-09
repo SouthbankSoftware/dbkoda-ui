@@ -77,8 +77,6 @@ export default class Palette extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
-
-    if (this.debug) console.log('Block added to position: ', position);
     // 1. Is this the first added block?
     if (position === 0) {
       position = 1;
@@ -92,7 +90,6 @@ export default class Palette extends React.Component {
       this.updateShellPipeline().then(() => {
         this.updateResultSet()
           .then((res) => {
-            if (this.debug) console.log('updateResultSet:', JSON.parse(res));
             res = JSON.parse(res);
             if (res.stepAttributes.constructor === Array) {
               // 3. Update Valid for each block.
@@ -104,9 +101,6 @@ export default class Palette extends React.Component {
                 if (indexValue.constructor === Array) {
                   // Check for error result.
                   if (res.stepCodes[index] === 0) {
-                    if (this.debug) {
-                      console.log('Result[', index, '] is valid: ', indexValue);
-                    }
                     if (!(typeof indexValue === 'string')) {
                       indexValue = '[ "' + indexValue.join('", "') + '"]';
                     }
@@ -158,14 +152,12 @@ export default class Palette extends React.Component {
 
   @action.bound
   onExpand(nodeName) {
-    console.log('Expanding ', nodeName);
     this.state.expanded[nodeName] = true;
     this.forceUpdate();
   }
 
   @action.bound
   onCollapse(nodeName) {
-    console.log('Collapse ', nodeName);
     this.state.expanded[nodeName] = false;
     this.forceUpdate();
   }
@@ -320,7 +312,6 @@ export default class Palette extends React.Component {
           }
         });
         // Update steps in Shell:
-        if (this.debug) console.log('updatingShellPipeline: ', stepArray);
         const service = featherClient().service('/mongo-sync-execution');
         service.timeout = 30000;
         service
@@ -401,7 +392,6 @@ export default class Palette extends React.Component {
         })
         .then((res) => {
           // Check attribute List to see if we have valid attributes returned.
-          if (this.debug) console.log('GetBlockAttributes: ', res);
           resolve(res);
         })
         .catch((err) => {
@@ -441,7 +431,7 @@ export default class Palette extends React.Component {
         ),
       })
       .then((res) => {
-        if (this.debug) console.log('Debug: result from add step: ', res);
+        // @TODO -> Can probably remove this then statement.
       })
       .catch((err) => {
         console.error(err);
@@ -500,8 +490,6 @@ export default class Palette extends React.Component {
     editor.blockList[position].attributeList = attributeList;
     editor.selectedBlock = position;
     this.props.store.editorPanel.updateAggregateDetails = true;
-
-    if (this.debug) console.log('addBlockToEditor:', editor);
   }
 
   @action.bound
@@ -528,9 +516,6 @@ export default class Palette extends React.Component {
    */
   @action.bound
   clearResultsOutput(editor) {
-    if (this.debug) {
-      console.log('clearOutput: ', this.props.store.outputs.get(editor.id));
-    }
     const output = this.props.store.outputs.get(editor.id);
     output.output = globalString('aggregate_builder/block_not_yet_valid');
   }
@@ -557,7 +542,6 @@ export default class Palette extends React.Component {
   }
 
   render() {
-    console.log(this.blockList);
     return (
       <div className="aggregatePaletteWrapper">
         <nav className="aggregatePaletteToolbar pt-navbar pt-dark">

@@ -35,17 +35,16 @@ export const DbCollectionStats = {
   },
   dbkoda_DbCollectionStats_parse: (data) => {
     // data.time = Globalize.formatNumber(data.time);
-    // console.log(data.time);
     const result = {};
     result.top10 = [];
     result.CollectionDetails = data.collStats;
     data.collStats.forEach((cs) => {
       result.top10.push({
-        ns:cs.ns,
-        size:cs.storageSizeMB
+        ns: cs.ns,
+        size: cs.storageSizeMB,
       });
-    result.top10 = result.top10.slice(0, 10);
+      result.top10 = result.top10.slice(0, 10);
     });
     return result;
-  }
+  },
 };

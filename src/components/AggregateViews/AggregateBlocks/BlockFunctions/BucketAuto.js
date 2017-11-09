@@ -17,6 +17,7 @@
  * You shouldhave received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+/* eslint no-unused-vars:warn */
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const BucketAuto = {
@@ -33,8 +34,8 @@ export const BucketAuto = {
   dbkodaGranularityLookup_parse: (res) => {
     //eslint-disable-line
     const debug = false;
-    if (debug) console.log(res);
-    const granularities = ['R5',
+    const granularities = [
+      'R5',
       'R10',
       'R20',
       'R40',
@@ -46,8 +47,8 @@ export const BucketAuto = {
       'E48',
       'E96',
       'E192',
-      'POWERSOF2'
+      'POWERSOF2',
     ];
     return granularities;
-  }
+  },
 };

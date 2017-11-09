@@ -27,14 +27,12 @@
 */
 
 import React from 'react';
-import {shallow, mount} from 'enzyme';
-import toJson from 'enzyme-to-json';
-import {useStrict} from 'mobx';
+import { shallow, mount } from 'enzyme';
+import { useStrict } from 'mobx';
 import Store from '~/stores/global';
 import DataCenter from '~/api/DataCenter';
 import globalizeInit from '#/tests/helpers/globalize.js';
-import {EditorPanel, EditorToolbar} from '../index.js';
-
+import { EditorPanel, EditorToolbar } from '../index.js';
 
 describe('Editor Panel', () => {
   let app;
@@ -45,7 +43,6 @@ describe('Editor Panel', () => {
     const store = new Store();
     const api = new DataCenter(store);
     app = shallow(<EditorPanel.wrappedComponent store={store} api={api} />);
-    console.log(toJson(app));
   });
 
   test('has tabs', () => {

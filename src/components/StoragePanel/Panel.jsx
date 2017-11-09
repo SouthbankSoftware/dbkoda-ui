@@ -97,7 +97,6 @@ export default class StoragePanel extends React.Component {
     this.showView(true);
   }
   loadChildData(db, col, nodeData) {
-    console.log('db:', db, ', col:', col);
     return new Promise((resolve, reject) => {
       const editorId = this.props.store.editorPanel.activeEditorId;
       if (editorId) {
@@ -110,7 +109,6 @@ export default class StoragePanel extends React.Component {
         )
           .then((res) => {
             try {
-              console.log('storageAnalysis:', res);
               this.showLoading(false);
               if (!nodeData.children) {
                 nodeData.children = res;
