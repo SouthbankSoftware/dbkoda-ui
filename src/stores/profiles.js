@@ -42,18 +42,15 @@ export default class Profiles {
     }
   }
 
-  sanitize(profiles) {
-    profiles = _.map(profiles, (profile) => {
-      profile.status = 'CLOSED';
-      return profile;
-    });
-    console.log(profiles);
-    return profiles;
+  sanitize(profilesList) {
+    for (const profile in profilesList) {
+      profilesList[profile].status = 'CLOSED';
+    }
+    return profilesList;
   }
 
   @action.bound
   load() {
-    console.log('Load from profiles.yml');
     if (!this.profilesFilePath) {
       return;
     }
@@ -66,7 +63,6 @@ export default class Profiles {
         runInAction('Apply changes to profiles from yaml file', () => {
           const profileLoad = yaml.safeLoad(file.content);
           if (profileLoad) {
-            console.log(profileLoad);
             this.profiles = observable.map(profileLoad);
           }
           if (this.loading) {
@@ -90,15 +86,12 @@ export default class Profiles {
 
   @action.bound
   save() {
-    console.log('Save to profiles.yml');
     if (!this.profilesFilePath) {
       return;
     }
     this.loading = true;
     try {
-      console.log(this.profiles);
       const exportProfiles = this.sanitize(toJS(this.profiles));
-      console.log(exportProfiles);
       return featherClient()
         .service('files')
         .create({
