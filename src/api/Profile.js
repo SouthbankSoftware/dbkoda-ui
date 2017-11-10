@@ -14,10 +14,12 @@ import StaticApi from './static';
 export default class ProfileApi {
   store;
   api;
+  profiles;
 
-  constructor(store, api) {
+  constructor(store, api, profiles) {
     this.store = store;
     this.api = api;
+    this.profiles = profiles;
   }
 
   /**

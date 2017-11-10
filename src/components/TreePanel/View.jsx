@@ -403,7 +403,7 @@ export default class TreeView extends React.Component {
           shouldFocus: true,
         },
       });
-      this.props.store.profiles.set(
+      this.props.profiles.profiles.set(
         selectedProfile.id,
         this.props.store.profileList.selectedProfile,
       );

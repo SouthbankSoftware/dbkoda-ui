@@ -58,6 +58,7 @@ const React = require('react');
   store: allStores.store,
   api: allStores.api,
   config: allStores.config,
+  profiles: allStores.profiles,
 }))
 @observer
 export default class ListView extends React.Component {
@@ -89,7 +90,7 @@ export default class ListView extends React.Component {
           this.props.store.editorPanel.activeDropdownId &&
           this.props.store.editorPanel.activeDropdownId != 'Default'
         ) {
-          const editorProfile = this.props.store.profiles.get(
+          const editorProfile = this.props.profiles.profiles.get(
             this.props.store.editorPanel.activeDropdownId,
           );
           this.props.store.profileList.selectedProfile = editorProfile;
@@ -111,7 +112,7 @@ export default class ListView extends React.Component {
     if (region.length == 0) {
       return;
     }
-    const profiles = this.props.store.profiles.entries();
+    const profiles = this.props.profiles.profiles.entries();
     const profile = profiles[region[0].rows[0]][1];
     this.props.store.profileList.selectedProfile = profile;
     this.setState({ lastSelectRegion: region });
@@ -247,13 +248,13 @@ export default class ListView extends React.Component {
       if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
         profile.bRemotePass = true;
       }
-      this.props.store.profiles.set(res.id, profile);
-      this.props.store.profileList.selectedProfile = this.props.store.profiles.get(
+      this.props.profiles.profiles.set(res.id, profile);
+      this.props.store.profileList.selectedProfile = this.props.profiles.profiles.get(
         res.id,
       );
       Broker.emit(
         EventType.RECONNECT_PROFILE_CREATED,
-        this.props.store.profiles.get(res.id),
+        this.props.profiles.profiles.get(res.id),
       );
       this.props.store.editors.forEach((value, _) => {
         if (value.shellId == res.shellId) {
@@ -294,7 +295,7 @@ export default class ListView extends React.Component {
   @action
   closeProfile() {
     const selectedProfile = this.state.targetProfile;
-    const profiles = this.props.store.profiles;
+    const profiles = this.props.profiles.profiles;
     if (selectedProfile) {
       this.setState({ closingProfile: true });
       this.props.store.layout.alertIsLoading = true;
@@ -410,9 +411,10 @@ export default class ListView extends React.Component {
   @action
   deleteProfile() {
     const { id: profileId } = this.state.targetProfile;
-    const { store: { profiles }, api } = this.props;
+    const { profiles, api } = this.props;
 
-    profiles.delete(profileId);
+    profiles.profiles.delete(profileId);
+    profiles.save();
     api.clearSshShellsForProfile(profileId);
 
     if (this.props.config.settings.telemetryEnabled) {
@@ -519,7 +521,7 @@ export default class ListView extends React.Component {
 
   @action
   renderBodyContextMenu(context) {
-    const profiles = this.props.store.profiles.entries();
+    const profiles = this.props.profiles.profiles.entries();
     const profile = profiles[context.regions[0].rows[0]][1];
     this.state.targetProfile = profile;
     if (this.props.config.settings.telemetryEnabled) {
@@ -630,7 +632,7 @@ export default class ListView extends React.Component {
   }
 
   render() {
-    const profiles = this.props.store.profiles.entries();
+    const profiles = this.props.profiles.profiles.entries();
     const renderCell = (rowIndex: number) => {
       const className =
         this.props.store.profileList &&
@@ -668,7 +670,7 @@ export default class ListView extends React.Component {
       <div className="profileList">
         <Table
           allowMultipleSelection={false}
-          numRows={this.props.store.profiles.size}
+          numRows={this.props.profiles.profiles.size}
           isRowHeaderShown={false}
           isColumnHeaderShown={false}
           selectionModes={SelectionModes.ROWS_AND_CELLS}

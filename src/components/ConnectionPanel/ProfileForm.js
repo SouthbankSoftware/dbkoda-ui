@@ -167,6 +167,7 @@ export class ProfileForm extends MobxReactForm {
     const formValues = { ...form.values() };
     return {
       ...formValues,
+      sshLocalPort: null,
       authorization: true,
       test: false,
     };
