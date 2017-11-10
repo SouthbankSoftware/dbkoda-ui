@@ -126,7 +126,7 @@ export default class Analytics extends React.Component {
   }
 
   /**
-   * 
+   *
    * function to be called when activity goes to the controller.
    * @param {String} service - The service type that has been called.
    */
