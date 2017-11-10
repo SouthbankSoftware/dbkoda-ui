@@ -25,28 +25,35 @@
  * @Last modified time: 2017-08-31T09:06:04+10:00
  */
 
-self.addEventListener('message', (e) => {
-  const jsonStr = e.data.jsonStr;
-  let message = '';
-  let json = jsonStr.replace(/ObjectId\("([0-9a-z]*)"\)/gm, '"$1"')
-    .replace(/NumberLong\("([0-9]*)"\)/gm, '$1')
-    .replace(/NumberDecimal\("([0-9.]*)"\)/gm, '$1')
-    .replace(/BinData\("([0-9a-zA-Z]*)"\)/gm, '"$1"')
-    .replace(/ISODate\("([0-9a-zA-Z\-:\.]*)"\)/gm, '"$1"')
-    .replace(/Timestamp\("([0-9], *)"\)/gm, '"$1"')
-    .replace(/\n/gm, '')
-    .replace(/<(.*)>/gm, (contents) => {
-      return contents.replace(/(<[^>])*\/([^>]>)*/gm, '$1\\\/$2')
-        .replace(/="([^"]*)"/gm, '=\\\"$1\\\"');
-    });
-  try {
-    json = JSOL.parse(json);
-  } catch (e) {
-    message = e.message;
-  }
-  self.postMessage([json, message]);
-  self.close();
-}, false);
+self.addEventListener(
+  'message',
+  (e) => {
+    const jsonStr = e.data.jsonStr;
+    let message = '';
+    let json = jsonStr
+      .replace(/ObjectId\("?([0-9a-z]*)"?\)/gm, '"$1"')
+      .replace(/NumberLong\("?([0-9]*)"?\)/gm, '$1')
+      .replace(/NumberDecimal\("([0-9.]*)"\)/gm, '$1')
+      .replace(/BinData\("?([0-9a-zA-Z]*)"?\)/gm, '"$1"')
+      .replace(/ISODate\("?([0-9a-zA-Z\-:\.]*)"?\)/gm, '"$1"')
+      .replace(/Timestamp\("?([0-9], *)"?\)/gm, '"$1"')
+      .replace(/\n/gm, '')
+      .replace(/<(.*)>/gm, (contents) => {
+        return contents
+          .replace(/(<[^>])*\/([^>]>)*/gm, '$1\\/$2')
+          .replace(/="([^"]*)"/gm, '=\\"$1\\"');
+      });
+    try {
+      console.log(json);
+      json = JSOL.parse(json);
+    } catch (e) {
+      message = e.message;
+    }
+    self.postMessage([json, message]);
+    self.close();
+  },
+  false,
+);
 
 /*
  *  All code below modified from https://github.com/daepark/JSOL/blob/master/jsol.js
@@ -94,11 +101,19 @@ JSOL.parse = function(text) {
     return null;
   }
   text = text.replace(trim, '');
-  if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
-       .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']')
-       .replace(/(?:^|:|,)(?:\s*\[)+/g, ':')
-       .replace(/\w*\s*\:/g, ':'))) {
-    return (new Function('return ' + text))();  // eslint-disable-line
+  if (
+    /^[\],:{}\s]*$/.test(
+      text
+        .replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@')
+        .replace(
+          /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+          ']',
+        )
+        .replace(/(?:^|:|,)(?:\s*\[)+/g, ':')
+        .replace(/\w*\s*\:/g, ':'),
+    )
+  ) {
+    return new Function('return ' + text)(); // eslint-disable-line
   }
   throw new Error('Invalid JSON: ' + text);
 };
