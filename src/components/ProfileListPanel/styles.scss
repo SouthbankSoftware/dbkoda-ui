@@ -269,3 +269,18 @@ ul.profileListContextMenu {
     }
   }
 }
+
+.connection-profile-cell-selected {
+  background-color: $profileListSelected !important;
+  outline: none !important;
+  .profileListing {
+    color: #fff;
+  }
+  .closedProfile {
+    font-style: italic !important;
+  }
+  div {
+    svg {
+    }
+  }
+}
