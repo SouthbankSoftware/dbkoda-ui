@@ -32,8 +32,9 @@ import {useStrict} from 'mobx';
 import {expect} from 'chai';
 import {Provider} from 'mobx-react';
 import globalizeInit from '#/tests/helpers/globalize.js';
-import Store from '../../../stores/global';
-import Config from '../../../stores/config';
+import Store from '~/stores/global';
+import Config from '~/stores/config';
+import Profiles from '~/stores/profiles';
 import ConnectionPanel from '../ConnectionPanel';
 import Label from '../Label';
 
@@ -45,7 +46,8 @@ describe('New Profile Panel', () => {
     useStrict(true);
     const store = new Store();
     const config = new Config();
-    app = mount(<Provider store={store} config={config}>
+    const profiles = new Profiles();
+    app = mount(<Provider store={store} config={config} profiles={profiles}>
       <ConnectionPanel />
     </Provider>);
   });

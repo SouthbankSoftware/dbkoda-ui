@@ -34,11 +34,13 @@ import StaticApi from './static';
 export default class OutputApi {
   store;
   api;
+  profiles;
   outputHash;
 
-  constructor(store, api) {
+  constructor(store, api, profiles) {
     this.store = store;
     this.api = api;
+    this.profiles = profiles;
     this.outputHash = {};
 
     this.init = this.init.bind(this);
@@ -150,7 +152,7 @@ export default class OutputApi {
     const outputId = this.outputHash[output.id + '|' + output.shellId];
 
     const totalOutput = this.store.outputs.get(outputId).output + output.output;
-    const profile = this.store.profiles.get(output.id);
+    const profile = this.profiles.profiles.get(output.id);
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
@@ -230,7 +232,7 @@ export default class OutputApi {
   }
   @action.bound
   drillOutputAvailable(res) {
-    const profile = this.store.profiles.get(res.profileId);
+    const profile = this.profiles.profiles.get(res.profileId);
     const strOutput = JSON.stringify(res.output, null, 2);
     const editor = this.store.editors.get(res.id);
     const totalOutput = this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
