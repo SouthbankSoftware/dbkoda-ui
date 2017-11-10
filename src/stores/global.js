@@ -405,7 +405,7 @@ export default class Store {
     newStore.layout.alertIsLoading = false;
 
     // Version:
-    newStore.version = '0.8.1';
+    newStore.version = '0.9.0-beta.1';
 
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
