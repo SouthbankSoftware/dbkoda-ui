@@ -69,7 +69,7 @@ global.EOL = global.IS_ELECTRON
 export default class Store {
   api;
   @observable locale = 'en';
-  @observable version = '0.8.1';
+  @observable version = '0.9.0-beta.1';
   @observable updateAvailable = false;
   @observable profiles = observable.map();
   @observable editors = observable.map();

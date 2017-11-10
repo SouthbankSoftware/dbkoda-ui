@@ -10,11 +10,19 @@
     "url": "http://southbanksoftware.com"
   },
   "main": "dist/index.html",
-  "keywords": ["React", "React-Router", "MobX", "Webpack", "ES6", "ES7"],
+  "keywords": [
+    "React",
+    "React-Router",
+    "MobX",
+    "Webpack",
+    "ES6",
+    "ES7"
+  ],
   "engines": {
     "node": ">= 7.2.1"
   },
   "scripts": {
+    "postinstall": "yarn upgrade xterm && cd node_modules/xterm && yarn install",
     "dev": "webpack-dev-server --config webpack/dev.js",
     "dev:install": "yarn install --ignore-scripts",
     "dev:prod": "yarn run postinstall && yarn start --",
