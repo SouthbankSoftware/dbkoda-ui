@@ -128,10 +128,8 @@ export default class Explain extends React.Component {
       } else if (explainOutputJson.output.shards) {
         const shardsOutput = {queryPlanner: {winningPlan: {stage: 'SHARD_MERGE', shards: []}}};
         _.forOwn(explainOutputJson.output.shards, (value, key) => {
-          console.log('key=value', key, value);
           if (value.stages && value.stages.length > 0) {
-            _.forOwn(value.stages[0], (stageValue, stageKey) => {
-              console.log('stage key=value', stageKey, stageValue);
+            _.forOwn(value.stages[0], (stageValue) => {
               if (stageValue.queryPlanner && stageValue.queryPlanner.winningPlan) {
                 const shardOutput = {shardName: key, winningPlan: stageValue.queryPlanner.winningPlan};
                 console.log('add to shard output ', shardOutput);
@@ -140,7 +138,6 @@ export default class Explain extends React.Component {
             });
           }
         });
-        console.log('output:', shardsOutput);
         explainOutputJson.output = shardsOutput;
       } else if (
         !explainOutputJson.output ||
