@@ -24,12 +24,12 @@
  * @Last modified time: 2017-10-03T15:35:19+11:00
  */
 
-import { action, observable, runInAction, toJS } from 'mobx';
+import {action, observable, runInAction, toJS} from 'mobx';
 import yaml from 'js-yaml';
 import _ from 'lodash';
 import path from 'path';
-import { featherClient } from '~/helpers/feathers';
-import { NewToaster } from '#/common/Toaster';
+import {featherClient} from '~/helpers/feathers';
+import {NewToaster} from '#/common/Toaster';
 
 export default class Profiles {
   saveDebounced = _.debounce(this.save, 500);
@@ -44,7 +44,9 @@ export default class Profiles {
 
   sanitize(profilesList) {
     for (const profile in profilesList) {
-      profilesList[profile].status = 'CLOSED';
+      if (Object.prototype.hasOwnProperty.call(profilesList, profile)) {
+        profilesList[profile].status = 'CLOSED';
+      }
     }
     return profilesList;
   }
