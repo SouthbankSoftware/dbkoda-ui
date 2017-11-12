@@ -101,6 +101,7 @@ export default class Panel extends React.Component {
         () => {
           try {
             if (
+              this.props.store.profileList.selectedProfile &&
               this.props.store.profileList.selectedProfile.id ==
               this.props.store.editorPanel.activeDropdownId
             ) {
