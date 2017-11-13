@@ -422,7 +422,7 @@ export default class Panel extends React.Component {
               (formErrors.length > 0 ? 'inactive' : 'active') +
               ' connectButton pt-button pt-intent-success'
             }
-            onClick={form.onSubmit}
+            onClick={form.onSuccess}
             text={globalString('connection/form/connectButton')}
             type="submit"
             disabled={formErrors.length > 0}

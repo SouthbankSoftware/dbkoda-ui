@@ -149,8 +149,8 @@ export class ProfileForm extends MobxReactForm {
   }
 
   @autobind
-  onSuccess(form) {
-    this.connect({ ...this.createFormData(form), test: false });
+  onSuccess() {
+    this.connect({ ...this.createFormData(this), test: false });
   }
 
   @autobind
