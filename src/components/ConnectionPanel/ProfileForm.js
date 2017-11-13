@@ -149,8 +149,8 @@ export class ProfileForm extends MobxReactForm {
   }
 
   @autobind
-  onSuccess(form) {
-    this.connect({ ...this.createFormData(form), test: false });
+  onSuccess() {
+    this.connect({ ...this.createFormData(this), test: false });
   }
 
   @autobind
@@ -167,6 +167,7 @@ export class ProfileForm extends MobxReactForm {
     const formValues = { ...form.values() };
     return {
       ...formValues,
+      sshLocalPort: null,
       authorization: true,
       test: false,
     };

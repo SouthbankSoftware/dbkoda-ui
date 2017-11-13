@@ -165,10 +165,6 @@ export default class Palette extends React.Component {
   /**
    * Gets a list of block types and converts it into a object that the listView can use.
    *
-   * @TODO: Now that we are grouping the block list and
-   * each block may have multiple groups, I should
-   * refactor this to just parse a list of "groups" and
-   * build them.
    * @return {Object} - The list of block types.
    */
   getBlockList() {
@@ -429,9 +425,6 @@ export default class Palette extends React.Component {
           generatedCode,
           position,
         ),
-      })
-      .then((res) => {
-        // @TODO -> Can probably remove this then statement.
       })
       .catch((err) => {
         console.error(err);

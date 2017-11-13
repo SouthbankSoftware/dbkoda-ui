@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  * @Author: chris
  * @Date:   2017-04-20T17:58:30+10:00
@@ -25,16 +24,15 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2017-07-06T10:14:08+10:00
  */
-
 /**
  * explain component is used to handle explain output
  */
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { action, observable } from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {action, observable} from 'mobx';
 import _ from 'lodash';
 import Panel from './Panel';
-import { Broker, EventType } from '../../helpers/broker/index';
+import {Broker, EventType} from '../../helpers/broker/index';
 
 export const parseOutput = (output) => {
   return output
@@ -55,11 +53,11 @@ export default class Explain extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { viewType: 0 };
+    this.state = {viewType: 0};
   }
 
   componentDidMount() {
-    const { editor } = this.props;
+    const {editor} = this.props;
     if (editor) {
       Broker.on(
         EventType.EXPLAIN_OUTPUT_AVAILABLE,
@@ -70,12 +68,12 @@ export default class Explain extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.editor.explains) {
-      this.setState({ viewType: nextProps.editor.explains.viewType });
+      this.setState({viewType: nextProps.editor.explains.viewType});
     }
   }
 
   componentWillUnmount() {
-    const { editor } = this.props;
+    const {editor} = this.props;
     if (editor) {
       Broker.removeListener(
         EventType.EXPLAIN_OUTPUT_AVAILABLE,
@@ -85,7 +83,7 @@ export default class Explain extends React.Component {
   }
 
   @action.bound
-  explainOutputAvailable({ id, shell, command, type, output }) {
+  explainOutputAvailable({id, shell, command, type, output}) {
     this.explainCommand = command;
     this.explainOutput = '';
     this.explainType = type;
@@ -116,7 +114,7 @@ export default class Explain extends React.Component {
       ) {
         // this is aggregate framework explain output, convert stages to regular stage
         const aggStages = explainOutputJson.output.stages;
-        const converted = { queryPlanner: { winningPlan: {} } };
+        const converted = {queryPlanner: {winningPlan: {}}};
         aggStages.reverse().forEach((stage) => {
           _.values(stage).forEach((v) => {
             _.keys(v).forEach((k) => {
@@ -127,6 +125,20 @@ export default class Explain extends React.Component {
           });
         });
         explainOutputJson.output = converted;
+      } else if (explainOutputJson.output.shards) {
+        const shardsOutput = {queryPlanner: {winningPlan: {stage: 'SHARD_MERGE', shards: []}}};
+        _.forOwn(explainOutputJson.output.shards, (value, key) => {
+          if (value.stages && value.stages.length > 0) {
+            _.forOwn(value.stages[0], (stageValue) => {
+              if (stageValue.queryPlanner && stageValue.queryPlanner.winningPlan) {
+                const shardOutput = {shardName: key, winningPlan: stageValue.queryPlanner.winningPlan};
+                console.log('add to shard output ', shardOutput);
+                shardsOutput.queryPlanner.winningPlan.shards.push(shardOutput);
+              }
+            });
+          }
+        });
+        explainOutputJson.output = shardsOutput;
       } else if (
         !explainOutputJson.output ||
         !explainOutputJson.output.queryPlanner
@@ -153,14 +165,14 @@ export default class Explain extends React.Component {
         explains: explainOutputJson,
       }),
     );
-    Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, { id, shell });
+    Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, {id, shell});
   }
 
   @action.bound
   switchExplainView() {
-    const { viewType } = this.props.editor.explains;
+    const {viewType} = this.props.editor.explains;
     this.props.editor.explains.viewType = 1 - viewType;
-    this.setState({ viewType: this.props.editor.explains.viewType });
+    this.setState({viewType: this.props.editor.explains.viewType});
   }
 
   render() {

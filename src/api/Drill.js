@@ -37,6 +37,7 @@ export default class DrillApi {
     const query = {};
     const profile = this.store.profileList.selectedProfile;
     query.alias = this.getDrillCompatibleAlias(profile.alias);
+    query.id = profile.id;
     if (options.pass) {
       query.url = StaticApi.mongoProtocol +
         profile.username +
@@ -107,7 +108,7 @@ export default class DrillApi {
     const query = {};
     const profile = (options.profile) ? options.profile : this.store.profileList.selectedProfile;
     query.alias = this.getDrillCompatibleAlias(profile.alias);
-
+    query.id = profile.id;
     if (options.removeAll) {
       query.removeAll = true;
     }

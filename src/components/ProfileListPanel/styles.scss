@@ -72,19 +72,49 @@
   .profileList {
     flex-grow: 1;
     overflow-y: scroll;
-    .bp-table-bottom-container {
+    .bp-table-quadrant {
+      background-color: $panelLeftBackground;
+    }
+    .bp-table-quadrant-scroll-container {
       background-color: rgba(0, 0, 0, 0) !important;
-      .bp-table-body {
+    }
+    .bp-table-quadrant-top {
+      display: none;
+    }
+    .bp-table-bottom-container {
+      width: 100% !important;
+      .bp-table-quadrant-body-container {
+        width: 100% !important;
         background-color: rgba(0, 0, 0, 0) !important;
-        .bp-table-body-scroll-client {
-          background-color: rgba(0, 0, 0, 0) !important;
+        div {
           width: 100% !important;
           .bp-table-body-virtual-client {
             width: 100% !important;
             background-color: rgba(0, 0, 0, 0) !important;
-            .bp-table-cell {
-              background-color: rgba(0, 0, 0, 0);
+            width: 100% !important;
+            .bp-table-body-cells {
               width: 100% !important;
+              background-color: rgba(0, 0, 0, 0) !important;
+              .bp-table-cell {
+                background-color: rgba(0, 0, 0, 0);
+                width: 100% !important;
+              }
+              .bp-table-cell:hover {
+                background-color: $profileListTabHover;
+              }
+              .bp-table-cell-selected {
+                background-color: $profileListSelected !important;
+                outline: none !important;
+                .profileListing {
+                  color: #fff;
+                }
+                .closedProfile {
+                  font-style: italic !important;
+                }
+              }
+              .bp-table-cell-selected:hover {
+                background-color: $profileListSelected !important;
+              }
             }
           }
         }
@@ -147,20 +177,6 @@
     }
     .closedProfile {
       font-style: italic !important;
-    }
-  }
-  .connection-profile-cell-selected {
-    background-color: $profileListSelected !important;
-    outline: none !important;
-    .profileListing {
-      color: #fff;
-    }
-    .closedProfile {
-      font-style: italic !important;
-    }
-    div {
-      svg {
-      }
     }
   }
   .bp-table-selection-region {
@@ -250,6 +266,21 @@ ul.profileListContextMenu {
     display: flex;
     flex-direction: row;
     li {
+    }
+  }
+}
+
+.connection-profile-cell-selected {
+  background-color: $profileListSelected !important;
+  outline: none !important;
+  .profileListing {
+    color: #fff;
+  }
+  .closedProfile {
+    font-style: italic !important;
+  }
+  div {
+    svg {
     }
   }
 }

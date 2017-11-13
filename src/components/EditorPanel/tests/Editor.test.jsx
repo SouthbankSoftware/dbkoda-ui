@@ -30,6 +30,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { useStrict } from 'mobx';
 import Store from '~/stores/global';
+import Profiles from '~/stores/profiles';
 import DataCenter from '~/api/DataCenter';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import { EditorPanel, EditorToolbar } from '../index.js';
@@ -41,8 +42,9 @@ describe('Editor Panel', () => {
     useStrict(true);
     globalizeInit();
     const store = new Store();
-    const api = new DataCenter(store);
-    app = shallow(<EditorPanel.wrappedComponent store={store} api={api} />);
+    const profiles = new Profiles();
+    const api = new DataCenter(store, profiles);
+    app = shallow(<EditorPanel.wrappedComponent store={store} api={api} profiles={profiles} />);
   });
 
   test('has tabs', () => {
@@ -57,13 +59,15 @@ describe('Editor Panel', () => {
 describe('Toolbar', () => {
   let app;
   let store;
+  let profiles;
   let api;
 
   beforeAll(() => {
     useStrict(false);
     store = new Store();
-    api = new DataCenter(store);
-    app = mount(<EditorToolbar.wrappedComponent store={store} api={api} />);
+    profiles = new Profiles();
+    api = new DataCenter(store, profiles);
+    app = mount(<EditorToolbar.wrappedComponent store={store} api={api} profiles={profiles} />);
   });
 
   test('has buttons', () => {

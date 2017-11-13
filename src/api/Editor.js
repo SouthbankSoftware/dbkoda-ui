@@ -38,10 +38,12 @@ export default class EditorApi {
   store;
   api;
   config;
-  constructor(store, api, config) {
+  profiles;
+  constructor(store, api, config, profiles) {
     this.store = store;
     this.api = api;
     this.config = config;
+    this.profiles = profiles;
   }
   /**
    * Method for adding a new editor to an existing connection.
@@ -215,7 +217,7 @@ export default class EditorApi {
         _.assign(
           {
             id: editorId,
-            alias: this.store.profiles.get(res.id).alias,
+            alias: this.profiles.profiles.get(res.id).alias,
             profileId: res.id,
             shellId: res.shellId,
             currentProfile: res.id,
@@ -360,7 +362,7 @@ SHOW TABLES`;
         _.assign(
           {
             id: editorId,
-            alias: this.store.profiles.get(profile.id).alias,
+            alias: this.profiles.profiles.get(profile.id).alias,
             profileId: profile.id,
             shellId: options.shellId,
             currentProfile: profile.id,

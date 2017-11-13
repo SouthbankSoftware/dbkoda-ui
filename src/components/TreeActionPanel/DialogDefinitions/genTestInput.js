@@ -20,9 +20,9 @@
 
 const file = process.argv[2];
 const sprintf = require('sprintf-js').sprintf;
-/*eslint-disable */
+/* eslint-disable */
 let ddd = require('./' + file); // eslint-disable-line no-dynamic-require
-/*eslint-enable */
+/* eslint-enable */
 console.log(file);
 console.log('{');
 ddd.Fields.forEach((f) => {

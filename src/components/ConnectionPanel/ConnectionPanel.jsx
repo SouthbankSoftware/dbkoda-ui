@@ -268,7 +268,7 @@ const ConnectionPanel = ({
 
 export default inject(allStores => ({
   store: allStores.store,
-  profiles: allStores.store.profiles,
+  profiles: allStores.profiles.profiles,
   profileList: allStores.store.profileList,
   setDrawerChild: allStores.store.setDrawerChild,
   userPreferences: allStores.config.settings,

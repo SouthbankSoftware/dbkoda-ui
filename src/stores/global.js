@@ -69,9 +69,9 @@ global.EOL = global.IS_ELECTRON
 export default class Store {
   api;
   @observable locale = 'en';
-  @observable version = '0.8.0';
+  @observable version = '0.9.0-beta.1';
   @observable updateAvailable = false;
-  @observable profiles = observable.map();
+  // @observable profiles = observable.map();
   @observable editors = observable.map();
   @observable outputs = observable.map();
   @observable sshShells = observable.shallowMap();
@@ -405,7 +405,7 @@ export default class Store {
     newStore.layout.alertIsLoading = false;
 
     // Version:
-    newStore.version = '0.8.0';
+    newStore.version = '0.9.0-beta.1';
 
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';

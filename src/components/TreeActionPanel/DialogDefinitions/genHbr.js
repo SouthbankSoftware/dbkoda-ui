@@ -21,9 +21,9 @@
  /* eslint no-unused-vars:warn */
 const file = process.argv[2];
 const sprintf = require('sprintf-js').sprintf;
-/*eslint-disable */
+/* eslint-disable */
 let ddd = require('./' + file); // eslint-disable-line no-dynamic-require
-/*eslint-enable */
+/* eslint-enable */
 ddd.Fields.forEach((f) => {
   const line = sprintf(
     '{{#if %s ~}},\n\t\t %s: {{%s}}{{/if ~}}',

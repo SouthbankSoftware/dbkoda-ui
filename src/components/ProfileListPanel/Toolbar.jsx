@@ -56,6 +56,7 @@ import './styles.scss';
 @inject(allStores => ({
   store: allStores.store,
   config: allStores.config,
+  profiles: allStores.profiles,
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -152,9 +153,10 @@ export default class Toolbar extends React.Component {
   @action.bound
   removeProfile() {
     // eslint-disable-line class-methods-use-this
-    this.props.store.profiles.delete(
+    this.props.profiles.profiles.delete(
       this.props.store.profileList.selectedProfile.id,
     );
+    this.props.profiles.save();
     this.hideRemoveConnectionAlert();
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
