@@ -1,9 +1,9 @@
 /**
  * @Author: Guan Gui <guiguan>
- * @Date:   2017-11-09T23:32:18+11:00
+ * @Date:   2017-11-08T15:20:34+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-10T09:56:57+11:00
+ * @Last modified time: 2017-11-13T17:38:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,14 +24,30 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../styles/_defaultTheme.scss";
-
-.Terminal {
-  background: #000;
-  width: 100%;
-
-  .Container {
-    height: 100%;
-    overflow: hidden;
+declare module 'xterm/build/xterm' {
+  declare class CharMeasure {
+    measure(options: {}): void;
   }
+
+  declare class Xterm {
+    constructor(): Xterm;
+
+    cols: number;
+    rows: number;
+    options: {};
+
+    open(container: React.ElementRef<*>): void;
+    winptyCompatInit(): void;
+    on(eventName: string, cb: (param: any) => void): void;
+    attach(socket: *): void;
+    destroy(): void;
+    getSelection(): string;
+    findNext(token: string): void;
+    findPrevious(token: string): void;
+    fit(): void;
+
+    charMeasure: CharMeasure;
+  }
+
+  declare export default typeof Xterm;
 }

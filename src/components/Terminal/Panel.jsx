@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-10T02:48:57+11:00
+ * @Last modified time: 2017-11-13T17:38:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,35 +27,81 @@
  */
 
 import * as React from 'react';
-import * as Xterm from 'xterm/build/xterm';
 import ReactResizeDetector from 'react-resize-detector';
+import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
+import { type ObservableMap, reaction } from 'mobx';
+import { inject } from 'mobx-react';
 import _ from 'lodash';
-import 'xterm/build/addons/attach/attach';
-import 'xterm/build/addons/fit/fit';
-// import 'xterm/build/addons/search/search';
-// import 'xterm/build/addons/winptyCompat/winptyCompat';
+import Xterm from 'xterm/build/xterm';
+import attachAddon from 'xterm/lib/addons/attach/attach';
+import fitAddon from 'xterm/lib/addons/fit/fit';
+import searchAddon from 'xterm/lib/addons/search/search';
+import winptyCompatAddon from 'xterm/lib/addons/winptyCompat/winptyCompat';
 import 'xterm/build/xterm.css';
 import './Panel.scss';
 
+attachAddon(Xterm);
+fitAddon(Xterm);
+searchAddon(Xterm);
+winptyCompatAddon(Xterm);
+
 const DEBOUNCE_DELAY = 100;
 
+type Store = {
+  outputPanel: *,
+  editorPanel: *,
+  editors: ObservableMap<*>,
+};
+
 type Props = {
-  id: string,
-  profileId: string,
+  store: Store,
+  data: {
+    tabId: string,
+  },
 };
 
 type State = {};
 
-export default class TerminalTest extends React.PureComponent<Props, State> {
+// $FlowIssue
+@inject(({ store }) => {
+  const { outputPanel, editorPanel, editors } = store;
+
+  return {
+    store: {
+      outputPanel,
+      editorPanel,
+      editors,
+    },
+  };
+})
+export default class Terminal extends React.PureComponent<Props, State> {
+  reactions = [];
+  resizeDetector: React.ElementRef<*>;
   container: React.ElementRef<*>;
-  xterm;
-  pid;
+  xterm: Xterm;
+  socket: *;
+  pid: *;
 
   componentDidMount() {
+    this.reactions.push(
+      reaction(
+        () => {
+          const { store: { outputPanel: { currentTab } }, data: { tabId } } = this.props;
+
+          return currentTab === tabId;
+        },
+        (isActive) => {
+          if (isActive) {
+            // fix container size undetected issue when this component is mounted behind the scene
+            this.resizeDetector.componentDidMount();
+          }
+        },
+      ),
+    );
+
     this.xterm = new Xterm();
     this.xterm.open(this.container);
-    // this.xterm.fit();
-    // this.xterm.winptyCompatInit();
+    this.xterm.winptyCompatInit();
 
     this.xterm.on('resize', (size) => {
       if (!this.pid) {
@@ -73,23 +121,78 @@ export default class TerminalTest extends React.PureComponent<Props, State> {
     }).then((res) => {
       res.text().then((pid) => {
         this.pid = pid;
-        const socket = new WebSocket(`ws://localhost:3001/terminals/${pid}`);
-        socket.onopen = () => {
-          this.xterm.attach(socket);
+        this.socket = new WebSocket(`ws://localhost:3001/terminals/${pid}`);
+        this.socket.onopen = () => {
+          this.xterm.attach(this.socket);
         };
       });
     });
   }
 
+  componentWillUnmount() {
+    _.forEach(this.reactions, r => r());
+    this.xterm.destroy();
+  }
+
+  _onExecuteCurrentEditorCodeHere = () => {
+    const { editorPanel, editors } = this.props.store;
+    const currEditor = editors.get(editorPanel.activeEditorId);
+
+    if (!currEditor) return;
+
+    let code = currEditor.doc.getValue();
+    code = code.replace(/\n/g, '\r');
+    code += '\r';
+
+    this.socket.send(code);
+  };
+
+  _onContextMenu = (e: SyntheticMouseEvent<*>) => {
+    const menu = (
+      <Menu>
+        <MenuItem
+          onClick={this._onExecuteCurrentEditorCodeHere}
+          text="Execute Current Editor Code Here"
+        />
+        <MenuItem
+          onClick={() => {
+            const selection = this.xterm.getSelection();
+            if (selection) {
+              this.xterm.findNext(selection);
+            }
+          }}
+          text="Find Next"
+        />
+        <MenuItem
+          onClick={() => {
+            const selection = this.xterm.getSelection();
+            if (selection) {
+              this.xterm.findPrevious(selection);
+            }
+          }}
+          text="Find Previous"
+        />
+      </Menu>
+    );
+
+    ContextMenu.show(menu, { left: e.clientX, top: e.clientY });
+  };
+
   _onPanelResize = _.debounce(() => {
+    this.xterm.charMeasure.measure(this.xterm.options);
     this.xterm.fit();
   }, DEBOUNCE_DELAY);
 
   render() {
     return (
-      <div className="Terminal">
+      <div className="Terminal" onContextMenu={this._onContextMenu}>
         <div className="Container" ref={ref => (this.container = ref)} />
-        <ReactResizeDetector handleWidth handleHeight onResize={this._onPanelResize} />
+        <ReactResizeDetector
+          ref={ref => (this.resizeDetector = ref)}
+          handleWidth
+          handleHeight
+          onResize={this._onPanelResize}
+        />
       </div>
     );
   }

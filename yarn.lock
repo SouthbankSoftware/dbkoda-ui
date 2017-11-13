@@ -10091,7 +10091,7 @@ xmlhttprequest@1:
 
 "xterm@https://github.com/guiguan/xterm.js.git":
   version "2.9.1"
-  resolved "https://github.com/guiguan/xterm.js.git#06a8af76ab974cd9083355ea86c7078d5b4247e9"
+  resolved "https://github.com/guiguan/xterm.js.git#0938613bda48b5ab8af3e30a29e2556dddfda330"
 
 y18n@^3.2.1:
   version "3.2.1"

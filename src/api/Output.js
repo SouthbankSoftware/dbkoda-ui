@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-09T14:46:16+11:00
+ * @Last modified time: 2017-11-13T16:54:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -195,8 +195,7 @@ export default class OutputApi {
           this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
-        const outputJSON =
-          initialOutput != null ? initialOutput : { loading: 'isLoaded' };
+        const outputJSON = initialOutput != null ? initialOutput : { loading: 'isLoaded' };
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
         this.store.outputs.set(
           editor.id,
@@ -489,6 +488,10 @@ export default class OutputApi {
     return largestId;
   }
 
+  getSshShellTabId(id: string, profileId: string) {
+    return `SSH-${profileId}-${id}`;
+  }
+
   @action.bound
   addSshShell(profileId: string) {
     const { sshShells, outputPanel } = this.store;
@@ -500,12 +503,14 @@ export default class OutputApi {
     }
 
     const newSshShellId = String(this._generateSshShellId(sshShellsForProfileId));
+    const tabId = this.getSshShellTabId(newSshShellId, profileId);
 
     sshShellsForProfileId.set(newSshShellId, {
       id: newSshShellId,
+      tabId,
     });
 
-    outputPanel.currentTab = `SSH-${profileId}-${newSshShellId}`;
+    outputPanel.currentTab = tabId;
   }
 
   @action.bound

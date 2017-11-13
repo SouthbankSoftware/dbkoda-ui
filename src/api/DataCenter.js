@@ -22,7 +22,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-09T13:56:43+11:00
+ * @Last modified time: 2017-11-13T16:54:05+11:00
  */
 
 import OutputApi from './Output';
@@ -54,6 +54,7 @@ export default class DataCenter {
     this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(this);
     this.addDrillOutput = this.outputApi.addDrillOutput.bind(this);
     this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
+    this.getSshShellTabId = this.outputApi.getSshShellTabId.bind(this);
     this.addSshShell = this.outputApi.addSshShell.bind(this);
     this.removeSshShell = this.outputApi.removeSshShell.bind(this);
     this.clearSshShellsForProfile = this.outputApi.clearSshShellsForProfile.bind(this);
