@@ -35,15 +35,15 @@ export default class DataCenter {
   store;
   config;
   outputApi;
-  profiles;
+  profileStore;
 
-  constructor(store, config, profiles) {
+  constructor(store, config, profileStore) {
     this.store = store;
     this.config = config;
-    this.profiles = profiles;
-    this.outputApi = new OutputApi(store, this, profiles);
-    this.editorApi = new EditorApi(store, this, config, profiles);
-    this.profileApi = new ProfileApi(store, this, profiles);
+    this.profileStore = profileStore;
+    this.outputApi = new OutputApi(store, this, profileStore);
+    this.editorApi = new EditorApi(store, this, config, profileStore);
+    this.profileApi = new ProfileApi(store, this, profileStore);
     this.treeApi = new TreeApi(store, this);
     this.drillApi = new DrillApi(store, this);
 

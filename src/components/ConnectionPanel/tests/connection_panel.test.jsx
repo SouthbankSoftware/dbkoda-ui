@@ -46,8 +46,8 @@ describe('New Profile Panel', () => {
     useStrict(true);
     const store = new Store();
     const config = new Config();
-    const profiles = new Profiles();
-    app = mount(<Provider store={store} config={config} profiles={profiles}>
+    const profileStore = new Profiles();
+    app = mount(<Provider store={store} config={config} profileStore={profileStore}>
       <ConnectionPanel />
     </Provider>);
   });

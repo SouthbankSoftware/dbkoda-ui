@@ -56,7 +56,7 @@ import './styles.scss';
 @inject(allStores => ({
   store: allStores.store,
   config: allStores.config,
-  profiles: allStores.profiles,
+  profileStore: allStores.profileStore,
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -153,10 +153,10 @@ export default class Toolbar extends React.Component {
   @action.bound
   removeProfile() {
     // eslint-disable-line class-methods-use-this
-    this.props.profiles.profiles.delete(
+    this.props.profileStore.profiles.delete(
       this.props.store.profileList.selectedProfile.id,
     );
-    this.props.profiles.save();
+    this.props.profileStore.save();
     this.hideRemoveConnectionAlert();
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
@@ -200,7 +200,7 @@ export default class Toolbar extends React.Component {
   @action.bound
   closeProfile() {
     const { selectedProfile } = this.props.store.profileList;
-    const { profiles } = this.props.store;
+    const { profiles } = this.props.profileStore;
     if (selectedProfile) {
       this.setState({ closingProfile: true });
       featherClient()
