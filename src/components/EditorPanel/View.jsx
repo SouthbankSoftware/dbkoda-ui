@@ -216,7 +216,7 @@ class View extends React.Component {
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     NewToaster.show({
                       message: globalString(
-                        'editor/toolbar/executionScriptFailed',
+                        'drill/execution_failed',
                       ),
                       className: 'danger',
                       iconName: 'pt-icon-thumbs-down',
@@ -310,10 +310,14 @@ class View extends React.Component {
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
+                    let message = globalString(
+                      'drill/execution_failed',
+                    );
+                    if (err && err.statusCode === 602) {
+                      message = err.error;
+                    }
                     NewToaster.show({
-                      message: globalString(
-                        'editor/toolbar/executionScriptFailed',
-                      ),
+                      message,
                       className: 'danger',
                       iconName: 'pt-icon-thumbs-down',
                     });
