@@ -76,6 +76,9 @@ import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import { TranslatorPanel } from '../Translator';
 import { insertExplainOnCommand } from '../ExplainPanel/Utils';
+import {getSeparator} from '../common/Utils';
+
+const esprima = require('esprima');
 
 /**
  * editorTarget object for helping with drag and drop actions?
@@ -319,18 +322,18 @@ class View extends React.Component {
             } else {
               // Quick check if line is a full command:
               if (type !== 'os') {
-                if (
-                  !content.match(/^ *db./g) &&
-                  !content.match(/^ *sh./g) &&
-                  !content.match(/^ *rs./g) &&
-                  !content.match(/^ *db *$/g) &&
-                  !content.match(/^ *use /g) &&
-                  !content.match(/^ *show /g) &&
-                  !content.match(/^ *it */g) &&
-                  !content.match(/^ *[A-Za-z0-9]+\(.*\);?$/g) &&
-                  !content.match(/^ *var/g) &&
-                  !content.match(/^ *([A-Za-z0-9].)+¥(.*¥);?$/g)
-                ) {
+                const ignore = /^[^\S\x0a\x0d]*(?:use|show|help|it|exit[\s]|dbk_agg*).*/g;
+                const splitted = content.split(getSeparator());
+                let hasError = false;
+                splitted.forEach((str) => {
+                  const ignoredStr = str.replace(ignore, '');
+                  try {
+                    esprima.parseScript(ignoredStr);
+                  } catch (err) {
+                    hasError = true;
+                  }
+                });
+                if (hasError) {
                   NewToaster.show({
                     message: globalString(
                       'editor/toolbar/possibleMultiLineCommand',
@@ -339,6 +342,25 @@ class View extends React.Component {
                     iconName: 'pEmilt-icon-thumbs-down',
                   });
                 }
+                // if (
+                //   !content.match(/^ *db./g) &&
+                //   !content.match(/^ *sh./g) &&
+                //   !content.match(/^ *rs./g) &&
+                //   !content.match(/^ *db *$/g) &&
+                //   !content.match(/^ *use /g) &&
+                //   !content.match(/^ *show /g) &&
+                //   !content.match(/^ *it */g) &&
+                // ) {
+                //   // parse scripts
+                //
+                //   NewToaster.show({
+                //     message: globalString(
+                //       'editor/toolbar/possibleMultiLineCommand',
+                //     ),
+                //     className: 'warning',
+                //     iconName: 'pEmilt-icon-thumbs-down',
+                //   });
+                // }
               }
               // Send request to feathers client
             const service = type && type === 'os'

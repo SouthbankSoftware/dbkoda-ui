@@ -162,7 +162,6 @@
     "react-test-renderer": "^15.4.2",
     "recharts": "^1.0.0-apha.5",
     "recompose": "^0.26.0",
-    "request-promise": "^4.2.2",
     "resolve-url-loader": "^2.0.0",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.5",
