@@ -68,6 +68,7 @@ global.EOL = global.IS_ELECTRON
 
 export default class Store {
   api;
+  profileStore;
   @observable locale = 'en';
   @observable version = '0.9.0-beta.1';
   @observable updateAvailable = false;
@@ -281,7 +282,7 @@ export default class Store {
     // Create a new shell through feathers.
     return featherClient()
       .service('/mongo-shells')
-      .create({ id: this.profiles.get(this.editorPanel.activeDropdownId).id })
+      .create({ id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id })
       .then((res) => {
         // Create new editor as normal, but with "aggregate" type.
         return this.api.setNewEditorState(res, {
@@ -311,6 +312,9 @@ export default class Store {
     _.assign(dumpStore, this);
     if (dumpStore.api) {
       delete dumpStore.api;
+    }
+    if (dumpStore.profileStore) {
+      delete dumpStore.profileStore;
     }
     // Remove till here
     // return dump(this, { serializer });
@@ -357,13 +361,15 @@ export default class Store {
     }
   };
 
+  @action
   closeConnection() {
     return new Promise((resolve) => {
-      if (this.profiles && this.profiles.size > 0) {
+      if (this.profileStore && this.profileStore.profiles && this.profileStore.profiles.size > 0) {
         const promises = [];
-        this.profiles.forEach((value) => {
+        this.profileStore.profiles.forEach((value) => {
           if (value.status === ProfileStatus.OPEN) {
             // close this connection from feather-client
+            value.status = ProfileStatus.CLOSED;
             const service = featherClient().service('/mongo-connection');
             if (service) {
               promises.push(service.remove(value.id));
@@ -453,11 +459,6 @@ export default class Store {
     // ProfileList
     newStore.profileList.creatingNewProfile = false;
 
-    // Profiles:
-    newStore.profiles.forEach((value) => {
-      value.status = 'CLOSED';
-    });
-
     // Tree Panel:
     newStore.treePanel.isRefreshing = false;
     newStore.treePanel.isRefreshDisabled = true;
@@ -519,7 +520,7 @@ export default class Store {
           require('cldr-data/main/en/ca-gregorian.json'),
           require('cldr-data/supplemental/likelySubtags.json'),
         );
-        this.saveUponProfileChange();
+        this.saveUponEditorsChange();
 
         if (this.api) {
           this.api.init();
@@ -567,8 +568,8 @@ export default class Store {
     }
   }
 
-  saveUponProfileChange() {
-    this.profiles.observe(this.saveDebounced);
+  saveUponEditorsChange() {
+    this.editors.observe(this.saveDebounced);
   }
 
   constructor() {
@@ -599,5 +600,8 @@ export default class Store {
   // Temporary setting reference to API in store because most of the action are still here in store.
   setAPI(apiRef) {
     this.api = apiRef;
+  }
+  setProfileStore(profileStore) {
+    this.profileStore = profileStore;
   }
 }

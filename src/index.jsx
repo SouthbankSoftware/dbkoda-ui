@@ -103,6 +103,7 @@ Broker.once(EventType.APP_CRASHED, () => {
         api = new DataCenter(store);
         config = new Config();
         profiles = new Profiles();
+        store.setProfileStore(profiles);
         store.setAPI(api); // TODO: Remove this line after complete migration to API
         store.saveSync();
         ipcRenderer.send(EventType.APP_CRASHED);
@@ -162,6 +163,7 @@ store = new Store();
 config = new Config();
 profiles = new Profiles();
 api = new DataCenter(store, config, profiles);
+store.setProfileStore(profiles);
 store.setAPI(api); // TODO: Remove this line after complete migration to API
 window.api = api;
 window.store = store;
