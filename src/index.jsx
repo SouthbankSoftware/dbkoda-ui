@@ -43,7 +43,7 @@ const rootEl = document.getElementById('root');
 let store;
 let api;
 let config;
-let profiles;
+let profileStore;
 
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -55,7 +55,7 @@ const renderApp = () => {
   const render = (Component) => {
     ReactDOM.render(
       <AppContainer>
-        <Provider store={store} api={api} config={config} profiles={profiles}>
+        <Provider store={store} api={api} config={config} profileStore={profileStore}>
           <Component />
         </Provider>
       </AppContainer>,
@@ -86,7 +86,7 @@ Broker.once(EventType.APP_READY, renderApp);
 
 Broker.once(EventType.APP_RENDERED, () => {
   config.load();
-  profiles.load();
+  profileStore.load();
   if (IS_ELECTRON) {
     ipcRenderer.send(EventType.APP_READY);
   }
@@ -102,8 +102,8 @@ Broker.once(EventType.APP_CRASHED, () => {
         store = new Store();
         api = new DataCenter(store);
         config = new Config();
-        profiles = new Profiles();
-        store.setProfileStore(profiles);
+        profileStore = new Profiles();
+        store.setProfileStore(profileStore);
         store.setAPI(api); // TODO: Remove this line after complete migration to API
         store.saveSync();
         ipcRenderer.send(EventType.APP_CRASHED);
@@ -161,12 +161,12 @@ window.addEventListener('beforeunload', (event) => {
 
 store = new Store();
 config = new Config();
-profiles = new Profiles();
-api = new DataCenter(store, config, profiles);
-store.setProfileStore(profiles);
+profileStore = new Profiles();
+api = new DataCenter(store, config, profileStore);
+store.setProfileStore(profileStore);
 store.setAPI(api); // TODO: Remove this line after complete migration to API
 window.api = api;
 window.store = store;
 window.config = config;
-window.profiles = profiles;
+window.profileStore = profileStore;
 window.mobx = mobx;

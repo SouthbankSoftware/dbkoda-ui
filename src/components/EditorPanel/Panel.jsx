@@ -66,7 +66,7 @@ const splitPane2Style = {
   store: allStores.store,
   api: allStores.api,
   config: allStores.config,
-  profiles: allStores.profiles,
+  profileStore: allStores.profileStore,
 }))
 @observer
 export default class Panel extends React.Component {
@@ -311,10 +311,10 @@ export default class Panel extends React.Component {
     if (newTabId != 'Default' && newTabId != 'Config') {
       editorPanel.activeDropdownId = currEditor.currentProfile;
       // Check if connection exists or is closed to update dropdown.
-      if (!this.props.profiles.profiles.get(editorPanel.activeDropdownId)) {
+      if (!this.props.profileStore.profiles.get(editorPanel.activeDropdownId)) {
         editorPanel.activeDropdownId = 'Default';
       } else if (
-        this.props.profiles.profiles.get(editorPanel.activeDropdownId).status ==
+        this.props.profileStore.profiles.get(editorPanel.activeDropdownId).status ==
         'CLOSED'
       ) {
         editorPanel.activeDropdownId = 'Default';
