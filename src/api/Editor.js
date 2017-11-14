@@ -67,7 +67,7 @@ export default class EditorApi {
       if (!editorOptions.type) {
         editorOptions.type = EditorTypes.DEFAULT;
       }
-      if (!store.profiles.has(profileId)) {
+      if (!this.profiles.profiles.has(profileId)) {
         if (this.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
             EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
