@@ -586,7 +586,8 @@
     },
     "drill": {
       "connection_failed": "Create Drill Connection Failed",
-      "execution_failed": "Execute SQL Statement Failed"
+      "execution_failed": "Execute SQL Statement Failed",
+      "connection_not_exist": "Cant find connection"
     }
   }
 }

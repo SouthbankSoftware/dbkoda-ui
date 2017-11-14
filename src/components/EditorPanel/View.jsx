@@ -315,6 +315,8 @@ class View extends React.Component {
                     );
                     if (err && err.statusCode === 602) {
                       message = err.error;
+                    } else if (err && err.statusCode === 600) {
+                      message = globalString('drill/connection_not_exist');
                     }
                     NewToaster.show({
                       message,
