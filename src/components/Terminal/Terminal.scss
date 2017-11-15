@@ -1,9 +1,9 @@
 /**
  * @Author: Guan Gui <guiguan>
- * @Date:   2017-11-08T15:07:55+11:00
+ * @Date:   2017-11-09T23:32:18+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T11:39:44+11:00
+ * @Last modified time: 2017-11-14T14:16:54+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,6 +24,22 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export LocalTerminal from './LocalTerminal';
-export LocalXtermDemoTerminal from './LocalXtermDemoTerminal';
-export SshTerminal from './SshTerminal';
+@import "../../styles/_defaultTheme.scss";
+
+$terminalForeground: #dad9d9;
+$terminalBackground: $tabBackgroundSelected;
+
+.Terminal {
+  background: $terminalBackground;
+  width: 100%;
+
+  .Container {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+:export {
+  terminalForeground: $terminalForeground;
+  terminalBackground: $terminalBackground;
+}

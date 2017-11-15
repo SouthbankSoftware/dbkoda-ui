@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-13T16:47:15+11:00
+ * @Last modified time: 2017-11-15T11:34:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,8 +31,9 @@ import { Tab2, Tabs2, Button } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
 import { ChartPanel } from '#/ChartPanel';
-import { Terminal } from '#/Terminal';
+import { LocalTerminal, LocalXtermDemoTerminal, SshTerminal } from '#/Terminal';
 import { EditorTypes } from '#/common/Constants.js';
+import { terminalTypes } from '~/api/Terminal';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
@@ -152,9 +153,7 @@ export default class Panel extends React.Component {
     }
 
     // Set new active output and stop change tab from executing..
-    this.props.store.outputPanel.currentTab = this.props.store.outputs.get(
-      editorId,
-    ).id;
+    this.props.store.outputPanel.currentTab = this.props.store.outputs.get(editorId).id;
     this.closingTab = true;
   }
 
@@ -473,12 +472,12 @@ export default class Panel extends React.Component {
       }
       return arrTabs;
     });
-    const profileTabs = [];
+
     const selectedProfile = this.props.store.profileList.selectedProfile;
 
     if (selectedProfile) {
       if (selectedProfile.storageView && selectedProfile.storageView.visible) {
-        profileTabs.push(
+        tabs.push(
           <Tab2
             className="visible"
             key={'Storage-' + selectedProfile.id}
@@ -499,28 +498,69 @@ export default class Panel extends React.Component {
           });
         }
       }
+    }
 
-      // render SSH shells for selected profile
-      const { sshShells } = this.props.store;
-      const sshShellsForProfileId = sshShells.get(selectedProfile.id);
-      if (sshShellsForProfileId) {
-        for (const sshShell of sshShellsForProfileId.values()) {
-          const { tabId } = sshShell;
+    // terminals
+    const { store: { terminals }, api } = this.props;
+    const localTerminals = [];
+    const sshTerminals = [];
 
-          profileTabs.push(
+    for (const terminal of terminals.values()) {
+      const { id, type, name } = terminal;
+      const tabId = api.getTerminalTabId(id);
+
+      if (type === terminalTypes.local) {
+        localTerminals.push(
+          <Tab2
+            className="visible"
+            key={tabId}
+            id={tabId}
+            title={`Local - ${name}`}
+            panel={<LocalTerminal tabId={tabId} />}
+          >
+            <Button
+              className="pt-minimal"
+              onClick={() => {
+                api.removeTerminal(id);
+              }}
+            >
+              <span className="pt-icon-cross" />
+            </Button>
+          </Tab2>,
+        );
+      } else if (type === terminalTypes.localXtermDemo) {
+        localTerminals.push(
+          <Tab2
+            className="visible"
+            key={tabId}
+            id={tabId}
+            title={`Local Xterm Demo - ${name}`}
+            panel={<LocalXtermDemoTerminal tabId={tabId} />}
+          >
+            <Button
+              className="pt-minimal"
+              onClick={() => {
+                api.removeTerminal(id);
+              }}
+            >
+              <span className="pt-icon-cross" />
+            </Button>
+          </Tab2>,
+        );
+      } else if (type === terminalTypes.ssh) {
+        if (terminal.profileId === selectedProfile.id) {
+          sshTerminals.push(
             <Tab2
               className="visible"
               key={tabId}
               id={tabId}
-              title={`SSH - ${sshShell.id}`}
-              panel={<Terminal data={sshShell} />}
+              title={`SSH - ${name}`}
+              panel={<SshTerminal tabId={tabId} />}
             >
               <Button
                 className="pt-minimal"
                 onClick={() => {
-                  const { removeSshShell } = this.props.api;
-
-                  removeSshShell(selectedProfile.id, sshShell.id);
+                  api.removeTerminal(id);
                 }}
               >
                 <span className="pt-icon-cross" />
@@ -529,9 +569,9 @@ export default class Panel extends React.Component {
           );
         }
       }
-
-      tabs.push(profileTabs);
     }
+
+    tabs.push(sshTerminals, localTerminals);
 
     return tabs;
   }

@@ -1,9 +1,9 @@
 /**
  * @Author: Guan Gui <guiguan>
- * @Date:   2017-11-09T23:32:18+11:00
+ * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-10T09:56:57+11:00
+ * @Last modified time: 2017-11-15T11:45:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,14 +24,41 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../styles/_defaultTheme.scss";
+import * as React from 'react';
+import Xterm from 'xterm/build/xterm';
+import Terminal from './Terminal';
 
-.Terminal {
-  background: #000;
-  width: 100%;
+type Props = {
+  tabId: string,
+};
 
-  .Container {
-    height: 100%;
-    overflow: hidden;
+export default class SshTerminal extends React.PureComponent<Props> {
+  socket: *;
+  pid: *;
+
+  _attach = (_xterm: Xterm) => {
+  };
+
+  _detach = (_xterm: Xterm) => {
+  };
+
+  _onResize = (_xterm: Xterm, _size: number) => {
+  };
+
+  _send = (_code: string) => {
+  };
+
+  render() {
+    const { tabId } = this.props;
+
+    return (
+      <Terminal
+        tabId={tabId}
+        attach={this._attach}
+        detach={this._detach}
+        send={this._send}
+        onResize={this._onResize}
+      />
+    );
   }
 }

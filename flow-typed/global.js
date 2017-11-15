@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-10-02T13:50:52+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T16:01:48+11:00
+ * @Last modified time: 2017-11-14T14:46:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,3 +31,4 @@ declare function globalNumber(value: number, config?: {}): string;
 
 /** Global types */
 declare type ComponentState = 'loading' | 'error' | 'loaded';
+declare type UUID = string;

@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-14T14:23:24+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,12 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-09T11:29:07+11:00
  */
 
 import _ from 'lodash';
@@ -75,7 +75,7 @@ export default class Store {
   // @observable profiles = observable.map();
   @observable editors = observable.map();
   @observable outputs = observable.map();
-  @observable sshShells = observable.shallowMap();
+  @observable terminals = observable.shallowMap();
 
   @observable
   userPreferences = observable({
@@ -521,6 +521,9 @@ export default class Store {
           require('cldr-data/supplemental/likelySubtags.json'),
         );
         this.saveUponEditorsChange();
+
+        // FIXME
+        // this.saveUponProfileChange();
 
         if (this.api) {
           this.api.init();
