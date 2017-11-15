@@ -67,6 +67,7 @@ export default class Profiles {
           if (profileLoad) {
             this.profiles = observable.map(profileLoad);
           }
+          this.profiles.observe(this.saveDebounced);
           if (this.loading) {
             runInAction(() => {
               this.loading = false;
@@ -83,7 +84,6 @@ export default class Profiles {
           iconName: 'pt-icon-thumbs-down',
         });
       });
-    this.profiles.observe(this.saveDebounced);
   }
 
   @action.bound

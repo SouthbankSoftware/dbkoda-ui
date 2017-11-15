@@ -42,9 +42,9 @@ describe('Editor Panel', () => {
     useStrict(true);
     globalizeInit();
     const store = new Store();
-    const profiles = new Profiles();
-    const api = new DataCenter(store, profiles);
-    app = shallow(<EditorPanel.wrappedComponent store={store} api={api} profiles={profiles} />);
+    const profileStore = new Profiles();
+    const api = new DataCenter(store, profileStore);
+    app = shallow(<EditorPanel.wrappedComponent store={store} api={api} profileStore={profileStore} />);
   });
 
   test('has tabs', () => {
@@ -59,15 +59,15 @@ describe('Editor Panel', () => {
 describe('Toolbar', () => {
   let app;
   let store;
-  let profiles;
+  let profileStore;
   let api;
 
   beforeAll(() => {
     useStrict(false);
     store = new Store();
-    profiles = new Profiles();
-    api = new DataCenter(store, profiles);
-    app = mount(<EditorToolbar.wrappedComponent store={store} api={api} profiles={profiles} />);
+    profileStore = new Profiles();
+    api = new DataCenter(store, profileStore);
+    app = mount(<EditorToolbar.wrappedComponent store={store} api={api} profileStore={profileStore} />);
   });
 
   test('has buttons', () => {

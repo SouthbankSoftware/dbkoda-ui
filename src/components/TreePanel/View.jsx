@@ -63,6 +63,7 @@ import './View.scss';
 @inject(allStores => ({
   store: allStores.store,
   treeState: allStores.treeState,
+  profileStore: allStores.profileStore,
   api: allStores.api,
 }))
 @ContextMenuTarget
@@ -403,7 +404,7 @@ export default class TreeView extends React.Component {
           shouldFocus: true,
         },
       });
-      this.props.profiles.profiles.set(
+      this.props.profileStore.profiles.set(
         selectedProfile.id,
         this.props.store.profileList.selectedProfile,
       );

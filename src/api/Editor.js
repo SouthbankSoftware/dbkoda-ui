@@ -38,12 +38,12 @@ export default class EditorApi {
   store;
   api;
   config;
-  profiles;
-  constructor(store, api, config, profiles) {
+  profileStore;
+  constructor(store, api, config, profileStore) {
     this.store = store;
     this.api = api;
     this.config = config;
-    this.profiles = profiles;
+    this.profileStore = profileStore;
   }
   /**
    * Method for adding a new editor to an existing connection.
@@ -67,7 +67,7 @@ export default class EditorApi {
       if (!editorOptions.type) {
         editorOptions.type = EditorTypes.DEFAULT;
       }
-      if (!store.profiles.has(profileId)) {
+      if (!this.profileStore.profiles.has(profileId)) {
         if (this.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
             EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
@@ -217,7 +217,7 @@ export default class EditorApi {
         _.assign(
           {
             id: editorId,
-            alias: this.profiles.profiles.get(res.id).alias,
+            alias: this.profileStore.profiles.get(res.id).alias,
             profileId: res.id,
             shellId: res.shellId,
             currentProfile: res.id,
@@ -362,7 +362,7 @@ SHOW TABLES`;
         _.assign(
           {
             id: editorId,
-            alias: this.profiles.profiles.get(profile.id).alias,
+            alias: this.profileStore.profiles.get(profile.id).alias,
             profileId: profile.id,
             shellId: options.shellId,
             currentProfile: profile.id,

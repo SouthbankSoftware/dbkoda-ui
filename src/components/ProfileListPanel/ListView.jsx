@@ -59,7 +59,7 @@ const React = require('react');
   store: allStores.store,
   api: allStores.api,
   config: allStores.config,
-  profiles: allStores.profiles,
+  profileStore: allStores.profileStore,
 }))
 @observer
 export default class ListView extends React.Component {
@@ -91,7 +91,7 @@ export default class ListView extends React.Component {
           this.props.store.editorPanel.activeDropdownId &&
           this.props.store.editorPanel.activeDropdownId != 'Default'
         ) {
-          const editorProfile = this.props.profiles.profiles.get(
+          const editorProfile = this.props.profileStore.profiles.get(
             this.props.store.editorPanel.activeDropdownId,
           );
           this.props.store.profileList.selectedProfile = editorProfile;
@@ -113,7 +113,7 @@ export default class ListView extends React.Component {
     if (region.length == 0) {
       return;
     }
-    const profiles = this.props.profiles.profiles.entries();
+    const profiles = this.props.profileStore.profiles.entries();
     const profile = profiles[region[0].rows[0]][1];
     this.props.store.profileList.selectedProfile = profile;
     this.setState({ lastSelectRegion: region });
@@ -240,9 +240,14 @@ export default class ListView extends React.Component {
       if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
         profile.bRemotePass = true;
       }
-      this.props.profiles.profiles.set(res.id, profile);
-      this.props.store.profileList.selectedProfile = this.props.profiles.profiles.get(res.id);
-      Broker.emit(EventType.RECONNECT_PROFILE_CREATED, this.props.profiles.profiles.get(res.id));
+      this.props.profileStore.profiles.set(res.id, profile);
+      this.props.store.profileList.selectedProfile = this.props.profileStore.profiles.get(
+        res.id,
+      );
+      Broker.emit(
+        EventType.RECONNECT_PROFILE_CREATED,
+        this.props.profileStore.profiles.get(res.id),
+      );
       this.props.store.editors.forEach((value, _) => {
         if (value.shellId == res.shellId) {
           // the default shell is using the same shell id as the profile
@@ -280,7 +285,7 @@ export default class ListView extends React.Component {
   @action
   closeProfile() {
     const selectedProfile = this.state.targetProfile;
-    const profiles = this.props.profiles.profiles;
+    const profiles = this.props.profileStore.profiles;
     if (selectedProfile) {
       this.setState({ closingProfile: true });
       this.props.store.layout.alertIsLoading = true;
@@ -395,10 +400,10 @@ export default class ListView extends React.Component {
   @action
   deleteProfile() {
     const { id: profileId } = this.state.targetProfile;
-    const { profiles, api } = this.props;
+    const { profileStore, api } = this.props;
 
-    profiles.profiles.delete(profileId);
-    profiles.save();
+    profileStore.profiles.delete(profileId);
+    profileStore.save();
     api.removeAllTerminalsForProfile(profileId);
 
     if (this.props.config.settings.telemetryEnabled) {
@@ -484,7 +489,7 @@ export default class ListView extends React.Component {
 
   @action
   renderBodyContextMenu(context) {
-    const profiles = this.props.profiles.profiles.entries();
+    const profiles = this.props.profileStore.profiles.entries();
     const profile = profiles[context.regions[0].rows[0]][1];
     this.state.targetProfile = profile;
     if (this.props.config.settings.telemetryEnabled) {
@@ -616,7 +621,7 @@ export default class ListView extends React.Component {
   }
 
   render() {
-    const profiles = this.props.profiles.profiles.entries();
+    const profiles = this.props.profileStore.profiles.entries();
     const renderCell = (rowIndex: number) => {
       const className =
         this.props.store.profileList &&
@@ -643,7 +648,7 @@ export default class ListView extends React.Component {
       <div className="profileList">
         <Table
           allowMultipleSelection={false}
-          numRows={this.props.profiles.profiles.size}
+          numRows={this.props.profileStore.profiles.size}
           isRowHeaderShown={false}
           isColumnHeaderShown={false}
           selectionModes={SelectionModes.ROWS_AND_CELLS}

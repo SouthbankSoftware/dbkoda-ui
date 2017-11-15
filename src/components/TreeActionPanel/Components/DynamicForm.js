@@ -37,51 +37,59 @@ export class DynamicForm extends MobxReactForm {
     this.sendFormValues = options.updates;
     this.validateFormValues = options.validate;
   }
-  onSuccess(form) {
-    // get field values
-    const formValues = form.values();
-    if (this.validateFormValues) {
-      try {
-        const valid = this.validateFormValues(formValues);
-        if (valid && this.sendFormValues) {
-          this.sendFormValues(formValues);
+  hooks() {
+    return {
+      onSuccess(form) {
+        // get field values
+        const formValues = form.values();
+        if (this.validateFormValues) {
+          try {
+            const valid = this.validateFormValues(formValues);
+            if (valid && this.sendFormValues) {
+              this.sendFormValues(formValues);
+            }
+          } catch (e) {
+            form.invalidate(e.message);
+          }
         }
-      } catch (e) {
-        form.invalidate(e.message);
-      }
-    }
-  }
-  onError(form) {
-    // get all form errors
-    console.error('All form errors', form.errors());
-    // invalidate the form with a custom error message
-    form.invalidate(globalString('tree/genericValidateError'));
+      },
+      onError(form) {
+        // get all form errors
+        console.error('All form errors', form.errors());
+        // invalidate the form with a custom error message
+        form.invalidate(globalString('tree/genericValidateError'));
+      },
+    };
   }
   onValueChange(form) {
     if (form.isValid) {
       form.submit();
     }
   }
-  onFieldChange = field => (e) => {
-    e.preventDefault();
-    field.onChange(e);
-    field.state.form.submit();
-  };
-  onFieldClick = field => () => {
-    field.state.form.submit();
-  };
+  onFieldChange = field =>
+    (e) => {
+      e.preventDefault();
+      field.onChange(e);
+      field.state.form.submit();
+    };
+  onFieldClick = field =>
+    () => {
+      field.state.form.submit();
+    };
   onFieldValueChange = (value, field) => {
     field.value = value;
     field.state.form.submit();
   };
-  onNumericValueChange = field => (value) => {
-    field.value = value;
-    field.state.form.submit();
-  };
-  onComboValueChange = field => (event, { newValue }) => {
-    field.value = newValue;
-    field.state.form.submit();
-  };
+  onNumericValueChange = field =>
+    (value) => {
+      field.value = value;
+      field.state.form.submit();
+    };
+  onComboValueChange = field =>
+    (event, { newValue }) => {
+      field.value = newValue;
+      field.state.form.submit();
+    };
   bindings() {
     return {
       TextField: ({ $try, field, props }) => ({

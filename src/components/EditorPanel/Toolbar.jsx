@@ -62,7 +62,7 @@ const FILE_FILTERS = [
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  profiles: allStores.profiles,
+  profileStore: allStores.profileStore,
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -419,7 +419,7 @@ export default class Toolbar extends React.Component {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
-    const profile = this.props.profiles.profiles.get(
+    const profile = this.props.profileStore.profiles.get(
       this.props.store.editorToolbar.currentProfile,
     );
     if (profile) {
@@ -531,7 +531,7 @@ export default class Toolbar extends React.Component {
    * Render function for this component.
    */
   render() {
-    const profiles = this.props.profiles.profiles.entries();
+    const profiles = this.props.profileStore.profiles.entries();
     return (
       <nav className="pt-navbar editorToolbar">
         <div className="pt-navbar-group pt-align-left leftEditorToolbar">
