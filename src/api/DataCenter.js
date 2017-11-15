@@ -22,10 +22,12 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-13T16:54:05+11:00
+ * @Last modified time: 2017-11-14T15:53:26+11:00
  */
 
+import _ from 'lodash';
 import OutputApi from './Output';
+import TerminalApi from './Terminal';
 import EditorApi from './Editor';
 import ProfileApi from './Profile';
 import TreeApi from './Tree';
@@ -42,12 +44,15 @@ export default class DataCenter {
     this.config = config;
     this.profiles = profiles;
     this.outputApi = new OutputApi(store, this, profiles);
+    this.terminalApi = new TerminalApi(store, this);
     this.editorApi = new EditorApi(store, this, config, profiles);
     this.profileApi = new ProfileApi(store, this, profiles);
     this.treeApi = new TreeApi(store, this);
     this.drillApi = new DrillApi(store, this);
 
     this.init = this.init.bind(this);
+
+    // TODO this is basically a mixin pattern, use a mixin lib instead of typing heedlessly here? :D
 
     // Output API public functions
     this.addOutput = this.outputApi.addOutput.bind(this);
@@ -56,17 +61,28 @@ export default class DataCenter {
     this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(this);
     this.addDrillOutput = this.outputApi.addDrillOutput.bind(this);
     this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
-    this.getSshShellTabId = this.outputApi.getSshShellTabId.bind(this);
-    this.addSshShell = this.outputApi.addSshShell.bind(this);
-    this.removeSshShell = this.outputApi.removeSshShell.bind(this);
-    this.clearSshShellsForProfile = this.outputApi.clearSshShellsForProfile.bind(this);
+
+    // Terminal public APIs
+    _.assign(
+      this,
+      _.pick(this.terminalApi, [
+        'getTerminalTabId',
+        'addTerminal',
+        'removeTerminal',
+        'removeAllTerminalsForProfile',
+      ]),
+    );
 
     // Editor API public functions
     this.addEditor = this.editorApi.addEditor.bind(this);
     this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);
     this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
-    this.getUnsavedEditorInternalFileName = this.editorApi.getUnsavedEditorInternalFileName.bind(this);
-    this.getUnsavedEditorSuggestedFileName = this.editorApi.getUnsavedEditorSuggestedFileName.bind(this);
+    this.getUnsavedEditorInternalFileName = this.editorApi.getUnsavedEditorInternalFileName.bind(
+      this,
+    );
+    this.getUnsavedEditorSuggestedFileName = this.editorApi.getUnsavedEditorSuggestedFileName.bind(
+      this,
+    );
     this.getEditorDisplayName = this.editorApi.getEditorDisplayName.bind(this);
     this.removeEditor = this.editorApi.removeEditor.bind(this);
     this.addDrillEditor = this.editorApi.addDrillEditor.bind(this);

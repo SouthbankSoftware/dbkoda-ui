@@ -3,7 +3,7 @@
  * @Date:   2017-11-08T15:20:34+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-13T17:59:52+11:00
+ * @Last modified time: 2017-11-14T14:08:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,7 +30,7 @@ declare module 'xterm/build/xterm' {
   }
 
   declare class Xterm {
-    constructor(): Xterm;
+    constructor(options: {}): Xterm;
 
     cols: number;
     rows: number;
@@ -40,6 +40,7 @@ declare module 'xterm/build/xterm' {
     winptyCompatInit(): void;
     on(eventName: string, cb: (param: any) => void): void;
     attach(socket: *): void;
+    detach(socket: *): void;
     destroy(): void;
     getSelection(): string;
     findNext(token: string): void;

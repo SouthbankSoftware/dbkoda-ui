@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-13T18:00:13+11:00
+ * @Last modified time: 2017-11-15T10:58:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,14 +33,12 @@ import { type ObservableMap, reaction } from 'mobx';
 import { inject } from 'mobx-react';
 import _ from 'lodash';
 import Xterm from 'xterm/build/xterm';
-import attachAddon from 'xterm/lib/addons/attach/attach';
 import fitAddon from 'xterm/lib/addons/fit/fit';
 import searchAddon from 'xterm/lib/addons/search/search';
 import winptyCompatAddon from 'xterm/lib/addons/winptyCompat/winptyCompat';
 import 'xterm/build/xterm.css';
-import './Panel.scss';
+import styles from './Terminal.scss';
 
-attachAddon(Xterm);
 fitAddon(Xterm);
 searchAddon(Xterm);
 winptyCompatAddon(Xterm);
@@ -55,12 +53,12 @@ type Store = {
 
 type Props = {
   store: Store,
-  data: {
-    tabId: string,
-  },
+  tabId: string,
+  attach: (xterm: Xterm) => void,
+  detach: (xterm: Xterm) => void,
+  send: (code: string) => void,
+  onResize: (xterm: Xterm, size: number) => void,
 };
-
-type State = {};
 
 // $FlowIssue
 @inject(({ store }) => {
@@ -74,19 +72,17 @@ type State = {};
     },
   };
 })
-export default class Terminal extends React.PureComponent<Props, State> {
+export default class Terminal extends React.PureComponent<Props> {
   reactions = [];
   resizeDetector: React.ElementRef<*>;
   container: React.ElementRef<*>;
   xterm: Xterm;
-  socket: *;
-  pid: *;
 
   componentDidMount() {
     this.reactions.push(
       reaction(
         () => {
-          const { store: { outputPanel: { currentTab } }, data: { tabId } } = this.props;
+          const { store: { outputPanel: { currentTab } }, tabId } = this.props;
 
           return currentTab === tabId;
         },
@@ -102,46 +98,38 @@ export default class Terminal extends React.PureComponent<Props, State> {
       ),
     );
 
-    this.xterm = new Xterm();
+    this.xterm = new Xterm({
+      enableBold: false,
+      theme: {
+        foreground: styles.terminalForeground,
+        background: styles.terminalBackground,
+      },
+    });
     this.xterm.open(this.container);
     this.xterm.winptyCompatInit();
     setTimeout(() => {
       this.xterm.focus();
     }, 100);
 
-    this.xterm.on('resize', (size) => {
-      if (!this.pid) {
-        return;
-      }
+    const { attach, onResize } = this.props;
 
-      fetch(
-        `http://localhost:3001/terminals/${this.pid}/size?cols=${size.cols}&rows=${size.rows}`,
-        {
-          method: 'POST',
-        },
-      );
-    });
+    this.xterm.on('resize', size => onResize(this.xterm, size));
 
-    fetch('http://localhost:3001/terminals?cols=' + this.xterm.cols + '&rows=' + this.xterm.rows, {
-      method: 'POST',
-    }).then((res) => {
-      res.text().then((pid) => {
-        this.pid = pid;
-        this.socket = new WebSocket(`ws://localhost:3001/terminals/${pid}`);
-        this.socket.onopen = () => {
-          this.xterm.attach(this.socket);
-        };
-      });
-    });
+    attach(this.xterm);
   }
 
   componentWillUnmount() {
     _.forEach(this.reactions, r => r());
+
+    const { detach } = this.props;
+
+    detach(this.xterm);
+
     this.xterm.destroy();
   }
 
   _onExecuteCurrentEditorCodeHere = () => {
-    const { editorPanel, editors } = this.props.store;
+    const { store: { editorPanel, editors }, send } = this.props;
     const currEditor = editors.get(editorPanel.activeEditorId);
 
     if (!currEditor) return;
@@ -150,7 +138,7 @@ export default class Terminal extends React.PureComponent<Props, State> {
     code = code.replace(/\n/g, '\r');
     code += '\r';
 
-    this.socket.send(code);
+    send(code);
   };
 
   _onContextMenu = (e: SyntheticMouseEvent<*>) => {
@@ -158,7 +146,7 @@ export default class Terminal extends React.PureComponent<Props, State> {
       <Menu>
         <MenuItem
           onClick={this._onExecuteCurrentEditorCodeHere}
-          text="Execute Current Editor Code Here"
+          text="Execute Current Editor Code"
         />
         <MenuItem
           onClick={() => {

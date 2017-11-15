@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-13T16:54:57+11:00
+ * @Last modified time: 2017-11-14T10:37:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -474,61 +474,5 @@ export default class OutputApi {
     }
 
     outputPanel.currentTab = `Chart-${editorId}`;
-  }
-
-  _generateSshShellId(sshShellsForProfileId: ObservableMap): number {
-    let largestId = -1;
-
-    for (const sshShell of sshShellsForProfileId.values()) {
-      const id = Number(sshShell.id);
-      if (id > largestId) {
-        largestId = id;
-      }
-    }
-
-    largestId += 1;
-    return largestId;
-  }
-
-  getSshShellTabId(id: string, profileId: string) {
-    return `SSH-${profileId}-${id}`;
-  }
-
-  @action.bound
-  addSshShell(profileId: string) {
-    const { sshShells, outputPanel } = this.store;
-    let sshShellsForProfileId = sshShells.get(profileId);
-
-    if (!sshShellsForProfileId) {
-      sshShellsForProfileId = observable.shallowMap();
-      sshShells.set(profileId, sshShellsForProfileId);
-    }
-
-    const newSshShellId = String(this._generateSshShellId(sshShellsForProfileId));
-    const tabId = this.getSshShellTabId(newSshShellId, profileId);
-
-    sshShellsForProfileId.set(newSshShellId, {
-      id: newSshShellId,
-      tabId,
-    });
-
-    outputPanel.currentTab = tabId;
-  }
-
-  @action.bound
-  removeSshShell(profileId: string, sshShellId: string) {
-    const { sshShells } = this.store;
-    const sshShellsForId = sshShells.get(profileId);
-
-    if (!sshShellsForId) return;
-
-    sshShellsForId.delete(sshShellId);
-  }
-
-  @action.bound
-  clearSshShellsForProfile(profileId: string) {
-    const { sshShells } = this.store;
-
-    sshShells.delete(profileId);
   }
 }

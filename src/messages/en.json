@@ -268,7 +268,8 @@
         "editProfile": "Edit Profile",
         "editors": "Editors:",
         "newWindow": "New Editor",
-        "newSshShell": "New SSH Shell",
+        "newSshTerminal": "New SSH Terminal",
+        "newLocalTerminal": "New Local Terminal",
         "deleteProfile": "Delete Profile"
       },
       "closeAlert": {
