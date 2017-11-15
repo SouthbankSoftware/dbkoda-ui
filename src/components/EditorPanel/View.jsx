@@ -114,6 +114,7 @@ function collect(connect, monitor) {
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
+  profiles: allStores.profileStore.profiles
 }))
 @ContextMenuTarget
 class View extends React.Component {
@@ -197,6 +198,7 @@ class View extends React.Component {
               service
                 .update(shell, {
                   queries,
+                  db: editor.db,
                 })
                 .then((res) => {
                   const output = {};
@@ -236,14 +238,18 @@ class View extends React.Component {
                 .catch((err) => {
                   console.error('execute error:', err);
                   runInAction(() => {
-                    this.finishedExecution({
-                      id: this.props.store.editorPanel.activeDropdownId,
-                      shellId: shell,
-                    });
+                    this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editorToolbar.isActiveExecuting = false;
+                    let message = globalString(
+                      'drill/execution_failed',
+                    );
+                    if (err && err.statusCode === 602) {
+                      message = err.error;
+                    } else if (err && err.statusCode === 600) {
+                      message = globalString('drill/connection_not_exist');
+                    }
                     NewToaster.show({
-                      message: globalString(
-                        'editor/toolbar/executionScriptFailed',
-                      ),
+                      message,
                       className: 'danger',
                       iconName: 'pt-icon-thumbs-down',
                     });
@@ -274,7 +280,6 @@ class View extends React.Component {
             );
             const shell = editor.shellId;
             const profileId = editor.profileId;
-
             const cm = this.editor.getCodeMirror(); // eslint-disable-line
             let content = cm.getSelection();
             if (cm.getSelection().length > 0) {
@@ -293,6 +298,7 @@ class View extends React.Component {
               service
                 .update(shell, {
                   queries: content.replace(/\t/g, '  ').split('\n'),
+                  schema: editor.db
                 })
                 .then((res) => {
                   const output = {};
@@ -348,25 +354,6 @@ class View extends React.Component {
                     iconName: 'pEmilt-icon-thumbs-down',
                   });
                 }
-                // if (
-                //   !content.match(/^ *db./g) &&
-                //   !content.match(/^ *sh./g) &&
-                //   !content.match(/^ *rs./g) &&
-                //   !content.match(/^ *db *$/g) &&
-                //   !content.match(/^ *use /g) &&
-                //   !content.match(/^ *show /g) &&
-                //   !content.match(/^ *it */g) &&
-                // ) {
-                //   // parse scripts
-                //
-                //   NewToaster.show({
-                //     message: globalString(
-                //       'editor/toolbar/possibleMultiLineCommand',
-                //     ),
-                //     className: 'warning',
-                //     iconName: 'pEmilt-icon-thumbs-down',
-                //   });
-                // }
               }
               // Send request to feathers client
             const service = type && type === 'os'

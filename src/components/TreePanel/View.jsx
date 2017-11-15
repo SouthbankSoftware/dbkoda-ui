@@ -434,17 +434,21 @@ export default class TreeView extends React.Component {
       this.props.api.openEditorWithDrillProfileId(drillProfileId);
     }
   };
-  onDrillEditorAdded = (response) => {
+  onDrillEditorAdded = (response, errorCode) => {
     this.setState({ isLoadingDialogVisible: false });
     if (response === 'error') {
+      let message = globalString('drill/open_drill_editor_failed');
+      if (errorCode === 'DRILL_BINARY_UNDETECTED') {
+        message = globalString('drill/drill_binary_not_defined');
+      }
       NewToaster.show({
-        message: 'Unable to add drill editor',
+        message,
         className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     } else {
       NewToaster.show({
-        message: 'Drill Editor added successfully !',
+        message: globalString('drill/drill_editor_open_success'),
         className: 'success',
         iconName: 'pt-icon-thumbs-up',
       });

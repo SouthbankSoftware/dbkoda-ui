@@ -66,7 +66,7 @@ export default class DrillApi {
       })
       .catch((err) => {
         console.error(err);
-        this.onFailCreate(options);
+        this.onFailCreate(options, err.code);
       });
   };
 
@@ -77,6 +77,7 @@ export default class DrillApi {
       id: res.id,
       output: res.output,
       profile,
+      db: query.db,
     };
     this.openEditorWithDrillProfileId(
       this.profileDBHash[query.alias][query.db],
@@ -86,10 +87,10 @@ export default class DrillApi {
     }
   }
 
-  onFailCreate(options) {
+  onFailCreate(options, code) {
     console.log('failed to launch or connect to drill');
     if (options.cbFunc) {
-      options.cbFunc('error');
+      options.cbFunc('error', code);
     }
   }
 
@@ -100,6 +101,7 @@ export default class DrillApi {
       shellId: drillJdbcConnection.id,
       type: EditorTypes.DRILL,
       output: drillJdbcConnection.output,
+      db: drillJdbcConnection.db,
     });
   };
 

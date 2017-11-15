@@ -587,7 +587,10 @@
     "drill": {
       "connection_failed": "Create Drill Connection Failed",
       "execution_failed": "Execute SQL Statement Failed",
-      "connection_not_exist": "Cant find connection"
+      "connection_not_exist": "Cant find connection",
+      "drill_binary_not_defined": "Drill Binary not found, Please configure it on user setting panel",
+      "open_drill_editor_failed": "Open Drill Editor Failed",
+      "drill_editor_open_success": "Drill Editor added successfully !"
     }
   }
 }

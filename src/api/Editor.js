@@ -375,6 +375,7 @@ SHOW TABLES`;
             status: ProfileStatus.OPEN,
             path: null,
             type: options.type,
+            db: options.db,
           },
           options,
         ),
