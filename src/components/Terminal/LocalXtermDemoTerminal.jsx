@@ -3,7 +3,7 @@
  * @Date:   2017-11-15T10:29:13+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T11:31:17+11:00
+ * @Last modified time: 2017-11-15T14:38:29+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,7 @@
 import * as React from 'react';
 import Xterm from 'xterm/build/xterm';
 import attachAddon from 'xterm/lib/addons/attach/attach';
+import chalk from '~/helpers/chalk';
 import Terminal from './Terminal';
 
 attachAddon(Xterm);
@@ -42,20 +43,32 @@ export default class LocalXtermDemoTerminal extends React.PureComponent<Props> {
   _attach = (xterm: Xterm) => {
     fetch('http://localhost:3001/terminals?cols=' + xterm.cols + '&rows=' + xterm.rows, {
       method: 'POST',
-    }).then((res) => {
-      res.text().then((pid) => {
-        this.pid = pid;
-        this.socket = new WebSocket(`ws://localhost:3001/terminals/${pid}`);
-        this.socket.onopen = () => {
-          xterm.attach(this.socket);
-        };
+    })
+      .then((res) => {
+        res.text().then((pid) => {
+          this.pid = pid;
+          this.socket = new WebSocket(`ws://localhost:3001/terminals/${pid}`);
+          this.socket.onopen = () => {
+            xterm.attach(this.socket);
+          };
+        });
+      })
+      .catch((_err) => {
+        xterm.write(
+          `${chalk.bold.red(
+            'Failed to connect to Xterm Demo backend.',
+          )} Please run it first using:\r\n\r\n${chalk.hex('#ffffff')(
+            '\tyarn dev:xterm',
+          )}\r\n\r\nThen restart this terminal`,
+        );
       });
-    });
   };
 
   _detach = (xterm: Xterm) => {
-    this.socket.close();
-    xterm.detach(this.socket);
+    if (this.socket) {
+      this.socket.close();
+      xterm.detach(this.socket);
+    }
   };
 
   _onResize = (xterm: Xterm, size: number) => {
@@ -69,7 +82,9 @@ export default class LocalXtermDemoTerminal extends React.PureComponent<Props> {
   };
 
   _send = (code: string) => {
-    this.socket.send(code);
+    if (this.socket) {
+      this.socket.send(code);
+    }
   };
 
   render() {
