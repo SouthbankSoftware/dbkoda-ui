@@ -3,7 +3,7 @@
  * @Date:   2017-11-08T15:07:55+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T10:59:29+11:00
+ * @Last modified time: 2017-11-15T11:39:44+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,4 +25,5 @@
  */
 
 export LocalTerminal from './LocalTerminal';
+export LocalXtermDemoTerminal from './LocalXtermDemoTerminal';
 export SshTerminal from './SshTerminal';

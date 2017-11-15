@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-14T23:26:13+11:00
+ * @Last modified time: 2017-11-15T11:30:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -241,9 +241,7 @@ export default class ListView extends React.Component {
         profile.bRemotePass = true;
       }
       this.props.profileStore.profiles.set(res.id, profile);
-      this.props.store.profileList.selectedProfile = this.props.profileStore.profiles.get(
-        res.id,
-      );
+      this.props.store.profileList.selectedProfile = this.props.profileStore.profiles.get(res.id);
       Broker.emit(
         EventType.RECONNECT_PROFILE_CREATED,
         this.props.profileStore.profiles.get(res.id),
@@ -599,6 +597,24 @@ export default class ListView extends React.Component {
         />
       </div>,
     );
+
+    if (process.env.NODE_ENV === 'development') {
+      terminalOperations.push(
+        <div key={terminalOperations.length} className="menuItemWrapper">
+          <MenuItem
+            className="profileListContextMenu newLocalXtermDemoTerminal"
+            onClick={() => {
+              const { addTerminal } = this.props.api;
+
+              addTerminal(terminalTypes.localXtermDemo);
+            }}
+            text={globalString('profile/menu/newLocalXtermDemoTerminal')}
+            intent={Intent.NONE}
+            iconName="pt-icon-new-text-box"
+          />
+        </div>,
+      );
+    }
 
     return (
       <Menu className="profileListContextMenu">

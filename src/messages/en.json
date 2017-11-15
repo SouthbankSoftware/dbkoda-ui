@@ -270,6 +270,7 @@
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
+        "newLocalXtermDemoTerminal": "New Local Xterm Demo Terminal",
         "deleteProfile": "Delete Profile"
       },
       "closeAlert": {

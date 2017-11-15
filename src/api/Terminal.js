@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T11:02:48+11:00
+ * @Last modified time: 2017-11-15T11:26:05+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,6 +32,7 @@ import autobind from 'autobind-decorator';
 
 export const terminalTypes = {
   local: 'local',
+  localXtermDemo: 'localXtermDemo',
   ssh: 'ssh',
 };
 
@@ -79,7 +80,7 @@ export default class TerminalApi {
   // $FlowIssue
   @action.bound
   addSshTerminal() {
-    
+
   }
 
   // $FlowIssue
