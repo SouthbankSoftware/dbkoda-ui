@@ -3,7 +3,7 @@
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T11:05:30+11:00
+ * @Last modified time: 2017-11-15T11:45:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,16 +36,16 @@ export default class SshTerminal extends React.PureComponent<Props> {
   socket: *;
   pid: *;
 
-  _attach = (xterm: Xterm) => {
+  _attach = (_xterm: Xterm) => {
   };
 
-  _detach = (xterm: Xterm) => {
+  _detach = (_xterm: Xterm) => {
   };
 
-  _onResize = (xterm: Xterm, size: number) => {
+  _onResize = (_xterm: Xterm, _size: number) => {
   };
 
-  _send = (code: string) => {
+  _send = (_code: string) => {
   };
 
   render() {
