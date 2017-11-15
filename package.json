@@ -28,6 +28,7 @@
     "dev:prod": "yarn run postinstall && yarn start --",
     "dev:analyser": "yarn run dev:analyzer",
     "dev:analyzer": "yarn run clean && webpack --config webpack/analyzer.js",
+    "dev:xterm": "cd node_modules/xterm; PORT=3001 yarn start",
     "start": "http-server ./dist -p 3000 -c-1",
     "clean": "rimraf ./dist rmdir",
     "cbuild": "yarn run clean && yarn run build",
@@ -79,6 +80,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^3.5.0",
     "chai-enzyme": "^0.6.1",
+    "chalk": "^2.3.0",
     "classnames": "^2.2.5",
     "cldr-data": "^31.0.2",
     "codemirror": "^5.27.2",
@@ -180,9 +182,5 @@
     "worker-loader": "^0.8.1",
     "xml2js": "^0.4.17",
     "xterm": "https://github.com/guiguan/xterm.js.git"
-  },
-  "dependencies": {
-    "escodegen": "^1.9.0",
-    "esprima": "^4.0.0"
   }
 }
