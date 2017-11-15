@@ -3,7 +3,7 @@
  * @Date:   2017-11-15T10:29:13+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T10:58:42+11:00
+ * @Last modified time: 2017-11-15T11:20:47+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -54,6 +54,7 @@ export default class LocalTerminal extends React.PureComponent<Props> {
   };
 
   _detach = (xterm: Xterm) => {
+    this.socket.close();
     xterm.detach(this.socket);
   };
 
