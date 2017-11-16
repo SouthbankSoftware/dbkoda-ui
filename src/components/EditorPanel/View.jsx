@@ -198,7 +198,7 @@ class View extends React.Component {
               service
                 .update(shell, {
                   queries,
-                  db: editor.db,
+                  schema: editor.db,
                 })
                 .then((res) => {
                   const output = {};
