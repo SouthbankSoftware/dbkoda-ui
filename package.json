@@ -3,14 +3,21 @@
   "gitName": "dbkoda-ui",
   "fullName": "dbKoda UI",
   "description": "dbKoda UI built with state of the art React stack",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "author": {
     "name": "Southbank Software",
     "email": "developer@southbanksoftware.com",
     "url": "http://southbanksoftware.com"
   },
   "main": "dist/index.html",
-  "keywords": ["React", "React-Router", "MobX", "Webpack", "ES6", "ES7"],
+  "keywords": [
+    "React",
+    "React-Router",
+    "MobX",
+    "Webpack",
+    "ES6",
+    "ES7"
+  ],
   "engines": {
     "node": ">= 7.2.1"
   },
@@ -24,8 +31,7 @@
     "clean": "rimraf ./dist rmdir",
     "cbuild": "yarn run clean && yarn run build",
     "build": "webpack --config webpack/prod.js --optimize-minimize",
-    "test":
-      "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
+    "test": "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
     "test:dev": "yarn flow && yarn run eslint && yarn run jest",
     "mlaunch:init": "mlaunch init --single",
     "mlaunch:clean": "mlaunch kill; rimraf data tmpd*",
@@ -92,7 +98,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
-    "eventemitter2": "^4.0.0",
+    "eventemitter2": "^4.1.2",
     "extract-text-webpack-plugin": "^2.1.0",
     "feathers-client": "^2.4.0",
     "feathers-primus": "^2.2.0",

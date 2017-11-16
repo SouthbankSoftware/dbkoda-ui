@@ -35,7 +35,7 @@ export default {
   /**
    * event type for shell output message
    */
-  SHELL_OUTPUT_AVAILABLE: 'controller::shell::output::available',
+  SHELL_OUTPUT_AVAILABLE: 'output-panel-control',
   createShellOutputEvent: (id, shellId) => {
     return 'controller::shell::output::' + id + '::' + shellId;
   },
