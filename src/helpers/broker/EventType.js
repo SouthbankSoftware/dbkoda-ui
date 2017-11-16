@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-02T15:51:14+11:00
+ * @Last modified time: 2017-11-16T17:59:54+11:00
  */
 
 export default {
@@ -64,8 +64,7 @@ export default {
   createFileChangedEvent(id) {
     return `fileChanged::${id}`;
   },
-  createAggregatorResultReceived: editorId =>
-    `aggregator::result-received::${editorId}`,
+  createAggregatorResultReceived: editorId => `aggregator::result-received::${editorId}`,
   SHELL_RECONNECT: 'controller::shell::reconnect',
   createShellReconnectEvent: (id, shellId) => {
     return 'controller::shell::reconnect::' + id + '::' + shellId;
@@ -78,4 +77,5 @@ export default {
   FEATURE_USE: 'feature::use',
   CONTROLLER_ACTIVITY: 'controller::activity',
   TABLE_VIEW_RESULT: editorId => `table-view::result-recieved::${editorId}`,
+  TERMINAL_DATA: id => `terminal::data::${id}`,
 };

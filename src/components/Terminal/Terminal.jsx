@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T10:58:35+11:00
+ * @Last modified time: 2017-11-15T16:01:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -57,7 +57,7 @@ type Props = {
   attach: (xterm: Xterm) => void,
   detach: (xterm: Xterm) => void,
   send: (code: string) => void,
-  onResize: (xterm: Xterm, size: number) => void,
+  onResize: (xterm: Xterm, size: { cols: number, rows: number }) => void,
 };
 
 // $FlowIssue

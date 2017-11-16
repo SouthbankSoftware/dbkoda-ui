@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T11:34:02+11:00
+ * @Last modified time: 2017-11-15T15:24:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -555,7 +555,7 @@ export default class Panel extends React.Component {
               key={tabId}
               id={tabId}
               title={`SSH - ${name}`}
-              panel={<SshTerminal tabId={tabId} />}
+              panel={<SshTerminal id={id} tabId={tabId} />}
             >
               <Button
                 className="pt-minimal"

@@ -3,7 +3,7 @@
  * @Date:   2017-11-15T10:29:13+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T14:38:29+11:00
+ * @Last modified time: 2017-11-15T16:02:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -71,7 +71,7 @@ export default class LocalXtermDemoTerminal extends React.PureComponent<Props> {
     }
   };
 
-  _onResize = (xterm: Xterm, size: number) => {
+  _onResize = (xterm: Xterm, size: { cols: number, rows: number }) => {
     if (!this.pid) {
       return;
     }

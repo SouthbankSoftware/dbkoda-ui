@@ -22,7 +22,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-14T15:53:26+11:00
+ * @Last modified time: 2017-11-15T15:36:49+11:00
  */
 
 import _ from 'lodash';
@@ -67,6 +67,7 @@ export default class DataCenter {
       this,
       _.pick(this.terminalApi, [
         'getTerminalTabId',
+        'addSshTerminal',
         'addTerminal',
         'removeTerminal',
         'removeAllTerminalsForProfile',

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T11:45:11+11:00
+ * @Last modified time: 2017-11-15T15:41:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -570,9 +570,9 @@ export default class ListView extends React.Component {
           <MenuItem
             className="profileListContextMenu newSshTerminal"
             onClick={() => {
-              const { addTerminal } = this.props.api;
+              const { addSshTerminal } = this.props.api;
 
-              addTerminal(terminalTypes.ssh, { profileId: profile.id });
+              addSshTerminal(profile.id);
             }}
             text={globalString('profile/menu/newSshTerminal')}
             intent={Intent.NONE}

@@ -3,7 +3,7 @@
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T11:45:39+11:00
+ * @Last modified time: 2017-11-16T18:05:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,26 +26,63 @@
 
 import * as React from 'react';
 import Xterm from 'xterm/build/xterm';
+import { featherClient } from '~/helpers/feathers';
+import { Broker, EventType } from '~/helpers/broker';
 import Terminal from './Terminal';
 
 type Props = {
+  id: UUID,
   tabId: string,
 };
 
 export default class SshTerminal extends React.PureComponent<Props> {
   socket: *;
   pid: *;
+  terminalService: *;
+  _receive: *;
 
-  _attach = (_xterm: Xterm) => {
+  constructor(props: Props) {
+    super(props);
+
+    this.terminalService = featherClient().terminalService;
+  }
+
+  _attach = (xterm: Xterm) => {
+    const { id } = this.props;
+
+    this._receive = (data) => {
+      console.log('Receiving: ', JSON.stringify(data));
+
+      xterm.write(data);
+    };
+
+    Broker.on(EventType.TERMINAL_DATA(id), this._receive);
+
+    xterm.on('data', this._send);
   };
 
-  _detach = (_xterm: Xterm) => {
+  _detach = (xterm: Xterm) => {
+    const { id } = this.props;
+
+    Broker.off(EventType.TERMINAL_DATA(id), this._receive);
+
+    xterm.off('data', this._send);
   };
 
-  _onResize = (_xterm: Xterm, _size: number) => {
+  _onResize = (_xterm: Xterm, size: { cols: number, rows: number }) => {
+    const { id } = this.props;
+
+    this.terminalService.patch(id, { size });
   };
 
-  _send = (_code: string) => {
+  _send = (code: string) => {
+    const { id } = this.props;
+
+    console.log('Sending: ', JSON.stringify(code));
+
+    this.terminalService.patch(id, {
+      cmd: code,
+    });
   };
 
   render() {

@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T11:26:05+11:00
+ * @Last modified time: 2017-11-17T09:41:32+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,8 @@
 import { action, observable } from 'mobx';
 import uuid from 'uuid/v1';
 import autobind from 'autobind-decorator';
+// $FlowFixMe
+import { featherClient } from '~/helpers/feathers';
 
 export const terminalTypes = {
   local: 'local',
@@ -79,16 +81,31 @@ export default class TerminalApi {
 
   // $FlowIssue
   @action.bound
-  addSshTerminal() {
+  addSshTerminal(profileId: string) {
+    const id = uuid();
+    const type = terminalTypes.ssh;
 
+    featherClient()
+      .terminalService.create({
+        _id: id,
+        type,
+        username: 'guiguan',
+        password: '',
+        host: 'localhost',
+        port: 22,
+      })
+      .then(() => {
+        this.addTerminal(type, { id, profileId });
+      })
+      .catch(console.error);
   }
 
   // $FlowIssue
   @action.bound
-  addTerminal(type: TerminalType, extraState: {}) {
+  addTerminal(type: TerminalType, extraState: { id?: string }) {
     const { terminals, outputPanel } = this.store;
 
-    const id = uuid();
+    const id = (extraState && extraState.id) || uuid();
     const name = this._findNextTerminalName(type);
 
     const terminal: TerminalState = {

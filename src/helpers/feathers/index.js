@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-25T14:46:32+11:00
+ * @Last modified time: 2017-11-16T18:01:20+11:00
  */
 
 import load from 'little-loader';
@@ -65,11 +65,18 @@ class FeatherClient {
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
       Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
     });
+
     this.service('files').on('changed', ({ _id }) => {
       Broker.emit(EventType.createFileChangedEvent(_id));
     });
+
     this.service('aggregators').on('result', ({ editorId, result }) => {
       Broker.emit(EventType.createAggregatorResultReceived(editorId), result);
+    });
+
+    this.terminalService = this.service('terminals');
+    this.terminalService.on('data', ({ _id, payload }) => {
+      Broker.emit(EventType.TERMINAL_DATA(_id), payload);
     });
   }
 
