@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T11:31:50+11:00
+ * @Last modified time: 2017-11-18T09:42:15+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -134,25 +134,30 @@ export default class Terminal extends React.PureComponent<Props> {
     this.xterm.destroy();
   }
 
-  _onExecuteCurrentEditorCodeHere = () => {
+  _onExecuteCommands = (all: boolean) => {
     const { store: { editorPanel, editors }, send } = this.props;
     const currEditor = editors.get(editorPanel.activeEditorId);
 
     if (!currEditor) return;
 
-    let code = currEditor.doc.getValue();
-    code = code.replace(/\n/g, '\r');
-    code += '\r';
+    const doc = currEditor.doc;
+    const code = all ? doc.getValue() : doc.getSelection();
 
-    send(code);
+    for (const line of code.split(doc.lineSeparator())) {
+      line && setTimeout(() => send(line + '\r'));
+    }
   };
 
   _onContextMenu = (e: SyntheticMouseEvent<*>) => {
     const menu = (
       <Menu>
         <MenuItem
-          onClick={this._onExecuteCurrentEditorCodeHere}
-          text="Execute Current Editor Code"
+          onClick={() => this._onExecuteCommands(false)}
+          text="Execute Selected Commands"
+        />
+        <MenuItem
+          onClick={() => this._onExecuteCommands(true)}
+          text="Execute All Commands"
         />
         <MenuItem
           onClick={() => {
