@@ -65,7 +65,8 @@ export default class WelcomeContent extends React.Component {
   }
 
   componentWillMount() {
-    fetch(FEED_URL)
+    const url = FEED_URL + '?rnd=' + (new Date()).getTime();
+    fetch(url)
       .then((res) => {
         return res.text();
       })
