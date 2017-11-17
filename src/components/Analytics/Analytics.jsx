@@ -57,10 +57,9 @@ export default class Analytics extends React.Component {
     }
     ReactGA.set({ page: siteUrl });
 
-    const appVersion = this.props.store.version;
-
     if (this.props.config.settings.telemetryEnabled) {
       // TODO Get App Version
+      const appVersion = this.props.store.version;
       this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', appVersion);
     }
 
@@ -77,6 +76,7 @@ export default class Analytics extends React.Component {
         } else {
           this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
         }
+        this.props.config.save();
       },
       { name: 'analyticsReactionToTelemetryChange' },
     );
@@ -107,7 +107,7 @@ export default class Analytics extends React.Component {
    *  @param {Object} profile - An object that represents the newly created profile
    */
   newProfileCreated(profile) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       console.log(profile);
       let mongoInfo =
         '{ dbVersion: ' +
@@ -132,13 +132,13 @@ export default class Analytics extends React.Component {
    * @param {String} service - The service type that has been called.
    */
   controllerActivity(service) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
     }
   }
 
   keyFeatureEvent(feature) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
     }
   }

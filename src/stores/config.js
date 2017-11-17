@@ -37,7 +37,7 @@ export default class Config {
   settings = {
     @observable mongoCmd: '',
     @observable drillCmd: '',
-    @observable telemetryEnabled: null,
+    @observable telemetryEnabled: true,
     @observable showWelcomePageAtStart: true,
   };
 

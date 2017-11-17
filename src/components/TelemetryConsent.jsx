@@ -35,6 +35,7 @@ const React = require('react');
  */
 @inject(allStores => ({
   store: allStores.store,
+  config: allStores.config,
   layout: allStores.store.layout,
 }))
 @observer
@@ -53,10 +54,10 @@ export default class TelemetryConsent extends React.Component {
   @action.bound
   handleSwitch(e) {
     console.log(e);
-    if (this.props.store.userPreferences.telemetryEnabled === false) {
-      this.props.store.userPreferences.telemetryEnabled = true;
+    if (this.props.config.settings.telemetryEnabled === false) {
+      this.props.config.settings.telemetryEnabled = true;
     } else {
-      this.props.store.userPreferences.telemetryEnabled = false;
+      this.props.config.settings.telemetryEnabled = false;
       if (IS_ELECTRON) {
         window.require('electron').shell.beep();
       }
@@ -88,7 +89,7 @@ export default class TelemetryConsent extends React.Component {
         </p>
         <div
           className={
-            'dialogButtons ' + this.props.store.userPreferences.telemetryEnabled
+            'dialogButtons ' + this.props.config.settings.telemetryEnabled
           }
         >
           <AnchorButton
@@ -99,7 +100,7 @@ export default class TelemetryConsent extends React.Component {
             text={globalString('telemetry_dialog/button_yes')}
           />
           <Switch
-            checked={this.props.store.userPreferences.telemetryEnabled}
+            checked={this.props.config.settings.telemetryEnabled}
             label="Enable Telemetry"
             onChange={this.handleSwitch}
           />
