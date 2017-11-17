@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T09:41:32+11:00
+ * @Last modified time: 2017-11-17T14:34:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,12 +26,14 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import _ from 'lodash';
 import { action, observable } from 'mobx';
 import uuid from 'uuid/v1';
 import autobind from 'autobind-decorator';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
+// $FlowFixMe
+import { Broker, EventType } from '~/helpers/broker';
+import type Xterm from 'xterm/build/xterm';
 
 export const terminalTypes = {
   local: 'local',
@@ -52,7 +54,7 @@ export type SshProfile = {
   host: string,
   password?: string,
   privateKey?: string,
-  passphrase?: string
+  passphrase?: string,
 };
 
 export default class TerminalApi {
@@ -94,21 +96,31 @@ export default class TerminalApi {
   addSshTerminal(profile: SshProfile) {
     const id = uuid();
     const type = terminalTypes.ssh;
-    const profileId = profile.profileId;
-    let query = _.omit(profile, ['profileId']);
+    const { profileId, username, password, host, privateKey, passphrase } = profile;
 
-    query = _.merge(query, {
-      _id: id,
-      type,
-      port: 22,
+    Broker.once(EventType.TERMINAL_ATTACHING(id), (xterm: Xterm) => {
+      featherClient()
+        .terminalService.create({
+          _id: id,
+          type,
+          username,
+          password,
+          host,
+          port: 22,
+          privateKey,
+          passphrase,
+          size: {
+            rows: xterm.rows,
+            cols: xterm.cols,
+          },
+        })
+        .then(() => {
+          console.log('Terminal created');
+        })
+        .catch(console.error);
     });
-    console.log('SSH query:', query);
-    featherClient()
-      .terminalService.create(query)
-      .then(() => {
-        this.addTerminal(type, { id, profileId });
-      })
-      .catch(console.error);
+
+    this.addTerminal(type, { id, profileId });
   }
 
   // $FlowIssue

@@ -3,7 +3,7 @@
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-16T18:05:20+11:00
+ * @Last modified time: 2017-11-17T15:45:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -50,6 +50,22 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _attach = (xterm: Xterm) => {
     const { id } = this.props;
 
+    console.log('Attaching...');
+
+    this.terminalService
+      .get(id)
+      .then(() => {
+        console.log('Terminal already exists');
+        this._send('\r');
+      })
+      .catch((err) => {
+        if (err.code === 404) {
+          Broker.emit(EventType.TERMINAL_ATTACHING(id), xterm);
+        } else {
+          console.error(err);
+        }
+      });
+
     this._receive = (data) => {
       console.log('Receiving: ', JSON.stringify(data));
 
@@ -64,9 +80,11 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _detach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    Broker.off(EventType.TERMINAL_DATA(id), this._receive);
+    console.log('Detaching...');
 
-    xterm.off('data', this._send);
+    this._receive && Broker.off(EventType.TERMINAL_DATA(id), this._receive);
+
+    this._send && xterm.off('data', this._send);
   };
 
   _onResize = (_xterm: Xterm, size: { cols: number, rows: number }) => {

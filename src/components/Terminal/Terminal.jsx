@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T16:01:45+11:00
+ * @Last modified time: 2017-11-17T11:31:50+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -77,6 +77,7 @@ export default class Terminal extends React.PureComponent<Props> {
   resizeDetector: React.ElementRef<*>;
   container: React.ElementRef<*>;
   xterm: Xterm;
+  _hasInitialSize = false;
 
   componentDidMount() {
     this.reactions.push(
@@ -113,9 +114,14 @@ export default class Terminal extends React.PureComponent<Props> {
 
     const { attach, onResize } = this.props;
 
-    this.xterm.on('resize', size => onResize(this.xterm, size));
-
-    attach(this.xterm);
+    this.xterm.on('resize', (size) => {
+      if (!this._hasInitialSize) {
+        this._hasInitialSize = true;
+        attach(this.xterm);
+      } else {
+        onResize(this.xterm, size);
+      }
+    });
   }
 
   componentWillUnmount() {

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T15:41:20+11:00
+ * @Last modified time: 2017-11-17T15:07:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -477,8 +477,8 @@ export default class ListView extends React.Component {
   openOpenConnectionAlert() {
     if (
       this.state.targetProfile.sha ||
-      (this.state.targetProfile.sshTunnel && (this.state.targetProfile.bPassPhrase ||
-      this.state.targetProfile.bRemotePass))
+      (this.state.targetProfile.sshTunnel &&
+        (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass))
     ) {
       this.setState({ isOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
@@ -498,10 +498,7 @@ export default class ListView extends React.Component {
 
   @autobind
   openSshConnectionAlert() {
-    if (
-      this.state.targetProfile.bPassPhrase ||
-      this.state.targetProfile.bRemotePass
-    ) {
+    if (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);
@@ -610,21 +607,21 @@ export default class ListView extends React.Component {
           </div>
         </div>
       );
+    }
 
-      if (profile.ssh) {
-        terminalOperations.push(
-          <div key={terminalOperations.length} className="menuItemWrapper">
-            <MenuItem
-              className="profileListContextMenu newSshTerminal"
-              onClick={this.openSshConnectionAlert}
-              text={globalString('profile/menu/newSshTerminal')}
-              intent={Intent.NONE}
-              iconName="pt-icon-new-text-box"
-            />
-          </div>,
-          );
-        }
-      }
+    if (profile.ssh) {
+      terminalOperations.push(
+        <div key={terminalOperations.length} className="menuItemWrapper">
+          <MenuItem
+            className="profileListContextMenu newSshTerminal"
+            onClick={this.openSshConnectionAlert}
+            text={globalString('profile/menu/newSshTerminal')}
+            intent={Intent.NONE}
+            iconName="pt-icon-new-text-box"
+          />
+        </div>,
+      );
+    }
 
     terminalOperations.push(
       <div key={terminalOperations.length} className="menuItemWrapper">
