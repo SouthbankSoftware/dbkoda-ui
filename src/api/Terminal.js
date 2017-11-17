@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T14:34:39+11:00
+ * @Last modified time: 2017-11-17T16:55:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@ import { featherClient } from '~/helpers/feathers';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import type Xterm from 'xterm/build/xterm';
+import _ from 'lodash';
 
 export const terminalTypes = {
   local: 'local',
@@ -143,12 +144,36 @@ export default class TerminalApi {
     outputPanel.currentTab = this.getTerminalTabId(id);
   }
 
+  _removeSshTerminal(terminal: TerminalState): Promise<*> {
+    const { id } = terminal;
+
+    return featherClient()
+      .terminalService.remove(id)
+      .catch(console.warn);
+  }
+
   // $FlowIssue
-  @action.bound
+  @autobind
   removeTerminal(id: UUID) {
     const { terminals } = this.store;
 
-    terminals.delete(id);
+    const terminal = terminals.get(id);
+
+    if (terminal) {
+      const { type } = terminal;
+      const removerName = `_remove${_.upperFirst(type)}Terminal`;
+      let p;
+
+      // $FlowIssue
+      if (typeof this[removerName] === 'function') {
+        // $FlowIssue
+        p = this[removerName](terminal);
+      } else {
+        p = Promise.resolve();
+      }
+
+      p.then(action(() => terminals.delete(id)));
+    }
   }
 
   // $FlowIssue
@@ -158,7 +183,7 @@ export default class TerminalApi {
 
     for (const terminal of terminals.values()) {
       if (terminal.profileId && terminal.profileId === profileId) {
-        terminals.delete(terminal.id);
+        this.removeTerminal(terminal.id);
       }
     }
   }
