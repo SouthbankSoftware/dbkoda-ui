@@ -370,6 +370,9 @@ export default class Panel extends React.Component {
                   divOnFocus={this._onClickKey}
                 />
               </div>
+              <div className="ssh-form pt-form-group pt-inline zero-margin">
+                <Checkbox field={form.$('sshTunnel')} />{' '}
+              </div>
             </div>
           )}
           <div className="profile-separator" />

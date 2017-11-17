@@ -116,6 +116,7 @@ const ConnectionPanel = ({
         username: data.username,
         sha: data.sha,
         ssh: data.ssh,
+        sshTunnel: data.sshTunnel,
         remoteHost: data.remoteHost,
         remoteUser: data.remoteUser,
         sshLocalPort: data.sshLocalPort,
@@ -168,7 +169,7 @@ const ConnectionPanel = ({
     } else if (data.urlRadio) {
       connectionUrl = data.url;
     }
-    if (data.ssh) {
+    if (data.ssh && data.sshTunnel) {
       query.ssh = data.ssh;
       query.remoteHost = data.host;
       query.remotePort = data.port;

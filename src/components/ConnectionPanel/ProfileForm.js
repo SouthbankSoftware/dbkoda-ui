@@ -280,7 +280,7 @@ export const Form = {
     {
       name: 'ssh',
       value: false,
-      label: 'SSH Tunnel',
+      label: 'SSH',
     },
     {
       name: 'remoteHost',
@@ -320,6 +320,11 @@ export const Form = {
       label: 'Phrase',
       placeholder: 'Passphrase(optional)',
       type: 'password',
+    },
+    {
+      name: 'sshTunnel',
+      value: false,
+      label: 'SSH Tunnel',
     },
   ],
 };

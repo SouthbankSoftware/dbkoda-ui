@@ -26,6 +26,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import { action, observable } from 'mobx';
 import uuid from 'uuid/v1';
 import autobind from 'autobind-decorator';
@@ -43,6 +44,15 @@ export type TerminalState = {
   id: UUID, // same as key
   type: TerminalType,
   name: number, // a unique number within its type
+};
+
+export type SshProfile = {
+  profileId: string,
+  username: string,
+  host: string,
+  password?: string,
+  privateKey?: string,
+  passphrase?: string
 };
 
 export default class TerminalApi {
@@ -81,19 +91,20 @@ export default class TerminalApi {
 
   // $FlowIssue
   @action.bound
-  addSshTerminal(profileId: string) {
+  addSshTerminal(profile: SshProfile) {
     const id = uuid();
     const type = terminalTypes.ssh;
+    const profileId = profile.profileId;
+    let query = _.omit(profile, ['profileId']);
 
+    query = _.merge(query, {
+      _id: id,
+      type,
+      port: 22,
+    });
+    console.log('SSH query:', query);
     featherClient()
-      .terminalService.create({
-        _id: id,
-        type,
-        username: 'guiguan',
-        password: '',
-        host: 'localhost',
-        port: 22,
-      })
+      .terminalService.create(query)
       .then(() => {
         this.addTerminal(type, { id, profileId });
       })

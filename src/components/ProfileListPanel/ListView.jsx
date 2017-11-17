@@ -70,6 +70,7 @@ export default class ListView extends React.Component {
       isCloseWarningActive: false,
       isRemoveWarningActive: false,
       isOpenWarningActive: false,
+      isSshOpenWarningActive: false,
       passwordText: null,
       lastSelectRegion: null,
       remotePass: null,
@@ -132,7 +133,7 @@ export default class ListView extends React.Component {
     } else if (selectedProfile.urlRadio) {
       connectionUrl = selectedProfile.url;
     }
-    if (selectedProfile.ssh) {
+    if (selectedProfile.ssh && selectedProfile.sshTunnel) {
       query.ssh = selectedProfile.ssh;
       query.remoteHost = selectedProfile.host;
       query.remotePort = selectedProfile.port;
@@ -224,6 +225,7 @@ export default class ListView extends React.Component {
         username: data.username,
         sha: data.sha,
         ssh: data.ssh,
+        sshTunnel: data.sshTunnel,
         remoteHost: data.remoteHost,
         remoteUser: data.remoteUser,
         sshLocalPort: data.sshLocalPort,
@@ -419,6 +421,28 @@ export default class ListView extends React.Component {
     this.closeConnectionRemoveAlert();
   }
 
+  @action.bound
+  openSshShell() {
+    const { addSshTerminal } = this.props.api;
+    const query = {};
+    const selectedProfile = this.state.targetProfile;
+
+    query.username = selectedProfile.remoteUser;
+    query.host = selectedProfile.remoteHost;
+
+    if (selectedProfile.passRadio) {
+      query.password = this.state.remotePass;
+    } else if (selectedProfile.keyRadio) {
+      query.privateKey = selectedProfile.sshKeyFile;
+      query.passphrase = this.state.passPhrase;
+    }
+
+    query.profileId = selectedProfile.id;
+
+    addSshTerminal(query);
+    this.closeSshConnectionAlert();
+  }
+
   @autobind
   openCloseConnectionAlert() {
     this.setState({ isCloseWarningActive: true });
@@ -453,8 +477,8 @@ export default class ListView extends React.Component {
   openOpenConnectionAlert() {
     if (
       this.state.targetProfile.sha ||
-      this.state.targetProfile.bPassPhrase ||
-      this.state.targetProfile.bRemotePass
+      (this.state.targetProfile.sshTunnel && (this.state.targetProfile.bPassPhrase ||
+      this.state.targetProfile.bRemotePass))
     ) {
       this.setState({ isOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
@@ -470,6 +494,28 @@ export default class ListView extends React.Component {
     this.setState({ isOpenWarningActive: false });
     Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
+  }
+
+  @autobind
+  openSshConnectionAlert() {
+    if (
+      this.state.targetProfile.bPassPhrase ||
+      this.state.targetProfile.bRemotePass
+    ) {
+      this.setState({ isSshOpenWarningActive: true });
+      Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
+      Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);
+    } else {
+      this.openSshShell();
+    }
+  }
+
+  @action.bound
+  closeSshConnectionAlert() {
+    this.props.store.layout.alertIsLoading = false;
+    this.setState({ isSshOpenWarningActive: false });
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);
   }
 
   @autobind
@@ -565,22 +611,20 @@ export default class ListView extends React.Component {
         </div>
       );
 
-      terminalOperations.push(
-        <div key={terminalOperations.length} className="menuItemWrapper">
-          <MenuItem
-            className="profileListContextMenu newSshTerminal"
-            onClick={() => {
-              const { addSshTerminal } = this.props.api;
-
-              addSshTerminal(profile.id);
-            }}
-            text={globalString('profile/menu/newSshTerminal')}
-            intent={Intent.NONE}
-            iconName="pt-icon-new-text-box"
-          />
-        </div>,
-      );
-    }
+      if (profile.ssh) {
+        terminalOperations.push(
+          <div key={terminalOperations.length} className="menuItemWrapper">
+            <MenuItem
+              className="profileListContextMenu newSshTerminal"
+              onClick={this.openSshConnectionAlert}
+              text={globalString('profile/menu/newSshTerminal')}
+              intent={Intent.NONE}
+              iconName="pt-icon-new-text-box"
+            />
+          </div>,
+          );
+        }
+      }
 
     terminalOperations.push(
       <div key={terminalOperations.length} className="menuItemWrapper">
@@ -792,6 +836,61 @@ export default class ListView extends React.Component {
               text={globalString('profile/openAlert/cancelButton')}
               loading={this.props.store.layout.alertIsLoading}
               onClick={this.closeOpenConnectionAlert}
+            />
+          </div>
+        </Dialog>
+        <Dialog
+          className="pt-dark open-profile-alert-dialog"
+          intent={Intent.PRIMARY}
+          isOpen={this.state.isSshOpenWarningActive}
+        >
+          {this.state.targetProfile &&
+            this.state.targetProfile.bRemotePass && (
+              <div className="dialogContent">
+                <p>{globalString('profile/openAlert/remotePassPrompt')}</p>
+                <input
+                  autoFocus={this.state.targetProfile.bRemotePass}
+                  className="pt-input remotePassInput"
+                  placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
+                  type="password"
+                  dir="auto"
+                  onChange={(event) => {
+                    this.setState({ remotePass: event.target.value });
+                  }}
+                />
+              </div>
+            )}
+          {this.state.targetProfile &&
+            this.state.targetProfile.bPassPhrase && (
+              <div className="dialogContent">
+                <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
+                <input
+                  autoFocus={!this.state.targetProfile.bRemotePass}
+                  className="pt-input passPhraseInput"
+                  placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
+                  type="password"
+                  dir="auto"
+                  onChange={(event) => {
+                    this.setState({ passPhrase: event.target.value });
+                  }}
+                />
+              </div>
+            )}
+          <div className="dialogButtons">
+            <AnchorButton
+              className="openButton"
+              intent={Intent.SUCCESS}
+              type="submit"
+              onClick={this.openSshShell}
+              loading={this.props.store.layout.alertIsLoading}
+              text={globalString('profile/openAlert/confirmButton')}
+            />
+            <AnchorButton
+              className="cancelButton"
+              intent={Intent.DANGER}
+              text={globalString('profile/openAlert/cancelButton')}
+              loading={this.props.store.layout.alertIsLoading}
+              onClick={this.closeSshConnectionAlert}
             />
           </div>
         </Dialog>
