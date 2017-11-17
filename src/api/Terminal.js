@@ -102,7 +102,6 @@ export default class TerminalApi {
       type,
       port: 22,
     });
-    console.log('SSH query:', query);
     featherClient()
       .terminalService.create(query)
       .then(() => {

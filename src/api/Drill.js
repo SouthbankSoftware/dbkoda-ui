@@ -38,22 +38,26 @@ export default class DrillApi {
     const profile = this.store.profileList.selectedProfile;
     query.alias = this.getDrillCompatibleAlias(profile.alias);
     query.id = profile.id;
-    if (options.pass) {
-      query.url = StaticApi.mongoProtocol +
-        profile.username +
-        ':' +
-        options.pass +
-        '@' +
-        profile.host +
-        ':' +
-        profile.port +
-        '/';
+    if (profile.hostRadio) {
+      if (options.pass) {
+        query.url = StaticApi.mongoProtocol +
+          profile.username +
+          ':' +
+          options.pass +
+          '@' +
+          profile.host +
+          ':' +
+          profile.port +
+          '/';
+      } else {
+        query.url = StaticApi.mongoProtocol +
+          profile.host +
+          ':' +
+          profile.port +
+          '/';
+      }
     } else {
-      query.url = StaticApi.mongoProtocol +
-        profile.host +
-        ':' +
-        profile.port +
-        '/';
+      query.url = profile.url;
     }
     query.db = options.db ? options.db : 'admin';
 
