@@ -3,7 +3,7 @@
  * @Date:   2017-11-15T10:29:13+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T16:02:33+11:00
+ * @Last modified time: 2017-11-17T17:55:54+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,13 +26,13 @@
 
 import * as React from 'react';
 import Xterm from 'xterm/build/xterm';
-import attachAddon from 'xterm/lib/addons/attach/attach';
-import chalk from '~/helpers/chalk';
+import { featherClient } from '~/helpers/feathers';
+import { Broker, EventType } from '~/helpers/broker';
+import { terminalTypes } from '~/api/Terminal';
 import Terminal from './Terminal';
 
-attachAddon(Xterm);
-
 type Props = {
+  id: UUID,
   tabId: string,
 };
 
@@ -40,51 +40,69 @@ export default class LocalTerminal extends React.PureComponent<Props> {
   socket: *;
   pid: *;
 
+  constructor(props: Props) {
+    super(props);
+
+    this.terminalService = featherClient().terminalService;
+  }
+
   _attach = (xterm: Xterm) => {
-    fetch('http://localhost:3001/terminals?cols=' + xterm.cols + '&rows=' + xterm.rows, {
-      method: 'POST',
-    })
-      .then((res) => {
-        res.text().then((pid) => {
-          this.pid = pid;
-          this.socket = new WebSocket(`ws://localhost:3001/terminals/${pid}`);
-          this.socket.onopen = () => {
-            xterm.attach(this.socket);
-          };
-        });
+    const { id } = this.props;
+
+    console.log('Attaching...');
+
+    this.terminalService
+      .create({
+        _id: id,
+        type: terminalTypes.local,
+        size: {
+          rows: xterm.rows,
+          cols: xterm.cols,
+        },
       })
-      .catch((_err) => {
-        xterm.write(
-          `${chalk.bold.red(
-            'Failed to connect to Xterm Demo backend.',
-          )} Please run it first using:\r\n\r\n${chalk.hex('#ffffff')(
-            '\tyarn dev:xterm',
-          )}\r\n\r\nThen restart this terminal`,
-        );
-      });
+      .then(({ payload: { new: isNew } }) => {
+        if (!isNew) {
+          console.log('Terminal already exists');
+          this._send('\r');
+        }
+      })
+      .catch(console.error);
+
+    this._receive = (data) => {
+      console.log('Receiving: ', JSON.stringify(data));
+
+      xterm.write(data);
+    };
+
+    Broker.on(EventType.TERMINAL_DATA(id), this._receive);
+
+    xterm.on('data', this._send);
   };
 
   _detach = (xterm: Xterm) => {
-    if (this.socket) {
-      this.socket.close();
-      xterm.detach(this.socket);
-    }
+    const { id } = this.props;
+
+    console.log('Detaching...');
+
+    this._receive && Broker.off(EventType.TERMINAL_DATA(id), this._receive);
+
+    this._send && xterm.off('data', this._send);
   };
 
   _onResize = (xterm: Xterm, size: { cols: number, rows: number }) => {
-    if (!this.pid) {
-      return;
-    }
+    const { id } = this.props;
 
-    fetch(`http://localhost:3001/terminals/${this.pid}/size?cols=${size.cols}&rows=${size.rows}`, {
-      method: 'POST',
-    });
+    this.terminalService.patch(id, { size });
   };
 
   _send = (code: string) => {
-    if (this.socket) {
-      this.socket.send(code);
-    }
+    const { id } = this.props;
+
+    console.log('Sending: ', JSON.stringify(code));
+
+    this.terminalService.patch(id, {
+      cmd: code,
+    });
   };
 
   render() {
