@@ -67,19 +67,34 @@ export default class Analytics extends React.Component {
      * Reaction function for when a change occurs on the telemetryEnabled state
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
+    //  */
+    // reaction(
+    //   () => this.props.config.settings.telemetryEnabled,
+    //   (telemetryEnabled) => {
+    //     if (telemetryEnabled) {
+    //       this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
+    //     } else {
+    //       this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
+    //     }
+    //     this.props.config.save();
+    //   },
+    //   { name: 'analyticsReactionToTelemetryChange' },
+    // );
+
+    /**
+     * send opt events when clicking ok button.
      */
     reaction(
-      () => this.props.config.settings.telemetryEnabled,
-      (telemetryEnabled) => {
-        if (telemetryEnabled) {
+      () => this.props.store.layout.optInVisible,
+      (_) => {
+        if (this.props.config.settings.telemetryEnabled) {
           this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
         } else {
           this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
         }
-        this.props.config.save();
       },
       { name: 'analyticsReactionToTelemetryChange' },
-    );
+    )
 
     this._sendEvent = this._sendEvent.bind(this);
     this.newProfileCreated = this.newProfileCreated.bind(this);
