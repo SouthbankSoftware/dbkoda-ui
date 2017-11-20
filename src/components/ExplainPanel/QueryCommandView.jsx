@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-06-07T15:03:32+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,13 +21,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-06-07T15:03:32+10:00
- */
-
 import React from 'react';
-
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 import Prettier from 'prettier-standalone';
@@ -38,10 +35,10 @@ const options = {
   tabSize: 2,
   matchBrackets: true,
   keyMap: 'sublime',
-  mode: 'MongoScript'
+  mode: 'MongoScript',
 };
 
-const QueryCommandView = ({command, namespace}) => {
+const QueryCommandView = ({ command, namespace }) => {
   let editor;
   let content = command;
   try {
@@ -54,23 +51,29 @@ const QueryCommandView = ({command, namespace}) => {
     const cm = editor && editor.getCodeMirror();
     cm && cm.setValue(content);
   }, 500);
-  const namespacePanel = namespace ? (<div className="namespace">
-    <div className="label">{globalString('explain/view/namespaceLabel')}</div>
-    <div className="value">{namespace}</div>
-  </div>) : null;
-  return (<div className="explain-command-panel">
-    {namespacePanel}
-    <div className="codemirror">
-      <div className="label">{globalString('explain/view/queryLabel')}</div>
-      <CodeMirror
-        ref={(cm) => {
-          editor = cm;
-        }}
-        codeMirrorInstance={CM}
-        value={command}
-        options={options} />
+  const namespacePanel = namespace ? (
+    <div className="namespace">
+      <div className="label">{globalString('explain/view/namespaceLabel')}</div>
+      <div className="value">{namespace}</div>
     </div>
-  </div>);
+  ) : null;
+
+  return (
+    <div className="explain-command-panel">
+      {namespacePanel}
+      <div className="codemirror">
+        <div className="label">{globalString('explain/view/queryLabel')}</div>
+        <CodeMirror
+          ref={(cm) => {
+            editor = cm;
+          }}
+          codeMirrorInstance={CM}
+          value={command}
+          options={options}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default QueryCommandView;

@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-15T10:54:51+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-06-19T16:22:04+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,14 +23,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-15T10:54:51+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-19T16:22:04+10:00
-*/
 
 import React from 'react';
 import { observer, inject } from 'mobx-react';
@@ -78,7 +76,8 @@ class DragLabel extends React.Component {
    * Returns the text of the label to render with filtered text highlighted
    * @return {string} - HTML text
    */
-  @computed get FilteredTextLabel() {
+  @computed
+  get FilteredTextLabel() {
     const filterText = this.props.treeState.filter;
     const strText = this.props.label;
     const matchStart = strText.toLowerCase().indexOf(filterText.toLowerCase());
@@ -87,7 +86,13 @@ class DragLabel extends React.Component {
       const beforeMatch = strText.slice(0, matchStart);
       const matchText = strText.slice(matchStart, matchEnd + 1);
       const afterMatch = strText.slice(matchEnd + 1);
-      return <span>{beforeMatch}<mark>{matchText}</mark>{afterMatch}</span>;
+      return (
+        <span>
+          {beforeMatch}
+          <mark>{matchText}</mark>
+          {afterMatch}
+        </span>
+      );
     }
     if (
       this.props.type == 'shard' ||
@@ -114,7 +119,9 @@ class DragLabel extends React.Component {
           opacity: isDragging ? 0.5 : 1,
           cursor: 'move',
         }}
-      >{this.FilteredTextLabel}</span>,
+      >
+        {this.FilteredTextLabel}
+      </span>,
     );
   }
 }

@@ -30,26 +30,29 @@ import { inject, observer } from 'mobx-react';
 import { AnchorButton, Tooltip, Intent, Position } from '@blueprintjs/core';
 
 @inject(allStores => ({
-  store: allStores.store
+  store: allStores.store,
 }))
 @observer
 export default class MenuItem extends React.Component {
   render() {
-    const itemClass = this.props.isSelected(this.props.name) ?
-      'menuItem selected' :
-      'menuItem';
-    return (<div className={itemClass}>
-      <Tooltip
-        intent={Intent.PRIMARY}
-        hoverOpenDelay={1000}
-        content={this.props.name}
-        tooltipClassName="pt-dark"
-        position={Position.TOP}
-      >
-        <AnchorButton className={`menuItem${this.props.name}`} onClick={() => this.props.changeMenu(this.props.name)}>
-          { this.props.children }
-        </AnchorButton>
-      </Tooltip>
-    </div>);
+    const itemClass = this.props.isSelected(this.props.name) ? 'menuItem selected' : 'menuItem';
+    return (
+      <div className={itemClass}>
+        <Tooltip
+          intent={Intent.PRIMARY}
+          hoverOpenDelay={1000}
+          content={this.props.name}
+          tooltipClassName="pt-dark"
+          position={Position.TOP}
+        >
+          <AnchorButton
+            className={`menuItem${this.props.name}`}
+            onClick={() => this.props.changeMenu(this.props.name)}
+          >
+            {this.props.children}
+          </AnchorButton>
+        </Tooltip>
+      </div>
+    );
   }
 }

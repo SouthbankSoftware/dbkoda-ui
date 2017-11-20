@@ -1,4 +1,6 @@
-/*
+/**
+ * Created by joey on 12/9/17
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,13 +19,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * Created by joey on 12/9/17.
- */
 
- /* eslint no-unused-vars:warn */
+/* eslint no-unused-vars:warn */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import CodeMirror from 'react-codemirror';
 import CM from 'codemirror';
 import {action} from 'mobx';
@@ -123,7 +123,7 @@ export default class TranslatorPanel extends React.Component {
     const service = featherClient().service('/mongo-driver');
     service.timeout = 30000;
     service.update(this.props.profileId, {commands: this.state.value, shellId: this.props.shellId})
-      .then((doc) => {
+      .then((_doc) => {
       }).catch((err) => {
         console.error(err.message);
         DBKodaToaster(Position.RIGHT_TOP).show({
@@ -169,21 +169,24 @@ export default class TranslatorPanel extends React.Component {
   render() {
     const {value} = this.state;
     const options = {...CMOptions};
-    return (<div className="ReactCodeMirror translate-codemirror">
-      <div className="syntax-selection">
-        <div className="nodejs-driver">{globalString('translator/label/driver-code')}</div>
-        <Button className="close-btn pt-icon-cross" onClick={() => this.props.closePanel()} />
-      </div>
-      <CodeMirror
-        className="CodeMirror-scroll"
-        ref={(r) => {
+    return (
+      <div className="ReactCodeMirror translate-codemirror">
+        <div className="syntax-selection">
+          <div className="nodejs-driver">{globalString('translator/label/driver-code')}</div>
+          <Button className="close-btn pt-icon-cross" onClick={() => this.props.closePanel()} />
+        </div>
+        <CodeMirror
+          className="CodeMirror-scroll"
+          ref={(r) => {
             this.codeMirror = r;
-          }
-        }
-        options={options}
-        onChange={doc => this.setState({value: doc})}
-        codeMirrorInstance={CM} value={value} />
-    </div>);
+          }}
+          options={options}
+          onChange={doc => this.setState({ value: doc })}
+          codeMirrorInstance={CM}
+          value={value}
+        />
+      </div>
+    );
   }
 }
 
@@ -194,7 +197,7 @@ TranslatorPanel.defaultProps = {
 };
 
 TranslatorPanel.propTypes = {
-  value: React.PropTypes.string,
-  profileId: React.PropTypes.string.required,
-  shellId: React.PropTypes.string.required,
+  value: PropTypes.string,
+  profileId: PropTypes.string,
+  shellId: PropTypes.string,
 };

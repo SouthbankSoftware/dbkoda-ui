@@ -1,4 +1,9 @@
-/*
+/**
+ * @Author: mike
+ * @Date:   2017-03-28 16:13:50
+ * @Last modified by:   mike
+ * @Last modified time: 2017-11-08 10:15:01
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,13 +23,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: mike
- * @Date:   2017-03-28 16:13:50
- * @Last modified by:   mike
- * @Last modified time: 2017-11-08 10:15:01
- */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/anchor-is-valid */
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
 import { Intent, Dialog, AnchorButton, Switch } from '@blueprintjs/core';
@@ -50,9 +49,7 @@ export default class TelemetryConsent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell.openExternal(
-          'https://southbanksoftware.github.io/privacy-policy',
-        );
+        .shell.openExternal('https://southbanksoftware.github.io/privacy-policy');
     }
   }
 
@@ -87,15 +84,9 @@ export default class TelemetryConsent extends React.Component {
         <p>
           {' '}
           {globalString('telemetry_dialog/content_third')}
-          <a onClick={this.openPrivacyPolicy}>
-            {globalString('telemetry_dialog/privacy_link')}
-          </a>
+          <a onClick={this.openPrivacyPolicy}>{globalString('telemetry_dialog/privacy_link')}</a>
         </p>
-        <div
-          className={
-            'dialogButtons ' + this.props.store.userPreferences.telemetryEnabled
-          }
-        >
+        <div className={'dialogButtons ' + this.props.store.userPreferences.telemetryEnabled}>
           <AnchorButton
             className="submitButton"
             type="submit"

@@ -36,7 +36,7 @@ export default class FilterList extends React.Component {
     onClick: null,
   };
 
-  static PropTypes = {
+  static propTypes = {
     items: React.PropTypes.array,
     getItemTitle: React.PropTypes.func,
     getItemId: React.PropTypes.func,

@@ -1,4 +1,6 @@
-/*
+/**
+ * Created by joey on 6/6/17
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,11 +19,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/**
- * Created by joey on 6/6/17.
- */
-
 
 import React from 'react';
 import './style.scss';
@@ -51,12 +48,14 @@ const getAllShardStatistics = (explains) => {
           examined += input.keysExamined;
           nReturned += input.nReturned;
         });
-        oneShard.push({docsExamined: examined, nReturned});
+        oneShard.push({ docsExamined: examined, nReturned });
       }
       cursor = cursor.inputStage;
     }
     // get the executionTimeMillisEstimate and nReturned from the first child, docsExamined from the deepest child
-    oneShard[0].docsExamined = oneShard[oneShard.length - 1].docsExamined ? oneShard[oneShard.length - 1].docsExamined : oneShard[oneShard.length - 1].keysExamined;
+    oneShard[0].docsExamined = oneShard[oneShard.length - 1].docsExamined
+      ? oneShard[oneShard.length - 1].docsExamined
+      : oneShard[oneShard.length - 1].keysExamined;
     oneShard[0].shardName = shard.shardName;
     oneShard[0].executionTime = executionTime;
     allShards.push(oneShard);
@@ -76,24 +75,26 @@ export const getWorstShardStatistics = (explains) => {
 /**
  * shard statistic view panel
  */
-export default ({explains}) => {
+export default ({ explains }) => {
   const shardStatistics = getWorstShardStatistics(explains);
-  return (<div className="explain-shards-statistic-view">
-    <div className="header">
-      <div className="column">{globalString('explain/statistics/shard')}</div>
-      <div className="column">{globalString('explain/statistics/examined')}</div>
-      <div className="column">{globalString('explain/statistics/returned')}</div>
-      <div className="column">{globalString('explain/statistics/ms')}</div>
+  return (
+    <div className="explain-shards-statistic-view">
+      <div className="header">
+        <div className="column">{globalString('explain/statistics/shard')}</div>
+        <div className="column">{globalString('explain/statistics/examined')}</div>
+        <div className="column">{globalString('explain/statistics/returned')}</div>
+        <div className="column">{globalString('explain/statistics/ms')}</div>
+      </div>
+      {shardStatistics.map((shard) => {
+        return (
+          <div className="row" key={shard.shardName}>
+            <div className="cell">{shard.shardName}</div>
+            <div className="cell">{shard.docsExamined}</div>
+            <div className="cell">{shard.nReturned}</div>
+            <div className="cell">{shard.executionTime}</div>
+          </div>
+        );
+      })}
     </div>
-    {
-      shardStatistics.map((shard) => {
-        return (<div className="row" key={shard.shardName}>
-          <div className="cell">{shard.shardName}</div>
-          <div className="cell">{shard.docsExamined}</div>
-          <div className="cell">{shard.nReturned}</div>
-          <div className="cell">{shard.executionTime}</div>
-        </div>);
-      })
-    }
-  </div>);
+  );
 };

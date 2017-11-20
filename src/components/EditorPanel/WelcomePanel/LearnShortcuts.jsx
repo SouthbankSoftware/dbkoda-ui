@@ -20,9 +20,15 @@
 
 /* eslint-disable react/no-string-refs */
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {AnchorButton} from '@blueprintjs/core';
-import {GlobalHotkeys, TerminalHotkeys, OutputHotkeys, EditorHotkeys, CodeMirrorHotkeys} from '#/common/hotkeys/hotkeyList.jsx';
+import { inject, observer } from 'mobx-react';
+import { AnchorButton } from '@blueprintjs/core';
+import {
+  GlobalHotkeys,
+  TerminalHotkeys,
+  OutputHotkeys,
+  EditorHotkeys,
+  CodeMirrorHotkeys,
+} from '#/common/hotkeys/hotkeyList.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -35,7 +41,7 @@ export default class LearnShortcuts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentGroup: 'global'
+      currentGroup: 'global',
     };
 
     this.getToolbarHotkeys = this.getToolbarHotkeys.bind();
@@ -47,32 +53,32 @@ export default class LearnShortcuts extends React.Component {
   }
 
   getToolbarHotkeys(item) {
-                  let jsxObj = {};
-                  Object.values(item).map((subItem) => {
-                    jsxObj += (
-                      <div className="hotkeyItem" key={subItem.description}>
-                        <h4 className="hotkeyTitle">{subItem.combo}</h4>
-                        <p className="hotkeyDescription>">{subItem.description}</p>
-                      </div>
-                    );
-                  });
-                  return jsxObj;
+    let jsxObj = {};
+    Object.values(item).map((subItem) => {
+      jsxObj += (
+        <div className="hotkeyItem" key={subItem.description}>
+          <h4 className="hotkeyTitle">{subItem.combo}</h4>
+          <p className="hotkeyDescription>">{subItem.description}</p>
+        </div>
+      );
+    });
+    return jsxObj;
   }
 
   showGlobal() {
-    this.setState({currentGroup: 'global'});
+    this.setState({ currentGroup: 'global' });
   }
   showTerminal() {
-    this.setState({currentGroup: 'terminal'});
+    this.setState({ currentGroup: 'terminal' });
   }
   showOutput() {
-    this.setState({currentGroup: 'output'});
+    this.setState({ currentGroup: 'output' });
   }
   showEditor() {
-    this.setState({currentGroup: 'editor'});
+    this.setState({ currentGroup: 'editor' });
   }
   showCM() {
-    this.setState({currentGroup: 'codemirror'});
+    this.setState({ currentGroup: 'codemirror' });
   }
 
   renderHotkeys() {
@@ -86,8 +92,7 @@ export default class LearnShortcuts extends React.Component {
       case 'global':
         return (
           <div className="globalHotkeys">
-            {globalShortcuts
-            .map((item) => {
+            {globalShortcuts.map((item) => {
               if ('saveFile' in item) {
                 return;
               }
@@ -97,8 +102,7 @@ export default class LearnShortcuts extends React.Component {
                   <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
-            })
-          }
+            })}
             {subkeys.map((item) => {
               return (
                 <div className="hotkeyItem" key={item.description}>
@@ -106,70 +110,62 @@ export default class LearnShortcuts extends React.Component {
                   <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
-          })}
+            })}
           </div>
         );
       default:
       case 'terminal':
-      return (
-        <div className="terminalHotkeys">
-          {terminalShortcuts
-            .map((item) => {
+        return (
+          <div className="terminalHotkeys">
+            {terminalShortcuts.map((item) => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
                   <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
-            })
-          }
-        </div>
-      );
+            })}
+          </div>
+        );
       case 'output':
-      return (
-        <div className="outputHotkeys">
-          {outputShortcuts
-            .map((item) => {
+        return (
+          <div className="outputHotkeys">
+            {outputShortcuts.map((item) => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
                   <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
-            })
-          }
-        </div>
-      );
+            })}
+          </div>
+        );
       case 'editor':
-      return (
-        <div className="editorHotkeys">
-          {editorShortcuts
-            .map((item) => {
+        return (
+          <div className="editorHotkeys">
+            {editorShortcuts.map((item) => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
                   <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
-            })
-          }
-        </div>
-      );
+            })}
+          </div>
+        );
       case 'codemirror':
-      return (
-        <div className="codemirrorHotkeys">
-          {codemirrorShortcuts
-            .map((item) => {
+        return (
+          <div className="codemirrorHotkeys">
+            {codemirrorShortcuts.map((item) => {
               return (
                 <div className="hotkeyItem" key={item.description}>
                   <h4 className="hotkeyTitle">{item.combo}</h4>
                   <p className="hotkeyDescription>">{item.description}</p>
                 </div>
               );
-            })
-          }
-        </div>
-      );
+            })}
+          </div>
+        );
     }
   }
 
@@ -177,36 +173,37 @@ export default class LearnShortcuts extends React.Component {
     // const codeMirrorHotkeys = Object.values(CodeMirrorHotkeys);
     return (
       <div className="learnShortcutsWrapper">
-        <div className="groupsList" >
+        <div className="groupsList">
           <div className="welcomeButtonWrapper">
-            <AnchorButton
-              className="welcomeMenuButton welcomePageButton"
-              onClick={this.showGlobal}>Global</AnchorButton>
+            <AnchorButton className="welcomeMenuButton welcomePageButton" onClick={this.showGlobal}>
+              Global
+            </AnchorButton>
           </div>
           <div className="welcomeButtonWrapper">
             <AnchorButton
               className="welcomeMenuButton welcomePageButton"
-              onClick={this.showTerminal}>Terminal</AnchorButton>
+              onClick={this.showTerminal}
+            >
+              Terminal
+            </AnchorButton>
           </div>
           <div className="welcomeButtonWrapper">
-            <AnchorButton
-              className="welcomeMenuButton welcomePageButton"
-              onClick={this.showOutput}>Output</AnchorButton>
+            <AnchorButton className="welcomeMenuButton welcomePageButton" onClick={this.showOutput}>
+              Output
+            </AnchorButton>
           </div>
           <div className="welcomeButtonWrapper">
-            <AnchorButton
-              className="welcomeMenuButton welcomePageButton"
-              onClick={this.showEditor}>Editor</AnchorButton>
+            <AnchorButton className="welcomeMenuButton welcomePageButton" onClick={this.showEditor}>
+              Editor
+            </AnchorButton>
           </div>
           <div className="welcomeButtonWrapper">
-            <AnchorButton
-              className="welcomeMenuButton welcomePageButton"
-              onClick={this.showCM}>Text Editing</AnchorButton>
+            <AnchorButton className="welcomeMenuButton welcomePageButton" onClick={this.showCM}>
+              Text Editing
+            </AnchorButton>
           </div>
         </div>
-        <div className="hotkeysList">
-          {this.renderHotkeys()}
-        </div>
+        <div className="hotkeysList">{this.renderHotkeys()}</div>
       </div>
     );
   }

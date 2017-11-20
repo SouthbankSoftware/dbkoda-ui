@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-07T11:39:01+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   chris
+ * @Last modified time: 2017-09-11T09:07:31+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,14 +22,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-03-07T11:39:01+11:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-09-11T09:07:31+10:00
-*/
+ */
 
 import React from 'react';
 import { inject } from 'mobx-react';
@@ -51,11 +50,7 @@ import CloseIcon from '../../styles/icons/cross-icon.svg';
 import ShardsIcon from '../../styles/icons/shards-icon-2.svg';
 import CollectionIcon from '../../styles/icons/collection-icon.svg';
 import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
-import {
-  EditorTypes,
-  BackupRestoreActions,
-  TableViewConstants,
-} from '../common/Constants';
+import { EditorTypes, BackupRestoreActions, TableViewConstants } from '../common/Constants';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
@@ -71,6 +66,7 @@ export default class TreeView extends React.Component {
   static get defaultProps() {
     return {
       treeState: {},
+      /* eslint-disable react/default-props-match-prop-types */
       store: {
         treeActionPanel: {
           treeActionEditorId: '',
@@ -193,10 +189,7 @@ export default class TreeView extends React.Component {
             Menus.push(<MenuDivider key={objAction.name} />);
           } else {
             let bDevOnlyFeature = false;
-            if (
-              process.env.NODE_ENV !== 'development' &&
-              objAction.development
-            ) {
+            if (process.env.NODE_ENV !== 'development' && objAction.development) {
               bDevOnlyFeature = true;
             }
             if (!bDevOnlyFeature) {
@@ -327,17 +320,9 @@ export default class TreeView extends React.Component {
       ) {
         this.showDetailsView(this.nodeRightClicked, action);
       } else if (this.isBackupRestoreAction(action)) {
-        this.showTreeActionPanel(
-          this.nodeRightClicked,
-          action,
-          EditorTypes.SHELL_COMMAND,
-        );
+        this.showTreeActionPanel(this.nodeRightClicked, action, EditorTypes.SHELL_COMMAND);
       } else {
-        this.showTreeActionPanel(
-          this.nodeRightClicked,
-          action,
-          EditorTypes.TREE_ACTION,
-        );
+        this.showTreeActionPanel(this.nodeRightClicked, action, EditorTypes.TREE_ACTION);
       }
     }
   };
@@ -347,8 +332,7 @@ export default class TreeView extends React.Component {
     let bExistingEditor = false;
     for (const editor of treeEditors) {
       if (
-        editor[1].currentProfile ==
-          this.props.store.profileList.selectedProfile.id &&
+        editor[1].currentProfile == this.props.store.profileList.selectedProfile.id &&
         editor[1].type == editorType
       ) {
         bExistingEditor = true;
@@ -477,7 +461,7 @@ export default class TreeView extends React.Component {
   render() {
     const classNames = `${Classes.ELEVATION_0} ${Classes.DARK}`;
     return (
-      <div className={'sb-tree-view'}>
+      <div className="sb-tree-view">
         <Tree
           contents={this.state.nodes}
           onNodeClick={this.handleNodeClick}
@@ -496,9 +480,7 @@ export default class TreeView extends React.Component {
             <LoadingView />
             <br />
             <br />
-            <p>
-              Note: This process might take almost 2 minutes on first start.
-            </p>
+            <p>Note: This process might take almost 2 minutes on first start.</p>
           </div>
         </Dialog>
         <Dialog
@@ -509,11 +491,9 @@ export default class TreeView extends React.Component {
           <div className="dialogContent">
             <p>{globalString('profile/openAlert/passwordPrompt')}</p>
             <input
-              autoFocus
+              autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               className="pt-input passwordInput"
-              placeholder={globalString(
-                'profile/openAlert/passwordPlaceholder',
-              )}
+              placeholder={globalString('profile/openAlert/passwordPlaceholder')}
               type="password"
               dir="auto"
               onChange={(event) => {

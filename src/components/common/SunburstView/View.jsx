@@ -99,7 +99,7 @@ export default class View extends React.Component {
     height: 600,
   };
 
-  static PropTypes = {
+  static propTypes = {
     width: React.PropTypes.number,
     height: React.PropTypes.number,
     data: React.PropTypes.object.isRequired,

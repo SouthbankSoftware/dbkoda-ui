@@ -1,4 +1,6 @@
-/*
+/**
+ * Show explain raw json
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,27 +20,29 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * show explain raw json
- *
- */
 import React from 'react';
-import {toJS} from 'mobx';
+import { toJS } from 'mobx';
 import JSONTree from 'react-json-tree';
-import {theme} from './JsonTreeTheme';
+import { theme } from './JsonTreeTheme';
 
-const RawJson = ({explains}) => {
+const RawJson = ({ explains }) => {
   if (!explains || !explains.output) {
     return null;
   }
   const output = toJS(explains.output);
-  return (<div className="explain-json-raw-panel">
-    <JSONTree data={output} invertTheme={false} theme={theme} hideRoot
-      shouldExpandNode={(keyName, data, level) => {
-                return level <= 2;
-              }} />
-
-  </div>);
+  return (
+    <div className="explain-json-raw-panel">
+      <JSONTree
+        data={output}
+        invertTheme={false}
+        theme={theme}
+        hideRoot
+        shouldExpandNode={(keyName, data, level) => {
+          return level <= 2;
+        }}
+      />
+    </div>
+  );
 };
 
 export default RawJson;

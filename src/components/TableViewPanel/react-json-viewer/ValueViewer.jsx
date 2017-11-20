@@ -1,4 +1,4 @@
-/*
+/**
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -27,31 +27,31 @@ class ValueViewer extends Component {
       case 'String':
         if (this.props.value.length <= 80) {
           return (
-            <span
-              className="string noWrap"
-              style={{ color: 'rgb(255, 65, 60)' }}
-            >{`"${this.props.value}"`}</span>
+            <span className="string noWrap" style={{ color: 'rgb(255, 65, 60)' }}>{`"${
+              this.props.value
+            }"`}
+            </span>
           );
         }
         return (
-          <span
-            className="string"
-            style={{ color: 'rgb(255, 65, 60)' }}
-          >{`"${this.props.value}"`}</span>
+          <span className="string" style={{ color: 'rgb(255, 65, 60)' }}>{`"${
+            this.props.value
+          }"`}
+          </span>
         );
       case 'Boolean':
         return (
-          <span
-            className="boolean"
-            style={{ color: 'rgb(31, 48, 255)' }}
-          >{`${this.props.value}`}</span>
+          <span className="boolean" style={{ color: 'rgb(31, 48, 255)' }}>{`${
+            this.props.value
+          }`}
+          </span>
         );
       case 'Number':
         return (
-          <span
-            className="number"
-            style={{ color: 'rgb(31, 49, 255)' }}
-          >{`${this.props.value}`}</span>
+          <span className="number" style={{ color: 'rgb(31, 49, 255)' }}>{`${
+            this.props.value
+          }`}
+          </span>
         );
       case 'Undefined':
         return (
@@ -69,13 +69,11 @@ class ValueViewer extends Component {
         return (
           <i className="date" style={{ color: '#007bc7;' }}>{`${JSON.stringify(
             this.props.value,
-          )}`}</i>
+          )}`}
+          </i>
         );
       default:
-        return (
-          <span style={{ color: 'rgb(31, 49, 255)' }}>{`${this.props
-            .value}`}</span>
-        );
+        return <span style={{ color: 'rgb(31, 49, 255)' }}>{`${this.props.value}`}</span>;
     }
   }
 

@@ -27,10 +27,10 @@
  */
 
 import React from 'react';
-import {mount} from 'enzyme';
-import {useStrict} from 'mobx';
-import {expect} from 'chai';
-import {Provider} from 'mobx-react';
+import { mount } from 'enzyme';
+import { useStrict } from 'mobx';
+import { expect } from 'chai';
+import { Provider } from 'mobx-react';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import Store from '~/stores/global';
 import Config from '~/stores/config';
@@ -47,9 +47,11 @@ describe('New Profile Panel', () => {
     const store = new Store();
     const config = new Config();
     const profileStore = new Profiles();
-    app = mount(<Provider store={store} config={config} profileStore={profileStore}>
-      <ConnectionPanel />
-    </Provider>);
+    app = mount(
+      <Provider store={store} config={config} profileStore={profileStore}>
+        <ConnectionPanel />
+      </Provider>,
+    );
   });
 
   it('form field exist', () => {

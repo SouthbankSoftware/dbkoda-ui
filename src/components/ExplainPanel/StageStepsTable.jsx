@@ -1,4 +1,6 @@
-/*
+/**
+ * Created by joey on 6/6/17.
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,16 +20,11 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Created by joey on 6/6/17.
- */
-
-
 import React from 'react';
 import './style.scss';
 
-import {generateComments} from './ExplainStep';
-import {getWorstShardStages} from './Utils';
+import { generateComments } from './ExplainStep';
+import { getWorstShardStages } from './Utils';
 
 const getExamined = (stage) => {
   if (stage.stage === 'IXSCAN') {
@@ -46,7 +43,7 @@ const getExamined = (stage) => {
  * @param shardMergeStage is the SHARD_MERGE at the last of the explain
  * @constructor
  */
-export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
+export const StageStepsTable = ({ stages, shard, shardMergeStage }) => {
   let mergedStages = [];
   let fStages = stages;
   let shardName = null;
@@ -64,35 +61,44 @@ export const StageStepsTable = ({stages, shard, shardMergeStage}) => {
     }
   });
 
-  return (<div className="explain-stages-table">
-    {shard ? <div className="explain-worst-shard-description">{globalString('explain/worst-shard', shardName)}</div> : null}
-    <div className="stage-header">
-      <div className="column-header">Seq</div>
-      <div className="column-header">Step</div>
-      <div className="column-header">ms</div>
-      <div className="column-header">Examined</div>
-      <div className="column-header">Return</div>
-      <div className="column-header">Comment</div>
-    </div>
-    {
-      mergedStages.map((stage, i) => {
+  return (
+    <div className="explain-stages-table">
+      {shard ? (
+        <div className="explain-worst-shard-description">
+          {globalString('explain/worst-shard', shardName)}
+        </div>
+      ) : null}
+      <div className="stage-header">
+        <div className="column-header">Seq</div>
+        <div className="column-header">Step</div>
+        <div className="column-header">ms</div>
+        <div className="column-header">Examined</div>
+        <div className="column-header">Return</div>
+        <div className="column-header">Comment</div>
+      </div>
+      {mergedStages.map((stage, i) => {
         const id = i;
-        const ms = stage.executionTimeMillisEstimate !== undefined ? stage.executionTimeMillisEstimate : stage.executionTimeMillis;
-        return (<div className="stage-row" key={stage.stage + '-' + id}>
-          <div className="stage-cell">{i + 1}</div>
-          <div className="stage-cell">{stage.stage}</div>
-          <div className="stage-cell">
-            <div className="text">{ms}</div>
+        const ms =
+          stage.executionTimeMillisEstimate !== undefined
+            ? stage.executionTimeMillisEstimate
+            : stage.executionTimeMillis;
+        return (
+          <div className="stage-row" key={stage.stage + '-' + id}>
+            <div className="stage-cell">{i + 1}</div>
+            <div className="stage-cell">{stage.stage}</div>
+            <div className="stage-cell">
+              <div className="text">{ms}</div>
+            </div>
+            <div className="stage-cell">
+              <div className="text">{getExamined(stage)}</div>
+            </div>
+            <div className="stage-cell">
+              <div className="text">{stage.nReturned}</div>
+            </div>
+            <div className="stage-cell">{generateComments(stage)}</div>
           </div>
-          <div className="stage-cell">
-            <div className="text">{getExamined(stage)}</div>
-          </div>
-          <div className="stage-cell">
-            <div className="text">{stage.nReturned}</div>
-          </div>
-          <div className="stage-cell">{generateComments(stage)}</div>
-        </div>);
-      })
-    }
-  </div>);
+        );
+      })}
+    </div>
+  );
 };
