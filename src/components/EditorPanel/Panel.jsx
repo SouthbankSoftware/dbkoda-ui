@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-31T13:30:40+11:00
+ * @Last modified time: 2017-11-20T14:04:21+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -46,6 +46,7 @@ import addTooltip from '#/hoc/addTooltip';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';
 import { EditorTypes, DrawerPanes } from '#/common/Constants';
+import findElementAttributeUpward from '~/helpers/findElementAttributeUpward';
 import { AggregateGraphicalBuilder } from '../AggregateViews';
 import Toolbar from './Toolbar';
 import View from './View';
@@ -419,12 +420,11 @@ export default class Panel extends React.Component {
    */
   showContextMenu(event) {
     const target = event.target;
-    const tabId =
-      target.getAttribute('data-tab-id') ||
-      target.parentElement.getAttribute('data-tab-id');
-    const currentEditor = this.props.store.editors.get(tabId);
+    const tabId = findElementAttributeUpward(target, 'data-tab-id');
 
     if (tabId && tabId !== 'Default') {
+      const currentEditor = this.props.store.editors.get(tabId);
+
       ContextMenu.show(
         <Menu className="editorTabContentMenu">
           <div className="menuItemWrapper closeTabItem">
