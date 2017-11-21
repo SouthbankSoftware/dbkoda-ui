@@ -10,7 +10,14 @@
     "url": "http://southbanksoftware.com"
   },
   "main": "dist/index.html",
-  "keywords": ["React", "React-Router", "MobX", "Webpack", "ES6", "ES7"],
+  "keywords": [
+    "React",
+    "React-Router",
+    "MobX",
+    "Webpack",
+    "ES6",
+    "ES7"
+  ],
   "engines": {
     "node": ">= 7.2.1"
   },
