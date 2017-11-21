@@ -107,11 +107,6 @@ export default class Config {
         })
         .then(() => {
           console.log('config.yml updated');
-          //NewToaster.show({
-          //  message: 'Config.yml successfully updated',
-          //  className: 'success',
-          //  iconName: 'pt-icon-thumbs-up',
-          //});
           runInAction(() => {
             this.loading = false;
           });
