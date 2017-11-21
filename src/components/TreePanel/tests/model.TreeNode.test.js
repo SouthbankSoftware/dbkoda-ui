@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-21T15:38:33+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T16:21:10+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,21 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-03-21T15:38:33+11:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-04-10T10:25:03+10:00
- */
-
-// import React from 'react';
-// import { shallow } from 'enzyme';
-// import { observable, useStrict } from 'mobx';
-// import { Provider } from 'mobx-react';
-// import renderer from 'react-test-renderer';
+import 'raf/polyfill';
 import TreeNode from '#/TreePanel/model/TreeNode';
-// import Store from '~/stores/global';
 
 describe('TreeNode', () => {
   const treeJson = {

@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-08-01T10:50:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-25T15:02:42+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T10:55:45+11:00
  */
 
 /*
@@ -28,6 +28,7 @@
 /* eslint no-unused-vars:warn */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import filesize from 'filesize';
 import { observe } from 'mobx';
@@ -100,13 +101,13 @@ export default class View extends React.Component {
   };
 
   static propTypes = {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    data: React.PropTypes.object.isRequired,
-    selectedNode: React.PropTypes.object.isRequired,
-    onClick: React.PropTypes.func,
-    onDblClick: React.PropTypes.func,
-    onBreadCrumbClick: React.PropTypes.func,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    data: PropTypes.object.isRequired,
+    selectedNode: PropTypes.object.isRequired,
+    onClick: PropTypes.func,
+    onDblClick: PropTypes.func,
+    onBreadCrumbClick: PropTypes.func,
   };
 
   constructor(props) {

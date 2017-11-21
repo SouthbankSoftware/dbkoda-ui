@@ -1,4 +1,9 @@
-/*
+/**
+ * @Author: mike
+ * @Date:   2017-03-28 16:13:50
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T16:30:12+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,13 +21,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: mike
- * @Date:   2017-03-28 16:13:50
- * @Last modified by:   chris
- * @Last modified time: 2017-10-17T10:33:12+11:00
  */
+
 /* eslint-disable react/no-string-refs */
 /* eslint-disable no-unused-vars */
 import {observer, inject} from 'mobx-react';
@@ -36,7 +36,7 @@ const instance = false;
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  */
- @inject(allStores => ({
+@inject(allStores => ({
    store: allStores.store,
    config: allStores.config,
  }))

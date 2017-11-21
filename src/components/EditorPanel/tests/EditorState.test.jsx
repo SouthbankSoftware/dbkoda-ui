@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: joey
+ * @Date:   2017-05-15T16:33:48+10:00
+ * @Email:  joey@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T13:19:52+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,16 +24,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: joey
- * @Date:   2017-05-15T16:33:48+10:00
- * @Email:  joey@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-01T13:22:02+11:00
- */
-
 import uuidV1 from 'uuid';
 import React from 'react';
+import '~/helpers/configEnzyme';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import { observable, useStrict } from 'mobx';

@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-20T14:04:21+11:00
+ * @Last modified time: 2017-11-21T14:07:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -189,7 +189,9 @@ export default class Panel extends React.Component {
   }
 
   restoreTabScrollLeftPosition() {
-    this.tabs.tablistElement.scrollLeft = this.props.store.editorPanel.tabScrollLeftPosition;
+    if (this.tabs) {
+      this.tabs.tablistElement.scrollLeft = this.props.store.editorPanel.tabScrollLeftPosition;
+    }
   }
 
   /**

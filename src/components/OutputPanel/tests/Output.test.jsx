@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: chris
+ * @Date:   2017-03-10T10:55:54+11:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T13:22:27+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,22 +24,15 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
-* @Author: chris
-* @Date:   2017-03-10T10:55:54+11:00
-* @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-19T11:32:30+10:00
-*/
+import 'raf/polyfill';
 import ReactDOM from 'react-dom';
+import React from 'react';
+import { jsdom } from 'jsdom';
 import { assert } from 'chai';
 import { Provider } from 'mobx-react';
 import Store from '~/stores/global';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import { OutputToolbar } from '../index.js';
-
-const jsdom = require('jsdom').jsdom;
-const React = require('react');
 
 describe('Output Toolbar', () => {
   let document;

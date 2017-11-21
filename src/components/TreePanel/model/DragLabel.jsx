@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-15T10:54:51+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-19T16:22:04+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T10:53:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,6 +25,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
 import { computed } from 'mobx';
 import { DragSource } from 'react-dnd';
@@ -127,10 +128,10 @@ class DragLabel extends React.Component {
 }
 
 DragLabel.propTypes = {
-  label: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  connectDragSource: React.PropTypes.func.isRequired,
-  isDragging: React.PropTypes.bool.isRequired,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  connectDragSource: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
 };
 
 export default DragSource(DragItemTypes.LABEL, labelSource, collect)(DragLabel);

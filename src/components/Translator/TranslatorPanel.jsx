@@ -1,6 +1,9 @@
 /**
  * Created by joey on 12/9/17
  *
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T13:05:21+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -24,7 +27,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import CodeMirror from 'react-codemirror';
+import CodeMirror from '#/common/LegacyCodeMirror';
 import CM from 'codemirror';
 import {action} from 'mobx';
 import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';

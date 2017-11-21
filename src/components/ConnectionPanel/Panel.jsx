@@ -1,4 +1,12 @@
-/*
+/**
+ * Connection profile panel class
+ *
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-04-21T10:47:14+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T16:31:06+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,18 +26,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-04-21T10:47:14+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T15:19:01+10:00
- */
-
-/**
- * connection profile panel class
- */
 /* eslint-disable react/jsx-no-bind */
+
 import React from 'react';
 import { observer } from 'mobx-react';
 import autobind from 'autobind-decorator';

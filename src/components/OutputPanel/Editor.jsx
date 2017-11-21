@@ -3,7 +3,7 @@
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T16:44:31+11:00
+ * @Last modified time: 2017-11-21T13:02:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
-import CodeMirror from 'react-codemirror';
+import CodeMirror from '#/common/LegacyCodeMirror';
 import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
 import StaticApi from '~/api/static';
 import { NewToaster } from '#/common/Toaster';

@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-07T12:00:43+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T10:57:25+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,14 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
-* @Author: Wahaj Shamim <wahaj>
-* @Date:   2017-03-07T12:00:43+11:00
-* @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-06-07T08:08:03+10:00
-*/
 import React from 'react';
+import PropTypes from 'prop-types';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { reaction, runInAction, action } from 'mobx';
@@ -155,5 +155,5 @@ export default class TreeToolbar extends React.Component {
 }
 
 TreeToolbar.propTypes = {
-  treeState: React.PropTypes.instanceOf(TreeState),
+  treeState: PropTypes.instanceOf(TreeState),
 };

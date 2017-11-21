@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-09-11T09:07:31+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T10:57:53+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,6 +25,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { reaction, runInAction, observable, action } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
@@ -523,5 +524,5 @@ export default class TreeView extends React.Component {
 }
 
 TreeView.propTypes = {
-  treeState: React.PropTypes.instanceOf(TreeState),
+  treeState: PropTypes.instanceOf(TreeState),
 };

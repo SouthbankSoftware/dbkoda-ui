@@ -1,9 +1,9 @@
 /**
- * @Author: chris
- * @Date:   2017-08-10T13:30:31+10:00
- * @Email:  chris@southbanksoftware.com
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2017-11-21T10:41:07+11:00
+ * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:43:16+11:00
+ * @Last modified time: 2017-11-21T10:43:43+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,24 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import React from 'react';
-import '~/helpers/configEnzyme';
-import { mount } from 'enzyme';
-import { useStrict } from 'mobx';
-import globalizeInit from '#/tests/helpers/globalize.js';
-import Panel from '../Panel';
+import 'raf/polyfill';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
-describe('Enhanced JSON Tab', () => {
-  let app;
-  const testJson = { json: { key: 'value' } };
-
-  beforeAll(() => {
-    useStrict(true);
-    globalizeInit();
-    app = mount(<Panel enhancedJson={testJson} />);
-  });
-
-  test('can render', () => {
-    expect(app.find('.react-json-view').length).toEqual(1);
-  });
-});
+configure({ adapter: new Adapter() });

@@ -1,4 +1,9 @@
-/*
+/**
+ * @Author: guiguan
+ * @Date:   2017-03-07T13:47:00+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T16:25:07+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,12 +21,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: guiguan
- * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   chris
- * @Last modified time: 2017-10-16T09:15:20+11:00
  */
 
 /* eslint camelcase:warn */
@@ -80,7 +79,7 @@ class App extends React.Component {
     this.props.config.settings.save();
     this.props.store.layout.optInVisible = false;
   }
-  unstable_handleError(...v) {
+  unstable_handleError() { // eslint-disable-line camelcase
     Broker.emit(EventType.APP_CRASHED);
   }
   render() {
