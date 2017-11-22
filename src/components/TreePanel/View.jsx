@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:57:53+11:00
+ * @Last modified time: 2017-11-22T11:33:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -41,6 +41,7 @@ import {
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import LoadingView from '#/common/LoadingView';
+import findElementAttributeUpward from '~/helpers/findElementAttributeUpward';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
 import DocumentIcon from '../../styles/icons/document-solid-icon.svg';
@@ -197,12 +198,11 @@ export default class TreeView extends React.Component {
               const icon = this.getIconFor(objAction.icon);
               if (icon != null) {
                 Menus.push(
-                  <div className="menuItemWrapper">
+                  <div className="menuItemWrapper" data-id={objAction.name}>
                     {icon}
                     <MenuItem
                       onClick={this.handleTreeActionClick}
                       text={objAction.text}
-                      name={objAction.name}
                       key={objAction.name}
                       intent={Intent.NONE}
                     />
@@ -210,12 +210,11 @@ export default class TreeView extends React.Component {
                 );
               } else {
                 Menus.push(
-                  <div className="menuItemWrapper">
+                  <div className="menuItemWrapper" data-id={objAction.name}>
                     {icon}
                     <MenuItem
                       onClick={this.handleTreeActionClick}
                       text={objAction.text}
-                      name={objAction.name}
                       key={objAction.name}
                       iconName={objAction.icon}
                       intent={Intent.NONE}
@@ -282,7 +281,7 @@ export default class TreeView extends React.Component {
 
   @action
   handleTreeActionClick = (e: React.MouseEvent) => {
-    const action = e._targetInst._currentElement._owner._instance.props.name;
+    const action = findElementAttributeUpward(e.target, 'data-id');
     const noDialog = this.getNoDialogByName(action);
     this.actionSelected = this.getActionByName(action);
     if (noDialog) {
