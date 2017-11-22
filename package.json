@@ -137,7 +137,6 @@
     "mongodb-uri": "^0.9.7",
     "mousetrap": "^1.6.1",
     "mousetrap-global-bind": "^1.1.0",
-    "node-fetch": "^1.7.1",
     "node-sass": "^4.7.1",
     "package": "^1.0.1",
     "postcss-loader": "^2.0.5",

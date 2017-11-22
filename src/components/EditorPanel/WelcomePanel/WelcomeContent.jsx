@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-04-10 14:32:37
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-22T16:41:16+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,18 +24,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-04-10 14:32:37
-* @Email:  mike@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-06-16T15:58:39+10:00
-*/
+/* eslint-disable react/no-string-refs, react/sort-comp */
 
-/* eslint-disable react/no-string-refs */
-/* eslint-disable react/sort-comp */
 import React from 'react';
-import fetch from 'node-fetch';
 import xml2js from 'xml2js';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
