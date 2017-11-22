@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T15:07:57+11:00
+ * @Last modified time: 2017-11-22T14:54:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -656,6 +656,11 @@ export default class ListView extends React.Component {
         </div>,
       );
     }
+
+    // HACK workaround for https://github.com/palantir/blueprint/issues/1539
+    setTimeout(() => {
+      document.querySelector('.pt-popover.pt-minimal.pt-dark').classList.remove('pt-dark');
+    });
 
     return (
       <Menu className="profileListContextMenu">
