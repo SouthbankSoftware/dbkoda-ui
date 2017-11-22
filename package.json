@@ -22,10 +22,12 @@
     "node": ">= 8.9.1"
   },
   "scripts": {
-    "postinstall": "yarn upgrade xterm && cd node_modules/xterm && yarn install",
+    "postinstall": "yarn patch:xterm && yarn patch:globalize-webpack-plugin",
+    "patch:xterm": "yarn upgrade xterm && cd node_modules/xterm && yarn install",
+    "patch:globalize-webpack-plugin": "shx cp ./patch/globalize-webpack-plugin/DevelopmentModePlugin.js ./node_modules/globalize-webpack-plugin",
     "dev": "webpack-dev-server --config webpack/dev.js",
     "dev:install": "yarn install --ignore-scripts",
-    "dev:prod": "yarn run postinstall && yarn start --",
+    "dev:prod": "yarn run postinstall && yarn start",
     "dev:analyser": "yarn run dev:analyzer",
     "dev:analyzer": "yarn run clean && webpack --config webpack/analyzer.js",
     "dev:xterm": "cd node_modules/xterm; PORT=3001 yarn start",
@@ -172,6 +174,7 @@
     "shallow-equal": "^1.0.0",
     "shebang-loader": "0.0.1",
     "shelljs": "^0.7.7",
+    "shx": "^0.2.2",
     "style-loader": "^0.19.0",
     "test-utils": "^1.0.21",
     "uglifyjs-webpack-plugin": "^1.1.0",

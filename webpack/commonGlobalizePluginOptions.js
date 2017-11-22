@@ -1,9 +1,9 @@
 /**
  * @Author: Guan Gui <guiguan>
- * @Date:   2017-07-10T12:51:15+10:00
+ * @Date:   2017-11-22T18:03:56+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-22T18:05:47+11:00
+ * @Last modified time: 2017-11-22T18:06:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,12 +24,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const merge = require('webpack-merge');
-const prod = require('./prod');
-
-module.exports = merge.strategy({
-  plugins: 'append'
-})(prod, {
-  plugins: [new BundleAnalyzerPlugin()]
-});
+module.exports = {
+  developmentLocale: 'en',
+  supportedLocales: ['en'],
+  messages: 'src/messages/[locale].json',
+  output: 'i18n/[locale].[hash].js',
+};
