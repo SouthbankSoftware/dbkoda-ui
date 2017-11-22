@@ -266,7 +266,7 @@
         "openConnection": "Open Connection",
         "closeConnection": "Close Connection",
         "editProfile": "Edit Profile",
-        "editors": "Editors:",
+        "editors": "Editors",
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
