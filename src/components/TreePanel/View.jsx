@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-22T11:33:02+11:00
+ * @Last modified time: 2017-11-23T17:54:17+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -198,7 +198,7 @@ export default class TreeView extends React.Component {
               const icon = this.getIconFor(objAction.icon);
               if (icon != null) {
                 Menus.push(
-                  <div className="menuItemWrapper" data-id={objAction.name}>
+                  <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
                     {icon}
                     <MenuItem
                       onClick={this.handleTreeActionClick}
@@ -210,7 +210,7 @@ export default class TreeView extends React.Component {
                 );
               } else {
                 Menus.push(
-                  <div className="menuItemWrapper" data-id={objAction.name}>
+                  <div className="menuItemWrapper" key={objAction.name} data-id={objAction.name}>
                     {icon}
                     <MenuItem
                       onClick={this.handleTreeActionClick}
