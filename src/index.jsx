@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-01T13:20:38+11:00
+ * @Last modified time: 2017-11-23T12:40:27+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,6 +35,13 @@ import { Provider } from 'mobx-react';
 import { AppContainer } from 'react-hot-loader';
 import { Broker, EventType } from './helpers/broker';
 import App from './components/App';
+
+const Globalize = require('globalize'); // doesn't work well with import
+
+global.globalString = (path, ...params) =>
+  Globalize.messageFormatter(path)(...params);
+global.globalNumber = (value, config) =>
+  Globalize.numberFormatter(config)(value);
 
 useStrict(true);
 
@@ -99,11 +106,11 @@ Broker.once(EventType.APP_CRASHED, () => {
     store
       .backup()
       .then(() => {
-        store = new Store();
+        store = new Store(true);
         api = new DataCenter(store);
         config = new Config();
         profileStore = new Profiles();
-        store.setProfileStore(profileStore);
+        store.setProfileStore(profileStore); // TODO: remove this dependency
         store.setAPI(api); // TODO: Remove this line after complete migration to API
         store.saveSync();
         ipcRenderer.send(EventType.APP_CRASHED);

@@ -3,7 +3,7 @@
  * @Date:   2017-11-22T16:42:44+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-22T18:36:24+11:00
+ * @Last modified time: 2017-11-22T23:43:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,10 +29,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, '../src'),
-  entry: [
-    'babel-polyfill',
-    './index.jsx',
-  ],
+  entry: ['babel-polyfill', './index.jsx'],
   output: {
     path: path.resolve(__dirname, '../dist/ui/'),
     publicPath: '/ui/',
@@ -98,9 +95,7 @@ module.exports = {
       handlebars: 'handlebars/dist/handlebars.js',
     },
   },
-  plugins: [
-    new HtmlWebpackPlugin({ hash: false, template: './index.html' })
-  ],
+  plugins: [new HtmlWebpackPlugin({ hash: false, template: './index.html' })],
   node: {
     fs: 'empty',
     module: 'empty',

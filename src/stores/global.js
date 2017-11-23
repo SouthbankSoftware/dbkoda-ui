@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-14T14:23:24+11:00
+ * @Last modified time: 2017-11-23T12:39:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,15 +36,9 @@ import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
+import Globalize from 'globalize';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
-
-global.Globalize = require('globalize'); // Globalize doesn't load well with import
-
-global.globalString = (path, ...params) =>
-  Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) =>
-  Globalize.numberFormatter(config)(value);
 
 let ipcRenderer;
 let stateStorePath;
@@ -215,17 +209,17 @@ export default class Store {
   @observable
   topology = observable({ isChanged: false, json: {}, profileId: '' });
 
-  @action
+  @action.bound
   setDrawerChild = (value) => {
     this.drawer.drawerChild = value;
   };
 
-  @action
+  @action.bound
   showConnectionPane = () => {
     this.setDrawerChild(DrawerPanes.PROFILE);
   };
 
-  @action
+  @action.bound
   showTreeActionPane = (type) => {
     if (type == EditorTypes.TREE_ACTION) {
       this.setDrawerChild(DrawerPanes.DYNAMIC);
@@ -234,26 +228,26 @@ export default class Store {
     }
   };
 
-  @action
+  @action.bound
   setTreeAction = (treeNode, treeAction) => {
     this.treeActionPanel.treeNode = treeNode;
     this.treeActionPanel.treeAction = treeAction;
   };
 
-  @action
+  @action.bound
   updateDynamicFormCode = (value) => {
     this.treeActionPanel.formValues = value;
     this.treeActionPanel.isNewFormValues = true;
   };
 
-  @action
+  @action.bound
   updateTopology = (res) => {
     this.topology.profileId = res.profileId;
     this.topology.json = res.result;
     this.topology.isChanged = true;
   };
 
-  @action
+  @action.bound
   addEditor = (withProfile, newRes) => {
     this.editorPanel.creatingNewEditor = true;
     this.editorPanel.creatingWithProfile = withProfile;
@@ -262,13 +256,13 @@ export default class Store {
 
   // Actions for creating new editors, currently used by ProfileListPanel/ListView.jsx
   // When time allows editor/Toolbar.jsx should also be refactored to use these same actions.
-  @action
+  @action.bound
   startCreatingNewEditor = () => {
     this.editorPanel.creatingNewEditor = true;
     this.editorToolbar.newConnectionLoading = true;
   };
 
-  @action
+  @action.bound
   openNewAggregateBuilder(nodeRightClicked) {
     if (this.editorPanel.activeDropdownId === 'Default') {
       NewToaster.show({
@@ -305,7 +299,6 @@ export default class Store {
       });
   }
 
-  @action
   dump() {
     // TODO: Remove this after the api has been implemented completely from here
     const dumpStore = {};
@@ -361,7 +354,7 @@ export default class Store {
     }
   };
 
-  @action
+  @action.bound
   closeConnection() {
     return new Promise((resolve) => {
       if (this.profileStore && this.profileStore.profiles && this.profileStore.profiles.size > 0) {
@@ -389,13 +382,13 @@ export default class Store {
       }
     });
   }
-  @action
+  @action.bound
   updateAndRestart() {
     this.updateAvailable = false;
     ipcRenderer.send('updateAndRestart');
   }
 
-  @action
+  @action.bound
   restore(data) {
     const newStore = restore(data, { deserializer, postDeserializer });
     this.cleanStore(newStore);
@@ -403,10 +396,7 @@ export default class Store {
   }
 
   cleanStore(newStore) {
-    if (!newStore.locale) {
-      newStore.locale = 'en';
-    }
-    Globalize.locale(newStore.locale);
+    // Globalize.locale(newStore.locale || 'en');
 
     newStore.layout.alertIsLoading = false;
 
@@ -516,10 +506,10 @@ export default class Store {
       .then(({ content }) => {
         this.restore(content);
         // Init Globalize required json
-        Globalize.load(
-          require('cldr-data/main/en/ca-gregorian.json'),
-          require('cldr-data/supplemental/likelySubtags.json'),
-        );
+        // Globalize.load(
+        //   require('cldr-data/main/en/ca-gregorian.json'),
+        //   require('cldr-data/supplemental/likelySubtags.json'),
+        // );
         this.saveUponEditorsChange();
 
         // FIXME
@@ -575,15 +565,18 @@ export default class Store {
     this.editors.observe(this.saveDebounced);
   }
 
-  constructor() {
+  constructor(initOnly: false) {
     this.save = this.save.bind(this);
     this.saveDebounced = _.debounce(this.save, 500);
+
+    if (initOnly) return;
 
     Broker.on(EventType.FEATHER_CLIENT_LOADED, (value) => {
       if (value) {
         this.load();
       }
     });
+
     if (IS_ELECTRON) {
       ipcRenderer.once('update', (event, message) => {
         if (message === 'updateReady') {
