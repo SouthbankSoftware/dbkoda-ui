@@ -158,7 +158,7 @@ export default class Panel extends React.Component {
         drillStatusMsg: 'Drill has been downloaded successfully.',
         showDrillDownloaderStatus: true,
       });
-      const drillCmd = message.split(':');
+      const drillCmd = message.split('|');
       console.log('drillCmd:', drillCmd);
       this.saveDrillCmd(drillCmd[0], drillCmd[1]);
       _.delay(hideDrillDownloaderStatus, 5000);
