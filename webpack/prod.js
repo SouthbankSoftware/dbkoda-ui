@@ -3,7 +3,7 @@
  * @Date:   2017-11-20T14:07:16+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-22T18:35:29+11:00
+ * @Last modified time: 2017-11-23T15:16:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,28 +27,19 @@
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const GlobalizePlugin = require('globalize-webpack-plugin');
 const commonGlobalizePluginOptions = require('./commonGlobalizePluginOptions');
 const common = require('./common');
 
+const ENABLE_SOURCE_MAP = true;
+
 module.exports = merge(
   merge.strategy({
-    entry: 'prepend',
     'module.rules': 'prepend',
     plugins: 'prepend',
   })(common, {
-    entry: [
-      // Load Globalize so libraries can be built
-      'globalize',
-      'globalize/dist/globalize-runtime/number',
-      'globalize/dist/globalize-runtime/currency',
-      'globalize/dist/globalize-runtime/date',
-      'globalize/dist/globalize-runtime/message',
-      'globalize/dist/globalize-runtime/plural',
-      'globalize/dist/globalize-runtime/relative-time',
-      'globalize/dist/globalize-runtime/unit',
-    ],
     module: {
       rules: [
         {
@@ -67,24 +58,32 @@ module.exports = merge(
         },
       ],
     },
-    devtool: 'source-map',
+    devtool: ENABLE_SOURCE_MAP ? 'source-map' : false,
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify('production'),
         },
       }),
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new ExtractTextPlugin('style.css'),
-      new UglifyJSPlugin({
+      new OptimizeCssAssetsPlugin(),
+      new UglifyJsPlugin({
+        parallel: true,
+        sourceMap: ENABLE_SOURCE_MAP,
         uglifyOptions: {
-          beautify: false,
           ecma: 6,
           compress: true,
-          comments: false,
+          output: {
+            comments: false,
+            beautify: false,
+          },
         },
       }),
       new GlobalizePlugin(
         merge(commonGlobalizePluginOptions, {
+          // because of statical extraction, we need to change our way of using Globalize in order
+          // to enable this
           production: false,
         }),
       ),
