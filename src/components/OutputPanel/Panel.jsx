@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T17:40:37+11:00
+ * @Last modified time: 2017-11-24T16:34:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -548,7 +548,7 @@ export default class Panel extends React.Component {
           </Tab2>,
         );
       } else if (type === terminalTypes.ssh) {
-        if (terminal.profileId === selectedProfile.id) {
+        if (selectedProfile && terminal.profileId === selectedProfile.id) {
           sshTerminals.push(
             <Tab2
               className="visible"

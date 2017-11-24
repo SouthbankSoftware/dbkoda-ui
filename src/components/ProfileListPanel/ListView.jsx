@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-24T16:08:55+11:00
+ * @Last modified time: 2017-11-24T17:31:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -236,12 +236,9 @@ export default class ListView extends React.Component {
         shellVersion: res.shellVersion,
         initialMsg: res.output ? res.output.join('\r') : '',
       };
-      if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
-        profile.bPassPhrase = true;
-      }
-      if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
-        profile.bRemotePass = true;
-      }
+
+      this._syncSshCredential(data, profile);
+
       this.props.profileStore.profiles.set(res.id, profile);
       this.props.store.profileList.selectedProfile = this.props.profileStore.profiles.get(res.id);
       Broker.emit(
@@ -496,8 +493,23 @@ export default class ListView extends React.Component {
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
   }
 
+  _syncSshCredential = action((source, target) => {
+    if ((source.passPhrase && source.passPhrase != '') || source.bPassPhrase) {
+      target.bPassPhrase = true;
+    }
+    if ((source.remotePass && source.remotePass != '') || source.bRemotePass) {
+      target.bRemotePass = true;
+    }
+  });
+
   @autobind
   openSshConnectionAlert() {
+    const { targetProfile } = this.state;
+
+    if (targetProfile) {
+      this._syncSshCredential(targetProfile, targetProfile);
+    }
+
     if (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);

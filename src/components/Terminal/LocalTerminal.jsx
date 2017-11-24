@@ -5,7 +5,7 @@
  * @Date:   2017-11-15T10:29:13+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-24T16:26:54+11:00
+ * @Last modified time: 2017-11-24T16:35:40+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -70,7 +70,7 @@ export default class LocalTerminal extends React.PureComponent<Props> {
       .then(({ payload: { new: isNew } }) => {
         if (!isNew) {
           console.log('Terminal already exists');
-          this._send('\r');
+          this._send('\f');
         }
       })
       .catch(console.error);

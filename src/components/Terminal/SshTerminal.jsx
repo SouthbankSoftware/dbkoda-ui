@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-24T16:11:59+11:00
+ * @Last modified time: 2017-11-24T16:35:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -60,7 +60,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
       .get(id)
       .then(() => {
         console.log('Terminal already exists');
-        this._send('\r');
+        this._send('\f');
       })
       .catch((err) => {
         if (err.code === 404) {
