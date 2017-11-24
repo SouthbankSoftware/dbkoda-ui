@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-22T15:12:51+11:00
+ * @Last modified time: 2017-11-24T16:08:55+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -285,7 +285,7 @@ export default class ListView extends React.Component {
   @action
   closeProfile() {
     const selectedProfile = this.state.targetProfile;
-    const profiles = this.props.profileStore.profiles;
+    const { profiles } = this.props.profileStore;
     if (selectedProfile) {
       this.setState({ closingProfile: true });
       this.props.store.layout.alertIsLoading = true;

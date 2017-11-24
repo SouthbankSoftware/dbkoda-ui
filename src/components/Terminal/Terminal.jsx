@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-18T09:42:15+11:00
+ * @Last modified time: 2017-11-24T16:25:13+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -52,7 +52,7 @@ type Store = {
 };
 
 type Props = {
-  store: Store,
+  store: any | Store,
   tabId: string,
   attach: (xterm: Xterm) => void,
   detach: (xterm: Xterm) => void,
@@ -60,7 +60,6 @@ type Props = {
   onResize: (xterm: Xterm, size: { cols: number, rows: number }) => void,
 };
 
-// $FlowIssue
 @inject(({ store }) => {
   const { outputPanel, editorPanel, editors } = store;
 
@@ -78,6 +77,10 @@ export default class Terminal extends React.PureComponent<Props> {
   container: React.ElementRef<*>;
   xterm: Xterm;
   _hasInitialSize = false;
+
+  static defaultProps = {
+    store: null,
+  };
 
   componentDidMount() {
     this.reactions.push(
@@ -140,7 +143,7 @@ export default class Terminal extends React.PureComponent<Props> {
 
     if (!currEditor) return;
 
-    const doc = currEditor.doc;
+    const { doc } = currEditor;
     const code = all ? doc.getValue() : doc.getSelection();
 
     for (const line of code.split(doc.lineSeparator())) {
@@ -151,14 +154,8 @@ export default class Terminal extends React.PureComponent<Props> {
   _onContextMenu = (e: SyntheticMouseEvent<*>) => {
     const menu = (
       <Menu>
-        <MenuItem
-          onClick={() => this._onExecuteCommands(false)}
-          text="Execute Selected Commands"
-        />
-        <MenuItem
-          onClick={() => this._onExecuteCommands(true)}
-          text="Execute All Commands"
-        />
+        <MenuItem onClick={() => this._onExecuteCommands(false)} text="Execute Selected Commands" />
+        <MenuItem onClick={() => this._onExecuteCommands(true)} text="Execute All Commands" />
         <MenuItem
           onClick={() => {
             const selection = this.xterm.getSelection();

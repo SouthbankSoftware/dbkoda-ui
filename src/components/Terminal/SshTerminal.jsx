@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T15:45:57+11:00
+ * @Last modified time: 2017-11-24T16:11:59+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +28,9 @@
 
 import * as React from 'react';
 import Xterm from 'xterm/build/xterm';
+// $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
+// $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import Terminal from './Terminal';
 

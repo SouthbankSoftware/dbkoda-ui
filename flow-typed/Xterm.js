@@ -3,7 +3,7 @@
  * @Date:   2017-11-08T15:20:34+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-14T14:08:19+11:00
+ * @Last modified time: 2017-11-24T16:13:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,6 +39,7 @@ declare module 'xterm/build/xterm' {
     open(container: React.ElementRef<*>): void;
     winptyCompatInit(): void;
     on(eventName: string, cb: (param: any) => void): void;
+    off(eventName: string, cb: (param: any) => void): void;
     attach(socket: *): void;
     detach(socket: *): void;
     destroy(): void;
@@ -47,6 +48,7 @@ declare module 'xterm/build/xterm' {
     findPrevious(token: string): void;
     fit(): void;
     focus(): void;
+    write(data: string): void;
 
     charMeasure: CharMeasure;
   }

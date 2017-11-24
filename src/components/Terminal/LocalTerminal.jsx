@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-15T10:29:13+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T17:55:54+11:00
+ * @Last modified time: 2017-11-24T16:26:54+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,8 +28,11 @@
 
 import * as React from 'react';
 import Xterm from 'xterm/build/xterm';
+// $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
+// $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
+// $FlowFixMe
 import { terminalTypes } from '~/api/Terminal';
 import Terminal from './Terminal';
 
@@ -39,6 +44,8 @@ type Props = {
 export default class LocalTerminal extends React.PureComponent<Props> {
   socket: *;
   pid: *;
+  terminalService: *;
+  _receive: (data: string) => void;
 
   constructor(props: Props) {
     super(props);
