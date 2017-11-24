@@ -45,6 +45,7 @@ class FeatherClient {
     this.osService = this.feathers.service('/os-execution');
     this.shellService.on('shell-output', (output) => {
       const { id, shellId } = output;
+      console.log('get output:', output);
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
       Broker.emit(EventType.SHELL_OUTPUT_AVAILABLE, output);
     });
