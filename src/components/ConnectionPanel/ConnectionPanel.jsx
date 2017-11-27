@@ -45,7 +45,7 @@ const ConnectionPanel = ({
   profiles,
   profileList,
   setDrawerChild,
-  userPreferences,
+  settings,
 }) => {
   const selectedProfile = profileList.selectedProfile;
   let edit = false;
@@ -148,7 +148,7 @@ const ConnectionPanel = ({
   });
 
   const onFail = action(() => {
-    if (userPreferences.telemetryEnabled) {
+    if (settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.FAILED,
         EventLogging.getFragmentEnum().PROFILES,
@@ -272,5 +272,5 @@ export default inject(allStores => ({
   profiles: allStores.profileStore.profiles,
   profileList: allStores.store.profileList,
   setDrawerChild: allStores.store.setDrawerChild,
-  userPreferences: allStores.config.settings,
+  settings: allStores.config.settings,
 }))(observer(ConnectionPanel));
