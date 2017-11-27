@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-27T16:50:31+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,11 +19,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-10-02T15:51:14+11:00
  */
 
 export default {
@@ -64,8 +62,7 @@ export default {
   createFileChangedEvent(id) {
     return `fileChanged::${id}`;
   },
-  createAggregatorResultReceived: editorId =>
-    `aggregator::result-received::${editorId}`,
+  createAggregatorResultReceived: editorId => `aggregator::result-received::${editorId}`,
   SHELL_RECONNECT: 'controller::shell::reconnect',
   createShellReconnectEvent: (id, shellId) => {
     return 'controller::shell::reconnect::' + id + '::' + shellId;
@@ -78,4 +75,6 @@ export default {
   FEATURE_USE: 'feature::use',
   CONTROLLER_ACTIVITY: 'controller::activity',
   TABLE_VIEW_RESULT: editorId => `table-view::result-recieved::${editorId}`,
+  TERMINAL_DATA: id => `terminal::data::${id}`,
+  TERMINAL_ATTACHING: id => `terminal::attaching::${id}`,
 };
