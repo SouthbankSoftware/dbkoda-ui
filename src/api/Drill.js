@@ -57,7 +57,17 @@ export default class DrillApi {
           '/';
       }
     } else {
-      query.url = profile.url;
+      if (profile.url.indexOf('@') < 0) {
+        const mUrl = profile.url.replace(StaticApi.mongoProtocol, '');
+        query.url = StaticApi.mongoProtocol +
+          profile.username +
+          ':' +
+          options.pass +
+          '@' +
+          mUrl;
+      } else {
+        query.url = profile.url;
+      }
     }
     query.db = options.db ? options.db : 'admin';
 
