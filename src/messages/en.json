@@ -207,7 +207,8 @@
         "telemetryEnabled": "Send Telemetry Data to dbKoda",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
         "mongoCmd": "Mongo Path",
-        "drillCmd": "Drill Path"
+        "drillCmd": "Drill Path",
+        "drillControllerCmd": "Drill Controller Path"
       },
       "tabMenu": {
         "closeTab": "Close Tab",

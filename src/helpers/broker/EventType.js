@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T13:51:37+11:00
+ * @Last modified time: 2017-10-02T15:51:14+11:00
  */
 
 export default {
@@ -35,7 +35,7 @@ export default {
   /**
    * event type for shell output message
    */
-  SHELL_OUTPUT_AVAILABLE: 'contral-output-panel-control',
+  SHELL_OUTPUT_AVAILABLE: 'output-panel-control',
   createShellOutputEvent: (id, shellId) => {
     return 'controller::shell::output::' + id + '::' + shellId;
   },
@@ -64,7 +64,8 @@ export default {
   createFileChangedEvent(id) {
     return `fileChanged::${id}`;
   },
-  createAggregatorResultReceived: editorId => `aggregator::result-received::${editorId}`,
+  createAggregatorResultReceived: editorId =>
+    `aggregator::result-received::${editorId}`,
   SHELL_RECONNECT: 'controller::shell::reconnect',
   createShellReconnectEvent: (id, shellId) => {
     return 'controller::shell::reconnect::' + id + '::' + shellId;
@@ -77,6 +78,4 @@ export default {
   FEATURE_USE: 'feature::use',
   CONTROLLER_ACTIVITY: 'controller::activity',
   TABLE_VIEW_RESULT: editorId => `table-view::result-recieved::${editorId}`,
-  TERMINAL_DATA: id => `terminal::data::${id}`,
-  TERMINAL_ATTACHING: id => `terminal::attaching::${id}`,
 };
