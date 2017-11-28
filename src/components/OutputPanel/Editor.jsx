@@ -185,7 +185,7 @@ export default class Editor extends React.Component {
               this.editor.getCodeMirror(),
               editorId
             )
-              .then(result => {
+              .then((result) => {
                 runInAction(() => {
                   this.props.api.outputApi.showChartPanel(
                     editorId,
@@ -194,7 +194,7 @@ export default class Editor extends React.Component {
                   );
                 });
               })
-              .catch(err => {
+              .catch((err) => {
                 const message =
                   globalString('output/editor/parseJsonError') +
                   err.substring(0, 50);
@@ -261,7 +261,7 @@ export default class Editor extends React.Component {
       <div className="outputEditor">
         <CodeMirror
           autosave
-          ref={c => {
+          ref={(c) => {
             this.editor = c;
           }}
           alwaysScrollToBottom

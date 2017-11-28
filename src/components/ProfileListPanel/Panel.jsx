@@ -30,9 +30,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import DBKodaIcon from '../../styles/icons/dbkoda-logo.svg';
-import { terminalTypes } from '~/api/Terminal';
 import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
+import { terminalTypes } from '~/api/Terminal';
+import DBKodaIcon from '../../styles/icons/dbkoda-logo.svg';
 import Toolbar from './Toolbar.jsx';
 import ListView from './ListView.jsx';
 import './styles.scss';
@@ -46,7 +46,7 @@ export default class Panel extends React.Component {
     this.state = {};
   }
 
-  renderContextMenu(event) {
+  renderContextMenu() {
     const menuItems = [];
     menuItems.push(
       <div key={menuItems.length} className="menuItemWrapper">
