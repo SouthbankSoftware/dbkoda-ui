@@ -30,6 +30,7 @@ import { action, runInAction } from 'mobx';
 import CodeMirror from '#/common/LegacyCodeMirror';
 import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
 import StaticApi from '~/api/static';
+import { terminalTypes } from '~/api/Terminal';
 import { NewToaster } from '#/common/Toaster';
 import 'codemirror/theme/material.css';
 import OutputTerminal from './Terminal';
@@ -43,7 +44,7 @@ require('#/common/MongoScript.js');
  */
 @inject(allStores => ({
   store: allStores.store,
-  api: allStores.api,
+  api: allStores.api
 }))
 @observer
 @ContextMenuTarget
@@ -109,14 +110,14 @@ export default class Editor extends React.Component {
               currentJson,
               this.props.id,
               'enhancedJson',
-              lines,
+              lines
             );
           }}
           text={globalString('output/editor/contextJson')}
           iconName="pt-icon-panel-stats"
           intent={Intent.NONE}
         />
-      </div>,
+      </div>
     );
     menuItems.push(
       <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
@@ -133,7 +134,7 @@ export default class Editor extends React.Component {
                 'tableJson',
                 lines,
                 this.editor,
-                true,
+                true
               );
             }}
             text={globalString('output/editor/contextTableSingle')}
@@ -148,7 +149,7 @@ export default class Editor extends React.Component {
                 'tableJson',
                 lines,
                 this.editor,
-                false,
+                false
               );
             }}
             text={globalString('output/editor/contextTableMulti')}
@@ -156,7 +157,21 @@ export default class Editor extends React.Component {
             intent={Intent.NONE}
           />
         </MenuItem>
-      </div>,
+      </div>
+    );
+    menuItems.push(
+      <div key={menuItems.length} className="menuItemWrapper">
+        <MenuItem
+          className="profileListContextMenu newLocalTerminal"
+          onClick={() => {
+            const { addTerminal } = this.props.api;
+            addTerminal(terminalTypes.local);
+          }}
+          text={globalString('profile/menu/newLocalTerminal')}
+          intent={Intent.NONE}
+          iconName="pt-icon-new-text-box"
+        />
+      </div>
     );
     menuItems.push(
       <div className="menuItemWrapper showChartView" id="showChartViewMenuItem">
@@ -168,18 +183,18 @@ export default class Editor extends React.Component {
               currentJson,
               lines,
               this.editor.getCodeMirror(),
-              editorId,
+              editorId
             )
-              .then((result) => {
+              .then(result => {
                 runInAction(() => {
                   this.props.api.outputApi.showChartPanel(
                     editorId,
                     result,
-                    'loaded',
+                    'loaded'
                   );
                 });
               })
-              .catch((err) => {
+              .catch(err => {
                 const message =
                   globalString('output/editor/parseJsonError') +
                   err.substring(0, 50);
@@ -187,7 +202,7 @@ export default class Editor extends React.Component {
                   NewToaster.show({
                     message,
                     className: 'danger',
-                    icon: '',
+                    icon: ''
                   });
                 });
 
@@ -196,7 +211,7 @@ export default class Editor extends React.Component {
                     editorId,
                     {},
                     'error',
-                    message,
+                    message
                   );
                 });
               });
@@ -205,7 +220,7 @@ export default class Editor extends React.Component {
           iconName="pt-icon-th"
           intent={Intent.NONE}
         />
-      </div>,
+      </div>
     );
 
     return <Menu className="outputContextMenu">{menuItems}</Menu>;
@@ -223,7 +238,7 @@ export default class Editor extends React.Component {
       styleActiveLine: true,
       scrollbarStyle: null,
       foldOptions: {
-        widget: '...',
+        widget: '...'
       },
       foldGutter: true,
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
@@ -232,12 +247,12 @@ export default class Editor extends React.Component {
         'Ctrl-Space': 'autocomplete',
         'Ctrl-Q': function(cm) {
           cm.foldCode(cm.getCursor());
-        },
+        }
       },
       mode: {
         name: 'javascript',
-        json: 'true',
-      },
+        json: 'true'
+      }
     };
     if (!this.props.store.outputs.get(this.props.id)) {
       return <div className="outputEditor" />;
@@ -246,7 +261,7 @@ export default class Editor extends React.Component {
       <div className="outputEditor">
         <CodeMirror
           autosave
-          ref={(c) => {
+          ref={c => {
             this.editor = c;
           }}
           alwaysScrollToBottom
