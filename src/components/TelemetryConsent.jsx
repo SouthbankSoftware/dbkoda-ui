@@ -1,8 +1,8 @@
 /**
  * @Author: mike
  * @Date:   2017-03-28 16:13:50
- * @Last modified by:   mike
- * @Last modified time: 2017-11-08 10:15:01
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-28T11:58:40+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -85,7 +85,7 @@ export default class TelemetryConsent extends React.Component {
           {globalString('telemetry_dialog/content_third')}
           <a onClick={this.openPrivacyPolicy}>{globalString('telemetry_dialog/privacy_link')}</a>
         </p>
-        <div className={'dialogButtons ' + this.props.store.userPreferences.telemetryEnabled}>
+        <div className={'dialogButtons ' + this.props.config.settings.telemetryEnabled}>
           <AnchorButton
             className="submitButton"
             type="submit"
