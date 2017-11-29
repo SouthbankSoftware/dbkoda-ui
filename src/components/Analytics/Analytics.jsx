@@ -71,12 +71,14 @@ export default class Analytics extends React.Component {
     reaction(
       () => this.props.config.settings.telemetryEnabled,
       (telemetryEnabled) => {
-        if (telemetryEnabled) {
-          this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
-        } else {
-          this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
+        if (!this.props.store.layout.optInVisible) {
+          if (telemetryEnabled) {
+            this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
+          } else {
+            this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
+          }
+          this.props.config.save();
         }
-        this.props.config.save();
       },
       { name: 'analyticsReactionToTelemetryChange' },
     );
