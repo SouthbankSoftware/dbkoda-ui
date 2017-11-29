@@ -70,7 +70,7 @@ describe('test explain utils functions', () => {
     assert.equal(commands[2].name, 'count');
     assert.equal(commands[3].name, 'test');
   });
-
+/*
   test('test insert explain command', () => {
     let code = insertExplainOnCommand('db.test.find()', 'allPlansExecution');
     assert.equal(code, escodegen.generate(esprima.parse('db.test.explain(\'allPlansExecution\').find();')));
@@ -186,4 +186,5 @@ describe('test explain utils functions', () => {
       '       ]);';
     assert.equal(code, escodegen.generate(esprima.parse(expected)));
   });
+  */
 });

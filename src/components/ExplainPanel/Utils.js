@@ -234,18 +234,13 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
     if (!_.find(commands, {name: 'explain'})) {
       const matchedCmd = findMatchedCommand(commands);
       if (matchedCmd) {
-        const explainObj = matchedCmd.name === 'aggregate' ? explainAst() : explainAst(explainParam);
-        explainObj.callee.object = matchedCmd.ast.object;
-        matchedCmd.ast.object = explainObj;
-        return escodegen.generate(parsed);
+        if (['aggregate', 'count', 'update'].indexOf(matchedCmd.name) >= 0) {
+          const explainObj = matchedCmd.name === 'aggregate' ? explainAst() : explainAst(explainParam);
+          explainObj.callee.object = matchedCmd.ast.object;
+          matchedCmd.ast.object = explainObj;
+          return escodegen.generate(parsed);
+        }
       }
-
-      // const aggregate = _.find(commands, {name: 'aggregate'});
-      // if (aggregate) {
-      //   insertExplainToAggregate(root);
-      //   return escodegen.generate(parsed);
-      // }
-
       if (command.match(/;$/)) {
         return command.replace(/;$/, '.explain("' + explainParam + '");');
       }
