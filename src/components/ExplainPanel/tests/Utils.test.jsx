@@ -21,10 +21,10 @@
 import chai, {assert} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import globalizeInit from '#/tests/helpers/globalize.js';
-import {findMongoCommand, insertExplainOnCommand} from '../Utils';
+import {findMongoCommand} from '../Utils';
 
 const esprima = require('esprima');
-const escodegen = require('escodegen');
+// const escodegen = require('escodegen');
 
 chai.use(chaiEnzyme());
 
