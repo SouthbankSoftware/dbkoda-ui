@@ -1,9 +1,9 @@
 db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").find(
   { {{#if FilterKeys}} {{#if UseOr}}"$or"{{else}}"$and"{{/if}}:[
         {{#each FilterKeys}} { "{{AttributeName}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
-        {{/each}}] {{/if}} },    
-  { {{#each Projections}}{{#if AttributeName}} "{{AttributeName}}":{{AttributeProjectionValue}} {{/if}}{{#unless last}},{{/unless}} {{/each}} })
+        {{/each}}] {{/if}} },
+     { {{#each Projections}}{{#if AttributeName}} "{{AttributeName}}":{{AttributeProjectionValue}} {{/if}}{{#unless last}},{{/unless}} {{/each}} })
     {{~#if SortKeys}}.sort({
-    {{#each SortKeys}} "{{AttributeName}}":{{Direction}}{{#unless last}},{{/unless}}{{/each}} }){{/if}}
+    {{~#each SortKeys}} "{{AttributeName}}":{{Direction}}{{#unless last}},{{/unless}}{{/each}} }){{/if}}
     {{~#if Limit}}.limit({{Limit}}){{/if}}
     {{~#if Count}}.count(){{/if}};
