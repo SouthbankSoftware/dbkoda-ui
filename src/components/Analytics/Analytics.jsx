@@ -92,6 +92,7 @@ export default class Analytics extends React.Component {
         } else {
           this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
         }
+        this.props.config.save();
       },
       { name: 'analyticsReactionToTelemetryChange' },
     )
