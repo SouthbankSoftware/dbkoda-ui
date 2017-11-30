@@ -37,6 +37,7 @@ import { AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
+import { EditorTypes } from '#/common/Constants.js';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import ExplainPopover from './ExplainPopover';
@@ -53,6 +54,13 @@ const FILE_FILTERS = [
   {
     name: 'JavaScript',
     extensions: ['js'],
+  },
+];
+
+const FILE_FILTERS_SQL = [
+  {
+    name: 'SQL',
+    extensions: ['sql'],
   },
 ];
 
@@ -271,7 +279,7 @@ export default class Toolbar extends React.Component {
               this.props.store.editorPanel.lastFileSavingDirectoryPath,
               getUnsavedEditorSuggestedFileName(currentEditor),
             ),
-            filters: FILE_FILTERS,
+            filters: (currentEditor.type == EditorTypes.DRILL) ? FILE_FILTERS_SQL : FILE_FILTERS,
           },
           (fileName) => {
             this.props.store.editorToolbar.saveAs = false;

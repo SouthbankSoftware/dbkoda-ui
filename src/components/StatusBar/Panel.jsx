@@ -28,9 +28,8 @@
 /* eslint no-prototype-builtins:warn */
 /* eslint jsx-a11y/no-static-element-interactions: 0 */
 
-import _ from 'lodash';
 import React from 'react';
-import { observable, action, toJS } from 'mobx';
+import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import { AnchorButton, Intent, Alert, EditableText } from '@blueprintjs/core';
@@ -50,8 +49,7 @@ const FeedbackTypes = {
 
 @inject(allStores => ({
   store: allStores.store,
-  api: allStores.api,
-  config: allStores.config,
+  api: allStores.api
 }))
 @observer
 export default class Panel extends React.Component {
@@ -71,8 +69,6 @@ export default class Panel extends React.Component {
       isUpdateAvailable: false,
       isUpdateDownloaded: false,
       isUpdateDownloading: false,
-      showDrillDownloaderStatus: false,
-      drillStatusMsg: ''
     };
     const os = require('os').release();
     if (os.match(/Mac/gi)) {
@@ -89,7 +85,6 @@ export default class Panel extends React.Component {
       const electron = window
       .require('electron');
       electron.ipcRenderer.on('updateStatus', this.handleAutoupdaterCommand);
-      electron.ipcRenderer.on('updateDrillStatus', this.handleDrillDownloaderCommand);
     }
   }
 
@@ -121,7 +116,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   onClickUpdateBtn() {
-    const remote = window.require('electron').remote;
+    const { remote } = window.require('electron');
     if (this.state.isUpdateDownloaded) {
       const installUpdate = remote.getGlobal('InstallUpdate');
       installUpdate()
@@ -141,53 +136,6 @@ export default class Panel extends React.Component {
         })
         .catch(reason => console.log('user click no:', reason));
     }
-  }
-
-  handleDrillDownloaderCommand = (event, command, message) => {
-    console.log('command: ', command, ', message:', message);
-    const hideDrillDownloaderStatus = () => {
-      this.setState({showDrillDownloaderStatus: false});
-    };
-    if (command === 'DOWNLOADING') {
-      this.setState({
-        drillStatusMsg: message,
-        showDrillDownloaderStatus: true,
-      });
-    } else if (command === 'COMPLETE') {
-      this.setState({
-        drillStatusMsg: 'Drill has been downloaded successfully.',
-        showDrillDownloaderStatus: true,
-      });
-      const drillCmd = message.split('|');
-      console.log('drillCmd:', drillCmd);
-      this.saveDrillCmd(drillCmd[0], drillCmd[1]);
-      _.delay(hideDrillDownloaderStatus, 5000);
-    } else if (command === 'ERROR') {
-      this.setState({
-        drillStatusMsg: 'Error downloading drill, contact support.',
-        showDrillDownloaderStatus: true,
-      });
-      _.delay(hideDrillDownloaderStatus, 5000);
-    }
-  };
-
-  @action.bound
-  onClickDrillDownload() {
-    this.setState({
-      showDrillDownloaderStatus: false,
-    });
-  }
-
-  @action.bound
-  saveDrillCmd(cmd, path) {
-    const newSettings = observable(
-      toJS(this.props.config.settings),
-    );
-    newSettings[cmd] = path;
-    this.props.config.settings = observable(
-      toJS(newSettings),
-    );
-    this.props.config.save();
   }
 
   @action.bound
@@ -483,14 +431,6 @@ export default class Panel extends React.Component {
               onClick={this.onClickUpdateBtn}
             >
               <span>{this.state.updateStatusMsg}</span>
-            </div>
-          )}
-          {(this.state.showDrillDownloaderStatus) && (
-            <div
-              className="updateButton updateGreen"
-              onClick={this.onClickDrillDownload}
-            >
-              <span>{this.state.drillStatusMsg}</span>
             </div>
           )}
         </div>
