@@ -135,6 +135,7 @@ export default class TreeView extends React.Component {
     this.reactionToJson();
     this.reactionToFilter();
     if (IS_ELECTRON) {
+      const electron = window.require('electron');
       electron.ipcRenderer.removeListener(
         'updateDrillStatus',
         this.handleDrillDownloaderCommand,
@@ -440,11 +441,11 @@ export default class TreeView extends React.Component {
     if (command === 'START') {
       if (message === 'drill') {
         this.setState({
-          drillStatusMsg: 'Downloading Apache Drill ...',
+          drillStatusMsg: globalString('drill/downloading_drill'),
         });
       } else {
         this.setState({
-          drillStatusMsg: 'Downloading dbKoda Drill Controller ...',
+          drillStatusMsg: globalString('drill/downloading_drill_controller'),
         });
       }
     } else if (command === 'DOWNLOADING') {
@@ -456,19 +457,19 @@ export default class TreeView extends React.Component {
       console.log('drillCmd:', drillCmd);
       if (drillCmd[0] == 'drillCmd') {
         this.setState({
-          drillStatusMsg: 'Drill has been downloaded successfully.',
+          drillStatusMsg: globalString('drill/drill_download_success'),
           drillDownloadProgress: null,
         });
       } else {
         this.setState({
-          drillStatusMsg: 'Drill Controller has been downloaded successfully.',
+          drillStatusMsg: globalString('drill/drill_controller_download_success'),
           drillDownloadProgress: null,
         });
       }
       this.saveDrillCmd(drillCmd[0], drillCmd[1]);
     } else if (command === 'ERROR') {
       this.setState({
-        drillStatusMsg: 'Error downloading drill, contact support.',
+        drillStatusMsg: globalString('drill/drill_download_failed'),
       });
     }
   };
@@ -491,8 +492,8 @@ export default class TreeView extends React.Component {
         dialog.showMessageBox(
           {
             type: 'info',
-            title: 'Drill Not Configured',
-            message: 'Drill path is not set in the configuration panel. Would you like us to setup drill for you?',
+            title: globalString('drill/drill_not_configured_title'),
+            message: globalString('drill/drill_not_configured_message'),
             buttons: ['Sure', 'No'],
           },
           (buttonIndex) => {
@@ -582,6 +583,8 @@ export default class TreeView extends React.Component {
       let message = globalString('drill/open_drill_editor_failed');
       if (errorCode === 'DRILL_BINARY_UNDETECTED') {
         message = globalString('drill/drill_binary_not_defined');
+      } else if (errorCode == 'JAVA_UNDETECTED') {
+        message = globalString('drill/java_not_found');
       }
       NewToaster.show({
         message,
