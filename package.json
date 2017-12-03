@@ -30,7 +30,6 @@
     "dev:prod": "yarn run postinstall && yarn start",
     "dev:analyser": "yarn run dev:analyzer",
     "dev:analyzer": "yarn run clean && webpack --config webpack/analyzer.js",
-    "dev:xterm": "cd node_modules/xterm; PORT=3001 yarn start",
     "start": "http-server ./dist -p 3000 -c-1",
     "clean": "rimraf ./dist rmdir",
     "build": "yarn run clean && node --max-old-space-size=2048 node_modules/.bin/webpack --config webpack/prod.js --display-optimization-bailout",

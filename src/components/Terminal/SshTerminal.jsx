@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-24T16:35:49+11:00
+ * @Last modified time: 2017-12-03T10:53:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -54,12 +54,12 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _attach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    console.log('Attaching...');
+    console.debug('Attaching...');
 
     this.terminalService
       .get(id)
       .then(() => {
-        console.log('Terminal already exists');
+        console.debug('Terminal already exists');
         this._send('\f');
       })
       .catch((err) => {
@@ -71,7 +71,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
       });
 
     this._receive = (data) => {
-      console.log('Receiving: ', JSON.stringify(data));
+      console.debug('Receiving: ', JSON.stringify(data));
 
       xterm.write(data);
     };
@@ -84,7 +84,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _detach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    console.log('Detaching...');
+    console.debug('Detaching...');
 
     this._receive && Broker.off(EventType.TERMINAL_DATA(id), this._receive);
 
@@ -100,7 +100,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _send = (code: string) => {
     const { id } = this.props;
 
-    console.log('Sending: ', JSON.stringify(code));
+    console.debug('Sending: ', JSON.stringify(code));
 
     this.terminalService.patch(id, {
       cmd: code,
@@ -108,10 +108,11 @@ export default class SshTerminal extends React.PureComponent<Props> {
   };
 
   render() {
-    const { tabId } = this.props;
+    const { id, tabId } = this.props;
 
     return (
       <Terminal
+        id={id}
         tabId={tabId}
         attach={this._attach}
         detach={this._detach}

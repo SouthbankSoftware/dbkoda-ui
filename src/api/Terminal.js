@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T17:47:42+11:00
+ * @Last modified time: 2017-12-03T14:15:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,15 +38,28 @@ import _ from 'lodash';
 
 export const terminalTypes = {
   local: 'local',
-  localXtermDemo: 'localXtermDemo',
   ssh: 'ssh',
 };
 
+export const terminalDisplayNames = {
+  local: 'Local',
+  ssh: 'SSH',
+};
+
+export const terminalErrorLevels = {
+  warn: 'warn',
+  error: 'error',
+};
+
 export type TerminalType = $Keys<typeof terminalTypes>;
+export type TerminalErrorLevel = $Keys<typeof terminalErrorLevels>;
 export type TerminalState = {
   id: UUID, // same as key
   type: TerminalType,
   name: number, // a unique number within its type
+  state: ComponentState,
+  errorLevel: ?TerminalErrorLevel,
+  error: ?string,
 };
 
 export type SshProfile = {
@@ -136,6 +149,9 @@ export default class TerminalApi {
       id,
       type,
       name,
+      state: 'loaded',
+      errorLevel: null,
+      error: null,
       ...extraState,
     };
 

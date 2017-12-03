@@ -5,7 +5,7 @@
  * @Date:   2017-11-15T10:29:13+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-24T16:35:40+11:00
+ * @Last modified time: 2017-12-02T16:43:44+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -113,10 +113,11 @@ export default class LocalTerminal extends React.PureComponent<Props> {
   };
 
   render() {
-    const { tabId } = this.props;
+    const { id, tabId } = this.props;
 
     return (
       <Terminal
+        id={id}
         tabId={tabId}
         attach={this._attach}
         detach={this._detach}

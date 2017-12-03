@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-27T16:50:31+11:00
+ * @Last modified time: 2017-12-03T13:59:58+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -77,4 +77,5 @@ export default {
   TABLE_VIEW_RESULT: editorId => `table-view::result-recieved::${editorId}`,
   TERMINAL_DATA: id => `terminal::data::${id}`,
   TERMINAL_ATTACHING: id => `terminal::attaching::${id}`,
+  TERMINAL_ERROR: id => `terminal::error::${id}`,
 };

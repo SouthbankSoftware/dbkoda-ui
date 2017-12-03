@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-24T16:34:57+11:00
+ * @Last modified time: 2017-12-03T13:48:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,9 +31,9 @@ import { Tab2, Tabs2, Button } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
 import { ChartPanel } from '#/ChartPanel';
-import { LocalTerminal, LocalXtermDemoTerminal, SshTerminal } from '#/Terminal';
+import { LocalTerminal, SshTerminal } from '#/Terminal';
 import { EditorTypes } from '#/common/Constants.js';
-import { terminalTypes } from '~/api/Terminal';
+import { terminalTypes, terminalDisplayNames } from '~/api/Terminal';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
 import './style.scss';
@@ -473,7 +473,7 @@ export default class Panel extends React.Component {
       return arrTabs;
     });
 
-    const selectedProfile = this.props.store.profileList.selectedProfile;
+    const { selectedProfile } = this.props.store.profileList;
 
     if (selectedProfile) {
       if (selectedProfile.storageView && selectedProfile.storageView.visible) {
@@ -515,27 +515,8 @@ export default class Panel extends React.Component {
             className="visible"
             key={tabId}
             id={tabId}
-            title={`Local - ${name}`}
+            title={`${terminalDisplayNames[type]} - ${name}`}
             panel={<LocalTerminal id={id} tabId={tabId} />}
-          >
-            <Button
-              className="pt-minimal"
-              onClick={() => {
-                api.removeTerminal(id);
-              }}
-            >
-              <span className="pt-icon-cross" />
-            </Button>
-          </Tab2>,
-        );
-      } else if (type === terminalTypes.localXtermDemo) {
-        localTerminals.push(
-          <Tab2
-            className="visible"
-            key={tabId}
-            id={tabId}
-            title={`Local Xterm Demo - ${name}`}
-            panel={<LocalXtermDemoTerminal tabId={tabId} />}
           >
             <Button
               className="pt-minimal"
@@ -554,7 +535,7 @@ export default class Panel extends React.Component {
               className="visible"
               key={tabId}
               id={tabId}
-              title={`SSH - ${name}`}
+              title={`${terminalDisplayNames[type]} - ${name}`}
               panel={<SshTerminal id={id} tabId={tabId} />}
             >
               <Button

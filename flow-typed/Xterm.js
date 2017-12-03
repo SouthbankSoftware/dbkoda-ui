@@ -3,7 +3,7 @@
  * @Date:   2017-11-08T15:20:34+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-24T16:13:35+11:00
+ * @Last modified time: 2017-12-03T13:28:40+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,12 +29,25 @@ declare module 'xterm/build/xterm' {
     measure(options: {}): void;
   }
 
+  declare class Buffer {
+    ybase: number,
+    y: number,
+
+    translateBufferLineToString(
+      lineIndex: number,
+      trimRight?: boolean,
+      startCol?: number,
+      endCol?: number,
+    ): string;
+  }
+
   declare class Xterm {
     constructor(options: {}): Xterm;
 
     cols: number;
     rows: number;
     options: {};
+    buffer: Buffer;
 
     open(container: React.ElementRef<*>): void;
     winptyCompatInit(): void;
@@ -53,21 +66,21 @@ declare module 'xterm/build/xterm' {
     charMeasure: CharMeasure;
   }
 
-  declare export default typeof Xterm;
+  declare export default typeof Xterm
 }
 
 declare module 'xterm/lib/addons/attach/attach' {
-  declare export default any;
+  declare export default any
 }
 
 declare module 'xterm/lib/addons/fit/fit' {
-  declare export default any;
+  declare export default any
 }
 
 declare module 'xterm/lib/addons/search/search' {
-  declare export default any;
+  declare export default any
 }
 
 declare module 'xterm/lib/addons/winptyCompat/winptyCompat' {
-  declare export default any;
+  declare export default any
 }
