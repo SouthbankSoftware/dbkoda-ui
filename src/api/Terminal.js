@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-03T14:15:31+11:00
+ * @Last modified time: 2017-12-03T16:12:26+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -131,7 +131,12 @@ export default class TerminalApi {
         .then(() => {
           console.log('Terminal created');
         })
-        .catch(console.error);
+        .catch((error) => {
+          Broker.emit(EventType.TERMINAL_ERROR(id), {
+            error: error.message,
+            level: terminalErrorLevels.error,
+          });
+        });
     });
 
     this.addTerminal(type, { id, profileId });
@@ -160,12 +165,18 @@ export default class TerminalApi {
     outputPanel.currentTab = this.getTerminalTabId(id);
   }
 
+  _handleServiceRemoveError(error) {
+    if (error.code !== 404) {
+      console.error(error);
+    }
+  }
+
   _removeSshTerminal(terminal: TerminalState): Promise<*> {
     const { id } = terminal;
 
     return featherClient()
       .terminalService.remove(id)
-      .catch(console.warn);
+      .catch(this._handleServiceRemoveError);
   }
 
   _removeLocalTerminal(terminal: TerminalState): Promise<*> {
@@ -173,7 +184,7 @@ export default class TerminalApi {
 
     return featherClient()
       .terminalService.remove(id)
-      .catch(console.warn);
+      .catch(this._handleServiceRemoveError);
   }
 
   // $FlowIssue

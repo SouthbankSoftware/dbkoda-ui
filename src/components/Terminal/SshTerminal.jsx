@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-03T10:53:10+11:00
+ * @Last modified time: 2017-12-03T15:36:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,6 +32,7 @@ import Xterm from 'xterm/build/xterm';
 import { featherClient } from '~/helpers/feathers';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
+import { terminalErrorLevels } from '~/api/Terminal';
 import Terminal from './Terminal';
 
 type Props = {
@@ -66,7 +67,10 @@ export default class SshTerminal extends React.PureComponent<Props> {
         if (err.code === 404) {
           Broker.emit(EventType.TERMINAL_ATTACHING(id), xterm);
         } else {
-          console.error(err);
+          Broker.emit(EventType.TERMINAL_ERROR(id), {
+            error: err.message,
+            level: terminalErrorLevels.error,
+          });
         }
       });
 
