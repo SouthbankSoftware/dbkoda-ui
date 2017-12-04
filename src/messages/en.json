@@ -207,7 +207,8 @@
         "telemetryEnabled": "Send Telemetry Data to dbKoda",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
         "mongoCmd": "Mongo Path",
-        "drillCmd": "Drill Path"
+        "drillCmd": "Drill Path",
+        "drillControllerCmd": "Drill Controller Path"
       },
       "tabMenu": {
         "closeTab": "Close Tab",
@@ -266,11 +267,10 @@
         "openConnection": "Open Connection",
         "closeConnection": "Close Connection",
         "editProfile": "Edit Profile",
-        "editors": "Editors:",
+        "editors": "Editors",
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
-        "newLocalXtermDemoTerminal": "New Local Xterm Demo Terminal",
         "deleteProfile": "Delete Profile"
       },
       "closeAlert": {
@@ -592,7 +592,15 @@
       "connection_not_exist": "Cant find connection",
       "drill_binary_not_defined": "Drill Binary not found, Please configure it on user setting panel",
       "open_drill_editor_failed": "Open Drill Editor Failed",
-      "drill_editor_open_success": "Drill Editor added successfully !"
+      "drill_editor_open_success": "Drill Editor added successfully !",
+      "java_not_found": "Apache Drill requires Java for execution. Please install Java and try again.",
+      "drill_not_configured_title": "Drill Not Configured",
+      "drill_not_configured_message": "Drill path is not set in the configuration panel. Would you like us to setup drill for you?",
+      "downloading_drill": "Downloading Apache Drill...",
+      "downloading_drill_controller": "Downloading dbKoda Drill Controller...",
+      "drill_download_success": "Drill has been downloaded successfully.",
+      "drill_controller_download_success": "Drill Controller has been downloaded successfully.",
+      "drill_download_failed": "Error downloading drill, contact support."
     }
   }
 }

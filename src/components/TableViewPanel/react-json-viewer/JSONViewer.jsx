@@ -24,16 +24,11 @@
 /* eslint react/no-array-index-key: 0 */
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { action } from 'mobx';
 import { ContextMenu, Menu, MenuItem, MenuDivider } from '@blueprintjs/core';
 import ValueViewer from './ValueViewer';
-import {
-  loopObject,
-  getType,
-  getFirstEle,
-  checkIfArrayIsAOB,
-  checkIfObjectIsOOB,
-} from './util';
+import { loopObject, getType, getFirstEle, checkIfArrayIsAOB, checkIfObjectIsOOB } from './util';
 
 export default class JSONViewer extends Component {
   constructor(props, context) {
@@ -117,10 +112,7 @@ export default class JSONViewer extends Component {
 
     if (this.state.deep && !showCurrentInt) {
       return (
-        <span
-          className="expandButton"
-          onClick={() => this.props.toggleShowDeep(currentInt)}
-        >
+        <span className="expandButton" onClick={() => this.props.toggleShowDeep(currentInt)}>
           {globalString('output/editor/expand')}
         </span>
       );
@@ -131,10 +123,7 @@ export default class JSONViewer extends Component {
       }
       return (
         <div className="deepObjectWrapper">
-          <span
-            className="hideButton"
-            onClick={() => this.props.toggleShowDeep(currentInt)}
-          >
+          <span className="hideButton" onClick={() => this.props.toggleShowDeep(currentInt)}>
             {globalString('output/editor/hide')}
           </span>
           <table {...this.props.tableProps}>
@@ -146,7 +135,8 @@ export default class JSONViewer extends Component {
                       onClick={() => this.props.onCellClick('cell in array')}
                       {...this.props.tdProps}
                       style={this.constructor.styles.td}
-                    >{`${key}`}</td>
+                    >{`${key}`}
+                    </td>
                     {this.renderTd(v, key)}
                   </tr>
                 );
@@ -170,7 +160,8 @@ export default class JSONViewer extends Component {
                   onClick={() => this.props.onCellClick('cell in array')}
                   {...this.props.tdProps}
                   style={this.constructor.styles.td}
-                >{`${key}`}</td>
+                >{`${key}`}
+                </td>
                 {this.renderTd(v, key)}
               </tr>
             );
@@ -255,10 +246,7 @@ export default class JSONViewer extends Component {
     if (this.state.deep && !showCurrentInt) {
       // Hide this objects.
       return (
-        <span
-          className="expandButton"
-          onClick={() => this.props.toggleShowDeep(currentInt)}
-        >
+        <span className="expandButton" onClick={() => this.props.toggleShowDeep(currentInt)}>
           {globalString('output/editor/expand')}
         </span>
       );
@@ -266,10 +254,7 @@ export default class JSONViewer extends Component {
       // Show deep objects
       return (
         <div className="deepObjectWrapper">
-          <span
-            className="hideButton"
-            onClick={() => this.props.toggleShowDeep(currentInt)}
-          >
+          <span className="hideButton" onClick={() => this.props.toggleShowDeep(currentInt)}>
             {globalString('output/editor/hide')}
           </span>
           <table {...this.props.tableProps}>
@@ -341,14 +326,15 @@ export default class JSONViewer extends Component {
     return <div>{this.decideAndRender(this.props.json)}</div>;
   }
 }
+
 JSONViewer.propTypes = {
-  json: React.PropTypes.any.isRequired,
-  tableProps: React.PropTypes.object,
-  trProps: React.PropTypes.object,
-  tdProps: React.PropTypes.object,
-  thProps: React.PropTypes.object,
-  tbodyProps: React.PropTypes.object,
-  theadProps: React.PropTypes.object,
+  json: PropTypes.any.isRequired,
+  tableProps: PropTypes.object,
+  trProps: PropTypes.object,
+  tdProps: PropTypes.object,
+  thProps: PropTypes.object,
+  tbodyProps: PropTypes.object,
+  theadProps: PropTypes.object,
 };
 
 JSONViewer.defaultProps = {};

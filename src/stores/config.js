@@ -37,7 +37,8 @@ export default class Config {
   settings = {
     @observable mongoCmd: '',
     @observable drillCmd: '',
-    @observable telemetryEnabled: null,
+    @observable drillControllerCmd: '',
+    @observable telemetryEnabled: true,
     @observable showWelcomePageAtStart: true,
   };
 
@@ -62,6 +63,7 @@ export default class Config {
 
   @action.bound
   load() {
+    console.log('Load from config.yml');
     if (!this.configFilePath) {
       return;
     }
@@ -77,6 +79,7 @@ export default class Config {
               this.loading = false;
             });
           }
+          console.log('Config loaded successfully!');
         });
       })
       .catch((e) => {
@@ -104,11 +107,7 @@ export default class Config {
           watching: false,
         })
         .then(() => {
-          NewToaster.show({
-            message: 'Config.yml successfully updated',
-            className: 'success',
-            iconName: 'pt-icon-thumbs-up',
-          });
+          console.log('config.yml updated');
           runInAction(() => {
             this.loading = false;
           });

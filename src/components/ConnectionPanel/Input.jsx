@@ -30,37 +30,42 @@
  * input dom for connection profile panel
  */
 import React from 'react';
-import {observer} from 'mobx-react';
+import { observer } from 'mobx-react';
 import './style.scss';
 
-export default observer(({
-  field,
-  showLabel = false,
-  disable = false,
-  divOnClick = () => {},
-  divOnFocus = () => {},
-  divOnChange = () => {},
-  autoFocus = false,
-}) => (
-  <div // eslint-disable-line
-    className={field.name + '-input-content pt-form-group pt-inline'}
-    onClick={divOnClick}
-    onFocus={divOnFocus}
-    onChange={divOnChange} >
-    {showLabel && <label
-      className={field.name + '-label pt-label field-inline pt-label-r'}
-      htmlFor={field.id}>
-      {field.label}
-    </label>}
-    <div className="pt-form-content field-inline">
-      <input
-        className={field.name + '-input pt-input'}
-        {...field.bind()}
-        disabled={disable
-        ? 'disabled'
-        : ''}
-        autoFocus={autoFocus} />
-      <p className="pt-form-helper-text">{field.error}</p>
+export default observer(
+  ({
+    field,
+    showLabel = false,
+    disable = false,
+    divOnClick = () => {},
+    divOnFocus = () => {},
+    divOnChange = () => {},
+    autoFocus = false,
+  }) => (
+    <div // eslint-disable-line
+      className={field.name + '-input-content pt-form-group pt-inline'}
+      onClick={divOnClick}
+      onFocus={divOnFocus}
+      onChange={divOnChange}
+    >
+      {showLabel && (
+        <label
+          className={field.name + '-label pt-label field-inline pt-label-r'}
+          htmlFor={field.id}
+        >
+          {field.label}
+        </label>
+      )}
+      <div className="pt-form-content field-inline">
+        <input
+          className={field.name + '-input pt-input'}
+          {...field.bind()}
+          disabled={disable ? 'disabled' : ''}
+          autoFocus={autoFocus} // eslint-disable-line jsx-a11y/no-autofocus
+        />
+        <p className="pt-form-helper-text">{field.error}</p>
+      </div>
     </div>
-  </div>
-));
+  ),
+);

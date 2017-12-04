@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-04-21T09:24:34+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-01T10:22:01+10:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,19 +24,11 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-04-21T09:24:34+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-01T10:22:01+10:00
- */
-
 import React from 'react';
 import { inject, observer, Provider } from 'mobx-react';
 import { action, untracked } from 'mobx';
 import SplitPane from 'react-split-pane';
-import {Button} from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 
 import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
@@ -41,18 +39,17 @@ import { TreeActionPanel } from '#/TreeActionPanel';
 import { DrawerPanes } from '#/common/Constants';
 import { BackupRestore } from '../BackupRestore/index';
 
-
 import './Panel.scss';
 
 const splitPane2Style = {
   display: 'flex',
-  flexDirection: 'column'
+  flexDirection: 'column',
 };
 
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  drawer: allStores.store.drawer
+  drawer: allStores.store.drawer,
 }))
 @observer
 export default class Panel extends React.Component {
@@ -61,11 +58,13 @@ export default class Panel extends React.Component {
     this.state = {};
   }
 
-  @action.bound updateLeftSplitPos(pos) {
+  @action.bound
+  updateLeftSplitPos(pos) {
     this.props.layout.leftSplitPos = pos;
   }
 
-  @action.bound updateAndRestart() {
+  @action.bound
+  updateAndRestart() {
     this.props.store.updateAndRestart();
   }
 
@@ -81,7 +80,7 @@ export default class Panel extends React.Component {
     return (
       <div>
         <div className="leftPaneInnerWrapper">
-          {drawer.drawerChild == DrawerPanes.DEFAULT &&
+          {drawer.drawerChild == DrawerPanes.DEFAULT && (
             <SplitPane
               className="LeftSplitPane"
               split="horizontal"
@@ -95,25 +94,28 @@ export default class Panel extends React.Component {
               <Provider treeState={this.treeState}>
                 <TreePanel />
               </Provider>
-            </SplitPane>}
+            </SplitPane>
+          )}
 
           {drawer.drawerChild == DrawerPanes.PROFILE && <ConnectionProfilePanel />}
 
           {drawer.drawerChild == DrawerPanes.DYNAMIC && <TreeActionPanel />}
 
-          {drawer.drawerChild == DrawerPanes.AGGREGATE &&
-            <AggregateLeftPanel className="sidebarAggregate" />}
+          {drawer.drawerChild == DrawerPanes.AGGREGATE && (
+            <AggregateLeftPanel className="sidebarAggregate" />
+          )}
 
           {drawer.drawerChild == DrawerPanes.BACKUP_RESTORE && <BackupRestore />}
-
         </div>
-        {this.props.store.updateAvailable &&
+        {this.props.store.updateAvailable && (
           <div className="leftPaneUpdateNotification">
             <Button
               className="updateButton pt-button pt-intent-primary"
-              text={'Update Downloaded. Click here to update and restart.'}
-              onClick={this.updateAndRestart} />
-          </div>}
+              text="Update Downloaded. Click here to update and restart."
+              onClick={this.updateAndRestart}
+            />
+          </div>
+        )}
       </div>
     );
   }

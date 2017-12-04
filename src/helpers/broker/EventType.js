@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-03T13:59:58+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,11 +21,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T13:51:37+11:00
- */
-
 export default {
   /**
    * used when a new connection profile is created
@@ -35,7 +33,7 @@ export default {
   /**
    * event type for shell output message
    */
-  SHELL_OUTPUT_AVAILABLE: 'contral-output-panel-control',
+  SHELL_OUTPUT_AVAILABLE: 'output-panel-control',
   createShellOutputEvent: (id, shellId) => {
     return 'controller::shell::output::' + id + '::' + shellId;
   },
@@ -79,4 +77,5 @@ export default {
   TABLE_VIEW_RESULT: editorId => `table-view::result-recieved::${editorId}`,
   TERMINAL_DATA: id => `terminal::data::${id}`,
   TERMINAL_ATTACHING: id => `terminal::attaching::${id}`,
+  TERMINAL_ERROR: id => `terminal::error::${id}`,
 };

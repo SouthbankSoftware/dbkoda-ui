@@ -1,9 +1,9 @@
 /**
  * @Author: Guan Gui <guiguan>
- * @Date:   2017-11-08T15:07:55+11:00
+ * @Date:   2017-11-22T18:03:56+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-02T16:47:42+11:00
+ * @Last modified time: 2017-11-22T18:06:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,5 +24,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export LocalTerminal from './LocalTerminal';
-export SshTerminal from './SshTerminal';
+module.exports = {
+  developmentLocale: 'en',
+  supportedLocales: ['en'],
+  messages: 'src/messages/[locale].json',
+  output: 'i18n/[locale].[hash].js',
+};

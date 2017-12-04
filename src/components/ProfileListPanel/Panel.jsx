@@ -30,17 +30,40 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { ContextMenuTarget, Menu, MenuItem, Intent } from '@blueprintjs/core';
+import { terminalTypes } from '~/api/Terminal';
 import DBKodaIcon from '../../styles/icons/dbkoda-logo.svg';
 import Toolbar from './Toolbar.jsx';
 import ListView from './ListView.jsx';
 import './styles.scss';
 
-@inject('store')
+@inject('store', 'api')
 @observer
+@ContextMenuTarget
 export default class Panel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  renderContextMenu() {
+    const menuItems = [];
+    menuItems.push(
+      <div key={menuItems.length} className="menuItemWrapper">
+        <MenuItem
+          className="profileListContextMenu newLocalTerminal"
+          onClick={() => {
+            const { addTerminal } = this.props.api;
+            addTerminal(terminalTypes.local);
+          }}
+          text={globalString('profile/menu/newLocalTerminal')}
+          intent={Intent.NONE}
+          iconName="pt-icon-new-text-box"
+        />
+      </div>
+    );
+
+    return <Menu className="profilePanelContextMenu">{menuItems}</Menu>;
   }
 
   render() {

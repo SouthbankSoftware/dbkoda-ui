@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-18T09:42:15+11:00
+ * @Last modified time: 2017-12-03T14:58:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,7 +29,7 @@
 import * as React from 'react';
 import ReactResizeDetector from 'react-resize-detector';
 import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
-import { type ObservableMap, reaction } from 'mobx';
+import { type ObservableMap, reaction, action } from 'mobx';
 import { inject } from 'mobx-react';
 import _ from 'lodash';
 import Xterm from 'xterm/build/xterm';
@@ -37,6 +37,17 @@ import fitAddon from 'xterm/lib/addons/fit/fit';
 import searchAddon from 'xterm/lib/addons/search/search';
 import winptyCompatAddon from 'xterm/lib/addons/winptyCompat/winptyCompat';
 import 'xterm/build/xterm.css';
+// $FlowFixMe
+import { Broker, EventType } from '~/helpers/broker';
+import {
+  type TerminalState,
+  terminalDisplayNames,
+  type TerminalErrorLevel,
+  terminalErrorLevels,
+} from '~/api/Terminal';
+import chalk from '~/helpers/chalk';
+// $FlowFixMe
+import { NewToaster } from '#/common/Toaster';
 import styles from './Terminal.scss';
 
 fitAddon(Xterm);
@@ -49,10 +60,12 @@ type Store = {
   outputPanel: *,
   editorPanel: *,
   editors: ObservableMap<*>,
+  terminal: TerminalState,
 };
 
 type Props = {
-  store: Store,
+  store: any | Store,
+  id: UUID,
   tabId: string,
   attach: (xterm: Xterm) => void,
   detach: (xterm: Xterm) => void,
@@ -60,15 +73,15 @@ type Props = {
   onResize: (xterm: Xterm, size: { cols: number, rows: number }) => void,
 };
 
-// $FlowIssue
-@inject(({ store }) => {
-  const { outputPanel, editorPanel, editors } = store;
+@inject(({ store }, { id }) => {
+  const { outputPanel, editorPanel, editors, terminals } = store;
 
   return {
     store: {
       outputPanel,
       editorPanel,
       editors,
+      terminal: terminals.get(id),
     },
   };
 })
@@ -78,6 +91,10 @@ export default class Terminal extends React.PureComponent<Props> {
   container: React.ElementRef<*>;
   xterm: Xterm;
   _hasInitialSize = false;
+
+  static defaultProps = {
+    store: null,
+  };
 
   componentDidMount() {
     this.reactions.push(
@@ -99,6 +116,10 @@ export default class Terminal extends React.PureComponent<Props> {
       ),
     );
 
+    const { id } = this.props;
+
+    Broker.on(EventType.TERMINAL_ERROR(id), this._onError);
+
     this.xterm = new Xterm({
       enableBold: false,
       theme: {
@@ -117,6 +138,13 @@ export default class Terminal extends React.PureComponent<Props> {
     this.xterm.on('resize', (size) => {
       if (!this._hasInitialSize) {
         this._hasInitialSize = true;
+
+        const { state, errorLevel, error } = this.props.store.terminal;
+
+        if (state === 'error' && errorLevel && error) {
+          this._showError(error, errorLevel, false);
+        }
+
         attach(this.xterm);
       } else {
         onResize(this.xterm, size);
@@ -127,6 +155,10 @@ export default class Terminal extends React.PureComponent<Props> {
   componentWillUnmount() {
     _.forEach(this.reactions, r => r());
 
+    const { id } = this.props;
+
+    Broker.off(EventType.TERMINAL_ERROR(id), this._onError);
+
     const { detach } = this.props;
 
     detach(this.xterm);
@@ -134,13 +166,57 @@ export default class Terminal extends React.PureComponent<Props> {
     this.xterm.destroy();
   }
 
+  _showError = (error: string, level: TerminalErrorLevel, toaster: boolean = true) => {
+    const { buffer } = this.xterm;
+    const lastLine = buffer.translateBufferLineToString(buffer.ybase + buffer.y, true);
+    let bgColor;
+    let color;
+    let className;
+
+    if (level === terminalErrorLevels.warn) {
+      bgColor = 'bgYellow';
+      color = 'yellow';
+      className = 'warning';
+    } else {
+      bgColor = 'bgRed';
+      color = 'red';
+      className = 'danger';
+    }
+
+    this.xterm.write(
+      `${lastLine.length === 0 ? '' : '\r\n'}${chalk[bgColor].white(
+        `${_.upperFirst(level)}:`,
+      )} ${chalk[color](error)}\r\n`,
+    );
+
+    if (toaster) {
+      const { type } = this.props.store.terminal;
+
+      NewToaster.show({
+        message: `${terminalDisplayNames[type]} Terminal: ${error}`,
+        className,
+        iconName: 'pt-icon-thumbs-down',
+      });
+    }
+  };
+
+  _onError = action.bound(({ error, level }: { error: string, level: TerminalErrorLevel }) => {
+    const { terminal } = this.props.store;
+
+    terminal.state = 'error';
+    terminal.errorLevel = level;
+    terminal.error = error;
+
+    this._showError(error, level);
+  });
+
   _onExecuteCommands = (all: boolean) => {
     const { store: { editorPanel, editors }, send } = this.props;
     const currEditor = editors.get(editorPanel.activeEditorId);
 
     if (!currEditor) return;
 
-    const doc = currEditor.doc;
+    const { doc } = currEditor;
     const code = all ? doc.getValue() : doc.getSelection();
 
     for (const line of code.split(doc.lineSeparator())) {
@@ -151,14 +227,8 @@ export default class Terminal extends React.PureComponent<Props> {
   _onContextMenu = (e: SyntheticMouseEvent<*>) => {
     const menu = (
       <Menu>
-        <MenuItem
-          onClick={() => this._onExecuteCommands(false)}
-          text="Execute Selected Commands"
-        />
-        <MenuItem
-          onClick={() => this._onExecuteCommands(true)}
-          text="Execute All Commands"
-        />
+        <MenuItem onClick={() => this._onExecuteCommands(false)} text="Execute Selected Commands" />
+        <MenuItem onClick={() => this._onExecuteCommands(true)} text="Execute All Commands" />
         <MenuItem
           onClick={() => {
             const selection = this.xterm.getSelection();

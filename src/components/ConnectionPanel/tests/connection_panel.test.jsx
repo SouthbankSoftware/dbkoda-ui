@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-04-21T10:47:14+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T16:19:05+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,19 +24,12 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-04-21T10:47:14+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-22T15:34:15+10:00
- */
-
 import React from 'react';
-import {mount} from 'enzyme';
-import {useStrict} from 'mobx';
-import {expect} from 'chai';
-import {Provider} from 'mobx-react';
+import '~/helpers/configEnzyme';
+import { mount } from 'enzyme';
+import { useStrict } from 'mobx';
+import { expect } from 'chai';
+import { Provider } from 'mobx-react';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import Store from '~/stores/global';
 import Config from '~/stores/config';
@@ -47,9 +46,11 @@ describe('New Profile Panel', () => {
     const store = new Store();
     const config = new Config();
     const profileStore = new Profiles();
-    app = mount(<Provider store={store} config={config} profileStore={profileStore}>
-      <ConnectionPanel />
-    </Provider>);
+    app = mount(
+      <Provider store={store} config={config} profileStore={profileStore}>
+        <ConnectionPanel />
+      </Provider>,
+    );
   });
 
   it('form field exist', () => {
@@ -70,6 +71,6 @@ describe('New Profile Panel', () => {
   });
 
   it('host radio exist', () => {
-    expect(app.find('.hostRadio-radio-input')).to.have.length(2);
+    expect(app.find('.hostRadio-radio-input')).to.have.length(3);
   });
 });

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T15:07:57+11:00
+ * @Last modified time: 2017-12-02T16:03:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -236,12 +236,9 @@ export default class ListView extends React.Component {
         shellVersion: res.shellVersion,
         initialMsg: res.output ? res.output.join('\r') : '',
       };
-      if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
-        profile.bPassPhrase = true;
-      }
-      if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
-        profile.bRemotePass = true;
-      }
+
+      this._syncSshCredential(data, profile);
+
       this.props.profileStore.profiles.set(res.id, profile);
       this.props.store.profileList.selectedProfile = this.props.profileStore.profiles.get(res.id);
       Broker.emit(
@@ -285,7 +282,7 @@ export default class ListView extends React.Component {
   @action
   closeProfile() {
     const selectedProfile = this.state.targetProfile;
-    const profiles = this.props.profileStore.profiles;
+    const { profiles } = this.props.profileStore;
     if (selectedProfile) {
       this.setState({ closingProfile: true });
       this.props.store.layout.alertIsLoading = true;
@@ -496,8 +493,23 @@ export default class ListView extends React.Component {
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
   }
 
+  _syncSshCredential = action((source, target) => {
+    if ((source.passPhrase && source.passPhrase != '') || source.bPassPhrase) {
+      target.bPassPhrase = true;
+    }
+    if ((source.remotePass && source.remotePass != '') || source.bRemotePass) {
+      target.bRemotePass = true;
+    }
+  });
+
   @autobind
   openSshConnectionAlert() {
+    const { targetProfile } = this.state;
+
+    if (targetProfile) {
+      this._syncSshCredential(targetProfile, targetProfile);
+    }
+
     if (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
@@ -569,7 +581,6 @@ export default class ListView extends React.Component {
     } else {
       const { api: { getEditorDisplayName } } = this.props;
 
-      windows.push(<MenuItem key={windows.length} text={globalString('profile/menu/editors')} />);
       this.props.store.editors.forEach((value) => {
         if (value.currentProfile.trim() == this.state.targetProfile.id.trim()) {
           windows.push(
@@ -639,23 +650,10 @@ export default class ListView extends React.Component {
       </div>,
     );
 
-    if (process.env.NODE_ENV === 'development') {
-      terminalOperations.push(
-        <div key={terminalOperations.length} className="menuItemWrapper">
-          <MenuItem
-            className="profileListContextMenu newLocalXtermDemoTerminal"
-            onClick={() => {
-              const { addTerminal } = this.props.api;
-
-              addTerminal(terminalTypes.localXtermDemo);
-            }}
-            text={globalString('profile/menu/newLocalXtermDemoTerminal')}
-            intent={Intent.NONE}
-            iconName="pt-icon-new-text-box"
-          />
-        </div>,
-      );
-    }
+    // HACK workaround for https://github.com/palantir/blueprint/issues/1539
+    setTimeout(() => {
+      document.querySelector('.pt-popover.pt-minimal.pt-dark').classList.remove('pt-dark');
+    });
 
     return (
       <Menu className="profileListContextMenu">
@@ -671,7 +669,7 @@ export default class ListView extends React.Component {
         </div>
         <MenuDivider />
         {terminalOperations}
-        {windows.length > 0 ? <MenuDivider /> : null}
+        {windows.length > 0 ? <MenuDivider title={globalString('profile/menu/editors')} /> : null}
         {windows}
       </Menu>
     );
@@ -777,7 +775,7 @@ export default class ListView extends React.Component {
               <div className="dialogContent">
                 <p>{globalString('profile/openAlert/passwordPrompt')}</p>
                 <input
-                  autoFocus
+                  autoFocus // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input passwordInput"
                   placeholder={globalString('profile/openAlert/passwordPlaceholder')}
                   type="password"
@@ -791,7 +789,7 @@ export default class ListView extends React.Component {
               <div className="dialogContent">
                 <p>{globalString('profile/openAlert/remotePassPrompt')}</p>
                 <input
-                  autoFocus={!this.state.targetProfile.sha}
+                  autoFocus={!this.state.targetProfile.sha} // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input remotePassInput"
                   placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
                   type="password"
@@ -807,7 +805,7 @@ export default class ListView extends React.Component {
               <div className="dialogContent">
                 <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
                 <input
-                  autoFocus={!this.state.targetProfile.sha && !this.state.targetProfile.bRemotePass}
+                  autoFocus={!this.state.targetProfile.sha && !this.state.targetProfile.bRemotePass} // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input passPhraseInput"
                   placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
                   type="password"
@@ -846,7 +844,7 @@ export default class ListView extends React.Component {
               <div className="dialogContent">
                 <p>{globalString('profile/openAlert/remotePassPrompt')}</p>
                 <input
-                  autoFocus={this.state.targetProfile.bRemotePass}
+                  autoFocus={this.state.targetProfile.bRemotePass} // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input remotePassInput"
                   placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
                   type="password"
@@ -862,7 +860,7 @@ export default class ListView extends React.Component {
               <div className="dialogContent">
                 <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
                 <input
-                  autoFocus={!this.state.targetProfile.bRemotePass}
+                  autoFocus={!this.state.targetProfile.bRemotePass} // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input passPhraseInput"
                   placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
                   type="password"

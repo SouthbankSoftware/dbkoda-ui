@@ -49,7 +49,7 @@ const FeedbackTypes = {
 
 @inject(allStores => ({
   store: allStores.store,
-  api: allStores.api,
+  api: allStores.api
 }))
 @observer
 export default class Panel extends React.Component {
@@ -82,13 +82,13 @@ export default class Panel extends React.Component {
 
   componentDidMount() {
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .ipcRenderer.on('updateStatus', this.handleMainProcessCommand);
+      const electron = window
+      .require('electron');
+      electron.ipcRenderer.on('updateStatus', this.handleAutoupdaterCommand);
     }
   }
 
-  handleMainProcessCommand = (event, message) => {
+  handleAutoupdaterCommand = (event, message) => {
     if (message === 'CHECKING') {
       this.setState({ updateStatusMsg: 'Checking for Updates...' });
     } else if (message === 'AVAILABLE') {
@@ -116,7 +116,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   onClickUpdateBtn() {
-    const remote = window.require('electron').remote;
+    const { remote } = window.require('electron');
     if (this.state.isUpdateDownloaded) {
       const installUpdate = remote.getGlobal('InstallUpdate');
       installUpdate()

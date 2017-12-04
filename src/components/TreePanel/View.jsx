@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-03-07T11:39:01+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-23T17:54:17+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,18 +22,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-03-07T11:39:01+11:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-09-11T09:07:31+10:00
-*/
+ */
 
 import React from 'react';
+import _ from 'lodash';
+import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { reaction, runInAction, observable, action } from 'mobx';
+import { reaction, runInAction, observable, action, toJS } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 import { Broker, EventType } from '~/helpers/broker';
 import {
@@ -38,9 +39,11 @@ import {
   Intent,
   AnchorButton,
   Dialog,
+  ProgressBar
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import LoadingView from '#/common/LoadingView';
+import findElementAttributeUpward from '~/helpers/findElementAttributeUpward';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
 import DocumentIcon from '../../styles/icons/document-solid-icon.svg';
@@ -65,12 +68,14 @@ import './View.scss';
   treeState: allStores.treeState,
   profileStore: allStores.profileStore,
   api: allStores.api,
+  config: allStores.config,
 }))
 @ContextMenuTarget
 export default class TreeView extends React.Component {
   static get defaultProps() {
     return {
       treeState: {},
+      /* eslint-disable react/default-props-match-prop-types */
       store: {
         treeActionPanel: {
           treeActionEditorId: '',
@@ -93,6 +98,9 @@ export default class TreeView extends React.Component {
       isPasswordDialogVisible: false,
       isLoadingDialogVisible: false,
       remotePass: null,
+      showDrillDownloaderStatus: false,
+      drillStatusMsg: '',
+      drillDownloadProgress: null,
     };
   }
   componentWillMount() {
@@ -115,10 +123,24 @@ export default class TreeView extends React.Component {
       },
     );
     onNewJson();
+    if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      electron.ipcRenderer.on(
+        'updateDrillStatus',
+        this.handleDrillDownloaderCommand,
+      );
+    }
   }
   componentWillUnmount() {
     this.reactionToJson();
     this.reactionToFilter();
+    if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      electron.ipcRenderer.removeListener(
+        'updateDrillStatus',
+        this.handleDrillDownloaderCommand,
+      );
+    }
   }
   getActionByName(actionName) {
     if (this.nodeRightClicked) {
@@ -194,8 +216,7 @@ export default class TreeView extends React.Component {
           } else {
             let bDevOnlyFeature = false;
             if (
-              process.env.NODE_ENV !== 'development' &&
-              objAction.development
+              process.env.NODE_ENV !== 'development' && objAction.development
             ) {
               bDevOnlyFeature = true;
             }
@@ -203,12 +224,15 @@ export default class TreeView extends React.Component {
               const icon = this.getIconFor(objAction.icon);
               if (icon != null) {
                 Menus.push(
-                  <div className="menuItemWrapper">
+                  <div
+                    className="menuItemWrapper"
+                    key={objAction.name}
+                    data-id={objAction.name}
+                  >
                     {icon}
                     <MenuItem
                       onClick={this.handleTreeActionClick}
                       text={objAction.text}
-                      name={objAction.name}
                       key={objAction.name}
                       intent={Intent.NONE}
                     />
@@ -216,12 +240,15 @@ export default class TreeView extends React.Component {
                 );
               } else {
                 Menus.push(
-                  <div className="menuItemWrapper">
+                  <div
+                    className="menuItemWrapper"
+                    key={objAction.name}
+                    data-id={objAction.name}
+                  >
                     {icon}
                     <MenuItem
                       onClick={this.handleTreeActionClick}
                       text={objAction.text}
-                      name={objAction.name}
                       key={objAction.name}
                       iconName={objAction.icon}
                       intent={Intent.NONE}
@@ -272,8 +299,7 @@ export default class TreeView extends React.Component {
   };
 
   isBackupRestoreAction = (action) => {
-    return (
-      action === BackupRestoreActions.EXPORT_DATABASE ||
+    return action === BackupRestoreActions.EXPORT_DATABASE ||
       action === BackupRestoreActions.EXPORT_COLLECTION ||
       action === BackupRestoreActions.DUMP_DATABASE ||
       action === BackupRestoreActions.DUMP_COLLECTION ||
@@ -282,13 +308,11 @@ export default class TreeView extends React.Component {
       action === BackupRestoreActions.DUMP_SERVER ||
       action === BackupRestoreActions.RESTORE_DATABASE ||
       action === BackupRestoreActions.RESTORE_COLLECTION ||
-      action === BackupRestoreActions.RESTORE_SERVER
-    );
+      action === BackupRestoreActions.RESTORE_SERVER;
   };
 
-  @action
-  handleTreeActionClick = (e: React.MouseEvent) => {
-    const action = e._targetInst._currentElement._owner._instance.props.name;
+  @action handleTreeActionClick = (e: React.MouseEvent) => {
+    const action = findElementAttributeUpward(e.target, 'data-id');
     const noDialog = this.getNoDialogByName(action);
     this.actionSelected = this.getActionByName(action);
     if (noDialog) {
@@ -411,7 +435,113 @@ export default class TreeView extends React.Component {
     });
   };
 
-  openDrillEditor = () => {
+  @action.bound
+  handleDrillDownloaderCommand = (event, command, message) => {
+    console.log('command: ', command, ', message:', message);
+    if (command === 'START') {
+      if (message === 'drill') {
+        this.setState({
+          drillStatusMsg: globalString('drill/downloading_drill'),
+        });
+      } else {
+        this.setState({
+          drillStatusMsg: globalString('drill/downloading_drill_controller'),
+        });
+      }
+    } else if (command === 'DOWNLOADING') {
+      this.setState({
+        drillDownloadProgress: message,
+      });
+    } else if (command === 'COMPLETE') {
+      const drillCmd = message.split('|');
+      console.log('drillCmd:', drillCmd);
+      if (drillCmd[0] == 'drillCmd') {
+        this.setState({
+          drillStatusMsg: globalString('drill/drill_download_success'),
+          drillDownloadProgress: null,
+        });
+      } else {
+        this.setState({
+          drillStatusMsg: globalString('drill/drill_controller_download_success'),
+          drillDownloadProgress: null,
+        });
+      }
+      this.saveDrillCmd(drillCmd[0], drillCmd[1]);
+    } else if (command === 'ERROR') {
+      this.setState({
+        drillStatusMsg: globalString('drill/drill_download_failed'),
+      });
+    }
+  };
+
+  @action.bound
+  saveDrillCmd(cmd, path) {
+    const newSettings = observable(toJS(this.props.config.settings));
+    newSettings[cmd] = path;
+    this.props.config.settings = observable(toJS(newSettings));
+    this.props.config.save();
+  }
+
+  checkForDrill = () => {
+    const electron = window.require('electron');
+    const { ipcRenderer, remote } = electron;
+    const {dialog} = remote;
+
+    return new Promise((resolve, reject) => {
+      if (this.props.config.settings.drillCmd == null || this.props.config.settings.drillCmd == '') {
+        dialog.showMessageBox(
+          {
+            type: 'info',
+            title: globalString('drill/drill_not_configured_title'),
+            message: globalString('drill/drill_not_configured_message'),
+            buttons: ['Sure', 'No'],
+          },
+          (buttonIndex) => {
+            if (buttonIndex === 0) {
+              this.setState({
+                showDrillDownloaderStatus: true,
+                isLoadingDialogVisible: true,
+              });
+              ipcRenderer.send('drill', 'downloadDrill');
+              ipcRenderer.once('drillResult', (event, arg) => {
+                if (arg == 'downloadDrillComplete') {
+                  resolve(true);
+                }
+              });
+            } else {
+              reject(false); // eslint-disable-line prefer-promise-reject-errors
+            }
+          },
+        );
+      } else {
+        resolve(true);
+      }
+    });
+  };
+
+  checkForDrillController = () => {
+    const electron = window.require('electron');
+    const { ipcRenderer } = electron;
+    return new Promise((resolve, reject) => {
+      if (this.props.config.settings.drillControllerCmd == null || this.props.config.settings.drillControllerCmd == '') {
+        ipcRenderer.send('drill', 'downloadController');
+        ipcRenderer.once('drillResult', (event, arg) => {
+          if (arg == 'downloadDrillControllerComplete') {
+            this.setState({
+              showDrillDownloaderStatus: false,
+              isLoadingDialogVisible: false,
+            });
+            resolve(true);
+          }
+          reject(false); // eslint-disable-line prefer-promise-reject-errors
+        });
+      } else {
+        resolve(true);
+      }
+    });
+  };
+
+  addNewEditorForDrill = () => {
     const drillProfileId = this.props.api.checkForExistingDrillProfile({
       db: this.nodeRightClicked.text,
     });
@@ -434,12 +564,27 @@ export default class TreeView extends React.Component {
       this.props.api.openEditorWithDrillProfileId(drillProfileId);
     }
   };
+
+  openDrillEditor = () => {
+    this.checkForDrill()
+      .then((bDrill) => {
+        bDrill &&
+          this.checkForDrillController().then((bDrillController) => {
+            bDrillController && this.addNewEditorForDrill();
+          });
+      })
+      .catch(() => {
+        console.log('user canceled');
+      });
+  };
   onDrillEditorAdded = (response, errorCode) => {
     this.setState({ isLoadingDialogVisible: false });
     if (response === 'error') {
       let message = globalString('drill/open_drill_editor_failed');
       if (errorCode === 'DRILL_BINARY_UNDETECTED') {
         message = globalString('drill/drill_binary_not_defined');
+      } else if (errorCode == 'JAVA_UNDETECTED') {
+        message = globalString('drill/java_not_found');
       }
       NewToaster.show({
         message,
@@ -459,6 +604,7 @@ export default class TreeView extends React.Component {
   };
 
   openDrillEditorWithPass = () => {
+    this.setState({ isLoadingDialogVisible: true });
     this.props.api.addNewEditorForDrill({
       db: this.nodeRightClicked.text,
       pass: this.state.remotePass,
@@ -477,7 +623,7 @@ export default class TreeView extends React.Component {
   render() {
     const classNames = `${Classes.ELEVATION_0} ${Classes.DARK}`;
     return (
-      <div className={'sb-tree-view'}>
+      <div className="sb-tree-view">
         <Tree
           contents={this.state.nodes}
           onNodeClick={this.handleNodeClick}
@@ -491,15 +637,28 @@ export default class TreeView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isLoadingDialogVisible}
         >
-          <div className="dialogContent" style={{ height: '120px' }}>
-            <p>Starting Apache Drill...</p>
-            <LoadingView />
-            <br />
-            <br />
-            <p>
-              Note: This process might take almost 2 minutes on first start.
-            </p>
-          </div>
+          {this.state.showDrillDownloaderStatus &&
+            <div className="dialogContent" style={{ height: '120px' }}>
+              <p>{this.state.drillStatusMsg}</p>
+              <ProgressBar intent={Intent.PRIMARY} value={this.state.drillDownloadProgress} />
+              <br />
+              <br />
+              {this.state.drillDownloadProgress &&
+                <p style={{textAlign: 'center'}}>
+                  {Math.round(this.state.drillDownloadProgress * 100) + '% complete'}
+                </p>}
+            </div>}
+
+          {(!this.state.showDrillDownloaderStatus) &&
+            <div className="dialogContent" style={{ height: '120px' }}>
+              <p>Starting Apache Drill...</p>
+              <LoadingView />
+              <br />
+              <br />
+              <p>
+                Note: This process might take almost 2 minutes on first start.
+              </p>
+            </div>}
         </Dialog>
         <Dialog
           className="pt-dark open-profile-alert-dialog"
@@ -509,7 +668,7 @@ export default class TreeView extends React.Component {
           <div className="dialogContent">
             <p>{globalString('profile/openAlert/passwordPrompt')}</p>
             <input
-              autoFocus
+              autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               className="pt-input passwordInput"
               placeholder={globalString(
                 'profile/openAlert/passwordPlaceholder',
@@ -543,5 +702,5 @@ export default class TreeView extends React.Component {
 }
 
 TreeView.propTypes = {
-  treeState: React.PropTypes.instanceOf(TreeState),
+  treeState: PropTypes.instanceOf(TreeState),
 };

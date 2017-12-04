@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-10T21:43:19+11:00
+ * @Last modified time: 2017-11-23T17:41:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -145,7 +145,7 @@ class SampleResultLeaf {
   };
 })
 @observer
-export default class ChartPanel extends React.PureComponent<Props, State> {
+export default class ChartPanel extends React.Component<Props, State> {
   reactions = [];
   resizeDetector: React.ElementRef<*>;
   barChartGrid: React.ElementRef<*>;

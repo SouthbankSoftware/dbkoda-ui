@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T13:18:42+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -20,6 +23,7 @@
 
 import React from 'react';
 import chai, { assert, expect } from 'chai';
+import '~/helpers/configEnzyme';
 import chaiEnzyme from 'chai-enzyme';
 import { mount } from 'enzyme';
 import globalizeInit from '#/tests/helpers/globalize.js';

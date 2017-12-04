@@ -1009,23 +1009,28 @@ class View extends React.Component {
       if (this.editor) {
         cm = this.editor.getCodeMirror();
       }
-      return connectDropTarget(<div className="editorView translator-open">
-        <SplitPane
-          split="vertical"
-          primary="second"
-          defaultSize={512}
-          minSize={200}>
-          <CodeMirrorEditor
-            ref={ref => (this.editor = ref)}
-            codeMirrorInstance={CodeMirror}
-            options={this.cmOptions}
-          />
-          <TranslatorPanel value={editor.shellCode} syntax="cb" profileId={editor.profileId}
-            shellId={editor.shellId} editorCodeMirror={cm} editor={editor}
-            closePanel={this.closeTranslatorPanel} />
-        </SplitPane>
-      </div>);
+      return connectDropTarget(
+        <div className="editorView translator-open">
+          <SplitPane split="vertical" primary="second" defaultSize={512} minSize={200}>
+            <CodeMirrorEditor
+              ref={ref => (this.editor = ref)}
+              codeMirrorInstance={CodeMirror}
+              options={this.cmOptions}
+            />
+            <TranslatorPanel
+              value={editor.shellCode}
+              syntax="cb"
+              profileId={editor.profileId}
+              shellId={editor.shellId}
+              editorCodeMirror={cm}
+              editor={editor}
+              closePanel={this.closeTranslatorPanel}
+            />
+          </SplitPane>
+        </div>,
+      );
     }
+
     return connectDropTarget(
       <div className="editorView">
         <CodeMirrorEditor

@@ -1,4 +1,6 @@
-/*
+/**
+ * Created by joey on 6/6/17.
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,36 +20,32 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Created by joey on 6/6/17.
- */
-
-
-
 import React from 'react';
 import './style.scss';
 
 /**
  * common statistic view panel
  */
-export default ({explains}) => {
-  const {executionStats} = explains;
-  return (<div className="explain-statistic-view">
-    <div className="header">
-      <div>{globalString('explain/view/statisticHeader')}</div>
-      <div>Value</div>
+export default ({ explains }) => {
+  const { executionStats } = explains;
+  return (
+    <div className="explain-statistic-view">
+      <div className="header">
+        <div>{globalString('explain/view/statisticHeader')}</div>
+        <div>Value</div>
+      </div>
+      <div className="row">
+        <div>{globalString('explain/view/docsReturned')}</div>
+        <div>{executionStats.nReturned}</div>
+      </div>
+      <div className="row">
+        <div>{globalString('explain/view/keysExamined')}</div>
+        <div>{executionStats.totalKeysExamined}</div>
+      </div>
+      <div className="row">
+        <div>{globalString('explain/view/docsExamined')}</div>
+        <div>{executionStats.totalDocsExamined}</div>
+      </div>
     </div>
-    <div className="row">
-      <div>{globalString('explain/view/docsReturned')}</div>
-      <div>{executionStats.nReturned}</div>
-    </div>
-    <div className="row">
-      <div>{globalString('explain/view/keysExamined')}</div>
-      <div>{executionStats.totalKeysExamined}</div>
-    </div>
-    <div className="row">
-      <div>{globalString('explain/view/docsExamined')}</div>
-      <div>{executionStats.totalDocsExamined}</div>
-    </div>
-  </div>);
+  );
 };

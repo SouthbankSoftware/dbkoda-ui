@@ -1,6 +1,12 @@
 # dbKoda UI
 *dbKoda UI built with state of the art React stack*
 
+<p align="left">
+  <a href="https://david-dm.org/SouthbankSoftware/dbkoda-ui?type=dev">
+    <img src="https://img.shields.io/david/dev/SouthbankSoftware/dbkoda-ui.svg?style=flat-square">
+  </a>
+</p>
+
 ## Build tool
 
 Webpack is used as build/assemble tool for React.js project. It defines two environments, `dev` and `prod`.

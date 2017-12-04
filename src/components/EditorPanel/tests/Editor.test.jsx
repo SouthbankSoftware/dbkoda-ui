@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-03-14 15:54:01
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T16:13:45+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,15 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-03-14 15:54:01
-* @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-01T13:05:05+10:00
-*/
-
 import React from 'react';
+import '~/helpers/configEnzyme';
 import { shallow, mount } from 'enzyme';
 import { useStrict } from 'mobx';
 import Store from '~/stores/global';
@@ -75,10 +74,10 @@ describe('Toolbar', () => {
   });
 
   test('has disabled buttons', () => {
-    expect(app.find('.executeLineButton').prop('disabled'));
-    expect(app.find('.executeAllButton').prop('disabled'));
-    expect(app.find('.explainPlanButton').prop('disabled'));
-    expect(app.find('.stopExecutionButton').prop('disabled'));
+    expect(app.find('.executeLineButton').at(0).prop('disabled'));
+    expect(app.find('.executeAllButton').at(0).prop('disabled'));
+    expect(app.find('.explainPlanButton').at(0).prop('disabled'));
+    expect(app.find('.stopExecutionButton').at(0).prop('disabled'));
   });
 
   test('has a dropdown', () => {

@@ -50,12 +50,13 @@ export default class Paths extends React.Component {
   openPath(fieldName) {
     const existingPath = (this.props.settings[fieldName]) ?
       path.resolve(this.props.settings[fieldName]) : '';
+    const dlgProperties = (fieldName == 'drillCmd') ? 'openDirectory' : 'openFile';
     if (IS_ELECTRON) {
       dialog.showOpenDialog(
         BrowserWindow.getFocusedWindow(),
         {
           defaultPath: existingPath,
-          properties: ['openFile'],
+          properties: [dlgProperties],
         },
         (fileName) => {
           if (!fileName) {
@@ -82,6 +83,11 @@ export default class Paths extends React.Component {
           { this.props.renderFieldLabel('mongoCmd') }
           <input type="text" id="mongoCmd" value={this.props.settings.mongoCmd} onChange={this.onPathEntered} />
           <Button className="formButton" onClick={() => { this.openPath('mongoCmd'); }}>Browse</Button>
+        </div>
+        <div className="form-row">
+          { this.props.renderFieldLabel('drillCmd') }
+          <input type="text" id="drillCmd" value={this.props.settings.drillCmd} onChange={this.onPathEntered} />
+          <Button className="formButton" onClick={() => { this.openPath('drillCmd'); }}>Browse</Button>
         </div>
       </div>
     );

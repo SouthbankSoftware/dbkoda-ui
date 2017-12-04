@@ -22,8 +22,8 @@
  * @Author: Michael Harrison
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2017-07-19 11:17:49
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-23T18:05:24+11:00
  */
 
 /* eslint import/no-dynamic-require: 0 */
@@ -171,6 +171,7 @@ export default class Palette extends React.Component {
     const dataObj = [
       {
         hasCaret: true,
+        id: 'common',
         label: 'Common',
         childNodes: [],
         onExpand: () => this.onExpand('common'),
@@ -179,6 +180,7 @@ export default class Palette extends React.Component {
       },
       {
         hasCaret: true,
+        id: 'queryAndAggregate',
         label: 'Query and Aggregate',
         childNodes: [],
         onExpand: () => this.onExpand('queryAndAggregate'),
@@ -187,6 +189,7 @@ export default class Palette extends React.Component {
       },
       {
         hasCaret: true,
+        id: 'groupAndJoin',
         label: 'Group and Join',
         childNodes: [],
         onExpand: () => this.onExpand('groupAndJoin'),
@@ -195,6 +198,7 @@ export default class Palette extends React.Component {
       },
       {
         hasCaret: true,
+        id: 'transform',
         label: 'Transform',
         childNodes: [],
         onExpand: () => this.onExpand('transform'),
@@ -203,6 +207,7 @@ export default class Palette extends React.Component {
       },
       {
         hasCaret: true,
+        id: 'other',
         label: 'Other',
         childNodes: [],
         onExpand: () => this.onExpand('other'),
@@ -211,6 +216,7 @@ export default class Palette extends React.Component {
       },
       {
         hasCaret: true,
+        id: 'all',
         label: 'All',
         childNodes: [],
         onExpand: () => this.onExpand('all'),
@@ -232,6 +238,7 @@ export default class Palette extends React.Component {
       if (!(BlockTypes[keyName].type.toUpperCase() === 'START')) {
         // Push item to all group.
         dataObj[5].childNodes.push({
+          id: index,
           label: (
             <Tooltip content={BlockTypes[keyName].description}>
               <Block
@@ -247,6 +254,7 @@ export default class Palette extends React.Component {
         // For each tag in groups array, add to group.
         BlockTypes[keyName].groups.map((group) => {
           groupsArray[group].push({
+            id: index,
             label: (
               <Tooltip
                 content={BlockTypes[keyName].description}

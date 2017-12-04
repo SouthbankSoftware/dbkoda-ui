@@ -27,7 +27,6 @@
 import {action, observable, runInAction, toJS} from 'mobx';
 import yaml from 'js-yaml';
 import _ from 'lodash';
-import path from 'path';
 import {featherClient} from '~/helpers/feathers';
 import {NewToaster} from '#/common/Toaster';
 
@@ -38,7 +37,7 @@ export default class Profiles {
 
   constructor() {
     if (global.PATHS) {
-      this.profilesFilePath = path.join(global.PATHS.home, 'profiles.yml');
+      this.profilesFilePath = global.PATHS.profilesPath;
     }
   }
 

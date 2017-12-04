@@ -57,10 +57,9 @@ export default class Analytics extends React.Component {
     }
     ReactGA.set({ page: siteUrl });
 
-    const appVersion = this.props.store.version;
-
     if (this.props.config.settings.telemetryEnabled) {
       // TODO Get App Version
+      const appVersion = this.props.store.version;
       this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', appVersion);
     }
 
@@ -68,15 +67,34 @@ export default class Analytics extends React.Component {
      * Reaction function for when a change occurs on the telemetryEnabled state
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
-     */
+    //  */
     reaction(
       () => this.props.config.settings.telemetryEnabled,
       (telemetryEnabled) => {
-        if (telemetryEnabled) {
+        if (!this.props.store.layout.optInVisible) {
+          if (telemetryEnabled) {
+            this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
+          } else {
+            this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
+          }
+          this.props.config.save();
+        }
+      },
+      { name: 'analyticsReactionToTelemetryChange' },
+    );
+
+    /**
+     * send opt events when clicking ok button.
+     */
+    reaction(
+      () => this.props.store.layout.optInVisible,
+      (_) => {
+        if (this.props.config.settings.telemetryEnabled) {
           this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
         } else {
           this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
         }
+        this.props.config.save();
       },
       { name: 'analyticsReactionToTelemetryChange' },
     );
@@ -107,7 +125,8 @@ export default class Analytics extends React.Component {
    *  @param {Object} profile - An object that represents the newly created profile
    */
   newProfileCreated(profile) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
+      console.log(profile);
       let mongoInfo =
         '{ dbVersion: ' +
         profile.dbVersion +
@@ -131,13 +150,13 @@ export default class Analytics extends React.Component {
    * @param {String} service - The service type that has been called.
    */
   controllerActivity(service) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
     }
   }
 
   keyFeatureEvent(feature) {
-    if (this.props.store.userPreferences.telemetryEnabled) {
+    if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
     }
   }

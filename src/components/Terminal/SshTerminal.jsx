@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T15:45:57+11:00
+ * @Last modified time: 2017-12-03T15:36:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,8 +28,11 @@
 
 import * as React from 'react';
 import Xterm from 'xterm/build/xterm';
+// $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
+// $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
+import { terminalErrorLevels } from '~/api/Terminal';
 import Terminal from './Terminal';
 
 type Props = {
@@ -50,24 +55,27 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _attach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    console.log('Attaching...');
+    console.debug('Attaching...');
 
     this.terminalService
       .get(id)
       .then(() => {
-        console.log('Terminal already exists');
-        this._send('\r');
+        console.debug('Terminal already exists');
+        this._send('\f');
       })
       .catch((err) => {
         if (err.code === 404) {
           Broker.emit(EventType.TERMINAL_ATTACHING(id), xterm);
         } else {
-          console.error(err);
+          Broker.emit(EventType.TERMINAL_ERROR(id), {
+            error: err.message,
+            level: terminalErrorLevels.error,
+          });
         }
       });
 
     this._receive = (data) => {
-      console.log('Receiving: ', JSON.stringify(data));
+      console.debug('Receiving: ', JSON.stringify(data));
 
       xterm.write(data);
     };
@@ -80,7 +88,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _detach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    console.log('Detaching...');
+    console.debug('Detaching...');
 
     this._receive && Broker.off(EventType.TERMINAL_DATA(id), this._receive);
 
@@ -96,7 +104,7 @@ export default class SshTerminal extends React.PureComponent<Props> {
   _send = (code: string) => {
     const { id } = this.props;
 
-    console.log('Sending: ', JSON.stringify(code));
+    console.debug('Sending: ', JSON.stringify(code));
 
     this.terminalService.patch(id, {
       cmd: code,
@@ -104,10 +112,11 @@ export default class SshTerminal extends React.PureComponent<Props> {
   };
 
   render() {
-    const { tabId } = this.props;
+    const { id, tabId } = this.props;
 
     return (
       <Terminal
+        id={id}
         tabId={tabId}
         attach={this._attach}
         detach={this._detach}

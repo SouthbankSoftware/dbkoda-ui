@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-16T18:01:20+11:00
+ * @Last modified time: 2017-12-03T14:00:15+11:00
  */
 
 import load from 'little-loader';
@@ -77,6 +77,9 @@ class FeatherClient {
     this.terminalService = this.service('terminals');
     this.terminalService.on('data', ({ _id, payload }) => {
       Broker.emit(EventType.TERMINAL_DATA(_id), payload);
+    });
+    this.terminalService.on('error', ({ _id, payload }) => {
+      Broker.emit(EventType.TERMINAL_ERROR(_id), payload);
     });
   }
 

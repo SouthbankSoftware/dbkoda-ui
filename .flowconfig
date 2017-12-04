@@ -13,6 +13,8 @@
 [options]
 module.name_mapper='^\(.*\)\.s?css$' -> 'CSSModule'
 module.name_mapper='^\(.*\)\.svg$' -> 'EmptyModule'
+module.name_mapper='^~/\(.*\)$' -> '<PROJECT_ROOT>/src/\1'
+module.name_mapper='^#/\(.*\)$' -> '<PROJECT_ROOT>/src/components/\1'
 # with node, name_mapper doesn't work: https://github.com/facebook/flow/issues/1068
 module.system=haste
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
@@ -20,3 +22,4 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 suppress_type=$FlowFixMe
 munge_underscores=true
 unsafe.enable_getters_and_setters=true
+esproposal.decorators=ignore

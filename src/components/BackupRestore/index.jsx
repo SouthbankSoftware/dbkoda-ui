@@ -1,12 +1,8 @@
 /**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-08-17T20:17:15+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T13:22:57+10:00
- */
-
-/*
+ * Created by joey on 19/7/17
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T16:29:22+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -25,9 +21,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * Created by joey on 19/7/17.
- */
+
 /* eslint no-unused-vars:warn */
 
 import React from 'react';
@@ -44,11 +38,11 @@ import {
 import { featherClient } from '../../helpers/feathers';
 import { isCollectionAction, isDatabaseAction } from './Utils';
 
-@observer
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
 }))
+@observer
 export class BackupRestore extends React.Component {
   constructor(props) {
     super(props);

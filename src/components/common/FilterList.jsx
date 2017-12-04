@@ -3,7 +3,7 @@
  * @Date:   2017-07-11T17:33:29+10:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-31T14:14:13+11:00
+ * @Last modified time: 2017-11-21T10:55:11+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,6 +26,7 @@
 
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
+import PropTypes from 'prop-types';
 import fuzzysearch from 'fuzzysearch';
 
 export default class FilterList extends React.Component {
@@ -36,11 +37,11 @@ export default class FilterList extends React.Component {
     onClick: null,
   };
 
-  static PropTypes = {
-    items: React.PropTypes.array,
-    getItemTitle: React.PropTypes.func,
-    getItemId: React.PropTypes.func,
-    onClick: React.PropTypes.func,
+  static propTypes = {
+    items: PropTypes.array,
+    getItemTitle: PropTypes.func,
+    getItemId: PropTypes.func,
+    onClick: PropTypes.func,
   };
 
   state = {

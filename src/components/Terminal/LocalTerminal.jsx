@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-15T10:29:13+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-17T17:55:54+11:00
+ * @Last modified time: 2017-12-03T15:38:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,9 +28,11 @@
 
 import * as React from 'react';
 import Xterm from 'xterm/build/xterm';
+// $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
+// $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
-import { terminalTypes } from '~/api/Terminal';
+import { terminalTypes, terminalErrorLevels } from '~/api/Terminal';
 import Terminal from './Terminal';
 
 type Props = {
@@ -39,6 +43,8 @@ type Props = {
 export default class LocalTerminal extends React.PureComponent<Props> {
   socket: *;
   pid: *;
+  terminalService: *;
+  _receive: (data: string) => void;
 
   constructor(props: Props) {
     super(props);
@@ -49,7 +55,7 @@ export default class LocalTerminal extends React.PureComponent<Props> {
   _attach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    console.log('Attaching...');
+    console.debug('Attaching...');
 
     this.terminalService
       .create({
@@ -62,14 +68,19 @@ export default class LocalTerminal extends React.PureComponent<Props> {
       })
       .then(({ payload: { new: isNew } }) => {
         if (!isNew) {
-          console.log('Terminal already exists');
-          this._send('\r');
+          console.debug('Terminal already exists');
+          this._send('\f');
         }
       })
-      .catch(console.error);
+      .catch((error) => {
+        Broker.emit(EventType.TERMINAL_ERROR(id), {
+          error: error.message,
+          level: terminalErrorLevels.error,
+        });
+      });
 
     this._receive = (data) => {
-      console.log('Receiving: ', JSON.stringify(data));
+      console.debug('Receiving: ', JSON.stringify(data));
 
       xterm.write(data);
     };
@@ -82,7 +93,7 @@ export default class LocalTerminal extends React.PureComponent<Props> {
   _detach = (xterm: Xterm) => {
     const { id } = this.props;
 
-    console.log('Detaching...');
+    console.debug('Detaching...');
 
     this._receive && Broker.off(EventType.TERMINAL_DATA(id), this._receive);
 
@@ -98,7 +109,7 @@ export default class LocalTerminal extends React.PureComponent<Props> {
   _send = (code: string) => {
     const { id } = this.props;
 
-    console.log('Sending: ', JSON.stringify(code));
+    console.debug('Sending: ', JSON.stringify(code));
 
     this.terminalService.patch(id, {
       cmd: code,
@@ -106,10 +117,11 @@ export default class LocalTerminal extends React.PureComponent<Props> {
   };
 
   render() {
-    const { tabId } = this.props;
+    const { id, tabId } = this.props;
 
     return (
       <Terminal
+        id={id}
         tabId={tabId}
         attach={this._attach}
         detach={this._detach}

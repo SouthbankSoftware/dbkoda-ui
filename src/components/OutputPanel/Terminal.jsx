@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: chris
+ * @Date:   2017-03-22T11:31:55+11:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-11-21T13:02:48+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -20,14 +26,6 @@
 
 /* eslint no-unused-vars: warn */
 
-/**
- * @Author: chris
- * @Date:   2017-03-22T11:31:55+11:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-06-09T11:09:36+10:00
- */
-
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { DropTarget } from 'react-dnd';
@@ -44,7 +42,7 @@ import {
   Position,
   Tooltip,
 } from '@blueprintjs/core';
-import CodeMirror from 'react-codemirror';
+import CodeMirror from '#/common/LegacyCodeMirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/edit/matchbrackets.js';
 // Patched for codemirror@5.28.0. Need to check this file when upgrade codemirror
