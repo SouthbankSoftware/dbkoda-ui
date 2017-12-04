@@ -19,7 +19,7 @@ class DevelopmentModePlugin {
     const tmpdirBase = attributes.tmpdirBase || ".";
     const tmpdir = util.tmpdir(tmpdirBase);
 
-    const messagesPath =  path.resolve(attributes.messages.replace("[locale]", attributes.developmentLocale));
+    const messagesPath = path.resolve(attributes.messages.replace("[locale]", attributes.developmentLocale)).replace(/\\/g, '\\\\');
 
     i18nDataTemplate = [
       "var messages = require(\"" + messagesPath + "\");",
