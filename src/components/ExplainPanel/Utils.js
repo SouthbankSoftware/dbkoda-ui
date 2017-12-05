@@ -232,7 +232,7 @@ export const insertExplainToAggregate = (root) => {
 export const appendNextOnExplainFind = (command) => {
   const i = command.search(/find\(.*\)/);
   const j = command.search(/explain\(.*\)/);
-  if (i > j) {
+  if (i > j && command.indexOf('next()') < 0) {
     let newCmd = command;
     // need to append next()
     if (command.match(/;$/)) {

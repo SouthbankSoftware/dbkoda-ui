@@ -193,5 +193,11 @@ describe('test explain utils functions', () => {
 
     code = appendNextOnExplainFind('db.test.explain().find({}, {})');
     assert.equal(code, 'db.test.explain().find({}, {}).next()');
+
+    code = appendNextOnExplainFind('db.test.explain().find({}, {});');
+    assert.equal(code, 'db.test.explain().find({}, {}).next();');
+
+    code = appendNextOnExplainFind('db.test.explain().find({}, {}).sort().next()');
+    assert.equal(code, 'db.test.explain().find({}, {}).sort().next()');
   });
 });
