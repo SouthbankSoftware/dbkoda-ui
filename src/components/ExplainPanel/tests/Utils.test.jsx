@@ -21,10 +21,10 @@
 import chai, {assert} from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import globalizeInit from '#/tests/helpers/globalize.js';
-import {findMongoCommand} from '../Utils';
+import {findMongoCommand, insertExplainOnCommand, appendNextOnExplainFind} from '../Utils';
 
 const esprima = require('esprima');
-// const escodegen = require('escodegen');
+const escodegen = require('escodegen');
 
 chai.use(chaiEnzyme());
 
@@ -70,37 +70,37 @@ describe('test explain utils functions', () => {
     assert.equal(commands[2].name, 'count');
     assert.equal(commands[3].name, 'test');
   });
-/*
+
   test('test insert explain command', () => {
     let code = insertExplainOnCommand('db.test.find()', 'allPlansExecution');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain(\'allPlansExecution\').find();')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.test.find().explain("allPlansExecution");')));
 
     code = insertExplainOnCommand('db.test.find({a:1, b:true}, {_id: 0})', 'allPlansExecution');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain(\'allPlansExecution\').find({a:1, b:true}, {_id: 0});')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.test.find({a:1, b:true}, {_id: 0}).explain(\'allPlansExecution\');')));
 
     code = insertExplainOnCommand('db.test.find({a:1, b:true}, {_id: 0})');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain(\'queryPlanner\').find({a:1, b:true}, {_id: 0});')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.test.find({a:1, b:true}, {_id: 0}).explain(\'queryPlanner\');')));
 
     code = insertExplainOnCommand('db.test.count()', 'executionStats');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain(\'executionStats\').count();')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.test.explain(\'executionStats\').count();')));
 
     code = insertExplainOnCommand('db.test.distinct()', 'executionStats');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain(\'executionStats\').distinct();')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.test.explain(\'executionStats\').distinct();')));
 
     code = insertExplainOnCommand('db.test.find({ quantity: { $gt: 50 }, category: "apparel" })', 'executionStats');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain(\'executionStats\').find({ quantity: { $gt: 50 }, category: "apparel" });')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.test.find({ quantity: { $gt: 50 }, category: "apparel" }).explain(\'executionStats\');')));
 
     code = insertExplainOnCommand('db.test.update({ quantity: { $gt: 50 }, category: "apparel" }, {})', 'executionStats');
-    assert.equal(code, escodegen.generate(esprima.parse('db.test.explain(\'executionStats\').update({ quantity: { $gt: 50 }, category: "apparel" }, {});')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.test.explain(\'executionStats\').update({ quantity: { $gt: 50 }, category: "apparel" }, {});')));
 
     code = insertExplainOnCommand('db.test.invalid()');
     assert.equal(code, 'db.test.invalid().explain("queryPlanner")');
 
     code = insertExplainOnCommand('db.users.find().sort({"user.age":1})');
-    assert.equal(code, escodegen.generate(esprima.parse('db.users.explain("queryPlanner").find().sort({"user.age":1})')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.users.find().sort({"user.age":1}).explain("queryPlanner")')));
 
     code = insertExplainOnCommand('db.users.find().sort({"user.age":1}).limit(100)');
-    assert.equal(code, escodegen.generate(esprima.parse('db.users.explain("queryPlanner").find().sort({"user.age":1}).limit(100)')));
+    assert.equal(escodegen.generate(esprima.parse(code)), escodegen.generate(esprima.parse('db.users.find().sort({"user.age":1}).limit(100).explain("queryPlanner")')));
   });
 
   test('already has explain', () => {
@@ -186,5 +186,12 @@ describe('test explain utils functions', () => {
       '       ]);';
     assert.equal(code, escodegen.generate(esprima.parse(expected)));
   });
-  */
+
+  it('test append next on find command', () => {
+    let code = appendNextOnExplainFind('db.test.explain("allPlansExecution").find()');
+    assert.equal(code, 'db.test.explain("allPlansExecution").find().next()');
+
+    code = appendNextOnExplainFind('db.test.explain().find({}, {})');
+    assert.equal(code, 'db.test.explain().find({}, {}).next()');
+  });
 });

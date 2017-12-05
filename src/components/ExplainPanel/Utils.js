@@ -23,6 +23,7 @@
  */
 
 import _ from 'lodash';
+import os from 'os';
 
 const esprima = require('esprima');
 const escodegen = require('escodegen');
@@ -225,6 +226,25 @@ export const insertExplainToAggregate = (root) => {
   }
 };
 
+/**
+ * if the explain command is before find on windows append a next()
+ */
+export const appendNextOnExplainFind = (command) => {
+  const i = command.search(/find\(.*\)/);
+  const j = command.search(/explain\(.*\)/);
+  if (i > j) {
+    let newCmd = command;
+    // need to append next()
+    if (command.match(/;$/)) {
+      newCmd = command.replace(/;$/, '.next();');
+    } else {
+      newCmd = command + '.next()';
+    }
+    return newCmd;
+  }
+  return command;
+};
+
 export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') => {
   try {
     const parsed = esprima.parseScript(command);
@@ -234,7 +254,7 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
     if (!_.find(commands, {name: 'explain'})) {
       const matchedCmd = findMatchedCommand(commands);
       if (matchedCmd) {
-        if (['aggregate', 'count', 'update'].indexOf(matchedCmd.name) >= 0) {
+        if (['aggregate', 'count', 'update', 'distinct'].indexOf(matchedCmd.name) >= 0) {
           const explainObj = matchedCmd.name === 'aggregate' ? explainAst() : explainAst(explainParam);
           explainObj.callee.object = matchedCmd.ast.object;
           matchedCmd.ast.object = explainObj;
@@ -245,6 +265,10 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
         return command.replace(/;$/, '.explain("' + explainParam + '");');
       }
       return command + '.explain("' + explainParam + '")';
+    }
+    // explain command is defined by user
+    if (os.release().indexOf('Windows') >= 0) {
+      return appendNextOnExplainFind(command);
     }
   } catch (err) {
     console.error('failed to parse script ', command);

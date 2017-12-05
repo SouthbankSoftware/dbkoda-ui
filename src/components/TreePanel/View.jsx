@@ -25,7 +25,6 @@
  */
 
 import React from 'react';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { reaction, runInAction, observable, action, toJS } from 'mobx';
