@@ -28,11 +28,11 @@
  * explain component is used to handle explain output
  */
 import React from 'react';
-import {inject, observer} from 'mobx-react';
-import {action, observable} from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { action, observable } from 'mobx';
 import _ from 'lodash';
 import Panel from './Panel';
-import {Broker, EventType} from '../../helpers/broker/index';
+import { Broker, EventType } from '../../helpers/broker/index';
 
 export const parseOutput = (output) => {
   return output
@@ -53,11 +53,11 @@ export default class Explain extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {viewType: 0};
+    this.state = { viewType: 0 };
   }
 
   componentDidMount() {
-    const {editor} = this.props;
+    const { editor } = this.props;
     if (editor) {
       Broker.on(
         EventType.EXPLAIN_OUTPUT_AVAILABLE,
@@ -68,12 +68,12 @@ export default class Explain extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.editor.explains) {
-      this.setState({viewType: nextProps.editor.explains.viewType});
+      this.setState({ viewType: nextProps.editor.explains.viewType });
     }
   }
 
   componentWillUnmount() {
-    const {editor} = this.props;
+    const { editor } = this.props;
     if (editor) {
       Broker.removeListener(
         EventType.EXPLAIN_OUTPUT_AVAILABLE,
@@ -83,7 +83,7 @@ export default class Explain extends React.Component {
   }
 
   @action.bound
-  explainOutputAvailable({id, shell, command, type, output}) {
+  explainOutputAvailable({ id, shell, command, type, output }) {
     this.explainCommand = command;
     this.explainOutput = '';
     this.explainType = type;
@@ -114,7 +114,7 @@ export default class Explain extends React.Component {
       ) {
         // this is aggregate framework explain output, convert stages to regular stage
         const aggStages = explainOutputJson.output.stages;
-        const converted = {queryPlanner: {winningPlan: {}}};
+        const converted = { queryPlanner: { winningPlan: {} } };
         aggStages.reverse().forEach((stage) => {
           _.values(stage).forEach((v) => {
             _.keys(v).forEach((k) => {
@@ -126,12 +126,20 @@ export default class Explain extends React.Component {
         });
         explainOutputJson.output = converted;
       } else if (explainOutputJson.output.shards) {
-        const shardsOutput = {queryPlanner: {winningPlan: {stage: 'SHARD_MERGE', shards: []}}};
+        const shardsOutput = {
+          queryPlanner: { winningPlan: { stage: 'SHARD_MERGE', shards: [] } },
+        };
         _.forOwn(explainOutputJson.output.shards, (value, key) => {
           if (value.stages && value.stages.length > 0) {
             _.forOwn(value.stages[0], (stageValue) => {
-              if (stageValue.queryPlanner && stageValue.queryPlanner.winningPlan) {
-                const shardOutput = {shardName: key, winningPlan: stageValue.queryPlanner.winningPlan};
+              if (
+                stageValue.queryPlanner &&
+                stageValue.queryPlanner.winningPlan
+              ) {
+                const shardOutput = {
+                  shardName: key,
+                  winningPlan: stageValue.queryPlanner.winningPlan,
+                };
                 console.log('add to shard output ', shardOutput);
                 shardsOutput.queryPlanner.winningPlan.shards.push(shardOutput);
               }
@@ -165,14 +173,21 @@ export default class Explain extends React.Component {
         explains: explainOutputJson,
       }),
     );
-    Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, {id, shell});
+    Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, { id, shell });
   }
 
   @action.bound
   switchExplainView() {
-    const {viewType} = this.props.editor.explains;
+    const { viewType } = this.props.editor.explains;
     this.props.editor.explains.viewType = 1 - viewType;
-    this.setState({viewType: this.props.editor.explains.viewType});
+    this.setState({ viewType: this.props.editor.explains.viewType });
+  }
+
+  @action.bound
+  suggestIndex() {
+    // Send a message to controller to fetch the suggested indicies.
+    // Once result is returned open a new editor.
+    // Once editor is open, append the suggestion text to the editor.
   }
 
   render() {
@@ -181,6 +196,7 @@ export default class Explain extends React.Component {
         editor={this.props.editor}
         viewType={this.state.viewType}
         switchExplainView={this.switchExplainView}
+        suggestIndex={this.suggestIndex}
       />
     );
   }

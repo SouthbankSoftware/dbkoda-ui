@@ -20,7 +20,7 @@
 
 $labelColor: #179dea;
 $contentColor: white;
-@import "../../styles/_defaultTheme.scss";
+@import '../../styles/_defaultTheme.scss';
 .explain-panel {
   display: flex;
   flex: 1;
@@ -40,7 +40,16 @@ $contentColor: white;
       line-height: 30px;
       font-size: $explainHeaderLabelFontSize;
     }
-
+    .explain-view-suggest-index-button {
+      font-size: $explainLabelFontSize;
+      background-color: $explainSwitchBtnColor !important;
+      border: 1px solid $explainSwitchBtnBorderColor;
+      width: 85px;
+      height: 30px;
+      span {
+        color: $explainLabelColor;
+      }
+    }
     .explain-view-switch-button {
       margin-left: auto;
       font-size: $explainLabelFontSize;
@@ -101,7 +110,7 @@ $contentColor: white;
 
     //.explain-stage:after,
     .explain-stage:before {
-      content: " ";
+      content: ' ';
       position: absolute;
       top: 0;
       right: -16px;
@@ -140,7 +149,7 @@ $contentColor: white;
       flex-direction: column;
       flex: 1;
       max-width: 200px;
-      .explain-stage:nth-child(n+2) {
+      .explain-stage:nth-child(n + 2) {
         margin-top: 10px;
       }
     }
@@ -443,7 +452,6 @@ $contentColor: white;
   ul {
     float: left;
     padding-left: 10px;
-
   }
   ul .label {
     color: $labelColor;
@@ -470,7 +478,6 @@ $contentColor: white;
 .explain-output-column-content {
   float: left;
   flex: 2;
-
 }
 
 .explain-stage-button {

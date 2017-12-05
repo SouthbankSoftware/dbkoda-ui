@@ -63,7 +63,9 @@ export default class TreePanel extends React.Component {
             this.props.treeState.setProfileId(profile.id);
             const service = featherClient().service('/mongo-inspector'); // Calls the controller to load the topology associated with the selected Profile
             service.timeout = 60000;
-            this.props.store.treePanel.isRefreshing = true;
+            runInAction(() => {
+              this.props.store.treePanel.isRefreshing = true;
+            });
             service
               .get(profile.id)
               .then((res) => {
