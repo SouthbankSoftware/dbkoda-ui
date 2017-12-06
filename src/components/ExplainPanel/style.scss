@@ -21,6 +21,11 @@
 $labelColor: #179dea;
 $contentColor: white;
 @import '../../styles/_defaultTheme.scss';
+.explainPanelWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 .explain-panel {
   display: flex;
   flex: 1;

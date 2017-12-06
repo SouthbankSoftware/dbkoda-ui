@@ -31,6 +31,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable } from 'mobx';
 import _ from 'lodash';
+import { featherClient } from '~/helpers/feathers';
 import Panel from './Panel';
 import { Broker, EventType } from '../../helpers/broker/index';
 
@@ -44,6 +45,7 @@ export const parseOutput = (output) => {
 };
 
 @inject(allStores => ({
+  store: allStores.store,
   explainPanel: allStores.store.explainPanel,
   editors: allStores.store.editors,
   outputPanel: allStores.store.outputPanel,
@@ -53,7 +55,11 @@ export default class Explain extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { viewType: 0 };
+    this.state = {
+      viewType: 0,
+      suggestionsGenerated: false,
+      suggestionText: '',
+    };
   }
 
   componentDidMount() {
@@ -157,6 +163,7 @@ export default class Explain extends React.Component {
           output: parseOutput(output),
         };
       }
+      this.explainOutput = explainOutputJson;
     } catch (err) {
       console.error('err parse explain output ', err);
       console.error(output);
@@ -185,19 +192,62 @@ export default class Explain extends React.Component {
 
   @action.bound
   suggestIndex() {
+    console.log(this.explainOutput.output);
+    const editor = this.props.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    );
+    const profileId = editor.profileId;
+    const shell = editor.shellId;
+
     // Send a message to controller to fetch the suggested indicies.
-    // Once result is returned open a new editor.
-    // Once editor is open, append the suggestion text to the editor.
+    const service = featherClient().service('/mongo-sync-execution');
+    service.timeout = 30000;
+    service
+      .update(profileId, {
+        shellId: shell, // eslint-disable-line
+        commands:
+          'dbkInx.suggestIndexKeys(' +
+          JSON.stringify(this.explainOutput.output) +
+          ');',
+      })
+      .then((res) => {
+        this.suggestionsGenerated = true;
+        this.suggestionText = JSON.parse(res);
+        // Iterate through each object in the result.
+        if (typeof this.suggestionText === 'object') {
+          console.log(this.suggestionText[0]);
+          for (const key in this.suggestionText[0]) {
+            if (this.suggestionText[0].hasOwnProperty(key)) {
+              console.log(key, ' -> ', this.suggestionText[0][key]);
+            }
+          }
+        } else {
+          console.error('Did not return an array.');
+        }
+
+        this.setState({ suggestionsGenerated: true });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   render() {
     return (
-      <Panel
-        editor={this.props.editor}
-        viewType={this.state.viewType}
-        switchExplainView={this.switchExplainView}
-        suggestIndex={this.suggestIndex}
-      />
+      <div className="explainPanelWrapper">
+        <Panel
+          editor={this.props.editor}
+          viewType={this.state.viewType}
+          switchExplainView={this.switchExplainView}
+          suggestIndex={this.suggestIndex}
+        />
+        {this.suggestionsGenerated && (
+          <div className="suggestionsWrapper">
+            <h2>Suggestions</h2>
+            <p>{JSON.stringify(this.suggestionText[0])}</p>
+          </div>
+        )}
+      </div>
     );
   }
 }
