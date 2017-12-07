@@ -213,7 +213,7 @@ export default class Explain extends React.Component {
         this.suggestionsGenerated = true;
         this.suggestionText = JSON.parse(res);
         let suggestionCode =
-          '// This is a list of commands for creating indexes.\n\n';
+          globalString('explain/panel/suggestIndexDescription') + '\n\n';
         // Iterate through each object in the result.
         if (typeof this.suggestionText === 'object') {
           const output = toJS(this.props.editor.explains.output);

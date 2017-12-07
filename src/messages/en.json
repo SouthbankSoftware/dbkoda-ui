@@ -105,7 +105,9 @@
       "panel": {
         "rawView": "Raw Json",
         "explainView": "Explain",
-        "suggestIndex": "Suggest Index"
+        "suggestIndex": "Index Advisor",
+        "suggestIndexDescription":
+          "// Here are some commands that may improve your query."
       },
       "step": {
         "fetchFilter":

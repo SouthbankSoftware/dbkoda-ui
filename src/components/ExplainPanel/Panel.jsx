@@ -93,7 +93,7 @@ const Panel = ({
       )}
       {hasSuggestions && (
         <div className="suggest-index-panel">
-          <h2> Suggested Indexes </h2>
+          <h2>{globalString('explain/panel/suggestIndex')}</h2>
           <QueryCommandView command={suggestionText} />
         </div>
       )}
