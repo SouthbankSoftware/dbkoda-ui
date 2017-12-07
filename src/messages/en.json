@@ -104,7 +104,10 @@
       "executionError": "Failed to run explain",
       "panel": {
         "rawView": "Raw Json",
-        "explainView": "Explain"
+        "explainView": "Explain",
+        "suggestIndex": "Index Advisor",
+        "suggestIndexDescription":
+          "// Here are some commands that may improve your query."
       },
       "step": {
         "fetchFilter":
@@ -591,16 +594,20 @@
       "connection_failed": "Create Drill Connection Failed",
       "execution_failed": "Execute SQL Statement Failed",
       "connection_not_exist": "Cant find connection",
-      "drill_binary_not_defined": "Drill Binary not found, Please configure it on user setting panel",
-      "open_drill_editor_failed": "Open Drill Editor Failed",
-      "drill_editor_open_success": "Drill Editor added successfully !",
-      "java_not_found": "Apache Drill requires Java for execution. Please install Java and try again.",
+      "drill_binary_not_defined":
+        "Drill Binary not found, Please configure it in the user settings panel",
+      "open_drill_editor_failed": "Failed to Open Drill Editor.",
+      "drill_editor_open_success": "Drill Editor created successfully!",
+      "java_not_found":
+        "Apache Drill requires Java for execution. Please install Java and try again.",
       "drill_not_configured_title": "Drill Not Configured",
-      "drill_not_configured_message": "Drill path is not set in the configuration panel. Would you like us to setup drill for you?",
+      "drill_not_configured_message":
+        "A path to Apache Drill has not been set in the configuration panel. Would you like us to setup drill for you now? This may take some time.",
       "downloading_drill": "Downloading Apache Drill...",
-      "downloading_drill_controller": "Downloading dbKoda Drill Controller...",
+      "downloading_drill_controller": "Downloading the dbKoda Drill Plugin...",
       "drill_download_success": "Drill has been downloaded successfully.",
-      "drill_controller_download_success": "Drill Controller has been downloaded successfully.",
+      "drill_controller_download_success":
+        "Drill Controller has been downloaded successfully.",
       "drill_download_failed": "Error downloading drill, contact support."
     }
   }

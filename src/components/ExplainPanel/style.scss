@@ -20,13 +20,24 @@
 
 $labelColor: #179dea;
 $contentColor: white;
-@import "../../styles/_defaultTheme.scss";
+@import '../../styles/_defaultTheme.scss';
+.outputPanel {
+  overflow-y: hidden;
+}
+.explainPanelWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
 .explain-panel {
   display: flex;
   flex: 1;
+  order: 1;
   flex-direction: column;
   background-color: $explainPanelBKColor;
   width: 100%;
+  overflow-y: auto;
 
   .explain-header {
     display: flex;
@@ -40,7 +51,16 @@ $contentColor: white;
       line-height: 30px;
       font-size: $explainHeaderLabelFontSize;
     }
-
+    .explain-view-suggest-index-button {
+      font-size: $explainLabelFontSize;
+      background-color: $explainSwitchBtnColor !important;
+      border: 1px solid $explainSwitchBtnBorderColor;
+      width: 120px;
+      height: 30px;
+      span {
+        color: $explainLabelColor;
+      }
+    }
     .explain-view-switch-button {
       margin-left: auto;
       font-size: $explainLabelFontSize;
@@ -101,7 +121,7 @@ $contentColor: white;
 
     //.explain-stage:after,
     .explain-stage:before {
-      content: " ";
+      content: ' ';
       position: absolute;
       top: 0;
       right: -16px;
@@ -140,7 +160,7 @@ $contentColor: white;
       flex-direction: column;
       flex: 1;
       max-width: 200px;
-      .explain-stage:nth-child(n+2) {
+      .explain-stage:nth-child(n + 2) {
         margin-top: 10px;
       }
     }
@@ -366,6 +386,45 @@ $contentColor: white;
       color: rgb(22, 160, 187);
     }
   }
+  .suggest-index-panel {
+    flex: 1 1 auto;
+    order: 2;
+    h2 {
+      margin: 10px 10px 0px 10px;
+      color: $explainLabelColor;
+      line-height: 30px;
+      font-size: $explainHeaderLabelFontSize;
+    }
+    p {
+      margin-left: 20px;
+      color: $explainLabelColor;
+    }
+    .explain-command-panel {
+      margin: 10px 10px 0px 10px;
+      //height: 300px;
+      //width: 400px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      .namespace {
+        display: flex;
+        flex-direction: row;
+        height: 20px;
+        .value {
+          margin-left: 20px;
+          color: $explainLabelColor;
+        }
+      }
+      .label {
+        color: rgb(22, 160, 187);
+      }
+    }
+  }
+}
+
+.suggestionsWrapper {
+  order: 2;
 }
 
 .explain-error-panel {
@@ -420,10 +479,9 @@ $contentColor: white;
 }
 
 .explain-view-panel {
-  flex: 1;
+  flex: 0 0 auto;
   background-color: $explainPanelBKColor;
   padding: 10px;
-  overflow: auto;
 }
 
 .explain-not-visible {
@@ -443,7 +501,6 @@ $contentColor: white;
   ul {
     float: left;
     padding-left: 10px;
-
   }
   ul .label {
     color: $labelColor;
@@ -470,7 +527,6 @@ $contentColor: white;
 .explain-output-column-content {
   float: left;
   flex: 2;
-
 }
 
 .explain-stage-button {

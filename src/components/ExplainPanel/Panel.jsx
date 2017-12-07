@@ -31,35 +31,49 @@
  *
  */
 import React from 'react';
-import {Button} from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import './style.scss';
 import RawJson from './RawJson';
 import ExplainView from './ExplainView';
 import QueryCommandView from './QueryCommandView';
 
-export const Header = ({viewType, switchExplainView}) => {
+export const Header = ({ viewType, switchExplainView, suggestIndex }) => {
   return (
     <div className="explain-header">
-      <span className="explain-label">
-        {globalString('explain/heading')}
-      </span>
+      <span className="explain-label">{globalString('explain/heading')}</span>
       <Button
         className="pt-label explain-view-switch-button"
-        onClick={switchExplainView}>
+        onClick={switchExplainView}
+      >
         {viewType === 0
           ? globalString('explain/panel/rawView')
-          : globalString('explain/panel/explainView')
-}
+          : globalString('explain/panel/explainView')}
+      </Button>
+      <Button
+        className="pt-label explain-view-suggest-index-button"
+        onClick={suggestIndex}
+      >
+        {globalString('explain/panel/suggestIndex')}
       </Button>
     </div>
   );
 };
 
-const Panel = ({editor, switchExplainView, viewType}) => {
+const Panel = ({
+  editor,
+  switchExplainView,
+  viewType,
+  suggestIndex,
+  suggestionText,
+  hasSuggestions,
+}) => {
   if (editor.explains && editor.explains.error) {
     return (
       <div className="explain-error-panel">
-        <div className="header">Failed to parse explain output, <b>make sure to highlight entire statement.</b></div>
+        <div className="header">
+          Failed to parse explain output,{' '}
+          <b>make sure to highlight entire statement.</b>
+        </div>
         <QueryCommandView command={editor.explains.command} />
         <div className="output">{editor.explains.output}</div>
       </div>
@@ -67,10 +81,22 @@ const Panel = ({editor, switchExplainView, viewType}) => {
   }
   return (
     <div className="explain-panel">
-      <Header switchExplainView={switchExplainView} viewType={viewType} /> {viewType === 0
-        ? <ExplainView explains={editor.explains} />
-        : <RawJson explains={editor.explains} />
-}
+      <Header
+        switchExplainView={switchExplainView}
+        viewType={viewType}
+        suggestIndex={suggestIndex}
+      />{' '}
+      {viewType === 0 ? (
+        <ExplainView explains={editor.explains} />
+      ) : (
+        <RawJson explains={editor.explains} />
+      )}
+      {hasSuggestions && (
+        <div className="suggest-index-panel">
+          <h2>{globalString('explain/panel/suggestIndex')}</h2>
+          <QueryCommandView command={suggestionText} />
+        </div>
+      )}
     </div>
   );
 };
