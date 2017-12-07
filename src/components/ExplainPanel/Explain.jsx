@@ -29,7 +29,7 @@
  */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action, observable } from 'mobx';
+import { action, observable, toJS } from 'mobx';
 import _ from 'lodash';
 import { featherClient } from '~/helpers/feathers';
 import Panel from './Panel';
@@ -192,7 +192,6 @@ export default class Explain extends React.Component {
 
   @action.bound
   suggestIndex() {
-    console.log(this.explainOutput.output);
     const editor = this.props.editors.get(
       this.props.store.editorPanel.activeEditorId,
     );
@@ -213,14 +212,33 @@ export default class Explain extends React.Component {
       .then((res) => {
         this.suggestionsGenerated = true;
         this.suggestionText = JSON.parse(res);
+        let suggestionCode =
+          '// This is a list of commands for creating indexes.\n\n';
         // Iterate through each object in the result.
         if (typeof this.suggestionText === 'object') {
-          console.log(this.suggestionText[0]);
+          const output = toJS(this.props.editor.explains.output);
+          let namespace = output.queryPlanner
+            ? output.queryPlanner.namespace
+            : '';
+          namespace = namespace.split('.');
+          const table = namespace[0];
+          const collection = namespace[1];
           for (const key in this.suggestionText[0]) {
             if (this.suggestionText[0].hasOwnProperty(key)) {
-              console.log(key, ' -> ', this.suggestionText[0][key]);
+              suggestionCode +=
+                'db.getSiblingDB("' +
+                table +
+                '").' +
+                collection +
+                '.createIndex(' +
+                key +
+                ', ' +
+                this.suggestionText[0][key] +
+                ');\n';
             }
           }
+          this.suggestionText = suggestionCode;
+          console.log(namespace);
         } else {
           console.error('Did not return an array.');
         }
@@ -240,13 +258,9 @@ export default class Explain extends React.Component {
           viewType={this.state.viewType}
           switchExplainView={this.switchExplainView}
           suggestIndex={this.suggestIndex}
+          suggestionText={this.suggestionText}
+          hasSuggestions={this.suggestionsGenerated}
         />
-        {this.suggestionsGenerated && (
-          <div className="suggestionsWrapper">
-            <h2>Suggestions</h2>
-            <p>{JSON.stringify(this.suggestionText[0])}</p>
-          </div>
-        )}
       </div>
     );
   }

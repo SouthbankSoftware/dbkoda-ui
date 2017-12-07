@@ -59,7 +59,14 @@ export const Header = ({ viewType, switchExplainView, suggestIndex }) => {
   );
 };
 
-const Panel = ({ editor, switchExplainView, viewType, suggestIndex }) => {
+const Panel = ({
+  editor,
+  switchExplainView,
+  viewType,
+  suggestIndex,
+  suggestionText,
+  hasSuggestions,
+}) => {
   if (editor.explains && editor.explains.error) {
     return (
       <div className="explain-error-panel">
@@ -83,6 +90,12 @@ const Panel = ({ editor, switchExplainView, viewType, suggestIndex }) => {
         <ExplainView explains={editor.explains} />
       ) : (
         <RawJson explains={editor.explains} />
+      )}
+      {hasSuggestions && (
+        <div className="suggest-index-panel">
+          <h2> Suggested Indexes </h2>
+          <QueryCommandView command={suggestionText} />
+        </div>
       )}
     </div>
   );
