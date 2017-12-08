@@ -107,7 +107,9 @@
         "explainView": "Explain",
         "suggestIndex": "Index Advisor",
         "suggestIndexDescription":
-          "// Here are some commands that may improve your query."
+          "// Here are some commands that may improve your query.",
+        "copySuggestedIndex": "Add Query",
+        "executeAgain": "UI has fallen out of sync, please explain query again."
       },
       "step": {
         "fetchFilter":

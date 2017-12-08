@@ -143,6 +143,9 @@ export default class StaticApi {
           linesAbove,
           cm,
         );
+        if (docAbove.match(/.*;$/gm) || docAbove.match(/ *{}\);?$/)) {
+          linesAbove.status = 'Invalid';
+        }
         if (!docAbove.match(/^ *{/gm)) {
           // Probably not Valid.
           linesAbove.status = 'Invalid';

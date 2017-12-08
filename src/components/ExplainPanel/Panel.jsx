@@ -66,6 +66,7 @@ const Panel = ({
   suggestIndex,
   suggestionText,
   hasSuggestions,
+  copySuggestion,
 }) => {
   if (editor.explains && editor.explains.error) {
     return (
@@ -93,7 +94,15 @@ const Panel = ({
       )}
       {hasSuggestions && (
         <div className="suggest-index-panel">
-          <h2>{globalString('explain/panel/suggestIndex')}</h2>
+          <div className="suggest-index-panel-header">
+            <h2>{globalString('explain/panel/suggestIndex')}</h2>
+            <Button
+              className="pt-label explain-view-copy-suggested-index-button"
+              onClick={copySuggestion}
+            >
+              {globalString('explain/panel/copySuggestedIndex')}
+            </Button>
+          </div>
           <QueryCommandView command={suggestionText} />
         </div>
       )}
