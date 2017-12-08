@@ -1,0 +1,82 @@
+{
+  "Title": "Delete Documents",
+  "AutoExecute": true,
+  "DefaultValues": {
+    "function": "dbkoda_DeleteDocumentsPreFill",
+    "arguments": [{
+      "name": "Database",
+      "value": "treeNode.parentDB"
+    }, {
+      "name": "CollectionName",
+      "value": "treeNode"
+    }]
+  },
+  "Fields": [{
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required"
+    },
+    {
+      "name": "CollectionName",
+      "type": "Text",
+      "label": "Collection Name",
+      "readOnly": true,
+      "rules": "required"
+    },
+    {
+      "name": "DeleteMany",
+      "label": "Delete more than one document?",
+      "tooltip": "If true, we can delete more than one document",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "UseOr",
+      "label": "Use Or?",
+      "tooltip": "If true, will us OR across filter conditions",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "FilterKeys",
+      "label": "Filter conditions",
+      "type": "Table",
+      "maxColumns": 3,
+      "columns": [{
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be filtered",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributes",
+          "lookup_arguments": [{
+              "name": "db",
+              "value": "treeNode.parentDB"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }
+          ]
+        },
+        {
+          "name": "Operator",
+          "label": "Operator",
+          "tooltip": "Operator to apply to value",
+          "type": "Combo",
+          "lookup": "dbkodaMatchOperators",
+          "lookup_arguments": [{
+            "name": "db",
+            "value": "database"
+          }]
+        },
+        {
+          "name": "Value",
+          "label": "Value to filter",
+          "type": "Text",
+          "tooltip": "Enter the value to search for (quote strings please)"
+        }
+      ]
+    }
+  ]
+}

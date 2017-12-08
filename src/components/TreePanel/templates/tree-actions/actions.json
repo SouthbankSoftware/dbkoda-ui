@@ -221,8 +221,17 @@
       "icon": "pt-icon-split-columns"
     },
     {
+      "type": "divider",
+      "name": "CollectionDivider3"
+    },
+    {
       "name": "DropCollection",
       "text": "Drop Collection",
+      "icon": "pt-icon-trash"
+    },
+    {
+      "name": "DeleteDocuments",
+      "text": "Delete Documents",
       "icon": "pt-icon-delete"
     },
     {

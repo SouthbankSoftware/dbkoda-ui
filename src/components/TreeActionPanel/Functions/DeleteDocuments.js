@@ -23,30 +23,24 @@
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-10T12:27:05+10:00
+ * @Last modified time: 2017-05-03T12:12:33+10:00
  */
-/* eslint no-unused-vars:warn */
 
 import * as common from './Common.js';
 
-export const CreateIndex = {
-  // Prefill function for alter user
-  dbkoda_CreateIndexPreFill: (params) => {
+// const sprintf = require('sprintf-js').sprintf;
+
+export const DeleteDocuments = {
+
+  dbkoda_DeleteDocumentsPreFill: (params) => {
+    // console.log('invoked dbkoda_DeleteDocumentsPreFill');
     const data = {};
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
-    data.Sparse = false;
-    data.Unique = false;
-    data.Background = false;
-    data.Keys = [];
-    data.Keys.push({ AttributeName: '_id', Direction: 1 });
+    data.FilterKeys = [];
+    data.FilterKeys.push({AttributeName:'_id', Operator:'$ne', Value:'"SomeValue"'});
+    // console.log('returns', data);
     return data;
-  },
-  dbkoda_indexOptions: () => {
-    return 'db';
-  },
-  dbkoda_indexOptions_parse: (res) => {
-    return [1, -1, '"hashed"', '"text"', '"2dsphere"', '"2d"'];
   },
   dbkoda_listdb: common.dbkoda_listdb,
   dbkoda_listdb_parse: common.dbkoda_listdb_parse,
@@ -54,4 +48,6 @@ export const CreateIndex = {
   dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
   dbkodaListAttributes: common.dbkodaListAttributes,
   dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaMatchOperators: common.dbkodaMatchOperators,
+  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
 };
