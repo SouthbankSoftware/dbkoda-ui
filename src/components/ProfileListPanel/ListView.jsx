@@ -520,6 +520,31 @@ export default class ListView extends React.Component {
   }
 
   @action.bound
+  openPerformanceView() {
+    const { targetProfile } = this.state;
+
+    if (targetProfile) {
+      this._syncSshCredential(targetProfile, targetProfile);
+    }
+    console.log('show performance for ', targetProfile);
+    let id;
+    const srv = featherClient().service('/ssh-remote-execution');
+    srv.create({host: targetProfile.remoteHost, username: targetProfile.remoteUser,
+      password: 'ctccadm'})
+      .then((res) => {
+        console.log('remote execution res ', res);
+        id = res.id;
+        return srv.update(id, { cmd: 'ls'});
+      })
+      .then((res) => {
+        console.log('response :', res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  @action.bound
   closeSshConnectionAlert() {
     this.props.store.layout.alertIsLoading = false;
     this.setState({ isSshOpenWarningActive: false });
@@ -627,6 +652,17 @@ export default class ListView extends React.Component {
             className="profileListContextMenu newSshTerminal"
             onClick={this.openSshConnectionAlert}
             text={globalString('profile/menu/newSshTerminal')}
+            intent={Intent.NONE}
+            iconName="pt-icon-new-text-box"
+          />
+        </div>,
+      );
+      terminalOperations.push(
+        <div key={terminalOperations.length} className="menuItemWrapper">
+          <MenuItem
+            className="profileListContextMenu newSshTerminal"
+            onClick={this.openPerformanceView}
+            text={globalString('profile/menu/performance')}
             intent={Intent.NONE}
             iconName="pt-icon-new-text-box"
           />
