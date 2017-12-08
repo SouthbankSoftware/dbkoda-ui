@@ -274,7 +274,8 @@
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
-        "deleteProfile": "Delete Profile"
+        "deleteProfile": "Delete Profile",
+        "performance": "Performance Counter Test"
       },
       "closeAlert": {
         "prompt": "Are you sure you want to close this connection?",
