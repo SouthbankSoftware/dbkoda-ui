@@ -528,7 +528,7 @@ export default class ListView extends React.Component {
     }
     console.log('show performance for ', targetProfile);
     let id;
-    const srv = featherClient().service('/ssh-remote-execution')
+    const srv = featherClient().service('/ssh-remote-execution');
     srv.create({host: targetProfile.remoteHost, username: targetProfile.remoteUser,
       password: 'ctccadm'})
       .then((res) => {
@@ -542,7 +542,6 @@ export default class ListView extends React.Component {
       .catch((err) => {
         console.error(err);
       });
-
   }
 
   @action.bound
