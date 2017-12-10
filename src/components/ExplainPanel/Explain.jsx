@@ -30,6 +30,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable, toJS } from 'mobx';
+import { NewToaster } from '#/common/Toaster';
 import _ from 'lodash';
 import { featherClient } from '~/helpers/feathers';
 import Panel from './Panel';
@@ -63,6 +64,7 @@ export default class Explain extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this._panel);
     const { editor } = this.props;
     if (editor) {
       Broker.on(
@@ -192,65 +194,88 @@ export default class Explain extends React.Component {
 
   @action.bound
   suggestIndex() {
-    const editor = this.props.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
-    const profileId = editor.profileId;
-    const shell = editor.shellId;
-
-    // Send a message to controller to fetch the suggested indicies.
-    const service = featherClient().service('/mongo-sync-execution');
-    service.timeout = 30000;
-    service
-      .update(profileId, {
-        shellId: shell, // eslint-disable-line
-        commands:
-          'dbkInx.suggestIndexKeys(' +
-          JSON.stringify(this.explainOutput.output) +
-          ');',
-      })
-      .then((res) => {
-        this.suggestionsGenerated = true;
-        this.suggestionText = JSON.parse(res);
-        let suggestionCode =
-          globalString('explain/panel/suggestIndexDescription') + '\n\n';
-        // Iterate through each object in the result.
-        if (typeof this.suggestionText === 'object') {
-          const output = toJS(this.props.editor.explains.output);
-          let namespace = output.queryPlanner
-            ? output.queryPlanner.namespace
-            : '';
-          namespace = namespace.split('.');
-          const table = namespace[0];
-          const collection = namespace[1];
-          for (const key in this.suggestionText[0]) {
-            if (this.suggestionText[0].hasOwnProperty(key)) {
-              suggestionCode +=
-                'db.getSiblingDB("' +
-                table +
-                '").' +
-                collection +
-                '.createIndex(' +
-                key +
-                ', ' +
-                this.suggestionText[0][key] +
-                ');\n';
-            }
-          }
-          this.suggestionText = suggestionCode;
-          console.log(namespace);
-        } else {
-          console.error('Did not return an array.');
-        }
-
-        this.setState({ suggestionsGenerated: true });
-      })
-      .catch((err) => {
-        console.error(err);
+    if (!this.explainOutput) {
+      console.error('Explain Plan needs to be re-executed.');
+      console.error(this);
+      NewToaster.show({
+        message: globalString('explain/panel/executeAgain'),
+        className: 'error',
+        iconName: 'pt-icon-thumbs-down',
       });
+    } else {
+      const editor = this.props.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      const profileId = editor.profileId;
+      const shell = editor.shellId;
+
+      // Send a message to controller to fetch the suggested indicies.
+      const service = featherClient().service('/mongo-sync-execution');
+      service.timeout = 30000;
+      service
+        .update(profileId, {
+          shellId: shell, // eslint-disable-line
+          commands:
+            'dbkInx.suggestIndexKeys(' +
+            JSON.stringify(this.explainOutput.output) +
+            ');',
+        })
+        .then((res) => {
+          this.suggestionsGenerated = true;
+          this.suggestionText = JSON.parse(res);
+          let suggestionCode =
+            globalString('explain/panel/suggestIndexDescription') + '\n\n';
+          // Iterate through each object in the result.
+          if (typeof this.suggestionText === 'object') {
+            const output = toJS(this.props.editor.explains.output);
+            let namespace = output.queryPlanner
+              ? output.queryPlanner.namespace
+              : '';
+            namespace = namespace.split('.');
+            const table = namespace[0];
+            const collection = namespace[1];
+            if (this.suggestionText.length <= 0) {
+              console.log('No Suggestions Found');
+              suggestionCode =
+                '// Looks good, no additional indexes are required to improve your query!';
+            } else {
+              for (const key in this.suggestionText) {
+                if (typeof this.suggestionText[key] === 'object') {
+                  suggestionCode +=
+                    'db.getSiblingDB("' +
+                    table +
+                    '").' +
+                    collection +
+                    '.createIndex(' +
+                    JSON.stringify(this.suggestionText[key]) +
+                    ');\n';
+                }
+              }
+            }
+            this.suggestionText = suggestionCode;
+          } else {
+            console.error('Did not return an array.');
+          }
+
+          this.setState({ suggestionsGenerated: true });
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }
+
+  @action.bound
+  copySuggestion() {
+    const cm = this.props.editor.doc.cm;
+    cm.setValue(
+      cm.getValue() + '\n\n// Index Suggestions:\n' + this.suggestionText,
+    );
+    cm.scrollIntoView({ line: cm.lineCount() - 1, ch: 0 });
   }
 
   render() {
+    console.log(this);
     return (
       <div className="explainPanelWrapper">
         <Panel
@@ -260,6 +285,7 @@ export default class Explain extends React.Component {
           suggestIndex={this.suggestIndex}
           suggestionText={this.suggestionText}
           hasSuggestions={this.suggestionsGenerated}
+          copySuggestion={this.copySuggestion}
         />
       </div>
     );

@@ -389,16 +389,34 @@ $contentColor: white;
   .suggest-index-panel {
     flex: 1 1 auto;
     order: 2;
-    h2 {
-      margin: 10px 10px 0px 10px;
-      color: $explainLabelColor;
-      line-height: 30px;
-      font-size: $explainHeaderLabelFontSize;
+    .suggest-index-panel-header {
+      display: flex;
+      flex-direction: row;
+      h2 {
+        margin: 10px 10px 0px 10px;
+        color: $explainLabelColor;
+        line-height: 30px;
+        font-size: $explainHeaderLabelFontSize;
+      }
+      p {
+        margin-left: 20px;
+        color: $explainLabelColor;
+      }
+      .explain-view-copy-suggested-index-button {
+        justify-self: flex-end;
+        font-size: $explainLabelFontSize;
+        background-color: $explainSwitchBtnColor !important;
+        border: 1px solid $explainSwitchBtnBorderColor;
+        width: 120px;
+        height: 30px;
+        margin-right: 20px;
+        margin-left: auto;
+        span {
+          color: $explainLabelColor;
+        }
+      }
     }
-    p {
-      margin-left: 20px;
-      color: $explainLabelColor;
-    }
+
     .explain-command-panel {
       margin: 10px 10px 0px 10px;
       //height: 300px;
