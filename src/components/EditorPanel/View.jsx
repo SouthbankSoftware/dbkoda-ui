@@ -396,9 +396,6 @@ class View extends React.Component {
           ) {
             if (this.props.store.dragItem.item) {
               const item = this.props.store.dragItem.item;
-              console.log(item);
-              console.log(this.state);
-              console.log(this.props.store.editors.get(this.props.id));
               if (this.props.store.editors.get(this.props.id).type === 'drill') {
                 console.log('SQL DnD');
                 this.insertAtCursor(TreeDropActions.getSQLForTreeNode(item));
@@ -406,7 +403,6 @@ class View extends React.Component {
                 console.log('JS DnD');
                 this.insertAtCursor(TreeDropActions.getCodeForTreeNode(item));
               }
-
             }
             this.props.store.dragItem.dragDrop = false;
           }

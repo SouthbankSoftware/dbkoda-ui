@@ -37,7 +37,7 @@ export default class TreeDropActions {
     console.log(type, ' - ', isSQL);
     const templateId = Templates[type];
     let template;
-    if(isSQL) {
+    if (isSQL) {
       template = require('../templates/dragdropSQL/' + templateId); //eslint-disable-line
     } else {
       template = require('../templates/dragdrop/' + templateId); //eslint-disable-line
