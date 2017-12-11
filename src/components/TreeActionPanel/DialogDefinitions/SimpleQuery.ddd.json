@@ -27,7 +27,7 @@
     {
       "name": "UseOr",
       "label": "Use Or?",
-      "tooltip": "If true, will us OR across filter conditions",
+      "tooltip": "If true, will OR across filter conditions",
       "type": "Boolean",
       "readOnly": false
     },

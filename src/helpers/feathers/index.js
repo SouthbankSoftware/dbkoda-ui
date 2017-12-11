@@ -43,6 +43,8 @@ class FeatherClient {
     this.feathers = this.feathers.configure(feathers.primus(primus));
     this.shellService = this.feathers.service('/mongo-shells');
     this.osService = this.feathers.service('/os-execution');
+    this.performanceSrv = this.feathers.service('/performance');
+
     this.shellService.on('shell-output', (output) => {
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
@@ -80,6 +82,9 @@ class FeatherClient {
     });
     this.terminalService.on('error', ({ _id, payload }) => {
       Broker.emit(EventType.TERMINAL_ERROR(_id), payload);
+    });
+    this.performanceSrv.on('performance-output', ({output}) => {
+      console.log('get performance output ', output);
     });
   }
 

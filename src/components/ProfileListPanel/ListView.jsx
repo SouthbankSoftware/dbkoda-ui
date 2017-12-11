@@ -527,16 +527,10 @@ export default class ListView extends React.Component {
       this._syncSshCredential(targetProfile, targetProfile);
     }
     console.log('show performance for ', targetProfile);
-    let id;
     const srv = featherClient().service('/performance');
     srv.create({id: targetProfile.id})
       .then((res) => {
         console.log('remote execution res ', res);
-        id = res.id;
-        return srv.update(id, { cmd: 'ls'});
-      })
-      .then((res) => {
-        console.log('response :', res);
       })
       .catch((err) => {
         console.error(err);

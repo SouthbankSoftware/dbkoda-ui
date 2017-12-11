@@ -1,0 +1,18 @@
+db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
+   update(
+     { {{#if FilterKeys~}} {{#if UseOr~}}"$or"{{else}}"$and"{{/if~}}:[
+        {{#each FilterKeys }}
+        { "{{AttributeName}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
+            {{/each }}
+         ]{{/if ~}}
+     }, {{#if Replace }}
+     {{ReplaceMent}} {{else }}
+     { {{#if UpdateOperators}}
+          {{#each UpdateOperators }}
+         "{{UpOperator}}":{ "{{{UpAttribute}}}":{{{UpValue}}} }  {{#unless last}},{{/unless}}
+              {{/each }}
+        {{/if }}
+     }{{/if ~}},
+     { upsert: {{Upsert}},
+       multi:  {{UpdateMany}}
+     });
