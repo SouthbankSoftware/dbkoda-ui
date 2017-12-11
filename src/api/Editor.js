@@ -170,12 +170,10 @@ export default class EditorApi {
    * @return suggested file name
    */
   getUnsavedEditorSuggestedFileName(editor: {}): string {
-    if(editor.type === 'drill') {
+    if (editor.type === 'drill') {
       return camelise(`new${this.getEditorDisplayName(editor)}`) + '.sql';
-    } else {
-      return camelise(`new${this.getEditorDisplayName(editor)}`) + '.js';
     }
-    
+    return camelise(`new${this.getEditorDisplayName(editor)}`) + '.js';
   }
 
   /**
