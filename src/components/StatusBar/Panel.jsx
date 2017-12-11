@@ -32,9 +32,17 @@ import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
-import { AnchorButton, Intent, Alert, EditableText } from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Intent,
+  Alert,
+  EditableText,
+  Dialog,
+  ProgressBar,
+} from '@blueprintjs/core';
 import { Broker, EventType } from '~/helpers/broker';
 import { NewToaster } from '#/common/Toaster';
+import LoadingView from '#/common/LoadingView';
 import HappyIcon from '../../styles/icons/happy.svg';
 import NeutralIcon from '../../styles/icons/neutral.svg';
 import SadIcon from '../../styles/icons/sad.svg';
@@ -49,7 +57,7 @@ const FeedbackTypes = {
 
 @inject(allStores => ({
   store: allStores.store,
-  api: allStores.api
+  api: allStores.api,
 }))
 @observer
 export default class Panel extends React.Component {
@@ -82,8 +90,7 @@ export default class Panel extends React.Component {
 
   componentDidMount() {
     if (IS_ELECTRON) {
-      const electron = window
-      .require('electron');
+      const electron = window.require('electron');
       electron.ipcRenderer.on('updateStatus', this.handleAutoupdaterCommand);
     }
   }
@@ -433,6 +440,63 @@ export default class Panel extends React.Component {
               <span>{this.state.updateStatusMsg}</span>
             </div>
           )}
+          {this.props.store.treePanel.downloadingDrill && (
+            <div className="drillDownload">
+              {this.props.store.treePanel.showDrillStatus && (
+                <div className="dialogContent">
+                  <p>{this.props.store.treePanel.drillStatusMsg}</p>
+                  {this.props.store.treePanel.drillDownloadProgress && (
+                    <p style={{ textAlign: 'center' }}>
+                      {Math.round(
+                        this.props.store.treePanel.drillDownloadProgress * 100,
+                      ) + '% complete'}
+                    </p>
+                  )}
+                </div>
+              )}
+              {!this.props.store.treePanel.showDrillStatus && (
+                <div className="dialogContent">
+                  <LoadingView />
+                  <p>Starting Apache Drill...</p>
+                </div>
+              )}
+            </div>
+          )}
+          {/* <Dialog
+            className="pt-dark open-profile-alert-dialog"
+            intent={Intent.PRIMARY}
+            isOpen={this.props.store.treePanel.downloadingDrill}
+            inline
+          >
+            {this.props.store.treePanel.showDrillStatus && (
+              <div className="dialogContent">
+                <p>{this.props.store.treePanel.drillStatusMsg}</p>
+                <ProgressBar
+                  intent={Intent.PRIMARY}
+                  value={this.props.store.treePanel.drillDownloadProgress}
+                />
+                {this.props.store.treePanel.drillDownloadProgress && (
+                  <p style={{ textAlign: 'center' }}>
+                    {Math.round(
+                      this.props.store.treePanel.drillDownloadProgress * 100,
+                    ) + '% complete'}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {!this.props.store.treePanel.showDrillStatus && (
+              <div className="dialogContent" style={{ height: '40px' }}>
+                <p>Starting Apache Drill...</p>
+                <LoadingView />
+                <br />
+                <br />
+                <p>
+                  Note: This process might take almost 2 minutes on first start.
+                </p>
+              </div>
+            )}
+          </Dialog> */}
         </div>
         <div className="float_right">
           <div className="configButton" onClick={this.props.api.openConfigTab}>
