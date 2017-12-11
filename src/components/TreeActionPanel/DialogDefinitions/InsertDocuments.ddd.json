@@ -1,0 +1,43 @@
+{
+    "Title": "Insert Documents",
+    "AutoExecute": true,
+    "DefaultValues": {
+        "function": "dbkoda_InsertDocumentsPreFill",
+        "arguments": [{
+            "name": "Database",
+            "value": "treeNode.parentDB"
+        }, {
+            "name": "CollectionName",
+            "value": "treeNode"
+        }]
+    },
+    "Fields": [{
+            "name": "Database",
+            "type": "Text",
+            "readOnly": true,
+            "rules": "required"
+        },
+        {
+            "name": "CollectionName",
+            "type": "Text",
+            "label": "Collection Name",
+            "readOnly": true,
+            "rules": "required"
+        },
+        {
+            "name": "Ordered",
+            "label": "Ordered",
+            "tooltip": "If selected, insert array in order and stop on failure",
+            "type": "Boolean",
+            "readOnly": false
+        },
+        {
+            "name": "DocumentArray",
+            "label": "Array of documents to insert",
+            "tooltip": "JSON array of documents to insert",
+            "type": "Text",
+            "default": "[{ Json Documents }]",
+            "readOnly": false
+        }
+    ]
+}
