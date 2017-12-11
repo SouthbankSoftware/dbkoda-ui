@@ -38,7 +38,7 @@ import {
   Intent,
   AnchorButton,
   Dialog,
-  ProgressBar
+  ProgressBar,
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import LoadingView from '#/common/LoadingView';
@@ -215,7 +215,8 @@ export default class TreeView extends React.Component {
           } else {
             let bDevOnlyFeature = false;
             if (
-              process.env.NODE_ENV !== 'development' && objAction.development
+              process.env.NODE_ENV !== 'development' &&
+              objAction.development
             ) {
               bDevOnlyFeature = true;
             }
@@ -298,7 +299,8 @@ export default class TreeView extends React.Component {
   };
 
   isBackupRestoreAction = (action) => {
-    return action === BackupRestoreActions.EXPORT_DATABASE ||
+    return (
+      action === BackupRestoreActions.EXPORT_DATABASE ||
       action === BackupRestoreActions.EXPORT_COLLECTION ||
       action === BackupRestoreActions.DUMP_DATABASE ||
       action === BackupRestoreActions.DUMP_COLLECTION ||
@@ -307,10 +309,12 @@ export default class TreeView extends React.Component {
       action === BackupRestoreActions.DUMP_SERVER ||
       action === BackupRestoreActions.RESTORE_DATABASE ||
       action === BackupRestoreActions.RESTORE_COLLECTION ||
-      action === BackupRestoreActions.RESTORE_SERVER;
+      action === BackupRestoreActions.RESTORE_SERVER
+    );
   };
 
-  @action handleTreeActionClick = (e: React.MouseEvent) => {
+  @action
+  handleTreeActionClick = (e: React.MouseEvent) => {
     const action = findElementAttributeUpward(e.target, 'data-id');
     const noDialog = this.getNoDialogByName(action);
     this.actionSelected = this.getActionByName(action);
@@ -461,7 +465,9 @@ export default class TreeView extends React.Component {
         });
       } else {
         this.setState({
-          drillStatusMsg: globalString('drill/drill_controller_download_success'),
+          drillStatusMsg: globalString(
+            'drill/drill_controller_download_success',
+          ),
           drillDownloadProgress: null,
         });
       }
@@ -484,10 +490,13 @@ export default class TreeView extends React.Component {
   checkForDrill = () => {
     const electron = window.require('electron');
     const { ipcRenderer, remote } = electron;
-    const {dialog} = remote;
+    const { dialog } = remote;
 
     return new Promise((resolve, reject) => {
-      if (this.props.config.settings.drillCmd == null || this.props.config.settings.drillCmd == '') {
+      if (
+        this.props.config.settings.drillCmd == null ||
+        this.props.config.settings.drillCmd == ''
+      ) {
         dialog.showMessageBox(
           {
             type: 'info',
@@ -522,7 +531,10 @@ export default class TreeView extends React.Component {
     const electron = window.require('electron');
     const { ipcRenderer } = electron;
     return new Promise((resolve, reject) => {
-      if (this.props.config.settings.drillControllerCmd == null || this.props.config.settings.drillControllerCmd == '') {
+      if (
+        this.props.config.settings.drillControllerCmd == null ||
+        this.props.config.settings.drillControllerCmd == ''
+      ) {
         ipcRenderer.send('drill', 'downloadController');
         ipcRenderer.once('drillResult', (event, arg) => {
           if (arg == 'downloadDrillControllerComplete') {
@@ -636,19 +648,25 @@ export default class TreeView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isLoadingDialogVisible}
         >
-          {this.state.showDrillDownloaderStatus &&
+          {this.state.showDrillDownloaderStatus && (
             <div className="dialogContent" style={{ height: '120px' }}>
               <p>{this.state.drillStatusMsg}</p>
-              <ProgressBar intent={Intent.PRIMARY} value={this.state.drillDownloadProgress} />
+              <ProgressBar
+                intent={Intent.PRIMARY}
+                value={this.state.drillDownloadProgress}
+              />
               <br />
               <br />
-              {this.state.drillDownloadProgress &&
-                <p style={{textAlign: 'center'}}>
-                  {Math.round(this.state.drillDownloadProgress * 100) + '% complete'}
-                </p>}
-            </div>}
+              {this.state.drillDownloadProgress && (
+                <p style={{ textAlign: 'center' }}>
+                  {Math.round(this.state.drillDownloadProgress * 100) +
+                    '% complete'}
+                </p>
+              )}
+            </div>
+          )}
 
-          {(!this.state.showDrillDownloaderStatus) &&
+          {!this.state.showDrillDownloaderStatus && (
             <div className="dialogContent" style={{ height: '120px' }}>
               <p>Starting Apache Drill...</p>
               <LoadingView />
@@ -657,7 +675,8 @@ export default class TreeView extends React.Component {
               <p>
                 Note: This process might take almost 2 minutes on first start.
               </p>
-            </div>}
+            </div>
+          )}
         </Dialog>
         <Dialog
           className="pt-dark open-profile-alert-dialog"

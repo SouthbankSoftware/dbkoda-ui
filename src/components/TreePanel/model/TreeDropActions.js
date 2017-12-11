@@ -33,9 +33,16 @@ export default class TreeDropActions {
    * @param  {string} type - Type of the template to load
    * @return {Template}    - Handle Template to generate code based on context
    */
-  static getTemplateByType(type) {
+  static getTemplateByType(type, isSQL) {
+    console.log(type, ' - ', isSQL);
     const templateId = Templates[type];
-    const template = require('../templates/dragdrop/' + templateId); //eslint-disable-line
+    let template;
+    if (isSQL) {
+      template = require('../templates/dragdropSQL/' + templateId); //eslint-disable-line
+    } else {
+      template = require('../templates/dragdrop/' + templateId); //eslint-disable-line
+    }
+    console.log(template);
     return template;
   }
   /**
@@ -79,7 +86,18 @@ export default class TreeDropActions {
   static getCodeForTreeNode(treeNode) {
     try {
       const context = TreeDropActions.getContext(treeNode);
-      const template = TreeDropActions.getTemplateByType(treeNode.type);
+      const template = TreeDropActions.getTemplateByType(treeNode.type, false);
+      return template(context);
+    } catch (e) {
+      console.error(e);
+      return '';
+    }
+  }
+
+  static getSQLForTreeNode(treeNode) {
+    try {
+      const context = TreeDropActions.getContext(treeNode);
+      const template = TreeDropActions.getTemplateByType(treeNode.type, true);
       return template(context);
     } catch (e) {
       console.error(e);
