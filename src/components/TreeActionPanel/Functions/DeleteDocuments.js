@@ -38,7 +38,7 @@ export const DeleteDocuments = {
     data.Database = params.Database;
     data.CollectionName = params.CollectionName;
     data.FilterKeys = [];
-    data.FilterKeys.push({AttributeName:'_id', Operator:'$ne', Value:'"SomeValue"'});
+    data.FilterKeys.push({AttributeName:'_id', Operator:'$eq', Value:'"SomeValue"'});
     // console.log('returns', data);
     return data;
   },

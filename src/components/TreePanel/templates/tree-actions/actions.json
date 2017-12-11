@@ -225,14 +225,23 @@
       "name": "CollectionDivider3"
     },
     {
+      "name": "DeleteDocuments",
+      "text": "Delete Documents",
+      "icon": "pt-icon-delete"
+    },
+    {
+      "name": "UpdateDocuments",
+      "text": "Update Documents",
+      "icon": "pt-icon-edit"
+    },
+    {
       "name": "DropCollection",
       "text": "Drop Collection",
       "icon": "pt-icon-trash"
     },
     {
-      "name": "DeleteDocuments",
-      "text": "Delete Documents",
-      "icon": "pt-icon-delete"
+      "type": "divider",
+      "name": "CollectionDivider4"
     },
     {
       "name": "ExportCollection",

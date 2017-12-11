@@ -1,8 +1,8 @@
 {
-  "Title": "Delete Documents",
+  "Title": "Update Documents",
   "AutoExecute": true,
   "DefaultValues": {
-    "function": "dbkoda_DeleteDocumentsPreFill",
+    "function": "dbkoda_UpdateDocumentsPreFill",
     "arguments": [{
       "name": "Database",
       "value": "treeNode.parentDB"
@@ -25,9 +25,16 @@
       "rules": "required"
     },
     {
-      "name": "DeleteMany",
-      "label": "Delete more than one document?",
-      "tooltip": "If true, we can delete more than one document",
+      "name": "UpdateMany",
+      "label": "Update more than one document?",
+      "tooltip": "If true, we can update more than one document",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "Upsert",
+      "label": "Apply Upsert?",
+      "tooltip": "Create new document if no matching document found?",
       "type": "Boolean",
       "readOnly": false
     },
@@ -47,7 +54,7 @@
           "name": "AttributeName",
           "label": "Attribute",
           "tooltip": "Name of the attribute to be filtered",
-          "type": "Combo",
+          "type": "Text",
           "lookup": "dbkodaListAttributes",
           "lookup_arguments": [{
               "name": "db",

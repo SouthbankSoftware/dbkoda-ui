@@ -46,7 +46,7 @@ export const SimpleQuery = {
     data.Projections.push({});
     data.Projections.push({AttributeName:'_id', 'AttributeProjectionValue':0});
     data.FilterKeys = [];
-    data.FilterKeys.push({AttributeName:'_id', Operator:'$ne', Value:'""'});
+    data.FilterKeys.push({AttributeName:'_id', Operator:'$eq', Value:'""'});
     data.Sort = false;
     data.Count = false;
     return data;
