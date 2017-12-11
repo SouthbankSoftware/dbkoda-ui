@@ -169,8 +169,9 @@ const ConnectionPanel = ({
     } else if (data.urlRadio) {
       connectionUrl = data.url;
     }
-    if (data.ssh && data.sshTunnel) {
+    if (data.ssh) {
       query.ssh = data.ssh;
+      query.sshTunnel = data.sshTunnel;
       query.remoteHost = data.host;
       query.remotePort = data.port;
       query.sshHost = data.remoteHost;
@@ -178,8 +179,10 @@ const ConnectionPanel = ({
       query.localHost = '127.0.0.1';
       data.sshLocalPort = await ProfileForm.getRandomPort();
       query.localPort = data.sshLocalPort;
-      connectionUrl =
-        ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+      if (data.sshTunnel) {
+        connectionUrl =
+          ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+      }
       if (data.passRadio) {
         query.remotePass = data.remotePass;
       } else if (data.keyRadio) {
