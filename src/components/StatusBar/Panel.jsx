@@ -32,14 +32,7 @@ import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
-import {
-  AnchorButton,
-  Intent,
-  Alert,
-  EditableText,
-  Dialog,
-  ProgressBar,
-} from '@blueprintjs/core';
+import { AnchorButton, Intent, Alert, EditableText } from '@blueprintjs/core';
 import { Broker, EventType } from '~/helpers/broker';
 import { NewToaster } from '#/common/Toaster';
 import LoadingView from '#/common/LoadingView';

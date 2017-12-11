@@ -38,10 +38,8 @@ import {
   Intent,
   AnchorButton,
   Dialog,
-  ProgressBar,
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
-import LoadingView from '#/common/LoadingView';
 import findElementAttributeUpward from '~/helpers/findElementAttributeUpward';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
@@ -678,7 +676,7 @@ export default class TreeView extends React.Component {
           onNodeContextMenu={this.handleNodeContextMenu}
           className={classNames}
         />
-        {/* <Dialog
+        {/* Old Drill starting UI - <Dialog
           className="pt-dark open-profile-alert-dialog"
           intent={Intent.PRIMARY}
           isOpen={this.state.isLoadingDialogVisible}
