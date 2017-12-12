@@ -38,10 +38,8 @@ import {
   Intent,
   AnchorButton,
   Dialog,
-  ProgressBar,
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
-import LoadingView from '#/common/LoadingView';
 import findElementAttributeUpward from '~/helpers/findElementAttributeUpward';
 import TreeActions from './templates/tree-actions/actions.json';
 import SettingsIcon from '../../styles/icons/settings-icon.svg';
@@ -273,6 +271,24 @@ export default class TreeView extends React.Component {
       this.props.treeState.selectNode(nodeData);
     }
     this.setState({ nodes: this.props.treeState.nodes });
+  };
+
+  handleNodeDoubleClick = (nodeData: ITreeNode, _nodePath: number[]) => {
+    if (nodeData.text == '...') {
+      this.props.treeState.resetRootNode();
+    } else if (nodeData.type === 'collection') {
+      // this.props.treeState.selectNode(nodeData);
+      console.log('Double clicked Node:');
+      console.log('Collection: ', nodeData.text);
+      this.props.api.treeApi.openNewTableViewForCollection(
+        {
+          collection: nodeData.text,
+          database: nodeData.refParent.text,
+        },
+        TableViewConstants.DEFAULT_MAX_ROWS,
+      );
+    }
+    // this.setState({ nodes: this.props.treeState.nodes });
   };
 
   handleNodeContextMenu = (nodeData: ITreeNode, _nodePath: number[]) => {
@@ -673,12 +689,13 @@ export default class TreeView extends React.Component {
         <Tree
           contents={this.state.nodes}
           onNodeClick={this.handleNodeClick}
+          onNodeDoubleClick={this.handleNodeDoubleClick}
           onNodeCollapse={this.handleNodeCollapse}
           onNodeExpand={this.handleNodeExpand}
           onNodeContextMenu={this.handleNodeContextMenu}
           className={classNames}
         />
-        {/* <Dialog
+        {/* Old Drill starting UI - <Dialog
           className="pt-dark open-profile-alert-dialog"
           intent={Intent.PRIMARY}
           isOpen={this.state.isLoadingDialogVisible}

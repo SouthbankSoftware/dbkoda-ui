@@ -225,6 +225,11 @@
       "name": "CollectionDivider3"
     },
     {
+      "name": "InsertDocuments",
+      "text": "Insert Documents",
+      "icon": "pt-icon-insert"
+    },
+    {
       "name": "DeleteDocuments",
       "text": "Delete Documents",
       "icon": "pt-icon-delete"
