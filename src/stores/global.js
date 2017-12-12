@@ -180,6 +180,10 @@ export default class Store {
   treePanel = {
     isRefreshing: false,
     isRefreshDisabled: true,
+    downloadingDrill: false,
+    showDrillStatus: false,
+    drillDownloadProgress: null,
+    drillStatusMsg: '',
   };
 
   @observable
@@ -276,7 +280,10 @@ export default class Store {
     // Create a new shell through feathers.
     return featherClient()
       .service('/mongo-shells')
-      .create({ id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id })
+      .create({
+        id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId)
+          .id,
+      })
       .then((res) => {
         // Create new editor as normal, but with "aggregate" type.
         return this.api.setNewEditorState(res, {
@@ -357,7 +364,11 @@ export default class Store {
   @action.bound
   closeConnection() {
     return new Promise((resolve) => {
-      if (this.profileStore && this.profileStore.profiles && this.profileStore.profiles.size > 0) {
+      if (
+        this.profileStore &&
+        this.profileStore.profiles &&
+        this.profileStore.profiles.size > 0
+      ) {
         const promises = [];
         this.profileStore.profiles.forEach((value) => {
           if (value.status === ProfileStatus.OPEN) {
@@ -452,6 +463,10 @@ export default class Store {
     // Tree Panel:
     newStore.treePanel.isRefreshing = false;
     newStore.treePanel.isRefreshDisabled = true;
+    newStore.treePanel.downloadingDrill = false;
+    newStore.treePanel.showDrillStatus = false;
+    newStore.treePanel.drillDownloadProgress = null;
+    newStore.treePanel.drillStatusMsg = '';
   }
 
   hasUnsavedEditorTabs() {

@@ -610,7 +610,14 @@
       "drill_download_success": "Drill has been downloaded successfully.",
       "drill_controller_download_success":
         "Drill Controller has been downloaded successfully.",
-      "drill_download_failed": "Error downloading drill, contact support."
+      "drill_download_failed": "Error downloading drill, contact support.",
+      "status_bar": {
+        "downloading_drill": "Drill Download:",
+        "downloading_drill_controller": "Drill Plugin:",
+        "drill_download_success": "Drill Downloaded Complete",
+        "drill_controller_download_success": "Drill Plugin Complete",
+        "drill_download_failed": "Error Downloading Drill"
+      }
     }
   }
 }
