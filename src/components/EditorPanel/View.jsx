@@ -337,14 +337,16 @@ class View extends React.Component {
                 const ignore = /^[^\S\x0a\x0d]*(?:use|show|help|it|exit[\s]|dbk_agg*).*/g;
                 const splitted = content.split(getSeparator());
                 let hasError = false;
+                let filteredCode = '';
                 splitted.forEach((str) => {
                   const ignoredStr = str.replace(ignore, '');
-                  try {
-                    esprima.parseScript(ignoredStr);
-                  } catch (err) {
-                    hasError = true;
-                  }
+                  filteredCode += ignoredStr + getSeparator();
                 });
+                try {
+                  esprima.parseScript(filteredCode);
+                } catch (err) {
+                  hasError = true;
+                }
                 if (hasError) {
                   NewToaster.show({
                     message: globalString(
