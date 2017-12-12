@@ -248,7 +248,7 @@ class View extends React.Component {
                       'drill/execution_failed',
                     );
                     if (err && err.statusCode === 602) {
-                      message = err.error;
+                      message = globalString('drill/query_error');
                     } else if (err && err.statusCode === 600) {
                       message = globalString('drill/connection_not_exist');
                     }
@@ -325,7 +325,8 @@ class View extends React.Component {
                       'drill/execution_failed',
                     );
                     if (err && err.statusCode === 602) {
-                      message = err.error;
+                      message = globalString('drill/query_error');
+                      // message = err.error;
                     } else if (err && err.statusCode === 600) {
                       message = globalString('drill/connection_not_exist');
                     }

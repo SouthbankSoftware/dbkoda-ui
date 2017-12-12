@@ -596,6 +596,7 @@
       "connection_failed": "Create Drill Connection Failed",
       "execution_failed": "Execute SQL Statement Failed",
       "connection_not_exist": "Cant find connection",
+      "query_error": "Failed to execute query, please check your syntax or lodge a bug using the bottom right button.",
       "drill_binary_not_defined":
         "Drill Binary not found, Please configure it in the user settings panel",
       "open_drill_editor_failed": "Failed to Open Drill Editor.",
