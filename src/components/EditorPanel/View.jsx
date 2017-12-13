@@ -218,6 +218,14 @@ class View extends React.Component {
                 .catch((err) => {
                   console.error('execute error:', err);
                   runInAction(() => {
+                    // Append this error to raw output:
+                    const strOutput = JSON.stringify(err, null, 2);
+                    const editorObject = this.props.store.editors.get(editor.id);
+                    const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
+                    this.props.store.outputs.get(editor.id).output = totalOutput;
+                  });
+
+                  runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     NewToaster.show({
@@ -242,13 +250,20 @@ class View extends React.Component {
                 .catch((err) => {
                   console.error('execute error:', err);
                   runInAction(() => {
+                    // Append this error to raw output:
+                    const strOutput = JSON.stringify(err, null, 2);
+                    const editorObject = this.props.store.editors.get(editor.id);
+                    const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
+                    this.props.store.outputs.get(editor.id).output = totalOutput;
+                  });
+                  runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     let message = globalString(
                       'drill/execution_failed',
                     );
                     if (err && err.statusCode === 602) {
-                      message = err.error;
+                      message = globalString('drill/query_error');
                     } else if (err && err.statusCode === 600) {
                       message = globalString('drill/connection_not_exist');
                     }
@@ -318,6 +333,13 @@ class View extends React.Component {
                 })
                 .catch((err) => {
                   console.error('execute error:', err);
+                  // Append this error to raw output:
+                  runInAction(() => {
+                    const strOutput = JSON.stringify(err, null, 2);
+                    const editorObject = this.props.store.editors.get(editor.id);
+                    const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
+                    this.props.store.outputs.get(editor.id).output = totalOutput;
+                  });
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
@@ -325,7 +347,8 @@ class View extends React.Component {
                       'drill/execution_failed',
                     );
                     if (err && err.statusCode === 602) {
-                      message = err.error;
+                      message = globalString('drill/query_error');
+                      // message = err.error;
                     } else if (err && err.statusCode === 600) {
                       message = globalString('drill/connection_not_exist');
                     }
@@ -342,14 +365,16 @@ class View extends React.Component {
                 const ignore = /^[^\S\x0a\x0d]*(?:use|show|help|it|exit[\s]|dbk_agg*).*/g;
                 const splitted = content.split(getSeparator());
                 let hasError = false;
+                let filteredCode = '';
                 splitted.forEach((str) => {
                   const ignoredStr = str.replace(ignore, '');
-                  try {
-                    esprima.parseScript(ignoredStr);
-                  } catch (err) {
-                    hasError = true;
-                  }
+                  filteredCode += ignoredStr + getSeparator();
                 });
+                try {
+                  esprima.parseScript(filteredCode);
+                } catch (err) {
+                  hasError = true;
+                }
                 if (hasError) {
                   NewToaster.show({
                     message: globalString(
@@ -711,19 +736,42 @@ class View extends React.Component {
       this.props.store.editorPanel.activeEditorId == this.props.id &&
       explainParam
     ) {
-      // Determine code to send.
+      // Get current Editor and Profile.
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
       );
       const { id, shell } = this.getActiveProfileId();
 
+      // Extract the query to explain.
       const cm = this.editor.getCodeMirror(); // eslint-disable-line
       let content = cm.getSelection();
+      // If no text is selected, try to find query based on cursor position.
       if ((cm.getSelection().length > 0) === false) {
-        content = cm.getLine(cm.getCursor().line);
+        // Get line text at current cursor position.
+        let currentLine = cm.getCursor().line;
+        content = cm.getLine(currentLine);
+        // If a full command isn't detected, parse up and down until white space.
+      let linesAbove = '';
+      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi)) {
+        console.log(cm.getLine(currentLine - 1));
+        linesAbove = cm.getLine(currentLine - 1) + linesAbove;
+        currentLine -= 1;
+      }
+      console.log(content);
+      currentLine = cm.getCursor().line;
+      let linesBelow = '';
+      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi)) {
+        console.log(cm.getLine(currentLine + 1));
+        linesBelow += cm.getLine(currentLine + 1);
+        currentLine += 1;
+      }
+
+      content = linesAbove + content + linesBelow;
+      console.log(content);
       }
       content = insertExplainOnCommand(content, explainParam);
       editor.executing = true;
+
       // Send request to feathers client
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');

@@ -92,6 +92,8 @@ export default class Explain extends React.Component {
 
   @action.bound
   explainOutputAvailable({ id, shell, command, type, output }) {
+    this.suggestionsGenerated = false;
+    this.suggestionText = '';
     this.explainCommand = command;
     this.explainOutput = '';
     this.explainType = type;
@@ -217,7 +219,7 @@ export default class Explain extends React.Component {
           shellId: shell, // eslint-disable-line
           commands:
             'dbkInx.suggestIndexKeys(' +
-            JSON.stringify(this.explainOutput.output) +
+            JSON.stringify(this.explainOutput.output, null, 2) +
             ');',
         })
         .then((res) => {
