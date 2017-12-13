@@ -235,8 +235,9 @@ export default class ListView extends React.Component {
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
         initialMsg: res.output ? res.output.join('\r') : '',
+        mongoType: res.mongoType
       };
-
+      console.debug('profile:', profile);
       this._syncSshCredential(data, profile);
 
       this.props.profileStore.profiles.set(res.id, profile);
