@@ -748,11 +748,26 @@ class View extends React.Component {
       // If no text is selected, try to find query based on cursor position.
       if ((cm.getSelection().length > 0) === false) {
         // Get line text at current cursor position.
-        content = cm.getLine(cm.getCursor().line);
+        let currentLine = cm.getCursor().line;
+        content = cm.getLine(currentLine);
         // If a full command isn't detected, parse up and down until white space.
-        // @TODO: Michael -> Add logic for searching between white space.
-        //
-        //
+      let linesAbove = '';
+      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi)) {
+        console.log(cm.getLine(currentLine - 1));
+        linesAbove = cm.getLine(currentLine - 1) + linesAbove;
+        currentLine -= 1;
+      }
+      console.log(content);
+      currentLine = cm.getCursor().line;
+      let linesBelow = '';
+      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi)) {
+        console.log(cm.getLine(currentLine + 1));
+        linesBelow += cm.getLine(currentLine + 1);
+        currentLine += 1;
+      }
+
+      content = linesAbove + content + linesBelow;
+      console.log(content);
       }
       content = insertExplainOnCommand(content, explainParam);
       editor.executing = true;
