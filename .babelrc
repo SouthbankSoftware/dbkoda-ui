@@ -1,22 +1,47 @@
 {
-  "presets": [
-    "env",
-    "react",
-    "flow"
-  ],
-  "plugins": [
-    "transform-decorators-legacy",
-    "transform-class-properties",
-    "transform-export-extensions",
-    "transform-object-rest-spread",
-    "add-module-exports", 
-    ["babel-plugin-root-import", [{
-      "rootPathPrefix": "~",
-      "rootPathSuffix": "src"
-    }, {
-      "rootPathPrefix": "#",
-      "rootPathSuffix": "src/components"
-    }]],
-    "react-hot-loader/babel"
-  ]
+  "env": {
+    "development": {
+      "presets": [
+        ["env", {
+          "modules": false
+        }],
+        "react",
+        "flow"
+      ],
+      "plugins": [
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-export-extensions",
+        "transform-object-rest-spread",
+        ["babel-plugin-root-import", [{
+          "rootPathPrefix": "~",
+          "rootPathSuffix": "src"
+        }, {
+          "rootPathPrefix": "#",
+          "rootPathSuffix": "src/components"
+        }]],
+        "react-hot-loader/babel"
+      ]
+    },
+    "test": {
+      "presets": [
+        "env",
+        "react",
+        "flow"
+      ],
+      "plugins": [
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-export-extensions",
+        "transform-object-rest-spread",
+        ["babel-plugin-root-import", [{
+          "rootPathPrefix": "~",
+          "rootPathSuffix": "src"
+        }, {
+          "rootPathPrefix": "#",
+          "rootPathSuffix": "src/components"
+        }]]
+      ]
+    }
+  }
 }

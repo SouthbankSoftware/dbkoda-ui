@@ -3,7 +3,7 @@
  * @Date:   2017-11-15T14:25:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-22T18:09:17+11:00
+ * @Last modified time: 2017-12-14T02:00:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,13 +39,6 @@ module.exports = merge.strategy({
   entry: [
     // activate HMR for React
     'react-hot-loader/patch',
-
-    // bundle the client for webpack-dev-server and connect to the provided endpoint
-    'webpack-dev-server/client?http://localhost:3000',
-
-    // bundle the client for hot reloading only- means to only hot reload for
-    // successful updates
-    'webpack/hot/only-dev-server',
   ],
   devtool: 'source-map',
   devServer: {
@@ -95,8 +88,8 @@ module.exports = merge.strategy({
       },
     }),
     // enable HMR globally
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new GlobalizePlugin(
       merge(commonGlobalizePluginOptions, {
         production: false,
