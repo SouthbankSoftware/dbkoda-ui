@@ -44,7 +44,7 @@ export const UpdateDocuments = {
             Operator: '$eq',
             Value: '"SomeValue"'
         });
-        data.UpdateOperators=[];
+        data.UpdateOperators = [];
         data.UpdateOperators.push({
           UpOperator: '$set',
           UpAttribute: 'SomeAttribute',
