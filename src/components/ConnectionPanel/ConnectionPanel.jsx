@@ -92,6 +92,7 @@ const ConnectionPanel = ({
           id: res.id,
           shellId: res.shellId,
           output: res.output.join('\n'),
+          mongoType: res.mongoType,
         });
       }
       position = Position.RIGHT_TOP;
@@ -126,7 +127,9 @@ const ConnectionPanel = ({
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
+        mongoType: res.mongoType,
       };
+      console.debug('profile:', profile);
       if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
         profile.bPassPhrase = true;
       }
