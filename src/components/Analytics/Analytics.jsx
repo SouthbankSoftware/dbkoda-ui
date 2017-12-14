@@ -67,7 +67,7 @@ export default class Analytics extends React.Component {
      * Reaction function for when a change occurs on the telemetryEnabled state
      * @param {function()} - The state that will trigger the reaction.
      * @param {function()} - The reaction to any change on the state.
-    //  */
+     //  */
     reaction(
       () => this.props.config.settings.telemetryEnabled,
       (telemetryEnabled) => {
@@ -132,6 +132,8 @@ export default class Analytics extends React.Component {
         profile.dbVersion +
         ', shellVersion: ' +
         profile.shellVersion +
+        ', instanceType: ' +
+        profile.mongoType +
         ', authorization: ' +
         profile.authorization;
       if (profile.hostRadio) {
