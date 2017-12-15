@@ -212,13 +212,14 @@ export default class Explain extends React.Component {
 
       // Send a message to controller to fetch the suggested indicies.
       const service = featherClient().service('/mongo-sync-execution');
+      const explainOutput = 'explain_' + editor.id.replace(/\-/g, '_');
       service.timeout = 30000;
       service
         .update(profileId, {
           shellId: shell, // eslint-disable-line
           commands:
             'dbkInx.suggestIndexKeys(' +
-            JSON.stringify(this.explainOutput.output, null, 2) +
+            explainOutput +
             ');',
         })
         .then((res) => {

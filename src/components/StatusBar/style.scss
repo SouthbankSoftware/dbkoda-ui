@@ -26,6 +26,8 @@ div.statusPanel {
       display: flex;
       flex-direction: row;
       .dialogContent {
+        padding-left: 10px;
+        padding-top: 4px;
         width: 300px;
         height: 20px;
         display: flex;
@@ -35,10 +37,10 @@ div.statusPanel {
         }
         div.pt-progress-bar {
         }
-        div.loaderWrapper {
+        div.LoadingView {
           width: 14px;
           height: 14px;
-          div.loader {
+          div.Spinner {
             margin-left: 0px;
             margin-top: -5px;
             width: 14px;

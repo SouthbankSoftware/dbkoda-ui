@@ -219,6 +219,7 @@ class View extends React.Component {
                   console.error('execute error:', err);
                   runInAction(() => {
                     // Append this error to raw output:
+                    console.log(err);
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
@@ -335,11 +336,13 @@ class View extends React.Component {
                   console.error('execute error:', err);
                   // Append this error to raw output:
                   runInAction(() => {
+                    console.log(err);
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
                     this.props.store.outputs.get(editor.id).output = totalOutput;
                   });
+
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
@@ -775,8 +778,15 @@ class View extends React.Component {
       // Send request to feathers client
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');
+      const saveExplainCommand = 'var explain_'+editor.id.replace(/\-/g,'_')+' = ' + filteredContent + ';';
+      console.log(saveExplainCommand);
       service.timeout = 300000;
       this.props.store.editorToolbar.isActiveExecuting = true;
+      service
+        .update(id, {
+          shellId: shell, // eslint-disable-line
+          commands: saveExplainCommand,
+        });
       service
         .update(id, {
           shellId: shell, // eslint-disable-line
