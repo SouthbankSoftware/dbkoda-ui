@@ -424,6 +424,7 @@ export default class Palette extends React.Component {
 
     // Determine if the previous block is valid.
     const service = featherClient().service('/mongo-sync-execution');
+    const generatedCode = '';
     service.timeout = 30000;
     service
       .update(editor.profileId, {
