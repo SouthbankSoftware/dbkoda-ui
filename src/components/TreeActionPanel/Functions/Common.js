@@ -23,13 +23,14 @@
  * @Date:   2017-05-10T10:33:53+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-05-16T21:43:08+10:00
+ * @Last modified time: 2017-12-15T13:40:15+11:00
  */
 
 /* eslint camelcase: off */
 /* eslint no-unused-vars: warn */
 
-const sprintf = require('sprintf-js').sprintf;
+import _ from 'lodash';
+import { sprintf } from 'sprintf-js';
 
 const debug = false;
 

@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-12T16:51:48+11:00
+ * @Last modified time: 2017-12-15T13:44:52+11:00
  */
 
 import load from 'little-loader';
@@ -121,7 +121,7 @@ let times = 0;
 const loadPrimus = () => {
   load(url + '/dist/primus.js', (err) => {
     if (!err) {
-      const primus = new Primus(url, {
+      const primus = new window.Primus(url, {
         strategy: ['online', 'timeout', 'disconnect'],
       });
       // remove native online/offline event so that when disconnected, ui is still connected to

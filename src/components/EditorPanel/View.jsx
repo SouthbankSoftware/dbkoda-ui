@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-13T13:58:12+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-15T13:32:52+11:00
  */
 
 import 'codemirror/addon/hint/show-hint.css';
@@ -33,6 +33,7 @@ import 'codemirror/addon/search/matchesonscrollbar.css';
 import { inject, PropTypes } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import { action, reaction, runInAction } from 'mobx';
+import _ from 'lodash';
 import { ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';

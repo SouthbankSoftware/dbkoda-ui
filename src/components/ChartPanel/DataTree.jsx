@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-10T16:00:50+11:00
+ * @Last modified time: 2017-12-15T13:23:27+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,8 +38,7 @@ import type { SchemaRef } from './Panel';
 import './DataTree.scss';
 
 export type Schema = {
-  [string]:
-    | {
+  [string]: | {
         path: string,
         type: 'string' | 'number',
         dataTreePath: ?string, // updated by DataTree
@@ -476,7 +475,8 @@ export default class DataTree extends React.Component<Props, State> {
           <MenuDivider />
           <MenuItem
             onClick={() =>
-              onSchemaPathTypeChange(valueSchemaPath, valueType === 'string' ? 'number' : 'string')}
+              onSchemaPathTypeChange(valueSchemaPath, valueType === 'string' ? 'number' : 'string')
+            }
             text={`Treat as ${valueType === 'string' ? 'numerical' : 'categorical'} data`}
           />
         </Menu>

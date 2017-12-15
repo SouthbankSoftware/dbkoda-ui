@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-14T16:53:00+11:00
+ * @Last modified time: 2017-12-15T13:47:30+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,7 +32,7 @@ import autobind from 'autobind-decorator';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 // $FlowFixMe
-import { Broker, EventType } from '~/helpers/broker';
+import { Broker, EventType } from '~/helpers/broker'; // eslint-disable-line
 import _ from 'lodash';
 
 export const widgetErrorLevels = {
@@ -85,7 +85,7 @@ export default class WidgetApi {
     profileId: UUID,
     items: string[],
     extraState: ?{ id?: string } = null,
-    statsServiceOptiopns: ?{} = null,
+    statsServiceOptiopns: ?{} = null, // eslint-disable-line
   ): UUID {
     const { widgets } = this.store;
 
