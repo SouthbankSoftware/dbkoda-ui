@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:25:07+11:00
+ * @Last modified time: 2017-12-13T11:36:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,6 +39,7 @@ import { OutputPanel } from '#/OutputPanel';
 import { SidebarPanel } from '#/SidebarPanel';
 import { Analytics } from '#/Analytics';
 import { StatusPanel } from '#/StatusBar';
+import { PerformancePanel } from '#/PerformancePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -79,11 +80,12 @@ class App extends React.Component {
     this.props.config.settings.save();
     this.props.store.layout.optInVisible = false;
   }
-  unstable_handleError() { // eslint-disable-line camelcase
+  unstable_handleError() {
+    // eslint-disable-line camelcase
     Broker.emit(EventType.APP_CRASHED);
   }
   render() {
-    const { layout } = this.props;
+    const { layout, store } = this.props;
     const splitPane2Style = {
       display: 'flex',
       flexDirection: 'column',
@@ -122,6 +124,9 @@ class App extends React.Component {
           </SplitPane>
         </SplitPane>
         <StatusPanel className="statusPanel" />
+        {store.performancePanel ? (
+          <PerformancePanel profileId={store.performancePanel.profileId} />
+        ) : null}
         {process.env.NODE_ENV !== 'production' ? (
           <div className="DevTools">
             <DevTools position={{ right: -1000, top: 200 }} />

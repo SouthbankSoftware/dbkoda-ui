@@ -3,7 +3,7 @@
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-14T10:37:37+11:00
+ * @Last modified time: 2017-12-15T12:59:50+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,6 +24,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import { action, observable, runInAction, extendObservable } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
 import { EditorTypes, ProfileStatus } from '#/common/Constants';
@@ -322,6 +323,8 @@ export default class OutputApi {
    */
   @action.bound
   initJsonTableView(jsonStr, outputId, displayType, lines, cm, singleLine) {
+    const tabPrefix = 'TableView-';
+
     if (singleLine) {
       // Single line implemention
       StaticApi.parseShellJson(jsonStr).then(

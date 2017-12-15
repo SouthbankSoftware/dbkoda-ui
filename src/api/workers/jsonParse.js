@@ -21,8 +21,8 @@
  * @Author: chris
  * @Date:   2017-08-08T15:59:13+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-08-31T09:06:04+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-15T13:10:04+11:00
  */
 
 self.addEventListener(
@@ -45,6 +45,7 @@ self.addEventListener(
       });
     try {
       console.log(json);
+      // eslint-disable-next-line no-undef
       json = JSOL.parse(json);
     } catch (e) {
       message = e.message;
@@ -95,6 +96,7 @@ if (!self.JSOL) {
   self.JSOL = {};
 }
 
+// eslint-disable-next-line no-undef
 JSOL.parse = function(text) {
   const trim = /^(\s|\u00A0)+|(\s|\u00A0)+$/g;
   if (typeof text !== 'string' || !text) {

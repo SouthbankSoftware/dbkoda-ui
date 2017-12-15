@@ -276,6 +276,7 @@
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
+        "showPerformancePanel": "Show Performance Panel",
         "deleteProfile": "Delete Profile",
         "performance": "Performance Counter Test"
       },
