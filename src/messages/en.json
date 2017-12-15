@@ -594,9 +594,11 @@
     },
     "drill": {
       "connection_failed": "Create Drill Connection Failed",
-      "execution_failed": "Failed to execute query, see Raw output tab for complete error. Please check your syntax or lodge a b ug using the bottom right button.",
+      "execution_failed":
+        "Failed to execute query, see Raw output tab for complete error. Please check your syntax or lodge a b ug using the bottom right button.",
       "connection_not_exist": "Cant find connection",
-      "query_error": "Failed to execute query, see Raw output tab for complete error. Please check your syntax or lodge a b ug using the bottom right button.",
+      "query_error":
+        "Failed to execute query, see Raw output tab for complete error. Please check your syntax or lodge a b ug using the bottom right button.",
       "drill_binary_not_defined":
         "Drill Binary not found, Please configure it in the user settings panel",
       "open_drill_editor_failed": "Failed to Open Drill Editor.",
@@ -612,6 +614,12 @@
       "drill_controller_download_success":
         "Drill Controller has been downloaded successfully.",
       "drill_download_failed": "Error downloading drill, contact support.",
+      "loadWarning": {
+        "warning":
+          "Warning, opening a new SQL file will overwrite your current SQL editor, please open a new Drill instance to import, or save your current SQL query first.",
+        "continue": "Continue",
+        "cancel": "Cancel"
+      },
       "status_bar": {
         "downloading_drill": "Drill Download:",
         "downloading_drill_controller": "Drill Plugin:",

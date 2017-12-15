@@ -33,7 +33,13 @@ import { featherClient } from '~/helpers/feathers';
 import { inject, observer } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
 import path from 'path';
-import { AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Intent,
+  Position,
+  Tooltip,
+  Dialog,
+} from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
@@ -77,13 +83,18 @@ export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showLoadSQLWarning: false,
+    };
     // this.addEditorNoOptions = this.addEditor.bind(this);
     this.executeLine = this.executeLine.bind(this);
     this.executeAll = this.executeAll.bind(this);
     this.explainPlan = this.explainPlan.bind(this);
     this.onDropdownChanged = this.onDropdownChanged.bind(this);
     this.openFile = this.openFile.bind(this);
+    this.openSQLFile = this.openSQLFile.bind(this);
     this.saveFile = this.saveFile.bind(this);
+    this.renderSQLImportWarning = this.renderSQLImportWarning.bind(this);
     this.saveFileHandleError = () =>
       this.saveFile().catch((e) => {
         if (e) {
@@ -178,37 +189,50 @@ export default class Toolbar extends React.Component {
 
   openFile() {
     if (IS_ELECTRON) {
-      dialog.showOpenDialog(
-        BrowserWindow.getFocusedWindow(),
-        {
-          properties: ['openFile', 'multiSelections'],
-          filters: FILE_FILTERS,
-        },
-        (fileNames) => {
-          if (!fileNames) {
-            return;
-          }
-
-          _.forEach(fileNames, (v) => {
-            this.props.store
-              .openFile(v, ({ _id, content }) => {
-                let _fileName = path.basename(_id);
-                if (window.navigator.platform.toLowerCase() === 'win32') {
-                  _fileName = _id.substring(
-                    _id.lastIndexOf('\\') + 1,
-                    _id.length,
-                  );
-                }
-                return this.props.api.addEditor({
-                  content,
-                  fileName: _fileName,
-                  path: _id,
-                });
-              })
-              .catch(() => {});
-          });
-        },
+      // @TODO -> Import SQL files.
+      // Check if Drill Window already open:
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
       );
+
+      console.log(editor);
+      if (editor && editor.type === 'drill') {
+        // Show Warning.
+        this.setState({ showLoadSQLWarning: true });
+      } else {
+        // Else
+        dialog.showOpenDialog(
+          BrowserWindow.getFocusedWindow(),
+          {
+            properties: ['openFile', 'multiSelections'],
+            filters: FILE_FILTERS,
+          },
+          (fileNames) => {
+            if (!fileNames) {
+              return;
+            }
+
+            _.forEach(fileNames, (v) => {
+              this.props.store
+                .openFile(v, ({ _id, content }) => {
+                  let _fileName = path.basename(_id);
+                  if (window.navigator.platform.toLowerCase() === 'win32') {
+                    _fileName = _id.substring(
+                      _id.lastIndexOf('\\') + 1,
+                      _id.length,
+                    );
+                  }
+                  return this.props.api.addEditor({
+                    content,
+                    fileName: _fileName,
+                    path: _id,
+                  });
+                })
+                .catch(() => {});
+            });
+          },
+        );
+      }
     } else {
       const warningMsg = globalString(
         'editor/toolbar/notSupportedInUI',
@@ -227,6 +251,33 @@ export default class Toolbar extends React.Component {
         iconName: 'pt-icon-thumbs-down',
       });
     }
+  }
+
+  openSQLFile() {
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId,
+    );
+    dialog.showOpenDialog(
+      BrowserWindow.getFocusedWindow(),
+      {
+        properties: ['openFile', 'multiSelections'],
+        filters: FILE_FILTERS_SQL,
+      },
+      (fileNames) => {
+        if (!fileNames) {
+          return;
+        }
+
+        _.forEach(fileNames, (v) => {
+          this.props.store
+            .openFile(v, ({ _id, content }) => {
+              editor.doc.cm.setValue(content);
+              this.setState({ showLoadSQLWarning: false });
+            })
+            .catch(() => {});
+        });
+      },
+    );
   }
 
   saveFileAs() {
@@ -279,7 +330,10 @@ export default class Toolbar extends React.Component {
               this.props.store.editorPanel.lastFileSavingDirectoryPath,
               getUnsavedEditorSuggestedFileName(currentEditor),
             ),
-            filters: (currentEditor.type == EditorTypes.DRILL) ? FILE_FILTERS_SQL : FILE_FILTERS,
+            filters:
+              currentEditor.type == EditorTypes.DRILL
+                ? FILE_FILTERS_SQL
+                : FILE_FILTERS,
           },
           (fileName) => {
             this.props.store.editorToolbar.saveAs = false;
@@ -536,12 +590,47 @@ export default class Toolbar extends React.Component {
   }
 
   /**
+   * Render the warning for loading an SQL file.
+   */
+  @action
+  renderSQLImportWarning() {
+    return (
+      <Dialog
+        className="pt-dark loadSQLWarning"
+        intent={Intent.PRIMARY}
+        isOpen={this.state.showLoadSQLWarning}
+      >
+        <p> {globalString('drill/loadWarning/warning')} </p>
+        <div className="dialogButtons">
+          <AnchorButton
+            className="continueButton"
+            type="submit"
+            intent={Intent.SUCCESS}
+            onClick={this.openSQLFile}
+            text={globalString('drill/loadWarning/continue')}
+          />
+          <AnchorButton
+            className="submitButton"
+            type="submit"
+            intent={Intent.SUCCESS}
+            onClick={() => {
+              this.setState({ showLoadSQLWarning: false });
+            }}
+            text={globalString('drill/loadWarning/cancel')}
+          />
+        </div>
+      </Dialog>
+    );
+  }
+
+  /**
    * Render function for this component.
    */
   render() {
     const profiles = this.props.profileStore.profiles.entries();
     return (
       <nav className="pt-navbar editorToolbar">
+        {this.renderSQLImportWarning()}
         <div className="pt-navbar-group pt-align-left leftEditorToolbar">
           <div className="pt-navbar-heading">Query Input</div>
           <div className="pt-button-group pt-intent-primary leftButtonGroup">
@@ -554,7 +643,7 @@ export default class Toolbar extends React.Component {
                 <option key="Default" value="Default">
                   No Active Connection
                 </option>
-                ; {' '}
+                ;{' '}
                 {profiles.map((profile) => {
                   if (profile[1].status == 'OPEN') {
                     return (

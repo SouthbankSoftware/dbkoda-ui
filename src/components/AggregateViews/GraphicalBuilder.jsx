@@ -31,7 +31,13 @@ import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { action, runInAction } from 'mobx';
 import path from 'path';
-import { Alert, AnchorButton, Intent, Tooltip, Position } from '@blueprintjs/core';
+import {
+  Alert,
+  AnchorButton,
+  Intent,
+  Tooltip,
+  Position,
+} from '@blueprintjs/core';
 import { DrawerPanes } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
 import ErrorView from '#/common/ErrorView';
@@ -47,7 +53,6 @@ import GenerateChartButton from './GenerateChartButton';
 import ShowIcon from '../../styles/icons/show-icon.svg';
 import ImportIcon from '../../styles/icons/import-icon.svg';
 import ExportIcon from '../../styles/icons/export-icon.svg';
-
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -76,8 +81,7 @@ export default class GraphicalBuilder extends React.Component {
       collection: props.collection,
       isLoading: true,
       failed: false,
-      failureReason: 'Unknown'
-
+      failureReason: 'Unknown',
     };
 
     Broker.emit(EventType.FEATURE_USE, 'AggregateBuilder');
@@ -93,7 +97,6 @@ export default class GraphicalBuilder extends React.Component {
     this.currentCollection = this.editor.collection.text;
 
     // Set loading icon in graphical builder!
-
 
     // Add aggregate object to shell.
     const service = featherClient().service('/mongo-sync-execution');
@@ -120,7 +123,7 @@ export default class GraphicalBuilder extends React.Component {
           this.state.failureReason = 'Unknown';
         }
         this.state.isLoading = false;
-        this.setState({failed: true});
+        this.setState({ failed: true });
         console.error(err);
       });
   }
@@ -187,12 +190,24 @@ export default class GraphicalBuilder extends React.Component {
               ) {
                 this.getBlockAttributes(position - 1).then((res) => {
                   // 3.a Add to Editor
-                  this.addBlockToEditor(block.type, position, res, true, block).then(() => {
+                  this.addBlockToEditor(
+                    block.type,
+                    position,
+                    res,
+                    true,
+                    block,
+                  ).then(() => {
                     resolve();
-                    });
+                  });
                 });
               } else {
-                this.addBlockToEditor(block.type, position, null, true, block).then(() => {
+                this.addBlockToEditor(
+                  block.type,
+                  position,
+                  null,
+                  true,
+                  block,
+                ).then(() => {
                   resolve();
                 });
               }
@@ -220,75 +235,76 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   addBlockToEditor(blockType, position, attributeList, isImport, block) {
     return new Promise((resolve) => {
-    // Get relevant editor.
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
-    // Update block list for editor as required.
-    const tmpArray = this.props.store.editors
-      .get(this.props.store.editorPanel.activeEditorId)
-      .blockList.slice();
-    if (tmpArray.length === 0) {
-      tmpArray.push({
-        type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false,
-      });
-    } else if (position === 'START') {
-      tmpArray.unshift({
-        type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false,
-      });
-    } else if (position === 'END') {
-      tmpArray.push({
-        type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false,
-      });
-    } else {
-      tmpArray.push({
-        type: blockType,
-        fields: BlockTypes[blockType.toUpperCase()].fields,
-        modified: false,
-      });
-      if (isImport) {
-        this.moveImportBlock(tmpArray, tmpArray.length - 1, position);
+      // Get relevant editor.
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      // Update block list for editor as required.
+      const tmpArray = this.props.store.editors
+        .get(this.props.store.editorPanel.activeEditorId)
+        .blockList.slice();
+      if (tmpArray.length === 0) {
+        tmpArray.push({
+          type: blockType,
+          fields: BlockTypes[blockType.toUpperCase()].fields,
+          modified: false,
+        });
+      } else if (position === 'START') {
+        tmpArray.unshift({
+          type: blockType,
+          fields: BlockTypes[blockType.toUpperCase()].fields,
+          modified: false,
+        });
+      } else if (position === 'END') {
+        tmpArray.push({
+          type: blockType,
+          fields: BlockTypes[blockType.toUpperCase()].fields,
+          modified: false,
+        });
       } else {
-        this.moveBlock(tmpArray, tmpArray.length - 1, position);
+        tmpArray.push({
+          type: blockType,
+          fields: BlockTypes[blockType.toUpperCase()].fields,
+          modified: false,
+        });
+        if (isImport) {
+          this.moveImportBlock(tmpArray, tmpArray.length - 1, position);
+        } else {
+          this.moveBlock(tmpArray, tmpArray.length - 1, position);
+        }
       }
-    }
 
-    this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    ).blockList = tmpArray;
+      this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      ).blockList = tmpArray;
 
-    // Update block attributes
-    editor.blockList[position].status = 'pending';
-    editor.blockList[position].attributeList = attributeList;
-    editor.selectedBlock = position;
-    this.props.store.editorPanel.updateAggregateDetails = true;
-    this.selectBlock(position).then(() => {
-      if (block) {
-        for (const key in block.fields) {
-          if (block.fields.hasOwnProperty(key)) { // eslint-disable-line
-            // Check if field is an array:
-            if (typeof block.fields[key] === 'object') {
-              // For each property in the object.
-              block.fields[key].forEach((value) => {
-                if (editor.blockList[position].fields[key]) {
-                  editor.blockList[position].fields[key].push(value);
-                }
-              });
-            } else {
-              editor.blockList[position].fields[key] = block.fields[key];
+      // Update block attributes
+      editor.blockList[position].status = 'pending';
+      editor.blockList[position].attributeList = attributeList;
+      editor.selectedBlock = position;
+      this.props.store.editorPanel.updateAggregateDetails = true;
+      this.selectBlock(position).then(() => {
+        if (block) {
+          for (const key in block.fields) {
+            if (block.fields.hasOwnProperty(key)) {
+              // eslint-disable-line
+              // Check if field is an array:
+              if (typeof block.fields[key] === 'object') {
+                // For each property in the object.
+                block.fields[key].forEach((value) => {
+                  if (editor.blockList[position].fields[key]) {
+                    editor.blockList[position].fields[key].push(value);
+                  }
+                });
+              } else {
+                editor.blockList[position].fields[key] = block.fields[key];
+              }
             }
           }
         }
-      }
-      resolve();
+        resolve();
+      });
     });
-  });
   }
   /**
    * Fetch the block attributes from the shell object.
@@ -336,94 +352,94 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   selectBlock(index) {
     return new Promise((resolve) => {
-    // 1. Update Editor List.
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
-    this.setOutputLoading(editor.id);
-    this.setState({ activeBlockIndex: index });
-    this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    ).selectedBlock = index;
-    this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    ).blockList[index].isSelected = true;
+      // 1. Update Editor List.
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      this.setOutputLoading(editor.id);
+      this.setState({ activeBlockIndex: index });
+      this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      ).selectedBlock = index;
+      this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      ).blockList[index].isSelected = true;
 
-    // 2. Update Shell Steps.
-    this.updateShellPipeline(true).then((res) => {
-      if (res && res.unableToUpdateSteps) {
-        // Partial update
-        console.error('[SELECT] - Unable to fully update steps: ', res);
-        // 4. Is the current block valid?.
-        if (editor.blockList[editor.selectedBlock].status === 'valid') {
-          // 4.a Yes - Update Results.
-          this.updateResultsOutput(editor, editor.selectedBlock);
-        } else {
-          // 4.b No - Clear Results.
-          this.clearResultsOutput(editor);
-        }
-
-        runInAction('Update Graphical Builder', () => {
-          this.props.store.editorPanel.updateAggregateDetails = true;
-          this.forceUpdate();
-        });
-      } else {
-        // All steps validated, full update.
-        this.updateResultSet().then((res) => {
-          res = JSON.parse(res);
-          if (res.stepAttributes.constructor === Array) {
-            // 3. Update Valid for each block.
-            res.stepAttributes.map((indexValue, index) => {
-              let attributeIndex = index;
-              if (index > 0) {
-                attributeIndex = index - 1;
-              }
-              if (indexValue.constructor === Array) {
-                // Check for error result.
-                if (res.stepCodes[index] === 0) {
-                  if (!(typeof indexValue === 'string')) {
-                    indexValue = '[ "' + indexValue.join('", "') + '"]';
-                  }
-                  runInAction('Update Graphical Builder', () => {
-                    editor.blockList[index].attributeList =
-                      res.stepAttributes[attributeIndex];
-                    editor.blockList[index].status = 'valid';
-                  });
-                } else {
-                  if (!(typeof indexValue === 'string')) {
-                    console.error(
-                      'Result[',
-                      index,
-                      '] is invalid: ',
-                      indexValue,
-                    );
-                    indexValue = '[ "' + indexValue.join('", "') + '"]';
-                  }
-                  runInAction('Update Graphical Builder', () => {
-                    editor.blockList[index].status = 'pending';
-                  });
-                }
-              }
-            });
-            // 4. Is the current block valid?.
-            if (editor.blockList[editor.selectedBlock].status === 'valid') {
-              // 4.a Yes - Update Results.
-              this.updateResultsOutput(editor, editor.selectedBlock);
-            } else {
-              // 4.b No - Clear Results.
-              this.clearResultsOutput(editor);
-            }
-
-            runInAction('Update Graphical Builder', () => {
-              this.props.store.editorPanel.updateAggregateDetails = true;
-              this.forceUpdate();
-              resolve();
-            });
+      // 2. Update Shell Steps.
+      this.updateShellPipeline(true).then((res) => {
+        if (res && res.unableToUpdateSteps) {
+          // Partial update
+          console.error('[SELECT] - Unable to fully update steps: ', res);
+          // 4. Is the current block valid?.
+          if (editor.blockList[editor.selectedBlock].status === 'valid') {
+            // 4.a Yes - Update Results.
+            this.updateResultsOutput(editor, editor.selectedBlock);
+          } else {
+            // 4.b No - Clear Results.
+            this.clearResultsOutput(editor);
           }
-        });
-      }
+
+          runInAction('Update Graphical Builder', () => {
+            this.props.store.editorPanel.updateAggregateDetails = true;
+            this.forceUpdate();
+          });
+        } else {
+          // All steps validated, full update.
+          this.updateResultSet().then((res) => {
+            res = JSON.parse(res);
+            if (res.stepAttributes.constructor === Array) {
+              // 3. Update Valid for each block.
+              res.stepAttributes.map((indexValue, index) => {
+                let attributeIndex = index;
+                if (index > 0) {
+                  attributeIndex = index - 1;
+                }
+                if (indexValue.constructor === Array) {
+                  // Check for error result.
+                  if (res.stepCodes[index] === 0) {
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    runInAction('Update Graphical Builder', () => {
+                      editor.blockList[index].attributeList =
+                        res.stepAttributes[attributeIndex];
+                      editor.blockList[index].status = 'valid';
+                    });
+                  } else {
+                    if (!(typeof indexValue === 'string')) {
+                      console.error(
+                        'Result[',
+                        index,
+                        '] is invalid: ',
+                        indexValue,
+                      );
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    runInAction('Update Graphical Builder', () => {
+                      editor.blockList[index].status = 'pending';
+                    });
+                  }
+                }
+              });
+              // 4. Is the current block valid?.
+              if (editor.blockList[editor.selectedBlock].status === 'valid') {
+                // 4.a Yes - Update Results.
+                this.updateResultsOutput(editor, editor.selectedBlock);
+              } else {
+                // 4.b No - Clear Results.
+                this.clearResultsOutput(editor);
+              }
+
+              runInAction('Update Graphical Builder', () => {
+                this.props.store.editorPanel.updateAggregateDetails = true;
+                this.forceUpdate();
+                resolve();
+              });
+            }
+          });
+        }
+      });
     });
-  });
   }
 
   @action.bound
@@ -466,88 +482,93 @@ export default class GraphicalBuilder extends React.Component {
   @action.bound
   moveBlock(blockFrom, blockTo) {
     return new Promise((resolve) => {
-    // 1. Update Editor (moveBlock)
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
-    if (blockTo === 0) {
-      blockTo = 1;
-    } else if (!blockTo) {
-      return null;
-    }
-    this.moveBlockInEditor(blockFrom, blockTo);
-    // 2. Update Shell Steps
-    this.updateShellPipeline(true).then((res) => {
-      if (res && res.unableToUpdateSteps) {
-        // 4. Is the current block valid?.
-        if (editor.blockList[editor.selectedBlock].status === 'valid') {
-          // 4.a Yes - Update Results.
-          this.updateResultsOutput(editor, editor.selectedBlock);
-        } else {
-          // 4.b No - Clear Results.
-          this.clearResultsOutput(editor);
-        }
-
-        runInAction('Update Graphical Builder', () => {
-          this.props.store.editorPanel.updateAggregateDetails = true;
-          this.forceUpdate();
-        });
-      } else {
-        this.updateResultSet().then((res) => {
-          res = JSON.parse(res);
-          if (res.stepAttributes.constructor === Array) {
-            // 3. Update Valid for each block.
-            res.stepAttributes.map((indexValue, index) => {
-              let attributeIndex = index;
-              if (index > 0) {
-                attributeIndex = index - 1;
-              }
-              if (index === res.stepAttributes.length - 1) {
-                // Not empty now.
-              } else if (indexValue.constructor === Array) {
-                // Check for error result.
-                if (res.stepCodes[index] === 0) {
-                  if (!(typeof indexValue === 'string')) {
-                    indexValue = '[ "' + indexValue.join('", "') + '"]';
-                  }
-                  runInAction('Update Block Status - Valid', () => {
-                    editor.blockList[index].attributeList =
-                      res.stepAttributes[attributeIndex];
-                    editor.blockList[index].status = 'valid';
-                  });
-                } else {
-                  console.error('Result[', index, '] is invalid: ', indexValue);
-                  if (!(typeof indexValue === 'string')) {
-                    indexValue = '[ "' + indexValue.join('", "') + '"]';
-                  }
-                  runInAction('Update Block Status - Invalid', () => {
-                    editor.blockList[index].attributeList =
-                      res.stepAttributes[attributeIndex];
-                    editor.blockList[index].status = 'pending';
-                  });
-                }
-              }
-            });
-
-            // 4. Is the current block valid?.
-            if (editor.blockList[editor.selectedBlock].status === 'valid') {
-              // 4.a Yes - Update Results.
-              this.updateResultsOutput(editor, editor.selectedBlock);
-            } else {
-              // 4.b No - Clear Results.
-              this.clearResultsOutput(editor);
-            }
-
-            runInAction('Update Graphical Builder', () => {
-              this.props.store.editorPanel.updateAggregateDetails = true;
-              this.forceUpdate();
-              resolve();
-            });
-          }
-        });
+      // 1. Update Editor (moveBlock)
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      if (blockTo === 0) {
+        blockTo = 1;
+      } else if (!blockTo) {
+        return null;
       }
+      this.moveBlockInEditor(blockFrom, blockTo);
+      // 2. Update Shell Steps
+      this.updateShellPipeline(true).then((res) => {
+        if (res && res.unableToUpdateSteps) {
+          // 4. Is the current block valid?.
+          if (editor.blockList[editor.selectedBlock].status === 'valid') {
+            // 4.a Yes - Update Results.
+            this.updateResultsOutput(editor, editor.selectedBlock);
+          } else {
+            // 4.b No - Clear Results.
+            this.clearResultsOutput(editor);
+          }
+
+          runInAction('Update Graphical Builder', () => {
+            this.props.store.editorPanel.updateAggregateDetails = true;
+            this.forceUpdate();
+          });
+        } else {
+          this.updateResultSet().then((res) => {
+            res = JSON.parse(res);
+            if (res.stepAttributes.constructor === Array) {
+              // 3. Update Valid for each block.
+              res.stepAttributes.map((indexValue, index) => {
+                let attributeIndex = index;
+                if (index > 0) {
+                  attributeIndex = index - 1;
+                }
+                if (index === res.stepAttributes.length - 1) {
+                  // Not empty now.
+                } else if (indexValue.constructor === Array) {
+                  // Check for error result.
+                  if (res.stepCodes[index] === 0) {
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    runInAction('Update Block Status - Valid', () => {
+                      editor.blockList[index].attributeList =
+                        res.stepAttributes[attributeIndex];
+                      editor.blockList[index].status = 'valid';
+                    });
+                  } else {
+                    console.error(
+                      'Result[',
+                      index,
+                      '] is invalid: ',
+                      indexValue,
+                    );
+                    if (!(typeof indexValue === 'string')) {
+                      indexValue = '[ "' + indexValue.join('", "') + '"]';
+                    }
+                    runInAction('Update Block Status - Invalid', () => {
+                      editor.blockList[index].attributeList =
+                        res.stepAttributes[attributeIndex];
+                      editor.blockList[index].status = 'pending';
+                    });
+                  }
+                }
+              });
+
+              // 4. Is the current block valid?.
+              if (editor.blockList[editor.selectedBlock].status === 'valid') {
+                // 4.a Yes - Update Results.
+                this.updateResultsOutput(editor, editor.selectedBlock);
+              } else {
+                // 4.b No - Clear Results.
+                this.clearResultsOutput(editor);
+              }
+
+              runInAction('Update Graphical Builder', () => {
+                this.props.store.editorPanel.updateAggregateDetails = true;
+                this.forceUpdate();
+                resolve();
+              });
+            }
+          });
+        }
+      });
     });
-  });
   }
 
   /**
@@ -650,7 +671,10 @@ export default class GraphicalBuilder extends React.Component {
             }
 
             // 4. Is the current block valid?.
-            if (editor.blockList[editor.selectedBlock] && editor.blockList[editor.selectedBlock].status === 'valid') {
+            if (
+              editor.blockList[editor.selectedBlock] &&
+              editor.blockList[editor.selectedBlock].status === 'valid'
+            ) {
               // 4.a Yes - Update Results.
               this.updateResultsOutput(editor, editor.selectedBlock);
             } else {
@@ -933,7 +957,7 @@ export default class GraphicalBuilder extends React.Component {
       });
   }
 
-   /**
+  /**
    * Sets the output to loading while it fetches results.
    *
    * @param {Object} editorId - The editor to update the output for.
@@ -960,18 +984,20 @@ export default class GraphicalBuilder extends React.Component {
     // Check if connection is open first.
     if (this.props.store.editorPanel.activeDropdownId === 'Default') {
       NewToaster.show({
-        message: globalString('aggregate_builder/no_active_connection_for_import'),
+        message: globalString(
+          'aggregate_builder/no_active_connection_for_import',
+        ),
         className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
     } else {
-      this.setState({isImportAlertOpen: true});
+      this.setState({ isImportAlertOpen: true });
     }
   }
 
   @action.bound
   handleCloseAlert() {
-    this.setState({isImportAlertOpen: false});
+    this.setState({ isImportAlertOpen: false });
   }
 
   /**
@@ -979,7 +1005,7 @@ export default class GraphicalBuilder extends React.Component {
    */
   @action.bound
   onImportButtonClicked() {
-    this.setState({isImportAlertOpen: false});
+    this.setState({ isImportAlertOpen: false });
     if (IS_ELECTRON) {
       dialog.showOpenDialog(
         BrowserWindow.getFocusedWindow(),
@@ -995,7 +1021,7 @@ export default class GraphicalBuilder extends React.Component {
           _.forEach(fileNames, (v) => {
             this.props.store
               .openFile(v, ({ _id, content }) => {
-                this.setState({isLoading: true});
+                this.setState({ isLoading: true });
                 const contentObject = JSON.parse(content);
                 this.importFile(contentObject);
               })
@@ -1062,7 +1088,7 @@ export default class GraphicalBuilder extends React.Component {
           },
           (fileName) => {
             if (!fileName) {
-             reject();
+              reject();
             }
             this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(
               fileName,
@@ -1155,7 +1181,7 @@ export default class GraphicalBuilder extends React.Component {
             className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
-          this.setState({isLoading: false});
+          this.setState({ isLoading: false });
           this.forceUpdate();
           console.error(err);
         });
@@ -1165,7 +1191,7 @@ export default class GraphicalBuilder extends React.Component {
         className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
       this.forceUpdate();
       console.error('Invalid import object: ', contentObject);
     }
@@ -1188,14 +1214,7 @@ export default class GraphicalBuilder extends React.Component {
         if (res && res.unableToUpdateSteps) {
           // Partial update
           if (this.debug) console.error('Unable to complete full update!');
-          // 4. Was the block removed the selected block?.
-          if (blockPosition === editor.selectedBlock) {
-            // 4.a Yes - Set selected block to current - 1.
-            editor.selectedBlock -= 1;
-            if (editor.selectedBlock < 0) {
-              editor.selectedBlock = 0;
-            }
-          }
+          editor.selectedBlock = 0;
           // 4. Is the current block valid?.
           if (editor.blockList[editor.selectedBlock].status === 'valid') {
             // 4.a Yes - Update Results.
@@ -1290,7 +1309,7 @@ export default class GraphicalBuilder extends React.Component {
         blocks.forEach((block) => {
           p = p.then(() => {
             if (count === 0) {
-               count += 1;
+              count += 1;
             } else {
               return this.addBlock(block, count).then(() => {
                 count += 1;
@@ -1308,11 +1327,11 @@ export default class GraphicalBuilder extends React.Component {
             className: 'success',
             iconName: 'pt-icon-thumbs-up',
           });
-          this.setState({isLoading: false});
+          this.setState({ isLoading: false });
         });
       });
-  });
-}
+    });
+  }
 
   /**
    * Sends a request to controller to update config for agg builder.
@@ -1361,17 +1380,21 @@ export default class GraphicalBuilder extends React.Component {
           <div className="aggregateGraphicalBuilderWrapper">
             <ErrorView
               title={globalString('aggregate_builder/alerts/failed_title')}
-              error={globalString('aggregate_builder/alerts/failed_message')} />
+              error={globalString('aggregate_builder/alerts/failed_message')}
+            />
           </div>
         );
       }
-        return (
-          <div className="aggregateGraphicalBuilderWrapper">
-            <ErrorView
-              title={globalString('aggregate_builder/alerts/failed_title')}
-              error={globalString('aggregate_builder/alerts/failed_message_unknown')} />
-          </div>
-        );
+      return (
+        <div className="aggregateGraphicalBuilderWrapper">
+          <ErrorView
+            title={globalString('aggregate_builder/alerts/failed_title')}
+            error={globalString(
+              'aggregate_builder/alerts/failed_message_unknown',
+            )}
+          />
+        </div>
+      );
     }
     return (
       <div className="aggregateGraphicalBuilderWrapper">
@@ -1384,7 +1407,7 @@ export default class GraphicalBuilder extends React.Component {
               content={globalString('aggregate_builder/show_left_panel')}
               tooltipClassName="pt-dark"
               position={Position.BOTTOM}
-              >
+            >
               <AnchorButton
                 className="showLeftPanelButton circleButton"
                 intent={Intent.SUCCESS}
@@ -1401,7 +1424,7 @@ export default class GraphicalBuilder extends React.Component {
             content={globalString('aggregate_builder/import_button')}
             tooltipClassName="pt-dark"
             position={Position.BOTTOM}
-              >
+          >
             <AnchorButton
               className="importButton circleButton"
               intent={Intent.SUCCESS}
@@ -1429,7 +1452,7 @@ export default class GraphicalBuilder extends React.Component {
           <GenerateChartButton
             connectionId={this.props.editor.currentProfile}
             editorId={this.props.editor.id}
-        />
+          />
         </div>
         <Alert
           className="importAlert"
@@ -1437,107 +1460,112 @@ export default class GraphicalBuilder extends React.Component {
           confirmButtonText={globalString('aggregate_builder/alerts/okay')}
           onConfirm={this.onImportButtonClicked}
           cancelButtonText={globalString('aggregate_builder/alerts/cancel')}
-          onCancel={this.handleCloseAlert}>
+          onCancel={this.handleCloseAlert}
+        >
           <p>{globalString('aggregate_builder/alerts/importWarningText')}</p>
         </Alert>
-        {
-          !this.state.isLoading ? (
-            <ul className="graphicalBuilderBlockList">
-              <FirstBlockTarget />
-              {this.props.store.editors
-                .get(this.state.id)
-                .blockList.map((indexValue, index) => {
-                  // Get Block Type for SVG Render.
-                  let posType = 'MIDDLE';
-                  if (index === 0) {
-                    posType = 'START';
-                  } else if (
-                    index >=
-                    this.props.store.editors.get(this.state.id).blockList.length - 1
-                  ) {
-                    posType = 'END';
-                  }
+        {!this.state.isLoading ? (
+          <ul className="graphicalBuilderBlockList">
+            <FirstBlockTarget />
+            {this.props.store.editors
+              .get(this.state.id)
+              .blockList.map((indexValue, index) => {
+                // Get Block Type for SVG Render.
+                let posType = 'MIDDLE';
+                if (index === 0) {
+                  posType = 'START';
+                } else if (
+                  index >=
+                  this.props.store.editors.get(this.state.id).blockList.length -
+                    1
+                ) {
+                  posType = 'END';
+                }
 
-                  let blockColor = 0;
-                  const blockColorLocation = _.findIndex(this.state.colorMatching, {
+                let blockColor = 0;
+                const blockColorLocation = _.findIndex(
+                  this.state.colorMatching,
+                  {
                     type: indexValue.type,
+                  },
+                );
+                // Check if function type already exists
+                if (this.state.colorMatching.length === 0) {
+                  this.state.colorMatching.push({
+                    type: indexValue.type,
+                    color: 0,
                   });
-                  // Check if function type already exists
-                  if (this.state.colorMatching.length === 0) {
-                    this.state.colorMatching.push({
-                      type: indexValue.type,
-                      color: 0,
-                    });
-                    blockColor = 0;
-                  } else if (blockColorLocation !== -1) {
-                    // Send through that color for styling.
-                    blockColor = this.state.colorMatching[blockColorLocation].color;
-                  } else if (
-                    blockColorLocation === -1 &&
-                    this.state.colorMatching.length > 16 &&
-                    this.state.colorMatching.length % 16 === 0
-                  ) {
-                    // Start the color loop again.
-                    this.state.colorMatching.push({
-                      type: indexValue.type,
-                      color: 0,
-                    });
-                    blockColor = 0;
-                  } else if (
-                    this.state.colorMatching.length > 16 &&
-                    blockColorLocation === -1
-                  ) {
-                    // Increment on previous value.
-                    this.state.colorMatching.push({
-                      type: indexValue.type,
-                      color:
-                        this.state.colorMaching[this.state.colorMatching.length]
-                          .color + 1,
-                    });
-                    blockColor = this.state.colorMatching.length - 1;
-                  } else if (
-                    this.state.colorMatching.length < 16 &&
-                    blockColorLocation === -1
-                  ) {
-                    // Increment on previous value.
-                    blockColor = this.state.colorMatching.length;
-                    this.state.colorMatching.push({
-                      type: indexValue.type,
-                      color: blockColor,
-                    });
-                  }
+                  blockColor = 0;
+                } else if (blockColorLocation !== -1) {
+                  // Send through that color for styling.
+                  blockColor = this.state.colorMatching[blockColorLocation]
+                    .color;
+                } else if (
+                  blockColorLocation === -1 &&
+                  this.state.colorMatching.length > 16 &&
+                  this.state.colorMatching.length % 16 === 0
+                ) {
+                  // Start the color loop again.
+                  this.state.colorMatching.push({
+                    type: indexValue.type,
+                    color: 0,
+                  });
+                  blockColor = 0;
+                } else if (
+                  this.state.colorMatching.length > 16 &&
+                  blockColorLocation === -1
+                ) {
+                  // Increment on previous value.
+                  this.state.colorMatching.push({
+                    type: indexValue.type,
+                    color:
+                      this.state.colorMaching[this.state.colorMatching.length]
+                        .color + 1,
+                  });
+                  blockColor = this.state.colorMatching.length - 1;
+                } else if (
+                  this.state.colorMatching.length < 16 &&
+                  blockColorLocation === -1
+                ) {
+                  // Increment on previous value.
+                  blockColor = this.state.colorMatching.length;
+                  this.state.colorMatching.push({
+                    type: indexValue.type,
+                    color: blockColor,
+                  });
+                }
 
-                  let isSelected = false;
-                  if (
-                    this.props.store.editors.get(
-                      this.props.store.editorPanel.activeEditorId,
-                    ).selectedBlock === index
-                  ) {
-                    isSelected = true;
-                  }
-                  return (
-                    <Block
-                      key={'key-' + index} //eslint-disable-line
-                      listPosition={index}
-                      selected={isSelected}
-                      positionType={posType}
-                      color={blockColor}
-                      type={indexValue.type}
-                      status={indexValue.status}
-                      moveBlock={this.moveBlock}
-                      onClickCallback={this.selectBlock}
-                      onClickCloseCallback={this.removeBlock}
-                      concrete
-                    />
-                  );
-                })}
-              <LastBlockTarget />
-            </ul>
-          ) : (
-            <div className="loaderWrapper">
-              <div className="loader" />
-            </div>
-          )}
+                let isSelected = false;
+                if (
+                  this.props.store.editors.get(
+                    this.props.store.editorPanel.activeEditorId,
+                  ).selectedBlock === index
+                ) {
+                  isSelected = true;
+                }
+                return (
+                  <Block
+                    key={'key-' + index} //eslint-disable-line
+                    listPosition={index}
+                    selected={isSelected}
+                    positionType={posType}
+                    color={blockColor}
+                    type={indexValue.type}
+                    status={indexValue.status}
+                    moveBlock={this.moveBlock}
+                    onClickCallback={this.selectBlock}
+                    onClickCloseCallback={this.removeBlock}
+                    concrete
+                  />
+                );
+              })}
+            <LastBlockTarget />
+          </ul>
+        ) : (
+          <div className="loaderWrapper">
+            <div className="loader" />
+          </div>
+        )}
       </div>
     );
   }

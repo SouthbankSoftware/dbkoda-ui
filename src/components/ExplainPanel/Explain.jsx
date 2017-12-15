@@ -64,7 +64,6 @@ export default class Explain extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this._panel);
     const { editor } = this.props;
     if (editor) {
       Broker.on(
@@ -277,7 +276,6 @@ export default class Explain extends React.Component {
   }
 
   render() {
-    console.log(this);
     return (
       <div className="explainPanelWrapper">
         <Panel

@@ -1024,3 +1024,16 @@ label.pt-control {
 .translator-open .Resizer.vertical {
   background-color: gray;
 }
+
+.pt-dialog .loadSQLWarning {
+  .pt-alert-body {
+  }
+  div.dialogButtons {
+    a.continueButton {
+      background-color: $buttonSuccessBackground;
+    }
+    a.continueButton:hover {
+      background-color: $buttonSuccessBackgroundHover;
+    }
+  }
+}
