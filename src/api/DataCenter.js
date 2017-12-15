@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-25T09:46:42+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-13T10:45:49+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,18 +22,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-07-25T09:46:42+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-15T15:36:49+11:00
  */
 
 import _ from 'lodash';
 import OutputApi from './Output';
 import TerminalApi from './Terminal';
+import PerformancePanelApi from './PerformancePanel';
+import WidgetApi from './Widget';
 import EditorApi from './Editor';
 import ProfileApi from './Profile';
 import TreeApi from './Tree';
@@ -45,6 +46,8 @@ export default class DataCenter {
     this.profileStore = profileStore;
     this.outputApi = new OutputApi(store, this, profileStore);
     this.terminalApi = new TerminalApi(store, this);
+    this.performancePanelApi = new PerformancePanelApi(store, this);
+    this.widgetApi = new WidgetApi(store, this);
     this.editorApi = new EditorApi(store, this, config, profileStore);
     this.profileApi = new ProfileApi(store, this, profileStore);
     this.treeApi = new TreeApi(store, this);
@@ -71,6 +74,24 @@ export default class DataCenter {
         'addTerminal',
         'removeTerminal',
         'removeAllTerminalsForProfile',
+      ]),
+    );
+
+    // PerformancePanel public APIs
+    _.assign(
+      this,
+      _.pick(this.performancePanelApi, [
+        'openPerformancePanel',
+        'closePerformancePanel',
+      ]),
+    );
+
+    // Widget public APIs
+    _.assign(
+      this,
+      _.pick(this.widgetApi, [
+        'addWidget',
+        'removeWidget',
       ]),
     );
 

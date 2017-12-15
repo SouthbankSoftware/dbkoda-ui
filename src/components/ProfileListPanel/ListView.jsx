@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-02T16:03:57+11:00
+ * @Last modified time: 2017-12-13T11:23:13+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -529,7 +529,8 @@ export default class ListView extends React.Component {
     }
     console.log('show performance for ', targetProfile);
     const srv = featherClient().service('/performance');
-    srv.create({id: targetProfile.id})
+    srv
+      .create({ id: targetProfile.id })
       .then((res) => {
         console.log('remote execution res ', res);
       })
@@ -624,6 +625,15 @@ export default class ListView extends React.Component {
               text={globalString('profile/menu/closeConnection')}
               intent={Intent.NONE}
               iconName="pt-icon-lock"
+            />
+          </div>
+          <div className="menuItemWrapper">
+            <MenuItem
+              className="profileListContextMenu showPerformancePanel"
+              onClick={() => this.props.api.openPerformancePanel(profile.id)}
+              text={globalString('profile/menu/showPerformancePanel')}
+              intent={Intent.NONE}
+              iconName="pt-icon-heat-grid"
             />
           </div>
           <div className="menuItemWrapper">

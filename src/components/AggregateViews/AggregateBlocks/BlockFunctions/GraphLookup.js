@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-15T13:12:30+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -14,9 +17,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
- * You shouldhave received a copy of the GNU Affero General Public License
+ * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import * as common from '../../../TreeActionPanel/Functions/Common.js';
 
 export const GraphLookup = {
@@ -29,7 +33,7 @@ export const GraphLookup = {
   dbkodaAggOperators: common.dbkodaAggOperators,
   dbkodaAggOperators_parse: common.dbkodaAggOperators_parse,
   dbkodaGraphLookupPreFill: (params) => {
-    data = {};
+    const data = {};
     data.collection = params.collection;
     data.as = 'GraphOutput';
     data.depthField = 'Depth';

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-27T11:45:59+11:00
+ * @Last modified time: 2017-12-12T22:47:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -66,16 +66,13 @@ export default class Store {
   @observable locale = 'en';
   @observable version = '0.9.0-beta.1';
   @observable updateAvailable = false;
-  // @observable profiles = observable.map();
   @observable editors = observable.map();
   @observable outputs = observable.map();
   @observable terminals = observable.shallowMap();
+  @observable widgets = observable.shallowMap();
+  @observable performancePanels = observable.shallowMap();
 
-  // @observable
-  // userPreferences = observable({
-  //   telemetryEnabled: true,
-  //   showWelcomePageAtStart: true,
-  // });
+  @observable performancePanel = null;
 
   @observable
   welcomePage = observable({

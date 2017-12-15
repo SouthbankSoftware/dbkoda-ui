@@ -1,10 +1,10 @@
-// @Author: Wahaj Shamim <wahaj>
-// @Date:   2017-07-17T12:55:19+10:00
-// @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-08-21T15:17:07+10:00
-
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-07-17T12:55:19+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-13T15:02:16+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -25,13 +25,13 @@
  */
 
 @import './_defaultTheme.scss';
+
 body {
   background-color: $panelLeftBackground;
-  overflow: auto !important;
+  overflow: hidden !important;
 }
 
-#root div {
-}
+#root div {}
 
 .aggregateTabInnerWrapper {
   .vertical {
@@ -39,30 +39,36 @@ body {
   }
 }
 
-p,
+.pt-navbar-heading,
 h1,
 h2,
 h3,
 h4 span,
-.pt-navbar-heading {
+p {
   font-family: Arial;
 }
+
 ::-webkit-scrollbar {
   background-color: $scrollBarThumb !important;
 }
+
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: $scrollBarBackground !important;
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: $scrollBarThumb !important;
 }
+
 ::-webkit-scrollbar-button {
   background-color: $scrollBarTopAndBottom !important;
 }
+
 ::-webkit-scrollbar-corner {
   background-color: $scrollBarThumb !important;
 }
+
 .profileList,
 .pt-tab-list {
   overflow: auto !important;
@@ -81,20 +87,20 @@ h4 span,
   background: $scrollBarBackground;
 }
 
+.bp-table-body,
 .horizontal,
-.welcomePageContentRight,
 .pt-button,
-.pt-tree-node-content,
 .pt-tab,
-.bp-table-body {
+.pt-tree-node-content,
+.welcomePageContentRight {
   overflow: hidden !important;
 }
 
-.pt-icon-,
 .feedIconWrapper,
-.feedItemContent,
 .feedItem,
-.feedList {
+.feedItemContent,
+.feedList,
+.pt-icon- {
   overflow: unset !important;
 }
 
@@ -140,7 +146,7 @@ h3 {
 
 .unsavedFileIndicator {
   top: 11.5px;
-  margin: 0px 10px 0 0;
+  margin: 0 10px 0 0;
   width: 7px;
   height: 7px;
   background: $buttonDangerBackground;
@@ -152,6 +158,7 @@ h3 {
 
 div.pt-dialog {
   background-color: $panelLeftBackground !important;
+
   div.pt-alert-footer {
     button {
       font-weight: lighter !important;
@@ -166,17 +173,20 @@ div.pt-dialog {
       border-top-right-radius: 1em;
       border-bottom-right-radius: 1em;
     }
+
     button.pt-button:hover {
       background-color: $connectionButtonBackgroundColourHover;
       color: $connectionButtonFontColourHover !important;
     }
   }
+
   input[type='text'],
   input[type='number'],
   input[type='password'] {
     background: unset;
     color: $connectionActiveTextFieldTextColour !important;
   }
+
   input[type='text']:focus,
   input[type='number']:focus,
   input[type='password']:focus {
@@ -191,7 +201,7 @@ div.pt-dialog {
 }
 
 .pt-tab .pt-button.pt-minimal {
-  padding: 0px;
+  padding: 0;
   margin-right: -10px;
   line-height: 14px;
   min-height: 14px;
@@ -201,8 +211,9 @@ div.pt-dialog {
 .CodeMirror-lines:focus {
   outline: none !important;
 }
-.pt-tab .pt-button.pt-minimal:hover,
-.pt-tab .pt-button.pt-minimal:focus {
+
+.pt-tab .pt-button.pt-minimal:focus,
+.pt-tab .pt-button.pt-minimal:hover {
   background: unset;
   box-shadow: none !important;
 }
@@ -211,8 +222,8 @@ div.pt-dialog {
   height: 31px;
 }
 
-.pt-dark.pt-navbar,
-.pt-dark .pt-navbar {
+.pt-dark .pt-navbar,
+.pt-dark.pt-navbar {
   box-shadow: none;
 }
 
@@ -221,16 +232,20 @@ div.pt-dialog {
     display: none;
   }
 }
+
 .pt-toast.success {
   background-color: $toastBackgroundColourSuccess !important;
   color: $toastFontColourSuccess !important;
+
   span {
     color: $toastFontColourSuccess !important;
   }
+
   div {
     button::before {
       color: $toastCloseIconColourSuccess !important;
     }
+
     button:focus {
       outline-style: none;
     }
@@ -240,13 +255,16 @@ div.pt-dialog {
 .pt-toast.warning {
   background-color: $toastBackgroundColourWarning !important;
   color: $toastFontColourWarning !important;
+
   span {
     color: $toastFontColourWarning !important;
   }
+
   div {
     button::before {
       color: $toastCloseIconColourWarning !important;
     }
+
     button:focus {
       outline-style: none;
     }
@@ -256,15 +274,19 @@ div.pt-dialog {
 .pt-toast.danger {
   background-color: $toastBackgroundColourDanger !important;
   color: $toastFontColourDanger !important;
+
   span {
     color: $toastFontColourDanger !important;
   }
+
   div {
     color: unset !important;
     color: $toastCloseIconColourDanger !important;
+
     button::before {
       color: $toastCloseIconColourDanger !important;
     }
+
     button:focus {
       outline-style: none;
     }
@@ -274,15 +296,19 @@ div.pt-dialog {
 .pt-toast.info {
   background-color: $toastBackgroundColourInfo !important;
   color: $toastFontColourInfo !important;
+
   span {
     color: $toastFontColourInfo !important;
   }
+
   div {
     color: unset !important;
     color: $toastCloseIconColourInfo !important;
+
     button::before {
       color: $toastCloseIconColourInfo !important;
     }
+
     button:focus {
       outline-style: none;
     }
@@ -381,6 +407,7 @@ div.pt-dialog {
 .cm-s-ambiance .CodeMirror-linenumber {
   color: $white;
 }
+
 span.cm-error {
   background-color: unset !important;
 }
@@ -491,8 +518,8 @@ input[type='checkbox']:focus {
   box-shadow: 0 0 0 1px $searchPrimaryBackground !important;
 }
 
-button:focus,
-a[role='button']:focus {
+a[role='button']:focus,
+button:focus {
   outline: none;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
 }
@@ -505,9 +532,11 @@ ul.CodeMirror-hints {
   border: none;
   background-color: $hintsBackgroundColor;
   overflow-y: hidden;
+
   li.CodeMirror-hint {
     color: $hintsColor;
   }
+
   li.CodeMirror-hint-active {
     background-color: $hintsBackgroundActiveColor;
   }
@@ -517,18 +546,22 @@ div.optInDialog {
   h1 {
     margin-bottom: 30px;
   }
+
   div.dialogButtons {
     a.submitButton {
       background-color: $buttonSuccessBackground !important;
     }
+
     a.submitButton:hover {
       background-color: $buttonSuccessBackgroundHover !important;
     }
   }
+
   div.dialogButtons.false {
     a.submitButton {
       background-color: $buttonDangerBackground !important;
     }
+
     a.submitButton:hover {
       background-color: $buttonDangerBackgroundHover !important;
     }

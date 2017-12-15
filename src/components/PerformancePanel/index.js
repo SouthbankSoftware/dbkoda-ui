@@ -1,10 +1,9 @@
 /**
- * @flow
- *
- * @Author: guiguan
- * @Date:   2017-10-09T15:41:06+11:00
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2017-12-12T22:15:45+11:00
+ * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-14T16:27:45+11:00
+ * @Last modified time: 2017-12-12T22:16:06+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,15 +24,4 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import * as React from 'react';
-import './View.scss';
-
-export default class LoadingView extends React.PureComponent<*> {
-  render() {
-    return (
-      <div className="LoadingView">
-        <div className="Spinner" />
-      </div>
-    );
-  }
-}
+export PerformancePanel from './Panel';

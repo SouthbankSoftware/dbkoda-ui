@@ -2,9 +2,9 @@
 # @Date:   2016-06-02T14:58:00+10:00
 # @Email:  root@guiguan.net
 # @Last modified by:   guiguan
-# @Last modified time: 2017-11-20T15:30:31+11:00
+# @Last modified time: 2017-12-15T12:26:41+11:00
 
-extends: airbnb
+extends: [airbnb, plugin:flowtype/recommended]
 parser: babel-eslint
 env:
   browser: true
@@ -78,7 +78,6 @@ rules:
   no-restricted-syntax: off
   no-unused-expressions: off
   newline-per-chained-call: off
-  no-undef: off
   class-methods-use-this: off
   no-multi-str: off
   no-useless-escape: off
@@ -89,7 +88,8 @@ rules:
   prefer-destructuring: warn
   prefer-promise-reject-errors: warn
   no-control-regex: off
-plugins: [react, import]
+  flowtype/no-types-missing-file-annotation: off
+plugins: [react, import, flowtype]
 settings:
   import/resolver:
     node:
@@ -98,3 +98,5 @@ settings:
         - src
 globals:
   l: false
+  globalString: false
+  IS_ELECTRON: false

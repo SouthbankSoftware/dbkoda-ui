@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Michael Harrison
+ * @Date:   2017-07-19 11:17:46
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-15T13:13:31+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,16 +24,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: Michael Harrison
- * @Date:   2017-07-19 11:17:46
- * @Email:  mike@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2017-07-19 11:17:49
- */
-
 /* eslint import/no-dynamic-require: warn */
 
+import _ from 'lodash';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, observable, reaction, runInAction } from 'mobx';

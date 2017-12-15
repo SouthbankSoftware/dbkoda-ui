@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-10-09T15:41:06+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-09T17:35:48+11:00
+ * @Last modified time: 2017-12-14T16:40:14+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,26 +26,29 @@
  */
 
 import * as React from 'react';
+import classnames from 'classnames';
 import ErrorIcon from '~/styles/icons/error-icon.svg';
 import './View.scss';
 
 type Props = {
   title?: string,
+  errorLevel?: string,
   error: string,
 };
 
 export default class ErrorView extends React.PureComponent<Props> {
   static defaultProps = {
+    errorLevel: 'error',
     title: 'Oh Snap!',
   };
 
   render() {
-    const { title, error } = this.props;
+    const { title, errorLevel, error } = this.props;
 
     return (
       <div className="ErrorView">
-        <ErrorIcon className="icon" />
-        <p className="title">{title}</p>
+        <ErrorIcon className={classnames('icon', errorLevel)} />
+        {title ? <p className="title">{title}</p> : null}
         <p className="message">{error}</p>
       </div>
     );
