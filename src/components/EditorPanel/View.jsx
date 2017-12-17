@@ -220,6 +220,17 @@ class View extends React.Component {
                   runInAction(() => {
                     // Append this error to raw output:
                     console.log(err);
+
+                    err = {
+                      Name: err.name,
+                      StatusCode: err.statusCode,
+                      Message: err.error
+                      };
+
+                    // Analyse Error for line number and highlight.
+                    const errPosition = err.Message.search(/From line [0-9]+, column [0-9]+ to line [0-9]+, column [0-9]+/);
+                    console.log(errPosition);
+
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
@@ -252,7 +263,12 @@ class View extends React.Component {
                   console.error('execute error:', err);
                   runInAction(() => {
                     // Append this error to raw output:
-                    const strOutput = JSON.stringify(err, null, 2);
+                    err = {
+                      Name: err.name,
+                      StatusCode: err.statusCode,
+                      Message: err.error
+                      };
+                      const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
                     this.props.store.outputs.get(editor.id).output = totalOutput;
@@ -336,7 +352,11 @@ class View extends React.Component {
                   console.error('execute error:', err);
                   // Append this error to raw output:
                   runInAction(() => {
-                    console.log(err);
+                    err = {
+                      Name: err.name,
+                      StatusCode: err.statusCode,
+                      Message: err.error
+                    };
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
@@ -778,7 +798,7 @@ class View extends React.Component {
       // Send request to feathers client
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');
-      const saveExplainCommand = 'var explain_'+editor.id.replace(/\-/g,'_')+' = ' + filteredContent + ';';
+      const saveExplainCommand = 'var explain_' + editor.id.replace(/\-/g, '_') + ' = ' + filteredContent + ';';
       console.log(saveExplainCommand);
       service.timeout = 300000;
       this.props.store.editorToolbar.isActiveExecuting = true;
