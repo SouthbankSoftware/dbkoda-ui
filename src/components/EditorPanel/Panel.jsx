@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:48:46+11:00
+ * @Last modified time: 2017-12-15T13:32:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,6 +42,7 @@ import {
   Dialog,
   AnchorButton,
 } from '@blueprintjs/core';
+import _ from 'lodash';
 import addTooltip from '#/hoc/addTooltip';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import FilterList from '#/common/FilterList';

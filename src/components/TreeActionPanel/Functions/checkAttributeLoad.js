@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-15T13:37:18+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -19,7 +22,7 @@
  */
 
 // Run this in mongo to check that we can parse attributes
-// eslint-disable
+/* eslint-disable */
 /* eslint camelcase:warn */
 
 function dbkodaListAttributes_parse(res) {

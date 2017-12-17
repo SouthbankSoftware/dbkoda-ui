@@ -2,7 +2,7 @@
  * @Author: mike
  * @Date:   2017-03-28 16:13:50
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:30:12+11:00
+ * @Last modified time: 2017-12-15T13:30:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,7 +47,7 @@ export default class EventReaction extends React.Component {
 
     const typeEnum = EventLogging.getTypeEnum();
     const fragmentEnum = EventLogging.getFragmentEnum();
-    const store = this.props.store;
+    const { store, config } = this.props.store;
     const editorPanelObserver = observe(store.editorPanel, change => this.observeEditorPanel(change, typeEnum, fragmentEnum));
     const profilePanelObserver = observe(store.profileList, change => this.observeProfilePanel(change, typeEnum, fragmentEnum));
     const profileOutputObserver = observe(store.outputPanel, change => this.observeOutputPanel(change, typeEnum, fragmentEnum));

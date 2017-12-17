@@ -21,8 +21,8 @@
  * @Author: mike
  * @Date:   2017-09-20 10:35:04
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-23T15:45:47+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-15T13:33:13+11:00
  */
 
 /* eslint no-prototype-builtins:warn */
@@ -273,7 +273,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   getSupportBundle() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       // Send request to feathers supportBundle Service
       const service = featherClient().service('/supportBundle');
       service.timeout = 30000;

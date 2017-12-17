@@ -22,12 +22,13 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-03T16:14:52+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-05-03T12:12:33+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2017-12-15T13:41:59+11:00
  */
 /* eslint no-unused-vars:warn */
 
 import * as common from './Common.js';
+import { Aggregate } from './Aggregate';
 
 // const sprintf = require('sprintf-js').sprintf;
 const debug = false;
