@@ -217,10 +217,7 @@ export default class Explain extends React.Component {
       service
         .update(profileId, {
           shellId: shell, // eslint-disable-line
-          commands:
-            'dbkInx.suggestIndexKeys(' +
-            explainOutput +
-            ');',
+          commands: 'dbkInx.suggestIndexKeys(' + explainOutput + ');',
         })
         .then((res) => {
           this.suggestionsGenerated = true;
