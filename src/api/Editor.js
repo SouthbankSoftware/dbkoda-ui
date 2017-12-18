@@ -346,13 +346,15 @@ export default class EditorApi {
   addDrillEditor(profile, options = {}) {
     const content = `/* Welcome to dbKoda Apache Drill integration
 // From here, you can use SQL to query your MongoDB collections
-// See http://bit.ly/dbKodadrill for an FAQ item on this topic.
+// See http://bit.ly/dbKodadrill2 for an FAQ item on this topic.
 //
 // Type "SHOW TABLES" to get a list of collections that can be queried.
 //
 // Try "SELECT * FROM tablename LIMIT 10" to see table data
 */
-SHOW TABLES`;
+
+SHOW TABLES
+`;
     const fileName = this.getUnsavedEditorInternalFileName(options.type);
 
     const editorId = uuidV1();
