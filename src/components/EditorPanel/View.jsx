@@ -217,30 +217,20 @@ class View extends React.Component {
                   });
                 })
                 .catch((err) => {
-                  console.error('execute error:', err);
+                  console.error(err);
                   runInAction(() => {
                     // Append this error to raw output:
-                    console.log(JSON.parse(err));
                     err = {
                       Name: err.name,
                       StatusCode: err.statusCode,
                       Message: err.error
                       };
 
-                    // @TODO -> Analyse Error for line number and highlight.
-                    const errorStringArray = err.Message.substring(err.Message.search(/From line [0-9]+/), 120).split(' ');
-                    const errStartLine = errorStringArray[2];
-                    const errStartCol = errorStringArray[4];
-                    console.log('Start: ', errStartLine, ':', errStartCol);
-                    const errEndLine = errorStringArray[7];
-                    const errEndCol = errorStringArray[9];
-                    console.log('End: ', errEndLine, ':', errEndCol);
-                    // @TODO -> Figure out which line it's actually on :(
-
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
                     this.props.store.outputs.get(editor.id).output = totalOutput;
+                    this.props.store.outputPanel.currentTab = editor.id;
                   });
 
                   runInAction(() => {
@@ -266,7 +256,7 @@ class View extends React.Component {
                   commands: currEditorValue.replace(/\t/g, '  '),
                 })
                 .catch((err) => {
-                  console.error('execute error:', err);
+                  console.error(err);
                   runInAction(() => {
                     // Append this error to raw output:
                     err = {
@@ -275,18 +265,11 @@ class View extends React.Component {
                       Message: err.error
                       };
 
-                    // @TODO -> Analyse Error for line number and highlight.
-                    const errStartLine = err.Message.substring(err.Message.search(/From line [0-9]+/), 60).split(' ')[2].substring(0, -1);
-                    const errStartCol = err.Message.substring(err.Message.search(/From line [0-9]+\, column [0-9]+/), 60).split(' ')[4];
-                    console.log('Start: ', errStartLine, ':', errStartCol);
-                    const errEndLine = err.Message.substring(err.Message.search(/to line [0-9]+/), 60).split(' ')[2].substring(0, -1);
-                    const errEndCol = err.Message.substring(err.Message.search(/to line [0-9]+\, column [0-9]+/), 60).split(' ')[4];
-                    console.log('End: ', errEndLine, ':', errEndCol);
-
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
                     this.props.store.outputs.get(editor.id).output = totalOutput;
+                    this.props.store.outputPanel.currentTab = editor.id;
                   });
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
@@ -332,6 +315,7 @@ class View extends React.Component {
             const shell = editor.shellId;
             const profileId = editor.profileId;
             const cm = this.editor.getCodeMirror(); // eslint-disable-line
+            const line = cm.getCursor().line;
             let content = cm.getSelection();
             if (cm.getSelection().length > 0) {
               Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
@@ -373,18 +357,29 @@ class View extends React.Component {
                       Message: err.error
                     };
 
-                    // @TODO -> Analyse Error for line number and highlight.
-                    const errStartLine = err.Message.substring(err.Message.search(/From line [0-9]+/), 60).split(' ')[2].substring(0, -1);
-                    const errStartCol = err.Message.substring(err.Message.search(/From line [0-9]+\, column [0-9]+/), 60).split(' ')[4];
-                    console.log('Start: ', errStartLine, ':', errStartCol);
-                    const errEndLine = err.Message.substring(err.Message.search(/to line [0-9]+/), 60).split(' ')[2].substring(0, -1);
-                    const errEndCol = err.Message.substring(err.Message.search(/to line [0-9]+\, column [0-9]+/), 60).split(' ')[4];
-                    console.log('End: ', errEndLine, ':', errEndCol);
+                    // Analyse Error for line number and highlight -> Only works for simple errors.
+                    // @TODO -> if drill proves popular, we should improve error handling here.
+                    try {
+                      if (err.Message.match(/From line [0-9]+/)) {
+                        const errorStringArray = err.Message.substring(err.Message.search(/From line [0-9]+/), 120).split(' ');
+                        const errStartLine = parseInt(errorStringArray[2], 10);
+                        const errStartCol = parseInt(errorStringArray[4], 10);
+                        const errEndLine = parseInt(errorStringArray[7], 10);
+                        const errEndCol = parseInt(errorStringArray[9], 10);
+                        // Set cm cursor:
+                        cm.setSelection({line: errStartLine + line - 1, ch: errStartCol - 1 }, { line: errEndLine + line - 1, ch: errEndCol }, {scroll: true});
+                      } else {
+                        cm.setSelection({line, ch: 0 });
+                      }
+                    } catch (err) {
+                      console.error(err);
+                    }
 
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
                     this.props.store.outputs.get(editor.id).output = totalOutput;
+                    this.props.store.outputPanel.currentTab = editor.id;
                   });
 
                   runInAction(() => {
