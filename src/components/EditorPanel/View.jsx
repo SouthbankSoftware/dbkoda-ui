@@ -220,17 +220,22 @@ class View extends React.Component {
                   console.error('execute error:', err);
                   runInAction(() => {
                     // Append this error to raw output:
-                    console.log(err);
-
+                    console.log(JSON.parse(err));
                     err = {
                       Name: err.name,
                       StatusCode: err.statusCode,
                       Message: err.error
                       };
 
-                    // Analyse Error for line number and highlight.
-                    const errPosition = err.Message.search(/From line [0-9]+, column [0-9]+ to line [0-9]+, column [0-9]+/);
-                    console.log(errPosition);
+                    // @TODO -> Analyse Error for line number and highlight.
+                    const errorStringArray = err.Message.substring(err.Message.search(/From line [0-9]+/), 120).split(' ');
+                    const errStartLine = errorStringArray[2];
+                    const errStartCol = errorStringArray[4];
+                    console.log('Start: ', errStartLine, ':', errStartCol);
+                    const errEndLine = errorStringArray[7];
+                    const errEndCol = errorStringArray[9];
+                    console.log('End: ', errEndLine, ':', errEndCol);
+                    // @TODO -> Figure out which line it's actually on :(
 
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
@@ -269,7 +274,16 @@ class View extends React.Component {
                       StatusCode: err.statusCode,
                       Message: err.error
                       };
-                      const strOutput = JSON.stringify(err, null, 2);
+
+                    // @TODO -> Analyse Error for line number and highlight.
+                    const errStartLine = err.Message.substring(err.Message.search(/From line [0-9]+/), 60).split(' ')[2].substring(0, -1);
+                    const errStartCol = err.Message.substring(err.Message.search(/From line [0-9]+\, column [0-9]+/), 60).split(' ')[4];
+                    console.log('Start: ', errStartLine, ':', errStartCol);
+                    const errEndLine = err.Message.substring(err.Message.search(/to line [0-9]+/), 60).split(' ')[2].substring(0, -1);
+                    const errEndCol = err.Message.substring(err.Message.search(/to line [0-9]+\, column [0-9]+/), 60).split(' ')[4];
+                    console.log('End: ', errEndLine, ':', errEndCol);
+
+                    const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;
                     this.props.store.outputs.get(editor.id).output = totalOutput;
@@ -358,6 +372,15 @@ class View extends React.Component {
                       StatusCode: err.statusCode,
                       Message: err.error
                     };
+
+                    // @TODO -> Analyse Error for line number and highlight.
+                    const errStartLine = err.Message.substring(err.Message.search(/From line [0-9]+/), 60).split(' ')[2].substring(0, -1);
+                    const errStartCol = err.Message.substring(err.Message.search(/From line [0-9]+\, column [0-9]+/), 60).split(' ')[4];
+                    console.log('Start: ', errStartLine, ':', errStartCol);
+                    const errEndLine = err.Message.substring(err.Message.search(/to line [0-9]+/), 60).split(' ')[2].substring(0, -1);
+                    const errEndCol = err.Message.substring(err.Message.search(/to line [0-9]+\, column [0-9]+/), 60).split(' ')[4];
+                    console.log('End: ', errEndLine, ':', errEndCol);
+
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
                     const totalOutput = this.props.store.outputs.get(editor.id).output + editorObject.doc.lineSep + 'ERROR:' + editorObject.doc.lineSep + strOutput;

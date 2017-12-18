@@ -54,7 +54,7 @@ export default class EventReaction extends React.Component {
     const userPreferencesObserver = observe(config.settings, change => this.observeUserPreferences(change, typeEnum, fragmentEnum));
 
     if (this.props.config.settings.telemtryEnabled) {
-      EventLogging.recordEvent(typeEnum.EVENT.APP.OPEN, fragmentEnum.PROFILES, 'dbKoda App started.', change);
+      EventLogging.recordEvent(typeEnum.EVENT.APP.OPEN, fragmentEnum.PROFILES, 'dbKoda App started.', '');
     }
   }
 
