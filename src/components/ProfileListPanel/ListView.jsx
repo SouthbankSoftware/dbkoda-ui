@@ -520,24 +520,24 @@ export default class ListView extends React.Component {
     }
   }
 
-  @action.bound
-  openPerformanceView() {
-    const { targetProfile } = this.state;
-
-    if (targetProfile) {
-      this._syncSshCredential(targetProfile, targetProfile);
-    }
-    console.log('show performance for ', targetProfile);
-    const srv = featherClient().service('/performance');
-    srv
-      .create({ id: targetProfile.id })
-      .then((res) => {
-        console.log('remote execution res ', res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
+  // @action.bound
+  // openPerformanceView() {
+  //   const { targetProfile } = this.state;
+  //
+  //   if (targetProfile) {
+  //     this._syncSshCredential(targetProfile, targetProfile);
+  //   }
+  //   console.log('show performance for ', targetProfile);
+  //   const srv = featherClient().service('/performance');
+  //   srv
+  //     .create({ id: targetProfile.id })
+  //     .then((res) => {
+  //       console.log('remote execution res ', res);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }
 
   @action.bound
   closeSshConnectionAlert() {
@@ -661,17 +661,17 @@ export default class ListView extends React.Component {
           />
         </div>,
       );
-      terminalOperations.push(
-        <div key={terminalOperations.length} className="menuItemWrapper">
-          <MenuItem
-            className="profileListContextMenu newSshTerminal"
-            onClick={this.openPerformanceView}
-            text={globalString('profile/menu/performance')}
-            intent={Intent.NONE}
-            iconName="pt-icon-new-text-box"
-          />
-        </div>,
-      );
+      // terminalOperations.push(
+      //   <div key={terminalOperations.length} className="menuItemWrapper">
+      //     <MenuItem
+      //       className="profileListContextMenu newSshTerminal"
+      //       onClick={this.openPerformanceView}
+      //       text={globalString('profile/menu/performance')}
+      //       intent={Intent.NONE}
+      //       iconName="pt-icon-new-text-box"
+      //     />
+      //   </div>,
+      // );
     }
 
     terminalOperations.push(
