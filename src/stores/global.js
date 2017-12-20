@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-20T16:22:56+11:00
+ * @Last modified time: 2017-12-20T16:30:17+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -310,17 +310,6 @@ export default class Store {
   }
 
   dump() {
-    // // TODO: Remove this after the api has been implemented completely from here
-    // const dumpStore = {};
-    // _.assign(dumpStore, this);
-    // if (dumpStore.api) {
-    //   delete dumpStore.api;
-    // }
-    // if (dumpStore.profileStore) {
-    //   delete dumpStore.profileStore;
-    // }
-    // // Remove till here
-    // // return dump(this, { serializer });
     return dump(this, { serializer });
   }
 
