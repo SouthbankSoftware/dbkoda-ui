@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-12T22:47:31+11:00
+ * @Last modified time: 2017-12-20T10:44:44+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -54,6 +54,10 @@ if (IS_ELECTRON) {
   global.PATHS = remote.getGlobal('PATHS');
   global.GetRandomPort = remote.getGlobal('getRandomPort');
   stateStorePath = global.PATHS.stateStore;
+
+  global.UAT = remote.getGlobal('UAT');
+} else {
+  global.UAT = false;
 }
 
 global.EOL = global.IS_ELECTRON

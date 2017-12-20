@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-23T12:40:27+11:00
+ * @Last modified time: 2017-12-20T10:49:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -137,7 +137,7 @@ window.addEventListener('beforeunload', (event) => {
     const { dialog } = remote;
     const currentWindow = remote.getCurrentWindow();
 
-    if (!remote.getGlobal('UAT') && store.hasUnsavedEditorTabs()) {
+    if (!UAT && store.hasUnsavedEditorTabs()) {
       const response = dialog.showMessageBox(currentWindow, {
         type: 'question',
         buttons: ['Yes', 'No'],
