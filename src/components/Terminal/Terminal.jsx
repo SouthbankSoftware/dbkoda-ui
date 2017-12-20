@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-03T14:58:52+11:00
+ * @Last modified time: 2017-12-21T10:16:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -116,6 +116,12 @@ export default class Terminal extends React.PureComponent<Props> {
       ),
     );
 
+    if (UAT) {
+      const { terminal } = this.props.store;
+
+      terminal.reactComponent = this;
+    }
+
     const { id } = this.props;
 
     Broker.on(EventType.TERMINAL_ERROR(id), this._onError);
@@ -154,6 +160,12 @@ export default class Terminal extends React.PureComponent<Props> {
 
   componentWillUnmount() {
     _.forEach(this.reactions, r => r());
+
+    if (UAT) {
+      const { terminal } = this.props.store;
+
+      terminal.reactComponent = null;
+    }
 
     const { id } = this.props;
 
