@@ -37,6 +37,7 @@ import _ from 'lodash';
 import { ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';
+import sqlFormatter from 'sql-formatter';
 import React from 'react';
 import CodeMirrorEditor from '#/common/CodeMirror';
 import CodeMirror from 'codemirror';
@@ -72,7 +73,6 @@ import 'codemirror/theme/material.css';
 import { DragItemTypes, EditorTypes } from '#/common/Constants.js';
 import { NewToaster } from '#/common/Toaster';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
-import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import { TranslatorPanel } from '../Translator';
@@ -882,6 +882,15 @@ class View extends React.Component {
     }
   }
 
+    /**
+   * Beautify SQL Code.
+   * @param {string code} - input code.
+   * @return {string} - beautified code.
+   */
+  _prettifySQL(code) {
+    return sqlFormatter.format(code);
+  }
+
   /**
    * Prettify provided code
    *
@@ -907,7 +916,7 @@ class View extends React.Component {
     code = this._prettify.preprocess(code);
 
     // feed into prettier
-    code = Prettier.format(code, {});
+    code = Prettier.format(code, {singleQuote: true});
 
     // postprocess result
     if (!this._prettify.postprocess) {
@@ -942,20 +951,20 @@ class View extends React.Component {
    */
   prettifyAll() {
     try {
-      this.setEditorValue(this._prettify(this.getEditorValue()));
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      if (editor.type === 'drill') {
+        this.setEditorValue(this._prettifySQL(this.getEditorValue()));
+      } else {
+        this.setEditorValue(this._prettify(this.getEditorValue()));
+      }
     } catch (err) {
       NewToaster.show({
         message: 'Error: ' + err.message,
         className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          'Format All failed with error: ' + err,
-        );
-      }
     }
   }
 
@@ -965,20 +974,20 @@ class View extends React.Component {
   prettifySelection() {
     const cm = this.editor.getCodeMirror();
     try {
-      cm.replaceSelection(this._prettify(cm.getSelection()).trim());
+        const editor = this.props.store.editors.get(
+          this.props.store.editorPanel.activeEditorId,
+        );
+        if (editor.type === 'drill') {
+          cm.replaceSelection(this._prettifySQL(cm.getSelection()).trim());
+        } else {
+          cm.replaceSelection(this._prettify(cm.getSelection()).trim());
+        }
     } catch (err) {
       NewToaster.show({
         message: 'Error: ' + err.message,
         className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          'Format Selection failed with error: ' + err,
-        );
-      }
     }
   }
 
