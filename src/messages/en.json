@@ -108,7 +108,7 @@
         "suggestIndex": "Index Advisor",
         "suggestIndexDescription":
           "// Here are some commands that may improve your query.",
-        "copySuggestedIndex": "Add Query",
+        "copySuggestedIndex": "Add Index",
         "executeAgain": "UI has fallen out of sync, please explain query again."
       },
       "step": {
@@ -118,7 +118,7 @@
         "collScanAll":
           "All documents in the collection where scanned. No filter condition was specified",
         "collScanFilter":
-          "Documents were scanned looking for these criteria: {0}",
+          "Documents were scanned looking for these criteria: {0}. Consider creating an index on these attributes.",
         "ixscan": "Index {0} was used to find matching values for {1}",
         "sort":
           "Documents were sorted on : {0}. Consider creating index on ${0} to support the sort",
@@ -136,7 +136,7 @@
           "Selected one of multiple possible plans based on $or condition",
         "eof": "Nothing was found: maybe collection does not exist?",
         "andSorted": "Output from the previous steps was sort-merged",
-        "sortMerge": "Output from multiple sorts was merged",
+        "sortMerge": "Output from multiple index lookups were merged",
         "project": "A subset of columns were projected",
         "or": "Combine document from previous {0} stages"
       },

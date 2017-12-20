@@ -351,6 +351,8 @@ export default class EditorApi {
 // Type "SHOW TABLES" to get a list of collections that can be queried.
 //
 // Try "SELECT * FROM tablename LIMIT 10" to see table data
+// Try "SELECT FLATTEN(array) FROM tablename LIMIT 10" to unwind embedded arrays
+// 
 */
 
 SHOW TABLES
