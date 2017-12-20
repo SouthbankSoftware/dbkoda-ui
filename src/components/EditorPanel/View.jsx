@@ -794,7 +794,7 @@ class View extends React.Component {
         content = cm.getLine(currentLine);
         // If a full command isn't detected, parse up and down until white space.
       let linesAbove = '';
-      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi)) {
+      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gmi)) {
         console.log(cm.getLine(currentLine - 1));
         linesAbove = cm.getLine(currentLine - 1) + linesAbove;
         currentLine -= 1;
@@ -802,7 +802,7 @@ class View extends React.Component {
       console.log(content);
       currentLine = cm.getCursor().line;
       let linesBelow = '';
-      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi)) {
+      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gmi)) {
         console.log(cm.getLine(currentLine + 1));
         linesBelow += cm.getLine(currentLine + 1);
         currentLine += 1;
