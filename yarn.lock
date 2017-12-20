@@ -3091,9 +3091,9 @@ download@^4.0.0, download@^4.1.2:
     vinyl-fs "^2.2.0"
     ware "^1.2.0"
 
-dumpenvy@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/dumpenvy/-/dumpenvy-1.1.0.tgz#ae54328a4b08a30b1a39e031c62bcad1d28a172a"
+dumpenvy@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/dumpenvy/-/dumpenvy-1.2.1.tgz#561f8fc18b2297d19c59f90c653da74ee6b3f8b8"
 
 duplexer2@0.0.2:
   version "0.0.2"

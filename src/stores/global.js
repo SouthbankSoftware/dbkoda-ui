@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-20T10:44:44+11:00
+ * @Last modified time: 2017-12-20T16:22:56+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,7 @@
 
 import _ from 'lodash';
 import { action, observable, when, runInAction } from 'mobx';
-import { dump, restore } from 'dumpenvy';
+import { dump, restore, nodump } from 'dumpenvy';
 import {
   serializer,
   deserializer,
@@ -65,8 +65,10 @@ global.EOL = global.IS_ELECTRON
   : process.platform === 'win32' ? '\r\n' : '\n';
 
 export default class Store {
-  api;
-  profileStore;
+  @nodump
+  api = null;
+  @nodump
+  profileStore = null;
   @observable locale = 'en';
   @observable version = '0.9.0-beta.1';
   @observable updateAvailable = false;
@@ -308,18 +310,18 @@ export default class Store {
   }
 
   dump() {
-    // TODO: Remove this after the api has been implemented completely from here
-    const dumpStore = {};
-    _.assign(dumpStore, this);
-    if (dumpStore.api) {
-      delete dumpStore.api;
-    }
-    if (dumpStore.profileStore) {
-      delete dumpStore.profileStore;
-    }
-    // Remove till here
-    // return dump(this, { serializer });
-    return dump(dumpStore, { serializer });
+    // // TODO: Remove this after the api has been implemented completely from here
+    // const dumpStore = {};
+    // _.assign(dumpStore, this);
+    // if (dumpStore.api) {
+    //   delete dumpStore.api;
+    // }
+    // if (dumpStore.profileStore) {
+    //   delete dumpStore.profileStore;
+    // }
+    // // Remove till here
+    // // return dump(this, { serializer });
+    return dump(this, { serializer });
   }
 
   openFile = (path, cb) => {
