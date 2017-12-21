@@ -115,6 +115,11 @@
       "icon": "pt-icon-delete"
     },
     {
+      "name": "RedundantDBIndex",
+      "text": "Drop Unnecessary Indexes",
+      "icon": "pt-icon-small-cross"
+    },
+    {
       "name": "EnableSharding",
       "text": "Enable Sharding",
       "icon": "pt-icon-split-columns"
