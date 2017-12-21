@@ -1,0 +1,8 @@
+//
+// These indexes can be safely dropped.  And index on {a:1,b:1} is uncessary if there is an index on {a:1,b:1,c:1}
+// 
+{{#each UnecessaryIndexes}}
+
+// {{{Reason}}}
+db.getSiblingDB("{{../Database}}").getCollection("{{../CollectionName}}").dropIndex("{{IndexName}}"); 
+ {{/each}}  
