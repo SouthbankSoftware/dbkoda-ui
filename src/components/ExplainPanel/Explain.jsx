@@ -220,6 +220,7 @@ export default class Explain extends React.Component {
           commands: 'dbkInx.suggestIndexesAndRedundants(' + explainOutput + ');'
         })
         .then((res) => {
+          console.log(JSON.parse(res));
           this.suggestionsGenerated = true;
           this.suggestionText = JSON.parse(res);
           let suggestionCode =
@@ -270,21 +271,6 @@ export default class Explain extends React.Component {
                   globalString('explain/panel/addIndexCommandsPrompt') +
                   '\n';
 
-                // Indexes to remove.
-                for (const key in this.suggestionText.newIndexes) {
-                  if (typeof this.suggestionText.newIndexes[key] === 'object') {
-                    suggestionCode +=
-                      'db.getSiblingDB("' +
-                      table +
-                      '").getCollection("' +
-                      collection +
-                      '").dropIndex(' +
-                      JSON.stringify(
-                        this.suggestionText.redundantIndexes[key].indexName
-                      ) +
-                      ');\n';
-                  }
-                }
                 // Indexes to add.
                 for (const key in this.suggestionText.newIndexes) {
                   if (typeof this.suggestionText.newIndexes[key] === 'object') {
@@ -295,6 +281,25 @@ export default class Explain extends React.Component {
                       collection +
                       '.createIndex(' +
                       JSON.stringify(this.suggestionText.newIndexes[key]) +
+                      ');\n';
+                  }
+                }
+
+                // Indexes to remove.
+                for (const key in this.suggestionText.redundantIndexes) {
+                  if (
+                    typeof this.suggestionText.redundantIndexes[key] ===
+                    'object'
+                  ) {
+                    suggestionCode +=
+                      'db.getSiblingDB("' +
+                      table +
+                      '").getCollection("' +
+                      collection +
+                      '").dropIndex(' +
+                      JSON.stringify(
+                        this.suggestionText.redundantIndexes[key].indexName
+                      ) +
                       ');\n';
                   }
                 }
