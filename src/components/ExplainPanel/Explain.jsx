@@ -49,7 +49,7 @@ export const parseOutput = (output) => {
   store: allStores.store,
   explainPanel: allStores.store.explainPanel,
   editors: allStores.store.editors,
-  outputPanel: allStores.store.outputPanel,
+  outputPanel: allStores.store.outputPanel
 }))
 @observer
 export default class Explain extends React.Component {
@@ -59,7 +59,7 @@ export default class Explain extends React.Component {
     this.state = {
       viewType: 0,
       suggestionsGenerated: false,
-      suggestionText: '',
+      suggestionText: ''
     };
   }
 
@@ -68,7 +68,7 @@ export default class Explain extends React.Component {
     if (editor) {
       Broker.on(
         EventType.EXPLAIN_OUTPUT_AVAILABLE,
-        this.explainOutputAvailable,
+        this.explainOutputAvailable
       );
     }
   }
@@ -84,7 +84,7 @@ export default class Explain extends React.Component {
     if (editor) {
       Broker.removeListener(
         EventType.EXPLAIN_OUTPUT_AVAILABLE,
-        this.explainOutputAvailable,
+        this.explainOutputAvailable
       );
     }
   }
@@ -115,7 +115,7 @@ export default class Explain extends React.Component {
         output: JSON.parse(output),
         type: this.explainType,
         command: this.explainCommand,
-        viewType: 0,
+        viewType: 0
       };
       if (
         explainOutputJson.output.stages &&
@@ -136,7 +136,7 @@ export default class Explain extends React.Component {
         explainOutputJson.output = converted;
       } else if (explainOutputJson.output.shards) {
         const shardsOutput = {
-          queryPlanner: { winningPlan: { stage: 'SHARD_MERGE', shards: [] } },
+          queryPlanner: { winningPlan: { stage: 'SHARD_MERGE', shards: [] } }
         };
         _.forOwn(explainOutputJson.output.shards, (value, key) => {
           if (value.stages && value.stages.length > 0) {
@@ -147,7 +147,7 @@ export default class Explain extends React.Component {
               ) {
                 const shardOutput = {
                   shardName: key,
-                  winningPlan: stageValue.queryPlanner.winningPlan,
+                  winningPlan: stageValue.queryPlanner.winningPlan
                 };
                 console.log('add to shard output ', shardOutput);
                 shardsOutput.queryPlanner.winningPlan.shards.push(shardOutput);
@@ -163,7 +163,7 @@ export default class Explain extends React.Component {
         explainOutputJson = {
           error: globalString('explain/parseError'),
           command: this.explainCommand,
-          output: parseOutput(output),
+          output: parseOutput(output)
         };
       }
       this.explainOutput = explainOutputJson;
@@ -173,15 +173,15 @@ export default class Explain extends React.Component {
       explainOutputJson = {
         error: globalString('explain/parseError'),
         command: this.explainCommand,
-        output: parseOutput(output),
+        output: parseOutput(output)
       };
     }
     this.props.editors.set(
       currentEditorId,
       observable({
         ...currentEditor,
-        explains: explainOutputJson,
-      }),
+        explains: explainOutputJson
+      })
     );
     Broker.emit(EventType.EXPLAIN_OUTPUT_PARSED, { id, shell });
   }
@@ -201,11 +201,11 @@ export default class Explain extends React.Component {
       NewToaster.show({
         message: globalString('explain/panel/executeAgain'),
         className: 'error',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     } else {
       const editor = this.props.editors.get(
-        this.props.store.editorPanel.activeEditorId,
+        this.props.store.editorPanel.activeEditorId
       );
       const profileId = editor.profileId;
       const shell = editor.shellId;
@@ -217,13 +217,13 @@ export default class Explain extends React.Component {
       service
         .update(profileId, {
           shellId: shell, // eslint-disable-line
-          commands: 'dbkInx.suggestIndexKeys(' + explainOutput + ');',
+          commands: 'dbkInx.suggestIndexesAndRedundants(' + explainOutput + ');'
         })
         .then((res) => {
           this.suggestionsGenerated = true;
           this.suggestionText = JSON.parse(res);
           let suggestionCode =
-            globalString('explain/panel/suggestIndexDescription') + '\n\n';
+            globalString('explain/panel/suggestIndexDescription') + '\n';
           // Iterate through each object in the result.
           if (typeof this.suggestionText === 'object') {
             const output = toJS(this.props.editor.explains.output);
@@ -233,21 +233,70 @@ export default class Explain extends React.Component {
             namespace = namespace.split('.');
             const table = namespace[0];
             const collection = namespace[1];
-            if (this.suggestionText.length <= 0) {
+            if (
+              this.suggestionText.newIndexes.length <= 0 &&
+              this.suggestionText.redundantIndexes.length <= 0
+            ) {
               console.log('No Suggestions Found');
               suggestionCode =
-                '// Looks good, no additional indexes are required to improve your query!';
+                globalString('explain/panel/noAdditionalIndexesRequired') +
+                '\n';
             } else {
-              for (const key in this.suggestionText) {
-                if (typeof this.suggestionText[key] === 'object') {
-                  suggestionCode +=
-                    'db.getSiblingDB("' +
-                    table +
-                    '").' +
-                    collection +
-                    '.createIndex(' +
-                    JSON.stringify(this.suggestionText[key]) +
-                    ');\n';
+              if (this.suggestionText.redundantIndexes.length > 0) {
+                for (const key in this.suggestionText.redundantIndexes) {
+                  if (
+                    typeof this.suggestionText.redundantIndexes[key] ===
+                    'object'
+                  ) {
+                    suggestionCode +=
+                      '// The index ' +
+                      JSON.stringify(
+                        this.suggestionText.redundantIndexes[key].indexName
+                      ) +
+                      ' on \n' +
+                      JSON.stringify(
+                        this.suggestionText.redundantIndexes[key].key
+                      ) +
+                      '\n // can be replaced by a new index on \n' +
+                      JSON.stringify(
+                        this.suggestionText.redundantIndexes[key].because
+                      );
+                  }
+                }
+              }
+              if (this.suggestionText.newIndexes.length > 0) {
+                suggestionCode +=
+                  '\n\n' +
+                  globalString('explain/panel/addIndexCommandsPrompt') +
+                  '\n';
+
+                // Indexes to remove.
+                for (const key in this.suggestionText.newIndexes) {
+                  if (typeof this.suggestionText.newIndexes[key] === 'object') {
+                    suggestionCode +=
+                      'db.getSiblingDB("' +
+                      table +
+                      '").getCollection("' +
+                      collection +
+                      '").dropIndex(' +
+                      JSON.stringify(
+                        this.suggestionText.redundantIndexes[key].indexName
+                      ) +
+                      ');\n';
+                  }
+                }
+                // Indexes to add.
+                for (const key in this.suggestionText.newIndexes) {
+                  if (typeof this.suggestionText.newIndexes[key] === 'object') {
+                    suggestionCode +=
+                      'db.getSiblingDB("' +
+                      table +
+                      '").' +
+                      collection +
+                      '.createIndex(' +
+                      JSON.stringify(this.suggestionText.newIndexes[key]) +
+                      ');\n';
+                  }
                 }
               }
             }
@@ -267,9 +316,7 @@ export default class Explain extends React.Component {
   @action.bound
   copySuggestion() {
     const cm = this.props.editor.doc.cm;
-    cm.setValue(
-      cm.getValue() + '\n\n// Index Suggestions:\n' + this.suggestionText,
-    );
+    cm.setValue(cm.getValue() + '\n' + this.suggestionText);
     cm.scrollIntoView({ line: cm.lineCount() - 1, ch: 0 });
   }
 

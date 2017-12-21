@@ -189,7 +189,7 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, '').split(';');
+              let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';');
               queries = queries.filter((query) => {
                 return (query.trim().length > 0);
               });
@@ -197,7 +197,7 @@ class View extends React.Component {
                 return query.trim();
               });
               queries = queries.map((query) => {
-                return query.replace(/ *(\r\n|\r|\n)/gm, '');
+                return query.replace(/ *(\r\n|\r|\n)/gm, ' ');
               });
               console.log(queries);
               service
@@ -330,10 +330,10 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log(content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, '').split(';'));
+              console.log(content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';'));
               service
                 .update(shell, {
-                  queries: content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, '').split(';'),
+                  queries: content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';'),
                   schema: editor.db
                 })
                 .then((res) => {

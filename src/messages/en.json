@@ -107,8 +107,12 @@
         "explainView": "Explain",
         "suggestIndex": "Index Advisor",
         "suggestIndexDescription":
-          "// Here are some commands that may improve your query.",
-        "copySuggestedIndex": "Add Index",
+          "// INDEX ADVICE:\n// Some of these suggestions may improve your query performance.\n",
+        "noAdditionalIndexesRequired":
+          "// Looks good, no additional indexes are required to improve your query!",
+        "addIndexCommandsPrompt":
+          "// Use these commands to implement the above indexes.",
+        "copySuggestedIndex": "Add Code Snippet",
         "executeAgain": "UI has fallen out of sync, please explain query again."
       },
       "step": {
