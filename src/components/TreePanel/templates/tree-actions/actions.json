@@ -197,6 +197,11 @@
       "icon": "pt-icon-delete"
     },
     {
+      "name": "RedundantIndex",
+      "text": "Drop Unnecessary Indexes",
+      "icon": "pt-icon-small-cross"
+    },
+    {
       "type": "divider",
       "name": "CollectionDivider2"
     },
