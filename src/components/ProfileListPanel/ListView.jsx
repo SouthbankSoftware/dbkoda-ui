@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-13T11:23:13+11:00
+ * @Last modified time: 2017-12-22T12:41:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -235,7 +235,7 @@ export default class ListView extends React.Component {
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
         initialMsg: res.output ? res.output.join('\r') : '',
-        mongoType: res.mongoType
+        mongoType: res.mongoType,
       };
       console.debug('profile:', profile);
       this._syncSshCredential(data, profile);
@@ -627,15 +627,17 @@ export default class ListView extends React.Component {
               iconName="pt-icon-lock"
             />
           </div>
-          <div className="menuItemWrapper">
-            <MenuItem
-              className="profileListContextMenu showPerformancePanel"
-              onClick={() => this.props.api.openPerformancePanel(profile.id)}
-              text={globalString('profile/menu/showPerformancePanel')}
-              intent={Intent.NONE}
-              iconName="pt-icon-heat-grid"
-            />
-          </div>
+          {IS_DEVELOPMENT ? (
+            <div className="menuItemWrapper">
+              <MenuItem
+                className="profileListContextMenu showPerformancePanel"
+                onClick={() => this.props.api.openPerformancePanel(profile.id)}
+                text={globalString('profile/menu/showPerformancePanel')}
+                intent={Intent.NONE}
+                iconName="pt-icon-heat-grid"
+              />
+            </div>
+          ) : null}
           <div className="menuItemWrapper">
             <MenuItem
               className="profileListContextMenu newWindow"

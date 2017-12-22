@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-20T16:30:17+11:00
+ * @Last modified time: 2017-12-22T12:40:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -44,6 +44,8 @@ let ipcRenderer;
 let stateStorePath;
 
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
+global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
+global.IS_DEVELOPMENT = !IS_PRODUCTION;
 if (IS_ELECTRON) {
   const electron = window.require('electron');
 
