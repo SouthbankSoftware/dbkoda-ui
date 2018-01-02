@@ -534,7 +534,6 @@ export default class TreeView extends React.Component {
         this.props.config.settings.drillCmd == null ||
         this.props.config.settings.drillCmd == ''
       ) {
-
         const downloadDrill = () => {
           this.setState({
             showDrillNotFoundDialog: false,
@@ -573,7 +572,7 @@ export default class TreeView extends React.Component {
           },
           (buttonIndex) => {
             if (buttonIndex === 0) {
-              
+
             } else {
               reject(false); // eslint-disable-line prefer-promise-reject-errors
             }
