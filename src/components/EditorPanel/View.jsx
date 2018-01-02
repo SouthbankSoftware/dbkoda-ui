@@ -795,21 +795,21 @@ class View extends React.Component {
         // If a full command isn't detected, parse up and down until white space.
       let linesAbove = '';
       while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gmi)) {
-        console.log(cm.getLine(currentLine - 1));
         linesAbove = cm.getLine(currentLine - 1) + linesAbove;
         currentLine -= 1;
       }
-      console.log(content);
       currentLine = cm.getCursor().line;
       let linesBelow = '';
-      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gmi)) {
-        console.log(cm.getLine(currentLine + 1));
+
+      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
         linesBelow += cm.getLine(currentLine + 1);
         currentLine += 1;
       }
+      if(cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
+        linesBelow += cm.getLine(currentLine + 1);
+      }
 
       content = linesAbove + content + linesBelow;
-      console.log(content);
       }
       content = insertExplainOnCommand(content, explainParam);
       editor.executing = true;
@@ -818,7 +818,6 @@ class View extends React.Component {
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');
       const saveExplainCommand = 'var explain_' + editor.id.replace(/\-/g, '_') + ' = ' + filteredContent + ';';
-      console.log(saveExplainCommand);
       service.timeout = 300000;
       this.props.store.editorToolbar.isActiveExecuting = true;
       service
