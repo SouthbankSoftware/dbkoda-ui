@@ -764,7 +764,9 @@ export default class ListView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isCloseWarningActive}
         >
-          <p>{globalString('profile/closeAlert/prompt')}</p>
+          <div className="dialogContent">
+            <p>{globalString('profile/closeAlert/prompt')}</p>
+          </div>
           <div className="dialogButtons">
             <AnchorButton
               className="submitButton"
@@ -788,7 +790,9 @@ export default class ListView extends React.Component {
           intent={Intent.PRIMARY}
           isOpen={this.state.isRemoveWarningActive}
         >
-          <p>{globalString('profile/removeAlert/prompt')}</p>
+          <div className="dialogContent">
+            <p>{globalString('profile/removeAlert/prompt')}</p>
+          </div>
           <div className="dialogButtons">
             <AnchorButton
               className="submitButton"

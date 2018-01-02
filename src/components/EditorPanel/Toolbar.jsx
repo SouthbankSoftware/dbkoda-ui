@@ -600,7 +600,9 @@ export default class Toolbar extends React.Component {
         intent={Intent.PRIMARY}
         isOpen={this.state.showLoadSQLWarning}
       >
-        <p> {globalString('drill/loadWarning/warning')} </p>
+        <div className="dialogContent">
+          <p> {globalString('drill/loadWarning/warning')} </p>
+        </div>
         <div className="dialogButtons">
           <AnchorButton
             className="continueButton"

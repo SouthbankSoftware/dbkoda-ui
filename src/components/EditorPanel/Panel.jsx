@@ -550,9 +550,16 @@ export default class Panel extends React.Component {
     };
 
     return (
-      <Dialog className="pt-dark savingDialog" intent={Intent.PRIMARY} isOpen>
-        <h4> {globalString('editor/savingDialog/title', this.getEditorTitle(currentEditor))} </h4>
-        <p> {globalString('editor/savingDialog/message')} </p>
+      <Dialog
+        className="pt-dark savingDialog"
+        intent={Intent.PRIMARY}
+        isOpen
+        title={globalString('editor/savingDialog/title', this.getEditorTitle(currentEditor))}
+        onClose={onSavingDialogCancelButtonClicked}
+        >
+        <div className="dialogContent">
+          <p> {globalString('editor/savingDialog/message')} </p>
+        </div>
         <div className="dialogButtons">
           <AnchorButton
             className="saveButton"
