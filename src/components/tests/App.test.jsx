@@ -40,7 +40,7 @@ describe('App', () => {
   beforeAll(() => {
     useStrict(true);
     globalizeInit();
-    app = shallow(<App.wrappedComponent layout={layout} />);
+    app = shallow(<App.wrappedComponent store={{}} layout={layout} />);
   });
 
   test('has 2 split panels', () => {
