@@ -1976,6 +1976,10 @@ clone@^1.0.0, clone@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/clone/-/clone-1.0.3.tgz#298d7e2231660f40c003c2ed3140decf3f53085f"
 
+cm-show-invisibles@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/cm-show-invisibles/-/cm-show-invisibles-2.0.2.tgz#017e9165ee2fd40b33446718aff97da55d7aeef4"
+
 co@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/co/-/co-3.1.0.tgz#4ea54ea5a08938153185e15210c68d9092bc1b78"

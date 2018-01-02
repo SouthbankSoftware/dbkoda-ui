@@ -66,6 +66,7 @@ import 'codemirror/addon/search/matchesonscrollbar.js';
 import 'codemirror/addon/scroll/annotatescrollbar.js';
 import 'codemirror/keymap/sublime.js';
 import 'codemirror-formatting';
+import 'cm-show-invisibles';
 import '#/common/MongoScript.js';
 
 import { DropTarget } from 'react-dnd';
@@ -131,6 +132,7 @@ class View extends React.Component {
     this.doc = this.editorObject.doc;
     this.cmOptions = {
       value: this.doc,
+      showInvisibles: true,
       theme: 'material',
       lineNumbers: 'true',
       lineSeparator: this.doc.lineSep,
