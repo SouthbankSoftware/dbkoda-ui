@@ -805,7 +805,7 @@ class View extends React.Component {
         linesBelow += cm.getLine(currentLine + 1);
         currentLine += 1;
       }
-      if (cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
+      if (cm.getLine(currentLine + 1) && cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
         linesBelow += cm.getLine(currentLine + 1);
       }
 
