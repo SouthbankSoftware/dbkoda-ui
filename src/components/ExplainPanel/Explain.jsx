@@ -254,11 +254,11 @@ export default class Explain extends React.Component {
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].indexName
                       ) +
-                      ' on \n' +
+                      ' on \n//' +
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].key
                       ) +
-                      '\n // can be replaced by a new index on \n' +
+                      '\n // can be replaced by a new index on \n//' +
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].because
                       );
