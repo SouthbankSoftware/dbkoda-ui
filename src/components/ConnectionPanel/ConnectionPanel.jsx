@@ -45,7 +45,7 @@ const ConnectionPanel = ({
   profiles,
   profileList,
   setDrawerChild,
-  settings,
+  settings
 }) => {
   const selectedProfile = profileList.selectedProfile;
   let edit = false;
@@ -67,7 +67,7 @@ const ConnectionPanel = ({
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: globalString('connection/existingAlias'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
         validate = false;
       }
@@ -92,7 +92,7 @@ const ConnectionPanel = ({
           id: res.id,
           shellId: res.shellId,
           output: res.output.join('\n'),
-          mongoType: res.mongoType,
+          mongoType: res.mongoType
         });
       }
       position = Position.RIGHT_TOP;
@@ -127,7 +127,7 @@ const ConnectionPanel = ({
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
-        mongoType: res.mongoType,
+        mongoType: res.mongoType
       };
       console.debug('profile:', profile);
       if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
@@ -146,7 +146,7 @@ const ConnectionPanel = ({
     DBKodaToaster(position).show({
       message,
       className: 'success',
-      iconName: 'pt-icon-thumbs-up',
+      iconName: 'pt-icon-thumbs-up'
     });
   });
 
@@ -155,7 +155,7 @@ const ConnectionPanel = ({
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.FAILED,
         EventLogging.getFragmentEnum().PROFILES,
-        globalString('connection/createProfileError'),
+        globalString('connection/createProfileError')
       );
     }
     profileList.creatingNewProfile = false;
@@ -230,11 +230,13 @@ const ConnectionPanel = ({
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: (
             <span
-              dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }}
+              dangerouslySetInnerHTML={{
+                __html: 'Error: ' + err.message.substring(0, 256) + '...'
+              }}
             />
           ), // eslint-disable-line react/no-danger
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
       });
   });
@@ -278,5 +280,5 @@ export default inject(allStores => ({
   profiles: allStores.profileStore.profiles,
   profileList: allStores.store.profileList,
   setDrawerChild: allStores.store.setDrawerChild,
-  settings: allStores.config.settings,
+  settings: allStores.config.settings
 }))(observer(ConnectionPanel));

@@ -389,6 +389,8 @@ $contentColor: white;
   .suggest-index-panel {
     flex: 1 1 auto;
     order: 2;
+    padding-top: 10px;
+    border-top: 1px solid $navbarSecondaryBackground;
     .suggest-index-panel-header {
       display: flex;
       flex-direction: row;

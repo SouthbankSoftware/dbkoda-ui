@@ -296,7 +296,9 @@ export default class Toolbar extends React.Component {
             intent={Intent.PRIMARY}
             isOpen={this.state.closeConnectionAlert}
           >
-            <p>{globalString('profile/closeAlert/prompt')}</p>
+            <div className="dialogContent">
+              <p>{globalString('profile/closeAlert/prompt')}</p>
+            </div>
             <div className="dialogButtons">
               <AnchorButton
                 className="submitButton"
@@ -320,7 +322,9 @@ export default class Toolbar extends React.Component {
             intent={Intent.PRIMARY}
             isOpen={this.state.removeConnectionAlert}
           >
-            <p>{globalString('profile/removeAlert/prompt')}</p>
+            <div className="dialogContent">
+              <p>{globalString('profile/removeAlert/prompt')}</p>
+            </div>
             <div className="dialogButtons">
               <AnchorButton
                 className="submitButton"

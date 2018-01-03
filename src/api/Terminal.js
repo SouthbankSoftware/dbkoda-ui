@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-03T16:12:26+11:00
+ * @Last modified time: 2017-12-21T10:17:26+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -60,6 +60,7 @@ export type TerminalState = {
   state: ComponentState,
   errorLevel: ?TerminalErrorLevel,
   error: ?string,
+  reactComponent?: *, // only for UAT
 };
 
 export type SshProfile = {

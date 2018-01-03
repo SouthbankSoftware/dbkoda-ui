@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-12T22:47:31+11:00
+ * @Last modified time: 2017-12-22T12:40:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,7 @@
 
 import _ from 'lodash';
 import { action, observable, when, runInAction } from 'mobx';
-import { dump, restore } from 'dumpenvy';
+import { dump, restore, nodump } from 'dumpenvy';
 import {
   serializer,
   deserializer,
@@ -44,6 +44,8 @@ let ipcRenderer;
 let stateStorePath;
 
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
+global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
+global.IS_DEVELOPMENT = !IS_PRODUCTION;
 if (IS_ELECTRON) {
   const electron = window.require('electron');
 
@@ -54,6 +56,10 @@ if (IS_ELECTRON) {
   global.PATHS = remote.getGlobal('PATHS');
   global.GetRandomPort = remote.getGlobal('getRandomPort');
   stateStorePath = global.PATHS.stateStore;
+
+  global.UAT = remote.getGlobal('UAT');
+} else {
+  global.UAT = false;
 }
 
 global.EOL = global.IS_ELECTRON
@@ -61,8 +67,10 @@ global.EOL = global.IS_ELECTRON
   : process.platform === 'win32' ? '\r\n' : '\n';
 
 export default class Store {
-  api;
-  profileStore;
+  @nodump
+  api = null;
+  @nodump
+  profileStore = null;
   @observable locale = 'en';
   @observable version = '0.9.0-beta.1';
   @observable updateAvailable = false;
@@ -304,18 +312,7 @@ export default class Store {
   }
 
   dump() {
-    // TODO: Remove this after the api has been implemented completely from here
-    const dumpStore = {};
-    _.assign(dumpStore, this);
-    if (dumpStore.api) {
-      delete dumpStore.api;
-    }
-    if (dumpStore.profileStore) {
-      delete dumpStore.profileStore;
-    }
-    // Remove till here
-    // return dump(this, { serializer });
-    return dump(dumpStore, { serializer });
+    return dump(this, { serializer });
   }
 
   openFile = (path, cb) => {

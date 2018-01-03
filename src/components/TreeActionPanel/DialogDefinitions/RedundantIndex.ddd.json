@@ -1,0 +1,56 @@
+{
+  "Title": "Drop Unecessary Indexes",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_DropUnecessaryPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
+    ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required"
+    },
+    {
+      "name": "CollectionName",
+      "label": "Collection Name",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required",
+      "lookup": "dbkoda_listcollections",
+      "lookup_arguments": [
+        {
+          "name": "db",
+          "value": "treeNode.parentDB"
+        }
+      ]
+    },
+    {
+      "name": "UnecessaryIndexes",
+      "type": "Table",
+      "columns": [
+        {
+          "name": "IndexName",
+          "label": "Index",
+          "readOnly": true,
+          "tooltip": "Name of uncessary index",
+          "type": "Text"},
+        {
+          "name": "Reason",
+          "Label": "Reason",
+          "type": "Text"
+        }
+      ]
+    }
+  ]
+}

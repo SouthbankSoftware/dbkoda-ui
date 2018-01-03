@@ -37,6 +37,7 @@ import _ from 'lodash';
 import { ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';
+import sqlFormatter from 'sql-formatter';
 import React from 'react';
 import CodeMirrorEditor from '#/common/CodeMirror';
 import CodeMirror from 'codemirror';
@@ -72,7 +73,6 @@ import 'codemirror/theme/material.css';
 import { DragItemTypes, EditorTypes } from '#/common/Constants.js';
 import { NewToaster } from '#/common/Toaster';
 import TreeDropActions from '#/TreePanel/model/TreeDropActions.js';
-import EventLogging from '#/common/logging/EventLogging';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 import { TranslatorPanel } from '../Translator';
@@ -189,7 +189,7 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, '').split(';');
+              let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';');
               queries = queries.filter((query) => {
                 return (query.trim().length > 0);
               });
@@ -197,7 +197,7 @@ class View extends React.Component {
                 return query.trim();
               });
               queries = queries.map((query) => {
-                return query.replace(/ *(\r\n|\r|\n)/gm, '');
+                return query.replace(/ *(\r\n|\r|\n)/gm, ' ');
               });
               console.log(queries);
               service
@@ -330,10 +330,10 @@ class View extends React.Component {
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 30000;
-              console.log(content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, '').split(';'));
+              console.log(content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';'));
               service
                 .update(shell, {
-                  queries: content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, '').split(';'),
+                  queries: content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';'),
                   schema: editor.db
                 })
                 .then((res) => {
@@ -794,22 +794,22 @@ class View extends React.Component {
         content = cm.getLine(currentLine);
         // If a full command isn't detected, parse up and down until white space.
       let linesAbove = '';
-      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi)) {
-        console.log(cm.getLine(currentLine - 1));
+      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gmi)) {
         linesAbove = cm.getLine(currentLine - 1) + linesAbove;
         currentLine -= 1;
       }
-      console.log(content);
       currentLine = cm.getCursor().line;
       let linesBelow = '';
-      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi)) {
-        console.log(cm.getLine(currentLine + 1));
+
+      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
         linesBelow += cm.getLine(currentLine + 1);
         currentLine += 1;
       }
+      if (cm.getLine(currentLine + 1) && cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
+        linesBelow += cm.getLine(currentLine + 1);
+      }
 
       content = linesAbove + content + linesBelow;
-      console.log(content);
       }
       content = insertExplainOnCommand(content, explainParam);
       editor.executing = true;
@@ -818,7 +818,6 @@ class View extends React.Component {
       const service = featherClient().service('/mongo-sync-execution');
       const filteredContent = content.replace(/\t/g, '  ');
       const saveExplainCommand = 'var explain_' + editor.id.replace(/\-/g, '_') + ' = ' + filteredContent + ';';
-      console.log(saveExplainCommand);
       service.timeout = 300000;
       this.props.store.editorToolbar.isActiveExecuting = true;
       service
@@ -882,6 +881,15 @@ class View extends React.Component {
     }
   }
 
+    /**
+   * Beautify SQL Code.
+   * @param {string code} - input code.
+   * @return {string} - beautified code.
+   */
+  _prettifySQL(code) {
+    return sqlFormatter.format(code);
+  }
+
   /**
    * Prettify provided code
    *
@@ -907,7 +915,7 @@ class View extends React.Component {
     code = this._prettify.preprocess(code);
 
     // feed into prettier
-    code = Prettier.format(code, {});
+    code = Prettier.format(code, {singleQuote: true});
 
     // postprocess result
     if (!this._prettify.postprocess) {
@@ -942,20 +950,20 @@ class View extends React.Component {
    */
   prettifyAll() {
     try {
-      this.setEditorValue(this._prettify(this.getEditorValue()));
+      const editor = this.props.store.editors.get(
+        this.props.store.editorPanel.activeEditorId,
+      );
+      if (editor.type === 'drill') {
+        this.setEditorValue(this._prettifySQL(this.getEditorValue()));
+      } else {
+        this.setEditorValue(this._prettify(this.getEditorValue()));
+      }
     } catch (err) {
       NewToaster.show({
         message: 'Error: ' + err.message,
         className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          'Format All failed with error: ' + err,
-        );
-      }
     }
   }
 
@@ -965,20 +973,20 @@ class View extends React.Component {
   prettifySelection() {
     const cm = this.editor.getCodeMirror();
     try {
-      cm.replaceSelection(this._prettify(cm.getSelection()).trim());
+        const editor = this.props.store.editors.get(
+          this.props.store.editorPanel.activeEditorId,
+        );
+        if (editor.type === 'drill') {
+          cm.replaceSelection(this._prettifySQL(cm.getSelection()).trim());
+        } else {
+          cm.replaceSelection(this._prettify(cm.getSelection()).trim());
+        }
     } catch (err) {
       NewToaster.show({
         message: 'Error: ' + err.message,
         className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          'Format Selection failed with error: ' + err,
-        );
-      }
     }
   }
 

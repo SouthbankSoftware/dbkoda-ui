@@ -77,14 +77,16 @@ export default class TelemetryConsent extends React.Component {
         intent={Intent.PRIMARY}
         isOpen={this.props.layout.optInVisible}
       >
-        <h1>{globalString('telemetry_dialog/header')} </h1>
-        <p> {globalString('telemetry_dialog/content_first')} </p>
-        <p> {globalString('telemetry_dialog/content_second')} </p>
-        <p>
-          {' '}
-          {globalString('telemetry_dialog/content_third')}
-          <a onClick={this.openPrivacyPolicy}>{globalString('telemetry_dialog/privacy_link')}</a>
-        </p>
+        <div className="dialogContent">
+          <h1>{globalString('telemetry_dialog/header')} </h1>
+          <p> {globalString('telemetry_dialog/content_first')} </p>
+          <p> {globalString('telemetry_dialog/content_second')} </p>
+          <p>
+            {' '}
+            {globalString('telemetry_dialog/content_third')}
+            <a onClick={this.openPrivacyPolicy}>{globalString('telemetry_dialog/privacy_link')}</a>
+          </p>
+        </div>
         <div className={'dialogButtons ' + this.props.config.settings.telemetryEnabled}>
           <AnchorButton
             className="submitButton"

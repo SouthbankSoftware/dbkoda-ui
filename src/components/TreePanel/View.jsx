@@ -96,6 +96,9 @@ export default class TreeView extends React.Component {
       isLoadingDialogVisible: false,
       remotePass: null,
       showDrillDownloaderStatus: false,
+      showDrillNotFoundDialog: false,
+      drillDownloadFunction: null,
+      drillDontDownloadFunction: null,
       drillStatusMsg: '',
       drillDownloadProgress: null,
     };
@@ -523,15 +526,44 @@ export default class TreeView extends React.Component {
 
   checkForDrill = () => {
     const electron = window.require('electron');
-    const { ipcRenderer, remote } = electron;
-    const { dialog } = remote;
+    const { ipcRenderer } = electron;
+    // const { dialog } = remote;
 
     return new Promise((resolve, reject) => {
       if (
         this.props.config.settings.drillCmd == null ||
         this.props.config.settings.drillCmd == ''
       ) {
-        dialog.showMessageBox(
+        const downloadDrill = () => {
+          this.setState({
+            showDrillNotFoundDialog: false,
+            showDrillDownloaderStatus: true,
+            isLoadingDialogVisible: true,
+          });
+          runInAction(() => {
+            this.props.store.treePanel.downloadingDrill = true;
+            this.props.store.treePanel.showDrillStatus = true;
+          });
+          ipcRenderer.send('drill', 'downloadDrill');
+          ipcRenderer.once('drillResult', (event, arg) => {
+            if (arg == 'downloadDrillComplete') {
+              resolve(true);
+            }
+          });
+        };
+        const dontDownloadDrill = () => {
+          this.setState({
+            showDrillNotFoundDialog: false
+          });
+          reject(false); // eslint-disable-line prefer-promise-reject-errors
+        };
+
+        this.setState({
+          showDrillNotFoundDialog: true,
+          drillDownloadFunction: downloadDrill,
+          drillDontDownloadFunction: dontDownloadDrill
+        });
+        /* dialog.showMessageBox(
           {
             type: 'info',
             title: globalString('drill/drill_not_configured_title'),
@@ -540,25 +572,12 @@ export default class TreeView extends React.Component {
           },
           (buttonIndex) => {
             if (buttonIndex === 0) {
-              this.setState({
-                showDrillDownloaderStatus: true,
-                isLoadingDialogVisible: true,
-              });
-              runInAction(() => {
-                this.props.store.treePanel.downloadingDrill = true;
-                this.props.store.treePanel.showDrillStatus = true;
-              });
-              ipcRenderer.send('drill', 'downloadDrill');
-              ipcRenderer.once('drillResult', (event, arg) => {
-                if (arg == 'downloadDrillComplete') {
-                  resolve(true);
-                }
-              });
+
             } else {
               reject(false); // eslint-disable-line prefer-promise-reject-errors
             }
           },
-        );
+        ); */
       } else {
         resolve(true);
       }
@@ -731,6 +750,33 @@ export default class TreeView extends React.Component {
             </div>
           )}
         </Dialog> */}
+
+        <Dialog
+          className="pt-dark open-profile-alert-dialog"
+          intent={Intent.PRIMARY}
+          isOpen={this.state.showDrillNotFoundDialog}
+          title={globalString('drill/drill_not_configured_title')}
+          onClose={this.state.drillDontDownloadFunction}
+        >
+          <div className="dialogContent">
+            <p>{globalString('drill/drill_not_configured_message')}</p>
+          </div>
+          <div className="dialogButtons">
+            <AnchorButton
+              className="openButton"
+              intent={Intent.SUCCESS}
+              type="submit"
+              onClick={this.state.drillDownloadFunction}
+              text="Sure"
+            />
+            <AnchorButton
+              className="cancelButton"
+              intent={Intent.DANGER}
+              text="Cancel"
+              onClick={this.state.drillDontDownloadFunction}
+            />
+          </div>
+        </Dialog>
         <Dialog
           className="pt-dark open-profile-alert-dialog"
           intent={Intent.PRIMARY}

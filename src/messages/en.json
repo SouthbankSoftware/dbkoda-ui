@@ -107,8 +107,12 @@
         "explainView": "Explain",
         "suggestIndex": "Index Advisor",
         "suggestIndexDescription":
-          "// Here are some commands that may improve your query.",
-        "copySuggestedIndex": "Add Query",
+          "// INDEX ADVICE:\n// Some of these suggestions may improve your query performance.\n",
+        "noAdditionalIndexesRequired":
+          "// Looks good, no additional indexes are required to improve your query!",
+        "addIndexCommandsPrompt":
+          "// Use these commands to implement the above indexes.",
+        "copySuggestedIndex": "Add Code Snippet",
         "executeAgain": "UI has fallen out of sync, please explain query again."
       },
       "step": {
@@ -118,7 +122,7 @@
         "collScanAll":
           "All documents in the collection where scanned. No filter condition was specified",
         "collScanFilter":
-          "Documents were scanned looking for these criteria: {0}",
+          "Documents were scanned looking for these criteria: {0}. Consider creating an index on these attributes.",
         "ixscan": "Index {0} was used to find matching values for {1}",
         "sort":
           "Documents were sorted on : {0}. Consider creating index on ${0} to support the sort",
@@ -136,7 +140,7 @@
           "Selected one of multiple possible plans based on $or condition",
         "eof": "Nothing was found: maybe collection does not exist?",
         "andSorted": "Output from the previous steps was sort-merged",
-        "sortMerge": "Output from multiple sorts was merged",
+        "sortMerge": "Output from multiple index lookups were merged",
         "project": "A subset of columns were projected",
         "or": "Combine document from previous {0} stages"
       },
@@ -596,10 +600,10 @@
     "drill": {
       "connection_failed": "Create Drill Connection Failed",
       "execution_failed":
-        "Failed to execute query, see Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
+        "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
       "connection_not_exist": "Cant find connection",
       "query_error":
-        "Failed to execute query, see Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
+        "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
       "drill_binary_not_defined":
         "Drill Binary not found, Please configure it in the user settings panel",
       "open_drill_editor_failed": "Failed to Open Drill Editor.",
