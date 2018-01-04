@@ -45,6 +45,19 @@ export const parseOutput = (output) => {
     .replace(/:(\/[^\/]*\/)/g, ':"$1"');
 };
 
+export const findKeyValue = (key, object) => {
+  // Find namespace within the plan (for instnace if this is a sharded plan)
+    if (object.hasOwnProperty(key)) {
+        return (object[key]);
+    }
+
+    for (let i = 0; i < Object.keys(object).length; i += 1) {
+        if (typeof object[Object.keys(object)[i]] == 'object') {
+            return findKeyValue(key, object[Object.keys(object)[i]]);
+        }
+    }
+};
+
 @inject(allStores => ({
   store: allStores.store,
   explainPanel: allStores.store.explainPanel,
@@ -228,9 +241,8 @@ export default class Explain extends React.Component {
           // Iterate through each object in the result.
           if (typeof this.suggestionText === 'object') {
             const output = toJS(this.props.editor.explains.output);
-            let namespace = output.queryPlanner
-              ? output.queryPlanner.namespace
-              : '';
+            let namespace = findKeyValue('namespace', output);
+
             namespace = namespace.split('.');
             const table = namespace[0];
             const collection = namespace[1];
