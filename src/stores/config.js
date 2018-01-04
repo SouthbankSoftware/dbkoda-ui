@@ -45,7 +45,11 @@ export default class Config {
   constructor() {
     if (global.PATHS) {
       this.configFilePath = global.PATHS.configPath;
+    } else if (process.env.UAT && process.env.UAT == 'true') {
+      this.configFilePath = '/tmp/config.yml';
     }
+
+    console.log('configFilePath:', this.configFilePath);
     this.loading = false;
 
     const handleConfigFileChange = () => {
