@@ -69,16 +69,28 @@ export default class DrillApi {
           profile.host +
           ':' +
           profile.port +
-          '/';
+          '/' +
+          profile.database;
       } else {
-        query.url = StaticApi.mongoProtocol + profile.host + ':' + profile.port + '/';
+        query.url = StaticApi.mongoProtocol + profile.host + ':' + profile.port + '/' + profile.database;
       }
-    } else if (profile.url.indexOf('@') < 0) {
+      if (profile.ssl) {
+        query.url += '?ssl=true';
+      }
+    } else {
+      query.url = profile.url;
+      if (profile.url.indexOf('@') < 0) {
         const mUrl = profile.url.replace(StaticApi.mongoProtocol, '');
         query.url = StaticApi.mongoProtocol + profile.username + ':' + options.pass + '@' + mUrl;
-      } else {
-        query.url = profile.url;
       }
+      if (profile.ssl) {
+        if (query.url.indexOf('?') < 0) {
+          query.url += '?ssl=true';
+        } else {
+          query.url += '&ssl=true';
+        }
+      }
+    }
     query.db = options.db ? options.db : 'admin';
 
     const service = featherClient().service('/drill');
