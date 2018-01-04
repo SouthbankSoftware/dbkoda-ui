@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:47:30+11:00
+ * @Last modified time: 2018-01-03T16:03:59+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -37,12 +37,12 @@ import _ from 'lodash';
 
 export const widgetErrorLevels = {
   warn: 'warn',
-  error: 'error',
+  error: 'error'
 };
 
 export type WidgetValue = {
   timestamp: number,
-  value: { [string]: any },
+  value: { [string]: any }
 };
 export type WidgetErrorLevel = $Keys<typeof widgetErrorLevels>;
 export type WidgetState = {
@@ -52,29 +52,28 @@ export type WidgetState = {
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
   errorLevel: ?WidgetErrorLevel,
-  error: ?string,
+  error: ?string
 };
 
 export default class WidgetApi {
   store: *;
   api: *;
-  statsService: *;
 
   constructor(store: *, api: *) {
     this.store = store;
     this.api = api;
-    this.statsService = featherClient().statsService;
   }
 
   _createWidgetErrorHandler = (id: UUID) => {
-    return action((err) => {
+    // eslint-disable-next-line arrow-parens
+    return action(err => {
       const widget = this.store.widgets.get(id);
 
       if (widget) {
         _.assign(widget, {
           state: 'error',
           errorLevel: widgetErrorLevels.error,
-          error: err.message,
+          error: err.message
         });
       }
     });
@@ -85,7 +84,7 @@ export default class WidgetApi {
     profileId: UUID,
     items: string[],
     extraState: ?{ id?: string } = null,
-    statsServiceOptiopns: ?{} = null, // eslint-disable-line
+    statsServiceOptiopns: {} = {}
   ): UUID {
     const { widgets } = this.store;
 
@@ -99,27 +98,28 @@ export default class WidgetApi {
       state: 'loading',
       errorLevel: null,
       error: null,
-      ...extraState,
+      ...extraState
     };
 
     widgets.set(id, observable.shallowObject(widget));
 
-    // this.statsService
-    //   .create({
-    //     profileId,
-    //     items,
-    //     options: statsServiceOptiopns,
-    //   })
-    //   .then(
-    //     action(() => {
-    //       const widget = widgets.get(id);
-    //
-    //       if (widget) {
-    //         widget.state = 'loaded';
-    //       }
-    //     }),
-    //   )
-    //   .catch(this._createWidgetErrorHandler(id));
+    featherClient()
+      .statsService.create({
+        profileId,
+        items,
+        debug: true,
+        options: statsServiceOptiopns
+      })
+      .then(
+        action(() => {
+          const widget = widgets.get(id);
+
+          if (widget) {
+            widget.state = 'loaded';
+          }
+        })
+      )
+      .catch(this._createWidgetErrorHandler(id));
 
     return id;
   }
@@ -131,18 +131,18 @@ export default class WidgetApi {
     const widget = widgets.get(id);
 
     if (widget) {
-      // this.statsService
-      //   .remove(widget.profileId, {
-      //     query: {
-      //       items: widgets.items,
-      //     },
-      //   })
-      //   .then(
-      //     action(() => {
+      featherClient()
+        .statsService.remove(widget.profileId, {
+          query: {
+            items: widgets.items
+          }
+        })
+        .then(
+          action(() => {
             widgets.delete(id);
-        //   }),
-        // )
-        // .catch(this._createWidgetErrorHandler(id));
+          })
+        )
+        .catch(this._createWidgetErrorHandler(id));
     }
   }
 }

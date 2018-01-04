@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T11:17:30+11:00
+ * @Last modified time: 2018-01-04T11:17:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,9 +31,14 @@ import * as React from 'react';
 import { Responsive } from 'react-grid-layout';
 // $FlowFixMe
 import { Button } from '@blueprintjs/core';
+import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import Widget from '#/PerformancePanel/Widgets/Widget';
+// $FlowFixMe
+import { NewToaster } from '#/common/Toaster';
+// $FlowFixMe
+import { Broker, EventType } from '~/helpers/broker';
 import SizeProvider from './SizeProvider';
 import './Panel.scss';
 
@@ -49,6 +54,14 @@ type Props = {
   profileId: UUID,
 };
 
+type State = {
+  layouts: *,
+  rows: number,
+  cols: number,
+  widgetHeight: number,
+  widgetWidth: number,
+};
+
 @inject(({ store: { performancePanels }, api }, { profileId }) => {
   const performancePanel = performancePanels.get(profileId);
 
@@ -60,15 +73,7 @@ type Props = {
   };
 })
 @observer
-export default class PerformancePanel extends React.Component<Props> {
-  // TODO: refactor these into mobx states
-  layouts: *;
-  rows = 8;
-  cols = 10;
-  widgetHeight = 2;
-  widgetWidth = 2;
-  widgets = [];
-
+export default class PerformancePanel extends React.Component<Props, State> {
   static defaultProps = {
     store: null,
     api: null,
@@ -77,45 +82,106 @@ export default class PerformancePanel extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    const { api, profileId } = this.props;
-
-    this.widgets.push(api.addWidget(profileId, ['dummy-0']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-1']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-2']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-3']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-4']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-5']));
-
-    this.layouts = {
-      desktop: this.widgets.map((v, i) => ({
-        w: this.widgetWidth,
-        h: this.widgetHeight,
-        x: (i * this.widgetWidth) % this.cols,
-        y: Math.floor(i / this.cols),
-        i: v,
-      })),
+    this.state = {
+      layouts: {
+        desktop: [],
+      },
+      rows: 8,
+      cols: 10,
+      widgetHeight: 2,
+      widgetWidth: 2,
     };
   }
 
+  _generateLayouts = (cols, widgetHeight, widgetWidth) => {
+    const { widgets } = this.props.store.performancePanel;
+
+    return {
+      desktop: widgets.map((v, i) => ({
+        w: widgetWidth,
+        h: widgetHeight,
+        x: (i * widgetWidth) % cols,
+        y: Math.floor(i / cols),
+        i: v,
+      })),
+    };
+  };
+
+  _addDemoWidgets = action(() => {
+    const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
+
+    widgets.push(api.addWidget(profileId, ['item-1']));
+    widgets.push(api.addWidget(profileId, ['item-2', 'item-6']));
+    widgets.push(api.addWidget(profileId, ['item-3', 'item-5', 'item-8']));
+    widgets.push(api.addWidget(profileId, ['item-6']));
+    widgets.push(api.addWidget(profileId, ['item-7']));
+    widgets.push(api.addWidget(profileId, ['item-10']));
+  });
+
+  _removeDemoWidgets = action(() => {
+    const { api, store } = this.props;
+    const { widgets } = store.performancePanel;
+
+    for (const widgetId of widgets) {
+      api.removeWidget(widgetId);
+    }
+
+    store.performancePanel.widgets = observable.shallowArray();
+  });
+
+  _onError = payload => {
+    const { error, level } = payload;
+
+    level === 'error' ? console.error(error) : console.warn(error);
+    NewToaster.show({
+      message: error,
+      className: level === 'error' ? 'danger' : 'warning',
+      iconName: 'pt-icon-thumbs-down',
+    });
+  };
+
+  componentDidMount() {
+    const { profileId } = this.props;
+
+    Broker.on(EventType.STATS_ERROR(profileId), this._onError);
+
+    this._addDemoWidgets();
+
+    const { cols, widgetHeight, widgetWidth } = this.state;
+
+    this.setState({
+      layouts: this._generateLayouts(cols, widgetHeight, widgetWidth),
+    });
+  }
+
+  componentWillUnmount() {
+    const { profileId } = this.props;
+
+    Broker.off(EventType.STATS_ERROR(profileId), this._onError);
+
+    this._removeDemoWidgets();
+  }
+
   render() {
-    const { api, profileId } = this.props;
+    const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
+    const { layouts, rows, cols } = this.state;
 
     return (
       <div className="PerformancePanel">
         <ResponsiveReactGridLayout
           className="GridLayout"
-          layouts={this.layouts}
+          layouts={layouts}
           autoSize={false}
           breakpoints={{
             desktop: 0,
           }}
           cols={{
-            desktop: this.cols,
+            desktop: cols,
           }}
-          verticalGridSize={this.rows}
+          verticalGridSize={rows}
           margin={[12, 12]}
         >
-          {this.widgets.map(v => (
+          {widgets.map(v => (
             <div id={`widget-${v}`} key={v} className="pt-elevation-3">
               <Widget id={v} />
             </div>
