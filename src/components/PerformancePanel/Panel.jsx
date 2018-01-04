@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-04T11:17:35+11:00
+ * @Last modified time: 2018-01-04T12:15:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -110,12 +110,14 @@ export default class PerformancePanel extends React.Component<Props, State> {
   _addDemoWidgets = action(() => {
     const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
 
-    widgets.push(api.addWidget(profileId, ['item-1']));
-    widgets.push(api.addWidget(profileId, ['item-2', 'item-6']));
-    widgets.push(api.addWidget(profileId, ['item-3', 'item-5', 'item-8']));
-    widgets.push(api.addWidget(profileId, ['item-6']));
-    widgets.push(api.addWidget(profileId, ['item-7']));
-    widgets.push(api.addWidget(profileId, ['item-10']));
+    widgets.push(api.addWidget(profileId, ['cpu']));
+    widgets.push(api.addWidget(profileId, ['memory']));
+    // widgets.push(api.addWidget(profileId, ['item-1']));
+    // widgets.push(api.addWidget(profileId, ['item-2', 'item-6']));
+    // widgets.push(api.addWidget(profileId, ['item-3', 'item-5', 'item-8']));
+    // widgets.push(api.addWidget(profileId, ['item-6']));
+    // widgets.push(api.addWidget(profileId, ['item-7']));
+    // widgets.push(api.addWidget(profileId, ['item-10']));
   });
 
   _removeDemoWidgets = action(() => {
