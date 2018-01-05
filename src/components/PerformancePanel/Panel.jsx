@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-04T12:15:48+11:00
+ * @Last modified time: 2018-01-05T12:33:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -110,10 +110,12 @@ export default class PerformancePanel extends React.Component<Props, State> {
   _addDemoWidgets = action(() => {
     const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
 
-    widgets.push(api.addWidget(profileId, ['cpu']));
-    widgets.push(api.addWidget(profileId, ['memory']));
-    widgets.push(api.addWidget(profileId, ['topology']));
-    widgets.push(api.addWidget(profileId, ['serverStatus']));
+    widgets.push(api.addWidget(profileId, ['cpu', 'memory', 'topology', 'serverStatus']));
+
+    // widgets.push(api.addWidget(profileId, ['memory']));
+    // widgets.push(api.addWidget(profileId, ['topology']));
+    // widgets.push(api.addWidget(profileId, ['serverStatus']));
+
     // widgets.push(api.addWidget(profileId, ['item-1']));
     // widgets.push(api.addWidget(profileId, ['item-2', 'item-6']));
     // widgets.push(api.addWidget(profileId, ['item-3', 'item-5', 'item-8']));
@@ -123,12 +125,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
   });
 
   _removeDemoWidgets = action(() => {
-    const { api, store } = this.props;
-    const { widgets } = store.performancePanel;
-
-    for (const widgetId of widgets) {
-      api.removeWidget(widgetId);
-    }
+    const { store } = this.props;
 
     store.performancePanel.widgets = observable.shallowArray();
   });
@@ -194,7 +191,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
         <Button
           className="close-button pt-button pt-intent-primary"
           text="X"
-          onClick={() => api.closePerformancePanel(profileId)}
+          onClick={() => api.closePerformancePanel(profileId, true)}
         />
       </div>
     );

@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-03T16:03:59+11:00
+ * @Last modified time: 2018-01-05T11:00:54+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,18 +31,16 @@ import uuid from 'uuid/v1';
 import autobind from 'autobind-decorator';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
-// $FlowFixMe
-import { Broker, EventType } from '~/helpers/broker'; // eslint-disable-line
 import _ from 'lodash';
 
 export const widgetErrorLevels = {
   warn: 'warn',
-  error: 'error'
+  error: 'error',
 };
 
 export type WidgetValue = {
   timestamp: number,
-  value: { [string]: any }
+  value: { [string]: any },
 };
 export type WidgetErrorLevel = $Keys<typeof widgetErrorLevels>;
 export type WidgetState = {
@@ -52,7 +50,7 @@ export type WidgetState = {
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
   errorLevel: ?WidgetErrorLevel,
-  error: ?string
+  error: ?string,
 };
 
 export default class WidgetApi {
@@ -73,7 +71,7 @@ export default class WidgetApi {
         _.assign(widget, {
           state: 'error',
           errorLevel: widgetErrorLevels.error,
-          error: err.message
+          error: err.message,
         });
       }
     });
@@ -84,7 +82,7 @@ export default class WidgetApi {
     profileId: UUID,
     items: string[],
     extraState: ?{ id?: string } = null,
-    statsServiceOptiopns: {} = {}
+    statsServiceOptiopns: {} = {},
   ): UUID {
     const { widgets } = this.store;
 
@@ -98,7 +96,7 @@ export default class WidgetApi {
       state: 'loading',
       errorLevel: null,
       error: null,
-      ...extraState
+      ...extraState,
     };
 
     widgets.set(id, observable.shallowObject(widget));
@@ -108,7 +106,7 @@ export default class WidgetApi {
         profileId,
         items,
         debug: true,
-        options: statsServiceOptiopns
+        options: statsServiceOptiopns,
       })
       .then(
         action(() => {
@@ -117,7 +115,7 @@ export default class WidgetApi {
           if (widget) {
             widget.state = 'loaded';
           }
-        })
+        }),
       )
       .catch(this._createWidgetErrorHandler(id));
 
@@ -131,16 +129,18 @@ export default class WidgetApi {
     const widget = widgets.get(id);
 
     if (widget) {
+      const { profileId, items } = widget;
+
       featherClient()
-        .statsService.remove(widget.profileId, {
+        .statsService.remove(profileId, {
           query: {
-            items: widgets.items
-          }
+            items,
+          },
         })
         .then(
           action(() => {
             widgets.delete(id);
-          })
+          }),
         )
         .catch(this._createWidgetErrorHandler(id));
     }

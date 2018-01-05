@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-04T11:12:09+11:00
+ * @Last modified time: 2018-01-05T12:21:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -101,14 +101,26 @@ export default class PerformancePanel extends React.Component<Props> {
             <ErrorView title={null} error={error} errorLevel={errorLevel} />
           )
         ) : (
-          items.map(v => [
-            <div key={`${v}-title`} className="title">
-              {v}
-            </div>,
-            <div key={`${v}-value`} className="value">
-              {_.get(latestValue, v, '?')}
-            </div>,
-          ])
+          items.map(v => {
+            let value = _.get(latestValue, v, null);
+
+            if (value === null) {
+              value = '?';
+            } else if (typeof value === 'number') {
+              value = _.isInteger(value) ? value : value.toFixed(2);
+            } else {
+              value = <pre>{JSON.stringify(value, null, 2)}</pre>;
+            }
+
+            return [
+              <div key={`${v}-title`} className="title">
+                {v}
+              </div>,
+              <div key={`${v}-value`} className="value">
+                {value}
+              </div>,
+            ];
+          })
         )}
       </div>
     );
