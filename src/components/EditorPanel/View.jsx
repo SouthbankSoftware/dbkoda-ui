@@ -329,7 +329,7 @@ class View extends React.Component {
             const type = editor.type;
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
-              service.timeout = 30000;
+              service.timeout = 90000;
               console.log(content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';'));
               service
                 .update(shell, {
