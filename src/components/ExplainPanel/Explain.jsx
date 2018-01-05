@@ -220,6 +220,7 @@ export default class Explain extends React.Component {
       const editor = this.props.editors.get(
         this.props.store.editorPanel.activeEditorId
       );
+      const lineSep = editor.doc.cm.lineSeparator() || '\n';
       const profileId = editor.profileId;
       const shell = editor.shellId;
 
@@ -237,7 +238,7 @@ export default class Explain extends React.Component {
           this.suggestionsGenerated = true;
           this.suggestionText = JSON.parse(res);
           let suggestionCode =
-            globalString('explain/panel/suggestIndexDescription') + '\n';
+            globalString('explain/panel/suggestIndexDescription') + lineSep;
           // Iterate through each object in the result.
           if (typeof this.suggestionText === 'object') {
             const output = toJS(this.props.editor.explains.output);
@@ -253,7 +254,7 @@ export default class Explain extends React.Component {
               console.log('No Suggestions Found');
               suggestionCode =
                 globalString('explain/panel/noAdditionalIndexesRequired') +
-                '\n';
+                lineSep;
             } else {
               if (this.suggestionText.redundantIndexes.length > 0) {
                 for (const key in this.suggestionText.redundantIndexes) {
@@ -266,11 +267,11 @@ export default class Explain extends React.Component {
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].indexName
                       ) +
-                      ' on \n//' +
+                      ' on ' + lineSep + '//' +
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].key
                       ) +
-                      '\n // can be replaced by a new index on \n//' +
+                      lineSep + ' // can be replaced by a new index on ' + lineSep + '//' +
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].because
                       );
@@ -279,9 +280,9 @@ export default class Explain extends React.Component {
               }
               if (this.suggestionText.newIndexes.length > 0) {
                 suggestionCode +=
-                  '\n\n' +
+                lineSep + lineSep +
                   globalString('explain/panel/addIndexCommandsPrompt') +
-                  '\n';
+                  lineSep;
 
                 // Indexes to add.
                 for (const key in this.suggestionText.newIndexes) {
@@ -293,7 +294,7 @@ export default class Explain extends React.Component {
                       collection +
                       '.createIndex(' +
                       JSON.stringify(this.suggestionText.newIndexes[key]) +
-                      ');\n';
+                      ');' + lineSep;
                   }
                 }
 
@@ -312,7 +313,7 @@ export default class Explain extends React.Component {
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].indexName
                       ) +
-                      ');\n';
+                      ');' + lineSep;
                   }
                 }
               }
@@ -333,7 +334,7 @@ export default class Explain extends React.Component {
   @action.bound
   copySuggestion() {
     const cm = this.props.editor.doc.cm;
-    cm.setValue(cm.getValue() + '\n' + this.suggestionText);
+    cm.setValue(cm.getValue() + cm.lineSeparator() + this.suggestionText);
     cm.scrollIntoView({ line: cm.lineCount() - 1, ch: 0 });
   }
 
