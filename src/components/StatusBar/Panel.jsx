@@ -303,6 +303,8 @@ export default class Panel extends React.Component {
           isOpen={this.state.isLodgeBugAlertOpen}
           confirmButtonText={globalString('general/confirm')}
           onConfirm={this.onConfirmLodgeBug}
+          cancelButtonText={globalString('general/cancel')}
+          onCancel={this.onCancelLodgeBug}
         >
           {this.state.isSupportBundleReady ? (
             <div className="supportBundleFinished">

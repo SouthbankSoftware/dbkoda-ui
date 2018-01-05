@@ -143,9 +143,17 @@ div.statusPanel {
     button {
       border: unset !important;
       color: $white !important;
-      background-color: $connectionButtonBackgroundColourConnect !important;
+      background-color: $connectionButtonBackgroundColourReset !important;
     }
     button:hover {
+      background-color: $connectionButtonBackgroundColourResetHover !important;
+    }
+    button:nth-child(1) {
+      border: unset !important;
+      color: $white !important;
+      background-color: $connectionButtonBackgroundColourConnect !important;
+    }
+    button:hover:nth-child(1) {
       background-color: $connectionButtonBackgroundColourConnectHover !important;
     }
   }
