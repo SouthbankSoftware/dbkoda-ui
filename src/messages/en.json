@@ -107,7 +107,7 @@
         "explainView": "Explain",
         "suggestIndex": "Index Advisor",
         "suggestIndexDescription":
-          "// INDEX ADVICE:\n// Some of these suggestions may improve your query performance.\n",
+          "// INDEX ADVICE: Some of these suggestions may improve your query performance.\n",
         "noAdditionalIndexesRequired":
           "// Looks good, no additional indexes are required to improve your query!",
         "addIndexCommandsPrompt":
