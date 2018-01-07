@@ -37,7 +37,7 @@ import View from '#/TreeActionPanel/View';
 import { BlockTypes } from './AggregateBlocks/BlockTypes.js';
 import BYOBlock from './AggregateBlocks/BYOBlock.jsx';
 import CodeIcon from '../../styles/icons/code-icon.svg';
-import HideIcon from '../../styles/icons/hide-icon.svg';
+import HideIcon from '../../styles/icons/close-profile-icon.svg';
 import './style.scss';
 
 @inject(allStores => ({
