@@ -66,7 +66,7 @@ import 'codemirror/addon/search/matchesonscrollbar.js';
 import 'codemirror/addon/scroll/annotatescrollbar.js';
 import 'codemirror/keymap/sublime.js';
 import 'codemirror-formatting';
-import 'cm-show-invisibles';
+// import 'cm-show-invisibles' // To show invisible Characters;
 import '#/common/MongoScript.js';
 
 import { DropTarget } from 'react-dnd';
