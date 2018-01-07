@@ -133,9 +133,10 @@
         {
           "name": "Direction",
           "label": "Ascending?",
-          "type": "Select",
+          "type": "Combo",
           "tooltip": "1 for ascending sort, -1 for descending sort",
-          "lookup": "dbkoda_sortOptions"
+          "lookup": "dbkoda_sortOptions",
+          "defaultValue": "1"
         }
       ]
     },
