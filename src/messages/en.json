@@ -297,10 +297,10 @@
       "openAlert": {
         "passwordPrompt": "Please enter your password for this profile.",
         "passwordPlaceholder": "Enter Password...",
-        "remotePassPrompt": "Please enter your password for the ssh tunnel.",
+        "remotePassPrompt": "Please enter your password for SSH connection",
         "remotePassPlaceholder": "Enter SSH Password...",
         "passPhrasePrompt":
-          "Please enter your passphrase for the ssh tunnel private key.",
+          "Please enter your passphrase for SSH connection private key",
         "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
         "confirmButton": "Open",
         "cancelButton": "Cancel"

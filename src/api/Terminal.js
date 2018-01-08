@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-21T10:17:26+11:00
+ * @Last modified time: 2018-01-08T16:05:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -108,12 +108,27 @@ export default class TerminalApi {
 
   // $FlowIssue
   @action.bound
-  addSshTerminal(profile: SshProfile) {
+  addSshTerminal(
+    profile: SshProfile,
+    options: { switchToUponCreation: boolean, skipWhenExisting: boolean, eagerCreation: boolean },
+  ) {
     const id = uuid();
     const type = terminalTypes.ssh;
     const { profileId, username, password, host, privateKey, passphrase } = profile;
+    const { switchToUponCreation = true, skipWhenExisting = false, eagerCreation = false } =
+      options || {};
 
-    Broker.once(EventType.TERMINAL_ATTACHING(id), (xterm: Xterm) => {
+    if (skipWhenExisting) {
+      const { terminals } = this.store;
+
+      for (const terminal of terminals.values()) {
+        if (terminal.profileId && terminal.profileId === profileId) {
+          return;
+        }
+      }
+    }
+
+    const createTerminal = (xterm: ?Xterm) => {
       featherClient()
         .terminalService.create({
           _id: id,
@@ -124,29 +139,42 @@ export default class TerminalApi {
           port: 22,
           privateKey,
           passphrase,
-          size: {
-            rows: xterm.rows,
-            cols: xterm.cols,
-          },
+          size: xterm
+            ? {
+                rows: xterm.rows,
+                cols: xterm.cols,
+              }
+            : undefined,
         })
         .then(() => {
-          console.log('Terminal created');
+          console.debug('Terminal created');
         })
-        .catch((error) => {
+        .catch(error => {
           Broker.emit(EventType.TERMINAL_ERROR(id), {
             error: error.message,
             level: terminalErrorLevels.error,
           });
         });
-    });
+    };
 
-    this.addTerminal(type, { id, profileId });
+    if (eagerCreation) {
+      createTerminal();
+    } else {
+      Broker.once(EventType.TERMINAL_ATTACHING(id), createTerminal);
+    }
+
+    this.addTerminal(type, { id, profileId }, { switchToUponCreation });
   }
 
   // $FlowIssue
   @action.bound
-  addTerminal(type: TerminalType, extraState: { id?: string }) {
+  addTerminal(
+    type: TerminalType,
+    extraState: { id?: string },
+    options: { switchToUponCreation: boolean },
+  ) {
     const { terminals, outputPanel } = this.store;
+    const { switchToUponCreation = true } = options || {};
 
     const id = (extraState && extraState.id) || uuid();
     const name = this._findNextTerminalName(type);
@@ -163,7 +191,9 @@ export default class TerminalApi {
 
     terminals.set(id, observable.shallowObject(terminal));
 
-    outputPanel.currentTab = this.getTerminalTabId(id);
+    if (switchToUponCreation) {
+      outputPanel.currentTab = this.getTerminalTabId(id);
+    }
   }
 
   _handleServiceRemoveError(error) {
@@ -189,9 +219,9 @@ export default class TerminalApi {
   }
 
   // $FlowIssue
-  @autobind
+  @action.bound
   removeTerminal(id: UUID) {
-    const { terminals } = this.store;
+    const { terminals, outputPanel, editorPanel } = this.store;
 
     const terminal = terminals.get(id);
 
@@ -209,6 +239,8 @@ export default class TerminalApi {
       }
 
       p.then(action(() => terminals.delete(id)));
+
+      outputPanel.currentTab = editorPanel.activeEditorId;
     }
   }
 
