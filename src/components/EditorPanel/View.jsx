@@ -211,7 +211,19 @@ class View extends React.Component {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
-                  output.output = res; // JSON.stringify(res);
+                  if (res.output.length > 10000) {
+                    output.output = { output: _.slice(res.output, 0, 10000) }; // JSON.stringify(res);
+                    const message = globalString(
+                      'drill/drill_large_dataset',
+                    );
+                    NewToaster.show({
+                      message,
+                      className: 'danger',
+                      iconName: 'pt-icon-thumbs-down',
+                    });
+                  } else {
+                    output.output = res; // JSON.stringify(res);
+                  }
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
@@ -225,8 +237,19 @@ class View extends React.Component {
                     err = {
                       Name: err.name,
                       StatusCode: err.statusCode,
-                      Message: err.error
+                      Message: err.error || err.message
                       };
+
+                    if (err.Message.match(/Timeout of 90000ms/)) {
+                      const message = globalString(
+                        'drill/drill_timed_out',
+                      );
+                      NewToaster.show({
+                        message,
+                        className: 'danger',
+                        iconName: 'pt-icon-thumbs-down',
+                      });
+                    }
 
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
@@ -342,7 +365,19 @@ class View extends React.Component {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
-                  output.output = res; // JSON.stringify(res);
+                  if (res.output.length > 10000) {
+                    output.output = { output: _.slice(res.output, 0, 10000) }; // JSON.stringify(res);
+                    const message = globalString(
+                      'drill/drill_large_dataset',
+                    );
+                    NewToaster.show({
+                      message,
+                      className: 'danger',
+                      iconName: 'pt-icon-thumbs-down',
+                    });
+                  } else {
+                    output.output = res; // JSON.stringify(res);
+                  }
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
@@ -356,8 +391,19 @@ class View extends React.Component {
                     err = {
                       Name: err.name,
                       StatusCode: err.statusCode,
-                      Message: err.error
+                      Message: err.error || err.message
                     };
+
+                    if (err.Message.match(/Timeout of 90000ms/)) {
+                      const message = globalString(
+                        'drill/drill_timed_out',
+                      );
+                      NewToaster.show({
+                        message,
+                        className: 'danger',
+                        iconName: 'pt-icon-thumbs-down',
+                      });
+                    }
 
                     // Analyse Error for line number and highlight -> Only works for simple errors.
                     // @TODO -> if drill proves popular, we should improve error handling here.
