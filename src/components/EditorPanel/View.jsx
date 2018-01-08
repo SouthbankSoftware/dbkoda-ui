@@ -190,7 +190,7 @@ class View extends React.Component {
             const type = editor.type;
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
-              service.timeout = 30000;
+              service.timeout = 90000;
               let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';');
               queries = queries.filter((query) => {
                 return (query.trim().length > 0);
