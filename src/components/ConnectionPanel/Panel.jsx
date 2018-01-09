@@ -159,7 +159,7 @@ export default class Panel extends React.Component {
   }
 
   @autobind
-  _getFormErrors() {
+  async _getFormErrors() {
     // invalidate the form with a custom error message
     const errorMsg = [];
     const error = this.props.form.errors();
