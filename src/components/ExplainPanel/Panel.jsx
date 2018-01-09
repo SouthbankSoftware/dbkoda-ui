@@ -62,30 +62,36 @@ export const Header = ({ viewType, switchExplainView, suggestIndex }) => {
 export default class Panel extends React.Component {
   componentDidUpdate() {
     if (this.el) {
-      this.el.scrollIntoView(false);
-      const scrollHeight = this.el.scrollHeight;
-      const height = this.el.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+      setTimeout(() => {
+        this.el.scrollIntoView(false);
+        const scrollHeight = this.el.scrollHeight;
+        const height = this.el.clientHeight;
+        const maxScrollTop = scrollHeight - height;
+        this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+      }, 0);
     }
   }
   scrollIntoView() {
     if (this.el) {
-      this.el.scrollIntoView(false);
-      const scrollHeight = this.el.scrollHeight;
-      const height = this.el.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+      setTimeout(() => {
+        this.el.scrollIntoView(false);
+        const scrollHeight = this.el.scrollHeight;
+        const height = this.el.clientHeight;
+        const maxScrollTop = scrollHeight - height;
+        this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+      }, 0);
     }
   }
 
   render() {
     if (this.el) {
-      this.el.scrollIntoView(false);
-      const scrollHeight = this.el.scrollHeight;
-      const height = this.el.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+      setTimeout(() => {
+        this.el.scrollIntoView(false);
+        const scrollHeight = this.el.scrollHeight;
+        const height = this.el.clientHeight;
+        const maxScrollTop = scrollHeight - height;
+        this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+      }, 0);
     }
 
     if (this.props.editor.explains && this.props.editor.explains.error) {
