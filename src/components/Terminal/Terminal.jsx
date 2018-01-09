@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-21T12:13:18+11:00
+ * @Last modified time: 2018-01-08T15:20:56+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -91,6 +91,7 @@ export default class Terminal extends React.PureComponent<Props> {
   container: React.ElementRef<*>;
   xterm: Xterm;
   _hasInitialSize = false;
+  _showInitialError = true;
 
   static defaultProps = {
     store: null,
@@ -104,7 +105,7 @@ export default class Terminal extends React.PureComponent<Props> {
 
           return currentTab === tabId;
         },
-        (isActive) => {
+        isActive => {
           if (isActive) {
             // fix container size undetected issue when this component is mounted behind the scene
             this.resizeDetector.componentDidMount();
@@ -143,13 +144,13 @@ export default class Terminal extends React.PureComponent<Props> {
 
     const { attach, onResize } = this.props;
 
-    this.xterm.on('resize', (size) => {
+    this.xterm.on('resize', size => {
       if (!this._hasInitialSize) {
         this._hasInitialSize = true;
 
         const { state, errorLevel, error } = this.props.store.terminal;
 
-        if (state === 'error' && errorLevel && error) {
+        if (state === 'error' && this._showInitialError && errorLevel && error) {
           this._showError(error, errorLevel, false);
         }
 
@@ -216,6 +217,8 @@ export default class Terminal extends React.PureComponent<Props> {
 
   _onError = action.bound(({ error, level }: { error: string, level: TerminalErrorLevel }) => {
     const { terminal } = this.props.store;
+
+    this._showInitialError = false;
 
     terminal.state = 'error';
     terminal.errorLevel = level;

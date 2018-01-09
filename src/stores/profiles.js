@@ -20,8 +20,8 @@
  * @Author: Chris Trott <christrott>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-03T15:35:19+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-01-09T10:50:32+11:00
  */
 
 import {action, observable, runInAction, toJS} from 'mobx';
@@ -101,12 +101,7 @@ export default class Profiles {
           watching: false,
         })
         .then(() => {
-          console.log('profiles.yml updated');
-          NewToaster.show({
-            message: 'profiles.yml successfully updated',
-            className: 'success',
-            iconName: 'pt-icon-thumbs-up',
-          });
+          IS_DEVELOPMENT && console.debug('profiles.yml updated');
           runInAction(() => {
             this.loading = false;
           });
