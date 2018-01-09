@@ -1,4 +1,4 @@
-db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
+var cmdResult=db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
    update(
      { {{#if FilterKeys~}} {{#if UseOr~}}"$or"{{else}}"$and"{{/if~}}:[
         {{#each FilterKeys }}
@@ -16,3 +16,5 @@ db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
      { upsert: {{Upsert}},
        multi:  {{UpdateMany}}
      });
+
+print(cmdResult);
