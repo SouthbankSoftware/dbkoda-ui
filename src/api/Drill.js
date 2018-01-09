@@ -116,6 +116,21 @@ export default class DrillApi {
       db: query.db,
     };
     this.openEditorWithDrillProfileId(this.profileDBHash[query.alias][query.db]);
+
+    // Fix for the issue where get this error 'You tried to write a Int type when you are using a ValueWriter of type NullableFloat8WriterImpl.'
+    // See https://issues.apache.org/jira/browse/DRILL-4038. The apparent solution is to issue
+    // ALTER SYSTEM SET `store.mongo.read_numbers_as_double` = true;
+    const service = featherClient().service('/drill');
+    service.timeout = 90000;
+    service
+      .update(res.id, {
+        queries: ['ALTER SYSTEM SET `store.mongo.read_numbers_as_double` = true'],
+        schema: query.db,
+      })
+      .then((res) => {
+        console.log('result for init query: ', res);
+      });
+
     if (options.cbFunc) {
       options.cbFunc('success');
     }
