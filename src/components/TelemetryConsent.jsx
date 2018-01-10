@@ -2,7 +2,7 @@
  * @Author: mike
  * @Date:   2017-03-28 16:13:50
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-28T11:58:40+11:00
+ * @Last modified time: 2018-01-10T16:10:53+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -73,7 +73,7 @@ export default class TelemetryConsent extends React.Component {
   render() {
     return (
       <Dialog
-        className="pt-dark optInDialog"
+        className="TelemetryConsent pt-dark optInDialog"
         intent={Intent.PRIMARY}
         isOpen={this.props.layout.optInVisible}
       >
@@ -88,17 +88,17 @@ export default class TelemetryConsent extends React.Component {
           </p>
         </div>
         <div className={'dialogButtons ' + this.props.config.settings.telemetryEnabled}>
+          <Switch
+            checked={this.props.config.settings.telemetryEnabled}
+            label="Enable Telemetry"
+            onChange={this.handleSwitch}
+          />
           <AnchorButton
             className="submitButton"
             type="submit"
             intent={Intent.SUCCESS}
             onClick={this.acceptDialog}
             text={globalString('telemetry_dialog/button_yes')}
-          />
-          <Switch
-            checked={this.props.config.settings.telemetryEnabled}
-            label="Enable Telemetry"
-            onChange={this.handleSwitch}
           />
         </div>
       </Dialog>
