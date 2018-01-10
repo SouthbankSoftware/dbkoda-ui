@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-08T11:56:51+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-09-11T12:22:36+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-10T12:07:13+11:00
  */
 
 import React from 'react';
@@ -363,7 +363,7 @@ export default class TreeNode {
     this.isFiltered = objState.isFiltered;
     this.isExpanded = objState.isExpanded;
     this.isSelected = objState.isSelected;
-    if (objState.allChildNodes.length > 0) {
+    if (objState.allChildNodes.length > 0 && this.allChildNodes) {
       for (const childSO of objState.allChildNodes) {
         const childNode = this.allChildNodes.get(childSO.id);
         if (childNode) { childNode.StateObject = childSO; }
