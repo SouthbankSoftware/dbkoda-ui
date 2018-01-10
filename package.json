@@ -58,8 +58,8 @@
   },
   "homepage": "https://github.com/SouthbankSoftware/dbkoda-ui#readme",
   "devDependencies": {
-    "@blueprintjs/core": "^1.33.0",
-    "@blueprintjs/table": "^1.30.0",
+    "@blueprintjs/core": "^1.35.0",
+    "@blueprintjs/table": "^1.31.0",
     "ajv": "^5.5.2",
     "autobind-decorator": "^2.1.0",
     "babel-cli": "^6.26.0",

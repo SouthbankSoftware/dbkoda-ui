@@ -3,7 +3,7 @@
  * @Date:   2018-01-05
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-08T09:33:57+11:00
+ * @Last modified time: 2018-01-09T11:57:27+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,4 +24,4 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export ConnectionPanel from './Panel.jsx'
+export ProfileManager from './Panel.jsx'

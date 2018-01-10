@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-08T09:38:55+11:00
+ * @Last modified time: 2018-01-09T15:39:42+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,17 +24,22 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export class ProfileForm {
+export const Subforms = {
+  forms: ['basic', 'cluster', 'advanced', 'url', 'ssh']
+};
+
+export class ConnectionForm {
   getInstance() {
     const form = {
       basic: {
+        name: 'Basic',
         fields: [
           {
             name: 'alias',
             label: 'Connection Name',
             value: 'Connection - 1',
             type: 'text',
-            column: 1,
+            column: 1
             // rules: 'required|string',
           },
           {
@@ -42,7 +47,7 @@ export class ProfileForm {
             label: 'Host',
             value: 'localhost',
             type: 'text',
-            column: 1,
+            column: 1
             // rules: 'string',
           },
           {
@@ -50,7 +55,7 @@ export class ProfileForm {
             label: 'Port',
             value: '27017',
             type: 'number',
-            column: 1,
+            column: 1
             // rules: 'numeric',
           },
           {
@@ -58,14 +63,14 @@ export class ProfileForm {
             label: 'Database',
             value: 'admin',
             type: 'text',
-            column: 1,
+            column: 1
           },
           {
             name: 'sha',
             value: false,
             label: 'SCRAM-SHA-1(username/password)',
             type: 'checkbox',
-            column: 2,
+            column: 2
           },
           {
             name: 'username',
@@ -73,7 +78,7 @@ export class ProfileForm {
             icon: 'user',
             type: 'text',
             column: 2,
-            width: 0.5,
+            width: 0.5
           },
           {
             name: 'password',
@@ -81,14 +86,14 @@ export class ProfileForm {
             icon: 'password',
             type: 'password',
             column: 2,
-            width: 0.5,
+            width: 0.5
           },
           {
             name: 'urlRadio',
             label: 'Use URI instead',
             value: false,
             type: 'checkbox',
-            column: 2,
+            column: 2
           },
           {
             name: 'url',
@@ -97,18 +102,19 @@ export class ProfileForm {
             // rules: 'regex:/^mongodb:///',
             value: 'mongodb://',
             type: 'text',
-            column: 2,
-          },
-        ],
+            column: 2
+          }
+        ]
       },
       cluster: {
+        name: 'Cluster',
         fields: [
           {
             name: 'hostsList',
             label: 'List of hosts:ports',
             value: '',
             type: 'text',
-            column: 1,
+            column: 1
             // rules: 'string',
           },
           {
@@ -116,7 +122,7 @@ export class ProfileForm {
             label: 'Replica Set Name',
             value: '',
             type: 'text',
-            column: 1,
+            column: 1
             // rules: 'string',
           },
           {
@@ -124,7 +130,7 @@ export class ProfileForm {
             label: 'w',
             value: '',
             type: 'text',
-            column: 2,
+            column: 2
             // rules: 'string',
           },
           {
@@ -132,7 +138,7 @@ export class ProfileForm {
             label: 'wtimeout',
             value: 0,
             type: 'number',
-            column: 2,
+            column: 2
             // rules: 'string',
           },
           {
@@ -140,7 +146,7 @@ export class ProfileForm {
             label: 'Journal',
             value: true,
             type: 'checkbox',
-            column: 2,
+            column: 2
           },
           {
             name: 'readPref',
@@ -148,7 +154,7 @@ export class ProfileForm {
             value: 'primary',
             options: ['primary', 'secondary'],
             type: 'combo',
-            column: 2,
+            column: 2
           },
           {
             name: 'urlCluster',
@@ -157,19 +163,22 @@ export class ProfileForm {
             // rules: 'regex:/^mongodb:///',
             value: 'mongodb://',
             type: 'text',
-            column: 2,
-          },
-        ],
+            column: 2
+          }
+        ]
       },
       advanced: {
-        fields: [],
+        name: 'Advanced',
+        fields: []
       },
       url: {
-        fields: [],
+        name: 'URL Builder',
+        fields: []
       },
       ssh: {
-        fields: [],
-      },
+        name: 'SSH',
+        fields: []
+      }
     };
     return form;
   }
@@ -186,7 +195,5 @@ export class ProfileForm {
     return form;
   }
 
-  getProfileData() {
-
-  }
+  getProfileData() {}
 }

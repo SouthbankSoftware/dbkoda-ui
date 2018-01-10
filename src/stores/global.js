@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-22T12:40:49+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-10T10:53:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -226,6 +226,11 @@ export default class Store {
   @action.bound
   showConnectionPane = () => {
     this.setDrawerChild(DrawerPanes.PROFILE);
+  };
+
+  @action.bound
+  hideConnectionPane = () => {
+    this.setDrawerChild(DrawerPanes.DEFAULT);
   };
 
   @action.bound
