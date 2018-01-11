@@ -22,7 +22,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-09T10:28:15+11:00
+ * @Last modified time: 2018-01-11T15:41:38+11:00
  */
 
 /**
@@ -211,7 +211,6 @@ const ConnectionPanel = ({ api, profiles, profileList, setDrawerChild, settings 
     }
     if (data.sha) {
       query.username = data.username;
-      query.password = data.password;
       query.password = data.password;
       query.authenticationDatabase = data.authenticationDatabase;
     }
