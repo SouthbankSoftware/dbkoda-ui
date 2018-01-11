@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-09T10:36:40+11:00
+ * @Last modified time: 2018-01-11T15:39:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -135,6 +135,7 @@ export default class ListView extends React.Component {
     }
     if (selectedProfile.ssh && selectedProfile.sshTunnel) {
       query.ssh = selectedProfile.ssh;
+      query.sshTunnel = selectedProfile.sshTunnel;
       query.remoteHost = selectedProfile.host;
       query.remotePort = selectedProfile.port;
       query.sshHost = selectedProfile.remoteHost;
@@ -153,6 +154,7 @@ export default class ListView extends React.Component {
     if (selectedProfile.sha) {
       query.username = selectedProfile.username;
       query.password = newPassword;
+      query.authenticationDatabase = selectedProfile.authenticationDatabase;
     }
     if (selectedProfile.ssl) {
       connectionUrl.indexOf('?') > 0
