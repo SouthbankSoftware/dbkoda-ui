@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-11T15:39:52+11:00
+ * @Last modified time: 2018-01-11T22:22:11+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -217,12 +217,14 @@ export default class ListView extends React.Component {
         password: null,
         status: 'OPEN',
         database: data.database,
+        authenticationDatabase: data.authenticationDatabase,
         alias: data.alias,
         authorization: data.authorization,
         host: data.host,
         hostRadio: data.hostRadio,
         port: data.port,
         ssl: data.ssl,
+        sslAllowInvalidCertificates: data.sslAllowInvalidCertificates,
         test: data.test,
         url: data.url,
         urlRadio: data.urlRadio,
@@ -525,10 +527,10 @@ export default class ListView extends React.Component {
 
   @action.bound
   openSshConnectionAlert(options) {
-    const { targetProfile } = this.state;
+    const { targetProfile, remotePass, passPhrase } = this.state;
     this._openSshTerminalOptions = options;
 
-    if (targetProfile.bPassPhrase || targetProfile.bRemotePass) {
+    if ((targetProfile.bPassPhrase && !passPhrase) || (targetProfile.bRemotePass && !remotePass)) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);
