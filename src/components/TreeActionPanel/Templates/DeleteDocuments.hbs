@@ -1,4 +1,6 @@
-var cmdResult=db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
+var delResult={}
+
+delResult=db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
   {{#if DeleteMany }}deleteMany{{else}}deleteOne{{/if}}(
      { {{#if FilterKeys~}} {{#if UseOr~}}"$or"{{else}}"$and"{{/if~}}:[
         {{#each FilterKeys }}
@@ -7,4 +9,4 @@ var cmdResult=db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}"
       ] {{/if ~}}
      });
 
-printjson(cmdResult);
+printjson(delResult);
