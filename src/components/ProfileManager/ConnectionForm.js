@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-09T15:39:42+11:00
+ * @Last modified time: 2018-01-15T09:46:58+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,13 +24,26 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { observable } from 'mobx';
+
+export const FieldBindings = {
+  text: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange'],
+  password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange'],
+  number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange'],
+  checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'onClick'],
+};
+
 export const Subforms = {
   forms: ['basic', 'cluster', 'advanced', 'url', 'ssh']
 };
 
 export class ConnectionForm {
+  formErrors: []
+  constructor() {
+    this.formErrors = [];
+  }
   getInstance() {
-    const form = {
+    const form = observable({
       basic: {
         name: 'Basic',
         fields: [
@@ -47,7 +60,9 @@ export class ConnectionForm {
             label: 'Host',
             value: 'localhost',
             type: 'text',
-            column: 1
+            column: 1,
+            disabled: false,
+            checkbox: 'disabled'
             // rules: 'string',
           },
           {
@@ -55,7 +70,13 @@ export class ConnectionForm {
             label: 'Port',
             value: '27017',
             type: 'number',
-            column: 1
+            options: {
+              min: 0,
+              max: 65535
+            },
+            column: 1,
+            disabled: false,
+            checkbox: 'disabled'
             // rules: 'numeric',
           },
           {
@@ -70,7 +91,8 @@ export class ConnectionForm {
             value: false,
             label: 'SCRAM-SHA-1(username/password)',
             type: 'checkbox',
-            column: 2
+            column: 2,
+            refFields: ['username', 'password']
           },
           {
             name: 'username',
@@ -78,7 +100,9 @@ export class ConnectionForm {
             icon: 'user',
             type: 'text',
             column: 2,
-            width: 0.5
+            width: 0.5,
+            disabled: true,
+            checkbox: 'enabled'
           },
           {
             name: 'password',
@@ -86,14 +110,17 @@ export class ConnectionForm {
             icon: 'password',
             type: 'password',
             column: 2,
-            width: 0.5
+            width: 0.5,
+            disabled: true,
+            checkbox: 'enabled'
           },
           {
             name: 'urlRadio',
             label: 'Use URI instead',
             value: false,
             type: 'checkbox',
-            column: 2
+            column: 2,
+            refFields: ['url', 'host', 'port']
           },
           {
             name: 'url',
@@ -102,7 +129,9 @@ export class ConnectionForm {
             // rules: 'regex:/^mongodb:///',
             value: 'mongodb://',
             type: 'text',
-            column: 2
+            column: 2,
+            disabled: true,
+            checkbox: 'enabled'
           }
         ]
       },
@@ -179,7 +208,7 @@ export class ConnectionForm {
         name: 'SSH',
         fields: []
       }
-    };
+    });
     return form;
   }
 
@@ -195,5 +224,23 @@ export class ConnectionForm {
     return form;
   }
 
-  getProfileData() {}
+  getProfileFromInstance(formInstance) {
+    console.log('getProfileFromInstance:', formInstance);
+    return {};
+  }
+
+  onConnect(formInstance) {
+    console.log('onConnect:', formInstance);
+  }
+  onSave(formInstance) {
+    console.log('onSave:', formInstance);
+  }
+
+  onTest(formInstance) {
+    console.log('onTest:', formInstance);
+  }
+
+  onReset(formInstance) {
+    console.log('onReset:', formInstance);
+  }
 }

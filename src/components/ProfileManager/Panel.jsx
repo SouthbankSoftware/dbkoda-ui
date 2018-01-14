@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-10T10:54:29+11:00
+ * @Last modified time: 2018-01-15T10:22:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,11 +24,18 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
+import { action } from 'mobx';
 import { Button, ButtonGroup } from '@blueprintjs/core';
 import RGL, { WidthProvider } from 'react-grid-layout';
-import { ConnectionForm, Subforms } from './ConnectionForm';
+
+import TextField from '#/TreeActionPanel/Components/TextField';
+import NumericField from '#/TreeActionPanel/Components/NumericField';
+import BooleanField from '#/TreeActionPanel/Components/BooleanField';
+
+import { ConnectionForm, Subforms, FieldBindings } from './ConnectionForm';
 import './Panel.scss';
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -49,7 +56,8 @@ type State = {
 })
 @observer
 export default class ProfileManager extends React.Component<Props, State> {
-  profileForm: null;
+  form: null;
+  formInstance: null;
   subForms: null;
 
   static defaultProps = {
@@ -58,34 +66,83 @@ export default class ProfileManager extends React.Component<Props, State> {
   };
 
   state = {
-    selectedSubform: 'Basic'
+    selectedSubform: 'basic',
+    connecting: false
   };
 
   constructor(props: Props) {
     super(props);
 
     const { store } = this.props;
-    const pf = new ConnectionForm();
+    this.form = new ConnectionForm();
     if (store && store.profileList.selectedProfile) {
-      this.profileForm = pf.getInstanceFromProfile(
+      this.formInstance = this.form.getInstanceFromProfile(
         store.profileList.selectedProfile
       );
     } else {
-      this.profileForm = pf.getInstance();
+      this.formInstance = this.form.getInstance();
     }
-    this.subForms = pf.subforms;
+    this.subForms = this.form.subforms;
+  }
+
+  @action
+  updateReferencedFields(refFields, value, type) {
+    const subForm = this.formInstance[this.state.selectedSubform];
+    if (subForm.fields) {
+      for (const fld of refFields) {
+        const refField = _.find(subForm.fields, (f) => {
+          return f.name === fld;
+        });
+        if (type === 'checkbox') {
+          if (refField.checkbox === 'enabled') {
+            refField.disabled = !value;
+          } else if (refField.checkbox === 'disabled') {
+            refField.disabled = value;
+          }
+        }
+      }
+    }
+  }
+
+  addAdditionalFieldProps(field) {
+    field.id = field.name; // fix to add id as required by UI fields
+    field.onChange = action((e) => {
+      field.value = e.currentTarget.value;
+      if (field.refFields) {
+        this.updateReferencedFields(field.refFields, field.value, field.type);
+      }
+    });
+    if (field.type == 'checkbox') {
+      field.onClick = action((e) => {
+        field.value = e.currentTarget.checked;
+        if (field.refFields) {
+          this.updateReferencedFields(field.refFields, field.value, field.type);
+        }
+      });
+    }
+    field.bind = () => {
+      const binds = FieldBindings[field.type];
+      const objProp = {};
+      for (const prop of binds) {
+        if (field.hasOwnProperty(prop)) {
+          objProp[prop] = field[prop];
+        }
+      }
+      return objProp;
+    };
   }
 
   renderMenu() {
     const menuBtns = [];
     Subforms.forms.forEach((formStr) => {
-      const subForm = this.profileForm[formStr];
+      const subForm = this.formInstance[formStr];
       menuBtns.push(
         <Button
-          active={this.state.selectedSubform == subForm.name}
+          active={this.state.selectedSubform == formStr}
+          key={formStr}
           onClick={() => {
             this.setState({
-              selectedSubform: subForm.name
+              selectedSubform: formStr
             });
           }}
         >
@@ -95,42 +152,114 @@ export default class ProfileManager extends React.Component<Props, State> {
     });
 
     return (
-      <div>
-        <ButtonGroup minimal={false} large vertical fill>
-          {menuBtns}
-        </ButtonGroup>
-      </div>
+      <ButtonGroup className="menuBtns" minimal={false} large vertical fill>
+        {menuBtns}
+      </ButtonGroup>
     );
+  }
+
+  getColumnFields() {
+    const fieldsCol1 = [];
+    const fieldsCol2 = [];
+    if (this.state.selectedSubform) {
+      const subForm = this.formInstance[this.state.selectedSubform];
+      if (subForm.fields) {
+        subForm.fields.forEach((field) => {
+          this.addAdditionalFieldProps(field);
+
+          let uiField;
+          if (field.type == 'text' || field.type == 'password') {
+            uiField = <TextField key={field.name} field={field} />;
+          } else if (field.type == 'number') {
+            uiField = <NumericField key={field.name} field={field} />;
+          } else if (field.type == 'checkbox') {
+            uiField = <BooleanField key={field.name} field={field} />;
+          }
+          if (field.column == 1) {
+            fieldsCol1.push(uiField);
+          } else if (field.column == 2) {
+            fieldsCol2.push(uiField);
+          }
+        });
+      }
+    }
+    return { fieldsCol1, fieldsCol2 };
   }
 
   render() {
     const { store } = this.props;
+    const { fieldsCol1, fieldsCol2 } = this.getColumnFields();
     return (
       <div className="ProfileManager">
-        <ReactGridLayout className="layout" rowHeight={150}>
-          <div
-            key="column0"
-            data-grid={{ x: 0, y: 1.5, w: 3, h: 3, static: true }}
-          >
-            {this.renderMenu()}
+        <div key="column0" className="connectionLeftPane">
+          <div className="form-title">
+            <span>Create New Connection</span>
           </div>
+
+          {this.renderMenu()}
+        </div>
+        <ReactGridLayout className="layout" rowHeight={150} margin={[0, 10]}>
           <div
             key="column1"
-            data-grid={{ x: 3, y: 1.5, w: 3, h: 3, static: true }}
+            data-grid={{ x: 0, y: 1.5, w: 3.5, h: 3, static: true }}
           >
-            <span className="text">2 - Static</span>
+            <div className="pt-dark form-scrollable">
+              <form>{fieldsCol1}</form>
+            </div>
           </div>
           <div
             key="column2"
-            data-grid={{ x: 6, y: 1.5, w: 3, h: 3, static: true }}
+            data-grid={{ x: 3.5, y: 1.5, w: 3.5, h: 3, static: true }}
           >
-            <span className="text">3 - Static</span>
+            <div className="pt-dark form-scrollable">
+              <form>{fieldsCol2}</form>
+            </div>
           </div>
           <div
             key="column3"
-            data-grid={{ x: 9, y: 1.5, w: 3, h: 3, static: true }}
+            data-grid={{ x: 7, y: 1.5, w: 3, h: 3, static: true }}
           >
-            <span className="text">4 - Static</span>
+            <div className="pt-dark form-scrollable">
+              <form>
+                <div className="profile-button-panel">
+                  <Button
+                    className={
+                      (this.form.formErrors.length > 0
+                        ? 'inactive'
+                        : 'active') +
+                      ' connectButton pt-button pt-intent-success'
+                    }
+                    onClick={() => this.form.onConnect(this.formInstance)}
+                    text={globalString('connection/form/connectButton')}
+                    disabled={this.form.formErrors.length > 0}
+                    loading={this.state.connecting}
+                  />
+                </div>
+                <div className="profile-button-panel">
+                  <Button
+                    className="save-button pt-button pt-intent-primary"
+                    text={globalString('connection/form/saveButton')}
+                    onClick={() => this.form.onSave(this.formInstance)}
+                  />{' '}
+                  <Button
+                    className={
+                      (this.form.formErrors.length > 0
+                        ? 'inactive'
+                        : 'active') + ' test-button pt-button pt-intent-primary'
+                    }
+                    onClick={() => this.form.onTest(this.formInstance)}
+                    text={globalString('connection/form/testButton')}
+                    disabled={this.form.formErrors.length > 0}
+                    loading={this.state.testing}
+                  />
+                  <Button
+                    className="reset-button pt-button pt-intent-warning"
+                    onClick={() => this.form.onReset(this.formInstance)}
+                    text={globalString('connection/form/resetButton')}
+                  />
+                </div>
+              </form>
+            </div>
           </div>
         </ReactGridLayout>
         <Button

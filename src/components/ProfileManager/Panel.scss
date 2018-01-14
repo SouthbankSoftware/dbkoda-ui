@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-10T11:29:48+11:00
+ * @Last modified time: 2018-01-15T09:57:34+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,18 +24,30 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-@import "../../styles/_defaultTheme.scss";
+@import '../../styles/_defaultTheme.scss';
 
 .ProfileManager {
-  background: $panelLeftBackground;
+  background: darken($panelLeftBackground, 5);
   z-index: 100;
   position: absolute;
   width: 100%;
   height: 100%;
 
+  .connectionLeftPane {
+    width: 300px;
+    height: 100%;
+    position: absolute;
+    background-color: $panelLeftBackground;
+  }
+
+  .react-grid-layout {
+    position: absolute;
+    left: 300px;
+    width: 100%;
+  }
   .react-grid-item {
-    background: lighten($panelLeftBackground, 10);
+    background: darken($panelLeftBackground, 5);
+    border-right: 1px solid $chartTooltipBackground;
   }
 
   .react-grid-placeholder {
@@ -48,7 +60,7 @@
     height: 20px;
     bottom: 0;
     right: 0;
-    background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=");
+    background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=');
     background-position: bottom right;
     padding: 0 3px 3px 0;
     background-repeat: no-repeat;
@@ -93,6 +105,460 @@
       border-top: 10px solid lighten($panelLeftBackground, 30);
       width: 80px;
       height: 80px;
+    }
+  }
+
+  // Button Menu styling
+
+  .menuBtns.pt-button-group {
+    margin: 30px;
+    .pt-button {
+      border-radius: 5px !important;
+      margin: 20px 11px;
+    }
+  }
+
+  // Dynamic Form styling
+
+  div > form {
+    margin: 90px 30px 30px 30px;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  input[type='Numeric'],
+  input[type='password'] {
+    background: unset;
+    color: $connectionActiveTextFieldTextColour !important;
+  }
+  input[type='text']:focus,
+  input[type='number']:focus,
+  input[type='Numeric']:focus,
+  input[type='password']:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
+    border-radius: 0px;
+  }
+  input[type='Numeric'] {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    border-top-left-radius: 0.4em !important;
+    border-top-right-radius: 0em !important;
+    border-bottom-left-radius: 0.4em !important;
+    border-bottom-right-radius: 0em !important;
+  }
+  input[type='Numeric']:focus {
+    border-top-left-radius: 0.4em !important;
+    border-top-right-radius: 0em !important;
+    border-bottom-left-radius: 0.4em !important;
+    border-bottom-right-radius: 0em !important;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  .form-scrollable {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .form-scrollable:after {
+    display: block;
+    content: '';
+    width: 100%;
+    height: 50px;
+  }
+
+  .form-title {
+    text-align: center;
+    margin: 280px 0 35px 0;
+    color: $fieldHeadingFontColor;
+    font-size: 16px;
+  }
+
+  .form-group-inline {
+    display: inline-block !important;
+    vertical-align: top;
+    width: 100%;
+  }
+
+  .pt-form-group {
+    padding: 0 11px;
+  }
+
+  .pt-form-content {
+    width: 100%;
+
+    :disabled {
+      opacity: 0.5;
+    }
+
+    .pt-input,
+    .pt-select {
+      width: 100%;
+      min-width: 200px;
+      border-radius: 0px;
+      border-style: none;
+      box-shadow: none;
+      // background-color: $fieldBrightBackgroundColor !important;
+      // color: $fieldBrightFontColor !important;
+    }
+
+    .pt-numeric-input {
+      .pt-input-group {
+        width: 100%;
+      }
+      .pt-button-group {
+        z-index: 100;
+        position: absolute;
+        right: 0;
+        border-left: 1px solid $defaultFontColor;
+        .pt-icon-chevron-up,
+        .pt-icon-chevron-down {
+          background: unset !important;
+          box-shadow: none !important;
+          background-color: $white !important;
+          color: $defaultFontColor !important;
+          border-radius: 0px !important;
+        }
+        .pt-icon-chevron-up::before,
+        .pt-icon-chevron-down::before {
+          color: $defaultFontColor !important;
+        }
+        .pt-icon-chevron-up {
+        }
+        .pt-icon-chevron-down {
+        }
+      }
+      .pt-input {
+        width: 100%;
+        min-width: 0px;
+      }
+    }
+
+    .pt-numeric-input:focus {
+      .pt-button-group {
+        .pt-icon-chevron-up {
+          background-color: $connectionActiveTextFieldBackgroundColour !important;
+        }
+        .pt-icon-chevron-down {
+          background-color: $connectionActiveTextFieldBackgroundColour !important;
+        }
+      }
+    }
+
+    .pt-popover-target {
+      width: 100%;
+    }
+  }
+  .groupFieldSet {
+    margin: 0px -15px 15px -15px;
+    border-style: none;
+    background-color: $fieldGroupPrimaryBackground;
+    .pt-form-group {
+      margin: 0px 5px 15px 5px;
+    }
+  }
+
+  .tableFieldSet {
+    border-style: none;
+    background-color: $fieldGroupPrimaryBackground;
+
+    .tableHeader {
+      height: 60px;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-bottom: 1px solid $fieldGroupTitleUnderline;
+
+      .pt-icon-add {
+        background: unset !important;
+        background-color: $fieldGroupHeaderIcon !important;
+      }
+      .pt-icon-add:hover {
+        background-color: #272a3a !important;
+      }
+
+      .pt-icon-trash {
+        background-color: $fieldGroupHeaderDangerIcon !important;
+        :hover {
+          background-color: #a5535e !important;
+        }
+      }
+      .pt-icon-trash:hover::before {
+        color: $white !important;
+      }
+
+      .left {
+        padding-top: 6px;
+      }
+    }
+
+    .field-group {
+      padding: 0 9px;
+
+      .pt-icon-delete {
+        color: $fieldGroupListIcon !important;
+        margin: 0;
+        background: unset !important;
+      }
+      .pt-icon-delete:hover::before {
+        color: $white !important;
+      }
+    }
+
+    .pt-form-content {
+      width: 100%;
+      margin: 2px 0;
+
+      .pt-input,
+      .pt-select,
+      .pt-numeric-input {
+        width: 40%;
+        min-width: 95px;
+      }
+    }
+
+    div.columns-1-max {
+      div.pt-form-group {
+        width: 96%;
+        padding: 0;
+      }
+    }
+    div.columns-2-max {
+      div.pt-form-group {
+        width: 44%;
+        padding: 0;
+      }
+    }
+    div.columns-3-max {
+      div.pt-form-group {
+        width: 30%;
+        padding: 0;
+      }
+    }
+    div.columns-4-max {
+      div.pt-form-group {
+        width: 20%;
+        padding: 0;
+      }
+    }
+  }
+  .form-button-panel {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: $fieldGroupPrimaryBackground;
+
+    button {
+      background: none;
+      border-radius: 0px;
+      position: right;
+    }
+    button:focus {
+      outline: none;
+    }
+    .pt-intent-success {
+      background-color: $connectionButtonBackgroundColourConnect;
+      color: $fieldPrimaryButtonFontColor;
+    }
+    .pt-intent-success:hover {
+      background-color: $connectionButtonBackgroundColourConnectHover;
+    }
+    .pt-intent-success:active {
+      background-color: $fieldPrimaryButtonActive;
+    }
+    .pt-intent-primary {
+      background-color: $fieldSecondaryButtonBackground;
+      color: $fieldSecondaryButtonFontColor;
+    }
+    .pt-intent-primary:hover {
+      background-color: $fieldSecondaryButtonHover;
+    }
+    .pt-intent-primary:active {
+      background-color: $fieldSecondaryButtonActive;
+    }
+  }
+
+  .pt-label-r-30 {
+    width: 100%;
+    text-align: left;
+    color: $fieldHeadingFontColor !important;
+  }
+
+  .pt-select select {
+    height: 30px;
+    width: 100%;
+    border-radius: 0px;
+    border-style: none;
+    background-color: $fieldBrightBackgroundColor !important;
+    color: $fieldBrightFontColor !important;
+  }
+
+  .pt-checkbox-form,
+  .pt-form-content-reverse {
+    // margin-top: 10px;
+
+    .pt-checkbox {
+      font-size: 10pt;
+      font-weight: lighter;
+      color: $connectionHeadingsFontColour !important;
+      text-align: left;
+      .pt-control-indicator {
+        font-size: unset;
+        font-weight: unset;
+        font-style: unset;
+        box-shadow: unset;
+        line-height: unset;
+        background: unset;
+        box-shadow: unset;
+        font-size: 11pt;
+        color: $connectionCheckboxColour;
+        border-radius: 0;
+        background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+        border: 1px solid $connectionCheckboxColour;
+      }
+      .pt-control-indicator:hover {
+        background-color: $connectionCheckboxBackgroundColourHover;
+      }
+    }
+  }
+
+  .table-field-100 {
+    width: 100% !important;
+  }
+
+  .table-field-90 {
+    width: 90% !important;
+  }
+
+  .table-field-80 {
+    width: 80% !important;
+  }
+
+  .table-field-15 {
+    width: 15% !important;
+  }
+
+  .right-button {
+    float: right;
+    margin: 10px;
+  }
+
+  .transparent-btn {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+
+  .tooltip-btn {
+    z-index: 9999;
+  }
+
+  .pt-tooltip-indicator-form {
+    border-bottom: none !important;
+    vertical-align: middle !important;
+  }
+
+  .pt-form-content-reverse {
+    display: flex;
+    width: 100%;
+    /*flex-direction: row-reverse;*/
+  }
+  .Select-control {
+    height: 30px;
+    border: none;
+    background: #bfbec0 !important;
+    color: $connectionActiveTextFieldTextColour !important;
+    border-radius: 0.4em;
+  }
+  .Select-clear-zone {
+    display: none;
+  }
+  .is-open > .Select-control {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
+  }
+  .Select-menu-outer {
+    z-index: 999 !important;
+    position: absolute;
+    max-height: 130px;
+    .Select-menu {
+      max-height: 130px;
+    }
+  }
+  .Select-placeholder,
+  .Select--single > .Select-control .Select-value {
+    line-height: 30px;
+  }
+  .Select-input {
+    height: 30px;
+    border-radius: 0px;
+  }
+  .circleButton {
+    background: none;
+    background-color: $fieldGroupPrimaryBackground !important;
+  }
+  .circleButton:hover {
+    background: none;
+    background-color: $fieldGroupPrimaryBackground !important;
+  }
+
+
+  div.profile-button-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 40px;
+    button.pt-button {
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 7em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColour;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+    }
+    button.pt-button:hover {
+      background-color: $connectionButtonBackgroundColourHover;
+      color: $connectionButtonFontColourHover;
+    }
+    button.reset-button {
+      width: 7em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColourReset;
+      border: unset;
+      box-shadow: unset;
+    }
+    button.reset-button:hover {
+      background-color: $connectionButtonBackgroundColourResetHover;
+      color: $connectionButtonFontColourHover;
+    }
+    button.connectButton {
+      font-weight: lighter;
+      color: $connectionButtonFontColour;
+      width: 7em;
+      border-radius: 0;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColourConnect;
+      border: unset;
+      box-shadow: unset;
+    }
+    button.connectButton:hover {
+      background-color: $connectionButtonBackgroundColourConnectHover;
+      color: $connectionButtonFontColourHover;
     }
   }
 }
