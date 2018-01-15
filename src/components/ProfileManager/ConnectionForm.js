@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-15T09:46:58+11:00
+ * @Last modified time: 2018-01-15T16:38:36+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,7 +24,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { observable } from 'mobx';
+import _ from 'lodash';
+import { observable, toJS, runInAction } from 'mobx';
+import Ajv from 'ajv';
 
 export const FieldBindings = {
   text: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange'],
@@ -39,6 +41,7 @@ export const Subforms = {
 
 export class ConnectionForm {
   formErrors: []
+  validateErrors: null
   constructor() {
     this.formErrors = [];
   }
@@ -224,13 +227,66 @@ export class ConnectionForm {
     return form;
   }
 
+  getValidationSchema() {
+    return {
+      'additionalProperties': false,
+      'properties': {
+        'basic': {
+          'type': 'object',
+          'properties': {
+            'fields': {
+              'type': 'array',
+              'additionalProperties': false,
+              'items': [
+                {
+                  'additionalProperties': false,
+                  'properties': {
+                    'name': {'type': 'string'},
+                    'value': {'type': 'string', 'minLength': 1}
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    };
+  }
+
+  validateForm(formInstance) {
+    if (!this.validateErrors) {
+      const ajv = new Ajv({removeAdditional: true});
+      const schema = this.getValidationSchema();
+      this.validateErrors = ajv.compile(schema);
+    }
+
+    const formData = toJS(formInstance);
+    const status = this.validateErrors(formData);
+    const { errors } = this.validateErrors;
+
+    if (errors) {
+      for (const error of errors) {
+        const errorPath = error.dataPath.substring(1, error.dataPath.lastIndexOf('.'));
+        const field = _.at(formInstance, errorPath);
+        console.log(field);
+        runInAction(() => {
+          field[0].error = error.message;
+        });
+      }
+      this.formErrors = errors;
+    }
+
+    return {status, formData};
+  }
+
   getProfileFromInstance(formInstance) {
     console.log('getProfileFromInstance:', formInstance);
     return {};
   }
 
   onConnect(formInstance) {
-    console.log('onConnect:', formInstance);
+    const result = this.validateForm(formInstance);
+    console.log('Validation: ', result.status, result.formData);
   }
   onSave(formInstance) {
     console.log('onSave:', formInstance);

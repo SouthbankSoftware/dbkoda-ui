@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-15T10:22:16+11:00
+ * @Last modified time: 2018-01-15T16:37:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 import _ from 'lodash';
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action } from 'mobx';
+import { action, observable, extendObservable } from 'mobx';
 import { Button, ButtonGroup } from '@blueprintjs/core';
 import RGL, { WidthProvider } from 'react-grid-layout';
 
@@ -57,7 +57,7 @@ type State = {
 @observer
 export default class ProfileManager extends React.Component<Props, State> {
   form: null;
-  formInstance: null;
+  @observable formInstance: null;
   subForms: null;
 
   static defaultProps = {
@@ -106,6 +106,10 @@ export default class ProfileManager extends React.Component<Props, State> {
 
   addAdditionalFieldProps(field) {
     field.id = field.name; // fix to add id as required by UI fields
+    extendObservable(field,
+      {
+        error: ''
+      });
     field.onChange = action((e) => {
       field.value = e.currentTarget.value;
       if (field.refFields) {
@@ -158,9 +162,8 @@ export default class ProfileManager extends React.Component<Props, State> {
     );
   }
 
-  getColumnFields() {
-    const fieldsCol1 = [];
-    const fieldsCol2 = [];
+  getColumnFields(column) {
+    const fieldsCol = [];
     if (this.state.selectedSubform) {
       const subForm = this.formInstance[this.state.selectedSubform];
       if (subForm.fields) {
@@ -175,20 +178,17 @@ export default class ProfileManager extends React.Component<Props, State> {
           } else if (field.type == 'checkbox') {
             uiField = <BooleanField key={field.name} field={field} />;
           }
-          if (field.column == 1) {
-            fieldsCol1.push(uiField);
-          } else if (field.column == 2) {
-            fieldsCol2.push(uiField);
+          if (field.column === column) {
+            fieldsCol.push(uiField);
           }
         });
       }
     }
-    return { fieldsCol1, fieldsCol2 };
+    return fieldsCol;
   }
 
   render() {
     const { store } = this.props;
-    const { fieldsCol1, fieldsCol2 } = this.getColumnFields();
     return (
       <div className="ProfileManager">
         <div key="column0" className="connectionLeftPane">
@@ -204,7 +204,7 @@ export default class ProfileManager extends React.Component<Props, State> {
             data-grid={{ x: 0, y: 1.5, w: 3.5, h: 3, static: true }}
           >
             <div className="pt-dark form-scrollable">
-              <form>{fieldsCol1}</form>
+              <form>{this.getColumnFields(1)}</form>
             </div>
           </div>
           <div
@@ -212,7 +212,7 @@ export default class ProfileManager extends React.Component<Props, State> {
             data-grid={{ x: 3.5, y: 1.5, w: 3.5, h: 3, static: true }}
           >
             <div className="pt-dark form-scrollable">
-              <form>{fieldsCol2}</form>
+              <form>{this.getColumnFields(2)}</form>
             </div>
           </div>
           <div
@@ -229,7 +229,9 @@ export default class ProfileManager extends React.Component<Props, State> {
                         : 'active') +
                       ' connectButton pt-button pt-intent-success'
                     }
-                    onClick={() => this.form.onConnect(this.formInstance)}
+                    onClick={() => {
+                      this.form.onConnect(this.formInstance);
+                    }}
                     text={globalString('connection/form/connectButton')}
                     disabled={this.form.formErrors.length > 0}
                     loading={this.state.connecting}
