@@ -39,7 +39,7 @@ import {isDumpAction} from './Utils';
 
 const createTemplateObject = (state) => {
   const {db, profile, exportType, parseGrace, mode} = state;
-  const {host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort} = profile;
+  const {host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort, sshTunnel} = profile;
   const items = {
     ...profile,
     ...state,
@@ -57,7 +57,7 @@ const createTemplateObject = (state) => {
     delete items.password;
   }
   if (hostRadio) {
-    if (ssh) {
+    if (sshTunnel) {
       items.host = '127.0.0.1';
       items.port = sshLocalPort;
     } else {
