@@ -183,7 +183,7 @@ export class ProfileForm extends MobxReactForm {
         errorMsg.push(error[key]);
       }
     });
-    form.invalidate('Form has error.');
+    form.invalidate(globalString('connection/form/error'));
   }
 
   plugins() {

@@ -264,7 +264,8 @@
         "sha": "SCRAM-SHA-1(username/password)",
         "username": "Username",
         "defaultUsername": "dbenvy",
-        "password": "Password"
+        "password": "Password",
+        "error": "The form has an error"
       }
     },
     "profile": {
