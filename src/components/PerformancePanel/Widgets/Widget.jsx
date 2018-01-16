@@ -58,7 +58,7 @@ type Props = {
   };
 })
 @observer
-export default class PerformancePanel extends React.Component<Props> {
+export default class Widget extends React.Component<Props> {
   static defaultProps = {
     store: null,
     api: null,
