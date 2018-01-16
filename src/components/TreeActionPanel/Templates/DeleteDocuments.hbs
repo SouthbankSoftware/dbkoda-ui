@@ -1,10 +1,10 @@
 var delResult={}
 
-delResult=db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
-  {{#if DeleteMany }}deleteMany{{else}}deleteOne{{/if}}(
-     { {{#if FilterKeys~}} {{#if UseOr~}}"$or"{{else}}"$and"{{/if~}}:[
+delResult=db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}").
+  {{#if DeleteMany }}deleteMany{{{else}}}deleteOne{{/if}}(
+     { {{#if FilterKeys~}} {{#if UseOr~}}"$or"{{{else}}}"$and"{{/if~}}:[
         {{#each FilterKeys }}
-        { "{{AttributeName}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
+        { "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
             {{/each }}
       ] {{/if ~}}
      });

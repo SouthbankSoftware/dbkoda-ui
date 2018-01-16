@@ -1,1 +1,1 @@
-  { $addFields:  {  {{#each AddFields}}"{{AttributeName}}": { {{{Expression}}} } {{#unless last}},{{/unless}}{{/each}} }  }
+  { $addFields:  {  {{#each AddFields}}"{{{AttributeName}}}": { {{{Expression}}} } {{#unless last}},{{/unless}}{{/each}} }  }
