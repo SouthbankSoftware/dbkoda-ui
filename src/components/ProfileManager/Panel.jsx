@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-15T16:37:39+11:00
+ * @Last modified time: 2018-01-16T15:21:01+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,10 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import _ from 'lodash';
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action, observable, extendObservable } from 'mobx';
 import { Button, ButtonGroup } from '@blueprintjs/core';
 import RGL, { WidthProvider } from 'react-grid-layout';
 
@@ -35,7 +33,7 @@ import TextField from '#/TreeActionPanel/Components/TextField';
 import NumericField from '#/TreeActionPanel/Components/NumericField';
 import BooleanField from '#/TreeActionPanel/Components/BooleanField';
 
-import { ConnectionForm, Subforms, FieldBindings } from './ConnectionForm';
+import { ConnectionForm } from './ConnectionForm';
 import './Panel.scss';
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -57,8 +55,6 @@ type State = {
 @observer
 export default class ProfileManager extends React.Component<Props, State> {
   form: null;
-  @observable formInstance: null;
-  subForms: null;
 
   static defaultProps = {
     store: null,
@@ -76,70 +72,37 @@ export default class ProfileManager extends React.Component<Props, State> {
     const { store } = this.props;
     this.form = new ConnectionForm();
     if (store && store.profileList.selectedProfile) {
-      this.formInstance = this.form.getInstanceFromProfile(
+      this.form.updateSchemaFromProfile(
         store.profileList.selectedProfile
       );
-    } else {
-      this.formInstance = this.form.getInstance();
-    }
-    this.subForms = this.form.subforms;
-  }
-
-  @action
-  updateReferencedFields(refFields, value, type) {
-    const subForm = this.formInstance[this.state.selectedSubform];
-    if (subForm.fields) {
-      for (const fld of refFields) {
-        const refField = _.find(subForm.fields, (f) => {
-          return f.name === fld;
-        });
-        if (type === 'checkbox') {
-          if (refField.checkbox === 'enabled') {
-            refField.disabled = !value;
-          } else if (refField.checkbox === 'disabled') {
-            refField.disabled = value;
-          }
-        }
-      }
     }
   }
 
-  addAdditionalFieldProps(field) {
-    field.id = field.name; // fix to add id as required by UI fields
-    extendObservable(field,
-      {
-        error: ''
-      });
-    field.onChange = action((e) => {
-      field.value = e.currentTarget.value;
-      if (field.refFields) {
-        this.updateReferencedFields(field.refFields, field.value, field.type);
-      }
-    });
-    if (field.type == 'checkbox') {
-      field.onClick = action((e) => {
-        field.value = e.currentTarget.checked;
-        if (field.refFields) {
-          this.updateReferencedFields(field.refFields, field.value, field.type);
+  renderUIFields(column) {
+    const fields = this.form.getSubformFields(this.state.selectedSubform, column);
+    const uiFields = [];
+    if (fields) {
+      fields.forEach((field) => {
+        let uiField;
+        if (field.type == 'text' || field.type == 'password') {
+          uiField = <TextField key={field.name} field={field} />;
+        } else if (field.type == 'number') {
+          uiField = <NumericField key={field.name} field={field} />;
+        } else if (field.type == 'checkbox') {
+          uiField = <BooleanField key={field.name} field={field} />;
         }
+
+        uiFields.push(uiField);
       });
     }
-    field.bind = () => {
-      const binds = FieldBindings[field.type];
-      const objProp = {};
-      for (const prop of binds) {
-        if (field.hasOwnProperty(prop)) {
-          objProp[prop] = field[prop];
-        }
-      }
-      return objProp;
-    };
+    return uiFields;
   }
 
   renderMenu() {
     const menuBtns = [];
-    Subforms.forms.forEach((formStr) => {
-      const subForm = this.formInstance[formStr];
+    const subforms = this.form.getSubForms();
+    subforms.forEach((formStr) => {
+      const subForm = this.form.formSchema[formStr];
       menuBtns.push(
         <Button
           active={this.state.selectedSubform == formStr}
@@ -162,31 +125,6 @@ export default class ProfileManager extends React.Component<Props, State> {
     );
   }
 
-  getColumnFields(column) {
-    const fieldsCol = [];
-    if (this.state.selectedSubform) {
-      const subForm = this.formInstance[this.state.selectedSubform];
-      if (subForm.fields) {
-        subForm.fields.forEach((field) => {
-          this.addAdditionalFieldProps(field);
-
-          let uiField;
-          if (field.type == 'text' || field.type == 'password') {
-            uiField = <TextField key={field.name} field={field} />;
-          } else if (field.type == 'number') {
-            uiField = <NumericField key={field.name} field={field} />;
-          } else if (field.type == 'checkbox') {
-            uiField = <BooleanField key={field.name} field={field} />;
-          }
-          if (field.column === column) {
-            fieldsCol.push(uiField);
-          }
-        });
-      }
-    }
-    return fieldsCol;
-  }
-
   render() {
     const { store } = this.props;
     return (
@@ -204,7 +142,7 @@ export default class ProfileManager extends React.Component<Props, State> {
             data-grid={{ x: 0, y: 1.5, w: 3.5, h: 3, static: true }}
           >
             <div className="pt-dark form-scrollable">
-              <form>{this.getColumnFields(1)}</form>
+              <form>{this.renderUIFields(1)}</form>
             </div>
           </div>
           <div
@@ -212,7 +150,7 @@ export default class ProfileManager extends React.Component<Props, State> {
             data-grid={{ x: 3.5, y: 1.5, w: 3.5, h: 3, static: true }}
           >
             <div className="pt-dark form-scrollable">
-              <form>{this.getColumnFields(2)}</form>
+              <form>{this.renderUIFields(2)}</form>
             </div>
           </div>
           <div
@@ -230,7 +168,7 @@ export default class ProfileManager extends React.Component<Props, State> {
                       ' connectButton pt-button pt-intent-success'
                     }
                     onClick={() => {
-                      this.form.onConnect(this.formInstance);
+                      this.form.onConnect(this.form.formSchema);
                     }}
                     text={globalString('connection/form/connectButton')}
                     disabled={this.form.formErrors.length > 0}
@@ -241,7 +179,7 @@ export default class ProfileManager extends React.Component<Props, State> {
                   <Button
                     className="save-button pt-button pt-intent-primary"
                     text={globalString('connection/form/saveButton')}
-                    onClick={() => this.form.onSave(this.formInstance)}
+                    onClick={() => this.form.onSave(this.form.formSchema)}
                   />{' '}
                   <Button
                     className={
@@ -249,14 +187,14 @@ export default class ProfileManager extends React.Component<Props, State> {
                         ? 'inactive'
                         : 'active') + ' test-button pt-button pt-intent-primary'
                     }
-                    onClick={() => this.form.onTest(this.formInstance)}
+                    onClick={() => this.form.onTest(this.form.formSchema)}
                     text={globalString('connection/form/testButton')}
                     disabled={this.form.formErrors.length > 0}
                     loading={this.state.testing}
                   />
                   <Button
                     className="reset-button pt-button pt-intent-warning"
-                    onClick={() => this.form.onReset(this.formInstance)}
+                    onClick={() => this.form.onReset(this.form.formSchema)}
                     text={globalString('connection/form/resetButton')}
                   />
                 </div>

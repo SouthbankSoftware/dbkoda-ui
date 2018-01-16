@@ -1,0 +1,23 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "basic": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "additionalProperties": false,
+          "items": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string", "minLength": 1 }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

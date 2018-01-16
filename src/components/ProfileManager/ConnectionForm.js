@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-15T16:38:36+11:00
+ * @Last modified time: 2018-01-16T15:27:26+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +25,7 @@
  */
 
 import _ from 'lodash';
-import { observable, toJS, runInAction } from 'mobx';
+import { observable, toJS, runInAction, action, extendObservable } from 'mobx';
 import Ajv from 'ajv';
 
 export const FieldBindings = {
@@ -35,187 +35,27 @@ export const FieldBindings = {
   checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'onClick'],
 };
 
-export const Subforms = {
-  forms: ['basic', 'cluster', 'advanced', 'url', 'ssh']
-};
-
 export class ConnectionForm {
+  formSchema: null
   formErrors: []
   validateErrors: null
   constructor() {
     this.formErrors = [];
+    this.formSchema = this.loadDefaultSchema();
+
+    this.getSubForms = this.getSubForms.bind(this);
   }
-  getInstance() {
-    const form = observable({
-      basic: {
-        name: 'Basic',
-        fields: [
-          {
-            name: 'alias',
-            label: 'Connection Name',
-            value: 'Connection - 1',
-            type: 'text',
-            column: 1
-            // rules: 'required|string',
-          },
-          {
-            name: 'host',
-            label: 'Host',
-            value: 'localhost',
-            type: 'text',
-            column: 1,
-            disabled: false,
-            checkbox: 'disabled'
-            // rules: 'string',
-          },
-          {
-            name: 'port',
-            label: 'Port',
-            value: '27017',
-            type: 'number',
-            options: {
-              min: 0,
-              max: 65535
-            },
-            column: 1,
-            disabled: false,
-            checkbox: 'disabled'
-            // rules: 'numeric',
-          },
-          {
-            name: 'database',
-            label: 'Database',
-            value: 'admin',
-            type: 'text',
-            column: 1
-          },
-          {
-            name: 'sha',
-            value: false,
-            label: 'SCRAM-SHA-1(username/password)',
-            type: 'checkbox',
-            column: 2,
-            refFields: ['username', 'password']
-          },
-          {
-            name: 'username',
-            label: 'Username',
-            icon: 'user',
-            type: 'text',
-            column: 2,
-            width: 0.5,
-            disabled: true,
-            checkbox: 'enabled'
-          },
-          {
-            name: 'password',
-            label: 'Password',
-            icon: 'password',
-            type: 'password',
-            column: 2,
-            width: 0.5,
-            disabled: true,
-            checkbox: 'enabled'
-          },
-          {
-            name: 'urlRadio',
-            label: 'Use URI instead',
-            value: false,
-            type: 'checkbox',
-            column: 2,
-            refFields: ['url', 'host', 'port']
-          },
-          {
-            name: 'url',
-            label: 'URI',
-            placeholder: 'mongodb://',
-            // rules: 'regex:/^mongodb:///',
-            value: 'mongodb://',
-            type: 'text',
-            column: 2,
-            disabled: true,
-            checkbox: 'enabled'
-          }
-        ]
-      },
-      cluster: {
-        name: 'Cluster',
-        fields: [
-          {
-            name: 'hostsList',
-            label: 'List of hosts:ports',
-            value: '',
-            type: 'text',
-            column: 1
-            // rules: 'string',
-          },
-          {
-            name: 'replicaSetName',
-            label: 'Replica Set Name',
-            value: '',
-            type: 'text',
-            column: 1
-            // rules: 'string',
-          },
-          {
-            name: 'w',
-            label: 'w',
-            value: '',
-            type: 'text',
-            column: 2
-            // rules: 'string',
-          },
-          {
-            name: 'wTimeout',
-            label: 'wtimeout',
-            value: 0,
-            type: 'number',
-            column: 2
-            // rules: 'string',
-          },
-          {
-            name: 'journal',
-            label: 'Journal',
-            value: true,
-            type: 'checkbox',
-            column: 2
-          },
-          {
-            name: 'readPref',
-            label: 'Read Preference',
-            value: 'primary',
-            options: ['primary', 'secondary'],
-            type: 'combo',
-            column: 2
-          },
-          {
-            name: 'urlCluster',
-            label: 'URI',
-            placeholder: 'mongodb://',
-            // rules: 'regex:/^mongodb:///',
-            value: 'mongodb://',
-            type: 'text',
-            column: 2
-          }
-        ]
-      },
-      advanced: {
-        name: 'Advanced',
-        fields: []
-      },
-      url: {
-        name: 'URL Builder',
-        fields: []
-      },
-      ssh: {
-        name: 'SSH',
-        fields: []
-      }
-    });
+  getSubForms() {
+    return Object.keys(this.formSchema);
+  }
+  loadDefaultSchema() {
+    // eslint-disable-next-line
+    const schema = require('./Forms/ConnectionForm.json');
+    const form = observable(schema);
     return form;
   }
 
-  getInstanceFromProfile(profile) {
+  updateSchemaFromProfile(profile) {
     const form = this.getInstance();
     for (const subform in form) {
       if (form.hasOwnProperty(subform)) {
@@ -227,30 +67,73 @@ export class ConnectionForm {
     return form;
   }
 
-  getValidationSchema() {
-    return {
-      'additionalProperties': false,
-      'properties': {
-        'basic': {
-          'type': 'object',
-          'properties': {
-            'fields': {
-              'type': 'array',
-              'additionalProperties': false,
-              'items': [
-                {
-                  'additionalProperties': false,
-                  'properties': {
-                    'name': {'type': 'string'},
-                    'value': {'type': 'string', 'minLength': 1}
-                  }
-                }
-              ]
-            }
+  getSubformFields(selectedSubform, column) {
+    const fieldsCol = [];
+    const subForm = this.formSchema[selectedSubform];
+    if (subForm.fields) {
+      subForm.fields.forEach((field) => {
+        this.addAdditionalFieldProps(field, selectedSubform);
+        if (field.column === column) {
+          fieldsCol.push(field);
+        }
+      });
+    }
+    return fieldsCol;
+  }
+
+  addAdditionalFieldProps(field, subform) {
+    field.id = field.name; // fix to add id as required by UI fields
+    field.subform = subform;
+    extendObservable(field, { error: ''});
+    field.onChange = action((e) => {
+      field.value = e.currentTarget.value;
+      if (field.refFields) {
+        this.updateReferencedFields(field);
+      }
+    });
+    if (field.type == 'checkbox') {
+      field.onClick = action((e) => {
+        field.value = e.currentTarget.checked;
+        if (field.refFields) {
+          this.updateReferencedFields(field);
+        }
+      });
+    }
+    field.bind = () => {
+      const binds = FieldBindings[field.type];
+      const objProp = {};
+      for (const prop of binds) {
+        if (field.hasOwnProperty(prop)) {
+          objProp[prop] = field[prop];
+        }
+      }
+      return objProp;
+    };
+  }
+
+  @action
+  updateReferencedFields(field) {
+    const subForm = this.formSchema[field.subform];
+    if (subForm.fields) {
+      for (const fld of field.refFields) {
+        const refField = _.find(subForm.fields, (f) => {
+          return f.name === fld;
+        });
+        if (field.type === 'checkbox') {
+          if (refField.checkbox === 'enabled') {
+            refField.disabled = !field.value;
+          } else if (refField.checkbox === 'disabled') {
+            refField.disabled = field.value;
           }
         }
       }
-    };
+    }
+  }
+
+  getValidationSchema() {
+    // eslint-disable-next-line
+    const schema = require('./Forms/ConnectionFormValidation.json');
+    return schema;
   }
 
   validateForm(formInstance) {
