@@ -19,12 +19,12 @@
  */
 
 /**
-* @Author: Chris Trott <chris>
-* @Date:   2017-03-10T12:33:56+11:00
-* @Email:  chris@southbanksoftware.com
+ * @Author: Chris Trott <chris>
+ * @Date:   2017-03-10T12:33:56+11:00
+ * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
  * @Last modified time: 2017-09-27T08:44:23+10:00
-*/
+ */
 
 import React from 'react';
 import Mousetrap from 'mousetrap';
@@ -36,7 +36,7 @@ import {
   Tooltip,
   AnchorButton,
   Position,
-  EditableText,
+  EditableText
 } from '@blueprintjs/core';
 import { featherClient } from '~/helpers/feathers';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
@@ -56,7 +56,7 @@ import RefreshIcon from '../../styles/icons/refresh-icon.svg';
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config,
+  config: allStores.config
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -65,8 +65,8 @@ export default class Toolbar extends React.Component {
     this.state = {
       context: OutputToolbarContexts.DEFAULT,
       tableToolbar: {
-        limit: 200,
-      },
+        limit: 200
+      }
     };
     this.downloadOutput = this.downloadOutput.bind(this);
 
@@ -82,11 +82,11 @@ export default class Toolbar extends React.Component {
      */
     reaction(
       () => this.props.store.outputPanel.executingShowMore,
-      (executingShowMore) => {
+      executingShowMore => {
         if (
           executingShowMore &&
           this.props.store.outputs.get(
-            this.props.store.outputPanel.currentTab,
+            this.props.store.outputPanel.currentTab
           ) &&
           !this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
             .cannotShowMore
@@ -94,28 +94,28 @@ export default class Toolbar extends React.Component {
           const command = 'it';
           this.props.store.editorToolbar.isActiveExecuting = true;
           this.props.store.editors.get(
-            this.props.store.outputPanel.currentTab,
+            this.props.store.outputPanel.currentTab
           ).executing = true;
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
           service.update(
             this.props.store.outputs.get(
-              this.props.store.outputPanel.currentTab,
+              this.props.store.outputPanel.currentTab
             ).connId,
             {
               shellId: this.props.store.outputs.get(
-                this.props.store.outputPanel.currentTab,
+                this.props.store.outputPanel.currentTab
               ).shellId,
-              commands: command,
-            },
+              commands: command
+            }
           );
           this.props.store.outputs.get(
-            this.props.store.outputPanel.currentTab,
+            this.props.store.outputPanel.currentTab
           ).cannotShowMore = true;
         }
         this.props.store.outputPanel.executingShowMore = false;
       },
-      { name: 'reactionOutputToolbarShowMore' },
+      { name: 'reactionOutputToolbarShowMore' }
     );
 
     /**
@@ -123,7 +123,7 @@ export default class Toolbar extends React.Component {
      */
     reaction(
       () => this.props.store.outputPanel.clearingOutput,
-      (clearingOutput) => {
+      clearingOutput => {
         const currentTab = this.props.store.outputPanel.currentTab;
         if (clearingOutput && this.props.store.outputs.get(currentTab)) {
           this.props.store.outputs.get(currentTab).output = '';
@@ -131,7 +131,7 @@ export default class Toolbar extends React.Component {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT,
               EventLogging.getFragmentEnum().OUTPUT,
-              'User cleared Output',
+              'User cleared Output'
             );
           }
           this.props.store.outputPanel.clearingOutput = false;
@@ -142,14 +142,14 @@ export default class Toolbar extends React.Component {
           if (editor) {
             this.props.store.editors.set(editorKey, {
               ...editor,
-              explains: undefined,
+              explains: undefined
             });
             this.props.store.outputPanel.currentTab = editorKey;
           }
           this.props.store.outputPanel.clearingOutput = false;
         } else if (currentTab.indexOf('Details-') === 0) {
           this.props.store.editors.get(
-            this.props.store.editorPanel.activeEditorId,
+            this.props.store.editorPanel.activeEditorId
           ).detailsView = undefined;
           const editorKey = currentTab.split('Details-')[1];
           this.props.store.outputPanel.currentTab = editorKey;
@@ -175,7 +175,7 @@ export default class Toolbar extends React.Component {
           this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
         }
       },
-      { name: 'reactionOutputToolbarClearOutput' },
+      { name: 'reactionOutputToolbarClearOutput' }
     );
   }
 
@@ -212,16 +212,16 @@ export default class Toolbar extends React.Component {
     const data = new Blob(
       [
         this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
-          .output,
+          .output
       ],
-      { type: 'text/csv' },
+      { type: 'text/csv' }
     );
     const csvURL = window.URL.createObjectURL(data);
     const tempLink = document.createElement('a');
     tempLink.href = csvURL;
     tempLink.setAttribute(
       'download',
-      `output-${this.props.store.outputPanel.currentTab}.js`,
+      `output-${this.props.store.outputPanel.currentTab}.js`
     );
     tempLink.click();
   }
@@ -231,7 +231,7 @@ export default class Toolbar extends React.Component {
    */
   renderTableToolbar() {
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
 
     return (
@@ -268,7 +268,7 @@ export default class Toolbar extends React.Component {
                 maxLength={9}
                 placeholder="200"
                 value={this.state.tableToolbar.limit}
-                onChange={(string) => {
+                onChange={string => {
                   string = parseInt(string, 10);
                   if (!string) {
                     string = '';
@@ -301,9 +301,9 @@ export default class Toolbar extends React.Component {
                         collection: this.props.store.outputs.get(editor.id)
                           .tableJson.collection,
                         database: this.props.store.outputs.get(editor.id)
-                          .tableJson.database,
+                          .tableJson.database
                       },
-                      this.state.tableToolbar.limit,
+                      this.state.tableToolbar.limit
                     );
                   }}
                 >
@@ -359,6 +359,45 @@ export default class Toolbar extends React.Component {
     );
   }
 
+  @action.bound
+  openTableView() {
+    // Get the output instance:
+    console.log(
+      this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
+    );
+    console.log(this.props.editorRefs[this.props.store.outputPanel.currentTab]);
+    console.log(
+      this.props.editorRefs[
+        this.props.store.outputPanel.currentTab
+      ].getCodeMirror()
+    );
+    const editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
+    const cm = editor.getCodeMirror();
+
+    const lineNumber = getLastLine(cm);
+    const currentJson = '';
+    const lines = { start: 0, end: 0, status: '' };
+
+    return this.props.getDocumentAtLine(this.props.id, lineNumber, 0, lines);
+    // Find the last line that looks like a JSON Document:
+
+    // Create a table view on this line:
+    this.props.api.initJsonView(
+      currentJson,
+      this.props.id,
+      'tableJson',
+      lines,
+      this.editor,
+      true
+    );
+  }
+
+  @action.bound
+  openJsonTreeView() {}
+
+  @action.bound
+  openChartView() {}
+
   render() {
     const currentOutput = this.props.store.outputPanel.currentTab;
     // Determine toolbar context.
@@ -378,6 +417,63 @@ export default class Toolbar extends React.Component {
               <div className="pt-navbar-heading">
                 {globalString('output/headings/default')}
               </div>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/jsonTree')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton jsonTreeViewButton"
+                  onClick={this.openJsonTreeView}
+                >
+                  <ClearOutputIcon
+                    className="dbKodaSVG"
+                    width={30}
+                    height={30}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/table')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton tableViewButton"
+                  onClick={this.openTableView}
+                >
+                  <ClearOutputIcon
+                    className="dbKodaSVG"
+                    width={30}
+                    height={30}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/chart')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton chartViewButton"
+                  onClick={this.openChartView}
+                >
+                  <ClearOutputIcon
+                    className="dbKodaSVG"
+                    width={30}
+                    height={30}
+                  />
+                </AnchorButton>
+              </Tooltip>
             </div>
             <div className="pt-navbar-group pt-align-right">
               <Tooltip
@@ -413,16 +509,16 @@ export default class Toolbar extends React.Component {
                   disabled={
                     this.props.store.outputPanel.currentTab == 'Default' ||
                     this.props.store.outputPanel.currentTab.indexOf(
-                      'Explain',
+                      'Explain'
                     ) >= 0 ||
                     this.props.store.outputPanel.currentTab.indexOf(
-                      'Details',
+                      'Details'
                     ) >= 0 ||
                     (this.props.store.outputs.get(
-                      this.props.store.outputPanel.currentTab,
+                      this.props.store.outputPanel.currentTab
                     ) &&
                       this.props.store.outputs.get(
-                        this.props.store.outputPanel.currentTab,
+                        this.props.store.outputPanel.currentTab
                       ).cannotShowMore)
                   }
                 >

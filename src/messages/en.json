@@ -70,6 +70,9 @@
         "save": "Save Output",
         "showMore": "Show More (Ctrl + M)",
         "clear": "Clear Output Contents (Ctrl + L)",
+        "jsonTree": "Open JSON Tree View",
+        "table": "Open Table View",
+        "chart": "Open Chart View",
         "tableToolbar": {
           "expandAll": "Expand all Rows in the table",
           "collapseAll": "Collapse all rows in the table",
@@ -606,8 +609,10 @@
         "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
       "drill_binary_not_defined":
         "Drill Binary not found, Please configure it in the user settings panel",
-      "drill_timed_out": "Timeout Error: Currently we don't support running queries which may take longer then 90 seconds. ",
-      "drill_large_dataset": "Last query has yeilded more than 10000 rows. Only the first 10000 rows are being displayed. Kindly consider optimising your query.",
+      "drill_timed_out":
+        "Timeout Error: Currently we don't support running queries which may take longer then 90 seconds. ",
+      "drill_large_dataset":
+        "Last query has yeilded more than 10000 rows. Only the first 10000 rows are being displayed. Kindly consider optimising your query.",
       "open_drill_editor_failed": "Failed to Open Drill Editor.",
       "drill_editor_open_success": "Drill Editor created successfully!",
       "java_not_found":
