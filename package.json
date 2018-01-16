@@ -79,6 +79,7 @@
     "chalk": "^2.3.0",
     "classnames": "^2.2.5",
     "cldr-data": "^32.0.0",
+    "cm-show-invisibles": "^2.0.2",
     "codemirror": "^5.32.0",
     "codemirror-colorpicker": "^1.0.10",
     "codemirror-formatting": "^1.0.0",
@@ -184,6 +185,6 @@
     "webpack-merge": "^4.1.0",
     "worker-loader": "^1.1.0",
     "xml2js": "^0.4.17",
-    "cm-show-invisibles": "^2.0.2"
+    "xterm": "https://github.com/guiguan/xterm.js.git"
   }
 }
