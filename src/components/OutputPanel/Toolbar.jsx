@@ -40,6 +40,8 @@ import {
 } from '@blueprintjs/core';
 import { featherClient } from '~/helpers/feathers';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
+import { NewToaster } from '#/common/Toaster';
+import StaticApi from '~/api/static';
 import EventLogging from '#/common/logging/EventLogging';
 import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
@@ -48,6 +50,9 @@ import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
 import ExpandIcon from '../../styles/icons/code-folder-icon.svg';
 import CollapseIcon from '../../styles/icons/code-folder-right-icon.svg';
 import RefreshIcon from '../../styles/icons/refresh-icon.svg';
+import ChartIcon from '../../styles/icons/chart-icon.svg';
+import TableIcon from '../../styles/icons/table-icon.svg';
+import EnhanceJSONIcon from '../../styles/icons/enhanced-json-icon.svg';
 
 /**
  * The OutputPanel toolbar, which hold the commands and actions specific to the output panel
@@ -227,6 +232,126 @@ export default class Toolbar extends React.Component {
   }
 
   /**
+   * Render function for the raw toolbar.
+   */
+  renderRawToolbar() {
+    return (
+      <nav className="pt-navbar pt-dark .modifier outputToolbar">
+        <div className="pt-navbar-group pt-align-left">
+          <div className="pt-navbar-heading">
+            {globalString('output/headings/default')}
+          </div>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/jsonTree')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="pt-intent-danger circleButton jsonTreeViewButton"
+              onClick={this.openJsonTreeView}
+            >
+              <EnhanceJSONIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/table')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="pt-intent-danger circleButton tableViewButton"
+              onClick={this.openTableView}
+            >
+              <TableIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/chart')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="pt-intent-danger circleButton chartViewButton"
+              onClick={this.openChartView}
+            >
+              <ChartIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+        </div>
+        <div className="pt-navbar-group pt-align-right">
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/clear')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="pt-intent-danger circleButton clearOutputBtn"
+              onClick={this.clearOutput}
+            >
+              <ClearOutputIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/showMore')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="showMoreBtn circleButton"
+              onClick={this.showMore}
+              disabled={
+                this.props.store.outputPanel.currentTab == 'Default' ||
+                this.props.store.outputPanel.currentTab.indexOf('Explain') >=
+                  0 ||
+                this.props.store.outputPanel.currentTab.indexOf('Details') >=
+                  0 ||
+                (this.props.store.outputs.get(
+                  this.props.store.outputPanel.currentTab
+                ) &&
+                  this.props.store.outputs.get(
+                    this.props.store.outputPanel.currentTab
+                  ).cannotShowMore)
+              }
+            >
+              <ShowMoreIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/save')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="saveOutputBtn circleButton"
+              onClick={this.downloadOutput}
+            >
+              <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+        </div>
+      </nav>
+    );
+  }
+
+  /**
    * Render function for a Table View Toolbar.
    */
   renderTableToolbar() {
@@ -360,56 +485,185 @@ export default class Toolbar extends React.Component {
   }
 
   @action.bound
-  openTableView() {
-    // Get the output instance:
-    console.log(
-      this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
-    );
-    console.log(this.props.editorRefs[this.props.store.outputPanel.currentTab]);
-    console.log(
-      this.props.editorRefs[
-        this.props.store.outputPanel.currentTab
-      ].getCodeMirror()
-    );
-    const editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
-    const cm = editor.getCodeMirror();
-
-    const lineNumber = getLastLine(cm);
-    const currentJson = '';
-    const lines = { start: 0, end: 0, status: '' };
-
-    return this.props.getDocumentAtLine(this.props.id, lineNumber, 0, lines);
-    // Find the last line that looks like a JSON Document:
-
-    // Create a table view on this line:
-    this.props.api.initJsonView(
-      currentJson,
-      this.props.id,
-      'tableJson',
-      lines,
-      this.editor,
-      true
-    );
+  getLastLine(codeMirror) {
+    let linesSearched = 2;
+    let lastLine = codeMirror.getLine(codeMirror.lineCount() - linesSearched);
+    while (
+      lastLine &&
+      !lastLine.match(/{|}/gim) &&
+      linesSearched < 50 &&
+      linesSearched < codeMirror.lineCount()
+    ) {
+      linesSearched += 1;
+      lastLine = codeMirror.getLine(codeMirror.lineCount() - linesSearched);
+    }
+    if (linesSearched == codeMirror.lineCount() || !lastLine) {
+      return false;
+    }
+    return codeMirror.lineCount() - linesSearched;
   }
 
   @action.bound
-  openJsonTreeView() {}
+  openTableView() {
+    // Get the output instance:
+    const editor = this.props.editorRefs[
+      this.props.store.outputPanel.currentTab
+    ];
+    const cm = editor.getCodeMirror();
+
+    // Get the last line that we think is valid:
+    const lineNumber = this.getLastLine(cm);
+    if (!lineNumber) {
+      // Throw error.
+      runInAction(() => {
+        NewToaster.show({
+          message: globalString('output/editor/tabularError'),
+          className: 'warning',
+          icon: ''
+        });
+      });
+    } else {
+      const lines = { start: 0, end: 0, status: '' };
+
+      const currentJson = this.props.getDocumentAtLine(
+        this.props.store.outputPanel.currentTab,
+        lineNumber,
+        0,
+        lines
+      );
+
+      this.props.api.initJsonView(
+        currentJson,
+        this.props.store.outputPanel.currentTab,
+        'tableJson',
+        lines,
+        editor,
+        false
+      );
+    }
+  }
 
   @action.bound
-  openChartView() {}
+  openJsonTreeView() {
+    // Get the output instance:
+    const editor = this.props.editorRefs[
+      this.props.store.outputPanel.currentTab
+    ];
+    const cm = editor.getCodeMirror();
+
+    // Get the last line that we think is valid:
+    const lineNumber = this.getLastLine(cm);
+    if (!lineNumber) {
+      // Throw error.
+      runInAction(() => {
+        NewToaster.show({
+          message: globalString('output/editor/tabularError'),
+          className: 'warning',
+          icon: ''
+        });
+      });
+    } else {
+      const lines = { start: 0, end: 0, status: '' };
+
+      const currentJson = this.props.getDocumentAtLine(
+        this.props.store.outputPanel.currentTab,
+        lineNumber,
+        0,
+        lines
+      );
+
+      this.props.api.initJsonView(
+        currentJson,
+        this.props.store.outputPanel.currentTab,
+        'enhancedJson',
+        lines
+      );
+    }
+  }
+
+  @action.bound
+  openChartView() {
+    // Get the output instance:
+    const editor = this.props.editorRefs[
+      this.props.store.outputPanel.currentTab
+    ];
+    const cm = editor.getCodeMirror();
+
+    // Get the last line that we think is valid:
+    const lineNumber = this.getLastLine(cm);
+    if (!lineNumber) {
+      // Throw error.
+      runInAction(() => {
+        NewToaster.show({
+          message: globalString('output/editor/tabularError'),
+          className: 'warning',
+          icon: ''
+        });
+      });
+    } else {
+      const lines = { start: 0, end: 0, status: '' };
+
+      const currentJson = this.props.getDocumentAtLine(
+        this.props.store.outputPanel.currentTab,
+        lineNumber,
+        0,
+        lines
+      );
+
+      StaticApi.parseTableJson(
+        currentJson,
+        lines,
+        editor.getCodeMirror(),
+        this.props.store.outputPanel.currentTab
+      )
+        .then(result => {
+          runInAction(() => {
+            this.props.api.outputApi.showChartPanel(
+              this.props.store.outputPanel.currentTab,
+              result,
+              'loaded'
+            );
+          });
+        })
+        .catch(err => {
+          const message = globalString('output/editor/parseJsonError') + err;
+          runInAction(() => {
+            NewToaster.show({
+              message,
+              className: 'danger',
+              icon: ''
+            });
+          });
+
+          runInAction(() => {
+            this.props.api.outputApi.showChartPanel(
+              this.props.store.outputPanel.currentTab,
+              {},
+              'error',
+              message
+            );
+          });
+        });
+    }
+  }
 
   render() {
     const currentOutput = this.props.store.outputPanel.currentTab;
     // Determine toolbar context.
     if (currentOutput.startsWith('TableView-')) {
       this.state.context = OutputToolbarContexts.TABLE_VIEW;
+    } else if (
+      this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
+    ) {
+      this.state.context = OutputToolbarContexts.RAW;
     } else {
       this.state.context = OutputToolbarContexts.DEFAULT;
     }
-
     switch (this.state.context) {
       case OutputToolbarContexts.TABLE_VIEW:
         return this.renderTableToolbar();
+      case OutputToolbarContexts.RAW:
+        return this.renderRawToolbar();
       default:
         return (
           <nav className="pt-navbar pt-dark .modifier outputToolbar">
@@ -417,63 +671,6 @@ export default class Toolbar extends React.Component {
               <div className="pt-navbar-heading">
                 {globalString('output/headings/default')}
               </div>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/jsonTree')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="pt-intent-danger circleButton jsonTreeViewButton"
-                  onClick={this.openJsonTreeView}
-                >
-                  <ClearOutputIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/table')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="pt-intent-danger circleButton tableViewButton"
-                  onClick={this.openTableView}
-                >
-                  <ClearOutputIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/chart')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="pt-intent-danger circleButton chartViewButton"
-                  onClick={this.openChartView}
-                >
-                  <ClearOutputIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
-                </AnchorButton>
-              </Tooltip>
             </div>
             <div className="pt-navbar-group pt-align-right">
               <Tooltip

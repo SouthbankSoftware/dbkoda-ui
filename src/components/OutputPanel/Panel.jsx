@@ -652,7 +652,10 @@ export default class Panel extends React.Component {
           />
           {this.renderTabs(this.props.store.editors.entries())}
         </Tabs2>
-        <OutputToolbar editorRefs={this.editorRefs} />
+        <OutputToolbar
+          editorRefs={this.editorRefs}
+          getDocumentAtLine={this.getDocumentAtLine}
+        />
       </div>
     );
   }

@@ -27,12 +27,12 @@
 export const DragItemTypes = {
   LABEL: 'label',
   VISUAL_BLOCK: 'visual_block',
-  CHART_DATA_TREE_NODE: 'chart_data_tree_node',
+  CHART_DATA_TREE_NODE: 'chart_data_tree_node'
 };
 
 export const ProfileStatus = {
   OPEN: 'OPEN',
-  CLOSED: 'CLOSED',
+  CLOSED: 'CLOSED'
 };
 
 export const EditorTypes = {
@@ -40,7 +40,7 @@ export const EditorTypes = {
   TREE_ACTION: 'treeAction',
   SHELL_COMMAND: 'os',
   AGGREGATE: 'aggregate',
-  DRILL: 'drill',
+  DRILL: 'drill'
 };
 
 export const DrawerPanes = {
@@ -48,7 +48,7 @@ export const DrawerPanes = {
   PROFILE: 'profile',
   DYNAMIC: 'dynamic',
   BACKUP_RESTORE: 'backup-restore',
-  AGGREGATE: 'aggregate',
+  AGGREGATE: 'aggregate'
 };
 
 export const BackupRestoreActions = {
@@ -61,14 +61,15 @@ export const BackupRestoreActions = {
   IMPORT_COLLECTION: 'ImportCollection',
   RESTORE_DATABASE: 'RestoreDatabase',
   RESTORE_COLLECTION: 'RestoreCollection',
-  RESTORE_SERVER: 'RestoreServer',
+  RESTORE_SERVER: 'RestoreServer'
 };
 
 export const TableViewConstants = {
-  DEFAULT_MAX_ROWS: 200,
+  DEFAULT_MAX_ROWS: 200
 };
 
 export const OutputToolbarContexts = {
   DEFAULT: 'Default',
-  TABLE_VIEW: 'TableView',
+  RAW: 'Raw',
+  TABLE_VIEW: 'TableView'
 };

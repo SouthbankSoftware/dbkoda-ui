@@ -232,6 +232,25 @@
       }
     }
     .pt-align-left {
+      span {
+        a.circleButton {
+          svg.dbKodaSVG {
+            width: 15px;
+          }
+        }
+        a.tableViewButton {
+          svg.dbKodaSVG {
+            path {
+              fill: $buttonPrimaryIcon;
+            }
+          }
+        }
+        a.chartViewButton {
+          svg.dbKodaSVG {
+            width: 25px;
+          }
+        }
+      }
     }
   }
   div.CodeMirror-activeline pre.CodeMirror-line {
