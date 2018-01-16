@@ -66,6 +66,7 @@ import 'codemirror/addon/search/matchesonscrollbar.js';
 import 'codemirror/addon/scroll/annotatescrollbar.js';
 import 'codemirror/keymap/sublime.js';
 import 'codemirror-formatting';
+// import 'cm-show-invisibles' // To show invisible Characters;
 import '#/common/MongoScript.js';
 
 import { DropTarget } from 'react-dnd';
@@ -131,6 +132,7 @@ class View extends React.Component {
     this.doc = this.editorObject.doc;
     this.cmOptions = {
       value: this.doc,
+      showInvisibles: true,
       theme: 'material',
       lineNumbers: 'true',
       lineSeparator: this.doc.lineSep,
@@ -188,7 +190,7 @@ class View extends React.Component {
             const type = editor.type;
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
-              service.timeout = 30000;
+              service.timeout = 90000;
               let queries = currEditorValue.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1').replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';');
               queries = queries.filter((query) => {
                 return (query.trim().length > 0);
@@ -209,7 +211,19 @@ class View extends React.Component {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
-                  output.output = res; // JSON.stringify(res);
+                  if (res.output.length > 10000) {
+                    output.output = { output: _.slice(res.output, 0, 10000) }; // JSON.stringify(res);
+                    const message = globalString(
+                      'drill/drill_large_dataset',
+                    );
+                    NewToaster.show({
+                      message,
+                      className: 'danger',
+                      iconName: 'pt-icon-thumbs-down',
+                    });
+                  } else {
+                    output.output = res; // JSON.stringify(res);
+                  }
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
@@ -223,8 +237,19 @@ class View extends React.Component {
                     err = {
                       Name: err.name,
                       StatusCode: err.statusCode,
-                      Message: err.error
+                      Message: err.error || err.message
                       };
+
+                    if (err.Message.match(/Timeout of 90000ms/)) {
+                      const message = globalString(
+                        'drill/drill_timed_out',
+                      );
+                      NewToaster.show({
+                        message,
+                        className: 'danger',
+                        iconName: 'pt-icon-thumbs-down',
+                      });
+                    }
 
                     const strOutput = JSON.stringify(err, null, 2);
                     const editorObject = this.props.store.editors.get(editor.id);
@@ -329,7 +354,7 @@ class View extends React.Component {
             const type = editor.type;
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
-              service.timeout = 30000;
+              service.timeout = 90000;
               console.log(content.replace(/\t/g, '  ').replace(/ *(\r\n|\r|\n)/gm, ' ').split(';'));
               service
                 .update(shell, {
@@ -340,7 +365,19 @@ class View extends React.Component {
                   const output = {};
                   output.id = editor.id;
                   output.profileId = profileId;
-                  output.output = res; // JSON.stringify(res);
+                  if (res.output.length > 10000) {
+                    output.output = { output: _.slice(res.output, 0, 10000) }; // JSON.stringify(res);
+                    const message = globalString(
+                      'drill/drill_large_dataset',
+                    );
+                    NewToaster.show({
+                      message,
+                      className: 'danger',
+                      iconName: 'pt-icon-thumbs-down',
+                    });
+                  } else {
+                    output.output = res; // JSON.stringify(res);
+                  }
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
@@ -354,8 +391,19 @@ class View extends React.Component {
                     err = {
                       Name: err.name,
                       StatusCode: err.statusCode,
-                      Message: err.error
+                      Message: err.error || err.message
                     };
+
+                    if (err.Message.match(/Timeout of 90000ms/)) {
+                      const message = globalString(
+                        'drill/drill_timed_out',
+                      );
+                      NewToaster.show({
+                        message,
+                        className: 'danger',
+                        iconName: 'pt-icon-thumbs-down',
+                      });
+                    }
 
                     // Analyse Error for line number and highlight -> Only works for simple errors.
                     // @TODO -> if drill proves popular, we should improve error handling here.
@@ -794,14 +842,14 @@ class View extends React.Component {
         content = cm.getLine(currentLine);
         // If a full command isn't detected, parse up and down until white space.
       let linesAbove = '';
-      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gmi)) {
+      while (cm.getLine(currentLine - 1) && !cm.getLine(currentLine - 1).match(/^\/\//gmi) && !cm.getLine(currentLine - 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine - 1).match(/;[ \t\s]*$/gmi)) {
         linesAbove = cm.getLine(currentLine - 1) + linesAbove;
         currentLine -= 1;
       }
       currentLine = cm.getCursor().line;
       let linesBelow = '';
 
-      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
+      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine - 1).match(/^\/\//gmi) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
         linesBelow += cm.getLine(currentLine + 1);
         currentLine += 1;
       }

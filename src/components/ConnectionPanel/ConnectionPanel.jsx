@@ -22,7 +22,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-30T14:10:52+11:00
+ * @Last modified time: 2018-01-11T15:41:38+11:00
  */
 
 /**
@@ -41,12 +41,7 @@ import { DBKodaToaster } from '../common/Toaster';
 import { Broker, EventType } from '../../helpers/broker';
 import { ProfileStatus, DrawerPanes } from '.././common/Constants';
 
-const ConnectionPanel = ({
-  profiles,
-  profileList,
-  setDrawerChild,
-  settings
-}) => {
+const ConnectionPanel = ({ api, profiles, profileList, setDrawerChild, settings }) => {
   const selectedProfile = profileList.selectedProfile;
   let edit = false;
   if (profileList.selectedProfile) {
@@ -60,14 +55,14 @@ const ConnectionPanel = ({
    * @param data
    * @returns {boolean}
    */
-  const validateConnectionFormData = (data) => {
+  const validateConnectionFormData = data => {
     let validate = true;
-    profiles.forEach((value) => {
+    profiles.forEach(value => {
       if (value.alias === data.alias) {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: globalString('connection/existingAlias'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
         validate = false;
       }
@@ -78,6 +73,18 @@ const ConnectionPanel = ({
   const close = action(() => {
     setDrawerChild(DrawerPanes.DEFAULT);
   });
+
+  const setPromptFlags = (profile) => {
+    if (profile && profile.ssh) {
+      if (profile.passRadio) {
+        profile.bRemotePass = true;
+      } else if (
+        profile.keyRadio && profile.passPhrase
+      ) {
+        profile.bPassPhrase = true;
+      }
+    }
+  };
   /**
    * when connection successfully created, this method will add the new profile on store.
    */
@@ -92,7 +99,7 @@ const ConnectionPanel = ({
           id: res.id,
           shellId: res.shellId,
           output: res.output.join('\n'),
-          mongoType: res.mongoType
+          mongoType: res.mongoType,
         });
       }
       position = Position.RIGHT_TOP;
@@ -127,15 +134,11 @@ const ConnectionPanel = ({
         initialMsg: res.output ? res.output.join('\r') : '',
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
-        mongoType: res.mongoType
+        mongoType: res.mongoType,
       };
-      console.debug('profile:', profile);
-      if ((data.passPhrase && data.passPhrase != '') || data.bPassPhrase) {
-        profile.bPassPhrase = true;
-      }
-      if ((data.remotePass && data.remotePass != '') || data.bRemotePass) {
-        profile.bRemotePass = true;
-      }
+
+      setPromptFlags(profile);
+
       profiles.set(res.id, profile);
       profileList.selectedProfile = profiles.get(res.id);
       close();
@@ -146,7 +149,7 @@ const ConnectionPanel = ({
     DBKodaToaster(position).show({
       message,
       className: 'success',
-      iconName: 'pt-icon-thumbs-up'
+      iconName: 'pt-icon-thumbs-up',
     });
   });
 
@@ -155,13 +158,13 @@ const ConnectionPanel = ({
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.FAILED,
         EventLogging.getFragmentEnum().PROFILES,
-        globalString('connection/createProfileError')
+        globalString('connection/createProfileError'),
       );
     }
     profileList.creatingNewProfile = false;
   });
 
-  const connect = action(async (data) => {
+  const connect = action(async data => {
     if (!edit && !validateConnectionFormData(data)) {
       return Promise.reject(globalString('connection/validationError'));
     }
@@ -172,6 +175,9 @@ const ConnectionPanel = ({
     } else if (data.urlRadio) {
       connectionUrl = data.url;
     }
+
+    let terminalQuery = null;
+
     if (data.ssh) {
       query.ssh = data.ssh;
       query.sshTunnel = data.sshTunnel;
@@ -182,20 +188,29 @@ const ConnectionPanel = ({
       query.localHost = '127.0.0.1';
       data.sshLocalPort = await ProfileForm.getRandomPort();
       query.localPort = data.sshLocalPort;
+
+      terminalQuery = {
+        username: data.remoteUser,
+        host: data.remoteHost,
+      };
+
       if (data.sshTunnel) {
-        connectionUrl =
-          ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+        connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       }
       if (data.passRadio) {
         query.remotePass = data.remotePass;
+
+        terminalQuery.password = data.remotePass;
       } else if (data.keyRadio) {
         query.sshKeyFile = data.sshKeyFile;
         query.passPhrase = data.passPhrase;
+
+        terminalQuery.privateKey = data.sshKeyFile;
+        terminalQuery.passphrase = data.passPhrase;
       }
     }
     if (data.sha) {
       query.username = data.username;
-      query.password = data.password;
       query.password = data.password;
       query.authenticationDatabase = data.authenticationDatabase;
     }
@@ -221,27 +236,36 @@ const ConnectionPanel = ({
     service.timeout = 30000;
     return service
       .create({}, { query })
-      .then((res) => {
+      .then(res => {
+        if (terminalQuery) {
+          terminalQuery.profileId = res.id;
+          api.addSshTerminal(terminalQuery, {
+            switchToUponCreation: false,
+            skipWhenExisting: true,
+            eagerCreation: true,
+          });
+        }
+
         onSuccess(res, data);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         onFail();
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: (
             <span
               dangerouslySetInnerHTML={{
-                __html: 'Error: ' + err.message.substring(0, 256) + '...'
+                __html: 'Error: ' + err.message.substring(0, 256) + '...',
               }}
             />
           ), // eslint-disable-line react/no-danger
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
       });
   });
 
-  const save = action((formData) => {
+  const save = action(formData => {
     const profile = { ...formData, status: ProfileStatus.CLOSED };
     if (edit) {
       profile.id = selectedProfile.id;
@@ -254,6 +278,9 @@ const ConnectionPanel = ({
     if (!profile.shellId) {
       profile.shellId = uuidV1();
     }
+
+    setPromptFlags(profile);
+
     profiles.set(profile.id, profile);
     close();
   });
@@ -267,18 +294,17 @@ const ConnectionPanel = ({
       profiles={profiles}
       save={save}
       title={
-        edit
-          ? globalString('connection/editHeading')
-          : globalString('connection/createHeading')
+        edit ? globalString('connection/editHeading') : globalString('connection/createHeading')
       }
     />
   );
 };
 
 export default inject(allStores => ({
+  api: allStores.api,
   store: allStores.store,
   profiles: allStores.profileStore.profiles,
   profileList: allStores.store.profileList,
   setDrawerChild: allStores.store.setDrawerChild,
-  settings: allStores.config.settings
+  settings: allStores.config.settings,
 }))(observer(ConnectionPanel));

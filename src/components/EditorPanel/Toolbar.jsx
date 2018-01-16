@@ -189,8 +189,6 @@ export default class Toolbar extends React.Component {
 
   openFile() {
     if (IS_ELECTRON) {
-      // @TODO -> Import SQL files.
-      // Check if Drill Window already open:
       const editor = this.props.store.editors.get(
         this.props.store.editorPanel.activeEditorId,
       );
@@ -253,6 +251,7 @@ export default class Toolbar extends React.Component {
     }
   }
 
+  // @TODO -> Associate editor with file context.
   openSQLFile() {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -271,6 +270,22 @@ export default class Toolbar extends React.Component {
         _.forEach(fileNames, (v) => {
           this.props.store
             .openFile(v, ({ _id, content }) => {
+              let _fileName = path.basename(_id);
+              if (window.navigator.platform.toLowerCase() === 'win32') {
+                _fileName = _id.substring(
+                  _id.lastIndexOf('\\') + 1,
+                  _id.length,
+                );
+              }
+
+              // Debugging.
+              console.log(_id);
+              console.log(_fileName);
+              console.log(editor);
+              runInAction(() => {
+                editor.fileName = _fileName;
+                editor.path = _id;
+              });
               editor.doc.cm.setValue(content);
               this.setState({ showLoadSQLWarning: false });
             })

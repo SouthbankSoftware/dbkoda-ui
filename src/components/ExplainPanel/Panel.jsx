@@ -60,34 +60,7 @@ export const Header = ({ viewType, switchExplainView, suggestIndex }) => {
 };
 
 export default class Panel extends React.Component {
-  componentDidUpdate() {
-    if (this.el) {
-      this.el.scrollIntoView(false);
-      const scrollHeight = this.el.scrollHeight;
-      const height = this.el.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-    }
-  }
-  scrollIntoView() {
-    if (this.el) {
-      this.el.scrollIntoView(false);
-      const scrollHeight = this.el.scrollHeight;
-      const height = this.el.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-    }
-  }
-
   render() {
-    if (this.el) {
-      this.el.scrollIntoView(false);
-      const scrollHeight = this.el.scrollHeight;
-      const height = this.el.clientHeight;
-      const maxScrollTop = scrollHeight - height;
-      this.el.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
-    }
-
     if (this.props.editor.explains && this.props.editor.explains.error) {
       return (
         <div className="explain-error-panel">
@@ -103,20 +76,10 @@ export default class Panel extends React.Component {
     return (
       <div
         className="explain-panel"
-        ref={(el) => {
+        ref={el => {
           this.el = el;
         }}
       >
-        <Header
-          switchExplainView={this.props.switchExplainView}
-          viewType={this.props.viewType}
-          suggestIndex={this.props.suggestIndex}
-        />{' '}
-        {this.props.viewType === 0 ? (
-          <ExplainView explains={this.props.editor.explains} />
-        ) : (
-          <RawJson explains={this.props.editor.explains} />
-        )}
         {this.props.hasSuggestions && (
           <div className="suggest-index-panel">
             <div className="suggest-index-panel-header">
@@ -131,58 +94,17 @@ export default class Panel extends React.Component {
             <QueryCommandView command={this.props.suggestionText} />
           </div>
         )}
+        <Header
+          switchExplainView={this.props.switchExplainView}
+          viewType={this.props.viewType}
+          suggestIndex={this.props.suggestIndex}
+        />{' '}
+        {this.props.viewType === 0 ? (
+          <ExplainView explains={this.props.editor.explains} />
+        ) : (
+          <RawJson explains={this.props.editor.explains} />
+        )}
       </div>
     );
   }
 }
-
-// const Panel = ({
-//   editor,
-//   switchExplainView,
-//   viewType,
-//   suggestIndex,
-//   suggestionText,
-//   hasSuggestions,
-//   copySuggestion,
-// }) => {
-//   if (editor.explains && editor.explains.error) {
-//     return (
-//       <div className="explain-error-panel">
-//         <div className="header">
-//           Failed to parse explain output,{' '}
-//           <b>make sure to highlight entire statement.</b>
-//         </div>
-//         <QueryCommandView command={editor.explains.command} />
-//         <div className="output">{editor.explains.output}</div>
-//       </div>
-//     );
-//   }
-//   return (
-//     <div className="explain-panel">
-//       <Header
-//         switchExplainView={switchExplainView}
-//         viewType={viewType}
-//         suggestIndex={suggestIndex}
-//       />{' '}
-//       {viewType === 0 ? (
-//         <ExplainView explains={editor.explains} />
-//       ) : (
-//         <RawJson explains={editor.explains} />
-//       )}
-//       {hasSuggestions && (
-//         <div className="suggest-index-panel">
-//           <div className="suggest-index-panel-header">
-//             <h2>{globalString('explain/panel/suggestIndex')}</h2>
-//             <Button
-//               className="pt-label explain-view-copy-suggested-index-button"
-//               onClick={copySuggestion}
-//             >
-//               {globalString('explain/panel/copySuggestedIndex')}
-//             </Button>
-//           </div>
-//           <QueryCommandView command={suggestionText} />
-//         </div>
-//       )}
-//     </div>
-//   );
-// };

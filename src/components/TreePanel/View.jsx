@@ -752,7 +752,7 @@ export default class TreeView extends React.Component {
         </Dialog> */}
 
         <Dialog
-          className="pt-dark open-profile-alert-dialog"
+          className="pt-dark drill-alert-dialog"
           intent={Intent.PRIMARY}
           isOpen={this.state.showDrillNotFoundDialog}
           title={globalString('drill/drill_not_configured_title')}

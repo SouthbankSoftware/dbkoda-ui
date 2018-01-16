@@ -107,7 +107,7 @@
         "explainView": "Explain",
         "suggestIndex": "Index Advisor",
         "suggestIndexDescription":
-          "// INDEX ADVICE:\n// Some of these suggestions may improve your query performance.\n",
+          "// INDEX ADVICE: Some of these suggestions may improve your query performance.\n",
         "noAdditionalIndexesRequired":
           "// Looks good, no additional indexes are required to improve your query!",
         "addIndexCommandsPrompt":
@@ -264,7 +264,8 @@
         "sha": "SCRAM-SHA-1(username/password)",
         "username": "Username",
         "defaultUsername": "dbenvy",
-        "password": "Password"
+        "password": "Password",
+        "error": "The form has an error"
       }
     },
     "profile": {
@@ -297,10 +298,10 @@
       "openAlert": {
         "passwordPrompt": "Please enter your password for this profile.",
         "passwordPlaceholder": "Enter Password...",
-        "remotePassPrompt": "Please enter your password for the ssh tunnel.",
+        "remotePassPrompt": "Please enter your password for SSH connection",
         "remotePassPlaceholder": "Enter SSH Password...",
         "passPhrasePrompt":
-          "Please enter your passphrase for the ssh tunnel private key.",
+          "Please enter your passphrase for SSH connection private key",
         "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
         "confirmButton": "Open",
         "cancelButton": "Cancel"
@@ -606,6 +607,8 @@
         "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
       "drill_binary_not_defined":
         "Drill Binary not found, Please configure it in the user settings panel",
+      "drill_timed_out": "Timeout Error: Currently we don't support running queries which may take longer then 90 seconds. ",
+      "drill_large_dataset": "Last query has yeilded more than 10000 rows. Only the first 10000 rows are being displayed. Kindly consider optimising your query.",
       "open_drill_editor_failed": "Failed to Open Drill Editor.",
       "drill_editor_open_success": "Drill Editor created successfully!",
       "java_not_found":

@@ -26,6 +26,10 @@
 
 @import './_defaultTheme.scss';
 
+span.cm-invalidchar {
+  display: none;
+}
+
 body {
   background-color: $panelLeftBackground;
   overflow: hidden !important;

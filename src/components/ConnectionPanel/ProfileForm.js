@@ -43,31 +43,30 @@ export class ProfileForm extends MobxReactForm {
 
   onInit() {
     // add dynamic validation on each field
-
     this.$('hostRadio').observe({
       key: 'value',
-      call: ({ form, change }) => {
+      call: ({form, change}) => {
         this.addHostRules(form, change.newValue);
         form.validate();
       },
     });
     this.$('urlRadio').observe({
       key: 'value',
-      call: ({ form, change }) => {
+      call: ({form, change}) => {
         this.addUrlRules(form, change.newValue);
         form.validate();
       },
     });
     this.$('sha').observe({
       key: 'value',
-      call: ({ form, change }) => {
+      call: async ({form, change}) => {
         this.addAuthenticationRules(form, change.newValue);
-        form.validate();
+        await form.validate();
       },
     });
     this.$('ssh').observe({
       key: 'value',
-      call: ({ form, change }) => {
+      call: ({form, change}) => {
         this.addSshRules(form, change.newValue);
         form.validate();
       },
@@ -81,6 +80,7 @@ export class ProfileForm extends MobxReactForm {
       form.$('url').set('rules', '');
     }
   }
+
 
   addAuthenticationRules(form, value) {
     if (value) {
@@ -110,14 +110,14 @@ export class ProfileForm extends MobxReactForm {
       form.$('remoteUser').set('rules', 'required|string');
       this.$('keyRadio').observe({
         key: 'value',
-        call: ({ form, change }) => {
+        call: ({form, change}) => {
           this.addKeyRules(form, change.newValue);
           form.validate();
         },
       });
       this.$('passRadio').observe({
         key: 'value',
-        call: ({ form, change }) => {
+        call: ({form, change}) => {
           this.addRemotePassRules(form, change.newValue);
           form.validate();
         },
@@ -140,6 +140,7 @@ export class ProfileForm extends MobxReactForm {
       form.$('sshKeyFile').set('rules', '');
     }
   }
+
   addRemotePassRules(form, value) {
     if (value) {
       form.$('remotePass').set('rules', 'required|string');
@@ -150,21 +151,21 @@ export class ProfileForm extends MobxReactForm {
 
   @autobind
   onSuccess() {
-    this.connect({ ...this.createFormData(this), test: false });
+    this.connect({...this.createFormData(this), test: false});
   }
 
   @autobind
   onTest() {
-    this.test({ ...this.createFormData(this), test: true });
+    this.test({...this.createFormData(this), test: true});
   }
 
   @autobind
   onSave() {
-    this.save({ ...this.createFormData(this) });
+    this.save({...this.createFormData(this)});
   }
 
   createFormData(form) {
-    const formValues = { ...form.values() };
+    const formValues = {...form.values()};
     return {
       ...formValues,
       sshLocalPort: null,
@@ -182,7 +183,7 @@ export class ProfileForm extends MobxReactForm {
         errorMsg.push(error[key]);
       }
     });
-    form.invalidate('Form has error.');
+    form.invalidate(globalString('connection/form/error'));
   }
 
   plugins() {
@@ -214,6 +215,11 @@ export const Form = {
       name: 'hostRadio',
       value: true,
       label: 'Host',
+      hooks: {
+        onChange: (field) => {
+          console.log('changed field ', field);
+        }
+      }
     },
     {
       name: 'host',
@@ -345,5 +351,7 @@ export const createFormFromProfile = (profile) => {
 export const createForm = (profile = null) => {
   const formData =
     profile === null ? Form.fields : createFormFromProfile(profile);
-  return new ProfileForm({ fields: formData });
+  const profileForm = new ProfileForm({fields: formData});
+  profileForm.onInit();
+  return profileForm;
 };

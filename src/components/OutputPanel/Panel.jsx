@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-03T13:48:02+11:00
+ * @Last modified time: 2018-01-08T16:06:11+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -521,6 +521,7 @@ export default class Panel extends React.Component {
             <Button
               className="pt-minimal"
               onClick={() => {
+                this.closingTab = true;
                 api.removeTerminal(id);
               }}
             >
@@ -541,6 +542,7 @@ export default class Panel extends React.Component {
               <Button
                 className="pt-minimal"
                 onClick={() => {
+                  this.closingTab = true;
                   api.removeTerminal(id);
                 }}
               >
