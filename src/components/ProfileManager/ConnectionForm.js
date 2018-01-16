@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-16T15:27:26+11:00
+ * @Last modified time: 2018-01-16T17:27:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,10 +29,10 @@ import { observable, toJS, runInAction, action, extendObservable } from 'mobx';
 import Ajv from 'ajv';
 
 export const FieldBindings = {
-  text: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange'],
-  password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange'],
-  number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange'],
-  checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'onClick'],
+  text: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
+  password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
+  number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
+  checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'onClick', 'onBlur'],
 };
 
 export class ConnectionForm {
@@ -56,15 +56,13 @@ export class ConnectionForm {
   }
 
   updateSchemaFromProfile(profile) {
-    const form = this.getInstance();
-    for (const subform in form) {
-      if (form.hasOwnProperty(subform)) {
+    for (const subform in this.formSchema) {
+      if (this.formSchema.hasOwnProperty(subform)) {
         subform.fields.forEach((field) => {
           field.value = profile[field.name];
         });
       }
     }
-    return form;
   }
 
   getSubformFields(selectedSubform, column) {
@@ -91,6 +89,9 @@ export class ConnectionForm {
         this.updateReferencedFields(field);
       }
     });
+    field.onBlur = () => {
+      this.validateForm();
+    };
     if (field.type == 'checkbox') {
       field.onClick = action((e) => {
         field.value = e.currentTarget.checked;
@@ -136,22 +137,32 @@ export class ConnectionForm {
     return schema;
   }
 
-  validateForm(formInstance) {
+  validateForm() {
     if (!this.validateErrors) {
       const ajv = new Ajv({removeAdditional: true});
       const schema = this.getValidationSchema();
       this.validateErrors = ajv.compile(schema);
     }
 
-    const formData = toJS(formInstance);
+    if (this.formErrors) {
+      for (const error of this.formErrors) {
+        const errorPath = error.dataPath.substring(1, error.dataPath.lastIndexOf('.'));
+        const field = _.at(this.formSchema, errorPath);
+        runInAction(() => {
+          field[0].error = '';
+        });
+      }
+      this.formErrors = [];
+    }
+
+    const formData = toJS(this.formSchema);
     const status = this.validateErrors(formData);
     const { errors } = this.validateErrors;
 
     if (errors) {
       for (const error of errors) {
         const errorPath = error.dataPath.substring(1, error.dataPath.lastIndexOf('.'));
-        const field = _.at(formInstance, errorPath);
-        console.log(field);
+        const field = _.at(this.formSchema, errorPath);
         runInAction(() => {
           field[0].error = error.message;
         });
@@ -162,24 +173,24 @@ export class ConnectionForm {
     return {status, formData};
   }
 
-  getProfileFromInstance(formInstance) {
-    console.log('getProfileFromInstance:', formInstance);
+  getProfileFromSchema() {
+    console.log('getProfileFromInstance:', this.formSchema);
     return {};
   }
 
-  onConnect(formInstance) {
-    const result = this.validateForm(formInstance);
+  onConnect() {
+    const result = this.validateForm();
     console.log('Validation: ', result.status, result.formData);
   }
-  onSave(formInstance) {
-    console.log('onSave:', formInstance);
+  onSave() {
+    console.log('onSave:', this.formSchema);
   }
 
-  onTest(formInstance) {
-    console.log('onTest:', formInstance);
+  onTest() {
+    console.log('onTest:', this.formSchema);
   }
 
-  onReset(formInstance) {
-    console.log('onReset:', formInstance);
+  onReset() {
+    console.log('onReset:', this.formSchema);
   }
 }

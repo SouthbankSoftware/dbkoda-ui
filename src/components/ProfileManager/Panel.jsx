@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-16T15:21:01+11:00
+ * @Last modified time: 2018-01-16T17:11:43+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -168,7 +168,7 @@ export default class ProfileManager extends React.Component<Props, State> {
                       ' connectButton pt-button pt-intent-success'
                     }
                     onClick={() => {
-                      this.form.onConnect(this.form.formSchema);
+                      this.form.onConnect();
                     }}
                     text={globalString('connection/form/connectButton')}
                     disabled={this.form.formErrors.length > 0}
@@ -179,7 +179,7 @@ export default class ProfileManager extends React.Component<Props, State> {
                   <Button
                     className="save-button pt-button pt-intent-primary"
                     text={globalString('connection/form/saveButton')}
-                    onClick={() => this.form.onSave(this.form.formSchema)}
+                    onClick={() => this.form.onSave()}
                   />{' '}
                   <Button
                     className={
@@ -187,14 +187,14 @@ export default class ProfileManager extends React.Component<Props, State> {
                         ? 'inactive'
                         : 'active') + ' test-button pt-button pt-intent-primary'
                     }
-                    onClick={() => this.form.onTest(this.form.formSchema)}
+                    onClick={() => this.form.onTest()}
                     text={globalString('connection/form/testButton')}
                     disabled={this.form.formErrors.length > 0}
                     loading={this.state.testing}
                   />
                   <Button
                     className="reset-button pt-button pt-intent-warning"
-                    onClick={() => this.form.onReset(this.form.formSchema)}
+                    onClick={() => this.form.onReset()}
                     text={globalString('connection/form/resetButton')}
                   />
                 </div>
