@@ -399,7 +399,7 @@ export default class Panel extends React.Component {
    *  @param {SyntheticMouseEvent} event - mouse click event from onContextMenu
    */
   showContextMenu(event) {
-    const target = event.target;
+    const {target} = event;
     const tabId = findElementAttributeUpward(target, 'data-tab-id');
 
     if (tabId && tabId !== 'Default') {

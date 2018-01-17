@@ -56,13 +56,17 @@ export default class View extends React.Component {
     this.getConfigForm = this.getConfigForm.bind(this);
     this.renderFieldLabel = this.renderFieldLabel.bind(this);
     this.reactionToConfig = reaction(
-      () => this.props.config.settings.telemetryEnabled,
+      () => this.props.config.settings,
       () => {
         this.props.store.configPage.newSettings = observable(
           toJS(this.props.config.settings),
         );
       },
     );
+  }
+
+  componentWillMount() {
+    this.props.store.configPage.newSettings = this.props.config.settings;
   }
 
   @action.bound
