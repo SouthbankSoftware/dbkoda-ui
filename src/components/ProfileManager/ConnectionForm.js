@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-16T17:27:12+11:00
+ * @Last modified time: 2018-01-17T16:16:29+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,7 +31,7 @@ import Ajv from 'ajv';
 export const FieldBindings = {
   text: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
-  number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
+  number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onValueChange', 'onBlur'],
   checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'onClick', 'onBlur'],
 };
 
@@ -99,6 +99,13 @@ export class ConnectionForm {
           this.updateReferencedFields(field);
         }
       });
+    } else if (field.type === 'number') {
+      field.onValueChange = action((value) => {
+        field.value = value;
+        if (field.refFields) {
+          this.updateReferencedFields(field);
+        }
+      });
     }
     field.bind = () => {
       const binds = FieldBindings[field.type];
@@ -139,7 +146,8 @@ export class ConnectionForm {
 
   validateForm() {
     if (!this.validateErrors) {
-      const ajv = new Ajv({removeAdditional: true});
+      const ajv = new Ajv({removeAdditional: true, $data: true, allErrors: true});
+      require('ajv-keywords')(ajv);
       const schema = this.getValidationSchema();
       this.validateErrors = ajv.compile(schema);
     }
@@ -147,10 +155,16 @@ export class ConnectionForm {
     if (this.formErrors) {
       for (const error of this.formErrors) {
         const errorPath = error.dataPath.substring(1, error.dataPath.lastIndexOf('.'));
-        const field = _.at(this.formSchema, errorPath);
-        runInAction(() => {
-          field[0].error = '';
-        });
+        let field = _.at(this.formSchema, errorPath);
+        if (field.length > 0 && field[0] === undefined || field[0] === null) {
+          const schemaPath = error.schemaPath.substring(1, error.schemaPath.lastIndexOf('/')).replace(/\/properties\//g, '.').replace(/(\/items\/)(\d*)/, '[$2]').substr(1, error.schemaPath.length);
+          field = _.at(this.formSchema, schemaPath);
+        }
+        if (field.length > 0 && field[0]) {
+          runInAction(() => {
+            field[0].error = '';
+          });
+        }
       }
       this.formErrors = [];
     }
@@ -162,10 +176,16 @@ export class ConnectionForm {
     if (errors) {
       for (const error of errors) {
         const errorPath = error.dataPath.substring(1, error.dataPath.lastIndexOf('.'));
-        const field = _.at(this.formSchema, errorPath);
-        runInAction(() => {
-          field[0].error = error.message;
-        });
+        let field = _.at(this.formSchema, errorPath);
+        if (field.length > 0 && field[0] === undefined || field[0] === null) {
+          const schemaPath = error.schemaPath.substring(1, error.schemaPath.lastIndexOf('/')).replace(/\/properties\//g, '.').replace(/(\/items\/)(\d*)/, '[$2]').substr(1, error.schemaPath.length);
+          field = _.at(this.formSchema, schemaPath);
+        }
+        if (field.length > 0 && field[0]) {
+          runInAction(() => {
+            field[0].error = error.message;
+          });
+        }
       }
       this.formErrors = errors;
     }

@@ -14,6 +14,116 @@
                 "name": { "type": "string" },
                 "value": { "type": "string", "minLength": 1 }
               }
+            },
+            {
+              "required": ["disabled"],
+              "properties": {
+                "disabled": {"type": "boolean"}
+              },
+              "select": { "$data": "0/disabled"},
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string", "minLength": 1 }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
+                }
+              }
+            },
+            {
+              "required": ["disabled"],
+              "properties": {
+                "disabled": {"type": "boolean"}
+              },
+              "select": { "$data": "0/disabled"},
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "number", "minimum": 0, "maximum": 65535 }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "number" }
+                  }
+                }
+              }
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "required": ["disabled"],
+              "properties": {
+                "disabled": {"type": "boolean"}
+              },
+              "select": { "$data": "0/disabled"},
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string", "pattern": "^mongodb://" }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
+                }
+              }
             }
           ]
         }

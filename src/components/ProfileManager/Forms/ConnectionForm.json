@@ -7,8 +7,7 @@
         "label": "Connection Name",
         "value": "Connection - 1",
         "type": "text",
-        "column": 1,
-        "rules": "required|string"
+        "column": 1
       },
       {
         "name": "host",
@@ -17,13 +16,12 @@
         "type": "text",
         "column": 1,
         "disabled": false,
-        "checkbox": "disabled",
-        "rules": "string"
+        "checkbox": "disabled"
       },
       {
         "name": "port",
         "label": "Port",
-        "value": "27017",
+        "value": 27017,
         "type": "number",
         "options": {
           "min": 0,
@@ -31,8 +29,7 @@
         },
         "column": 1,
         "disabled": false,
-        "checkbox": "disabled",
-        "rules": "numeric"
+        "checkbox": "disabled"
       },
       {
         "name": "database",
@@ -81,7 +78,6 @@
         "name": "url",
         "label": "URI",
         "placeholder": "mongodb://",
-        "rules": "regex:/^mongodb:///",
         "value": "mongodb://",
         "type": "text",
         "column": 2,

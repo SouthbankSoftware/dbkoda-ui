@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-16T17:11:43+11:00
+ * @Last modified time: 2018-01-17T15:01:18+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -72,14 +72,15 @@ export default class ProfileManager extends React.Component<Props, State> {
     const { store } = this.props;
     this.form = new ConnectionForm();
     if (store && store.profileList.selectedProfile) {
-      this.form.updateSchemaFromProfile(
-        store.profileList.selectedProfile
-      );
+      this.form.updateSchemaFromProfile(store.profileList.selectedProfile);
     }
   }
 
   renderUIFields(column) {
-    const fields = this.form.getSubformFields(this.state.selectedSubform, column);
+    const fields = this.form.getSubformFields(
+      this.state.selectedSubform,
+      column
+    );
     const uiFields = [];
     if (fields) {
       fields.forEach((field) => {
@@ -136,7 +137,7 @@ export default class ProfileManager extends React.Component<Props, State> {
 
           {this.renderMenu()}
         </div>
-        <ReactGridLayout className="layout" rowHeight={150} margin={[0, 10]}>
+        <ReactGridLayout className="layout" cols={10} rowHeight={150} margin={[0, 10]}>
           <div
             key="column1"
             data-grid={{ x: 0, y: 1.5, w: 3.5, h: 3, static: true }}
@@ -155,10 +156,18 @@ export default class ProfileManager extends React.Component<Props, State> {
           </div>
           <div
             key="column3"
+            className="no-border"
             data-grid={{ x: 7, y: 1.5, w: 3, h: 3, static: true }}
           >
+            <span>Panel reserved for TIPs</span>
+          </div>
+          <div
+            key="rowBottom"
+            className="no-border"
+            data-grid={{ x: 4, y: 4.5, w: 6, h: 2, static: true }}
+          >
             <div className="pt-dark form-scrollable">
-              <form>
+              <form className="formButtons">
                 <div className="profile-button-panel">
                   <Button
                     className={
