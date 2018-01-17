@@ -35,6 +35,7 @@ import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import Widget from '#/PerformancePanel/Widgets/Widget';
+import RadialWidget from '#/PerformancePanel/Widgets/RadialWidget';
 // $FlowFixMe
 import { NewToaster } from '#/common/Toaster';
 // $FlowFixMe
@@ -110,7 +111,8 @@ export default class PerformancePanel extends React.Component<Props, State> {
   _addDemoWidgets = action(() => {
     const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
 
-    widgets.push(api.addWidget(profileId, ['cpu', 'memory', 'topology', 'serverStatus']));
+    widgets.push(api.addWidget(profileId, ['cpu']));
+    widgets.push(api.addWidget(profileId, ['memory']));
 
     // widgets.push(api.addWidget(profileId, ['memory']));
     // widgets.push(api.addWidget(profileId, ['topology']));
@@ -184,7 +186,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
         >
           {widgets.map(v => (
             <div id={`widget-${v}`} key={v} className="pt-elevation-3">
-              <Widget id={v} />
+              <RadialWidget id={v} />
             </div>
           ))}
         </ResponsiveReactGridLayout>
