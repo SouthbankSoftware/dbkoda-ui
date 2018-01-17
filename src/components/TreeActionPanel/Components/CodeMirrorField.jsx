@@ -28,7 +28,6 @@
 
 import React from 'react';
 import { observer } from 'mobx-react';
-import runInAction from 'mobx';
 
 import { Intent, Position, Tooltip } from '@blueprintjs/core';
 import 'codemirror/addon/hint/show-hint.css';

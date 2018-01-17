@@ -30,7 +30,6 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Select from 'react-select';
 import { Intent, Position, Tooltip } from '@blueprintjs/core';
-import util from 'react';
 
 import 'react-select/dist/react-select.css';
 
