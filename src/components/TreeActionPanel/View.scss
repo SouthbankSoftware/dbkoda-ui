@@ -30,6 +30,10 @@
     margin: 30px;
   }
 
+  .cm-s-material .CodeMirror-gutters {
+    z-index: 0;
+  }
+
   input[type='text'],
   input[type='number'],
   input[type='Numeric'],
