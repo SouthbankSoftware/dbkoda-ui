@@ -34,7 +34,7 @@ import { Button } from '@blueprintjs/core';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
-import Widget from '#/PerformancePanel/Widgets/Widget';
+// import Widget from '#/PerformancePanel/Widgets/Widget';
 import RadialWidget from '#/PerformancePanel/Widgets/RadialWidget';
 // $FlowFixMe
 import { NewToaster } from '#/common/Toaster';

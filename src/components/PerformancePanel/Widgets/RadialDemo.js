@@ -20,7 +20,7 @@
 /**
  * Created by joey on 17/1/18.
  */
-
+/* eslint-disable */
 //based on https://bl.ocks.org/mbostock/1096355
 //apple design:https://images.apple.com/watch/features/images/fitness_large.jpg
 "use strict";
