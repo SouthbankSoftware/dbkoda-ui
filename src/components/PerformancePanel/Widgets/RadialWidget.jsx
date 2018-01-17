@@ -49,9 +49,14 @@ export default class RadialWidget extends Widget {
   static PI = 2 * Math.PI;
   static gap = 2;
 
-  static dataset = [
-    {index: 0, name: 'move', icon: '\uF105', percentage: Math.random() * 60 + 30}
-  ];
+  ranDataset() {
+    var ran = Math.random();
+
+    return    [
+      {index: 0, name: 'move', icon: "\uF105", percentage: ran * 60 + 30}
+    ];
+
+  };
 
   static arc = d3.arc()
     .startAngle(0)
@@ -70,6 +75,9 @@ export default class RadialWidget extends Widget {
   constructor(props) {
     super(props);
     this.state = {field: null};
+    this.dataset = [
+      {index: 0, name: 'move', icon: '\uF105', percentage: Math.random() * 60 + 30}
+    ];
   }
 
   getDisplayName(items) {
@@ -148,7 +156,7 @@ export default class RadialWidget extends Widget {
       .attr('in', 'SourceGraphic');
 
     const field = svg.selectAll('g')
-      .data(RadialWidget.dataset)
+      .data(this.ranDataset())
       .enter().append('g');
 
     field.append('path').attr('class', 'progress').attr('filter', 'url(#dropshadow)');
@@ -165,7 +173,8 @@ export default class RadialWidget extends Widget {
     field.append('text').attr('class', 'goal').text(this.getDisplayName(items)).attr('transform', 'translate(0,50)');
     field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)');
 
-    // d3.transition().duration(1750).each(this.update);
+    d3.transition().duration(1750).each(() => this.update(field));
+
     return field;
   }
 
@@ -177,16 +186,17 @@ export default class RadialWidget extends Widget {
     };
   }
 
-  update(latestValue, items) {
-    let field = this.state.field;
-    if (!field) {
-      return;
-    }
+  update(field) {
+    // let field = this.state.field;
+    // if (!field) {
+    //   return;
+    // }
+    console.log('update');
     field = field
       .each(function (d) {
         this._value = d.percentage;
       })
-      .data(RadialWidget.dataset)
+      .data(this.ranDataset())
       .each(function (d) {
         d.previousValue = this._value;
       });
@@ -195,7 +205,7 @@ export default class RadialWidget extends Widget {
       return i * 200;
     })
     // .ease('elastic')
-      .attrTween('d', this.arcTween)
+      .attrTween('d', this.arcTween.bind(this))
       .style('fill', (d) => {
         if (d.index === 0) {
           return 'url(#gradient)';
@@ -208,12 +218,10 @@ export default class RadialWidget extends Widget {
     }).attr('transform', (d) => {
       return 'translate(10,' + -(150 - d.index * (40 + RadialWidget.gap)) + ')';
     });
-    console.log('cpu usage', latestValue);
-    const value = latestValue[items[0]];
-    const fixedValue = _.isInteger(value) ? value : value.toFixed(2)
-    field.select('text.completed').text(fixedValue);
-
-    // setTimeout(update, 2000);
+    field.select('text.completed').text((d) => {
+      return d.percentage;
+    });
+    setTimeout(() => this.update(field), 2000);
   }
 
 
@@ -228,12 +236,17 @@ export default class RadialWidget extends Widget {
       },
     ]);
     const latestValue = values.length > 0 ? values[values.length - 1].value : {};
-    this.update(latestValue, items);
+
+    const v = latestValue[items[0]];
+    const fixedValue = _.isInteger(v) ? v : v.toFixed(2);
+    this.dataset[0].percentage = fixedValue;
+    console.log('updated value ', latestValue);
+    this.update();
   });
 
   componentDidMount() {
     const {profileId, items} = this.props.store.widget;
-    Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
+    // Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
     const field = this.buildWidget(items);
     this.setState({field});
   }
