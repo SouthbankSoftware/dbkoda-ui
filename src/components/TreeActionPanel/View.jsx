@@ -35,6 +35,7 @@ import { observer, inject } from 'mobx-react';
 import { DrawerPanes } from '#/common/Constants';
 import FormTable from './Components/FormTable';
 import TextField from './Components/TextField';
+import CodeMirrorField from './Components/CodeMirrorField';
 import SelectField from './Components/SelectField';
 import BooleanField from './Components/BooleanField';
 import NumericField from './Components/NumericField';
@@ -46,7 +47,7 @@ import './View.scss';
 @inject(allStores => ({
   setDrawerChild: allStores.store.setDrawerChild,
   treeActionPanel: allStores.store.treeActionPanel,
-  editorPanel: allStores.store.editorPanel,
+  editorPanel: allStores.store.editorPanel
 }))
 @observer
 export default class TreeActionView extends React.Component {
@@ -101,6 +102,10 @@ export default class TreeActionView extends React.Component {
       for (const key of mobxForm.fields._keys) {
         if (mobxForm.fields.get(key).type == 'Text') {
           formFields.push(<TextField key={key} field={mobxForm.$(key)} />);
+        } else if (mobxForm.fields.get(key).type == 'CodeMirror') {
+          formFields.push(
+            <CodeMirrorField key={key} field={mobxForm.$(key)} />
+          );
         } else if (mobxForm.fields.get(key).type == 'Table') {
           formFields.push(<FormTable key={key} members={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'Select') {
@@ -120,7 +125,7 @@ export default class TreeActionView extends React.Component {
       <div className="pt-dark form-scrollable">
         <h3 className="form-title">{title}</h3>
         <form
-          ref={(f) => {
+          ref={f => {
             this.treeActionForm = f;
           }}
           onChange={mobxForm.onValueChange(mobxForm)}

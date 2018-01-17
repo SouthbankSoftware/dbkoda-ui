@@ -1,4 +1,6 @@
 /*
+ * @flow
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -25,24 +27,33 @@
  */
 
 import { action, observable, runInAction } from 'mobx';
+// $FlowFixMe
 import yaml from 'js-yaml';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import { Broker, EventType } from '../helpers/broker';
 
+type Settings = {
+  mongoCmd: string,
+  drillCmd: string,
+  drillControllerCmd: string,
+  telemetryEnabled: boolean,
+  showWelcomePageAtStart: boolean
+};
+
 export default class Config {
-  configFilePath;
-  @observable loading;
-  @observable
-  settings = {
-    @observable mongoCmd: '',
-    @observable drillCmd: '',
-    @observable drillControllerCmd: '',
-    @observable telemetryEnabled: true,
-    @observable showWelcomePageAtStart: true,
-  };
+  configFilePath: string;
+  @observable loading: boolean;
+  @observable settings: Settings;
 
   constructor() {
+    this.settings = {
+      mongoCmd: '',
+      drillCmd: '',
+      drillControllerCmd: '',
+      telemetryEnabled: true,
+      showWelcomePageAtStart: true,
+    };
     if (global.PATHS) {
       this.configFilePath = global.PATHS.configPath;
     } else if (process.env.UAT && process.env.UAT == 'true') {
@@ -53,6 +64,7 @@ export default class Config {
     this.loading = false;
 
     const handleConfigFileChange = () => {
+      console.log('Config file changed!');
       this.load();
     };
     const eventName = EventType.createFileChangedEvent(this.configFilePath);
@@ -77,13 +89,19 @@ export default class Config {
       .get(this.configFilePath)
       .then((file) => {
         runInAction('Apply changes to config from yaml file', () => {
-          this.settings = yaml.safeLoad(file.content);
+          const newSettings = yaml.safeLoad(file.content);
+          for (const key in this.settings) {
+            if (this.settings.hasOwnProperty(key)) {
+              this.settings[key] = newSettings[key];
+            }
+          }
           if (this.loading) {
             runInAction(() => {
               this.loading = false;
             });
           }
           console.log('Config loaded successfully!');
+          console.log(this.settings);
         });
       })
       .catch((e) => {
