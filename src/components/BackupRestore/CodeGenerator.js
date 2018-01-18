@@ -39,7 +39,7 @@ import {isDumpAction} from './Utils';
 
 const createTemplateObject = (state) => {
   const {db, profile, exportType, parseGrace, mode} = state;
-  const {host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort} = profile;
+  const {host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort, authenticationDatabase} = profile;
   const items = {
     ...profile,
     ...state,
@@ -51,7 +51,7 @@ const createTemplateObject = (state) => {
     ssl
   };
   if (sha) {
-    items.authDb = database;
+    items.authDb = authenticationDatabase || database;
   } else {
     delete items.username;
     delete items.password;
