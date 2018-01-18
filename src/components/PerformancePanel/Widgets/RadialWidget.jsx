@@ -226,7 +226,7 @@ export default class RadialWidget extends Widget {
     const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
     const v = latestValue[items[0]];
-    const fixedValue = _.isInteger(v) ? v : v.toFixed(2);
+    const fixedValue = _.isInteger(v) ? v : parseInt(v).toFixed(2);
     this.itemValue = fixedValue;
     this.update(this.state.field);
   });
