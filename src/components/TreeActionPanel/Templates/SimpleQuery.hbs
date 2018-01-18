@@ -1,5 +1,5 @@
 db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}").find(
-  { {{#if FilterKeys}} {{#if UseOr}}"$or"{{{else}}}"$and"{{/if}}:[
+  { {{#if FilterKeys}} {{#if UseOr}}"$or"{{else}}"$and"{{/if}}:[
         {{#each FilterKeys}} { "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
         {{/each}}] {{/if}} },
      { {{#each Projections}}{{#if AttributeName}} "{{{AttributeName}}}":{{{AttributeProjectionValue}}} {{/if}}{{#unless last}},{{/unless}} {{/each}} })
