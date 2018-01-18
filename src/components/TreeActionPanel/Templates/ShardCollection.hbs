@@ -1,9 +1,9 @@
 db.getSiblingDB("admin").runCommand(
   {
-   shardCollection: "{{Database}}.{{CollectionName}}",
+   shardCollection: "{{{Database}}}.{{{CollectionName}}}",
    key: { {{#each Keys}}
-     "{{AttributeName}}":{{{Direction}}}{{#unless last}},{{/unless}}{{/each}} } ,
-   unique: {{Unique}}{{#if numInitialChunks}},
-   numInitialChunks: {{numInitialChunks}} {{/if}}
+     "{{{AttributeName}}}":{{{Direction}}}{{#unless last}},{{/unless}}{{/each}} } ,
+   unique: {{{Unique}}}{{#if numInitialChunks}},
+   numInitialChunks: {{{numInitialChunks}}} {{/if}}
  }
 );

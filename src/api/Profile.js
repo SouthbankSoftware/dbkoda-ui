@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-18T15:54:19+11:00
+ * @Last modified time: 2018-01-19T09:40:51+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -81,6 +81,9 @@ export default class ProfileApi {
     } else if (data.urlRadio) {
       connectionUrl = data.url;
     }
+
+    let terminalQuery = null;
+
     if (data.ssh) {
       query.ssh = data.ssh;
       query.sshTunnel = data.sshTunnel;
@@ -91,20 +94,29 @@ export default class ProfileApi {
       query.localHost = '127.0.0.1';
       data.sshLocalPort = await ProfileForm.getRandomPort();
       query.localPort = data.sshLocalPort;
+
+      terminalQuery = {
+        username: data.remoteUser,
+        host: data.remoteHost
+      };
+
       if (data.sshTunnel) {
         connectionUrl =
           ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       }
       if (data.passRadio) {
         query.remotePass = data.remotePass;
+        terminalQuery.password = data.remotePass;
       } else if (data.keyRadio) {
         query.sshKeyFile = data.sshKeyFile;
         query.passPhrase = data.passPhrase;
+
+        terminalQuery.privateKey = data.sshKeyFile;
+        terminalQuery.passPhrase = data.passPhrase;
       }
     }
     if (data.sha) {
       query.username = data.username;
-      query.password = data.password;
       query.password = data.password;
       query.authenticationDatabase = data.authenticationDatabase;
     }
@@ -131,6 +143,14 @@ export default class ProfileApi {
     return service
       .create({}, { query })
       .then((res) => {
+        if (terminalQuery) {
+          terminalQuery.profileId = res.id;
+          this.api.addSshTerminal(terminalQuery, {
+            switchToUponCreation: false,
+            skipWhenExisting: true,
+            eagerCreation: true
+          });
+        }
         this.onSuccess(res, data);
       })
       .catch((err) => {

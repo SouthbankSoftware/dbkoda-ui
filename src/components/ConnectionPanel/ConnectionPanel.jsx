@@ -53,14 +53,14 @@ const ConnectionPanel = ({
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: globalString('connection/existingAlias'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
       break;
       case 'connectionFail':
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message.substring(0, 256) + '...' }} />), // eslint-disable-line react/no-danger
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          iconName: 'pt-icon-thumbs-down',
         });
       break;
       case 'connectionSuccess':
@@ -85,9 +85,7 @@ const ConnectionPanel = ({
       profiles={profiles}
       save={api.saveProfile}
       title={
-        edit
-          ? globalString('connection/editHeading')
-          : globalString('connection/createHeading')
+        edit ? globalString('connection/editHeading') : globalString('connection/createHeading')
       }
     />
   );

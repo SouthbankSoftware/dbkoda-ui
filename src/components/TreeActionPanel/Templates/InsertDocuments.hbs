@@ -1,5 +1,9 @@
-db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
+var insResult={};
+
+insResult=db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}").
    insert(
-     {{DocumentArray}} ,
-     { ordered: {{Ordered}}
+     {{{DocumentArray}}} ,
+     { ordered: {{{Ordered}}}
      });
+
+printjson(insResult);

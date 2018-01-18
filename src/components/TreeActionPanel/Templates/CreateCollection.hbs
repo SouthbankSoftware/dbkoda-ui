@@ -1,19 +1,19 @@
-db.getSiblingDB("{{Database}}").createCollection(
-    "{{CollectionName}}" , 
+db.getSiblingDB("{{{Database}}}").createCollection(
+    "{{{CollectionName}}}" , 
     {
-         capped: {{capped}} {{#if autoIndexId ~}},
-         autoIndexId: {{autoIndexId}}{{/if ~}}
+         capped: {{{capped}}} {{#if autoIndexId ~}},
+         autoIndexId: {{{autoIndexId}}}{{/if ~}}
 {{#if size ~}},
-         size: {{size}}{{/if ~}}
+         size: {{{size}}}{{/if ~}}
 {{#if max ~}},
-         max: {{max}}{{/if ~}}
+         max: {{{max}}}{{/if ~}}
 {{#if storageEngine~}},
-         storageEngine: {{storageEngine}}{{/if ~}}
+         storageEngine: {{{storageEngine}}}{{/if ~}}
 {{#if validator ~}},
-         validator: {{validator}}{{/if ~}}
+         validator: {{{validator}}}{{/if ~}}
 {{#if validationLevel ~}},
-         validationLevel: "{{validationLevel}}"{{/if ~}}
+         validationLevel: "{{{validationLevel}}}"{{/if ~}}
 {{#if validationAction ~}},
-         validationAction: "{{validationAction}}"{{/if ~}}
+         validationAction: "{{{validationAction}}}"{{/if ~}}
 
 });

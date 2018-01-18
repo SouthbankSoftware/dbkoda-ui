@@ -27,11 +27,7 @@
 import _ from 'lodash';
 import { action, observable, when, runInAction } from 'mobx';
 import { dump, restore, nodump } from 'dumpenvy';
-import {
-  serializer,
-  deserializer,
-  postDeserializer,
-} from '#/common/mobxDumpenvyExtension';
+import { serializer, deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
@@ -67,10 +63,8 @@ global.EOL = global.IS_ELECTRON
   : process.platform === 'win32' ? '\r\n' : '\n';
 
 export default class Store {
-  @nodump
-  api = null;
-  @nodump
-  profileStore = null;
+  @nodump api = null;
+  @nodump profileStore = null;
   @observable locale = 'en';
   @observable version = '0.9.0-beta.1';
   @observable updateAvailable = false;
@@ -215,11 +209,10 @@ export default class Store {
     item: null,
   });
 
-  @observable
-  topology = observable({ isChanged: false, json: {}, profileId: '' });
+  @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
 
   @action.bound
-  setDrawerChild = (value) => {
+  setDrawerChild = value => {
     this.drawer.drawerChild = value;
   };
 
@@ -249,13 +242,13 @@ export default class Store {
   };
 
   @action.bound
-  updateDynamicFormCode = (value) => {
+  updateDynamicFormCode = value => {
     this.treeActionPanel.formValues = value;
     this.treeActionPanel.isNewFormValues = true;
   };
 
   @action.bound
-  updateTopology = (res) => {
+  updateTopology = res => {
     this.topology.profileId = res.profileId;
     this.topology.json = res.result;
     this.topology.isChanged = true;
@@ -280,8 +273,7 @@ export default class Store {
   openNewAggregateBuilder(nodeRightClicked) {
     if (this.editorPanel.activeDropdownId === 'Default') {
       NewToaster.show({
-        message:
-          'Error: Please select an open connection from the Profile Dropdown.',
+        message: 'Error: Please select an open connection from the Profile Dropdown.',
         className: 'danger',
         iconName: 'pt-icon-thumbs-down',
       });
@@ -291,10 +283,9 @@ export default class Store {
     return featherClient()
       .service('/mongo-shells')
       .create({
-        id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId)
-          .id,
+        id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id,
       })
-      .then((res) => {
+      .then(res => {
         // Create new editor as normal, but with "aggregate" type.
         return this.api.setNewEditorState(res, {
           type: 'aggregate',
@@ -305,7 +296,7 @@ export default class Store {
           blockList: [],
         });
       })
-      .catch((err) => {
+      .catch(err => {
         this.api.createNewEditorFailed();
         console.error(err);
         NewToaster.show({
@@ -325,7 +316,7 @@ export default class Store {
       .service('files')
       .get(path)
       .then(res => cb(res))
-      .catch((err) => {
+      .catch(err => {
         NewToaster.show({
           message: err.message,
           className: 'danger',
@@ -335,7 +326,7 @@ export default class Store {
       });
   };
 
-  watchFileBackgroundChange = (editorId) => {
+  watchFileBackgroundChange = editorId => {
     const editor = this.editors.get(editorId);
     if (editor && editor.path) {
       const handleFileChangedEvent = () => {
@@ -362,14 +353,10 @@ export default class Store {
 
   @action.bound
   closeConnection() {
-    return new Promise((resolve) => {
-      if (
-        this.profileStore &&
-        this.profileStore.profiles &&
-        this.profileStore.profiles.size > 0
-      ) {
+    return new Promise(resolve => {
+      if (this.profileStore && this.profileStore.profiles && this.profileStore.profiles.size > 0) {
         const promises = [];
-        this.profileStore.profiles.forEach((value) => {
+        this.profileStore.profiles.forEach(value => {
           if (value.status === ProfileStatus.OPEN) {
             // close this connection from feather-client
             value.status = ProfileStatus.CLOSED;
@@ -403,6 +390,38 @@ export default class Store {
     const newStore = restore(data, { deserializer, postDeserializer });
     this.cleanStore(newStore);
     _.assign(this, newStore);
+
+    const ps = [];
+
+    // Remove terminals doesn't exist on Controller
+    for (const terminalId of this.terminals.keys()) {
+      ps.push(
+        featherClient()
+          .terminalService.get(terminalId)
+          .catch(
+            action(err => {
+              if (err.code !== 404) {
+                console.error(err);
+              }
+
+              this.terminals.delete(terminalId);
+
+              return this.api.getTerminalTabId(terminalId);
+            }),
+          ),
+      );
+    }
+
+    Promise.all(ps).then(
+      action(removedIds => {
+        const { currentTab } = this.outputPanel;
+
+        if (currentTab && _.includes(removedIds, currentTab)) {
+          // go back to `Raw` if current Terminal is removed
+          this.outputPanel.currentTab = this.editorPanel.activeEditorId;
+        }
+      }),
+    );
   }
 
   cleanStore(newStore) {
@@ -441,7 +460,7 @@ export default class Store {
     newStore.editorToolbar.noActiveProfile = true;
 
     // Editors:
-    newStore.editors.forEach((value) => {
+    newStore.editors.forEach(value => {
       value.executing = false;
       value.status = ProfileStatus.CLOSED;
     });
@@ -487,10 +506,7 @@ export default class Store {
 
       const stateStoreDir = path.dirname(stateStorePath);
       const dateStr = moment().format('DD-MM-YYYY_HH-mm-ss');
-      const backupPath = path.resolve(
-        stateStoreDir,
-        `stateStore.${dateStr}.json`,
-      );
+      const backupPath = path.resolve(stateStoreDir, `stateStore.${dateStr}.json`);
       return featherClient()
         .service('files')
         .get(stateStorePath, {
@@ -535,7 +551,7 @@ export default class Store {
 
         Broker.emit(EventType.APP_READY);
       })
-      .catch((err) => {
+      .catch(err => {
         if (err.code === 404) {
           console.error(
             "State store doesn't exist. A new one will be created after app close or refreshing",
@@ -585,7 +601,7 @@ export default class Store {
 
     if (initOnly) return;
 
-    Broker.on(EventType.FEATHER_CLIENT_LOADED, (value) => {
+    Broker.on(EventType.FEATHER_CLIENT_LOADED, value => {
       if (value) {
         this.load();
       }

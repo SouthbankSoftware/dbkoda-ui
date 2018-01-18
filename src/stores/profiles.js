@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Chris Trott <christrott>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-01-12T00:22:02+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,19 +22,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @Author: Chris Trott <christrott>
- * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-03T15:35:19+11:00
  */
 
-import {action, observable, runInAction, toJS} from 'mobx';
+import { action, observable, runInAction, toJS } from 'mobx';
 import yaml from 'js-yaml';
 import _ from 'lodash';
-import {featherClient} from '~/helpers/feathers';
-import {NewToaster} from '#/common/Toaster';
+import { featherClient } from '~/helpers/feathers';
+import { NewToaster } from '#/common/Toaster';
 
 export default class Profiles {
   saveDebounced = _.debounce(this.save, 500);
@@ -60,7 +60,7 @@ export default class Profiles {
     featherClient()
       .service('files')
       .get(this.profilesFilePath)
-      .then((file) => {
+      .then(file => {
         runInAction('Apply changes to profiles from yaml file', () => {
           const profileLoad = yaml.safeLoad(file.content);
           if (profileLoad) {
@@ -75,7 +75,7 @@ export default class Profiles {
           console.log('Profiles loaded successfully!');
         });
       })
-      .catch((e) => {
+      .catch(e => {
         console.error(e);
         NewToaster.show({
           message: `Reading profiles.yml failed: ${e.message}`,
@@ -97,16 +97,11 @@ export default class Profiles {
         .service('files')
         .create({
           _id: this.profilesFilePath,
-          content: yaml.safeDump(exportProfiles),
+          content: yaml.safeDump(exportProfiles, { skipInvalid: true }),
           watching: false,
         })
         .then(() => {
-          console.log('profiles.yml updated');
-          NewToaster.show({
-            message: 'profiles.yml successfully updated',
-            className: 'success',
-            iconName: 'pt-icon-thumbs-up',
-          });
+          IS_DEVELOPMENT && console.debug('profiles.yml updated');
           runInAction(() => {
             this.loading = false;
           });

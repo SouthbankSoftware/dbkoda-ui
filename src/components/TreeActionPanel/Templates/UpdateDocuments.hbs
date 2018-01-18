@@ -1,18 +1,22 @@
-db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").
+var upResult={};
+
+upResult=db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}").
    update(
      { {{#if FilterKeys~}} {{#if UseOr~}}"$or"{{else}}"$and"{{/if~}}:[
         {{#each FilterKeys }}
-        { "{{AttributeName}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
+        { "{{{AttributeName}}}":{ {{{Operator}}}:{{{Value}}} } } {{#unless last}},{{/unless}}
             {{/each }}
          ]{{/if ~}}
      }, {{#if Replace }}
-     {{ReplaceMent}} {{else }}
+     {{{ReplaceMent}}} {{else }}
      { {{#if UpdateOperators}}
           {{#each UpdateOperators }}
-         "{{UpOperator}}":{ "{{{UpAttribute}}}":{{{UpValue}}} }  {{#unless last}},{{/unless}}
+         "{{{UpOperator}}}":{ "{{{UpAttribute}}}":{{{UpValue}}} }  {{#unless last}},{{/unless}}
               {{/each }}
         {{/if }}
      }{{/if ~}},
-     { upsert: {{Upsert}},
-       multi:  {{UpdateMany}}
+     { upsert: {{{Upsert}}},
+       multi:  {{{UpdateMany}}}
      });
+
+print(upResult);

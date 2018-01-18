@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-01-10T16:18:50+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -247,7 +250,7 @@ div.savingDialog {
 }
 
 .pt-dialog {
-  
+
   .dialogContent {
     padding: 20px;
     width: 100%;
@@ -322,4 +325,13 @@ div.savingDialog {
   bottom: 0px;
   background-color: $navbarLeftBackground;
   color: $defaultFontColor;
+}
+
+.TelemetryConsent {
+  .dialogButtons {
+    label.pt-switch {
+      float: left;
+      margin-top: 15px;
+    }
+  }
 }

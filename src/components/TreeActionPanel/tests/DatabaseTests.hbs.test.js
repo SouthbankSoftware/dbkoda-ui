@@ -1,4 +1,8 @@
-/*
+/**
+ * @Author: Guy Harrison
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-01-18T10:47:37+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,19 +22,10 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
-*  General unit tests
-
-* @Author: Guy Harrison
-
-*/
-//
 const hbs = require('handlebars');
 const fs = require('fs');
-// const sprintf = require('sprintf-js').sprintf;
 const common = require('./common.js');
 const jsonHelper = require('../../../helpers/handlebars/json.js');
-// const shelljs = require('shelljs');
 
 hbs.registerHelper('json', jsonHelper);
 

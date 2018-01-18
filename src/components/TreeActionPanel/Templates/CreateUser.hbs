@@ -1,11 +1,11 @@
-db.getSiblingDB("{{Database}}").createUser({ 
-   user: "{{UserName}}",
-   pwd: "{{Password}}", {{#if CustomData}} 
+db.getSiblingDB("{{{Database}}}").createUser({
+   user: "{{{UserName}}}",
+   pwd: "{{{Password}}}", {{#if CustomData}}
    customData:{{{CustomData}}}, {{/if}}
-     roles: [ {{#each Roles}} 
-             {role:"{{Role}}", db: "{{Database}}" } {{#unless last}},{{/unless}}    {{/each}}
-            ]              
-    },          
+     roles: [ {{#each Roles}}
+             {role:"{{{Role}}}", db: "{{{Database}}}" } {{#unless last}},{{/unless}}    {{/each}}
+            ]
+    },
     {  w: "majority" }
 );
  

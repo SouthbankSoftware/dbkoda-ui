@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-22T12:41:19+11:00
+ * @Last modified time: 2018-01-12T01:42:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -135,6 +135,7 @@ export default class ListView extends React.Component {
     }
     if (selectedProfile.ssh && selectedProfile.sshTunnel) {
       query.ssh = selectedProfile.ssh;
+      query.sshTunnel = selectedProfile.sshTunnel;
       query.remoteHost = selectedProfile.host;
       query.remotePort = selectedProfile.port;
       query.sshHost = selectedProfile.remoteHost;
@@ -153,6 +154,7 @@ export default class ListView extends React.Component {
     if (selectedProfile.sha) {
       query.username = selectedProfile.username;
       query.password = newPassword;
+      query.authenticationDatabase = selectedProfile.authenticationDatabase;
     }
     if (selectedProfile.ssl) {
       connectionUrl.indexOf('?') > 0
@@ -176,10 +178,10 @@ export default class ListView extends React.Component {
     });
     return service
       .create({}, { query })
-      .then((res) => {
+      .then(res => {
         this.onSuccess(res, selectedProfile);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err.stack);
         this.props.store.profileList.creatingNewProfile = false;
         this.closeOpenConnectionAlert();
@@ -198,6 +200,8 @@ export default class ListView extends React.Component {
   onSuccess(res, data) {
     let message = globalString('connection/success');
     let position = Position.LEFT_BOTTOM;
+    let profile = null;
+
     this.props.store.profileList.creatingNewProfile = false;
     if (!data.test) {
       Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {
@@ -207,18 +211,20 @@ export default class ListView extends React.Component {
       });
       position = Position.RIGHT_TOP;
       // @TODO -> Someone should go through these and see which are unchanged from a new connection.
-      const profile = {
+      profile = {
         id: res.id,
         shellId: res.shellId,
         password: null,
         status: 'OPEN',
         database: data.database,
+        authenticationDatabase: data.authenticationDatabase,
         alias: data.alias,
         authorization: data.authorization,
         host: data.host,
         hostRadio: data.hostRadio,
         port: data.port,
         ssl: data.ssl,
+        sslAllowInvalidCertificates: data.sslAllowInvalidCertificates,
         test: data.test,
         url: data.url,
         urlRadio: data.urlRadio,
@@ -237,8 +243,11 @@ export default class ListView extends React.Component {
         initialMsg: res.output ? res.output.join('\r') : '',
         mongoType: res.mongoType,
       };
-      console.debug('profile:', profile);
-      this._syncSshCredential(data, profile);
+
+      if ('bRemotePass' in data) profile.bRemotePass = data.bRemotePass;
+      if ('bPassPhrase' in data) profile.bPassPhrase = data.bPassPhrase;
+
+      IS_DEVELOPMENT && console.debug('profile:', profile);
 
       this.props.profileStore.profiles.set(res.id, profile);
       this.props.store.profileList.selectedProfile = this.props.profileStore.profiles.get(res.id);
@@ -278,6 +287,26 @@ export default class ListView extends React.Component {
       className: 'success',
       iconName: 'pt-icon-thumbs-up',
     });
+
+    if (profile && profile.ssh) {
+      const { terminals } = this.props.store;
+      let shouldCreateSshTerminal = true;
+
+      for (const terminal of terminals.values()) {
+        if (terminal.profileId && terminal.profileId === profile.id) {
+          shouldCreateSshTerminal = false;
+          break;
+        }
+      }
+
+      if (shouldCreateSshTerminal) {
+        this.state.targetProfile = profile;
+        this.openSshConnectionAlert({
+          switchToUponCreation: false,
+          eagerCreation: true,
+        });
+      }
+    }
   }
 
   @action
@@ -290,7 +319,7 @@ export default class ListView extends React.Component {
       featherClient()
         .service('/mongo-connection')
         .remove(selectedProfile.id)
-        .then((_v) => {
+        .then(_v => {
           runInAction(() => {
             selectedProfile.status = ProfileStatus.CLOSED;
             profiles.set(selectedProfile.id, selectedProfile);
@@ -317,7 +346,7 @@ export default class ListView extends React.Component {
           }
           this.closeConnectionCloseAlert();
         })
-        .catch((err) => {
+        .catch(err => {
           console.error('error:', err);
           if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
@@ -437,7 +466,9 @@ export default class ListView extends React.Component {
 
     query.profileId = selectedProfile.id;
 
-    addSshTerminal(query);
+    addSshTerminal(query, this._openSshTerminalOptions);
+    this._openSshTerminalOptions = null;
+    this.setState({ remotePass: null, passPhrase: null });
     this.closeSshConnectionAlert();
   }
 
@@ -494,24 +525,12 @@ export default class ListView extends React.Component {
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
   }
 
-  _syncSshCredential = action((source, target) => {
-    if ((source.passPhrase && source.passPhrase != '') || source.bPassPhrase) {
-      target.bPassPhrase = true;
-    }
-    if ((source.remotePass && source.remotePass != '') || source.bRemotePass) {
-      target.bRemotePass = true;
-    }
-  });
+  @action.bound
+  openSshConnectionAlert(options) {
+    const { targetProfile, remotePass, passPhrase } = this.state;
+    this._openSshTerminalOptions = options;
 
-  @autobind
-  openSshConnectionAlert() {
-    const { targetProfile } = this.state;
-
-    if (targetProfile) {
-      this._syncSshCredential(targetProfile, targetProfile);
-    }
-
-    if (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass) {
+    if ((targetProfile.bPassPhrase && !passPhrase) || (targetProfile.bRemotePass && !remotePass)) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);
@@ -601,7 +620,7 @@ export default class ListView extends React.Component {
     } else {
       const { api: { getEditorDisplayName } } = this.props;
 
-      this.props.store.editors.forEach((value) => {
+      this.props.store.editors.forEach(value => {
         if (value.currentProfile.trim() == this.state.targetProfile.id.trim()) {
           windows.push(
             <div key={windows.length} className="menuItemWrapper">
@@ -656,7 +675,7 @@ export default class ListView extends React.Component {
         <div key={terminalOperations.length} className="menuItemWrapper">
           <MenuItem
             className="profileListContextMenu newSshTerminal"
-            onClick={this.openSshConnectionAlert}
+            onClick={() => this.openSshConnectionAlert()}
             text={globalString('profile/menu/newSshTerminal')}
             intent={Intent.NONE}
             iconName="pt-icon-new-text-box"
@@ -691,11 +710,6 @@ export default class ListView extends React.Component {
         />
       </div>,
     );
-
-    // HACK workaround for https://github.com/palantir/blueprint/issues/1539
-    setTimeout(() => {
-      document.querySelector('.pt-popover.pt-minimal.pt-dark').classList.remove('pt-dark');
-    });
 
     return (
       <Menu className="profileListContextMenu">
@@ -840,7 +854,7 @@ export default class ListView extends React.Component {
                   placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
                   type="password"
                   dir="auto"
-                  onChange={(event) => {
+                  onChange={event => {
                     this.setState({ remotePass: event.target.value });
                   }}
                 />
@@ -856,7 +870,7 @@ export default class ListView extends React.Component {
                   placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
                   type="password"
                   dir="auto"
-                  onChange={(event) => {
+                  onChange={event => {
                     this.setState({ passPhrase: event.target.value });
                   }}
                 />
@@ -895,7 +909,7 @@ export default class ListView extends React.Component {
                   placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
                   type="password"
                   dir="auto"
-                  onChange={(event) => {
+                  onChange={event => {
                     this.setState({ remotePass: event.target.value });
                   }}
                 />
@@ -911,7 +925,7 @@ export default class ListView extends React.Component {
                   placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
                   type="password"
                   dir="auto"
-                  onChange={(event) => {
+                  onChange={event => {
                     this.setState({ passPhrase: event.target.value });
                   }}
                 />
