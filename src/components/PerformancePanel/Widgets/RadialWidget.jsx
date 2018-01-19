@@ -47,19 +47,16 @@ export default class RadialWidget extends Widget {
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
-  static gap = 2;
+  static innerRadiusSize = 140;
+  static outerRadiusSize = 180;
 
   static arc = d3.arc()
     .startAngle(0)
     .endAngle((d) => {
       return d.percentage / 100 * RadialWidget.PI;
     })
-    .innerRadius((d) => {
-      return 140 - d.index * (40 + RadialWidget.gap);
-    })
-    .outerRadius((d) => {
-      return 180 - d.index * (40 + RadialWidget.gap);
-    })
+    .innerRadius(140)
+    .outerRadius(180)
     .cornerRadius(20);// modified d3 api only
 
 
@@ -89,12 +86,8 @@ export default class RadialWidget extends Widget {
     const background = d3.arc()
       .startAngle(0)
       .endAngle(RadialWidget.PI)
-      .innerRadius((d) => {
-        return 140 - d.index * (40 + RadialWidget.gap);
-      })
-      .outerRadius((d) => {
-        return 180 - d.index * (40 + RadialWidget.gap);
-      });
+      .innerRadius(RadialWidget.innerRadiusSize)
+      .outerRadius(RadialWidget.outerRadiusSize);
     const elem = d3.select(this.radial);
     const svg = elem.select('.radial-main').append('svg')
       .attr('width', RadialWidget.width)
@@ -167,7 +160,7 @@ export default class RadialWidget extends Widget {
     field.append('text').attr('class', 'goal').text(this.getDisplayName(items)).attr('transform', 'translate(0,50)');
     field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)');
 
-    d3.transition().duration(1750).each(() => this.update(field));
+    d3.transition().duration(1000).each(() => this.update(field));
 
     return field;
   }
@@ -190,7 +183,7 @@ export default class RadialWidget extends Widget {
         d.previousValue = this._value;
       });
 
-    field.select('path.progress').transition().duration(1750).delay((d, i) => {
+    field.select('path.progress').transition().duration(1000).delay((d, i) => {
       return i * 200;
     })
     // .ease('elastic')
@@ -202,13 +195,13 @@ export default class RadialWidget extends Widget {
         return RadialWidget.colors[d.index];
       });
 
-    field.select('text.icon').text((d) => {
-      return d.icon;
-    }).attr('transform', (d) => {
-      return 'translate(10,' + -(150 - d.index * (40 + RadialWidget.gap)) + ')';
-    });
+    // field.select('text.icon').text((d) => {
+    //   return d.icon;
+    // }).attr('transform', (d) => {
+    //   return 'translate(10,' + -(150) + ')';
+    // });
     field.select('text.completed').text((d) => {
-      return d.percentage;
+      return d.percentage + '%';
     });
   }
 
@@ -224,11 +217,12 @@ export default class RadialWidget extends Widget {
       },
     ]);
     const latestValue = values.length > 0 ? values[values.length - 1].value : {};
-
-    const v = latestValue[items[0]];
-    const fixedValue = _.isInteger(v) ? v : parseInt(v).toFixed(2);
-    this.itemValue = fixedValue;
-    this.update(this.state.field);
+    if (!_.isEmpty(latestValue)) {
+      const v = latestValue[items[0]];
+      const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
+      this.itemValue = fixedValue;
+      this.update(this.state.field);
+    }
   });
 
   componentDidMount() {
@@ -239,6 +233,7 @@ export default class RadialWidget extends Widget {
   }
 
   render() {
+    this.radial && console.log(this.radial.offsetWidth);
     return (
       <div className="radial-widget" ref={radial => (this.radial = radial)}>
         <div className="radial-main" />

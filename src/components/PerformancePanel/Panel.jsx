@@ -89,8 +89,8 @@ export default class PerformancePanel extends React.Component<Props, State> {
       },
       rows: 8,
       cols: 10,
-      widgetHeight: 2,
-      widgetWidth: 2,
+      widgetHeight: 4,
+      widgetWidth: 4,
     };
   }
 
