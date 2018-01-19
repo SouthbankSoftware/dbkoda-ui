@@ -8,7 +8,7 @@ upResult=db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}")
             {{/each }}
          ]{{/if ~}}
      }, {{#if Replace }}
-     {{{ReplaceMent}}} {{else }}
+     {{{Replacement}}} {{else }}
      { {{#if UpdateOperators}}
           {{#each UpdateOperators }}
          "{{{UpOperator}}}":{ "{{{UpAttribute}}}":{{{UpValue}}} }  {{#unless last}},{{/unless}}
