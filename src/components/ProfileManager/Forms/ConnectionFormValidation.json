@@ -97,6 +97,13 @@
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
                 "value": { "type": "boolean" }
               }
             },
@@ -123,6 +130,31 @@
                     "value": { "type": "string" }
                   }
                 }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "advanced": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "additionalProperties": false,
+          "items": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
               }
             }
           ]

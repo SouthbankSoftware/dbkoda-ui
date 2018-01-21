@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-17T16:16:29+11:00
+ * @Last modified time: 2018-01-19T12:48:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,10 +36,12 @@ export const FieldBindings = {
 };
 
 export class ConnectionForm {
+  api: null
   formSchema: null
   formErrors: []
   validateErrors: null
-  constructor() {
+  constructor(api) {
+    this.api = api;
     this.formErrors = [];
     this.formSchema = this.loadDefaultSchema();
 
@@ -58,7 +60,7 @@ export class ConnectionForm {
   updateSchemaFromProfile(profile) {
     for (const subform in this.formSchema) {
       if (this.formSchema.hasOwnProperty(subform)) {
-        subform.fields.forEach((field) => {
+        this.formSchema[subform].fields.forEach((field) => {
           field.value = profile[field.name];
         });
       }
@@ -79,6 +81,7 @@ export class ConnectionForm {
     return fieldsCol;
   }
 
+  @action
   addAdditionalFieldProps(field, subform) {
     field.id = field.name; // fix to add id as required by UI fields
     field.subform = subform;
@@ -193,14 +196,27 @@ export class ConnectionForm {
     return {status, formData};
   }
 
-  getProfileFromSchema() {
-    console.log('getProfileFromInstance:', this.formSchema);
-    return {};
+  getProfileFromSchema(formData) {
+    const profile = {};
+    console.log('getProfileFromInstance:', formData);
+    for (const subform in formData) {
+      if (formData.hasOwnProperty(subform)) {
+        formData[subform].fields.forEach((field) => {
+          if (field.value !== undefined && field.value !== null) {
+            profile[field.name] = field.value;
+          }
+        });
+      }
+    }
+    return profile;
   }
 
   onConnect() {
     const result = this.validateForm();
     console.log('Validation: ', result.status, result.formData);
+    const profile = this.getProfileFromSchema(result.formData);
+    console.log('Profile:', profile);
+    return this.api.connectProfile(profile);
   }
   onSave() {
     console.log('onSave:', this.formSchema);

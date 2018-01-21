@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-19T09:40:51+11:00
+ * @Last modified time: 2018-01-22T09:53:42+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -37,7 +37,6 @@ export default class ProfileApi {
     this.connectProfile = this.connectProfile.bind(this);
     this.onFail = this.onFail.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
-    this.closeConnectionPane = this.closeConnectionPane.bind(this);
     this.saveProfile = this.saveProfile.bind(this);
   }
 
@@ -76,7 +75,7 @@ export default class ProfileApi {
     }
     const query = {};
     let connectionUrl;
-    if (data.hostRadio) {
+    if (data.hostRadio || data.urlRadio === false) {
       connectionUrl = ProfileForm.mongoProtocol + data.host + ':' + data.port;
     } else if (data.urlRadio) {
       connectionUrl = data.url;
@@ -237,14 +236,10 @@ export default class ProfileApi {
       }
       profiles.set(res.id, profile);
       profileList.selectedProfile = profiles.get(res.id);
-      this.closeConnectionPane();
+      this.store.hideConnectionPane();
       Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
     }
     this.toasterCallback && this.toasterCallback('connectionSuccess');
-  }
-  @action
-  closeConnectionPane() {
-    this.store.setDrawerChild(DrawerPanes.DEFAULT);
   }
   @action
   saveProfile(formData) {
@@ -266,7 +261,7 @@ export default class ProfileApi {
       profile.shellId = uuidV1();
     }
     profiles.set(profile.id, profile);
-    this.closeConnectionPane();
+    this.store.hideConnectionPane();
   }
 
   /**

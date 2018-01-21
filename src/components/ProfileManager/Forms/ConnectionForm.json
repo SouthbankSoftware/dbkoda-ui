@@ -44,7 +44,7 @@
         "label": "SCRAM-SHA-1(username/password)",
         "type": "checkbox",
         "column": 2,
-        "refFields": ["username", "password"]
+        "refFields": ["username", "password", "authenticationDatabase"]
       },
       {
         "name": "username",
@@ -61,6 +61,15 @@
         "label": "Password",
         "icon": "password",
         "type": "password",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "authenticationDatabase",
+        "label": "Authentication Database",
+        "type": "text",
         "column": 2,
         "width": 0.5,
         "disabled": true,
@@ -149,7 +158,22 @@
   },
   "advanced": {
     "name": "Advanced",
-    "fields": []
+    "fields": [
+      {
+        "name": "ssl",
+        "value": false,
+        "label": "Use SSL for all connections",
+        "type": "checkbox",
+        "column": 1
+      },
+      {
+        "name": "sslAllowInvalidCertificates",
+        "value": false,
+        "label": "Allow invalid certificates",
+        "type": "checkbox",
+        "column": 1
+      }
+    ]
   },
   "url": {
     "name": "URL Builder",

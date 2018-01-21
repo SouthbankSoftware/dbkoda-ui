@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-17T15:01:18+11:00
+ * @Last modified time: 2018-01-19T13:01:33+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,13 +26,14 @@
 
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, ButtonGroup } from '@blueprintjs/core';
+import { Button, ButtonGroup, Position } from '@blueprintjs/core';
 import RGL, { WidthProvider } from 'react-grid-layout';
 
 import TextField from '#/TreeActionPanel/Components/TextField';
 import NumericField from '#/TreeActionPanel/Components/NumericField';
 import BooleanField from '#/TreeActionPanel/Components/BooleanField';
 
+import { DBKodaToaster } from '#/common/Toaster';
 import { ConnectionForm } from './ConnectionForm';
 import './Panel.scss';
 
@@ -63,17 +64,47 @@ export default class ProfileManager extends React.Component<Props, State> {
 
   state = {
     selectedSubform: 'basic',
+    formTitle: globalString('connection/createHeading'),
     connecting: false
   };
 
   constructor(props: Props) {
     super(props);
 
-    const { store } = this.props;
-    this.form = new ConnectionForm();
+    const { store, api } = this.props;
+    this.form = new ConnectionForm(api);
     if (store && store.profileList.selectedProfile) {
+      this.setState({ formTitle: globalString('connection/editHeading')});
       this.form.updateSchemaFromProfile(store.profileList.selectedProfile);
     }
+    const showToaster = (strErrorCode, err) => {
+      switch (strErrorCode) {
+        case 'existingAlias':
+          DBKodaToaster(Position.LEFT_BOTTOM).show({
+            message: globalString('connection/existingAlias'),
+            className: 'danger',
+            iconName: 'pt-icon-thumbs-down',
+          });
+        break;
+        case 'connectionFail':
+          DBKodaToaster(Position.LEFT_BOTTOM).show({
+            message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message.substring(0, 256) + '...' }} />), // eslint-disable-line react/no-danger
+            className: 'danger',
+            iconName: 'pt-icon-thumbs-down',
+          });
+        break;
+        case 'connectionSuccess':
+          DBKodaToaster(Position.RIGHT_TOP).show({
+            message: globalString('connection/success'),
+            className: 'success',
+            iconName: 'pt-icon-thumbs-up'
+          });
+        break;
+        default:
+        break;
+      }
+    };
+    api.setToasterCallback(showToaster);
   }
 
   renderUIFields(column) {
@@ -132,7 +163,7 @@ export default class ProfileManager extends React.Component<Props, State> {
       <div className="ProfileManager">
         <div key="column0" className="connectionLeftPane">
           <div className="form-title">
-            <span>Create New Connection</span>
+            <span>{this.state.formTitle}</span>
           </div>
 
           {this.renderMenu()}
@@ -177,7 +208,12 @@ export default class ProfileManager extends React.Component<Props, State> {
                       ' connectButton pt-button pt-intent-success'
                     }
                     onClick={() => {
-                      this.form.onConnect();
+                      this.setState({ connecting: true });
+                      this.form.onConnect()
+                      .then(() => {
+                        this.setState({ connecting: false });
+                      })
+                      .catch(() => this.setState({ connecting: false }));
                     }}
                     text={globalString('connection/form/connectButton')}
                     disabled={this.form.formErrors.length > 0}

@@ -22,7 +22,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-18T13:54:59+11:00
+ * @Last modified time: 2018-01-19T11:50:06+11:00
  */
 
 /**
@@ -37,6 +37,7 @@ import { DBKodaToaster } from '../common/Toaster';
 
 const ConnectionPanel = ({
   api,
+  store,
   profiles,
   profileList
 }) => {
@@ -79,7 +80,7 @@ const ConnectionPanel = ({
   return (
     <Panel
       form={form}
-      close={api.closeConnectionPane}
+      close={store.hideConnectionPane}
       edit={edit}
       connect={api.connectProfile}
       profiles={profiles}
