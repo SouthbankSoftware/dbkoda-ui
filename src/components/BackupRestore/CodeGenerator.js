@@ -60,7 +60,7 @@ const createTemplateObject = state => {
     delete items.password;
   }
   if (hostRadio) {
-    if (ssh) {
+    if (sshTunnel) {
       items.host = '127.0.0.1';
       items.port = sshLocalPort;
     } else {

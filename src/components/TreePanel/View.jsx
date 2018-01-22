@@ -37,7 +37,7 @@ import {
   MenuDivider,
   Intent,
   AnchorButton,
-  Dialog,
+  Dialog
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import findElementAttributeUpward from '~/helpers/findElementAttributeUpward';
@@ -54,7 +54,7 @@ import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
 import {
   EditorTypes,
   BackupRestoreActions,
-  TableViewConstants,
+  TableViewConstants
 } from '../common/Constants';
 
 import TreeState from './model/TreeState.js';
@@ -65,7 +65,7 @@ import './View.scss';
   treeState: allStores.treeState,
   profileStore: allStores.profileStore,
   api: allStores.api,
-  config: allStores.config,
+  config: allStores.config
 }))
 @ContextMenuTarget
 export default class TreeView extends React.Component {
@@ -75,9 +75,9 @@ export default class TreeView extends React.Component {
       /* eslint-disable react/default-props-match-prop-types */
       store: {
         treeActionPanel: {
-          treeActionEditorId: '',
-        },
-      },
+          treeActionEditorId: ''
+        }
+      }
     };
   }
   constructor(props) {
@@ -100,7 +100,7 @@ export default class TreeView extends React.Component {
       drillDownloadFunction: null,
       drillDontDownloadFunction: null,
       drillStatusMsg: '',
-      drillDownloadProgress: null,
+      drillDownloadProgress: null
     };
   }
   componentWillMount() {
@@ -114,20 +114,20 @@ export default class TreeView extends React.Component {
     };
     this.reactionToJson = reaction(
       () => this.props.treeState.isNewJsonAvailable,
-      () => onNewJson(),
+      () => onNewJson()
     );
     this.reactionToFilter = reaction(
       () => this.props.treeState.filter,
       () => {
         this.setState({ nodes: this.props.treeState.nodes });
-      },
+      }
     );
     onNewJson();
     if (IS_ELECTRON) {
       const electron = window.require('electron');
       electron.ipcRenderer.on(
         'updateDrillStatus',
-        this.handleDrillDownloaderCommand,
+        this.handleDrillDownloaderCommand
       );
     }
   }
@@ -138,14 +138,14 @@ export default class TreeView extends React.Component {
       const electron = window.require('electron');
       electron.ipcRenderer.removeListener(
         'updateDrillStatus',
-        this.handleDrillDownloaderCommand,
+        this.handleDrillDownloaderCommand
       );
     }
   }
   getActionByName(actionName) {
     if (this.nodeRightClicked) {
       const Actions = TreeActions[this.nodeRightClicked.type];
-      const namedAction = Actions.find((action) => {
+      const namedAction = Actions.find(action => {
         return action.name == actionName;
       });
       if (namedAction) {
@@ -158,7 +158,7 @@ export default class TreeView extends React.Component {
   getNoDialogByName(actionName) {
     if (this.nodeRightClicked) {
       const Actions = TreeActions[this.nodeRightClicked.type];
-      const namedAction = Actions.find((action) => {
+      const namedAction = Actions.find(action => {
         return action.name == actionName;
       });
       if (namedAction) {
@@ -205,7 +205,7 @@ export default class TreeView extends React.Component {
           name="MakeRoot"
           iconName="pt-icon-git-new-branch"
           intent={Intent.NONE}
-        />,
+        />
       );
       if (Actions && Actions.length > 0) {
         Menus.push(<MenuDivider key="divider" />);
@@ -237,7 +237,7 @@ export default class TreeView extends React.Component {
                       key={objAction.name}
                       intent={Intent.NONE}
                     />
-                  </div>,
+                  </div>
                 );
               } else {
                 Menus.push(
@@ -254,7 +254,7 @@ export default class TreeView extends React.Component {
                       iconName={objAction.icon}
                       intent={Intent.NONE}
                     />
-                  </div>,
+                  </div>
                 );
               }
             }
@@ -286,9 +286,9 @@ export default class TreeView extends React.Component {
       this.props.api.treeApi.openNewTableViewForCollection(
         {
           collection: nodeData.text,
-          database: nodeData.refParent.text,
+          database: nodeData.refParent.text
         },
-        TableViewConstants.DEFAULT_MAX_ROWS,
+        TableViewConstants.DEFAULT_MAX_ROWS
       );
     }
     // this.setState({ nodes: this.props.treeState.nodes });
@@ -317,7 +317,7 @@ export default class TreeView extends React.Component {
     }
   };
 
-  isBackupRestoreAction = (action) => {
+  isBackupRestoreAction = action => {
     return (
       action === BackupRestoreActions.EXPORT_DATABASE ||
       action === BackupRestoreActions.EXPORT_COLLECTION ||
@@ -355,9 +355,9 @@ export default class TreeView extends React.Component {
           this.props.api.treeApi.openNewTableViewForCollection(
             {
               collection: this.nodeRightClicked.text,
-              database: this.nodeRightClicked.refParent.text,
+              database: this.nodeRightClicked.refParent.text
             },
-            TableViewConstants.DEFAULT_MAX_ROWS,
+            TableViewConstants.DEFAULT_MAX_ROWS
           );
           break;
         default:
@@ -376,19 +376,19 @@ export default class TreeView extends React.Component {
         this.showTreeActionPanel(
           this.nodeRightClicked,
           action,
-          EditorTypes.SHELL_COMMAND,
+          EditorTypes.SHELL_COMMAND
         );
       } else {
         this.showTreeActionPanel(
           this.nodeRightClicked,
           action,
-          EditorTypes.TREE_ACTION,
+          EditorTypes.TREE_ACTION
         );
       }
     }
   };
 
-  checkExistingEditor = (editorType) => {
+  checkExistingEditor = editorType => {
     const treeEditors = this.props.store.treeActionPanel.editors.entries();
     let bExistingEditor = false;
     for (const editor of treeEditors) {
@@ -432,9 +432,9 @@ export default class TreeView extends React.Component {
               visible: true,
               treeNode,
               treeAction: action,
-              currentProfile: editor.currentProfile,
-            },
-          }),
+              currentProfile: editor.currentProfile
+            }
+          })
         );
       }
     });
@@ -447,12 +447,12 @@ export default class TreeView extends React.Component {
         ...selectedProfile,
         storageView: {
           visible: true,
-          shouldFocus: true,
-        },
+          shouldFocus: true
+        }
       });
       this.props.profileStore.profiles.set(
         selectedProfile.id,
-        this.props.store.profileList.selectedProfile,
+        this.props.store.profileList.selectedProfile
       );
     });
   };
@@ -463,23 +463,24 @@ export default class TreeView extends React.Component {
     if (command === 'START') {
       if (message === 'drill') {
         this.setState({
-          drillStatusMsg: globalString('drill/downloading_drill'),
+          drillStatusMsg: globalString('drill/downloading_drill')
         });
         this.props.store.treePanel.drillStatusMsg = globalString(
-          'drill/status_bar/downloading_drill',
+          'drill/status_bar/downloading_drill'
         );
       } else {
         this.setState({
-          drillStatusMsg: globalString('drill/downloading_drill_controller'),
+          drillStatusMsg: globalString('drill/downloading_drill_controller')
         });
         this.props.store.treePanel.drillStatusMsg = globalString(
-          'drill/status_bar/downloading_drill_controller',
+          'drill/status_bar/downloading_drill_controller'
         );
       }
     } else if (command === 'DOWNLOADING') {
       this.setState({
-        drillDownloadProgress: message,
+        drillDownloadProgress: message
       });
+      this.props.store.treePanel.downloadingDrill = true;
       this.props.store.treePanel.drillDownloadProgress = message;
     } else if (command === 'COMPLETE') {
       const drillCmd = message.split('|');
@@ -487,31 +488,33 @@ export default class TreeView extends React.Component {
       if (drillCmd[0] == 'drillCmd') {
         this.setState({
           drillStatusMsg: globalString('drill/drill_download_success'),
-          drillDownloadProgress: null,
+          drillDownloadProgress: null
         });
         this.props.store.treePanel.drillDownloadProgress = message;
         this.props.store.treePanel.drillStatusMsg = globalString(
-          'drill/status_bar/drill_download_success',
+          'drill/status_bar/drill_download_success'
         );
       } else {
         this.setState({
           drillStatusMsg: globalString(
-            'drill/drill_controller_download_success',
+            'drill/drill_controller_download_success'
           ),
-          drillDownloadProgress: null,
+          drillDownloadProgress: null
         });
         this.props.store.treePanel.drillDownloadProgress = null;
         this.props.store.treePanel.drillStatusMsg = globalString(
-          'drill/status_bar/drill_download_success',
+          'drill/status_bar/drill_download_success'
         );
       }
+      this.props.store.treePanel.downloadingDrill = false;
       this.saveDrillCmd(drillCmd[0], drillCmd[1]);
     } else if (command === 'ERROR') {
       this.setState({
-        drillStatusMsg: globalString('drill/drill_download_failed'),
+        drillStatusMsg: globalString('drill/drill_download_failed')
       });
+      this.props.store.treePanel.downloadingDrill = false;
       this.props.store.treePanel.drillStatusMsg = globalString(
-        'drill/status_bar/drill_download_failed',
+        'drill/status_bar/drill_download_failed'
       );
     }
   };
@@ -538,7 +541,7 @@ export default class TreeView extends React.Component {
           this.setState({
             showDrillNotFoundDialog: false,
             showDrillDownloaderStatus: true,
-            isLoadingDialogVisible: true,
+            isLoadingDialogVisible: true
           });
           runInAction(() => {
             this.props.store.treePanel.downloadingDrill = true;
@@ -597,7 +600,7 @@ export default class TreeView extends React.Component {
           if (arg == 'downloadDrillControllerComplete') {
             this.setState({
               showDrillDownloaderStatus: false,
-              isLoadingDialogVisible: false,
+              isLoadingDialogVisible: false
             });
             runInAction(() => {
               this.props.store.treePanel.downloadingDrill = false;
@@ -615,7 +618,7 @@ export default class TreeView extends React.Component {
 
   addNewEditorForDrill = () => {
     const drillProfileId = this.props.api.checkForExistingDrillProfile({
-      db: this.nodeRightClicked.text,
+      db: this.nodeRightClicked.text
     });
     if (!drillProfileId) {
       if (
@@ -631,7 +634,7 @@ export default class TreeView extends React.Component {
           });
           this.props.api.addNewEditorForDrill({
             db: this.nodeRightClicked.text,
-            cbFunc: this.onDrillEditorAdded,
+            cbFunc: this.onDrillEditorAdded
           });
         }
       }
@@ -642,9 +645,9 @@ export default class TreeView extends React.Component {
 
   openDrillEditor = () => {
     this.checkForDrill()
-      .then((bDrill) => {
+      .then(bDrill => {
         bDrill &&
-          this.checkForDrillController().then((bDrillController) => {
+          this.checkForDrillController().then(bDrillController => {
             bDrillController && this.addNewEditorForDrill();
           });
       })
@@ -667,13 +670,13 @@ export default class TreeView extends React.Component {
       NewToaster.show({
         message,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     } else {
       NewToaster.show({
         message: globalString('drill/drill_editor_open_success'),
         className: 'success',
-        iconName: 'pt-icon-thumbs-up',
+        iconName: 'pt-icon-thumbs-up'
       });
     }
   };
@@ -689,7 +692,7 @@ export default class TreeView extends React.Component {
     this.props.api.addNewEditorForDrill({
       db: this.nodeRightClicked.text,
       pass: this.state.remotePass,
-      cbFunc: this.onDrillEditorAdded,
+      cbFunc: this.onDrillEditorAdded
     });
     this.setState({ isPasswordDialogVisible: false });
   };
@@ -788,11 +791,11 @@ export default class TreeView extends React.Component {
               autoFocus // eslint-disable-line jsx-a11y/no-autofocus
               className="pt-input passwordInput"
               placeholder={globalString(
-                'profile/openAlert/passwordPlaceholder',
+                'profile/openAlert/passwordPlaceholder'
               )}
               type="password"
               dir="auto"
-              onChange={(event) => {
+              onChange={event => {
                 this.setState({ remotePass: event.target.value });
               }}
             />
@@ -819,5 +822,5 @@ export default class TreeView extends React.Component {
 }
 
 TreeView.propTypes = {
-  treeState: PropTypes.instanceOf(TreeState),
+  treeState: PropTypes.instanceOf(TreeState)
 };
