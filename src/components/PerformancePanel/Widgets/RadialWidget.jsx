@@ -47,23 +47,12 @@ export default class RadialWidget extends Widget {
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
-  static innerRadiusSize = 140;
-  static outerRadiusSize = 180;
-
-  static arc = d3.arc()
-    .startAngle(0)
-    .endAngle((d) => {
-      return d.percentage / 100 * RadialWidget.PI;
-    })
-    .innerRadius(140)
-    .outerRadius(180)
-    .cornerRadius(20);// modified d3 api only
-
 
   constructor(props) {
     super(props);
-    this.state = {field: null};
+    this.state = {width: RadialWidget.width, height: RadialWidget.height};
     this.itemValue = 0;
+    this.field = null;
     this.dataset = () => {
       return [
         {index: 0, name: 'move', icon: '\uF105', percentage: this.itemValue}
@@ -82,18 +71,32 @@ export default class RadialWidget extends Widget {
     }
   }
 
-  buildWidget(items) {
+  _getInnerRadiusSize() {
+    return this.state.width / 3;
+  }
+
+  _getOuterRadiusSize() {
+    const minValue = Math.min(this.state.width, this.state.height);
+    return this._getInnerRadiusSize() + minValue / 10;
+  }
+
+  buildWidget() {
+    const {items} = this.props.store.widget;
     const background = d3.arc()
       .startAngle(0)
       .endAngle(RadialWidget.PI)
-      .innerRadius(RadialWidget.innerRadiusSize)
-      .outerRadius(RadialWidget.outerRadiusSize);
+      .innerRadius(this._getInnerRadiusSize())
+      .outerRadius(this._getOuterRadiusSize());
+
     const elem = d3.select(this.radial);
+    elem.select('.radial-main').selectAll('svg').remove();
+    d3.transition();
+
     const svg = elem.select('.radial-main').append('svg')
-      .attr('width', RadialWidget.width)
-      .attr('height', RadialWidget.height)
+      .attr('width', this.state.width)
+      .attr('height', this.state.height)
       .append('g')
-      .attr('transform', 'translate(' + RadialWidget.width / 2 + ',' + RadialWidget.height / 2 + ')');
+      .attr('transform', 'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')');
 
     // add linear gradient, notice apple uses gradient alone the arc..
     // meh, close enough...
@@ -159,8 +162,8 @@ export default class RadialWidget extends Widget {
 
     field.append('text').attr('class', 'goal').text(this.getDisplayName(items)).attr('transform', 'translate(0,50)');
     field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)');
-
-    d3.transition().duration(1000).each(() => this.update(field));
+    this.field = field;
+    d3.transition().duration(1000).each(() => this.update());
 
     return field;
   }
@@ -169,12 +172,24 @@ export default class RadialWidget extends Widget {
     const i = d3.interpolateNumber(d.previousValue, d.percentage);
     return (t) => {
       d.percentage = i(t);
-      return RadialWidget.arc(d);
+      return this.arc()(d);
     };
   }
 
-  update(field) {
-    field = field
+  arc() {
+    return d3.arc()
+      .startAngle(0)
+      .endAngle((d) => {
+        return d.percentage / 100 * RadialWidget.PI;
+      })
+      .innerRadius(this._getInnerRadiusSize())
+      .outerRadius(this._getOuterRadiusSize());
+      // .cornerRadius(20);
+  };
+
+
+  update() {
+    this.field = this.field
       .each(function (d) {
         this._value = d.percentage;
       })
@@ -183,7 +198,7 @@ export default class RadialWidget extends Widget {
         d.previousValue = this._value;
       });
 
-    field.select('path.progress').transition().duration(1000).delay((d, i) => {
+    this.field.select('path.progress').transition().duration(1000).delay((d, i) => {
       return i * 200;
     })
     // .ease('elastic')
@@ -200,7 +215,7 @@ export default class RadialWidget extends Widget {
     // }).attr('transform', (d) => {
     //   return 'translate(10,' + -(150) + ')';
     // });
-    field.select('text.completed').text((d) => {
+    this.field.select('text.completed').text((d) => {
       return d.percentage + '%';
     });
   }
@@ -221,19 +236,18 @@ export default class RadialWidget extends Widget {
       const v = latestValue[items[0]];
       const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
       this.itemValue = fixedValue;
-      this.update(this.state.field);
+      this.update(this.field);
     }
   });
 
   componentDidMount() {
-    const {profileId, items} = this.props.store.widget;
+    const {profileId} = this.props.store.widget;
     Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
-    const field = this.buildWidget(items);
-    this.setState({field});
+    this.buildWidget();
   }
 
   render() {
-    this.radial && console.log(this.radial.offsetWidth);
+    this.buildWidget();
     return (
       <div className="radial-widget" ref={radial => (this.radial = radial)}>
         <div className="radial-main" />

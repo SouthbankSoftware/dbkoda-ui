@@ -47,6 +47,11 @@ type Props = {
   id: UUID,
 };
 
+type State = {
+  width: number,
+  height: number,
+};
+
 @inject(({ store: { widgets }, api }, { id }) => {
   const widget = widgets.get(id);
 
@@ -58,7 +63,7 @@ type Props = {
   };
 })
 @observer
-export default class Widget extends React.Component<Props> {
+export default class Widget extends React.Component<Props, State> {
   static defaultProps = {
     store: null,
     api: null,
