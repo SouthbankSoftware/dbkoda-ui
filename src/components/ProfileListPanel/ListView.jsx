@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-12T01:42:45+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-22T16:27:01+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,6 +26,7 @@
 
 /* eslint-disable react/prop-types */
 /* eslint no-unused-vars:warn */
+import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
 import autobind from 'autobind-decorator';
@@ -63,6 +64,8 @@ const React = require('react');
 }))
 @observer
 export default class ListView extends React.Component {
+  api;
+  store;
   constructor(props) {
     super(props);
     this.state = {
@@ -76,12 +79,19 @@ export default class ListView extends React.Component {
       remotePass: null,
       passPhrase: null,
     };
+
+    this.api = this.props.api;
+    this.store = this.props.store;
+
     this.renderBodyContextMenu = this.renderBodyContextMenu.bind(this);
     this.openProfile = this.openProfile.bind(this);
     this.closeProfile = this.closeProfile.bind(this);
     this.editProfile = this.editProfile.bind(this);
     this.deleteProfile = this.deleteProfile.bind(this);
     this.swapToEditor = this.swapToEditor.bind(this);
+    this.showToaster = this.showToaster.bind(this);
+
+    this.api.setToasterCallback(this.showToaster);
   }
 
   componentWillMount() {
@@ -109,6 +119,34 @@ export default class ListView extends React.Component {
 
   reactionToEditorToolbarComboChange;
 
+  showToaster(strErrorCode, err) {
+    switch (strErrorCode) {
+      case 'existingAlias':
+        DBKodaToaster(Position.LEFT_BOTTOM).show({
+          message: globalString('connection/existingAlias'),
+          className: 'danger',
+          iconName: 'pt-icon-thumbs-down',
+        });
+      break;
+      case 'connectionFail':
+        DBKodaToaster(Position.LEFT_BOTTOM).show({
+          message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message.substring(0, 256) + '...' }} />), // eslint-disable-line react/no-danger
+          className: 'danger',
+          iconName: 'pt-icon-thumbs-down',
+        });
+      break;
+      case 'connectionSuccess':
+        DBKodaToaster(Position.RIGHT_TOP).show({
+          message: globalString('connection/success'),
+          className: 'success',
+          iconName: 'pt-icon-thumbs-up'
+        });
+      break;
+      default:
+      break;
+    }
+  }
+
   @action
   onSelection(region) {
     if (region.length == 0) {
@@ -123,170 +161,24 @@ export default class ListView extends React.Component {
   @action
   async openProfile() {
     const selectedProfile = this.state.targetProfile;
-    const newPassword = this.state.passwordText;
-    const usrRemotePass = this.state.remotePass;
-    const usrPassPhrase = this.state.passPhrase;
-    let connectionUrl;
-    let query = {}; // eslint-disable-line
-    if (selectedProfile.hostRadio) {
-      connectionUrl = ProfileForm.mongoProtocol + selectedProfile.host + ':' + selectedProfile.port;
-    } else if (selectedProfile.urlRadio) {
-      connectionUrl = selectedProfile.url;
-    }
-    if (selectedProfile.ssh && selectedProfile.sshTunnel) {
-      query.ssh = selectedProfile.ssh;
-      query.sshTunnel = selectedProfile.sshTunnel;
-      query.remoteHost = selectedProfile.host;
-      query.remotePort = selectedProfile.port;
-      query.sshHost = selectedProfile.remoteHost;
-      query.remoteUser = selectedProfile.remoteUser;
-      query.localHost = '127.0.0.1';
-      selectedProfile.sshLocalPort = await ProfileForm.getRandomPort();
-      query.localPort = selectedProfile.sshLocalPort;
-      connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
-      if (selectedProfile.passRadio) {
-        query.remotePass = usrRemotePass;
-      } else if (selectedProfile.keyRadio) {
-        query.sshKeyFile = selectedProfile.sshKeyFile;
-        query.passPhrase = usrPassPhrase;
-      }
-    }
-    if (selectedProfile.sha) {
-      query.username = selectedProfile.username;
-      query.password = newPassword;
-      query.authenticationDatabase = selectedProfile.authenticationDatabase;
-    }
-    if (selectedProfile.ssl) {
-      connectionUrl.indexOf('?') > 0
-        ? (connectionUrl += '&ssl=true')
-        : (connectionUrl += '?ssl=true');
-    }
-    query.database = selectedProfile.database;
-    query.url = connectionUrl;
-    query.ssl = selectedProfile.ssl;
-    query.test = selectedProfile.test;
-    query.authorization = selectedProfile.authorization;
-    if (selectedProfile) {
-      query.id = selectedProfile.id;
-      query.shellId = selectedProfile.shellId;
-    }
-    this.props.store.profileList.creatingNewProfile = true;
-    const service = featherClient().service('/mongo-connection');
-    service.timeout = 30000;
-    runInAction(() => {
-      this.props.store.layout.alertIsLoading = true;
+    const profile = _.clone(selectedProfile);
+    profile.password = this.state.passwordText;
+    profile.remotePass = this.state.remotePass;
+    profile.passPhrase = this.state.passPhrase;
+    profile.bReconnect = true;
+
+    this.api.connectProfile(profile)
+    .then((res) => {
+      this.onSuccess(res, profile);
     });
-    return service
-      .create({}, { query })
-      .then(res => {
-        this.onSuccess(res, selectedProfile);
-      })
-      .catch(err => {
-        console.error(err.stack);
-        this.props.store.profileList.creatingNewProfile = false;
-        this.closeOpenConnectionAlert();
-        DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: <span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />, // eslint-disable-line react/no-danger
-          className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
-        });
-      });
   }
 
   /**
    * when connection successfully created, this method will add the new profile on store.
    */
   @action
-  onSuccess(res, data) {
-    let message = globalString('connection/success');
-    let position = Position.LEFT_BOTTOM;
-    let profile = null;
-
-    this.props.store.profileList.creatingNewProfile = false;
-    if (!data.test) {
-      Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {
-        id: res.id,
-        shellId: res.shellId,
-        output: res.output.join('\n'),
-      });
-      position = Position.RIGHT_TOP;
-      // @TODO -> Someone should go through these and see which are unchanged from a new connection.
-      profile = {
-        id: res.id,
-        shellId: res.shellId,
-        password: null,
-        status: 'OPEN',
-        database: data.database,
-        authenticationDatabase: data.authenticationDatabase,
-        alias: data.alias,
-        authorization: data.authorization,
-        host: data.host,
-        hostRadio: data.hostRadio,
-        port: data.port,
-        ssl: data.ssl,
-        sslAllowInvalidCertificates: data.sslAllowInvalidCertificates,
-        test: data.test,
-        url: data.url,
-        urlRadio: data.urlRadio,
-        username: data.username,
-        sha: data.sha,
-        ssh: data.ssh,
-        sshTunnel: data.sshTunnel,
-        remoteHost: data.remoteHost,
-        remoteUser: data.remoteUser,
-        sshLocalPort: data.sshLocalPort,
-        passRadio: data.passRadio,
-        keyRadio: data.keyRadio,
-        sshKeyFile: data.sshKeyFile,
-        dbVersion: res.dbVersion,
-        shellVersion: res.shellVersion,
-        initialMsg: res.output ? res.output.join('\r') : '',
-        mongoType: res.mongoType,
-      };
-
-      if ('bRemotePass' in data) profile.bRemotePass = data.bRemotePass;
-      if ('bPassPhrase' in data) profile.bPassPhrase = data.bPassPhrase;
-
-      IS_DEVELOPMENT && console.debug('profile:', profile);
-
-      this.props.profileStore.profiles.set(res.id, profile);
-      this.props.store.profileList.selectedProfile = this.props.profileStore.profiles.get(res.id);
-      Broker.emit(
-        EventType.RECONNECT_PROFILE_CREATED,
-        this.props.profileStore.profiles.get(res.id),
-      );
-      this.props.store.editors.forEach((value, _) => {
-        if (value.shellId == res.shellId) {
-          // the default shell is using the same shell id as the profile
-          value.status = ProfileStatus.OPEN;
-        } else if (value.profileId === res.id) {
-          featherClient()
-            .service('/mongo-shells')
-            .create(
-              {
-                id: res.id,
-              },
-              {
-                query: {
-                  shellId: value.shellId,
-                },
-              },
-            )
-            .then(() => {
-              value.status = ProfileStatus.OPEN;
-            })
-            .catch(err => console.error('failed to create shell connection', err));
-        }
-      });
-    } else {
-      message = globalString('connection/test', message);
-    }
+  onSuccess(res, profile) {
     this.closeOpenConnectionAlert();
-    DBKodaToaster(position).show({
-      message,
-      className: 'success',
-      iconName: 'pt-icon-thumbs-up',
-    });
 
     if (profile && profile.ssh) {
       const { terminals } = this.props.store;

@@ -22,7 +22,7 @@
  * @Date:   2017-03-30T09:57:22+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-19T11:50:06+11:00
+ * @Last modified time: 2018-01-22T15:49:35+11:00
  */
 
 /**
@@ -30,10 +30,8 @@
  */
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Position } from '@blueprintjs/core';
 import { createForm } from './ProfileForm';
 import Panel from './Panel';
-import { DBKodaToaster } from '../common/Toaster';
 
 const ConnectionPanel = ({
   api,
@@ -47,35 +45,6 @@ const ConnectionPanel = ({
     edit = true;
   }
   const form = createForm(selectedProfile);
-
-  const showToaster = (strErrorCode, err) => {
-    switch (strErrorCode) {
-      case 'existingAlias':
-        DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: globalString('connection/existingAlias'),
-          className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
-        });
-      break;
-      case 'connectionFail':
-        DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message.substring(0, 256) + '...' }} />), // eslint-disable-line react/no-danger
-          className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
-        });
-      break;
-      case 'connectionSuccess':
-        DBKodaToaster(Position.RIGHT_TOP).show({
-          message: globalString('connection/success'),
-          className: 'success',
-          iconName: 'pt-icon-thumbs-up'
-        });
-      break;
-      default:
-      break;
-    }
-  };
-  api.setToasterCallback(showToaster);
 
   return (
     <Panel

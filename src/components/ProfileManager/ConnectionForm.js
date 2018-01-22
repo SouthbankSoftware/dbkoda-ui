@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-19T12:48:51+11:00
+ * @Last modified time: 2018-01-22T15:42:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,7 @@
 import _ from 'lodash';
 import { observable, toJS, runInAction, action, extendObservable } from 'mobx';
 import Ajv from 'ajv';
+import { Profile } from '~/api/Profile';
 
 export const FieldBindings = {
   text: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
@@ -57,7 +58,7 @@ export class ConnectionForm {
     return form;
   }
 
-  updateSchemaFromProfile(profile) {
+  updateSchemaFromProfile(profile: Profile) {
     for (const subform in this.formSchema) {
       if (this.formSchema.hasOwnProperty(subform)) {
         this.formSchema[subform].fields.forEach((field) => {
@@ -196,7 +197,7 @@ export class ConnectionForm {
     return {status, formData};
   }
 
-  getProfileFromSchema(formData) {
+  getProfileFromSchema(formData): Profile {
     const profile = {};
     console.log('getProfileFromInstance:', formData);
     for (const subform in formData) {
@@ -219,14 +220,25 @@ export class ConnectionForm {
     return this.api.connectProfile(profile);
   }
   onSave() {
-    console.log('onSave:', this.formSchema);
+    const result = this.validateForm();
+    console.log('Validation: ', result.status, result.formData);
+    const profile = this.getProfileFromSchema(result.formData);
+    console.log('Profile:', profile);
+    return this.api.saveProfile(profile);
   }
 
   onTest() {
-    console.log('onTest:', this.formSchema);
+    const result = this.validateForm();
+    console.log('Validation: ', result.status, result.formData);
+    const profile = this.getProfileFromSchema(result.formData);
+    console.log('Profile:', profile);
+    profile.test = true;
+    return this.api.connectProfile(profile);
   }
 
   onReset() {
+    this.formErrors = [];
+    this.formSchema = this.loadDefaultSchema();
     console.log('onReset:', this.formSchema);
   }
 }

@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-22T09:53:42+11:00
+ * @Last modified time: 2018-01-22T16:33:01+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -13,9 +13,42 @@ import { ProfileForm } from '#/ConnectionPanel/ProfileForm';
 import { featherClient } from '~/helpers/feathers';
 import { Broker, EventType } from '~/helpers/broker';
 import EventLogging from '#/common/logging/EventLogging';
-import { ProfileStatus, DrawerPanes } from '#/common/Constants';
+import { ProfileStatus } from '#/common/Constants';
 import StaticApi from './static';
 
+export type Profile = {
+  id: string,
+  shellId: string,
+  password: string,
+  status: ProfileStatus,
+  database: string,
+  authenticationDatabase: string,
+  alias: string,
+  authorization: boolean,
+  host: string,
+  hostRadio: boolean,
+  port: number,
+  ssl: boolean,
+  sslAllowInvalidCertificates: boolean,
+  test: boolean,
+  url: string,
+  urlRadio: boolean,
+  username: string,
+  sha: boolean,
+  ssh: boolean,
+  sshTunnel: boolean,
+  remoteHost: string,
+  remoteUser: string,
+  sshLocalPort: number,
+  passRadio: boolean,
+  keyRadio: boolean,
+  sshKeyFile: string,
+  dbVersion: string,
+  shellVersion: string,
+  initialMsg: string,
+  mongoType: string,
+  bReconnect: boolean // Boolean variable to be set when profile is reconnected from profileList
+};
 
 export default class ProfileApi {
   store;
@@ -33,15 +66,19 @@ export default class ProfileApi {
     // this.profileList = store.profileList;
 
     this.setToasterCallback = this.setToasterCallback.bind(this);
-    this.validateConnectionFormData = this.validateConnectionFormData.bind(this);
+    this.validateConnectionFormData = this.validateConnectionFormData.bind(
+      this
+    );
     this.connectProfile = this.connectProfile.bind(this);
     this.onFail = this.onFail.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.saveProfile = this.saveProfile.bind(this);
   }
 
-  setToasterCallback(fn) {
-    this.toasterCallback = fn;
+  setToasterCallback(
+    callBack: (strErrorCode: String, err: Error | null) => void
+  ) {
+    this.toasterCallback = callBack;
   }
 
   /**
@@ -50,7 +87,7 @@ export default class ProfileApi {
    * @param data
    * @returns {boolean}
    */
-  validateConnectionFormData(data) {
+  validateConnectionFormData(data: Profile): boolean {
     const { profiles } = this.profileStore;
     let validate = true;
     profiles.forEach((value) => {
@@ -63,7 +100,7 @@ export default class ProfileApi {
   }
 
   @action
-  async connectProfile(data) {
+  async connectProfile(data: Profile): Promise {
     const { profileList } = this.store;
     const { selectedProfile } = profileList;
     let edit = false;
@@ -175,9 +212,9 @@ export default class ProfileApi {
   /**
    * when connection successfully created, this method will add the new profile on store.
    */
-   @action
-  onSuccess(res, data) {
-    const { profileList } = this.store;
+  @action
+  onSuccess(res: any, data: Profile) {
+    const { profileList, editors } = this.store;
     const { profiles } = this.profileStore;
     const { selectedProfile } = profileList;
     let edit = false;
@@ -195,7 +232,7 @@ export default class ProfileApi {
           mongoType: res.mongoType
         });
       }
-      const profile = {
+      const profile: Profile = {
         id: res.id,
         shellId: res.shellId,
         password: null,
@@ -236,8 +273,37 @@ export default class ProfileApi {
       }
       profiles.set(res.id, profile);
       profileList.selectedProfile = profiles.get(res.id);
-      this.store.hideConnectionPane();
-      Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
+      if (data.bReconnect) {
+        Broker.emit(EventType.RECONNECT_PROFILE_CREATED, profiles.get(res.id));
+        editors.forEach((value, _) => {
+          if (value.shellId == res.shellId) {
+            // the default shell is using the same shell id as the profile
+            value.status = ProfileStatus.OPEN;
+          } else if (value.profileId === res.id) {
+            featherClient()
+              .service('/mongo-shells')
+              .create(
+                {
+                  id: res.id
+                },
+                {
+                  query: {
+                    shellId: value.shellId
+                  }
+                }
+              )
+              .then(() => {
+                value.status = ProfileStatus.OPEN;
+              })
+              .catch((err) =>
+                console.error('failed to create shell connection', err)
+              );
+          }
+        });
+      } else {
+        this.store.hideConnectionPane();
+        Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
+      }
     }
     this.toasterCallback && this.toasterCallback('connectionSuccess');
   }
@@ -246,7 +312,7 @@ export default class ProfileApi {
     const { profileList } = this.store;
     const { profiles } = this.profileStore;
     const { selectedProfile } = profileList;
-    const edit = (selectedProfile !== undefined && selectedProfile !== null);
+    const edit = selectedProfile !== undefined && selectedProfile !== null;
 
     const profile = { ...formData, status: ProfileStatus.CLOSED };
     if (edit) {
@@ -265,12 +331,12 @@ export default class ProfileApi {
   }
 
   /**
-    * called when there is new connection profile get created.
-    *
-    * @param profile the newly created connection profile
-    */
+   * called when there is new connection profile get created.
+   *
+   * @param profile the newly created connection profile
+   */
   @action.bound
-  profileCreated(profile) {
+  profileCreated(profile: Profile) {
     const { editors, editorToolbar, editorPanel } = this.store;
     let targetEditor = null;
     for (const editor of editors.values()) {
@@ -284,7 +350,9 @@ export default class ProfileApi {
       const doc = StaticApi.createNewDocumentObject(content);
       doc.lineSep = StaticApi.determineEol(content);
 
-      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(EditorTypes.DEFAULT);
+      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(
+        EditorTypes.DEFAULT
+      );
       const editorId = uuidV1();
       editors.set(
         editorId,
@@ -302,8 +370,8 @@ export default class ProfileApi {
           doc: observable.ref(doc),
           status: profile.status,
           path: null,
-          type: EditorTypes.DEFAULT,
-        }),
+          type: EditorTypes.DEFAULT
+        })
       );
       if (this.api) {
         this.api.addOutput(this.store.editors.get(editorId));

@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-19T13:01:33+11:00
+ * @Last modified time: 2018-01-22T15:48:55+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,6 +29,8 @@ import { inject, observer } from 'mobx-react';
 import { Button, ButtonGroup, Position } from '@blueprintjs/core';
 import RGL, { WidthProvider } from 'react-grid-layout';
 
+import DataCenter from '~/api/DataCenter';
+
 import TextField from '#/TreeActionPanel/Components/TextField';
 import NumericField from '#/TreeActionPanel/Components/NumericField';
 import BooleanField from '#/TreeActionPanel/Components/BooleanField';
@@ -41,7 +43,7 @@ const ReactGridLayout = WidthProvider(RGL);
 
 type Props = {
   store: any,
-  api: *
+  api: DataCenter
 };
 
 type State = {
@@ -77,34 +79,6 @@ export default class ProfileManager extends React.Component<Props, State> {
       this.setState({ formTitle: globalString('connection/editHeading')});
       this.form.updateSchemaFromProfile(store.profileList.selectedProfile);
     }
-    const showToaster = (strErrorCode, err) => {
-      switch (strErrorCode) {
-        case 'existingAlias':
-          DBKodaToaster(Position.LEFT_BOTTOM).show({
-            message: globalString('connection/existingAlias'),
-            className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
-          });
-        break;
-        case 'connectionFail':
-          DBKodaToaster(Position.LEFT_BOTTOM).show({
-            message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message.substring(0, 256) + '...' }} />), // eslint-disable-line react/no-danger
-            className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
-          });
-        break;
-        case 'connectionSuccess':
-          DBKodaToaster(Position.RIGHT_TOP).show({
-            message: globalString('connection/success'),
-            className: 'success',
-            iconName: 'pt-icon-thumbs-up'
-          });
-        break;
-        default:
-        break;
-      }
-    };
-    api.setToasterCallback(showToaster);
   }
 
   renderUIFields(column) {
