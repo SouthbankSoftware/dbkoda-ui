@@ -60,7 +60,8 @@ export default class RadialWidget extends Widget {
     };
   }
 
-  getDisplayName(items) {
+  getDisplayName() {
+    const {items} = this.props.store.widget;
     if (items && items.length > 0) {
       if (items[0] === 'cpu') {
         return 'CPU';
@@ -81,7 +82,6 @@ export default class RadialWidget extends Widget {
   }
 
   buildWidget() {
-    const {items} = this.props.store.widget;
     const background = d3.arc()
       .startAngle(0)
       .endAngle(RadialWidget.PI)
@@ -151,6 +151,7 @@ export default class RadialWidget extends Widget {
 
     field.append('path').attr('class', 'progress').attr('filter', 'url(#dropshadow)');
 
+    // render background
     field.append('path').attr('class', 'bg')
       .style('fill', (d) => {
         return RadialWidget.colors[d.index];
@@ -160,7 +161,7 @@ export default class RadialWidget extends Widget {
 
     // field.append('text').attr('class', 'icon');
 
-    field.append('text').attr('class', 'goal').text(this.getDisplayName(items)).attr('transform', 'translate(0,50)');
+    // field.append('text').attr('class', 'goal').text(this.getDisplayName()).attr('transform', 'translate(0,50)');
     field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)');
     this.field = field;
     d3.transition().duration(1000).each(() => this.update());
@@ -250,6 +251,7 @@ export default class RadialWidget extends Widget {
     this.buildWidget();
     return (
       <div className="radial-widget" ref={radial => (this.radial = radial)}>
+        <div className="display-name">{this.getDisplayName()}</div>
         <div className="radial-main" />
       </div>
     );
