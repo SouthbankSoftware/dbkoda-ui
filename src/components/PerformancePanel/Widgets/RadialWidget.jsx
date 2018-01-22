@@ -186,7 +186,7 @@ export default class RadialWidget extends Widget {
       .innerRadius(this._getInnerRadiusSize())
       .outerRadius(this._getOuterRadiusSize());
       // .cornerRadius(20);
-  };
+  }
 
 
   update() {
