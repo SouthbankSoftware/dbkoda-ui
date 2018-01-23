@@ -104,7 +104,7 @@ export default observer(({ field, showLabel = true, formGroup = false }) => {
           {field.label}
         </label>
       )}
-      <div className="pt-form-content codeMirror">
+      <div className="pt-form-content codeMirror" label={field.label}>
         {field.options &&
           field.options.tooltip && (
             <Tooltip

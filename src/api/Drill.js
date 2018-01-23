@@ -36,7 +36,7 @@ export default class DrillApi {
     this.api = api;
   }
   getDrillCompatibleAlias(alias) {
-    return alias.replace(/\.|:/g, '-').replace(/\s/g, '');
+    return alias.replace(/\.|:|\-/g, '_').replace(/\s/g, '');
   }
   @action.bound
   checkForExistingDrillProfile = (options = {}) => {
@@ -44,7 +44,10 @@ export default class DrillApi {
     const profile = this.store.profileList.selectedProfile;
     const profileAlias = this.getDrillCompatibleAlias(profile.alias);
     const profileDB = options.db ? options.db : 'admin';
-    if (this.profileDBHash[profileAlias] && this.profileDBHash[profileAlias][profileDB]) {
+    if (
+      this.profileDBHash[profileAlias] &&
+      this.profileDBHash[profileAlias][profileDB]
+    ) {
       return this.profileDBHash[profileAlias][profileDB];
     }
     return null;
@@ -72,7 +75,13 @@ export default class DrillApi {
           '/' +
           profile.database;
       } else {
-        query.url = StaticApi.mongoProtocol + profile.host + ':' + profile.port + '/' + profile.database;
+        query.url =
+          StaticApi.mongoProtocol +
+          profile.host +
+          ':' +
+          profile.port +
+          '/' +
+          profile.database;
       }
       if (profile.ssl) {
         query.url += '?ssl=true';
@@ -81,7 +90,13 @@ export default class DrillApi {
       query.url = profile.url;
       if (profile.url.indexOf('@') < 0) {
         const mUrl = profile.url.replace(StaticApi.mongoProtocol, '');
-        query.url = StaticApi.mongoProtocol + profile.username + ':' + options.pass + '@' + mUrl;
+        query.url =
+          StaticApi.mongoProtocol +
+          profile.username +
+          ':' +
+          options.pass +
+          '@' +
+          mUrl;
       }
       if (profile.ssl) {
         if (query.url.indexOf('?') < 0) {
@@ -97,10 +112,10 @@ export default class DrillApi {
     service.timeout = 90000;
     return service
       .create(query)
-      .then((res) => {
+      .then(res => {
         this.onDrillConnectionSuccess(res, query, profile, options);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         this.onFailCreate(options, err.code);
       });
@@ -113,9 +128,11 @@ export default class DrillApi {
       id: res.id,
       output: res.output,
       profile,
-      db: query.db,
+      db: query.db
     };
-    this.openEditorWithDrillProfileId(this.profileDBHash[query.alias][query.db]);
+    this.openEditorWithDrillProfileId(
+      this.profileDBHash[query.alias][query.db]
+    );
 
     // Fix for the issue where get this error 'You tried to write a Int type when you are using a ValueWriter of type NullableFloat8WriterImpl.'
     // See https://issues.apache.org/jira/browse/DRILL-4038. The apparent solution is to issue
@@ -124,10 +141,12 @@ export default class DrillApi {
     service.timeout = 90000;
     service
       .update(res.id, {
-        queries: ['ALTER SYSTEM SET `store.mongo.read_numbers_as_double` = true'],
-        schema: query.db,
+        queries: [
+          'ALTER SYSTEM SET `store.mongo.read_numbers_as_double` = true'
+        ],
+        schema: query.db
       })
-      .then((res) => {
+      .then(res => {
         console.log('result for init query: ', res);
       });
 
@@ -144,20 +163,22 @@ export default class DrillApi {
   }
 
   @action.bound
-  openEditorWithDrillProfileId = (drillJdbcConnection) => {
+  openEditorWithDrillProfileId = drillJdbcConnection => {
     console.log(drillJdbcConnection.id, drillJdbcConnection.profile);
     this.api.addDrillEditor(drillJdbcConnection.profile, {
       shellId: drillJdbcConnection.id,
       type: EditorTypes.DRILL,
       output: drillJdbcConnection.output,
-      db: drillJdbcConnection.db,
+      db: drillJdbcConnection.db
     });
   };
 
   @action.bound
   deleteProfileFromDrill = (options = {}) => {
     const query = {};
-    const profile = options.profile ? options.profile : this.store.profileList.selectedProfile;
+    const profile = options.profile
+      ? options.profile
+      : this.store.profileList.selectedProfile;
     query.alias = this.getDrillCompatibleAlias(profile.alias);
     query.id = profile.id;
     if (options.removeAll) {
@@ -168,10 +189,10 @@ export default class DrillApi {
       service.timeout = 90000;
       return service
         .remove(query)
-        .then((res) => {
+        .then(res => {
           this.onDrillConnectionDeleteSuccess(res, query);
         })
-        .catch((err) => {
+        .catch(err => {
           this.onFailDelete(err);
         });
     }

@@ -71,5 +71,7 @@ export const TableViewConstants = {
 export const OutputToolbarContexts = {
   DEFAULT: 'Default',
   RAW: 'Raw',
-  TABLE_VIEW: 'TableView'
+  TABLE_VIEW: 'TableView',
+  CHART_VIEW: 'ChartView',
+  ENHANCED_VIEW: 'JsonView'
 };

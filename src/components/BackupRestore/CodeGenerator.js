@@ -1,7 +1,7 @@
 /**
  * Created by joey on 24/7/17.
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-17T13:21:38+11:00
+ * @Last modified time: 2018-01-23T15:40:11+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,7 +34,18 @@ Handlebars.registerHelper('escapeDoubleQuotes', escapeDoubleQuotes);
 
 const createTemplateObject = state => {
   const { db, profile, exportType, parseGrace, mode } = state;
-  const { host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort } = profile;
+  const {
+    host,
+    port,
+    sha,
+    hostRadio,
+    url,
+    database,
+    ssl,
+    ssh,
+    sshLocalPort,
+    authenticationDatabase
+  } = profile;
   const items = {
     ...profile,
     ...state,
@@ -43,10 +54,10 @@ const createTemplateObject = state => {
     exportType: exportType ? exportType.selected : false,
     parseGrace: parseGrace ? parseGrace.selected : false,
     mode: mode ? mode.selected : false,
-    ssl,
+    ssl
   };
   if (sha) {
-    items.authDb = database;
+    items.authDb = authenticationDatabase || database;
   } else {
     delete items.username;
     delete items.password;
@@ -102,7 +113,7 @@ const getDumpServerCommandObject = ({ profile, state }) => {
     allCollections,
     collections,
     selectedCollections,
-    dumpDbUsersAndRoles,
+    dumpDbUsersAndRoles
   } = state;
   let targetCols = [];
   if (allCollections) {
@@ -135,7 +146,7 @@ const getDBCollectionCommandObject = ({ profile, state, action }) => {
     allCollections,
     collections,
     selectedCollections,
-    dumpDbUsersAndRoles,
+    dumpDbUsersAndRoles
   } = state;
   let targetCols = [];
   if (allCollections) {
