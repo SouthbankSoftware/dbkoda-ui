@@ -153,9 +153,7 @@ export default class RadialWidget extends Widget {
 
     // render background
     field.append('path').attr('class', 'bg')
-      .style('fill', (d) => {
-        return RadialWidget.colors[d.index];
-      })
+      .style('fill',RadialWidget.colors[0])
       .style('opacity', 0.2)
       .attr('d', background);
 
@@ -202,12 +200,7 @@ export default class RadialWidget extends Widget {
     this.field.select('path.progress').transition().duration(1000)
     // .ease('elastic')
       .attrTween('d', this.arcTween.bind(this))
-      .style('fill', (d) => {
-        if (d.index === 0) {
-          return 'url(#gradient)';
-        }
-        return RadialWidget.colors[d.index];
-      });
+      .style('fill', 'url(#gradient)');
 
     this.field.select('text.completed').text((d) => {
       return d.percentage + '%';
