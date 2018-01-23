@@ -1,14 +1,8 @@
 /**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-08-29T12:59:18+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-29T13:59:27+10:00
- */
-
-
-
-/*
+ * Created by joey on 24/7/17.
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-01-23T15:40:11+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -27,9 +21,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * Created by joey on 24/7/17.
- */
+
 import os from 'os';
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
@@ -42,7 +34,18 @@ Handlebars.registerHelper('escapeDoubleQuotes', escapeDoubleQuotes);
 
 const createTemplateObject = state => {
   const { db, profile, exportType, parseGrace, mode } = state;
-  const { host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort, authenticationDatabase } = profile;
+  const {
+    host,
+    port,
+    sha,
+    hostRadio,
+    url,
+    database,
+    ssl,
+    ssh,
+    sshLocalPort,
+    authenticationDatabase
+  } = profile;
   const items = {
     ...profile,
     ...state,
@@ -60,7 +63,7 @@ const createTemplateObject = state => {
     delete items.password;
   }
   if (hostRadio) {
-    if (sshTunnel) {
+    if (ssh) {
       items.host = '127.0.0.1';
       items.port = sshLocalPort;
     } else {
@@ -110,7 +113,7 @@ const getDumpServerCommandObject = ({ profile, state }) => {
     allCollections,
     collections,
     selectedCollections,
-    dumpDbUsersAndRoles,
+    dumpDbUsersAndRoles
   } = state;
   let targetCols = [];
   if (allCollections) {
@@ -143,7 +146,7 @@ const getDBCollectionCommandObject = ({ profile, state, action }) => {
     allCollections,
     collections,
     selectedCollections,
-    dumpDbUsersAndRoles,
+    dumpDbUsersAndRoles
   } = state;
   let targetCols = [];
   if (allCollections) {
@@ -216,21 +219,21 @@ export const filterOutParameters = ({ cols, shellVersion }) => {
   return cols;
 };
 
-export const generateCode = ({treeNode, profile, state, action, shellVersion}) => {
+export const generateCode = ({ treeNode, profile, state, action, shellVersion }) => {
   let cols;
   if (action === BackupRestoreActions.DUMP_SERVER) {
-    cols = getDumpServerCommandObject({treeNode, profile, state, action});
+    cols = getDumpServerCommandObject({ treeNode, profile, state, action });
   } else {
-    cols = getCommandObject({treeNode, profile, state, action});
+    cols = getCommandObject({ treeNode, profile, state, action });
   }
   if (cols.constructor === Array) {
-    cols = cols.map((col) => {
-      return filterOutParameters({cols: col, shellVersion});
+    cols = cols.map(col => {
+      return filterOutParameters({ cols: col, shellVersion });
     });
   } else {
-    cols = filterOutParameters({cols, shellVersion});
+    cols = filterOutParameters({ cols, shellVersion });
   }
-  const values = {cols};
+  const values = { cols };
   switch (action) {
     case BackupRestoreActions.EXPORT_DATABASE:
     case BackupRestoreActions.EXPORT_COLLECTION: {
@@ -249,15 +252,15 @@ export const generateCode = ({treeNode, profile, state, action, shellVersion}) =
     case BackupRestoreActions.RESTORE_SERVER:
     case BackupRestoreActions.RESTORE_COLLECTION:
     case BackupRestoreActions.RESTORE_DATABASE: {
-      cols = getRestoreServerCommandObject({treeNode, profile, state, action});
-      cols = filterOutParameters({cols, shellVersion});
+      cols = getRestoreServerCommandObject({ treeNode, profile, state, action });
+      cols = filterOutParameters({ cols, shellVersion });
       const template = Handlebars.compile(restoreServer);
       return template(cols);
     }
     case BackupRestoreActions.IMPORT_COLLECTION:
     case BackupRestoreActions.IMPORT_DATABASE: {
-      cols = getImportCollectionCommandObject({treeNode, profile, state, action});
-      cols = filterOutParameters({cols, shellVersion});
+      cols = getImportCollectionCommandObject({ treeNode, profile, state, action });
+      cols = filterOutParameters({ cols, shellVersion });
       const template = Handlebars.compile(importCollection);
       return template(cols);
     }

@@ -40,7 +40,7 @@
     {
       "name": "CustomData",
       "tooltip": "A JSON document containing site-specific information",
-      "type": "Text",
+      "type": "CodeMirror",
       "optional": true
     }
   ]
