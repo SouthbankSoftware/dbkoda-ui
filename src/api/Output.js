@@ -55,7 +55,7 @@ export default class OutputApi {
   }
 
   configureOutputs() {
-    this.store.editors.entries().map((editor) => {
+    this.store.editors.entries().map(editor => {
       if (editor[1].type == EditorTypes.DRILL) {
         this.addDrillOutput(editor[1]);
       } else {
@@ -72,8 +72,13 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
-          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
+        if (
+          editor.id != 'Default' &&
+          this.store.outputs.get(editor.id).output
+        ) {
+          this.store.outputs.get(editor.id).output += globalString(
+            'output/editor/restoreSession'
+          );
         }
       } else {
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
@@ -89,8 +94,8 @@ export default class OutputApi {
             showingMore: false,
             commandHistory: [],
             enhancedJson: '',
-            tableJson: '',
-          }),
+            tableJson: ''
+          })
         );
 
         if (editor.initialMsg && editor.id != 'Default') {
@@ -107,11 +112,11 @@ export default class OutputApi {
 
     Broker.on(
       EventType.createShellOutputEvent(editor.profileId, editor.shellId),
-      this.outputAvailable,
+      this.outputAvailable
     );
     Broker.on(
       EventType.createShellReconnectEvent(editor.profileId, editor.shellId),
-      this.onReconnect,
+      this.onReconnect
     );
   }
 
@@ -121,11 +126,11 @@ export default class OutputApi {
     delete this.outputHash[editor.profileId + '|' + editor.shellId];
     Broker.removeListener(
       EventType.createShellOutputEvent(editor.profileId, editor.shellId),
-      this.outputAvailable,
+      this.outputAvailable
     );
     Broker.removeListener(
       EventType.createShellReconnectEvent(editor.profileId, editor.shellId),
-      this.onReconnect,
+      this.onReconnect
     );
   }
 
@@ -137,14 +142,23 @@ export default class OutputApi {
     delete this.outputHash[oldId + '|' + oldShellId];
     Broker.removeListener(
       EventType.createShellOutputEvent(oldId, oldShellId),
-      this.outputAvailable,
+      this.outputAvailable
     );
-    Broker.removeListener(EventType.createShellReconnectEvent(oldId, oldShellId), this.onReconnect);
+    Broker.removeListener(
+      EventType.createShellReconnectEvent(oldId, oldShellId),
+      this.onReconnect
+    );
 
     this.outputHash[id + '|' + shellId] = outputId;
 
-    Broker.on(EventType.createShellOutputEvent(id, shellId), this.outputAvailable);
-    Broker.on(EventType.createShellReconnectEvent(id, shellId), this.onReconnect);
+    Broker.on(
+      EventType.createShellOutputEvent(id, shellId),
+      this.outputAvailable
+    );
+    Broker.on(
+      EventType.createShellReconnectEvent(id, shellId),
+      this.onReconnect
+    );
   }
 
   @action.bound
@@ -194,11 +208,17 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
-          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
+        if (
+          editor.id != 'Default' &&
+          this.store.outputs.get(editor.id).output
+        ) {
+          this.store.outputs.get(editor.id).output += globalString(
+            'output/editor/restoreSession'
+          );
         }
       } else {
-        const outputJSON = initialOutput != null ? initialOutput : { loading: 'isLoaded' };
+        const outputJSON =
+          initialOutput != null ? initialOutput : { loading: 'isLoaded' };
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
         this.store.outputs.set(
           editor.id,
@@ -213,9 +233,9 @@ export default class OutputApi {
             tableJson: {
               json: [outputJSON],
               firstLine: 0,
-              lastLine: 0,
-            },
-          }),
+              lastLine: 0
+            }
+          })
         );
 
         if (editor.initialMsg && editor.id != 'Default') {
@@ -235,7 +255,8 @@ export default class OutputApi {
     const profile = this.profileStore.profiles.get(res.profileId);
     const strOutput = JSON.stringify(res.output, null, 2);
     const editor = this.store.editors.get(res.id);
-    const totalOutput = this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
+    const totalOutput =
+      this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
@@ -263,52 +284,56 @@ export default class OutputApi {
         displayType,
         lines,
         editor.getCodeMirror(),
-        singleDoc,
+        singleDoc
       );
     }
 
     StaticApi.parseShellJson(jsonStr).then(
-      (result) => {
+      result => {
         runInAction(() => {
           if (lines.type === 'SINGLE') {
             this.store.outputs.get(outputId)[displayType] = {
               json: result,
               firstLine: lines.start,
               lastLine: lines.end,
-              status: 'SINGLE',
+              status: 'SINGLE'
             };
           } else {
             this.store.outputs.get(outputId)[displayType] = {
               json: result,
               firstLine: lines.start,
-              lastLine: lines.end,
+              lastLine: lines.end
             };
           }
         });
       },
-      (error) => {
+      error => {
         runInAction(
           () => {
             NewToaster.show({
-              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+              message:
+                globalString('output/editor/parseJsonError') +
+                error.substring(0, 50),
               className: 'danger',
-              icon: '',
+              icon: ''
             });
           },
-          (error) => {
+          error => {
             runInAction(() => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 className: 'danger',
-                icon: '',
+                icon: ''
               });
               this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
-                tabPrefix,
+                tabPrefix
               )[1];
             });
-          },
+          }
         );
-      },
+      }
     );
   }
 
@@ -328,79 +353,87 @@ export default class OutputApi {
     if (singleLine) {
       // Single line implemention
       StaticApi.parseShellJson(jsonStr).then(
-        (result) => {
+        result => {
           runInAction(() => {
             this.store.outputs.get(outputId)[displayType] = {
               json: result,
               firstLine: lines.start,
-              lastLine: lines.end,
+              lastLine: lines.end
             };
           });
         },
-        (error) => {
+        error => {
           runInAction(
             () => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 className: 'danger',
-                icon: '',
+                icon: ''
               });
             },
-            (error) => {
+            error => {
               runInAction(() => {
                 NewToaster.show({
-                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                  message:
+                    globalString('output/editor/parseJsonError') +
+                    error.substring(0, 50),
                   className: 'danger',
-                  icon: '',
+                  icon: ''
                 });
                 this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
-                  tabPrefix,
+                  tabPrefix
                 )[1];
               });
-            },
+            }
           );
-        },
+        }
       );
     } else {
       StaticApi.parseTableJson(jsonStr, lines, cm, outputId).then(
-        (result) => {
+        result => {
           runInAction(() => {
             this.store.outputs.get(outputId)[displayType] = {
               json: result,
               firstLine: lines.start,
-              lastLine: lines.end,
+              lastLine: lines.end
             };
           });
         },
-        (error) => {
+        error => {
           runInAction(
             () => {
               NewToaster.show({
-                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                message:
+                  globalString('output/editor/parseJsonError') +
+                  error.substring(0, 50),
                 className: 'danger',
-                icon: '',
+                icon: ''
               });
               this.store.outputs.get(outputId)[displayType] = {
                 json: false,
                 firstLine: false,
-                lastLine: false,
+                lastLine: false
               };
             },
             // FIXME what does this second function mean?
-            (error) => {
+            error => {
               runInAction(() => {
                 NewToaster.show({
-                  message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
+                  message:
+                    globalString('output/editor/parseJsonError') +
+                    error.substring(0, 50),
                   className: 'danger',
-                  icon: '',
+                  icon: ''
                 });
                 this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
-                  tabPrefix,
+                  tabPrefix
                 )[1];
               });
-            },
+            }
           );
-        },
+        }
       );
     }
   }
@@ -413,7 +446,7 @@ export default class OutputApi {
    */
   @action.bound
   createJSONTableViewFromJSONArray(JSONArray, outputId, targetData) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       runInAction(() => {
         const tabPrefix = 'TableView-';
 
@@ -426,7 +459,7 @@ export default class OutputApi {
             firstLine: 0,
             lastLine: 0,
             collection: targetData.collection,
-            database: targetData.database,
+            database: targetData.database
           };
         } else {
           this.store.outputs.get(outputId).tableJson = {
@@ -434,7 +467,7 @@ export default class OutputApi {
             firstLine: 0,
             lastLine: 0,
             collection: null,
-            database: null,
+            database: null
           };
         }
         resolve();
@@ -453,7 +486,7 @@ export default class OutputApi {
       chartComponentY: false,
       chartComponentCenter: false,
       state,
-      error,
+      error
     };
 
     if (!output.chartPanel) {
@@ -465,11 +498,11 @@ export default class OutputApi {
         chartWidth: 0,
         chartHeight: 0,
         showOtherInCategoricalAxis: true,
-        showOtherInCenter: true,
+        showOtherInCenter: true
       });
 
       extendObservable(output, {
-        chartPanel: observable.shallowObject(chartPanelStore),
+        chartPanel: observable.shallowObject(chartPanelStore)
       });
     } else {
       // re-entrant

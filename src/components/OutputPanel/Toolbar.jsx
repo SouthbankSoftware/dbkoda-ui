@@ -22,8 +22,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-09-27T08:44:23+10:00
+ * @Last modified by:   Michael
+ * @Last modified time: 2018-01-23T15:33:23+10:00
  */
 
 import React from 'react';
@@ -294,7 +294,10 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    if (existingOutputs.enhancedJson) {
+                    if (
+                      existingOutputs.enhancedJson &&
+                      !currentOutput.rawView
+                    ) {
                       this.openView(OutputToolbarContexts.ENHANCED_VIEW);
                     } else {
                       this.openJsonTreeView();
@@ -324,7 +327,12 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton tableViewButton"
                   onClick={() => {
-                    if (existingOutputs.tableJson) {
+                    if (currentOutput.chartView) {
+                      this.openTableView(true);
+                    } else if (
+                      existingOutputs.tableJson &&
+                      !currentOutput.rawView
+                    ) {
                       this.openView(OutputToolbarContexts.TABLE_VIEW);
                     } else {
                       this.openTableView();
@@ -349,7 +357,7 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton chartViewButton"
                   onClick={() => {
-                    if (existingOutputs.chartPanel) {
+                    if (existingOutputs.chartPanel && !currentOutput.rawView) {
                       this.openView(OutputToolbarContexts.CHART_VIEW);
                     } else {
                       this.openChartView();
@@ -700,11 +708,26 @@ export default class Toolbar extends React.Component {
   }
 
   @action.bound
-  openTableView() {
-    // Get the output instance:
-    const editor = this.props.editorRefs[
-      this.props.store.outputPanel.currentTab
-    ];
+  openTableView(fromChart) {
+    let editor;
+    if (fromChart) {
+      editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
+      runInAction(() => {
+        this.props.store.outputs.get(
+          this.props.store.editorPanel.activeEditorId
+        ).tableJson = {
+          json: this.props.store.outputs.get(
+            this.props.store.editorPanel.activeEditorId
+          ).chartPanel.data,
+          firstLine: 0,
+          lastLine: 20
+        };
+      });
+      this.props.store.outputPanel.currentTab =
+        'TableView-' + this.props.store.editorPanel.activeEditorId;
+      return;
+    }
+    editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
     const cm = editor.getCodeMirror();
 
     // Get the last line that we think is valid:
@@ -779,14 +802,22 @@ export default class Toolbar extends React.Component {
 
   @action.bound
   openChartView(fromTable) {
-    // Get the output instance:
+    // Get the output instance
     let editor;
-    console.log(this.props.store.outputPanel);
     if (fromTable) {
       editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
-    } else {
-      editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
+      runInAction(() => {
+        this.props.api.outputApi.showChartPanel(
+          this.props.store.editorPanel.activeEditorId,
+          this.props.store.outputs.get(
+            this.props.store.editorPanel.activeEditorId
+          ).tableJson.json,
+          'loaded'
+        );
+      });
+      return;
     }
+    editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
 
     const cm = editor.getCodeMirror();
 
