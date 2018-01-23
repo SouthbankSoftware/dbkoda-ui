@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-22T15:48:55+11:00
+ * @Last modified time: 2018-01-23T15:28:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,7 @@
 
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Button, ButtonGroup, Position } from '@blueprintjs/core';
+import { Button, ButtonGroup } from '@blueprintjs/core';
 import RGL, { WidthProvider } from 'react-grid-layout';
 
 import DataCenter from '~/api/DataCenter';
@@ -34,8 +34,8 @@ import DataCenter from '~/api/DataCenter';
 import TextField from '#/TreeActionPanel/Components/TextField';
 import NumericField from '#/TreeActionPanel/Components/NumericField';
 import BooleanField from '#/TreeActionPanel/Components/BooleanField';
+import FileField from '#/TreeActionPanel/Components/FileField';
 
-import { DBKodaToaster } from '#/common/Toaster';
 import { ConnectionForm } from './ConnectionForm';
 import './Panel.scss';
 
@@ -96,6 +96,8 @@ export default class ProfileManager extends React.Component<Props, State> {
           uiField = <NumericField key={field.name} field={field} />;
         } else if (field.type == 'checkbox') {
           uiField = <BooleanField key={field.name} field={field} />;
+        } else if (field.type == 'file') {
+          uiField = <FileField key={field.name} field={field} />;
         }
 
         uiFields.push(uiField);
@@ -109,10 +111,12 @@ export default class ProfileManager extends React.Component<Props, State> {
     const subforms = this.form.getSubForms();
     subforms.forEach((formStr) => {
       const subForm = this.form.formSchema[formStr];
+      const btnClassName = 'btn-' + subForm.name.toLowerCase().replace(/\s/g, '');
       menuBtns.push(
         <Button
           active={this.state.selectedSubform == formStr}
           key={formStr}
+          className={btnClassName}
           onClick={() => {
             this.setState({
               selectedSubform: formStr

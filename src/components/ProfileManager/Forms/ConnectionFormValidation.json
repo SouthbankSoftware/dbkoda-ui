@@ -9,6 +9,7 @@
           "additionalProperties": false,
           "items": [
             {
+              "$id": "alias",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -16,6 +17,7 @@
               }
             },
             {
+              "$id": "host",
               "required": ["disabled"],
               "properties": {
                 "disabled": {"type": "boolean"}
@@ -41,6 +43,7 @@
               }
             },
             {
+              "$id":"port",
               "required": ["disabled"],
               "properties": {
                 "disabled": {"type": "boolean"}
@@ -66,6 +69,7 @@
               }
             },
             {
+              "$id":"database",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -73,6 +77,7 @@
               }
             },
             {
+              "$id":"sha",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -80,6 +85,7 @@
               }
             },
             {
+              "$id":"username",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -87,6 +93,7 @@
               }
             },
             {
+              "$id":"password",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -94,6 +101,7 @@
               }
             },
             {
+              "$id":"authenticationDatabase",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -101,6 +109,7 @@
               }
             },
             {
+              "$id":"urlRadio",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -108,6 +117,7 @@
               }
             },
             {
+              "$id":"url",
               "required": ["disabled"],
               "properties": {
                 "disabled": {"type": "boolean"}
@@ -144,6 +154,7 @@
           "additionalProperties": false,
           "items": [
             {
+              "$id":"ssl",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -151,10 +162,122 @@
               }
             },
             {
+              "$id":"sslAllowInvalidCertificates",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
                 "value": { "type": "boolean" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ssh": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "additionalProperties": false,
+          "items": [
+            {
+              "$id":"ssh",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id": "remoteHost",
+              "required": ["disabled"],
+              "properties": {
+                "disabled": {"type": "boolean"}
+              },
+              "select": { "$data": "0/disabled"},
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string", "minLength": 1 }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
+                }
+              }
+            },
+            {
+              "$id": "remoteUser",
+              "required": ["disabled"],
+              "properties": {
+                "disabled": {"type": "boolean"}
+              },
+              "select": { "$data": "0/disabled"},
+              "selectCases": {
+                "false": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string", "minLength": 1 }
+                  }
+                },
+                "true": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "disabled": {},
+                    "name": { "type": "string" },
+                    "value": { "type": "string" }
+                  }
+                }
+              }
+            },
+            {
+              "$id":"remotePass",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id":"sshTunnel",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id":"keyRadio",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id":"sshKeyFile",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id":"passPhrase",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
               }
             }
           ]

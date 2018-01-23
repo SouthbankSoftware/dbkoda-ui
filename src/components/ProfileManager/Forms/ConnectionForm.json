@@ -51,6 +51,7 @@
         "label": "Username",
         "icon": "user",
         "type": "text",
+        "value": "",
         "column": 2,
         "width": 0.5,
         "disabled": true,
@@ -61,6 +62,7 @@
         "label": "Password",
         "icon": "password",
         "type": "password",
+        "value": "",
         "column": 2,
         "width": 0.5,
         "disabled": true,
@@ -70,6 +72,7 @@
         "name": "authenticationDatabase",
         "label": "Authentication Database",
         "type": "text",
+        "value": "",
         "column": 2,
         "width": 0.5,
         "disabled": true,
@@ -181,6 +184,75 @@
   },
   "ssh": {
     "name": "SSH",
-    "fields": []
+    "fields": [
+      {
+        "name": "ssh",
+        "value": false,
+        "label": "Establish Direct OS Connection (for terminal and performance monitoring)",
+        "type": "checkbox",
+        "column": 1,
+        "refFields": ["remoteHost", "remoteUser", "remotePass"]
+      },
+      {
+        "name": "remoteHost",
+        "label": "HostName",
+        "value": "",
+        "type": "text",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "remoteUser",
+        "label": "Username",
+        "type": "text",
+        "value": "",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "remotePass",
+        "label": "Password",
+        "type": "password",
+        "value": "",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "sshTunnel",
+        "value": false,
+        "label": "Tunnel through this host for Mongo Connection",
+        "type": "checkbox",
+        "column": 1
+      },
+      {
+        "name": "keyRadio",
+        "value": false,
+        "label": "Use PEM Key File instead",
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["sshKeyFile", "passPhrase"]
+      },
+      {
+        "name": "sshKeyFile",
+        "label": "PEM Certificate Key File",
+        "type": "file",
+        "value": "",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "passPhrase",
+        "label": "Password for PE File",
+        "type": "password",
+        "value": "",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      }
+    ]
   }
 }

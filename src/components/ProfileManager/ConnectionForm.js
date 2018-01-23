@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-22T15:42:49+11:00
+ * @Last modified time: 2018-01-23T16:46:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@ export const FieldBindings = {
   password: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
   number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onValueChange', 'onBlur'],
   checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'onClick', 'onBlur'],
+  file: ['name', 'value', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
 };
 
 export class ConnectionForm {
@@ -204,7 +205,9 @@ export class ConnectionForm {
       if (formData.hasOwnProperty(subform)) {
         formData[subform].fields.forEach((field) => {
           if (field.value !== undefined && field.value !== null) {
-            profile[field.name] = field.value;
+            if (!field.hasOwnProperty('disabled') || (field.hasOwnProperty('disabled') && field.disabled === false)) {
+              profile[field.name] = field.value;
+            }
           }
         });
       }
