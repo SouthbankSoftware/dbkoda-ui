@@ -59,7 +59,7 @@
     {
       "name": "validator",
       "label": "Validation document",
-      "type": "Text",
+      "type": "CodeMirror",
       "tooltip": "Document that defines Validation Rule for collection",
       "readOnly": false
     },

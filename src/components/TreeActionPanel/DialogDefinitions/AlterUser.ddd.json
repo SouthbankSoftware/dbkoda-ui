@@ -72,7 +72,7 @@
     {
       "name": "CustomData",
       "label": "Custom JSON",
-      "type": "Text",
+      "type": "CodeMirror",
       "optional": true
     }
   ],
