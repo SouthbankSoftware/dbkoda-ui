@@ -60,18 +60,6 @@ export default class RadialWidget extends Widget {
     };
   }
 
-  getDisplayName() {
-    const {items} = this.props.store.widget;
-    if (items && items.length > 0) {
-      if (items[0] === 'cpu') {
-        return 'CPU';
-      }
-      if (items[0] === 'memory') {
-        return 'Memory';
-      }
-    }
-  }
-
   _getInnerRadiusSize() {
     return this.state.width / 3;
   }
@@ -159,7 +147,6 @@ export default class RadialWidget extends Widget {
 
     // field.append('text').attr('class', 'icon');
 
-    // field.append('text').attr('class', 'goal').text(this.getDisplayName()).attr('transform', 'translate(0,50)');
     field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)');
     this.field = field;
     d3.transition().duration(1000).each(() => this.update());
@@ -234,10 +221,11 @@ export default class RadialWidget extends Widget {
   }
 
   render() {
+    const {displayName} = this.props.store.widget;
     this.buildWidget();
     return (
       <div className="radial-widget" ref={radial => (this.radial = radial)}>
-        <div className="display-name">{this.getDisplayName()}</div>
+        <div className="display-name">{displayName}</div>
         <div className="radial-main" />
       </div>
     );

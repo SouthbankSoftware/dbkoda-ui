@@ -111,8 +111,8 @@ export default class PerformancePanel extends React.Component<Props, State> {
   _addDemoWidgets = action(() => {
     const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
 
-    widgets.push(api.addWidget(profileId, ['cpu']));
-    widgets.push(api.addWidget(profileId, ['memory']));
+    widgets.push(api.addWidget(profileId, ['cpu'], {displayName: 'CPU'}));
+    widgets.push(api.addWidget(profileId, ['memory'], {displayName: 'Memory'}));
 
     // widgets.push(api.addWidget(profileId, ['memory']));
     // widgets.push(api.addWidget(profileId, ['topology']));
