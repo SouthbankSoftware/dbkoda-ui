@@ -1,7 +1,7 @@
 /**
  * Created by joey on 24/7/17.
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-23T15:38:42+11:00
+ * @Last modified time: 2018-01-23T15:40:11+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,7 +63,7 @@ const createTemplateObject = state => {
     delete items.password;
   }
   if (hostRadio) {
-    if (sshTunnel) {
+    if (ssh) {
       items.host = '127.0.0.1';
       items.port = sshLocalPort;
     } else {
