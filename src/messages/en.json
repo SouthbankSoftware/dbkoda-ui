@@ -70,9 +70,10 @@
         "save": "Save Output",
         "showMore": "Show More (Ctrl + M)",
         "clear": "Clear Output Contents (Ctrl + L)",
-        "jsonTree": "Open JSON Tree View",
-        "table": "Open Table View",
-        "chart": "Open Chart View",
+        "raw": "View Raw output.",
+        "jsonTree": "View JSON Tree output",
+        "table": "View Table Output",
+        "chart": "View Chart Output",
         "tableToolbar": {
           "expandAll": "Expand all Rows in the table",
           "collapseAll": "Collapse all rows in the table",
