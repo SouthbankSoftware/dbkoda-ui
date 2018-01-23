@@ -153,7 +153,7 @@ export default class RadialWidget extends Widget {
 
     // render background
     field.append('path').attr('class', 'bg')
-      .style('fill',RadialWidget.colors[0])
+      .style('fill', RadialWidget.colors[0])
       .style('opacity', 0.2)
       .attr('d', background);
 
