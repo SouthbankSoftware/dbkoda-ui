@@ -34,14 +34,14 @@ import { Intent, Position, Tooltip } from '@blueprintjs/core';
 import 'react-select/dist/react-select.css';
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @observer
 export default class ComboField extends React.Component {
   static get defaultProps() {
     return {
       showLabel: true,
-      formGroup: false,
+      formGroup: false
     };
   }
 
@@ -51,10 +51,10 @@ export default class ComboField extends React.Component {
     this.setOptions(field.options.dropdown);
   }
 
-  setOptions = (arrOptions) => {
+  setOptions = arrOptions => {
     if (arrOptions) {
       this.options = [];
-      arrOptions.forEach((opt) => {
+      arrOptions.forEach(opt => {
         this.options.push({ value: opt, label: opt });
       });
       // this.options = arrOptions;
@@ -82,9 +82,9 @@ export default class ComboField extends React.Component {
     if (field.options.multi) {
       this.multiValues = field.value.split('|');
     }
-    const onChange = (newValue) => {
+    const onChange = newValue => {
       const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
+        this.props.store.editorPanel.activeEditorId
       );
       if (this.options[0].value !== '') {
         // A new option has been added.
@@ -94,19 +94,19 @@ export default class ComboField extends React.Component {
           if (block.customFields) {
             if (block.customFields[field.path.replace(/.[0-9]./g, '[].')]) {
               block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
-                newValue.value,
+                newValue.value
               );
             } else {
               block.customFields[field.path.replace(/.[0-9]./g, '[].')] = [];
               block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
-                newValue.value,
+                newValue.value
               );
             }
           } else {
             block.customFields = {};
             block.customFields[field.path.replace(/.[0-9]./g, '[].')] = [];
             block.customFields[field.path.replace(/.[0-9]./g, '[].')].push(
-              newValue.value,
+              newValue.value
             );
           }
         }
@@ -117,7 +117,7 @@ export default class ComboField extends React.Component {
         } else if (newValue[0].value == '' && newValue.length > 1) {
           newValue.shift();
         }
-        const arrValues = newValue.map((obj) => {
+        const arrValues = newValue.map(obj => {
           return obj.value;
         });
         field.value = arrValues.join('|');

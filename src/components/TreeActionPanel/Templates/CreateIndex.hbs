@@ -1,12 +1,12 @@
-db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").createIndex(
+db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}").createIndex(
   { {{#each Keys}}
-     "{{AttributeName}}":{{{Direction}}}{{#unless last}},{{/unless}}{{/each}} } ,
+     "{{{AttributeName}}}":{{{Direction}}}{{#unless last}},{{/unless}}{{/each}} } ,
   {
     {{#if IndexName}}
-    name: "{{IndexName}}",{{/if}}background: {{Background}},
-    unique: {{Unique}},{{#if partialFilterExpression}}
+    name: "{{{IndexName}}}",{{/if}}background: {{{Background}}},
+    unique: {{{Unique}}},{{#if partialFilterExpression}}
     partialFilterExpression: {{{partialFilterExpression}}},{{/if}}{{#if expireAfterSeconds}}
-    expireAfterSeconds :  {{expireAfterSeconds}} , {{/if}}
-    sparse: {{Sparse}}
+    expireAfterSeconds :  {{{expireAfterSeconds}}} , {{/if}}
+    sparse: {{{Sparse}}}
   }
 );

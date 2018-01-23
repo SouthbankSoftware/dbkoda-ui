@@ -1,13 +1,13 @@
-db.getSiblingDB("{{Database}}").updateRole(
-  "{{RoleName}}",
+db.getSiblingDB("{{{Database}}}").updateRole(
+  "{{{RoleName}}}",
   {
     roles: [ {{#each Roles}}
-      { role:"{{Role}}", db: "{{Database}}" } {{#unless @last}},{{/unless ~}}
+      { role:"{{{Role}}}", db: "{{{Database}}}" } {{#unless @last}},{{/unless ~}}
     {{/each}} ],
     privileges: [ {{#each Privileges}}
       {
-        resource: { {{#if Cluster}}cluster: true{{else}}db: "{{Database}}", collection: "{{Collection}}"{{/if}} },
-        actions: [ {{#each Actions}}"{{this}}"{{#unless @last}},{{/unless}}{{/each}} ]
+        resource: { {{#if Cluster}}cluster: true{{else}}db: "{{{Database}}}", collection: "{{{Collection}}}"{{/if}} },
+        actions: [ {{#each Actions}}"{{{this}}}"{{#unless @last}},{{/unless}}{{/each}} ]
       }{{#unless @last}},{{/unless}}{{/each}}
     ]
   },

@@ -2,7 +2,7 @@
            groupBy: "${{{groupBy}}}", 
            buckets: {{{buckets}}} {{#if AggregateKeys ~}}  ,
            output: { "count":{$sum:1} {{#each AggregateKeys ~}}, 
-                    "{{nodots AttributeName}}-{{Aggregation}}":{${{Aggregation}}:"${{AttributeName}}"} {{/each}} 
+                    "{{nodots AttributeName}}-{{{Aggregation}}}":{${{{Aggregation}}}:"${{{AttributeName}}}"} {{/each}} 
            }{{/if ~}}{{#if granularity ~}},
            granularity: "{{{granularity}}}"
         {{/if }}

@@ -1,145 +1,159 @@
 {
-    "Title": "Update Documents",
-    "AutoExecute": true,
-    "DefaultValues": {
-        "function": "dbkoda_UpdateDocumentsPreFill",
-        "arguments": [{
-            "name": "Database",
-            "value": "treeNode.parentDB"
-        }, {
-            "name": "CollectionName",
-            "value": "treeNode"
-        }]
-    },
-    "Fields": [{
-            "name": "Database",
-            "type": "Text",
-            "readOnly": true,
-            "rules": "required"
-        },
-        {
-            "name": "CollectionName",
-            "type": "Text",
-            "label": "Collection Name",
-            "readOnly": true,
-            "rules": "required"
-        },
-        {
-            "name": "UseOr",
-            "label": "Use Or?",
-            "tooltip": "use OR in filter conditions?",
-            "type": "Boolean",
-            "readOnly": false
-        },
-        {
-            "name": "FilterKeys",
-            "label": "Filter conditions",
-            "type": "Table",
-            "maxColumns": 3,
-            "columns": [{
-                    "name": "AttributeName",
-                    "label": "Attribute",
-                    "tooltip": "Name of the attribute to be filtered",
-                    "type": "Combo",
-                    "lookup": "dbkodaListAttributes",
-                    "lookup_arguments": [{
-                            "name": "db",
-                            "value": "treeNode.parentDB"
-                        },
-                        {
-                            "name": "collection",
-                            "value": "treeNode"
-                        }
-                    ]
-                },
-                {
-                    "name": "Operator",
-                    "label": "Operator",
-                    "tooltip": "Operator to apply to value",
-                    "type": "Combo",
-                    "lookup": "dbkodaMatchOperators",
-                    "lookup_arguments": [{
-                        "name": "db",
-                        "value": "database"
-                    }]
-                },
-                {
-                    "name": "Value",
-                    "label": "Value to filter",
-                    "type": "Text",
-                    "tooltip": "Enter the value to search for (quote strings please)"
-                }
-            ]
-        },
-        {
-            "name": "UpdateMany",
-            "label": "Update more than one document?",
-            "tooltip": "If true, we can update more than one document",
-            "type": "Boolean",
-            "readOnly": false
-        },
-        {
-            "name": "Upsert",
-            "label": "Apply Upsert?",
-            "tooltip": "Create new document if no matching document found?",
-            "type": "Boolean",
-            "readOnly": false
-        },
-        {
-            "name": "UpdateOperators",
-            "label": "Updates",
-            "type": "Table",
-            "maxColumns": 3,
-            "tooltip": "Enter the value to search for (quote strings please)",
-            "columns": [{
-                    "name": "UpOperator",
-                    "label": "Operator",
-                    "tooltip": "Operator to apply to value",
-                    "type": "Combo",
-                    "lookup": "dbkodaUpdateOperators",
-                    "lookup_arguments": [{
-                        "name": "db",
-                        "value": "database"
-                    }]
-                },
-                {
-                    "name": "UpAttribute",
-                    "label": "Attribute",
-                    "tooltip": "Name of the attribute to be updated",
-                    "type": "Combo",
-                    "lookup": "dbkodaListAttributes",
-                    "lookup_arguments": [{
-                            "name": "db",
-                            "value": "treeNode.parentDB"
-                        },
-                        {
-                            "name": "collection",
-                            "value": "treeNode"
-                        }
-                    ]
-                },
-                {
-                    "name": "UpValue",
-                    "label": "Value to apply",
-                    "type": "Text",
-                    "tooltip": "Enter the value for the operator (strings in quotes please)"
-                }
-            ]
-        },
-        {
-            "name": "Replace",
-            "label": "Replace Entire Document",
-            "tooltip": "If selected, entire document will be replaced with that below",
-            "type": "Boolean",
-            "readOnly": false
-        },
-        {
-            "name": "ReplaceMent",
-            "label": "Document to replace existing document(s)",
-            "tooltip": "JSON which will replace all existing documents",
-            "type": "Text",
-            "default": "{ Replacement JSON  }",
-            "readOnly": false
-        }
+  "Title": "Update Documents",
+  "AutoExecute": true,
+  "DefaultValues": {
+    "function": "dbkoda_UpdateDocumentsPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "CollectionName",
+        "value": "treeNode"
+      }
     ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true,
+      "rules": "required"
+    },
+    {
+      "name": "CollectionName",
+      "type": "Text",
+      "label": "Collection Name",
+      "readOnly": true,
+      "rules": "required"
+    },
+    {
+      "name": "UseOr",
+      "label": "Use Or?",
+      "tooltip": "use OR in filter conditions?",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "FilterKeys",
+      "label": "Filter conditions",
+      "type": "Table",
+      "maxColumns": 3,
+      "columns": [
+        {
+          "name": "AttributeName",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be filtered",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributes",
+          "lookup_arguments": [
+            {
+              "name": "db",
+              "value": "treeNode.parentDB"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }
+          ]
+        },
+        {
+          "name": "Operator",
+          "label": "Operator",
+          "tooltip": "Operator to apply to value",
+          "type": "Combo",
+          "lookup": "dbkodaMatchOperators",
+          "lookup_arguments": [
+            {
+              "name": "db",
+              "value": "database"
+            }
+          ]
+        },
+        {
+          "name": "Value",
+          "label": "Value to filter",
+          "type": "Text",
+          "tooltip": "Enter the value to search for (quote strings please)"
+        }
+      ]
+    },
+    {
+      "name": "UpdateMany",
+      "label": "Update more than one document?",
+      "tooltip": "If true, we can update more than one document",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "Upsert",
+      "label": "Apply Upsert?",
+      "tooltip": "Create new document if no matching document found?",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "UpdateOperators",
+      "label": "Updates",
+      "type": "Table",
+      "maxColumns": 3,
+      "tooltip": "Enter the value to search for (quote strings please)",
+      "columns": [
+        {
+          "name": "UpOperator",
+          "label": "Operator",
+          "tooltip": "Operator to apply to value",
+          "type": "Combo",
+          "lookup": "dbkodaUpdateOperators",
+          "lookup_arguments": [
+            {
+              "name": "db",
+              "value": "database"
+            }
+          ]
+        },
+        {
+          "name": "UpAttribute",
+          "label": "Attribute",
+          "tooltip": "Name of the attribute to be updated",
+          "type": "Combo",
+          "lookup": "dbkodaListAttributes",
+          "lookup_arguments": [
+            {
+              "name": "db",
+              "value": "treeNode.parentDB"
+            },
+            {
+              "name": "collection",
+              "value": "treeNode"
+            }
+          ]
+        },
+        {
+          "name": "UpValue",
+          "label": "Value to apply",
+          "type": "Text",
+          "tooltip":
+            "Enter the value for the operator (strings in quotes please)"
+        }
+      ]
+    },
+    {
+      "name": "Replace",
+      "label": "Replace Entire Document",
+      "tooltip":
+        "If selected, entire document will be replaced with that below",
+      "type": "Boolean",
+      "readOnly": false
+    },
+    {
+      "name": "Replacement",
+      "label": "Document to replace existing document(s)",
+      "tooltip": "JSON which will replace all existing documents",
+      "type": "CodeMirror",
+      "default": "{ Replacement JSON  }",
+      "readOnly": false
+    }
+  ]
 }

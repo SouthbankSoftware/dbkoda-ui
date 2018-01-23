@@ -19,12 +19,12 @@
  */
 
 /**
-* @Author: Chris Trott <chris>
-* @Date:   2017-03-10T12:33:56+11:00
-* @Email:  chris@southbanksoftware.com
+ * @Author: Chris Trott <chris>
+ * @Date:   2017-03-10T12:33:56+11:00
+ * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
  * @Last modified time: 2017-09-27T08:44:23+10:00
-*/
+ */
 
 import React from 'react';
 import Mousetrap from 'mousetrap';
@@ -36,10 +36,12 @@ import {
   Tooltip,
   AnchorButton,
   Position,
-  EditableText,
+  EditableText
 } from '@blueprintjs/core';
 import { featherClient } from '~/helpers/feathers';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
+import { NewToaster } from '#/common/Toaster';
+import StaticApi from '~/api/static';
 import EventLogging from '#/common/logging/EventLogging';
 import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
@@ -48,6 +50,9 @@ import SaveOutputIcon from '../../styles/icons/save-output-icon.svg';
 import ExpandIcon from '../../styles/icons/code-folder-icon.svg';
 import CollapseIcon from '../../styles/icons/code-folder-right-icon.svg';
 import RefreshIcon from '../../styles/icons/refresh-icon.svg';
+import ChartIcon from '../../styles/icons/chart-icon.svg';
+import TableIcon from '../../styles/icons/table-icon.svg';
+import EnhanceJSONIcon from '../../styles/icons/enhanced-json-icon.svg';
 
 /**
  * The OutputPanel toolbar, which hold the commands and actions specific to the output panel
@@ -56,7 +61,7 @@ import RefreshIcon from '../../styles/icons/refresh-icon.svg';
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config,
+  config: allStores.config
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -65,8 +70,8 @@ export default class Toolbar extends React.Component {
     this.state = {
       context: OutputToolbarContexts.DEFAULT,
       tableToolbar: {
-        limit: 200,
-      },
+        limit: 200
+      }
     };
     this.downloadOutput = this.downloadOutput.bind(this);
 
@@ -82,11 +87,11 @@ export default class Toolbar extends React.Component {
      */
     reaction(
       () => this.props.store.outputPanel.executingShowMore,
-      (executingShowMore) => {
+      executingShowMore => {
         if (
           executingShowMore &&
           this.props.store.outputs.get(
-            this.props.store.outputPanel.currentTab,
+            this.props.store.outputPanel.currentTab
           ) &&
           !this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
             .cannotShowMore
@@ -94,28 +99,28 @@ export default class Toolbar extends React.Component {
           const command = 'it';
           this.props.store.editorToolbar.isActiveExecuting = true;
           this.props.store.editors.get(
-            this.props.store.outputPanel.currentTab,
+            this.props.store.outputPanel.currentTab
           ).executing = true;
           const service = featherClient().service('/mongo-shells');
           service.timeout = 30000;
           service.update(
             this.props.store.outputs.get(
-              this.props.store.outputPanel.currentTab,
+              this.props.store.outputPanel.currentTab
             ).connId,
             {
               shellId: this.props.store.outputs.get(
-                this.props.store.outputPanel.currentTab,
+                this.props.store.outputPanel.currentTab
               ).shellId,
-              commands: command,
-            },
+              commands: command
+            }
           );
           this.props.store.outputs.get(
-            this.props.store.outputPanel.currentTab,
+            this.props.store.outputPanel.currentTab
           ).cannotShowMore = true;
         }
         this.props.store.outputPanel.executingShowMore = false;
       },
-      { name: 'reactionOutputToolbarShowMore' },
+      { name: 'reactionOutputToolbarShowMore' }
     );
 
     /**
@@ -123,7 +128,7 @@ export default class Toolbar extends React.Component {
      */
     reaction(
       () => this.props.store.outputPanel.clearingOutput,
-      (clearingOutput) => {
+      clearingOutput => {
         const currentTab = this.props.store.outputPanel.currentTab;
         if (clearingOutput && this.props.store.outputs.get(currentTab)) {
           this.props.store.outputs.get(currentTab).output = '';
@@ -131,7 +136,7 @@ export default class Toolbar extends React.Component {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT,
               EventLogging.getFragmentEnum().OUTPUT,
-              'User cleared Output',
+              'User cleared Output'
             );
           }
           this.props.store.outputPanel.clearingOutput = false;
@@ -142,14 +147,14 @@ export default class Toolbar extends React.Component {
           if (editor) {
             this.props.store.editors.set(editorKey, {
               ...editor,
-              explains: undefined,
+              explains: undefined
             });
             this.props.store.outputPanel.currentTab = editorKey;
           }
           this.props.store.outputPanel.clearingOutput = false;
         } else if (currentTab.indexOf('Details-') === 0) {
           this.props.store.editors.get(
-            this.props.store.editorPanel.activeEditorId,
+            this.props.store.editorPanel.activeEditorId
           ).detailsView = undefined;
           const editorKey = currentTab.split('Details-')[1];
           this.props.store.outputPanel.currentTab = editorKey;
@@ -175,7 +180,7 @@ export default class Toolbar extends React.Component {
           this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
         }
       },
-      { name: 'reactionOutputToolbarClearOutput' },
+      { name: 'reactionOutputToolbarClearOutput' }
     );
   }
 
@@ -212,37 +217,201 @@ export default class Toolbar extends React.Component {
     const data = new Blob(
       [
         this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
-          .output,
+          .output
       ],
-      { type: 'text/csv' },
+      { type: 'text/csv' }
     );
     const csvURL = window.URL.createObjectURL(data);
     const tempLink = document.createElement('a');
     tempLink.href = csvURL;
     tempLink.setAttribute(
       'download',
-      `output-${this.props.store.outputPanel.currentTab}.js`,
+      `output-${this.props.store.outputPanel.currentTab}.js`
     );
     tempLink.click();
   }
 
   /**
-   * Render function for a Table View Toolbar.
+   * Render function for the raw toolbar.
    */
-  renderTableToolbar() {
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
-    );
+  renderDefaultToolbar(disabledButtons) {
+    // Get list of existing outputs for enabling buttons:
+    const existingOutputs = this.getExistingOutputs();
+    const currentOutput = {};
+    if (this.props.store.outputPanel.currentTab.startsWith('TableView-')) {
+      currentOutput.tableView = true;
+    } else if (this.props.store.outputPanel.currentTab.startsWith('Enhanced')) {
+      currentOutput.enhancedView = true;
+    } else if (this.props.store.outputPanel.currentTab.startsWith('Chart')) {
+      currentOutput.chartView = true;
+    } else if (
+      this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
+    ) {
+      currentOutput.rawView = true;
+    }
+
+    console.log('!!! - Existing Outputs: ', existingOutputs);
+    console.log('!!! - Current Output:  ', currentOutput);
 
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
           <div className="pt-navbar-heading">
-            {globalString('output/headings/table')}
+            {globalString('output/headings/default')}
           </div>
+          {IS_DEVELOPMENT && (
+            <div>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/raw')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  disabled={disabledButtons.raw || currentOutput.rawView}
+                  className="pt-intent-danger circleButton jsonTreeViewButton"
+                  onClick={() => {
+                    this.openView(OutputToolbarContexts.RAW);
+                  }}
+                >
+                  <EnhanceJSONIcon
+                    className="dbKodaSVG"
+                    width={30}
+                    height={30}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/jsonTree')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton jsonTreeViewButton"
+                  onClick={() => {
+                    if (existingOutputs.enhancedJson) {
+                      this.openView(OutputToolbarContexts.ENHANCED_VIEW);
+                    } else {
+                      this.openJsonTreeView();
+                    }
+                  }}
+                  disabled={
+                    (disabledButtons.jsonView &&
+                      !existingOutputs.enhancedJson) ||
+                    currentOutput.enhancedView
+                  }
+                >
+                  <EnhanceJSONIcon
+                    className="dbKodaSVG"
+                    width={30}
+                    height={30}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/table')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton tableViewButton"
+                  onClick={() => {
+                    if (existingOutputs.tableJson) {
+                      this.openView(OutputToolbarContexts.TABLE_VIEW);
+                    } else {
+                      this.openTableView();
+                    }
+                  }}
+                  disabled={
+                    (disabledButtons.tableView && !existingOutputs.tableJson) ||
+                    currentOutput.tableView
+                  }
+                >
+                  <TableIcon className="dbKodaSVG" width={30} height={30} />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/chart')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton chartViewButton"
+                  onClick={() => {
+                    if (existingOutputs.chartPanel) {
+                      this.openView(OutputToolbarContexts.CHART_VIEW);
+                    } else {
+                      this.openChartView();
+                    }
+                  }}
+                  disabled={
+                    (disabledButtons.chartView &&
+                      !existingOutputs.chartPanel) ||
+                    currentOutput.chartView
+                  }
+                >
+                  <ChartIcon className="dbKodaSVG" width={30} height={30} />
+                </AnchorButton>
+              </Tooltip>
+            </div>
+          )}
         </div>
         <div className="pt-navbar-group pt-align-right">
-          {/* <Tooltip
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/clear')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="pt-intent-danger circleButton clearOutputBtn"
+              onClick={this.clearOutput}
+            >
+              <ClearOutputIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/showMore')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="showMoreBtn circleButton"
+              onClick={this.showMore}
+              disabled={
+                this.props.store.outputPanel.currentTab == 'Default' ||
+                this.props.store.outputPanel.currentTab.indexOf('Explain') >=
+                  0 ||
+                this.props.store.outputPanel.currentTab.indexOf('Details') >=
+                  0 ||
+                (this.props.store.outputs.get(
+                  this.props.store.outputPanel.currentTab
+                ) &&
+                  this.props.store.outputs.get(
+                    this.props.store.outputPanel.currentTab
+                  ).cannotShowMore)
+              }
+            >
+              <ShowMoreIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
             inline
@@ -252,66 +421,169 @@ export default class Toolbar extends React.Component {
           >
             <AnchorButton
               className="saveOutputBtn circleButton"
-              onClick={() => {
-                this.props.api.outputApi.saveTableData();
-              }}
+              onClick={this.downloadOutput}
             >
               <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
-          </Tooltip> */}
-          {this.props.store.outputs.get(editor.id).tableJson.database && (
-            <div>
-              <span className="docLimitLabel">Document Limit: </span>
-              <EditableText
-                minLines={1}
-                maxLines={1}
-                maxLength={9}
-                placeholder="200"
-                value={this.state.tableToolbar.limit}
-                onChange={(string) => {
-                  string = parseInt(string, 10);
-                  if (!string) {
-                    string = '';
-                  }
-                  this.setState({ tableToolbar: { limit: string } });
-                }}
-                intent={Intent.NONE}
-                className="limit"
-              />
-            </div>
-          )}
-          {this.props.store.outputs.get(editor.id).tableJson.database && (
+          </Tooltip>
+        </div>
+      </nav>
+    );
+  }
+
+  /**
+   * Render function for a Table View Toolbar.
+   */
+  renderTableToolbar() {
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+
+    // Get list of already generated tabs for switching too:
+    const existingOutputs = this.getExistingOutputs();
+
+    return (
+      <nav className="pt-navbar pt-dark .modifier outputToolbar">
+        <div className="pt-navbar-group pt-align-left">
+          <div className="pt-navbar-heading">
+            {globalString('output/headings/table')}
+          </div>
+          {IS_DEVELOPMENT && (
             <div>
               <Tooltip
                 intent={Intent.PRIMARY}
                 hoverOpenDelay={1000}
                 inline
-                content={globalString('output/toolbar/tableToolbar/refresh')}
+                content={globalString('output/toolbar/raw')}
                 tooltipClassName="pt-dark"
                 position={Position.BOTTOM}
               >
                 <AnchorButton
-                  className="refreshButton circleButton"
+                  className="pt-intent-danger circleButton rawButton"
                   onClick={() => {
-                    if (!this.state.tableToolbar.limit) {
-                      this.state.tableToolbar.limit = 200;
-                    }
-                    this.props.api.treeApi.openNewTableViewForCollection(
-                      {
-                        collection: this.props.store.outputs.get(editor.id)
-                          .tableJson.collection,
-                        database: this.props.store.outputs.get(editor.id)
-                          .tableJson.database,
-                      },
-                      this.state.tableToolbar.limit,
-                    );
+                    this.openView(OutputToolbarContexts.RAW);
                   }}
                 >
-                  <RefreshIcon className="dbKodaSVG" width={30} height={30} />
+                  <EnhanceJSONIcon
+                    className="dbKodaSVG"
+                    width={30}
+                    height={30}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/jsonTree')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton jsonTreeViewButton"
+                  onClick={() => {
+                    this.openView(OutputToolbarContexts.ENHANCED_VIEW);
+                  }}
+                  disabled={!existingOutputs.enhancedJson}
+                >
+                  <EnhanceJSONIcon
+                    className="dbKodaSVG"
+                    width={30}
+                    height={30}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/table')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton tableViewButton"
+                  disabled
+                >
+                  <TableIcon className="dbKodaSVG" width={30} height={30} />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                intent={Intent.PRIMARY}
+                hoverOpenDelay={1000}
+                inline
+                content={globalString('output/toolbar/chart')}
+                tooltipClassName="pt-dark"
+                position={Position.BOTTOM}
+              >
+                <AnchorButton
+                  className="pt-intent-danger circleButton chartViewButton"
+                  onClick={() => {
+                    this.openChartView(true);
+                  }}
+                >
+                  <ChartIcon className="dbKodaSVG" width={30} height={30} />
                 </AnchorButton>
               </Tooltip>
             </div>
           )}
+        </div>
+        <div className="pt-navbar-group pt-align-right">
+          {this.props.store.outputs.get(editor.id).tableJson &&
+            this.props.store.outputs.get(editor.id).tableJson.database && (
+              <div>
+                <span className="docLimitLabel">Document Limit: </span>
+                <EditableText
+                  minLines={1}
+                  maxLines={1}
+                  maxLength={9}
+                  placeholder="200"
+                  value={this.state.tableToolbar.limit}
+                  onChange={string => {
+                    string = parseInt(string, 10);
+                    if (!string) {
+                      string = '';
+                    }
+                    this.setState({ tableToolbar: { limit: string } });
+                  }}
+                  intent={Intent.NONE}
+                  className="limit"
+                />
+              </div>
+            )}
+          {this.props.store.outputs.get(editor.id).tableJson &&
+            this.props.store.outputs.get(editor.id).tableJson.database && (
+              <div>
+                <Tooltip
+                  intent={Intent.PRIMARY}
+                  hoverOpenDelay={1000}
+                  inline
+                  content={globalString('output/toolbar/tableToolbar/refresh')}
+                  tooltipClassName="pt-dark"
+                  position={Position.BOTTOM}
+                >
+                  <AnchorButton
+                    className="refreshButton circleButton"
+                    onClick={() => {
+                      if (!this.state.tableToolbar.limit) {
+                        this.state.tableToolbar.limit = 200;
+                      }
+                      this.props.api.treeApi.openNewTableViewForCollection(
+                        {
+                          collection: this.props.store.outputs.get(editor.id)
+                            .tableJson.collection,
+                          database: this.props.store.outputs.get(editor.id)
+                            .tableJson.database
+                        },
+                        this.state.tableToolbar.limit
+                      );
+                    }}
+                  >
+                    <RefreshIcon className="dbKodaSVG" width={30} height={30} />
+                  </AnchorButton>
+                </Tooltip>
+              </div>
+            )}
           <Tooltip
             intent={Intent.PRIMARY}
             hoverOpenDelay={1000}
@@ -359,98 +631,308 @@ export default class Toolbar extends React.Component {
     );
   }
 
-  render() {
-    const currentOutput = this.props.store.outputPanel.currentTab;
-    // Determine toolbar context.
-    if (currentOutput.startsWith('TableView-')) {
-      this.state.context = OutputToolbarContexts.TABLE_VIEW;
+  @action.bound
+  getExistingOutputs() {
+    // Can always swap to Raw Output.
+    const existingOutputs = { raw: true };
+    if (
+      this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
+        .chartPanel
+    ) {
+      existingOutputs.chartPanel = true;
+    }
+    if (
+      this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
+        .enhancedJson
+    ) {
+      existingOutputs.enhancedJson = true;
+    }
+    if (
+      this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
+        .tableJson
+    ) {
+      existingOutputs.tableJson = true;
+    }
+    return existingOutputs;
+  }
+
+  @action.bound
+  openView(context) {
+    console.log('Opening View: ', context);
+    switch (context) {
+      case OutputToolbarContexts.RAW:
+        this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
+        break;
+      case OutputToolbarContexts.TABLE_VIEW:
+        this.props.store.outputPanel.currentTab =
+          'TableView-' + this.props.store.editorPanel.activeEditorId;
+        break;
+      case OutputToolbarContexts.CHART_VIEW:
+        this.props.store.outputPanel.currentTab =
+          'Chart-' + this.props.store.editorPanel.activeEditorId;
+        break;
+      case OutputToolbarContexts.ENHANCED_VIEW:
+        this.props.store.outputPanel.currentTab =
+          'EnhancedJson-' + this.props.store.editorPanel.activeEditorId;
+        break;
+      default:
+        break;
+    }
+  }
+
+  @action.bound
+  getLastLine(codeMirror) {
+    let linesSearched = 2;
+    let lastLine = codeMirror.getLine(codeMirror.lineCount() - linesSearched);
+    while (
+      lastLine &&
+      !lastLine.match(/{|}/gim) &&
+      linesSearched < 50 &&
+      linesSearched < codeMirror.lineCount()
+    ) {
+      linesSearched += 1;
+      lastLine = codeMirror.getLine(codeMirror.lineCount() - linesSearched);
+    }
+    if (linesSearched == codeMirror.lineCount() || !lastLine) {
+      return false;
+    }
+    return codeMirror.lineCount() - linesSearched;
+  }
+
+  @action.bound
+  openTableView() {
+    // Get the output instance:
+    const editor = this.props.editorRefs[
+      this.props.store.outputPanel.currentTab
+    ];
+    const cm = editor.getCodeMirror();
+
+    // Get the last line that we think is valid:
+    const lineNumber = this.getLastLine(cm);
+    if (!lineNumber) {
+      // Throw error.
+      runInAction(() => {
+        NewToaster.show({
+          message: globalString('output/editor/tabularError'),
+          className: 'warning',
+          icon: ''
+        });
+      });
     } else {
-      this.state.context = OutputToolbarContexts.DEFAULT;
+      const lines = { start: 0, end: 0, status: '' };
+
+      const currentJson = this.props.getDocumentAtLine(
+        this.props.store.outputPanel.currentTab,
+        lineNumber,
+        0,
+        lines
+      );
+
+      this.props.api.initJsonView(
+        currentJson,
+        this.props.store.outputPanel.currentTab,
+        'tableJson',
+        lines,
+        editor,
+        false
+      );
+    }
+  }
+
+  @action.bound
+  openJsonTreeView() {
+    // Get the output instance:
+    const editor = this.props.editorRefs[
+      this.props.store.outputPanel.currentTab
+    ];
+    const cm = editor.getCodeMirror();
+
+    // Get the last line that we think is valid:
+    const lineNumber = this.getLastLine(cm);
+    if (!lineNumber) {
+      // Throw error.
+      runInAction(() => {
+        NewToaster.show({
+          message: globalString('output/editor/tabularError'),
+          className: 'warning',
+          icon: ''
+        });
+      });
+    } else {
+      const lines = { start: 0, end: 0, status: '' };
+
+      const currentJson = this.props.getDocumentAtLine(
+        this.props.store.outputPanel.currentTab,
+        lineNumber,
+        0,
+        lines
+      );
+
+      this.props.api.initJsonView(
+        currentJson,
+        this.props.store.outputPanel.currentTab,
+        'enhancedJson',
+        lines
+      );
+    }
+  }
+
+  @action.bound
+  openChartView(fromTable) {
+    // Get the output instance:
+    let editor;
+    console.log(this.props.store.outputPanel);
+    if (fromTable) {
+      editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
+    } else {
+      editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
     }
 
-    switch (this.state.context) {
-      case OutputToolbarContexts.TABLE_VIEW:
-        return this.renderTableToolbar();
-      default:
-        return (
-          <nav className="pt-navbar pt-dark .modifier outputToolbar">
-            <div className="pt-navbar-group pt-align-left">
-              <div className="pt-navbar-heading">
-                {globalString('output/headings/default')}
-              </div>
-            </div>
-            <div className="pt-navbar-group pt-align-right">
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/clear')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="pt-intent-danger circleButton clearOutputBtn"
-                  onClick={this.clearOutput}
-                >
-                  <ClearOutputIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/showMore')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="showMoreBtn circleButton"
-                  onClick={this.showMore}
-                  disabled={
-                    this.props.store.outputPanel.currentTab == 'Default' ||
-                    this.props.store.outputPanel.currentTab.indexOf(
-                      'Explain',
-                    ) >= 0 ||
-                    this.props.store.outputPanel.currentTab.indexOf(
-                      'Details',
-                    ) >= 0 ||
-                    (this.props.store.outputs.get(
-                      this.props.store.outputPanel.currentTab,
-                    ) &&
-                      this.props.store.outputs.get(
-                        this.props.store.outputPanel.currentTab,
-                      ).cannotShowMore)
-                  }
-                >
-                  <ShowMoreIcon className="dbKodaSVG" width={30} height={30} />
-                </AnchorButton>
-              </Tooltip>
-              <Tooltip
-                intent={Intent.PRIMARY}
-                hoverOpenDelay={1000}
-                inline
-                content={globalString('output/toolbar/save')}
-                tooltipClassName="pt-dark"
-                position={Position.BOTTOM}
-              >
-                <AnchorButton
-                  className="saveOutputBtn circleButton"
-                  onClick={this.downloadOutput}
-                >
-                  <SaveOutputIcon
-                    className="dbKodaSVG"
-                    width={30}
-                    height={30}
-                  />
-                </AnchorButton>
-              </Tooltip>
-            </div>
-          </nav>
-        );
+    const cm = editor.getCodeMirror();
+
+    // Get the last line that we think is valid:
+    const lineNumber = this.getLastLine(cm);
+    if (!lineNumber) {
+      // Throw error.
+      runInAction(() => {
+        NewToaster.show({
+          message: globalString('output/editor/tabularError'),
+          className: 'warning',
+          icon: ''
+        });
+      });
+    } else {
+      const lines = { start: 0, end: 0, status: '' };
+
+      const currentJson = this.props.getDocumentAtLine(
+        this.props.store.outputPanel.currentTab,
+        lineNumber,
+        0,
+        lines
+      );
+
+      StaticApi.parseTableJson(
+        currentJson,
+        lines,
+        editor.getCodeMirror(),
+        this.props.store.outputPanel.currentTab
+      )
+        .then(result => {
+          runInAction(() => {
+            this.props.api.outputApi.showChartPanel(
+              this.props.store.outputPanel.currentTab,
+              result,
+              'loaded'
+            );
+          });
+        })
+        .catch(err => {
+          const message = globalString('output/editor/parseJsonError') + err;
+          runInAction(() => {
+            NewToaster.show({
+              message,
+              className: 'danger',
+              icon: ''
+            });
+          });
+
+          runInAction(() => {
+            this.props.api.outputApi.showChartPanel(
+              this.props.store.outputPanel.currentTab,
+              {},
+              'error',
+              message
+            );
+          });
+        });
     }
+  }
+
+  render() {
+    const currentOutput = this.props.store.outputPanel.currentTab;
+    if (currentOutput.startsWith('TableView-')) {
+      return this.renderTableToolbar();
+    } else if (currentOutput.startsWith('Enhanced')) {
+      return this.renderDefaultToolbar({
+        jsonView: true,
+        chartView: true,
+        tableView: true
+      });
+    } else if (currentOutput.startsWith('Chart')) {
+      return this.renderDefaultToolbar({ chartView: true, jsonView: true });
+    } else if (
+      this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
+    ) {
+      return this.renderDefaultToolbar({ raw: true });
+    }
+    return (
+      <nav className="pt-navbar pt-dark .modifier outputToolbar">
+        <div className="pt-navbar-group pt-align-left">
+          <div className="pt-navbar-heading">
+            {globalString('output/headings/default')}
+          </div>
+        </div>
+        <div className="pt-navbar-group pt-align-right">
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/clear')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="pt-intent-danger circleButton clearOutputBtn"
+              onClick={this.clearOutput}
+            >
+              <ClearOutputIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/showMore')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="showMoreBtn circleButton"
+              onClick={this.showMore}
+              disabled={
+                this.props.store.outputPanel.currentTab == 'Default' ||
+                this.props.store.outputPanel.currentTab.indexOf('Explain') >=
+                  0 ||
+                this.props.store.outputPanel.currentTab.indexOf('Details') >=
+                  0 ||
+                (this.props.store.outputs.get(
+                  this.props.store.outputPanel.currentTab
+                ) &&
+                  this.props.store.outputs.get(
+                    this.props.store.outputPanel.currentTab
+                  ).cannotShowMore)
+              }
+            >
+              <ShowMoreIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/save')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="saveOutputBtn circleButton"
+              onClick={this.downloadOutput}
+            >
+              <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+        </div>
+      </nav>
+    );
   }
 }

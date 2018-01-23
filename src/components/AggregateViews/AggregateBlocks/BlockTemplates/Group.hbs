@@ -1,5 +1,5 @@
-  { $group:{     _id:{ {{#each GroupByKeys}}"{{nodots AttributeName}}":"${{AttributeName}}" {{#unless last}},{{/unless}}{{/each}} }, 
+  { $group:{     _id:{ {{#each GroupByKeys}}"{{nodots AttributeName}}":"${{{AttributeName}}}" {{#unless last}},{{/unless}}{{/each}} }, 
              "count":{$sum:1}{{#each AggregateKeys}},
-             "{{nodots AttributeName}}-{{Aggregation}}":{${{Aggregation}}:"${{AttributeName}}"} {{/each}} 
+             "{{nodots AttributeName}}-{{{Aggregation}}}":{${{{Aggregation}}}:"${{{AttributeName}}}"} {{/each}} 
       }
   }

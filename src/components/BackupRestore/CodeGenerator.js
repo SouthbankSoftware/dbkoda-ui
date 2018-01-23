@@ -33,13 +33,27 @@
 import os from 'os';
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
-import {BackupRestoreActions} from '../common/Constants';
-import {dumpDB, dumpServer, exportDB, importCollection, restoreServer} from './Template';
-import {isDumpAction} from './Utils';
+import escapeDoubleQuotes from '~/helpers/handlebars/escapeDoubleQuotes';
+import { BackupRestoreActions } from '../common/Constants';
+import { dumpDB, dumpServer, exportDB, importCollection, restoreServer } from './Template';
+import { isDumpAction } from './Utils';
 
-const createTemplateObject = (state) => {
-  const {db, profile, exportType, parseGrace, mode} = state;
-  const {host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort, authenticationDatabase} = profile;
+Handlebars.registerHelper('escapeDoubleQuotes', escapeDoubleQuotes);
+
+const createTemplateObject = state => {
+  const { db, profile, exportType, parseGrace, mode } = state;
+  const {
+    host,
+    port,
+    sha,
+    hostRadio,
+    url,
+    database,
+    ssl,
+    ssh,
+    sshLocalPort,
+    authenticationDatabase
+  } = profile;
   const items = {
     ...profile,
     ...state,
