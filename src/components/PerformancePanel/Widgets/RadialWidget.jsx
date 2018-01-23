@@ -184,8 +184,8 @@ export default class RadialWidget extends Widget {
         return d.percentage / 100 * RadialWidget.PI;
       })
       .innerRadius(this._getInnerRadiusSize())
-      .outerRadius(this._getOuterRadiusSize());
-      // .cornerRadius(20);
+      .outerRadius(this._getOuterRadiusSize())
+      .cornerRadius((this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2);
   }
 
 
@@ -199,9 +199,7 @@ export default class RadialWidget extends Widget {
         d.previousValue = this._value;
       });
 
-    this.field.select('path.progress').transition().duration(1000).delay((d, i) => {
-      return i * 200;
-    })
+    this.field.select('path.progress').transition().duration(1000)
     // .ease('elastic')
       .attrTween('d', this.arcTween.bind(this))
       .style('fill', (d) => {
@@ -211,11 +209,6 @@ export default class RadialWidget extends Widget {
         return RadialWidget.colors[d.index];
       });
 
-    // field.select('text.icon').text((d) => {
-    //   return d.icon;
-    // }).attr('transform', (d) => {
-    //   return 'translate(10,' + -(150) + ')';
-    // });
     this.field.select('text.completed').text((d) => {
       return d.percentage + '%';
     });
