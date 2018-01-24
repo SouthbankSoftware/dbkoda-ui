@@ -184,11 +184,18 @@ export default class Toolbar extends React.Component {
     );
   }
 
+  /**
+   * When component mounts the hotkeys will be bound.
+   */
   componentDidMount() {
     // Add hotkey bindings for this component:
     Mousetrap.bindGlobal(OutputHotkeys.clearOutput.keys, this.clearOutput);
     Mousetrap.bindGlobal(OutputHotkeys.showMore.keys, this.showMore);
   }
+
+  /**
+   * When component unmounts the hotkeys will be unbound.
+   */
   componentWillUnmount() {
     Mousetrap.unbindGlobal(OutputHotkeys.clearOutput.keys, this.clearOutput);
     Mousetrap.unbindGlobal(OutputHotkeys.showMore.keys, this.showMore);
@@ -249,9 +256,6 @@ export default class Toolbar extends React.Component {
     ) {
       currentOutput.rawView = true;
     }
-
-    console.log('!!! - Existing Outputs: ', existingOutputs);
-    console.log('!!! - Current Output:  ', currentOutput);
 
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
@@ -651,31 +655,46 @@ export default class Toolbar extends React.Component {
     );
   }
 
+  /**
+   * Retrieves an object detailing which outputs are already existing.
+   */
   @action.bound
   getExistingOutputs() {
     // Can always swap to Raw Output.
     const existingOutputs = { raw: true };
     if (
       this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
-        .chartPanel
     ) {
-      existingOutputs.chartPanel = true;
-    }
-    if (
-      this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
-        .enhancedJson
-    ) {
-      existingOutputs.enhancedJson = true;
-    }
-    if (
-      this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
-        .tableJson
-    ) {
-      existingOutputs.tableJson = true;
+      if (
+        this.props.store.outputs.get(
+          this.props.store.editorPanel.activeEditorId
+        ).chartPanel
+      ) {
+        existingOutputs.chartPanel = true;
+      }
+      if (
+        this.props.store.outputs.get(
+          this.props.store.editorPanel.activeEditorId
+        ).enhancedJson
+      ) {
+        existingOutputs.enhancedJson = true;
+      }
+      if (
+        this.props.store.outputs.get(
+          this.props.store.editorPanel.activeEditorId
+        ).tableJson
+      ) {
+        existingOutputs.tableJson = true;
+      }
     }
     return existingOutputs;
   }
 
+  /**
+   * Find the last line in the Codemirror instance to contain a valid JSON object.
+   * @param {Object} codeMirror - The CodeMirror instance to fetch the last line of.
+   * @return {integer} - Returns the line number of the last valid line.
+   */
   @action.bound
   getLastLine(codeMirror) {
     let linesSearched = 2;
@@ -695,6 +714,10 @@ export default class Toolbar extends React.Component {
     return codeMirror.lineCount() - linesSearched;
   }
 
+  /**
+   * Creates a new table view from the current view.
+   * @param {boolean} fromChart - Determines whether or not the table should be generated from the chart view.
+   */
   @action.bound
   openTableView(fromChart) {
     let editor;
@@ -750,6 +773,9 @@ export default class Toolbar extends React.Component {
     }
   }
 
+  /**
+   * Opens an enhancedJSON View.
+   */
   @action.bound
   openJsonTreeView() {
     // Get the output instance:
@@ -788,6 +814,10 @@ export default class Toolbar extends React.Component {
     }
   }
 
+  /**
+   * Create a new Chart view from the current view.
+   * @param {boolean} fromTable - Determines whether or not the chart should be generated from the table view.
+   */
   @action.bound
   openChartView(fromTable) {
     // Get the output instance
