@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-24T13:15:39+11:00
+ * @Last modified time: 2018-01-24T15:28:53+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -117,7 +117,10 @@ export default class ProfileApi {
     }
     const query = {};
     let connectionUrl;
-    if (data.hostRadio || data.urlRadio === false) {
+    if (data.hostRadio === null || data.hostRadio === undefined) {
+      data.hostRadio = !data.urlRadio;
+    }
+    if (data.hostRadio) {
       connectionUrl = ProfileForm.mongoProtocol + data.host + ':' + data.port;
     } else if (data.urlRadio) {
       connectionUrl = data.url;
