@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-12T02:44:26+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-19T09:58:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,63 +34,65 @@ import mobx, { useStrict } from 'mobx';
 import { Provider } from 'mobx-react';
 import { AppContainer } from 'react-hot-loader';
 import { Broker, EventType } from './helpers/broker';
+import App from './components/App';
 
-// Patching Blueprint JS' ContextMenuTarget to always use light theme
 //
-// which is a better alternative to old hack:
-// HACK workaround for https://github.com/palantir/blueprint/issues/1539
-// setTimeout(() => {
-//   document.querySelector('.pt-popover.pt-minimal.pt-dark').classList.remove('pt-dark');
-// });
-const _ = require('lodash');
-const blueprintJs = require('@blueprintjs/core');
-
-const { ContextMenu } = blueprintJs;
-
-console.log(blueprintJs.ContextMenuTarget.toString());
-
-blueprintJs.ContextMenuTarget = function ContextMenuTarget(constructor) {
-  const { render, onContextMenuClose } = constructor.prototype;
-
-  // patching classes like this requires preserving function context
-  // tslint:disable-next-line only-arrow-functions
-  constructor.prototype.render = function() {
-    const _this = this;
-    /* tslint:disable:no-invalid-this */
-    const element = render.call(this);
-    if (element == null) {
-      // always return `element` in case caller is distinguishing between `null` and `undefined`
-      return element;
-    }
-    const oldOnContextMenu = element.props.onContextMenu;
-    const onContextMenu = function(e) {
-      // support nested menus (inner menu target would have called preventDefault())
-      if (e.defaultPrevented) {
-        return;
-      }
-      if (_.isFunction(_this.renderContextMenu)) {
-        const menu = _this.renderContextMenu(e);
-        if (menu != null) {
-          const darkTheme = false;
-          e.preventDefault();
-          ContextMenu.show(
-            menu,
-            { left: e.clientX, top: e.clientY },
-            onContextMenuClose,
-            darkTheme,
-          );
-        }
-      }
-      if (_.isFunction(oldOnContextMenu)) {
-        oldOnContextMenu(e);
-      }
-    };
-    return React.cloneElement(element, { onContextMenu });
-    /* tslint:enable:no-invalid-this */
-  };
-};
-
-const App = require('./components/App').default;
+// // Patching Blueprint JS' ContextMenuTarget to always use light theme
+// //
+// // which is a better alternative to old hack:
+// // HACK workaround for https://github.com/palantir/blueprint/issues/1539
+// // setTimeout(() => {
+// //   document.querySelector('.pt-popover.pt-minimal.pt-dark').classList.remove('pt-dark');
+// // });
+// const _ = require('lodash');
+// const blueprintJs = require('@blueprintjs/core');
+//
+// const { ContextMenu } = blueprintJs;
+//
+// console.log(blueprintJs.ContextMenuTarget.toString());
+//
+// blueprintJs.ContextMenuTarget = function ContextMenuTarget(constructor) {
+//   const { render, onContextMenuClose } = constructor.prototype;
+//
+//   // patching classes like this requires preserving function context
+//   // tslint:disable-next-line only-arrow-functions
+//   constructor.prototype.render = function() {
+//     const _this = this;
+//     /* tslint:disable:no-invalid-this */
+//     const element = render.call(this);
+//     if (element == null) {
+//       // always return `element` in case caller is distinguishing between `null` and `undefined`
+//       return element;
+//     }
+//     const oldOnContextMenu = element.props.onContextMenu;
+//     const onContextMenu = function(e) {
+//       // support nested menus (inner menu target would have called preventDefault())
+//       if (e.defaultPrevented) {
+//         return;
+//       }
+//       if (_.isFunction(_this.renderContextMenu)) {
+//         const menu = _this.renderContextMenu(e);
+//         if (menu != null) {
+//           const darkTheme = false;
+//           e.preventDefault();
+//           ContextMenu.show(
+//             menu,
+//             { left: e.clientX, top: e.clientY },
+//             onContextMenuClose,
+//             darkTheme,
+//           );
+//         }
+//       }
+//       if (_.isFunction(oldOnContextMenu)) {
+//         oldOnContextMenu(e);
+//       }
+//     };
+//     return React.cloneElement(element, { onContextMenu });
+//     /* tslint:enable:no-invalid-this */
+//   };
+// };
+//
+// const App = require('./components/App').default;
 
 const Globalize = require('globalize'); // doesn't work well with import
 

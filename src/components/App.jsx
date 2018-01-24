@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-13T11:36:07+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-19T11:25:47+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -40,6 +40,8 @@ import { SidebarPanel } from '#/SidebarPanel';
 import { Analytics } from '#/Analytics';
 import { StatusPanel } from '#/StatusBar';
 import { PerformancePanel } from '#/PerformancePanel';
+import { ProfileManager } from '#/ProfileManager';
+import { DrawerPanes } from '#/common/Constants';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -127,6 +129,7 @@ class App extends React.Component {
         {store.performancePanel ? (
           <PerformancePanel profileId={store.performancePanel.profileId} />
         ) : null}
+        {(store.drawer.drawerChild == DrawerPanes.PROFILE) ? (<ProfileManager />) : null}
         {process.env.NODE_ENV !== 'production' ? (
           <div className="DevTools">
             <DevTools position={{ right: -1000, top: 200 }} />

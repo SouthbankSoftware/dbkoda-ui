@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-13T10:45:49+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-24T13:24:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -49,7 +49,7 @@ export default class DataCenter {
     this.performancePanelApi = new PerformancePanelApi(store, this);
     this.widgetApi = new WidgetApi(store, this);
     this.editorApi = new EditorApi(store, this, config, profileStore);
-    this.profileApi = new ProfileApi(store, this, profileStore);
+    this.profileApi = new ProfileApi(store, this, profileStore, config);
     this.treeApi = new TreeApi(store, this);
     this.drillApi = new DrillApi(store, this);
 
@@ -114,7 +114,16 @@ export default class DataCenter {
     this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);
 
     // Profile API public functions
-    this.profileCreated = this.profileApi.profileCreated.bind(this);
+    _.assign(
+      this,
+      _.pick(this.profileApi, [
+        'profileCreated',
+        'setToasterCallback',
+        'connectProfile',
+        'saveProfile',
+        'getProfiles'
+      ]),
+    );
 
     // Drill API public functions
     this.addNewEditorForDrill = this.drillApi.addNewEditorForDrill.bind(this);

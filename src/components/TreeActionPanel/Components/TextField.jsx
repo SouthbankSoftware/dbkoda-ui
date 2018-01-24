@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-19T15:43:32+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-30T16:00:49+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-10T14:00:53+11:00
  */
 
 import React from 'react';
@@ -36,9 +36,13 @@ export default observer(({
   showLabel = true,
   formGroup = false
 }) => {
-  const fldClassName = formGroup
+  let fldClassName = formGroup
     ? 'pt-form-group form-group-inline'
     : 'pt-form-group pt-top-level';
+
+  if (field.error) {
+    fldClassName += ' pt-intent-danger';
+  }
   let inputClassName = 'pt-input';
   let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
   if (formGroup) {
@@ -66,10 +70,10 @@ export default observer(({
             intent={Intent.PRIMARY}
             position={Position.TOP}
           >
-            <input className={inputClassName} {...field.bind()} type="text" />
+            <input className={inputClassName} {...field.bind()} />
           </Tooltip>}
         {(!field.options || !field.options.tooltip) &&
-          <input className={inputClassName} {...field.bind()} type="text" />}
+          <input className={inputClassName} {...field.bind()} />}
         <p className="pt-form-helper-text">{field.error}</p>
       </div>
     </div>
