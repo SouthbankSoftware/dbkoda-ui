@@ -37,3 +37,11 @@ declare function globalNumber(value: number, config?: {}): string;
 /** Global types */
 declare type ComponentState = 'loading' | 'error' | 'loaded';
 declare type UUID = string;
+
+declare type Store = {
+  editors: Editors,
+  outputs: Outputs
+};
+
+declare type Editors = any;
+declare type Outputs = any;

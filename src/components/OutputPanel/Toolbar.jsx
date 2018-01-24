@@ -22,8 +22,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-09-27T08:44:23+10:00
+ * @Last modified by:   Michael
+ * @Last modified time: 2018-01-23T15:33:23+10:00
  */
 
 import React from 'react';
@@ -184,11 +184,18 @@ export default class Toolbar extends React.Component {
     );
   }
 
+  /**
+   * When component mounts the hotkeys will be bound.
+   */
   componentDidMount() {
     // Add hotkey bindings for this component:
     Mousetrap.bindGlobal(OutputHotkeys.clearOutput.keys, this.clearOutput);
     Mousetrap.bindGlobal(OutputHotkeys.showMore.keys, this.showMore);
   }
+
+  /**
+   * When component unmounts the hotkeys will be unbound.
+   */
   componentWillUnmount() {
     Mousetrap.unbindGlobal(OutputHotkeys.clearOutput.keys, this.clearOutput);
     Mousetrap.unbindGlobal(OutputHotkeys.showMore.keys, this.showMore);
@@ -250,9 +257,6 @@ export default class Toolbar extends React.Component {
       currentOutput.rawView = true;
     }
 
-    console.log('!!! - Existing Outputs: ', existingOutputs);
-    console.log('!!! - Current Output:  ', currentOutput);
-
     return (
       <nav className="pt-navbar pt-dark .modifier outputToolbar">
         <div className="pt-navbar-group pt-align-left">
@@ -273,7 +277,9 @@ export default class Toolbar extends React.Component {
                   disabled={disabledButtons.raw || currentOutput.rawView}
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    this.openView(OutputToolbarContexts.RAW);
+                    this.props.api.outputApi.openView(
+                      OutputToolbarContexts.RAW
+                    );
                   }}
                 >
                   <EnhanceJSONIcon
@@ -294,8 +300,13 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    if (existingOutputs.enhancedJson) {
-                      this.openView(OutputToolbarContexts.ENHANCED_VIEW);
+                    if (
+                      existingOutputs.enhancedJson &&
+                      !currentOutput.rawView
+                    ) {
+                      this.props.api.outputApi.openView(
+                        OutputToolbarContexts.ENHANCED_VIEW
+                      );
                     } else {
                       this.openJsonTreeView();
                     }
@@ -324,8 +335,15 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton tableViewButton"
                   onClick={() => {
-                    if (existingOutputs.tableJson) {
-                      this.openView(OutputToolbarContexts.TABLE_VIEW);
+                    if (currentOutput.chartView) {
+                      this.openTableView(true);
+                    } else if (
+                      existingOutputs.tableJson &&
+                      !currentOutput.rawView
+                    ) {
+                      this.props.api.outputApi.openView(
+                        OutputToolbarContexts.TABLE_VIEW
+                      );
                     } else {
                       this.openTableView();
                     }
@@ -349,8 +367,10 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton chartViewButton"
                   onClick={() => {
-                    if (existingOutputs.chartPanel) {
-                      this.openView(OutputToolbarContexts.CHART_VIEW);
+                    if (existingOutputs.chartPanel && !currentOutput.rawView) {
+                      this.props.api.outputApi.openView(
+                        OutputToolbarContexts.CHART_VIEW
+                      );
                     } else {
                       this.openChartView();
                     }
@@ -461,7 +481,9 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton rawButton"
                   onClick={() => {
-                    this.openView(OutputToolbarContexts.RAW);
+                    this.props.api.outputApi.openView(
+                      OutputToolbarContexts.RAW
+                    );
                   }}
                 >
                   <EnhanceJSONIcon
@@ -482,7 +504,9 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    this.openView(OutputToolbarContexts.ENHANCED_VIEW);
+                    this.props.api.outputApi.openView(
+                      OutputToolbarContexts.ENHANCED_VIEW
+                    );
                   }}
                   disabled={!existingOutputs.enhancedJson}
                 >
@@ -631,55 +655,46 @@ export default class Toolbar extends React.Component {
     );
   }
 
+  /**
+   * Retrieves an object detailing which outputs are already existing.
+   */
   @action.bound
   getExistingOutputs() {
     // Can always swap to Raw Output.
     const existingOutputs = { raw: true };
     if (
       this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
-        .chartPanel
     ) {
-      existingOutputs.chartPanel = true;
-    }
-    if (
-      this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
-        .enhancedJson
-    ) {
-      existingOutputs.enhancedJson = true;
-    }
-    if (
-      this.props.store.outputs.get(this.props.store.editorPanel.activeEditorId)
-        .tableJson
-    ) {
-      existingOutputs.tableJson = true;
+      if (
+        this.props.store.outputs.get(
+          this.props.store.editorPanel.activeEditorId
+        ).chartPanel
+      ) {
+        existingOutputs.chartPanel = true;
+      }
+      if (
+        this.props.store.outputs.get(
+          this.props.store.editorPanel.activeEditorId
+        ).enhancedJson
+      ) {
+        existingOutputs.enhancedJson = true;
+      }
+      if (
+        this.props.store.outputs.get(
+          this.props.store.editorPanel.activeEditorId
+        ).tableJson
+      ) {
+        existingOutputs.tableJson = true;
+      }
     }
     return existingOutputs;
   }
 
-  @action.bound
-  openView(context) {
-    console.log('Opening View: ', context);
-    switch (context) {
-      case OutputToolbarContexts.RAW:
-        this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.TABLE_VIEW:
-        this.props.store.outputPanel.currentTab =
-          'TableView-' + this.props.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.CHART_VIEW:
-        this.props.store.outputPanel.currentTab =
-          'Chart-' + this.props.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.ENHANCED_VIEW:
-        this.props.store.outputPanel.currentTab =
-          'EnhancedJson-' + this.props.store.editorPanel.activeEditorId;
-        break;
-      default:
-        break;
-    }
-  }
-
+  /**
+   * Find the last line in the Codemirror instance to contain a valid JSON object.
+   * @param {Object} codeMirror - The CodeMirror instance to fetch the last line of.
+   * @return {integer} - Returns the line number of the last valid line.
+   */
   @action.bound
   getLastLine(codeMirror) {
     let linesSearched = 2;
@@ -699,12 +714,31 @@ export default class Toolbar extends React.Component {
     return codeMirror.lineCount() - linesSearched;
   }
 
+  /**
+   * Creates a new table view from the current view.
+   * @param {boolean} fromChart - Determines whether or not the table should be generated from the chart view.
+   */
   @action.bound
-  openTableView() {
-    // Get the output instance:
-    const editor = this.props.editorRefs[
-      this.props.store.outputPanel.currentTab
-    ];
+  openTableView(fromChart) {
+    let editor;
+    if (fromChart) {
+      editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
+      runInAction(() => {
+        this.props.store.outputs.get(
+          this.props.store.editorPanel.activeEditorId
+        ).tableJson = {
+          json: this.props.store.outputs.get(
+            this.props.store.editorPanel.activeEditorId
+          ).chartPanel.data,
+          firstLine: 0,
+          lastLine: 20
+        };
+      });
+      this.props.store.outputPanel.currentTab =
+        'TableView-' + this.props.store.editorPanel.activeEditorId;
+      return;
+    }
+    editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
     const cm = editor.getCodeMirror();
 
     // Get the last line that we think is valid:
@@ -739,6 +773,9 @@ export default class Toolbar extends React.Component {
     }
   }
 
+  /**
+   * Opens an enhancedJSON View.
+   */
   @action.bound
   openJsonTreeView() {
     // Get the output instance:
@@ -777,16 +814,28 @@ export default class Toolbar extends React.Component {
     }
   }
 
+  /**
+   * Create a new Chart view from the current view.
+   * @param {boolean} fromTable - Determines whether or not the chart should be generated from the table view.
+   */
   @action.bound
   openChartView(fromTable) {
-    // Get the output instance:
+    // Get the output instance
     let editor;
-    console.log(this.props.store.outputPanel);
     if (fromTable) {
       editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
-    } else {
-      editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
+      runInAction(() => {
+        this.props.api.outputApi.showChartPanel(
+          this.props.store.editorPanel.activeEditorId,
+          this.props.store.outputs.get(
+            this.props.store.editorPanel.activeEditorId
+          ).tableJson.json,
+          'loaded'
+        );
+      });
+      return;
     }
+    editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
 
     const cm = editor.getCodeMirror();
 

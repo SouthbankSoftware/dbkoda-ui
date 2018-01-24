@@ -1,4 +1,5 @@
 /**
+ * @flow
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-15T12:03:27+11:00
  * @Email:  wahaj@southbanksoftware.com
@@ -75,3 +76,4 @@ export const OutputToolbarContexts = {
   CHART_VIEW: 'ChartView',
   ENHANCED_VIEW: 'JsonView'
 };
+declare type OutputToolbarContext = $Keys<typeof OutputToolbarContexts>;
