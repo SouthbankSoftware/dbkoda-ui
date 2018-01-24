@@ -2701,6 +2701,10 @@ d3-zoom@1.7.1:
     d3-selection "1"
     d3-transition "1"
 
+d3@^3.5.0:
+  version "3.5.17"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.17.tgz#bc46748004378b21a360c9fc7cf5231790762fb8"
+
 d3@^4.12.0:
   version "4.12.0"
   resolved "https://registry.yarnpkg.com/d3/-/d3-4.12.0.tgz#75eccb39ea40f6018de8cfa2752905bee7daa46f"
@@ -8066,6 +8070,12 @@ querystringify@0.0.x:
 querystringify@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-1.0.0.tgz#6286242112c5b712fa654e526652bf6a13ff05cb"
+
+radial-progress-chart@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/radial-progress-chart/-/radial-progress-chart-0.0.4.tgz#cf3684bb5c84cd2da7e27b35e1df92ebb3b772b2"
+  dependencies:
+    d3 "^3.5.0"
 
 raf@^3.1.0, raf@^3.2.0, raf@^3.4.0:
   version "3.4.0"

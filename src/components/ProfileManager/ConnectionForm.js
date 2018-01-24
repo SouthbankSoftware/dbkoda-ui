@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-24T14:17:38+11:00
+ * @Last modified time: 2018-01-24T14:40:28+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -68,7 +68,7 @@ export class ConnectionForm extends JsonForm {
     if (!this.isEditMode && !this.hasAliasChanged && field.subForm.name == 'Basic') {
       const isUrlMode = field.$('urlRadio').value;
       const aliasField = field.$('alias');
-      console.log('isUrlMode:', isUrlMode);
+
       if (!isUrlMode) {
         if (
           field.$('host').value.length > MAX_HOSTNAME_ALIAS_LENGTH &&
@@ -134,17 +134,17 @@ export class ConnectionForm extends JsonForm {
   }
 
   updateSchemaFromProfile(profile: Profile) {
+    this.isEditMode = true;
     for (const subform in this.formSchema) {
       if (this.formSchema.hasOwnProperty(subform)) {
         this.formSchema[subform].fields.forEach((field) => {
-          if (profile[field.name] !== null) {
+          if (profile[field.name] !== null && profile[field.name] !== undefined) {
             this.updateFieldValue(field, profile[field.name]);
             // field.value = profile[field.name];
           }
         });
       }
     }
-    this.isEditMode = true;
   }
 
   getProfileFromSchema(formData): Profile {
