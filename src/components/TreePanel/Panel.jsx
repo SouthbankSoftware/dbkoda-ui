@@ -22,8 +22,8 @@
 * @Author: Wahaj Shamim <wahaj>
 * @Date:   2017-03-07T11:38:53+11:00
 * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:56:28+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-19T11:29:27+11:00
 */
 
 import React from 'react';
@@ -101,7 +101,9 @@ export default class TreePanel extends React.Component {
               });
           }
         } else {
-          this.props.store.treePanel.isRefreshDisabled = true;
+          runInAction(() => {
+            this.props.store.treePanel.isRefreshDisabled = true;
+          });
           this.updateStatus('NOPROFILE');
         }
       } else {

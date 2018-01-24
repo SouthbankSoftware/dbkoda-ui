@@ -1,0 +1,258 @@
+{
+  "basic": {
+    "name": "Basic",
+    "fields": [
+      {
+        "name": "alias",
+        "label": "Connection Name",
+        "value": "Connection - 1",
+        "type": "text",
+        "column": 1
+      },
+      {
+        "name": "host",
+        "label": "Host",
+        "value": "localhost",
+        "type": "text",
+        "column": 1,
+        "disabled": false,
+        "checkbox": "disabled"
+      },
+      {
+        "name": "port",
+        "label": "Port",
+        "value": 27017,
+        "type": "number",
+        "options": {
+          "min": 0,
+          "max": 65535
+        },
+        "column": 1,
+        "disabled": false,
+        "checkbox": "disabled"
+      },
+      {
+        "name": "database",
+        "label": "Database",
+        "value": "admin",
+        "type": "text",
+        "column": 1
+      },
+      {
+        "name": "sha",
+        "value": false,
+        "label": "SCRAM-SHA-1(username/password)",
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["username", "password", "authenticationDatabase"]
+      },
+      {
+        "name": "username",
+        "label": "Username",
+        "icon": "user",
+        "type": "text",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "password",
+        "label": "Password",
+        "icon": "password",
+        "type": "password",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "authenticationDatabase",
+        "label": "Authentication Database",
+        "type": "text",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "urlRadio",
+        "label": "Use URI instead",
+        "value": false,
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["url", "host", "port"]
+      },
+      {
+        "name": "url",
+        "label": "URI",
+        "placeholder": "mongodb://",
+        "value": "mongodb://",
+        "type": "text",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      }
+    ]
+  },
+  "cluster": {
+    "name": "Cluster",
+    "fields": [
+      {
+        "name": "hostsList",
+        "label": "List of hosts:ports",
+        "value": "",
+        "type": "text",
+        "column": 1,
+        "rules": "string"
+      },
+      {
+        "name": "replicaSetName",
+        "label": "Replica Set Name",
+        "value": "",
+        "type": "text",
+        "column": 1,
+        "rules": "string"
+      },
+      {
+        "name": "w",
+        "label": "w",
+        "value": "",
+        "type": "text",
+        "column": 2,
+        "rules": "string"
+      },
+      {
+        "name": "wTimeout",
+        "label": "wtimeout",
+        "value": 0,
+        "type": "number",
+        "column": 2,
+        "rules": "string"
+      },
+      {
+        "name": "journal",
+        "label": "Journal",
+        "value": true,
+        "type": "checkbox",
+        "column": 2
+      },
+      {
+        "name": "readPref",
+        "label": "Read Preference",
+        "value": "primary",
+        "options": ["primary", "secondary"],
+        "type": "combo",
+        "column": 2
+      },
+      {
+        "name": "urlCluster",
+        "label": "URI",
+        "placeholder": "mongodb://",
+        "rules": "regex:/^mongodb:///",
+        "value": "mongodb://",
+        "type": "text",
+        "column": 2
+      }
+    ]
+  },
+  "advanced": {
+    "name": "Advanced",
+    "fields": [
+      {
+        "name": "ssl",
+        "value": false,
+        "label": "Use SSL for all connections",
+        "type": "checkbox",
+        "column": 1
+      },
+      {
+        "name": "sslAllowInvalidCertificates",
+        "value": false,
+        "label": "Allow invalid certificates",
+        "type": "checkbox",
+        "column": 1
+      }
+    ]
+  },
+  "url": {
+    "name": "URL Builder",
+    "fields": []
+  },
+  "ssh": {
+    "name": "SSH",
+    "fields": [
+      {
+        "name": "ssh",
+        "value": false,
+        "label": "Establish Direct OS Connection (for terminal and performance monitoring)",
+        "type": "checkbox",
+        "column": 1,
+        "refFields": ["remoteHost", "remoteUser", "remotePass"]
+      },
+      {
+        "name": "remoteHost",
+        "label": "HostName",
+        "value": "",
+        "type": "text",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "remoteUser",
+        "label": "Username",
+        "type": "text",
+        "value": "",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "remotePass",
+        "label": "Password",
+        "type": "password",
+        "value": "",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "sshTunnel",
+        "value": false,
+        "label": "Tunnel through this host for Mongo Connection",
+        "type": "checkbox",
+        "column": 1
+      },
+      {
+        "name": "keyRadio",
+        "value": false,
+        "label": "Use PEM Key File instead",
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["sshKeyFile", "passPhrase"]
+      },
+      {
+        "name": "sshKeyFile",
+        "label": "PEM Certificate Key File",
+        "type": "file",
+        "value": "",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "passPhrase",
+        "label": "Password for PE File",
+        "type": "password",
+        "value": "",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      }
+    ]
+  }
+}
