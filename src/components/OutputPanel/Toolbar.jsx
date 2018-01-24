@@ -273,7 +273,9 @@ export default class Toolbar extends React.Component {
                   disabled={disabledButtons.raw || currentOutput.rawView}
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    this.openView(OutputToolbarContexts.RAW);
+                    this.props.api.outputApi.openView(
+                      OutputToolbarContexts.RAW
+                    );
                   }}
                 >
                   <EnhanceJSONIcon
@@ -298,7 +300,9 @@ export default class Toolbar extends React.Component {
                       existingOutputs.enhancedJson &&
                       !currentOutput.rawView
                     ) {
-                      this.openView(OutputToolbarContexts.ENHANCED_VIEW);
+                      this.props.api.outputApi.openView(
+                        OutputToolbarContexts.ENHANCED_VIEW
+                      );
                     } else {
                       this.openJsonTreeView();
                     }
@@ -333,7 +337,9 @@ export default class Toolbar extends React.Component {
                       existingOutputs.tableJson &&
                       !currentOutput.rawView
                     ) {
-                      this.openView(OutputToolbarContexts.TABLE_VIEW);
+                      this.props.api.outputApi.openView(
+                        OutputToolbarContexts.TABLE_VIEW
+                      );
                     } else {
                       this.openTableView();
                     }
@@ -358,7 +364,9 @@ export default class Toolbar extends React.Component {
                   className="pt-intent-danger circleButton chartViewButton"
                   onClick={() => {
                     if (existingOutputs.chartPanel && !currentOutput.rawView) {
-                      this.openView(OutputToolbarContexts.CHART_VIEW);
+                      this.props.api.outputApi.openView(
+                        OutputToolbarContexts.CHART_VIEW
+                      );
                     } else {
                       this.openChartView();
                     }
@@ -469,7 +477,9 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton rawButton"
                   onClick={() => {
-                    this.openView(OutputToolbarContexts.RAW);
+                    this.props.api.outputApi.openView(
+                      OutputToolbarContexts.RAW
+                    );
                   }}
                 >
                   <EnhanceJSONIcon
@@ -490,7 +500,9 @@ export default class Toolbar extends React.Component {
                 <AnchorButton
                   className="pt-intent-danger circleButton jsonTreeViewButton"
                   onClick={() => {
-                    this.openView(OutputToolbarContexts.ENHANCED_VIEW);
+                    this.props.api.outputApi.openView(
+                      OutputToolbarContexts.ENHANCED_VIEW
+                    );
                   }}
                   disabled={!existingOutputs.enhancedJson}
                 >
@@ -662,30 +674,6 @@ export default class Toolbar extends React.Component {
       existingOutputs.tableJson = true;
     }
     return existingOutputs;
-  }
-
-  @action.bound
-  openView(context) {
-    console.log('Opening View: ', context);
-    switch (context) {
-      case OutputToolbarContexts.RAW:
-        this.props.store.outputPanel.currentTab = this.props.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.TABLE_VIEW:
-        this.props.store.outputPanel.currentTab =
-          'TableView-' + this.props.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.CHART_VIEW:
-        this.props.store.outputPanel.currentTab =
-          'Chart-' + this.props.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.ENHANCED_VIEW:
-        this.props.store.outputPanel.currentTab =
-          'EnhancedJson-' + this.props.store.editorPanel.activeEditorId;
-        break;
-      default:
-        break;
-    }
   }
 
   @action.bound
