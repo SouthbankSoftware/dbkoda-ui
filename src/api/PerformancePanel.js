@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:46:52+11:00
+ * @Last modified time: 2018-01-05T11:24:33+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,11 +26,14 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// eslint-disable-next-line
 import { action, observable } from 'mobx';
+import type { IObservableArray } from 'mobx';
+// $FlowFixMe
+import { featherClient } from '~/helpers/feathers';
 
 export type PerformancePanelState = {
   profileId: UUID,
+  widgets: IObservableArray<UUID>,
 };
 
 export default class PerformancePanelApi {
@@ -48,6 +51,7 @@ export default class PerformancePanelApi {
 
     const performancePanel: PerformancePanelState = {
       profileId,
+      widgets: observable.shallowArray(),
     };
 
     performancePanels.set(profileId, performancePanel);
@@ -76,7 +80,14 @@ export default class PerformancePanelApi {
   @action.bound
   closePerformancePanel(profileId: UUID, destroy: boolean = false) {
     if (destroy) {
-      this.removePerformancePanel(profileId);
+      const { performancePanels } = this.store;
+
+      if (performancePanels.has(profileId)) {
+        featherClient()
+          .statsService.remove(profileId)
+          .catch(console.error);
+        this.removePerformancePanel(profileId);
+      }
     }
 
     this.store.performancePanel = null;

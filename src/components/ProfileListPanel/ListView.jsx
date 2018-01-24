@@ -41,7 +41,7 @@ import {
   Menu,
   MenuDivider,
   MenuItem,
-  Position,
+  Position
 } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import { terminalTypes } from '~/api/Terminal';
@@ -59,7 +59,7 @@ const React = require('react');
   store: allStores.store,
   api: allStores.api,
   config: allStores.config,
-  profileStore: allStores.profileStore,
+  profileStore: allStores.profileStore
 }))
 @observer
 export default class ListView extends React.Component {
@@ -74,7 +74,7 @@ export default class ListView extends React.Component {
       passwordText: null,
       lastSelectRegion: null,
       remotePass: null,
-      passPhrase: null,
+      passPhrase: null
     };
     this.renderBodyContextMenu = this.renderBodyContextMenu.bind(this);
     this.openProfile = this.openProfile.bind(this);
@@ -93,13 +93,13 @@ export default class ListView extends React.Component {
           this.props.store.editorPanel.activeDropdownId != 'Default'
         ) {
           const editorProfile = this.props.profileStore.profiles.get(
-            this.props.store.editorPanel.activeDropdownId,
+            this.props.store.editorPanel.activeDropdownId
           );
           this.props.store.profileList.selectedProfile = editorProfile;
           this.setState({ lastSelectRegion: null });
           this.forceUpdate();
         }
-      },
+      }
     );
   }
 
@@ -188,7 +188,7 @@ export default class ListView extends React.Component {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: <span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message }} />, // eslint-disable-line react/no-danger
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
       });
   }
@@ -207,7 +207,7 @@ export default class ListView extends React.Component {
       Broker.emit(EventType.createShellOutputEvent(res.id, res.shellId), {
         id: res.id,
         shellId: res.shellId,
-        output: res.output.join('\n'),
+        output: res.output.join('\n')
       });
       position = Position.RIGHT_TOP;
       // @TODO -> Someone should go through these and see which are unchanged from a new connection.
@@ -241,7 +241,7 @@ export default class ListView extends React.Component {
         dbVersion: res.dbVersion,
         shellVersion: res.shellVersion,
         initialMsg: res.output ? res.output.join('\r') : '',
-        mongoType: res.mongoType,
+        mongoType: res.mongoType
       };
 
       if ('bRemotePass' in data) profile.bRemotePass = data.bRemotePass;
@@ -253,7 +253,7 @@ export default class ListView extends React.Component {
       this.props.store.profileList.selectedProfile = this.props.profileStore.profiles.get(res.id);
       Broker.emit(
         EventType.RECONNECT_PROFILE_CREATED,
-        this.props.profileStore.profiles.get(res.id),
+        this.props.profileStore.profiles.get(res.id)
       );
       this.props.store.editors.forEach((value, _) => {
         if (value.shellId == res.shellId) {
@@ -264,13 +264,13 @@ export default class ListView extends React.Component {
             .service('/mongo-shells')
             .create(
               {
-                id: res.id,
+                id: res.id
               },
               {
                 query: {
-                  shellId: value.shellId,
-                },
-              },
+                  shellId: value.shellId
+                }
+              }
             )
             .then(() => {
               value.status = ProfileStatus.OPEN;
@@ -285,7 +285,7 @@ export default class ListView extends React.Component {
     DBKodaToaster(position).show({
       message,
       className: 'success',
-      iconName: 'pt-icon-thumbs-up',
+      iconName: 'pt-icon-thumbs-up'
     });
 
     if (profile && profile.ssh) {
@@ -329,13 +329,13 @@ export default class ListView extends React.Component {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE,
               EventLogging.getFragmentEnum().PROFILES,
-              'User closed a profile connection.',
+              'User closed a profile connection.'
             );
           }
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up',
+            iconName: 'pt-icon-thumbs-up'
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
           this.props.api.deleteProfileFromDrill({ profile: selectedProfile });
@@ -352,13 +352,13 @@ export default class ListView extends React.Component {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,
               EventLogging.getFragmentEnum().PROFILES,
-              err.message,
+              err.message
             );
           }
           NewToaster.show({
             message: 'Error: ' + err.message,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
+            iconName: 'pt-icon-thumbs-down'
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
           this.closeConnectionCloseAlert();
@@ -368,13 +368,13 @@ export default class ListView extends React.Component {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
           EventLogging.getFragmentEnum().PROFILES,
-          'User attempted to close a connection profile with no profile selected..',
+          'User attempted to close a connection profile with no profile selected..'
         );
       }
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     }
     this.closeConnectionCloseAlert();
@@ -390,20 +390,20 @@ export default class ListView extends React.Component {
           EventLogging.recordManualEvent(
             EventLogging.getTypeEnum().WARNING,
             EventLogging.getFragmentEnum().PROFILES,
-            'User attempted to edit active profile..',
+            'User attempted to edit active profile..'
           );
         }
         NewToaster.show({
           message: globalString('profile/notClosed'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
       } else {
         if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
             EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG,
             EventLogging.getFragmentEnum().PROFILES,
-            'User opened the Edit Connection Profile drawer.',
+            'User opened the Edit Connection Profile drawer.'
           );
         }
         this.props.store.showConnectionPane();
@@ -413,13 +413,13 @@ export default class ListView extends React.Component {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
           EventLogging.getFragmentEnum().PROFILES,
-          'User attempted to edit with no profile selected.',
+          'User attempted to edit with no profile selected.'
         );
       }
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     }
   }
@@ -432,18 +432,19 @@ export default class ListView extends React.Component {
     profileStore.profiles.delete(profileId);
     profileStore.save();
     api.removeAllTerminalsForProfile(profileId);
+    api.closePerformancePanel(profileId, true);
 
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE,
         EventLogging.getFragmentEnum().PROFILES,
-        'User removed a profile..',
+        'User removed a profile..'
       );
     }
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
       className: 'success',
-      iconName: 'pt-icon-thumbs-up',
+      iconName: 'pt-icon-thumbs-up'
     });
     this.closeConnectionRemoveAlert();
   }
@@ -588,7 +589,7 @@ export default class ListView extends React.Component {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.OPEN_CONTEXT_MENU,
         EventLogging.getFragmentEnum().PROFILES,
-        'Opened a context menu for a profile.',
+        'Opened a context menu for a profile.'
       );
     }
     let connect;
@@ -631,7 +632,7 @@ export default class ListView extends React.Component {
                 intent={Intent.NONE}
                 iconName="pt-icon-document"
               />
-            </div>,
+            </div>
           );
         }
       });
@@ -680,7 +681,7 @@ export default class ListView extends React.Component {
             intent={Intent.NONE}
             iconName="pt-icon-new-text-box"
           />
-        </div>,
+        </div>
       );
       // terminalOperations.push(
       //   <div key={terminalOperations.length} className="menuItemWrapper">
@@ -708,7 +709,7 @@ export default class ListView extends React.Component {
           intent={Intent.NONE}
           iconName="pt-icon-new-text-box"
         />
-      </div>,
+      </div>
     );
 
     return (

@@ -20,7 +20,7 @@
 
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:44:52+11:00
+ * @Last modified time: 2018-01-04T00:22:22+11:00
  */
 
 import load from 'little-loader';
@@ -89,7 +89,7 @@ class FeatherClient {
       Broker.emit(EventType.STATS_DATA(profileId), payload);
     });
     this.statsService.on('error', ({ profileId, payload }) => {
-      Broker.emit(EventType.TERMINAL_ERROR(profileId), payload);
+      Broker.emit(EventType.STATS_ERROR(profileId), payload);
     });
 
     this.performanceSrv.on('performance-output', ({output}) => {

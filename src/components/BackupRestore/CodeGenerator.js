@@ -1,8 +1,14 @@
 /**
- * Created by joey on 24/7/17.
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-23T15:40:11+11:00
- *
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2017-08-29T12:59:18+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2017-08-29T13:59:27+10:00
+ */
+
+
+
+/*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -21,7 +27,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+/**
+ * Created by joey on 24/7/17.
+ */
 import os from 'os';
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
@@ -101,20 +109,14 @@ const createTemplateObject = state => {
   return items;
 };
 
-const getRestoreServerCommandObject = ({ profile, state }) => {
-  const itm = createTemplateObject({ ...state, profile });
+const getRestoreServerCommandObject = ({profile, state}) => {
+  const itm = createTemplateObject({...state, profile});
   itm.inputFile = state.directoryPath;
   return itm;
 };
 
-const getDumpServerCommandObject = ({ profile, state }) => {
-  const {
-    directoryPath,
-    allCollections,
-    collections,
-    selectedCollections,
-    dumpDbUsersAndRoles
-  } = state;
+const getDumpServerCommandObject = ({profile, state}) => {
+  const {directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles} = state;
   let targetCols = [];
   if (allCollections) {
     targetCols = collections;
@@ -123,8 +125,8 @@ const getDumpServerCommandObject = ({ profile, state }) => {
   }
   const cols = [];
   if (!dumpDbUsersAndRoles && !allCollections) {
-    targetCols.map(col => {
-      const items = createTemplateObject({ ...state, profile });
+    targetCols.map((col) => {
+      const items = createTemplateObject({...state, profile});
       items.database = col;
       if (directoryPath) {
         items.output = directoryPath;
@@ -134,20 +136,14 @@ const getDumpServerCommandObject = ({ profile, state }) => {
   }
 
   if (dumpDbUsersAndRoles || allCollections) {
-    const itm = createTemplateObject({ ...state, profile, db: null });
-    cols.push({ ...itm, output: directoryPath });
+    const itm = createTemplateObject({...state, profile, db: null});
+    cols.push({...itm, output: directoryPath});
   }
   return cols;
 };
 
-const getDBCollectionCommandObject = ({ profile, state, action }) => {
-  const {
-    directoryPath,
-    allCollections,
-    collections,
-    selectedCollections,
-    dumpDbUsersAndRoles
-  } = state;
+const getDBCollectionCommandObject = ({profile, state, action}) => {
+  const {directoryPath, allCollections, collections, selectedCollections, dumpDbUsersAndRoles} = state;
   let targetCols = [];
   if (allCollections) {
     targetCols = collections;
@@ -158,18 +154,12 @@ const getDBCollectionCommandObject = ({ profile, state, action }) => {
   if (!dumpDbUsersAndRoles && !(isDumpAction(action) && allCollections)) {
     // for dump, dumpDbUsersAndRoles can't be set with collections
     // for dump, should not split command for all collections
-    targetCols.map(col => {
-      const items = createTemplateObject({ ...state, profile });
+    targetCols.map((col) => {
+      const items = createTemplateObject({...state, profile});
       items.collection = col;
       if (directoryPath) {
-        if (
-          action === BackupRestoreActions.EXPORT_COLLECTION ||
-          action === BackupRestoreActions.EXPORT_DATABASE
-        ) {
-          items.output =
-            os.release().indexOf('Windows') >= 0
-              ? directoryPath + '\\' + col + '.json'
-              : directoryPath + '/' + col + '.json';
+        if (action === BackupRestoreActions.EXPORT_COLLECTION || action === BackupRestoreActions.EXPORT_DATABASE) {
+          items.output = os.release().indexOf('Windows') >= 0 ? directoryPath + '\\' + col + '.json' : directoryPath + '/' + col + '.json';
         } else {
           items.output = directoryPath;
         }
@@ -180,36 +170,36 @@ const getDBCollectionCommandObject = ({ profile, state, action }) => {
 
   if (isDumpAction(action)) {
     if (dumpDbUsersAndRoles || allCollections) {
-      const itm = createTemplateObject({ ...state, profile });
-      cols.push({ ...itm, output: directoryPath });
+      const itm = createTemplateObject({...state, profile});
+      cols.push({...itm, output: directoryPath});
     }
   }
   return cols;
 };
 
-const getImportCollectionCommandObject = ({ profile, state }) => {
-  const itm = createTemplateObject({ ...state, profile });
+const getImportCollectionCommandObject = ({profile, state}) => {
+  const itm = createTemplateObject({...state, profile});
   itm.inputFile = state.directoryPath;
   return itm;
 };
 
-export const getCommandObject = ({ profile, state, action }) => {
+export const getCommandObject = ({profile, state, action}) => {
   switch (action) {
     case BackupRestoreActions.DUMP_SERVER:
-      return getDumpServerCommandObject({ profile, state, action });
+      return getDumpServerCommandObject({profile, state, action});
     case BackupRestoreActions.IMPORT_DATABASE:
-      return [getImportCollectionCommandObject({ profile, state })];
+      return [getImportCollectionCommandObject({profile, state})];
     default:
-      return getDBCollectionCommandObject({ profile, state, action });
+      return getDBCollectionCommandObject({profile, state, action});
   }
 };
 
-export const filterOutParameters = ({ cols, shellVersion }) => {
+export const filterOutParameters = ({cols, shellVersion}) => {
   if (shellVersion) {
     const ver = parseFloat(shellVersion.substring(0, 3), 10);
     const deleteKeys = ['parseGrace', 'mode'];
     if (ver < 3.4) {
-      deleteKeys.map(key => {
+      deleteKeys.map((key) => {
         if (cols[key]) {
           delete cols[key];
         }
@@ -219,21 +209,21 @@ export const filterOutParameters = ({ cols, shellVersion }) => {
   return cols;
 };
 
-export const generateCode = ({ treeNode, profile, state, action, shellVersion }) => {
+export const generateCode = ({treeNode, profile, state, action, shellVersion}) => {
   let cols;
   if (action === BackupRestoreActions.DUMP_SERVER) {
-    cols = getDumpServerCommandObject({ treeNode, profile, state, action });
+    cols = getDumpServerCommandObject({treeNode, profile, state, action});
   } else {
-    cols = getCommandObject({ treeNode, profile, state, action });
+    cols = getCommandObject({treeNode, profile, state, action});
   }
   if (cols.constructor === Array) {
-    cols = cols.map(col => {
-      return filterOutParameters({ cols: col, shellVersion });
+    cols = cols.map((col) => {
+      return filterOutParameters({cols: col, shellVersion});
     });
   } else {
-    cols = filterOutParameters({ cols, shellVersion });
+    cols = filterOutParameters({cols, shellVersion});
   }
-  const values = { cols };
+  const values = {cols};
   switch (action) {
     case BackupRestoreActions.EXPORT_DATABASE:
     case BackupRestoreActions.EXPORT_COLLECTION: {
@@ -252,15 +242,15 @@ export const generateCode = ({ treeNode, profile, state, action, shellVersion })
     case BackupRestoreActions.RESTORE_SERVER:
     case BackupRestoreActions.RESTORE_COLLECTION:
     case BackupRestoreActions.RESTORE_DATABASE: {
-      cols = getRestoreServerCommandObject({ treeNode, profile, state, action });
-      cols = filterOutParameters({ cols, shellVersion });
+      cols = getRestoreServerCommandObject({treeNode, profile, state, action});
+      cols = filterOutParameters({cols, shellVersion});
       const template = Handlebars.compile(restoreServer);
       return template(cols);
     }
     case BackupRestoreActions.IMPORT_COLLECTION:
     case BackupRestoreActions.IMPORT_DATABASE: {
-      cols = getImportCollectionCommandObject({ treeNode, profile, state, action });
-      cols = filterOutParameters({ cols, shellVersion });
+      cols = getImportCollectionCommandObject({treeNode, profile, state, action});
+      cols = filterOutParameters({cols, shellVersion});
       const template = Handlebars.compile(importCollection);
       return template(cols);
     }
