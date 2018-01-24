@@ -3,7 +3,7 @@
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-24T10:09:31+11:00
+ * @Last modified time: 2018-01-24T14:12:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,6 +42,8 @@
    validationSchema: null
    formErrors: []
    validateErrors: null
+   @observable isFormInvalid: false;
+
    constructor(api) {
      this.api = api;
      this.formErrors = [];
@@ -51,6 +53,14 @@
 
    loadFormSchema(jsonSchema) {
      this.formSchema = observable(jsonSchema);
+
+     for (const subform in this.formSchema) {
+       if (this.formSchema.hasOwnProperty(subform)) {
+         this.formSchema[subform].fields.forEach(field => {
+           this.addAdditionalFieldProps(field, this.formSchema[subform]);
+         });
+       }
+     }
    }
    loadValidationSchema(jsonSchema) {
      this.validationSchema = jsonSchema;
@@ -64,7 +74,6 @@
      const subForm = this.formSchema[selectedSubform];
      if (subForm.fields) {
        subForm.fields.forEach((field) => {
-         this.addAdditionalFieldProps(field, selectedSubform);
          if (field.column === column) {
            fieldsCol.push(field);
          }
@@ -74,32 +83,29 @@
    }
 
    @action
-   addAdditionalFieldProps(field, subform) {
+   addAdditionalFieldProps(field, subForm) {
      field.id = field.name; // fix to add id as required by UI fields
-     field.subform = subform;
+     field.subForm = subForm;
+     field.$ = (siblingFieldName) => { // get Sibling field of the sub form
+       const refField = _.find(field.subForm.fields, (f) => {
+         return f.name === siblingFieldName;
+       });
+       return refField;
+     };
      extendObservable(field, { error: ''});
      field.onChange = action((e) => {
-       field.value = e.currentTarget.value;
-       if (field.refFields) {
-         this.updateReferencedFields(field);
-       }
+       this.updateFieldValue(field, e.currentTarget.value);
      });
      field.onBlur = () => {
        this.validateForm();
      };
      if (field.type == 'checkbox') {
        field.onClick = action((e) => {
-         field.value = e.currentTarget.checked;
-         if (field.refFields) {
-           this.updateReferencedFields(field);
-         }
+         this.updateFieldValue(field, e.currentTarget.checked);
        });
      } else if (field.type === 'number') {
        field.onValueChange = action((value) => {
-         field.value = value;
-         if (field.refFields) {
-           this.updateReferencedFields(field);
-         }
+         this.updateFieldValue(field, value);
        });
      }
      field.bind = () => {
@@ -115,8 +121,17 @@
    }
 
    @action
+   updateFieldValue(field, newValue) {
+     field.value = newValue;
+     if (field.refFields) {
+       this.updateReferencedFields(field);
+     }
+     this.validateForm();
+   }
+
+   @action
    updateReferencedFields(field) {
-     const subForm = this.formSchema[field.subform];
+     const { subForm } = field;
      if (subForm.fields) {
        for (const fld of field.refFields) {
          const refField = _.find(subForm.fields, (f) => {
@@ -134,6 +149,9 @@
    }
 
    validateForm() {
+     if (!this.validationSchema) {
+       throw (new Error('Validation Json schema is not set for the form.'));
+     }
      if (!this.validateErrors) {
        const ajv = new Ajv({removeAdditional: true, $data: true, allErrors: true});
        require('ajv-keywords')(ajv);
@@ -177,7 +195,7 @@
        }
        this.formErrors = errors;
      }
-
+     runInAction(() => { this.isFormInvalid = !(this.formErrors && this.formErrors.length <= 0); });
      return {status, formData};
    }
  }

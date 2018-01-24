@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-23T15:28:08+11:00
+ * @Last modified time: 2018-01-24T12:00:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -180,7 +180,7 @@ export default class ProfileManager extends React.Component<Props, State> {
                 <div className="profile-button-panel">
                   <Button
                     className={
-                      (this.form.formErrors.length > 0
+                      (this.form.isFormInvalid
                         ? 'inactive'
                         : 'active') +
                       ' connectButton pt-button pt-intent-success'
@@ -194,7 +194,7 @@ export default class ProfileManager extends React.Component<Props, State> {
                       .catch(() => this.setState({ connecting: false }));
                     }}
                     text={globalString('connection/form/connectButton')}
-                    disabled={this.form.formErrors.length > 0}
+                    disabled={this.form.isFormInvalid}
                     loading={this.state.connecting}
                   />
                 </div>
@@ -206,7 +206,7 @@ export default class ProfileManager extends React.Component<Props, State> {
                   />{' '}
                   <Button
                     className={
-                      (this.form.formErrors.length > 0
+                      (this.form.isFormInvalid
                         ? 'inactive'
                         : 'active') + ' test-button pt-button pt-intent-primary'
                     }

@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-22T09:52:30+11:00
+ * @Last modified time: 2018-01-24T13:24:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -120,7 +120,8 @@ export default class DataCenter {
         'profileCreated',
         'setToasterCallback',
         'connectProfile',
-        'saveProfile'
+        'saveProfile',
+        'getProfiles'
       ]),
     );
 

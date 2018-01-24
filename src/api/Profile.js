@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-22T16:33:01+11:00
+ * @Last modified time: 2018-01-24T13:15:39+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -79,6 +79,11 @@ export default class ProfileApi {
     callBack: (strErrorCode: String, err: Error | null) => void
   ) {
     this.toasterCallback = callBack;
+  }
+
+  getProfiles() {
+    const { profiles } = this.profileStore;
+    return profiles;
   }
 
   /**
