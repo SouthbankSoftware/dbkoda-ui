@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-23T14:14:39+11:00
+ * @Last modified time: 2018-01-25T12:20:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,20 +34,24 @@
   height: 100%;
 
   .connectionLeftPane {
-    width: 300px;
     height: 100%;
+    width: 100%;
     position: absolute;
     background-color: $panelLeftBackground;
   }
 
   .react-grid-layout {
     position: absolute;
-    left: 300px;
+    left: 0px;
     right: 0px;
   }
   .react-grid-item {
     background: darken($panelLeftBackground, 5);
     border-right: 1px solid $chartTooltipBackground;
+  }
+  .react-grid-item:first-child {
+    background: darken($panelLeftBackground, 5);
+    border: none;
   }
   .no-border {
     border: none;
@@ -115,9 +119,17 @@
 
   .menuBtns.pt-button-group {
     margin: 30px;
+    position: relative;
+    top: 35%;
+    transform: translateY(-50%);
     .pt-button {
       border-radius: 5px !important;
-      margin: 20px 11px;
+      margin: 10px 5px 10px 5px !important;
+    }
+  }
+  @media (max-width: 1140px) {
+    .menuBtns.pt-button-group {
+      margin: 20px;
     }
   }
 
@@ -125,6 +137,11 @@
 
   div > form {
     margin: 90px 30px 30px 30px;
+  }
+  @media (max-width: 1140px) {
+    div > form {
+      margin: 90px 20px 30px 20px;
+    }
   }
 
   input[type='text'],
@@ -177,9 +194,12 @@
 
   .form-title {
     text-align: center;
-    margin: 280px 0 35px 0;
+    margin: 35px 10px 35px 10px;
     color: $fieldHeadingFontColor;
     font-size: 16px;
+    position: relative;
+    top: 20%;
+    transform: translateY(-50%);
   }
 
   .form-group-inline {
@@ -531,7 +551,7 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    margin-top: 40px;
+    margin-top: 20px;
     button.pt-button {
       font-weight: lighter;
       color: $connectionButtonFontColour;

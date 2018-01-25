@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T11:21:04+11:00
+ * @Last modified time: 2018-01-25T11:56:01+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -171,13 +171,6 @@ export default class ProfileManager extends React.Component<Props, State> {
   render() {
     return (
       <div className="ProfileManager">
-        <div key="column0" className="connectionLeftPane">
-          <div className="form-title">
-            <span>{this.state.formTitle}</span>
-          </div>
-
-          {this.renderMenu()}
-        </div>
         <ReactGridLayout
           className="layout"
           layouts={{
@@ -188,15 +181,33 @@ export default class ProfileManager extends React.Component<Props, State> {
             desktop: 0
           }}
           cols={{
-            desktop: 10
+            desktop: 12
           }}
           verticalGridSize={9}
-          margin={[0, 10]}
+          margin={[1, 0]}
         >
+          <div
+            key="column0"
+            data-grid={{
+              x: 0,
+              y: 0,
+              w: 2,
+              h: 9,
+              static: true
+            }}
+          >
+            <div key="column0" className="connectionLeftPane">
+              <div className="form-title">
+                <span>{this.state.formTitle}</span>
+              </div>
+
+              {this.renderMenu()}
+            </div>
+          </div>
           <div
             key="column1"
             data-grid={{
-              x: 0,
+              x: 2,
               y: 1.5,
               w: 3.5,
               h: 5.5,
@@ -210,7 +221,7 @@ export default class ProfileManager extends React.Component<Props, State> {
           <div
             key="column2"
             data-grid={{
-              x: 3.5,
+              x: 5.5,
               y: 1.5,
               w: 3.5,
               h: 5.5,
@@ -225,7 +236,7 @@ export default class ProfileManager extends React.Component<Props, State> {
             key="column3"
             className="no-border"
             data-grid={{
-              x: 7,
+              x: 9,
               y: 1.5,
               w: 3,
               h: 5.5,
@@ -238,7 +249,7 @@ export default class ProfileManager extends React.Component<Props, State> {
             key="rowBottom"
             className="no-border"
             data-grid={{
-              x: 4,
+              x: 6,
               y: 7,
               w: 6,
               h: 2,
