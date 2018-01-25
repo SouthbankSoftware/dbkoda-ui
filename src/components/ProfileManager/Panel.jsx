@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T13:38:27+11:00
+ * @Last modified time: 2018-01-25T16:30:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -40,6 +40,7 @@ import NumericField from '#/TreeActionPanel/Components/NumericField';
 import BooleanField from '#/TreeActionPanel/Components/BooleanField';
 import FileField from '#/TreeActionPanel/Components/FileField';
 
+import TipsField from './TipsField';
 import { ConnectionForm } from './ConnectionForm';
 import './Panel.scss';
 
@@ -243,7 +244,7 @@ export default class ProfileManager extends React.Component<Props, State> {
               static: true
             }}
           >
-            <span>Panel reserved for TIPs</span>
+            <TipsField tips={this.form.getSubformTips(this.state.selectedSubform)} />
           </div>
           <div
             key="rowBottom"

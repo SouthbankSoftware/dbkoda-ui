@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T13:52:19+11:00
+ * @Last modified time: 2018-01-25T17:08:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,6 +38,33 @@
     width: 100%;
     position: absolute;
     background-color: $panelLeftBackground;
+  }
+
+  .tipsField {
+    .tips-heading {
+      margin: 80px 30px 10px 30px;
+      color: $connectionButtonFontColour;
+    }
+    div.pt-card {
+      margin: 10px 30px 0px 30px;
+      color: $connectionButtonFontColour;
+      background-color: $panelLeftBackground;
+      border-radius: 0px;
+      height: 350px;
+    }
+    div.profile-button-panel {
+      margin: 0px 30px 0px 30px !important;
+      .pt-button {
+        width: 50% !important;
+        margin: 0px;
+        border-style: none;
+        border-radius: 0px;
+      }
+      button:focus {
+        outline: none;
+        box-shadow: unset !important;
+      }
+    }
   }
 
   .react-grid-layout {
