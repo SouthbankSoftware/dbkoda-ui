@@ -21,12 +21,12 @@
  * @Author: chris
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-23T15:44:29+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-25T11:19:34+11:00
  */
 
 import React from 'react';
-import { action, toJS, reaction, observable } from 'mobx';
+import { action, toJS, reaction, observable, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton, Intent } from '@blueprintjs/core';
 import ConfigDatabaseIcon from '~/styles/icons/config-database-icon-1.svg';
@@ -49,9 +49,11 @@ export default class View extends React.Component {
 
   constructor(props) {
     super(props);
-    this.props.store.configPage.newSettings = observable(
-      toJS(this.props.config.settings),
-    );
+    runInAction(() => {
+      this.props.store.configPage.newSettings = observable(
+        toJS(this.props.config.settings),
+      );
+    });
     this.checkConfig = this.checkConfig.bind(this);
     this.getConfigForm = this.getConfigForm.bind(this);
     this.renderFieldLabel = this.renderFieldLabel.bind(this);

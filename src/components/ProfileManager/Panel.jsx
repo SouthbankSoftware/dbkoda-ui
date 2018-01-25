@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-24T12:00:51+11:00
+ * @Last modified time: 2018-01-25T11:21:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,10 +27,14 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button, ButtonGroup } from '@blueprintjs/core';
-import RGL, { WidthProvider } from 'react-grid-layout';
+import { Responsive } from 'react-grid-layout';
+import Mousetrap from 'mousetrap';
+import 'mousetrap-global-bind';
 
 import DataCenter from '~/api/DataCenter';
 
+import { DialogHotkeys } from '#/common/hotkeys/hotkeyList';
+import SizeProvider from '#/PerformancePanel/SizeProvider';
 import TextField from '#/TreeActionPanel/Components/TextField';
 import NumericField from '#/TreeActionPanel/Components/NumericField';
 import BooleanField from '#/TreeActionPanel/Components/BooleanField';
@@ -39,7 +43,7 @@ import FileField from '#/TreeActionPanel/Components/FileField';
 import { ConnectionForm } from './ConnectionForm';
 import './Panel.scss';
 
-const ReactGridLayout = WidthProvider(RGL);
+const ReactGridLayout = SizeProvider(Responsive);
 
 type Props = {
   store: any,
@@ -76,9 +80,37 @@ export default class ProfileManager extends React.Component<Props, State> {
     const { store, api } = this.props;
     this.form = new ConnectionForm(api);
     if (store && store.profileList.selectedProfile) {
-      this.setState({ formTitle: globalString('connection/editHeading')});
+      this.setState({ formTitle: globalString('connection/editHeading') });
       this.form.updateSchemaFromProfile(store.profileList.selectedProfile);
     }
+
+    this.submitDialog = this.submitDialog.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
+  }
+
+  componentWillMount() {
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.submitDialog);
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeDialog);
+  }
+
+  componentWillUnmount() {
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.submitDialog);
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeDialog);
+  }
+
+  submitDialog() {
+    this.setState({ connecting: true });
+    this.form
+      .onConnect()
+      .then(() => {
+        this.setState({ connecting: false });
+      })
+      .catch(() => this.setState({ connecting: false }));
+  }
+
+  closeDialog() {
+    const { store } = this.props;
+    store.hideConnectionPane();
   }
 
   renderUIFields(column) {
@@ -111,7 +143,8 @@ export default class ProfileManager extends React.Component<Props, State> {
     const subforms = this.form.getSubForms();
     subforms.forEach((formStr) => {
       const subForm = this.form.formSchema[formStr];
-      const btnClassName = 'btn-' + subForm.name.toLowerCase().replace(/\s/g, '');
+      const btnClassName =
+        'btn-' + subForm.name.toLowerCase().replace(/\s/g, '');
       menuBtns.push(
         <Button
           active={this.state.selectedSubform == formStr}
@@ -136,7 +169,6 @@ export default class ProfileManager extends React.Component<Props, State> {
   }
 
   render() {
-    const { store } = this.props;
     return (
       <div className="ProfileManager">
         <div key="column0" className="connectionLeftPane">
@@ -146,10 +178,30 @@ export default class ProfileManager extends React.Component<Props, State> {
 
           {this.renderMenu()}
         </div>
-        <ReactGridLayout className="layout" cols={10} rowHeight={150} margin={[0, 10]}>
+        <ReactGridLayout
+          className="layout"
+          layouts={{
+            desktop: []
+          }}
+          autoSize={false}
+          breakpoints={{
+            desktop: 0
+          }}
+          cols={{
+            desktop: 10
+          }}
+          verticalGridSize={9}
+          margin={[0, 10]}
+        >
           <div
             key="column1"
-            data-grid={{ x: 0, y: 1.5, w: 3.5, h: 3, static: true }}
+            data-grid={{
+              x: 0,
+              y: 1.5,
+              w: 3.5,
+              h: 5.5,
+              static: true
+            }}
           >
             <div className="pt-dark form-scrollable">
               <form>{this.renderUIFields(1)}</form>
@@ -157,7 +209,13 @@ export default class ProfileManager extends React.Component<Props, State> {
           </div>
           <div
             key="column2"
-            data-grid={{ x: 3.5, y: 1.5, w: 3.5, h: 3, static: true }}
+            data-grid={{
+              x: 3.5,
+              y: 1.5,
+              w: 3.5,
+              h: 5.5,
+              static: true
+            }}
           >
             <div className="pt-dark form-scrollable">
               <form>{this.renderUIFields(2)}</form>
@@ -166,33 +224,36 @@ export default class ProfileManager extends React.Component<Props, State> {
           <div
             key="column3"
             className="no-border"
-            data-grid={{ x: 7, y: 1.5, w: 3, h: 3, static: true }}
+            data-grid={{
+              x: 7,
+              y: 1.5,
+              w: 3,
+              h: 5.5,
+              static: true
+            }}
           >
             <span>Panel reserved for TIPs</span>
           </div>
           <div
             key="rowBottom"
             className="no-border"
-            data-grid={{ x: 4, y: 4.5, w: 6, h: 2, static: true }}
+            data-grid={{
+              x: 4,
+              y: 7,
+              w: 6,
+              h: 2,
+              static: true
+            }}
           >
             <div className="pt-dark form-scrollable">
               <form className="formButtons">
                 <div className="profile-button-panel">
                   <Button
                     className={
-                      (this.form.isFormInvalid
-                        ? 'inactive'
-                        : 'active') +
+                      (this.form.isFormInvalid ? 'inactive' : 'active') +
                       ' connectButton pt-button pt-intent-success'
                     }
-                    onClick={() => {
-                      this.setState({ connecting: true });
-                      this.form.onConnect()
-                      .then(() => {
-                        this.setState({ connecting: false });
-                      })
-                      .catch(() => this.setState({ connecting: false }));
-                    }}
+                    onClick={this.submitDialog}
                     text={globalString('connection/form/connectButton')}
                     disabled={this.form.isFormInvalid}
                     loading={this.state.connecting}
@@ -206,9 +267,8 @@ export default class ProfileManager extends React.Component<Props, State> {
                   />{' '}
                   <Button
                     className={
-                      (this.form.isFormInvalid
-                        ? 'inactive'
-                        : 'active') + ' test-button pt-button pt-intent-primary'
+                      (this.form.isFormInvalid ? 'inactive' : 'active') +
+                      ' test-button pt-button pt-intent-primary'
                     }
                     onClick={() => this.form.onTest()}
                     text={globalString('connection/form/testButton')}
@@ -228,7 +288,7 @@ export default class ProfileManager extends React.Component<Props, State> {
         <Button
           className="close-button pt-button pt-intent-primary"
           text="X"
-          onClick={() => store.hideConnectionPane()}
+          onClick={this.closeDialog}
         />
       </div>
     );

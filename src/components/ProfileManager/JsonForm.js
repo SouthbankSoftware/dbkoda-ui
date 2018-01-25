@@ -3,7 +3,7 @@
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-24T14:12:51+11:00
+ * @Last modified time: 2018-01-24T15:56:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -54,6 +54,7 @@
    loadFormSchema(jsonSchema) {
      this.formSchema = observable(jsonSchema);
 
+     // This loop will add the additional required properties which are required by renderer UI fields
      for (const subform in this.formSchema) {
        if (this.formSchema.hasOwnProperty(subform)) {
          this.formSchema[subform].fields.forEach(field => {
