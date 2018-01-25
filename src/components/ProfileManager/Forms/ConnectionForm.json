@@ -1,6 +1,6 @@
 {
   "basic": {
-    "name": "Basic",
+    "name": "Basic Connection",
     "fields": [
       {
         "name": "alias",
@@ -99,7 +99,7 @@
     ]
   },
   "cluster": {
-    "name": "Cluster",
+    "name": "Cluster Configuration",
     "fields": [
       {
         "name": "hostsList",
@@ -160,7 +160,7 @@
     ]
   },
   "advanced": {
-    "name": "Advanced",
+    "name": "Advanced Authentication",
     "fields": [
       {
         "name": "ssl",
@@ -183,7 +183,7 @@
     "fields": []
   },
   "ssh": {
-    "name": "SSH",
+    "name": "SSH Options",
     "fields": [
       {
         "name": "ssh",

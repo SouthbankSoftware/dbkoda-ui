@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T12:20:24+11:00
+ * @Last modified time: 2018-01-25T13:52:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,7 +47,7 @@
   }
   .react-grid-item {
     background: darken($panelLeftBackground, 5);
-    border-right: 1px solid $chartTooltipBackground;
+    border-right: 1px solid lighten($panelLeftBackground, 10);
   }
   .react-grid-item:first-child {
     background: darken($panelLeftBackground, 5);
@@ -120,11 +120,43 @@
   .menuBtns.pt-button-group {
     margin: 30px;
     position: relative;
-    top: 35%;
+    top: 40%;
     transform: translateY(-50%);
+    button:focus {
+      outline: none;
+      box-shadow: unset !important;
+    }
     .pt-button {
-      border-radius: 5px !important;
+      border-radius: 7px !important;
       margin: 10px 5px 10px 5px !important;
+      color: #EEE;
+      background-image: unset;
+      background-color: $connectionButtonBackgroundColour;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+      font-size: 14px;
+      font-weight: 100;
+      line-height: 30px;
+    }
+    .btn-basic.pt-active {
+      background-color: #749BA4;
+      border-color: #749BA4;
+    }
+    .btn-cluster.pt-active {
+      background-color: #77688A;
+      border-color: #77688A;
+    }
+    .btn-advanced.pt-active {
+      background-color: #5F92C8;
+      border-color: #5F92C8;
+    }
+    .btn-url.pt-active {
+      background-color: #C86B5E;
+      border-color: #C86B5E;
+    }
+    .btn-ssh.pt-active {
+      background-color: #A3C084;
+      border-color: #A3C084;
     }
   }
   @media (max-width: 1140px) {
@@ -556,11 +588,13 @@
       font-weight: lighter;
       color: $connectionButtonFontColour;
       width: 7em !important;
-      border-radius: 0;
       background-image: unset;
       background-color: $connectionButtonBackgroundColour;
       border: 1px solid $connectionButtonBorderColour;
       box-shadow: unset;
+      margin: 0px 10px;
+      border-radius: 7px;
+      font-size: small;
     }
     button.pt-button:hover {
       background-color: $connectionButtonBackgroundColourHover;
@@ -573,6 +607,7 @@
       background-color: $connectionButtonBackgroundColourReset;
       border: unset;
       box-shadow: unset;
+      border-radius: 7px;
     }
     button.reset-button:hover {
       background-color: $connectionButtonBackgroundColourResetHover;
@@ -580,13 +615,14 @@
     }
     button.connectButton {
       font-weight: lighter;
-      color: $connectionButtonFontColour;
+      color: #EEE;
       width: 7em;
       border-radius: 0;
       background-image: unset;
       background-color: $connectionButtonBackgroundColourConnect;
       border: unset;
       box-shadow: unset;
+      border-radius: 7px;
     }
     button.connectButton:hover {
       background-color: $connectionButtonBackgroundColourConnectHover;
