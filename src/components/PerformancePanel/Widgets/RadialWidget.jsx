@@ -43,7 +43,7 @@ import {Broker, EventType} from '../../../helpers/broker';
 })
 @observer
 export default class RadialWidget extends Widget {
-  static colors = ['#e90b3a', '#a0ff03', '#1ad5de'];
+  static colors = ['#853E56'];
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
