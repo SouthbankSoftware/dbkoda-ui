@@ -113,6 +113,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     widgets.push(api.addWidget(profileId, ['cpu'], {displayName: 'CPU'}));
     widgets.push(api.addWidget(profileId, ['memory'], {displayName: 'Memory'}));
+    widgets.push(api.addWidget(profileId, ['disk'], {displayName: 'Disk'}));
 
     // widgets.push(api.addWidget(profileId, ['memory']));
     // widgets.push(api.addWidget(profileId, ['topology']));
