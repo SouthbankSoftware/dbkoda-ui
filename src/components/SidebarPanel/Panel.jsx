@@ -3,7 +3,7 @@
  * @Date:   2017-04-21T09:24:34+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-01T10:22:01+10:00
+ * @Last modified time: 2018-01-29T11:41:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,7 +33,7 @@ import { Button } from '@blueprintjs/core';
 import { ProfileListPanel } from '#/ProfileListPanel';
 import { TreePanel } from '#/TreePanel';
 import TreeState from '#/TreePanel/model/TreeState.js';
-import { ConnectionProfilePanel } from '#/ConnectionPanel';
+// import { ConnectionProfilePanel } from '#/ConnectionPanel';
 import { AggregateLeftPanel } from '#/AggregateViews';
 import { TreeActionPanel } from '#/TreeActionPanel';
 import { DrawerPanes } from '#/common/Constants';
@@ -97,7 +97,7 @@ export default class Panel extends React.Component {
             </SplitPane>
           )}
 
-          {drawer.drawerChild == DrawerPanes.PROFILE && <ConnectionProfilePanel />}
+          {/* drawer.drawerChild == DrawerPanes.PROFILE && <ConnectionProfilePanel /> */}
 
           {drawer.drawerChild == DrawerPanes.DYNAMIC && <TreeActionPanel />}
 

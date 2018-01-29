@@ -3,7 +3,7 @@
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T16:27:17+11:00
+ * @Last modified time: 2018-01-29T12:55:17+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -162,8 +162,9 @@
        throw (new Error('Validation Json schema is not set for the form.'));
      }
      if (!this.validateErrors) {
-       const ajv = new Ajv({removeAdditional: true, $data: true, allErrors: true});
+       const ajv = new Ajv({removeAdditional: true, $data: true, allErrors: true, jsonPointers: true});
        require('ajv-keywords')(ajv);
+       require('ajv-errors')(ajv);
        this.validateErrors = ajv.compile(this.validationSchema);
      }
 
