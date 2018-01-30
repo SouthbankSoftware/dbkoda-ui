@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-24T15:30:55+11:00
+ * @Last modified time: 2018-01-30T11:34:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -44,9 +44,25 @@ export class ConnectionForm extends JsonForm {
     this.isEditMode = false;
   }
 
+  getSubformFields(selectedSubform, column) {
+    const fieldsCol = [];
+    const subForm = this.formSchema[selectedSubform];
+    if (subForm.fields) {
+      subForm.fields.forEach((field) => {
+        if (field.name === 'alias') {
+          this.updateAlias(field);
+        }
+        if (field.column === column) {
+          fieldsCol.push(field);
+        }
+      });
+    }
+    return fieldsCol;
+  }
+
   @action
   updateFieldValue(field, newValue) {
-    if (field.name == 'alias' && field.value !== newValue) {
+    if (field.name === 'alias' && field.value !== newValue) {
       this.hasAliasChanged = true;
     }
     if (field.type === 'number' && typeof newValue === 'string') {
@@ -65,7 +81,7 @@ export class ConnectionForm extends JsonForm {
 
   @action
   updateAlias(field) {
-    if (!this.isEditMode && !this.hasAliasChanged && field.subForm.name == 'Basic') {
+    if (!this.isEditMode && !this.hasAliasChanged && field.subForm.name == 'Basic Connection') {
       const isUrlMode = field.$('urlRadio').value;
       const aliasField = field.$('alias');
 
