@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-30T15:40:02+11:00
+ * @Last modified time: 2018-01-30T16:49:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -250,7 +250,7 @@ export default class ProfileManager extends React.Component<Props, State> {
           </div>
           <div
             key="rowBottom"
-            className="no-border"
+            className="no-border minus-one-z-index"
             data-grid={{
               x: 6,
               y: 7,

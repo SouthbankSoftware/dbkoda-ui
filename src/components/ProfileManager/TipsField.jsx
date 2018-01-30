@@ -3,7 +3,7 @@
  * @Date:   2018-01-25T15:46:41+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T17:06:47+11:00
+ * @Last modified time: 2018-01-30T16:31:13+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -89,19 +89,17 @@
              <Button
                className={
                  (this.state.prevEnabled ? 'active' : 'inactive') +
-                 ' pt-button pt-intent-primary'
+                 ' pt-button pt-intent-primary pt-icon-chevron-left'
                }
                onClick={this.onPrevTip}
-               text="<"
                disabled={!this.state.prevEnabled}
              />
              <Button
                className={
                  (this.state.nextEnabled ? 'active' : 'inactive') +
-                 ' pt-button pt-intent-primary'
+                 ' pt-button pt-intent-primary pt-icon-chevron-right'
                }
                onClick={this.onNextTip}
-               text=">"
                disabled={!this.state.nextEnabled}
              />
            </div>
