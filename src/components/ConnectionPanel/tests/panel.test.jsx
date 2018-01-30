@@ -2,8 +2,8 @@
  * @Author: chris
  * @Date:   2017-04-21T10:59:57+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:47:51+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-30T13:47:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,6 +24,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
 import React from 'react';
 import '~/helpers/configEnzyme';
 import { mount } from 'enzyme';
@@ -77,3 +78,4 @@ describe('New Connection Profile Panel', () => {
     expect(app.find('.url-input')).to.not.be.disabled();
   });
 });
+*/

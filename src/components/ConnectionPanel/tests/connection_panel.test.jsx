@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-21T10:47:14+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:19:05+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-30T13:47:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,6 +24,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
 import React from 'react';
 import '~/helpers/configEnzyme';
 import { mount } from 'enzyme';
@@ -74,3 +75,4 @@ describe('New Profile Panel', () => {
     expect(app.find('.hostRadio-radio-input')).to.have.length(3);
   });
 });
+*/
