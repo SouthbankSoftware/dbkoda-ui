@@ -3,7 +3,7 @@
  * @Date:   2018-01-25T15:46:41+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-30T16:31:13+11:00
+ * @Last modified time: 2018-01-31T09:35:53+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -79,7 +79,7 @@
 
    render() {
      return (
-       <div className="tipsField">
+       <div className="tips-field">
          <div className="pt-form-content">
            <h5 className="tips-heading">Tips</h5>
            <Card interactive={false} elevation={0}>

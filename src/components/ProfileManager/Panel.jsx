@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-30T16:49:25+11:00
+ * @Last modified time: 2018-01-31T09:35:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -165,7 +165,7 @@ export default class ProfileManager extends React.Component<Props, State> {
     });
 
     return (
-      <ButtonGroup className="menuBtns" minimal={false} large vertical fill>
+      <ButtonGroup className="menu-btns" minimal={false} large vertical fill>
         {menuBtns}
       </ButtonGroup>
     );
@@ -200,11 +200,13 @@ export default class ProfileManager extends React.Component<Props, State> {
             }}
           >
             <div key="column0" className="connectionLeftPane">
-              <div className="form-title">
-                <span>{this.state.formTitle}</span>
-              </div>
+              <div className="connection-form">
+                <div className="form-title">
+                  <span>{this.state.formTitle}</span>
+                </div>
 
-              {this.renderMenu()}
+                {this.renderMenu()}
+              </div>
             </div>
           </div>
           <div

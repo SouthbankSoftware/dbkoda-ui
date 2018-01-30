@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-30T16:56:22+11:00
+ * @Last modified time: 2018-01-31T09:47:34+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,9 +38,60 @@
     width: 100%;
     position: absolute;
     background-color: $panelLeftBackground;
+
+    .connection-form {
+      position: relative;
+      top: 38%;
+      transform: translateY(-50%);
+      // Button Menu styling
+      .menu-btns.pt-button-group {
+        margin: 30px;
+        button:focus {
+          outline: none;
+          box-shadow: unset !important;
+        }
+        .pt-button {
+          border-radius: 7px !important;
+          margin: 10px 5px 10px 5px !important;
+          color: #EEE;
+          background-image: unset;
+          background-color: $connectionButtonBackgroundColour;
+          border: 1px solid $connectionButtonBorderColour;
+          box-shadow: unset;
+          font-size: 14px;
+          font-weight: 100;
+          line-height: 30px;
+        }
+        .btn-basic.pt-active {
+          background-color: #749BA4;
+          border-color: #749BA4;
+        }
+        .btn-cluster.pt-active {
+          background-color: #77688A;
+          border-color: #77688A;
+        }
+        .btn-advanced.pt-active {
+          background-color: #5F92C8;
+          border-color: #5F92C8;
+        }
+        .btn-url.pt-active {
+          background-color: #C86B5E;
+          border-color: #C86B5E;
+        }
+        .btn-ssh.pt-active {
+          background-color: #A3C084;
+          border-color: #A3C084;
+        }
+      }
+      @media (max-width: 1140px) {
+        .menu-btns.pt-button-group {
+          margin: 20px;
+        }
+      }
+    }
   }
 
-  .tipsField {
+  .tips-field {
     .tips-heading {
       margin: 80px 30px 10px 30px;
       color: $connectionButtonFontColour;
@@ -51,6 +102,11 @@
       background-color: $panelLeftBackground;
       border-radius: 0px;
       height: 300px;
+    }
+    @media (max-height: 730px) {
+      div.pt-card {
+        height: 250px;
+      }
     }
     div.profile-button-panel {
       margin: 0px 30px 0px 30px !important;
@@ -159,55 +215,7 @@
     }
   }
 
-  // Button Menu styling
 
-  .menuBtns.pt-button-group {
-    margin: 30px;
-    position: relative;
-    top: 40%;
-    transform: translateY(-50%);
-    button:focus {
-      outline: none;
-      box-shadow: unset !important;
-    }
-    .pt-button {
-      border-radius: 7px !important;
-      margin: 10px 5px 10px 5px !important;
-      color: #EEE;
-      background-image: unset;
-      background-color: $connectionButtonBackgroundColour;
-      border: 1px solid $connectionButtonBorderColour;
-      box-shadow: unset;
-      font-size: 14px;
-      font-weight: 100;
-      line-height: 30px;
-    }
-    .btn-basic.pt-active {
-      background-color: #749BA4;
-      border-color: #749BA4;
-    }
-    .btn-cluster.pt-active {
-      background-color: #77688A;
-      border-color: #77688A;
-    }
-    .btn-advanced.pt-active {
-      background-color: #5F92C8;
-      border-color: #5F92C8;
-    }
-    .btn-url.pt-active {
-      background-color: #C86B5E;
-      border-color: #C86B5E;
-    }
-    .btn-ssh.pt-active {
-      background-color: #A3C084;
-      border-color: #A3C084;
-    }
-  }
-  @media (max-width: 1140px) {
-    .menuBtns.pt-button-group {
-      margin: 20px;
-    }
-  }
 
   // Dynamic Form styling
 
@@ -273,9 +281,6 @@
     margin: 35px 10px 35px 10px;
     color: $fieldHeadingFontColor;
     font-size: 16px;
-    position: relative;
-    top: 20%;
-    transform: translateY(-50%);
   }
 
   .form-group-inline {
@@ -308,6 +313,7 @@
 
     .pt-file {
       width: calc(100% - 80px);
+      min-width: 120px;
     }
     .pt-file-button {
       width: 80px;
