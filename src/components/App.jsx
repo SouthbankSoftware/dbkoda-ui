@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-19T11:25:47+11:00
+ * @Last modified time: 2018-01-30T14:12:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -129,7 +129,7 @@ class App extends React.Component {
         {store.performancePanel ? (
           <PerformancePanel profileId={store.performancePanel.profileId} />
         ) : null}
-        {(store.drawer.drawerChild == DrawerPanes.PROFILE) ? (<ProfileManager />) : null}
+        {(store.drawer && store.drawer.drawerChild == DrawerPanes.PROFILE) ? (<ProfileManager />) : null}
         {process.env.NODE_ENV !== 'production' ? (
           <div className="DevTools">
             <DevTools position={{ right: -1000, top: 200 }} />
