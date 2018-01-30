@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T16:30:20+11:00
+ * @Last modified time: 2018-01-30T15:40:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -52,7 +52,9 @@ type Props = {
 };
 
 type State = {
-  selectedSubform: string
+  selectedSubform: string,
+  formTitle: string,
+  isConnecting: boolean
 };
 @inject(({ store, api }) => {
   return {
@@ -72,7 +74,7 @@ export default class ProfileManager extends React.Component<Props, State> {
   state = {
     selectedSubform: 'basic',
     formTitle: globalString('connection/createHeading'),
-    connecting: false
+    isConnecting: false
   };
 
   constructor(props: Props) {
@@ -100,13 +102,13 @@ export default class ProfileManager extends React.Component<Props, State> {
   }
 
   submitDialog() {
-    this.setState({ connecting: true });
+    this.setState({ isConnecting: true });
     this.form
       .onConnect()
       .then(() => {
-        this.setState({ connecting: false });
+        this.setState({ isConnecting: false });
       })
-      .catch(() => this.setState({ connecting: false }));
+      .catch(() => this.setState({ isConnecting: false }));
   }
 
   closeDialog() {
@@ -114,7 +116,7 @@ export default class ProfileManager extends React.Component<Props, State> {
     store.hideConnectionPane();
   }
 
-  renderUIFields(column) {
+  renderUIFields(column: number) {
     const fields = this.form.getSubformFields(
       this.state.selectedSubform,
       column
@@ -268,7 +270,7 @@ export default class ProfileManager extends React.Component<Props, State> {
                     onClick={this.submitDialog}
                     text={globalString('connection/form/connectButton')}
                     disabled={this.form.isFormInvalid}
-                    loading={this.state.connecting}
+                    loading={this.state.isConnecting}
                   />
                 </div>
                 <div className="profile-button-panel">
