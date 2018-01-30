@@ -22,9 +22,10 @@
     "node": ">= 8.9.1"
   },
   "scripts": {
-    "postinstall": "yarn patch:xterm && yarn patch:globalize-webpack-plugin",
+    "postinstall": "yarn patch:xterm && yarn patch:globalize-webpack-plugin && yarn patch:blueprintjs",
     "patch:xterm": "yarn upgrade xterm && cd node_modules/xterm && yarn install",
     "patch:globalize-webpack-plugin": "shx cp ./patch/globalize-webpack-plugin/DevelopmentModePlugin.js ./node_modules/globalize-webpack-plugin",
+    "patch:blueprintjs": "shx cp ./patch/blueprintjs/contextMenuTarget.js ./node_modules/@blueprintjs/core/dist/esm/components/context-menu/",
     "dev": "webpack-dev-server --config webpack/dev.js",
     "dev:test": "UAT=true yarn run dev",
     "dev:install": "yarn install --ignore-scripts",
