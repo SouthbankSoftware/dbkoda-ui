@@ -3,9 +3,9 @@
  *
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:15:28+11:00
- * @Email:  guan@southbanksoftware.com
- * @Last modified by:   Michael
- * @Last modified time: 2018-01-31T9:55:00+11:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-01-31T23:22:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,20 +33,17 @@ import { Responsive } from 'react-grid-layout';
 import { Button } from '@blueprintjs/core';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import type { PerformancePanelState } from '~/api/PerformancePanel';
-// import Widget from '#/PerformancePanel/Widgets/Widget';
-import RadialWidget from '#/PerformancePanel/Widgets/RadialWidget';
-import StackedRadialWidget from '#/PerformancePanel/Widgets/StackedRadialWidget';
+import type { WidgetMetaData, PerformancePanelState } from '~/api/PerformancePanel';
 // $FlowFixMe
 import { NewToaster } from '#/common/Toaster';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import SizeProvider from './SizeProvider';
+import * as widgetTypes from './Widgets';
 import './Panel.scss';
 
 const ResponsiveReactGridLayout = SizeProvider(Responsive);
 
-//= =======| Flow Type Definitions |===//
 type Store = {
   performancePanel: PerformancePanelState
 };
@@ -64,9 +61,7 @@ type State = {
   widgetHeight: number,
   widgetWidth: number
 };
-//= ==============================//
 
-// Inject Store.
 @inject(({ store: { performancePanels }, api }, { profileId }) => {
   const performancePanel = performancePanels.get(profileId);
   return {
@@ -76,11 +71,10 @@ type State = {
     api
   };
 })
-/**
- * Performance Panel defines the layout and creation of widgets in the performance view.
- * @TODO - The current logic is pretty messy, we can probably refactor this to be simpler.
- */
 @observer
+/**
+ * Performance Panel defines the layout and creation of widgets in the performance view
+ */
 export default class PerformancePanel extends React.Component<Props, State> {
   static defaultProps = {
     store: null,
@@ -96,19 +90,22 @@ export default class PerformancePanel extends React.Component<Props, State> {
       },
       rows: 8,
       cols: 10,
-      widgetHeight: 4,
-      widgetWidth: 4
+      widgetHeight: 2,
+      widgetWidth: 2
     };
   }
 
   /**
-   * Generate Layout for the panel based on added widgets.
-   * @param {int} cols - Number of columns desired.
-   * @param {int} widgetHeight - The desired height of each widget.
-   * @param {int} widgetWidth - The desired width of each widget.
+   * TODO: @wahaj generate layout from panel schema
+   * TIP: @mike beautiful code should be self-explanatory as much as possible in the first place,
+   * then we can add some flow annotations to help understanding, if still confusing,
+   * then we can add some comments to help understanding. Please avoid exceesive commenting :)
    *
+   * @param cols - total number of grid columns
+   * @param widgetHeight - widget height in grid unit
+   * @param widgetWidth - widget width in grid unit
    */
-  _generateLayouts = (cols, widgetHeight, widgetWidth) => {
+  _generateLayouts = (cols: number, widgetHeight: number, widgetWidth: number) => {
     const { widgets } = this.props.store.performancePanel;
 
     return {
@@ -117,77 +114,57 @@ export default class PerformancePanel extends React.Component<Props, State> {
         h: widgetHeight,
         x: (i * widgetWidth) % cols,
         y: Math.floor(i / cols),
-        i: v
+        i: v.id
       }))
     };
   };
 
   _addDemoWidgets = action(() => {
-    const {
-      api,
-      profileId,
-      store: { performancePanel: { widgets } }
-    } = this.props;
+    const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
 
-    // $FlowFixMe
+    // widgets.push({
+    //   id: api.addWidget(profileId, ['cpu'], { displayName: 'CPU' }),
+    //   type: 'RadialWidget'
+    // });
+    // widgets.push({
+    //   id: api.addWidget(profileId, ['memory'], { displayName: 'Memory' }),
+    //   type: 'RadialWidget'
+    // });
+    // widgets.push({
+    //   id: api.addWidget(profileId, ['disk'], { displayName: 'Disk' }),
+    //   type: 'RadialWidget'
+    // });
+
+    // TIP: easier to dev widget with dummy observable
+
     widgets.push({
-      id: api.addWidget(profileId, ['cpu'], { displayName: 'CPU' }),
-      type: 'radial'
-    });
-    // $FlowFixMe
-    widgets.push({
-      id: api.addWidget(profileId, ['memory'], { displayName: 'Memory' }),
-      type: 'radial'
-    });
-    // $FlowFixMe
-    widgets.push({
-      id: api.addWidget(profileId, ['disk'], { displayName: 'Disk' }),
-      type: 'radial'
+      id: api.addWidget(profileId, ['item-1']),
+      type: 'Widget'
     });
 
-    // widgets.push(api.addWidget(profileId, ['memory']));
-    // widgets.push(api.addWidget(profileId, ['topology']));
-    // widgets.push(api.addWidget(profileId, ['serverStatus']));
+    widgets.push({
+      id: api.addWidget(profileId, ['item-1']),
+      type: 'ArrowWidget'
+    });
 
-    // $FlowFixMe
-    /*     widgets.push({
-      id: api.addWidget(profileId, ['cpu', 'memory', 'disk'], {
-        displayName: 'CPU'
+    widgets.push({
+      id: api.addWidget(profileId, ['item-1'], {
+        displayName: 'Dummy'
       }),
-      type: 'stackedRadial'
-    }); */
+      type: 'RadialWidget'
+    });
   });
 
-  _getWidgetComponent(widget: { type: string, id: any }) {
-    switch (widget.type) {
-      case 'stackedRadial':
-        return (
-          <div
-            id={`widget-${widget.id}`}
-            key={widget.id}
-            className="pt-elevation-3"
-          >
-            <StackedRadialWidget
-              className="stacked-radial outer-ring-1"
-              id={widget.id}
-              height={100}
-              width={100}
-            />
-          </div>
-        );
-      case 'radial':
-        return (
-          <div
-            id={`widget-${widget.id}`}
-            key={widget.id}
-            className="pt-elevation-3"
-          >
-            <RadialWidget id={widget.id} />
-          </div>
-        );
-      default:
-        break;
-    }
+  _getWidgetComponent(widget: WidgetMetaData) {
+    const { id, type } = widget;
+
+    const Widget = widgetTypes[type];
+
+    return (
+      <div id={`widget-${id}`} key={id} className="pt-elevation-3">
+        <Widget id={id} />
+      </div>
+    );
   }
 
   _removeDemoWidgets = action(() => {
@@ -234,13 +211,9 @@ export default class PerformancePanel extends React.Component<Props, State> {
   }
 
   render() {
-    const {
-      api,
-      profileId,
-      store: { performancePanel: { widgets } }
-    } = this.props;
+    const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
     const { layouts, rows, cols } = this.state;
-    console.log(this.props.store);
+
     return (
       <div className="PerformancePanel">
         <ResponsiveReactGridLayout
@@ -256,10 +229,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
           verticalGridSize={rows}
           margin={[12, 12]}
         >
-          {widgets.map(widget => {
-            // $FlowFixMe
-            return this._getWidgetComponent(widget);
-          })}
+          {widgets.map(this._getWidgetComponent)}
         </ResponsiveReactGridLayout>
         <Button
           className="close-button pt-button pt-intent-primary"

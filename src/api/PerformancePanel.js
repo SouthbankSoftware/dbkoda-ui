@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-05T11:24:33+11:00
+ * @Last modified time: 2018-01-31T22:21:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,9 +31,16 @@ import type { IObservableArray } from 'mobx';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 
+// TODO: @wahaj will decide a proper name for this
+export type WidgetMetaData = {
+  id: UUID,
+  type: string
+};
+
 export type PerformancePanelState = {
   profileId: UUID,
-  widgets: IObservableArray<UUID>,
+  // TODO: @wahaj will decide a structure for this
+  widgets: IObservableArray<WidgetMetaData>
 };
 
 export default class PerformancePanelApi {
@@ -51,7 +58,7 @@ export default class PerformancePanelApi {
 
     const performancePanel: PerformancePanelState = {
       profileId,
-      widgets: observable.shallowArray(),
+      widgets: observable.shallowArray()
     };
 
     performancePanels.set(profileId, performancePanel);
