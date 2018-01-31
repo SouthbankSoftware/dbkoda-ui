@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-31T09:35:08+11:00
+ * @Last modified time: 2018-01-31T12:34:32+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,10 +35,10 @@ import DataCenter from '~/api/DataCenter';
 
 import { DialogHotkeys } from '#/common/hotkeys/hotkeyList';
 import SizeProvider from '#/PerformancePanel/SizeProvider';
-import TextField from '#/TreeActionPanel/Components/TextField';
-import NumericField from '#/TreeActionPanel/Components/NumericField';
-import BooleanField from '#/TreeActionPanel/Components/BooleanField';
-import FileField from '#/TreeActionPanel/Components/FileField';
+import TextField from '#/common/FormFields/TextField';
+import NumericField from '#/common/FormFields/NumericField';
+import BooleanField from '#/common/FormFields/BooleanField';
+import FileField from '#/common/FormFields/FileField';
 
 import TipsField from './TipsField';
 import { ConnectionForm } from './ConnectionForm';
@@ -123,7 +123,7 @@ export default class ProfileManager extends React.Component<Props, State> {
     );
     const uiFields = [];
     if (fields) {
-      fields.forEach((field) => {
+      fields.forEach(field => {
         let uiField;
         if (field.type == 'text' || field.type == 'password') {
           uiField = <TextField key={field.name} field={field} />;
@@ -144,10 +144,9 @@ export default class ProfileManager extends React.Component<Props, State> {
   renderMenu() {
     const menuBtns = [];
     const subforms = this.form.getSubForms();
-    subforms.forEach((formStr) => {
+    subforms.forEach(formStr => {
       const subForm = this.form.formSchema[formStr];
-      const btnClassName =
-        'btn-' + formStr;
+      const btnClassName = 'btn-' + formStr;
       menuBtns.push(
         <Button
           active={this.state.selectedSubform == formStr}
@@ -248,7 +247,9 @@ export default class ProfileManager extends React.Component<Props, State> {
               static: true
             }}
           >
-            <TipsField tips={this.form.getSubformTips(this.state.selectedSubform)} />
+            <TipsField
+              tips={this.form.getSubformTips(this.state.selectedSubform)}
+            />
           </div>
           <div
             key="rowBottom"

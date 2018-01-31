@@ -23,7 +23,7 @@
  * @Date:   2017-04-18T13:51:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-15T15:00:45+10:00
+ * @Last modified time: 2018-01-31T12:37:45+11:00
  */
 
 import React from 'react';
@@ -40,7 +40,6 @@ import CodeMirrorField from './CodeMirrorField';
 export default observer(({ member }) => {
   const rowFields = [];
   member.map(col => {
-    console.log(col);
     if (col.type == 'Text') {
       rowFields.push(
         <TextField
