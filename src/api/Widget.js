@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-05T11:00:54+11:00
+ * @Last modified time: 2018-01-31T23:28:56+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -82,7 +82,7 @@ export default class WidgetApi {
     profileId: UUID,
     items: string[],
     extraState: ?{ id?: string } = null,
-    statsServiceOptiopns: {} = {},
+    statsServiceOptions: {} = {},
   ): UUID {
     const { widgets } = this.store;
 
@@ -106,7 +106,7 @@ export default class WidgetApi {
         profileId,
         items,
         debug: true,
-        options: statsServiceOptiopns,
+        options: statsServiceOptions,
       })
       .then(
         action(() => {

@@ -1,6 +1,11 @@
 /**
+ * @flow
+ *
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2018-01-31T16:32:29+11:00
+ * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-31T23:27:19+11:00
+ * @Last modified time: 2018-01-31T17:03:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -21,21 +26,42 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-.RadialWidget {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
+import * as React from 'react';
+import { inject, observer } from 'mobx-react';
+import type { WidgetState } from '~/api/Widget';
+import Widget from './Widget';
+import './ArrowWidget.scss';
 
-  .completed {
-    font-family: 'Roboto', 'Myriad Set Pro', 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
-    fill: white;
-    text-anchor: middle;
-    font-size: xx-large;
-  }
+type Store = {
+  widget: WidgetState
+};
 
-  .display-name {
-    color: white;
+type Props = {
+  store: any | Store,
+  api: *,
+  id: UUID
+};
 
+@inject(({ store: { widgets }, api }, { id }) => {
+  const widget = widgets.get(id);
+
+  return {
+    store: {
+      widget
+    },
+    api
+  };
+})
+@observer
+export default class ArrowWidget extends React.Component<Props> {
+  static defaultProps = {
+    store: null,
+    api: null
+  };
+
+  render() {
+    const { id } = this.props;
+
+    return <Widget id={id}>test test test</Widget>;
   }
 }

@@ -1,4 +1,8 @@
 /**
+ * Created by joey on 17/1/18.
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-01-31T23:27:23+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,9 +20,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * Created by joey on 17/1/18.
  */
 
 import * as d3 from 'd3';
@@ -42,7 +43,10 @@ import {Broker, EventType} from '../../../helpers/broker';
   };
 })
 @observer
-export default class RadialWidget extends Widget {
+/**
+ * TODO: @joey please enable flow
+ */
+export default class RadialWidget extends React.Component {
   static colors = ['#8A4148'];
   static width = 500;
   static height = 500;
@@ -220,14 +224,36 @@ export default class RadialWidget extends Widget {
     this.buildWidget();
   }
 
+  _onResize = (width: number, height: number) => {
+    this.setState({
+      width,
+      height
+    });
+  };
+
   render() {
-    const {displayName} = this.props.store.widget;
+    const { id, store } = this.props;
+    const { displayName } = store.widget;
+
+    // TODO: @joey why buildWidget in render? the standard way of using d3 should be:
+    // 1. render container for d3 in this render function
+    // 2. draw d3 graph in a separate function after componentDidMount
+    // 3. incremental redraw whenever data change happens
+    // 4. re-draw whole graph whenver size/dimension changes
+    // 5. destroy container in componentWillUnmount
+    //
+    // in this way, d3's render logic is detached from react's render logic. So a re-render of d3
+    // container won't trigger re-render whole d3 graph. d3 has its own way of efficent DOM
+    // manipulation inside its container created by react
     this.buildWidget();
+
     return (
-      <div className="radial-widget" ref={radial => (this.radial = radial)}>
-        <div className="display-name">{displayName}</div>
-        <div className="radial-main" />
-      </div>
+      <Widget id={id} onResize={this._onResize}>
+        <div className="RadialWidget" ref={radial => (this.radial = radial)}>
+          <div className="display-name">{displayName}</div>
+          <div className="radial-main" />
+        </div>
+      </Widget>
     );
   }
 }

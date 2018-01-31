@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-05T12:21:04+11:00
+ * @Last modified time: 2018-01-31T23:07:21+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,23 +33,24 @@ import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
 import LoadingView from '#/common/LoadingView';
 import _ from 'lodash';
+import ReactResizeDetector from 'react-resize-detector';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import './Widget.scss';
 
+const DEBOUNCE_DELAY = 100;
+
 type Store = {
-  widget: WidgetState,
+  widget: WidgetState
 };
 
 type Props = {
   store: any | Store,
   api: *,
   id: UUID,
-};
-
-type State = {
-  width: number,
-  height: number,
+  children: *,
+  onResize?: (width: number, height: number) => void,
+  projection?: (values: { [string]: any }) => { [string]: number }
 };
 
 @inject(({ store: { widgets }, api }, { id }) => {
@@ -57,16 +58,16 @@ type State = {
 
   return {
     store: {
-      widget,
+      widget
     },
-    api,
+    api
   };
 })
 @observer
-export default class Widget extends React.Component<Props, State> {
+export default class Widget extends React.Component<Props> {
   static defaultProps = {
     store: null,
-    api: null,
+    api: null
   };
 
   _onData = action(payload => {
@@ -76,10 +77,14 @@ export default class Widget extends React.Component<Props, State> {
     values.replace([
       {
         timestamp,
-        value: _.pick(value, items),
-      },
+        value: _.pick(value, items)
+      }
     ]);
   });
+
+  _onResize = _.debounce((...args) => {
+    _.invoke(this.props, 'onResize', ...args);
+  }, DEBOUNCE_DELAY);
 
   componentDidMount() {
     const { profileId } = this.props.store.widget;
@@ -93,9 +98,35 @@ export default class Widget extends React.Component<Props, State> {
     Broker.off(EventType.STATS_DATA(profileId), this._onData);
   }
 
-  render() {
-    const { items, values, state, errorLevel, error } = this.props.store.widget;
+  _renderDefaultView() {
+    const { items, values } = this.props.store.widget;
     const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+
+    return items.map(v => {
+      let value = _.get(latestValue, v, null);
+
+      if (value === null) {
+        value = '?';
+      } else if (typeof value === 'number') {
+        value = _.isInteger(value) ? value : value.toFixed(2);
+      } else {
+        value = <pre>{JSON.stringify(value, null, 2)}</pre>;
+      }
+
+      return [
+        <div key={`${v}-title`} className="title">
+          {v}
+        </div>,
+        <div key={`${v}-value`} className="value">
+          {value}
+        </div>
+      ];
+    });
+  }
+
+  render() {
+    const { children, store } = this.props;
+    const { state, errorLevel, error } = store.widget;
 
     return (
       <div className="Widget">
@@ -106,27 +137,9 @@ export default class Widget extends React.Component<Props, State> {
             <ErrorView title={null} error={error} errorLevel={errorLevel} />
           )
         ) : (
-          items.map(v => {
-            let value = _.get(latestValue, v, null);
-
-            if (value === null) {
-              value = '?';
-            } else if (typeof value === 'number') {
-              value = _.isInteger(value) ? value : value.toFixed(2);
-            } else {
-              value = <pre>{JSON.stringify(value, null, 2)}</pre>;
-            }
-
-            return [
-              <div key={`${v}-title`} className="title">
-                {v}
-              </div>,
-              <div key={`${v}-value`} className="value">
-                {value}
-              </div>,
-            ];
-          })
+          children || this._renderDefaultView()
         )}
+        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
       </div>
     );
   }
