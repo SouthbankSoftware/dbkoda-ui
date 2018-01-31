@@ -23,7 +23,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-24T13:54:38+10:00
+ * @Last modified time: 2018-01-31T12:33:24+11:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -33,14 +33,14 @@ import React from 'react';
 import { action } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { DrawerPanes } from '#/common/Constants';
-import FormTable from './Components/FormTable';
-import TextField from './Components/TextField';
-import CodeMirrorField from './Components/CodeMirrorField';
-import SelectField from './Components/SelectField';
-import BooleanField from './Components/BooleanField';
-import NumericField from './Components/NumericField';
-import ComboField from './Components/ComboField';
-import FormGroup from './Components/FormGroup';
+import FormTable from '#/common/FormFields/FormTable';
+import TextField from '#/common/FormFields/TextField';
+import CodeMirrorField from '#/common/FormFields/CodeMirrorField';
+import SelectField from '#/common/FormFields/SelectField';
+import BooleanField from '#/common/FormFields/BooleanField';
+import NumericField from '#/common/FormFields/NumericField';
+import ComboField from '#/common/FormFields/ComboField';
+import FormGroup from '#/common/FormFields/FormGroup';
 
 import './View.scss';
 

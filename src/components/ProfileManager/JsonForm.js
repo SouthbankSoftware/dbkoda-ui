@@ -3,7 +3,7 @@
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-29T12:55:17+11:00
+ * @Last modified time: 2018-01-31T11:30:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -50,7 +50,9 @@
 
      this.getSubForms = this.getSubForms.bind(this);
    }
-
+   /**
+    * Function to load schema to create form fields
+    */
    loadFormSchema(jsonSchema) {
      this.formSchema = observable(jsonSchema);
 
@@ -63,13 +65,21 @@
        }
      }
    }
+   /**
+    * Function to load validation schema to validate form fields
+    */
    loadValidationSchema(jsonSchema) {
      this.validationSchema = jsonSchema;
    }
+   /**
+    * Function to get the subform keys to get subform fields
+    */
    getSubForms() {
      return Object.keys(this.formSchema);
    }
-
+   /**
+    * Function to get subform fields
+    */
    getSubformFields(selectedSubform, column) {
      const fieldsCol = [];
      const subForm = this.formSchema[selectedSubform];
@@ -82,7 +92,9 @@
      }
      return fieldsCol;
    }
-
+   /**
+    * Function to get the subform Tips if there are any
+    */
    getSubformTips(selectedSubform) {
      const subForm = this.formSchema[selectedSubform];
      if (subForm && subForm.tips) {
@@ -90,7 +102,9 @@
      }
      return [];
    }
-
+   /**
+    * Private function to add additional Props to a form field which are used in UI renderer of fields
+    */
    @action
    addAdditionalFieldProps(field, subForm) {
      field.id = field.name; // fix to add id as required by UI fields
@@ -128,7 +142,9 @@
        return objProp;
      };
    }
-
+   /**
+    * Function to update field value and also update values of referenced fields if defined in the schema
+    */
    @action
    updateFieldValue(field, newValue) {
      field.value = newValue;
@@ -138,6 +154,9 @@
      this.validateForm();
    }
 
+   /**
+    * Function to update referenced fields values defined in the schema
+    */
    @action
    updateReferencedFields(field) {
      const { subForm } = field;
@@ -156,7 +175,9 @@
        }
      }
    }
-
+   /**
+    * Function to validate form fields if Validation schema is present
+    */
    validateForm() {
      if (!this.validationSchema) {
        throw (new Error('Validation Json schema is not set for the form.'));
@@ -167,7 +188,7 @@
        require('ajv-errors')(ajv);
        this.validateErrors = ajv.compile(this.validationSchema);
      }
-
+     // reset the errors if present from previous validation
      if (this.formErrors) {
        for (const error of this.formErrors) {
          const errorPath = error.dataPath.substring(1, error.dataPath.lastIndexOf('.'));
@@ -189,6 +210,7 @@
      const status = this.validateErrors(formData);
      const { errors } = this.validateErrors;
 
+     // if Errors found, Add them to fields for UI display and keep their record in form
      if (errors) {
        for (const error of errors) {
          const errorPath = error.dataPath.substring(1, error.dataPath.lastIndexOf('.'));

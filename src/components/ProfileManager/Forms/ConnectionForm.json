@@ -12,7 +12,7 @@
       },
       {
         "name": "host",
-        "label": "Host",
+        "label": "Host(s)",
         "value": "localhost",
         "type": "text",
         "column": 1,
