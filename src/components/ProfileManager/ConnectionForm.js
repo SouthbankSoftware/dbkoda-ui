@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-30T11:34:51+11:00
+ * @Last modified time: 2018-01-31T11:40:21+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -43,7 +43,9 @@ export class ConnectionForm extends JsonForm {
     this.hasAliasChanged = false;
     this.isEditMode = false;
   }
-
+  /**
+   * Overrided function from JsonForm to update the alias
+   */
   getSubformFields(selectedSubform, column) {
     const fieldsCol = [];
     const subForm = this.formSchema[selectedSubform];
@@ -59,7 +61,9 @@ export class ConnectionForm extends JsonForm {
     }
     return fieldsCol;
   }
-
+  /**
+   * Overrided function from JsonForm to update the alias on certain fields
+   */
   @action
   updateFieldValue(field, newValue) {
     if (field.name === 'alias' && field.value !== newValue) {
@@ -78,7 +82,9 @@ export class ConnectionForm extends JsonForm {
 
     this.validateForm();
   }
-
+  /**
+   * Function to update the alias field on certain other fields
+   */
   @action
   updateAlias(field) {
     if (!this.isEditMode && !this.hasAliasChanged && field.subForm.name == 'Basic Connection') {
@@ -148,7 +154,9 @@ export class ConnectionForm extends JsonForm {
       }
     }
   }
-
+  /**
+   * Function to update the connection form schema from connection profile
+   */
   updateSchemaFromProfile(profile: Profile) {
     this.isEditMode = true;
     for (const subform in this.formSchema) {
@@ -162,7 +170,9 @@ export class ConnectionForm extends JsonForm {
       }
     }
   }
-
+  /**
+   * Function to get connection profile from schema
+   */
   getProfileFromSchema(formData): Profile {
     const profile = {};
     console.log('getProfileFromInstance:', formData);
@@ -184,7 +194,9 @@ export class ConnectionForm extends JsonForm {
 
     return profile;
   }
-
+  /**
+   * Event handler for connect button
+   */
   onConnect() {
     const result = this.validateForm();
     console.log('Validation: ', result.status, result.formData);
@@ -192,6 +204,9 @@ export class ConnectionForm extends JsonForm {
     console.log('Profile:', profile);
     return this.api.connectProfile(profile);
   }
+  /**
+   * Event handler for Save button
+   */
   onSave() {
     const result = this.validateForm();
     console.log('Validation: ', result.status, result.formData);
@@ -199,7 +214,9 @@ export class ConnectionForm extends JsonForm {
     console.log('Profile:', profile);
     return this.api.saveProfile(profile);
   }
-
+  /**
+   * Event handler for Test button
+   */
   onTest() {
     const result = this.validateForm();
     console.log('Validation: ', result.status, result.formData);
@@ -208,7 +225,9 @@ export class ConnectionForm extends JsonForm {
     profile.test = true;
     return this.api.connectProfile(profile);
   }
-
+  /**
+   * Event handler for Reset button
+   */
   onReset() {
     this.formErrors = [];
     this.formSchema = this.loadDefaultSchema();
