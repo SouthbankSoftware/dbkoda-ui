@@ -43,7 +43,7 @@ import {Broker, EventType} from '../../../helpers/broker';
 })
 @observer
 export default class RadialWidget extends Widget {
-  static colors = ['#853E56'];
+  static colors = ['#8A4148'];
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
@@ -101,12 +101,12 @@ export default class RadialWidget extends Widget {
 
     gradient.append('svg:stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#fe08b5')
+      .attr('stop-color', '#BD4133')
       .attr('stop-opacity', 1);
 
     gradient.append('svg:stop')
       .attr('offset', '100%')
-      .attr('stop-color', '#ff1410')
+      .attr('stop-color', '#8A4148')
       .attr('stop-opacity', 1);
 
 
