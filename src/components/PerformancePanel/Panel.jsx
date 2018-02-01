@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T18:13:38+11:00
+ * @Last modified time: 2018-02-02T09:32:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -228,6 +228,8 @@ export default class PerformancePanel extends React.Component<Props, State> {
           className="GridLayout"
           layouts={layouts}
           autoSize={false}
+          compactType={false}
+          preventCollision={false}
           breakpoints={{
             desktop: 0
           }}
