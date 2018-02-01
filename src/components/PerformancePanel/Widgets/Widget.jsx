@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-31T23:07:21+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-01T14:44:56+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,15 +47,13 @@ type Store = {
 type Props = {
   store: any | Store,
   api: *,
-  id: UUID,
+  widget: WidgetState,
   children: *,
   onResize?: (width: number, height: number) => void,
   projection?: (values: { [string]: any }) => { [string]: number }
 };
 
-@inject(({ store: { widgets }, api }, { id }) => {
-  const widget = widgets.get(id);
-
+@inject(({ api }, { widget }) => {
   return {
     store: {
       widget

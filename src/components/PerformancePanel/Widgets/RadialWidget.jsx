@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-31T23:27:23+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-01T14:48:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,9 +32,7 @@ import './RadialWidget.scss';
 import Widget from './Widget';
 import {Broker, EventType} from '../../../helpers/broker';
 
-@inject(({store: {widgets}, api}, {id}) => {
-  const widget = widgets.get(id);
-
+@inject(({ api}, {widget}) => {
   return {
     store: {
       widget,
@@ -232,7 +230,7 @@ export default class RadialWidget extends React.Component {
   };
 
   render() {
-    const { id, store } = this.props;
+    const { widget, store } = this.props;
     const { displayName } = store.widget;
 
     // TODO: @joey why buildWidget in render? the standard way of using d3 should be:
@@ -248,7 +246,7 @@ export default class RadialWidget extends React.Component {
     this.buildWidget();
 
     return (
-      <Widget id={id} onResize={this._onResize}>
+      <Widget widget={widget} onResize={this._onResize}>
         <div className="RadialWidget" ref={radial => (this.radial = radial)}>
           <div className="display-name">{displayName}</div>
           <div className="radial-main" />

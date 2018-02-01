@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-31T23:22:41+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-01T15:05:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,7 +33,8 @@ import { Responsive } from 'react-grid-layout';
 import { Button } from '@blueprintjs/core';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import type { WidgetMetaData, PerformancePanelState } from '~/api/PerformancePanel';
+import type { PerformancePanelState } from '~/api/PerformancePanel';
+import type { WidgetState } from '~/api/Widget';
 // $FlowFixMe
 import { NewToaster } from '#/common/Toaster';
 // $FlowFixMe
@@ -109,7 +110,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
     const { widgets } = this.props.store.performancePanel;
 
     return {
-      desktop: widgets.map((v, i) => ({
+      desktop: widgets.values().map((v, i) => ({
         w: widgetWidth,
         h: widgetHeight,
         x: (i * widgetWidth) % cols,
@@ -120,49 +121,25 @@ export default class PerformancePanel extends React.Component<Props, State> {
   };
 
   _addDemoWidgets = action(() => {
-    const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
-
-    // widgets.push({
-    //   id: api.addWidget(profileId, ['cpu'], { displayName: 'CPU' }),
-    //   type: 'RadialWidget'
-    // });
-    // widgets.push({
-    //   id: api.addWidget(profileId, ['memory'], { displayName: 'Memory' }),
-    //   type: 'RadialWidget'
-    // });
-    // widgets.push({
-    //   id: api.addWidget(profileId, ['disk'], { displayName: 'Disk' }),
-    //   type: 'RadialWidget'
-    // });
+    const { api, profileId } = this.props;
 
     // TIP: easier to dev widget with dummy observable
 
-    widgets.push({
-      id: api.addWidget(profileId, ['item-1']),
-      type: 'Widget'
-    });
-
-    widgets.push({
-      id: api.addWidget(profileId, ['item-1']),
-      type: 'ArrowWidget'
-    });
-
-    widgets.push({
-      id: api.addWidget(profileId, ['item-1'], {
-        displayName: 'Dummy'
-      }),
-      type: 'RadialWidget'
+    api.addWidget(profileId, ['item-1'], 'Widget');
+    api.addWidget(profileId, ['item-1'], 'ArrowWidget');
+    api.addWidget(profileId, ['item-1'], 'RadialWidget', {
+      displayName: 'Dummy'
     });
   });
 
-  _getWidgetComponent(widget: WidgetMetaData) {
+  _getWidgetComponent(widget: WidgetState) {
     const { id, type } = widget;
 
     const Widget = widgetTypes[type];
 
     return (
       <div id={`widget-${id}`} key={id} className="pt-elevation-3">
-        <Widget id={id} />
+        <Widget widget={widget} />
       </div>
     );
   }
@@ -170,7 +147,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
   _removeDemoWidgets = action(() => {
     const { store } = this.props;
 
-    store.performancePanel.widgets = observable.shallowArray();
+    store.performancePanel.widgets = observable.shallowMap();
   });
 
   _onError = payload => {
@@ -229,7 +206,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
           verticalGridSize={rows}
           margin={[12, 12]}
         >
-          {widgets.map(this._getWidgetComponent)}
+          {widgets.values().map(this._getWidgetComponent)}
         </ResponsiveReactGridLayout>
         <Button
           className="close-button pt-button pt-intent-primary"
