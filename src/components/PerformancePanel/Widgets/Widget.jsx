@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T14:44:56+11:00
+ * @Last modified time: 2018-02-01T18:03:55+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -48,17 +48,17 @@ type Props = {
   store: any | Store,
   api: *,
   widget: WidgetState,
+  widgetStyle: *,
   children: *,
   onResize?: (width: number, height: number) => void,
   projection?: (values: { [string]: any }) => { [string]: number }
 };
 
-@inject(({ api }, { widget }) => {
+@inject(({store, api }, { widget }) => {
   return {
-    store: {
-      widget
-    },
-    api
+    store,
+    api,
+    widget
   };
 })
 @observer
@@ -70,7 +70,7 @@ export default class Widget extends React.Component<Props> {
 
   _onData = action(payload => {
     const { timestamp, value } = payload;
-    const { items, values } = this.props.store.widget;
+    const { items, values } = this.props.widget;
 
     values.replace([
       {
@@ -85,19 +85,19 @@ export default class Widget extends React.Component<Props> {
   }, DEBOUNCE_DELAY);
 
   componentDidMount() {
-    const { profileId } = this.props.store.widget;
+    const { profileId } = this.props.widget;
 
     Broker.on(EventType.STATS_DATA(profileId), this._onData);
   }
 
   componentWillUnmount() {
-    const { profileId } = this.props.store.widget;
+    const { profileId } = this.props.widget;
 
     Broker.off(EventType.STATS_DATA(profileId), this._onData);
   }
 
   _renderDefaultView() {
-    const { items, values } = this.props.store.widget;
+    const { items, values } = this.props.widget;
     const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
     return items.map(v => {
@@ -123,11 +123,11 @@ export default class Widget extends React.Component<Props> {
   }
 
   render() {
-    const { children, store } = this.props;
-    const { state, errorLevel, error } = store.widget;
+    const { children } = this.props;
+    const { state, errorLevel, error } = this.props.widget;
 
     return (
-      <div className="Widget">
+      <div className="Widget" style={this.props.widgetStyle}>
         {state !== 'loaded' ? (
           state === 'loading' ? (
             <LoadingView />

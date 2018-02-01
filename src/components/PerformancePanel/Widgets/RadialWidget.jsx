@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T14:48:35+11:00
+ * @Last modified time: 2018-02-01T17:15:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,12 +32,11 @@ import './RadialWidget.scss';
 import Widget from './Widget';
 import {Broker, EventType} from '../../../helpers/broker';
 
-@inject(({ api}, {widget}) => {
+@inject(({ store, api}, {widget}) => {
   return {
-    store: {
-      widget,
-    },
+    store,
     api,
+    widget
   };
 })
 @observer
@@ -199,7 +198,7 @@ export default class RadialWidget extends React.Component {
 
   _onData = action(payload => {
     const {timestamp, value} = payload;
-    const {items, values} = this.props.store.widget;
+    const {items, values} = this.props.widget;
 
     values.replace([
       {
@@ -217,7 +216,7 @@ export default class RadialWidget extends React.Component {
   });
 
   componentDidMount() {
-    const {profileId} = this.props.store.widget;
+    const {profileId} = this.props.widget;
     Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
     this.buildWidget();
   }
@@ -230,8 +229,8 @@ export default class RadialWidget extends React.Component {
   };
 
   render() {
-    const { widget, store } = this.props;
-    const { displayName } = store.widget;
+    const { widget } = this.props;
+    const { displayName } = widget;
 
     // TODO: @joey why buildWidget in render? the standard way of using d3 should be:
     // 1. render container for d3 in this render function

@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T15:05:12+11:00
+ * @Last modified time: 2018-02-01T18:13:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -41,6 +41,7 @@ import { NewToaster } from '#/common/Toaster';
 import { Broker, EventType } from '~/helpers/broker';
 import SizeProvider from './SizeProvider';
 import * as widgetTypes from './Widgets';
+import schema from './schema.json';
 import './Panel.scss';
 
 const ResponsiveReactGridLayout = SizeProvider(Responsive);
@@ -77,6 +78,7 @@ type State = {
  * Performance Panel defines the layout and creation of widgets in the performance view
  */
 export default class PerformancePanel extends React.Component<Props, State> {
+  layout = observable.map();
   static defaultProps = {
     store: null,
     api: null
@@ -106,42 +108,71 @@ export default class PerformancePanel extends React.Component<Props, State> {
    * @param widgetHeight - widget height in grid unit
    * @param widgetWidth - widget width in grid unit
    */
-  _generateLayouts = (cols: number, widgetHeight: number, widgetWidth: number) => {
-    const { widgets } = this.props.store.performancePanel;
+  // _generateLayouts = (cols: number, widgetHeight: number, widgetWidth: number) => {
+  //   const { widgets } = this.props.store.performancePanel;
+  //
+  //   return {
+  //     desktop: widgets.values().map((v, i) => ({
+  //       w: widgetWidth,
+  //       h: widgetHeight,
+  //       x: (i * widgetWidth) % cols,
+  //       y: Math.floor(i / cols),
+  //       i: v.id
+  //     }))
+  //   };
+  // };
 
-    return {
-      desktop: widgets.values().map((v, i) => ({
-        w: widgetWidth,
-        h: widgetHeight,
-        x: (i * widgetWidth) % cols,
-        y: Math.floor(i / cols),
-        i: v.id
-      }))
-    };
-  };
-
-  _addDemoWidgets = action(() => {
+  _addSchemaWidgets = action(() => {
     const { api, profileId } = this.props;
 
-    // TIP: easier to dev widget with dummy observable
+    if (schema.columns && schema.rows) {
+      this.setState({
+        rows: schema.rows,
+        cols: schema.cols
+      });
+    }
 
-    api.addWidget(profileId, ['item-1'], 'Widget');
-    api.addWidget(profileId, ['item-1'], 'ArrowWidget');
-    api.addWidget(profileId, ['item-1'], 'RadialWidget', {
-      displayName: 'Dummy'
-    });
+    if (schema && schema.widgets) {
+      for (const widget of schema.widgets) {
+        const id = api.addWidget(profileId, widget.items, widget.type, widget.extraState ? widget.extraState : {});
+        this.layout.set(id, widget.layout);
+      }
+    }
+    // TIP: easier to dev widget with dummy observable
   });
 
   _getWidgetComponent(widget: WidgetState) {
     const { id, type } = widget;
+    const layout = this.layout.get(id);
 
-    const Widget = widgetTypes[type];
+    if (layout) {
+      const layoutGrid = {
+        x: layout.x,
+        y: layout.y,
+        w: layout.w,
+        h: layout.h,
+        static: (!!layout.static)
+      };
+      const widgetStyle = {};
+      const gridElementStyle = {};
+      if (layout.background === 'light') {
+        widgetStyle.backgroundColor = '#2A2A2A';
+      }
+      if (layout.seperator) {
+        widgetStyle.borderRight = '1px solid #383838';
+      }
+      if (layout.padding) {
+        gridElementStyle.padding = layout.padding;
+      }
 
-    return (
-      <div id={`widget-${id}`} key={id} className="pt-elevation-3">
-        <Widget widget={widget} />
-      </div>
-    );
+      const Widget = widgetTypes[type];
+
+      return (
+        <div id={`widget-${id}`} key={id} data-grid={layoutGrid} style={gridElementStyle}>
+          <Widget widget={widget} widgetStyle={widgetStyle} />
+        </div>
+      );
+    }
   }
 
   _removeDemoWidgets = action(() => {
@@ -170,13 +201,13 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     Broker.on(EventType.STATS_ERROR(profileId), this._onError);
 
-    this._addDemoWidgets();
+    this._addSchemaWidgets();
 
-    const { cols, widgetHeight, widgetWidth } = this.state;
+    // const { cols, widgetHeight, widgetWidth } = this.state;
 
-    this.setState({
-      layouts: this._generateLayouts(cols, widgetHeight, widgetWidth)
-    });
+    // this.setState({
+    //   layouts: this._generateLayouts(cols, widgetHeight, widgetWidth)
+    // });
   }
 
   componentWillUnmount() {
@@ -204,9 +235,9 @@ export default class PerformancePanel extends React.Component<Props, State> {
             desktop: cols
           }}
           verticalGridSize={rows}
-          margin={[12, 12]}
+          margin={[0, 0]}
         >
-          {widgets.values().map(this._getWidgetComponent)}
+          {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
         <Button
           className="close-button pt-button pt-intent-primary"
