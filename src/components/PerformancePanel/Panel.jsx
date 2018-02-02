@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-02T09:32:46+11:00
+ * @Last modified time: 2018-02-02T11:27:17+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -60,6 +60,8 @@ type State = {
   layouts: *,
   rows: number,
   cols: number,
+  midWidth: number,
+  leftWidth: number,
   widgetHeight: number,
   widgetWidth: number
 };
@@ -78,7 +80,6 @@ type State = {
  * Performance Panel defines the layout and creation of widgets in the performance view
  */
 export default class PerformancePanel extends React.Component<Props, State> {
-  layout = observable.map();
   static defaultProps = {
     store: null,
     api: null
@@ -92,7 +93,9 @@ export default class PerformancePanel extends React.Component<Props, State> {
         desktop: []
       },
       rows: 8,
-      cols: 10,
+      cols: 9,
+      leftWidth: 2,
+      midWidth: 5,
       widgetHeight: 2,
       widgetWidth: 2
     };
@@ -123,59 +126,71 @@ export default class PerformancePanel extends React.Component<Props, State> {
   // };
 
   _addSchemaWidgets = action(() => {
-    const { api, profileId } = this.props;
+    const { api, profileId, store: { performancePanel } } = this.props;
 
     if (schema.columns && schema.rows) {
       this.setState({
         rows: schema.rows,
-        cols: schema.cols
+        cols: schema.cols,
+        midWidth: schema.midWidth,
+        leftWidth: schema.leftWidth
       });
     }
 
     if (schema && schema.widgets) {
       for (const widget of schema.widgets) {
         const id = api.addWidget(profileId, widget.items, widget.type, widget.extraState ? widget.extraState : {});
-        this.layout.set(id, widget.layout);
+        const layout = this._updateLayoutStyle({
+         i: id,
+         widgetStyle: {},
+         gridElementStyle: {},
+         ...widget.layout
+       });
+        performancePanel.layouts.set(id, observable(layout));
       }
     }
     // TIP: easier to dev widget with dummy observable
   });
 
+  _updateLayoutStyle(layout) {
+    const lSep = this.state.leftWidth;
+    const rSep = this.state.leftWidth + this.state.midWidth;
+    if (layout.background === 'light') {
+      layout.widgetStyle.backgroundColor = '#2A2A2A';
+      layout.gridElementStyle.paddingTop = '10px';
+      layout.gridElementStyle.paddingBottom = '10px';
+
+      if ((layout.x + layout.w) < rSep) {
+        layout.widgetStyle.borderRight = '1px solid #383838';
+      }
+      if (layout.x === lSep) {
+        layout.gridElementStyle.paddingLeft = '10px';
+      }
+      if ((layout.x + layout.w) === rSep) {
+        layout.gridElementStyle.paddingRight = '10px';
+      }
+    }
+    return layout;
+  }
+
   _getWidgetComponent(widget: WidgetState) {
     const { id, type } = widget;
-    const layout = this.layout.get(id);
+    const { store: { performancePanel } } = this.props;
+    const layout = performancePanel.layouts.get(id);
 
     if (layout) {
-      const layoutGrid = {
-        x: layout.x,
-        y: layout.y,
-        w: layout.w,
-        h: layout.h,
-        static: (!!layout.static)
-      };
-      const widgetStyle = {};
-      const gridElementStyle = {};
-      if (layout.background === 'light') {
-        widgetStyle.backgroundColor = '#2A2A2A';
-      }
-      if (layout.seperator) {
-        widgetStyle.borderRight = '1px solid #383838';
-      }
-      if (layout.padding) {
-        gridElementStyle.padding = layout.padding;
-      }
-
+      console.log('id:', id, 'layout:', layout);
       const Widget = widgetTypes[type];
 
       return (
-        <div id={`widget-${id}`} key={id} data-grid={layoutGrid} style={gridElementStyle}>
-          <Widget widget={widget} widgetStyle={widgetStyle} />
+        <div id={`widget-${id}`} key={id} data-grid={layout} style={layout.gridElementStyle}>
+          <Widget widget={widget} widgetStyle={layout.widgetStyle} />
         </div>
       );
     }
   }
 
-  _removeDemoWidgets = action(() => {
+  _removeSchemaWidgets = action(() => {
     const { store } = this.props;
 
     store.performancePanel.widgets = observable.shallowMap();
@@ -202,12 +217,6 @@ export default class PerformancePanel extends React.Component<Props, State> {
     Broker.on(EventType.STATS_ERROR(profileId), this._onError);
 
     this._addSchemaWidgets();
-
-    // const { cols, widgetHeight, widgetWidth } = this.state;
-
-    // this.setState({
-    //   layouts: this._generateLayouts(cols, widgetHeight, widgetWidth)
-    // });
   }
 
   componentWillUnmount() {
@@ -215,7 +224,10 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     Broker.off(EventType.STATS_ERROR(profileId), this._onError);
 
-    this._removeDemoWidgets();
+    this._removeSchemaWidgets();
+  }
+  onLayoutChange(layout: *, oldItem: *, newItem: *) {
+    console.log('layout:', layout, '\noldItem:', oldItem, '\nnewItem:', newItem);
   }
 
   render() {
@@ -227,8 +239,9 @@ export default class PerformancePanel extends React.Component<Props, State> {
         <ResponsiveReactGridLayout
           className="GridLayout"
           layouts={layouts}
+          onDragStop={this.onLayoutChange}
           autoSize={false}
-          compactType={false}
+          compactType={null}
           preventCollision={false}
           breakpoints={{
             desktop: 0
