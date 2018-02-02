@@ -1,9 +1,7 @@
 /**
- * @Author: joey
- * @Date:   2018-01-17T09:47:18+11:00
- * @Email:  joey@southbanksoftware.com
+ * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T17:15:55+11:00
+ * @Last modified time: 2018-02-01T17:15:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,7 +22,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import * as d3 from 'd3';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
@@ -43,53 +40,82 @@ import { Broker, EventType } from '../../../helpers/broker';
   };
 })
 @observer
-export default class StackedRadialWidget extends Widget {
-  static colors = ['#853E56'];
-  static width = 500;
-  static height = 500;
+/**
+ * TODO: @joey please enable flow
+ */
+export default class StackedRadialWidget extends React.Component {
+  static colors = ['#3333cc'];
+  static width = 50;
+  static height = 50;
   static PI = 2 * Math.PI;
 
   constructor(props) {
     super(props);
     this.state = {
-      width: props.width,
-      height: props.height
+      width: StackedRadialWidget.width,
+      height: StackedRadialWidget.height,
+      lastLayerTweened: { key: '', index: 1 }
     };
-    this.itemValue = 0;
+    this.fields = [];
+    this.itemValues = [];
     this.field = null;
+    if (this.props.widget.items.length > 3) {
+      this.scaleFactor = 2;
+    } else {
+      this.scaleFactor = 1;
+    }
     this.dataset = () => {
+      if (!this.itemValues[this.state.lastLayerTweened.key]) {
+        return [
+          {
+            index: 0,
+            name: 'move',
+            icon: '\uF105',
+            percentage: 0
+          }
+        ];
+      }
       return [
-        { index: 0, name: 'move', icon: '\uF105', percentage: this.itemValue }
+        {
+          index: this.state.lastLayerTweened.index,
+          name: 'move',
+          icon: '\uF105',
+          percentage: this.itemValues[this.state.lastLayerTweened.key]
+        }
       ];
     };
+    console.log(this.props.widget.items);
   }
 
-  _getInnerRadiusSize() {
-    return this.state.width / 3;
+  _getInnerRadiusSize(layer: number) {
+    if (layer > 1) {
+      return this.state.width / (12 * this.scaleFactor) * layer - 1;
+    }
+    return this.state.width / (12 * this.scaleFactor);
   }
 
-  _getOuterRadiusSize() {
+  _getOuterRadiusSize(layer: number) {
     const minValue = Math.min(this.state.width, this.state.height);
-    return this._getInnerRadiusSize() + minValue / 10;
+    return this._getInnerRadiusSize(layer) + minValue / (16 * this.scaleFactor);
   }
 
-  buildWidget() {
+  buildWidget(selector: string, layer: number, data) {
     const background = d3
       .arc()
       .startAngle(0)
       .endAngle(StackedRadialWidget.PI)
-      .innerRadius(this._getInnerRadiusSize())
-      .outerRadius(this._getOuterRadiusSize());
+      .innerRadius(this._getInnerRadiusSize(layer))
+      .outerRadius(this._getOuterRadiusSize(layer));
 
     const elem = d3.select(this.radial);
     elem
-      .select('.radial-main')
+      .select(selector)
       .selectAll('svg')
       .remove();
     d3.transition();
 
     const svg = elem
-      .select('.radial-main')
+      .select(selector)
       .append('svg')
       .attr('width', this.state.width)
       .attr('height', this.state.height)
@@ -99,9 +125,7 @@ export default class StackedRadialWidget extends Widget {
         'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')'
       );
 
-    // add linear gradient, notice apple uses gradient alone the arc..
-    // meh, close enough...
-
+    // Gradient.
     const gradient = svg
       .append('svg:defs')
       .append('svg:linearGradient')
@@ -115,16 +139,16 @@ export default class StackedRadialWidget extends Widget {
     gradient
       .append('svg:stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#fe08b5')
+      .attr('stop-color', '#BD4133')
       .attr('stop-opacity', 1);
 
     gradient
       .append('svg:stop')
       .attr('offset', '100%')
-      .attr('stop-color', '#ff1410')
+      .attr('stop-color', '#8A4148')
       .attr('stop-opacity', 1);
 
-    // add some shadows
+    // Drop Shadows
     const defs = svg.append('defs');
 
     const filter = defs.append('filter').attr('id', 'dropshadow');
@@ -166,44 +190,54 @@ export default class StackedRadialWidget extends Widget {
       .attr('d', background);
 
     // field.append('text').attr('class', 'icon');
-
+    const yTranslation = -100 + 35 * (layer - 1);
     field
       .append('text')
       .attr('class', 'completed')
-      .attr('transform', 'translate(0,0)');
+      .attr('transform', 'scale(0.5, 0.5)')
+      .attr('transform', 'translate(100, ' + parseInt(yTranslation, 10) + ')');
+
+    this.fields.push({ field, layer, data });
     this.field = field;
     d3
       .transition()
       .duration(1000)
-      .each(() => this.update());
+      .each(() => this.update({ field, layer, data }));
 
     return field;
   }
 
   arcTween(d) {
     const i = d3.interpolateNumber(d.previousValue, d.percentage);
+
     return t => {
       d.percentage = i(t);
-      return this.arc()(d);
+      return this.arc(d)(d);
     };
   }
 
-  arc() {
+  arc(data) {
     return d3
       .arc()
       .startAngle(0)
       .endAngle(d => {
         return d.percentage / 100 * StackedRadialWidget.PI;
       })
-      .innerRadius(this._getInnerRadiusSize())
-      .outerRadius(this._getOuterRadiusSize())
+      .innerRadius(this._getInnerRadiusSize(data.index))
+      .outerRadius(this._getOuterRadiusSize(data.index))
       .cornerRadius(
-        (this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2
+        (this._getOuterRadiusSize(data.index) -
+          this._getInnerRadiusSize(data.index)) /
+          2
       );
   }
 
-  update() {
-    this.field = this.field
+  /**
+   * When new data is recieved, update the relevant ring.
+   */
+  update(field) {
+    this.state.lastLayerTweened = { key: field.data, index: field.layer };
+    field.field = field.field
       .each(function(d) {
         this._value = d.percentage;
       })
@@ -212,7 +246,8 @@ export default class StackedRadialWidget extends Widget {
         d.previousValue = this._value;
       });
 
-    this.field
+    // Draw
+    field.field
       .select('path.progress')
       .transition()
       .duration(1000)
@@ -220,7 +255,7 @@ export default class StackedRadialWidget extends Widget {
       .attrTween('d', this.arcTween.bind(this))
       .style('fill', 'url(#gradient)');
 
-    this.field.select('text.completed').text(d => {
+    field.field.select('text.completed').text(d => {
       return d.percentage + '%';
     });
   }
@@ -237,28 +272,66 @@ export default class StackedRadialWidget extends Widget {
     ]);
     const latestValue =
       values.length > 0 ? values[values.length - 1].value : {};
+    this.itemValues = [];
     if (!_.isEmpty(latestValue)) {
-      const v = latestValue[items[0]];
-      const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
-      this.itemValue = fixedValue;
-      this.update(this.field);
+      Object.keys(latestValue).map(key => {
+        const fixedValue = _.isInteger(latestValue[key])
+          ? latestValue[key]
+          : parseInt(latestValue[key], 10);
+        this.itemValues[key] = fixedValue;
+      });
+      this.fields.map(field => {
+        Object.keys(latestValue).map(key => {
+          if (field.data === key) {
+            this.update(field);
+          }
+        });
+      });
     }
   });
 
   componentDidMount() {
     const { profileId } = this.props.widget;
     Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
-    this.buildWidget();
+    this.fields = [];
+    this.props.widget.items.forEach((item, count) => {
+      this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
+    });
+    // this.buildWidget('.radial-1', 1, 'memory');
+    // this.buildWidget('.radial-2', 2, 'disk');
+    // this.buildWidget('.radial-3', 3, 'cpu');
   }
 
+  _onResize = (width: number, height: number) => {
+    this.setState({
+      width,
+      height
+    });
+  };
+
   render() {
-    const { displayName } = this.props.widget;
-    this.buildWidget();
+    const { widget } = this.props;
+    const { displayName } = widget;
+    this.fields = [];
+    this.props.widget.items.forEach((item, count) => {
+      this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
+    });
+    console.log(this.props.widget.items);
     return (
-      <div className="radial-widget" ref={radial => (this.radial = radial)}>
-        <div className="display-name">{displayName}</div>
-        <div className="radial-main" />
-      </div>
+      <Widget widget={widget} onResize={this._onResize}>
+        <div
+          className="StackedRadialWidget"
+          ref={radial => (this.radial = radial)}
+        >
+          <div className="display-name">{displayName}</div>
+          {this.props.widget.items.map((item, count) => {
+            console.log('Building: ', item);
+            const classes =
+              'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
+            return <div className={classes} />;
+          })}
+        </div>
+      </Widget>
     );
   }
 }
