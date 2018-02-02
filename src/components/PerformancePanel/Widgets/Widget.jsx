@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-02T09:58:29+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-02T13:47:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +28,7 @@
 
 import * as React from 'react';
 import { action } from 'mobx';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
 import LoadingView from '#/common/LoadingView';
@@ -40,34 +40,17 @@ import './Widget.scss';
 
 const DEBOUNCE_DELAY = 100;
 
-type Store = {
-  widget: WidgetState
-};
-
 type Props = {
-  store: any | Store,
-  api: *,
   widget: WidgetState,
   widgetStyle: *,
   children: *,
+  className?: string,
   onResize?: (width: number, height: number) => void,
   projection?: (values: { [string]: any }) => { [string]: number }
 };
 
-@inject(({store, api }, { widget }) => {
-  return {
-    store,
-    api,
-    widget
-  };
-})
 @observer
 export default class Widget extends React.Component<Props> {
-  static defaultProps = {
-    store: null,
-    api: null
-  };
-
   _onData = action(payload => {
     const { timestamp, value } = payload;
     const { items, values } = this.props.widget;
@@ -123,11 +106,10 @@ export default class Widget extends React.Component<Props> {
   }
 
   render() {
-    const { children } = this.props;
-    const { state, errorLevel, error } = this.props.widget;
+    const { children, widget: { state, errorLevel, error }, className, widgetStyle } = this.props;
 
     return (
-      <div className="Widget" style={this.props.widgetStyle}>
+      <div className={className || 'Widget'} style={widgetStyle}>
         {state !== 'loaded' ? (
           state === 'loading' ? (
             <LoadingView />
