@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-31T22:21:12+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-02T11:27:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,20 +27,27 @@
  */
 
 import { action, observable } from 'mobx';
-import type { IObservableArray } from 'mobx';
+import type { ObservableMap } from 'mobx';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
+import type { WidgetState } from './Widget';
 
-// TODO: @wahaj will decide a proper name for this
-export type WidgetMetaData = {
-  id: UUID,
-  type: string
-};
+export type LayoutState = {
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  i: UUID,
+  static: boolean,
+  background: string,
+  gridElementStyle: Object,
+  widgetStyle: Object
+}
 
 export type PerformancePanelState = {
   profileId: UUID,
-  // TODO: @wahaj will decide a structure for this
-  widgets: IObservableArray<WidgetMetaData>
+  widgets: ObservableMap<WidgetState>,
+  layouts: ObservableMap<LayoutState>,
 };
 
 export default class PerformancePanelApi {
@@ -58,7 +65,8 @@ export default class PerformancePanelApi {
 
     const performancePanel: PerformancePanelState = {
       profileId,
-      widgets: observable.shallowArray()
+      widgets: observable.shallowMap(),
+      layouts: observable.shallowMap()
     };
 
     performancePanels.set(profileId, performancePanel);

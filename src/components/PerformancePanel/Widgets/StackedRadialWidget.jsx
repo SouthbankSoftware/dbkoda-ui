@@ -1,4 +1,10 @@
 /**
+ * @Author: joey
+ * @Date:   2018-01-17T09:47:18+11:00
+ * @Email:  joey@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-01T17:15:55+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,9 +23,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * Created by joey on 17/1/18.
- */
+
 
 import * as d3 from 'd3';
 import React from 'react';
@@ -31,14 +35,11 @@ import './StackedRadialWidget.scss';
 import Widget from './Widget';
 import { Broker, EventType } from '../../../helpers/broker';
 
-@inject(({ store: { widgets }, api }, { id }) => {
-  const widget = widgets.get(id);
-
+@inject(({ store, api }, { widget }) => {
   return {
-    store: {
-      widget
-    },
-    api
+    store,
+    api,
+    widget
   };
 })
 @observer
@@ -226,7 +227,7 @@ export default class StackedRadialWidget extends Widget {
 
   _onData = action(payload => {
     const { timestamp, value } = payload;
-    const { items, values } = this.props.store.widget;
+    const { items, values } = this.props.widget;
 
     values.replace([
       {
@@ -245,13 +246,13 @@ export default class StackedRadialWidget extends Widget {
   });
 
   componentDidMount() {
-    const { profileId } = this.props.store.widget;
+    const { profileId } = this.props.widget;
     Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
     this.buildWidget();
   }
 
   render() {
-    const { displayName } = this.props.store.widget;
+    const { displayName } = this.props.widget;
     this.buildWidget();
     return (
       <div className="radial-widget" ref={radial => (this.radial = radial)}>

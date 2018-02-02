@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-31T23:27:23+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-02T11:33:40+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -20,6 +20,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @flow
  */
 
 import * as d3 from 'd3';
@@ -32,40 +34,39 @@ import './RadialWidget.scss';
 import Widget from './Widget';
 import {Broker, EventType} from '../../../helpers/broker';
 
-@inject(({store: {widgets}, api}, {id}) => {
-  const widget = widgets.get(id);
-
+@inject(({ store, api}, {widget}) => {
   return {
-    store: {
-      widget,
-    },
+    store,
     api,
+    widget
   };
 })
 @observer
-/**
- * TODO: @joey please enable flow
- */
-export default class RadialWidget extends React.Component {
+export default class RadialWidget extends React.Component<Object, Object> {
   static colors = ['#8A4148'];
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
 
-  constructor(props) {
+  itemValue: number;
+  field: Object;
+  radial: ?HTMLElement;
+
+  constructor(props: Object) {
     super(props);
     this.state = {width: RadialWidget.width, height: RadialWidget.height};
     this.itemValue = 0;
-    this.field = null;
-    this.dataset = () => {
-      return [
-        {index: 0, name: 'move', icon: '\uF105', percentage: this.itemValue}
-      ];
-    };
   }
 
+  dataset = () => {
+    return [
+      {index: 0, name: 'move', icon: '\uF105', percentage: this.itemValue}
+    ];
+  };
+
   _getInnerRadiusSize() {
-    return this.state.width / 3;
+    const minValue = Math.min(this.state.width, this.state.height);
+    return minValue / 4;
   }
 
   _getOuterRadiusSize() {
@@ -89,10 +90,6 @@ export default class RadialWidget extends React.Component {
       .attr('height', this.state.height)
       .append('g')
       .attr('transform', 'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')');
-
-    // add linear gradient, notice apple uses gradient alone the arc..
-    // meh, close enough...
-
 
     const gradient = svg.append('svg:defs')
       .append('svg:linearGradient')
@@ -158,9 +155,9 @@ export default class RadialWidget extends React.Component {
     return field;
   }
 
-  arcTween(d) {
+  arcTween(d: Object) {
     const i = d3.interpolateNumber(d.previousValue, d.percentage);
-    return (t) => {
+    return (t: Object) => {
       d.percentage = i(t);
       return this.arc()(d);
     };
@@ -201,7 +198,7 @@ export default class RadialWidget extends React.Component {
 
   _onData = action(payload => {
     const {timestamp, value} = payload;
-    const {items, values} = this.props.store.widget;
+    const {items, values} = this.props.widget;
 
     values.replace([
       {
@@ -214,12 +211,12 @@ export default class RadialWidget extends React.Component {
       const v = latestValue[items[0]];
       const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
       this.itemValue = fixedValue;
-      this.update(this.field);
+      this.update();
     }
   });
 
   componentDidMount() {
-    const {profileId} = this.props.store.widget;
+    const {profileId} = this.props.widget;
     Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
     this.buildWidget();
   }
@@ -229,13 +226,13 @@ export default class RadialWidget extends React.Component {
       width,
       height
     });
+    this.buildWidget();
   };
 
   render() {
-    const { id, store } = this.props;
-    const { displayName } = store.widget;
+    const { widget, widgetStyle } = this.props;
+    const { displayName } = widget;
 
-    // TODO: @joey why buildWidget in render? the standard way of using d3 should be:
     // 1. render container for d3 in this render function
     // 2. draw d3 graph in a separate function after componentDidMount
     // 3. incremental redraw whenever data change happens
@@ -245,10 +242,9 @@ export default class RadialWidget extends React.Component {
     // in this way, d3's render logic is detached from react's render logic. So a re-render of d3
     // container won't trigger re-render whole d3 graph. d3 has its own way of efficent DOM
     // manipulation inside its container created by react
-    this.buildWidget();
 
     return (
-      <Widget id={id} onResize={this._onResize}>
+      <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize}>
         <div className="RadialWidget" ref={radial => (this.radial = radial)}>
           <div className="display-name">{displayName}</div>
           <div className="radial-main" />

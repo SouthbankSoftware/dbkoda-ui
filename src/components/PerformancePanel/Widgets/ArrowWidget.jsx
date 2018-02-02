@@ -5,7 +5,7 @@
  * @Date:   2018-01-31T16:32:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-02T13:29:17+11:00
+ * @Last modified time: 2018-02-02T15:50:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +28,6 @@
 
 import * as React from 'react';
 import { autorun } from 'mobx';
-import { inject } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import * as d3 from 'd3';
 // $FlowFixMe
@@ -53,35 +52,18 @@ const arrowMaskPathDes = `M${width / 2},${halfStrokeWidth}L${width -
   halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) * (1 - tailXPropotion) / 2 +
   halfStrokeWidth}V${headTailY}H${halfStrokeWidth}Z`;
 
-type Store = {
-  widget: WidgetState
-};
-
 type Props = {
-  store: any | Store,
-  id: UUID,
+  widget: WidgetState,
+  widgetStyle: *,
   rotate?: number
 };
 
-@inject(({ store: { widgets } }, { id }) => {
-  const widget = widgets.get(id);
-
-  return {
-    store: {
-      widget
-    }
-  };
-})
 export default class ArrowWidget extends React.Component<Props> {
   _chartEl: *;
   _textEl: *;
   _chart: *;
   _valueRec: *;
   _autorunDisposer: *;
-
-  static defaultProps = {
-    store: null
-  };
 
   _createD3View = () => {
     this._chart = d3.select(this._chartEl).attrs({
@@ -94,7 +76,7 @@ export default class ArrowWidget extends React.Component<Props> {
     if (!this._chart) return;
 
     // $FlowFixMe
-    const rotate = this.props.rotate || this.props.store.widget.rotate;
+    const rotate = this.props.rotate || this.props.widget.rotate;
 
     if (typeof rotate === 'number') {
       this._chart.attr('transform', `rotate(${rotate})`);
@@ -184,7 +166,7 @@ export default class ArrowWidget extends React.Component<Props> {
       this._createD3View();
 
       this._autorunDisposer = autorun(() => {
-        const { items, values } = this.props.store.widget;
+        const { items, values } = this.props.widget;
         const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
         if (items.length !== 1) {
@@ -193,6 +175,8 @@ export default class ArrowWidget extends React.Component<Props> {
         }
 
         const data = latestValue[items[0]];
+
+        if (data === undefined) return;
 
         if (typeof data !== 'number') {
           console.error('ArrowWidget only supports numeric data value');
@@ -206,8 +190,7 @@ export default class ArrowWidget extends React.Component<Props> {
 
   componentDidUpdate() {
     setTimeout(() => {
-      this._removeD3View();
-      this._createD3View();
+      this._recreateD3View();
     }, 200);
   }
 
@@ -217,10 +200,10 @@ export default class ArrowWidget extends React.Component<Props> {
   }
 
   render() {
-    const { id } = this.props;
+    const { widget, widgetStyle } = this.props;
 
     return (
-      <Widget className="ArrowWidget" id={id}>
+      <Widget className="ArrowWidget" widget={widget} widgetStyle={widgetStyle}>
         <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
         <div className="text" ref={_textEl => (this._textEl = _textEl)}>
           0%

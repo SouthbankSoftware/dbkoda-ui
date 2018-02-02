@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-02T09:54:07+11:00
+ * @Last modified time: 2018-02-02T13:47:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +28,7 @@
 
 import * as React from 'react';
 import { action } from 'mobx';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
 import LoadingView from '#/common/LoadingView';
@@ -40,40 +40,20 @@ import './Widget.scss';
 
 const DEBOUNCE_DELAY = 100;
 
-type Store = {
-  widget: WidgetState
-};
-
 type Props = {
-  store: any | Store,
-  api: *,
-  id: UUID,
+  widget: WidgetState,
+  widgetStyle: *,
   children: *,
   className?: string,
   onResize?: (width: number, height: number) => void,
   projection?: (values: { [string]: any }) => { [string]: number }
 };
 
-@inject(({ store: { widgets }, api }, { id }) => {
-  const widget = widgets.get(id);
-
-  return {
-    store: {
-      widget
-    },
-    api
-  };
-})
 @observer
 export default class Widget extends React.Component<Props> {
-  static defaultProps = {
-    store: null,
-    api: null
-  };
-
   _onData = action(payload => {
     const { timestamp, value } = payload;
-    const { items, values } = this.props.store.widget;
+    const { items, values } = this.props.widget;
 
     values.replace([
       {
@@ -88,19 +68,19 @@ export default class Widget extends React.Component<Props> {
   }, DEBOUNCE_DELAY);
 
   componentDidMount() {
-    const { profileId } = this.props.store.widget;
+    const { profileId } = this.props.widget;
 
     Broker.on(EventType.STATS_DATA(profileId), this._onData);
   }
 
   componentWillUnmount() {
-    const { profileId } = this.props.store.widget;
+    const { profileId } = this.props.widget;
 
     Broker.off(EventType.STATS_DATA(profileId), this._onData);
   }
 
   _renderDefaultView() {
-    const { items, values } = this.props.store.widget;
+    const { items, values } = this.props.widget;
     const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
     return items.map(v => {
@@ -126,11 +106,10 @@ export default class Widget extends React.Component<Props> {
   }
 
   render() {
-    const { children, store, className } = this.props;
-    const { state, errorLevel, error } = store.widget;
+    const { children, widget: { state, errorLevel, error }, className, widgetStyle } = this.props;
 
     return (
-      <div className={className || 'Widget'}>
+      <div className={className || 'Widget'} style={widgetStyle}>
         {state !== 'loaded' ? (
           state === 'loading' ? (
             <LoadingView />

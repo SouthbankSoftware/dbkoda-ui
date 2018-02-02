@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-31T23:28:56+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-01T14:30:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -46,6 +46,7 @@ export type WidgetErrorLevel = $Keys<typeof widgetErrorLevels>;
 export type WidgetState = {
   id: UUID,
   profileId: UUID,
+  type: string,
   items: string[],
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
@@ -62,10 +63,12 @@ export default class WidgetApi {
     this.api = api;
   }
 
-  _createWidgetErrorHandler = (id: UUID) => {
+  _createWidgetErrorHandler = (profileId: UUID, id: UUID) => {
     // eslint-disable-next-line arrow-parens
     return action(err => {
-      const widget = this.store.widgets.get(id);
+      const performancePanel = this.store.performancePanels.get(profileId);
+      const { widgets } = performancePanel;
+      const widget = widgets.get(id);
 
       if (widget) {
         _.assign(widget, {
@@ -81,16 +84,19 @@ export default class WidgetApi {
   addWidget(
     profileId: UUID,
     items: string[],
+    type: string,
     extraState: ?{ id?: string } = null,
     statsServiceOptions: {} = {},
   ): UUID {
-    const { widgets } = this.store;
+    const performancePanel = this.store.performancePanels.get(profileId);
+    const { widgets } = performancePanel;
 
     const id = (extraState && extraState.id) || uuid();
 
     const widget: WidgetState = {
       id,
       profileId,
+      type,
       items,
       values: observable.shallowArray(),
       state: 'loading',
@@ -101,8 +107,9 @@ export default class WidgetApi {
 
     widgets.set(id, observable.shallowObject(widget));
 
-    featherClient()
-      .statsService.create({
+    const statsSrv = featherClient();
+    statsSrv.statsService.timeout = 30000;
+    statsSrv.statsService.create({
         profileId,
         items,
         debug: true,
@@ -117,14 +124,15 @@ export default class WidgetApi {
           }
         }),
       )
-      .catch(this._createWidgetErrorHandler(id));
+      .catch(this._createWidgetErrorHandler(profileId, id));
 
     return id;
   }
 
   @autobind
-  removeWidget(id: UUID) {
-    const { widgets } = this.store;
+  removeWidget(profileId: UUID, id: UUID) {
+    const performancePanel = this.store.performancePanels.get(profileId);
+    const { widgets } = performancePanel;
 
     const widget = widgets.get(id);
 
@@ -142,7 +150,7 @@ export default class WidgetApi {
             widgets.delete(id);
           }),
         )
-        .catch(this._createWidgetErrorHandler(id));
+        .catch(this._createWidgetErrorHandler(profileId, id));
     }
   }
 }
