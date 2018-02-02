@@ -84,13 +84,25 @@
     },
     {
       "type": "ArrowWidget",
-      "items": ["item-2"],
+      "items": ["item-1"],
       "layout": {
         "x": 2,
         "y": 2,
         "w": 1,
-        "h": 1,
-        "background": "light"
+        "h": 1
+      }
+    },
+    {
+      "type": "ArrowWidget",
+      "items": ["item-1"],
+      "layout": {
+        "x": 3,
+        "y": 2,
+        "w": 1,
+        "h": 1
+      },
+      "extraState": {
+        "rotate": 180
       }
     }
   ]
