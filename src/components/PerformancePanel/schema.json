@@ -6,14 +6,14 @@
   "widgets": [
     {
       "type": "StackedRadialWidget",
-      "items": ["cpu", "disk", "memory", "item-3", "item-1"],
+      "items": ["item-1", "item-2", "item-3"],
       "extraState": {
         "displayName": "StackedRadial"
       },
       "layout": {
         "x": 2,
         "y": 0,
-        "w": 6,
+        "w": 2,
         "h": 2,
         "background": "light",
         "static": true
