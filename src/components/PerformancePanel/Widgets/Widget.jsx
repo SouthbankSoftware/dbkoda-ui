@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-31T23:07:21+11:00
+ * @Last modified time: 2018-02-02T09:54:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -49,6 +49,7 @@ type Props = {
   api: *,
   id: UUID,
   children: *,
+  className?: string,
   onResize?: (width: number, height: number) => void,
   projection?: (values: { [string]: any }) => { [string]: number }
 };
@@ -125,11 +126,11 @@ export default class Widget extends React.Component<Props> {
   }
 
   render() {
-    const { children, store } = this.props;
+    const { children, store, className } = this.props;
     const { state, errorLevel, error } = store.widget;
 
     return (
-      <div className="Widget">
+      <div className={className || 'Widget'}>
         {state !== 'loaded' ? (
           state === 'loading' ? (
             <LoadingView />
