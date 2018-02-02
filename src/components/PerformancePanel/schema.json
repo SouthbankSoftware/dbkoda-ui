@@ -4,9 +4,9 @@
   "widgets": [
     {
       "type": "RadialWidget",
-      "items": ["item-3"],
+      "items": ["cpu"],
       "extraState": {
-        "displayName": "Dummy"
+        "displayName": "CPU"
       },
       "layout": {
         "x": 0,
@@ -18,9 +18,9 @@
     },
     {
       "type": "RadialWidget",
-      "items": ["item-3"],
+      "items": ["memory"],
       "extraState": {
-        "displayName": "Dummy"
+        "displayName": "Memory"
       },
       "layout": {
         "x": 0,
@@ -32,9 +32,9 @@
     },
     {
       "type": "RadialWidget",
-      "items": ["item-3"],
+      "items": ["disk"],
       "extraState": {
-        "displayName": "Dummy"
+        "displayName": "Disk"
       },
       "layout": {
         "x": 0,
@@ -46,9 +46,9 @@
     },
     {
       "type": "RadialWidget",
-      "items": ["item-3"],
+      "items": ["network"],
       "extraState": {
-        "displayName": "Dummy"
+        "displayName": "Network"
       },
       "layout": {
         "x": 0,
