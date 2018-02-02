@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T17:15:23+11:00
+ * @Last modified time: 2018-02-02T11:33:40+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -230,7 +230,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   };
 
   render() {
-    const { widget } = this.props;
+    const { widget, widgetStyle } = this.props;
     const { displayName } = widget;
 
     // 1. render container for d3 in this render function
@@ -244,7 +244,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     // manipulation inside its container created by react
 
     return (
-      <Widget widget={widget} onResize={this._onResize}>
+      <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize}>
         <div className="RadialWidget" ref={radial => (this.radial = radial)}>
           <div className="display-name">{displayName}</div>
           <div className="radial-main" />

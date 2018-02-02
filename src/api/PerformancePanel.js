@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T15:02:13+11:00
+ * @Last modified time: 2018-02-02T11:27:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,9 +32,22 @@ import type { ObservableMap } from 'mobx';
 import { featherClient } from '~/helpers/feathers';
 import type { WidgetState } from './Widget';
 
+export type LayoutState = {
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  i: UUID,
+  static: boolean,
+  background: string,
+  gridElementStyle: Object,
+  widgetStyle: Object
+}
+
 export type PerformancePanelState = {
   profileId: UUID,
-  widgets: ObservableMap<WidgetState>
+  widgets: ObservableMap<WidgetState>,
+  layouts: ObservableMap<LayoutState>,
 };
 
 export default class PerformancePanelApi {
@@ -52,7 +65,8 @@ export default class PerformancePanelApi {
 
     const performancePanel: PerformancePanelState = {
       profileId,
-      widgets: observable.shallowMap()
+      widgets: observable.shallowMap(),
+      layouts: observable.shallowMap()
     };
 
     performancePanels.set(profileId, performancePanel);

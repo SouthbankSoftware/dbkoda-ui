@@ -5,7 +5,7 @@
  * @Date:   2018-01-31T16:32:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T16:57:56+11:00
+ * @Last modified time: 2018-02-02T09:59:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,7 +39,8 @@ type Store = {
 type Props = {
   store: any | Store,
   api: *,
-  widget: WidgetState
+  widget: WidgetState,
+  widgetStyle: *
 };
 
 @inject(({ store, api }, { widget }) => {
@@ -57,8 +58,8 @@ export default class ArrowWidget extends React.Component<Props> {
   };
 
   render() {
-    const { widget } = this.props;
+    const { widget, widgetStyle } = this.props;
 
-    return <Widget widget={widget}>test test test</Widget>;
+    return <Widget widget={widget} widgetStyle={widgetStyle}>test test test</Widget>;
   }
 }

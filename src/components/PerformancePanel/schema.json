@@ -1,6 +1,8 @@
 {
   "cols": 9,
   "rows": 8,
+  "leftWidth": 2,
+  "midWidth": 5,
   "widgets": [
     {
       "type": "RadialWidget",
@@ -66,9 +68,7 @@
         "y": 0,
         "w": 3,
         "h": 1,
-        "background": "light",
-        "seperator": true,
-        "padding": "10px 0px 10px 10px"
+        "background": "light"
       }
     },
     {
@@ -79,8 +79,7 @@
         "y": 0,
         "w": 2,
         "h": 1,
-        "background": "light",
-        "padding": "10px 10px 10px 0px"
+        "background": "light"
       }
     },
     {
@@ -90,7 +89,8 @@
         "x": 2,
         "y": 2,
         "w": 1,
-        "h": 1
+        "h": 1,
+        "background": "light"
       }
     }
   ]
