@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-02T11:27:17+11:00
+ * @Last modified time: 2018-02-02T12:14:14+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -101,30 +101,6 @@ export default class PerformancePanel extends React.Component<Props, State> {
     };
   }
 
-  /**
-   * TODO: @wahaj generate layout from panel schema
-   * TIP: @mike beautiful code should be self-explanatory as much as possible in the first place,
-   * then we can add some flow annotations to help understanding, if still confusing,
-   * then we can add some comments to help understanding. Please avoid exceesive commenting :)
-   *
-   * @param cols - total number of grid columns
-   * @param widgetHeight - widget height in grid unit
-   * @param widgetWidth - widget width in grid unit
-   */
-  // _generateLayouts = (cols: number, widgetHeight: number, widgetWidth: number) => {
-  //   const { widgets } = this.props.store.performancePanel;
-  //
-  //   return {
-  //     desktop: widgets.values().map((v, i) => ({
-  //       w: widgetWidth,
-  //       h: widgetHeight,
-  //       x: (i * widgetWidth) % cols,
-  //       y: Math.floor(i / cols),
-  //       i: v.id
-  //     }))
-  //   };
-  // };
-
   _addSchemaWidgets = action(() => {
     const { api, profileId, store: { performancePanel } } = this.props;
 
@@ -139,13 +115,18 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     if (schema && schema.widgets) {
       for (const widget of schema.widgets) {
-        const id = api.addWidget(profileId, widget.items, widget.type, widget.extraState ? widget.extraState : {});
+        const id = api.addWidget(
+          profileId,
+          widget.items,
+          widget.type,
+          widget.extraState ? widget.extraState : {}
+        );
         const layout = this._updateLayoutStyle({
-         i: id,
-         widgetStyle: {},
-         gridElementStyle: {},
-         ...widget.layout
-       });
+          i: id,
+          widgetStyle: {},
+          gridElementStyle: {},
+          ...widget.layout
+        });
         performancePanel.layouts.set(id, observable(layout));
       }
     }
@@ -160,13 +141,13 @@ export default class PerformancePanel extends React.Component<Props, State> {
       layout.gridElementStyle.paddingTop = '10px';
       layout.gridElementStyle.paddingBottom = '10px';
 
-      if ((layout.x + layout.w) < rSep) {
+      if (layout.x + layout.w < rSep) {
         layout.widgetStyle.borderRight = '1px solid #383838';
       }
       if (layout.x === lSep) {
         layout.gridElementStyle.paddingLeft = '10px';
       }
-      if ((layout.x + layout.w) === rSep) {
+      if (layout.x + layout.w === rSep) {
         layout.gridElementStyle.paddingRight = '10px';
       }
     }
@@ -179,11 +160,15 @@ export default class PerformancePanel extends React.Component<Props, State> {
     const layout = performancePanel.layouts.get(id);
 
     if (layout) {
-      console.log('id:', id, 'layout:', layout);
       const Widget = widgetTypes[type];
 
       return (
-        <div id={`widget-${id}`} key={id} data-grid={layout} style={layout.gridElementStyle}>
+        <div
+          id={`widget-${id}`}
+          key={id}
+          data-grid={layout}
+          style={layout.gridElementStyle}
+        >
           <Widget widget={widget} widgetStyle={layout.widgetStyle} />
         </div>
       );
@@ -194,6 +179,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
     const { store } = this.props;
 
     store.performancePanel.widgets = observable.shallowMap();
+    store.performancePanel.layouts = observable.shallowMap();
   });
 
   _onError = payload => {
@@ -212,11 +198,13 @@ export default class PerformancePanel extends React.Component<Props, State> {
    * It will also adds demo widgets and generates a layout.
    */
   componentDidMount() {
-    const { profileId } = this.props;
+    const { profileId, store: { performancePanel } } = this.props;
 
     Broker.on(EventType.STATS_ERROR(profileId), this._onError);
 
-    this._addSchemaWidgets();
+    if (performancePanel.widgets.size <= 0) {
+      this._addSchemaWidgets();
+    }
   }
 
   componentWillUnmount() {
@@ -226,12 +214,27 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     this._removeSchemaWidgets();
   }
-  onLayoutChange(layout: *, oldItem: *, newItem: *) {
-    console.log('layout:', layout, '\noldItem:', oldItem, '\nnewItem:', newItem);
-  }
+  onLayoutChange = action((gridLayout: *, oldItem: *, newItem: *) => {
+    const { store: { performancePanel } } = this.props;
+    const layout = performancePanel.layouts.get(oldItem.i);
+    if (layout.background === 'light') {
+      const newLayout = this._updateLayoutStyle({
+        ...newItem,
+        widgetStyle: {},
+        gridElementStyle: {},
+        background: layout.background
+      });
+      layout.gridElementStyle = newLayout.gridElementStyle;
+      layout.widgetStyle = newLayout.widgetStyle;
+    }
+  });
 
   render() {
-    const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
+    const {
+      api,
+      profileId,
+      store: { performancePanel: { widgets } }
+    } = this.props;
     const { layouts, rows, cols } = this.state;
 
     return (
@@ -240,6 +243,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
           className="GridLayout"
           layouts={layouts}
           onDragStop={this.onLayoutChange}
+          onResizeStop={this.onLayoutChange}
           autoSize={false}
           compactType={null}
           preventCollision={false}
