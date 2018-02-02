@@ -5,7 +5,7 @@
  * @Date:   2018-01-31T16:32:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-02T13:58:26+11:00
+ * @Last modified time: 2018-02-02T15:50:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -190,8 +190,7 @@ export default class ArrowWidget extends React.Component<Props> {
 
   componentDidUpdate() {
     setTimeout(() => {
-      this._removeD3View();
-      this._createD3View();
+      this._recreateD3View();
     }, 200);
   }
 
