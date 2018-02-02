@@ -108,7 +108,7 @@ export default class WidgetApi {
     widgets.set(id, observable.shallowObject(widget));
 
     const statsSrv = featherClient();
-    statsSrv.timeout = 30000;
+    statsSrv.statsService.timeout = 30000;
     statsSrv.statsService.create({
         profileId,
         items,
