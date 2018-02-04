@@ -77,7 +77,7 @@
     },
     {
       "type": "Widget",
-      "items": ["item-1"],
+      "items": ["serverStatus"],
       "layout": {
         "x": 2,
         "y": 0,
