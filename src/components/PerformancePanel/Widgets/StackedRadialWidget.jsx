@@ -84,7 +84,6 @@ export default class StackedRadialWidget extends React.Component {
         }
       ];
     };
-    console.log(this.props.widget.items);
   }
 
   _getInnerRadiusSize(layer: number) {
@@ -197,6 +196,8 @@ export default class StackedRadialWidget extends React.Component {
       .attr('transform', 'scale(0.5, 0.5)')
       .attr('transform', 'translate(100, ' + parseInt(yTranslation, 10) + ')');
 
+    // Add tooltip.
+
     this.fields.push({ field, layer, data });
     this.field = field;
     d3
@@ -255,9 +256,31 @@ export default class StackedRadialWidget extends React.Component {
       .attrTween('d', this.arcTween.bind(this))
       .style('fill', 'url(#gradient)');
 
-    field.field.select('text.completed').text(d => {
-      return d.percentage + '%';
-    });
+    // Get total sum of radials.
+    let sumOfItems = 0;
+    for (const key in this.itemValues) {
+      if (this.itemValues.hasOwnProperty(key)) {
+        sumOfItems += this.itemValues[key];
+      }
+    }
+
+    // Reduce Radial to 3 figures max.
+    if (sumOfItems > 999) {
+      sumOfItems =
+        Number.parseFloat((sumOfItems /= 1000)).toPrecision(3) + 'k/s';
+    } else if (sumOfItems > 999) {
+      sumOfItems =
+        Number.parseFloat((sumOfItems /= 1000000)).toPrecision(3) + 'M/s';
+    }
+
+    if (field.layer === 1) {
+      field.field.select('text.completed').text(() => {
+        return sumOfItems + '/s';
+      });
+      field.field
+        .select('text.completed')
+        .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+    }
   }
 
   _onData = action(payload => {
@@ -297,9 +320,6 @@ export default class StackedRadialWidget extends React.Component {
     this.props.widget.items.forEach((item, count) => {
       this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
     });
-    // this.buildWidget('.radial-1', 1, 'memory');
-    // this.buildWidget('.radial-2', 2, 'disk');
-    // this.buildWidget('.radial-3', 3, 'cpu');
   }
 
   _onResize = (width: number, height: number) => {
@@ -316,7 +336,6 @@ export default class StackedRadialWidget extends React.Component {
     this.props.widget.items.forEach((item, count) => {
       this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
     });
-    console.log(this.props.widget.items);
     return (
       <Widget widget={widget} onResize={this._onResize}>
         <div
@@ -325,7 +344,6 @@ export default class StackedRadialWidget extends React.Component {
         >
           <div className="display-name">{displayName}</div>
           {this.props.widget.items.map((item, count) => {
-            console.log('Building: ', item);
             const classes =
               'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
             return <div className={classes} />;
