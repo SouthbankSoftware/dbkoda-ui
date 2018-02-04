@@ -46,6 +46,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
+  static gap = 20;
 
   itemValue: number;
   field: Object;
@@ -59,7 +60,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   dataset = () => {
     return [
-      {index: 0, name: 'move', icon: '\uF105', percentage: this.itemValue}
+      {index: 0, name: 'move', icon: '\uF105', percentage: this.itemValue},
+      // {index: 1, name: 'move', icon: '\uF105', percentage: this.itemValue * 0.89}
     ];
   };
 
@@ -77,8 +79,14 @@ export default class RadialWidget extends React.Component<Object, Object> {
     const background = d3.arc()
       .startAngle(0)
       .endAngle(RadialWidget.PI)
-      .innerRadius(this._getInnerRadiusSize())
-      .outerRadius(this._getOuterRadiusSize());
+      .innerRadius((d, i) => {
+        console.log('inner ', d);
+        return this._getInnerRadiusSize() - i * RadialWidget.gap;
+      })
+      .outerRadius((d, i) => {
+        console.log('inner ', d);
+        return this._getOuterRadiusSize() - i * RadialWidget.gap;
+      });
 
     const elem = d3.select(this.radial);
     // elem.select('.radial-main').selectAll('svg').remove();
@@ -168,8 +176,14 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .endAngle((d) => {
         return d.percentage / 100 * RadialWidget.PI;
       })
-      .innerRadius(this._getInnerRadiusSize())
-      .outerRadius(this._getOuterRadiusSize())
+      .innerRadius((d, i) => {
+        console.log('inner ', d, i);
+        return this._getInnerRadiusSize() - i * RadialWidget.gap;
+      })
+      .outerRadius((d, i) => {
+        console.log('outer ', d, i);
+        return this._getOuterRadiusSize() - i * RadialWidget.gap;
+      })
       .cornerRadius((this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2);
   }
 
@@ -196,17 +210,21 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   componentDidMount() {
     setTimeout(() => this.buildWidget(), 200);
-    autorun(() => {
-      const {items, values} = this.props.widget;
-      const latestValue = values.length > 0 ? values[values.length - 1].value : {};
-      if (!_.isEmpty(latestValue)) {
-        const v = latestValue[items[0]];
-        console.log('widget value', v);
-        const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
-        this.itemValue = fixedValue;
-        this.update();
-      }
-    });
+    // autorun(() => {
+    //   const {items, values} = this.props.widget;
+    //   const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+    //   if (!_.isEmpty(latestValue)) {
+    //     const v = latestValue[items[0]];
+    //     console.log('widget value', v);
+    //     const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
+    //     this.itemValue = fixedValue;
+    //     this.buildWidget();
+    //   }
+    // });
+    setInterval(() => {
+      this.itemValue = Math.random() * 100;
+      this.update();
+    }, 500);
   }
 
   removeD3 = () => {
@@ -218,6 +236,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   componentWillUnmount() {
     this.removeD3();
+  }
+
+  componentDidUpdate() {
+    setTimeout(() => {
+      this.removeD3();
+      this.buildWidget();
+    }, 200);
   }
 
   _onResize = (width: number, height: number) => {
