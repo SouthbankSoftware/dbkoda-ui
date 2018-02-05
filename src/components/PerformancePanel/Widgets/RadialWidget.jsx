@@ -48,21 +48,18 @@ export default class RadialWidget extends React.Component<Object, Object> {
   static PI = 2 * Math.PI;
   static gap = 20;
 
-  itemValue: number;
+  itemValue: Array<Object> = [];
   field: Object;
   radial: ?HTMLElement;
+  text: string = '';
 
   constructor(props: Object) {
     super(props);
     this.state = {width: RadialWidget.width, height: RadialWidget.height};
-    this.itemValue = 0;
   }
 
   dataset = () => {
-    return [
-      {index: 0, name: 'move', icon: '\uF105', percentage: this.itemValue},
-      // {index: 1, name: 'move', icon: '\uF105', percentage: this.itemValue * 0.89}
-    ];
+    return this.itemValue;
   };
 
   _getInnerRadiusSize() {
@@ -71,21 +68,18 @@ export default class RadialWidget extends React.Component<Object, Object> {
   }
 
   _getOuterRadiusSize() {
-    const minValue = Math.min(this.state.width, this.state.height);
-    return this._getInnerRadiusSize() + minValue / 10;
+    return this._getInnerRadiusSize() + RadialWidget.gap - 1;
   }
 
   buildWidget() {
     const background = d3.arc()
       .startAngle(0)
       .endAngle(RadialWidget.PI)
-      .innerRadius((d, i) => {
-        console.log('inner ', d);
-        return this._getInnerRadiusSize() - i * RadialWidget.gap;
+      .innerRadius((d) => {
+        return this._getInnerRadiusSize() - d.index * RadialWidget.gap;
       })
-      .outerRadius((d, i) => {
-        console.log('inner ', d);
-        return this._getOuterRadiusSize() - i * RadialWidget.gap;
+      .outerRadius((d) => {
+        return this._getOuterRadiusSize() - d.index * RadialWidget.gap;
       });
 
     const elem = d3.select(this.radial);
@@ -176,13 +170,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .endAngle((d) => {
         return d.percentage / 100 * RadialWidget.PI;
       })
-      .innerRadius((d, i) => {
-        console.log('inner ', d, i);
-        return this._getInnerRadiusSize() - i * RadialWidget.gap;
+      .innerRadius((d) => {
+        return this._getInnerRadiusSize() - d.index * RadialWidget.gap;
       })
-      .outerRadius((d, i) => {
-        console.log('outer ', d, i);
-        return this._getOuterRadiusSize() - i * RadialWidget.gap;
+      .outerRadius((d) => {
+        return this._getOuterRadiusSize() - d.index * RadialWidget.gap;
       })
       .cornerRadius((this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2);
   }
@@ -202,29 +194,70 @@ export default class RadialWidget extends React.Component<Object, Object> {
     // .ease('elastic')
       .attrTween('d', this.arcTween.bind(this))
       .style('fill', 'url(#gradient)');
-
-    this.field.select('text.completed').text((d) => {
-      return d.percentage + '%';
-    });
+    // this.field.selectAll('text.completed').removeAll();
+    if (this.itemValue.length === 1) {
+      this.field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)').text((d) => d.text);
+      // this.field.select('text.completed').text((d) => d.text);
+    } else if (this.itemValue.length >= 1) {
+      //
+    }
   }
 
   componentDidMount() {
-    setTimeout(() => this.buildWidget(), 200);
-    // autorun(() => {
-    //   const {items, values} = this.props.widget;
-    //   const latestValue = values.length > 0 ? values[values.length - 1].value : {};
-    //   if (!_.isEmpty(latestValue)) {
-    //     const v = latestValue[items[0]];
-    //     console.log('widget value', v);
-    //     const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
-    //     this.itemValue = fixedValue;
-    //     this.buildWidget();
-    //   }
-    // });
-    setInterval(() => {
-      this.itemValue = Math.random() * 100;
-      this.update();
-    }, 500);
+    setTimeout(() => {
+      this.buildWidget();
+      autorun(() => {
+        const {items, values} = this.props.widget;
+        this.itemValue = this.getValueFromData(items, values);
+        this.update();
+      });
+    }, 200);
+  }
+
+  getValueFromData(items: Array<Object>, values: Array<Object>): Array<Object> {
+    const latestValue : Object = values.length > 0 ? values[values.length - 1].value : {};
+    if (!_.isEmpty(latestValue)) {
+      const v = latestValue[items[0]];
+      console.log('widget value', v);
+      if (!v) {
+        return [];
+      }
+      if (items[0] === 'network') {
+        const previousValue : Object = values.length > 1 ? values[values.length - 2].value : {};
+        if (_.isEmpty(previousValue)) {
+          return [];
+        }
+        const prevV = previousValue[items[0]];
+        const download = _.isInteger(v.download) ? v.download : parseInt(v.download, 10);
+        const upload = _.isInteger(v.upload) ? v.upload : parseInt(v.upload, 10);
+        const prevDownload = _.isInteger(prevV.download) ? prevV.download : parseInt(prevV.download, 10);
+        const prevUplaod = _.isInteger(prevV.upload) ? prevV.upload : parseInt(prevV.upload, 10);
+        const maxDownload = _.maxBy(values, e => {
+          return !_.isEmpty(e) && e.value && e.value[items[0]] ? e.value[items[0]].download : 0;
+        });
+        const maxUpload = _.maxBy(values, e => {
+          return !_.isEmpty(e) && e.value && e.value[items[0]] ? e.value[items[0]].upload : 0;
+        });
+        if (maxDownload === 0 || maxUpload === 0) {
+          return [];
+        }
+        const bytesToSize = (bytes) => {
+          const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+          if (bytes <= 0) return '0 Byte';
+          const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+          return Math.round(bytes / (1024 ** i)) + ' ' + sizes[i];
+        };
+        this.text = `${bytesToSize(Math.abs(download - prevDownload))}/${v.samplingRate / 1000}s \n ${bytesToSize(Math.abs(upload - prevUplaod))}/${v.samplingRate / 1000}s`;
+        return [
+          {index: 0, percentage: download / maxDownload.value[items[0]].download * 100, text: `${bytesToSize(Math.abs(download - prevDownload))}/${v.samplingRate / 1000}s`},
+          {index: 1, percentage: upload / maxUpload.value[items[0]].upload * 100, text: `${bytesToSize(Math.abs(upload - prevUplaod))}/${v.samplingRate / 1000}s`},
+        ];
+      }
+      const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
+      this.text = fixedValue + '%';
+      return [{index: 0, percentage: fixedValue, text: fixedValue + '%'}];
+    }
+    return [];
   }
 
   removeD3 = () => {

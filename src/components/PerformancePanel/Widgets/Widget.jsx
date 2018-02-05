@@ -55,12 +55,12 @@ export default class Widget extends React.Component<Props> {
     const { timestamp, value } = payload;
     const { items, values } = this.props.widget;
 
-    values.replace([
+    values.push(
       {
         timestamp,
         value: _.pick(value, items)
       }
-    ]);
+    );
   });
 
   _onResize = _.debounce((...args) => {
