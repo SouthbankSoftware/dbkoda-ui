@@ -27,14 +27,13 @@
 import * as d3 from 'd3';
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {action} from 'mobx';
+import {autorun} from 'mobx';
 import _ from 'lodash';
 
 import './RadialWidget.scss';
 import Widget from './Widget';
-import {Broker, EventType} from '../../../helpers/broker';
 
-@inject(({ store, api}, {widget}) => {
+@inject(({store, api}, {widget}) => {
   return {
     store,
     api,
@@ -82,8 +81,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .outerRadius(this._getOuterRadiusSize());
 
     const elem = d3.select(this.radial);
-    elem.select('.radial-main').selectAll('svg').remove();
-    d3.transition();
+    // elem.select('.radial-main').selectAll('svg').remove();
+    // d3.transition();
 
     const svg = elem.select('.radial-main').append('svg')
       .attr('width', this.state.width)
@@ -195,30 +194,30 @@ export default class RadialWidget extends React.Component<Object, Object> {
     });
   }
 
-
-  _onData = action(payload => {
-    const {timestamp, value} = payload;
-    const {items, values} = this.props.widget;
-
-    values.replace([
-      {
-        timestamp,
-        value: _.pick(value, items),
-      },
-    ]);
-    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
-    if (!_.isEmpty(latestValue)) {
-      const v = latestValue[items[0]];
-      const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
-      this.itemValue = fixedValue;
-      this.update();
-    }
-  });
-
   componentDidMount() {
-    const {profileId} = this.props.widget;
-    Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
-    this.buildWidget();
+    setTimeout(() => this.buildWidget(), 200);
+    autorun(() => {
+      const {items, values} = this.props.widget;
+      const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+      if (!_.isEmpty(latestValue)) {
+        const v = latestValue[items[0]];
+        console.log('widget value', v);
+        const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
+        this.itemValue = fixedValue;
+        this.update();
+      }
+    });
+  }
+
+  removeD3 = () => {
+    if (this.radial) {
+      const elem = d3.select(this.radial);
+      elem.select('.radial-main').selectAll('svg').remove();
+    }
+  };
+
+  componentWillUnmount() {
+    this.removeD3();
   }
 
   _onResize = (width: number, height: number) => {
@@ -230,8 +229,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
   };
 
   render() {
-    const { widget, widgetStyle } = this.props;
-    const { displayName } = widget;
+    const {widget, widgetStyle} = this.props;
+    const {displayName} = widget;
 
     // 1. render container for d3 in this render function
     // 2. draw d3 graph in a separate function after componentDidMount
