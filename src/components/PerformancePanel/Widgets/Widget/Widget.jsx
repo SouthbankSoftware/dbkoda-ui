@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-02T13:47:24+11:00
+ * @Last modified time: 2018-02-05T11:58:21+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,6 +39,7 @@ import { Broker, EventType } from '~/helpers/broker';
 import './Widget.scss';
 
 const DEBOUNCE_DELAY = 100;
+const MAX_HISTORY_SIZE = 720; // 1h with 5s sampling rate
 
 type Props = {
   widget: WidgetState,
@@ -55,12 +56,14 @@ export default class Widget extends React.Component<Props> {
     const { timestamp, value } = payload;
     const { items, values } = this.props.widget;
 
-    values.replace([
-      {
-        timestamp,
-        value: _.pick(value, items)
-      }
-    ]);
+    if (values.length >= MAX_HISTORY_SIZE) {
+      values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
+    }
+
+    values.push({
+      timestamp,
+      value: _.pick(value, items)
+    });
   });
 
   _onResize = _.debounce((...args) => {
