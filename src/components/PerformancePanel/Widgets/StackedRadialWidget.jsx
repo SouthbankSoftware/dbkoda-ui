@@ -26,10 +26,12 @@ import * as d3 from 'd3';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
-import _ from 'lodash';
 
+import _ from 'lodash';
+import { Intent, Tooltip, Position } from '@blueprintjs/core';
 import './StackedRadialWidget.scss';
 import Widget from './Widget';
+import Legend from './Legend';
 import { Broker, EventType } from '../../../helpers/broker';
 
 @inject(({ store, api }, { widget }) => {
@@ -44,7 +46,14 @@ import { Broker, EventType } from '../../../helpers/broker';
  * TODO: @joey please enable flow
  */
 export default class StackedRadialWidget extends React.Component {
-  static colors = ['#3333cc'];
+  static colors = [
+    '#3333cc',
+    '#2E547A',
+    '#643798',
+    '#39B160',
+    '#DC5D3E',
+    '#A27EB7'
+  ];
   static width = 50;
   static height = 50;
   static PI = 2 * Math.PI;
@@ -113,6 +122,9 @@ export default class StackedRadialWidget extends React.Component {
       .remove();
     d3.transition();
 
+    let xTranslate = this.state.width / 2;
+    xTranslate -= parseInt(this.state.width * 0.175, 10);
+
     const svg = elem
       .select(selector)
       .append('svg')
@@ -121,8 +133,21 @@ export default class StackedRadialWidget extends React.Component {
       .append('g')
       .attr(
         'transform',
-        'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')'
+        'translate(' + xTranslate + ',' + this.state.height / 2 + ')'
       );
+
+    let tooltip = '?';
+    let count = 0;
+    for (const key in this.itemValues) {
+      if (this.itemValues.hasOwnProperty(key)) {
+        count += 1;
+        if (count === layer) {
+          console.debug('Layer ', layer, ' tooltip is ', key);
+          tooltip = key;
+        }
+      }
+    }
+    svg.append('svg:title').text(tooltip);
 
     // Gradient.
     const gradient = svg
@@ -138,13 +163,13 @@ export default class StackedRadialWidget extends React.Component {
     gradient
       .append('svg:stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#BD4133')
+      .attr('stop-color', StackedRadialWidget.colors[layer - 1])
       .attr('stop-opacity', 1);
 
     gradient
       .append('svg:stop')
       .attr('offset', '100%')
-      .attr('stop-color', '#8A4148')
+      .attr('stop-color', StackedRadialWidget.colors[layer - 1])
       .attr('stop-opacity', 1);
 
     // Drop Shadows
@@ -184,7 +209,7 @@ export default class StackedRadialWidget extends React.Component {
     field
       .append('path')
       .attr('class', 'bg')
-      .style('fill', StackedRadialWidget.colors[0])
+      .style('fill', StackedRadialWidget.colors[layer - 1])
       .style('opacity', 0.2)
       .attr('d', background);
 
@@ -193,7 +218,7 @@ export default class StackedRadialWidget extends React.Component {
     field
       .append('text')
       .attr('class', 'completed')
-      .attr('transform', 'scale(0.5, 0.5)')
+      .attr('transform', 'scale(0.1, 0.1)')
       .attr('transform', 'translate(100, ' + parseInt(yTranslation, 10) + ')');
 
     // Add tooltip.
@@ -281,6 +306,10 @@ export default class StackedRadialWidget extends React.Component {
         .select('text.completed')
         .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
     }
+
+    field.field
+      .select('title')
+      .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
   }
 
   _onData = action(payload => {
@@ -311,6 +340,9 @@ export default class StackedRadialWidget extends React.Component {
         });
       });
     }
+    if (this.legend) {
+      this.legend.setValues(this.itemValues);
+    }
   });
 
   componentDidMount() {
@@ -329,6 +361,27 @@ export default class StackedRadialWidget extends React.Component {
     });
   };
 
+  /**
+   * Used to dynamically style the element so a tooltip can be overlayed on it.
+   * @param {int} count - The layer being rendered, this will determine the scale and position.
+   */
+  determineTooltipStyling(count: number) {
+    return {
+      color: 'white',
+      position: 'absolute',
+      width: this.state.width * count / 4.25,
+      height: this.state.width * count / 4.25,
+      zIndex: 10 - count,
+      left:
+        'calc(50% - ' +
+        this.state.width * count / 4.25 / 2 +
+        'px - ' +
+        this.state.width * 0.175 +
+        'px)',
+      top: 'calc(50% - ' + this.state.width * count / 4.25 / 2 + 'px)'
+    };
+  }
+
   render() {
     const { widget } = this.props;
     const { displayName } = widget;
@@ -336,18 +389,29 @@ export default class StackedRadialWidget extends React.Component {
     this.props.widget.items.forEach((item, count) => {
       this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
     });
+    const wrapperStyle = { width: this.state.width * 0.66 };
     return (
       <Widget widget={widget} onResize={this._onResize}>
         <div
           className="StackedRadialWidget"
           ref={radial => (this.radial = radial)}
         >
-          <div className="display-name">{displayName}</div>
-          {this.props.widget.items.map((item, count) => {
-            const classes =
-              'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
-            return <div className={classes} />;
-          })}
+          <div className="radialWrapper" style={wrapperStyle}>
+            <div className="display-name">{displayName}</div>
+            {this.props.widget.items.map((item, count) => {
+              const tooltipStyle = this.determineTooltipStyling(count + 1);
+              const classes =
+                'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
+              return <div className={classes} />;
+            })}
+          </div>
+          <Legend
+            showTotal
+            metrics={this.props.widget.items}
+            onRef={legend => {
+              this.legend = legend;
+            }}
+          />
         </div>
       </Widget>
     );

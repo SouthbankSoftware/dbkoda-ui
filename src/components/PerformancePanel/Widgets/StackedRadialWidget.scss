@@ -25,7 +25,7 @@
   display: flex;
   width: 100%;
   height: 100%;
-  flex-direction: column;
+  flex-direction: row;
 
   .completed {
     font-family: 'Roboto', 'Myriad Set Pro', 'Lucida Grande', 'Helvetica Neue',
@@ -47,5 +47,47 @@
   div.radial-2 {
   }
   div.radial-3 {
+  }
+
+  .pt-popover-target {
+    width: 100%;
+    height: 100%;
+  }
+
+  .keyWrapper {
+    width: 25%;
+    float: right;
+    display: flex;
+    padding-top: 10%;
+    flex-direction: column;
+    .value {
+    }
+    .label {
+    }
+    .row {
+      text-align: end;
+      float: right;
+      display: flex;
+      flex-direction: row;
+      .colorDot {
+        visibility: visible;
+        border-radius: 50%;
+        width: 20px;
+        height: 10px;
+        background-color: #bfbec0;
+        margin-right: 5px;
+      }
+      .legendValue {
+        width: 100%;
+        text-align: end;
+      }
+      .label {
+        width: 100%;
+        text-align: end;
+      }
+    }
+    .rowTotal {
+      opacity: 0.5;
+    }
   }
 }
