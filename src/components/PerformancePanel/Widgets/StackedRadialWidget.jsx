@@ -402,7 +402,24 @@ export default class StackedRadialWidget extends React.Component {
               const tooltipStyle = this.determineTooltipStyling(count + 1);
               const classes =
                 'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
-              return <div className={classes} />;
+              return (
+                <div className={classes}>
+                  <div className="tooltip-wrapper" style={tooltipStyle}>
+                    {' '}
+                    <Tooltip
+                      intent={Intent.PRIMARY}
+                      style={tooltipStyle}
+                      hoverOpenDelay={1000}
+                      inline
+                      content={item}
+                      tooltipClassName="pt-dark"
+                      position={Position.BOTTOM}
+                    >
+                      <div />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
             })}
           </div>
           <Legend
