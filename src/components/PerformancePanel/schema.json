@@ -1,6 +1,7 @@
 {
   "cols": 9,
   "rows": 8,
+  "rowHeight": 150,
   "leftWidth": 2,
   "midWidth": 5,
   "widgets": [
