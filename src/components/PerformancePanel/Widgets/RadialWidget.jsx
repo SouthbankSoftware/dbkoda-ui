@@ -196,8 +196,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .style('fill', 'url(#gradient)');
     // this.field.selectAll('text.completed').removeAll();
     if (this.itemValue.length === 1) {
-      this.field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)').text((d) => d.text);
-      // this.field.select('text.completed').text((d) => d.text);
+      // this.field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)').text((d) => d.text);
+      this.field.select('text.completed').text((d) => d.text);
     } else if (this.itemValue.length >= 1) {
       //
     }
