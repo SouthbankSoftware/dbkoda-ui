@@ -6,13 +6,70 @@
   "midWidth": 5,
   "widgets": [
     {
-      "type": "StackedRadialWidget",
-      "items": ["item-1", "item-2", "item-3", "item-4"],
+      "type": "RadialWidget",
+      "items": ["cpu"],
       "extraState": {
-        "displayName": "StackedRadial"
+        "displayName": "CPU"
       },
       "layout": {
         "x": 0,
+        "y": 0,
+        "w": 2,
+        "h": 2,
+        "static": true
+      }
+    },
+    {
+      "type": "RadialWidget",
+      "items": ["memory"],
+      "extraState": {
+        "displayName": "Memory"
+      },
+      "layout": {
+        "x": 0,
+        "y": 2,
+        "w": 2,
+        "h": 2,
+        "static": true
+      }
+    },
+    {
+      "type": "RadialWidget",
+      "items": ["disk"],
+      "extraState": {
+        "displayName": "Disk"
+      },
+      "layout": {
+        "x": 0,
+        "y": 4,
+        "w": 2,
+        "h": 2,
+        "static": true
+      }
+    },
+    {
+      "type": "RadialWidget",
+      "items": ["network"],
+      "extraState": {
+        "displayName": "Network"
+      },
+      "layout": {
+        "x": 0,
+        "y": 6,
+        "w": 2,
+        "h": 2,
+        "static": true
+      }
+    },
+    {
+      "type": "StackedRadialWidget",
+      "items": ["item-1", "item-2", "item-3", "item-4", "item-5"],
+      "extraState": {
+        "displayName": "StackedRadial Example",
+        "showLegend": true
+      },
+      "layout": {
+        "x": 2,
         "y": 0,
         "w": 4,
         "h": 2,

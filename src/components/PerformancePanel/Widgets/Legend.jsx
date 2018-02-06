@@ -24,8 +24,15 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import ErrorIcon from '../../../styles/icons/error-icon.svg';
 
 import './StackedRadialWidget.scss';
+
+type Props = {
+  metrics: any,
+  onRef: any,
+  showTotal: any
+};
 
 @inject(({ store, api }, { widget }) => {
   return {
@@ -38,7 +45,7 @@ import './StackedRadialWidget.scss';
 /**
  * TODO: @joey please enable flow
  */
-export default class Legend extends React.Component {
+export default class Legend extends React.Component<Props> {
   static colors = [
     '#3333cc',
     '#2E547A',
@@ -48,11 +55,20 @@ export default class Legend extends React.Component {
     '#A27EB7'
   ];
 
+  static fontSize = 7;
+  static rowSize = 20;
+  static rowScalingFactor = 600;
+  static fontScalingFactor = 500;
+  static height = 20;
+  static width = 20;
+
   constructor(props) {
     super(props);
     this.state = {
       items: this.props.metrics,
-      values: []
+      values: [],
+      width: 100,
+      height: 100
     };
     this.setValues = this.setValues.bind(this);
   }
@@ -69,30 +85,88 @@ export default class Legend extends React.Component {
     this.setState({ values });
   }
 
+  resize(width: number, height: number) {
+    this.setState({ width, height });
+  }
+
   render() {
     let total = 0;
+
+    // Determine size.
+    const fontSize =
+      Legend.fontSize +
+      Legend.fontSize * this.state.width / Legend.fontScalingFactor +
+      'px';
+    const rowDynamicStyle = {
+      height:
+        Legend.rowSize +
+        Legend.rowSize * this.state.width / Legend.rowScalingFactor * 1.2 +
+        'px'
+    };
+    // Render
     return (
       <div className="keyWrapper">
         {this.state.items.map((item, count) => {
-          const style = { backgroundColor: Legend.colors[count] };
+          // Determine Dot color and total count.
+          const style = { fill: Legend.colors[count] };
           let value = '0';
           if (this.state.values[item]) {
             value = parseInt(this.state.values[item], 10);
             total += this.state.values[item];
           }
+
           return (
-            <div className="row">
-              <div className="colorDot" style={style} />
-              <div className="label">{item}: </div>
-              <div className="legendValue">{value}</div>
+            <div className="row" style={rowDynamicStyle}>
+              <ErrorIcon className="colorDot" style={style} />
+              <svg className="label">
+                <text
+                  x="20"
+                  y="20"
+                  fontFamily="sans-serif"
+                  fontSize={fontSize}
+                  fill="white"
+                >
+                  {item}:
+                </text>{' '}
+              </svg>
+              <svg className="legendValue">
+                <text
+                  x="20"
+                  y="20"
+                  fontFamily="sans-serif"
+                  fontSize={fontSize}
+                  fill="white"
+                >
+                  {value}
+                </text>{' '}
+              </svg>
             </div>
           );
         })}
         {this.props.showTotal && (
-          <div className="row rowTotal">
-            <div className="colorDot" />
-            <div className="label">Total: </div>
-            <div className="legendValue">{total}</div>
+          <div className="row rowTotal" style={rowDynamicStyle}>
+            <svg className="label">
+              <text
+                x="20"
+                y="20"
+                fontFamily="sans-serif"
+                fontSize={fontSize}
+                fill="white"
+              >
+                Total:
+              </text>:{' '}
+            </svg>
+            <svg className="legendValue">
+              <text
+                x="20"
+                y="20"
+                fontFamily="sans-serif"
+                fontSize={fontSize}
+                fill="white"
+              >
+                {total}
+              </text>{' '}
+            </svg>
           </div>
         )}
       </div>

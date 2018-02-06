@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+@import '../../../styles/_defaultTheme.scss';
 .StackedRadialWidget {
   display: flex;
   width: 100%;
@@ -53,9 +53,12 @@
     width: 100%;
     height: 100%;
   }
-
+  .radialWrapper {
+    flex-grow: 1;
+  }
   .keyWrapper {
-    width: 25%;
+    width: 33%;
+    flex-grow: 1;
     float: right;
     display: flex;
     padding-top: 10%;
@@ -70,24 +73,22 @@
       display: flex;
       flex-direction: row;
       .colorDot {
-        visibility: visible;
-        border-radius: 50%;
-        width: 20px;
-        height: 10px;
-        background-color: #bfbec0;
-        margin-right: 5px;
+        width: 16px;
       }
       .legendValue {
-        width: 100%;
+        width: 40%;
         text-align: end;
       }
       .label {
-        width: 100%;
+        width: 57%;
         text-align: end;
       }
     }
     .rowTotal {
-      opacity: 0.5;
+      border-top: 1px solid gray;
+      margin-top: 4px;
+      padding-top: 2px;
+      opacity: 0.4;
     }
   }
 }

@@ -43,7 +43,7 @@ import { Broker, EventType } from '../../../helpers/broker';
 })
 @observer
 /**
- * TODO: @joey please enable flow
+ * TODO: Flow.
  */
 export default class StackedRadialWidget extends React.Component {
   static colors = [
@@ -56,6 +56,7 @@ export default class StackedRadialWidget extends React.Component {
   ];
   static width = 50;
   static height = 50;
+  static minRadius = 12;
   static PI = 2 * Math.PI;
 
   constructor(props) {
@@ -96,10 +97,16 @@ export default class StackedRadialWidget extends React.Component {
   }
 
   _getInnerRadiusSize(layer: number) {
+    const minValue = Math.min(this.state.width, this.state.height);
     if (layer > 1) {
-      return this.state.width / (12 * this.scaleFactor) * layer - 1;
+      // Layer X inner should be equal to layer X-1 outer.
+      return (
+        this._getInnerRadiusSize(layer - 1) + minValue / (10 * this.scaleFactor)
+      );
     }
-    return this.state.width / (12 * this.scaleFactor);
+    return (
+      StackedRadialWidget.minRadius + this.state.width / (8 * this.scaleFactor)
+    );
   }
 
   _getOuterRadiusSize(layer: number) {
@@ -122,8 +129,12 @@ export default class StackedRadialWidget extends React.Component {
       .remove();
     d3.transition();
 
-    let xTranslate = this.state.width / 2;
-    xTranslate -= parseInt(this.state.width * 0.175, 10);
+    let xTranslate = 0;
+    xTranslate += parseInt(
+      this._getOuterRadiusSize(this.props.widget.items.length) +
+        this.state.width * 0.02,
+      10
+    );
 
     const svg = elem
       .select(selector)
@@ -142,7 +153,6 @@ export default class StackedRadialWidget extends React.Component {
       if (this.itemValues.hasOwnProperty(key)) {
         count += 1;
         if (count === layer) {
-          console.debug('Layer ', layer, ' tooltip is ', key);
           tooltip = key;
         }
       }
@@ -203,7 +213,7 @@ export default class StackedRadialWidget extends React.Component {
     field
       .append('path')
       .attr('class', 'progress')
-      .attr('filter', 'url(#dropshadow)');
+      .attr('fill', StackedRadialWidget.colors[layer - 1]);
 
     // render background
     field
@@ -213,7 +223,6 @@ export default class StackedRadialWidget extends React.Component {
       .style('opacity', 0.2)
       .attr('d', background);
 
-    // field.append('text').attr('class', 'icon');
     const yTranslation = -100 + 35 * (layer - 1);
     field
       .append('text')
@@ -277,9 +286,7 @@ export default class StackedRadialWidget extends React.Component {
       .select('path.progress')
       .transition()
       .duration(1000)
-      // .ease('elastic')
-      .attrTween('d', this.arcTween.bind(this))
-      .style('fill', 'url(#gradient)');
+      .attrTween('d', this.arcTween.bind(this));
 
     // Get total sum of radials.
     let sumOfItems = 0;
@@ -291,11 +298,10 @@ export default class StackedRadialWidget extends React.Component {
 
     // Reduce Radial to 3 figures max.
     if (sumOfItems > 999) {
-      sumOfItems =
-        Number.parseFloat((sumOfItems /= 1000)).toPrecision(3) + 'k/s';
+      sumOfItems = Number.parseFloat((sumOfItems /= 1000)).toPrecision(3) + 'k';
     } else if (sumOfItems > 999) {
       sumOfItems =
-        Number.parseFloat((sumOfItems /= 1000000)).toPrecision(3) + 'M/s';
+        Number.parseFloat((sumOfItems /= 1000000)).toPrecision(3) + 'M';
     }
 
     if (field.layer === 1) {
@@ -355,6 +361,9 @@ export default class StackedRadialWidget extends React.Component {
   }
 
   _onResize = (width: number, height: number) => {
+    if (this.legend) {
+      this.legend.resize(width, height);
+    }
     this.setState({
       width,
       height
@@ -383,6 +392,7 @@ export default class StackedRadialWidget extends React.Component {
   }
 
   render() {
+    console.debug(this.props);
     const { widget } = this.props;
     const { displayName } = widget;
     this.fields = [];
@@ -422,13 +432,15 @@ export default class StackedRadialWidget extends React.Component {
               );
             })}
           </div>
-          <Legend
-            showTotal
-            metrics={this.props.widget.items}
-            onRef={legend => {
-              this.legend = legend;
-            }}
-          />
+          {widget.showLegend && (
+            <Legend
+              showTotal
+              metrics={this.props.widget.items}
+              onRef={legend => {
+                this.legend = legend;
+              }}
+            />
+          )}
         </div>
       </Widget>
     );
