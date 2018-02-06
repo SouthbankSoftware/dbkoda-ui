@@ -1,0 +1,71 @@
+/**
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2018-02-05T12:18:41+11:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-05T18:01:41+11:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "../../../../styles/_defaultTheme.scss";
+
+$container-padding: 5px;
+$description-height: 18px;
+
+.HistoryView {
+  height: 100%;
+  width: 100%;
+  padding: $container-padding;
+  text-shadow: none;
+
+  .description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: $description-height;
+    margin: 0;
+  }
+}
+
+:export {
+  colour1: $colourOne;
+  colour2: $colourTwo;
+  colour3: $colourThree;
+  colour4: $colourFour;
+  colour5: $colourFive;
+  colour6: $colourSix;
+  colour7: $colourSeven;
+  colour8: $colourEight;
+  colour9: $colourNine;
+  colour10: $colourTen;
+  colour11: $colourEleven;
+  colour12: $colourTwelve;
+  colour13: $colourThirteen;
+  colour14: $colourFourteen;
+  colour15: $colourFifteen;
+  colour16: $colourSixteen;
+  colour17: $colourSeventeen;
+  colour18: lighten($colourOne, 10%);
+  colour19: lighten($colourTwo, 10%);
+  colour20: lighten($colourThree, 10%);
+  colour21: darken($defaultChartPanelText, 10%);
+  containerPadding: $container-padding;
+  descriptionHeight: $description-height;
+}
