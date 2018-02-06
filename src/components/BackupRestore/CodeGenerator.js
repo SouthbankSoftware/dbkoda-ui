@@ -42,7 +42,7 @@ const createTemplateObject = state => {
     url,
     database,
     ssl,
-    ssh,
+    sshTunnel,
     sshLocalPort,
     authenticationDatabase
   } = profile;
@@ -63,7 +63,7 @@ const createTemplateObject = state => {
     delete items.password;
   }
   if (hostRadio) {
-    if (ssh) {
+    if (sshTunnel) {
       items.host = '127.0.0.1';
       items.port = sshLocalPort;
     } else {
