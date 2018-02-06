@@ -1,7 +1,9 @@
 /**
- * Created by joey on 17/1/18.
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T17:15:23+11:00
+ * @flow
+ *
+ * Created by mike on 06/02/2018
+ * @Last modified by:   mike
+ * @Last modified time: 2018-02-06T17:15:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,11 +30,12 @@ import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 
 import _ from 'lodash';
-import { Intent, Tooltip, Position } from '@blueprintjs/core';
 import './StackedRadialWidget.scss';
 import Widget from './Widget';
 import Legend from './Legend';
 import { Broker, EventType } from '../../../helpers/broker';
+
+// Flow type definitions.
 
 @inject(({ store, api }, { widget }) => {
   return {
@@ -42,10 +45,10 @@ import { Broker, EventType } from '../../../helpers/broker';
   };
 })
 @observer
-/**
- * TODO: Flow.
- */
-export default class StackedRadialWidget extends React.Component {
+export default class StackedRadialWidget extends React.Component<
+  Object,
+  Object
+> {
   static colors = [
     '#3333cc',
     '#2E547A',
@@ -59,14 +62,25 @@ export default class StackedRadialWidget extends React.Component {
   static minRadius = 12;
   static PI = 2 * Math.PI;
 
-  constructor(props) {
+  state: any;
+  fields: Array<Object>;
+  itemValues: Object;
+  field: *;
+  scaleFactor: number;
+  legend: any;
+  radial: Object;
+  dataset: () => Array<Object>;
+
+  constructor(props: Object) {
     super(props);
     this.state = {
       width: StackedRadialWidget.width,
       height: StackedRadialWidget.height,
       lastLayerTweened: { key: '', index: 1 }
     };
+    // $FlowFixMe
     this.fields = [];
+    // $FlowFixMe
     this.itemValues = [];
     this.field = null;
     if (this.props.widget.items.length > 3) {
@@ -114,7 +128,7 @@ export default class StackedRadialWidget extends React.Component {
     return this._getInnerRadiusSize(layer) + minValue / (16 * this.scaleFactor);
   }
 
-  buildWidget(selector: string, layer: number, data) {
+  buildWidget(selector: string, layer: number, data: String) {
     const background = d3
       .arc()
       .startAngle(0)
@@ -221,7 +235,9 @@ export default class StackedRadialWidget extends React.Component {
       .attr('class', 'bg')
       .style('fill', StackedRadialWidget.colors[layer - 1])
       .style('opacity', 0.2)
-      .attr('d', background);
+      .attr('d', background)
+      .on('mouseover', this.handleMouseOver)
+      .on('mouseout', this.handleMouseOut);
 
     const yTranslation = -100 + 35 * (layer - 1);
     field
@@ -242,16 +258,16 @@ export default class StackedRadialWidget extends React.Component {
     return field;
   }
 
-  arcTween(d) {
+  arcTween(d: any) {
     const i = d3.interpolateNumber(d.previousValue, d.percentage);
-
+    // $FlowFixMe
     return t => {
       d.percentage = i(t);
       return this.arc(d)(d);
     };
   }
 
-  arc(data) {
+  arc(data: any) {
     return d3
       .arc()
       .startAngle(0)
@@ -270,7 +286,7 @@ export default class StackedRadialWidget extends React.Component {
   /**
    * When new data is recieved, update the relevant ring.
    */
-  update(field) {
+  update(field: Object) {
     this.state.lastLayerTweened = { key: field.data, index: field.layer };
     field.field = field.field
       .each(function(d) {
@@ -298,9 +314,11 @@ export default class StackedRadialWidget extends React.Component {
 
     // Reduce Radial to 3 figures max.
     if (sumOfItems > 999) {
+      // $FlowFixMe
       sumOfItems = Number.parseFloat((sumOfItems /= 1000)).toPrecision(3) + 'k';
     } else if (sumOfItems > 999) {
       sumOfItems =
+        // $FlowFixMe
         Number.parseFloat((sumOfItems /= 1000000)).toPrecision(3) + 'M';
     }
 
@@ -330,6 +348,7 @@ export default class StackedRadialWidget extends React.Component {
     ]);
     const latestValue =
       values.length > 0 ? values[values.length - 1].value : {};
+    // $FlowFixMe
     this.itemValues = [];
     if (!_.isEmpty(latestValue)) {
       Object.keys(latestValue).map(key => {
@@ -337,7 +356,9 @@ export default class StackedRadialWidget extends React.Component {
           ? latestValue[key]
           : parseInt(latestValue[key], 10);
         this.itemValues[key] = fixedValue;
+        // Check if max ever.
       });
+
       this.fields.map(field => {
         Object.keys(latestValue).map(key => {
           if (field.data === key) {
@@ -351,13 +372,27 @@ export default class StackedRadialWidget extends React.Component {
     }
   });
 
+  handleMouseOver(d: any, i: any) {
+    console.debug('Mouse over:');
+    console.debug(d);
+    console.debug(i);
+  }
+
+  handleMouseOut(d: any, i: any) {
+    console.debug('Mouse over:');
+    console.debug(d);
+    console.debug(i);
+  }
+
   componentDidMount() {
     const { profileId } = this.props.widget;
     Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
-    this.fields = [];
-    this.props.widget.items.forEach((item, count) => {
-      this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
-    });
+    setTimeout(() => {
+      this.fields = [];
+      this.props.widget.items.forEach((item, count) => {
+        this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
+      });
+    }, 200);
   }
 
   _onResize = (width: number, height: number) => {
@@ -404,32 +439,15 @@ export default class StackedRadialWidget extends React.Component {
       <Widget widget={widget} onResize={this._onResize}>
         <div
           className="StackedRadialWidget"
+          // $FlowFixMe
           ref={radial => (this.radial = radial)}
         >
           <div className="radialWrapper" style={wrapperStyle}>
             <div className="display-name">{displayName}</div>
             {this.props.widget.items.map((item, count) => {
-              const tooltipStyle = this.determineTooltipStyling(count + 1);
               const classes =
                 'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
-              return (
-                <div className={classes}>
-                  <div className="tooltip-wrapper" style={tooltipStyle}>
-                    {' '}
-                    <Tooltip
-                      intent={Intent.PRIMARY}
-                      style={tooltipStyle}
-                      hoverOpenDelay={1000}
-                      inline
-                      content={item}
-                      tooltipClassName="pt-dark"
-                      position={Position.BOTTOM}
-                    >
-                      <div />
-                    </Tooltip>
-                  </div>
-                </div>
-              );
+              return <div className={classes} />;
             })}
           </div>
           {widget.showLegend && (
