@@ -2,8 +2,8 @@
  * @Author: Michael Harrison
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:13:31+11:00
+ * @Last modified by:   mike
+ * @Last modified time: 2018-02-05T10:25:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -41,7 +41,7 @@ import HideIcon from '../../styles/icons/close-profile-icon.svg';
 import './style.scss';
 
 @inject(allStores => ({
-  store: allStores.store,
+  store: allStores.store
 }))
 @observer
 export default class Details extends React.Component {
@@ -50,16 +50,16 @@ export default class Details extends React.Component {
     this.state = {
       form: null,
       previousActiveBlock: null,
-      reproduceCode: false,
+      reproduceCode: false
     };
     this.reactionToUpdateDetails = reaction(
       () => this.props.store.editorPanel.updateAggregateDetails,
-      () => this.updateDetails(),
+      () => this.updateDetails()
     );
 
     // Get variables for action:
     this.editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     this.debug = false;
 
@@ -69,9 +69,9 @@ export default class Details extends React.Component {
      * @return {Object}          Object containing params for prefetch function
      *
      */
-    this.resolveArguments = (args) => {
+    this.resolveArguments = args => {
       const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
+        this.props.store.editorPanel.activeEditorId
       );
       const params = {};
       let myCount = 1;
@@ -115,7 +115,7 @@ export default class Details extends React.Component {
               default:
                 console.error(
                   'Invalid arguments to Aggregate Block (This should not really happen :( - ',
-                  args,
+                  args
                 );
             }
           }
@@ -163,7 +163,7 @@ export default class Details extends React.Component {
     }
     // Update Editor Contents.
     this.props.store.treeActionPanel.formValues = this.generateCode(
-      editorObject,
+      editorObject
     );
     this.props.store.treeActionPanel.isNewFormValues = true;
   }
@@ -194,7 +194,10 @@ export default class Details extends React.Component {
         formTemplate(editorObject.blockList[0].fields) + ';' + newLine;
     }
     codeString +=
-      'db.' + editorObject.collection.text + '.aggregate([' + newLine;
+      'db.getCollection("' +
+      editorObject.collection.text +
+      '").aggregate([' +
+      newLine;
 
     const selectedBlockIndex = editorObject.selectedBlock;
     // Then add all other blocks.
@@ -267,7 +270,7 @@ export default class Details extends React.Component {
   byoCode() {
     // Get current block.
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     editor.blockList[editor.selectedBlock].byoCode = true;
     // eslint-disable-next-line
@@ -275,7 +278,7 @@ export default class Details extends React.Component {
       editor.blockList[editor.selectedBlock].type +
       '.hbs');
     editor.blockList[editor.selectedBlock].code = formTemplate(
-      editor.blockList[editor.selectedBlock].fields,
+      editor.blockList[editor.selectedBlock].fields
     );
     this.forceUpdate();
   }
@@ -284,7 +287,7 @@ export default class Details extends React.Component {
   nonBYOCode() {
     // Get current block.
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     editor.blockList[editor.selectedBlock].byoCode = false;
     this.forceUpdate();
@@ -292,7 +295,7 @@ export default class Details extends React.Component {
 
   render() {
     const activeEditor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     this.currentDB = this.editor.collection.refParent.text;
     this.currentCollection = this.editor.collection.text;
@@ -307,7 +310,7 @@ export default class Details extends React.Component {
       // Update Editor Contents.
       runInAction(() => {
         this.props.store.treeActionPanel.formValues = this.generateCode(
-          activeEditor,
+          activeEditor
         );
         this.props.store.treeActionPanel.isNewFormValues = true;
       });
@@ -377,17 +380,17 @@ export default class Details extends React.Component {
         this.editor,
         {
           action: activeBlock.type,
-          aggregate: true,
-        },
+          aggregate: true
+        }
       );
       this.formPromise
-        .then((res) => {
+        .then(res => {
           this.dynamicForm = res;
           this.showForm(true);
           this.setState({ form: this.dynamicForm });
           this.dynamicForm.getData();
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.updateMsg(reason);
         });
     }
