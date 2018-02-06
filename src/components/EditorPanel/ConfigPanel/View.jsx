@@ -22,7 +22,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T11:19:34+11:00
+ * @Last modified time: 2018-02-05T11:13:17+11:00
  */
 
 import React from 'react';
@@ -68,7 +68,9 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
-    this.props.store.configPage.newSettings = this.props.config.settings;
+    runInAction(() => {
+      this.props.store.configPage.newSettings = this.props.config.settings;
+    });
   }
 
   @action.bound
