@@ -452,7 +452,7 @@ class View extends React.Component {
             } else {
               // Quick check if line is a full command:
               if (type !== 'os') {
-                const ignore = /^[^\S\x0a\x0d]*(?:use|show|help|it|exit[\s]|dbk_agg*).*/g;
+                const ignore = /^[^\S\x0a\x0d]*(?:use|show|help|it|exit[\s]).*/g;
                 const splitted = content.split(getSeparator());
                 let hasError = false;
                 let filteredCode = '';
