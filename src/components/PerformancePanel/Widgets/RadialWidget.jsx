@@ -55,7 +55,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   constructor(props: Object) {
     super(props);
-    this.state = {width: RadialWidget.width, height: RadialWidget.height};
+    this.state = {width: RadialWidget.width, height: RadialWidget.height, text: ''};
   }
 
   dataset = () => {
@@ -64,7 +64,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   _getInnerRadiusSize() {
     const minValue = Math.min(this.state.width, this.state.height);
-    return minValue / 4;
+    return minValue / 2.9;
   }
 
   _getOuterRadiusSize() {
@@ -149,7 +149,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
     // field.append('text').attr('class', 'icon');
 
-    field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)');
+    field.append('text').attr('class', 'completed').attr('transform', 'translate(0, 10)');
     this.field = field;
     d3.transition().duration(1000).each(() => this.update());
 
@@ -194,12 +194,15 @@ export default class RadialWidget extends React.Component<Object, Object> {
     // .ease('elastic')
       .attrTween('d', this.arcTween.bind(this))
       .style('fill', 'url(#gradient)');
-    // this.field.selectAll('text.completed').removeAll();
     if (this.itemValue.length === 1) {
-      // this.field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)').text((d) => d.text);
       this.field.select('text.completed').text((d) => d.text);
     } else if (this.itemValue.length >= 1) {
-      //
+      this.field.selectAll('text.completed').remove();
+      const texts = this.state.text.split('\n');
+      for (let i = 0; i < texts.length; i += 1) {
+        const t = texts[i];
+        this.field.append('text').attr('class', 'completed').attr('transform', `translate(0, ${i * 20})`).style('font-size', 'small').text(t);
+      }
     }
   }
 
@@ -209,52 +212,83 @@ export default class RadialWidget extends React.Component<Object, Object> {
       autorun(() => {
         const {items, values} = this.props.widget;
         this.itemValue = this.getValueFromData(items, values);
-        this.update();
+        const pathsSize = this.field.selectAll('path').size();
+        if (pathsSize === 0) {
+          this.buildWidget();
+        } else {
+          this.update();
+        }
       });
-    }, 200);
+    }, 500);
   }
 
-  getValueFromData(items: Array<Object>, values: Array<Object>): Array<Object> {
+  /**
+   * TODO: move to schema
+   */
+  getValueFromData(items: Array<Object>, staleValues: Array<Object>): Array<Object> {
+    const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latestValue : Object = values.length > 0 ? values[values.length - 1].value : {};
     if (!_.isEmpty(latestValue)) {
       const v = latestValue[items[0]];
-      console.log('widget value', v);
+      console.log('widget value', items[0], v);
       if (!v) {
         return [];
       }
-      if (items[0] === 'network') {
+      if (!_.isInteger(v) && _.keys(v).indexOf('download') >= 0 && _.keys(v).indexOf('upload') >= 0) {
         const previousValue : Object = values.length > 1 ? values[values.length - 2].value : {};
         if (_.isEmpty(previousValue)) {
           return [];
         }
         const prevV = previousValue[items[0]];
-        const download = _.isInteger(v.download) ? v.download : parseInt(v.download, 10);
-        const upload = _.isInteger(v.upload) ? v.upload : parseInt(v.upload, 10);
-        const prevDownload = _.isInteger(prevV.download) ? prevV.download : parseInt(prevV.download, 10);
-        const prevUplaod = _.isInteger(prevV.upload) ? prevV.upload : parseInt(prevV.upload, 10);
+        const download : number = _.isInteger(v.download) ? v.download : parseInt(v.download, 10);
+        const upload : number = _.isInteger(v.upload) ? v.upload : parseInt(v.upload, 10);
+        const prevDownload : number = _.isInteger(prevV.download) ? prevV.download : parseInt(prevV.download, 10);
+        const prevUplaod : number = _.isInteger(prevV.upload) ? prevV.upload : parseInt(prevV.upload, 10);
         const maxDownload = _.maxBy(values, e => {
-          return !_.isEmpty(e) && e.value && e.value[items[0]] ? e.value[items[0]].download : 0;
+          return !_.isEmpty(e) && e.value !== undefined && e.value[items[0]] ? e.value[items[0]].download : 0;
         });
         const maxUpload = _.maxBy(values, e => {
-          return !_.isEmpty(e) && e.value && e.value[items[0]] ? e.value[items[0]].upload : 0;
+          return !_.isEmpty(e) && e.value !== undefined && e.value[items[0]] ? e.value[items[0]].upload : 0;
         });
-        if (maxDownload === 0 || maxUpload === 0) {
-          return [];
-        }
-        const bytesToSize = (bytes) => {
-          const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-          if (bytes <= 0) return '0 Byte';
+        const bytesToSize = (bytes: number) => {
+          const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+          if (bytes <= 0) return '0 B';
           const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
-          return Math.round(bytes / (1024 ** i)) + ' ' + sizes[i];
+          if (i < 0) {
+            return '0B';
+          }
+          return Math.round(bytes / (1024 ** i)) + '' + sizes[i];
         };
-        this.text = `${bytesToSize(Math.abs(download - prevDownload))}/${v.samplingRate / 1000}s \n ${bytesToSize(Math.abs(upload - prevUplaod))}/${v.samplingRate / 1000}s`;
+        console.log(`download ${download} / ${maxDownload.value[items[0]].download} uplaod ${upload} / ${maxUpload.value[items[0]].upload}`);
+        const downloadPerc = maxDownload.value[items[0]].download === 0 ? 100 : download / maxDownload.value[items[0]].download * 100;
+        const uploadPerc = maxUpload.value[items[0]].upload === 0 ? 100 : upload / maxUpload.value[items[0]].upload * 100;
+        let downloadText = '';
+        let uploadText = '';
+        if (items[0] === 'network') {
+          downloadText = 'Download ';
+          uploadText = 'Upload ';
+        } else if (items[0] === 'disk') {
+          downloadText = 'In ';
+          uploadText = 'Out ';
+        }
+        let downloadValue = bytesToSize(Math.abs(download - prevDownload) / (v.samplingRate / 1000));
+        let uploadValue = bytesToSize(Math.abs(upload - prevUplaod) / (v.samplingRate / 1000));
+        if (downloadValue === undefined) {
+          downloadValue = 0;
+        }
+        if (uploadValue === undefined) {
+          uploadValue = 0;
+        }
+        const text = `${downloadText}${downloadValue}/s \n ${uploadText}${uploadValue}/s`;
+        this.setState({text});
         return [
-          {index: 0, percentage: download / maxDownload.value[items[0]].download * 100, text: `${bytesToSize(Math.abs(download - prevDownload))}/${v.samplingRate / 1000}s`},
-          {index: 1, percentage: upload / maxUpload.value[items[0]].upload * 100, text: `${bytesToSize(Math.abs(upload - prevUplaod))}/${v.samplingRate / 1000}s`},
+          {index: 0, percentage: downloadPerc},
+          {index: 1, percentage: uploadPerc},
         ];
       }
       const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
-      this.text = fixedValue + '%';
+      const text = fixedValue + '%';
+      this.setState({text});
       return [{index: 0, percentage: fixedValue, text: fixedValue + '%'}];
     }
     return [];
@@ -275,7 +309,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     setTimeout(() => {
       this.removeD3();
       this.buildWidget();
-    }, 200);
+    }, 500);
   }
 
   _onResize = (width: number, height: number) => {
@@ -283,7 +317,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       width,
       height
     });
-    this.buildWidget();
+    // this.buildWidget();
   };
 
   render() {
