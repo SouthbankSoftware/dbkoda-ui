@@ -63,6 +63,32 @@ class App extends React.Component {
   };
   componentDidMount() {
     Broker.emit(EventType.APP_RENDERED);
+
+    console.log(this.props.store.dateLastPinged);
+    console.log(this.props.config.settings.telemetryEnabled);
+    console.log(
+      this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
+    );
+    if (
+      this.props.store.dateLastPinged &&
+      this.props.config.settings.telemetryEnabled &&
+      this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
+    ) {
+      console.log('1');
+      Broker.emit(EventType.PING_HOME);
+      this.props.store.dateLastPinged = this.getToday();
+    } else if (
+      !this.props.store.dateLastPinged &&
+      !this.props.layout.optInVisible
+    ) {
+      console.log('2');
+      this.props.store.dateLastPinged = this.getToday();
+      this.props.store.firstPingDate = this.getToday();
+      Broker.emit(EventType.PING_HOME);
+    }
+    if (!this.props.store.firstPingDate) {
+      this.props.store.firstPingDate = this.getToday();
+    }
   }
   @action.bound
   updateRightSplitPos(pos) {
@@ -83,7 +109,8 @@ class App extends React.Component {
 
   @action.bound
   hasOneDayPassed(previousDate, currentDate) {
-    if (Date.parse(previousDate) - Date.parse(currentDate) >= 1) {
+    console.log(Date.parse(currentDate) - Date.parse(previousDate));
+    if (Date.parse(currentDate) - Date.parse(previousDate) >= 1) {
       return true;
     }
     return false;
@@ -120,16 +147,6 @@ class App extends React.Component {
     };
     let defaultOverallSplitPos;
     let defaultRightSplitPos;
-
-    // Ping Home.
-    if (
-      this.props.store.dateLastPinged &&
-      this.props.config.settings.telemetryEnabled &&
-      this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
-    ) {
-      Broker.emit(EventType.PING_HOME);
-      this.props.store.dateLastPinged = this.getToday();
-    }
 
     untracked(() => {
       defaultOverallSplitPos = layout.overallSplitPos;

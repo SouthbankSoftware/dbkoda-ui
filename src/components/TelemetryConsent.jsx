@@ -58,7 +58,8 @@ export default class TelemetryConsent extends React.Component {
 
   @action.bound
   hasOneDayPassed(previousDate, currentDate) {
-    if (Date.parse(previousDate) - Date.parse(currentDate) >= 1) {
+    console.log(Date.parse(currentDate) - Date.parse(previousDate));
+    if (Date.parse(currentDate) - Date.parse(previousDate) >= 1) {
       return true;
     }
     return false;
@@ -110,7 +111,11 @@ export default class TelemetryConsent extends React.Component {
       this.props.config.settings.telemetryEnabled
     ) {
       this.props.store.dateLastPinged = this.getToday();
+      this.props.store.firstPingDate = this.getToday();
       Broker.emit(EventType.PING_HOME);
+    }
+    if (!this.props.store.firstPingDate) {
+      this.props.store.firstPingDate = this.getToday();
     }
   }
 

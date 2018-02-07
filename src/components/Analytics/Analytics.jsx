@@ -26,7 +26,7 @@
  * @Last modified time: 2017-06-27T13:52:32+10:00
  */
 import React from 'react';
-import { reaction } from 'mobx';
+import { action, reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import ReactGA from 'react-ga';
 import { analytics, protocol } from '../../env';
@@ -61,6 +61,32 @@ export default class Analytics extends React.Component {
       // TODO Get App Version
       const appVersion = this.props.store.version;
       this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', appVersion);
+
+      console.log(this.props.store.dateLastPinged);
+      console.log(this.props.config.settings.telemetryEnabled);
+      console.log(
+        this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
+      );
+      if (
+        this.props.store.dateLastPinged &&
+        this.props.config.settings.telemetryEnabled &&
+        this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
+      ) {
+        console.log('1');
+        Broker.emit(EventType.PING_HOME);
+        this.props.store.dateLastPinged = this.getToday();
+      } else if (
+        !this.props.store.dateLastPinged &&
+        !this.props.layout.optInVisible
+      ) {
+        console.log('2');
+        this.props.store.dateLastPinged = this.getToday();
+        this.props.store.firstPingDate = this.getToday();
+        Broker.emit(EventType.PING_HOME);
+      }
+      if (!this.props.store.firstPingDate) {
+        this.props.store.firstPingDate = this.getToday();
+      }
     }
 
     /**
@@ -120,12 +146,35 @@ export default class Analytics extends React.Component {
     Broker.off(EventType.FEEDBACK, this.feedbackEvent);
     Broker.off(EventType.FEATURE_USE, this.keyFeatureEvent);
     Broker.off(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
-    Broker.on(EventType.PING_HOME, this.pingHome);
+    Broker.off(EventType.PING_HOME, this.pingHome);
+  }
+
+  @action.bound
+  getToday() {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; // January is 0!
+    const yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    today = mm + '/' + dd + '/' + yyyy;
+    return today;
   }
 
   pingHome() {
-    console.debug('!!! Pinging home... !!!');
-    this._sendEvent(AnalyticsEvents.PING_HOME, 'Ping', 'DailyPing');
+    console.log('!!! Pinging home... !!!');
+    // Calculate days since first ping.
+    const today = Date.parse(this.getToday());
+    const firstPing = Date.parse(this.props.store.firstPingDate);
+    const daysSince = today - firstPing;
+    this._sendEvent(AnalyticsEvents.PING_HOME, 'Ping', daysSince);
   }
 
   /**
