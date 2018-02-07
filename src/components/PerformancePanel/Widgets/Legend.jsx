@@ -1,7 +1,9 @@
 /**
- * Created by joey on 17/1/18.
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T17:15:23+11:00
+ * @flow
+ *
+ * Created by Mike on 05/2/18.
+ * @Last modified by:   Mike
+ * @Last modified time: 2018-06-02T17:15:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -62,7 +64,10 @@ export default class Legend extends React.Component<Props> {
   static height = 20;
   static width = 20;
 
-  constructor(props) {
+  setValues: () => null;
+  state: any;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       items: this.props.metrics,
@@ -81,11 +86,13 @@ export default class Legend extends React.Component<Props> {
     this.props.onRef(undefined);
   }
 
-  setValues(values) {
+  setValues(values: Object) {
+    // $FlowFixMe
     this.setState({ values });
   }
 
   resize(width: number, height: number) {
+    // $FlowFixMe
     this.setState({ width, height });
   }
 
