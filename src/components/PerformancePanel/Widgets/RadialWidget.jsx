@@ -42,7 +42,8 @@ import Widget from './Widget';
 })
 @observer
 export default class RadialWidget extends React.Component<Object, Object> {
-  static colors = ['#8A4148'];
+  static colors = ['#8A4148', '#8A4148'];
+  static gradientColors = ['#BD4133', '#8A4148'];
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
@@ -93,26 +94,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .append('g')
       .attr('transform', 'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')');
 
-    const gradient = svg.append('svg:defs')
-      .append('svg:linearGradient')
-      .attr('id', 'gradient')
-      .attr('x1', '0%')
-      .attr('y1', '100%')
-      .attr('x2', '50%')
-      .attr('y2', '0%')
-      .attr('spreadMethod', 'pad');
-
-    gradient.append('svg:stop')
-      .attr('offset', '0%')
-      .attr('stop-color', '#BD4133')
-      .attr('stop-opacity', 1);
-
-    gradient.append('svg:stop')
-      .attr('offset', '100%')
-      .attr('stop-color', '#8A4148')
-      .attr('stop-opacity', 1);
-
-
+    this.buildGradient(svg);
     // add some shadows
     const defs = svg.append('defs');
 
@@ -144,7 +126,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
     // render background
     field.append('path').attr('class', 'bg')
-      .style('fill', RadialWidget.colors[0])
+      .style('fill', (d) => RadialWidget.colors[d.index])
       .style('opacity', 0.2)
       .attr('d', background);
 
@@ -180,6 +162,27 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .cornerRadius((this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2);
   }
 
+  buildGradient(svg: Object) {
+    const gradient = svg.append('svg:defs')
+      .append('svg:linearGradient')
+      .attr('id', 'gradient')
+      .attr('x1', '0%')
+      .attr('y1', '100%')
+      .attr('x2', '50%')
+      .attr('y2', '0%')
+      .attr('spreadMethod', 'pad');
+
+    gradient.append('svg:stop')
+      .attr('offset', '0%')
+      .attr('stop-color', RadialWidget.gradientColors[0])
+      .attr('stop-opacity', 1);
+
+    gradient.append('svg:stop')
+      .attr('offset', '100%')
+      .attr('stop-color', RadialWidget.gradientColors[1])
+      .attr('stop-opacity', 1);
+    return gradient;
+  }
 
   update() {
     this.field = this.field
@@ -192,9 +195,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
       });
 
     this.field.select('path.progress').transition().duration(1000)
-    // .ease('elastic')
       .attrTween('d', this.arcTween.bind(this))
-      .style('fill', 'url(#gradient)');
+      .style('fill', () => {
+        // if (d.index === 0) {
+        return 'url(#gradient)';
+        // }
+        // return RadialWidget.colors[d.index];
+      });
     if (this.itemValue.length === 1) {
       this.field.select('text.completed').text((d) => d.text);
     } else if (this.itemValue.length >= 1) {
@@ -211,8 +218,6 @@ export default class RadialWidget extends React.Component<Object, Object> {
     this._onResize(RadialWidget.width, RadialWidget.height);
     setTimeout(() => {
       this.buildWidget();
-      const pathsSize = this.field.selectAll('path').size();
-      console.log('pathsSize:', pathsSize);
       autorun(() => {
         const {items, values} = this.props.widget;
         this.itemValue = this.getValueFromData(items, values);
@@ -289,9 +294,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
         ];
       }
       const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
-      const text = fixedValue + '%';
-      // this.setState({text});
-      this.text = text;
+      this.text = fixedValue + '%';
       return [{index: 0, percentage: fixedValue, text: fixedValue + '%'}];
     }
     return [];
