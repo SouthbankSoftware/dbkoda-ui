@@ -76,6 +76,22 @@
         "background": "light",
         "static": true
       }
+    },
+    {
+      "type": "StackedRadialWidget",
+      "items": ["item-1", "item-2", "item-3", "item-4", "item-5"],
+      "extraState": {
+        "displayName": "Network",
+        "showLegend": true
+      },
+      "layout": {
+        "x": 4,
+        "y": 0,
+        "w": 2,
+        "h": 2,
+        "background": "light",
+        "static": true
+      }
     }
   ]
 }
