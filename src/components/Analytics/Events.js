@@ -37,5 +37,6 @@ module.exports = {
     FEEDBACK_NEGATIVE: 'NegativeFeedback',
     KEY_FEATURE_USED: 'KeyFeatureUsed',
     CONTROLLER_ACTIVITY: 'ControllerActivity',
-  },
+    PING_HOME: 'PingHome'
+  }
 };

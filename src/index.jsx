@@ -77,7 +77,7 @@ blueprintJs.ContextMenuTarget = function ContextMenuTarget(constructor) {
             menu,
             { left: e.clientX, top: e.clientY },
             onContextMenuClose,
-            darkTheme,
+            darkTheme
           );
         }
       }
@@ -94,8 +94,10 @@ const App = require('./components/App').default;
 
 const Globalize = require('globalize'); // doesn't work well with import
 
-global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
+global.globalString = (path, ...params) =>
+  Globalize.messageFormatter(path)(...params);
+global.globalNumber = (value, config) =>
+  Globalize.numberFormatter(config)(value);
 
 useStrict(true);
 
@@ -112,15 +114,21 @@ const { ipcRenderer } = electron;
 const renderApp = () => {
   if (store) {
     console.log('Last Store Version:', store.version);
+    console.log('Last Ping:', store.dateLastPinged);
   }
   const render = Component => {
     ReactDOM.render(
       <AppContainer>
-        <Provider store={store} api={api} config={config} profileStore={profileStore}>
+        <Provider
+          store={store}
+          api={api}
+          config={config}
+          profileStore={profileStore}
+        >
           <Component />
         </Provider>
       </AppContainer>,
-      rootEl,
+      rootEl
     );
   };
 
@@ -177,7 +185,7 @@ Broker.once(EventType.APP_CRASHED, () => {
         dialog.showMessageBox(currentWindow, {
           title: 'Error',
           buttons: ['OK'],
-          message: err.message,
+          message: err.message
         });
       });
   }
@@ -196,7 +204,8 @@ window.addEventListener('beforeunload', event => {
         type: 'question',
         buttons: ['Yes', 'No'],
         title: 'Confirm',
-        message: 'You have unsaved editor tabs. Are you sure you want to continue?',
+        message:
+          'You have unsaved editor tabs. Are you sure you want to continue?'
       });
 
       if (response === 1) {

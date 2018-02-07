@@ -35,7 +35,7 @@ import { Broker, EventType } from '../../helpers/broker';
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config,
+  config: allStores.config
 }))
 @observer
 export default class Analytics extends React.Component {
@@ -47,12 +47,12 @@ export default class Analytics extends React.Component {
       siteUrl = protocol + 'dev.dbkoda.com';
       ReactGA.initialize(gaCode.development, {
         debug: true,
-        titleCase: false,
+        titleCase: false
       });
     } else if (process.env.NODE_ENV === 'production') {
       siteUrl = protocol + 'electron.dbkoda.com';
       ReactGA.initialize(gaCode.prod, {
-        titleCase: false,
+        titleCase: false
       });
     }
     ReactGA.set({ page: siteUrl });
@@ -70,7 +70,7 @@ export default class Analytics extends React.Component {
      //  */
     reaction(
       () => this.props.config.settings.telemetryEnabled,
-      (telemetryEnabled) => {
+      telemetryEnabled => {
         if (!this.props.store.layout.optInVisible) {
           if (telemetryEnabled) {
             this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
@@ -80,7 +80,7 @@ export default class Analytics extends React.Component {
           this.props.config.save();
         }
       },
-      { name: 'analyticsReactionToTelemetryChange' },
+      { name: 'analyticsReactionToTelemetryChange' }
     );
 
     /**
@@ -88,7 +88,7 @@ export default class Analytics extends React.Component {
      */
     reaction(
       () => this.props.store.layout.optInVisible,
-      (_) => {
+      _ => {
         if (this.props.config.settings.telemetryEnabled) {
           this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
         } else {
@@ -96,7 +96,7 @@ export default class Analytics extends React.Component {
         }
         this.props.config.save();
       },
-      { name: 'analyticsReactionToTelemetryChange' },
+      { name: 'analyticsReactionToTelemetryChange' }
     );
 
     this._sendEvent = this._sendEvent.bind(this);
@@ -104,6 +104,7 @@ export default class Analytics extends React.Component {
     this.feedbackEvent = this.feedbackEvent.bind(this);
     this.keyFeatureEvent = this.keyFeatureEvent.bind(this);
     this.controllerActivity = this.controllerActivity.bind(this);
+    this.pingHome = this.pingHome.bind(this);
   }
 
   componentDidMount() {
@@ -111,6 +112,7 @@ export default class Analytics extends React.Component {
     Broker.on(EventType.FEEDBACK, this.feedbackEvent);
     Broker.on(EventType.FEATURE_USE, this.keyFeatureEvent);
     Broker.on(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
+    Broker.on(EventType.PING_HOME, this.pingHome);
   }
 
   componentWillUnmount() {
@@ -118,6 +120,12 @@ export default class Analytics extends React.Component {
     Broker.off(EventType.FEEDBACK, this.feedbackEvent);
     Broker.off(EventType.FEATURE_USE, this.keyFeatureEvent);
     Broker.off(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
+    Broker.on(EventType.PING_HOME, this.pingHome);
+  }
+
+  pingHome() {
+    console.debug('!!! Pinging home... !!!');
+    this._sendEvent(AnalyticsEvents.PING_HOME, 'Ping', 'DailyPing');
   }
 
   /**
@@ -195,7 +203,7 @@ export default class Analytics extends React.Component {
   _sendEvent(eventType, eventCategory, eventLabel, eventValue) {
     const event = {
       category: eventCategory,
-      action: eventType,
+      action: eventType
     };
     if (eventLabel) {
       event.label = eventLabel;

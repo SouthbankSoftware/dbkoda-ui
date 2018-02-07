@@ -54,12 +54,12 @@ import './App.scss';
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  config: allStores.config,
+  config: allStores.config
 }))
 @observer
 class App extends React.Component {
   static propTypes = {
-    layout: PropTypes.observableObject.isRequired,
+    layout: PropTypes.observableObject.isRequired
   };
   componentDidMount() {
     Broker.emit(EventType.APP_RENDERED);
@@ -80,6 +80,34 @@ class App extends React.Component {
     this.props.config.settings.save();
     this.props.store.layout.optInVisible = false;
   }
+
+  @action.bound
+  hasOneDayPassed(previousDate, currentDate) {
+    if (Date.parse(previousDate) - Date.parse(currentDate) >= 1) {
+      return true;
+    }
+    return false;
+  }
+
+  @action.bound
+  getToday() {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; // January is 0!
+    const yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    today = mm + '/' + dd + '/' + yyyy;
+    return today;
+  }
+
   unstable_handleError() {
     // eslint-disable-line camelcase
     Broker.emit(EventType.APP_CRASHED);
@@ -88,10 +116,20 @@ class App extends React.Component {
     const { layout, store } = this.props;
     const splitPane2Style = {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     };
     let defaultOverallSplitPos;
     let defaultRightSplitPos;
+
+    // Ping Home.
+    if (
+      this.props.store.dateLastPinged &&
+      this.props.config.settings.telemetryEnabled &&
+      this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
+    ) {
+      Broker.emit(EventType.PING_HOME);
+      this.props.store.dateLastPinged = this.getToday();
+    }
 
     untracked(() => {
       defaultOverallSplitPos = layout.overallSplitPos;
