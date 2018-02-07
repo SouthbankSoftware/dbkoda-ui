@@ -1,6 +1,7 @@
 {
   "cols": 9,
   "rows": 8,
+  "rowHeight": 150,
   "leftWidth": 2,
   "midWidth": 5,
   "widgets": [
@@ -61,48 +62,57 @@
       }
     },
     {
-      "type": "Widget",
-      "items": ["serverStatus"],
+      "type": "StackedRadialWidget",
+      "items": ["item-1", "item-2", "item-3", "item-4", "item-5"],
+      "extraState": {
+        "displayName": "Network",
+        "showLegend": true
+      },
       "layout": {
         "x": 2,
         "y": 0,
-        "w": 3,
-        "h": 1,
-        "background": "light"
+        "w": 2,
+        "h": 2,
+        "background": "light",
+        "static": true
       }
     },
     {
-      "type": "Widget",
-      "items": ["item-1"],
+      "type": "StackedRadialWidget",
+      "items": ["item-1", "item-2", "item-3", "item-4", "item-5"],
+      "extraState": {
+        "displayName": "Network",
+        "showLegend": true
+      },
       "layout": {
-        "x": 5,
+        "x": 4,
         "y": 0,
+        "w": 2,
+        "h": 2,
+        "background": "light",
+        "static": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
+      "layout": {
+        "x": 2,
+        "y": 4,
         "w": 2,
         "h": 1,
         "background": "light"
       }
     },
     {
-      "type": "ArrowWidget",
-      "items": ["item-1"],
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
       "layout": {
-        "x": 2,
-        "y": 2,
-        "w": 1,
-        "h": 1
-      }
-    },
-    {
-      "type": "ArrowWidget",
-      "items": ["item-1"],
-      "layout": {
-        "x": 3,
-        "y": 2,
-        "w": 1,
-        "h": 1
-      },
-      "extraState": {
-        "rotate": 180
+        "x": 4,
+        "y": 4,
+        "w": 2,
+        "h": 1,
+        "background": "light"
       }
     }
   ]

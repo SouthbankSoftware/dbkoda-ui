@@ -33,6 +33,16 @@ import _ from 'lodash';
 import './RadialWidget.scss';
 import Widget from './Widget';
 
+const bytesToSize = (bytes: number) => {
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes <= 0) return '0 B';
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+  if (i < 0) {
+    return '0B';
+  }
+  return Math.round(bytes / (1024 ** i)) + '' + sizes[i];
+};
+
 @inject(({store, api}, {widget}) => {
   return {
     store,
@@ -42,7 +52,8 @@ import Widget from './Widget';
 })
 @observer
 export default class RadialWidget extends React.Component<Object, Object> {
-  static colors = ['#8A4148'];
+  static colors = ['#8A4148', '#8A4148'];
+  static gradientColors = ['#BD4133', '#8A4148'];
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
@@ -55,20 +66,24 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   constructor(props: Object) {
     super(props);
-    this.state = {width: RadialWidget.width, height: RadialWidget.height};
+    this.state = {width: 512, height: 512, text: ''};
+    this.text = '';
   }
 
-  dataset = () => {
-    return this.itemValue;
-  };
+  dataset() {
+    // return this.itemValue;
+    return this.itemValue.map((v) => {
+      return {...v};
+    });
+  }
 
   _getInnerRadiusSize() {
     const minValue = Math.min(this.state.width, this.state.height);
-    return minValue / 4;
+    return minValue / 2.9;
   }
 
   _getOuterRadiusSize() {
-    return this._getInnerRadiusSize() + RadialWidget.gap - 1;
+    return this._getInnerRadiusSize() + RadialWidget.gap - 5;
   }
 
   buildWidget() {
@@ -83,7 +98,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       });
 
     const elem = d3.select(this.radial);
-    // elem.select('.radial-main').selectAll('svg').remove();
+    elem.select('.radial-main').selectAll('svg').remove();
     // d3.transition();
 
     const svg = elem.select('.radial-main').append('svg')
@@ -92,26 +107,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .append('g')
       .attr('transform', 'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')');
 
-    const gradient = svg.append('svg:defs')
-      .append('svg:linearGradient')
-      .attr('id', 'gradient')
-      .attr('x1', '0%')
-      .attr('y1', '100%')
-      .attr('x2', '50%')
-      .attr('y2', '0%')
-      .attr('spreadMethod', 'pad');
-
-    gradient.append('svg:stop')
-      .attr('offset', '0%')
-      .attr('stop-color', '#BD4133')
-      .attr('stop-opacity', 1);
-
-    gradient.append('svg:stop')
-      .attr('offset', '100%')
-      .attr('stop-color', '#8A4148')
-      .attr('stop-opacity', 1);
-
-
+    this.buildGradient(svg);
     // add some shadows
     const defs = svg.append('defs');
 
@@ -136,20 +132,20 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .attr('in', 'SourceGraphic');
 
     const field = svg.selectAll('g')
-      .data(this.dataset)
+      .data(this.dataset.bind(this))
       .enter().append('g');
 
     field.append('path').attr('class', 'progress').attr('filter', 'url(#dropshadow)');
 
     // render background
     field.append('path').attr('class', 'bg')
-      .style('fill', RadialWidget.colors[0])
+      .style('fill', (d) => RadialWidget.colors[d.index])
       .style('opacity', 0.2)
       .attr('d', background);
 
     // field.append('text').attr('class', 'icon');
 
-    field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)');
+    field.append('text').attr('class', 'completed').attr('transform', 'translate(0, 10)');
     this.field = field;
     d3.transition().duration(1000).each(() => this.update());
 
@@ -179,78 +175,120 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .cornerRadius((this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2);
   }
 
+  buildGradient(svg: Object) {
+    const gradient = svg.append('svg:defs')
+      .append('svg:linearGradient')
+      .attr('id', 'gradient')
+      .attr('x1', '0%')
+      .attr('y1', '100%')
+      .attr('x2', '50%')
+      .attr('y2', '0%')
+      .attr('spreadMethod', 'pad');
+
+    gradient.append('svg:stop')
+      .attr('offset', '0%')
+      .attr('stop-color', RadialWidget.gradientColors[0])
+      .attr('stop-opacity', 1);
+
+    gradient.append('svg:stop')
+      .attr('offset', '100%')
+      .attr('stop-color', RadialWidget.gradientColors[1])
+      .attr('stop-opacity', 1);
+    return gradient;
+  }
 
   update() {
-    this.field = this.field
+    this.field
       .each(function (d) {
         this._value = d.percentage;
       })
-      .data(this.dataset)
+      .data(this.dataset.bind(this))
       .each(function (d) {
         d.previousValue = this._value;
       });
 
     this.field.select('path.progress').transition().duration(1000)
-    // .ease('elastic')
       .attrTween('d', this.arcTween.bind(this))
-      .style('fill', 'url(#gradient)');
-    // this.field.selectAll('text.completed').removeAll();
+      .style('fill', () => {
+        // if (d.index === 0) {
+        return 'url(#gradient)';
+        // }
+        // return RadialWidget.colors[d.index];
+      });
     if (this.itemValue.length === 1) {
-      // this.field.append('text').attr('class', 'completed').attr('transform', 'translate(0,0)').text((d) => d.text);
       this.field.select('text.completed').text((d) => d.text);
     } else if (this.itemValue.length >= 1) {
-      //
+      this.field.selectAll('text.completed').remove();
+      const texts = this.text.split('\n');
+      for (let i = 0; i < texts.length; i += 1) {
+        const t = texts[i];
+        this.field.append('text').attr('class', 'completed').attr('transform', `translate(0, ${i * 20})`).style('font-size', 'small').text(t);
+      }
     }
   }
 
   componentDidMount() {
+    this._onResize(RadialWidget.width, RadialWidget.height);
+    const that = this;
     setTimeout(() => {
-      this.buildWidget();
+      that.buildWidget();
       autorun(() => {
-        const {items, values} = this.props.widget;
-        this.itemValue = this.getValueFromData(items, values);
-        this.update();
+        const {items, values} = that.props.widget;
+        that.itemValue = that.getValueFromData(items, values);
+        that.update();
       });
     }, 200);
   }
 
-  getValueFromData(items: Array<Object>, values: Array<Object>): Array<Object> {
+  /**
+   * TODO: move to schema
+   */
+  getMaximumValue(value: Object, key: string, historyValues: Array<Object>, itemKey: string): Object {
+    const previousValueObj : Object = historyValues.length > 1 ? historyValues[historyValues.length - 2].value : {};
+    if (_.isEmpty(previousValueObj)) {
+      return {percentage:0, valuePerSec:0};
+    }
+    const prevValue = previousValueObj[itemKey];
+    const v : number = _.isInteger(value[key]) ? value[key] : parseInt(value[key], 10);
+    const prevV : number = _.isInteger(prevValue[key]) ? prevValue[key] : parseInt(prevValue[key], 10);
+    const max : number = this.getMaximumValueFromHistory(historyValues, itemKey, key);
+    let valuePerSec = bytesToSize(Math.abs(v - prevV) / (value.samplingRate / 1000));
+    if (valuePerSec === undefined) {
+      valuePerSec = 0;
+    }
+    const percentage = max === 0 ? 100 : Math.abs(v - prevV) / max * 100;
+    return {percentage, valuePerSec};
+  }
+
+  getValueFromData(items: Array<string>, staleValues: Array<Object>): Array<Object> {
+    const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latestValue : Object = values.length > 0 ? values[values.length - 1].value : {};
     if (!_.isEmpty(latestValue)) {
       const v = latestValue[items[0]];
-      console.log('widget value', v);
+      console.log('widget value', items[0], v);
       if (!v) {
         return [];
       }
-      if (items[0] === 'network') {
+      if (!_.isInteger(v) && _.keys(v).indexOf('download') >= 0 && _.keys(v).indexOf('upload') >= 0) {
         const previousValue : Object = values.length > 1 ? values[values.length - 2].value : {};
         if (_.isEmpty(previousValue)) {
           return [];
         }
-        const prevV = previousValue[items[0]];
-        const download = _.isInteger(v.download) ? v.download : parseInt(v.download, 10);
-        const upload = _.isInteger(v.upload) ? v.upload : parseInt(v.upload, 10);
-        const prevDownload = _.isInteger(prevV.download) ? prevV.download : parseInt(prevV.download, 10);
-        const prevUplaod = _.isInteger(prevV.upload) ? prevV.upload : parseInt(prevV.upload, 10);
-        const maxDownload = _.maxBy(values, e => {
-          return !_.isEmpty(e) && e.value && e.value[items[0]] ? e.value[items[0]].download : 0;
-        });
-        const maxUpload = _.maxBy(values, e => {
-          return !_.isEmpty(e) && e.value && e.value[items[0]] ? e.value[items[0]].upload : 0;
-        });
-        if (maxDownload === 0 || maxUpload === 0) {
-          return [];
+        const download: Object = this.getMaximumValue(v, 'download', values, items[0]);
+        const upload: Object = this.getMaximumValue(v, 'upload', values, items[0]);
+        let downloadText = '';
+        let uploadText = '';
+        if (items[0] === 'network') {
+          downloadText = 'Download ';
+          uploadText = 'Upload ';
+        } else if (items[0] === 'disk') {
+          downloadText = 'In ';
+          uploadText = 'Out ';
         }
-        const bytesToSize = (bytes) => {
-          const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-          if (bytes <= 0) return '0 Byte';
-          const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
-          return Math.round(bytes / (1024 ** i)) + ' ' + sizes[i];
-        };
-        this.text = `${bytesToSize(Math.abs(download - prevDownload))}/${v.samplingRate / 1000}s \n ${bytesToSize(Math.abs(upload - prevUplaod))}/${v.samplingRate / 1000}s`;
+        this.text = `${downloadText}${download.valuePerSec}/s \n ${uploadText}${upload.valuePerSec}/s`;
         return [
-          {index: 0, percentage: download / maxDownload.value[items[0]].download * 100, text: `${bytesToSize(Math.abs(download - prevDownload))}/${v.samplingRate / 1000}s`},
-          {index: 1, percentage: upload / maxUpload.value[items[0]].upload * 100, text: `${bytesToSize(Math.abs(upload - prevUplaod))}/${v.samplingRate / 1000}s`},
+          {index: 0, percentage: download.percentage},
+          {index: 1, percentage: upload.percentage},
         ];
       }
       const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
@@ -258,6 +296,22 @@ export default class RadialWidget extends React.Component<Object, Object> {
       return [{index: 0, percentage: fixedValue, text: fixedValue + '%'}];
     }
     return [];
+  }
+
+  getMaximumValueFromHistory(values: Array<Object>, item: string, key: string): number {
+    let prev = null;
+    let max = 0;
+    values.forEach((value) => {
+      const v = value.value[item][key];
+      if (prev !== null) {
+        const diff = Math.abs(prev - v);
+        if (diff > max) {
+          max = diff;
+        }
+      }
+      prev = v;
+    });
+    return max;
   }
 
   removeD3 = () => {
@@ -283,7 +337,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       width,
       height
     });
-    this.buildWidget();
+    // this.buildWidget();
   };
 
   render() {
@@ -299,7 +353,6 @@ export default class RadialWidget extends React.Component<Object, Object> {
     // in this way, d3's render logic is detached from react's render logic. So a re-render of d3
     // container won't trigger re-render whole d3 graph. d3 has its own way of efficent DOM
     // manipulation inside its container created by react
-
     return (
       <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize}>
         <div className="RadialWidget" ref={radial => (this.radial = radial)}>

@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-02T12:14:14+11:00
+ * @Last modified time: 2018-02-05T11:09:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -58,12 +58,14 @@ type Props = {
 
 type State = {
   layouts: *,
-  rows: number,
+  rowHeight: number,
   cols: number,
+  rows: number,
   midWidth: number,
   leftWidth: number,
   widgetHeight: number,
-  widgetWidth: number
+  widgetWidth: number,
+  height: number
 };
 
 @inject(({ store: { performancePanels }, api }, { profileId }) => {
@@ -92,22 +94,25 @@ export default class PerformancePanel extends React.Component<Props, State> {
       layouts: {
         desktop: []
       },
-      rows: 8,
+      rowHeight: 150,
       cols: 9,
+      rows: 8,
       leftWidth: 2,
       midWidth: 5,
       widgetHeight: 2,
-      widgetWidth: 2
+      widgetWidth: 2,
+      height: 0
     };
   }
 
   _addSchemaWidgets = action(() => {
     const { api, profileId, store: { performancePanel } } = this.props;
 
-    if (schema.columns && schema.rows) {
+    if (schema.cols && schema.rows) {
       this.setState({
-        rows: schema.rows,
+        rowHeight: schema.rowHeight,
         cols: schema.cols,
+        rows: schema.rows,
         midWidth: schema.midWidth,
         leftWidth: schema.leftWidth
       });
@@ -235,7 +240,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
       profileId,
       store: { performancePanel: { widgets } }
     } = this.props;
-    const { layouts, rows, cols } = this.state;
+    const { layouts, rowHeight, rows, cols } = this.state;
 
     return (
       <div className="PerformancePanel">
@@ -253,8 +258,10 @@ export default class PerformancePanel extends React.Component<Props, State> {
           cols={{
             desktop: cols
           }}
-          verticalGridSize={rows}
+          rowHeight={rowHeight}
           margin={[0, 0]}
+          verticalGridSize={rows}
+          bFitHeight={false}
         >
           {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>

@@ -4,7 +4,7 @@
   "Fields": [
     {
       "name": "SampleSize",
-      "label": "Sample Size",
+      "label": "Sample Size  (Enter 0 to supress sampling)",
       "tooltip": "Size of the sample used to preview results",
       "type": "Numeric",
       "default": 100

@@ -1,9 +1,9 @@
 /**
- * @Author: joey
- * @Date:   2018-01-17T09:47:18+11:00
- * @Email:  joey@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T17:15:55+11:00
+ * @flow
+ *
+ * Created by mike on 06/02/2018
+ * @Last modified by:   mike
+ * @Last modified time: 2018-02-06T17:15:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,16 +24,18 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 import * as d3 from 'd3';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
-import _ from 'lodash';
 
+import _ from 'lodash';
 import './StackedRadialWidget.scss';
 import Widget from './Widget';
+import Legend from './Legend';
 import { Broker, EventType } from '../../../helpers/broker';
+
+// Flow type definitions.
 
 @inject(({ store, api }, { widget }) => {
   return {
@@ -43,65 +45,135 @@ import { Broker, EventType } from '../../../helpers/broker';
   };
 })
 @observer
-export default class StackedRadialWidget extends Widget {
-  static colors = ['#853E56'];
-  static width = 500;
-  static height = 500;
+export default class StackedRadialWidget extends React.Component<
+  Object,
+  Object
+> {
+  static colors = [
+    '#3333cc',
+    '#2E547A',
+    '#643798',
+    '#39B160',
+    '#DC5D3E',
+    '#A27EB7'
+  ];
+  static width = 50;
+  static height = 50;
+  static minRadius = 12;
   static PI = 2 * Math.PI;
 
-  constructor(props) {
+  state: any;
+  fields: Array<Object>;
+  itemValues: Object;
+  field: *;
+  scaleFactor: number;
+  legend: any;
+  radial: Object;
+  dataset: () => Array<Object>;
+
+  constructor(props: Object) {
     super(props);
     this.state = {
-      width: props.width,
-      height: props.height
+      width: StackedRadialWidget.width,
+      height: StackedRadialWidget.height,
+      lastLayerTweened: { key: '', index: 1 }
     };
-    this.itemValue = 0;
+    // $FlowFixMe
+    this.fields = [];
+    // $FlowFixMe
+    this.itemValues = [];
     this.field = null;
+    if (this.props.widget.items.length > 3) {
+      this.scaleFactor = 2;
+    } else {
+      this.scaleFactor = 1;
+    }
     this.dataset = () => {
+      if (!this.itemValues[this.state.lastLayerTweened.key]) {
+        return [
+          {
+            index: 0,
+            name: 'move',
+            icon: '\uF105',
+            percentage: 0
+          }
+        ];
+      }
       return [
-        { index: 0, name: 'move', icon: '\uF105', percentage: this.itemValue }
+        {
+          index: this.state.lastLayerTweened.index,
+          name: 'move',
+          icon: '\uF105',
+          percentage: this.itemValues[this.state.lastLayerTweened.key]
+        }
       ];
     };
   }
 
-  _getInnerRadiusSize() {
-    return this.state.width / 3;
-  }
-
-  _getOuterRadiusSize() {
+  _getInnerRadiusSize(layer: number) {
     const minValue = Math.min(this.state.width, this.state.height);
-    return this._getInnerRadiusSize() + minValue / 10;
+    if (layer > 1) {
+      // Layer X inner should be equal to layer X-1 outer.
+      return (
+        this._getInnerRadiusSize(layer - 1) + minValue / (10 * this.scaleFactor)
+      );
+    }
+    return (
+      StackedRadialWidget.minRadius + this.state.width / (8 * this.scaleFactor)
+    );
   }
 
-  buildWidget() {
+  _getOuterRadiusSize(layer: number) {
+    const minValue = Math.min(this.state.width, this.state.height);
+    return this._getInnerRadiusSize(layer) + minValue / (16 * this.scaleFactor);
+  }
+
+  buildWidget(selector: string, layer: number, data: String) {
     const background = d3
       .arc()
       .startAngle(0)
       .endAngle(StackedRadialWidget.PI)
-      .innerRadius(this._getInnerRadiusSize())
-      .outerRadius(this._getOuterRadiusSize());
+      .innerRadius(this._getInnerRadiusSize(layer))
+      .outerRadius(this._getOuterRadiusSize(layer));
 
     const elem = d3.select(this.radial);
     elem
-      .select('.radial-main')
+      .select(selector)
       .selectAll('svg')
       .remove();
     d3.transition();
 
+    let xTranslate = 0;
+    xTranslate += parseInt(
+      this._getOuterRadiusSize(this.props.widget.items.length) +
+        this.state.width * 0.02,
+      10
+    );
+
     const svg = elem
-      .select('.radial-main')
+      .select(selector)
       .append('svg')
       .attr('width', this.state.width)
       .attr('height', this.state.height)
       .append('g')
       .attr(
         'transform',
-        'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')'
+        'translate(' + xTranslate + ',' + this.state.height / 2 + ')'
       );
 
-    // add linear gradient, notice apple uses gradient alone the arc..
-    // meh, close enough...
+    let tooltip = '?';
+    let count = 0;
+    for (const key in this.itemValues) {
+      if (this.itemValues.hasOwnProperty(key)) {
+        count += 1;
+        if (count === layer) {
+          tooltip = key;
+        }
+      }
+    }
+    svg.append('svg:title').text(tooltip);
 
+    // Gradient.
     const gradient = svg
       .append('svg:defs')
       .append('svg:linearGradient')
@@ -115,16 +187,16 @@ export default class StackedRadialWidget extends Widget {
     gradient
       .append('svg:stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#fe08b5')
+      .attr('stop-color', StackedRadialWidget.colors[layer - 1])
       .attr('stop-opacity', 1);
 
     gradient
       .append('svg:stop')
       .attr('offset', '100%')
-      .attr('stop-color', '#ff1410')
+      .attr('stop-color', StackedRadialWidget.colors[layer - 1])
       .attr('stop-opacity', 1);
 
-    // add some shadows
+    // Drop Shadows
     const defs = svg.append('defs');
 
     const filter = defs.append('filter').attr('id', 'dropshadow');
@@ -155,55 +227,68 @@ export default class StackedRadialWidget extends Widget {
     field
       .append('path')
       .attr('class', 'progress')
-      .attr('filter', 'url(#dropshadow)');
+      .attr('fill', StackedRadialWidget.colors[layer - 1]);
 
     // render background
     field
       .append('path')
       .attr('class', 'bg')
-      .style('fill', StackedRadialWidget.colors[0])
+      .style('fill', StackedRadialWidget.colors[layer - 1])
       .style('opacity', 0.2)
-      .attr('d', background);
+      .attr('d', background)
+      .on('mouseover', this.handleMouseOver)
+      .on('mouseout', this.handleMouseOut);
 
-    // field.append('text').attr('class', 'icon');
-
+    const yTranslation = -100 + 35 * (layer - 1);
     field
       .append('text')
       .attr('class', 'completed')
-      .attr('transform', 'translate(0,0)');
+      .attr('transform', 'scale(0.1, 0.1)')
+      .attr('transform', 'translate(100, ' + parseInt(yTranslation, 10) + ')');
+
+    // Add tooltip.
+
+    this.fields.push({ field, layer, data });
     this.field = field;
     d3
       .transition()
       .duration(1000)
-      .each(() => this.update());
+      .each(() => this.update({ field, layer, data }));
 
     return field;
   }
 
-  arcTween(d) {
+  arcTween(d: any) {
     const i = d3.interpolateNumber(d.previousValue, d.percentage);
+    // $FlowFixMe
     return t => {
       d.percentage = i(t);
-      return this.arc()(d);
+      return this.arc(d)(d);
     };
   }
 
-  arc() {
+  arc(data: any) {
     return d3
       .arc()
       .startAngle(0)
       .endAngle(d => {
         return d.percentage / 100 * StackedRadialWidget.PI;
       })
-      .innerRadius(this._getInnerRadiusSize())
-      .outerRadius(this._getOuterRadiusSize())
+      .innerRadius(this._getInnerRadiusSize(data.index))
+      .outerRadius(this._getOuterRadiusSize(data.index))
       .cornerRadius(
-        (this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2
+        (this._getOuterRadiusSize(data.index) -
+          this._getInnerRadiusSize(data.index)) /
+          2
       );
   }
 
-  update() {
-    this.field = this.field
+  /**
+   * When new data is recieved, update the relevant ring.
+   */
+  update(field: Object) {
+    this.state.lastLayerTweened = { key: field.data, index: field.layer };
+    field.field = field.field
       .each(function(d) {
         this._value = d.percentage;
       })
@@ -212,17 +297,43 @@ export default class StackedRadialWidget extends Widget {
         d.previousValue = this._value;
       });
 
-    this.field
+    // Draw
+    field.field
       .select('path.progress')
       .transition()
       .duration(1000)
-      // .ease('elastic')
-      .attrTween('d', this.arcTween.bind(this))
-      .style('fill', 'url(#gradient)');
+      .attrTween('d', this.arcTween.bind(this));
 
-    this.field.select('text.completed').text(d => {
-      return d.percentage + '%';
-    });
+    // Get total sum of radials.
+    let sumOfItems = 0;
+    for (const key in this.itemValues) {
+      if (this.itemValues.hasOwnProperty(key)) {
+        sumOfItems += this.itemValues[key];
+      }
+    }
+
+    // Reduce Radial to 3 figures max.
+    if (sumOfItems > 999) {
+      // $FlowFixMe
+      sumOfItems = Number.parseFloat((sumOfItems /= 1000)).toPrecision(3) + 'k';
+    } else if (sumOfItems > 999) {
+      sumOfItems =
+        // $FlowFixMe
+        Number.parseFloat((sumOfItems /= 1000000)).toPrecision(3) + 'M';
+    }
+
+    if (field.layer === 1) {
+      field.field.select('text.completed').text(() => {
+        return sumOfItems + '/s';
+      });
+      field.field
+        .select('text.completed')
+        .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+    }
+
+    field.field
+      .select('title')
+      .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
   }
 
   _onData = action(payload => {
@@ -237,28 +348,119 @@ export default class StackedRadialWidget extends Widget {
     ]);
     const latestValue =
       values.length > 0 ? values[values.length - 1].value : {};
+    // $FlowFixMe
+    this.itemValues = [];
     if (!_.isEmpty(latestValue)) {
-      const v = latestValue[items[0]];
-      const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
-      this.itemValue = fixedValue;
-      this.update(this.field);
+      Object.keys(latestValue).map(key => {
+        const fixedValue = _.isInteger(latestValue[key])
+          ? latestValue[key]
+          : parseInt(latestValue[key], 10);
+        this.itemValues[key] = fixedValue;
+        // Check if max ever.
+      });
+
+      this.fields.map(field => {
+        Object.keys(latestValue).map(key => {
+          if (field.data === key) {
+            this.update(field);
+          }
+        });
+      });
+    }
+    if (this.legend) {
+      this.legend.setValues(this.itemValues);
     }
   });
+
+  handleMouseOver(d: any, i: any) {
+    console.debug('Mouse over:');
+    console.debug(d);
+    console.debug(i);
+  }
+
+  handleMouseOut(d: any, i: any) {
+    console.debug('Mouse over:');
+    console.debug(d);
+    console.debug(i);
+  }
 
   componentDidMount() {
     const { profileId } = this.props.widget;
     Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
-    this.buildWidget();
+    setTimeout(() => {
+      this.fields = [];
+      this.props.widget.items.forEach((item, count) => {
+        this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
+      });
+    }, 200);
+  }
+
+  _onResize = (width: number, height: number) => {
+    if (this.legend) {
+      this.legend.resize(width, height);
+    }
+    this.setState({
+      width,
+      height
+    });
+  };
+
+  /**
+   * Used to dynamically style the element so a tooltip can be overlayed on it.
+   * @param {int} count - The layer being rendered, this will determine the scale and position.
+   */
+  determineTooltipStyling(count: number) {
+    return {
+      color: 'white',
+      position: 'absolute',
+      width: this.state.width * count / 4.25,
+      height: this.state.width * count / 4.25,
+      zIndex: 10 - count,
+      left:
+        'calc(50% - ' +
+        this.state.width * count / 4.25 / 2 +
+        'px - ' +
+        this.state.width * 0.175 +
+        'px)',
+      top: 'calc(50% - ' + this.state.width * count / 4.25 / 2 + 'px)'
+    };
   }
 
   render() {
-    const { displayName } = this.props.widget;
-    this.buildWidget();
+    console.debug(this.props);
+    const { widget } = this.props;
+    const { displayName } = widget;
+    this.fields = [];
+    this.props.widget.items.forEach((item, count) => {
+      this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
+    });
+    const wrapperStyle = { width: this.state.width * 0.66 };
     return (
-      <div className="radial-widget" ref={radial => (this.radial = radial)}>
-        <div className="display-name">{displayName}</div>
-        <div className="radial-main" />
-      </div>
+      <Widget widget={widget} onResize={this._onResize}>
+        <div
+          className="StackedRadialWidget"
+          // $FlowFixMe
+          ref={radial => (this.radial = radial)}
+        >
+          <div className="radialWrapper" style={wrapperStyle}>
+            <div className="display-name">{displayName}</div>
+            {this.props.widget.items.map((item, count) => {
+              const classes =
+                'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
+              return <div className={classes} />;
+            })}
+          </div>
+          {widget.showLegend && (
+            <Legend
+              showTotal
+              metrics={this.props.widget.items}
+              onRef={legend => {
+                this.legend = legend;
+              }}
+            />
+          )}
+        </div>
+      </Widget>
     );
   }
 }

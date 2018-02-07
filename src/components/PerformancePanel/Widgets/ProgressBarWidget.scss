@@ -1,9 +1,9 @@
 /**
- * @Author: Guan Gui <guiguan>
- * @Date:   2018-01-31T21:46:54+11:00
- * @Email:  root@guiguan.net
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-02-07T14:47:40+11:00
+ * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-07T14:17:15+11:00
+ * @Last modified time: 2018-02-07T16:20:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,8 +24,19 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export ArrowWidget from './ArrowWidget';
-export RadialWidget from './RadialWidget';
-export StackedRadialWidget from './StackedRadialWidget';
-export ProgressBarWidget from './ProgressBarWidget';
-export Widget from './Widget';
+@import '../../../styles/_defaultTheme.scss';
+
+.ProgressBarWidget {
+  div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 18px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;			
+    pointer-events: none;
+}
+}
