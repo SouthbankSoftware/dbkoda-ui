@@ -76,6 +76,28 @@
         "background": "light",
         "static": true
       }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
+      "layout": {
+        "x": 2,
+        "y": 4,
+        "w": 2,
+        "h": 1,
+        "background": "light"
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
+      "layout": {
+        "x": 4,
+        "y": 4,
+        "w": 2,
+        "h": 1,
+        "background": "light"
+      }
     }
   ]
 }
