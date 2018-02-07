@@ -243,18 +243,23 @@ export default class Toolbar extends React.Component {
    */
   renderDefaultToolbar(disabledButtons) {
     // Get list of existing outputs for enabling buttons:
-    const existingOutputs = this.getExistingOutputs();
+    let existingOutputs;
     const currentOutput = {};
-    if (this.props.store.outputPanel.currentTab.startsWith('TableView-')) {
-      currentOutput.tableView = true;
-    } else if (this.props.store.outputPanel.currentTab.startsWith('Enhanced')) {
-      currentOutput.enhancedView = true;
-    } else if (this.props.store.outputPanel.currentTab.startsWith('Chart')) {
-      currentOutput.chartView = true;
-    } else if (
-      this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
-    ) {
-      currentOutput.rawView = true;
+    if (false) {
+      existingOutputs = this.getExistingOutputs();
+      if (this.props.store.outputPanel.currentTab.startsWith('TableView-')) {
+        currentOutput.tableView = true;
+      } else if (
+        this.props.store.outputPanel.currentTab.startsWith('Enhanced')
+      ) {
+        currentOutput.enhancedView = true;
+      } else if (this.props.store.outputPanel.currentTab.startsWith('Chart')) {
+        currentOutput.chartView = true;
+      } else if (
+        this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
+      ) {
+        currentOutput.rawView = true;
+      }
     }
 
     return (
@@ -263,7 +268,7 @@ export default class Toolbar extends React.Component {
           <div className="pt-navbar-heading">
             {globalString('output/headings/default')}
           </div>
-          {IS_DEVELOPMENT && (
+          {false && (
             <div>
               <Tooltip
                 intent={Intent.PRIMARY}
