@@ -5,7 +5,7 @@
  * @Date:   2018-02-05T12:18:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-06T17:17:02+11:00
+ * @Last modified time: 2018-02-07T14:46:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,19 +29,27 @@
 import * as React from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import { autorun } from 'mobx';
+import { autorun, type IObservableArray } from 'mobx';
 import { LineChart, Line, Brush as BaseBrush, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import type { WidgetValue } from '~/api/Widget';
+import type { Projection } from './Widget';
 import styles from './HistoryView.scss';
 
 // $FlowFixMe
 const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) => k.startsWith('colour'));
 const DEFAULT_BRUSH_SIZE = 10;
-const DEBOUNCED_SET_SHOULD_UPDATE_DELAY = 800;
+const DEBOUNCED_ENABLE_UPDATE_DELAY = 500;
 
+const { primaryColour, primaryColourLighten30, backgroundColour } = styles;
 const containerPadding = parseInt(styles.containerPadding, 10);
 const descriptionHeight = parseInt(styles.descriptionHeight, 10);
+const lineChartMargin = { top: 8, right: 5, left: -20, bottom: 5 };
+const tooltipCursor = { stroke: primaryColourLighten30 };
+const brushHeight = 18;
+const brushHorizontalPadding = 52;
 const timeFormatter = d3.timeFormat('%H:%M:%S');
+const legendTimeFormatter = d3.timeFormat('%H:%M:%S %x');
+const valueFormatter = d3.format('.2f');
 
 const Brush = class extends BaseBrush {
   _handleEnterSlideOrTraveller = this.handleEnterSlideOrTraveller;
@@ -64,8 +72,10 @@ const Brush = class extends BaseBrush {
 type Props = {
   width: number,
   height: number,
-  values: *,
-  projection: *
+  values: IObservableArray<WidgetValue>,
+  projection: Projection,
+  name: string,
+  description: string
 };
 
 type State = {
@@ -79,6 +89,11 @@ export default class HistoryView extends React.PureComponent<Props, State> {
   _brushEndIdx: ?number = null;
   _shouldUpdate: boolean = true;
   _autorunDisposer: *;
+
+  static defaultProps = {
+    name: 'Unknown',
+    description: 'n/a'
+  };
 
   componentWillMount() {
     // componentWillMount allows us to use setState without triggering extra rendering
@@ -107,32 +122,26 @@ export default class HistoryView extends React.PureComponent<Props, State> {
     this._brushEndIdx = endIndex === this.state.data.length - 1 ? null : endIndex;
   };
 
-  _debouncedSetShouldUpdate = _.debounce((shouldUpdate: boolean) => {
-    this._shouldUpdate = shouldUpdate;
-  }, DEBOUNCED_SET_SHOULD_UPDATE_DELAY);
+  _debouncedEnableUpdate = _.debounce(() => {
+    this._shouldUpdate = true;
+  }, DEBOUNCED_ENABLE_UPDATE_DELAY);
 
   _onMouseEnterBrushTraveller = () => {
-    this._debouncedSetShouldUpdate(false);
+    this._debouncedEnableUpdate.cancel();
+    this._shouldUpdate = false;
   };
 
   _onMouseLeaveBrushTraveller = () => {
-    this._debouncedSetShouldUpdate(true);
+    this._debouncedEnableUpdate();
   };
 
   componentWillUnmount() {
     this._autorunDisposer && this._autorunDisposer();
   }
 
-  componentDidUpdate() {
-    console.log('I am updated!!!');
-  }
-
   render() {
-    const { width, height, projection } = this.props;
+    const { width, height, projection, name, description } = this.props;
     const { data } = this.state;
-
-    // // let mobx track latest data for us
-    // const data = this._data || this._getLatestData(this.props);
 
     let colourIdx = 0;
     const brushEndIdx = Math.max(
@@ -143,24 +152,28 @@ export default class HistoryView extends React.PureComponent<Props, State> {
 
     return (
       <div className="HistoryView">
-        <p className="description">
-          <b>Uplink speed: </b>host uplink network speed. host uplink network speed. host uplink
-          network speed. host uplink network speed. host uplink network speed.{' '}
-        </p>
         <LineChart
+          className="chart"
           width={width - 2 * containerPadding}
           height={height - 2 * containerPadding - descriptionHeight}
           data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          margin={lineChartMargin}
         >
-          <XAxis dataKey="timestamp" tickFormatter={timeFormatter} />
-          <YAxis />
-          <Tooltip labelFormatter={timeFormatter} />
-          <Legend verticalAlign="top" wrapperStyle={{ lineHeight: '40px' }} />
+          <XAxis stroke={primaryColour} dataKey="timestamp" tickFormatter={timeFormatter} />
+          <YAxis stroke={primaryColour} />
+          <Tooltip
+            formatter={valueFormatter}
+            labelFormatter={legendTimeFormatter}
+            cursor={tooltipCursor}
+          />
+          <Legend verticalAlign="top" iconType="circle" iconSize={8} />
           <Brush
             dataKey="timestamp"
-            height={18}
-            stroke="#8884d8"
+            x={brushHorizontalPadding}
+            width={width - 2 * containerPadding - 2 * brushHorizontalPadding}
+            height={brushHeight}
+            stroke={primaryColour}
+            fill={backgroundColour}
             startIndex={brushStartIdx}
             endIndex={brushEndIdx}
             onChange={this._onBrushChange}
@@ -177,17 +190,22 @@ export default class HistoryView extends React.PureComponent<Props, State> {
                 key={k}
                 type="monotone"
                 dataKey={data => {
-                  const value = v(data.value);
+                  const value = v(data);
                   return value === undefined ? null : value;
                 }}
                 name={k}
                 dot={false}
+                activeDot={tooltipCursor}
                 isAnimationActive={false}
                 stroke={colour}
               />
             );
           })}
         </LineChart>
+        <p className="description">
+          <b className="name">{name}: </b>
+          {description}
+        </p>
       </div>
     );
   }
