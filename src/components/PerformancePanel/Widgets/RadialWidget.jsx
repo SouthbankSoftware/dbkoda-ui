@@ -75,7 +75,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     return this.itemValue.map((v) => {
       return {...v};
     });
-  };
+  }
 
   _getInnerRadiusSize() {
     const minValue = Math.min(this.state.width, this.state.height);
@@ -198,14 +198,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
   }
 
   update() {
-    const item = this.props.widget.items[0];
     this.field
       .each(function (d) {
         this._value = d.percentage;
       })
       .data(this.dataset.bind(this))
       .each(function (d) {
-        console.log(item, 'update ', d);
         d.previousValue = this._value;
       });
 
@@ -245,10 +243,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
   /**
    * TODO: move to schema
    */
-  getMaximumValue(value: Object, key: string, historyValues: Array<Object>, itemKey: string) {
+  getMaximumValue(value: Object, key: string, historyValues: Array<Object>, itemKey: string): Object {
     const previousValueObj : Object = historyValues.length > 1 ? historyValues[historyValues.length - 2].value : {};
     if (_.isEmpty(previousValueObj)) {
-      return [];
+      return {percentage:0, valuePerSec:0};
     }
     const prevValue = previousValueObj[itemKey];
     const v : number = _.isInteger(value[key]) ? value[key] : parseInt(value[key], 10);
@@ -276,19 +274,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
         if (_.isEmpty(previousValue)) {
           return [];
         }
-        const prevV = previousValue[items[0]];
-        const download : number = _.isInteger(v.download) ? v.download : parseInt(v.download, 10);
-        const upload : number = _.isInteger(v.upload) ? v.upload : parseInt(v.upload, 10);
-        const prevDownload : number = _.isInteger(prevV.download) ? prevV.download : parseInt(prevV.download, 10);
-        const prevUplaod : number = _.isInteger(prevV.upload) ? prevV.upload : parseInt(prevV.upload, 10);
-        const maxDownload : number = this.getMaximumValueFromHistory(values, items[0], 'download');
-        const maxUpload : number = this.getMaximumValueFromHistory(values, items[0], 'upload');
-        const downloadPerc = maxDownload === 0 ? 100 : Math.abs(download - prevDownload) / maxDownload * 100;
-        const uploadPerc = maxUpload === 0 ? 100 : Math.abs(upload - prevUplaod) / maxUpload * 100;
-        console.log(`${items[0]} download ${download - prevDownload} / ${maxDownload} = ${downloadPerc} uplaod ${upload - prevUplaod} / ${maxUpload} = ${uploadPerc}`);
-        const dddd = this.getMaximumValue(v, 'download', values, items[0]);
-        const dddd1 = this.getMaximumValue(v, 'update', values, items[0]);
-        console.log('dddd' , dddd, dddd1);
+        const download: Object = this.getMaximumValue(v, 'download', values, items[0]);
+        const upload: Object = this.getMaximumValue(v, 'upload', values, items[0]);
         let downloadText = '';
         let uploadText = '';
         if (items[0] === 'network') {
@@ -298,20 +285,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
           downloadText = 'In ';
           uploadText = 'Out ';
         }
-        let downloadValue = bytesToSize(Math.abs(download - prevDownload) / (v.samplingRate / 1000));
-        let uploadValue = bytesToSize(Math.abs(upload - prevUplaod) / (v.samplingRate / 1000));
-        if (downloadValue === undefined) {
-          downloadValue = 0;
-        }
-        if (uploadValue === undefined) {
-          uploadValue = 0;
-        }
-        const text = `${downloadText}${downloadValue}/s \n ${uploadText}${uploadValue}/s`;
-        this.text = text;
-        this.setState({text});
+        this.text = `${downloadText}${download.valuePerSec}/s \n ${uploadText}${upload.valuePerSec}/s`;
         return [
-          {index: 0, percentage: uploadPerc},
-          {index: 1, percentage: downloadPerc},
+          {index: 0, percentage: download.percentage},
+          {index: 1, percentage: upload.percentage},
         ];
       }
       const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
@@ -360,7 +337,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       width,
       height
     });
-    this.buildWidget();
+    // this.buildWidget();
   };
 
   render() {
