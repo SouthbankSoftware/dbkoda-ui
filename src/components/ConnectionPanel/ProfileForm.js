@@ -1,4 +1,12 @@
-/*
+/**
+ * Profile form class
+ *
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2018-01-16T16:20:21+11:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-08T11:59:53+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,14 +26,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Last modified by:   wahaj
- * @Last modified time: 2017-08-23T15:15:10+10:00
- */
-
-/**
- * profile form class
- */
 import MobxReactForm from 'mobx-react-form';
 import validatorjs from 'validatorjs';
 import _ from 'lodash';
@@ -35,8 +35,8 @@ export class ProfileForm extends MobxReactForm {
   static mongoProtocol = 'mongodb://';
 
   static getRandomPort() {
-    if (GetRandomPort) {
-      return GetRandomPort(6000, 7000, '127.0.0.1');
+    if (IS_ELECTRON) {
+      return window.require('find-free-port')(6000, 7000, '127.0.0.1').then(([port]) => port);
     }
     return new Promise().resolve(Math.floor(Math.random() * 7000) + 6000);
   }

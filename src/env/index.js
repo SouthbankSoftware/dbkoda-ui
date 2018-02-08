@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-08T12:07:55+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,24 +21,19 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-10-25T11:42:31+11:00
- */
+import _ from 'lodash';
 
-const protocol = 'http://';
-const host = '127.0.0.1';
-const port = 3030;
-const url = protocol + host + ':' + port;
-const analytics = {
-  'development': 'UA-101162043-2',
-  'prod': 'UA-101162043-1'
-};
+global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
+global.IS_DEVELOPMENT = !IS_PRODUCTION;
+global.IS_ELECTRON = _.has(window, 'process.versions.electron');
 
-module.exports = {
-  protocol,
-  host,
-  port,
-  url,
-  analytics
+export const protocol = 'http://';
+export const host = '127.0.0.1';
+
+const _port = IS_ELECTRON && window.require('electron').remote.getGlobal('CONTROLLER_PORT');
+export const port = typeof _port === 'number' ? _port : 3030;
+export const url = protocol + host + ':' + port;
+export const analytics = {
+  development: 'UA-101162043-2',
+  prod: 'UA-101162043-1'
 };
