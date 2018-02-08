@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-08T13:26:23+11:00
+ * @Last modified time: 2018-02-09T09:58:43+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -171,12 +171,16 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
 
       .on('mouseover', (d) => {
+        const w = d.value * chartWidth / 100;
+        const x = w / 2;
+        const y = 0;
+          console.log('x2, y2:', x, y);
           this._tip.transition()
               .duration(200)
               .style('opacity', 0.9);
           this._tip.html(d.key)
-              .style('left', (d3.event.pageX) + 'px')
-              .style('top', (d3.event.pageY - 28) + 'px');
+              .style('left', (x) + 'px')
+              .style('top', (y) + 'px');
           })
       .on('mouseout', () => {
           this._tip.transition()
@@ -238,7 +242,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         widgetStyle={widgetStyle}
       >
         <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
-        <div className="tooltip" ref={_tipEl => (this._tipEl = _tipEl)} />
+        <div className="d3-tip" ref={_tipEl => (this._tipEl = _tipEl)} />
       </Widget>
     );
   }

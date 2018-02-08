@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T14:47:40+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-07T16:20:31+11:00
+ * @Last modified time: 2018-02-09T10:20:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,16 +27,29 @@
 @import '../../../styles/_defaultTheme.scss';
 
 .ProgressBarWidget {
-  div.tooltip {
-    position: absolute;
-    text-align: center;
-    width: 60px;
-    height: 18px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;			
-    pointer-events: none;
-}
+  .d3-tip {
+  position: absolute;
+  text-align: center;
+  height: 18px;
+  line-height: 1;
+  font-weight: bold;
+  padding: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border-radius: 2px;
+  }
+
+  /* Creates a small triangle extender for the tooltip */
+  .d3-tip:after {
+  box-sizing: border-box;
+  display: block;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+  }
+
 }
