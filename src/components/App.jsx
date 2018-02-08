@@ -56,12 +56,12 @@ import './App.scss';
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  config: allStores.config,
+  config: allStores.config
 }))
 @observer
 class App extends React.Component {
   static propTypes = {
-    layout: PropTypes.observableObject.isRequired,
+    layout: PropTypes.observableObject.isRequired
   };
   componentDidMount() {
     Broker.emit(EventType.APP_RENDERED);
@@ -82,6 +82,7 @@ class App extends React.Component {
     this.props.config.settings.save();
     this.props.store.layout.optInVisible = false;
   }
+
   unstable_handleError() {
     // eslint-disable-line camelcase
     Broker.emit(EventType.APP_CRASHED);
@@ -90,7 +91,7 @@ class App extends React.Component {
     const { layout, store } = this.props;
     const splitPane2Style = {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     };
     let defaultOverallSplitPos;
     let defaultRightSplitPos;

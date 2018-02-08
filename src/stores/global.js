@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T14:52:14+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-08T12:08:00+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,18 +39,14 @@ import { ProfileStatus } from '../components/common/Constants';
 let ipcRenderer;
 let stateStorePath;
 
-global.IS_ELECTRON = _.has(window, 'process.versions.electron');
-global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
-global.IS_DEVELOPMENT = !IS_PRODUCTION;
 if (IS_ELECTRON) {
   const electron = window.require('electron');
 
-  ipcRenderer = electron.ipcRenderer;
+  ipcRenderer = electron.ipcRenderer; // eslint-disable-line prefer-destructuring
 
-  const remote = electron.remote;
+  const { remote } = electron;
 
   global.PATHS = remote.getGlobal('PATHS');
-  global.GetRandomPort = remote.getGlobal('getRandomPort');
   stateStorePath = global.PATHS.stateStore;
 
   global.UAT = remote.getGlobal('UAT');

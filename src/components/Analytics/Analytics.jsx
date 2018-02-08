@@ -28,6 +28,7 @@
 import React from 'react';
 import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import { featherClient } from '~/helpers/feathers';
 import ReactGA from 'react-ga';
 import { analytics, protocol } from '../../env';
 import { AnalyticsEvents } from './Events';
@@ -35,24 +36,25 @@ import { Broker, EventType } from '../../helpers/broker';
 
 @inject(allStores => ({
   store: allStores.store,
-  config: allStores.config,
+  config: allStores.config
 }))
 @observer
 export default class Analytics extends React.Component {
   constructor(props) {
     super(props);
+    this.hasPinged = false;
     let siteUrl = '';
     const gaCode = analytics;
     if (process.env.NODE_ENV === 'development') {
       siteUrl = protocol + 'dev.dbkoda.com';
       ReactGA.initialize(gaCode.development, {
         debug: true,
-        titleCase: false,
+        titleCase: false
       });
     } else if (process.env.NODE_ENV === 'production') {
       siteUrl = protocol + 'electron.dbkoda.com';
       ReactGA.initialize(gaCode.prod, {
-        titleCase: false,
+        titleCase: false
       });
     }
     ReactGA.set({ page: siteUrl });
@@ -70,7 +72,7 @@ export default class Analytics extends React.Component {
      //  */
     reaction(
       () => this.props.config.settings.telemetryEnabled,
-      (telemetryEnabled) => {
+      telemetryEnabled => {
         if (!this.props.store.layout.optInVisible) {
           if (telemetryEnabled) {
             this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
@@ -80,7 +82,7 @@ export default class Analytics extends React.Component {
           this.props.config.save();
         }
       },
-      { name: 'analyticsReactionToTelemetryChange' },
+      { name: 'analyticsReactionToTelemetryChange' }
     );
 
     /**
@@ -88,7 +90,7 @@ export default class Analytics extends React.Component {
      */
     reaction(
       () => this.props.store.layout.optInVisible,
-      (_) => {
+      _ => {
         if (this.props.config.settings.telemetryEnabled) {
           this._sendEvent(AnalyticsEvents.OPT_IN, 'App');
         } else {
@@ -96,7 +98,7 @@ export default class Analytics extends React.Component {
         }
         this.props.config.save();
       },
-      { name: 'analyticsReactionToTelemetryChange' },
+      { name: 'analyticsReactionToTelemetryChange' }
     );
 
     this._sendEvent = this._sendEvent.bind(this);
@@ -104,6 +106,9 @@ export default class Analytics extends React.Component {
     this.feedbackEvent = this.feedbackEvent.bind(this);
     this.keyFeatureEvent = this.keyFeatureEvent.bind(this);
     this.controllerActivity = this.controllerActivity.bind(this);
+    this.pingHome = this.pingHome.bind(this);
+    this.getToday = this.getToday.bind(this);
+    this.hasOneDayPassed = this.hasOneDayPassed.bind(this);
   }
 
   componentDidMount() {
@@ -111,6 +116,7 @@ export default class Analytics extends React.Component {
     Broker.on(EventType.FEEDBACK, this.feedbackEvent);
     Broker.on(EventType.FEATURE_USE, this.keyFeatureEvent);
     Broker.on(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
+    Broker.on(EventType.PING_HOME, this.pingHome);
   }
 
   componentWillUnmount() {
@@ -118,6 +124,63 @@ export default class Analytics extends React.Component {
     Broker.off(EventType.FEEDBACK, this.feedbackEvent);
     Broker.off(EventType.FEATURE_USE, this.keyFeatureEvent);
     Broker.off(EventType.CONTROLLER_ACTIVITY, this.controllerActivity);
+    Broker.on(EventType.PING_HOME, this.pingHome);
+  }
+
+  hasOneDayPassed(previousDate, currentDate) {
+    if (Date.parse(currentDate) - Date.parse(previousDate) >= 1) {
+      return true;
+    }
+    return false;
+  }
+
+  getToday() {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; // January is 0!
+    const yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    today = mm + '/' + dd + '/' + yyyy;
+    return today;
+  }
+
+  pingHome() {
+    if (!this.hasPinged) {
+      this.hasPinged = true;
+      const today = Date.parse(this.getToday());
+      const firstPing = Date.parse(this.props.store.firstPingDate);
+      let daysSince = today - firstPing;
+      daysSince /= 1000 * 60 * 60 * 24;
+      const service = featherClient().service('/supportBundle');
+      service.timeout = 30000;
+      service
+        .get(true)
+        .then(result => {
+          console.log('!!! - ', result, ' - !!!');
+          this._sendEvent(
+            AnalyticsEvents.PING_HOME,
+            'Ping',
+            '{daysSinceFirstPing: ' +
+              daysSince +
+              ', dateFolderCreated: ' +
+              result.dateCreated +
+              ', daysSinceCreation: ' +
+              result.daysSinceCreation +
+              '}'
+          );
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
   }
 
   /**
@@ -126,7 +189,6 @@ export default class Analytics extends React.Component {
    */
   newProfileCreated(profile) {
     if (this.props.config.settings.telemetryEnabled) {
-      console.log(profile);
       let mongoInfo =
         '{ dbVersion: ' +
         profile.dbVersion +
@@ -154,6 +216,21 @@ export default class Analytics extends React.Component {
   controllerActivity(service) {
     if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.CONTROLLER_ACTIVITY, 'Service', service);
+      if (
+        this.props.store.dateLastPinged &&
+        this.props.config.settings.telemetryEnabled &&
+        this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
+      ) {
+        Broker.emit(EventType.PING_HOME);
+        this.props.store.dateLastPinged = this.getToday();
+      } else if (!this.props.store.dateLastPinged) {
+        this.props.store.dateLastPinged = this.getToday();
+        this.props.store.firstPingDate = this.getToday();
+        Broker.emit(EventType.PING_HOME);
+      }
+      if (!this.props.store.firstPingDate) {
+        this.props.store.firstPingDate = this.getToday();
+      }
     }
   }
 
@@ -195,7 +272,7 @@ export default class Analytics extends React.Component {
   _sendEvent(eventType, eventCategory, eventLabel, eventValue) {
     const event = {
       category: eventCategory,
-      action: eventType,
+      action: eventType
     };
     if (eventLabel) {
       event.label = eventLabel;

@@ -26,6 +26,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/anchor-is-valid */
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
+import { Broker, EventType } from '~/helpers/broker';
 import { Intent, Dialog, AnchorButton, Switch } from '@blueprintjs/core';
 
 const React = require('react');
@@ -35,7 +36,7 @@ const React = require('react');
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  config: allStores.config,
+  config: allStores.config
 }))
 @observer
 export default class TelemetryConsent extends React.Component {
@@ -49,8 +50,37 @@ export default class TelemetryConsent extends React.Component {
     if (IS_ELECTRON) {
       window
         .require('electron')
-        .shell.openExternal('https://southbanksoftware.github.io/privacy-policy');
+        .shell.openExternal(
+          'https://southbanksoftware.github.io/privacy-policy'
+        );
     }
+  }
+
+  @action.bound
+  hasOneDayPassed(previousDate, currentDate) {
+    if (Date.parse(currentDate) - Date.parse(previousDate) >= 1) {
+      return true;
+    }
+    return false;
+  }
+
+  @action.bound
+  getToday() {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; // January is 0!
+    const yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    today = mm + '/' + dd + '/' + yyyy;
+    return today;
   }
 
   @action.bound
@@ -68,6 +98,22 @@ export default class TelemetryConsent extends React.Component {
   @action.bound
   acceptDialog() {
     this.props.layout.optInVisible = false;
+    if (
+      this.props.store.dateLastPinged &&
+      this.props.config.settings.telemetryEnabled &&
+      this.hasOneDayPassed(this.props.store.dateLastPinged, this.getToday())
+    ) {
+      this.props.store.dateLastPinged = this.getToday();
+      this.props.store.firstPingDate = this.getToday();
+      Broker.emit(EventType.PING_HOME);
+    } else if (
+      !this.props.store.dateLastPinged &&
+      this.props.config.settings.telemetryEnabled
+    ) {
+      this.props.store.dateLastPinged = this.getToday();
+      this.props.store.firstPingDate = this.getToday();
+      Broker.emit(EventType.PING_HOME);
+    }
   }
 
   render() {
@@ -84,10 +130,16 @@ export default class TelemetryConsent extends React.Component {
           <p>
             {' '}
             {globalString('telemetry_dialog/content_third')}
-            <a onClick={this.openPrivacyPolicy}>{globalString('telemetry_dialog/privacy_link')}</a>
+            <a onClick={this.openPrivacyPolicy}>
+              {globalString('telemetry_dialog/privacy_link')}
+            </a>
           </p>
         </div>
-        <div className={'dialogButtons ' + this.props.config.settings.telemetryEnabled}>
+        <div
+          className={
+            'dialogButtons ' + this.props.config.settings.telemetryEnabled
+          }
+        >
           <Switch
             checked={this.props.config.settings.telemetryEnabled}
             label="Enable Telemetry"
