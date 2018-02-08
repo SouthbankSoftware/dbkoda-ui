@@ -1,9 +1,6 @@
 /**
  * Profile form class
  *
- * @Author: Guan Gui <guiguan>
- * @Date:   2018-01-16T16:20:21+11:00
- * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
  * @Last modified time: 2018-02-08T11:59:53+11:00
  *
@@ -36,7 +33,7 @@ export class ProfileForm extends MobxReactForm {
 
   static getRandomPort() {
     if (IS_ELECTRON) {
-      return window.require('find-free-port')(6000, 7000, '127.0.0.1').then(([port]) => port);
+      return window.require('electron').remote.getGlobal('findAvailablePort')(6000, 7000, '127.0.0.1');
     }
     return new Promise().resolve(Math.floor(Math.random() * 7000) + 6000);
   }
