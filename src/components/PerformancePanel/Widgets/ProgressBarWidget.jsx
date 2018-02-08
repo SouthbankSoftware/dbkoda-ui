@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-07T16:26:23+11:00
+ * @Last modified time: 2018-02-08T13:26:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -195,10 +195,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this._createD3View();
 
       this._autorunDisposer = autorun(() => {
-        const { items, values } = this.props.widget;
+        const { values } = this.props.widget;
         const latestValue = values.length > 0 ? values[values.length - 1].value : {};
-
-        console.log(items, latestValue);
 
         // // if (items.length !== 1) {
         // //   console.error('ArrowWidget only supports single item');

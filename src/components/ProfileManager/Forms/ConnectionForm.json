@@ -192,7 +192,7 @@
         "label": "Establish Direct OS Connection (for terminal and performance monitoring)",
         "type": "checkbox",
         "column": 1,
-        "refFields": ["remoteHost", "remoteUser", "remotePass"]
+        "refFields": ["remoteHost", "remoteUser", "remotePass", "sshTunnel"]
       },
       {
         "name": "remoteHost",
@@ -226,7 +226,9 @@
         "value": false,
         "label": "Tunnel through this host for Mongo Connection",
         "type": "checkbox",
-        "column": 1
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
       },
       {
         "name": "keyRadio",
