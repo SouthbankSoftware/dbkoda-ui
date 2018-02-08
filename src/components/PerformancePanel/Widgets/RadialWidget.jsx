@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-02T11:33:40+11:00
+ * @Last modified time: 2018-02-08T13:59:09+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -238,11 +238,15 @@ export default class RadialWidget extends React.Component<Object, Object> {
     this._onResize(RadialWidget.width, RadialWidget.height);
     const that = this;
     setTimeout(() => {
+      that.itemValue = [{ index: 0, percentage: 0, text: '0%'}];
       that.buildWidget();
       autorun(() => {
         const {items, values} = that.props.widget;
-        that.itemValue = that.getValueFromData(items, values);
-        that.update();
+        const newItemValue = that.getValueFromData(items, values);
+        if (newItemValue.length > 0) {
+          that.itemValue = newItemValue;
+          that.update();
+        }
       });
     }, 200);
   }

@@ -54,9 +54,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@blueprintjs/core@^1.34.0", "@blueprintjs/core@^1.35.0":
-  version "1.35.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-1.35.0.tgz#fea1db5f3b4ddc47eb18bb98f770d4152ecbe339"
+"@blueprintjs/core@^1.35.3":
+  version "1.35.3"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-1.35.3.tgz#aa7f603f135f826e373f39dbe7f603ec7a30284d"
   dependencies:
     "@types/dom4" "^1.5.20"
     "@types/tether" "^1.1.27"
@@ -67,11 +67,25 @@
     tether "^1.4"
     tslib "^1.5.0"
 
-"@blueprintjs/table@^1.31.0":
-  version "1.31.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-1.31.0.tgz#8b03ad9eb544de44024311e7c5d7f617a5760026"
+"@blueprintjs/labs@^0.14.4":
+  version "0.14.4"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/labs/-/labs-0.14.4.tgz#cd2e4d4c7268d6f51c7a466be98038bc9810e8f4"
   dependencies:
-    "@blueprintjs/core" "^1.34.0"
+    "@blueprintjs/core" "^1.35.3"
+    classnames "^2.2"
+    fuzzaldrin-plus "^0.5.0"
+    moment "^2.14.1"
+    moment-timezone "^0.5.13"
+    popper.js "^1.12.6"
+    pure-render-decorator "^1.2.1"
+    react-popper "~0.7.4"
+    tslib "^1.5.0"
+
+"@blueprintjs/table@^1.31.2":
+  version "1.31.2"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-1.31.2.tgz#7f6db681aaa95fb24e9abcbb1ce187d4ead8971e"
+  dependencies:
+    "@blueprintjs/core" "^1.35.3"
     classnames "^2.2"
     es6-shim "^0.35"
     pure-render-decorator "^1.1"
@@ -4350,6 +4364,10 @@ fusing@~1.0.0:
     emits "3.0.x"
     predefine "0.1.x"
 
+fuzzaldrin-plus@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/fuzzaldrin-plus/-/fuzzaldrin-plus-0.5.0.tgz#ef5f26f0c2fc7e9e9a16ea149a802d6cb4804b1e"
+
 fuzzysearch@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/fuzzysearch/-/fuzzysearch-1.0.3.tgz#dffc80f6d6b04223f2226aa79dd194231096d008"
@@ -6706,7 +6724,13 @@ mobx@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.3.2.tgz#e912a9f7c82b2df69f1abe6515ecaa551828a024"
 
-moment@^2.10.6:
+moment-timezone@^0.5.13:
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.14.tgz#4eb38ff9538b80108ba467a458f3ed4268ccfcb1"
+  dependencies:
+    moment ">= 2.9.0"
+
+"moment@>= 2.9.0", moment@^2.10.6, moment@^2.14.1:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
@@ -7510,6 +7534,10 @@ pngquant-bin@^3.0.0:
     bin-wrapper "^3.0.0"
     logalot "^2.0.0"
 
+popper.js@^1.12.5, popper.js@^1.12.6:
+  version "1.12.9"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.9.tgz#0dfbc2dff96c451bb332edcfcfaaf566d331d5b3"
+
 portfinder@^1.0.13, portfinder@^1.0.9:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.13.tgz#bb32ecd87c27104ae6ee44b5a3ccbf0ebb1aede9"
@@ -8107,7 +8135,7 @@ pure-color@^1.2.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/pure-color/-/pure-color-1.3.0.tgz#1fe064fb0ac851f0de61320a8bf796836422f33e"
 
-pure-render-decorator@^1.1:
+pure-render-decorator@^1.1, pure-render-decorator@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pure-render-decorator/-/pure-render-decorator-1.2.1.tgz#568870eeca17a1cee536b4fe94a3477fcd31eeb9"
   dependencies:
@@ -8381,6 +8409,13 @@ react-motion@^0.5.0:
     performance-now "^0.2.0"
     prop-types "^15.5.8"
     raf "^3.1.0"
+
+react-popper@~0.7.4:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.7.5.tgz#71c25946f291db381231281f6b95729e8b801596"
+  dependencies:
+    popper.js "^1.12.5"
+    prop-types "^15.5.10"
 
 react-proxy@^3.0.0-alpha.0:
   version "3.0.0-alpha.1"
