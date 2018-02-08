@@ -1,9 +1,9 @@
 {
-  "cols": 9,
+  "cols": 8,
   "rows": 8,
   "rowHeight": 150,
   "leftWidth": 2,
-  "midWidth": 5,
+  "midWidth": 6,
   "widgets": [
     {
       "type": "RadialWidget",
@@ -71,7 +71,7 @@
       "layout": {
         "x": 2,
         "y": 0,
-        "w": 2,
+        "w": 3,
         "h": 2,
         "background": "light",
         "static": true
@@ -85,9 +85,9 @@
         "showLegend": true
       },
       "layout": {
-        "x": 4,
+        "x": 5,
         "y": 0,
-        "w": 2,
+        "w": 3,
         "h": 2,
         "background": "light",
         "static": true
