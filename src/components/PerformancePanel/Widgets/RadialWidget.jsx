@@ -206,6 +206,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .each(function (d) {
         d.previousValue = this._value;
       });
+    // const that = this;
+    // this.field.selectAll('.bg').each((d, i) => {
+    //   const elem = d3.select(that.radial);
+    //   d3.select(this).on('mouseover', () => {
+    //     console.log('class .bg on radial', d);
+    //   });
+    // });
 
     this.field.select('path.progress').transition().duration(1000)
       .attrTween('d', this.arcTween.bind(this))
@@ -337,13 +344,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
       width,
       height
     });
-    // this.buildWidget();
   };
 
   render() {
     const {widget, widgetStyle} = this.props;
     const {displayName} = widget;
-
     // 1. render container for d3 in this render function
     // 2. draw d3 graph in a separate function after componentDidMount
     // 3. incremental redraw whenever data change happens
