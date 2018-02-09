@@ -71,7 +71,6 @@ export default class RadialWidget extends React.Component<Object, Object> {
   }
 
   dataset() {
-    // return this.itemValue;
     return this.itemValue.map((v) => {
       return {...v};
     });

@@ -79,7 +79,7 @@
     },
     {
       "type": "StackedRadialWidget",
-      "items": ["item-1", "item-2", "item-3", "item-4", "item-5"],
+      "items": ["activeRead", "writeOpsRate", "writeLatencyRate", "writeLatency", "networkLoad", "bytesIn"],
       "extraState": {
         "displayName": "Network",
         "showLegend": true
