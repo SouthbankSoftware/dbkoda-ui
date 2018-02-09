@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-09T09:58:43+11:00
+ * @Last modified time: 2018-02-09T11:58:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,10 +35,10 @@ import './ProgressBarWidget.scss';
 
 const colors = ['#e0a767', '#a5a11b', '#58595b'];
 const BAR_CLIPPATH_ID = 'barCP';
-const width = 500;
-const height = 100;
+const vbWidth = 500;
+const vbHeight = 100;
 const barHeight = 30;
-const chartWidth = width - 60;
+const chartWidth = vbWidth - 60;
 
 type Props = {
   widget: WidgetState,
@@ -59,7 +59,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     this._chart = d3.select(this._chartEl).attrs({
       width: '100%',
       height: '100%',
-      viewBox: `0 0 ${width} ${height}`,
+      viewBox: `0 0 ${vbWidth} ${vbHeight}`,
       perserveAspectRatio: 'xMinYMid'
     });
 
@@ -86,7 +86,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     // chart background
     this._chart
       .append('g')
-      .attr('transform', 'translate(30,' + (height / 2 - barHeight / 2) + ')')
+      .attr('transform', 'translate(30,' + (vbHeight / 2 - barHeight / 2) + ')')
       .append('rect')
       .attrs({
         class: 'chart-bg',
@@ -101,7 +101,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
     this._dataGroup = this._chart
       .append('g')
-      .attr('transform', 'translate(30,' + (height / 2 - barHeight / 2) + ')');
+      .attr('transform', 'translate(30,' + (vbHeight / 2 - barHeight / 2) + ')');
   };
 
   _removeD3View = () => {
@@ -171,16 +171,21 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
 
       .on('mouseover', (d) => {
+        console.log('d3.event:', d3.event);
+        const wRatio = this._chartEl.clientWidth / vbWidth;
         const w = d.value * chartWidth / 100;
-        const x = w / 2;
+        let x = (w * wRatio) + 30 - 8;
         const y = 0;
           console.log('x2, y2:', x, y);
           this._tip.transition()
               .duration(200)
               .style('opacity', 0.9);
-          this._tip.html(d.key)
-              .style('left', (x) + 'px')
-              .style('top', (y) + 'px');
+          this._tip.html('<strong>' + d.key + ':</strong> <span style="color:red">' + Math.round(d.value) + '</span>');
+          const rect = this._tip.node().getBoundingClientRect();
+          x -= (rect.width / 2);
+          this._tip.style('left', (x) + 'px')
+              .style('top', (y) + 'px')
+              .style('width', (rect.width) + 'px');
           })
       .on('mouseout', () => {
           this._tip.transition()
@@ -216,6 +221,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         //   return;
         // }
 
+        // const testData = {item1: 10, item2: 90};
         this._updateD3ViewData(latestValue);
       });
     }, 200);
