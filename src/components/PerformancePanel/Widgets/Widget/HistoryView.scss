@@ -1,0 +1,115 @@
+/**
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2018-02-05T12:18:41+11:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-07T14:50:07+11:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import "../../../../styles/_defaultTheme.scss";
+
+$container-padding: 5px;
+$description-height: 18px;
+$background-colour: #202020;
+$primary-colour: $defaultChartPanelText;
+$primary-colour-lighten-30: lighten($primary-colour, 30);
+
+.HistoryViewPopover {
+  opacity: 0.9;
+}
+
+.HistoryView {
+  padding: $container-padding;
+  text-shadow: none;
+  background-color: $background-colour;
+  color: $primary-colour;
+
+  .description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: $description-height;
+    font-size: 14px;
+    margin: 0;
+    width: calc(100% - #{2*$container-padding});
+    position: absolute;
+    top: $container-padding;
+
+    .name {
+      color: $primary-colour-lighten-30;
+    }
+  }
+
+  .description:hover {
+    text-overflow: clip;
+    white-space: normal;
+    word-break: break-all;
+    background-color: rgba($background-colour, 0.9);
+  }
+
+  .chart {
+    position: absolute !important;
+    top: $container-padding + $description-height;
+    font-size: 12px;
+
+    .recharts-default-tooltip {
+      background-color: rgba($background-colour, 0.9) !important;
+      border: none !important;
+    }
+
+    .recharts-tooltip-label {
+      color: $primary-colour !important;
+    }
+
+    .recharts-brush-traveller line {
+      stroke: $primary-colour-lighten-30 !important;
+    }
+  }
+}
+
+:export {
+  colour1: $colourOne;
+  colour2: $colourTwo;
+  colour3: $colourThree;
+  colour4: $colourFour;
+  colour5: $colourFive;
+  colour6: $colourSix;
+  colour7: $colourSeven;
+  colour8: $colourEight;
+  colour9: $colourNine;
+  colour10: $colourTen;
+  colour11: $colourEleven;
+  colour12: $colourTwelve;
+  colour13: $colourThirteen;
+  colour14: $colourFourteen;
+  colour15: $colourFifteen;
+  colour16: $colourSixteen;
+  colour17: $colourSeventeen;
+  colour18: lighten($colourOne, 10%);
+  colour19: lighten($colourTwo, 10%);
+  colour20: lighten($colourThree, 10%);
+  colour21: darken($defaultChartPanelText, 10%);
+  containerPadding: $container-padding;
+  descriptionHeight: $description-height;
+  primaryColour: $primary-colour;
+  primaryColourLighten30: $primary-colour-lighten-30;
+  backgroundColour: $background-colour;
+}

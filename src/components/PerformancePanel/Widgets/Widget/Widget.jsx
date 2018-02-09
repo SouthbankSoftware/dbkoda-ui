@@ -35,11 +35,19 @@ import LoadingView from '#/common/LoadingView';
 import _ from 'lodash';
 import ReactResizeDetector from 'react-resize-detector';
 // $FlowFixMe
+import { Popover2 } from '@blueprintjs/labs';
+// $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
+import type { WidgetValue } from '~/api/Widget';
+import HistoryView from './HistoryView';
 import './Widget.scss';
 
 const DEBOUNCE_DELAY = 100;
 const MAX_HISTORY_SIZE = 720; // 1h with 5s sampling rate
+const HISTORY_VIEW_WIDTH = 537;
+const HISTORY_VIEW_HEIGHT = 257;
+
+export type Projection = { [string]: (value: WidgetValue) => number };
 
 type Props = {
   widget: WidgetState,
@@ -47,11 +55,46 @@ type Props = {
   children: *,
   className?: string,
   onResize?: (width: number, height: number) => void,
-  projection?: (values: { [string]: any }) => { [string]: number }
+  projection?: Projection
+};
+
+type State = {
+  projection: Projection
 };
 
 @observer
-export default class Widget extends React.Component<Props> {
+export default class Widget extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      projection: props.projection || this._generateDefaultProjection(props)
+    };
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { projection } = this.state;
+    const { projection: newProjection } = nextProps;
+    if (newProjection && projection !== newProjection) {
+      this.setState({
+        projection: newProjection
+      });
+    }
+  }
+
+  _generateDefaultProjection = (props: Props) => {
+    const { widget: { items } } = props;
+
+    return _.reduce(
+      items,
+      (acc, v) => {
+        acc[v] = value => value.value[v];
+        return acc;
+      },
+      {}
+    );
+  };
+
   _onData = action(payload => {
     const { timestamp, value } = payload;
     const { items, values } = this.props.widget;
@@ -86,30 +129,41 @@ export default class Widget extends React.Component<Props> {
     const { items, values } = this.props.widget;
     const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
-    return items.map(v => {
-      let value = _.get(latestValue, v, null);
+    return (
+      <div className="DefaultWidgetView">
+        {items.map(v => {
+          let value = _.get(latestValue, v, null);
 
-      if (value === null) {
-        value = '?';
-      } else if (typeof value === 'number') {
-        value = _.isInteger(value) ? value : value.toFixed(2);
-      } else {
-        value = <pre>{JSON.stringify(value, null, 2)}</pre>;
-      }
+          if (value === null) {
+            value = '?';
+          } else if (typeof value === 'number') {
+            value = _.isInteger(value) ? value : value.toFixed(2);
+          } else {
+            value = <pre>{JSON.stringify(value, null, 2)}</pre>;
+          }
 
-      return [
-        <div key={`${v}-title`} className="title">
-          {v}
-        </div>,
-        <div key={`${v}-value`} className="value">
-          {value}
-        </div>
-      ];
-    });
+          return [
+            <div key={`${v}-title`} className="title">
+              {v}
+            </div>,
+            <div key={`${v}-value`} className="value">
+              {value}
+            </div>
+          ];
+        })}
+      </div>
+    );
   }
 
   render() {
-    const { children, widget: { state, errorLevel, error }, className, widgetStyle } = this.props;
+    const {
+      children,
+      // $FlowFixMe
+      widget: { state, errorLevel, error, values, name, description },
+      className,
+      widgetStyle
+    } = this.props;
+    const { projection } = this.state;
 
     return (
       <div className={className || 'Widget'} style={widgetStyle}>
@@ -120,7 +174,21 @@ export default class Widget extends React.Component<Props> {
             <ErrorView title={null} error={error} errorLevel={errorLevel} />
           )
         ) : (
-          children || this._renderDefaultView()
+          <Popover2
+            minimal
+            popoverClassName="HistoryViewPopover"
+            content={
+              <HistoryView
+                width={HISTORY_VIEW_WIDTH}
+                height={HISTORY_VIEW_HEIGHT}
+                values={values}
+                projection={projection}
+                name={name}
+                description={description}
+              />
+            }
+            target={<span className="children">{children || this._renderDefaultView()}</span>}
+          />
         )}
         <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
       </div>

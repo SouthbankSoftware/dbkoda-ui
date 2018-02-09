@@ -2,8 +2,8 @@
  * @flow
  *
  * Created by mike on 06/02/2018
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-08T17:01:38+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-09T15:33:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -443,7 +443,7 @@ export default class StackedRadialWidget extends React.Component<
     this.props.widget.items.forEach((item, count) => {
       this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
     });
-    const wrapperStyle = { width: this.state.width * 0.4 };
+    const wrapperStyle = { width: this.state.width * 0.55 };
     return (
       <Widget
         widget={widget}
@@ -456,6 +456,7 @@ export default class StackedRadialWidget extends React.Component<
           ref={radial => (this.radial = radial)}
         >
           <Tooltip
+            portalClassName="StackedRadialWidgetTooltip"
             className="toolTip"
             content={
               <div className="Tooltip">
@@ -483,7 +484,7 @@ export default class StackedRadialWidget extends React.Component<
           </Tooltip>
           {widget.showLegend && (
             <Legend
-              showTotal={false}
+              showTotal
               showValues
               showDots
               metrics={this.props.widget.items}
