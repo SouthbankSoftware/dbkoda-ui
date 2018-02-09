@@ -33,7 +33,9 @@ import './StackedRadialWidget.scss';
 type Props = {
   metrics: any,
   onRef: any,
-  showTotal: any
+  showTotal: boolean,
+  showValues: boolean,
+  showDots: boolean
 };
 
 @inject(({ store, api }, { widget }) => {
@@ -116,7 +118,7 @@ export default class Legend extends React.Component<Props> {
         {this.state.items.map((item, count) => {
           // Determine Dot color and total count.
           const style = { fill: Legend.colors[count] };
-          let value = '0';
+          let value = 'Fetching...';
           if (this.state.values[item]) {
             value = parseInt(this.state.values[item], 10);
             total += this.state.values[item];
@@ -124,29 +126,37 @@ export default class Legend extends React.Component<Props> {
 
           return (
             <div className="row" style={rowDynamicStyle}>
-              <ErrorIcon className="colorDot" style={style} />
-              <svg className="label">
-                <text
-                  x="20"
-                  y="20"
-                  fontFamily="sans-serif"
-                  fontSize={fontSize}
-                  fill="white"
-                >
-                  {item}:
-                </text>{' '}
-              </svg>
-              <svg className="legendValue">
-                <text
-                  x="20"
-                  y="20"
-                  fontFamily="sans-serif"
-                  fontSize={fontSize}
-                  fill="white"
-                >
-                  {value}
-                </text>{' '}
-              </svg>
+              {this.props.showDots && (
+                <ErrorIcon className="colorDot" style={style} />
+              )}
+              <div className="labelWrapper">
+                <svg className="label">
+                  <text
+                    x="20"
+                    y="20"
+                    fontFamily="sans-serif"
+                    fontSize={fontSize}
+                    fill="white"
+                  >
+                    {item}
+                  </text>{' '}
+                </svg>
+              </div>
+              {this.props.showValues && (
+                <div className="valueWrapper">
+                  <svg className="legendValue">
+                    <text
+                      x="20"
+                      y="20"
+                      fontFamily="sans-serif"
+                      fontSize={fontSize}
+                      fill="white"
+                    >
+                      : {value}
+                    </text>{' '}
+                  </svg>
+                </div>
+              )}
             </div>
           );
         })}

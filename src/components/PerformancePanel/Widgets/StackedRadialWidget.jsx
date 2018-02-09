@@ -28,11 +28,12 @@ import * as d3 from 'd3';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
-
 import _ from 'lodash';
+import { Tooltip, Position } from '@blueprintjs/core';
 import './StackedRadialWidget.scss';
 import Widget from './Widget';
 import Legend from './Legend';
+
 import { Broker, EventType } from '../../../helpers/broker';
 
 // Flow type definitions.
@@ -235,9 +236,7 @@ export default class StackedRadialWidget extends React.Component<
       .attr('class', 'bg')
       .style('fill', StackedRadialWidget.colors[layer - 1])
       .style('opacity', 0.2)
-      .attr('d', background)
-      .on('mouseover', this.handleMouseOver)
-      .on('mouseout', this.handleMouseOut);
+      .attr('d', background);
 
     const yTranslation = -100 + 35 * (layer - 1);
     field
@@ -355,8 +354,11 @@ export default class StackedRadialWidget extends React.Component<
         const fixedValue = _.isInteger(latestValue[key])
           ? latestValue[key]
           : parseInt(latestValue[key], 10);
+        // If fixedValue is null, give a 0 value so it will render straight away.
         this.itemValues[key] = fixedValue;
-        // Check if max ever.
+        // Check if it's the highest value ever.
+        // console.log(values);
+        // console.log(this.props.widget);
       });
 
       this.fields.map(field => {
@@ -372,16 +374,24 @@ export default class StackedRadialWidget extends React.Component<
     }
   });
 
-  handleMouseOver(d: any, i: any) {
-    console.debug('Mouse over:');
-    console.debug(d);
-    console.debug(i);
-  }
-
-  handleMouseOut(d: any, i: any) {
-    console.debug('Mouse over:');
-    console.debug(d);
-    console.debug(i);
+  getMaximumValueFromHistory(
+    values: Array<Object>,
+    item: string,
+    key: string
+  ): number {
+    let prev = null;
+    let max = 0;
+    values.forEach(value => {
+      const v = value.value[item][key];
+      if (prev !== null) {
+        const diff = Math.abs(prev - v);
+        if (diff > max) {
+          max = diff;
+        }
+      }
+      prev = v;
+    });
+    return max;
   }
 
   componentDidMount() {
@@ -427,32 +437,55 @@ export default class StackedRadialWidget extends React.Component<
   }
 
   render() {
-    console.debug(this.props);
     const { widget, widgetStyle } = this.props;
     const { displayName } = widget;
     this.fields = [];
     this.props.widget.items.forEach((item, count) => {
       this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
     });
-    const wrapperStyle = { width: this.state.width * 0.66 };
+    const wrapperStyle = { width: this.state.width * 0.4 };
     return (
-      <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize}>
+      <Widget
+        widget={widget}
+        widgetStyle={widgetStyle}
+        onResize={this._onResize}
+      >
         <div
           className="StackedRadialWidget"
           // $FlowFixMe
           ref={radial => (this.radial = radial)}
         >
-          <div className="radialWrapper" style={wrapperStyle}>
-            <div className="display-name">{displayName}</div>
-            {this.props.widget.items.map((item, count) => {
-              const classes =
-                'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
-              return <div className={classes} />;
-            })}
-          </div>
+          <Tooltip
+            className="toolTip"
+            content={
+              <div className="Tooltip">
+                <Legend
+                  showTotal
+                  showValues
+                  showDots={false}
+                  metrics={this.props.widget.items}
+                  onRef={legend => {
+                    this.legend = legend;
+                  }}
+                />
+              </div>
+            }
+            position={Position.RIGHT_BOTTOM}
+          >
+            <div className="radialWrapper" style={wrapperStyle}>
+              <div className="display-name">{displayName}</div>
+              {this.props.widget.items.map((item, count) => {
+                const classes =
+                  'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
+                return <div className={classes} />;
+              })}
+            </div>
+          </Tooltip>
           {widget.showLegend && (
             <Legend
-              showTotal
+              showTotal={false}
+              showValues
+              showDots
               metrics={this.props.widget.items}
               onRef={legend => {
                 this.legend = legend;
