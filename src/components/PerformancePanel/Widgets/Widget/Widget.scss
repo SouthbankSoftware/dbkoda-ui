@@ -27,22 +27,33 @@
 @import "../../../../styles/_defaultTheme.scss";
 
 .Widget {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   height: 100%;
   width: 100%;
-  color: lighten($panelLeftBackground, 30);
-  text-shadow: 0 -1px 0 $panelLeftBackground;
-  white-space: nowrap;
-  overflow: hidden;
 
-  .title {
-    font-size: 20px;
+  > span,
+  .DefaultWidgetView,
+  .children,
+  > span > div.pt-popover-target {
+    width: 100%;
+    height: 100%;
   }
 
-  .value {
-    font-size: 36px;
+  .DefaultWidgetView {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: lighten($panelLeftBackground, 30);
+    text-shadow: 0 -1px 0 $panelLeftBackground;
+    white-space: nowrap;
+    overflow: hidden;
+
+    .title {
+      font-size: 20px;
+    }
+
+    .value {
+      font-size: 36px;
+    }
   }
 }
