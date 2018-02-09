@@ -32,9 +32,11 @@ $background-colour: #202020;
 $primary-colour: $defaultChartPanelText;
 $primary-colour-lighten-30: lighten($primary-colour, 30);
 
+.HistoryViewPopover {
+  opacity: 0.9;
+}
+
 .HistoryView {
-  height: 100%;
-  width: 100%;
   padding: $container-padding;
   text-shadow: none;
   background-color: $background-colour;

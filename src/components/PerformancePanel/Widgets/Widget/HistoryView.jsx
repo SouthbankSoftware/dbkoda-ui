@@ -5,7 +5,7 @@
  * @Date:   2018-02-05T12:18:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-07T14:46:49+11:00
+ * @Last modified time: 2018-02-09T14:09:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -37,7 +37,7 @@ import styles from './HistoryView.scss';
 
 // $FlowFixMe
 const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) => k.startsWith('colour'));
-const DEFAULT_BRUSH_SIZE = 10;
+const DEFAULT_BRUSH_SIZE = 20;
 const DEBOUNCED_ENABLE_UPDATE_DELAY = 500;
 
 const { primaryColour, primaryColourLighten30, backgroundColour } = styles;
@@ -151,7 +151,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
     const brushStartIdx = Math.max(brushEndIdx - this._brushSize + 1, 0);
 
     return (
-      <div className="HistoryView">
+      <div className="HistoryView" style={{ width, height }}>
         <LineChart
           className="chart"
           width={width - 2 * containerPadding}
@@ -191,7 +191,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
                 type="monotone"
                 dataKey={data => {
                   const value = v(data);
-                  return value === undefined ? null : value;
+                  return typeof value === 'number' ? value : null;
                 }}
                 name={k}
                 dot={false}
