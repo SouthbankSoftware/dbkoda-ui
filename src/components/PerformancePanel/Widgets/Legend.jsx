@@ -112,6 +112,12 @@ export default class Legend extends React.Component<Props> {
         Legend.rowSize * this.state.width / Legend.rowScalingFactor * 1.2 +
         'px'
     };
+    let totalFontColor = 'white';
+    let totalValueFontColor = 'white';
+    if (!this.props.showDots) {
+      totalFontColor = 'black';
+      totalValueFontColor = 'black';
+    }
 
     // Render
     return (
@@ -177,7 +183,7 @@ export default class Legend extends React.Component<Props> {
                 y="20"
                 fontFamily="sans-serif"
                 fontSize={fontSize}
-                fill="black"
+                fill={totalFontColor}
               >
                 Total:
               </text>:{' '}
@@ -188,7 +194,7 @@ export default class Legend extends React.Component<Props> {
                 y="20"
                 fontFamily="sans-serif"
                 fontSize={fontSize}
-                fill="black"
+                fill={totalValueFontColor}
               >
                 {total}
               </text>{' '}

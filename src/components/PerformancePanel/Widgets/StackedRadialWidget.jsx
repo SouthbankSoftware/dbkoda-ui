@@ -483,8 +483,8 @@ export default class StackedRadialWidget extends React.Component<
           </Tooltip>
           {widget.showLegend && (
             <Legend
-              showTotal={false}
-              showValues={false}
+              showTotal
+              showValues
               showDots
               metrics={this.props.widget.items}
               onRef={legend => {
