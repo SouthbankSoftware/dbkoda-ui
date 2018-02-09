@@ -5,7 +5,7 @@
  * @Date:   2018-02-05T12:18:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-09T14:09:31+11:00
+ * @Last modified time: 2018-02-09T19:24:15+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -37,7 +37,7 @@ import styles from './HistoryView.scss';
 
 // $FlowFixMe
 const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) => k.startsWith('colour'));
-const DEFAULT_BRUSH_SIZE = 20;
+const DEFAULT_BRUSH_SIZE = 30;
 const DEBOUNCED_ENABLE_UPDATE_DELAY = 500;
 
 const { primaryColour, primaryColourLighten30, backgroundColour } = styles;
@@ -188,7 +188,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
             return (
               <Line
                 key={k}
-                type="monotone"
+                type="linear"
                 dataKey={data => {
                   const value = v(data);
                   return typeof value === 'number' ? value : null;
