@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-09T11:58:46+11:00
+ * @Last modified time: 2018-02-09T12:06:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -180,12 +180,12 @@ export default class ProgressBarWidget extends React.Component<Props> {
           this._tip.transition()
               .duration(200)
               .style('opacity', 0.9);
-          this._tip.html('<strong>' + d.key + ':</strong> <span style="color:red">' + Math.round(d.value) + '</span>');
+          this._tip.html('<strong>' + d.key + ':</strong> <span style="color:red">' + Math.round(d.value) + '</span>').style('width', 'unset');
           const rect = this._tip.node().getBoundingClientRect();
-          x -= (rect.width / 2);
+          x -= ((rect.width + 10) / 2);
           this._tip.style('left', (x) + 'px')
               .style('top', (y) + 'px')
-              .style('width', (rect.width) + 'px');
+              .style('width', (rect.width + 10) + 'px');
           })
       .on('mouseout', () => {
           this._tip.transition()
