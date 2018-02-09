@@ -95,16 +95,24 @@
     .row {
       display: flex;
       flex-direction: row;
-      .colorDot {
-        width: 16px;
+      justify-content: flex-start;
+      align-content: flex-start;
+      .dotWrapper {
+        .colorDot {
+          width: 16px;
+          order: 1;
+        }
       }
+
       .valueWrapper {
+        order: 3;
         .legendValue {
           width: 100%;
           text-align: end;
         }
       }
       .labelWrapper {
+        order: 2;
         .label {
           width: 100%;
           text-align: end;

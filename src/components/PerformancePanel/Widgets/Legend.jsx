@@ -112,11 +112,18 @@ export default class Legend extends React.Component<Props> {
         Legend.rowSize * this.state.width / Legend.rowScalingFactor * 1.2 +
         'px'
     };
+
     // Render
     return (
       <div className="keyWrapper">
         {this.state.items.map((item, count) => {
           // Determine Dot color and total count.
+          let fontColor = 'white';
+          let valueFontColor = 'white';
+          if (!this.props.showDots) {
+            fontColor = Legend.colors[count];
+            valueFontColor = 'black';
+          }
           const style = { fill: Legend.colors[count] };
           let value = 'Fetching...';
           if (this.state.values[item]) {
@@ -127,7 +134,9 @@ export default class Legend extends React.Component<Props> {
           return (
             <div className="row" style={rowDynamicStyle}>
               {this.props.showDots && (
-                <ErrorIcon className="colorDot" style={style} />
+                <div className="dotWrapper">
+                  <ErrorIcon className="colorDot" style={style} />
+                </div>
               )}
               <div className="labelWrapper">
                 <svg className="label">
@@ -136,7 +145,7 @@ export default class Legend extends React.Component<Props> {
                     y="20"
                     fontFamily="sans-serif"
                     fontSize={fontSize}
-                    fill="white"
+                    fill={fontColor}
                   >
                     {item}
                   </text>{' '}
@@ -150,7 +159,7 @@ export default class Legend extends React.Component<Props> {
                       y="20"
                       fontFamily="sans-serif"
                       fontSize={fontSize}
-                      fill="white"
+                      fill={valueFontColor}
                     >
                       : {value}
                     </text>{' '}
@@ -168,7 +177,7 @@ export default class Legend extends React.Component<Props> {
                 y="20"
                 fontFamily="sans-serif"
                 fontSize={fontSize}
-                fill="white"
+                fill="black"
               >
                 Total:
               </text>:{' '}
@@ -179,7 +188,7 @@ export default class Legend extends React.Component<Props> {
                 y="20"
                 fontFamily="sans-serif"
                 fontSize={fontSize}
-                fill="white"
+                fill="black"
               >
                 {total}
               </text>{' '}

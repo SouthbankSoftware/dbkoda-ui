@@ -443,7 +443,7 @@ export default class StackedRadialWidget extends React.Component<
     this.props.widget.items.forEach((item, count) => {
       this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
     });
-    const wrapperStyle = { width: this.state.width * 0.4 };
+    const wrapperStyle = { width: this.state.width * 0.55 };
     return (
       <Widget
         widget={widget}
@@ -484,7 +484,7 @@ export default class StackedRadialWidget extends React.Component<
           {widget.showLegend && (
             <Legend
               showTotal={false}
-              showValues
+              showValues={false}
               showDots
               metrics={this.props.widget.items}
               onRef={legend => {
