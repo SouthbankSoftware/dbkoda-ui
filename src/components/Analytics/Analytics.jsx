@@ -168,13 +168,14 @@ export default class Analytics extends React.Component {
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
             'Ping',
-            '{daysSinceFirstPing: ' +
-              daysSince +
-              ', dateFolderCreated: ' +
-              result.dateCreated +
-              ', daysSinceCreation: ' +
-              result.daysSinceCreation +
-              '}'
+            'daysSinceFirstPing',
+            daysSince
+          );
+          this._sendEvent(
+            AnalyticsEvents.PING_HOME,
+            'Ping',
+            'daysSinceFolderCreated',
+            result.daysSinceCreation
           );
         })
         .catch(err => {
@@ -209,7 +210,7 @@ export default class Analytics extends React.Component {
   }
 
   /**
-   *
+   *f
    * function to be called when activity goes to the controller.
    * @param {String} service - The service type that has been called.
    */
