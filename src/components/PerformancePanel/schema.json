@@ -80,10 +80,11 @@
     {
       "type": "StackedRadialWidget",
       "items": [
-        "activeRead",
-        "writeOpsRate",
-        "writeLatencyRate",
-        "writeLatency"
+        "opCounterQuery",
+        "opCounterUpdate",
+        "opCounterInsert",
+        "opCounterDelete",
+        "opCounterCommand"
       ],
       "extraState": {
         "displayName": "Operations",

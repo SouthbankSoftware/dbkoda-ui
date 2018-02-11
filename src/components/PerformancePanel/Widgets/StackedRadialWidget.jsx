@@ -1,5 +1,4 @@
 /**
- * @flow
  *
  * Created by mike on 06/02/2018
  * @Last modified by:   wahaj
@@ -83,6 +82,7 @@ export default class StackedRadialWidget extends React.Component<
     this.fields = [];
     // $FlowFixMe
     this.itemValues = [];
+    this.maxValues = [];
     this.field = null;
     if (this.props.widget.items.length > 3) {
       this.scaleFactor = 2;
@@ -271,7 +271,11 @@ export default class StackedRadialWidget extends React.Component<
       .arc()
       .startAngle(0)
       .endAngle(d => {
-        return d.percentage / 100 * StackedRadialWidget.PI;
+        return (
+          d.percentage /
+          this.maxValues[this.state.lastLayerTweened.key] *
+          StackedRadialWidget.PI
+        );
       })
       .innerRadius(this._getInnerRadiusSize(data.index))
       .outerRadius(this._getOuterRadiusSize(data.index))
@@ -338,7 +342,7 @@ export default class StackedRadialWidget extends React.Component<
   _onData = action(payload => {
     const { timestamp, value } = payload;
     const { items, values } = this.props.widget;
-
+    console.log(payload);
     values.replace([
       {
         timestamp,
@@ -356,9 +360,11 @@ export default class StackedRadialWidget extends React.Component<
           : parseInt(latestValue[key], 10);
         // If fixedValue is null, give a 0 value so it will render straight away.
         this.itemValues[key] = fixedValue;
+
         // Check if it's the highest value ever.
-        // console.log(values);
-        // console.log(this.props.widget);
+        if (!this.maxValues[key] || this.maxValues[key] < fixedValue) {
+          this.maxValues[key] = fixedValue;
+        }
       });
 
       this.fields.map(field => {
@@ -371,6 +377,9 @@ export default class StackedRadialWidget extends React.Component<
     }
     if (this.legend) {
       this.legend.setValues(this.itemValues);
+      if (this.toolTipLegend) {
+        this.toolTipLegend.setValues(this.itemValues);
+      }
     }
   });
 
@@ -464,13 +473,16 @@ export default class StackedRadialWidget extends React.Component<
                   showValues
                   showDots={false}
                   metrics={this.props.widget.items}
-                  onRef={legend => {
-                    this.legend = legend;
+                  getValues={() => {
+                    return this.itemValues;
+                  }}
+                  onRef={toolTipLegend => {
+                    this.toolTipLegend = toolTipLegend;
                   }}
                 />
               </div>
             }
-            position={Position.RIGHT_BOTTOM}
+            position={Position.BOTTOM_LEFT}
           >
             <div className="radialWrapper" style={wrapperStyle}>
               <div className="display-name">{displayName}</div>
@@ -483,8 +495,8 @@ export default class StackedRadialWidget extends React.Component<
           </Tooltip>
           {widget.showLegend && (
             <Legend
-              showTotal
-              showValues
+              showTotal={false}
+              showValues={false}
               showDots
               metrics={this.props.widget.items}
               onRef={legend => {

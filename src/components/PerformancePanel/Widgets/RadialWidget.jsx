@@ -275,7 +275,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     const latestValue : Object = values.length > 0 ? values[values.length - 1].value : {};
     if (!_.isEmpty(latestValue)) {
       const v = latestValue[items[0]];
-      console.log('widget value', items[0], v);
+      // console.log('widget value', items[0], v);
       if (!v) {
         return [];
       }
