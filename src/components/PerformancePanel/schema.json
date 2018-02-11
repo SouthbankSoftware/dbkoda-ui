@@ -102,9 +102,9 @@
       "type": "ProgressBarWidget",
       "items": ["item-1", "item-2"],
       "layout": {
-        "x": 2,
-        "y": 6,
-        "w": 2,
+        "x": 4,
+        "y": 4,
+        "w": 3,
         "h": 1,
         "background": "light"
       }
@@ -114,8 +114,8 @@
       "items": ["item-1", "item-2"],
       "layout": {
         "x": 4,
-        "y": 6,
-        "w": 2,
+        "y": 5,
+        "w": 3,
         "h": 1,
         "background": "light"
       }
