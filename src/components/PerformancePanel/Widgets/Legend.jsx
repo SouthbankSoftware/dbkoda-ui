@@ -33,6 +33,7 @@ import './StackedRadialWidget.scss';
 type Props = {
   metrics: any,
   onRef: any,
+  getValues: () => any,
   showTotal: boolean,
   showValues: boolean,
   showDots: boolean
