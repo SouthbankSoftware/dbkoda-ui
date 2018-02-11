@@ -158,13 +158,16 @@ export default class Analytics extends React.Component {
       const today = Date.parse(this.getToday());
       const firstPing = Date.parse(this.props.store.firstPingDate);
       let daysSince = today - firstPing;
-      daysSince /= 1000 * 60 * 60 * 24;
+      console.log('!!! - ', daysSince, ' - !!!');
+      if (daysSince > 0) {
+        daysSince /= 1000 * 60 * 60 * 24;
+      }
       const service = featherClient().service('/supportBundle');
       service.timeout = 30000;
       service
         .get(true)
         .then(result => {
-          console.log('!!! - ', result, ' - !!!');
+          console.log('!!! - ', daysSince, ' - !!!');
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
             'Ping',
@@ -278,7 +281,7 @@ export default class Analytics extends React.Component {
     if (eventLabel) {
       event.label = eventLabel;
     }
-    if (eventValue) {
+    if (eventValue || eventValue === 0) {
       event.value = eventValue;
     }
     ReactGA.event(event);
