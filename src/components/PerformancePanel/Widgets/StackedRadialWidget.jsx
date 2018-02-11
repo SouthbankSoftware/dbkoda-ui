@@ -1,8 +1,8 @@
 /**
  *
  * Created by mike on 06/02/2018
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-08T17:01:38+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-09T15:33:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -465,6 +465,7 @@ export default class StackedRadialWidget extends React.Component<
           ref={radial => (this.radial = radial)}
         >
           <Tooltip
+            portalClassName="StackedRadialWidgetTooltip"
             className="toolTip"
             content={
               <div className="Tooltip">
