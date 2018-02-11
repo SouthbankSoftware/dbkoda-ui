@@ -158,7 +158,6 @@ export default class Analytics extends React.Component {
       const today = Date.parse(this.getToday());
       const firstPing = Date.parse(this.props.store.firstPingDate);
       let daysSince = today - firstPing;
-      console.log('!!! - ', daysSince, ' - !!!');
       if (daysSince > 0) {
         daysSince /= 1000 * 60 * 60 * 24;
       }
@@ -167,7 +166,6 @@ export default class Analytics extends React.Component {
       service
         .get(true)
         .then(result => {
-          console.log('!!! - ', daysSince, ' - !!!');
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
             'Ping',
