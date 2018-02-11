@@ -26,14 +26,12 @@
 import * as d3 from 'd3';
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { action } from 'mobx';
+import { action, autorun } from 'mobx';
 import _ from 'lodash';
 import { Tooltip, Position } from '@blueprintjs/core';
 import './StackedRadialWidget.scss';
 import Widget from './Widget';
 import Legend from './Legend';
-
-import { Broker, EventType } from '../../../helpers/broker';
 
 // Flow type definitions.
 
@@ -339,16 +337,10 @@ export default class StackedRadialWidget extends React.Component<
       .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
   }
 
-  _onData = action(payload => {
-    const { timestamp, value } = payload;
-    const { items, values } = this.props.widget;
-    console.log(payload);
-    values.replace([
-      {
-        timestamp,
-        value: _.pick(value, items)
-      }
-    ]);
+  @action.bound
+  updateD3Graphs = action(data => {
+    const { values } = this.props.widget;
+    console.debug('!!! - Data - ', data);
     const latestValue =
       values.length > 0 ? values[values.length - 1].value : {};
     // $FlowFixMe
@@ -404,12 +396,30 @@ export default class StackedRadialWidget extends React.Component<
   }
 
   componentDidMount() {
-    const { profileId } = this.props.widget;
-    Broker.on(EventType.STATS_DATA(profileId), this._onData.bind(this));
     setTimeout(() => {
       this.fields = [];
       this.props.widget.items.forEach((item, count) => {
         this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
+      });
+
+      this._autorunDisposer = autorun(() => {
+        const { items, values } = this.props.widget;
+        const latestValue =
+          values.length > 0 ? values[values.length - 1].value : {};
+
+        if (items.length == 1) {
+          console.error(
+            'Please use Radial and not StackedRadial for single item metrics.'
+          );
+          return;
+        }
+        if (latestValue === undefined) return;
+
+        if (typeof latestValue[0] !== 'number') {
+          console.error('StackedRadial only supports numeric data value');
+        }
+
+        this.updateD3Graphs(latestValue);
       });
     }, 200);
   }
