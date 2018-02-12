@@ -98,7 +98,11 @@ const renderApp = () => {
 Broker.once(EventType.APP_READY, renderApp);
 
 Broker.once(EventType.APP_RENDERED, () => {
-  config.load();
+  config.load().then(() => {
+    if (config.settings.passwordStoreEnabled) {
+      api.passwordApi.showPasswordDialog();
+    }
+  });
   profileStore.load();
   if (IS_ELECTRON) {
     ipcRenderer.send(EventType.APP_READY);

@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-08T17:15:30+11:00
+ * @Last modified time: 2018-02-12T15:58:03+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -143,8 +143,8 @@ export default class PerformancePanel extends React.Component<Props, State> {
     const rSep = this.state.leftWidth + this.state.midWidth;
     if (layout.background === 'light') {
       layout.widgetStyle.backgroundColor = '#2A2A2A';
-      layout.gridElementStyle.paddingTop = '20px';
-      layout.gridElementStyle.paddingBottom = '20px';
+      // layout.gridElementStyle.paddingTop = '20px';
+      // layout.gridElementStyle.paddingBottom = '20px';
 
       if (layout.x + layout.w < rSep) {
         layout.widgetStyle.borderRight = '1px solid #383838';

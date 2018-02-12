@@ -42,6 +42,7 @@ import { StatusPanel } from '#/StatusBar';
 import { PerformancePanel } from '#/PerformancePanel';
 import { ProfileManager } from '#/ProfileManager';
 import { DrawerPanes } from '#/common/Constants';
+import PasswordDialog from '#/common/PasswordDialog';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -104,6 +105,13 @@ class App extends React.Component {
       <div>
         <Analytics />
         <TelemetryConsent />
+        {
+          (process.env.NODE_ENV === 'development') &&
+          <PasswordDialog
+            showDialog={this.props.store.password.showDialog}
+            verifyPassword={this.props.store.password.verifyPassword}
+          />
+        }
         <SplitPane
           className="RootSplitPane"
           split="vertical"
