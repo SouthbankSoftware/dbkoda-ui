@@ -86,10 +86,6 @@
     {
       "type": "ProgressBarWidget",
       "items": ["item-1", "item-2"],
-      "extraState": {
-        "displayName": "Bar Chart Example.",
-        "chartLabel": "Chart #1"
-      },
       "layout": {
         "x": 20,
         "y": 8,
@@ -107,10 +103,6 @@
     {
       "type": "ProgressBarWidget",
       "items": ["item-1", "item-2"],
-      "extraState": {
-        "displayName": "Bar Chart Example.",
-        "chartLabel": "Chart #1"
-      },
       "layout": {
         "x": 20,
         "y": 11,
