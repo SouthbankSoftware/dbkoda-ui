@@ -138,7 +138,7 @@ export default class Legend extends React.Component<Props> {
           }
           const style = { fill: Legend.colors[count] };
           let value = 'Fetching...';
-          if (this.state.values[item]) {
+          if (this.state.values[item] || this.state.values[item] === 0) {
             value = parseInt(this.state.values[item], 10);
             total += this.state.values[item];
           }
