@@ -229,11 +229,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
     this.field.select('path.progress').transition().duration(1000)
       .attrTween('d', this.arcTween.bind(this))
-      .style('fill', () => {
-        // if (d.index === 0) {
+      .style('fill', (d) => {
+        if (d.index === 0) {
         return 'url(#gradient)';
-        // }
-        // return RadialWidget.colors[d.index];
+        }
+        return RadialWidget.colors[d.index];
       });
     if (this.itemValue.length === 1) {
       this.field.select('text.completed').text((d) => d.text);
