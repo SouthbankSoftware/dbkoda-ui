@@ -56,11 +56,7 @@
       "layout": {
         "x": 0,
         "y": 6,
-<<<<<<< HEAD
-        "w": 4,
-=======
         "w": 2,
->>>>>>> 673e842380746012ded63aaee70cc3baf3ac6f0e
         "h": 2,
         "static": true
       }
