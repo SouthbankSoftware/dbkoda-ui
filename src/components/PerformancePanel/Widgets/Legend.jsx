@@ -33,6 +33,7 @@ import './StackedRadialWidget.scss';
 type Props = {
   metrics: any,
   onRef: any,
+  getValues: () => any,
   showTotal: boolean,
   showValues: boolean,
   showDots: boolean
@@ -71,12 +72,17 @@ export default class Legend extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props);
+
     this.state = {
       items: this.props.metrics,
       values: [],
       width: 100,
       height: 100
     };
+
+    if (this.props.getValues && this.props.getValues()) {
+      this.state.values = this.props.getValues();
+    }
     this.setValues = this.setValues.bind(this);
   }
 

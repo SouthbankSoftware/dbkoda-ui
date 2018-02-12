@@ -298,7 +298,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     if (!_.isEmpty(latestValue)) {
       const v = latestValue[items[0]];
-      console.log('widget value', items[0], v);
+      // console.log('widget value', items[0], v);
       if (!v) {
         return [];
       }
