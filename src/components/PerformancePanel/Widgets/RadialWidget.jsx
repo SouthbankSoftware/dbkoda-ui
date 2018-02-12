@@ -212,21 +212,20 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .each(function (d) {
         d.previousValue = this._value;
       }).selectAll('.bg').on('mouseover', (d) => {
-        console.log('class .bg on radial', d);
-        const data = that.dataset()[d.index];
-        if (data.tooltip) {
-          that.tooltip.transition()
-            .duration(200)
-            .style('opacity', 0.9);
-          that.tooltip.html(`<p>${data.tooltip}</p>`)
-            .style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 28) + 'px');
-        }
-      }).on('mouseout', () => {
+      const data = that.dataset()[d.index];
+      if (data.tooltip) {
         that.tooltip.transition()
-          .duration(500)
-          .style('opacity', 0);
-      });
+          .duration(200)
+          .style('opacity', 0.9);
+        that.tooltip.html(`<p>${data.tooltip}</p>`)
+          .style('left', (d3.event.pageX) + 'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+      }
+    }).on('mouseout', () => {
+      that.tooltip.transition()
+        .duration(500)
+        .style('opacity', 0);
+    });
 
     this.field.select('path.progress').transition().duration(1000)
       .attrTween('d', this.arcTween.bind(this))
@@ -252,12 +251,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
     this._onResize(RadialWidget.width, RadialWidget.height);
     let first = true;
     setTimeout(() => {
-      this.itemValue = [{ index: 0, percentage: 0, tooltip: '0%', text: '0%'}];
+      this.itemValue = [{index: 0, percentage: 0, tooltip: '0%', text: '0%'}];
       this.text = '0%';
       this.buildWidget();
       autorun(() => {
         const {items, values} = this.props.widget;
         const newItemValue = this.getValueFromData(items, values);
+        console.log('get widget data', items, newItemValue);
         if (newItemValue.length > 0) {
           if (this.itemValue.length !== newItemValue.length || first) {
             first = false;
@@ -275,40 +275,45 @@ export default class RadialWidget extends React.Component<Object, Object> {
   /**
    * TODO: move to schema
    */
-  getMaximumValue(value: Object, key: string, historyValues: Array<Object>, itemKey: string): Object {
-    const previousValueObj : Object = historyValues.length > 1 ? historyValues[historyValues.length - 2].value : {};
-    if (_.isEmpty(previousValueObj)) {
-      return {percentage:0, valuePerSec:0};
-    }
-    const prevValue = previousValueObj[itemKey];
-    const v : number = _.isInteger(value[key]) ? value[key] : parseInt(value[key], 10);
-    const prevV : number = _.isInteger(prevValue[key]) ? prevValue[key] : parseInt(prevValue[key], 10);
-    const max : number = this.getMaximumValueFromHistory(historyValues, itemKey, key);
-    let valuePerSec = bytesToSize(Math.abs(v - prevV) / (value.samplingRate / 1000));
-    if (valuePerSec === undefined) {
-      valuePerSec = 0;
-    }
-    const percentage = max === 0 ? 100 : parseInt(Math.abs(v - prevV) / max * 100, 10);
-    return {percentage, valuePerSec};
-  }
-
   getValueFromData(items: Array<string>, staleValues: Array<Object>): Array<Object> {
     const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
-    const latestValue : Object = values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue: Object = values.length > 0 ? values[values.length - 1].value : {};
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     if (!_.isEmpty(latestValue)) {
       const v = latestValue[items[0]];
-      // console.log('widget value', items[0], v);
       if (!v) {
         return [];
       }
       if (!_.isInteger(v) && _.keys(v).indexOf('download') >= 0 && _.keys(v).indexOf('upload') >= 0) {
-        const previousValue : Object = values.length > 1 ? values[values.length - 2].value : {};
+        const previousValue: Object = values.length > 1 ? values[values.length - 2].value : {};
         if (_.isEmpty(previousValue)) {
+          if (values.length > 0) {
+            values[0].value[items[0]].maxDownload = 0;
+            values[0].value[items[0]].maxUpload = 0;
+          }
           return [];
         }
-        const download: Object = this.getMaximumValue(v, 'download', values, items[0]);
-        const upload: Object = this.getMaximumValue(v, 'upload', values, items[0]);
+        latestValue[items[0]].downloadDelta = Math.abs(latestValue[items[0]].download - previousValue[items[0]].download);
+        latestValue[items[0]].uploadDelta = Math.abs(latestValue[items[0]].upload - previousValue[items[0]].upload);
+        if (latestValue[items[0]].downloadDelta > previousValue[items[0]].maxDownload) {
+          latestValue[items[0]].maxDownload = latestValue[items[0]].downloadDelta;
+        } else {
+          latestValue[items[0]].maxDownload = previousValue[items[0]].maxDownload;
+        }
+        if (latestValue[items[0]].uploadDelta > previousValue[items[0]].maxUpload) {
+          latestValue[items[0]].maxUpload = latestValue[items[0]].uploadDelta;
+        } else {
+          latestValue[items[0]].maxUpload = previousValue[items[0]].maxUpload;
+        }
+        const download: Object = {
+          percentage: latestValue[items[0]].maxDownload === 0 ? 0 : parseInt(latestValue[items[0]].downloadDelta / latestValue[items[0]].maxDownload * 100, 10),
+          valuePerSec: bytesToSize(latestValue[items[0]].downloadDelta / (latestValue[items[0]].samplingRate / 1000))
+        };
+        const upload: Object = {
+          percentage: latestValue[items[0]].maxUpload === 0 ? 0 : parseInt(latestValue[items[0]].uploadDelta / latestValue[items[0]].maxUpload * 100, 10),
+          valuePerSec: bytesToSize(latestValue[items[0]].uploadDelta / (latestValue[items[0]].samplingRate / 1000))
+        };
+
         let downloadText = '';
         let uploadText = '';
         if (items[0] === 'network') {
@@ -326,25 +331,14 @@ export default class RadialWidget extends React.Component<Object, Object> {
       }
       const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
       this.text = fixedValue + '%';
-      return [{index: 0, percentage: fixedValue, text: fixedValue + '%', tooltip: `${capitalize(items[0])} ${fixedValue} %`}];
+      return [{
+        index: 0,
+        percentage: fixedValue,
+        text: fixedValue + '%',
+        tooltip: `${capitalize(items[0])} ${fixedValue} %`
+      }];
     }
     return [];
-  }
-
-  getMaximumValueFromHistory(values: Array<Object>, item: string, key: string): number {
-    let prev = null;
-    let max = 0;
-    values.forEach((value) => {
-      const v = value.value[item][key];
-      if (prev !== null) {
-        const diff = Math.abs(prev - v);
-        if (diff > max) {
-          max = diff;
-        }
-      }
-      prev = v;
-    });
-    return max;
   }
 
   removeD3 = () => {
@@ -375,6 +369,30 @@ export default class RadialWidget extends React.Component<Object, Object> {
     });
   };
 
+  projection = () => {
+    const {items} = this.props.widget;
+    if (items[0] === 'network' || items[0] === 'disk') {
+      const downloadText = items[0] === 'network' ? 'Download' : 'In';
+      const uploadText = items[0] === 'network' ? 'Upload' : 'Out';
+      return {
+        [downloadText]: (value: Object) => {
+          if (value.value[items[0]]) {
+            return value.value[items[0]].downloadDelta;
+          }
+        },
+        [uploadText]: (value: Object) => {
+          if (value.value[items[0]]) {
+            return value.value[items[0]].uploadDelta;
+          }
+        }
+      };
+    }
+    return {
+      [items[0]]: v => v.value[items[0]]
+    };
+  };
+
+
   render() {
     const {widget, widgetStyle} = this.props;
     const {displayName} = widget;
@@ -388,7 +406,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     // container won't trigger re-render whole d3 graph. d3 has its own way of efficent DOM
     // manipulation inside its container created by react
     return (
-      <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize}>
+      <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize} projection={this.projection()}>
         <div className="RadialWidget" ref={radial => (this.radial = radial)}>
           <div className="display-name">{displayName}</div>
           <div className="radial-main" />
