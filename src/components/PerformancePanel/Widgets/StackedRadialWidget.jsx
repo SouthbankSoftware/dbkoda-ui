@@ -343,6 +343,7 @@ export default class StackedRadialWidget extends React.Component<
 
   @action.bound
   updateD3Graphs = action(data => {
+    console.debug(data);
     const { values } = this.props.widget;
     const latestValue =
       values.length > 0 ? values[values.length - 1].value : {};
