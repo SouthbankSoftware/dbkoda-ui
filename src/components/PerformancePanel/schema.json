@@ -71,7 +71,7 @@
         "opCounterCommand"
       ],
       "extraState": {
-        "name": "Operations",
+        "title": "Operations",
         "showLegend": true
       },
       "layout": {
@@ -80,6 +80,7 @@
         "w": 12,
         "h": 8,
         "background": "light",
+        "showVerticalRule": true,
         "static": true
       }
     },
@@ -88,8 +89,7 @@
       "items": ["item-1", "item-2"],
       "extraState": {
         "displayName": "Bar Chart Example.",
-        "chartLabel": "Chart #1",
-        "divider": "bottom"
+        "chartLabel": "Chart #1"
       },
       "layout": {
         "x": 20,
@@ -100,7 +100,7 @@
         "static": true
       },
       "extraState": {
-        "name": "Queues",
+        "title": "Queues",
         "description": "test description",
         "chartTitle": "Reads"
       }
@@ -138,7 +138,7 @@
         "static": true
       },
       "extraState": {
-        "name": "Latency",
+        "title": "Latency",
         "chartTitle": "Reads"
       }
     },

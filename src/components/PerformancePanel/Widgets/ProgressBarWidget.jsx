@@ -259,7 +259,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
   render() {
     const { widget, widgetStyle } = this.props;
-    const { name, showHorizontalRule, chartTitle } = widget;
+    const { chartTitle } = widget;
     // const containerStyle = {};
     // let topC = 0;
     // if (name) {
@@ -276,11 +276,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
         widget={widget}
         widgetStyle={widgetStyle}
       >
-        {name && (
-          <p className="description">
-            <b className="name">{name}</b>
-          </p>
-        )}
         <div className="container">
           {chartTitle && (
             <div className="chart-label">
@@ -292,7 +287,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
             <span>Total</span>
           </div>
         </div>
-        {showHorizontalRule && <hr />}
         <div className="d3-tip" ref={_tipEl => (this._tipEl = _tipEl)} />
       </Widget>
     );

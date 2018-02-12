@@ -35,99 +35,77 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
   display: flex;
   flex-direction: column;
   height: 100%;
-  span {
+  .parentWidgetWrapper {
     height: 100%;
-  }
-  hr {
-    border: 1px solid #383838;
-    width: calc(100% - 40px);
-    text-align: center;
-    margin: 0px 20px 0px 20px;
-    position: absolute;
-    bottom: 10px;
-  }
-  .description {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 18px;
-    font-size: 18px;
-    margin: 8px 12px;
-    color: lighten($defaultChartPanelText, 20);
-    width: calc(100% - #{2*$container-padding});
-    position: absolute;
-    top: $container-padding;
-
-    .name {
-      color: $primary-colour-lighten-30;
+    span {
+      height: 100%;
     }
-  }
-
-  .description:hover {
-    text-overflow: clip;
-    white-space: normal;
-    word-break: break-all;
-    // background-color: rgba($background-colour, 0.9);
-  }
-  .pt-popover-target {
-    width: 100%;
-    height: 100%;
-  }
-  .container {
-    height: 100%;
-    display: flex;
-    flex: 1;
-    position: absolute;
-    width: 100%;
-    .chart {
+    .description:hover {
+      text-overflow: clip;
+      white-space: normal;
+      word-break: break-all;
+      // background-color: rgba($background-colour, 0.9);
+    }
+    .pt-popover-target {
+      width: 100%;
+      height: 100%;
+    }
+    .container {
+      height: 100%;
+      display: flex;
       flex: 1;
-      padding: 0px;
-    }
-    .chart-label {
-      flex: 0 0 100px;
-      padding: 0px;
-      order: -1;
-      text-align: right;
-      color: white;
-      strong {
-        position: relative;
-        top: 45%;
-        transform: translate(-50%);
+      position: absolute;
+      width: 100%;
+      .chart {
+        flex: 1;
+        padding: 0px;
+      }
+      .chart-label {
+        flex: 0 0 100px;
+        padding: 0px;
+        order: -1;
+        text-align: right;
+        color: white;
+        strong {
+          position: relative;
+          top: 45%;
+          transform: translate(-50%);
+        }
+      }
+      .chart-total {
+        flex: 0 0 100px;
+        padding: 0px;
+        color: white;
+        span {
+          position: relative;
+          top: 45%;
+          transform: translate(-50%);
+        }
       }
     }
-    .chart-total {
-      flex: 0 0 100px;
-      padding: 0px;
-      color: white;
-      span {
-        position: relative;
-        top: 45%;
-        transform: translate(-50%);
-      }
+    .d3-tip {
+      position: absolute;
+      text-align: center;
+      height: 18px;
+      line-height: 1;
+      font-weight: bold;
+      padding: 2px;
+      background: rgba(255, 255, 255, 0.8);
+      color: #333;
+      border-radius: 2px;
     }
-  }
-  .d3-tip {
-    position: absolute;
-    text-align: center;
-    height: 18px;
-    line-height: 1;
-    font-weight: bold;
-    padding: 2px;
-    background: rgba(255, 255, 255, 0.8);
-    color: #333;
-    border-radius: 2px;
-  }
 
-  /* Creates a small triangle extender for the tooltip */
-  .d3-tip:after {
-    box-sizing: border-box;
-    display: block;
-    font-size: 10px;
-    width: 100%;
-    line-height: 1;
-    color: rgba(255, 255, 255, 0.8);
-    content: '\25BC';
-    position: absolute;
-    text-align: center;
+    /* Creates a small triangle extender for the tooltip */
+    .d3-tip:after {
+      box-sizing: border-box;
+      display: block;
+      font-size: 10px;
+      width: 100%;
+      line-height: 1;
+      color: rgba(255, 255, 255, 0.8);
+      content: '\25BC';
+      position: absolute;
+      text-align: center;
+    }
   }
 }
