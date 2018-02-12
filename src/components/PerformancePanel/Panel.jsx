@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-12T15:58:03+11:00
+ * @Last modified time: 2018-02-12T17:03:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -63,8 +63,6 @@ type State = {
   rows: number,
   midWidth: number,
   leftWidth: number,
-  widgetHeight: number,
-  widgetWidth: number,
   height: number
 };
 
@@ -94,13 +92,11 @@ export default class PerformancePanel extends React.Component<Props, State> {
       layouts: {
         desktop: []
       },
-      rowHeight: 75,
-      cols: 8,
-      rows: 16,
-      leftWidth: 2,
-      midWidth: 6,
-      widgetHeight: 2,
-      widgetWidth: 2,
+      rowHeight: 40,
+      cols: 32,
+      rows: 32,
+      leftWidth: 8,
+      midWidth: 24,
       height: 0
     };
   }
