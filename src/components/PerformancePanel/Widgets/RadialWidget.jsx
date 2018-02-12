@@ -63,6 +63,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   field: Object;
   radial: ?HTMLElement;
   text: string = '';
+  tooltip: Object;
 
   constructor(props: Object) {
     super(props);
@@ -147,7 +148,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
     field.append('text').attr('class', 'completed').attr('transform', 'translate(0, 10)');
     this.field = field;
     d3.transition().duration(1000).each(() => this.update());
-
+    this.tooltip = d3.select('body').append('div')
+      .attr('class', 'radial-tooltip')
+      .style('opacity', 0)
+      .style('color', 'white')
+      .style('position', 'absolute')
+      .style('z-index', 1000);
     return field;
   }
 
@@ -197,6 +203,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   }
 
   update() {
+    const that = this;
     this.field
       .each(function (d) {
         this._value = d.percentage;
@@ -204,14 +211,22 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .data(this.dataset.bind(this))
       .each(function (d) {
         d.previousValue = this._value;
+      }).selectAll('.bg').on('mouseover', (d) => {
+        console.log('class .bg on radial', d);
+        const data = that.dataset()[d.index];
+        if (data.tooltip) {
+          that.tooltip.transition()
+            .duration(200)
+            .style('opacity', 0.9);
+          that.tooltip.html(`<p>${data.tooltip}</p>`)
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY - 28) + 'px');
+        }
+      }).on('mouseout', () => {
+        that.tooltip.transition()
+          .duration(500)
+          .style('opacity', 0);
       });
-    // const that = this;
-    // this.field.selectAll('.bg').each((d, i) => {
-    //   const elem = d3.select(that.radial);
-    //   d3.select(this).on('mouseover', () => {
-    //     console.log('class .bg on radial', d);
-    //   });
-    // });
 
     this.field.select('path.progress').transition().duration(1000)
       .attrTween('d', this.arcTween.bind(this))
@@ -235,16 +250,23 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   componentDidMount() {
     this._onResize(RadialWidget.width, RadialWidget.height);
-    const that = this;
+    let first = true;
     setTimeout(() => {
-      that.itemValue = [{ index: 0, percentage: 0, text: '0%'}];
-      that.buildWidget();
+      this.itemValue = [{ index: 0, percentage: 0, tooltip: '0%', text: '0%'}];
+      this.text = '0%';
+      this.buildWidget();
       autorun(() => {
-        const {items, values} = that.props.widget;
-        const newItemValue = that.getValueFromData(items, values);
+        const {items, values} = this.props.widget;
+        const newItemValue = this.getValueFromData(items, values);
         if (newItemValue.length > 0) {
-          that.itemValue = newItemValue;
-          that.update();
+          if (this.itemValue.length !== newItemValue.length || first) {
+            first = false;
+            this.removeD3();
+            this.itemValue = newItemValue;
+            this.buildWidget();
+          }
+          this.itemValue = newItemValue;
+          this.update();
         }
       });
     }, 200);
@@ -266,13 +288,14 @@ export default class RadialWidget extends React.Component<Object, Object> {
     if (valuePerSec === undefined) {
       valuePerSec = 0;
     }
-    const percentage = max === 0 ? 100 : Math.abs(v - prevV) / max * 100;
+    const percentage = max === 0 ? 100 : parseInt(Math.abs(v - prevV) / max * 100, 10);
     return {percentage, valuePerSec};
   }
 
   getValueFromData(items: Array<string>, staleValues: Array<Object>): Array<Object> {
     const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latestValue : Object = values.length > 0 ? values[values.length - 1].value : {};
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     if (!_.isEmpty(latestValue)) {
       const v = latestValue[items[0]];
       // console.log('widget value', items[0], v);
@@ -297,13 +320,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
         }
         this.text = `${downloadText}${download.valuePerSec}/s \n ${uploadText}${upload.valuePerSec}/s`;
         return [
-          {index: 0, percentage: download.percentage},
-          {index: 1, percentage: upload.percentage},
+          {index: 0, percentage: download.percentage, tooltip: `${capitalize(downloadText)} ${download.percentage}%`},
+          {index: 1, percentage: upload.percentage, tooltip: `${capitalize(uploadText)} ${upload.percentage}%`},
         ];
       }
       const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
       this.text = fixedValue + '%';
-      return [{index: 0, percentage: fixedValue, text: fixedValue + '%'}];
+      return [{index: 0, percentage: fixedValue, text: fixedValue + '%', tooltip: `${capitalize(items[0])} ${fixedValue} %`}];
     }
     return [];
   }
@@ -328,6 +351,9 @@ export default class RadialWidget extends React.Component<Object, Object> {
     if (this.radial) {
       const elem = d3.select(this.radial);
       elem.select('.radial-main').selectAll('svg').remove();
+    }
+    if (this.tooltip) {
+      this.tooltip.remove();
     }
   };
 
