@@ -63,18 +63,46 @@
     },
     {
       "type": "StackedRadialWidget",
-      "items": ["item-1", "item-2", "item-3", "item-4", "item-5"],
+      "items": [
+        "opCounterQuery",
+        "opCounterUpdate",
+        "opCounterInsert",
+        "opCounterDelete",
+        "opCounterCommand"
+      ],
       "extraState": {
-        "displayName": "Stacked Radial Example.",
+        "displayName": "Operations",
         "showLegend": true
       },
       "layout": {
         "x": 2,
-        "y": 2,
+        "y": 0,
         "w": 4,
         "h": 2,
         "background": "light",
         "static": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
+      "layout": {
+        "x": 4,
+        "y": 4,
+        "w": 3,
+        "h": 1,
+        "background": "light"
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
+      "layout": {
+        "x": 4,
+        "y": 5,
+        "w": 3,
+        "h": 1,
+        "background": "light"
       }
     }
   ]
