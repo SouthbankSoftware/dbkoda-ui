@@ -269,11 +269,9 @@ export default class StackedRadialWidget extends React.Component<
       .arc()
       .startAngle(0)
       .endAngle(d => {
-        return (
-          d.percentage /
-          this.maxValues[this.state.lastLayerTweened.key] *
-          StackedRadialWidget.PI
-        );
+        console.log(d.percentage / 100);
+        console.log(d.percentage / this.maxValue);
+        return d.percentage / this.maxValue * StackedRadialWidget.PI;
       })
       .innerRadius(this._getInnerRadiusSize(data.index))
       .outerRadius(this._getOuterRadiusSize(data.index))
@@ -354,8 +352,8 @@ export default class StackedRadialWidget extends React.Component<
         this.itemValues[key] = fixedValue;
 
         // Check if it's the highest value ever.
-        if (!this.maxValues[key] || this.maxValues[key] < fixedValue) {
-          this.maxValues[key] = fixedValue;
+        if (!this.maxValue || this.maxValue < fixedValue) {
+          this.maxValue = fixedValue;
         }
       });
 
@@ -415,8 +413,11 @@ export default class StackedRadialWidget extends React.Component<
         }
         if (latestValue === undefined) return;
 
-        if (typeof latestValue[0] !== 'number') {
-          console.error('StackedRadial only supports numeric data value');
+        if (typeof latestValue[items[0]] !== 'number') {
+          console.error(
+            'StackedRadial only supports numeric data value, got ',
+            typeof latestValue[items[0]]
+          );
         }
 
         this.updateD3Graphs(latestValue);
