@@ -149,11 +149,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
     this.field = field;
     d3.transition().duration(1000).each(() => this.update());
     this.tooltip = d3.select('body').append('div')
-      .attr('class', 'tooltip')
+      .attr('class', 'radial-tooltip')
       .style('opacity', 0)
       .style('color', 'white')
+      .style('position', 'absolute')
       .style('z-index', 1000);
-
     return field;
   }
 
@@ -213,18 +213,19 @@ export default class RadialWidget extends React.Component<Object, Object> {
         d.previousValue = this._value;
       }).selectAll('.bg').on('mouseover', (d) => {
         console.log('class .bg on radial', d);
-        if (d.tooltip) {
+        const data = that.dataset()[d.index];
+        if (data.tooltip) {
           that.tooltip.transition()
             .duration(200)
             .style('opacity', 0.9);
-          that.tooltip.html(`<p>${d.tooltip}</p>`)
+          that.tooltip.html(`<p>${data.tooltip}</p>`)
             .style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 28) + 'px');
         }
       }).on('mouseout', () => {
-        // that.tooltip.transition()
-        //   .duration(500)
-        //   .style('opacity', 0);
+        that.tooltip.transition()
+          .duration(500)
+          .style('opacity', 0);
       });
 
     this.field.select('path.progress').transition().duration(1000)
@@ -251,7 +252,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     this._onResize(RadialWidget.width, RadialWidget.height);
     let first = true;
     setTimeout(() => {
-      this.itemValue = [{ index: 0, percentage: 0, tooltip: '0%'}];
+      this.itemValue = [{ index: 0, percentage: 0, tooltip: '0%', text: '0%'}];
       this.text = '0%';
       this.buildWidget();
       autorun(() => {
@@ -287,7 +288,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     if (valuePerSec === undefined) {
       valuePerSec = 0;
     }
-    const percentage = max === 0 ? 100 : Math.abs(v - prevV) / max * 100;
+    const percentage = max === 0 ? 100 : parseInt(Math.abs(v - prevV) / max * 100, 10);
     return {percentage, valuePerSec};
   }
 
