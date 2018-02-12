@@ -269,8 +269,9 @@ export default class StackedRadialWidget extends React.Component<
       .arc()
       .startAngle(0)
       .endAngle(d => {
-        console.log(d.percentage / 100);
-        console.log(d.percentage / this.maxValue);
+        if (!this.maxValue) {
+          this.maxValue = d.percentage;
+        }
         return d.percentage / this.maxValue * StackedRadialWidget.PI;
       })
       .innerRadius(this._getInnerRadiusSize(data.index))
@@ -311,6 +312,11 @@ export default class StackedRadialWidget extends React.Component<
       }
     }
 
+    // Check if it's the highest value ever.
+    if (!this.maxValue || this.maxValue < sumOfItems) {
+      this.maxValue = sumOfItems;
+    }
+
     // Reduce Radial to 3 figures max.
     if (sumOfItems > 999) {
       // $FlowFixMe
@@ -338,7 +344,6 @@ export default class StackedRadialWidget extends React.Component<
   @action.bound
   updateD3Graphs = action(data => {
     const { values } = this.props.widget;
-    console.debug('!!! - Data - ', data);
     const latestValue =
       values.length > 0 ? values[values.length - 1].value : {};
     // $FlowFixMe
