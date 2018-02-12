@@ -71,7 +71,7 @@
         "opCounterCommand"
       ],
       "extraState": {
-        "displayName": "Operations",
+        "name": "Operations",
         "showLegend": true
       },
       "layout": {
@@ -90,7 +90,7 @@
         "x": 20,
         "y": 8,
         "w": 12,
-        "h": 3,
+        "h": 2,
         "background": "light",
         "static": true
       },
@@ -105,15 +105,47 @@
       "items": ["item-1", "item-2"],
       "layout": {
         "x": 20,
-        "y": 11,
+        "y": 10,
         "w": 12,
         "h": 2,
         "background": "light",
         "static": true
       },
       "extraState": {
-        "showHorizontalRule": true,
+        "chartTitle": "Writes",
+        "description": "test description",
+        "showHorizontalRule": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
+      "layout": {
+        "x": 20,
+        "y": 12,
+        "w": 12,
+        "h": 2,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "name": "Latency",
+        "chartTitle": "Reads"
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
+      "extraState": {
         "chartTitle": "Writes"
+      },
+      "layout": {
+        "x": 20,
+        "y": 14,
+        "w": 12,
+        "h": 2,
+        "background": "light",
+        "static": true
       }
     }
   ]
