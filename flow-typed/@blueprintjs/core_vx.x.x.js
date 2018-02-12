@@ -87,6 +87,7 @@ declare module '@blueprintjs/core' {
   declare export var Position;
   declare export var Tooltip;
   declare export var MenuDivider;
+  declare export var Dialog;
 
   declare export default any;
 }

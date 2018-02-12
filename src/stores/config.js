@@ -53,6 +53,7 @@ export default class Config {
       drillControllerCmd: '',
       telemetryEnabled: true,
       showWelcomePageAtStart: true,
+      passwordStoreEnabled: false,
     };
     if (global.PATHS) {
       this.configFilePath = global.PATHS.configPath;
@@ -84,7 +85,7 @@ export default class Config {
       return;
     }
     // Call controller file get service
-    featherClient()
+    return featherClient()
       .service('files')
       .get(this.configFilePath)
       .then((file) => {
@@ -111,6 +112,7 @@ export default class Config {
           className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
+        return Promise.reject(e);
       });
   }
 

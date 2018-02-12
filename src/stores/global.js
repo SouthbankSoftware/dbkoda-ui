@@ -205,6 +205,12 @@ export default class Store {
     item: null,
   });
 
+  @observable
+  password = {
+    showDialog: false,
+    verifyPassword: false
+  };
+
   @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
 
   @action.bound

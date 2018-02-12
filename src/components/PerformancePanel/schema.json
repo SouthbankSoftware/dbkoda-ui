@@ -63,9 +63,15 @@
     },
     {
       "type": "StackedRadialWidget",
-      "items": ["item-1", "item-2", "item-3", "item-4", "item-5"],
+      "items": [
+        "opCounterQuery",
+        "opCounterUpdate",
+        "opCounterInsert",
+        "opCounterDelete",
+        "opCounterCommand"
+      ],
       "extraState": {
-        "displayName": "Stacked Radial Example.",
+        "displayName": "Operations",
         "showLegend": true
       },
       "layout": {

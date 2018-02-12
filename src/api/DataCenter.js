@@ -33,6 +33,7 @@ import EditorApi from './Editor';
 import ProfileApi from './Profile';
 import TreeApi from './Tree';
 import DrillApi from './Drill';
+import PasswordApi from './Password';
 
 export default class DataCenter {
   store;
@@ -52,6 +53,7 @@ export default class DataCenter {
     this.profileApi = new ProfileApi(store, this, profileStore, config);
     this.treeApi = new TreeApi(store, this);
     this.drillApi = new DrillApi(store, this);
+    this.passwordApi = new PasswordApi(store, this, config);
 
     this.init = this.init.bind(this);
 
