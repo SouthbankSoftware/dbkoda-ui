@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-12T15:40:15+11:00
+ * @Last modified time: 2018-02-12T17:09:42+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -102,7 +102,10 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
     this._dataGroup = this._chart
       .append('g')
-      .attr('transform', 'translate(30,' + (vbHeight / 2 - barHeight / 2) + ')');
+      .attr(
+        'transform',
+        'translate(30,' + (vbHeight / 2 - barHeight / 2) + ')'
+      );
   };
 
   _removeD3View = () => {
@@ -178,26 +181,35 @@ export default class ProgressBarWidget extends React.Component<Props> {
         x: 0
       })
 
-      .on('mouseover', (d) => {
+      .on('mouseover', d => {
         const wRatio = this._chartEl.clientWidth / vbWidth;
         const w = d.sumValue / this._sumOfValues * chartWidth;
-        let x = (w * wRatio) + 100;
+        let x = w * wRatio + 100;
         const y = 5;
-          this._tip.transition()
-              .duration(200)
-              .style('opacity', 0.9);
-          this._tip.html('<strong>' + d.key + ':</strong> <span style="color:red">' + Math.round(d.value) + '</span>');
-          const strWidth = String(d.key + ': ' + Math.round(d.value)).length * 8;
-          x -= ((strWidth) / 2);
-          this._tip.style('left', (x) + 'px')
-              .style('top', (y) + 'px')
-              .style('width', (strWidth + 10) + 'px');
-          })
+        this._tip
+          .transition()
+          .duration(200)
+          .style('opacity', 0.9);
+        this._tip.html(
+          '<strong>' +
+            d.key +
+            ':</strong> <span style="color:red">' +
+            Math.round(d.value) +
+            '</span>'
+        );
+        const strWidth = String(d.key + ': ' + Math.round(d.value)).length * 8;
+        x -= strWidth / 2;
+        this._tip
+          .style('left', x + 'px')
+          .style('top', y + 'px')
+          .style('width', strWidth + 10 + 'px');
+      })
       .on('mouseout', () => {
-          this._tip.transition()
-              .duration(500)
-              .style('opacity', 0);
-          })
+        this._tip
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
+      })
       .transition(t)
       .attr('width', d => {
         return d.sumValue / this._sumOfValues * chartWidth;
@@ -211,7 +223,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
       this._autorunDisposer = autorun(() => {
         const { values } = this.props.widget;
-        const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+        const latestValue =
+          values.length > 0 ? values[values.length - 1].value : {};
 
         // // if (items.length !== 1) {
         // //   console.error('ArrowWidget only supports single item');
@@ -246,18 +259,40 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
   render() {
     const { widget, widgetStyle } = this.props;
+    const { name, showHorizontalRule, chartTitle } = widget;
+    // const containerStyle = {};
+    // let topC = 0;
+    // if (name) {
+    //   topC += 26;
+    // }
+    // containerStyle.top = topC + 'px';
+    // if (showHorizontalRule) {
+    //   topC += 2;
+    // }
+    // containerStyle.height = 'calc(100% - ' + topC + 'px)';
     return (
       <Widget
         className="ProgressBarWidget"
         widget={widget}
         widgetStyle={widgetStyle}
       >
+        {name && (
+          <p className="description">
+            <b className="name">{name}</b>
+          </p>
+        )}
         <div className="container">
-          <div className="chart-label"><strong>Chart # 1</strong></div>
+          {chartTitle && (
+            <div className="chart-label">
+              <strong>{chartTitle}</strong>
+            </div>
+          )}
           <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
-          <div className="chart-total"><span>Total</span></div>
+          <div className="chart-total">
+            <span>Total</span>
+          </div>
         </div>
-        <hr />
+        {showHorizontalRule && <hr />}
         <div className="d3-tip" ref={_tipEl => (this._tipEl = _tipEl)} />
       </Widget>
     );
