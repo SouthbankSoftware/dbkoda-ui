@@ -36,6 +36,7 @@ import LoadingView from '#/common/LoadingView';
 import { NewToaster } from '#/common/Toaster';
 import Menu from './Menu';
 import Application from './Application';
+import PasswordStore from './PasswordStore';
 import Paths from './Paths';
 import './Panel.scss';
 
@@ -163,6 +164,16 @@ export default class View extends React.Component {
           />
         );
         break;
+        case 'PasswordStore':
+          form = (
+            <PasswordStore
+              updateValue={this.updateValue}
+              settings={this.props.store.configPage.newSettings}
+              changedFields={this.props.store.configPage.changedFields}
+              renderFieldLabel={this.renderFieldLabel}
+            />
+          );
+          break;
       default:
         form = <ErrorView error="Unknown menu item selection." />;
         break;
@@ -198,7 +209,7 @@ export default class View extends React.Component {
               className="saveBtn"
               intent={Intent.SUCCESS}
               onClick={this.checkConfig}
-              text="Apply"
+              text={globalString('editor/config/applyButton')}
             />
           </div>
         </div>

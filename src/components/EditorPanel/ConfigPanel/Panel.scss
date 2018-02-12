@@ -43,6 +43,7 @@ $menuColor4: #837395;
   .configLeftMenuWrapper .configMenu {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     width: 250px;
     border-right: 1px solid $selectDarkBorderColor;
     .menuItem {
@@ -85,8 +86,15 @@ $menuColor4: #837395;
       .st2{fill:#203F49;}
       .st3{fill:#FBDF65;}
     }
-    .menuItem .menuItem2 {
+    .menuItem .menuItemPasswordStore {
       background-color: $menuColor3;
+      .st0{fill:#FFFFFF;}
+      .st1{fill:#EFCE4A;}
+      .st2{fill:#D6A416;}
+      svg {
+        width: 65px;
+        height: 65px;
+      }
     }
     .menuItem .menuItem3 {
       background-color: $menuColor4;
