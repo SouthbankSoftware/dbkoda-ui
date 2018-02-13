@@ -34,6 +34,24 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
   height: 100%;
   width: 100%;
 
+  hr {
+    border: 1px solid #383838;
+    width: calc(100% - 40px);
+    text-align: center;
+    margin: 0px 20px 0px 20px;
+    position: absolute;
+    bottom: 10px;
+  }
+
+  hr.vertical {
+    border: none;
+    border-right: 1px solid #383838;
+    height: 100vh;
+    width: 1px;
+    left: calc(100% - 25px);
+    height: 75%;
+    top: 12.5%;
+  }
   > span,
   .DefaultWidgetView,
   .children,
@@ -51,6 +69,7 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
         color: $primary-colour-lighten-30;
         text-shadow: 0 -1px 0 $panelLeftBackground;
         white-space: nowrap;
+        opacity: 0.6;
       }
     }
   }

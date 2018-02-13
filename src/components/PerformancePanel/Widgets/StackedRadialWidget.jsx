@@ -48,12 +48,12 @@ export default class StackedRadialWidget extends React.Component<
   Object
 > {
   static colors = [
-    '#3333cc',
-    '#2E547A',
-    '#643798',
-    '#39B160',
+    '#A27EB7',
     '#DC5D3E',
-    '#A27EB7'
+    '#39B160',
+    '#643798',
+    '#2E547A',
+    '#3333cc'
   ];
   static width = 50;
   static height = 50;
@@ -265,22 +265,26 @@ export default class StackedRadialWidget extends React.Component<
   }
 
   arc(data: any) {
-    return d3
-      .arc()
-      .startAngle(0)
-      .endAngle(d => {
-        if (!this.maxValue) {
-          this.maxValue = d.percentage;
-        }
-        return d.percentage / this.maxValue * StackedRadialWidget.PI;
-      })
-      .innerRadius(this._getInnerRadiusSize(data.index))
-      .outerRadius(this._getOuterRadiusSize(data.index))
-      .cornerRadius(
-        (this._getOuterRadiusSize(data.index) -
-          this._getInnerRadiusSize(data.index)) /
-          2
-      );
+    try {
+      return d3
+        .arc()
+        .startAngle(0)
+        .endAngle(d => {
+          if (!this.maxValue) {
+            this.maxValue = d.percentage;
+          }
+          return d.percentage / this.maxValue * StackedRadialWidget.PI;
+        })
+        .innerRadius(this._getInnerRadiusSize(data.index))
+        .outerRadius(this._getOuterRadiusSize(data.index))
+        .cornerRadius(
+          (this._getOuterRadiusSize(data.index) -
+            this._getInnerRadiusSize(data.index)) /
+            2
+        );
+    } catch (e) {
+      console.error('Caught Error: ', e);
+    }
   }
 
   /**
@@ -418,13 +422,6 @@ export default class StackedRadialWidget extends React.Component<
           return;
         }
         if (latestValue === undefined) return;
-
-        if (typeof latestValue[items[0]] !== 'number') {
-          console.error(
-            'StackedRadial only supports numeric data value, got ',
-            typeof latestValue[items[0]]
-          );
-        }
 
         this.updateD3Graphs(latestValue);
       });

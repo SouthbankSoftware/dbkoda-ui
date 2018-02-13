@@ -168,7 +168,8 @@ export default class Widget extends React.Component<Props, State> {
         name,
         title,
         description,
-        showHorizontalRule
+        showHorizontalRule,
+        showVerticalRule
       },
       className,
       widgetStyle
@@ -176,6 +177,7 @@ export default class Widget extends React.Component<Props, State> {
     const { projection } = this.state;
 
     return (
+      // $FlowFixMe
       <div className={className + ' Widget' || 'Widget'} style={widgetStyle}>
         {state !== 'loaded' ? (
           state === 'loading' ? (
@@ -210,6 +212,7 @@ export default class Widget extends React.Component<Props, State> {
               }
             />
             {showHorizontalRule && <hr />}
+            {showVerticalRule && <hr className="vertical" />}
           </div>
         )}
         <ReactResizeDetector
