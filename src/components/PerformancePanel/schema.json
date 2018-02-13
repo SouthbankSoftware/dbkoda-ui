@@ -147,6 +147,21 @@
         "background": "light",
         "static": true
       }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["item-1", "item-2"],
+      "extraState": {
+        "showVertical": true
+      },
+      "layout": {
+        "x": 20,
+        "y": 18,
+        "w": 4,
+        "h": 12,
+        "background": "light",
+        "static": true
+      }
     }
   ]
 }
