@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-13T15:46:10+11:00
+ * @Last modified time: 2018-02-14T10:53:00+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -56,7 +56,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
   _tipREl: *;
   _tip: *;
   _chartTotalEl: *;
-  _sumOfValues: *;
+  _totalDivisor: *;
   _chartLabel: *;
   _bVertical: false;
 
@@ -147,7 +147,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
     const bVertical = this.props.widget.showVertical === true;
     const sData = Object.keys(data).sort(); // sort according to keys to keep the color same
     let arrData = [];
-    if (sData.length > 1) { // Case where there are more than 1 data items to display
+    let sumOfValues = 0;
+    if (sData.length > 1) {
+      // Case where there are more than 1 data items to display
       for (let I = 0; I < sData.length; I += 1) {
         arrData.push({
           color: colors[I],
@@ -160,35 +162,46 @@ export default class ProgressBarWidget extends React.Component<Props> {
           return o.value;
         }
       ]).reverse();
-      this._sumOfValues = 0;
       arrData = arrData.map(elem => {
-        elem.sumValue = this._sumOfValues + elem.value;
-        this._sumOfValues += elem.value;
+        elem.sumValue = sumOfValues + elem.value;
+        sumOfValues += elem.value;
         return elem;
       });
       arrData = _.reverse(arrData);
-      this._chartLabel = this._sumOfValues;
-    } else if (sData.length === 1) { // specific case of only one data item
+      this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label
+    } else if (sData.length === 1) {
+      // specific case of only one data item
       arrData.push({
         color: colors[0],
         value: data[sData[0]],
         key: sData[0],
         sumValue: data[sData[0]]
       });
-      this._sumOfValues = arrData[0].value;
-      if (this.props.widget.maxValue) {
-        this._sumOfValues = this.props.widget.maxValue;
-      }
-      this._chartLabel = arrData[0].value;
+      this._chartLabel = arrData[0].value; // for single item chart it will always show the item value in text label
+      sumOfValues = arrData[0].value;
     } else {
       console.error('ProgressBarWidget require atleast one data element');
       return;
     }
 
+    if (this.props.widget.maxValue) {
+      this._totalDivisor = this.props.widget.maxValue; // If maxValue is provided, it will become the total divisor for the bar chart
+    } else if (this.props.widget.useHighWaterMark) {
+      const newHighWaterMark = Math.ceil(sumOfValues * 1.5);
+      if (
+        !this._totalDivisor ||
+        (this._totalDivisor > 0 && sumOfValues >= this._totalDivisor) // update HighWaterMark only it is not set or smaller then the current sum of values
+      ) {
+        this._totalDivisor = newHighWaterMark;
+      }
+    } else {
+      this._totalDivisor = sumOfValues;
+    }
+
     const t = d3.transition().duration(750);
 
     const bars = this._dataGroup.selectAll('rect').data(arrData, d => {
-      return d.sumValue;
+      return d.key; // this return value determines which bars to add/remove/update in the current chart.
     });
 
     bars
@@ -206,7 +219,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
       .transition(t)
       .attr('width', d => {
-        return d.sumValue / this._sumOfValues * chartWidth;
+        return d.sumValue / this._totalDivisor * chartWidth;
       });
 
     bars
@@ -230,7 +243,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         const wRatio = bVertical
           ? this._chartEl.clientHeight / vbWidth
           : this._chartEl.clientWidth / vbWidth;
-        const w = d.sumValue / this._sumOfValues * chartWidth;
+        const w = d.sumValue / this._totalDivisor * chartWidth;
         let x = w * wRatio + (bVertical ? 50 : 100);
         this._tip
           .transition()
@@ -265,7 +278,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
       .transition(t)
       .attr('width', d => {
-        return d.sumValue / this._sumOfValues * chartWidth;
+        return d.sumValue / this._totalDivisor * chartWidth;
       });
 
     d3.select(this._chartTotalEl).text(Math.floor(this._chartLabel));

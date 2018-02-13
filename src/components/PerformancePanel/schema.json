@@ -126,7 +126,7 @@
         "description": "test description",
         "showVerticalRule": true,
         "showVertical": true,
-        "maxValue": 20
+        "useHighWaterMark": true
       }
     },
     {
@@ -195,7 +195,8 @@
         "static": true
       },
       "extraState": {
-        "title": "Time"
+        "title": "Time",
+        "useHighWaterMark": true
       }
     },
     {
