@@ -124,7 +124,8 @@
       "extraState": {
         "title": "Connections",
         "description": "test description",
-        "showVerticalRule": true
+        "showVerticalRule": true,
+        "maxValue": 20
       }
     },
     {
