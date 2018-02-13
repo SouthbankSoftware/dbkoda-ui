@@ -80,7 +80,7 @@
         "rotate": 180
       },
       "layout": {
-        "x": 28,
+        "x": 30,
         "y": 6,
         "w": 2,
         "h": 2,
@@ -104,7 +104,7 @@
       "layout": {
         "x": 9,
         "y": 10,
-        "w": 14,
+        "w": 15,
         "h": 9,
         "background": "light",
         "static": true
@@ -114,9 +114,9 @@
       "type": "ProgressBarWidget",
       "items": ["connections_current"],
       "layout": {
-        "x": 23,
+        "x": 24,
         "y": 10,
-        "w": 8,
+        "w": 10,
         "h": 9,
         "background": "light",
         "static": true
@@ -133,9 +133,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_readersActive", "queue_readersQueued"],
       "layout": {
-        "x": 31,
+        "x": 34,
         "y": 10,
-        "w": 18,
+        "w": 16,
         "h": 2,
         "background": "light",
         "static": true
@@ -150,9 +150,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
-        "x": 31,
+        "x": 34,
         "y": 12,
-        "w": 18,
+        "w": 16,
         "h": 2,
         "background": "light",
         "static": true
@@ -166,9 +166,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_totalActive", "queue_totalQueued"],
       "layout": {
-        "x": 31,
+        "x": 34,
         "y": 14,
-        "w": 18,
+        "w": 16,
         "h": 2,
         "background": "light",
         "static": true
@@ -187,9 +187,9 @@
         "latency_commandWaitUsPs"
       ],
       "layout": {
-        "x": 31,
+        "x": 34,
         "y": 16,
-        "w": 18,
+        "w": 16,
         "h": 3,
         "background": "light",
         "static": true
@@ -216,7 +216,7 @@
       "layout": {
         "x": 9,
         "y": 24,
-        "w": 14,
+        "w": 15,
         "h": 4,
         "background": "light",
         "static": true
@@ -232,7 +232,7 @@
       "layout": {
         "x": 9,
         "y": 28,
-        "w": 14,
+        "w": 15,
         "h": 4,
         "background": "light",
         "static": true
@@ -245,9 +245,9 @@
       "type": "StackedRadialWidget",
       "items": ["wtTransactions_readPct", "wtTransactions_writePct"],
       "layout": {
-        "x": 23,
+        "x": 24,
         "y": 24,
-        "w": 10,
+        "w": 11,
         "h": 8,
         "background": "light",
         "static": true
@@ -260,9 +260,9 @@
       "type": "ProgressBarWidget",
       "items": ["wtCache_MissPct"],
       "layout": {
-        "x": 33,
+        "x": 35,
         "y": 24,
-        "w": 16,
+        "w": 15,
         "h": 4,
         "background": "light",
         "static": true
@@ -276,9 +276,9 @@
       "type": "ProgressBarWidget",
       "items": ["wtCache_evictionsPs"],
       "layout": {
-        "x": 33,
+        "x": 35,
         "y": 28,
-        "w": 16,
+        "w": 15,
         "h": 4,
         "background": "light",
         "static": true
@@ -304,7 +304,7 @@
       "items": ["wtIO_cacheToDiskUsPs"],
       "extraState": {},
       "layout": {
-        "x": 28,
+        "x": 30,
         "y": 33,
         "w": 2,
         "h": 2,
@@ -314,11 +314,9 @@
     {
       "type": "StackedRadialWidget",
       "items": [
-        "operations_QueryPs",
-        "operations_CommandPs",
-        "operations_InsertPs",
-        "operations_UpdatePs",
-        "operations_DeletePs"
+        "wtIO_diskToCacheUsPs",
+        "wtIO_cacheToDiskUsPs",
+        "wtIO_logSyncTimeUsPs"
       ],
       "extraState": {
         "title": "Disc",
@@ -336,48 +334,51 @@
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["connections_current"],
+      "items": ["wtIO_readLatencyMs"],
       "layout": {
         "x": 23,
         "y": 36,
-        "w": 10,
+        "w": 13,
         "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Latency",
+        "chartTitle": "Reads",
         "description": "test description",
         "maxValue": 20
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["connections_current"],
+      "items": ["wtIO_logSyncLatencyMs"],
       "layout": {
         "x": 23,
         "y": 39,
-        "w": 10,
+        "w": 13,
         "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
+        "chartTitle": "Writes",
         "maxValue": 20
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["connections_current"],
+      "items": ["wtIO_writeLatencyMs"],
       "layout": {
         "x": 23,
         "y": 42,
-        "w": 10,
+        "w": 13,
         "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
+        "chartTitle": "Log Sync",
         "maxValue": 20
       }
     },
@@ -396,9 +397,9 @@
         "showVerticalRule": true
       },
       "layout": {
-        "x": 33,
+        "x": 36,
         "y": 36,
-        "w": 16,
+        "w": 14,
         "h": 9,
         "background": "light",
         "static": true
