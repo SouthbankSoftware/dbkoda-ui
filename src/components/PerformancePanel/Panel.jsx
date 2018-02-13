@@ -92,9 +92,9 @@ export default class PerformancePanel extends React.Component<Props, State> {
       layouts: {
         desktop: []
       },
-      rowHeight: 36,
-      cols: 38,
-      rows: 38,
+      rowHeight: 26,
+      cols: 64,
+      rows: 64,
       leftWidth: 8,
       midWidth: 24,
       height: 0

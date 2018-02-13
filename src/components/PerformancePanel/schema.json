@@ -1,9 +1,9 @@
 {
-  "cols": 38,
-  "rows": 38,
-  "rowHeight": 40,
+  "cols": 50,
+  "rows": 50,
+  "rowHeight": 26,
   "leftWidth": 8,
-  "midWidth": 24,
+  "midWidth": 20,
   "widgets": [
     {
       "type": "RadialWidget",
@@ -13,9 +13,9 @@
       },
       "layout": {
         "x": 0,
-        "y": 0,
-        "w": 8,
-        "h": 8,
+        "y": 1,
+        "w": 4,
+        "h": 4,
         "static": true
       }
     },
@@ -27,9 +27,9 @@
       },
       "layout": {
         "x": 0,
-        "y": 10,
-        "w": 8,
-        "h": 8,
+        "y": 12,
+        "w": 5,
+        "h": 5,
         "static": true
       }
     },
@@ -41,9 +41,9 @@
       },
       "layout": {
         "x": 0,
-        "y": 20,
-        "w": 8,
-        "h": 8,
+        "y": 26,
+        "w": 5,
+        "h": 5,
         "static": true
       }
     },
@@ -55,9 +55,9 @@
       },
       "layout": {
         "x": 0,
-        "y": 28,
-        "w": 8,
-        "h": 8,
+        "y": 40,
+        "w": 5,
+        "h": 5,
         "static": true
       }
     },
@@ -66,10 +66,10 @@
       "items": ["network_bytesOutPs"],
       "extraState": {},
       "layout": {
-        "x": 10,
+        "x": 12,
         "y": 8,
-        "w": 1,
-        "h": 1,
+        "w": 2,
+        "h": 2,
         "static": true
       }
     },
@@ -80,10 +80,10 @@
         "rotate": 180
       },
       "layout": {
-        "x": 24,
+        "x": 28,
         "y": 8,
-        "w": 1,
-        "h": 1,
+        "w": 2,
+        "h": 2,
         "static": true
       }
     },
@@ -102,9 +102,9 @@
         "showVerticalRule": true
       },
       "layout": {
-        "x": 8,
-        "y": 10,
-        "w": 10,
+        "x": 9,
+        "y": 12,
+        "w": 12,
         "h": 8,
         "background": "light",
         "static": true
@@ -114,9 +114,9 @@
       "type": "ProgressBarWidget",
       "items": ["connections_current"],
       "layout": {
-        "x": 18,
-        "y": 10,
-        "w": 6,
+        "x": 21,
+        "y": 12,
+        "w": 8,
         "h": 8,
         "background": "light",
         "static": true
@@ -124,16 +124,17 @@
       "extraState": {
         "title": "Connections",
         "description": "test description",
-        "showVerticalRule": true
+        "showVerticalRule": true,
+        "showVertical": true
       }
     },
     {
       "type": "ProgressBarWidget",
       "items": ["queue_readersActive", "queue_readersQueued"],
       "layout": {
-        "x": 24,
-        "y": 10,
-        "w": 13,
+        "x": 29,
+        "y": 12,
+        "w": 14,
         "h": 2,
         "background": "light",
         "static": true
@@ -148,9 +149,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
-        "x": 24,
-        "y": 12,
-        "w": 13,
+        "x": 29,
+        "y": 14,
+        "w": 14,
         "h": 2,
         "background": "light",
         "static": true
@@ -164,9 +165,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_totalActive", "queue_totalQueued"],
       "layout": {
-        "x": 24,
-        "y": 14,
-        "w": 13,
+        "x": 29,
+        "y": 16,
+        "w": 14,
         "h": 2,
         "background": "light",
         "static": true
@@ -185,9 +186,9 @@
         "latency_commandWaitUsPs"
       ],
       "layout": {
-        "x": 24,
-        "y": 16,
-        "w": 13,
+        "x": 29,
+        "y": 18,
+        "w": 14,
         "h": 2,
         "background": "light",
         "static": true
@@ -201,40 +202,113 @@
       "items": ["wtCache_readRequestsPs"],
       "extraState": {},
       "layout": {
-        "x": 10,
-        "y": 18,
-        "w": 1,
-        "h": 1,
-        "static": true
-      }
-    },
-    {
-      "type": "ArrowWidget",
-      "items": ["item-2"],
-      "extraState": {
-        "rotate": 180
-      },
-      "layout": {
-        "x": 24,
-        "y": 18,
-        "w": 1,
-        "h": 1,
+        "x": 12,
+        "y": 22,
+        "w": 2,
+        "h": 2,
         "static": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["item-1", "item-2"],
-      "extraState": {
-        "showVertical": true
-      },
+      "items": [
+        "latency_writeWaitUsPs",
+        "latency_readWaitUsPs",
+        "latency_commandWaitUsPs"
+      ],
       "layout": {
-        "x": 20,
-        "y": 18,
-        "w": 4,
-        "h": 12,
+        "x": 9,
+        "y": 25,
+        "w": 30,
+        "h": 4,
         "background": "light",
         "static": true
+      },
+      "extraState": {
+        "title": "Wiredtiger Cach",
+        "showHorizontalRule": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": [
+        "latency_writeWaitUsPs",
+        "latency_readWaitUsPs",
+        "latency_commandWaitUsPs"
+      ],
+      "layout": {
+        "x": 9,
+        "y": 29,
+        "w": 30,
+        "h": 4,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Log Buffer"
+      }
+    },
+    {
+      "type": "ArrowWidget",
+      "items": ["wtCache_readRequestsPs"],
+      "extraState": {},
+      "layout": {
+        "x": 12,
+        "y": 34,
+        "w": 2,
+        "h": 2,
+        "static": true
+      }
+    },
+    {
+      "type": "ArrowWidget",
+      "items": ["wtCache_readRequestsPs"],
+      "extraState": {},
+      "layout": {
+        "x": 28,
+        "y": 34,
+        "w": 2,
+        "h": 2,
+        "static": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": [
+        "latency_writeWaitUsPs",
+        "latency_readWaitUsPs",
+        "latency_commandWaitUsPs"
+      ],
+      "layout": {
+        "x": 9,
+        "y": 37,
+        "w": 30,
+        "h": 4,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Wiredtiger Cach",
+        "showHorizontalRule": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": [
+        "latency_writeWaitUsPs",
+        "latency_readWaitUsPs",
+        "latency_commandWaitUsPs"
+      ],
+      "layout": {
+        "x": 9,
+        "y": 41,
+        "w": 30,
+        "h": 4,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Log Buffer"
       }
     }
   ]

@@ -257,7 +257,6 @@ export default class RadialWidget extends React.Component<Object, Object> {
       autorun(() => {
         const {items, values} = this.props.widget;
         const newItemValue = this.getValueFromData(items, values);
-        console.log('get widget data', items, newItemValue);
         if (newItemValue.length > 0) {
           if (this.itemValue.length !== newItemValue.length || first) {
             first = false;

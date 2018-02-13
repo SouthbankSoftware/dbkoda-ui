@@ -33,6 +33,11 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
 .Widget {
   height: 100%;
   width: 100%;
+  .pt-popover-target {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 
   hr {
     border: 1px solid #383838;
@@ -61,6 +66,8 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
   }
 
   div.parentWidgetWrapper {
+    width: 100%;
+    height: 100%;
     p.header {
       position: absolute;
       margin: 0 0 0 0;
