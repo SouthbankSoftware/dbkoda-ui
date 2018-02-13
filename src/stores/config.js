@@ -127,7 +127,7 @@ export default class Config {
         .service('files')
         .create({
           _id: this.configFilePath,
-          content: yaml.safeDump(this.settings),
+          content: yaml.safeDump(this.settings, { skipInvalid: true }),
           watching: false,
         })
         .then(() => {
