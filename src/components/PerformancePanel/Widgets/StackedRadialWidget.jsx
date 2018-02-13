@@ -324,11 +324,11 @@ export default class StackedRadialWidget extends React.Component<
     // Reduce Radial to 3 figures max.
     if (sumOfItems > 999) {
       // $FlowFixMe
-      sumOfItems = Number.parseFloat((sumOfItems /= 1000)).toPrecision(3) + 'k';
+      sumOfItems = Number.parseFloat((sumOfItems /= 1000).toFixed(3)) + 'k';
     } else if (sumOfItems > 999) {
       sumOfItems =
         // $FlowFixMe
-        Number.parseFloat((sumOfItems /= 1000000)).toPrecision(3) + 'M';
+        Number.parseFloat((sumOfItems /= 1000000).toFixed(3)) + 'M';
     }
 
     if (field.layer === 1) {
