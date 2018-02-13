@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-12T17:09:42+11:00
+ * @Last modified time: 2018-02-13T12:58:54+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -53,20 +53,29 @@ export default class ProgressBarWidget extends React.Component<Props> {
   _valueRec: *;
   _autorunDisposer: *;
   _tipEl: *;
+  _tipREl: *;
   _tip: *;
+  _chartTotalEl: *;
   _sumOfValues: *;
+  _bVertical: false;
 
-  _createD3View = () => {
+  _createD3View = (bVertical: boolean) => {
+    if (bVertical) {
+      this._bVertical = bVertical;
+      this._tip = d3.select(this._tipREl).style('opacity', 0);
+      d3.select(this._tipEl).style('opacity', 0);
+    } else {
+      this._tip = d3.select(this._tipEl).style('opacity', 0);
+      d3.select(this._tipREl).style('opacity', 0);
+    }
     this._chart = d3.select(this._chartEl).attrs({
       width: '100%',
       height: '100%',
-      viewBox: `0 0 ${vbWidth} ${vbHeight}`,
+      viewBox: (this._bVertical) ? `0 0 ${vbHeight} ${vbWidth}` : `0 0 ${vbWidth} ${vbHeight}`,
       perserveAspectRatio: 'xMinYMid'
     });
 
     if (!this._chart) return;
-
-    this._tip = d3.select(this._tipEl).style('opacity', 0);
 
     const defs = this._chart.append('defs');
 
@@ -84,11 +93,12 @@ export default class ProgressBarWidget extends React.Component<Props> {
         y: 1
       });
 
+    const posTransY = (vbHeight / 2 - barHeight / 2);
     // chart background
-    this._chart
+    const chartBG = this._chart
       .append('g')
-      .attr('transform', 'translate(30,' + (vbHeight / 2 - barHeight / 2) + ')')
-      .append('rect')
+      .attr('transform', `translate(30, ${posTransY})`);
+    chartBG.append('rect')
       .attrs({
         class: 'chart-bg',
         rx: 0,
@@ -104,8 +114,14 @@ export default class ProgressBarWidget extends React.Component<Props> {
       .append('g')
       .attr(
         'transform',
-        'translate(30,' + (vbHeight / 2 - barHeight / 2) + ')'
+        `translate(30, ${posTransY})`
       );
+
+    if (this._bVertical) {
+      const rotatePos = (vbWidth / 2) - barHeight;
+      chartBG.attr('transform', `translate(30, ${posTransY}) rotate(270 ${rotatePos} ${rotatePos})`);
+      this._dataGroup.attr('transform', `translate(30, ${posTransY}) rotate(270 ${rotatePos} ${rotatePos})`);
+    }
   };
 
   _removeD3View = () => {
@@ -117,11 +133,13 @@ export default class ProgressBarWidget extends React.Component<Props> {
   };
 
   _recreateD3View = () => {
+    const bVertical = (this.props.widget.showVertical === true);
     this._removeD3View();
-    this._createD3View();
+    this._createD3View(bVertical);
   };
 
   _updateD3ViewData = (data: Object) => {
+    const bVertical = (this.props.widget.showVertical === true);
     const sData = Object.keys(data).sort(); // sort according to keys to keep the color same
     let arrData = [];
 
@@ -140,7 +158,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       return elem;
     });
     arrData = _.reverse(arrData);
-    const t = d3.transition().duration(1500);
+    const t = d3.transition().duration(750);
 
     const bars = this._dataGroup.selectAll('rect').data(arrData, d => {
       return d.sumValue;
@@ -182,10 +200,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
 
       .on('mouseover', d => {
-        const wRatio = this._chartEl.clientWidth / vbWidth;
+        const wRatio = (bVertical) ? (this._chartEl.clientHeight / vbWidth) : (this._chartEl.clientWidth / vbWidth);
         const w = d.sumValue / this._sumOfValues * chartWidth;
-        let x = w * wRatio + 100;
-        const y = 5;
+        let x = w * wRatio + ((bVertical) ? 50 : 100);
         this._tip
           .transition()
           .duration(200)
@@ -197,12 +214,19 @@ export default class ProgressBarWidget extends React.Component<Props> {
             Math.round(d.value) +
             '</span>'
         );
-        const strWidth = String(d.key + ': ' + Math.round(d.value)).length * 8;
+        const strWidth = String(d.key + ': ' + Math.floor(d.value)).length * 8;
         x -= strWidth / 2;
-        this._tip
-          .style('left', x + 'px')
-          .style('top', y + 'px')
-          .style('width', strWidth + 10 + 'px');
+        if (bVertical) {
+          this._tip
+            .style('left', '60px')
+            .style('bottom', x + 'px')
+            .style('width', strWidth + 10 + 'px');
+        } else {
+          this._tip
+            .style('left', x + 'px')
+            .style('top', '5px')
+            .style('width', strWidth + 10 + 'px');
+        }
       })
       .on('mouseout', () => {
         this._tip
@@ -214,12 +238,15 @@ export default class ProgressBarWidget extends React.Component<Props> {
       .attr('width', d => {
         return d.sumValue / this._sumOfValues * chartWidth;
       });
+
+      d3.select(this._chartTotalEl).text(Math.floor(this._sumOfValues));
   };
 
   componentDidMount() {
     // this is a problem to receive _chartEl and _textEl unless we wrap in setTimeout. An react bug?
     setTimeout(() => {
-      this._createD3View();
+      const bVertical = (this.props.widget.showVertical === true);
+      this._createD3View(bVertical);
 
       this._autorunDisposer = autorun(() => {
         const { values } = this.props.widget;
@@ -259,7 +286,15 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
   render() {
     const { widget, widgetStyle } = this.props;
+<<<<<<< HEAD
     const { chartTitle } = widget;
+=======
+    const { name, showHorizontalRule, chartTitle, showVertical } = widget;
+    const chartTotalStyle = { top: '40%'};
+    if (showVertical) {
+      chartTotalStyle.top = '50%';
+    }
+>>>>>>> 85a9727167c50bb8d3209ff3080dc0e5bde6a6a7
     // const containerStyle = {};
     // let topC = 0;
     // if (name) {
@@ -284,10 +319,16 @@ export default class ProgressBarWidget extends React.Component<Props> {
           )}
           <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
           <div className="chart-total">
-            <span>Total</span>
+            <span ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)} style={chartTotalStyle} />
           </div>
         </div>
+<<<<<<< HEAD
         <div className="d3-tip" ref={_tipEl => (this._tipEl = _tipEl)} />
+=======
+        {showHorizontalRule && <hr />}
+        <div className="d3-tip-top" ref={_tipEl => (this._tipEl = _tipEl)} />
+        <div className="d3-tip-right" ref={_tipREl => (this._tipREl = _tipREl)} />
+>>>>>>> 85a9727167c50bb8d3209ff3080dc0e5bde6a6a7
       </Widget>
     );
   }
