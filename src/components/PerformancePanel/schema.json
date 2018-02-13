@@ -1,15 +1,15 @@
 {
   "cols": 50,
-  "rows": 50,
+  "rows": 46,
   "rowHeight": 26,
   "leftWidth": 8,
   "midWidth": 20,
   "widgets": [
     {
       "type": "RadialWidget",
-      "items": ["cpu"],
+      "items": ["network"],
       "extraState": {
-        "displayName": "CPU"
+        "displayName": "Network"
       },
       "layout": {
         "x": 0,
@@ -21,9 +21,9 @@
     },
     {
       "type": "RadialWidget",
-      "items": ["memory"],
+      "items": ["cpu"],
       "extraState": {
-        "displayName": "Memory"
+        "displayName": "CPU"
       },
       "layout": {
         "x": 0,
@@ -35,9 +35,9 @@
     },
     {
       "type": "RadialWidget",
-      "items": ["disk"],
+      "items": ["memory"],
       "extraState": {
-        "displayName": "Disk"
+        "displayName": "Memory"
       },
       "layout": {
         "x": 0,
@@ -49,9 +49,9 @@
     },
     {
       "type": "RadialWidget",
-      "items": ["network"],
+      "items": ["disk"],
       "extraState": {
-        "displayName": "Network"
+        "displayName": "Disk"
       },
       "layout": {
         "x": 0,
@@ -67,7 +67,7 @@
       "extraState": {},
       "layout": {
         "x": 12,
-        "y": 8,
+        "y": 6,
         "w": 2,
         "h": 2,
         "static": true
@@ -81,7 +81,7 @@
       },
       "layout": {
         "x": 28,
-        "y": 8,
+        "y": 6,
         "w": 2,
         "h": 2,
         "static": true
@@ -103,9 +103,9 @@
       },
       "layout": {
         "x": 9,
-        "y": 12,
-        "w": 12,
-        "h": 8,
+        "y": 10,
+        "w": 14,
+        "h": 9,
         "background": "light",
         "static": true
       }
@@ -114,10 +114,10 @@
       "type": "ProgressBarWidget",
       "items": ["connections_current"],
       "layout": {
-        "x": 21,
-        "y": 12,
+        "x": 23,
+        "y": 10,
         "w": 8,
-        "h": 8,
+        "h": 9,
         "background": "light",
         "static": true
       },
@@ -133,9 +133,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_readersActive", "queue_readersQueued"],
       "layout": {
-        "x": 29,
-        "y": 12,
-        "w": 14,
+        "x": 31,
+        "y": 10,
+        "w": 18,
         "h": 2,
         "background": "light",
         "static": true
@@ -150,9 +150,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
-        "x": 29,
-        "y": 14,
-        "w": 14,
+        "x": 31,
+        "y": 12,
+        "w": 18,
         "h": 2,
         "background": "light",
         "static": true
@@ -166,9 +166,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_totalActive", "queue_totalQueued"],
       "layout": {
-        "x": 29,
-        "y": 16,
-        "w": 14,
+        "x": 31,
+        "y": 14,
+        "w": 18,
         "h": 2,
         "background": "light",
         "static": true
@@ -187,10 +187,10 @@
         "latency_commandWaitUsPs"
       ],
       "layout": {
-        "x": 29,
-        "y": 18,
-        "w": 14,
-        "h": 2,
+        "x": 31,
+        "y": 16,
+        "w": 18,
+        "h": 3,
         "background": "light",
         "static": true
       },
@@ -204,7 +204,7 @@
       "extraState": {},
       "layout": {
         "x": 12,
-        "y": 22,
+        "y": 20,
         "w": 2,
         "h": 2,
         "static": true
@@ -212,15 +212,11 @@
     },
     {
       "type": "ProgressBarWidget",
-      "items": [
-        "latency_writeWaitUsPs",
-        "latency_readWaitUsPs",
-        "latency_commandWaitUsPs"
-      ],
+      "items": ["wtCache_maxBytes", "wtCache_currentBytes"],
       "layout": {
         "x": 9,
-        "y": 25,
-        "w": 30,
+        "y": 24,
+        "w": 14,
         "h": 4,
         "background": "light",
         "static": true
@@ -232,15 +228,11 @@
     },
     {
       "type": "ProgressBarWidget",
-      "items": [
-        "latency_writeWaitUsPs",
-        "latency_readWaitUsPs",
-        "latency_commandWaitUsPs"
-      ],
+      "items": ["wtLog_maxLogSize", "wtLog_currentLogSize"],
       "layout": {
         "x": 9,
-        "y": 29,
-        "w": 30,
+        "y": 28,
+        "w": 14,
         "h": 4,
         "background": "light",
         "static": true
@@ -250,12 +242,58 @@
       }
     },
     {
+      "type": "StackedRadialWidget",
+      "items": ["wtTransactions_readPct", "wtTransactions_writePct"],
+      "layout": {
+        "x": 23,
+        "y": 24,
+        "w": 10,
+        "h": 8,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Transactions"
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["wtCache_MissPct"],
+      "layout": {
+        "x": 33,
+        "y": 24,
+        "w": 16,
+        "h": 4,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Miss Rate",
+        "showHorizontalRule": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["wtCache_evictionsPs"],
+      "layout": {
+        "x": 33,
+        "y": 28,
+        "w": 16,
+        "h": 4,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Evictions"
+      }
+    },
+    {
       "type": "ArrowWidget",
-      "items": ["wtCache_readRequestsPs"],
+      "items": ["wtIO_diskToCacheUsPs"],
       "extraState": {},
       "layout": {
         "x": 12,
-        "y": 34,
+        "y": 33,
         "w": 2,
         "h": 2,
         "static": true
@@ -263,53 +301,107 @@
     },
     {
       "type": "ArrowWidget",
-      "items": ["wtCache_readRequestsPs"],
+      "items": ["wtIO_cacheToDiskUsPs"],
       "extraState": {},
       "layout": {
         "x": 28,
-        "y": 34,
+        "y": 33,
         "w": 2,
         "h": 2,
         "static": true
       }
     },
     {
-      "type": "ProgressBarWidget",
+      "type": "StackedRadialWidget",
       "items": [
-        "latency_writeWaitUsPs",
-        "latency_readWaitUsPs",
-        "latency_commandWaitUsPs"
+        "operations_QueryPs",
+        "operations_CommandPs",
+        "operations_InsertPs",
+        "operations_UpdatePs",
+        "operations_DeletePs"
       ],
+      "extraState": {
+        "title": "Disc",
+        "showLegend": true,
+        "showVerticalRule": true
+      },
       "layout": {
         "x": 9,
-        "y": 37,
-        "w": 30,
-        "h": 4,
+        "y": 36,
+        "w": 14,
+        "h": 9,
         "background": "light",
         "static": true
-      },
-      "extraState": {
-        "title": "Wiredtiger Cach",
-        "showHorizontalRule": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": [
-        "latency_writeWaitUsPs",
-        "latency_readWaitUsPs",
-        "latency_commandWaitUsPs"
-      ],
+      "items": ["connections_current"],
       "layout": {
-        "x": 9,
-        "y": 41,
-        "w": 30,
-        "h": 4,
+        "x": 23,
+        "y": 36,
+        "w": 10,
+        "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
-        "title": "Log Buffer"
+        "title": "Latency",
+        "description": "test description",
+        "maxValue": 20
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["connections_current"],
+      "layout": {
+        "x": 23,
+        "y": 39,
+        "w": 10,
+        "h": 3,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "maxValue": 20
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["connections_current"],
+      "layout": {
+        "x": 23,
+        "y": 42,
+        "w": 10,
+        "h": 3,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "maxValue": 20
+      }
+    },
+    {
+      "type": "StackedRadialWidget",
+      "items": [
+        "operations_QueryPs",
+        "operations_CommandPs",
+        "operations_InsertPs",
+        "operations_UpdatePs",
+        "operations_DeletePs"
+      ],
+      "extraState": {
+        "title": "Storage",
+        "showLegend": true,
+        "showVerticalRule": true
+      },
+      "layout": {
+        "x": 33,
+        "y": 36,
+        "w": 16,
+        "h": 9,
+        "background": "light",
+        "static": true
       }
     }
   ]
