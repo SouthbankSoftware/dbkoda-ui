@@ -125,7 +125,8 @@
         "title": "Connections",
         "description": "test description",
         "showVerticalRule": true,
-        "showVertical": true
+        "showVertical": true,
+        "maxValue": 20
       }
     },
     {

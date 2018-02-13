@@ -277,6 +277,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   getValueFromData(items: Array<string>, staleValues: Array<Object>): Array<Object> {
     const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latestValue: Object = values.length > 0 ? values[values.length - 1].value : {};
+    console.log('get stat value ', latestValue);
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     if (!_.isEmpty(latestValue)) {
       const v = latestValue[items[0]];
@@ -368,6 +369,9 @@ export default class RadialWidget extends React.Component<Object, Object> {
     });
   };
 
+  /**
+   * TODO: move it to schema
+   */
   projection = () => {
     const {items} = this.props.widget;
     if (items[0] === 'network' || items[0] === 'disk') {

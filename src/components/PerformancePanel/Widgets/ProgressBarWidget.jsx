@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-13T12:58:54+11:00
+ * @Last modified time: 2018-02-13T15:46:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -57,6 +57,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
   _tip: *;
   _chartTotalEl: *;
   _sumOfValues: *;
+  _chartLabel: *;
   _bVertical: false;
 
   _createD3View = (bVertical: boolean) => {
@@ -146,22 +147,44 @@ export default class ProgressBarWidget extends React.Component<Props> {
     const bVertical = this.props.widget.showVertical === true;
     const sData = Object.keys(data).sort(); // sort according to keys to keep the color same
     let arrData = [];
-
-    for (let I = 0; I < sData.length; I += 1) {
-      arrData.push({ color: colors[I], value: data[sData[I]], key: sData[I] });
-    }
-    arrData = _.sortBy(arrData, [
-      function(o) {
-        return o.value;
+    if (sData.length > 1) { // Case where there are more than 1 data items to display
+      for (let I = 0; I < sData.length; I += 1) {
+        arrData.push({
+          color: colors[I],
+          value: data[sData[I]],
+          key: sData[I]
+        });
       }
-    ]).reverse();
-    this._sumOfValues = 0;
-    arrData = arrData.map(elem => {
-      elem.sumValue = this._sumOfValues + elem.value;
-      this._sumOfValues += elem.value;
-      return elem;
-    });
-    arrData = _.reverse(arrData);
+      arrData = _.sortBy(arrData, [
+        function(o) {
+          return o.value;
+        }
+      ]).reverse();
+      this._sumOfValues = 0;
+      arrData = arrData.map(elem => {
+        elem.sumValue = this._sumOfValues + elem.value;
+        this._sumOfValues += elem.value;
+        return elem;
+      });
+      arrData = _.reverse(arrData);
+      this._chartLabel = this._sumOfValues;
+    } else if (sData.length === 1) { // specific case of only one data item
+      arrData.push({
+        color: colors[0],
+        value: data[sData[0]],
+        key: sData[0],
+        sumValue: data[sData[0]]
+      });
+      this._sumOfValues = arrData[0].value;
+      if (this.props.widget.maxValue) {
+        this._sumOfValues = this.props.widget.maxValue;
+      }
+      this._chartLabel = arrData[0].value;
+    } else {
+      console.error('ProgressBarWidget require atleast one data element');
+      return;
+    }
+
     const t = d3.transition().duration(750);
 
     const bars = this._dataGroup.selectAll('rect').data(arrData, d => {
@@ -245,7 +268,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         return d.sumValue / this._sumOfValues * chartWidth;
       });
 
-    d3.select(this._chartTotalEl).text(Math.floor(this._sumOfValues));
+    d3.select(this._chartTotalEl).text(Math.floor(this._chartLabel));
   };
 
   componentDidMount() {
@@ -258,20 +281,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
         const { values } = this.props.widget;
         const latestValue =
           values.length > 0 ? values[values.length - 1].value : {};
-
-        // // if (items.length !== 1) {
-        // //   console.error('ArrowWidget only supports single item');
-        // //   return;
-        // // }
-        //
-        // const data = latestValue[items[0]];
-        //
-        // if (data === undefined) return;
-        //
-        // if (typeof data !== 'number') {
-        //   console.error('ArrowWidget only supports numeric data value');
-        //   return;
-        // }
 
         // const testData = {'item-001': 15, 'item-002': 130};
         this._updateD3ViewData(latestValue);
@@ -297,16 +306,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (showVertical) {
       chartTotalStyle.top = '50%';
     }
-    // const containerStyle = {};
-    // let topC = 0;
-    // if (name) {
-    //   topC += 26;
-    // }
-    // containerStyle.top = topC + 'px';
-    // if (showHorizontalRule) {
-    //   topC += 2;
-    // }
-    // containerStyle.height = 'calc(100% - ' + topC + 'px)';
+
     return (
       <Widget
         className="ProgressBarWidget"
