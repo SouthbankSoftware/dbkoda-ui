@@ -47,17 +47,14 @@ type Props = {
   };
 })
 @observer
-/**
- * TODO: @joey please enable flow
- */
 export default class Legend extends React.Component<Props> {
   static colors = [
-    '#3333cc',
-    '#2E547A',
-    '#643798',
-    '#39B160',
+    '#A27EB7',
     '#DC5D3E',
-    '#A27EB7'
+    '#39B160',
+    '#643798',
+    '#2E547A',
+    '#3333cc'
   ];
 
   static fontSize = 7;
@@ -115,7 +112,7 @@ export default class Legend extends React.Component<Props> {
     const rowDynamicStyle = {
       height:
         Legend.rowSize +
-        Legend.rowSize * this.state.width / Legend.rowScalingFactor * 1.2 +
+        Legend.rowSize * this.state.width / Legend.rowScalingFactor * 1.1 +
         'px'
     };
     let totalFontColor = 'white';

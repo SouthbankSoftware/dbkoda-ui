@@ -92,9 +92,9 @@ export default class PerformancePanel extends React.Component<Props, State> {
       layouts: {
         desktop: []
       },
-      rowHeight: 40,
-      cols: 32,
-      rows: 32,
+      rowHeight: 36,
+      cols: 38,
+      rows: 38,
       leftWidth: 8,
       midWidth: 24,
       height: 0
@@ -143,7 +143,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
       // layout.gridElementStyle.paddingBottom = '20px';
 
       if (layout.x + layout.w < rSep) {
-        layout.widgetStyle.borderRight = '1px solid #383838';
+        //  layout.widgetStyle.borderRight = '1px solid #383838';
       }
       if (layout.x === lSep) {
         layout.gridElementStyle.paddingLeft = '20px';

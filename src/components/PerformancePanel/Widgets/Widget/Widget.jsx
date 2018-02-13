@@ -127,7 +127,8 @@ export default class Widget extends React.Component<Props, State> {
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;
-    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue =
+      values.length > 0 ? values[values.length - 1].value : {};
 
     return (
       <div className="DefaultWidgetView">
@@ -159,14 +160,25 @@ export default class Widget extends React.Component<Props, State> {
     const {
       children,
       // $FlowFixMe
-      widget: { state, errorLevel, error, values, name, description },
+      widget: {
+        state,
+        errorLevel,
+        error,
+        values,
+        name,
+        title,
+        description,
+        showHorizontalRule,
+        showVerticalRule
+      },
       className,
       widgetStyle
     } = this.props;
     const { projection } = this.state;
 
     return (
-      <div className={className || 'Widget'} style={widgetStyle}>
+      // $FlowFixMe
+      <div className={className + ' Widget' || 'Widget'} style={widgetStyle}>
         {state !== 'loaded' ? (
           state === 'loading' ? (
             <LoadingView />
@@ -174,23 +186,40 @@ export default class Widget extends React.Component<Props, State> {
             <ErrorView title={null} error={error} errorLevel={errorLevel} />
           )
         ) : (
-          <Popover2
-            minimal
-            popoverClassName="HistoryViewPopover"
-            content={
-              <HistoryView
-                width={HISTORY_VIEW_WIDTH}
-                height={HISTORY_VIEW_HEIGHT}
-                values={values}
-                projection={projection}
-                name={name}
-                description={description}
-              />
-            }
-            target={<span className="children">{children || this._renderDefaultView()}</span>}
-          />
+          <div className="parentWidgetWrapper">
+            {title && (
+              <p className="header">
+                <b className="title">{title}</b>
+              </p>
+            )}
+            <Popover2
+              minimal
+              popoverClassName="HistoryViewPopover"
+              content={
+                <HistoryView
+                  width={HISTORY_VIEW_WIDTH}
+                  height={HISTORY_VIEW_HEIGHT}
+                  values={values}
+                  projection={projection}
+                  name={name}
+                  description={description}
+                />
+              }
+              target={
+                <span className="children">
+                  {children || this._renderDefaultView()}
+                </span>
+              }
+            />
+            {showHorizontalRule && <hr />}
+            {showVerticalRule && <hr className="vertical" />}
+          </div>
         )}
-        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
+        <ReactResizeDetector
+          handleWidth
+          handleHeight
+          onResize={this._onResize}
+        />
       </div>
     );
   }

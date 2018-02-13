@@ -1,6 +1,6 @@
 {
-  "cols": 32,
-  "rows": 32,
+  "cols": 38,
+  "rows": 38,
   "rowHeight": 40,
   "leftWidth": 8,
   "midWidth": 24,
@@ -27,7 +27,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 8,
+        "y": 10,
         "w": 8,
         "h": 8,
         "static": true
@@ -41,7 +41,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 16,
+        "y": 20,
         "w": 8,
         "h": 8,
         "static": true
@@ -55,29 +55,56 @@
       },
       "layout": {
         "x": 0,
-        "y": 24,
+        "y": 28,
         "w": 8,
         "h": 8,
         "static": true
       }
     },
     {
+      "type": "ArrowWidget",
+      "items": ["network_bytesOutPs"],
+      "extraState": {},
+      "layout": {
+        "x": 10,
+        "y": 8,
+        "w": 1,
+        "h": 1,
+        "static": true
+      }
+    },
+    {
+      "type": "ArrowWidget",
+      "items": ["network_bytesInPs"],
+      "extraState": {
+        "rotate": 180
+      },
+      "layout": {
+        "x": 24,
+        "y": 8,
+        "w": 1,
+        "h": 1,
+        "static": true
+      }
+    },
+    {
       "type": "StackedRadialWidget",
       "items": [
-        "opCounterQuery",
-        "opCounterUpdate",
-        "opCounterInsert",
-        "opCounterDelete",
-        "opCounterCommand"
+        "operations_QueryPs",
+        "operations_CommandPs",
+        "operations_InsertPs",
+        "operations_UpdatePs",
+        "operations_DeletePs"
       ],
       "extraState": {
-        "name": "Operations",
-        "showLegend": true
+        "title": "Operations",
+        "showLegend": true,
+        "showVerticalRule": true
       },
       "layout": {
         "x": 8,
-        "y": 8,
-        "w": 12,
+        "y": 10,
+        "w": 10,
         "h": 8,
         "background": "light",
         "static": true
@@ -85,65 +112,127 @@
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["item-1", "item-2"],
+      "items": ["connections_current"],
       "layout": {
-        "x": 20,
-        "y": 8,
-        "w": 12,
+        "x": 18,
+        "y": 10,
+        "w": 6,
+        "h": 8,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Connections",
+        "description": "test description",
+        "showVerticalRule": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["queue_readersActive", "queue_readersQueued"],
+      "layout": {
+        "x": 24,
+        "y": 10,
+        "w": 13,
         "h": 2,
         "background": "light",
         "static": true
       },
       "extraState": {
-        "name": "Queues",
+        "title": "Queues",
         "description": "test description",
         "chartTitle": "Reads"
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["item-1", "item-2"],
+      "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
-        "x": 20,
-        "y": 10,
-        "w": 12,
+        "x": 24,
+        "y": 12,
+        "w": 13,
         "h": 2,
         "background": "light",
         "static": true
       },
       "extraState": {
         "chartTitle": "Writes",
+        "description": "test description"
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["queue_totalActive", "queue_totalQueued"],
+      "layout": {
+        "x": 24,
+        "y": 14,
+        "w": 13,
+        "h": 2,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "chartTitle": "Total",
         "description": "test description",
         "showHorizontalRule": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["item-1", "item-2"],
+      "items": [
+        "latency_writeWaitUsPs",
+        "latency_readWaitUsPs",
+        "latency_commandWaitUsPs"
+      ],
       "layout": {
-        "x": 20,
-        "y": 12,
-        "w": 12,
+        "x": 24,
+        "y": 16,
+        "w": 13,
         "h": 2,
         "background": "light",
         "static": true
       },
       "extraState": {
-        "name": "Latency",
-        "chartTitle": "Reads"
+        "title": "Time"
+      }
+    },
+    {
+      "type": "ArrowWidget",
+      "items": ["wtCache_readRequestsPs"],
+      "extraState": {},
+      "layout": {
+        "x": 10,
+        "y": 18,
+        "w": 1,
+        "h": 1,
+        "static": true
+      }
+    },
+    {
+      "type": "ArrowWidget",
+      "items": ["item-2"],
+      "extraState": {
+        "rotate": 180
+      },
+      "layout": {
+        "x": 24,
+        "y": 18,
+        "w": 1,
+        "h": 1,
+        "static": true
       }
     },
     {
       "type": "ProgressBarWidget",
       "items": ["item-1", "item-2"],
       "extraState": {
-        "chartTitle": "Writes"
+        "showVertical": true
       },
       "layout": {
         "x": 20,
-        "y": 14,
-        "w": 12,
-        "h": 2,
+        "y": 18,
+        "w": 4,
+        "h": 12,
         "background": "light",
         "static": true
       }
