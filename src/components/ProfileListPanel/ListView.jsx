@@ -397,7 +397,11 @@ export default class ListView extends React.Component {
 
   @autobind
   openOpenConnectionAlert() {
+    const { id } = this.state.targetProfile;
+    const { passwordStoreEnabled } = this.props.config.settings.passwordStoreEnabled;
+    const storeNeedsPassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(id) : false;
     if (
+      (passwordStoreEnabled && storeNeedsPassword || !passwordStoreEnabled) &&
       this.state.targetProfile.sha ||
       (this.state.targetProfile.ssh &&
         (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass))

@@ -38,7 +38,8 @@ type Settings = {
   drillCmd: string,
   drillControllerCmd: string,
   telemetryEnabled: boolean,
-  showWelcomePageAtStart: boolean
+  showWelcomePageAtStart: boolean,
+  passwordStoreEnabled: boolean,
 };
 
 export default class Config {

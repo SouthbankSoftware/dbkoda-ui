@@ -27,6 +27,7 @@
  */
 
 import { action } from 'mobx';
+import _ from 'lodash';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 
@@ -71,7 +72,7 @@ export default class Password {
       .create({ masterPassword: masterHash, profileIds })
       .then(missingProfileIds => {
         console.log(`missingProfileIds: ${missingProfileIds}`);
-        // TODO Handle profileIds that haven't yet sent their password
+        this.store.password.missingProfiles = missingProfileIds;
         this.closePasswordDialog();
       })
       .catch(error => {
@@ -95,5 +96,16 @@ export default class Password {
   hashPassword(masterPassword: string): string {
     // TODO Hash masterPassword
     return masterPassword;
+  }
+
+  removeMissingStoreId(profileId: string) {
+    console.log(`Remove ${profileId} from the store!`);
+    _.remove(this.store.password.missingProfiles, profileId);
+  }
+
+  isProfileMissingFromStore(profileId: string) {
+    console.log(`Is ${profileId} missing from the store?`);
+    // Does the profileId exist in the missingProfiles array?
+    return (_.find(this.store.password.missingProfiles, profileId) > -1);
   }
 }
