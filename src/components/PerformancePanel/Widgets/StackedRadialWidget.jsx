@@ -273,6 +273,9 @@ export default class StackedRadialWidget extends React.Component<
           if (!this.maxValue) {
             this.maxValue = d.percentage;
           }
+          if (this.props.widget.unit === '%') {
+            return d.percentage / 100 * StackedRadialWidget.PI;
+          }
           return d.percentage / this.maxValue * StackedRadialWidget.PI;
         })
         .innerRadius(this._getInnerRadiusSize(data.index))
@@ -322,17 +325,36 @@ export default class StackedRadialWidget extends React.Component<
     }
 
     // Reduce Radial to 3 figures max.
-    if (sumOfItems > 999) {
-      // $FlowFixMe
-      sumOfItems = Number.parseFloat((sumOfItems /= 1000).toFixed(3)) + 'k';
-    } else if (sumOfItems > 999) {
+    if (sumOfItems > 99999) {
       sumOfItems =
         // $FlowFixMe
-        Number.parseFloat((sumOfItems /= 1000000).toFixed(3)) + 'M';
+        Number.parseFloat((sumOfItems /= 1000000).toFixed(2)) + 'M';
+    } else if (sumOfItems > 999) {
+      // $FlowFixMe
+      sumOfItems = Number.parseFloat((sumOfItems /= 1000).toFixed(2)) + 'k';
     }
 
     if (field.layer === 1) {
       field.field.select('text.completed').text(() => {
+        if (this.props.widget.unit === '%') {
+          return sumOfItems + '%';
+        } else if (this.props.widget.unit === 'Us') {
+          return sumOfItems + 'Us';
+        }
+        return sumOfItems + '/s';
+      });
+      field.field
+        .select('text.completed')
+        .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+    }
+
+    if (this.props.widget.unit === '%' && field.layer === 2) {
+      field.field.select('text.completed').text(() => {
+        if (this.props.widget.unit === '%') {
+          return sumOfItems + '%';
+        } else if (this.props.widget.unit === 'Us') {
+          return sumOfItems + 'Us';
+        }
         return sumOfItems + '/s';
       });
       field.field
@@ -342,7 +364,7 @@ export default class StackedRadialWidget extends React.Component<
 
     field.field
       .select('title')
-      .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+      .attr('transform', 'translate(0, 50), scale(0.5, 0.5)');
   }
 
   @action.bound

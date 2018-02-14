@@ -1,7 +1,7 @@
 {
   "cols": 50,
-  "rows": 46,
-  "rowHeight": 26,
+  "rows": 50,
+  "rowHeight": 25,
   "leftWidth": 8,
   "midWidth": 20,
   "widgets": [
@@ -9,13 +9,15 @@
       "type": "RadialWidget",
       "items": ["network"],
       "extraState": {
-        "displayName": "Network"
+        "displayName": "Network",
+        "widgetItemKeys": ["download", "upload"],
+        "widgetDisplayNames": ["Download", "Upload"]
       },
       "layout": {
         "x": 0,
         "y": 1,
-        "w": 5,
-        "h": 5,
+        "w": 6,
+        "h": 6,
         "static": true
       }
     },
@@ -23,13 +25,14 @@
       "type": "RadialWidget",
       "items": ["cpu"],
       "extraState": {
-        "displayName": "CPU"
+        "displayName": "CPU",
+        "showRunQueue": true
       },
       "layout": {
         "x": 0,
         "y": 12,
-        "w": 5,
-        "h": 5,
+        "w": 6,
+        "h": 6,
         "static": true
       }
     },
@@ -42,8 +45,8 @@
       "layout": {
         "x": 0,
         "y": 25,
-        "w": 5,
-        "h": 5,
+        "w": 6,
+        "h": 6,
         "static": true
       }
     },
@@ -51,23 +54,28 @@
       "type": "RadialWidget",
       "items": ["disk"],
       "extraState": {
-        "displayName": "Disk"
+        "displayName": "Disk",
+        "widgetItemKeys": ["download", "upload"],
+        "widgetDisplayNames": ["In", "Out"]
       },
       "layout": {
         "x": 0,
-        "y": 37,
-        "w": 5,
-        "h": 5,
+        "y": 39,
+        "w": 6,
+        "h": 6,
         "static": true
       }
     },
     {
       "type": "ArrowWidget",
       "items": ["network_bytesOutPs"],
-      "extraState": {},
+      "extraState": {
+        "description": "Data written to network from Mongo Server",
+        "unit": "bytes"
+      },
       "layout": {
         "x": 12,
-        "y": 6,
+        "y": 2,
         "w": 2,
         "h": 2,
         "static": true
@@ -77,11 +85,13 @@
       "type": "ArrowWidget",
       "items": ["network_bytesInPs"],
       "extraState": {
-        "rotate": 180
+        "rotate": 180,
+        "description": "Data read into Mongo Server from Network",
+        "unit": "bytes"
       },
       "layout": {
-        "x": 28,
-        "y": 6,
+        "x": 34,
+        "y": 2,
         "w": 2,
         "h": 2,
         "static": true
@@ -99,13 +109,15 @@
       "extraState": {
         "title": "Operations",
         "showLegend": true,
-        "showVerticalRule": true
+        "showVerticalRule": true,
+        "description": "Operations executed in Mongo per second by type.",
+        "unit": "/s"
       },
       "layout": {
         "x": 9,
-        "y": 10,
-        "w": 14,
-        "h": 9,
+        "y": 6,
+        "w": 15,
+        "h": 12,
         "background": "light",
         "static": true
       }
@@ -114,16 +126,16 @@
       "type": "ProgressBarWidget",
       "items": ["connections_current"],
       "layout": {
-        "x": 23,
-        "y": 10,
-        "w": 8,
-        "h": 9,
+        "x": 24,
+        "y": 6,
+        "w": 10,
+        "h": 12,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Connections",
-        "description": "test description",
+        "description": "Number of connections current open",
         "showVerticalRule": true,
         "showVertical": true,
         "useHighWaterMark": true
@@ -133,50 +145,57 @@
       "type": "ProgressBarWidget",
       "items": ["queue_readersActive", "queue_readersQueued"],
       "layout": {
-        "x": 31,
-        "y": 10,
-        "w": 18,
-        "h": 2,
+        "x": 34,
+        "y": 6,
+        "w": 16,
+        "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Queues",
-        "description": "test description",
-        "chartTitle": "Reads"
+        "description":
+          "Current number of read operations and queued read operations.",
+        "chartTitle": "Reads",
+        "useHighWaterMark": true,
+        "unit": "/s"
       }
     },
     {
       "type": "ProgressBarWidget",
       "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
-        "x": 31,
-        "y": 12,
-        "w": 18,
-        "h": 2,
+        "x": 34,
+        "y": 9,
+        "w": 16,
+        "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "chartTitle": "Writes",
-        "description": "test description"
+        "description":
+          "Current number of Write operations and queued Write operations.",
+        "unit": "/s"
       }
     },
     {
       "type": "ProgressBarWidget",
       "items": ["queue_totalActive", "queue_totalQueued"],
       "layout": {
-        "x": 31,
-        "y": 14,
-        "w": 18,
-        "h": 2,
+        "x": 34,
+        "y": 12,
+        "w": 16,
+        "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "chartTitle": "Total",
-        "description": "test description",
-        "showHorizontalRule": true
+        "description": "Total number of all operations and queued operations.",
+        "showHorizontalRule": true,
+        "useHighWaterMark": true,
+        "unit": "/s"
       }
     },
     {
@@ -187,25 +206,31 @@
         "latency_commandWaitUsPs"
       ],
       "layout": {
-        "x": 31,
-        "y": 16,
-        "w": 18,
+        "x": 34,
+        "y": 15,
+        "w": 16,
         "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Time",
+        "description": "Time spent for different ops.",
+        "unit": "Us",
         "useHighWaterMark": true
       }
     },
     {
       "type": "ArrowWidget",
       "items": ["wtCache_readRequestsPs"],
-      "extraState": {},
+      "extraState": {
+        "description":
+          "Number of pages requested from wiredTiger cache per second.",
+        "unit": "/s"
+      },
       "layout": {
         "x": 12,
-        "y": 20,
+        "y": 19,
         "w": 2,
         "h": 2,
         "static": true
@@ -216,15 +241,18 @@
       "items": ["wtCache_maxBytes", "wtCache_currentBytes"],
       "layout": {
         "x": 9,
-        "y": 24,
-        "w": 14,
-        "h": 4,
+        "y": 23,
+        "w": 15,
+        "h": 5,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Wiredtiger Cach",
-        "showHorizontalRule": true
+        "description": "Current and Maximum size of the wiredTiger cache.",
+        "unit": "B",
+        "showHorizontalRule": true,
+        "useHighWaterMark": true
       }
     },
     {
@@ -233,68 +261,84 @@
       "layout": {
         "x": 9,
         "y": 28,
-        "w": 14,
-        "h": 4,
+        "w": 15,
+        "h": 5,
         "background": "light",
         "static": true
       },
       "extraState": {
-        "title": "Log Buffer"
+        "title": "Log Buffer",
+        "description": "Current and Maximum size of the wiredTiger log Buffer",
+        "unit": "B",
+        "useHighWaterMark": true
       }
     },
     {
       "type": "StackedRadialWidget",
       "items": ["wtTransactions_readPct", "wtTransactions_writePct"],
       "layout": {
-        "x": 23,
-        "y": 24,
-        "w": 10,
-        "h": 8,
+        "x": 24,
+        "y": 23,
+        "w": 11,
+        "h": 10,
         "background": "light",
         "static": true
       },
       "extraState": {
-        "title": "Transactions"
+        "title": "Transactions",
+        "description":
+          "Percentage of wiredTiger read/write transactions in use.",
+        "unit": "%"
       }
     },
     {
       "type": "ProgressBarWidget",
       "items": ["wtCache_MissPct"],
       "layout": {
-        "x": 33,
-        "y": 24,
-        "w": 16,
-        "h": 4,
+        "x": 35,
+        "y": 23,
+        "w": 15,
+        "h": 5,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Miss Rate",
-        "showHorizontalRule": true
+        "description":
+          "Percentage of time a needed page is not found in wiredTiger cache",
+        "unit": "%",
+        "showHorizontalRule": true,
+        "useHighWaterMark": true
       }
     },
     {
       "type": "ProgressBarWidget",
       "items": ["wtCache_evictionsPs"],
       "layout": {
-        "x": 33,
+        "x": 35,
         "y": 28,
-        "w": 16,
-        "h": 4,
+        "w": 15,
+        "h": 5,
         "background": "light",
         "static": true
       },
       "extraState": {
-        "title": "Evictions"
+        "title": "Evictions",
+        "description": "Pages evicted from the wiredTiger cache per second",
+        "unit": "Ops/s",
+        "useHighWaterMark": true
       }
     },
     {
       "type": "ArrowWidget",
       "items": ["wtIO_diskToCacheUsPs"],
-      "extraState": {},
+      "extraState": {
+        "description": "wiredTiger disk to cache IO rate",
+        "unit": "Ops/s"
+      },
       "layout": {
         "x": 12,
-        "y": 33,
+        "y": 34,
         "w": 2,
         "h": 2,
         "static": true
@@ -303,10 +347,13 @@
     {
       "type": "ArrowWidget",
       "items": ["wtIO_cacheToDiskUsPs"],
-      "extraState": {},
+      "extraState": {
+        "description": "wiredTiger cache to disk time per second",
+        "unit": "Us"
+      },
       "layout": {
-        "x": 28,
-        "y": 33,
+        "x": 34,
+        "y": 34,
         "w": 2,
         "h": 2,
         "static": true
@@ -315,71 +362,80 @@
     {
       "type": "StackedRadialWidget",
       "items": [
-        "operations_QueryPs",
-        "operations_CommandPs",
-        "operations_InsertPs",
-        "operations_UpdatePs",
-        "operations_DeletePs"
+        "wtIO_diskToCacheUsPs",
+        "wtIO_cacheToDiskUsPs",
+        "wtIO_logSyncTimeUsPs"
       ],
       "extraState": {
         "title": "Disc",
+        "description":
+          "wiredTiger disk to cahce, cache to disk and log sync time per second.",
+        "unit": "Us",
         "showLegend": true,
         "showVerticalRule": true
       },
       "layout": {
         "x": 9,
-        "y": 36,
+        "y": 38,
         "w": 14,
-        "h": 9,
+        "h": 12,
         "background": "light",
         "static": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["connections_current"],
+      "items": ["wtIO_readLatencyMs"],
       "layout": {
         "x": 23,
-        "y": 36,
-        "w": 10,
-        "h": 3,
+        "y": 38,
+        "w": 13,
+        "h": 4,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Latency",
-        "description": "test description",
-        "maxValue": 20
+        "chartTitle": "Reads",
+        "description": "Average time for a wiredTiger disk read",
+        "unit": "ms",
+        "useHighWaterMark": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["connections_current"],
-      "layout": {
-        "x": 23,
-        "y": 39,
-        "w": 10,
-        "h": 3,
-        "background": "light",
-        "static": true
-      },
-      "extraState": {
-        "maxValue": 20
-      }
-    },
-    {
-      "type": "ProgressBarWidget",
-      "items": ["connections_current"],
+      "items": ["wtIO_writeLatencyMs"],
       "layout": {
         "x": 23,
         "y": 42,
-        "w": 10,
-        "h": 3,
+        "w": 13,
+        "h": 4,
         "background": "light",
         "static": true
       },
       "extraState": {
-        "maxValue": 20
+        "chartTitle": "Writes",
+        "description": "Average time for a wiredTiger disk write",
+        "unit": "ms",
+        "useHighWaterMark": true
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["wtIO_logSyncLatencyMs"],
+      "layout": {
+        "x": 23,
+        "y": 46,
+        "w": 13,
+        "h": 4,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "chartTitle": "Log Sync",
+        "description": "Average time for a wiredTiger log sync",
+        "unit": "ms",
+        "useHighWaterMark": true
       }
     },
     {
@@ -393,14 +449,16 @@
       ],
       "extraState": {
         "title": "Storage",
+        "description": "Storage by database",
+        "unit": "Gb",
         "showLegend": true,
         "showVerticalRule": true
       },
       "layout": {
-        "x": 33,
-        "y": 36,
-        "w": 16,
-        "h": 9,
+        "x": 36,
+        "y": 38,
+        "w": 14,
+        "h": 12,
         "background": "light",
         "static": true
       }
