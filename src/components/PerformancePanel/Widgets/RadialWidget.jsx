@@ -281,6 +281,25 @@ export default class RadialWidget extends React.Component<Object, Object> {
     const latestValue: Object = values.length > 0 ? values[values.length - 1].value : {};
     console.log('get stat value ', latestValue);
     const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    const highWaterMark = (previousValue, itemKey, itemKeyValues, i) => {
+      if (previousValue[items[0]][`max${itemKey}`] === undefined) {
+        previousValue[items[0]][`max${itemKey}`] = 0;
+      }
+      latestValue[items[0]][`${itemKey}Delta`] = Math.abs(latestValue[items[0]][itemKey] - previousValue[items[0]][itemKey]);
+      if (latestValue[items[0]][`${itemKey}Delta`] > previousValue[items[0]][`max${itemKey}`]) {
+        latestValue[items[0]][`max${itemKey}`] = latestValue[items[0]][`${itemKey}Delta`];
+      } else {
+        latestValue[items[0]][`max${itemKey}`] = previousValue[items[0]][`max${itemKey}`];
+      }
+      itemKeyValues[itemKey] = {
+        percentage: latestValue[items[0]][`max${itemKey}`] === 0 ? 0 : parseInt(latestValue[items[0]][`${itemKey}Delta`] / latestValue[items[0]][`max${itemKey}`] * 100, 10),
+        valuePerSec: bytesToSize(latestValue[items[0]][`${itemKey}Delta`] / (latestValue[items[0]].samplingRate / 1000))
+      };
+      this.text += `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].valuePerSec}/s`;
+      if (i < widgetItemKeys.length - 1) {
+        this.text += '\n';
+      }
+    };
     if (!_.isEmpty(latestValue)) {
       const v = latestValue[items[0]];
       if (!v) {
@@ -299,23 +318,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           return [];
         }
         widgetItemKeys.forEach((itemKey, i) => {
-          if (previousValue[items[0]][`max${itemKey}`] === undefined) {
-            previousValue[items[0]][`max${itemKey}`] = 0;
-          }
-          latestValue[items[0]][`${itemKey}Delta`] = Math.abs(latestValue[items[0]][itemKey] - previousValue[items[0]][itemKey]);
-          if (latestValue[items[0]][`${itemKey}Delta`] > previousValue[items[0]][`max${itemKey}`]) {
-            latestValue[items[0]][`max${itemKey}`] = latestValue[items[0]][`${itemKey}Delta`];
-          } else {
-            latestValue[items[0]][`max${itemKey}`] = previousValue[items[0]][`max${itemKey}`];
-          }
-          itemKeyValues[itemKey] = {
-            percentage: latestValue[items[0]][`max${itemKey}`] === 0 ? 0 : parseInt(latestValue[items[0]][`${itemKey}Delta`] / latestValue[items[0]][`max${itemKey}`] * 100, 10),
-            valuePerSec: bytesToSize(latestValue[items[0]][`${itemKey}Delta`] / (latestValue[items[0]].samplingRate / 1000))
-          };
-          this.text += `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].valuePerSec}/s`;
-          if (i < widgetItemKeys.length - 1) {
-            this.text += '\n';
-          }
+          highWaterMark.call(this, previousValue, itemKey, itemKeyValues, i);
         });
 
         const retValue = widgetItemKeys.map((itemKey, i) => {
