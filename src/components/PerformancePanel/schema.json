@@ -143,7 +143,8 @@
       "extraState": {
         "title": "Queues",
         "description": "test description",
-        "chartTitle": "Reads"
+        "chartTitle": "Reads",
+        "useHighWaterMark": true
       }
     },
     {
@@ -176,7 +177,8 @@
       "extraState": {
         "chartTitle": "Total",
         "description": "test description",
-        "showHorizontalRule": true
+        "showHorizontalRule": true,
+        "useHighWaterMark": true
       }
     },
     {
@@ -224,7 +226,8 @@
       },
       "extraState": {
         "title": "Wiredtiger Cach",
-        "showHorizontalRule": true
+        "showHorizontalRule": true,
+        "useHighWaterMark": true
       }
     },
     {
@@ -239,7 +242,8 @@
         "static": true
       },
       "extraState": {
-        "title": "Log Buffer"
+        "title": "Log Buffer",
+        "useHighWaterMark": true
       }
     },
     {
@@ -270,7 +274,8 @@
       },
       "extraState": {
         "title": "Miss Rate",
-        "showHorizontalRule": true
+        "showHorizontalRule": true,
+        "useHighWaterMark": true
       }
     },
     {
@@ -285,7 +290,8 @@
         "static": true
       },
       "extraState": {
-        "title": "Evictions"
+        "title": "Evictions",
+        "useHighWaterMark": true
       }
     },
     {
@@ -348,12 +354,13 @@
         "title": "Latency",
         "chartTitle": "Reads",
         "description": "test description",
+        "useHighWaterMark": true,
         "maxValue": 20
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtIO_logSyncLatencyMs"],
+      "items": ["wtIO_writeLatencyMs"],
       "layout": {
         "x": 23,
         "y": 39,
@@ -364,12 +371,13 @@
       },
       "extraState": {
         "chartTitle": "Writes",
+        "useHighWaterMark": true,
         "maxValue": 20
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtIO_writeLatencyMs"],
+      "items": ["wtIO_logSyncLatencyMs"],
       "layout": {
         "x": 23,
         "y": 42,
@@ -380,6 +388,7 @@
       },
       "extraState": {
         "chartTitle": "Log Sync",
+        "useHighWaterMark": true,
         "maxValue": 20
       }
     },
