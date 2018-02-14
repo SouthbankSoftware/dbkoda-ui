@@ -16,7 +16,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 12,
+        "y": 1,
         "w": 6,
         "h": 6,
         "static": true
@@ -26,11 +26,12 @@
       "type": "RadialWidget",
       "items": ["cpu"],
       "extraState": {
-        "displayName": "CPU"
+        "displayName": "CPU",
+        "showRunQueue": true
       },
       "layout": {
         "x": 0,
-        "y": 1,
+        "y": 12,
         "w": 6,
         "h": 6,
         "static": true
