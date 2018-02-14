@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-05T11:58:21+11:00
+ * @Last modified time: 2018-02-14T14:55:30+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,7 +31,6 @@ import { action } from 'mobx';
 import { observer } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
-import LoadingView from '#/common/LoadingView';
 import _ from 'lodash';
 import ReactResizeDetector from 'react-resize-detector';
 // $FlowFixMe
@@ -127,8 +126,7 @@ export default class Widget extends React.Component<Props, State> {
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;
-    const latestValue =
-      values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
     return (
       <div className="DefaultWidgetView">
@@ -179,12 +177,8 @@ export default class Widget extends React.Component<Props, State> {
     return (
       // $FlowFixMe
       <div className={className + ' Widget' || 'Widget'} style={widgetStyle}>
-        {state !== 'loaded' ? (
-          state === 'loading' ? (
-            <LoadingView />
-          ) : (
-            <ErrorView title={null} error={error} errorLevel={errorLevel} />
-          )
+        {state === 'error' ? (
+          <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (
           <div className="parentWidgetWrapper">
             {title && (
@@ -205,21 +199,13 @@ export default class Widget extends React.Component<Props, State> {
                   description={description}
                 />
               }
-              target={
-                <span className="children">
-                  {children || this._renderDefaultView()}
-                </span>
-              }
+              target={<span className="children">{children || this._renderDefaultView()}</span>}
             />
             {showHorizontalRule && <hr />}
             {showVerticalRule && <hr className="vertical" />}
           </div>
         )}
-        <ReactResizeDetector
-          handleWidth
-          handleHeight
-          onResize={this._onResize}
-        />
+        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
       </div>
     );
   }
