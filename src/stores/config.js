@@ -79,6 +79,18 @@ export default class Config {
     // NOTE: Don't change paths, that's just super annoying
   }
 
+  verifySettings() {
+    if (!this.settings.passwordStoreEnabled) {
+      this.settings.passwordStoreEnabled = false;
+    }
+    if (!this.settings.telemetryEnabled) {
+      this.settings.telemetryEnabled = true;
+    }
+    if (!this.settings.showWelcomePageAtStart) {
+      this.settings.showWelcomePageAtStart = true;
+    }
+  }
+
   @action.bound
   load() {
     console.log('Load from config.yml');
@@ -104,6 +116,7 @@ export default class Config {
           }
           console.log('Config loaded successfully!');
           console.log(this.settings);
+          this.verifySettings();
         });
       })
       .catch((e) => {
