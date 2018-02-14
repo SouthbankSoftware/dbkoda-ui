@@ -64,7 +64,10 @@
     {
       "type": "ArrowWidget",
       "items": ["network_bytesOutPs"],
-      "extraState": {},
+      "extraState": {
+        "description": "Data written to network from Mongo Server",
+        "unit": "bytes"
+      },
       "layout": {
         "x": 12,
         "y": 6,
@@ -77,7 +80,9 @@
       "type": "ArrowWidget",
       "items": ["network_bytesInPs"],
       "extraState": {
-        "rotate": 180
+        "rotate": 180,
+        "description": "Data read into Mongo Server from Network",
+        "unit": "bytes"
       },
       "layout": {
         "x": 30,
@@ -99,7 +104,9 @@
       "extraState": {
         "title": "Operations",
         "showLegend": true,
-        "showVerticalRule": true
+        "showVerticalRule": true,
+        "description": "Operations executed in Mongo per second by type.",
+        "unit": "/s"
       },
       "layout": {
         "x": 9,
@@ -123,7 +130,7 @@
       },
       "extraState": {
         "title": "Connections",
-        "description": "test description",
+        "description": "Number of connections current open",
         "showVerticalRule": true,
         "showVertical": true,
         "useHighWaterMark": true
@@ -142,9 +149,11 @@
       },
       "extraState": {
         "title": "Queues",
-        "description": "test description",
+        "description":
+          "Current number of read operations and queued read operations.",
         "chartTitle": "Reads",
-        "useHighWaterMark": true
+        "useHighWaterMark": true,
+        "unit": "/s"
       }
     },
     {
@@ -160,7 +169,9 @@
       },
       "extraState": {
         "chartTitle": "Writes",
-        "description": "test description"
+        "description":
+          "Current number of Write operations and queued Write operations.",
+        "unit": "/s"
       }
     },
     {
@@ -176,9 +187,10 @@
       },
       "extraState": {
         "chartTitle": "Total",
-        "description": "test description",
+        "description": "Total number of all operations and queued operations.",
         "showHorizontalRule": true,
-        "useHighWaterMark": true
+        "useHighWaterMark": true,
+        "unit": "/s"
       }
     },
     {
@@ -198,13 +210,19 @@
       },
       "extraState": {
         "title": "Time",
+        "description": "Time spent for different ops.",
+        "unit": "Us",
         "useHighWaterMark": true
       }
     },
     {
       "type": "ArrowWidget",
       "items": ["wtCache_readRequestsPs"],
-      "extraState": {},
+      "extraState": {
+        "description":
+          "Number of pages requested from wiredTiger cache per second.",
+        "unit": "/s"
+      },
       "layout": {
         "x": 12,
         "y": 20,
@@ -226,6 +244,8 @@
       },
       "extraState": {
         "title": "Wiredtiger Cach",
+        "description": "Current and Maximum size of the wiredTiger cache.",
+        "unit": "B",
         "showHorizontalRule": true,
         "useHighWaterMark": true
       }
@@ -243,6 +263,8 @@
       },
       "extraState": {
         "title": "Log Buffer",
+        "description": "Current and Maximum size of the wiredTiger log Buffer",
+        "unit": "B",
         "useHighWaterMark": true
       }
     },
@@ -258,7 +280,10 @@
         "static": true
       },
       "extraState": {
-        "title": "Transactions"
+        "title": "Transactions",
+        "description":
+          "Percentage of wiredTiger read/write transactions in use.",
+        "unit": "%"
       }
     },
     {
@@ -274,6 +299,9 @@
       },
       "extraState": {
         "title": "Miss Rate",
+        "description":
+          "Percentage of time a needed page is not found in wiredTiger cache",
+        "unit": "%",
         "showHorizontalRule": true,
         "useHighWaterMark": true
       }
@@ -291,13 +319,18 @@
       },
       "extraState": {
         "title": "Evictions",
+        "description": "Pages evicted from the wiredTiger cache per second",
+        "unit": "Ops/s",
         "useHighWaterMark": true
       }
     },
     {
       "type": "ArrowWidget",
       "items": ["wtIO_diskToCacheUsPs"],
-      "extraState": {},
+      "extraState": {
+        "description": "wiredTiger disk to cache IO rate",
+        "unit": "Ops/s"
+      },
       "layout": {
         "x": 12,
         "y": 33,
@@ -309,7 +342,10 @@
     {
       "type": "ArrowWidget",
       "items": ["wtIO_cacheToDiskUsPs"],
-      "extraState": {},
+      "extraState": {
+        "description": "wiredTiger cache to disk time per second",
+        "unit": "Us"
+      },
       "layout": {
         "x": 30,
         "y": 33,
@@ -327,6 +363,9 @@
       ],
       "extraState": {
         "title": "Disc",
+        "description":
+          "wiredTiger disk to cahce, cache to disk and log sync time per second.",
+        "unit": "Us",
         "showLegend": true,
         "showVerticalRule": true
       },
@@ -353,9 +392,9 @@
       "extraState": {
         "title": "Latency",
         "chartTitle": "Reads",
-        "description": "test description",
-        "useHighWaterMark": true,
-        "maxValue": 20
+        "description": "Average time for a wiredTiger disk read",
+        "unit": "ms",
+        "useHighWaterMark": true
       }
     },
     {
@@ -371,8 +410,9 @@
       },
       "extraState": {
         "chartTitle": "Writes",
-        "useHighWaterMark": true,
-        "maxValue": 20
+        "description": "Average time for a wiredTiger disk write",
+        "unit": "ms",
+        "useHighWaterMark": true
       }
     },
     {
@@ -388,8 +428,9 @@
       },
       "extraState": {
         "chartTitle": "Log Sync",
-        "useHighWaterMark": true,
-        "maxValue": 20
+        "description": "Average time for a wiredTiger log sync",
+        "unit": "ms",
+        "useHighWaterMark": true
       }
     },
     {
@@ -403,6 +444,8 @@
       ],
       "extraState": {
         "title": "Storage",
+        "description": "Storage by database",
+        "unit": "Gb",
         "showLegend": true,
         "showVerticalRule": true
       },
