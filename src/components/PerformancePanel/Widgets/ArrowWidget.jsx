@@ -162,14 +162,6 @@ export default class ArrowWidget extends React.Component<Props> {
       // $FlowFixMe
       this.maxValue = data;
     }
-    console.log('!!!!!!!!');
-    console.log(data);
-    console.log(this.maxValue);
-    console.log(height);
-    console.log(data / this.maxValue);
-    console.log(data / this.maxValue * height);
-    console.log(-data / this.maxValue * height);
-    console.log('!!!!!!!!');
     let text = data;
 
     // Reduce Text to 3 figures max.
