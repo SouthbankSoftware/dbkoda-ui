@@ -9,7 +9,9 @@
       "type": "RadialWidget",
       "items": ["network"],
       "extraState": {
-        "displayName": "Network"
+        "displayName": "Network",
+        "widgetItemKeys": ["download", "upload"],
+        "widgetDisplayNames": ["Download", "Upload"]
       },
       "layout": {
         "x": 0,
@@ -51,7 +53,9 @@
       "type": "RadialWidget",
       "items": ["disk"],
       "extraState": {
-        "displayName": "Disk"
+        "displayName": "Disk",
+        "widgetItemKeys": ["download", "upload"],
+        "widgetDisplayNames": ["In", "Out"]
       },
       "layout": {
         "x": 0,
