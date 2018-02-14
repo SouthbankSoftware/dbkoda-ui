@@ -231,7 +231,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .attrTween('d', this.arcTween.bind(this))
       .style('fill', (d) => {
         if (d.index === 0) {
-        return 'url(#gradient)';
+          return 'url(#gradient)';
         }
         return RadialWidget.colors[d.index];
       });
@@ -276,7 +276,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
    */
   getValueFromData(items: Array<string>, staleValues: Array<Object>): Array<Object> {
     const {widget} = this.props;
-    const {widgetItemKeys, widgetDisplayNames} = widget;
+    const {widgetItemKeys, widgetDisplayNames, useHighWaterMark} = widget;
     const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latestValue: Object = values.length > 0 ? values[values.length - 1].value : {};
     console.log('get stat value ', latestValue);
@@ -310,19 +310,28 @@ export default class RadialWidget extends React.Component<Object, Object> {
         const diff = _.difference(widgetItemKeys, _.keys(v));
         multipleKeys = diff.length === 0;
       }
+      const previousValue: Object = values.length > 1 ? values[values.length - 2].value : {};
       if (!_.isInteger(v) && multipleKeys) {
-        const previousValue: Object = values.length > 1 ? values[values.length - 2].value : {};
         const itemKeyValues = {};
         this.text = '';
-        if (_.isEmpty(previousValue)) {
-          return [];
+        if (useHighWaterMark) {
+          if (_.isEmpty(previousValue)) {
+            return [];
+          }
+          widgetItemKeys.forEach((itemKey, i) => {
+            highWaterMark(previousValue, itemKey, itemKeyValues, i);
+          });
+        } else {
+          widgetItemKeys.forEach((itemKey, i) => {
+            itemKeyValues.push({index: i, percentage: v[itemKey] + '%'});
+          });
         }
-        widgetItemKeys.forEach((itemKey, i) => {
-          highWaterMark.call(this, previousValue, itemKey, itemKeyValues, i);
-        });
-
         const retValue = widgetItemKeys.map((itemKey, i) => {
-          return {index: i, percentage: itemKeyValues[itemKey].percentage, tooltip: `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].percentage}%`};
+          return {
+            index: i,
+            percentage: itemKeyValues[itemKey].percentage,
+            tooltip: `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].percentage}%`
+          };
         });
         console.log('ret value', retValue);
         return retValue;

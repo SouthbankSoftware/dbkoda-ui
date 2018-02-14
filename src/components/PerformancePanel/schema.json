@@ -11,11 +11,12 @@
       "extraState": {
         "displayName": "Network",
         "widgetItemKeys": ["download", "upload"],
-        "widgetDisplayNames": ["Download", "Upload"]
+        "widgetDisplayNames": ["Download", "Upload"],
+        "useHighWaterMark": true
       },
       "layout": {
         "x": 0,
-        "y": 1,
+        "y": 12,
         "w": 6,
         "h": 6,
         "static": true
@@ -29,7 +30,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 12,
+        "y": 1,
         "w": 6,
         "h": 6,
         "static": true
@@ -55,7 +56,8 @@
       "extraState": {
         "displayName": "Disk",
         "widgetItemKeys": ["download", "upload"],
-        "widgetDisplayNames": ["In", "Out"]
+        "widgetDisplayNames": ["In", "Out"],
+        "useHighWaterMark": true
       },
       "layout": {
         "x": 0,
