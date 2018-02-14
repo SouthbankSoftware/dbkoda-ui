@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-08T13:59:09+11:00
+ * @Last modified time: 2018-02-14T16:51:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -175,9 +175,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
     this.tooltip = d3
       .select('body')
       .append('div')
-      .attr('class', 'radial-tooltip')
+      .attr('class', 'radial-tooltip d3-tip-top')
       .style('opacity', 0)
-      .style('color', 'white')
       .style('position', 'absolute')
       .style('z-index', 1000);
     return field;
@@ -246,6 +245,24 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .attr('d', arc)
       .style('fill', d => {
         return RadialWidget.runQueueColors[parseInt(d.data.busy, 10)];
+      }).on('mouseover', () => {
+        const tipData = `RunQueue ${noOfNodes}`;
+        const tipWidth = String(tipData).length * 8;
+        this.tooltip
+            .transition()
+            .duration(200)
+            .style('opacity', 0.9);
+        this.tooltip
+          .html(`<p>RunQueue ${noOfNodes}</p>`)
+          .style('left', d3.event.pageX - (tipWidth / 2) + 'px')
+          .style('top', d3.event.pageY - 28 + 'px');
+        }
+      )
+      .on('mouseout', () => {
+        this.tooltip
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
       });
   }
 
@@ -314,13 +331,14 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .on('mouseover', d => {
         const data = that.dataset()[d.index];
         if (data.tooltip) {
+          const tipWidth = String(data.tooltip).length * 8;
           that.tooltip
             .transition()
             .duration(200)
             .style('opacity', 0.9);
           that.tooltip
             .html(`<p>${data.tooltip}</p>`)
-            .style('left', d3.event.pageX + 'px')
+            .style('left', d3.event.pageX - (tipWidth / 2) + 'px')
             .style('top', d3.event.pageY - 28 + 'px');
         }
       })
