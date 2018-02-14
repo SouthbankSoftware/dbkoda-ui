@@ -47,7 +47,8 @@ export type Profile = {
   shellVersion: string,
   initialMsg: string,
   mongoType: string,
-  bReconnect: boolean // Boolean variable to be set when profile is reconnected from profileList
+  bReconnect: boolean, // Boolean variable to be set when profile is reconnected from profileList
+  usePasswordStore: boolean,
 };
 
 export default class ProfileApi {
@@ -286,6 +287,11 @@ export default class ProfileApi {
       profileList.selectedProfile = profiles.get(res.id);
       if (data.bReconnect) {
         Broker.emit(EventType.RECONNECT_PROFILE_CREATED, profiles.get(res.id));
+        const { passwordStoreEnabled } = this.config.settings.passwordStoreEnabled;
+        const storeNeedsPassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(res.id) : false;
+        if (passwordStoreEnabled && storeNeedsPassword) {
+          this.api.passwordApi.removeMissingStoreId(res.id);
+        }
         editors.forEach((value, _) => {
           if (value.shellId == res.shellId) {
             // the default shell is using the same shell id as the profile

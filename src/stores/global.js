@@ -208,7 +208,8 @@ export default class Store {
   @observable
   password = {
     showDialog: false,
-    verifyPassword: false
+    verifyPassword: false,
+    missingProfiles: [],
   };
 
   @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
