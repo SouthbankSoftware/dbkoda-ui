@@ -337,7 +337,10 @@ export default class StackedRadialWidget extends React.Component<
     if (field.layer === 1) {
       field.field.select('text.completed').text(() => {
         if (this.props.widget.unit === '%') {
-          return sumOfItems + '%';
+          if (this.itemValues[field.data]) {
+            return this.itemValues[field.data] + '%';
+          }
+          return '0%';
         } else if (this.props.widget.unit === 'Us') {
           return sumOfItems + 'Us';
         }
@@ -345,13 +348,16 @@ export default class StackedRadialWidget extends React.Component<
       });
       field.field
         .select('text.completed')
-        .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+        .attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
     }
 
     if (this.props.widget.unit === '%' && field.layer === 2) {
       field.field.select('text.completed').text(() => {
         if (this.props.widget.unit === '%') {
-          return sumOfItems + '%';
+          if (this.itemValues[field.data]) {
+            return this.itemValues[field.data] + '%';
+          }
+          return '0%';
         } else if (this.props.widget.unit === 'Us') {
           return sumOfItems + 'Us';
         }
@@ -359,12 +365,12 @@ export default class StackedRadialWidget extends React.Component<
       });
       field.field
         .select('text.completed')
-        .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+        .attr('transform', 'translate(0, 14), scale(0.4, 0.4)');
     }
 
     field.field
       .select('title')
-      .attr('transform', 'translate(0, 50), scale(0.5, 0.5)');
+      .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
   }
 
   @action.bound
