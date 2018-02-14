@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-14T13:49:41+11:00
+ * @Last modified time: 2018-02-14T13:54:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -415,11 +415,29 @@ export default class RadialWidget extends React.Component<Object, Object> {
     const {widgetItemKeys, widgetDisplayNames, showRunQueue} = widget;
     const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latestValue: Object = values.length > 0 ? values[values.length - 1].value : {};
+    const key = items[0];
     console.log('get stat value ', latestValue);
-    const capitalize = str =>
-      str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    const highWaterMark = (previousValue, itemKey, itemKeyValues, i) => {
+      if (previousValue[key][`max${itemKey}`] === undefined) {
+        previousValue[key][`max${itemKey}`] = 0;
+      }
+      latestValue[key][`${itemKey}Delta`] = Math.abs(latestValue[key][itemKey] - previousValue[key][itemKey]);
+      if (latestValue[key][`${itemKey}Delta`] > previousValue[key][`max${itemKey}`]) {
+        latestValue[key][`max${itemKey}`] = latestValue[key][`${itemKey}Delta`];
+      } else {
+        latestValue[key][`max${itemKey}`] = previousValue[key][`max${itemKey}`];
+      }
+      itemKeyValues[itemKey] = {
+        percentage: latestValue[key][`max${itemKey}`] === 0 ? 0 : parseInt(latestValue[key][`${itemKey}Delta`] / latestValue[key][`max${itemKey}`] * 100, 10),
+        valuePerSec: bytesToSize(latestValue[key][`${itemKey}Delta`] / (latestValue[key].samplingRate / 1000))
+      };
+      this.text += `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].valuePerSec}/s`;
+      if (i < widgetItemKeys.length - 1) {
+        this.text += '\n';
+      }
+    };
     if (!_.isEmpty(latestValue)) {
-      const key = items[0];
       const v = latestValue[key];
       if (!v) {
         return [];
@@ -437,23 +455,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           return [];
         }
         widgetItemKeys.forEach((itemKey, i) => {
-          if (previousValue[key][`max${itemKey}`] === undefined) {
-            previousValue[key][`max${itemKey}`] = 0;
-          }
-          latestValue[key][`${itemKey}Delta`] = Math.abs(latestValue[key][itemKey] - previousValue[key][itemKey]);
-          if (latestValue[key][`${itemKey}Delta`] > previousValue[key][`max${itemKey}`]) {
-            latestValue[key][`max${itemKey}`] = latestValue[key][`${itemKey}Delta`];
-          } else {
-            latestValue[key][`max${itemKey}`] = previousValue[key][`max${itemKey}`];
-          }
-          itemKeyValues[itemKey] = {
-            percentage: latestValue[key][`max${itemKey}`] === 0 ? 0 : parseInt(latestValue[key][`${itemKey}Delta`] / latestValue[key][`max${itemKey}`] * 100, 10),
-            valuePerSec: bytesToSize(latestValue[key][`${itemKey}Delta`] / (latestValue[key].samplingRate / 1000))
-          };
-          this.text += `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].valuePerSec}/s`;
-          if (i < widgetItemKeys.length - 1) {
-            this.text += '\n';
-          }
+          highWaterMark.call(this, previousValue, itemKey, itemKeyValues, i);
         });
 
         const retValue = widgetItemKeys.map((itemKey, i) => {
