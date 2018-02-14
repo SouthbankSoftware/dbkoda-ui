@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-14T10:53:00+11:00
+ * @Last modified time: 2018-02-14T16:09:05+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -240,11 +240,17 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
 
       .on('mouseover', d => {
-        const wRatio = bVertical
-          ? this._chartEl.clientHeight / vbWidth
-          : this._chartEl.clientWidth / vbWidth;
+        const xScale = (bVertical) ? this._chartEl.clientWidth / vbHeight : this._chartEl.clientWidth / vbWidth;
+        const yScale = (bVertical) ? this._chartEl.clientHeight / vbWidth : this._chartEl.clientHeight / vbHeight;
+        const wRatio = (xScale < yScale) ? xScale : yScale;
         const w = d.sumValue / this._totalDivisor * chartWidth;
-        let x = w * wRatio + (bVertical ? 50 : 100);
+        let xDiff = ((bVertical ? this._chartEl.clientHeight : this._chartEl.clientWidth) - (chartWidth * wRatio)) / 2;
+        const yDiff = ((bVertical ? this._chartEl.clientWidth : this._chartEl.clientHeight) - (barHeight * wRatio)) / 2;
+        if (this._chartEl.previousSibling) {
+          xDiff += this._chartEl.previousSibling.clientWidth;
+        }
+        let x = w * wRatio + xDiff;
+        let y = yDiff - 20;
         this._tip
           .transition()
           .duration(200)
@@ -257,16 +263,18 @@ export default class ProgressBarWidget extends React.Component<Props> {
             '</span>'
         );
         const strWidth = String(d.key + ': ' + Math.floor(d.value)).length * 8;
-        x -= strWidth / 2;
+
         if (bVertical) {
+          y += (barHeight * wRatio * 2);
           this._tip
-            .style('left', '60px')
-            .style('bottom', x + 'px')
+            .style('left', y + 'px')
+            .style('bottom', (x - 20) + 'px')
             .style('width', strWidth + 10 + 'px');
         } else {
+          x -= strWidth / 2;
           this._tip
-            .style('left', x + 'px')
-            .style('top', '5px')
+            .style('left', (x - 10) + 'px')
+            .style('top', y + 'px')
             .style('width', strWidth + 10 + 'px');
         }
       })
