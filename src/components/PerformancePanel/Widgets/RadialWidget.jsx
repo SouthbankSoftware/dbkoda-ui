@@ -249,21 +249,21 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   componentDidMount() {
     this._onResize(RadialWidget.width, RadialWidget.height);
-    let first = true;
+    const {widget} = this.props;
+    const {widgetItemKeys} = widget;
+    this.itemValue = [];
+    if (widgetItemKeys) {
+      widgetItemKeys.forEach((w, i) => this.itemValue.push({index: i, percentage: 0, tooltip: '0%', text: '0%'}));
+    } else {
+      this.itemValue.push({index: 0, percentage: 0, tooltip: '0%', text: '0%'});
+    }
     setTimeout(() => {
-      this.itemValue = [{index: 0, percentage: 0, tooltip: '0%', text: '0%'}];
       this.text = '0%';
       this.buildWidget();
       autorun(() => {
         const {items, values} = this.props.widget;
         const newItemValue = this.getValueFromData(items, values);
         if (newItemValue.length > 0) {
-          if (this.itemValue.length !== newItemValue.length || first) {
-            first = false;
-            this.removeD3();
-            this.itemValue = newItemValue;
-            this.buildWidget();
-          }
           this.itemValue = newItemValue;
           this.update();
         }
@@ -275,6 +275,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
    * TODO: move to schema
    */
   getValueFromData(items: Array<string>, staleValues: Array<Object>): Array<Object> {
+    const {widget} = this.props;
+    const {widgetItemKeys, widgetDisplayNames} = widget;
     const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latestValue: Object = values.length > 0 ? values[values.length - 1].value : {};
     console.log('get stat value ', latestValue);
@@ -284,52 +286,48 @@ export default class RadialWidget extends React.Component<Object, Object> {
       if (!v) {
         return [];
       }
-      if (!_.isInteger(v) && _.keys(v).indexOf('download') >= 0 && _.keys(v).indexOf('upload') >= 0) {
+      let multipleKeys = false;
+      if (widgetItemKeys && widgetItemKeys.length > 1) {
+        const diff = _.difference(widgetItemKeys, _.keys(v));
+        multipleKeys = diff.length === 0;
+      }
+      if (!_.isInteger(v) && multipleKeys) {
         const previousValue: Object = values.length > 1 ? values[values.length - 2].value : {};
+        const itemKeyValues = {};
+        this.text = '';
         if (_.isEmpty(previousValue)) {
-          if (values.length > 0) {
-            values[0].value[items[0]].maxDownload = 0;
-            values[0].value[items[0]].maxUpload = 0;
-          }
           return [];
         }
-        latestValue[items[0]].downloadDelta = Math.abs(latestValue[items[0]].download - previousValue[items[0]].download);
-        latestValue[items[0]].uploadDelta = Math.abs(latestValue[items[0]].upload - previousValue[items[0]].upload);
-        if (latestValue[items[0]].downloadDelta > previousValue[items[0]].maxDownload) {
-          latestValue[items[0]].maxDownload = latestValue[items[0]].downloadDelta;
-        } else {
-          latestValue[items[0]].maxDownload = previousValue[items[0]].maxDownload;
-        }
-        if (latestValue[items[0]].uploadDelta > previousValue[items[0]].maxUpload) {
-          latestValue[items[0]].maxUpload = latestValue[items[0]].uploadDelta;
-        } else {
-          latestValue[items[0]].maxUpload = previousValue[items[0]].maxUpload;
-        }
-        const download: Object = {
-          percentage: latestValue[items[0]].maxDownload === 0 ? 0 : parseInt(latestValue[items[0]].downloadDelta / latestValue[items[0]].maxDownload * 100, 10),
-          valuePerSec: bytesToSize(latestValue[items[0]].downloadDelta / (latestValue[items[0]].samplingRate / 1000))
-        };
-        const upload: Object = {
-          percentage: latestValue[items[0]].maxUpload === 0 ? 0 : parseInt(latestValue[items[0]].uploadDelta / latestValue[items[0]].maxUpload * 100, 10),
-          valuePerSec: bytesToSize(latestValue[items[0]].uploadDelta / (latestValue[items[0]].samplingRate / 1000))
-        };
+        widgetItemKeys.forEach((itemKey, i) => {
+          if (previousValue[items[0]][`max${itemKey}`] === undefined) {
+            previousValue[items[0]][`max${itemKey}`] = 0;
+          }
+          latestValue[items[0]][`${itemKey}Delta`] = Math.abs(latestValue[items[0]][itemKey] - previousValue[items[0]][itemKey]);
+          if (latestValue[items[0]][`${itemKey}Delta`] > previousValue[items[0]][`max${itemKey}`]) {
+            latestValue[items[0]][`max${itemKey}`] = latestValue[items[0]][`${itemKey}Delta`];
+          } else {
+            latestValue[items[0]][`max${itemKey}`] = previousValue[items[0]][`max${itemKey}`];
+          }
+          itemKeyValues[itemKey] = {
+            percentage: latestValue[items[0]][`max${itemKey}`] === 0 ? 0 : parseInt(latestValue[items[0]][`${itemKey}Delta`] / latestValue[items[0]][`max${itemKey}`] * 100, 10),
+            valuePerSec: bytesToSize(latestValue[items[0]][`${itemKey}Delta`] / (latestValue[items[0]].samplingRate / 1000))
+          };
+          this.text += `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].valuePerSec}/s`;
+          if (i < widgetItemKeys.length - 1) {
+            this.text += '\n';
+          }
+        });
 
-        let downloadText = '';
-        let uploadText = '';
-        if (items[0] === 'network') {
-          downloadText = 'Download ';
-          uploadText = 'Upload ';
-        } else if (items[0] === 'disk') {
-          downloadText = 'In ';
-          uploadText = 'Out ';
-        }
-        this.text = `${downloadText}${download.valuePerSec}/s \n ${uploadText}${upload.valuePerSec}/s`;
-        return [
-          {index: 0, percentage: download.percentage, tooltip: `${capitalize(downloadText)} ${download.percentage}%`},
-          {index: 1, percentage: upload.percentage, tooltip: `${capitalize(uploadText)} ${upload.percentage}%`},
-        ];
+        const retValue = widgetItemKeys.map((itemKey, i) => {
+          return {index: i, percentage: itemKeyValues[itemKey].percentage, tooltip: `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].percentage}%`};
+        });
+        console.log('ret value', retValue);
+        return retValue;
       }
-      const fixedValue = _.isInteger(v) ? v : parseInt(v, 10);
+      let fixedValue = _.isInteger(v) ? 0 : parseInt(v, 10);
+      if (isNaN(fixedValue)) {
+        fixedValue = 0;
+      }
       this.text = fixedValue + '%';
       return [{
         index: 0,
