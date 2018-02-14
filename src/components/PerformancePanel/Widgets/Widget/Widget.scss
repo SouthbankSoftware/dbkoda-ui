@@ -27,8 +27,6 @@
 @import '../../../../styles/_defaultTheme.scss';
 $container-padding: 5px;
 $background-colour: #202020;
-$primary-colour: $defaultChartPanelText;
-$primary-colour-lighten-30: lighten($primary-colour, 30);
 
 .Widget {
   height: 100%;
@@ -72,11 +70,12 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
       position: absolute;
       margin: 0 0 0 0;
       b.title {
-        font-size: 20px;
-        color: $primary-colour-lighten-30;
+        font-size: 16px;
+        color: $brightFontColor;
         text-shadow: 0 -1px 0 $panelLeftBackground;
         white-space: nowrap;
-        opacity: 0.6;
+        opacity: 1;
+        margin-left: 6px;
       }
     }
   }
@@ -86,7 +85,7 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: lighten($panelLeftBackground, 30);
+    color: $brightFontColor;
     text-shadow: 0 -1px 0 $panelLeftBackground;
     white-space: nowrap;
     overflow: hidden;

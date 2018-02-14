@@ -1,7 +1,7 @@
 {
   "cols": 50,
-  "rows": 46,
-  "rowHeight": 26,
+  "rows": 50,
+  "rowHeight": 25,
   "leftWidth": 8,
   "midWidth": 20,
   "widgets": [
@@ -14,8 +14,8 @@
       "layout": {
         "x": 0,
         "y": 1,
-        "w": 5,
-        "h": 5,
+        "w": 6,
+        "h": 6,
         "static": true
       }
     },
@@ -28,8 +28,8 @@
       "layout": {
         "x": 0,
         "y": 12,
-        "w": 5,
-        "h": 5,
+        "w": 6,
+        "h": 6,
         "static": true
       }
     },
@@ -42,8 +42,8 @@
       "layout": {
         "x": 0,
         "y": 25,
-        "w": 5,
-        "h": 5,
+        "w": 6,
+        "h": 6,
         "static": true
       }
     },
@@ -55,9 +55,9 @@
       },
       "layout": {
         "x": 0,
-        "y": 37,
-        "w": 5,
-        "h": 5,
+        "y": 39,
+        "w": 6,
+        "h": 6,
         "static": true
       }
     },
@@ -70,7 +70,7 @@
       },
       "layout": {
         "x": 12,
-        "y": 6,
+        "y": 2,
         "w": 2,
         "h": 2,
         "static": true
@@ -85,8 +85,8 @@
         "unit": "bytes"
       },
       "layout": {
-        "x": 30,
-        "y": 6,
+        "x": 34,
+        "y": 2,
         "w": 2,
         "h": 2,
         "static": true
@@ -110,9 +110,9 @@
       },
       "layout": {
         "x": 9,
-        "y": 10,
+        "y": 6,
         "w": 15,
-        "h": 9,
+        "h": 12,
         "background": "light",
         "static": true
       }
@@ -122,9 +122,9 @@
       "items": ["connections_current"],
       "layout": {
         "x": 24,
-        "y": 10,
+        "y": 6,
         "w": 10,
-        "h": 9,
+        "h": 12,
         "background": "light",
         "static": true
       },
@@ -141,9 +141,9 @@
       "items": ["queue_readersActive", "queue_readersQueued"],
       "layout": {
         "x": 34,
-        "y": 10,
+        "y": 6,
         "w": 16,
-        "h": 2,
+        "h": 3,
         "background": "light",
         "static": true
       },
@@ -161,9 +161,9 @@
       "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
         "x": 34,
-        "y": 12,
+        "y": 9,
         "w": 16,
-        "h": 2,
+        "h": 3,
         "background": "light",
         "static": true
       },
@@ -179,9 +179,9 @@
       "items": ["queue_totalActive", "queue_totalQueued"],
       "layout": {
         "x": 34,
-        "y": 14,
+        "y": 12,
         "w": 16,
-        "h": 2,
+        "h": 3,
         "background": "light",
         "static": true
       },
@@ -202,7 +202,7 @@
       ],
       "layout": {
         "x": 34,
-        "y": 16,
+        "y": 15,
         "w": 16,
         "h": 3,
         "background": "light",
@@ -225,7 +225,7 @@
       },
       "layout": {
         "x": 12,
-        "y": 20,
+        "y": 19,
         "w": 2,
         "h": 2,
         "static": true
@@ -236,9 +236,9 @@
       "items": ["wtCache_maxBytes", "wtCache_currentBytes"],
       "layout": {
         "x": 9,
-        "y": 24,
+        "y": 23,
         "w": 15,
-        "h": 4,
+        "h": 5,
         "background": "light",
         "static": true
       },
@@ -257,7 +257,7 @@
         "x": 9,
         "y": 28,
         "w": 15,
-        "h": 4,
+        "h": 5,
         "background": "light",
         "static": true
       },
@@ -273,9 +273,9 @@
       "items": ["wtTransactions_readPct", "wtTransactions_writePct"],
       "layout": {
         "x": 24,
-        "y": 24,
+        "y": 23,
         "w": 11,
-        "h": 8,
+        "h": 10,
         "background": "light",
         "static": true
       },
@@ -291,9 +291,9 @@
       "items": ["wtCache_MissPct"],
       "layout": {
         "x": 35,
-        "y": 24,
+        "y": 23,
         "w": 15,
-        "h": 4,
+        "h": 5,
         "background": "light",
         "static": true
       },
@@ -313,7 +313,7 @@
         "x": 35,
         "y": 28,
         "w": 15,
-        "h": 4,
+        "h": 5,
         "background": "light",
         "static": true
       },
@@ -333,7 +333,7 @@
       },
       "layout": {
         "x": 12,
-        "y": 33,
+        "y": 34,
         "w": 2,
         "h": 2,
         "static": true
@@ -347,8 +347,8 @@
         "unit": "Us"
       },
       "layout": {
-        "x": 30,
-        "y": 33,
+        "x": 34,
+        "y": 34,
         "w": 2,
         "h": 2,
         "static": true
@@ -371,9 +371,9 @@
       },
       "layout": {
         "x": 9,
-        "y": 36,
+        "y": 38,
         "w": 14,
-        "h": 9,
+        "h": 12,
         "background": "light",
         "static": true
       }
@@ -383,9 +383,9 @@
       "items": ["wtIO_readLatencyMs"],
       "layout": {
         "x": 23,
-        "y": 36,
+        "y": 38,
         "w": 13,
-        "h": 3,
+        "h": 4,
         "background": "light",
         "static": true
       },
@@ -402,9 +402,9 @@
       "items": ["wtIO_writeLatencyMs"],
       "layout": {
         "x": 23,
-        "y": 39,
+        "y": 42,
         "w": 13,
-        "h": 3,
+        "h": 4,
         "background": "light",
         "static": true
       },
@@ -420,9 +420,9 @@
       "items": ["wtIO_logSyncLatencyMs"],
       "layout": {
         "x": 23,
-        "y": 42,
+        "y": 46,
         "w": 13,
-        "h": 3,
+        "h": 4,
         "background": "light",
         "static": true
       },
@@ -451,9 +451,9 @@
       },
       "layout": {
         "x": 36,
-        "y": 36,
+        "y": 38,
         "w": 14,
-        "h": 9,
+        "h": 12,
         "background": "light",
         "static": true
       }
