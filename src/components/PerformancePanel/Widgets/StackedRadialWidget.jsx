@@ -270,13 +270,18 @@ export default class StackedRadialWidget extends React.Component<
         .arc()
         .startAngle(0)
         .endAngle(d => {
+          let returnValue = 0;
           if (!this.maxValue) {
             this.maxValue = d.percentage;
           }
           if (this.props.widget.unit === '%') {
-            return d.percentage / 100 * StackedRadialWidget.PI;
+            returnValue = d.percentage / 100 * StackedRadialWidget.PI;
+            if (isNaN(returnValue)) return 0;
+            return returnValue;
           }
-          return d.percentage / this.maxValue * StackedRadialWidget.PI;
+          returnValue = d.percentage / this.maxValue * StackedRadialWidget.PI;
+          if (isNaN(returnValue)) return 0;
+          return returnValue;
         })
         .innerRadius(this._getInnerRadiusSize(data.index))
         .outerRadius(this._getOuterRadiusSize(data.index))

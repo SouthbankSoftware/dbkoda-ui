@@ -93,19 +93,30 @@ export default class Password {
       });
   }
 
+  removeStore() {
+    return featherClient()
+      .service('master-pass')
+      .remove()
+      .catch(error => {
+        NewToaster.show({
+          message: `Could not remove password store: ${error.message}`,
+          className: 'danger',
+          iconName: 'pt-icon-thumbs-down',
+        });
+      });
+  }
+
   hashPassword(masterPassword: string): string {
     // TODO Hash masterPassword
     return masterPassword;
   }
 
   removeMissingStoreId(profileId: string) {
-    console.log(`Remove ${profileId} from the store!`);
-    _.remove(this.store.password.missingProfiles, profileId);
+    _.remove(this.store.password.missingProfiles, id => { return id === profileId; });
   }
 
   isProfileMissingFromStore(profileId: string) {
-    console.log(`Is ${profileId} missing from the store?`);
     // Does the profileId exist in the missingProfiles array?
-    return (_.find(this.store.password.missingProfiles, profileId) > -1);
+    return (_.findIndex(this.store.password.missingProfiles, id => { return id === profileId; }) > -1);
   }
 }

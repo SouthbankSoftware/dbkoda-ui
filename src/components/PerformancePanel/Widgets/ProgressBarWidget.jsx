@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-14T16:09:05+11:00
+ * @Last modified time: 2018-02-15T14:34:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -219,7 +219,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
       .transition(t)
       .attr('width', d => {
-        return d.sumValue / this._totalDivisor * chartWidth;
+        const cWidth = d.sumValue / this._totalDivisor * chartWidth;
+        return (isNaN(cWidth) || cWidth < 0) ? 0 : cWidth;
       });
 
     bars
@@ -286,7 +287,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
       .transition(t)
       .attr('width', d => {
-        return d.sumValue / this._totalDivisor * chartWidth;
+        const cWidth = d.sumValue / this._totalDivisor * chartWidth;
+        return (isNaN(cWidth) || cWidth < 0) ? 0 : cWidth;
       });
 
     d3.select(this._chartTotalEl).text(Math.floor(this._chartLabel));
