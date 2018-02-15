@@ -151,7 +151,8 @@
         "description": "Number of connections current open",
         "showVerticalRule": true,
         "showVertical": true,
-        "useHighWaterMark": true
+        "useHighWaterMark": true,
+        "unit": ""
       }
     },
     {
@@ -231,7 +232,7 @@
         "title": "Time",
         "infoWidget": true,
         "description": "Time spent for different ops.",
-        "unit": "Us",
+        "unit": "/μs",
         "useHighWaterMark": true
       }
     },
@@ -266,7 +267,7 @@
         "title": "Wiredtiger Cach",
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger cache.",
-        "unit": "B",
+        "unit": "b",
         "showHorizontalRule": true,
         "useHighWaterMark": true
       }
@@ -286,7 +287,7 @@
         "title": "Log Buffer",
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger log Buffer",
-        "unit": "B",
+        "unit": "b",
         "useHighWaterMark": true
       }
     },
@@ -369,7 +370,7 @@
       "items": ["wtIO_cacheToDiskUsPs"],
       "extraState": {
         "description": "wiredTiger cache to disk time per second",
-        "unit": "Us"
+        "unit": "/μs"
       },
       "layout": {
         "x": 34,
@@ -391,7 +392,7 @@
         "infoWidget": true,
         "description":
           "wiredTiger disk to cahce, cache to disk and log sync time per second.",
-        "unit": "Us",
+        "unit": "/μs",
         "showLegend": true,
         "showVerticalRule": true
       },
@@ -420,7 +421,7 @@
         "infoWidget": true,
         "chartTitle": "Reads",
         "description": "Average time for a wiredTiger disk read",
-        "unit": "ms",
+        "unit": "/ms",
         "useHighWaterMark": true
       }
     },
@@ -438,7 +439,7 @@
       "extraState": {
         "chartTitle": "Writes",
         "description": "Average time for a wiredTiger disk write",
-        "unit": "ms",
+        "unit": "/ms",
         "useHighWaterMark": true
       }
     },
@@ -456,7 +457,7 @@
       "extraState": {
         "chartTitle": "Log Sync",
         "description": "Average time for a wiredTiger log sync",
-        "unit": "ms",
+        "unit": "/ms",
         "useHighWaterMark": true
       }
     },
@@ -473,7 +474,7 @@
         "title": "Storage",
         "infoWidget": true,
         "description": "Storage by database",
-        "unit": "Gb",
+        "unit": "gb",
         "showLegend": true,
         "showVerticalRule": true
       },
