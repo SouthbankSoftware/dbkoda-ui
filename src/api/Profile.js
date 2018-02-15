@@ -184,6 +184,7 @@ export default class ProfileApi {
       query.id = selectedProfile.id;
       query.shellId = selectedProfile.shellId;
     }
+    query.usePasswordStore = this.config.settings.passwordStoreEnabled;
 
     profileList.creatingNewProfile = true;
     const service = featherClient().service('/mongo-connection');
@@ -244,6 +245,11 @@ export default class ProfileApi {
           mongoType: res.mongoType
         });
       }
+      const { passwordStoreEnabled } = this.config.settings;
+      const storeNeedsPassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(res.id) : false;
+      if (passwordStoreEnabled && storeNeedsPassword) {
+        this.api.passwordApi.removeMissingStoreId(res.id);
+      }
       const profile: Profile = {
         id: res.id,
         shellId: res.shellId,
@@ -287,11 +293,6 @@ export default class ProfileApi {
       profileList.selectedProfile = profiles.get(res.id);
       if (data.bReconnect) {
         Broker.emit(EventType.RECONNECT_PROFILE_CREATED, profiles.get(res.id));
-        const { passwordStoreEnabled } = this.config.settings.passwordStoreEnabled;
-        const storeNeedsPassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(res.id) : false;
-        if (passwordStoreEnabled && storeNeedsPassword) {
-          this.api.passwordApi.removeMissingStoreId(res.id);
-        }
         editors.forEach((value, _) => {
           if (value.shellId == res.shellId) {
             // the default shell is using the same shell id as the profile
