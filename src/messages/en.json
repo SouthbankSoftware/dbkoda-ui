@@ -229,7 +229,13 @@
         "drillCmd": "Drill Path",
         "drillControllerCmd": "Drill Controller Path",
         "passwordStoreEnabled": "Password Store Enabled",
-        "applyButton": "Apply"
+        "applyButton": "Apply",
+        "remove_store_dialog": {
+          "question": "Are you sure you would like to disable the password store?",
+          "qualifier": "This will remove the store along with all stored passwords. These will need to be re-entered in order to connect.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        }
       },
       "tabMenu": {
         "closeTab": "Close Tab",
