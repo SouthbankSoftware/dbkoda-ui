@@ -36,10 +36,10 @@ import ReactResizeDetector from 'react-resize-detector';
 import { Tooltip, Position } from '@blueprintjs/core';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
-import InfoIcon from '../../../../styles/icons/explain-query-icon.svg';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import type { WidgetValue } from '~/api/Widget';
+import InfoIcon from '../../../../styles/icons/explain-query-icon.svg';
 import HistoryView from './HistoryView';
 import './Widget.scss';
 
