@@ -607,7 +607,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       >
         <div className="RadialWidget" ref={radial => (this.radial = radial)}>
           <div className="display-name">{displayName}</div>
-          <div className="radial-main"/>
+          <div className="radial-main" />
         </div>
       </Widget>
     );
