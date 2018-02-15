@@ -33,8 +33,10 @@ import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
 import _ from 'lodash';
 import ReactResizeDetector from 'react-resize-detector';
+import { Tooltip, Position } from '@blueprintjs/core';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
+import InfoIcon from '../../../../styles/icons/explain-query-icon.svg';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import type { WidgetValue } from '~/api/Widget';
@@ -126,7 +128,8 @@ export default class Widget extends React.Component<Props, State> {
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;
-    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue =
+      values.length > 0 ? values[values.length - 1].value : {};
 
     return (
       <div className="DefaultWidgetView">
@@ -165,6 +168,7 @@ export default class Widget extends React.Component<Props, State> {
         values,
         name,
         title,
+        infoWidget,
         description,
         showHorizontalRule,
         showVerticalRule
@@ -184,6 +188,17 @@ export default class Widget extends React.Component<Props, State> {
             {title && (
               <p className="header">
                 <b className="title">{title}</b>
+                {infoWidget && (
+                  <Tooltip
+                    portalClassName="StackedRadialWidgetTooltip"
+                    className="toolTip"
+                    content={<div>{description}</div>}
+                    useSmartPositioning
+                    position={Position.RIGHT_TOP}
+                  >
+                    <InfoIcon className="infoButton" width={20} height={20} />
+                  </Tooltip>
+                )}
               </p>
             )}
             <Popover2
@@ -199,13 +214,21 @@ export default class Widget extends React.Component<Props, State> {
                   description={description}
                 />
               }
-              target={<span className="children">{children || this._renderDefaultView()}</span>}
+              target={
+                <span className="children">
+                  {children || this._renderDefaultView()}
+                </span>
+              }
             />
             {showHorizontalRule && <hr />}
             {showVerticalRule && <hr className="vertical" />}
           </div>
         )}
-        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
+        <ReactResizeDetector
+          handleWidth
+          handleHeight
+          onResize={this._onResize}
+        />
       </div>
     );
   }

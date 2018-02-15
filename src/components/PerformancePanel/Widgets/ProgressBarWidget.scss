@@ -84,12 +84,15 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
       padding: 0px;
     }
     .chart-label {
+      font-weight: normal;
+      font-size: 10px;
       flex: 0 0 100px;
       padding: 0px;
       order: -1;
       text-align: right;
-      color: white;
+      color: $primary-colour-lighten-30;
       strong {
+        font-weight: normal;
         position: relative;
         top: 40%;
         transform: translate(-50%);
@@ -98,7 +101,7 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
     .chart-total {
       flex: 0 0 100px;
       padding: 0px;
-      color: white;
+      color: $primary-colour-lighten-30;
       span {
         position: relative;
         top: 40%;
