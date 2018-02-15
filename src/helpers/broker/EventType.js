@@ -81,5 +81,6 @@ export default {
   TERMINAL_ATTACHING: id => `terminal::attaching::${id}`,
   TERMINAL_ERROR: id => `terminal::error::${id}`,
   STATS_DATA: profileId => `stats::data::${profileId}`,
-  STATS_ERROR: profileId => `stats::error::${profileId}`
+  STATS_ERROR: profileId => `stats::error::${profileId}`,
+  MASTER_PASSWORD_REQUIRED: 'master-pass::password-required'
 };

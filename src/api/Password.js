@@ -30,6 +30,7 @@ import { action } from 'mobx';
 import _ from 'lodash';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
+import { Broker, EventType } from '../helpers/broker';
 
 export default class Password {
   store: *;
@@ -40,13 +41,16 @@ export default class Password {
     this.store = store;
     this.api = api;
     this.config = config;
-    console.log(config);
+    Broker.on(
+      EventType.MASTER_PASSWORD_REQUIRED,
+      this.showPasswordDialog.bind(this)
+    );
   }
 
   @action.bound
   showPasswordDialog(verify: boolean = false) {
     console.log('Show Password Dialog');
-    this.store.password.verifyPassword = verify;
+    this.store.password.verifyPassword = (verify === true);
     this.store.password.showDialog = true;
   }
 
