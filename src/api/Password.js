@@ -93,6 +93,19 @@ export default class Password {
       });
   }
 
+  removeStore() {
+    return featherClient()
+      .service('master-pass')
+      .remove()
+      .catch(error => {
+        NewToaster.show({
+          message: `Could not remove password store: ${error.message}`,
+          className: 'danger',
+          iconName: 'pt-icon-thumbs-down',
+        });
+      });
+  }
+
   hashPassword(masterPassword: string): string {
     // TODO Hash masterPassword
     return masterPassword;

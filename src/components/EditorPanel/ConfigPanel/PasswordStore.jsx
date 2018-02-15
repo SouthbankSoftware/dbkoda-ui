@@ -27,7 +27,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Checkbox } from '@blueprintjs/core';
+import { AnchorButton, Checkbox, Dialog, Intent } from '@blueprintjs/core';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -38,6 +38,9 @@ export default class PasswordStore extends React.Component {
   constructor(props) {
     super(props);
     this.onCheckboxToggle = this.onCheckboxToggle.bind(this);
+    this.closeRemoveDialog = this.closeRemoveDialog.bind(this);
+    this.removePasswordStore = this.removePasswordStore.bind(this);
+    this.state = { isConfirmOpen: false };
   }
 
   onCheckboxToggle(e) {
@@ -46,7 +49,21 @@ export default class PasswordStore extends React.Component {
     this.props.updateValue(fieldName, fieldValue);
     if (fieldValue === true) {
       this.props.api.passwordApi.showPasswordDialog(true);
+    } else {
+      // TODO Ask if the user is sure that they want to remove the store.
+      this.setState({ isConfirmOpen: true });
     }
+  }
+
+  closeRemoveDialog() {
+    this.setState({ isConfirmOpen: false });
+  }
+
+  removePasswordStore() {
+    this.props.api.passwordApi.removeStore()
+      .then(() => {
+        this.closeRemoveDialog();
+      });
   }
 
   render() {
@@ -60,6 +77,29 @@ export default class PasswordStore extends React.Component {
             checked={this.props.settings.passwordStoreEnabled}
             onChange={this.onCheckboxToggle}
            />
+          <Dialog
+            className="confirmDialog"
+            title="Remove Password Store?"
+            isOpen={this.state.isConfirmOpen}>
+            <div className="dialogContent">
+              {globalString('editor/config/remove_store_dialog/question')}
+              {globalString('editor/config/remove_store_dialog/qualifier')}
+            </div>
+            <div className="dialogButtons">
+              <AnchorButton
+                className="deleteButton"
+                intent={Intent.DANGER}
+                onClick={this.removePasswordStore}>
+                {globalString('editor/config/remove_store_dialog/confirm')}
+              </AnchorButton>
+              <AnchorButton
+                className="cancelButton"
+                intent={Intent.PRIMARY}
+                onClick={this.closeRemoveDialog}>
+                {globalString('editor/config/remove_store_dialog/cancel')}
+              </AnchorButton>
+            </div>
+          </Dialog>
         </div>
       </div>
     );
