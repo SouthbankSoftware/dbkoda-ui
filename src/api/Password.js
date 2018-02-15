@@ -99,13 +99,11 @@ export default class Password {
   }
 
   removeMissingStoreId(profileId: string) {
-    console.log(`Remove ${profileId} from the store!`);
-    _.remove(this.store.password.missingProfiles, profileId);
+    _.remove(this.store.password.missingProfiles, id => { return id === profileId; });
   }
 
   isProfileMissingFromStore(profileId: string) {
-    console.log(`Is ${profileId} missing from the store?`);
     // Does the profileId exist in the missingProfiles array?
-    return (_.find(this.store.password.missingProfiles, profileId) > -1);
+    return (_.findIndex(this.store.password.missingProfiles, id => { return id === profileId; }) > -1);
   }
 }
