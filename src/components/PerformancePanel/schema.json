@@ -27,7 +27,8 @@
       "items": ["cpu"],
       "extraState": {
         "displayName": "CPU",
-        "showRunQueue": true
+        "showRunQueue": true,
+        "queueItems": ["usage", "runQueue"]
       },
       "layout": {
         "x": 0,
@@ -443,7 +444,7 @@
     {
       "type": "StackedRadialWidget",
       "items": [
-        "operations_QueryPs",
+        "db_storage",
         "operations_CommandPs",
         "operations_InsertPs",
         "operations_UpdatePs",
