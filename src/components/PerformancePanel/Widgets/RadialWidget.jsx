@@ -26,8 +26,8 @@
 
 import * as d3 from 'd3';
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { autorun } from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {autorun} from 'mobx';
 import _ from 'lodash';
 
 import './RadialWidget.scss';
@@ -43,7 +43,7 @@ const bytesToSize = (bytes: number) => {
   return Math.round(bytes / (1024 ** i)) + '' + sizes[i];
 };
 
-@inject(({ store, api }, { widget }) => {
+@inject(({store, api}, {widget}) => {
   return {
     store,
     api,
@@ -68,13 +68,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   constructor(props: Object) {
     super(props);
-    this.state = { width: 512, height: 512, text: '' };
+    this.state = {width: 512, height: 512, text: ''};
     this.text = '';
   }
 
   dataset() {
     return this.itemValue.map(v => {
-      return { ...v };
+      return {...v};
     });
   }
 
@@ -191,16 +191,16 @@ export default class RadialWidget extends React.Component<Object, Object> {
         if (noOfNodes >= maxNodes) {
           if (i < noOfNodes % maxNodes) {
             const busyHigh = Math.ceil(noOfNodes / maxNodes);
-            arrData.push({ busy: '' + busyHigh });
+            arrData.push({busy: '' + busyHigh});
           } else {
             const busyLow = Math.floor(noOfNodes / maxNodes);
-            arrData.push({ busy: '' + busyLow });
+            arrData.push({busy: '' + busyLow});
           }
         } else {
-          arrData.push({ busy: '1' });
+          arrData.push({busy: '1'});
         }
       } else {
-        arrData.push({ busy: '0' });
+        arrData.push({busy: '0'});
       }
     }
 
@@ -249,15 +249,15 @@ export default class RadialWidget extends React.Component<Object, Object> {
         const tipData = `RunQueue ${noOfNodes}`;
         const tipWidth = String(tipData).length * 8;
         this.tooltip
-            .transition()
-            .duration(200)
-            .style('opacity', 0.9);
+          .transition()
+          .duration(200)
+          .style('opacity', 0.9);
         this.tooltip
           .html(`<p>RunQueue ${noOfNodes}</p>`)
           .style('left', d3.event.pageX - (tipWidth / 2) + 'px')
           .style('top', d3.event.pageY - 28 + 'px');
-        }
-      )
+      }
+    )
       .on('mouseout', () => {
         this.tooltip
           .transition()
@@ -320,11 +320,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
   update() {
     const that = this;
     this.field
-      .each(function(d) {
+      .each(function (d) {
         this._value = d.percentage;
       })
       .data(this.dataset.bind(this))
-      .each(function(d) {
+      .each(function (d) {
         d.previousValue = this._value;
       })
       .selectAll('.bg')
@@ -411,7 +411,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       this.text = '0%';
       this.buildWidget();
       autorun(() => {
-        const { items, values } = this.props.widget;
+        const {items, values} = this.props.widget;
         const newItemValue = this.getValueFromData(items, values);
         if (newItemValue.length > 0) {
           this.itemValue = newItemValue;
@@ -559,7 +559,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
    * TODO: move it to schema
    */
   projection = () => {
-    const { items, widgetItemKeys, widgetDisplayNames } = this.props.widget;
+    const {items, widgetItemKeys, widgetDisplayNames, showRunQueue} = this.props.widget;
     const key = items[0];
     if (widgetDisplayNames && widgetDisplayNames.length > 0) {
       const ret = {};
@@ -570,14 +570,25 @@ export default class RadialWidget extends React.Component<Object, Object> {
       });
       return ret;
     }
+    if (showRunQueue) {
+      return {
+        'usage': (v: Object) => {
+          console.log('usage:', v, key);
+          return v.value[key].usage;
+        },
+        'runQueue': (v: Object) => {
+          return v.value[key].runQueue;
+        },
+      };
+    }
     return {
       [key]: v => v.value[key]
     };
   };
 
   render() {
-    const { widget, widgetStyle } = this.props;
-    const { displayName } = widget;
+    const {widget, widgetStyle} = this.props;
+    const {displayName} = widget;
     // 1. render container for d3 in this render function
     // 2. draw d3 graph in a separate function after componentDidMount
     // 3. incremental redraw whenever data change happens

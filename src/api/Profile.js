@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-01-29T10:28:59+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T09:40:45+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -322,6 +322,8 @@ export default class ProfileApi {
         this.store.hideConnectionPane();
         Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
       }
+
+      this.api.startPerformancePanel(profile.id, false);
     }
     this.toasterCallback && this.toasterCallback('connectionSuccess');
   }

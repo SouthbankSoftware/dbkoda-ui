@@ -299,7 +299,9 @@
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
-        "showPerformancePanel": "Show Performance Panel",
+        "createPerformancePanel": "Create Performance Panel",
+        "openPerformancePanel": "Open Performance Panel",
+        "destroyPerformancePanel": "Destroy Performance Panel",
         "deleteProfile": "Delete Profile",
         "performance": "Performance Counter Test"
       },

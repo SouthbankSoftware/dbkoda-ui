@@ -29,9 +29,7 @@
       "type": "RadialWidget",
       "items": ["cpu"],
       "extraState": {
-        "title": "CPU",
-        "description": "CPU utilization on the host system.",
-        "infoWidget": true,
+        "displayName": "CPU",
         "showRunQueue": true
       },
       "layout": {
@@ -468,6 +466,7 @@
     {
       "type": "StackedRadialWidget",
       "items": [
+        "db_storage",
         "operations_QueryPs",
         "operations_CommandPs",
         "operations_InsertPs",
