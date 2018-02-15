@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-12T17:03:39+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T08:10:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,7 @@ import { Responsive } from 'react-grid-layout';
 import { Button } from '@blueprintjs/core';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import type { WidgetState } from '~/api/Widget';
 // $FlowFixMe
@@ -57,13 +58,11 @@ type Props = {
 };
 
 type State = {
-  layouts: *,
   rowHeight: number,
   cols: number,
   rows: number,
   midWidth: number,
-  leftWidth: number,
-  height: number
+  leftWidth: number
 };
 
 @inject(({ store: { performancePanels }, api }, { profileId }) => {
@@ -89,17 +88,41 @@ export default class PerformancePanel extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      layouts: {
-        desktop: []
-      },
       rowHeight: 25,
       cols: 50,
       rows: 50,
       leftWidth: 8,
-      midWidth: 24,
-      height: 0
+      midWidth: 24
     };
   }
+
+  /**
+   * When the panel mounts it will subscribe to the event broker for stats errors.
+   * It will also adds demo widgets and generates a layout.
+   */
+  componentDidMount() {
+    const { profileId } = this.props;
+
+    Broker.on(EventType.STATS_ERROR(profileId), this._onError);
+
+    this._init();
+  }
+
+  componentWillUnmount() {
+    const { profileId } = this.props;
+
+    Broker.off(EventType.STATS_ERROR(profileId), this._onError);
+  }
+
+  _init = action(() => {
+    const { profileId, store: { performancePanel }, api } = this.props;
+
+    if (performancePanel.status === performancePanelStatuses.created) {
+      this._addSchemaWidgets();
+      performancePanel.status = performancePanelStatuses.stopped;
+      api.startPerformancePanel(profileId);
+    }
+  });
 
   _addSchemaWidgets = action(() => {
     const { api, profileId, store: { performancePanel } } = this.props;
@@ -116,12 +139,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     if (schema && schema.widgets) {
       for (const widget of schema.widgets) {
-        const id = api.addWidget(
-          profileId,
-          widget.items,
-          widget.type,
-          widget.extraState ? widget.extraState : {}
-        );
+        const id = api.addWidget(profileId, widget.items, widget.type, widget.extraState || {});
         const layout = this._updateLayoutStyle({
           i: id,
           widgetStyle: {},
@@ -131,7 +149,6 @@ export default class PerformancePanel extends React.Component<Props, State> {
         performancePanel.layouts.set(id, observable(layout));
       }
     }
-    // TIP: easier to dev widget with dummy observable
   });
 
   _updateLayoutStyle(layout) {
@@ -164,24 +181,12 @@ export default class PerformancePanel extends React.Component<Props, State> {
       const Widget = widgetTypes[type];
 
       return (
-        <div
-          id={`widget-${id}`}
-          key={id}
-          data-grid={layout}
-          style={layout.gridElementStyle}
-        >
+        <div id={`widget-${id}`} key={id} data-grid={layout} style={layout.gridElementStyle}>
           <Widget widget={widget} widgetStyle={layout.widgetStyle} />
         </div>
       );
     }
   }
-
-  _removeSchemaWidgets = action(() => {
-    const { store } = this.props;
-
-    store.performancePanel.widgets = observable.shallowMap();
-    store.performancePanel.layouts = observable.shallowMap();
-  });
 
   _onError = payload => {
     const { error, level } = payload;
@@ -194,28 +199,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
     });
   };
 
-  /**
-   * When the panel mounts it will subscribe to the event broker for stats errors.
-   * It will also adds demo widgets and generates a layout.
-   */
-  componentDidMount() {
-    const { profileId, store: { performancePanel } } = this.props;
-
-    Broker.on(EventType.STATS_ERROR(profileId), this._onError);
-
-    if (performancePanel.widgets.size <= 0) {
-      this._addSchemaWidgets();
-    }
-  }
-
-  componentWillUnmount() {
-    const { profileId } = this.props;
-
-    Broker.off(EventType.STATS_ERROR(profileId), this._onError);
-
-    this._removeSchemaWidgets();
-  }
-  onLayoutChange = action((gridLayout: *, oldItem: *, newItem: *) => {
+  _onLayoutChange = action((gridLayout: *, oldItem: *, newItem: *) => {
     const { store: { performancePanel } } = this.props;
     const layout = performancePanel.layouts.get(oldItem.i);
     if (layout.background === 'light') {
@@ -231,20 +215,15 @@ export default class PerformancePanel extends React.Component<Props, State> {
   });
 
   render() {
-    const {
-      api,
-      profileId,
-      store: { performancePanel: { widgets } }
-    } = this.props;
-    const { layouts, rowHeight, rows, cols } = this.state;
+    const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
+    const { rowHeight, rows, cols } = this.state;
 
     return (
       <div className="PerformancePanel">
         <ResponsiveReactGridLayout
           className="GridLayout"
-          layouts={layouts}
-          onDragStop={this.onLayoutChange}
-          onResizeStop={this.onLayoutChange}
+          onDragStop={this._onLayoutChange}
+          onResizeStop={this._onLayoutChange}
           autoSize={false}
           compactType={null}
           preventCollision={false}
@@ -264,7 +243,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
         <Button
           className="close-button pt-button pt-intent-primary"
           text="X"
-          onClick={() => api.closePerformancePanel(profileId, true)}
+          onClick={() => api.closePerformancePanel(profileId)}
         />
       </div>
     );
