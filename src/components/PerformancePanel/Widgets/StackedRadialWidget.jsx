@@ -30,6 +30,7 @@ import { action, autorun } from 'mobx';
 import _ from 'lodash';
 import { Tooltip, Position } from '@blueprintjs/core';
 import './StackedRadialWidget.scss';
+import { convertUnits } from './Utils';
 import Widget from './Widget';
 import Legend from './Legend';
 
@@ -329,17 +330,8 @@ export default class StackedRadialWidget extends React.Component<
       this.maxValue = sumOfItems;
     }
 
-    // Reduce Radial to 3 figures max.
-    if (sumOfItems > 99999) {
-      sumOfItems =
-        // $FlowFixMe
-        Number.parseFloat((sumOfItems /= 1000000).toFixed(2)) + 'M';
-    } else if (sumOfItems > 999) {
-      // $FlowFixMe
-      sumOfItems = Number.parseFloat((sumOfItems /= 1000).toFixed(2)) + 'k';
-    }
-
     if (field.layer === 1) {
+      let lblValue;
       field.field.select('text.completed').text(() => {
         if (this.props.widget.unit === '%') {
           if (this.itemValues[field.data]) {
@@ -347,9 +339,11 @@ export default class StackedRadialWidget extends React.Component<
           }
           return '0%';
         } else if (this.props.widget.unit === 'Us') {
-          return sumOfItems + 'Us';
+          lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
+          return lblValue.value + ' ' + lblValue.unit;
         }
-        return sumOfItems + '/s';
+        lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
+        return lblValue.value + ' ' + lblValue.unit;
       });
       field.field
         .select('text.completed')
@@ -357,6 +351,7 @@ export default class StackedRadialWidget extends React.Component<
     }
 
     if (this.props.widget.unit === '%' && field.layer === 2) {
+      let lblValue;
       field.field.select('text.completed').text(() => {
         if (this.props.widget.unit === '%') {
           if (this.itemValues[field.data]) {
@@ -364,9 +359,12 @@ export default class StackedRadialWidget extends React.Component<
           }
           return '0%';
         } else if (this.props.widget.unit === 'Us') {
-          return sumOfItems + 'Us';
+          lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
+
+          return lblValue.value + ' ' + lblValue.unit;
         }
-        return sumOfItems + '/s';
+        lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
+        return lblValue.value + ' ' + lblValue.unit;
       });
       field.field
         .select('text.completed')
@@ -447,9 +445,9 @@ export default class StackedRadialWidget extends React.Component<
 
       this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
+
         const latestValue =
           values.length > 0 ? values[values.length - 1].value : {};
-
         if (items.length == 1) {
           console.error(
             'Please use Radial and not StackedRadial for single item metrics.'
@@ -532,7 +530,8 @@ export default class StackedRadialWidget extends React.Component<
                 />
               </div>
             }
-            position={Position.BOTTOM_LEFT}
+            position={Position.BOTTOM}
+            useSmartPositioning
           >
             <div className="radialWrapper" style={wrapperStyle}>
               <div className="display-name">{displayName}</div>

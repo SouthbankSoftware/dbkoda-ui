@@ -156,7 +156,8 @@ export default class Legend extends React.Component<Props> {
                     fontSize={fontSize}
                     fill={fontColor}
                   >
-                    {item}
+                    {item.match('_') && item.split('_')[1]}
+                    {!item.match('_') && item}
                   </text>{' '}
                 </svg>
               </div>

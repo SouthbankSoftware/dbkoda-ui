@@ -29,9 +29,11 @@
 import * as React from 'react';
 import { autorun } from 'mobx';
 import type { WidgetState } from '~/api/Widget';
+
 import * as d3 from 'd3';
 // $FlowFixMe
 import 'd3-selection-multi';
+import { convertUnits } from './Utils';
 import Widget from './Widget';
 import styles from './ArrowWidget.scss';
 
@@ -162,20 +164,12 @@ export default class ArrowWidget extends React.Component<Props> {
       // $FlowFixMe
       this.maxValue = data;
     }
-    let text = data;
 
-    // Reduce Text to 3 figures max.
-    if (text > 99999) {
-      text =
-        // $FlowFixMe
-        Number.parseFloat((text /= 1000000).toFixed(2)) + 'M';
-    } else if (text > 999) {
-      // $FlowFixMe
-      text = Number.parseFloat((data /= 1000).toFixed(2)) + 'k';
-    }
+    const lblValue = convertUnits(data, this.props.widget.unit, 3);
 
     // $FlowIssue
-    this._textEl && (this._textEl.innerHTML = text);
+    this._textEl &&
+      (this._textEl.innerHTML = lblValue.value + ' ' + lblValue.unit);
     this._valueRec &&
       this._valueRec.transition().attrs({
         y: -data / this.maxValue * height * 1000
