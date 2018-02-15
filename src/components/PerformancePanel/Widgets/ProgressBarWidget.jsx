@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-14T16:09:05+11:00
+ * @Last modified time: 2018-02-15T17:24:47+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,6 +31,7 @@ import type { WidgetState } from '~/api/Widget';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
 import Widget from './Widget';
+import { convertUnits } from './Utils';
 import './ProgressBarWidget.scss';
 
 const colors = ['#e0a767', '#a5a11b', '#58595b'];
@@ -59,6 +60,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
   _totalDivisor: *;
   _chartLabel: *;
   _bVertical: false;
+  _unit: *;
 
   _createD3View = (bVertical: boolean) => {
     if (bVertical) {
@@ -219,7 +221,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
       .transition(t)
       .attr('width', d => {
-        return d.sumValue / this._totalDivisor * chartWidth;
+        const cWidth = d.sumValue / this._totalDivisor * chartWidth;
+        return (isNaN(cWidth) || cWidth < 0) ? 0 : cWidth;
       });
 
     bars
@@ -255,14 +258,16 @@ export default class ProgressBarWidget extends React.Component<Props> {
           .transition()
           .duration(200)
           .style('opacity', 0.9);
+        let strTipValue = (String(d.value).indexOf('.') >= 0) ? Number(d.value).toFixed(2) : d.value;
+        strTipValue += ' ' + this._unit;
         this._tip.html(
           '<strong>' +
             d.key +
             ':</strong> <span style="color:red">' +
-            Math.round(d.value) +
+            strTipValue +
             '</span>'
         );
-        const strWidth = String(d.key + ': ' + Math.floor(d.value)).length * 8;
+        const strWidth = String(d.key + ': ' + strTipValue).length * 8;
 
         if (bVertical) {
           y += (barHeight * wRatio * 2);
@@ -286,10 +291,12 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
       .transition(t)
       .attr('width', d => {
-        return d.sumValue / this._totalDivisor * chartWidth;
+        const cWidth = d.sumValue / this._totalDivisor * chartWidth;
+        return (isNaN(cWidth) || cWidth < 0) ? 0 : cWidth;
       });
 
-    d3.select(this._chartTotalEl).text(Math.floor(this._chartLabel));
+    const lblValue = convertUnits(this._chartLabel, this._unit, 3);
+    d3.select(this._chartTotalEl).text(lblValue.value + ' ' + lblValue.unit);
   };
 
   componentDidMount() {
@@ -299,11 +306,12 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this._createD3View(bVertical);
 
       this._autorunDisposer = autorun(() => {
-        const { values } = this.props.widget;
+        const { values, unit } = this.props.widget;
         const latestValue =
           values.length > 0 ? values[values.length - 1].value : {};
 
         // const testData = {'item-001': 15, 'item-002': 130};
+        this._unit = unit;
         this._updateD3ViewData(latestValue);
       });
     }, 200);
