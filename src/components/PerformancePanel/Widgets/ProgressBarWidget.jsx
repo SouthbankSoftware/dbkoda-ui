@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-16T12:20:43+11:00
+ * @Last modified time: 2018-02-16T14:00:33+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -382,6 +382,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
                   metrics={this.props.widget.items}
                   getValues={() => {
                     return this._itemValues;
+                  }}
+                  getUnit={() => {
+                    return this._unit;
                   }}
                   onRef={toolTipLegend => {
                     this.toolTipLegend = toolTipLegend;
