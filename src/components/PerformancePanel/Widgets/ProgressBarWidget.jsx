@@ -34,7 +34,7 @@ import Widget from './Widget';
 import { convertUnits } from './Utils';
 import './ProgressBarWidget.scss';
 
-const colors = ['#e0a767', '#a5a11b', '#58595b'];
+const colors = ['#783da8', '#b188c3', '#5e1533'];
 const BAR_CLIPPATH_ID = 'barCP';
 const vbWidth = 500;
 const vbHeight = 100;
@@ -222,7 +222,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       .transition(t)
       .attr('width', d => {
         const cWidth = d.sumValue / this._totalDivisor * chartWidth;
-        return (isNaN(cWidth) || cWidth < 0) ? 0 : cWidth;
+        return isNaN(cWidth) || cWidth < 0 ? 0 : cWidth;
       });
 
     bars
@@ -243,12 +243,26 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
 
       .on('mouseover', d => {
-        const xScale = (bVertical) ? this._chartEl.clientWidth / vbHeight : this._chartEl.clientWidth / vbWidth;
-        const yScale = (bVertical) ? this._chartEl.clientHeight / vbWidth : this._chartEl.clientHeight / vbHeight;
-        const wRatio = (xScale < yScale) ? xScale : yScale;
+        const xScale = bVertical
+          ? this._chartEl.clientWidth / vbHeight
+          : this._chartEl.clientWidth / vbWidth;
+        const yScale = bVertical
+          ? this._chartEl.clientHeight / vbWidth
+          : this._chartEl.clientHeight / vbHeight;
+        const wRatio = xScale < yScale ? xScale : yScale;
         const w = d.sumValue / this._totalDivisor * chartWidth;
-        let xDiff = ((bVertical ? this._chartEl.clientHeight : this._chartEl.clientWidth) - (chartWidth * wRatio)) / 2;
-        const yDiff = ((bVertical ? this._chartEl.clientWidth : this._chartEl.clientHeight) - (barHeight * wRatio)) / 2;
+        let xDiff =
+          ((bVertical
+            ? this._chartEl.clientHeight
+            : this._chartEl.clientWidth) -
+            chartWidth * wRatio) /
+          2;
+        const yDiff =
+          ((bVertical
+            ? this._chartEl.clientWidth
+            : this._chartEl.clientHeight) -
+            barHeight * wRatio) /
+          2;
         if (this._chartEl.previousSibling) {
           xDiff += this._chartEl.previousSibling.clientWidth;
         }
@@ -258,7 +272,10 @@ export default class ProgressBarWidget extends React.Component<Props> {
           .transition()
           .duration(200)
           .style('opacity', 0.9);
-        let strTipValue = (String(d.value).indexOf('.') >= 0) ? Number(d.value).toFixed(2) : d.value;
+        let strTipValue =
+          String(d.value).indexOf('.') >= 0
+            ? Number(d.value).toFixed(2)
+            : d.value;
         strTipValue += ' ' + this._unit;
         this._tip.html(
           '<strong>' +
@@ -270,15 +287,15 @@ export default class ProgressBarWidget extends React.Component<Props> {
         const strWidth = String(d.key + ': ' + strTipValue).length * 8;
 
         if (bVertical) {
-          y += (barHeight * wRatio * 2);
+          y += barHeight * wRatio * 2;
           this._tip
             .style('left', y + 'px')
-            .style('bottom', (x - 20) + 'px')
+            .style('bottom', x - 20 + 'px')
             .style('width', strWidth + 10 + 'px');
         } else {
           x -= strWidth / 2;
           this._tip
-            .style('left', (x - 10) + 'px')
+            .style('left', x - 10 + 'px')
             .style('top', y + 'px')
             .style('width', strWidth + 10 + 'px');
         }
@@ -292,7 +309,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       .transition(t)
       .attr('width', d => {
         const cWidth = d.sumValue / this._totalDivisor * chartWidth;
-        return (isNaN(cWidth) || cWidth < 0) ? 0 : cWidth;
+        return isNaN(cWidth) || cWidth < 0 ? 0 : cWidth;
       });
 
     const lblValue = convertUnits(this._chartLabel, this._unit, 3);
