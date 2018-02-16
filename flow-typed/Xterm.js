@@ -3,7 +3,7 @@
  * @Date:   2017-11-08T15:20:34+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T13:40:20+11:00
+ * @Last modified time: 2018-02-16T13:53:47+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -41,8 +41,8 @@ declare module 'xterm' {
     ): string;
   }
 
-  declare class Xterm {
-    constructor(options: {}): Xterm;
+  declare export class Terminal {
+    constructor(options: {}): Terminal;
 
     cols: number;
     rows: number;
@@ -62,11 +62,10 @@ declare module 'xterm' {
     fit(): void;
     focus(): void;
     write(data: string): void;
+    static applyAddon(addon: *): void;
 
     charMeasure: CharMeasure;
   }
-
-  declare export default { terminal: typeof Xterm }
 }
 
 declare module 'xterm/lib/addons/attach/attach' {

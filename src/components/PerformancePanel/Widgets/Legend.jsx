@@ -2,8 +2,8 @@
  * @flow
  *
  * Created by Mike on 05/2/18.
- * @Last modified by:   Mike
- * @Last modified time: 2018-06-02T17:15:23+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-16T14:53:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,7 +36,8 @@ type Props = {
   getValues: () => any,
   showTotal: boolean,
   showValues: boolean,
-  showDots: boolean
+  showDots: boolean,
+  getUnit: () => string
 };
 
 @inject(({ store, api }, { widget }) => {
@@ -74,11 +75,15 @@ export default class Legend extends React.Component<Props> {
       items: this.props.metrics,
       values: [],
       width: 100,
-      height: 100
+      height: 100,
+      unit: ''
     };
 
     if (this.props.getValues && this.props.getValues()) {
       this.state.values = this.props.getValues();
+    }
+    if (this.props.getUnit && this.props.getUnit()) {
+      this.state.unit = this.props.getUnit();
     }
     this.setValues = this.setValues.bind(this);
   }
@@ -136,8 +141,10 @@ export default class Legend extends React.Component<Props> {
           const style = { fill: Legend.colors[count] };
           let value = 'Fetching...';
           if (this.state.values[item] || this.state.values[item] === 0) {
-            value = parseInt(this.state.values[item], 10);
+            value = parseFloat(Number(this.state.values[item]).toFixed(2));
+            value = value + ' ' + this.state.unit;
             total += this.state.values[item];
+            total = parseFloat(Number(total).toFixed(2));
           }
 
           return (
@@ -200,7 +207,7 @@ export default class Legend extends React.Component<Props> {
                 fontSize={fontSize}
                 fill={totalValueFontColor}
               >
-                {total}
+                {total + ' ' + this.state.unit}
               </text>{' '}
             </svg>
           </div>
