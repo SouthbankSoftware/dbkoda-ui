@@ -84,7 +84,7 @@ export default class PasswordDialog extends React.Component<Props, State> {
               onChange={event => {
                   this.setState({
                     passPhraseVerified: (
-                      this.props.verifyPassword &&
+                      !this.props.verifyPassword ||
                       event.target.value === this.state.passPhrase
                     )
                   });
