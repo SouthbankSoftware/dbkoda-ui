@@ -341,7 +341,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .selectAll('.bg')
       .on('mouseover', d => {
         const data = that.dataset()[d.index];
-        if (data.tooltip) {
+        if (data && data.tooltip) {
           const tipWidth = String(data.tooltip).length * 8;
           that.tooltip
             .transition()
@@ -469,34 +469,34 @@ export default class RadialWidget extends React.Component<Object, Object> {
     console.log('get stat value ', latestValue);
     const capitalize = str =>
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    const highWaterMark = (previousValue, itemKey, itemKeyValues, i) => {
+    const highWaterMark = (previousValue, itemKey, itemKeyValues, i, latest) => {
       if (previousValue[key][`max${itemKey}`] === undefined) {
         previousValue[key][`max${itemKey}`] = 0;
       }
-      latestValue[key][`${itemKey}Delta`] = Math.abs(
-        latestValue[key][itemKey] - previousValue[key][itemKey]
+      latest[key][`${itemKey}Delta`] = Math.abs(
+        latest[key][itemKey] - previousValue[key][itemKey]
       );
       if (
-        latestValue[key][`${itemKey}Delta`] >
+        latest[key][`${itemKey}Delta`] >
         previousValue[key][`max${itemKey}`]
       ) {
-        latestValue[key][`max${itemKey}`] = latestValue[key][`${itemKey}Delta`];
+        latest[key][`max${itemKey}`] = latest[key][`${itemKey}Delta`];
       } else {
-        latestValue[key][`max${itemKey}`] = previousValue[key][`max${itemKey}`];
+        latest[key][`max${itemKey}`] = previousValue[key][`max${itemKey}`];
       }
       itemKeyValues[itemKey] = {
         percentage:
-          latestValue[key][`max${itemKey}`] === 0
+          latest[key][`max${itemKey}`] === 0
             ? 0
             : parseInt(
-            latestValue[key][`${itemKey}Delta`] /
-            latestValue[key][`max${itemKey}`] *
+            latest[key][`${itemKey}Delta`] /
+            latest[key][`max${itemKey}`] *
             100,
             10
             ),
         valuePerSec: bytesToSize(
-          latestValue[key][`${itemKey}Delta`] /
-          (latestValue[key].samplingRate / 1000)
+          latest[key][`${itemKey}Delta`] /
+          (latest[key].samplingRate / 1000)
         )
       };
       this.text += `${widgetDisplayNames[i]} ${
@@ -526,7 +526,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
             return [];
           }
           widgetItemKeys.forEach((itemKey, i) => {
-            highWaterMark(previousValue, itemKey, itemKeyValues, i);
+            highWaterMark(previousValue, itemKey, itemKeyValues, i, latestValue);
           });
         } else {
           widgetItemKeys.forEach((itemKey, i) => {
@@ -560,6 +560,18 @@ export default class RadialWidget extends React.Component<Object, Object> {
             tooltip: `${capitalize(key)} ${fixedValue} %`
           }
         ];
+      } else if (useHighWaterMark) {
+        if (_.isEmpty(previousValue)) {
+          return [];
+        }
+        const itemKeyValues = {};
+        highWaterMark(previousValue, 'download', itemKeyValues, 0, latestValue);
+        return [{
+          index: 0,
+          percentage: itemKeyValues.download.percentage,
+          tooltip: `${capitalize(key)} ${itemKeyValues.download.percentage}%`,
+          text: `In ${itemKeyValues.download.valuePerSec}/s`
+        }];
       }
       let fixedValue = _.isInteger(v) ? 0 : parseInt(v, 10);
       if (isNaN(fixedValue)) {
