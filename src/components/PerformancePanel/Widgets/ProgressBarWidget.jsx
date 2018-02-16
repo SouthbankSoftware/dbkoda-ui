@@ -36,14 +36,7 @@ import Widget from './Widget';
 import { convertUnits } from './Utils';
 import './ProgressBarWidget.scss';
 
-const colors = [
-  '#A27EB7',
-  '#DC5D3E',
-  '#39B160',
-  '#643798',
-  '#2E547A',
-  '#3333cc'
-];
+let colors = ['#A27EB7', '#DC5D3E', '#39B160', '#643798', '#2E547A', '#3333cc'];
 const BAR_CLIPPATH_ID = 'barCP';
 const vbWidth = 500;
 const vbHeight = 50;
@@ -156,6 +149,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
   };
 
   _updateD3ViewData = (data: Object) => {
+    if (this.props.widget.colorList) {
+      colors = this.props.widget.colorList;
+    }
     const bVertical = this.props.widget.showVertical === true;
     const sData = Object.keys(data); // .sort(); // sort according to keys to keep the color same
     let arrData = [];
@@ -365,10 +361,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     }
 
     return (
-      <Widget
-        widget={widget}
-        widgetStyle={widgetStyle}
-      >
+      <Widget widget={widget} widgetStyle={widgetStyle}>
         <div className="ProgressBarWidget">
           <Tooltip
             portalClassName="StackedRadialWidgetTooltip"
@@ -401,7 +394,10 @@ export default class ProgressBarWidget extends React.Component<Props> {
                   <strong>{chartTitle}</strong>
                 </div>
               )}
-              <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
+              <svg
+                className="chart"
+                ref={_chartEl => (this._chartEl = _chartEl)}
+              />
               <div className="chart-total">
                 <span
                   ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}

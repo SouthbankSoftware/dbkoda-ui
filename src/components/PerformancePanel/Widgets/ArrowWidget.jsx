@@ -173,7 +173,7 @@ export default class ArrowWidget extends React.Component<Props> {
       (this._textEl.innerHTML = lblValue.value + ' ' + lblValue.unit);
     this._valueRec &&
       this._valueRec.transition().attrs({
-        y: -data / this.maxValue * height * 1000
+        y: -data / this.maxValue * height
       });
   };
 
