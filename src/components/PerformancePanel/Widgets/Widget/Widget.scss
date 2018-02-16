@@ -55,6 +55,16 @@ $background-colour: #202020;
     height: 75%;
     top: 12.5%;
   }
+  hr.verticalLeft {
+    border: none;
+    border-right: 1px solid #383838;
+    height: 100vh;
+    width: 1px;
+    left: 0px;
+    height: 75%;
+    top: 12.5%;
+    margin-left: 0px;
+  }
   > span,
   .DefaultWidgetView,
   .children,
@@ -71,6 +81,7 @@ $background-colour: #202020;
       flex-direction: row;
       position: absolute;
       margin: 0 0 0 0;
+      width: 100%;
       b.title {
         font-size: 16px;
         color: $brightFontColor;
@@ -95,6 +106,35 @@ $background-colour: #202020;
           width: 8px;
           height: 8px;
           fill: #202020;
+        }
+      }
+      span.alarm {
+        border: none;
+        z-index: 100;
+        opacity: 0.6;
+        margin-top: 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-left: auto;
+        margin-right: 2px;
+        top: -2px;
+        background-color: none;
+        svg.alarm {
+          position: absolute;
+          float: right;
+          width: 10px;
+          height: 10px;
+          fill: #202020;
+        }
+        svg.red {
+          fill: $colourEight;
+        }
+        svg.green {
+          fill: $colourFourteen;
+        }
+        svg.yellow {
+          fill: $colourThirteen;
         }
       }
     }

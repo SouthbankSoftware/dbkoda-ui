@@ -82,6 +82,14 @@ export const convertTime = (value, unit, length) => {
         result.unit = '/d';
         result.value = timescale(value, 'h', 'd').toFixed(2);
         break;
+      case 'μs/s':
+        result.unit = 'ms/s';
+        result.value = timescale(value, 'μs', 'ms').toFixed(2);
+        break;
+      case 'ms/s':
+        result.unit = 's/s';
+        result.value = timescale(value, 'ms', 's').toFixed(2);
+        break;
       default: {
         console.error('"' + unit + '" is not a valid unit of time.');
         return result;
@@ -89,7 +97,8 @@ export const convertTime = (value, unit, length) => {
     }
     return convertTime(result.value, result.unit, length);
   }
-  result.value = (String(value).indexOf('.') >= 0) ? Number(value).toFixed(2) : value;
+  result.value =
+    String(value).indexOf('.') >= 0 ? Number(value).toFixed(2) : value;
   return result;
 };
 
@@ -130,14 +139,14 @@ export const convertBytes = (value, unit, length) => {
 };
 
 export const convertUnits = (value, unit, length) => {
-  if ('/μs|/us|/ms|/s|/m|/h'.indexOf(unit) >= 0) {
+  if ('ms/s|μs/s|/μs|/us|/ms|/s|/m|/h'.indexOf(unit) >= 0) {
     return convertTime(value, unit, length);
   } else if ('b|kb|mb|gb|tb|pb|eb'.indexOf(unit) >= 0) {
     return convertBytes(value, unit, length);
   }
-  console.log('Unknown unit is provided for conversion!!!');
+  console.log('Unknown unit is provided for conversion (unit=', unit, ').');
   return {
-    value: (String(value).indexOf('.') >= 0) ? Number(value).toFixed(2) : value,
+    value: String(value).indexOf('.') >= 0 ? Number(value).toFixed(2) : value,
     unit
   };
 };

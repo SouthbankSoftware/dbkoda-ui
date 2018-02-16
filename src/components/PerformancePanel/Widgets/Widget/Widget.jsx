@@ -40,6 +40,8 @@ import { Popover2 } from '@blueprintjs/labs';
 import { Broker, EventType } from '~/helpers/broker';
 import type { WidgetValue } from '~/api/Widget';
 import InfoIcon from '../../../../styles/icons/explain-query-icon.svg';
+import ErrorIcon from '../../../../styles/icons/error-icon.svg';
+import TickIcon from '../../../../styles/icons/tick-icon.svg';
 import HistoryView from './HistoryView';
 import './Widget.scss';
 
@@ -157,6 +159,16 @@ export default class Widget extends React.Component<Props, State> {
     );
   }
 
+  @action.bound
+  getAlarmStatus(alarm: any) {
+    // @TODO -> Alarming logic.
+    console.debug('Fetching Alarms for row: ', alarm);
+    return {
+      status: 'green',
+      alarmList: 'No current alarms.'
+    };
+  }
+
   render() {
     const {
       children,
@@ -171,13 +183,18 @@ export default class Widget extends React.Component<Props, State> {
         infoWidget,
         description,
         showHorizontalRule,
-        showVerticalRule
+        showVerticalRule,
+        showVerticalRuleLeft,
+        showAlarms
       },
       className,
       widgetStyle
     } = this.props;
     const { projection } = this.state;
-
+    let alarmStatus;
+    if (showAlarms) {
+      alarmStatus = this.getAlarmStatus(showAlarms);
+    }
     return (
       // $FlowFixMe
       <div className={className + ' Widget' || 'Widget'} style={widgetStyle}>
@@ -197,6 +214,46 @@ export default class Widget extends React.Component<Props, State> {
                     position={Position.RIGHT_TOP}
                   >
                     <InfoIcon className="infoButton" width={20} height={20} />
+                  </Tooltip>
+                )}
+                {showAlarms && (
+                  <Tooltip
+                    portalClassName="StackedRadialWidgetTooltip"
+                    className={
+                      // $FlowIssue
+                      'tooltip alarm ' + alarmStatus.status
+                    }
+                    content={
+                      <div>
+                        {
+                          // $FlowIssue
+                          alarmStatus.alarmList
+                        }
+                      </div>
+                    }
+                    useSmartPositioning
+                    position={Position.RIGHT_TOP}
+                  >
+                    {// $FlowIssue
+                    alarmStatus.status === 'green' && (
+                      <TickIcon
+                        className="alarm green"
+                        width={20}
+                        height={20}
+                      />
+                    )}
+                    {// $FlowIssue
+                    alarmStatus.status === 'yellow' && (
+                      <ErrorIcon
+                        className="alarm yellow"
+                        width={20}
+                        height={20}
+                      />
+                    )}
+                    {// $FlowIssue
+                    alarmStatus.status === 'red' && (
+                      <ErrorIcon className="alarm red" width={20} height={20} />
+                    )}
                   </Tooltip>
                 )}
               </p>
@@ -220,6 +277,7 @@ export default class Widget extends React.Component<Props, State> {
                 </span>
               }
             />
+            {showVerticalRuleLeft && <hr className="verticalLeft" />}
             {showHorizontalRule && <hr />}
             {showVerticalRule && <hr className="vertical" />}
           </div>
