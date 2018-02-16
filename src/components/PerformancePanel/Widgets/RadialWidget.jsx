@@ -378,7 +378,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
         for (let i = 0; i < texts.length; i += 1) {
           const t = texts[i];
           let txtColor = 'white';
-          if (i == 1) {
+          if (i === 1) {
             const idxColor = Math.ceil(parseInt(t, 10) / 20);
             txtColor = RadialWidget.runQueueColors[idxColor];
           }
@@ -391,7 +391,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
             .text(t);
         }
       } else {
-        this.field.select('text.completed').text(d => d.text);
+        this.field.selectAll('text.completed').remove();
+        this.field.append('text')
+          .attr('class', 'completed')
+          .attr('transform', 'translate(0, 5)').text(d => d.text);
       }
     } else if (this.itemValue.length >= 1) {
       this.field.selectAll('text.completed').remove();
@@ -437,6 +440,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
         const {items, values} = this.props.widget;
         const newItemValue = this.getValueFromData(items, values);
         if (newItemValue.length > 0) {
+          if (newItemValue.length !== this.itemValue.length) {
+            this.removeD3();
+            this.itemValue = newItemValue;
+            this.buildWidget();
+          }
           this.itemValue = newItemValue;
           this.update();
           if (_.keys(this.itemValue[0]).indexOf('runQueue') >= 0) {
