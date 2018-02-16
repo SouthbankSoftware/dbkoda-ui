@@ -80,7 +80,7 @@
       "items": ["network_bytesOutPs"],
       "extraState": {
         "description": "Data written to network from Mongo Server",
-        "unit": "bytes"
+        "unit": "b"
       },
       "layout": {
         "x": 12,
@@ -96,7 +96,7 @@
       "extraState": {
         "rotate": 180,
         "description": "Data read into Mongo Server from Network",
-        "unit": "bytes"
+        "unit": "b"
       },
       "layout": {
         "x": 34,
@@ -171,6 +171,7 @@
         "infoWidget": true,
         "chartTitle": "Reads",
         "useHighWaterMark": true,
+        "showAlarms": "CPU",
         "unit": "/s"
       }
     },
@@ -230,7 +231,7 @@
         "title": "Time",
         "infoWidget": true,
         "description": "Time spent for different ops.",
-        "unit": "/μs",
+        "unit": "μs/s",
         "useHighWaterMark": true
       }
     },
@@ -262,7 +263,7 @@
         "static": true
       },
       "extraState": {
-        "title": "Wiredtiger Cach",
+        "title": "Wiredtiger Cache",
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger cache.",
         "unit": "b",
@@ -303,6 +304,8 @@
       "extraState": {
         "title": "Transactions",
         "infoWidget": true,
+        "showVerticalRuleLeft": true,
+        "showVerticalRule": true,
         "description":
           "Percentage of wiredTiger read/write transactions in use.",
         "unit": "%"
@@ -326,6 +329,7 @@
           "Percentage of time a needed page is not found in wiredTiger cache",
         "unit": "%",
         "showHorizontalRule": true,
+        "showAlarms": "Memory",
         "useHighWaterMark": true
       }
     },
@@ -344,7 +348,7 @@
         "title": "Evictions",
         "infoWidget": true,
         "description": "Pages evicted from the wiredTiger cache per second",
-        "unit": "Ops/s",
+        "unit": "/s",
         "useHighWaterMark": true
       }
     },
@@ -353,7 +357,7 @@
       "items": ["wtIO_diskToCacheUsPs"],
       "extraState": {
         "description": "wiredTiger disk to cache IO rate",
-        "unit": "Ops/s"
+        "unit": "μs/s"
       },
       "layout": {
         "x": 12,
@@ -368,7 +372,7 @@
       "items": ["wtIO_cacheToDiskUsPs"],
       "extraState": {
         "description": "wiredTiger cache to disk time per second",
-        "unit": "/μs"
+        "unit": "μs/s"
       },
       "layout": {
         "x": 34,
@@ -386,11 +390,11 @@
         "wtIO_logSyncTimeUsPs"
       ],
       "extraState": {
-        "title": "Disc",
+        "title": "Disk",
         "infoWidget": true,
         "description":
           "wiredTiger disk to cahce, cache to disk and log sync time per second.",
-        "unit": "/μs",
+        "unit": "μs/s",
         "showLegend": true,
         "showVerticalRule": true
       },
@@ -461,21 +465,15 @@
     },
     {
       "type": "StackedRadialWidget",
-      "items": [
-        "db_storage",
-        "operations_QueryPs",
-        "operations_CommandPs",
-        "operations_InsertPs",
-        "operations_UpdatePs",
-        "operations_DeletePs"
-      ],
+      "items": ["db_storage"],
       "extraState": {
         "title": "Storage",
         "infoWidget": true,
         "description": "Storage by database",
         "unit": "gb",
         "showLegend": true,
-        "showVerticalRule": true
+        "showAlarms": "Disk",
+        "showVerticalRuleLeft": true
       },
       "layout": {
         "x": 36,

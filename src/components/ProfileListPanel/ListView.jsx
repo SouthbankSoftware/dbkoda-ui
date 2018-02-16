@@ -739,6 +739,8 @@ export default class ListView extends React.Component {
                   dir="auto"
                   onChange={this.setPWText}
                 />
+                { !this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreInfo')}</p> }
+                { this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreAdd')}</p> }
               </div>
             )}
           {this.state.targetProfile &&

@@ -92,6 +92,11 @@ class FeatherClient {
       Broker.emit(EventType.STATS_ERROR(profileId), payload);
     });
 
+    this.passwordService = this.service('master-pass');
+    this.passwordService.on(EventType.MASTER_PASSWORD_REQUIRED, ({ method }) => {
+      Broker.emit(EventType.MASTER_PASSWORD_REQUIRED, method);
+    });
+
     this.performanceSrv.on('performance-output', ({output}) => {
       console.log('get performance output ', output);
     });
