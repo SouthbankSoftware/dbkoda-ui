@@ -573,11 +573,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
     if (showRunQueue) {
       return {
         'usage': (v: Object) => {
-          console.log('usage:', v, key);
-          return v.value[key].usage;
+          return v.value[key] !== undefined ? v.value[key].usage : 0;
         },
         'runQueue': (v: Object) => {
-          return v.value[key].runQueue;
+          return v.value[key] !== undefined ? v.value[key].runQueue : 0;
         },
       };
     }
