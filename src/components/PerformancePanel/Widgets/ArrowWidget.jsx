@@ -165,6 +165,7 @@ export default class ArrowWidget extends React.Component<Props> {
       this.maxValue = data;
     }
 
+    // $FlowFixMe
     const lblValue = convertUnits(data, this.props.widget.unit, 3);
 
     // $FlowIssue

@@ -219,26 +219,39 @@ export default class Widget extends React.Component<Props, State> {
                 {showAlarms && (
                   <Tooltip
                     portalClassName="StackedRadialWidgetTooltip"
-                    className={'tooltip alarm ' + alarmStatus.status}
-                    content={<div>{alarmStatus.alarmList}</div>}
+                    className={
+                      // $FlowIssue
+                      'tooltip alarm ' + alarmStatus.status
+                    }
+                    content={
+                      <div>
+                        {
+                          // $FlowIssue
+                          alarmStatus.alarmList
+                        }
+                      </div>
+                    }
                     useSmartPositioning
                     position={Position.RIGHT_TOP}
                   >
-                    {alarmStatus.status === 'green' && (
+                    {// $FlowIssue
+                    alarmStatus.status === 'green' && (
                       <TickIcon
                         className="alarm green"
                         width={20}
                         height={20}
                       />
                     )}
-                    {alarmStatus.status === 'yellow' && (
+                    {// $FlowIssue
+                    alarmStatus.status === 'yellow' && (
                       <ErrorIcon
                         className="alarm yellow"
                         width={20}
                         height={20}
                       />
                     )}
-                    {alarmStatus.status === 'red' && (
+                    {// $FlowIssue
+                    alarmStatus.status === 'red' && (
                       <ErrorIcon className="alarm red" width={20} height={20} />
                     )}
                   </Tooltip>
