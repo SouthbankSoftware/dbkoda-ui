@@ -159,7 +159,8 @@ ul.pt-menu {
   }
 }
 
-div.savingDialog {
+div.savingDialog,
+div.confirmDialog {
   div.dialogButtons {
     font-family: Arial, Helvetica, sans-serif;
     h4 {
@@ -250,7 +251,12 @@ div.savingDialog {
 }
 
 .pt-dialog {
-
+  .pt-dialog-header {
+    background-color: $navbarLeftBackground;
+    h5 {
+      color: $defaultFontColor;
+    }
+  }
   .dialogContent {
     color: $defaultFontColor;
     padding: 20px;

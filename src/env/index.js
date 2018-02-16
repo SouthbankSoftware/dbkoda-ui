@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-08T12:07:55+11:00
+ * @Last modified time: 2018-02-16T12:04:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -22,10 +22,24 @@
  */
 
 import _ from 'lodash';
+import * as d3 from 'd3';
 
 global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
 global.IS_DEVELOPMENT = !IS_PRODUCTION;
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
+
+const Globalize = require('globalize'); // doesn't work well with import
+
+global.Globalize = Globalize;
+
+const { language, region } = Globalize.locale().attributes;
+
+global.locale = `${language}-${region}`;
+
+d3.formatDefaultLocale(require(`d3-format/locale/${global.locale}.json`)); // eslint-disable-line import/no-dynamic-require
+
+global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
+global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
 
 export const protocol = 'http://';
 export const host = '127.0.0.1';

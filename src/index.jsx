@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-01-19T09:58:39+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T11:38:15+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,13 +35,6 @@ import { Provider } from 'mobx-react';
 import { AppContainer } from 'react-hot-loader';
 import { Broker, EventType } from './helpers/broker';
 import App from './components/App';
-
-const Globalize = require('globalize'); // doesn't work well with import
-
-global.globalString = (path, ...params) =>
-  Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) =>
-  Globalize.numberFormatter(config)(value);
 
 useStrict(true);
 
