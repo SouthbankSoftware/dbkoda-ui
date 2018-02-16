@@ -52,8 +52,8 @@ const bytesToSize = (bytes: number) => {
 })
 @observer
 export default class RadialWidget extends React.Component<Object, Object> {
-  static colors = ['#8A4148', '#8A4148'];
-  static gradientColors = ['#BD4133', '#8A4148'];
+  static colors = ['#01969E', '#01969E'];
+  static gradientColors = ['#01747A', '#359BA1'];
   static runQueueColors = [
     '#362728',
     '#00b458',
@@ -626,7 +626,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     if (widgetDisplayNames && widgetDisplayNames.length > 0) {
       const ret = {};
       widgetDisplayNames.forEach((k, i) => {
-        ret[k] = (v) => {
+        ret[k] = v => {
           return v.value[key] ? v.value[key][`${widgetItemKeys[i]}Delta`] : 0;
         };
       });
@@ -634,12 +634,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
     }
     if (showRunQueue) {
       return {
-        'usage': (v: Object) => {
+        usage: (v: Object) => {
           return v.value[key] ? v.value[key].usage : 0;
         },
-        'runQueue': (v: Object) => {
+        runQueue: (v: Object) => {
           return v.value[key] ? v.value[key].runQueue : 0;
-        },
+        }
       };
     }
     return {
