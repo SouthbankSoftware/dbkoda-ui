@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-15T17:24:47+11:00
+ * @Last modified time: 2018-02-16T12:20:43+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,14 +30,23 @@ import { autorun } from 'mobx';
 import type { WidgetState } from '~/api/Widget';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
+import { Tooltip, Position } from '@blueprintjs/core';
+import Legend from './Legend';
 import Widget from './Widget';
 import { convertUnits } from './Utils';
 import './ProgressBarWidget.scss';
 
-const colors = ['#783da8', '#b188c3', '#5e1533'];
+const colors = [
+  '#A27EB7',
+  '#DC5D3E',
+  '#39B160',
+  '#643798',
+  '#2E547A',
+  '#3333cc'
+];
 const BAR_CLIPPATH_ID = 'barCP';
 const vbWidth = 500;
-const vbHeight = 100;
+const vbHeight = 50;
 const barHeight = 30;
 const chartWidth = vbWidth - 60;
 
@@ -61,6 +70,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
   _chartLabel: *;
   _bVertical: false;
   _unit: *;
+  _itemValues: *;
 
   _createD3View = (bVertical: boolean) => {
     if (bVertical) {
@@ -147,7 +157,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
   _updateD3ViewData = (data: Object) => {
     const bVertical = this.props.widget.showVertical === true;
-    const sData = Object.keys(data).sort(); // sort according to keys to keep the color same
+    const sData = Object.keys(data); // .sort(); // sort according to keys to keep the color same
     let arrData = [];
     let sumOfValues = 0;
     if (sData.length > 1) {
@@ -217,7 +227,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         return 'chartBar ' + d.key;
       })
       .attr('fill', d => {
-        return d.color;
+        return d3.hsl(d.color).darker(1);
       })
       .transition(t)
       .attr('width', d => {
@@ -235,7 +245,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         rx: 15,
         ry: 15,
         fill: d => {
-          return d.color;
+          return d3.hsl(d.color).darker(1);
         },
         'clip-path': `url(#${BAR_CLIPPATH_ID})`,
         height: barHeight,
@@ -328,6 +338,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
           values.length > 0 ? values[values.length - 1].value : {};
 
         // const testData = {'item-001': 15, 'item-002': 130};
+        this._itemValues = latestValue;
         this._unit = unit;
         this._updateD3ViewData(latestValue);
       });
@@ -355,30 +366,54 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
     return (
       <Widget
-        className="ProgressBarWidget"
         widget={widget}
         widgetStyle={widgetStyle}
       >
-        <div className="container">
-          {chartTitle && (
-            <div className="chart-label">
-              <strong>{chartTitle}</strong>
+        <div className="ProgressBarWidget">
+          <Tooltip
+            portalClassName="StackedRadialWidgetTooltip"
+            className="toolTip"
+            content={
+              <div className="Tooltip">
+                <Legend
+                  showTotal
+                  showValues
+                  showDots={false}
+                  metrics={this.props.widget.items}
+                  getValues={() => {
+                    return this._itemValues;
+                  }}
+                  onRef={toolTipLegend => {
+                    this.toolTipLegend = toolTipLegend;
+                  }}
+                />
+              </div>
+            }
+            position={Position.BOTTOM}
+            useSmartPositioning
+          >
+            <div className="container">
+              {chartTitle && (
+                <div className="chart-label">
+                  <strong>{chartTitle}</strong>
+                </div>
+              )}
+              <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
+              <div className="chart-total">
+                <span
+                  ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}
+                  style={chartTotalStyle}
+                />
+              </div>
             </div>
-          )}
-          <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
-          <div className="chart-total">
-            <span
-              ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}
-              style={chartTotalStyle}
-            />
-          </div>
+          </Tooltip>
+          {showHorizontalRule && <hr />}
+          <div className="d3-tip-top" ref={_tipEl => (this._tipEl = _tipEl)} />
+          <div
+            className="d3-tip-right"
+            ref={_tipREl => (this._tipREl = _tipREl)}
+          />
         </div>
-        {showHorizontalRule && <hr />}
-        <div className="d3-tip-top" ref={_tipEl => (this._tipEl = _tipEl)} />
-        <div
-          className="d3-tip-right"
-          ref={_tipREl => (this._tipREl = _tipREl)}
-        />
       </Widget>
     );
   }
