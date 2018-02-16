@@ -56,9 +56,12 @@ export default class StackedRadialWidget extends React.Component<
     '#2E547A',
     '#3333cc'
   ];
-  static width = 50;
-  static height = 50;
-  static minRadius = 12;
+  static width = 60;
+  static height = 60;
+  static minRadius = 10;
+  static ringGapScaleFactor = 14;
+  static xTranslateScale = 0.02;
+  static yTranslateScale = 10;
   static PI = 2 * Math.PI;
 
   state: any;
@@ -86,7 +89,7 @@ export default class StackedRadialWidget extends React.Component<
     if (this.props.widget.items.length > 3) {
       this.scaleFactor = 2;
     } else {
-      this.scaleFactor = 1;
+      this.scaleFactor = 1.5;
     }
     this.dataset = () => {
       if (!this.itemValues[this.state.lastLayerTweened.key]) {
@@ -115,7 +118,8 @@ export default class StackedRadialWidget extends React.Component<
     if (layer > 1) {
       // Layer X inner should be equal to layer X-1 outer.
       return (
-        this._getInnerRadiusSize(layer - 1) + minValue / (10 * this.scaleFactor)
+        this._getInnerRadiusSize(layer - 1) +
+        minValue / (StackedRadialWidget.ringGapScaleFactor * this.scaleFactor)
       );
     }
     return (
@@ -146,8 +150,8 @@ export default class StackedRadialWidget extends React.Component<
     let xTranslate = 0;
     xTranslate += parseInt(
       this._getOuterRadiusSize(this.props.widget.items.length) +
-        this.state.width * 0.02,
-      10
+        this.state.width * StackedRadialWidget.xTranslateScale,
+      StackedRadialWidget.yTranslateScale
     );
 
     const svg = elem
