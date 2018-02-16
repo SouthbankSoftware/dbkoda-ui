@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-08T15:20:56+11:00
+ * @Last modified time: 2018-02-16T13:39:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,11 +32,11 @@ import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
 import { type ObservableMap, reaction, action } from 'mobx';
 import { inject } from 'mobx-react';
 import _ from 'lodash';
-import Xterm from 'xterm/build/xterm';
-import fitAddon from 'xterm/lib/addons/fit/fit';
-import searchAddon from 'xterm/lib/addons/search/search';
-import winptyCompatAddon from 'xterm/lib/addons/winptyCompat/winptyCompat';
-import 'xterm/build/xterm.css';
+import { Terminal as Xterm } from 'xterm';
+import * as fitAddon from 'xterm/lib/addons/fit/fit';
+import * as searchAddon from 'xterm/lib/addons/search/search';
+import * as winptyCompatAddon from 'xterm/lib/addons/winptyCompat/winptyCompat';
+import 'xterm/dist/xterm.css';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import {
@@ -50,9 +50,9 @@ import chalk from '~/helpers/chalk';
 import { NewToaster } from '#/common/Toaster';
 import styles from './Terminal.scss';
 
-fitAddon(Xterm);
-searchAddon(Xterm);
-winptyCompatAddon(Xterm);
+Xterm.applyAddon(fitAddon);
+Xterm.applyAddon(searchAddon);
+Xterm.applyAddon(winptyCompatAddon);
 
 const DEBOUNCE_DELAY = 100;
 
