@@ -3,7 +3,7 @@
  * @Date:   2018-02-15T15:05:45+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-15T17:12:16+11:00
+ * @Last modified time: 2018-02-16T11:32:14+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -140,4 +140,12 @@ export const convertUnits = (value, unit, length) => {
     value: (String(value).indexOf('.') >= 0) ? Number(value).toFixed(2) : value,
     unit
   };
+};
+
+export const hofUnitFormatter = (unit, length) => {
+  const unitFormatter = (value) => {
+    const result = convertUnits(value, unit, length);
+    return result.value + ' ' + result.unit;
+  };
+  return unitFormatter;
 };
