@@ -145,6 +145,7 @@
       },
       "extraState": {
         "title": "Connections",
+        "colorList": ["#C9C21E"],
         "infoWidget": true,
         "description": "Number of connections current open",
         "showVerticalRule": true,
@@ -166,6 +167,7 @@
       },
       "extraState": {
         "title": "Queues",
+        "colorList": ["#8964BD", "#A88EBE"],
         "description":
           "Current number of read operations and queued read operations.",
         "infoWidget": true,
@@ -188,6 +190,7 @@
       },
       "extraState": {
         "chartTitle": "Writes",
+        "colorList": ["#8964BD", "#A88EBE"],
         "description":
           "Current number of Write operations and queued Write operations.",
         "unit": "/s"
@@ -206,6 +209,7 @@
       },
       "extraState": {
         "chartTitle": "Total",
+        "colorList": ["#7E4EA7", "#8964BD", "#A88EBE"],
         "description": "Total number of all operations and queued operations.",
         "showHorizontalRule": true,
         "useHighWaterMark": true,
