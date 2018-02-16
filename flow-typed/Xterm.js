@@ -3,7 +3,7 @@
  * @Date:   2017-11-08T15:20:34+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-03T13:28:40+11:00
+ * @Last modified time: 2018-02-16T13:40:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,20 +24,20 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-declare module 'xterm/build/xterm' {
+declare module 'xterm' {
   declare class CharMeasure {
     measure(options: {}): void;
   }
 
   declare class Buffer {
-    ybase: number,
-    y: number,
+    ybase: number;
+    y: number;
 
     translateBufferLineToString(
       lineIndex: number,
       trimRight?: boolean,
       startCol?: number,
-      endCol?: number,
+      endCol?: number
     ): string;
   }
 
@@ -66,7 +66,7 @@ declare module 'xterm/build/xterm' {
     charMeasure: CharMeasure;
   }
 
-  declare export default typeof Xterm
+  declare export default { terminal: typeof Xterm }
 }
 
 declare module 'xterm/lib/addons/attach/attach' {
