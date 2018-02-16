@@ -465,14 +465,7 @@
     },
     {
       "type": "StackedRadialWidget",
-      "items": [
-        "db_storage",
-        "operations_QueryPs",
-        "operations_CommandPs",
-        "operations_InsertPs",
-        "operations_UpdatePs",
-        "operations_DeletePs"
-      ],
+      "items": ["db_storage"],
       "extraState": {
         "title": "Storage",
         "infoWidget": true,
