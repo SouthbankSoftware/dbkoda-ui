@@ -82,8 +82,8 @@ export default class PasswordStore extends React.Component {
             title="Remove Password Store?"
             isOpen={this.state.isConfirmOpen}>
             <div className="dialogContent">
-              {globalString('editor/config/remove_store_dialog/question')}
-              {globalString('editor/config/remove_store_dialog/qualifier')}
+              <p>{globalString('editor/config/remove_store_dialog/question')}</p>
+              <p>{globalString('editor/config/remove_store_dialog/qualifier')}</p>
             </div>
             <div className="dialogButtons">
               <AnchorButton
