@@ -372,7 +372,8 @@
       "items": ["wtIO_cacheToDiskUsPs"],
       "extraState": {
         "description": "wiredTiger cache to disk time per second",
-        "unit": "μs/s"
+        "unit": "μs/s",
+        "rotate": 180
       },
       "layout": {
         "x": 34,
