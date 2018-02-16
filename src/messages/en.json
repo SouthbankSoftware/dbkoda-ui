@@ -323,6 +323,8 @@
         "passPhrasePrompt":
           "Please enter your passphrase for SSH connection private key",
         "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
+        "passwordStoreInfo": "Tip: To avoid seeing this prompt every time you connect, you can setup a password store in Preferences",
+        "passwordStoreAdd": "This will add the password to your password store. You will not be asked again, but you can still change the password in the Edit Profile screen",
         "confirmButton": "Open",
         "cancelButton": "Cancel"
       },
