@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-08T12:08:00+11:00
+ * @Last modified time: 2018-02-16T17:07:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,8 +33,11 @@ import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
 import Globalize from 'globalize';
+import DataCenter from '~/api/DataCenter';
 import { Broker, EventType } from '../helpers/broker';
 import { ProfileStatus } from '../components/common/Constants';
+import Config from './config';
+import Profiles from './profiles';
 
 let ipcRenderer;
 let stateStorePath;
@@ -76,7 +79,7 @@ export default class Store {
   welcomePage = observable({
     isOpen: true,
     newsFeed: [],
-    currentContent: 'Welcome', // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
+    currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
   });
 
   @observable
@@ -84,7 +87,7 @@ export default class Store {
     isOpen: true,
     selectedMenu: 'Paths',
     changedFields: observable([]),
-    newSettings: observable([]),
+    newSettings: observable([])
   });
 
   @observable
@@ -105,7 +108,7 @@ export default class Store {
     shouldScrollToActiveTab: false,
     tabScrollLeftPosition: 0,
     updateAggregateDetails: false,
-    updateAggregateCode: false,
+    updateAggregateCode: false
   });
 
   @observable
@@ -118,7 +121,7 @@ export default class Store {
     shellId: 0,
     newEditorForTreeAction: false,
     newEditorForProfileId: '',
-    saveAs: false,
+    saveAs: false
   });
 
   @observable
@@ -129,7 +132,7 @@ export default class Store {
     executingTerminalCmd: false,
     sendingCommand: '',
     collapseTable: false,
-    expandTable: false,
+    expandTable: false
   });
 
   @observable
@@ -138,12 +141,12 @@ export default class Store {
     optInVisible: true,
     overallSplitPos: '35%',
     leftSplitPos: '50%',
-    rightSplitPos: '60%',
+    rightSplitPos: '60%'
   };
 
   @observable
   drawer = observable({
-    drawerChild: DrawerPanes.DEFAULT,
+    drawerChild: DrawerPanes.DEFAULT
   });
 
   @observable
@@ -155,7 +158,7 @@ export default class Store {
     formValues: '',
     isNewFormValues: false,
     editors: observable.map(),
-    refreshOnExecution: false,
+    refreshOnExecution: false
   };
 
   @observable
@@ -163,12 +166,12 @@ export default class Store {
     lastTreeAction: null,
     lastTreeNode: null,
     detailsViewInfo: null,
-    activeEditorId: '',
+    activeEditorId: ''
   };
 
   @observable
   storagePanel = {
-    selectedDatabase: null,
+    selectedDatabase: null
   };
 
   @observable
@@ -178,38 +181,38 @@ export default class Store {
     downloadingDrill: false,
     showDrillStatus: false,
     drillDownloadProgress: null,
-    drillStatusMsg: '',
+    drillStatusMsg: ''
   };
 
   @observable
   explainPanel = {
     activeId: undefined,
-    explainAvailable: false,
+    explainAvailable: false
   };
 
   @observable
   mongoShellPrompt = {
-    prompt: 'dbkoda>',
+    prompt: 'dbkoda>'
   };
 
   @observable
   profileList = observable({
     selectedProfile: null,
-    creatingNewProfile: false,
+    creatingNewProfile: false
   });
 
   @observable
   dragItem = observable({
     dragDrop: false,
     dragDropTerminal: false,
-    item: null,
+    item: null
   });
 
   @observable
   password = {
     showDialog: false,
     verifyPassword: false,
-    missingProfiles: [],
+    missingProfiles: []
   };
 
   @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
@@ -230,7 +233,7 @@ export default class Store {
   };
 
   @action.bound
-  showTreeActionPane = (type) => {
+  showTreeActionPane = type => {
     if (type == EditorTypes.TREE_ACTION) {
       this.setDrawerChild(DrawerPanes.DYNAMIC);
     } else if (type == EditorTypes.SHELL_COMMAND) {
@@ -278,7 +281,7 @@ export default class Store {
       NewToaster.show({
         message: 'Error: Please select an open connection from the Profile Dropdown.',
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     }
     this.startCreatingNewEditor();
@@ -286,7 +289,7 @@ export default class Store {
     return featherClient()
       .service('/mongo-shells')
       .create({
-        id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id,
+        id: this.profileStore.profiles.get(this.editorPanel.activeDropdownId).id
       })
       .then(res => {
         // Create new editor as normal, but with "aggregate" type.
@@ -294,9 +297,9 @@ export default class Store {
           type: 'aggregate',
           collection: {
             text: nodeRightClicked.text,
-            refParent: { text: nodeRightClicked.refParent.text },
+            refParent: { text: nodeRightClicked.refParent.text }
           },
-          blockList: [],
+          blockList: []
         });
       })
       .catch(err => {
@@ -305,11 +308,12 @@ export default class Store {
         NewToaster.show({
           message: 'Error: ' + err.message,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
       });
   }
 
+  @action.bound
   dump() {
     return dump(this, { serializer });
   }
@@ -323,7 +327,7 @@ export default class Store {
         NewToaster.show({
           message: err.message,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
         throw err;
       });
@@ -349,11 +353,12 @@ export default class Store {
         () => !this.editors.has(editorId),
         () => {
           Broker.off(eventName, handleFileChangedEvent);
-        },
+        }
       );
     }
   };
 
+  // TODO: verify this logic
   @action.bound
   closeConnection() {
     return new Promise(resolve => {
@@ -382,6 +387,7 @@ export default class Store {
       }
     });
   }
+
   @action.bound
   updateAndRestart() {
     this.updateAvailable = false;
@@ -410,12 +416,12 @@ export default class Store {
               this.terminals.delete(terminalId);
 
               return this.api.getTerminalTabId(terminalId);
-            }),
-          ),
+            })
+          )
       );
     }
 
-    Promise.all(ps).then(
+    return Promise.all(ps).then(
       action(removedIds => {
         const { currentTab } = this.outputPanel;
 
@@ -423,7 +429,7 @@ export default class Store {
           // go back to `Raw` if current Terminal is removed
           this.outputPanel.currentTab = this.editorPanel.activeEditorId;
         }
-      }),
+      })
     );
   }
 
@@ -515,12 +521,56 @@ export default class Store {
         .get(stateStorePath, {
           query: {
             copyTo: backupPath,
-            watching: 'false',
-          },
+            watching: 'false'
+          }
         });
     }
 
     return Promise.reject(new Error('Backup only supported in Electron'));
+  }
+
+  loadRest() {
+    // init config
+    this.config = new Config();
+    global.config = this.config;
+
+    // init profiles
+    this.profileStore = new Profiles();
+    global.profileStore = this.profileStore;
+
+    // init api
+    this.api = new DataCenter(this, this.config, this.profileStore);
+    global.api = this.api;
+
+    return this.config
+      .load()
+      .then(() => {
+        if (this.config.settings.passwordStoreEnabled) {
+          this.api.passwordApi.showPasswordDialog();
+        }
+      })
+      .then(() => this.profileStore.load())
+      .then(
+        action(() => {
+          // recover selectedProfile
+          if (this.profileList.selectedProfile) {
+            this.profileList.selectedProfile = this.profileStore.profiles.get(
+              this.profileList.selectedProfile.id
+            );
+          }
+
+          this.saveUponEditorsChange();
+
+          // FIXME
+          // this.saveUponProfileChange();
+
+          if (this.api) {
+            this.api.init();
+          }
+
+          Broker.emit(EventType.APP_READY);
+        })
+      );
   }
 
   /**
@@ -533,37 +583,24 @@ export default class Store {
       .service('files')
       .get(stateStorePath, {
         query: {
-          watching: 'false',
-        },
+          watching: 'false'
+        }
       })
       .then(({ content }) => {
-        this.restore(content);
-        // Init Globalize required json
-        // Globalize.load(
-        //   require('cldr-data/main/en/ca-gregorian.json'),
-        //   require('cldr-data/supplemental/likelySubtags.json'),
-        // );
-        this.saveUponEditorsChange();
-
-        // FIXME
-        // this.saveUponProfileChange();
-
-        if (this.api) {
-          this.api.init();
-        }
-
-        Broker.emit(EventType.APP_READY);
+        return this.restore(content).then(() => this.loadRest());
       })
       .catch(err => {
         if (err.code === 404) {
           console.error(
-            "State store doesn't exist. A new one will be created after app close or refreshing",
+            "State store doesn't exist. A new one will be created after app close or refreshing"
           );
-          Broker.emit(EventType.APP_READY);
-        } else {
-          console.error(err);
-          Broker.emit(EventType.APP_CRASHED);
+          return this.loadRest().then(() => {
+            Broker.emit(EventType.APP_READY);
+          });
         }
+
+        console.error(err);
+        Broker.emit(EventType.APP_CRASHED);
       });
   }
 
@@ -576,7 +613,7 @@ export default class Store {
       .create({
         _id: stateStorePath,
         content: this.dump(),
-        watching: false,
+        watching: false
       })
       .then(() => {})
       .catch(console.error);
@@ -624,13 +661,5 @@ export default class Store {
   @action.bound
   runEditorScript() {
     this.editorPanel.executingEditorAll = true;
-  }
-
-  // Temporary setting reference to API in store because most of the action are still here in store.
-  setAPI(apiRef) {
-    this.api = apiRef;
-  }
-  setProfileStore(profileStore) {
-    this.profileStore = profileStore;
   }
 }
