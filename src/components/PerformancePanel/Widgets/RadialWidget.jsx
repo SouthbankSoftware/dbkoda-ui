@@ -565,7 +565,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       const ret = {};
       widgetDisplayNames.forEach((k, i) => {
         ret[k] = (v) => {
-          return v.value[key][`${widgetItemKeys[i]}Delta`];
+          return v.value[key] ? v.value[key][`${widgetItemKeys[i]}Delta`] : 0;
         };
       });
       return ret;
@@ -573,10 +573,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
     if (showRunQueue) {
       return {
         'usage': (v: Object) => {
-          return v.value[key] !== undefined ? v.value[key].usage : 0;
+          return v.value[key] ? v.value[key].usage : 0;
         },
         'runQueue': (v: Object) => {
-          return v.value[key] !== undefined ? v.value[key].runQueue : 0;
+          return v.value[key] ? v.value[key].runQueue : 0;
         },
       };
     }
