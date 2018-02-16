@@ -26,8 +26,8 @@
 
 import * as d3 from 'd3';
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { autorun } from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {autorun} from 'mobx';
 import _ from 'lodash';
 
 import './RadialWidget.scss';
@@ -43,7 +43,7 @@ const bytesToSize = (bytes: number) => {
   return Math.round(bytes / 1024 ** i) + '' + sizes[i];
 };
 
-@inject(({ store, api }, { widget }) => {
+@inject(({store, api}, {widget}) => {
   return {
     store,
     api,
@@ -74,13 +74,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   constructor(props: Object) {
     super(props);
-    this.state = { width: 512, height: 512, text: '' };
+    this.state = {width: 512, height: 512, text: ''};
     this.text = '';
   }
 
   dataset() {
     return this.itemValue.map(v => {
-      return { ...v };
+      return {...v};
     });
   }
 
@@ -197,16 +197,16 @@ export default class RadialWidget extends React.Component<Object, Object> {
         if (noOfNodes >= maxNodes) {
           if (i < noOfNodes % maxNodes) {
             const busyHigh = Math.ceil(noOfNodes / maxNodes);
-            arrData.push({ busy: '' + busyHigh });
+            arrData.push({busy: '' + busyHigh});
           } else {
             const busyLow = Math.floor(noOfNodes / maxNodes);
-            arrData.push({ busy: '' + busyLow });
+            arrData.push({busy: '' + busyLow});
           }
         } else {
-          arrData.push({ busy: '1' });
+          arrData.push({busy: '1'});
         }
       } else {
-        arrData.push({ busy: '0' });
+        arrData.push({busy: '0'});
       }
     }
 
@@ -331,11 +331,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
   update() {
     const that = this;
     this.field
-      .each(function(d) {
+      .each(function (d) {
         this._value = d.percentage;
       })
       .data(this.dataset.bind(this))
-      .each(function(d) {
+      .each(function (d) {
         d.previousValue = this._value;
       })
       .selectAll('.bg')
@@ -410,8 +410,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   componentDidMount() {
     this._onResize(RadialWidget.width, RadialWidget.height);
-    const { widget } = this.props;
-    const { widgetItemKeys } = widget;
+    const {widget} = this.props;
+    const {widgetItemKeys} = widget;
     this.itemValue = [];
     if (widgetItemKeys) {
       widgetItemKeys.forEach((w, i) =>
@@ -434,7 +434,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       this.text = '0%';
       this.buildWidget();
       autorun(() => {
-        const { items, values } = this.props.widget;
+        const {items, values} = this.props.widget;
         const newItemValue = this.getValueFromData(items, values);
         if (newItemValue.length > 0) {
           this.itemValue = newItemValue;
@@ -450,11 +450,9 @@ export default class RadialWidget extends React.Component<Object, Object> {
   /**
    * TODO: move to schema
    */
-  getValueFromData(
-    items: Array<string>,
-    staleValues: Array<Object>
-  ): Array<Object> {
-    const { widget } = this.props;
+  getValueFromData(items: Array<string>,
+                   staleValues: Array<Object>): Array<Object> {
+    const {widget} = this.props;
     const {
       widgetItemKeys,
       widgetDisplayNames,
@@ -491,19 +489,19 @@ export default class RadialWidget extends React.Component<Object, Object> {
           latestValue[key][`max${itemKey}`] === 0
             ? 0
             : parseInt(
-                latestValue[key][`${itemKey}Delta`] /
-                  latestValue[key][`max${itemKey}`] *
-                  100,
-                10
-              ),
+            latestValue[key][`${itemKey}Delta`] /
+            latestValue[key][`max${itemKey}`] *
+            100,
+            10
+            ),
         valuePerSec: bytesToSize(
           latestValue[key][`${itemKey}Delta`] /
-            (latestValue[key].samplingRate / 1000)
+          (latestValue[key].samplingRate / 1000)
         )
       };
       this.text += `${widgetDisplayNames[i]} ${
         itemKeyValues[itemKey].valuePerSec
-      }/s`;
+        }/s`;
       if (i < widgetItemKeys.length - 1) {
         this.text += '\n';
       }
@@ -532,7 +530,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           });
         } else {
           widgetItemKeys.forEach((itemKey, i) => {
-            itemKeyValues.push({ index: i, percentage: v[itemKey] + '%' });
+            itemKeyValues.push({index: i, percentage: v[itemKey] + '%'});
           });
         }
         const retValue = widgetItemKeys.map((itemKey, i) => {
@@ -541,10 +539,9 @@ export default class RadialWidget extends React.Component<Object, Object> {
             percentage: itemKeyValues[itemKey].percentage,
             tooltip: `${widgetDisplayNames[i]} ${
               itemKeyValues[itemKey].percentage
-            }%`
+              }%`
           };
         });
-        console.log('ret value', retValue);
         return retValue;
       } else if (showRunQueue && key === 'cpu') {
         const fixedValue = _.isInteger(v.usage)
@@ -648,8 +645,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
   };
 
   render() {
-    const { widget, widgetStyle } = this.props;
-    const { displayName } = widget;
+    const {widget, widgetStyle} = this.props;
+    const {displayName} = widget;
     // 1. render container for d3 in this render function
     // 2. draw d3 graph in a separate function after componentDidMount
     // 3. incremental redraw whenever data change happens
