@@ -478,7 +478,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     const latestValue: Object =
       values.length > 0 ? values[values.length - 1].value : {};
     const key = items[0];
-    console.log('get stat value ', latestValue);
+    // console.log('get stat value ', latestValue);
     const capitalize = str =>
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     const highWaterMark = (

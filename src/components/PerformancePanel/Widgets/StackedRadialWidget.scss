@@ -130,9 +130,10 @@
 
 .StackedRadialWidgetTooltip .pt-popover-content {
   text {
-    font-size: 20px !important;
+    font-size: 16px !important;
   }
-  width: 80%;
+  opacity: 0.9;
+  width: 60%;
   height: 100%;
   .Tooltip {
     height: 100%;
@@ -147,6 +148,16 @@
         }
         .labelWrapper {
           width: 50%;
+          .label {
+            text {
+              stroke: #000000;
+              stroke-width: 1px;
+              stroke-linecap: round;
+              stroke-linejoin: bevel;
+              stroke-opacity: 0.25;
+              stroke-location: outside;
+            }
+          }
         }
         .valueWrapper {
           width: 50%;
