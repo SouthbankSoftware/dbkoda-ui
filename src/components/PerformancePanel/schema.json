@@ -233,7 +233,7 @@
       },
       "extraState": {
         "title": "Latency",
-        "colorList": ["#c6593d", "#6EC4CB", "#93E6A3"],
+        "colorList": ["#c6593d", "#6EC4CB", "#467f51"],
         "infoWidget": true,
         "description": "Time spent for different ops.",
         "unit": "μs/s",

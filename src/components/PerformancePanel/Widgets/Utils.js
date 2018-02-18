@@ -1,4 +1,5 @@
 /**
+ * @flow
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-15T15:05:45+11:00
  * @Email:  inbox.wahaj@gmail.com
@@ -24,7 +25,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function timescale(num, a, b) {
+function timescale(num: number, a, b) {
   if (isNaN(num)) {
     throw new TypeError('expected a number');
   }
@@ -55,7 +56,7 @@ function unitTimeValue(name) {
     }
   }
 }
-export const convertTime = (value, unit, length) => {
+export const convertTime = (value: any, unit: string, length: number) => {
   const result = {
     value,
     unit
@@ -101,7 +102,7 @@ export const convertTime = (value, unit, length) => {
   return result;
 };
 
-export const convertBytes = (value, unit, length) => {
+export const convertBytes = (value: any, unit: string, length: number) => {
   const result = {
     value,
     unit
@@ -137,7 +138,7 @@ export const convertBytes = (value, unit, length) => {
   return result;
 };
 
-export const convertUnits = (value, unit, length) => {
+export const convertUnits = (value: any, unit: string, length: number) => {
   if ('ms/s|μs/s|/μs|/us|/ms|/s|/m|/h'.indexOf(unit) >= 0) {
     return convertTime(value, unit, length);
   } else if ('b|kb|mb|gb|tb|pb|eb'.indexOf(unit) >= 0) {
@@ -150,8 +151,8 @@ export const convertUnits = (value, unit, length) => {
   };
 };
 
-export const hofUnitFormatter = (unit, length) => {
-  const unitFormatter = (value) => {
+export const hofUnitFormatter = (unit: string, length: number) => {
+  const unitFormatter = value => {
     const result = convertUnits(value, unit, length);
     return result.value + ' ' + result.unit;
   };
