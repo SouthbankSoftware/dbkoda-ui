@@ -35,6 +35,7 @@ let colors = ['#A27EB7', '#DC5D3E', '#39B160', '#643798', '#2E547A', '#3333cc'];
 type Props = {
   metrics: any,
   onRef: any,
+  colors: string[],
   getValues: () => any,
   showTotal: boolean,
   showValues: boolean,
