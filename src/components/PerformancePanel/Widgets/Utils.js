@@ -152,6 +152,7 @@ export const convertUnits = (value: any, unit: string, length: number) => {
 };
 
 export const hofUnitFormatter = (unit: string, length: number) => {
+  // $FlowFixMe
   const unitFormatter = value => {
     const result = convertUnits(value, unit, length);
     return result.value + ' ' + result.unit;
