@@ -232,7 +232,8 @@
         "static": true
       },
       "extraState": {
-        "title": "Time",
+        "title": "Latency",
+        "colorList": ["#CD8974", "#6EC4CB", "#93E6A3"],
         "infoWidget": true,
         "description": "Time spent for different ops.",
         "unit": "μs/s",
@@ -268,6 +269,7 @@
       },
       "extraState": {
         "title": "Wiredtiger Cache",
+        "colorList": ["#68837E", "#8AB3A7"],
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger cache.",
         "unit": "b",
@@ -288,6 +290,7 @@
       },
       "extraState": {
         "title": "Log Buffer",
+        "colorList": ["#68B6B8", "#8AB3A7"],
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger log Buffer",
         "unit": "b",
@@ -328,6 +331,7 @@
       },
       "extraState": {
         "title": "Miss Rate",
+        "colorList": ["#6D8EB2", "#8AB3A7"],
         "infoWidget": true,
         "description":
           "Percentage of time a needed page is not found in wiredTiger cache",
@@ -350,6 +354,7 @@
       },
       "extraState": {
         "title": "Evictions",
+        "colorList": ["#9F4F3B", "#5A8377"],
         "infoWidget": true,
         "description": "Pages evicted from the wiredTiger cache per second",
         "unit": "/s",
@@ -427,6 +432,7 @@
         "title": "Latency",
         "infoWidget": true,
         "chartTitle": "Reads",
+        "colorList": ["#A76E84", "#8AB3A7"],
         "description": "Average time for a wiredTiger disk read",
         "unit": "/ms",
         "useHighWaterMark": true
@@ -445,6 +451,7 @@
       },
       "extraState": {
         "chartTitle": "Writes",
+        "colorList": ["#93E6A3"],
         "description": "Average time for a wiredTiger disk write",
         "unit": "/ms",
         "useHighWaterMark": true
@@ -463,6 +470,7 @@
       },
       "extraState": {
         "chartTitle": "Log Sync",
+        "colorList": ["#D4CF6A"],
         "description": "Average time for a wiredTiger log sync",
         "unit": "/ms",
         "useHighWaterMark": true

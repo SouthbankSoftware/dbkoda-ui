@@ -34,6 +34,8 @@ import { convertUnits } from './Utils';
 import Widget from './Widget';
 import Legend from './Legend';
 
+let colors = ['#A27EB7', '#DC5D3E', '#39B160', '#643798', '#2E547A', '#3333cc'];
+
 // Flow type definitions.
 
 @inject(({ store, api }, { widget }) => {
@@ -48,14 +50,6 @@ export default class StackedRadialWidget extends React.Component<
   Object,
   Object
 > {
-  static colors = [
-    '#A27EB7',
-    '#DC5D3E',
-    '#39B160',
-    '#643798',
-    '#2E547A',
-    '#3333cc'
-  ];
   static width = 60;
   static height = 60;
   static minRadius = 10;
@@ -191,13 +185,13 @@ export default class StackedRadialWidget extends React.Component<
     gradient
       .append('svg:stop')
       .attr('offset', '0%')
-      .attr('stop-color', StackedRadialWidget.colors[layer - 1])
+      .attr('stop-color', colors[layer - 1])
       .attr('stop-opacity', 1);
 
     gradient
       .append('svg:stop')
       .attr('offset', '100%')
-      .attr('stop-color', StackedRadialWidget.colors[layer - 1])
+      .attr('stop-color', colors[layer - 1])
       .attr('stop-opacity', 1);
 
     // Drop Shadows
@@ -231,13 +225,13 @@ export default class StackedRadialWidget extends React.Component<
     field
       .append('path')
       .attr('class', 'progress')
-      .attr('fill', StackedRadialWidget.colors[layer - 1]);
+      .attr('fill', colors[layer - 1]);
 
     // render background
     field
       .append('path')
       .attr('class', 'bg')
-      .style('fill', StackedRadialWidget.colors[layer - 1])
+      .style('fill', colors[layer - 1])
       .style('opacity', 0.2)
       .attr('d', background);
 
@@ -497,6 +491,9 @@ export default class StackedRadialWidget extends React.Component<
   }
 
   render() {
+    if (this.props.widget.colorList) {
+      colors = this.props.widget.colorList;
+    }
     const { widget, widgetStyle } = this.props;
     const { displayName } = widget;
     this.fields = [];
@@ -523,6 +520,7 @@ export default class StackedRadialWidget extends React.Component<
                 <Legend
                   showTotal
                   showValues
+                  colors={colors}
                   showDots={false}
                   metrics={this.props.widget.items}
                   getValues={() => {

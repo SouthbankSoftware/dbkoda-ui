@@ -30,6 +30,8 @@ import ErrorIcon from '../../../styles/icons/error-icon.svg';
 
 import './StackedRadialWidget.scss';
 
+let colors = ['#A27EB7', '#DC5D3E', '#39B160', '#643798', '#2E547A', '#3333cc'];
+
 type Props = {
   metrics: any,
   onRef: any,
@@ -49,15 +51,6 @@ type Props = {
 })
 @observer
 export default class Legend extends React.Component<Props> {
-  static colors = [
-    '#A27EB7',
-    '#DC5D3E',
-    '#39B160',
-    '#643798',
-    '#2E547A',
-    '#3333cc'
-  ];
-
   static fontSize = 7;
   static rowSize = 20;
   static rowScalingFactor = 600;
@@ -109,6 +102,10 @@ export default class Legend extends React.Component<Props> {
   render() {
     let total = 0;
 
+    if (this.props.colors) {
+      colors = this.props.colors;
+    }
+
     // Determine size.
     const fontSize =
       Legend.fontSize +
@@ -135,10 +132,10 @@ export default class Legend extends React.Component<Props> {
           let fontColor = 'white';
           let valueFontColor = 'white';
           if (!this.props.showDots) {
-            fontColor = Legend.colors[count];
+            fontColor = colors[count];
             valueFontColor = 'black';
           }
-          const style = { fill: Legend.colors[count] };
+          const style = { fill: colors[count] };
           let value = 'Fetching...';
           if (this.state.values[item] || this.state.values[item] === 0) {
             value = parseFloat(Number(this.state.values[item]).toFixed(2));

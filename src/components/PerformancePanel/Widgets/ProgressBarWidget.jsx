@@ -353,6 +353,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
   }
 
   render() {
+    if (this.props.widget.colorList) {
+      colors = this.props.widget.colorList;
+    }
     const { widget, widgetStyle } = this.props;
     const { showHorizontalRule, chartTitle, showVertical } = widget;
     const chartTotalStyle = { top: '40%' };
@@ -371,6 +374,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
                 <Legend
                   showTotal
                   showValues
+                  colors={colors}
                   showDots={false}
                   metrics={this.props.widget.items}
                   getValues={() => {
