@@ -251,7 +251,6 @@ export default class PerformancePanel extends React.Component<Props, State> {
           margin={[0, 0]}
           verticalGridSize={rows}
           bFitHeight
-          minH = 24
         >
           {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
