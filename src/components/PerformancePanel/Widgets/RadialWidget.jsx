@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-19T15:50:15+11:00
+ * @Last modified time: 2018-02-19T16:36:17+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -212,13 +212,14 @@ export default class RadialWidget extends React.Component<Object, Object> {
     }
 
     const radius = (Math.min(this.state.width, this.state.height) - 30) / 2;
-
+    const innerRadius = radius - (radius * 0.4);
+    const outerRadius = radius - (radius * 0.22);
     const arc = d3
       .arc()
-      .outerRadius(radius - 10)
-      .innerRadius(radius - 20)
+      .outerRadius(outerRadius)
+      .innerRadius(innerRadius)
       .cornerRadius(10)
-      .padAngle(0.03);
+      .padAngle(0.035);
 
     const pie = d3
       .pie()
