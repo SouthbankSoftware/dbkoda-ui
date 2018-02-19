@@ -139,7 +139,12 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     if (schema && schema.widgets) {
       for (const widget of schema.widgets) {
-        const id = api.addWidget(profileId, widget.items, widget.type, widget.extraState || {});
+        const id = api.addWidget(
+          profileId,
+          widget.items,
+          widget.type,
+          widget.extraState || {}
+        );
         const layout = this._updateLayoutStyle({
           i: id,
           widgetStyle: {},
@@ -181,7 +186,12 @@ export default class PerformancePanel extends React.Component<Props, State> {
       const Widget = widgetTypes[type];
 
       return (
-        <div id={`widget-${id}`} key={id} data-grid={layout} style={layout.gridElementStyle}>
+        <div
+          id={`widget-${id}`}
+          key={id}
+          data-grid={layout}
+          style={layout.gridElementStyle}
+        >
           <Widget widget={widget} widgetStyle={layout.widgetStyle} />
         </div>
       );
@@ -215,7 +225,11 @@ export default class PerformancePanel extends React.Component<Props, State> {
   });
 
   render() {
-    const { api, profileId, store: { performancePanel: { widgets } } } = this.props;
+    const {
+      api,
+      profileId,
+      store: { performancePanel: { widgets } }
+    } = this.props;
     const { rowHeight, rows, cols } = this.state;
 
     return (
@@ -236,7 +250,8 @@ export default class PerformancePanel extends React.Component<Props, State> {
           rowHeight={rowHeight}
           margin={[0, 0]}
           verticalGridSize={rows}
-          bFitHeight={false}
+          bFitHeight
+          minH = 24
         >
           {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
