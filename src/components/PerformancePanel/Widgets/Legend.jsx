@@ -68,6 +68,7 @@ export default class Legend extends React.Component<Props> {
 
   setValues: () => null;
   state: any;
+  colors: string[];
 
   constructor(props: Props) {
     super(props);
