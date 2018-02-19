@@ -437,7 +437,7 @@
         "chartTitle": "Reads",
         "colorList": ["#964564"],
         "description": "Average time for a wiredTiger disk read",
-        "unit": "/ms",
+        "unit": "ms",
         "useHighWaterMark": true
       }
     },
@@ -456,7 +456,7 @@
         "chartTitle": "Writes",
         "colorList": ["#39B160"],
         "description": "Average time for a wiredTiger disk write",
-        "unit": "/ms",
+        "unit": "ms",
         "useHighWaterMark": true
       }
     },
@@ -475,7 +475,7 @@
         "chartTitle": "Log Sync",
         "colorList": ["#C9C21E"],
         "description": "Average time for a wiredTiger log sync",
-        "unit": "/ms",
+        "unit": "ms",
         "useHighWaterMark": true
       }
     },
