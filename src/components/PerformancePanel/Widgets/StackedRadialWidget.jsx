@@ -365,7 +365,7 @@ export default class StackedRadialWidget extends React.Component<
       });
       field.field
         .select('text.completed')
-        .attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
+        .attr('transform', 'translate(0, 14), scale(0.4, 0.4)');
     }
 
     if (this.props.widget.unit === '%' && field.layer === 2) {
@@ -386,7 +386,7 @@ export default class StackedRadialWidget extends React.Component<
       });
       field.field
         .select('text.completed')
-        .attr('transform', 'translate(0, 14), scale(0.4, 0.4)');
+        .attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
     }
 
     field.field
