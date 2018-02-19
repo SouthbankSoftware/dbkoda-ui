@@ -14,14 +14,14 @@
           "Current network upload and download on the host system.",
         "infoWidget": true,
         "widgetItemKeys": ["download", "upload"],
-        "widgetDisplayNames": ["Download", "Upload"],
+        "widgetDisplayNames": ["In", "Out"],
         "useHighWaterMark": true
       },
       "layout": {
         "x": 0,
         "y": 1,
-        "w": 6,
-        "h": 6,
+        "w": 4,
+        "h": 4,
         "static": true
       }
     },
@@ -34,7 +34,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 12,
+        "y": 8,
         "w": 6,
         "h": 6,
         "static": true
@@ -80,7 +80,7 @@
       "items": ["network_bytesOutPs"],
       "extraState": {
         "description": "Data written to network from Mongo Server",
-        "unit": "b"
+        "unit": "b/s"
       },
       "layout": {
         "x": 12,
@@ -96,7 +96,7 @@
       "extraState": {
         "rotate": 180,
         "description": "Data read into Mongo Server from Network",
-        "unit": "b"
+        "unit": "b/s"
       },
       "layout": {
         "x": 34,
@@ -310,6 +310,8 @@
       },
       "extraState": {
         "title": "Transactions",
+        "showLegend": true,
+        "colorList": ["#39B160", "#964564"],
         "infoWidget": true,
         "showVerticalRuleLeft": true,
         "showVerticalRule": true,
@@ -401,6 +403,7 @@
       ],
       "extraState": {
         "title": "Disk",
+        "colorList": ["#964564", "#39B160", "#C9C21E"],
         "infoWidget": true,
         "description":
           "wiredTiger disk to cahce, cache to disk and log sync time per second.",
@@ -432,7 +435,7 @@
         "title": "Latency",
         "infoWidget": true,
         "chartTitle": "Reads",
-        "colorList": ["#964564", "#8AB3A7"],
+        "colorList": ["#964564"],
         "description": "Average time for a wiredTiger disk read",
         "unit": "/ms",
         "useHighWaterMark": true

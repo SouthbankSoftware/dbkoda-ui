@@ -223,7 +223,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         return 'chartBar ' + d.key;
       })
       .attr('fill', d => {
-        return d3.hsl(d.color).darker(1);
+        return d3.hsl(d.color);
       })
       .transition(t)
       .attr('width', d => {
@@ -241,7 +241,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         rx: 15,
         ry: 15,
         fill: d => {
-          return d3.hsl(d.color).darker(1);
+          return d3.hsl(d.color);
         },
         'clip-path': `url(#${BAR_CLIPPATH_ID})`,
         height: barHeight,

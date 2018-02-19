@@ -127,6 +127,18 @@ export const convertBytes = (value: any, unit: string, length: number) => {
       case 'pb':
         result.unit = 'eb';
         break;
+      case 'b/s':
+        result.unit = 'kb/s';
+        break;
+      case 'kb/s':
+        result.unit = 'mb/s';
+        break;
+      case 'mb/s':
+        result.unit = 'gb/s';
+        break;
+      case 'gb/s':
+        result.unit = 'tb/s';
+        break;
       default: {
         console.error('"' + unit + '" is the maximum supported unit of bytes.');
         return result;
@@ -141,7 +153,7 @@ export const convertBytes = (value: any, unit: string, length: number) => {
 export const convertUnits = (value: any, unit: string, length: number) => {
   if ('ms/s|μs/s|/μs|/us|/ms|/s|/m|/h'.indexOf(unit) >= 0) {
     return convertTime(value, unit, length);
-  } else if ('b|kb|mb|gb|tb|pb|eb'.indexOf(unit) >= 0) {
+  } else if ('b|kb|mb|gb|tb|pb|eb|b/s|kb/s|mb/s|gb/s|tb/s'.indexOf(unit) >= 0) {
     return convertBytes(value, unit, length);
   }
   console.log('Unknown unit is provided for conversion (unit=', unit, ').');

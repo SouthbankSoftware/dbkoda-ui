@@ -34,7 +34,19 @@
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0px 28px 0px 28px;
+  padding-left: 30px;
+
+  hr.osDivider {
+    position: absolute;
+    border: none;
+    border-right: 2px solid #383838;
+    height: 100vh;
+    width: 1px;
+    left: 15%;
+    height: 96%;
+    top: 2%;
+  }
+
   .react-grid-item {
     background: #202020;
   }

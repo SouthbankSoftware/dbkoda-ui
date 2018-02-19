@@ -34,7 +34,14 @@ import { convertUnits } from './Utils';
 import Widget from './Widget';
 import Legend from './Legend';
 
-let colors = ['#A27EB7', '#DC5D3E', '#39B160', '#643798', '#2E547A', '#3333cc'];
+const colors = [
+  '#A27EB7',
+  '#DC5D3E',
+  '#39B160',
+  '#643798',
+  '#2E547A',
+  '#3333cc'
+];
 
 // Flow type definitions.
 
@@ -74,6 +81,11 @@ export default class StackedRadialWidget extends React.Component<
       height: StackedRadialWidget.height,
       lastLayerTweened: { key: '', index: 1 }
     };
+    if (this.props.widget.colorList) {
+      this.colors = this.props.widget.colorList;
+    } else {
+      this.colors = colors;
+    }
     // $FlowFixMe
     this.fields = [];
     // $FlowFixMe
@@ -142,11 +154,19 @@ export default class StackedRadialWidget extends React.Component<
     d3.transition();
 
     let xTranslate = 0;
-    xTranslate += parseInt(
-      this._getOuterRadiusSize(this.props.widget.items.length) +
-        this.state.width * StackedRadialWidget.xTranslateScale,
-      StackedRadialWidget.yTranslateScale
-    );
+    if (this.props.widget.showLegend) {
+      xTranslate += parseInt(
+        this._getOuterRadiusSize(this.props.widget.items.length) +
+          this.state.width * StackedRadialWidget.xTranslateScale,
+        StackedRadialWidget.yTranslateScale
+      );
+    } else {
+      xTranslate += parseInt(
+        this._getOuterRadiusSize(this.props.widget.items.length) +
+          this.state.width,
+        StackedRadialWidget.yTranslateScale
+      );
+    }
 
     const svg = elem
       .select(selector)
@@ -185,13 +205,13 @@ export default class StackedRadialWidget extends React.Component<
     gradient
       .append('svg:stop')
       .attr('offset', '0%')
-      .attr('stop-color', colors[layer - 1])
+      .attr('stop-color', this.colors[layer - 1])
       .attr('stop-opacity', 1);
 
     gradient
       .append('svg:stop')
       .attr('offset', '100%')
-      .attr('stop-color', colors[layer - 1])
+      .attr('stop-color', this.colors[layer - 1])
       .attr('stop-opacity', 1);
 
     // Drop Shadows
@@ -225,13 +245,13 @@ export default class StackedRadialWidget extends React.Component<
     field
       .append('path')
       .attr('class', 'progress')
-      .attr('fill', colors[layer - 1]);
+      .attr('fill', this.colors[layer - 1]);
 
     // render background
     field
       .append('path')
       .attr('class', 'bg')
-      .style('fill', colors[layer - 1])
+      .style('fill', this.colors[layer - 1])
       .style('opacity', 0.2)
       .attr('d', background);
 
@@ -491,9 +511,6 @@ export default class StackedRadialWidget extends React.Component<
   }
 
   render() {
-    if (this.props.widget.colorList) {
-      colors = this.props.widget.colorList;
-    }
     const { widget, widgetStyle } = this.props;
     const { displayName } = widget;
     this.fields = [];
@@ -520,7 +537,7 @@ export default class StackedRadialWidget extends React.Component<
                 <Legend
                   showTotal
                   showValues
-                  colors={colors}
+                  colors={this.colors}
                   showDots={false}
                   metrics={this.props.widget.items}
                   getValues={() => {
@@ -548,6 +565,7 @@ export default class StackedRadialWidget extends React.Component<
             <Legend
               showTotal={false}
               showValues={false}
+              colors={this.colors}
               showDots
               metrics={this.props.widget.items}
               onRef={legend => {
