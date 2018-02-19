@@ -303,7 +303,7 @@
       "layout": {
         "x": 24,
         "y": 23,
-        "w": 11,
+        "w": 10,
         "h": 10,
         "background": "light",
         "static": true
@@ -322,9 +322,9 @@
       "type": "ProgressBarWidget",
       "items": ["wtCache_MissPct"],
       "layout": {
-        "x": 35,
+        "x": 34,
         "y": 23,
-        "w": 15,
+        "w": 16,
         "h": 5,
         "background": "light",
         "static": true
@@ -345,9 +345,9 @@
       "type": "ProgressBarWidget",
       "items": ["wtCache_evictionsPs"],
       "layout": {
-        "x": 35,
+        "x": 34,
         "y": 28,
-        "w": 15,
+        "w": 16,
         "h": 5,
         "background": "light",
         "static": true

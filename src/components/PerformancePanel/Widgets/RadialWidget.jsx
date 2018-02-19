@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-14T16:51:20+11:00
+ * @Last modified time: 2018-02-19T15:50:15+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -172,6 +172,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     field
       .append('text')
       .attr('class', 'completed')
+      .style('fill', d => RadialWidget.colors[d.index])
       .attr('transform', 'translate(0, 5)');
     this.field = field;
     d3
@@ -377,7 +378,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
         const texts = this.text.split('\n');
         for (let i = 0; i < texts.length; i += 1) {
           const t = texts[i];
-          let txtColor = 'white';
+          let txtColor = RadialWidget.colors[0];
           if (i === 1) {
             const idxColor = Math.ceil(parseInt(t, 10) / 20);
             txtColor = RadialWidget.runQueueColors[idxColor];
@@ -396,6 +397,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           .append('text')
           .attr('class', 'completed')
           .attr('transform', 'translate(0, 5)')
+          .style('fill', () => RadialWidget.colors[0])
           .text(d => d.text);
       }
     } else if (this.itemValue.length >= 1) {
