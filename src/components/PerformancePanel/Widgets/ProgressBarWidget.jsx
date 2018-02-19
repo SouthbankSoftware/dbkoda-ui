@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-16T14:00:33+11:00
+ * @Last modified time: 2018-02-19T15:10:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -393,11 +393,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
             useSmartPositioning
           >
             <div className="container">
-              {chartTitle && (
-                <div className="chart-label">
-                  <strong>{chartTitle}</strong>
-                </div>
-              )}
+              <div className="chart-label">
+                {chartTitle && (<strong>{chartTitle}</strong>)}
+              </div>
               <svg
                 className="chart"
                 ref={_chartEl => (this._chartEl = _chartEl)}
