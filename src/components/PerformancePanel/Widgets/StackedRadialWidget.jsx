@@ -1,8 +1,8 @@
 /**
  *
  * Created by mike on 06/02/2018
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-09T15:33:41+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-19T16:06:30+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -61,7 +61,7 @@ export default class StackedRadialWidget extends React.Component<
   static height = 60;
   static minRadius = 10;
   static ringGapScaleFactor = 14;
-  static xTranslateScale = 0.02;
+  static xTranslateScale = 0.14;
   static yTranslateScale = 10;
   static PI = 2 * Math.PI;
 
@@ -158,13 +158,13 @@ export default class StackedRadialWidget extends React.Component<
       xTranslate += parseInt(
         this._getOuterRadiusSize(this.props.widget.items.length) +
           this.state.width * StackedRadialWidget.xTranslateScale,
-        StackedRadialWidget.yTranslateScale
+        10
       );
     } else {
       xTranslate += parseInt(
         this._getOuterRadiusSize(this.props.widget.items.length) +
           this.state.width,
-        StackedRadialWidget.yTranslateScale
+        10
       );
     }
 

@@ -1,6 +1,6 @@
 /**
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-09T15:34:05+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-19T16:05:18+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -98,6 +98,8 @@
       justify-content: flex-start;
       align-content: flex-start;
       .dotWrapper {
+        position: relative;
+        top: 6px;
         .colorDot {
           width: 16px;
           order: 1;
