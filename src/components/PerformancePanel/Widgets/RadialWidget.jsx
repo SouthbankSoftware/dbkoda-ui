@@ -57,9 +57,9 @@ export default class RadialWidget extends React.Component<Object, Object> {
   static runQueueColors = [
     '#362728',
     '#00b458',
-    '#FF0000',
-    '#CC0000',
-    '#990000'
+    '#c40d0d',
+    '#960909',
+    '#750808'
   ];
   static width = 500;
   static height = 500;

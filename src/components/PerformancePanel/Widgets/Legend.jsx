@@ -30,7 +30,14 @@ import ErrorIcon from '../../../styles/icons/error-icon.svg';
 
 import './StackedRadialWidget.scss';
 
-let colors = ['#A27EB7', '#DC5D3E', '#39B160', '#643798', '#2E547A', '#3333cc'];
+const colors = [
+  '#A27EB7',
+  '#DC5D3E',
+  '#39B160',
+  '#643798',
+  '#2E547A',
+  '#3333cc'
+];
 
 type Props = {
   metrics: any,
@@ -61,6 +68,7 @@ export default class Legend extends React.Component<Props> {
 
   setValues: () => null;
   state: any;
+  colors: string[];
 
   constructor(props: Props) {
     super(props);
@@ -70,8 +78,14 @@ export default class Legend extends React.Component<Props> {
       values: [],
       width: 100,
       height: 100,
-      unit: ''
+      unit: '',
+      colors: []
     };
+    if (this.props.colors) {
+      this.colors = this.props.colors;
+    } else {
+      this.colors = colors;
+    }
 
     if (this.props.getValues && this.props.getValues()) {
       this.state.values = this.props.getValues();
@@ -103,10 +117,6 @@ export default class Legend extends React.Component<Props> {
   render() {
     let total = 0;
 
-    if (this.props.colors) {
-      colors = this.props.colors;
-    }
-
     // Determine size.
     const fontSize =
       Legend.fontSize +
@@ -133,10 +143,10 @@ export default class Legend extends React.Component<Props> {
           let fontColor = 'white';
           let valueFontColor = 'white';
           if (!this.props.showDots) {
-            fontColor = colors[count];
+            fontColor = this.colors[count];
             valueFontColor = 'black';
           }
-          const style = { fill: colors[count] };
+          const style = { fill: this.colors[count] };
           let value = 'Fetching...';
           if (this.state.values[item] || this.state.values[item] === 0) {
             value = parseFloat(Number(this.state.values[item]).toFixed(2));

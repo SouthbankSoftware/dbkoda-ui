@@ -234,6 +234,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     return (
       <div className="PerformancePanel">
+        <hr className="osDivider" />
         <ResponsiveReactGridLayout
           className="GridLayout"
           onDragStop={this._onLayoutChange}
