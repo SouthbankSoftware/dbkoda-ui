@@ -29,9 +29,10 @@
     {
       "type": "RadialWidget",
       "items": ["cpu"],
-      "description": "Current network upload and download on the host system.",
       "extraState": {
         "title": "CPU",
+        "description": "Current CPU Usage and Run Queue on the OS level.",
+        "infoWidget": true,
         "colorList": ["#01969E", "#01969E"],
         "showRunQueue": true
       },

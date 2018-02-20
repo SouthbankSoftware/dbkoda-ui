@@ -161,3 +161,20 @@ $background-colour: #202020;
     }
   }
 }
+.RadialWidget.Widget {
+  .parentWidgetWrapper {
+    .header {
+      top: -20px;
+      left: -10px;
+    }
+  }
+}
+
+.Network.RadialWidget.Widget {
+  .parentWidgetWrapper {
+    .header {
+      top: -30px;
+      left: -28px;
+    }
+  }
+}
