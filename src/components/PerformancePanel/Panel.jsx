@@ -89,8 +89,8 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     this.state = {
       rowHeight: 25,
-      cols: 50,
-      rows: 50,
+      cols: 54,
+      rows: 58,
       leftWidth: 8,
       midWidth: 24
     };
@@ -160,7 +160,9 @@ export default class PerformancePanel extends React.Component<Props, State> {
     const lSep = this.state.leftWidth;
     const rSep = this.state.leftWidth + this.state.midWidth;
     if (layout.background === 'light') {
-      layout.widgetStyle.backgroundColor = '#2A2A2A';
+      layout.widgetStyle.backgroundColor = '#2D2D2D';
+      layout.widgetStyle.opacity = '0.8';
+      layout.widgetStyle.padding = '10px';
       // layout.gridElementStyle.paddingTop = '20px';
       // layout.gridElementStyle.paddingBottom = '20px';
 
@@ -173,6 +175,9 @@ export default class PerformancePanel extends React.Component<Props, State> {
       if (layout.x + layout.w === rSep) {
         layout.gridElementStyle.paddingRight = '20px';
       }
+    }
+    if (layout.padding) {
+      layout.widgetStyle.padding = layout.padding;
     }
     return layout;
   }

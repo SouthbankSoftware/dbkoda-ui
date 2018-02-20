@@ -30,14 +30,7 @@ import ErrorIcon from '../../../styles/icons/error-icon.svg';
 
 import './StackedRadialWidget.scss';
 
-const colors = [
-  '#A27EB7',
-  '#DC5D3E',
-  '#39B160',
-  '#643798',
-  '#2E547A',
-  '#3333cc'
-];
+const colors = ['#AC8BC0', '#E26847', '#42BB6D', '#7040A3', '#365F87'];
 
 type Props = {
   metrics: any,
