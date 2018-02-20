@@ -3,7 +3,7 @@
  *
  * Created by Mike on 05/2/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-16T14:53:22+11:00
+ * @Last modified time: 2018-02-20T15:17:33+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -125,7 +125,7 @@ export default class Legend extends React.Component<Props> {
     const rowDynamicStyle = {
       height:
         Legend.rowSize +
-        Legend.rowSize * this.state.width / Legend.rowScalingFactor * 1.1 +
+        Legend.rowSize * this.state.width / Legend.rowScalingFactor +
         'px'
     };
     let totalFontColor = 'white';
