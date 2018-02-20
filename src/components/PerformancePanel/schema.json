@@ -33,6 +33,10 @@
       "extraState": {
         "title": "CPU",
         "colorList": ["#01969E", "#01969E"],
+        "displayName": "CPU",
+        "description":
+          "CPU pct busy and run queue on host",
+        "infoWidget": true,
         "showRunQueue": true
       },
       "layout": {
@@ -65,7 +69,7 @@
       "items": ["disk"],
       "extraState": {
         "colorList": ["#01969E", "#01969E"],
-        "title": "Disk",
+        "title": "Disk IO",
         "description": "Disk IO on the host system",
         "infoWidget": true,
         "widgetItemKeys": ["download", "upload"],
@@ -120,12 +124,12 @@
         "document_inserted"
       ],
       "extraState": {
-        "title": "Operations",
+        "title": "Document operations",
         "showLegend": true,
         "showVerticalRule": true,
-        "description": "Operations executed in Mongo per second by type.",
+        "description": "Document operations executed in Mongo per second by type.",
         "infoWidget": true,
-        "unit": "Op/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 11,
@@ -151,7 +155,7 @@
         "title": "Connections",
         "colorList": ["#A5A11B"],
         "infoWidget": true,
-        "description": "Number of connections current open",
+        "description": "Number of connections currently open",
         "showVerticalRule": true,
         "showVertical": true,
         "useHighWaterMark": true,
@@ -236,7 +240,7 @@
         "static": true
       },
       "extraState": {
-        "title": "Latency",
+        "title": "Op times",
         "colorList": ["#BA5A3F", "#01969E", "#42BB6D"],
         "infoWidget": true,
         "description": "Time spent for different ops.",
@@ -250,7 +254,7 @@
       "extraState": {
         "description":
           "Number of pages requested from wiredTiger cache per second.",
-        "unit": "pages/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 17,
@@ -313,7 +317,7 @@
         "static": true
       },
       "extraState": {
-        "title": "Transactions",
+        "title": "Transaction tickets",
         "showLegend": true,
         "colorList": ["#42BB6D", "#913856"],
         "infoWidget": true,
@@ -321,7 +325,7 @@
         "showVerticalRule": true,
         "description":
           "Percentage of wiredTiger read/write transactions in use.",
-        "unit": "%"
+        "unit": "% "
       }
     },
     {
@@ -363,7 +367,7 @@
         "colorList": ["#AA4B35"],
         "infoWidget": true,
         "description": "Pages evicted from the wiredTiger cache per second",
-        "unit": "Op/s",
+        "unit": "/s",
         "useHighWaterMark": true
       }
     },
@@ -372,7 +376,7 @@
       "items": ["wtIO_readIOps"],
       "extraState": {
         "description": "wiredTiger disk to cache IO rate",
-        "unit": "Op/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 17,
@@ -387,7 +391,7 @@
       "items": ["wtIO_writeIOps"],
       "extraState": {
         "description": "wiredTiger cache to disk time per second",
-        "unit": "Op/s",
+        "unit": "/s",
         "rotate": 180
       },
       "layout": {
@@ -406,7 +410,7 @@
         "wtIO_logSyncTimeUsPs"
       ],
       "extraState": {
-        "title": "Disk",
+        "title": "Disk time",
         "colorList": ["#913856", "#42BB6D", "#A5A11B"],
         "infoWidget": true,
         "description":
@@ -436,7 +440,7 @@
         "static": true
       },
       "extraState": {
-        "title": "Latency",
+        "title": "Average Latency",
         "infoWidget": true,
         "chartTitle": "Reads",
         "colorList": ["#913856"],
@@ -487,7 +491,7 @@
       "type": "DonutWidget",
       "items": ["db_storage"],
       "extraState": {
-        "title": "Storage",
+        "title": "Database Storage",
         "infoWidget": true,
         "colorList": ["#AC8BC0", "#7040A3", "#42BB6D", "#365F87"],
         "description": "Storage by database",

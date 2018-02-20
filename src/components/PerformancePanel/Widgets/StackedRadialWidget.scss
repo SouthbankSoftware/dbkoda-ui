@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-19T16:05:18+11:00
+ * @Last modified time: 2018-02-20T15:19:58+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -86,8 +86,8 @@
     flex-grow: 1;
     float: right;
     display: flex;
-    padding-top: 80px;
     flex-direction: column;
+    justify-content: center;
     .value {
     }
     .label {
