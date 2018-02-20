@@ -29,7 +29,9 @@
     {
       "type": "RadialWidget",
       "items": ["cpu"],
+      "description": "Current network upload and download on the host system.",
       "extraState": {
+        "title": "CPU",
         "colorList": ["#01969E", "#01969E"],
         "displayName": "CPU",
         "description":
@@ -127,7 +129,7 @@
         "showVerticalRule": true,
         "description": "Document operations executed in Mongo per second by type.",
         "infoWidget": true,
-        "unit": "Op/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 11,
@@ -252,7 +254,7 @@
       "extraState": {
         "description":
           "Number of pages requested from wiredTiger cache per second.",
-        "unit": "pages/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 17,
@@ -280,7 +282,7 @@
         "description": "Current and Maximum size of the wiredTiger cache.",
         "unit": "b",
         "showHorizontalRule": true,
-        "useHighWaterMark": true
+        "firstValueIsHighWaterMark": true
       }
     },
     {
@@ -300,7 +302,7 @@
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger log Buffer",
         "unit": "b",
-        "useHighWaterMark": true
+        "firstValueIsHighWaterMark": true
       }
     },
     {
@@ -374,7 +376,7 @@
       "items": ["wtIO_readIOps"],
       "extraState": {
         "description": "wiredTiger disk to cache IO rate",
-        "unit": "Op/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 17,
@@ -389,7 +391,7 @@
       "items": ["wtIO_writeIOps"],
       "extraState": {
         "description": "wiredTiger cache to disk time per second",
-        "unit": "Op/s",
+        "unit": "/s",
         "rotate": 180
       },
       "layout": {

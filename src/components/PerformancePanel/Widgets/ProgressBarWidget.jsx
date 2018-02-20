@@ -159,6 +159,11 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (sData.length > 1) {
       // Case where there are more than 1 data items to display
       for (let I = 0; I < sData.length; I += 1) {
+        if (I == 0 && this.props.widget.firstValueIsHighWaterMark) {
+          // Discard first value, set high water mark.
+          this._totalDivisor = data[sData[I]];
+          sumOfValues = data[sData[I]];
+        }
         arrData.push({
           color: colors[I],
           value: data[sData[I]],
@@ -171,11 +176,17 @@ export default class ProgressBarWidget extends React.Component<Props> {
         }
       ]).reverse();
       arrData = arrData.map(elem => {
-        elem.sumValue = sumOfValues + elem.value;
-        sumOfValues += elem.value;
+        if (!this.props.widget.firstValueIsHighWaterMark) {
+          sumOfValues += elem.value;
+          elem.sumValue = sumOfValues + elem.value;
+        } else {
+          elem.sumValue = elem.value;
+        }
         return elem;
       });
-      arrData = _.reverse(arrData);
+      if (!this.props.widget.firstValueIsHighWaterMark) {
+        arrData = _.reverse(arrData);
+      }
       this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label
     } else if (sData.length === 1) {
       // specific case of only one data item
@@ -202,8 +213,12 @@ export default class ProgressBarWidget extends React.Component<Props> {
       ) {
         this._totalDivisor = newHighWaterMark;
       }
-    } else {
+    } else if (!this.props.widget.firstValueIsHighWaterMark) {
       this._totalDivisor = sumOfValues;
+    }
+    if (this.props.widget.firstValueIsHighWaterMark) {
+      console.log('Total Divisor: ', this._totalDivisor);
+      console.log('Sum of Values: ', sumOfValues);
     }
 
     const t = d3.transition().duration(750);
