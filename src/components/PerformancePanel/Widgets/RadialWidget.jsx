@@ -33,15 +33,9 @@ import _ from 'lodash';
 import './RadialWidget.scss';
 import Widget from './Widget';
 
-let colors = ['#01969E', '#01969E'];
-let gradientColors = ['#01969E', '#01969E'];
-let runQueueColors = [
-  '#362728',
-  '#00b458',
-  '#c40d0d',
-  '#960909',
-  '#750808'
-];
+const colors = ['#01969E', '#01969E'];
+const gradientColors = ['#01969E', '#01969E'];
+const runQueueColors = ['#362728', '#00b458', '#c40d0d', '#960909', '#750808'];
 
 const bytesToSize = (bytes: number) => {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -62,7 +56,6 @@ const bytesToSize = (bytes: number) => {
 })
 @observer
 export default class RadialWidget extends React.Component<Object, Object> {
-
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
@@ -73,6 +66,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
   radial: ?HTMLElement;
   text: string = '';
   tooltip: Object;
+  colors: any;
+  gradientColors: any;
 
   constructor(props: Object) {
     super(props);
@@ -169,7 +164,6 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .style('opacity', 0.2)
       .attr('d', background);
 
-
     field
       .append('text')
       .attr('class', 'completed')
@@ -213,8 +207,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
     }
 
     const radius = (Math.min(this.state.width, this.state.height) - 30) / 2;
-    const innerRadius = radius - (radius * 0.4);
-    const outerRadius = radius - (radius * 0.22);
+    const innerRadius = radius - radius * 0.4;
+    const outerRadius = radius - radius * 0.22;
     const arc = d3
       .arc()
       .outerRadius(outerRadius)
