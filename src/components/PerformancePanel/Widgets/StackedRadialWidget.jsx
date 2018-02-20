@@ -34,14 +34,7 @@ import { convertUnits } from './Utils';
 import Widget from './Widget';
 import Legend from './Legend';
 
-const colors = [
-  '#A27EB7',
-  '#DC5D3E',
-  '#39B160',
-  '#643798',
-  '#2E547A',
-  '#3333cc'
-];
+const colors = ['#AC8BC0', '#E26847', '#42BB6D', '#7040A3', '#365F87'];
 
 // Flow type definitions.
 
@@ -252,7 +245,7 @@ export default class StackedRadialWidget extends React.Component<
       .append('path')
       .attr('class', 'bg')
       .style('fill', this.colors[layer - 1])
-      .style('opacity', 0.2)
+      .style('opacity', 0.1)
       .attr('d', background);
 
     const yTranslation = -100 + 35 * (layer - 1);

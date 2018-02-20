@@ -357,7 +357,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       colors = this.props.widget.colorList;
     }
     const { widget, widgetStyle } = this.props;
-    const { showHorizontalRule, chartTitle, showVertical } = widget;
+    const { chartTitle, showVertical } = widget;
     const chartTotalStyle = { top: '40%' };
     if (showVertical) {
       chartTotalStyle.top = '50%';
@@ -394,7 +394,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
           >
             <div className="container">
               <div className="chart-label">
-                {chartTitle && (<strong>{chartTitle}</strong>)}
+                {chartTitle && <strong>{chartTitle}</strong>}
               </div>
               <svg
                 className="chart"
@@ -408,7 +408,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
               </div>
             </div>
           </Tooltip>
-          {showHorizontalRule && <hr />}
           <div className="d3-tip-top" ref={_tipEl => (this._tipEl = _tipEl)} />
           <div
             className="d3-tip-right"

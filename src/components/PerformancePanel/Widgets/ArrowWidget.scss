@@ -24,13 +24,13 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../../styles/_defaultTheme.scss";
+@import '../../../styles/_defaultTheme.scss';
 
 .ArrowWidget {
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: lighten($panelLeftBackground, 30);
+  color: #39B160;
   text-shadow: 0 -1px 0 $panelLeftBackground;
 
   .chart {
@@ -46,6 +46,6 @@
 
 :export {
   backgroundColour: #295137;
-  progressBarGradientStartColour: #39B160;
-  progressBarGradientStopColour: #39B160;
+  progressBarGradientStartColour: #42bb6d;
+  progressBarGradientStopColour: #42bb6d;
 }
