@@ -21,4 +21,4 @@
  * Created by joey on 20/2/18.
  */
 
-export default from './DonutContainer';
+export default from './DonutWidget';

@@ -24,8 +24,18 @@
 
 import React from 'react';
 import * as d3 from 'd3';
+import {inject, observer} from 'mobx-react';
+import {autorun} from 'mobx';
 import Widget from '../Widget';
 
+@inject(({ store, api }, { widget }) => {
+  return {
+    store,
+    api,
+    widget
+  };
+})
+@observer
 export default class DonutWidget extends React.Component<Object, Object> {
   colors: Array<string> = [];
   dataset: Array<Object>;
@@ -97,7 +107,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
     const pie = d3.pie()
       .sort(null)
       .value((d) => {
-        return d.val;
+        return d.dataSize;
       });
 
     const arc = d3.arc()
@@ -108,8 +118,10 @@ export default class DonutWidget extends React.Component<Object, Object> {
     const paths = this.context.selectAll('.donut')
       .selectAll('path')
       .data((d) => {
+        console.log('d.data=', d.data);
         return pie(d.data);
       });
+
     paths
       .transition()
       .duration(1000)
@@ -140,16 +152,13 @@ export default class DonutWidget extends React.Component<Object, Object> {
         const value = Math.random() * 10 * (3 - i);
         total += value;
         data.push({
-          'cat': cat[j],
-          'val': value
+          'dbName': cat[j],
+          'dataSize': value
         });
       }
 
       dataset.push({
-        'type': type[i],
-        'unit': unit[i],
         'data': data,
-        'total': total
       });
     }
     return dataset;
@@ -157,9 +166,32 @@ export default class DonutWidget extends React.Component<Object, Object> {
 
   componentDidMount() {
     setTimeout(() => {
+      autorun(() => {
+        const {values, items} = this.props.widget;
+        console.log('get values', items, values.length);
+        if (this.context) {
+          this.getUpdatedData(values, items);
+          this.context.selectAll('.donut').data(this.genData());
+          this.update();
+        }
+      });
       this.renderD3Component();
     }, 200);
   }
+
+  getUpdatedData(values, items) {
+    const latestValue = values.length > 0 ? values[values.length - 1] : {};
+    if (_.isEmpty(latestValue)) {
+      return [];
+    }
+    const value = latestValue.value[items[0]];
+    const retValue = [];
+    _.forOwn(value, (dbValue, dbName) => {
+      retValue.push({dbName, dataSize: dbValue.dataSize});
+    });
+    return [{data: retValue}];
+  }
+
 
   render() {
     const {widget, widgetStyle} = this.props;
