@@ -95,20 +95,28 @@ export const convertTime = (value: any, unit: string, length: number) => {
         result.value = timescale(value, 'ms', 's').toFixed(2);
         break;
       case 'Op/s':
-        result.unit = 'Op/ms';
-        result.value = timescale(value, 's', 'ms').toFixed(2);
+        result.unit = 'KOp/s';
+        result.value /= 1000;
         break;
-      case 'Op/ms':
-        result.unit = 'Op/μs';
-        result.value = timescale(value, 'ms', 'μs').toFixed(2);
+      case 'KOp/ss':
+        result.unit = 'MOp/μs';
+        result.value /= 1000;
         break;
       case 'pages/s':
-        result.unit = 'pages/ms';
-        result.value = timescale(value, 's', 'ms').toFixed(2);
+        result.unit = 'Kpages/s';
+        result.value /= 1000;
         break;
-      case 'pages/ms':
-        result.unit = 'pages/μs';
-        result.value = timescale(value, 'ms', 'μs').toFixed(2);
+      case 'Kpages/s':
+        result.unit = 'Mpages/s';
+        result.value /= 1000;
+        break;
+      case 'μs':
+        result.unit = 'ms';
+        result.value = timescale(value, 'μs', 'ms').toFixed(2);
+        break;
+      case 'ms':
+        result.unit = 's';
+        result.value = timescale(value, 'ms', 's').toFixed(2);
         break;
       default: {
         console.error('"' + unit + '" is not a valid unit of time.');
@@ -171,7 +179,7 @@ export const convertBytes = (value: any, unit: string, length: number) => {
 
 export const convertUnits = (value: any, unit: string, length: number) => {
   if (
-    'ms/s|μs/s|/μs|/us|/ms|/s|/m|/h|Op/s|Op/ms|Op/μs|pages/s|pages/ms|pages/μs'.indexOf(
+    's|ms|μs|ms/s|μs/s|/μs|/us|/ms|/s|/m|/h|Op/s|KOp/s|MOp/s|pages/s|Kpages/s|Mpages/s'.indexOf(
       unit
     ) >= 0
   ) {
