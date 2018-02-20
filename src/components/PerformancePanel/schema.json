@@ -425,7 +425,7 @@
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtIO_readLatencyMs"],
+      "items": ["wtIO_readLatencyUs"],
       "layout": {
         "x": 25,
         "y": 46,
@@ -440,13 +440,13 @@
         "chartTitle": "Reads",
         "colorList": ["#913856"],
         "description": "Average time for a wiredTiger disk read",
-        "unit": "ms",
+        "unit": "μs",
         "useHighWaterMark": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtIO_writeLatencyMs"],
+      "items": ["wtIO_writeLatencyUs"],
       "layout": {
         "x": 25,
         "y": 50,
@@ -459,13 +459,13 @@
         "chartTitle": "Writes",
         "colorList": ["#42BB6D"],
         "description": "Average time for a wiredTiger disk write",
-        "unit": "ms",
+        "unit": "μs",
         "useHighWaterMark": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtIO_logSyncLatencyMs"],
+      "items": ["wtIO_logSyncLatencyUs"],
       "layout": {
         "x": 25,
         "y": 54,
@@ -478,7 +478,7 @@
         "chartTitle": "Log Sync",
         "colorList": ["#A5A11B"],
         "description": "Average time for a wiredTiger log sync",
-        "unit": "ms",
+        "unit": "μs",
         "useHighWaterMark": true
       }
     },
