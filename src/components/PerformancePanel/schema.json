@@ -1,6 +1,6 @@
 {
-  "cols": 50,
-  "rows": 50,
+  "cols": 54,
+  "rows": 58,
   "rowHeight": 25,
   "leftWidth": 8,
   "midWidth": 20,
@@ -10,6 +10,7 @@
       "items": ["network"],
       "extraState": {
         "title": "Network",
+        "colorList": ["#365F87", "#365F87"],
         "description":
           "Current network upload and download on the host system.",
         "infoWidget": true,
@@ -18,8 +19,8 @@
         "useHighWaterMark": true
       },
       "layout": {
-        "x": 0,
-        "y": 1,
+        "x": 2,
+        "y": 5,
         "w": 4,
         "h": 4,
         "static": true
@@ -29,12 +30,13 @@
       "type": "RadialWidget",
       "items": ["cpu"],
       "extraState": {
+        "colorList": ["#01969E", "#01969E"],
         "displayName": "CPU",
         "showRunQueue": true
       },
       "layout": {
-        "x": 0,
-        "y": 8,
+        "x": 1,
+        "y": 13,
         "w": 6,
         "h": 6,
         "static": true
@@ -44,13 +46,14 @@
       "type": "RadialWidget",
       "items": ["memory"],
       "extraState": {
+        "colorList": ["#01969E", "#01969E"],
         "title": "Memory",
         "description": "Memory utilization on the host system.",
         "infoWidget": true
       },
       "layout": {
-        "x": 0,
-        "y": 25,
+        "x": 1,
+        "y": 30,
         "w": 6,
         "h": 6,
         "static": true
@@ -60,6 +63,7 @@
       "type": "RadialWidget",
       "items": ["disk"],
       "extraState": {
+        "colorList": ["#01969E", "#01969E"],
         "title": "Disk",
         "description": "Disk IO on the host system",
         "infoWidget": true,
@@ -68,8 +72,8 @@
         "useHighWaterMark": true
       },
       "layout": {
-        "x": 0,
-        "y": 39,
+        "x": 1,
+        "y": 48,
         "w": 6,
         "h": 6,
         "static": true
@@ -83,8 +87,8 @@
         "unit": "b/s"
       },
       "layout": {
-        "x": 12,
-        "y": 2,
+        "x": 17,
+        "y": 6,
         "w": 2,
         "h": 2,
         "static": true
@@ -99,8 +103,8 @@
         "unit": "b/s"
       },
       "layout": {
-        "x": 34,
-        "y": 2,
+        "x": 41,
+        "y": 6,
         "w": 2,
         "h": 2,
         "static": true
@@ -109,11 +113,10 @@
     {
       "type": "StackedRadialWidget",
       "items": [
-        "operations_QueryPs",
-        "operations_CommandPs",
-        "operations_InsertPs",
-        "operations_UpdatePs",
-        "operations_DeletePs"
+        "document_returned",
+        "document_updated",
+        "document_deleted",
+        "document_inserted"
       ],
       "extraState": {
         "title": "Operations",
@@ -121,12 +124,12 @@
         "showVerticalRule": true,
         "description": "Operations executed in Mongo per second by type.",
         "infoWidget": true,
-        "unit": "/s"
+        "unit": "Op/s"
       },
       "layout": {
-        "x": 9,
-        "y": 6,
-        "w": 15,
+        "x": 11,
+        "y": 10,
+        "w": 14,
         "h": 12,
         "background": "light",
         "static": true
@@ -136,16 +139,16 @@
       "type": "ProgressBarWidget",
       "items": ["connections_current"],
       "layout": {
-        "x": 24,
-        "y": 6,
-        "w": 10,
+        "x": 25,
+        "y": 10,
+        "w": 12,
         "h": 12,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Connections",
-        "colorList": ["#C9C21E"],
+        "colorList": ["#A5A11B"],
         "infoWidget": true,
         "description": "Number of connections current open",
         "showVerticalRule": true,
@@ -158,16 +161,16 @@
       "type": "ProgressBarWidget",
       "items": ["queue_readersActive", "queue_readersQueued"],
       "layout": {
-        "x": 34,
-        "y": 6,
-        "w": 16,
+        "x": 37,
+        "y": 10,
+        "w": 15,
         "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Queues",
-        "colorList": ["#8964BD", "#A88EBE"],
+        "colorList": ["#7040A3", "#AC8BC0"],
         "description":
           "Current number of read operations and queued read operations.",
         "infoWidget": true,
@@ -181,16 +184,16 @@
       "type": "ProgressBarWidget",
       "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
-        "x": 34,
-        "y": 9,
-        "w": 16,
+        "x": 37,
+        "y": 13,
+        "w": 15,
         "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "chartTitle": "Writes",
-        "colorList": ["#8964BD", "#A88EBE"],
+        "colorList": ["#7040A3", "#AC8BC0"],
         "description":
           "Current number of Write operations and queued Write operations.",
         "unit": "/s"
@@ -200,16 +203,16 @@
       "type": "ProgressBarWidget",
       "items": ["queue_totalActive", "queue_totalQueued"],
       "layout": {
-        "x": 34,
-        "y": 12,
-        "w": 16,
+        "x": 37,
+        "y": 16,
+        "w": 15,
         "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "chartTitle": "Total",
-        "colorList": ["#7E4EA7", "#8964BD", "#A88EBE"],
+        "colorList": ["#7040A3", "#AC8BC0"],
         "description": "Total number of all operations and queued operations.",
         "showHorizontalRule": true,
         "useHighWaterMark": true,
@@ -224,16 +227,16 @@
         "latency_commandWaitUsPs"
       ],
       "layout": {
-        "x": 34,
-        "y": 15,
-        "w": 16,
+        "x": 37,
+        "y": 19,
+        "w": 15,
         "h": 3,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Latency",
-        "colorList": ["#c6593d", "#6EC4CB", "#467f51"],
+        "colorList": ["#BA5A3F", "#01969E", "#42BB6D"],
         "infoWidget": true,
         "description": "Time spent for different ops.",
         "unit": "μs/s",
@@ -246,11 +249,11 @@
       "extraState": {
         "description":
           "Number of pages requested from wiredTiger cache per second.",
-        "unit": "/s"
+        "unit": "pages/s"
       },
       "layout": {
-        "x": 12,
-        "y": 19,
+        "x": 17,
+        "y": 23,
         "w": 2,
         "h": 2,
         "static": true
@@ -260,16 +263,16 @@
       "type": "ProgressBarWidget",
       "items": ["wtCache_maxBytes", "wtCache_currentBytes"],
       "layout": {
-        "x": 9,
-        "y": 23,
-        "w": 15,
-        "h": 5,
+        "x": 11,
+        "y": 27,
+        "w": 14,
+        "h": 7,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Wiredtiger Cache",
-        "colorList": ["#68837E", "#8AB3A7"],
+        "colorList": ["#32554D", "#4E8476"],
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger cache.",
         "unit": "b",
@@ -281,16 +284,16 @@
       "type": "ProgressBarWidget",
       "items": ["wtLog_maxLogSize", "wtLog_currentLogSize"],
       "layout": {
-        "x": 9,
-        "y": 28,
-        "w": 15,
-        "h": 5,
+        "x": 11,
+        "y": 34,
+        "w": 14,
+        "h": 7,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Log Buffer",
-        "colorList": ["#68B6B8", "#8AB3A7"],
+        "colorList": ["#028989", "#03e2e2"],
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger log Buffer",
         "unit": "b",
@@ -301,17 +304,17 @@
       "type": "StackedRadialWidget",
       "items": ["wtTransactions_readPct", "wtTransactions_writePct"],
       "layout": {
-        "x": 24,
-        "y": 23,
-        "w": 10,
-        "h": 10,
+        "x": 25,
+        "y": 27,
+        "w": 12,
+        "h": 14,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Transactions",
         "showLegend": true,
-        "colorList": ["#39B160", "#964564"],
+        "colorList": ["#42BB6D", "#913856"],
         "infoWidget": true,
         "showVerticalRuleLeft": true,
         "showVerticalRule": true,
@@ -324,16 +327,16 @@
       "type": "ProgressBarWidget",
       "items": ["wtCache_MissPct"],
       "layout": {
-        "x": 34,
-        "y": 23,
-        "w": 16,
-        "h": 5,
+        "x": 37,
+        "y": 27,
+        "w": 15,
+        "h": 7,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Miss Rate",
-        "colorList": ["#6D8EB2", "#8AB3A7"],
+        "colorList": ["#365F87"],
         "infoWidget": true,
         "description":
           "Percentage of time a needed page is not found in wiredTiger cache",
@@ -347,16 +350,16 @@
       "type": "ProgressBarWidget",
       "items": ["wtCache_evictionsPs"],
       "layout": {
-        "x": 34,
-        "y": 28,
-        "w": 16,
-        "h": 5,
+        "x": 37,
+        "y": 34,
+        "w": 15,
+        "h": 7,
         "background": "light",
         "static": true
       },
       "extraState": {
         "title": "Evictions",
-        "colorList": ["#c6593d", "#5A8377"],
+        "colorList": ["#AA4B35"],
         "infoWidget": true,
         "description": "Pages evicted from the wiredTiger cache per second",
         "unit": "/s",
@@ -365,14 +368,14 @@
     },
     {
       "type": "ArrowWidget",
-      "items": ["wtIO_diskToCacheUsPs"],
+      "items": ["wtIO_readIOps"],
       "extraState": {
         "description": "wiredTiger disk to cache IO rate",
-        "unit": "μs/s"
+        "unit": "Op/s"
       },
       "layout": {
-        "x": 12,
-        "y": 34,
+        "x": 17,
+        "y": 42,
         "w": 2,
         "h": 2,
         "static": true
@@ -380,15 +383,15 @@
     },
     {
       "type": "ArrowWidget",
-      "items": ["wtIO_cacheToDiskUsPs"],
+      "items": ["wtIO_writeIOps"],
       "extraState": {
         "description": "wiredTiger cache to disk time per second",
-        "unit": "μs/s",
+        "unit": "Op/s",
         "rotate": 180
       },
       "layout": {
-        "x": 34,
-        "y": 34,
+        "x": 41,
+        "y": 42,
         "w": 2,
         "h": 2,
         "static": true
@@ -403,7 +406,7 @@
       ],
       "extraState": {
         "title": "Disk",
-        "colorList": ["#964564", "#39B160", "#C9C21E"],
+        "colorList": ["#913856", "#42BB6D", "#A5A11B"],
         "infoWidget": true,
         "description":
           "wiredTiger disk to cahce, cache to disk and log sync time per second.",
@@ -412,8 +415,8 @@
         "showVerticalRule": true
       },
       "layout": {
-        "x": 9,
-        "y": 38,
+        "x": 11,
+        "y": 46,
         "w": 14,
         "h": 12,
         "background": "light",
@@ -422,11 +425,11 @@
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtIO_readLatencyMs"],
+      "items": ["wtIO_readLatencyUs"],
       "layout": {
-        "x": 23,
-        "y": 38,
-        "w": 13,
+        "x": 25,
+        "y": 46,
+        "w": 12,
         "h": 4,
         "background": "light",
         "static": true
@@ -435,56 +438,57 @@
         "title": "Latency",
         "infoWidget": true,
         "chartTitle": "Reads",
-        "colorList": ["#964564"],
+        "colorList": ["#913856"],
         "description": "Average time for a wiredTiger disk read",
-        "unit": "ms",
+        "unit": "μs",
         "useHighWaterMark": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtIO_writeLatencyMs"],
+      "items": ["wtIO_writeLatencyUs"],
       "layout": {
-        "x": 23,
-        "y": 42,
-        "w": 13,
+        "x": 25,
+        "y": 50,
+        "w": 12,
         "h": 4,
         "background": "light",
         "static": true
       },
       "extraState": {
         "chartTitle": "Writes",
-        "colorList": ["#39B160"],
+        "colorList": ["#42BB6D"],
         "description": "Average time for a wiredTiger disk write",
-        "unit": "ms",
+        "unit": "μs",
         "useHighWaterMark": true
       }
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["wtIO_logSyncLatencyMs"],
+      "items": ["wtIO_logSyncLatencyUs"],
       "layout": {
-        "x": 23,
-        "y": 46,
-        "w": 13,
+        "x": 25,
+        "y": 54,
+        "w": 12,
         "h": 4,
         "background": "light",
         "static": true
       },
       "extraState": {
         "chartTitle": "Log Sync",
-        "colorList": ["#C9C21E"],
+        "colorList": ["#A5A11B"],
         "description": "Average time for a wiredTiger log sync",
-        "unit": "ms",
+        "unit": "μs",
         "useHighWaterMark": true
       }
     },
     {
-      "type": "StackedRadialWidget",
+      "type": "DonutWidget",
       "items": ["db_storage"],
       "extraState": {
         "title": "Storage",
         "infoWidget": true,
+        "colorList": ["#AC8BC0", "#7040A3", "#42BB6D", "#365F87"],
         "description": "Storage by database",
         "unit": "gb",
         "showLegend": true,
@@ -492,9 +496,9 @@
         "showVerticalRuleLeft": true
       },
       "layout": {
-        "x": 36,
-        "y": 38,
-        "w": 14,
+        "x": 37,
+        "y": 46,
+        "w": 15,
         "h": 12,
         "background": "light",
         "static": true

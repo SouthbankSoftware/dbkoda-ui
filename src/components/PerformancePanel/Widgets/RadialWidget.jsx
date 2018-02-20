@@ -33,6 +33,16 @@ import _ from 'lodash';
 import './RadialWidget.scss';
 import Widget from './Widget';
 
+let colors = ['#01969E', '#01969E'];
+let gradientColors = ['#01969E', '#01969E'];
+let runQueueColors = [
+  '#362728',
+  '#00b458',
+  '#c40d0d',
+  '#960909',
+  '#750808'
+];
+
 const bytesToSize = (bytes: number) => {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   if (bytes <= 0) return '0 B';
@@ -52,15 +62,7 @@ const bytesToSize = (bytes: number) => {
 })
 @observer
 export default class RadialWidget extends React.Component<Object, Object> {
-  static colors = ['#01969E', '#01969E'];
-  static gradientColors = ['#01969E', '#01969E'];
-  static runQueueColors = [
-    '#362728',
-    '#00b458',
-    '#c40d0d',
-    '#960909',
-    '#750808'
-  ];
+
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
@@ -163,16 +165,15 @@ export default class RadialWidget extends React.Component<Object, Object> {
     field
       .append('path')
       .attr('class', 'bg')
-      .style('fill', d => RadialWidget.colors[d.index])
+      .style('fill', d => this.colors[d.index])
       .style('opacity', 0.2)
       .attr('d', background);
 
-    // field.append('text').attr('class', 'icon');
 
     field
       .append('text')
       .attr('class', 'completed')
-      .style('fill', d => RadialWidget.colors[d.index])
+      .style('fill', d => this.colors[d.index])
       .attr('transform', 'translate(0, 5)');
     this.field = field;
     d3
@@ -257,7 +258,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .append('path')
       .attr('d', arc)
       .style('fill', d => {
-        return RadialWidget.runQueueColors[parseInt(d.data.busy, 10)];
+        return runQueueColors[parseInt(d.data.busy, 10)];
       })
       .on('mouseover', () => {
         const tipData = `RunQueue ${noOfNodes}`;
@@ -319,13 +320,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
     gradient
       .append('svg:stop')
       .attr('offset', '0%')
-      .attr('stop-color', RadialWidget.gradientColors[0])
+      .attr('stop-color', this.gradientColors[0])
       .attr('stop-opacity', 1);
 
     gradient
       .append('svg:stop')
       .attr('offset', '100%')
-      .attr('stop-color', RadialWidget.gradientColors[1])
+      .attr('stop-color', this.gradientColors[1])
       .attr('stop-opacity', 1);
     return gradient;
   }
@@ -371,7 +372,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
         if (d.index === 0) {
           return 'url(#gradient)';
         }
-        return RadialWidget.colors[d.index];
+        return this.colors[d.index];
       });
     if (this.itemValue.length === 1) {
       if (_.keys(this.itemValue[0]).indexOf('runQueue') >= 0) {
@@ -379,10 +380,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
         const texts = this.text.split('\n');
         for (let i = 0; i < texts.length; i += 1) {
           const t = texts[i];
-          let txtColor = RadialWidget.colors[0];
+          let txtColor = this.colors[0];
           if (i === 1) {
             const idxColor = Math.ceil(parseInt(t, 10) / 20);
-            txtColor = RadialWidget.runQueueColors[idxColor];
+            txtColor = runQueueColors[idxColor];
           }
           this.field
             .append('text')
@@ -398,7 +399,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           .append('text')
           .attr('class', 'completed')
           .attr('transform', 'translate(0, 5)')
-          .style('fill', () => RadialWidget.colors[0])
+          .style('fill', () => this.colors[0])
           .text(d => d.text);
       }
     } else if (this.itemValue.length >= 1) {
@@ -417,6 +418,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
   }
 
   componentDidMount() {
+    if (this.props.widget.colorList) {
+      this.colors = this.props.widget.colorList;
+      this.gradientColors = this.props.widget.colorList;
+    } else {
+      this.colors = colors;
+      this.gradientColors = gradientColors;
+    }
     this._onResize(RadialWidget.width, RadialWidget.height);
     const { widget } = this.props;
     const { widgetItemKeys } = widget;

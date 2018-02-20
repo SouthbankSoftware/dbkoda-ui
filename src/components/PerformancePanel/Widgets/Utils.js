@@ -29,6 +29,9 @@ function timescale(num: number, a, b) {
   if (isNaN(num)) {
     throw new TypeError('expected a number');
   }
+  if (unitTimeValue(a) > unitTimeValue(b)) {
+    return num / (unitTimeValue(a) / unitTimeValue(b));
+  }
   return num * unitTimeValue(a) / unitTimeValue(b);
 }
 
@@ -91,6 +94,22 @@ export const convertTime = (value: any, unit: string, length: number) => {
         result.unit = 's/s';
         result.value = timescale(value, 'ms', 's').toFixed(2);
         break;
+      case 'Op/s':
+        result.unit = 'Op/ms';
+        result.value = timescale(value, 's', 'ms').toFixed(2);
+        break;
+      case 'Op/ms':
+        result.unit = 'Op/μs';
+        result.value = timescale(value, 'ms', 'μs').toFixed(2);
+        break;
+      case 'pages/s':
+        result.unit = 'pages/ms';
+        result.value = timescale(value, 's', 'ms').toFixed(2);
+        break;
+      case 'pages/ms':
+        result.unit = 'pages/μs';
+        result.value = timescale(value, 'ms', 'μs').toFixed(2);
+        break;
       default: {
         console.error('"' + unit + '" is not a valid unit of time.');
         return result;
@@ -151,7 +170,11 @@ export const convertBytes = (value: any, unit: string, length: number) => {
 };
 
 export const convertUnits = (value: any, unit: string, length: number) => {
-  if ('ms/s|μs/s|/μs|/us|/ms|/s|/m|/h'.indexOf(unit) >= 0) {
+  if (
+    'ms/s|μs/s|/μs|/us|/ms|/s|/m|/h|Op/s|Op/ms|Op/μs|pages/s|pages/ms|pages/μs'.indexOf(
+      unit
+    ) >= 0
+  ) {
     return convertTime(value, unit, length);
   } else if ('b|kb|mb|gb|tb|pb|eb|b/s|kb/s|mb/s|gb/s|tb/s'.indexOf(unit) >= 0) {
     return convertBytes(value, unit, length);

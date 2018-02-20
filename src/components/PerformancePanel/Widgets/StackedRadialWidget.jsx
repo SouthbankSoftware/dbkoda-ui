@@ -34,14 +34,7 @@ import { convertUnits } from './Utils';
 import Widget from './Widget';
 import Legend from './Legend';
 
-const colors = [
-  '#A27EB7',
-  '#DC5D3E',
-  '#39B160',
-  '#643798',
-  '#2E547A',
-  '#3333cc'
-];
+const colors = ['#AC8BC0', '#E26847', '#42BB6D', '#7040A3', '#365F87'];
 
 // Flow type definitions.
 
@@ -252,7 +245,7 @@ export default class StackedRadialWidget extends React.Component<
       .append('path')
       .attr('class', 'bg')
       .style('fill', this.colors[layer - 1])
-      .style('opacity', 0.2)
+      .style('opacity', 0.1)
       .attr('d', background);
 
     const yTranslation = -100 + 35 * (layer - 1);
@@ -350,6 +343,8 @@ export default class StackedRadialWidget extends React.Component<
 
     if (field.layer === 1) {
       let lblValue;
+      let yTranslate = '0';
+      if (this.props.widget.unit === '%') yTranslate = '14';
       field.field.select('text.completed').text(() => {
         if (this.props.widget.unit === '%') {
           if (this.itemValues[field.data]) {
@@ -365,7 +360,7 @@ export default class StackedRadialWidget extends React.Component<
       });
       field.field
         .select('text.completed')
-        .attr('transform', 'translate(0, 14), scale(0.4, 0.4)');
+        .attr('transform', 'translate(0, ' + yTranslate + '), scale(0.4, 0.4)');
     }
 
     if (this.props.widget.unit === '%' && field.layer === 2) {

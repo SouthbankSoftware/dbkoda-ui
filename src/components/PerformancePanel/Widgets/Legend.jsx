@@ -30,14 +30,7 @@ import ErrorIcon from '../../../styles/icons/error-icon.svg';
 
 import './StackedRadialWidget.scss';
 
-const colors = [
-  '#A27EB7',
-  '#DC5D3E',
-  '#39B160',
-  '#643798',
-  '#2E547A',
-  '#3333cc'
-];
+const colors = ['#AC8BC0', '#E26847', '#42BB6D', '#7040A3', '#365F87'];
 
 type Props = {
   metrics: any,
@@ -61,7 +54,7 @@ type Props = {
 export default class Legend extends React.Component<Props> {
   static fontSize = 7;
   static rowSize = 20;
-  static rowScalingFactor = 600;
+  static rowScalingFactor = 900;
   static fontScalingFactor = 500;
   static height = 20;
   static width = 20;
@@ -120,7 +113,7 @@ export default class Legend extends React.Component<Props> {
     // Determine size.
     const fontSize =
       Legend.fontSize +
-      Legend.fontSize * this.state.width / Legend.fontScalingFactor +
+      Legend.fontSize * this.state.height / Legend.fontScalingFactor +
       'px';
     const rowDynamicStyle = {
       height:
