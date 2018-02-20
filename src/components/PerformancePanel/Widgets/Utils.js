@@ -75,16 +75,12 @@ export const convertTime = (value: any, unit: string, length: number) => {
         result.value = timescale(value, 'ms', 's').toFixed(2);
         break;
       case '/s':
-        result.unit = '/m';
-        result.value = timescale(value, 's', 'm').toFixed(2);
+        result.unit = 'k/s';
+        result.value /= 1000;
         break;
-      case '/m':
-        result.unit = '/h';
-        result.value = timescale(value, 'm', 'h').toFixed(2);
-        break;
-      case '/h':
-        result.unit = '/d';
-        result.value = timescale(value, 'h', 'd').toFixed(2);
+        case 'k/s':
+        result.unit = 'M/s';
+        result.value /= 1000;
         break;
       case 'μs/s':
         result.unit = 'ms/s';

@@ -125,7 +125,7 @@
         "showVerticalRule": true,
         "description": "Operations executed in Mongo per second by type.",
         "infoWidget": true,
-        "unit": "Op/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 11,
@@ -250,7 +250,7 @@
       "extraState": {
         "description":
           "Number of pages requested from wiredTiger cache per second.",
-        "unit": "pages/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 17,
@@ -363,7 +363,7 @@
         "colorList": ["#AA4B35"],
         "infoWidget": true,
         "description": "Pages evicted from the wiredTiger cache per second",
-        "unit": "Op/s",
+        "unit": "/s",
         "useHighWaterMark": true
       }
     },
@@ -372,7 +372,7 @@
       "items": ["wtIO_readIOps"],
       "extraState": {
         "description": "wiredTiger disk to cache IO rate",
-        "unit": "Op/s"
+        "unit": "/s"
       },
       "layout": {
         "x": 17,
@@ -387,7 +387,7 @@
       "items": ["wtIO_writeIOps"],
       "extraState": {
         "description": "wiredTiger cache to disk time per second",
-        "unit": "Op/s",
+        "unit": "/s",
         "rotate": 180
       },
       "layout": {
