@@ -277,7 +277,7 @@
         "description": "Current and Maximum size of the wiredTiger cache.",
         "unit": "b",
         "showHorizontalRule": true,
-        "useHighWaterMark": true
+        "firstValueIsHighWaterMark": true
       }
     },
     {
@@ -297,7 +297,7 @@
         "infoWidget": true,
         "description": "Current and Maximum size of the wiredTiger log Buffer",
         "unit": "b",
-        "useHighWaterMark": true
+        "firstValueIsHighWaterMark": true
       }
     },
     {
@@ -362,7 +362,7 @@
         "colorList": ["#AA4B35"],
         "infoWidget": true,
         "description": "Pages evicted from the wiredTiger cache per second",
-        "unit": "/s",
+        "unit": "Op/s",
         "useHighWaterMark": true
       }
     },
