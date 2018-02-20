@@ -1,10 +1,4 @@
-/**
- * @Author: Guan Gui <guiguan>
- * @Date:   2018-01-31T21:46:54+11:00
- * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-07T14:17:15+11:00
- *
+/*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -23,11 +17,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+/**
+ * Created by joey on 20/2/18.
+ */
 
-export ArrowWidget from './ArrowWidget';
-export RadialWidget from './RadialWidget';
-export StackedRadialWidget from './StackedRadialWidget';
-export ProgressBarWidget from './ProgressBarWidget';
-export Widget from './Widget';
-export DonutWidget from './Donut';
-
+export default from './DonutContainer';
