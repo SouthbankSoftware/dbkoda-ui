@@ -483,7 +483,7 @@
       }
     },
     {
-      "type": "StackedRadialWidget",
+      "type": "DonutWidget",
       "items": ["db_storage"],
       "extraState": {
         "title": "Storage",
