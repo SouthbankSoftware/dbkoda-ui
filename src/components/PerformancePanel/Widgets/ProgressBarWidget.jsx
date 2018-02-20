@@ -357,7 +357,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       colors = this.props.widget.colorList;
     }
     const { widget, widgetStyle } = this.props;
-    const { showHorizontalRule, chartTitle, showVertical } = widget;
+    const { chartTitle, showVertical } = widget;
     const chartTotalStyle = { top: '40%' };
     if (showVertical) {
       chartTotalStyle.top = '50%';
