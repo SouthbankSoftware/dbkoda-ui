@@ -167,7 +167,6 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .style('opacity', 0.2)
       .attr('d', background);
 
-    // field.append('text').attr('class', 'icon');
 
     field
       .append('text')
