@@ -343,6 +343,8 @@ export default class StackedRadialWidget extends React.Component<
 
     if (field.layer === 1) {
       let lblValue;
+      let yTranslate = '0';
+      if (this.props.widget.unit === '%') yTranslate = '14';
       field.field.select('text.completed').text(() => {
         if (this.props.widget.unit === '%') {
           if (this.itemValues[field.data]) {
@@ -358,7 +360,7 @@ export default class StackedRadialWidget extends React.Component<
       });
       field.field
         .select('text.completed')
-        .attr('transform', 'translate(0, 14), scale(0.4, 0.4)');
+        .attr('transform', 'translate(0, ' + yTranslate + '), scale(0.4, 0.4)');
     }
 
     if (this.props.widget.unit === '%' && field.layer === 2) {

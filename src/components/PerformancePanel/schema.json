@@ -10,6 +10,7 @@
       "items": ["network"],
       "extraState": {
         "title": "Network",
+        "colorList": ["#365F87", "#365F87"],
         "description":
           "Current network upload and download on the host system.",
         "infoWidget": true,
@@ -29,12 +30,13 @@
       "type": "RadialWidget",
       "items": ["cpu"],
       "extraState": {
+        "colorList": ["#01969E", "#01969E"],
         "displayName": "CPU",
         "showRunQueue": true
       },
       "layout": {
         "x": 1,
-        "y": 12,
+        "y": 13,
         "w": 6,
         "h": 6,
         "static": true
@@ -44,13 +46,14 @@
       "type": "RadialWidget",
       "items": ["memory"],
       "extraState": {
+        "colorList": ["#01969E", "#01969E"],
         "title": "Memory",
         "description": "Memory utilization on the host system.",
         "infoWidget": true
       },
       "layout": {
         "x": 1,
-        "y": 29,
+        "y": 30,
         "w": 6,
         "h": 6,
         "static": true
@@ -60,6 +63,7 @@
       "type": "RadialWidget",
       "items": ["disk"],
       "extraState": {
+        "colorList": ["#01969E", "#01969E"],
         "title": "Disk",
         "description": "Disk IO on the host system",
         "infoWidget": true,
@@ -69,7 +73,7 @@
       },
       "layout": {
         "x": 1,
-        "y": 43,
+        "y": 48,
         "w": 6,
         "h": 6,
         "static": true
@@ -109,11 +113,10 @@
     {
       "type": "StackedRadialWidget",
       "items": [
-        "operations_QueryPs",
-        "operations_CommandPs",
-        "operations_InsertPs",
-        "operations_UpdatePs",
-        "operations_DeletePs"
+        "document_returned",
+        "document_updated",
+        "document_deleted",
+        "document_inserted"
       ],
       "extraState": {
         "title": "Operations",
@@ -121,12 +124,12 @@
         "showVerticalRule": true,
         "description": "Operations executed in Mongo per second by type.",
         "infoWidget": true,
-        "unit": "/s"
+        "unit": "Op/s"
       },
       "layout": {
         "x": 11,
         "y": 10,
-        "w": 15,
+        "w": 14,
         "h": 12,
         "background": "light",
         "static": true
@@ -136,9 +139,9 @@
       "type": "ProgressBarWidget",
       "items": ["connections_current"],
       "layout": {
-        "x": 26,
+        "x": 25,
         "y": 10,
-        "w": 10,
+        "w": 12,
         "h": 12,
         "background": "light",
         "static": true
@@ -158,9 +161,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_readersActive", "queue_readersQueued"],
       "layout": {
-        "x": 36,
+        "x": 37,
         "y": 10,
-        "w": 16,
+        "w": 15,
         "h": 3,
         "background": "light",
         "static": true
@@ -181,9 +184,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
-        "x": 36,
+        "x": 37,
         "y": 13,
-        "w": 16,
+        "w": 15,
         "h": 3,
         "background": "light",
         "static": true
@@ -200,9 +203,9 @@
       "type": "ProgressBarWidget",
       "items": ["queue_totalActive", "queue_totalQueued"],
       "layout": {
-        "x": 36,
+        "x": 37,
         "y": 16,
-        "w": 16,
+        "w": 15,
         "h": 3,
         "background": "light",
         "static": true
@@ -224,9 +227,9 @@
         "latency_commandWaitUsPs"
       ],
       "layout": {
-        "x": 36,
+        "x": 37,
         "y": 19,
-        "w": 16,
+        "w": 15,
         "h": 3,
         "background": "light",
         "static": true
@@ -365,7 +368,7 @@
     },
     {
       "type": "ArrowWidget",
-      "items": ["wtIO_diskToCachePs"],
+      "items": ["wtIO_readIOps"],
       "extraState": {
         "description": "wiredTiger disk to cache IO rate",
         "unit": "Op/s"
@@ -380,7 +383,7 @@
     },
     {
       "type": "ArrowWidget",
-      "items": ["wtIO_cacheToDiskPs"],
+      "items": ["wtIO_writeIOps"],
       "extraState": {
         "description": "wiredTiger cache to disk time per second",
         "unit": "Op/s",

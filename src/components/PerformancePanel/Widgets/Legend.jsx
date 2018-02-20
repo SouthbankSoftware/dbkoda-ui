@@ -54,7 +54,7 @@ type Props = {
 export default class Legend extends React.Component<Props> {
   static fontSize = 7;
   static rowSize = 20;
-  static rowScalingFactor = 600;
+  static rowScalingFactor = 900;
   static fontScalingFactor = 500;
   static height = 20;
   static width = 20;
@@ -113,12 +113,12 @@ export default class Legend extends React.Component<Props> {
     // Determine size.
     const fontSize =
       Legend.fontSize +
-      Legend.fontSize * this.state.width / Legend.fontScalingFactor +
+      Legend.fontSize * this.state.height / Legend.fontScalingFactor +
       'px';
     const rowDynamicStyle = {
       height:
         Legend.rowSize +
-        Legend.rowSize * this.state.width / Legend.rowScalingFactor * 1.1 +
+        Legend.rowSize * this.state.height / Legend.rowScalingFactor * 1.1 +
         'px'
     };
     let totalFontColor = 'white';
