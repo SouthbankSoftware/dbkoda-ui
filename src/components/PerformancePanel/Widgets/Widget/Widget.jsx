@@ -185,9 +185,9 @@ export default class Widget extends React.Component<Props, State> {
         showHorizontalRule,
         showVerticalRule,
         showVerticalRuleLeft,
-        showAlarms
+        showAlarms,
+        type
       },
-      className,
       widgetStyle
     } = this.props;
     const { projection } = this.state;
@@ -197,7 +197,7 @@ export default class Widget extends React.Component<Props, State> {
     }
     return (
       // $FlowFixMe
-      <div className={className + ' Widget' || 'Widget'} style={widgetStyle}>
+      <div className={type + ' Widget' || 'Widget'} style={widgetStyle}>
         {state === 'error' ? (
           <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (

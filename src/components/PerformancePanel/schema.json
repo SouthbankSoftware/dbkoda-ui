@@ -29,9 +29,10 @@
     {
       "type": "RadialWidget",
       "items": ["cpu"],
+      "description": "Current network upload and download on the host system.",
       "extraState": {
+        "title": "CPU",
         "colorList": ["#01969E", "#01969E"],
-        "displayName": "CPU",
         "showRunQueue": true
       },
       "layout": {
