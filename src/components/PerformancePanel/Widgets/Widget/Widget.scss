@@ -85,7 +85,7 @@ $background-colour: #202020;
       flex-direction: row;
       position: absolute;
       margin: 0;
-      width: 100%;
+      width: calc(100% - 20px);
 
       b.title {
         font-size: 16px;
@@ -97,26 +97,7 @@ $background-colour: #202020;
         margin-right: 6px;
       }
 
-      span.toolTip {
-        z-index: 100;
-        opacity: 0.6;
-        margin-top: 6px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: $defaultFontColor;
-
-        svg.infoButton {
-          position: absolute;
-          top: 1px;
-          left: 1px;
-          width: 8px;
-          height: 8px;
-          fill: #202020;
-        }
-      }
-
-      > span:nth-child(2) {
+      span {
         border: none;
         z-index: 100;
         opacity: 0.6;
@@ -148,6 +129,27 @@ $background-colour: #202020;
 
         svg.yellow {
           fill: #a5a11b;
+        }
+      }
+      span.toolTip {
+        z-index: 100;
+        opacity: 0.6;
+        margin-top: unset;
+        top: 4px;
+        border-radius: 50%;
+        margin-left: 2px;
+        width: 10px;
+        height: 10px;
+        right: unset;
+        background-color: $defaultFontColor;
+
+        svg.infoButton {
+          position: absolute;
+          top: 1px;
+          left: 1px;
+          width: 8px;
+          height: 8px;
+          fill: #202020;
         }
       }
     }

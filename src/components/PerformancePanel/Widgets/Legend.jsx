@@ -27,6 +27,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import ErrorIcon from '../../../styles/icons/error-icon.svg';
+import { convertUnits } from './Utils';
 
 import './StackedRadialWidget.scss';
 
@@ -143,7 +144,7 @@ export default class Legend extends React.Component<Props> {
           let value = 'Fetching...';
           if (this.state.values[item] || this.state.values[item] === 0) {
             value = parseFloat(Number(this.state.values[item]).toFixed(2));
-            value = value + ' ' + this.state.unit;
+            // value = value + ' ' + this.state.unit;
             total += this.state.values[item];
             total = parseFloat(Number(total).toFixed(2));
           }
@@ -190,8 +191,9 @@ export default class Legend extends React.Component<Props> {
                       fill={valueFontColor}
                       className="valueText"
                     >
-                      {value}
-                    </span>{' '}
+                      {convertUnits(value, this.props.getUnit(), 3).value}{' '}
+                      {convertUnits(value, this.props.getUnit(), 3).unit}
+                    </span>
                   </div>
                 </div>
               )}
