@@ -10,7 +10,7 @@
       "items": ["network"],
       "extraState": {
         "title": "Network",
-        "colorList": ["#365F87", "#365F87"],
+        "colorList": ["#365F87", "#01969E"],
         "description":
           "Current network upload and download on the host system.",
         "infoWidget": true,
@@ -19,9 +19,9 @@
         "useHighWaterMark": true
       },
       "layout": {
-        "x": 2,
+        "x": 0,
         "y": 5,
-        "w": 4,
+        "w": 7,
         "h": 4,
         "static": true
       }
@@ -39,9 +39,9 @@
         "showRunQueue": true
       },
       "layout": {
-        "x": 1,
+        "x": 0,
         "y": 13,
-        "w": 6,
+        "w": 7,
         "h": 6,
         "static": true
       }
@@ -56,9 +56,9 @@
         "infoWidget": true
       },
       "layout": {
-        "x": 1,
+        "x": 0,
         "y": 30,
-        "w": 6,
+        "w": 7,
         "h": 6,
         "static": true
       }
@@ -76,9 +76,9 @@
         "useHighWaterMark": true
       },
       "layout": {
-        "x": 1,
+        "x": 0,
         "y": 48,
-        "w": 6,
+        "w": 7,
         "h": 6,
         "static": true
       }
