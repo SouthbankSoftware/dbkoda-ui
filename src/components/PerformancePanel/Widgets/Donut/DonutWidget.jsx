@@ -39,7 +39,7 @@ import Widget from '../Widget';
 @observer
 export default class DonutWidget extends React.Component<Object, Object> {
   colors: Array<string> = [];
-  dataset: Array<Object> = [];
+  dataset: Array<Array<Object>> = [];
   radius: number;
   chartRadius: number;
   d3Elem: ?Object;
@@ -77,7 +77,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
     this.chartRadius = this.radius / 2;
     this.context = d3.select(this.d3Elem);
     this.removeD3();
-
+    console.log('size:', this.state.width, this.state.height);
     this.context
       .select('.donut-main')
       .append('svg')
@@ -116,8 +116,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
     const paths = this.context.selectAll('.donut')
       .selectAll('path')
       .data((d) => {
-        console.log('d.data=', d.data);
-        return pie(d.data);
+        return pie(d);
       });
 
     paths
@@ -130,7 +129,6 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .append('path')
       .attr('d', arc)
       .style('fill', (d, i) => {
-        console.log('fill color', that.colors[i]);
         return that.colors[i];
       });
       // .style('stroke', '#FFFFFF');
@@ -142,8 +140,8 @@ export default class DonutWidget extends React.Component<Object, Object> {
       autorun(() => {
         const {values, items} = this.props.widget;
         if (this.context) {
-          const newDataset = this.getUpdatedData(values, items);
-          if (this.dataset.length <= 0 || this.dataset[0].data.lenght !== newDataset[0].data.length) {
+          const newDataset: Array<Array<Object>> = this.getUpdatedData(values, items);
+          if (this.dataset.length <= 0 || this.dataset[0].lenght !== newDataset[0].length) {
             this.dataset = newDataset;
             this.renderD3Component();
           }
@@ -156,7 +154,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
     }, 200);
   }
 
-  getUpdatedData(values: Array<Object>, items: Array<Object>) {
+  getUpdatedData(values: Array<Object>, items: Array<Object>): Array<Array<Object>> {
     const latestValue = values.length > 0 ? values[values.length - 1] : {};
     if (_.isEmpty(latestValue)) {
       return [];
@@ -174,14 +172,14 @@ export default class DonutWidget extends React.Component<Object, Object> {
     });
     const orderedValue = _.orderBy(retValue, ['dataSize'], ['desc']);
     const sumValue = _.sumBy(retValue, 'dataSize');
-    let normalized: Array<Object> = orderedValue.map((v) => {
+    let normalized = orderedValue.map((v) => {
       const sum = sumValue > 0 ? sumValue : 1;
       const normalizeSize = _.round(v.dataSize / sum, 2);
       return {...v, dataPerc: normalizeSize};
     });
     _.remove(normalized, o => o.dataPerc <= 0);
     normalized = normalized.slice(0, 5);
-    return [{data: normalized}];
+    return [normalized];
   }
 
 
