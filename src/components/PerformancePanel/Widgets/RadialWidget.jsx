@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T11:52:00+11:00
+ * @Last modified time: 2018-02-21T16:17:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -59,8 +59,8 @@ export default class RadialWidget extends React.Component<Object, Object> {
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
-  static gap = 20;
 
+  gap: 20;
   itemValue: Array<Object> = [];
   field: Object;
   radial: ?HTMLElement;
@@ -83,11 +83,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
   _getInnerRadiusSize() {
     const minValue = Math.min(this.state.width, this.state.height);
+    this.gap = Math.round(minValue * 0.15);
     return minValue / 2.9;
   }
 
   _getOuterRadiusSize() {
-    return this._getInnerRadiusSize() + RadialWidget.gap - 5;
+    return this._getInnerRadiusSize() + this.gap - 5;
   }
 
   buildWidget() {
@@ -96,10 +97,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .startAngle(0)
       .endAngle(RadialWidget.PI)
       .innerRadius(d => {
-        return this._getInnerRadiusSize() - d.index * RadialWidget.gap;
+        return this._getInnerRadiusSize() - d.index * this.gap;
       })
       .outerRadius(d => {
-        return this._getOuterRadiusSize() - d.index * RadialWidget.gap;
+        return this._getOuterRadiusSize() - d.index * this.gap;
       });
 
     const elem = d3.select(this.radial);
@@ -297,10 +298,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
         return d.percentage / 100 * RadialWidget.PI;
       })
       .innerRadius(d => {
-        return this._getInnerRadiusSize() - d.index * RadialWidget.gap;
+        return this._getInnerRadiusSize() - d.index * this.gap;
       })
       .outerRadius(d => {
-        return this._getOuterRadiusSize() - d.index * RadialWidget.gap;
+        return this._getOuterRadiusSize() - d.index * this.gap;
       })
       .cornerRadius(
         (this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2
