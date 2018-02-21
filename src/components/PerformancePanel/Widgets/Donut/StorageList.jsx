@@ -17,23 +17,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {inject, observer} from 'mobx-react';
-import React from 'react';
-
-import DonutWidget from './DonutWidget';
-
 /**
- * Created by joey on 20/2/18.
+ * Created by joey on 21/2/18.
  */
 
-const DonutContainer = (params) => {
-  return (<DonutWidget {...params} />);
-};
+import React from 'react';
 
-export default inject(({store, api}, {widget}) => {
-  return {
-    store,
-    api,
-    widget
-  };
-})(observer(DonutContainer));
+export default (props) => {
+  const {items} = props;
+  return (
+    <div>
+      {
+        items.map((item) => {
+          return <div>{item.name}</div>;
+        })
+      }
+    </div>
+  );
+};

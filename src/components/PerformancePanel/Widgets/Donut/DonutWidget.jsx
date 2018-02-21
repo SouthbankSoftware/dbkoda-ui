@@ -24,11 +24,22 @@
 
 import React from 'react';
 import * as d3 from 'd3';
+import _ from 'lodash';
+import {inject, observer} from 'mobx-react';
+import {autorun} from 'mobx';
 import Widget from '../Widget';
 
+@inject(({ store, api }, { widget }) => {
+  return {
+    store,
+    api,
+    widget
+  };
+})
+@observer
 export default class DonutWidget extends React.Component<Object, Object> {
   colors: Array<string> = [];
-  dataset: Array<Object>;
+  dataset: Array<Array<Object>> = [];
   radius: number;
   chartRadius: number;
   d3Elem: ?Object;
@@ -37,11 +48,9 @@ export default class DonutWidget extends React.Component<Object, Object> {
   constructor(props: Object) {
     super(props);
     this.colors = [
-      '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
-      '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'
+      '#365F87', '#42BB6D', '#7040A3', 'AC8BC0', '#E26847'
     ];
     this.state = {width: 500, height: 500};
-    this.dataset = this.genData();
   }
 
   projection() {
@@ -64,12 +73,11 @@ export default class DonutWidget extends React.Component<Object, Object> {
   }
 
   renderD3Component() {
-    console.log('size: ', this.state);
     this.radius = Math.min(this.state.width, this.state.height) / 2;
     this.chartRadius = this.radius / 2;
     this.context = d3.select(this.d3Elem);
     this.removeD3();
-
+    console.log('size:', this.state.width, this.state.height);
     this.context
       .select('.donut-main')
       .append('svg')
@@ -97,7 +105,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
     const pie = d3.pie()
       .sort(null)
       .value((d) => {
-        return d.val;
+        return d.dataPerc;
       });
 
     const arc = d3.arc()
@@ -108,58 +116,72 @@ export default class DonutWidget extends React.Component<Object, Object> {
     const paths = this.context.selectAll('.donut')
       .selectAll('path')
       .data((d) => {
-        return pie(d.data);
+        return pie(d);
       });
+
     paths
       .transition()
       .duration(1000)
       .attr('d', arc);
 
+    const that = this;
     paths.enter()
-      .append('svg:path')
+      .append('path')
       .attr('d', arc)
       .style('fill', (d, i) => {
-        return this.colors[i];
-      })
-      .style('stroke', '#FFFFFF');
-    // .on(eventObj)
-  }
-
-  genData() {
-    const type = ['Users'];
-    const unit = ['M', 'GB', ''];
-    const cat = ['Google Drive', 'Dropbox', 'iCloud', 'OneDrive', 'Box'];
-
-    const dataset = [];
-
-    for (let i = 0; i < type.length; i += 1) {
-      const data = [];
-      let total = 0;
-
-      for (let j = 0; j < cat.length; j += 1) {
-        const value = Math.random() * 10 * (3 - i);
-        total += value;
-        data.push({
-          'cat': cat[j],
-          'val': value
-        });
-      }
-
-      dataset.push({
-        'type': type[i],
-        'unit': unit[i],
-        'data': data,
-        'total': total
+        return that.colors[i];
       });
-    }
-    return dataset;
+      // .style('stroke', '#FFFFFF');
+    // .on(eventObj)
   }
 
   componentDidMount() {
     setTimeout(() => {
+      autorun(() => {
+        const {values, items} = this.props.widget;
+        if (this.context) {
+          const newDataset: Array<Array<Object>> = this.getUpdatedData(values, items);
+          if (this.dataset.length <= 0 || this.dataset[0].lenght !== newDataset[0].length) {
+            this.dataset = newDataset;
+            this.renderD3Component();
+          }
+          this.dataset = newDataset;
+          this.context.selectAll('.donut').data(this.dataset);
+          this.update();
+        }
+      });
       this.renderD3Component();
     }, 200);
   }
+
+  getUpdatedData(values: Array<Object>, items: Array<Object>): Array<Array<Object>> {
+    const latestValue = values.length > 0 ? values[values.length - 1] : {};
+    if (_.isEmpty(latestValue)) {
+      return [];
+    }
+    const value = latestValue.value[items[0]];
+    const retValue = _.map(value, (dbObject) => {
+      let dataSize = 0;
+      try {
+        dataSize = parseInt(dbObject.dataSize, 10);
+      } catch (err) {
+        // failed to parse integer
+      }
+      dataSize = Math.random() * 100;
+      return {dbName: dbObject.dbName, dataSize};
+    });
+    const orderedValue = _.orderBy(retValue, ['dataSize'], ['desc']);
+    const sumValue = _.sumBy(retValue, 'dataSize');
+    let normalized = orderedValue.map((v) => {
+      const sum = sumValue > 0 ? sumValue : 1;
+      const normalizeSize = _.round(v.dataSize / sum, 2);
+      return {...v, dataPerc: normalizeSize};
+    });
+    _.remove(normalized, o => o.dataPerc <= 0);
+    normalized = normalized.slice(0, 5);
+    return [normalized];
+  }
+
 
   render() {
     const {widget, widgetStyle} = this.props;

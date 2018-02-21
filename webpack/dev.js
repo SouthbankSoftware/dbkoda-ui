@@ -3,7 +3,7 @@
  * @Date:   2017-11-15T14:25:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-14T02:00:52+11:00
+ * @Last modified time: 2018-02-21T13:21:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,17 +28,18 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const GlobalizePlugin = require('globalize-webpack-plugin');
+const DashboardPlugin = require('webpack-dashboard/plugin');
 const commonGlobalizePluginOptions = require('./commonGlobalizePluginOptions');
 const common = require('./common');
 
 module.exports = merge.strategy({
   entry: 'prepend',
   'module.rules': 'prepend',
-  plugins: 'prepend',
+  plugins: 'prepend'
 })(common, {
   entry: [
     // activate HMR for React
-    'react-hot-loader/patch',
+    'react-hot-loader/patch'
   ],
   devtool: 'source-map',
   devServer: {
@@ -51,49 +52,53 @@ module.exports = merge.strategy({
     // match the output `publicPath`
     publicPath: '/ui/',
     port: 3000,
-    host: '0.0.0.0',
+    host: '0.0.0.0'
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.scss$/,
         use: [
           {
-            loader: 'style-loader',
+            loader: 'style-loader'
           },
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true,
-            },
+              sourceMap: true
+            }
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
-    ],
+              sourceMap: true
+            }
+          }
+        ]
+      }
+    ]
   },
   plugins: [
+    new DashboardPlugin({
+      minified: false,
+      gzip: false
+    }),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('development'),
-      },
+        NODE_ENV: JSON.stringify('development')
+      }
     }),
     // enable HMR globally
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new GlobalizePlugin(
       merge(commonGlobalizePluginOptions, {
-        production: false,
-      }),
-    ),
-  ],
+        production: false
+      })
+    )
+  ]
 });
