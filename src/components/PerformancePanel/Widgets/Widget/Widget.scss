@@ -165,7 +165,7 @@ $background-colour: #202020;
   .parentWidgetWrapper {
     .header {
       top: -20px;
-      left: -10px;
+      left: 5px;
     }
   }
 }
@@ -174,7 +174,17 @@ $background-colour: #202020;
   .parentWidgetWrapper {
     .header {
       top: -30px;
-      left: -28px;
+      left: 5px;
     }
+  }
+  .completed {
+    fill: #567fa7;
+    font-size: 24px;
+  }
+  .layer-0 {
+    fill: #365f87;
+  }
+  .layer-1 {
+    fill: #01969e;
   }
 }

@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T10:20:50+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-21T14:16:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,6 +36,10 @@ import type { WidgetState } from './Widget';
 
 const FOREGROUND_SAMPLING_RATE = 5000;
 const BACKGROUND_SAMPLING_RATE = 30000;
+
+const electron = window.require('electron');
+const { powerSaveBlocker } = electron.remote;
+
 
 export type LayoutState = {
   x: number,
@@ -69,10 +73,13 @@ export type PerformancePanelState = {
 export default class PerformancePanelApi {
   store: *;
   api: *;
+  config: *;
+  powerSaverID: *;
 
-  constructor(store: *, api: *) {
+  constructor(store: *, api: *, config: *) {
     this.store = store;
     this.api = api;
+    this.config = config;
   }
 
   _createErrorHandler = (profileId: UUID) => {
@@ -174,6 +181,11 @@ export default class PerformancePanelApi {
         )
         .catch(this._createErrorHandler(profileId));
     }
+    if (this.config.settings.keepDisplayAwake && foreground) {
+      this._startDisplaySleepBlocker();
+    } else {
+      this._stopDisplaySleepBlocker();
+    }
   }
 
   @action.bound
@@ -219,5 +231,26 @@ export default class PerformancePanelApi {
     }
 
     this.store.performancePanel = null;
+    if (this.config.settings.keepDisplayAwake) {
+      this._stopDisplaySleepBlocker();
+    }
+  }
+
+  _startDisplaySleepBlocker() {
+    if (IS_ELECTRON) {
+      if (!this.powerSaverID) {
+        this.powerSaverID = powerSaveBlocker.start('prevent-display-sleep');
+        console.log('Power Saver Status:', powerSaveBlocker.isStarted(this.powerSaverID), ', id:', this.powerSaverID);
+      }
+    }
+  }
+  _stopDisplaySleepBlocker() {
+    if (IS_ELECTRON) {
+      if (this.powerSaverID) {
+        powerSaveBlocker.stop(this.powerSaverID);
+        console.log('Power Saver Status:', powerSaveBlocker.isStarted(this.powerSaverID), ', id:', this.powerSaverID);
+        this.powerSaverID = null;
+      }
+    }
   }
 }
