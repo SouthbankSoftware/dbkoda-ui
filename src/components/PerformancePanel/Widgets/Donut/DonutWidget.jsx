@@ -46,7 +46,6 @@ export default class DonutWidget extends React.Component<Object, Object> {
   radius: number;
   chartRadius: number;
   d3Elem: ?Object;
-  context: Object;
   width: number;
   height: number;
   tooltip: Object;
@@ -72,10 +71,12 @@ export default class DonutWidget extends React.Component<Object, Object> {
   }
 
   removeD3() {
-    this.context
-      .select('.donut-main')
-      .selectAll('svg')
-      .remove();
+    if (this.d3Elem) {
+      d3.select(this.d3Elem)
+        .select('.donut-main')
+        .selectAll('svg')
+        .remove();
+    }
     if (this.tooltip) {
       this.tooltip.remove();
     }
@@ -90,9 +91,9 @@ export default class DonutWidget extends React.Component<Object, Object> {
   renderD3Component() {
     this.radius = Math.min(this.width, this.height) / 2;
     this.chartRadius = this.radius / 2;
-    this.context = d3.select(this.d3Elem);
     this.removeD3();
-    this.context
+    const context = d3.select(this.d3Elem);
+    context
       .select('.donut-main')
       .append('svg')
       .attr('width', this.width)
@@ -102,7 +103,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
         'translate(' + this.width / 2 + ',' + this.height / 2 + ')'
       );
 
-    this.context.selectAll('.donut')
+    context.selectAll('.donut')
       .data(this.dataset)
       .enter().append('svg:svg')
       .attr('width', this.width)
@@ -125,6 +126,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
   }
 
   update() {
+    const context = d3.select(this.d3Elem);
     const pie = d3.pie()
       .sort(null)
       .value((d) => {
@@ -136,7 +138,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .outerRadius(() => {
         return this.chartRadius * 1.08;
       }).padAngle(0.03);
-    const paths = this.context.selectAll('.donut')
+    const paths = context.selectAll('.donut')
       .selectAll('path')
       .data((d) => {
         return pie(d);
@@ -178,15 +180,16 @@ export default class DonutWidget extends React.Component<Object, Object> {
     setTimeout(() => {
       autorun(() => {
         const {values, items} = this.props.widget;
-        if (this.context) {
+        if (this.d3Elem) {
+          const context = d3.select(this.d3Elem);
           const newDataset: Array<Array<Object>> = this.getUpdatedData(values, items);
-          if (this.dataset.length <= 0 || this.dataset[0].lenght !== newDataset[0].length) {
+          if (this.dataset.length <= 0 || this.dataset[0].length !== newDataset[0].length) {
             this.dataset = newDataset;
             this.renderD3Component();
           }
           this.dataset = newDataset;
           this.setState({items: this.dataset[0]});
-          this.context.selectAll('.donut').data(this.dataset);
+          context.selectAll('.donut').data(this.dataset);
           this.update();
         }
       });
