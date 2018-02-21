@@ -1,6 +1,6 @@
 {
   "cols": 54,
-  "rows": 58,
+  "rows": 59,
   "rowHeight": 25,
   "leftWidth": 8,
   "midWidth": 20,
@@ -9,6 +9,7 @@
       "type": "RadialWidget",
       "items": ["network"],
       "extraState": {
+        "name": "Network",
         "title": "Network",
         "colorList": ["#365F87", "#01969E"],
         "description":
@@ -30,6 +31,7 @@
       "type": "RadialWidget",
       "items": ["cpu"],
       "extraState": {
+        "name": "CPU",
         "title": "CPU",
         "description": "Current CPU Usage and Run Queue on the OS level.",
         "infoWidget": true,
@@ -50,6 +52,7 @@
       "type": "RadialWidget",
       "items": ["memory"],
       "extraState": {
+        "name": "Memory",
         "colorList": ["#01969E", "#01969E"],
         "title": "Memory",
         "description": "Memory utilization on the host system.",
@@ -67,6 +70,7 @@
       "type": "RadialWidget",
       "items": ["disk"],
       "extraState": {
+        "name": "Disk",
         "colorList": ["#01969E", "#01969E"],
         "title": "Disk IO",
         "description": "Disk IO on the host system",
@@ -87,6 +91,7 @@
       "type": "ArrowWidget",
       "items": ["network_bytesOutPs"],
       "extraState": {
+        "name": "Network Bytes Out",
         "description": "Data written to network from Mongo Server",
         "unit": "b/s"
       },
@@ -102,6 +107,7 @@
       "type": "ArrowWidget",
       "items": ["network_bytesInPs"],
       "extraState": {
+        "name": "Network Bytes In",
         "rotate": 180,
         "description": "Data read into Mongo Server from Network",
         "unit": "b/s"
