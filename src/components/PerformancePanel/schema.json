@@ -33,7 +33,6 @@
       "extraState": {
         "title": "CPU",
         "colorList": ["#01969E", "#01969E"],
-        "displayName": "CPU",
         "description":
           "CPU pct busy and run queue on host",
         "infoWidget": true,
