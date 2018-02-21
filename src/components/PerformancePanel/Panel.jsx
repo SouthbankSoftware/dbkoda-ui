@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T08:10:10+11:00
+ * @Last modified time: 2018-02-21T13:27:53+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -187,6 +187,14 @@ export default class PerformancePanel extends React.Component<Props, State> {
     const { store: { performancePanel } } = this.props;
     const layout = performancePanel.layouts.get(id);
 
+    if (widget.waterMarkGroup) {
+      if (!performancePanel.highWaterMarkGroups) {
+        performancePanel.highWaterMarkGroups = [];
+      }
+      performancePanel.highWaterMarkGroups[widget.waterMarkGroup] = 0;
+    }
+    widget.profileId = this.props.profileId;
+
     if (layout) {
       const Widget = widgetTypes[type];
 
@@ -197,7 +205,11 @@ export default class PerformancePanel extends React.Component<Props, State> {
           data-grid={layout}
           style={layout.gridElementStyle}
         >
-          <Widget widget={widget} widgetStyle={layout.widgetStyle} />
+          <Widget
+            profileId={this.props.profileId}
+            widget={widget}
+            widgetStyle={layout.widgetStyle}
+          />
         </div>
       );
     }

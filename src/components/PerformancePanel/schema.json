@@ -29,13 +29,12 @@
     {
       "type": "RadialWidget",
       "items": ["cpu"],
-      "description": "Current network upload and download on the host system.",
       "extraState": {
         "title": "CPU",
+        "description": "Current CPU Usage and Run Queue on the OS level.",
+        "infoWidget": true,
         "colorList": ["#01969E", "#01969E"],
-        "displayName": "CPU",
-        "description":
-          "CPU pct busy and run queue on host",
+        "description": "CPU pct busy and run queue on host",
         "infoWidget": true,
         "showRunQueue": true
       },
@@ -127,7 +126,8 @@
         "title": "Document operations",
         "showLegend": true,
         "showVerticalRule": true,
-        "description": "Document operations executed in Mongo per second by type.",
+        "description":
+          "Document operations executed in Mongo per second by type.",
         "infoWidget": true,
         "unit": "/s"
       },
@@ -180,7 +180,7 @@
           "Current number of read operations and queued read operations.",
         "infoWidget": true,
         "chartTitle": "Reads",
-        "useHighWaterMark": true,
+        "waterMarkGroup": 1,
         "showAlarms": "CPU",
         "unit": "/s"
       }
@@ -199,6 +199,7 @@
       "extraState": {
         "chartTitle": "Writes",
         "colorList": ["#7040A3", "#AC8BC0"],
+        "waterMarkGroup": 1,
         "description":
           "Current number of Write operations and queued Write operations.",
         "unit": "/s"
@@ -220,7 +221,7 @@
         "colorList": ["#7040A3", "#AC8BC0"],
         "description": "Total number of all operations and queued operations.",
         "showHorizontalRule": true,
-        "useHighWaterMark": true,
+        "waterMarkGroup": 1,
         "unit": "/s"
       }
     },
@@ -325,7 +326,7 @@
         "showVerticalRule": true,
         "description":
           "Percentage of wiredTiger read/write transactions in use.",
-        "unit": "% "
+        "unit": "%"
       }
     },
     {
