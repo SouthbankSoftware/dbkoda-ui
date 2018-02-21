@@ -22,8 +22,8 @@
  * @Author: Chris Trott <christrott>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-03T15:35:19+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-21T14:41:41+11:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -40,6 +40,7 @@ type Settings = {
   telemetryEnabled: boolean,
   showWelcomePageAtStart: boolean,
   passwordStoreEnabled: boolean,
+  keepDisplayAwake: boolean
 };
 
 export default class Config {
@@ -55,6 +56,7 @@ export default class Config {
       telemetryEnabled: true,
       showWelcomePageAtStart: true,
       passwordStoreEnabled: false,
+      keepDisplayAwake: true
     };
     if (global.PATHS) {
       this.configFilePath = global.PATHS.configPath;
@@ -80,14 +82,17 @@ export default class Config {
   }
 
   verifySettings() {
-    if (!this.settings.passwordStoreEnabled) {
+    if (this.settings.passwordStoreEnabled === undefined) {
       this.settings.passwordStoreEnabled = false;
     }
-    if (!this.settings.telemetryEnabled) {
+    if (this.settings.telemetryEnabled === undefined) {
       this.settings.telemetryEnabled = true;
     }
-    if (!this.settings.showWelcomePageAtStart) {
+    if (this.settings.showWelcomePageAtStart === undefined) {
       this.settings.showWelcomePageAtStart = true;
+    }
+    if (this.settings.keepDisplayAwake === undefined) {
+      this.settings.keepDisplayAwake = true;
     }
   }
 

@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-15T19:14:40+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-21T14:08:03+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,7 +47,7 @@ export default class DataCenter {
     this.profileStore = profileStore;
     this.outputApi = new OutputApi(store, this, profileStore);
     this.terminalApi = new TerminalApi(store, this);
-    this.performancePanelApi = new PerformancePanelApi(store, this);
+    this.performancePanelApi = new PerformancePanelApi(store, this, config);
     this.widgetApi = new WidgetApi(store, this);
     this.editorApi = new EditorApi(store, this, config, profileStore);
     this.profileApi = new ProfileApi(store, this, profileStore, config);
