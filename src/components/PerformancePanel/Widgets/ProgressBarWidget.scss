@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T14:47:40+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-14T13:42:14+11:00
+ * @Last modified time: 2018-02-21T11:27:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,9 +35,6 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
   display: flex;
   flex-direction: column;
   height: 100%;
-  span {
-    height: 100%;
-  }
   hr {
     border: 1px solid #383838;
     width: calc(100% - 40px);
@@ -86,27 +83,25 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
     .chart-label {
       font-weight: normal;
       font-size: 10px;
-      flex: 0 0 100px;
+      flex: 0 0 15%;
       padding: 0px;
       order: -1;
       text-align: right;
       color: $primary-colour-lighten-30;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       strong {
         font-weight: normal;
-        position: relative;
-        top: 40%;
-        transform: translate(-50%);
       }
     }
     .chart-total {
-      flex: 0 0 100px;
+      flex: 0 0 20%;
       padding: 0px;
       color: $primary-colour-lighten-30;
-      span {
-        position: relative;
-        top: 40%;
-        transform: translate(-50%);
-      }
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
   }
   .d3-tip-top {

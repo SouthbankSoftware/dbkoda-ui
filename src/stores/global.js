@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T17:07:22+11:00
+ * @Last modified time: 2018-02-21T10:51:11+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -400,37 +400,7 @@ export default class Store {
     this.cleanStore(newStore);
     _.assign(this, newStore);
 
-    const ps = [];
-
-    // Remove terminals doesn't exist on Controller
-    for (const terminalId of this.terminals.keys()) {
-      ps.push(
-        featherClient()
-          .terminalService.get(terminalId)
-          .catch(
-            action(err => {
-              if (err.code !== 404) {
-                console.error(err);
-              }
-
-              this.terminals.delete(terminalId);
-
-              return this.api.getTerminalTabId(terminalId);
-            })
-          )
-      );
-    }
-
-    return Promise.all(ps).then(
-      action(removedIds => {
-        const { currentTab } = this.outputPanel;
-
-        if (currentTab && _.includes(removedIds, currentTab)) {
-          // go back to `Raw` if current Terminal is removed
-          this.outputPanel.currentTab = this.editorPanel.activeEditorId;
-        }
-      })
-    );
+    return Promise.resolve();
   }
 
   cleanStore(newStore) {
@@ -569,6 +539,41 @@ export default class Store {
           }
 
           Broker.emit(EventType.APP_READY);
+        })
+      )
+      .then(
+        action(() => {
+          const ps = [];
+
+          // Remove terminals doesn't exist on Controller
+          for (const terminalId of this.terminals.keys()) {
+            ps.push(
+              featherClient()
+                .terminalService.get(terminalId)
+                .catch(
+                  action(err => {
+                    if (err.code !== 404) {
+                      console.error(err);
+                    }
+
+                    this.terminals.delete(terminalId);
+
+                    return this.api.getTerminalTabId(terminalId);
+                  })
+                )
+            );
+          }
+
+          return Promise.all(ps).then(
+            action(removedIds => {
+              const { currentTab } = this.outputPanel;
+
+              if (currentTab && _.includes(removedIds, currentTab)) {
+                // go back to `Raw` if current Terminal is removed
+                this.outputPanel.currentTab = this.editorPanel.activeEditorId;
+              }
+            })
+          );
         })
       );
   }

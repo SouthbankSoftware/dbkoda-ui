@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-19T16:36:17+11:00
+ * @Last modified time: 2018-02-21T11:52:00+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -181,6 +181,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .style('opacity', 0)
       .style('position', 'absolute')
       .style('z-index', 1000);
+
+    if (_.keys(this.itemValue[0]).indexOf('runQueue') >= 0) {
+      this.addRunQueueDisplay(this.itemValue[0].runQueue);
+    }
     return field;
   }
 
@@ -368,6 +372,9 @@ export default class RadialWidget extends React.Component<Object, Object> {
         }
         return this.colors[d.index];
       });
+    if (_.keys(this.itemValue[0]).indexOf('runQueue') >= 0) {
+      this.addRunQueueDisplay(this.itemValue[0].runQueue);
+    }
     if (this.itemValue.length === 1) {
       if (_.keys(this.itemValue[0]).indexOf('runQueue') >= 0) {
         this.field.selectAll('text.completed').remove();
@@ -454,9 +461,6 @@ export default class RadialWidget extends React.Component<Object, Object> {
           }
           this.itemValue = newItemValue;
           this.update();
-          if (_.keys(this.itemValue[0]).indexOf('runQueue') >= 0) {
-            this.addRunQueueDisplay(this.itemValue[0].runQueue);
-          }
         }
       });
     }, 200);

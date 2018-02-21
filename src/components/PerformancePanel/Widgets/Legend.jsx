@@ -3,7 +3,7 @@
  *
  * Created by Mike on 05/2/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-16T14:53:22+11:00
+ * @Last modified time: 2018-02-21T12:16:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -53,7 +53,7 @@ type Props = {
 @observer
 export default class Legend extends React.Component<Props> {
   static fontSize = 7;
-  static rowSize = 20;
+  static rowSize = 22;
   static rowScalingFactor = 900;
   static fontScalingFactor = 500;
   static height = 20;
@@ -118,7 +118,7 @@ export default class Legend extends React.Component<Props> {
     const rowDynamicStyle = {
       height:
         Legend.rowSize +
-        Legend.rowSize * this.state.height / Legend.rowScalingFactor * 1.1 +
+        Legend.rowSize * this.state.width / Legend.rowScalingFactor +
         'px'
     };
     let totalFontColor = 'white';
