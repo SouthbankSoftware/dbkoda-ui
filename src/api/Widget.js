@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-01T14:30:07+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T09:58:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,12 +35,12 @@ import _ from 'lodash';
 
 export const widgetErrorLevels = {
   warn: 'warn',
-  error: 'error',
+  error: 'error'
 };
 
 export type WidgetValue = {
   timestamp: number,
-  value: { [string]: any },
+  value: { [string]: any }
 };
 export type WidgetErrorLevel = $Keys<typeof widgetErrorLevels>;
 export type WidgetState = {
@@ -50,8 +50,9 @@ export type WidgetState = {
   items: string[],
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
+  waterMarkGroup: ?number,
   errorLevel: ?WidgetErrorLevel,
-  error: ?string,
+  error: ?string
 };
 
 export default class WidgetApi {
@@ -63,7 +64,7 @@ export default class WidgetApi {
     this.api = api;
   }
 
-  _createWidgetErrorHandler = (profileId: UUID, id: UUID) => {
+  _createErrorHandler = (profileId: UUID, id: UUID) => {
     // eslint-disable-next-line arrow-parens
     return action(err => {
       const performancePanel = this.store.performancePanels.get(profileId);
@@ -74,7 +75,7 @@ export default class WidgetApi {
         _.assign(widget, {
           state: 'error',
           errorLevel: widgetErrorLevels.error,
-          error: err.message,
+          error: err.message
         });
       }
     });
@@ -85,8 +86,7 @@ export default class WidgetApi {
     profileId: UUID,
     items: string[],
     type: string,
-    extraState: ?{ id?: string } = null,
-    statsServiceOptions: {} = {},
+    extraState: ?{ id?: string } = null
   ): UUID {
     const performancePanel = this.store.performancePanels.get(profileId);
     const { widgets } = performancePanel;
@@ -100,31 +100,13 @@ export default class WidgetApi {
       items,
       values: observable.shallowArray(),
       state: 'loading',
+      waterMarkGroup: 0,
       errorLevel: null,
       error: null,
-      ...extraState,
+      ...extraState
     };
 
     widgets.set(id, observable.shallowObject(widget));
-
-    const statsSrv = featherClient();
-    statsSrv.statsService.timeout = 30000;
-    statsSrv.statsService.create({
-        profileId,
-        items,
-        debug: true,
-        options: statsServiceOptions,
-      })
-      .then(
-        action(() => {
-          const widget = widgets.get(id);
-
-          if (widget) {
-            widget.state = 'loaded';
-          }
-        }),
-      )
-      .catch(this._createWidgetErrorHandler(profileId, id));
 
     return id;
   }
@@ -142,15 +124,15 @@ export default class WidgetApi {
       featherClient()
         .statsService.remove(profileId, {
           query: {
-            items,
-          },
+            items
+          }
         })
         .then(
           action(() => {
             widgets.delete(id);
-          }),
+          })
         )
-        .catch(this._createWidgetErrorHandler(profileId, id));
+        .catch(this._createErrorHandler(profileId, id));
     }
   }
 }

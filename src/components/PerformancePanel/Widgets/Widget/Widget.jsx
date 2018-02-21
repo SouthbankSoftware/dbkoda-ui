@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-05T11:58:21+11:00
+ * @Last modified time: 2018-02-14T14:55:30+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,14 +31,17 @@ import { action } from 'mobx';
 import { observer } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
-import LoadingView from '#/common/LoadingView';
 import _ from 'lodash';
 import ReactResizeDetector from 'react-resize-detector';
+import { Tooltip, Position } from '@blueprintjs/core';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import type { WidgetValue } from '~/api/Widget';
+import InfoIcon from '../../../../styles/icons/explain-query-icon.svg';
+import ErrorIcon from '../../../../styles/icons/error-icon.svg';
+import TickIcon from '../../../../styles/icons/tick-icon.svg';
 import HistoryView from './HistoryView';
 import './Widget.scss';
 
@@ -127,7 +130,8 @@ export default class Widget extends React.Component<Props, State> {
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;
-    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue =
+      values.length > 0 ? values[values.length - 1].value : {};
 
     return (
       <div className="DefaultWidgetView">
@@ -155,42 +159,137 @@ export default class Widget extends React.Component<Props, State> {
     );
   }
 
+  @action.bound
+  getAlarmStatus(alarm: any) {
+    // @TODO -> Alarming logic.
+    console.debug('Fetching Alarms for row: ', alarm);
+    return {
+      status: 'green',
+      alarmList: 'No current alarms.'
+    };
+  }
+
   render() {
     const {
       children,
       // $FlowFixMe
-      widget: { state, errorLevel, error, values, name, description },
-      className,
+      widget: {
+        state,
+        errorLevel,
+        error,
+        values,
+        name,
+        title,
+        infoWidget,
+        description,
+        showHorizontalRule,
+        showVerticalRule,
+        showVerticalRuleLeft,
+        showAlarms,
+        type
+      },
       widgetStyle
     } = this.props;
     const { projection } = this.state;
-
+    let alarmStatus;
+    if (showAlarms) {
+      alarmStatus = this.getAlarmStatus(showAlarms);
+    }
     return (
-      <div className={className || 'Widget'} style={widgetStyle}>
-        {state !== 'loaded' ? (
-          state === 'loading' ? (
-            <LoadingView />
-          ) : (
-            <ErrorView title={null} error={error} errorLevel={errorLevel} />
-          )
+      // $FlowFixMe
+      <div
+        className={title + ' ' + type + ' Widget' || 'Widget'}
+        style={widgetStyle}
+      >
+        {state === 'error' ? (
+          <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (
-          <Popover2
-            minimal
-            popoverClassName="HistoryViewPopover"
-            content={
-              <HistoryView
-                width={HISTORY_VIEW_WIDTH}
-                height={HISTORY_VIEW_HEIGHT}
-                values={values}
-                projection={projection}
-                name={name}
-                description={description}
-              />
-            }
-            target={<span className="children">{children || this._renderDefaultView()}</span>}
-          />
+          <div className="parentWidgetWrapper">
+            {title && (
+              <p className="header">
+                <b className="title">{title}</b>
+                {infoWidget && (
+                  <Tooltip
+                    portalClassName="StackedRadialWidgetTooltip"
+                    className="toolTip"
+                    content={<div>{description}</div>}
+                    useSmartPositioning
+                    position={Position.RIGHT_TOP}
+                  >
+                    <InfoIcon className="infoButton" width={20} height={20} />
+                  </Tooltip>
+                )}
+                {showAlarms && (
+                  <Tooltip
+                    portalClassName="StackedRadialWidgetTooltip"
+                    className={
+                      // $FlowIssue
+                      'tooltip alarm ' + alarmStatus.status
+                    }
+                    content={
+                      <div>
+                        {
+                          // $FlowIssue
+                          alarmStatus.alarmList
+                        }
+                      </div>
+                    }
+                    useSmartPositioning
+                    position={Position.RIGHT_TOP}
+                  >
+                    {// $FlowIssue
+                    alarmStatus.status === 'green' && (
+                      <TickIcon
+                        className="alarm green"
+                        width={20}
+                        height={20}
+                      />
+                    )}
+                    {// $FlowIssue
+                    alarmStatus.status === 'yellow' && (
+                      <ErrorIcon
+                        className="alarm yellow"
+                        width={20}
+                        height={20}
+                      />
+                    )}
+                    {// $FlowIssue
+                    alarmStatus.status === 'red' && (
+                      <ErrorIcon className="alarm red" width={20} height={20} />
+                    )}
+                  </Tooltip>
+                )}
+              </p>
+            )}
+            <Popover2
+              minimal
+              popoverClassName="HistoryViewPopover"
+              content={
+                <HistoryView
+                  width={HISTORY_VIEW_WIDTH}
+                  height={HISTORY_VIEW_HEIGHT}
+                  values={values}
+                  projection={projection}
+                  name={name}
+                  description={description}
+                />
+              }
+              target={
+                <span className="children">
+                  {children || this._renderDefaultView()}
+                </span>
+              }
+            />
+            {showVerticalRuleLeft && <hr className="verticalLeft" />}
+            {showHorizontalRule && <hr />}
+            {showVerticalRule && <hr className="vertical" />}
+          </div>
         )}
-        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
+        <ReactResizeDetector
+          handleWidth
+          handleHeight
+          onResize={this._onResize}
+        />
       </div>
     );
   }

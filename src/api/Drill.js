@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-29T14:43:31+11:00
+ * @Last modified time: 2018-02-16T16:48:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -179,6 +179,9 @@ export default class DrillApi {
     const profile = options.profile
       ? options.profile
       : this.store.profileList.selectedProfile;
+
+    if (!profile) return;
+
     query.alias = this.getDrillCompatibleAlias(profile.alias);
     query.id = profile.id;
     if (options.removeAll) {

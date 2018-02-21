@@ -38,7 +38,8 @@ type Settings = {
   drillCmd: string,
   drillControllerCmd: string,
   telemetryEnabled: boolean,
-  showWelcomePageAtStart: boolean
+  showWelcomePageAtStart: boolean,
+  passwordStoreEnabled: boolean,
 };
 
 export default class Config {
@@ -53,6 +54,7 @@ export default class Config {
       drillControllerCmd: '',
       telemetryEnabled: true,
       showWelcomePageAtStart: true,
+      passwordStoreEnabled: false,
     };
     if (global.PATHS) {
       this.configFilePath = global.PATHS.configPath;
@@ -77,6 +79,18 @@ export default class Config {
     // NOTE: Don't change paths, that's just super annoying
   }
 
+  verifySettings() {
+    if (!this.settings.passwordStoreEnabled) {
+      this.settings.passwordStoreEnabled = false;
+    }
+    if (!this.settings.telemetryEnabled) {
+      this.settings.telemetryEnabled = true;
+    }
+    if (!this.settings.showWelcomePageAtStart) {
+      this.settings.showWelcomePageAtStart = true;
+    }
+  }
+
   @action.bound
   load() {
     console.log('Load from config.yml');
@@ -84,7 +98,7 @@ export default class Config {
       return;
     }
     // Call controller file get service
-    featherClient()
+    return featherClient()
       .service('files')
       .get(this.configFilePath)
       .then((file) => {
@@ -102,6 +116,7 @@ export default class Config {
           }
           console.log('Config loaded successfully!');
           console.log(this.settings);
+          this.verifySettings();
         });
       })
       .catch((e) => {
@@ -111,6 +126,7 @@ export default class Config {
           className: 'danger',
           iconName: 'pt-icon-thumbs-down',
         });
+        return Promise.reject(e);
       });
   }
 
@@ -125,7 +141,7 @@ export default class Config {
         .service('files')
         .create({
           _id: this.configFilePath,
-          content: yaml.safeDump(this.settings),
+          content: yaml.safeDump(this.settings, { skipInvalid: true }),
           watching: false,
         })
         .then(() => {

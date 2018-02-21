@@ -22,11 +22,10 @@
     "node": ">= 8.9.1"
   },
   "scripts": {
-    "postinstall": "yarn patch:xterm && yarn patch:globalize-webpack-plugin && yarn patch:blueprintjs",
-    "patch:xterm": "yarn upgrade xterm && cd node_modules/xterm && yarn install",
+    "postinstall": "yarn patch:globalize-webpack-plugin && yarn patch:blueprintjs",
     "patch:globalize-webpack-plugin": "shx cp ./patch/globalize-webpack-plugin/DevelopmentModePlugin.js ./node_modules/globalize-webpack-plugin",
     "patch:blueprintjs": "shx cp ./patch/blueprintjs/contextMenuTarget.js ./node_modules/@blueprintjs/core/dist/esm/components/context-menu/",
-    "dev": "webpack-dev-server --config webpack/dev.js",
+    "dev": "webpack-dashboard -- webpack-dev-server --config webpack/dev.js",
     "dev:test": "UAT=true yarn run dev",
     "dev:install": "yarn install --ignore-scripts",
     "dev:prod": "yarn run postinstall && yarn start",
@@ -187,10 +186,11 @@
     "validatorjs": "^3.11.0",
     "webpack": "^3.8.1",
     "webpack-bundle-analyzer": "^2.8.2",
+    "webpack-dashboard": "^1.1.1",
     "webpack-dev-server": "^2.4.5",
     "webpack-merge": "^4.1.0",
     "worker-loader": "^1.1.0",
     "xml2js": "^0.4.17",
-    "xterm": "https://github.com/guiguan/xterm.js.git"
+    "xterm": "^3.1.0"
   }
 }

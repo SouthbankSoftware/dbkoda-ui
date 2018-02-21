@@ -29,9 +29,11 @@
 import * as React from 'react';
 import { autorun } from 'mobx';
 import type { WidgetState } from '~/api/Widget';
+
 import * as d3 from 'd3';
 // $FlowFixMe
 import 'd3-selection-multi';
+import { convertUnits } from './Utils';
 import Widget from './Widget';
 import styles from './ArrowWidget.scss';
 
@@ -48,8 +50,12 @@ const strokeWidth = width * 0.04;
 const halfStrokeWidth = strokeWidth / 2;
 const headTailY = (height - strokeWidth) * headYPropotion + halfStrokeWidth;
 const arrowMaskPathDes = `M${width / 2},${halfStrokeWidth}L${width -
-  halfStrokeWidth},${headTailY}H${(width - strokeWidth) * (1 + tailXPropotion) / 2 +
-  halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) * (1 - tailXPropotion) / 2 +
+  halfStrokeWidth},${headTailY}H${(width - strokeWidth) *
+  (1 + tailXPropotion) /
+  2 +
+  halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) *
+  (1 - tailXPropotion) /
+  2 +
   halfStrokeWidth}V${headTailY}H${halfStrokeWidth}Z`;
 
 type Props = {
@@ -64,6 +70,7 @@ export default class ArrowWidget extends React.Component<Props> {
   _chart: *;
   _valueRec: *;
   _autorunDisposer: *;
+  maxValue: *;
 
   _createD3View = () => {
     this._chart = d3.select(this._chartEl).attrs({
@@ -153,10 +160,20 @@ export default class ArrowWidget extends React.Component<Props> {
 
   _updateD3ViewData = (data: number) => {
     // $FlowIssue
-    this._textEl && (this._textEl.innerHTML = `${data.toFixed(0)}%`);
+    if (!this.maxValue) {
+      // $FlowFixMe
+      this.maxValue = data;
+    }
+
+    // $FlowFixMe
+    const lblValue = convertUnits(data, this.props.widget.unit, 3);
+
+    // $FlowIssue
+    this._textEl &&
+      (this._textEl.innerHTML = lblValue.value + ' ' + lblValue.unit);
     this._valueRec &&
       this._valueRec.transition().attrs({
-        y: -data / 100 * height
+        y: -data / this.maxValue * height
       });
   };
 
@@ -167,7 +184,8 @@ export default class ArrowWidget extends React.Component<Props> {
 
       this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
-        const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+        const latestValue =
+          values.length > 0 ? values[values.length - 1].value : {};
 
         if (items.length !== 1) {
           console.error('ArrowWidget only supports single item');
@@ -181,6 +199,12 @@ export default class ArrowWidget extends React.Component<Props> {
         if (typeof data !== 'number') {
           console.error('ArrowWidget only supports numeric data value');
           return;
+        }
+
+        // Check data against max.
+        if (!this.maxValue || this.maxValue < data) {
+          // $FlowFixMe
+          this.maxValue = data;
         }
 
         this._updateD3ViewData(data);
@@ -206,7 +230,7 @@ export default class ArrowWidget extends React.Component<Props> {
       <Widget className="ArrowWidget" widget={widget} widgetStyle={widgetStyle}>
         <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
         <div className="text" ref={_textEl => (this._textEl = _textEl)}>
-          0%
+          0
         </div>
       </Widget>
     );

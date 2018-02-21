@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-02T11:27:41+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T10:20:50+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,7 +30,12 @@ import { action, observable } from 'mobx';
 import type { ObservableMap } from 'mobx';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
+// $FlowFixMe
+import { NewToaster } from '#/common/Toaster';
 import type { WidgetState } from './Widget';
+
+const FOREGROUND_SAMPLING_RATE = 5000;
+const BACKGROUND_SAMPLING_RATE = 30000;
 
 export type LayoutState = {
   x: number,
@@ -42,12 +47,23 @@ export type LayoutState = {
   background: string,
   gridElementStyle: Object,
   widgetStyle: Object
-}
+};
+
+export const performancePanelStatuses = {
+  created: 'created',
+  background: 'background',
+  foreground: 'foreground',
+  stopped: 'stopped'
+};
+
+export type PerformancePanelStatus = $Keys<typeof performancePanelStatuses>;
 
 export type PerformancePanelState = {
   profileId: UUID,
   widgets: ObservableMap<WidgetState>,
   layouts: ObservableMap<LayoutState>,
+  status: PerformancePanelStatus,
+  highWaterMarkGroups: number[]
 };
 
 export default class PerformancePanelApi {
@@ -59,24 +75,120 @@ export default class PerformancePanelApi {
     this.api = api;
   }
 
+  _createErrorHandler = (profileId: UUID) => {
+    return err => {
+      console.error(err);
+
+      NewToaster.show({
+        message: `Profile ${profileId} error: ${err.message || err}`,
+        className: 'danger',
+        iconName: 'pt-icon-thumbs-down'
+      });
+    };
+  };
+
   @action.bound
-  addPerformancePanel(profileId: UUID) {
+  _addPerformancePanel(profileId: UUID) {
     const { performancePanels } = this.store;
 
     const performancePanel: PerformancePanelState = {
       profileId,
       widgets: observable.shallowMap(),
-      layouts: observable.shallowMap()
+      layouts: observable.shallowMap(),
+      highWaterMarkGroups: [],
+      status: performancePanelStatuses.created
     };
 
     performancePanels.set(profileId, performancePanel);
   }
 
   @action.bound
-  removePerformancePanel(profileId: UUID) {
+  _removePerformancePanel(profileId: UUID) {
     const { performancePanels } = this.store;
 
+    this.stopPerformancePanel(profileId);
     performancePanels.delete(profileId);
+  }
+
+  // open connection:
+  //  PP doesn't exist: do nothing
+  //  PP exist: resume updating with background samplingRate (10s)
+
+  // open performance panel (PP):
+  //  PP doesn't exist: create one and start updating with foreground samplingRate
+  //  PP exist: updating with foreground samplingRate (5s)
+
+  // close performance panel: updating with background samplingRate
+
+  // close connection: stop updating. PP state is preserved
+
+  // destroy connection:
+  //  PP doesn't exist: do nothing
+  //  PP exist: stop updating and destroy PP state
+
+  @action.bound
+  hasPerformancePanel(profileId: UUID): boolean {
+    const { performancePanels } = this.store;
+
+    return performancePanels.has(profileId);
+  }
+
+  @action.bound
+  startPerformancePanel(profileId: UUID, foreground: boolean = true) {
+    const performancePanel = this.store.performancePanels.get(profileId);
+
+    if (
+      performancePanel &&
+      performancePanel.status !== performancePanelStatuses.created
+    ) {
+      const { widgets } = performancePanel;
+      const itemsSet = new Set();
+
+      for (const widget of widgets.values()) {
+        for (const item of widget.items) {
+          itemsSet.add(item);
+        }
+      }
+
+      const statsSrv = featherClient();
+      // statsSrv.statsService.timeout = 30000;
+      statsSrv.statsService
+        .create({
+          profileId,
+          items: [...itemsSet],
+          samplingRate: foreground
+            ? FOREGROUND_SAMPLING_RATE
+            : BACKGROUND_SAMPLING_RATE,
+          debug: true
+        })
+        .then(
+          action(() => {
+            for (const widget of widgets.values()) {
+              widget.state = 'loaded';
+            }
+
+            performancePanel.status = foreground
+              ? performancePanelStatuses.foreground
+              : performancePanelStatuses.background;
+          })
+        )
+        .catch(this._createErrorHandler(profileId));
+    }
+  }
+
+  @action.bound
+  stopPerformancePanel(profileId: UUID) {
+    const performancePanel = this.store.performancePanels.get(profileId);
+
+    if (
+      performancePanel &&
+      performancePanel.status !== performancePanelStatuses.created
+    ) {
+      featherClient()
+        .statsService.remove(profileId)
+        .catch(this._createErrorHandler(profileId));
+      performancePanel.status = performancePanelStatuses.stopped;
+    }
   }
 
   @action.bound
@@ -85,8 +197,10 @@ export default class PerformancePanelApi {
     let performancePanel = performancePanels.get(profileId);
 
     if (!performancePanel) {
-      this.addPerformancePanel(profileId);
+      this._addPerformancePanel(profileId);
       performancePanel = performancePanels.get(profileId);
+    } else {
+      this.startPerformancePanel(profileId, true);
     }
 
     this.store.performancePanel = performancePanel;
@@ -98,11 +212,10 @@ export default class PerformancePanelApi {
       const { performancePanels } = this.store;
 
       if (performancePanels.has(profileId)) {
-        featherClient()
-          .statsService.remove(profileId)
-          .catch(console.error);
-        this.removePerformancePanel(profileId);
+        this._removePerformancePanel(profileId);
       }
+    } else {
+      this.startPerformancePanel(profileId, false);
     }
 
     this.store.performancePanel = null;

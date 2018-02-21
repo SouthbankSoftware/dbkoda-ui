@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-03-15 13:34:55
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T09:47:47+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,13 +24,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @Author: Michael Harrison <mike>
- * @Date:   2017-03-15 13:34:55
- * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-19T15:00:19+10:00
- */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 /* eslint no-unused-vars:warn */
@@ -55,6 +54,7 @@ import './styles.scss';
 
 @inject(allStores => ({
   store: allStores.store,
+  api: allStores.api,
   config: allStores.config,
   profileStore: allStores.profileStore,
 }))
@@ -152,10 +152,13 @@ export default class Toolbar extends React.Component {
    */
   @action.bound
   removeProfile() {
+    const { id: profileId } = this.props.store.profileList.selectedProfile;
+    const { api } = this.props;
+
+    api.closePerformancePanel(profileId, true);
+
     // eslint-disable-line class-methods-use-this
-    this.props.profileStore.profiles.delete(
-      this.props.store.profileList.selectedProfile.id,
-    );
+    this.props.profileStore.profiles.delete(profileId);
     this.props.profileStore.save();
     this.hideRemoveConnectionAlert();
     if (this.props.config.settings.telemetryEnabled) {
@@ -202,6 +205,10 @@ export default class Toolbar extends React.Component {
     const { selectedProfile } = this.props.store.profileList;
     const { profiles } = this.props.profileStore;
     if (selectedProfile) {
+      const { api } = this.props;
+
+      api.stopPerformancePanel(selectedProfile.id);
+
       this.setState({ closingProfile: true });
       featherClient()
         .service('/mongo-connection')

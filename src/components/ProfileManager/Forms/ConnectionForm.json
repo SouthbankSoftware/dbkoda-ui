@@ -1,7 +1,7 @@
 {
   "basic": {
     "name": "Basic Connection",
-    "tips": ["Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.", "Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.", "Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of 'de Finibus Bonorum et Malorum' (The Extremes of Good and Evil) by Cicero, written in 45 BC. ", "This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, 'Lorem ipsum dolor sit amet..', comes from a line in section 1.10.32."],
+    "tips": ["For simple connections, you can enter all the connection details on this page.  If you are connecting to a replica set or sharded cluster, you might want to visit the \"Cluster Congifuration\" page.  For an operating system terminal, to connect via an SSH tunnel or to monitor operating system statistics, checkout the \"SSH Options\""],
     "fields": [
       {
         "name": "alias",
@@ -36,6 +36,7 @@
         "name": "database",
         "label": "Database",
         "value": "admin",
+        "options": {"tooltip": "The database in which this connection will initially be established"},
         "type": "text",
         "column": 1
       },
@@ -72,6 +73,7 @@
       {
         "name": "authenticationDatabase",
         "label": "Authentication Database",
+        "options": {"tooltip": "The database in which this user was created"},
         "type": "text",
         "value": "",
         "column": 2,
@@ -101,6 +103,7 @@
   },
   "cluster": {
     "name": "Cluster Configuration",
+    "tips": ["This page allows you to configure items specific to a replica set. Specify a comma seperated list of the hosts and ports in the replica set to get started.  Eg 'host1:port1, host2:port2, host3:port3'"],
     "fields": [
       {
         "name": "hostsList",
@@ -120,7 +123,8 @@
       },
       {
         "name": "w",
-        "label": "w",
+        "label": "w (write concern w option)",
+        "options": {"tooltip": "write concern: specifiy a number, 'majority' or a tagSet"},
         "value": "",
         "type": "text",
         "column": 2,
@@ -129,6 +133,7 @@
       {
         "name": "wTimeout",
         "label": "wtimeout",
+        "options": {"tooltip": "Time in ms to wait for write concern. 0=no timeout"},
         "value": 0,
         "type": "number",
         "column": 2,
@@ -137,6 +142,7 @@
       {
         "name": "journal",
         "label": "Journal",
+        "options": {"tooltip": "Write concern 'j' option.  If true writes must journal before returning"},
         "value": true,
         "type": "checkbox",
         "column": 2
@@ -162,6 +168,7 @@
   },
   "advanced": {
     "name": "Advanced Authentication",
+    "tips": ["Advanced configuration options.  Eventually LDAP and X509 connections will go here'"],
     "fields": [
       {
         "name": "ssl",
@@ -185,6 +192,8 @@
   },
   "ssh": {
     "name": "SSH Options",
+    "tips": ["Configure an SSH connection to your mongodb server here.  This can be used to establish a tunnel to a MongoDB server behind a firewall, or to estalish an SSH terminal to issue commands like 'top', or to collection OS statistics in the performance panel",
+            "For details on establishing a SSH tunnel, see the FAQ item https://dbkoda.useresponse.com/knowledge-base/article/what-is-ssh-tunneling-and-how-do-i-set-it-up"],
     "fields": [
       {
         "name": "ssh",
@@ -192,7 +201,7 @@
         "label": "Establish Direct OS Connection (for terminal and performance monitoring)",
         "type": "checkbox",
         "column": 1,
-        "refFields": ["remoteHost", "remoteUser", "remotePass"]
+        "refFields": ["remoteHost", "remoteUser", "remotePass", "sshTunnel"]
       },
       {
         "name": "remoteHost",
@@ -226,7 +235,9 @@
         "value": false,
         "label": "Tunnel through this host for Mongo Connection",
         "type": "checkbox",
-        "column": 1
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
       },
       {
         "name": "keyRadio",
@@ -239,6 +250,7 @@
       {
         "name": "sshKeyFile",
         "label": "PEM Certificate Key File",
+        "options": {"tooltip": "This is the same file as you would use to establish an ssh command line to your host"},
         "type": "file",
         "value": "",
         "column": 2,
@@ -247,7 +259,8 @@
       },
       {
         "name": "passPhrase",
-        "label": "Password for PE File",
+        "label": "Password for PEM File",
+        "options": {"tooltip": "Leave it blank if there is no password on the file"},
         "type": "password",
         "value": "",
         "column": 2,

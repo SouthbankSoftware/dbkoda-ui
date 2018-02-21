@@ -30,6 +30,7 @@ import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import ApplicationIcon from '~/styles/icons/menu-application-icon.svg';
 import PathsIcon from '~/styles/icons/menu-paths-icon.svg';
+import PasswordStoreIcon from '~/styles/icons/lock-icon.svg';
 import MenuItem from './MenuItem';
 
 @inject(allStores => ({
@@ -56,6 +57,12 @@ export default class Menu extends React.Component {
         <MenuItem name="Paths" isSelected={this.isItemSelected} changeMenu={this.changeMenuSelected}>
           <PathsIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
+        {
+          (process.env.NODE_ENV === 'development') &&
+          <MenuItem name="PasswordStore" isSelected={this.isItemSelected} changeMenu={this.changeMenuSelected}>
+            <PasswordStoreIcon className="dbKodaSVG" width={20} height={20} />
+          </MenuItem>
+        }
       </div>
     );
   }

@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-31T09:47:34+11:00
+ * @Last modified time: 2018-02-08T15:56:36+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -295,6 +295,11 @@
 
   .pt-form-content {
     width: 100%;
+
+    input[type='checkbox']:disabled {
+      width: 20px;
+      height: 20px;
+    }
 
     :disabled {
       opacity: 0.5;

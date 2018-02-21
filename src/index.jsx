@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-01-19T09:58:39+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T17:10:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,9 +25,6 @@
  */
 
 import Store from '~/stores/global';
-import Config from '~/stores/config';
-import Profiles from '~/stores/profiles';
-import DataCenter from '~/api/DataCenter';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import mobx, { useStrict } from 'mobx';
@@ -36,19 +33,11 @@ import { AppContainer } from 'react-hot-loader';
 import { Broker, EventType } from './helpers/broker';
 import App from './components/App';
 
-const Globalize = require('globalize'); // doesn't work well with import
-
-global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
-
 useStrict(true);
 
 const rootEl = document.getElementById('root');
 
 let store;
-let api;
-let config;
-let profileStore;
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
@@ -56,15 +45,21 @@ const { ipcRenderer } = electron;
 const renderApp = () => {
   if (store) {
     console.log('Last Store Version:', store.version);
+    console.log('Last Ping:', store.dateLastPinged);
   }
   const render = Component => {
     ReactDOM.render(
       <AppContainer>
-        <Provider store={store} api={api} config={config} profileStore={profileStore}>
+        <Provider
+          store={store}
+          api={store.api}
+          config={store.config}
+          profileStore={store.profileStore}
+        >
           <Component />
         </Provider>
       </AppContainer>,
-      rootEl,
+      rootEl
     );
   };
 
@@ -90,8 +85,6 @@ const renderApp = () => {
 Broker.once(EventType.APP_READY, renderApp);
 
 Broker.once(EventType.APP_RENDERED, () => {
-  config.load();
-  profileStore.load();
   if (IS_ELECTRON) {
     ipcRenderer.send(EventType.APP_READY);
   }
@@ -105,12 +98,8 @@ Broker.once(EventType.APP_CRASHED, () => {
       .backup()
       .then(() => {
         store = new Store(true);
-        api = new DataCenter(store);
-        config = new Config();
-        profileStore = new Profiles();
-        store.setProfileStore(profileStore); // TODO: remove this dependency
-        store.setAPI(api); // TODO: Remove this line after complete migration to API
         store.saveSync();
+        // try to reload once
         ipcRenderer.send(EventType.APP_CRASHED);
       })
       .catch(err => {
@@ -121,7 +110,7 @@ Broker.once(EventType.APP_CRASHED, () => {
         dialog.showMessageBox(currentWindow, {
           title: 'Error',
           buttons: ['OK'],
-          message: err.message,
+          message: err.message
         });
       });
   }
@@ -140,7 +129,8 @@ window.addEventListener('beforeunload', event => {
         type: 'question',
         buttons: ['Yes', 'No'],
         title: 'Confirm',
-        message: 'You have unsaved editor tabs. Are you sure you want to continue?',
+        message:
+          'You have unsaved editor tabs. Are you sure you want to continue?'
       });
 
       if (response === 1) {
@@ -155,7 +145,9 @@ window.addEventListener('beforeunload', event => {
   }
 
   if (shouldUnmount) {
-    store.closeConnection();
+    store.api && store.api.deleteProfileFromDrill({ removeAll: true });
+    // TODO: verify this logic
+    // store.closeConnection();
     ReactDOM.unmountComponentAtNode(rootEl);
   }
 
@@ -164,13 +156,5 @@ window.addEventListener('beforeunload', event => {
 });
 
 store = new Store();
-config = new Config();
-profileStore = new Profiles();
-api = new DataCenter(store, config, profileStore);
-store.setProfileStore(profileStore);
-store.setAPI(api); // TODO: Remove this line after complete migration to API
-window.api = api;
 window.store = store;
-window.config = config;
-window.profileStore = profileStore;
 window.mobx = mobx;

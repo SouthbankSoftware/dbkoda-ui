@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-31T12:34:32+11:00
+ * @Last modified time: 2018-02-06T09:55:36+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -185,6 +185,7 @@ export default class ProfileManager extends React.Component<Props, State> {
           cols={{
             desktop: 12
           }}
+          bFitHeight
           verticalGridSize={9}
           margin={[1, 0]}
         >

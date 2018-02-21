@@ -22,7 +22,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-25T11:19:34+11:00
+ * @Last modified time: 2018-02-05T11:13:17+11:00
  */
 
 import React from 'react';
@@ -36,6 +36,7 @@ import LoadingView from '#/common/LoadingView';
 import { NewToaster } from '#/common/Toaster';
 import Menu from './Menu';
 import Application from './Application';
+import PasswordStore from './PasswordStore';
 import Paths from './Paths';
 import './Panel.scss';
 
@@ -68,7 +69,9 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
-    this.props.store.configPage.newSettings = this.props.config.settings;
+    runInAction(() => {
+      this.props.store.configPage.newSettings = this.props.config.settings;
+    });
   }
 
   @action.bound
@@ -161,6 +164,16 @@ export default class View extends React.Component {
           />
         );
         break;
+        case 'PasswordStore':
+          form = (
+            <PasswordStore
+              updateValue={this.updateValue}
+              settings={this.props.store.configPage.newSettings}
+              changedFields={this.props.store.configPage.changedFields}
+              renderFieldLabel={this.renderFieldLabel}
+            />
+          );
+          break;
       default:
         form = <ErrorView error="Unknown menu item selection." />;
         break;
@@ -196,7 +209,7 @@ export default class View extends React.Component {
               className="saveBtn"
               intent={Intent.SUCCESS}
               onClick={this.checkConfig}
-              text="Apply"
+              text={globalString('editor/config/applyButton')}
             />
           </div>
         </div>

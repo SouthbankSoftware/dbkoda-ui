@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-01-24T13:24:37+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-15T19:14:40+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,7 @@ import EditorApi from './Editor';
 import ProfileApi from './Profile';
 import TreeApi from './Tree';
 import DrillApi from './Drill';
+import PasswordApi from './Password';
 
 export default class DataCenter {
   store;
@@ -52,6 +53,7 @@ export default class DataCenter {
     this.profileApi = new ProfileApi(store, this, profileStore, config);
     this.treeApi = new TreeApi(store, this);
     this.drillApi = new DrillApi(store, this);
+    this.passwordApi = new PasswordApi(store, this, config);
 
     this.init = this.init.bind(this);
 
@@ -81,6 +83,9 @@ export default class DataCenter {
     _.assign(
       this,
       _.pick(this.performancePanelApi, [
+        'hasPerformancePanel',
+        'startPerformancePanel',
+        'stopPerformancePanel',
         'openPerformancePanel',
         'closePerformancePanel',
       ]),

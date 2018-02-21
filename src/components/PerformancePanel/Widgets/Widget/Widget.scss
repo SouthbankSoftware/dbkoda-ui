@@ -24,12 +24,47 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../../../styles/_defaultTheme.scss";
+@import '../../../../styles/_defaultTheme.scss';
+$container-padding: 5px;
+$background-colour: #202020;
 
 .Widget {
   height: 100%;
   width: 100%;
+  .pt-popover-target {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 
+  hr {
+    border: 1px solid rgba(79, 79, 79, 0.5);
+    width: calc(100% - 40px);
+    text-align: center;
+    margin: 0px 20px 0px 20px;
+    position: absolute;
+    bottom: 10px;
+  }
+
+  hr.vertical {
+    border: none;
+    border-right: 1px solid rgba(79, 79, 79, 0.5);
+    height: 100vh;
+    width: 1px;
+    left: calc(100% - 25px);
+    height: 75%;
+    top: 12.5%;
+  }
+  hr.verticalLeft {
+    border: none;
+    border-right: 1px solid rgba(79, 79, 79, 0.5);
+    height: 100vh;
+    width: 1px;
+    left: 0px;
+    height: 75%;
+    top: 12.5%;
+    margin-left: 0px;
+  }
   > span,
   .DefaultWidgetView,
   .children,
@@ -38,22 +73,108 @@
     height: 100%;
   }
 
+  div.parentWidgetWrapper {
+    width: 100%;
+    height: 100%;
+    p.header {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      margin: 0 0 0 0;
+      width: 100%;
+      b.title {
+        font-size: 16px;
+        color: #bfbec0;
+        text-shadow: 0 -1px 0 $panelLeftBackground;
+        white-space: nowrap;
+        opacity: 1;
+        margin-left: 6px;
+        margin-right: 6px;
+      }
+      span.toolTip {
+        z-index: 100;
+        opacity: 0.6;
+        margin-top: 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $defaultFontColor;
+        svg.infoButton {
+          position: absolute;
+          top: 1px;
+          left: 1px;
+          width: 8px;
+          height: 8px;
+          fill: #202020;
+        }
+      }
+      span.alarm {
+        border: none;
+        z-index: 100;
+        opacity: 0.6;
+        margin-top: 6px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-left: auto;
+        margin-right: 2px;
+        top: -2px;
+        right: 16px;
+        background-color: none;
+        svg.alarm {
+          position: absolute;
+          float: right;
+          width: 20px;
+          height: 20px;
+          fill: #202020;
+        }
+        svg.red {
+          fill: #913856;
+        }
+        svg.green {
+          fill: #42bb6d;
+        }
+        svg.yellow {
+          fill: #a5a11b;
+        }
+      }
+    }
+  }
+
   .DefaultWidgetView {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: lighten($panelLeftBackground, 30);
+    color: #bfbec0;
     text-shadow: 0 -1px 0 $panelLeftBackground;
     white-space: nowrap;
     overflow: hidden;
 
     .title {
       font-size: 20px;
+      font-weight: normal;
     }
 
     .value {
       font-size: 36px;
+    }
+  }
+}
+.RadialWidget.Widget {
+  .parentWidgetWrapper {
+    .header {
+      top: -20px;
+      left: -10px;
+    }
+  }
+}
+
+.Network.RadialWidget.Widget {
+  .parentWidgetWrapper {
+    .header {
+      top: -30px;
+      left: -28px;
     }
   }
 }

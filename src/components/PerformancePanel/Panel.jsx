@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-02T12:14:14+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-21T13:27:53+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,7 @@ import { Responsive } from 'react-grid-layout';
 import { Button } from '@blueprintjs/core';
 import { action, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import type { WidgetState } from '~/api/Widget';
 // $FlowFixMe
@@ -57,13 +58,11 @@ type Props = {
 };
 
 type State = {
-  layouts: *,
-  rows: number,
+  rowHeight: number,
   cols: number,
+  rows: number,
   midWidth: number,
-  leftWidth: number,
-  widgetHeight: number,
-  widgetWidth: number
+  leftWidth: number
 };
 
 @inject(({ store: { performancePanels }, api }, { profileId }) => {
@@ -89,25 +88,50 @@ export default class PerformancePanel extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      layouts: {
-        desktop: []
-      },
-      rows: 8,
-      cols: 9,
-      leftWidth: 2,
-      midWidth: 5,
-      widgetHeight: 2,
-      widgetWidth: 2
+      rowHeight: 25,
+      cols: 54,
+      rows: 58,
+      leftWidth: 8,
+      midWidth: 24
     };
   }
+
+  /**
+   * When the panel mounts it will subscribe to the event broker for stats errors.
+   * It will also adds demo widgets and generates a layout.
+   */
+  componentDidMount() {
+    const { profileId } = this.props;
+
+    Broker.on(EventType.STATS_ERROR(profileId), this._onError);
+
+    this._init();
+  }
+
+  componentWillUnmount() {
+    const { profileId } = this.props;
+
+    Broker.off(EventType.STATS_ERROR(profileId), this._onError);
+  }
+
+  _init = action(() => {
+    const { profileId, store: { performancePanel }, api } = this.props;
+
+    if (performancePanel.status === performancePanelStatuses.created) {
+      this._addSchemaWidgets();
+      performancePanel.status = performancePanelStatuses.stopped;
+      api.startPerformancePanel(profileId);
+    }
+  });
 
   _addSchemaWidgets = action(() => {
     const { api, profileId, store: { performancePanel } } = this.props;
 
-    if (schema.columns && schema.rows) {
+    if (schema.cols && schema.rows) {
       this.setState({
-        rows: schema.rows,
+        rowHeight: schema.rowHeight,
         cols: schema.cols,
+        rows: schema.rows,
         midWidth: schema.midWidth,
         leftWidth: schema.leftWidth
       });
@@ -119,7 +143,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
           profileId,
           widget.items,
           widget.type,
-          widget.extraState ? widget.extraState : {}
+          widget.extraState || {}
         );
         const layout = this._updateLayoutStyle({
           i: id,
@@ -130,26 +154,30 @@ export default class PerformancePanel extends React.Component<Props, State> {
         performancePanel.layouts.set(id, observable(layout));
       }
     }
-    // TIP: easier to dev widget with dummy observable
   });
 
   _updateLayoutStyle(layout) {
     const lSep = this.state.leftWidth;
     const rSep = this.state.leftWidth + this.state.midWidth;
     if (layout.background === 'light') {
-      layout.widgetStyle.backgroundColor = '#2A2A2A';
-      layout.gridElementStyle.paddingTop = '10px';
-      layout.gridElementStyle.paddingBottom = '10px';
+      layout.widgetStyle.backgroundColor = '#2D2D2D';
+      layout.widgetStyle.opacity = '0.8';
+      layout.widgetStyle.padding = '10px';
+      // layout.gridElementStyle.paddingTop = '20px';
+      // layout.gridElementStyle.paddingBottom = '20px';
 
       if (layout.x + layout.w < rSep) {
-        layout.widgetStyle.borderRight = '1px solid #383838';
+        //  layout.widgetStyle.borderRight = '1px solid #383838';
       }
       if (layout.x === lSep) {
-        layout.gridElementStyle.paddingLeft = '10px';
+        layout.gridElementStyle.paddingLeft = '20px';
       }
       if (layout.x + layout.w === rSep) {
-        layout.gridElementStyle.paddingRight = '10px';
+        layout.gridElementStyle.paddingRight = '20px';
       }
+    }
+    if (layout.padding) {
+      layout.widgetStyle.padding = layout.padding;
     }
     return layout;
   }
@@ -158,6 +186,14 @@ export default class PerformancePanel extends React.Component<Props, State> {
     const { id, type } = widget;
     const { store: { performancePanel } } = this.props;
     const layout = performancePanel.layouts.get(id);
+
+    if (widget.waterMarkGroup) {
+      if (!performancePanel.highWaterMarkGroups) {
+        performancePanel.highWaterMarkGroups = [];
+      }
+      performancePanel.highWaterMarkGroups[widget.waterMarkGroup] = 0;
+    }
+    widget.profileId = this.props.profileId;
 
     if (layout) {
       const Widget = widgetTypes[type];
@@ -169,18 +205,15 @@ export default class PerformancePanel extends React.Component<Props, State> {
           data-grid={layout}
           style={layout.gridElementStyle}
         >
-          <Widget widget={widget} widgetStyle={layout.widgetStyle} />
+          <Widget
+            profileId={this.props.profileId}
+            widget={widget}
+            widgetStyle={layout.widgetStyle}
+          />
         </div>
       );
     }
   }
-
-  _removeSchemaWidgets = action(() => {
-    const { store } = this.props;
-
-    store.performancePanel.widgets = observable.shallowMap();
-    store.performancePanel.layouts = observable.shallowMap();
-  });
 
   _onError = payload => {
     const { error, level } = payload;
@@ -193,28 +226,7 @@ export default class PerformancePanel extends React.Component<Props, State> {
     });
   };
 
-  /**
-   * When the panel mounts it will subscribe to the event broker for stats errors.
-   * It will also adds demo widgets and generates a layout.
-   */
-  componentDidMount() {
-    const { profileId, store: { performancePanel } } = this.props;
-
-    Broker.on(EventType.STATS_ERROR(profileId), this._onError);
-
-    if (performancePanel.widgets.size <= 0) {
-      this._addSchemaWidgets();
-    }
-  }
-
-  componentWillUnmount() {
-    const { profileId } = this.props;
-
-    Broker.off(EventType.STATS_ERROR(profileId), this._onError);
-
-    this._removeSchemaWidgets();
-  }
-  onLayoutChange = action((gridLayout: *, oldItem: *, newItem: *) => {
+  _onLayoutChange = action((gridLayout: *, oldItem: *, newItem: *) => {
     const { store: { performancePanel } } = this.props;
     const layout = performancePanel.layouts.get(oldItem.i);
     if (layout.background === 'light') {
@@ -235,15 +247,15 @@ export default class PerformancePanel extends React.Component<Props, State> {
       profileId,
       store: { performancePanel: { widgets } }
     } = this.props;
-    const { layouts, rows, cols } = this.state;
+    const { rowHeight, rows, cols } = this.state;
 
     return (
       <div className="PerformancePanel">
+        <hr className="osDivider" />
         <ResponsiveReactGridLayout
           className="GridLayout"
-          layouts={layouts}
-          onDragStop={this.onLayoutChange}
-          onResizeStop={this.onLayoutChange}
+          onDragStop={this._onLayoutChange}
+          onResizeStop={this._onLayoutChange}
           autoSize={false}
           compactType={null}
           preventCollision={false}
@@ -253,15 +265,17 @@ export default class PerformancePanel extends React.Component<Props, State> {
           cols={{
             desktop: cols
           }}
-          verticalGridSize={rows}
+          rowHeight={rowHeight}
           margin={[0, 0]}
+          verticalGridSize={rows}
+          bFitHeight
         >
           {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
         <Button
           className="close-button pt-button pt-intent-primary"
           text="X"
-          onClick={() => api.closePerformancePanel(profileId, true)}
+          onClick={() => api.closePerformancePanel(profileId)}
         />
       </div>
     );

@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-12T00:22:02+11:00
+ * @Last modified time: 2018-02-16T15:53:32+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -57,7 +57,7 @@ export default class Profiles {
     }
     this.loading = true;
     // Call controller file get service
-    featherClient()
+    return featherClient()
       .service('files')
       .get(this.profilesFilePath)
       .then(file => {
@@ -80,7 +80,7 @@ export default class Profiles {
         NewToaster.show({
           message: `Reading profiles.yml failed: ${e.message}`,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
       });
   }
@@ -98,7 +98,7 @@ export default class Profiles {
         .create({
           _id: this.profilesFilePath,
           content: yaml.safeDump(exportProfiles, { skipInvalid: true }),
-          watching: false,
+          watching: false
         })
         .then(() => {
           IS_DEVELOPMENT && console.debug('profiles.yml updated');
@@ -112,7 +112,7 @@ export default class Profiles {
       NewToaster.show({
         message: `Saving profiles.yml failed: ${e.message}`,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     }
   }

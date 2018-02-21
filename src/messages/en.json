@@ -61,6 +61,11 @@
       "button_no": "No Thanks",
       "button_yes": "Okay"
     },
+    "password_dialog": {
+      "message": "Please enter your master password:",
+      "login_error_message": "Not Authorized: Could not verify the password specified. Please try again",
+      "general_error_message": "An error occurred while attempting to init the password store"
+    },
     "output": {
       "headings": {
         "default": "Query Output",
@@ -217,11 +222,20 @@
         "heading": "Preferences",
         "menuApplication": "Application",
         "menuPaths": "Paths",
+        "menuPasswordStore": "Password Store",
         "telemetryEnabled": "Send Telemetry Data to dbKoda",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
         "mongoCmd": "Mongo Path",
         "drillCmd": "Drill Path",
-        "drillControllerCmd": "Drill Controller Path"
+        "drillControllerCmd": "Drill Controller Path",
+        "passwordStoreEnabled": "Password Store Enabled",
+        "applyButton": "Apply",
+        "remove_store_dialog": {
+          "question": "Are you sure you would like to disable the password store?",
+          "qualifier": "This will remove the store along with all stored passwords. These will need to be re-entered in order to connect.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        }
       },
       "tabMenu": {
         "closeTab": "Close Tab",
@@ -285,7 +299,9 @@
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
-        "showPerformancePanel": "Show Performance Panel",
+        "createPerformancePanel": "Create Performance Panel",
+        "openPerformancePanel": "Open Performance Panel",
+        "destroyPerformancePanel": "Destroy Performance Panel",
         "deleteProfile": "Delete Profile",
         "performance": "Performance Counter Test"
       },
@@ -307,6 +323,8 @@
         "passPhrasePrompt":
           "Please enter your passphrase for SSH connection private key",
         "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
+        "passwordStoreInfo": "Tip: To avoid seeing this prompt every time you connect, you can setup a password store in Preferences",
+        "passwordStoreAdd": "This will add the password to your password store. You will not be asked again, but you can still change the password in the Edit Profile screen",
         "confirmButton": "Open",
         "cancelButton": "Cancel"
       },

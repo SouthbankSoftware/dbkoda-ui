@@ -5,7 +5,7 @@
  * @Date:   2018-02-05T12:18:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-09T19:24:15+11:00
+ * @Last modified time: 2018-02-16T12:12:26+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -49,6 +49,7 @@ const brushHeight = 18;
 const brushHorizontalPadding = 52;
 const timeFormatter = d3.timeFormat('%H:%M:%S');
 const legendTimeFormatter = d3.timeFormat('%H:%M:%S %x');
+// TODO: use hofUnitFormatter from Utils.js
 const valueFormatter = d3.format('.2f');
 
 const Brush = class extends BaseBrush {

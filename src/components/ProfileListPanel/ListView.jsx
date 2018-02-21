@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-01-22T16:27:01+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T09:36:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -46,7 +46,6 @@ import {
 } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import { terminalTypes } from '~/api/Terminal';
-import { ProfileForm } from '../ConnectionPanel/ProfileForm';
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
@@ -125,25 +124,31 @@ export default class ListView extends React.Component {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: globalString('connection/existingAlias'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
-      break;
+        break;
       case 'connectionFail':
         DBKodaToaster(Position.LEFT_BOTTOM).show({
-          message: (<span dangerouslySetInnerHTML={{ __html: 'Error: ' + err.message.substring(0, 256) + '...' }} />), // eslint-disable-line react/no-danger
+          message: (
+            <span
+              dangerouslySetInnerHTML={{
+                __html: 'Error: ' + err.message.substring(0, 256) + '...'
+              }}
+            />
+          ), // eslint-disable-line react/no-danger
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
-      break;
+        break;
       case 'connectionSuccess':
         DBKodaToaster(Position.RIGHT_TOP).show({
           message: globalString('connection/success'),
           className: 'success',
           iconName: 'pt-icon-thumbs-up'
         });
-      break;
+        break;
       default:
-      break;
+        break;
     }
   }
 
@@ -167,8 +172,7 @@ export default class ListView extends React.Component {
     profile.passPhrase = this.state.passPhrase;
     profile.bReconnect = true;
 
-    this.api.connectProfile(profile)
-    .then((res) => {
+    this.api.connectProfile(profile).then(res => {
       this.onSuccess(res, profile);
     });
   }
@@ -195,7 +199,7 @@ export default class ListView extends React.Component {
         this.state.targetProfile = profile;
         this.openSshConnectionAlert({
           switchToUponCreation: false,
-          eagerCreation: true,
+          eagerCreation: true
         });
       }
     }
@@ -206,6 +210,10 @@ export default class ListView extends React.Component {
     const selectedProfile = this.state.targetProfile;
     const { profiles } = this.props.profileStore;
     if (selectedProfile) {
+      const { api } = this.props;
+
+      api.stopPerformancePanel(selectedProfile.id);
+
       this.setState({ closingProfile: true });
       this.props.store.layout.alertIsLoading = true;
       featherClient()
@@ -397,9 +405,15 @@ export default class ListView extends React.Component {
 
   @autobind
   openOpenConnectionAlert() {
+    const { id } = this.state.targetProfile;
+    const { passwordStoreEnabled } = this.props.config.settings;
+    const storeNeedsPassword = passwordStoreEnabled
+      ? this.api.passwordApi.isProfileMissingFromStore(id)
+      : false;
     if (
-      this.state.targetProfile.sha ||
-      (this.state.targetProfile.sshTunnel &&
+      (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
+        this.state.targetProfile.sha) ||
+      (this.state.targetProfile.ssh &&
         (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass))
     ) {
       this.setState({ isOpenWarningActive: true });
@@ -431,25 +445,6 @@ export default class ListView extends React.Component {
       this.openSshShell();
     }
   }
-
-  // @action.bound
-  // openPerformanceView() {
-  //   const { targetProfile } = this.state;
-  //
-  //   if (targetProfile) {
-  //     this._syncSshCredential(targetProfile, targetProfile);
-  //   }
-  //   console.log('show performance for ', targetProfile);
-  //   const srv = featherClient().service('/performance');
-  //   srv
-  //     .create({ id: targetProfile.id })
-  //     .then((res) => {
-  //       console.log('remote execution res ', res);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }
 
   @action.bound
   closeSshConnectionAlert() {
@@ -511,7 +506,7 @@ export default class ListView extends React.Component {
         </div>
       );
     } else {
-      const { api: { getEditorDisplayName } } = this.props;
+      const { api } = this.props;
 
       this.props.store.editors.forEach(value => {
         if (value.currentProfile.trim() == this.state.targetProfile.id.trim()) {
@@ -519,7 +514,7 @@ export default class ListView extends React.Component {
             <div key={windows.length} className="menuItemWrapper">
               <MenuItem
                 className={'profileListContextMenu editorListing ' + value.fileName}
-                text={getEditorDisplayName(value)}
+                text={api.getEditorDisplayName(value)}
                 onClick={() => this.swapToEditor(value)}
                 intent={Intent.NONE}
                 iconName="pt-icon-document"
@@ -528,6 +523,9 @@ export default class ListView extends React.Component {
           );
         }
       });
+
+      const hasPerformancePanel = api.hasPerformancePanel(profile.id);
+
       connect = (
         <div className="contextMenuGroup">
           <div className="menuItemWrapper">
@@ -542,9 +540,26 @@ export default class ListView extends React.Component {
           {IS_DEVELOPMENT ? (
             <div className="menuItemWrapper">
               <MenuItem
-                className="profileListContextMenu showPerformancePanel"
+                className={`profileListContextMenu ${
+                  !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
+                }`}
                 onClick={() => this.props.api.openPerformancePanel(profile.id)}
-                text={globalString('profile/menu/showPerformancePanel')}
+                text={globalString(
+                  `profile/menu/${
+                    !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
+                  }`
+                )}
+                intent={Intent.NONE}
+                iconName="pt-icon-heat-grid"
+              />
+            </div>
+          ) : null}
+          {IS_DEVELOPMENT && hasPerformancePanel ? (
+            <div className="menuItemWrapper">
+              <MenuItem
+                className="profileListContextMenu destroyPerformancePanel"
+                onClick={() => this.props.api.closePerformancePanel(profile.id, true)}
+                text={globalString('profile/menu/destroyPerformancePanel')}
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
               />
@@ -575,17 +590,6 @@ export default class ListView extends React.Component {
           />
         </div>
       );
-      // terminalOperations.push(
-      //   <div key={terminalOperations.length} className="menuItemWrapper">
-      //     <MenuItem
-      //       className="profileListContextMenu newSshTerminal"
-      //       onClick={this.openPerformanceView}
-      //       text={globalString('profile/menu/performance')}
-      //       intent={Intent.NONE}
-      //       iconName="pt-icon-new-text-box"
-      //     />
-      //   </div>,
-      // );
     }
 
     terminalOperations.push(
@@ -735,6 +739,8 @@ export default class ListView extends React.Component {
                   dir="auto"
                   onChange={this.setPWText}
                 />
+                { !this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreInfo')}</p> }
+                { this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreAdd')}</p> }
               </div>
             )}
           {this.state.targetProfile &&
