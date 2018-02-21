@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-19T15:10:19+11:00
+ * @Last modified time: 2018-02-21T11:38:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,9 +38,9 @@ import './ProgressBarWidget.scss';
 
 let colors = ['#A27EB7', '#DC5D3E', '#39B160', '#643798', '#2E547A', '#3333cc'];
 const BAR_CLIPPATH_ID = 'barCP';
-const vbWidth = 500;
+const vbWidth = 400;
 const vbHeight = 50;
-const barHeight = 30;
+const barHeight = Math.round(vbHeight * 50 / 100);
 const chartWidth = vbWidth - 60;
 
 type Props = {
@@ -93,15 +93,15 @@ export default class ProgressBarWidget extends React.Component<Props> {
       .attr('id', BAR_CLIPPATH_ID)
       .append('rect')
       .attrs({
-        rx: 15,
-        ry: 15,
+        rx: 10,
+        ry: 10,
         height: barHeight - 2,
         width: chartWidth,
         x: 0,
         y: 1
       });
 
-    const posTransY = vbHeight / 2 - barHeight / 2;
+    const posTransY = (vbHeight / 2) - (barHeight / 2);
     // chart background
     const chartBG = this._chart
       .append('g')
@@ -199,7 +199,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this._chartLabel = arrData[0].value; // for single item chart it will always show the item value in text label
       sumOfValues = arrData[0].value;
     } else {
-      console.error('ProgressBarWidget require atleast one data element');
+      // console.error('ProgressBarWidget require atleast one data element');
       return;
     }
 
@@ -217,8 +217,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this._totalDivisor = sumOfValues;
     }
     if (this.props.widget.firstValueIsHighWaterMark) {
-      console.log('Total Divisor: ', this._totalDivisor);
-      console.log('Sum of Values: ', sumOfValues);
+      // console.log('Total Divisor: ', this._totalDivisor);
+      // console.log('Sum of Values: ', sumOfValues);
     }
 
     const t = d3.transition().duration(750);
@@ -253,8 +253,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
         class: d => {
           return 'chartBar ' + d.key;
         },
-        rx: 15,
-        ry: 15,
+        rx: 10,
+        ry: 10,
         fill: d => {
           return d3.hsl(d.color);
         },
