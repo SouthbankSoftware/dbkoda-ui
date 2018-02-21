@@ -82,6 +82,7 @@
     width: 50%;
   }
   .keyWrapper {
+    color: #bfbec0;
     width: 65%;
     flex-grow: 1;
     float: right;
@@ -99,7 +100,7 @@
       align-content: flex-start;
       .dotWrapper {
         position: relative;
-        top: 6px;
+        margin-right: 4px;
         .colorDot {
           width: 16px;
           order: 1;
@@ -135,7 +136,6 @@
   }
   box-shadow: none;
   opacity: 0.9;
-  width: 60%;
   height: 100%;
   .Tooltip {
     height: 100%;
@@ -145,11 +145,21 @@
       .row {
         display: flex;
         flex-direction: row;
+        .dotWrapper {
+          position: relative;
+          margin-right: 4px;
+          .colorDot {
+            width: 16px;
+            order: 1;
+          }
+        }
+
         .colorDot {
           width: 16px;
         }
         .labelWrapper {
           width: 50%;
+
           .label {
             text {
             }
@@ -157,6 +167,7 @@
         }
         .valueWrapper {
           width: 50%;
+          margin-left: 10px;
         }
       }
       .rowTotal {

@@ -165,31 +165,34 @@ export default class Legend extends React.Component<Props> {
                 </div>
               )}
               <div className="labelWrapper">
-                <svg className="label">
-                  <text
+                <div className="label">
+                  <span
                     x="20"
                     y="20"
                     fontFamily="sans-serif"
                     fontSize={fontSize}
                     fill={fontColor}
+                    className="labelText"
                   >
                     {itemString}
-                  </text>{' '}
-                </svg>
+                    {this.props.showValues && ':'}
+                  </span>{' '}
+                </div>
               </div>
               {this.props.showValues && (
                 <div className="valueWrapper">
-                  <svg className="legendValue">
-                    <text
+                  <div className="legendValue">
+                    <span
                       x="20"
                       y="20"
                       fontFamily="sans-serif"
                       fontSize={fontSize}
                       fill={valueFontColor}
+                      className="valueText"
                     >
-                      : {value}
-                    </text>{' '}
-                  </svg>
+                      {value}
+                    </span>{' '}
+                  </div>
                 </div>
               )}
             </div>
@@ -197,28 +200,30 @@ export default class Legend extends React.Component<Props> {
         })}
         {this.props.showTotal && (
           <div className="row rowTotal" style={rowDynamicStyle}>
-            <svg className="label">
-              <text
+            <div className="label">
+              <span
                 x="20"
                 y="20"
                 fontFamily="sans-serif"
                 fontSize={fontSize}
                 fill={totalFontColor}
+                className="totalText"
               >
                 Total:
-              </text>:{' '}
-            </svg>
-            <svg className="legendValue">
-              <text
+              </span>:{' '}
+            </div>
+            <div className="legendValue">
+              <span
                 x="20"
                 y="20"
                 fontFamily="sans-serif"
                 fontSize={fontSize}
                 fill={totalValueFontColor}
+                className="totalTextValue"
               >
                 {total + ' ' + this.state.unit}
-              </text>{' '}
-            </svg>
+              </span>{' '}
+            </div>
           </div>
         )}
       </div>

@@ -25,8 +25,8 @@
 import React from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import {inject, observer} from 'mobx-react';
-import {autorun} from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { autorun } from 'mobx';
 import Widget from '../Widget';
 
 @inject(({ store, api }, { widget }) => {
@@ -47,15 +47,11 @@ export default class DonutWidget extends React.Component<Object, Object> {
 
   constructor(props: Object) {
     super(props);
-    this.colors = [
-      '#365F87', '#42BB6D', '#7040A3', 'AC8BC0', '#E26847'
-    ];
-    this.state = {width: 500, height: 500};
+    this.colors = ['#365F87', '#42BB6D', '#7040A3', 'AC8BC0', '#E26847'];
+    this.state = { width: 500, height: 500 };
   }
 
-  projection() {
-
-  }
+  projection() {}
 
   removeD3() {
     this.context
@@ -66,11 +62,11 @@ export default class DonutWidget extends React.Component<Object, Object> {
 
   _onResize = (width: number, height: number) => {
     this.setState({
-      width,
-      height
+      width: width - 10,
+      height: height - 10
     });
     this.renderD3Component();
-  }
+  };
 
   renderD3Component() {
     this.radius = Math.min(this.state.width, this.state.height) / 2;
@@ -88,34 +84,43 @@ export default class DonutWidget extends React.Component<Object, Object> {
         'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')'
       );
 
-    this.context.selectAll('.donut')
+    this.context
+      .selectAll('.donut')
       .data(this.dataset)
-      .enter().append('svg:svg')
+      .enter()
+      .append('svg:svg')
       .attr('width', this.state.width)
       .attr('height', this.state.height)
       .append('svg:g')
       .attr('class', (d, i) => {
         return 'donut type' + i;
       })
-      .attr('transform', 'translate(' + (this.state.width / 2) + ',' + (this.state.height / 2) + ')');
+      .attr(
+        'transform',
+        'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')'
+      );
     this.update();
   }
 
   update() {
-    const pie = d3.pie()
+    const pie = d3
+      .pie()
       .sort(null)
-      .value((d) => {
+      .value(d => {
         return d.dataPerc;
       });
 
-    const arc = d3.arc()
+    const arc = d3
+      .arc()
       .innerRadius(this.chartRadius * 0.7)
       .outerRadius(() => {
         return this.chartRadius * 1.08;
-      }).padAngle(0.03);
-    const paths = this.context.selectAll('.donut')
+      })
+      .padAngle(0.03);
+    const paths = this.context
+      .selectAll('.donut')
       .selectAll('path')
-      .data((d) => {
+      .data(d => {
         return pie(d);
       });
 
@@ -125,23 +130,30 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .attr('d', arc);
 
     const that = this;
-    paths.enter()
+    paths
+      .enter()
       .append('path')
       .attr('d', arc)
       .style('fill', (d, i) => {
         return that.colors[i];
       });
-      // .style('stroke', '#FFFFFF');
+    // .style('stroke', '#FFFFFF');
     // .on(eventObj)
   }
 
   componentDidMount() {
     setTimeout(() => {
       autorun(() => {
-        const {values, items} = this.props.widget;
+        const { values, items } = this.props.widget;
         if (this.context) {
-          const newDataset: Array<Array<Object>> = this.getUpdatedData(values, items);
-          if (this.dataset.length <= 0 || this.dataset[0].lenght !== newDataset[0].length) {
+          const newDataset: Array<Array<Object>> = this.getUpdatedData(
+            values,
+            items
+          );
+          if (
+            this.dataset.length <= 0 ||
+            this.dataset[0].lenght !== newDataset[0].length
+          ) {
             this.dataset = newDataset;
             this.renderD3Component();
           }
@@ -154,13 +166,16 @@ export default class DonutWidget extends React.Component<Object, Object> {
     }, 200);
   }
 
-  getUpdatedData(values: Array<Object>, items: Array<Object>): Array<Array<Object>> {
+  getUpdatedData(
+    values: Array<Object>,
+    items: Array<Object>
+  ): Array<Array<Object>> {
     const latestValue = values.length > 0 ? values[values.length - 1] : {};
     if (_.isEmpty(latestValue)) {
       return [];
     }
     const value = latestValue.value[items[0]];
-    const retValue = _.map(value, (dbObject) => {
+    const retValue = _.map(value, dbObject => {
       let dataSize = 0;
       try {
         dataSize = parseInt(dbObject.dataSize, 10);
@@ -168,23 +183,22 @@ export default class DonutWidget extends React.Component<Object, Object> {
         // failed to parse integer
       }
       dataSize = Math.random() * 100;
-      return {dbName: dbObject.dbName, dataSize};
+      return { dbName: dbObject.dbName, dataSize };
     });
     const orderedValue = _.orderBy(retValue, ['dataSize'], ['desc']);
     const sumValue = _.sumBy(retValue, 'dataSize');
-    let normalized = orderedValue.map((v) => {
+    let normalized = orderedValue.map(v => {
       const sum = sumValue > 0 ? sumValue : 1;
       const normalizeSize = _.round(v.dataSize / sum, 2);
-      return {...v, dataPerc: normalizeSize};
+      return { ...v, dataPerc: normalizeSize };
     });
     _.remove(normalized, o => o.dataPerc <= 0);
     normalized = normalized.slice(0, 5);
     return [normalized];
   }
 
-
   render() {
-    const {widget, widgetStyle} = this.props;
+    const { widget, widgetStyle } = this.props;
     return (
       <Widget
         widget={widget}
@@ -193,6 +207,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
         projection={this.projection()}
       >
         <div className="donut-main" ref={r => (this.d3Elem = r)} />
-      </Widget>);
+      </Widget>
+    );
   }
 }

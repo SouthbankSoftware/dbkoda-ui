@@ -479,8 +479,8 @@ export default class StackedRadialWidget extends React.Component<
       this.legend.resize(width, height);
     }
     this.setState({
-      width,
-      height
+      width: width - 20,
+      height: height - 20
     });
   };
 
@@ -533,7 +533,7 @@ export default class StackedRadialWidget extends React.Component<
                   showTotal
                   showValues
                   colors={this.colors}
-                  showDots={false}
+                  showDots
                   metrics={this.props.widget.items}
                   getValues={() => {
                     return this.itemValues;
@@ -546,6 +546,7 @@ export default class StackedRadialWidget extends React.Component<
             }
             position={Position.BOTTOM}
             useSmartPositioning
+            isOpen
           >
             <div className="radialWrapper" style={wrapperStyle}>
               <div className="display-name">{displayName}</div>
