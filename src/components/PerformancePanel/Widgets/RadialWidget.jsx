@@ -32,20 +32,11 @@ import _ from 'lodash';
 
 import './RadialWidget.scss';
 import Widget from './Widget';
+import {bytesToSize} from './Utils';
 
 const colors = ['#01969E', '#01969E'];
 const gradientColors = ['#01969E', '#01969E'];
 const runQueueColors = ['#362728', '#00b458', '#c40d0d', '#960909', '#750808'];
-
-const bytesToSize = (bytes: number) => {
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes <= 0) return '0 B';
-  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
-  if (i < 0) {
-    return '0B';
-  }
-  return Math.round(bytes / 1024 ** i) + '' + sizes[i];
-};
 
 @inject(({ store, api }, { widget }) => {
   return {

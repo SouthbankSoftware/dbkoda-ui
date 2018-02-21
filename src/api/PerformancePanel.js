@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T14:16:23+11:00
+ * @Last modified time: 2018-02-21T15:50:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -36,9 +36,6 @@ import type { WidgetState } from './Widget';
 
 const FOREGROUND_SAMPLING_RATE = 5000;
 const BACKGROUND_SAMPLING_RATE = 30000;
-
-const electron = window.require('electron');
-const { powerSaveBlocker } = electron.remote;
 
 
 export type LayoutState = {
@@ -238,6 +235,8 @@ export default class PerformancePanelApi {
 
   _startDisplaySleepBlocker() {
     if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      const { powerSaveBlocker } = electron.remote;
       if (!this.powerSaverID) {
         this.powerSaverID = powerSaveBlocker.start('prevent-display-sleep');
         console.log('Power Saver Status:', powerSaveBlocker.isStarted(this.powerSaverID), ', id:', this.powerSaverID);
@@ -246,6 +245,8 @@ export default class PerformancePanelApi {
   }
   _stopDisplaySleepBlocker() {
     if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      const { powerSaveBlocker } = electron.remote;
       if (this.powerSaverID) {
         powerSaveBlocker.stop(this.powerSaverID);
         console.log('Power Saver Status:', powerSaveBlocker.isStarted(this.powerSaverID), ', id:', this.powerSaverID);
