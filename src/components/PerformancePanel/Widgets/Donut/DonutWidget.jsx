@@ -30,8 +30,9 @@ import {autorun} from 'mobx';
 import Widget from '../Widget';
 import StorageList from './StorageList';
 import './DonutWidget.scss';
+import {bytesToSize} from '../Utils';
 
-@inject(({ store, api }, { widget }) => {
+@inject(({store, api}, {widget}) => {
   return {
     store,
     api,
@@ -48,6 +49,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
   context: Object;
   width: number;
   height: number;
+  tooltip: Object;
 
   constructor(props: Object) {
     super(props);
@@ -74,6 +76,9 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .select('.donut-main')
       .selectAll('svg')
       .remove();
+    if (this.tooltip) {
+      this.tooltip.remove();
+    }
   }
 
   _onResize = (width: number, height: number) => {
@@ -107,6 +112,15 @@ export default class DonutWidget extends React.Component<Object, Object> {
         return 'donut type' + i;
       })
       .attr('transform', 'translate(' + (this.width / 3) + ',' + (this.height / 2) + ')');
+
+    this.tooltip = d3
+      .select('body')
+      .append('div')
+      .attr('class', 'radial-tooltip d3-tip-top')
+      .style('opacity', 0)
+      .style('position', 'absolute')
+      .style('z-index', 1000);
+
     this.update();
   }
 
@@ -133,15 +147,32 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .duration(1000)
       .attr('d', arc);
 
+    const that = this;
     paths.enter()
       .append('path')
       .attr('d', arc)
       .style('fill', (d) => {
         return d.data.color;
+      })
+      .on(
+        'mouseover', (d) => {
+          that.tooltip
+            .transition()
+            .duration(200)
+            .style('opacity', 0.9);
+          that.tooltip
+            .html(`<p>${d.data.dbName} : ${bytesToSize(d.data.dataSize)}</p>`)
+            .style('left', d3.event.pageX - 50 / 2 + 'px')
+            .style('top', d3.event.pageY - 28 + 'px');
+        })
+      .on('mouseout', () => {
+        that.tooltip
+          .transition()
+          .duration(500)
+          .style('opacity', 0);
       });
-    // .style('stroke', '#FFFFFF');
-    // .on(eventObj)
   }
+
 
   componentDidMount() {
     setTimeout(() => {
