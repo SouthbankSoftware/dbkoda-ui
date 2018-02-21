@@ -50,7 +50,7 @@ export default (props) => {
         items.map((item) => {
           return (
             <div style={styles.item}>
-              <ErrorIcon style={{fill: item.color, width: '16px'}} />
+              <ErrorIcon style={{fill: item.color, width: '16px', marginRight: '2px'}} />
               <div style={{color: 'white', marginRight: '10px', width: '50%'}}>{item.dbName}</div>
               <div style={{color: 'white'}}>{bytesToSize(item.dataSize)}</div>
             </div>

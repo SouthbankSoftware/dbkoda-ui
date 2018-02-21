@@ -36,7 +36,7 @@ import {bytesToSize} from '../Utils';
   return {
     store,
     api,
-    widget
+    widget,
   };
 })
 @observer
@@ -52,9 +52,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
 
   constructor(props: Object) {
     super(props);
-    this.colors = [
-      '#365F87', '#42BB6D', '#7040A3', 'AC8BC0', '#E26847'
-    ];
+    this.colors = ['#365F87', '#42BB6D', '#7040A3', 'AC8BC0', '#E26847'];
     this.width = 200;
     this.height = 200;
     this.state = {items: []};
@@ -63,7 +61,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
   projection() {
     if (this.dataset.length > 0) {
       const prej = {};
-      this.dataset[0].forEach((data) => {
+      this.dataset[0].forEach(data => {
         prej[data.dbName] = () => data.dataSize;
       });
       return prej;
@@ -72,7 +70,8 @@ export default class DonutWidget extends React.Component<Object, Object> {
 
   removeD3() {
     if (this.d3Elem) {
-      d3.select(this.d3Elem)
+      d3
+        .select(this.d3Elem)
         .select('.donut-main')
         .selectAll('svg')
         .remove();
@@ -86,7 +85,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
     this.width = width;
     this.height = height;
     this.renderD3Component();
-  }
+  };
 
   renderD3Component() {
     this.radius = Math.min(this.width, this.height) / 2;
@@ -103,16 +102,21 @@ export default class DonutWidget extends React.Component<Object, Object> {
         'translate(' + this.width / 2 + ',' + this.height / 2 + ')'
       );
 
-    context.selectAll('.donut')
+    context
+      .selectAll('.donut')
       .data(this.dataset)
-      .enter().append('svg:svg')
+      .enter()
+      .append('svg:svg')
       .attr('width', this.width)
       .attr('height', this.height)
       .append('svg:g')
       .attr('class', (d, i) => {
         return 'donut type' + i;
       })
-      .attr('transform', 'translate(' + (this.width / 3) + ',' + (this.height / 2) + ')');
+      .attr(
+        'transform',
+        'translate(' + this.width / 3 + ',' + this.height / 2 + ')'
+      );
 
     this.tooltip = d3
       .select('body')
@@ -127,20 +131,33 @@ export default class DonutWidget extends React.Component<Object, Object> {
 
   update() {
     const context = d3.select(this.d3Elem);
-    const pie = d3.pie()
+    const pie = d3
+      .pie()
       .sort(null)
-      .value((d) => {
+      .value(d => {
         return d.dataPerc;
       });
 
-    const arc = d3.arc()
+    const arc = d3
+      .arc()
       .innerRadius(this.chartRadius * 0.7)
       .outerRadius(() => {
         return this.chartRadius * 1.08;
-      }).padAngle(0.03);
-    const paths = context.selectAll('.donut')
+      })
+      .padAngle(0.03);
+
+    const arcTween = d => {
+      const i = d3.interpolate(this._current, d);
+      this._current = i(0);
+      return function(t) {
+        return arc(i(t));
+      };
+    };
+
+    const paths = context
+      .selectAll('.donut')
       .selectAll('path')
-      .data((d) => {
+      .data(d => {
         return pie(d);
       });
 
@@ -148,25 +165,26 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .transition()
       .duration(1000)
       .attr('d', arc);
+    // .attrTween('d', arcTween);
 
     const that = this;
-    paths.enter()
+    paths
+      .enter()
       .append('path')
       .attr('d', arc)
-      .style('fill', (d) => {
+      .style('fill', d => {
         return d.data.color;
       })
-      .on(
-        'mouseover', (d) => {
-          that.tooltip
-            .transition()
-            .duration(200)
-            .style('opacity', 0.9);
-          that.tooltip
-            .html(`<p>${d.data.dbName} : ${bytesToSize(d.data.dataSize)}</p>`)
-            .style('left', d3.event.pageX - 50 / 2 + 'px')
-            .style('top', d3.event.pageY - 28 + 'px');
-        })
+      .on('mouseover', d => {
+        that.tooltip
+          .transition()
+          .duration(200)
+          .style('opacity', 0.9);
+        that.tooltip
+          .html(`<p>${d.data.dbName} : ${bytesToSize(d.data.dataSize)}</p>`)
+          .style('left', d3.event.pageX - 50 / 2 + 'px')
+          .style('top', d3.event.pageY - 28 + 'px');
+      })
       .on('mouseout', () => {
         that.tooltip
           .transition()
@@ -175,15 +193,20 @@ export default class DonutWidget extends React.Component<Object, Object> {
       });
   }
 
-
   componentDidMount() {
     setTimeout(() => {
       autorun(() => {
         const {values, items} = this.props.widget;
         if (this.d3Elem) {
           const context = d3.select(this.d3Elem);
-          const newDataset: Array<Array<Object>> = this.getUpdatedData(values, items);
-          if (this.dataset.length <= 0 || this.dataset[0].length !== newDataset[0].length) {
+          const newDataset: Array<Array<Object>> = this.getUpdatedData(
+            values,
+            items
+          );
+          if (
+            this.dataset.length <= 0 ||
+            this.dataset[0].length !== newDataset[0].length
+          ) {
             this.dataset = newDataset;
             this.renderD3Component();
           }
@@ -197,13 +220,16 @@ export default class DonutWidget extends React.Component<Object, Object> {
     }, 200);
   }
 
-  getUpdatedData(values: Array<Object>, items: Array<Object>): Array<Array<Object>> {
+  getUpdatedData(
+    values: Array<Object>,
+    items: Array<Object>
+  ): Array<Array<Object>> {
     const latestValue = values.length > 0 ? values[values.length - 1] : {};
     if (_.isEmpty(latestValue)) {
       return [];
     }
     const value = latestValue.value[items[0]];
-    const retValue = _.map(value, (dbObject) => {
+    const retValue = _.map(value, dbObject => {
       let dataSize = 0;
       try {
         dataSize = parseInt(dbObject.dataSize, 10);
@@ -215,7 +241,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
     });
     const orderedValue = _.orderBy(retValue, ['dataSize'], ['desc']);
     const sumValue = _.sumBy(retValue, 'dataSize');
-    let normalized = orderedValue.map((v) => {
+    let normalized = orderedValue.map(v => {
       const sum = sumValue > 0 ? sumValue : 1;
       const normalizeSize = _.round(v.dataSize / sum, 2);
       return {...v, dataPerc: normalizeSize};
@@ -227,7 +253,6 @@ export default class DonutWidget extends React.Component<Object, Object> {
     });
     return [normalized];
   }
-
 
   render() {
     const {widget, widgetStyle} = this.props;
@@ -242,6 +267,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
           <div className="donut-main" ref={r => (this.d3Elem = r)} />
           <StorageList items={this.state.items} />
         </div>
-      </Widget>);
+      </Widget>
+    );
   }
 }
