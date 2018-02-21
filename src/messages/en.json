@@ -225,6 +225,7 @@
         "menuPasswordStore": "Password Store",
         "telemetryEnabled": "Send Telemetry Data to dbKoda",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
+        "keepDisplayAwake": "Prevent display from going to sleep (if Performance Dashboard is visible)",
         "mongoCmd": "Mongo Path",
         "drillCmd": "Drill Path",
         "drillControllerCmd": "Drill Controller Path",
