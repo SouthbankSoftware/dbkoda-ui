@@ -26,6 +26,7 @@
     "patch:globalize-webpack-plugin": "shx cp ./patch/globalize-webpack-plugin/DevelopmentModePlugin.js ./node_modules/globalize-webpack-plugin",
     "patch:blueprintjs": "shx cp ./patch/blueprintjs/contextMenuTarget.js ./node_modules/@blueprintjs/core/dist/esm/components/context-menu/",
     "dev": "webpack-dashboard -- webpack-dev-server --config webpack/dev.js",
+    "dev:x": "webpack-dev-server --config webpack/dev.js",
     "dev:test": "UAT=true yarn run dev",
     "dev:install": "yarn install --ignore-scripts",
     "dev:prod": "yarn run postinstall && yarn start",

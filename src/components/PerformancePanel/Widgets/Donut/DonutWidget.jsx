@@ -28,6 +28,8 @@ import _ from 'lodash';
 import {inject, observer} from 'mobx-react';
 import {autorun} from 'mobx';
 import Widget from '../Widget';
+import StorageList from './StorageList';
+import './DonutWidget.scss';
 
 @inject(({ store, api }, { widget }) => {
   return {
@@ -44,17 +46,27 @@ export default class DonutWidget extends React.Component<Object, Object> {
   chartRadius: number;
   d3Elem: ?Object;
   context: Object;
+  width: number;
+  height: number;
 
   constructor(props: Object) {
     super(props);
     this.colors = [
       '#365F87', '#42BB6D', '#7040A3', 'AC8BC0', '#E26847'
     ];
-    this.state = {width: 500, height: 500};
+    this.width = 200;
+    this.height = 200;
+    this.state = {items: []};
   }
 
   projection() {
-
+    if (this.dataset.length > 0) {
+      const prej = {};
+      this.dataset[0].forEach((data) => {
+        prej[data.dbName] = () => data.dataSize;
+      });
+      return prej;
+    }
   }
 
   removeD3() {
@@ -65,39 +77,36 @@ export default class DonutWidget extends React.Component<Object, Object> {
   }
 
   _onResize = (width: number, height: number) => {
-    this.setState({
-      width,
-      height
-    });
+    this.width = width;
+    this.height = height;
     this.renderD3Component();
   }
 
   renderD3Component() {
-    this.radius = Math.min(this.state.width, this.state.height) / 2;
+    this.radius = Math.min(this.width, this.height) / 2;
     this.chartRadius = this.radius / 2;
     this.context = d3.select(this.d3Elem);
     this.removeD3();
-    console.log('size:', this.state.width, this.state.height);
     this.context
       .select('.donut-main')
       .append('svg')
-      .attr('width', this.state.width)
-      .attr('height', this.state.height)
+      .attr('width', this.width)
+      .attr('height', this.height)
       .attr(
         'transform',
-        'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')'
+        'translate(' + this.width / 2 + ',' + this.height / 2 + ')'
       );
 
     this.context.selectAll('.donut')
       .data(this.dataset)
       .enter().append('svg:svg')
-      .attr('width', this.state.width)
-      .attr('height', this.state.height)
+      .attr('width', this.width)
+      .attr('height', this.height)
       .append('svg:g')
       .attr('class', (d, i) => {
         return 'donut type' + i;
       })
-      .attr('transform', 'translate(' + (this.state.width / 2) + ',' + (this.state.height / 2) + ')');
+      .attr('transform', 'translate(' + (this.width / 3) + ',' + (this.height / 2) + ')');
     this.update();
   }
 
@@ -124,12 +133,11 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .duration(1000)
       .attr('d', arc);
 
-    const that = this;
     paths.enter()
       .append('path')
       .attr('d', arc)
-      .style('fill', (d, i) => {
-        return that.colors[i];
+      .style('fill', (d) => {
+        return d.data.color;
       });
       // .style('stroke', '#FFFFFF');
     // .on(eventObj)
@@ -146,6 +154,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
             this.renderD3Component();
           }
           this.dataset = newDataset;
+          this.setState({items: this.dataset[0]});
           this.context.selectAll('.donut').data(this.dataset);
           this.update();
         }
@@ -179,6 +188,9 @@ export default class DonutWidget extends React.Component<Object, Object> {
     });
     _.remove(normalized, o => o.dataPerc <= 0);
     normalized = normalized.slice(0, 5);
+    normalized.forEach((norm, i) => {
+      norm.color = this.colors[i];
+    });
     return [normalized];
   }
 
@@ -192,7 +204,10 @@ export default class DonutWidget extends React.Component<Object, Object> {
         onResize={this._onResize}
         projection={this.projection()}
       >
-        <div className="donut-main" ref={r => (this.d3Elem = r)} />
+        <div className="donut-container">
+          <div className="donut-main" ref={r => (this.d3Elem = r)} />
+          <StorageList items={this.state.items} />
+        </div>
       </Widget>);
   }
 }
