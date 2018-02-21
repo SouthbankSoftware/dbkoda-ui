@@ -546,7 +546,6 @@ export default class StackedRadialWidget extends React.Component<
             }
             position={Position.BOTTOM}
             useSmartPositioning
-            isOpen
           >
             <div className="radialWrapper" style={wrapperStyle}>
               <div className="display-name">{displayName}</div>
