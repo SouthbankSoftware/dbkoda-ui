@@ -34,8 +34,7 @@
         "description": "Current CPU Usage and Run Queue on the OS level.",
         "infoWidget": true,
         "colorList": ["#01969E", "#01969E"],
-        "description":
-          "CPU pct busy and run queue on host",
+        "description": "CPU pct busy and run queue on host",
         "infoWidget": true,
         "showRunQueue": true
       },
@@ -127,7 +126,8 @@
         "title": "Document operations",
         "showLegend": true,
         "showVerticalRule": true,
-        "description": "Document operations executed in Mongo per second by type.",
+        "description":
+          "Document operations executed in Mongo per second by type.",
         "infoWidget": true,
         "unit": "/s"
       },
@@ -326,7 +326,7 @@
         "showVerticalRule": true,
         "description":
           "Percentage of wiredTiger read/write transactions in use.",
-        "unit": "% "
+        "unit": "%"
       }
     },
     {
