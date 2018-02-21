@@ -27,6 +27,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import { autorun } from 'mobx';
+import { inject } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
@@ -49,6 +50,15 @@ type Props = {
   rotate?: number
 };
 
+@inject(({ store: { performancePanels }, api }, { profileId }) => {
+  const performancePanel = performancePanels.get(profileId);
+  return {
+    store: {
+      performancePanel
+    },
+    api
+  };
+})
 export default class ProgressBarWidget extends React.Component<Props> {
   _chartEl: *;
   _chart: *;
@@ -178,7 +188,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       arrData = arrData.map(elem => {
         if (!this.props.widget.firstValueIsHighWaterMark) {
           sumOfValues += elem.value;
-          elem.sumValue = sumOfValues + elem.value;
+          elem.sumValue = sumOfValues;
         } else {
           elem.sumValue = elem.value;
         }
@@ -199,10 +209,13 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this._chartLabel = arrData[0].value; // for single item chart it will always show the item value in text label
       sumOfValues = arrData[0].value;
     } else {
-      console.error('ProgressBarWidget require atleast one data element');
+      console.error(
+        'ProgressBarWidget (',
+        this.props.widget.chartTitle,
+        ') require atleast one data element'
+      );
       return;
     }
-
     if (this.props.widget.maxValue) {
       this._totalDivisor = this.props.widget.maxValue; // If maxValue is provided, it will become the total divisor for the bar chart
     } else if (this.props.widget.useHighWaterMark) {
@@ -216,9 +229,19 @@ export default class ProgressBarWidget extends React.Component<Props> {
     } else if (!this.props.widget.firstValueIsHighWaterMark) {
       this._totalDivisor = sumOfValues;
     }
-    if (this.props.widget.firstValueIsHighWaterMark) {
-      console.log('Total Divisor: ', this._totalDivisor);
-      console.log('Sum of Values: ', sumOfValues);
+
+    // If part of high water mark group, set group value.
+    if (this.props.widget.waterMarkGroup) {
+      const highestValue = this.props.store.performancePanel
+        .highWaterMarkGroups[this.props.widget.waterMarkGroup];
+      if (this._totalDivisor > highestValue) {
+        this.props.store.performancePanel.highWaterMarkGroups[
+          this.props.widget.waterMarkGroup
+        ] = this._totalDivisor;
+      }
+      this._totalDivisor = this.props.store.performancePanel.highWaterMarkGroups[
+        this.props.widget.waterMarkGroup
+      ];
     }
 
     const t = d3.transition().duration(750);

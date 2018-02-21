@@ -187,6 +187,14 @@ export default class PerformancePanel extends React.Component<Props, State> {
     const { store: { performancePanel } } = this.props;
     const layout = performancePanel.layouts.get(id);
 
+    if (widget.waterMarkGroup) {
+      if (!performancePanel.highWaterMarkGroups) {
+        performancePanel.highWaterMarkGroups = [];
+      }
+      performancePanel.highWaterMarkGroups[widget.waterMarkGroup] = 0;
+    }
+    widget.profileId = this.props.profileId;
+
     if (layout) {
       const Widget = widgetTypes[type];
 
@@ -197,7 +205,11 @@ export default class PerformancePanel extends React.Component<Props, State> {
           data-grid={layout}
           style={layout.gridElementStyle}
         >
-          <Widget widget={widget} widgetStyle={layout.widgetStyle} />
+          <Widget
+            profileId={this.props.profileId}
+            widget={widget}
+            widgetStyle={layout.widgetStyle}
+          />
         </div>
       );
     }

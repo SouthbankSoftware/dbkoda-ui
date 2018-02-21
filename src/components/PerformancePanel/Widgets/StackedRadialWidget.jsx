@@ -347,7 +347,6 @@ export default class StackedRadialWidget extends React.Component<
       if (this.props.widget.unit === '%') yTranslate = '14';
       field.field.select('text.completed').text(() => {
         if (this.props.widget.unit === '%') {
-          console.log(this.itemValues);
           if (this.itemValues[field.data]) {
             return this.itemValues[field.data] + '%';
           }
