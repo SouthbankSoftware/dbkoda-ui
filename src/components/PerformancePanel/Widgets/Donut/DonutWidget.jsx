@@ -139,7 +139,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .style('fill', (d) => {
         return d.data.color;
       });
-      // .style('stroke', '#FFFFFF');
+    // .style('stroke', '#FFFFFF');
     // .on(eventObj)
   }
 

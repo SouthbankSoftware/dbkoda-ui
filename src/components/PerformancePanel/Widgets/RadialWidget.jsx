@@ -99,7 +99,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .selectAll('svg')
       .remove();
     // d3.transition();
-
+    let xTranslate = this.state.width / 2;
+    if (this.props.widget.title === 'Network') {
+      xTranslate = this.state.width / 2 - 20;
+    }
     const svg = elem
       .select('.radial-main')
       .append('svg')
@@ -109,7 +112,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .attr('class', 'radial-chart')
       .attr(
         'transform',
-        'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')'
+        'translate(' + xTranslate + ',' + this.state.height / 2 + ')'
       );
 
     this.buildGradient(svg);
@@ -315,7 +318,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     gradient
       .append('svg:stop')
       .attr('offset', '100%')
-      .attr('stop-color', this.gradientColors[1])
+      .attr('stop-color', this.gradientColors[0])
       .attr('stop-opacity', 1);
     return gradient;
   }
@@ -366,6 +369,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     if (_.keys(this.itemValue[0]).indexOf('runQueue') >= 0) {
       this.addRunQueueDisplay(this.itemValue[0].runQueue);
     }
+
     if (this.itemValue.length === 1) {
       if (_.keys(this.itemValue[0]).indexOf('runQueue') >= 0) {
         this.field.selectAll('text.completed').remove();
@@ -395,14 +399,18 @@ export default class RadialWidget extends React.Component<Object, Object> {
           .text(d => d.text);
       }
     } else if (this.itemValue.length >= 1) {
+      let xTranslate = 0;
+      if (this.props.widget.title === 'Network') {
+        xTranslate = 85;
+      }
       this.field.selectAll('text.completed').remove();
       const texts = this.text.split('\n');
       for (let i = 0; i < texts.length; i += 1) {
         const t = texts[i];
         this.field
           .append('text')
-          .attr('class', 'completed')
-          .attr('transform', `translate(0, ${i * 20})`)
+          .attr('class', 'completed layer-' + i)
+          .attr('transform', `translate(${xTranslate}, ${i * 20})`)
           .style('font-size', 'small')
           .text(t);
       }

@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T12:26:38+11:00
+ * @Last modified time: 2018-02-21T15:16:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -82,6 +82,7 @@
     width: 50%;
   }
   .keyWrapper {
+    color: #bfbec0;
     width: 65%;
     flex-grow: 1;
     float: right;
@@ -99,7 +100,7 @@
       align-content: flex-start;
       .dotWrapper {
         position: relative;
-        top: 6px;
+        margin-right: 4px;
         .colorDot {
           width: 16px;
           order: 1;
@@ -118,6 +119,7 @@
         .label {
           width: 100%;
           text-align: end;
+          height: 100%;
         }
       }
     }
@@ -135,7 +137,6 @@
   }
   box-shadow: none;
   opacity: 0.9;
-  width: 60%;
   height: 100%;
   .Tooltip {
     height: 100%;
@@ -145,11 +146,21 @@
       .row {
         display: flex;
         flex-direction: row;
+        .dotWrapper {
+          position: relative;
+          margin-right: 4px;
+          .colorDot {
+            width: 16px;
+            order: 1;
+          }
+        }
+
         .colorDot {
           width: 16px;
         }
         .labelWrapper {
           width: 50%;
+
           .label {
             text {
             }
@@ -157,6 +168,7 @@
         }
         .valueWrapper {
           width: 50%;
+          margin-left: 10px;
         }
       }
       .rowTotal {

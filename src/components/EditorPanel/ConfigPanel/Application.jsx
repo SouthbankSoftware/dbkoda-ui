@@ -21,8 +21,8 @@
  * @Author: chris
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-17T14:47:46+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-21T13:14:38+11:00
  */
 
 import React from 'react';
@@ -48,6 +48,10 @@ export default class Application extends React.Component {
         <div className="form-row">
           { this.props.renderFieldLabel('telemetryEnabled') }
           <Checkbox type="text" id="telemetryEnabled" checked={this.props.settings.telemetryEnabled} onChange={this.onCheckboxToggle} />
+        </div>
+        <div className="form-row">
+          { this.props.renderFieldLabel('keepDisplayAwake') }
+          <Checkbox type="text" id="keepDisplayAwake" checked={this.props.settings.keepDisplayAwake} onChange={this.onCheckboxToggle} />
         </div>
       </div>
     );
