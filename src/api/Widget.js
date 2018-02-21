@@ -50,6 +50,7 @@ export type WidgetState = {
   items: string[],
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
+  waterMarkGroup: ?number,
   errorLevel: ?WidgetErrorLevel,
   error: ?string
 };
@@ -99,6 +100,7 @@ export default class WidgetApi {
       items,
       values: observable.shallowArray(),
       state: 'loading',
+      waterMarkGroup: 0,
       errorLevel: null,
       error: null,
       ...extraState

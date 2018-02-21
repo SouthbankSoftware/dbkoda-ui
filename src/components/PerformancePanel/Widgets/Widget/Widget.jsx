@@ -197,7 +197,10 @@ export default class Widget extends React.Component<Props, State> {
     }
     return (
       // $FlowFixMe
-      <div className={type + ' Widget' || 'Widget'} style={widgetStyle}>
+      <div
+        className={title + ' ' + type + ' Widget' || 'Widget'}
+        style={widgetStyle}
+      >
         {state === 'error' ? (
           <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (

@@ -161,3 +161,30 @@ $background-colour: #202020;
     }
   }
 }
+.RadialWidget.Widget {
+  .parentWidgetWrapper {
+    .header {
+      top: -20px;
+      left: 5px;
+    }
+  }
+}
+
+.Network.RadialWidget.Widget {
+  .parentWidgetWrapper {
+    .header {
+      top: -30px;
+      left: 5px;
+    }
+  }
+  .completed {
+    fill: #567fa7;
+    font-size: 24px;
+  }
+  .layer-0 {
+    fill: #365f87;
+  }
+  .layer-1 {
+    fill: #01969e;
+  }
+}

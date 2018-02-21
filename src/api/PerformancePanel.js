@@ -66,7 +66,8 @@ export type PerformancePanelState = {
   profileId: UUID,
   widgets: ObservableMap<WidgetState>,
   layouts: ObservableMap<LayoutState>,
-  status: PerformancePanelStatus
+  status: PerformancePanelStatus,
+  highWaterMarkGroups: number[]
 };
 
 export default class PerformancePanelApi {
@@ -101,6 +102,7 @@ export default class PerformancePanelApi {
       profileId,
       widgets: observable.shallowMap(),
       layouts: observable.shallowMap(),
+      highWaterMarkGroups: [],
       status: performancePanelStatuses.created
     };
 
@@ -142,7 +144,10 @@ export default class PerformancePanelApi {
   startPerformancePanel(profileId: UUID, foreground: boolean = true) {
     const performancePanel = this.store.performancePanels.get(profileId);
 
-    if (performancePanel && performancePanel.status !== performancePanelStatuses.created) {
+    if (
+      performancePanel &&
+      performancePanel.status !== performancePanelStatuses.created
+    ) {
       const { widgets } = performancePanel;
       const itemsSet = new Set();
 
@@ -158,7 +163,9 @@ export default class PerformancePanelApi {
         .create({
           profileId,
           items: [...itemsSet],
-          samplingRate: foreground ? FOREGROUND_SAMPLING_RATE : BACKGROUND_SAMPLING_RATE,
+          samplingRate: foreground
+            ? FOREGROUND_SAMPLING_RATE
+            : BACKGROUND_SAMPLING_RATE,
           debug: true
         })
         .then(
@@ -185,7 +192,10 @@ export default class PerformancePanelApi {
   stopPerformancePanel(profileId: UUID) {
     const performancePanel = this.store.performancePanels.get(profileId);
 
-    if (performancePanel && performancePanel.status !== performancePanelStatuses.created) {
+    if (
+      performancePanel &&
+      performancePanel.status !== performancePanelStatuses.created
+    ) {
       featherClient()
         .statsService.remove(profileId)
         .catch(this._createErrorHandler(profileId));
