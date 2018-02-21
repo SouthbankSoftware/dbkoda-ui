@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T16:17:10+11:00
+ * @Last modified time: 2018-02-21T16:35:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -51,7 +51,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   static height = 500;
   static PI = 2 * Math.PI;
 
-  gap: 20;
+  gap: number = 20;
   itemValue: Array<Object> = [];
   field: Object;
   radial: ?HTMLElement;
