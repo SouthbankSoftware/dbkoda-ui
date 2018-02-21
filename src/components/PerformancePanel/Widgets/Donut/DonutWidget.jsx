@@ -49,6 +49,8 @@ export default class DonutWidget extends React.Component<Object, Object> {
   width: number;
   height: number;
   tooltip: Object;
+  svg: Object;
+  paths: Object;
 
   constructor(props: Object) {
     super(props);
@@ -92,30 +94,15 @@ export default class DonutWidget extends React.Component<Object, Object> {
     this.chartRadius = this.radius / 2;
     this.removeD3();
     const context = d3.select(this.d3Elem);
-    context
+    this.svg = context
       .select('.donut-main')
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height)
+      .append('g')
       .attr(
         'transform',
-        'translate(' + this.width / 2 + ',' + this.height / 2 + ')'
-      );
-
-    context
-      .selectAll('.donut')
-      .data(this.dataset)
-      .enter()
-      .append('svg:svg')
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .append('svg:g')
-      .attr('class', (d, i) => {
-        return 'donut type' + i;
-      })
-      .attr(
-        'transform',
-        'translate(' + this.width / 3 + ',' + this.height / 2 + ')'
+        'translate(' + this.width / 4 + ',' + this.height / 2 + ')'
       );
 
     this.tooltip = d3
@@ -126,52 +113,47 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .style('position', 'absolute')
       .style('z-index', 1000);
 
-    this.update();
+    return this.update();
   }
 
-  update() {
-    const context = d3.select(this.d3Elem);
-    const pie = d3
-      .pie()
-      .sort(null)
-      .value(d => {
-        return d.dataPerc;
-      });
+  pie = d3
+    .pie()
+    .sort(null)
+    .value(d => {
+      return d.dataPerc;
+    });
 
+  update() {
+    const radius = this.chartRadius;
+    const _current = [];
     const arc = d3
       .arc()
-      .innerRadius(this.chartRadius * 0.7)
+      .innerRadius(radius * 0.7)
       .outerRadius(() => {
-        return this.chartRadius * 1.08;
+        return radius * 1.08;
       })
       .padAngle(0.03);
-
-    const arcTween = d => {
-      const i = d3.interpolate(this._current, d);
-      this._current = i(0);
-      return function(t) {
-        return arc(i(t));
+    const arcTween = (d: Object, i: number) => {
+      console.log('_current ', _current[i], d);
+      const ii = d3.interpolate(_current[i], d);
+      _current[i] = ii(0);
+      return function(t: Object) {
+        return arc(ii(t));
       };
     };
-
-    const paths = context
-      .selectAll('.donut')
-      .selectAll('path')
-      .data(d => {
-        return pie(d);
-      });
-
-    paths
-      .transition()
-      .duration(1000)
-      .attr('d', arc);
-    // .attrTween('d', arcTween);
-
     const that = this;
-    paths
+    this.paths = this.svg
+      .datum(this.dataset[0])
+      // .selectAll('.donut')
+      .selectAll('path')
+      .data(this.pie)
       .enter()
       .append('path')
       .attr('d', arc)
+      .each((d, i) => {
+        _current[i] = d;
+        console.log('init _current d,', _current[i], i);
+      })
       .style('fill', d => {
         return d.data.color;
       })
@@ -191,14 +173,15 @@ export default class DonutWidget extends React.Component<Object, Object> {
           .duration(500)
           .style('opacity', 0);
       });
+    return arcTween;
   }
 
   componentDidMount() {
+    let arcTween;
     setTimeout(() => {
       autorun(() => {
         const {values, items} = this.props.widget;
         if (this.d3Elem) {
-          const context = d3.select(this.d3Elem);
           const newDataset: Array<Array<Object>> = this.getUpdatedData(
             values,
             items
@@ -208,16 +191,29 @@ export default class DonutWidget extends React.Component<Object, Object> {
             this.dataset[0].length !== newDataset[0].length
           ) {
             this.dataset = newDataset;
-            this.renderD3Component();
+            arcTween = this.renderD3Component();
           }
           this.dataset = newDataset;
           this.setState({items: this.dataset[0]});
-          context.selectAll('.donut').data(this.dataset);
-          this.update();
+          this.updateDate(arcTween);
         }
       });
       this.renderD3Component();
+      arcTween = this.renderD3Component();
     }, 200);
+  }
+
+  updateDate(arcTween: Object) {
+    const that = this;
+    this.pie.value((d, i) => {
+      return that.dataset[0][i].dataPerc;
+      // return Math.random() * 100;
+    });
+    that.paths = that.paths.data(this.pie);
+    that.paths
+      .transition()
+      .duration(1000)
+      .attrTween('d', arcTween);
   }
 
   getUpdatedData(
@@ -236,7 +232,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
       } catch (err) {
         // failed to parse integer
       }
-      dataSize = Math.random() * 100;
+      dataSize = Math.random() * 10000;
       return {dbName: dbObject.dbName, dataSize};
     });
     const orderedValue = _.orderBy(retValue, ['dataSize'], ['desc']);
@@ -263,8 +259,8 @@ export default class DonutWidget extends React.Component<Object, Object> {
         onResize={this._onResize}
         projection={this.projection()}
       >
-        <div className="donut-container">
-          <div className="donut-main" ref={r => (this.d3Elem = r)} />
+        <div className="donut-container" ref={r => (this.d3Elem = r)}>
+          <div className="donut-main" />
           <StorageList items={this.state.items} />
         </div>
       </Widget>
