@@ -178,10 +178,10 @@ div.confirmDialog {
       border: none;
       color: $buttonTextColour;
       background-color: $buttonSuccessBackground;
-      border-top-left-radius: 1em;
+      /* border-top-left-radius: 1em;
       border-bottom-left-radius: 1em;
       border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em;
+      border-bottom-right-radius: 1em; */
     }
     a.saveButton:hover {
       background: unset;
@@ -198,10 +198,10 @@ div.confirmDialog {
       border: 1px solid $connectionButtonBorderColour;
       box-shadow: unset !important;
       -webkit-appearance: unset;
-      border-top-left-radius: 1em;
+      /* border-top-left-radius: 1em;
       border-bottom-left-radius: 1em;
       border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em;
+      border-bottom-right-radius: 1em; */
     }
     a.cancelButton:hover {
       background: none;
@@ -218,10 +218,10 @@ div.confirmDialog {
       background-color: $buttonDangerBackground;
       box-shadow: unset;
       -webkit-appearance: unset;
-      border-top-left-radius: 1em;
+      /* border-top-left-radius: 1em;
       border-bottom-left-radius: 1em;
       border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em;
+      border-bottom-right-radius: 1em; */
     }
     a.dontSaveButton:hover {
       background: none;

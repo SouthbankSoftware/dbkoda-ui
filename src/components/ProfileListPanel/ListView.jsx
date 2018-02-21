@@ -405,16 +405,20 @@ export default class ListView extends React.Component {
 
   @autobind
   openOpenConnectionAlert() {
-    const { id } = this.state.targetProfile;
+    const { id, sha, ssh } = this.state.targetProfile;
     const { passwordStoreEnabled } = this.props.config.settings;
     const storeNeedsPassword = passwordStoreEnabled
-      ? this.api.passwordApi.isProfileMissingFromStore(id)
+      ? this.api.passwordApi.isProfileMissingFromStore(id) && sha
+      : false;
+    const storeNeedsRemotePassword = passwordStoreEnabled
+      ? this.api.passwordApi.isProfileMissingFromStore(`${id}-s`) && ssh
       : false;
     if (
       (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
         this.state.targetProfile.sha) ||
-      (this.state.targetProfile.ssh &&
-        (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass))
+      (((passwordStoreEnabled && storeNeedsRemotePassword) || !passwordStoreEnabled) &&
+        this.state.targetProfile.ssh) &&
+        (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass)
     ) {
       this.setState({ isOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
@@ -436,8 +440,16 @@ export default class ListView extends React.Component {
   openSshConnectionAlert(options) {
     const { targetProfile, remotePass, passPhrase } = this.state;
     this._openSshTerminalOptions = options;
-
-    if ((targetProfile.bPassPhrase && !passPhrase) || (targetProfile.bRemotePass && !remotePass)) {
+    const { id } = this.state.targetProfile;
+    const { passwordStoreEnabled } = this.props.config.settings;
+    const storeNeedsPassword = passwordStoreEnabled
+      ? this.api.passwordApi.isProfileMissingFromStore(`${id}-s`)
+      : false;
+    if (
+      ((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
+      (targetProfile.bPassPhrase && !passPhrase) ||
+      (targetProfile.bRemotePass && !remotePass)
+    ) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);
@@ -757,6 +769,8 @@ export default class ListView extends React.Component {
                     this.setState({ remotePass: event.target.value });
                   }}
                 />
+                { !this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreInfo')}</p> }
+                { this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreAdd')}</p> }
               </div>
             )}
           {this.state.targetProfile &&
