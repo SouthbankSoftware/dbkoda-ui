@@ -534,9 +534,13 @@ export default class StackedRadialWidget extends React.Component<
                   showValues
                   colors={this.colors}
                   showDots
+                  unit={this.props.widget.unit}
                   metrics={this.props.widget.items}
                   getValues={() => {
                     return this.itemValues;
+                  }}
+                  getUnit={() => {
+                    return this.props.widget.unit;
                   }}
                   onRef={toolTipLegend => {
                     this.toolTipLegend = toolTipLegend;
@@ -561,6 +565,7 @@ export default class StackedRadialWidget extends React.Component<
               showTotal={false}
               showValues={false}
               colors={this.colors}
+              unit={this.props.widget.unit}
               showDots
               metrics={this.props.widget.items}
               onRef={legend => {

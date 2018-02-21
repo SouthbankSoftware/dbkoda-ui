@@ -17,7 +17,8 @@
         "infoWidget": true,
         "widgetItemKeys": ["download", "upload"],
         "widgetDisplayNames": ["In", "Out"],
-        "useHighWaterMark": true
+        "useHighWaterMark": true,
+        "unit": "/s"
       },
       "layout": {
         "x": 0,

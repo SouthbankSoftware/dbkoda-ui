@@ -111,7 +111,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         y: 1
       });
 
-    const posTransY = (vbHeight / 2) - (barHeight / 2);
+    const posTransY = vbHeight / 2 - barHeight / 2;
     // chart background
     const chartBG = this._chart
       .append('g')
@@ -375,6 +375,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
         this._itemValues = latestValue;
         this._unit = unit;
         this._updateD3ViewData(latestValue);
+        if (this.toolTipLegend && this.hasRendered && this._itemValues) {
+          this.toolTipLegend.setValues(this._itemValues);
+        }
       });
     }, 200);
   }
@@ -400,7 +403,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (showVertical) {
       chartTotalStyle.top = '50%';
     }
-
+    setTimeout(() => {
+      this.hasRendered = true;
+    }, 200);
     return (
       <Widget widget={widget} widgetStyle={widgetStyle}>
         <div className="ProgressBarWidget">
@@ -413,8 +418,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
                   showTotal
                   showValues
                   colors={colors}
-                  showDots={false}
+                  showDots
                   metrics={this.props.widget.items}
+                  unit={this._unit}
                   getValues={() => {
                     return this._itemValues;
                   }}
@@ -429,6 +435,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
             }
             position={Position.BOTTOM}
             useSmartPositioning
+            isOpen
           >
             <div className="container">
               <div className="chart-label">
