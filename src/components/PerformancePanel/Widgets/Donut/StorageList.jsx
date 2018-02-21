@@ -29,7 +29,7 @@ export default (props) => {
     <div>
       {
         items.map((item) => {
-          return <div>item.name</div>
+          return <div>{item.name}</div>;
         })
       }
     </div>
