@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-14T14:55:30+11:00
+ * @Last modified time: 2018-02-21T15:42:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,16 +33,17 @@ import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
 import _ from 'lodash';
 import ReactResizeDetector from 'react-resize-detector';
-import { Tooltip, Position } from '@blueprintjs/core';
+import { Tooltip, Position, PopoverInteractionKind } from '@blueprintjs/core';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import type { WidgetValue } from '~/api/Widget';
-import InfoIcon from '../../../../styles/icons/explain-query-icon.svg';
-import ErrorIcon from '../../../../styles/icons/error-icon.svg';
-import TickIcon from '../../../../styles/icons/tick-icon.svg';
+import InfoIcon from '~/styles/icons/explain-query-icon.svg';
+// import ErrorIcon from '~/styles/icons/error-icon.svg';
+import TickIcon from '~/styles/icons/tick-icon.svg';
 import HistoryView from './HistoryView';
+import AlarmView from './AlarmView';
 import './Widget.scss';
 
 const DEBOUNCE_DELAY = 100;
@@ -130,8 +131,7 @@ export default class Widget extends React.Component<Props, State> {
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;
-    const latestValue =
-      values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
     return (
       <div className="DefaultWidgetView">
@@ -159,16 +159,6 @@ export default class Widget extends React.Component<Props, State> {
     );
   }
 
-  @action.bound
-  getAlarmStatus(alarm: any) {
-    // @TODO -> Alarming logic.
-    console.debug('Fetching Alarms for row: ', alarm);
-    return {
-      status: 'green',
-      alarmList: 'No current alarms.'
-    };
-  }
-
   render() {
     const {
       children,
@@ -191,22 +181,16 @@ export default class Widget extends React.Component<Props, State> {
       widgetStyle
     } = this.props;
     const { projection } = this.state;
-    let alarmStatus;
-    if (showAlarms) {
-      alarmStatus = this.getAlarmStatus(showAlarms);
-    }
+
     return (
       // $FlowFixMe
-      <div
-        className={title + ' ' + type + ' Widget' || 'Widget'}
-        style={widgetStyle}
-      >
+      <div className={title + ' ' + type + ' Widget' || 'Widget'} style={widgetStyle}>
         {state === 'error' ? (
           <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (
           <div className="parentWidgetWrapper">
             {title && (
-              <p className="header">
+              <div className="header">
                 <b className="title">{title}</b>
                 {infoWidget && (
                   <Tooltip
@@ -220,46 +204,15 @@ export default class Widget extends React.Component<Props, State> {
                   </Tooltip>
                 )}
                 {showAlarms && (
-                  <Tooltip
-                    portalClassName="StackedRadialWidgetTooltip"
-                    className={
-                      // $FlowIssue
-                      'tooltip alarm ' + alarmStatus.status
-                    }
-                    content={
-                      <div>
-                        {
-                          // $FlowIssue
-                          alarmStatus.alarmList
-                        }
-                      </div>
-                    }
-                    useSmartPositioning
-                    position={Position.RIGHT_TOP}
-                  >
-                    {// $FlowIssue
-                    alarmStatus.status === 'green' && (
-                      <TickIcon
-                        className="alarm green"
-                        width={20}
-                        height={20}
-                      />
-                    )}
-                    {// $FlowIssue
-                    alarmStatus.status === 'yellow' && (
-                      <ErrorIcon
-                        className="alarm yellow"
-                        width={20}
-                        height={20}
-                      />
-                    )}
-                    {// $FlowIssue
-                    alarmStatus.status === 'red' && (
-                      <ErrorIcon className="alarm red" width={20} height={20} />
-                    )}
-                  </Tooltip>
+                  <Popover2
+                    minimal
+                    interactionKind={PopoverInteractionKind.HOVER}
+                    popoverClassName="AlarmViewPopover"
+                    content={<AlarmView />}
+                    target={<TickIcon className="alarm green" width={20} height={20} />}
+                  />
                 )}
-              </p>
+              </div>
             )}
             <Popover2
               minimal
@@ -274,22 +227,14 @@ export default class Widget extends React.Component<Props, State> {
                   description={description}
                 />
               }
-              target={
-                <span className="children">
-                  {children || this._renderDefaultView()}
-                </span>
-              }
+              target={<span className="children">{children || this._renderDefaultView()}</span>}
             />
             {showVerticalRuleLeft && <hr className="verticalLeft" />}
             {showHorizontalRule && <hr />}
             {showVerticalRule && <hr className="vertical" />}
           </div>
         )}
-        <ReactResizeDetector
-          handleWidth
-          handleHeight
-          onResize={this._onResize}
-        />
+        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
       </div>
     );
   }
