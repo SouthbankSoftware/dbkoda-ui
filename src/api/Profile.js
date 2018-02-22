@@ -231,7 +231,7 @@ export default class ProfileApi {
     const { profiles } = this.profileStore;
     const { selectedProfile } = profileList;
     let edit = false;
-    if (selectedProfile) {
+    if (selectedProfile && selectedProfile.id === res.id) {
       edit = true;
     }
     profileList.creatingNewProfile = false;
