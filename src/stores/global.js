@@ -215,8 +215,10 @@ export default class Store {
   @observable
   password = {
     showDialog: false,
-    verifyPassword: false,
-    missingProfiles: []
+    passwordVerified: false,
+    missingProfiles: [],
+    initialPassword: '',
+    repeatPassword: ''
   };
 
   @observable

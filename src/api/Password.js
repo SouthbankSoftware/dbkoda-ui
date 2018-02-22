@@ -28,7 +28,9 @@
 
 import { action } from 'mobx';
 import _ from 'lodash';
+import Mousetrap from 'mousetrap';
 import { featherClient } from '~/helpers/feathers';
+import { DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { NewToaster } from '#/common/Toaster';
 import { Broker, EventType } from '../helpers/broker';
 
@@ -36,6 +38,7 @@ export default class Password {
   store: *;
   api: *;
   config: *;
+  MIN_PASSWORD_LENGTH = 8;
 
   constructor(store: *, api: *, config: *) {
     this.store = store;
@@ -50,6 +53,7 @@ export default class Password {
   @action.bound
   showPasswordDialog(verify: boolean = false) {
     console.log('Show Password Dialog');
+    this._setupKeyBind();
     this.store.password.verifyPassword = (verify === true);
     this.store.password.showDialog = true;
   }
@@ -57,11 +61,36 @@ export default class Password {
   @action.bound
   closePasswordDialog() {
     console.log('Hide Password Dialog');
+    this._removeKeyBind();
     this.store.password.showDialog = false;
+    this.store.password.initialPassword = '';
+    this.store.password.verifyPassword = '';
+  }
+
+  _setupKeyBind() {
+    // $FlowFixMe
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closePasswordDialog);
+    // $FlowFixMe
+    Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.sendStoreInit);
+  }
+
+  _removeKeyBind() {
+    // $FlowFixMe
+    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys);
+    // $FlowFixMe
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys);
+  }
+
+  verifyPassword() {
+    const {initialPassword, repeatPassword} = this.store.password;
+    return (
+      initialPassword === repeatPassword &&
+      initialPassword.length >= this.MIN_PASSWORD_LENGTH
+    );
   }
 
   @action.bound
-  sendStoreInit(masterPassword: string) {
+  sendStoreInit() {
     /*
       NOTE: If UI somehow loses track of the fact there is a password store already,
       when creating on the controller, it will still only allow a store to be created with the same password.
@@ -69,14 +98,22 @@ export default class Password {
       Not Authorised. If the request gets a Not Authorised request, it should note there is in fact an
       existing store, and allow the user to wipe it or enter their previous password.
     */
-    const masterHash = this.hashPassword(masterPassword);
-    const profileIds = this.store.profileStore.profiles.keys();
+    const { initialPassword } = this.store.password;
+    const masterHash = this.hashPassword(initialPassword);
+    const profileSshIds = _.filter(this.store.profileStore.profiles.entries(), (value) => {
+      return (value[1].ssh);
+    }).map((value) => {
+      return `${value[1].id}-s`;
+    });
+    const profileIds = _.concat(this.store.profileStore.profiles.keys(), profileSshIds);
     featherClient()
       .service('master-pass')
       .create({ masterPassword: masterHash, profileIds })
       .then(missingProfileIds => {
         console.log(`missingProfileIds: ${missingProfileIds}`);
         this.store.password.missingProfiles = missingProfileIds;
+        this.config.settings.enablePasswordStore = true;
+        this.config.save();
         this.closePasswordDialog();
       })
       .catch(error => {
@@ -101,6 +138,10 @@ export default class Password {
     return featherClient()
       .service('master-pass')
       .remove()
+      .then(() => {
+        this.config.settings.enablePasswordStore = false;
+        this.config.save();
+      })
       .catch(error => {
         NewToaster.show({
           message: `Could not remove password store: ${error.message}`,
@@ -112,6 +153,7 @@ export default class Password {
 
   hashPassword(masterPassword: string): string {
     // TODO Hash masterPassword
+
     return masterPassword;
   }
 
@@ -120,7 +162,6 @@ export default class Password {
   }
 
   isProfileMissingFromStore(profileId: string) {
-    // Does the profileId exist in the missingProfiles array?
     return (_.findIndex(this.store.password.missingProfiles, id => { return id === profileId; }) > -1);
   }
 }
