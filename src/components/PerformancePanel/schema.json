@@ -94,6 +94,7 @@
       "extraState": {
         "name": "Network Bytes Out",
         "description": "Data written to network from Mongo Server",
+        "rowText": "Bytes per Second",
         "unit": "b/s"
       },
       "layout": {
@@ -242,6 +243,7 @@
       "extraState": {
         "description":
           "Number of pages requested from wiredTiger cache per second.",
+        "rowText": "Requests per Second",
         "unit": "/s"
       },
       "layout": {
@@ -364,7 +366,8 @@
       "items": ["wtIO_readIOps"],
       "extraState": {
         "description": "wiredTiger disk to cache IO rate",
-        "unit": "/s"
+        "unit": "/s",
+        "rowText": "IO per Second"
       },
       "layout": {
         "x": 17,
