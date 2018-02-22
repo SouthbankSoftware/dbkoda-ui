@@ -223,7 +223,8 @@ export default class Legend extends React.Component<Props> {
                 fill={totalValueFontColor}
                 className="totalTextValue"
               >
-                {total + ' ' + this.state.unit}
+                {convertUnits(total, this.props.getUnit(), 3).value}{' '}
+                {convertUnits(total, this.props.getUnit(), 3).unit}
               </span>{' '}
             </div>
           </div>

@@ -176,7 +176,7 @@
         "x": 37,
         "y": 10,
         "w": 15,
-        "h": 3,
+        "h": 4,
         "background": "light",
         "static": true
       },
@@ -197,9 +197,9 @@
       "items": ["queue_writersActive", "queue_writersQueued"],
       "layout": {
         "x": 37,
-        "y": 13,
+        "y": 14,
         "w": 15,
-        "h": 3,
+        "h": 4,
         "background": "light",
         "static": true
       },
@@ -214,26 +214,6 @@
     },
     {
       "type": "ProgressBarWidget",
-      "items": ["queue_totalActive", "queue_totalQueued"],
-      "layout": {
-        "x": 37,
-        "y": 16,
-        "w": 15,
-        "h": 3,
-        "background": "light",
-        "static": true
-      },
-      "extraState": {
-        "chartTitle": "Total",
-        "colorList": ["#7040A3", "#AC8BC0"],
-        "description": "Total number of all operations and queued operations.",
-        "showHorizontalRule": true,
-        "waterMarkGroup": 1,
-        "unit": "/s"
-      }
-    },
-    {
-      "type": "ProgressBarWidget",
       "items": [
         "latency_writeWaitUsPs",
         "latency_readWaitUsPs",
@@ -241,9 +221,9 @@
       ],
       "layout": {
         "x": 37,
-        "y": 19,
+        "y": 18,
         "w": 15,
-        "h": 3,
+        "h": 4,
         "background": "light",
         "static": true
       },
