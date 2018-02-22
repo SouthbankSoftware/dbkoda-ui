@@ -35,7 +35,42 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding-left: 10px;
-  line-height: 1.0;
+  line-height: 1;
+
+  .performanceNavBar {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: calc(100% + 2px);
+    height: 5%;
+    background-color: #474747;
+    color: #bfbec0;
+    left: -2px;
+    .title {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      padding-left: 15px;
+    }
+    .performanceSubNavBar {
+      width: calc(100% + 2px);
+      height: 100%;
+      background-color: #313131;
+      left: -2px;
+      display: flex;
+      flex-direction: row;
+      .subtitle {
+        padding-top: 5px;
+        padding-left: 15px;
+        color: #8b8b8b;
+      }
+      .subtitle.mongo {
+        position: absolute;
+        color: #8b8b8b;
+        padding-left: 15px;
+        left: calc(15% + 5px);
+      }
+    }
+  }
 
   hr.osDivider {
     position: absolute;
@@ -80,7 +115,7 @@
     font-weight: 100;
     color: $connectionCloseIconColor;
     margin-right: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
     position: fixed;
     top: 0;
     right: 0;

@@ -131,7 +131,8 @@ export default class Widget extends React.Component<Props, State> {
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;
-    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue =
+      values.length > 0 ? values[values.length - 1].value : {};
 
     return (
       <div className="DefaultWidgetView">
@@ -176,6 +177,7 @@ export default class Widget extends React.Component<Props, State> {
         showVerticalRule,
         showVerticalRuleLeft,
         showAlarms,
+        rowText,
         type
       },
       widgetStyle
@@ -184,7 +186,10 @@ export default class Widget extends React.Component<Props, State> {
 
     return (
       // $FlowFixMe
-      <div className={title + ' ' + type + ' Widget' || 'Widget'} style={widgetStyle}>
+      <div
+        className={title + ' ' + type + ' Widget' || 'Widget'}
+        style={widgetStyle}
+      >
         {state === 'error' ? (
           <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (
@@ -209,7 +214,13 @@ export default class Widget extends React.Component<Props, State> {
                     interactionKind={PopoverInteractionKind.HOVER}
                     popoverClassName="AlarmViewPopover"
                     content={<AlarmView />}
-                    target={<TickIcon className="alarm green" width={20} height={20} />}
+                    target={
+                      <TickIcon
+                        className="alarm green"
+                        width={20}
+                        height={20}
+                      />
+                    }
                   />
                 )}
               </div>
@@ -227,14 +238,23 @@ export default class Widget extends React.Component<Props, State> {
                   description={description}
                 />
               }
-              target={<span className="children">{children || this._renderDefaultView()}</span>}
+              target={
+                <span className="children">
+                  {children || this._renderDefaultView()}
+                </span>
+              }
             />
             {showVerticalRuleLeft && <hr className="verticalLeft" />}
             {showHorizontalRule && <hr />}
             {showVerticalRule && <hr className="vertical" />}
+            {rowText && <div className="rowText">{rowText}</div>}
           </div>
         )}
-        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
+        <ReactResizeDetector
+          handleWidth
+          handleHeight
+          onResize={this._onResize}
+        />
       </div>
     );
   }

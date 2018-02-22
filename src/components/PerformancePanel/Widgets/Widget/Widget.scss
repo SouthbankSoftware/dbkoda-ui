@@ -80,6 +80,16 @@ $background-colour: #202020;
     width: 100%;
     height: 100%;
 
+    div.rowText {
+      position: absolute;
+      left: calc(50% + 240px);
+      top: 28px;
+      color: #bfbec0;
+      opacity: 0.5;
+      width: 200%;
+      text-align: center;
+    }
+
     div.header {
       display: flex;
       flex-direction: row;

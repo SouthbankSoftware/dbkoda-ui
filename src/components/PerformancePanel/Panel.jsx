@@ -251,6 +251,17 @@ export default class PerformancePanel extends React.Component<Props, State> {
 
     return (
       <div className="PerformancePanel">
+        <div className="performanceNavBar">
+          <div className="title">{globalString('performance/title')}</div>
+          <div className="performanceSubNavBar">
+            <div className="subtitle os">
+              {globalString('performance/section_headers/os')}
+            </div>
+            <div className="subtitle mongo">
+              {globalString('performance/section_headers/mongo')}
+            </div>
+          </div>
+        </div>
         <hr className="osDivider" />
         <ResponsiveReactGridLayout
           className="GridLayout"
