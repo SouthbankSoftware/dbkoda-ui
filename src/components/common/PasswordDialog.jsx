@@ -46,6 +46,8 @@ type State = {
 }))
 @observer
 export default class PasswordDialog extends React.Component<Props, State> {
+  MIN_PASSWORD_SIZE = 6;
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -54,9 +56,16 @@ export default class PasswordDialog extends React.Component<Props, State> {
     };
   }
 
+  closeDialog = () => {
+    this.props.api.passwordApi.closePasswordDialog();
+  }
+
   onPasswordSubmit = () => {
-    this.props.api.passwordApi.sendStoreInit(this.state.passPhrase);
-    this.setState({ passPhraseVerified: !(this.props.verifyPassword) });
+    if (this.state.passPhraseVerified) {
+      this.props.api.passwordApi.sendStoreInit();
+      // this.props.api.passwordApi.sendStoreInit(this.state.passPhrase);
+      this.setState({ passPhraseVerified: !(this.props.verifyPassword) });
+    }
   }
 
   render() {
@@ -64,7 +73,7 @@ export default class PasswordDialog extends React.Component<Props, State> {
       <Dialog
         className="passwordDialog"
         isOpen={this.props.showDialog}
-        onClose={this.props.api.passwordApi.hidePasswordDialog}>
+        onClose={this.props.api.passwordApi.closePasswordDialog}>
         <div className="dialogContent">
           <p>{globalString('password_dialog/message')}</p>
           <input
@@ -72,7 +81,14 @@ export default class PasswordDialog extends React.Component<Props, State> {
             className="pt-input passPhraseInput"
             placeholder="Enter Master Password..."
             onChange={event => {
-              this.setState({ passPhrase: event.target.value });
+              this.props.store.password.initialPassword = event.target.value;
+              // this.setState({ passPhrase: event.target.value });
+              this.setState({
+                passPhraseVerified: (
+                  !this.props.verifyPassword ||
+                  this.props.api.passwordApi.verifyPassword()
+                )
+              });
             }}
           />
           {
@@ -82,10 +98,11 @@ export default class PasswordDialog extends React.Component<Props, State> {
               className="pt-input passPhraseInput verifyInput"
               placeholder="Verify Master Password..."
               onChange={event => {
+                this.props.store.password.repeatPassword = event.target.value;
                   this.setState({
                     passPhraseVerified: (
                       !this.props.verifyPassword ||
-                      event.target.value === this.state.passPhrase
+                      this.props.api.passwordApi.verifyPassword()
                     )
                   });
               }}

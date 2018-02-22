@@ -231,7 +231,7 @@ export default class ProfileApi {
     const { profiles } = this.profileStore;
     const { selectedProfile } = profileList;
     let edit = false;
-    if (selectedProfile) {
+    if (selectedProfile && selectedProfile.id === res.id) {
       edit = true;
     }
     profileList.creatingNewProfile = false;
@@ -247,8 +247,12 @@ export default class ProfileApi {
       }
       const { passwordStoreEnabled } = this.config.settings;
       const storeNeedsPassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(res.id) : false;
+      const storeNeedsRemotePassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(`${res.id}-s`) : false;
       if (passwordStoreEnabled && storeNeedsPassword) {
         this.api.passwordApi.removeMissingStoreId(res.id);
+      }
+      if (passwordStoreEnabled && storeNeedsRemotePassword) {
+        this.api.passwordApi.removeMissingStoreId(`${res.id}-s`);
       }
       const profile: Profile = {
         id: res.id,
