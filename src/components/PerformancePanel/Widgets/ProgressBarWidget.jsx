@@ -435,7 +435,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
             }
             position={Position.BOTTOM}
             useSmartPositioning
-            isOpen
           >
             <div className="container">
               <div className="chart-label">
