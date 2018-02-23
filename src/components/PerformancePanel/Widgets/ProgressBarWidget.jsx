@@ -194,7 +194,10 @@ export default class ProgressBarWidget extends React.Component<Props> {
         }
         return elem;
       });
-      if (!this.props.widget.firstValueIsHighWaterMark) {
+      if (
+        !this.props.widget.firstValueIsHighWaterMark ||
+        !this.props.widget.useHighWaterMark
+      ) {
         arrData = _.reverse(arrData);
       }
       this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label

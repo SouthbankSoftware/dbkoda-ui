@@ -108,6 +108,11 @@ export default class PasswordDialog extends React.Component<Props, State> {
               }}
             />
           }
+          {
+            this.props.verifyPassword &&
+            !this.state.passPhraseVerified &&
+            <p className="dialogValidationError">{globalString('password_dialog/validation_message')}</p>
+          }
         </div>
         <div className="dialogButtons">
           <AnchorButton

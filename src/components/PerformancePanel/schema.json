@@ -134,6 +134,7 @@
         "static": true
       },
       "extraState": {
+        "name": "Connections",
         "title": "Connections",
         "colorList": ["#A5A11B"],
         "infoWidget": true,
@@ -155,6 +156,7 @@
         "static": true
       },
       "extraState": {
+        "name": "Mongo Server Memory",
         "title": "Mongo Server Memory",
         "colorList": ["#E26847", "#B02C09"],
         "infoWidget": true,
@@ -172,7 +174,8 @@
         "document_inserted"
       ],
       "extraState": {
-        "title": "Document operations",
+        "name": "Document Operations",
+        "title": "Document Operations",
         "showLegend": true,
         "showVerticalRule": true,
         "showVerticalRuleLeft": true,
@@ -202,6 +205,7 @@
         "static": true
       },
       "extraState": {
+        "name": "Reads",
         "title": "Queues",
         "colorList": ["#7040A3", "#AC8BC0"],
         "description":
@@ -209,7 +213,7 @@
         "infoWidget": true,
         "chartTitle": "Reads",
         "waterMarkGroup": 1,
-        "showAlarms": "CPU",
+        "showAlarms": "mongo",
         "unit": " "
       }
     },
@@ -225,6 +229,7 @@
         "static": true
       },
       "extraState": {
+        "name": "Writes",
         "chartTitle": "Writes",
         "colorList": ["#7040A3", "#AC8BC0"],
         "showHorizontalRule": true,
@@ -250,7 +255,8 @@
         "static": true
       },
       "extraState": {
-        "title": "Op times",
+        "name": "Op Times",
+        "title": "Op Times",
         "colorList": ["#BA5A3F", "#01969E", "#42BB6D"],
         "infoWidget": true,
         "description": "Time spent for different ops.",
@@ -262,8 +268,9 @@
       "type": "ArrowWidget",
       "items": ["wtCache_readRequestsPs"],
       "extraState": {
+        "name": "Cache Requests",
         "description":
-          "Number of pages requested from wiredTiger cache per second.",
+          "Number of pages requested from WiredTiger cache per second.",
         "rowText": "Requests per Second",
         "unit": "/s"
       },
@@ -287,10 +294,11 @@
         "static": true
       },
       "extraState": {
-        "title": "Wiredtiger Cache",
+        "name": "WiredTiger Cache",
+        "title": "WiredTiger Cache",
         "colorList": ["#32554D", "#4E8476"],
         "infoWidget": true,
-        "description": "Current and Maximum size of the wiredTiger cache.",
+        "description": "Current and Maximum size of the WiredTiger cache.",
         "unit": "b",
         "showHorizontalRule": true,
         "firstValueIsHighWaterMark": true
@@ -308,10 +316,11 @@
         "static": true
       },
       "extraState": {
+        "name": "Log Buffer",
         "title": "Log Buffer",
         "colorList": ["#028989", "#03e2e2"],
         "infoWidget": true,
-        "description": "Current and Maximum size of the wiredTiger log Buffer",
+        "description": "Current and Maximum size of the WiredTiger log Buffer",
         "unit": "b",
         "firstValueIsHighWaterMark": true
       }
@@ -328,14 +337,15 @@
         "static": true
       },
       "extraState": {
-        "title": "Transaction tickets",
+        "name": "Transaction Tickets",
+        "title": "Transaction Tickets",
         "showLegend": true,
         "colorList": ["#42BB6D", "#913856"],
         "infoWidget": true,
         "showVerticalRuleLeft": true,
         "showVerticalRule": true,
         "description":
-          "Percentage of wiredTiger read/write transactions in use.",
+          "Percentage of WiredTiger read/write transactions in use.",
         "unit": "%"
       }
     },
@@ -351,14 +361,15 @@
         "static": true
       },
       "extraState": {
+        "name": "Miss Rate",
         "title": "Miss Rate",
         "colorList": ["#365F87"],
         "infoWidget": true,
         "description":
-          "Percentage of time a needed page is not found in wiredTiger cache",
+          "Percentage of time a needed page is not found in WiredTiger cache",
         "unit": "%",
         "showHorizontalRule": true,
-        "showAlarms": "Memory",
+        "showAlarms": "wiredtiger",
         "useHighWaterMark": true
       }
     },
@@ -374,10 +385,11 @@
         "static": true
       },
       "extraState": {
+        "name": "Evictions",
         "title": "Evictions",
         "colorList": ["#AA4B35"],
         "infoWidget": true,
-        "description": "Pages evicted from the wiredTiger cache per second",
+        "description": "Pages evicted from the WiredTiger cache per second",
         "unit": "/s",
         "useHighWaterMark": true
       }
@@ -386,7 +398,8 @@
       "type": "ArrowWidget",
       "items": ["wtIO_readIOps"],
       "extraState": {
-        "description": "wiredTiger disk to cache IO rate",
+        "name": "Disk to Cache",
+        "description": "WiredTiger disk to cache IO rate",
         "unit": "/s",
         "rowText": "IO per Second"
       },
@@ -402,7 +415,8 @@
       "type": "ArrowWidget",
       "items": ["wtIO_writeIOps"],
       "extraState": {
-        "description": "wiredTiger cache to disk time per second",
+        "name": "Cache to Disk",
+        "description": "WiredTiger cache to disk time per second",
         "unit": "/s",
         "rotate": 180
       },
@@ -422,11 +436,12 @@
         "wtIO_logSyncTimeUsPs"
       ],
       "extraState": {
-        "title": "Disk time",
+        "name": "Disk Time",
+        "title": "Disk Time",
         "colorList": ["#913856", "#42BB6D", "#A5A11B"],
         "infoWidget": true,
         "description":
-          "wiredTiger disk to cahce, cache to disk and log sync time per second.",
+          "WiredTiger disk to cahce, cache to disk and log sync time per second.",
         "unit": "μs/s",
         "showLegend": true,
         "showVerticalRule": true
@@ -452,11 +467,12 @@
         "static": true
       },
       "extraState": {
+        "name": "Disk Reads",
         "title": "Average Latency",
         "infoWidget": true,
         "chartTitle": "Reads",
         "colorList": ["#913856"],
-        "description": "Average time for a wiredTiger disk read",
+        "description": "Average time for a WiredTiger disk read",
         "unit": "μs",
         "useHighWaterMark": true
       }
@@ -473,9 +489,10 @@
         "static": true
       },
       "extraState": {
+        "name": "Disk Writes",
         "chartTitle": "Writes",
         "colorList": ["#42BB6D"],
-        "description": "Average time for a wiredTiger disk write",
+        "description": "Average time for a WiredTiger disk write",
         "unit": "μs",
         "useHighWaterMark": true
       }
@@ -492,9 +509,10 @@
         "static": true
       },
       "extraState": {
+        "name": "Log Sync",
         "chartTitle": "Log Sync",
         "colorList": ["#A5A11B"],
-        "description": "Average time for a wiredTiger log sync",
+        "description": "Average time for a WiredTiger log sync",
         "unit": "μs",
         "useHighWaterMark": true
       }
@@ -503,13 +521,14 @@
       "type": "DonutWidget",
       "items": ["db_storage"],
       "extraState": {
+        "name": "Database Storage",
         "title": "Database Storage",
         "infoWidget": true,
         "colorList": ["#AC8BC0", "#7040A3", "#42BB6D", "#365F87"],
         "description": "Storage by database",
         "unit": "gb",
         "showLegend": true,
-        "showAlarms": "Disk",
+        "showAlarms": "disk",
         "showVerticalRuleLeft": true
       },
       "layout": {
