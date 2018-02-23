@@ -29,7 +29,7 @@ const styles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
-    width: '50%',
+    width: '60%',
   },
   item: {
     display: 'flex',

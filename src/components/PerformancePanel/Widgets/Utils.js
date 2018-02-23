@@ -25,6 +25,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
+
 function timescale(num: number, a, b) {
   if (isNaN(num)) {
     throw new TypeError('expected a number');
@@ -210,9 +212,9 @@ export const hofUnitFormatter = (unit: string, length: number) => {
 export const bytesToSize = (bytes: number) => {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   if (bytes <= 0) return '0 B';
-  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+  const i = _.round(parseFloat(Math.floor(Math.log(bytes) / Math.log(1024))), 2);
   if (i < 0) {
     return '0B';
   }
-  return Math.round(bytes / 1024 ** i) + '' + sizes[i];
+  return _.round(bytes / 1024 ** i, 1) + '' + sizes[i];
 };
