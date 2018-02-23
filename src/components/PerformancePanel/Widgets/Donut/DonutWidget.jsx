@@ -42,7 +42,7 @@ import {bytesToSize} from '../Utils';
 @observer
 export default class DonutWidget extends React.Component<Object, Object> {
   colors: Array<string> = [];
-  dataset: Array<Array<Object>> = [];
+  dataset: Array<Array<Object>> = [[{dataPerc: 1, dbName: '', color: '#365F87', opacity: 0.2}]];
   radius: number;
   chartRadius: number;
   d3Elem: ?Object;
@@ -51,7 +51,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
   tooltip: Object;
   svg: Object;
   paths: Object;
-  totalSize: number;
+  totalSize: number = 0;
 
   constructor(props: Object) {
     super(props);
@@ -160,6 +160,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .style('fill', d => {
         return d.data.color;
       })
+      .style('opacity', d => (d.data.opacity === undefined ? 1 : d.data.opacity))
       .on('mouseover', d => {
         that.tooltip
           .transition()
@@ -176,6 +177,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
           .duration(500)
           .style('opacity', 0);
       });
+    this.updateDate(arcTween);
     return arcTween;
   }
 
@@ -214,13 +216,16 @@ export default class DonutWidget extends React.Component<Object, Object> {
     const that = this;
     this.pie.value((d, i) => {
       return that.dataset[0][i].dataPerc;
-      // return Math.random() * 100;
     });
     this.paths = this.paths.data(this.pie);
     this.paths
       .transition()
       .duration(1000)
       .attrTween('d', arcTween);
+    this.renderText();
+  }
+
+  renderText() {
     this.svg.select('.total-size').remove();
     this.svg
       .append('text')

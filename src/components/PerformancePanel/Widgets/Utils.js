@@ -212,7 +212,10 @@ export const hofUnitFormatter = (unit: string, length: number) => {
 export const bytesToSize = (bytes: number) => {
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   if (bytes <= 0) return '0 B';
-  const i = _.round(parseFloat(Math.floor(Math.log(bytes) / Math.log(1024))), 2);
+  const i = _.round(
+    parseFloat(Math.floor(Math.log(bytes) / Math.log(1024))),
+    2
+  );
   if (i < 0) {
     return '0B';
   }

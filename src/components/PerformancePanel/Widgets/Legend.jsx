@@ -26,7 +26,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import ErrorIcon from '../../../styles/icons/error-icon.svg';
+import ErrorIcon from '../../../styles/icons/circle.svg';
 import { convertUnits } from './Utils';
 
 import './StackedRadialWidget.scss';

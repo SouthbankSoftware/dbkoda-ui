@@ -82,7 +82,7 @@ $background-colour: #202020;
 
     div.rowText {
       position: absolute;
-      left: calc(50% + 260px);
+      left: calc(55% + 260px);
       top: 28px;
       color: #bfbec0;
       opacity: 0.5;
@@ -173,6 +173,21 @@ $background-colour: #202020;
       top: -20px;
       left: 5px;
     }
+  }
+
+  .completed {
+    fill: #567fa7;
+    font-size: smaller !important;
+  }
+
+  .layer-0 {
+    fill: #365f87;
+    font-size: smaller !important;
+  }
+
+  .layer-1 {
+    fill: #01969e;
+    font-size: smaller !important;
   }
 }
 
