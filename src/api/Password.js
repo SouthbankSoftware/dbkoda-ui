@@ -38,7 +38,7 @@ export default class Password {
   store: *;
   api: *;
   config: *;
-  MIN_PASSWORD_LENGTH = 8;
+  MIN_PASSWORD_LENGTH: number = 8;
 
   constructor(store: *, api: *, config: *) {
     this.store = store;
@@ -101,7 +101,7 @@ export default class Password {
     const { initialPassword } = this.store.password;
     const masterHash = this.hashPassword(initialPassword);
     const profileSshIds = _.filter(this.store.profileStore.profiles.entries(), (value) => {
-      return (value[1].ssh);
+      return (value[1].ssh || value[1].keyRadio);
     }).map((value) => {
       return `${value[1].id}-s`;
     });
