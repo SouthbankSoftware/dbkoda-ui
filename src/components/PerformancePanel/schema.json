@@ -16,7 +16,7 @@
           "Current network upload and download on the host system.",
         "infoWidget": true,
         "widgetItemKeys": ["download", "upload"],
-        "widgetDisplayNames": ["", ""],
+        "widgetDisplayNames": ["Download", "Upload"],
         "useHighWaterMark": true,
         "unit": "/s"
       },
