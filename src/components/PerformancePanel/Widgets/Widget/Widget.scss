@@ -3,7 +3,7 @@
  * @Date:   2017-12-14T12:24:16+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-21T15:39:43+11:00
+ * @Last modified time: 2018-02-22T23:51:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -110,26 +110,6 @@ $background-colour: #202020;
         top: -2px;
         right: 16px;
         background-color: none;
-
-        svg.alarm {
-          position: absolute;
-          float: right;
-          width: 20px;
-          height: 20px;
-          fill: #202020;
-        }
-
-        svg.red {
-          fill: #913856;
-        }
-
-        svg.green {
-          fill: #42bb6d;
-        }
-
-        svg.yellow {
-          fill: #a5a11b;
-        }
       }
       span.toolTip {
         z-index: 100;
