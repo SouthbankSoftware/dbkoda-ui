@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T15:50:45+11:00
+ * @Last modified time: 2018-02-23T17:11:21+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -72,11 +72,14 @@ export default class PerformancePanelApi {
   api: *;
   config: *;
   powerSaverID: *;
+  powerMonitorProfileId: * = null;
 
   constructor(store: *, api: *, config: *) {
     this.store = store;
     this.api = api;
     this.config = config;
+
+    // document.addEventListener('visibilitychange', this._handleAppVisibility.bind(this), false);
   }
 
   _createErrorHandler = (profileId: UUID) => {
@@ -178,10 +181,12 @@ export default class PerformancePanelApi {
         )
         .catch(this._createErrorHandler(profileId));
     }
-    if (this.config.settings.keepDisplayAwake && foreground) {
-      this._startDisplaySleepBlocker();
-    } else {
-      this._stopDisplaySleepBlocker();
+    if (foreground) {
+      if (this.config.settings.keepDisplayAwake) {
+        this._startDisplaySleepBlocker();
+      } else {
+        this._startPowerMonitor(profileId);
+      }
     }
   }
 
@@ -216,7 +221,7 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  closePerformancePanel(profileId: UUID, destroy: boolean = false) {
+  closePerformancePanel(profileId: UUID, destroy: boolean = false, suspend: boolean = false) {
     if (destroy) {
       const { performancePanels } = this.store;
 
@@ -226,10 +231,14 @@ export default class PerformancePanelApi {
     } else {
       this.startPerformancePanel(profileId, false);
     }
-
     this.store.performancePanel = null;
-    if (this.config.settings.keepDisplayAwake) {
-      this._stopDisplaySleepBlocker();
+
+    if (!suspend) {
+      if (this.config.settings.keepDisplayAwake) {
+        this._stopDisplaySleepBlocker();
+      } else {
+        this._stopPowerMonitor();
+      }
     }
   }
 
@@ -252,6 +261,49 @@ export default class PerformancePanelApi {
         console.log('Power Saver Status:', powerSaveBlocker.isStarted(this.powerSaverID), ', id:', this.powerSaverID);
         this.powerSaverID = null;
       }
+    }
+  }
+  _startPowerMonitor(profileId) {
+    if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      const { powerMonitor } = electron.remote;
+      if (this.powerMonitorProfileId === null) {
+        this.powerMonitorProfileId = profileId;
+        powerMonitor.on('suspend', this._suspendPerformancePanel.bind(this));
+        powerMonitor.on('resume', this._resumePerformancePanel.bind(this));
+      }
+    }
+  }
+  _stopPowerMonitor() {
+    if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      const { powerMonitor } = electron.remote;
+      if (this.powerMonitorProfileId !== null) {
+        this.powerMonitorProfileId = null;
+        powerMonitor.removeListener('suspend', this._suspendPerformancePanel.bind(this));
+        powerMonitor.removeListener('resume', this._resumePerformancePanel.bind(this));
+      }
+    }
+  }
+  _handleAppVisibility() {
+    if (document.hidden) {
+      console.log('App is Hidden!!!');
+      this._suspendPerformancePanel();
+    } else {
+      console.log('App is Visible!!!');
+      this._resumePerformancePanel();
+    }
+  }
+  _suspendPerformancePanel() {
+    console.log('The system is going to sleep!!!');
+    if (this.powerMonitorProfileId !== null) {
+      this.closePerformancePanel(this.powerMonitorProfileId, false, true);
+    }
+  }
+  _resumePerformancePanel() {
+    console.log('The system is going to resume!!!');
+    if (this.powerMonitorProfileId !== null) {
+      this.openPerformancePanel(this.powerMonitorProfileId);
     }
   }
 }

@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T11:38:37+11:00
+ * @Last modified time: 2018-02-23T10:39:46+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -209,11 +209,11 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this._chartLabel = arrData[0].value; // for single item chart it will always show the item value in text label
       sumOfValues = arrData[0].value;
     } else {
-      console.error(
-        'ProgressBarWidget (',
-        this.props.widget.chartTitle,
-        ') require atleast one data element'
-      );
+      // console.error(
+      //   'ProgressBarWidget (',
+      //   this.props.widget.chartTitle,
+      //   ') require atleast one data element'
+      // );
       return;
     }
     if (this.props.widget.maxValue) {
