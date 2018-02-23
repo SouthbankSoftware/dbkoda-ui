@@ -29,7 +29,8 @@ const styles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
-    width: '60%'
+    width: '60%',
+    color: '#b3b3b3',
   },
   item: {
     display: 'flex',
@@ -52,10 +53,10 @@ export default props => {
             <CircleIcon
               style={{ fill: item.color, width: '16px', marginRight: '2px' }}
             />
-            <div style={{ color: 'white', marginRight: '10px', width: '50%' }}>
+            <div style={{ marginRight: '10px', width: '50%' }}>
               {item.dbName}
             </div>
-            <div style={{ color: 'white' }}>{bytesToSize(item.dataSize)}</div>
+            <div>{bytesToSize(item.dataSize)}</div>
           </div>
         );
       })}
