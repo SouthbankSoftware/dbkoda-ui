@@ -209,7 +209,7 @@
         "infoWidget": true,
         "chartTitle": "Reads",
         "waterMarkGroup": 1,
-        "showAlarms": "CPU",
+        "showAlarms": "mongo",
         "unit": " "
       }
     },
@@ -358,7 +358,7 @@
           "Percentage of time a needed page is not found in wiredTiger cache",
         "unit": "%",
         "showHorizontalRule": true,
-        "showAlarms": "Memory",
+        "showAlarms": "wiredtiger",
         "useHighWaterMark": true
       }
     },
@@ -509,7 +509,7 @@
         "description": "Storage by database",
         "unit": "gb",
         "showLegend": true,
-        "showAlarms": "Disk",
+        "showAlarms": "disk",
         "showVerticalRuleLeft": true
       },
       "layout": {
