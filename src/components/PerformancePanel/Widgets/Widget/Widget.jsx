@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-21T15:42:25+11:00
+ * @Last modified time: 2018-02-23T10:32:43+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,29 +27,28 @@
  */
 
 import * as React from 'react';
-import { action } from 'mobx';
+import { action, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
 import _ from 'lodash';
 import ReactResizeDetector from 'react-resize-detector';
-import { Tooltip, Position, PopoverInteractionKind } from '@blueprintjs/core';
+import { Tooltip, Position } from '@blueprintjs/core';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
 // $FlowFixMe
 import { Broker, EventType } from '~/helpers/broker';
 import type { WidgetValue } from '~/api/Widget';
 import InfoIcon from '~/styles/icons/explain-query-icon.svg';
-// import ErrorIcon from '~/styles/icons/error-icon.svg';
-import TickIcon from '~/styles/icons/tick-icon.svg';
 import HistoryView from './HistoryView';
-import AlarmView from './AlarmView';
+import AlarmView, { type Alarm } from './AlarmView';
 import './Widget.scss';
 
 const DEBOUNCE_DELAY = 100;
 const MAX_HISTORY_SIZE = 720; // 1h with 5s sampling rate
 const HISTORY_VIEW_WIDTH = 537;
 const HISTORY_VIEW_HEIGHT = 257;
+const EMPTY_ALARMS = [];
 
 export type Projection = { [string]: (value: WidgetValue) => number };
 
@@ -86,6 +85,15 @@ export default class Widget extends React.Component<Props, State> {
     }
   }
 
+  @computed
+  get alarms(): Alarm[] {
+    // $FlowFixMe
+    const { values } = this.props.widget;
+
+    // $FlowFixMe
+    return _.get(_.last(values), 'alarms', EMPTY_ALARMS);
+  }
+
   _generateDefaultProjection = (props: Props) => {
     const { widget: { items } } = props;
 
@@ -100,17 +108,37 @@ export default class Widget extends React.Component<Props, State> {
   };
 
   _onData = action(payload => {
-    const { timestamp, value } = payload;
-    const { items, values } = this.props.widget;
+    const { timestamp, value: rawValue } = payload;
+    // $FlowFixMe
+    const { items, values, showAlarms } = this.props.widget;
 
     if (values.length >= MAX_HISTORY_SIZE) {
       values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
     }
 
-    values.push({
+    const value = {
       timestamp,
-      value: _.pick(value, items)
-    });
+      value: _.pick(rawValue, items)
+    };
+
+    if (showAlarms) {
+      const alarmObj = _.get(rawValue, `alarm.${showAlarms}`);
+
+      if (alarmObj) {
+        // $FlowFixMe
+        value.alarms = _.orderBy(
+          _.map(alarmObj, v => {
+            const alarm = _.pick(v, ['level', 'message']);
+            alarm.timestamp = timestamp;
+            return alarm;
+          }),
+          ['timestamp'],
+          ['desc']
+        );
+      }
+    }
+
+    values.push(value);
   });
 
   _onResize = _.debounce((...args) => {
@@ -208,21 +236,7 @@ export default class Widget extends React.Component<Props, State> {
                     <InfoIcon className="infoButton" width={20} height={20} />
                   </Tooltip>
                 )}
-                {showAlarms && (
-                  <Popover2
-                    minimal
-                    interactionKind={PopoverInteractionKind.HOVER}
-                    popoverClassName="AlarmViewPopover"
-                    content={<AlarmView />}
-                    target={
-                      <TickIcon
-                        className="alarm green"
-                        width={20}
-                        height={20}
-                      />
-                    }
-                  />
-                )}
+                {showAlarms && <AlarmView category={showAlarms} alarms={this.alarms} />}
               </div>
             )}
             <Popover2
