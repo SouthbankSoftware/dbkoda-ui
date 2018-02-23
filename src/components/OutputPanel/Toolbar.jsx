@@ -245,7 +245,7 @@ export default class Toolbar extends React.Component {
     // Get list of existing outputs for enabling buttons:
     let existingOutputs;
     const currentOutput = {};
-    if (false) {
+    if (true) {
       existingOutputs = this.getExistingOutputs();
       if (this.props.store.outputPanel.currentTab.startsWith('TableView-')) {
         currentOutput.tableView = true;
@@ -268,7 +268,7 @@ export default class Toolbar extends React.Component {
           <div className="pt-navbar-heading">
             {globalString('output/headings/default')}
           </div>
-          {false && (
+          {true && (
             <div>
               <Tooltip
                 intent={Intent.PRIMARY}
