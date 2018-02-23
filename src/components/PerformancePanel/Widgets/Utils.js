@@ -80,7 +80,7 @@ export const convertTime = (value: any, unit: string, length: number) => {
         result.unit = 'k/s';
         result.value /= 1000;
         break;
-        case 'k/s':
+      case 'k/s':
         result.unit = 'M/s';
         result.value /= 1000;
         break;
@@ -115,6 +115,14 @@ export const convertTime = (value: any, unit: string, length: number) => {
       case 'ms':
         result.unit = 's';
         result.value = timescale(value, 'ms', 's').toFixed(2);
+        break;
+      case ' ':
+        result.unit = 'k';
+        result.value /= 1000;
+        break;
+      case 'k':
+        result.unit = 'M';
+        result.value /= 1000;
         break;
       default: {
         console.error('"' + unit + '" is not a valid unit of time.');
@@ -177,7 +185,7 @@ export const convertBytes = (value: any, unit: string, length: number) => {
 
 export const convertUnits = (value: any, unit: string, length: number) => {
   if (
-    's|ms|μs|ms/s|μs/s|/μs|/us|/ms|/s|/m|/h|Op/s|KOp/s|MOp/s|pages/s|Kpages/s|Mpages/s'.indexOf(
+    's|ms|μs|ms/s|μs/s|/μs|/us|/ms|/s|/m|/h|Op/s|KOp/s|MOp/s|pages/s|Kpages/s|Mpages/s| |k'.indexOf(
       unit
     ) >= 0
   ) {

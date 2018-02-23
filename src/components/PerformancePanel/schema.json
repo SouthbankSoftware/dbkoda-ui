@@ -16,7 +16,7 @@
           "Current network upload and download on the host system.",
         "infoWidget": true,
         "widgetItemKeys": ["download", "upload"],
-        "widgetDisplayNames": ["In", "Out"],
+        "widgetDisplayNames": ["", ""],
         "useHighWaterMark": true,
         "unit": "/s"
       },
@@ -24,7 +24,7 @@
         "x": 0,
         "y": 5,
         "w": 7,
-        "h": 4,
+        "h": 6,
         "static": true
       }
     },
@@ -123,6 +123,47 @@
       }
     },
     {
+      "type": "ProgressBarWidget",
+      "items": ["connections_current"],
+      "layout": {
+        "x": 11,
+        "y": 10,
+        "w": 14,
+        "h": 6,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Connections",
+        "colorList": ["#A5A11B"],
+        "infoWidget": true,
+        "description": "Number of connections currently open",
+        "showHorizontalRule": true,
+        "useHighWaterMark": true,
+        "unit": " "
+      }
+    },
+    {
+      "type": "ProgressBarWidget",
+      "items": ["mem_virtual", "mem_resident"],
+      "layout": {
+        "x": 11,
+        "y": 16,
+        "w": 14,
+        "h": 6,
+        "background": "light",
+        "static": true
+      },
+      "extraState": {
+        "title": "Mongo Server Memory",
+        "colorList": ["#E26847", "#B02C09"],
+        "infoWidget": true,
+        "description": "Mongo Server Memory",
+        "unit": "b",
+        "firstValueIsHighWaterMark": true
+      }
+    },
+    {
       "type": "StackedRadialWidget",
       "items": [
         "document_returned",
@@ -134,23 +175,12 @@
         "title": "Document operations",
         "showLegend": true,
         "showVerticalRule": true,
+        "showVerticalRuleLeft": true,
         "description":
           "Document operations executed in Mongo per second by type.",
         "infoWidget": true,
         "unit": "/s"
       },
-      "layout": {
-        "x": 11,
-        "y": 10,
-        "w": 14,
-        "h": 12,
-        "background": "light",
-        "static": true
-      }
-    },
-    {
-      "type": "ProgressBarWidget",
-      "items": ["connections_current"],
       "layout": {
         "x": 25,
         "y": 10,
@@ -158,16 +188,6 @@
         "h": 12,
         "background": "light",
         "static": true
-      },
-      "extraState": {
-        "title": "Connections",
-        "colorList": ["#A5A11B"],
-        "infoWidget": true,
-        "description": "Number of connections currently open",
-        "showVerticalRule": true,
-        "showVertical": true,
-        "useHighWaterMark": true,
-        "unit": ""
       }
     },
     {
@@ -190,7 +210,7 @@
         "chartTitle": "Reads",
         "waterMarkGroup": 1,
         "showAlarms": "CPU",
-        "unit": "/s"
+        "unit": " "
       }
     },
     {
@@ -207,10 +227,11 @@
       "extraState": {
         "chartTitle": "Writes",
         "colorList": ["#7040A3", "#AC8BC0"],
+        "showHorizontalRule": true,
         "waterMarkGroup": 1,
         "description":
           "Current number of Write operations and queued Write operations.",
-        "unit": "/s"
+        "unit": " "
       }
     },
     {

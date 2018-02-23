@@ -316,16 +316,18 @@ export default class ProgressBarWidget extends React.Component<Props> {
           .transition()
           .duration(200)
           .style('opacity', 0.9);
-        let strTipValue =
+        const strTipValue =
           String(d.value).indexOf('.') >= 0
             ? Number(d.value).toFixed(2)
             : d.value;
-        strTipValue += ' ' + this._unit;
+        const strTipLabel = convertUnits(strTipValue, this._unit, 3);
         this._tip.html(
           '<strong>' +
             d.key +
             ':</strong> <span style="color:red">' +
-            strTipValue +
+            strTipLabel.value +
+            ' ' +
+            strTipLabel.unit +
             '</span>'
         );
         const strWidth = String(d.key + ': ' + strTipValue).length * 8;
