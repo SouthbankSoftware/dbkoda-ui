@@ -73,7 +73,9 @@
       "login_error_message":
         "Not Authorized: Could not verify the password specified. Please try again",
       "general_error_message":
-        "An error occurred while attempting to init the password store"
+        "An error occurred while attempting to init the password store",
+      "validation_message":
+        "Please ensure your password is 8 or more characters long, and that the entered passwords both match."
     },
     "output": {
       "headings": {
