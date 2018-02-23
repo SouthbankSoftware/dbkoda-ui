@@ -190,18 +190,19 @@ export default class DonutWidget extends React.Component<Object, Object> {
             items
           );
           const newDataset: Array<Array<Object>> = updatedData.items;
+          if (newDataset) {
           this.totalSize = updatedData.totalSize;
           if (
-            updatedData && (
             this.dataset.length <= 0 ||
-            this.dataset[0].length !== newDataset[0].length)
+            this.dataset[0].length !== newDataset[0].length
           ) {
             this.dataset = newDataset;
             arcTween = this.renderD3Component();
           }
-          this.dataset = newDataset;
-          this.setState({items: this.dataset[0]});
-          this.updateDate(arcTween);
+            this.dataset = newDataset;
+            this.setState({items: this.dataset[0]});
+            this.updateDate(arcTween);
+          }
         }
       });
       this.renderD3Component();
