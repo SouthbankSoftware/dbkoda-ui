@@ -265,6 +265,9 @@ div.confirmDialog {
       width: 100%;
       margin: 0 0 15px 0;
     }
+    .dialogValidationError {
+      color: $toastFontColourDanger;
+    }
   }
   .dialogButtons {
     padding: 0 20px;
