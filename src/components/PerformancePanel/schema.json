@@ -155,10 +155,10 @@
         "static": true
       },
       "extraState": {
-        "title": "Resident Memory",
+        "title": "Mongo Server Memory",
         "colorList": ["#E26847", "#B02C09"],
         "infoWidget": true,
-        "description": "Resident and virtual memory.",
+        "description": "Mongo Server Memory",
         "unit": "b",
         "firstValueIsHighWaterMark": true
       }
