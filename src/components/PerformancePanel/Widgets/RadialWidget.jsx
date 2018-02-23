@@ -75,10 +75,23 @@ export default class RadialWidget extends React.Component<Object, Object> {
   _getInnerRadiusSize() {
     const minValue = Math.min(this.state.width, this.state.height);
     this.gap = Math.round(minValue * 0.15);
+    if (
+      this.props.widget.title === 'Network' ||
+      this.props.widget.title === 'Disk IO'
+    ) {
+      this.gap = Math.round(minValue * 0.13);
+      return minValue / 2.5;
+    }
     return minValue / 2.9;
   }
 
   _getOuterRadiusSize() {
+    if (
+      this.props.widget.title === 'Network' ||
+      this.props.widget.title === 'Disk IO'
+    ) {
+      return this._getInnerRadiusSize() + this.gap - 6;
+    }
     return this._getInnerRadiusSize() + this.gap - 5;
   }
 
@@ -401,11 +414,17 @@ export default class RadialWidget extends React.Component<Object, Object> {
       }
     } else if (this.itemValue.length >= 1) {
       let xTranslate = 0;
-      if (this.props.widget.title === 'Network') {
+      if (
+        this.props.widget.title === 'Network' ||
+        this.props.widget.title === 'Disk IO'
+      ) {
         xTranslate = 0;
       }
       let yTranslate = 0;
-      if (this.props.widget.title === 'Network') {
+      if (
+        this.props.widget.title === 'Network' ||
+        this.props.widget.title === 'Disk IO'
+      ) {
         yTranslate = -4;
       }
       this.field.selectAll('text.completed').remove();
@@ -528,9 +547,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
           latest[key][`${itemKey}Delta`] / (latest[key].samplingRate / 1000)
         )
       };
-      this.text += `${widgetDisplayNames[i]} ${
-        itemKeyValues[itemKey].valuePerSec
-      }/s`;
+
+      // this.text += `${widgetDisplayNames[i]} ${
+      //   itemKeyValues[itemKey].valuePerSec
+      // }/s`;
+
+      this.text += ` ${itemKeyValues[itemKey].valuePerSec}/s`;
       if (i < widgetItemKeys.length - 1) {
         this.text += '\n';
       }

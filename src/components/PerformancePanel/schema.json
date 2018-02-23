@@ -16,7 +16,7 @@
           "Current network upload and download on the host system.",
         "infoWidget": true,
         "widgetItemKeys": ["download", "upload"],
-        "widgetDisplayNames": ["", ""],
+        "widgetDisplayNames": ["In", "Out"],
         "useHighWaterMark": true,
         "unit": "/s"
       },
@@ -72,7 +72,7 @@
       "items": ["disk"],
       "extraState": {
         "name": "Disk",
-        "colorList": ["#01969E", "#01969E"],
+        "colorList": ["#365F87", "#01969E"],
         "title": "Disk IO",
         "description": "Disk IO on the host system",
         "infoWidget": true,
