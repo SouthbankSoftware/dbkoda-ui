@@ -5,7 +5,7 @@
  * @Date:   2018-02-21T14:36:12+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-23T11:53:37+11:00
+ * @Last modified time: 2018-02-23T12:12:27+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -133,9 +133,9 @@ export default class AlarmView extends React.PureComponent<Props, State> {
     switch (category) {
       case 'mongo':
         return 'MongoDB';
-      case alarmStatuses.yellow:
+      case 'wiredtiger':
         return 'WiredTiger';
-      case alarmStatuses.red:
+      case 'disk':
         return 'Disk';
       default:
         return category;
