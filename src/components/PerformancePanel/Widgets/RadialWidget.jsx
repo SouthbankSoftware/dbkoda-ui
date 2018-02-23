@@ -683,7 +683,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   /**
    * TODO: move it to schema
    */
-  projection = () => {
+  projection() {
     const {
       items,
       widgetItemKeys,
@@ -713,7 +713,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     return {
       [key]: v => v.value[key]
     };
-  };
+  }
 
   render() {
     const { widget, widgetStyle } = this.props;
