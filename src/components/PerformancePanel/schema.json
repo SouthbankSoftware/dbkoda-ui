@@ -161,7 +161,7 @@
         "colorList": ["#E26847", "#B02C09"],
         "infoWidget": true,
         "description": "Mongo Server Memory",
-        "unit": "b",
+        "unit": "mb",
         "firstValueIsHighWaterMark": true
       }
     },
