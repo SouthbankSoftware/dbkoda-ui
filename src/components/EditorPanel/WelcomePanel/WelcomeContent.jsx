@@ -3,7 +3,7 @@
  * @Date:   2017-04-10 14:32:37
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-22T16:41:16+11:00
+ * @Last modified time: 2018-02-23T14:23:40+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,19 +24,23 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/no-string-refs, react/sort-comp */
+/* eslint-disable react/no-danger */
 
+import _ from 'lodash';
 import React from 'react';
 import xml2js from 'xml2js';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton } from '@blueprintjs/core';
-import TwitterIcon from '../../../styles/icons/twitter-icon.svg';
-import GithubIcon from '../../../styles/icons/github-icon.svg';
-import DocumentIcon from '../../../styles/icons/document-icon.svg';
-import KodaIcon from '../../../styles/icons/dbkoda-logo.svg';
+import moment from 'moment';
+import TwitterIcon from '~/styles/icons/twitter-icon.svg';
+import GithubIcon from '~/styles/icons/github-icon.svg';
+import DocumentIcon from '~/styles/icons/document-icon.svg';
+import KodaIcon from '~/styles/icons/dbkoda-logo.svg';
 
-const FEED_URL = 'https://www.dbkoda.com/feed.xml';
+const FEED_URL = 'https://cors-anywhere.herokuapp.com/https://medium.com/feed/dbkoda';
+const CONTENT_SUMMARY_RE = /<p>.*?<\/p>/;
+
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
  * @extends {React.Component}
@@ -49,7 +53,7 @@ export default class WelcomeContent extends React.Component {
     super(props);
     this.state = {
       operatingSystem: 'unknown',
-      newsJSX: null,
+      newsJSX: null
     };
     const os = require('os').release();
     if (os.match(/Mac/gi)) {
@@ -62,12 +66,12 @@ export default class WelcomeContent extends React.Component {
   }
 
   componentWillMount() {
-    const url = FEED_URL + '?rnd=' + (new Date()).getTime();
+    const url = FEED_URL + '?rnd=' + new Date().getTime();
     fetch(url)
-      .then((res) => {
+      .then(res => {
         return res.text();
       })
-      .then((body) => {
+      .then(body => {
         xml2js.parseString(body, (err, result) => {
           // Create new array of objects from results.
           if (err) {
@@ -75,61 +79,21 @@ export default class WelcomeContent extends React.Component {
           }
           const newsPosts = [{}, {}, {}];
           for (let i = 0; i < 3; i += 1) {
-            newsPosts[i].title = result.feed.entry[i].title[0]._;
-            newsPosts[i].summary = result.feed.entry[i].summary[0]._;
-            newsPosts[i].published = {
-              day: result.feed.entry[i].published[0].substring(8, 10),
-              month: result.feed.entry[i].published[0].substring(5, 7),
-              year: result.feed.entry[i].published[0].substring(0, 4),
-            };
-            switch (parseInt(newsPosts[i].published.month, 10)) {
-              case 1:
-                newsPosts[i].published.month = 'January';
-                break;
-              case 2:
-                newsPosts[i].published.month = 'February';
-                break;
-              case 3:
-                newsPosts[i].published.month = 'March';
-                break;
-              case 4:
-                newsPosts[i].published.month = 'April';
-                break;
-              case 5:
-                newsPosts[i].published.month = 'May';
-                break;
-              case 6:
-                newsPosts[i].published.month = 'June';
-                break;
-              case 7:
-                newsPosts[i].published.month = 'July';
-                break;
-              case 8:
-                newsPosts[i].published.month = 'August';
-                break;
-              case 9:
-                newsPosts[i].published.month = 'September';
-                break;
-              case 10:
-                newsPosts[i].published.month = 'October';
-                break;
-              case 11:
-                newsPosts[i].published.month = 'November';
-                break;
-              case 12:
-                newsPosts[i].published.month = 'December';
-                break;
-              default:
-                newsPosts[i].published.month = 'Unknown';
-                break;
-            }
-            // Parse date into readable format.
-            newsPosts[i].link = result.feed.entry[i].link[0].$.href;
+            const item = _.get(result, ['rss', 'channel', 0, 'item', i]);
+            const content = _.get(item, 'content:encoded[0]');
+            const summary = content.match(CONTENT_SUMMARY_RE);
+            const pubDate = moment(_.get(item, 'pubDate[0]')).format('LLL');
+            const link = _.get(item, 'link[0]');
+
+            newsPosts[i].title = _.get(item, 'title[0]');
+            newsPosts[i].summary = summary;
+            newsPosts[i].pubDate = pubDate;
+            newsPosts[i].link = link;
           }
           this.setState({ newsJSX: newsPosts });
         });
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Error fetching news: ' + error);
       });
   }
@@ -137,18 +101,14 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickBlog(number) {
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .shell.openExternal(this.state.newsJSX[number].link);
+      window.require('electron').shell.openExternal(this.state.newsJSX[number].link);
     }
   }
 
   @action.bound
   onClickMongoDocumentation() {
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .shell.openExternal('https://docs.mongodb.com/');
+      window.require('electron').shell.openExternal('https://docs.mongodb.com/');
     }
   }
   @action.bound
@@ -157,50 +117,40 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell.openExternal(
-          'https://github.com/SouthbankSoftware/dbkoda/blob/master/releaseNotes.md',
+          'https://github.com/SouthbankSoftware/dbkoda/blob/master/releaseNotes.md'
         );
     }
   }
   @action.bound
   onClickNeedHelp() {
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .shell.openExternal('https://dbkoda.useresponse.com/');
+      window.require('electron').shell.openExternal('https://dbkoda.useresponse.com/');
     }
   }
   @action.bound
   onClickLodgeABug() {
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .shell.openExternal('https://dbkoda.useresponse.com/topic/add');
+      window.require('electron').shell.openExternal('https://dbkoda.useresponse.com/topic/add');
     }
   }
 
   @action.bound
   onClickTwitter() {
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .shell.openExternal('https://twitter.com/db_Koda');
+      window.require('electron').shell.openExternal('https://twitter.com/db_Koda');
     }
   }
   @action.bound
   onClickGithub() {
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .shell.openExternal('https://github.com/SouthbankSoftware/dbkoda');
+      window.require('electron').shell.openExternal('https://github.com/SouthbankSoftware/dbkoda');
     }
   }
 
   @action.bound
   onClickKoda() {
     if (IS_ELECTRON) {
-      window
-        .require('electron')
-        .shell.openExternal('http://southbanksoftware.github.io/');
+      window.require('electron').shell.openExternal('http://southbanksoftware.github.io/');
     }
   }
 
@@ -213,10 +163,7 @@ export default class WelcomeContent extends React.Component {
             <div className="docsList">
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton
-                    className="docsIcon"
-                    onClick={this.onClickMongoDocumentation}
-                  >
+                  <AnchorButton className="docsIcon" onClick={this.onClickMongoDocumentation}>
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -224,10 +171,7 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton
-                    className="docsIcon"
-                    onClick={this.onClickReleaseNotes}
-                  >
+                  <AnchorButton className="docsIcon" onClick={this.onClickReleaseNotes}>
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -235,10 +179,7 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton
-                    className="docsIcon"
-                    onClick={this.onClickNeedHelp}
-                  >
+                  <AnchorButton className="docsIcon" onClick={this.onClickNeedHelp}>
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -246,10 +187,7 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton
-                    className="docsIcon"
-                    onClick={this.onClickLodgeABug}
-                  >
+                  <AnchorButton className="docsIcon" onClick={this.onClickLodgeABug}>
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -259,19 +197,13 @@ export default class WelcomeContent extends React.Component {
             <h2>Links</h2>
             <div className="linksList">
               <div className="linkWrapper">
-                <AnchorButton
-                  className="twitterIcon"
-                  onClick={this.onClickTwitter}
-                >
+                <AnchorButton className="twitterIcon" onClick={this.onClickTwitter}>
                   <TwitterIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Twitter</p>
               </div>
               <div className="linkWrapper">
-                <AnchorButton
-                  className="gitHubIcon"
-                  onClick={this.onClickGithub}
-                >
+                <AnchorButton className="gitHubIcon" onClick={this.onClickGithub}>
                   <GithubIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Github</p>
@@ -287,84 +219,61 @@ export default class WelcomeContent extends React.Component {
         </div>
         <div className="welcomePageContentRight">
           <h2>News</h2>
-          {this.state.newsJSX &&
+          {this.state.newsJSX && (
             <div className="newsListWrapper">
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton
-                    className="svgWrapper"
-                    onClick={() => this.onClickBlog(0)}
-                  >
+                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(0)}>
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
                 <div className="newsContentWrapper">
-                  <h2 className="newsTitle">
-                    {this.state.newsJSX[0].title}
-                  </h2>
-                  <p className="newsContent">
-                    {this.state.newsJSX[0].summary}
-                  </p>
-                  <p className="datePublished">
-                    {this.state.newsJSX[0].published.month +
-                      ' ' +
-                      this.state.newsJSX[0].published.day +
-                      ' ' +
-                      this.state.newsJSX[0].published.year}
-                  </p>
+                  <h2 className="newsTitle">{this.state.newsJSX[0].title}</h2>
+                  <p
+                    className="newsContent"
+                    dangerouslySetInnerHTML={{
+                      __html: this.state.newsJSX[0].summary
+                    }}
+                  />
+                  <p className="datePublished">{this.state.newsJSX[0].pubDate}</p>
                 </div>
               </div>
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton
-                    className="svgWrapper"
-                    onClick={() => this.onClickBlog(1)}
-                  >
+                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(1)}>
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
                 <div className="newsContentWrapper">
-                  <h2 className="newsTitle">
-                    {this.state.newsJSX[1].title}
-                  </h2>
-                  <p className="newsContent">
-                    {this.state.newsJSX[1].summary}
-                  </p>
-                  <p className="datePublished">
-                    {this.state.newsJSX[1].published.month +
-                      ' ' +
-                      this.state.newsJSX[1].published.day +
-                      ' ' +
-                      this.state.newsJSX[1].published.year}
-                  </p>
+                  <h2 className="newsTitle">{this.state.newsJSX[1].title}</h2>
+                  <p
+                    className="newsContent"
+                    dangerouslySetInnerHTML={{
+                      __html: this.state.newsJSX[1].summary
+                    }}
+                  />
+                  <p className="datePublished">{this.state.newsJSX[1].pubDate}</p>
                 </div>
               </div>
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton
-                    className="svgWrapper"
-                    onClick={() => this.onClickBlog(2)}
-                  >
+                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(2)}>
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
                 <div className="newsContentWrapper">
-                  <h2 className="newsTitle">
-                    {this.state.newsJSX[2].title}
-                  </h2>
-                  <p className="newsContent">
-                    {this.state.newsJSX[2].summary}
-                  </p>
-                  <p className="datePublished">
-                    {this.state.newsJSX[2].published.month +
-                      ' ' +
-                      this.state.newsJSX[2].published.day +
-                      ' ' +
-                      this.state.newsJSX[2].published.year}
-                  </p>
+                  <h2 className="newsTitle">{this.state.newsJSX[2].title}</h2>
+                  <p
+                    className="newsContent"
+                    dangerouslySetInnerHTML={{
+                      __html: this.state.newsJSX[2].summary
+                    }}
+                  />
+                  <p className="datePublished">{this.state.newsJSX[2].pubDate}</p>
                 </div>
               </div>
-            </div>}
+            </div>
+          )}
         </div>
       </div>
     );

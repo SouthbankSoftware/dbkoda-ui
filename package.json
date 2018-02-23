@@ -10,20 +10,23 @@
     "url": "http://southbanksoftware.com"
   },
   "main": "dist/index.html",
-  "keywords": ["React", "React-Router", "MobX", "Webpack", "ES6", "ES7"],
+  "keywords": [
+    "React",
+    "React-Router",
+    "MobX",
+    "Webpack",
+    "ES6",
+    "ES7"
+  ],
   "engines": {
     "node": ">= 8.9.1"
   },
   "scripts": {
-    "postinstall":
-      "yarn patch:globalize-webpack-plugin && yarn patch:blueprintjs",
-    "patch:globalize-webpack-plugin":
-      "shx cp ./patch/globalize-webpack-plugin/DevelopmentModePlugin.js ./node_modules/globalize-webpack-plugin",
-    "patch:blueprintjs":
-      "shx cp ./patch/blueprintjs/contextMenuTarget.js ./node_modules/@blueprintjs/core/dist/esm/components/context-menu/",
+    "postinstall": "yarn patch:globalize-webpack-plugin && yarn patch:blueprintjs",
+    "patch:globalize-webpack-plugin": "shx cp ./patch/globalize-webpack-plugin/DevelopmentModePlugin.js ./node_modules/globalize-webpack-plugin",
+    "patch:blueprintjs": "shx cp ./patch/blueprintjs/contextMenuTarget.js ./node_modules/@blueprintjs/core/dist/esm/components/context-menu/",
     "dev:x": "webpack-dev-server --config webpack/dev.js",
-    "dev":
-      "webpack-dashboard -m -- node --max-old-space-size=2048 ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack/dev.js",
+    "dev": "webpack-dashboard -m -- node --max-old-space-size=2048 ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack/dev.js",
     "dev:test": "UAT=true yarn run dev",
     "dev:install": "yarn install --ignore-scripts",
     "dev:prod": "yarn run postinstall && yarn start",
@@ -31,17 +34,14 @@
     "dev:analyzer": "yarn run clean && webpack --config webpack/analyzer.js",
     "start": "http-server ./dist -p 3000 -c-1",
     "clean": "rimraf ./dist rmdir",
-    "build":
-      "yarn run clean && node --max-old-space-size=2048 ./node_modules/webpack/bin/webpack.js --config webpack/prod.js --display-optimization-bailout --progress",
-    "test":
-      "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
+    "build": "yarn run clean && node --max-old-space-size=2048 ./node_modules/webpack/bin/webpack.js --config webpack/prod.js --display-optimization-bailout --progress",
+    "test": "yarn flow && yarn run eslint && yarn run mlaunch:init && yarn run jest; TEST_EXIT_CODE=$?; yarn run mlaunch:clean; exit $TEST_EXIT_CODE",
     "test:dev": "yarn flow && yarn run eslint && yarn run jest",
     "mlaunch:init": "mlaunch init --single",
     "mlaunch:clean": "mlaunch kill; rimraf data tmpd*",
     "eslint": "eslint --ext .jsx --ext .js src/. tests/.",
     "jest": "NODE_ENV=test jest --config jest.json --coverage",
-    "jest:debug":
-      "NODE_ENV=test node --inspect-brk ./node_modules/.bin/jest --config jest.json",
+    "jest:debug": "NODE_ENV=test node --inspect-brk ./node_modules/.bin/jest --config jest.json",
     "test:win": "yarn run mlaunch:init && jest --config jest.json --coverage",
     "docs": "yarn run esdoc && open -b com.google.chrome ./docs/index.html",
     "esdoc": "rimraf docs && esdoc -c .esdoc.json",

@@ -22,41 +22,43 @@
  */
 
 import React from 'react';
-import {bytesToSize} from '../Utils';
-import ErrorIcon from '../../../../styles/icons/error-icon.svg';
+import { bytesToSize } from '../Utils';
+import CircleIcon from '../../../../styles/icons/circle.svg';
 
 const styles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
-    width: '60%',
+    width: '60%'
   },
   item: {
     display: 'flex',
     flexDirection: 'row',
     height: '20px',
-    lineHeight: '20px',
+    lineHeight: '20px'
   }
 };
 
-export default (props) => {
-  const {items} = props;
+export default props => {
+  const { items } = props;
   if (!items) {
     return null;
   }
   return (
     <div style={styles.root}>
-      {
-        items.map((item) => {
-          return (
-            <div style={styles.item}>
-              <ErrorIcon style={{fill: item.color, width: '16px', marginRight: '2px'}} />
-              <div style={{color: 'white', marginRight: '10px', width: '50%'}}>{item.dbName}</div>
-              <div style={{color: 'white'}}>{bytesToSize(item.dataSize)}</div>
+      {items.map(item => {
+        return (
+          <div style={styles.item}>
+            <CircleIcon
+              style={{ fill: item.color, width: '16px', marginRight: '2px' }}
+            />
+            <div style={{ color: 'white', marginRight: '10px', width: '50%' }}>
+              {item.dbName}
             </div>
-          );
-        })
-      }
+            <div style={{ color: 'white' }}>{bytesToSize(item.dataSize)}</div>
+          </div>
+        );
+      })}
     </div>
   );
 };
