@@ -139,7 +139,6 @@ export default class DonutWidget extends React.Component<Object, Object> {
       })
       .padAngle(0.03);
     const arcTween = (d: Object, i: number) => {
-      console.log('_current ', _current[i], d);
       const ii = d3.interpolate(_current[i], d);
       _current[i] = ii(0);
       return function(t: Object) {
@@ -157,7 +156,6 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .attr('d', arc)
       .each((d, i) => {
         _current[i] = d;
-        console.log('init _current d,', _current[i], i);
       })
       .style('fill', d => {
         return d.data.color;
@@ -194,8 +192,9 @@ export default class DonutWidget extends React.Component<Object, Object> {
           const newDataset: Array<Array<Object>> = updatedData.items;
           this.totalSize = updatedData.totalSize;
           if (
+            updatedData && (
             this.dataset.length <= 0 ||
-            this.dataset[0].length !== newDataset[0].length
+            this.dataset[0].length !== newDataset[0].length)
           ) {
             this.dataset = newDataset;
             arcTween = this.renderD3Component();
