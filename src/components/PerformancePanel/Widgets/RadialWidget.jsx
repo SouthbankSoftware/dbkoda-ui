@@ -32,7 +32,7 @@ import _ from 'lodash';
 
 import './RadialWidget.scss';
 import Widget from './Widget';
-import {bytesToSize} from './Utils';
+import { bytesToSize } from './Utils';
 
 const colors = ['#01969E', '#01969E'];
 const gradientColors = ['#01969E', '#01969E'];
@@ -100,10 +100,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .selectAll('svg')
       .remove();
     // d3.transition();
-    let xTranslate = this.state.width / 2;
-    if (this.props.widget.title === 'Network') {
-      xTranslate = this.state.width / 2 - 20;
-    }
+    const xTranslate = this.state.width / 2;
+    // if (this.props.widget.title === 'Network') {
+    //   xTranslate = this.state.width / 2 - 20;
+    // }
     const svg = elem
       .select('.radial-main')
       .append('svg')
@@ -402,7 +402,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
     } else if (this.itemValue.length >= 1) {
       let xTranslate = 0;
       if (this.props.widget.title === 'Network') {
-        xTranslate = 85;
+        xTranslate = 0;
+      }
+      let yTranslate = 0;
+      if (this.props.widget.title === 'Network') {
+        yTranslate = -4;
       }
       this.field.selectAll('text.completed').remove();
       const texts = this.text.split('\n');
@@ -411,7 +415,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
         this.field
           .append('text')
           .attr('class', 'completed layer-' + i)
-          .attr('transform', `translate(${xTranslate}, ${i * 20})`)
+          .attr('transform', `translate(${xTranslate}, ${yTranslate + i * 20})`)
           .style('font-size', 'small')
           .text(t);
       }
@@ -602,7 +606,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
             index: 0,
             percentage: itemKeyValues.download.percentage,
             tooltip: `${capitalize(key)} ${itemKeyValues.download.percentage}%`,
-            text: `In ${itemKeyValues.download.valuePerSec}/s`
+            text: `${itemKeyValues.download.valuePerSec}/s`
           }
         ];
       }
