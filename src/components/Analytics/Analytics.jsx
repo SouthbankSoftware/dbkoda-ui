@@ -158,23 +158,25 @@ export default class Analytics extends React.Component {
       const today = Date.parse(this.getToday());
       const firstPing = Date.parse(this.props.store.firstPingDate);
       let daysSince = today - firstPing;
-      daysSince /= 1000 * 60 * 60 * 24;
+      if (daysSince > 0) {
+        daysSince /= 1000 * 60 * 60 * 24;
+      }
       const service = featherClient().service('/supportBundle');
       service.timeout = 30000;
       service
         .get(true)
         .then(result => {
-          console.log('!!! - ', result, ' - !!!');
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
             'Ping',
-            '{daysSinceFirstPing: ' +
-              daysSince +
-              ', dateFolderCreated: ' +
-              result.dateCreated +
-              ', daysSinceCreation: ' +
-              result.daysSinceCreation +
-              '}'
+            'daysSinceFirstPing',
+            daysSince
+          );
+          this._sendEvent(
+            AnalyticsEvents.PING_HOME,
+            'Ping',
+            'daysSinceFolderCreated',
+            result.daysSinceCreation
           );
         })
         .catch(err => {
@@ -209,7 +211,7 @@ export default class Analytics extends React.Component {
   }
 
   /**
-   *
+   *f
    * function to be called when activity goes to the controller.
    * @param {String} service - The service type that has been called.
    */
@@ -277,7 +279,7 @@ export default class Analytics extends React.Component {
     if (eventLabel) {
       event.label = eventLabel;
     }
-    if (eventValue) {
+    if (eventValue || eventValue === 0) {
       event.value = eventValue;
     }
     ReactGA.event(event);
