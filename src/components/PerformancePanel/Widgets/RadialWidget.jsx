@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T16:35:04+11:00
+ * @Last modified time: 2018-02-26T10:35:14+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -264,7 +264,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .append('path')
       .attr('d', arc)
       .style('fill', d => {
-        return runQueueColors[parseInt(d.data.busy, 10)];
+        return runQueueColors[Math.min(parseInt(d.data.busy, 10), (runQueueColors.length - 1))];
       })
       .on('mouseover', () => {
         const tipData = `RunQueue ${noOfNodes}`;
