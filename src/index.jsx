@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-26T15:35:29+11:00
+ * @Last modified time: 2018-02-26T16:14:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -127,7 +127,7 @@ if (IS_ELECTRON) {
   ipcRenderer.on('windowClosing', () => {
     logToMain('notice', 'executing app closing logic...');
 
-    Broker.emit(EventType.APP_CLOSING);
+    Broker.emit(EventType.WINDOW_CLOSING);
   });
 }
 
@@ -136,7 +136,7 @@ if (IS_ELECTRON) {
 window.onbeforeunload = () => {
   logToMain('notice', 'executing app refreshing logic...');
 
-  Broker.emit(EventType.APP_REFRESHING);
+  Broker.emit(EventType.WINDOW_REFRESHING);
   store.api && store.api.deleteProfileFromDrill({ removeAll: true });
   // TODO: verify this logic
   // store.closeConnection();
