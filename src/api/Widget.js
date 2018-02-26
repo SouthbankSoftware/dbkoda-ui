@@ -99,6 +99,7 @@ export default class WidgetApi {
       type,
       items,
       values: observable.shallowArray(),
+      stats: {},
       state: 'loading',
       waterMarkGroup: 0,
       errorLevel: null,

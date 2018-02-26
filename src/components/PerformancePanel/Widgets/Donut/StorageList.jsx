@@ -47,9 +47,10 @@ export default props => {
   }
   return (
     <div style={styles.root}>
-      {items.map(item => {
+      {items.map((item, i) => {
+        const id = i;
         return (
-          <div style={styles.item}>
+          <div style={styles.item} key={id}>
             <CircleIcon
               style={{ fill: item.color, width: '16px', marginRight: '2px' }}
             />
