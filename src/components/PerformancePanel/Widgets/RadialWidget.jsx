@@ -602,7 +602,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
         const retValue = widgetItemKeys.map((itemKey, i) => {
           return {
             index: i,
-            percentage: itemKeyValues[itemKey].percentage,
+            percentage: Math.min(itemKeyValues[itemKey].percentage, 100),
             tooltip: `${widgetDisplayNames[i]} ${
               itemKeyValues[itemKey].percentage
             }%`
@@ -610,11 +610,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
         });
         return retValue;
       } else if (showRunQueue && key === 'cpu') {
-        const fixedValue = _.isInteger(v.usage)
-          ? v.usage
+        let fixedValue = _.isInteger(v.usage)
+          ? parseInt(v.usage / v.usagehwm * 100, 10)
           : parseInt(v.usage, 10);
+        fixedValue = Math.min(fixedValue, 100);
         const runQueueValue = _.isInteger(v.runQueue)
-          ? v.runQueue
+          ? parseInt(v.runQueue / v.runQueue * 100, 10)
           : parseInt(v.runQueue, 10);
         this.text = fixedValue + '%\n' + runQueueValue;
         return [
@@ -626,25 +627,14 @@ export default class RadialWidget extends React.Component<Object, Object> {
             tooltip: `${capitalize(key)} ${fixedValue} %`
           }
         ];
-      } else if (useHighWaterMark) {
-        if (_.isEmpty(previousValue)) {
-          return [];
-        }
-        const itemKeyValues = {};
-        highWaterMark(previousValue, 'download', itemKeyValues, 0, latestValue);
-        return [
-          {
-            index: 0,
-            percentage: itemKeyValues.download.percentage,
-            tooltip: `${capitalize(key)} ${itemKeyValues.download.percentage}%`,
-            text: `${itemKeyValues.download.valuePerSec}/s`
-          }
-        ];
       }
       let fixedValue = _.isInteger(v) ? 0 : parseInt(v, 10);
       if (isNaN(fixedValue)) {
         fixedValue = 0;
+      } else {
+        fixedValue = parseInt((fixedValue / latestValue[`${key}hwm`]) * 100, 10);
       }
+      fixedValue = Math.min(fixedValue, 100);
       this.text = fixedValue + '%';
       return [
         {
