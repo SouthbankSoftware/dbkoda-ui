@@ -42,7 +42,7 @@
     flex-direction: column;
     position: absolute;
     width: calc(100% + 2px);
-    height: 60px;
+    height: 54px;
     background-color: #474747;
     color: #bfbec0;
     left: -2px;
@@ -112,11 +112,11 @@
     background-image: unset;
     align-self: flex-end;
     box-shadow: unset !important;
-    font-size: 25pt;
+    font-size: 20pt;
     font-weight: 100;
     color: $connectionCloseIconColor;
     margin-right: 10px;
-    margin-top: 10px;
+    margin-top: 5px;
     position: fixed;
     top: 0;
     right: 0;
