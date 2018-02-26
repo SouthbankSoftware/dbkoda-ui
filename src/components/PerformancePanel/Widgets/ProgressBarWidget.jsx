@@ -162,6 +162,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
+    // eslint-disable-next-line
     const bVertical = this.props.widget.showVertical === true;
     const sData = Object.keys(data); // .sort(); // sort according to keys to keep the color same
     let arrData = [];
