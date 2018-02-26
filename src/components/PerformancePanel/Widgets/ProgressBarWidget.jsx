@@ -180,11 +180,18 @@ export default class ProgressBarWidget extends React.Component<Props> {
           key: sData[I]
         });
       }
-      arrData = _.sortBy(arrData, [
-        function(o) {
-          return o.value;
-        }
-      ]).reverse();
+      if (this.props.widget.waterMarkGroup) {
+        console.log(arrData);
+      }
+      if (!this.props.widget.maintainOrder) {
+        arrData = _.sortBy(arrData, [
+          function(o) {
+            return o.value;
+          }
+        ]);
+        arrData = _.reverse(arrData);
+      }
+
       arrData = arrData.map(elem => {
         if (!this.props.widget.firstValueIsHighWaterMark) {
           sumOfValues += elem.value;
@@ -194,8 +201,14 @@ export default class ProgressBarWidget extends React.Component<Props> {
         }
         return elem;
       });
-      if (!this.props.widget.firstValueIsHighWaterMark) {
+      if (
+        !this.props.widget.firstValueIsHighWaterMark ||
+        this.props.widget.waterMarkGroup
+      ) {
         arrData = _.reverse(arrData);
+      }
+      if (this.props.widget.waterMarkGroup) {
+        console.log(arrData);
       }
       this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label
     } else if (sData.length === 1) {
