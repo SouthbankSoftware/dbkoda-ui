@@ -108,7 +108,7 @@ export default class Widget extends React.Component<Props, State> {
   };
 
   _onData = action(payload => {
-    const { timestamp, value: rawValue } = payload;
+    const { timestamp, value: rawValue, stats } = payload;
     // $FlowFixMe
     const { items, values, showAlarms } = this.props.widget;
 
@@ -118,7 +118,8 @@ export default class Widget extends React.Component<Props, State> {
 
     const value = {
       timestamp,
-      value: _.pick(rawValue, items)
+      value: _.pick(rawValue, items),
+      stats: _.pick(stats, items)
     };
 
     if (showAlarms) {

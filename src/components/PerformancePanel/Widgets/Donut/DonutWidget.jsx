@@ -212,6 +212,19 @@ export default class DonutWidget extends React.Component<Object, Object> {
     }, 200);
   }
 
+
+  componentWillUnmount() {
+    this.removeD3();
+  }
+
+  componentDidUpdate() {
+    setTimeout(() => {
+      this.removeD3();
+      this.renderD3Component();
+    }, 200);
+  }
+
+
   updateDate(arcTween: Object) {
     const that = this;
     this.pie.value((d, i) => {

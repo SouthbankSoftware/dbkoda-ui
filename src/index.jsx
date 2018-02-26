@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T17:10:02+11:00
+ * @Last modified time: 2018-02-26T15:35:29+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -91,7 +91,8 @@ Broker.once(EventType.APP_RENDERED, () => {
 });
 
 Broker.once(EventType.APP_CRASHED, () => {
-  console.error('Woah...App Crashed !!!!!!!');
+  logToMain('error', 'app window crashed');
+  console.error('App window crashed');
   if (IS_ELECTRON) {
     // make a backup of the old stateStore
     store
@@ -116,44 +117,34 @@ Broker.once(EventType.APP_CRASHED, () => {
   }
 });
 
-window.addEventListener('beforeunload', event => {
-  let shouldUnmount = true;
+if (IS_ELECTRON) {
+  const { ipcRenderer } = window.require('electron');
 
-  if (IS_ELECTRON) {
-    const { remote } = window.require('electron');
-    const { dialog } = remote;
-    const currentWindow = remote.getCurrentWindow();
+  ipcRenderer.on('shouldShowConfirmationDialog', () => {
+    ipcRenderer.send('shouldShowConfirmationDialog-reply', store.hasUnsavedEditorTabs());
+  });
 
-    if (!UAT && store.hasUnsavedEditorTabs()) {
-      const response = dialog.showMessageBox(currentWindow, {
-        type: 'question',
-        buttons: ['Yes', 'No'],
-        title: 'Confirm',
-        message:
-          'You have unsaved editor tabs. Are you sure you want to continue?'
-      });
+  ipcRenderer.on('windowClosing', () => {
+    logToMain('notice', 'executing app closing logic...');
 
-      if (response === 1) {
-        // if 'No' is clicked
+    Broker.emit(EventType.APP_CLOSING);
+  });
+}
 
-        // cancel window unload
-        event.returnValue = false;
-        // cancel our own unload logics
-        shouldUnmount = false;
-      }
-    }
-  }
+// BUG: confirmation dialog won't prevent window closing when devtools is not opened
+// https://github.com/electron/electron/issues/9966
+window.onbeforeunload = () => {
+  logToMain('notice', 'executing app refreshing logic...');
 
-  if (shouldUnmount) {
-    store.api && store.api.deleteProfileFromDrill({ removeAll: true });
-    // TODO: verify this logic
-    // store.closeConnection();
-    ReactDOM.unmountComponentAtNode(rootEl);
-  }
+  Broker.emit(EventType.APP_REFRESHING);
+  store.api && store.api.deleteProfileFromDrill({ removeAll: true });
+  // TODO: verify this logic
+  // store.closeConnection();
+  ReactDOM.unmountComponentAtNode(rootEl);
 
   // save store anyway
   store.saveSync();
-});
+};
 
 store = new Store();
 window.store = store;

@@ -507,10 +507,23 @@ export default class RadialWidget extends React.Component<Object, Object> {
       staleValues,
       v => !_.isEmpty(v) && !_.isEmpty(v.value)
     );
-    const latestValue: Object =
-      values.length > 0 ? values[values.length - 1].value : {};
+    const latest = values.length > 0 ? values[values.length - 1] : {};
+    const latestValue = latest && latest.value ? latest.value : {};
+    if (latest.stats) {
+      _.forOwn(latest.stats, (v, k) => { // k is the item name like `cpu`, `memory`
+        if (!widgetItemKeys && k !== 'cpu') {
+          // there is no sub object for this item
+          latestValue[k] = v.hwm;
+        } else {
+          _.forOwn(v, (vv, kk) => {
+            latestValue[k][kk] = vv.hwm;
+          });
+        }
+      });
+    }
+    // const latestValue: Object = latest && latest.value ? latest.value : {};
     const key = items[0];
-    // console.log('get stat value ', latestValue);
+    console.log('get stat value ', items, latestValue);
     const capitalize = str =>
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     const highWaterMark = (
@@ -547,10 +560,6 @@ export default class RadialWidget extends React.Component<Object, Object> {
           latest[key][`${itemKey}Delta`] / (latest[key].samplingRate / 1000)
         )
       };
-
-      // this.text += `${widgetDisplayNames[i]} ${
-      //   itemKeyValues[itemKey].valuePerSec
-      // }/s`;
 
       this.text += ` ${itemKeyValues[itemKey].valuePerSec}/s`;
       if (i < widgetItemKeys.length - 1) {
