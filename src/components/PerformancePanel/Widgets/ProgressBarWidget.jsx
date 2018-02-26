@@ -298,8 +298,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
         height: barHeight,
         x: 0
       })
-
-      .on('mouseover', d => {
+      /* Tooltips.
+        .on('mouseover', d => {
         const xScale = bVertical
           ? this._chartEl.clientWidth / vbHeight
           : this._chartEl.clientWidth / vbWidth;
@@ -364,7 +364,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
           .transition()
           .duration(500)
           .style('opacity', 0);
-      })
+      }) */
       .transition(t)
       .attr('width', d => {
         const cWidth = d.sumValue / this._totalDivisor * chartWidth;
