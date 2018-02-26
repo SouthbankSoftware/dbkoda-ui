@@ -5,7 +5,7 @@
  * @Date:   2018-01-31T16:32:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-02T15:50:04+11:00
+ * @Last modified time: 2018-02-23T18:01:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -50,12 +50,8 @@ const strokeWidth = width * 0.04;
 const halfStrokeWidth = strokeWidth / 2;
 const headTailY = (height - strokeWidth) * headYPropotion + halfStrokeWidth;
 const arrowMaskPathDes = `M${width / 2},${halfStrokeWidth}L${width -
-  halfStrokeWidth},${headTailY}H${(width - strokeWidth) *
-  (1 + tailXPropotion) /
-  2 +
-  halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) *
-  (1 - tailXPropotion) /
-  2 +
+  halfStrokeWidth},${headTailY}H${(width - strokeWidth) * (1 + tailXPropotion) / 2 +
+  halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) * (1 - tailXPropotion) / 2 +
   halfStrokeWidth}V${headTailY}H${halfStrokeWidth}Z`;
 
 type Props = {
@@ -64,13 +60,25 @@ type Props = {
   rotate?: number
 };
 
-export default class ArrowWidget extends React.Component<Props> {
+type State = {
+  text: string
+};
+
+export default class ArrowWidget extends React.Component<Props, State> {
   _chartEl: *;
   _textEl: *;
   _chart: *;
   _valueRec: *;
   _autorunDisposer: *;
   maxValue: *;
+
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      text: ''
+    };
+  }
 
   _createD3View = () => {
     this._chart = d3.select(this._chartEl).attrs({
@@ -169,8 +177,12 @@ export default class ArrowWidget extends React.Component<Props> {
     const lblValue = convertUnits(data, this.props.widget.unit, 3);
 
     // $FlowIssue
-    this._textEl &&
-      (this._textEl.innerHTML = lblValue.value + ' ' + lblValue.unit);
+    // this._textEl &&
+    //   (this._textEl.innerHTML = lblValue.value + ' ' + lblValue.unit);
+    this.setState({
+      text: `${lblValue.value} ${lblValue.unit}`
+    });
+
     this._valueRec &&
       this._valueRec.transition().attrs({
         y: -data / this.maxValue * height
@@ -184,8 +196,7 @@ export default class ArrowWidget extends React.Component<Props> {
 
       this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
-        const latestValue =
-          values.length > 0 ? values[values.length - 1].value : {};
+        const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
         if (items.length !== 1) {
           console.error('ArrowWidget only supports single item');
@@ -212,11 +223,12 @@ export default class ArrowWidget extends React.Component<Props> {
     }, 200);
   }
 
-  componentDidUpdate() {
-    setTimeout(() => {
-      this._recreateD3View();
-    }, 200);
-  }
+  // componentDidUpdate() {
+  //   setTimeout(() => {
+  //     console.log('KKKKKKKKKKKK');
+  //     this._recreateD3View();
+  //   }, 200);
+  // }
 
   componentWillUnmount() {
     this._autorunDisposer && this._autorunDisposer();
@@ -225,12 +237,13 @@ export default class ArrowWidget extends React.Component<Props> {
 
   render() {
     const { widget, widgetStyle } = this.props;
+    const { text } = this.state;
 
     return (
       <Widget className="ArrowWidget" widget={widget} widgetStyle={widgetStyle}>
         <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
         <div className="text" ref={_textEl => (this._textEl = _textEl)}>
-          0
+          {text}
         </div>
       </Widget>
     );

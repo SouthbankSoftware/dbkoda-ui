@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-13T11:48:33+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-12T17:01:42+11:00
+ * @Last modified by:   Mike
+ * @Last modified time: 2018-02-26T14:16:42+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -41,19 +41,21 @@ type Props = {
 type State = {
   width: number,
   rowHeight: number,
-  height: number
+  height: number,
+  minHeight: number
 };
 
 export default (ComposedComponent: ReactComponentType<any>) =>
   class extends React.Component<Props, State> {
     static defaultProps = {
-      measureBeforeMount: false,
+      measureBeforeMount: false
     };
 
     state: State = {
       width: 1280,
       height: 0,
       rowHeight: 150,
+      minHeight: 901
     };
 
     mounted: boolean = false;
@@ -81,18 +83,27 @@ export default (ComposedComponent: ReactComponentType<any>) =>
       const node = ReactDOM.findDOMNode(this); // Flow casts this to Text | Element
       const { verticalGridSize, margin, bFitHeight } = this.props;
       if (bFitHeight) {
-        const rowHeight =
-          (window.innerHeight - (verticalGridSize - 1) * margin[1] - 2 * margin[1]) /
+        let rowHeight =
+          (window.innerHeight -
+            (verticalGridSize - 1) * margin[1] -
+            2 * margin[1]) /
           verticalGridSize;
+        if (rowHeight * verticalGridSize < this.state.minHeight) {
+          rowHeight = 1000 / verticalGridSize;
+        }
+
         this.setState({
-          width: node instanceof HTMLElement ? node.offsetWidth : this.state.width,
-          rowHeight,
+          width:
+            node instanceof HTMLElement ? node.offsetWidth : this.state.width,
+          rowHeight
         });
       } else {
         console.log(this.props.rowHeight);
-        const gridHeight = (this.props.rowHeight + margin[1]) * verticalGridSize;
+        const gridHeight =
+          (this.props.rowHeight + margin[1]) * verticalGridSize;
         this.setState({
-          width: node instanceof HTMLElement ? node.offsetWidth : this.state.width,
+          width:
+            node instanceof HTMLElement ? node.offsetWidth : this.state.width,
           height: gridHeight,
           rowHeight: this.props.rowHeight
         });
@@ -108,6 +119,8 @@ export default (ComposedComponent: ReactComponentType<any>) =>
         return <div {...this.props} {...this.state} style={gridStyle} />;
       }
 
-      return <ComposedComponent {...this.props} {...this.state} style={gridStyle} />;
+      return (
+        <ComposedComponent {...this.props} {...this.state} style={gridStyle} />
+      );
     }
   };

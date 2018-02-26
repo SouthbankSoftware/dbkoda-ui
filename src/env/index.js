@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T14:01:59+11:00
+ * @Last modified time: 2018-02-26T15:31:30+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,14 @@ import * as d3 from 'd3';
 global.IS_PRODUCTION = process.env.NODE_ENV === 'production';
 global.IS_DEVELOPMENT = !IS_PRODUCTION;
 global.IS_ELECTRON = _.has(window, 'process.versions.electron');
+
+global.logToMain = (level, message) => {
+  if (IS_ELECTRON) {
+    const { ipcRenderer } = window.require('electron');
+
+    ipcRenderer.send('log', level, message);
+  }
+};
 
 if (process.env.NODE_ENV !== 'test') {
   const Globalize = require('globalize'); // doesn't work well with import
