@@ -201,7 +201,7 @@
         "label": "Establish Direct OS Connection (for terminal and performance monitoring)",
         "type": "checkbox",
         "column": 1,
-        "refFields": ["remoteHost", "remoteUser", "remotePass", "sshTunnel"]
+        "refFields": ["remoteHost", "remoteUser", "remotePass", "sshPort", "sshTunnel"]
       },
       {
         "name": "remoteHost",
@@ -226,6 +226,19 @@
         "label": "Password",
         "type": "password",
         "value": "",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "sshPort",
+        "label": "Port",
+        "value": 22,
+        "type": "number",
+        "options": {
+          "min": 0,
+          "max": 65535
+        },
         "column": 1,
         "disabled": true,
         "checkbox": "enabled"
