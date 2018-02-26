@@ -269,6 +269,14 @@
               }
             },
             {
+              "$id": "sshPort",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "number" }
+              }
+            },
+            {
               "$id":"sshTunnel",
               "additionalProperties": false,
               "properties": {
