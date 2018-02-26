@@ -162,6 +162,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
+    // eslint-disable-next-line
     const bVertical = this.props.widget.showVertical === true;
     const sData = Object.keys(data); // .sort(); // sort according to keys to keep the color same
     let arrData = [];
@@ -180,11 +181,18 @@ export default class ProgressBarWidget extends React.Component<Props> {
           key: sData[I]
         });
       }
-      arrData = _.sortBy(arrData, [
-        function(o) {
-          return o.value;
-        }
-      ]).reverse();
+      if (this.props.widget.waterMarkGroup) {
+        console.log(arrData);
+      }
+      if (!this.props.widget.maintainOrder) {
+        arrData = _.sortBy(arrData, [
+          function(o) {
+            return o.value;
+          }
+        ]);
+        arrData = _.reverse(arrData);
+      }
+
       arrData = arrData.map(elem => {
         if (!this.props.widget.firstValueIsHighWaterMark) {
           sumOfValues += elem.value;
@@ -194,8 +202,14 @@ export default class ProgressBarWidget extends React.Component<Props> {
         }
         return elem;
       });
-      if (!this.props.widget.firstValueIsHighWaterMark) {
+      if (
+        !this.props.widget.firstValueIsHighWaterMark ||
+        this.props.widget.waterMarkGroup
+      ) {
         arrData = _.reverse(arrData);
+      }
+      if (this.props.widget.waterMarkGroup) {
+        console.log(arrData);
       }
       this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label
     } else if (sData.length === 1) {
@@ -285,8 +299,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
         height: barHeight,
         x: 0
       })
-
-      .on('mouseover', d => {
+      /* Tooltips.
+        .on('mouseover', d => {
         const xScale = bVertical
           ? this._chartEl.clientWidth / vbHeight
           : this._chartEl.clientWidth / vbWidth;
@@ -351,7 +365,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
           .transition()
           .duration(500)
           .style('opacity', 0);
-      })
+      }) */
       .transition(t)
       .attr('width', d => {
         const cWidth = d.sumValue / this._totalDivisor * chartWidth;

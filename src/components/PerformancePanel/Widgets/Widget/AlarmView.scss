@@ -68,6 +68,7 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
       }
 
       .message {
+        color: $primary-colour-lighten-30;
         line-height: 18px;
       }
     }

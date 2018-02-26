@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-26T10:35:14+11:00
+ * @Last modified time: 2018-02-26T10:58:47+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -393,7 +393,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           let txtColor = this.colors[0];
           if (i === 1) {
             const idxColor = Math.ceil(parseInt(t, 10) / 20);
-            txtColor = runQueueColors[idxColor];
+            txtColor = runQueueColors[Math.min(idxColor, (runQueueColors.length - 1))];
           }
           this.field
             .append('text')

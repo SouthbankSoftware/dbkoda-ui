@@ -59,11 +59,16 @@ export default class View extends React.Component {
     this.getConfigForm = this.getConfigForm.bind(this);
     this.renderFieldLabel = this.renderFieldLabel.bind(this);
     this.reactionToConfig = reaction(
-      () => this.props.config.settings,
+      () => this.props.config.loading,
       () => {
-        this.props.store.configPage.newSettings = observable(
-          toJS(this.props.config.settings),
-        );
+        if (this.props.config.loading === false) {
+          this.props.store.configPage.newSettings = observable(
+            toJS(this.props.config.settings),
+          );
+        } else {
+          // TODO Show loading icon
+          console.log('Config loading...');
+        }
       },
     );
   }

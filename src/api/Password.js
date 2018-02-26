@@ -26,7 +26,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { action } from 'mobx';
+import { action, runInAction } from 'mobx';
 import _ from 'lodash';
 import Mousetrap from 'mousetrap';
 import { featherClient } from '~/helpers/feathers';
@@ -112,8 +112,12 @@ export default class Password {
       .then(missingProfileIds => {
         console.log(`missingProfileIds: ${missingProfileIds}`);
         this.store.password.missingProfiles = missingProfileIds;
-        this.config.settings.enablePasswordStore = true;
-        this.config.save();
+        runInAction(() => {
+          if (!this.config.settings.passwordStoreEnabled) {
+            this.config.settings.passwordStoreEnabled = true;
+            this.config.save();
+          }
+        });
         this.closePasswordDialog();
       })
       .catch(error => {

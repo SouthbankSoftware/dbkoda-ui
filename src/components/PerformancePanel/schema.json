@@ -213,6 +213,7 @@
         "infoWidget": true,
         "chartTitle": "Reads",
         "waterMarkGroup": 1,
+        "maintainOrder": true,
         "showAlarms": "mongo",
         "unit": " "
       }
@@ -234,6 +235,7 @@
         "colorList": ["#7040A3", "#AC8BC0"],
         "showHorizontalRule": true,
         "waterMarkGroup": 1,
+        "maintainOrder": true,
         "description":
           "Current number of Write operations and queued Write operations.",
         "unit": " "
