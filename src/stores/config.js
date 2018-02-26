@@ -115,12 +115,9 @@ export default class Config {
             }
           }
           if (this.loading) {
-            runInAction(() => {
-              this.loading = false;
-            });
+            this.loading = false;
           }
           console.log('Config loaded successfully!');
-          console.log(this.settings);
           this.verifySettings();
         });
       })
