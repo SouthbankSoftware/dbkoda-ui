@@ -1139,14 +1139,18 @@ class View extends React.Component {
             intent={Intent.NONE}
           />
         </div>
-        <div className="menuItemWrapper translator">
-          <MenuItem
-            onClick={this.translateToNativeCode}
-            text={globalString('editor/view/menu/translateSelection')}
-            iconName="pt-icon-align-left"
-            intent={Intent.NONE}
-          />
-        </div>
+        {this.props.store.editors.get(this.props.id).type != EditorTypes.DRILL &&
+        (
+          <div className="menuItemWrapper translator">
+            <MenuItem
+              onClick={this.translateToNativeCode}
+              text={globalString('editor/view/menu/translateSelection')}
+              iconName="pt-icon-align-left"
+              intent={Intent.NONE}
+            />
+          </div>
+          )
+        }
       </Menu>
     );
   }
