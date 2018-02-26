@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-23T17:11:21+11:00
+ * @Last modified time: 2018-02-26T10:09:09+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,7 @@
 
 import { action, observable } from 'mobx';
 import type { ObservableMap } from 'mobx';
+import autobind from 'autobind-decorator';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 // $FlowFixMe
@@ -79,7 +80,7 @@ export default class PerformancePanelApi {
     this.api = api;
     this.config = config;
 
-    // document.addEventListener('visibilitychange', this._handleAppVisibility.bind(this), false);
+    document.addEventListener('visibilitychange', this._handleAppVisibility, false);
   }
 
   _createErrorHandler = (profileId: UUID) => {
@@ -269,8 +270,8 @@ export default class PerformancePanelApi {
       const { powerMonitor } = electron.remote;
       if (this.powerMonitorProfileId === null) {
         this.powerMonitorProfileId = profileId;
-        powerMonitor.on('suspend', this._suspendPerformancePanel.bind(this));
-        powerMonitor.on('resume', this._resumePerformancePanel.bind(this));
+        powerMonitor.on('suspend', this._suspendPerformancePanel);
+        powerMonitor.on('resume', this._resumePerformancePanel);
       }
     }
   }
@@ -280,11 +281,12 @@ export default class PerformancePanelApi {
       const { powerMonitor } = electron.remote;
       if (this.powerMonitorProfileId !== null) {
         this.powerMonitorProfileId = null;
-        powerMonitor.removeListener('suspend', this._suspendPerformancePanel.bind(this));
-        powerMonitor.removeListener('resume', this._resumePerformancePanel.bind(this));
+        powerMonitor.removeListener('suspend', this._suspendPerformancePanel);
+        powerMonitor.removeListener('resume', this._resumePerformancePanel);
       }
     }
   }
+  @autobind
   _handleAppVisibility() {
     if (document.hidden) {
       console.log('App is Hidden!!!');
@@ -294,12 +296,14 @@ export default class PerformancePanelApi {
       this._resumePerformancePanel();
     }
   }
+  @autobind
   _suspendPerformancePanel() {
     console.log('The system is going to sleep!!!');
     if (this.powerMonitorProfileId !== null) {
       this.closePerformancePanel(this.powerMonitorProfileId, false, true);
     }
   }
+  @autobind
   _resumePerformancePanel() {
     console.log('The system is going to resume!!!');
     if (this.powerMonitorProfileId !== null) {
