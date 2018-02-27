@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T09:36:23+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-27T13:27:17+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -54,6 +54,9 @@ import ConnectionIcon from '../../styles/icons/connection-icon-2.svg';
 import './styles.scss';
 
 const React = require('react');
+
+const electron = window.require('electron');
+const { ipcRenderer } = electron;
 
 @inject(allStores => ({
   store: allStores.store,
@@ -479,6 +482,11 @@ export default class ListView extends React.Component {
     this.props.store.editorPanel.activeEditorId = event.id;
   }
 
+  @autobind
+  openPerformancePanelExternal(profile) {
+    ipcRenderer.send('performance', {command: 'createPerformanceWindow', profileId: profile.id});
+  }
+
   @action
   renderBodyContextMenu(context) {
     const profiles = this.props.profileStore.profiles.entries();
@@ -572,6 +580,17 @@ export default class ListView extends React.Component {
                 className="profileListContextMenu destroyPerformancePanel"
                 onClick={() => this.props.api.closePerformancePanel(profile.id, true)}
                 text={globalString('profile/menu/destroyPerformancePanel')}
+                intent={Intent.NONE}
+                iconName="pt-icon-heat-grid"
+              />
+            </div>
+          ) : null}
+          {IS_DEVELOPMENT ? (
+            <div className="menuItemWrapper">
+              <MenuItem
+                className="profileListContextMenu createPerformancePanel"
+                onClick={() => this.openPerformancePanelExternal(profile)}
+                text="Create External Performance Panel"
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
               />

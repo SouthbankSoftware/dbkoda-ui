@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T09:58:38+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-27T16:45:03+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -98,7 +98,7 @@ export default class WidgetApi {
       profileId,
       type,
       items,
-      values: observable.shallowArray(),
+      values: observable.array(),
       stats: {},
       state: 'loading',
       waterMarkGroup: 0,

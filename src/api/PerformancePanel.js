@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-26T10:09:09+11:00
+ * @Last modified time: 2018-02-27T16:40:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { action, observable } from 'mobx';
+import { action, observable, observe } from 'mobx';
 import type { ObservableMap } from 'mobx';
 import autobind from 'autobind-decorator';
 // $FlowFixMe
@@ -156,6 +156,9 @@ export default class PerformancePanelApi {
         for (const item of widget.items) {
           itemsSet.add(item);
         }
+        observe(widget.values, (change) => {
+            console.log(widget.id, 'observer::', 'type:', change.type, ',name:', change.name, ',from', change.oldValue, ',to', change.object[change.name]);
+        });
       }
 
       const statsSrv = featherClient();
