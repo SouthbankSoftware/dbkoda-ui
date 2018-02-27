@@ -31,7 +31,8 @@ import { inject } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
-import { Tooltip, Position } from '@blueprintjs/core';
+import { Tooltip, Position, PopoverInteractionKind } from '@blueprintjs/core';
+import { Popover2 } from '@blueprintjs/labs';
 import Legend from './Legend';
 import Widget from './Widget';
 import { convertUnits } from './Utils';
@@ -419,9 +420,10 @@ export default class ProgressBarWidget extends React.Component<Props> {
     return (
       <Widget widget={widget} widgetStyle={widgetStyle}>
         <div className="ProgressBarWidget">
-          <Tooltip
-            portalClassName="StackedRadialWidgetTooltip"
-            className="toolTip"
+          <Popover2
+            minimal
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="StackedRadialWidgetTooltip toolTip"
             content={
               <div className="Tooltip">
                 <Legend
@@ -443,25 +445,24 @@ export default class ProgressBarWidget extends React.Component<Props> {
                 />
               </div>
             }
-            position={Position.BOTTOM}
-            useSmartPositioning
-          >
-            <div className="container">
-              <div className="chart-label">
-                {chartTitle && <strong>{chartTitle}</strong>}
-              </div>
-              <svg
-                className="chart"
-                ref={_chartEl => (this._chartEl = _chartEl)}
-              />
-              <div className="chart-total">
-                <span
-                  ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}
-                  style={chartTotalStyle}
+            target={
+              <div className="container">
+                <div className="chart-label">
+                  {chartTitle && <strong>{chartTitle}</strong>}
+                </div>
+                <svg
+                  className="chart"
+                  ref={_chartEl => (this._chartEl = _chartEl)}
                 />
+                <div className="chart-total">
+                  <span
+                    ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}
+                    style={chartTotalStyle}
+                  />
+                </div>
               </div>
-            </div>
-          </Tooltip>
+            }
+          />
           <div className="d3-tip-top" ref={_tipEl => (this._tipEl = _tipEl)} />
           <div
             className="d3-tip-right"

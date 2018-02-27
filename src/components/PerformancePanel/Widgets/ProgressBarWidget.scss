@@ -35,6 +35,14 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
   display: flex;
   flex-direction: column;
   height: 100%;
+  span {
+    width: 100%;
+    height: 100%;
+    div.pt-popover-target {
+      height: 100%;
+      width: 100%;
+    }
+  }
   hr {
     border: 1px solid #383838;
     width: calc(100% - 40px);

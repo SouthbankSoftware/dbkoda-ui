@@ -28,7 +28,8 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, autorun } from 'mobx';
 import _ from 'lodash';
-import { Tooltip, Position } from '@blueprintjs/core';
+import { Tooltip, Position, PopoverInteractionKind } from '@blueprintjs/core';
+import { Popover2 } from '@blueprintjs/labs';
 import './StackedRadialWidget.scss';
 import { convertUnits } from './Utils';
 import Widget from './Widget';
@@ -396,7 +397,7 @@ export default class StackedRadialWidget extends React.Component<
     }
     const { values } = this.props.widget;
     const latest = values.length > 0 ? values[values.length - 1] : {};
-    const {value: latestValue, stats: latestStats} = latest;
+    const { value: latestValue, stats: latestStats } = latest;
     // $FlowFixMe
     this.itemValues = [];
     if (!_.isEmpty(latestValue)) {
@@ -525,9 +526,10 @@ export default class StackedRadialWidget extends React.Component<
           // $FlowFixMe
           ref={radial => (this.radial = radial)}
         >
-          <Tooltip
-            portalClassName="StackedRadialWidgetTooltip"
-            className="toolTip"
+          <Popover2
+            minimal
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="StackedRadialWidgetTooltip toolTip"
             content={
               <div className="Tooltip">
                 <Legend
@@ -549,18 +551,22 @@ export default class StackedRadialWidget extends React.Component<
                 />
               </div>
             }
-            position={Position.BOTTOM}
-            useSmartPositioning
-          >
-            <div className="radialWrapper" style={wrapperStyle}>
-              <div className="display-name">{displayName}</div>
-              {this.props.widget.items.map((item, count) => {
-                const classes =
-                  'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
-                return <div className={classes} />;
-              })}
-            </div>
-          </Tooltip>
+            target={
+              <div className="radialWrapper" style={wrapperStyle}>
+                <div className="display-name">{displayName}</div>
+                {this.props.widget.items.map((item, count) => {
+                  const classes =
+                    'radial radial-' +
+                    (count + 1) +
+                    ' ' +
+                    (count + 1) +
+                    ' item';
+                  return <div className={classes} />;
+                })}
+              </div>
+            }
+          />
+
           {widget.showLegend && (
             <Legend
               showTotal={false}
