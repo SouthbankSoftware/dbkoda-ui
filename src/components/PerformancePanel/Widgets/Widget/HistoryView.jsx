@@ -5,7 +5,7 @@
  * @Date:   2018-02-05T12:18:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T12:12:26+11:00
+ * @Last modified time: 2018-02-27T11:04:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -160,7 +160,12 @@ export default class HistoryView extends React.PureComponent<Props, State> {
           data={data}
           margin={lineChartMargin}
         >
-          <XAxis stroke={primaryColour} dataKey="timestamp" tickFormatter={timeFormatter} />
+          <XAxis
+            stroke={primaryColour}
+            dataKey="timestamp"
+            scale="linear"
+            tickFormatter={timeFormatter}
+          />
           <YAxis stroke={primaryColour} />
           <Tooltip
             formatter={valueFormatter}
