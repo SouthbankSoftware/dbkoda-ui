@@ -44,13 +44,10 @@ export default class PasswordStore extends React.Component {
   }
 
   onCheckboxToggle(e) {
-    const fieldName = e.target.id;
     const fieldValue = e.target.checked;
     if (fieldValue === true) {
-      this.props.updateValue(fieldName, fieldValue);
       this.props.api.passwordApi.showPasswordDialog(true);
     } else {
-      // TODO Ask if the user is sure that they want to remove the store.
       this.setState({ isConfirmOpen: true });
     }
   }

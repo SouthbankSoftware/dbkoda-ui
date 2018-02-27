@@ -849,7 +849,8 @@ class View extends React.Component {
       currentLine = cm.getCursor().line;
       let linesBelow = '';
 
-      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine - 1).match(/^\/\//gmi) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
+
+      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^\/\//gmi) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
         linesBelow += cm.getLine(currentLine + 1);
         currentLine += 1;
       }
@@ -1139,14 +1140,18 @@ class View extends React.Component {
             intent={Intent.NONE}
           />
         </div>
-        <div className="menuItemWrapper translator">
-          <MenuItem
-            onClick={this.translateToNativeCode}
-            text={globalString('editor/view/menu/translateSelection')}
-            iconName="pt-icon-align-left"
-            intent={Intent.NONE}
-          />
-        </div>
+        {this.props.store.editors.get(this.props.id).type != EditorTypes.DRILL &&
+        (
+          <div className="menuItemWrapper translator">
+            <MenuItem
+              onClick={this.translateToNativeCode}
+              text={globalString('editor/view/menu/translateSelection')}
+              iconName="pt-icon-align-left"
+              intent={Intent.NONE}
+            />
+          </div>
+          )
+        }
       </Menu>
     );
   }

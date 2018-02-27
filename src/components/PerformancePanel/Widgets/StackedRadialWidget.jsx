@@ -395,8 +395,8 @@ export default class StackedRadialWidget extends React.Component<
       console.debug(data);
     }
     const { values } = this.props.widget;
-    const latestValue =
-      values.length > 0 ? values[values.length - 1].value : {};
+    const latest = values.length > 0 ? values[values.length - 1] : {};
+    const {value: latestValue, stats: latestStats} = latest;
     // $FlowFixMe
     this.itemValues = [];
     if (!_.isEmpty(latestValue)) {
@@ -406,10 +406,10 @@ export default class StackedRadialWidget extends React.Component<
           : parseInt(latestValue[key], 10);
         // If fixedValue is null, give a 0 value so it will render straight away.
         this.itemValues[key] = fixedValue;
-
+        const hwm = latestStats[key].hwm;
         // Check if it's the highest value ever.
-        if (!this.maxValue || this.maxValue < fixedValue) {
-          this.maxValue = fixedValue;
+        if (!this.maxValue || this.maxValue < hwm) {
+          this.maxValue = hwm;
         }
       });
 

@@ -24,7 +24,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 .donut-container {
   display: flex;
   flex-direction: row;
@@ -32,5 +31,17 @@
 
   .donut-main {
     width: 50%;
+  }
+
+  .storageList {
+    div {
+    }
+    .leftWrapper {
+      display: flex;
+      span {
+        div {
+        }
+      }
+    }
   }
 }

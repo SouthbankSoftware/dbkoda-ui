@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-12T15:09:59+11:00
+ * @Last modified time: 2018-02-26T15:14:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -82,5 +82,7 @@ export default {
   TERMINAL_ERROR: id => `terminal::error::${id}`,
   STATS_DATA: profileId => `stats::data::${profileId}`,
   STATS_ERROR: profileId => `stats::error::${profileId}`,
-  MASTER_PASSWORD_REQUIRED: 'master-pass::password-required'
+  MASTER_PASSWORD_REQUIRED: 'master-pass::password-required',
+  WINDOW_REFRESHING: 'window-refreshing',
+  WINDOW_CLOSING: 'window-closing'
 };

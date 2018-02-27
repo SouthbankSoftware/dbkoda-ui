@@ -1,7 +1,7 @@
 /**
  * Created by joey on 17/1/18.
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T16:35:04+11:00
+ * @Last modified time: 2018-02-26T10:58:47+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -264,7 +264,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .append('path')
       .attr('d', arc)
       .style('fill', d => {
-        return runQueueColors[parseInt(d.data.busy, 10)];
+        return runQueueColors[Math.min(parseInt(d.data.busy, 10), (runQueueColors.length - 1))];
       })
       .on('mouseover', () => {
         const tipData = `RunQueue ${noOfNodes}`;
@@ -393,7 +393,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           let txtColor = this.colors[0];
           if (i === 1) {
             const idxColor = Math.ceil(parseInt(t, 10) / 20);
-            txtColor = runQueueColors[idxColor];
+            txtColor = runQueueColors[Math.min(idxColor, (runQueueColors.length - 1))];
           }
           this.field
             .append('text')
@@ -507,10 +507,22 @@ export default class RadialWidget extends React.Component<Object, Object> {
       staleValues,
       v => !_.isEmpty(v) && !_.isEmpty(v.value)
     );
-    const latestValue: Object =
-      values.length > 0 ? values[values.length - 1].value : {};
+    const latest = values.length > 0 ? values[values.length - 1] : {};
+    const latestValue = latest && latest.value ? latest.value : {};
+    if (latest.stats) {
+      _.forOwn(latest.stats, (v, k) => { // k is the item name like `cpu`, `memory`
+        if (k === 'memory') {
+          // there is no sub object for this item
+          latestValue[k] = v.hwm;
+          latestValue[`${k}hwm`] = v.hwm;
+        } else {
+          _.forOwn(v, (vv, kk) => {
+            latestValue[k][`${kk}hwm`] = vv.hwm;
+          });
+        }
+      });
+    }
     const key = items[0];
-    // console.log('get stat value ', latestValue);
     const capitalize = str =>
       str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     const highWaterMark = (
@@ -535,11 +547,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
       }
       itemKeyValues[itemKey] = {
         percentage:
-          latest[key][`max${itemKey}`] === 0
+          latest[key][`${itemKey}hwm`] === 0
             ? 0
             : parseInt(
-                latest[key][`${itemKey}Delta`] /
-                  latest[key][`max${itemKey}`] *
+                latest[key][`${itemKey}`] /
+                  latest[key][`${itemKey}hwm`] *
                   100,
                 10
               ),
@@ -547,14 +559,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
           latest[key][`${itemKey}Delta`] / (latest[key].samplingRate / 1000)
         )
       };
-
-      // this.text += `${widgetDisplayNames[i]} ${
-      //   itemKeyValues[itemKey].valuePerSec
-      // }/s`;
-
-      this.text += ` ${itemKeyValues[itemKey].valuePerSec}/s`;
-      if (i < widgetItemKeys.length - 1) {
-        this.text += '\n';
+      if (itemKeyValues[itemKey].valuePerSec) {
+        this.text += ` ${itemKeyValues[itemKey].valuePerSec}/s`;
+        if (i < widgetItemKeys.length - 1) {
+          this.text += '\n';
+        }
       }
     };
     if (!_.isEmpty(latestValue)) {
@@ -593,7 +602,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
         const retValue = widgetItemKeys.map((itemKey, i) => {
           return {
             index: i,
-            percentage: itemKeyValues[itemKey].percentage,
+            percentage: Math.min(itemKeyValues[itemKey].percentage, 100),
             tooltip: `${widgetDisplayNames[i]} ${
               itemKeyValues[itemKey].percentage
             }%`
@@ -601,11 +610,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
         });
         return retValue;
       } else if (showRunQueue && key === 'cpu') {
-        const fixedValue = _.isInteger(v.usage)
-          ? v.usage
+        let fixedValue = _.isInteger(v.usage)
+          ? parseInt(v.usage / v.usagehwm * 100, 10)
           : parseInt(v.usage, 10);
+        fixedValue = Math.min(fixedValue, 100);
         const runQueueValue = _.isInteger(v.runQueue)
-          ? v.runQueue
+          ? parseInt(v.runQueue / v.runQueue * 100, 10)
           : parseInt(v.runQueue, 10);
         this.text = fixedValue + '%\n' + runQueueValue;
         return [
@@ -617,25 +627,14 @@ export default class RadialWidget extends React.Component<Object, Object> {
             tooltip: `${capitalize(key)} ${fixedValue} %`
           }
         ];
-      } else if (useHighWaterMark) {
-        if (_.isEmpty(previousValue)) {
-          return [];
-        }
-        const itemKeyValues = {};
-        highWaterMark(previousValue, 'download', itemKeyValues, 0, latestValue);
-        return [
-          {
-            index: 0,
-            percentage: itemKeyValues.download.percentage,
-            tooltip: `${capitalize(key)} ${itemKeyValues.download.percentage}%`,
-            text: `${itemKeyValues.download.valuePerSec}/s`
-          }
-        ];
       }
       let fixedValue = _.isInteger(v) ? 0 : parseInt(v, 10);
       if (isNaN(fixedValue)) {
         fixedValue = 0;
+      } else {
+        fixedValue = parseInt((fixedValue / latestValue[`${key}hwm`]) * 100, 10);
       }
+      fixedValue = Math.min(fixedValue, 100);
       this.text = fixedValue + '%';
       return [
         {

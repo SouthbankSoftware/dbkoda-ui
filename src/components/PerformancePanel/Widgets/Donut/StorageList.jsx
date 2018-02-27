@@ -22,19 +22,23 @@
  */
 
 import React from 'react';
+import { Popover2 } from '@blueprintjs/labs';
+import { PopoverInteractionKind } from '@blueprintjs/core';
 import { bytesToSize } from '../Utils';
 import CircleIcon from '../../../../styles/icons/circle.svg';
+import './DonutWidget.scss';
 
 const styles = {
   root: {
     display: 'flex',
     flexDirection: 'column',
     width: '60%',
-    color: '#b3b3b3',
+    color: '#b3b3b3'
   },
   item: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     height: '20px',
     lineHeight: '20px'
   }
@@ -46,17 +50,43 @@ export default props => {
     return null;
   }
   return (
-    <div style={styles.root}>
+    <div className="storageList" style={styles.root}>
       {items.map(item => {
         return (
           <div style={styles.item}>
-            <CircleIcon
-              style={{ fill: item.color, width: '16px', marginRight: '2px' }}
-            />
-            <div style={{ marginRight: '10px', width: '50%' }}>
-              {item.dbName}
+            <div className="leftWrapper" style={{ marginRight: '10px' }}>
+              {' '}
+              <CircleIcon
+                style={{ fill: item.color, width: '5%', marginRight: '2px' }}
+              />
+              {item.dbName.length > 10 && (
+                <Popover2
+                  minimal
+                  interactionKind={PopoverInteractionKind.HOVER}
+                  popoverClassName="StorageLabelPopover"
+                  content={
+                    <div
+                      className="StorageLabelPopoverContent"
+                      style={{
+                        width: '100%',
+                        height: '100%'
+                      }}
+                    >
+                      {item.dbName}
+                    </div>
+                  }
+                  target={
+                    <span style={{ top: '-100%', left: '10x' }}>
+                      {item.dbName.substr(0, 8) + '...'}
+                    </span>
+                  }
+                />
+              )}
+              {item.dbName.length < 10 && <span>{item.dbName}</span>}
             </div>
-            <div>{bytesToSize(item.dataSize)}</div>
+            <div style={{ textAlign: 'end', float: 'right', width: '60px' }}>
+              {bytesToSize(item.dataSize)}
+            </div>
           </div>
         );
       })}

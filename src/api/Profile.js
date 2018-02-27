@@ -39,6 +39,7 @@ export type Profile = {
   sshTunnel: boolean,
   remoteHost: string,
   remoteUser: string,
+  sshPort: number,
   sshLocalPort: number,
   passRadio: boolean,
   keyRadio: boolean,
@@ -135,6 +136,7 @@ export default class ProfileApi {
     if (data.ssh) {
       query.ssh = data.ssh;
       query.sshTunnel = data.sshTunnel;
+      query.sshPort = data.sshPort;
       query.remoteHost = data.host;
       query.remotePort = data.port;
       query.sshHost = data.remoteHost;
@@ -277,6 +279,7 @@ export default class ProfileApi {
         sshTunnel: data.sshTunnel,
         remoteHost: data.remoteHost,
         remoteUser: data.remoteUser,
+        sshPort: data.sshPort,
         sshLocalPort: data.sshLocalPort,
         passRadio: data.passRadio,
         keyRadio: data.keyRadio,

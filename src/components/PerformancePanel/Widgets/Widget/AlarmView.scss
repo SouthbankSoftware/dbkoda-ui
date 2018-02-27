@@ -31,6 +31,8 @@ $header-height: 30px;
 $background-colour: #161616;
 $primary-colour: $defaultChartPanelText;
 $primary-colour-lighten-30: lighten($primary-colour, 30);
+$alarm-yellow: lighten(#e8e471, 0);
+$alarm-red: lighten(#913856, 0);
 
 .AlarmViewPopover {
   opacity: 0.8;
@@ -68,6 +70,7 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
       }
 
       .message {
+        color: $primary-colour-lighten-30;
         line-height: 18px;
       }
     }
@@ -93,14 +96,14 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
 }
 
 .AlarmLevelIcon.yellow {
-  fill: #a5a11b;
+  fill: $alarm-yellow;
 }
 
 .AlarmLevelIcon.red {
-  fill: #913856;
+  fill: $alarm-red;
 }
 
 :export {
-  headerHeight: $header-height;
-  containerPadding: $container-padding;
+  headerheight: $header-height;
+  containerpadding: $container-padding;
 }

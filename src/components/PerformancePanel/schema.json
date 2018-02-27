@@ -43,7 +43,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 13,
+        "y": 15,
         "w": 7,
         "h": 6,
         "static": true
@@ -94,7 +94,7 @@
       "extraState": {
         "name": "Network Bytes Out",
         "description": "Data written to network from Mongo Server",
-        "rowText": "Bytes per Second",
+        "rowText": "Network activity",
         "unit": "b/s"
       },
       "layout": {
@@ -162,7 +162,8 @@
         "infoWidget": true,
         "description": "Mongo Server Memory",
         "unit": "mb",
-        "firstValueIsHighWaterMark": true
+        "firstValueIsHighWaterMark": true,
+        "panelTitle": "Server"
       }
     },
     {
@@ -213,6 +214,7 @@
         "infoWidget": true,
         "chartTitle": "Reads",
         "waterMarkGroup": 1,
+        "maintainOrder": true,
         "showAlarms": "mongo",
         "unit": " "
       }
@@ -234,6 +236,7 @@
         "colorList": ["#7040A3", "#AC8BC0"],
         "showHorizontalRule": true,
         "waterMarkGroup": 1,
+        "maintainOrder": true,
         "description":
           "Current number of Write operations and queued Write operations.",
         "unit": " "
@@ -271,7 +274,7 @@
         "name": "Cache Requests",
         "description":
           "Number of pages requested from WiredTiger cache per second.",
-        "rowText": "Requests per Second",
+        "rowText": "Cache activity",
         "unit": "/s"
       },
       "layout": {
@@ -322,7 +325,8 @@
         "infoWidget": true,
         "description": "Current and Maximum size of the WiredTiger log Buffer",
         "unit": "b",
-        "firstValueIsHighWaterMark": true
+        "firstValueIsHighWaterMark": true,
+        "panelTitle": "Cache"
       }
     },
     {
@@ -401,7 +405,7 @@
         "name": "Disk to Cache",
         "description": "WiredTiger disk to cache IO rate",
         "unit": "/s",
-        "rowText": "IO per Second"
+        "rowText": "Disk I/O activity"
       },
       "layout": {
         "x": 17,
@@ -444,7 +448,8 @@
           "WiredTiger disk to cahce, cache to disk and log sync time per second.",
         "unit": "μs/s",
         "showLegend": true,
-        "showVerticalRule": true
+        "showVerticalRule": true,
+        "panelTitle": "Disk"
       },
       "layout": {
         "x": 11,

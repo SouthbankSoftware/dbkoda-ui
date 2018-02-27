@@ -2,7 +2,7 @@
 # @Date:   2016-06-02T14:58:00+10:00
 # @Email:  root@guiguan.net
 # @Last modified by:   guiguan
-# @Last modified time: 2018-02-16T13:59:53+11:00
+# @Last modified time: 2018-02-26T15:32:07+11:00
 
 extends: [airbnb, plugin:flowtype/recommended]
 parser: babel-eslint
@@ -99,7 +99,6 @@ settings:
         - node_modules
         - src
 globals:
-  l: false
   locale: false
   globalString: false
   globalNumber: false
@@ -109,3 +108,4 @@ globals:
   IS_DEVELOPMENT: false
   GetRandomPort: false
   UAT: false
+  logToMain: false
