@@ -32,8 +32,5 @@ export const NewToaster = Toaster.create({
 });
 
 export const DBKodaToaster = () => {
-  return Toaster.create({
-    className: 'dbkoda-toaster',
-    position: Position.TOP_RIGHT,
-  });
+  return NewToaster;
 };
