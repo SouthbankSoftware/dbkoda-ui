@@ -473,6 +473,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
     setTimeout(() => {
       this.text = '0%';
       this.buildWidget();
+
       autorun(() => {
         const { items, values } = this.props.widget;
         const newItemValue = this.getValueFromData(items, values);
@@ -513,11 +514,10 @@ export default class RadialWidget extends React.Component<Object, Object> {
       _.forOwn(latest.stats, (v, k) => { // k is the item name like `cpu`, `memory`
         if (k === 'memory') {
           // there is no sub object for this item
-          latestValue[k] = v.hwm;
           latestValue[`${k}hwm`] = v.hwm;
         } else {
           _.forOwn(v, (vv, kk) => {
-            latestValue[k][`${kk}hwm`] = vv.hwm;
+            latestValue[k][`${kk}hwm`] = vv.hwm === 0 ? vv[kk] : latestValue[k][kk];
           });
         }
       });
