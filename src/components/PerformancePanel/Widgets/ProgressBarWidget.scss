@@ -110,6 +110,9 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
       display: flex;
       flex-direction: column;
       justify-content: center;
+      span {
+        flex-basis: 20%;
+      }
     }
   }
   .d3-tip-top {
