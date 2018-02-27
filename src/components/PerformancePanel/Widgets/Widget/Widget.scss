@@ -81,8 +81,9 @@ $background-colour: #202020;
     height: 100%;
 
     div.rowText {
+      opacity: 0.5;
       position: absolute;
-      left: -120px;
+      left: calc(65% + 200px);
       top: 28px;
       color: #bfbec0;
       opacity: 0.5;
@@ -103,14 +104,14 @@ $background-colour: #202020;
         left: -60px;
       }
       div.Server {
-        top: 60%;
+        top: 55%;
       }
       div.Cache {
-        top: 65%;
+        top: 60%;
       }
       div.Disk {
         left: -48px;
-        top: 85%;
+        top: 80%;
       }
     }
 
