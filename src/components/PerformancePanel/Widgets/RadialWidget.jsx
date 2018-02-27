@@ -547,7 +547,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       }
       itemKeyValues[itemKey] = {
         percentage:
-          latest[key][`max${itemKey}`] === 0
+          latest[key][`${itemKey}hwm`] === 0
             ? 0
             : parseInt(
                 latest[key][`${itemKey}`] /
