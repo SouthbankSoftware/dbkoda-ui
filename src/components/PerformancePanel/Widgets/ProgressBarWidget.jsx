@@ -225,9 +225,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       // );
       return;
     }
-    if (this.props.widget.maxValue) {
-      this._totalDivisor = this.props.widget.maxValue; // If maxValue is provided, it will become the total divisor for the bar chart
-    } else if (this.props.widget.useHighWaterMark) {
+    if (this.props.widget.useHighWaterMark) {
       const newHighWaterMark = Math.ceil(sumOfValues * 1.5);
       if (
         !this._totalDivisor ||
