@@ -82,12 +82,36 @@ $background-colour: #202020;
 
     div.rowText {
       position: absolute;
-      left: calc(55% + 260px);
+      left: -120px;
       top: 28px;
       color: #bfbec0;
       opacity: 0.5;
       width: 200%;
       text-align: center;
+    }
+
+    div.panelTitle {
+      /* Saf3.1+, Chrome */
+
+      div.content {
+        opacity: 0.4;
+        position: absolute;
+        -webkit-transform: rotate(-90deg);
+        color: #bfbec0;
+        font-size: 30px;
+        position: absolute;
+        left: -60px;
+      }
+      div.Server {
+        top: 60%;
+      }
+      div.Cache {
+        top: 65%;
+      }
+      div.Disk {
+        left: -48px;
+        top: 85%;
+      }
     }
 
     div.header {
