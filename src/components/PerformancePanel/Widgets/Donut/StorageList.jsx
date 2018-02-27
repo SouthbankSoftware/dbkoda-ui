@@ -84,7 +84,7 @@ export default props => {
               )}
               {item.dbName.length < 10 && <span>{item.dbName}</span>}
             </div>
-            <div style={{ textAlign: 'end', float: 'right' }}>
+            <div style={{ textAlign: 'end', float: 'right', width: '60px' }}>
               {bytesToSize(item.dataSize)}
             </div>
           </div>
