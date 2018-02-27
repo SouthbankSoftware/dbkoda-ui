@@ -633,4 +633,73 @@ export default class OutputApi {
         break;
     }
   }
+
+  getOutputContent(context) {
+    const { currentTab } = this.store.outputPanel;
+    console.log(`getOutput() context: ${context}`);
+    const outputId = (context === OutputToolbarContexts.RAW) ?
+        currentTab :
+        currentTab.replace(`${context}-`, '');
+    let output = '';
+    switch (context) {
+      case OutputToolbarContexts.RAW: {
+        ({ output } = this.store.outputs.get(currentTab));
+        break;
+      }
+      case OutputToolbarContexts.TABLE_VIEW: {
+        output = JSON.stringify(this.store.outputs.get(outputId).tableJson.json);
+        break;
+      }
+      case OutputToolbarContexts.ENHANCED_VIEW: {
+        output = JSON.stringify(this.store.outputs.get(outputId).enhancedJson.json);
+        break;
+      }
+      default:
+        output = '';
+    }
+    return output;
+  }
+
+  downloadOutput() {
+    const { currentTab } = this.store.outputPanel;
+    const outputContext = this.getOutputContext();
+    console.log(`downloadOutput() context: ${outputContext}`);
+    let content;
+    let fileType;
+    switch (outputContext) {
+      case OutputToolbarContexts.ENHANCED_VIEW:
+        content = this.getOutputContent(outputContext);
+        fileType = 'application/json';
+        break;
+      case OutputToolbarContexts.TABLE_VIEW:
+        content = this.getOutputContent(outputContext);
+        fileType = 'application/json';
+        break;
+      case OutputToolbarContexts.RAW:
+        content = this.getOutputContent(outputContext);
+        fileType = 'text/csv';
+        break;
+      default:
+        return;
+    }
+    const data = new Blob([content], { type: fileType });
+    const csvURL = window.URL.createObjectURL(data);
+    const tempLink = document.createElement('a');
+    tempLink.href = csvURL;
+    tempLink.setAttribute(
+      'download',
+      `output-${currentTab}.js`
+    );
+    tempLink.click();
+  }
+
+  getOutputContext(): OutputToolbarContext {
+    const { currentTab } = this.store.outputPanel;
+    const tabString = currentTab.split('-')[0];
+    const validContext = _.findKey(OutputToolbarContexts, (ctx) => (ctx === tabString));
+    if (!validContext) {
+      return OutputToolbarContexts.RAW;
+    }
+    return OutputToolbarContexts[validContext];
+  }
 }
