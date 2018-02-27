@@ -207,7 +207,8 @@ export default class Widget extends React.Component<Props, State> {
         showVerticalRuleLeft,
         showAlarms,
         rowText,
-        type
+        type,
+        panelTitle
       },
       widgetStyle
     } = this.props;
@@ -237,7 +238,9 @@ export default class Widget extends React.Component<Props, State> {
                     <InfoIcon className="infoButton" width={20} height={20} />
                   </Tooltip>
                 )}
-                {showAlarms && <AlarmView category={showAlarms} alarms={this.alarms} />}
+                {showAlarms && (
+                  <AlarmView category={showAlarms} alarms={this.alarms} />
+                )}
               </div>
             )}
             <Popover2
@@ -263,6 +266,11 @@ export default class Widget extends React.Component<Props, State> {
             {showHorizontalRule && <hr />}
             {showVerticalRule && <hr className="vertical" />}
             {rowText && <div className="rowText">{rowText}</div>}
+            {panelTitle && (
+              <div className="panelTitle">
+                <div className={'content ' + panelTitle}>{panelTitle}</div>
+              </div>
+            )}
           </div>
         )}
         <ReactResizeDetector
