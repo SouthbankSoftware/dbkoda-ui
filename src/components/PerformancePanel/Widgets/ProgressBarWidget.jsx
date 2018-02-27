@@ -181,9 +181,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
           key: sData[I]
         });
       }
-      if (this.props.widget.waterMarkGroup) {
-        console.log(arrData);
-      }
       if (!this.props.widget.maintainOrder) {
         arrData = _.sortBy(arrData, [
           function(o) {
@@ -207,9 +204,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
         this.props.widget.waterMarkGroup
       ) {
         arrData = _.reverse(arrData);
-      }
-      if (this.props.widget.waterMarkGroup) {
-        console.log(arrData);
       }
       this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label
     } else if (sData.length === 1) {
