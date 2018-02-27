@@ -28,7 +28,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action, autorun } from 'mobx';
 import _ from 'lodash';
-import { Tooltip, Position, PopoverInteractionKind } from '@blueprintjs/core';
+import { PopoverInteractionKind } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/labs';
 import './StackedRadialWidget.scss';
 import { convertUnits } from './Utils';

@@ -31,7 +31,7 @@ import { inject } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
-import { Tooltip, Position, PopoverInteractionKind } from '@blueprintjs/core';
+import { PopoverInteractionKind } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/labs';
 import Legend from './Legend';
 import Widget from './Widget';
