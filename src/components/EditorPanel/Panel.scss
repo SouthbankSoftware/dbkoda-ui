@@ -797,6 +797,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
   .CodeMirror-scroll {
     background-color: $editorBackground;
     width: 100%;
+    padding-bottom: unset;
   }
   .CodeMirror,
   .ReactCodeMirror {
