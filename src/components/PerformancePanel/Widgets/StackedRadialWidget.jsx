@@ -409,7 +409,8 @@ export default class StackedRadialWidget extends React.Component<
         const hwm = latestStats[key].hwm;
         // Check if it's the highest value ever.
         if (!this.maxValue || this.maxValue < hwm) {
-          this.maxValue = hwm;
+          this.maxValue = hwm === 0 ? fixedValue : hwm;
+          this.maxValue = this.maxValue === 0 ? 1 : this.maxValue;
         }
       });
 
