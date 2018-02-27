@@ -614,9 +614,9 @@ export default class RadialWidget extends React.Component<Object, Object> {
           ? parseInt(v.usage / v.usagehwm * 100, 10)
           : parseInt(v.usage, 10);
         fixedValue = Math.min(fixedValue, 100);
-        const runQueueValue = _.isInteger(v.runQueuehwm)
-          ? v.runQueuehwm
-          : parseInt(v.runQueuehwm, 10);
+        const runQueueValue = _.isInteger(v.runQueue)
+          ? v.runQueue
+          : parseInt(v.runQueue, 10);
         this.text = fixedValue + '%\n' + runQueueValue;
         return [
           {
