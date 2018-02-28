@@ -517,7 +517,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           latestValue[`${k}hwm`] = v.hwm;
         } else {
           _.forOwn(v, (vv, kk) => {
-            latestValue[k][`${kk}hwm`] = vv.hwm === 0 ? vv[kk] : latestValue[k][kk];
+            latestValue[k][`${kk}hwm`] = vv.hwm === 0 ? vv.hwm : latestValue[k][kk];
           });
         }
       });
