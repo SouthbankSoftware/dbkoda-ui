@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2018-01-30T14:12:20+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-28T14:32:29+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -22,9 +22,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/* eslint camelcase:warn */
-/* eslint no-unused-vars:warn */
 
 import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
@@ -57,7 +54,8 @@ import './App.scss';
 @inject(allStores => ({
   store: allStores.store,
   layout: allStores.store.layout,
-  config: allStores.config
+  config: allStores.config,
+  api: allStores.api
 }))
 @observer
 class App extends React.Component {
@@ -84,12 +82,13 @@ class App extends React.Component {
     this.props.store.layout.optInVisible = false;
   }
 
+  // eslint-disable-next-line camelcase
   unstable_handleError() {
-    // eslint-disable-line camelcase
     Broker.emit(EventType.APP_CRASHED);
   }
+
   render() {
-    const { layout, store } = this.props;
+    const { layout, store, api } = this.props;
     const splitPane2Style = {
       display: 'flex',
       flexDirection: 'column'
@@ -105,13 +104,12 @@ class App extends React.Component {
       <div>
         <Analytics />
         <TelemetryConsent />
-        {
-          (process.env.NODE_ENV === 'development') &&
+        {process.env.NODE_ENV === 'development' && (
           <PasswordDialog
             showDialog={this.props.store.password.showDialog}
             verifyPassword={this.props.store.password.verifyPassword}
           />
-        }
+        )}
         <SplitPane
           className="RootSplitPane"
           split="vertical"
@@ -136,9 +134,14 @@ class App extends React.Component {
         </SplitPane>
         <StatusPanel className="statusPanel" />
         {store.performancePanel ? (
-          <PerformancePanel profileId={store.performancePanel.profileId} />
+          <PerformancePanel
+            performancePanel={store.performancePanel}
+            onClose={() => api.closePerformancePanel(store.performancePanel.profileId)}
+          />
         ) : null}
-        {(store.drawer && store.drawer.drawerChild == DrawerPanes.PROFILE) ? (<ProfileManager />) : null}
+        {store.drawer && store.drawer.drawerChild == DrawerPanes.PROFILE ? (
+          <ProfileManager />
+        ) : null}
         {process.env.NODE_ENV !== 'production' ? (
           <div className="DevTools">
             <DevTools position={{ right: -1000, top: 200 }} />

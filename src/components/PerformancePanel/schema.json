@@ -3,7 +3,7 @@
   "rows": 59,
   "rowHeight": 25,
   "leftWidth": 8,
-  "midWidth": 20,
+  "midWidth": 24,
   "widgets": [
     {
       "type": "RadialWidget",

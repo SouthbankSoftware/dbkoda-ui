@@ -1,4 +1,10 @@
-/*
+/**
+ * @flow
+ *
+ * Created by joey on 20/2/18.
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-28T13:40:38+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,32 +23,33 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
- * @flow
- * Created by joey on 20/2/18.
- */
 
 import React from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import {inject, observer} from 'mobx-react';
-import {autorun} from 'mobx';
+import { observer } from 'mobx-react';
+import { autorun } from 'mobx';
+import type { WidgetState } from '~/api/Widget';
+import type { PerformancePanelState } from '~/api/PerformancePanel';
 import Widget from '../Widget';
 import StorageList from './StorageList';
 import './DonutWidget.scss';
-import {bytesToSize} from '../Utils';
+import { bytesToSize } from '../Utils';
 
-@inject(({store, api}, {widget}) => {
-  return {
-    store,
-    api,
-    widget,
-  };
-})
+type Props = {
+  performancePanel: PerformancePanelState,
+  widget: WidgetState,
+  widgetStyle: *
+};
+
+type State = {
+  items: *
+};
+
 @observer
-export default class DonutWidget extends React.Component<Object, Object> {
+export default class DonutWidget extends React.Component<Props, State> {
   colors: Array<string> = [];
-  dataset: Array<Array<Object>> = [[{dataPerc: 1, dbName: '', color: '#365F87', opacity: 0.2}]];
+  dataset: Array<Array<Object>> = [[{ dataPerc: 1, dbName: '', color: '#365F87', opacity: 0.2 }]];
   radius: number;
   chartRadius: number;
   d3Elem: ?Object;
@@ -58,7 +65,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
     this.colors = ['#365F87', '#42BB6D', '#7040A3', 'AC8BC0', '#E26847'];
     this.width = 200;
     this.height = 200;
-    this.state = {items: []};
+    this.state = { items: [] };
   }
 
   projection() {
@@ -101,10 +108,7 @@ export default class DonutWidget extends React.Component<Object, Object> {
       .attr('width', this.width)
       .attr('height', this.height)
       .append('g')
-      .attr(
-        'transform',
-        'translate(' + this.width / 4 + ',' + this.height / 2 + ')'
-      );
+      .attr('transform', 'translate(' + this.width / 4 + ',' + this.height / 2 + ')');
 
     this.tooltip = d3
       .select('body')
@@ -185,24 +189,19 @@ export default class DonutWidget extends React.Component<Object, Object> {
     let arcTween;
     setTimeout(() => {
       autorun(() => {
-        const {values, items} = this.props.widget;
+        const { values, items } = this.props.widget;
         if (this.d3Elem) {
-          const updatedData = this.getUpdatedData(
-            values,
-            items
-          );
+          // $FlowFixMe
+          const updatedData = this.getUpdatedData(values, items);
           const newDataset: Array<Array<Object>> = updatedData.items;
           if (newDataset) {
-          this.totalSize = updatedData.totalSize;
-          if (
-            this.dataset.length <= 0 ||
-            this.dataset[0].length !== newDataset[0].length
-          ) {
+            this.totalSize = updatedData.totalSize;
+            if (this.dataset.length <= 0 || this.dataset[0].length !== newDataset[0].length) {
+              this.dataset = newDataset;
+              arcTween = this.renderD3Component();
+            }
             this.dataset = newDataset;
-            arcTween = this.renderD3Component();
-          }
-            this.dataset = newDataset;
-            this.setState({items: this.dataset[0]});
+            this.setState({ items: this.dataset[0] });
             this.updateDate(arcTween);
           }
         }
@@ -211,7 +210,6 @@ export default class DonutWidget extends React.Component<Object, Object> {
       arcTween = this.renderD3Component();
     }, 200);
   }
-
 
   componentWillUnmount() {
     this.removeD3();
@@ -259,32 +257,33 @@ export default class DonutWidget extends React.Component<Object, Object> {
         // failed to parse integer
       }
       // dataSize = Math.random() * 10000;
-      return {dbName: dbObject.dbName, dataSize};
+      return { dbName: dbObject.dbName, dataSize };
     });
     const orderedValue = _.orderBy(retValue, ['dataSize'], ['desc']);
     const sumValue = _.sumBy(retValue, 'dataSize');
     const sum = sumValue > 0 ? sumValue : 1;
     const normalized = orderedValue.map(v => {
       const normalizeSize = Math.max(_.round(v.dataSize / sum, 2), 0.01);
-      return {...v, dataPerc: normalizeSize};
+      return { ...v, dataPerc: normalizeSize };
     });
     const top = normalized.slice(0, 4);
     top.forEach((norm, i) => {
       norm.color = this.colors[i];
     });
-    const others = {dbName: 'others', dataSize: 0, dataPerc: 0, color: this.colors[4]};
-    normalized.slice(4).forEach((item) => {
+    const others = { dbName: 'others', dataSize: 0, dataPerc: 0, color: this.colors[4] };
+    normalized.slice(4).forEach(item => {
       others.dataSize += item.dataSize;
       others.dataPerc = _.round(others.dataSize / sum, 2);
     });
     top.push(others);
-    return {items: [top], totalSize: sumValue};
+    return { items: [top], totalSize: sumValue };
   }
 
   render() {
-    const {widget, widgetStyle} = this.props;
+    const { performancePanel, widget, widgetStyle } = this.props;
     return (
       <Widget
+        performancePanel={performancePanel}
         widget={widget}
         widgetStyle={widgetStyle}
         onResize={this._onResize}

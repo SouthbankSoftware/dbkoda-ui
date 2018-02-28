@@ -1,7 +1,9 @@
 /**
+ * @flow
+ *
  * Created by joey on 17/1/18.
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-26T10:58:47+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-28T13:48:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -20,16 +22,15 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @flow
  */
 
 import * as d3 from 'd3';
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { autorun } from 'mobx';
 import _ from 'lodash';
-
+import type { WidgetState } from '~/api/Widget';
+import type { PerformancePanelState } from '~/api/PerformancePanel';
 import './RadialWidget.scss';
 import Widget from './Widget';
 import { bytesToSize } from './Utils';
@@ -38,15 +39,20 @@ const colors = ['#01969E', '#01969E'];
 const gradientColors = ['#01969E', '#01969E'];
 const runQueueColors = ['#362728', '#00b458', '#c40d0d', '#960909', '#750808'];
 
-@inject(({ store, api }, { widget }) => {
-  return {
-    store,
-    api,
-    widget
-  };
-})
+type Props = {
+  performancePanel: PerformancePanelState,
+  widget: WidgetState,
+  widgetStyle: *
+};
+
+type State = {
+  width: number,
+  height: number,
+  text: string
+};
+
 @observer
-export default class RadialWidget extends React.Component<Object, Object> {
+export default class RadialWidget extends React.Component<Props, State> {
   static width = 500;
   static height = 500;
   static PI = 2 * Math.PI;
@@ -75,10 +81,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   _getInnerRadiusSize() {
     const minValue = Math.min(this.state.width, this.state.height);
     this.gap = Math.round(minValue * 0.15);
-    if (
-      this.props.widget.title === 'Network' ||
-      this.props.widget.title === 'Disk IO'
-    ) {
+    if (this.props.widget.title === 'Network' || this.props.widget.title === 'Disk IO') {
       this.gap = Math.round(minValue * 0.13);
       return minValue / 2.5;
     }
@@ -86,10 +89,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
   }
 
   _getOuterRadiusSize() {
-    if (
-      this.props.widget.title === 'Network' ||
-      this.props.widget.title === 'Disk IO'
-    ) {
+    if (this.props.widget.title === 'Network' || this.props.widget.title === 'Disk IO') {
       return this._getInnerRadiusSize() + this.gap - 6;
     }
     return this._getInnerRadiusSize() + this.gap - 5;
@@ -124,10 +124,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .attr('height', this.state.height)
       .append('g')
       .attr('class', 'radial-chart')
-      .attr(
-        'transform',
-        'translate(' + xTranslate + ',' + this.state.height / 2 + ')'
-      );
+      .attr('transform', 'translate(' + xTranslate + ',' + this.state.height / 2 + ')');
 
     this.buildGradient(svg);
     // add some shadows
@@ -248,10 +245,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .select('svg')
       .append('g')
       .attr('class', 'chart-rc')
-      .attr(
-        'transform',
-        'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')'
-      );
+      .attr('transform', 'translate(' + this.state.width / 2 + ',' + this.state.height / 2 + ')');
 
     const g = svg
       .selectAll('.arc-rc')
@@ -264,7 +258,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .append('path')
       .attr('d', arc)
       .style('fill', d => {
-        return runQueueColors[Math.min(parseInt(d.data.busy, 10), (runQueueColors.length - 1))];
+        return runQueueColors[Math.min(parseInt(d.data.busy, 10), runQueueColors.length - 1)];
       })
       .on('mouseover', () => {
         const tipData = `RunQueue ${noOfNodes}`;
@@ -307,9 +301,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       .outerRadius(d => {
         return this._getOuterRadiusSize() - d.index * this.gap;
       })
-      .cornerRadius(
-        (this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2
-      );
+      .cornerRadius((this._getOuterRadiusSize() - this._getInnerRadiusSize()) / 2);
   }
 
   buildGradient(svg: Object) {
@@ -393,7 +385,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           let txtColor = this.colors[0];
           if (i === 1) {
             const idxColor = Math.ceil(parseInt(t, 10) / 20);
-            txtColor = runQueueColors[Math.min(idxColor, (runQueueColors.length - 1))];
+            txtColor = runQueueColors[Math.min(idxColor, runQueueColors.length - 1)];
           }
           this.field
             .append('text')
@@ -414,17 +406,11 @@ export default class RadialWidget extends React.Component<Object, Object> {
       }
     } else if (this.itemValue.length >= 1) {
       let xTranslate = 0;
-      if (
-        this.props.widget.title === 'Network' ||
-        this.props.widget.title === 'Disk IO'
-      ) {
+      if (this.props.widget.title === 'Network' || this.props.widget.title === 'Disk IO') {
         xTranslate = 0;
       }
       let yTranslate = 0;
-      if (
-        this.props.widget.title === 'Network' ||
-        this.props.widget.title === 'Disk IO'
-      ) {
+      if (this.props.widget.title === 'Network' || this.props.widget.title === 'Disk IO') {
         yTranslate = -4;
       }
       this.field.selectAll('text.completed').remove();
@@ -476,6 +462,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
 
       autorun(() => {
         const { items, values } = this.props.widget;
+        // $FlowFixMe
         const newItemValue = this.getValueFromData(items, values);
         if (newItemValue.length > 0) {
           if (newItemValue.length !== this.itemValue.length) {
@@ -493,25 +480,15 @@ export default class RadialWidget extends React.Component<Object, Object> {
   /**
    * TODO: move to schema
    */
-  getValueFromData(
-    items: Array<string>,
-    staleValues: Array<Object>
-  ): Array<Object> {
+  getValueFromData(items: Array<string>, staleValues: Array<Object>): Array<Object> {
     const { widget } = this.props;
-    const {
-      widgetItemKeys,
-      widgetDisplayNames,
-      showRunQueue,
-      useHighWaterMark
-    } = widget;
-    const values = _.filter(
-      staleValues,
-      v => !_.isEmpty(v) && !_.isEmpty(v.value)
-    );
+    const { widgetItemKeys, widgetDisplayNames, showRunQueue, useHighWaterMark } = widget;
+    const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latest = values.length > 0 ? values[values.length - 1] : {};
     const latestValue = latest && latest.value ? latest.value : {};
     if (latest.stats) {
-      _.forOwn(latest.stats, (v, k) => { // k is the item name like `cpu`, `memory`
+      _.forOwn(latest.stats, (v, k) => {
+        // k is the item name like `cpu`, `memory`
         if (k === 'memory') {
           // there is no sub object for this item
           latestValue[`${k}hwm`] = v.hwm;
@@ -523,24 +500,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
       });
     }
     const key = items[0];
-    const capitalize = str =>
-      str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    const highWaterMark = (
-      previousValue,
-      itemKey,
-      itemKeyValues,
-      i,
-      latest
-    ) => {
+    const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    const highWaterMark = (previousValue, itemKey, itemKeyValues, i, latest) => {
       if (previousValue[key][`max${itemKey}`] === undefined) {
         previousValue[key][`max${itemKey}`] = 0;
       }
-      latest[key][`${itemKey}Delta`] = Math.abs(
-        latest[key][itemKey] - previousValue[key][itemKey]
-      );
-      if (
-        latest[key][`${itemKey}Delta`] > previousValue[key][`max${itemKey}`]
-      ) {
+      latest[key][`${itemKey}Delta`] = Math.abs(latest[key][itemKey] - previousValue[key][itemKey]);
+      if (latest[key][`${itemKey}Delta`] > previousValue[key][`max${itemKey}`]) {
         latest[key][`max${itemKey}`] = latest[key][`${itemKey}Delta`];
       } else {
         latest[key][`max${itemKey}`] = previousValue[key][`max${itemKey}`];
@@ -549,18 +515,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
         percentage:
           latest[key][`${itemKey}hwm`] === 0
             ? 0
-            : parseInt(
-                latest[key][`${itemKey}`] /
-                  latest[key][`${itemKey}hwm`] *
-                  100,
-                10
-              ),
-        valuePerSec: bytesToSize(
-          latest[key][`${itemKey}Delta`] / (latest[key].samplingRate / 1000)
-        )
+            : parseInt(latest[key][`${itemKey}`] / latest[key][`${itemKey}hwm`] * 100, 10),
+        valuePerSec: bytesToSize(latest[key][`${itemKey}Delta`] / (latest[key].samplingRate / 1000))
       };
       if (itemKeyValues[itemKey].valuePerSec) {
         this.text += ` ${itemKeyValues[itemKey].valuePerSec}/s`;
+        // $FlowFixMe
         if (i < widgetItemKeys.length - 1) {
           this.text += '\n';
         }
@@ -576,8 +536,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
         const diff = _.difference(widgetItemKeys, _.keys(v));
         multipleKeys = diff.length === 0;
       }
-      const previousValue: Object =
-        values.length > 1 ? values[values.length - 2].value : {};
+      const previousValue: Object = values.length > 1 ? values[values.length - 2].value : {};
       if (!_.isInteger(v) && multipleKeys) {
         const itemKeyValues = {};
         this.text = '';
@@ -585,27 +544,23 @@ export default class RadialWidget extends React.Component<Object, Object> {
           if (_.isEmpty(previousValue)) {
             return [];
           }
+          // $FlowFixMe
           widgetItemKeys.forEach((itemKey, i) => {
-            highWaterMark(
-              previousValue,
-              itemKey,
-              itemKeyValues,
-              i,
-              latestValue
-            );
+            highWaterMark(previousValue, itemKey, itemKeyValues, i, latestValue);
           });
         } else {
+          // $FlowFixMe
           widgetItemKeys.forEach((itemKey, i) => {
             itemKeyValues.push({ index: i, percentage: v[itemKey] + '%' });
           });
         }
+        // $FlowFixMe
         const retValue = widgetItemKeys.map((itemKey, i) => {
           return {
             index: i,
             percentage: Math.min(itemKeyValues[itemKey].percentage, 100),
-            tooltip: `${widgetDisplayNames[i]} ${
-              itemKeyValues[itemKey].percentage
-            }%`
+            // $FlowFixMe
+            tooltip: `${widgetDisplayNames[i]} ${itemKeyValues[itemKey].percentage}%`
           };
         });
         return retValue;
@@ -614,9 +569,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
           ? parseInt(v.usage / v.usagehwm * 100, 10)
           : parseInt(v.usage, 10);
         fixedValue = Math.min(fixedValue, 100);
-        const runQueueValue = _.isInteger(v.runQueue)
-          ? v.runQueue
-          : parseInt(v.runQueue, 10);
+        const runQueueValue = _.isInteger(v.runQueue) ? v.runQueue : parseInt(v.runQueue, 10);
         this.text = fixedValue + '%\n' + runQueueValue;
         return [
           {
@@ -632,7 +585,7 @@ export default class RadialWidget extends React.Component<Object, Object> {
       if (isNaN(fixedValue)) {
         fixedValue = 0;
       } else {
-        fixedValue = parseInt((fixedValue / latestValue[`${key}hwm`]) * 100, 10);
+        fixedValue = parseInt(fixedValue / latestValue[`${key}hwm`] * 100, 10);
       }
       fixedValue = Math.min(fixedValue, 100);
       this.text = fixedValue + '%';
@@ -683,17 +636,13 @@ export default class RadialWidget extends React.Component<Object, Object> {
    * TODO: move it to schema
    */
   projection() {
-    const {
-      items,
-      widgetItemKeys,
-      widgetDisplayNames,
-      showRunQueue
-    } = this.props.widget;
+    const { items, widgetItemKeys, widgetDisplayNames, showRunQueue } = this.props.widget;
     const key = items[0];
     if (widgetDisplayNames && widgetDisplayNames.length > 0) {
       const ret = {};
       widgetDisplayNames.forEach((k, i) => {
         ret[k] = v => {
+          // $FlowFixMe
           return v.value[key] ? v.value[key][`${widgetItemKeys[i]}Delta`] : 0;
         };
       });
@@ -715,19 +664,12 @@ export default class RadialWidget extends React.Component<Object, Object> {
   }
 
   render() {
-    const { widget, widgetStyle } = this.props;
+    const { performancePanel, widget, widgetStyle } = this.props;
     const { displayName } = widget;
-    // 1. render container for d3 in this render function
-    // 2. draw d3 graph in a separate function after componentDidMount
-    // 3. incremental redraw whenever data change happens
-    // 4. re-draw whole graph whenver size/dimension changes
-    // 5. destroy container in componentWillUnmount
-    //
-    // in this way, d3's render logic is detached from react's render logic. So a re-render of d3
-    // container won't trigger re-render whole d3 graph. d3 has its own way of efficent DOM
-    // manipulation inside its container created by react
+
     return (
       <Widget
+        performancePanel={performancePanel}
         widget={widget}
         widgetStyle={widgetStyle}
         onResize={this._onResize}

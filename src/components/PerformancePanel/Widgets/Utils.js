@@ -180,6 +180,7 @@ export const convertBytes = (value: any, unit: string, length: number) => {
     result.value = (value / 1024).toFixed(2);
     return convertBytes(result.value, result.unit, length);
   }
+  result.value = value.toFixed(2);
   return result;
 };
 
