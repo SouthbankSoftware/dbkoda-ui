@@ -462,8 +462,9 @@ export default class RadialWidget extends React.Component<Props, State> {
 
       autorun(() => {
         const { items, values } = this.props.widget;
+        const { stats } = this.props.performancePanel;
         // $FlowFixMe
-        const newItemValue = this.getValueFromData(items, values);
+        const newItemValue = this.getValueFromData(items, values, stats);
         if (newItemValue.length > 0) {
           if (newItemValue.length !== this.itemValue.length) {
             this.removeD3();
@@ -480,21 +481,23 @@ export default class RadialWidget extends React.Component<Props, State> {
   /**
    * TODO: move to schema
    */
-  getValueFromData(items: Array<string>, staleValues: Array<Object>): Array<Object> {
+  getValueFromData(items: Array<string>, staleValues: Array<Object>, stats: Object): Array<Object> {
     const { widget } = this.props;
     const { widgetItemKeys, widgetDisplayNames, showRunQueue, useHighWaterMark } = widget;
     const values = _.filter(staleValues, v => !_.isEmpty(v) && !_.isEmpty(v.value));
     const latest = values.length > 0 ? values[values.length - 1] : {};
     const latestValue = latest && latest.value ? latest.value : {};
-    if (latest.stats) {
-      _.forOwn(latest.stats, (v, k) => {
+    if (latestValue) {
+      _.forOwn(latestValue, (v, k) => {
         // k is the item name like `cpu`, `memory`
         if (k === 'memory') {
           // there is no sub object for this item
-          latestValue[`${k}hwm`] = v.hwm;
+          latestValue[`${k}hwm`] = stats[k].hwm;
         } else {
           _.forOwn(v, (vv, kk) => {
-            latestValue[k][`${kk}hwm`] = vv.hwm === 0 ? vv.hwm : latestValue[k][kk];
+            if (stats[k][kk]) {
+              latestValue[k][`${kk}hwm`] = stats[k][kk].hwm !== 0 ? stats[k][kk].hwm : latestValue[k][kk];
+            }
           });
         }
       });
