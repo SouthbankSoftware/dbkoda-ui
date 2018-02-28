@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-23T10:39:46+11:00
+ * @Last modified time: 2018-02-28T11:18:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -189,7 +189,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         ]);
         arrData = _.reverse(arrData);
       }
-
+      let displayOrder = 0;
       arrData = arrData.map(elem => {
         if (!this.props.widget.firstValueIsHighWaterMark) {
           sumOfValues += elem.value;
@@ -197,6 +197,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
         } else {
           elem.sumValue = elem.value;
         }
+        elem.displayOrder = displayOrder;
+        displayOrder += 1;
         return elem;
       });
       if (
@@ -212,7 +214,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
         color: colors[0],
         value: data[sData[0]],
         key: sData[0],
-        sumValue: data[sData[0]]
+        sumValue: data[sData[0]],
+        displayOrder: 0
       });
       this._chartLabel = arrData[0].value; // for single item chart it will always show the item value in text label
       sumOfValues = arrData[0].value;
@@ -255,7 +258,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     const t = d3.transition().duration(750);
 
     const bars = this._dataGroup.selectAll('rect').data(arrData, d => {
-      return d.key; // this return value determines which bars to add/remove/update in the current chart.
+      return d.key + d.displayOrder; // this return value determines which bars to add/remove/update in the current chart.
     });
 
     bars
