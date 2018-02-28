@@ -76,7 +76,7 @@ export default class Toolbar extends React.Component {
     this.downloadOutput = this.downloadOutput.bind(this);
 
     // Determine toolbar context.
-    if (this.props.store.outputPanel.currentTab.startsWith('TableView-')) {
+    if (this.props.store.outputPanel.currentTab.startsWith(OutputToolbarContexts.TABLE_VIEW)) {
       this.state.context = OutputToolbarContexts.TABLE_VIEW;
     } else {
       this.state.context = OutputToolbarContexts.DEFAULT;
@@ -129,7 +129,7 @@ export default class Toolbar extends React.Component {
     reaction(
       () => this.props.store.outputPanel.clearingOutput,
       clearingOutput => {
-        const currentTab = this.props.store.outputPanel.currentTab;
+        const {currentTab} = this.props.store.outputPanel;
         if (clearingOutput && this.props.store.outputs.get(currentTab)) {
           this.props.store.outputs.get(currentTab).output = '';
           if (this.props.config.settings.telemetryEnabled) {
@@ -221,21 +221,7 @@ export default class Toolbar extends React.Component {
    * Downloads the current contents of the Output Editor to a file
    */
   downloadOutput() {
-    const data = new Blob(
-      [
-        this.props.store.outputs.get(this.props.store.outputPanel.currentTab)
-          .output
-      ],
-      { type: 'text/csv' }
-    );
-    const csvURL = window.URL.createObjectURL(data);
-    const tempLink = document.createElement('a');
-    tempLink.href = csvURL;
-    tempLink.setAttribute(
-      'download',
-      `output-${this.props.store.outputPanel.currentTab}.js`
-    );
-    tempLink.click();
+    this.props.api.outputApi.downloadOutput();
   }
 
   /**
@@ -653,6 +639,21 @@ export default class Toolbar extends React.Component {
               }}
             >
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
+            </AnchorButton>
+          </Tooltip>
+          <Tooltip
+            intent={Intent.PRIMARY}
+            hoverOpenDelay={1000}
+            inline
+            content={globalString('output/toolbar/save')}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              className="saveOutputBtn circleButton"
+              onClick={this.downloadOutput}
+            >
+              <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
         </div>

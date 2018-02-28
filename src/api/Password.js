@@ -92,7 +92,7 @@ export default class Password {
   @action.bound
   sendStoreInit() {
     /*
-      NOTE: If UI somehow loses track of the fact there is a password store already,
+      TODO: If UI somehow loses track of the fact there is a password store already,
       when creating on the controller, it will still only allow a store to be created with the same password.
       If the same password is entered, it is still recoverable, if not the same, the UI will receive
       Not Authorised. If the request gets a Not Authorised request, it should note there is in fact an

@@ -3,7 +3,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-23T10:39:46+11:00
+ * @Last modified time: 2018-02-28T11:18:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,7 +31,8 @@ import { inject } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
-import { Tooltip, Position } from '@blueprintjs/core';
+import { PopoverInteractionKind } from '@blueprintjs/core';
+import { Popover2 } from '@blueprintjs/labs';
 import Legend from './Legend';
 import Widget from './Widget';
 import { convertUnits } from './Utils';
@@ -158,7 +159,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     this._createD3View(bVertical);
   };
 
-  _updateD3ViewData = (data: Object) => {
+  _updateD3ViewData = (data: Object, stats: Object) => {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
@@ -167,10 +168,11 @@ export default class ProgressBarWidget extends React.Component<Props> {
     const sData = Object.keys(data); // .sort(); // sort according to keys to keep the color same
     let arrData = [];
     let sumOfValues = 0;
+    let sumOfHWM = 0;
     if (sData.length > 1) {
       // Case where there are more than 1 data items to display
       for (let I = 0; I < sData.length; I += 1) {
-        if (I == 0 && this.props.widget.firstValueIsHighWaterMark) {
+        if (I === 0 && this.props.widget.firstValueIsHighWaterMark) {
           // Discard first value, set high water mark.
           this._totalDivisor = data[sData[I]];
           sumOfValues = data[sData[I]];
@@ -189,14 +191,17 @@ export default class ProgressBarWidget extends React.Component<Props> {
         ]);
         arrData = _.reverse(arrData);
       }
-
+      let displayOrder = 0;
       arrData = arrData.map(elem => {
         if (!this.props.widget.firstValueIsHighWaterMark) {
           sumOfValues += elem.value;
           elem.sumValue = sumOfValues;
+          sumOfHWM += stats[elem.key].hwm;
         } else {
           elem.sumValue = elem.value;
         }
+        elem.displayOrder = displayOrder;
+        displayOrder += 1;
         return elem;
       });
       if (
@@ -205,17 +210,27 @@ export default class ProgressBarWidget extends React.Component<Props> {
       ) {
         arrData = _.reverse(arrData);
       }
-      this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label
+      if (this.props.widget.firstValueIsHighWaterMark) {
+        this._chartLabel = sumOfValues;
+      } else {
+        this._chartLabel = sumOfHWM; // for multi item chart it will show the sum of value in the text label
+      }
     } else if (sData.length === 1) {
       // specific case of only one data item
       arrData.push({
         color: colors[0],
         value: data[sData[0]],
         key: sData[0],
-        sumValue: data[sData[0]]
+        sumValue: data[sData[0]],
+        displayOrder: 0
       });
-      this._chartLabel = arrData[0].value; // for single item chart it will always show the item value in text label
+      sumOfHWM = stats[sData[0]].hwm;
       sumOfValues = arrData[0].value;
+      if (!this.props.widget.firstValueIsHighWaterMark) {
+        this._chartLabel = sumOfHWM; // for single item chart it will always show the item value in text label
+      } else {
+        this._chartLabel = sumOfValues; // for single item chart it will always show the item value in text label
+      }
     } else {
       // console.error(
       //   'ProgressBarWidget (',
@@ -224,18 +239,16 @@ export default class ProgressBarWidget extends React.Component<Props> {
       // );
       return;
     }
-    if (this.props.widget.maxValue) {
-      this._totalDivisor = this.props.widget.maxValue; // If maxValue is provided, it will become the total divisor for the bar chart
-    } else if (this.props.widget.useHighWaterMark) {
-      const newHighWaterMark = Math.ceil(sumOfValues * 1.5);
+    if (this.props.widget.useHighWaterMark) {
+      const newHighWaterMark = sumOfHWM;
       if (
         !this._totalDivisor ||
-        (this._totalDivisor > 0 && sumOfValues >= this._totalDivisor) // update HighWaterMark only it is not set or smaller then the current sum of values
+        (this._totalDivisor > 0 && sumOfHWM >= this._totalDivisor) // update HighWaterMark only it is not set or smaller then the current sum of values
       ) {
         this._totalDivisor = newHighWaterMark;
       }
     } else if (!this.props.widget.firstValueIsHighWaterMark) {
-      this._totalDivisor = sumOfValues;
+      this._totalDivisor = sumOfHWM;
     }
 
     // If part of high water mark group, set group value.
@@ -255,7 +268,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     const t = d3.transition().duration(750);
 
     const bars = this._dataGroup.selectAll('rect').data(arrData, d => {
-      return d.key; // this return value determines which bars to add/remove/update in the current chart.
+      return d.key + d.displayOrder; // this return value determines which bars to add/remove/update in the current chart.
     });
 
     bars
@@ -273,7 +286,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
       .transition(t)
       .attr('width', d => {
-        const cWidth = d.sumValue / this._totalDivisor * chartWidth;
+        const perc = d.sumValue / this._totalDivisor;
+        const cWidth = Math.min(perc, 1) * chartWidth;
         return isNaN(cWidth) || cWidth < 0 ? 0 : cWidth;
       });
 
@@ -378,13 +392,15 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
       this._autorunDisposer = autorun(() => {
         const { values, unit } = this.props.widget;
-        const latestValue =
-          values.length > 0 ? values[values.length - 1].value : {};
+        const latest = values.length > 0 ? values[values.length - 1] : {};
+        if (_.isEmpty(latest)) {
+          return;
+        }
+        const {value: latestValue, stats: latestStats} = latest;
 
-        // const testData = {'item-001': 15, 'item-002': 130};
         this._itemValues = latestValue;
         this._unit = unit;
-        this._updateD3ViewData(latestValue);
+        this._updateD3ViewData(latestValue, latestStats);
         if (this.toolTipLegend && this.hasRendered && this._itemValues) {
           this.toolTipLegend.setValues(this._itemValues);
         }
@@ -419,9 +435,10 @@ export default class ProgressBarWidget extends React.Component<Props> {
     return (
       <Widget widget={widget} widgetStyle={widgetStyle}>
         <div className="ProgressBarWidget">
-          <Tooltip
-            portalClassName="StackedRadialWidgetTooltip"
-            className="toolTip"
+          <Popover2
+            minimal
+            interactionKind={PopoverInteractionKind.HOVER}
+            popoverClassName="StackedRadialWidgetTooltip toolTip"
             content={
               <div className="Tooltip">
                 <Legend
@@ -443,25 +460,24 @@ export default class ProgressBarWidget extends React.Component<Props> {
                 />
               </div>
             }
-            position={Position.BOTTOM}
-            useSmartPositioning
-          >
-            <div className="container">
-              <div className="chart-label">
-                {chartTitle && <strong>{chartTitle}</strong>}
-              </div>
-              <svg
-                className="chart"
-                ref={_chartEl => (this._chartEl = _chartEl)}
-              />
-              <div className="chart-total">
-                <span
-                  ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}
-                  style={chartTotalStyle}
+            target={
+              <div className="container">
+                <div className="chart-label">
+                  {chartTitle && <strong>{chartTitle}</strong>}
+                </div>
+                <svg
+                  className="chart"
+                  ref={_chartEl => (this._chartEl = _chartEl)}
                 />
+                <div className="chart-total">
+                  <span
+                    ref={_chartTotalEl => (this._chartTotalEl = _chartTotalEl)}
+                    style={chartTotalStyle}
+                  />
+                </div>
               </div>
-            </div>
-          </Tooltip>
+            }
+          />
           <div className="d3-tip-top" ref={_tipEl => (this._tipEl = _tipEl)} />
           <div
             className="d3-tip-right"
