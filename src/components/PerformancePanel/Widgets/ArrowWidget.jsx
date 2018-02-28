@@ -50,8 +50,12 @@ const strokeWidth = width * 0.04;
 const halfStrokeWidth = strokeWidth / 2;
 const headTailY = (height - strokeWidth) * headYPropotion + halfStrokeWidth;
 const arrowMaskPathDes = `M${width / 2},${halfStrokeWidth}L${width -
-  halfStrokeWidth},${headTailY}H${(width - strokeWidth) * (1 + tailXPropotion) / 2 +
-  halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) * (1 - tailXPropotion) / 2 +
+  halfStrokeWidth},${headTailY}H${(width - strokeWidth) *
+  (1 + tailXPropotion) /
+  2 +
+  halfStrokeWidth}V${height - halfStrokeWidth}H${(width - strokeWidth) *
+  (1 - tailXPropotion) /
+  2 +
   halfStrokeWidth}V${headTailY}H${halfStrokeWidth}Z`;
 
 type Props = {
@@ -175,7 +179,6 @@ export default class ArrowWidget extends React.Component<Props, State> {
 
     // $FlowFixMe
     const lblValue = convertUnits(data, this.props.widget.unit, 3);
-
     // $FlowIssue
     // this._textEl &&
     //   (this._textEl.innerHTML = lblValue.value + ' ' + lblValue.unit);
@@ -196,7 +199,8 @@ export default class ArrowWidget extends React.Component<Props, State> {
 
       this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
-        const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+        const latestValue =
+          values.length > 0 ? values[values.length - 1].value : {};
 
         if (items.length !== 1) {
           console.error('ArrowWidget only supports single item');
@@ -222,13 +226,6 @@ export default class ArrowWidget extends React.Component<Props, State> {
       });
     }, 200);
   }
-
-  // componentDidUpdate() {
-  //   setTimeout(() => {
-  //     console.log('KKKKKKKKKKKK');
-  //     this._recreateD3View();
-  //   }, 200);
-  // }
 
   componentWillUnmount() {
     this._autorunDisposer && this._autorunDisposer();
