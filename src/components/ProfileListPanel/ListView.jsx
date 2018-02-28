@@ -577,6 +577,17 @@ export default class ListView extends React.Component {
               />
             </div>
           ) : null}
+          {IS_DEVELOPMENT && hasPerformancePanel ? (
+            <div className="menuItemWrapper">
+              <MenuItem
+                className="profileListContextMenu reset-high-water-mark"
+                onClick={() => this.props.api.resetHighWaterMark(profile.id)}
+                text={globalString('profile/menu/resetHWM')}
+                intent={Intent.NONE}
+                iconName="pt-icon-heat-grid"
+              />
+            </div>
+          ) : null}
           <div className="menuItemWrapper">
             <MenuItem
               className="profileListContextMenu newWindow"

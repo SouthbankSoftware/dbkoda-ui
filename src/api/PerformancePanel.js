@@ -243,6 +243,15 @@ export default class PerformancePanelApi {
     }
   }
 
+  resetHighWaterMark(profileId: UUID) {
+    const statsSrv = featherClient();
+    statsSrv.statsService.patch(profileId, {resetStats: true})
+      .then((res) => {
+        console.log('rest hwm', res);
+      })
+      .catch(err => console.error(err));
+  }
+
   _startDisplaySleepBlocker() {
     if (IS_ELECTRON) {
       const electron = window.require('electron');
