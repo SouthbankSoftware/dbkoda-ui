@@ -158,7 +158,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     this._createD3View(bVertical);
   };
 
-  _updateD3ViewData = (data: Object) => {
+  _updateD3ViewData = (data: Object, stats: Object) => {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
@@ -167,10 +167,11 @@ export default class ProgressBarWidget extends React.Component<Props> {
     const sData = Object.keys(data); // .sort(); // sort according to keys to keep the color same
     let arrData = [];
     let sumOfValues = 0;
+    let sumOfHWM = 0;
     if (sData.length > 1) {
       // Case where there are more than 1 data items to display
       for (let I = 0; I < sData.length; I += 1) {
-        if (I == 0 && this.props.widget.firstValueIsHighWaterMark) {
+        if (I === 0 && this.props.widget.firstValueIsHighWaterMark) {
           // Discard first value, set high water mark.
           this._totalDivisor = data[sData[I]];
           sumOfValues = data[sData[I]];
@@ -194,6 +195,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         if (!this.props.widget.firstValueIsHighWaterMark) {
           sumOfValues += elem.value;
           elem.sumValue = sumOfValues;
+          sumOfHWM += stats[elem.key].hwm;
         } else {
           elem.sumValue = elem.value;
         }
@@ -205,7 +207,11 @@ export default class ProgressBarWidget extends React.Component<Props> {
       ) {
         arrData = _.reverse(arrData);
       }
-      this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label
+      if (this.props.widget.firstValueIsHighWaterMark) {
+        this._chartLabel = sumOfValues;
+      } else {
+        this._chartLabel = sumOfHWM; // for multi item chart it will show the sum of value in the text label
+      }
     } else if (sData.length === 1) {
       // specific case of only one data item
       arrData.push({
@@ -214,8 +220,13 @@ export default class ProgressBarWidget extends React.Component<Props> {
         key: sData[0],
         sumValue: data[sData[0]]
       });
-      this._chartLabel = arrData[0].value; // for single item chart it will always show the item value in text label
+      sumOfHWM = stats[sData[0]].hwm;
       sumOfValues = arrData[0].value;
+      if (!this.props.widget.firstValueIsHighWaterMark) {
+        this._chartLabel = sumOfHWM; // for single item chart it will always show the item value in text label
+      } else {
+        this._chartLabel = sumOfValues; // for single item chart it will always show the item value in text label
+      }
     } else {
       // console.error(
       //   'ProgressBarWidget (',
@@ -225,15 +236,15 @@ export default class ProgressBarWidget extends React.Component<Props> {
       return;
     }
     if (this.props.widget.useHighWaterMark) {
-      const newHighWaterMark = Math.ceil(sumOfValues * 1.5);
+      const newHighWaterMark = sumOfHWM;
       if (
         !this._totalDivisor ||
-        (this._totalDivisor > 0 && sumOfValues >= this._totalDivisor) // update HighWaterMark only it is not set or smaller then the current sum of values
+        (this._totalDivisor > 0 && sumOfHWM >= this._totalDivisor) // update HighWaterMark only it is not set or smaller then the current sum of values
       ) {
         this._totalDivisor = newHighWaterMark;
       }
     } else if (!this.props.widget.firstValueIsHighWaterMark) {
-      this._totalDivisor = sumOfValues;
+      this._totalDivisor = sumOfHWM;
     }
 
     // If part of high water mark group, set group value.
@@ -271,7 +282,8 @@ export default class ProgressBarWidget extends React.Component<Props> {
       })
       .transition(t)
       .attr('width', d => {
-        const cWidth = d.sumValue / this._totalDivisor * chartWidth;
+        const perc = d.sumValue / this._totalDivisor;
+        const cWidth = Math.min(perc, 1) * chartWidth;
         return isNaN(cWidth) || cWidth < 0 ? 0 : cWidth;
       });
 
@@ -376,13 +388,15 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
       this._autorunDisposer = autorun(() => {
         const { values, unit } = this.props.widget;
-        const latestValue =
-          values.length > 0 ? values[values.length - 1].value : {};
+        const latest = values.length > 0 ? values[values.length - 1] : {};
+        if (_.isEmpty(latest)) {
+          return;
+        }
+        const {value: latestValue, stats: latestStats} = latest;
 
-        // const testData = {'item-001': 15, 'item-002': 130};
         this._itemValues = latestValue;
         this._unit = unit;
-        this._updateD3ViewData(latestValue);
+        this._updateD3ViewData(latestValue, latestStats);
         if (this.toolTipLegend && this.hasRendered && this._itemValues) {
           this.toolTipLegend.setValues(this._itemValues);
         }
