@@ -397,7 +397,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
           return;
         }
         const {value: latestValue, stats: latestStats} = latest;
-
+        if (_.isEmpty(latestValue)) {
+          return;
+        }
         this._itemValues = latestValue;
         this._unit = unit;
         this._updateD3ViewData(latestValue, latestStats);
