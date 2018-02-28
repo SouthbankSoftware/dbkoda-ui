@@ -151,7 +151,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     this._createD3View(bVertical);
   };
 
-  _updateD3ViewData = (data: Object, stats: Object) => {
+  _updateD3ViewData = (data: Object) => {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
@@ -161,6 +161,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     let arrData = [];
     let sumOfValues = 0;
     let sumOfHWM = 0;
+    const { stats } = this.props.performancePanel;
     if (sData.length > 1) {
       // Case where there are more than 1 data items to display
       for (let I = 0; I < sData.length; I += 1) {
@@ -392,13 +393,13 @@ export default class ProgressBarWidget extends React.Component<Props> {
         if (_.isEmpty(latest)) {
           return;
         }
-        const {value: latestValue, stats: latestStats} = latest;
+        const {value: latestValue} = latest;
         if (_.isEmpty(latestValue)) {
           return;
         }
         this._itemValues = latestValue;
         this._unit = unit;
-        this._updateD3ViewData(latestValue, latestStats);
+        this._updateD3ViewData(latestValue);
         if (this.toolTipLegend && this.hasRendered && this._itemValues) {
           this.toolTipLegend.setValues(this._itemValues);
         }
