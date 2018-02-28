@@ -5,7 +5,7 @@
  * @Date:   2018-01-31T16:32:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-23T18:01:22+11:00
+ * @Last modified time: 2018-02-28T13:48:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,7 +29,7 @@
 import * as React from 'react';
 import { autorun } from 'mobx';
 import type { WidgetState } from '~/api/Widget';
-
+import type { PerformancePanelState } from '~/api/PerformancePanel';
 import * as d3 from 'd3';
 // $FlowFixMe
 import 'd3-selection-multi';
@@ -59,6 +59,7 @@ const arrowMaskPathDes = `M${width / 2},${halfStrokeWidth}L${width -
   halfStrokeWidth}V${headTailY}H${halfStrokeWidth}Z`;
 
 type Props = {
+  performancePanel: PerformancePanelState,
   widget: WidgetState,
   widgetStyle: *,
   rotate?: number
@@ -233,11 +234,16 @@ export default class ArrowWidget extends React.Component<Props, State> {
   }
 
   render() {
-    const { widget, widgetStyle } = this.props;
+    const { performancePanel, widget, widgetStyle } = this.props;
     const { text } = this.state;
 
     return (
-      <Widget className="ArrowWidget" widget={widget} widgetStyle={widgetStyle}>
+      <Widget
+        className="ArrowWidget"
+        performancePanel={performancePanel}
+        widget={widget}
+        widgetStyle={widgetStyle}
+      >
         <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
         <div className="text" ref={_textEl => (this._textEl = _textEl)}>
           {text}

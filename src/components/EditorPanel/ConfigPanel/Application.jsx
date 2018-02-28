@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: chris
+ * @Date:   2017-09-27T10:39:11+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-27T13:36:53+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,13 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: chris
- * @Date:   2017-09-27T10:39:11+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T13:14:38+11:00
  */
 
 import React from 'react';
@@ -46,12 +45,22 @@ export default class Application extends React.Component {
     return (
       <div className="formContentWrapper">
         <div className="form-row">
-          { this.props.renderFieldLabel('telemetryEnabled') }
-          <Checkbox type="text" id="telemetryEnabled" checked={this.props.settings.telemetryEnabled} onChange={this.onCheckboxToggle} />
+          {this.props.renderFieldLabel('telemetryEnabled')}
+          <Checkbox
+            type="text"
+            id="telemetryEnabled"
+            checked={this.props.settings.telemetryEnabled}
+            onChange={this.onCheckboxToggle}
+          />
         </div>
         <div className="form-row">
-          { this.props.renderFieldLabel('keepDisplayAwake') }
-          <Checkbox type="text" id="keepDisplayAwake" checked={this.props.settings.keepDisplayAwake} onChange={this.onCheckboxToggle} />
+          {this.props.renderFieldLabel('performancePanel_preventDisplaySleep')}
+          <Checkbox
+            type="text"
+            id="performancePanel_preventDisplaySleep"
+            checked={this.props.settings.performancePanel_preventDisplaySleep}
+            onChange={this.onCheckboxToggle}
+          />
         </div>
       </div>
     );

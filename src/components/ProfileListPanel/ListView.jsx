@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T09:36:23+11:00
+ * @Last modified time: 2018-02-28T13:30:33+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,8 +24,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-/* eslint no-unused-vars:warn */
 import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
@@ -131,11 +129,12 @@ export default class ListView extends React.Component {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: (
             <span
+              // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{
                 __html: 'Error: ' + err.message.substring(0, 256) + '...'
               }}
             />
-          ), // eslint-disable-line react/no-danger
+          ),
           className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });

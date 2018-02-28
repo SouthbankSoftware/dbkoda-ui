@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T09:58:38+11:00
+ * @Last modified time: 2018-02-28T13:46:55+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -50,9 +50,14 @@ export type WidgetState = {
   items: string[],
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
-  waterMarkGroup: ?number,
   errorLevel: ?WidgetErrorLevel,
-  error: ?string
+  error: ?string,
+  stats: {},
+  displayName?: *,
+  widgetItemKeys?: *,
+  widgetDisplayNames?: *,
+  showRunQueue?: *,
+  useHighWaterMark?: *
 };
 
 export default class WidgetApi {
@@ -93,21 +98,21 @@ export default class WidgetApi {
 
     const id = (extraState && extraState.id) || uuid();
 
-    const widget: WidgetState = {
+    const widget: WidgetState = observable.shallowObject({
       id,
       profileId,
       type,
       items,
       values: observable.shallowArray(),
-      stats: {},
       state: 'loading',
-      waterMarkGroup: 0,
       errorLevel: null,
       error: null,
+      waterMarkGroup: 0,
+      stats: {},
       ...extraState
-    };
+    });
 
-    widgets.set(id, observable.shallowObject(widget));
+    widgets.set(id, widget);
 
     return id;
   }

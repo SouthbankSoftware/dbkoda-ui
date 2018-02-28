@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-26T16:14:24+11:00
+ * @Last modified time: 2018-02-28T12:57:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -128,18 +128,19 @@ if (IS_ELECTRON) {
     logToMain('notice', 'executing app closing logic...');
 
     Broker.emit(EventType.WINDOW_CLOSING);
+
+    // TODO: verify this logic
+    // store.closeConnection();
   });
 }
 
-// BUG: confirmation dialog won't prevent window closing when devtools is not opened
+// NOTE: we cannot use this to show confirmation dialog because of this bug:
 // https://github.com/electron/electron/issues/9966
 window.onbeforeunload = () => {
   logToMain('notice', 'executing app refreshing logic...');
 
   Broker.emit(EventType.WINDOW_REFRESHING);
   store.api && store.api.deleteProfileFromDrill({ removeAll: true });
-  // TODO: verify this logic
-  // store.closeConnection();
   ReactDOM.unmountComponentAtNode(rootEl);
 
   // save store anyway
