@@ -74,6 +74,9 @@ export const OutputToolbarContexts = {
   RAW: 'Raw',
   TABLE_VIEW: 'TableView',
   CHART_VIEW: 'ChartView',
-  ENHANCED_VIEW: 'JsonView'
+  ENHANCED_VIEW: 'EnhancedJson',
+  EXPLAIN_VIEW: 'Explain',
+  DETAILS_VIEW: 'Details',
+  STORAGE_VIEW: 'Storage'
 };
 declare type OutputToolbarContext = $Keys<typeof OutputToolbarContexts>;

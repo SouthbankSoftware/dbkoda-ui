@@ -55,6 +55,7 @@ export default class View extends React.Component {
         toJS(this.props.config.settings),
       );
     });
+    this.props.store.configPage.changedFields = [];
     this.checkConfig = this.checkConfig.bind(this);
     this.getConfigForm = this.getConfigForm.bind(this);
     this.renderFieldLabel = this.renderFieldLabel.bind(this);
@@ -71,12 +72,6 @@ export default class View extends React.Component {
         }
       },
     );
-  }
-
-  componentWillMount() {
-    runInAction(() => {
-      this.props.store.configPage.newSettings = this.props.config.settings;
-    });
   }
 
   @action.bound
