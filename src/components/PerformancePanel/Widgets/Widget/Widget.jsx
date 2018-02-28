@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-23T10:32:43+11:00
+ * @Last modified time: 2018-02-28T13:08:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,8 +27,9 @@
  */
 
 import * as React from 'react';
-import { action, computed } from 'mobx';
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
+import type { PerformancePanelState } from '~/api/PerformancePanel';
 import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
 import _ from 'lodash';
@@ -36,8 +37,6 @@ import ReactResizeDetector from 'react-resize-detector';
 import { Tooltip, Position } from '@blueprintjs/core';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
-// $FlowFixMe
-import { Broker, EventType } from '~/helpers/broker';
 import type { WidgetValue } from '~/api/Widget';
 import InfoIcon from '~/styles/icons/explain-query-icon.svg';
 import HistoryView from './HistoryView';
@@ -45,7 +44,6 @@ import AlarmView, { type Alarm } from './AlarmView';
 import './Widget.scss';
 
 const DEBOUNCE_DELAY = 100;
-const MAX_HISTORY_SIZE = 720; // 1h with 5s sampling rate
 const HISTORY_VIEW_WIDTH = 537;
 const HISTORY_VIEW_HEIGHT = 257;
 const EMPTY_ALARMS = [];
@@ -53,6 +51,7 @@ const EMPTY_ALARMS = [];
 export type Projection = { [string]: (value: WidgetValue) => number };
 
 type Props = {
+  performancePanel: PerformancePanelState,
   widget: WidgetState,
   widgetStyle: *,
   children: *,
@@ -107,56 +106,9 @@ export default class Widget extends React.Component<Props, State> {
     );
   };
 
-  _onData = action(payload => {
-    const { timestamp, value: rawValue, stats } = payload;
-    // $FlowFixMe
-    const { items, values, showAlarms } = this.props.widget;
-
-    if (values.length >= MAX_HISTORY_SIZE) {
-      values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
-    }
-
-    const value = {
-      timestamp,
-      value: _.pick(rawValue, items),
-      stats: _.pick(stats, items)
-    };
-
-    if (showAlarms) {
-      const alarmObj = _.get(rawValue, `alarm.${showAlarms}`);
-
-      if (alarmObj) {
-        // $FlowFixMe
-        value.alarms = _.orderBy(
-          _.map(alarmObj, v => {
-            const alarm = _.pick(v, ['level', 'message']);
-            alarm.timestamp = timestamp;
-            return alarm;
-          }),
-          ['timestamp'],
-          ['desc']
-        );
-      }
-    }
-
-    values.push(value);
-  });
-
   _onResize = _.debounce((...args) => {
     _.invoke(this.props, 'onResize', ...args);
   }, DEBOUNCE_DELAY);
-
-  componentDidMount() {
-    const { profileId } = this.props.widget;
-
-    Broker.on(EventType.STATS_DATA(profileId), this._onData);
-  }
-
-  componentWillUnmount() {
-    const { profileId } = this.props.widget;
-
-    Broker.off(EventType.STATS_DATA(profileId), this._onData);
-  }
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;

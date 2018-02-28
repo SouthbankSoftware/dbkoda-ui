@@ -1,8 +1,7 @@
 /**
- *
  * Created by mike on 06/02/2018
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-19T16:06:30+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-28T14:11:18+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,11 +24,13 @@
 
 import * as d3 from 'd3';
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { action, autorun } from 'mobx';
 import _ from 'lodash';
 import { PopoverInteractionKind } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/labs';
+import type { WidgetState } from '~/api/Widget';
+import type { PerformancePanelState } from '~/api/PerformancePanel';
 import './StackedRadialWidget.scss';
 import { convertUnits } from './Utils';
 import Widget from './Widget';
@@ -37,20 +38,20 @@ import Legend from './Legend';
 
 const colors = ['#AC8BC0', '#E26847', '#42BB6D', '#7040A3', '#365F87'];
 
-// Flow type definitions.
+type Props = {
+  performancePanel: PerformancePanelState,
+  widget: WidgetState,
+  widgetStyle: *
+};
 
-@inject(({ store, api }, { widget }) => {
-  return {
-    store,
-    api,
-    widget
-  };
-})
+type State = {
+  width: number,
+  height: number,
+  lastLayerTweened: *
+};
+
 @observer
-export default class StackedRadialWidget extends React.Component<
-  Object,
-  Object
-> {
+export default class StackedRadialWidget extends React.Component<Props, State> {
   static width = 60;
   static height = 60;
   static minRadius = 10;
@@ -122,9 +123,7 @@ export default class StackedRadialWidget extends React.Component<
         minValue / (StackedRadialWidget.ringGapScaleFactor * this.scaleFactor)
       );
     }
-    return (
-      StackedRadialWidget.minRadius + this.state.width / (8 * this.scaleFactor)
-    );
+    return StackedRadialWidget.minRadius + this.state.width / (8 * this.scaleFactor);
   }
 
   _getOuterRadiusSize(layer: number) {
@@ -156,8 +155,7 @@ export default class StackedRadialWidget extends React.Component<
       );
     } else {
       xTranslate += parseInt(
-        this._getOuterRadiusSize(this.props.widget.items.length) +
-          this.state.width,
+        this._getOuterRadiusSize(this.props.widget.items.length) + this.state.width,
         10
       );
     }
@@ -168,10 +166,7 @@ export default class StackedRadialWidget extends React.Component<
       .attr('width', this.state.width)
       .attr('height', this.state.height)
       .append('g')
-      .attr(
-        'transform',
-        'translate(' + xTranslate + ',' + this.state.height / 2 + ')'
-      );
+      .attr('transform', 'translate(' + xTranslate + ',' + this.state.height / 2 + ')');
 
     let tooltip = '?';
     let count = 0;
@@ -299,9 +294,7 @@ export default class StackedRadialWidget extends React.Component<
         .innerRadius(this._getInnerRadiusSize(data.index))
         .outerRadius(this._getOuterRadiusSize(data.index))
         .cornerRadius(
-          (this._getOuterRadiusSize(data.index) -
-            this._getInnerRadiusSize(data.index)) /
-            2
+          (this._getOuterRadiusSize(data.index) - this._getInnerRadiusSize(data.index)) / 2
         );
     } catch (e) {
       console.error('Caught Error: ', e);
@@ -380,14 +373,10 @@ export default class StackedRadialWidget extends React.Component<
         lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
         return lblValue.value + ' ' + lblValue.unit;
       });
-      field.field
-        .select('text.completed')
-        .attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
+      field.field.select('text.completed').attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
     }
 
-    field.field
-      .select('title')
-      .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+    field.field.select('title').attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
   }
 
   @action.bound
@@ -431,11 +420,7 @@ export default class StackedRadialWidget extends React.Component<
     }
   });
 
-  getMaximumValueFromHistory(
-    values: Array<Object>,
-    item: string,
-    key: string
-  ): number {
+  getMaximumValueFromHistory(values: Array<Object>, item: string, key: string): number {
     let prev = null;
     let max = 0;
     values.forEach(value => {
@@ -461,12 +446,9 @@ export default class StackedRadialWidget extends React.Component<
       this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
 
-        const latestValue =
-          values.length > 0 ? values[values.length - 1].value : {};
+        const latestValue = values.length > 0 ? values[values.length - 1].value : {};
         if (items.length == 1) {
-          console.error(
-            'Please use Radial and not StackedRadial for single item metrics.'
-          );
+          console.error('Please use Radial and not StackedRadial for single item metrics.');
           return;
         }
         if (latestValue === undefined) return;
@@ -516,11 +498,7 @@ export default class StackedRadialWidget extends React.Component<
     });
     const wrapperStyle = { width: this.state.width * 0.55 };
     return (
-      <Widget
-        widget={widget}
-        widgetStyle={widgetStyle}
-        onResize={this._onResize}
-      >
+      <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize}>
         <div
           className="StackedRadialWidget"
           // $FlowFixMe
@@ -555,12 +533,7 @@ export default class StackedRadialWidget extends React.Component<
               <div className="radialWrapper" style={wrapperStyle}>
                 <div className="display-name">{displayName}</div>
                 {this.props.widget.items.map((item, count) => {
-                  const classes =
-                    'radial radial-' +
-                    (count + 1) +
-                    ' ' +
-                    (count + 1) +
-                    ' item';
+                  const classes = 'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
                   return <div className={classes} />;
                 })}
               </div>

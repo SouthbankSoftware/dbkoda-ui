@@ -24,8 +24,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint-disable react/prop-types */
-/* eslint no-unused-vars:warn */
 import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
@@ -134,11 +132,12 @@ export default class ListView extends React.Component {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: (
             <span
+              // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{
                 __html: 'Error: ' + err.message.substring(0, 256) + '...'
               }}
             />
-          ), // eslint-disable-line react/no-danger
+          ),
           className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });

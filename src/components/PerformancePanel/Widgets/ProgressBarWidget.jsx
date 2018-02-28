@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-28T11:18:57+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-28T14:21:43+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,8 +27,8 @@
 import * as React from 'react';
 import _ from 'lodash';
 import { autorun } from 'mobx';
-import { inject } from 'mobx-react';
 import type { WidgetState } from '~/api/Widget';
+import type { PerformancePanelState } from '~/api/PerformancePanel';
 import * as d3 from 'd3';
 import 'd3-selection-multi';
 import { PopoverInteractionKind } from '@blueprintjs/core';
@@ -46,20 +46,12 @@ const barHeight = Math.round(vbHeight * 50 / 100);
 const chartWidth = vbWidth - 60;
 
 type Props = {
+  performancePanel: PerformancePanelState,
   widget: WidgetState,
   widgetStyle: *,
   rotate?: number
 };
 
-@inject(({ store: { performancePanels }, api }, { profileId }) => {
-  const performancePanel = performancePanels.get(profileId);
-  return {
-    store: {
-      performancePanel
-    },
-    api
-  };
-})
 export default class ProgressBarWidget extends React.Component<Props> {
   _chartEl: *;
   _chart: *;
@@ -253,16 +245,20 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
     // If part of high water mark group, set group value.
     if (this.props.widget.waterMarkGroup) {
-      const highestValue = this.props.store.performancePanel
-        .highWaterMarkGroups[this.props.widget.waterMarkGroup];
-      if (this._totalDivisor > highestValue) {
-        this.props.store.performancePanel.highWaterMarkGroups[
-          this.props.widget.waterMarkGroup
-        ] = this._totalDivisor;
-      }
-      this._totalDivisor = this.props.store.performancePanel.highWaterMarkGroups[
-        this.props.widget.waterMarkGroup
-      ];
+      // const highestValue = this.props.store.performancePanel
+      //   .highWaterMarkGroups[this.props.widget.waterMarkGroup];
+      // if (this._totalDivisor > highestValue) {
+      //   this.props.store.performancePanel.highWaterMarkGroups[
+      //     this.props.widget.waterMarkGroup
+      //   ] = this._totalDivisor;
+      // }
+      // this._totalDivisor = this.props.store.performancePanel.highWaterMarkGroups[
+      //   this.props.widget.waterMarkGroup
+      // ];
+
+      // TODO: this is temp workaround. change to use PerformancePanelState.stats. Also cleanup
+      // extraState: waterMarkGroup, maxValue, useHighWaterMark
+      this._totalDivisor = 10;
     }
 
     const t = d3.transition().duration(750);
@@ -397,7 +393,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
           return;
         }
         const {value: latestValue, stats: latestStats} = latest;
-
+        if (_.isEmpty(latestValue)) {
+          return;
+        }
         this._itemValues = latestValue;
         this._unit = unit;
         this._updateD3ViewData(latestValue, latestStats);
@@ -423,7 +421,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
-    const { widget, widgetStyle } = this.props;
+    const { performancePanel, widget, widgetStyle } = this.props;
     const { chartTitle, showVertical } = widget;
     const chartTotalStyle = { top: '40%' };
     if (showVertical) {
@@ -433,7 +431,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this.hasRendered = true;
     }, 200);
     return (
-      <Widget widget={widget} widgetStyle={widgetStyle}>
+      <Widget performancePanel={performancePanel} widget={widget} widgetStyle={widgetStyle}>
         <div className="ProgressBarWidget">
           <Popover2
             minimal
