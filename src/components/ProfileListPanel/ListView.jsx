@@ -574,7 +574,7 @@ export default class ListView extends React.Component {
               />
             </div>
           ) : null}
-          {IS_DEVELOPMENT && hasPerformancePanel ? (
+          {hasPerformancePanel ? (
             <div className="menuItemWrapper">
               <MenuItem
                 className="profileListContextMenu reset-high-water-mark"
