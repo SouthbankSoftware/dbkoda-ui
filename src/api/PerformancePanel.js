@@ -255,7 +255,6 @@ export default class PerformancePanelApi {
           const value = {
             timestamp,
             value: _.pick(rawValue, items),
-            stats: _.pick(stats, items)
           };
 
           if (showAlarms) {

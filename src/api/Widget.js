@@ -52,7 +52,6 @@ export type WidgetState = {
   state: ComponentState,
   errorLevel: ?WidgetErrorLevel,
   error: ?string,
-  stats: {},
   displayName?: *,
   widgetItemKeys?: *,
   widgetDisplayNames?: *,
@@ -108,7 +107,6 @@ export default class WidgetApi {
       errorLevel: null,
       error: null,
       waterMarkGroup: 0,
-      stats: {},
       ...extraState
     });
 
