@@ -245,8 +245,9 @@ export default class DonutWidget extends React.Component<Object, Object> {
     values: Array<Object>,
     items: Array<Object>
   ): Object {
-    const latestValue = values.length > 0 ? values[values.length - 1] : {};
-    if (_.isEmpty(latestValue)) {
+    const latestValue = _.findLast(values, v => !_.isEmpty(v.value));
+    // const latestValue = values.length > 0 ? values[values.length - 1] : {};
+    if (!latestValue || _.isEmpty(latestValue)) {
       return {};
     }
     const value = latestValue.value[items[0]];
