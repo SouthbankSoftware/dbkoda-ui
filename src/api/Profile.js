@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T09:40:45+11:00
+ * @Last modified time: 2018-03-02T00:39:52+11:00
  */
 
 import { action, observable } from 'mobx';
@@ -15,6 +15,7 @@ import { Broker, EventType } from '~/helpers/broker';
 import EventLogging from '#/common/logging/EventLogging';
 import { ProfileStatus } from '#/common/Constants';
 import StaticApi from './static';
+import { performancePanelStatuses } from './PerformancePanel';
 
 export type Profile = {
   id: string,
@@ -49,7 +50,7 @@ export type Profile = {
   initialMsg: string,
   mongoType: string,
   bReconnect: boolean, // Boolean variable to be set when profile is reconnected from profileList
-  usePasswordStore: boolean,
+  usePasswordStore: boolean
 };
 
 export default class ProfileApi {
@@ -68,18 +69,14 @@ export default class ProfileApi {
     // this.profileList = store.profileList;
 
     this.setToasterCallback = this.setToasterCallback.bind(this);
-    this.validateConnectionFormData = this.validateConnectionFormData.bind(
-      this
-    );
+    this.validateConnectionFormData = this.validateConnectionFormData.bind(this);
     this.connectProfile = this.connectProfile.bind(this);
     this.onFail = this.onFail.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.saveProfile = this.saveProfile.bind(this);
   }
 
-  setToasterCallback(
-    callBack: (strErrorCode: String, err: Error | null) => void
-  ) {
+  setToasterCallback(callBack: (strErrorCode: String, err: Error | null) => void) {
     this.toasterCallback = callBack;
   }
 
@@ -97,7 +94,7 @@ export default class ProfileApi {
   validateConnectionFormData(data: Profile): boolean {
     const { profiles } = this.profileStore;
     let validate = true;
-    profiles.forEach((value) => {
+    profiles.forEach(value => {
       if (value.alias === data.alias) {
         this.toasterCallback && this.toasterCallback('existingAlias');
         validate = false;
@@ -151,8 +148,7 @@ export default class ProfileApi {
       };
 
       if (data.sshTunnel) {
-        connectionUrl =
-          ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+        connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       }
       if (data.passRadio) {
         query.remotePass = data.remotePass;
@@ -193,7 +189,7 @@ export default class ProfileApi {
     service.timeout = 30000;
     return service
       .create({}, { query })
-      .then((res) => {
+      .then(res => {
         if (terminalQuery) {
           terminalQuery.profileId = res.id;
           this.api.addSshTerminal(terminalQuery, {
@@ -204,7 +200,7 @@ export default class ProfileApi {
         }
         this.onSuccess(res, data);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         this.onFail();
         this.toasterCallback && this.toasterCallback('connectionFail', err);
@@ -248,8 +244,12 @@ export default class ProfileApi {
         });
       }
       const { passwordStoreEnabled } = this.config.settings;
-      const storeNeedsPassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(res.id) : false;
-      const storeNeedsRemotePassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(`${res.id}-s`) : false;
+      const storeNeedsPassword = passwordStoreEnabled
+        ? this.api.passwordApi.isProfileMissingFromStore(res.id)
+        : false;
+      const storeNeedsRemotePassword = passwordStoreEnabled
+        ? this.api.passwordApi.isProfileMissingFromStore(`${res.id}-s`)
+        : false;
       if (passwordStoreEnabled && storeNeedsPassword) {
         this.api.passwordApi.removeMissingStoreId(res.id);
       }
@@ -320,9 +320,7 @@ export default class ProfileApi {
               .then(() => {
                 value.status = ProfileStatus.OPEN;
               })
-              .catch((err) =>
-                console.error('failed to create shell connection', err)
-              );
+              .catch(err => console.error('failed to create shell connection', err));
           }
         });
       } else {
@@ -330,7 +328,8 @@ export default class ProfileApi {
         Broker.emit(EventType.NEW_PROFILE_CREATED, profiles.get(res.id));
       }
 
-      this.api.startPerformancePanel(profile.id, false);
+      this.api.hasPerformancePanel(profile.id) &&
+        this.api.transformPerformancePanel(profile.id, performancePanelStatuses.background);
     }
     this.toasterCallback && this.toasterCallback('connectionSuccess');
   }
@@ -377,9 +376,7 @@ export default class ProfileApi {
       const doc = StaticApi.createNewDocumentObject(content);
       doc.lineSep = StaticApi.determineEol(content);
 
-      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(
-        EditorTypes.DEFAULT
-      );
+      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(EditorTypes.DEFAULT);
       const editorId = uuidV1();
       editors.set(
         editorId,

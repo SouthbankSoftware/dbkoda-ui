@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T14:32:29+11:00
+ * @Last modified time: 2018-03-02T00:41:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -40,6 +40,7 @@ import { PerformancePanel } from '#/PerformancePanel';
 import { ProfileManager } from '#/ProfileManager';
 import { DrawerPanes } from '#/common/Constants';
 import PasswordDialog from '#/common/PasswordDialog';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -136,7 +137,12 @@ class App extends React.Component {
         {store.performancePanel ? (
           <PerformancePanel
             performancePanel={store.performancePanel}
-            onClose={() => api.closePerformancePanel(store.performancePanel.profileId)}
+            onClose={() =>
+              api.transformPerformancePanel(
+                store.performancePanel.profileId,
+                performancePanelStatuses.background
+              )
+            }
           />
         ) : null}
         {store.drawer && store.drawer.drawerChild == DrawerPanes.PROFILE ? (
