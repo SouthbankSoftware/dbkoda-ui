@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T16:31:08+11:00
+ * @Last modified time: 2018-03-01T16:44:55+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -48,7 +48,6 @@ global.locale = `${language}-${region}`;
 
 global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
 global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
-
 
 export default class Store {
   @observable performancePanel = null;
@@ -116,7 +115,6 @@ export default class Store {
     }
   };
   constructor() {
-    Globalize.locale('en');
     ipcRenderer.on('performance', this.handleDataSync);
   }
 }

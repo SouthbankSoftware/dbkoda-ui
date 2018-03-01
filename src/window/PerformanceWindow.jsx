@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T16:09:48+11:00
+ * @Last modified time: 2018-03-01T16:49:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -40,12 +40,17 @@ import '#/App.scss';
  }))
  @observer
 class PerformanceWindow extends React.Component {
+  performancePanelVisible = true;
+  constructor() {
+    super();
+    document.addEventListener('visibilitychange', this._handleAppVisibility, false);
+  }
   render() {
     const { store } = this.props;
 
     return (
       <div>
-        {store.performancePanel ? (
+        {store.performancePanel && this.performancePanelVisible ? (
           <PerformancePanel
             performancePanel={store.performancePanel}
             onClose={null}
@@ -55,6 +60,15 @@ class PerformanceWindow extends React.Component {
         )}
       </div>
     );
+  }
+  _handleAppVisibility() {
+    if (document.hidden) {
+      console.log('App is Hidden!!!');
+      this.performancePanelVisible = false;
+    } else {
+      console.log('App is Visible!!!');
+      this.performancePanelVisible = true;
+    }
   }
 }
 

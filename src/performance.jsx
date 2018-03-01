@@ -3,7 +3,7 @@
  * @Date:   2018-02-26T13:19:02+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T16:22:22+11:00
+ * @Last modified time: 2018-03-01T16:42:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,13 +26,15 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import mobx from 'mobx';
+import mobx, { useStrict } from 'mobx';
 import { Provider } from 'mobx-react';
 import { AppContainer } from 'react-hot-loader';
 
 import Store from '~/window/stores/performance';
 
 import PerformanceWindow from '~/window/PerformanceWindow';
+
+useStrict(true);
 
 const rootEl = document.getElementById('root');
 
