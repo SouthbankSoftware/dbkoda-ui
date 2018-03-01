@@ -303,6 +303,9 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
             if (isNaN(returnValue)) return 0;
             return returnValue;
           }
+          if (this.maxValue === 0) {
+            return 0;
+          }
           returnValue = d.percentage / this.maxValue * StackedRadialWidget.PI;
           if (isNaN(returnValue)) return 0;
           return returnValue;
@@ -410,8 +413,8 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     }
     const { values } = this.props.widget;
     const latest = values.length > 0 ? values[values.length - 1] : {};
-    // $FlowFixMe
-    const { value: latestValue, stats: latestStats } = latest;
+    const { value: latestValue } = latest;
+    const { stats } = this.props.performancePanel;
     // $FlowFixMe
     this.itemValues = [];
     if (!_.isEmpty(latestValue)) {
@@ -421,7 +424,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           : parseInt(latestValue[key], 10);
         // If fixedValue is null, give a 0 value so it will render straight away.
         this.itemValues[key] = fixedValue;
-        const hwm = latestStats[key].hwm;
+        const hwm = stats[key].hwm;
         // Check if it's the highest value ever.
         if (!this.maxValue || this.maxValue < hwm) {
           this.maxValue = hwm === 0 ? fixedValue : hwm;

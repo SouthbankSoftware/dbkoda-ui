@@ -255,7 +255,6 @@ export default class PerformancePanelApi {
           const value = {
             timestamp,
             value: _.pick(rawValue, items),
-            stats: _.pick(stats, items)
           };
 
           if (showAlarms) {
@@ -387,6 +386,15 @@ export default class PerformancePanelApi {
     //     this._stopPowerMonitor();
     //   }
     // }
+  }
+
+  resetHighWaterMark(profileId: UUID) {
+    const statsSrv = featherClient();
+    statsSrv.statsService.patch(profileId, {resetStats: true})
+      .then((res) => {
+        console.log('rest hwm', res);
+      })
+      .catch(err => console.error(err));
   }
 
   _startDisplaySleepBlocker() {

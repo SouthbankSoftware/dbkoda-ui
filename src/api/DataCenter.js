@@ -88,6 +88,7 @@ export default class DataCenter {
         'stopPerformancePanel',
         'openPerformancePanel',
         'closePerformancePanel',
+        'resetHighWaterMark'
       ]),
     );
 
