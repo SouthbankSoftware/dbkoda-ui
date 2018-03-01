@@ -49,7 +49,7 @@ export type Profile = {
   initialMsg: string,
   mongoType: string,
   bReconnect: boolean, // Boolean variable to be set when profile is reconnected from profileList
-  usePasswordStore: boolean,
+  usePasswordStore: boolean
 };
 
 export default class ProfileApi {
@@ -97,7 +97,7 @@ export default class ProfileApi {
   validateConnectionFormData(data: Profile): boolean {
     const { profiles } = this.profileStore;
     let validate = true;
-    profiles.forEach((value) => {
+    profiles.forEach(value => {
       if (value.alias === data.alias) {
         this.toasterCallback && this.toasterCallback('existingAlias');
         validate = false;
@@ -193,7 +193,7 @@ export default class ProfileApi {
     service.timeout = 30000;
     return service
       .create({}, { query })
-      .then((res) => {
+      .then(res => {
         if (terminalQuery) {
           terminalQuery.profileId = res.id;
           this.api.addSshTerminal(terminalQuery, {
@@ -204,8 +204,9 @@ export default class ProfileApi {
         }
         this.onSuccess(res, data);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
+        logToMain('error', 'Failed to add SSH Terminal: ' + err);
         this.onFail();
         this.toasterCallback && this.toasterCallback('connectionFail', err);
       });
@@ -248,8 +249,12 @@ export default class ProfileApi {
         });
       }
       const { passwordStoreEnabled } = this.config.settings;
-      const storeNeedsPassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(res.id) : false;
-      const storeNeedsRemotePassword = passwordStoreEnabled ? this.api.passwordApi.isProfileMissingFromStore(`${res.id}-s`) : false;
+      const storeNeedsPassword = passwordStoreEnabled
+        ? this.api.passwordApi.isProfileMissingFromStore(res.id)
+        : false;
+      const storeNeedsRemotePassword = passwordStoreEnabled
+        ? this.api.passwordApi.isProfileMissingFromStore(`${res.id}-s`)
+        : false;
       if (passwordStoreEnabled && storeNeedsPassword) {
         this.api.passwordApi.removeMissingStoreId(res.id);
       }
@@ -320,9 +325,10 @@ export default class ProfileApi {
               .then(() => {
                 value.status = ProfileStatus.OPEN;
               })
-              .catch((err) =>
-                console.error('failed to create shell connection', err)
-              );
+              .catch(err => {
+                console.error('failed to create shell connection', err);
+                logToMain('error', 'Failed to create shell connection: + err');
+              });
           }
         });
       } else {

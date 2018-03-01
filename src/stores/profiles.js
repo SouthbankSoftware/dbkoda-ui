@@ -82,6 +82,7 @@ export default class Profiles {
           className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });
+        logToMain('error', 'Failed to read profiles.yml: ' + e.message);
       });
   }
 
@@ -114,6 +115,7 @@ export default class Profiles {
         className: 'danger',
         iconName: 'pt-icon-thumbs-down'
       });
+      logToMain('error', 'Failed to save profiles.yml: ' + e.message);
     }
   }
 }

@@ -91,7 +91,7 @@ Broker.once(EventType.APP_RENDERED, () => {
 });
 
 Broker.once(EventType.APP_CRASHED, () => {
-  logToMain('error', 'app window crashed');
+  logToMain('error', 'App window crashed!');
   console.error('App window crashed');
   if (IS_ELECTRON) {
     // make a backup of the old stateStore
@@ -121,7 +121,10 @@ if (IS_ELECTRON) {
   const { ipcRenderer } = window.require('electron');
 
   ipcRenderer.on('shouldShowConfirmationDialog', () => {
-    ipcRenderer.send('shouldShowConfirmationDialog-reply', store.hasUnsavedEditorTabs());
+    ipcRenderer.send(
+      'shouldShowConfirmationDialog-reply',
+      store.hasUnsavedEditorTabs()
+    );
   });
 
   ipcRenderer.on('windowClosing', () => {

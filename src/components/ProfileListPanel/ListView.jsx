@@ -247,6 +247,7 @@ export default class ListView extends React.Component {
         })
         .catch(err => {
           console.error('error:', err);
+          logToMain('error', 'Failed to close profile: ' + err);
           if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,

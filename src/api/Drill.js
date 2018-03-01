@@ -117,6 +117,7 @@ export default class DrillApi {
       })
       .catch(err => {
         console.error(err);
+        logToMain('error', 'Drill Response Error: ' + err);
         this.onFailCreate(options, err.code);
       });
   };

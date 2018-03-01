@@ -106,7 +106,7 @@ export default class Config {
     return featherClient()
       .service('files')
       .get(this.configFilePath)
-      .then((file) => {
+      .then(file => {
         runInAction('Apply changes to config from yaml file', () => {
           const newSettings = yaml.safeLoad(file.content);
           for (const key in this.settings) {
@@ -121,12 +121,13 @@ export default class Config {
           this.verifySettings();
         });
       })
-      .catch((e) => {
+      .catch(e => {
         console.error(e);
+        logToMain('error', 'Failed to read config.yml: ' + e);
         NewToaster.show({
           message: `Reading config.yml failed: ${e.message}`,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
         return Promise.reject(e);
       });
@@ -144,7 +145,7 @@ export default class Config {
         .create({
           _id: this.configFilePath,
           content: yaml.safeDump(this.settings, { skipInvalid: true }),
-          watching: false,
+          watching: false
         })
         .then(() => {
           console.log('config.yml updated');
@@ -155,10 +156,11 @@ export default class Config {
         .catch(console.error);
     } catch (e) {
       console.error(e);
+      logToMain('error', 'Failed to save config.yml: ' + e);
       NewToaster.show({
         message: `Saving config.yml failed: ${e.message}`,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     }
   }

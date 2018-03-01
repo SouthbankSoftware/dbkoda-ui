@@ -181,6 +181,7 @@ export default class Analytics extends React.Component {
         })
         .catch(err => {
           console.error(err);
+          logToMain('error', 'Failed to send event to GA: ' + err);
         });
     }
   }
