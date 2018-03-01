@@ -1,7 +1,8 @@
 /**
+ *
  * Created by mike on 06/02/2018
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T14:11:18+11:00
+ * @Last modified by:   mike
+ * @Last modified time: 2018-02-28T15:06:18+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,7 +29,9 @@ import { observer } from 'mobx-react';
 import { action, autorun } from 'mobx';
 import _ from 'lodash';
 import { PopoverInteractionKind } from '@blueprintjs/core';
+// @FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
+// @FlowFixMe
 import type { WidgetState } from '~/api/Widget';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import './StackedRadialWidget.scss';
@@ -66,7 +69,12 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
   field: *;
   scaleFactor: number;
   legend: any;
+  tooltipLegend: any;
   radial: Object;
+  colors: Array<string>;
+  maxValues: Array<*>;
+  maxValue: number;
+  _autorunDisposer: *;
   dataset: () => Array<Object>;
 
   constructor(props: Object) {
@@ -77,6 +85,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       lastLayerTweened: { key: '', index: 1 }
     };
     if (this.props.widget.colorList) {
+      // $FlowFixMe
       this.colors = this.props.widget.colorList;
     } else {
       this.colors = colors;
@@ -123,7 +132,9 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         minValue / (StackedRadialWidget.ringGapScaleFactor * this.scaleFactor)
       );
     }
-    return StackedRadialWidget.minRadius + this.state.width / (8 * this.scaleFactor);
+    return (
+      StackedRadialWidget.minRadius + this.state.width / (8 * this.scaleFactor)
+    );
   }
 
   _getOuterRadiusSize(layer: number) {
@@ -155,7 +166,8 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       );
     } else {
       xTranslate += parseInt(
-        this._getOuterRadiusSize(this.props.widget.items.length) + this.state.width,
+        this._getOuterRadiusSize(this.props.widget.items.length) +
+          this.state.width,
         10
       );
     }
@@ -166,7 +178,10 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       .attr('width', this.state.width)
       .attr('height', this.state.height)
       .append('g')
-      .attr('transform', 'translate(' + xTranslate + ',' + this.state.height / 2 + ')');
+      .attr(
+        'transform',
+        'translate(' + xTranslate + ',' + this.state.height / 2 + ')'
+      );
 
     let tooltip = '?';
     let count = 0;
@@ -268,6 +283,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     // $FlowFixMe
     return t => {
       d.percentage = i(t);
+      // $FlowFixMe
       return this.arc(d)(d);
     };
   }
@@ -294,7 +310,9 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         .innerRadius(this._getInnerRadiusSize(data.index))
         .outerRadius(this._getOuterRadiusSize(data.index))
         .cornerRadius(
-          (this._getOuterRadiusSize(data.index) - this._getInnerRadiusSize(data.index)) / 2
+          (this._getOuterRadiusSize(data.index) -
+            this._getInnerRadiusSize(data.index)) /
+            2
         );
     } catch (e) {
       console.error('Caught Error: ', e);
@@ -349,6 +367,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
           return lblValue.value + ' ' + lblValue.unit;
         }
+        // @FlowIssue
         lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
         return lblValue.value + ' ' + lblValue.unit;
       });
@@ -370,13 +389,18 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
 
           return lblValue.value + ' ' + lblValue.unit;
         }
+        // $FlowFixMe
         lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
         return lblValue.value + ' ' + lblValue.unit;
       });
-      field.field.select('text.completed').attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
+      field.field
+        .select('text.completed')
+        .attr('transform', 'translate(0, 0), scale(0.4, 0.4)');
     }
 
-    field.field.select('title').attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
+    field.field
+      .select('title')
+      .attr('transform', 'translate(0, 0), scale(0.5, 0.5)');
   }
 
   @action.bound
@@ -386,6 +410,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     }
     const { values } = this.props.widget;
     const latest = values.length > 0 ? values[values.length - 1] : {};
+    // $FlowFixMe
     const { value: latestValue, stats: latestStats } = latest;
     // $FlowFixMe
     this.itemValues = [];
@@ -415,12 +440,17 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     if (this.legend) {
       this.legend.setValues(this.itemValues);
       if (this.toolTipLegend) {
+        // $FlowFixMe
         this.toolTipLegend.setValues(this.itemValues);
       }
     }
   });
 
-  getMaximumValueFromHistory(values: Array<Object>, item: string, key: string): number {
+  getMaximumValueFromHistory(
+    values: Array<Object>,
+    item: string,
+    key: string
+  ): number {
     let prev = null;
     let max = 0;
     values.forEach(value => {
@@ -440,15 +470,18 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     setTimeout(() => {
       this.fields = [];
       this.props.widget.items.forEach((item, count) => {
+        // $FlowFixMe
         this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
       });
-
       this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
 
-        const latestValue = values.length > 0 ? values[values.length - 1].value : {};
+        const latestValue =
+          values.length > 0 ? values[values.length - 1].value : {};
         if (items.length == 1) {
-          console.error('Please use Radial and not StackedRadial for single item metrics.');
+          console.error(
+            'Please use Radial and not StackedRadial for single item metrics.'
+          );
           return;
         }
         if (latestValue === undefined) return;
@@ -494,11 +527,17 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     const { displayName } = widget;
     this.fields = [];
     this.props.widget.items.forEach((item, count) => {
+      // @FlowFixMe
       this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
     });
     const wrapperStyle = { width: this.state.width * 0.55 };
+    // $FlowIssue
     return (
-      <Widget widget={widget} widgetStyle={widgetStyle} onResize={this._onResize}>
+      <Widget
+        widget={widget}
+        widgetStyle={widgetStyle}
+        onResize={this._onResize}
+      >
         <div
           className="StackedRadialWidget"
           // $FlowFixMe
@@ -533,7 +572,12 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
               <div className="radialWrapper" style={wrapperStyle}>
                 <div className="display-name">{displayName}</div>
                 {this.props.widget.items.map((item, count) => {
-                  const classes = 'radial radial-' + (count + 1) + ' ' + (count + 1) + ' item';
+                  const classes =
+                    'radial radial-' +
+                    (count + 1) +
+                    ' ' +
+                    (count + 1) +
+                    ' item';
                   return <div className={classes} />;
                 })}
               </div>
