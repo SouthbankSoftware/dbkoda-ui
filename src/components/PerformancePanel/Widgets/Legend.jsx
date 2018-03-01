@@ -41,7 +41,7 @@ type Props = {
   showTotal: boolean,
   showValues: boolean,
   showDots: boolean,
-  getUnit: () => string
+  getUnit: () => any
 };
 
 @inject(({ store, api }, { widget }) => {

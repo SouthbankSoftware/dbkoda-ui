@@ -1,5 +1,5 @@
 /**
- *
+ * @flow
  * Created by mike on 06/02/2018
  * @Last modified by:   mike
  * @Last modified time: 2018-02-28T15:06:18+11:00
@@ -29,9 +29,8 @@ import { observer } from 'mobx-react';
 import { action, autorun } from 'mobx';
 import _ from 'lodash';
 import { PopoverInteractionKind } from '@blueprintjs/core';
-// @FlowFixMe
+// $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
-// @FlowFixMe
 import type { WidgetState } from '~/api/Widget';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import './StackedRadialWidget.scss';
@@ -370,7 +369,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
           return lblValue.value + ' ' + lblValue.unit;
         }
-        // @FlowIssue
+        // $FlowFixMe
         lblValue = convertUnits(sumOfItems, this.props.widget.unit, 3);
         return lblValue.value + ' ' + lblValue.unit;
       });
@@ -530,7 +529,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     const { displayName } = widget;
     this.fields = [];
     this.props.widget.items.forEach((item, count) => {
-      // @FlowFixMe
+      // $FlowFixMe
       this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
     });
     const wrapperStyle = { width: this.state.width * 0.55 };
@@ -550,6 +549,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
             minimal
             interactionKind={PopoverInteractionKind.HOVER}
             popoverClassName="StackedRadialWidgetTooltip toolTip"
+            // $FlowIssue
             content={
               <div className="Tooltip">
                 <Legend
@@ -588,6 +588,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           />
 
           {widget.showLegend && (
+            // $FlowFixMe
             <Legend
               showTotal={false}
               showValues={false}
