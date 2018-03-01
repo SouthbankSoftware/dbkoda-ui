@@ -3,7 +3,7 @@
  * @Date:   2017-03-15 13:34:55
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T09:47:47+11:00
+ * @Last modified time: 2018-03-02T02:49:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,16 +33,11 @@ import { action, runInAction } from 'mobx';
 import autobind from 'autobind-decorator';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
-import {
-  Dialog,
-  AnchorButton,
-  Intent,
-  Position,
-  Tooltip,
-} from '@blueprintjs/core';
+import { Dialog, AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
@@ -56,7 +51,7 @@ import './styles.scss';
   store: allStores.store,
   api: allStores.api,
   config: allStores.config,
-  profileStore: allStores.profileStore,
+  profileStore: allStores.profileStore
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -67,16 +62,13 @@ export default class Toolbar extends React.Component {
       removeDisabled: true,
       closingProfile: false,
       closeConnectionAlert: false,
-      removeConnectionAlert: false,
+      removeConnectionAlert: false
     };
 
     this.newProfile = this.newProfile.bind(this);
   }
   componentWillUnmount() {
-    Mousetrap.unbindGlobal(
-      GlobalHotkeys.createNewProfile.keys,
-      this.newProfile,
-    );
+    Mousetrap.unbindGlobal(GlobalHotkeys.createNewProfile.keys, this.newProfile);
   }
   componentDidMount() {
     // Add hotkey bindings for this component:
@@ -90,10 +82,9 @@ export default class Toolbar extends React.Component {
   newProfile() {
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE
-          .OPEN_DIALOG,
+        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.OPEN_DIALOG,
         EventLogging.getFragmentEnum().PROFILES,
-        'User opened the New Connection Profile drawer.',
+        'User opened the New Connection Profile drawer.'
       );
     }
     this.props.store.profileList.selectedProfile = null;
@@ -112,21 +103,20 @@ export default class Toolbar extends React.Component {
           EventLogging.recordManualEvent(
             EventLogging.getTypeEnum().WARNING,
             EventLogging.getFragmentEnum().PROFILES,
-            'User attempted to edit active profile..',
+            'User attempted to edit active profile..'
           );
         }
         NewToaster.show({
           message: globalString('profile/not'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
       } else {
         if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE
-              .OPEN_DIALOG,
+            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG,
             EventLogging.getFragmentEnum().PROFILES,
-            'User opened the Edit Connection Profile drawer.',
+            'User opened the Edit Connection Profile drawer.'
           );
         }
         this.props.store.showConnectionPane();
@@ -136,13 +126,13 @@ export default class Toolbar extends React.Component {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
           EventLogging.getFragmentEnum().PROFILES,
-          'User attempted to edit with no profile selected.',
+          'User attempted to edit with no profile selected.'
         );
       }
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     }
   }
@@ -155,7 +145,7 @@ export default class Toolbar extends React.Component {
     const { id: profileId } = this.props.store.profileList.selectedProfile;
     const { api } = this.props;
 
-    api.closePerformancePanel(profileId, true);
+    api.transformPerformancePanel(profileId, null);
 
     // eslint-disable-line class-methods-use-this
     this.props.profileStore.profiles.delete(profileId);
@@ -165,38 +155,29 @@ export default class Toolbar extends React.Component {
       EventLogging.recordManualEvent(
         EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE,
         EventLogging.getFragmentEnum().PROFILES,
-        'User removed a profile..',
+        'User removed a profile..'
       );
     }
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
       className: 'success',
-      iconName: 'pt-icon-thumbs-up',
+      iconName: 'pt-icon-thumbs-up'
     });
-    Mousetrap.unbindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.hideRemoveConnectionAlert,
-    );
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
   @autobind
   showRemoveConnectionAlert() {
     this.setState({ removeConnectionAlert: true });
-    Mousetrap.bindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.hideRemoveConnectionAlert,
-    );
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
   @autobind
   hideRemoveConnectionAlert() {
     this.setState({ removeConnectionAlert: false });
-    Mousetrap.unbindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.hideRemoveConnectionAlert,
-    );
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
@@ -207,13 +188,14 @@ export default class Toolbar extends React.Component {
     if (selectedProfile) {
       const { api } = this.props;
 
-      api.stopPerformancePanel(selectedProfile.id);
+      api.hasPerformancePanel(selectedProfile.id) &&
+        api.transformPerformancePanel(selectedProfile.id, performancePanelStatuses.stopped);
 
       this.setState({ closingProfile: true });
       featherClient()
         .service('/mongo-connection')
         .remove(selectedProfile.id)
-        .then((v) => {
+        .then(() => {
           runInAction(() => {
             selectedProfile.status = ProfileStatus.CLOSED;
             profiles.set(selectedProfile.id, selectedProfile);
@@ -223,29 +205,29 @@ export default class Toolbar extends React.Component {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE,
               EventLogging.getFragmentEnum().PROFILES,
-              'User closed a profile connection.',
+              'User closed a profile connection.'
             );
           }
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up',
+            iconName: 'pt-icon-thumbs-up'
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })
-        .catch((err) => {
+        .catch(err => {
           console.error('error:', err);
           if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,
               EventLogging.getFragmentEnum().PROFILES,
-              err.message,
+              err.message
             );
           }
           NewToaster.show({
             message: err.message,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
+            iconName: 'pt-icon-thumbs-down'
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
         });
@@ -254,39 +236,30 @@ export default class Toolbar extends React.Component {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().WARNING,
           EventLogging.getFragmentEnum().PROFILES,
-          'User attempted to close a connection profile with no profile selected..',
+          'User attempted to close a connection profile with no profile selected..'
         );
       }
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
     }
-    Mousetrap.unbindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.hideCloseConnectionAlert,
-    );
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   @autobind
   hideCloseConnectionAlert() {
     this.setState({ closeConnectionAlert: false });
-    Mousetrap.unbindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.hideCloseConnectionAlert,
-    );
+    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   @autobind
   showCloseConnectionAlert() {
     this.setState({ closeConnectionAlert: true });
-    Mousetrap.bindGlobal(
-      DialogHotkeys.closeDialog.keys,
-      this.hideCloseConnectionAlert,
-    );
+    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
@@ -357,10 +330,7 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM_LEFT}
           >
-            <AnchorButton
-              className="newProfileButton"
-              onClick={this.newProfile}
-            >
+            <AnchorButton className="newProfileButton" onClick={this.newProfile}>
               <AddIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
@@ -374,10 +344,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="editProfileButton"
               onClick={this.editProfile}
-              disabled={
-                !selectedProfile ||
-                selectedProfile.status === ProfileStatus.OPEN
-              }
+              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN}
             >
               <EditProfileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
@@ -392,10 +359,7 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className=" dangerButton closeProfileButton"
               loading={this.state.closingProfile}
-              disabled={
-                !selectedProfile ||
-                selectedProfile.status === ProfileStatus.CLOSED
-              }
+              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.CLOSED}
               onClick={this.showCloseConnectionAlert}
             >
               <CloseProfileIcon className="dbKodaSVG" width={20} height={20} />
@@ -413,8 +377,7 @@ export default class Toolbar extends React.Component {
               onClick={this.showRemoveConnectionAlert}
               disabled={
                 !this.props.store.profileList.selectedProfile ||
-                this.props.store.profileList.selectedProfile.status ===
-                  ProfileStatus.OPEN
+                this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN
               }
             >
               <RemoveProfileIcon className="dbKodaSVG" width={20} height={20} />
