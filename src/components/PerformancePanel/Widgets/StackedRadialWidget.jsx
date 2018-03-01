@@ -566,6 +566,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
                     return this.props.widget.unit;
                   }}
                   onRef={toolTipLegend => {
+                    // $FlowFixMe
                     this.toolTipLegend = toolTipLegend;
                   }}
                 />
