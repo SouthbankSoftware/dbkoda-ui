@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T14:08:03+11:00
+ * @Last modified time: 2018-02-28T13:18:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -88,6 +88,7 @@ export default class DataCenter {
         'stopPerformancePanel',
         'openPerformancePanel',
         'closePerformancePanel',
+        'openPerformancePanelExternal',
       ]),
     );
 

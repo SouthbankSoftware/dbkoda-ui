@@ -1,9 +1,9 @@
 /**
  * @Author: Wahaj Shamim <wahaj>
- * @Date:   2018-02-26T13:19:02+11:00
+ * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T16:22:22+11:00
+ * @Last modified time: 2018-03-01T16:09:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,32 +25,37 @@
  */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import mobx from 'mobx';
-import { Provider } from 'mobx-react';
-import { AppContainer } from 'react-hot-loader';
+import { inject, observer } from 'mobx-react';
+import { PerformancePanel } from '#/PerformancePanel';
 
-import Store from '~/window/stores/performance';
+import 'normalize.css/normalize.css';
+import '@blueprintjs/core/dist/blueprint.css';
+import '@blueprintjs/table/dist/table.css';
+import '~/styles/global.scss';
+import '~/styles/fonts/index.css';
+import '#/App.scss';
 
-import PerformanceWindow from '~/window/PerformanceWindow';
+ @inject(allStores => ({
+   store: allStores.store
+ }))
+ @observer
+class PerformanceWindow extends React.Component {
+  render() {
+    const { store } = this.props;
 
-const rootEl = document.getElementById('root');
+    return (
+      <div>
+        {store.performancePanel ? (
+          <PerformancePanel
+            performancePanel={store.performancePanel}
+            onClose={null}
+          />
+        ) : (
+          <div><span>Loading Performance Panel...</span></div>
+        )}
+      </div>
+    );
+  }
+}
 
-const store = new Store();
-
-ReactDOM.render(
-  <AppContainer>
-    <Provider
-      store={store}
-      api={store.api}
-      config={store.config}
-      profileStore={store.profileStore}
-    >
-      <PerformanceWindow />
-    </Provider>
-  </AppContainer>,
-  rootEl
-);
-
-window.store = store;
-window.mobx = mobx;
+export default PerformanceWindow;

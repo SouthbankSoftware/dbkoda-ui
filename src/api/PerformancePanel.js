@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T13:31:51+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-01T16:04:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,16 +27,20 @@
  */
 
 import _ from 'lodash';
-import { action, observable, observe } from 'mobx';
+import { action, observable } from 'mobx';
 import type { ObservableMap } from 'mobx';
 import autobind from 'autobind-decorator';
 import { Broker, EventType } from '~/helpers/broker';
+import { dump} from 'dumpenvy';
+import { serializer } from '#/common/mobxDumpenvyExtension';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 // $FlowFixMe
 import { NewToaster } from '#/common/Toaster';
 import schema from '#/PerformancePanel/schema.json';
 import type { WidgetState } from './Widget';
+
+
 
 const FOREGROUND_SAMPLING_RATE = 5000;
 const BACKGROUND_SAMPLING_RATE = 30000;
@@ -57,6 +61,7 @@ export type LayoutState = {
 export const performancePanelStatuses = {
   background: 'background',
   foreground: 'foreground',
+  external: 'external',
   stopped: 'stopped'
 };
 
@@ -112,6 +117,8 @@ export default class PerformancePanelApi {
   powerMonitorProfileId: * = null;
   _disposers: Map<UUID, *> = new Map();
 
+  externalPerformanceWindows: Map<UUID, *> = new Map();
+
   constructor(store: *, api: *, config: *) {
     this.store = store;
     this.api = api;
@@ -122,6 +129,11 @@ export default class PerformancePanelApi {
         this.stopPerformancePanel(pId, false);
       }
     });
+    if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      const { ipcRenderer } = electron;
+      ipcRenderer.on('performance', this._handlePerformanceWindowEvents);
+    }
     // document.addEventListener('visibilitychange', this._handleAppVisibility, false);
   }
 
@@ -228,9 +240,9 @@ export default class PerformancePanelApi {
         for (const item of widget.items) {
           itemsSet.add(item);
         }
-        observe(widget.values, (change) => {
-            console.log(widget.id, 'observer::', 'type:', change.type, ',name:', change.name, ',from', change.oldValue, ',to', change.object[change.name]);
-        });
+        // observe(widget.values, (change) => {
+        //     console.log(widget.id, 'observer::', 'type:', change.type, ',name:', change.name, ',from', change.oldValue, ',to', change.object[change.name]);
+        // });
       }
 
       // handle errors
@@ -279,6 +291,12 @@ export default class PerformancePanelApi {
           }
 
           values.push(value);
+        }
+        if (performancePanel.status === performancePanelStatuses.external) {
+          const externalWindow = this.externalPerformanceWindows.get(profileId);
+          if (externalWindow && externalWindow.status === 'ready') {
+              this._sendMsgToPerformanceWindow({command: 'mw_updateData', profileId, dataObject: dump(payload, { serializer })});
+          }
         }
       });
 
@@ -354,7 +372,7 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  openPerformancePanel(profileId: UUID) {
+  openPerformancePanel(profileId: UUID, external: boolean = false) {
     const { performancePanels } = this.store;
     let performancePanel = performancePanels.get(profileId);
 
@@ -364,8 +382,12 @@ export default class PerformancePanelApi {
     }
 
     this.startPerformancePanel(profileId, true);
-
-    this.store.performancePanel = performancePanel;
+    if (!external) {
+      this.store.performancePanel = performancePanel;
+    } else {
+      this.store.performancePanel = null;
+      performancePanel.status = performancePanelStatuses.external;
+    }
   }
 
   @action.bound
@@ -390,6 +412,47 @@ export default class PerformancePanelApi {
     //     this._stopPowerMonitor();
     //   }
     // }
+  }
+  @autobind
+  openPerformancePanelExternal(profileId: UUID) {
+    this._mountPerformancePanelToExternalWindow(profileId);
+  }
+  @autobind
+  closePerformancePanelExternal(profileId: UUID) {
+    this._sendMsgToPerformanceWindow({command: 'mw_closeWindow', profileId});
+  }
+  @action.bound
+  _mountPerformancePanelToExternalWindow(profileId: UUID) {
+    this.openPerformancePanel(profileId, true);
+    this._sendMsgToPerformanceWindow({command: 'mw_createWindow', profileId});
+    this.externalPerformanceWindows.set(profileId, {status: 'started'});
+  }
+  @action.bound
+  _unmountPerformancePanelFromExternalWindow(profileId: UUID) {
+    this.closePerformancePanel(profileId);
+    this.externalPerformanceWindows.set(profileId, {status: 'closed'});
+  }
+  @autobind
+  _handlePerformanceWindowEvents(event, args) {
+    console.log('_handlePerformanceWindowEvents::', args);
+    const { performancePanels } = this.store;
+    if (args.profileId) {
+      if (args.command === 'pw_windowReady') {
+        const performancePanel = performancePanels.get(args.profileId);
+        this._sendMsgToPerformanceWindow({command: 'mw_initData', profileId: args.profileId, dataObject: dump(performancePanel, { serializer })});
+        this.externalPerformanceWindows.set(args.profileId, {status: 'ready'});
+      } else if (args.command === 'pw_windowClosed') {
+        this._unmountPerformancePanelFromExternalWindow(args.profileId);
+      }
+    }
+  }
+  @autobind
+  _sendMsgToPerformanceWindow(args) {
+    if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      const { ipcRenderer } = electron;
+      ipcRenderer.send('performance', args);
+    }
   }
 
   _startDisplaySleepBlocker() {

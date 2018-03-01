@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-27T13:27:17+11:00
+ * @Last modified time: 2018-03-01T12:36:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -52,9 +52,6 @@ import ConnectionIcon from '../../styles/icons/connection-icon-2.svg';
 import './styles.scss';
 
 const React = require('react');
-
-const electron = window.require('electron');
-const { ipcRenderer } = electron;
 
 @inject(allStores => ({
   store: allStores.store,
@@ -483,7 +480,10 @@ export default class ListView extends React.Component {
 
   @autobind
   openPerformancePanelExternal(profile) {
-    ipcRenderer.send('performance', {command: 'createPerformanceWindow', profileId: profile.id});
+    this.props.api.openPerformancePanelExternal(profile.id);
+    // ipcRenderer.send('performance', {command: 'createPerformanceWindow', profileId: profile.id});
+    // const initObject = this.props.api.openPerformancePanelExternal(profile.id);
+    // ipcRenderer.send('performance', {command: 'initPerformanceWindow', profileId: profile.id, dataObject: initObject});
   }
 
   @action
