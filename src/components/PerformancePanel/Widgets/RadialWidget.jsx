@@ -65,6 +65,7 @@ export default class RadialWidget extends React.Component<Props, State> {
   tooltip: Object;
   colors: any;
   gradientColors: any;
+  _autorunDisposer: *;
 
   constructor(props: Object) {
     super(props);
@@ -460,7 +461,7 @@ export default class RadialWidget extends React.Component<Props, State> {
       this.text = '0%';
       this.buildWidget();
 
-      autorun(() => {
+      this._autorunDisposer = autorun(() => {
         const { items, values } = this.props.widget;
         const { stats } = this.props.performancePanel;
         // $FlowFixMe
@@ -618,6 +619,7 @@ export default class RadialWidget extends React.Component<Props, State> {
   };
 
   componentWillUnmount() {
+    this._autorunDisposer && this._autorunDisposer();
     this.removeD3();
   }
 

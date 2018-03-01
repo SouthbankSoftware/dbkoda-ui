@@ -59,6 +59,7 @@ export default class DonutWidget extends React.Component<Props, State> {
   svg: Object;
   paths: Object;
   totalSize: number = 0;
+  _autorunDisposer: *;
 
   constructor(props: Object) {
     super(props);
@@ -188,7 +189,7 @@ export default class DonutWidget extends React.Component<Props, State> {
   componentDidMount() {
     let arcTween;
     setTimeout(() => {
-      autorun(() => {
+      this._autorunDisposer = autorun(() => {
         const { values, items } = this.props.widget;
         if (this.d3Elem) {
           // $FlowFixMe
@@ -212,6 +213,7 @@ export default class DonutWidget extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
+    this._autorunDisposer && this._autorunDisposer();
     this.removeD3();
   }
 
