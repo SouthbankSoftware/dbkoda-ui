@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T15:34:46+11:00
+ * @Last modified time: 2018-03-02T16:32:55+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,10 +26,7 @@
 
 import { observable, action } from 'mobx';
 import { restore } from 'dumpenvy';
-import {
-  deserializer,
-  postDeserializer
-} from '#/common/mobxDumpenvyExtension';
+import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { handleNewData } from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
@@ -48,7 +45,7 @@ global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...p
 global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
 
 export default class Store {
-  @observable performancePanel = null;
+  @observable.shallow performancePanel = null;
   @observable profileId = null;
 
   @action.bound
@@ -56,7 +53,7 @@ export default class Store {
     console.log(args);
     if (args.command === 'mw_setProfileId') {
       this.profileId = args.profileId;
-      ipcRenderer.send('performance', {command: 'pw_windowReady', profileId: this.profileId});
+      ipcRenderer.send('performance', { command: 'pw_windowReady', profileId: this.profileId });
     } else if (args.profileId) {
       if (!this.profileId) {
         this.profileId = args.profileId;
