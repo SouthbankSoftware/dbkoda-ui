@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-02T11:42:02+11:00
+ * @Last modified time: 2018-03-02T13:11:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -64,7 +64,8 @@ export const performancePanelStatuses = {
   stopped: 'stopped' // PP is stopped, unmounted
 };
 
-const DEMOTABLE_STATUSES = [performancePanelStatuses.foreground, performancePanelStatuses.external];
+const DEMOTABLE_VISIBILITY_STATUSES = [performancePanelStatuses.foreground];
+const DEMOTABLE_SUSPEND_STATUSES = [performancePanelStatuses.foreground, performancePanelStatuses.external];
 const RUNNABLE_STATUSES = [
   performancePanelStatuses.background,
   performancePanelStatuses.foreground,
@@ -149,7 +150,7 @@ export default class PerformancePanelApi {
 
       const handleSuspend = () => {
         logToMain('info', 'os is suspending');
-        this._demotePerforamncePanelsToBackground();
+        this._demotePerforamncePanelsToBackground(true);
       };
 
       const handleResume = () => {
@@ -180,11 +181,14 @@ export default class PerformancePanelApi {
     });
   }
 
-  _demotePerforamncePanelsToBackground = () => {
+  _demotePerforamncePanelsToBackground = (_suspend: boolean = false) => {
     for (const pP of this.store.performancePanels.values()) {
       const { profileId, status } = pP;
-
-      if (_.includes(DEMOTABLE_STATUSES, status)) {
+      let statuses = DEMOTABLE_VISIBILITY_STATUSES;
+      if (_suspend) {
+        statuses = DEMOTABLE_SUSPEND_STATUSES;
+      }
+      if (_.includes(statuses, status)) {
         this._lastStatuses.set(profileId, status);
         this.transformPerformancePanel(profileId, performancePanelStatuses.background);
       }
