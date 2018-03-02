@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-02T11:27:35+11:00
+ * @Last modified time: 2018-03-02T11:42:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -457,13 +457,13 @@ export default class PerformancePanelApi {
 
   @action.bound
   _mountPerformancePanelToExternalWindow(_profileId: UUID) {
-    this._sendMsgToPerformanceWindow({command: 'mw_createWindow', _profileId});
+    this._sendMsgToPerformanceWindow({command: 'mw_createWindow', profileId: _profileId});
     this.externalPerformanceWindows.set(_profileId, {status: 'started'});
   }
 
   @action.bound
   _unmountPerformancePanelFromExternalWindow(_profileId: UUID) {
-    this._sendMsgToPerformanceWindow({command: 'mw_closeWindow', _profileId});
+    this._sendMsgToPerformanceWindow({command: 'mw_closeWindow', profileId: _profileId});
   }
 
   @action.bound
