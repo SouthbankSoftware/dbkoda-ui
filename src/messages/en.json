@@ -317,6 +317,7 @@
         "createPerformancePanel": "Create Performance Panel",
         "openPerformancePanel": "Open Performance Panel",
         "destroyPerformancePanel": "Destroy Performance Panel",
+        "resetHWM": "Reset High Water Mark",
         "deleteProfile": "Delete Profile",
         "performance": "Performance Counter Test"
       },

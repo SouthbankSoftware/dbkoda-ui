@@ -47,12 +47,17 @@ export type WidgetState = {
   id: UUID,
   profileId: UUID,
   type: string,
+  // $FlowFixMe
   items: string[],
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
   errorLevel: ?WidgetErrorLevel,
   error: ?string,
   stats: {},
+  unit?: any,
+  showVertical?: boolean,
+  chartTitle?: string,
+  showLegend?: *,
   displayName?: *,
   widgetItemKeys?: *,
   widgetDisplayNames?: *,
@@ -98,6 +103,7 @@ export default class WidgetApi {
 
     const id = (extraState && extraState.id) || uuid();
 
+    // $FlowFixMe
     const widget: WidgetState = observable.shallowObject({
       id,
       profileId,
@@ -108,7 +114,6 @@ export default class WidgetApi {
       errorLevel: null,
       error: null,
       waterMarkGroup: 0,
-      stats: {},
       ...extraState
     });
 

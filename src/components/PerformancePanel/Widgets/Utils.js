@@ -70,11 +70,11 @@ export const convertTime = (value: any, unit: string, length: number) => {
     switch (unit) {
       case '/μs':
         result.unit = '/ms';
-        result.value = timescale(value, 'μs', 'ms').toFixed(2);
+        result.value = timescale(value, 'μs', 'ms');
         break;
       case '/ms':
         result.unit = '/s';
-        result.value = timescale(value, 'ms', 's').toFixed(2);
+        result.value = timescale(value, 'ms', 's');
         break;
       case '/s':
         result.unit = 'k/s';
@@ -86,11 +86,11 @@ export const convertTime = (value: any, unit: string, length: number) => {
         break;
       case 'μs/s':
         result.unit = 'ms/s';
-        result.value = timescale(value, 'μs', 'ms').toFixed(2);
+        result.value = timescale(value, 'μs', 'ms');
         break;
       case 'ms/s':
         result.unit = 's/s';
-        result.value = timescale(value, 'ms', 's').toFixed(2);
+        result.value = timescale(value, 'ms', 's');
         break;
       case 'Op/s':
         result.unit = 'KOp/s';
@@ -110,11 +110,11 @@ export const convertTime = (value: any, unit: string, length: number) => {
         break;
       case 'μs':
         result.unit = 'ms';
-        result.value = timescale(value, 'μs', 'ms').toFixed(2);
+        result.value = timescale(value, 'μs', 'ms');
         break;
       case 'ms':
         result.unit = 's';
-        result.value = timescale(value, 'ms', 's').toFixed(2);
+        result.value = timescale(value, 'ms', 's');
         break;
       case ' ':
         result.unit = 'k';
@@ -131,7 +131,7 @@ export const convertTime = (value: any, unit: string, length: number) => {
     }
     return convertTime(result.value, result.unit, length);
   }
-  result.value = parseFloat(Number(value).toFixed(2));
+  result.value = _.round(parseFloat(Number(value)), 2);
   return result;
 };
 
@@ -177,10 +177,11 @@ export const convertBytes = (value: any, unit: string, length: number) => {
         return result;
       }
     }
-    result.value = (value / 1024).toFixed(2);
+
+    result.value = parseFloat(value) / 1024;
     return convertBytes(result.value, result.unit, length);
   }
-  result.value = value.toFixed(2);
+  result.value = _.round(parseFloat(value), 2);
   return result;
 };
 
@@ -196,7 +197,7 @@ export const convertUnits = (value: any, unit: string, length: number) => {
   }
   console.log('Unknown unit is provided for conversion (unit=', unit, ').');
   return {
-    value: parseFloat(Number(value).toFixed(2)),
+    value: parseFloat(_.round(Number(value), 2)),
     unit
   };
 };

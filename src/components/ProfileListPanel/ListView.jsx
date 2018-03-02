@@ -44,6 +44,7 @@ import {
 } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import { terminalTypes } from '~/api/Terminal';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
@@ -211,7 +212,8 @@ export default class ListView extends React.Component {
     if (selectedProfile) {
       const { api } = this.props;
 
-      api.stopPerformancePanel(selectedProfile.id);
+      api.hasPerformancePanel(selectedProfile.id) &&
+        api.transformPerformancePanel(selectedProfile.id, performancePanelStatuses.stopped);
 
       this.setState({ closingProfile: true });
       this.props.store.layout.alertIsLoading = true;
@@ -331,7 +333,7 @@ export default class ListView extends React.Component {
     profileStore.profiles.delete(profileId);
     profileStore.save();
     api.removeAllTerminalsForProfile(profileId);
-    api.closePerformancePanel(profileId, true);
+    api.transformPerformancePanel(profileId, null);
 
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
@@ -416,8 +418,8 @@ export default class ListView extends React.Component {
       (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
         this.state.targetProfile.sha) ||
       (((passwordStoreEnabled && storeNeedsRemotePassword) || !passwordStoreEnabled) &&
-        this.state.targetProfile.ssh) &&
-        (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass)
+        this.state.targetProfile.ssh &&
+        (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass))
     ) {
       this.setState({ isOpenWarningActive: true });
       Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
@@ -445,8 +447,8 @@ export default class ListView extends React.Component {
       ? this.api.passwordApi.isProfileMissingFromStore(`${id}-s`)
       : false;
     if (
-      ((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
-      (targetProfile.bPassPhrase && !passPhrase) ||
+      (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
+        (targetProfile.bPassPhrase && !passPhrase)) ||
       (targetProfile.bRemotePass && !remotePass)
     ) {
       this.setState({ isSshOpenWarningActive: true });
@@ -556,29 +558,43 @@ export default class ListView extends React.Component {
               iconName="pt-icon-lock"
             />
           </div>
-          {IS_DEVELOPMENT ? (
+          <div className="menuItemWrapper">
+            <MenuItem
+              className={`profileListContextMenu ${
+                !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
+              }`}
+              onClick={() =>
+                this.props.api.transformPerformancePanel(
+                  profile.id,
+                  performancePanelStatuses.foreground
+                )
+              }
+              text={globalString(
+                `profile/menu/${
+                  !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
+                }`
+              )}
+              intent={Intent.NONE}
+              iconName="pt-icon-heat-grid"
+            />
+          </div>
+          {hasPerformancePanel ? (
             <div className="menuItemWrapper">
               <MenuItem
-                className={`profileListContextMenu ${
-                  !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
-                }`}
-                onClick={() => this.props.api.openPerformancePanel(profile.id)}
-                text={globalString(
-                  `profile/menu/${
-                    !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
-                  }`
-                )}
+                className="profileListContextMenu destroyPerformancePanel"
+                onClick={() => this.props.api.transformPerformancePanel(profile.id, null)}
+                text={globalString('profile/menu/destroyPerformancePanel')}
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
               />
             </div>
           ) : null}
-          {IS_DEVELOPMENT && hasPerformancePanel ? (
+          {hasPerformancePanel ? (
             <div className="menuItemWrapper">
               <MenuItem
-                className="profileListContextMenu destroyPerformancePanel"
-                onClick={() => this.props.api.closePerformancePanel(profile.id, true)}
-                text={globalString('profile/menu/destroyPerformancePanel')}
+                className="profileListContextMenu reset-high-water-mark"
+                onClick={() => this.props.api.resetHighWaterMark(profile.id)}
+                text={globalString('profile/menu/resetHWM')}
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
               />
@@ -769,8 +785,12 @@ export default class ListView extends React.Component {
                   dir="auto"
                   onChange={this.setPWText}
                 />
-                { !this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreInfo')}</p> }
-                { this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreAdd')}</p> }
+                {!this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
+                )}
+                {this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
+                )}
               </div>
             )}
           {this.state.targetProfile &&
@@ -787,8 +807,12 @@ export default class ListView extends React.Component {
                     this.setState({ remotePass: event.target.value });
                   }}
                 />
-                { !this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreInfo')}</p> }
-                { this.props.config.settings.passwordStoreEnabled && <p>{globalString('profile/openAlert/passwordStoreAdd')}</p> }
+                {!this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
+                )}
+                {this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
+                )}
               </div>
             )}
           {this.state.targetProfile &&

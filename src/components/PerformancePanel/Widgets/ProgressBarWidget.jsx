@@ -1,9 +1,11 @@
 /**
+ * @flow
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T14:21:43+11:00
+ * @Last modified by:   mike
+ * @Last modified time: 2018-02-28T15:21:43+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,8 +32,10 @@ import { autorun } from 'mobx';
 import type { WidgetState } from '~/api/Widget';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import * as d3 from 'd3';
+// $FlowFixMe
 import 'd3-selection-multi';
 import { PopoverInteractionKind } from '@blueprintjs/core';
+// $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
 import Legend from './Legend';
 import Widget from './Widget';
@@ -65,11 +69,15 @@ export default class ProgressBarWidget extends React.Component<Props> {
   _totalDivisor: *;
   _chartLabel: *;
   _bVertical: false;
-  _unit: *;
+  _unit: any;
   _itemValues: *;
+  hasRendered: *;
+  toolTipLegend: *;
+  colors: *;
 
   _createD3View = (bVertical: boolean) => {
     if (bVertical) {
+      // $FlowFixMe
       this._bVertical = bVertical;
       this._tip = d3.select(this._tipREl).style('opacity', 0);
       d3.select(this._tipEl).style('opacity', 0);
@@ -106,6 +114,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
     const posTransY = vbHeight / 2 - barHeight / 2;
     // chart background
+    // $FlowFixMe
     const chartBG = this._chart
       .append('g')
       .attr('transform', `translate(30, ${posTransY})`);
@@ -119,7 +128,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       width: chartWidth,
       x: 0
     });
-
+    // $FlowFixMe
     this._dataGroup = this._chart
       .append('g')
       .attr('transform', `translate(30, ${posTransY})`);
@@ -130,6 +139,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
         'transform',
         `translate(30, ${posTransY}) rotate(270 ${rotatePos} ${rotatePos})`
       );
+      // $FlowFixMe
       this._dataGroup.attr(
         'transform',
         `translate(30, ${posTransY}) rotate(270 ${rotatePos} ${rotatePos})`
@@ -151,7 +161,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     this._createD3View(bVertical);
   };
 
-  _updateD3ViewData = (data: Object, stats: Object) => {
+  _updateD3ViewData = (data: Object) => {
     if (this.props.widget.colorList) {
       colors = this.props.widget.colorList;
     }
@@ -161,6 +171,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     let arrData = [];
     let sumOfValues = 0;
     let sumOfHWM = 0;
+    const { stats } = this.props.performancePanel;
     if (sData.length > 1) {
       // Case where there are more than 1 data items to display
       for (let I = 0; I < sData.length; I += 1) {
@@ -170,6 +181,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
           sumOfValues = data[sData[I]];
         }
         arrData.push({
+          // $FlowFixMe
           color: colors[I],
           value: data[sData[I]],
           key: sData[I]
@@ -187,11 +199,14 @@ export default class ProgressBarWidget extends React.Component<Props> {
       arrData = arrData.map(elem => {
         if (!this.props.widget.firstValueIsHighWaterMark) {
           sumOfValues += elem.value;
+          // $FlowFixMe
           elem.sumValue = sumOfValues;
           sumOfHWM += stats[elem.key].hwm;
         } else {
+          // $FlowFixMe
           elem.sumValue = elem.value;
         }
+        // $FlowFixMe
         elem.displayOrder = displayOrder;
         displayOrder += 1;
         return elem;
@@ -209,7 +224,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
       }
     } else if (sData.length === 1) {
       // specific case of only one data item
+      // $FlowFixMe
       arrData.push({
+        // $FlowFixMe
         color: colors[0],
         value: data[sData[0]],
         key: sData[0],
@@ -261,8 +278,10 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this._totalDivisor = 10;
     }
 
+    // $FlowFixMe
     const t = d3.transition().duration(750);
 
+    // $FlowFixMe
     const bars = this._dataGroup.selectAll('rect').data(arrData, d => {
       return d.key + d.displayOrder; // this return value determines which bars to add/remove/update in the current chart.
     });
@@ -392,13 +411,13 @@ export default class ProgressBarWidget extends React.Component<Props> {
         if (_.isEmpty(latest)) {
           return;
         }
-        const {value: latestValue, stats: latestStats} = latest;
+        const { value: latestValue } = latest;
         if (_.isEmpty(latestValue)) {
           return;
         }
         this._itemValues = latestValue;
         this._unit = unit;
-        this._updateD3ViewData(latestValue, latestStats);
+        this._updateD3ViewData(latestValue);
         if (this.toolTipLegend && this.hasRendered && this._itemValues) {
           this.toolTipLegend.setValues(this._itemValues);
         }
@@ -431,7 +450,11 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this.hasRendered = true;
     }, 200);
     return (
-      <Widget performancePanel={performancePanel} widget={widget} widgetStyle={widgetStyle}>
+      <Widget
+        performancePanel={performancePanel}
+        widget={widget}
+        widgetStyle={widgetStyle}
+      >
         <div className="ProgressBarWidget">
           <Popover2
             minimal

@@ -34,9 +34,10 @@ import type { WidgetState } from '~/api/Widget';
 import ErrorView from '#/common/ErrorView';
 import _ from 'lodash';
 import ReactResizeDetector from 'react-resize-detector';
-import { Tooltip, Position } from '@blueprintjs/core';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
+// $FlowFixMe
+import { PopoverInteractionKind } from '@blueprintjs/core';
 import type { WidgetValue } from '~/api/Widget';
 import InfoIcon from '~/styles/icons/explain-query-icon.svg';
 import HistoryView from './HistoryView';
@@ -165,7 +166,10 @@ export default class Widget extends React.Component<Props, State> {
       widgetStyle
     } = this.props;
     const { projection } = this.state;
-
+    let className = 'parentWidgetWrapper';
+    if (title) {
+      className += ' title';
+    }
     return (
       // $FlowFixMe
       <div
@@ -175,20 +179,27 @@ export default class Widget extends React.Component<Props, State> {
         {state === 'error' ? (
           <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (
-          <div className="parentWidgetWrapper">
+          <div className={className}>
             {title && (
               <div className="header">
                 <b className="title">{title}</b>
                 {infoWidget && (
-                  <Tooltip
-                    portalClassName="StackedRadialWidgetTooltip"
-                    className="toolTip"
-                    content={<div>{description}</div>}
-                    useSmartPositioning
-                    position={Position.RIGHT_TOP}
-                  >
-                    <InfoIcon className="infoButton" width={20} height={20} />
-                  </Tooltip>
+                  <span className="toolTip">
+                    <Popover2
+                      minimal
+                      interactionKind={PopoverInteractionKind.HOVER}
+                      popoverClassName="StackedRadialWidgetTooltip"
+                      className="toolTip"
+                      content={<div>{description}</div>}
+                      target={
+                        <InfoIcon
+                          className="infoButton"
+                          width={20}
+                          height={20}
+                        />
+                      }
+                    />
+                  </span>
                 )}
                 {showAlarms && (
                   <AlarmView category={showAlarms} alarms={this.alarms} />

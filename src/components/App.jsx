@@ -40,6 +40,7 @@ import { PerformancePanel } from '#/PerformancePanel';
 import { ProfileManager } from '#/ProfileManager';
 import { DrawerPanes } from '#/common/Constants';
 import PasswordDialog from '#/common/PasswordDialog';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -136,7 +137,12 @@ class App extends React.Component {
         {store.performancePanel ? (
           <PerformancePanel
             performancePanel={store.performancePanel}
-            onClose={() => api.closePerformancePanel(store.performancePanel.profileId)}
+            onClose={() =>
+              api.transformPerformancePanel(
+                store.performancePanel.profileId,
+                performancePanelStatuses.background
+              )
+            }
           />
         ) : null}
         {store.drawer && store.drawer.drawerChild == DrawerPanes.PROFILE ? (
