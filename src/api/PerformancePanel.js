@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T15:57:45+11:00
+ * @Last modified time: 2018-03-02T16:38:29+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -399,7 +399,7 @@ export default class PerformancePanelApi {
 
       // handle new data
       const _handleNewData = action(payload => {
-        logToMain('debug', 'new data');
+        logToMain('debug', `new data for Performance Panel ${profileId}`);
 
         handleNewData(payload, performancePanel);
 
