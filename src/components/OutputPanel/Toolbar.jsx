@@ -36,12 +36,16 @@ import {
   Tooltip,
   AnchorButton,
   Position,
-  EditableText
+  EditableText,
+  Menu,
+  MenuItem,
+  Popover
 } from '@blueprintjs/core';
 import { featherClient } from '~/helpers/feathers';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { NewToaster } from '#/common/Toaster';
 import StaticApi from '~/api/static';
+import { OutputFileTypes } from '~/api/Output';
 import EventLogging from '#/common/logging/EventLogging';
 import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
@@ -169,8 +173,8 @@ export default class Toolbar extends React.Component {
           this.props.store.outputs.get(editorKey).tableJson = '';
           this.props.store.outputPanel.clearingOutput = false;
           this.props.store.outputPanel.currentTab = editorKey;
-        } else if (currentTab.startsWith('Chart-')) {
-          const editorKey = currentTab.split('Chart-')[1];
+        } else if (currentTab.startsWith('ChartView-')) {
+          const editorKey = currentTab.split('ChartView-')[1];
           this.props.store.outputs.get(editorKey).chartPanel = null;
           this.props.store.outputPanel.clearingOutput = false;
           this.props.store.outputPanel.currentTab = editorKey;
@@ -220,8 +224,23 @@ export default class Toolbar extends React.Component {
   /**
    * Downloads the current contents of the Output Editor to a file
    */
-  downloadOutput() {
-    this.props.api.outputApi.downloadOutput();
+  downloadOutput(format = OutputFileTypes.JSON) {
+    this.props.api.outputApi.downloadOutput(format);
+  }
+
+  renderDownloadMenu() {
+    return (
+      <Menu>
+        <MenuItem
+          onClick={() => { this.downloadOutput(OutputFileTypes.JSON); }}
+          text={globalString('output/toolbar/downloadMenu/json')}
+        />
+        <MenuItem
+          onClick={() => { this.downloadOutput(OutputFileTypes.CSV); }}
+          text={globalString('output/toolbar/downloadMenu/csv')}
+        />
+      </Menu>
+    );
   }
 
   /**
@@ -641,21 +660,23 @@ export default class Toolbar extends React.Component {
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
-          <Tooltip
-            intent={Intent.PRIMARY}
-            hoverOpenDelay={1000}
-            inline
-            content={globalString('output/toolbar/save')}
-            tooltipClassName="pt-dark"
-            position={Position.BOTTOM}
-          >
-            <AnchorButton
-              className="saveOutputBtn circleButton"
-              onClick={this.downloadOutput}
+          <Popover content={this.renderDownloadMenu()} position={Position.BOTTOM_LEFT}>
+            <Tooltip
+              intent={Intent.PRIMARY}
+              hoverOpenDelay={1000}
+              inline
+              content={globalString('output/toolbar/save')}
+              tooltipClassName="pt-dark"
+              position={Position.BOTTOM}
             >
-              <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
-            </AnchorButton>
-          </Tooltip>
+              <AnchorButton
+                className="saveOutputBtn circleButton"
+                onClick={this.showDownloadMenu}
+              >
+                <SaveOutputIcon className="dbKodaSVG" width={30} height={30} />
+              </AnchorButton>
+            </Tooltip>
+          </Popover>
         </div>
       </nav>
     );

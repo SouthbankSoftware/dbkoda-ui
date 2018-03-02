@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T09:42:43+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T16:06:02+10:00
+ * @Last modified time: 2018-02-28T11:58:07+10:00
  */
 
 import { Doc } from 'codemirror';
@@ -307,5 +307,29 @@ export default class StaticApi {
       line += this._getLineText(cm, lineNumber + direction, direction, lines);
     }
     return line;
+  }
+
+  static convertJsonToCsv(jsonArray) {
+    let fields;
+    let headings = [];
+    const csv = jsonArray.map((row) => {
+      fields = Object.keys(row);
+      headings = _.union(headings, fields);
+      const newRow = fields.map((fieldName) => {
+        if (typeof row[fieldName] === 'string' ||
+            typeof row[fieldName] === 'number' ||
+            typeof row[fieldName] === 'boolean'
+          ) {
+          console.log(`${fieldName}: ${JSON.stringify(row[fieldName])}`);
+          return JSON.stringify(row[fieldName]);
+        }
+        console.log(`${fieldName}: "${JSON.stringify(row[fieldName]).replace(/"/g, '\'')}"`);
+        return `"${JSON.stringify(row[fieldName]).replace(/"/g, '\'')}"`;
+      }).join(',').concat('\r\n');
+      return newRow;
+    });
+    console.log(headings.join(','));
+    console.log(csv);
+    return `${headings.join(',')}\r\n${csv.join('')}`;
   }
 }

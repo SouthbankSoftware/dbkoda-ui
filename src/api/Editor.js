@@ -35,6 +35,16 @@ import camelise from '~/helpers/camelise';
 
 import StaticApi from './static';
 
+export type Editor = {
+  id: string,
+  profileId: string,
+  shellId: string,
+  alias: string,
+  currentProfile: string,
+  fileName: string,
+  initialMsg: string,
+};
+
 export default class EditorApi {
   store;
   api;
