@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T16:49:37+11:00
+ * @Last modified time: 2018-03-02T12:17:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,6 +25,7 @@
  */
 
 import React from 'react';
+import { observable, action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { PerformancePanel } from '#/PerformancePanel';
 
@@ -40,7 +41,7 @@ import '#/App.scss';
  }))
  @observer
 class PerformanceWindow extends React.Component {
-  performancePanelVisible = true;
+  @observable performancePanelVisible = true;
   constructor() {
     super();
     document.addEventListener('visibilitychange', this._handleAppVisibility, false);
@@ -61,6 +62,7 @@ class PerformanceWindow extends React.Component {
       </div>
     );
   }
+  @action.bound
   _handleAppVisibility() {
     if (document.hidden) {
       console.log('App is Hidden!!!');
