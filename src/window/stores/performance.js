@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T16:44:55+11:00
+ * @Last modified time: 2018-03-02T11:06:32+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -108,7 +108,7 @@ export default class Store {
           this.performancePanel = restore(args.dataObject, { deserializer, postDeserializer });
           console.log('this.performancePanel::', this.performancePanel);
         } else if (args.command === 'mw_updateData' && this.performancePanel !== null) {
-          const payload = restore(args.dataObject, { deserializer, postDeserializer });
+          const payload = args.dataObject;
           this.syncPayload(this.performancePanel, payload);
         }
       }
