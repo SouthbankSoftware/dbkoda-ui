@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-02T13:11:24+11:00
+ * @Last modified time: 2018-03-02T15:40:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -76,6 +76,7 @@ export type PerformancePanelStatus = $Keys<typeof performancePanelStatuses>;
 
 export type PerformancePanelState = {
   profileId: UUID,
+  profileAlias: string,
   widgets: ObservableMap<WidgetState>,
   layouts: ObservableMap<LayoutState>,
   status: PerformancePanelStatus,
@@ -248,6 +249,7 @@ export default class PerformancePanelApi {
 
     const performancePanel: PerformancePanelState = observable.shallowObject({
       profileId,
+      profileAlias: '',
       widgets: observable.shallowMap(),
       layouts,
       status: performancePanelStatuses.stopped,
@@ -460,14 +462,15 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  _mountPerformancePanelToExternalWindow(_profileId: UUID) {
-    this._sendMsgToPerformanceWindow({command: 'mw_createWindow', profileId: _profileId});
-    this.externalPerformanceWindows.set(_profileId, {status: 'started'});
+  _mountPerformancePanelToExternalWindow(profileId: UUID) {
+    this._sendMsgToPerformanceWindow({command: 'mw_createWindow', profileId});
+    this.externalPerformanceWindows.set(profileId, {status: 'started'});
   }
 
   @action.bound
-  _unmountPerformancePanelFromExternalWindow(_profileId: UUID) {
-    this._sendMsgToPerformanceWindow({command: 'mw_closeWindow', profileId: _profileId});
+  _unmountPerformancePanelFromExternalWindow(profileId: UUID) {
+    this._sendMsgToPerformanceWindow({command: 'mw_closeWindow', profileId});
+    this.externalPerformanceWindows.set(profileId, {status: 'closed'});
   }
 
   @action.bound
@@ -480,7 +483,9 @@ export default class PerformancePanelApi {
         this._sendMsgToPerformanceWindow({command: 'mw_initData', profileId: args.profileId, dataObject: dump(performancePanel, { serializer })});
         this.externalPerformanceWindows.set(args.profileId, {status: 'ready'});
       } else if (args.command === 'pw_windowClosed') {
+        // this command should only come from Performance Window if window is closed by user using cross.
         this.externalPerformanceWindows.set(args.profileId, {status: 'closed'});
+        this.transformPerformancePanel(args.profileId, performancePanelStatuses.background);
       }
     }
   }
@@ -571,6 +576,7 @@ export default class PerformancePanelApi {
         // foreground => external
 
         this._unmountPerformancePanelFromMainWindow();
+        performancePanel.status = to;
         this._mountPerformancePanelToExternalWindow(profileId);
       } else if (to === performancePanelStatuses.stopped) {
         // foreground => stopped
@@ -595,6 +601,7 @@ export default class PerformancePanelApi {
         // external => foreground
 
         this._unmountPerformancePanelFromExternalWindow(profileId);
+        performancePanel.status = to;
         this._mountPerformancePanelToMainWindow(profileId);
       } else if (to === performancePanelStatuses.stopped) {
         // external => stopped
