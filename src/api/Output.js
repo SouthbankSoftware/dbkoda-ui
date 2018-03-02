@@ -1,4 +1,6 @@
 /*
+ * @flow
+ *
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@sout≈hbanksoftware.com
@@ -35,6 +37,38 @@ import {
 import { NewToaster } from '#/common/Toaster';
 import { type ChartPanelStore } from '#/ChartPanel';
 import StaticApi from './static';
+import { type Profile } from './Profile';
+import { type Editor } from './Editor';
+
+export type Output = {
+  id: string,
+  connId: string,
+  shellId: string,
+  title: string,
+  output: string & [string],
+  cannotShowMore: boolean,
+  showingMore: boolean,
+  commandHistory: [string],
+  enhancedJson: string,
+  tableJson: string,
+};
+
+export type OutputPanel = {
+  currentTab: string,
+  clearingOutput: boolean,
+  executingShowMore: boolean,
+  executingTerminalCmd: boolean,
+  sendingCommand: string,
+  collapseTable: boolean,
+  expandTable: boolean,
+};
+
+export const OutputFileTypes = {
+  JSON: 'application/json',
+  CSV: 'text/csv',
+};
+
+declare type OutputFileType = $Keys<typeof OutputFileTypes>;
 
 /**
  * API class containing functions related to the output and output toolbar as well as managing the global store for these components.
@@ -42,8 +76,9 @@ import StaticApi from './static';
 export default class OutputApi {
   store: Store;
   api: {};
-  profileStore: {};
+  profileStore: { profiles: Map<string, Profile> };
   outputHash: any;
+  outputPanel: OutputPanel;
 
   /**
    *
@@ -51,11 +86,13 @@ export default class OutputApi {
    * @param {Object} api -  The API object, for interacting with other API categories.
    * @param {Object} profileStore - The global profiles store, containing information about connection profiles.
    */
-  constructor(store: Store, api: {}, profileStore: {}) {
+  constructor(store: Store, api: {}, profileStore: { profiles: Map<string, Profile> }) {
     this.store = store;
     this.api = api;
     this.profileStore = profileStore;
     this.outputHash = {};
+    // $FlowFixMe
+    this.outputPanel = this.store.outputPanel;
 
     // $FlowFixMe
     this.init = this.init.bind(this);
@@ -90,7 +127,7 @@ export default class OutputApi {
    * @param {Object} editor - The editor to add a new output tab for.
    */
   @action.bound
-  addOutput(editor) {
+  addOutput(editor: Editor) {
     this.outputHash[editor.profileId + '|' + editor.shellId] = editor.id;
 
     try {
@@ -150,7 +187,7 @@ export default class OutputApi {
    * @param {Object} editor - The editor to remove all outputs for.
    */
   @action.bound
-  removeOutput(editor) {
+  removeOutput(editor: Editor) {
     this.store.outputs.delete(editor.id);
     delete this.outputHash[editor.profileId + '|' + editor.shellId];
     Broker.removeListener(
@@ -168,7 +205,7 @@ export default class OutputApi {
    * @param {*} event
    */
   @action.bound
-  swapOutputShellConnection(event) {
+  swapOutputShellConnection(event: *) {
     const { oldId, oldShellId, id, shellId } = event;
 
     const outputId = this.outputHash[oldId + '|' + oldShellId];
@@ -199,12 +236,12 @@ export default class OutputApi {
    * @param {Object} output - The output tab for which there is new output avaliable.
    */
   @action.bound
-  outputAvailable(output) {
+  outputAvailable(output: Output) {
     // Parse output for string 'Type "it" for more'
     const outputId = this.outputHash[output.id + '|' + output.shellId];
 
     const totalOutput = this.store.outputs.get(outputId).output + output.output;
-    const profile = this.profileStore.profiles.get(output.id);
+    const profile: Profile = this.profileStore.profiles.get(output.id);
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
@@ -234,7 +271,7 @@ export default class OutputApi {
    * @param {Object} output
    */
   @action.bound
-  onReconnect(output) {
+  onReconnect(output: Output) {
     const outputId = this.outputHash[output.id + '|' + output.shellId];
     const combineOutput = output.output.join('\r');
     const totalOutput = this.store.outputs.get(outputId).output + combineOutput;
@@ -247,7 +284,7 @@ export default class OutputApi {
    * @param {} initialOutput - The initial output to place in the new Drill tab.
    */
   @action.bound
-  addDrillOutput(editor, initialOutput = null) {
+  addDrillOutput(editor: Editor, initialOutput: ?string = null) {
     // this.outputHash[editor.profileId + '|' + editor.id] = editor.id;
 
     try {
@@ -302,6 +339,7 @@ export default class OutputApi {
    * @param {Object} res - The result object from drill containing the output to render in the tab.
    */
   @action.bound
+  // $FlowFixMe drill result object type
   drillOutputAvailable(res) {
     const profile = this.profileStore.profiles.get(res.profileId);
     const strOutput = JSON.stringify(res.output, null, 2);
@@ -331,18 +369,18 @@ export default class OutputApi {
     outputId: string,
     displayType: string,
     lines: any,
-    editor,
+    editor: Editor,
     singleDoc: boolean
   ) {
-    let tabPrefix;
+    let tabPrefix = '';
     if (displayType === 'enhancedJson') {
       tabPrefix = 'EnhancedJson-';
     } else if (displayType === 'tableJson') {
       tabPrefix = 'TableView-';
     }
 
-    if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
-      this.store.outputPanel.currentTab = tabPrefix + outputId;
+    if (!this.outputPanel.currentTab.startsWith(tabPrefix)) {
+      this.outputPanel.currentTab = `${tabPrefix}${outputId}`;
     }
 
     if (displayType === 'tableJson') {
@@ -351,6 +389,7 @@ export default class OutputApi {
         outputId,
         displayType,
         lines,
+        // $FlowFixMe
         editor.getCodeMirror(),
         singleDoc
       );
@@ -395,7 +434,7 @@ export default class OutputApi {
                 className: 'danger',
                 icon: ''
               });
-              this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
+              this.outputPanel.currentTab = this.outputPanel.currentTab.split(
                 tabPrefix
               )[1];
             });
@@ -416,11 +455,11 @@ export default class OutputApi {
    */
   @action.bound
   initJsonTableView(
-    jsonStr: String,
-    outputId: String,
-    displayType: String,
+    jsonStr: string,
+    outputId: string,
+    displayType: string,
     lines: any,
-    cm,
+    cm: {},
     singleLine: boolean
   ) {
     const tabPrefix = 'TableView-';
@@ -457,7 +496,7 @@ export default class OutputApi {
                   className: 'danger',
                   icon: ''
                 });
-                this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
+                this.outputPanel.currentTab = this.outputPanel.currentTab.split(
                   tabPrefix
                 )[1];
               });
@@ -502,7 +541,7 @@ export default class OutputApi {
                   className: 'danger',
                   icon: ''
                 });
-                this.store.outputPanel.currentTab = this.store.outputPanel.currentTab.split(
+                this.outputPanel.currentTab = this.outputPanel.currentTab.split(
                   tabPrefix
                 )[1];
               });
@@ -521,15 +560,15 @@ export default class OutputApi {
   @action.bound
   createJSONTableViewFromJSONArray(
     JSONArray: Array<any>,
-    outputId: String,
-    targetData
-  ) {
+    outputId: string,
+    targetData: ?{ collection: string, database: string }
+  ): Promise<void> {
     return new Promise(resolve => {
       runInAction(() => {
-        const tabPrefix = 'TableView-';
+        const tabPrefix = OutputToolbarContexts.TABLE_VIEW;
 
-        if (!this.store.outputPanel.currentTab.startsWith(tabPrefix)) {
-          this.store.outputPanel.currentTab = tabPrefix + outputId;
+        if (!this.outputPanel.currentTab.startsWith(tabPrefix)) {
+          this.outputPanel.currentTab = tabPrefix + outputId;
         }
         if (targetData) {
           this.store.outputs.get(outputId).tableJson = {
@@ -568,7 +607,7 @@ export default class OutputApi {
     state: ComponentState,
     error: ?string = null
   ) {
-    const { outputs, outputPanel } = this.store;
+    const { outputs } = this.store;
     const output = outputs.get(editorId);
     const common = {
       data,
@@ -600,43 +639,35 @@ export default class OutputApi {
       _.assign(output.chartPanel, common);
     }
 
-    outputPanel.currentTab = `Chart-${editorId}`;
+    this.outputPanel.currentTab = `${OutputToolbarContexts.CHART_VIEW}-${editorId}`;
   }
 
   /**
-   * A generic function for swapping to an existing Output View froma another existing output view.
+   * A generic function for swapping to an existing Output View from another existing output view.
    * @param {OutputToolbarContext} context - Which context are we swapping to.
    */
   @action.bound
+  // $FlowFixMe
   openView(context: OutputToolbarContext) {
     if (IS_DEVELOPMENT) {
       console.log('Opening Output View: ', context);
     }
 
-    switch (context) {
-      case OutputToolbarContexts.RAW:
-        this.store.outputPanel.currentTab = this.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.TABLE_VIEW:
-        this.store.outputPanel.currentTab =
-          'TableView-' + this.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.CHART_VIEW:
-        this.store.outputPanel.currentTab =
-          'Chart-' + this.store.editorPanel.activeEditorId;
-        break;
-      case OutputToolbarContexts.ENHANCED_VIEW:
-        this.store.outputPanel.currentTab =
-          'EnhancedJson-' + this.store.editorPanel.activeEditorId;
-        break;
-      default:
-        break;
+    if (context == OutputToolbarContexts.RAW) {
+      // $FlowFixMe
+      this.outputPanel.currentTab = this.store.editorPanel.activeEditorId;
+    } else {
+      // $FlowFixMe
+      this.outputPanel.currentTab = `${context}-${this.store.editorPanel.activeEditorId}`;
     }
   }
 
-  getOutputContent(context) {
-    const { currentTab } = this.store.outputPanel;
-    console.log(`getOutput() context: ${context}`);
+  // $FlowFixMe
+  getOutputContent(context: OutputToolbarContext, format: ?OutputFileType) {
+    const { currentTab } = this.outputPanel;
+    if (!format) {
+      format = OutputFileTypes.JSON;
+    }
     const outputId = (context === OutputToolbarContexts.RAW) ?
         currentTab :
         currentTab.replace(`${context}-`, '');
@@ -647,7 +678,11 @@ export default class OutputApi {
         break;
       }
       case OutputToolbarContexts.TABLE_VIEW: {
-        output = JSON.stringify(this.store.outputs.get(outputId).tableJson.json);
+        if (format === OutputFileTypes.JSON) {
+          output = JSON.stringify(this.store.outputs.get(outputId).tableJson.json);
+        } else if (format === OutputFileTypes.CSV) {
+          output = StaticApi.convertJsonToCsv(this.store.outputs.get(outputId).tableJson.json);
+        }
         break;
       }
       case OutputToolbarContexts.ENHANCED_VIEW: {
@@ -660,29 +695,24 @@ export default class OutputApi {
     return output;
   }
 
-  downloadOutput() {
-    const { currentTab } = this.store.outputPanel;
+  downloadOutput(format: OutputFileType) {
+    const { currentTab } = this.outputPanel;
     const outputContext = this.getOutputContext();
-    console.log(`downloadOutput() context: ${outputContext}`);
     let content;
-    let fileType;
     switch (outputContext) {
       case OutputToolbarContexts.ENHANCED_VIEW:
         content = this.getOutputContent(outputContext);
-        fileType = 'application/json';
         break;
       case OutputToolbarContexts.TABLE_VIEW:
-        content = this.getOutputContent(outputContext);
-        fileType = 'application/json';
+        content = this.getOutputContent(outputContext, format);
         break;
       case OutputToolbarContexts.RAW:
         content = this.getOutputContent(outputContext);
-        fileType = 'text/csv';
         break;
       default:
         return;
     }
-    const data = new Blob([content], { type: fileType });
+    const data = new Blob([content], { type: format });
     const csvURL = window.URL.createObjectURL(data);
     const tempLink = document.createElement('a');
     tempLink.href = csvURL;
@@ -694,7 +724,7 @@ export default class OutputApi {
   }
 
   getOutputContext(): OutputToolbarContext {
-    const { currentTab } = this.store.outputPanel;
+    const { currentTab } = this.outputPanel;
     const tabString = currentTab.split('-')[0];
     const validContext = _.findKey(OutputToolbarContexts, (ctx) => (ctx === tabString));
     if (!validContext) {

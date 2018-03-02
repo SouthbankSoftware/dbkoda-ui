@@ -94,6 +94,10 @@
           "expandAll": "Expand all Rows in the table",
           "collapseAll": "Collapse all rows in the table",
           "refresh": "Refresh results in table."
+        },
+        "downloadMenu": {
+          "json": "JSON",
+          "csv": "CSV"
         }
       },
       "editor": {
