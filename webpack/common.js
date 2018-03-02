@@ -2,8 +2,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-22T16:42:44+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-22T23:43:23+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-26T16:24:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,11 +29,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, '../src'),
-  entry: ['babel-polyfill', './index.jsx'],
+  entry: {
+    main: ['babel-polyfill', './index.jsx'],
+    performance: ['babel-polyfill', './performance.jsx']
+  },
   output: {
     path: path.resolve(__dirname, '../dist/ui/'),
     publicPath: '/ui/',
-    filename: 'app.[hash].js',
+    filename: '[name].[hash].js',
   },
   module: {
     rules: [
@@ -61,43 +64,56 @@ module.exports = {
               svgo: {
                 plugins: [
                   {
-                    removeTitle: false,
-                  },
+                    removeTitle: false
+                  }
                 ],
-                floatPrecision: 2,
-              },
-            },
-          },
-        ],
+                floatPrecision: 2
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.(png|woff|eot|ttf|woff2)(\?.*$|$)/,
-        loader: 'url-loader?limit=100000&mimetype=application/font-woff',
+        loader: 'url-loader?limit=100000&mimetype=application/font-woff'
       },
       {
         test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader?name=images/[hash].[ext]',
+        loader: 'file-loader?name=images/[hash].[ext]'
       },
       {
         test: /\.handlebars|hbs$/,
         loader:
-          'handlebars-loader?helperDirs[]=' + path.join(__dirname, '../src/helpers/handlebars'),
+          'handlebars-loader?helperDirs[]=' +
+          path.join(__dirname, '../src/helpers/handlebars')
       },
       {
         test: /node_modules\/JSONStream\/index\.js$/,
-        use: ['shebang-loader', 'babel-loader'],
-      },
-    ],
+        use: ['shebang-loader', 'babel-loader']
+      }
+    ]
   },
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      handlebars: 'handlebars/dist/handlebars.js',
-    },
+      handlebars: 'handlebars/dist/handlebars.js'
+    }
   },
-  plugins: [new HtmlWebpackPlugin({ hash: false, template: './index.html' })],
+  plugins: [
+    new HtmlWebpackPlugin({
+      hash: false,
+      template: './index.html',
+      chunks: ['main'],
+    }),
+    new HtmlWebpackPlugin({
+      hash: false,
+      filename: 'performance.html',
+      template: './index.html',
+      chunks: ['performance']
+    })
+  ],
   node: {
     fs: 'empty',
-    module: 'empty',
-  },
+    module: 'empty'
+  }
 };

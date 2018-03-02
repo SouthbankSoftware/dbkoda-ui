@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T10:23:23+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-02T11:42:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,12 +30,16 @@ import _ from 'lodash';
 import { action, observable } from 'mobx';
 import type { ObservableMap } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
+import { dump} from 'dumpenvy';
+import { serializer } from '#/common/mobxDumpenvyExtension';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 // $FlowFixMe
 import { NewToaster } from '#/common/Toaster';
 import schema from '#/PerformancePanel/schema.json';
 import type { WidgetState } from './Widget';
+
+
 
 const FOREGROUND_SAMPLING_RATE = 5000;
 const BACKGROUND_SAMPLING_RATE = 30000;
@@ -119,6 +123,8 @@ export default class PerformancePanelApi {
   _disposers: Map<UUID, *> = new Map();
   _powerBlockerDisposers: Map<UUID, *> = new Map();
 
+  externalPerformanceWindows: Map<UUID, *> = new Map();
+
   constructor(store: *, api: *, config: *) {
     this.store = store;
     this.api = api;
@@ -139,7 +145,7 @@ export default class PerformancePanelApi {
     let powerMonitorDisposer;
 
     if (IS_ELECTRON) {
-      const { remote: { powerMonitor } } = window.require('electron');
+      const { remote: { powerMonitor }, ipcRenderer } = window.require('electron');
 
       const handleSuspend = () => {
         logToMain('info', 'os is suspending');
@@ -158,6 +164,8 @@ export default class PerformancePanelApi {
         powerMonitor.removeListener('suspend', handleSuspend);
         powerMonitor.removeListener('resume', handleResume);
       };
+
+      ipcRenderer.on('performance', this._handlePerformanceWindowEvents);
     }
 
     // stop all PP when refreshing
@@ -305,7 +313,7 @@ export default class PerformancePanelApi {
 
     if (!_.includes(RUNNABLE_STATUSES, to)) {
       console.error(
-        `PerformancePanel API: invalid (not runnable) to \`${to}\` for _startPerformancePanel`
+        `PerformancePanel API: invalid (not runnable) to \`${to}\` for _runPerformancePanel`
       );
       return;
     }
@@ -367,6 +375,12 @@ export default class PerformancePanelApi {
           }
 
           values.push(value);
+        }
+        if (performancePanel.status === performancePanelStatuses.external) {
+          const externalWindow = this.externalPerformanceWindows.get(profileId);
+          if (externalWindow && externalWindow.status === 'ready') {
+              this._sendMsgToPerformanceWindow({command: 'mw_updateData', profileId, dataObject: payload});
+          }
         }
       });
 
@@ -443,12 +457,36 @@ export default class PerformancePanelApi {
 
   @action.bound
   _mountPerformancePanelToExternalWindow(_profileId: UUID) {
-    // TODO: @wshamim
+    this._sendMsgToPerformanceWindow({command: 'mw_createWindow', profileId: _profileId});
+    this.externalPerformanceWindows.set(_profileId, {status: 'started'});
   }
 
   @action.bound
   _unmountPerformancePanelFromExternalWindow(_profileId: UUID) {
-    // TODO: @wshamim
+    this._sendMsgToPerformanceWindow({command: 'mw_closeWindow', profileId: _profileId});
+  }
+
+  @action.bound
+  _handlePerformanceWindowEvents(event, args) {
+    console.log('_handlePerformanceWindowEvents::', args);
+    const { performancePanels } = this.store;
+    if (args.profileId) {
+      if (args.command === 'pw_windowReady') {
+        const performancePanel = performancePanels.get(args.profileId);
+        this._sendMsgToPerformanceWindow({command: 'mw_initData', profileId: args.profileId, dataObject: dump(performancePanel, { serializer })});
+        this.externalPerformanceWindows.set(args.profileId, {status: 'ready'});
+      } else if (args.command === 'pw_windowClosed') {
+        this.externalPerformanceWindows.set(args.profileId, {status: 'closed'});
+      }
+    }
+  }
+  @action.bound
+  _sendMsgToPerformanceWindow(args) {
+    if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      const { ipcRenderer } = electron;
+      ipcRenderer.send('performance', args);
+    }
   }
 
   @action.bound

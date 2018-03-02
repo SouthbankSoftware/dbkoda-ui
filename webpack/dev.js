@@ -2,8 +2,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-15T14:25:29+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-21T13:21:22+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-26T16:14:59+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -37,10 +37,11 @@ module.exports = merge.strategy({
   'module.rules': 'prepend',
   plugins: 'prepend'
 })(common, {
-  entry: [
+  entry: {
     // activate HMR for React
-    'react-hot-loader/patch'
-  ],
+    main: 'react-hot-loader/patch',
+    performance: 'react-hot-loader/patch'
+  },
   devtool: 'source-map',
   devServer: {
     // enable HMR on the server

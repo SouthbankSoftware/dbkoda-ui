@@ -109,7 +109,7 @@ export default class WidgetApi {
       profileId,
       type,
       items,
-      values: observable.shallowArray(),
+      values: observable.array(),
       state: 'loading',
       errorLevel: null,
       error: null,

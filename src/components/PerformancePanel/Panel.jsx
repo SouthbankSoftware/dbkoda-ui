@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T11:26:13+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-01T16:11:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -105,7 +105,8 @@ export default class PerformancePanel extends React.Component<Props> {
         >
           {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
-        <Button className="close-button pt-button pt-intent-primary" text="X" onClick={onClose} />
+        {onClose &&
+        <Button className="close-button pt-button pt-intent-primary" text="X" onClick={onClose} />}
       </div>
     );
   }

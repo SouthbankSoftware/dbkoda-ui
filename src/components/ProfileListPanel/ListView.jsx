@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T02:49:21+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-02T11:37:06+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -587,6 +587,20 @@ export default class ListView extends React.Component {
                 className="profileListContextMenu reset-high-water-mark"
                 onClick={() => this.props.api.resetHighWaterMark(profile.id)}
                 text={globalString('profile/menu/resetHWM')}
+                intent={Intent.NONE}
+                iconName="pt-icon-heat-grid"
+              />
+            </div>
+          ) : null}
+          {IS_DEVELOPMENT ? (
+            <div className="menuItemWrapper">
+              <MenuItem
+                className="profileListContextMenu createPerformancePanel"
+                onClick={() => this.props.api.transformPerformancePanel(
+                  profile.id,
+                  performancePanelStatuses.external
+                )}
+                text="Create External Performance Panel"
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
               />
