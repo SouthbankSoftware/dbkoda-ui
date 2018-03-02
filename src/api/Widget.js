@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T13:46:55+11:00
+ * @Last modified time: 2018-03-02T15:52:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -62,7 +62,8 @@ export type WidgetState = {
   widgetItemKeys?: *,
   widgetDisplayNames?: *,
   showRunQueue?: *,
-  useHighWaterMark?: *
+  useHighWaterMark?: *,
+  showAlarms?: *
 };
 
 export default class WidgetApi {
@@ -109,7 +110,7 @@ export default class WidgetApi {
       profileId,
       type,
       items,
-      values: observable.array(),
+      values: observable.shallowArray(),
       state: 'loading',
       errorLevel: null,
       error: null,

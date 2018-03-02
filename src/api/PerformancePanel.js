@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-02T15:40:20+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-02T15:57:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,7 +30,7 @@ import _ from 'lodash';
 import { action, observable } from 'mobx';
 import type { ObservableMap } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
-import { dump} from 'dumpenvy';
+import { dump } from 'dumpenvy';
 import { serializer } from '#/common/mobxDumpenvyExtension';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
@@ -38,8 +38,6 @@ import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import schema from '#/PerformancePanel/schema.json';
 import type { WidgetState } from './Widget';
-
-
 
 const FOREGROUND_SAMPLING_RATE = 5000;
 const BACKGROUND_SAMPLING_RATE = 30000;
@@ -86,6 +84,45 @@ export type PerformancePanelState = {
   rows: number,
   midWidth: number,
   leftWidth: number
+};
+
+export const handleNewData = (payload: *, performancePanel: PerformancePanelState) => {
+  const { timestamp, value: rawValue, stats } = payload;
+  const { widgets } = performancePanel;
+
+  performancePanel.stats = stats;
+
+  for (const widget of widgets.values()) {
+    const { items, values, showAlarms } = widget;
+
+    if (values.length >= MAX_HISTORY_SIZE) {
+      values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
+    }
+
+    const value = {
+      timestamp,
+      value: _.pick(rawValue, items)
+    };
+
+    if (showAlarms) {
+      const alarmObj = _.get(rawValue, `alarm.${showAlarms}`);
+
+      if (alarmObj) {
+        // $FlowFixMe
+        value.alarms = _.orderBy(
+          _.map(alarmObj, v => {
+            const alarm = _.pick(v, ['level', 'message']);
+            alarm.timestamp = timestamp;
+            return alarm;
+          }),
+          ['timestamp'],
+          ['desc']
+        );
+      }
+    }
+
+    values.push(value);
+  }
 };
 
 /**
@@ -197,13 +234,15 @@ export default class PerformancePanelApi {
   };
 
   _restorePerformancePanelsFromBackground = () => {
-    for (const [profileId, lastStatus] of this._lastStatuses) {
-      if (this.hasPerformancePanel(profileId)) {
-        this.transformPerformancePanel(profileId, lastStatus);
+    setTimeout(() => {
+      for (const [profileId, lastStatus] of this._lastStatuses) {
+        if (this.hasPerformancePanel(profileId)) {
+          this.transformPerformancePanel(profileId, lastStatus);
+        }
       }
-    }
 
-    this._lastStatuses.clear();
+      this._lastStatuses.clear();
+    }, 500);
   };
 
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
@@ -334,6 +373,21 @@ export default class PerformancePanelApi {
     }
 
     if (status === performancePanelStatuses.stopped) {
+      // prevent app suspension
+      let suspensionBlockerDisposer;
+
+      if (IS_ELECTRON) {
+        const { remote: { powerSaveBlocker } } = window.require('electron');
+        const suspensionBlockerId = powerSaveBlocker.start('prevent-app-suspension');
+
+        logToMain('info', `started suspension blocker for Performance Panel ${profileId}`);
+
+        suspensionBlockerDisposer = () => {
+          powerSaveBlocker.stop(suspensionBlockerId);
+          logToMain('info', `stopped suspension blocker for Performance Panel ${profileId}`);
+        };
+      }
+
       // handle errors
       const handleStatsServiceError = payload => {
         const { error, level } = payload;
@@ -344,58 +398,30 @@ export default class PerformancePanelApi {
       Broker.on(EventType.STATS_ERROR(profileId), handleStatsServiceError);
 
       // handle new data
-      const handleNewData = action(payload => {
-        const { timestamp, value: rawValue, stats } = payload;
+      const _handleNewData = action(payload => {
+        logToMain('debug', 'new data');
 
-        logToMain('info', 'new data');
+        handleNewData(payload, performancePanel);
 
-        performancePanel.stats = stats;
-
-        for (const widget of widgets.values()) {
-          const { items, values, showAlarms } = widget;
-
-          if (values.length >= MAX_HISTORY_SIZE) {
-            values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
-          }
-
-          const value = {
-            timestamp,
-            value: _.pick(rawValue, items)
-          };
-
-          if (showAlarms) {
-            const alarmObj = _.get(rawValue, `alarm.${showAlarms}`);
-
-            if (alarmObj) {
-              // $FlowFixMe
-              value.alarms = _.orderBy(
-                _.map(alarmObj, v => {
-                  const alarm = _.pick(v, ['level', 'message']);
-                  alarm.timestamp = timestamp;
-                  return alarm;
-                }),
-                ['timestamp'],
-                ['desc']
-              );
-            }
-          }
-
-          values.push(value);
-        }
         if (performancePanel.status === performancePanelStatuses.external) {
           const externalWindow = this.externalPerformanceWindows.get(profileId);
           if (externalWindow && externalWindow.status === 'ready') {
-              this._sendMsgToPerformanceWindow({command: 'mw_updateData', profileId, dataObject: payload});
+            this._sendMsgToPerformanceWindow({
+              command: 'mw_updateData',
+              profileId,
+              dataObject: payload
+            });
           }
         }
       });
 
-      Broker.on(EventType.STATS_DATA(profileId), handleNewData);
+      Broker.on(EventType.STATS_DATA(profileId), _handleNewData);
 
       // set up a disposer to cleanup everything related when called
       this._disposers.set(profileId, () => {
+        suspensionBlockerDisposer && suspensionBlockerDisposer();
         Broker.off(EventType.STATS_ERROR(profileId), handleStatsServiceError);
-        Broker.off(EventType.STATS_DATA(profileId), handleNewData);
+        Broker.off(EventType.STATS_DATA(profileId), _handleNewData);
         this._removePowerBlocker(profileId);
       });
     }
@@ -480,8 +506,12 @@ export default class PerformancePanelApi {
     if (args.profileId) {
       if (args.command === 'pw_windowReady') {
         const performancePanel = performancePanels.get(args.profileId);
-        this._sendMsgToPerformanceWindow({command: 'mw_initData', profileId: args.profileId, dataObject: dump(performancePanel, { serializer })});
-        this.externalPerformanceWindows.set(args.profileId, {status: 'ready'});
+        this._sendMsgToPerformanceWindow({
+          command: 'mw_initData',
+          profileId: args.profileId,
+          dataObject: dump(performancePanel, { serializer })
+        });
+        this.externalPerformanceWindows.set(args.profileId, { status: 'ready' });
       } else if (args.command === 'pw_windowClosed') {
         // this command should only come from Performance Window if window is closed by user using cross.
         this.externalPerformanceWindows.set(args.profileId, {status: 'closed'});

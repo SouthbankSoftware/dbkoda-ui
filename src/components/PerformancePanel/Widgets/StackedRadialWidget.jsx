@@ -1,8 +1,8 @@
 /**
  * @flow
  * Created by mike on 06/02/2018
- * @Last modified by:   mike
- * @Last modified time: 2018-02-28T15:06:18+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-02T13:36:14+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -468,6 +468,11 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     return max;
   }
 
+  componentWillUnmount() {
+    this._autorunDisposer && this._autorunDisposer();
+    // TODO: cleanup d3?
+  }
+
   componentDidMount() {
     setTimeout(() => {
       this.fields = [];
@@ -527,12 +532,9 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
   render() {
     const { widget, widgetStyle } = this.props;
     const { displayName } = widget;
-    this.fields = [];
-    this.props.widget.items.forEach((item, count) => {
-      // $FlowFixMe
-      this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
-    });
+
     const wrapperStyle = { width: this.state.width * 0.55 };
+
     // $FlowIssue
     return (
       <Widget
