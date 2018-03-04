@@ -213,7 +213,10 @@ export default class ListView extends React.Component {
       const { api } = this.props;
 
       api.hasPerformancePanel(selectedProfile.id) &&
-        api.transformPerformancePanel(selectedProfile.id, performancePanelStatuses.stopped);
+        api.transformPerformancePanel(
+          selectedProfile.id,
+          performancePanelStatuses.stopped
+        );
 
       this.setState({ closingProfile: true });
       this.props.store.layout.alertIsLoading = true;
@@ -303,7 +306,8 @@ export default class ListView extends React.Component {
       } else {
         if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG,
+            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE
+              .OPEN_DIALOG,
             EventLogging.getFragmentEnum().PROFILES,
             'User opened the Edit Connection Profile drawer.'
           );
@@ -378,7 +382,10 @@ export default class ListView extends React.Component {
   @autobind
   openCloseConnectionAlert() {
     this.setState({ isCloseWarningActive: true });
-    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
+    Mousetrap.bindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.closeConnectionCloseAlert
+    );
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
@@ -386,14 +393,20 @@ export default class ListView extends React.Component {
   closeConnectionCloseAlert() {
     this.props.store.layout.alertIsLoading = false;
     this.setState({ isCloseWarningActive: false });
-    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionCloseAlert);
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.closeConnectionCloseAlert
+    );
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   @autobind
   openRemoveConnectionAlert() {
     this.setState({ isRemoveWarningActive: true });
-    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
+    Mousetrap.bindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.closeConnectionRemoveAlert
+    );
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
 
@@ -401,7 +414,10 @@ export default class ListView extends React.Component {
   closeConnectionRemoveAlert() {
     this.props.store.layout.alertIsLoading = false;
     this.setState({ isRemoveWarningActive: false });
-    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeConnectionRemoveAlert);
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.closeConnectionRemoveAlert
+    );
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.deleteProfile);
   }
 
@@ -416,14 +432,20 @@ export default class ListView extends React.Component {
       ? this.api.passwordApi.isProfileMissingFromStore(`${id}-s`) && ssh
       : false;
     if (
-      (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
+      (((passwordStoreEnabled && storeNeedsPassword) ||
+        !passwordStoreEnabled) &&
         this.state.targetProfile.sha) ||
-      (((passwordStoreEnabled && storeNeedsRemotePassword) || !passwordStoreEnabled) &&
+      (((passwordStoreEnabled && storeNeedsRemotePassword) ||
+        !passwordStoreEnabled) &&
         this.state.targetProfile.ssh &&
-        (this.state.targetProfile.bPassPhrase || this.state.targetProfile.bRemotePass))
+        (this.state.targetProfile.bPassPhrase ||
+          this.state.targetProfile.bRemotePass))
     ) {
       this.setState({ isOpenWarningActive: true });
-      Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
+      Mousetrap.bindGlobal(
+        DialogHotkeys.closeDialog.keys,
+        this.closeOpenConnectionAlert
+      );
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openProfile);
     } else {
       this.openProfile();
@@ -434,8 +456,14 @@ export default class ListView extends React.Component {
   closeOpenConnectionAlert() {
     this.props.store.layout.alertIsLoading = false;
     this.setState({ isOpenWarningActive: false });
-    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeOpenConnectionAlert);
-    Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openConnection);
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.closeOpenConnectionAlert
+    );
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.submitDialog.keys,
+      this.openConnection
+    );
   }
 
   @action.bound
@@ -448,12 +476,16 @@ export default class ListView extends React.Component {
       ? this.api.passwordApi.isProfileMissingFromStore(`${id}-s`)
       : false;
     if (
-      (((passwordStoreEnabled && storeNeedsPassword) || !passwordStoreEnabled) &&
+      (((passwordStoreEnabled && storeNeedsPassword) ||
+        !passwordStoreEnabled) &&
         (targetProfile.bPassPhrase && !passPhrase)) ||
       (targetProfile.bRemotePass && !remotePass)
     ) {
       this.setState({ isSshOpenWarningActive: true });
-      Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
+      Mousetrap.bindGlobal(
+        DialogHotkeys.closeDialog.keys,
+        this.closeSshConnectionAlert
+      );
       Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);
     } else {
       this.openSshShell();
@@ -464,7 +496,10 @@ export default class ListView extends React.Component {
   closeSshConnectionAlert() {
     this.props.store.layout.alertIsLoading = false;
     this.setState({ isSshOpenWarningActive: false });
-    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.closeSshConnectionAlert);
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.closeSshConnectionAlert
+    );
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.openSshShell);
   }
 
@@ -527,7 +562,9 @@ export default class ListView extends React.Component {
           windows.push(
             <div key={windows.length} className="menuItemWrapper">
               <MenuItem
-                className={'profileListContextMenu editorListing ' + value.fileName}
+                className={
+                  'profileListContextMenu editorListing ' + value.fileName
+                }
                 text={api.getEditorDisplayName(value)}
                 onClick={() => this.swapToEditor(value)}
                 intent={Intent.NONE}
@@ -553,8 +590,31 @@ export default class ListView extends React.Component {
           </div>
           <div className="menuItemWrapper">
             <MenuItem
+              className="profileListContextMenu newWindow"
+              onClick={() =>
+                this.props.api.addEditor({ profileId: profile.id })
+              }
+              text={globalString('profile/menu/newWindow')}
+              intent={Intent.NONE}
+              iconName="pt-icon-new-text-box"
+            />
+          </div>
+          <div className="menuItemWrapper">
+            <MenuItem
+              className="profileListContextMenu deleteProfile"
+              onClick={this.openRemoveConnectionAlert}
+              text={globalString('profile/menu/deleteProfile')}
+              intent={Intent.NONE}
+              iconName="pt-icon-delete"
+            />
+          </div>
+          <MenuDivider />
+          <div className="menuItemWrapper">
+            <MenuItem
               className={`profileListContextMenu ${
-                !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
+                !hasPerformancePanel
+                  ? 'createPerformancePanel'
+                  : 'openPerformancePanel'
               }`}
               onClick={() =>
                 this.props.api.transformPerformancePanel(
@@ -564,7 +624,9 @@ export default class ListView extends React.Component {
               }
               text={globalString(
                 `profile/menu/${
-                  !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
+                  !hasPerformancePanel
+                    ? 'createPerformancePanel'
+                    : 'openPerformancePanel'
                 }`
               )}
               intent={Intent.NONE}
@@ -575,7 +637,9 @@ export default class ListView extends React.Component {
             <div className="menuItemWrapper">
               <MenuItem
                 className="profileListContextMenu destroyPerformancePanel"
-                onClick={() => this.props.api.transformPerformancePanel(profile.id, null)}
+                onClick={() =>
+                  this.props.api.transformPerformancePanel(profile.id, null)
+                }
                 text={globalString('profile/menu/destroyPerformancePanel')}
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
@@ -597,25 +661,18 @@ export default class ListView extends React.Component {
             <div className="menuItemWrapper">
               <MenuItem
                 className="profileListContextMenu createPerformancePanel"
-                onClick={() => this.props.api.transformPerformancePanel(
-                  profile.id,
-                  performancePanelStatuses.external
-                )}
+                onClick={() =>
+                  this.props.api.transformPerformancePanel(
+                    profile.id,
+                    performancePanelStatuses.external
+                  )
+                }
                 text="Create External Performance Panel"
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
               />
             </div>
           ) : null}
-          <div className="menuItemWrapper">
-            <MenuItem
-              className="profileListContextMenu newWindow"
-              onClick={() => this.props.api.addEditor({ profileId: profile.id })}
-              text={globalString('profile/menu/newWindow')}
-              intent={Intent.NONE}
-              iconName="pt-icon-new-text-box"
-            />
-          </div>
         </div>
       );
     }
@@ -653,18 +710,11 @@ export default class ListView extends React.Component {
     return (
       <Menu className="profileListContextMenu">
         {connect}
-        <div className="menuItemWrapper">
-          <MenuItem
-            className="profileListContextMenu deleteProfile"
-            onClick={this.openRemoveConnectionAlert}
-            text={globalString('profile/menu/deleteProfile')}
-            intent={Intent.NONE}
-            iconName="pt-icon-delete"
-          />
-        </div>
         <MenuDivider />
         {terminalOperations}
-        {windows.length > 0 ? <MenuDivider title={globalString('profile/menu/editors')} /> : null}
+        {windows.length > 0 ? (
+          <MenuDivider title={globalString('profile/menu/editors')} />
+        ) : null}
         {windows}
       </Menu>
     );
@@ -676,12 +726,17 @@ export default class ListView extends React.Component {
       const className =
         this.props.store.profileList &&
         this.props.store.profileList.selectedProfile &&
-        profiles[rowIndex][1].id === this.props.store.profileList.selectedProfile.id
+        profiles[rowIndex][1].id ===
+          this.props.store.profileList.selectedProfile.id
           ? 'connection-profile-cell connection-profile-cell-selected'
           : 'connection-profile-cell';
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
-          <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
+          <Cell
+            className={
+              className + ' profileListItem ' + profiles[rowIndex][1].alias
+            }
+          >
             <ConnectionIcon className="dbKodaSVG" width={20} height={20} />
             <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
@@ -689,8 +744,14 @@ export default class ListView extends React.Component {
       }
       return (
         <Cell className={className}>
-          <ConnectionIcon className="dbKodaSVG closedProfile" width={20} height={20} />
-          <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
+          <ConnectionIcon
+            className="dbKodaSVG closedProfile"
+            width={20}
+            height={20}
+          />
+          <i className="profileListing closedProfile">
+            {profiles[rowIndex][1].alias}
+          </i>
         </Cell>
       );
     };
@@ -776,7 +837,9 @@ export default class ListView extends React.Component {
                 <input
                   autoFocus // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input passwordInput"
-                  placeholder={globalString('profile/openAlert/passwordPlaceholder')}
+                  placeholder={globalString(
+                    'profile/openAlert/passwordPlaceholder'
+                  )}
                   type="password"
                   dir="auto"
                   onChange={this.setPWText}
@@ -796,7 +859,9 @@ export default class ListView extends React.Component {
                 <input
                   autoFocus={!this.state.targetProfile.sha} // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input remotePassInput"
-                  placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
+                  placeholder={globalString(
+                    'profile/openAlert/remotePassPlaceholder'
+                  )}
                   type="password"
                   dir="auto"
                   onChange={event => {
@@ -816,9 +881,14 @@ export default class ListView extends React.Component {
               <div className="dialogContent">
                 <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
                 <input
-                  autoFocus={!this.state.targetProfile.sha && !this.state.targetProfile.bRemotePass} // eslint-disable-line jsx-a11y/no-autofocus
+                  autoFocus={
+                    !this.state.targetProfile.sha &&
+                    !this.state.targetProfile.bRemotePass
+                  } // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input passPhraseInput"
-                  placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
+                  placeholder={globalString(
+                    'profile/openAlert/passPhrasePlaceholder'
+                  )}
                   type="password"
                   dir="auto"
                   onChange={event => {
@@ -857,7 +927,9 @@ export default class ListView extends React.Component {
                 <input
                   autoFocus={this.state.targetProfile.bRemotePass} // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input remotePassInput"
-                  placeholder={globalString('profile/openAlert/remotePassPlaceholder')}
+                  placeholder={globalString(
+                    'profile/openAlert/remotePassPlaceholder'
+                  )}
                   type="password"
                   dir="auto"
                   onChange={event => {
@@ -873,7 +945,9 @@ export default class ListView extends React.Component {
                 <input
                   autoFocus={!this.state.targetProfile.bRemotePass} // eslint-disable-line jsx-a11y/no-autofocus
                   className="pt-input passPhraseInput"
-                  placeholder={globalString('profile/openAlert/passPhrasePlaceholder')}
+                  placeholder={globalString(
+                    'profile/openAlert/passPhrasePlaceholder'
+                  )}
                   type="password"
                   dir="auto"
                   onChange={event => {
