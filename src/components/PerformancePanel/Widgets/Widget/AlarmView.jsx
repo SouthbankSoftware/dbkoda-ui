@@ -5,7 +5,7 @@
  * @Date:   2018-02-21T14:36:12+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-23T12:12:27+11:00
+ * @Last modified time: 2018-03-04T23:27:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,8 @@
 
 import * as d3 from 'd3';
 import * as React from 'react';
+import { computed, type IObservableArray } from 'mobx';
+import { observer } from 'mobx-react';
 import { PopoverInteractionKind } from '@blueprintjs/core';
 // $FlowFixMe
 import { Popover2 } from '@blueprintjs/labs';
@@ -76,14 +78,11 @@ const AlarmLevelIcon = ({ level, size = 18 }: { level: AlarmLevel, size?: number
 
 type Props = {
   category: string,
-  alarms: Alarm[]
+  alarms: IObservableArray<Alarm>
 };
 
-type State = {
-  overallLevel: AlarmLevel
-};
-
-export default class AlarmView extends React.PureComponent<Props, State> {
+@observer
+export default class AlarmView extends React.PureComponent<Props> {
   _cellMeasurerCache: *;
 
   constructor(props: Props) {
@@ -92,28 +91,13 @@ export default class AlarmView extends React.PureComponent<Props, State> {
     this._cellMeasurerCache = new CellMeasurerCache({
       fixedWidth: true
     });
-
-    const { alarms } = props;
-
-    this.state = {
-      overallLevel: this._calcOverallLevel(alarms)
-    };
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  @computed
+  get overallLevel(): AlarmLevel {
+    this._cellMeasurerCache.clearAll();
+
     const { alarms } = this.props;
-    const { alarms: nextAlarms } = nextProps;
-
-    if (alarms !== nextAlarms) {
-      const overallLevel = this._calcOverallLevel(nextAlarms);
-
-      this._cellMeasurerCache.clearAll();
-
-      this.setState({ overallLevel });
-    }
-  }
-
-  _calcOverallLevel = (alarms: Alarm[]): AlarmLevel => {
     let level = 0;
 
     for (const { level: l } of alarms) {
@@ -127,7 +111,7 @@ export default class AlarmView extends React.PureComponent<Props, State> {
     }
 
     return level;
-  };
+  }
 
   _getCategoryDescription = (category: string): string => {
     switch (category) {
@@ -179,7 +163,7 @@ export default class AlarmView extends React.PureComponent<Props, State> {
 
   render() {
     const { category, alarms } = this.props;
-    const { overallLevel } = this.state;
+    const { overallLevel } = this;
 
     return (
       <Popover2

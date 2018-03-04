@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-04T20:37:06+11:00
+ * @Last modified time: 2018-03-04T23:00:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -99,35 +99,36 @@ export const handleNewData = (payload: *, performancePanel: PerformancePanelStat
 
   for (const widget of widgets.values()) {
     const { items, showAlarms, buffer } = widget;
-    const { values } = buffer || widget;
+    const { values, alarms } = buffer || widget;
 
     if (values.length >= MAX_HISTORY_SIZE) {
       values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
     }
 
-    const value = {
-      timestamp,
-      value: _.pick(rawValue, items)
-    };
+    const value = _.pick(rawValue, items);
 
-    if (showAlarms) {
+    if (!_.isEmpty(value)) {
+      values.push({
+        timestamp,
+        value
+      });
+    }
+
+    if (showAlarms && alarms) {
       const alarmObj = _.get(rawValue, `alarm.${showAlarms}`);
 
       if (alarmObj) {
-        // $FlowFixMe
-        value.alarms = _.orderBy(
-          _.map(alarmObj, v => {
+        alarms.splice(
+          0,
+          alarms.length,
+          ..._.map(alarmObj, v => {
             const alarm = _.pick(v, ['level', 'message']);
             alarm.timestamp = timestamp;
             return alarm;
-          }),
-          ['timestamp'],
-          ['desc']
+          })
         );
       }
     }
-
-    values.push(value);
   }
 };
 
@@ -141,10 +142,11 @@ export const detachFromMobx = (performancePanel: PerformancePanelState) => {
   const { widgets } = performancePanel;
 
   for (const widget of widgets.values()) {
-    const { values } = widget;
+    const { values, alarms } = widget;
 
     widget.buffer = {
-      values: values.slice()
+      values: values.slice(),
+      ...(alarms ? { alarms: alarms.slice() } : null)
     };
   }
 };
@@ -162,12 +164,13 @@ export const attachToMobx = (performancePanel: PerformancePanelState) => {
   const { widgets } = performancePanel;
 
   for (const widget of widgets.values()) {
-    const { buffer } = widget;
+    const { buffer, alarms } = widget;
 
     if (buffer) {
-      const { values } = buffer;
+      const { values, alarms: bufferedAlarms } = buffer;
 
       widget.values.replace(values);
+      alarms && bufferedAlarms && alarms.replace(bufferedAlarms);
       widget.buffer = null;
     }
   }

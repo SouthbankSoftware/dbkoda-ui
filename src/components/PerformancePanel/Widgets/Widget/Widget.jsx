@@ -5,7 +5,7 @@
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T13:08:38+11:00
+ * @Last modified time: 2018-03-04T23:36:54+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,6 @@
  */
 
 import * as React from 'react';
-import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import type { WidgetState } from '~/api/Widget';
@@ -41,13 +40,12 @@ import { PopoverInteractionKind } from '@blueprintjs/core';
 import type { WidgetValue } from '~/api/Widget';
 import InfoIcon from '~/styles/icons/explain-query-icon.svg';
 import HistoryView from './HistoryView';
-import AlarmView, { type Alarm } from './AlarmView';
+import AlarmView from './AlarmView';
 import './Widget.scss';
 
 const DEBOUNCE_DELAY = 100;
 const HISTORY_VIEW_WIDTH = 537;
 const HISTORY_VIEW_HEIGHT = 257;
-const EMPTY_ALARMS = [];
 
 export type Projection = { [string]: (value: WidgetValue) => number };
 
@@ -85,15 +83,6 @@ export default class Widget extends React.Component<Props, State> {
     }
   }
 
-  @computed
-  get alarms(): Alarm[] {
-    // $FlowFixMe
-    const { values } = this.props.widget;
-
-    // $FlowFixMe
-    return _.get(_.last(values), 'alarms', EMPTY_ALARMS);
-  }
-
   _generateDefaultProjection = (props: Props) => {
     const { widget: { items } } = props;
 
@@ -113,8 +102,7 @@ export default class Widget extends React.Component<Props, State> {
 
   _renderDefaultView() {
     const { items, values } = this.props.widget;
-    const latestValue =
-      values.length > 0 ? values[values.length - 1].value : {};
+    const latestValue = values.length > 0 ? values[values.length - 1].value : {};
 
     return (
       <div className="DefaultWidgetView">
@@ -145,13 +133,13 @@ export default class Widget extends React.Component<Props, State> {
   render() {
     const {
       children,
-      // $FlowFixMe
       widget: {
         state,
         errorLevel,
         error,
         values,
         name,
+        alarms,
         title,
         infoWidget,
         description,
@@ -172,10 +160,7 @@ export default class Widget extends React.Component<Props, State> {
     }
     return (
       // $FlowFixMe
-      <div
-        className={title + ' ' + type + ' Widget' || 'Widget'}
-        style={widgetStyle}
-      >
+      <div className={(title || '') + ' ' + type + ' Widget' || 'Widget'} style={widgetStyle}>
         {state === 'error' ? (
           <ErrorView title={null} error={error} errorLevel={errorLevel} />
         ) : (
@@ -191,19 +176,11 @@ export default class Widget extends React.Component<Props, State> {
                       popoverClassName="StackedRadialWidgetTooltip"
                       className="toolTip"
                       content={<div>{description}</div>}
-                      target={
-                        <InfoIcon
-                          className="infoButton"
-                          width={20}
-                          height={20}
-                        />
-                      }
+                      target={<InfoIcon className="infoButton" width={20} height={20} />}
                     />
                   </span>
                 )}
-                {showAlarms && (
-                  <AlarmView category={showAlarms} alarms={this.alarms} />
-                )}
+                {showAlarms && alarms && <AlarmView category={showAlarms} alarms={alarms} />}
               </div>
             )}
             <Popover2
@@ -219,11 +196,7 @@ export default class Widget extends React.Component<Props, State> {
                   description={description}
                 />
               }
-              target={
-                <span className="children">
-                  {children || this._renderDefaultView()}
-                </span>
-              }
+              target={<span className="children">{children || this._renderDefaultView()}</span>}
             />
             {showVerticalRuleLeft && <hr className="verticalLeft" />}
             {showHorizontalRule && <hr />}
@@ -236,11 +209,7 @@ export default class Widget extends React.Component<Props, State> {
             )}
           </div>
         )}
-        <ReactResizeDetector
-          handleWidth
-          handleHeight
-          onResize={this._onResize}
-        />
+        <ReactResizeDetector handleWidth handleHeight onResize={this._onResize} />
       </div>
     );
   }

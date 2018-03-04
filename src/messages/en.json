@@ -6,7 +6,7 @@
       "send": "Send"
     },
     "performance": {
-      "title": "Performance View",
+      "title": "Performance Panel",
       "section_headers": {
         "os": "OS",
         "mongo": "Mongo"
