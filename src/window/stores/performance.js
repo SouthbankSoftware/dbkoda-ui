@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T16:32:55+11:00
+ * @Last modified time: 2018-03-04T20:47:06+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,7 @@ import { observable, action } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { handleNewData } from '~/api/PerformancePanel';
+import { attachToMobx } from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
 
@@ -48,6 +49,10 @@ export default class Store {
   @observable.shallow performancePanel = null;
   @observable profileId = null;
 
+  constructor() {
+    ipcRenderer.on('performance', this.handleDataSync);
+  }
+
   @action.bound
   handleDataSync = (event, args) => {
     console.log(args);
@@ -61,6 +66,9 @@ export default class Store {
       if (this.profileId === args.profileId) {
         if (args.command === 'mw_initData') {
           this.performancePanel = restore(args.dataObject, { deserializer, postDeserializer });
+
+          attachToMobx(this.performancePanel);
+
           console.log('this.performancePanel::', this.performancePanel);
         } else if (args.command === 'mw_updateData' && this.performancePanel !== null) {
           const payload = args.dataObject;
@@ -69,7 +77,4 @@ export default class Store {
       }
     }
   };
-  constructor() {
-    ipcRenderer.on('performance', this.handleDataSync);
-  }
 }

@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-02T12:17:45+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-04T20:22:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,9 +25,10 @@
  */
 
 import React from 'react';
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { PerformancePanel } from '#/PerformancePanel';
+import { detachFromMobx, attachToMobx } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -36,41 +37,48 @@ import '~/styles/global.scss';
 import '~/styles/fonts/index.css';
 import '#/App.scss';
 
- @inject(allStores => ({
-   store: allStores.store
- }))
- @observer
+@inject(allStores => ({
+  store: allStores.store
+}))
+@observer
 class PerformanceWindow extends React.Component {
-  @observable performancePanelVisible = true;
   constructor() {
     super();
-    document.addEventListener('visibilitychange', this._handleAppVisibility, false);
+
+    document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
   }
+
+  @action.bound
+  _handleVisibilityChange() {
+    if (document.hidden) {
+      logToMain('info', 'becomes hidden');
+
+      const { store: { performancePanel } } = this.props;
+
+      detachFromMobx(performancePanel);
+    } else {
+      logToMain('info', 'becomes visible');
+
+      const { store: { performancePanel } } = this.props;
+
+      attachToMobx(performancePanel);
+    }
+  }
+
   render() {
     const { store } = this.props;
 
     return (
       <div>
-        {store.performancePanel && this.performancePanelVisible ? (
-          <PerformancePanel
-            performancePanel={store.performancePanel}
-            onClose={null}
-          />
+        {store.performancePanel ? (
+          <PerformancePanel performancePanel={store.performancePanel} onClose={null} />
         ) : (
-          <div><span>Loading Performance Panel...</span></div>
+          <div>
+            <span>Loading Performance Panel...</span>
+          </div>
         )}
       </div>
     );
-  }
-  @action.bound
-  _handleAppVisibility() {
-    if (document.hidden) {
-      console.log('App is Hidden!!!');
-      this.performancePanelVisible = false;
-    } else {
-      console.log('App is Visible!!!');
-      this.performancePanelVisible = true;
-    }
   }
 }
 

@@ -2,8 +2,8 @@
  * @flow
  *
  * Created by Mike on 05/2/18.
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T12:16:46+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-04T18:28:26+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +25,7 @@
  */
 
 import React from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import ErrorIcon from '../../../styles/icons/circle.svg';
 import { convertUnits } from './Utils';
 
@@ -44,13 +44,6 @@ type Props = {
   getUnit: () => any
 };
 
-@inject(({ store, api }, { widget }) => {
-  return {
-    store,
-    api,
-    widget
-  };
-})
 @observer
 export default class Legend extends React.Component<Props> {
   static fontSize = 7;
@@ -113,14 +106,9 @@ export default class Legend extends React.Component<Props> {
 
     // Determine size.
     const fontSize =
-      Legend.fontSize +
-      Legend.fontSize * this.state.height / Legend.fontScalingFactor +
-      'px';
+      Legend.fontSize + Legend.fontSize * this.state.height / Legend.fontScalingFactor + 'px';
     const rowDynamicStyle = {
-      height:
-        Legend.rowSize +
-        Legend.rowSize * this.state.width / Legend.rowScalingFactor +
-        'px'
+      height: Legend.rowSize + Legend.rowSize * this.state.width / Legend.rowScalingFactor + 'px'
     };
     let totalFontColor = 'white';
     let totalValueFontColor = 'white';

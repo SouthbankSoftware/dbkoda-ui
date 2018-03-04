@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T15:52:35+11:00
+ * @Last modified time: 2018-03-04T18:34:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -43,6 +43,9 @@ export type WidgetValue = {
   value: { [string]: any }
 };
 export type WidgetErrorLevel = $Keys<typeof widgetErrorLevels>;
+export type WidgetStateBuffer = {
+  values: Array<WidgetValue>
+};
 export type WidgetState = {
   id: UUID,
   profileId: UUID,
@@ -53,7 +56,7 @@ export type WidgetState = {
   state: ComponentState,
   errorLevel: ?WidgetErrorLevel,
   error: ?string,
-  stats: {},
+  buffer: ?WidgetStateBuffer,
   unit?: any,
   showVertical?: boolean,
   chartTitle?: string,
@@ -104,7 +107,6 @@ export default class WidgetApi {
 
     const id = (extraState && extraState.id) || uuid();
 
-    // $FlowFixMe
     const widget: WidgetState = observable.shallowObject({
       id,
       profileId,
@@ -114,7 +116,7 @@ export default class WidgetApi {
       state: 'loading',
       errorLevel: null,
       error: null,
-      waterMarkGroup: 0,
+      buffer: null,
       ...extraState
     });
 

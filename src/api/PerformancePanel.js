@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T16:38:29+11:00
+ * @Last modified time: 2018-03-04T20:37:06+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -40,7 +40,7 @@ import schema from '#/PerformancePanel/schema.json';
 import type { WidgetState } from './Widget';
 
 const FOREGROUND_SAMPLING_RATE = 5000;
-const BACKGROUND_SAMPLING_RATE = 30000;
+const BACKGROUND_SAMPLING_RATE = 5000;
 const MAX_HISTORY_SIZE = 720; // 1h with 5s sampling rate
 
 export type LayoutState = {
@@ -62,8 +62,6 @@ export const performancePanelStatuses = {
   stopped: 'stopped' // PP is stopped, unmounted
 };
 
-const DEMOTABLE_VISIBILITY_STATUSES = [performancePanelStatuses.foreground];
-const DEMOTABLE_SUSPEND_STATUSES = [performancePanelStatuses.foreground, performancePanelStatuses.external];
 const RUNNABLE_STATUSES = [
   performancePanelStatuses.background,
   performancePanelStatuses.foreground,
@@ -71,7 +69,9 @@ const RUNNABLE_STATUSES = [
 ];
 
 export type PerformancePanelStatus = $Keys<typeof performancePanelStatuses>;
-
+export type PerformancePanelStateBuffer = {
+  stats: { [string]: any }
+};
 export type PerformancePanelState = {
   profileId: UUID,
   profileAlias: string,
@@ -83,17 +83,23 @@ export type PerformancePanelState = {
   cols: number,
   rows: number,
   midWidth: number,
-  leftWidth: number
+  leftWidth: number,
+  buffer: ?PerformancePanelStateBuffer
 };
 
+/**
+ * Integrates new data with current mobx store or buffer. Whenever, window goes to background, new
+ * data is buffered to stop all reactions
+ */
 export const handleNewData = (payload: *, performancePanel: PerformancePanelState) => {
   const { timestamp, value: rawValue, stats } = payload;
-  const { widgets } = performancePanel;
+  const { widgets, buffer } = performancePanel;
 
-  performancePanel.stats = stats;
+  (buffer || performancePanel).stats = stats;
 
   for (const widget of widgets.values()) {
-    const { items, values, showAlarms } = widget;
+    const { items, showAlarms, buffer } = widget;
+    const { values } = buffer || widget;
 
     if (values.length >= MAX_HISTORY_SIZE) {
       values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
@@ -122,6 +128,48 @@ export const handleNewData = (payload: *, performancePanel: PerformancePanelStat
     }
 
     values.push(value);
+  }
+};
+
+export const detachFromMobx = (performancePanel: PerformancePanelState) => {
+  const { stats } = performancePanel;
+
+  performancePanel.buffer = {
+    stats
+  };
+
+  const { widgets } = performancePanel;
+
+  for (const widget of widgets.values()) {
+    const { values } = widget;
+
+    widget.buffer = {
+      values: values.slice()
+    };
+  }
+};
+
+export const attachToMobx = (performancePanel: PerformancePanelState) => {
+  const { buffer } = performancePanel;
+
+  if (buffer) {
+    const { stats } = buffer;
+
+    performancePanel.stats = stats;
+    performancePanel.buffer = null;
+  }
+
+  const { widgets } = performancePanel;
+
+  for (const widget of widgets.values()) {
+    const { buffer } = widget;
+
+    if (buffer) {
+      const { values } = buffer;
+
+      widget.values.replace(values);
+      widget.buffer = null;
+    }
   }
 };
 
@@ -158,7 +206,6 @@ export default class PerformancePanelApi {
   store: *;
   api: *;
   config: *;
-  _lastStatuses: Map<UUID, 'foreground' | 'external'> = new Map();
   _disposers: Map<UUID, *> = new Map();
   _powerBlockerDisposers: Map<UUID, *> = new Map();
 
@@ -169,17 +216,9 @@ export default class PerformancePanelApi {
     this.api = api;
     this.config = config;
 
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        logToMain('info', 'becomes hidden');
-        this._demotePerforamncePanelsToBackground();
-      } else {
-        logToMain('info', 'becomes visible');
-        this._restorePerformancePanelsFromBackground();
-      }
-    };
+    this._attachPerformancePanelsToMobx();
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('visibilitychange', this._handleVisibilityChange);
 
     let powerMonitorDisposer;
 
@@ -188,12 +227,10 @@ export default class PerformancePanelApi {
 
       const handleSuspend = () => {
         logToMain('info', 'os is suspending');
-        this._demotePerforamncePanelsToBackground(true);
       };
 
       const handleResume = () => {
         logToMain('info', 'os is resuming');
-        this._restorePerformancePanelsFromBackground();
       };
 
       powerMonitor.on('suspend', handleSuspend);
@@ -209,7 +246,7 @@ export default class PerformancePanelApi {
 
     // stop all PP when refreshing
     Broker.once(EventType.WINDOW_REFRESHING, () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener('visibilitychange', this._handleVisibilityChange);
 
       powerMonitorDisposer && powerMonitorDisposer();
 
@@ -219,31 +256,35 @@ export default class PerformancePanelApi {
     });
   }
 
-  _demotePerforamncePanelsToBackground = (_suspend: boolean = false) => {
+  @action.bound
+  _attachPerformancePanelsToMobx() {
     for (const pP of this.store.performancePanels.values()) {
-      const { profileId, status } = pP;
-      let statuses = DEMOTABLE_VISIBILITY_STATUSES;
-      if (_suspend) {
-        statuses = DEMOTABLE_SUSPEND_STATUSES;
-      }
-      if (_.includes(statuses, status)) {
-        this._lastStatuses.set(profileId, status);
-        this.transformPerformancePanel(profileId, performancePanelStatuses.background);
+      const { status } = pP;
+
+      if (status === performancePanelStatuses.foreground) {
+        attachToMobx(pP);
       }
     }
-  };
+  }
 
-  _restorePerformancePanelsFromBackground = () => {
-    setTimeout(() => {
-      for (const [profileId, lastStatus] of this._lastStatuses) {
-        if (this.hasPerformancePanel(profileId)) {
-          this.transformPerformancePanel(profileId, lastStatus);
+  @action.bound
+  _handleVisibilityChange() {
+    if (document.hidden) {
+      logToMain('info', 'becomes hidden');
+
+      for (const pP of this.store.performancePanels.values()) {
+        const { status } = pP;
+
+        if (status === performancePanelStatuses.foreground) {
+          detachFromMobx(pP);
         }
       }
+    } else {
+      logToMain('info', 'becomes visible');
 
-      this._lastStatuses.clear();
-    }, 500);
-  };
+      this._attachPerformancePanelsToMobx();
+    }
+  }
 
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
     console.error(err);
@@ -297,7 +338,8 @@ export default class PerformancePanelApi {
       cols: schema.cols,
       rows: schema.rows,
       midWidth: schema.midWidth,
-      leftWidth: schema.leftWidth
+      leftWidth: schema.leftWidth,
+      buffer: null
     });
 
     performancePanels.set(profileId, performancePanel);
@@ -489,14 +531,14 @@ export default class PerformancePanelApi {
 
   @action.bound
   _mountPerformancePanelToExternalWindow(profileId: UUID) {
-    this._sendMsgToPerformanceWindow({command: 'mw_createWindow', profileId});
-    this.externalPerformanceWindows.set(profileId, {status: 'started'});
+    this._sendMsgToPerformanceWindow({ command: 'mw_createWindow', profileId });
+    this.externalPerformanceWindows.set(profileId, { status: 'started' });
   }
 
   @action.bound
   _unmountPerformancePanelFromExternalWindow(profileId: UUID) {
-    this._sendMsgToPerformanceWindow({command: 'mw_closeWindow', profileId});
-    this.externalPerformanceWindows.set(profileId, {status: 'closed'});
+    this._sendMsgToPerformanceWindow({ command: 'mw_closeWindow', profileId });
+    this.externalPerformanceWindows.set(profileId, { status: 'closed' });
   }
 
   @action.bound
@@ -514,7 +556,7 @@ export default class PerformancePanelApi {
         this.externalPerformanceWindows.set(args.profileId, { status: 'ready' });
       } else if (args.command === 'pw_windowClosed') {
         // this command should only come from Performance Window if window is closed by user using cross.
-        this.externalPerformanceWindows.set(args.profileId, {status: 'closed'});
+        this.externalPerformanceWindows.set(args.profileId, { status: 'closed' });
         this.transformPerformancePanel(args.profileId, performancePanelStatuses.background);
       }
     }
