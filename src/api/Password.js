@@ -143,8 +143,10 @@ export default class Password {
       .service('master-pass')
       .remove()
       .then(() => {
-        this.config.settings.enablePasswordStore = false;
-        this.config.save();
+        runInAction(() => {
+          this.config.settings.passwordStoreEnabled = false;
+          this.config.save();
+        });
       })
       .catch(error => {
         NewToaster.show({

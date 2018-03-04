@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T16:33:11+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-02T11:37:06+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -44,6 +44,7 @@ import {
 } from '@blueprintjs/core';
 import EventLogging from '#/common/logging/EventLogging';
 import { terminalTypes } from '~/api/Terminal';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
@@ -211,7 +212,8 @@ export default class ListView extends React.Component {
     if (selectedProfile) {
       const { api } = this.props;
 
-      api.stopPerformancePanel(selectedProfile.id);
+      api.hasPerformancePanel(selectedProfile.id) &&
+        api.transformPerformancePanel(selectedProfile.id, performancePanelStatuses.stopped);
 
       this.setState({ closingProfile: true });
       this.props.store.layout.alertIsLoading = true;
@@ -332,7 +334,7 @@ export default class ListView extends React.Component {
     profileStore.profiles.delete(profileId);
     profileStore.save();
     api.removeAllTerminalsForProfile(profileId);
-    api.closePerformancePanel(profileId, true);
+    api.transformPerformancePanel(profileId, null);
 
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
@@ -554,7 +556,12 @@ export default class ListView extends React.Component {
               className={`profileListContextMenu ${
                 !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
               }`}
-              onClick={() => this.props.api.openPerformancePanel(profile.id)}
+              onClick={() =>
+                this.props.api.transformPerformancePanel(
+                  profile.id,
+                  performancePanelStatuses.foreground
+                )
+              }
               text={globalString(
                 `profile/menu/${
                   !hasPerformancePanel ? 'createPerformancePanel' : 'openPerformancePanel'
@@ -568,7 +575,7 @@ export default class ListView extends React.Component {
             <div className="menuItemWrapper">
               <MenuItem
                 className="profileListContextMenu destroyPerformancePanel"
-                onClick={() => this.props.api.closePerformancePanel(profile.id, true)}
+                onClick={() => this.props.api.transformPerformancePanel(profile.id, null)}
                 text={globalString('profile/menu/destroyPerformancePanel')}
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
@@ -581,6 +588,20 @@ export default class ListView extends React.Component {
                 className="profileListContextMenu reset-high-water-mark"
                 onClick={() => this.props.api.resetHighWaterMark(profile.id)}
                 text={globalString('profile/menu/resetHWM')}
+                intent={Intent.NONE}
+                iconName="pt-icon-heat-grid"
+              />
+            </div>
+          ) : null}
+          {IS_DEVELOPMENT ? (
+            <div className="menuItemWrapper">
+              <MenuItem
+                className="profileListContextMenu createPerformancePanel"
+                onClick={() => this.props.api.transformPerformancePanel(
+                  profile.id,
+                  performancePanelStatuses.external
+                )}
+                text="Create External Performance Panel"
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
               />

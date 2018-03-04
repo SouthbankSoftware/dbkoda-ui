@@ -6,7 +6,7 @@
       "send": "Send"
     },
     "performance": {
-      "title": "Performance View",
+      "title": "Performance Panel",
       "section_headers": {
         "os": "OS",
         "mongo": "Mongo"
@@ -94,6 +94,10 @@
           "expandAll": "Expand all Rows in the table",
           "collapseAll": "Collapse all rows in the table",
           "refresh": "Refresh results in table."
+        },
+        "downloadMenu": {
+          "json": "JSON",
+          "csv": "CSV"
         }
       },
       "editor": {

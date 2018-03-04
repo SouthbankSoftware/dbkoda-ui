@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T13:31:51+11:00
+ * @Last modified time: 2018-03-04T23:00:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,8 +29,9 @@
 import _ from 'lodash';
 import { action, observable } from 'mobx';
 import type { ObservableMap } from 'mobx';
-import autobind from 'autobind-decorator';
 import { Broker, EventType } from '~/helpers/broker';
+import { dump } from 'dumpenvy';
+import { serializer } from '#/common/mobxDumpenvyExtension';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 // $FlowFixMe
@@ -39,7 +40,7 @@ import schema from '#/PerformancePanel/schema.json';
 import type { WidgetState } from './Widget';
 
 const FOREGROUND_SAMPLING_RATE = 5000;
-const BACKGROUND_SAMPLING_RATE = 30000;
+const BACKGROUND_SAMPLING_RATE = 5000;
 const MAX_HISTORY_SIZE = 720; // 1h with 5s sampling rate
 
 export type LayoutState = {
@@ -55,15 +56,25 @@ export type LayoutState = {
 };
 
 export const performancePanelStatuses = {
-  background: 'background',
-  foreground: 'foreground',
-  stopped: 'stopped'
+  background: 'background', // PP is in background, unmounted
+  foreground: 'foreground', // PP is in foreground, mounted in main window
+  external: 'external', // PP is in foreground, mounted in an external window
+  stopped: 'stopped' // PP is stopped, unmounted
 };
 
-export type PerformancePanelStatus = $Keys<typeof performancePanelStatuses>;
+const RUNNABLE_STATUSES = [
+  performancePanelStatuses.background,
+  performancePanelStatuses.foreground,
+  performancePanelStatuses.external
+];
 
+export type PerformancePanelStatus = $Keys<typeof performancePanelStatuses>;
+export type PerformancePanelStateBuffer = {
+  stats: { [string]: any }
+};
 export type PerformancePanelState = {
   profileId: UUID,
+  profileAlias: string,
   widgets: ObservableMap<WidgetState>,
   layouts: ObservableMap<LayoutState>,
   status: PerformancePanelStatus,
@@ -72,7 +83,97 @@ export type PerformancePanelState = {
   cols: number,
   rows: number,
   midWidth: number,
-  leftWidth: number
+  leftWidth: number,
+  buffer: ?PerformancePanelStateBuffer
+};
+
+/**
+ * Integrates new data with current mobx store or buffer. Whenever, window goes to background, new
+ * data is buffered to stop all reactions
+ */
+export const handleNewData = (payload: *, performancePanel: PerformancePanelState) => {
+  const { timestamp, value: rawValue, stats } = payload;
+  const { widgets, buffer } = performancePanel;
+
+  (buffer || performancePanel).stats = stats;
+
+  for (const widget of widgets.values()) {
+    const { items, showAlarms, buffer } = widget;
+    const { values, alarms } = buffer || widget;
+
+    if (values.length >= MAX_HISTORY_SIZE) {
+      values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
+    }
+
+    const value = _.pick(rawValue, items);
+
+    if (!_.isEmpty(value)) {
+      values.push({
+        timestamp,
+        value
+      });
+    }
+
+    if (showAlarms && alarms) {
+      const alarmObj = _.get(rawValue, `alarm.${showAlarms}`);
+
+      if (alarmObj) {
+        alarms.splice(
+          0,
+          alarms.length,
+          ..._.map(alarmObj, v => {
+            const alarm = _.pick(v, ['level', 'message']);
+            alarm.timestamp = timestamp;
+            return alarm;
+          })
+        );
+      }
+    }
+  }
+};
+
+export const detachFromMobx = (performancePanel: PerformancePanelState) => {
+  const { stats } = performancePanel;
+
+  performancePanel.buffer = {
+    stats
+  };
+
+  const { widgets } = performancePanel;
+
+  for (const widget of widgets.values()) {
+    const { values, alarms } = widget;
+
+    widget.buffer = {
+      values: values.slice(),
+      ...(alarms ? { alarms: alarms.slice() } : null)
+    };
+  }
+};
+
+export const attachToMobx = (performancePanel: PerformancePanelState) => {
+  const { buffer } = performancePanel;
+
+  if (buffer) {
+    const { stats } = buffer;
+
+    performancePanel.stats = stats;
+    performancePanel.buffer = null;
+  }
+
+  const { widgets } = performancePanel;
+
+  for (const widget of widgets.values()) {
+    const { buffer, alarms } = widget;
+
+    if (buffer) {
+      const { values, alarms: bufferedAlarms } = buffer;
+
+      widget.values.replace(values);
+      alarms && bufferedAlarms && alarms.replace(bufferedAlarms);
+      widget.buffer = null;
+    }
+  }
 };
 
 /**
@@ -108,21 +209,84 @@ export default class PerformancePanelApi {
   store: *;
   api: *;
   config: *;
-  powerSaverID: *;
-  powerMonitorProfileId: * = null;
   _disposers: Map<UUID, *> = new Map();
+  _powerBlockerDisposers: Map<UUID, *> = new Map();
+
+  externalPerformanceWindows: Map<UUID, *> = new Map();
 
   constructor(store: *, api: *, config: *) {
     this.store = store;
     this.api = api;
     this.config = config;
 
+    this._attachPerformancePanelsToMobx();
+
+    document.addEventListener('visibilitychange', this._handleVisibilityChange);
+
+    let powerMonitorDisposer;
+
+    if (IS_ELECTRON) {
+      const { remote: { powerMonitor }, ipcRenderer } = window.require('electron');
+
+      const handleSuspend = () => {
+        logToMain('info', 'os is suspending');
+      };
+
+      const handleResume = () => {
+        logToMain('info', 'os is resuming');
+      };
+
+      powerMonitor.on('suspend', handleSuspend);
+      powerMonitor.on('resume', handleResume);
+
+      powerMonitorDisposer = () => {
+        powerMonitor.removeListener('suspend', handleSuspend);
+        powerMonitor.removeListener('resume', handleResume);
+      };
+
+      ipcRenderer.on('performance', this._handlePerformanceWindowEvents);
+    }
+
+    // stop all PP when refreshing
     Broker.once(EventType.WINDOW_REFRESHING, () => {
+      document.removeEventListener('visibilitychange', this._handleVisibilityChange);
+
+      powerMonitorDisposer && powerMonitorDisposer();
+
       for (const pId of this.store.performancePanels.keys()) {
-        this.stopPerformancePanel(pId, false);
+        this.transformPerformancePanel(pId, performancePanelStatuses.stopped);
       }
     });
-    // document.addEventListener('visibilitychange', this._handleAppVisibility, false);
+  }
+
+  @action.bound
+  _attachPerformancePanelsToMobx() {
+    for (const pP of this.store.performancePanels.values()) {
+      const { status } = pP;
+
+      if (status === performancePanelStatuses.foreground) {
+        attachToMobx(pP);
+      }
+    }
+  }
+
+  @action.bound
+  _handleVisibilityChange() {
+    if (document.hidden) {
+      logToMain('info', 'becomes hidden');
+
+      for (const pP of this.store.performancePanels.values()) {
+        const { status } = pP;
+
+        if (status === performancePanelStatuses.foreground) {
+          detachFromMobx(pP);
+        }
+      }
+    } else {
+      logToMain('info', 'becomes visible');
+
+      this._attachPerformancePanelsToMobx();
+    }
   }
 
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
@@ -168,6 +332,7 @@ export default class PerformancePanelApi {
 
     const performancePanel: PerformancePanelState = observable.shallowObject({
       profileId,
+      profileAlias: '',
       widgets: observable.shallowMap(),
       layouts,
       status: performancePanelStatuses.stopped,
@@ -176,7 +341,8 @@ export default class PerformancePanelApi {
       cols: schema.cols,
       rows: schema.rows,
       midWidth: schema.midWidth,
-      leftWidth: schema.leftWidth
+      leftWidth: schema.leftWidth,
+      buffer: null
     });
 
     performancePanels.set(profileId, performancePanel);
@@ -201,33 +367,70 @@ export default class PerformancePanelApi {
   _removePerformancePanel(profileId: UUID) {
     const { performancePanels } = this.store;
 
-    this.stopPerformancePanel(profileId);
     performancePanels.delete(profileId);
   }
 
-  @action.bound
-  hasPerformancePanel(profileId: UUID): boolean {
-    const { performancePanels } = this.store;
+  _addPowerBlocker = profileId => {
+    if (IS_ELECTRON && this.config.settings.performancePanel_preventDisplaySleep) {
+      const { remote: { powerSaveBlocker } } = window.require('electron');
 
-    return performancePanels.has(profileId);
-  }
+      const powerBlockerId = powerSaveBlocker.start('prevent-display-sleep');
+      logToMain('info', `started power blocker for Performance Panel ${profileId}`);
+
+      this._powerBlockerDisposers.set(profileId, () => {
+        powerSaveBlocker.stop(powerBlockerId);
+        logToMain('info', `stopped power blocker for Performance Panel ${profileId}`);
+      });
+    }
+  };
+
+  _removePowerBlocker = profileId => {
+    const powerBlockerDisposer = this._powerBlockerDisposers.get(profileId);
+
+    if (powerBlockerDisposer) {
+      powerBlockerDisposer();
+      this._powerBlockerDisposers.delete(profileId);
+    }
+  };
 
   @action.bound
-  startPerformancePanel(profileId: UUID, foreground: boolean = true) {
+  _runPerformancePanel(profileId: UUID, to: 'background' | 'foreground' | 'external') {
     const performancePanel = this.store.performancePanels.get(profileId);
 
-    if (performancePanel && performancePanel.status === performancePanelStatuses.stopped) {
-      performancePanel.status = foreground
-        ? performancePanelStatuses.foreground
-        : performancePanelStatuses.background;
+    if (!performancePanel) return;
 
-      const { widgets } = performancePanel;
-      const itemsSet = new Set();
+    const { status } = performancePanel;
 
-      for (const widget of widgets.values()) {
-        for (const item of widget.items) {
-          itemsSet.add(item);
-        }
+    if (!_.includes(RUNNABLE_STATUSES, to)) {
+      console.error(
+        `PerformancePanel API: invalid (not runnable) to \`${to}\` for _runPerformancePanel`
+      );
+      return;
+    }
+
+    const { widgets, stats } = performancePanel;
+    const itemsSet = new Set();
+
+    for (const widget of widgets.values()) {
+      for (const item of widget.items) {
+        itemsSet.add(item);
+      }
+    }
+
+    if (status === performancePanelStatuses.stopped) {
+      // prevent app suspension
+      let suspensionBlockerDisposer;
+
+      if (IS_ELECTRON) {
+        const { remote: { powerSaveBlocker } } = window.require('electron');
+        const suspensionBlockerId = powerSaveBlocker.start('prevent-app-suspension');
+
+        logToMain('info', `started suspension blocker for Performance Panel ${profileId}`);
+
+        suspensionBlockerDisposer = () => {
+          powerSaveBlocker.stop(suspensionBlockerId);
+          logToMain('info', `stopped suspension blocker for Performance Panel ${profileId}`);
+        };
       }
 
       // handle errors
@@ -240,92 +443,66 @@ export default class PerformancePanelApi {
       Broker.on(EventType.STATS_ERROR(profileId), handleStatsServiceError);
 
       // handle new data
-      const handleNewData = action(payload => {
-        const { timestamp, value: rawValue, stats } = payload;
+      const _handleNewData = action(payload => {
+        logToMain('debug', `new data for Performance Panel ${profileId}`);
 
-        performancePanel.stats = stats;
+        handleNewData(payload, performancePanel);
 
-        for (const widget of widgets.values()) {
-          const { items, values, showAlarms } = widget;
-
-          if (values.length >= MAX_HISTORY_SIZE) {
-            values.splice(0, MAX_HISTORY_SIZE - values.length + 1);
+        if (performancePanel.status === performancePanelStatuses.external) {
+          const externalWindow = this.externalPerformanceWindows.get(profileId);
+          if (externalWindow && externalWindow.status === 'ready') {
+            this._sendMsgToPerformanceWindow({
+              command: 'mw_updateData',
+              profileId,
+              dataObject: payload
+            });
           }
-
-          const value = {
-            timestamp,
-            value: _.pick(rawValue, items),
-          };
-
-          if (showAlarms) {
-            const alarmObj = _.get(rawValue, `alarm.${showAlarms}`);
-
-            if (alarmObj) {
-              // $FlowFixMe
-              value.alarms = _.orderBy(
-                _.map(alarmObj, v => {
-                  const alarm = _.pick(v, ['level', 'message']);
-                  alarm.timestamp = timestamp;
-                  return alarm;
-                }),
-                ['timestamp'],
-                ['desc']
-              );
-            }
-          }
-
-          values.push(value);
         }
       });
 
-      Broker.on(EventType.STATS_DATA(profileId), handleNewData);
+      Broker.on(EventType.STATS_DATA(profileId), _handleNewData);
 
       // set up a disposer to cleanup everything related when called
       this._disposers.set(profileId, () => {
+        suspensionBlockerDisposer && suspensionBlockerDisposer();
         Broker.off(EventType.STATS_ERROR(profileId), handleStatsServiceError);
-        Broker.off(EventType.STATS_DATA(profileId), handleNewData);
+        Broker.off(EventType.STATS_DATA(profileId), _handleNewData);
+        this._removePowerBlocker(profileId);
       });
-
-      // always call create because it is idempotent
-      const statsSrv = featherClient();
-      statsSrv.statsService
-        .create({
-          profileId,
-          items: [...itemsSet],
-          samplingRate: foreground ? FOREGROUND_SAMPLING_RATE : BACKGROUND_SAMPLING_RATE,
-          debug: true
-        })
-        .then(
-          action(() => {
-            for (const widget of widgets.values()) {
-              widget.state = 'loaded';
-            }
-          })
-        )
-        .catch(
-          action(err => {
-            performancePanel.status = performancePanelStatuses.stopped;
-
-            this._handleError(profileId, err);
-          })
-        );
     }
 
-    // if (foreground) {
-    //   if (this.config.settings.performancePanel_preventDisplaySleep) {
-    //     this._startDisplaySleepBlocker();
-    //   } else {
-    //     this._startPowerMonitor(profileId);
-    //   }
-    // }
+    // always call create because it is idempotent
+    const statsSrv = featherClient();
+    statsSrv.statsService
+      .create({
+        profileId,
+        items: [...itemsSet],
+        samplingRate:
+          to === performancePanelStatuses.background
+            ? BACKGROUND_SAMPLING_RATE
+            : FOREGROUND_SAMPLING_RATE,
+        debug: true,
+        ...(performancePanel.status === performancePanelStatuses.stopped ? { stats } : null)
+      })
+      .then(
+        action(() => {
+          for (const widget of widgets.values()) {
+            widget.state = 'loaded';
+          }
+        })
+      )
+      .catch(err => {
+        this._handleError(profileId, err);
+      });
+
+    performancePanel.status = to;
   }
 
   @action.bound
-  stopPerformancePanel(profileId: UUID, destroyService: boolean = true) {
+  _stopPerformancePanel(profileId: UUID) {
     const performancePanel = this.store.performancePanels.get(profileId);
 
     if (performancePanel && performancePanel.status !== performancePanelStatuses.stopped) {
-      const prevStatus = performancePanel.status;
       performancePanel.status = performancePanelStatuses.stopped;
 
       const disposer = this._disposers.get(profileId);
@@ -335,143 +512,191 @@ export default class PerformancePanelApi {
         this._disposers.delete(profileId);
       }
 
-      if (destroyService) {
-        featherClient()
-          .statsService.remove(profileId)
-          .catch(
-            action(err => {
-              performancePanel.status = prevStatus;
-
-              this._handleError(profileId, err);
-            })
-          );
-      }
+      featherClient()
+        .statsService.remove(profileId)
+        .catch(err => {
+          this._handleError(profileId, err);
+        });
     }
   }
 
   @action.bound
-  openPerformancePanel(profileId: UUID) {
-    const { performancePanels } = this.store;
-    let performancePanel = performancePanels.get(profileId);
-
-    if (!performancePanel) {
-      this._addPerformancePanel(profileId);
-      performancePanel = performancePanels.get(profileId);
-    }
-
-    this.startPerformancePanel(profileId, true);
+  _mountPerformancePanelToMainWindow(profileId: UUID) {
+    const performancePanel = this.store.performancePanels.get(profileId);
 
     this.store.performancePanel = performancePanel;
   }
 
   @action.bound
-  closePerformancePanel(profileId: UUID, destroy: boolean = false, _suspend: boolean = false) {
-    if (destroy) {
-      const { performancePanels } = this.store;
+  _unmountPerformancePanelFromMainWindow() {
+    this.store.performancePanel = null;
+  }
 
-      if (performancePanels.has(profileId)) {
-        this.stopPerformancePanel(profileId);
+  @action.bound
+  _mountPerformancePanelToExternalWindow(profileId: UUID) {
+    this._sendMsgToPerformanceWindow({ command: 'mw_createWindow', profileId });
+    this.externalPerformanceWindows.set(profileId, { status: 'started' });
+  }
+
+  @action.bound
+  _unmountPerformancePanelFromExternalWindow(profileId: UUID) {
+    this._sendMsgToPerformanceWindow({ command: 'mw_closeWindow', profileId });
+    this.externalPerformanceWindows.set(profileId, { status: 'closed' });
+  }
+
+  @action.bound
+  _handlePerformanceWindowEvents(event, args) {
+    console.log('_handlePerformanceWindowEvents::', args);
+    const { performancePanels } = this.store;
+    if (args.profileId) {
+      if (args.command === 'pw_windowReady') {
+        const performancePanel = performancePanels.get(args.profileId);
+        this._sendMsgToPerformanceWindow({
+          command: 'mw_initData',
+          profileId: args.profileId,
+          dataObject: dump(performancePanel, { serializer })
+        });
+        this.externalPerformanceWindows.set(args.profileId, { status: 'ready' });
+      } else if (args.command === 'pw_windowClosed') {
+        // this command should only come from Performance Window if window is closed by user using cross.
+        this.externalPerformanceWindows.set(args.profileId, { status: 'closed' });
+        this.transformPerformancePanel(args.profileId, performancePanelStatuses.background);
+      }
+    }
+  }
+  @action.bound
+  _sendMsgToPerformanceWindow(args) {
+    if (IS_ELECTRON) {
+      const electron = window.require('electron');
+      const { ipcRenderer } = electron;
+      ipcRenderer.send('performance', args);
+    }
+  }
+
+  @action.bound
+  hasPerformancePanel(profileId: UUID): boolean {
+    const { performancePanels } = this.store;
+
+    return performancePanels.has(profileId);
+  }
+
+  @action.bound
+  transformPerformancePanel(profileId: UUID, to: ?PerformancePanelStatus) {
+    const { performancePanels } = this.store;
+    let performancePanel = performancePanels.get(profileId);
+
+    if (!performancePanel) {
+      // none => stopped
+      this._addPerformancePanel(profileId);
+      performancePanel = performancePanels.get(profileId);
+    }
+
+    const { status } = performancePanel;
+
+    if (status === to) return;
+
+    if (status === performancePanelStatuses.stopped) {
+      if (to === performancePanelStatuses.background) {
+        // stopped => background
+
+        this._runPerformancePanel(profileId, performancePanelStatuses.background);
+      } else if (to === performancePanelStatuses.foreground) {
+        // stopped => foreground
+
+        this._runPerformancePanel(profileId, performancePanelStatuses.foreground);
+        this._mountPerformancePanelToMainWindow(profileId);
+        this._addPowerBlocker(profileId);
+      } else if (to === performancePanelStatuses.external) {
+        // stopped => external
+
+        this._runPerformancePanel(profileId, performancePanelStatuses.external);
+        this._mountPerformancePanelToExternalWindow(profileId);
+        this._addPowerBlocker(profileId);
+      } else if (to == null) {
+        // stopped => none
+
         this._removePerformancePanel(profileId);
       }
-    } else {
-      this.startPerformancePanel(profileId, false);
+    } else if (status === performancePanelStatuses.background) {
+      if (to === performancePanelStatuses.foreground) {
+        // background => foreground
+
+        this._runPerformancePanel(profileId, performancePanelStatuses.foreground);
+        this._mountPerformancePanelToMainWindow(profileId);
+        this._addPowerBlocker(profileId);
+      } else if (to === performancePanelStatuses.external) {
+        // background => external
+
+        this._runPerformancePanel(profileId, performancePanelStatuses.external);
+        this._mountPerformancePanelToExternalWindow(profileId);
+        this._addPowerBlocker(profileId);
+      } else if (to === performancePanelStatuses.stopped) {
+        // background => stopped
+
+        this._stopPerformancePanel(profileId);
+      } else if (to == null) {
+        // background => none
+
+        this._stopPerformancePanel(profileId);
+        this._removePerformancePanel(profileId);
+      }
+    } else if (status === performancePanelStatuses.foreground) {
+      if (to === performancePanelStatuses.background) {
+        // foreground => background
+
+        this._runPerformancePanel(profileId, performancePanelStatuses.background);
+        this._unmountPerformancePanelFromMainWindow();
+        this._removePowerBlocker(profileId);
+      } else if (to === performancePanelStatuses.external) {
+        // foreground => external
+
+        this._unmountPerformancePanelFromMainWindow();
+        performancePanel.status = to;
+        this._mountPerformancePanelToExternalWindow(profileId);
+      } else if (to === performancePanelStatuses.stopped) {
+        // foreground => stopped
+
+        this._stopPerformancePanel(profileId);
+        this._unmountPerformancePanelFromMainWindow();
+      } else if (to == null) {
+        // foreground => none
+
+        this._stopPerformancePanel(profileId);
+        this._unmountPerformancePanelFromMainWindow();
+        this._removePerformancePanel(profileId);
+      }
+    } else if (status === performancePanelStatuses.external) {
+      if (to === performancePanelStatuses.background) {
+        // external => background
+
+        this._runPerformancePanel(profileId, performancePanelStatuses.background);
+        this._unmountPerformancePanelFromExternalWindow(profileId);
+        this._removePowerBlocker(profileId);
+      } else if (to === performancePanelStatuses.foreground) {
+        // external => foreground
+
+        this._unmountPerformancePanelFromExternalWindow(profileId);
+        performancePanel.status = to;
+        this._mountPerformancePanelToMainWindow(profileId);
+      } else if (to === performancePanelStatuses.stopped) {
+        // external => stopped
+
+        this._stopPerformancePanel(profileId);
+        this._unmountPerformancePanelFromExternalWindow(profileId);
+      } else if (to == null) {
+        // external => none
+
+        this._stopPerformancePanel(profileId);
+        this._unmountPerformancePanelFromExternalWindow(profileId);
+        this._removePerformancePanel(profileId);
+      }
     }
-
-    this.store.performancePanel = null;
-
-    // if (!suspend) {
-    //   if (this.config.settings.performancePanel_preventDisplaySleep) {
-    //     this._stopDisplaySleepBlocker();
-    //   } else {
-    //     this._stopPowerMonitor();
-    //   }
-    // }
   }
 
-  resetHighWaterMark(profileId: UUID) {
+  resetHighWaterMark = (profileId: UUID) => {
     const statsSrv = featherClient();
-    statsSrv.statsService.patch(profileId, {resetStats: true})
-      .then((res) => {
-        console.log('rest hwm', res);
-      })
-      .catch(err => console.error(err));
-  }
-
-  _startDisplaySleepBlocker() {
-    if (IS_ELECTRON) {
-      const electron = window.require('electron');
-      const { powerSaveBlocker } = electron.remote;
-      if (!this.powerSaverID) {
-        this.powerSaverID = powerSaveBlocker.start('prevent-display-sleep');
-        console.log(
-          'Power Saver Status:',
-          powerSaveBlocker.isStarted(this.powerSaverID),
-          ', id:',
-          this.powerSaverID
-        );
-      }
-    }
-  }
-  _stopDisplaySleepBlocker() {
-    if (IS_ELECTRON) {
-      const electron = window.require('electron');
-      const { powerSaveBlocker } = electron.remote;
-      if (this.powerSaverID) {
-        powerSaveBlocker.stop(this.powerSaverID);
-        console.log(
-          'Power Saver Status:',
-          powerSaveBlocker.isStarted(this.powerSaverID),
-          ', id:',
-          this.powerSaverID
-        );
-        this.powerSaverID = null;
-      }
-    }
-  }
-  _startPowerMonitor(profileId) {
-    if (IS_ELECTRON) {
-      const electron = window.require('electron');
-      const { powerMonitor } = electron.remote;
-      if (this.powerMonitorProfileId === null) {
-        this.powerMonitorProfileId = profileId;
-        powerMonitor.on('suspend', this._suspendPerformancePanel);
-        powerMonitor.on('resume', this._resumePerformancePanel);
-      }
-    }
-  }
-  _stopPowerMonitor() {
-    if (IS_ELECTRON) {
-      const electron = window.require('electron');
-      const { powerMonitor } = electron.remote;
-      if (this.powerMonitorProfileId !== null) {
-        this.powerMonitorProfileId = null;
-        powerMonitor.removeListener('suspend', this._suspendPerformancePanel);
-        powerMonitor.removeListener('resume', this._resumePerformancePanel);
-      }
-    }
-  }
-  @autobind
-  _handleAppVisibility() {
-    if (document.hidden) {
-      console.log('App is Hidden!!!');
-      this._suspendPerformancePanel();
-    } else {
-      console.log('App is Visible!!!');
-      this._resumePerformancePanel();
-    }
-  }
-  @autobind
-  _suspendPerformancePanel() {
-    console.log('The system is going to sleep!!!');
-    if (this.powerMonitorProfileId !== null) {
-      this.closePerformancePanel(this.powerMonitorProfileId, false, true);
-    }
-  }
-  @autobind
-  _resumePerformancePanel() {
-    console.log('The system is going to resume!!!');
-    if (this.powerMonitorProfileId !== null) {
-      this.openPerformancePanel(this.powerMonitorProfileId);
-    }
-  }
+    statsSrv.statsService.patch(profileId, { resetStats: true }).catch(err => {
+      this._handleError(profileId, err);
+    });
+  };
 }

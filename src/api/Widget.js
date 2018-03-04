@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T13:46:55+11:00
+ * @Last modified time: 2018-03-04T23:35:55+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -32,6 +32,7 @@ import autobind from 'autobind-decorator';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 import _ from 'lodash';
+import type { Alarm } from '#/PerformancePanel/Widgets/Widget/AlarmView';
 
 export const widgetErrorLevels = {
   warn: 'warn',
@@ -43,26 +44,40 @@ export type WidgetValue = {
   value: { [string]: any }
 };
 export type WidgetErrorLevel = $Keys<typeof widgetErrorLevels>;
+export type WidgetStateBuffer = {
+  values: Array<WidgetValue>,
+  alarms?: Array<Alarm>
+};
 export type WidgetState = {
   id: UUID,
   profileId: UUID,
   type: string,
-  // $FlowFixMe
   items: string[],
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
   errorLevel: ?WidgetErrorLevel,
   error: ?string,
-  stats: {},
+  buffer: ?WidgetStateBuffer,
+  name?: string,
+  description?: string,
   unit?: any,
   showVertical?: boolean,
   chartTitle?: string,
+  panelTitle?: string,
+  title?: string,
+  rowText?: string,
+  showVerticalRule?: boolean,
+  showVerticalRuleLeft?: boolean,
+  showHorizontalRule?: boolean,
   showLegend?: *,
   displayName?: *,
   widgetItemKeys?: *,
   widgetDisplayNames?: *,
   showRunQueue?: *,
-  useHighWaterMark?: *
+  useHighWaterMark?: *,
+  showAlarms?: *,
+  alarms?: IObservableArray<Alarm>,
+  infoWidget?: boolean
 };
 
 export default class WidgetApi {
@@ -103,8 +118,7 @@ export default class WidgetApi {
 
     const id = (extraState && extraState.id) || uuid();
 
-    // $FlowFixMe
-    const widget: WidgetState = observable.shallowObject({
+    const widget: WidgetState = {
       id,
       profileId,
       type,
@@ -113,11 +127,13 @@ export default class WidgetApi {
       state: 'loading',
       errorLevel: null,
       error: null,
-      waterMarkGroup: 0,
+      buffer: null,
       ...extraState
-    });
+    };
 
-    widgets.set(id, widget);
+    widget.showAlarms && (widget.alarms = observable.shallowArray());
+
+    widgets.set(id, observable.shallowObject(widget));
 
     return id;
   }

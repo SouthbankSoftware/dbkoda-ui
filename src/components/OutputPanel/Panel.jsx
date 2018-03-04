@@ -296,6 +296,9 @@ export default class Panel extends React.Component {
    */
   @action.bound
   changeTab(newTab) {
+    if (IS_DEVELOPMENT) {
+      console.log(`changeTab(${newTab})`);
+    }
     // Check if the tab has just been closed, if so, don't swap to it:
     if (this.closingTab) {
       this.closingTab = false;
@@ -306,7 +309,7 @@ export default class Panel extends React.Component {
         newTab.indexOf('Details') < 0 &&
         newTab.indexOf('EnhancedJson') < 0 &&
         newTab.indexOf('TableView') < 0 &&
-        newTab.indexOf('Chart') < 0 &&
+        newTab.indexOf('ChartView') < 0 &&
         newTab.indexOf('Storage') < 0
       ) {
         if (this.editorRefs[newTab]) {
@@ -446,7 +449,7 @@ export default class Panel extends React.Component {
           }
         }
         if (this.props.store.outputs.get(editorId).chartPanel) {
-          const tabId = `Chart-${editorId}`;
+          const tabId = `ChartView-${editorId}`;
 
           arrTabs.push(
             <Tab2
@@ -455,7 +458,7 @@ export default class Panel extends React.Component {
               }
               id={tabId}
               key={tabId}
-              title="Chart"
+              title="Chart View"
               panel={<ChartPanel editorId={editorId} />}
             >
               <Button
