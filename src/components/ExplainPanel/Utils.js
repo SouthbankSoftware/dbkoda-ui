@@ -28,9 +28,9 @@ import os from 'os';
 const esprima = require('esprima');
 const escodegen = require('escodegen');
 
-export const getWorstStage = (stages) => {
+export const getWorstStage = stages => {
   let max = 0;
-  stages.map((stage) => {
+  stages.map(stage => {
     let time = stage.executionTimeMillisEstimate;
     if (time === undefined) {
       time = stage.executionTimeMillis;
@@ -44,11 +44,11 @@ export const getWorstStage = (stages) => {
   return max;
 };
 
-export const getWorstShardStages = (shards) => {
+export const getWorstShardStages = shards => {
   let max = -1;
   let worst = null;
   let shardName = null;
-  shards.map((shard) => {
+  shards.map(shard => {
     if (shard && shard.stages && shard.stages.length > 0) {
       if (worst === null) {
         worst = shard.stages;
@@ -61,14 +61,27 @@ export const getWorstShardStages = (shards) => {
       }
     }
   });
-  return {shardName, worst};
+  return { shardName, worst };
 };
 
-export const getStageElapseTime = (stage) => {
-  return stage && stage.executionTimeMillisEstimate !== undefined ? stage.executionTimeMillisEstimate : stage.executionTimeMillis;
+export const getStageElapseTime = stage => {
+  return stage && stage.executionTimeMillisEstimate !== undefined
+    ? stage.executionTimeMillisEstimate
+    : stage.executionTimeMillis;
 };
 
-const coloursTheme = ['#24a26e', '#29bc7f', '#43d698', '#6ddfaf', '#96e8c6', '#debabd', '#ce979c', '#be747c', '#ad525b', '#8a4148'];
+const coloursTheme = [
+  '#24a26e',
+  '#29bc7f',
+  '#43d698',
+  '#6ddfaf',
+  '#96e8c6',
+  '#debabd',
+  '#ce979c',
+  '#be747c',
+  '#ad525b',
+  '#8a4148'
+];
 
 export const generateColorValueByTime = (stage, number, max, min) => {
   const yellow = '#f0c419';
@@ -80,7 +93,11 @@ export const generateColorValueByTime = (stage, number, max, min) => {
   if (!stage) {
     return 'transparent';
   }
-  if (stage.docsExamined !== undefined && stage.nReturned !== undefined && stage.docsExamined > stage.nReturned * 1.1) {
+  if (
+    stage.docsExamined !== undefined &&
+    stage.nReturned !== undefined &&
+    stage.docsExamined > stage.nReturned * 1.1
+  ) {
     return red;
   }
   // if (stageTime === max && stageTime > min && stage.stage !== 'SHARD_MERGE') {
@@ -95,21 +112,31 @@ export const generateColorValueByTime = (stage, number, max, min) => {
   if (max === min) {
     return defaultColor;
   }
-  const value = parseInt((((getStageElapseTime(stage) - min) * (greenValue - redValue)) / (max - min)) + redValue, 10);
+  const value = parseInt(
+    (getStageElapseTime(stage) - min) * (greenValue - redValue) / (max - min) +
+      redValue,
+    10
+  );
   return coloursTheme[value];
 };
 
-const findMongoCommandFromMemberExpress = (exp) => {
+const findMongoCommandFromMemberExpress = exp => {
   const callee = exp.callee;
   let memberExp = callee;
   let parent = exp;
   const commands = [];
   while (memberExp && memberExp.type === esprima.Syntax.MemberExpression) {
-    if (memberExp.property && memberExp.property.type === esprima.Syntax.Identifier) {
-      const cmd = {name: memberExp.property.name, parent};
+    if (
+      memberExp.property &&
+      memberExp.property.type === esprima.Syntax.Identifier
+    ) {
+      const cmd = { name: memberExp.property.name, parent };
       parent = memberExp;
       cmd.ast = memberExp;
-      if (memberExp.object && memberExp.object.type === esprima.Syntax.CallExpression) {
+      if (
+        memberExp.object &&
+        memberExp.object.type === esprima.Syntax.CallExpression
+      ) {
         memberExp = memberExp.object.callee;
       } else {
         memberExp = memberExp.object;
@@ -117,46 +144,66 @@ const findMongoCommandFromMemberExpress = (exp) => {
       commands.push(cmd);
     }
   }
-  return {commands};
+  return { commands };
 };
 
-const findRootExpression = (ast) => {
-  if (ast.type === esprima.Syntax.Program && ast.body && ast.body.length === 1) {
+const findRootExpression = ast => {
+  if (
+    ast.type === esprima.Syntax.Program &&
+    ast.body &&
+    ast.body.length === 1
+  ) {
     const script = ast.body[0];
     if (script.type === esprima.Syntax.ExpressionStatement) {
       if (script.expression.type === esprima.Syntax.CallExpression) {
         return script.expression;
-      } else if (script.expression.type === esprima.Syntax.AssignmentExpression) {
+      } else if (
+        script.expression.type === esprima.Syntax.AssignmentExpression
+      ) {
         return script.expression.right;
       }
-    } else if (script.type === esprima.Syntax.VariableDeclaration && script.declarations && script.declarations.length > 0) {
+    } else if (
+      script.type === esprima.Syntax.VariableDeclaration &&
+      script.declarations &&
+      script.declarations.length > 0
+    ) {
       return script.declarations[0].init;
     }
   }
   return {};
 };
 
-export const findMongoCommand = (commandAst) => {
-  if (commandAst.type === esprima.Syntax.Program && commandAst.body && commandAst.body.length === 1) {
+export const findMongoCommand = commandAst => {
+  if (
+    commandAst.type === esprima.Syntax.Program &&
+    commandAst.body &&
+    commandAst.body.length === 1
+  ) {
     const script = commandAst.body[0];
     if (script.type === esprima.Syntax.ExpressionStatement) {
       if (script.expression.type === esprima.Syntax.CallExpression) {
         return findMongoCommandFromMemberExpress(script.expression);
-      } else if (script.expression.type === esprima.Syntax.AssignmentExpression) {
+      } else if (
+        script.expression.type === esprima.Syntax.AssignmentExpression
+      ) {
         return findMongoCommandFromMemberExpress(script.expression.right);
       }
-    } else if (script.type === esprima.Syntax.VariableDeclaration && script.declarations && script.declarations.length > 0) {
+    } else if (
+      script.type === esprima.Syntax.VariableDeclaration &&
+      script.declarations &&
+      script.declarations.length > 0
+    ) {
       return findMongoCommandFromMemberExpress(script.declarations[0].init);
     }
   }
   return {};
 };
 
-const findMatchedCommand = (commands) => {
+const findMatchedCommand = commands => {
   const supportedCmds = ['find', 'count', 'distinct', 'update', 'aggregate'];
   let value = null;
-  supportedCmds.forEach((c) => {
-    const matched = _.find(commands, {name: c});
+  supportedCmds.forEach(c => {
+    const matched = _.find(commands, { name: c });
     if (matched) {
       value = matched;
     }
@@ -164,12 +211,12 @@ const findMatchedCommand = (commands) => {
   return value;
 };
 
-const explainAst = (explainParam) => {
+const explainAst = explainParam => {
   const args = [];
   if (explainParam) {
     args.push({
       type: esprima.Syntax.Literal,
-      value: explainParam,
+      value: explainParam
     });
   }
   return {
@@ -179,24 +226,28 @@ const explainAst = (explainParam) => {
       object: null,
       property: {
         type: esprima.Syntax.Identifier,
-        name: 'explain',
+        name: 'explain'
       }
     },
     arguments: args
   };
 };
 
-export const insertExplainToAggregate = (root) => {
+export const insertExplainToAggregate = root => {
   if (root && root.arguments) {
     if (root.arguments.length > 1) {
       // insert into the second argument
       const second = root.arguments[1];
-      if (second && second.type === esprima.Syntax.ObjectExpression && second.properties) {
+      if (
+        second &&
+        second.type === esprima.Syntax.ObjectExpression &&
+        second.properties
+      ) {
         second.properties.push({
           type: esprima.Syntax.Property,
           key: {
             type: esprima.Syntax.Identifier,
-            name: 'explain',
+            name: 'explain'
           },
           value: {
             type: esprima.Syntax.Literal,
@@ -212,12 +263,12 @@ export const insertExplainToAggregate = (root) => {
             type: esprima.Syntax.Property,
             key: {
               type: esprima.Syntax.Identifier,
-              name: 'explain',
+              name: 'explain'
             },
             value: {
               type: esprima.Syntax.Literal,
               value: true,
-              raw: 'true',
+              raw: 'true'
             }
           }
         ]
@@ -229,7 +280,7 @@ export const insertExplainToAggregate = (root) => {
 /**
  * if the explain command is before find on windows append a next()
  */
-export const appendNextOnExplainFind = (command) => {
+export const appendNextOnExplainFind = command => {
   const i = command.search(/find\(.*\)/);
   const j = command.search(/explain\(.*\)/);
   if (i > j && command.indexOf('next()') < 0) {
@@ -245,17 +296,27 @@ export const appendNextOnExplainFind = (command) => {
   return command;
 };
 
-export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') => {
+export const insertExplainOnCommand = (
+  command,
+  explainParam = 'queryPlanner'
+) => {
   try {
     const parsed = esprima.parseScript(command);
     const root = findRootExpression(parsed);
-    const {commands} = findMongoCommandFromMemberExpress(root);
+    const { commands } = findMongoCommandFromMemberExpress(root);
 
-    if (!_.find(commands, {name: 'explain'})) {
+    if (!_.find(commands, { name: 'explain' })) {
       const matchedCmd = findMatchedCommand(commands);
       if (matchedCmd) {
-        if (['aggregate', 'count', 'update', 'distinct'].indexOf(matchedCmd.name) >= 0) {
-          const explainObj = matchedCmd.name === 'aggregate' ? explainAst() : explainAst(explainParam);
+        if (
+          ['aggregate', 'count', 'update', 'distinct'].indexOf(
+            matchedCmd.name
+          ) >= 0
+        ) {
+          const explainObj =
+            matchedCmd.name === 'aggregate'
+              ? explainAst()
+              : explainAst(explainParam);
           explainObj.callee.object = matchedCmd.ast.object;
           matchedCmd.ast.object = explainObj;
           return escodegen.generate(parsed);
@@ -273,7 +334,6 @@ export const insertExplainOnCommand = (command, explainParam = 'queryPlanner') =
   } catch (err) {
     console.error('failed to parse script ', command);
     logToMain('error', 'Failed to parse script to explain: ' + command);
-
   }
   return command;
 };

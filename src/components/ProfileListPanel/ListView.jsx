@@ -881,10 +881,10 @@ export default class ListView extends React.Component {
               <div className="dialogContent">
                 <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
                 <input
-                  autoFocus={
-                    !this.state.targetProfile.sha &&
-                    !this.state.targetProfile.bRemotePass
-                  } // eslint-disable-line jsx-a11y/no-autofocus
+                  autoFocus={// eslint-disable-line jsx-a11y/no-autofocus
+                    !this.state.targetProfile.sha && // eslint-disable-line jsx-a11y/no-autofocu
+                    !this.state.targetProfile.bRemotePass // eslint-disable-line jsx-a11y/no-autofocus
+                  }
                   className="pt-input passPhraseInput"
                   placeholder={globalString(
                     'profile/openAlert/passPhrasePlaceholder'
