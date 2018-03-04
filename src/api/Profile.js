@@ -321,14 +321,10 @@ export default class ProfileApi {
               .then(() => {
                 value.status = ProfileStatus.OPEN;
               })
-<<<<<<< HEAD
               .catch(err => {
                 console.error('failed to create shell connection', err);
                 logToMain('error', 'Failed to create shell connection: + err');
               });
-=======
-              .catch(err => console.error('failed to create shell connection', err));
->>>>>>> a57c95cd3a23e41ccb090825522fc04e1605932f
           }
         });
       } else {
