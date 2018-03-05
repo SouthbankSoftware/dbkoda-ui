@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-05T13:47:49+11:00
+ * @Last modified time: 2018-03-05T14:22:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -341,12 +341,13 @@ export default class PerformancePanelApi {
 
   @action.bound
   _addPerformancePanel(profileId: UUID) {
-    const { performancePanels } = this.store;
+    const { performancePanels, profileStore: { profiles } } = this.store;
+    const profile = profiles.get(profileId);
     const layouts = observable.shallowMap();
 
     const performancePanel: PerformancePanelState = observable.shallowObject({
       profileId,
-      profileAlias: '',
+      profileAlias: _.get(profile, 'alias', ''),
       widgets: observable.shallowMap(),
       layouts,
       status: performancePanelStatuses.stopped,
