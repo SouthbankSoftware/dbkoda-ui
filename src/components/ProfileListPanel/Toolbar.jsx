@@ -33,7 +33,13 @@ import { action, runInAction } from 'mobx';
 import autobind from 'autobind-decorator';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
-import { Dialog, AnchorButton, Intent, Position, Tooltip } from '@blueprintjs/core';
+import {
+  Dialog,
+  AnchorButton,
+  Intent,
+  Position,
+  Tooltip
+} from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
 import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
@@ -68,7 +74,10 @@ export default class Toolbar extends React.Component {
     this.newProfile = this.newProfile.bind(this);
   }
   componentWillUnmount() {
-    Mousetrap.unbindGlobal(GlobalHotkeys.createNewProfile.keys, this.newProfile);
+    Mousetrap.unbindGlobal(
+      GlobalHotkeys.createNewProfile.keys,
+      this.newProfile
+    );
   }
   componentDidMount() {
     // Add hotkey bindings for this component:
@@ -82,7 +91,8 @@ export default class Toolbar extends React.Component {
   newProfile() {
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.OPEN_DIALOG,
+        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE
+          .OPEN_DIALOG,
         EventLogging.getFragmentEnum().PROFILES,
         'User opened the New Connection Profile drawer.'
       );
@@ -114,7 +124,8 @@ export default class Toolbar extends React.Component {
       } else {
         if (this.props.config.settings.telemetryEnabled) {
           EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE.OPEN_DIALOG,
+            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE
+              .OPEN_DIALOG,
             EventLogging.getFragmentEnum().PROFILES,
             'User opened the Edit Connection Profile drawer.'
           );
@@ -163,21 +174,30 @@ export default class Toolbar extends React.Component {
       className: 'success',
       iconName: 'pt-icon-thumbs-up'
     });
-    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.hideRemoveConnectionAlert
+    );
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
   @autobind
   showRemoveConnectionAlert() {
     this.setState({ removeConnectionAlert: true });
-    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
+    Mousetrap.bindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.hideRemoveConnectionAlert
+    );
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
   @autobind
   hideRemoveConnectionAlert() {
     this.setState({ removeConnectionAlert: false });
-    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideRemoveConnectionAlert);
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.hideRemoveConnectionAlert
+    );
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.removeProfile);
   }
 
@@ -189,7 +209,10 @@ export default class Toolbar extends React.Component {
       const { api } = this.props;
 
       api.hasPerformancePanel(selectedProfile.id) &&
-        api.transformPerformancePanel(selectedProfile.id, performancePanelStatuses.stopped);
+        api.transformPerformancePanel(
+          selectedProfile.id,
+          performancePanelStatuses.stopped
+        );
 
       this.setState({ closingProfile: true });
       featherClient()
@@ -217,6 +240,7 @@ export default class Toolbar extends React.Component {
         })
         .catch(err => {
           console.error('error:', err);
+          logToMain('error', 'Failed to close profile: ' + err);
           if (this.props.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,
@@ -245,21 +269,30 @@ export default class Toolbar extends React.Component {
         iconName: 'pt-icon-thumbs-down'
       });
     }
-    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.hideCloseConnectionAlert
+    );
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   @autobind
   hideCloseConnectionAlert() {
     this.setState({ closeConnectionAlert: false });
-    Mousetrap.unbindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
+    Mousetrap.unbindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.hideCloseConnectionAlert
+    );
     Mousetrap.unbindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
   @autobind
   showCloseConnectionAlert() {
     this.setState({ closeConnectionAlert: true });
-    Mousetrap.bindGlobal(DialogHotkeys.closeDialog.keys, this.hideCloseConnectionAlert);
+    Mousetrap.bindGlobal(
+      DialogHotkeys.closeDialog.keys,
+      this.hideCloseConnectionAlert
+    );
     Mousetrap.bindGlobal(DialogHotkeys.submitDialog.keys, this.closeProfile);
   }
 
@@ -330,7 +363,10 @@ export default class Toolbar extends React.Component {
             tooltipClassName="pt-dark"
             position={Position.BOTTOM_LEFT}
           >
-            <AnchorButton className="newProfileButton" onClick={this.newProfile}>
+            <AnchorButton
+              className="newProfileButton"
+              onClick={this.newProfile}
+            >
               <AddIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
@@ -344,7 +380,10 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className="editProfileButton"
               onClick={this.editProfile}
-              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.OPEN}
+              disabled={
+                !selectedProfile ||
+                selectedProfile.status === ProfileStatus.OPEN
+              }
             >
               <EditProfileIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
@@ -359,7 +398,10 @@ export default class Toolbar extends React.Component {
             <AnchorButton
               className=" dangerButton closeProfileButton"
               loading={this.state.closingProfile}
-              disabled={!selectedProfile || selectedProfile.status === ProfileStatus.CLOSED}
+              disabled={
+                !selectedProfile ||
+                selectedProfile.status === ProfileStatus.CLOSED
+              }
               onClick={this.showCloseConnectionAlert}
             >
               <CloseProfileIcon className="dbKodaSVG" width={20} height={20} />
@@ -377,7 +419,8 @@ export default class Toolbar extends React.Component {
               onClick={this.showRemoveConnectionAlert}
               disabled={
                 !this.props.store.profileList.selectedProfile ||
-                this.props.store.profileList.selectedProfile.status === ProfileStatus.OPEN
+                this.props.store.profileList.selectedProfile.status ===
+                  ProfileStatus.OPEN
               }
             >
               <RemoveProfileIcon className="dbKodaSVG" width={20} height={20} />

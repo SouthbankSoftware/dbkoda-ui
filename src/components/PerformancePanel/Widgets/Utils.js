@@ -194,6 +194,11 @@ export const convertUnits = (value: any, unit: string, length: number) => {
     return convertTime(value, unit, length);
   } else if ('b|kb|mb|gb|tb|pb|eb|b/s|kb/s|mb/s|gb/s|tb/s'.indexOf(unit) >= 0) {
     return convertBytes(value, unit, length);
+  } else if ('%'.indexOf(unit) >= 0) {
+    return {
+      value: parseFloat(_.round(Number(value), 2)),
+      unit
+    };
   }
   console.log('Unknown unit is provided for conversion (unit=', unit, ').');
   return {

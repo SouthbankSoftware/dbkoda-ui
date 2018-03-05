@@ -84,13 +84,13 @@ export default class EditorApi {
             EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
               .FAILED_DEFAULT,
             EventLogging.getFragmentEnum().EDITORS,
-            'Cannot create new Editor for Default Tab.',
+            'Cannot create new Editor for Default Tab.'
           );
         }
         NewToaster.show({
           message: globalString('editor/toolbar/addEditorError'),
           className: 'warning',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
         this.createNewEditorFailed();
         return null;
@@ -98,15 +98,15 @@ export default class EditorApi {
       return featherClient()
         .service('/mongo-shells')
         .create({ id: profileId })
-        .then((res) => {
+        .then(res => {
           return this.setNewEditorState(res, editorOptions);
         })
-        .catch((err) => {
+        .catch(err => {
           if (this.config.settings.telemetryEnabled) {
             EventLogging.recordManualEvent(
               EventLogging.getTypeEnum().ERROR,
               EventLogging.getFragmentEnum().EDITORS,
-              err.message,
+              err.message
             );
           }
           this.createNewEditorFailed();
@@ -118,8 +118,10 @@ export default class EditorApi {
             NewToaster.show({
               message: 'Error: ' + err.message,
               className: 'danger',
-              iconName: 'pt-icon-thumbs-down',
+              iconName: 'pt-icon-thumbs-down'
             });
+            console.error(err.message);
+            logToMain('error', 'Error creating new editor: ' + err.message);
           }
         });
     } catch (err) {
@@ -127,13 +129,13 @@ export default class EditorApi {
         EventLogging.recordManualEvent(
           EventLogging.getTypeEnum().ERROR,
           EventLogging.getFragmentEnum().EDITORS,
-          err.message,
+          err.message
         );
       }
       NewToaster.show({
         message: err.message,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
       this.createNewEditorFailed();
     }
@@ -244,11 +246,11 @@ export default class EditorApi {
             doc: observable.ref(doc),
             status: ProfileStatus.OPEN,
             path: null,
-            type: options.type,
+            type: options.type
           },
-          options,
-        ),
-      ),
+          options
+        )
+      )
     );
     if (this.api) {
       this.api.addOutput(this.store.editors.get(editorId));
@@ -287,7 +289,7 @@ export default class EditorApi {
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
       iconName: 'pt-icon-thumbs-up',
-      className: 'success',
+      className: 'success'
     });
     return editorId;
   }
@@ -312,11 +314,14 @@ export default class EditorApi {
         .service('/mongo-shells')
         .remove(currEditor.profileId, {
           query: {
-            shellId: currEditor.shellId,
-          },
+            shellId: currEditor.shellId
+          }
         })
         .then()
-        .catch(err => console.error('remove shell failed,', err));
+        .catch(err => {
+          console.error('remove shell failed,', err);
+          logToMain('error', 'Failed to remove shell: ' + err);
+        });
     }
 
     // Check if the editor closing is the currently active editor.
@@ -335,7 +340,7 @@ export default class EditorApi {
         this.store.editorPanel.activeEditorId = editors[0][1].id;
 
         const treeEditor = this.store.treeActionPanel.editors.get(
-          currEditor.id,
+          currEditor.id
         );
         if (treeEditor) {
           this.store.treeActionPanel.editors.delete(treeEditor.id);
@@ -393,11 +398,11 @@ SHOW TABLES
             status: ProfileStatus.OPEN,
             path: null,
             type: options.type,
-            db: options.db,
+            db: options.db
           },
-          options,
-        ),
-      ),
+          options
+        )
+      )
     );
     if (this.api) {
       this.api.addDrillOutput(this.store.editors.get(editorId), options.output);
@@ -429,7 +434,7 @@ SHOW TABLES
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
       iconName: 'pt-icon-thumbs-up',
-      className: 'success',
+      className: 'success'
     });
     return editorId;
   }

@@ -300,6 +300,7 @@ export default class Toolbar extends React.Component {
     this.saveFile().catch((e) => {
       if (e) {
         console.error(e);
+        logToMain('error', 'Failed to save file ' + e);
       }
     });
   }

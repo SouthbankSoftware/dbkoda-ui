@@ -41,7 +41,7 @@ const MAX_PROFILE_NAME_DISPLAYED = 28;
 
 @inject(allStores => ({
   store: allStores.store,
-  treeState: allStores.treeState,
+  treeState: allStores.treeState
 }))
 @observer
 export default class TreeToolbar extends React.Component {
@@ -55,7 +55,7 @@ export default class TreeToolbar extends React.Component {
 
     this.reactionToProfile = reaction(
       () => this.props.store.profileList.selectedProfile,
-      () => this.onSelectProfile(),
+      () => this.onSelectProfile()
     );
   }
 
@@ -96,7 +96,7 @@ export default class TreeToolbar extends React.Component {
     service.timeout = 60000;
     service
       .get(profile.id)
-      .then((res) => {
+      .then(res => {
         if (this.props.store.profileList.selectedProfile.id == res.profileId) {
           this.props.store.updateTopology(res);
         }
@@ -104,12 +104,13 @@ export default class TreeToolbar extends React.Component {
           this.props.store.treePanel.isRefreshing = false;
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err.stack);
+        logToMain('error', 'Failed to refresh Tree: ' + err);
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: err.message,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
       });
   }
@@ -128,7 +129,7 @@ export default class TreeToolbar extends React.Component {
             MAX_PROFILE_NAME_DISPLAYED
               ? this.props.treeState.profileAlias.substring(
                   0,
-                  MAX_PROFILE_NAME_DISPLAYED,
+                  MAX_PROFILE_NAME_DISPLAYED
                 ) + '...'
               : this.props.treeState.profileAlias}
           </div>
@@ -155,5 +156,5 @@ export default class TreeToolbar extends React.Component {
 }
 
 TreeToolbar.propTypes = {
-  treeState: PropTypes.instanceOf(TreeState),
+  treeState: PropTypes.instanceOf(TreeState)
 };

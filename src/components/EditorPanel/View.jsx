@@ -900,6 +900,7 @@ class View extends React.Component {
             className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
+          logToMain('error', 'Failed to execute explain: ' + err);
           runInAction(() => {
             editor.executing = false;
             this.props.store.editorToolbar.isActiveExecuting = false;
@@ -1057,6 +1058,7 @@ class View extends React.Component {
         this.setState({ openTranslator: true });
       } catch (err) {
         console.error('failed to translate the selected code ');
+        logToMain('error', 'Failed to translate to native code: ' + err);
       }
     }
   }

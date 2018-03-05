@@ -318,6 +318,7 @@ export default class Store {
           className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });
+        logToMain('error', 'Failed to create new editor: ' + err);
       });
   }
 
@@ -567,6 +568,7 @@ export default class Store {
                 .terminalService.get(terminalId)
                 .catch(
                   action(err => {
+                    logToMain('error', 'Failed to fetch terminals: ' + err);
                     if (err.code !== 404) {
                       console.error(err);
                     }
@@ -614,12 +616,14 @@ export default class Store {
           console.error(
             "State store doesn't exist. A new one will be created after app close or refreshing"
           );
+          logToMain('error', 'State store does not exist: ' + err);
           return this.loadRest().then(() => {
             Broker.emit(EventType.APP_READY);
           });
         }
 
         console.error(err);
+        logToMain('error', 'Failed to load state store: ' + err);
         Broker.emit(EventType.APP_CRASHED);
       });
   }

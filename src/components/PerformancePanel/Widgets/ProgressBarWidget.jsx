@@ -235,10 +235,14 @@ export default class ProgressBarWidget extends React.Component<Props> {
       });
       sumOfHWM = stats[sData[0]].hwm;
       sumOfValues = arrData[0].value;
-      if (!this.props.widget.firstValueIsHighWaterMark) {
-        this._chartLabel = sumOfHWM; // for single item chart it will always show the item value in text label
+      if (this.props.widget.items.length === 1) {
+        // If it is a single chart, just show the real value.
+        this._chartLabel = data[Object.keys(data)[0]];
+      } else if (!this.props.widget.firstValueIsHighWaterMark) {
+        // First value is high water mark, show first value.
+        this._chartLabel = sumOfHWM;
       } else {
-        this._chartLabel = sumOfValues; // for single item chart it will always show the item value in text label
+        this._chartLabel = sumOfValues; // If it is a stacked chart, show the sum of the values.
       }
     } else {
       // console.error(

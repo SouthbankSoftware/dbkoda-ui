@@ -86,6 +86,7 @@ export default class TranslatorPanel extends React.Component {
       newValue = translator.translate(value, syntax);
     } catch (_err) {
       console.error(_err);
+      logToMain('error', 'Failed to translate shells cript to driver: ' + _err);
       let msg = 'Error: Failed to translate shell script.';
       if (_err.lineNumber > 0 && _err.description) {
         msg += `<br>${_err.description} on line ${_err.lineNumber}`;
@@ -130,6 +131,7 @@ export default class TranslatorPanel extends React.Component {
       .then((_doc) => {
       }).catch((err) => {
         console.error(err.message);
+        logToMain('error', 'Failed to execute commands through driver: ' + err);
       DBKodaToaster().show({
           message: (<span dangerouslySetInnerHTML={{__html: err.message}} />), // eslint-disable-line react/no-danger
           className: 'danger',

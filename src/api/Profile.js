@@ -202,6 +202,7 @@ export default class ProfileApi {
       })
       .catch(err => {
         console.error(err);
+        logToMain('error', 'Failed to add SSH Terminal: ' + err);
         this.onFail();
         this.toasterCallback && this.toasterCallback('connectionFail', err);
       });
@@ -320,7 +321,10 @@ export default class ProfileApi {
               .then(() => {
                 value.status = ProfileStatus.OPEN;
               })
-              .catch(err => console.error('failed to create shell connection', err));
+              .catch(err => {
+                console.error('failed to create shell connection', err);
+                logToMain('error', 'Failed to create shell connection: + err');
+              });
           }
         });
       } else {
