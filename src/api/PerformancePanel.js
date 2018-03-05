@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-04T23:00:24+11:00
+ * @Last modified time: 2018-03-05T13:47:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,6 +42,7 @@ import type { WidgetState } from './Widget';
 const FOREGROUND_SAMPLING_RATE = 5000;
 const BACKGROUND_SAMPLING_RATE = 5000;
 const MAX_HISTORY_SIZE = 720; // 1h with 5s sampling rate
+const ALARM_DISPLAYING_WINDOW = 60000; // ms, 1 min
 
 export type LayoutState = {
   x: number,
@@ -118,9 +119,7 @@ export const handleNewData = (payload: *, performancePanel: PerformancePanelStat
       const alarmObj = _.get(rawValue, `alarm.${showAlarms}`);
 
       if (alarmObj) {
-        alarms.splice(
-          0,
-          alarms.length,
+        alarms.unshift(
           ..._.map(alarmObj, v => {
             const alarm = _.pick(v, ['level', 'message']);
             alarm.timestamp = timestamp;
@@ -128,6 +127,21 @@ export const handleNewData = (payload: *, performancePanel: PerformancePanelStat
           })
         );
       }
+
+      // remove old alarms
+      let removeCount = 0;
+      // $FlowFixMe
+      _.forEachRight(alarms, v => {
+        const { timestamp } = v;
+
+        if (Date.now() - timestamp > ALARM_DISPLAYING_WINDOW) {
+          removeCount += 1;
+        } else {
+          return false;
+        }
+      });
+
+      removeCount && alarms.splice(-removeCount, removeCount);
     }
   }
 };

@@ -5,7 +5,7 @@
  * @Date:   2018-02-21T14:36:12+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-04T23:27:49+11:00
+ * @Last modified time: 2018-03-05T13:42:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,6 +26,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import * as d3 from 'd3';
 import * as React from 'react';
 import { computed, type IObservableArray } from 'mobx';
@@ -82,8 +83,9 @@ type Props = {
 };
 
 @observer
-export default class AlarmView extends React.PureComponent<Props> {
+export default class AlarmView extends React.Component<Props> {
   _cellMeasurerCache: *;
+  _list: React.ElementRef<*>;
 
   constructor(props: Props) {
     super(props);
@@ -95,8 +97,6 @@ export default class AlarmView extends React.PureComponent<Props> {
 
   @computed
   get overallLevel(): AlarmLevel {
-    this._cellMeasurerCache.clearAll();
-
     const { alarms } = this.props;
     let level = 0;
 
@@ -161,6 +161,11 @@ export default class AlarmView extends React.PureComponent<Props> {
     );
   };
 
+  componentDidUpdate() {
+    this._cellMeasurerCache.clearAll();
+    _.invoke(this, '_list.forceUpdateGrid');
+  }
+
   render() {
     const { category, alarms } = this.props;
     const { overallLevel } = this;
@@ -185,6 +190,7 @@ export default class AlarmView extends React.PureComponent<Props> {
               )}`}
             </div>
             <List
+              ref={ref => (this._list = ref)}
               className="messageList"
               deferredMeasurementCache={this._cellMeasurerCache}
               width={POPOVER_CONTENT_WIDTH - 2 * containerPadding}
