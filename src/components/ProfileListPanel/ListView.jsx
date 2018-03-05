@@ -363,6 +363,7 @@ export default class ListView extends React.Component {
 
     query.username = selectedProfile.remoteUser;
     query.host = selectedProfile.remoteHost;
+    query.port = selectedProfile.sshPort;
 
     if (selectedProfile.passRadio) {
       query.password = this.state.remotePass;
