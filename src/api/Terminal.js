@@ -68,6 +68,7 @@ export type SshProfile = {
   username: string,
   host: string,
   password?: string,
+  port: number,
   privateKey?: string,
   passphrase?: string,
 };
@@ -114,7 +115,7 @@ export default class TerminalApi {
   ) {
     const id = uuid();
     const type = terminalTypes.ssh;
-    const { profileId, username, password, host, privateKey, passphrase } = profile;
+    const { profileId, username, password, host, privateKey, passphrase, port } = profile;
     const { switchToUponCreation = true, skipWhenExisting = false, eagerCreation = false } =
       options || {};
 
@@ -128,6 +129,7 @@ export default class TerminalApi {
       }
     }
 
+    console.log(port);
     const createTerminal = (xterm: ?Xterm) => {
       featherClient()
         .terminalService.create({
@@ -136,7 +138,7 @@ export default class TerminalApi {
           username,
           password,
           host,
-          port: 22,
+          port,
           privateKey,
           passphrase,
           size: xterm
