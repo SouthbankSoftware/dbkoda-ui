@@ -3,7 +3,7 @@
  * @Date:   2017-11-22T16:42:44+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-26T16:24:12+11:00
+ * @Last modified time: 2018-03-05T12:31:11+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -103,13 +103,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       hash: false,
       template: './index.html',
-      chunks: ['main'],
+      chunks: ['commons', 'main'],
     }),
     new HtmlWebpackPlugin({
       hash: false,
       filename: 'performance.html',
       template: './index.html',
-      chunks: ['performance']
+      chunks: ['commons', 'performance']
     })
   ],
   node: {

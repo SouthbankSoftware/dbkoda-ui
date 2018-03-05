@@ -2,8 +2,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-15T14:25:29+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T14:43:12+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-05T12:34:59+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -97,6 +97,11 @@ module.exports = merge.strategy({
     // enable HMR globally
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'commons',
+      filename: 'commons.js',
+      chunks: ['main', 'performance']
+    }),
     new GlobalizePlugin(
       merge(commonGlobalizePluginOptions, {
         production: false
