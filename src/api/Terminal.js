@@ -129,7 +129,6 @@ export default class TerminalApi {
       }
     }
 
-    console.log(port);
     const createTerminal = (xterm: ?Xterm) => {
       featherClient()
         .terminalService.create({

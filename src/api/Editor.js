@@ -95,8 +95,9 @@ export default class EditorApi {
         this.createNewEditorFailed();
         return null;
       }
-      return featherClient()
-        .service('/mongo-shells')
+      const shellService = featherClient().service('/mongo-shells');
+      shellService.timeout = 30000;
+      return shellService
         .create({ id: profileId })
         .then(res => {
           return this.setNewEditorState(res, editorOptions);

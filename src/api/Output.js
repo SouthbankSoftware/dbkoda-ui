@@ -715,10 +715,11 @@ export default class OutputApi {
     const data = new Blob([content], { type: format });
     const csvURL = window.URL.createObjectURL(data);
     const tempLink = document.createElement('a');
+    const ext = format === OutputFileTypes.CSV ? 'csv' : 'js';
     tempLink.href = csvURL;
     tempLink.setAttribute(
       'download',
-      `output-${currentTab}.js`
+      `output-${currentTab}.${ext}`
     );
     tempLink.click();
   }
