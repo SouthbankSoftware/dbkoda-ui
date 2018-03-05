@@ -21,8 +21,8 @@
 // @Author: chris
 // @Date:   2017-05-15T09:44:11+10:00
 // @Email:  chris@southbanksoftware.com
-// @Last modified by:   guiguan
-// @Last modified time: 2017-06-09T16:32:37+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-06T09:42:50+11:00
 @import '../../styles/_defaultTheme.scss';
 .outputPanel {
   flex: 1;
@@ -82,6 +82,7 @@
         .ReactCodeMirror {
           .CodeMirror {
             top: 0px;
+            height: 100%;
           }
         }
         .outputTerminal {
