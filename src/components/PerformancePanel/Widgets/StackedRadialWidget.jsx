@@ -1,8 +1,8 @@
 /**
  * @flow
  * Created by mike on 06/02/2018
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T13:36:14+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-06T10:45:44+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -406,13 +406,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
   }
 
   @action.bound
-  updateD3Graphs = action(data => {
-    if (false) {
-      console.debug(data);
-    }
-    const { values } = this.props.widget;
-    const latest = values.length > 0 ? values[values.length - 1] : {};
-    const { value: latestValue } = latest;
+  updateD3Graphs = action(latestValue => {
     const { stats } = this.props.performancePanel;
     // $FlowFixMe
     this.itemValues = [];
@@ -423,7 +417,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           : parseInt(latestValue[key], 10);
         // If fixedValue is null, give a 0 value so it will render straight away.
         this.itemValues[key] = fixedValue;
-        const hwm = stats[key].hwm;
+        const { hwm } = stats[key];
         // Check if it's the highest value ever.
         if (!this.maxValue || this.maxValue < hwm) {
           this.maxValue = hwm === 0 ? fixedValue : hwm;
@@ -506,7 +500,15 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       width: width - 20,
       height: height - 20
     });
+    this._rebuildOnResize();
   };
+
+  _rebuildOnResize() {
+    this.props.widget.items.forEach((item, count) => {
+      // $FlowFixMe
+      this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
+    });
+  }
 
   /**
    * Used to dynamically style the element so a tooltip can be overlayed on it.
