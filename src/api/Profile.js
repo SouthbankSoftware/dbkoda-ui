@@ -144,7 +144,8 @@ export default class ProfileApi {
 
       terminalQuery = {
         username: data.remoteUser,
-        host: data.remoteHost
+        host: data.remoteHost,
+        port: data.sshPort
       };
 
       if (data.sshTunnel) {

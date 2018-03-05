@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-23T17:54:17+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-05T15:38:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -442,7 +442,7 @@ export default class TreeView extends React.Component {
 
   showStorageStatsView = () => {
     runInAction('Using Active profile to store statistics', () => {
-      const selectedProfile = this.props.store.profileList.selectedProfile;
+      const { selectedProfile } = this.props.store.profileList;
       this.props.store.profileList.selectedProfile = observable({
         ...selectedProfile,
         storageView: {

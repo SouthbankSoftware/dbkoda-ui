@@ -3,7 +3,7 @@
  * @Date:   2017-12-12T22:16:38+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T15:25:23+11:00
+ * @Last modified time: 2018-03-05T16:56:28+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,10 +47,25 @@
     color: #bfbec0;
     left: -2px;
     z-index: 1000;
-    .title {
-      padding-top: 10px;
-      padding-bottom: 10px;
-      padding-left: 15px;
+    .performanceTitleBar {
+      width: calc(100% + 2px);
+      height: 30px;
+      background-color: #313131;
+      left: -2px;
+      display: flex;
+      flex-direction: row;
+      .title {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        flex-grow: 4;
+      }
+      .titleProfile {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        flex-grow: 5;
+      }
     }
     .performanceSubNavBar {
       width: calc(100% + 2px);
