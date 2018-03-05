@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T16:11:35+11:00
+ * @Last modified time: 2018-03-05T16:45:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -73,12 +73,15 @@ export default class PerformancePanel extends React.Component<Props> {
   }
 
   render() {
-    const { performancePanel: { widgets, rowHeight, rows, cols }, onClose } = this.props;
+    const { performancePanel: { widgets, rowHeight, rows, cols, profileAlias }, onClose } = this.props;
 
     return (
       <div className="PerformancePanel">
         <div className="performanceNavBar">
-          <div className="title">{globalString('performance/title')}</div>
+          <div className="performanceTitleBar">
+            <div className="title">{globalString('performance/title')}</div>
+            <div className="titleProfile">{profileAlias}</div>
+          </div>
           <div className="performanceSubNavBar">
             <div className="subtitle os">{globalString('performance/section_headers/os')}</div>
             <div className="subtitle mongo">
