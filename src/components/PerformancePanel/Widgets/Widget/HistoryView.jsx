@@ -30,13 +30,23 @@ import * as React from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { autorun, type IObservableArray } from 'mobx';
-import { LineChart, Line, Brush as BaseBrush, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import {
+  LineChart,
+  Line,
+  Brush as BaseBrush,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend
+} from 'recharts';
 import type { WidgetValue } from '~/api/Widget';
 import type { Projection } from './Widget';
 import styles from './HistoryView.scss';
 
 // $FlowFixMe
-const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) => k.startsWith('colour'));
+const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) =>
+  k.startsWith('colour')
+);
 const DEFAULT_BRUSH_SIZE = 30;
 const DEBOUNCED_ENABLE_UPDATE_DELAY = 500;
 
@@ -106,7 +116,8 @@ export default class HistoryView extends React.PureComponent<Props, State> {
 
       if (
         this._shouldUpdate &&
-        (this._brushEndIdx == null || this._brushEndIdx >= this.state.data.length)
+        (this._brushEndIdx == null ||
+          this._brushEndIdx >= this.state.data.length)
       ) {
         // if brush right handle is at the rightmost edge, we update the view in realtime
 
@@ -120,7 +131,8 @@ export default class HistoryView extends React.PureComponent<Props, State> {
 
   _onBrushChange = ({ startIndex, endIndex }) => {
     this._brushSize = endIndex - startIndex + 1;
-    this._brushEndIdx = endIndex === this.state.data.length - 1 ? null : endIndex;
+    this._brushEndIdx =
+      endIndex === this.state.data.length - 1 ? null : endIndex;
   };
 
   _debouncedEnableUpdate = _.debounce(() => {
@@ -192,7 +204,14 @@ export default class HistoryView extends React.PureComponent<Props, State> {
           {_.map(projection, (v, k) => {
             const colour = COLOUR_PALETTE[colourIdx % COLOUR_PALETTE.length];
             colourIdx += 1;
-
+            if (k.match('_')) {
+              k = k.split('_')[1];
+            }
+            if (k.match(/UsPs$/g)) {
+              k = k.substring(0, k.length - 4);
+            } else if (k.match(/Us$|Ps$/g)) {
+              k = k.substring(0, k.length - 2);
+            }
             return (
               <Line
                 key={k}
