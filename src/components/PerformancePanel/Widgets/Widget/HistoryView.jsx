@@ -41,6 +41,8 @@ import {
 } from 'recharts';
 import type { WidgetValue } from '~/api/Widget';
 import type { Projection } from './Widget';
+// $FlowFixMe
+import { convertUnits, convertToTarget } from '../Utils';
 import styles from './HistoryView.scss';
 
 // $FlowFixMe
@@ -86,11 +88,15 @@ type Props = {
   values: IObservableArray<WidgetValue>,
   projection: Projection,
   name: string,
-  description: string
+  description: string,
+  unit: string
 };
 
 type State = {
-  data: WidgetValue[]
+  data: WidgetValue[],
+  convertedTimestamps: number[],
+  maxValue: number,
+  maxUnit: string
 };
 
 export default class HistoryView extends React.PureComponent<Props, State> {
@@ -114,6 +120,19 @@ export default class HistoryView extends React.PureComponent<Props, State> {
       // must keep a shallow clone here, otherwise `recharts` will complain, nor can we use `.peek`
       const data = values.slice();
 
+      // Determine Max Value from Value list.
+      let maxValue = 0;
+      this.props.values.forEach(value => {
+        Object.keys(value.value).forEach(key => {
+          if (value.value[key] > maxValue) {
+            maxValue = value.value[key];
+          }
+        });
+      });
+
+      // Scale max value down to a smaller unit:
+      const convertedValue = convertUnits(maxValue, this.props.unit, 3);
+
       if (
         this._shouldUpdate &&
         (this._brushEndIdx == null ||
@@ -122,6 +141,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
         // if brush right handle is at the rightmost edge, we update the view in realtime
 
         this._brushEndIdx = null;
+        this.setState({ maxUnit: convertedValue.unit });
         this.setState({
           data
         });
@@ -153,9 +173,12 @@ export default class HistoryView extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { width, height, projection, name, description } = this.props;
-    const { data } = this.state;
+    const { width, height, projection, name, description, unit } = this.props;
+    const { data, maxUnit } = this.state;
 
+    if (!this.state.convertedTimestamps) {
+      this.state.convertedTimestamps = [];
+    }
     let colourIdx = 0;
     const brushEndIdx = Math.max(
       this._brushEndIdx != null ? this._brushEndIdx : data.length - 1,
@@ -204,6 +227,8 @@ export default class HistoryView extends React.PureComponent<Props, State> {
           {_.map(projection, (v, k) => {
             const colour = COLOUR_PALETTE[colourIdx % COLOUR_PALETTE.length];
             colourIdx += 1;
+
+            // Handle Metric Names:
             if (k.match('_')) {
               k = k.split('_')[1];
             }
@@ -212,12 +237,16 @@ export default class HistoryView extends React.PureComponent<Props, State> {
             } else if (k.match(/Us$|Ps$/g)) {
               k = k.substring(0, k.length - 2);
             }
+
+            // Handle Metric Values
+
             return (
               <Line
                 key={k}
                 type="linear"
                 dataKey={data => {
-                  const value = v(data);
+                  const value = convertToTarget(v(data), unit, maxUnit, 3)
+                    .value;
                   return typeof value === 'number' ? value : null;
                 }}
                 name={k}
