@@ -620,7 +620,7 @@ export default class ListView extends React.Component {
               onClick={() =>
                 this.props.api.transformPerformancePanel(
                   profile.id,
-                  performancePanelStatuses.foreground
+                  performancePanelStatuses.external
                 )
               }
               text={globalString(
@@ -658,20 +658,6 @@ export default class ListView extends React.Component {
               />
             </div>
           ) : null}
-          <div className="menuItemWrapper">
-            <MenuItem
-              className="profileListContextMenu createPerformancePanel"
-              onClick={() =>
-                this.props.api.transformPerformancePanel(
-                  profile.id,
-                  performancePanelStatuses.external
-                )
-              }
-              text="Create External Performance Panel"
-              intent={Intent.NONE}
-              iconName="pt-icon-heat-grid"
-            />
-          </div>
         </div>
       );
     }

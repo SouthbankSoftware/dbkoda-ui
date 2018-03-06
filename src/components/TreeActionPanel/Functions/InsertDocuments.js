@@ -38,6 +38,7 @@ export const InsertDocuments = {
         data.Database = params.Database;
         data.CollectionName = params.CollectionName;
         console.log('returns', data);
+        data.Ordered = false;
         return data;
     },
     dbkoda_listdb: common.dbkoda_listdb,
