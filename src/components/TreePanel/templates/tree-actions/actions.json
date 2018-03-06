@@ -31,6 +31,12 @@
   "mongos": [],
   "databases": [
     {
+      "name": "ShowPerformancePanel",
+      "text": "Open Performance Panel",
+      "icon": "pt-icon-timeline-bar-chart",
+      "noDialog": true
+    },
+    {
       "name": "DbStorageStats",
       "text": "Database Storage",
       "icon": "pt-icon-pie-chart",
