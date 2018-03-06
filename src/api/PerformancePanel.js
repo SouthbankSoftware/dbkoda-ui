@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-05T14:22:12+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-06T11:47:04+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -576,6 +576,8 @@ export default class PerformancePanelApi {
         // this command should only come from Performance Window if window is closed by user using cross.
         this.externalPerformanceWindows.set(args.profileId, { status: 'closed' });
         this.transformPerformancePanel(args.profileId, performancePanelStatuses.background);
+      } else if (args.command === 'pw_windowReload') {
+        this.externalPerformanceWindows.set(args.profileId, { status: 'reloading' });
       }
     }
   }

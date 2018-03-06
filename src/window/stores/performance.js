@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-04T20:47:06+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-06T11:42:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -58,7 +58,7 @@ export default class Store {
     console.log(args);
     if (args.command === 'mw_setProfileId') {
       this.profileId = args.profileId;
-      ipcRenderer.send('performance', { command: 'pw_windowReady', profileId: this.profileId });
+      this.sendCommandToMainProcess('pw_windowReady');
     } else if (args.profileId) {
       if (!this.profileId) {
         this.profileId = args.profileId;
@@ -76,5 +76,10 @@ export default class Store {
         }
       }
     }
+  };
+
+  @action.bound
+  sendCommandToMainProcess = (command) => {
+    ipcRenderer.send('performance', { command, profileId: this.profileId });
   };
 }
