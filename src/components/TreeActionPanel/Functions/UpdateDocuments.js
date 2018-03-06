@@ -33,51 +33,55 @@ const debug = false;
 
 export const UpdateDocuments = {
 
-    dbkoda_UpdateDocumentsPreFill: (params) => {
-        // console.log('invoked dbkoda_DeleteDocumentsPreFill');
-        const data = {};
-        data.Database = params.Database;
-        data.CollectionName = params.CollectionName;
-        data.FilterKeys = [];
-        data.FilterKeys.push({
-            AttributeName: '_id',
-            Operator: '$eq',
-            Value: '"SomeValue"'
-        });
-        data.UpdateOperators = [];
-        data.UpdateOperators.push({
-          UpOperator: '$set',
-          UpAttribute: 'SomeAttribute',
-          UpValue: 'SomeValue'
-        });
-        console.log('returns', data);
-        return data;
-    },
-    dbkodaUpdateOperators: (params) => { //eslint-disable-line
-        params.dontRun = true;
-        return params;
-    },
-    dbkodaUpdateOperators_parse: (res) => {
-        //eslint-disable-line
-        if (debug) console.log(res);
-        return [
-            '$set',
-            '$inc',
-            '$currentDate',
-            '$min',
-            '$max',
-            '$mul',
-            '$rename',
-            '$setOnInsert',
-            '$unset'
-        ];
-    },
-    dbkoda_listdb: common.dbkoda_listdb,
-    dbkoda_listdb_parse: common.dbkoda_listdb_parse,
-    dbkoda_listcollections: common.dbkoda_listcollections,
-    dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
-    dbkodaListAttributes: common.dbkodaListAttributes,
-    dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
-    dbkodaMatchOperators: common.dbkodaMatchOperators,
-    dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
+  dbkoda_UpdateDocumentsPreFill: (params) => {
+    // console.log('invoked dbkoda_DeleteDocumentsPreFill');
+    const data = {};
+    data.Database = params.Database;
+    data.CollectionName = params.CollectionName;
+    data.FilterKeys = [];
+    data.FilterKeys.push({
+      AttributeName: '_id',
+      Operator: '$eq',
+      Value: '"SomeValue"'
+    });
+    data.UpdateOperators = [];
+    data.UpdateOperators.push({
+      UpOperator: '$set',
+      UpAttribute: 'SomeAttribute',
+      UpValue: 'SomeValue'
+    });
+    data.UseOr = false;
+    data.UpdateMany = false;
+    data.Upsert = false;
+    data.Replace = false;
+    console.log('returns', data);
+    return data;
+  },
+  dbkodaUpdateOperators: (params) => { //eslint-disable-line
+    params.dontRun = true;
+    return params;
+  },
+  dbkodaUpdateOperators_parse: (res) => {
+    //eslint-disable-line
+    if (debug) console.log(res);
+    return [
+      '$set',
+      '$inc',
+      '$currentDate',
+      '$min',
+      '$max',
+      '$mul',
+      '$rename',
+      '$setOnInsert',
+      '$unset'
+    ];
+  },
+  dbkoda_listdb: common.dbkoda_listdb,
+  dbkoda_listdb_parse: common.dbkoda_listdb_parse,
+  dbkoda_listcollections: common.dbkoda_listcollections,
+  dbkoda_listcollections_parse: common.dbkoda_listcollections_parse,
+  dbkodaListAttributes: common.dbkodaListAttributes,
+  dbkodaListAttributes_parse: common.dbkodaListAttributes_parse,
+  dbkodaMatchOperators: common.dbkodaMatchOperators,
+  dbkodaMatchOperators_parse: common.dbkodaMatchOperators_parse,
 };

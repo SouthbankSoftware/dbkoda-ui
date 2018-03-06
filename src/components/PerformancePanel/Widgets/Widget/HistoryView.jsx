@@ -3,9 +3,9 @@
  *
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-02-05T12:18:29+11:00
- * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T03:32:09+11:00
+ * @Email:  guan@southbanksoftware.com
+ * @Last modified by:   Mike
+ * @Last modified time: 2018-03-06T14:33:42+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -89,7 +89,7 @@ type Props = {
   projection: Projection,
   name: string,
   description: string,
-  unit: string
+  unit: any
 };
 
 type State = {
@@ -130,7 +130,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
         });
       });
 
-      // Scale max value down to a smaller unit:
+      // Scale max value down to a smaller unit for all values.
       const convertedValue = convertUnits(maxValue, this.props.unit, 3);
 
       if (
@@ -228,17 +228,18 @@ export default class HistoryView extends React.PureComponent<Props, State> {
             const colour = COLOUR_PALETTE[colourIdx % COLOUR_PALETTE.length];
             colourIdx += 1;
 
-            // Handle Metric Names:
-            if (k.match('_')) {
-              k = k.split('_')[1];
-            }
-            if (k.match(/UsPs$/g)) {
-              k = k.substring(0, k.length - 4);
-            } else if (k.match(/Us$|Ps$/g)) {
-              k = k.substring(0, k.length - 2);
+            let name = k;
+
+            // @TODO - Guan : Integrate with projection function.
+            if (name.match('_')) {
+              [, name] = name.split('_');
             }
 
-            // Handle Metric Values
+            if (name.match(/UsPs$/g)) {
+              name = name.substring(0, name.length - 4);
+            } else if (name.match(/Us$|Ps$/g)) {
+              name = name.substring(0, name.length - 2);
+            }
 
             return (
               <Line
@@ -249,7 +250,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
                     .value;
                   return typeof value === 'number' ? value : null;
                 }}
-                name={k}
+                name={name}
                 dot={false}
                 activeDot={tooltipCursor}
                 isAnimationActive={false}

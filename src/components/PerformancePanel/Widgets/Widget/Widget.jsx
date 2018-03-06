@@ -3,9 +3,9 @@
  *
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-14T12:22:05+11:00
- * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-04T23:36:54+11:00
+ * @Email:  guan@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2018-03-06T14:32:54+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
