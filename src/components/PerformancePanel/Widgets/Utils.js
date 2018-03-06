@@ -416,3 +416,21 @@ export const convertToTarget = (
     unit
   };
 };
+
+/**
+ * Reduces the length of the name of a metric from the controller for user readability.
+ * @param {string} name - Takes the name of a metric.
+ * @returns {string} The reduced string.
+ */
+export const reduceName = (name: string) => {
+  if (name.match('_')) {
+    [, name] = name.split('_');
+  }
+
+  if (name.match(/UsPs$/g)) {
+    name = name.substring(0, name.length - 4);
+  } else if (name.match(/Us$|Ps$/g)) {
+    name = name.substring(0, name.length - 2);
+  }
+  return name;
+};

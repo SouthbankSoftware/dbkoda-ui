@@ -27,7 +27,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import ErrorIcon from '../../../styles/icons/circle.svg';
-import { convertUnits } from './Utils';
+import { convertUnits, reduceName } from './Utils';
 
 import './StackedRadialWidget.scss';
 
@@ -143,15 +143,7 @@ export default class Legend extends React.Component<Props> {
             total = parseFloat(Number(total).toFixed(2));
           }
 
-          let itemString = item;
-          if (itemString.match('_')) {
-            itemString = itemString.split('_')[1];
-          }
-          if (itemString.match(/UsPs$/g)) {
-            itemString = itemString.substring(0, itemString.length - 4);
-          } else if (itemString.match(/Us$|Ps$/g)) {
-            itemString = itemString.substring(0, itemString.length - 2);
-          }
+          const itemString = reduceName(item);
           return (
             <div key={key} className="row" style={rowDynamicStyle}>
               {this.props.showDots && (

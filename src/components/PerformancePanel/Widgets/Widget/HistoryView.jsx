@@ -42,7 +42,7 @@ import {
 import type { WidgetValue } from '~/api/Widget';
 import type { Projection } from './Widget';
 // $FlowFixMe
-import { convertUnits, convertToTarget } from '../Utils';
+import { convertUnits, convertToTarget, reduceName } from '../Utils';
 import styles from './HistoryView.scss';
 
 // $FlowFixMe
@@ -231,15 +231,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
             let name = k;
 
             // @TODO - Guan : Integrate with projection function.
-            if (name.match('_')) {
-              [, name] = name.split('_');
-            }
-
-            if (name.match(/UsPs$/g)) {
-              name = name.substring(0, name.length - 4);
-            } else if (name.match(/Us$|Ps$/g)) {
-              name = name.substring(0, name.length - 2);
-            }
+            name = reduceName(name);
 
             return (
               <Line
