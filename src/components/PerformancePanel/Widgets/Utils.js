@@ -374,10 +374,18 @@ export const convertToTarget = (
     's|ms|μs|ms/s|μs/s|/μs|/us|/ms|/s|/m|/h|Op/s|KOp/s|MOp/s|pages/s|Kpages/s|Mpages/s| |k'.indexOf(
       unit
     ) >= 0 &&
-    'b|kb|mb|gb|tb|pb|eb|b/s|kb/s|mb/s|gb/s|tb/s'.indexOf(targetUnit) >= 0
+    's|ms|μs|ms/s|μs/s|/μs|/us|/ms|/s|/m|/h|Op/s|KOp/s|MOp/s|pages/s|Kpages/s|Mpages/s| |k'.indexOf(
+      targetUnit
+    ) < 0
   ) {
     // Invalid
-    console.log('Unit and target unit for conversion are not compatible.');
+    console.log(
+      'Unit (',
+      unit,
+      ') and target unit (',
+      targetUnit,
+      ') for conversion are not compatible.'
+    );
     return {
       value: parseFloat(_.round(Number(value), 2)),
       unit

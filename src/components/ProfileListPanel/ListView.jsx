@@ -553,6 +553,15 @@ export default class ListView extends React.Component {
               iconName="pt-icon-edit"
             />
           </div>
+          <div className="menuItemWrapper">
+            <MenuItem
+              className="profileListContextMenu deleteProfile"
+              onClick={this.openRemoveConnectionAlert}
+              text={globalString('profile/menu/deleteProfile')}
+              intent={Intent.NONE}
+              iconName="pt-icon-delete"
+            />
+          </div>
         </div>
       );
     } else {
@@ -598,15 +607,6 @@ export default class ListView extends React.Component {
               text={globalString('profile/menu/newWindow')}
               intent={Intent.NONE}
               iconName="pt-icon-new-text-box"
-            />
-          </div>
-          <div className="menuItemWrapper">
-            <MenuItem
-              className="profileListContextMenu deleteProfile"
-              onClick={this.openRemoveConnectionAlert}
-              text={globalString('profile/menu/deleteProfile')}
-              intent={Intent.NONE}
-              iconName="pt-icon-delete"
             />
           </div>
           <MenuDivider />
