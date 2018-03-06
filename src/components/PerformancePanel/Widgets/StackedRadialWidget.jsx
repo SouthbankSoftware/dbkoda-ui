@@ -580,13 +580,14 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
               <div className="radialWrapper" style={wrapperStyle}>
                 <div className="display-name">{displayName}</div>
                 {this.props.widget.items.map((item, count) => {
+                  const key = item + count;
                   const classes =
                     'radial radial-' +
                     (count + 1) +
                     ' ' +
                     (count + 1) +
                     ' item';
-                  return <div className={classes} />;
+                  return <div key={key} className={classes} />;
                 })}
               </div>
             }

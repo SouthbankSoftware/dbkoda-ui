@@ -106,9 +106,14 @@ export default class Legend extends React.Component<Props> {
 
     // Determine size.
     const fontSize =
-      Legend.fontSize + Legend.fontSize * this.state.height / Legend.fontScalingFactor + 'px';
+      Legend.fontSize +
+      Legend.fontSize * this.state.height / Legend.fontScalingFactor +
+      'px';
     const rowDynamicStyle = {
-      height: Legend.rowSize + Legend.rowSize * this.state.width / Legend.rowScalingFactor + 'px'
+      height:
+        Legend.rowSize +
+        Legend.rowSize * this.state.width / Legend.rowScalingFactor +
+        'px'
     };
     let totalFontColor = 'white';
     let totalValueFontColor = 'white';
@@ -122,6 +127,7 @@ export default class Legend extends React.Component<Props> {
       <div className="keyWrapper">
         {this.state.items.map((item, count) => {
           // Determine Dot color and total count.
+          const key = item + count;
           let fontColor = 'white';
           let valueFontColor = 'white';
           if (!this.props.showDots) {
@@ -147,7 +153,7 @@ export default class Legend extends React.Component<Props> {
             itemString = itemString.substring(0, itemString.length - 2);
           }
           return (
-            <div className="row" style={rowDynamicStyle}>
+            <div key={key} className="row" style={rowDynamicStyle}>
               {this.props.showDots && (
                 <div className="dotWrapper">
                   <ErrorIcon className="colorDot" style={style} />
