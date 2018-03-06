@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-04T20:22:51+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-06T11:42:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -46,8 +46,14 @@ class PerformanceWindow extends React.Component {
     super();
 
     document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
-  }
 
+    window.onbeforeunload = this._handleNavigatingAway;
+  }
+  @action.bound
+  _handleNavigatingAway(event) {
+    console.log(event);
+    this.props.store.sendCommandToMainProcess('pw_windowReload');
+  }
   @action.bound
   _handleVisibilityChange() {
     if (document.hidden) {
