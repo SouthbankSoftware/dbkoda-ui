@@ -420,7 +420,7 @@
       "items": ["wtIO_writeIOps"],
       "extraState": {
         "name": "Cache to Disk",
-        "description": "WiredTiger cache to disk time per second",
+        "description": "WiredTiger cache to disk operations per second",
         "unit": "/s",
         "rotate": 180
       },

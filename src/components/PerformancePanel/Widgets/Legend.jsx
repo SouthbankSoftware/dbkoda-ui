@@ -27,7 +27,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import ErrorIcon from '../../../styles/icons/circle.svg';
-import { convertUnits } from './Utils';
+import { convertUnits, reduceName } from './Utils';
 
 import './StackedRadialWidget.scss';
 
@@ -106,9 +106,14 @@ export default class Legend extends React.Component<Props> {
 
     // Determine size.
     const fontSize =
-      Legend.fontSize + Legend.fontSize * this.state.height / Legend.fontScalingFactor + 'px';
+      Legend.fontSize +
+      Legend.fontSize * this.state.height / Legend.fontScalingFactor +
+      'px';
     const rowDynamicStyle = {
-      height: Legend.rowSize + Legend.rowSize * this.state.width / Legend.rowScalingFactor + 'px'
+      height:
+        Legend.rowSize +
+        Legend.rowSize * this.state.width / Legend.rowScalingFactor +
+        'px'
     };
     let totalFontColor = 'white';
     let totalValueFontColor = 'white';
@@ -122,6 +127,7 @@ export default class Legend extends React.Component<Props> {
       <div className="keyWrapper">
         {this.state.items.map((item, count) => {
           // Determine Dot color and total count.
+          const key = item + count;
           let fontColor = 'white';
           let valueFontColor = 'white';
           if (!this.props.showDots) {
@@ -137,17 +143,9 @@ export default class Legend extends React.Component<Props> {
             total = parseFloat(Number(total).toFixed(2));
           }
 
-          let itemString = item;
-          if (itemString.match('_')) {
-            itemString = itemString.split('_')[1];
-          }
-          if (itemString.match(/UsPs$/g)) {
-            itemString = itemString.substring(0, itemString.length - 4);
-          } else if (itemString.match(/Us$|Ps$/g)) {
-            itemString = itemString.substring(0, itemString.length - 2);
-          }
+          const itemString = reduceName(item);
           return (
-            <div className="row" style={rowDynamicStyle}>
+            <div key={key} className="row" style={rowDynamicStyle}>
               {this.props.showDots && (
                 <div className="dotWrapper">
                   <ErrorIcon className="colorDot" style={style} />

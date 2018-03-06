@@ -155,6 +155,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       .selectAll('svg')
       .remove();
     d3.transition();
+    console.log(this.state.width);
 
     let xTranslate = 0;
     if (this.props.widget.showLegend) {
@@ -169,6 +170,11 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           this.state.width,
         10
       );
+    }
+
+    // For smaller screen width, move radial left to make more room for legend.
+    if (this.state.width < 300) {
+      xTranslate = 65;
     }
 
     const svg = elem
@@ -580,13 +586,14 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
               <div className="radialWrapper" style={wrapperStyle}>
                 <div className="display-name">{displayName}</div>
                 {this.props.widget.items.map((item, count) => {
+                  const key = item + count;
                   const classes =
                     'radial radial-' +
                     (count + 1) +
                     ' ' +
                     (count + 1) +
                     ' item';
-                  return <div className={classes} />;
+                  return <div key={key} className={classes} />;
                 })}
               </div>
             }

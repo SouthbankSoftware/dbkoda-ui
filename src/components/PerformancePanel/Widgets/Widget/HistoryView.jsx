@@ -3,9 +3,9 @@
  *
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-02-05T12:18:29+11:00
- * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-06T10:17:42+11:00
+ * @Email:  guan@southbanksoftware.com
+ * @Last modified by:   Mike
+ * @Last modified time: 2018-03-06T14:33:42+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,13 +30,25 @@ import * as React from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import { autorun, type IObservableArray } from 'mobx';
-import { LineChart, Line, Brush as BaseBrush, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import {
+  LineChart,
+  Line,
+  Brush as BaseBrush,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend
+} from 'recharts';
 import type { WidgetValue } from '~/api/Widget';
 import type { Projection } from './Widget';
+// $FlowFixMe
+import { convertUnits, convertToTarget, reduceName } from '../Utils';
 import styles from './HistoryView.scss';
 
 // $FlowFixMe
-const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) => k.startsWith('colour'));
+const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) =>
+  k.startsWith('colour')
+);
 const DEFAULT_BRUSH_SIZE = 30;
 const DEBOUNCED_ENABLE_UPDATE_DELAY = 500;
 
@@ -76,11 +88,15 @@ type Props = {
   values: IObservableArray<WidgetValue>,
   projection: Projection,
   name: string,
-  description: string
+  description: string,
+  unit: any
 };
 
 type State = {
-  data: WidgetValue[]
+  data: WidgetValue[],
+  convertedTimestamps: number[],
+  maxValue: number,
+  maxUnit: string
 };
 
 export default class HistoryView extends React.PureComponent<Props, State> {
@@ -104,13 +120,28 @@ export default class HistoryView extends React.PureComponent<Props, State> {
       // must keep a shallow clone here, otherwise `recharts` will complain, nor can we use `.peek`
       const data = values.slice();
 
+      // Determine Max Value from Value list.
+      let maxValue = 0;
+      this.props.values.forEach(value => {
+        Object.keys(value.value).forEach(key => {
+          if (value.value[key] > maxValue) {
+            maxValue = value.value[key];
+          }
+        });
+      });
+
+      // Scale max value down to a smaller unit for all values.
+      const convertedValue = convertUnits(maxValue, this.props.unit, 3);
+
       if (
         this._shouldUpdate &&
-        (this._brushEndIdx == null || this._brushEndIdx >= this.state.data.length)
+        (this._brushEndIdx == null ||
+          this._brushEndIdx >= this.state.data.length)
       ) {
         // if brush right handle is at the rightmost edge, we update the view in realtime
 
         this._brushEndIdx = null;
+        this.setState({ maxUnit: convertedValue.unit });
         this.setState({
           data
         });
@@ -120,7 +151,8 @@ export default class HistoryView extends React.PureComponent<Props, State> {
 
   _onBrushChange = ({ startIndex, endIndex }) => {
     this._brushSize = endIndex - startIndex + 1;
-    this._brushEndIdx = endIndex === this.state.data.length - 1 ? null : endIndex;
+    this._brushEndIdx =
+      endIndex === this.state.data.length - 1 ? null : endIndex;
   };
 
   _debouncedEnableUpdate = _.debounce(() => {
@@ -141,9 +173,12 @@ export default class HistoryView extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { width, height, projection, name, description } = this.props;
-    const { data } = this.state;
+    const { width, height, projection, name, description, unit } = this.props;
+    const { data, maxUnit } = this.state;
 
+    if (!this.state.convertedTimestamps) {
+      this.state.convertedTimestamps = [];
+    }
     let colourIdx = 0;
     const brushEndIdx = Math.max(
       this._brushEndIdx != null ? this._brushEndIdx : data.length - 1,
@@ -195,24 +230,16 @@ export default class HistoryView extends React.PureComponent<Props, State> {
 
             let name = k;
 
-            // HACK, TODO: better for the projection provider to provide us meaning full keys (as
-            // names) instead of changing here
-            if (name.match('_')) {
-              [, name] = name.split('_');
-            }
-
-            if (name.match(/UsPs$/g)) {
-              name = name.substring(0, name.length - 4);
-            } else if (name.match(/Us$|Ps$/g)) {
-              name = name.substring(0, name.length - 2);
-            }
+            // @TODO - Guan : Integrate with projection function.
+            name = reduceName(name);
 
             return (
               <Line
                 key={k}
                 type="linear"
                 dataKey={data => {
-                  const value = v(data);
+                  const value = convertToTarget(v(data), unit, maxUnit, 3)
+                    .value;
                   return typeof value === 'number' ? value : null;
                 }}
                 name={name}
