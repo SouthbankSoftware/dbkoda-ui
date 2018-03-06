@@ -155,6 +155,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       .selectAll('svg')
       .remove();
     d3.transition();
+    console.log(this.state.width);
 
     let xTranslate = 0;
     if (this.props.widget.showLegend) {
@@ -169,6 +170,11 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           this.state.width,
         10
       );
+    }
+
+    // For smaller screen width, move radial left to make more room for legend.
+    if (this.state.width < 300) {
+      xTranslate = 65;
     }
 
     const svg = elem
