@@ -480,7 +480,9 @@ export default class ListView extends React.Component {
       (((passwordStoreEnabled && storeNeedsPassword) ||
         !passwordStoreEnabled) &&
         (targetProfile.bPassPhrase && !passPhrase)) ||
-      (targetProfile.bRemotePass && !remotePass)
+        ((passwordStoreEnabled && storeNeedsPassword) ||
+        !passwordStoreEnabled) &&
+        (targetProfile.bRemotePass && !remotePass)
     ) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(
@@ -880,6 +882,12 @@ export default class ListView extends React.Component {
                     this.setState({ passPhrase: event.target.value });
                   }}
                 />
+                {!this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
+                )}
+                {this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
+                )}
               </div>
             )}
           <div className="dialogButtons">
@@ -921,6 +929,12 @@ export default class ListView extends React.Component {
                     this.setState({ remotePass: event.target.value });
                   }}
                 />
+                {!this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
+                )}
+                {this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
+                )}
               </div>
             )}
           {this.state.targetProfile &&
@@ -939,6 +953,12 @@ export default class ListView extends React.Component {
                     this.setState({ passPhrase: event.target.value });
                   }}
                 />
+                {!this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreInfo')}</p>
+                )}
+                {this.props.config.settings.passwordStoreEnabled && (
+                  <p>{globalString('profile/openAlert/passwordStoreAdd')}</p>
+                )}
               </div>
             )}
           <div className="dialogButtons">
