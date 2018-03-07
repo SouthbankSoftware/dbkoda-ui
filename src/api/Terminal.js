@@ -140,6 +140,7 @@ export default class TerminalApi {
           port,
           privateKey,
           passphrase,
+          profileId,
           size: xterm
             ? {
                 rows: xterm.rows,

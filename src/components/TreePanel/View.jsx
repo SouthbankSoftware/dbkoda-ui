@@ -56,6 +56,7 @@ import {
   BackupRestoreActions,
   TableViewConstants
 } from '../common/Constants';
+import { performancePanelStatuses } from '../../api/PerformancePanel';
 
 import TreeState from './model/TreeState.js';
 import './View.scss';
@@ -211,6 +212,16 @@ export default class TreeView extends React.Component {
         Menus.push(<MenuDivider key="divider" />);
         for (const objAction of Actions) {
           // iconName={objAction.icon}
+          if (objAction.name === 'ShowPerformancePanel' && this.props.store.profileList.selectedProfile) {
+            const hasPerformancePanel = this.props.api.hasPerformancePanel(this.props.store.profileList.selectedProfile.id);
+            objAction.text = globalString(
+              `profile/menu/${
+                !hasPerformancePanel
+                  ? 'createPerformancePanel'
+                  : 'openPerformancePanel'
+                }`
+            );
+          }
           if (objAction.type && objAction.type == 'divider') {
             Menus.push(<MenuDivider key={objAction.name} />);
           } else {
@@ -348,6 +359,9 @@ export default class TreeView extends React.Component {
         case 'DbStorageStats':
           this.showStorageStatsView();
           break;
+        case 'ShowPerformancePanel':
+          this.showPerformancePanel();
+          break;
         case 'DrillDatabase':
           this.openDrillEditor();
           break;
@@ -455,6 +469,15 @@ export default class TreeView extends React.Component {
         this.props.store.profileList.selectedProfile
       );
     });
+  };
+
+  showPerformancePanel = () => {
+    if (this.props.store.profileList.selectedProfile) {
+      this.props.api.transformPerformancePanel(
+        this.props.store.profileList.selectedProfile.id,
+        performancePanelStatuses.external
+      );
+    }
   };
 
   @action.bound

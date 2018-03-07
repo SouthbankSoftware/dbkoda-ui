@@ -506,23 +506,14 @@ export default class RadialWidget extends React.Component<Props, State> {
     const key = items[0];
     const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     const highWaterMark = (previousValue, itemKey, itemKeyValues, i, latest) => {
-      if (previousValue[key][`max${itemKey}`] === undefined) {
-        previousValue[key][`max${itemKey}`] = 0;
-      }
-      latest[key][`${itemKey}Delta`] = Math.abs(latest[key][itemKey] - previousValue[key][itemKey]);
-      if (latest[key][`${itemKey}Delta`] > previousValue[key][`max${itemKey}`]) {
-        latest[key][`max${itemKey}`] = latest[key][`${itemKey}Delta`];
-      } else {
-        latest[key][`max${itemKey}`] = previousValue[key][`max${itemKey}`];
-      }
       itemKeyValues[itemKey] = {
         percentage:
           latest[key][`${itemKey}hwm`] === 0
             ? 0
             : parseInt(latest[key][`${itemKey}`] / latest[key][`${itemKey}hwm`] * 100, 10),
-        valuePerSec: bytesToSize(latest[key][`${itemKey}Delta`] / (latest[key].samplingRate / 1000))
+        valuePerSec: bytesToSize(latest[key][`${itemKey}PerSec`])
       };
-      if (itemKeyValues[itemKey].valuePerSec) {
+      if (itemKeyValues[itemKey].valuePerSec !== undefined) {
         this.text += ` ${itemKeyValues[itemKey].valuePerSec}/s`;
         // $FlowFixMe
         if (i < widgetItemKeys.length - 1) {
