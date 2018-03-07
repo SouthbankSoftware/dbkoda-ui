@@ -573,6 +573,10 @@
           "label": "gzip",
           "tooltip": "Compress or decompress dumps using GZIP"
         },
+        "archive": {
+          "label": "archive",
+          "tooltip": "Compress or decompress an archive."
+        },
         "headerLine": {
           "label": "headerLine",
           "tooltip": "Import CSV or TSV have headers in first line"

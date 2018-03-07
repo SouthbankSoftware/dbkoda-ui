@@ -423,7 +423,7 @@ export default class PerformancePanelApi {
       return;
     }
 
-    const { widgets, stats } = performancePanel;
+    const { profileAlias, widgets, stats } = performancePanel;
     const itemsSet = new Set();
 
     for (const widget of widgets.values()) {
@@ -491,12 +491,13 @@ export default class PerformancePanelApi {
     statsSrv.statsService
       .create({
         profileId,
+        profileAlias,
         items: [...itemsSet],
         samplingRate:
           to === performancePanelStatuses.background
             ? BACKGROUND_SAMPLING_RATE
             : FOREGROUND_SAMPLING_RATE,
-        debug: true,
+        debug: false,
         ...(performancePanel.status === performancePanelStatuses.stopped ? { stats } : null)
       })
       .then(

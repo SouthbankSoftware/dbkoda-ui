@@ -94,7 +94,7 @@
       "extraState": {
         "name": "Network Bytes Out",
         "description": "Data written to network from Mongo Server",
-        "rowText": "Network activity",
+        "rowText": "Mongo Data Transfers",
         "unit": "b/s"
       },
       "layout": {

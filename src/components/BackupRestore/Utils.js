@@ -19,29 +19,50 @@
  */
 
 import os from 'os';
-import {BackupRestoreActions} from '../common/Constants';
+import { BackupRestoreActions } from '../common/Constants';
 
-export const isDumpAction = action => BackupRestoreActions.DUMP_COLLECTION === action || action === BackupRestoreActions.DUMP_DATABASE || action === BackupRestoreActions.DUMP_SERVER;
+export const isDumpAction = action =>
+  BackupRestoreActions.DUMP_COLLECTION === action ||
+  action === BackupRestoreActions.DUMP_DATABASE ||
+  action === BackupRestoreActions.DUMP_SERVER;
 
-export const isExportAction = action => BackupRestoreActions.EXPORT_COLLECTION === action || action === BackupRestoreActions.EXPORT_DATABASE;
+export const isExportAction = action =>
+  BackupRestoreActions.EXPORT_COLLECTION === action ||
+  action === BackupRestoreActions.EXPORT_DATABASE;
 
-export const isRestoreAction = action => BackupRestoreActions.RESTORE_COLLECTION === action || action === BackupRestoreActions.RESTORE_DATABASE || action === BackupRestoreActions.RESTORE_SERVER;
+export const isRestoreAction = action =>
+  BackupRestoreActions.RESTORE_COLLECTION === action ||
+  action === BackupRestoreActions.RESTORE_DATABASE ||
+  action === BackupRestoreActions.RESTORE_SERVER;
 
-export const isImportAction = action => BackupRestoreActions.IMPORT_COLLECTION === action || action === BackupRestoreActions.IMPORT_DATABASE;
+export const isImportAction = action =>
+  BackupRestoreActions.IMPORT_COLLECTION === action ||
+  action === BackupRestoreActions.IMPORT_DATABASE;
 
-export const isServerAction = action => BackupRestoreActions.DUMP_SERVER === action || BackupRestoreActions.DUMP_SERVER;
+export const isServerAction = action =>
+  BackupRestoreActions.DUMP_SERVER === action ||
+  BackupRestoreActions.DUMP_SERVER;
 
-export const isCollectionAction = treeAction => treeAction === BackupRestoreActions.EXPORT_COLLECTION || treeAction === BackupRestoreActions.DUMP_COLLECTION
-  || treeAction === BackupRestoreActions.RESTORE_COLLECTION || treeAction === BackupRestoreActions.IMPORT_COLLECTION;
+export const isCollectionAction = treeAction =>
+  treeAction === BackupRestoreActions.EXPORT_COLLECTION ||
+  treeAction === BackupRestoreActions.DUMP_COLLECTION ||
+  treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
+  treeAction === BackupRestoreActions.IMPORT_COLLECTION;
 
-export const isDatabaseAction = treeAction => treeAction === BackupRestoreActions.EXPORT_DATABASE || treeAction === BackupRestoreActions.DUMP_DATABASE
-  || treeAction === BackupRestoreActions.RESTORE_DATABASE || treeAction === BackupRestoreActions.IMPORT_DATABASE;
+export const isDatabaseAction = treeAction =>
+  treeAction === BackupRestoreActions.EXPORT_DATABASE ||
+  treeAction === BackupRestoreActions.DUMP_DATABASE ||
+  treeAction === BackupRestoreActions.RESTORE_DATABASE ||
+  treeAction === BackupRestoreActions.IMPORT_DATABASE;
 
-export const getDialogProperites = (action) => {
+export const getDialogProperites = (action, archive) => {
   let properties = [];
 
-  if (action === BackupRestoreActions.RESTORE_COLLECTION || action === BackupRestoreActions.IMPORT_COLLECTION
-    || action === BackupRestoreActions.IMPORT_DATABASE) {
+  if (
+    action === BackupRestoreActions.RESTORE_COLLECTION ||
+    action === BackupRestoreActions.IMPORT_COLLECTION ||
+    action === BackupRestoreActions.IMPORT_DATABASE
+  ) {
     // On Windows and Linux an open dialog can not be both a file selector and a directory selector, so if you set properties to ['openFile', 'openDirectory'] on these platforms, a directory selector will be shown.
     if (os.release().indexOf('Mac') >= 0) {
       properties = ['openFile', 'openDirectory'];
@@ -51,7 +72,9 @@ export const getDialogProperites = (action) => {
   } else {
     properties = ['openDirectory'];
   }
-
+  if (archive) {
+    properties.push('openFile');
+  }
   properties.push('createDirectory');
   properties.push('promptToCreate');
   return properties;

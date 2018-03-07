@@ -23,7 +23,13 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { Checkbox, Intent, Position, Tooltip, NumericInput } from '@blueprintjs/core';
+import {
+  Checkbox,
+  Intent,
+  Position,
+  Tooltip,
+  NumericInput
+} from '@blueprintjs/core';
 
 import { BackupRestoreActions } from '../common/Constants';
 import './Options.scss';
@@ -31,7 +37,7 @@ import './Options.scss';
 const TooltipDelay = 1000;
 const HoverCloseDelay = 10;
 
-const getOptions = (options) => {
+const getOptions = options => {
   const filterOptions = _.filter(options, o => !o.hide);
   return (
     <div className="options-panel pt-dark">
@@ -56,7 +62,7 @@ const getOptions = (options) => {
                 <select
                   className={`select db-backup-${o.name}`}
                   defaultValue={value.selected}
-                  onChange={(item) => {
+                  onChange={item => {
                     o.onChange(item.target.value);
                   }}
                   value={value.selected}
@@ -101,7 +107,9 @@ const getOptions = (options) => {
                 )}
                 {o.inputType === 'number' && (
                   <NumericInput
-                    className={`pt-tooltip-indicator number-input db-backup-${o.name}`}
+                    className={`pt-tooltip-indicator number-input db-backup-${
+                      o.name
+                    }`}
                     value={o.value}
                     onValueChange={e => o.onChange(e)}
                   />
@@ -135,18 +143,23 @@ const getOptions = (options) => {
   );
 };
 
-export const AllCollectionOption = ({ allCollections, changeAllCollections, action }) => {
+export const AllCollectionOption = ({
+  allCollections,
+  changeAllCollections,
+  action
+}) => {
   const options = [
     {
       label:
-        action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_SERVER
+        action === BackupRestoreActions.DUMP_SERVER ||
+        action === BackupRestoreActions.EXPORT_SERVER
           ? globalString('backuprestore/parameters/allDatabases/label')
           : globalString('backuprestore/parameters/allCollections/label'),
       onChange: changeAllCollections,
       tooltips: '',
       checked: allCollections,
-      name: 'all-collections',
-    },
+      name: 'all-collections'
+    }
   ];
   return getOptions(options);
 };
@@ -175,40 +188,40 @@ export const ExportDBOptions = ({
   changeExportType,
   exportType,
   outputFields,
-  changeOutputFields,
+  changeOutputFields
 }) => {
   const options = [
     {
       label: globalString('backuprestore/parameters/outputOptions/label'),
-      type: 'separator',
+      type: 'separator'
     },
     {
       label: 'Type',
       onChange: changeExportType,
       type: 'selection',
       value: exportType,
-      name: 'type',
+      name: 'type'
     },
     {
       label: globalString('backuprestore/parameters/pretty/label'),
       onChange: changePretty,
       tooltips: '',
       checked: pretty,
-      name: 'pretty',
+      name: 'pretty'
     },
     {
       label: globalString('backuprestore/parameters/jsonArray/label'),
       onChange: changeJsonArray,
       tooltips: globalString('backuprestore/parameters/jsonArray/tooltip'),
       checked: jsonArray,
-      name: 'json-array',
+      name: 'json-array'
     },
     {
       label: globalString('backuprestore/parameters/noHeaderLine/label'),
       onChange: changeNoHeaderLine,
       checked: noHeaderLine,
       tooltips: globalString('backuprestore/parameters/noHeaderLine/tooltip'),
-      name: 'no-header-line',
+      name: 'no-header-line'
     },
     {
       label: globalString('backuprestore/parameters/fields/label'),
@@ -216,32 +229,32 @@ export const ExportDBOptions = ({
       value: outputFields,
       onChange: changeOutputFields,
       name: 'output-fields',
-      tooltips: globalString('backuprestore/parameters/fields/tooltip'),
+      tooltips: globalString('backuprestore/parameters/fields/tooltip')
     },
     {
       label: globalString('backuprestore/parameters/queryOptions/label'),
-      type: 'separator',
+      type: 'separator'
     },
     {
       label: globalString('backuprestore/parameters/forceTableScan/label'),
       value: forceTableScan,
       onChange: changeForceTableScan,
       tooltips: globalString('backuprestore/parameters/forceTableScan/tooltip'),
-      name: 'force-table-scan',
+      name: 'force-table-scan'
     },
     {
       label: globalString('backuprestore/parameters/assertExists/label'),
       value: assertExists,
       onChange: changeAssertExists,
       tooltips: globalString('backuprestore/parameters/assertExists/tooltip'),
-      name: 'assert-exists',
+      name: 'assert-exists'
     },
     {
       label: globalString('backuprestore/parameters/query/label'),
       type: 'input',
       value: query,
       onChange: changeQuery,
-      name: 'query',
+      name: 'query'
     },
     {
       label: globalString('backuprestore/parameters/readPreference/label'),
@@ -249,7 +262,7 @@ export const ExportDBOptions = ({
       value: readPreference,
       onChange: changeReadPreference,
       tooltips: globalString('backuprestore/parameters/readPreference/tooltip'),
-      name: 'read-preference',
+      name: 'read-preference'
     },
     {
       label: globalString('backuprestore/parameters/skip/label'),
@@ -258,7 +271,7 @@ export const ExportDBOptions = ({
       value: skip,
       onChange: changeSkip,
       tooltips: globalString('backuprestore/parameters/skip/tooltip'),
-      name: 'skip',
+      name: 'skip'
     },
     {
       label: globalString('backuprestore/parameters/limit/label'),
@@ -267,7 +280,7 @@ export const ExportDBOptions = ({
       value: limit,
       onChange: changeLimit,
       tooltips: globalString('backuprestore/parameters/limit/tooltip'),
-      name: 'limit',
+      name: 'limit'
     },
     {
       label: globalString('backuprestore/parameters/sort/label'),
@@ -275,14 +288,16 @@ export const ExportDBOptions = ({
       value: exportSort,
       onChange: changeExportSort,
       tooltips: globalString('backuprestore/parameters/sort/tooltip'),
-      name: 'export-sort',
-    },
+      name: 'export-sort'
+    }
   ];
   return getOptions(options);
 };
 
 export const DumpOptions = ({
   gzip,
+  archive,
+  changeArchive,
   changeGZip,
   repair,
   changeRepair,
@@ -297,60 +312,75 @@ export const DumpOptions = ({
   query,
   changeQuery,
   viewsAsCollections,
-  changeViewsAsCollections,
+  changeViewsAsCollections
 }) => {
   const options = [
     {
       label: globalString('backuprestore/parameters/outputOptions/label'),
-      type: 'separator',
+      type: 'separator'
     },
     {
       label: globalString('backuprestore/parameters/gzip/label'),
       tooltips: globalString('backuprestore/parameters/gzip/tooltip'),
       onChange: changeGZip,
       checked: gzip,
-      name: 'gzip',
+      name: 'gzip'
+    },
+    {
+      label: globalString('backuprestore/parameters/archive/label'),
+      tooltips: globalString('backuprestore/parameters/archive/tooltip'),
+      onChange: changeArchive,
+      checked: archive,
+      name: 'archive'
     },
     {
       label: globalString('backuprestore/parameters/repair/label'),
       onChange: changeRepair,
       tooltips: globalString('backuprestore/parameters/repair/tooltip'),
       checked: repair,
-      name: 'repair',
+      name: 'repair'
     },
     {
       label: globalString('backuprestore/parameters/dumpDbUsersAndRoles/label'),
       onChange: changeDumpDbUsersAndRoles,
       checked: dumpDbUsersAndRoles,
-      tooltips: globalString('backuprestore/parameters/dumpDbUsersAndRoles/tooltip'),
-      name: 'dump-db-users-and-roles',
+      tooltips: globalString(
+        'backuprestore/parameters/dumpDbUsersAndRoles/tooltip'
+      ),
+      name: 'dump-db-users-and-roles'
     },
     {
       label: globalString('backuprestore/parameters/viewsAsCollections/label'),
       checked: viewsAsCollections,
-      tooltips: globalString('backuprestore/parameters/viewsAsCollections/tooltip'),
+      tooltips: globalString(
+        'backuprestore/parameters/viewsAsCollections/tooltip'
+      ),
       onChange: changeViewsAsCollections,
-      name: 'views-as-collections',
+      name: 'views-as-collections'
     },
     {
-      label: globalString('backuprestore/parameters/numParallelCollections/label'),
-      tooltips: globalString('backuprestore/parameters/numParallelCollections/tooltip'),
+      label: globalString(
+        'backuprestore/parameters/numParallelCollections/label'
+      ),
+      tooltips: globalString(
+        'backuprestore/parameters/numParallelCollections/tooltip'
+      ),
       onChange: changeNumParallelCollections,
       type: 'input',
       inputType: 'number',
       value: numParallelCollections,
-      name: 'num-parallel-collections',
+      name: 'num-parallel-collections'
     },
     {
       label: globalString('backuprestore/parameters/queryOptions/label'),
-      type: 'separator',
+      type: 'separator'
     },
     {
       label: globalString('backuprestore/parameters/forceTableScan/label'),
       tooltips: globalString('backuprestore/parameters/forceTableScan/tooltip'),
       value: forceTableScan,
       onChange: changeForceTableScan,
-      name: 'force-table-scan',
+      name: 'force-table-scan'
     },
     {
       label: globalString('backuprestore/parameters/readPreference/label'),
@@ -358,7 +388,7 @@ export const DumpOptions = ({
       type: 'input',
       value: readPreference,
       onChange: changeReadPreference,
-      name: 'read-preference',
+      name: 'read-preference'
     },
     {
       label: globalString('backuprestore/parameters/query/label'),
@@ -366,8 +396,8 @@ export const DumpOptions = ({
       type: 'input',
       value: query,
       onChange: changeQuery,
-      name: 'query',
-    },
+      name: 'query'
+    }
   ];
   return getOptions(options);
 };
@@ -405,26 +435,28 @@ export const RestoreOptions = ({
   changeRestoreDbUsersAndRoles,
   gzip,
   changeGzip,
+  archive,
+  changeArchive
 }) => {
   const options = [
     {
       label: globalString('backuprestore/parameters/restoreOptions/label'),
       type: 'separator',
-      name: 'separator',
+      name: 'separator'
     },
     {
       label: globalString('backuprestore/parameters/drop/label'),
       onChange: changeDrop,
       tooltips: globalString('backuprestore/parameters/drop/tooltip'),
       checked: drop,
-      name: 'drop',
+      name: 'drop'
     },
     {
       label: globalString('backuprestore/parameters/dryRun/label'),
       onChange: changeDryRun,
       tooltips: globalString('backuprestore/parameters/dryRun/tooltip'),
       checked: dryRun,
-      name: 'dry-run',
+      name: 'dry-run'
     },
     {
       label: globalString('backuprestore/parameters/writeConcern/label'),
@@ -432,85 +464,103 @@ export const RestoreOptions = ({
       checked: writeConcern,
       type: 'input',
       name: 'write-concern',
-      tooltips: globalString('backuprestore/parameters/writeConcern/tooltip'),
+      tooltips: globalString('backuprestore/parameters/writeConcern/tooltip')
     },
     {
       label: globalString('backuprestore/parameters/noIndexRestore/label'),
       checked: noIndexRestore,
       name: 'no-index-restore',
       tooltips: globalString('backuprestore/parameters/noIndexRestore/tooltip'),
-      onChange: changeNoIndexRestore,
+      onChange: changeNoIndexRestore
     },
     {
       label: globalString('backuprestore/parameters/noOptionsRestore/label'),
       onChange: changeNoOptionsRestore,
       value: noOptionsRestore,
       name: 'no-options-restore',
-      tooltips: globalString('backuprestore/parameters/noOptionsRestore/tooltip'),
+      tooltips: globalString(
+        'backuprestore/parameters/noOptionsRestore/tooltip'
+      )
     },
     {
       label: globalString('backuprestore/parameters/keepIndexVersion/label'),
-      tooltips: globalString('backuprestore/parameters/keepIndexVersion/tooltip'),
+      tooltips: globalString(
+        'backuprestore/parameters/keepIndexVersion/tooltip'
+      ),
       onChange: changeKeepIndexVersion,
       value: keepIndexVersion,
-      name: 'keep-index-version',
+      name: 'keep-index-version'
     },
     {
-      label: globalString('backuprestore/parameters/maintainInsertionOrder/label'),
-      tooltips: globalString('backuprestore/parameters/maintainInsertionOrder/tooltip'),
+      label: globalString(
+        'backuprestore/parameters/maintainInsertionOrder/label'
+      ),
+      tooltips: globalString(
+        'backuprestore/parameters/maintainInsertionOrder/tooltip'
+      ),
       onChange: changeMaintainInsertionOrder,
       value: maintainInsertionOrder,
-      name: 'maintain-insertion-order',
+      name: 'maintain-insertion-order'
     },
     {
-      label: globalString('backuprestore/parameters/numParallelCollections/label'),
-      tooltips: globalString('backuprestore/parameters/numParallelCollections/tooltip'),
+      label: globalString(
+        'backuprestore/parameters/numParallelCollections/label'
+      ),
+      tooltips: globalString(
+        'backuprestore/parameters/numParallelCollections/tooltip'
+      ),
       onChange: changeNumParallelCollections,
       value: numParallelCollections,
       type: 'input',
       inputType: 'number',
-      name: 'num-parallel-collections',
+      name: 'num-parallel-collections'
     },
     {
       label: globalString('backuprestore/parameters/numInsertionWorkers/label'),
-      tooltips: globalString('backuprestore/parameters/numInsertionWorkers/tooltip'),
+      tooltips: globalString(
+        'backuprestore/parameters/numInsertionWorkers/tooltip'
+      ),
       onChange: changeNumInsertionWorkersPerCollection,
       value: numInsertionWorkersPerCollection,
       type: 'input',
       inputType: 'number',
-      name: 'num-insertion-workers',
+      name: 'num-insertion-workers'
     },
     {
       label: globalString('backuprestore/parameters/stopOnError/label'),
       tooltips: globalString('backuprestore/parameters/stopOnError/tooltip'),
       onChange: changeStopOnError,
       value: stopOnError,
-      name: 'stop-on-error',
+      name: 'stop-on-error'
     },
     {
-      label: globalString('backuprestore/parameters/bypassDocumentValidation/label'),
-      tooltips: globalString('backuprestore/parameters/bypassDocumentValidation/tooltip'),
+      label: globalString(
+        'backuprestore/parameters/bypassDocumentValidation/label'
+      ),
+      tooltips: globalString(
+        'backuprestore/parameters/bypassDocumentValidation/tooltip'
+      ),
       onChange: changeBypassDocumentValidation,
       value: bypassDocumentValidation,
-      name: 'bypass-document-validation',
+      name: 'bypass-document-validation'
     },
     {
       label: globalString('backuprestore/parameters/inputOptions/label'),
-      type: 'separator',
+      type: 'separator'
     },
     {
       label: globalString('backuprestore/parameters/objcheck/label'),
       tooltips: globalString('backuprestore/parameters/objcheck/tooltip'),
       value: objcheck,
       onChange: changeObjcheck,
-      name: 'objcheck',
+      name: 'objcheck'
     },
     {
       label: globalString('backuprestore/parameters/oplogReplay/label'),
       tooltips: globalString('backuprestore/parameters/oplogReplay/tooltip'),
       value: oplogReplay,
       onChange: changeOplogReplay,
-      name: 'oplog-replay',
+      name: 'oplog-replay'
     },
     {
       label: globalString('backuprestore/parameters/oplogLimit/label'),
@@ -518,22 +568,33 @@ export const RestoreOptions = ({
       type: 'input',
       value: oplogLimit,
       onChange: changeOplogLimit,
-      name: 'oplog-limit',
+      name: 'oplog-limit'
     },
     {
-      label: globalString('backuprestore/parameters/restoreDbUsersAndRoles/label'),
-      tooltips: globalString('backuprestore/parameters/restoreDbUsersAndRoles/tooltip'),
+      label: globalString(
+        'backuprestore/parameters/restoreDbUsersAndRoles/label'
+      ),
+      tooltips: globalString(
+        'backuprestore/parameters/restoreDbUsersAndRoles/tooltip'
+      ),
       value: restoreDbUsersAndRoles,
       onChange: changeRestoreDbUsersAndRoles,
-      name: 'restore-db-users-and-roles',
+      name: 'restore-db-users-and-roles'
+    },
+    {
+      label: globalString('backuprestore/parameters/archive/label'),
+      tooltips: globalString('backuprestore/parameters/archive/tooltip'),
+      value: archive,
+      onChange: changeArchive,
+      name: 'archive'
     },
     {
       label: globalString('backuprestore/parameters/gzip/label'),
       tooltips: globalString('backuprestore/parameters/gzip/tooltip'),
       value: gzip,
       onChange: changeGzip,
-      name: 'gzip',
-    },
+      name: 'gzip'
+    }
   ];
   return getOptions(options);
 };
@@ -569,19 +630,19 @@ export const ImportOptions = ({
   changeWriteConcern,
   shellVersion,
   bypassDocumentValidation,
-  changeBypassDocumentValidation,
+  changeBypassDocumentValidation
 }) => {
   let options = [
     {
       label: globalString('backuprestore/parameters/inputOptions/label'),
-      type: 'separator',
+      type: 'separator'
     },
     {
       label: globalString('backuprestore/parameters/jsonArray/label'),
       tooltips: globalString('backuprestore/parameters/jsonArray/tooltip'),
       onChange: changeJsonArray,
       checked: jsonArray,
-      name: 'json-array',
+      name: 'json-array'
     },
     {
       label: globalString('backuprestore/parameters/parseGrace/label'),
@@ -589,7 +650,7 @@ export const ImportOptions = ({
       onChange: changeParseGrace,
       type: 'selection',
       value: parseGrace,
-      name: 'parse-grace',
+      name: 'parse-grace'
     },
     {
       label: globalString('backuprestore/parameters/type/label'),
@@ -597,7 +658,7 @@ export const ImportOptions = ({
       onChange: changeExportType,
       type: 'selection',
       value: exportType,
-      name: 'export-type',
+      name: 'export-type'
     },
     {
       label: globalString('backuprestore/parameters/headerLine/label'),
@@ -605,15 +666,17 @@ export const ImportOptions = ({
       onChange: changeHeaderLine,
       checked: headerLine,
       name: 'change-header-line',
-      hide: exportType.selected === 'json',
+      hide: exportType.selected === 'json'
     },
     {
       label: globalString('backuprestore/parameters/columnsHaveTypes/label'),
-      tooltips: globalString('backuprestore/parameters/columnsHaveTypes/tooltip'),
+      tooltips: globalString(
+        'backuprestore/parameters/columnsHaveTypes/tooltip'
+      ),
       onChange: changeColumnsHaveTypes,
       type: 'input',
       value: columnsHaveTypes,
-      name: 'columns-have-types',
+      name: 'columns-have-types'
     },
     {
       label: globalString('backuprestore/parameters/fields/label'),
@@ -621,48 +684,54 @@ export const ImportOptions = ({
       type: 'input',
       value: outputFields,
       onChange: changeOutputFields,
-      name: 'output-fields',
+      name: 'output-fields'
     },
     {
       label: globalString('backuprestore/parameters/ingestOptions/label'),
-      type: 'separator',
+      type: 'separator'
     },
     {
       label: globalString('backuprestore/parameters/drop/label'),
       tooltips: globalString('backuprestore/parameters/drop/tooltip'),
       onChange: changeDrop,
       checked: drop,
-      name: 'drop',
+      name: 'drop'
     },
     {
       label: globalString('backuprestore/parameters/ignoreBlanks/label'),
       tooltips: globalString('backuprestore/parameters/ignoreBlanks/tooltip'),
       onChange: changeIgnoreBlanks,
       checked: ignoreBlanks,
-      name: 'ignore-blanks',
+      name: 'ignore-blanks'
     },
     {
-      label: globalString('backuprestore/parameters/maintainInsertionOrder/label'),
-      tooltips: globalString('backuprestore/parameters/maintainInsertionOrder/tooltip'),
+      label: globalString(
+        'backuprestore/parameters/maintainInsertionOrder/label'
+      ),
+      tooltips: globalString(
+        'backuprestore/parameters/maintainInsertionOrder/tooltip'
+      ),
       onChange: changeMaintainInsertionOrder,
       checked: maintainInsertionOrder,
-      name: 'maintain-insertion-order',
+      name: 'maintain-insertion-order'
     },
     {
       label: globalString('backuprestore/parameters/numInsertionWorkers/label'),
-      tooltips: globalString('backuprestore/parameters/numInsertionWorkers/tooltip'),
+      tooltips: globalString(
+        'backuprestore/parameters/numInsertionWorkers/tooltip'
+      ),
       type: 'input',
       inputType: 'number',
       value: numInsertionWorkers,
       onChange: changeNumInsertionWorkers,
-      name: 'num-insertion-workers',
+      name: 'num-insertion-workers'
     },
     {
       label: globalString('backuprestore/parameters/stopOnError/label'),
       tooltips: globalString('backuprestore/parameters/stopOnError/tooltip'),
       onChange: changeStopOnError,
       checked: stopOnError,
-      name: 'stop-on-error',
+      name: 'stop-on-error'
     },
     {
       label: globalString('backuprestore/parameters/mode/label'),
@@ -670,7 +739,7 @@ export const ImportOptions = ({
       onChange: changeMode,
       type: 'selection',
       value: mode,
-      name: 'mode',
+      name: 'mode'
     },
     {
       label: globalString('backuprestore/parameters/upsertFields/label'),
@@ -678,7 +747,7 @@ export const ImportOptions = ({
       type: 'input',
       value: upsertFields,
       onChange: changeUpsertFields,
-      name: 'upsert-fields',
+      name: 'upsert-fields'
     },
     {
       label: globalString('backuprestore/parameters/writeConcern/label'),
@@ -686,20 +755,27 @@ export const ImportOptions = ({
       type: 'input',
       value: writeConcern,
       onChange: changeWriteConcern,
-      name: 'write-concern',
+      name: 'write-concern'
     },
     {
-      label: globalString('backuprestore/parameters/bypassDocumentValidation/label'),
-      tooltips: globalString('backuprestore/parameters/bypassDocumentValidation/tooltip'),
+      label: globalString(
+        'backuprestore/parameters/bypassDocumentValidation/label'
+      ),
+      tooltips: globalString(
+        'backuprestore/parameters/bypassDocumentValidation/tooltip'
+      ),
       onChange: changeBypassDocumentValidation,
       checked: bypassDocumentValidation,
-      name: 'bypass-document-validation',
-    },
+      name: 'bypass-document-validation'
+    }
   ];
   if (shellVersion) {
     const ver = parseFloat(shellVersion.substring(0, 3), 10);
     if (ver < 3.4) {
-      options = _.filter(options, o => o.name !== 'parse-grace' && o.name !== 'mode');
+      options = _.filter(
+        options,
+        o => o.name !== 'parse-grace' && o.name !== 'mode'
+      );
     }
   }
   return getOptions(options);

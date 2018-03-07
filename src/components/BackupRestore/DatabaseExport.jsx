@@ -23,17 +23,23 @@
 
 import React from 'react';
 import os from 'os';
-import {Button} from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 
-import {ButtonPanel} from './ButtonPanel';
+import { ButtonPanel } from './ButtonPanel';
 import './DatabaseExport.scss';
 import CollectionList from './CollectionList';
-import {BackupRestoreActions} from '../common/Constants';
-import {AllCollectionOption, DumpOptions, ExportDBOptions, ImportOptions, RestoreOptions, } from './Options';
-import {generateCode, getCommandObject} from './CodeGenerator';
-import {getDialogProperites, isImportAction, isRestoreAction} from './Utils';
+import { BackupRestoreActions } from '../common/Constants';
+import {
+  AllCollectionOption,
+  DumpOptions,
+  ExportDBOptions,
+  ImportOptions,
+  RestoreOptions
+} from './Options';
+import { generateCode, getCommandObject } from './CodeGenerator';
+import { getDialogProperites, isImportAction, isRestoreAction } from './Utils';
 
-const {dialog, BrowserWindow} = IS_ELECTRON
+const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
   : {};
 
@@ -47,29 +53,30 @@ export default class DatabaseExport extends React.Component {
       collections: [],
       allCollections: true,
       selectedCollections: [],
-      exportType: {selected: 'json', options: ['json', 'csv']},
+      exportType: { selected: 'json', options: ['json', 'csv'] },
       directoryPath: '',
       jsonArray: false,
       gzip: false,
+      archive: false,
       pretty: false,
       db: '',
       collection: '',
       numParallelCollections: 4,
-      mode: {selected: 'insert', options: ['insert', 'upsert', 'merge']},
+      mode: { selected: 'insert', options: ['insert', 'upsert', 'merge'] },
       parseGrace: {
         selected: 'stop',
-        options: ['autoCast', 'skipField', 'skipRow', 'stop'],
-      },
+        options: ['autoCast', 'skipField', 'skipRow', 'stop']
+      }
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (!this.state.editor || this.state.collections.length === 0) {
       const collections = nextProps.collections ? nextProps.collections : [];
-      this.setState({collections, editor: nextProps.treeEditor});
+      this.setState({ collections, editor: nextProps.treeEditor });
     }
     if (nextProps.db && !this.state.db) {
-      this.setState({db: nextProps.db});
+      this.setState({ db: nextProps.db });
     }
   }
 
@@ -80,14 +87,14 @@ export default class DatabaseExport extends React.Component {
       collection,
       treeEditor,
       treeNode,
-      profile,
+      profile
     } = this.props;
     this.setState({
       db,
       collection,
       treeAction,
       editor: treeEditor,
-      ssl: profile.ssl,
+      ssl: profile.ssl
     });
     if (
       treeAction === BackupRestoreActions.EXPORT_COLLECTION ||
@@ -97,13 +104,13 @@ export default class DatabaseExport extends React.Component {
       const collection = treeNode.text;
       const sc = this.state.selectedCollections;
       sc.push(collection);
-      this.setState({selectedCollections: sc, allCollections: false});
+      this.setState({ selectedCollections: sc, allCollections: false });
     }
     if (
       treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
       treeAction === BackupRestoreActions.IMPORT_COLLECTION
     ) {
-      this.setState({collection: treeNode.text});
+      this.setState({ collection: treeNode.text });
     }
   }
 
@@ -114,7 +121,7 @@ export default class DatabaseExport extends React.Component {
         profile: this.props.profile,
         state: this.state,
         action: this.props.treeAction,
-        shellVersion: this.props.profile.shellVersion,
+        shellVersion: this.props.profile.shellVersion
       });
       const currentCode = this.state.editor.doc.cm.getValue();
       if (currentCode !== generatedCode) {
@@ -124,30 +131,35 @@ export default class DatabaseExport extends React.Component {
   }
 
   openFile(action) {
-    const properties = getDialogProperites(action);
+    const properties = getDialogProperites(action, this.state.archive);
+    console.log(properties);
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {
-        properties,
+        properties
       },
-      (fileNames) => {
+      fileNames => {
         if (!fileNames || fileNames.length == 0) {
           return;
         }
         const f = fileNames[0];
         this.setPathValue(f, action);
-      },
+      }
     );
   }
 
   setPathValue(f, action) {
-    if (action === BackupRestoreActions.DUMP_COLLECTION || action === BackupRestoreActions.DUMP_DATABASE
-      || action === BackupRestoreActions.DUMP_SERVER || action === BackupRestoreActions.EXPORT_COLLECTION
-      || action === BackupRestoreActions.EXPORT_DATABASE) {
+    if (
+      action === BackupRestoreActions.DUMP_COLLECTION ||
+      action === BackupRestoreActions.DUMP_DATABASE ||
+      action === BackupRestoreActions.DUMP_SERVER ||
+      action === BackupRestoreActions.EXPORT_COLLECTION ||
+      action === BackupRestoreActions.EXPORT_DATABASE
+    ) {
       f = os.release().indexOf('Windows') >= 0 ? f + '\\dump' : f + '/dump';
     }
 
-    this.setState({directoryPath: f});
+    this.setState({ directoryPath: f });
   }
 
   selectCollection(collection, i) {
@@ -161,13 +173,13 @@ export default class DatabaseExport extends React.Component {
     } else {
       selected.splice(i, 1, collection);
     }
-    this.setState({selectedCollections: selected});
+    this.setState({ selectedCollections: selected });
   }
 
   unSelectCollection(collection) {
     const selected = this.state.selectedCollections;
     selected.splice(selected.indexOf(collection), 1);
-    this.setState({selectedCollections: selected});
+    this.setState({ selectedCollections: selected });
   }
 
   /**
@@ -183,7 +195,7 @@ export default class DatabaseExport extends React.Component {
       treeNode: this.props.treeNode,
       profile: this.props.profile,
       state: this.state,
-      action: this.props.treeAction,
+      action: this.props.treeAction
     });
     return commandObject.length > 0 && this.state.directoryPath;
   }
@@ -193,7 +205,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   getOptions() {
-    const {treeAction} = this.props;
+    const { treeAction } = this.props;
     switch (treeAction) {
       case BackupRestoreActions.EXPORT_DATABASE:
       case BackupRestoreActions.EXPORT_COLLECTION:
@@ -203,39 +215,44 @@ export default class DatabaseExport extends React.Component {
             allCollections={this.state.allCollections}
             pretty={this.state.pretty}
             jsonArray={this.state.jsonArray}
-            changeSSL={() => this.setState({ssl: !this.state.ssl})}
-            changePretty={() => this.setState({pretty: !this.state.pretty})}
+            changeSSL={() => this.setState({ ssl: !this.state.ssl })}
+            changePretty={() => this.setState({ pretty: !this.state.pretty })}
             changeJsonArray={() =>
-              this.setState({jsonArray: !this.state.jsonArray})}
+              this.setState({ jsonArray: !this.state.jsonArray })
+            }
             changeAllCollections={() =>
-              this.setState({allCollections: !this.state.allCollections})}
+              this.setState({ allCollections: !this.state.allCollections })
+            }
             changeNoHeaderLine={() =>
-              this.setState({noHeaderLine: !this.state.noHeaderLine})}
+              this.setState({ noHeaderLine: !this.state.noHeaderLine })
+            }
             noHeaderLine={this.state.noHeaderLine}
-            changeExportType={(e) => {
-              const {exportType} = this.state;
+            changeExportType={e => {
+              const { exportType } = this.state;
               exportType.selected = e;
-              this.setState({exportType});
+              this.setState({ exportType });
             }}
             exportType={this.state.exportType}
             outputFields={this.state.outputFields}
-            changeOutputFields={e => this.setState({outputFields: e})}
+            changeOutputFields={e => this.setState({ outputFields: e })}
             query={this.state.query}
-            changeQuery={e => this.setState({query: e})}
+            changeQuery={e => this.setState({ query: e })}
             readPreference={this.state.readPreference}
-            changeReadPreference={e => this.setState({readPreference: e})}
+            changeReadPreference={e => this.setState({ readPreference: e })}
             forceTableScan={this.state.forceTableScan}
             changeForceTableScan={() =>
-              this.setState({forceTableScan: !this.state.forceTableScan})}
+              this.setState({ forceTableScan: !this.state.forceTableScan })
+            }
             limit={this.state.limit}
-            changeLimit={e => this.setState({limit: e})}
+            changeLimit={e => this.setState({ limit: e })}
             exportSort={this.state.exportSort}
-            changeExportSort={e => this.setState({exportSort: e})}
+            changeExportSort={e => this.setState({ exportSort: e })}
             skip={this.state.skip}
-            changeSkip={e => this.setState({skip: e})}
+            changeSkip={e => this.setState({ skip: e })}
             assertExists={this.state.assertExists}
             changeAssertExists={() =>
-              this.setState({assertExists: !this.state.assertExists})}
+              this.setState({ assertExists: !this.state.assertExists })
+            }
           />
         );
       case BackupRestoreActions.DUMP_DATABASE:
@@ -246,42 +263,49 @@ export default class DatabaseExport extends React.Component {
             ssl={this.state.ssl}
             allCollections={this.state.allCollections}
             gzip={this.state.gzip}
-            changeSSL={() => this.setState({ssl: !this.state.ssl})}
-            changeGZip={() => this.setState({gzip: !this.state.gzip})}
+            archive={this.state.archive}
+            changeArchive={() =>
+              this.setState({ archive: !this.state.archive })
+            }
+            changeSSL={() => this.setState({ ssl: !this.state.ssl })}
+            changeGZip={() => this.setState({ gzip: !this.state.gzip })}
             repair={this.state.repair}
-            changeRepair={() => this.setState({repair: !this.state.repair})}
+            changeRepair={() => this.setState({ repair: !this.state.repair })}
             dumpDbUsersAndRoles={this.state.dumpDbUsersAndRoles}
             changeViewsAsCollections={() =>
               this.setState({
-                viewsAsCollections: !this.state.viewsAsCollections,
-              })}
+                viewsAsCollections: !this.state.viewsAsCollections
+              })
+            }
             viewsAsCollections={this.state.viewsAsCollections}
             changeDumpDbUsersAndRoles={() => {
               if (!this.state.dumpDbUsersAndRoles) {
                 // when turn on viewsAsCollections, unselect all collection
-                this.setState({allCollections: false});
+                this.setState({ allCollections: false });
               }
               this.setState({
-                dumpDbUsersAndRoles: !this.state.dumpDbUsersAndRoles,
+                dumpDbUsersAndRoles: !this.state.dumpDbUsersAndRoles
               });
             }}
             changeAllCollections={() => {
               if (!this.state.allCollections) {
                 // when turn on all collections, unselect viewsAsCollections
-                this.setState({dumpDbUsersAndRoles: false});
+                this.setState({ dumpDbUsersAndRoles: false });
               }
-              this.setState({allCollections: !this.state.allCollections});
+              this.setState({ allCollections: !this.state.allCollections });
             }}
             numParallelCollections={this.state.numParallelCollections}
             changeNumParallelCollections={e =>
-              this.setState({numParallelCollections: e})}
+              this.setState({ numParallelCollections: e })
+            }
             readPreference={this.state.readPreference}
-            changeReadPreference={e => this.setState({readPreference: e})}
+            changeReadPreference={e => this.setState({ readPreference: e })}
             forceTableScan={this.state.forceTableScan}
             changeForceTableScan={() =>
-              this.setState({forceTableScan: !this.state.forceTableScan})}
+              this.setState({ forceTableScan: !this.state.forceTableScan })
+            }
             query={this.state.query}
-            changeQuery={e => this.setState({query: e})}
+            changeQuery={e => this.setState({ query: e })}
           />
         );
       case BackupRestoreActions.RESTORE_SERVER:
@@ -290,58 +314,73 @@ export default class DatabaseExport extends React.Component {
         return (
           <RestoreOptions
             ssl={this.state.ssl}
-            changeSSL={() => this.setState({ssl: !this.state.ssl})}
+            changeSSL={() => this.setState({ ssl: !this.state.ssl })}
             drop={this.state.drop}
-            changeDrop={() => this.setState({drop: !this.state.drop})}
+            changeDrop={() => this.setState({ drop: !this.state.drop })}
             dryRun={this.state.dryRun}
-            changeDryRun={() => this.setState({dryRun: !this.state.dryRun})}
+            changeDryRun={() => this.setState({ dryRun: !this.state.dryRun })}
             writeConcern={this.state.writeConcern}
-            changeWriteConcern={e => this.setState({writeConcern: e})}
+            changeWriteConcern={e => this.setState({ writeConcern: e })}
             noIndexRestore={this.state.noIndexRestore}
             changeNoIndexRestore={() =>
-              this.setState({noIndexRestore: !this.state.noIndexRestore})}
+              this.setState({ noIndexRestore: !this.state.noIndexRestore })
+            }
             noOptionsRestore={this.state.noOptionsRestore}
             changeNoOptionsRestore={() =>
-              this.setState({noOptionsRestore: !this.state.noOptionsRestore})}
+              this.setState({ noOptionsRestore: !this.state.noOptionsRestore })
+            }
             keepIndexVersion={this.state.keepIndexVersion}
             changeKeepIndexVersion={() =>
-              this.setState({keepIndexVersion: !this.state.keepIndexVersion})}
+              this.setState({ keepIndexVersion: !this.state.keepIndexVersion })
+            }
             maintainInsertionOrder={this.state.maintainInsertionOrder}
             changeMaintainInsertionOrder={() =>
               this.setState({
-                maintainInsertionOrder: !this.state.maintainInsertionOrder,
-              })}
+                maintainInsertionOrder: !this.state.maintainInsertionOrder
+              })
+            }
             numParallelCollections={this.state.numParallelCollections}
             changeNumParallelCollections={e =>
-              this.setState({numParallelCollections: e})}
+              this.setState({ numParallelCollections: e })
+            }
             numInsertionWorkersPerCollection={
               this.state.numInsertionWorkersPerCollection
             }
             changeNumInsertionWorkersPerCollection={e =>
-              this.setState({numInsertionWorkersPerCollection: e})}
+              this.setState({ numInsertionWorkersPerCollection: e })
+            }
             stopOnError={this.state.stopOnError}
             changeStopOnError={() =>
-              this.setState({stopOnError: !this.state.stopOnError})}
+              this.setState({ stopOnError: !this.state.stopOnError })
+            }
             bypassDocumentValidation={this.state.bypassDocumentValidation}
             changeBypassDocumentValidation={() =>
               this.setState({
-                bypassDocumentValidation: !this.state.bypassDocumentValidation,
-              })}
+                bypassDocumentValidation: !this.state.bypassDocumentValidation
+              })
+            }
             objcheck={this.state.objcheck}
             changeObjcheck={() =>
-              this.setState({objcheck: !this.state.objcheck})}
+              this.setState({ objcheck: !this.state.objcheck })
+            }
             oplogReplay={this.state.oplogReplay}
             changeOplogReplay={() =>
-              this.setState({oplogReplay: !this.state.oplogReplay})}
+              this.setState({ oplogReplay: !this.state.oplogReplay })
+            }
             oplogLimit={this.state.oplogLimit}
-            changeOplogLimit={e => this.setState({oplogLimit: e})}
+            changeOplogLimit={e => this.setState({ oplogLimit: e })}
             restoreDbUsersAndRoles={this.state.restoreDbUsersAndRoles}
             changeRestoreDbUsersAndRoles={() =>
               this.setState({
-                restoreDbUsersAndRoles: !this.state.restoreDbUsersAndRoles,
-              })}
+                restoreDbUsersAndRoles: !this.state.restoreDbUsersAndRoles
+              })
+            }
             gzip={this.state.gzip}
-            changeGzip={() => this.setState({gzip: !this.state.gzip})}
+            changeGzip={() => this.setState({ gzip: !this.state.gzip })}
+            archive={this.state.archive}
+            changeArchive={() =>
+              this.setState({ archive: !this.state.archive })
+            }
           />
         );
       case BackupRestoreActions.IMPORT_COLLECTION:
@@ -350,60 +389,67 @@ export default class DatabaseExport extends React.Component {
           <ImportOptions
             shellVersion={this.props.profile.shellVersion}
             outputFields={this.state.outputFields}
-            changeOutputFields={e => this.setState({outputFields: e})}
+            changeOutputFields={e => this.setState({ outputFields: e })}
             headerLine={this.state.headerLine}
             changeHeaderLine={() =>
-              this.setState({headerLine: !this.state.headerLine})}
+              this.setState({ headerLine: !this.state.headerLine })
+            }
             jsonArray={this.state.jsonArray}
             changeJsonArray={() =>
-              this.setState({jsonArray: !this.state.jsonArray})}
+              this.setState({ jsonArray: !this.state.jsonArray })
+            }
             parseGrace={this.state.parseGrace}
-            changeParseGrace={(e) => {
-              const {parseGrace} = this.state;
+            changeParseGrace={e => {
+              const { parseGrace } = this.state;
               parseGrace.selected = e;
-              this.setState({parseGrace});
+              this.setState({ parseGrace });
             }}
             exportType={this.state.exportType}
-            changeExportType={(e) => {
-              const {exportType} = this.state;
+            changeExportType={e => {
+              const { exportType } = this.state;
               exportType.selected = e;
-              this.setState({exportType});
+              this.setState({ exportType });
             }}
             columnsHaveTypes={this.state.columnsHaveTypes}
-            changeColumnsHaveTypes={e => this.setState({columnsHaveTypes: e})}
+            changeColumnsHaveTypes={e => this.setState({ columnsHaveTypes: e })}
             drop={this.state.drop}
-            changeDrop={() => this.setState({drop: !this.state.drop})}
+            changeDrop={() => this.setState({ drop: !this.state.drop })}
             ignoreBlanks={this.state.ignoreBlanks}
             changeIgnoreBlanks={() =>
-              this.setState({ignoreBlanks: !this.state.ignoreBlanks})}
+              this.setState({ ignoreBlanks: !this.state.ignoreBlanks })
+            }
             maintainInsertionOrder={this.state.maintainInsertionOrder}
             changeMaintainInsertionOrder={() =>
               this.setState({
-                maintainInsertionOrder: !this.state.maintainInsertionOrder,
-              })}
+                maintainInsertionOrder: !this.state.maintainInsertionOrder
+              })
+            }
             numInsertionWorkers={this.state.numInsertionWorkers}
             changeNumInsertionWorkers={() =>
               this.setState({
-                numInsertionWorkers: !this.state.numInsertionWorkers,
-              })}
+                numInsertionWorkers: !this.state.numInsertionWorkers
+              })
+            }
             stopOnError={this.state.stopOnError}
             changeStopOnError={() =>
-              this.setState({stopOnError: !this.state.stopOnError})}
+              this.setState({ stopOnError: !this.state.stopOnError })
+            }
             mode={this.state.mode}
-            changeMode={(e) => {
-              const {mode} = this.state;
+            changeMode={e => {
+              const { mode } = this.state;
               mode.selected = e;
-              this.setState({mode});
+              this.setState({ mode });
             }}
             upsertFields={this.state.upsertFields}
-            changeUpsertFields={e => this.setState({upsertFields: e})}
-            changeWriteConcern={e => this.setState({writeConcern: e})}
+            changeUpsertFields={e => this.setState({ upsertFields: e })}
+            changeWriteConcern={e => this.setState({ writeConcern: e })}
             writeConcern={this.state.writeConcern}
             bypassDocumentValidation={this.state.bypassDocumentValidation}
             changeBypassDocumentValidation={() =>
               this.setState({
-                bypassDocumentValidation: !this.state.bypassDocumentValidation,
-              })}
+                bypassDocumentValidation: !this.state.bypassDocumentValidation
+              })
+            }
           />
         );
       default:
@@ -434,7 +480,7 @@ export default class DatabaseExport extends React.Component {
   }
 
   getDatabaseFieldComponent() {
-    const {db} = this.props;
+    const { db } = this.props;
     if (
       this.props.treeAction === BackupRestoreActions.DUMP_COLLECTION ||
       this.props.treeAction === BackupRestoreActions.DUMP_DATABASE ||
@@ -462,7 +508,7 @@ export default class DatabaseExport extends React.Component {
               type="text"
               dir="auto"
               value={db}
-              onChange={e => this.setState({db: e.target.value})}
+              onChange={e => this.setState({ db: e.target.value })}
             />
           </div>
         </div>
@@ -481,19 +527,17 @@ export default class DatabaseExport extends React.Component {
   }
 
   render() {
-    const {treeAction} = this.props;
+    const { treeAction } = this.props;
     this.updateEditorCode();
     return (
       <div className="database-export-panel">
-        <h3 className="form-title">
-          {this.getComponentTitle()}
-        </h3>
+        <h3 className="form-title">{this.getComponentTitle()}</h3>
         <div className="pt-form-group">
           {this.getDatabaseFieldComponent()}
           {(treeAction === BackupRestoreActions.RESTORE_COLLECTION ||
             treeAction === BackupRestoreActions.IMPORT_COLLECTION ||
-            treeAction === BackupRestoreActions.IMPORT_DATABASE) &&
-            <div style={{marginBottom: 20}}>
+            treeAction === BackupRestoreActions.IMPORT_DATABASE) && (
+            <div style={{ marginBottom: 20 }}>
               <label className="pt-label database" htmlFor="database">
                 {globalString('backuprestore/collection')}
               </label>
@@ -503,13 +547,14 @@ export default class DatabaseExport extends React.Component {
                   type="text"
                   dir="auto"
                   readOnly={
-                  treeAction === BackupRestoreActions.RESTORE_COLLECTION
-                }
+                    treeAction === BackupRestoreActions.RESTORE_COLLECTION
+                  }
                   value={this.state.collection}
-                  onChange={e => this.setState({collection: e.target.value})}
-              />
+                  onChange={e => this.setState({ collection: e.target.value })}
+                />
               </div>
-            </div>}
+            </div>
+          )}
           <label className="pt-label database" htmlFor="database">
             {this.getFilePathLabel(treeAction)}
           </label>
@@ -517,7 +562,7 @@ export default class DatabaseExport extends React.Component {
             <input
               className="pt-input path-input db-backup-path-input"
               type="text"
-              onChange={e => this.setState({'directoryPath': e.target.value})}
+              onChange={e => this.setState({ directoryPath: e.target.value })}
               value={this.state.directoryPath}
             />
             <Button
@@ -534,30 +579,31 @@ export default class DatabaseExport extends React.Component {
             {globalString('backuprestore/requiredWarning')}
           </label>
         </div>
-        <div style={{overflowY: 'auto'}}>
+        <div style={{ overflowY: 'auto' }}>
           {treeAction !== BackupRestoreActions.EXPORT_COLLECTION &&
-          treeAction !== BackupRestoreActions.DUMP_COLLECTION &&
-          treeAction !== BackupRestoreActions.RESTORE_COLLECTION &&
-          treeAction !== BackupRestoreActions.RESTORE_DATABASE &&
-          treeAction !== BackupRestoreActions.RESTORE_SERVER &&
-          treeAction !== BackupRestoreActions.IMPORT_DATABASE &&
-          treeAction !== BackupRestoreActions.IMPORT_COLLECTION &&
-          <AllCollectionOption
-            allCollections={this.state.allCollections}
-            action={treeAction}
-            changeAllCollections={() => {
-              if (!this.state.allCollections) {
-                // when turn on all collections, unselect viewsAsCollections
-                this.setState({dumpDbUsersAndRoles: false});
-              }
-              this.setState({allCollections: !this.state.allCollections});
-            }}
-          />}
+            treeAction !== BackupRestoreActions.DUMP_COLLECTION &&
+            treeAction !== BackupRestoreActions.RESTORE_COLLECTION &&
+            treeAction !== BackupRestoreActions.RESTORE_DATABASE &&
+            treeAction !== BackupRestoreActions.RESTORE_SERVER &&
+            treeAction !== BackupRestoreActions.IMPORT_DATABASE &&
+            treeAction !== BackupRestoreActions.IMPORT_COLLECTION && (
+              <AllCollectionOption
+                allCollections={this.state.allCollections}
+                action={treeAction}
+                changeAllCollections={() => {
+                  if (!this.state.allCollections) {
+                    // when turn on all collections, unselect viewsAsCollections
+                    this.setState({ dumpDbUsersAndRoles: false });
+                  }
+                  this.setState({ allCollections: !this.state.allCollections });
+                }}
+              />
+            )}
           {!this.state.allCollections &&
           !this.state.dumpDbUsersAndRoles &&
           treeAction !== BackupRestoreActions.IMPORT_COLLECTION &&
-          treeAction !== BackupRestoreActions.IMPORT_DATABASE
-            ? <CollectionList
+          treeAction !== BackupRestoreActions.IMPORT_DATABASE ? (
+            <CollectionList
               collections={this.state.collections}
               readOnly={
                 treeAction === BackupRestoreActions.EXPORT_COLLECTION ||
@@ -574,7 +620,7 @@ export default class DatabaseExport extends React.Component {
               unSelectCollection={this.unSelectCollection}
               selectedCollections={this.state.selectedCollections}
             />
-            : null}
+          ) : null}
           {this.getOptions()}
         </div>
         <ButtonPanel
