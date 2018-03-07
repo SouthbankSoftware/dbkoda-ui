@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-06T11:42:31+11:00
+ * @Last modified time: 2018-03-07T15:19:03+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,23 +31,22 @@ import { handleNewData } from '~/api/PerformancePanel';
 import { attachToMobx } from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
-
 const { ipcRenderer } = electron;
 
 const Globalize = require('globalize'); // doesn't work well with import
-
+// Globalize Configuration for Performance Window
 global.Globalize = Globalize;
-
 const { language, region } = Globalize.locale().attributes;
-
 global.locale = `${language}-${region}`;
-
 global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
 global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
 
 export default class Store {
+  config = null;
   @observable.shallow performancePanel = null;
   @observable profileId = null;
+
+  toasterCallback = null;
 
   constructor() {
     ipcRenderer.on('performance', this.handleDataSync);
@@ -55,24 +54,26 @@ export default class Store {
 
   @action.bound
   handleDataSync = (event, args) => {
-    console.log(args);
     if (args.command === 'mw_setProfileId') {
       this.profileId = args.profileId;
       this.sendCommandToMainProcess('pw_windowReady');
-    } else if (args.profileId) {
-      if (!this.profileId) {
+    } else {
+      if (!this.profileId && args.profileId) {
         this.profileId = args.profileId;
       }
       if (this.profileId === args.profileId) {
         if (args.command === 'mw_initData') {
+          this.config = restore(args.configObject, { deserializer, postDeserializer });
           this.performancePanel = restore(args.dataObject, { deserializer, postDeserializer });
-
           attachToMobx(this.performancePanel);
-
-          console.log('this.performancePanel::', this.performancePanel);
         } else if (args.command === 'mw_updateData' && this.performancePanel !== null) {
           const payload = args.dataObject;
           handleNewData(payload, this.performancePanel);
+        } else if (args.command === 'mw_toaster') {
+          console.log(args.toasterObj);
+          if (this.toasterCallback) {
+            this.toasterCallback(args.toasterObj);
+          }
         }
       }
     }

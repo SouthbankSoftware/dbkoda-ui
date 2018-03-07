@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-06T11:42:24+11:00
+ * @Last modified time: 2018-03-07T15:29:33+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,7 @@ import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { PerformancePanel } from '#/PerformancePanel';
+import { NewToaster } from '#/common/Toaster';
 import { detachFromMobx, attachToMobx } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
@@ -49,6 +50,10 @@ class PerformanceWindow extends React.Component {
 
     window.onbeforeunload = this._handleNavigatingAway;
   }
+  componentWillMount() {
+    const { store } = this.props;
+    store.toasterCallback = this._showToasterFromMainWindow;
+  }
   @action.bound
   _handleNavigatingAway(event) {
     console.log(event);
@@ -69,6 +74,9 @@ class PerformanceWindow extends React.Component {
 
       attachToMobx(performancePanel);
     }
+  }
+  _showToasterFromMainWindow(objToaster) {
+    NewToaster.show(objToaster);
   }
 
   render() {

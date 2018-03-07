@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-07T13:25:48+11:00
+ * @Last modified time: 2018-03-07T15:30:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -567,9 +567,11 @@ export default class PerformancePanelApi {
     if (args.profileId) {
       if (args.command === 'pw_windowReady') {
         const performancePanel = performancePanels.get(args.profileId);
+        const configObj = this.store.config;
         this._sendMsgToPerformanceWindow({
           command: 'mw_initData',
           profileId: args.profileId,
+          configObject: dump(configObj, { serializer }),
           dataObject: dump(performancePanel, { serializer })
         });
         this.externalPerformanceWindows.set(args.profileId, { status: 'ready' });
@@ -723,6 +725,14 @@ export default class PerformancePanelApi {
     const statsSrv = featherClient();
     statsSrv.statsService.patch(profileId, { samplingRate: newSamplingRate }).catch(err => {
       this._handleError(profileId, err);
+    });
+  };
+
+  showToasterInPerformanceWindow = (profileId: UUID, toasterObj: *) => {
+    this._sendMsgToPerformanceWindow({
+      command: 'mw_toaster',
+      profileId,
+      toasterObj
     });
   };
 }

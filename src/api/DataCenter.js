@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T00:35:37+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-07T15:31:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -86,7 +86,8 @@ export default class DataCenter {
         'hasPerformancePanel',
         'transformPerformancePanel',
         'resetHighWaterMark',
-        'changeSamplingRate'
+        'changeSamplingRate',
+        'showToasterInPerformanceWindow'
       ]),
     );
 
