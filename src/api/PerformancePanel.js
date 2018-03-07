@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-06T11:47:04+11:00
+ * @Last modified time: 2018-03-07T13:25:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -548,8 +548,8 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  _mountPerformancePanelToExternalWindow(profileId: UUID) {
-    this._sendMsgToPerformanceWindow({ command: 'mw_createWindow', profileId });
+  _mountPerformancePanelToExternalWindow(profileId: UUID, profileAlias: string) {
+    this._sendMsgToPerformanceWindow({ command: 'mw_createWindow', profileId, profileAlias});
     this.externalPerformanceWindows.set(profileId, { status: 'started' });
   }
 
@@ -627,7 +627,7 @@ export default class PerformancePanelApi {
         // stopped => external
 
         this._runPerformancePanel(profileId, performancePanelStatuses.external);
-        this._mountPerformancePanelToExternalWindow(profileId);
+        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
         this._addPowerBlocker(profileId);
       } else if (to == null) {
         // stopped => none
@@ -645,7 +645,7 @@ export default class PerformancePanelApi {
         // background => external
 
         this._runPerformancePanel(profileId, performancePanelStatuses.external);
-        this._mountPerformancePanelToExternalWindow(profileId);
+        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
         this._addPowerBlocker(profileId);
       } else if (to === performancePanelStatuses.stopped) {
         // background => stopped
@@ -669,7 +669,7 @@ export default class PerformancePanelApi {
 
         this._unmountPerformancePanelFromMainWindow();
         performancePanel.status = to;
-        this._mountPerformancePanelToExternalWindow(profileId);
+        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
       } else if (to === performancePanelStatuses.stopped) {
         // foreground => stopped
 
