@@ -85,7 +85,8 @@ export default class DataCenter {
       _.pick(this.performancePanelApi, [
         'hasPerformancePanel',
         'transformPerformancePanel',
-        'resetHighWaterMark'
+        'resetHighWaterMark',
+        'changeSamplingRate'
       ]),
     );
 

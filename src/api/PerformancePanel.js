@@ -550,7 +550,7 @@ export default class PerformancePanelApi {
 
   @action.bound
   _mountPerformancePanelToExternalWindow(profileId: UUID, profileAlias: string) {
-    this._sendMsgToPerformanceWindow({ command: 'mw_createWindow', profileId, profileAlias});
+    this._sendMsgToPerformanceWindow({ command: 'mw_createWindow', profileId, profileAlias });
     this.externalPerformanceWindows.set(profileId, { status: 'started' });
   }
 
@@ -712,8 +712,16 @@ export default class PerformancePanelApi {
   }
 
   resetHighWaterMark = (profileId: UUID) => {
+    featherClient()
+      .statsService.patch(profileId, { resetStats: true })
+      .catch(err => {
+        this._handleError(profileId, err);
+      });
+  };
+
+  changeSamplingRate = (profileId: UUID, newSamplingRate: number) => {
     const statsSrv = featherClient();
-    statsSrv.statsService.patch(profileId, { resetStats: true }).catch(err => {
+    statsSrv.statsService.patch(profileId, { samplingRate: newSamplingRate }).catch(err => {
       this._handleError(profileId, err);
     });
   };
