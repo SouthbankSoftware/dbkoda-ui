@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-07T01:15:34+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,11 +19,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-04T00:22:22+11:00
  */
 
 import load from 'little-loader';
@@ -100,6 +98,8 @@ class FeatherClient {
     this.performanceSrv.on('performance-output', ({output}) => {
       console.log('get performance output ', output);
     });
+
+    this.loggerService = this.service('logger');
   }
 
   service(service) {

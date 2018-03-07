@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-06T11:47:04+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-07T10:56:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -423,7 +423,7 @@ export default class PerformancePanelApi {
       return;
     }
 
-    const { widgets, stats } = performancePanel;
+    const { profileAlias, widgets, stats } = performancePanel;
     const itemsSet = new Set();
 
     for (const widget of widgets.values()) {
@@ -491,12 +491,13 @@ export default class PerformancePanelApi {
     statsSrv.statsService
       .create({
         profileId,
+        profileAlias,
         items: [...itemsSet],
         samplingRate:
           to === performancePanelStatuses.background
             ? BACKGROUND_SAMPLING_RATE
             : FOREGROUND_SAMPLING_RATE,
-        debug: true,
+        debug: false,
         ...(performancePanel.status === performancePanelStatuses.stopped ? { stats } : null)
       })
       .then(
