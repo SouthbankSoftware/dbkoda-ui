@@ -511,7 +511,7 @@ export default class RadialWidget extends React.Component<Props, State> {
           latest[key][`${itemKey}hwm`] === 0
             ? 0
             : parseInt(latest[key][`${itemKey}`] / latest[key][`${itemKey}hwm`] * 100, 10),
-        valuePerSec: bytesToSize(latest[key][`${itemKey}PerSec`])
+        valuePerSec: latest[key][`${itemKey}PerSec`] ? bytesToSize(latest[key][`${itemKey}PerSec`]) : 0
       };
       if (itemKeyValues[itemKey].valuePerSec !== undefined) {
         this.text += ` ${itemKeyValues[itemKey].valuePerSec}/s`;
@@ -561,7 +561,7 @@ export default class RadialWidget extends React.Component<Props, State> {
         return retValue;
       } else if (showRunQueue && key === 'cpu') {
         let fixedValue = _.isInteger(v.usage)
-          ? parseInt(v.usage / v.usagehwm * 100, 10)
+          ? v.usage
           : parseInt(v.usage, 10);
         fixedValue = Math.min(fixedValue, 100);
         const runQueueValue = _.isInteger(v.runQueue) ? v.runQueue : parseInt(v.runQueue, 10);
@@ -580,7 +580,7 @@ export default class RadialWidget extends React.Component<Props, State> {
       if (isNaN(fixedValue)) {
         fixedValue = 0;
       } else {
-        fixedValue = parseInt(fixedValue / latestValue[`${key}hwm`] * 100, 10);
+        fixedValue = parseInt(fixedValue, 10);
       }
       fixedValue = Math.min(fixedValue, 100);
       this.text = fixedValue + '%';

@@ -105,12 +105,10 @@ class App extends React.Component {
       <div>
         <Analytics />
         <TelemetryConsent />
-        {process.env.NODE_ENV === 'development' && (
-          <PasswordDialog
-            showDialog={this.props.store.password.showDialog}
-            verifyPassword={this.props.store.password.verifyPassword}
-          />
-        )}
+        <PasswordDialog
+          showDialog={this.props.store.password.showDialog}
+          verifyPassword={this.props.store.password.verifyPassword}
+        />
         <SplitPane
           className="RootSplitPane"
           split="vertical"
