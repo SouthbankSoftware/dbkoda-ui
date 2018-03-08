@@ -50,7 +50,7 @@ const barHeight = Math.round(vbHeight * 50 / 100);
 const chartWidth = vbWidth - 60;
 
 type Props = {
-  performancePanel: PerformancePanelState,
+  performancePanel: PerformancePanelState & { highWaterMarkGroups: Object },
   widget: WidgetState,
   widgetStyle: *,
   rotate?: number
@@ -262,6 +262,20 @@ export default class ProgressBarWidget extends React.Component<Props> {
       }
     } else if (!this.props.widget.firstValueIsHighWaterMark) {
       this._totalDivisor = sumOfHWM;
+    }
+
+    // If part of high water mark group, set group value.
+    if (this.props.widget.waterMarkGroup) {
+      const highestValue = this.props.performancePanel
+        .highWaterMarkGroups[this.props.widget.waterMarkGroup];
+      if (this._totalDivisor > highestValue) {
+        this.props.performancePanel.highWaterMarkGroups[
+          this.props.widget.waterMarkGroup
+        ] = this._totalDivisor;
+      }
+      this._totalDivisor = this.props.performancePanel.highWaterMarkGroups[
+        this.props.widget.waterMarkGroup
+      ];
     }
 
     // $FlowFixMe
