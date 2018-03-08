@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-08T14:56:30+11:00
+ * @Last modified time: 2018-03-09T10:09:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -610,6 +610,16 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
+  _focusPerformancePanelExternalWindow(
+    profileId: UUID
+  ) {
+    this._sendMsgToPerformanceWindow({
+      command: 'mw_focusWindow',
+      profileId
+    });
+  }
+
+  @action.bound
   _handlePerformanceWindowEvents(event, args) {
     console.log('_handlePerformanceWindowEvents::', args);
     const { performancePanels } = this.store;
@@ -673,7 +683,7 @@ export default class PerformancePanelApi {
 
     const { status } = performancePanel;
 
-    if (status === to) return;
+    if (status === to && to !== performancePanelStatuses.external) return;
 
     if (status === performancePanelStatuses.stopped) {
       if (to === performancePanelStatuses.background) {
@@ -793,6 +803,11 @@ export default class PerformancePanelApi {
         this._stopPerformancePanel(profileId);
         this._unmountPerformancePanelFromExternalWindow(profileId);
         this._removePerformancePanel(profileId);
+      } else if (to === performancePanelStatuses.external) {
+        // case added to bring the performance panel to the front.
+        this._focusPerformancePanelExternalWindow(
+          profileId
+        );
       }
     }
   }
