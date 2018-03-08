@@ -329,6 +329,7 @@ export default class Panel extends React.Component {
     const tabs = editors.map(editor => {
       const arrTabs = [];
       const editorId = editor[1].id;
+      console.log(this.props.store.outputPanel.currentTab);
 
       let tabClassName = 'notVisible';
       if (this.props.store.editorPanel.activeEditorId === editorId) {
@@ -625,6 +626,8 @@ export default class Panel extends React.Component {
   }
 
   render() {
+    console.log(this.props.store.outputPanel.currentTab);
+    
     // Toolbar must be rendered after tabs for initialisation purposes
     const defaultVisible =
       this.props.store.editorPanel.activeEditorId == 'Default'

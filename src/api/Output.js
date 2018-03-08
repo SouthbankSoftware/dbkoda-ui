@@ -50,7 +50,7 @@ export type Output = {
   showingMore: boolean,
   commandHistory: [string],
   enhancedJson: string,
-  tableJson: string,
+  tableJson: string
 };
 
 export type OutputPanel = {
@@ -60,12 +60,12 @@ export type OutputPanel = {
   executingTerminalCmd: boolean,
   sendingCommand: string,
   collapseTable: boolean,
-  expandTable: boolean,
+  expandTable: boolean
 };
 
 export const OutputFileTypes = {
   JSON: 'application/json',
-  CSV: 'text/csv',
+  CSV: 'text/csv'
 };
 
 declare type OutputFileType = $Keys<typeof OutputFileTypes>;
@@ -86,7 +86,11 @@ export default class OutputApi {
    * @param {Object} api -  The API object, for interacting with other API categories.
    * @param {Object} profileStore - The global profiles store, containing information about connection profiles.
    */
-  constructor(store: Store, api: {}, profileStore: { profiles: Map<string, Profile> }) {
+  constructor(
+    store: Store,
+    api: {},
+    profileStore: { profiles: Map<string, Profile> }
+  ) {
     this.store = store;
     this.api = api;
     this.profileStore = profileStore;
@@ -566,10 +570,11 @@ export default class OutputApi {
     return new Promise(resolve => {
       runInAction(() => {
         const tabPrefix = OutputToolbarContexts.TABLE_VIEW;
-
         if (!this.outputPanel.currentTab.startsWith(tabPrefix)) {
-          this.outputPanel.currentTab = tabPrefix + outputId;
+          this.outputPanel.currentTab = tabPrefix + '-' + outputId;
         }
+        console.log(this.outputPanel.currentTab);
+        console.log(this.store.outputs);
         if (targetData) {
           this.store.outputs.get(outputId).tableJson = {
             json: JSONArray,
@@ -639,7 +644,9 @@ export default class OutputApi {
       _.assign(output.chartPanel, common);
     }
 
-    this.outputPanel.currentTab = `${OutputToolbarContexts.CHART_VIEW}-${editorId}`;
+    this.outputPanel.currentTab = `${
+      OutputToolbarContexts.CHART_VIEW
+    }-${editorId}`;
   }
 
   /**
@@ -658,7 +665,9 @@ export default class OutputApi {
       this.outputPanel.currentTab = this.store.editorPanel.activeEditorId;
     } else {
       // $FlowFixMe
-      this.outputPanel.currentTab = `${context}-${this.store.editorPanel.activeEditorId}`;
+      this.outputPanel.currentTab = `${context}-${
+        this.store.editorPanel.activeEditorId
+      }`;
     }
   }
 
@@ -668,9 +677,10 @@ export default class OutputApi {
     if (!format) {
       format = OutputFileTypes.JSON;
     }
-    const outputId = (context === OutputToolbarContexts.RAW) ?
-        currentTab :
-        currentTab.replace(`${context}-`, '');
+    const outputId =
+      context === OutputToolbarContexts.RAW
+        ? currentTab
+        : currentTab.replace(`${context}-`, '');
     let output = '';
     switch (context) {
       case OutputToolbarContexts.RAW: {
@@ -679,14 +689,20 @@ export default class OutputApi {
       }
       case OutputToolbarContexts.TABLE_VIEW: {
         if (format === OutputFileTypes.JSON) {
-          output = JSON.stringify(this.store.outputs.get(outputId).tableJson.json);
+          output = JSON.stringify(
+            this.store.outputs.get(outputId).tableJson.json
+          );
         } else if (format === OutputFileTypes.CSV) {
-          output = StaticApi.convertJsonToCsv(this.store.outputs.get(outputId).tableJson.json);
+          output = StaticApi.convertJsonToCsv(
+            this.store.outputs.get(outputId).tableJson.json
+          );
         }
         break;
       }
       case OutputToolbarContexts.ENHANCED_VIEW: {
-        output = JSON.stringify(this.store.outputs.get(outputId).enhancedJson.json);
+        output = JSON.stringify(
+          this.store.outputs.get(outputId).enhancedJson.json
+        );
         break;
       }
       default:
@@ -717,17 +733,17 @@ export default class OutputApi {
     const tempLink = document.createElement('a');
     const ext = format === OutputFileTypes.CSV ? 'csv' : 'js';
     tempLink.href = csvURL;
-    tempLink.setAttribute(
-      'download',
-      `output-${currentTab}.${ext}`
-    );
+    tempLink.setAttribute('download', `output-${currentTab}.${ext}`);
     tempLink.click();
   }
 
   getOutputContext(): OutputToolbarContext {
     const { currentTab } = this.outputPanel;
     const tabString = currentTab.split('-')[0];
-    const validContext = _.findKey(OutputToolbarContexts, (ctx) => (ctx === tabString));
+    const validContext = _.findKey(
+      OutputToolbarContexts,
+      ctx => ctx === tabString
+    );
     if (!validContext) {
       return OutputToolbarContexts.RAW;
     }
