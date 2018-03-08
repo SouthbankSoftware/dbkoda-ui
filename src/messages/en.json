@@ -10,6 +10,10 @@
       "section_headers": {
         "os": "OS",
         "mongo": "Mongo"
+      },
+      "errors": {
+        "failover":
+          "Unable to fetch metrics from server, try restarting performance panel."
       }
     },
     "aggregate_builder": {

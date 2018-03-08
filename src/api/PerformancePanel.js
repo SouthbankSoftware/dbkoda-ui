@@ -92,7 +92,10 @@ export type PerformancePanelState = {
  * Integrates new data with current mobx store or buffer. Whenever, window goes to background, new
  * data is buffered to stop all reactions
  */
-export const handleNewData = (payload: *, performancePanel: PerformancePanelState) => {
+export const handleNewData = (
+  payload: *,
+  performancePanel: PerformancePanelState
+) => {
   const { timestamp, value: rawValue, stats } = payload;
   const { widgets, buffer } = performancePanel;
 
@@ -240,7 +243,9 @@ export default class PerformancePanelApi {
     let powerMonitorDisposer;
 
     if (IS_ELECTRON) {
-      const { remote: { powerMonitor }, ipcRenderer } = window.require('electron');
+      const { remote: { powerMonitor }, ipcRenderer } = window.require(
+        'electron'
+      );
 
       const handleSuspend = () => {
         logToMain('info', 'os is suspending');
@@ -263,7 +268,10 @@ export default class PerformancePanelApi {
 
     // stop all PP when refreshing
     Broker.once(EventType.WINDOW_REFRESHING, () => {
-      document.removeEventListener('visibilitychange', this._handleVisibilityChange);
+      document.removeEventListener(
+        'visibilitychange',
+        this._handleVisibilityChange
+      );
 
       powerMonitorDisposer && powerMonitorDisposer();
 
@@ -303,13 +311,21 @@ export default class PerformancePanelApi {
     }
   }
 
-  _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
+  _handleError = (
+    profileId: UUID,
+    err: Error | string,
+    level: 'error' | 'warn' = 'error'
+  ) => {
     console.error(err);
-
     NewToaster.show({
       // $FlowFixMe
       message: `Profile ${profileId} error: ${err.message || err}`,
       className: level === 'error' ? 'danger' : 'warning',
+      iconName: 'pt-icon-thumbs-down'
+    });
+    this.showToasterInPerformanceWindow(profileId, {
+      message: (err.message || err) + ' try restarting performance panel.',
+      className: 'danger',
       iconName: 'pt-icon-thumbs-down'
     });
   };
@@ -386,15 +402,24 @@ export default class PerformancePanelApi {
   }
 
   _addPowerBlocker = profileId => {
-    if (IS_ELECTRON && this.config.settings.performancePanel_preventDisplaySleep) {
+    if (
+      IS_ELECTRON &&
+      this.config.settings.performancePanel_preventDisplaySleep
+    ) {
       const { remote: { powerSaveBlocker } } = window.require('electron');
 
       const powerBlockerId = powerSaveBlocker.start('prevent-display-sleep');
-      logToMain('info', `started power blocker for Performance Panel ${profileId}`);
+      logToMain(
+        'info',
+        `started power blocker for Performance Panel ${profileId}`
+      );
 
       this._powerBlockerDisposers.set(profileId, () => {
         powerSaveBlocker.stop(powerBlockerId);
-        logToMain('info', `stopped power blocker for Performance Panel ${profileId}`);
+        logToMain(
+          'info',
+          `stopped power blocker for Performance Panel ${profileId}`
+        );
       });
     }
   };
@@ -409,7 +434,10 @@ export default class PerformancePanelApi {
   };
 
   @action.bound
-  _runPerformancePanel(profileId: UUID, to: 'background' | 'foreground' | 'external') {
+  _runPerformancePanel(
+    profileId: UUID,
+    to: 'background' | 'foreground' | 'external'
+  ) {
     const performancePanel = this.store.performancePanels.get(profileId);
 
     if (!performancePanel) return;
@@ -438,13 +466,21 @@ export default class PerformancePanelApi {
 
       if (IS_ELECTRON) {
         const { remote: { powerSaveBlocker } } = window.require('electron');
-        const suspensionBlockerId = powerSaveBlocker.start('prevent-app-suspension');
+        const suspensionBlockerId = powerSaveBlocker.start(
+          'prevent-app-suspension'
+        );
 
-        logToMain('info', `started suspension blocker for Performance Panel ${profileId}`);
+        logToMain(
+          'info',
+          `started suspension blocker for Performance Panel ${profileId}`
+        );
 
         suspensionBlockerDisposer = () => {
           powerSaveBlocker.stop(suspensionBlockerId);
-          logToMain('info', `stopped suspension blocker for Performance Panel ${profileId}`);
+          logToMain(
+            'info',
+            `stopped suspension blocker for Performance Panel ${profileId}`
+          );
         };
       }
 
@@ -498,7 +534,9 @@ export default class PerformancePanelApi {
             ? BACKGROUND_SAMPLING_RATE
             : FOREGROUND_SAMPLING_RATE,
         debug: false,
-        ...(performancePanel.status === performancePanelStatuses.stopped ? { stats } : null)
+        ...(performancePanel.status === performancePanelStatuses.stopped
+          ? { stats }
+          : null)
       })
       .then(
         action(() => {
@@ -518,7 +556,10 @@ export default class PerformancePanelApi {
   _stopPerformancePanel(profileId: UUID) {
     const performancePanel = this.store.performancePanels.get(profileId);
 
-    if (performancePanel && performancePanel.status !== performancePanelStatuses.stopped) {
+    if (
+      performancePanel &&
+      performancePanel.status !== performancePanelStatuses.stopped
+    ) {
       performancePanel.status = performancePanelStatuses.stopped;
 
       const disposer = this._disposers.get(profileId);
@@ -549,8 +590,15 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  _mountPerformancePanelToExternalWindow(profileId: UUID, profileAlias: string) {
-    this._sendMsgToPerformanceWindow({ command: 'mw_createWindow', profileId, profileAlias });
+  _mountPerformancePanelToExternalWindow(
+    profileId: UUID,
+    profileAlias: string
+  ) {
+    this._sendMsgToPerformanceWindow({
+      command: 'mw_createWindow',
+      profileId,
+      profileAlias
+    });
     this.externalPerformanceWindows.set(profileId, { status: 'started' });
   }
 
@@ -574,13 +622,22 @@ export default class PerformancePanelApi {
           configObject: dump(configObj, { serializer }),
           dataObject: dump(performancePanel, { serializer })
         });
-        this.externalPerformanceWindows.set(args.profileId, { status: 'ready' });
+        this.externalPerformanceWindows.set(args.profileId, {
+          status: 'ready'
+        });
       } else if (args.command === 'pw_windowClosed') {
         // this command should only come from Performance Window if window is closed by user using cross.
-        this.externalPerformanceWindows.set(args.profileId, { status: 'closed' });
-        this.transformPerformancePanel(args.profileId, performancePanelStatuses.background);
+        this.externalPerformanceWindows.set(args.profileId, {
+          status: 'closed'
+        });
+        this.transformPerformancePanel(
+          args.profileId,
+          performancePanelStatuses.background
+        );
       } else if (args.command === 'pw_windowReload') {
-        this.externalPerformanceWindows.set(args.profileId, { status: 'reloading' });
+        this.externalPerformanceWindows.set(args.profileId, {
+          status: 'reloading'
+        });
       }
     }
   }
@@ -619,18 +676,27 @@ export default class PerformancePanelApi {
       if (to === performancePanelStatuses.background) {
         // stopped => background
 
-        this._runPerformancePanel(profileId, performancePanelStatuses.background);
+        this._runPerformancePanel(
+          profileId,
+          performancePanelStatuses.background
+        );
       } else if (to === performancePanelStatuses.foreground) {
         // stopped => foreground
 
-        this._runPerformancePanel(profileId, performancePanelStatuses.foreground);
+        this._runPerformancePanel(
+          profileId,
+          performancePanelStatuses.foreground
+        );
         this._mountPerformancePanelToMainWindow(profileId);
         this._addPowerBlocker(profileId);
       } else if (to === performancePanelStatuses.external) {
         // stopped => external
 
         this._runPerformancePanel(profileId, performancePanelStatuses.external);
-        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
+        this._mountPerformancePanelToExternalWindow(
+          profileId,
+          performancePanel.profileAlias
+        );
         this._addPowerBlocker(profileId);
       } else if (to == null) {
         // stopped => none
@@ -641,14 +707,20 @@ export default class PerformancePanelApi {
       if (to === performancePanelStatuses.foreground) {
         // background => foreground
 
-        this._runPerformancePanel(profileId, performancePanelStatuses.foreground);
+        this._runPerformancePanel(
+          profileId,
+          performancePanelStatuses.foreground
+        );
         this._mountPerformancePanelToMainWindow(profileId);
         this._addPowerBlocker(profileId);
       } else if (to === performancePanelStatuses.external) {
         // background => external
 
         this._runPerformancePanel(profileId, performancePanelStatuses.external);
-        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
+        this._mountPerformancePanelToExternalWindow(
+          profileId,
+          performancePanel.profileAlias
+        );
         this._addPowerBlocker(profileId);
       } else if (to === performancePanelStatuses.stopped) {
         // background => stopped
@@ -664,7 +736,10 @@ export default class PerformancePanelApi {
       if (to === performancePanelStatuses.background) {
         // foreground => background
 
-        this._runPerformancePanel(profileId, performancePanelStatuses.background);
+        this._runPerformancePanel(
+          profileId,
+          performancePanelStatuses.background
+        );
         this._unmountPerformancePanelFromMainWindow();
         this._removePowerBlocker(profileId);
       } else if (to === performancePanelStatuses.external) {
@@ -672,7 +747,10 @@ export default class PerformancePanelApi {
 
         this._unmountPerformancePanelFromMainWindow();
         performancePanel.status = to;
-        this._mountPerformancePanelToExternalWindow(profileId, performancePanel.profileAlias);
+        this._mountPerformancePanelToExternalWindow(
+          profileId,
+          performancePanel.profileAlias
+        );
       } else if (to === performancePanelStatuses.stopped) {
         // foreground => stopped
 
@@ -689,7 +767,10 @@ export default class PerformancePanelApi {
       if (to === performancePanelStatuses.background) {
         // external => background
 
-        this._runPerformancePanel(profileId, performancePanelStatuses.background);
+        this._runPerformancePanel(
+          profileId,
+          performancePanelStatuses.background
+        );
         this._unmountPerformancePanelFromExternalWindow(profileId);
         this._removePowerBlocker(profileId);
       } else if (to === performancePanelStatuses.foreground) {
@@ -723,9 +804,11 @@ export default class PerformancePanelApi {
 
   changeSamplingRate = (profileId: UUID, newSamplingRate: number) => {
     const statsSrv = featherClient();
-    statsSrv.statsService.patch(profileId, { samplingRate: newSamplingRate }).catch(err => {
-      this._handleError(profileId, err);
-    });
+    statsSrv.statsService
+      .patch(profileId, { samplingRate: newSamplingRate })
+      .catch(err => {
+        this._handleError(profileId, err);
+      });
   };
 
   showToasterInPerformanceWindow = (profileId: UUID, toasterObj: *) => {
