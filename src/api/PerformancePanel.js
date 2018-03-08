@@ -324,6 +324,7 @@ export default class PerformancePanelApi {
       iconName: 'pt-icon-thumbs-down'
     });
     this.showToasterInPerformanceWindow(profileId, {
+      // $FlowFixMe
       message: (err.message || err) + ' try restarting performance panel.',
       className: 'danger',
       iconName: 'pt-icon-thumbs-down'
@@ -635,7 +636,9 @@ export default class PerformancePanelApi {
           performancePanelStatuses.background
         );
       } else if (args.command === 'pw_windowReload') {
-        this.externalPerformanceWindows.set(args.profileId, { status: 'reloading' });
+        this.externalPerformanceWindows.set(args.profileId, {
+          status: 'reloading'
+        });
       } else if (args.command === 'pw_resetHighWaterMark') {
         this.resetHighWaterMark(args.profileId);
       }
