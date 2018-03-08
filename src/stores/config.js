@@ -22,8 +22,8 @@
  * @Author: Chris Trott <christrott>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-27T13:37:10+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-09T09:56:04+11:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -56,7 +56,7 @@ export default class Config {
       telemetryEnabled: true,
       showWelcomePageAtStart: true,
       passwordStoreEnabled: false,
-      performancePanel_preventDisplaySleep: true
+      performancePanel_preventDisplaySleep: false
     };
     if (global.PATHS) {
       this.configFilePath = global.PATHS.configPath;
@@ -92,7 +92,7 @@ export default class Config {
       this.settings.showWelcomePageAtStart = true;
     }
     if (this.settings.performancePanel_preventDisplaySleep === undefined) {
-      this.settings.performancePanel_preventDisplaySleep = true;
+      this.settings.performancePanel_preventDisplaySleep = false;
     }
   }
 
