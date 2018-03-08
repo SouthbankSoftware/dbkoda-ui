@@ -357,9 +357,9 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     }
 
     // Check if it's the highest value ever.
-    if (!this.maxValue || this.maxValue < sumOfItems) {
-      this.maxValue = sumOfItems;
-    }
+    // if (!this.maxValue || this.maxValue < sumOfItems) {
+    //   this.maxValue = sumOfItems;
+    //  }
 
     if (field.layer === 1) {
       let lblValue;
@@ -427,6 +427,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         // Check if it's the highest value ever.
         if (!this.maxValue || this.maxValue < hwm) {
           this.maxValue = hwm === 0 ? fixedValue : hwm;
+          console.log('Max Value=', this.maxValue);
           this.maxValue = this.maxValue === 0 ? 1 : this.maxValue;
         }
       });
