@@ -216,11 +216,12 @@ export default class ArrowWidget extends React.Component<Props, State> {
           console.error('ArrowWidget only supports numeric data value');
           return;
         }
+				const { stats } = this.props.performancePanel;
 
         // Check data against max.
-        if (!this.maxValue || this.maxValue < data) {
+        if (stats[items[0]] && stats[items[0]].hwm !== undefined) {
           // $FlowFixMe
-          this.maxValue = data;
+          this.maxValue = stats[items[0]].hwm;
         }
 
         this._updateD3ViewData(data);
