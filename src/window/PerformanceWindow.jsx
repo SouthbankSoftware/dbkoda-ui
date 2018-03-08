@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-07T15:29:33+11:00
+ * @Last modified time: 2018-03-08T14:04:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -85,7 +85,7 @@ class PerformanceWindow extends React.Component {
     return (
       <div>
         {store.performancePanel ? (
-          <PerformancePanel performancePanel={store.performancePanel} onClose={null} />
+          <PerformancePanel performancePanel={store.performancePanel} onClose={null} resetHighWaterMark={store.resetHighWaterMark}/>
         ) : (
           <div>
             <span>Loading Performance Panel...</span>

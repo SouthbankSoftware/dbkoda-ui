@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T15:46:32+11:00
+ * @Last modified time: 2018-03-08T15:07:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -141,6 +141,11 @@ class App extends React.Component {
               api.transformPerformancePanel(
                 store.performancePanel.profileId,
                 performancePanelStatuses.background
+              )
+            }
+            resetHighWaterMark={() =>
+              api.resetHighWaterMark(
+                store.performancePanel.profileId
               )
             }
           />
