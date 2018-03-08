@@ -46,7 +46,11 @@ class PerformanceWindow extends React.Component {
   constructor() {
     super();
 
-    document.addEventListener('visibilitychange', this._handleVisibilityChange, false);
+    document.addEventListener(
+      'visibilitychange',
+      this._handleVisibilityChange,
+      false
+    );
 
     window.onbeforeunload = this._handleNavigatingAway;
   }
@@ -85,7 +89,11 @@ class PerformanceWindow extends React.Component {
     return (
       <div>
         {store.performancePanel ? (
-          <PerformancePanel performancePanel={store.performancePanel} onClose={null} resetHighWaterMark={store.resetHighWaterMark}/>
+          <PerformancePanel
+            performancePanel={store.performancePanel}
+            onClose={null}
+            resetHighWaterMark={store.resetHighWaterMark}
+          />
         ) : (
           <div>
             <span>Loading Performance Panel...</span>
