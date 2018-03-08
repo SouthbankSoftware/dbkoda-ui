@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-07T15:19:03+11:00
+ * @Last modified time: 2018-03-08T14:03:48+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -82,5 +82,10 @@ export default class Store {
   @action.bound
   sendCommandToMainProcess = (command) => {
     ipcRenderer.send('performance', { command, profileId: this.profileId });
+  };
+
+  @action.bound
+  resetHighWaterMark = () => {
+    this.sendCommandToMainProcess('pw_resetHighWaterMark');
   };
 }
