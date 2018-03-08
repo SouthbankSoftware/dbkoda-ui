@@ -264,24 +264,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
       this._totalDivisor = sumOfHWM;
     }
 
-    // If part of high water mark group, set group value.
-    if (this.props.widget.waterMarkGroup) {
-      // const highestValue = this.props.store.performancePanel
-      //   .highWaterMarkGroups[this.props.widget.waterMarkGroup];
-      // if (this._totalDivisor > highestValue) {
-      //   this.props.store.performancePanel.highWaterMarkGroups[
-      //     this.props.widget.waterMarkGroup
-      //   ] = this._totalDivisor;
-      // }
-      // this._totalDivisor = this.props.store.performancePanel.highWaterMarkGroups[
-      //   this.props.widget.waterMarkGroup
-      // ];
-
-      // TODO: this is temp workaround. change to use PerformancePanelState.stats. Also cleanup
-      // extraState: waterMarkGroup, maxValue, useHighWaterMark
-      this._totalDivisor = 10;
-    }
-
     // $FlowFixMe
     const t = d3.transition().duration(750);
 
