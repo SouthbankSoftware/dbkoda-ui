@@ -245,11 +245,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
         this._chartLabel = sumOfValues; // If it is a stacked chart, show the sum of the values.
       }
     } else {
-      // console.error(
-      //   'ProgressBarWidget (',
-      //   this.props.widget.chartTitle,
-      //   ') require atleast one data element'
-      // );
       return;
     }
     if (this.props.widget.useHighWaterMark) {
@@ -322,73 +317,6 @@ export default class ProgressBarWidget extends React.Component<Props> {
         height: barHeight,
         x: 0
       })
-      /* Tooltips.
-        .on('mouseover', d => {
-        const xScale = bVertical
-          ? this._chartEl.clientWidth / vbHeight
-          : this._chartEl.clientWidth / vbWidth;
-        const yScale = bVertical
-          ? this._chartEl.clientHeight / vbWidth
-          : this._chartEl.clientHeight / vbHeight;
-        const wRatio = xScale < yScale ? xScale : yScale;
-        const w = d.sumValue / this._totalDivisor * chartWidth;
-        let xDiff =
-          ((bVertical
-            ? this._chartEl.clientHeight
-            : this._chartEl.clientWidth) -
-            chartWidth * wRatio) /
-          2;
-        const yDiff =
-          ((bVertical
-            ? this._chartEl.clientWidth
-            : this._chartEl.clientHeight) -
-            barHeight * wRatio) /
-          2;
-        if (this._chartEl.previousSibling) {
-          xDiff += this._chartEl.previousSibling.clientWidth;
-        }
-        let x = w * wRatio + xDiff;
-        let y = yDiff - 20;
-        this._tip
-          .transition()
-          .duration(200)
-          .style('opacity', 0.9);
-        const strTipValue =
-          String(d.value).indexOf('.') >= 0
-            ? Number(d.value).toFixed(2)
-            : d.value;
-        const strTipLabel = convertUnits(strTipValue, this._unit, 3);
-        this._tip.html(
-          '<strong>' +
-            d.key +
-            ':</strong> <span style="color:red">' +
-            strTipLabel.value +
-            ' ' +
-            strTipLabel.unit +
-            '</span>'
-        );
-        const strWidth = String(d.key + ': ' + strTipValue).length * 8;
-
-        if (bVertical) {
-          y += barHeight * wRatio * 2;
-          this._tip
-            .style('left', y + 'px')
-            .style('bottom', x - 20 + 'px')
-            .style('width', strWidth + 10 + 'px');
-        } else {
-          x -= strWidth / 2;
-          this._tip
-            .style('left', x - 10 + 'px')
-            .style('top', y + 'px')
-            .style('width', strWidth + 10 + 'px');
-        }
-      })
-      .on('mouseout', () => {
-        this._tip
-          .transition()
-          .duration(500)
-          .style('opacity', 0);
-      }) */
       .transition(t)
       .attr('width', d => {
         const cWidth = d.sumValue / this._totalDivisor * chartWidth;
