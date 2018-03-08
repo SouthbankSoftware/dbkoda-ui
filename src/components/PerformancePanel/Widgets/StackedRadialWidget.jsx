@@ -155,7 +155,6 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       .selectAll('svg')
       .remove();
     d3.transition();
-    console.log(this.state.width);
 
     let xTranslate = 0;
     if (this.props.widget.showLegend) {
@@ -427,7 +426,6 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         // Check if it's the highest value ever.
         if (!this.maxValue || this.maxValue < hwm) {
           this.maxValue = hwm === 0 ? fixedValue : hwm;
-          console.log('Max Value=', this.maxValue);
           this.maxValue = this.maxValue === 0 ? 1 : this.maxValue;
         }
       });
