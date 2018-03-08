@@ -40,7 +40,7 @@ describe('App', () => {
   beforeAll(() => {
     useStrict(true);
     globalizeInit();
-    app = shallow(<App.wrappedComponent store={{}} layout={layout} />);
+    app = shallow(<App.wrappedComponent store={{ password: { showDialog: false, verifyPassword: false } }} layout={layout} />);
   });
 
   test('has 2 split panels', () => {
