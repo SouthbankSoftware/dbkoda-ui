@@ -573,8 +573,6 @@ export default class OutputApi {
         if (!this.outputPanel.currentTab.startsWith(tabPrefix)) {
           this.outputPanel.currentTab = tabPrefix + '-' + outputId;
         }
-        console.log(this.outputPanel.currentTab);
-        console.log(this.store.outputs);
         if (targetData) {
           this.store.outputs.get(outputId).tableJson = {
             json: JSONArray,
@@ -666,6 +664,7 @@ export default class OutputApi {
     } else {
       // $FlowFixMe
       this.outputPanel.currentTab = `${context}-${
+        // $FlowFixMe
         this.store.editorPanel.activeEditorId
       }`;
     }
