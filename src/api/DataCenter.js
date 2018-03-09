@@ -46,7 +46,7 @@ export default class DataCenter {
     this.config = config;
     this.profileStore = profileStore;
     this.outputApi = new OutputApi(store, this, profileStore);
-    this.terminalApi = new TerminalApi(store, this);
+    this.terminalApi = new TerminalApi(store, this, config);
     this.performancePanelApi = new PerformancePanelApi(store, this, config);
     this.widgetApi = new WidgetApi(store, this);
     this.editorApi = new EditorApi(store, this, config, profileStore);
