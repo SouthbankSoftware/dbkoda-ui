@@ -261,13 +261,19 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
     // If part of high water mark group, set group value.
     if (this.props.widget.waterMarkGroup) {
+      if (!this.props.performancePanel.highWaterMarkGroups) {
+        this.props.performancePanel.highWaterMarkGroups = {};
+      }
+      // $FlowFixMe
       const highestValue = this.props.performancePanel
         .highWaterMarkGroups[this.props.widget.waterMarkGroup];
       if (this._totalDivisor > highestValue) {
+        // $FlowFixMe
         this.props.performancePanel.highWaterMarkGroups[
           this.props.widget.waterMarkGroup
         ] = this._totalDivisor;
       }
+      // $FlowFixMe
       this._totalDivisor = this.props.performancePanel.highWaterMarkGroups[
         this.props.widget.waterMarkGroup
       ];
