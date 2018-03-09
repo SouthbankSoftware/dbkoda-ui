@@ -51,7 +51,7 @@ const chartWidth = vbWidth - 60;
 
 type Props = {
   performancePanel: PerformancePanelState & { highWaterMarkGroups: Object },
-  widget: WidgetState,
+  widget: WidgetState & { highWaterMarkGroups: any, firstValueIsHighWaterMark: boolean, waterMarkGroup: any, colorList: any, maintainOrder: boolean },
   widgetStyle: *,
   rotate?: number
 };
@@ -264,16 +264,13 @@ export default class ProgressBarWidget extends React.Component<Props> {
       if (!this.props.performancePanel.highWaterMarkGroups) {
         this.props.performancePanel.highWaterMarkGroups = {};
       }
-      // $FlowFixMe
       const highestValue = this.props.performancePanel
         .highWaterMarkGroups[this.props.widget.waterMarkGroup];
       if (this._totalDivisor > highestValue) {
-        // $FlowFixMe
         this.props.performancePanel.highWaterMarkGroups[
           this.props.widget.waterMarkGroup
         ] = this._totalDivisor;
       }
-      // $FlowFixMe
       this._totalDivisor = this.props.performancePanel.highWaterMarkGroups[
         this.props.widget.waterMarkGroup
       ];
