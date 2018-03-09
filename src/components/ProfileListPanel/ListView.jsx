@@ -165,6 +165,7 @@ export default class ListView extends React.Component {
 
   @action
   async openProfile() {
+    this.props.store.layout.alertIsLoading = true;
     const selectedProfile = this.state.targetProfile;
     const profile = _.clone(selectedProfile);
     profile.password = this.state.passwordText;
@@ -173,6 +174,9 @@ export default class ListView extends React.Component {
     profile.bReconnect = true;
 
     this.api.connectProfile(profile).then(res => {
+      runInAction('Turn off loading spinner in dialog.', () => {
+        this.props.store.layout.alertIsLoading = false;
+      });
       this.onSuccess(res, profile);
     });
   }
@@ -182,8 +186,8 @@ export default class ListView extends React.Component {
    */
   @action
   onSuccess(res, profile) {
+    this.props.store.layout.alertIsLoading = false;
     this.closeOpenConnectionAlert();
-
     if (profile && profile.ssh) {
       const { terminals } = this.props.store;
       let shouldCreateSshTerminal = true;
@@ -357,6 +361,7 @@ export default class ListView extends React.Component {
 
   @action.bound
   openSshShell() {
+    this.props.store.layout.alertIsLoading = true;
     const { addSshTerminal } = this.props.api;
     const query = {};
     const selectedProfile = this.state.targetProfile;
@@ -904,7 +909,6 @@ export default class ListView extends React.Component {
               className="cancelButton"
               intent={Intent.DANGER}
               text={globalString('profile/openAlert/cancelButton')}
-              loading={this.props.store.layout.alertIsLoading}
               onClick={this.closeOpenConnectionAlert}
             />
           </div>
@@ -975,7 +979,6 @@ export default class ListView extends React.Component {
               className="cancelButton"
               intent={Intent.DANGER}
               text={globalString('profile/openAlert/cancelButton')}
-              loading={this.props.store.layout.alertIsLoading}
               onClick={this.closeSshConnectionAlert}
             />
           </div>

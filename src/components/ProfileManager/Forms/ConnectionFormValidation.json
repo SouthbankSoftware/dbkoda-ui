@@ -25,9 +25,9 @@
               "$id": "host",
               "required": ["disabled"],
               "properties": {
-                "disabled": {"type": "boolean"}
+                "disabled": { "type": "boolean" }
               },
-              "select": { "$data": "0/disabled"},
+              "select": { "$data": "0/disabled" },
               "selectCases": {
                 "false": {
                   "additionalProperties": false,
@@ -53,19 +53,23 @@
               }
             },
             {
-              "$id":"port",
+              "$id": "port",
               "required": ["disabled"],
               "properties": {
-                "disabled": {"type": "boolean"}
+                "disabled": { "type": "boolean" }
               },
-              "select": { "$data": "0/disabled"},
+              "select": { "$data": "0/disabled" },
               "selectCases": {
                 "false": {
                   "additionalProperties": false,
                   "properties": {
                     "disabled": {},
                     "name": { "type": "string" },
-                    "value": { "type": "number", "minimum": 0, "maximum": 65535 }
+                    "value": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 65535
+                    }
                   },
                   "errorMessage": {
                     "properties": {
@@ -84,7 +88,7 @@
               }
             },
             {
-              "$id":"database",
+              "$id": "database",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -92,7 +96,7 @@
               }
             },
             {
-              "$id":"sha",
+              "$id": "ssl",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -100,31 +104,7 @@
               }
             },
             {
-              "$id":"username",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string" }
-              }
-            },
-            {
-              "$id":"password",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string" }
-              }
-            },
-            {
-              "$id":"authenticationDatabase",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "string" }
-              }
-            },
-            {
-              "$id":"urlRadio",
+              "$id": "sslAllowInvalidCertificates",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -132,12 +112,52 @@
               }
             },
             {
-              "$id":"url",
+              "$id": "sha",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id": "username",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "password",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "authenticationDatabase",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            },
+            {
+              "$id": "urlRadio",
+              "additionalProperties": false,
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "boolean" }
+              }
+            },
+            {
+              "$id": "url",
               "required": ["disabled"],
               "properties": {
-                "disabled": {"type": "boolean"}
+                "disabled": { "type": "boolean" }
               },
-              "select": { "$data": "0/disabled"},
+              "select": { "$data": "0/disabled" },
               "selectCases": {
                 "false": {
                   "additionalProperties": false,
@@ -166,33 +186,6 @@
         }
       }
     },
-    "advanced": {
-      "type": "object",
-      "properties": {
-        "fields": {
-          "type": "array",
-          "additionalProperties": false,
-          "items": [
-            {
-              "$id":"ssl",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "boolean" }
-              }
-            },
-            {
-              "$id":"sslAllowInvalidCertificates",
-              "additionalProperties": false,
-              "properties": {
-                "name": { "type": "string" },
-                "value": { "type": "boolean" }
-              }
-            }
-          ]
-        }
-      }
-    },
     "ssh": {
       "type": "object",
       "properties": {
@@ -201,7 +194,7 @@
           "additionalProperties": false,
           "items": [
             {
-              "$id":"ssh",
+              "$id": "ssh",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -212,9 +205,9 @@
               "$id": "remoteHost",
               "required": ["disabled"],
               "properties": {
-                "disabled": {"type": "boolean"}
+                "disabled": { "type": "boolean" }
               },
-              "select": { "$data": "0/disabled"},
+              "select": { "$data": "0/disabled" },
               "selectCases": {
                 "false": {
                   "additionalProperties": false,
@@ -238,9 +231,9 @@
               "$id": "remoteUser",
               "required": ["disabled"],
               "properties": {
-                "disabled": {"type": "boolean"}
+                "disabled": { "type": "boolean" }
               },
-              "select": { "$data": "0/disabled"},
+              "select": { "$data": "0/disabled" },
               "selectCases": {
                 "false": {
                   "additionalProperties": false,
@@ -261,7 +254,7 @@
               }
             },
             {
-              "$id":"remotePass",
+              "$id": "remotePass",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -277,7 +270,7 @@
               }
             },
             {
-              "$id":"sshTunnel",
+              "$id": "sshTunnel",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -285,7 +278,7 @@
               }
             },
             {
-              "$id":"keyRadio",
+              "$id": "keyRadio",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -293,7 +286,7 @@
               }
             },
             {
-              "$id":"sshKeyFile",
+              "$id": "sshKeyFile",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
@@ -301,7 +294,7 @@
               }
             },
             {
-              "$id":"passPhrase",
+              "$id": "passPhrase",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },

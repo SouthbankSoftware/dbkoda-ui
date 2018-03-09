@@ -6,7 +6,7 @@
  * @Last modified time: 2018-03-02T00:39:52+11:00
  */
 
-import { action, observable } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import uuidV1 from 'uuid';
 import { EditorTypes } from '#/common/Constants';
 import { ProfileForm } from '#/ConnectionPanel/ProfileForm';
@@ -120,6 +120,10 @@ export default class ProfileApi {
       edit = true;
     }
     if (!edit && !this.validateConnectionFormData(data)) {
+      runInAction('Turn off loading spinner in dialog.', () => {
+        this.store.layout.alertIsLoading = false;
+      });
+
       return Promise.reject(globalString('connection/validationError'));
     }
     const query = {};
@@ -208,9 +212,15 @@ export default class ProfileApi {
             eagerCreation: true
           });
         }
+        runInAction('Turn off loading spinner in dialog.', () => {
+          this.store.layout.alertIsLoading = false;
+        });
         this.onSuccess(res, data);
       })
       .catch(err => {
+        runInAction('Turn off loading spinner in dialog.', () => {
+          this.store.layout.alertIsLoading = false;
+        });
         console.error(err);
         logToMain('error', 'Failed to add SSH Terminal: ' + err);
         this.onFail();
