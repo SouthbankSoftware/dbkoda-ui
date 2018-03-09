@@ -35,7 +35,7 @@ $alarm-yellow: lighten(#e8e471, 0);
 $alarm-red: lighten(#913856, 0);
 
 .AlarmViewPopover {
-  opacity: 0.8;
+  opacity: 0.95;
 }
 
 .AlarmViewPopoverContent {
@@ -104,6 +104,6 @@ $alarm-red: lighten(#913856, 0);
 }
 
 :export {
-  headerHeight: $header-height;
-  containerPadding: $container-padding;
+  headerheight: $header-height;
+  containerpadding: $container-padding;
 }

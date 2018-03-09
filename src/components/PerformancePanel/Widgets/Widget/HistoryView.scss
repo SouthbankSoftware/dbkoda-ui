@@ -24,7 +24,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../../../styles/_defaultTheme.scss";
+@import '../../../../styles/_defaultTheme.scss';
 
 $container-padding: 5px;
 $description-height: 18px;
@@ -33,7 +33,7 @@ $primary-colour: $defaultChartPanelText;
 $primary-colour-lighten-30: lighten($primary-colour, 30);
 
 .HistoryViewPopover {
-  opacity: 0.8;
+  opacity: 0.95;
 }
 
 .HistoryView {
@@ -49,7 +49,7 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
     line-height: $description-height;
     font-size: 14px;
     margin: 0;
-    width: calc(100% - #{2*$container-padding});
+    width: calc(100% - #{2 * $container-padding});
     position: absolute;
     top: $container-padding;
 
@@ -107,9 +107,9 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
   colour19: lighten($colourTwo, 10%);
   colour20: lighten($colourThree, 10%);
   colour21: darken($defaultChartPanelText, 10%);
-  containerPadding: $container-padding;
-  descriptionHeight: $description-height;
-  primaryColour: $primary-colour;
-  primaryColourLighten30: $primary-colour-lighten-30;
-  backgroundColour: $background-colour;
+  containerpadding: $container-padding;
+  descriptionheight: $description-height;
+  primarycolour: $primary-colour;
+  primarycolourlighten30: $primary-colour-lighten-30;
+  backgroundcolour: $background-colour;
 }

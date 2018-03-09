@@ -62,7 +62,12 @@ export default class PerformancePanel extends React.Component<Props> {
       const Widget = widgetTypes[type];
 
       return (
-        <div id={`widget-${id}`} key={id} data-grid={layout} style={layout.gridElementStyle}>
+        <div
+          id={`widget-${id}`}
+          key={id}
+          data-grid={layout}
+          style={layout.gridElementStyle}
+        >
           <Widget
             performancePanel={performancePanel}
             widget={widget}
@@ -74,7 +79,11 @@ export default class PerformancePanel extends React.Component<Props> {
   }
 
   render() {
-    const { performancePanel: { widgets, rowHeight, rows, cols, profileAlias }, onClose, resetHighWaterMark } = this.props;
+    const {
+      performancePanel: { widgets, rowHeight, rows, cols, profileAlias },
+      onClose,
+      resetHighWaterMark
+    } = this.props;
 
     return (
       <div className="PerformancePanel">
@@ -82,20 +91,27 @@ export default class PerformancePanel extends React.Component<Props> {
           <div className="performanceTitleBar">
             <div className="title">{globalString('performance/title')}</div>
             <div className="titleProfile">{profileAlias}</div>
-            {resetHighWaterMark &&
+            {resetHighWaterMark && (
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content="Reset Hight Water Mark"
+                content="Reset High Water Mark"
                 hoverOpenDelay={1000}
                 inline
                 intent={Intent.PRIMARY}
                 position={Position.BOTTOM}
               >
-                <Button className="reset-button pt-button pt-intent-primary" text="Reset HWM" onClick={resetHighWaterMark} />
-              </Tooltip>}
+                <Button
+                  className="reset-button pt-button pt-intent-primary"
+                  text="Reset HWM"
+                  onClick={resetHighWaterMark}
+                />
+              </Tooltip>
+            )}
           </div>
           <div className="performanceSubNavBar">
-            <div className="subtitle os">{globalString('performance/section_headers/os')}</div>
+            <div className="subtitle os">
+              {globalString('performance/section_headers/os')}
+            </div>
             <div className="subtitle mongo">
               {globalString('performance/section_headers/mongo')}
             </div>
@@ -120,8 +136,13 @@ export default class PerformancePanel extends React.Component<Props> {
         >
           {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
-        {onClose &&
-        <Button className="close-button pt-button pt-intent-primary" text="X" onClick={onClose} />}
+        {onClose && (
+          <Button
+            className="close-button pt-button pt-intent-primary"
+            text="X"
+            onClick={onClose}
+          />
+        )}
       </div>
     );
   }
