@@ -264,8 +264,9 @@ export default class ProgressBarWidget extends React.Component<Props> {
       if (!this.props.performancePanel.highWaterMarkGroups) {
         this.props.performancePanel.highWaterMarkGroups = {};
       }
-      const highestValue = this.props.performancePanel
+      let highestValue = this.props.performancePanel
         .highWaterMarkGroups[this.props.widget.waterMarkGroup];
+      highestValue = !highestValue ? 0 : highestValue;
       if (this._totalDivisor > highestValue) {
         this.props.performancePanel.highWaterMarkGroups[
           this.props.widget.waterMarkGroup
