@@ -69,14 +69,18 @@ export default class ProfileApi {
     // this.profileList = store.profileList;
 
     this.setToasterCallback = this.setToasterCallback.bind(this);
-    this.validateConnectionFormData = this.validateConnectionFormData.bind(this);
+    this.validateConnectionFormData = this.validateConnectionFormData.bind(
+      this
+    );
     this.connectProfile = this.connectProfile.bind(this);
     this.onFail = this.onFail.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.saveProfile = this.saveProfile.bind(this);
   }
 
-  setToasterCallback(callBack: (strErrorCode: String, err: Error | null) => void) {
+  setToasterCallback(
+    callBack: (strErrorCode: String, err: Error | null) => void
+  ) {
     this.toasterCallback = callBack;
   }
 
@@ -106,7 +110,11 @@ export default class ProfileApi {
   @action
   async connectProfile(data: Profile): Promise {
     const { profileList } = this.store;
-    const { selectedProfile } = profileList;
+    let { selectedProfile } = profileList;
+    if (data && data.id) {
+      selectedProfile = this.store.profileStore.profiles.get(data.id);
+    }
+
     let edit = false;
     if (selectedProfile) {
       edit = true;
@@ -149,7 +157,8 @@ export default class ProfileApi {
       };
 
       if (data.sshTunnel) {
-        connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+        connectionUrl =
+          ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       }
       if (data.passRadio) {
         query.remotePass = data.remotePass;
@@ -334,7 +343,10 @@ export default class ProfileApi {
       }
 
       this.api.hasPerformancePanel(profile.id) &&
-        this.api.transformPerformancePanel(profile.id, performancePanelStatuses.background);
+        this.api.transformPerformancePanel(
+          profile.id,
+          performancePanelStatuses.background
+        );
     }
     this.toasterCallback && this.toasterCallback('connectionSuccess');
   }
@@ -381,7 +393,9 @@ export default class ProfileApi {
       const doc = StaticApi.createNewDocumentObject(content);
       doc.lineSep = StaticApi.determineEol(content);
 
-      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(EditorTypes.DEFAULT);
+      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(
+        EditorTypes.DEFAULT
+      );
       const editorId = uuidV1();
       editors.set(
         editorId,

@@ -480,9 +480,9 @@ export default class ListView extends React.Component {
       (((passwordStoreEnabled && storeNeedsPassword) ||
         !passwordStoreEnabled) &&
         (targetProfile.bPassPhrase && !passPhrase)) ||
-        ((passwordStoreEnabled && storeNeedsPassword) ||
+      (((passwordStoreEnabled && storeNeedsPassword) ||
         !passwordStoreEnabled) &&
-        (targetProfile.bRemotePass && !remotePass)
+        (targetProfile.bRemotePass && !remotePass))
     ) {
       this.setState({ isSshOpenWarningActive: true });
       Mousetrap.bindGlobal(
@@ -523,6 +523,7 @@ export default class ListView extends React.Component {
   renderBodyContextMenu(context) {
     const profiles = this.props.profileStore.profiles.entries();
     const profile = profiles[context.regions[0].rows[0]][1];
+    // @TODO -> Should we update state store to reflect right clicks here?
     this.state.targetProfile = profile;
     if (this.props.config.settings.telemetryEnabled) {
       EventLogging.recordManualEvent(
