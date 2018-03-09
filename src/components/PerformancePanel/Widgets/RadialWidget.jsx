@@ -113,11 +113,7 @@ export default class RadialWidget extends React.Component<Props, State> {
       .select('.radial-main')
       .selectAll('svg')
       .remove();
-    // d3.transition();
     const xTranslate = this.state.width / 2;
-    // if (this.props.widget.title === 'Network') {
-    //   xTranslate = this.state.width / 2 - 20;
-    // }
     const svg = elem
       .select('.radial-main')
       .append('svg')
