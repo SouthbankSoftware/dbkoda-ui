@@ -277,7 +277,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
           this.props.widget.waterMarkGroup
           ];
       }
-      this._chartLabel = this._totalDivisor;
+      // this._chartLabel = this._totalDivisor;
     }
 
     // $FlowFixMe
