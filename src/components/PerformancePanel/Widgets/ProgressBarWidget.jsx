@@ -263,6 +263,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     if (this.props.widget.waterMarkGroup) {
       if (!this.props.performancePanel.highWaterMarkGroups) {
         this.props.performancePanel.highWaterMarkGroups = {};
+        this.props.performancePanel.highWaterMarkGroups[this.props.widget.waterMarkGroup] = 0;
       }
       let highestValue = this.props.performancePanel
         .highWaterMarkGroups[this.props.widget.waterMarkGroup];
@@ -271,10 +272,11 @@ export default class ProgressBarWidget extends React.Component<Props> {
         this.props.performancePanel.highWaterMarkGroups[
           this.props.widget.waterMarkGroup
         ] = this._totalDivisor;
+      } else {
+        this._totalDivisor = this.props.performancePanel.highWaterMarkGroups[
+          this.props.widget.waterMarkGroup
+          ];
       }
-      this._totalDivisor = this.props.performancePanel.highWaterMarkGroups[
-        this.props.widget.waterMarkGroup
-      ];
       this._chartLabel = this._totalDivisor;
     }
 
