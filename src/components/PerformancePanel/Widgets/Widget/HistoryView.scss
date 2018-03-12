@@ -107,9 +107,9 @@ $primary-colour-lighten-30: lighten($primary-colour, 30);
   colour19: lighten($colourTwo, 10%);
   colour20: lighten($colourThree, 10%);
   colour21: darken($defaultChartPanelText, 10%);
-  containerpadding: $container-padding;
-  descriptionheight: $description-height;
-  primarycolour: $primary-colour;
-  primarycolourlighten30: $primary-colour-lighten-30;
-  backgroundcolour: $background-colour;
+  containerPadding: $container-padding;
+  descriptionHeight: $description-height;
+  primaryColour: $primary-colour;
+  primaryColourLighten30: $primary-colour-lighten-30;
+  backgroundColour: $background-colour;
 }
