@@ -46,8 +46,6 @@ type State = {
 }))
 @observer
 export default class PasswordDialog extends React.Component<Props, State> {
-  MIN_PASSWORD_SIZE = 6;
-
   constructor(props: Props) {
     super(props);
     this.state = {

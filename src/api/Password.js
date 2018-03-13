@@ -48,6 +48,19 @@ export default class Password {
       EventType.MASTER_PASSWORD_REQUIRED,
       this.showPasswordDialog.bind(this)
     );
+    Broker.on(
+      EventType.PASSWORD_STORE_RESET,
+      this.onPasswordReset.bind(this)
+    );
+  }
+
+  @action.bound
+  onPasswordReset() {
+    console.log('Due to too many login attempts, your password store has been reset!');
+    this.closePasswordDialog();
+    this.showResetDialog();
+    this.config.settings.passwordStoreEnabled = false;
+    this.config.save();
   }
 
   @action.bound
@@ -64,7 +77,16 @@ export default class Password {
     this._removeKeyBind();
     this.store.password.showDialog = false;
     this.store.password.initialPassword = '';
-    this.store.password.verifyPassword = '';
+    this.store.password.repeatPassword = '';
+  }
+
+  @action.bound
+  showResetDialog() {
+    this.store.password.showResetDialog = true;
+  }
+
+  closeResetDialog() {
+    this.store.password.showResetDialog = false;
   }
 
   _setupKeyBind() {
@@ -106,7 +128,7 @@ export default class Password {
       return `${value[1].id}-s`;
     });
     const profileIds = _.concat(this.store.profileStore.profiles.keys(), profileSshIds);
-    featherClient()
+    return featherClient()
       .service('master-pass')
       .create({ masterPassword: masterHash, profileIds })
       .then(missingProfileIds => {

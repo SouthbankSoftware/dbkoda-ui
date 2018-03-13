@@ -83,6 +83,7 @@ export default {
   STATS_DATA: profileId => `stats::data::${profileId}`,
   STATS_ERROR: profileId => `stats::error::${profileId}`,
   MASTER_PASSWORD_REQUIRED: 'master-pass::password-required',
+  PASSWORD_STORE_RESET: 'master-pass::store-reset',
   WINDOW_REFRESHING: 'window-refreshing',
   WINDOW_CLOSING: 'window-closing'
 };

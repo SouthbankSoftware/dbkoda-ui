@@ -94,6 +94,9 @@ class FeatherClient {
     this.passwordService.on(EventType.MASTER_PASSWORD_REQUIRED, ({ method }) => {
       Broker.emit(EventType.MASTER_PASSWORD_REQUIRED, method);
     });
+    this.passwordService.on(EventType.PASSWORD_STORE_RESET, () => {
+      Broker.emit(EventType.PASSWORD_STORE_RESET, {});
+    });
 
     this.performanceSrv.on('performance-output', ({output}) => {
       console.log('get performance output ', output);
