@@ -117,7 +117,9 @@ export default class TerminalApi {
   ) {
     const id = uuid();
     const type = terminalTypes.ssh;
-    const usePasswordStore = this.config.settings.passwordStoreEnabled;
+    const usePasswordStore = (typeof this.config.settings.passwordStoreEnabled === 'object') ?
+        false :
+        this.config.settings.passwordStoreEnabled;
     const { profileId, username, password, host, privateKey, passphrase, port } = profile;
     const { switchToUponCreation = true, skipWhenExisting = false, eagerCreation = false } =
       options || {};

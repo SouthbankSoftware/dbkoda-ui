@@ -82,7 +82,8 @@ export default class Config {
   }
 
   verifySettings() {
-    if (this.settings.passwordStoreEnabled === undefined) {
+    if (this.settings.passwordStoreEnabled === undefined ||
+      typeof this.settings.passwordStoreEnabled === 'object') {
       this.settings.passwordStoreEnabled = false;
     }
     if (this.settings.telemetryEnabled === undefined) {
