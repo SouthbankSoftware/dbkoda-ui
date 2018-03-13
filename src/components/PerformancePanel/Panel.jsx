@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-08T14:45:02+11:00
+ * @Last modified time: 2018-03-14T10:20:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -133,6 +133,7 @@ export default class PerformancePanel extends React.Component<Props> {
           margin={[0, 0]}
           verticalGridSize={rows}
           bFitHeight
+          minFitHeight={901}
         >
           {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
