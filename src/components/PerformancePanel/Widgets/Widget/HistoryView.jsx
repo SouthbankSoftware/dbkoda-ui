@@ -232,6 +232,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
 
             // @TODO - Guan : Integrate with projection function.
             name = reduceName(name);
+            name += ' (' + maxUnit + ')';
 
             return (
               <Line
