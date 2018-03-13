@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-13T11:48:33+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   Mike
- * @Last modified time: 2018-02-26T14:16:42+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-14T10:19:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -35,14 +35,14 @@ type Props = {
   verticalGridSize: number,
   margin: [number, number],
   bFitHeight: boolean,
-  rowHeight: number
+  rowHeight: number,
+  minFitHeight: number
 };
 
 type State = {
   width: number,
   rowHeight: number,
-  height: number,
-  minHeight: number
+  height: number
 };
 
 export default (ComposedComponent: ReactComponentType<any>) =>
@@ -54,8 +54,7 @@ export default (ComposedComponent: ReactComponentType<any>) =>
     state: State = {
       width: 1280,
       height: 0,
-      rowHeight: 150,
-      minHeight: 901
+      rowHeight: 150
     };
 
     mounted: boolean = false;
@@ -81,14 +80,14 @@ export default (ComposedComponent: ReactComponentType<any>) =>
 
       // eslint-disable-next-line
       const node = ReactDOM.findDOMNode(this); // Flow casts this to Text | Element
-      const { verticalGridSize, margin, bFitHeight } = this.props;
+      const { verticalGridSize, margin, bFitHeight, minFitHeight } = this.props;
       if (bFitHeight) {
         let rowHeight =
           (window.innerHeight -
             (verticalGridSize - 1) * margin[1] -
             2 * margin[1]) /
           verticalGridSize;
-        if (rowHeight * verticalGridSize < this.state.minHeight) {
+        if (minFitHeight && (rowHeight * verticalGridSize < minFitHeight)) {
           rowHeight = 1000 / verticalGridSize;
         }
 
