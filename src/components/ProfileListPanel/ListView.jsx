@@ -157,7 +157,11 @@ export default class ListView extends React.Component {
     if (region.length == 0) {
       return;
     }
-    const profiles = this.props.profileStore.profiles.entries();
+    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+      function(o) {
+        return o[1].alias;
+      }
+    ]);
     const profile = profiles[region[0].rows[0]][1];
     this.props.store.profileList.selectedProfile = profile;
     this.setState({ lastSelectRegion: region });
@@ -526,8 +530,14 @@ export default class ListView extends React.Component {
 
   @action
   renderBodyContextMenu(context) {
-    const profiles = this.props.profileStore.profiles.entries();
+    // Get profiles, sort alphabetically and use that as a reference.
+    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+      function(o) {
+        return o[1].alias;
+      }
+    ]);
     const profile = profiles[context.regions[0].rows[0]][1];
+
     // @TODO -> Should we update state store to reflect right clicks here?
     this.state.targetProfile = profile;
     if (this.props.config.settings.telemetryEnabled) {
@@ -714,7 +724,14 @@ export default class ListView extends React.Component {
   }
 
   render() {
-    const profiles = this.props.profileStore.profiles.entries();
+    // Sort profile list first.
+    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+      function(o) {
+        return o[1].alias;
+      }
+    ]);
+
+    // Individual function for creating a single profile listing.
     const renderCell = (rowIndex: number) => {
       const className =
         this.props.store.profileList &&
@@ -748,6 +765,7 @@ export default class ListView extends React.Component {
         </Cell>
       );
     };
+
     return (
       <div className="profileList">
         <Table
@@ -874,7 +892,8 @@ export default class ListView extends React.Component {
               <div className="dialogContent">
                 <p>{globalString('profile/openAlert/passPhrasePrompt')}</p>
                 <input
-                  autoFocus={// eslint-disable-line jsx-a11y/no-autofocus
+                  autoFocus={
+                    // eslint-disable-line jsx-a11y/no-autofocus
                     !this.state.targetProfile.sha && // eslint-disable-line jsx-a11y/no-autofocu
                     !this.state.targetProfile.bRemotePass // eslint-disable-line jsx-a11y/no-autofocus
                   }
