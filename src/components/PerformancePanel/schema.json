@@ -370,7 +370,7 @@
         "colorList": ["#365F87"],
         "infoWidget": true,
         "description":
-          "Percentage of time a needed page is not found in WiredTiger cache",
+          "Percentage of time a requested page is not found in WiredTiger cache",
         "unit": "%",
         "showHorizontalRule": true,
         "showAlarms": "wiredtiger",
@@ -403,7 +403,7 @@
       "items": ["wtIO_readIOps"],
       "extraState": {
         "name": "Disk to Cache",
-        "description": "WiredTiger disk to cache IO rate",
+        "description": "WiredTiger disk to cache operations per second",
         "unit": "/s",
         "rowText": "Disk I/O activity"
       },
@@ -445,7 +445,7 @@
         "colorList": ["#913856", "#42BB6D", "#A5A11B"],
         "infoWidget": true,
         "description":
-          "WiredTiger disk to cahce, cache to disk and log sync time per second.",
+          "WiredTiger disk to cache, cache to disk and log sync time per second.",
         "unit": "μs/s",
         "showLegend": true,
         "showVerticalRule": true,
