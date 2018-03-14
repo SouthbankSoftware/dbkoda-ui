@@ -253,22 +253,30 @@ export default class ProgressBarWidget extends React.Component<Props> {
 
     // If part of high water mark group, set group value.
     if (this.props.widget.waterMarkGroup) {
-      if (!this.props.performancePanel.highWaterMarkGroups) {
-        this.props.performancePanel.highWaterMarkGroups = {};
-        this.props.performancePanel.highWaterMarkGroups[this.props.widget.waterMarkGroup] = 0;
+      const groupKeys = this.props.widget.waterMarkGroup;
+      let groupHwm = 0;
+      groupKeys.forEach(key => {
+        groupHwm += stats[key].hwm;
+      });
+      if (this._totalDivisor < groupHwm) {
+        this._totalDivisor = groupHwm;
       }
-      let highestValue = this.props.performancePanel
-        .highWaterMarkGroups[this.props.widget.waterMarkGroup];
-      highestValue = !highestValue ? 0 : highestValue;
-      if (this._totalDivisor > highestValue) {
-        this.props.performancePanel.highWaterMarkGroups[
-          this.props.widget.waterMarkGroup
-        ] = this._totalDivisor;
-      } else {
-        this._totalDivisor = this.props.performancePanel.highWaterMarkGroups[
-          this.props.widget.waterMarkGroup
-          ];
-      }
+      // if (!this.props.performancePanel.highWaterMarkGroups) {
+      //   this.props.performancePanel.highWaterMarkGroups = {};
+      //   this.props.performancePanel.highWaterMarkGroups[this.props.widget.waterMarkGroup] = 0;
+      // }
+      // let highestValue = this.props.performancePanel
+      //   .highWaterMarkGroups[this.props.widget.waterMarkGroup];
+      // highestValue = !highestValue ? 0 : highestValue;
+      // if (this._totalDivisor > highestValue) {
+      //   this.props.performancePanel.highWaterMarkGroups[
+      //     this.props.widget.waterMarkGroup
+      //   ] = this._totalDivisor;
+      // } else {
+      //   this._totalDivisor = this.props.performancePanel.highWaterMarkGroups[
+      //     this.props.widget.waterMarkGroup
+      //     ];
+      // }
       // this._chartLabel = this._totalDivisor;
     }
 
