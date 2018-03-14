@@ -38,17 +38,17 @@ import _ from 'lodash';
 
 export const terminalTypes = {
   local: 'local',
-  ssh: 'ssh',
+  ssh: 'ssh'
 };
 
 export const terminalDisplayNames = {
   local: 'Local',
-  ssh: 'SSH',
+  ssh: 'SSH'
 };
 
 export const terminalErrorLevels = {
   warn: 'warn',
-  error: 'error',
+  error: 'error'
 };
 
 export type TerminalType = $Keys<typeof terminalTypes>;
@@ -60,7 +60,7 @@ export type TerminalState = {
   state: ComponentState,
   errorLevel: ?TerminalErrorLevel,
   error: ?string,
-  reactComponent?: *, // only for UAT
+  reactComponent?: * // only for UAT
 };
 
 export type SshProfile = {
@@ -70,7 +70,7 @@ export type SshProfile = {
   password?: string,
   port: number,
   privateKey?: string,
-  passphrase?: string,
+  passphrase?: string
 };
 
 export default class TerminalApi {
@@ -113,15 +113,32 @@ export default class TerminalApi {
   @action.bound
   addSshTerminal(
     profile: SshProfile,
-    options: { switchToUponCreation: boolean, skipWhenExisting: boolean, eagerCreation: boolean },
+    options: {
+      switchToUponCreation: boolean,
+      skipWhenExisting: boolean,
+      eagerCreation: boolean
+    }
   ) {
     const id = uuid();
     const type = terminalTypes.ssh;
-    const usePasswordStore = (typeof this.config.settings.passwordStoreEnabled === 'object') ?
-        false :
-        this.config.settings.passwordStoreEnabled;
-    const { profileId, username, password, host, privateKey, passphrase, port } = profile;
-    const { switchToUponCreation = true, skipWhenExisting = false, eagerCreation = false } =
+    const usePasswordStore =
+      typeof this.config.settings.passwordStoreEnabled === 'object'
+        ? false
+        : this.config.settings.passwordStoreEnabled;
+    const {
+      profileId,
+      username,
+      password,
+      host,
+      privateKey,
+      passphrase,
+      port
+    } = profile;
+    const {
+      switchToUponCreation = true,
+      skipWhenExisting = false,
+      eagerCreation = false
+    } =
       options || {};
 
     if (skipWhenExisting) {
@@ -135,32 +152,49 @@ export default class TerminalApi {
     }
 
     const createTerminal = (xterm: ?Xterm) => {
+      // Only send defined variables
+      const reqObject: * = {
+        _id: id,
+        type,
+        username,
+        host,
+        port,
+        password,
+        passphrase,
+        privateKey,
+        profileId,
+        usePasswordStore,
+        size: xterm
+          ? {
+              rows: xterm.rows,
+              cols: xterm.cols
+            }
+          : undefined
+      };
+      if (password) {
+        reqObject.password = password;
+      }
+      if (passphrase) {
+        reqObject.passphrase = passphrase;
+      }
+      if (privateKey) {
+        reqObject.privateKey = privateKey;
+      }
+      if (port) {
+        reqObject.port = port;
+      } else {
+        reqObject.port = 22;
+      }
+
       featherClient()
-        .terminalService.create({
-          _id: id,
-          type,
-          username,
-          password,
-          host,
-          port,
-          privateKey,
-          passphrase,
-          profileId,
-          usePasswordStore,
-          size: xterm
-            ? {
-                rows: xterm.rows,
-                cols: xterm.cols,
-              }
-            : undefined,
-        })
+        .terminalService.create(reqObject)
         .then(() => {
           console.debug('Terminal created');
         })
         .catch(error => {
           Broker.emit(EventType.TERMINAL_ERROR(id), {
             error: error.message,
-            level: terminalErrorLevels.error,
+            level: terminalErrorLevels.error
           });
         });
     };
@@ -179,7 +213,7 @@ export default class TerminalApi {
   addTerminal(
     type: TerminalType,
     extraState: { id?: string },
-    options: { switchToUponCreation: boolean },
+    options: { switchToUponCreation: boolean }
   ) {
     const { terminals, outputPanel } = this.store;
     const { switchToUponCreation = true } = options || {};
@@ -194,7 +228,7 @@ export default class TerminalApi {
       state: 'loaded',
       errorLevel: null,
       error: null,
-      ...extraState,
+      ...extraState
     };
 
     terminals.set(id, observable.shallowObject(terminal));
