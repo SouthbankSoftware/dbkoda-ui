@@ -69,7 +69,7 @@ export default class Store {
   @nodump api = null;
   @nodump profileStore = null;
   @observable locale = 'en';
-  @observable version = '0.10.0-beta';
+  @observable version = '0.10.0';
   @observable updateAvailable = false;
   @observable editors = observable.map();
   @observable outputs = observable.map();
@@ -422,7 +422,7 @@ export default class Store {
     newStore.layout.alertIsLoading = false;
 
     // Version:
-    newStore.version = '0.10.0-beta';
+    newStore.version = '0.10.0';
 
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
