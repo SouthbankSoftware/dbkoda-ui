@@ -1076,9 +1076,11 @@ class View extends React.Component {
         v.executing = false;
       }
     });
-    if (this.props.store.editorPanel.activeEditorId == this.props.id) {
-      this.props.store.editorToolbar.isActiveExecuting = false;
-      this.props.store.editorPanel.stoppingExecution = false;
+    if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).shellId === event.shellId) {
+      runInAction('Execution has copleted on current editor.', () => {
+        this.props.store.editorToolbar.isActiveExecuting = false;
+        this.props.store.editorPanel.stoppingExecution = false;
+      });
     }
   }
 

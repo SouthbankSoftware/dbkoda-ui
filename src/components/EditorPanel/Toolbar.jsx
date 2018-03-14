@@ -193,7 +193,6 @@ export default class Toolbar extends React.Component {
         this.props.store.editorPanel.activeEditorId,
       );
 
-      console.log(editor);
       if (editor && editor.type === 'drill') {
         // Show Warning.
         this.setState({ showLoadSQLWarning: true });
@@ -278,10 +277,6 @@ export default class Toolbar extends React.Component {
                 );
               }
 
-              // Debugging.
-              console.log(_id);
-              console.log(_fileName);
-              console.log(editor);
               runInAction(() => {
                 editor.fileName = _fileName;
                 editor.path = _id;
