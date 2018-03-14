@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T19:49:27+11:00
+ * @Last modified time: 2018-03-15T08:42:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -69,7 +69,9 @@ export default class View extends React.Component {
     _.set(newSettings, configPath, nextValue);
     // update changedFields
     const oldValue = _.get(settings, configPath);
-    if (nextValue === oldValue) {
+    // use double equal here, because nextValue might be a string. We don't want to convert it to
+    // number yet, because it is a controlled input
+    if (nextValue == oldValue) {
       // unchanged, remove from changedFields
       _.remove(changedFields, v => v === configPath);
     } else if (!_.includes(changedFields, configPath)) {
