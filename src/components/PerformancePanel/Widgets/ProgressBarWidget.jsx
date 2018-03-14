@@ -247,15 +247,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
     } else {
       return;
     }
-    if (this.props.widget.useHighWaterMark) {
-      const newHighWaterMark = sumOfHWM;
-      if (
-        !this._totalDivisor ||
-        (this._totalDivisor > 0 && sumOfHWM >= this._totalDivisor) // update HighWaterMark only it is not set or smaller then the current sum of values
-      ) {
-        this._totalDivisor = newHighWaterMark;
-      }
-    } else if (!this.props.widget.firstValueIsHighWaterMark) {
+    if (this.props.widget.useHighWaterMark || !this.props.widget.firstValueIsHighWaterMark) {
       this._totalDivisor = sumOfHWM;
     }
 
