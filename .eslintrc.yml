@@ -91,6 +91,7 @@ rules:
   flowtype/no-types-missing-file-annotation: off
   flowtype/generic-spacing: off
   arrow-parens: off
+  no-multi-assign: off
 plugins: [react, import, flowtype]
 settings:
   import/resolver:

@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: christrott
+ * @Date:   2017-02-06T11:51:13+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T14:09:25+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,13 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: christrott
- * @Date:   2017-02-06T11:51:13+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   christrott
- * @Last modified time: 2017-02-06T11:53:52+11:00
  */
 
 import React from 'react';
@@ -58,28 +57,28 @@ export default class PasswordStore extends React.Component {
   }
 
   removePasswordStore() {
-    this.props.api.passwordApi.removeStore()
-      .then(() => {
-        this.props.updateValue('passwordStoreEnabled', false);
-        this.closeRemoveDialog(false);
-      });
+    this.props.api.passwordApi.removeStore().then(() => {
+      this.props.updateValue('passwordStoreEnabled', false);
+      this.closeRemoveDialog(false);
+    });
   }
 
   render() {
     return (
       <div className="formContentWrapper">
         <div className="form-row">
-          { this.props.renderFieldLabel('passwordStoreEnabled') }
+          {this.props.renderFieldLabel('passwordStoreEnabled')}
           <Checkbox
             type="text"
             id="passwordStoreEnabled"
             checked={this.props.settings.passwordStoreEnabled}
             onChange={this.onCheckboxToggle}
-           />
+          />
           <Dialog
             className="confirmDialog"
             title="Remove Password Store?"
-            isOpen={this.state.isConfirmOpen}>
+            isOpen={this.state.isConfirmOpen}
+          >
             <div className="dialogContent">
               <p>{globalString('editor/config/remove_store_dialog/question')}</p>
               <p>{globalString('editor/config/remove_store_dialog/qualifier')}</p>
@@ -88,13 +87,15 @@ export default class PasswordStore extends React.Component {
               <AnchorButton
                 className="deleteButton"
                 intent={Intent.DANGER}
-                onClick={this.removePasswordStore}>
+                onClick={this.removePasswordStore}
+              >
                 {globalString('editor/config/remove_store_dialog/confirm')}
               </AnchorButton>
               <AnchorButton
                 className="cancelButton"
                 intent={Intent.PRIMARY}
-                onClick={this.closeRemoveDialog}>
+                onClick={this.closeRemoveDialog}
+              >
                 {globalString('editor/config/remove_store_dialog/cancel')}
               </AnchorButton>
             </div>

@@ -76,3 +76,4 @@ tsconfig.json
 *.DS_Store
 
 nohup\.out
+test.js

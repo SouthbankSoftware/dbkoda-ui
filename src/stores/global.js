@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-21T13:40:04+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T22:25:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,13 +25,9 @@
  */
 
 import _ from 'lodash';
-import { action, observable, when, runInAction } from 'mobx';
+import { action, observable, when, runInAction, toJS, reaction } from 'mobx';
 import { dump, restore, nodump } from 'dumpenvy';
-import {
-  serializer,
-  deserializer,
-  postDeserializer
-} from '#/common/mobxDumpenvyExtension';
+import { serializer, deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
@@ -86,12 +82,13 @@ export default class Store {
     currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
   });
 
+  @nodump
   @observable
-  configPage = observable({
+  configPage = observable.shallowObject({
     isOpen: true,
     selectedMenu: 'Paths',
-    changedFields: observable([]),
-    newSettings: observable([])
+    changedFields: observable.shallowArray(),
+    newSettings: null
   });
 
   @observable
@@ -221,8 +218,7 @@ export default class Store {
     repeatPassword: ''
   };
 
-  @observable
-  topology = observable({ isChanged: false, json: {}, profileId: '' });
+  @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
 
   @action.bound
   setDrawerChild = value => {
@@ -286,8 +282,7 @@ export default class Store {
   openNewAggregateBuilder(nodeRightClicked) {
     if (this.editorPanel.activeDropdownId === 'Default') {
       NewToaster.show({
-        message:
-          'Error: Please select an open connection from the Profile Dropdown.',
+        message: 'Error: Please select an open connection from the Profile Dropdown.',
         className: 'danger',
         iconName: 'pt-icon-thumbs-down'
       });
@@ -371,11 +366,7 @@ export default class Store {
   @action.bound
   closeConnection() {
     return new Promise(resolve => {
-      if (
-        this.profileStore &&
-        this.profileStore.profiles &&
-        this.profileStore.profiles.size > 0
-      ) {
+      if (this.profileStore && this.profileStore.profiles && this.profileStore.profiles.size > 0) {
         const promises = [];
         this.profileStore.profiles.forEach(value => {
           if (value.status === ProfileStatus.OPEN) {
@@ -498,10 +489,7 @@ export default class Store {
 
       const stateStoreDir = path.dirname(stateStorePath);
       const dateStr = moment().format('DD-MM-YYYY_HH-mm-ss');
-      const backupPath = path.resolve(
-        stateStoreDir,
-        `stateStore.${dateStr}.json`
-      );
+      const backupPath = path.resolve(stateStoreDir, `stateStore.${dateStr}.json`);
       return featherClient()
         .service('files')
         .get(stateStorePath, {
@@ -513,6 +501,12 @@ export default class Store {
     }
 
     return Promise.reject(new Error('Backup only supported in Electron'));
+  }
+
+  @action.bound
+  resetConfigPage(settingsObj) {
+    this.configPage.changedFields.clear();
+    this.configPage.newSettings = observable.object(settingsObj || toJS(this.config.settings));
   }
 
   loadRest() {
@@ -531,6 +525,26 @@ export default class Store {
     return this.config
       .load()
       .then(() => {
+        const foregroundSamplingRateChangedReaction = reaction(
+          () => this.config.settings.performancePanel.foregroundSamplingRate,
+          rate => this.api.reactToSamplingRateChange(rate, true)
+        );
+
+        const backgroundSamplingRateChangedReaction = reaction(
+          () => this.config.settings.performancePanel.backgroundSamplingRate,
+          rate => this.api.reactToSamplingRateChange(rate, false)
+        );
+
+        // stop all PP when refreshing
+        Broker.once(EventType.WINDOW_REFRESHING, () => {
+          foregroundSamplingRateChangedReaction();
+          backgroundSamplingRateChangedReaction();
+        });
+
+        // init configPage so that Preferences panel can render
+        // TODO: redesign Preferences panel and get rid of this
+        this.resetConfigPage();
+
         if (this.config.settings.passwordStoreEnabled) {
           this.api.passwordApi.showPasswordDialog();
         }

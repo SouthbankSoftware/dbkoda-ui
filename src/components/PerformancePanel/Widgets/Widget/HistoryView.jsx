@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-02-05T12:18:29+11:00
  * @Email:  guan@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2018-03-06T14:33:42+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T21:34:54+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -49,7 +49,6 @@ import styles from './HistoryView.scss';
 const COLOUR_PALETTE: string[] = _.filter(styles, (v, k) =>
   k.startsWith('colour')
 );
-const DEFAULT_BRUSH_SIZE = 30;
 const DEBOUNCED_ENABLE_UPDATE_DELAY = 500;
 
 const { primaryColour, primaryColourLighten30, backgroundColour } = styles;
@@ -102,7 +101,7 @@ type State = {
 export default class HistoryView extends React.PureComponent<Props, State> {
   // we don't put these variables as state, because we use them as record, and changing them doesn't
   // need to re-render our component
-  _brushSize: number = DEFAULT_BRUSH_SIZE;
+  _brushSize: number = global.config.settings.performancePanel.historyBrushSize;
   _brushEndIdx: ?number = null;
   _shouldUpdate: boolean = true;
   _autorunDisposer: *;
