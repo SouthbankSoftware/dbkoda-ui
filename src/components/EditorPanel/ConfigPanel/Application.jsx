@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T20:23:39+11:00
+ * @Last modified time: 2018-03-15T01:00:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -41,9 +41,11 @@ export default class Application extends React.Component {
     this.props.updateValue(fieldName, fieldValue);
   }
 
-  onNumericInputValueChange = e => {
+  onTextInputChange = e => {
     const fieldName = e.target.id;
-    const fieldValue = Number(e.target.value);
+    // fieldValue is kept as string here so that controlled input can hv good UX. When patching,
+    // config service will convert it to number
+    const fieldValue = e.target.value;
 
     this.props.updateValue(fieldName, fieldValue);
   };
@@ -74,55 +76,55 @@ export default class Application extends React.Component {
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.metricSmoothingWindow')}
           <input
-            type="number"
+            type="text"
             id="performancePanel.metricSmoothingWindow"
             value={this.props.settings.performancePanel.metricSmoothingWindow}
-            onChange={this.onNumericInputValueChange}
+            onChange={this.onTextInputChange}
           />
         </div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.foregroundSamplingRate')}
           <input
-            type="number"
+            type="text"
             id="performancePanel.foregroundSamplingRate"
             value={this.props.settings.performancePanel.foregroundSamplingRate}
-            onChange={this.onNumericInputValueChange}
+            onChange={this.onTextInputChange}
           />
         </div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.backgroundSamplingRate')}
           <input
-            type="number"
+            type="text"
             id="performancePanel.backgroundSamplingRate"
             value={this.props.settings.performancePanel.backgroundSamplingRate}
-            onChange={this.onNumericInputValueChange}
+            onChange={this.onTextInputChange}
           />
         </div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.historySize')}
           <input
-            type="number"
+            type="text"
             id="performancePanel.historySize"
             value={this.props.settings.performancePanel.historySize}
-            onChange={this.onNumericInputValueChange}
+            onChange={this.onTextInputChange}
           />
         </div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.historyBrushSize')}
           <input
-            type="number"
+            type="text"
             id="performancePanel.historyBrushSize"
             value={this.props.settings.performancePanel.historyBrushSize}
-            onChange={this.onNumericInputValueChange}
+            onChange={this.onTextInputChange}
           />
         </div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.alarmDisplayingWindow')}
           <input
-            type="number"
+            type="text"
             id="performancePanel.alarmDisplayingWindow"
             value={this.props.settings.performancePanel.alarmDisplayingWindow}
-            onChange={this.onNumericInputValueChange}
+            onChange={this.onTextInputChange}
           />
         </div>
       </div>
