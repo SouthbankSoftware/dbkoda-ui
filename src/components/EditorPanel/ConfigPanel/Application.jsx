@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-15T01:00:19+11:00
+ * @Last modified time: 2018-03-15T10:25:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,6 +24,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Checkbox } from '@blueprintjs/core';
@@ -41,11 +42,20 @@ export default class Application extends React.Component {
     this.props.updateValue(fieldName, fieldValue);
   }
 
-  onTextInputChange = e => {
+  onNumericalInputChange = e => {
     const fieldName = e.target.id;
-    // fieldValue is kept as string here so that controlled input can hv good UX. When patching,
-    // config service will convert it to number
-    const fieldValue = e.target.value;
+    const rawValue = e.target.value;
+    let fieldValue;
+
+    if (rawValue === '') {
+      fieldValue = rawValue;
+    } else {
+      fieldValue = Number(rawValue);
+
+      if (_.isNaN(fieldValue)) {
+        fieldValue = rawValue;
+      }
+    }
 
     this.props.updateValue(fieldName, fieldValue);
   };
@@ -79,7 +89,7 @@ export default class Application extends React.Component {
             type="text"
             id="performancePanel.metricSmoothingWindow"
             value={this.props.settings.performancePanel.metricSmoothingWindow}
-            onChange={this.onTextInputChange}
+            onChange={this.onNumericalInputChange}
           />
         </div>
         <div className="form-row">
@@ -88,7 +98,7 @@ export default class Application extends React.Component {
             type="text"
             id="performancePanel.foregroundSamplingRate"
             value={this.props.settings.performancePanel.foregroundSamplingRate}
-            onChange={this.onTextInputChange}
+            onChange={this.onNumericalInputChange}
           />
         </div>
         <div className="form-row">
@@ -97,7 +107,7 @@ export default class Application extends React.Component {
             type="text"
             id="performancePanel.backgroundSamplingRate"
             value={this.props.settings.performancePanel.backgroundSamplingRate}
-            onChange={this.onTextInputChange}
+            onChange={this.onNumericalInputChange}
           />
         </div>
         <div className="form-row">
@@ -106,7 +116,7 @@ export default class Application extends React.Component {
             type="text"
             id="performancePanel.historySize"
             value={this.props.settings.performancePanel.historySize}
-            onChange={this.onTextInputChange}
+            onChange={this.onNumericalInputChange}
           />
         </div>
         <div className="form-row">
@@ -115,7 +125,7 @@ export default class Application extends React.Component {
             type="text"
             id="performancePanel.historyBrushSize"
             value={this.props.settings.performancePanel.historyBrushSize}
-            onChange={this.onTextInputChange}
+            onChange={this.onNumericalInputChange}
           />
         </div>
         <div className="form-row">
@@ -124,7 +134,7 @@ export default class Application extends React.Component {
             type="text"
             id="performancePanel.alarmDisplayingWindow"
             value={this.props.settings.performancePanel.alarmDisplayingWindow}
-            onChange={this.onTextInputChange}
+            onChange={this.onNumericalInputChange}
           />
         </div>
       </div>
