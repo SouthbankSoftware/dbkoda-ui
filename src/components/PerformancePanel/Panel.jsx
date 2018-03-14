@@ -43,7 +43,8 @@ const ResponsiveReactGridLayout = SizeProvider(Responsive);
 type Props = {
   performancePanel: PerformancePanelState,
   onClose: () => void,
-  resetHighWaterMark: (profileId: UUID) => void
+  resetHighWaterMark: (profileId: UUID) => void,
+  isUnresponsive: boolean
 };
 
 @observer
@@ -82,7 +83,8 @@ export default class PerformancePanel extends React.Component<Props> {
     const {
       performancePanel: { widgets, rowHeight, rows, cols, profileAlias },
       onClose,
-      resetHighWaterMark
+      resetHighWaterMark,
+      isUnresponsive
     } = this.props;
 
     return (
@@ -90,7 +92,10 @@ export default class PerformancePanel extends React.Component<Props> {
         <div className="performanceNavBar">
           <div className="performanceTitleBar">
             <div className="title">{globalString('performance/title')}</div>
-            <div className="titleProfile">{profileAlias}</div>
+            <div className="titleProfile">
+              {profileAlias}
+              {isUnresponsive && ' (Not Responding)'}
+            </div>
             {resetHighWaterMark && (
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"

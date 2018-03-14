@@ -45,6 +45,9 @@ import '#/App.scss';
 class PerformanceWindow extends React.Component {
   constructor() {
     super();
+    this.state = {
+      isUnresponsive: false
+    };
 
     document.addEventListener(
       'visibilitychange',
@@ -79,7 +82,11 @@ class PerformanceWindow extends React.Component {
       attachToMobx(performancePanel);
     }
   }
+  @action.bound
   _showToasterFromMainWindow(objToaster) {
+    if (objToaster.className === 'danger') {
+      this.setState({ isUnresponsive: true });
+    }
     NewToaster.show(objToaster);
   }
 
@@ -93,6 +100,7 @@ class PerformanceWindow extends React.Component {
             performancePanel={store.performancePanel}
             onClose={null}
             resetHighWaterMark={store.resetHighWaterMark}
+            isUnresponsive={this.state.isUnresponsive}
           />
         ) : (
           <div>

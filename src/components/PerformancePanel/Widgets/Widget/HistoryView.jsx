@@ -130,8 +130,14 @@ export default class HistoryView extends React.PureComponent<Props, State> {
         });
       });
 
-      // Scale max value down to a smaller unit for all values.
       const convertedValue = convertUnits(maxValue, this.props.unit, 3);
+
+      // @TODO - Hacky fix for Radial Widgets that are not using the schema units properly,
+      // we should upgrade the radial widget in the 0.11 release to use common unit conversion.
+      if (this.props.name === 'Network' || this.props.name === 'Disk') {
+        convertedValue.unit = 'kb/s';
+      }
+      // Scale max value down to a smaller unit for all values.
 
       if (
         this._shouldUpdate &&
@@ -241,7 +247,16 @@ export default class HistoryView extends React.PureComponent<Props, State> {
                 key={k}
                 type="linear"
                 dataKey={data => {
-                  const value = convertToTarget(v(data), unit, maxUnit, 3)
+                  let conversionUnit = unit;
+                  // @TODO - Hacky fix for Radial Widgets that are not using the schema units properly,
+                  // we should upgrade the radial widget in the 0.11 release to use common unit conversion.
+                  if (
+                    this.props.name === 'Network' ||
+                    this.props.name === 'Disk'
+                  ) {
+                    conversionUnit = 'b/s';
+                  }
+                  const value = convertToTarget(v(data), conversionUnit, maxUnit, 3)
                     .value;
                   return typeof value === 'number' ? value : null;
                 }}
