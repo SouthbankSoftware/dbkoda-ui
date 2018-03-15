@@ -246,17 +246,17 @@
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
         "performancePanel": {
           "preventDisplaySleep":
-            "Prevent display sleep when panel is visible. Panel reopen needed",
+            "Prevent display sleep when panel is visible. (Panel restart required)",
           "metricSmoothingWindow":
-            "Metric smoothing window (number of samples)",
+            "Metric moving average (number of samples)",
           "foregroundSamplingRate": "Foreground sampling rate (ms)",
           "backgroundSamplingRate": "Background sampling rate (ms)",
           "historySize":
-            "History size (number of samples). Panel reopen needed",
+            "History size (number of samples). (Panel restart required)",
           "historyBrushSize":
-            "History default brush size (number of samples). Panel reopen needed",
+            "History default brush size. (Panel restart required)",
           "alarmDisplayingWindow":
-            "Displaying alarms in last N ms. Panel reopen needed"
+            "Alarm keepalive (ms). (Panel restart required)"
         },
         "mongoCmd": "Mongo Path",
         "drillCmd": "Drill Path",
