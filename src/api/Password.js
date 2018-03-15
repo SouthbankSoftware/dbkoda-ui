@@ -58,7 +58,7 @@ export default class Password {
   onPasswordReset() {
     console.log('Due to too many login attempts, your password store has been reset!');
     this.closePasswordDialog();
-    this.showResetDialog();
+    this.store.password.showResetDialog = true;
     this.config.patch({
       passwordStoreEnabled: false
     });
@@ -79,15 +79,6 @@ export default class Password {
     this.store.password.showDialog = false;
     this.store.password.initialPassword = '';
     this.store.password.repeatPassword = '';
-  }
-
-  @action.bound
-  showResetDialog() {
-    this.store.password.showResetDialog = true;
-  }
-
-  closeResetDialog() {
-    this.store.password.showResetDialog = false;
   }
 
   _setupKeyBind() {

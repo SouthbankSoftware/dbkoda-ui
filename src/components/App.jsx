@@ -40,6 +40,7 @@ import { PerformancePanel } from '#/PerformancePanel';
 import { ProfileManager } from '#/ProfileManager';
 import { DrawerPanes } from '#/common/Constants';
 import PasswordDialog from '#/common/PasswordDialog';
+import PasswordResetDialog from '#/common/PasswordResetDialog';
 import { performancePanelStatuses } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
@@ -110,6 +111,7 @@ class App extends React.Component {
           showDialog={this.props.store.password.showDialog}
           verifyPassword={this.props.store.password.verifyPassword}
         />
+        <PasswordResetDialog />
         <SplitPane
           className="RootSplitPane"
           split="vertical"
