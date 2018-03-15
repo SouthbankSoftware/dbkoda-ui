@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-08T14:03:48+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T21:44:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,8 +27,7 @@
 import { observable, action } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
-import { handleNewData } from '~/api/PerformancePanel';
-import { attachToMobx } from '~/api/PerformancePanel';
+import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
@@ -42,6 +41,8 @@ global.globalString = (path, ...params) =>
   Globalize.messageFormatter(path)(...params);
 global.globalNumber = (value, config) =>
   Globalize.numberFormatter(config)(value);
+
+global.config = null;
 
 export default class Store {
   config = null;
@@ -65,7 +66,7 @@ export default class Store {
       }
       if (this.profileId === args.profileId) {
         if (args.command === 'mw_initData') {
-          this.config = restore(args.configObject, {
+          global.config = this.config = restore(args.configObject, {
             deserializer,
             postDeserializer
           });

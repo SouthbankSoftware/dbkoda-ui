@@ -22,8 +22,8 @@
  * @Author: chris
  * @Date:   2017-06-20T15:09:51+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-27T13:52:32+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T13:38:08+11:00
  */
 import React from 'react';
 import { reaction } from 'mobx';
@@ -79,7 +79,6 @@ export default class Analytics extends React.Component {
           } else {
             this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
           }
-          this.props.config.save();
         }
       },
       { name: 'analyticsReactionToTelemetryChange' }
@@ -96,7 +95,6 @@ export default class Analytics extends React.Component {
         } else {
           this._sendEvent(AnalyticsEvents.OPT_OUT, 'App');
         }
-        this.props.config.save();
       },
       { name: 'analyticsReactionToTelemetryChange' }
     );

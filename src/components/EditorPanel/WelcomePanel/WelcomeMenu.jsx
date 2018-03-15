@@ -20,8 +20,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-04-10 14:32:37
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-25T12:09:41+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T13:32:57+11:00
  */
 
 /* eslint-disable react/no-string-refs */
@@ -69,9 +69,13 @@ export default class Panel extends React.Component {
   @action.bound
   telemetryEnabledChanged() {
     if (this.props.config.settings.telemetryEnabled) {
-      this.props.config.settings.telemetryEnabled = false;
+      this.props.config.patch({
+        telemetryEnabled: false
+      });
     } else {
-      this.props.config.settings.telemetryEnabled = true;
+      this.props.config.patch({
+        telemetryEnabled: true
+      });
     }
   }
 
