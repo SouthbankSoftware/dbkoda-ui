@@ -51,7 +51,13 @@ const chartWidth = vbWidth - 60;
 
 type Props = {
   performancePanel: PerformancePanelState & { highWaterMarkGroups: Object },
-  widget: WidgetState & { highWaterMarkGroups: any, firstValueIsHighWaterMark: boolean, waterMarkGroup: any, colorList: any, maintainOrder: boolean },
+  widget: WidgetState & {
+    highWaterMarkGroups: any,
+    firstValueIsHighWaterMark: boolean,
+    waterMarkGroup: any,
+    colorList: any,
+    maintainOrder: boolean
+  },
   widgetStyle: *,
   rotate?: number
 };
@@ -220,7 +226,7 @@ export default class ProgressBarWidget extends React.Component<Props> {
       if (this.props.widget.firstValueIsHighWaterMark) {
         this._chartLabel = sumOfValues;
       } else {
-        this._chartLabel = sumOfHWM; // for multi item chart it will show the sum of value in the text label
+        this._chartLabel = sumOfValues; // for multi item chart it will show the sum of value in the text label
       }
     } else if (sData.length === 1) {
       // specific case of only one data item
@@ -240,14 +246,17 @@ export default class ProgressBarWidget extends React.Component<Props> {
         this._chartLabel = data[Object.keys(data)[0]];
       } else if (!this.props.widget.firstValueIsHighWaterMark) {
         // First value is high water mark, show first value.
-        this._chartLabel = sumOfHWM;
+        this._chartLabel = sumOfValues;
       } else {
         this._chartLabel = sumOfValues; // If it is a stacked chart, show the sum of the values.
       }
     } else {
       return;
     }
-    if (this.props.widget.useHighWaterMark || !this.props.widget.firstValueIsHighWaterMark) {
+    if (
+      this.props.widget.useHighWaterMark ||
+      !this.props.widget.firstValueIsHighWaterMark
+    ) {
       this._totalDivisor = sumOfHWM;
     }
 
