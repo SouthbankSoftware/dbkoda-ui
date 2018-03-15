@@ -415,6 +415,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     const {stats} = this.props.performancePanel;
     // $FlowFixMe
     this.itemValues = [];
+    this.maxValue = 0;
     if (!_.isEmpty(latestValue)) {
       Object.keys(latestValue).map(key => {
         const fixedValue = _.isInteger(latestValue[key])
@@ -423,11 +424,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         // If fixedValue is null, give a 0 value so it will render straight away.
         this.itemValues[key] = fixedValue;
         const {hwm} = stats[key];
-        const tmpHwm = hwm === 0 ? fixedValue : hwm;
-        if (!this.maxValue || (tmpHwm && tmpHwm > this.maxValue)) {
-          this.maxValue = tmpHwm;
-        }
-        this.maxValue = this.maxValue === 0 ? fixedValue : this.maxValue;
+        this.maxValue = parseInt(Math.max(hwm, fixedValue, this.maxValue, 0), 10);
       });
 
       this.fields.map(field => {
