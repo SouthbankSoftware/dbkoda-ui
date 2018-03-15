@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T22:39:08+11:00
+ * @Last modified time: 2018-03-15T15:39:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -305,10 +305,12 @@ export default class PerformancePanelApi {
   }
 
   _handleError = (profileId: UUID, err: Error | string, level: 'error' | 'warn' = 'error') => {
+    const { profileAlias } = this.store.performancePanels.get(profileId);
+
     console.error(err);
     NewToaster.show({
       // $FlowFixMe
-      message: `Profile ${profileId} error: ${err.message || err}`,
+      message: `Profile ${profileAlias} (${profileId}) ${level}: ${err.message || err}`,
       className: level === 'error' ? 'danger' : 'warning',
       iconName: 'pt-icon-thumbs-down'
     });
