@@ -8,7 +8,7 @@
     "performance": {
       "title": "Performance Panel",
       "unresponsive":
-        "Apologies but we have lost the connection to your Mongo Server and could not recover, please try closing this window, closing the profile and reopening it to recreate the connection.",
+        "Woops! Looks like we lost the connection. Is your Mongo server running? Please close and reopen your profile.",
       "section_headers": {
         "os": "OS",
         "mongo": "Mongo"
@@ -26,44 +26,62 @@
       "hide_left_panel": "Hide Left Hand Aggregate Panel",
       "byo_code": "Code it Yourself!",
       "form_code": "Code it with a Form",
-      "no_active_connection": "dbKoda has lost connection to your Mongo Shell.\n Please close or export this aggregation and then import it or start again.",
-      "no_active_connection_for_import": "Cannot import without an active connection.",
+      "no_active_connection":
+        "dbKoda has lost connection to your Mongo Shell.\n Please close or export this aggregation and then import it or start again.",
+      "no_active_connection_for_import":
+        "Cannot import without an active connection.",
       "import_button": "Import",
       "generate_chart_button": "Generate Chart",
       "import_failed": "Sorry, failed to import that file!",
       "import_passed": "Import succeeded.",
       "export_passed": "Export Complete.",
       "export_button": "Export",
-      "no_valid_output": "  Cannot display results at this stage, Block probably does not produce valid results.\n  Pipeline stages detected as invalid will be gray.\n  ----------------------------------  ",
-      "block_not_yet_valid": "  Please fill in Stage details and click on the stage to see results.\n  ----------------------------------  ",
-      "valid_output": "  Example of Result at current Stage: \n  ----------------------------------  \n",
-      "no_output": "  No results to display at current stage in pipeline.\n  Perhaps your pipeline returns no results, or is filtering out all results.\n  You can also increase your sample size in the 'Start' step to increase results of accuracy.\n  ----------------------------------  ",
-      "loading_output": "  Loading results...\n  ----------------------------------  ",
-      "failed_output": "  Failed to fetch results\n  ----------------------------------  ",
+      "no_valid_output":
+        "  Cannot display results at this stage, Block probably does not produce valid results.\n  Pipeline stages detected as invalid will be gray.\n  ----------------------------------  ",
+      "block_not_yet_valid":
+        "  Please fill in Stage details and click on the stage to see results.\n  ----------------------------------  ",
+      "valid_output":
+        "  Example of Result at current Stage: \n  ----------------------------------  \n",
+      "no_output":
+        "  No results to display at current stage in pipeline.\n  Perhaps your pipeline returns no results, or is filtering out all results.\n  You can also increase your sample size in the 'Start' step to increase results of accuracy.\n  ----------------------------------  ",
+      "loading_output":
+        "  Loading results...\n  ----------------------------------  ",
+      "failed_output":
+        "  Failed to fetch results\n  ----------------------------------  ",
       "alerts": {
-        "importWarningText": " Warning, your current aggregate builder will be lost on import, please export your builder before importing a new one. ",
+        "importWarningText":
+          " Warning, your current aggregate builder will be lost on import, please export your builder before importing a new one. ",
         "cancel": "Cancel",
         "okay": "Okay",
         "failed_title": "Aggregation Failed",
-        "failed_message_unknown": "Apologies, Aggregation failed on that collection for an unknown reason, please raise a bug using the support bundle button in the bottom right corner of the screen.",
-        "failed_message": "Apologies, Aggregation has lost connection with the Mongo shell, please restart Aggregation builder from the tree context menu."
+        "failed_message_unknown":
+          "Apologies, Aggregation failed on that collection for an unknown reason, please raise a bug using the support bundle button in the bottom right corner of the screen.",
+        "failed_message":
+          "Apologies, Aggregation has lost connection with the Mongo shell, please restart Aggregation builder from the tree context menu."
       },
-      "invalid_aggregation_code": "Invalid aggregation code. Please check syntax."
+      "invalid_aggregation_code":
+        "Invalid aggregation code. Please check syntax."
     },
     "telemetry_dialog": {
       "header": "Hi There!",
-      "content_first": "Thanks for downloading and installing dbKoda - we need your help to make it better, so we  collect statistics on product utilization so we can work out how to best invest our efforts on improving the product.",
-      "content_second": "These statistics only include information about how often various parts of the product are used and NEVER include anything personally identifiable or even anything specific to your usage of the product. We just collect feature usage counters.",
-      "content_third": "We use the Google Analytics API to collect these statistics which is used by zillions (OK, tens of millions) of websites. ",
+      "content_first":
+        "Thanks for downloading and installing dbKoda - we need your help to make it better, so we  collect statistics on product utilization so we can work out how to best invest our efforts on improving the product.",
+      "content_second":
+        "These statistics only include information about how often various parts of the product are used and NEVER include anything personally identifiable or even anything specific to your usage of the product. We just collect feature usage counters.",
+      "content_third":
+        "We use the Google Analytics API to collect these statistics which is used by zillions (OK, tens of millions) of websites. ",
       "privacy_link": "See our privacy policy for more details.",
       "button_no": "No Thanks",
       "button_yes": "Okay"
     },
     "password_dialog": {
       "message": "Please enter your master password:",
-      "login_error_message": "Not Authorized: Could not verify the password specified. Please try again",
-      "general_error_message": "An error occurred while attempting to init the password store",
-      "validation_message": "Please ensure your password is 8 or more characters long, and that the entered passwords both match."
+      "login_error_message":
+        "Not Authorized: Could not verify the password specified. Please try again",
+      "general_error_message":
+        "An error occurred while attempting to init the password store",
+      "validation_message":
+        "Please ensure your password is 8 or more characters long, and that the entered passwords both match."
     },
     "output": {
       "headings": {
@@ -96,13 +114,15 @@
         "contextTableMulti": "Multi-Document",
         "contextChart": "Chart View",
         "parseJsonError": "Could not parse a document from the selected text.",
-        "tabularError": "Unable to find a result set for that line, please right click on a JSON document",
+        "tabularError":
+          "Unable to find a result set for that line, please right click on a JSON document",
         "hide": "Hide",
         "expand": "Show",
         "collapseAll": "Collapse All",
         "expandAll": "Expand All",
         "numOfDocs": "Number of Documents: ",
-        "exceededMaxDocs": "Table View is currently limited to 500 documents at a time, please narrow your query."
+        "exceededMaxDocs":
+          "Table View is currently limited to 500 documents at a time, please narrow your query."
       },
       "terminal": {
         "execute": "Execute Command (Enter)"
@@ -116,28 +136,38 @@
         "rawView": "Raw Json",
         "explainView": "Explain",
         "suggestIndex": "Index Advisor",
-        "suggestIndexDescription": "// INDEX ADVICE: Some of these suggestions may improve your query performance.\n",
-        "noAdditionalIndexesRequired": "// Looks good, no additional indexes are required to improve your query!",
-        "addIndexCommandsPrompt": "// Use these commands to implement the above indexes.",
+        "suggestIndexDescription":
+          "// INDEX ADVICE: Some of these suggestions may improve your query performance.\n",
+        "noAdditionalIndexesRequired":
+          "// Looks good, no additional indexes are required to improve your query!",
+        "addIndexCommandsPrompt":
+          "// Use these commands to implement the above indexes.",
         "copySuggestedIndex": "Add Code Snippet",
         "executeAgain": "UI has fallen out of sync, please explain query again."
       },
       "step": {
-        "fetchFilter": "Documents from previous step were scanned looking for these criteria: {0}.",
+        "fetchFilter":
+          "Documents from previous step were scanned looking for these criteria: {0}.",
         "fetchIndex": "Retrieved documents from index fetch",
-        "collScanAll": "All documents in the collection where scanned. No filter condition was specified",
-        "collScanFilter": "Documents were scanned looking for these criteria: {0}. Consider creating an index on these attributes.",
+        "collScanAll":
+          "All documents in the collection where scanned. No filter condition was specified",
+        "collScanFilter":
+          "Documents were scanned looking for these criteria: {0}. Consider creating an index on these attributes.",
         "ixscan": "Index {0} was used to find matching values for {1}",
-        "sort": "Documents were sorted on : {0}. Consider creating index on ${0} to support the sort",
+        "sort":
+          "Documents were sorted on : {0}. Consider creating index on ${0} to support the sort",
         "limit": "Limited documents returned : {0}",
         "skip": "Skipped Forward : {0}",
         "singleShard": "A single shard {0} was involved in the query.",
         "generateKeys": "Generate keys for the next sort step",
-        "shardingFilter": "The previous operation was sent to one or more shards",
+        "shardingFilter":
+          "The previous operation was sent to one or more shards",
         "shardMergeSort": "Output from multiple shards was merged and sorted",
         "shardMerge": "Output from multiple shards was merged",
-        "keepMutations": "Merge in any documents which may have been incorrectly invalidated mid-query",
-        "subplan": "Selected one of multiple possible plans based on $or condition",
+        "keepMutations":
+          "Merge in any documents which may have been incorrectly invalidated mid-query",
+        "subplan":
+          "Selected one of multiple possible plans based on $or condition",
         "eof": "Nothing was found: maybe collection does not exist?",
         "andSorted": "Output from the previous steps was sort-merged",
         "sortMerge": "Output from multiple index lookups were merged",
@@ -163,7 +193,8 @@
       }
     },
     "details": {
-      "error": "Sorry, we were unable to create the view you asked for due to the following error: {0}",
+      "error":
+        "Sorry, we were unable to create the view you asked for due to the following error: {0}",
       "dddError": "No DefaultValues attribute available in DDD json file."
     },
     "editor": {
@@ -179,14 +210,18 @@
         "openFileTooltip": "Open File",
         "saveFileTooltip": "Save to File",
         "saveFileAsTooltip": "Save to Another File",
-        "addEditorError": "Cannot create new Editor for 'No Active Connection'.",
+        "addEditorError":
+          "Cannot create new Editor for 'No Active Connection'.",
         "connectionSuccess": "Connection Success!",
         "profileSwapError": "Could not swap Profiles.",
-        "profileSwapSslError": "Could not swap profiles due to SSL differences.",
+        "profileSwapSslError":
+          "Could not swap profiles due to SSL differences.",
         "notSupportedInUI": "`{0}` is not supported in browser UI",
         "cannotExecuteOnWelcome": "Cannot Execute on Welcome Page.",
-        "executionScriptFailed": "Execution of scripts failed, do you have an active connection?",
-        "possibleMultiLineCommand": "Could not detect a valid mongo command, please highlight multi-line commands."
+        "executionScriptFailed":
+          "Execution of scripts failed, do you have an active connection?",
+        "possibleMultiLineCommand":
+          "Could not detect a valid mongo command, please highlight multi-line commands."
       },
       "view": {
         "executionStopped": "Execution Stopped Successfully",
@@ -212,13 +247,18 @@
         "telemetryEnabled": "Send Telemetry Data to dbKoda",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
         "performancePanel": {
-          "preventDisplaySleep": "Prevent display sleep when panel is visible. Panel reopen needed",
-          "metricSmoothingWindow": "Metric smoothing window (number of samples)",
+          "preventDisplaySleep":
+            "Prevent display sleep when panel is visible. Panel reopen needed",
+          "metricSmoothingWindow":
+            "Metric smoothing window (number of samples)",
           "foregroundSamplingRate": "Foreground sampling rate (ms)",
           "backgroundSamplingRate": "Background sampling rate (ms)",
-          "historySize": "History size (number of samples). Panel reopen needed",
-          "historyBrushSize": "History default brush size (number of samples). Panel reopen needed",
-          "alarmDisplayingWindow": "Displaying alarms in last N ms. Panel reopen needed"
+          "historySize":
+            "History size (number of samples). Panel reopen needed",
+          "historyBrushSize":
+            "History default brush size (number of samples). Panel reopen needed",
+          "alarmDisplayingWindow":
+            "Displaying alarms in last N ms. Panel reopen needed"
         },
         "mongoCmd": "Mongo Path",
         "drillCmd": "Drill Path",
@@ -226,8 +266,10 @@
         "passwordStoreEnabled": "Password Store Enabled",
         "applyButton": "Apply",
         "remove_store_dialog": {
-          "question": "Are you sure you would like to disable the password store?",
-          "qualifier": "This will remove the store along with all stored passwords. These will need to be re-entered in order to connect.",
+          "question":
+            "Are you sure you would like to disable the password store?",
+          "qualifier":
+            "This will remove the store along with all stored passwords. These will need to be re-entered in order to connect.",
           "confirm": "Delete",
           "cancel": "Cancel"
         }
@@ -241,7 +283,8 @@
       },
       "savingDialog": {
         "title": "'{0}' has changes.",
-        "message": "Do you want to save these changes? All changes will be lost if you close this tab without saving.",
+        "message":
+          "Do you want to save these changes? All changes will be lost if you close this tab without saving.",
         "dontSave": "Don't Save",
         "cancel": "Cancel",
         "save": "Save"
@@ -268,7 +311,8 @@
         "port": ":",
         "defaultPort": "27017",
         "url": "URL",
-        "defaultUrl": "mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com",
+        "defaultUrl":
+          "mongodb://ec2-13-54-17-227.ap-southeast-2.compute.amazonaws.com",
         "database": "Database",
         "defaultDatabase": "admin",
         "ssl": "SSL",
@@ -314,10 +358,13 @@
         "passwordPlaceholder": "Enter Password...",
         "remotePassPrompt": "Please enter your password for SSH connection",
         "remotePassPlaceholder": "Enter SSH Password...",
-        "passPhrasePrompt": "Please enter your passphrase for SSH connection private key",
+        "passPhrasePrompt":
+          "Please enter your passphrase for SSH connection private key",
         "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
-        "passwordStoreInfo": "Tip: To avoid seeing this prompt every time you connect, you can setup a password store in Preferences",
-        "passwordStoreAdd": "This will add the password to your password store. You will not be asked again, but you can still change the password in the Edit Profile screen",
+        "passwordStoreInfo":
+          "Tip: To avoid seeing this prompt every time you connect, you can setup a password store in Preferences",
+        "passwordStoreAdd":
+          "This will add the password to your password store. You will not be asked again, but you can still change the password in the Edit Profile screen",
         "confirmButton": "Open",
         "cancelButton": "Cancel"
       },
@@ -443,7 +490,8 @@
         },
         "fields": {
           "label": "Fields <field>[,<field>]*",
-          "tooltip": "Comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
+          "tooltip":
+            "Comma separated list of field names (required for exporting CSV) e.g. -f \"name,age\""
         },
         "allDatabases": {
           "label": "All Database",
@@ -455,15 +503,18 @@
         },
         "assertExists": {
           "label": "assertExists",
-          "tooltip": "If specified, export fails if the collection does not exist (default: false)"
+          "tooltip":
+            "If specified, export fails if the collection does not exist (default: false)"
         },
         "query": {
           "label": "Query",
-          "tooltip": "Query filter, as a JSON string, e.g., '\\{x:\\{$gt:1\\}\\}'"
+          "tooltip":
+            "Query filter, as a JSON string, e.g., '\\{x:\\{$gt:1\\}\\}'"
         },
         "readPreference": {
           "label": "readPreference",
-          "tooltip": "Specify either a preference name or a preference json object"
+          "tooltip":
+            "Specify either a preference name or a preference json object"
         },
         "dumpDbUsersAndRoles": {
           "label": "dumpDbUsersAndRoles",
@@ -503,11 +554,13 @@
         },
         "maintainInsertionOrder": {
           "label": "maintainInsertionOrder",
-          "tooltip": "Make sure documents are restored in the order they appear in backup"
+          "tooltip":
+            "Make sure documents are restored in the order they appear in backup"
         },
         "numInsertionWorkers": {
           "label": "numInsertionWorkers",
-          "tooltip": "Number of insert operations to run concurrently per collection (1 by default) (default: 1)"
+          "tooltip":
+            "Number of insert operations to run concurrently per collection (1 by default) (default: 1)"
         },
         "stopOnError": {
           "label": "stopOnError",
@@ -515,7 +568,8 @@
         },
         "bypassDocumentValidation": {
           "label": "bypassDocumentValidation",
-          "tooltip": "Do not process Document validation rules during the restore"
+          "tooltip":
+            "Do not process Document validation rules during the restore"
         },
         "objcheck": {
           "label": "objcheck",
@@ -567,7 +621,8 @@
         },
         "upsertFields": {
           "label": "upsertFields",
-          "tooltip": "List of fields that specify query (matching) portion of upsert operation"
+          "tooltip":
+            "List of fields that specify query (matching) portion of upsert operation"
         },
         "noHeaderLine": {
           "label": "noHeaderLine",
@@ -585,44 +640,59 @@
       "support_bundle": {
         "button_title": "Lodge Bug",
         "toaster_confirm": "Support Bundle Created.",
-        "alert_text": "Pressing okay will cause the application to bundle up some logs about your experience into a compressed file, this file can then be uploaded to the dbKoda team to help solve your bug. This may take a small amount of time.",
-        "finished_text_default_one": "A Support Bundle has been created and is avaliable in your dbKoda directory;",
+        "alert_text":
+          "Pressing okay will cause the application to bundle up some logs about your experience into a compressed file, this file can then be uploaded to the dbKoda team to help solve your bug. This may take a small amount of time.",
+        "finished_text_default_one":
+          "A Support Bundle has been created and is avaliable in your dbKoda directory;",
         "finished_text_default_two": "  $HOMEPATH%\\\\.dbKoda on Windows",
         "finished_text_default_three": "  $HOME/.dbKoda on Mac and Linux.",
-        "finished_text_default_four": "Please select one of the options below to send us your support bundle. See ",
+        "finished_text_default_four":
+          "Please select one of the options below to send us your support bundle. See ",
         "directory_faq_link": "this link ",
         "finished_text_default_five": "for more information.",
         "forum": {
           "button": "Forum",
-          "default_subject": "dbKoda%20Bug%20-%20%7BYour%20Bug%20Title%20Here%7D"
+          "default_subject":
+            "dbKoda%20Bug%20-%20%7BYour%20Bug%20Title%20Here%7D"
         },
         "email": {
           "button": "Email",
-          "default_subject": "dbKoda%20Bug%20-%20%7BYour%20Bug%20Title%20Here%7D",
-          "default_body": "Please%20Describe%20your%20Bug%20or%20Issue%20Below%3A%0A%0A%0APlease%20Attach%20your%20Support%20Bundle%20to%20this%20document along with any%20other%20relevant%20files%20or%20photos.%20Support%20Bundle%20location%20is%20documented%20here%3A%20https%3A%2F%2Fdbkoda.useresponse.com%2Fknowledge-base%2Farticle%2Fhow-do-i-generate-a-support-bundle%0A%0A%0AKind%20Regards%2C%0A%7BYour%20Name%7D"
+          "default_subject":
+            "dbKoda%20Bug%20-%20%7BYour%20Bug%20Title%20Here%7D",
+          "default_body":
+            "Please%20Describe%20your%20Bug%20or%20Issue%20Below%3A%0A%0A%0APlease%20Attach%20your%20Support%20Bundle%20to%20this%20document along with any%20other%20relevant%20files%20or%20photos.%20Support%20Bundle%20location%20is%20documented%20here%3A%20https%3A%2F%2Fdbkoda.useresponse.com%2Fknowledge-base%2Farticle%2Fhow-do-i-generate-a-support-bundle%0A%0A%0AKind%20Regards%2C%0A%7BYour%20Name%7D"
         }
       }
     },
     "drill": {
       "connection_failed": "Create Drill Connection Failed",
-      "execution_failed": "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
+      "execution_failed":
+        "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
       "connection_not_exist": "Cant find connection",
-      "query_error": "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
-      "drill_binary_not_defined": "Drill Binary not found, Please configure it in the user settings panel",
-      "drill_timed_out": "Timeout Error: Currently we don't support running queries which may take longer then 90 seconds. ",
-      "drill_large_dataset": "Last query has yeilded more than 10000 rows. Only the first 10000 rows are being displayed. Kindly consider optimising your query.",
+      "query_error":
+        "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
+      "drill_binary_not_defined":
+        "Drill Binary not found, Please configure it in the user settings panel",
+      "drill_timed_out":
+        "Timeout Error: Currently we don't support running queries which may take longer then 90 seconds. ",
+      "drill_large_dataset":
+        "Last query has yeilded more than 10000 rows. Only the first 10000 rows are being displayed. Kindly consider optimising your query.",
       "open_drill_editor_failed": "Failed to Open Drill Editor.",
       "drill_editor_open_success": "Drill Editor created successfully!",
-      "java_not_found": "Apache Drill requires Java for execution. Please install Java and try again.",
+      "java_not_found":
+        "Apache Drill requires Java for execution. Please install Java and try again.",
       "drill_not_configured_title": "Drill Not Configured",
-      "drill_not_configured_message": "A path to Apache Drill has not been set in the configuration panel. Would you like us to setup drill for you now? This may take some time.",
+      "drill_not_configured_message":
+        "A path to Apache Drill has not been set in the configuration panel. Would you like us to setup drill for you now? This may take some time.",
       "downloading_drill": "Downloading Apache Drill...",
       "downloading_drill_controller": "Downloading the dbKoda Drill Plugin...",
       "drill_download_success": "Drill has been downloaded successfully.",
-      "drill_controller_download_success": "Drill Controller has been downloaded successfully.",
+      "drill_controller_download_success":
+        "Drill Controller has been downloaded successfully.",
       "drill_download_failed": "Error downloading drill, contact support.",
       "loadWarning": {
-        "warning": "Warning, opening a new SQL file will overwrite your current SQL editor, please open a new Drill instance to import, or save your current SQL query first.",
+        "warning":
+          "Warning, opening a new SQL file will overwrite your current SQL editor, please open a new Drill instance to import, or save your current SQL query first.",
         "continue": "Continue",
         "cancel": "Cancel"
       },
