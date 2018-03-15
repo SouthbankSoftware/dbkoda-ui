@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: chris
+ * @Date:   2017-09-27T10:39:11+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T13:53:18+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,13 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: chris
- * @Date:   2017-09-27T10:39:11+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-06T12:06:38+11:00
  */
 
 import React from 'react';
@@ -40,7 +39,7 @@ import MenuItem from './MenuItem';
 export default class Menu extends React.Component {
   @action.bound
   isItemSelected(itemName) {
-    return (this.props.selectedMenu === itemName);
+    return this.props.selectedMenu === itemName;
   }
 
   @action.bound
@@ -51,13 +50,25 @@ export default class Menu extends React.Component {
   render() {
     return (
       <div className="configMenu">
-        <MenuItem name="Application" isSelected={this.isItemSelected} changeMenu={this.changeMenuSelected}>
+        <MenuItem
+          name="Application"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
           <ApplicationIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
-        <MenuItem name="Paths" isSelected={this.isItemSelected} changeMenu={this.changeMenuSelected}>
+        <MenuItem
+          name="Paths"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
           <PathsIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
-        <MenuItem name="PasswordStore" isSelected={this.isItemSelected} changeMenu={this.changeMenuSelected}>
+        <MenuItem
+          name="PasswordStore"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
           <PasswordStoreIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
       </div>

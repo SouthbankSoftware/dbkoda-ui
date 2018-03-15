@@ -3,7 +3,7 @@
  * @Date:   2017-09-27T10:39:11+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-27T13:36:53+11:00
+ * @Last modified time: 2018-03-15T10:25:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,6 +24,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Checkbox } from '@blueprintjs/core';
@@ -41,9 +42,28 @@ export default class Application extends React.Component {
     this.props.updateValue(fieldName, fieldValue);
   }
 
+  onNumericalInputChange = e => {
+    const fieldName = e.target.id;
+    const rawValue = e.target.value;
+    let fieldValue;
+
+    if (rawValue === '') {
+      fieldValue = rawValue;
+    } else {
+      fieldValue = Number(rawValue);
+
+      if (_.isNaN(fieldValue)) {
+        fieldValue = rawValue;
+      }
+    }
+
+    this.props.updateValue(fieldName, fieldValue);
+  };
+
   render() {
     return (
-      <div className="formContentWrapper">
+      <div className="formContentWrapper ApplicationPreferences">
+        <div className="sectionHeader">General</div>
         <div className="form-row">
           {this.props.renderFieldLabel('telemetryEnabled')}
           <Checkbox
@@ -53,13 +73,68 @@ export default class Application extends React.Component {
             onChange={this.onCheckboxToggle}
           />
         </div>
+        <div className="sectionHeader">Performance Panel</div>
         <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel_preventDisplaySleep')}
+          {this.props.renderFieldLabel('performancePanel.preventDisplaySleep')}
           <Checkbox
             type="text"
-            id="performancePanel_preventDisplaySleep"
-            checked={this.props.settings.performancePanel_preventDisplaySleep}
+            id="performancePanel.preventDisplaySleep"
+            checked={this.props.settings.performancePanel.preventDisplaySleep}
             onChange={this.onCheckboxToggle}
+          />
+        </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('performancePanel.metricSmoothingWindow')}
+          <input
+            type="text"
+            id="performancePanel.metricSmoothingWindow"
+            value={this.props.settings.performancePanel.metricSmoothingWindow}
+            onChange={this.onNumericalInputChange}
+          />
+        </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('performancePanel.foregroundSamplingRate')}
+          <input
+            type="text"
+            id="performancePanel.foregroundSamplingRate"
+            value={this.props.settings.performancePanel.foregroundSamplingRate}
+            onChange={this.onNumericalInputChange}
+          />
+        </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('performancePanel.backgroundSamplingRate')}
+          <input
+            type="text"
+            id="performancePanel.backgroundSamplingRate"
+            value={this.props.settings.performancePanel.backgroundSamplingRate}
+            onChange={this.onNumericalInputChange}
+          />
+        </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('performancePanel.historySize')}
+          <input
+            type="text"
+            id="performancePanel.historySize"
+            value={this.props.settings.performancePanel.historySize}
+            onChange={this.onNumericalInputChange}
+          />
+        </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('performancePanel.historyBrushSize')}
+          <input
+            type="text"
+            id="performancePanel.historyBrushSize"
+            value={this.props.settings.performancePanel.historyBrushSize}
+            onChange={this.onNumericalInputChange}
+          />
+        </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('performancePanel.alarmDisplayingWindow')}
+          <input
+            type="text"
+            id="performancePanel.alarmDisplayingWindow"
+            value={this.props.settings.performancePanel.alarmDisplayingWindow}
+            onChange={this.onNumericalInputChange}
           />
         </div>
       </div>

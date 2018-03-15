@@ -2,7 +2,7 @@
  * @Author: mike
  * @Date:   2017-03-28 16:13:50
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-10T16:10:53+11:00
+ * @Last modified time: 2018-03-14T13:35:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -86,9 +86,13 @@ export default class TelemetryConsent extends React.Component {
   @action.bound
   handleSwitch() {
     if (this.props.config.settings.telemetryEnabled === false) {
-      this.props.config.settings.telemetryEnabled = true;
+      this.props.config.patch({
+        telemetryEnabled: true
+      });
     } else {
-      this.props.config.settings.telemetryEnabled = false;
+      this.props.config.patch({
+        telemetryEnabled: false
+      });
       if (IS_ELECTRON) {
         window.require('electron').shell.beep();
       }

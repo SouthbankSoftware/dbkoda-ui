@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-08T15:07:16+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T13:31:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -78,8 +78,9 @@ class App extends React.Component {
 
   @action.bound
   closeOptIn(bool) {
-    this.props.config.settings.telemetryEnabled = bool;
-    this.props.config.settings.save();
+    this.props.config.patch({
+      telemetryEnabled: bool
+    });
     this.props.store.layout.optInVisible = false;
   }
 

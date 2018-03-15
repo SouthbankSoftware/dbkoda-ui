@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: chris
+ * @Date:   2017-09-27T10:39:11+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T17:50:54+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,13 +22,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- * @Author: chris
- * @Date:   2017-09-27T10:39:11+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-17T14:46:50+11:00
  */
 
 import React from 'react';
@@ -30,9 +29,7 @@ import { observer } from 'mobx-react';
 import { Button } from '@blueprintjs/core';
 import path from 'path';
 
-const { dialog, BrowserWindow } = IS_ELECTRON
-  ? window.require('electron').remote
-  : {};
+const { dialog, BrowserWindow } = IS_ELECTRON ? window.require('electron').remote : {};
 
 @observer
 export default class Paths extends React.Component {
@@ -44,21 +41,22 @@ export default class Paths extends React.Component {
   onPathEntered(e) {
     const fieldName = e.target.id;
     const fieldValue = e.target.value;
-    this.props.updateValue(fieldName, fieldValue);
+    this.props.updateValue(fieldName, fieldValue || null);
   }
 
   openPath(fieldName) {
-    const existingPath = (this.props.settings[fieldName]) ?
-      path.resolve(this.props.settings[fieldName]) : '';
-    const dlgProperties = (fieldName == 'drillCmd') ? 'openDirectory' : 'openFile';
+    const existingPath = this.props.settings[fieldName]
+      ? path.resolve(this.props.settings[fieldName])
+      : '';
+    const dlgProperties = fieldName == 'drillCmd' ? 'openDirectory' : 'openFile';
     if (IS_ELECTRON) {
       dialog.showOpenDialog(
         BrowserWindow.getFocusedWindow(),
         {
           defaultPath: existingPath,
-          properties: [dlgProperties],
+          properties: [dlgProperties]
         },
-        (fileName) => {
+        fileName => {
           if (!fileName) {
             return;
           }
@@ -69,25 +67,41 @@ export default class Paths extends React.Component {
   }
 
   render() {
-    /*
-    Add this back in after drill is complete
-    <div className="form-row">
-      { this.props.renderFieldLabel('drillCmd') }
-      <input type="text" id="drillCmd" value={this.props.settings.drillCmd} onChange={this.onPathEntered} />
-      <Button className="formButton" onClick={() => { this.openPath('drillCmd'); }}>Browse</Button>
-    </div>
-    */
     return (
       <div className="formContentWrapper">
         <div className="form-row">
-          { this.props.renderFieldLabel('mongoCmd') }
-          <input type="text" id="mongoCmd" value={this.props.settings.mongoCmd} onChange={this.onPathEntered} />
-          <Button className="formButton" onClick={() => { this.openPath('mongoCmd'); }}>Browse</Button>
+          {this.props.renderFieldLabel('mongoCmd')}
+          <input
+            type="text"
+            id="mongoCmd"
+            value={this.props.settings.mongoCmd || ''}
+            onChange={this.onPathEntered}
+          />
+          <Button
+            className="formButton"
+            onClick={() => {
+              this.openPath('mongoCmd');
+            }}
+          >
+            Browse
+          </Button>
         </div>
         <div className="form-row">
-          { this.props.renderFieldLabel('drillCmd') }
-          <input type="text" id="drillCmd" value={this.props.settings.drillCmd} onChange={this.onPathEntered} />
-          <Button className="formButton" onClick={() => { this.openPath('drillCmd'); }}>Browse</Button>
+          {this.props.renderFieldLabel('drillCmd')}
+          <input
+            type="text"
+            id="drillCmd"
+            value={this.props.settings.drillCmd || ''}
+            onChange={this.onPathEntered}
+          />
+          <Button
+            className="formButton"
+            onClick={() => {
+              this.openPath('drillCmd');
+            }}
+          >
+            Browse
+          </Button>
         </div>
       </div>
     );

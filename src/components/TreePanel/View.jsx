@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-05T15:38:23+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T16:57:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { reaction, runInAction, observable, action, toJS } from 'mobx';
+import { reaction, runInAction, observable, action } from 'mobx';
 import { Classes, ITreeNode, Tree } from '@blueprintjs/core';
 import { Broker, EventType } from '~/helpers/broker';
 import {
@@ -544,10 +544,9 @@ export default class TreeView extends React.Component {
 
   @action.bound
   saveDrillCmd(cmd, path) {
-    const newSettings = observable(toJS(this.props.config.settings));
-    newSettings[cmd] = path;
-    this.props.config.settings = observable(toJS(newSettings));
-    this.props.config.save();
+    this.props.config.patch({
+      [cmd]: path
+    });
   }
 
   checkForDrill = () => {

@@ -4,8 +4,8 @@
  * @Author: christrott
  * @Date:   2018-02-07T10:41:12+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   christrott
- * @Last modified time: 2018-02-07T10:43:52+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T16:57:27+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,7 +26,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { action, runInAction } from 'mobx';
+import { action } from 'mobx';
 import _ from 'lodash';
 import Mousetrap from 'mousetrap';
 import { featherClient } from '~/helpers/feathers';
@@ -59,8 +59,9 @@ export default class Password {
     console.log('Due to too many login attempts, your password store has been reset!');
     this.closePasswordDialog();
     this.showResetDialog();
-    this.config.settings.passwordStoreEnabled = false;
-    this.config.save();
+    this.config.patch({
+      passwordStoreEnabled: false
+    });
   }
 
   @action.bound
@@ -134,12 +135,11 @@ export default class Password {
       .then(missingProfileIds => {
         console.log(`missingProfileIds: ${missingProfileIds}`);
         this.store.password.missingProfiles = missingProfileIds;
-        runInAction(() => {
-          if (!this.config.settings.passwordStoreEnabled) {
-            this.config.settings.passwordStoreEnabled = true;
-            this.config.save();
-          }
-        });
+        if (!this.config.settings.passwordStoreEnabled) {
+          this.config.patch({
+            passwordStoreEnabled: true
+          });
+        }
         this.closePasswordDialog();
       })
       .catch(error => {
@@ -165,9 +165,8 @@ export default class Password {
       .service('master-pass')
       .remove()
       .then(() => {
-        runInAction(() => {
-          this.config.settings.passwordStoreEnabled = false;
-          this.config.save();
+        this.config.patch({
+          passwordStoreEnabled: false
         });
       })
       .catch(error => {
