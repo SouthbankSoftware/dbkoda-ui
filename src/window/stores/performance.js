@@ -38,8 +38,10 @@ const Globalize = require('globalize'); // doesn't work well with import
 global.Globalize = Globalize;
 const { language, region } = Globalize.locale().attributes;
 global.locale = `${language}-${region}`;
-global.globalString = (path, ...params) => Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) => Globalize.numberFormatter(config)(value);
+global.globalString = (path, ...params) =>
+  Globalize.messageFormatter(path)(...params);
+global.globalNumber = (value, config) =>
+  Globalize.numberFormatter(config)(value);
 
 export default class Store {
   config = null;
@@ -63,10 +65,19 @@ export default class Store {
       }
       if (this.profileId === args.profileId) {
         if (args.command === 'mw_initData') {
-          this.config = restore(args.configObject, { deserializer, postDeserializer });
-          this.performancePanel = restore(args.dataObject, { deserializer, postDeserializer });
+          this.config = restore(args.configObject, {
+            deserializer,
+            postDeserializer
+          });
+          this.performancePanel = restore(args.dataObject, {
+            deserializer,
+            postDeserializer
+          });
           attachToMobx(this.performancePanel);
-        } else if (args.command === 'mw_updateData' && this.performancePanel !== null) {
+        } else if (
+          args.command === 'mw_updateData' &&
+          this.performancePanel !== null
+        ) {
           const payload = args.dataObject;
           handleNewData(payload, this.performancePanel);
         } else if (args.command === 'mw_toaster') {
@@ -80,12 +91,17 @@ export default class Store {
   };
 
   @action.bound
-  sendCommandToMainProcess = (command) => {
+  sendCommandToMainProcess = command => {
     ipcRenderer.send('performance', { command, profileId: this.profileId });
   };
 
   @action.bound
   resetHighWaterMark = () => {
     this.sendCommandToMainProcess('pw_resetHighWaterMark');
+  };
+
+  @action.bound
+  resetPerformancePanel = () => {
+    this.sendCommandToMainProcess('pw_resetPerformancePanel');
   };
 }

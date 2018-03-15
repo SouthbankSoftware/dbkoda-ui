@@ -7,6 +7,8 @@
     },
     "performance": {
       "title": "Performance Panel",
+      "unresponsive":
+        "Apologies but we have lost the connection to your Mongo Server and could not recover, please try closing this window, closing the profile and reopening it to recreate the connection.",
       "section_headers": {
         "os": "OS",
         "mongo": "Mongo"

@@ -92,6 +92,8 @@ class PerformanceWindow extends React.Component {
 
   render() {
     const { store } = this.props;
+    console.log(store.resetPerformancePanel);
+    console.log(store.resetHighWaterMark);
 
     return (
       <div>
@@ -100,6 +102,10 @@ class PerformanceWindow extends React.Component {
             performancePanel={store.performancePanel}
             onClose={null}
             resetHighWaterMark={store.resetHighWaterMark}
+            resetPerformancePanel={() => {
+              this.setState({ isUnresponsive: false });
+              store.resetPerformancePanel();
+            }}
             isUnresponsive={this.state.isUnresponsive}
           />
         ) : (

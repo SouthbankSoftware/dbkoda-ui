@@ -610,9 +610,7 @@ export default class PerformancePanelApi {
   }
 
   @action.bound
-  _focusPerformancePanelExternalWindow(
-    profileId: UUID
-  ) {
+  _focusPerformancePanelExternalWindow(profileId: UUID) {
     this._sendMsgToPerformanceWindow({
       command: 'mw_focusWindow',
       profileId
@@ -651,6 +649,8 @@ export default class PerformancePanelApi {
         });
       } else if (args.command === 'pw_resetHighWaterMark') {
         this.resetHighWaterMark(args.profileId);
+      } else if (args.command === 'pw_resetPerformancePanel') {
+        this.resetPerformancePanel(args.profileId);
       }
     }
   }
@@ -805,9 +805,7 @@ export default class PerformancePanelApi {
         this._removePerformancePanel(profileId);
       } else if (to === performancePanelStatuses.external) {
         // case added to bring the performance panel to the front.
-        this._focusPerformancePanelExternalWindow(
-          profileId
-        );
+        this._focusPerformancePanelExternalWindow(profileId);
       }
     }
   }
@@ -818,6 +816,15 @@ export default class PerformancePanelApi {
       .catch(err => {
         this._handleError(profileId, err);
       });
+  };
+
+  resetPerformancePanel = (profileId: UUID) => {
+    console.log('Stopping perf panel...');
+    this._stopPerformancePanel(profileId);
+    setTimeout(() => {
+      console.log('Running perf panel...');
+      this._runPerformancePanel(profileId, 'external');
+    }, 1000);
   };
 
   changeSamplingRate = (profileId: UUID, newSamplingRate: number) => {

@@ -142,10 +142,12 @@ class App extends React.Component {
               )
             }
             resetHighWaterMark={() =>
-              api.resetHighWaterMark(
-                store.performancePanel.profileId
-              )
+              api.resetHighWaterMark(store.performancePanel.profileId)
             }
+            resetPerformancePanel={() => {
+              api.resetPerformancePanel(store.performancePanel.profileId);
+              console.log('!!!');
+            }}
           />
         ) : null}
         {store.drawer && store.drawer.drawerChild == DrawerPanes.PROFILE ? (

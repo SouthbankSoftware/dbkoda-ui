@@ -44,6 +44,7 @@ type Props = {
   performancePanel: PerformancePanelState,
   onClose: () => void,
   resetHighWaterMark: (profileId: UUID) => void,
+  resetPerformancePanel: (profileId: UUID) => void,
   isUnresponsive: boolean
 };
 
@@ -84,11 +85,19 @@ export default class PerformancePanel extends React.Component<Props> {
       performancePanel: { widgets, rowHeight, rows, cols, profileAlias },
       onClose,
       resetHighWaterMark,
+      resetPerformancePanel,
       isUnresponsive
     } = this.props;
 
     return (
       <div className="PerformancePanel">
+        {isUnresponsive && (
+          <div className="unresponsive">
+            <span className="unresponsiveText">
+              {globalString('performance/unresponsive')}
+            </span>
+          </div>
+        )}
         <div className="performanceNavBar">
           <div className="performanceTitleBar">
             <div className="title">{globalString('performance/title')}</div>
@@ -96,10 +105,28 @@ export default class PerformancePanel extends React.Component<Props> {
               {profileAlias}
               {isUnresponsive && ' (Not Responding)'}
             </div>
-            {resetHighWaterMark && (
+            {resetHighWaterMark &&
+              !isUnresponsive && (
+                <Tooltip
+                  className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                  content="Reset High Water Mark"
+                  hoverOpenDelay={1000}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.BOTTOM}
+                >
+                  <Button
+                    className="reset-button pt-button pt-intent-primary"
+                    text="Reset HWM"
+                    onClick={resetHighWaterMark}
+                  />
+                </Tooltip>
+              )}
+            {// @TODO -> 0.10.1 fix to add a reset connections button.
+            false && (
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content="Reset High Water Mark"
+                content="Reset Connections."
                 hoverOpenDelay={1000}
                 inline
                 intent={Intent.PRIMARY}
@@ -107,8 +134,12 @@ export default class PerformancePanel extends React.Component<Props> {
               >
                 <Button
                   className="reset-button pt-button pt-intent-primary"
-                  text="Reset HWM"
-                  onClick={resetHighWaterMark}
+                  text="Reset Connections"
+                  onClick={() => {
+                    console.debug('Reset Performance Panel Clicked...');
+                    // $FlowFixMe
+                    resetPerformancePanel();
+                  }}
                 />
               </Tooltip>
             )}

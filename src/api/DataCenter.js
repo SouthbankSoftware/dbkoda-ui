@@ -86,6 +86,7 @@ export default class DataCenter {
         'hasPerformancePanel',
         'transformPerformancePanel',
         'resetHighWaterMark',
+        'resetPerformancePanel',
         'changeSamplingRate',
         'showToasterInPerformanceWindow'
       ]),
