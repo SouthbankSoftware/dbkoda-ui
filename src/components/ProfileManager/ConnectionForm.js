@@ -114,7 +114,7 @@ export class ConnectionForm extends JsonForm {
             (this.api.getProfiles().size + 1);
         } else if (field.$('username').value.length > 0) {
           aliasField.value =
-            field.$('username').get('value') +
+            field.$('username').value +
             '@' +
             field.$('host').value +
             ':' +
