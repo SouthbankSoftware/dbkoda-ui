@@ -166,14 +166,12 @@ export default class Analytics extends React.Component {
         .then(result => {
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
-            'Ping',
-            'daysSinceFirstPing',
+            'Ping.daysSinceFirstPing',
             daysSince
           );
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
-            'Ping',
-            'daysSinceFolderCreated',
+            'Ping.daysSinceFolderCreated',
             result.daysSinceCreation
           );
         })
