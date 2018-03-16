@@ -3,7 +3,7 @@
  * @Date:   2017-11-20T14:07:16+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-05T12:46:21+11:00
+ * @Last modified time: 2018-03-16T10:55:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -53,7 +53,22 @@ module.exports = merge(
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader']
+            use: [
+            {
+                loader: 'css-loader',
+                options: {
+                    url: false,
+                    minimize: true,
+                    sourceMap: false
+                }
+            },
+            {
+                loader: 'sass-loader',
+                options: {
+                    sourceMap: false
+                }
+            }
+          ]
           })
         }
       ]
@@ -71,8 +86,17 @@ module.exports = merge(
         filename: 'commons.js',
         chunks: ['main', 'performance']
       }),
-      new ExtractTextPlugin('[name].css'),
-      new OptimizeCssAssetsPlugin(),
+      new ExtractTextPlugin({
+        filename: '[name].css',
+        allChunks: true
+      }),
+      new OptimizeCssAssetsPlugin({
+        cssProcessor: require('cssnano'),
+        cssProcessorOptions: {
+          safe: true,
+          discardComments: { removeAll: true }
+        }
+      }),
       new UglifyJsPlugin({
         parallel: true,
         sourceMap: ENABLE_SOURCE_MAP,
