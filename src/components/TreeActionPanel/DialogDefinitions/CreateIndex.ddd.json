@@ -95,7 +95,7 @@
     {
       "name": "partialFilterExpression",
       "label": "Partial Filter",
-      "type": "Text",
+      "type": "CodeMirror",
       "readOnly": false,
       "tooltip": "filter condition that limits index scope"
     },

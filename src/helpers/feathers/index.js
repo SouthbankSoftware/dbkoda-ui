@@ -1,4 +1,7 @@
-/*
+/**
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T10:51:27+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,11 +19,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:44:52+11:00
  */
 
 import load from 'little-loader';
@@ -89,12 +87,23 @@ class FeatherClient {
       Broker.emit(EventType.STATS_DATA(profileId), payload);
     });
     this.statsService.on('error', ({ profileId, payload }) => {
-      Broker.emit(EventType.TERMINAL_ERROR(profileId), payload);
+      Broker.emit(EventType.STATS_ERROR(profileId), payload);
+    });
+
+    this.passwordService = this.service('master-pass');
+    this.passwordService.on(EventType.MASTER_PASSWORD_REQUIRED, ({ method }) => {
+      Broker.emit(EventType.MASTER_PASSWORD_REQUIRED, method);
+    });
+    this.passwordService.on(EventType.PASSWORD_STORE_RESET, () => {
+      Broker.emit(EventType.PASSWORD_STORE_RESET, {});
     });
 
     this.performanceSrv.on('performance-output', ({output}) => {
       console.log('get performance output ', output);
     });
+
+    this.loggerService = this.service('logger');
+    this.configService = this.service('config');
   }
 
   service(service) {

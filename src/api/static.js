@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T09:42:43+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   chris
- * @Last modified time: 2017-08-11T16:06:02+10:00
+ * @Last modified time: 2018-02-28T11:58:07+10:00
  */
 
 import { Doc } from 'codemirror';
@@ -43,7 +43,7 @@ export default class StaticApi {
       const ParseWorker = require('worker-loader!./workers/jsonParse.js'); // eslint-disable-line
       const parseWorker = new ParseWorker();
       parseWorker.postMessage({ cmd: 'start', jsonStr });
-      parseWorker.addEventListener('message', (e) => {
+      parseWorker.addEventListener('message', e => {
         if (e.data[1]) {
           reject(e.data[1]);
         } else {
@@ -56,11 +56,11 @@ export default class StaticApi {
   static parseTableJson(jsonStr, lines, cm, outputId) {
     return new Promise((resolve, reject) => {
       this.findResultSet(jsonStr, lines, cm, outputId)
-        .then((res) => {
+        .then(res => {
           const ParseWorker = require('worker-loader!./workers/jsonParse.js'); // eslint-disable-line
           const parseWorker = new ParseWorker();
           parseWorker.postMessage({ cmd: 'start', jsonStr: res });
-          parseWorker.addEventListener('message', (e) => {
+          parseWorker.addEventListener('message', e => {
             if (e.data[1]) {
               reject(e.data[1]);
             } else {
@@ -68,14 +68,15 @@ export default class StaticApi {
             }
           });
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
+          logToMain('error', 'Error while parsing JSON:' + error);
         });
     });
   }
 
   static findResultSet(jsonStr, lines, cm, outputId) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const linesAbove = _.clone(lines);
       const linesBelow = _.clone(lines);
       const documentsAbove = [];
@@ -90,7 +91,7 @@ export default class StaticApi {
           console.warn('Initial: ', jsonStr);
           jsonStr = jsonStr.replace(/^.*\);?/gm, '');
           console.warn(
-            'Right click action returned invalid result, tried replacing.',
+            'Right click action returned invalid result, tried replacing.'
           );
           console.warn('Replaced: ', jsonStr);
         }
@@ -106,7 +107,7 @@ export default class StaticApi {
           linesBelow.end + 1,
           1,
           linesBelow,
-          cm,
+          cm
         );
         if (!docBelow.match(/^ *{/gm)) {
           // Probably not Valid.
@@ -126,7 +127,7 @@ export default class StaticApi {
           NewToaster.show({
             message: globalString('output/editor/exceededMaxDocs'),
             className: 'warning',
-            iconName: 'pt-icon-thumbs-down',
+            iconName: 'pt-icon-thumbs-down'
           });
         }
       }
@@ -141,7 +142,7 @@ export default class StaticApi {
           linesAbove.start - 1,
           -1,
           linesAbove,
-          cm,
+          cm
         );
         if (
           docAbove.match(/.*;$/gm) ||
@@ -169,7 +170,7 @@ export default class StaticApi {
           NewToaster.show({
             message: globalString('output/editor/exceededMaxDocs'),
             className: 'warning',
-            iconName: 'pt-icon-thumbs-down',
+            iconName: 'pt-icon-thumbs-down'
           });
         }
       }
@@ -197,7 +198,7 @@ export default class StaticApi {
     // Skip these lines to continue reading result set
     if (
       ['dbKoda>', 'it', 'dbKoda>it', '', 'Type "it" for more'].includes(
-        startLine,
+        startLine
       )
     ) {
       if (!direction) {
@@ -208,7 +209,7 @@ export default class StaticApi {
         lineNumber + direction,
         direction,
         lines,
-        cm,
+        cm
       );
     }
     if (!startLine || startLine.indexOf('dbKoda>') !== -1) {
@@ -224,7 +225,7 @@ export default class StaticApi {
         console.info(
           'Tried to parse a non-existing line at',
           lineNumber,
-          ' + or - 1 : Ending parsing at this line.',
+          ' + or - 1 : Ending parsing at this line.'
         );
         lines.start = lineNumber;
         return this._getLineText(cm, lineNumber, 1, lines);
@@ -307,5 +308,29 @@ export default class StaticApi {
       line += this._getLineText(cm, lineNumber + direction, direction, lines);
     }
     return line;
+  }
+
+  static convertJsonToCsv(jsonArray) {
+    let fields;
+    let headings = [];
+    const csv = jsonArray.map((row) => {
+      fields = Object.keys(row);
+      headings = _.union(headings, fields);
+      const newRow = fields.map((fieldName) => {
+        if (typeof row[fieldName] === 'string' ||
+            typeof row[fieldName] === 'number' ||
+            typeof row[fieldName] === 'boolean'
+          ) {
+          console.log(`${fieldName}: ${JSON.stringify(row[fieldName])}`);
+          return JSON.stringify(row[fieldName]);
+        }
+        console.log(`${fieldName}: "${JSON.stringify(row[fieldName]).replace(/"/g, '\'')}"`);
+        return `"${JSON.stringify(row[fieldName]).replace(/"/g, '\'')}"`;
+      }).join(',').concat('\r\n');
+      return newRow;
+    });
+    console.log(headings.join(','));
+    console.log(csv);
+    return `${headings.join(',')}\r\n${csv.join('')}`;
   }
 }

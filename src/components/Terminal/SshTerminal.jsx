@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T09:38:57+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-08T15:28:59+11:00
+ * @Last modified time: 2018-02-16T13:34:26+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
  */
 
 import * as React from 'react';
-import Xterm from 'xterm/build/xterm';
+import { Terminal as Xterm } from 'xterm';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
 // $FlowFixMe

@@ -1,0 +1,109 @@
+/**
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2018-02-21T14:36:23+11:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-27T14:25:56+11:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../../../../styles/_defaultTheme.scss';
+
+$container-padding: 5px;
+$header-height: 30px;
+$background-colour: #161616;
+$primary-colour: $defaultChartPanelText;
+$primary-colour-lighten-30: lighten($primary-colour, 30);
+$alarm-yellow: lighten(#e8e471, 0);
+$alarm-red: lighten(#913856, 0);
+
+.AlarmViewPopover {
+  opacity: 0.95;
+}
+
+.AlarmViewPopoverContent {
+  padding: $container-padding;
+  text-shadow: none;
+  background-color: $background-colour;
+  color: $primary-colour;
+
+  .header {
+    height: $header-height;
+    display: flex;
+    line-height: $header-height;
+    font-size: 16px;
+    padding-left: 10px;
+    border-bottom: 1px darken($primary-colour, 10) solid;
+    color: $primary-colour-lighten-30;
+
+    svg {
+      margin-right: 10px;
+    }
+  }
+
+  .messageList {
+    outline: none;
+
+    .row {
+      padding: 5px 0 5px 10px;
+      display: flex;
+
+      .status {
+        margin-right: 12px;
+      }
+
+      .message {
+        color: $primary-colour-lighten-30;
+        line-height: 18px;
+      }
+    }
+  }
+
+  .messageList::-webkit-scrollbar {
+    background-color: $background-colour !important;
+    width: 5px;
+  }
+
+  .messageList::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: $background-colour !important;
+  }
+
+  .messageList::-webkit-scrollbar-thumb {
+    background-color: lighten($background-colour, 10) !important;
+  }
+}
+
+.AlarmLevelIcon.green {
+  fill: #42bb6d;
+}
+
+.AlarmLevelIcon.yellow {
+  fill: $alarm-yellow;
+}
+
+.AlarmLevelIcon.red {
+  fill: $alarm-red;
+}
+
+:export {
+  headerHeight: $header-height;
+  containerPadding: $container-padding;
+}

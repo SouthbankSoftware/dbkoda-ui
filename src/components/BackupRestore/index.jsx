@@ -1,7 +1,7 @@
 /**
  * Created by joey on 19/7/17
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:29:22+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-14T15:03:15+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -64,7 +64,7 @@ export class BackupRestore extends React.Component {
     this.props.store.setDrawerChild(DrawerPanes.DEFAULT);
     const editorId = this.props.store.treeActionPanel.treeActionEditorId;
     const editor = this.getEditorById(editorId);
-    if (editor) {
+    if (editor && editor.executing === false) {
       this.props.api.removeEditor(editor);
     }
   }

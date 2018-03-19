@@ -20,8 +20,8 @@
  * @Author: chris
  * @Date:   2017-10-17T12:21:59+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-17T14:48:13+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T20:50:27+11:00
  */
 @import '../../../styles/_defaultTheme.scss';
 
@@ -34,67 +34,140 @@ $menuColor4: #837395;
   display: flex;
   flex-direction: row;
   margin-top: 25px;
+
   .loadingWrapper {
     position: relative;
     float: right;
     width: 50px;
     height: 50px;
   }
+
   .configLeftMenuWrapper .configMenu {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     width: 250px;
     border-right: 1px solid $selectDarkBorderColor;
+
     .menuItem {
       width: 100px;
       height: 100px;
     }
+
     .menuItem:hover {
       background-color: darken(#2e3042, 15%);
     }
+
     .pt-button {
       width: 100px;
       height: 100px;
       border-radius: 0;
       opacity: 0.5;
+
       .dbKodaSVG {
         width: 80px;
         height: 80px;
       }
     }
+
     .menuItem.selected .pt-button {
       opacity: 1.0;
     }
+
     .menuItem .menuItemApplication {
       background-color: $menuColor1;
-      .st0{fill:#CCD1D9;}
-      .st1{fill:#E6E9ED;}
-      .st2{fill:#656D78;}
-      .st3{fill:#434A54;}
-      .st4{fill:#FC6E51;}
-      .st5{fill:#AC92EB;}
-      .st6{fill:#48CFAD;}
-      .st7{fill:#5D9CEC;}
-      .st8{fill:#FFCE54;}
-      .st9{fill:#ED5564;}
+
+      .st0 {
+        fill: #CCD1D9;
+      }
+
+      .st1 {
+        fill: #E6E9ED;
+      }
+
+      .st2 {
+        fill: #656D78;
+      }
+
+      .st3 {
+        fill: #434A54;
+      }
+
+      .st4 {
+        fill: #FC6E51;
+      }
+
+      .st5 {
+        fill: #AC92EB;
+      }
+
+      .st6 {
+        fill: #48CFAD;
+      }
+
+      .st7 {
+        fill: #5D9CEC;
+      }
+
+      .st8 {
+        fill: #FFCE54;
+      }
+
+      .st9 {
+        fill: #ED5564;
+      }
     }
+
     .menuItem .menuItemPaths {
       background-color: $menuColor2;
-      .st0{fill:#FABE5C;}
-      .st1{fill:#5C6F74;}
-      .st2{fill:#203F49;}
-      .st3{fill:#FBDF65;}
+
+      .st0 {
+        fill: #FABE5C;
+      }
+
+      .st1 {
+        fill: #5C6F74;
+      }
+
+      .st2 {
+        fill: #203F49;
+      }
+
+      .st3 {
+        fill: #FBDF65;
+      }
     }
-    .menuItem .menuItem2 {
+
+    .menuItem .menuItemPasswordStore {
       background-color: $menuColor3;
+
+      .st0 {
+        fill: #FFFFFF;
+      }
+
+      .st1 {
+        fill: #EFCE4A;
+      }
+
+      .st2 {
+        fill: #D6A416;
+      }
+
+      svg {
+        width: 65px;
+        height: 65px;
+      }
     }
+
     .menuItem .menuItem3 {
       background-color: $menuColor4;
     }
   }
+
   .configRightFormWrapper {
     margin-left: 50px;
     width: 100%;
+
     button.pt-button.formButton {
       margin-left: 5px;
       font-weight: lighter;
@@ -106,13 +179,21 @@ $menuColor4: #837395;
       border: 1px solid $connectionButtonBorderColour;
       box-shadow: unset;
     }
+
     .formContentWrapper {
       display: table;
       width: 100%;
+
+      .sectionHeader {
+        font-size: 20px;
+        margin: 8px 0 13px 0;
+      }
+
       .form-row {
         display: table-row;
         margin: 12px;
         height: 35px;
+
         label {
           display: table-cell;
           font-size: 12pt;
@@ -120,16 +201,19 @@ $menuColor4: #837395;
           width: 30%;
           max-width: max-content;
         }
+
         input {
           display: table-cell;
           width: 60%;
         }
+
         .pt-checkbox {
           font-size: 10pt;
           font-weight: lighter;
           color: $connectionHeadingsFontColour !important;
           text-align: left;
           margin: 0;
+
           span.pt-control-indicator {
             margin: 5px;
             font-size: unset;
@@ -145,21 +229,36 @@ $menuColor4: #837395;
             background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
             border: 1px solid $connectionCheckboxColour;
           }
+
           span.pt-control-indicator:hover {
             background-color: $connectionCheckboxBackgroundColourHover;
           }
         }
       }
+
       .unsavedFileIndicator {
         opacity: 1;
         top: 0;
         float: right;
       }
     }
+
+    .formContentWrapper.ApplicationPreferences {
+      .form-row {
+        height: 50px;
+
+        label {
+          vertical-align: text-top;
+          width: 20%;
+        }
+      }
+    }
   }
 }
+
 .configContentFooter {
   width: 75%;
+
   .saveBtn {
     float: right;
     font-weight: lighter;

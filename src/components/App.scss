@@ -159,7 +159,8 @@ ul.pt-menu {
   }
 }
 
-div.savingDialog {
+div.savingDialog,
+div.confirmDialog {
   div.dialogButtons {
     font-family: Arial, Helvetica, sans-serif;
     h4 {
@@ -177,10 +178,10 @@ div.savingDialog {
       border: none;
       color: $buttonTextColour;
       background-color: $buttonSuccessBackground;
-      border-top-left-radius: 1em;
+      /* border-top-left-radius: 1em;
       border-bottom-left-radius: 1em;
       border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em;
+      border-bottom-right-radius: 1em; */
     }
     a.saveButton:hover {
       background: unset;
@@ -197,10 +198,10 @@ div.savingDialog {
       border: 1px solid $connectionButtonBorderColour;
       box-shadow: unset !important;
       -webkit-appearance: unset;
-      border-top-left-radius: 1em;
+      /* border-top-left-radius: 1em;
       border-bottom-left-radius: 1em;
       border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em;
+      border-bottom-right-radius: 1em; */
     }
     a.cancelButton:hover {
       background: none;
@@ -217,10 +218,10 @@ div.savingDialog {
       background-color: $buttonDangerBackground;
       box-shadow: unset;
       -webkit-appearance: unset;
-      border-top-left-radius: 1em;
+      /* border-top-left-radius: 1em;
       border-bottom-left-radius: 1em;
       border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em;
+      border-bottom-right-radius: 1em; */
     }
     a.dontSaveButton:hover {
       background: none;
@@ -250,12 +251,22 @@ div.savingDialog {
 }
 
 .pt-dialog {
-
+  .pt-dialog-header {
+    background-color: $navbarLeftBackground;
+    h5 {
+      color: $defaultFontColor;
+    }
+  }
   .dialogContent {
+    color: $defaultFontColor;
     padding: 20px;
     width: 100%;
     .pt-input {
       width: 100%;
+      margin: 0 0 15px 0;
+    }
+    .dialogValidationError {
+      color: $toastFontColourDanger;
     }
   }
   .dialogButtons {

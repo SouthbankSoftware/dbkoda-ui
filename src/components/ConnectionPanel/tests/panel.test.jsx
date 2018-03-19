@@ -2,8 +2,8 @@
  * @Author: chris
  * @Date:   2017-04-21T10:59:57+10:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:47:51+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-30T14:15:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -37,7 +37,7 @@ import { createForm } from '../ProfileForm';
 
 chai.use(chaiEnzyme());
 
-describe('New Connection Profile Panel', () => {
+describe.skip('New Connection Profile Panel', () => {
   beforeAll(() => {
     globalizeInit();
   });

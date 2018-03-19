@@ -7,9 +7,9 @@
       {{#if AggregateKeys }}  
            output: { "count":{$sum:1}
         {{#each AggregateKeys}}
-                    ,"{{nodots AttributeName}}-{{Aggregation}}":{${{Aggregation}}:"${{AttributeName}}"} {{/each}} 
+                    ,"{{nodots AttributeName}}-{{{Aggregation}}}":{${{{Aggregation}}}:"${{{AttributeName}}}"} {{/each}} 
             }, 
       {{/if }}
-            boundaries: [ {{#each lowerBounds}} {{lowerBound}}{{#unless last}},{{/unless}}{{/each}} ]
+            boundaries: [ {{#each lowerBounds}} {{{lowerBound}}}{{#unless last}},{{/unless}}{{/each}} ]
    }
 }

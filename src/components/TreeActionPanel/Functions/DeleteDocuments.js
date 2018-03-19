@@ -39,6 +39,8 @@ export const DeleteDocuments = {
     data.CollectionName = params.CollectionName;
     data.FilterKeys = [];
     data.FilterKeys.push({AttributeName:'_id', Operator:'$eq', Value:'"SomeValue"'});
+    data.DeleteMany = false;
+    data.UseOr = false;
     // console.log('returns', data);
     return data;
   },

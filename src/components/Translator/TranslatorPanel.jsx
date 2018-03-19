@@ -32,7 +32,7 @@ import CM from 'codemirror';
 import {action} from 'mobx';
 import {MongoShellTranslator, SyntaxType} from 'mongo-shell-translator';
 import { Broker, EventType } from '~/helpers/broker';
-import {Button, ContextMenuTarget, Intent, Position, MenuItem, Menu} from '@blueprintjs/core';
+import {Button, ContextMenuTarget, Intent, MenuItem, Menu} from '@blueprintjs/core';
 import Prettier from 'prettier-standalone';
 import _ from 'lodash';
 
@@ -86,6 +86,7 @@ export default class TranslatorPanel extends React.Component {
       newValue = translator.translate(value, syntax);
     } catch (_err) {
       console.error(_err);
+      logToMain('error', 'Failed to translate shells cript to driver: ' + _err);
       let msg = 'Error: Failed to translate shell script.';
       if (_err.lineNumber > 0 && _err.description) {
         msg += `<br>${_err.description} on line ${_err.lineNumber}`;
@@ -97,7 +98,8 @@ export default class TranslatorPanel extends React.Component {
         }
       }
       // failed to translate code
-      DBKodaToaster(Position.RIGHT_TOP).show({
+      const toaster = DBKodaToaster();
+      toaster.show({
         message: (<span dangerouslySetInnerHTML={{__html: msg}} />), // eslint-disable-line react/no-danger
         className: 'danger',
         iconName: 'pt-icon-thumbs-down'
@@ -129,7 +131,8 @@ export default class TranslatorPanel extends React.Component {
       .then((_doc) => {
       }).catch((err) => {
         console.error(err.message);
-        DBKodaToaster(Position.RIGHT_TOP).show({
+        logToMain('error', 'Failed to execute commands through driver: ' + err);
+      DBKodaToaster().show({
           message: (<span dangerouslySetInnerHTML={{__html: err.message}} />), // eslint-disable-line react/no-danger
           className: 'danger',
           iconName: 'pt-icon-thumbs-down'

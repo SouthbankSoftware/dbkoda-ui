@@ -1,9 +1,9 @@
-db.getSiblingDB("{{Database}}").getCollection("{{CollectionName}}").aggregate([{{#if InitialFilter}} 
-  {$match:{ {{#each FilterKeys}} "{{AttributeName}}":{{{Value}}} {{#unless last}},{{/unless}}{{/each}} }}, {{/if}} 
-  {$group:{ _id:{ {{#each GroupByKeys}}"{{nodots AttributeName}}":"${{AttributeName}}" {{#unless last}},{{/unless}}{{/each}}
+db.getSiblingDB("{{{Database}}}").getCollection("{{{CollectionName}}}").aggregate([{{#if InitialFilter}} 
+  {$match:{ {{#each FilterKeys}} "{{{AttributeName}}}":{{{Value}}} {{#unless last}},{{/unless}}{{/each}} }}, {{/if}} 
+  {$group:{ _id:{ {{#each GroupByKeys}}"{{nodots AttributeName}}":"${{{AttributeName}}}" {{#unless last}},{{/unless}}{{/each}}
                   }, 
               "count":{$sum:1}{{#each AggregateKeys}},
-              "{{AttributeName}}-{{Aggregation}}":{${{Aggregation}}:"${{AttributeName}}"} {{/each}}
+              "{{{AttributeName}}}-{{{Aggregation}}}":{${{{Aggregation}}}:"${{{AttributeName}}}"} {{/each}}
            }}{{#if Sort}},
-  {$sort:{ {{#each SortKeys}} "{{{AttributeName}}}":{{Direction}}{{#unless last}},{{/unless}}{{/each}} }} {{/if}}
+  {$sort:{ {{#each SortKeys}} "{{{AttributeName}}}":{{{Direction}}}{{#unless last}},{{/unless}}{{/each}} }} {{/if}}
 ]);

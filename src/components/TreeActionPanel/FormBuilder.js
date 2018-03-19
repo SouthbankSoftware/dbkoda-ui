@@ -80,6 +80,9 @@ export default class FormBuilder {
     if (defField.type == 'Text') {
       res.fieldBinding = 'TextField';
     }
+    if (defField.type == 'CodeMirror') {
+      res.fieldBinding = 'CodeMirrorField';
+    }
     if (defField.type == 'Select') {
       res.fieldBinding = 'SelectField';
     }
@@ -121,10 +124,10 @@ export default class FormBuilder {
         result[query] = query;
         if (queries.length > 0) {
           this.resolveQueries(queries, result)
-            .then((result) => {
+            .then(result => {
               resolve(result);
             })
-            .catch((reason) => {
+            .catch(reason => {
               reject(reason);
             });
         } else {
@@ -134,23 +137,23 @@ export default class FormBuilder {
         SyncService.executeQuery(
           query,
           this.editor.shellId,
-          this.editor.profileId,
+          this.editor.profileId
         )
-          .then((res) => {
+          .then(res => {
             result[query] = res;
             if (queries.length > 0) {
               this.resolveQueries(queries, result)
-                .then((result) => {
+                .then(result => {
                   resolve(result);
                 })
-                .catch((reason) => {
+                .catch(reason => {
                   reject(reason);
                 });
             } else {
               resolve(result);
             }
           })
-          .catch((reason) => {
+          .catch(reason => {
             reject(reason);
           });
       }
@@ -239,7 +242,7 @@ export default class FormBuilder {
           }
           queryFieldsHash[fldName] = {
             query: fld.fieldQuery,
-            parseFn: fld.fieldParseFn,
+            parseFn: fld.fieldParseFn
           };
         }
       };
@@ -272,7 +275,7 @@ export default class FormBuilder {
       // if there are db queries resolve them and update the options for select fields
       if (queries.length > 0) {
         this.resolveQueries(queries, {})
-          .then((resQueries) => {
+          .then(resQueries => {
             for (const fldName in queryFieldsHash) {
               if (queryFieldsHash[fldName]) {
                 const fldQuery = queryFieldsHash[fldName];
@@ -288,7 +291,7 @@ export default class FormBuilder {
                 if (formFunctions[fldQuery.parseFn]) {
                   try {
                     arrOptions = [''].concat(
-                      formFunctions[fldQuery.parseFn](resOpts),
+                      formFunctions[fldQuery.parseFn](resOpts)
                     );
                   } catch (e) {
                     console.error(e.stack);
@@ -304,8 +307,8 @@ export default class FormBuilder {
             if (this.editor.type.toUpperCase() === 'AGGREGATE') {
               const block = this.editor.blockList[this.editor.selectedBlock];
               if (this.editor.aggregateID && block.customFields) {
-                Object.keys(block.customFields).map((field) => {
-                  block.customFields[field].map((value) => {
+                Object.keys(block.customFields).map(field => {
+                  block.customFields[field].map(value => {
                     result.options[field].dropdown.unshift(value);
                   });
                 });
@@ -313,7 +316,7 @@ export default class FormBuilder {
             }
             resolve(result);
           })
-          .catch((reason) => {
+          .catch(reason => {
             reject(reason);
           });
       } else {
@@ -334,7 +337,7 @@ export default class FormBuilder {
     resolveArguments,
     updateDynamicFormCode,
     editorObject,
-    formAction,
+    formAction
   ) => {
     try {
       let treeAction;
@@ -378,7 +381,7 @@ export default class FormBuilder {
         // get Fields for Mobx React Form
 
         this.getFieldsFromDefinitions(ddd, formFunctions)
-          .then((formDefs) => {
+          .then(formDefs => {
             const traverseMultiCombo = (fldArray, frmVals, bMerge = true) => {
               if (fldArray.length > 1) {
                 let pFld = fldArray.shift();
@@ -404,7 +407,7 @@ export default class FormBuilder {
               }
             };
             // callback function to get the updated values from the form
-            const formValueUpdates = (values) => {
+            const formValueUpdates = values => {
               if (formDefs.arrayLast.length > 0) {
                 for (const fld of formDefs.arrayLast) {
                   if (values[fld].length > 0) {
@@ -439,7 +442,7 @@ export default class FormBuilder {
             };
 
             // callback function to validate the input document
-            const formInputValidate = (values) => {
+            const formInputValidate = values => {
               if (ddd && ddd.Validate && formFunctions[ddd.Validate]) {
                 return formFunctions[ddd.Validate](values);
               }
@@ -447,7 +450,7 @@ export default class FormBuilder {
             };
 
             // Update the form after prefetching the data from controller
-            const updatePrefilledData = (data) => {
+            const updatePrefilledData = data => {
               if (formDefs.multiCombo.length > 0) {
                 for (const fld of formDefs.multiCombo) {
                   if (fld.indexOf('.') > 0) {
@@ -463,7 +466,7 @@ export default class FormBuilder {
               form.mobxForm.submit(); //eslint-disable-line
             };
 
-            const defaultParseFunction = (values) => {
+            const defaultParseFunction = values => {
               return values;
             };
 
@@ -491,7 +494,7 @@ export default class FormBuilder {
                   ddd.DefaultValues.arguments.length > 0
                 ) {
                   PrefilledValues = formFunctions[ddd.DefaultValues.function](
-                    params,
+                    params
                   );
                 } else {
                   PrefilledValues = formFunctions[ddd.DefaultValues.function]();
@@ -507,8 +510,8 @@ export default class FormBuilder {
                   SyncService.executeQuery(
                     PrefilledValues,
                     this.editor.shellId,
-                    this.editor.profileId,
-                  ).then((res) => {
+                    this.editor.profileId
+                  ).then(res => {
                     const parsedValues = parseFunction(res);
                     updatePrefilledData(parsedValues);
                   });
@@ -523,13 +526,13 @@ export default class FormBuilder {
               title: ddd.Title,
               mobxForm: new DynamicForm(formDefs, {
                 updates: formValueUpdates,
-                validate: formInputValidate,
+                validate: formInputValidate
               }),
-              getData: getPrefilledFormData,
+              getData: getPrefilledFormData
             };
             resolve(form);
           })
-          .catch((reason) => {
+          .catch(reason => {
             reject(reason);
           });
       });

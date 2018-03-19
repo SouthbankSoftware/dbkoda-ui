@@ -22,20 +22,21 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-05-09T12:16:12+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-30T15:59:44+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-12T11:53:06+11:00
  */
 
 /**
   * @Author: Wahaj Shamim <wahaj>
   * @Date:   2017-04-19T15:43:32+10:00
   * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-30T15:59:44+10:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-12T11:53:06+11:00
   */
 
 import React from 'react';
 import { observer } from 'mobx-react';
+import { runInAction } from 'mobx';
 
 import { Intent, Position, Tooltip, Checkbox } from '@blueprintjs/core';
 
@@ -54,8 +55,10 @@ export default observer(({
   } else {
     inputClassName += ' pt-checkbox-form';
   }
-  if (!field.value) {
-    field.value = false;
+  if (field.value === undefined || field.value === null) {
+    runInAction(() => {
+      field.value = false;
+    });
   }
 
   return (

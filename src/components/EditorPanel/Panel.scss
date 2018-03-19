@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-31T11:05:29+11:00
+ * @Last modified time: 2018-03-14T20:41:43+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -253,9 +253,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
       color: $welcomeViewFontColor;
       .welcomePanelTabWrapper,
       .configPanelTabWrapper {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
         margin-left: 50px;
         .welcomePanelWrapper,
         .configPanelWrapper {
@@ -797,6 +794,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
   .CodeMirror-scroll {
     background-color: $editorBackground;
     width: 100%;
+    padding-bottom: unset;
   }
   .CodeMirror,
   .ReactCodeMirror {

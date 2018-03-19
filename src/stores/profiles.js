@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Chris Trott <christrott>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-16T15:53:32+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,19 +22,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @Author: Chris Trott <christrott>
- * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-01-09T10:50:32+11:00
  */
 
-import {action, observable, runInAction, toJS} from 'mobx';
+import { action, observable, runInAction, toJS } from 'mobx';
 import yaml from 'js-yaml';
 import _ from 'lodash';
-import {featherClient} from '~/helpers/feathers';
-import {NewToaster} from '#/common/Toaster';
+import { featherClient } from '~/helpers/feathers';
+import { NewToaster } from '#/common/Toaster';
 
 export default class Profiles {
   saveDebounced = _.debounce(this.save, 500);
@@ -57,10 +57,10 @@ export default class Profiles {
     }
     this.loading = true;
     // Call controller file get service
-    featherClient()
+    return featherClient()
       .service('files')
       .get(this.profilesFilePath)
-      .then((file) => {
+      .then(file => {
         runInAction('Apply changes to profiles from yaml file', () => {
           const profileLoad = yaml.safeLoad(file.content);
           if (profileLoad) {
@@ -75,13 +75,14 @@ export default class Profiles {
           console.log('Profiles loaded successfully!');
         });
       })
-      .catch((e) => {
+      .catch(e => {
         console.error(e);
         NewToaster.show({
           message: `Reading profiles.yml failed: ${e.message}`,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          iconName: 'pt-icon-thumbs-down'
         });
+        logToMain('error', 'Failed to read profiles.yml: ' + e.message);
       });
   }
 
@@ -97,8 +98,8 @@ export default class Profiles {
         .service('files')
         .create({
           _id: this.profilesFilePath,
-          content: yaml.safeDump(exportProfiles),
-          watching: false,
+          content: yaml.safeDump(exportProfiles, { skipInvalid: true }),
+          watching: false
         })
         .then(() => {
           IS_DEVELOPMENT && console.debug('profiles.yml updated');
@@ -112,8 +113,9 @@ export default class Profiles {
       NewToaster.show({
         message: `Saving profiles.yml failed: ${e.message}`,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        iconName: 'pt-icon-thumbs-down'
       });
+      logToMain('error', 'Failed to save profiles.yml: ' + e.message);
     }
   }
 }

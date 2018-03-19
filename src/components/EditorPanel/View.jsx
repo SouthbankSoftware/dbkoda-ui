@@ -452,7 +452,7 @@ class View extends React.Component {
             } else {
               // Quick check if line is a full command:
               if (type !== 'os') {
-                const ignore = /^[^\S\x0a\x0d]*(?:use|show|help|it|exit[\s]|dbk_agg*).*/g;
+                const ignore = /^[^\S\x0a\x0d]*(?:use|show|help|it|exit[\s]).*/g;
                 const splitted = content.split(getSeparator());
                 let hasError = false;
                 let filteredCode = '';
@@ -849,7 +849,8 @@ class View extends React.Component {
       currentLine = cm.getCursor().line;
       let linesBelow = '';
 
-      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine - 1).match(/^\/\//gmi) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
+
+      while (cm.getLine(currentLine + 1) && !cm.getLine(currentLine + 1).match(/^\/\//gmi) && !cm.getLine(currentLine + 1).match(/^[ \s\t]*[\n\r]+$/gmi) && !cm.getLine(currentLine + 1).match(/;[ \t\s]*$/gmi)) {
         linesBelow += cm.getLine(currentLine + 1);
         currentLine += 1;
       }
@@ -899,6 +900,7 @@ class View extends React.Component {
             className: 'danger',
             iconName: 'pt-icon-thumbs-down',
           });
+          logToMain('error', 'Failed to execute explain: ' + err);
           runInAction(() => {
             editor.executing = false;
             this.props.store.editorToolbar.isActiveExecuting = false;
@@ -1056,6 +1058,7 @@ class View extends React.Component {
         this.setState({ openTranslator: true });
       } catch (err) {
         console.error('failed to translate the selected code ');
+        logToMain('error', 'Failed to translate to native code: ' + err);
       }
     }
   }
@@ -1073,9 +1076,11 @@ class View extends React.Component {
         v.executing = false;
       }
     });
-    if (this.props.store.editorPanel.activeEditorId == this.props.id) {
-      this.props.store.editorToolbar.isActiveExecuting = false;
-      this.props.store.editorPanel.stoppingExecution = false;
+    if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).shellId === event.shellId) {
+      runInAction('Execution has copleted on current editor.', () => {
+        this.props.store.editorToolbar.isActiveExecuting = false;
+        this.props.store.editorPanel.stoppingExecution = false;
+      });
     }
   }
 
@@ -1139,14 +1144,18 @@ class View extends React.Component {
             intent={Intent.NONE}
           />
         </div>
-        <div className="menuItemWrapper translator">
-          <MenuItem
-            onClick={this.translateToNativeCode}
-            text={globalString('editor/view/menu/translateSelection')}
-            iconName="pt-icon-align-left"
-            intent={Intent.NONE}
-          />
-        </div>
+        {this.props.store.editors.get(this.props.id).type != EditorTypes.DRILL &&
+        (
+          <div className="menuItemWrapper translator">
+            <MenuItem
+              onClick={this.translateToNativeCode}
+              text={globalString('editor/view/menu/translateSelection')}
+              iconName="pt-icon-align-left"
+              intent={Intent.NONE}
+            />
+          </div>
+          )
+        }
       </Menu>
     );
   }

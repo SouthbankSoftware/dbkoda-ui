@@ -2,8 +2,8 @@ db.getSiblingDB("admin").runCommand(
   {setParameter: 1,  
    logComponentVerbosity: 
      {
-        verbosity: {{verbosity}},{{#each Components}}
-       "{{Component}}":{verbosity: {{Level}} } {{#unless last}},{{/unless}} {{/each}}
+        verbosity: {{{verbosity}}},{{#each Components}}
+       "{{{Component}}}":{verbosity: {{{Level}}} } {{#unless last}},{{/unless}} {{/each}}
      }
   });
  

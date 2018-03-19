@@ -36,7 +36,7 @@ import { featherClient } from '~/helpers/feathers';
 import Panel from './Panel';
 import { Broker, EventType } from '../../helpers/broker/index';
 
-export const parseOutput = (output) => {
+export const parseOutput = output => {
   return output
     .replace(/NumberLong\((\d*)\)/g, '$1')
     .replace(/\n/g, '')
@@ -47,15 +47,15 @@ export const parseOutput = (output) => {
 
 export const findKeyValue = (key, object) => {
   // Find namespace within the plan (for instnace if this is a sharded plan)
-    if (object.hasOwnProperty(key)) {
-        return (object[key]);
-    }
+  if (object.hasOwnProperty(key)) {
+    return object[key];
+  }
 
-    for (let i = 0; i < Object.keys(object).length; i += 1) {
-        if (typeof object[Object.keys(object)[i]] == 'object') {
-            return findKeyValue(key, object[Object.keys(object)[i]]);
-        }
+  for (let i = 0; i < Object.keys(object).length; i += 1) {
+    if (typeof object[Object.keys(object)[i]] == 'object') {
+      return findKeyValue(key, object[Object.keys(object)[i]]);
     }
+  }
 };
 
 @inject(allStores => ({
@@ -137,9 +137,9 @@ export default class Explain extends React.Component {
         // this is aggregate framework explain output, convert stages to regular stage
         const aggStages = explainOutputJson.output.stages;
         const converted = { queryPlanner: { winningPlan: {} } };
-        aggStages.reverse().forEach((stage) => {
-          _.values(stage).forEach((v) => {
-            _.keys(v).forEach((k) => {
+        aggStages.reverse().forEach(stage => {
+          _.values(stage).forEach(v => {
+            _.keys(v).forEach(k => {
               if (k === 'queryPlanner') {
                 converted.queryPlanner = v.queryPlanner;
               }
@@ -153,7 +153,7 @@ export default class Explain extends React.Component {
         };
         _.forOwn(explainOutputJson.output.shards, (value, key) => {
           if (value.stages && value.stages.length > 0) {
-            _.forOwn(value.stages[0], (stageValue) => {
+            _.forOwn(value.stages[0], stageValue => {
               if (
                 stageValue.queryPlanner &&
                 stageValue.queryPlanner.winningPlan
@@ -182,6 +182,7 @@ export default class Explain extends React.Component {
       this.explainOutput = explainOutputJson;
     } catch (err) {
       console.error('err parse explain output ', err);
+      logToMain('error', 'Failed to parse for Explain: ' + err);
       console.error(output);
       explainOutputJson = {
         error: globalString('explain/parseError'),
@@ -233,7 +234,7 @@ export default class Explain extends React.Component {
           shellId: shell, // eslint-disable-line
           commands: 'dbkInx.suggestIndexesAndRedundants(' + explainOutput + ');'
         })
-        .then((res) => {
+        .then(res => {
           console.log(JSON.parse(res));
           this.suggestionsGenerated = true;
           this.suggestionText = JSON.parse(res);
@@ -267,11 +268,16 @@ export default class Explain extends React.Component {
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].indexName
                       ) +
-                      ' on ' + lineSep + '//' +
+                      ' on ' +
+                      lineSep +
+                      '//' +
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].key
                       ) +
-                      lineSep + ' // can be replaced by a new index on ' + lineSep + '//' +
+                      lineSep +
+                      ' // can be replaced by a new index on ' +
+                      lineSep +
+                      '//' +
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].because
                       );
@@ -280,7 +286,8 @@ export default class Explain extends React.Component {
               }
               if (this.suggestionText.newIndexes.length > 0) {
                 suggestionCode +=
-                lineSep + lineSep +
+                  lineSep +
+                  lineSep +
                   globalString('explain/panel/addIndexCommandsPrompt') +
                   lineSep;
 
@@ -294,7 +301,8 @@ export default class Explain extends React.Component {
                       collection +
                       '.createIndex(' +
                       JSON.stringify(this.suggestionText.newIndexes[key]) +
-                      ');' + lineSep;
+                      ');' +
+                      lineSep;
                   }
                 }
 
@@ -313,7 +321,8 @@ export default class Explain extends React.Component {
                       JSON.stringify(
                         this.suggestionText.redundantIndexes[key].indexName
                       ) +
-                      ');' + lineSep;
+                      ');' +
+                      lineSep;
                   }
                 }
               }
@@ -325,7 +334,7 @@ export default class Explain extends React.Component {
 
           this.setState({ suggestionsGenerated: true });
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
         });
     }

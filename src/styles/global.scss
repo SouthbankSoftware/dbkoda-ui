@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-17T12:55:19+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-13T15:02:16+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-14T11:46:28+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,9 @@ span.cm-invalidchar {
 body {
   background-color: $panelLeftBackground;
   overflow: hidden !important;
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Arial', 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue',
+    'Icons16', sans-serif;
 }
 
 #root div {}
@@ -570,4 +573,29 @@ div.optInDialog {
       background-color: $buttonDangerBackgroundHover !important;
     }
   }
+}
+
+.d3-tip-top {
+  position: absolute;
+  text-align: center;
+  height: 18px;
+  line-height: 1;
+  padding: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip-top:after {
+  box-sizing: border-box;
+  display: block;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.8);
+  content: '\25BC';
+  position: absolute;
+  text-align: center;
+  top: 15px;
 }

@@ -1,4 +1,12 @@
-/*
+/**
+ * @flow
+ *
+ * @Author: Chris Trott <christrott>
+ * @Date:   2017-07-21T09:27:03+10:00
+ * @Email:  chris@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-14T21:53:30+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,114 +24,87 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @Author: Chris Trott <christrott>
- * @Date:   2017-07-21T09:27:03+10:00
- * @Email:  chris@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-10-03T15:35:19+11:00
  */
 
-import { action, observable, runInAction } from 'mobx';
-import yaml from 'js-yaml';
+import _ from 'lodash';
+import { action, observable } from 'mobx';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
-import { Broker, EventType } from '../helpers/broker';
 
 export default class Config {
-  configFilePath;
-  @observable loading;
-  @observable
-  settings = {
-    @observable mongoCmd: '',
-    @observable drillCmd: '',
-    @observable drillControllerCmd: '',
-    @observable telemetryEnabled: true,
-    @observable showWelcomePageAtStart: true,
-  };
+  path: string;
+  @observable settings: *;
 
   constructor() {
-    if (global.PATHS) {
-      this.configFilePath = global.PATHS.configPath;
-    } else if (process.env.UAT && process.env.UAT == 'true') {
-      this.configFilePath = '/tmp/config.yml';
-    }
+    this.path = global.PATHS.configPath;
 
-    console.log('configFilePath:', this.configFilePath);
-    this.loading = false;
+    logToMain('info', `config path: ${this.path}`);
 
-    const handleConfigFileChange = () => {
-      this.load();
-    };
-    const eventName = EventType.createFileChangedEvent(this.configFilePath);
-    Broker.on(eventName, handleConfigFileChange);
+    this._watchConfigChanges();
   }
 
-  setDefaults() {
-    this.settings.telemetryEnabled = true;
-    this.settings.showWelcomePageAtStart = true;
-    // NOTE: Don't change paths, that's just super annoying
-  }
+  _watchConfigChanges = () => {
+    featherClient().configService.on(
+      'changed',
+      action(changed => {
+        logToMain('debug', 'config changed');
 
-  @action.bound
-  load() {
-    console.log('Load from config.yml');
-    if (!this.configFilePath) {
-      return;
-    }
-    // Call controller file get service
-    featherClient()
-      .service('files')
-      .get(this.configFilePath)
-      .then((file) => {
-        runInAction('Apply changes to config from yaml file', () => {
-          this.settings = yaml.safeLoad(file.content);
-          if (this.loading) {
-            runInAction(() => {
-              this.loading = false;
-            });
-          }
-          console.log('Config loaded successfully!');
+        _.forEach(changed, (v, k) => {
+          _.set(this.settings, k, v.new);
         });
       })
-      .catch((e) => {
-        console.error(e);
-        NewToaster.show({
-          message: `Reading config.yml failed: ${e.message}`,
-          className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
-        });
-      });
-  }
+    );
+  };
 
-  @action.bound
-  save() {
-    this.loading = true;
-    if (!this.configFilePath) {
-      return;
-    }
-    try {
-      return featherClient()
-        .service('files')
-        .create({
-          _id: this.configFilePath,
-          content: yaml.safeDump(this.settings),
-          watching: false,
+  _handleError = (message: string) => {
+    console.error(message);
+    logToMain('error', message);
+    NewToaster.show({
+      message,
+      className: 'danger',
+      iconName: 'pt-icon-thumbs-down'
+    });
+  };
+
+  /**
+   * Load settings from config service. This should ONLY be done once during initialisation
+   */
+  load = (): Promise<*> => {
+    return featherClient()
+      .configService.get('current')
+      .then(
+        action(({ payload }) => {
+          // this will convert payload into new observable
+          this.settings = payload;
+          logToMain('debug', 'config loaded');
         })
-        .then(() => {
-          console.log('config.yml updated');
-          runInAction(() => {
-            this.loading = false;
-          });
-        })
-        .catch(console.error);
-    } catch (e) {
-      console.error(e);
-      NewToaster.show({
-        message: `Saving config.yml failed: ${e.message}`,
-        className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+      )
+      .catch(err => {
+        this._handleError(`Failed to load initial config: ${err.message}`);
       });
-    }
-  }
+  };
+
+  /**
+   * Update settings. This should be the ONLY way to update both ui and controller settings. After
+   * this request, ui should receive a changed event which will in term update ui settings.
+   */
+  patch = (settings: {}) => {
+    return featherClient()
+      .configService.patch('current', {
+        config: settings
+      })
+      .catch(err => {
+        let message;
+
+        if (err.errors) {
+          message = JSON.stringify(err.errors);
+        } else if (err.message) {
+          message = err.message; // eslint-disable-line prefer-destructuring
+        } else {
+          message = String(err);
+        }
+
+        this._handleError(`Failed to update config: ${message}`);
+      });
+  };
 }

@@ -7,7 +7,6 @@
  */
 
 
-
 /*
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,13 +32,27 @@
 import os from 'os';
 import mongodbUri from 'mongodb-uri';
 import Handlebars from 'handlebars';
+import escapeDoubleQuotes from '~/helpers/handlebars/escapeDoubleQuotes';
 import {BackupRestoreActions} from '../common/Constants';
 import {dumpDB, dumpServer, exportDB, importCollection, restoreServer} from './Template';
 import {isDumpAction} from './Utils';
 
-const createTemplateObject = (state) => {
+Handlebars.registerHelper('escapeDoubleQuotes', escapeDoubleQuotes);
+
+const createTemplateObject = state => {
   const {db, profile, exportType, parseGrace, mode} = state;
-  const {host, port, sha, hostRadio, url, database, ssl, ssh, sshLocalPort, sshTunnel} = profile;
+  const {
+    host,
+    port,
+    sha,
+    hostRadio,
+    url,
+    database,
+    ssl,
+    sshLocalPort,
+    authenticationDatabase,
+    sshTunnel
+  } = profile;
   const items = {
     ...profile,
     ...state,
@@ -51,7 +64,7 @@ const createTemplateObject = (state) => {
     ssl
   };
   if (sha) {
-    items.authDb = database;
+    items.authDb = authenticationDatabase || database;
   } else {
     delete items.username;
     delete items.password;

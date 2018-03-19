@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-13T11:48:33+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-13T14:52:47+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-14T10:19:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,22 +34,27 @@ type Props = {
   measureBeforeMount: boolean,
   verticalGridSize: number,
   margin: [number, number],
+  bFitHeight: boolean,
+  rowHeight: number,
+  minFitHeight: number
 };
 
 type State = {
   width: number,
   rowHeight: number,
+  height: number
 };
 
 export default (ComposedComponent: ReactComponentType<any>) =>
   class extends React.Component<Props, State> {
     static defaultProps = {
-      measureBeforeMount: false,
+      measureBeforeMount: false
     };
 
     state: State = {
       width: 1280,
-      rowHeight: 50,
+      height: 0,
+      rowHeight: 150
     };
 
     mounted: boolean = false;
@@ -75,21 +80,46 @@ export default (ComposedComponent: ReactComponentType<any>) =>
 
       // eslint-disable-next-line
       const node = ReactDOM.findDOMNode(this); // Flow casts this to Text | Element
-      const { verticalGridSize, margin } = this.props;
-      const rowHeight =
-        (window.innerHeight - (verticalGridSize - 1) * margin[1] - 2 * margin[1]) /
-        verticalGridSize;
-      this.setState({
-        width: node instanceof HTMLElement ? node.offsetWidth : this.state.width,
-        rowHeight,
-      });
+      const { verticalGridSize, margin, bFitHeight, minFitHeight } = this.props;
+      if (bFitHeight) {
+        let rowHeight =
+          (window.innerHeight -
+            (verticalGridSize - 1) * margin[1] -
+            2 * margin[1]) /
+          verticalGridSize;
+        if (minFitHeight && (rowHeight * verticalGridSize < minFitHeight)) {
+          rowHeight = 1000 / verticalGridSize;
+        }
+
+        this.setState({
+          width:
+            node instanceof HTMLElement ? node.offsetWidth : this.state.width,
+          rowHeight
+        });
+      } else {
+        console.log(this.props.rowHeight);
+        const gridHeight =
+          (this.props.rowHeight + margin[1]) * verticalGridSize;
+        this.setState({
+          width:
+            node instanceof HTMLElement ? node.offsetWidth : this.state.width,
+          height: gridHeight,
+          rowHeight: this.props.rowHeight
+        });
+      }
     };
 
     render() {
+      const gridStyle = {};
+      if (!this.props.bFitHeight) {
+        gridStyle.height = this.state.height + 'px';
+      }
       if (this.props.measureBeforeMount && !this.mounted) {
-        return <div {...this.props} {...this.state} />;
+        return <div {...this.props} {...this.state} style={gridStyle} />;
       }
 
-      return <ComposedComponent {...this.props} {...this.state} />;
+      return (
+        <ComposedComponent {...this.props} {...this.state} style={gridStyle} />
+      );
     }
   };

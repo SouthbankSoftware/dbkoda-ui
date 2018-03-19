@@ -23,7 +23,7 @@
  * @Date:   2017-04-18T13:51:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-05-15T15:00:45+10:00
+ * @Last modified time: 2018-01-31T12:37:45+11:00
  */
 
 import React from 'react';
@@ -35,20 +35,60 @@ import SelectField from './SelectField';
 import NumericField from './NumericField';
 import BooleanField from './BooleanField';
 import ComboField from './ComboField';
+import CodeMirrorField from './CodeMirrorField';
 
 export default observer(({ member }) => {
   const rowFields = [];
-  member.map((col) => {
+  member.map(col => {
     if (col.type == 'Text') {
-      rowFields.push(<TextField key={member.id + col.key} field={col} showLabel={false} formGroup />);
+      rowFields.push(
+        <TextField
+          key={member.id + col.key}
+          field={col}
+          showLabel={false}
+          formGroup
+        />
+      );
     } else if (col.type == 'Select') {
-      rowFields.push(<SelectField key={member.id + col.key} field={col} showLabel={false} formGroup />);
+      rowFields.push(
+        <SelectField
+          key={member.id + col.key}
+          field={col}
+          showLabel={false}
+          formGroup
+        />
+      );
+    } else if (col.type == 'CodeMirror') {
+      rowFields.push(
+        <CodeMirrorField
+          key={member.id + col.key}
+          field={col}
+          showLabel={false}
+          formGroup
+        />
+      );
     } else if (col.type == 'Numeric') {
-      rowFields.push(<NumericField key={member.id + col.key} field={col} showLabel={false} formGroup />);
+      rowFields.push(
+        <NumericField
+          key={member.id + col.key}
+          field={col}
+          showLabel={false}
+          formGroup
+        />
+      );
     } else if (col.type == 'Boolean') {
-      rowFields.push(<BooleanField key={member.id + col.key} field={col} formGroup />);
+      rowFields.push(
+        <BooleanField key={member.id + col.key} field={col} formGroup />
+      );
     } else if (col.type == 'Combo') {
-      rowFields.push(<ComboField key={member.id + col.key} field={col} showLabel={false} formGroup />);
+      rowFields.push(
+        <ComboField
+          key={member.id + col.key}
+          field={col}
+          showLabel={false}
+          formGroup
+        />
+      );
     }
   });
 

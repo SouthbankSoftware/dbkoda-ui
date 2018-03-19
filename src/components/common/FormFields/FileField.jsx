@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-01-23T13:03:39+11:00
+ * @Email:  inbox.wahaj@gmail.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-23T14:13:23+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -17,50 +23,53 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/**
- * @Author: Wahaj Shamim <wahaj>
- * @Date:   2017-05-09T16:07:17+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-30T16:00:38+10:00
- */
-
-
-
- /**
-  * @Author: Wahaj Shamim <wahaj>
-  * @Date:   2017-04-19T15:43:32+10:00
-  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-30T16:00:38+10:00
-  */
-
  import React from 'react';
  import { observer } from 'mobx-react';
+ import { runInAction } from 'mobx';
 
- import { Intent, Position, Tooltip, NumericInput } from '@blueprintjs/core';
+ import { Intent, Position, Tooltip, Button } from '@blueprintjs/core';
 
  export default observer(({
    field,
    showLabel = true,
    formGroup = false
  }) => {
-   const fldClassName = formGroup
+   const onInputClick = () => {
+     if (!field.disabled) {
+       const electron = window.require('electron');
+       const { remote } = electron;
+       const file = remote.dialog.showOpenDialog({
+         properties: ['openFile', 'showHiddenFiles'],
+       });
+
+       if (file !== undefined) {
+         const [filePath] = file;
+         runInAction(() => {
+           field.value = filePath;
+         });
+       }
+     }
+   };
+   let fldClassName = formGroup
      ? 'pt-form-group form-group-inline'
      : 'pt-form-group pt-top-level';
-   let inputClassName = '';
+
+   if (field.error) {
+     fldClassName += ' pt-intent-danger';
+   }
+   let inputClassName = 'pt-input pt-file';
    let tooltipClassName = 'pt-tooltip-indicator pt-tooltip-indicator-form';
    if (formGroup) {
      if (field.options && field.options.tooltip) {
-       tooltipClassName += ' table-field-80';
+       tooltipClassName += ' table-field-90';
        inputClassName += ' table-field-100';
      } else {
-       inputClassName += ' table-field-80';
+       inputClassName += ' table-field-90';
      }
    }
    return (
-     <div className={fldClassName}>
+     <div // eslint-disable-line
+       className={fldClassName} onClick={onInputClick}>
        {showLabel &&
          <label className="pt-label pt-label-r-30" htmlFor={field.id}>
            {field.label}
@@ -76,10 +85,13 @@
              intent={Intent.PRIMARY}
              position={Position.TOP}
            >
-             <NumericInput className={inputClassName} min={field.options.min} max={field.options.max} {...field.bind()} />
+             <input className={inputClassName} {...field.bind()} />
            </Tooltip>}
          {(!field.options || !field.options.tooltip) &&
-           <NumericInput className={inputClassName} min={field.options.min} max={field.options.max} {...field.bind()} />}
+           <input className={inputClassName} {...field.bind()} />}
+         <Button className="pt-file-button" disabled={field.disabled} onClick={() => {}}>
+           {'Browse'}
+         </Button>
          <p className="pt-form-helper-text">{field.error}</p>
        </div>
      </div>

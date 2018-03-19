@@ -2,7 +2,7 @@
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-13T11:36:07+11:00
+ * @Last modified time: 2018-03-14T13:31:19+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -23,9 +23,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* eslint camelcase:warn */
-/* eslint no-unused-vars:warn */
-
 import React from 'react';
 import { Broker, EventType } from '~/helpers/broker';
 import { DragDropContext } from 'react-dnd';
@@ -40,6 +37,11 @@ import { SidebarPanel } from '#/SidebarPanel';
 import { Analytics } from '#/Analytics';
 import { StatusPanel } from '#/StatusBar';
 import { PerformancePanel } from '#/PerformancePanel';
+import { ProfileManager } from '#/ProfileManager';
+import { DrawerPanes } from '#/common/Constants';
+import PasswordDialog from '#/common/PasswordDialog';
+import PasswordResetDialog from '#/common/PasswordResetDialog';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -55,11 +57,12 @@ import './App.scss';
   store: allStores.store,
   layout: allStores.store.layout,
   config: allStores.config,
+  api: allStores.api
 }))
 @observer
 class App extends React.Component {
   static propTypes = {
-    layout: PropTypes.observableObject.isRequired,
+    layout: PropTypes.observableObject.isRequired
   };
   componentDidMount() {
     Broker.emit(EventType.APP_RENDERED);
@@ -76,19 +79,22 @@ class App extends React.Component {
 
   @action.bound
   closeOptIn(bool) {
-    this.props.config.settings.telemetryEnabled = bool;
-    this.props.config.settings.save();
+    this.props.config.patch({
+      telemetryEnabled: bool
+    });
     this.props.store.layout.optInVisible = false;
   }
+
+  // eslint-disable-next-line camelcase
   unstable_handleError() {
-    // eslint-disable-line camelcase
     Broker.emit(EventType.APP_CRASHED);
   }
+
   render() {
-    const { layout, store } = this.props;
+    const { layout, store, api } = this.props;
     const splitPane2Style = {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     };
     let defaultOverallSplitPos;
     let defaultRightSplitPos;
@@ -101,6 +107,11 @@ class App extends React.Component {
       <div>
         <Analytics />
         <TelemetryConsent />
+        <PasswordDialog
+          showDialog={this.props.store.password.showDialog}
+          verifyPassword={this.props.store.password.verifyPassword}
+        />
+        <PasswordResetDialog />
         <SplitPane
           className="RootSplitPane"
           split="vertical"
@@ -125,7 +136,25 @@ class App extends React.Component {
         </SplitPane>
         <StatusPanel className="statusPanel" />
         {store.performancePanel ? (
-          <PerformancePanel profileId={store.performancePanel.profileId} />
+          <PerformancePanel
+            performancePanel={store.performancePanel}
+            onClose={() =>
+              api.transformPerformancePanel(
+                store.performancePanel.profileId,
+                performancePanelStatuses.background
+              )
+            }
+            resetHighWaterMark={() =>
+              api.resetHighWaterMark(store.performancePanel.profileId)
+            }
+            resetPerformancePanel={() => {
+              api.resetPerformancePanel(store.performancePanel.profileId);
+              console.log('!!!');
+            }}
+          />
+        ) : null}
+        {store.drawer && store.drawer.drawerChild == DrawerPanes.PROFILE ? (
+          <ProfileManager />
         ) : null}
         {process.env.NODE_ENV !== 'production' ? (
           <div className="DevTools">

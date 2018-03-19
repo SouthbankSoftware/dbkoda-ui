@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-13T10:45:49+11:00
+ * @Last modified time: 2018-03-14T22:27:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,6 +33,7 @@ import EditorApi from './Editor';
 import ProfileApi from './Profile';
 import TreeApi from './Tree';
 import DrillApi from './Drill';
+import PasswordApi from './Password';
 
 export default class DataCenter {
   store;
@@ -45,13 +46,14 @@ export default class DataCenter {
     this.config = config;
     this.profileStore = profileStore;
     this.outputApi = new OutputApi(store, this, profileStore);
-    this.terminalApi = new TerminalApi(store, this);
-    this.performancePanelApi = new PerformancePanelApi(store, this);
+    this.terminalApi = new TerminalApi(store, this, config);
+    this.performancePanelApi = new PerformancePanelApi(store, this, config);
     this.widgetApi = new WidgetApi(store, this);
     this.editorApi = new EditorApi(store, this, config, profileStore);
-    this.profileApi = new ProfileApi(store, this, profileStore);
+    this.profileApi = new ProfileApi(store, this, profileStore, config);
     this.treeApi = new TreeApi(store, this);
     this.drillApi = new DrillApi(store, this);
+    this.passwordApi = new PasswordApi(store, this, config);
 
     this.init = this.init.bind(this);
 
@@ -81,8 +83,13 @@ export default class DataCenter {
     _.assign(
       this,
       _.pick(this.performancePanelApi, [
-        'openPerformancePanel',
-        'closePerformancePanel',
+        'hasPerformancePanel',
+        'transformPerformancePanel',
+        'resetHighWaterMark',
+        'resetPerformancePanel',
+        'changeSamplingRate',
+        'reactToSamplingRateChange',
+        'showToasterInPerformanceWindow'
       ]),
     );
 
@@ -114,7 +121,16 @@ export default class DataCenter {
     this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);
 
     // Profile API public functions
-    this.profileCreated = this.profileApi.profileCreated.bind(this);
+    _.assign(
+      this,
+      _.pick(this.profileApi, [
+        'profileCreated',
+        'setToasterCallback',
+        'connectProfile',
+        'saveProfile',
+        'getProfiles'
+      ]),
+    );
 
     // Drill API public functions
     this.addNewEditorForDrill = this.drillApi.addNewEditorForDrill.bind(this);

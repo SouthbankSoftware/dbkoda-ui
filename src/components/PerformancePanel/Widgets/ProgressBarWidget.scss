@@ -1,0 +1,166 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-02-07T14:47:40+11:00
+ * @Email:  inbox.wahaj@gmail.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-21T11:27:48+11:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../../../styles/_defaultTheme.scss';
+
+$container-padding: 5px;
+$background-colour: #202020;
+$primary-colour: $defaultChartPanelText;
+$primary-colour-lighten-30: lighten($primary-colour, 30);
+
+.ProgressBarWidget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  span {
+    width: 100%;
+    height: 100%;
+    div.pt-popover-target {
+      height: 100%;
+      width: 100%;
+    }
+  }
+  hr {
+    border: 1px solid #383838;
+    width: calc(100% - 40px);
+    text-align: center;
+    margin: 0px 20px 0px 20px;
+    position: absolute;
+    bottom: 10px;
+  }
+  .description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 18px;
+    font-size: 18px;
+    margin: 8px 12px;
+    color: lighten($defaultChartPanelText, 20);
+    width: calc(100% - #{2*$container-padding});
+    position: absolute;
+    top: $container-padding;
+
+    .name {
+      color: $primary-colour-lighten-30;
+    }
+  }
+
+  .description:hover {
+    text-overflow: clip;
+    white-space: normal;
+    word-break: break-all;
+    // background-color: rgba($background-colour, 0.9);
+  }
+  .pt-popover-target {
+    width: 100%;
+    height: 100%;
+  }
+  .container {
+    height: 100%;
+    display: flex;
+    flex: 1;
+    position: absolute;
+    width: 100%;
+    .chart {
+      flex: 1;
+      padding: 0px;
+    }
+    .chart-label {
+      font-weight: normal;
+      font-size: 14px;
+      flex: 0 0 15%;
+      padding: 0px;
+      order: -1;
+      text-align: right;
+      color: $primary-colour-lighten-30;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      strong {
+        font-weight: normal;
+      }
+    }
+    .chart-total {
+      flex: 0 0 20%;
+      padding: 0px;
+      color: $primary-colour-lighten-30;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      span {
+        flex-basis: 20%;
+      }
+    }
+  }
+  .d3-tip-top {
+    position: absolute;
+    text-align: center;
+    height: 18px;
+    line-height: 1;
+    padding: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border-radius: 2px;
+  }
+
+  /* Creates a small triangle extender for the tooltip */
+  .d3-tip-top:after {
+    box-sizing: border-box;
+    display: block;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.8);
+    content: '\25BC';
+    position: absolute;
+    text-align: center;
+  }
+
+  .d3-tip-right {
+    position: absolute;
+    text-align: center;
+    height: 18px;
+    line-height: 1;
+    padding: 2px;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    border-radius: 2px;
+  }
+
+  /* Creates a small triangle extender for the tooltip */
+  .d3-tip-right:before {
+    box-sizing: border-box;
+    display: block;
+    font-size: 10px;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.8);
+    content: '\25C0';
+    position: absolute;
+    text-align: left;
+    left: -7px;
+    top: 3px;
+  }
+}

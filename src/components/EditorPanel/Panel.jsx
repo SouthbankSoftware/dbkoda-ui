@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:32:02+11:00
+ * @Last modified time: 2018-03-14T20:05:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 /* eslint-disable react/no-string-refs, jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { inject, observer, PropTypes } from 'mobx-react';
-import { action, reaction, runInAction, observable, toJS } from 'mobx';
+import { action, reaction, runInAction } from 'mobx';
 import SplitPane from 'react-split-pane';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
@@ -399,7 +399,7 @@ export default class Panel extends React.Component {
    *  @param {SyntheticMouseEvent} event - mouse click event from onContextMenu
    */
   showContextMenu(event) {
-    const target = event.target;
+    const {target} = event;
     const tabId = findElementAttributeUpward(target, 'data-tab-id');
 
     if (tabId && tabId !== 'Default') {
@@ -492,10 +492,13 @@ export default class Panel extends React.Component {
   onSavingDialogSaveButtonClicked(unbindGlobalKeys, currentEditor) {
     this.onSavingDialogCancelButtonClicked(unbindGlobalKeys);
     if (!currentEditor) {
-      this.props.config.settings = observable(toJS(this.props.store.configPage.newSettings));
-      this.props.store.configPage.changedFields = [];
-      this.props.config.save();
+      const { configPage } = this.props.store;
+      const { newSettings } = configPage;
+      const { patch } = this.props.config;
+
+      configPage.changedFields.clear();
       this.closeConfig();
+      patch(newSettings);
     } else {
       this.toolbar.wrappedInstance
         .saveFile()
@@ -520,7 +523,9 @@ export default class Panel extends React.Component {
   onSavingDialogDontSaveButtonClicked(unbindGlobalKeys, currentEditor) {
     this.onSavingDialogCancelButtonClicked(unbindGlobalKeys);
     if (!currentEditor) {
-      this.props.store.configPage.changedFields = [];
+      const { configPage } = this.props.store;
+
+      configPage.changedFields.clear();
       this.closeConfig();
     } else {
       currentEditor.doc.markClean();

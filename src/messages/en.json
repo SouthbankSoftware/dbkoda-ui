@@ -5,6 +5,19 @@
       "cancel": "Cancel",
       "send": "Send"
     },
+    "performance": {
+      "title": "Performance Panel",
+      "unresponsive":
+        "Woops! Looks like we lost the connection. Is your Mongo server running? Please close and reopen your profile.",
+      "section_headers": {
+        "os": "OS",
+        "mongo": "Mongo"
+      },
+      "errors": {
+        "failover":
+          "Unable to fetch metrics from server, try restarting performance panel."
+      }
+    },
     "aggregate_builder": {
       "palette_title": "Pipeline Palette",
       "details_title": "Stage Details",
@@ -61,6 +74,13 @@
       "button_no": "No Thanks",
       "button_yes": "Okay"
     },
+    "password_dialog": {
+      "message": "Please enter your master password:",
+      "login_error_message": "Not Authorized: Could not verify the password specified. Please try again",
+      "general_error_message": "An error occurred while attempting to init the password store",
+      "validation_message": "Please ensure your password is 8 or more characters long, and that the entered passwords both match.",
+      "reset_message": "Due to too many failed login attempts, your password store has been reset! Please re-enable your password store and re-enter your passwords to continue using the password store feature."
+    },
     "output": {
       "headings": {
         "default": "Query Output",
@@ -70,10 +90,18 @@
         "save": "Save Output",
         "showMore": "Show More (Ctrl + M)",
         "clear": "Clear Output Contents (Ctrl + L)",
+        "raw": "View Raw output.",
+        "jsonTree": "View JSON Tree output",
+        "table": "View Table Output",
+        "chart": "View Chart Output",
         "tableToolbar": {
           "expandAll": "Expand all Rows in the table",
           "collapseAll": "Collapse all rows in the table",
           "refresh": "Refresh results in table."
+        },
+        "downloadMenu": {
+          "json": "JSON",
+          "csv": "CSV"
         }
       },
       "editor": {
@@ -213,11 +241,36 @@
         "heading": "Preferences",
         "menuApplication": "Application",
         "menuPaths": "Paths",
+        "menuPasswordStore": "Password Store",
         "telemetryEnabled": "Send Telemetry Data to dbKoda",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
+        "performancePanel": {
+          "preventDisplaySleep":
+            "Prevent display sleep when panel is visible. (Panel restart required)",
+          "metricSmoothingWindow":
+            "Metric moving average (number of samples)",
+          "foregroundSamplingRate": "Foreground sampling rate (ms)",
+          "backgroundSamplingRate": "Background sampling rate (ms)",
+          "historySize":
+            "History size (number of samples). (Panel restart required)",
+          "historyBrushSize":
+            "History default brush size. (Panel restart required)",
+          "alarmDisplayingWindow":
+            "Alarm keepalive (ms). (Panel restart required)"
+        },
         "mongoCmd": "Mongo Path",
         "drillCmd": "Drill Path",
-        "drillControllerCmd": "Drill Controller Path"
+        "drillControllerCmd": "Drill Controller Path",
+        "passwordStoreEnabled": "Password Store Enabled",
+        "applyButton": "Apply",
+        "remove_store_dialog": {
+          "question":
+            "Are you sure you would like to disable the password store?",
+          "qualifier":
+            "This will remove the store along with all stored passwords. These will need to be re-entered in order to connect.",
+          "confirm": "Delete",
+          "cancel": "Cancel"
+        }
       },
       "tabMenu": {
         "closeTab": "Close Tab",
@@ -264,7 +317,8 @@
         "sha": "SCRAM-SHA-1(username/password)",
         "username": "Username",
         "defaultUsername": "dbenvy",
-        "password": "Password"
+        "password": "Password",
+        "error": "The form has an error"
       }
     },
     "profile": {
@@ -280,7 +334,10 @@
         "newWindow": "New Editor",
         "newSshTerminal": "New SSH Terminal",
         "newLocalTerminal": "New Local Terminal",
-        "showPerformancePanel": "Show Performance Panel",
+        "createPerformancePanel": "Create Performance Panel",
+        "openPerformancePanel": "Open Performance Panel",
+        "destroyPerformancePanel": "Destroy Performance Panel",
+        "resetHWM": "Reset High Water Mark",
         "deleteProfile": "Delete Profile",
         "performance": "Performance Counter Test"
       },
@@ -302,6 +359,10 @@
         "passPhrasePrompt":
           "Please enter your passphrase for SSH connection private key",
         "passPhrasePlaceholder": "Enter SSH Key Passphrase...",
+        "passwordStoreInfo":
+          "Tip: To avoid seeing this prompt every time you connect, you can setup a password store in Preferences",
+        "passwordStoreAdd":
+          "This will add the password to your password store. You will not be asked again, but you can still change the password in the Edit Profile screen",
         "confirmButton": "Open",
         "cancelButton": "Cancel"
       },
@@ -528,6 +589,10 @@
           "label": "gzip",
           "tooltip": "Compress or decompress dumps using GZIP"
         },
+        "archive": {
+          "label": "archive",
+          "tooltip": "Compress or decompress an archive."
+        },
         "headerLine": {
           "label": "headerLine",
           "tooltip": "Import CSV or TSV have headers in first line"
@@ -606,8 +671,10 @@
         "Failed to execute query, make sure to highlight the entire query. See Raw output tab for complete error. Please check your syntax or lodge a bug using the bottom right button.",
       "drill_binary_not_defined":
         "Drill Binary not found, Please configure it in the user settings panel",
-      "drill_timed_out": "Timeout Error: Currently we don't support running queries which may take longer then 90 seconds. ",
-      "drill_large_dataset": "Last query has yeilded more than 10000 rows. Only the first 10000 rows are being displayed. Kindly consider optimising your query.",
+      "drill_timed_out":
+        "Timeout Error: Currently we don't support running queries which may take longer then 90 seconds. ",
+      "drill_large_dataset":
+        "Last query has yeilded more than 10000 rows. Only the first 10000 rows are being displayed. Kindly consider optimising your query.",
       "open_drill_editor_failed": "Failed to Open Drill Editor.",
       "drill_editor_open_success": "Drill Editor created successfully!",
       "java_not_found":

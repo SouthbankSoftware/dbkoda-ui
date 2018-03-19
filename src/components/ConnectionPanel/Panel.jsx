@@ -4,8 +4,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-21T10:47:14+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:31:06+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-01-18T13:41:09+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -145,7 +145,10 @@ export default class Panel extends React.Component {
     this.setState({ connecting: true });
     this.props
       .connect(data)
-      .then(() => this.setState({ connecting: false }))
+      .then(() => {
+        this.setState({ connecting: false });
+        this.props.form.reset();
+      })
       .catch(() => this.setState({ connecting: false }));
   }
 
@@ -159,7 +162,7 @@ export default class Panel extends React.Component {
   }
 
   @autobind
-  async _getFormErrors() {
+  _getFormErrors() {
     // invalidate the form with a custom error message
     const errorMsg = [];
     const error = this.props.form.errors();

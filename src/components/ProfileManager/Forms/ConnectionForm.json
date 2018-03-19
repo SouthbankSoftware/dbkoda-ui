@@ -1,0 +1,229 @@
+{
+  "basic": {
+    "name": "Basic Connection",
+    "tips": [
+      "For simple connections, you can enter all the connection details on this page.  If you are connecting to a replica set or sharded cluster, you might want to visit the \"Cluster Congifuration\" page.  For an operating system terminal, to connect via an SSH tunnel or to monitor operating system statistics, checkout the \"SSH Options\""
+    ],
+    "fields": [
+      {
+        "name": "alias",
+        "label": "Connection Name",
+        "value": "Connection - 1",
+        "type": "text",
+        "column": 1
+      },
+      {
+        "name": "host",
+        "label": "Host(s)",
+        "value": "localhost",
+        "type": "text",
+        "column": 1,
+        "disabled": false,
+        "checkbox": "disabled"
+      },
+      {
+        "name": "port",
+        "label": "Port",
+        "value": 27017,
+        "type": "number",
+        "options": {
+          "min": 0,
+          "max": 65535
+        },
+        "column": 1,
+        "disabled": false,
+        "checkbox": "disabled"
+      },
+      {
+        "name": "database",
+        "label": "Database",
+        "value": "admin",
+        "options": {
+          "tooltip":
+            "The database in which this connection will initially be established"
+        },
+        "type": "text",
+        "column": 1
+      },
+      {
+        "name": "ssl",
+        "value": false,
+        "label": "Use SSL for all connections",
+        "type": "checkbox",
+        "column": 1
+      },
+      {
+        "name": "sslAllowInvalidCertificates",
+        "value": false,
+        "label": "Allow invalid certificates",
+        "type": "checkbox",
+        "column": 1
+      },
+      {
+        "name": "sha",
+        "value": false,
+        "label": "SCRAM-SHA-1(username/password)",
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["username", "password", "authenticationDatabase"]
+      },
+      {
+        "name": "username",
+        "label": "Username",
+        "icon": "user",
+        "type": "text",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "password",
+        "label": "Password",
+        "icon": "password",
+        "type": "password",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "authenticationDatabase",
+        "label": "Authentication Database",
+        "options": { "tooltip": "The database in which this user was created" },
+        "type": "text",
+        "value": "",
+        "column": 2,
+        "width": 0.5,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "urlRadio",
+        "label": "Use URI instead",
+        "value": false,
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["url", "host", "port"]
+      },
+      {
+        "name": "url",
+        "label": "URI",
+        "placeholder": "mongodb://",
+        "value": "mongodb://",
+        "type": "text",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      }
+    ]
+  },
+  "ssh": {
+    "name": "SSH Options",
+    "tips": [
+      "Configure an SSH connection to your mongodb server here.  This can be used to establish a tunnel to a MongoDB server behind a firewall, or to estalish an SSH terminal to issue commands like 'top', or to collection OS statistics in the performance panel",
+      "For details on establishing a SSH tunnel, see the FAQ item https://dbkoda.useresponse.com/knowledge-base/article/what-is-ssh-tunneling-and-how-do-i-set-it-up"
+    ],
+    "fields": [
+      {
+        "name": "ssh",
+        "value": false,
+        "label":
+          "Establish Direct OS Connection (for terminal and performance monitoring)",
+        "type": "checkbox",
+        "column": 1,
+        "refFields": [
+          "remoteHost",
+          "remoteUser",
+          "remotePass",
+          "sshPort",
+          "sshTunnel"
+        ]
+      },
+      {
+        "name": "remoteHost",
+        "label": "HostName",
+        "value": "",
+        "type": "text",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "remoteUser",
+        "label": "Username",
+        "type": "text",
+        "value": "",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "remotePass",
+        "label": "Password",
+        "type": "password",
+        "value": "",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "sshPort",
+        "label": "Port",
+        "value": 22,
+        "type": "number",
+        "options": {
+          "min": 0,
+          "max": 65535
+        },
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "sshTunnel",
+        "value": false,
+        "label": "Tunnel through this host for Mongo Connection",
+        "type": "checkbox",
+        "column": 1,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "keyRadio",
+        "value": false,
+        "label": "Use PEM Key File instead",
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["sshKeyFile", "passPhrase"]
+      },
+      {
+        "name": "sshKeyFile",
+        "label": "PEM Certificate Key File",
+        "options": {
+          "tooltip":
+            "This is the same file as you would use to establish an ssh command line to your host"
+        },
+        "type": "file",
+        "value": "",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      },
+      {
+        "name": "passPhrase",
+        "label": "Password for PEM File",
+        "options": {
+          "tooltip": "Leave it blank if there is no password on the file"
+        },
+        "type": "password",
+        "value": "",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      }
+    ]
+  }
+}

@@ -23,7 +23,7 @@
  * @Date:   2017-04-05T15:49:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2017-08-24T13:54:38+10:00
+ * @Last modified time: 2018-01-31T12:33:24+11:00
  */
 
 // This will get the mobx-react-form and create dynamic fields for that form
@@ -33,20 +33,21 @@ import React from 'react';
 import { action } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { DrawerPanes } from '#/common/Constants';
-import FormTable from './Components/FormTable';
-import TextField from './Components/TextField';
-import SelectField from './Components/SelectField';
-import BooleanField from './Components/BooleanField';
-import NumericField from './Components/NumericField';
-import ComboField from './Components/ComboField';
-import FormGroup from './Components/FormGroup';
+import FormTable from '#/common/FormFields/FormTable';
+import TextField from '#/common/FormFields/TextField';
+import CodeMirrorField from '#/common/FormFields/CodeMirrorField';
+import SelectField from '#/common/FormFields/SelectField';
+import BooleanField from '#/common/FormFields/BooleanField';
+import NumericField from '#/common/FormFields/NumericField';
+import ComboField from '#/common/FormFields/ComboField';
+import FormGroup from '#/common/FormFields/FormGroup';
 
 import './View.scss';
 
 @inject(allStores => ({
   setDrawerChild: allStores.store.setDrawerChild,
   treeActionPanel: allStores.store.treeActionPanel,
-  editorPanel: allStores.store.editorPanel,
+  editorPanel: allStores.store.editorPanel
 }))
 @observer
 export default class TreeActionView extends React.Component {
@@ -101,6 +102,10 @@ export default class TreeActionView extends React.Component {
       for (const key of mobxForm.fields._keys) {
         if (mobxForm.fields.get(key).type == 'Text') {
           formFields.push(<TextField key={key} field={mobxForm.$(key)} />);
+        } else if (mobxForm.fields.get(key).type == 'CodeMirror') {
+          formFields.push(
+            <CodeMirrorField key={key} field={mobxForm.$(key)} />
+          );
         } else if (mobxForm.fields.get(key).type == 'Table') {
           formFields.push(<FormTable key={key} members={mobxForm.$(key)} />);
         } else if (mobxForm.fields.get(key).type == 'Select') {
@@ -120,7 +125,7 @@ export default class TreeActionView extends React.Component {
       <div className="pt-dark form-scrollable">
         <h3 className="form-title">{title}</h3>
         <form
-          ref={(f) => {
+          ref={f => {
             this.treeActionForm = f;
           }}
           onChange={mobxForm.onValueChange(mobxForm)}

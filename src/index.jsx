@@ -3,7 +3,7 @@
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-20T10:49:35+11:00
+ * @Last modified time: 2018-02-28T12:57:16+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,9 +25,6 @@
  */
 
 import Store from '~/stores/global';
-import Config from '~/stores/config';
-import Profiles from '~/stores/profiles';
-import DataCenter from '~/api/DataCenter';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import mobx, { useStrict } from 'mobx';
@@ -36,37 +33,33 @@ import { AppContainer } from 'react-hot-loader';
 import { Broker, EventType } from './helpers/broker';
 import App from './components/App';
 
-const Globalize = require('globalize'); // doesn't work well with import
-
-global.globalString = (path, ...params) =>
-  Globalize.messageFormatter(path)(...params);
-global.globalNumber = (value, config) =>
-  Globalize.numberFormatter(config)(value);
-
 useStrict(true);
 
 const rootEl = document.getElementById('root');
 
 let store;
-let api;
-let config;
-let profileStore;
 
 const electron = window.require('electron');
-const ipcRenderer = electron.ipcRenderer;
+const { ipcRenderer } = electron;
 
 const renderApp = () => {
   if (store) {
     console.log('Last Store Version:', store.version);
+    console.log('Last Ping:', store.dateLastPinged);
   }
-  const render = (Component) => {
+  const render = Component => {
     ReactDOM.render(
       <AppContainer>
-        <Provider store={store} api={api} config={config} profileStore={profileStore}>
+        <Provider
+          store={store}
+          api={store.api}
+          config={store.config}
+          profileStore={store.profileStore}
+        >
           <Component />
         </Provider>
       </AppContainer>,
-      rootEl,
+      rootEl
     );
   };
 
@@ -92,88 +85,71 @@ const renderApp = () => {
 Broker.once(EventType.APP_READY, renderApp);
 
 Broker.once(EventType.APP_RENDERED, () => {
-  config.load();
-  profileStore.load();
   if (IS_ELECTRON) {
     ipcRenderer.send(EventType.APP_READY);
   }
 });
 
 Broker.once(EventType.APP_CRASHED, () => {
-  console.error('Woah...App Crashed !!!!!!!');
+  logToMain('error', 'App window crashed!');
+  console.error('App window crashed');
   if (IS_ELECTRON) {
     // make a backup of the old stateStore
     store
       .backup()
       .then(() => {
         store = new Store(true);
-        api = new DataCenter(store);
-        config = new Config();
-        profileStore = new Profiles();
-        store.setProfileStore(profileStore); // TODO: remove this dependency
-        store.setAPI(api); // TODO: Remove this line after complete migration to API
         store.saveSync();
+        // try to reload once
         ipcRenderer.send(EventType.APP_CRASHED);
       })
-      .catch((err) => {
-        const remote = window.require('electron').remote;
+      .catch(err => {
+        const { remote } = window.require('electron');
         const { dialog } = remote;
         const currentWindow = remote.getCurrentWindow();
 
         dialog.showMessageBox(currentWindow, {
           title: 'Error',
           buttons: ['OK'],
-          message: err.message,
+          message: err.message
         });
       });
   }
 });
 
-window.addEventListener('beforeunload', (event) => {
-  let shouldUnmount = true;
+if (IS_ELECTRON) {
+  const { ipcRenderer } = window.require('electron');
 
-  if (IS_ELECTRON) {
-    const remote = window.require('electron').remote;
-    const { dialog } = remote;
-    const currentWindow = remote.getCurrentWindow();
+  ipcRenderer.on('shouldShowConfirmationDialog', () => {
+    ipcRenderer.send(
+      'shouldShowConfirmationDialog-reply',
+      store.hasUnsavedEditorTabs()
+    );
+  });
 
-    if (!UAT && store.hasUnsavedEditorTabs()) {
-      const response = dialog.showMessageBox(currentWindow, {
-        type: 'question',
-        buttons: ['Yes', 'No'],
-        title: 'Confirm',
-        message:
-          'You have unsaved editor tabs. Are you sure you want to continue?',
-      });
+  ipcRenderer.on('windowClosing', () => {
+    logToMain('notice', 'executing app closing logic...');
 
-      if (response === 1) {
-        // if 'No' is clicked
+    Broker.emit(EventType.WINDOW_CLOSING);
 
-        // cancel window unload
-        event.returnValue = false;
-        // cancel our own unload logics
-        shouldUnmount = false;
-      }
-    }
-  }
+    // TODO: verify this logic
+    // store.closeConnection();
+  });
+}
 
-  if (shouldUnmount) {
-    store.closeConnection();
-    ReactDOM.unmountComponentAtNode(rootEl);
-  }
+// NOTE: we cannot use this to show confirmation dialog because of this bug:
+// https://github.com/electron/electron/issues/9966
+window.onbeforeunload = () => {
+  logToMain('notice', 'executing app refreshing logic...');
+
+  Broker.emit(EventType.WINDOW_REFRESHING);
+  store.api && store.api.deleteProfileFromDrill({ removeAll: true });
+  ReactDOM.unmountComponentAtNode(rootEl);
 
   // save store anyway
   store.saveSync();
-});
+};
 
 store = new Store();
-config = new Config();
-profileStore = new Profiles();
-api = new DataCenter(store, config, profileStore);
-store.setProfileStore(profileStore);
-store.setAPI(api); // TODO: Remove this line after complete migration to API
-window.api = api;
 window.store = store;
-window.config = config;
-window.profileStore = profileStore;
 window.mobx = mobx;

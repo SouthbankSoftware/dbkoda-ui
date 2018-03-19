@@ -1,9 +1,9 @@
 /**
  * @Author: Guan Gui <guiguan>
- * @Date:   2017-12-14T12:24:16+11:00
+ * @Date:   2018-01-31T21:46:54+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-14T16:16:27+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-02-07T14:17:15+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,25 +24,10 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../../styles/_defaultTheme.scss";
+export ArrowWidget from './ArrowWidget';
+export RadialWidget from './RadialWidget';
+export StackedRadialWidget from './StackedRadialWidget';
+export ProgressBarWidget from './ProgressBarWidget';
+export Widget from './Widget';
+export DonutWidget from './Donut';
 
-.Widget {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  color: lighten($panelLeftBackground, 30);
-  text-shadow: 0 -1px 0 $panelLeftBackground;
-  white-space: nowrap;
-  overflow: hidden;
-
-  .title {
-    font-size: 20px;
-  }
-
-  .value {
-    font-size: 36px;
-  }
-}

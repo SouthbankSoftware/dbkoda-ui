@@ -218,6 +218,7 @@ export default class Panel extends React.Component {
             if (!filePath) {
               filePath = '/Users/mike/.dbKoda/';
               console.error('Did not recieve a file path back from controller');
+              logToMain('error', 'Did not recieve a file path back from controller');
             }
             window.require('electron').shell.showItemInFolder(filePath);
           }
@@ -289,6 +290,7 @@ export default class Panel extends React.Component {
         })
         .catch((err) => {
           console.error(err);
+          logToMain('error', 'Failed to create support bundle: ' + err);
           reject(err);
         });
     });

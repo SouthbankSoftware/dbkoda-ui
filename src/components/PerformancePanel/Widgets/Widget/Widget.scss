@@ -1,0 +1,249 @@
+/**
+ * @Author: Guan Gui <guiguan>
+ * @Date:   2017-12-14T12:24:16+11:00
+ * @Email:  root@guiguan.net
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-02-22T23:51:04+11:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '../../../../styles/_defaultTheme.scss';
+$container-padding: 5px;
+$background-colour: #202020;
+
+.StackedRadialWidgetTooltip {
+  .pt-popover-content {
+    div {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+}
+.Widget {
+  height: 100%;
+  width: 100%;
+
+  .pt-popover-target {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  hr {
+    border: 1px solid rgba(79, 79, 79, 0.5);
+    width: calc(100% - 40px);
+    text-align: center;
+    margin: 0 20px;
+    position: absolute;
+    bottom: 10px;
+  }
+
+  hr.vertical {
+    border: none;
+    border-right: 1px solid rgba(79, 79, 79, 0.5);
+    height: 100vh;
+    width: 1px;
+    left: calc(100% - 25px);
+    height: 75%;
+    top: 12.5%;
+  }
+
+  hr.verticalLeft {
+    border: none;
+    border-right: 1px solid rgba(79, 79, 79, 0.5);
+    height: 100vh;
+    width: 1px;
+    left: 0;
+    height: 75%;
+    top: 12.5%;
+    margin-left: 0;
+  }
+
+  > span > div.pt-popover-target,
+  .DefaultWidgetView,
+  .children,
+  > span {
+    width: 100%;
+    height: 100%;
+  }
+
+  .parentWidgetWrapper {
+    width: 100%;
+    height: 100%;
+
+    div.rowText {
+      opacity: 0.5;
+      position: absolute;
+      left: calc(100% + 250px);
+      top: 28px;
+      color: #bfbec0;
+      opacity: 0.5;
+      width: 200%;
+      text-align: center;
+    }
+
+    div.panelTitle {
+      /* Saf3.1+, Chrome */
+
+      div.content {
+        opacity: 0.4;
+        position: absolute;
+        -webkit-transform: rotate(-90deg);
+        color: #bfbec0;
+        font-size: 30px;
+        position: absolute;
+        left: -60px;
+      }
+      div.Server {
+        top: 55%;
+      }
+      div.Cache {
+        top: 60%;
+      }
+      div.Disk {
+        left: -48px;
+        top: 80%;
+      }
+    }
+
+    div.header {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      margin: 0;
+      width: calc(100% - 20px);
+      top: 3px;
+
+      b.title {
+        font-size: 16px;
+        color: #bfbec0;
+        text-shadow: 0 -1px 0 $panelLeftBackground;
+        white-space: nowrap;
+        opacity: 1;
+        margin-left: 6px;
+        font-weight: normal;
+        margin-right: 6px;
+      }
+
+      span {
+        border: none;
+        z-index: 100;
+        opacity: 0.6;
+        margin-top: 6px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-left: auto;
+        top: -2px;
+        right: 16px;
+        background-color: none;
+      }
+      span.toolTip {
+        z-index: 100;
+        opacity: 0.6;
+        margin-top: 5px;
+        top: 4px;
+        border-radius: 50%;
+        margin-left: 2px;
+        width: 10px;
+        height: 10px;
+        right: unset;
+        background-color: $defaultFontColor;
+
+        svg.infoButton {
+          position: absolute;
+          top: 1px;
+          left: 1px;
+          width: 8px;
+          height: 8px;
+          fill: #202020;
+        }
+      }
+    }
+  }
+
+  .DefaultWidgetView {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #bfbec0;
+    text-shadow: 0 -1px 0 $panelLeftBackground;
+    white-space: nowrap;
+    overflow: hidden;
+
+    .title {
+      font-size: 20px;
+      font-weight: normal;
+    }
+
+    .value {
+      font-size: 36px;
+    }
+  }
+}
+
+.RadialWidget.Widget {
+  .parentWidgetWrapper {
+    .header {
+      top: -20px;
+      left: 5px;
+    }
+  }
+
+  .completed {
+    fill: #567fa7;
+    font-size: smaller !important;
+  }
+
+  .layer-0 {
+    fill: #365f87;
+    font-size: smaller !important;
+  }
+
+  .layer-1 {
+    fill: #01969e;
+    font-size: smaller !important;
+  }
+}
+
+.Network.RadialWidget.Widget {
+  .parentWidgetWrapper {
+    .header {
+      top: -30px;
+      left: 5px;
+    }
+  }
+
+  .completed {
+    fill: #567fa7;
+    font-size: smaller !important;
+  }
+
+  .layer-0 {
+    fill: #365f87;
+    font-size: smaller !important;
+  }
+
+  .layer-1 {
+    fill: #01969e;
+    font-size: smaller !important;
+  }
+}

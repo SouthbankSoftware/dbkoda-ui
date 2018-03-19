@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T11:17:30+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-14T10:20:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,102 +30,156 @@ import * as React from 'react';
 // $FlowFixMe
 import { Responsive } from 'react-grid-layout';
 // $FlowFixMe
-import { Button } from '@blueprintjs/core';
-import { inject, observer } from 'mobx-react';
+import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
+import { observer } from 'mobx-react';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
-import Widget from '#/PerformancePanel/Widgets/Widget';
+import type { WidgetState } from '~/api/Widget';
 import SizeProvider from './SizeProvider';
+import * as widgetTypes from './Widgets';
 import './Panel.scss';
 
 const ResponsiveReactGridLayout = SizeProvider(Responsive);
 
-type Store = {
-  performancePanel: PerformancePanelState,
-};
-
 type Props = {
-  store: any | Store,
-  api: *,
-  profileId: UUID,
+  performancePanel: PerformancePanelState,
+  onClose: () => void,
+  resetHighWaterMark: (profileId: UUID) => void,
+  resetPerformancePanel: (profileId: UUID) => void,
+  isUnresponsive: boolean
 };
 
-@inject(({ store: { performancePanels }, api }, { profileId }) => {
-  const performancePanel = performancePanels.get(profileId);
-
-  return {
-    store: {
-      performancePanel,
-    },
-    api,
-  };
-})
 @observer
+/**
+ * Performance Panel defines the layout and creation of widgets in the performance view
+ */
 export default class PerformancePanel extends React.Component<Props> {
-  // TODO: refactor these into mobx states
-  layouts: *;
-  rows = 8;
-  cols = 10;
-  widgetHeight = 2;
-  widgetWidth = 2;
-  widgets = [];
+  _getWidgetComponent(widget: WidgetState) {
+    const { id, type } = widget;
+    const { performancePanel } = this.props;
+    const { layouts } = performancePanel;
 
-  static defaultProps = {
-    store: null,
-    api: null,
-  };
+    const layout = layouts.get(id);
 
-  constructor(props: Props) {
-    super(props);
+    if (layout) {
+      const Widget = widgetTypes[type];
 
-    const { api, profileId } = this.props;
-
-    this.widgets.push(api.addWidget(profileId, ['dummy-0']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-1']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-2']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-3']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-4']));
-    this.widgets.push(api.addWidget(profileId, ['dummy-5']));
-
-    this.layouts = {
-      desktop: this.widgets.map((v, i) => ({
-        w: this.widgetWidth,
-        h: this.widgetHeight,
-        x: (i * this.widgetWidth) % this.cols,
-        y: Math.floor(i / this.cols),
-        i: v,
-      })),
-    };
+      return (
+        <div
+          id={`widget-${id}`}
+          key={id}
+          data-grid={layout}
+          style={layout.gridElementStyle}
+        >
+          <Widget
+            performancePanel={performancePanel}
+            widget={widget}
+            widgetStyle={layout.widgetStyle}
+          />
+        </div>
+      );
+    }
   }
 
   render() {
-    const { api, profileId } = this.props;
+    const {
+      performancePanel: { widgets, rowHeight, rows, cols, profileAlias },
+      onClose,
+      resetHighWaterMark,
+      resetPerformancePanel,
+      isUnresponsive
+    } = this.props;
 
     return (
       <div className="PerformancePanel">
+        {isUnresponsive && (
+          <div className="unresponsive">
+            <span className="unresponsiveText">
+              {globalString('performance/unresponsive')}
+            </span>
+          </div>
+        )}
+        <div className="performanceNavBar">
+          <div className="performanceTitleBar">
+            <div className="title">{globalString('performance/title')}</div>
+            <div className="titleProfile">
+              {profileAlias}
+              {isUnresponsive && ' (Not Responding)'}
+            </div>
+            {resetHighWaterMark &&
+              !isUnresponsive && (
+                <Tooltip
+                  className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                  content="Reset High Water Mark"
+                  hoverOpenDelay={1000}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.BOTTOM}
+                >
+                  <Button
+                    className="reset-button pt-button pt-intent-primary"
+                    text="Reset HWM"
+                    onClick={resetHighWaterMark}
+                  />
+                </Tooltip>
+              )}
+            {// @TODO -> 0.10.1 fix to add a reset connections button.
+            false && (
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content="Reset Connections."
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  className="reset-button pt-button pt-intent-primary"
+                  text="Reset Connections"
+                  onClick={() => {
+                    console.debug('Reset Performance Panel Clicked...');
+                    // $FlowFixMe
+                    resetPerformancePanel();
+                  }}
+                />
+              </Tooltip>
+            )}
+          </div>
+          <div className="performanceSubNavBar">
+            <div className="subtitle os">
+              {globalString('performance/section_headers/os')}
+            </div>
+            <div className="subtitle mongo">
+              {globalString('performance/section_headers/mongo')}
+            </div>
+          </div>
+        </div>
+        <hr className="osDivider" />
         <ResponsiveReactGridLayout
           className="GridLayout"
-          layouts={this.layouts}
           autoSize={false}
+          compactType={null}
+          preventCollision={false}
           breakpoints={{
-            desktop: 0,
+            desktop: 0
           }}
           cols={{
-            desktop: this.cols,
+            desktop: cols
           }}
-          verticalGridSize={this.rows}
-          margin={[12, 12]}
+          rowHeight={rowHeight}
+          margin={[0, 0]}
+          verticalGridSize={rows}
+          bFitHeight
+          minFitHeight={901}
         >
-          {this.widgets.map(v => (
-            <div id={`widget-${v}`} key={v} className="pt-elevation-3">
-              <Widget id={v} />
-            </div>
-          ))}
+          {widgets.values().map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
-        <Button
-          className="close-button pt-button pt-intent-primary"
-          text="X"
-          onClick={() => api.closePerformancePanel(profileId)}
-        />
+        {onClose && (
+          <Button
+            className="close-button pt-button pt-intent-primary"
+            text="X"
+            onClick={onClose}
+          />
+        )}
       </div>
     );
   }

@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:47:30+11:00
+ * @Last modified time: 2018-03-04T23:35:55+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,50 +31,76 @@ import uuid from 'uuid/v1';
 import autobind from 'autobind-decorator';
 // $FlowFixMe
 import { featherClient } from '~/helpers/feathers';
-// $FlowFixMe
-import { Broker, EventType } from '~/helpers/broker'; // eslint-disable-line
 import _ from 'lodash';
+import type { Alarm } from '#/PerformancePanel/Widgets/Widget/AlarmView';
 
 export const widgetErrorLevels = {
   warn: 'warn',
-  error: 'error',
+  error: 'error'
 };
 
 export type WidgetValue = {
   timestamp: number,
-  value: { [string]: any },
+  value: { [string]: any }
 };
 export type WidgetErrorLevel = $Keys<typeof widgetErrorLevels>;
+export type WidgetStateBuffer = {
+  values: Array<WidgetValue>,
+  alarms?: Array<Alarm>
+};
 export type WidgetState = {
   id: UUID,
   profileId: UUID,
+  type: string,
   items: string[],
   values: IObservableArray<WidgetValue>,
   state: ComponentState,
   errorLevel: ?WidgetErrorLevel,
   error: ?string,
+  buffer: ?WidgetStateBuffer,
+  name?: string,
+  description?: string,
+  unit?: any,
+  showVertical?: boolean,
+  chartTitle?: string,
+  panelTitle?: string,
+  title?: string,
+  rowText?: string,
+  showVerticalRule?: boolean,
+  showVerticalRuleLeft?: boolean,
+  showHorizontalRule?: boolean,
+  showLegend?: *,
+  displayName?: *,
+  widgetItemKeys?: *,
+  widgetDisplayNames?: *,
+  showRunQueue?: *,
+  useHighWaterMark?: *,
+  showAlarms?: *,
+  alarms?: IObservableArray<Alarm>,
+  infoWidget?: boolean
 };
 
 export default class WidgetApi {
   store: *;
   api: *;
-  statsService: *;
 
   constructor(store: *, api: *) {
     this.store = store;
     this.api = api;
-    this.statsService = featherClient().statsService;
   }
 
-  _createWidgetErrorHandler = (id: UUID) => {
-    return action((err) => {
-      const widget = this.store.widgets.get(id);
+  _createErrorHandler = (profileId: UUID, id: UUID) => {
+    // eslint-disable-next-line arrow-parens
+    return action(err => {
+      const performancePanel = this.store.performancePanels.get(profileId);
+      const { widgets } = performancePanel;
+      const widget = widgets.get(id);
 
       if (widget) {
         _.assign(widget, {
           state: 'error',
           errorLevel: widgetErrorLevels.error,
-          error: err.message,
+          error: err.message
         });
       }
     });
@@ -84,65 +110,56 @@ export default class WidgetApi {
   addWidget(
     profileId: UUID,
     items: string[],
-    extraState: ?{ id?: string } = null,
-    statsServiceOptiopns: ?{} = null, // eslint-disable-line
+    type: string,
+    extraState: ?{ id?: string } = null
   ): UUID {
-    const { widgets } = this.store;
+    const performancePanel = this.store.performancePanels.get(profileId);
+    const { widgets } = performancePanel;
 
     const id = (extraState && extraState.id) || uuid();
 
     const widget: WidgetState = {
       id,
       profileId,
+      type,
       items,
       values: observable.shallowArray(),
       state: 'loading',
       errorLevel: null,
       error: null,
-      ...extraState,
+      buffer: null,
+      ...extraState
     };
 
-    widgets.set(id, observable.shallowObject(widget));
+    widget.showAlarms && (widget.alarms = observable.shallowArray());
 
-    // this.statsService
-    //   .create({
-    //     profileId,
-    //     items,
-    //     options: statsServiceOptiopns,
-    //   })
-    //   .then(
-    //     action(() => {
-    //       const widget = widgets.get(id);
-    //
-    //       if (widget) {
-    //         widget.state = 'loaded';
-    //       }
-    //     }),
-    //   )
-    //   .catch(this._createWidgetErrorHandler(id));
+    widgets.set(id, observable.shallowObject(widget));
 
     return id;
   }
 
   @autobind
-  removeWidget(id: UUID) {
-    const { widgets } = this.store;
+  removeWidget(profileId: UUID, id: UUID) {
+    const performancePanel = this.store.performancePanels.get(profileId);
+    const { widgets } = performancePanel;
 
     const widget = widgets.get(id);
 
     if (widget) {
-      // this.statsService
-      //   .remove(widget.profileId, {
-      //     query: {
-      //       items: widgets.items,
-      //     },
-      //   })
-      //   .then(
-      //     action(() => {
+      const { profileId, items } = widget;
+
+      featherClient()
+        .statsService.remove(profileId, {
+          query: {
+            items
+          }
+        })
+        .then(
+          action(() => {
             widgets.delete(id);
-        //   }),
-        // )
-        // .catch(this._createWidgetErrorHandler(id));
+          })
+        )
+        .catch(this._createErrorHandler(profileId, id));
     }
   }
 }

@@ -2,8 +2,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-11-20T14:07:16+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-23T15:16:57+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-16T10:55:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -38,7 +38,7 @@ const ENABLE_SOURCE_MAP = true;
 module.exports = merge(
   merge.strategy({
     'module.rules': 'prepend',
-    plugins: 'prepend',
+    plugins: 'prepend'
   })(common, {
     module: {
       rules: [
@@ -46,28 +46,57 @@ module.exports = merge(
           test: /\.css$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: 'css-loader',
-          }),
+            use: 'css-loader'
+          })
         },
         {
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader'],
-          }),
-        },
-      ],
+            use: [
+            {
+                loader: 'css-loader',
+                options: {
+                    url: false,
+                    minimize: true,
+                    sourceMap: false
+                }
+            },
+            {
+                loader: 'sass-loader',
+                options: {
+                    sourceMap: false
+                }
+            }
+          ]
+          })
+        }
+      ]
     },
     devtool: ENABLE_SOURCE_MAP ? 'source-map' : false,
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          NODE_ENV: JSON.stringify('production'),
-        },
+          NODE_ENV: JSON.stringify('production')
+        }
       }),
       new webpack.optimize.ModuleConcatenationPlugin(),
-      new ExtractTextPlugin('style.css'),
-      new OptimizeCssAssetsPlugin(),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'commons',
+        filename: 'commons.js',
+        chunks: ['main', 'performance']
+      }),
+      new ExtractTextPlugin({
+        filename: '[name].css',
+        allChunks: true
+      }),
+      new OptimizeCssAssetsPlugin({
+        cssProcessor: require('cssnano'),
+        cssProcessorOptions: {
+          safe: true,
+          discardComments: { removeAll: true }
+        }
+      }),
       new UglifyJsPlugin({
         parallel: true,
         sourceMap: ENABLE_SOURCE_MAP,
@@ -76,17 +105,17 @@ module.exports = merge(
           compress: true,
           output: {
             comments: false,
-            beautify: false,
-          },
-        },
+            beautify: false
+          }
+        }
       }),
       new GlobalizePlugin(
         merge(commonGlobalizePluginOptions, {
           // because of statical extraction, we need to change our way of using Globalize in order
           // to enable this
-          production: false,
-        }),
-      ),
-    ],
-  }),
+          production: false
+        })
+      )
+    ]
+  })
 );
