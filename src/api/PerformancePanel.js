@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-15T15:39:39+11:00
+ * @Last modified time: 2018-03-22T10:33:34+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -510,8 +510,8 @@ export default class PerformancePanelApi {
     } = this.config.settings.performancePanel;
 
     // always call create because it is idempotent
-    const statsSrv = featherClient();
-    statsSrv.statsService
+    featherClient()
+      .service('stats')
       .create({
         profileId,
         profileAlias,
@@ -552,7 +552,8 @@ export default class PerformancePanelApi {
       }
 
       featherClient()
-        .statsService.remove(profileId)
+        .service('stats')
+        .remove(profileId)
         .catch(err => {
           this._handleError(profileId, err);
         });
@@ -764,7 +765,8 @@ export default class PerformancePanelApi {
 
   resetHighWaterMark = (profileId: UUID) => {
     featherClient()
-      .statsService.patch(profileId, {resetStats: true})
+      .service('stats')
+      .patch(profileId, { resetStats: true })
       .catch(err => {
         this._handleError(profileId, err);
       });
@@ -780,10 +782,12 @@ export default class PerformancePanelApi {
   };
 
   changeSamplingRate = (profileId: UUID, newSamplingRate: number) => {
-    const statsSrv = featherClient();
-    statsSrv.statsService.patch(profileId, {samplingRate: newSamplingRate}).catch(err => {
-      this._handleError(profileId, err);
-    });
+    featherClient()
+      .service('stats')
+      .patch(profileId, { samplingRate: newSamplingRate })
+      .catch(err => {
+        this._handleError(profileId, err);
+      });
   };
 
   reactToSamplingRateChange = (rate: number, foreground: boolean) => {

@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-04T23:35:55+11:00
+ * @Last modified time: 2018-03-22T10:32:35+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -149,7 +149,8 @@ export default class WidgetApi {
       const { profileId, items } = widget;
 
       featherClient()
-        .statsService.remove(profileId, {
+        .service('stats')
+        .remove(profileId, {
           query: {
             items
           }
