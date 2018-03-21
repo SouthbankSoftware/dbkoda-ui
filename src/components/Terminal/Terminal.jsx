@@ -210,7 +210,7 @@ export default class Terminal extends React.PureComponent<Props> {
       NewToaster.show({
         message: `${terminalDisplayNames[type]} Terminal: ${error}`,
         className,
-        iconName: 'pt-icon-thumbs-down',
+        icon: 'thumbs-down',
       });
     }
   };

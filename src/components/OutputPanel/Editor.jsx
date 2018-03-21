@@ -114,7 +114,7 @@ export default class Editor extends React.Component {
             );
           }}
           text={globalString('output/editor/contextJson')}
-          iconName="pt-icon-panel-stats"
+          icon="pt-icon-panel-stats"
           intent={Intent.NONE}
         />
       </div>
@@ -122,7 +122,7 @@ export default class Editor extends React.Component {
     menuItems.push(
       <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
         <MenuItem
-          iconName="pt-icon-th"
+          icon="pt-icon-th"
           text={globalString('output/editor/contextTable')}
           intent={Intent.NONE}
         >
@@ -138,7 +138,7 @@ export default class Editor extends React.Component {
               );
             }}
             text={globalString('output/editor/contextTableSingle')}
-            iconName="pt-icon-th"
+            icon="pt-icon-th"
             intent={Intent.NONE}
           />
           <MenuItem
@@ -153,7 +153,7 @@ export default class Editor extends React.Component {
               );
             }}
             text={globalString('output/editor/contextTableMulti')}
-            iconName="pt-icon-th"
+            icon="pt-icon-th"
             intent={Intent.NONE}
           />
         </MenuItem>
@@ -169,7 +169,7 @@ export default class Editor extends React.Component {
           }}
           text={globalString('profile/menu/newLocalTerminal')}
           intent={Intent.NONE}
-          iconName="pt-icon-new-text-box"
+          icon="pt-icon-new-text-box"
         />
       </div>
     );
@@ -216,7 +216,7 @@ export default class Editor extends React.Component {
               });
           }}
           text={globalString('output/editor/contextChart')}
-          iconName="pt-icon-th"
+          icon="pt-icon-th"
           intent={Intent.NONE}
         />
       </div>

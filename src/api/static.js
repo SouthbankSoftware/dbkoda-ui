@@ -127,7 +127,7 @@ export default class StaticApi {
           NewToaster.show({
             message: globalString('output/editor/exceededMaxDocs'),
             className: 'warning',
-            iconName: 'pt-icon-thumbs-down'
+            icon: 'thumbs-down'
           });
         }
       }
@@ -170,7 +170,7 @@ export default class StaticApi {
           NewToaster.show({
             message: globalString('output/editor/exceededMaxDocs'),
             className: 'warning',
-            iconName: 'pt-icon-thumbs-down'
+            icon: 'thumbs-down'
           });
         }
       }

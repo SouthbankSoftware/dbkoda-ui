@@ -62,7 +62,7 @@ export default class Config {
     NewToaster.show({
       message,
       className: 'danger',
-      iconName: 'pt-icon-thumbs-down'
+      icon: 'thumbs-down'
     });
   };
 

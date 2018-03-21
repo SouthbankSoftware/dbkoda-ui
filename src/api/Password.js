@@ -139,13 +139,13 @@ export default class Password {
           NewToaster.show({
             message: `${globalString('password_dialog/login_error_message')}`,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
+            icon: 'thumbs-down',
           });
         } else {
           NewToaster.show({
             message: `${globalString('password_dialog/general_error_message')}`,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
+            icon: 'thumbs-down',
           });
         }
       });
@@ -164,7 +164,7 @@ export default class Password {
         NewToaster.show({
           message: `Could not remove password store: ${error.message}`,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          icon: 'thumbs-down',
         });
       });
   }

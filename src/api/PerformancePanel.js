@@ -312,13 +312,13 @@ export default class PerformancePanelApi {
       // $FlowFixMe
       message: `Profile ${profileAlias} (${profileId}) ${level}: ${err.message || err}`,
       className: level === 'error' ? 'danger' : 'warning',
-      iconName: 'pt-icon-thumbs-down'
+      icon: 'thumbs-down'
     });
     this.showToasterInPerformanceWindow(profileId, {
       // $FlowFixMe
       message: (err.message || err) + ' try restarting performance panel.',
       className: 'danger',
-      iconName: 'pt-icon-thumbs-down'
+      icon: 'thumbs-down'
     });
   };
 

@@ -102,7 +102,7 @@ export default class TranslatorPanel extends React.Component {
       toaster.show({
         message: (<span dangerouslySetInnerHTML={{__html: msg}} />), // eslint-disable-line react/no-danger
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
     this.setState({syntaxErrors : newSyntaxErrors});
@@ -135,7 +135,7 @@ export default class TranslatorPanel extends React.Component {
       DBKodaToaster().show({
           message: (<span dangerouslySetInnerHTML={{__html: err.message}} />), // eslint-disable-line react/no-danger
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
     });
   }
@@ -147,7 +147,7 @@ export default class TranslatorPanel extends React.Component {
           <MenuItem
             onClick={this.executeCommands}
             text={globalString('editor/view/menu/executeAll')}
-            iconName="pt-icon-double-chevron-right"
+            icon="pt-icon-double-chevron-right"
             intent={Intent.NONE}
           />
         </div>

@@ -2,8 +2,8 @@
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:13:45+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-21T11:01:51+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -47,7 +47,7 @@ describe('Editor Panel', () => {
   });
 
   test('has tabs', () => {
-    expect(app.find('Tabs2').length).toEqual(1);
+    expect(app.find('Tabs').length).toEqual(1);
   });
 
   test('has a toolbar', () => {

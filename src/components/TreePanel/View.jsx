@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T16:57:08+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-21T16:47:20+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -169,8 +169,8 @@ export default class TreeView extends React.Component {
     return null;
   }
 
-  getIconFor(iconName) {
-    switch (iconName) {
+  getIconFor(icon) {
+    switch (icon) {
       case 'settings':
         return <SettingsIcon className="dbKodaSVG" width={20} height={20} />;
       case 'document':
@@ -204,14 +204,14 @@ export default class TreeView extends React.Component {
           text="Make Root Node"
           key="MakeRoot"
           name="MakeRoot"
-          iconName="pt-icon-git-new-branch"
+          icon="git-new-branch"
           intent={Intent.NONE}
         />
       );
       if (Actions && Actions.length > 0) {
         Menus.push(<MenuDivider key="divider" />);
         for (const objAction of Actions) {
-          // iconName={objAction.icon}
+          // icon={objAction.icon}
           if (objAction.name === 'ShowPerformancePanel' && this.props.store.profileList.selectedProfile) {
             const hasPerformancePanel = this.props.api.hasPerformancePanel(this.props.store.profileList.selectedProfile.id);
             objAction.text = globalString(
@@ -262,7 +262,7 @@ export default class TreeView extends React.Component {
                       onClick={this.handleTreeActionClick}
                       text={objAction.text}
                       key={objAction.name}
-                      iconName={objAction.icon}
+                      icon={objAction.icon}
                       intent={Intent.NONE}
                     />
                   </div>
@@ -692,13 +692,13 @@ export default class TreeView extends React.Component {
       NewToaster.show({
         message,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     } else {
       NewToaster.show({
         message: globalString('drill/drill_editor_open_success'),
         className: 'success',
-        iconName: 'pt-icon-thumbs-up'
+        icon: 'pt-icon-thumbs-up'
       });
     }
   };

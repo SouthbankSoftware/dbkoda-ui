@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-21T15:40:44+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-21T11:22:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -44,7 +44,7 @@ declare module '@blueprintjs/core' {
     /**
      * The name of a Blueprint icon to display next to the node's label.
      */
-    iconName?: string,
+    icon?: string,
 
     /**
      * A unique identifier for the node.
@@ -318,27 +318,11 @@ declare module '@blueprintjs/core/dist/components/tabs/tab' {
   declare module.exports: any;
 }
 
-declare module '@blueprintjs/core/dist/components/tabs/tabList' {
-  declare module.exports: any;
-}
-
-declare module '@blueprintjs/core/dist/components/tabs/tabPanel' {
-  declare module.exports: any;
-}
-
 declare module '@blueprintjs/core/dist/components/tabs/tabs' {
   declare module.exports: any;
 }
 
-declare module '@blueprintjs/core/dist/components/tabs2/tab2' {
-  declare module.exports: any;
-}
-
-declare module '@blueprintjs/core/dist/components/tabs2/tabs2' {
-  declare module.exports: any;
-}
-
-declare module '@blueprintjs/core/dist/components/tabs2/tabTitle' {
+declare module '@blueprintjs/core/dist/components/tabs/tabTitle' {
   declare module.exports: any;
 }
 
@@ -556,23 +540,11 @@ declare module '@blueprintjs/core/dist/components/spinner/svgSpinner.js' {
 declare module '@blueprintjs/core/dist/components/tabs/tab.js' {
   declare module.exports: $Exports<'@blueprintjs/core/dist/components/tabs/tab'>;
 }
-declare module '@blueprintjs/core/dist/components/tabs/tabList.js' {
-  declare module.exports: $Exports<'@blueprintjs/core/dist/components/tabs/tabList'>;
-}
-declare module '@blueprintjs/core/dist/components/tabs/tabPanel.js' {
-  declare module.exports: $Exports<'@blueprintjs/core/dist/components/tabs/tabPanel'>;
-}
 declare module '@blueprintjs/core/dist/components/tabs/tabs.js' {
   declare module.exports: $Exports<'@blueprintjs/core/dist/components/tabs/tabs'>;
 }
-declare module '@blueprintjs/core/dist/components/tabs2/tab2.js' {
-  declare module.exports: $Exports<'@blueprintjs/core/dist/components/tabs2/tab2'>;
-}
-declare module '@blueprintjs/core/dist/components/tabs2/tabs2.js' {
-  declare module.exports: $Exports<'@blueprintjs/core/dist/components/tabs2/tabs2'>;
-}
-declare module '@blueprintjs/core/dist/components/tabs2/tabTitle.js' {
-  declare module.exports: $Exports<'@blueprintjs/core/dist/components/tabs2/tabTitle'>;
+declare module '@blueprintjs/core/dist/components/tabs/tabTitle.js' {
+  declare module.exports: $Exports<'@blueprintjs/core/dist/components/tabs/tabTitle'>;
 }
 declare module '@blueprintjs/core/dist/components/tag/tag.js' {
   declare module.exports: $Exports<'@blueprintjs/core/dist/components/tag/tag'>;

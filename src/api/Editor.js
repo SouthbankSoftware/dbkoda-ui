@@ -90,7 +90,7 @@ export default class EditorApi {
         NewToaster.show({
           message: globalString('editor/toolbar/addEditorError'),
           className: 'warning',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         this.createNewEditorFailed();
         return null;
@@ -119,7 +119,7 @@ export default class EditorApi {
             NewToaster.show({
               message: 'Error: ' + err.message,
               className: 'danger',
-              iconName: 'pt-icon-thumbs-down'
+              icon: 'thumbs-down'
             });
             console.error(err.message);
             logToMain('error', 'Error creating new editor: ' + err.message);
@@ -136,7 +136,7 @@ export default class EditorApi {
       NewToaster.show({
         message: err.message,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
       this.createNewEditorFailed();
     }
@@ -289,7 +289,7 @@ export default class EditorApi {
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
-      iconName: 'pt-icon-thumbs-up',
+      icon: 'pt-icon-thumbs-up',
       className: 'success'
     });
     return editorId;
@@ -434,7 +434,7 @@ SHOW TABLES
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
-      iconName: 'pt-icon-thumbs-up',
+      icon: 'pt-icon-thumbs-up',
       className: 'success'
     });
     return editorId;

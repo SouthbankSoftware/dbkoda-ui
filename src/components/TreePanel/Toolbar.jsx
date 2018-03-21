@@ -110,7 +110,7 @@ export default class TreeToolbar extends React.Component {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: err.message,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
       });
   }

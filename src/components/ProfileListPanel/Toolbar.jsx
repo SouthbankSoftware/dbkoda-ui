@@ -119,7 +119,7 @@ export default class Toolbar extends React.Component {
         NewToaster.show({
           message: globalString('profile/not'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
       } else {
         if (this.props.config.settings.telemetryEnabled) {
@@ -143,7 +143,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
   }
@@ -172,7 +172,7 @@ export default class Toolbar extends React.Component {
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
       className: 'success',
-      iconName: 'pt-icon-thumbs-up'
+      icon: 'pt-icon-thumbs-up'
     });
     Mousetrap.unbindGlobal(
       DialogHotkeys.closeDialog.keys,
@@ -234,7 +234,7 @@ export default class Toolbar extends React.Component {
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up'
+            icon: 'pt-icon-thumbs-up'
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
         })
@@ -251,7 +251,7 @@ export default class Toolbar extends React.Component {
           NewToaster.show({
             message: err.message,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down'
+            icon: 'thumbs-down'
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
         });
@@ -266,7 +266,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
     Mousetrap.unbindGlobal(

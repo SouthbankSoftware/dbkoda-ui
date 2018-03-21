@@ -331,7 +331,7 @@ class Terminal extends React.Component {
         <MenuItem
           onClick={this.sendCommandToEditor}
           text="Send Command to Editor"
-          iconName="pt-icon-chevron-up"
+          icon="pt-icon-chevron-up"
           intent={Intent.NONE}
         />
       </Menu>

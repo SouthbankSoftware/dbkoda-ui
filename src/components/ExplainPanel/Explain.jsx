@@ -215,7 +215,7 @@ export default class Explain extends React.Component {
       NewToaster.show({
         message: globalString('explain/panel/executeAgain'),
         className: 'error',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     } else {
       const editor = this.props.editors.get(

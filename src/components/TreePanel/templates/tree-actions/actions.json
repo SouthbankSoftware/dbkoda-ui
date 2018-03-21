@@ -4,25 +4,25 @@
     {
       "name": "EnableBalancer",
       "text": "Enable Balancer",
-      "icon": "pt-icon-split-columns"
+      "icon": "split-columns"
     },
     {
       "name": "ShardStats",
       "text": "Shard Statistics",
-      "icon": "pt-icon-grouped-bar-chart",
+      "icon": "grouped-bar-chart",
       "view": "details"
     },
     {
       "name": "shstatus",
       "text": "sh.status()",
-      "icon": "pt-icon-split-columns"
+      "icon": "split-columns"
     }
   ],
   "group_shards": [
     {
       "name": "EnableBalancer",
       "text": "Enable Balancer",
-      "icon": "pt-icon-split-columns"
+      "icon": "split-columns"
     }
   ],
   "configservers": [],
@@ -33,34 +33,34 @@
     {
       "name": "ShowPerformancePanel",
       "text": "Open Performance Panel",
-      "icon": "pt-icon-timeline-bar-chart",
+      "icon": "timeline-bar-chart",
       "noDialog": true
     },
     {
       "name": "DbStorageStats",
       "text": "Database Storage",
-      "icon": "pt-icon-pie-chart",
+      "icon": "pie-chart",
       "noDialog": true
     },
     {
       "name": "GetParameters",
       "text": "Get Parameters",
-      "icon": "pt-icon-settings"
+      "icon": "settings"
     },
     {
       "name": "SetParameter",
       "text": "Set parameter",
-      "icon": "pt-icon-settings"
+      "icon": "settings"
     },
     {
       "name": "SetLogLevel",
       "text": "Get/Set Logging levels",
-      "icon": "pt-icon-issue"
+      "icon": "issue"
     },
     {
       "name": "GetLog",
       "text": "View log entries",
-      "icon": "pt-icon-error"
+      "icon": "error"
     },
     {
       "type": "divider",
@@ -69,13 +69,13 @@
     {
       "name": "TopCollections",
       "text": "Top Collections",
-      "icon": "pt-icon-grouped-bar-chart",
+      "icon": "grouped-bar-chart",
       "view": "details"
     },
     {
       "name": "ServerStatistics",
       "text": "Server Statistics",
-      "icon": "pt-icon-doughnut-chart",
+      "icon": "doughnut-chart",
       "view": "details"
     },
     {
@@ -85,81 +85,81 @@
     {
       "name": "CurrentOps",
       "text": "Current Operations",
-      "icon": "pt-icon-comparison",
+      "icon": "comparison",
       "view": "details"
     },
     {
       "name": "KillOp",
       "text": "Kill An Operation",
-      "icon": "pt-icon-thumbs-down"
+      "icon": "thumbs-down"
     },
     {
       "name": "DumpServer",
       "text": "Dump Databases",
-      "icon": "pt-icon-import"
+      "icon": "import"
     },
     {
       "name": "RestoreServer",
       "text": "Restore Databases",
-      "icon": "pt-icon-export"
+      "icon": "export"
     }
   ],
   "database": [
     {
       "name": "CreateCollection",
       "text": "Create Collection",
-      "icon": "pt-icon-add"
+      "icon": "add"
     },
     {
       "name": "setProfilingLevel",
       "text": "Set Profiling",
-      "icon": "pt-icon-history"
+      "icon": "history"
     },
     {
       "name": "DropDatabase",
       "text": "Drop Database",
-      "icon": "pt-icon-delete"
+      "icon": "delete"
     },
     {
       "name": "RedundantDBIndex",
       "text": "Drop Unnecessary Indexes",
-      "icon": "pt-icon-small-cross"
+      "icon": "small-cross"
     },
     {
       "name": "EnableSharding",
       "text": "Enable Sharding",
-      "icon": "pt-icon-split-columns"
+      "icon": "split-columns"
     },
     {
       "name": "DbCollectionStats",
       "text": "Storage by Collection",
-      "icon": "pt-icon-horizontal-bar-chart-desc",
+      "icon": "horizontal-bar-chart-desc",
       "view": "details"
     },
     {
       "name": "ExportDatabase",
       "text": "Export Collections",
-      "icon": "pt-icon-import"
+      "icon": "import"
     },
     {
       "name": "DumpDatabase",
       "text": "Dump Database",
-      "icon": "pt-icon-import"
+      "icon": "import"
     },
     {
       "name": "ImportDatabase",
       "text": "Import Collections",
-      "icon": "pt-icon-export"
+      "icon": "export"
     },
     {
       "name": "RestoreDatabase",
       "text": "Restore Database",
-      "icon": "pt-icon-export"
+      "icon": "export"
     },
     {
       "name": "DrillDatabase",
       "text": "Query Database with Drill",
-      "icon": "pt-icon-add",
+      "icon": "add",
       "noDialog": true
     }
   ],
@@ -167,24 +167,24 @@
     {
       "name": "SampleCollections",
       "text": "Find Attributes",
-      "icon": "pt-icon-properties",
+      "icon": "properties",
       "noDialog": true
     },
     {
       "name": "SimpleQuery",
       "text": "Simple Query",
-      "icon": "pt-icon-search-template"
+      "icon": "search-template"
     },
     {
       "name": "AggregateBuilder",
       "text": "Aggregate Builder",
-      "icon": "pt-icon-sort",
+      "icon": "sort",
       "noDialog": true
     },
     {
       "name": "TableView",
       "text": "View as Table",
-      "icon": "pt-icon-th",
+      "icon": "th",
       "noDialog": true
     },
     {
@@ -194,23 +194,23 @@
     {
       "name": "CollectionStats",
       "text": "Collection Statistics",
-      "icon": "pt-icon-grouped-bar-chart",
+      "icon": "grouped-bar-chart",
       "view": "details"
     },
     {
       "name": "CreateIndex",
       "text": "Create Index",
-      "icon": "pt-icon-add"
+      "icon": "add"
     },
     {
       "name": "DropAllIndexes",
       "text": "Drop All Indexes",
-      "icon": "pt-icon-delete"
+      "icon": "delete"
     },
     {
       "name": "RedundantIndex",
       "text": "Drop Unnecessary Indexes",
-      "icon": "pt-icon-small-cross"
+      "icon": "small-cross"
     },
     {
       "type": "divider",
@@ -219,22 +219,22 @@
     {
       "name": "RenameCollection",
       "text": "Rename Collection",
-      "icon": "pt-icon-exchange"
+      "icon": "exchange"
     },
     {
       "name": "CompactCollection",
       "text": "Compact Collection",
-      "icon": "pt-icon-compressed"
+      "icon": "compressed"
     },
     {
       "name": "ValidateCollection",
       "text": "Validate Collection",
-      "icon": "pt-icon-confirm"
+      "icon": "confirm"
     },
     {
       "name": "ShardCollection",
       "text": "Shard Collection",
-      "icon": "pt-icon-split-columns"
+      "icon": "split-columns"
     },
     {
       "type": "divider",
@@ -243,22 +243,22 @@
     {
       "name": "InsertDocuments",
       "text": "Insert Documents",
-      "icon": "pt-icon-insert"
+      "icon": "insert"
     },
     {
       "name": "DeleteDocuments",
       "text": "Delete Documents",
-      "icon": "pt-icon-delete"
+      "icon": "delete"
     },
     {
       "name": "UpdateDocuments",
       "text": "Update Documents",
-      "icon": "pt-icon-edit"
+      "icon": "edit"
     },
     {
       "name": "DropCollection",
       "text": "Drop Collection",
-      "icon": "pt-icon-trash"
+      "icon": "trash"
     },
     {
       "type": "divider",
@@ -267,29 +267,29 @@
     {
       "name": "ExportCollection",
       "text": "Export Collection",
-      "icon": "pt-icon-import"
+      "icon": "import"
     },
     {
       "name": "DumpCollection",
       "text": "Dump Collection",
-      "icon": "pt-icon-import"
+      "icon": "import"
     },
     {
       "name": "RestoreCollection",
       "text": "Restore Collection",
-      "icon": "pt-icon-export"
+      "icon": "export"
     },
     {
       "name": "ImportCollection",
       "text": "Import Collection",
-      "icon": "pt-icon-export"
+      "icon": "export"
     }
   ],
   "index": [
     {
       "name": "DropIndex",
       "text": "Drop Index",
-      "icon": "pt-icon-delete"
+      "icon": "delete"
     }
   ],
   "users": [
@@ -334,18 +334,18 @@
     {
       "name": "rsstepdown",
       "text": "Stepdown primary",
-      "icon": "pt-icon-layout-sorted-clusters"
+      "icon": "layout-sorted-clusters"
     },
     {
       "name": "ReplicaStats",
       "text": "Replica Set Statistics",
-      "icon": "pt-icon-grouped-bar-chart",
+      "icon": "grouped-bar-chart",
       "view": "details"
     },
     {
       "name": "rsstatus",
       "text": "rs.status()",
-      "icon": "pt-icon-layout-sorted-clusters"
+      "icon": "layout-sorted-clusters"
     }
   ],
   "replica_member": [],

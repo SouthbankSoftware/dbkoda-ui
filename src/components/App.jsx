@@ -1,8 +1,8 @@
 /**
  * @Author: guiguan
  * @Date:   2017-03-07T13:47:00+11:00
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T13:31:19+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-21T14:14:02+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -44,8 +44,9 @@ import PasswordResetDialog from '#/common/PasswordResetDialog';
 import { performancePanelStatuses } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
-import '@blueprintjs/core/dist/blueprint.css';
-import '@blueprintjs/table/dist/table.css';
+import '@blueprintjs/icons/lib/css/blueprint-icons.css';
+import '@blueprintjs/core/lib/css/blueprint.css';
+import '@blueprintjs/table/lib/css/table.css';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/ambiance.css';
 import '~/styles/global.scss';

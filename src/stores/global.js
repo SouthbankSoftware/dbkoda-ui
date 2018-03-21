@@ -285,7 +285,7 @@ export default class Store {
       NewToaster.show({
         message: 'Error: Please select an open connection from the Profile Dropdown.',
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
     this.startCreatingNewEditor();
@@ -312,7 +312,7 @@ export default class Store {
         NewToaster.show({
           message: 'Error: ' + err.message,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         logToMain('error', 'Failed to create new editor: ' + err);
       });
@@ -332,7 +332,7 @@ export default class Store {
         NewToaster.show({
           message: err.message,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         throw err;
       });

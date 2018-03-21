@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-13T10:36:10+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T12:57:16+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-21T15:41:41+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,7 +33,7 @@ import { AppContainer } from 'react-hot-loader';
 import { Broker, EventType } from './helpers/broker';
 import App from './components/App';
 
-useStrict(true);
+useStrict(false);
 
 const rootEl = document.getElementById('root');
 

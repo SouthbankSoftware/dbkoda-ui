@@ -180,7 +180,7 @@ export default class Panel extends React.Component {
     NewToaster.show({
       message: globalString('status_bar/feedback/toaster_confirm'),
       className: 'success',
-      iconName: 'pt-icon-thumbs-up',
+      icon: 'pt-icon-thumbs-up',
     });
     this.setState({ isFeedbackAlertOpen: false });
   }
@@ -235,7 +235,7 @@ export default class Panel extends React.Component {
               />
             ),
             className: 'danger',
-            iconName: 'pt-icon-thumbs-up',
+            icon: 'pt-icon-thumbs-up',
           });
         });
     }
@@ -284,7 +284,7 @@ export default class Panel extends React.Component {
           NewToaster.show({
             message: globalString('status_bar/support_bundle/toaster_confirm'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up',
+            icon: 'pt-icon-thumbs-up',
           });
           resolve(result);
         })

@@ -123,7 +123,7 @@ export default class ListView extends React.Component {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: globalString('connection/existingAlias'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         break;
       case 'connectionFail':
@@ -137,14 +137,14 @@ export default class ListView extends React.Component {
             />
           ),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         break;
       case 'connectionSuccess':
         DBKodaToaster(Position.RIGHT_TOP).show({
           message: globalString('connection/success'),
           className: 'success',
-          iconName: 'pt-icon-thumbs-up'
+          icon: 'pt-icon-thumbs-up'
         });
         break;
       default:
@@ -247,7 +247,7 @@ export default class ListView extends React.Component {
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up'
+            icon: 'pt-icon-thumbs-up'
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
           this.props.api.deleteProfileFromDrill({ profile: selectedProfile });
@@ -271,7 +271,7 @@ export default class ListView extends React.Component {
           NewToaster.show({
             message: 'Error: ' + err.message,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down'
+            icon: 'thumbs-down'
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
           this.closeConnectionCloseAlert();
@@ -287,7 +287,7 @@ export default class ListView extends React.Component {
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
     this.closeConnectionCloseAlert();
@@ -309,7 +309,7 @@ export default class ListView extends React.Component {
         NewToaster.show({
           message: globalString('profile/notClosed'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
       } else {
         if (this.props.config.settings.telemetryEnabled) {
@@ -333,7 +333,7 @@ export default class ListView extends React.Component {
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
   }
@@ -358,7 +358,7 @@ export default class ListView extends React.Component {
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
       className: 'success',
-      iconName: 'pt-icon-thumbs-up'
+      icon: 'pt-icon-thumbs-up'
     });
     this.closeConnectionRemoveAlert();
   }
@@ -559,7 +559,7 @@ export default class ListView extends React.Component {
               onClick={this.openOpenConnectionAlert}
               text={globalString('profile/menu/openConnection')}
               intent={Intent.NONE}
-              iconName="pt-icon-unlock"
+              icon="pt-icon-unlock"
             />
           </div>
           <div className="menuItemWrapper">
@@ -568,7 +568,7 @@ export default class ListView extends React.Component {
               onClick={this.editProfile}
               text={globalString('profile/menu/editProfile')}
               intent={Intent.NONE}
-              iconName="pt-icon-edit"
+              icon="pt-icon-edit"
             />
           </div>
           <div className="menuItemWrapper">
@@ -577,7 +577,7 @@ export default class ListView extends React.Component {
               onClick={this.openRemoveConnectionAlert}
               text={globalString('profile/menu/deleteProfile')}
               intent={Intent.NONE}
-              iconName="pt-icon-delete"
+              icon="pt-icon-delete"
             />
           </div>
         </div>
@@ -596,7 +596,7 @@ export default class ListView extends React.Component {
                 text={api.getEditorDisplayName(value)}
                 onClick={() => this.swapToEditor(value)}
                 intent={Intent.NONE}
-                iconName="pt-icon-document"
+                icon="pt-icon-document"
               />
             </div>
           );
@@ -613,7 +613,7 @@ export default class ListView extends React.Component {
               onClick={this.openCloseConnectionAlert}
               text={globalString('profile/menu/closeConnection')}
               intent={Intent.NONE}
-              iconName="pt-icon-lock"
+              icon="pt-icon-lock"
             />
           </div>
           <div className="menuItemWrapper">
@@ -624,7 +624,7 @@ export default class ListView extends React.Component {
               }
               text={globalString('profile/menu/newWindow')}
               intent={Intent.NONE}
-              iconName="pt-icon-new-text-box"
+              icon="pt-icon-new-text-box"
             />
           </div>
           <MenuDivider />
@@ -649,7 +649,7 @@ export default class ListView extends React.Component {
                 }`
               )}
               intent={Intent.NONE}
-              iconName="pt-icon-heat-grid"
+              icon="pt-icon-heat-grid"
             />
           </div>
           {hasPerformancePanel ? (
@@ -661,7 +661,7 @@ export default class ListView extends React.Component {
                 }
                 text={globalString('profile/menu/destroyPerformancePanel')}
                 intent={Intent.NONE}
-                iconName="pt-icon-heat-grid"
+                icon="pt-icon-heat-grid"
               />
             </div>
           ) : null}
@@ -672,7 +672,7 @@ export default class ListView extends React.Component {
                 onClick={() => this.props.api.resetHighWaterMark(profile.id)}
                 text={globalString('profile/menu/resetHWM')}
                 intent={Intent.NONE}
-                iconName="pt-icon-heat-grid"
+                icon="pt-icon-heat-grid"
               />
             </div>
           ) : null}
@@ -688,7 +688,7 @@ export default class ListView extends React.Component {
             onClick={() => this.openSshConnectionAlert()}
             text={globalString('profile/menu/newSshTerminal')}
             intent={Intent.NONE}
-            iconName="pt-icon-new-text-box"
+            icon="pt-icon-new-text-box"
           />
         </div>
       );
@@ -705,7 +705,7 @@ export default class ListView extends React.Component {
           }}
           text={globalString('profile/menu/newLocalTerminal')}
           intent={Intent.NONE}
-          iconName="pt-icon-new-text-box"
+          icon="pt-icon-new-text-box"
         />
       </div>
     );
