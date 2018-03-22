@@ -17,7 +17,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 /**
  * @Author: chris
  * @Date:   2017-06-20T15:09:51+10:00
@@ -25,6 +24,7 @@
  * @Last modified by:   guiguan
  * @Last modified time: 2018-03-14T13:38:08+11:00
  */
+
 import React from 'react';
 import { reaction } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -58,13 +58,11 @@ export default class Analytics extends React.Component {
       });
     }
     ReactGA.set({ page: siteUrl });
-
     if (this.props.config.settings.telemetryEnabled) {
       // TODO Get App Version
       const appVersion = this.props.store.version;
       this._sendEvent(AnalyticsEvents.APP_OPEN, 'App', appVersion);
     }
-
     /**
      * Reaction function for when a change occurs on the telemetryEnabled state
      * @param {function()} - The state that will trigger the reaction.
@@ -83,7 +81,6 @@ export default class Analytics extends React.Component {
       },
       { name: 'analyticsReactionToTelemetryChange' }
     );
-
     /**
      * send opt events when clicking ok button.
      */
@@ -98,7 +95,6 @@ export default class Analytics extends React.Component {
       },
       { name: 'analyticsReactionToTelemetryChange' }
     );
-
     this._sendEvent = this._sendEvent.bind(this);
     this.newProfileCreated = this.newProfileCreated.bind(this);
     this.feedbackEvent = this.feedbackEvent.bind(this);
@@ -164,6 +160,7 @@ export default class Analytics extends React.Component {
       service
         .get(true)
         .then(result => {
+          console.debug('RESULT: ', result);
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
             'Ping.daysSinceFirstPing',
@@ -172,7 +169,7 @@ export default class Analytics extends React.Component {
           this._sendEvent(
             AnalyticsEvents.PING_HOME,
             'Ping.daysSinceFolderCreated',
-            result.daysSinceCreation
+            '' + result.daysSinceCreation
           );
         })
         .catch(err => {
@@ -181,7 +178,6 @@ export default class Analytics extends React.Component {
         });
     }
   }
-
   /**
    *  Function to be called after a new profile event has been received
    *  @param {Object} profile - An object that represents the newly created profile
@@ -206,7 +202,6 @@ export default class Analytics extends React.Component {
       this._sendEvent(AnalyticsEvents.NEW_PROFILE, 'Profiles', mongoInfo);
     }
   }
-
   /**
    *f
    * function to be called when activity goes to the controller.
@@ -232,13 +227,11 @@ export default class Analytics extends React.Component {
       }
     }
   }
-
   keyFeatureEvent(feature) {
     if (this.props.config.settings.telemetryEnabled) {
       this._sendEvent(AnalyticsEvents.KEY_FEATURE_USED, 'FeatureUsed', feature);
     }
   }
-
   /**
    * function to be called when feedback is recieved
    * @param {String} comments - Any additional comments to be sent with the feedback.
@@ -260,7 +253,6 @@ export default class Analytics extends React.Component {
     }
     this._sendEvent(type, 'Feedback', feedback.comments);
   }
-
   /**
    *  Function to send an event to the analytics service
    *  @param {AnalyticsEvent} eventType - The AnalyticsEvent type that relates to this event
@@ -281,7 +273,6 @@ export default class Analytics extends React.Component {
     }
     ReactGA.event(event);
   }
-
   render() {
     return <div className="analytics" />;
   }

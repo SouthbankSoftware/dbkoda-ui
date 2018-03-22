@@ -635,12 +635,14 @@ export default class ListView extends React.Component {
                   ? 'createPerformancePanel'
                   : 'openPerformancePanel'
               }`}
-              onClick={() =>
+              onClick={() => {
+                // Emit event for performance panel
+                Broker.emit(EventType.FEATURE_USE, 'PerformancePanel');
                 this.props.api.transformPerformancePanel(
                   profile.id,
                   performancePanelStatuses.external
-                )
-              }
+                );
+              }}
               text={globalString(
                 `profile/menu/${
                   !hasPerformancePanel
