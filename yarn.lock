@@ -67,9 +67,29 @@
     react-popper "~0.7.4"
     tslib "^1.9.0"
 
+"@blueprintjs/core@^2.0.0-rc.4":
+  version "2.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-2.0.0-rc.4.tgz#f5b9cbce93ac297676c4135f2f720ac5fbe7e4a3"
+  dependencies:
+    "@blueprintjs/icons" "^2.0.0-rc.4"
+    "@types/dom4" "^2.0.0"
+    classnames "^2.2"
+    dom4 "^2.0.1"
+    normalize.css "^7.0.0"
+    popper.js "^1.14.1"
+    react-popper "^0.8.2"
+    tslib "^1.9.0"
+
 "@blueprintjs/icons@^2.0.0-rc.3":
   version "2.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-2.0.0-rc.3.tgz#30235278a115c849b3d6a9a1f38495790b526c52"
+  dependencies:
+    classnames "^2.2"
+    tslib "^1.9.0"
+
+"@blueprintjs/icons@^2.0.0-rc.4":
+  version "2.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-2.0.0-rc.4.tgz#ec7dcd95db42be88bb4816f1c04fe9ea91246ea6"
   dependencies:
     classnames "^2.2"
     tslib "^1.9.0"
@@ -92,11 +112,11 @@
     classnames "^2.2"
     tslib "^1.9.0"
 
-"@blueprintjs/table@^2.0.0-rc.3":
-  version "2.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-2.0.0-rc.3.tgz#0fb401e2e6409d8419504fbcbeac2a6bb3431338"
+"@blueprintjs/table@^2.0.0-rc.4":
+  version "2.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-2.0.0-rc.4.tgz#8a353d55a10601bb61c17077aadcf79d541cb4e4"
   dependencies:
-    "@blueprintjs/core" "^2.0.0-rc.3"
+    "@blueprintjs/core" "^2.0.0-rc.4"
     classnames "^2.2"
     prop-types "^15.6.0"
     tslib "^1.9.0"
@@ -8095,6 +8115,10 @@ popper.js@^1.12.5, popper.js@^1.12.6:
   version "1.12.9"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.9.tgz#0dfbc2dff96c451bb332edcfcfaaf566d331d5b3"
 
+popper.js@^1.12.9, popper.js@^1.14.1:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.1.tgz#b8815e5cda6f62fc2042e47618649f75866e6753"
+
 portfinder@^1.0.13, portfinder@^1.0.9:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.13.tgz#bb32ecd87c27104ae6ee44b5a3ccbf0ebb1aede9"
@@ -8972,6 +8996,13 @@ react-motion@^0.5.0:
     performance-now "^0.2.0"
     prop-types "^15.5.8"
     raf "^3.1.0"
+
+react-popper@^0.8.2:
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.8.3.tgz#0f73333137c9fb0af6ec4074d2d0585a0a0461e1"
+  dependencies:
+    popper.js "^1.12.9"
+    prop-types "^15.6.0"
 
 react-popper@~0.7.4:
   version "0.7.5"

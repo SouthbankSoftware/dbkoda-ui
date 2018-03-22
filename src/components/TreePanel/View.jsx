@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-21T16:47:20+11:00
+ * @Last modified time: 2018-03-22T17:34:32+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -172,23 +172,23 @@ export default class TreeView extends React.Component {
   getIconFor(icon) {
     switch (icon) {
       case 'settings':
-        return <SettingsIcon className="dbKodaSVG" width={20} height={20} />;
+        return <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'document':
-        return <DocumentIcon className="dbKodaSVG" width={20} height={20} />;
+        return <DocumentIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'user':
-        return <UserIcon className="dbKodaSVG" width={20} height={20} />;
+        return <UserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'remove-user':
-        return <RemoveUserIcon className="dbKodaSVG" width={20} height={20} />;
+        return <RemoveUserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'add':
-        return <AddIcon className="dbKodaSVG" width={20} height={20} />;
+        return <AddIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'close':
-        return <CloseIcon className="dbKodaSVG" width={20} height={20} />;
+        return <CloseIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'shards':
-        return <ShardsIcon className="dbKodaSVG" width={20} height={20} />;
+        return <ShardsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'collection':
-        return <CollectionIcon className="dbKodaSVG" width={20} height={20} />;
+        return <CollectionIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'dropdown':
-        return <DropdownIcon className="dbKodaSVG" width={20} height={20} />;
+        return <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       default:
         return null;
     }
@@ -241,11 +241,11 @@ export default class TreeView extends React.Component {
                     key={objAction.name}
                     data-id={objAction.name}
                   >
-                    {icon}
                     <MenuItem
                       onClick={this.handleTreeActionClick}
                       text={objAction.text}
                       key={objAction.name}
+                      icon={icon}
                       intent={Intent.NONE}
                     />
                   </div>
@@ -257,7 +257,6 @@ export default class TreeView extends React.Component {
                     key={objAction.name}
                     data-id={objAction.name}
                   >
-                    {icon}
                     <MenuItem
                       onClick={this.handleTreeActionClick}
                       text={objAction.text}

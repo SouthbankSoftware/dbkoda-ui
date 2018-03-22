@@ -49,7 +49,7 @@
         bottom: 50%;
         width: 50%;
         height: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-80%, -50%);
         fill: $buttonSecondaryIcon;
       }
     }
@@ -72,37 +72,37 @@
   .profileList {
     flex-grow: 1;
     overflow-y: scroll;
-    .bp-table-quadrant {
+    .pt-table-quadrant {
       background-color: $panelLeftBackground;
     }
-    .bp-table-quadrant-scroll-container {
+    .pt-table-quadrant-scroll-container {
       background-color: rgba(0, 0, 0, 0) !important;
     }
-    .bp-table-quadrant-top {
+    .pt-table-quadrant-top {
       display: none;
     }
-    .bp-table-bottom-container {
+    .pt-table-bottom-container {
       width: 100% !important;
-      .bp-table-quadrant-body-container {
+      .pt-table-quadrant-body-container {
         width: 100% !important;
         background-color: rgba(0, 0, 0, 0) !important;
         div {
           width: 100% !important;
-          .bp-table-body-virtual-client {
+          .pt-table-body-virtual-client {
             width: 100% !important;
             background-color: rgba(0, 0, 0, 0) !important;
             width: 100% !important;
-            .bp-table-body-cells {
+            .pt-table-body-cells {
               width: 100% !important;
               background-color: rgba(0, 0, 0, 0) !important;
-              .bp-table-cell {
+              .pt-table-cell {
                 background-color: rgba(0, 0, 0, 0);
                 width: 100% !important;
               }
-              .bp-table-cell:hover {
+              .pt-table-cell:hover {
                 background-color: $profileListTabHover;
               }
-              .bp-table-cell-selected {
+              .pt-table-cell-selected {
                 background-color: $profileListSelected !important;
                 outline: none !important;
                 .profileListing {
@@ -112,7 +112,7 @@
                   font-style: italic !important;
                 }
               }
-              .bp-table-cell-selected:hover {
+              .pt-table-cell-selected:hover {
                 background-color: $profileListSelected !important;
               }
             }
@@ -132,16 +132,16 @@
       fill: none;
     }
   }
-  .bp-table-top-container {
+  .pt-table-top-container {
     display: none;
   }
 
-  .bp-table-container {
+  .pt-table-container {
     outline: none;
     background-color: rgba(0, 0, 0, 0) !important;
   }
-  .bp-table-cell {
-    .bp-table-truncated-text {
+  .pt-table-cell {
+    .pt-table-truncated-text {
       height: 100%;
       display: flex;
       flex-direction: row;
@@ -169,7 +169,7 @@
       }
     }
   }
-  .bp-table-cell:hover {
+  .pt-table-cell:hover {
     background-color: $profileListTabHover !important;
   }
   .connection-profile-cell {
@@ -179,7 +179,7 @@
       font-style: italic !important;
     }
   }
-  .bp-table-selection-region {
+  .pt-table-selection-region {
     border: none;
     background-color: rgba(0, 0, 0, 0);
   }

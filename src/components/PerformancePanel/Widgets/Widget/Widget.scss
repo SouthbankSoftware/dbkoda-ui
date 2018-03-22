@@ -2,8 +2,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-14T12:24:16+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-22T23:51:04+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-22T18:07:39+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -166,6 +166,12 @@ $background-colour: #202020;
         height: 10px;
         right: unset;
         background-color: $defaultFontColor;
+
+        span.pt-popover-wrapper {
+          top: 0px;
+          margin-left: 0px;
+          margin-top: 0px;
+        }
 
         svg.infoButton {
           position: absolute;

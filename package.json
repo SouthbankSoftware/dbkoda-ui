@@ -59,10 +59,10 @@
   },
   "homepage": "https://github.com/SouthbankSoftware/dbkoda-ui#readme",
   "devDependencies": {
-    "@blueprintjs/core": "^2.0.0-rc.3",
-    "@blueprintjs/icons": "^2.0.0-rc.3",
+    "@blueprintjs/core": "^2.0.0-rc.4",
+    "@blueprintjs/icons": "^2.0.0-rc.4",
     "@blueprintjs/labs": "^0.15.3",
-    "@blueprintjs/table": "^2.0.0-rc.3",
+    "@blueprintjs/table": "^2.0.0-rc.4",
     "ajv": "^6.0.1",
     "ajv-errors": "^1.0.0",
     "ajv-keywords": "^3.0.0",

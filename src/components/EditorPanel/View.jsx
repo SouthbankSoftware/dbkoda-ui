@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:32:52+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-22T17:35:23+11:00
  */
 
 import 'codemirror/addon/hint/show-hint.css';
@@ -575,13 +575,13 @@ class View extends React.Component {
                   NewToaster.show({
                     message: response.result,
                     className: 'success',
-                    icon: 'pt-icon-thumbs-up',
+                    icon: 'thumbs-up',
                   });
                 } else {
                   NewToaster.show({
                     message: globalString('editor/view/executionStopped'),
                     className: 'success',
-                    icon: 'pt-icon-thumbs-up',
+                    icon: 'thumbs-up',
                   });
                 }
                 this.finishedExecution({ id, shellId: shell });
@@ -1108,7 +1108,7 @@ class View extends React.Component {
           <MenuItem
             onClick={this.executeLine}
             text={globalString('editor/view/menu/executeSelected')}
-            icon="pt-icon-chevron-right"
+            icon="chevron-right"
             intent={Intent.NONE}
           />
         </div>
@@ -1116,7 +1116,7 @@ class View extends React.Component {
           <MenuItem
             onClick={this.executeAll}
             text={globalString('editor/view/menu/executeAll')}
-            icon="pt-icon-double-chevron-right"
+            icon="double-chevron-right"
             intent={Intent.NONE}
           />
         </div>
@@ -1124,7 +1124,7 @@ class View extends React.Component {
           <MenuItem
             onClick={this.refresh}
             text={globalString('editor/view/menu/refresh')}
-            icon="pt-icon-refresh"
+            icon="refresh"
             intent={Intent.NONE}
           />
         </div>
@@ -1132,7 +1132,7 @@ class View extends React.Component {
           <MenuItem
             onClick={this.prettifyAll}
             text={globalString('editor/view/menu/formatAll')}
-            icon="pt-icon-align-left"
+            icon="align-left"
             intent={Intent.NONE}
           />
         </div>
@@ -1140,7 +1140,7 @@ class View extends React.Component {
           <MenuItem
             onClick={this.prettifySelection}
             text={globalString('editor/view/menu/formatSelection')}
-            icon="pt-icon-align-left"
+            icon="align-left"
             intent={Intent.NONE}
           />
         </div>
@@ -1150,7 +1150,7 @@ class View extends React.Component {
             <MenuItem
               onClick={this.translateToNativeCode}
               text={globalString('editor/view/menu/translateSelection')}
-              icon="pt-icon-align-left"
+              icon="align-left"
               intent={Intent.NONE}
             />
           </div>

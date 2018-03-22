@@ -22,8 +22,8 @@
 * @Author: Michael Harrison <mike>
 * @Date:   2017-03-14 15:54:01
 * @Email:  mike@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2017-03-14 15:54:27
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-22T17:11:16+11:00
 */
 
 import React from 'react';
@@ -92,7 +92,6 @@ describe('Profile List View', () => {
   });
 
   test('has a Connection Profiles column', () => {
-    expect(app.find('.bp-table-truncated-text').text()).toEqual('Connection Profiles');
+    expect(app.find('.pt-table-truncated-text').text()).toEqual('Connection Profiles');
   });
 });
-

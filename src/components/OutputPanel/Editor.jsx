@@ -2,8 +2,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-10T12:33:56+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T13:02:20+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-22T18:01:27+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -114,7 +114,7 @@ export default class Editor extends React.Component {
             );
           }}
           text={globalString('output/editor/contextJson')}
-          icon="pt-icon-panel-stats"
+          icon="panel-stats"
           intent={Intent.NONE}
         />
       </div>
@@ -122,7 +122,7 @@ export default class Editor extends React.Component {
     menuItems.push(
       <div className="menuItemWrapper showTableView" id="showTableViewMenuItem">
         <MenuItem
-          icon="pt-icon-th"
+          icon="th"
           text={globalString('output/editor/contextTable')}
           intent={Intent.NONE}
         >
@@ -138,7 +138,7 @@ export default class Editor extends React.Component {
               );
             }}
             text={globalString('output/editor/contextTableSingle')}
-            icon="pt-icon-th"
+            icon="th"
             intent={Intent.NONE}
           />
           <MenuItem
@@ -153,7 +153,7 @@ export default class Editor extends React.Component {
               );
             }}
             text={globalString('output/editor/contextTableMulti')}
-            icon="pt-icon-th"
+            icon="th"
             intent={Intent.NONE}
           />
         </MenuItem>
@@ -169,7 +169,7 @@ export default class Editor extends React.Component {
           }}
           text={globalString('profile/menu/newLocalTerminal')}
           intent={Intent.NONE}
-          icon="pt-icon-new-text-box"
+          icon="new-text-box"
         />
       </div>
     );
@@ -216,7 +216,7 @@ export default class Editor extends React.Component {
               });
           }}
           text={globalString('output/editor/contextChart')}
-          icon="pt-icon-th"
+          icon="th"
           intent={Intent.NONE}
         />
       </div>
