@@ -2,7 +2,7 @@
   "basic": {
     "name": "Basic Connection",
     "tips": [
-      "For simple connections, you can enter all the connection details on this page.  If you are connecting to a replica set or sharded cluster, you might want to visit the \"Cluster Congifuration\" page.  For an operating system terminal, to connect via an SSH tunnel or to monitor operating system statistics, checkout the \"SSH Options\""
+      "For simple connections, you can enter all the connection details on this page.  For a more complex connection (replica set for instance), use the URI field.  For an operating system terminal, to connect via an SSH tunnel or to monitor operating system statistics, checkout the \"SSH Options\""
     ],
     "fields": [
       {
