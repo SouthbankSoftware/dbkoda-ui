@@ -314,7 +314,6 @@ export default class Panel extends React.Component {
       ) {
         if (this.editorRefs[newTab]) {
           const cm = this.editorRefs[newTab].getCodeMirror();
-          cm.refresh();
           cm.focus();
         }
       }
