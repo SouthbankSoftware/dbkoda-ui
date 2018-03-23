@@ -127,35 +127,34 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
                     }
                 }
             }
-
-
         }
 
         .perfButtonGroup {
-          padding-left: 20px;
+            padding-left: 20px;
+            float: left;
 
-          span {
-              .pt-button {
-                  position: relative;
+            span {
+                .pt-button {
+                    position: relative;
 
-                  svg.dbKodaSVG {
-                      position: absolute;
-                      top: 50%;
-                      bottom: 50%;
-                      transform: translate(-50%, -50%);
-                      fill: $buttonPrimaryIcon;
-                  }
-              }
+                    svg.dbKodaSVG {
+                        position: absolute;
+                        top: 50%;
+                        bottom: 50%;
+                        transform: translate(-50%, -50%);
+                        fill: $buttonPrimaryIcon;
+                    }
+                }
 
-              .destroyPerformancePanel svg.dbKodaSVG {
-                  fill: $buttonSecondaryIcon;
-              }
+                .destroyPerformancePanel svg.dbKodaSVG {
+                    fill: $buttonSecondaryIcon;
+                }
 
-              .executeLineButton svg.dbKodaSVG {
-                  height: 45%;
-              }
-          }
-      }
+                .executeLineButton svg.dbKodaSVG {
+                    height: 45%;
+                }
+            }
+        }
 
         .pt-align-right {
             span {
