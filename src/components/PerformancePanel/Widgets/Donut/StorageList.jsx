@@ -51,9 +51,10 @@ export default props => {
   }
   return (
     <div className="storageList" style={styles.root}>
-      {items.map(item => {
+      {items.map((item, i) => {
+        const key = i;
         return (
-          <div style={styles.item}>
+          <div style={styles.item} key={key}>
             <div className="leftWrapper" style={{ marginRight: '10px' }}>
               {' '}
               <CircleIcon
