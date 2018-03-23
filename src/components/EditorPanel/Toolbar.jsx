@@ -783,27 +783,6 @@ export default class Toolbar extends React.Component {
               <PerfPanelIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
-          {hasPerformancePanel ? (
-            <Tooltip
-              intent={Intent.DANGER}
-              hoverOpenDelay={1000}
-              content={globalString('profile/menu/destroyPerformancePanel')}
-              tooltipClassName="pt-dark"
-              position={Position.BOTTOM}
-            >
-              <AnchorButton
-                disabled={this.props.store.editorToolbar.noActiveProfile}
-                className="pt-button pt-intent-danger destroyPerformancePanel"
-                onClick={() => {
-                  this.props.api.transformPerformancePanel(profile.id, null);
-                  this.forceUpdate();
-                }}
-                intent={Intent.NONE}
-              >
-                <PerfPanelIcon className="dbKodaSVG" width={20} height={20} />
-              </AnchorButton>
-            </Tooltip>
-          ) : null}
         </div>
         <div className="pt-navbar-group pt-align-right">
           <Tooltip
