@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-21T11:01:40+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T18:02:34+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -223,7 +223,7 @@ export default class Panel extends React.Component {
     this.props.store.welcomePage.isOpen = false;
     this.props.store.editorPanel.removingTabId = true; // TODO: There shouldn't be an output visible for the welcome page. Have tp replace this logic with this.props.api.removeOutput(deletedEditor);
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      const editors = this.props.store.editors.entries();
+      const editors = [...this.props.store.editors.entries()];
       this.props.store.editorPanel.activeEditorId = editors[0][1].id;
     }
     this.forceUpdate();
@@ -244,7 +244,7 @@ export default class Panel extends React.Component {
       if (this.props.store.welcomePage.isOpen) {
         this.changeTab('Default');
       } else {
-        const editors = this.props.store.editors.entries();
+        const editors = [...this.props.store.editors.entries()];
         this.props.store.editorPanel.activeEditorId = editors[0][1].id;
       }
     }
@@ -632,7 +632,7 @@ export default class Panel extends React.Component {
 
     const tabList = (
       <FilterList
-        items={editors.values()}
+        items={[...editors.values()]}
         getItemTitle={this.getEditorTitle}
         getItemId={item => item.id}
         onClick={(item) => {
@@ -840,7 +840,7 @@ export default class Panel extends React.Component {
    * Action for rendering the component.
    */
   render() {
-    const editors = this.props.store.editors.entries();
+    const editors = [...this.props.store.editors.entries()];
     return (
       <div className="pt-dark editorPanel" onContextMenu={this.showContextMenu}>
         <Toolbar

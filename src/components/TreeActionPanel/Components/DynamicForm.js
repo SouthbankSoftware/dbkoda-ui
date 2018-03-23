@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-05-23T09:51:53+10:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T18:04:51+11:00
  */
 
 import MobxReactForm from 'mobx-react-form';
@@ -41,7 +41,7 @@ export class DynamicForm extends MobxReactForm {
     return {
       onSuccess(form) {
         // get field values
-        const formValues = form.values();
+        const formValues = [...form.values()];
         if (this.validateFormValues) {
           try {
             const valid = this.validateFormValues(formValues);

@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T10:33:34+11:00
+ * @Last modified time: 2018-03-23T09:48:17+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -74,8 +74,8 @@ export type PerformancePanelStateBuffer = {
 export type PerformancePanelState = {
   profileId: UUID,
   profileAlias: string,
-  widgets: ObservableMap<WidgetState>,
-  layouts: ObservableMap<LayoutState>,
+  widgets: ObservableMap<UUID, WidgetState>,
+  layouts: ObservableMap<UUID, LayoutState>,
   status: PerformancePanelStatus,
   stats: { [string]: any },
   rowHeight: number,
@@ -96,6 +96,7 @@ export const handleNewData = (payload: *, performancePanel: PerformancePanelStat
 
   (buffer || performancePanel).stats = stats;
 
+  // $FlowFixMe
   for (const widget of widgets.values()) {
     const {items, showAlarms, buffer} = widget;
     const {values, alarms} = buffer || widget;
@@ -157,6 +158,7 @@ export const detachFromMobx = (performancePanel: PerformancePanelState) => {
 
   const {widgets} = performancePanel;
 
+  // $FlowFixMe
   for (const widget of widgets.values()) {
     const {values, alarms} = widget;
 
@@ -179,6 +181,7 @@ export const attachToMobx = (performancePanel: PerformancePanelState) => {
 
   const {widgets} = performancePanel;
 
+  // $FlowFixMe
   for (const widget of widgets.values()) {
     const {buffer, alarms} = widget;
 
@@ -309,8 +312,10 @@ export default class PerformancePanelApi {
     const {profileAlias} = this.store.performancePanels.get(profileId);
 
     console.error(err);
+
+    let errorMessage = err.message || err;
+
     // $FlowFixMe
-    let errorMessage = err.message;
     if (err && err.code && ErrorCodes[err.code]) {
       try {
         errorMessage = globalString(ErrorCodes[err.code], errorMessage);
@@ -361,35 +366,49 @@ export default class PerformancePanelApi {
   _addPerformancePanel(profileId: UUID) {
     const {performancePanels, profileStore: {profiles}} = this.store;
     const profile = profiles.get(profileId);
-    const layouts = observable.shallowMap();
+    // $FlowFixMe
+    const layouts = observable.map(null, { deep: false });
 
-    const performancePanel: PerformancePanelState = observable.shallowObject({
-      profileId,
-      profileAlias: _.get(profile, 'alias', ''),
-      widgets: observable.shallowMap(),
-      layouts,
-      status: performancePanelStatuses.stopped,
-      stats: {},
-      rowHeight: schema.rowHeight,
-      cols: schema.cols,
-      rows: schema.rows,
-      midWidth: schema.midWidth,
-      leftWidth: schema.leftWidth,
-      buffer: null
-    });
+    // $FlowFixMe
+    const performancePanel: PerformancePanelState = observable.object(
+      {
+        profileId,
+        profileAlias: _.get(profile, 'alias', ''),
+        // $FlowFixMe
+        widgets: observable.map(null, { deep: false }),
+        layouts,
+        status: performancePanelStatuses.stopped,
+        stats: {},
+        rowHeight: schema.rowHeight,
+        cols: schema.cols,
+        rows: schema.rows,
+        midWidth: schema.midWidth,
+        leftWidth: schema.leftWidth,
+        buffer: null
+      },
+      null,
+      {
+        deep: false
+      }
+    );
 
     performancePanels.set(profileId, performancePanel);
 
     for (const w of schema.widgets) {
       const id = this.api.addWidget(profileId, w.items, w.type, w.extraState);
 
-      const layout = observable.shallowObject(
+      // $FlowFixMe
+      const layout = observable.object(
         this._updateLayoutStyle({
           i: id,
           widgetStyle: {},
           gridElementStyle: {},
           ...w.layout
-        })
+        }),
+        null,
+        {
+          deep: false
+        }
       );
 
       layouts.set(id, layout);

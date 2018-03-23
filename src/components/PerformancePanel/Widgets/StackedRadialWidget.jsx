@@ -1,8 +1,8 @@
 /**
  * @flow
  * Created by mike on 06/02/2018
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-06T10:45:44+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T17:31:09+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -75,8 +75,9 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
   maxValue: number;
   _autorunDisposer: *;
   dataset: () => Array<Object>;
+  toolTipLegend: *;
 
-  constructor(props: Object) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       width: StackedRadialWidget.width,
@@ -84,7 +85,6 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
       lastLayerTweened: {key: '', index: 1},
     };
     if (this.props.widget.colorList) {
-      // $FlowFixMe
       this.colors = this.props.widget.colorList;
     } else {
       this.colors = colors;

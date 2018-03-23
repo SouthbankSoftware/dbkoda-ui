@@ -2,8 +2,8 @@
  * @Author: Chris Trott <chris>
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-21T11:02:23+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T17:58:34+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -98,7 +98,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   explainOutputAvailable({ id, shell }) {
-    const editors = this.props.store.editors.entries();
+    const editors = [...this.props.store.editors.entries()];
     const that = this;
     editors.map(editor => {
       if (
@@ -118,7 +118,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   shellOutputAvailable({ id, shellId }) {
-    const editors = this.props.store.editors.entries();
+    const editors = [...this.props.store.editors.entries()];
     editors.map(editor => {
       if (
         editor[1].visible &&
@@ -653,7 +653,7 @@ export default class Panel extends React.Component {
             }
             title="Default"
           />
-          {this.renderTabs(this.props.store.editors.entries())}
+          {this.renderTabs([...this.props.store.editors.entries()])}
         </Tabs>
         <OutputToolbar
           editorRefs={this.editorRefs}

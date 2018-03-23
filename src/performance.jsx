@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-26T13:19:02+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-01T16:42:41+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T15:21:07+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,15 +26,14 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import mobx, { useStrict } from 'mobx';
+import * as mobx from 'mobx';
+import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import { AppContainer } from 'react-hot-loader';
-
 import Store from '~/window/stores/performance';
-
 import PerformanceWindow from '~/window/PerformanceWindow';
 
-useStrict(true);
+configure({ enforceActions: true });
 
 const rootEl = document.getElementById('root');
 
@@ -42,12 +41,7 @@ const store = new Store();
 
 ReactDOM.render(
   <AppContainer>
-    <Provider
-      store={store}
-      api={store.api}
-      config={store.config}
-      profileStore={store.profileStore}
-    >
+    <Provider store={store} api={store.api} config={store.config} profileStore={store.profileStore}>
       <PerformanceWindow />
     </Provider>
   </AppContainer>,

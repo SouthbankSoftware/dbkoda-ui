@@ -3,7 +3,7 @@
  * @Date:   2017-03-24T16:13:16+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T11:00:41+11:00
+ * @Last modified time: 2018-03-22T20:31:23+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 import React from 'react';
 import '~/helpers/configEnzyme';
 import { mount } from 'enzyme';
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import { DragDropContext } from 'react-dnd';
 import Store from '~/stores/global';
@@ -58,7 +58,7 @@ describe('Tree View and Toolbar', () => {
   treeState.parseJson(topology);
 
   beforeAll(() => {
-    useStrict(true);
+    configure({ enforceActions: true });
     globalizeInit();
   });
 

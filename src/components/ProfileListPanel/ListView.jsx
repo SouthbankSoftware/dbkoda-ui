@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-22T17:09:17+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T17:59:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -157,7 +157,7 @@ export default class ListView extends React.Component {
     if (region.length == 0) {
       return;
     }
-    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+    const profiles = _.sortBy([...this.props.profileStore.profiles.entries()], [
       function(o) {
         return o[1].alias;
       }
@@ -531,7 +531,7 @@ export default class ListView extends React.Component {
   @action
   renderBodyContextMenu(context) {
     // Get profiles, sort alphabetically and use that as a reference.
-    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+    const profiles = _.sortBy([...this.props.profileStore.profiles.entries()], [
       function(o) {
         return o[1].alias;
       }
@@ -727,7 +727,7 @@ export default class ListView extends React.Component {
 
   render() {
     // Sort profile list first.
-    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+    const profiles = _.sortBy([...this.props.profileStore.profiles.entries()], [
       function(o) {
         return o[1].alias;
       }

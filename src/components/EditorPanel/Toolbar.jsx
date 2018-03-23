@@ -22,7 +22,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-30T15:55:58+11:00
+ * @Last modified time: 2018-03-22T17:51:36+11:00
  */
 
 import _ from 'lodash';
@@ -640,7 +640,7 @@ export default class Toolbar extends React.Component {
    * Render function for this component.
    */
   render() {
-    const profiles = this.props.profileStore.profiles.entries();
+    const profiles = [...this.props.profileStore.profiles.entries()];
     return (
       <nav className="pt-navbar editorToolbar">
         {this.renderSQLImportWarning()}

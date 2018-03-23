@@ -5,7 +5,7 @@
  * @Date:   2017-11-14T10:31:06+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T13:46:33+11:00
+ * @Last modified time: 2018-03-22T20:32:49+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -125,20 +125,8 @@ export default class TerminalApi {
       typeof this.config.settings.passwordStoreEnabled === 'object'
         ? false
         : this.config.settings.passwordStoreEnabled;
-    const {
-      profileId,
-      username,
-      password,
-      host,
-      privateKey,
-      passphrase,
-      port
-    } = profile;
-    const {
-      switchToUponCreation = true,
-      skipWhenExisting = false,
-      eagerCreation = false
-    } =
+    const { profileId, username, password, host, privateKey, passphrase, port } = profile;
+    const { switchToUponCreation = true, skipWhenExisting = false, eagerCreation = false } =
       options || {};
 
     if (skipWhenExisting) {
@@ -231,7 +219,8 @@ export default class TerminalApi {
       ...extraState
     };
 
-    terminals.set(id, observable.shallowObject(terminal));
+    // $FlowFixMe
+    terminals.set(id, observable.object(terminal, null, { deep: false }));
 
     if (switchToUponCreation) {
       outputPanel.currentTab = this.getTerminalTabId(id);

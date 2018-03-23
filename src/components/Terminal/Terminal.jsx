@@ -5,7 +5,7 @@
  * @Date:   2017-11-08T15:08:22+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T13:39:24+11:00
+ * @Last modified time: 2018-03-23T10:43:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -43,7 +43,7 @@ import {
   type TerminalState,
   terminalDisplayNames,
   type TerminalErrorLevel,
-  terminalErrorLevels,
+  terminalErrorLevels
 } from '~/api/Terminal';
 import chalk from '~/helpers/chalk';
 // $FlowFixMe
@@ -59,8 +59,8 @@ const DEBOUNCE_DELAY = 100;
 type Store = {
   outputPanel: *,
   editorPanel: *,
-  editors: ObservableMap<*>,
-  terminal: TerminalState,
+  editors: ObservableMap<UUID, *>,
+  terminal: TerminalState
 };
 
 type Props = {
@@ -70,7 +70,7 @@ type Props = {
   attach: (xterm: Xterm) => void,
   detach: (xterm: Xterm) => void,
   send: (code: string) => void,
-  onResize: (xterm: Xterm, size: { cols: number, rows: number }) => void,
+  onResize: (xterm: Xterm, size: { cols: number, rows: number }) => void
 };
 
 @inject(({ store }, { id }) => {
@@ -81,8 +81,8 @@ type Props = {
       outputPanel,
       editorPanel,
       editors,
-      terminal: terminals.get(id),
-    },
+      terminal: terminals.get(id)
+    }
   };
 })
 export default class Terminal extends React.PureComponent<Props> {
@@ -94,7 +94,7 @@ export default class Terminal extends React.PureComponent<Props> {
   _showInitialError = true;
 
   static defaultProps = {
-    store: null,
+    store: null
   };
 
   componentDidMount() {
@@ -113,8 +113,8 @@ export default class Terminal extends React.PureComponent<Props> {
               this.xterm.focus();
             }, 100);
           }
-        },
-      ),
+        }
+      )
     );
 
     if (UAT) {
@@ -133,8 +133,8 @@ export default class Terminal extends React.PureComponent<Props> {
       enableBold: false,
       theme: {
         foreground: styles.terminalForeground,
-        background: styles.terminalBackground,
-      },
+        background: styles.terminalBackground
+      }
     });
     this.xterm.open(this.container);
     this.xterm.winptyCompatInit();
@@ -200,8 +200,8 @@ export default class Terminal extends React.PureComponent<Props> {
 
     this.xterm.write(
       `${lastLine.length === 0 ? '' : '\r\n'}${chalk[bgColor].white(
-        `${_.upperFirst(level)}:`,
-      )} ${chalk[color](error)}\r\n`,
+        `${_.upperFirst(level)}:`
+      )} ${chalk[color](error)}\r\n`
     );
 
     if (toaster) {
@@ -210,12 +210,12 @@ export default class Terminal extends React.PureComponent<Props> {
       NewToaster.show({
         message: `${terminalDisplayNames[type]} Terminal: ${error}`,
         className,
-        icon: 'thumbs-down',
+        icon: 'thumbs-down'
       });
     }
   };
 
-  _onError = action.bound(({ error, level }: { error: string, level: TerminalErrorLevel }) => {
+  _onError = action(({ error, level }: { error: string, level: TerminalErrorLevel }) => {
     const { terminal } = this.props.store;
 
     this._showInitialError = false;

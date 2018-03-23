@@ -3,7 +3,7 @@
  * @Date:   2017-05-15T16:33:48+10:00
  * @Email:  joey@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T13:19:52+11:00
+ * @Last modified time: 2018-03-22T18:17:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -29,7 +29,7 @@ import React from 'react';
 import '~/helpers/configEnzyme';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import { observable, useStrict } from 'mobx';
+import { observable, configure } from 'mobx';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import { EditorTypes } from '#/common/Constants';
 import DataCenter from '~/api/DataCenter';
@@ -38,7 +38,7 @@ import { EditorPanel } from '../index.js';
 
 describe('Editor State Tests', () => {
   beforeAll(() => {
-    useStrict(true);
+    configure({ enforceActions: true });
     globalizeInit();
   });
 

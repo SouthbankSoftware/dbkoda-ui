@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-03-14 15:54:01
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T18:18:38+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,25 +24,17 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-03-14 15:54:01
-* @Email:  mike@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-22T17:11:16+11:00
-*/
-
 import React from 'react';
-import {shallow, mount} from 'enzyme';
-import {useStrict} from 'mobx';
+import { shallow, mount } from 'enzyme';
+import { configure } from 'mobx';
 import Store from '~/stores/global';
-import {ProfileListPanel, ProfileListToolbar, ProfileListView} from '../index.js';
+import { ProfileListPanel, ProfileListToolbar, ProfileListView } from '../index.js';
 
 describe('Profile List Panel', () => {
   let app;
 
   beforeAll(() => {
-    useStrict(true);
+    configure({ enforceActions: true });
     const store = new Store();
     app = shallow(<ProfileListPanel.wrappedComponent store={store} />);
   });
@@ -54,7 +52,7 @@ describe('Profile List Toolbar', () => {
   let app;
 
   beforeAll(() => {
-    useStrict(true);
+    configure({ enforceActions: true });
     const store = new Store();
     app = mount(<ProfileListToolbar.wrappedComponent store={store} />);
   });
@@ -73,12 +71,11 @@ describe('Profile List Toolbar', () => {
   });
 });
 
-
 describe('Profile List View', () => {
   let app;
 
   beforeAll(() => {
-    useStrict(true);
+    configure({ enforceActions: true });
     const store = new Store();
     app = mount(<ProfileListView.wrappedComponent store={store} />);
   });

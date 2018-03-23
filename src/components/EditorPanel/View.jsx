@@ -21,8 +21,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-24T14:46:20+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-22T17:35:23+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T18:02:48+11:00
  */
 
 import 'codemirror/addon/hint/show-hint.css';
@@ -1070,7 +1070,7 @@ class View extends React.Component {
       return;
     }
     this.props.store.editors.get(editorIndex).executing = false;
-    const editorValues = this.props.store.editors.values();
+    const editorValues = [...this.props.store.editors.values()];
     editorValues.map((v) => {
       if (v.profileId === event.id && v.shellId === event.shellId) {
         v.executing = false;
