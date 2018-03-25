@@ -256,6 +256,9 @@ export default class ListView extends React.Component {
               this.props.store.treePanel.isRefreshDisabled = true;
             });
           }
+          runInAction(() => {
+            this.props.store.editorToolbar.noActiveProfile = true;
+          });
           this.closeConnectionCloseAlert();
         })
         .catch(err => {
@@ -637,6 +640,12 @@ export default class ListView extends React.Component {
               }`}
               onClick={() => {
                 // Emit event for performance panel
+                runInAction(() => {
+                  if (this.props.store.editorToolbar.reloadToolbar) {
+                    this.props.store.editorToolbar.reloadToolbar = false;
+                  }
+                  this.props.store.editorToolbar.reloadToolbar = true;
+                });
                 Broker.emit(EventType.FEATURE_USE, 'PerformancePanel');
                 this.props.api.transformPerformancePanel(
                   profile.id,
@@ -658,9 +667,12 @@ export default class ListView extends React.Component {
             <div className="menuItemWrapper">
               <MenuItem
                 className="profileListContextMenu destroyPerformancePanel"
-                onClick={() =>
-                  this.props.api.transformPerformancePanel(profile.id, null)
-                }
+                onClick={() => {
+                  runInAction(() => {
+                    this.props.store.editorToolbar.reloadToolbar = true;
+                  });
+                  this.props.api.transformPerformancePanel(profile.id, null);
+                }}
                 text={globalString('profile/menu/destroyPerformancePanel')}
                 intent={Intent.NONE}
                 iconName="pt-icon-heat-grid"
@@ -799,7 +811,17 @@ export default class ListView extends React.Component {
               className="submitButton"
               type="submit"
               intent={Intent.SUCCESS}
-              onClick={this.closeProfile}
+              onClick={() => {
+                setTimeout(() => {
+                  runInAction(() => {
+                  if (this.props.store.editorToolbar.reloadToolbar) {
+                    this.props.store.editorToolbar.reloadToolbar = false;
+                  }
+                  this.props.store.editorToolbar.reloadToolbar = true;
+                });
+                }, 500);
+                this.closeProfile();
+              }}
               loading={this.props.store.layout.alertIsLoading}
               text={globalString('profile/closeAlert/confirmButton')}
             />

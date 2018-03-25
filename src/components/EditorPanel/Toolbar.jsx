@@ -30,6 +30,7 @@ import React from 'react';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { featherClient } from '~/helpers/feathers';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { inject, observer } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
 import path from 'path';
@@ -46,11 +47,13 @@ import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { EditorTypes } from '#/common/Constants.js';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
+
 import ExplainPopover from './ExplainPopover';
 import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
+import PerfPanelIcon from '../../styles/icons/performance-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
@@ -132,6 +135,14 @@ export default class Toolbar extends React.Component {
           this.props.store.editorPanel.activeDropdownId = this.props.store.editorToolbar.newEditorForProfileId;
           this.props.api.addEditor();
           this.props.store.editorToolbar.newEditorForProfileId = '';
+    this.reactionToPerformancePanel = reaction(
+      () => this.props.store.editorToolbar.reloadToolbar,
+      () => {
+        if (this.props.store.editorToolbar.reloadToolbar) {
+          this.props.store.editorToolbar.reloadToolbar = false;
+          setTimeout(() => {
+            this.forceUpdate();
+          }, 100);
         }
       }
     );
@@ -655,10 +666,19 @@ export default class Toolbar extends React.Component {
    * Render function for this component.
    */
   render() {
+    const profile = this.props.profileStore.profiles.get(
+      this.props.store.editorToolbar.currentProfile
+    );
     const profiles = this.props.profileStore.profiles.entries();
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId
     );
+    const { api } = this.props;
+    let hasPerformancePanel = false;
+    if (profile) {
+      hasPerformancePanel = api.hasPerformancePanel(profile.id);
+    }
+
     return (
       <nav className="pt-navbar editorToolbar">
         {this.renderSQLImportWarning()}
@@ -743,6 +763,43 @@ export default class Toolbar extends React.Component {
               <span>Query executed in {this.props.store.editors.get(editor.id).lastExecutionTime}ms</span>
             }
           </div>
+        </div>
+
+        <div className="pt-button-group pt-navbar-group pt-intent-primary perfButtonGroup">
+          <Tooltip
+            intent={Intent.DANGER}
+            hoverOpenDelay={1000}
+            content={globalString(
+              `profile/menu/${
+                !hasPerformancePanel
+                  ? 'createPerformancePanel'
+                  : 'openPerformancePanel'
+              }`
+            )}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              disabled={this.props.store.editorToolbar.noActiveProfile}
+              className={`pt-button pt-intent-primary ${
+                !hasPerformancePanel
+                  ? 'createPerformancePanel'
+                  : 'openPerformancePanel'
+              }`}
+              onClick={() => {
+                // Emit event for performance panel
+                Broker.emit(EventType.FEATURE_USE, 'PerformancePanel');
+                this.props.api.transformPerformancePanel(
+                  profile.id,
+                  performancePanelStatuses.external
+                );
+                this.forceUpdate();
+              }}
+              icon="pt-icon-heat-grid"
+            >
+              <PerfPanelIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
         </div>
         <div className="pt-navbar-group pt-align-right">
           <Tooltip

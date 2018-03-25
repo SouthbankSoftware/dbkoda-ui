@@ -17,7 +17,8 @@
         "failover":
           "Unable to fetch metrics from server, try restarting performance panel.",
         "mongos_error": "Creating Performance Panel on mongos and only minimal statistics is available",
-        "not_supported_storage_engine": "Creating Performance Panel on storage engine `{0}`. At the moment, only diagnostics on `wiredTiger` is supported"
+        "not_supported_storage_engine": "Creating Performance Panel on storage engine `{0}`. At the moment, only diagnostics on `wiredTiger` is supported",
+        "driver_connection_closed": "MongoDB Connection closed"
       }
     },
     "aggregate_builder": {

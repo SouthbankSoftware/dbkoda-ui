@@ -24,5 +24,6 @@
 export const ErrorCodes = {
   PERFORMANCE_LIMIT_MONGOS: 'performance/errors/mongos_error',
   PERFORMANCE_LIMIT_ENGINE: 'performance/errors/not_supported_storage_engine',
+  MONGO_CONNECTION_CLOSED: 'performance/errors/driver_connection_closed'
 };
 
