@@ -131,6 +131,20 @@ export default class Toolbar extends React.Component {
       }
     );
 
+    /**
+     * Reaction to track execution time.
+     * @TODO - Would be better if we could track each query independantly, this method will only cover how long the editor thinks it's executing.
+     */
+    this.reactionToExecutionState = reaction(
+      () => this.props.store.editorToolbar.newEditorForProfileId,
+      () => {
+        if (this.props.store.editorToolbar.newEditorForProfileId != '') {
+          this.props.store.editorPanel.activeDropdownId = this.props.store.editorToolbar.newEditorForProfileId;
+          this.props.api.addEditor();
+          this.props.store.editorToolbar.newEditorForProfileId = '';
+        }
+      }
+    );
     this.reactionToPerformancePanel = reaction(
       () => this.props.store.editorToolbar.reloadToolbar,
       () => {
@@ -613,6 +627,9 @@ export default class Toolbar extends React.Component {
       this.props.store.editorToolbar.currentProfile
     );
     const profiles = this.props.profileStore.profiles.entries();
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
     const { api } = this.props;
     let hasPerformancePanel = false;
     if (profile) {
@@ -697,6 +714,13 @@ export default class Toolbar extends React.Component {
                 />
               </AnchorButton>
             </Tooltip>
+            {!this.props.store.editorToolbar.isActiveExecuting &&
+              this.props.store.editors.get(editor.id).lastExecutionTime && (
+                <span>
+                  Query executed in{' '}
+                  {this.props.store.editors.get(editor.id).lastExecutionTime}ms
+                </span>
+              )}
           </div>
         </div>
 
