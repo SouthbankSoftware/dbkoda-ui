@@ -135,6 +135,9 @@ export default class Toolbar extends React.Component {
           this.props.store.editorPanel.activeDropdownId = this.props.store.editorToolbar.newEditorForProfileId;
           this.props.api.addEditor();
           this.props.store.editorToolbar.newEditorForProfileId = '';
+        }
+      }
+    );
     this.reactionToPerformancePanel = reaction(
       () => this.props.store.editorToolbar.reloadToolbar,
       () => {
@@ -759,9 +762,13 @@ export default class Toolbar extends React.Component {
                 />
               </AnchorButton>
             </Tooltip>
-            {!this.props.store.editorToolbar.isActiveExecuting && this.props.store.editors.get(editor.id).lastExecutionTime &&
-              <span>Query executed in {this.props.store.editors.get(editor.id).lastExecutionTime}ms</span>
-            }
+            {!this.props.store.editorToolbar.isActiveExecuting &&
+              this.props.store.editors.get(editor.id).lastExecutionTime && (
+                <span>
+                  Query executed in{' '}
+                  {this.props.store.editors.get(editor.id).lastExecutionTime}ms
+                </span>
+              )}
           </div>
         </div>
 
