@@ -1,4 +1,6 @@
 /*
+ * @Mike TODO -> Add Flow.
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -19,13 +21,16 @@
  */
 
 /**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-03-15 13:33:53
-* @Email:  mike@southbanksoftware.com
- * @Last modified by:   chris
- * @Last modified time: 2017-06-13T16:37:15+10:00
-*/
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-03-15 13:33:53
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2018-03-23T16:37:15+10:00
+ */
 
+/**
+ * @Mike TODO -> Fix these linting issues and remove the disables.
+ */
 /* eslint-disable react/no-string-refs */
 /* eslint-disable react/prop-types */
 import React from 'react';

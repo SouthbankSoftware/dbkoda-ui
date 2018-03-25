@@ -33,7 +33,6 @@ import _ from 'lodash';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import { Intent } from '@blueprintjs/core';
-import EventLogging from '#/common/logging/EventLogging';
 import TreeNode from './TreeNode.jsx';
 
 export default class TreeState {

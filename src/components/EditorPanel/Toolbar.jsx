@@ -1,4 +1,5 @@
 /*
+ * @Mike TODO -> Add Flow.
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -21,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-10-30T15:55:58+11:00
+ * @Last modified by:   Mike
+ * @Last modified time: 2018-03-23T15:55:58+11:00
  */
 
 import _ from 'lodash';
@@ -42,12 +43,12 @@ import {
   Dialog
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
-import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { EditorTypes } from '#/common/Constants.js';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 
+// Icon Imports.
 import ExplainPopover from './ExplainPopover';
 import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
@@ -59,6 +60,9 @@ const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
   : {};
 
+/**
+ * @Mike TODO -> These filters can probably be moved to a common place in the constants file.
+ */
 const FILE_FILTERS = [
   {
     name: 'JavaScript',
@@ -89,6 +93,9 @@ export default class Toolbar extends React.Component {
     this.state = {
       showLoadSQLWarning: false
     };
+    /**
+     * @Mike TODO -> These can probably all be moved to using @action.bound instead of binding up the top, since it's a lot neater.
+     */
     // this.addEditorNoOptions = this.addEditor.bind(this);
     this.executeLine = this.executeLine.bind(this);
     this.executeAll = this.executeAll.bind(this);
@@ -197,6 +204,9 @@ export default class Toolbar extends React.Component {
 
   reactionToNewEditorForProfileId;
 
+  /**
+   * @Mike TODO -> This can probably be an inline function, since it's a single line.
+   */
   @action
   onFail() {
     this.props.store.editorPanel.creatingNewEditor = false;
@@ -250,13 +260,6 @@ export default class Toolbar extends React.Component {
         'editor/toolbar/notSupportedInUI',
         'openFile'
       );
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().WARNING,
-          EventLogging.getFragmentEnum().EDITORS,
-          warningMsg
-        );
-      }
       NewToaster.show({
         message: warningMsg,
         className: 'danger',
@@ -265,7 +268,6 @@ export default class Toolbar extends React.Component {
     }
   }
 
-  // @TODO -> Associate editor with file context.
   openSQLFile() {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId
@@ -402,13 +404,6 @@ export default class Toolbar extends React.Component {
       'editor/toolbar/notSupportedInUI',
       'saveFile'
     );
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().WARNING,
-        EventLogging.getFragmentEnum().EDITORS,
-        warningMsg
-      );
-    }
     NewToaster.show({
       message: warningMsg,
       className: 'danger',
@@ -420,6 +415,7 @@ export default class Toolbar extends React.Component {
 
   /**
    * Execute the line currently selected in the active CodeMirror instance.
+   * @Mike TODO -> This function can probably be moved to an inline function on the button, as refactors mean the button is disabled if on default editor.
    */
   @action
   executeLine() {
@@ -436,6 +432,7 @@ export default class Toolbar extends React.Component {
 
   /**
    * Execute all the contents of the currently active CodeMirror instance.
+   * @Mike TODO -> This function can probably be moved to an inline function on the button, as refactors mean the button is disabled if on default editor.
    */
   @action
   executeAll() {
@@ -451,26 +448,8 @@ export default class Toolbar extends React.Component {
   }
 
   /**
-   * Open the Explain Plan dialog for the currently selected line in the active
-   * codemirror instance.
-   */
-  explainPlan() {
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().WARNING,
-        EventLogging.getFragmentEnum().EDITORS,
-        'Tried to execute non-implemented explainPlan'
-      );
-    }
-    NewToaster.show({
-      message: 'Sorry, not yet implemented!',
-      className: 'warning',
-      iconName: 'pt-icon-thumbs-down'
-    });
-  }
-
-  /**
    * Stop the current execution on this connection.
+   * @Mike TODO -> This function can proably be moved to an inline function on the button, as refactors mean the button is disabled if nothing is executing.
    */
   @action.bound
   stopExecution() {
@@ -490,6 +469,7 @@ export default class Toolbar extends React.Component {
    * @param {Object} event - The event that triggered this action.
    * @param {Object} event.target - The target of the event.
    * @param {String} event.target.value - The new value of the dropdown.
+   * @Mike TODO -> I think this entire function can be rewritten to adhere to our new logic, using the API.
    */
   @action
   onDropdownChanged(event) {
@@ -503,7 +483,6 @@ export default class Toolbar extends React.Component {
       this.props.store.editorToolbar.noActiveProfile = false;
     }
     // Send command through current editor to swap DB: Get current editor instance:
-
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId
     );
@@ -591,31 +570,6 @@ export default class Toolbar extends React.Component {
   }
 
   /**
-   * Event triggered when the dropdown changes.
-   * @param {Object} event - The event that triggered this action.
-   * @param {Object} event.target - The target of the event.
-   * @param {String} event.target.value - The new value of the filter.
-   */
-  @action
-  onFilterChanged(event) {
-    const filter = event.target.value.replace(/ /g, '');
-    this.props.store.editorPanel.tabFilter = filter;
-    this.props.store.editors.forEach(value => {
-      if (value.alias.includes(filter)) {
-        value.visible = true;
-      } else {
-        if (
-          value.alias + ' (' + value.shellId + ')' ==
-          this.props.store.editorPanel.activeEditorId
-        ) {
-          this.props.store.editorPanel.activeEditorId = 'Default';
-        }
-        value.visible = false;
-      }
-    });
-  }
-
-  /**
    * Render the warning for loading an SQL file.
    */
   @action
@@ -669,7 +623,9 @@ export default class Toolbar extends React.Component {
       <nav className="pt-navbar editorToolbar">
         {this.renderSQLImportWarning()}
         <div className="pt-navbar-group pt-align-left leftEditorToolbar">
-          <div className="pt-navbar-heading">Query Input</div>
+          <div className="pt-navbar-heading">
+            {globalString('editor/toolbar/queryInput')}
+          </div>
           <div className="pt-button-group pt-intent-primary leftButtonGroup">
             <div className="pt-select pt-intent-primary editorContextDropdownWrapper">
               <select
@@ -678,7 +634,7 @@ export default class Toolbar extends React.Component {
                 className="pt-intent-primary editorContextDropdown"
               >
                 <option key="Default" value="Default">
-                  No Active Connection
+                  {globalString('editor/toolbar/noActiveConnection')}
                 </option>
                 ;{' '}
                 {profiles.map(profile => {
@@ -687,7 +643,7 @@ export default class Toolbar extends React.Component {
                       <option key={profile[0]} value={profile[1].id}>
                         {profile[1].alias}
                       </option>
-                    ); // eslint-disable-line react/no-array-index-key
+                    );
                   }
                 })}
               </select>
@@ -704,9 +660,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeLine}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}
-              >
-                {/* // <ExecuteLineIcon className="dbKodaSVG" width={20} height={20} /> */}
-              </AnchorButton>
+              />
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
@@ -720,9 +674,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeAll}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}
-              >
-                {/* <ExecuteAllIcon className="dbKodaSVG" width={20} height={20} /> */}
-              </AnchorButton>
+              />
             </Tooltip>
             <ExplainPopover editorToolbar={this.props.store.editorToolbar} />
             <Tooltip

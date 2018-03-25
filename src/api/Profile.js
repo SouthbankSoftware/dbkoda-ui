@@ -12,7 +12,6 @@ import { EditorTypes } from '#/common/Constants';
 import { ProfileForm } from '#/ConnectionPanel/ProfileForm';
 import { featherClient } from '~/helpers/feathers';
 import { Broker, EventType } from '~/helpers/broker';
-import EventLogging from '#/common/logging/EventLogging';
 import { ProfileStatus } from '#/common/Constants';
 import StaticApi from './static';
 import { performancePanelStatuses } from './PerformancePanel';
@@ -231,13 +230,6 @@ export default class ProfileApi {
   @action
   onFail() {
     const { profileList } = this.store;
-    if (this.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE.FAILED,
-        EventLogging.getFragmentEnum().PROFILES,
-        globalString('connection/createProfileError')
-      );
-    }
     profileList.creatingNewProfile = false;
   }
 

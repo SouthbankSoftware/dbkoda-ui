@@ -1,4 +1,5 @@
 /**
+ * @Mike TODO -> Add Flow.
  * @Author: Michael Harrison <mike>
  * @Date:   2017-03-15 13:34:55
  * @Email:  mike@southbanksoftware.com
@@ -24,6 +25,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * Fix linting errors and remove these disables.
+ */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/sort-comp */
 /* eslint no-unused-vars:warn */
@@ -41,7 +45,6 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
-import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys, DialogHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { ProfileStatus } from '../common/Constants';
@@ -71,6 +74,9 @@ export default class Toolbar extends React.Component {
       removeConnectionAlert: false
     };
 
+    /**
+     * Can probably be replaced with action.bound decorator.
+     */
     this.newProfile = this.newProfile.bind(this);
   }
   componentWillUnmount() {
@@ -80,7 +86,6 @@ export default class Toolbar extends React.Component {
     );
   }
   componentDidMount() {
-    // Add hotkey bindings for this component:
     Mousetrap.bindGlobal(GlobalHotkeys.createNewProfile.keys, this.newProfile);
   }
 
@@ -89,14 +94,6 @@ export default class Toolbar extends React.Component {
    */
   @action
   newProfile() {
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE
-          .OPEN_DIALOG,
-        EventLogging.getFragmentEnum().PROFILES,
-        'User opened the New Connection Profile drawer.'
-      );
-    }
     this.props.store.profileList.selectedProfile = null;
     this.props.store.showConnectionPane();
   }
@@ -109,37 +106,15 @@ export default class Toolbar extends React.Component {
     const { selectedProfile } = this.props.store.profileList;
     if (selectedProfile) {
       if (selectedProfile.status === ProfileStatus.OPEN) {
-        if (this.props.config.settings.telemetryEnabled) {
-          EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().WARNING,
-            EventLogging.getFragmentEnum().PROFILES,
-            'User attempted to edit active profile..'
-          );
-        }
         NewToaster.show({
           message: globalString('profile/not'),
           className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });
       } else {
-        if (this.props.config.settings.telemetryEnabled) {
-          EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE
-              .OPEN_DIALOG,
-            EventLogging.getFragmentEnum().PROFILES,
-            'User opened the Edit Connection Profile drawer.'
-          );
-        }
         this.props.store.showConnectionPane();
       }
     } else {
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().WARNING,
-          EventLogging.getFragmentEnum().PROFILES,
-          'User attempted to edit with no profile selected.'
-        );
-      }
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
@@ -162,13 +137,6 @@ export default class Toolbar extends React.Component {
     this.props.profileStore.profiles.delete(profileId);
     this.props.profileStore.save();
     this.hideRemoveConnectionAlert();
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE,
-        EventLogging.getFragmentEnum().PROFILES,
-        'User removed a profile..'
-      );
-    }
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
       className: 'success',
@@ -224,13 +192,6 @@ export default class Toolbar extends React.Component {
             profiles.set(selectedProfile.id, selectedProfile);
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
-          if (this.props.config.settings.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE,
-              EventLogging.getFragmentEnum().PROFILES,
-              'User closed a profile connection.'
-            );
-          }
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
             className: 'success',
@@ -241,13 +202,6 @@ export default class Toolbar extends React.Component {
         .catch(err => {
           console.error('error:', err);
           logToMain('error', 'Failed to close profile: ' + err);
-          if (this.props.config.settings.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().ERROR,
-              EventLogging.getFragmentEnum().PROFILES,
-              err.message
-            );
-          }
           NewToaster.show({
             message: err.message,
             className: 'danger',
@@ -256,13 +210,6 @@ export default class Toolbar extends React.Component {
           this.setState({ closingProfile: false, closeConnectionAlert: false });
         });
     } else {
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().WARNING,
-          EventLogging.getFragmentEnum().PROFILES,
-          'User attempted to close a connection profile with no profile selected..'
-        );
-      }
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',

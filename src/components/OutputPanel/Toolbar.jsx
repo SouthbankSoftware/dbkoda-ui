@@ -46,7 +46,6 @@ import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { NewToaster } from '#/common/Toaster';
 import StaticApi from '~/api/static';
 import { OutputFileTypes } from '~/api/Output';
-import EventLogging from '#/common/logging/EventLogging';
 import { OutputToolbarContexts } from '../common/Constants';
 import ClearOutputIcon from '../../styles/icons/clear-output-icon.svg';
 import ShowMoreIcon from '../../styles/icons/show-more-icon.svg';
@@ -80,7 +79,11 @@ export default class Toolbar extends React.Component {
     this.downloadOutput = this.downloadOutput.bind(this);
 
     // Determine toolbar context.
-    if (this.props.store.outputPanel.currentTab.startsWith(OutputToolbarContexts.TABLE_VIEW)) {
+    if (
+      this.props.store.outputPanel.currentTab.startsWith(
+        OutputToolbarContexts.TABLE_VIEW
+      )
+    ) {
       this.state.context = OutputToolbarContexts.TABLE_VIEW;
     } else {
       this.state.context = OutputToolbarContexts.DEFAULT;
@@ -133,16 +136,9 @@ export default class Toolbar extends React.Component {
     reaction(
       () => this.props.store.outputPanel.clearingOutput,
       clearingOutput => {
-        const {currentTab} = this.props.store.outputPanel;
+        const { currentTab } = this.props.store.outputPanel;
         if (clearingOutput && this.props.store.outputs.get(currentTab)) {
           this.props.store.outputs.get(currentTab).output = '';
-          if (this.props.config.settings.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().EVENT.OUTPUT_PANEL.CLEAR_OUTPUT,
-              EventLogging.getFragmentEnum().OUTPUT,
-              'User cleared Output'
-            );
-          }
           this.props.store.outputPanel.clearingOutput = false;
         } else if (currentTab.indexOf('Explain-') === 0) {
           // close explain output
@@ -232,11 +228,15 @@ export default class Toolbar extends React.Component {
     return (
       <Menu>
         <MenuItem
-          onClick={() => { this.downloadOutput(OutputFileTypes.JSON); }}
+          onClick={() => {
+            this.downloadOutput(OutputFileTypes.JSON);
+          }}
           text={globalString('output/toolbar/downloadMenu/json')}
         />
         <MenuItem
-          onClick={() => { this.downloadOutput(OutputFileTypes.CSV); }}
+          onClick={() => {
+            this.downloadOutput(OutputFileTypes.CSV);
+          }}
           text={globalString('output/toolbar/downloadMenu/csv')}
         />
       </Menu>
@@ -660,7 +660,10 @@ export default class Toolbar extends React.Component {
               <CollapseIcon className="dbKodaSVG" width={30} height={30} />
             </AnchorButton>
           </Tooltip>
-          <Popover content={this.renderDownloadMenu()} position={Position.BOTTOM_LEFT}>
+          <Popover
+            content={this.renderDownloadMenu()}
+            position={Position.BOTTOM_LEFT}
+          >
             <Tooltip
               intent={Intent.PRIMARY}
               hoverOpenDelay={1000}

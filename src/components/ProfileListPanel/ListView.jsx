@@ -1,9 +1,10 @@
 /**
+ * @Mike TODO -> Add Flow.
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-05T12:45:22+11:00
+ * @Last modified by:   mike
+ * @Last modified time: 2018-03-23T12:45:22+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -42,7 +43,6 @@ import {
   MenuItem,
   Position
 } from '@blueprintjs/core';
-import EventLogging from '#/common/logging/EventLogging';
 import { terminalTypes } from '~/api/Terminal';
 import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { ProfileStatus } from '../common/Constants';
@@ -81,6 +81,9 @@ export default class ListView extends React.Component {
     this.api = this.props.api;
     this.store = this.props.store;
 
+    /**
+     * @Mike TODO -> These can probably all be replaced with action.bound decorators, as it's cleaner.
+     */
     this.renderBodyContextMenu = this.renderBodyContextMenu.bind(this);
     this.openProfile = this.openProfile.bind(this);
     this.closeProfile = this.closeProfile.bind(this);
@@ -237,13 +240,6 @@ export default class ListView extends React.Component {
             profiles.set(selectedProfile.id, selectedProfile);
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
-          if (this.props.config.settings.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.CLOSE_PROFILE,
-              EventLogging.getFragmentEnum().PROFILES,
-              'User closed a profile connection.'
-            );
-          }
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
             className: 'success',
@@ -264,13 +260,6 @@ export default class ListView extends React.Component {
         .catch(err => {
           console.error('error:', err);
           logToMain('error', 'Failed to close profile: ' + err);
-          if (this.props.config.settings.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().ERROR,
-              EventLogging.getFragmentEnum().PROFILES,
-              err.message
-            );
-          }
           NewToaster.show({
             message: 'Error: ' + err.message,
             className: 'danger',
@@ -280,13 +269,6 @@ export default class ListView extends React.Component {
           this.closeConnectionCloseAlert();
         });
     } else {
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().WARNING,
-          EventLogging.getFragmentEnum().PROFILES,
-          'User attempted to close a connection profile with no profile selected..'
-        );
-      }
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
@@ -302,37 +284,15 @@ export default class ListView extends React.Component {
     this.props.store.profileList.selectedProfile = selectedProfile;
     if (selectedProfile) {
       if (selectedProfile.status === ProfileStatus.OPEN) {
-        if (this.props.config.settings.telemetryEnabled) {
-          EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().WARNING,
-            EventLogging.getFragmentEnum().PROFILES,
-            'User attempted to edit active profile..'
-          );
-        }
         NewToaster.show({
           message: globalString('profile/notClosed'),
           className: 'danger',
           iconName: 'pt-icon-thumbs-down'
         });
       } else {
-        if (this.props.config.settings.telemetryEnabled) {
-          EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.EDIT_PROFILE
-              .OPEN_DIALOG,
-            EventLogging.getFragmentEnum().PROFILES,
-            'User opened the Edit Connection Profile drawer.'
-          );
-        }
         this.props.store.showConnectionPane();
       }
     } else {
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().WARNING,
-          EventLogging.getFragmentEnum().PROFILES,
-          'User attempted to edit with no profile selected.'
-        );
-      }
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
@@ -350,14 +310,6 @@ export default class ListView extends React.Component {
     profileStore.save();
     api.removeAllTerminalsForProfile(profileId);
     api.transformPerformancePanel(profileId, null);
-
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.REMOVE_PROFILE,
-        EventLogging.getFragmentEnum().PROFILES,
-        'User removed a profile..'
-      );
-    }
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
       className: 'success',
@@ -543,13 +495,6 @@ export default class ListView extends React.Component {
 
     // @TODO -> Should we update state store to reflect right clicks here?
     this.state.targetProfile = profile;
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.OPEN_CONTEXT_MENU,
-        EventLogging.getFragmentEnum().PROFILES,
-        'Opened a context menu for a profile.'
-      );
-    }
     let connect;
     const terminalOperations = [];
     const windows = [];
@@ -814,11 +759,11 @@ export default class ListView extends React.Component {
               onClick={() => {
                 setTimeout(() => {
                   runInAction(() => {
-                  if (this.props.store.editorToolbar.reloadToolbar) {
-                    this.props.store.editorToolbar.reloadToolbar = false;
-                  }
-                  this.props.store.editorToolbar.reloadToolbar = true;
-                });
+                    if (this.props.store.editorToolbar.reloadToolbar) {
+                      this.props.store.editorToolbar.reloadToolbar = false;
+                    }
+                    this.props.store.editorToolbar.reloadToolbar = true;
+                  });
                 }, 500);
                 this.closeProfile();
               }}

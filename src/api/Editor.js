@@ -28,7 +28,6 @@ import _ from 'lodash';
 import { action, observable } from 'mobx';
 import uuidV1 from 'uuid';
 import { NewToaster } from '#/common/Toaster';
-import EventLogging from '#/common/logging/EventLogging';
 import { EditorTypes, DrawerPanes, ProfileStatus } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import camelise from '~/helpers/camelise';
@@ -42,7 +41,7 @@ export type Editor = {
   alias: string,
   currentProfile: string,
   fileName: string,
-  initialMsg: string,
+  initialMsg: string
 };
 
 export default class EditorApi {
@@ -79,14 +78,6 @@ export default class EditorApi {
         editorOptions.type = EditorTypes.DEFAULT;
       }
       if (!this.profileStore.profiles.has(profileId)) {
-        if (this.config.settings.telemetryEnabled) {
-          EventLogging.recordManualEvent(
-            EventLogging.getTypeEnum().EVENT.EDITOR_PANEL.NEW_EDITOR
-              .FAILED_DEFAULT,
-            EventLogging.getFragmentEnum().EDITORS,
-            'Cannot create new Editor for Default Tab.'
-          );
-        }
         NewToaster.show({
           message: globalString('editor/toolbar/addEditorError'),
           className: 'warning',
@@ -103,13 +94,6 @@ export default class EditorApi {
           return this.setNewEditorState(res, editorOptions);
         })
         .catch(err => {
-          if (this.config.settings.telemetryEnabled) {
-            EventLogging.recordManualEvent(
-              EventLogging.getTypeEnum().ERROR,
-              EventLogging.getFragmentEnum().EDITORS,
-              err.message
-            );
-          }
           this.createNewEditorFailed();
           // @TODO -> Object Object issue
           console.error(err);
@@ -126,13 +110,6 @@ export default class EditorApi {
           }
         });
     } catch (err) {
-      if (this.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().ERROR,
-          EventLogging.getFragmentEnum().EDITORS,
-          err.message
-        );
-      }
       NewToaster.show({
         message: err.message,
         className: 'danger',
