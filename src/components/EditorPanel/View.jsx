@@ -35,6 +35,7 @@ import { featherClient } from '~/helpers/feathers';
 import { action, reaction, runInAction } from 'mobx';
 import _ from 'lodash';
 import { ContextMenuTarget, Intent, Menu, MenuItem } from '@blueprintjs/core';
+import {now} from 'performance-now';
 import SplitPane from 'react-split-pane';
 import Prettier from 'prettier-standalone';
 import sqlFormatter from 'sql-formatter';
@@ -185,6 +186,8 @@ class View extends React.Component {
             Broker.emit(EventType.FEATURE_USE, 'ExecuteAll');
             // Listen for completion
             this.props.store.editors.get(editor.id).executing = true;
+            this.props.store.editors.get(editor.id).lastExecutionStart = Date.now();
+            this.props.store.editors.get(editor.id).lastExecutionFailed = false;
             this.props.store.editorToolbar.isActiveExecuting = true;
             // Send request to feathers client
             const type = editor.type;
@@ -227,6 +230,8 @@ class View extends React.Component {
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editors.get(editor.id).lastExecutionTime = Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                   });
                 })
@@ -260,6 +265,8 @@ class View extends React.Component {
 
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editors.get(editor.id).lastExecutionTime = Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     NewToaster.show({
                       message: globalString(
@@ -297,7 +304,8 @@ class View extends React.Component {
                     this.props.store.outputPanel.currentTab = editor.id;
                   });
                   runInAction(() => {
-                    this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editors.get(editor.id).lastExecutionTime = now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     let message = globalString(
                       'drill/execution_failed',
@@ -349,6 +357,8 @@ class View extends React.Component {
               content = cm.getLine(cm.getCursor().line);
             }
             this.props.store.editors.get(editor.id).executing = true;
+            this.props.store.editors.get(editor.id).lastExecutionStart = Date.now();
+            this.props.store.editors.get(editor.id).lastExecutionFailed = false;
             this.props.store.editorToolbar.isActiveExecuting = true;
 
             const type = editor.type;
@@ -381,6 +391,8 @@ class View extends React.Component {
                   this.props.api.drillOutputAvailable(output);
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editors.get(editor.id).lastExecutionTime = Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = false;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                   });
                 })
@@ -432,6 +444,8 @@ class View extends React.Component {
 
                   runInAction(() => {
                     this.props.store.editors.get(editor.id).executing = false;
+                    this.props.store.editors.get(editor.id).lastExecutionTime = Date.now() - this.props.store.editors.get(editor.id).lastExecutionStart;
+                    this.props.store.editors.get(editor.id).lastExecutionFailed = true;
                     this.props.store.editorToolbar.isActiveExecuting = false;
                     let message = globalString(
                       'drill/execution_failed',
@@ -1074,6 +1088,8 @@ class View extends React.Component {
     editorValues.map((v) => {
       if (v.profileId === event.id && v.shellId === event.shellId) {
         v.executing = false;
+        v.lastExecutionTime = Date.now() - v.lastExecutionStart;
+       v.lastExecutionFailed = true;
       }
     });
     if (this.props.store.editors.get(this.props.store.editorPanel.activeEditorId).shellId === event.shellId) {
