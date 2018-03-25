@@ -99,7 +99,6 @@ export default class Toolbar extends React.Component {
     // this.addEditorNoOptions = this.addEditor.bind(this);
     this.executeLine = this.executeLine.bind(this);
     this.executeAll = this.executeAll.bind(this);
-    this.explainPlan = this.explainPlan.bind(this);
     this.onDropdownChanged = this.onDropdownChanged.bind(this);
     this.openFile = this.openFile.bind(this);
     this.openSQLFile = this.openSQLFile.bind(this);
@@ -714,7 +713,7 @@ export default class Toolbar extends React.Component {
                 />
               </AnchorButton>
             </Tooltip>
-            {!this.props.store.editorToolbar.isActiveExecuting &&
+            {!this.props.store.editorToolbar.isActiveExecuting && editor &&
               this.props.store.editors.get(editor.id).lastExecutionTime && (
                 <span>
                   Query executed in{' '}
