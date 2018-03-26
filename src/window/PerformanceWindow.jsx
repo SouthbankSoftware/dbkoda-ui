@@ -85,9 +85,9 @@ class PerformanceWindow extends React.Component {
   }
   @action.bound
   _showToasterFromMainWindow(objToaster) {
-    // if (objToaster.className === 'danger') {
-    //   this.setState({ isUnresponsive: true });
-    // }
+    if (objToaster.className === 'danger') {
+      this.setState({ isUnresponsive: true });
+    }
     NewToaster.show(objToaster);
   }
 
