@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-22T16:52:58+11:00
+ * @Last modified time: 2018-03-26T15:19:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -21,14 +21,16 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import '../../styles/_defaultTheme.scss';
-$boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
-  inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
+@import "../../styles/_defaultTheme.scss";
+
+$boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
+
 .FilterList {
   background: #ffffff;
   border-radius: 3px;
   width: 250px;
   overflow: hidden;
+
   input.pt-input {
     outline: none;
     border-radius: 3px 3px 0 0;
@@ -37,14 +39,17 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
     box-shadow: $boxShadow;
     padding: 0 7px;
   }
+
   input.pt-input::placeholder {
     opacity: 0.3;
   }
+
   input:focus {
     outline: none;
     background: #ffffff !important;
     box-shadow: $boxShadow;
   }
+
   ul {
     list-style-type: unset;
     max-height: 270px;
@@ -53,13 +58,16 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
     padding: 0;
     margin: 0;
     cursor: pointer;
+
     li {
       padding: 7px;
     }
+
     li:hover {
       background-color: $menuItemHover;
     }
   }
+
   ul::-webkit-scrollbar {
     width: 6px;
   }
@@ -69,18 +77,22 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
   display: flex;
   flex-direction: column;
   width: 100%;
+
   .notVisible {
     display: none;
   }
+
   .editorToolbar {
     overflow-x: hidden;
     background-color: $navbarRightBackground !important;
     min-height: 50px;
+
     .leftEditorToolbar {
       .leftButtonGroup {
         .editorContextDropdownWrapper {
           border: 1px solid $selectDarkBorderColor;
           background-color: $selectDarkPrimaryBackground !important;
+
           .editorContextDropdown {
             outline: unset;
             background-color: $selectDarkPrimaryBackground;
@@ -90,9 +102,11 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
             width: 100%;
           }
         }
+
         span {
           .pt-button {
             position: relative;
+
             svg.dbKodaSVG {
               position: absolute;
               top: 50%;
@@ -101,17 +115,20 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
               fill: $buttonPrimaryIcon;
             }
           }
+
           .stopExecutionButton svg.dbKodaSVG {
             fill: $buttonSecondaryIcon;
             height: 40%;
             width: 40%;
           }
+
           .executeLineButton svg.dbKodaSVG {
             height: 45%;
           }
         }
       }
     }
+
     .pt-align-right {
       span {
         a {
@@ -119,6 +136,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
           background-color: $buttonTertiaryBackground;
           width: 30px;
           height: 30px;
+
           svg.dbKodaSVG {
             position: absolute;
             top: 50%;
@@ -129,13 +147,16 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
             fill: $buttonTertiaryIcon;
           }
         }
+
         a:focus {
           box-shadow: none !important;
         }
+
         .saveFileButton svg.dbKodaSVG {
           width: 60%;
           height: 60%;
         }
+
         .openFileButton svg.dbKodaSVG {
           width: 60%;
           height: 60%;
@@ -143,104 +164,117 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
       }
     }
   }
+
   .editorTabView {
     background-color: $editorBackground;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+
     .pt-tab-list {
       height: 31px;
       background-color: $tabBackground;
       margin-left: 20px;
       margin-right: 43px;
+
       .pt-tab {
         margin-right: unset;
         color: $tabFontColor;
         background-color: $tabBackground;
+
         /* border-right: 1px solid linear-gradient(rgba(0, 0, 0, 0), ) !important; */
         /* border-right: 1px solid $tabBackgroundHover !important; */
 
         border-right-width: 1px;
         border-right-style: solid;
-        border-image: linear-gradient(
-            to bottom,
-            transparent,
-            #292929 10px,
-            #292929 90%,
-            transparent 1%
-          )
-          1 100% 1 100%;
-
+        border-image: linear-gradient(to bottom, transparent, #292929 10px, #292929 90%, transparent 1%) 1 100% 1 100%;
         outline: unset;
         box-shadow: unset;
       }
+
       .pt-tab[aria-selected='true'] {
         box-shadow: unset;
         background-color: $tabBackgroundSelected;
       }
+
       .pt-tab:hover {
         background-color: $tabBackgroundHover;
         color: $tabFontColor !important;
       }
+
       .welcomeTab,
       .configTab {
         background-color: $tabBackground;
         font-family: unset;
         flex-grow: initial;
+
         button {
           top: -1px;
         }
+
         button:hover {
           color: $tabButtonHover !important;
         }
       }
+
       .welcomeTab[aria-selected='true'],
       .configTab[aria-selected='true'] {
         background-color: $welcomeViewBackgroundColor;
         font-family: unset;
         flex-grow: initial;
       }
+
       .welcomeTab[aria-selected='true']:hover,
       .configTab[aria-selected='true']:hover {
         background-color: $welcomeViewBackgroundColor;
         color: $tabFontColor !important;
         font-family: unset;
         flex-grow: initial;
+
         button:hover {
           color: $tabButtonHover !important;
         }
       }
+
       .editorTab {
         flex-grow: unset;
+
         button {
           float: right;
         }
+
         button:hover {
           color: $tabButtonHover !important;
         }
       }
     }
+
     .editorTab {
       margin-top: 0;
       flex-grow: 1;
+
       .editorView {
         flex: 1;
         width: 100%;
       }
     }
+
     div.aggregateTab {
       margin-top: 0;
       flex-grow: 1;
+
       div.aggregateTabInnerWrapper {
         display: flex;
         flex-direction: row;
         width: 100%;
+
         div.editorView {
           order: 2;
           flex-grow: 1;
         }
       }
     }
+
     .welcomeTab,
     .configTab {
       font-family: 'Arial', Arial, Helvetica, sans-serif;
@@ -251,9 +285,11 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
       overflow-y: scroll;
       margin-top: 0;
       color: $welcomeViewFontColor;
+
       .welcomePanelTabWrapper,
       .configPanelTabWrapper {
         margin-left: 50px;
+
         .welcomePanelWrapper,
         .configPanelWrapper {
           display: flex;
@@ -261,38 +297,46 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
           flex-grow: 1;
           background-color: $welcomeViewBackgroundColor;
           margin-top: 30px;
+
           .dbKodaSVG {
             fill: $welcomeViewFontColor;
           }
+
           h1 {
             color: $welcomeViewFontColor;
             font-size: 24px;
             order: 1;
             font-size: 10;
           }
+
           .welcomeTitleWrapper,
           .configTitleWrapper {
             display: flex;
             flex-direction: row;
             flex-shrink: 0;
+
             svg.dbKodaLogo {
               margin-right: 15px;
               fill: $welcomeViewFontColor;
               width: 50px;
               height: 50px;
+
               path.st0 {
                 fill: none;
               }
             }
+
             h1 {
               margin-top: 20px;
             }
           }
+
           .welcomeMiddleSection {
             order: 2;
             display: flex;
             flex-direction: row;
             flex-grow: 2;
+
             .welcomeMenuWrapper {
               margin-top: 30px;
               display: flex;
@@ -301,6 +345,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
               flex-grow: 0;
               flex-shrink: 0;
               width: 210px;
+
               .welcomeMenu {
                 display: flex;
                 padding-right: 20px;
@@ -308,18 +353,21 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                 flex-grow: 1;
                 flex-shrink: 0;
                 flex-direction: column;
+
                 h2 {
                   color: $welcomeViewFontColor;
                   font-size: 18px;
                   order: 1;
                   margin-bottom: 20px;
                 }
+
                 .welcomeButtons {
                   order: 2;
                   display: flex;
                   flex-direction: column;
                   flex-grow: 5;
                   flex-shrink: 0;
+
                   .welcomeButtonWrapper {
                     display: flex;
                     flex-direction: row;
@@ -328,6 +376,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                     padding-bottom: 15px;
                     height: 60px;
                     width: 180px;
+
                     .welcomeMenuButton {
                       display: flex;
                       flex-direction: row;
@@ -337,6 +386,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                       box-shadow: unset;
                       border: 1px solid $welcomeViewButtonBorderColor;
                       border-radius: 0.75em;
+
                       span {
                         display: block;
                         font-size: 14px;
@@ -346,6 +396,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                         margin-left: 30px;
                         text-align: left;
                       }
+
                       svg.dbKodaSVG {
                         float: left;
                         height: 16px;
@@ -354,12 +405,14 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                         padding-bottom: 2px;
                       }
                     }
+
                     .welcomeMenuButton:hover {
                       background-color: $welcomeViewButtonHoverColor;
                       border: 1px solid $welcomeViewButtonHoverColor;
                     }
                   }
                 }
+
                 .welcomeMenuOptOut,
                 .welcomeMenuConfig {
                   display: flex;
@@ -370,6 +423,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                   color: $connectionHeadingsFontColour !important;
                   text-align: left;
                   margin: 5px 0 0;
+
                   .pt-control {
                     span.pt-control-indicator {
                       font-size: unset;
@@ -382,9 +436,12 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                       font-size: 11pt;
                       color: $connectionCheckboxColour;
                       border-radius: 0;
-                      background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+                      background-color: $connectionCheckboxBackgroundColour;
+
+                      // outline: $connectionCheckboxColour solid 1px;
                       border: 1px solid $connectionCheckboxColour;
                     }
+
                     span.pt-control-indicator:hover {
                       background-color: $connectionCheckboxBackgroundColourHover;
                     }
@@ -392,13 +449,16 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                 }
               }
             }
+
             .welcomeContentWrapper {
               margin-top: 30px;
               order: 2;
+
               .welcomePageContentWrapper {
                 display: flex;
                 flex-direction: row;
                 height: 100%;
+
                 .welcomePageContentLeft {
                   width: 250px;
                   color: $welcomeViewSocialMediaText;
@@ -407,27 +467,33 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                   border-right: 1px solid $welcomeViewDividerTransparent;
                   flex-shrink: 0;
                   flex-direction: column;
+
                   h2 {
                     color: $welcomeViewFontColor;
                     font-size: 18px;
                     margin-bottom: 20px;
                   }
+
                   p {
                     color: $welcomeViewFontColorDark;
                   }
+
                   .docsContent {
                     overflow-y: auto;
                     height: 100%;
+
                     .docsList {
                       overflow-y: auto;
                       display: flex;
                       flex-direction: column;
+
                       .documentationLinkWrapper {
                         padding-bottom: 12px;
                         flex-grow: 1;
                         display: flex;
                         flex-direction: row;
                         margin-right: 6%;
+
                         .iconWrapper {
                           width: 50px;
                           height: 50px;
@@ -435,6 +501,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                           flex-grow: 2;
                           border-radius: 0.4em;
                           text-align: center;
+
                           a {
                             float: left;
                             width: 50px;
@@ -443,6 +510,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                             background: $welcomeViewIconBGHover;
                             position: relative;
                             text-align: center;
+
                             svg {
                               position: absolute;
                               top: 50%;
@@ -451,13 +519,16 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                               fill: $welcomeViewSocialMediaIcons;
                             }
                           }
+
                           a:focus {
                             box-shadow: none !important;
                           }
+
                           a:hover {
                             background-color: $welcomeViewIconBG;
                           }
                         }
+
                         p {
                           padding-left: 16px;
                           padding-top: 6px;
@@ -469,13 +540,16 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                         }
                       }
                     }
+
                     .linksList {
                       display: flex;
                       flex-direction: row;
                       flex-grow: 1;
+
                       .linkWrapper {
                         flex-direction: column;
                         margin-right: 10px;
+
                         a {
                           width: 100px;
                           border-radius: 50%;
@@ -484,13 +558,16 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                           background: $welcomeViewIconBGHover;
                           font-size: 40;
                         }
+
                         a:focus {
                           box-shadow: none !important;
                         }
+
                         .twitterIcon {
                           width: 60px;
                           height: 60px;
                           position: relative;
+
                           svg {
                             width: 30px;
                             height: 30px;
@@ -501,10 +578,12 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                             fill: $welcomeViewSocialMediaIcons;
                           }
                         }
+
                         .gitHubIcon {
                           width: 60px;
                           height: 60px;
                           position: relative;
+
                           svg {
                             width: 30px;
                             height: 30px;
@@ -515,10 +594,12 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                             fill: $welcomeViewSocialMediaIcons;
                           }
                         }
+
                         .kodaIcon {
                           width: 60px;
                           height: 60px;
                           position: relative;
+
                           svg {
                             width: 30px;
                             height: 30px;
@@ -527,14 +608,17 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                             bottom: 50%;
                             transform: translate(-50%, -50%);
                             fill: $welcomeViewSocialMediaIcons;
+
                             path.st0 {
                               fill: none;
                             }
                           }
                         }
+
                         a:hover {
                           background-color: $welcomeViewIconBG;
                         }
+
                         p {
                           flex-grow: 1;
                           order: 2;
@@ -545,6 +629,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                     }
                   }
                 }
+
                 .welcomePageContentRight {
                   padding-right: 3%;
                   padding-left: 20px;
@@ -558,17 +643,20 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                     font-size: 18px;
                     color: $welcomeViewFontColor;
                   }
+
                   .feedList {
                     .feedItem {
                       display: flex;
                       flex-direction: row;
                       overflow-x: auto;
+
                       .feedIconWrapper {
                         width: 60px;
                         height: 60px;
                         order: 1;
                         border-radius: 0.4em;
                         text-align: center;
+
                         a {
                           width: 60px;
                           height: 60px;
@@ -576,6 +664,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                           background: $welcomeViewIconBGHover;
                           position: relative;
                           text-align: center;
+
                           svg {
                             width: 30px;
                             height: 30px;
@@ -586,24 +675,29 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                             fill: $welcomeViewSocialMediaIcons;
                           }
                         }
+
                         a:hover {
                           background-color: $welcomeViewIconBG;
                         }
                       }
+
                       .feedItemContent {
                         order: 2;
                         margin-left: 10px;
                         display: flex;
                         flex-direction: column;
                         color: $welcomeViewFontColor;
+
                         .feedItemTitle {
                           font-weight: bold;
                           font-size: 12;
                         }
+
                         .feedItemContent {
                           margin-left: 0;
                           width: 600px;
                         }
+
                         .feedItemPubDate {
                           font-weight: lighter;
                           font-size: 8;
@@ -611,17 +705,21 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                       }
                     }
                   }
+
                   .newsListWrapper {
                     overflow-y: auto;
+
                     .newsItemWrapper {
                       display: flex;
                       flex-direction: row;
+
                       .newsIconWrapper {
                         background-color: $welcomeViewIconBGHover;
                         width: 50px;
                         height: 50px;
                         border-radius: 0.4em;
                         text-align: center;
+
                         .svgWrapper {
                           float: left;
                           width: 50px;
@@ -630,6 +728,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                           background: $welcomeViewIconBGHover;
                           position: relative;
                           text-align: center;
+
                           svg {
                             opacity: 0.9;
                             position: absolute;
@@ -638,24 +737,29 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                             bottom: 50%;
                             transform: translate(-50%, -50%);
                             fill: $welcomeViewSocialMediaIcons;
+
                             .st0 {
                               fill: none;
                             }
                           }
                         }
+
                         .svgWrapper:hover {
                           background-color: $welcomeViewIconBG;
                         }
+
                         .svgWrapper:focus {
                           box-shadow: none !important;
                         }
                       }
+
                       .newsContentWrapper {
                         margin-left: 12px;
                         margin-bottom: 12px;
                         padding-right: 5px;
                         font-family: 'Arial';
                         color: $welcomeViewFontColorDark;
+
                         h2.newsTitle {
                           color: $welcomeViewFontColorDark;
                           font-family: 'Arial';
@@ -663,6 +767,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                           line-height: 20px;
                           margin-bottom: 12px;
                         }
+
                         p.newsContent {
                           color: $welcomeViewFontColorDark;
                           font-family: 'Arial';
@@ -670,6 +775,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                           margin-bottom: 4px;
                           line-height: 16px;
                         }
+
                         p.datePublished {
                           color: $welcomeViewFontColorDark;
                           opacity: 0.6;
@@ -680,17 +786,20 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                   }
                 }
               }
+
               .learnShortcutsWrapper {
                 display: flex;
                 flex-direction: row;
                 height: 100%;
                 margin-left: 20px;
+
                 .groupsList {
                   display: flex;
                   flex-direction: column;
                   border-right: 1px solid $welcomeViewDividerTransparent;
                   padding-right: 20px;
                   overflow-y: auto;
+
                   .welcomeButtonWrapper {
                     display: flex;
                     flex-direction: row;
@@ -698,6 +807,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                     flex-shrink: 0;
                     padding-bottom: 15px;
                     height: 80px;
+
                     .welcomeMenuButton {
                       color: $welcomeViewOptoutFontColor;
                       background: unset;
@@ -705,6 +815,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                       border: 1px solid $welcomeViewButtonBorderColor;
                       border-radius: 0.75em;
                       width: 120px;
+
                       span {
                         display: block;
                         font-size: 14px;
@@ -713,29 +824,33 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
                         padding-bottom: 10px;
                       }
                     }
+
                     .welcomeMenuButton:hover {
                       background-color: $welcomeViewButtonHoverColor;
                       border: 1px solid $welcomeViewButtonHoverColor;
                     }
                   }
                 }
+
                 .hotkeysList {
                   padding-left: 5%;
                   overflow-y: scroll;
                   flex-grow: 4;
                 }
+
                 .hotkeyItem {
                   background-color: $welcomeViewKeyboardShortcutsBG;
                   margin-top: 20px;
                   margin-right: 20px;
                   padding: 10px;
                   border-radius: 0.3em;
+
                   .hotkeyTitle {
                     color: $welcomeViewFontColor;
                     font-size: 18px;
                   }
-                  p {
-                  }
+
+                  p {}
                 }
               }
             }
@@ -744,6 +859,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
       }
     }
   }
+
   .tabControlBtn {
     position: absolute;
     top: 50px;
@@ -756,182 +872,231 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
     font-size: 12px;
     text-align: center;
   }
+
   .tabControlBtn:hover {
     color: $tabButtonHover;
   }
+
   .tabScrollLeftBtn {
     left: 0;
     border-right: 1px solid rgba(139, 139, 139, 0.5);
   }
+
   .tabScrollRightBtn {
     right: 23px;
     width: 25px;
     border-left: 1px solid rgba(139, 139, 139, 0.5);
     border-right: 1px solid rgba(139, 139, 139, 0.5);
   }
+
   .tabListBtn {
     right: 0;
     width: 23px;
   }
+
   //// Code Mirror CSS: ////
   div.CodeMirror span.CodeMirror-matchingbracket {
     color: $white !important;
     border: 1px solid $keywordFour;
   }
+
   div.CodeMirror span.CodeMirror-nonmatchingbracket {
     color: $keywordThree !important;
     border: 1px solid $keywordThree;
   }
+
   span.cm-property {
     color: $propFontColor !important;
   }
+
   span.cm-string {
     color: $stringFontColor !important;
   }
+
   .CodeMirror-overlayscroll-vertical {
     height: 0 !important;
   }
+
   .CodeMirror-scroll {
     background-color: $editorBackground;
     width: 100%;
     padding-bottom: unset;
   }
+
   .CodeMirror,
   .ReactCodeMirror {
     height: 100%;
     font-family: 'Courier New', 'Courier', 'monospace' !important;
   }
+
   .cm-s-ambiance .CodeMirror-linenumber {
     color: $white;
   }
+
   .CodeMirror-linebackground {
     background-color: $editorBackground !important;
   }
+
   .CodeMirror-line {
     background-color: $editorBackground;
   }
+
   span.cm-mongo-operator {
     color: $white !important;
   }
+
   .cm-variable {
     color: $editorDefaultFontColor !important;
   }
+
   span.cm-db {
     color: $keywordTwo !important;
   }
+
   span.cm-show {
     color: $keywordOne !important;
   }
+
   span.cm-dbs {
     color: $keywordTwo !important;
   }
+
   span.cm-use {
     color: $keywordOne !important;
   }
+
   span.cm-collections {
     color: $keywordTwo !important;
   }
+
   span.cm-users {
     color: $keywordTwo !important;
   }
+
   span.cm-roles {
     color: $keywordTwo !important;
   }
+
   span.cm-profile {
     color: $keywordTwo !important;
   }
+
   span.cm-databases {
     color: $keywordTwo !important;
   }
+
   span.cm-it {
     color: $keywordOne !important;
   }
+
   span.cm-dbkoda-prompt {
     color: $keywordFour !important;
   }
+
   span.cm-mongos-prompt {
     color: $keywordFour !important;
   }
+
   .CodeMirror-gutters {
     background-color: $editorBackground !important;
     border-right: 1px solid $editorBackground !important;
     box-shadow: none !important;
   }
+
   .CodeMirror-gutter {
     background-color: $editorBackground !important;
   }
+
   .CodeMirror-foldmarker {
     color: $keywordTwo;
     font-family: 'Arial';
     line-height: 0.3;
     cursor: pointer;
   }
+
   .CodeMirror-foldgutter {
     width: 0.7em;
     margin-right: 5px !important;
   }
+
   .CodeMirror-foldgutter-open {
     padding-left: 5px !important;
     padding-left: 5px !important;
   }
+
   .CodeMirrror-foldgutter-folded {
     padding-left: 5px !important;
     padding-left: 5px !important;
   }
+
   .cm-s-ambiance .CodeMirror-guttermarker-subtle {
     color: $white !important;
     cursor: pointer;
   }
+
   .CodeMirror-foldgutter-folded,
   .CodeMirror-foldgutter-open {
     color: #555;
     cursor: pointer;
   }
+
   .CodeMirror-foldgutter-open:after {
     content: $downArrow;
   }
+
   .CodeMirror-foldgutter-folded:after {
     content: $rightArrow;
   }
+
   div.CodeMirror-activeline pre.CodeMirror-line {
     background-color: unset !important;
   }
+
   .CodeMirror-activeline-background {
     background-color: $editorActiveLine !important;
   }
+
   .CodeMirror-activeline-gutter {
     background-color: $editorBackground;
   }
+
   .CodeMirror-lines > div > div:nth-child(3) {
     z-index: 19 !important;
     background: unset !important;
+
     div.CodeMirror-selected {
       background-color: $editorSelectText;
     }
   }
+
   .lint-error-icon {
     color: $keywordThree;
     font-style: oblique;
     font-size: 20px;
     float: right;
   }
+
   .CodeMirror-cursor {
     border-left: 1px solid $white;
     border-right: none;
     width: 0;
   }
+
   /* Shown when moving in bi-directional text */
   .CodeMirror div.CodeMirror-secondarycursor {
     border-left: 1px solid silver;
   }
+
   .cm-fat-cursor .CodeMirror-cursor {
     width: auto;
     border: 0 !important;
     background: #7e7;
   }
+
   .cm-fat-cursor div.CodeMirror-cursors {
     z-index: 1;
   }
+
   .cm-animate-fat-cursor {
     width: auto;
     border: 0;
@@ -940,40 +1105,45 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
     animation: blink 1.06s steps(1) infinite;
     background-color: #7e7;
   }
+
   @-moz-keyframes blink {
-    0% {
-    }
+    0% {}
+
     50% {
       background-color: transparent;
     }
-    100% {
-    }
+
+    100% {}
   }
+
   @-webkit-keyframes blink {
-    0% {
-    }
+    0% {}
+
     50% {
       background-color: transparent;
     }
-    100% {
-    }
+
+    100% {}
   }
+
   @keyframes blink {
-    0% {
-    }
+    0% {}
+
     50% {
       background-color: transparent;
     }
-    100% {
-    }
+
+    100% {}
   }
+
   /* Can style cursor different in overwrite (non-insert) mode */
-  .CodeMirror-overwrite .CodeMirror-cursor {
-  }
+  .CodeMirror-overwrite .CodeMirror-cursor {}
+
   .cm-tab {
     display: inline-block;
     text-decoration: inherit;
   }
+
   .CodeMirror-rulers {
     position: absolute;
     left: 0;
@@ -982,6 +1152,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
     bottom: -20px;
     overflow: hidden;
   }
+
   .CodeMirror-ruler {
     border-left: 1px solid #ccc;
     top: 0;
@@ -1000,6 +1171,7 @@ label.pt-control {
   color: $connectionHeadingsFontColour !important;
   text-align: left;
   margin: 0;
+
   span.pt-control-indicator {
     font-size: unset;
     font-weight: unset;
@@ -1011,9 +1183,12 @@ label.pt-control {
     font-size: 11pt;
     color: $connectionCheckboxColour;
     border-radius: 0;
-    background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+    background-color: $connectionCheckboxBackgroundColour;
+
+    // outline: $connectionCheckboxColour solid 1px;
     border: 1px solid $connectionCheckboxColour;
   }
+
   span.pt-control-indicator:hover {
     background-color: $connectionCheckboxBackgroundColourHover;
   }
@@ -1024,12 +1199,13 @@ label.pt-control {
 }
 
 .pt-dialog .loadSQLWarning {
-  .pt-alert-body {
-  }
+  .pt-alert-body {}
+
   div.dialogButtons {
     a.continueButton {
       background-color: $buttonSuccessBackground;
     }
+
     a.continueButton:hover {
       background-color: $buttonSuccessBackgroundHover;
     }
