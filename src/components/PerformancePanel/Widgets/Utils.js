@@ -116,6 +116,14 @@ export const convertTime = (value: any, unit: string, length: number) => {
         result.unit = 's';
         result.value = timescale(value, 'ms', 's');
         break;
+      case 's':
+        result.unit = 'm';
+        result.value = timescale(value, 's', 'm');
+        break;
+      case 'm':
+        result.unit = 'h';
+        result.value = timescale(value, 'm', 'h');
+        break;
       case ' ':
         result.unit = 'k';
         result.value /= 1000;

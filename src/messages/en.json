@@ -208,6 +208,8 @@
       "toolbar": {
         "executeSelectedTooltip": "Execute Selected Commands",
         "executeAllTooltip": "Execute All Commands",
+        "executionTimeLabel": "Ran for",
+        "executionTimeUnit": "ms",
         "stopExecutionTooltip": "Stop Execution",
         "explainTooltip": "Explain",
         "explainQuery": "Query Planner",
