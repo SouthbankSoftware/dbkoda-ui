@@ -487,6 +487,9 @@ export default class Store {
     newStore.treePanel.showDrillStatus = false;
     newStore.treePanel.drillDownloadProgress = null;
     newStore.treePanel.drillStatusMsg = '';
+
+    // Tree Action Panel:
+    newStore.treeActionPanel.isNewFormValues = false;
   }
 
   hasUnsavedEditorTabs() {
