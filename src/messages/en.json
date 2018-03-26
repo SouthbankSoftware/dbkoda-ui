@@ -40,6 +40,7 @@
         "Cannot import without an active connection.",
       "import_button": "Import",
       "generate_chart_button": "Generate Chart",
+      "create_view_button": "Create View",
       "import_failed": "Sorry, failed to import that file!",
       "import_passed": "Import succeeded.",
       "export_passed": "Export Complete.",
@@ -97,6 +98,15 @@
       "headings": {
         "default": "Query Output",
         "table": "Table Output"
+      },
+      "tabs": {
+        "Raw": "Raw",
+        "EnhancedJson": "JSON",
+        "TableView": "Table",
+        "ChartView": "Chart",
+        "Explain": "Explain",
+        "Details": "Details",
+        "Storage": "Storage"
       },
       "toolbar": {
         "save": "Save Output",
@@ -211,6 +221,8 @@
       "toolbar": {
         "executeSelectedTooltip": "Execute Selected Commands",
         "executeAllTooltip": "Execute All Commands",
+        "executionTimeLabel": "Ran for",
+        "executionTimeUnit": "ms",
         "stopExecutionTooltip": "Stop Execution",
         "explainTooltip": "Explain",
         "explainQuery": "Query Planner",
