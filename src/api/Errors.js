@@ -24,6 +24,9 @@
 export const ErrorCodes = {
   PERFORMANCE_LIMIT_MONGOS: 'performance/errors/mongos_error',
   PERFORMANCE_LIMIT_ENGINE: 'performance/errors/not_supported_storage_engine',
-  MONGO_CONNECTION_CLOSED: 'performance/errors/driver_connection_closed'
+  MONGO_CONNECTION_CLOSED: 'performance/errors/driver_connection_closed',
+  MONGO_RECONNECTING: 'performance/errors/mongo_reconnecting',
+  SSH_CONNECTION_CLOSED: 'performance/errors/ssh_connection_closed',
+  SSH_RECONNECTING: 'performance/errors/ssh_reconnecting',
 };
 

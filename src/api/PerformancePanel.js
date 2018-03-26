@@ -314,22 +314,29 @@ export default class PerformancePanelApi {
     if (err && err.code && ErrorCodes[err.code]) {
       try {
         errorMessage = globalString(ErrorCodes[err.code], errorMessage);
+        this._sendMsgToPerformanceWindow({
+          command: 'mw_error',
+          profileId,
+          err
+        });
       } catch (err) {
         console.error(err);
       }
     }
-    NewToaster.show({
-      // $FlowFixMe
-      message: `Profile ${profileAlias} (${profileId}) ${level}: ${errorMessage || err}`,
-      className: level === 'error' ? 'danger' : 'warning',
-      iconName: 'pt-icon-thumbs-down'
-    });
-    this.showToasterInPerformanceWindow(profileId, {
-      // $FlowFixMe
-      message: (errorMessage || err) + ' try restarting performance panel.',
-      className: 'danger',
-      iconName: 'pt-icon-thumbs-down'
-    });
+    if (!errorMessage) {
+      NewToaster.show({
+        // $FlowFixMe
+        message: `Profile ${profileAlias} (${profileId}) ${level}: ${errorMessage || err}`,
+        className: level === 'error' ? 'danger' : 'warning',
+        iconName: 'pt-icon-thumbs-down'
+      });
+      this.showToasterInPerformanceWindow(profileId, {
+        // $FlowFixMe
+        message: (errorMessage || err) + ' try restarting performance panel.',
+        className: 'danger',
+        iconName: 'pt-icon-thumbs-down'
+      });
+    }
   };
 
   _updateLayoutStyle = (layout, leftWidth, midWidth) => {
