@@ -32,7 +32,7 @@ import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
 import { ChartPanel } from '#/ChartPanel';
 import { LocalTerminal, SshTerminal } from '#/Terminal';
-import { EditorTypes } from '#/common/Constants.js';
+import { EditorTypes, OutputToolbarContexts } from '#/common/Constants.js';
 import { terminalTypes, terminalDisplayNames } from '~/api/Terminal';
 import OutputToolbar from './Toolbar';
 import OutputEditor from './Editor';
@@ -314,7 +314,6 @@ export default class Panel extends React.Component {
       ) {
         if (this.editorRefs[newTab]) {
           const cm = this.editorRefs[newTab].getCodeMirror();
-          cm.refresh();
           cm.focus();
         }
       }
@@ -348,7 +347,7 @@ export default class Panel extends React.Component {
       }
 
       if (this.props.store.editorPanel.activeEditorId === editorId) {
-        const title = 'Raw';
+        const title = globalString(`output/tabs/${OutputToolbarContexts.RAW}`);
         arrTabs.push(
           <Tab
             className={tabClassName}
@@ -380,7 +379,7 @@ export default class Panel extends React.Component {
           });
         }
         if (this.props.store.outputs.get(editorId).enhancedJson) {
-          const tabId = `EnhancedJson-${editorId}`;
+          const tabId = `${OutputToolbarContexts.ENHANCED_VIEW}-${editorId}`;
 
           arrTabs.push(
             <Tab
@@ -389,7 +388,7 @@ export default class Panel extends React.Component {
               }
               key={tabId}
               id={tabId}
-              title="Enhanced JSON"
+              title={globalString(`output/tabs/${OutputToolbarContexts.ENHANCED_VIEW}`)}
               panel={
                 <EnhancedJson
                   outputId={editorId}
@@ -419,7 +418,7 @@ export default class Panel extends React.Component {
               }
               key={tabId}
               id={tabId}
-              title="Table"
+              title={globalString(`output/tabs/${OutputToolbarContexts.TABLE_VIEW}`)}
               panel={
                 <TableView
                   outputId={editorId}
@@ -458,7 +457,7 @@ export default class Panel extends React.Component {
               }
               id={tabId}
               key={tabId}
-              title="Chart View"
+              title={globalString(`output/tabs/${OutputToolbarContexts.CHART_VIEW}`)}
               panel={<ChartPanel editorId={editorId} />}
             >
               <Button
@@ -482,7 +481,7 @@ export default class Panel extends React.Component {
               }
               key={tabId}
               id={tabId}
-              title="Explain"
+              title={globalString(`output/tabs/${OutputToolbarContexts.EXPLAIN_VIEW}`)}
               panel={<Explain editor={editor[1]} />}
             >
               <Button
@@ -508,7 +507,7 @@ export default class Panel extends React.Component {
               }
               key={tabId}
               id={tabId}
-              title="Details"
+              title={globalString(`output/tabs/${OutputToolbarContexts.DETAILS_VIEW}`)}
               panel={
                 <DetailsPanel
                   isVisible={

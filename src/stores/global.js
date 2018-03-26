@@ -27,7 +27,11 @@
 import _ from 'lodash';
 import { action, observable, when, runInAction, toJS, reaction } from 'mobx';
 import { dump, restore, nodump } from 'dumpenvy';
-import { serializer, deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
+import {
+  serializer,
+  deserializer,
+  postDeserializer
+} from '#/common/mobxDumpenvyExtension';
 import { EditorTypes, DrawerPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
@@ -65,7 +69,7 @@ export default class Store {
   @nodump api = null;
   @nodump profileStore = null;
   @observable locale = 'en';
-  @observable version = '0.10.0';
+  @observable version = '0.10.1';
   @observable updateAvailable = false;
   @observable.shallow editors = observable.map(null, { deep: false });
   @observable.shallow outputs = observable.map(null, { deep: false });
@@ -119,6 +123,7 @@ export default class Store {
 
   @observable
   editorToolbar = observable({
+    reloadToolbar: false,
     newConnectionLoading: false,
     currentProfile: 0,
     noActiveProfile: true,
@@ -224,7 +229,8 @@ export default class Store {
     repeatPassword: ''
   };
 
-  @observable topology = observable({ isChanged: false, json: {}, profileId: '' });
+  @observable
+  topology = observable({ isChanged: false, json: {}, profileId: '' });
 
   @action.bound
   setDrawerChild = value => {
@@ -288,7 +294,8 @@ export default class Store {
   openNewAggregateBuilder(nodeRightClicked) {
     if (this.editorPanel.activeDropdownId === 'Default') {
       NewToaster.show({
-        message: 'Error: Please select an open connection from the Profile Dropdown.',
+        message:
+          'Error: Please select an open connection from the Profile Dropdown.',
         className: 'danger',
         icon: 'thumbs-down'
       });
@@ -374,7 +381,11 @@ export default class Store {
   @action.bound
   closeConnection() {
     return new Promise(resolve => {
-      if (this.profileStore && this.profileStore.profiles && this.profileStore.profiles.size > 0) {
+      if (
+        this.profileStore &&
+        this.profileStore.profiles &&
+        this.profileStore.profiles.size > 0
+      ) {
         const promises = [];
         this.profileStore.profiles.forEach(value => {
           if (value.status === ProfileStatus.OPEN) {
@@ -427,7 +438,7 @@ export default class Store {
     newStore.layout.alertIsLoading = false;
 
     // Version:
-    newStore.version = '0.10.0';
+    newStore.version = '0.10.1';
 
     // EditorPanel:
     newStore.editorPanel.activeDropdownId = 'Default';
@@ -451,6 +462,7 @@ export default class Store {
     newStore.editorToolbar.currentProfile = 0;
     newStore.editorToolbar.id = 0;
     newStore.editorToolbar.shellId = 0;
+    newStore.editorToolbar.reloadToolbar = false;
     newStore.editorToolbar.isActiveExecuting = false;
     newStore.editorToolbar.isExplainExecuting = false;
     newStore.editorToolbar.newConnectionLoading = false;
@@ -482,6 +494,9 @@ export default class Store {
     newStore.treePanel.showDrillStatus = false;
     newStore.treePanel.drillDownloadProgress = null;
     newStore.treePanel.drillStatusMsg = '';
+
+    // Tree Action Panel:
+    newStore.treeActionPanel.isNewFormValues = false;
   }
 
   hasUnsavedEditorTabs() {
@@ -503,7 +518,10 @@ export default class Store {
 
       const stateStoreDir = path.dirname(stateStorePath);
       const dateStr = moment().format('DD-MM-YYYY_HH-mm-ss');
-      const backupPath = path.resolve(stateStoreDir, `stateStore.${dateStr}.json`);
+      const backupPath = path.resolve(
+        stateStoreDir,
+        `stateStore.${dateStr}.json`
+      );
       return featherClient()
         .service('files')
         .get(stateStorePath, {
@@ -520,7 +538,9 @@ export default class Store {
   @action.bound
   resetConfigPage(settingsObj) {
     this.configPage.changedFields.clear();
-    this.configPage.newSettings = observable.object(settingsObj || toJS(this.config.settings));
+    this.configPage.newSettings = observable.object(
+      settingsObj || toJS(this.config.settings)
+    );
   }
 
   loadRest() {

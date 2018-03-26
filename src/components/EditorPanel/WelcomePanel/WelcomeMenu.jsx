@@ -30,7 +30,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 import { AnchorButton } from '@blueprintjs/core';
-import EventLogging from '#/common/logging/EventLogging';
+
 import KeyboardIcon from '../../../styles/icons/keyboard-icon.svg';
 import OpenFolderIcon from '../../../styles/icons/open-folder-icon.svg';
 import ConfigDatabaseIcon from '../../../styles/icons/config-database-icon-2.svg';
@@ -42,7 +42,7 @@ import ConfigDatabaseIcon from '../../../styles/icons/config-database-icon-2.svg
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  config: allStores.config,
+  config: allStores.config
 }))
 @observer
 export default class Panel extends React.Component {
@@ -54,14 +54,6 @@ export default class Panel extends React.Component {
 
   @action.bound
   openConnection() {
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().EVENT.CONNECTION_PANEL.NEW_PROFILE
-          .OPEN_DIALOG,
-        EventLogging.getFragmentEnum().PROFILES,
-        'User opened the New Connection Profile drawer.',
-      );
-    }
     this.props.store.profileList.selectedProfile = null;
     this.props.store.showConnectionPane();
   }

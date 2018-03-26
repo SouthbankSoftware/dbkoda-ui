@@ -16,8 +16,11 @@
       "errors": {
         "failover":
           "Unable to fetch metrics from server, try restarting performance panel.",
-        "mongos_error": "Creating Performance Panel on mongos and only minimal statistics is available",
-        "not_supported_storage_engine": "Creating Performance Panel on storage engine `{0}`. At the moment, only diagnostics on `wiredTiger` is supported"
+        "mongos_error":
+          "Creating Performance Panel on mongos and only minimal statistics is available",
+        "not_supported_storage_engine":
+          "Creating Performance Panel on storage engine `{0}`. At the moment, only diagnostics on `wiredTiger` is supported",
+        "driver_connection_closed": "MongoDB Connection closed"
       }
     },
     "aggregate_builder": {
@@ -34,6 +37,7 @@
         "Cannot import without an active connection.",
       "import_button": "Import",
       "generate_chart_button": "Generate Chart",
+      "create_view_button": "Create View",
       "import_failed": "Sorry, failed to import that file!",
       "import_passed": "Import succeeded.",
       "export_passed": "Export Complete.",
@@ -78,15 +82,28 @@
     },
     "password_dialog": {
       "message": "Please enter your master password:",
-      "login_error_message": "Not Authorized: Could not verify the password specified. Please try again",
-      "general_error_message": "An error occurred while attempting to init the password store",
-      "validation_message": "Please ensure your password is 8 or more characters long, and that the entered passwords both match.",
-      "reset_message": "Due to too many failed login attempts, your password store has been reset! Please re-enable your password store and re-enter your passwords to continue using the password store feature."
+      "login_error_message":
+        "Not Authorized: Could not verify the password specified. Please try again",
+      "general_error_message":
+        "An error occurred while attempting to init the password store",
+      "validation_message":
+        "Please ensure your password is 8 or more characters long, and that the entered passwords both match.",
+      "reset_message":
+        "Due to too many failed login attempts, your password store has been reset! Please re-enable your password store and re-enter your passwords to continue using the password store feature."
     },
     "output": {
       "headings": {
         "default": "Query Output",
         "table": "Table Output"
+      },
+      "tabs": {
+        "Raw": "Raw",
+        "EnhancedJson": "JSON",
+        "TableView": "Table",
+        "ChartView": "Chart",
+        "Explain": "Explain",
+        "Details": "Details",
+        "Storage": "Storage"
       },
       "toolbar": {
         "save": "Save Output",
@@ -204,12 +221,14 @@
         "stopExecutionTooltip": "Stop Execution",
         "explainTooltip": "Explain",
         "explainQuery": "Query Planner",
+        "queryInput": "Query Input",
         "explainExecutionStats": "Execution Stats",
         "explainAllPlans": "All Plans Execution",
         "addEditorTooltip": "Add a new Editor",
         "openFileTooltip": "Open File",
         "saveFileTooltip": "Save to File",
         "saveFileAsTooltip": "Save to Another File",
+        "noActiveConnection": "No Active Connection",
         "addEditorError":
           "Cannot create new Editor for 'No Active Connection'.",
         "connectionSuccess": "Connection Success!",
@@ -249,8 +268,7 @@
         "performancePanel": {
           "preventDisplaySleep":
             "Prevent display sleep when panel is visible. (Panel restart required)",
-          "metricSmoothingWindow":
-            "Metric moving average (number of samples)",
+          "metricSmoothingWindow": "Metric moving average (number of samples)",
           "foregroundSamplingRate": "Foreground sampling rate (ms)",
           "backgroundSamplingRate": "Background sampling rate (ms)",
           "historySize":

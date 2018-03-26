@@ -1,4 +1,5 @@
 /*
+ * @Mike TODO -> Add Flow.
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -30,6 +31,7 @@ import React from 'react';
 import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import { featherClient } from '~/helpers/feathers';
+import { performancePanelStatuses } from '~/api/PerformancePanel';
 import { inject, observer } from 'mobx-react';
 import { action, reaction, runInAction } from 'mobx';
 import path from 'path';
@@ -38,36 +40,41 @@ import {
   Intent,
   Position,
   Tooltip,
-  Dialog,
+  Dialog
 } from '@blueprintjs/core';
 import { NewToaster } from '#/common/Toaster';
-import EventLogging from '#/common/logging/EventLogging';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { EditorTypes } from '#/common/Constants.js';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
+
+// Icon Imports.
 import ExplainPopover from './ExplainPopover';
 import StopExecutionIcon from '../../styles/icons/stop-execute-icon.svg';
 import AddIcon from '../../styles/icons/add-icon.svg';
 import OpenFileIcon from '../../styles/icons/open-icon.svg';
 import SaveFileIcon from '../../styles/icons/save-icon.svg';
+import PerfPanelIcon from '../../styles/icons/performance-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
   : {};
 
+/**
+ * @Mike TODO -> These filters can probably be moved to a common place in the constants file.
+ */
 const FILE_FILTERS = [
   {
     name: 'JavaScript',
-    extensions: ['js'],
-  },
+    extensions: ['js']
+  }
 ];
 
 const FILE_FILTERS_SQL = [
   {
     name: 'SQL',
-    extensions: ['sql'],
-  },
+    extensions: ['sql']
+  }
 ];
 
 /**
@@ -76,7 +83,7 @@ const FILE_FILTERS_SQL = [
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  profileStore: allStores.profileStore,
+  profileStore: allStores.profileStore
 }))
 @observer
 export default class Toolbar extends React.Component {
@@ -84,29 +91,31 @@ export default class Toolbar extends React.Component {
     super(props);
 
     this.state = {
-      showLoadSQLWarning: false,
+      showLoadSQLWarning: false
     };
+    /**
+     * @Mike TODO -> These can probably all be moved to using @action.bound instead of binding up the top, since it's a lot neater.
+     */
     // this.addEditorNoOptions = this.addEditor.bind(this);
     this.executeLine = this.executeLine.bind(this);
     this.executeAll = this.executeAll.bind(this);
-    this.explainPlan = this.explainPlan.bind(this);
     this.onDropdownChanged = this.onDropdownChanged.bind(this);
     this.openFile = this.openFile.bind(this);
     this.openSQLFile = this.openSQLFile.bind(this);
     this.saveFile = this.saveFile.bind(this);
     this.renderSQLImportWarning = this.renderSQLImportWarning.bind(this);
     this.saveFileHandleError = () =>
-      this.saveFile().catch((e) => {
+      this.saveFile().catch(e => {
         if (e) {
           console.error(e);
         }
       });
     this.saveFileAs = this.saveFileAs.bind(this);
 
-    Broker.on(EventType.NEW_PROFILE_CREATED, (profile) => {
+    Broker.on(EventType.NEW_PROFILE_CREATED, profile => {
       this.props.api.profileCreated(profile);
     });
-    Broker.on(EventType.RECONNECT_PROFILE_CREATED, (profile) => {
+    Broker.on(EventType.RECONNECT_PROFILE_CREATED, profile => {
       this.props.api.profileCreated(profile);
     });
 
@@ -118,7 +127,33 @@ export default class Toolbar extends React.Component {
           this.props.api.addEditor();
           this.props.store.editorToolbar.newEditorForProfileId = '';
         }
-      },
+      }
+    );
+
+    /**
+     * Reaction to track execution time.
+     * @TODO - Would be better if we could track each query independantly, this method will only cover how long the editor thinks it's executing.
+     */
+    this.reactionToExecutionState = reaction(
+      () => this.props.store.editorToolbar.newEditorForProfileId,
+      () => {
+        if (this.props.store.editorToolbar.newEditorForProfileId != '') {
+          this.props.store.editorPanel.activeDropdownId = this.props.store.editorToolbar.newEditorForProfileId;
+          this.props.api.addEditor();
+          this.props.store.editorToolbar.newEditorForProfileId = '';
+        }
+      }
+    );
+    this.reactionToPerformancePanel = reaction(
+      () => this.props.store.editorToolbar.reloadToolbar,
+      () => {
+        if (this.props.store.editorToolbar.reloadToolbar) {
+          this.props.store.editorToolbar.reloadToolbar = false;
+          setTimeout(() => {
+            this.forceUpdate();
+          }, 100);
+        }
+      }
     );
   }
 
@@ -140,15 +175,15 @@ export default class Toolbar extends React.Component {
     // Add hotkey bindings for this component:
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
-      this.executeLine,
+      this.executeLine
     );
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeAll.keys,
-      this.executeAll,
+      this.executeAll
     );
     Mousetrap.bindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys,
-      this.stopExecution,
+      this.stopExecution
     );
 
     if (IS_ELECTRON) {
@@ -162,15 +197,15 @@ export default class Toolbar extends React.Component {
     this.reactionToNewEditorForProfileId();
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeLine.keys,
-      this.executeLine,
+      this.executeLine
     );
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.executeAll.keys,
-      this.executeAll,
+      this.executeAll
     );
     Mousetrap.unbindGlobal(
       GlobalHotkeys.editorToolbarHotkeys.stopExecution.keys,
-      this.stopExecution,
+      this.stopExecution
     );
 
     if (IS_ELECTRON) {
@@ -182,6 +217,9 @@ export default class Toolbar extends React.Component {
 
   reactionToNewEditorForProfileId;
 
+  /**
+   * @Mike TODO -> This can probably be an inline function, since it's a single line.
+   */
   @action
   onFail() {
     this.props.store.editorPanel.creatingNewEditor = false;
@@ -190,7 +228,7 @@ export default class Toolbar extends React.Component {
   openFile() {
     if (IS_ELECTRON) {
       const editor = this.props.store.editors.get(
-        this.props.store.editorPanel.activeEditorId,
+        this.props.store.editorPanel.activeEditorId
       );
 
       if (editor && editor.type === 'drill') {
@@ -202,46 +240,39 @@ export default class Toolbar extends React.Component {
           BrowserWindow.getFocusedWindow(),
           {
             properties: ['openFile', 'multiSelections'],
-            filters: FILE_FILTERS,
+            filters: FILE_FILTERS
           },
-          (fileNames) => {
+          fileNames => {
             if (!fileNames) {
               return;
             }
 
-            _.forEach(fileNames, (v) => {
+            _.forEach(fileNames, v => {
               this.props.store
                 .openFile(v, ({ _id, content }) => {
                   let _fileName = path.basename(_id);
                   if (window.navigator.platform.toLowerCase() === 'win32') {
                     _fileName = _id.substring(
                       _id.lastIndexOf('\\') + 1,
-                      _id.length,
+                      _id.length
                     );
                   }
                   return this.props.api.addEditor({
                     content,
                     fileName: _fileName,
-                    path: _id,
+                    path: _id
                   });
                 })
                 .catch(() => {});
             });
-          },
+          }
         );
       }
     } else {
       const warningMsg = globalString(
         'editor/toolbar/notSupportedInUI',
-        'openFile',
+        'openFile'
       );
-      if (this.props.config.settings.telemetryEnabled) {
-        EventLogging.recordManualEvent(
-          EventLogging.getTypeEnum().WARNING,
-          EventLogging.getFragmentEnum().EDITORS,
-          warningMsg,
-        );
-      }
       NewToaster.show({
         message: warningMsg,
         className: 'danger',
@@ -250,30 +281,29 @@ export default class Toolbar extends React.Component {
     }
   }
 
-  // @TODO -> Associate editor with file context.
   openSQLFile() {
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     dialog.showOpenDialog(
       BrowserWindow.getFocusedWindow(),
       {
         properties: ['openFile', 'multiSelections'],
-        filters: FILE_FILTERS_SQL,
+        filters: FILE_FILTERS_SQL
       },
-      (fileNames) => {
+      fileNames => {
         if (!fileNames) {
           return;
         }
 
-        _.forEach(fileNames, (v) => {
+        _.forEach(fileNames, v => {
           this.props.store
             .openFile(v, ({ _id, content }) => {
               let _fileName = path.basename(_id);
               if (window.navigator.platform.toLowerCase() === 'win32') {
                 _fileName = _id.substring(
                   _id.lastIndexOf('\\') + 1,
-                  _id.length,
+                  _id.length
                 );
               }
 
@@ -286,13 +316,13 @@ export default class Toolbar extends React.Component {
             })
             .catch(() => {});
         });
-      },
+      }
     );
   }
 
   saveFileAs() {
     this.props.store.editorToolbar.saveAs = true;
-    this.saveFile().catch((e) => {
+    this.saveFile().catch(e => {
       if (e) {
         console.error(e);
         logToMain('error', 'Failed to save file ' + e);
@@ -305,19 +335,19 @@ export default class Toolbar extends React.Component {
       currentEditor =
         currentEditor ||
         this.props.store.editors.get(
-          this.props.store.editorPanel.activeEditorId,
+          this.props.store.editorPanel.activeEditorId
         );
 
       if (!currentEditor) {
         return Promise.reject();
       }
 
-      const _saveFile = (path) => {
+      const _saveFile = path => {
         return featherClient()
           .service('files')
           .create({ _id: path, content: currentEditor.doc.getValue() })
           .then(() => currentEditor.doc.markClean())
-          .catch((err) => {
+          .catch(err => {
             NewToaster.show({
               message: err.message,
               className: 'danger',
@@ -339,20 +369,20 @@ export default class Toolbar extends React.Component {
           {
             defaultPath: path.resolve(
               this.props.store.editorPanel.lastFileSavingDirectoryPath,
-              getUnsavedEditorSuggestedFileName(currentEditor),
+              getUnsavedEditorSuggestedFileName(currentEditor)
             ),
             filters:
               currentEditor.type == EditorTypes.DRILL
                 ? FILE_FILTERS_SQL
-                : FILE_FILTERS,
+                : FILE_FILTERS
           },
-          (fileName) => {
+          fileName => {
             this.props.store.editorToolbar.saveAs = false;
             if (!fileName) {
               return reject();
             }
             this.props.store.editorPanel.lastFileSavingDirectoryPath = path.dirname(
-              fileName,
+              fileName
             );
             _saveFile(fileName)
               .then(() => {
@@ -361,16 +391,16 @@ export default class Toolbar extends React.Component {
                   if (window.navigator.platform.toLowerCase() === 'win32') {
                     currentEditor.fileName = fileName.substring(
                       fileName.lastIndexOf('\\') + 1,
-                      fileName.length,
+                      fileName.length
                     );
                   }
                   currentEditor.path = fileName;
                   const treeEditor = this.props.store.treeActionPanel.editors.get(
-                    currentEditor.id,
+                    currentEditor.id
                   );
                   if (treeEditor) {
                     this.props.store.treeActionPanel.editors.delete(
-                      currentEditor.id,
+                      currentEditor.id
                     );
                   }
                 });
@@ -378,22 +408,15 @@ export default class Toolbar extends React.Component {
                 resolve();
               })
               .catch(reject);
-          },
+          }
         );
       });
     }
 
     const warningMsg = globalString(
       'editor/toolbar/notSupportedInUI',
-      'saveFile',
+      'saveFile'
     );
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().WARNING,
-        EventLogging.getFragmentEnum().EDITORS,
-        warningMsg,
-      );
-    }
     NewToaster.show({
       message: warningMsg,
       className: 'danger',
@@ -405,6 +428,7 @@ export default class Toolbar extends React.Component {
 
   /**
    * Execute the line currently selected in the active CodeMirror instance.
+   * @Mike TODO -> This function can probably be moved to an inline function on the button, as refactors mean the button is disabled if on default editor.
    */
   @action
   executeLine() {
@@ -421,6 +445,7 @@ export default class Toolbar extends React.Component {
 
   /**
    * Execute all the contents of the currently active CodeMirror instance.
+   * @Mike TODO -> This function can probably be moved to an inline function on the button, as refactors mean the button is disabled if on default editor.
    */
   @action
   executeAll() {
@@ -436,26 +461,8 @@ export default class Toolbar extends React.Component {
   }
 
   /**
-   * Open the Explain Plan dialog for the currently selected line in the active
-   * codemirror instance.
-   */
-  explainPlan() {
-    if (this.props.config.settings.telemetryEnabled) {
-      EventLogging.recordManualEvent(
-        EventLogging.getTypeEnum().WARNING,
-        EventLogging.getFragmentEnum().EDITORS,
-        'Tried to execute non-implemented explainPlan',
-      );
-    }
-    NewToaster.show({
-      message: 'Sorry, not yet implemented!',
-      className: 'warning',
-      icon: 'thumbs-down',
-    });
-  }
-
-  /**
    * Stop the current execution on this connection.
+   * @Mike TODO -> This function can proably be moved to an inline function on the button, as refactors mean the button is disabled if nothing is executing.
    */
   @action.bound
   stopExecution() {
@@ -475,6 +482,7 @@ export default class Toolbar extends React.Component {
    * @param {Object} event - The event that triggered this action.
    * @param {Object} event.target - The target of the event.
    * @param {String} event.target.value - The new value of the dropdown.
+   * @Mike TODO -> I think this entire function can be rewritten to adhere to our new logic, using the API.
    */
   @action
   onDropdownChanged(event) {
@@ -488,12 +496,11 @@ export default class Toolbar extends React.Component {
       this.props.store.editorToolbar.noActiveProfile = false;
     }
     // Send command through current editor to swap DB: Get current editor instance:
-
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     const profile = this.props.profileStore.profiles.get(
-      this.props.store.editorToolbar.currentProfile,
+      this.props.store.editorToolbar.currentProfile
     );
     if (profile) {
       // Send Command:
@@ -504,9 +511,9 @@ export default class Toolbar extends React.Component {
         .update(editor.profileId, {
           shellId: editor.shellId,
           newProfile: profile.id,
-          swapProfile: true,
+          swapProfile: true
         })
-        .then((res) => {
+        .then(res => {
           if (res.shellId) {
             // a new shell got created.
             runInAction('Update dropdown on success', () => {
@@ -541,7 +548,7 @@ export default class Toolbar extends React.Component {
             }
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
           runInAction('Revert dropdown change on failure', () => {
             this.props.store.editorPanel.activeDropdownId = prevDropdown;
@@ -559,45 +566,20 @@ export default class Toolbar extends React.Component {
   @action
   updateCurrentProfile(profile, shellId = undefined) {
     const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId,
+      this.props.store.editorPanel.activeEditorId
     );
     if (shellId) {
       Broker.emit(EventType.SWAP_SHELL_CONNECTION, {
         oldId: editor.profileId,
         oldShellId: editor.shellId,
         id: profile.id,
-        shellId,
+        shellId
       });
       editor.shellId = shellId;
       editor.profileId = profile.id;
     }
     editor.currentProfile = profile.id;
     editor.alias = profile.alias;
-  }
-
-  /**
-   * Event triggered when the dropdown changes.
-   * @param {Object} event - The event that triggered this action.
-   * @param {Object} event.target - The target of the event.
-   * @param {String} event.target.value - The new value of the filter.
-   */
-  @action
-  onFilterChanged(event) {
-    const filter = event.target.value.replace(/ /g, '');
-    this.props.store.editorPanel.tabFilter = filter;
-    this.props.store.editors.forEach((value) => {
-      if (value.alias.includes(filter)) {
-        value.visible = true;
-      } else {
-        if (
-          value.alias + ' (' + value.shellId + ')' ==
-          this.props.store.editorPanel.activeEditorId
-        ) {
-          this.props.store.editorPanel.activeEditorId = 'Default';
-        }
-        value.visible = false;
-      }
-    });
   }
 
   /**
@@ -640,12 +622,26 @@ export default class Toolbar extends React.Component {
    * Render function for this component.
    */
   render() {
+    const profile = this.props.profileStore.profiles.get(
+      this.props.store.editorToolbar.currentProfile
+    );
     const profiles = [...this.props.profileStore.profiles.entries()];
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+    const { api } = this.props;
+    let hasPerformancePanel = false;
+    if (profile) {
+      hasPerformancePanel = api.hasPerformancePanel(profile.id);
+    }
+
     return (
       <nav className="pt-navbar editorToolbar">
         {this.renderSQLImportWarning()}
         <div className="pt-navbar-group pt-align-left leftEditorToolbar">
-          <div className="pt-navbar-heading">Query Input</div>
+          <div className="pt-navbar-heading">
+            {globalString('editor/toolbar/queryInput')}
+          </div>
           <div className="pt-button-group pt-intent-primary leftButtonGroup">
             <div className="pt-select pt-intent-primary editorContextDropdownWrapper">
               <select
@@ -654,16 +650,16 @@ export default class Toolbar extends React.Component {
                 className="pt-intent-primary editorContextDropdown"
               >
                 <option key="Default" value="Default">
-                  No Active Connection
+                  {globalString('editor/toolbar/noActiveConnection')}
                 </option>
                 ;{' '}
-                {profiles.map((profile) => {
+                {profiles.map(profile => {
                   if (profile[1].status == 'OPEN') {
                     return (
                       <option key={profile[0]} value={profile[1].id}>
                         {profile[1].alias}
                       </option>
-                    ); // eslint-disable-line react/no-array-index-key
+                    );
                   }
                 })}
               </select>
@@ -680,9 +676,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeLine}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}
-              >
-                {/* // <ExecuteLineIcon className="dbKodaSVG" width={20} height={20} /> */}
-              </AnchorButton>
+              />
             </Tooltip>
             <Tooltip
               intent={Intent.PRIMARY}
@@ -696,9 +690,7 @@ export default class Toolbar extends React.Component {
                 onClick={this.executeAll}
                 loading={this.props.store.editorToolbar.isActiveExecuting}
                 disabled={this.props.store.editorToolbar.noActiveProfile}
-              >
-                {/* <ExecuteAllIcon className="dbKodaSVG" width={20} height={20} /> */}
-              </AnchorButton>
+              />
             </Tooltip>
             <ExplainPopover editorToolbar={this.props.store.editorToolbar} />
             <Tooltip
@@ -721,7 +713,51 @@ export default class Toolbar extends React.Component {
                 />
               </AnchorButton>
             </Tooltip>
+            {!this.props.store.editorToolbar.isActiveExecuting && editor &&
+              this.props.store.editors.get(editor.id).lastExecutionTime && (
+                <span>
+                  Query executed in{' '}
+                  {this.props.store.editors.get(editor.id).lastExecutionTime}ms
+                </span>
+              )}
           </div>
+        </div>
+
+        <div className="pt-button-group pt-navbar-group pt-intent-primary perfButtonGroup">
+          <Tooltip
+            intent={Intent.DANGER}
+            hoverOpenDelay={1000}
+            content={globalString(
+              `profile/menu/${
+                !hasPerformancePanel
+                  ? 'createPerformancePanel'
+                  : 'openPerformancePanel'
+              }`
+            )}
+            tooltipClassName="pt-dark"
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              disabled={this.props.store.editorToolbar.noActiveProfile}
+              className={`pt-button pt-intent-primary ${
+                !hasPerformancePanel
+                  ? 'createPerformancePanel'
+                  : 'openPerformancePanel'
+              }`}
+              onClick={() => {
+                // Emit event for performance panel
+                Broker.emit(EventType.FEATURE_USE, 'PerformancePanel');
+                this.props.api.transformPerformancePanel(
+                  profile.id,
+                  performancePanelStatuses.external
+                );
+                this.forceUpdate();
+              }}
+              icon="pt-icon-heat-grid"
+            >
+              <PerfPanelIcon className="dbKodaSVG" width={20} height={20} />
+            </AnchorButton>
+          </Tooltip>
         </div>
         <div className="pt-navbar-group pt-align-right">
           <Tooltip
