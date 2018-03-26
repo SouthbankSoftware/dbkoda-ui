@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-26T15:19:52+11:00
+ * @Last modified time: 2018-03-26T16:31:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -20,9 +20,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-@import "../../styles/_defaultTheme.scss";
-
+@import '../../styles/_defaultTheme.scss';
 $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.15), inset 0 1px 1px rgba(16, 22, 26, 0.2);
 
 .FilterList {
@@ -86,6 +84,14 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
     overflow-x: hidden;
     background-color: $navbarRightBackground !important;
     min-height: 50px;
+
+    .pt-button svg.dbKodaSVG {
+      position: absolute;
+      top: 50%;
+      bottom: 50%;
+      transform: translate(-50%, -50%);
+      fill: #58595b;
+    }
 
     .leftEditorToolbar {
       .leftButtonGroup {
@@ -181,10 +187,8 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
         margin-right: unset;
         color: $tabFontColor;
         background-color: $tabBackground;
-
         /* border-right: 1px solid linear-gradient(rgba(0, 0, 0, 0), ) !important; */
         /* border-right: 1px solid $tabBackgroundHover !important; */
-
         border-right-width: 1px;
         border-right-style: solid;
         border-image: linear-gradient(to bottom, transparent, #292929 10px, #292929 90%, transparent 1%) 1 100% 1 100%;
@@ -202,8 +206,8 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
         color: $tabFontColor !important;
       }
 
-      .welcomeTab,
-      .configTab {
+      .configTab,
+      .welcomeTab {
         background-color: $tabBackground;
         font-family: unset;
         flex-grow: initial;
@@ -275,8 +279,8 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
       }
     }
 
-    .welcomeTab,
-    .configTab {
+    .configTab,
+    .welcomeTab {
       font-family: 'Arial', Arial, Helvetica, sans-serif;
       background-color: $welcomeViewBackgroundColor;
       flex-grow: 1;
@@ -286,12 +290,12 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
       margin-top: 0;
       color: $welcomeViewFontColor;
 
-      .welcomePanelTabWrapper,
-      .configPanelTabWrapper {
+      .configPanelTabWrapper,
+      .welcomePanelTabWrapper {
         margin-left: 50px;
 
-        .welcomePanelWrapper,
-        .configPanelWrapper {
+        .configPanelWrapper,
+        .welcomePanelWrapper {
           display: flex;
           flex-direction: column;
           flex-grow: 1;
@@ -309,8 +313,8 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
             font-size: 10;
           }
 
-          .welcomeTitleWrapper,
-          .configTitleWrapper {
+          .configTitleWrapper,
+          .welcomeTitleWrapper {
             display: flex;
             flex-direction: row;
             flex-shrink: 0;
@@ -401,7 +405,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
                         float: left;
                         height: 16px;
                         fill: $welcomeViewSocialMediaIcons;
-                        margin-left: 10px;
+                        margin-left: -10px;
                         padding-bottom: 2px;
                       }
                     }
@@ -413,8 +417,8 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
                   }
                 }
 
-                .welcomeMenuOptOut,
-                .welcomeMenuConfig {
+                .welcomeMenuConfig,
+                .welcomeMenuOptOut {
                   display: flex;
                   flex-direction: row;
                   order: 3;
@@ -437,7 +441,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
                       color: $connectionCheckboxColour;
                       border-radius: 0;
                       background-color: $connectionCheckboxBackgroundColour;
-
                       // outline: $connectionCheckboxColour solid 1px;
                       border: 1px solid $connectionCheckboxColour;
                     }
@@ -533,7 +536,7 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
                           padding-left: 16px;
                           padding-top: 6px;
                           padding-bottom: 5px;
-                          margin: 0px;
+                          margin: 0;
                           flex-grow: 3;
                           order: 2;
                           text-align: left;
@@ -893,7 +896,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
     right: 0;
     width: 23px;
   }
-
   //// Code Mirror CSS: ////
   div.CodeMirror span.CodeMirror-matchingbracket {
     color: $white !important;
@@ -1081,7 +1083,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
     border-right: none;
     width: 0;
   }
-
   /* Shown when moving in bi-directional text */
   .CodeMirror div.CodeMirror-secondarycursor {
     border-left: 1px solid silver;
@@ -1105,7 +1106,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
     animation: blink 1.06s steps(1) infinite;
     background-color: #7e7;
   }
-
   @-moz-keyframes blink {
     0% {}
 
@@ -1115,7 +1115,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
 
     100% {}
   }
-
   @-webkit-keyframes blink {
     0% {}
 
@@ -1125,7 +1124,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
 
     100% {}
   }
-
   @keyframes blink {
     0% {}
 
@@ -1135,7 +1133,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
 
     100% {}
   }
-
   /* Can style cursor different in overwrite (non-insert) mode */
   .CodeMirror-overwrite .CodeMirror-cursor {}
 
@@ -1184,7 +1181,6 @@ label.pt-control {
     color: $connectionCheckboxColour;
     border-radius: 0;
     background-color: $connectionCheckboxBackgroundColour;
-
     // outline: $connectionCheckboxColour solid 1px;
     border: 1px solid $connectionCheckboxColour;
   }
