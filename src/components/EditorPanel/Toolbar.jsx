@@ -23,7 +23,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T17:51:36+11:00
+ * @Last modified time: 2018-03-27T17:35:44+11:00
  */
 
 import _ from 'lodash';
@@ -626,9 +626,6 @@ export default class Toolbar extends React.Component {
       this.props.store.editorToolbar.currentProfile
     );
     const profiles = [...this.props.profileStore.profiles.entries()];
-    const editor = this.props.store.editors.get(
-      this.props.store.editorPanel.activeEditorId
-    );
     const { api } = this.props;
     let hasPerformancePanel = false;
     if (profile) {

@@ -4,7 +4,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T17:59:08+11:00
+ * @Last modified time: 2018-03-27T17:37:12+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -600,7 +600,7 @@ export default class ListView extends React.Component {
                 onClick={() => this.props.api.getTopConnections(profile.id)}
                 text={globalString('profile/menu/getTopConnections')}
                 intent={Intent.NONE}
-                iconName="pt-icon-heat-grid"
+                icon="heat-grid"
               />
             </div>
           ]}
