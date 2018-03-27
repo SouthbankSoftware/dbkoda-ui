@@ -30,6 +30,7 @@
 
 import React from 'react';
 import { action } from 'mobx';
+import { convertUnits } from '#/PerformancePanel/Widgets/Utils';
 import { inject, observer } from 'mobx-react';
 import { featherClient } from '~/helpers/feathers';
 import { AnchorButton, Intent, Alert, EditableText } from '@blueprintjs/core';
@@ -45,12 +46,12 @@ import './style.scss';
 const FeedbackTypes = {
   POSITIVE: 'PositiveFeedback',
   NEUTRAL: 'NeutralFeedback',
-  NEGATIVE: 'NegativeFeedback',
+  NEGATIVE: 'NegativeFeedback'
 };
 
 @inject(allStores => ({
   store: allStores.store,
-  api: allStores.api,
+  api: allStores.api
 }))
 @observer
 export default class Panel extends React.Component {
@@ -69,7 +70,7 @@ export default class Panel extends React.Component {
       updateStatusMsg: '',
       isUpdateAvailable: false,
       isUpdateDownloaded: false,
-      isUpdateDownloading: false,
+      isUpdateDownloading: false
     };
     const os = require('os').release();
     if (os.match(/Mac/gi)) {
@@ -94,7 +95,7 @@ export default class Panel extends React.Component {
     } else if (message === 'AVAILABLE') {
       this.setState({
         updateStatusMsg: 'Update Available.',
-        isUpdateAvailable: true,
+        isUpdateAvailable: true
       });
     } else if (message === 'NOT_AVAILABLE') {
       this.setState({ updateStatusMsg: 'No Updates Available.' });
@@ -104,12 +105,12 @@ export default class Panel extends React.Component {
       this.setState({
         updateStatusMsg: 'Update Downloaded.',
         isUpdateDownloaded: true,
-        isUpdateDownloading: false,
+        isUpdateDownloading: false
       });
     } else if (message.indexOf('DOWNLOADING') >= 0) {
       this.setState({
         updateStatusMsg: 'Downloading update ' + message.split(' ')[1],
-        isUpdateDownloading: true,
+        isUpdateDownloading: true
       });
     }
   };
@@ -120,7 +121,7 @@ export default class Panel extends React.Component {
     if (this.state.isUpdateDownloaded) {
       const installUpdate = remote.getGlobal('InstallUpdate');
       installUpdate()
-        .then((result) => {
+        .then(result => {
           if (result) {
             this.setState({ isUpdateDownloaded: false });
           }
@@ -129,7 +130,7 @@ export default class Panel extends React.Component {
     } else if (this.state.isUpdateAvailable) {
       const downloadUpdate = remote.getGlobal('DownloadUpdate');
       downloadUpdate()
-        .then((result) => {
+        .then(result => {
           if (result) {
             this.setState({ isUpdateAvailable: false });
           }
@@ -141,7 +142,7 @@ export default class Panel extends React.Component {
   @action.bound
   onClickBugForum() {
     const subject = globalString(
-      'status_bar/support_bundle/forum/default_subject',
+      'status_bar/support_bundle/forum/default_subject'
     );
     const url = 'https://dbkoda.useresponse.com/topic/add?title=' + subject;
     if (IS_ELECTRON) {
@@ -152,7 +153,7 @@ export default class Panel extends React.Component {
   @action.bound
   onClickBugEmail() {
     const subject = globalString(
-      'status_bar/support_bundle/email/default_subject',
+      'status_bar/support_bundle/email/default_subject'
     );
     const body = globalString('status_bar/support_bundle/email/default_body');
     const mailToString =
@@ -175,12 +176,12 @@ export default class Panel extends React.Component {
   onConfirmFeedback() {
     Broker.emit(EventType.FEEDBACK, {
       type: this.state.feedbackType,
-      comments: this.state.feedbackComments,
+      comments: this.state.feedbackComments
     });
     NewToaster.show({
       message: globalString('status_bar/feedback/toaster_confirm'),
       className: 'success',
-      iconName: 'pt-icon-thumbs-up',
+      iconName: 'pt-icon-thumbs-up'
     });
     this.setState({ isFeedbackAlertOpen: false });
   }
@@ -213,19 +214,22 @@ export default class Panel extends React.Component {
     } else {
       this.setState({ isLodgeBugPending: true });
       this.getSupportBundle()
-        .then((filePath) => {
+        .then(filePath => {
           if (IS_ELECTRON) {
             if (!filePath) {
               filePath = '/Users/mike/.dbKoda/';
               console.error('Did not recieve a file path back from controller');
-              logToMain('error', 'Did not recieve a file path back from controller');
+              logToMain(
+                'error',
+                'Did not recieve a file path back from controller'
+              );
             }
             window.require('electron').shell.showItemInFolder(filePath);
           }
           this.setState({ isLodgeBugPending: false });
           this.setState({ isSupportBundleReady: true });
         })
-        .catch((err) => {
+        .catch(err => {
           this.setState({ isLodgeBugPending: false });
           this.setState({ isSupportBundleReady: false });
           NewToaster.show({
@@ -235,7 +239,7 @@ export default class Panel extends React.Component {
               />
             ),
             className: 'danger',
-            iconName: 'pt-icon-thumbs-up',
+            iconName: 'pt-icon-thumbs-up'
           });
         });
     }
@@ -262,7 +266,7 @@ export default class Panel extends React.Component {
       window
         .require('electron')
         .shell.openExternal(
-          'https://dbkoda.useresponse.com/knowledge-base/article/how-do-i-generate-a-support-bundle',
+          'https://dbkoda.useresponse.com/knowledge-base/article/how-do-i-generate-a-support-bundle'
         );
     }
   }
@@ -280,15 +284,15 @@ export default class Panel extends React.Component {
       service.timeout = 30000;
       service
         .get()
-        .then((result) => {
+        .then(result => {
           NewToaster.show({
             message: globalString('status_bar/support_bundle/toaster_confirm'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up',
+            iconName: 'pt-icon-thumbs-up'
           });
           resolve(result);
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
           logToMain('error', 'Failed to create support bundle: ' + err);
           reject(err);
@@ -312,27 +316,27 @@ export default class Panel extends React.Component {
             <div className="supportBundleFinished">
               <p className="supportBundleFinishedText">
                 {globalString(
-                  'status_bar/support_bundle/finished_text_default_one',
+                  'status_bar/support_bundle/finished_text_default_one'
                 )}
               </p>
               <p className="supportBundleFinishedText">
                 {globalString(
-                  'status_bar/support_bundle/finished_text_default_two',
+                  'status_bar/support_bundle/finished_text_default_two'
                 )}
                 <br />
                 {globalString(
-                  'status_bar/support_bundle/finished_text_default_three',
+                  'status_bar/support_bundle/finished_text_default_three'
                 )}
               </p>
               <p className="supportBundleFinishedText">
                 {globalString(
-                  'status_bar/support_bundle/finished_text_default_four',
+                  'status_bar/support_bundle/finished_text_default_four'
                 )}
                 <b className="directoryFAQLink" onClick={this.openDirectoryFAQ}>
                   {globalString('status_bar/support_bundle/directory_faq_link')}
                 </b>
                 {globalString(
-                  'status_bar/support_bundle/finished_text_default_five',
+                  'status_bar/support_bundle/finished_text_default_five'
                 )}
               </p>
               <AnchorButton
@@ -416,6 +420,10 @@ export default class Panel extends React.Component {
   }
 
   render() {
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+
     let updateBtnClassNames = 'updateButton';
     if (this.state.isUpdateAvailable || this.state.isUpdateDownloaded) {
       updateBtnClassNames += ' updateGreen';
@@ -445,7 +453,7 @@ export default class Panel extends React.Component {
                   {this.props.store.treePanel.drillDownloadProgress && (
                     <p style={{ textAlign: 'center' }}>
                       {Math.round(
-                        this.props.store.treePanel.drillDownloadProgress * 100,
+                        this.props.store.treePanel.drillDownloadProgress * 100
                       ) + '% complete'}
                     </p>
                   )}
@@ -459,43 +467,33 @@ export default class Panel extends React.Component {
               )}
             </div>
           )}
-          {/* <Dialog
-            className="pt-dark open-profile-alert-dialog"
-            intent={Intent.PRIMARY}
-            isOpen={this.props.store.treePanel.downloadingDrill}
-            inline
-          >
-            {this.props.store.treePanel.showDrillStatus && (
-              <div className="dialogContent">
-                <p>{this.props.store.treePanel.drillStatusMsg}</p>
-                <ProgressBar
-                  intent={Intent.PRIMARY}
-                  value={this.props.store.treePanel.drillDownloadProgress}
-                />
-                {this.props.store.treePanel.drillDownloadProgress && (
-                  <p style={{ textAlign: 'center' }}>
-                    {Math.round(
-                      this.props.store.treePanel.drillDownloadProgress * 100,
-                    ) + '% complete'}
-                  </p>
-                )}
-              </div>
-            )}
-
-            {!this.props.store.treePanel.showDrillStatus && (
-              <div className="dialogContent" style={{ height: '40px' }}>
-                <p>Starting Apache Drill...</p>
-                <LoadingView />
-                <br />
-                <br />
-                <p>
-                  Note: This process might take almost 2 minutes on first start.
-                </p>
-              </div>
-            )}
-          </Dialog> */}
         </div>
         <div className="float_right">
+          {!this.props.store.editorToolbar.isActiveExecuting &&
+            editor &&
+            this.props.store.editors.get(editor.id).lastExecutionTime && (
+              <div className="executionTime">
+                <span className="label">
+                  {globalString('editor/toolbar/executionTimeLabel')}
+                </span>
+                <span className="value">
+                  {
+                    convertUnits(
+                      this.props.store.editors.get(editor.id).lastExecutionTime,
+                      'ms',
+                      3
+                    ).value
+                  }
+                  {
+                    convertUnits(
+                      this.props.store.editors.get(editor.id).lastExecutionTime,
+                      'ms',
+                      3
+                    ).unit
+                  }
+                </span>
+              </div>
+            )}
           <div className="configButton" onClick={this.props.api.openConfigTab}>
             <span className="pt-icon-cog" />
           </div>

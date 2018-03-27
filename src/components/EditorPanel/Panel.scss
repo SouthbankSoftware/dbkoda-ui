@@ -126,25 +126,6 @@ $boxShadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 
                         height: 45%;
                     }
                 }
-
-                .executionTime {
-                    color: #bfbec0;
-                    display: flex;
-                    flex-direction: column;
-                    margin-left: 10px;
-                    text-align: center;
-                    font-size: 12px;
-                    font-weight: lighter;
-                    opacity: 0.8;
-
-                    .label {
-                        opacity: 0.6;
-                    }
-
-                    .value {
-                        font-size: 14px;
-                    }
-                }
             }
         }
 

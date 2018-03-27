@@ -221,7 +221,7 @@
       "toolbar": {
         "executeSelectedTooltip": "Execute Selected Commands",
         "executeAllTooltip": "Execute All Commands",
-        "executionTimeLabel": "Ran for",
+        "executionTimeLabel": "Execution Time: ",
         "executionTimeUnit": "ms",
         "stopExecutionTooltip": "Stop Execution",
         "explainTooltip": "Explain",
