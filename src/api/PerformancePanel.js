@@ -328,7 +328,8 @@ export default class PerformancePanelApi {
             this.eventQueue[profileId].events.push(err);
           }
         } else {
-        errorMessage = globalString(ErrorCodes[err.code], errorMessage);
+          // $FlowFixMe
+          errorMessage = globalString(ErrorCodes[err.code], errorMessage);
           this._sendMsgToPerformanceWindow({
             command: 'mw_error',
             profileId,
@@ -652,6 +653,7 @@ export default class PerformancePanelApi {
         });
         if (this.eventQueue[args.profileId]) {
           console.log('send event from queue ', this.eventQueue[args.profileId]);
+          // $FlowFixMe
           this.eventQueue[args.profileId].events.forEach((err) => this._handleError(args.profileId, err, 'err'));
           delete this.eventQueue[args.profileId];
         }
