@@ -45,7 +45,6 @@ import {
 import { NewToaster } from '#/common/Toaster';
 import { GlobalHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { EditorTypes } from '#/common/Constants.js';
-import { convertUnits } from '#/PerformancePanel/Widgets/Utils';
 import './Panel.scss';
 import { Broker, EventType } from '../../helpers/broker';
 
@@ -714,33 +713,6 @@ export default class Toolbar extends React.Component {
                 />
               </AnchorButton>
             </Tooltip>
-            {!this.props.store.editorToolbar.isActiveExecuting &&
-              editor &&
-              this.props.store.editors.get(editor.id).lastExecutionTime && (
-                <div className="executionTime">
-                  <span className="label">
-                    {globalString('editor/toolbar/executionTimeLabel')}
-                  </span>
-                  <span className="value">
-                    {
-                      convertUnits(
-                        this.props.store.editors.get(editor.id)
-                          .lastExecutionTime,
-                        'ms',
-                        3
-                      ).value
-                    }
-                    {
-                      convertUnits(
-                        this.props.store.editors.get(editor.id)
-                          .lastExecutionTime,
-                        'ms',
-                        3
-                      ).unit
-                    }
-                  </span>
-                </div>
-              )}
           </div>
         </div>
 
