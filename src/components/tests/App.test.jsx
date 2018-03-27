@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:22:54+11:00
+ * @Last modified time: 2018-03-22T18:18:53+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +25,7 @@ import '~/stores/global';
 import React from 'react';
 import '~/helpers/configEnzyme';
 import { shallow } from 'enzyme';
-import { observable, useStrict } from 'mobx';
+import { observable, configure } from 'mobx';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import App from '#/App';
 
@@ -38,7 +38,7 @@ describe('App', () => {
   });
 
   beforeAll(() => {
-    useStrict(true);
+    configure({ enforceActions: true });
     globalizeInit();
     app = shallow(<App.wrappedComponent store={{ password: { showDialog: false, verifyPassword: false } }} layout={layout} />);
   });

@@ -22,8 +22,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   Mike
- * @Last modified time: 2018-03-23T15:55:58+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T17:51:36+11:00
  */
 
 import _ from 'lodash';
@@ -276,7 +276,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: warningMsg,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down',
       });
     }
   }
@@ -351,7 +351,7 @@ export default class Toolbar extends React.Component {
             NewToaster.show({
               message: err.message,
               className: 'danger',
-              iconName: 'pt-icon-thumbs-down'
+              icon: 'thumbs-down',
             });
             throw err;
           });
@@ -420,7 +420,7 @@ export default class Toolbar extends React.Component {
     NewToaster.show({
       message: warningMsg,
       className: 'danger',
-      iconName: 'pt-icon-thumbs-down'
+      icon: 'thumbs-down',
     });
 
     return Promise.reject(new Error(warningMsg));
@@ -436,7 +436,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
         className: 'warning',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down',
       });
     } else {
       this.props.store.editorPanel.executingEditorLines = true;
@@ -453,7 +453,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
         className: 'warning',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down',
       });
     } else {
       this.props.store.editorPanel.executingEditorAll = true;
@@ -472,7 +472,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: 'Cannot stop execution. Nothing is executing.',
         className: 'warning',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down',
       });
     }
   }
@@ -522,7 +522,7 @@ export default class Toolbar extends React.Component {
             NewToaster.show({
               message: 'Swapped Profiles.',
               className: 'success',
-              iconName: 'pt-icon-thumbs-up'
+              icon: 'pt-icon-thumbs-up',
             });
           } else {
             const match = res.match(/Error/g);
@@ -534,7 +534,7 @@ export default class Toolbar extends React.Component {
               NewToaster.show({
                 message: globalString('editor/toolbar/profileSwapSslError'),
                 className: 'danger',
-                iconName: 'pt-icon-thumbs-down'
+                icon: 'thumbs-down',
               });
             } else {
               runInAction('Update dropdown on success', () => {
@@ -543,7 +543,7 @@ export default class Toolbar extends React.Component {
               NewToaster.show({
                 message: 'Swapped Profiles.',
                 className: 'success',
-                iconName: 'pt-icon-thumbs-up'
+                icon: 'pt-icon-thumbs-up',
               });
             }
           }
@@ -557,7 +557,7 @@ export default class Toolbar extends React.Component {
           NewToaster.show({
             message: globalString('editor/toolbar/profileSwapError'),
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down'
+            icon: 'thumbs-down',
           });
         });
     }
@@ -625,7 +625,10 @@ export default class Toolbar extends React.Component {
     const profile = this.props.profileStore.profiles.get(
       this.props.store.editorToolbar.currentProfile
     );
-    const profiles = this.props.profileStore.profiles.entries();
+    const profiles = [...this.props.profileStore.profiles.entries()];
+    const editor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
     const { api } = this.props;
     let hasPerformancePanel = false;
     if (profile) {

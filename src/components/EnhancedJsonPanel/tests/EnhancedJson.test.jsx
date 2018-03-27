@@ -3,7 +3,7 @@
  * @Date:   2017-08-10T13:30:31+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T10:43:16+11:00
+ * @Last modified time: 2018-03-22T15:24:31+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 import React from 'react';
 import '~/helpers/configEnzyme';
 import { mount } from 'enzyme';
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import Panel from '../Panel';
 
@@ -36,7 +36,7 @@ describe('Enhanced JSON Tab', () => {
   const testJson = { json: { key: 'value' } };
 
   beforeAll(() => {
-    useStrict(true);
+    configure({ enforceActions: true });
     globalizeInit();
     app = mount(<Panel enhancedJson={testJson} />);
   });

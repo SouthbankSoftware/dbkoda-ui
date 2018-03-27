@@ -205,7 +205,7 @@ export default class TreeState {
           message:
             'Sorry, sampling of collection not currently supported for Mongo shell versions lower than 3.1',
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          icon: 'thumbs-down',
         });
       } else {
         const service = featherClient().service('/tree-actions');
@@ -252,7 +252,7 @@ export default class TreeState {
         message:
           'Sorry, sampling of collections failed as we can not detect a supported Mongo Shell Version',
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        icon: 'thumbs-down',
       });
     }
   }
@@ -281,7 +281,7 @@ export default class TreeState {
         NewToaster.show({
           message: 'Sorry, sampling of collection failed! Please try again.',
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          icon: 'thumbs-down',
         });
         reject('Sampling of Attributes Failed: ', err);
       }

@@ -3,7 +3,7 @@
  * @Date:   2017-07-05T14:22:40+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T20:05:39+11:00
+ * @Last modified time: 2018-03-22T18:02:34+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,8 +33,8 @@ import Mousetrap from 'mousetrap';
 import 'mousetrap-global-bind';
 import {
   Button,
-  Tabs2,
-  Tab2,
+  Tabs,
+  Tab,
   Intent,
   ContextMenu,
   Menu,
@@ -223,7 +223,7 @@ export default class Panel extends React.Component {
     this.props.store.welcomePage.isOpen = false;
     this.props.store.editorPanel.removingTabId = true; // TODO: There shouldn't be an output visible for the welcome page. Have tp replace this logic with this.props.api.removeOutput(deletedEditor);
     if (this.props.store.editorPanel.activeEditorId == 'Default') {
-      const editors = this.props.store.editors.entries();
+      const editors = [...this.props.store.editors.entries()];
       this.props.store.editorPanel.activeEditorId = editors[0][1].id;
     }
     this.forceUpdate();
@@ -244,7 +244,7 @@ export default class Panel extends React.Component {
       if (this.props.store.welcomePage.isOpen) {
         this.changeTab('Default');
       } else {
-        const editors = this.props.store.editors.entries();
+        const editors = [...this.props.store.editors.entries()];
         this.props.store.editorPanel.activeEditorId = editors[0][1].id;
       }
     }
@@ -413,7 +413,7 @@ export default class Panel extends React.Component {
                 tabId === 'Default' ? this.closeWelcome() : this.closeTab(currentEditor);
               }}
               text={globalString('editor/tabMenu/closeTab')}
-              iconName="pt-icon-small-cross"
+              icon="pt-icon-small-cross"
               intent={Intent.NONE}
             />
           </div>
@@ -421,7 +421,7 @@ export default class Panel extends React.Component {
             <MenuItem
               onClick={() => this.closeTabs(tabId)}
               text={globalString('editor/tabMenu/closeOtherTabs')}
-              iconName="pt-icon-cross"
+              icon="pt-icon-cross"
               intent={Intent.NONE}
             />
           </div>
@@ -429,7 +429,7 @@ export default class Panel extends React.Component {
             <MenuItem
               onClick={() => this.closeTabs()}
               text={globalString('editor/tabMenu/closeAllTabs')}
-              iconName="pt-icon-key-delete"
+              icon="pt-icon-key-delete"
               intent={Intent.NONE}
             />
           </div>
@@ -439,7 +439,7 @@ export default class Panel extends React.Component {
                 this.closeLeft(tabId);
               }}
               text={globalString('editor/tabMenu/closeLeft')}
-              iconName="pt-icon-chevron-left"
+              icon="pt-icon-chevron-left"
               intent={Intent.NONE}
             />
           </div>
@@ -449,7 +449,7 @@ export default class Panel extends React.Component {
                 this.closeRight(tabId);
               }}
               text={globalString('editor/tabMenu/closeRight')}
-              iconName="pt-icon-chevron-right"
+              icon="pt-icon-chevron-right"
               intent={Intent.NONE}
             />
           </div>
@@ -466,7 +466,7 @@ export default class Panel extends React.Component {
   renderWelcome() {
     if (this.props.store.editors.size == 0) {
       return (
-        <Tab2
+        <Tab
           className="welcomeTab"
           id="Default"
           title={globalString('editor/welcome/heading')}
@@ -475,7 +475,7 @@ export default class Panel extends React.Component {
       );
     }
     return (
-      <Tab2
+      <Tab
         className={this.props.store.welcomePage.isOpen ? 'welcomeTab' : 'welcomeTab notVisible'}
         id="Default"
         title={globalString('editor/welcome/heading')}
@@ -484,7 +484,7 @@ export default class Panel extends React.Component {
         <Button className="pt-minimal" onClick={this.closeWelcome}>
           <span className="pt-icon-cross" />
         </Button>
-      </Tab2>
+      </Tab>
     );
   }
 
@@ -632,7 +632,7 @@ export default class Panel extends React.Component {
 
     const tabList = (
       <FilterList
-        items={editors.values()}
+        items={[...editors.values()]}
         getItemTitle={this.getEditorTitle}
         getItemId={item => item.id}
         onClick={(item) => {
@@ -756,7 +756,7 @@ export default class Panel extends React.Component {
   @action.bound
   renderConfigTab() {
     return (
-      <Tab2
+      <Tab
         className="configTab"
         id="Config"
         title={globalString('editor/config/heading')}
@@ -765,7 +765,7 @@ export default class Panel extends React.Component {
         <Button className="pt-minimal" onClick={this.closeConfig}>
           <span className="pt-icon-cross" />
         </Button>
-      </Tab2>
+      </Tab>
     );
   }
 
@@ -784,7 +784,7 @@ export default class Panel extends React.Component {
   // Encapsulation for rendering a standard Mongo Shell Tab in the Editor Panel.
   renderShellTab([id, editorObj], tabClassName, editorTitle) {
     return (
-      <Tab2
+      <Tab
         className={'editorTab visible ' + tabClassName}
         key={id}
         id={id}
@@ -805,7 +805,7 @@ export default class Panel extends React.Component {
   // Encapsulation for rendering an Aggregate Tab in the Editor Panel.
   renderAggregateTab([id, editorObj], tabClassName, editorTitle) {
     return (
-      <Tab2
+      <Tab
         className={'editorTab aggregateTab visible ' + tabClassName}
         key={id}
         id={id}
@@ -840,7 +840,7 @@ export default class Panel extends React.Component {
    * Action for rendering the component.
    */
   render() {
-    const editors = this.props.store.editors.entries();
+    const editors = [...this.props.store.editors.entries()];
     return (
       <div className="pt-dark editorPanel" onContextMenu={this.showContextMenu}>
         <Toolbar
@@ -848,7 +848,7 @@ export default class Panel extends React.Component {
           executeAll={this.executeAll}
           newEditor={this.newEditor}
         />
-        <Tabs2
+        <Tabs
           ref={ref => (this.tabs = ref)}
           id="EditorTabs"
           className="editorTabView"
@@ -873,7 +873,7 @@ export default class Panel extends React.Component {
             }
             return comp;
           })}
-        </Tabs2>
+        </Tabs>
         <div
           ref={ref => (this.tabScrollLeftBtn = ref)}
           className="pt-icon-caret-left tabControlBtn tabScrollLeftBtn"

@@ -3,7 +3,7 @@
  * @Date:   2017-05-15T09:29:31+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-06T09:58:08+11:00
+ * @Last modified time: 2018-03-22T16:58:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -213,7 +213,7 @@
             position: absolute;
             top: 50%;
             bottom: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-85%, -50%);
             width: 40%;
             height: 40%;
             fill: $buttonTertiaryIcon;
@@ -237,6 +237,11 @@
     }
     .pt-align-left {
       span {
+        .pt-button {
+          svg.dbKodaSVG {
+            transform: translate(-50%, -50%);
+          }
+        }
         a.circleButton {
           svg.dbKodaSVG {
             width: 15px;

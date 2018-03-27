@@ -298,7 +298,7 @@ export default class DataTree extends React.Component<Props, State> {
 
         const nodes = this._buildTreeFromSchema(childSchema, `${newPrefix}.childNodes`);
         node = {
-          iconName: `pt-icon-folder-${isExpanded ? 'open' : 'close'}`,
+          icon: `pt-icon-folder-${isExpanded ? 'open' : 'close'}`,
           isExpanded,
           childNodes: nodes,
           type,
@@ -323,17 +323,17 @@ export default class DataTree extends React.Component<Props, State> {
 
         if (type === 'string') {
           _.assign(node, {
-            iconName: 'pt-icon-font',
+            icon: 'pt-icon-font',
             type: 'string',
           });
         } else if (type === 'number') {
           _.assign(node, {
-            iconName: 'pt-icon-numerical',
+            icon: 'pt-icon-numerical',
             type: 'number',
           });
         } else {
           _.assign(node, {
-            iconName: 'pt-icon-error',
+            icon: 'pt-icon-error',
             type,
           });
           console.error(`Unsupported data tree node type: ${v}`);
@@ -363,7 +363,7 @@ export default class DataTree extends React.Component<Props, State> {
       console.error('Missing schema node');
     }
 
-    node.iconName = 'pt-icon-folder-close';
+    node.icon = 'pt-icon-folder-close';
     node.isExpanded = false;
     this.setState(this.state);
   };
@@ -379,7 +379,7 @@ export default class DataTree extends React.Component<Props, State> {
       console.error('Missing schema node');
     }
 
-    node.iconName = 'pt-icon-folder-open';
+    node.icon = 'pt-icon-folder-open';
     node.isExpanded = true;
     this.setState(this.state);
   };

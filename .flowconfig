@@ -1,12 +1,10 @@
 [ignore]
-# ignore all node modules by default and we are using type definitions provided by flow-typed
-.*/node_modules/.*
+.*/node_modules/config-chain/.*
+.*/node_modules/npmconf/.*
 
 [include]
-# re-include any node modules to be used with flow
 
 [libs]
-./node_modules/mobx/lib/mobx.js.flow
 
 [lints]
 
@@ -21,5 +19,4 @@ suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 suppress_type=$FlowFixMe
 munge_underscores=true
-unsafe.enable_getters_and_setters=true
 esproposal.decorators=ignore

@@ -751,7 +751,7 @@ export default class GraphicalBuilder extends React.Component {
             NewToaster.show({
               message: globalString('aggregate_builder/no_active_connection'),
               className: 'danger',
-              iconName: 'pt-icon-thumbs-down',
+              icon: 'thumbs-down',
             });
             this.setOutputBroken();
           }
@@ -989,7 +989,7 @@ export default class GraphicalBuilder extends React.Component {
           'aggregate_builder/no_active_connection_for_import',
         ),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        icon: 'thumbs-down',
       });
     } else {
       this.setState({ isImportAlertOpen: true });
@@ -1038,7 +1038,7 @@ export default class GraphicalBuilder extends React.Component {
       NewToaster.show({
         message: warningMsg,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        icon: 'thumbs-down',
       });
     }
   }
@@ -1070,7 +1070,7 @@ export default class GraphicalBuilder extends React.Component {
             NewToaster.show({
               message: err.message,
               className: 'danger',
-              iconName: 'pt-icon-thumbs-down',
+              icon: 'thumbs-down',
             });
             throw err;
           });
@@ -1100,7 +1100,7 @@ export default class GraphicalBuilder extends React.Component {
                   NewToaster.show({
                     message: globalString('aggregate_builder/export_passed'),
                     className: 'success',
-                    iconName: 'pt-icon-thumbs-up',
+                    icon: 'pt-icon-thumbs-up',
                   });
                   runInAction('update fileName and path', () => {
                     currentEditor.fileName = path.basename(fileName);
@@ -1180,7 +1180,7 @@ export default class GraphicalBuilder extends React.Component {
           NewToaster.show({
             message: globalString('aggregate_builder/import_failed'),
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
+            icon: 'thumbs-down',
           });
           this.setState({ isLoading: false });
           this.forceUpdate();
@@ -1190,7 +1190,7 @@ export default class GraphicalBuilder extends React.Component {
       NewToaster.show({
         message: globalString('aggregate_builder/import_failed'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down',
+        icon: 'thumbs-down',
       });
       this.setState({ isLoading: false });
       this.forceUpdate();
@@ -1326,7 +1326,7 @@ export default class GraphicalBuilder extends React.Component {
           NewToaster.show({
             message: globalString('aggregate_builder/import_passed'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up',
+            icon: 'pt-icon-thumbs-up',
           });
           this.setState({ isLoading: false });
         });

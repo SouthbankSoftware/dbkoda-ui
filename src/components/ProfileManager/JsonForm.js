@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-02-08T15:36:26+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T17:10:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,7 +25,7 @@
  */
 
  import _ from 'lodash';
- import { observable, toJS, runInAction, action, extendObservable } from 'mobx';
+ import { observable, toJS, runInAction, action, set } from 'mobx';
  import Ajv from 'ajv';
 
  export const FieldBindings = {
@@ -115,7 +115,7 @@
        });
        return refField;
      };
-     extendObservable(field, { error: ''});
+     set(field, { error: ''});
      field.onChange = action((e) => {
        this.updateFieldValue(field, e.currentTarget.value);
      });

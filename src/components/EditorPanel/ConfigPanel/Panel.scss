@@ -20,11 +20,10 @@
  * @Author: chris
  * @Date:   2017-10-17T12:21:59+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T20:50:27+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-26T16:32:49+11:00
  */
 @import '../../../styles/_defaultTheme.scss';
-
 $menuColor1: #7fa5ad;
 $menuColor2: #cf7769;
 $menuColor3: #adc88f;
@@ -67,6 +66,7 @@ $menuColor4: #837395;
       .dbKodaSVG {
         width: 80px;
         height: 80px;
+        transform: translate(-50%, -50%);
       }
     }
 
@@ -186,7 +186,7 @@ $menuColor4: #837395;
 
       .sectionHeader {
         font-size: 20px;
-        margin: 8px 0 13px 0;
+        margin: 8px 0 13px;
       }
 
       .form-row {

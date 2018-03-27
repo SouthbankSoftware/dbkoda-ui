@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-23T11:06:27+11:00
+ * @Last modified time: 2018-03-22T20:48:52+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -71,13 +71,12 @@ export default class Store {
   @observable locale = 'en';
   @observable version = '0.10.1';
   @observable updateAvailable = false;
-  @observable editors = observable.map();
-  @observable outputs = observable.map();
-  @observable terminals = observable.shallowMap();
-  // @observable widgets = observable.shallowMap();
-  @observable performancePanels = observable.shallowMap();
+  @observable.shallow editors = observable.map(null, { deep: false });
+  @observable.shallow outputs = observable.map(null, { deep: false });
+  @observable.shallow terminals = observable.map(null, { deep: false });
+  @observable.shallow performancePanels = observable.map(null, { deep: false });
 
-  @observable performancePanel = null;
+  @observable.shallow performancePanel = null;
 
   @observable
   welcomePage = observable({
@@ -86,14 +85,20 @@ export default class Store {
     currentContent: 'Welcome' // Can be 'Welcome', 'Choose Theme' or 'Keyboard Shortcuts'
   });
 
-  @nodump
-  @observable
-  configPage = observable.shallowObject({
-    isOpen: true,
-    selectedMenu: 'Paths',
-    changedFields: observable.shallowArray(),
-    newSettings: null
-  });
+  // @nodump
+  @observable.shallow
+  configPage = observable.object(
+    {
+      isOpen: true,
+      selectedMenu: 'Paths',
+      changedFields: observable.array(null, { deep: false }),
+      newSettings: null
+    },
+    null,
+    {
+      deep: false
+    }
+  );
 
   @observable
   editorPanel = observable({
@@ -299,7 +304,7 @@ export default class Store {
         message:
           'Error: Please select an open connection from the Profile Dropdown.',
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
     this.startCreatingNewEditor();
@@ -326,7 +331,7 @@ export default class Store {
         NewToaster.show({
           message: 'Error: ' + err.message,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         logToMain('error', 'Failed to create new editor: ' + err);
       });
@@ -346,7 +351,7 @@ export default class Store {
         NewToaster.show({
           message: err.message,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         throw err;
       });
@@ -368,10 +373,12 @@ export default class Store {
 
       // smart recycle
       when(
-        `Unwatch file changes for ${editorId}`,
         () => !this.editors.has(editorId),
         () => {
           Broker.off(eventName, handleFileChangedEvent);
+        },
+        {
+          name: `Unwatch file changes for ${editorId}`
         }
       );
     }
@@ -447,7 +454,7 @@ export default class Store {
     newStore.editorPanel.executingEditorLines = false;
     newStore.editorPanel.stoppingExecution = false;
     newStore.editorPanel.tabFilter = '';
-    newStore.editorPanel.showingSavingDialogEditorIds = observable.shallowArray();
+    newStore.editorPanel.showingSavingDialogEditorIds = observable.array(null, { deep: false });
     newStore.editorPanel.updateAggregateDetails = false;
     newStore.editorToolbar.newEditorForTreeAction = false;
     newStore.editorPanel.lastFileSavingDirectoryPath =

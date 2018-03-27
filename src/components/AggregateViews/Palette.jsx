@@ -362,7 +362,7 @@ export default class Palette extends React.Component {
           NewToaster.show({
             message: globalString('aggregate_builder/no_active_connection'),
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
+            icon: 'thumbs-down',
           });
           reject(e);
         });

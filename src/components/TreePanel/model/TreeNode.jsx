@@ -58,7 +58,7 @@ export default class TreeNode {
   @observable label;
   text;
   type;
-  iconName;
+  icon;
   secondaryLabel;
   allChildNodes;
   childNodes;
@@ -246,8 +246,8 @@ export default class TreeNode {
         this.secondaryLabel = null;
         break;
     }
-    // this.iconName = `pt-icon-${this.type}`;
-    this.iconName = null;
+    // this.icon = `pt-icon-${this.type}`;
+    this.icon = null;
     if (parent && parent.id != 'root') {
       this.id = `${parent.id}_${treeJSON.text}`;
     } else {

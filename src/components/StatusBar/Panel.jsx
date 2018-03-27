@@ -21,8 +21,8 @@
  * @Author: mike
  * @Date:   2017-09-20 10:35:04
  * @Email:  mike@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:33:13+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-27T14:59:02+11:00
  */
 
 /* eslint no-prototype-builtins:warn */
@@ -181,7 +181,7 @@ export default class Panel extends React.Component {
     NewToaster.show({
       message: globalString('status_bar/feedback/toaster_confirm'),
       className: 'success',
-      iconName: 'pt-icon-thumbs-up'
+      icon: 'thumbs-up',
     });
     this.setState({ isFeedbackAlertOpen: false });
   }
@@ -239,7 +239,7 @@ export default class Panel extends React.Component {
               />
             ),
             className: 'danger',
-            iconName: 'pt-icon-thumbs-up'
+            icon: 'thumbs-up',
           });
         });
     }
@@ -288,7 +288,7 @@ export default class Panel extends React.Component {
           NewToaster.show({
             message: globalString('status_bar/support_bundle/toaster_confirm'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up'
+            icon: 'thumbs-up',
           });
           resolve(result);
         })

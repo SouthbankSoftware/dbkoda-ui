@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   wahaj
- * @Last modified time: 2018-03-14T10:20:10+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T17:45:13+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -64,12 +64,7 @@ export default class PerformancePanel extends React.Component<Props> {
       const Widget = widgetTypes[type];
 
       return (
-        <div
-          id={`widget-${id}`}
-          key={id}
-          data-grid={layout}
-          style={layout.gridElementStyle}
-        >
+        <div id={`widget-${id}`} key={id} data-grid={layout} style={layout.gridElementStyle}>
           <Widget
             performancePanel={performancePanel}
             widget={widget}
@@ -93,9 +88,7 @@ export default class PerformancePanel extends React.Component<Props> {
       <div className="PerformancePanel">
         {isUnresponsive && (
           <div className="unresponsive">
-            <span className="unresponsiveText">
-              {globalString('performance/unresponsive')}
-            </span>
+            <span className="unresponsiveText">{globalString('performance/unresponsive')}</span>
           </div>
         )}
         <div className="performanceNavBar">
@@ -145,9 +138,7 @@ export default class PerformancePanel extends React.Component<Props> {
             )}
           </div>
           <div className="performanceSubNavBar">
-            <div className="subtitle os">
-              {globalString('performance/section_headers/os')}
-            </div>
+            <div className="subtitle os">{globalString('performance/section_headers/os')}</div>
             <div className="subtitle mongo">
               {globalString('performance/section_headers/mongo')}
             </div>
@@ -171,14 +162,11 @@ export default class PerformancePanel extends React.Component<Props> {
           bFitHeight
           minFitHeight={901}
         >
-          {widgets.values().map(widget => this._getWidgetComponent(widget))}
+          {// $FlowFixMe
+          [...widgets.values()].map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
         {onClose && (
-          <Button
-            className="close-button pt-button pt-intent-primary"
-            text="X"
-            onClick={onClose}
-          />
+          <Button className="close-button pt-button pt-intent-primary" text="X" onClick={onClose} />
         )}
       </div>
     );

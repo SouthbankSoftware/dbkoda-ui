@@ -3,7 +3,7 @@
  * @Date:   2017-07-28T08:56:08+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T12:56:51+11:00
+ * @Last modified time: 2018-03-22T17:49:06+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -81,7 +81,7 @@ export default class EditorApi {
         NewToaster.show({
           message: globalString('editor/toolbar/addEditorError'),
           className: 'warning',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         this.createNewEditorFailed();
         return null;
@@ -103,7 +103,7 @@ export default class EditorApi {
             NewToaster.show({
               message: 'Error: ' + err.message,
               className: 'danger',
-              iconName: 'pt-icon-thumbs-down'
+              icon: 'thumbs-down'
             });
             console.error(err.message);
             logToMain('error', 'Error creating new editor: ' + err.message);
@@ -113,7 +113,7 @@ export default class EditorApi {
       NewToaster.show({
         message: err.message,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
       this.createNewEditorFailed();
     }
@@ -141,11 +141,7 @@ export default class EditorApi {
     let largestFileName = -1;
 
     for (const editor of this.store.editors.values()) {
-      if (
-        !editor.path &&
-        editor.type === type &&
-        editor.fileName > largestFileName
-      ) {
+      if (!editor.path && editor.type === type && editor.fileName > largestFileName) {
         largestFileName = editor.fileName;
       }
     }
@@ -221,13 +217,16 @@ export default class EditorApi {
             visible: true,
             shellVersion: res.shellVersion,
             initialMsg: res.output ? res.output.join('\n') : '',
-            doc: observable.ref(doc),
+            doc,
             status: ProfileStatus.OPEN,
             path: null,
             type: options.type
           },
           options
-        )
+        ),
+        {
+          doc: observable.ref
+        }
       )
     );
     if (this.api) {
@@ -266,7 +265,7 @@ export default class EditorApi {
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
-      iconName: 'pt-icon-thumbs-up',
+      icon: 'pt-icon-thumbs-up',
       className: 'success'
     });
     return editorId;
@@ -278,10 +277,7 @@ export default class EditorApi {
 
     this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     // If Editor is not clean, prompt for save.
-    if (
-      !currEditor.doc.isClean() &&
-      currEditor.type != EditorTypes.SHELL_COMMAND
-    ) {
+    if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
       this.store.editorPanel.showingSavingDialogEditorIds.push(currEditor.id);
       return;
     }
@@ -314,12 +310,10 @@ export default class EditorApi {
         // Show and select first entry in map.
         this.api.removeOutput(currEditor);
         this.store.editors.delete(currEditor.id);
-        const editors = this.store.editors.entries();
+        const editors = [...this.store.editors.entries()];
         this.store.editorPanel.activeEditorId = editors[0][1].id;
 
-        const treeEditor = this.store.treeActionPanel.editors.get(
-          currEditor.id
-        );
+        const treeEditor = this.store.treeActionPanel.editors.get(currEditor.id);
         if (treeEditor) {
           this.store.treeActionPanel.editors.delete(treeEditor.id);
         }
@@ -345,7 +339,7 @@ export default class EditorApi {
 //
 // Try "SELECT * FROM tablename LIMIT 10" to see table data
 // Try "SELECT FLATTEN(array) FROM tablename LIMIT 10" to unwind embedded arrays
-// 
+//
 */
 
 SHOW TABLES
@@ -372,14 +366,17 @@ SHOW TABLES
             visible: true,
             shellVersion: profile.shellVersion,
             initialMsg: '', // profile.output ? profile.output.join('\n') : '',
-            doc: observable.ref(doc),
+            doc,
             status: ProfileStatus.OPEN,
             path: null,
             type: options.type,
             db: options.db
           },
           options
-        )
+        ),
+        {
+          doc: observable.ref
+        }
       )
     );
     if (this.api) {
@@ -411,7 +408,7 @@ SHOW TABLES
 
     NewToaster.show({
       message: globalString('editor/toolbar/connectionSuccess'),
-      iconName: 'pt-icon-thumbs-up',
+      icon: 'pt-icon-thumbs-up',
       className: 'success'
     });
     return editorId;

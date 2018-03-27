@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-01-08T16:06:11+11:00
+ * @Last modified time: 2018-03-22T17:58:34+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 import React from 'react';
 import { action, reaction, runInAction, toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { Tab2, Tabs2, Button } from '@blueprintjs/core';
+import { Tab, Tabs, Button } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
 import { ChartPanel } from '#/ChartPanel';
@@ -98,7 +98,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   explainOutputAvailable({ id, shell }) {
-    const editors = this.props.store.editors.entries();
+    const editors = [...this.props.store.editors.entries()];
     const that = this;
     editors.map(editor => {
       if (
@@ -118,7 +118,7 @@ export default class Panel extends React.Component {
 
   @action.bound
   shellOutputAvailable({ id, shellId }) {
-    const editors = this.props.store.editors.entries();
+    const editors = [...this.props.store.editors.entries()];
     editors.map(editor => {
       if (
         editor[1].visible &&
@@ -349,7 +349,7 @@ export default class Panel extends React.Component {
       if (this.props.store.editorPanel.activeEditorId === editorId) {
         const title = globalString(`output/tabs/${OutputToolbarContexts.RAW}`);
         arrTabs.push(
-          <Tab2
+          <Tab
             className={tabClassName}
             key={editorId}
             id={editorId}
@@ -382,7 +382,7 @@ export default class Panel extends React.Component {
           const tabId = `${OutputToolbarContexts.ENHANCED_VIEW}-${editorId}`;
 
           arrTabs.push(
-            <Tab2
+            <Tab
               className={
                 tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
               }
@@ -405,14 +405,14 @@ export default class Panel extends React.Component {
               >
                 <span className="pt-icon-cross" />
               </Button>
-            </Tab2>
+            </Tab>
           );
         }
         if (this.props.store.outputs.get(editorId).tableJson) {
           const tabId = `TableView-${editorId}`;
 
           arrTabs.push(
-            <Tab2
+            <Tab
               className={
                 tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
               }
@@ -435,7 +435,7 @@ export default class Panel extends React.Component {
               >
                 <span className="pt-icon-cross" />
               </Button>
-            </Tab2>
+            </Tab>
           );
 
           if (
@@ -451,7 +451,7 @@ export default class Panel extends React.Component {
           const tabId = `ChartView-${editorId}`;
 
           arrTabs.push(
-            <Tab2
+            <Tab
               className={
                 tabClassName !== 'notVisible' ? 'visible' : 'notVisible'
               }
@@ -466,14 +466,14 @@ export default class Panel extends React.Component {
               >
                 <span className="pt-icon-cross" />
               </Button>
-            </Tab2>
+            </Tab>
           );
         }
         {
           const tabId = `Explain-${editorId}`;
 
           arrTabs.push(
-            <Tab2
+            <Tab
               className={
                 editor[1].explains && tabClassName !== 'notVisible'
                   ? 'visible'
@@ -490,14 +490,14 @@ export default class Panel extends React.Component {
               >
                 <span className="pt-icon-cross" />
               </Button>
-            </Tab2>
+            </Tab>
           );
         }
         {
           const tabId = `Details-${editorId}`;
 
           arrTabs.push(
-            <Tab2
+            <Tab
               className={
                 editor[1].detailsView &&
                 tabClassName !== 'notVisible' &&
@@ -525,7 +525,7 @@ export default class Panel extends React.Component {
               >
                 <span className="pt-icon-cross" />
               </Button>
-            </Tab2>
+            </Tab>
           );
         }
         this.lastEditorId = editorId;
@@ -538,7 +538,7 @@ export default class Panel extends React.Component {
     if (selectedProfile) {
       if (selectedProfile.storageView && selectedProfile.storageView.visible) {
         tabs.push(
-          <Tab2
+          <Tab
             className="visible"
             key={'Storage-' + selectedProfile.id}
             id={'Storage-' + selectedProfile.id}
@@ -551,7 +551,7 @@ export default class Panel extends React.Component {
             >
               <span className="pt-icon-cross" />
             </Button>
-          </Tab2>
+          </Tab>
         );
 
         if (selectedProfile.storageView.shouldFocus) {
@@ -575,7 +575,7 @@ export default class Panel extends React.Component {
 
       if (type === terminalTypes.local) {
         localTerminals.push(
-          <Tab2
+          <Tab
             className="visible"
             key={tabId}
             id={tabId}
@@ -591,12 +591,12 @@ export default class Panel extends React.Component {
             >
               <span className="pt-icon-cross" />
             </Button>
-          </Tab2>
+          </Tab>
         );
       } else if (type === terminalTypes.ssh) {
         if (selectedProfile && terminal.profileId === selectedProfile.id) {
           sshTerminals.push(
-            <Tab2
+            <Tab
               className="visible"
               key={tabId}
               id={tabId}
@@ -612,7 +612,7 @@ export default class Panel extends React.Component {
               >
                 <span className="pt-icon-cross" />
               </Button>
-            </Tab2>
+            </Tab>
           );
         }
       }
@@ -631,14 +631,14 @@ export default class Panel extends React.Component {
         : 'notVisible';
     return (
       <div className="pt-dark outputPanel">
-        <Tabs2
+        <Tabs
           id="outputPanelTabs"
           className="outputTabView"
           animate={false}
           onChange={this.changeTab}
           selectedTabId={this.props.store.outputPanel.currentTab}
         >
-          <Tab2
+          <Tab
             key={0}
             className={defaultVisible}
             id="Default"
@@ -652,8 +652,8 @@ export default class Panel extends React.Component {
             }
             title="Default"
           />
-          {this.renderTabs(this.props.store.editors.entries())}
-        </Tabs2>
+          {this.renderTabs([...this.props.store.editors.entries()])}
+        </Tabs>
         <OutputToolbar
           editorRefs={this.editorRefs}
           getDocumentAtLine={this.getDocumentAtLine}

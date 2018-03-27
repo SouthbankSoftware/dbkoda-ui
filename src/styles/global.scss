@@ -3,7 +3,7 @@
  * @Date:   2017-07-17T12:55:19+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-14T11:46:28+11:00
+ * @Last modified time: 2018-03-27T14:28:21+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -23,7 +23,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 @import './_defaultTheme.scss';
 
 span.cm-invalidchar {
@@ -33,9 +32,7 @@ span.cm-invalidchar {
 body {
   background-color: $panelLeftBackground;
   overflow: hidden !important;
-  font-family: -apple-system, 'BlinkMacSystemFont', 'Arial', 'Segoe UI',
-    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue',
-    'Icons16', sans-serif;
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Arial', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'Icons16', sans-serif;
 }
 
 #root div {}
@@ -94,10 +91,10 @@ p {
   background: $scrollBarBackground;
 }
 
-.bp-table-body,
 .horizontal,
 .pt-button,
 .pt-tab,
+.pt-table-body,
 .pt-tree-node-content,
 .welcomePageContentRight {
   overflow: hidden !important;
@@ -423,9 +420,9 @@ span.cm-error {
 .ReactCodeMirror {
   height: 100%;
 }
-
 //  //// Global CSS: ////  //
 /////////////////////////////
+
 .pt-dark pre {
   box-shadow: unset;
   background: unset;
@@ -518,6 +515,14 @@ a.pt-disabled.pt-intent-primary {
   box-shadow: unset !important;
 }
 
+.pt-numeric-input .pt-button-group.pt-vertical {
+  .pt-button {
+    border-radius: 0 0 0 0 !important;
+    margin-bottom: 0 !important;
+    flex: 1 1 15px;
+  }
+}
+
 .pt-control input:focus ~ .pt-control-indicator,
 input[type='radio']:focus,
 input[type='checkbox']:focus {
@@ -531,8 +536,17 @@ button:focus {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
 }
 
-.pt-menu-item:hover {
-  background-color: $menuItemHover;
+.pt-menu-item .pt-icon {
+  color: #5c7080 !important;
+}
+
+.pt-menu-divider,
+.pt-menu-header {
+  border-top: 1px solid rgba(16, 22, 26, 0.15) !important;
+}
+
+.pt-menu-header > h6 {
+  color: #182026 !important;
 }
 
 ul.CodeMirror-hints {
@@ -585,7 +599,6 @@ div.optInDialog {
   color: #333;
   border-radius: 2px;
 }
-
 /* Creates a small triangle extender for the tooltip */
 .d3-tip-top:after {
   box-sizing: border-box;

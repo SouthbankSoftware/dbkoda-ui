@@ -4,7 +4,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-27T11:35:05+11:00
+ * @Last modified time: 2018-03-22T17:59:08+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -126,7 +126,7 @@ export default class ListView extends React.Component {
         DBKodaToaster(Position.LEFT_BOTTOM).show({
           message: globalString('connection/existingAlias'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         break;
       case 'connectionFail':
@@ -140,14 +140,14 @@ export default class ListView extends React.Component {
             />
           ),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         break;
       case 'connectionSuccess':
         DBKodaToaster(Position.RIGHT_TOP).show({
           message: globalString('connection/success'),
           className: 'success',
-          iconName: 'pt-icon-thumbs-up'
+          icon: 'thumbs-up'
         });
         break;
       default:
@@ -160,7 +160,7 @@ export default class ListView extends React.Component {
     if (region.length == 0) {
       return;
     }
-    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+    const profiles = _.sortBy([...this.props.profileStore.profiles.entries()], [
       function(o) {
         return o[1].alias;
       }
@@ -240,7 +240,7 @@ export default class ListView extends React.Component {
           NewToaster.show({
             message: globalString('profile/toolbar/connectionClosed'),
             className: 'success',
-            iconName: 'pt-icon-thumbs-up'
+            icon: 'thumbs-up'
           });
           Broker.emit(EventType.PROFILE_CLOSED, selectedProfile.id);
           this.props.api.deleteProfileFromDrill({ profile: selectedProfile });
@@ -260,7 +260,7 @@ export default class ListView extends React.Component {
           NewToaster.show({
             message: 'Error: ' + err.message,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down'
+            icon: 'thumbs-down'
           });
           this.setState({ closingProfile: false, closeConnectionAlert: false });
           this.closeConnectionCloseAlert();
@@ -269,7 +269,7 @@ export default class ListView extends React.Component {
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
     this.closeConnectionCloseAlert();
@@ -284,7 +284,7 @@ export default class ListView extends React.Component {
         NewToaster.show({
           message: globalString('profile/notClosed'),
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
       } else {
         this.props.store.showConnectionPane();
@@ -293,7 +293,7 @@ export default class ListView extends React.Component {
       NewToaster.show({
         message: globalString('profile/noProfile'),
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
     }
   }
@@ -310,7 +310,7 @@ export default class ListView extends React.Component {
     NewToaster.show({
       message: globalString('profile/removeSuccess'),
       className: 'success',
-      iconName: 'pt-icon-thumbs-up'
+      icon: 'thumbs-up'
     });
     this.closeConnectionRemoveAlert();
   }
@@ -451,7 +451,7 @@ export default class ListView extends React.Component {
   @action
   renderBodyContextMenu(context) {
     // Get profiles, sort alphabetically and use that as a reference.
-    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+    const profiles = _.sortBy([...this.props.profileStore.profiles.entries()], [
       function(o) {
         return o[1].alias;
       }
@@ -472,7 +472,7 @@ export default class ListView extends React.Component {
               onClick={this.openOpenConnectionAlert}
               text={globalString('profile/menu/openConnection')}
               intent={Intent.NONE}
-              iconName="pt-icon-unlock"
+              icon="unlock"
             />
           </div>
           <div className="menuItemWrapper">
@@ -481,7 +481,7 @@ export default class ListView extends React.Component {
               onClick={this.editProfile}
               text={globalString('profile/menu/editProfile')}
               intent={Intent.NONE}
-              iconName="pt-icon-edit"
+              icon="edit"
             />
           </div>
           <div className="menuItemWrapper">
@@ -490,7 +490,7 @@ export default class ListView extends React.Component {
               onClick={this.openRemoveConnectionAlert}
               text={globalString('profile/menu/deleteProfile')}
               intent={Intent.NONE}
-              iconName="pt-icon-delete"
+              icon="delete"
             />
           </div>
         </div>
@@ -507,7 +507,7 @@ export default class ListView extends React.Component {
                 text={api.getEditorDisplayName(value)}
                 onClick={() => this.swapToEditor(value)}
                 intent={Intent.NONE}
-                iconName="pt-icon-document"
+                icon="document"
               />
             </div>
           );
@@ -524,7 +524,7 @@ export default class ListView extends React.Component {
               onClick={this.openCloseConnectionAlert}
               text={globalString('profile/menu/closeConnection')}
               intent={Intent.NONE}
-              iconName="pt-icon-lock"
+              icon="lock"
             />
           </div>
           <div className="menuItemWrapper">
@@ -533,7 +533,7 @@ export default class ListView extends React.Component {
               onClick={() => this.props.api.addEditor({ profileId: profile.id })}
               text={globalString('profile/menu/newWindow')}
               intent={Intent.NONE}
-              iconName="pt-icon-new-text-box"
+              icon="new-text-box"
             />
           </div>
           <MenuDivider />
@@ -562,7 +562,7 @@ export default class ListView extends React.Component {
                 }`
               )}
               intent={Intent.NONE}
-              iconName="pt-icon-heat-grid"
+              icon="heat-grid"
             />
           </div>
           {hasPerformancePanel ? (
@@ -577,7 +577,7 @@ export default class ListView extends React.Component {
                 }}
                 text={globalString('profile/menu/destroyPerformancePanel')}
                 intent={Intent.NONE}
-                iconName="pt-icon-heat-grid"
+                icon="heat-grid"
               />
             </div>
           ) : null}
@@ -588,7 +588,7 @@ export default class ListView extends React.Component {
                 onClick={() => this.props.api.resetHighWaterMark(profile.id)}
                 text={globalString('profile/menu/resetHWM')}
                 intent={Intent.NONE}
-                iconName="pt-icon-heat-grid"
+                icon="heat-grid"
               />
             </div>
           ) : null}
@@ -616,7 +616,7 @@ export default class ListView extends React.Component {
             onClick={() => this.openSshConnectionAlert()}
             text={globalString('profile/menu/newSshTerminal')}
             intent={Intent.NONE}
-            iconName="pt-icon-new-text-box"
+            icon="new-text-box"
           />
         </div>
       );
@@ -633,7 +633,7 @@ export default class ListView extends React.Component {
           }}
           text={globalString('profile/menu/newLocalTerminal')}
           intent={Intent.NONE}
-          iconName="pt-icon-new-text-box"
+          icon="new-text-box"
         />
       </div>
     );
@@ -651,7 +651,7 @@ export default class ListView extends React.Component {
 
   render() {
     // Sort profile list first.
-    const profiles = _.sortBy(this.props.profileStore.profiles.entries(), [
+    const profiles = _.sortBy([...this.props.profileStore.profiles.entries()], [
       function(o) {
         return o[1].alias;
       }
@@ -667,16 +667,26 @@ export default class ListView extends React.Component {
           : 'connection-profile-cell';
       if (profiles[rowIndex][1].status == 'OPEN') {
         return (
-          <Cell className={className + ' profileListItem ' + profiles[rowIndex][1].alias}>
-            <ConnectionIcon className="dbKodaSVG" width={20} height={20} />
+          <Cell
+            className={
+              className + ' profileListItem ' + profiles[rowIndex][1].alias
+            }
+          >
+            <ConnectionIcon className="pt-icon dbKodaSVG" width={40} height={40} />
             <p className="profileListing">{profiles[rowIndex][1].alias}</p>
           </Cell>
         );
       }
       return (
         <Cell className={className}>
-          <ConnectionIcon className="dbKodaSVG closedProfile" width={20} height={20} />
-          <i className="profileListing closedProfile">{profiles[rowIndex][1].alias}</i>
+          <ConnectionIcon
+            className="pt-icon dbKodaSVG closedProfile"
+            width={40}
+            height={40}
+          />
+          <i className="profileListing closedProfile">
+            {profiles[rowIndex][1].alias}
+          </i>
         </Cell>
       );
     };
@@ -684,20 +694,20 @@ export default class ListView extends React.Component {
     return (
       <div className="profileList">
         <Table
-          allowMultipleSelection={false}
+          enableMultipleSelection={false}
           numRows={this.props.profileStore.profiles.size}
-          isRowHeaderShown={false}
-          isColumnHeaderShown={false}
+          enableRowHeader={false}
           selectionModes={SelectionModes.ROWS_AND_CELLS}
-          isColumnResizable={false}
-          renderBodyContextMenu={this.renderBodyContextMenu}
-          isRowResizable={false}
+          enableColumnResizing={false}
+          bodyContextMenuRenderer={this.renderBodyContextMenu}
+          enableRowResizing={false}
           defaultColumnWidth={100}
           defaultRowHeight={60}
           onSelection={region => this.onSelection(region)}
           selectedRegions={this.state.lastSelectRegion}
+          columnWidths={[200]}
         >
-          <Column name="Connection Profiles" renderCell={renderCell} />
+          <Column name="Connection Profiles" cellRenderer={renderCell} />
         </Table>
         <Dialog
           className="pt-dark close-profile-alert-dialog"

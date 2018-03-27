@@ -4,7 +4,7 @@
  * @Author: guiguan
  * @Date:   2017-09-21T15:25:12+10:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-12-15T13:28:17+11:00
+ * @Last modified time: 2018-03-22T17:11:03+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -43,7 +43,7 @@ import DataTree, {
   type ChartComponentChangeHandler,
   type GetAllowedChartComponentOperations,
   type ChartComponentOperation,
-  type DragAndDropHandler,
+  type DragAndDropHandler
 } from './DataTree';
 import BarChart, { type ChartData, type ChartComponent } from './BarChart';
 import BarChartOverlay from './BarChartOverlay';
@@ -67,25 +67,25 @@ type Data = {}[];
 type ChartComponents = {
   chartComponentX: ChartComponent,
   chartComponentY: ChartComponent,
-  chartComponentCenter: ChartComponent,
+  chartComponentCenter: ChartComponent
 };
 type BarChartData = {
   data: ChartData,
   componentX: ChartComponent,
   componentY: ChartComponent,
-  componentCenter: ChartComponent,
+  componentCenter: ChartComponent
 };
 export type SelectedComponents = {
   chartComponentX: ?ChartComponent,
   chartComponentY: ?ChartComponent,
-  chartComponentCenter: ?ChartComponent,
+  chartComponentCenter: ?ChartComponent
 };
 type DataSchema = {
   schema: Schema,
-  autoSelectedComponents: SelectedComponents,
+  autoSelectedComponents: SelectedComponents
 };
 export type SchemaRef = {
-  schema: Schema,
+  schema: Schema
 };
 export type ChartPanelStore = {
   data: Data,
@@ -99,26 +99,26 @@ export type ChartPanelStore = {
   showOtherInCategoricalAxis: boolean,
   showOtherInCenter: boolean,
   state: ComponentState,
-  error: ?string,
+  error: ?string
 };
 
 type Store = {
   chartPanel: ChartPanelStore,
   outputPanel: {
-    currentTab: string,
-  },
+    currentTab: string
+  }
 };
 
 type Props = {
   store: Store,
   editorId: string,
-  tabId: string,
+  tabId: string
 };
 
 type State = {
   isDragging: boolean,
   valueSchemaPath: ?string,
-  valueType: ?string,
+  valueType: ?string
 };
 
 class SampleResultLeaf {
@@ -138,10 +138,10 @@ class SampleResultLeaf {
   return {
     store: {
       chartPanel: store.outputs.get(editorId).chartPanel,
-      outputPanel: store.outputPanel,
+      outputPanel: store.outputPanel
     },
     editorId,
-    tabId: `Chart-${editorId}`,
+    tabId: `Chart-${editorId}`
   };
 })
 @observer
@@ -157,7 +157,7 @@ export default class ChartPanel extends React.Component<Props, State> {
     this.state = {
       isDragging: false,
       valueSchemaPath: null,
-      valueType: null,
+      valueType: null
     };
   }
 
@@ -170,13 +170,13 @@ export default class ChartPanel extends React.Component<Props, State> {
 
           return currentTab === tabId;
         },
-        (isActive) => {
+        isActive => {
           if (isActive) {
             // fix container size undetected issue when this component is mounted behind the scene
             this.resizeDetector.componentDidMount();
           }
-        },
-      ),
+        }
+      )
     );
   }
 
@@ -203,7 +203,7 @@ export default class ChartPanel extends React.Component<Props, State> {
 
     const { schema } = this.dataSchema;
     const newSchemaRef = {
-      schema,
+      schema
     };
     setTimeout(() => (this.schemaRef = newSchemaRef));
     return newSchemaRef;
@@ -215,7 +215,7 @@ export default class ChartPanel extends React.Component<Props, State> {
   }
 
   // $FlowIssue
-  @computed.equals(shallowEqualObjects)
+  @computed({ equals: shallowEqualObjects })
   get selectedComponents(): SelectedComponents {
     const { chartComponentX, chartComponentY, chartComponentCenter } = this.props.store.chartPanel;
 
@@ -233,7 +233,7 @@ export default class ChartPanel extends React.Component<Props, State> {
     return {
       chartComponentX,
       chartComponentY,
-      chartComponentCenter,
+      chartComponentCenter
     };
   }
   set selectedComponents(selectedComponents: SelectedComponents) {
@@ -256,7 +256,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       data,
       componentX,
       componentY,
-      componentCenter: { name, valueSchemaPath, valueType, values },
+      componentCenter: { name, valueSchemaPath, valueType, values }
     } = this._barChartData;
     const categoricalComponent = this._getCategoricalNumericalComponents(componentX, componentY)[0];
     let resultData;
@@ -279,7 +279,7 @@ export default class ChartPanel extends React.Component<Props, State> {
         valueSchemaPath,
         valueType,
         // $FlowIssue
-        values: values.slice(0, values.length - 1),
+        values: values.slice(0, values.length - 1)
       };
     } else {
       resultComponentCenter = this._barChartData.componentCenter;
@@ -289,14 +289,14 @@ export default class ChartPanel extends React.Component<Props, State> {
       data: resultData,
       componentX,
       componentY,
-      componentCenter: resultComponentCenter,
+      componentCenter: resultComponentCenter
     };
   }
 
   _getComponentsForBarChart(
     chartComponentX: ?ChartComponent | false,
     chartComponentY: ?ChartComponent | false,
-    chartComponentCenter: ?ChartComponent | false,
+    chartComponentCenter: ?ChartComponent | false
   ): ChartComponents {
     const resultChartComponents = {};
 
@@ -307,14 +307,14 @@ export default class ChartPanel extends React.Component<Props, State> {
       resultChartComponents.chartComponentX = {
         name: 'x',
         valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
-        valueType: 'string',
+        valueType: 'string'
       };
     } else {
       // use x as default numerical axis
       resultChartComponents.chartComponentX = {
         name: 'x',
         valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
-        valueType: 'number',
+        valueType: 'number'
       };
     }
 
@@ -325,14 +325,14 @@ export default class ChartPanel extends React.Component<Props, State> {
       resultChartComponents.chartComponentY = {
         name: 'y',
         valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
-        valueType: 'number',
+        valueType: 'number'
       };
     } else {
       // use y as default categorical axis
       resultChartComponents.chartComponentY = {
         name: 'y',
         valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
-        valueType: 'string',
+        valueType: 'string'
       };
     }
 
@@ -343,7 +343,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       resultChartComponents.chartComponentCenter = {
         name: 'center',
         valueSchemaPath: DEFAULT_AXIS_VALUE_SCHEMA_PATH,
-        valueType: 'string',
+        valueType: 'string'
       };
     }
 
@@ -352,10 +352,10 @@ export default class ChartPanel extends React.Component<Props, State> {
 
   _getCategoricalNumericalComponents(
     chartComponentX: ChartComponent,
-    chartComponentY: ChartComponent,
+    chartComponentY: ChartComponent
   ): [
     { name: 'x' | 'y', valueSchemaPath: string, valueType: 'number' | 'string' },
-    { name: 'x' | 'y', valueSchemaPath: string, valueType: 'number' | 'string' },
+    { name: 'x' | 'y', valueSchemaPath: string, valueType: 'number' | 'string' }
   ] {
     return chartComponentX.valueType === 'string'
       ? // $FlowIssue
@@ -374,17 +374,17 @@ export default class ChartPanel extends React.Component<Props, State> {
   _generateChartData(
     x: ?ChartComponent | false,
     y: ?ChartComponent | false,
-    center: ?ChartComponent | false,
+    center: ?ChartComponent | false
   ): BarChartData {
     const { data } = this.props.store.chartPanel;
     const {
       chartComponentX,
       chartComponentY,
-      chartComponentCenter,
+      chartComponentCenter
     } = this._getComponentsForBarChart(x, y, center);
     const [categoricalComponent, numericalComponent] = this._getCategoricalNumericalComponents(
       chartComponentX,
-      chartComponentY,
+      chartComponentY
     );
     const categoricalComponentDataPath = getDisplaySchemaPath(categoricalComponent.valueSchemaPath);
     const numericalComponentDataPath = getDisplaySchemaPath(numericalComponent.valueSchemaPath);
@@ -393,12 +393,12 @@ export default class ChartPanel extends React.Component<Props, State> {
     /* scan through data to build categorical axis map */
     type Center = {
       value: number,
-      order: number, // creation order, indicates its earliness
+      order: number // creation order, indicates its earliness
     };
     type CategoricalAxis = {
       centerMap: Map<string, Center>,
       centerSum: number,
-      order: number, // creation order, indicates its earliness
+      order: number // creation order, indicates its earliness
     };
 
     let categoricalAxisMap: Map<string, CategoricalAxis> = new Map();
@@ -437,7 +437,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       return [categoricalValue, numericalValue, numericalBin];
     };
 
-    _.forEach(data, (v) => {
+    _.forEach(data, v => {
       const [categoricalValue, numericalValue, numericalBin] = fetchValues(v);
 
       categoricalAxisSum += numericalValue;
@@ -454,7 +454,7 @@ export default class ChartPanel extends React.Component<Props, State> {
         } else {
           const newCenter = {
             value: numericalValue,
-            order: centerMap.size,
+            order: centerMap.size
           };
 
           centerMap.set(numericalBin, newCenter);
@@ -466,12 +466,12 @@ export default class ChartPanel extends React.Component<Props, State> {
               numericalBin,
               {
                 value: numericalValue,
-                order: 0,
-              },
-            ],
+                order: 0
+              }
+            ]
           ]),
           centerSum: numericalValue,
-          order: categoricalAxisMap.size,
+          order: categoricalAxisMap.size
         };
 
         categoricalAxisMap.set(categoricalValue, newEntry);
@@ -484,7 +484,7 @@ export default class ChartPanel extends React.Component<Props, State> {
     for (const [k, v] of categoricalAxisMap.entries()) {
       categoricalAxes.push({
         [categoricalComponent.name]: k, // ready
-        [numericalComponent.name]: v, // not ready
+        [numericalComponent.name]: v // not ready
       });
     }
     // $FlowIssue
@@ -496,7 +496,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       hasOtherInCategoricalAxis = true;
       categoricalAxes = _.sortBy(categoricalAxes, v => v[numericalComponent.name].centerSum);
       categoricalAxes = _.takeRight(categoricalAxes, CATEGORICAL_AXIS_LIMIT);
-      categoricalAxes = _.sortBy(categoricalAxes, (v) => {
+      categoricalAxes = _.sortBy(categoricalAxes, v => {
         const { centerSum, order } = v[numericalComponent.name];
 
         currSum += centerSum;
@@ -509,8 +509,8 @@ export default class ChartPanel extends React.Component<Props, State> {
       string,
       {
         sum: number,
-        earliness: number,
-      },
+        earliness: number
+      }
     > = new Map();
     for (const categoricalAxis of categoricalAxes) {
       const { centerMap, order: categoricalAxisOrder } = categoricalAxis[numericalComponent.name];
@@ -525,7 +525,7 @@ export default class ChartPanel extends React.Component<Props, State> {
         } else {
           const newCenterCategory = {
             sum: value,
-            earliness: categoricalAxisOrder + centerOrder,
+            earliness: categoricalAxisOrder + centerOrder
           };
 
           centerCategoryMap.set(k, newCenterCategory);
@@ -547,7 +547,7 @@ export default class ChartPanel extends React.Component<Props, State> {
     centerCategories = _.map(centerCategories, v => v[0]);
     const centerCategorySet = new Set(centerCategories); // use set for membership checking
     // efficiency
-    _.forEach(categoricalAxes, (axis) => {
+    _.forEach(categoricalAxes, axis => {
       const { centerMap, centerSum } = axis[numericalComponent.name];
       const centerObj = {};
 
@@ -574,8 +574,8 @@ export default class ChartPanel extends React.Component<Props, State> {
       categoricalAxes.push({
         [categoricalComponent.name]: OTHER_CATEGORY_LABEL,
         [numericalComponent.name]: {
-          [OTHER_CATEGORY_LABEL]: categoricalAxisSum - currSum,
-        },
+          [OTHER_CATEGORY_LABEL]: categoricalAxisSum - currSum
+        }
       });
     }
 
@@ -589,7 +589,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       data: categoricalAxes,
       componentX: chartComponentX,
       componentY: chartComponentY,
-      componentCenter: chartComponentCenter,
+      componentCenter: chartComponentCenter
     };
   }
 
@@ -632,14 +632,14 @@ export default class ChartPanel extends React.Component<Props, State> {
     const autoSelectedComponents = {
       chartComponentX: null,
       chartComponentY: null,
-      chartComponentCenter: null,
+      chartComponentCenter: null
     };
 
     const [, schema] = this._generateObjectSchema(sampleResults, '', autoSelectedComponents);
 
     return {
       schema,
-      autoSelectedComponents,
+      autoSelectedComponents
     };
   }
 
@@ -647,7 +647,7 @@ export default class ChartPanel extends React.Component<Props, State> {
     name: string,
     type: 'string' | 'number',
     schemaPath: string,
-    autoSelectedComponents,
+    autoSelectedComponents
   ): ?ChartComponent {
     if (name.toLowerCase().endsWith('id')) {
       // skip fields end with id
@@ -662,7 +662,7 @@ export default class ChartPanel extends React.Component<Props, State> {
         autoSelectedComponents.chartComponentX = {
           name: 'x',
           valueSchemaPath: schemaPath,
-          valueType: type,
+          valueType: type
         };
         return autoSelectedComponents.chartComponentX;
       }
@@ -676,7 +676,7 @@ export default class ChartPanel extends React.Component<Props, State> {
         autoSelectedComponents.chartComponentY = {
           name: 'y',
           valueSchemaPath: schemaPath,
-          valueType: type,
+          valueType: type
         };
         return autoSelectedComponents.chartComponentY;
       }
@@ -686,7 +686,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       autoSelectedComponents.chartComponentCenter = {
         name: 'center',
         valueSchemaPath: schemaPath,
-        valueType: type,
+        valueType: type
       };
       return autoSelectedComponents.chartComponentCenter;
     }
@@ -695,7 +695,7 @@ export default class ChartPanel extends React.Component<Props, State> {
   _generateObjectSchema(
     sampleResults: {},
     prefix: string,
-    autoSelectedComponents: SelectedComponents,
+    autoSelectedComponents: SelectedComponents
   ): [boolean, Schema] {
     const schema = {};
     let shouldBeExpanded = false;
@@ -712,7 +712,7 @@ export default class ChartPanel extends React.Component<Props, State> {
           // $FlowIssue
           type,
           newPrefix,
-          autoSelectedComponents,
+          autoSelectedComponents
         );
 
         shouldBeExpanded = shouldBeExpanded || !!selectedCompnent;
@@ -720,14 +720,14 @@ export default class ChartPanel extends React.Component<Props, State> {
         schema[k] = {
           path: newPrefix,
           type,
-          dataTreePath: null,
+          dataTreePath: null
         };
       } else {
         const [childShouldBeExpanded, childSchema] = this._generateObjectSchema(
           // $FlowIssue
           v,
           `${newPrefix}.childSchema`,
-          autoSelectedComponents,
+          autoSelectedComponents
         );
 
         shouldBeExpanded = shouldBeExpanded || childShouldBeExpanded;
@@ -737,7 +737,7 @@ export default class ChartPanel extends React.Component<Props, State> {
           type: 'object',
           dataTreePath: null,
           isExpanded: childShouldBeExpanded,
-          childSchema,
+          childSchema
         };
       }
     });
@@ -751,10 +751,10 @@ export default class ChartPanel extends React.Component<Props, State> {
 
       _.assign(this.props.store.chartPanel, {
         dataTreeWidth: width,
-        chartWidth: dataTreeWidth + chartWidth - width,
+        chartWidth: dataTreeWidth + chartWidth - width
       });
     }),
-    DEBOUNCE_DELAY,
+    DEBOUNCE_DELAY
   );
 
   _onPanelResize = _.debounce(
@@ -763,10 +763,10 @@ export default class ChartPanel extends React.Component<Props, State> {
 
       _.assign(this.props.store.chartPanel, {
         chartWidth: width - dataTreeWidth,
-        chartHeight: height,
+        chartHeight: height
       });
     }),
-    DEBOUNCE_DELAY,
+    DEBOUNCE_DELAY
   );
 
   _onChartComponentChange: ChartComponentChangeHandler = action(
@@ -788,18 +788,18 @@ export default class ChartPanel extends React.Component<Props, State> {
         chartPanel[`chartComponent${_.upperFirst(target)}`] = {
           name: target,
           valueSchemaPath,
-          valueType,
+          valueType
         };
       } else if (target === 'all') {
         _.assign(chartPanel, {
           chartComponentX: null,
           chartComponentY: null,
-          chartComponentCenter: null,
+          chartComponentCenter: null
         });
       } else {
         chartPanel[`chartComponent${_.upperFirst(target)}`] = null;
       }
-    },
+    }
   );
 
   /**
@@ -807,7 +807,7 @@ export default class ChartPanel extends React.Component<Props, State> {
    */
   _getAllowedChartComponentOperations: GetAllowedChartComponentOperations = (
     targetValueSchemaPath,
-    targetValueType,
+    targetValueType
   ) => {
     const operations: ChartComponentOperation[] = [];
 
@@ -820,7 +820,7 @@ export default class ChartPanel extends React.Component<Props, State> {
     if (chartComponentX && chartComponentX.valueSchemaPath === targetValueSchemaPath) {
       operations.push({
         action: 'unload',
-        target: 'x',
+        target: 'x'
       });
     } else if (
       !chartComponentY ||
@@ -829,14 +829,14 @@ export default class ChartPanel extends React.Component<Props, State> {
     ) {
       operations.push({
         action: 'load',
-        target: 'x',
+        target: 'x'
       });
     }
 
     if (chartComponentY && chartComponentY.valueSchemaPath === targetValueSchemaPath) {
       operations.push({
         action: 'unload',
-        target: 'y',
+        target: 'y'
       });
     } else if (
       !chartComponentX ||
@@ -845,19 +845,19 @@ export default class ChartPanel extends React.Component<Props, State> {
     ) {
       operations.push({
         action: 'load',
-        target: 'y',
+        target: 'y'
       });
     }
 
     if (chartComponentCenter && chartComponentCenter.valueSchemaPath === targetValueSchemaPath) {
       operations.push({
         action: 'unload',
-        target: 'center',
+        target: 'center'
       });
     } else if (targetValueType === 'string') {
       operations.push({
         action: 'load',
-        target: 'center',
+        target: 'center'
       });
     }
 
@@ -876,7 +876,7 @@ export default class ChartPanel extends React.Component<Props, State> {
     this.setState({
       isDragging,
       valueSchemaPath,
-      valueType,
+      valueType
     });
   };
 
@@ -899,7 +899,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       if (c && c.valueSchemaPath === valueSchemaPath) {
         if ((c.name === 'x' && !chartComponentY) || (c.name === 'y' && !chartComponentX)) {
           chartPanel[`chartComponent${_.upperFirst(c.name)}`] = _.assign(_.clone(c), {
-            valueType: newType,
+            valueType: newType
           });
           continue;
         }
@@ -927,7 +927,7 @@ export default class ChartPanel extends React.Component<Props, State> {
       showOtherInCategoricalAxis,
       showOtherInCenter,
       state,
-      error,
+      error
     } = this.props.store.chartPanel;
 
     const { schemaRef, barChartData } = this;
@@ -952,7 +952,7 @@ export default class ChartPanel extends React.Component<Props, State> {
             maxSize={1000}
             pane2Style={{
               display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'column'
             }}
             onChange={this._onSplitPaneResize}
           >

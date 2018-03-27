@@ -22,18 +22,14 @@
  * @Author: guiguan
  * @Date:   2017-03-29T13:29:29+11:00
  * @Last modified by:   guiguan
- * @Last modified time: 2017-03-29T16:28:36+11:00
+ * @Last modified time: 2018-03-22T20:38:21+11:00
  */
 
 import { observable, isObservable, isBoxedObservable } from 'mobx';
 import { dump as _dump, restore as _restore } from 'dumpenvy';
 import { Doc } from 'codemirror';
 import { expect } from 'chai';
-import {
-  serializer,
-  deserializer,
-  postDeserializer
-} from '#/common/mobxDumpenvyExtension';
+import { serializer, deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
 
 describe('DumpEnvy', () => {
   const dump = root => _dump(root, { serializer });
@@ -59,10 +55,14 @@ describe('DumpEnvy', () => {
 
   it('serialises and deserialises ObservableObject', () => {
     const testInput = {
-      x: observable.shallowObject({
-        a: 1,
-        b: { m: observable.shallowObject({ j: 888 }) }
-      })
+      x: observable.object(
+        {
+          a: 1,
+          b: { m: observable.object({ j: 888 }, null, { deep: false }) }
+        },
+        null,
+        { deep: false }
+      )
     };
 
     const dumpedInput = dump(testInput);
@@ -73,7 +73,7 @@ describe('DumpEnvy', () => {
 
   it('serialises and deserialises ObservableValue', () => {
     const testInput = {
-      x: observable.shallowBox({ a: 1, b: observable.shallowBox('sss') })
+      x: observable.box({ a: 1, b: observable.box('sss', { deep: false }) }, { deep: false })
     };
 
     const dumpedInput = dump(testInput);
@@ -85,18 +85,11 @@ describe('DumpEnvy', () => {
   });
 
   it('serialises and deserialises mixed object', () => {
-    const sharedObservable = observable('test');
+    const sharedObservable = observable.box('test');
     const testInput = {
       x: new Map([
         ['a', observable([1, 2, 3])],
-        [
-          'b',
-          new Set([
-            3,
-            observable.map({ n: sharedObservable }),
-            sharedObservable
-          ])
-        ]
+        ['b', new Set([3, observable.map({ n: sharedObservable }), sharedObservable])]
       ])
     };
 
@@ -111,15 +104,18 @@ describe('DumpEnvy', () => {
     const value = 'test\ntest1\ntest2';
     newDoc.setValue(value);
 
-    const selections = [
-      { anchor: { line: 0, ch: 0 }, head: { line: 1, ch: 2 } }
-    ];
+    const selections = [{ anchor: { line: 0, ch: 0 }, head: { line: 1, ch: 2 } }];
     newDoc.setSelections(selections);
 
     const testInput = {
-      editor: observable({
-        doc: observable.ref(newDoc)
-      })
+      editor: observable(
+        {
+          doc: newDoc
+        },
+        {
+          doc: observable.ref
+        }
+      )
     };
 
     const dumpedInput = dump(testInput);
@@ -128,8 +124,6 @@ describe('DumpEnvy', () => {
 
     expect(restoredDoc).to.be.an.instanceof(Doc);
     expect(restoredDoc.getValue()).to.equal(value);
-    expect(JSON.stringify(restoredDoc.listSelections())).to.equal(
-      JSON.stringify(selections)
-    );
+    expect(JSON.stringify(restoredDoc.listSelections())).to.equal(JSON.stringify(selections));
   });
 });
