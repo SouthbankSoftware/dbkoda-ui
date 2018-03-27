@@ -364,7 +364,7 @@
         "destroyPerformancePanel": "Destroy Performance Panel",
         "resetHWM": "Reset High Water Mark",
         "deleteProfile": "Delete Profile",
-        "performance": "Performance Counter Test"
+        "getTopConnections": "Get Top 10 Connections"
       },
       "closeAlert": {
         "prompt": "Are you sure you want to close this connection?",

@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T10:51:27+11:00
+ * @Last modified time: 2018-03-27T11:05:05+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -114,6 +114,14 @@ class FeatherClient {
 
     this.loggerService = this.service('logger');
     this.configService = this.service('config');
+
+    this.topConnectionsService = this.service('top-connections');
+    this.topConnectionsService.on('data', data => {
+      Broker.emit(EventType.TOP_CONNECTIONS_DATA, data);
+    });
+    this.topConnectionsService.on('error', data => {
+      Broker.emit(EventType.TOP_CONNECTIONS_ERROR, data);
+    });
   }
 
   service(service) {

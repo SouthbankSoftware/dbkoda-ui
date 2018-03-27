@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T22:27:02+11:00
+ * @Last modified time: 2018-03-27T11:20:38+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@ import ProfileApi from './Profile';
 import TreeApi from './Tree';
 import DrillApi from './Drill';
 import PasswordApi from './Password';
+import TopConnectionsApi from './TopConnections';
 
 export default class DataCenter {
   store;
@@ -54,6 +55,7 @@ export default class DataCenter {
     this.treeApi = new TreeApi(store, this);
     this.drillApi = new DrillApi(store, this);
     this.passwordApi = new PasswordApi(store, this, config);
+    this.topConnectionsApi = new TopConnectionsApi(store);
 
     this.init = this.init.bind(this);
 
@@ -67,6 +69,9 @@ export default class DataCenter {
     this.addDrillOutput = this.outputApi.addDrillOutput.bind(this);
     this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
 
+    // TopConnections public APIs
+    _.assign(this, _.pick(this.topConnectionsApi, ['getTopConnections']));
+
     // Terminal public APIs
     _.assign(
       this,
@@ -75,8 +80,8 @@ export default class DataCenter {
         'addSshTerminal',
         'addTerminal',
         'removeTerminal',
-        'removeAllTerminalsForProfile',
-      ]),
+        'removeAllTerminalsForProfile'
+      ])
     );
 
     // PerformancePanel public APIs
@@ -90,27 +95,21 @@ export default class DataCenter {
         'changeSamplingRate',
         'reactToSamplingRateChange',
         'showToasterInPerformanceWindow'
-      ]),
+      ])
     );
 
     // Widget public APIs
-    _.assign(
-      this,
-      _.pick(this.widgetApi, [
-        'addWidget',
-        'removeWidget',
-      ]),
-    );
+    _.assign(this, _.pick(this.widgetApi, ['addWidget', 'removeWidget']));
 
     // Editor API public functions
     this.addEditor = this.editorApi.addEditor.bind(this);
     this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);
     this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
     this.getUnsavedEditorInternalFileName = this.editorApi.getUnsavedEditorInternalFileName.bind(
-      this,
+      this
     );
     this.getUnsavedEditorSuggestedFileName = this.editorApi.getUnsavedEditorSuggestedFileName.bind(
-      this,
+      this
     );
     this.getEditorDisplayName = this.editorApi.getEditorDisplayName.bind(this);
     this.removeEditor = this.editorApi.removeEditor.bind(this);
@@ -129,7 +128,7 @@ export default class DataCenter {
         'connectProfile',
         'saveProfile',
         'getProfiles'
-      ]),
+      ])
     );
 
     // Drill API public functions
