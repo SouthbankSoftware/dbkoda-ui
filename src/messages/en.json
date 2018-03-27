@@ -23,7 +23,10 @@
         "driver_connection_closed": "MongoDB Connection closed",
         "mongo_reconnecting": "Reconnecting to MongoDB instance",
         "ssh_connection_closed": "SSH Connection Closed",
-        "ssh_reconnecting": "Reconnecting to SSH"
+        "ssh_reconnecting": "Reconnecting to SSH",
+        "ssh_not_enabled": "SSH Not Enabled",
+        "ssh_reconnect_success": "SSH Reconnect Success",
+        "mongo_reconnect_success": "Mongo Reconnect Success"
       }
     },
     "aggregate_builder": {

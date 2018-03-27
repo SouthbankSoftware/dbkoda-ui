@@ -37,8 +37,6 @@
         "description": "Current CPU Usage and Run Queue on the OS level.",
         "infoWidget": true,
         "colorList": ["#01969E", "#01969E"],
-        "description": "CPU pct busy and run queue on host",
-        "infoWidget": true,
         "showRunQueue": true
       },
       "layout": {

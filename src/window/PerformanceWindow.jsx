@@ -25,11 +25,11 @@
  */
 
 import React from 'react';
-import { action } from 'mobx';
-import { inject, observer } from 'mobx-react';
-import { PerformancePanel } from '#/PerformancePanel';
-import { NewToaster } from '#/common/Toaster';
-import { detachFromMobx, attachToMobx } from '~/api/PerformancePanel';
+import {action} from 'mobx';
+import {inject, observer} from 'mobx-react';
+import {PerformancePanel} from '#/PerformancePanel';
+import {NewToaster} from '#/common/Toaster';
+import {attachToMobx, detachFromMobx} from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/dist/blueprint.css';
@@ -37,6 +37,7 @@ import '@blueprintjs/table/dist/table.css';
 import '~/styles/global.scss';
 import '~/styles/fonts/index.css';
 import '#/App.scss';
+import Status from '../components/PerformancePanel/Status';
 
 @inject(allStores => ({
   store: allStores.store
@@ -46,7 +47,9 @@ class PerformanceWindow extends React.Component {
   constructor() {
     super();
     this.state = {
-      isUnresponsive: false
+      isUnresponsive: false,
+      sshStatus: Status.NORMAL,
+      mongoStatus: Status.NORMAL,
     };
 
     document.addEventListener(
@@ -57,47 +60,70 @@ class PerformanceWindow extends React.Component {
 
     window.onbeforeunload = this._handleNavigatingAway;
   }
+
   componentWillMount() {
-    const { store } = this.props;
+    const {store} = this.props;
     store.toasterCallback = this._showToasterFromMainWindow;
     store.errorHandler = this._errorHandler;
   }
+
   @action.bound
   _handleNavigatingAway(event) {
     console.log(event);
     this.props.store.sendCommandToMainProcess('pw_windowReload');
   }
+
   @action.bound
   _handleVisibilityChange() {
     if (document.hidden) {
       logToMain('info', 'becomes hidden');
 
-      const { store: { performancePanel } } = this.props;
+      const {store: {performancePanel}} = this.props;
 
       detachFromMobx(performancePanel);
     } else {
       logToMain('info', 'becomes visible');
 
-      const { store: { performancePanel } } = this.props;
+      const {store: {performancePanel}} = this.props;
 
       attachToMobx(performancePanel);
     }
   }
+
   @action.bound
   _showToasterFromMainWindow(objToaster) {
     if (objToaster.className === 'danger') {
-      this.setState({ isUnresponsive: true });
+      // this.setState({ isUnresponsive: true });
     }
     NewToaster.show(objToaster);
   }
 
   @action.bound
   _errorHandler(err) {
-    console.log('receive error', err);
+    console.log('received an error', err);
+    switch (err.code) {
+      case 'SSH_NOT_ENABLED':
+        this.setState({sshStatus: Status.NOT_ENABLED});
+        break;
+      case 'SSH_CONNECTION_CLOSED':
+        this.setState({sshStatus: Status.CONNECTION_BROKEN});
+        break;
+      case 'MONGO_CONNECTION_CLOSED':
+        this.setState({mongoStatus: Status.CONNECTION_BROKEN});
+        break;
+      case 'MONGO_RECONNECT_SUCCESS':
+        this.setState({mongoStatus: Status.NORMAL});
+        break;
+      case 'SSH_RECONNECTION_SUCCESS':
+        this.setState({sshStatus: Status.NORMAL});
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
-    const { store } = this.props;
+    const {store} = this.props;
     console.log(store.resetPerformancePanel);
     console.log(store.resetHighWaterMark);
 
@@ -109,10 +135,12 @@ class PerformanceWindow extends React.Component {
             onClose={null}
             resetHighWaterMark={store.resetHighWaterMark}
             resetPerformancePanel={() => {
-              this.setState({ isUnresponsive: false });
+              this.setState({isUnresponsive: false});
               store.resetPerformancePanel();
             }}
             isUnresponsive={this.state.isUnresponsive}
+            sshStatus={this.state.sshStatus}
+            mongoStatus={this.state.mongoStatus}
           />
         ) : (
           <div>

@@ -18,18 +18,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * Created by joey on 19/3/18.
+ * Created by joey on 27/3/18.
  */
 
-export const ErrorCodes = {
-  PERFORMANCE_LIMIT_MONGOS: 'performance/errors/mongos_error',
-  PERFORMANCE_LIMIT_ENGINE: 'performance/errors/not_supported_storage_engine',
-  MONGO_CONNECTION_CLOSED: 'performance/errors/driver_connection_closed',
-  MONGO_RECONNECTING: 'performance/errors/mongo_reconnecting',
-  SSH_CONNECTION_CLOSED: 'performance/errors/ssh_connection_closed',
-  SSH_RECONNECTING: 'performance/errors/ssh_reconnecting',
-  SSH_NOT_ENABLED: 'performance/errors/ssh_not_enabled',
-  SSH_RECONNECTION_SUCCESS: 'performance/errors/ssh_reconnect_success',
-  MONGO_RECONNECT_SUCCESS: 'performance/errors/mongo_reconnect_success'
-};
-
+export default {NORMAL: 0, CONNECTION_BROKEN: 1, NOT_ENABLED: 2};

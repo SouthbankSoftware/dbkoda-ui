@@ -37,6 +37,7 @@ import type { WidgetState } from '~/api/Widget';
 import SizeProvider from './SizeProvider';
 import * as widgetTypes from './Widgets';
 import './Panel.scss';
+import {ErrorPanel} from './ErrorPanel';
 
 const ResponsiveReactGridLayout = SizeProvider(Responsive);
 
@@ -86,18 +87,21 @@ export default class PerformancePanel extends React.Component<Props> {
       onClose,
       resetHighWaterMark,
       resetPerformancePanel,
-      isUnresponsive
+      isUnresponsive,
+      mongoStatus,
+      sshStatus
     } = this.props;
 
     return (
       <div className="PerformancePanel">
-        {isUnresponsive && (
-          <div className="unresponsive">
-            <span className="unresponsiveText">
-              {globalString('performance/unresponsive')}
-            </span>
-          </div>
-        )}
+        {/* {isUnresponsive && ( */}
+        {/* <div className="unresponsive"> */}
+        {/* <span className="unresponsiveText"> */}
+        {/* {globalString('performance/unresponsive')} */}
+        {/* </span> */}
+        {/* </div> */}
+        {/* )} */}
+        <ErrorPanel mongoStatus={mongoStatus} sshStatus={sshStatus} />
         <div className="performanceNavBar">
           <div className="performanceTitleBar">
             <div className="title">{globalString('performance/title')}</div>

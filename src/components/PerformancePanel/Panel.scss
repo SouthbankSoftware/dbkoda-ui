@@ -41,6 +41,25 @@
         z-index: 1001;
     }
 
+    .performance-status-panel {
+        height: 100%;
+        width: 100%;
+        z-index: 10;
+        .ssh-status-panel {
+            width: 14.50%;
+            height: 100%;
+            font-size: 24px;
+            color: #bfbec0;
+            background-color: #222222;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .ssh-status-text {
+                margin: auto;
+            }
+        }
+    }
+
     .unresponsive {
         position: absolute;
         width: 120%;
