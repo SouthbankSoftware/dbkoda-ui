@@ -211,13 +211,13 @@ export default class Details extends React.Component {
             if (index > selectedBlockIndex) {
               const blockString =
                 '/*' +
-                block.code.replace(/\r\n/g, /newLine/) +
+                block.code.replace(/\r\n/g, newLine) +
                 ', */' +
                 newLine;
               codeString += blockString;
               pipelineString += blockString;
             } else {
-              const blockString = block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+              const blockString = block.code.replace(/\r\n/g, newLine) + ',' + newLine;
               codeString += blockString;
               pipelineString += blockString;
             }
