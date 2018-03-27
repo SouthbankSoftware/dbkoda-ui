@@ -50,6 +50,7 @@ import LastBlockTarget from './AggregateBlocks/LastBlockTarget.jsx';
 import './style.scss';
 import { AggregateCommands } from './AggregateCommands.js';
 import GenerateChartButton from './GenerateChartButton';
+import CreateViewButton from './CreateViewButton';
 import ShowIcon from '../../styles/icons/show-icon.svg';
 import ImportIcon from '../../styles/icons/import-icon.svg';
 import ExportIcon from '../../styles/icons/export-icon.svg';
@@ -1449,6 +1450,7 @@ export default class GraphicalBuilder extends React.Component {
               <ExportIcon className="dbKodaSVG" width={20} height={20} />
             </AnchorButton>
           </Tooltip>
+          <CreateViewButton />
           <GenerateChartButton
             connectionId={this.props.editor.currentProfile}
             editorId={this.props.editor.id}

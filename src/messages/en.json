@@ -66,7 +66,8 @@
         "failed_message_unknown":
           "Apologies, Aggregation failed on that collection for an unknown reason, please raise a bug using the support bundle button in the bottom right corner of the screen.",
         "failed_message":
-          "Apologies, Aggregation has lost connection with the Mongo shell, please restart Aggregation builder from the tree context menu."
+          "Apologies, Aggregation has lost connection with the Mongo shell, please restart Aggregation builder from the tree context menu.",
+        "create_view_message": "Please enter a View name:"
       },
       "invalid_aggregation_code":
         "Invalid aggregation code. Please check syntax."

@@ -168,6 +168,13 @@ export default class Store {
   };
 
   @observable
+  aggregateBuilder = {
+    includeCreateView: true,
+    viewName: '',
+    showViewNameDialog: false
+  };
+
+  @observable
   detailsPanel = {
     lastTreeAction: null,
     lastTreeNode: null,
@@ -490,6 +497,9 @@ export default class Store {
 
     // Tree Action Panel:
     newStore.treeActionPanel.isNewFormValues = false;
+
+    // Aggregate Builder:
+    newStore.aggregateBuilder.showViewNameDialog = false;
   }
 
   hasUnsavedEditorTabs() {
