@@ -3,7 +3,7 @@
  * @Date:   2017-07-19 11:17:46
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-10-03T11:54:11+11:00
+ * @Last modified time: 2018-03-27T17:15:25+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -1064,7 +1064,7 @@ export default class GraphicalBuilder extends React.Component {
         const service = featherClient().service('files');
         service.timeout = 30000;
         return service
-          .create({ _id: path, content: fileContent })
+          .create({ _id: path, content: fileContent, watching: false })
           .then(() => currentEditor.doc.markClean())
           .catch((err) => {
             NewToaster.show({

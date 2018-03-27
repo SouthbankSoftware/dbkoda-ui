@@ -3,7 +3,7 @@
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  chris@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-02-16T15:53:32+11:00
+ * @Last modified time: 2018-03-27T17:18:00+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -59,7 +59,11 @@ export default class Profiles {
     // Call controller file get service
     return featherClient()
       .service('files')
-      .get(this.profilesFilePath)
+      .get(this.profilesFilePath, {
+        query: {
+          watching: 'false'
+        }
+      })
       .then(file => {
         runInAction('Apply changes to profiles from yaml file', () => {
           const profileLoad = yaml.safeLoad(file.content);
