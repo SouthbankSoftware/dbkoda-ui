@@ -116,6 +116,9 @@ class PerformanceWindow extends React.Component {
       case 'SSH_RECONNECTION_SUCCESS':
         this.setState({sshStatus: Status.NORMAL});
         break;
+      case 'UNSUPPORTED_STATS_OS':
+        this.setState({sshStatus: Status.UNSUPPORTED_STATS_OS});
+        break;
       default:
         break;
     }
