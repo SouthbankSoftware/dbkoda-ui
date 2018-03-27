@@ -47,7 +47,6 @@ class PerformanceWindow extends React.Component {
   constructor() {
     super();
     this.state = {
-      isUnresponsive: false,
       sshStatus: Status.NORMAL,
       mongoStatus: Status.NORMAL,
     };
@@ -135,10 +134,9 @@ class PerformanceWindow extends React.Component {
             onClose={null}
             resetHighWaterMark={store.resetHighWaterMark}
             resetPerformancePanel={() => {
-              this.setState({isUnresponsive: false});
+              this.setState({sshStatus: Status.NORMAL, mongoStatus: Status.NORMAL});
               store.resetPerformancePanel();
             }}
-            isUnresponsive={this.state.isUnresponsive}
             sshStatus={this.state.sshStatus}
             mongoStatus={this.state.mongoStatus}
           />
