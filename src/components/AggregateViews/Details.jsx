@@ -209,20 +209,17 @@ export default class Details extends React.Component {
             block.code.replace(/\r\n/g, newLine);
             block.code.replace(/\n/g, newLine);
             if (index > selectedBlockIndex) {
-              codeString +=
+              const blockString =
                 '/*' +
                 block.code.replace(/\r\n/g, /newLine/) +
                 ', */' +
                 newLine;
-              pipelineString += '/*' +
-                block.code.replace(/\r\n/g, /newLine/) +
-                ', */' +
-                newLine;
+              codeString += blockString;
+              pipelineString += blockString;
             } else {
-              codeString +=
-                block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
-              pipelineString +=
-                block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+              const blockString = block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+              codeString += blockString;
+              pipelineString += blockString;
             }
           }
         } else {
