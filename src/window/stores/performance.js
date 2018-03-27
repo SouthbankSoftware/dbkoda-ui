@@ -50,6 +50,7 @@ export default class Store {
   @observable profileId = null;
 
   toasterCallback = null;
+  errorHandler = null;
 
   constructor() {
     ipcRenderer.on('performance', this.handleDataSync);
@@ -85,6 +86,11 @@ export default class Store {
           console.log(args.toasterObj);
           if (this.toasterCallback) {
             this.toasterCallback(args.toasterObj);
+          }
+        } else if (args.command === 'mw_error') {
+          console.log(args);
+          if (this.errorHandler) {
+            this.errorHandler(args.err);
           }
         }
       }

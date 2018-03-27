@@ -671,7 +671,7 @@ export default class Store {
         }
 
         console.error(err);
-        logToMain('error', 'Failed to load state store: ' + err);
+        logToMain('error', 'Failed to load state store: ' + stateStorePath + ',' + err);
         Broker.emit(EventType.APP_CRASHED);
       });
   }

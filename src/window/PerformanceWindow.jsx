@@ -60,6 +60,7 @@ class PerformanceWindow extends React.Component {
   componentWillMount() {
     const { store } = this.props;
     store.toasterCallback = this._showToasterFromMainWindow;
+    store.errorHandler = this._errorHandler;
   }
   @action.bound
   _handleNavigatingAway(event) {
@@ -88,6 +89,11 @@ class PerformanceWindow extends React.Component {
       this.setState({ isUnresponsive: true });
     }
     NewToaster.show(objToaster);
+  }
+
+  @action.bound
+  _errorHandler(err) {
+    console.log('receive error', err);
   }
 
   render() {

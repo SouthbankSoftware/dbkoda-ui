@@ -20,7 +20,10 @@
           "Creating Performance Panel on mongos and only minimal statistics is available",
         "not_supported_storage_engine":
           "Creating Performance Panel on storage engine `{0}`. At the moment, only diagnostics on `wiredTiger` is supported",
-        "driver_connection_closed": "MongoDB Connection closed"
+        "driver_connection_closed": "MongoDB Connection closed",
+        "mongo_reconnecting": "Reconnecting to MongoDB instance",
+        "ssh_connection_closed": "SSH Connection Closed",
+        "ssh_reconnecting": "Reconnecting to SSH"
       }
     },
     "aggregate_builder": {
@@ -218,6 +221,8 @@
       "toolbar": {
         "executeSelectedTooltip": "Execute Selected Commands",
         "executeAllTooltip": "Execute All Commands",
+        "executionTimeLabel": "Ran for",
+        "executionTimeUnit": "ms",
         "stopExecutionTooltip": "Stop Execution",
         "explainTooltip": "Explain",
         "explainQuery": "Query Planner",
