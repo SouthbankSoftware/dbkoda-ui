@@ -85,7 +85,7 @@ export default class TreePanel extends React.Component {
                   DBKodaToaster(Position.LEFT_BOTTOM).show({
                     message: 'Profile got changed before loading completes.',
                     className: 'warning',
-                    iconName: 'pt-icon-thumbs-down',
+                    icon: 'thumbs-down',
                   });
                   this.updateStatus('FAILED');
                 }
@@ -96,7 +96,7 @@ export default class TreePanel extends React.Component {
                 DBKodaToaster(Position.LEFT_BOTTOM).show({
                   message: err.message,
                   className: 'danger',
-                  iconName: 'pt-icon-thumbs-down',
+                  icon: 'thumbs-down',
                 });
               });
           }

@@ -1,4 +1,11 @@
-/*
+/**
+ * Extension to handle Mobx observables
+ *
+ * @Author: guiguan
+ * @Date:   2017-03-29T13:25:34+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T20:33:06+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -16,15 +23,6 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * Extension to handle Mobx observables
- *
- * @Author: guiguan
- * @Date:   2017-03-29T13:25:34+11:00
- * @Last modified by:   wahaj
- * @Last modified time: 2017-07-31T16:08:13+10:00
  */
 
 import {
@@ -79,14 +77,14 @@ export function serializer(key, value) {
 export function deserializer(key, value) {
   if (value !== null) {
     if (value.__dump__ === 'ObservableMap') {
-      return observable.shallowMap(value.entries);
+      return observable.map(value.entries, { deep: false });
     } else if (value.__dump__ === 'ObservableArray') {
-      return observable.shallowArray(value.values);
+      return observable.array(value.values, { deep: false });
     } else if (value.__dump__ === 'ObservableObject') {
       delete value.__dump__;
-      return observable.shallowObject(value);
+      return observable.object(value, null, { deep: false });
     } else if (value.__dump__ === 'ObservableValue') {
-      return observable.shallowBox(value.value);
+      return observable.box(value.value, { deep: false });
     } else if (value.__dump__ === 'Doc') {
       const newDoc = StaticApi.createNewDocumentObject(value.value);
 
@@ -95,7 +93,7 @@ export function deserializer(key, value) {
       newDoc.setSelections(value.selections);
       newDoc.setHistory(value.history);
       // recover changes generation
-      const _recoverGen = (collectionName) => {
+      const _recoverGen = collectionName => {
         for (const [i, v] of value.history[collectionName].entries()) {
           if (v.generation) {
             newDoc.history[collectionName][i].generation = v.generation;
@@ -104,10 +102,7 @@ export function deserializer(key, value) {
       };
       _recoverGen('done');
       _recoverGen('undone');
-      _.assign(
-        newDoc.history,
-        _.pick(value.history, ['generation', 'maxGeneration', 'undoDepth'])
-      );
+      _.assign(newDoc.history, _.pick(value.history, ['generation', 'maxGeneration', 'undoDepth']));
       newDoc.cleanGeneration = value.cleanGeneration;
 
       return newDoc;

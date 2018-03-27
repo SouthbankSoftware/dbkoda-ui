@@ -5,7 +5,7 @@
  * @Date:   2018-02-07T10:41:12+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T16:57:27+11:00
+ * @Last modified time: 2018-03-22T18:00:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -114,12 +114,12 @@ export default class Password {
     */
     const { initialPassword } = this.store.password;
     const masterHash = this.hashPassword(initialPassword);
-    const profileSshIds = _.filter(this.store.profileStore.profiles.entries(), (value) => {
+    const profileSshIds = _.filter([...this.store.profileStore.profiles.entries()], (value) => {
       return (value[1].ssh || value[1].keyRadio);
     }).map((value) => {
       return `${value[1].id}-s`;
     });
-    const profileIds = _.concat(this.store.profileStore.profiles.keys(), profileSshIds);
+    const profileIds = _.concat([...this.store.profileStore.profiles.keys()], profileSshIds);
     return featherClient()
       .service('master-pass')
       .create({ masterPassword: masterHash, profileIds })
@@ -139,13 +139,13 @@ export default class Password {
           NewToaster.show({
             message: `${globalString('password_dialog/login_error_message')}`,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
+            icon: 'thumbs-down',
           });
         } else {
           NewToaster.show({
             message: `${globalString('password_dialog/general_error_message')}`,
             className: 'danger',
-            iconName: 'pt-icon-thumbs-down',
+            icon: 'thumbs-down',
           });
         }
       });
@@ -164,7 +164,7 @@ export default class Password {
         NewToaster.show({
           message: `Could not remove password store: ${error.message}`,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down',
+          icon: 'thumbs-down',
         });
       });
   }

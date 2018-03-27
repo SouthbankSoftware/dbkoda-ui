@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T13:17:29+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T10:32:35+11:00
+ * @Last modified time: 2018-03-22T20:32:57+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -77,7 +77,8 @@ export type WidgetState = {
   useHighWaterMark?: *,
   showAlarms?: *,
   alarms?: IObservableArray<Alarm>,
-  infoWidget?: boolean
+  infoWidget?: boolean,
+  colorList?: *
 };
 
 export default class WidgetApi {
@@ -123,7 +124,8 @@ export default class WidgetApi {
       profileId,
       type,
       items,
-      values: observable.shallowArray(),
+      // $FlowFixMe
+      values: observable.array(null, { deep: false }),
       state: 'loading',
       errorLevel: null,
       error: null,
@@ -131,9 +133,11 @@ export default class WidgetApi {
       ...extraState
     };
 
-    widget.showAlarms && (widget.alarms = observable.shallowArray());
+    // $FlowFixMe
+    widget.showAlarms && (widget.alarms = observable.array(null, { deep: false }));
 
-    widgets.set(id, observable.shallowObject(widget));
+    // $FlowFixMe
+    widgets.set(id, observable.object(widget, null, { deep: false }));
 
     return id;
   }

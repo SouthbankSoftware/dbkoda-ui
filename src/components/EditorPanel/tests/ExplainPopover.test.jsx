@@ -3,7 +3,7 @@
  * @Date:   2017-03-14 15:54:01
  * @Email:  mike@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2017-11-21T16:19:28+11:00
+ * @Last modified time: 2018-03-22T20:40:14+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,7 +27,7 @@
 import React from 'react';
 import '~/helpers/configEnzyme';
 import { mount } from 'enzyme';
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 import Store from '~/stores/global';
 import globalizeInit from '#/tests/helpers/globalize.js';
 import { expect } from 'chai';
@@ -38,7 +38,7 @@ describe('Explain Toolbar Test', () => {
   let store;
 
   beforeAll(() => {
-    useStrict(false);
+    configure({ enforceActions: true });
     globalizeInit();
     store = new Store();
     app = mount(
@@ -47,6 +47,6 @@ describe('Explain Toolbar Test', () => {
   });
 
   test('has explain menu items', () => {
-    expect(app.find('.explainPopover')).to.have.length(2);
+    expect(app.find('.explainPopover')).to.have.length(3);
   });
 });

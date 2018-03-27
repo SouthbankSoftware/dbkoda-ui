@@ -1,275 +1,337 @@
-@import '../../styles/_defaultTheme.scss';
+@import "../../styles/_defaultTheme.scss";
+
 div.statusPanel {
-  display: flex;
-  flex-direction: row;
-  div.float_left {
-    display: flex;
-    justify-content: flex-start;
-    flex-grow: 1;
-    order: 1;
-    padding-left: 10px;
-    div.leftDiv {
-      background: unset;
-      color: $defaultFontColor;
-      border: none;
-      border-radius: 0px;
-      background-color: $navbarLeftBackground;
-      width: 30px;
-      padding-left: 7px;
-    }
-    .drillDownload {
-      border-left: 1px solid rgba(154, 154, 155, 0.4);
-      padding-left: 4px;
-      margin-left: 10px;
-      width: 300px;
-      height: 20px;
-      display: flex;
-      flex-direction: row;
-      .dialogContent {
-        padding-left: 10px;
-        padding-top: 4px;
-        width: 300px;
-        height: 20px;
-        display: flex;
-        flex-direction: row;
-        p {
-          padding-left: 15px;
-        }
-        div.pt-progress-bar {
-        }
-        div.LoadingView {
-          width: 14px;
-          height: 14px;
-          div.Spinner {
-            margin-left: 0px;
-            margin-top: -5px;
-            width: 14px;
-            height: 14px;
-            border: 4px solid rgba(154, 154, 155, 0.4);
-            border-top: 4px solid rgba(154, 154, 155, 0.8);
-          }
-        }
-      }
-    }
-    div.updateButton {
-      margin-left: 10px;
-      width: 50%;
-    }
-    div.updateGreen {
-      color: mediumseagreen;
-      span {
-        cursor: pointer;
-      }
-    }
-    .open-profile-alert-dialog {
-      order: 3;
-      width: 500px;
-      .dialogContent {
-        p {
-        }
-        input[type='password'] {
-          padding: 15px;
-        }
-      }
-    }
-  }
-  div.float_right {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
-    flex-grow: 1;
-    order: 2;
-    div {
-      background: unset;
-      color: $defaultFontColor;
-      border-left: 1px solid $welcomeViewDividerTransparent;
-      background-color: $navbarLeftBackground;
-      width: 30px;
-      padding-left: 7px;
-      svg {
-        height: 16px;
-        width: 16px;
-        padding-top: 2px;
-        color: $defaultFontColor;
-        fill: $defaultFontColor;
-        path.p1 {
-          fill: $defaultFontColor;
+
+    div.float_left {
+        display: flex;
+        justify-content: flex-start;
+        flex-grow: 1;
+        order: 1;
+        padding-left: 10px;
+
+        div.leftDiv {
+            background: unset;
+            color: $defaultFontColor;
+            border: none;
+            border-radius: 0px;
+            background-color: $navbarLeftBackground;
+            width: 30px;
+            padding-left: 7px;
         }
-      }
-    }
-    div:hover {
-      background-color: $navbarLeftBackgroundSecondary;
-      svg {
-        path.p1 {
-          fill: white;
+
+        .drillDownload {
+            border-left: 1px solid rgba(154, 154, 155, 0.4);
+            padding-left: 4px;
+            margin-left: 10px;
+            width: 300px;
+            height: 20px;
+            display: flex;
+            flex-direction: row;
+
+            .dialogContent {
+                padding-left: 10px;
+                padding-top: 4px;
+                width: 300px;
+                height: 20px;
+                display: flex;
+                flex-direction: row;
+
+                p {
+                    padding-left: 15px;
+                }
+
+                div.pt-progress-bar {}
+
+                div.LoadingView {
+                    width: 14px;
+                    height: 14px;
+
+                    div.Spinner {
+                        margin-left: 0px;
+                        margin-top: -5px;
+                        width: 14px;
+                        height: 14px;
+                        border: 4px solid rgba(154, 154, 155, 0.4);
+                        border-top: 4px solid rgba(154, 154, 155, 0.8);
+                    }
+                }
+            }
         }
-      }
+
+        div.updateButton {
+            margin-left: 10px;
+            width: 50%;
+        }
+
+        div.updateGreen {
+            color: mediumseagreen;
+
+            span {
+                cursor: pointer;
+            }
+        }
+
+        .open-profile-alert-dialog {
+            order: 3;
+            width: 500px;
+
+            .dialogContent {
+                p {}
+
+                input[type='password'] {
+                    padding: 15px;
+                }
+            }
+        }
     }
-    div.feedbackButton {
+
+    div.float_right {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        flex-grow: 1;
+        order: 2;
+
+        div {
+            background: unset;
+            color: $defaultFontColor;
+            border-left: 1px solid $welcomeViewDividerTransparent;
+            background-color: $navbarLeftBackground;
+            width: 30px;
+            padding-left: 7px;
+
+            svg {
+                height: 16px;
+                width: 16px;
+                padding-top: 2px;
+                color: $defaultFontColor;
+                fill: $defaultFontColor;
+
+                path.p1 {
+                    fill: $defaultFontColor;
+                }
+            }
+        }
+
+        div:hover {
+            background-color: $navbarLeftBackgroundSecondary;
+
+            svg {
+                path.p1 {
+                    fill: white;
+                }
+            }
+        }
+
+        div.feedbackButton {}
+
+        div.lodgeBugButton {}
+
+        .executionTime {
+            margin-top: 2px;
+            color: #bfbec0;
+            display: flex;
+            margin-left: 10px;
+            margin-right: 5px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: lighter;
+            width: unset;
+            border-left: none;
+            opacity: 0.8;
+
+            .label {
+                margin-right: 4px;
+            }
+
+            .value {
+                font-size: 12px;
+            }
+        }
     }
-    div.lodgeBugButton {
-    }
-  }
 }
 
 .pt-alert.lodgeBugAlert {
-  div.pt-alert-body {
-    div.pt-alert-contents {
-      margin-bottom: 30px;
-      div.supportBundleFinished {
-        p.supportBundleFinishedText {
-          font-weight: 100;
-          b {
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: underline;
-          }
-        }
-        a.pt-button {
-          margin-right: 10px;
-          font-weight: lighter !important;
-          color: $white !important;
-          width: 7em !important;
-          background-image: unset !important;
-          background-color: $panelLeftBackground !important;
-          border: 1px solid $dialogButtonBorder !important;
-          box-shadow: unset !important;
-        }
-        a.pt-button:hover {
-          background-color: $connectionButtonBackgroundColourHover !important;
-          color: $connectionButtonFontColourHover !important;
-        }
-      }
-    }
-  }
-  div.pt-alert-footer {
-    button {
-      border: unset !important;
-      color: $white !important;
-      background-color: $connectionButtonBackgroundColourReset !important;
-    }
-    button:hover {
-      background-color: $connectionButtonBackgroundColourResetHover !important;
-    }
-    button:nth-child(1) {
-      border: unset !important;
-      color: $white !important;
-      background-color: $connectionButtonBackgroundColourConnect !important;
-    }
-    button:hover:nth-child(1) {
-      background-color: $connectionButtonBackgroundColourConnectHover !important;
-    }
-  }
-  color: $defaultFontColor;
-  div.loaderWrapper {
-    width: 100%;
-    height: 200px;
-    margin-top: -100px;
-    div.loader {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin-top: -50px;
-      margin-left: -50px;
-      border: 16px solid $treeLoaderColorBG;
-      border-top: 16px solid $treeLoaderColor;
-      border-radius: 50%;
-      width: 100px;
-      height: 100px;
-      order: 1;
-      position: relative;
-      animation: spin 2s linear infinite;
-    }
-  }
+    div.pt-alert-body {
+        div.pt-alert-contents {
+            margin-bottom: 30px;
 
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
+            div.supportBundleFinished {
+                p.supportBundleFinishedText {
+                    font-weight: 100;
+
+                    b {
+                        font-weight: bold;
+                        cursor: pointer;
+                        text-decoration: underline;
+                    }
+                }
+
+                a.pt-button {
+                    margin-right: 10px;
+                    font-weight: lighter !important;
+                    color: $white !important;
+                    width: 7em !important;
+                    background-image: unset !important;
+                    background-color: $panelLeftBackground !important;
+                    border: 1px solid $dialogButtonBorder !important;
+                    box-shadow: unset !important;
+                }
+
+                a.pt-button:hover {
+                    background-color: $connectionButtonBackgroundColourHover !important;
+                    color: $connectionButtonFontColourHover !important;
+                }
+            }
+        }
     }
 
-    100% {
-      transform: rotate(360deg);
+    div.pt-alert-footer {
+        button {
+            border: unset !important;
+            color: $white !important;
+            background-color: $connectionButtonBackgroundColourReset !important;
+        }
+
+        button:hover {
+            background-color: $connectionButtonBackgroundColourResetHover !important;
+        }
+
+        button:nth-child(1) {
+            border: unset !important;
+            color: $white !important;
+            background-color: $connectionButtonBackgroundColourConnect !important;
+        }
+
+        button:hover:nth-child(1) {
+            background-color: $connectionButtonBackgroundColourConnectHover !important;
+        }
     }
-  }
+
+    color: $defaultFontColor;
+
+    div.loaderWrapper {
+        width: 100%;
+        height: 200px;
+        margin-top: -100px;
+
+        div.loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -50px;
+            margin-left: -50px;
+            border: 16px solid $treeLoaderColorBG;
+            border-top: 16px solid $treeLoaderColor;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            order: 1;
+            position: relative;
+            animation: spin 2s linear infinite;
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 }
 
 .pt-alert.feedbackAlert {
-  color: $defaultFontColor;
-  div.pt-alert-body {
-    div.pt-alert-contents {
-      p {
-      }
-      div.additionalComments {
-        margin-bottom: 10px;
-        margin-top: 10px;
-      }
-      div.npsButtons {
-        display: flex;
-        flex-direction: row;
-        div {
-          margin-right: 10px;
-          svg {
-            path.p1 {
-              fill: $defaultFontColor;
-            }
-          }
-        }
-        div.active {
-          svg {
-            path.p1 {
-              fill: $white;
-            }
-          }
-        }
-        div:hover {
-          svg {
-            path.p1 {
-              fill: white;
-            }
-          }
-        }
-      }
-    }
-  }
-  div.pt-alert-footer {
-    button {
-      border: unset !important;
-      color: $white !important;
-      background-color: $connectionButtonBackgroundColourConnect !important;
-    }
-    button:hover {
-      background-color: $connectionButtonBackgroundColourConnectHover !important;
-    }
-  }
-  .pt-editable-placeholder {
-    border-radius: 0.5em;
-    padding: 5px;
-    background-color: $navbarLeftBackground;
     color: $defaultFontColor;
-  }
 
-  .pt-editable-text {
-    border-radius: 0.5em;
-    padding: 5px;
-    background-color: $navbarLeftBackground;
-    color: $defaultFontColor;
-  }
+    div.pt-alert-body {
+        div.pt-alert-contents {
+            p {}
 
-  .pt-editable-editing {
-    border-radius: 0.5em;
-    padding: 5px;
-    background-color: $navbarLeftBackground;
-    color: $defaultFontColor;
-    .pt-editable-input {
-      background-color: $navbarLeftBackground !important;
-      color: $defaultFontColor !important;
-      height: 90% !important;
+            div.additionalComments {
+                margin-bottom: 10px;
+                margin-top: 10px;
+            }
+
+            div.npsButtons {
+                display: flex;
+                flex-direction: row;
+
+                div {
+                    margin-right: 10px;
+
+                    svg {
+                        path.p1 {
+                            fill: $defaultFontColor;
+                        }
+                    }
+                }
+
+                div.active {
+                    svg {
+                        path.p1 {
+                            fill: $white;
+                        }
+                    }
+                }
+
+                div:hover {
+                    svg {
+                        path.p1 {
+                            fill: white;
+                        }
+                    }
+                }
+            }
+        }
     }
-  }
 
-  .pt-editable-editing:before {
-    border: unset;
-    background: unset;
-    box-shadow: unset;
-  }
+    div.pt-alert-footer {
+        button {
+            border: unset !important;
+            color: $white !important;
+            background-color: $connectionButtonBackgroundColourConnect !important;
+        }
+
+        button:hover {
+            background-color: $connectionButtonBackgroundColourConnectHover !important;
+        }
+    }
+
+    .pt-editable-placeholder {
+        border-radius: 0.5em;
+        padding: 5px;
+        background-color: $navbarLeftBackground;
+        color: $defaultFontColor;
+    }
+
+    .pt-editable-text {
+        border-radius: 0.5em;
+        padding: 5px;
+        background-color: $navbarLeftBackground;
+        color: $defaultFontColor;
+    }
+
+    .pt-editable-editing {
+        border-radius: 0.5em;
+        padding: 5px;
+        background-color: $navbarLeftBackground;
+        color: $defaultFontColor;
+
+        .pt-editable-input {
+            background-color: $navbarLeftBackground !important;
+            color: $defaultFontColor !important;
+            height: 90% !important;
+        }
+    }
+
+    .pt-editable-editing:before {
+        border: unset;
+        background: unset;
+        box-shadow: unset;
+    }
 }

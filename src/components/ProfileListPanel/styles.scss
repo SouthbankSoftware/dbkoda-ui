@@ -1,4 +1,10 @@
-/*
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-03-26T15:12:11+11:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-26T15:23:26+11:00
+ *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
  *
@@ -18,242 +24,236 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @Author: Wahaj Shamim <wahaj>
-// @Date:   2017-05-29T15:22:41+10:00
-// @Email:  wahaj@southbanksoftware.com
-// @Last modified by:   wahaj
-// @Last modified time: 2017-08-28T12:38:52+10:00
-
 @import "../../styles/_defaultTheme.scss";
 
 .profileListPanel {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: $panelLeftBackground !important;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: $panelLeftBackground !important;
 
-    .closedProfile {
-        color: $profileListFontColor;
-        opacity: 0.5;
+  .closedProfile {
+    color: $profileListFontColor;
+    opacity: 0.5;
+  }
+
+  .profileListToolbar {
+    background-color: $navbarLeftBackground !important;
+
+    .pt-button {
+      background: $buttonSecondaryBackground !important;
+      color: $buttonSecondaryIcon !important;
+      border-radius: 50%;
+      margin-left: 5px;
+      margin-right: 5px;
+      position: relative;
+
+      svg.dbKodaSVG {
+        position: absolute;
+        top: 50%;
+        bottom: 50%;
+        width: 50%;
+        height: 50%;
+        transform: translate(-80%, -50%);
+        fill: $buttonSecondaryIcon;
+      }
     }
 
-    .profileListToolbar {
-        background-color: $navbarLeftBackground !important;
-
-        .pt-button {
-            background: $buttonSecondaryBackground !important;
-            color: $buttonSecondaryIcon !important;
-            border-radius: 50%;
-            margin-left: 5px;
-            margin-right: 5px;
-            position: relative;
-
-            svg.dbKodaSVG {
-                position: absolute;
-                top: 50%;
-                bottom: 50%;
-                width: 50%;
-                height: 50%;
-                transform: translate(-50%, -50%);
-                fill: $buttonSecondaryIcon;
-            }
-        }
-
-        .pt-button:hover {
-            background: $buttonSecondaryBackgroundHover !important;
-        }
-
-        .pt-button.dangerButton {
-            background: $buttonDangerBackground !important;
-        }
-
-        .pt-button.dangerButton:hover {
-            background: $buttonDangerBackgroundHover !important;
-        }
-
-        .pt-button.pt-disabled:hover {
-            background: $buttonSecondaryBackground !important;
-        }
-
-        .pt-button.pt-disabled.dangerButton:hover {
-            background: $buttonDangerBackground !important;
-        }
+    .pt-button:hover {
+      background: $buttonSecondaryBackgroundHover !important;
     }
 
-    .profileList {
-        flex-grow: 1;
-        overflow-y: scroll;
+    .pt-button.dangerButton {
+      background: $buttonDangerBackground !important;
+    }
 
-        .bp-table-quadrant {
-            background-color: $panelLeftBackground;
-        }
+    .pt-button.dangerButton:hover {
+      background: $buttonDangerBackgroundHover !important;
+    }
 
-        .bp-table-quadrant-scroll-container {
+    .pt-button.pt-disabled:hover {
+      background: $buttonSecondaryBackground !important;
+    }
+
+    .pt-button.pt-disabled.dangerButton:hover {
+      background: $buttonDangerBackground !important;
+    }
+  }
+
+  .profileList {
+    flex-grow: 1;
+    overflow-y: scroll;
+
+    .pt-table-quadrant {
+      background-color: $panelLeftBackground;
+    }
+
+    .pt-table-quadrant-scroll-container {
+      background-color: rgba(0, 0, 0, 0) !important;
+    }
+
+    .pt-table-quadrant-top {
+      display: none;
+    }
+
+    .pt-table-bottom-container {
+      width: 100% !important;
+
+      .pt-table-quadrant-body-container {
+        width: 100% !important;
+        background-color: rgba(0, 0, 0, 0) !important;
+
+        div {
+          width: 100% !important;
+
+          .pt-table-body-virtual-client {
+            width: 100% !important;
             background-color: rgba(0, 0, 0, 0) !important;
-        }
-
-        .bp-table-quadrant-top {
-            display: none;
-        }
-
-        .bp-table-bottom-container {
             width: 100% !important;
 
-            .bp-table-quadrant-body-container {
+            .pt-table-body-cells {
+              width: 100% !important;
+              background-color: rgba(0, 0, 0, 0) !important;
+
+              .pt-table-cell {
+                background-color: rgba(0, 0, 0, 0);
                 width: 100% !important;
-                background-color: rgba(0, 0, 0, 0) !important;
+              }
 
-                div {
-                    width: 100% !important;
+              .pt-table-cell:hover {
+                background-color: $profileListTabHover;
+              }
 
-                    .bp-table-body-virtual-client {
-                        width: 100% !important;
-                        background-color: rgba(0, 0, 0, 0) !important;
-                        width: 100% !important;
+              .pt-table-cell-selected {
+                background-color: $profileListSelected !important;
+                outline: none !important;
 
-                        .bp-table-body-cells {
-                            width: 100% !important;
-                            background-color: rgba(0, 0, 0, 0) !important;
-
-                            .bp-table-cell {
-                                background-color: rgba(0, 0, 0, 0);
-                                width: 100% !important;
-                            }
-
-                            .bp-table-cell:hover {
-                                background-color: $profileListTabHover;
-                            }
-
-                            .bp-table-cell-selected {
-                                background-color: $profileListSelected !important;
-                                outline: none !important;
-
-                                .profileListing {
-                                    color: #fff;
-                                }
-
-                                .closedProfile {
-                                    font-style: italic !important;
-                                }
-                            }
-
-                            .bp-table-cell-selected:hover {
-                                background-color: $profileListSelected !important;
-                            }
-                        }
-                    }
+                .profileListing {
+                  color: #fff;
                 }
+
+                .closedProfile {
+                  font-style: italic !important;
+                }
+              }
+
+              .pt-table-cell-selected:hover {
+                background-color: $profileListSelected !important;
+              }
             }
+          }
         }
+      }
     }
+  }
 
-    svg.dbKodaLogo {
-        opacity: 0.03;
-        position: absolute;
-        left: calc(50% - 100px);
-        top: calc(50% - 100px);
-        width: 200px;
-        height: 200px;
+  svg.dbKodaLogo {
+    opacity: 0.03;
+    position: absolute;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    width: 200px;
+    height: 200px;
 
-        path.st0 {
-            fill: none;
-        }
+    path.st0 {
+      fill: none;
     }
+  }
 
-    .bp-table-top-container {
-        display: none;
+  .pt-table-top-container {
+    display: none;
+  }
+
+  .pt-table-container {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0) !important;
+  }
+
+  .pt-table-cell {
+    .pt-table-truncated-text {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      line-height: 60px;
+
+      svg.dbKodaSVG {
+        stroke: $buttonSecondaryIcon;
+        stroke-width: 4px;
+        width: 3.5em;
+        height: 3.5em;
+        margin-top: 1em;
+        margin-right: 1em;
+        border-radius: 50%;
+        padding: 3px;
+        fill: $buttonSecondaryIcon;
+      }
+
+      .profileListing {
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: normal !important;
+        letter-spacing: 0px;
+        font-size: 15px;
+      }
+
+      .profileListing::before {
+        margin-right: 10px;
+        color: $profileListIconColor;
+      }
     }
+  }
 
-    .bp-table-container {
-        outline: none;
-        background-color: rgba(0, 0, 0, 0) !important;
+  .pt-table-cell:hover {
+    background-color: $profileListTabHover !important;
+  }
+
+  .connection-profile-cell {
+    .profileListing {}
+
+    .closedProfile {
+      font-style: italic !important;
     }
+  }
 
-    .bp-table-cell {
-        .bp-table-truncated-text {
-            height: 100%;
-            display: flex;
-            flex-direction: row;
-            line-height: 60px;
-
-            svg.dbKodaSVG {
-                stroke: $buttonSecondaryIcon;
-                stroke-width: 4px;
-                width: 3.5em;
-                height: 3.5em;
-                margin-top: 1em;
-                margin-right: 1em;
-                border-radius: 50%;
-                padding: 3px;
-                fill: $buttonSecondaryIcon;
-            }
-
-            .profileListing {
-                font-family: Arial, Helvetica, sans-serif;
-                font-style: normal !important;
-                letter-spacing: 0px;
-                font-size: 15px;
-            }
-
-            .profileListing::before {
-                margin-right: 10px;
-                color: $profileListIconColor;
-            }
-        }
-    }
-
-    .bp-table-cell:hover {
-        background-color: $profileListTabHover !important;
-    }
-
-    .connection-profile-cell {
-        .profileListing {}
-
-        .closedProfile {
-            font-style: italic !important;
-        }
-    }
-
-    .bp-table-selection-region {
-        border: none;
-        background-color: rgba(0, 0, 0, 0);
-    }
+  .pt-table-selection-region {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+  }
 }
 
 ul.profileListContextMenu {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    div.contextMenuGroup {
-        div.menuItemWrapper {
-            display: flex;
-            flex-direction: row;
-
-            li {}
-        }
-    }
-
+  div.contextMenuGroup {
     div.menuItemWrapper {
-        display: flex;
-        flex-direction: row;
+      display: flex;
+      flex-direction: row;
 
-        li {}
+      li {}
     }
+  }
+
+  div.menuItemWrapper {
+    display: flex;
+    flex-direction: row;
+
+    li {}
+  }
 }
 
 .connection-profile-cell-selected {
-    background-color: $profileListSelected !important;
-    outline: none !important;
+  background-color: $profileListSelected !important;
+  outline: none !important;
 
-    .profileListing {
-        color: #fff;
-    }
+  .profileListing {
+    color: #fff;
+  }
 
-    .closedProfile {
-        font-style: italic !important;
-    }
+  .closedProfile {
+    font-style: italic !important;
+  }
 
-    div {
-        svg {}
-    }
+  div {
+    svg {}
+  }
 }

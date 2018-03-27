@@ -3,7 +3,7 @@
  * @Date:   2017-07-31T13:06:24+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-02T00:39:52+11:00
+ * @Last modified time: 2018-03-22T15:36:38+11:00
  */
 
 import { action, observable, runInAction } from 'mobx';
@@ -68,18 +68,14 @@ export default class ProfileApi {
     // this.profileList = store.profileList;
 
     this.setToasterCallback = this.setToasterCallback.bind(this);
-    this.validateConnectionFormData = this.validateConnectionFormData.bind(
-      this
-    );
+    this.validateConnectionFormData = this.validateConnectionFormData.bind(this);
     this.connectProfile = this.connectProfile.bind(this);
     this.onFail = this.onFail.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.saveProfile = this.saveProfile.bind(this);
   }
 
-  setToasterCallback(
-    callBack: (strErrorCode: String, err: Error | null) => void
-  ) {
+  setToasterCallback(callBack: (strErrorCode: String, err: Error | null) => void) {
     this.toasterCallback = callBack;
   }
 
@@ -160,8 +156,7 @@ export default class ProfileApi {
       };
 
       if (data.sshTunnel) {
-        connectionUrl =
-          ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+        connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
       }
       if (data.passRadio) {
         query.remotePass = data.remotePass;
@@ -345,10 +340,7 @@ export default class ProfileApi {
       }
 
       this.api.hasPerformancePanel(profile.id) &&
-        this.api.transformPerformancePanel(
-          profile.id,
-          performancePanelStatuses.background
-        );
+        this.api.transformPerformancePanel(profile.id, performancePanelStatuses.background);
     }
     this.toasterCallback && this.toasterCallback('connectionSuccess');
   }
@@ -395,28 +387,31 @@ export default class ProfileApi {
       const doc = StaticApi.createNewDocumentObject(content);
       doc.lineSep = StaticApi.determineEol(content);
 
-      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(
-        EditorTypes.DEFAULT
-      );
+      const fileName = this.api.editorApi.getUnsavedEditorInternalFileName(EditorTypes.DEFAULT);
       const editorId = uuidV1();
       editors.set(
         editorId,
-        observable({
-          id: editorId,
-          alias: profile.alias,
-          profileId: profile.id,
-          shellId: profile.shellId,
-          currentProfile: profile.id,
-          fileName,
-          visible: true,
-          executing: false,
-          shellVersion: profile.shellVersion,
-          initialMsg: profile.initialMsg,
-          doc: observable.ref(doc),
-          status: profile.status,
-          path: null,
-          type: EditorTypes.DEFAULT
-        })
+        observable(
+          {
+            id: editorId,
+            alias: profile.alias,
+            profileId: profile.id,
+            shellId: profile.shellId,
+            currentProfile: profile.id,
+            fileName,
+            visible: true,
+            executing: false,
+            shellVersion: profile.shellVersion,
+            initialMsg: profile.initialMsg,
+            doc,
+            status: profile.status,
+            path: null,
+            type: EditorTypes.DEFAULT
+          },
+          {
+            doc: observable.ref
+          }
+        )
       );
       if (this.api) {
         this.api.addOutput(this.store.editors.get(editorId));

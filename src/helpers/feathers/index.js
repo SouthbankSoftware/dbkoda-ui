@@ -1,6 +1,6 @@
 /**
  * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T10:51:27+11:00
+ * @Last modified time: 2018-03-27T11:05:05+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -43,27 +43,34 @@ class FeatherClient {
     this.osService = this.feathers.service('/os-execution');
     this.performanceSrv = this.feathers.service('/performance');
 
-    this.shellService.on('shell-output', (output) => {
+    // @Mike TODO - Move these service assignments so that the broker events are triggered every time. Maybe we can listen on the events rather than the service calls for telemetry.
+    this.shellService.on('shell-output', output => {
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
       Broker.emit(EventType.SHELL_OUTPUT_AVAILABLE, output);
     });
-    this.shellService.on('mongo-execution-end', (output) => {
+    this.shellService.on('mongo-execution-end', output => {
       const { id, shellId } = output;
-      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
+      Broker.emit(
+        EventType.createShellExecutionFinishEvent(id, shellId),
+        output
+      );
     });
-    this.shellService.on('mongo-shell-reconnected', (output) => {
+    this.shellService.on('mongo-shell-reconnected', output => {
       const { id, shellId } = output;
       Broker.emit(EventType.createShellReconnectEvent(id, shellId), output);
     });
-    this.osService.on('os-command-output', (output) => {
+    this.osService.on('os-command-output', output => {
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
     });
-    this.osService.on('os-command-finish', (output) => {
+    this.osService.on('os-command-finish', output => {
       const { id, shellId } = output;
       Broker.emit(EventType.createShellOutputEvent(id, shellId), output);
-      Broker.emit(EventType.createShellExecutionFinishEvent(id, shellId), output);
+      Broker.emit(
+        EventType.createShellExecutionFinishEvent(id, shellId),
+        output
+      );
     });
 
     this.service('files').on('changed', ({ _id }) => {
@@ -91,19 +98,30 @@ class FeatherClient {
     });
 
     this.passwordService = this.service('master-pass');
-    this.passwordService.on(EventType.MASTER_PASSWORD_REQUIRED, ({ method }) => {
-      Broker.emit(EventType.MASTER_PASSWORD_REQUIRED, method);
-    });
+    this.passwordService.on(
+      EventType.MASTER_PASSWORD_REQUIRED,
+      ({ method }) => {
+        Broker.emit(EventType.MASTER_PASSWORD_REQUIRED, method);
+      }
+    );
     this.passwordService.on(EventType.PASSWORD_STORE_RESET, () => {
       Broker.emit(EventType.PASSWORD_STORE_RESET, {});
     });
 
-    this.performanceSrv.on('performance-output', ({output}) => {
+    this.performanceSrv.on('performance-output', ({ output }) => {
       console.log('get performance output ', output);
     });
 
     this.loggerService = this.service('logger');
     this.configService = this.service('config');
+
+    this.topConnectionsService = this.service('top-connections');
+    this.topConnectionsService.on('data', data => {
+      Broker.emit(EventType.TOP_CONNECTIONS_DATA, data);
+    });
+    this.topConnectionsService.on('error', data => {
+      Broker.emit(EventType.TOP_CONNECTIONS_ERROR, data);
+    });
   }
 
   service(service) {
@@ -128,10 +146,10 @@ export const featherClient = () => {
 
 let times = 0;
 const loadPrimus = () => {
-  load(url + '/dist/primus.js', (err) => {
+  load(url + '/dist/primus.js', err => {
     if (!err) {
       const primus = new window.Primus(url, {
-        strategy: ['online', 'timeout', 'disconnect'],
+        strategy: ['online', 'timeout', 'disconnect']
       });
       // remove native online/offline event so that when disconnected, ui is still connected to
       // controller. we may need to rethink this after we build our cloud solution

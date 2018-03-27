@@ -63,7 +63,7 @@ export default class Panel extends React.Component {
           }}
           text={globalString('profile/menu/newLocalTerminal')}
           intent={Intent.NONE}
-          iconName="pt-icon-new-text-box"
+          icon="pt-icon-new-text-box"
         />
       </div>
     );

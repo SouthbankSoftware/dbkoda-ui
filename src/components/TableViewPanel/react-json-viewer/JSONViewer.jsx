@@ -306,7 +306,7 @@ export default class JSONViewer extends Component {
     ContextMenu.show(
       <Menu>
         <MenuItem
-          iconName="search-around"
+          icon="search-around"
           text="Enhanced JSON View"
           onClick={() => this.props.openEnhancedJsonView(json)}
         />

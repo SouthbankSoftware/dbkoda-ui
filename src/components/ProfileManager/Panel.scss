@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-08T15:56:36+11:00
+ * @Last modified time: 2018-03-27T14:30:37+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -23,7 +23,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 @import '../../styles/_defaultTheme.scss';
 
 .ProfileManager {
@@ -46,10 +45,12 @@
       // Button Menu styling
       .menu-btns.pt-button-group {
         margin: 30px;
+
         button:focus {
           outline: none;
           box-shadow: unset !important;
         }
+
         .pt-button {
           border-radius: 7px !important;
           margin: 10px 5px 10px 5px !important;
@@ -62,22 +63,27 @@
           font-weight: 100;
           line-height: 30px;
         }
+
         .btn-basic.pt-active {
           background-color: #749BA4;
           border-color: #749BA4;
         }
+
         .btn-cluster.pt-active {
           background-color: #77688A;
           border-color: #77688A;
         }
+
         .btn-advanced.pt-active {
           background-color: #5F92C8;
           border-color: #5F92C8;
         }
+
         .btn-url.pt-active {
           background-color: #C86B5E;
           border-color: #C86B5E;
         }
+
         .btn-ssh.pt-active {
           background-color: #A3C084;
           border-color: #A3C084;
@@ -93,14 +99,15 @@
 
   .tips-field {
     .tips-heading {
-      margin: 80px 30px 10px 30px;
+      margin: 80px 30px 10px;
       color: $connectionButtonFontColour;
     }
+
     div.pt-card {
-      margin: 10px 30px 0px 30px;
+      margin: 10px 30px 0;
       color: $connectionButtonFontColour;
       background-color: $panelLeftBackground;
-      border-radius: 0px;
+      border-radius: 0;
       height: 300px;
     }
     @media (max-height: 730px) {
@@ -108,28 +115,34 @@
         height: 250px;
       }
     }
+
     div.profile-button-panel {
-      margin: 0px 30px 0px 30px !important;
+      margin: 0 30px 0 30px !important;
       justify-content: space-between !important;
       background-color: darken($panelLeftBackground, 2);
+
       .pt-button {
         width: 50px !important;
         height: 50px !important;
         margin: 7px;
         border-style: none;
-        border-radius: 0px;
+        border-radius: 0;
         background-color: darken($connectionButtonBackgroundColour, 2);
+
         &:before {
           font-size: 30px;
         }
       }
+
       button:focus {
         outline: none;
         box-shadow: unset !important;
       }
+
       .pt-icon-chevron-left {
         border-right: 1px solid lighten($connectionButtonBackgroundColour, 10);
       }
+
       .pt-icon-chevron-right {
         border-left: 1px solid lighten($connectionButtonBackgroundColour, 10);
       }
@@ -138,21 +151,24 @@
 
   .react-grid-layout {
     position: absolute;
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
   }
+
   .react-grid-item {
     background: darken($panelLeftBackground, 5);
     border-right: 1px solid lighten($panelLeftBackground, 10);
   }
+
   .react-grid-item:first-child {
     background: darken($panelLeftBackground, 5);
     border: none;
   }
+
   .no-border {
     border: none;
-
   }
+
   .minus-one-z-index {
     z-index: -1;
   }
@@ -167,7 +183,7 @@
     height: 20px;
     bottom: 0;
     right: 0;
-    background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=');
+    background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=");
     background-position: bottom right;
     padding: 0 3px 3px 0;
     background-repeat: no-repeat;
@@ -214,17 +230,13 @@
       height: 80px;
     }
   }
-
-
-
   // Dynamic Form styling
-
   div > form {
-    margin: 90px 30px 30px 30px;
+    margin: 90px 30px 30px;
   }
   @media (max-width: 1140px) {
     div > form {
-      margin: 90px 20px 30px 20px;
+      margin: 90px 20px 30px;
     }
   }
 
@@ -235,27 +247,31 @@
     background: unset;
     color: $connectionActiveTextFieldTextColour !important;
   }
+
   input[type='text']:focus,
   input[type='number']:focus,
   input[type='Numeric']:focus,
   input[type='password']:focus {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
-    border-radius: 0px;
+    border-radius: 0;
   }
+
   input[type='Numeric'] {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     border-top-left-radius: 0.4em !important;
-    border-top-right-radius: 0em !important;
+    border-top-right-radius: 0 !important;
     border-bottom-left-radius: 0.4em !important;
-    border-bottom-right-radius: 0em !important;
+    border-bottom-right-radius: 0 !important;
   }
+
   input[type='Numeric']:focus {
     border-top-left-radius: 0.4em !important;
-    border-top-right-radius: 0em !important;
+    border-top-right-radius: 0 !important;
     border-bottom-left-radius: 0.4em !important;
-    border-bottom-right-radius: 0em !important;
+    border-bottom-right-radius: 0 !important;
   }
+
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -278,7 +294,7 @@
 
   .form-title {
     text-align: center;
-    margin: 35px 10px 35px 10px;
+    margin: 35px 10px;
     color: $fieldHeadingFontColor;
     font-size: 16px;
   }
@@ -309,7 +325,7 @@
     .pt-select {
       width: 100%;
       min-width: 200px;
-      border-radius: 0px;
+      border-radius: 0;
       border-style: none;
       box-shadow: none;
       // background-color: $fieldBrightBackgroundColor !important;
@@ -320,40 +336,44 @@
       width: calc(100% - 80px);
       min-width: 120px;
     }
+
     .pt-file-button {
       width: 80px;
-      border-radius: 0px;
+      border-radius: 0;
     }
 
     .pt-numeric-input {
       .pt-input-group {
         width: 100%;
       }
+
       .pt-button-group {
         z-index: 100;
         position: absolute;
         right: 0;
-        border-left: 1px solid $defaultFontColor;
-        .pt-icon-chevron-up,
-        .pt-icon-chevron-down {
+
+        .pt-icon-chevron-down,
+        .pt-icon-chevron-up {
           background: unset !important;
           box-shadow: none !important;
           background-color: $white !important;
           color: $defaultFontColor !important;
-          border-radius: 0px !important;
+          border-radius: 0 !important;
         }
-        .pt-icon-chevron-up::before,
-        .pt-icon-chevron-down::before {
+
+        .pt-icon-chevron-down::before,
+        .pt-icon-chevron-up::before {
           color: $defaultFontColor !important;
         }
-        .pt-icon-chevron-up {
-        }
-        .pt-icon-chevron-down {
-        }
+
+        .pt-icon-chevron-up {}
+
+        .pt-icon-chevron-down {}
       }
+
       .pt-input {
         width: 100%;
-        min-width: 0px;
+        min-width: 0;
       }
     }
 
@@ -362,6 +382,7 @@
         .pt-icon-chevron-up {
           background-color: $connectionActiveTextFieldBackgroundColour !important;
         }
+
         .pt-icon-chevron-down {
           background-color: $connectionActiveTextFieldBackgroundColour !important;
         }
@@ -372,12 +393,14 @@
       width: 100%;
     }
   }
+
   .groupFieldSet {
-    margin: 0px -15px 15px -15px;
+    margin: 0 -15px 15px;
     border-style: none;
     background-color: $fieldGroupPrimaryBackground;
+
     .pt-form-group {
-      margin: 0px 5px 15px 5px;
+      margin: 0 5px 15px;
     }
   }
 
@@ -395,16 +418,19 @@
         background: unset !important;
         background-color: $fieldGroupHeaderIcon !important;
       }
+
       .pt-icon-add:hover {
         background-color: #272a3a !important;
       }
 
       .pt-icon-trash {
         background-color: $fieldGroupHeaderDangerIcon !important;
+
         :hover {
           background-color: #a5535e !important;
         }
       }
+
       .pt-icon-trash:hover::before {
         color: $white !important;
       }
@@ -422,6 +448,7 @@
         margin: 0;
         background: unset !important;
       }
+
       .pt-icon-delete:hover::before {
         color: $white !important;
       }
@@ -432,8 +459,8 @@
       margin: 2px 0;
 
       .pt-input,
-      .pt-select,
-      .pt-numeric-input {
+      .pt-numeric-input,
+      .pt-select {
         width: 40%;
         min-width: 95px;
       }
@@ -445,18 +472,21 @@
         padding: 0;
       }
     }
+
     div.columns-2-max {
       div.pt-form-group {
         width: 44%;
         padding: 0;
       }
     }
+
     div.columns-3-max {
       div.pt-form-group {
         width: 30%;
         padding: 0;
       }
     }
+
     div.columns-4-max {
       div.pt-form-group {
         width: 20%;
@@ -464,6 +494,7 @@
       }
     }
   }
+
   .form-button-panel {
     position: absolute;
     bottom: 0;
@@ -472,29 +503,36 @@
 
     button {
       background: none;
-      border-radius: 0px;
+      border-radius: 0;
       position: right;
     }
+
     button:focus {
       outline: none;
     }
+
     .pt-intent-success {
       background-color: $connectionButtonBackgroundColourConnect;
       color: $fieldPrimaryButtonFontColor;
     }
+
     .pt-intent-success:hover {
       background-color: $connectionButtonBackgroundColourConnectHover;
     }
+
     .pt-intent-success:active {
       background-color: $fieldPrimaryButtonActive;
     }
+
     .pt-intent-primary {
       background-color: $fieldSecondaryButtonBackground;
       color: $fieldSecondaryButtonFontColor;
     }
+
     .pt-intent-primary:hover {
       background-color: $fieldSecondaryButtonHover;
     }
+
     .pt-intent-primary:active {
       background-color: $fieldSecondaryButtonActive;
     }
@@ -509,7 +547,7 @@
   .pt-select select {
     height: 30px;
     width: 100%;
-    border-radius: 0px;
+    border-radius: 0;
     border-style: none;
     background-color: $fieldBrightBackgroundColor !important;
     color: $fieldBrightFontColor !important;
@@ -518,12 +556,12 @@
   .pt-checkbox-form,
   .pt-form-content-reverse {
     // margin-top: 10px;
-
     .pt-checkbox {
       font-size: 10pt;
       font-weight: lighter;
       color: $connectionHeadingsFontColour !important;
       text-align: left;
+
       .pt-control-indicator {
         font-size: unset;
         font-weight: unset;
@@ -538,6 +576,7 @@
         background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
         border: 1px solid $connectionCheckboxColour;
       }
+
       .pt-control-indicator:hover {
         background-color: $connectionCheckboxBackgroundColourHover;
       }
@@ -593,6 +632,7 @@
     width: 100%;
     /*flex-direction: row-reverse;*/
   }
+
   .Select-control {
     height: 30px;
     border: none;
@@ -600,45 +640,56 @@
     color: $connectionActiveTextFieldTextColour !important;
     border-radius: 0.4em;
   }
+
   .Select-clear-zone {
     display: none;
   }
+
   .is-open > .Select-control {
     background-color: $connectionActiveTextFieldBackgroundColour !important;
     box-shadow: none !important;
   }
+
   .Select-menu-outer {
     z-index: 999 !important;
     position: absolute;
     max-height: 130px;
+
     .Select-menu {
       max-height: 130px;
     }
   }
-  .Select-placeholder,
-  .Select--single > .Select-control .Select-value {
+
+  .Select--single > .Select-control .Select-value,
+  .Select-placeholder {
     line-height: 30px;
   }
+
   .Select-input {
     height: 30px;
-    border-radius: 0px;
+    border-radius: 0;
   }
+
   .circleButton {
     background: none;
     background-color: $fieldGroupPrimaryBackground !important;
   }
+
   .circleButton:hover {
     background: none;
     background-color: $fieldGroupPrimaryBackground !important;
   }
+
   form.formButtons {
     margin: 30px;
   }
+
   div.profile-button-panel {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     margin-top: 20px;
+
     button.pt-button {
       font-weight: lighter;
       color: $connectionButtonFontColour;
@@ -647,14 +698,16 @@
       background-color: $connectionButtonBackgroundColour;
       border: 1px solid $connectionButtonBorderColour;
       box-shadow: unset;
-      margin: 0px 10px;
+      margin: 0 10px;
       border-radius: 7px;
       font-size: small;
     }
+
     button.pt-button:hover {
       background-color: $connectionButtonBackgroundColourHover;
       color: $connectionButtonFontColourHover;
     }
+
     button.reset-button {
       width: 7em !important;
       border-radius: 0;
@@ -664,10 +717,12 @@
       box-shadow: unset;
       border-radius: 7px;
     }
+
     button.reset-button:hover {
       background-color: $connectionButtonBackgroundColourResetHover;
       color: $connectionButtonFontColourHover;
     }
+
     button.connectButton {
       font-weight: lighter;
       color: #EEE;
@@ -679,6 +734,7 @@
       box-shadow: unset;
       border-radius: 7px;
     }
+
     button.connectButton:hover {
       background-color: $connectionButtonBackgroundColourConnectHover;
       color: $connectionButtonFontColourHover;

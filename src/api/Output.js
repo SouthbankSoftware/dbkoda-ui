@@ -4,8 +4,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-26T12:18:37+10:00
  * @Email:  wahaj@sout≈hbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2018-01-15T11:00:00+11:00
+ * @Last modified by:   guiguan
+ * @Last modified time: 2018-03-22T20:32:10+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,13 +27,9 @@
  */
 
 import _ from 'lodash';
-import { action, observable, runInAction, extendObservable } from 'mobx';
+import { action, observable, runInAction, set } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
-import {
-  EditorTypes,
-  ProfileStatus,
-  OutputToolbarContexts
-} from '#/common/Constants';
+import { EditorTypes, ProfileStatus, OutputToolbarContexts } from '#/common/Constants';
 import { NewToaster } from '#/common/Toaster';
 import { type ChartPanelStore } from '#/ChartPanel';
 import StaticApi from './static';
@@ -86,11 +82,7 @@ export default class OutputApi {
    * @param {Object} api -  The API object, for interacting with other API categories.
    * @param {Object} profileStore - The global profiles store, containing information about connection profiles.
    */
-  constructor(
-    store: Store,
-    api: {},
-    profileStore: { profiles: Map<string, Profile> }
-  ) {
+  constructor(store: Store, api: {}, profileStore: { profiles: Map<string, Profile> }) {
     this.store = store;
     this.api = api;
     this.profileStore = profileStore;
@@ -117,7 +109,7 @@ export default class OutputApi {
    * Iterates through each editor in the store and creates the appropriate outputs.
    */
   configureOutputs() {
-    this.store.editors.entries().map(editor => {
+    [...this.store.editors.entries()].map(editor => {
       if (editor[1].type == EditorTypes.DRILL) {
         this.addDrillOutput(editor[1]);
       } else {
@@ -138,13 +130,8 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (
-          editor.id != 'Default' &&
-          this.store.outputs.get(editor.id).output
-        ) {
-          this.store.outputs.get(editor.id).output += globalString(
-            'output/editor/restoreSession'
-          );
+        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
+          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
@@ -218,21 +205,12 @@ export default class OutputApi {
       EventType.createShellOutputEvent(oldId, oldShellId),
       this.outputAvailable
     );
-    Broker.removeListener(
-      EventType.createShellReconnectEvent(oldId, oldShellId),
-      this.onReconnect
-    );
+    Broker.removeListener(EventType.createShellReconnectEvent(oldId, oldShellId), this.onReconnect);
 
     this.outputHash[id + '|' + shellId] = outputId;
 
-    Broker.on(
-      EventType.createShellOutputEvent(id, shellId),
-      this.outputAvailable
-    );
-    Broker.on(
-      EventType.createShellReconnectEvent(id, shellId),
-      this.onReconnect
-    );
+    Broker.on(EventType.createShellOutputEvent(id, shellId), this.outputAvailable);
+    Broker.on(EventType.createShellReconnectEvent(id, shellId), this.onReconnect);
   }
 
   /**
@@ -295,17 +273,11 @@ export default class OutputApi {
       if (this.store.outputs.get(editor.id)) {
         this.store.outputs.get(editor.id).cannotShowMore = true;
         this.store.outputs.get(editor.id).showingMore = false;
-        if (
-          editor.id != 'Default' &&
-          this.store.outputs.get(editor.id).output
-        ) {
-          this.store.outputs.get(editor.id).output += globalString(
-            'output/editor/restoreSession'
-          );
+        if (editor.id != 'Default' && this.store.outputs.get(editor.id).output) {
+          this.store.outputs.get(editor.id).output += globalString('output/editor/restoreSession');
         }
       } else {
-        const outputJSON =
-          initialOutput != null ? initialOutput : { loading: 'isLoaded' };
+        const outputJSON = initialOutput != null ? initialOutput : { loading: 'isLoaded' };
         const editorTitle = editor.alias + ' (' + editor.fileName + ')';
         this.store.outputs.set(
           editor.id,
@@ -348,8 +320,7 @@ export default class OutputApi {
     const profile = this.profileStore.profiles.get(res.profileId);
     const strOutput = JSON.stringify(res.output, null, 2);
     const editor = this.store.editors.get(res.id);
-    const totalOutput =
-      this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
+    const totalOutput = this.store.outputs.get(res.id).output + editor.doc.lineSep + strOutput;
     if (profile && profile.status !== ProfileStatus.OPEN) {
       // the connection has been closed.
       return;
@@ -422,25 +393,9 @@ export default class OutputApi {
         runInAction(
           () => {
             NewToaster.show({
-              message:
-                globalString('output/editor/parseJsonError') +
-                error.substring(0, 50),
+              message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
               className: 'danger',
               icon: ''
-            });
-          },
-          error => {
-            runInAction(() => {
-              NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
-                className: 'danger',
-                icon: ''
-              });
-              this.outputPanel.currentTab = this.outputPanel.currentTab.split(
-                tabPrefix
-              )[1];
             });
           }
         );
@@ -466,8 +421,6 @@ export default class OutputApi {
     cm: {},
     singleLine: boolean
   ) {
-    const tabPrefix = 'TableView-';
-
     if (singleLine) {
       // Single line implemention
       StaticApi.parseShellJson(jsonStr).then(
@@ -484,25 +437,9 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 className: 'danger',
                 icon: ''
-              });
-            },
-            error => {
-              runInAction(() => {
-                NewToaster.show({
-                  message:
-                    globalString('output/editor/parseJsonError') +
-                    error.substring(0, 50),
-                  className: 'danger',
-                  icon: ''
-                });
-                this.outputPanel.currentTab = this.outputPanel.currentTab.split(
-                  tabPrefix
-                )[1];
               });
             }
           );
@@ -523,9 +460,7 @@ export default class OutputApi {
           runInAction(
             () => {
               NewToaster.show({
-                message:
-                  globalString('output/editor/parseJsonError') +
-                  error.substring(0, 50),
+                message: globalString('output/editor/parseJsonError') + error.substring(0, 50),
                 className: 'danger',
                 icon: ''
               });
@@ -534,21 +469,6 @@ export default class OutputApi {
                 firstLine: false,
                 lastLine: false
               };
-            },
-            // FIXME what does this second function mean?
-            error => {
-              runInAction(() => {
-                NewToaster.show({
-                  message:
-                    globalString('output/editor/parseJsonError') +
-                    error.substring(0, 50),
-                  className: 'danger',
-                  icon: ''
-                });
-                this.outputPanel.currentTab = this.outputPanel.currentTab.split(
-                  tabPrefix
-                )[1];
-              });
             }
           );
         }
@@ -604,12 +524,7 @@ export default class OutputApi {
    * @param {*} error
    */
   @action.bound
-  showChartPanel(
-    editorId: string,
-    data: Array<any>,
-    state: ComponentState,
-    error: ?string = null
-  ) {
+  showChartPanel(editorId: string, data: Array<any>, state: ComponentState, error: ?string = null) {
     const { outputs } = this.store;
     const output = outputs.get(editorId);
     const common = {
@@ -634,17 +549,16 @@ export default class OutputApi {
         showOtherInCenter: true
       });
 
-      extendObservable(output, {
-        chartPanel: observable.shallowObject(chartPanelStore)
+      set(output, {
+        // $FlowFixMe
+        chartPanel: observable.object(chartPanelStore, null, { deep: false })
       });
     } else {
       // re-entrant
       _.assign(output.chartPanel, common);
     }
 
-    this.outputPanel.currentTab = `${
-      OutputToolbarContexts.CHART_VIEW
-    }-${editorId}`;
+    this.outputPanel.currentTab = `${OutputToolbarContexts.CHART_VIEW}-${editorId}`;
   }
 
   /**
@@ -677,9 +591,7 @@ export default class OutputApi {
       format = OutputFileTypes.JSON;
     }
     const outputId =
-      context === OutputToolbarContexts.RAW
-        ? currentTab
-        : currentTab.replace(`${context}-`, '');
+      context === OutputToolbarContexts.RAW ? currentTab : currentTab.replace(`${context}-`, '');
     let output = '';
     switch (context) {
       case OutputToolbarContexts.RAW: {
@@ -688,20 +600,14 @@ export default class OutputApi {
       }
       case OutputToolbarContexts.TABLE_VIEW: {
         if (format === OutputFileTypes.JSON) {
-          output = JSON.stringify(
-            this.store.outputs.get(outputId).tableJson.json
-          );
+          output = JSON.stringify(this.store.outputs.get(outputId).tableJson.json);
         } else if (format === OutputFileTypes.CSV) {
-          output = StaticApi.convertJsonToCsv(
-            this.store.outputs.get(outputId).tableJson.json
-          );
+          output = StaticApi.convertJsonToCsv(this.store.outputs.get(outputId).tableJson.json);
         }
         break;
       }
       case OutputToolbarContexts.ENHANCED_VIEW: {
-        output = JSON.stringify(
-          this.store.outputs.get(outputId).enhancedJson.json
-        );
+        output = JSON.stringify(this.store.outputs.get(outputId).enhancedJson.json);
         break;
       }
       default:
@@ -739,10 +645,7 @@ export default class OutputApi {
   getOutputContext(): OutputToolbarContext {
     const { currentTab } = this.outputPanel;
     const tabString = currentTab.split('-')[0];
-    const validContext = _.findKey(
-      OutputToolbarContexts,
-      ctx => ctx === tabString
-    );
+    const validContext = _.findKey(OutputToolbarContexts, ctx => ctx === tabString);
     if (!validContext) {
       return OutputToolbarContexts.RAW;
     }

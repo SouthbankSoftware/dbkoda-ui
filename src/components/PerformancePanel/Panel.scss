@@ -27,212 +27,212 @@
 @import "../../styles/_defaultTheme.scss";
 
 .PerformancePanel {
-    background: #202020;
-    z-index: 20;
-    position: absolute;
-    width: 100%;
+  background: #202020;
+  z-index: 20;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-left: 10px;
+  line-height: 1;
+
+  .pt-button {
+    z-index: 1001;
+  }
+
+  .performance-status-panel {
     height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-left: 10px;
-    line-height: 1;
+    width: 100%;
+    z-index: 10;
+    .ssh-status-panel {
+      width: 14.50%;
+      height: 100%;
+      font-size: 24px;
+      color: #bfbec0;
+      background-color: #222222;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .ssh-status-text {
+        margin: auto;
+      }
+    }
+  }
 
-    .pt-button {
-        z-index: 1001;
+  .unresponsive {
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    opacity: 0.6;
+    background-color: #222222;
+    z-index: 10;
+
+    .unresponsiveText {
+      z-index: 11;
+      font-size: 24px;
+      color: #bfbec0;
+      top: 40%;
+      left: 10%;
+      width: 65%;
+      position: absolute;
+    }
+  }
+
+  .performanceNavBar {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: calc(100% + 2px);
+    height: 54px;
+    background-color: #474747;
+    color: #bfbec0;
+    left: -2px;
+    z-index: 1000;
+
+    .performanceTitleBar {
+      width: calc(100% + 2px);
+      height: 30px;
+      left: -2px;
+      display: flex;
+      flex-direction: row;
+
+      .title {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        flex-grow: 4;
+      }
+
+      .titleProfile {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        flex-grow: 4;
+      }
     }
 
-    .performance-status-panel {
-        height: 100%;
-        width: 100%;
-        z-index: 10;
-        .ssh-status-panel {
-            width: 14.50%;
-            height: 100%;
-            font-size: 24px;
-            color: #bfbec0;
-            background-color: #222222;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            .ssh-status-text {
-                margin: auto;
-            }
-        }
-    }
+    .performanceSubNavBar {
+      width: calc(100% + 2px);
+      height: 25px;
+      background-color: #313131;
+      left: -2px;
+      display: flex;
+      flex-direction: row;
 
-    .unresponsive {
+      .subtitle {
+        padding-top: 5px;
+        padding-left: 15px;
+        color: #8b8b8b;
+      }
+
+      .subtitle.mongo {
         position: absolute;
-        width: 120%;
-        height: 120%;
-        opacity: 0.6;
-        background-color: #222222;
-        z-index: 10;
+        color: #8b8b8b;
+        padding-left: 15px;
+        left: calc(15% + 5px);
+      }
+    }
+  }
 
-        .unresponsiveText {
-            z-index: 11;
-            font-size: 24px;
-            color: #bfbec0;
-            top: 40%;
-            left: 10%;
-            width: 65%;
-            position: absolute;
-        }
+  hr.osDivider {
+    position: absolute;
+    border: none;
+    border-right: 2px solid $performanceSectionDivider;
+    width: 1px;
+    left: 15%;
+    height: unset;
+    top: 5px;
+    bottom: 5px;
+  }
+
+  .react-grid-item {
+    background: #202020;
+  }
+
+  .react-grid-placeholder {
+    display: none;
+  }
+
+  .react-grid-item > .react-resizable-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    bottom: 0;
+    right: 0;
+    background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=");
+    background-position: bottom right;
+    padding: 0 3px 3px 0;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    box-sizing: border-box;
+    cursor: se-resize;
+  }
+
+  button.close-button {
+    background-color: unset;
+    background-image: unset;
+    align-self: flex-end;
+    box-shadow: unset !important;
+    font-size: 20pt;
+    font-weight: 100;
+    color: $connectionCloseIconColor;
+    margin-right: 5px;
+    margin-top: -2px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1001;
+  }
+
+  button.close-button:hover {
+    color: $connectionCloseIconHover;
+    background-color: unset;
+    background-image: unset;
+    box-shadow: unset;
+    border: unset;
+    border-radius: 50%;
+  }
+
+  .ResetButton {
+    align-self: center;
+    margin-right: 40px;
+    height: 22px;
+    border-bottom: unset;
+
+    button.reset-button {
+      font-weight: lighter;
+      font-size: small;
+      color: $connectionButtonFontColour;
+      width: 8em !important;
+      border-radius: 0;
+      background-image: unset;
+      background-color: #474747;
+      border: 1px solid $connectionButtonBorderColour;
+      box-shadow: unset;
+      height: 22px;
+      line-height: 10px;
+      min-height: 22px;
     }
 
-    .performanceNavBar {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        width: calc(100% + 2px);
-        height: 54px;
-        background-color: #474747;
-        color: #bfbec0;
-        left: -2px;
-        z-index: 1000;
-
-        .performanceTitleBar {
-            width: calc(100% + 2px);
-            height: 30px;
-            left: -2px;
-            display: flex;
-            flex-direction: row;
-
-            .title {
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-left: 15px;
-                flex-grow: 4;
-            }
-
-            .titleProfile {
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-left: 15px;
-                flex-grow: 4;
-            }
-        }
-
-        .performanceSubNavBar {
-            width: calc(100% + 2px);
-            height: 25px;
-            background-color: #313131;
-            left: -2px;
-            display: flex;
-            flex-direction: row;
-
-            .subtitle {
-                padding-top: 5px;
-                padding-left: 15px;
-                color: #8b8b8b;
-            }
-
-            .subtitle.mongo {
-                position: absolute;
-                color: #8b8b8b;
-                padding-left: 15px;
-                left: calc(15% + 5px);
-            }
-        }
+    button.reset-button:hover {
+      background-color: $connectionButtonBackgroundColourHover;
+      color: $connectionButtonFontColourHover;
     }
+  }
 
-    hr.osDivider {
-        position: absolute;
-        border: none;
-        border-right: 2px solid $performanceSectionDivider;
-        width: 1px;
-        left: 15%;
-        height: unset;
-        top: 5px;
-        bottom: 5px;
+  .ErrorView {
+    .message {
+      color: lighten($panelLeftBackground, 30);
     }
+  }
 
-    .react-grid-item {
-        background: #202020;
+  .LoadingView {
+    .Spinner {
+      border: 10px solid lighten($panelLeftBackground, 20);
+      border-top: 10px solid lighten($panelLeftBackground, 30);
+      width: 80px;
+      height: 80px;
     }
-
-    .react-grid-placeholder {
-        display: none;
-    }
-
-    .react-grid-item > .react-resizable-handle {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        bottom: 0;
-        right: 0;
-        background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg08IS0tIEdlbmVyYXRvcjogQWRvYmUgRmlyZXdvcmtzIENTNiwgRXhwb3J0IFNWRyBFeHRlbnNpb24gYnkgQWFyb24gQmVhbGwgKGh0dHA6Ly9maXJld29ya3MuYWJlYWxsLmNvbSkgLiBWZXJzaW9uOiAwLjYuMSAgLS0+DTwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DTxzdmcgaWQ9IlVudGl0bGVkLVBhZ2UlMjAxIiB2aWV3Qm94PSIwIDAgNiA2IiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojZmZmZmZmMDAiIHZlcnNpb249IjEuMSINCXhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQl4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjZweCIgaGVpZ2h0PSI2cHgiDT4NCTxnIG9wYWNpdHk9IjAuMzAyIj4NCQk8cGF0aCBkPSJNIDYgNiBMIDAgNiBMIDAgNC4yIEwgNCA0LjIgTCA0LjIgNC4yIEwgNC4yIDAgTCA2IDAgTCA2IDYgTCA2IDYgWiIgZmlsbD0iIzAwMDAwMCIvPg0JPC9nPg08L3N2Zz4=");
-        background-position: bottom right;
-        padding: 0 3px 3px 0;
-        background-repeat: no-repeat;
-        background-origin: content-box;
-        box-sizing: border-box;
-        cursor: se-resize;
-    }
-
-    button.close-button {
-        background-color: unset;
-        background-image: unset;
-        align-self: flex-end;
-        box-shadow: unset !important;
-        font-size: 20pt;
-        font-weight: 100;
-        color: $connectionCloseIconColor;
-        margin-right: 5px;
-        margin-top: -2px;
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: 1001;
-    }
-
-    button.close-button:hover {
-        color: $connectionCloseIconHover;
-        background-color: unset;
-        background-image: unset;
-        box-shadow: unset;
-        border: unset;
-        border-radius: 50%;
-    }
-
-    .ResetButton {
-        align-self: center;
-        margin-right: 40px;
-        height: 22px;
-        border-bottom: unset;
-
-        button.reset-button {
-            font-weight: lighter;
-            font-size: small;
-            color: $connectionButtonFontColour;
-            width: 7em !important;
-            border-radius: 0;
-            background-image: unset;
-            background-color: #474747;
-            border: 1px solid $connectionButtonBorderColour;
-            box-shadow: unset;
-            height: 22px;
-            line-height: 20px;
-            min-height: 22px;
-        }
-
-        button.reset-button:hover {
-            background-color: $connectionButtonBackgroundColourHover;
-            color: $connectionButtonFontColourHover;
-        }
-    }
-
-    .ErrorView {
-        .message {
-            color: lighten($panelLeftBackground, 30);
-        }
-    }
-
-    .LoadingView {
-        .Spinner {
-            border: 10px solid lighten($panelLeftBackground, 20);
-            border-top: 10px solid lighten($panelLeftBackground, 30);
-            width: 80px;
-            height: 80px;
-        }
-    }
+  }
 }

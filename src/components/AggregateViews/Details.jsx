@@ -198,6 +198,7 @@ export default class Details extends React.Component {
       editorObject.collection.text +
       '").aggregate([' +
       newLine;
+    let pipelineString = '[';
 
     const selectedBlockIndex = editorObject.selectedBlock;
     // Then add all other blocks.
@@ -208,14 +209,17 @@ export default class Details extends React.Component {
             block.code.replace(/\r\n/g, newLine);
             block.code.replace(/\n/g, newLine);
             if (index > selectedBlockIndex) {
-              codeString +=
+              const blockString =
                 '/*' +
-                block.code.replace(/\r\n/g, /newLine/) +
+                block.code.replace(/\r\n/g, newLine) +
                 ', */' +
                 newLine;
+              codeString += blockString;
+              pipelineString += blockString;
             } else {
-              codeString +=
-                block.code.replace(/\r\n/g, /newLine/) + ',' + newLine;
+              const blockString = block.code.replace(/\r\n/g, newLine) + ',' + newLine;
+              codeString += blockString;
+              pipelineString += blockString;
             }
           }
         } else {
@@ -225,8 +229,10 @@ export default class Details extends React.Component {
             '.hbs');
           if (index > selectedBlockIndex) {
             codeString += '/*' + formTemplate(block.fields) + ', */' + newLine;
+            pipelineString += '/*' + formTemplate(block.fields) + ', */' + newLine;
           } else {
             codeString += formTemplate(block.fields) + ',' + newLine;
+            pipelineString += formTemplate(block.fields) + ',' + newLine;
           }
         }
       }
@@ -234,6 +240,7 @@ export default class Details extends React.Component {
 
     codeString += '],';
     codeString += '{';
+    pipelineString += ']';
 
     if (
       editorObject.blockList &&
@@ -245,6 +252,11 @@ export default class Details extends React.Component {
     }
     codeString += '}';
     codeString += ');';
+
+    if (this.props.store.aggregateBuilder.includeCreateView) {
+      codeString += `${newLine}${newLine}db.createView('${this.props.store.aggregateBuilder.viewName}','${editorObject.collection.text}', ${pipelineString});${newLine}`;
+    }
+
     return codeString;
   }
 

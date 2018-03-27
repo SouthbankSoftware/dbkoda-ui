@@ -65,12 +65,7 @@ export default class PerformancePanel extends React.Component<Props> {
       const Widget = widgetTypes[type];
 
       return (
-        <div
-          id={`widget-${id}`}
-          key={id}
-          data-grid={layout}
-          style={layout.gridElementStyle}
-        >
+        <div id={`widget-${id}`} key={id} data-grid={layout} style={layout.gridElementStyle}>
           <Widget
             performancePanel={performancePanel}
             widget={widget}
@@ -149,9 +144,7 @@ export default class PerformancePanel extends React.Component<Props> {
             )}
           </div>
           <div className="performanceSubNavBar">
-            <div className="subtitle os">
-              {globalString('performance/section_headers/os')}
-            </div>
+            <div className="subtitle os">{globalString('performance/section_headers/os')}</div>
             <div className="subtitle mongo">
               {globalString('performance/section_headers/mongo')}
             </div>
@@ -175,14 +168,11 @@ export default class PerformancePanel extends React.Component<Props> {
           bFitHeight
           minFitHeight={901}
         >
-          {widgets.values().map(widget => this._getWidgetComponent(widget))}
+          {// $FlowFixMe
+          [...widgets.values()].map(widget => this._getWidgetComponent(widget))}
         </ResponsiveReactGridLayout>
         {onClose && (
-          <Button
-            className="close-button pt-button pt-intent-primary"
-            text="X"
-            onClick={onClose}
-          />
+          <Button className="close-button pt-button pt-intent-primary" text="X" onClick={onClose} />
         )}
       </div>
     );

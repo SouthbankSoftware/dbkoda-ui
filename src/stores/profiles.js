@@ -80,7 +80,7 @@ export default class Profiles {
         NewToaster.show({
           message: `Reading profiles.yml failed: ${e.message}`,
           className: 'danger',
-          iconName: 'pt-icon-thumbs-down'
+          icon: 'thumbs-down'
         });
         logToMain('error', 'Failed to read profiles.yml: ' + e.message);
       });
@@ -113,7 +113,7 @@ export default class Profiles {
       NewToaster.show({
         message: `Saving profiles.yml failed: ${e.message}`,
         className: 'danger',
-        iconName: 'pt-icon-thumbs-down'
+        icon: 'thumbs-down'
       });
       logToMain('error', 'Failed to save profiles.yml: ' + e.message);
     }
