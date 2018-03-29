@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-14T21:44:38+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-29T09:42:44+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -44,8 +44,35 @@ global.globalNumber = (value, config) =>
 
 global.config = null;
 
+class PerformanceWindowApi {
+  profileId = null;
+  setProfileId(id) {
+    this.profileId = id;
+  }
+  @action.bound
+  sendCommandToMainProcess = command => {
+    ipcRenderer.send('performance', { command, profileId: this.profileId });
+  };
+
+  @action.bound
+  resetHighWaterMark = () => {
+    this.sendCommandToMainProcess('pw_resetHighWaterMark');
+  };
+
+  @action.bound
+  resetPerformancePanel = () => {
+    this.sendCommandToMainProcess('pw_resetPerformancePanel');
+  };
+
+  @action.bound
+  openStorageDDView = () => {
+    this.sendCommandToMainProcess('pw_openStorageDDView');
+  }
+}
+
 export default class Store {
   config = null;
+  api = null;
   @observable.shallow performancePanel = null;
   @observable profileId = null;
 
@@ -53,17 +80,21 @@ export default class Store {
   errorHandler = null;
 
   constructor() {
+    this.api = new PerformanceWindowApi(this);
     ipcRenderer.on('performance', this.handleDataSync);
   }
-
+  setProfileId(id) {
+    this.profileId = id;
+    this.api.setProfileId(id);
+  }
   @action.bound
   handleDataSync = (event, args) => {
     if (args.command === 'mw_setProfileId') {
-      this.profileId = args.profileId;
-      this.sendCommandToMainProcess('pw_windowReady');
+      this.setProfileId(args.profileId);
+      this.api.sendCommandToMainProcess('pw_windowReady');
     } else {
       if (!this.profileId && args.profileId) {
-        this.profileId = args.profileId;
+        this.setProfileId(args.profileId);
       }
       if (this.profileId === args.profileId) {
         if (args.command === 'mw_initData') {
@@ -95,20 +126,5 @@ export default class Store {
         }
       }
     }
-  };
-
-  @action.bound
-  sendCommandToMainProcess = command => {
-    ipcRenderer.send('performance', { command, profileId: this.profileId });
-  };
-
-  @action.bound
-  resetHighWaterMark = () => {
-    this.sendCommandToMainProcess('pw_resetHighWaterMark');
-  };
-
-  @action.bound
-  resetPerformancePanel = () => {
-    this.sendCommandToMainProcess('pw_resetPerformancePanel');
   };
 }

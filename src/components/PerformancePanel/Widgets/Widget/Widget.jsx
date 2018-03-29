@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-14T12:22:05+11:00
  * @Email:  guan@southbanksoftware.com
- * @Last modified by:   mike
- * @Last modified time: 2018-03-06T14:32:54+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-29T09:46:56+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +27,8 @@
  */
 
 import * as React from 'react';
+// $FlowFixMe decorators
+import { ContextMenuTarget } from '@blueprintjs/core';
 import { observer } from 'mobx-react';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import type { WidgetState } from '~/api/Widget';
@@ -56,7 +58,8 @@ type Props = {
   children: *,
   className?: string,
   onResize?: (width: number, height: number) => void,
-  projection?: Projection
+  projection?: Projection,
+  getContextMenu?: () => any
 };
 
 type State = {
@@ -64,6 +67,7 @@ type State = {
 };
 
 @observer
+@ContextMenuTarget
 export default class Widget extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -129,6 +133,10 @@ export default class Widget extends React.Component<Props, State> {
         })}
       </div>
     );
+  }
+
+  renderContextMenu() {
+    return _.invoke(this.props, 'getContextMenu');
   }
 
   render() {

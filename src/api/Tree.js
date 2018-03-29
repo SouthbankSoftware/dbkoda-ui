@@ -2,11 +2,11 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-31T14:53:10+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2017-10-30T15:07:45+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-29T10:26:21+11:00
  */
 
-import { action } from 'mobx';
+import { runInAction, action, observable } from 'mobx';
 import { Broker, EventType } from '~/helpers/broker';
 import { featherClient } from '~/helpers/feathers';
 import { EditorTypes } from '#/common/Constants';
@@ -14,10 +14,12 @@ import { EditorTypes } from '#/common/Constants';
 export default class TreeApi {
   store;
   api;
+  profileStore;
 
-  constructor(store, api) {
+  constructor(store, api, profileStore) {
     this.store = store;
     this.api = api;
+    this.profileStore = profileStore;
   }
 
   @action.bound
@@ -79,4 +81,21 @@ export default class TreeApi {
   _handleError(error) {
     console.error(error);
   }
+
+  showStorageStatsView = () => {
+    runInAction('Using Active profile to store statistics', () => {
+      const { selectedProfile } = this.store.profileList;
+      this.store.profileList.selectedProfile = observable({
+        ...selectedProfile,
+        storageView: {
+          visible: true,
+          shouldFocus: true
+        }
+      });
+      this.profileStore.profiles.set(
+        selectedProfile.id,
+        this.store.profileList.selectedProfile
+      );
+    });
+  };
 }

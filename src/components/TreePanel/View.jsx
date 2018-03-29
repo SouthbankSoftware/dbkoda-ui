@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-22T17:34:32+11:00
+ * @Last modified time: 2018-03-29T10:26:13+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -356,7 +356,7 @@ export default class TreeView extends React.Component {
           this.props.store.openNewAggregateBuilder(this.nodeRightClicked);
           break;
         case 'DbStorageStats':
-          this.showStorageStatsView();
+          this.props.api.showStorageStatsView();
           break;
         case 'ShowPerformancePanel':
           this.showPerformancePanel();
@@ -450,23 +450,6 @@ export default class TreeView extends React.Component {
           })
         );
       }
-    });
-  };
-
-  showStorageStatsView = () => {
-    runInAction('Using Active profile to store statistics', () => {
-      const { selectedProfile } = this.props.store.profileList;
-      this.props.store.profileList.selectedProfile = observable({
-        ...selectedProfile,
-        storageView: {
-          visible: true,
-          shouldFocus: true
-        }
-      });
-      this.props.profileStore.profiles.set(
-        selectedProfile.id,
-        this.props.store.profileList.selectedProfile
-      );
     });
   };
 

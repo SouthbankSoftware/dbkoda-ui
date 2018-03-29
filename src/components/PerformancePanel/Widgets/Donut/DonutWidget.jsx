@@ -2,8 +2,8 @@
  * @flow
  *
  * Created by joey on 20/2/18.
- * @Last modified by:   guiguan
- * @Last modified time: 2018-02-28T13:40:38+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-29T12:43:26+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,7 +39,8 @@ import { bytesToSize } from '../Utils';
 type Props = {
   performancePanel: PerformancePanelState,
   widget: WidgetState,
-  widgetStyle: *
+  widgetStyle: *,
+  getContextMenu: Function
 };
 
 type State = {
@@ -289,7 +290,7 @@ export default class DonutWidget extends React.Component<Props, State> {
   }
 
   render() {
-    const { performancePanel, widget, widgetStyle } = this.props;
+    const { performancePanel, widget, widgetStyle, getContextMenu} = this.props;
     return (
       <Widget
         performancePanel={performancePanel}
@@ -297,6 +298,7 @@ export default class DonutWidget extends React.Component<Props, State> {
         widgetStyle={widgetStyle}
         onResize={this._onResize}
         projection={this.projection()}
+        getContextMenu={() => getContextMenu(widget.name)}
       >
         <div className="donut-container" ref={r => (this.d3Elem = r)}>
           <div className="donut-main" />

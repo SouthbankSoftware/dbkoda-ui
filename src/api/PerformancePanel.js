@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-23T09:48:17+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-03-29T10:29:13+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -653,6 +653,8 @@ export default class PerformancePanelApi {
         this.resetHighWaterMark(args.profileId);
       } else if (args.command === 'pw_resetPerformancePanel') {
         this.resetPerformancePanel(args.profileId);
+      } else if (args.command === 'pw_openStorageDDView') {
+        this.api.showStorageStatsView();
       }
     }
   }

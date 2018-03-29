@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-14T10:20:10+11:00
+ * @Last modified time: 2018-03-29T12:42:24+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -31,7 +31,9 @@ import * as React from 'react';
 import { Responsive } from 'react-grid-layout';
 // $FlowFixMe
 import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
-import { observer } from 'mobx-react';
+import { Menu, MenuItem } from '@blueprintjs/core';
+import { inject, observer } from 'mobx-react';
+import autobind from 'autobind-decorator';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
 import type { WidgetState } from '~/api/Widget';
 import SizeProvider from './SizeProvider';
@@ -47,10 +49,14 @@ type Props = {
   onClose: () => void,
   resetHighWaterMark: (profileId: UUID) => void,
   resetPerformancePanel: (profileId: UUID) => void,
+  api: *,
   mongoStatus: String,
   sshStatus: String
 };
 
+@inject(allStores => ({
+  api: allStores.store.api
+}))
 @observer
 /**
  * Performance Panel defines the layout and creation of widgets in the performance view
@@ -72,8 +78,23 @@ export default class PerformancePanel extends React.Component<Props> {
             performancePanel={performancePanel}
             widget={widget}
             widgetStyle={layout.widgetStyle}
+            getContextMenu={this._getContextMenu}
           />
         </div>
+      );
+    }
+  }
+
+  @autobind
+  _getContextMenu(widgetName: String) {
+    const that = this;
+    if (widgetName === 'Database Storage') {
+      return (
+        <Menu>
+          <MenuItem onClick={() => {
+            that.props.api.openStorageDDView();
+          }} text="View Storage Drill down" />
+        </Menu>
       );
     }
   }
