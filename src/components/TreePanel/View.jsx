@@ -3,7 +3,7 @@
  * @Date:   2017-03-07T11:39:01+11:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-29T10:26:13+11:00
+ * @Last modified time: 2018-03-29T14:26:45+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -621,6 +621,16 @@ export default class TreeView extends React.Component {
   };
 
   addNewEditorForDrill = () => {
+    const profile = this.props.store.profileList.selectedProfile;
+    if (profile.sshTunnel) {
+      NewToaster.show({
+        message: 'MongoDB connections using SSH Tunnel are not supported by Apache Drill.',
+        className: 'danger',
+        icon: 'thumbs-down'
+      });
+      return;
+    }
+
     const drillProfileId = this.props.api.checkForExistingDrillProfile({
       db: this.nodeRightClicked.text
     });
