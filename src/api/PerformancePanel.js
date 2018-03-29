@@ -232,6 +232,7 @@ export default class PerformancePanelApi {
   _powerBlockerDisposers: Map<UUID, *> = new Map();
 
   externalPerformanceWindows: Map<UUID, *> = new Map();
+  eventQueue: Object = {};
 
   constructor(store: *, api: *, config: *) {
     this.store = store;
@@ -318,12 +319,23 @@ export default class PerformancePanelApi {
     // $FlowFixMe
     if (err && err.code && ErrorCodes[err.code]) {
       try {
-        errorMessage = globalString(ErrorCodes[err.code], errorMessage);
-        this._sendMsgToPerformanceWindow({
-          command: 'mw_error',
-          profileId,
-          err
-        });
+        const externalProfile = this.externalPerformanceWindows.get(profileId);
+        if (externalProfile && externalProfile.status !== 'ready') {
+          console.log('put event to queue', err);
+          if (!this.eventQueue[profileId]) {
+            this.eventQueue[profileId] = {events: [err]};
+          } else {
+            this.eventQueue[profileId].events.push(err);
+          }
+        } else {
+          // $FlowFixMe
+          errorMessage = globalString(ErrorCodes[err.code], errorMessage);
+          this._sendMsgToPerformanceWindow({
+            command: 'mw_error',
+            profileId,
+            err
+          });
+        }
       } catch (err) {
         console.error(err);
       }
@@ -600,6 +612,9 @@ export default class PerformancePanelApi {
 
   @action.bound
   _mountPerformancePanelToExternalWindow(profileId: UUID, profileAlias: string) {
+    if (this.eventQueue[profileId]) {
+      delete this.eventQueue[profileId];
+    }
     this._sendMsgToPerformanceWindow({
       command: 'mw_createWindow',
       profileId,
@@ -639,16 +654,28 @@ export default class PerformancePanelApi {
         this.externalPerformanceWindows.set(args.profileId, {
           status: 'ready'
         });
+        if (this.eventQueue[args.profileId]) {
+          console.log('send event from queue ', this.eventQueue[args.profileId]);
+          // $FlowFixMe
+          this.eventQueue[args.profileId].events.forEach((err) => this._handleError(args.profileId, err, 'err'));
+          delete this.eventQueue[args.profileId];
+        }
       } else if (args.command === 'pw_windowClosed') {
         // this command should only come from Performance Window if window is closed by user using cross.
         this.externalPerformanceWindows.set(args.profileId, {
           status: 'closed'
         });
+        if (this.eventQueue[args.profileId]) {
+          delete this.eventQueue[args.profileId];
+        }
         this.transformPerformancePanel(args.profileId, performancePanelStatuses.background);
       } else if (args.command === 'pw_windowReload') {
         this.externalPerformanceWindows.set(args.profileId, {
           status: 'reloading'
         });
+        if (this.eventQueue[args.profileId]) {
+          delete this.eventQueue[args.profileId];
+        }
       } else if (args.command === 'pw_resetHighWaterMark') {
         this.resetHighWaterMark(args.profileId);
       } else if (args.command === 'pw_resetPerformancePanel') {

@@ -38,15 +38,18 @@ export const ErrorPanel = ({mongoStatus, sshStatus}) => {
   }
   let mongoPanel = null;
   if (mongoStatus === Status.CONNECTION_BROKEN) {
-    mongoPanel = <div>{globalString('performance/errors/driver_connection_closed')}</div>;
+    mongoPanel = <div className="item-status-panel mongo-status-panel"><p className="status-text">{globalString('performance/errors/driver_connection_closed')}</p></div>;
   }
   let sshPanel = null;
   switch (sshStatus) {
     case Status.CONNECTION_BROKEN:
-      sshPanel = <div className="ssh-status-panel"><p className="ssh-status-text">{globalString('performance/errors/ssh_connection_closed')}</p></div>;
+      sshPanel = <div className="item-status-panel ssh-status-panel"><p className="status-text">{globalString('performance/errors/ssh_connection_closed')}</p></div>;
       break;
     case Status.NOT_ENABLED:
-      sshPanel = <div className="ssh-status-panel"><p className="ssh-status-text">{globalString('performance/errors/ssh_not_enabled')}</p></div>;
+      sshPanel = <div className="item-status-panel ssh-status-panel"><p className="status-text">{globalString('performance/errors/ssh_not_enabled')}</p></div>;
+      break;
+    case Status.UNSUPPORTED_STATS_OS:
+      sshPanel = <div className="item-status-panel ssh-status-panel"><p className="status-text">{globalString('performance/errors/ssh_unsupported_os')}</p></div>;
       break;
     default:
       break;

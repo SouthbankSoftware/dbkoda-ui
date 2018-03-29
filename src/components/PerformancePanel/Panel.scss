@@ -45,8 +45,7 @@
     height: 100%;
     width: 100%;
     z-index: 10;
-    .ssh-status-panel {
-      width: 14.50%;
+    .item-status-panel {
       height: 100%;
       font-size: 24px;
       color: #bfbec0;
@@ -54,7 +53,17 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      .ssh-status-text {
+    }
+    .status-text {
+      margin: auto;
+    }
+    .ssh-status-panel {
+      width: 14.50%;
+    }
+    .mongo-status-panel {
+      width: 85.50%;
+      margin-left: 14.5%;
+      .mongo-status-text {
         margin: auto;
       }
     }
