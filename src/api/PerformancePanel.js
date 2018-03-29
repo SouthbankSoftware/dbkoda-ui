@@ -612,6 +612,9 @@ export default class PerformancePanelApi {
 
   @action.bound
   _mountPerformancePanelToExternalWindow(profileId: UUID, profileAlias: string) {
+    if (this.eventQueue[profileId]) {
+      delete this.eventQueue[profileId];
+    }
     this._sendMsgToPerformanceWindow({
       command: 'mw_createWindow',
       profileId,
@@ -662,11 +665,17 @@ export default class PerformancePanelApi {
         this.externalPerformanceWindows.set(args.profileId, {
           status: 'closed'
         });
+        if (this.eventQueue[args.profileId]) {
+          delete this.eventQueue[args.profileId];
+        }
         this.transformPerformancePanel(args.profileId, performancePanelStatuses.background);
       } else if (args.command === 'pw_windowReload') {
         this.externalPerformanceWindows.set(args.profileId, {
           status: 'reloading'
         });
+        if (this.eventQueue[args.profileId]) {
+          delete this.eventQueue[args.profileId];
+        }
       } else if (args.command === 'pw_resetHighWaterMark') {
         this.resetHighWaterMark(args.profileId);
       } else if (args.command === 'pw_resetPerformancePanel') {
