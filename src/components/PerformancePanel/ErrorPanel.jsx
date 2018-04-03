@@ -28,6 +28,7 @@ const styles = {
   position: 'absolute',
   zIndex: 10,
   opacity: 0.6,
+  pointerEvents: 'none',
 };
 
 
