@@ -52,8 +52,8 @@ import { AggregateCommands } from './AggregateCommands.js';
 import GenerateChartButton from './GenerateChartButton';
 import CreateViewButton from './CreateViewButton';
 import ShowIcon from '../../styles/icons/show-icon.svg';
-import ImportIcon from '../../styles/icons/import-icon.svg';
-import ExportIcon from '../../styles/icons/export-icon.svg';
+import ImportIcon from '../../styles/icons/export-icon.svg';
+import ExportIcon from '../../styles/icons/import-icon.svg';
 
 const { dialog, BrowserWindow } = IS_ELECTRON
   ? window.require('electron').remote
