@@ -47,6 +47,7 @@ import './style.scss';
 export default class Details extends React.Component {
   constructor(props) {
     super(props);
+    this.generateCode = this.generateCode.bind(this);
     this.state = {
       form: null,
       previousActiveBlock: null,
