@@ -22,10 +22,11 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-04-06T12:07:13+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T18:04:51+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-04T10:50:56+10:00
  */
 
+import _ from 'lodash';
 import MobxReactForm from 'mobx-react-form';
 import validatorjs from 'validatorjs';
 
@@ -41,7 +42,7 @@ export class DynamicForm extends MobxReactForm {
     return {
       onSuccess(form) {
         // get field values
-        const formValues = [...form.values()];
+        const formValues = form.values();
         if (this.validateFormValues) {
           try {
             const valid = this.validateFormValues(formValues);
@@ -55,9 +56,12 @@ export class DynamicForm extends MobxReactForm {
       },
       onError(form) {
         // get all form errors
-        console.error('All form errors', form.errors());
+        const fieldErrors = _.pickBy(form.errors(), _.identity);
+        console.error('All form errors', fieldErrors);
         // invalidate the form with a custom error message
-        form.invalidate(globalString('tree/genericValidateError'));
+        if (_.keys(fieldErrors).length > 0 && !form.error) {
+          form.invalidate(globalString('tree/genericValidateError'));
+        }
       }
     };
   }

@@ -22,8 +22,7 @@
     "node": ">= 8.9.1"
   },
   "scripts": {
-    "postinstall": "yarn patch:globalize-webpack-plugin && yarn build:mobx-react-from",
-    "build:mobx-react-from": "cd ./node_modules/mobx-react-form && yarn install && yarn build",
+    "postinstall": "yarn patch:globalize-webpack-plugin",
     "patch:globalize-webpack-plugin": "shx cp ./patch/globalize-webpack-plugin/DevelopmentModePlugin.js ./node_modules/globalize-webpack-plugin",
     "dev:x": "webpack-dev-server --config webpack/dev.js",
     "dev": "webpack-dashboard -m -- node --max-old-space-size=2048 ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack/dev.js",
@@ -46,7 +45,8 @@
     "docs": "yarn run esdoc && open -b com.google.chrome ./docs/index.html",
     "esdoc": "rimraf docs && esdoc -c .esdoc.json",
     "flow": "flow",
-    "flow:install": "flow-typed install --overwrite --skip --ignoreDeps mobx"
+    "flow:install": "flow-typed install --overwrite --skip --ignoreDeps mobx",
+    "precommit": "yarn flow && yarn run eslint"
   },
   "repository": {
     "type": "git",
