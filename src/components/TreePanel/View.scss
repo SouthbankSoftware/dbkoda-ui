@@ -172,8 +172,18 @@ ul.pt-tree-node-list {
         order: 3;
         div.labelWrapper {
           span.additionalActions {
-            opacity: 0;
             float: right;
+            opacity: 0;
+            a.button {
+              background-color: unset;
+              background-image: none;
+            }
+            a.button:hover {
+              opacity: 1;
+            }
+            a.button:focus {
+              box-shadow: unset;
+            }
           }
         }
       }

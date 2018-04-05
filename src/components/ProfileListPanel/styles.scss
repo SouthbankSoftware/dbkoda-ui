@@ -24,7 +24,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "../../styles/_defaultTheme.scss";
+@import '../../styles/_defaultTheme.scss';
 
 .profileListPanel {
   width: 100%;
@@ -199,6 +199,27 @@
         margin-right: 10px;
         color: $profileListIconColor;
       }
+
+      span.additionalActions {
+        float: right;
+        margin-left: auto;
+        opacity: 0;
+        a.button {
+          background-color: unset;
+          background-image: none;
+        }
+        a.button:hover {
+          opacity: 1;
+        }
+        a.button:focus {
+          box-shadow: unset;
+        }
+      }
+    }
+    .pt-table-truncated-text:hover {
+      span.additionalActions {
+        opacity: 0.6;
+      }
     }
   }
 
@@ -207,7 +228,8 @@
   }
 
   .connection-profile-cell {
-    .profileListing {}
+    .profileListing {
+    }
 
     .closedProfile {
       font-style: italic !important;
@@ -229,7 +251,8 @@ ul.profileListContextMenu {
       display: flex;
       flex-direction: row;
 
-      li {}
+      li {
+      }
     }
   }
 
@@ -237,7 +260,8 @@ ul.profileListContextMenu {
     display: flex;
     flex-direction: row;
 
-    li {}
+    li {
+    }
   }
 }
 
@@ -254,6 +278,7 @@ ul.profileListContextMenu {
   }
 
   div {
-    svg {}
+    svg {
+    }
   }
 }
