@@ -27,7 +27,7 @@
 import 'raf/polyfill';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import { jsdom } from 'jsdom';
+import { JSDOM } from 'jsdom';
 import { assert } from 'chai';
 import { Provider } from 'mobx-react';
 import Store from '~/stores/global';
@@ -36,7 +36,7 @@ import { OutputToolbar } from '../index.js';
 
 describe('Output Toolbar', () => {
   let document;
-  let window; // eslint-disable-line
+  let window;
   let store;
   const OutputToolbarWrapper = function OutputToolbarWrapper(props) {
     return (<Provider store={props.store}><OutputToolbar title="Test" /></Provider>);
@@ -44,8 +44,8 @@ describe('Output Toolbar', () => {
 
   beforeAll(() => {
     globalizeInit();
-    document = jsdom('<div id="container"></div>');
-    window = document.defaultView;
+    ({window} = new JSDOM('<div id="container"></div>'));
+    ({document} = window);
     store = new Store();
   });
 
