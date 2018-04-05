@@ -9,7 +9,6 @@
 import { action, observable, runInAction } from 'mobx';
 import uuidV1 from 'uuid';
 import { EditorTypes } from '#/common/Constants';
-import { ProfileForm } from '#/ConnectionPanel/ProfileForm';
 import { featherClient } from '~/helpers/feathers';
 import { Broker, EventType } from '~/helpers/broker';
 import { ProfileStatus } from '#/common/Constants';
@@ -130,7 +129,7 @@ export default class ProfileApi {
       data.passRadio = !data.keyRadio;
     }
     if (data.hostRadio) {
-      connectionUrl = ProfileForm.mongoProtocol + data.host + ':' + data.port;
+      connectionUrl = StaticApi.mongoProtocol + data.host + ':' + data.port;
     } else if (data.urlRadio) {
       connectionUrl = data.url;
     }
@@ -146,7 +145,7 @@ export default class ProfileApi {
       query.sshHost = data.remoteHost;
       query.remoteUser = data.remoteUser;
       query.localHost = '127.0.0.1';
-      data.sshLocalPort = await ProfileForm.getRandomPort();
+      data.sshLocalPort = await StaticApi.getRandomPort();
       query.localPort = data.sshLocalPort;
 
       terminalQuery = {
@@ -156,7 +155,7 @@ export default class ProfileApi {
       };
 
       if (data.sshTunnel) {
-        connectionUrl = ProfileForm.mongoProtocol + query.localHost + ':' + query.localPort;
+        connectionUrl = StaticApi.mongoProtocol + query.localHost + ':' + query.localPort;
       }
       if (data.passRadio) {
         query.remotePass = data.remotePass;

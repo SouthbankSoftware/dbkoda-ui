@@ -14,6 +14,12 @@ const MAX_DOCUMENTS = 500;
 
 export default class StaticApi {
   static mongoProtocol = 'mongodb://';
+  static getRandomPort() {
+    if (IS_ELECTRON) {
+      return window.require('electron').remote.getGlobal('findAvailablePort')(6000, 7000, '127.0.0.1');
+    }
+    return new Promise().resolve(Math.floor(Math.random() * 7000) + 6000);
+  }
   /**
    * Determine EOL to be used for given content string
    *

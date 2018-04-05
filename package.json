@@ -46,7 +46,7 @@
     "esdoc": "rimraf docs && esdoc -c .esdoc.json",
     "flow": "flow",
     "flow:install": "flow-typed install --overwrite --skip --ignoreDeps mobx",
-    "precommit": "yarn flow && yarn run eslint"
+    "prepush": "yarn flow && yarn run eslint"
   },
   "repository": {
     "type": "git",
