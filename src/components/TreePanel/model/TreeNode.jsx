@@ -26,9 +26,19 @@
  */
 
 import React from 'react';
-import { observable } from 'mobx';
+import { observable, action } from 'mobx';
+import {
+  AnchorButton,
+  Popover,
+  PopoverInteractionKind,
+  Intent,
+  Menu,
+  MenuItem,
+  MenuDivider
+} from '@blueprintjs/core';
 
 import DragLabel from './DragLabel.jsx';
+import TreeActions from '../templates/tree-actions/actions.json';
 import DatabaseIcon from '../../../styles/icons/database-icon-2.svg';
 import DatabasesIcon from '../../../styles/icons/database-icon-4.svg';
 import CollectionIcon from '../../../styles/icons/collection-icon.svg';
@@ -40,8 +50,7 @@ import RoleIcon from '../../../styles/icons/user-icon.svg';
 import RootShardsIcon from '../../../styles/icons/shards-icon-4.svg';
 import ShardsIcon from '../../../styles/icons/shards-icon-2.svg';
 import ShardIcon from '../../../styles/icons/shards-icon-1.svg';
-import ConfigServersIcon
-  from '../../../styles/icons/config-database-icon-4.svg';
+import ConfigServersIcon from '../../../styles/icons/config-database-icon-4.svg';
 import ConfigIcon from '../../../styles/icons/config-database-icon-1.svg';
 import RoutersIcon from '../../../styles/icons/mongos-icon-2.svg';
 import MongosIcon from '../../../styles/icons/mongos-icon.svg';
@@ -52,6 +61,12 @@ import ReplicaMemberIcon from '../../../styles/icons/replica-set-icon.svg';
 import PrimaryIcon from '../../../styles/icons/primary-icon.svg';
 import SecondaryIcon from '../../../styles/icons/secondary-icon.svg';
 import ArbiterIcon from '../../../styles/icons/arbiters-icon.svg';
+import SettingsIcon from '../../../styles/icons/settings-icon.svg';
+import DocumentIcon from '../../../styles/icons/document-solid-icon.svg';
+import RemoveUserIcon from '../../../styles/icons/users-icon-2.svg';
+import AddIcon from '../../../styles/icons/add-icon.svg';
+import CloseIcon from '../../../styles/icons/cross-icon.svg';
+import DropdownIcon from '../../../styles/icons/dropdown-menu-icon.svg';
 
 export default class TreeNode {
   id;
@@ -73,7 +88,8 @@ export default class TreeNode {
    * @param {Object} treeJSON - JSON object from controller having text
    * @param {Object} parent - reference to the parent node
    */
-  constructor(treeJSON, parent) {
+  constructor(treeJSON, parent, store) {
+    this.store = store;
     this.type = TreeNode.getNodeType(treeJSON, parent);
     if (this.type == 'root') {
       this.type = 'shards';
@@ -175,9 +191,9 @@ export default class TreeNode {
         );
         break;
       case 'role':
-      this.secondaryLabel = (
-        <RoleIcon className="dbKodaSVG roleIcon" width={30} height={30} />
-      );
+        this.secondaryLabel = (
+          <RoleIcon className="dbKodaSVG roleIcon" width={30} height={30} />
+        );
         break;
       case 'property':
         this.secondaryLabel = (
@@ -267,22 +283,176 @@ export default class TreeNode {
       this.text = '';
     }
     this.json = treeJSON;
-    this.label = (
-      <DragLabel
-        label={this.text}
-        id={this.id}
-        type={this.type}
-        refParent={this.refParent}
+
+    const Actions = TreeActions[this.type];
+    const Menus = [];
+    Menus.push(
+      <MenuItem
+        onClick={this.handleMakeRoot}
+        text="Make Root Node"
+        key="MakeRoot"
+        name="MakeRoot"
+        icon="git-new-branch"
+        intent={Intent.NONE}
       />
+    );
+    if (Actions && Actions.length > 0) {
+      Menus.push(<MenuDivider key="divider" />);
+      for (const objAction of Actions) {
+        /*         if (
+          objAction.name === 'ShowPerformancePanel' &&
+          this.props.store.profileList.selectedProfile
+        ) {
+          const hasPerformancePanel = this.props.api.hasPerformancePanel(
+            this.props.store.profileList.selectedProfile.id
+          );
+          objAction.text = globalString(
+            `profile/menu/${
+              !hasPerformancePanel
+                ? 'createPerformancePanel'
+                : 'openPerformancePanel'
+            }`
+          );
+        } */
+        if (objAction.type && objAction.type == 'divider') {
+          Menus.push(<MenuDivider key={objAction.name} />);
+        } else {
+          let bDevOnlyFeature = false;
+          if (process.env.NODE_ENV !== 'development' && objAction.development) {
+            bDevOnlyFeature = true;
+          }
+          if (!bDevOnlyFeature) {
+            const icon = this.getIconFor(objAction.icon);
+            if (icon != null) {
+              Menus.push(
+                <div
+                  className="menuItemWrapper"
+                  key={objAction.name}
+                  data-id={objAction.name}
+                >
+                  <MenuItem
+                    onClick={this.handleTreeActionClick}
+                    text={objAction.text}
+                    key={objAction.name}
+                    icon={icon}
+                    intent={Intent.NONE}
+                  />
+                </div>
+              );
+            } else {
+              Menus.push(
+                <div
+                  className="menuItemWrapper"
+                  key={objAction.name}
+                  data-id={objAction.name}
+                >
+                  <MenuItem
+                    onClick={this.handleTreeActionClick}
+                    text={objAction.text}
+                    key={objAction.name}
+                    icon={objAction.icon}
+                    intent={Intent.NONE}
+                  />
+                </div>
+              );
+            }
+          }
+        }
+      }
+    }
+
+    this.label = (
+      <div className="labelWrapper">
+        <DragLabel
+          label={this.text}
+          id={this.id}
+          type={this.type}
+          refParent={this.refParent}
+        />
+        <span className="additionalActions">
+          <Popover
+            minimal
+            interactionKind={PopoverInteractionKind.CLICK}
+            popoverClassName="toolTip"
+            content={<Menu>{Menus}</Menu>}
+            target={
+              <AnchorButton
+                className="button"
+                onClick={() => {
+                  console.log('Open Context Menu');
+                }}
+              >
+                ...
+              </AnchorButton>
+            }
+          />
+        </span>
+      </div>
     );
     if (treeJSON.children) {
       this.allChildNodes = new Map();
       for (const childJSON of treeJSON.children) {
-        const child = new TreeNode(childJSON, this);
+        const child = new TreeNode(childJSON, this, this.store);
         this.allChildNodes.set(child.id, child);
       }
     }
   }
+
+  @action
+  handleTreeActionClick = (e: React.MouseEvent) => {
+    this.store.treePanel.nodeOpened = this;
+    this.store.treePanel.action = e;
+  };
+
+  getIconFor(icon) {
+    switch (icon) {
+      case 'settings':
+        return (
+          <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
+      case 'document':
+        return (
+          <DocumentIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
+      case 'user':
+        return (
+          <UserIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
+      case 'remove-user':
+        return (
+          <RemoveUserIcon
+            className="pt-icon dbKodaSVG"
+            width={16}
+            height={16}
+          />
+        );
+      case 'add':
+        return <AddIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+      case 'close':
+        return (
+          <CloseIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
+      case 'shards':
+        return (
+          <ShardsIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
+      case 'collection':
+        return (
+          <CollectionIcon
+            className="pt-icon dbKodaSVG"
+            width={16}
+            height={16}
+          />
+        );
+      case 'dropdown':
+        return (
+          <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
+      default:
+        return null;
+    }
+  }
+
   /**
    * Traverse a single dependency tree (DFS)
    *
@@ -323,11 +493,11 @@ export default class TreeNode {
     }
   }
   /**
- * Returns the node type based on the node text or json specified node type
- *
- * @param {Object} treeJSON - JSON object from controller having text
- * @return {string} - type of the node in mongodb
- */
+   * Returns the node type based on the node text or json specified node type
+   *
+   * @param {Object} treeJSON - JSON object from controller having text
+   * @return {string} - type of the node in mongodb
+   */
   static getNodeType(treeJSON, parent) {
     if (treeJSON.type) {
       return treeJSON.type;
@@ -366,7 +536,9 @@ export default class TreeNode {
     if (objState.allChildNodes.length > 0 && this.allChildNodes) {
       for (const childSO of objState.allChildNodes) {
         const childNode = this.allChildNodes.get(childSO.id);
-        if (childNode) { childNode.StateObject = childSO; }
+        if (childNode) {
+          childNode.StateObject = childSO;
+        }
       }
     }
   }

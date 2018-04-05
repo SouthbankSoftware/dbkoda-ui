@@ -68,7 +68,7 @@ export default class Panel extends React.Component {
     this.props.store.updateAndRestart();
   }
 
-  treeState = new TreeState();
+  treeState = new TreeState(this.props.store);
   render() {
     const { layout, drawer } = this.props;
     let defaultLeftSplitPos;
