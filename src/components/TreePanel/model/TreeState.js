@@ -49,12 +49,13 @@ export default class TreeState {
   @observable profileAlias = '';
   updateCallback;
   updateCallback2;
-  constructor() {
+  constructor(stateStore) {
     this.treeNodes = [];
     this.filteredNodes = observable([]);
     this.resetTreeNode = new TreeNode({
-      text: '...',
+      text: '...'
     });
+    this.store = stateStore;
   }
   @action
   setProfileId(value) {
@@ -112,7 +113,7 @@ export default class TreeState {
     if (this.treeJson.length && this.treeJson.length > 0) {
       this.treeNodes = [];
       for (const node of this.treeJson) {
-        const treeNode = new TreeNode(node);
+        const treeNode = new TreeNode(node, null, this.store);
         if (treeNode.allChildNodes && treeNode.allChildNodes.size > 0) {
           this.treeNodes.push(treeNode);
         } else if (treeNode.type && treeNode.type == 'users') {
@@ -199,13 +200,13 @@ export default class TreeState {
       ) {
         console.error(
           'Sample attributes does not currently support Shell versions lower than 3.1, detected version is: ',
-          profile.shellVersion,
+          profile.shellVersion
         );
         NewToaster.show({
           message:
             'Sorry, sampling of collection not currently supported for Mongo shell versions lower than 3.1',
           className: 'danger',
-          icon: 'thumbs-down',
+          icon: 'thumbs-down'
         });
       } else {
         const service = featherClient().service('/tree-actions');
@@ -215,8 +216,8 @@ export default class TreeState {
             query: {
               type: 'attributes',
               db,
-              collection: nodeRightClicked.text,
-            },
+              collection: nodeRightClicked.text
+            }
           })
           .then(
             res => {
@@ -225,7 +226,11 @@ export default class TreeState {
                   if (!nodeRightClicked.allChildNodes) {
                     nodeRightClicked.allChildNodes = new Map();
                   }
-                  const child = new TreeNode(sampleJSON, nodeRightClicked);
+                  const child = new TreeNode(
+                    sampleJSON,
+                    nodeRightClicked,
+                    this.store
+                  );
                   nodeRightClicked.isExpanded = true;
                   child.isExpanded = true;
                   nodeRightClicked.setFilter(this.filter);
@@ -235,24 +240,24 @@ export default class TreeState {
                 },
                 err => {
                   console.error('Failed: ', err);
-                },
+                }
               );
             },
             err => {
               console.error('Failed: ', err);
-            },
+            }
           );
       }
     } else {
       console.error(
         'Sample Attributes could not determine the shell version, detected version is: ',
-        profile.shellVersion,
+        profile.shellVersion
       );
       NewToaster.show({
         message:
           'Sorry, sampling of collections failed as we can not detect a supported Mongo Shell Version',
         className: 'danger',
-        icon: 'thumbs-down',
+        icon: 'thumbs-down'
       });
     }
   }
@@ -272,7 +277,7 @@ export default class TreeState {
         let treeObj = {
           text: 'Attributes',
           type: 'properties',
-          children: [],
+          children: []
         };
         this.traverseObject(object, treeObj.children);
 
@@ -281,7 +286,7 @@ export default class TreeState {
         NewToaster.show({
           message: 'Sorry, sampling of collection failed! Please try again.',
           className: 'danger',
-          icon: 'thumbs-down',
+          icon: 'thumbs-down'
         });
         reject('Sampling of Attributes Failed: ', err);
       }
@@ -298,7 +303,7 @@ export default class TreeState {
               let newChild = {
                 text: key + ' (array)',
                 type: 'properties',
-                children: [],
+                children: []
               };
               this.traverseObject(obj[key][0], newChild.children);
               childArray.push(newChild);
@@ -307,7 +312,7 @@ export default class TreeState {
               let newChild = {
                 text: key,
                 type: 'properties',
-                children: [],
+                children: []
               };
               this.traverseObject(obj[key], newChild.children);
               childArray.push(newChild);
@@ -315,11 +320,11 @@ export default class TreeState {
           } else {
             childArray.push({
               text: key,
-              type: 'property',
+              type: 'property'
             });
           }
           // Create a node
-        }.bind(this),
+        }.bind(this)
       );
     }
   }
@@ -356,9 +361,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'g',
@@ -367,9 +372,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'a',
@@ -378,9 +383,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'k',
@@ -389,9 +394,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'l',
@@ -400,9 +405,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'm',
@@ -411,9 +416,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'b',
@@ -422,9 +427,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'c',
@@ -433,9 +438,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'h',
@@ -444,9 +449,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'f',
@@ -455,9 +460,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'e',
@@ -467,9 +472,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'j',
@@ -478,9 +483,9 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
+            bbb: 2
+          }
+        }
       },
       {
         name: 'e',
@@ -490,9 +495,9 @@ export default class TreeState {
           b: {
             bb: 1,
             bbb: 2,
-            ccc: 3,
-          },
-        },
+            ccc: 3
+          }
+        }
       },
       {
         name: 'e',
@@ -501,10 +506,10 @@ export default class TreeState {
           a: 1,
           b: {
             bb: 1,
-            bbb: 2,
-          },
-        },
-      },
+            bbb: 2
+          }
+        }
+      }
     ];
   }
 }

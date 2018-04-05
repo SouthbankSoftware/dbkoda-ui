@@ -123,6 +123,15 @@ export default class TreeView extends React.Component {
         this.setState({ nodes: this.props.treeState.nodes });
       }
     );
+    this.reactionToContextMenuAction = reaction(
+      () => this.props.store.treePanel.action,
+      () => {
+        if (this.props.store.treePanel.action) {
+          this.handleTreeActionClick(this.props.store.treePanel.action, true);
+          this.props.store.treePanel.action = null;
+        }
+      }
+    );
     onNewJson();
     if (IS_ELECTRON) {
       const electron = window.require('electron');
@@ -172,23 +181,47 @@ export default class TreeView extends React.Component {
   getIconFor(icon) {
     switch (icon) {
       case 'settings':
-        return <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+        return (
+          <SettingsIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
       case 'document':
-        return <DocumentIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+        return (
+          <DocumentIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
       case 'user':
-        return <UserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+        return (
+          <UserIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
       case 'remove-user':
-        return <RemoveUserIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+        return (
+          <RemoveUserIcon
+            className="pt-icon dbKodaSVG"
+            width={16}
+            height={16}
+          />
+        );
       case 'add':
         return <AddIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
       case 'close':
-        return <CloseIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+        return (
+          <CloseIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
       case 'shards':
-        return <ShardsIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+        return (
+          <ShardsIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
       case 'collection':
-        return <CollectionIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+        return (
+          <CollectionIcon
+            className="pt-icon dbKodaSVG"
+            width={16}
+            height={16}
+          />
+        );
       case 'dropdown':
-        return <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />;
+        return (
+          <DropdownIcon className="pt-icon dbKodaSVG" width={16} height={16} />
+        );
       default:
         return null;
     }
@@ -212,14 +245,19 @@ export default class TreeView extends React.Component {
         Menus.push(<MenuDivider key="divider" />);
         for (const objAction of Actions) {
           // icon={objAction.icon}
-          if (objAction.name === 'ShowPerformancePanel' && this.props.store.profileList.selectedProfile) {
-            const hasPerformancePanel = this.props.api.hasPerformancePanel(this.props.store.profileList.selectedProfile.id);
+          if (
+            objAction.name === 'ShowPerformancePanel' &&
+            this.props.store.profileList.selectedProfile
+          ) {
+            const hasPerformancePanel = this.props.api.hasPerformancePanel(
+              this.props.store.profileList.selectedProfile.id
+            );
             objAction.text = globalString(
               `profile/menu/${
                 !hasPerformancePanel
                   ? 'createPerformancePanel'
                   : 'openPerformancePanel'
-                }`
+              }`
             );
           }
           if (objAction.type && objAction.type == 'divider') {
@@ -343,7 +381,14 @@ export default class TreeView extends React.Component {
   };
 
   @action
-  handleTreeActionClick = (e: React.MouseEvent) => {
+  handleTreeActionClick = (
+    e: React.MouseEvent,
+    isTriggeredFromButton: boolean
+  ) => {
+    if (isTriggeredFromButton) {
+      this.nodeRightClicked = this.props.store.treePanel.nodeOpened;
+    }
+    console.log(this.nodeRightClicked);
     const action = findElementAttributeUpward(e.target, 'data-id');
     const noDialog = this.getNoDialogByName(action);
     this.actionSelected = this.getActionByName(action);
@@ -624,7 +669,8 @@ export default class TreeView extends React.Component {
     const profile = this.props.store.profileList.selectedProfile;
     if (profile.sshTunnel) {
       NewToaster.show({
-        message: 'MongoDB connections using SSH Tunnel are not supported by Apache Drill.',
+        message:
+          'MongoDB connections using SSH Tunnel are not supported by Apache Drill.',
         className: 'danger',
         icon: 'thumbs-down'
       });

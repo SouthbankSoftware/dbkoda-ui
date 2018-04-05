@@ -116,6 +116,29 @@ ul.pt-tree-node-list {
 
       span.pt-tree-node-label {
         order: 3;
+        div.labelWrapper {
+          span.additionalActions {
+            float: right;
+            opacity: 0;
+            a.button {
+              background-color: unset;
+              background-image: none;
+            }
+            a.button:hover {
+              opacity: 1;
+            }
+            a.button:focus {
+              box-shadow: unset;
+            }
+          }
+        }
+      }
+      span.pt-tree-node-label:hover {
+        div.labelWrapper {
+          span.additionalActions {
+            opacity: 0.6;
+          }
+        }
       }
 
       span.pt-tree-node-secondary-label {
@@ -127,6 +150,11 @@ ul.pt-tree-node-list {
           width: 20px;
           height: 20px;
         }
+      }
+    }
+    div.pt-tree-node-content:hover {
+      span.additionActions {
+        opacity: 1;
       }
     }
 
@@ -142,6 +170,30 @@ ul.pt-tree-node-list {
       span.pt-tree-node-label {
         font-size: 10pt;
         order: 3;
+        div.labelWrapper {
+          span.additionalActions {
+            float: right;
+            opacity: 0;
+            a.button {
+              background-color: unset;
+              background-image: none;
+            }
+            a.button:hover {
+              opacity: 1;
+            }
+            a.button:focus {
+              box-shadow: unset;
+            }
+          }
+        }
+      }
+
+      span.pt-tree-node-label:hover {
+        div.labelWrapper {
+          span.additionalActions {
+            opacity: 1;
+          }
+        }
       }
 
       span.pt-tree-node-secondary-label {
