@@ -1,0 +1,43 @@
+{
+  "Title": "Create View",
+  "AutoRefresh": true,
+  "DefaultValues": {
+    "function": "dbkoda_CreateViewPreFill",
+    "arguments": [
+      {
+        "name": "Database",
+        "value": "treeNode.parentDB"
+      },
+      {
+        "name": "Collection",
+        "value": "treeNode"
+      }
+    ]
+  },
+  "Fields": [
+    {
+      "name": "Database",
+      "type": "Text",
+      "readOnly": true,
+      "tooltip": "The database which the View will be created in"
+    },
+    {
+      "name": "Collection",
+      "type": "Text",
+      "readOnly": true,
+      "tooltip": "The collection that the View will be based on",
+      "lookup": "dbkoda_listcollections"
+    },
+    {
+      "name": "ViewName",
+      "label": "View Name",
+      "type": "Text",
+      "tooltip": "The name of the View to be created"
+    },
+    {
+      "name": "Pipeline",
+      "type": "CodeMirror",
+      "tooltip": "The aggregation pipeline to use as a filter for the View"
+    }
+  ]
+}
