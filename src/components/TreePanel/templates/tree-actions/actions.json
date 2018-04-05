@@ -217,6 +217,11 @@
       "name": "CollectionDivider2"
     },
     {
+      "name": "CreateView",
+      "text": "Create View",
+      "icon": "add"
+    },
+    {
       "name": "RenameCollection",
       "text": "Rename Collection",
       "icon": "exchange"
