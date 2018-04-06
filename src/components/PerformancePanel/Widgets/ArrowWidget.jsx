@@ -30,11 +30,13 @@ import * as React from 'react';
 import { autorun } from 'mobx';
 import type { WidgetState } from '~/api/Widget';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
+import { Popover, PopoverInteractionKind } from '@blueprintjs/core';
 import * as d3 from 'd3';
 // $FlowFixMe
 import 'd3-selection-multi';
 import { convertUnits } from './Utils';
 import Widget from './Widget';
+import Legend from './Legend';
 import styles from './ArrowWidget.scss';
 
 const ARROW_MASK_ID = 'ArrowWidget-arrowMask';
@@ -43,6 +45,7 @@ const GRADIENT_ID = 'ArrowWidget-gradient';
 // these dimensions are only used at drawing time. The svg will automatically adapt to its container
 // size
 const width = 300;
+const colors = ['#39B160'];
 const height = 375;
 const headYPropotion = 0.5;
 const tailXPropotion = 0.4;
@@ -76,6 +79,7 @@ export default class ArrowWidget extends React.Component<Props, State> {
   _valueRec: *;
   _autorunDisposer: *;
   maxValue: *;
+  toolTipLegend: *;
 
   constructor(props: Props) {
     super(props);
@@ -237,7 +241,10 @@ export default class ArrowWidget extends React.Component<Props, State> {
   render() {
     const { performancePanel, widget, widgetStyle } = this.props;
     const { text } = this.state;
-
+    const latestValue =
+      widget.values.length > 0
+        ? widget.values[widget.values.length - 1].value
+        : {};
     return (
       <Widget
         className="ArrowWidget"
@@ -245,10 +252,43 @@ export default class ArrowWidget extends React.Component<Props, State> {
         widget={widget}
         widgetStyle={widgetStyle}
       >
-        <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
-        <div className="text" ref={_textEl => (this._textEl = _textEl)}>
-          {text}
-        </div>
+        <Popover
+          minimal
+          interactionKind={PopoverInteractionKind.HOVER}
+          popoverClassName="StackedRadialWidgetTooltip toolTip"
+          content={
+            <div className="Tooltip">
+              <Legend
+                showTotal
+                showValues
+                colors={colors}
+                showDots
+                metrics={this.props.widget.items}
+                unit={this.props.widget.unit}
+                getValues={() => {
+                  return latestValue;
+                }}
+                getUnit={() => {
+                  return this.props.widget.unit;
+                }}
+                onRef={toolTipLegend => {
+                  this.toolTipLegend = toolTipLegend;
+                }}
+              />
+            </div>
+          }
+          target={
+            <div className="popoverTargetWrapper">
+              <svg
+                className="chart"
+                ref={_chartEl => (this._chartEl = _chartEl)}
+              />
+              <div className="text" ref={_textEl => (this._textEl = _textEl)}>
+                {text}
+              </div>
+            </div>
+          }
+        />
       </Widget>
     );
   }
