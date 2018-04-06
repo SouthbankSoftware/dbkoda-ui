@@ -30,6 +30,7 @@ import * as React from 'react';
 import { autorun } from 'mobx';
 import type { WidgetState } from '~/api/Widget';
 import type { PerformancePanelState } from '~/api/PerformancePanel';
+// $FlowFixMe
 import { Popover, PopoverInteractionKind } from '@blueprintjs/core';
 import * as d3 from 'd3';
 // $FlowFixMe
