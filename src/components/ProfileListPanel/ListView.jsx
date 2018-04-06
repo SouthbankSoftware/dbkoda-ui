@@ -504,12 +504,9 @@ export default class ListView extends React.Component {
       profile = buttonProfile;
     } else {
       profile = profiles[context.regions[0].rows[0]][1];
+      this.state.targetProfile = profile;
     }
-    console.log(buttonProfile);
-    console.log(profile);
 
-    // @TODO -> Should we update state store to reflect right clicks here?
-    this.state.targetProfile = profile;
     let connect;
     const terminalOperations = [];
     const windows = [];
@@ -549,7 +546,7 @@ export default class ListView extends React.Component {
       const { api } = this.props;
 
       this.props.store.editors.forEach(value => {
-        if (value.currentProfile.trim() == this.state.targetProfile.id.trim()) {
+        if (value.currentProfile.trim() == profile.id.trim()) {
           windows.push(
             <div key={windows.length} className="menuItemWrapper">
               <MenuItem
@@ -698,6 +695,7 @@ export default class ListView extends React.Component {
 
     return (
       <Menu className="profileListContextMenu">
+        <div>{profile.alias}</div>
         {connect}
         <MenuDivider />
         {terminalOperations}
@@ -756,6 +754,7 @@ export default class ListView extends React.Component {
                     className="button"
                     onClick={() => {
                       console.log('Open Context Menu');
+                      this.state.targetProfile = profiles[rowIndex][1];
                     }}
                   >
                     ...
@@ -781,12 +780,13 @@ export default class ListView extends React.Component {
               minimal
               interactionKind={PopoverInteractionKind.CLICK}
               popoverClassName="toolTip"
-              content={<Menu />}
+              content={this.renderBodyContextMenu(null, profiles[rowIndex][1])}
               target={
                 <AnchorButton
                   className="button"
                   onClick={() => {
                     console.log('Open Context Menu');
+                    this.state.targetProfile = profiles[rowIndex][1];
                   }}
                 >
                   ...
