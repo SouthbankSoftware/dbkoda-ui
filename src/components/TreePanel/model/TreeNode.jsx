@@ -382,7 +382,11 @@ export default class TreeNode {
                   console.log('Open Context Menu');
                 }}
               >
-                ...
+                <DropdownIcon
+                  className="pt-icon dbKodaSVG"
+                  width={16}
+                  height={16}
+                />
               </AnchorButton>
             }
           />

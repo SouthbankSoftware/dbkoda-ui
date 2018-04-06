@@ -125,6 +125,14 @@ ul.pt-tree-node-list {
                             outline: unset;
                             background-color: unset;
                             background-image: none;
+
+                            svg {
+                                fill: #bfbec0;
+                            }
+
+                            svg:hover {
+                                fill: white;
+                            }
                         }
 
                         a.button:hover {
@@ -188,6 +196,11 @@ ul.pt-tree-node-list {
                             box-shadow: none !important;
                             background-color: unset;
                             background-image: none;
+
+                            svg {
+                                width: 20px;
+                                height: 40px;
+                            }
                         }
 
                         a.button:hover {

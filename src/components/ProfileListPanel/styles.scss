@@ -214,6 +214,17 @@
                     span.pt-button-text {
                         font-size: 24px;
                     }
+
+                    svg {
+                        width: 30px;
+                        height: 40px;
+                        fill: #bfbec0;
+                        margin: unset;
+                    }
+
+                    svg:hover {
+                        fill: white;
+                    }
                 }
 
                 a.button:hover {

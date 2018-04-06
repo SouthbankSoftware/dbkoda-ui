@@ -51,6 +51,7 @@ import { ProfileStatus } from '../common/Constants';
 import { featherClient } from '../../helpers/feathers';
 import { Broker, EventType } from '../../helpers/broker';
 import ConnectionIcon from '../../styles/icons/connection-icon-2.svg';
+import DropdownIcon from '../../styles/icons/dropdown-menu-icon.svg';
 
 import './styles.scss';
 
@@ -758,7 +759,11 @@ export default class ListView extends React.Component {
                       this.state.targetProfile = profiles[rowIndex][1];
                     }}
                   >
-                    ...
+                    <DropdownIcon
+                      className="pt-icon dbKodaSVG"
+                      width={16}
+                      height={16}
+                    />
                   </AnchorButton>
                 }
               />
@@ -790,7 +795,11 @@ export default class ListView extends React.Component {
                     this.state.targetProfile = profiles[rowIndex][1];
                   }}
                 >
-                  ...
+                  <DropdownIcon
+                    className="pt-icon dbKodaSVG"
+                    width={16}
+                    height={16}
+                  />
                 </AnchorButton>
               }
             />
