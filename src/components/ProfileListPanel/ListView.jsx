@@ -696,6 +696,7 @@ export default class ListView extends React.Component {
     return (
       <Menu className="profileListContextMenu">
         <div>{profile.alias}</div>
+        <MenuDivider />
         {connect}
         <MenuDivider />
         {terminalOperations}
