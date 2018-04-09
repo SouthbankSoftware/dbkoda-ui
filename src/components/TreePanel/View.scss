@@ -116,7 +116,9 @@ ul.pt-tree-node-list {
             span.pt-tree-node-label {
                 order: 3;
 
-                div.labelWrapper {
+                .labelWrapper {
+                    margin-top: 10px;
+
                     span.additionalActions {
                         float: right;
                         opacity: 0;
@@ -127,6 +129,7 @@ ul.pt-tree-node-list {
                             background-image: none;
 
                             svg {
+                                top: 10px;
                                 fill: #bfbec0;
                             }
 
@@ -162,6 +165,8 @@ ul.pt-tree-node-list {
         .pt-tree-node-content:hover {
             .pt-tree-node-label {
                 .labelWrapper {
+                    margin-top: 10px;
+
                     .additionalActions {
                         opacity: 0.6;
                     }
@@ -186,7 +191,9 @@ ul.pt-tree-node-list {
                 font-size: 10pt;
                 order: 3;
 
-                div.labelWrapper {
+                .labelWrapper {
+                    margin-top: 10px;
+
                     span.additionalActions {
                         float: right;
                         opacity: 0;
@@ -200,6 +207,7 @@ ul.pt-tree-node-list {
                             svg {
                                 width: 20px;
                                 height: 40px;
+                                top: 10px;
                             }
                         }
 
