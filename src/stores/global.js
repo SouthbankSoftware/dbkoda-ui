@@ -118,7 +118,8 @@ export default class Store {
     shouldScrollToActiveTab: false,
     tabScrollLeftPosition: 0,
     updateAggregateDetails: false,
-    updateAggregateCode: false
+    updateAggregateCode: false,
+    showNewFeaturesDialog: true
   });
 
   @observable
@@ -463,8 +464,8 @@ export default class Store {
     newStore.editorPanel.showingSavingDialogEditorIds = observable.array(null, {
       deep: false
     });
+    newStore.editorPanel.showNewFeaturesDialog = true;
     newStore.editorPanel.updateAggregateDetails = false;
-    newStore.editorToolbar.newEditorForTreeAction = false;
     newStore.editorPanel.lastFileSavingDirectoryPath =
       newStore.editorPanel.lastFileSavingDirectoryPath ||
       (IS_ELECTRON ? global.PATHS.userHome : '');
@@ -475,6 +476,7 @@ export default class Store {
 
     // EditorToolbar:
     newStore.editorToolbar.currentProfile = 0;
+    newStore.editorToolbar.newEditorForTreeAction = false;
     newStore.editorToolbar.id = 0;
     newStore.editorToolbar.shellId = 0;
     newStore.editorToolbar.reloadToolbar = false;

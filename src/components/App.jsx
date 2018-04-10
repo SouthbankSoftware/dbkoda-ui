@@ -40,6 +40,7 @@ import { PerformancePanel } from '#/PerformancePanel';
 import { ProfileManager } from '#/ProfileManager';
 import { DrawerPanes } from '#/common/Constants';
 import PasswordDialog from '#/common/PasswordDialog';
+import NewFeaturesDialog from '#/common/NewFeaturesDialog';
 import PasswordResetDialog from '#/common/PasswordResetDialog';
 import { performancePanelStatuses } from '~/api/PerformancePanel';
 
@@ -65,6 +66,15 @@ class App extends React.Component {
   static propTypes = {
     layout: PropTypes.observableObject.isRequired
   };
+
+  componentWillMount() {
+    if (!this.props.config.settings.showNewFeaturesDialogOnStart) {
+      this.props.store.editorPanel.showNewFeaturesDialog = false;
+    } else {
+      this.props.store.editorPanel.showNewFeaturesDialog = true;
+    }
+  }
+
   componentDidMount() {
     Broker.emit(EventType.APP_RENDERED);
   }
@@ -104,6 +114,7 @@ class App extends React.Component {
       defaultOverallSplitPos = layout.overallSplitPos;
       defaultRightSplitPos = layout.rightSplitPos;
     });
+
     return (
       <div>
         <Analytics />
@@ -111,6 +122,9 @@ class App extends React.Component {
         <PasswordDialog
           showDialog={this.props.store.password.showDialog}
           verifyPassword={this.props.store.password.verifyPassword}
+        />
+        <NewFeaturesDialog
+          showDialog={this.props.store.editorPanel.showNewFeaturesDialog}
         />
         <PasswordResetDialog />
         <SplitPane

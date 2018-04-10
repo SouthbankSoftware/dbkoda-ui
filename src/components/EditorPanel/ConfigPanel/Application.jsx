@@ -73,6 +73,15 @@ export default class Application extends React.Component {
             onChange={this.onCheckboxToggle}
           />
         </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('showNewFeaturesDialogOnStart')}
+          <Checkbox
+            type="text"
+            id="showNewFeaturesDialogOnStart"
+            checked={this.props.settings.showNewFeaturesDialogOnStart}
+            onChange={this.onCheckboxToggle}
+          />
+        </div>
         <div className="sectionHeader">Performance Panel</div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.preventDisplaySleep')}
@@ -84,7 +93,9 @@ export default class Application extends React.Component {
           />
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.metricSmoothingWindow')}
+          {this.props.renderFieldLabel(
+            'performancePanel.metricSmoothingWindow'
+          )}
           <input
             type="text"
             id="performancePanel.metricSmoothingWindow"
@@ -93,7 +104,9 @@ export default class Application extends React.Component {
           />
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.foregroundSamplingRate')}
+          {this.props.renderFieldLabel(
+            'performancePanel.foregroundSamplingRate'
+          )}
           <input
             type="text"
             id="performancePanel.foregroundSamplingRate"
@@ -102,7 +115,9 @@ export default class Application extends React.Component {
           />
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.backgroundSamplingRate')}
+          {this.props.renderFieldLabel(
+            'performancePanel.backgroundSamplingRate'
+          )}
           <input
             type="text"
             id="performancePanel.backgroundSamplingRate"
@@ -129,7 +144,9 @@ export default class Application extends React.Component {
           />
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.alarmDisplayingWindow')}
+          {this.props.renderFieldLabel(
+            'performancePanel.alarmDisplayingWindow'
+          )}
           <input
             type="text"
             id="performancePanel.alarmDisplayingWindow"
