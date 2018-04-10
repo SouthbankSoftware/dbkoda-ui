@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-29T10:29:13+11:00
+ * @Last modified time: 2018-04-10T10:50:01+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -330,7 +330,7 @@ export default class PerformancePanelApi {
         } else {
           // $FlowFixMe
           errorMessage = globalString(ErrorCodes[err.code], errorMessage);
-          this._sendMsgToPerformanceWindow({
+          this.sendMsgToPerformanceWindow({
             command: 'mw_error',
             profileId,
             err
@@ -522,7 +522,7 @@ export default class PerformancePanelApi {
         if (performancePanel.status === performancePanelStatuses.external) {
           const externalWindow = this.externalPerformanceWindows.get(profileId);
           if (externalWindow && externalWindow.status === 'ready') {
-            this._sendMsgToPerformanceWindow({
+            this.sendMsgToPerformanceWindow({
               command: 'mw_updateData',
               profileId,
               dataObject: payload
@@ -615,7 +615,7 @@ export default class PerformancePanelApi {
     if (this.eventQueue[profileId]) {
       delete this.eventQueue[profileId];
     }
-    this._sendMsgToPerformanceWindow({
+    this.sendMsgToPerformanceWindow({
       command: 'mw_createWindow',
       profileId,
       profileAlias
@@ -625,13 +625,13 @@ export default class PerformancePanelApi {
 
   @action.bound
   _unmountPerformancePanelFromExternalWindow(profileId: UUID) {
-    this._sendMsgToPerformanceWindow({command: 'mw_closeWindow', profileId});
+    this.sendMsgToPerformanceWindow({command: 'mw_closeWindow', profileId});
     this.externalPerformanceWindows.set(profileId, {status: 'closed'});
   }
 
   @action.bound
   _focusPerformancePanelExternalWindow(profileId: UUID) {
-    this._sendMsgToPerformanceWindow({
+    this.sendMsgToPerformanceWindow({
       command: 'mw_focusWindow',
       profileId
     });
@@ -645,7 +645,7 @@ export default class PerformancePanelApi {
       if (args.command === 'pw_windowReady') {
         const performancePanel = performancePanels.get(args.profileId);
         const configObj = this.store.config;
-        this._sendMsgToPerformanceWindow({
+        this.sendMsgToPerformanceWindow({
           command: 'mw_initData',
           profileId: args.profileId,
           configObject: dump(configObj, {serializer}),
@@ -682,12 +682,14 @@ export default class PerformancePanelApi {
         this.resetPerformancePanel(args.profileId);
       } else if (args.command === 'pw_openStorageDDView') {
         this.api.showStorageStatsView();
+      } else if (args.command === 'pw_getTopConnections') {
+        this.api.getTopConnections(args.profileId);
       }
     }
   }
 
   @action.bound
-  _sendMsgToPerformanceWindow(args) {
+  sendMsgToPerformanceWindow(args: { profileId: UUID, command: string }) {
     if (IS_ELECTRON) {
       const electron = window.require('electron');
       const {ipcRenderer} = electron;
@@ -859,7 +861,7 @@ export default class PerformancePanelApi {
   };
 
   showToasterInPerformanceWindow = (profileId: UUID, toasterObj: *) => {
-    this._sendMsgToPerformanceWindow({
+    this.sendMsgToPerformanceWindow({
       command: 'mw_toaster',
       profileId,
       toasterObj

@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-29T10:26:54+11:00
+ * @Last modified time: 2018-04-10T10:50:48+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -55,7 +55,7 @@ export default class DataCenter {
     this.treeApi = new TreeApi(store, this, profileStore);
     this.drillApi = new DrillApi(store, this);
     this.passwordApi = new PasswordApi(store, this, config);
-    this.topConnectionsApi = new TopConnectionsApi(store);
+    this.topConnectionsApi = new TopConnectionsApi(store, this);
 
     this.init = this.init.bind(this);
 
@@ -94,7 +94,8 @@ export default class DataCenter {
         'resetPerformancePanel',
         'changeSamplingRate',
         'reactToSamplingRateChange',
-        'showToasterInPerformanceWindow'
+        'showToasterInPerformanceWindow',
+        'sendMsgToPerformanceWindow'
       ])
     );
 

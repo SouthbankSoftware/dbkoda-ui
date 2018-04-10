@@ -28,7 +28,7 @@
 self.addEventListener(
   'message',
   (e) => {
-    const jsonStr = e.data.jsonStr;
+    const {jsonStr} = e.data;
     let message = '';
     let json = jsonStr
       .replace(/ObjectId\("?([0-9a-z]*)"?\)/gm, '"$1"')
@@ -48,7 +48,7 @@ self.addEventListener(
       // eslint-disable-next-line no-undef
       json = JSOL.parse(json);
     } catch (e) {
-      message = e.message;
+      ({message} = e);
     }
     self.postMessage([json, message]);
     self.close();

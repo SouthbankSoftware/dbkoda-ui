@@ -4,8 +4,8 @@
  * @Author: Guan Gui <guiguan>
  * @Date:   2018-03-27T10:39:44+11:00
  * @Email:  root@guiguan.net
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-27T11:33:32+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-10T10:56:32+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,15 +33,22 @@ import { NewToaster } from '#/common/Toaster';
 
 export default class TopConnections {
   store: *;
+  api: *;
 
-  constructor(store: *) {
+  constructor(store: *, api: *) {
     this.store = store;
+    this.api = api;
 
     Broker.on(EventType.TOP_CONNECTIONS_DATA, ({ profileId, payload }) => {
       const { alias } = this.store.profileStore.profiles.get(profileId);
 
       console.log(`%cTop connections for ${alias} (${profileId}):`, 'color: green');
       console.table(payload);
+      this.api.sendMsgToPerformanceWindow({
+        profileId,
+        command: 'mw_topConnectionsData',
+        payload
+      });
     });
 
     Broker.on(EventType.TOP_CONNECTIONS_ERROR, ({ profileId, payload: { error, level } }) => {

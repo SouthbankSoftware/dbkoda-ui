@@ -3,8 +3,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2017-07-21T09:27:03+10:00
  * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-27T17:37:12+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-10T12:09:45+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -504,7 +504,7 @@ export default class ListView extends React.Component {
     if (buttonProfile) {
       profile = buttonProfile;
     } else {
-      profile = profiles[context.regions[0].rows[0]][1];
+      [, profile] = profiles[context.regions[0].rows[0]];
       this.state.targetProfile = profile;
     }
 
@@ -696,8 +696,7 @@ export default class ListView extends React.Component {
 
     return (
       <Menu className="profileListContextMenu">
-        <div>{profile.alias}</div>
-        <MenuDivider />
+        <div className="profileAlias">{profile.alias}</div>
         {connect}
         <MenuDivider />
         {terminalOperations}
@@ -756,7 +755,7 @@ export default class ListView extends React.Component {
                     className="button"
                     onClick={() => {
                       console.log('Open Context Menu');
-                      this.state.targetProfile = profiles[rowIndex][1];
+                      [, this.state.targetProfile] = profiles[rowIndex];
                     }}
                   >
                     <DropdownIcon
@@ -792,7 +791,7 @@ export default class ListView extends React.Component {
                   className="button"
                   onClick={() => {
                     console.log('Open Context Menu');
-                    this.state.targetProfile = profiles[rowIndex][1];
+                    [, this.state.targetProfile] = profiles[rowIndex];
                   }}
                 >
                   <DropdownIcon

@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-29T09:21:50+11:00
+ * @Last modified time: 2018-04-10T14:24:57+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,7 @@ import React from 'react';
 import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {PerformancePanel} from '#/PerformancePanel';
+import {TopConnectionsPanel} from '#/TopConnectionsPanel';
 import {NewToaster} from '#/common/Toaster';
 import {attachToMobx, detachFromMobx} from '~/api/PerformancePanel';
 
@@ -49,6 +50,7 @@ class PerformanceWindow extends React.Component {
     this.state = {
       sshStatus: Status.NORMAL,
       mongoStatus: Status.NORMAL,
+      bTopConnection: false
     };
 
     document.addEventListener(
@@ -131,22 +133,33 @@ class PerformanceWindow extends React.Component {
 
     return (
       <div>
-        {store.performancePanel ? (
-          <PerformancePanel
-            performancePanel={store.performancePanel}
-            onClose={null}
-            resetHighWaterMark={store.api.resetHighWaterMark}
-            resetPerformancePanel={() => {
-              this.setState({sshStatus: Status.NORMAL, mongoStatus: Status.NORMAL});
-              store.api.resetPerformancePanel();
-            }}
-            sshStatus={this.state.sshStatus}
-            mongoStatus={this.state.mongoStatus}
-          />
-        ) : (
+        {!this.state.bTopConnection && (
           <div>
-            <span>Loading Performance Panel...</span>
+            {store.performancePanel ? (
+              <PerformancePanel
+                performancePanel={store.performancePanel}
+                onClose={null}
+                resetHighWaterMark={store.api.resetHighWaterMark}
+                resetPerformancePanel={() => {
+                  this.setState({sshStatus: Status.NORMAL, mongoStatus: Status.NORMAL});
+                  store.api.resetPerformancePanel();
+                }}
+                getTopConnections={() => {
+                  this.setState({bTopConnection: true});
+                  store.api.getTopConnections();
+                }}
+                sshStatus={this.state.sshStatus}
+                mongoStatus={this.state.mongoStatus}
+              />
+            ) : (
+              <div>
+                <span>Loading Performance Panel...</span>
+              </div>
+            )}
           </div>
+        )}
+        {this.state.bTopConnection && (
+          <TopConnectionsPanel />
         )}
       </div>
     );
