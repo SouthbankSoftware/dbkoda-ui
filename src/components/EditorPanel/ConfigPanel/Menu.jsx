@@ -71,6 +71,13 @@ export default class Menu extends React.Component {
         >
           <PasswordStoreIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
+        <MenuItem
+          name="Performance"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
+          <PasswordStoreIcon className="dbKodaSVG" width={20} height={20} />
+        </MenuItem>
       </div>
     );
   }

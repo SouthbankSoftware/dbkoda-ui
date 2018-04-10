@@ -73,68 +73,22 @@ export default class Application extends React.Component {
             onChange={this.onCheckboxToggle}
           />
         </div>
-        <div className="sectionHeader">Performance Panel</div>
         <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.preventDisplaySleep')}
+          {this.props.renderFieldLabel('tableOutputDefault')}
           <Checkbox
             type="text"
-            id="performancePanel.preventDisplaySleep"
-            checked={this.props.settings.performancePanel.preventDisplaySleep}
+            id="tableOutputDefault"
+            checked={this.props.settings.tableOutputDefault}
             onChange={this.onCheckboxToggle}
           />
         </div>
         <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.metricSmoothingWindow')}
-          <input
+          {this.props.renderFieldLabel('showNewFeaturesDialogOnStart')}
+          <Checkbox
             type="text"
-            id="performancePanel.metricSmoothingWindow"
-            value={this.props.settings.performancePanel.metricSmoothingWindow}
-            onChange={this.onNumericalInputChange}
-          />
-        </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.foregroundSamplingRate')}
-          <input
-            type="text"
-            id="performancePanel.foregroundSamplingRate"
-            value={this.props.settings.performancePanel.foregroundSamplingRate}
-            onChange={this.onNumericalInputChange}
-          />
-        </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.backgroundSamplingRate')}
-          <input
-            type="text"
-            id="performancePanel.backgroundSamplingRate"
-            value={this.props.settings.performancePanel.backgroundSamplingRate}
-            onChange={this.onNumericalInputChange}
-          />
-        </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.historySize')}
-          <input
-            type="text"
-            id="performancePanel.historySize"
-            value={this.props.settings.performancePanel.historySize}
-            onChange={this.onNumericalInputChange}
-          />
-        </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.historyBrushSize')}
-          <input
-            type="text"
-            id="performancePanel.historyBrushSize"
-            value={this.props.settings.performancePanel.historyBrushSize}
-            onChange={this.onNumericalInputChange}
-          />
-        </div>
-        <div className="form-row">
-          {this.props.renderFieldLabel('performancePanel.alarmDisplayingWindow')}
-          <input
-            type="text"
-            id="performancePanel.alarmDisplayingWindow"
-            value={this.props.settings.performancePanel.alarmDisplayingWindow}
-            onChange={this.onNumericalInputChange}
+            id="showNewFeaturesDialogOnStart"
+            checked={this.props.settings.showNewFeaturesDialogOnStart}
+            onChange={this.onCheckboxToggle}
           />
         </div>
       </div>

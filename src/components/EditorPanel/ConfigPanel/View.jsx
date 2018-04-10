@@ -35,6 +35,7 @@ import Menu from './Menu';
 import Application from './Application';
 import PasswordStore from './PasswordStore';
 import Paths from './Paths';
+import Performance from './Performance';
 import './Panel.scss';
 
 @inject(allStores => ({
@@ -92,8 +93,12 @@ export default class View extends React.Component {
     return (
       <label htmlFor="fieldName">
         {globalString(`editor/config/${strPath}`)}
-        {this.props.store.configPage.changedFields.indexOf(fieldName) !== -1 && (
-          <div id={`unsavedFileIndicator_${fieldName}`} className="unsavedFileIndicator" />
+        {this.props.store.configPage.changedFields.indexOf(fieldName) !==
+          -1 && (
+          <div
+            id={`unsavedFileIndicator_${fieldName}`}
+            className="unsavedFileIndicator"
+          />
         )}
       </label>
     );
@@ -132,6 +137,16 @@ export default class View extends React.Component {
           />
         );
         break;
+      case 'Performance':
+        form = (
+          <Performance
+            updateValue={this.updateValue}
+            settings={this.props.store.configPage.newSettings}
+            changedFields={this.props.store.configPage.changedFields}
+            renderFieldLabel={this.renderFieldLabel}
+          />
+        );
+        break;
       default:
         form = <ErrorView error="Unknown menu item selection." />;
         break;
@@ -145,7 +160,12 @@ export default class View extends React.Component {
         <div className="configPanelWrapper">
           <div className="configTitleWrapper">
             <h1>
-              <ConfigDatabaseIcon className="dbKodaSVG" width={25} height={25} /> {this.props.title}
+              <ConfigDatabaseIcon
+                className="dbKodaSVG"
+                width={25}
+                height={25}
+              />{' '}
+              {this.props.title}
             </h1>
           </div>
           <div className="configContentWrapper">

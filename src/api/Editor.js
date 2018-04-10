@@ -141,7 +141,11 @@ export default class EditorApi {
     let largestFileName = -1;
 
     for (const editor of this.store.editors.values()) {
-      if (!editor.path && editor.type === type && editor.fileName > largestFileName) {
+      if (
+        !editor.path &&
+        editor.type === type &&
+        editor.fileName > largestFileName
+      ) {
         largestFileName = editor.fileName;
       }
     }
@@ -271,13 +275,25 @@ export default class EditorApi {
     return editorId;
   }
 
+  /**
+   * Closes the new features dialog.
+   */
+  @action.bound
+  closeNewFeaturesDialog() {
+    console.log('Hide New Features Dialog');
+    this.store.editorPanel.showNewFeaturesDialog = false;
+  }
+
   @action.bound
   removeEditor(currEditor) {
     // @TODO -> Looks like during it's various reworks this entire function has been broken and stitched back together. Some refactoring needs to occur to ensure that when atab is closed a new tab is selected. @Mike.
 
     this.store.drawer.drawerChild = DrawerPanes.DEFAULT;
     // If Editor is not clean, prompt for save.
-    if (!currEditor.doc.isClean() && currEditor.type != EditorTypes.SHELL_COMMAND) {
+    if (
+      !currEditor.doc.isClean() &&
+      currEditor.type != EditorTypes.SHELL_COMMAND
+    ) {
       this.store.editorPanel.showingSavingDialogEditorIds.push(currEditor.id);
       return;
     }
@@ -313,7 +329,9 @@ export default class EditorApi {
         const editors = [...this.store.editors.entries()];
         this.store.editorPanel.activeEditorId = editors[0][1].id;
 
-        const treeEditor = this.store.treeActionPanel.editors.get(currEditor.id);
+        const treeEditor = this.store.treeActionPanel.editors.get(
+          currEditor.id
+        );
         if (treeEditor) {
           this.store.treeActionPanel.editors.delete(treeEditor.id);
         }

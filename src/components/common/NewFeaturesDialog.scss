@@ -1,0 +1,46 @@
+@import "../../styles/_defaultTheme.scss";
+
+.newFeaturesDialog {
+    .dialogContent {
+        .header {
+            .title {
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+        }
+
+        .body {
+            background-color: darken($panelLeftBackground, 5);
+            padding: 10px;
+            border-radius: 0.45em;
+            max-height: 350px;
+            min-height: 150px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+
+            .featureWrapper {
+                min-height: 50px;
+                max-height: 100px;
+                margin-bottom: 8px;
+
+                .title {
+                    font-size: 22px;
+                    margin-bottom: 8px;
+                }
+
+                .body {
+                    margin: unset;
+                    padding: unset;
+                    font-weight: lighter;
+                    color: darken(#bfbec0, 14);
+                }
+            }
+        }
+    }
+
+    .dialogButtons {}
+}

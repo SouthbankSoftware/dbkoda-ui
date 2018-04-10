@@ -21,328 +21,373 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import '../styles/_defaultTheme.scss';
+@import "../styles/_defaultTheme.scss";
+
 $purpleFont: #b95cce;
 $resizerHoverColor: rgba($connectionButtonBackgroundColourHover, 0.7);
+
 .Resizer {
-  background: $navbarLeftBackground;
-  z-index: 20;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding;
-  background-clip: padding-box;
+    background: $navbarLeftBackground;
+    z-index: 20;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
 }
 
 .Resizer:active,
 .Resizer:hover {
-  -webkit-transition: all 2s ease;
-  transition: all 2s ease;
+    -webkit-transition: all 2s ease;
+    transition: all 2s ease;
 }
 
 .Resizer.horizontal {
-  height: 11px;
-  margin: -5px 0;
-  border-top: 5px solid rgba(255, 255, 255, 0);
-  border-bottom: 5px solid rgba(255, 255, 255, 0);
-  cursor: row-resize;
-  width: 100%;
+    height: 11px;
+    margin: -5px 0;
+    border-top: 5px solid rgba(255, 255, 255, 0);
+    border-bottom: 5px solid rgba(255, 255, 255, 0);
+    cursor: row-resize;
+    width: 100%;
 }
 
 .Resizer.horizontal:active,
 .Resizer.horizontal:hover {
-  border-top: 5px solid $resizerHoverColor;
-  border-bottom: 5px solid $resizerHoverColor;
+    border-top: 5px solid $resizerHoverColor;
+    border-bottom: 5px solid $resizerHoverColor;
 }
 
 .Resizer.vertical {
-  width: 11px;
-  margin: 0 -5px;
-  border-left: 5px solid rgba(255, 255, 255, 0);
-  border-right: 5px solid rgba(255, 255, 255, 0);
-  cursor: col-resize;
+    width: 11px;
+    margin: 0 -5px;
+    border-left: 5px solid rgba(255, 255, 255, 0);
+    border-right: 5px solid rgba(255, 255, 255, 0);
+    cursor: col-resize;
 }
 
 .Resizer.vertical:active,
 .Resizer.vertical:hover {
-  border-left: 5px solid $resizerHoverColor;
-  border-right: 5px solid $resizerHoverColor;
+    border-left: 5px solid $resizerHoverColor;
+    border-right: 5px solid $resizerHoverColor;
 }
 
 .Pane .vertical .Pane1 {
-  overflow-y: scroll;
+    overflow-y: scroll;
 }
 
 resizer.disabled {
-  cursor: not-allowed;
+    cursor: not-allowed;
 }
 
 resizer.disabled:hover {
-  border-color: transparent;
+    border-color: transparent;
 }
 
 .optInBoldDBKoda {
-  color: $purpleFont !important;
+    color: $purpleFont !important;
 }
 
 .optInSwitch {
-  width: 200px;
+    width: 200px;
 }
 
 .horizontal.Pane2 {
-  background-color: $panelLeftBackground;
+    background-color: $panelLeftBackground;
 }
 
 .DevTools > div > div:first-child > div {
-  opacity: 0.15;
-  transform: rotate(90deg);
-  right: -62px !important;
+    opacity: 0.15;
+    transform: rotate(90deg);
+    right: -62px !important;
 }
 
 .DevTools > div > div:first-child > div:hover {
-  opacity: 1;
-  transition: opacity 1s ease;
+    opacity: 1;
+    transition: opacity 1s ease;
 }
 
 ul.profileListContextMenu {
-  display: flex;
-  flex-direction: column;
-  div.contextMenuGroup {
-    div.menuItemWrapper {
-      display: flex;
-      flex-direction: row;
-      svg.dbKodaSVG {
-      }
-      li {
-      }
-    }
-  }
-  div.menuItemWrapper {
     display: flex;
-    flex-direction: row;
-    svg.dbKodaSVG {
+    flex-direction: column;
+
+    div.contextMenuGroup {
+        div.menuItemWrapper {
+            display: flex;
+            flex-direction: row;
+
+            svg.dbKodaSVG {}
+
+            li {}
+        }
     }
-    li {
+
+    div.menuItemWrapper {
+        display: flex;
+        flex-direction: row;
+
+        svg.dbKodaSVG {}
+
+        li {}
     }
-  }
 }
 
 .pt-popover-content {
-  .pt-menu {
-    background: #ffffff;
-    color: #182026;
-  }
+    .pt-menu {
+        background: #ffffff;
+        color: #182026;
+    }
 }
+
 ul.pt-menu {
-  display: flex;
-  flex-direction: column;
-  div.contextMenuGroup {
-    div.menuItemWrapper {
-      display: flex;
-      flex-direction: row;
-      svg.dbKodaSVG {
-      }
-      li {
-        width: 100%;
-      }
-    }
-  }
-  div.menuItemWrapper {
     display: flex;
-    flex-direction: row;
-    svg.dbKodaSVG {
+    flex-direction: column;
+
+    div.contextMenuGroup {
+        div.menuItemWrapper {
+            display: flex;
+            flex-direction: row;
+
+            svg.dbKodaSVG {}
+
+            li {
+                width: 100%;
+            }
+        }
     }
-    li {
-      width: 100%;
+
+    div.menuItemWrapper {
+        display: flex;
+        flex-direction: row;
+
+        svg.dbKodaSVG {}
+
+        li {
+            width: 100%;
+        }
     }
-  }
 }
 
 div.savingDialog,
 div.confirmDialog {
-  div.dialogButtons {
-    font-family: Arial, Helvetica, sans-serif;
-    h4 {
-      font-size: 12pt;
+    div.dialogButtons {
+        font-family: Arial, Helvetica, sans-serif;
+
+        h4 {
+            font-size: 12pt;
+        }
+
+        p {}
+
+        a {
+            color: $buttonTextColour;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: lighter;
+        }
+
+        a.saveButton {
+            background: unset;
+            border: none;
+            color: $buttonTextColour;
+            background-color: $buttonSuccessBackground;
+        }
+
+        a.saveButton:hover {
+            background: unset;
+            color: $buttonTextColour;
+            background-color: $buttonSuccessBackgroundHover;
+        }
+
+        a.cancelButton {
+            font-weight: lighter;
+            color: $connectionButtonFontColour !important;
+            width: 7em !important;
+            background-image: unset;
+            background-color: $connectionButtonBackgroundColour !important;
+            border: 1px solid $connectionButtonBorderColour;
+            box-shadow: unset !important;
+            -webkit-appearance: unset;
+        }
+
+        a.cancelButton:hover {
+            background: none;
+            border: 1px solid $connectionButtonBackgroundColourHover;
+            background-color: $connectionButtonBackgroundColourHover !important;
+            color: $connectionButtonFontColourHover !important;
+        }
+
+        a.dontSaveButton {
+            font-weight: lighter;
+            color: $connectionButtonFontColour;
+            width: 10em !important;
+            background-image: unset;
+            background-color: $buttonDangerBackground;
+            box-shadow: unset;
+            -webkit-appearance: unset;
+
+            /* border-top-left-radius: 1em;
+            border-bottom-left-radius: 1em;
+            border-top-right-radius: 1em;
+            border-bottom-right-radius: 1em; */
+        }
+
+        a.dontSaveButton:hover {
+            background: none;
+            color: $connectionButtonFontColour;
+            background-color: $buttonDangerBackgroundHover;
+        }
     }
-    p {
+
+    div.dialogButtons.false {
+        a.saveButton {
+            background: unset;
+            border: none;
+            color: $buttonTextColour;
+            background-color: $buttonDangerBackground;
+        }
+
+        a.saveButton:hover {
+            background: unset;
+            color: $buttonTextColour;
+            background-color: $buttonDangerBackgroundHover;
+        }
     }
-    a {
-      color: $buttonTextColour;
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: lighter;
+
+    .CodeMirror {
+        font-family: 'Courier New', 'Courier', 'monospace' !important;
     }
-    a.saveButton {
-      background: unset;
-      border: none;
-      color: $buttonTextColour;
-      background-color: $buttonSuccessBackground;
-      /* border-top-left-radius: 1em;
-      border-bottom-left-radius: 1em;
-      border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em; */
-    }
-    a.saveButton:hover {
-      background: unset;
-      color: $buttonTextColour;
-      background-color: $buttonSuccessBackgroundHover;
-    }
-    a.cancelButton {
-      font-weight: lighter;
-      color: $connectionButtonFontColour !important;
-      width: 7em !important;
-      border-radius: 0;
-      background-image: unset;
-      background-color: $connectionButtonBackgroundColour !important;
-      border: 1px solid $connectionButtonBorderColour;
-      box-shadow: unset !important;
-      -webkit-appearance: unset;
-      /* border-top-left-radius: 1em;
-      border-bottom-left-radius: 1em;
-      border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em; */
-    }
-    a.cancelButton:hover {
-      background: none;
-      border: 1px solid $connectionButtonBackgroundColourHover;
-      background-color: $connectionButtonBackgroundColourHover !important;
-      color: $connectionButtonFontColourHover !important;
-    }
-    a.dontSaveButton {
-      font-weight: lighter;
-      color: $connectionButtonFontColour;
-      width: 10em !important;
-      border-radius: 0;
-      background-image: unset;
-      background-color: $buttonDangerBackground;
-      box-shadow: unset;
-      -webkit-appearance: unset;
-      /* border-top-left-radius: 1em;
-      border-bottom-left-radius: 1em;
-      border-top-right-radius: 1em;
-      border-bottom-right-radius: 1em; */
-    }
-    a.dontSaveButton:hover {
-      background: none;
-      color: $connectionButtonFontColour;
-      background-color: $buttonDangerBackgroundHover;
-    }
-  }
-  div.dialogButtons.false {
-    a.saveButton {
-      background: unset;
-      border: none;
-      color: $buttonTextColour;
-      background-color: $buttonDangerBackground;
-    }
-    a.saveButton:hover {
-      background: unset;
-      color: $buttonTextColour;
-      background-color: $buttonDangerBackgroundHover;
-    }
-  }
-  .CodeMirror {
-    font-family: 'Courier New', 'Courier', 'monospace' !important;
-  }
 }
+
 .RootSplitPane {
-  height: calc(100% - 20px) !important;
+    height: calc(100% - 20px) !important;
 }
 
 .pt-dialog {
-  .pt-dialog-header {
-    background-color: $navbarLeftBackground;
-    h5 {
-      color: $defaultFontColor;
+    .pt-dialog-header {
+        background-color: $navbarLeftBackground;
+
+        h5 {
+            color: $defaultFontColor;
+        }
     }
-  }
-  .dialogContent {
-    color: $defaultFontColor;
-    padding: 20px;
-    width: 100%;
-    .pt-input {
-      width: 100%;
-      margin: 0 0 15px 0;
+
+    .dialogContent {
+        color: $defaultFontColor;
+        padding: 20px;
+        width: 100%;
+
+        .pt-input {
+            width: 100%;
+            margin: 0 0 15px 0;
+        }
+
+        .dialogValidationError {
+            color: $toastFontColourDanger;
+        }
     }
-    .dialogValidationError {
-      color: $toastFontColourDanger;
+
+    .dialogButtons {
+        padding: 0 20px;
+        display: inline-block;
+
+        .pt-button {
+            border-radius: 1em;
+            margin: 10px;
+            float: right;
+        }
+
+        .submitButton {
+            font-weight: lighter;
+            color: $connectionButtonFontColour;
+            width: 10em !important;
+            background-image: unset;
+            background-color: $buttonDangerBackground;
+            box-shadow: unset;
+            -webkit-appearance: unset;
+        }
+
+        .submitButton:hover {
+            background: none;
+            color: $connectionButtonFontColour;
+            background-color: $buttonDangerBackgroundHover;
+        }
+
+        .openButton {
+            font-weight: lighter;
+            color: $connectionButtonFontColour;
+            width: 10em !important;
+            background-image: unset;
+            background-color: $buttonSuccessBackground;
+            box-shadow: unset;
+            -webkit-appearance: unset;
+        }
+
+        .openButton:hover {
+            background: none;
+            color: $connectionButtonFontColour;
+            background-color: $buttonSuccessBackgroundHover;
+        }
+
+        .cancelButton {
+            font-weight: lighter;
+            color: $connectionButtonFontColour;
+            width: 7em !important;
+            background-image: unset;
+            background-color: $connectionButtonBackgroundColour;
+            border: 1px solid $connectionButtonBorderColour;
+            box-shadow: unset;
+            -webkit-appearance: unset;
+        }
+
+        .cancelButton:hover {
+            background: none;
+            border: 1px solid $connectionButtonBackgroundColourHover;
+            background-color: $connectionButtonBackgroundColourHover;
+            color: $connectionButtonFontColourHover;
+        }
+
+        .pt-intent-danger {
+            border: none;
+            color: lighten($connectionButtonFontColour, 10);
+            background-color: $buttonDangerBackground;
+            background-image: none;
+        }
+
+        .pt-intent-danger:hover {
+            border: none;
+            color: lighten($connectionButtonFontColour, 10);
+            background-color: $buttonDangerBackgroundHover;
+        }
+
+        .pt-intent-success {
+            background: unset;
+            border: none;
+            color: $buttonTextColour;
+            background-color: $buttonSuccessBackground;
+        }
+
+        .pt-intent-success:hover {
+            background-color: $buttonSuccessBackgroundHover;
+        }
     }
-  }
-  .dialogButtons {
-    padding: 0 20px;
-    display: inline-block;
-    .pt-button {
-      border-radius: 0;
-      margin: 10px;
-      float: right;
-    }
-    .submitButton {
-      font-weight: lighter;
-      color: $connectionButtonFontColour;
-      width: 10em !important;
-      border-radius: 0;
-      background-image: unset;
-      background-color: $buttonDangerBackground;
-      box-shadow: unset;
-      -webkit-appearance: unset;
-    }
-    .submitButton:hover {
-      background: none;
-      color: $connectionButtonFontColour;
-      background-color: $buttonDangerBackgroundHover;
-    }
-    .openButton {
-      font-weight: lighter;
-      color: $connectionButtonFontColour;
-      width: 10em !important;
-      border-radius: 0;
-      background-image: unset;
-      background-color: $buttonSuccessBackground;
-      box-shadow: unset;
-      -webkit-appearance: unset;
-    }
-    .openButton:hover {
-      background: none;
-      color: $connectionButtonFontColour;
-      background-color: $buttonSuccessBackgroundHover;
-    }
-    .cancelButton {
-      font-weight: lighter;
-      color: $connectionButtonFontColour;
-      width: 7em !important;
-      border-radius: 0;
-      background-image: unset;
-      background-color: $connectionButtonBackgroundColour;
-      border: 1px solid $connectionButtonBorderColour;
-      box-shadow: unset;
-      -webkit-appearance: unset;
-    }
-    .cancelButton:hover {
-      background: none;
-      border: 1px solid $connectionButtonBackgroundColourHover;
-      background-color: $connectionButtonBackgroundColourHover;
-      color: $connectionButtonFontColourHover;
-    }
-  }
 }
 
 .statusPanel {
-  order: 2;
-  width: 100%;
-  height: 20px;
-  position: absolute;
-  z-index: 20;
-  bottom: 0px;
-  background-color: $navbarLeftBackground;
-  color: $defaultFontColor;
+    order: 2;
+    width: 100%;
+    height: 20px;
+    position: absolute;
+    z-index: 20;
+    bottom: 0px;
+    background-color: $navbarLeftBackground;
+    color: $defaultFontColor;
 }
 
 .TelemetryConsent {
-  .dialogButtons {
-    label.pt-switch {
-      float: left;
-      margin-top: 15px;
+    .dialogButtons {
+        label.pt-switch {
+            float: left;
+            margin-top: 15px;
+        }
     }
-  }
 }
