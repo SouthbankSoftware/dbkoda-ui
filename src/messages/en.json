@@ -296,6 +296,7 @@
         "telemetryEnabled": "Send Telemetry Data to dbKoda",
         "showNewFeaturesDialogOnStart":
           "Show new features dialog on application start.",
+        "tableOutputDefault": "Use Table Output as Default Output",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
         "performancePanel": {
           "preventDisplaySleep":
