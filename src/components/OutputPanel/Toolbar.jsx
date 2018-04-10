@@ -251,8 +251,9 @@ export default class Toolbar extends React.Component {
   onExecutionFinished() {
     console.log('Execution Finished!');
     if (this.props.config.settings.tableOutputDefault) {
-      console.log('Output Default: Table');
-      this.openTableView();
+      setTimeout(() => {
+        this.openTableView();
+      }, 0);
     }
   }
 
