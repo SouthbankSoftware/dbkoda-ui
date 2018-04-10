@@ -23,251 +23,256 @@
  * @Last modified by:   wahaj
  * @Last modified time: 2018-03-26T16:32:49+11:00
  */
-@import '../../../styles/_defaultTheme.scss';
+@import "../../../styles/_defaultTheme.scss";
+
 $menuColor1: #7fa5ad;
 $menuColor2: #cf7769;
 $menuColor3: #adc88f;
 $menuColor4: #837395;
 
+.pt-button {}
+
 .configContentWrapper {
-  display: flex;
-  flex-direction: row;
-  margin-top: 25px;
-
-  .loadingWrapper {
-    position: relative;
-    float: right;
-    width: 50px;
-    height: 50px;
-  }
-
-  .configLeftMenuWrapper .configMenu {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    width: 250px;
-    border-right: 1px solid $selectDarkBorderColor;
+    margin-top: 25px;
 
-    .menuItem {
-      width: 100px;
-      height: 100px;
-    }
-
-    .menuItem:hover {
-      background-color: darken(#2e3042, 15%);
-    }
-
-    .pt-button {
-      width: 100px;
-      height: 100px;
-      border-radius: 0;
-      opacity: 0.5;
-
-      .dbKodaSVG {
-        width: 80px;
-        height: 80px;
-        transform: translate(-50%, -50%);
-      }
-    }
-
-    .menuItem.selected .pt-button {
-      opacity: 1.0;
-    }
-
-    .menuItem .menuItemApplication {
-      background-color: $menuColor1;
-
-      .st0 {
-        fill: #CCD1D9;
-      }
-
-      .st1 {
-        fill: #E6E9ED;
-      }
-
-      .st2 {
-        fill: #656D78;
-      }
-
-      .st3 {
-        fill: #434A54;
-      }
-
-      .st4 {
-        fill: #FC6E51;
-      }
-
-      .st5 {
-        fill: #AC92EB;
-      }
-
-      .st6 {
-        fill: #48CFAD;
-      }
-
-      .st7 {
-        fill: #5D9CEC;
-      }
-
-      .st8 {
-        fill: #FFCE54;
-      }
-
-      .st9 {
-        fill: #ED5564;
-      }
-    }
-
-    .menuItem .menuItemPaths {
-      background-color: $menuColor2;
-
-      .st0 {
-        fill: #FABE5C;
-      }
-
-      .st1 {
-        fill: #5C6F74;
-      }
-
-      .st2 {
-        fill: #203F49;
-      }
-
-      .st3 {
-        fill: #FBDF65;
-      }
-    }
-
-    .menuItem .menuItemPasswordStore {
-      background-color: $menuColor3;
-
-      .st0 {
-        fill: #FFFFFF;
-      }
-
-      .st1 {
-        fill: #EFCE4A;
-      }
-
-      .st2 {
-        fill: #D6A416;
-      }
-
-      svg {
-        width: 65px;
-        height: 65px;
-      }
-    }
-
-    .menuItem .menuItem3 {
-      background-color: $menuColor4;
-    }
-  }
-
-  .configRightFormWrapper {
-    margin-left: 50px;
-    width: 100%;
-
-    button.pt-button.formButton {
-      margin-left: 5px;
-      font-weight: lighter;
-      color: $connectionButtonFontColour;
-      width: 7em !important;
-      border-radius: 0;
-      background-image: unset;
-      background-color: $connectionButtonBackgroundColour;
-      border: 1px solid $connectionButtonBorderColour;
-      box-shadow: unset;
-    }
-
-    .formContentWrapper {
-      display: table;
-      width: 100%;
-
-      .sectionHeader {
-        font-size: 20px;
-        margin: 8px 0 13px;
-      }
-
-      .form-row {
-        display: table-row;
-        margin: 12px;
-        height: 35px;
-
-        label {
-          display: table-cell;
-          font-size: 12pt;
-          vertical-align: middle;
-          width: 30%;
-          max-width: max-content;
-        }
-
-        input {
-          display: table-cell;
-          width: 60%;
-        }
-
-        .pt-checkbox {
-          font-size: 10pt;
-          font-weight: lighter;
-          color: $connectionHeadingsFontColour !important;
-          text-align: left;
-          margin: 0;
-
-          span.pt-control-indicator {
-            margin: 5px;
-            font-size: unset;
-            font-weight: unset;
-            font-style: unset;
-            box-shadow: unset;
-            line-height: unset;
-            background: unset;
-            box-shadow: unset;
-            font-size: 11pt;
-            color: $connectionCheckboxColour;
-            border-radius: 0;
-            background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
-            border: 1px solid $connectionCheckboxColour;
-          }
-
-          span.pt-control-indicator:hover {
-            background-color: $connectionCheckboxBackgroundColourHover;
-          }
-        }
-      }
-
-      .unsavedFileIndicator {
-        opacity: 1;
-        top: 0;
+    .loadingWrapper {
+        position: relative;
         float: right;
-      }
-    }
-
-    .formContentWrapper.ApplicationPreferences {
-      .form-row {
+        width: 50px;
         height: 50px;
-
-        label {
-          vertical-align: text-top;
-          width: 20%;
-        }
-      }
     }
-  }
+
+    .configLeftMenuWrapper .configMenu {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 250px;
+        border-right: 1px solid $selectDarkBorderColor;
+
+        .menuItem {
+            width: 100px;
+            height: 100px;
+        }
+
+        .menuItem:hover {
+            background-color: darken(#2e3042, 15%);
+        }
+
+        .pt-button {
+            width: 100px;
+            height: 100px;
+            border-radius: 0;
+            opacity: 0.5;
+
+            .dbKodaSVG {
+                width: 80px;
+                height: 80px;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .menuItem.selected .pt-button {
+            opacity: 1.0;
+        }
+
+        .menuItem .menuItemApplication {
+            background-color: $menuColor1;
+
+            .st0 {
+                fill: #CCD1D9;
+            }
+
+            .st1 {
+                fill: #E6E9ED;
+            }
+
+            .st2 {
+                fill: #656D78;
+            }
+
+            .st3 {
+                fill: #434A54;
+            }
+
+            .st4 {
+                fill: #FC6E51;
+            }
+
+            .st5 {
+                fill: #AC92EB;
+            }
+
+            .st6 {
+                fill: #48CFAD;
+            }
+
+            .st7 {
+                fill: #5D9CEC;
+            }
+
+            .st8 {
+                fill: #FFCE54;
+            }
+
+            .st9 {
+                fill: #ED5564;
+            }
+        }
+
+        .menuItem .menuItemPaths {
+            background-color: $menuColor2;
+
+            .st0 {
+                fill: #FABE5C;
+            }
+
+            .st1 {
+                fill: #5C6F74;
+            }
+
+            .st2 {
+                fill: #203F49;
+            }
+
+            .st3 {
+                fill: #FBDF65;
+            }
+        }
+
+        .menuItem .menuItemPasswordStore {
+            background-color: $menuColor3;
+
+            .st0 {
+                fill: #FFFFFF;
+            }
+
+            .st1 {
+                fill: #EFCE4A;
+            }
+
+            .st2 {
+                fill: #D6A416;
+            }
+
+            svg {
+                width: 65px;
+                height: 65px;
+            }
+        }
+
+        .menuItem .menuItem3 {
+            background-color: $menuColor4;
+        }
+    }
+
+    .configRightFormWrapper {
+        margin-left: 50px;
+        width: 100%;
+
+        button.pt-button.formButton {
+            margin-left: 5px;
+            font-weight: lighter;
+            color: $connectionButtonFontColour;
+            width: 7em !important;
+            border-radius: 0;
+            background-image: unset;
+            background-color: $connectionButtonBackgroundColour;
+            border: 1px solid $connectionButtonBorderColour;
+            box-shadow: unset;
+        }
+
+        .formContentWrapper {
+            display: table;
+            width: 100%;
+
+            .sectionHeader {
+                font-size: 20px;
+                margin: 8px 0 13px;
+            }
+
+            .form-row {
+                display: table-row;
+                margin: 12px;
+                height: 35px;
+
+                label {
+                    display: table-cell;
+                    font-size: 12pt;
+                    vertical-align: middle;
+                    width: 30%;
+                    max-width: max-content;
+                }
+
+                input {
+                    display: table-cell;
+                    width: 60%;
+                }
+
+                .pt-checkbox {
+                    font-size: 10pt;
+                    font-weight: lighter;
+                    color: $connectionHeadingsFontColour !important;
+                    text-align: left;
+                    margin: 0;
+
+                    span.pt-control-indicator {
+                        margin: 5px;
+                        font-size: unset;
+                        font-weight: unset;
+                        font-style: unset;
+                        box-shadow: unset;
+                        line-height: unset;
+                        background: unset;
+                        box-shadow: unset;
+                        font-size: 11pt;
+                        color: $connectionCheckboxColour;
+                        border-radius: 0;
+                        background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
+                        border: 1px solid $connectionCheckboxColour;
+                    }
+
+                    span.pt-control-indicator:hover {
+                        background-color: $connectionCheckboxBackgroundColourHover;
+                    }
+                }
+            }
+
+            .unsavedFileIndicator {
+                opacity: 1;
+                top: 0;
+                float: right;
+            }
+        }
+
+        .formContentWrapper.ApplicationPreferences {
+            .form-row {
+                height: 50px;
+
+                label {
+                    vertical-align: text-top;
+                    width: 20%;
+                }
+            }
+        }
+    }
 }
 
 .configContentFooter {
-  width: 75%;
+    width: 75%;
 
-  .saveBtn {
-    float: right;
-    font-weight: lighter;
-    color: $connectionButtonFontColour;
-    width: 7em;
-    border-radius: 0;
-    background-image: unset;
-    background-color: $connectionButtonBackgroundColourConnect;
-    border: unset;
-    box-shadow: unset;
-  }
+    .saveBtn {
+        float: right;
+        font-weight: lighter;
+        color: $connectionButtonFontColour;
+        width: 7em;
+        background-image: unset;
+        background-color: $connectionButtonBackgroundColourConnect;
+        border: unset;
+        box-shadow: unset;
+        border-radius: 0.25em;
+        background: none;
+        font-weight: lighter;
+    }
 }
