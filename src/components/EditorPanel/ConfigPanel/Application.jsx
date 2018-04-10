@@ -82,7 +82,6 @@ export default class Application extends React.Component {
             onChange={this.onCheckboxToggle}
           />
         </div>
-        <div className="sectionHeader">Performance Panel</div>
         <div className="form-row">
           {this.props.renderFieldLabel('showNewFeaturesDialogOnStart')}
           <Checkbox
