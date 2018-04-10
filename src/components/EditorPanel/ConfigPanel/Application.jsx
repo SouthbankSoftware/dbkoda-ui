@@ -73,6 +73,15 @@ export default class Application extends React.Component {
             onChange={this.onCheckboxToggle}
           />
         </div>
+        <div className="form-row">
+          {this.props.renderFieldLabel('tableOutputDefault')}
+          <Checkbox
+            type="text"
+            id="tableOutputDefault"
+            checked={this.props.settings.tableOutputDefault}
+            onChange={this.onCheckboxToggle}
+          />
+        </div>
         <div className="sectionHeader">Performance Panel</div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.preventDisplaySleep')}

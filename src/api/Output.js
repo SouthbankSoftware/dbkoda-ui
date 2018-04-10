@@ -571,16 +571,12 @@ export default class OutputApi {
     if (IS_DEVELOPMENT) {
       console.log('Opening Output View: ', context);
     }
-
+    // $FlowFixMe
+    const { activeEditorId } = this.store.editorPanel;
     if (context == OutputToolbarContexts.RAW) {
-      // $FlowFixMe
-      this.outputPanel.currentTab = this.store.editorPanel.activeEditorId;
+      this.outputPanel.currentTab = activeEditorId;
     } else {
-      // $FlowFixMe
-      this.outputPanel.currentTab = `${context}-${
-        // $FlowFixMe
-        this.store.editorPanel.activeEditorId
-      }`;
+      this.outputPanel.currentTab = `${context}-${activeEditorId}`;
     }
   }
 

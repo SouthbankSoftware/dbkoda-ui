@@ -42,6 +42,7 @@ import {
   Popover
 } from '@blueprintjs/core';
 import { featherClient } from '~/helpers/feathers';
+import { Broker, EventType } from '~/helpers/broker';
 import { OutputHotkeys } from '#/common/hotkeys/hotkeyList.jsx';
 import { NewToaster } from '#/common/Toaster';
 import StaticApi from '~/api/static';
@@ -182,6 +183,11 @@ export default class Toolbar extends React.Component {
       },
       { name: 'reactionOutputToolbarClearOutput' }
     );
+
+    reaction(
+      () => this.props.store.editorToolbar.shellId,
+      () => { this.onShellIdChanged(); }
+    );
   }
 
   /**
@@ -199,6 +205,13 @@ export default class Toolbar extends React.Component {
   componentWillUnmount() {
     Mousetrap.unbindGlobal(OutputHotkeys.clearOutput.keys, this.clearOutput);
     Mousetrap.unbindGlobal(OutputHotkeys.showMore.keys, this.showMore);
+    Broker.removeListener(
+      EventType.createShellExecutionFinishEvent(
+        this.props.store.editorToolbar.currentProfile,
+        this.props.store.editorToolbar.shellId
+      ),
+      this.onExecutionFinished.bind(this)
+    );
   }
 
   /**
@@ -223,6 +236,26 @@ export default class Toolbar extends React.Component {
   downloadOutput(format = OutputFileTypes.JSON) {
     this.props.api.outputApi.downloadOutput(format);
   }
+
+  onShellIdChanged() {
+    console.log(`EventType.createShellExecutionFinishEvent(${this.props.store.editorPanel.activeEditorId}, ${this.props.store.editorToolbar.shellId})`);
+    Broker.on(
+      EventType.createShellExecutionFinishEvent(
+        this.props.store.editorToolbar.currentProfile,
+        this.props.store.editorToolbar.shellId
+      ),
+      this.onExecutionFinished.bind(this)
+    );
+  }
+
+  onExecutionFinished() {
+    console.log('Execution Finished!');
+    if (this.props.config.settings.tableOutputDefault) {
+      console.log('Output Default: Table');
+      this.openTableView();
+    }
+  }
+
 
   renderDownloadMenu() {
     return (

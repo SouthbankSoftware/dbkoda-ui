@@ -274,6 +274,7 @@
         "menuPaths": "Paths",
         "menuPasswordStore": "Password Store",
         "telemetryEnabled": "Send Telemetry Data to dbKoda",
+        "tableOutputDefault": "Use Table Output as Default Output",
         "showWelcomePageAtStart": "Show Welcome Page on Startup",
         "performancePanel": {
           "preventDisplaySleep":
