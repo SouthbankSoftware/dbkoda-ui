@@ -150,7 +150,7 @@ export default class Store {
   @observable
   layout = {
     alertIsLoading: false,
-    optInVisible: true,
+    optInVisible: !(global.UAT),
     overallSplitPos: '35%',
     leftSplitPos: '50%',
     rightSplitPos: '60%'
