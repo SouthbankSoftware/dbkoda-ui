@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-10T15:31:58+10:00
+ * @Last modified time: 2018-04-11T12:48:51+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -30,12 +30,18 @@ import { inject, observer } from 'mobx-react';
 import SplitPane from 'react-split-pane';
 import ConnectionsView from './Views/Connections';
 
+import './Panel.scss';
+
 @inject(allStores => ({
-  api: allStores.store.api
+  api: allStores.store.api,
+  store: allStores.store
 }))
 @observer
 export default class TopConnectionsPanel extends React.Component<Props> {
   render() {
+    const { store } = this.props;
+    const { topConnectionsPanel } = store;
+    const connections = topConnectionsPanel.payload;
     const splitPane2Style = {
       display: 'flex',
       flexDirection: 'column'
@@ -51,7 +57,7 @@ export default class TopConnectionsPanel extends React.Component<Props> {
           pane2Style={splitPane2Style}
         >
           <div className="connectionList">
-            <ConnectionsView />
+            <ConnectionsView connections={connections} />
           </div>
           <SplitPane
             className="RootSplitPane"
