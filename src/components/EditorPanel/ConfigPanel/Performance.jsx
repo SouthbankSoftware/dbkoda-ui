@@ -27,7 +27,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Checkbox } from '@blueprintjs/core';
+import { Switch } from '@blueprintjs/core';
 
 @observer
 export default class Performance extends React.Component {
@@ -63,15 +63,26 @@ export default class Performance extends React.Component {
   render() {
     return (
       <div className="formContentWrapper PerformancePreferences">
-        <div className="sectionHeader">Performance Panel</div>
+        <div className="sectionHeader">
+          {' '}
+          {globalString('editor/config/sections/performance')}
+        </div>
         <div className="form-row">
           {this.props.renderFieldLabel('performancePanel.preventDisplaySleep')}
-          <Checkbox
+        </div>
+        <div className="switch">
+          <Switch
             type="text"
             id="performancePanel.preventDisplaySleep"
             checked={this.props.settings.performancePanel.preventDisplaySleep}
             onChange={this.onCheckboxToggle}
           />
+          <div className="switchLabel">
+            {this.props.settings.performancePanel.preventDisplaySleep &&
+              globalString('general/on')}
+            {!this.props.settings.performancePanel.preventDisplaySleep &&
+              globalString('general/off')}
+          </div>
         </div>
         <div className="form-row">
           {this.props.renderFieldLabel(

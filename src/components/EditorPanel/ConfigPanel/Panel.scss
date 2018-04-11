@@ -25,12 +25,46 @@
  */
 @import "../../../styles/_defaultTheme.scss";
 
-$menuColor1: #7fa5ad;
-$menuColor2: #cf7769;
-$menuColor3: #adc88f;
-$menuColor4: #837395;
+$menuBackground1: #837395;
+$menuBackground2: #CF7769;
+$menuBackground3: #7FA5AD;
+$menuBackground4: #6A9CCE;
+$menuBackground5: #994182;
+$menuBackground6: #E0B448;
+$menuBackground7: #ADC88F;
 
 .pt-button {}
+
+input {
+    background-color: $searchPrimaryBackground !important;
+    color: $searchPrimaryFontColor !important;
+    border: none;
+}
+
+input[type='text'],
+input[type='number'],
+input[type='password'] {
+    background: unset;
+    color: $connectionActiveTextFieldTextColour !important;
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+input[type='password']:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+h4 {
+    color: #bfbec0 !important;
+}
+
+.logo {
+    .st0 {
+        fill: none;
+    }
+}
 
 .configContentWrapper {
     display: flex;
@@ -44,126 +78,222 @@ $menuColor4: #837395;
         height: 50px;
     }
 
-    .configLeftMenuWrapper .configMenu {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: 250px;
-        border-right: 1px solid $selectDarkBorderColor;
+    .configLeftMenuWrapper {
+        width: 30%;
+        max-width: 225px;
+        min-width: 110px;
+        background-color: #41465C;
 
-        .menuItem {
-            width: 100px;
-            height: 100px;
-        }
+        .configMenu {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            border-right: 1px solid $selectDarkBorderColor;
 
-        .menuItem:hover {
-            background-color: darken(#2e3042, 15%);
-        }
-
-        .pt-button {
-            width: 100px;
-            height: 100px;
-            border-radius: 0;
-            opacity: 0.5;
-
-            .dbKodaSVG {
-                width: 80px;
-                height: 80px;
-                transform: translate(-50%, -50%);
-            }
-        }
-
-        .menuItem.selected .pt-button {
-            opacity: 1.0;
-        }
-
-        .menuItem .menuItemApplication {
-            background-color: $menuColor1;
-
-            .st0 {
-                fill: #CCD1D9;
+            .menuItem {
+                width: 100px;
+                height: 100px;
+                margin: 5px;
             }
 
-            .st1 {
-                fill: #E6E9ED;
+            .menuItem:hover {
+                background-color: darken(#2e3042, 15%);
             }
 
-            .st2 {
-                fill: #656D78;
+            .pt-button {
+                width: 100px;
+                height: 100px;
+                border-radius: 0;
+                opacity: 0.5;
+
+                .dbKodaSVG {
+                    width: 80px;
+                    height: 80px;
+                    transform: translate(-50%, -50%);
+                }
             }
 
-            .st3 {
-                fill: #434A54;
+            .menuItem.selected .pt-button {
+                opacity: 1.0;
             }
 
-            .st4 {
-                fill: #FC6E51;
+            .menuItem .menuItemHome {
+                background-color: $menuBackground1;
+
+                .st0 {
+                    fill: #FFFFFF;
+                }
+
+                .st1 {
+                    fill: #D7DADB;
+                }
+
+                .st2 {
+                    fill: #3D516A;
+                }
+
+                .st3 {
+                    fill: #2D384C;
+                }
+
+                .st4 {
+                    fill: #0F2A48;
+                }
+
+                .st5 {
+                    fill: #2C3D51;
+                }
+
+                .st6 {
+                    fill: #E2EBF2;
+                }
+
+                .st7 {
+                    fill: #3C526A;
+                }
+
+                .st8 {
+                    fill: #E1EBED;
+                }
+
+                svg {
+                    width: 65px;
+                    height: 65px;
+                }
             }
 
-            .st5 {
-                fill: #AC92EB;
+            .menuItem .menuItemPaths {
+                background-color: $menuBackground2;
+
+                .st0 {
+                    fill: #EFCE4A;
+                }
+
+                .st1 {
+                    fill: #D6A416;
+                }
             }
 
-            .st6 {
-                fill: #48CFAD;
+            .menuItem .menuItemApplication {
+                background-color: $menuBackground3;
+
+                .st0 {
+                    fill: #FFFFFF;
+                }
+
+                .st1 {
+                    fill: #D7DADB;
+                }
             }
 
-            .st7 {
-                fill: #5D9CEC;
+            .menuItem .menuItemPasswordStore {
+                background-color: $menuBackground4;
+
+                .st0 {
+                    fill: #FFFFFF;
+                }
+
+                .st1 {
+                    fill: #EFCE4A;
+                }
+
+                .st2 {
+                    fill: #D6A416;
+                }
+
+                svg {
+                    width: 65px;
+                    height: 65px;
+                }
             }
 
-            .st8 {
-                fill: #FFCE54;
+            .menuItem .menuItemPerformance {
+                background-color: $menuBackground5;
+
+                .st0 {
+                    fill: #AEAFAF;
+                }
+
+                .st1 {
+                    fill: #D7DADB;
+                }
+
+                .st2 {
+                    fill: #FFFFFF;
+                }
+
+                .st3 {
+                    fill: #6A9CCE;
+                }
+
+                .st4 {
+                    fill: #ADC88F;
+                }
+
+                .st5 {
+                    fill: #D6A416;
+                }
+
+                .st6 {
+                    fill: #CF7769;
+                }
+
+                svg {
+                    width: 65px;
+                    height: 65px;
+                }
             }
 
-            .st9 {
-                fill: #ED5564;
-            }
-        }
+            .menuItem .menuItemShortcuts {
+                background-color: $menuBackground6;
 
-        .menuItem .menuItemPaths {
-            background-color: $menuColor2;
+                .st0 {
+                    fill: #D7DADB;
+                }
 
-            .st0 {
-                fill: #FABE5C;
-            }
+                .st1 {
+                    fill: #FFFFFF;
+                }
 
-            .st1 {
-                fill: #5C6F74;
-            }
+                .st2 {
+                    fill: #656D78;
+                }
 
-            .st2 {
-                fill: #203F49;
-            }
-
-            .st3 {
-                fill: #FBDF65;
-            }
-        }
-
-        .menuItem .menuItemPasswordStore {
-            background-color: $menuColor3;
-
-            .st0 {
-                fill: #FFFFFF;
+                svg {
+                    width: 65px;
+                    height: 65px;
+                }
             }
 
-            .st1 {
-                fill: #EFCE4A;
-            }
+            .menuItem .menuItemFeatures {
+                background-color: $menuBackground7;
 
-            .st2 {
-                fill: #D6A416;
-            }
+                .st0 {
+                    fill: #D2555A;
+                }
 
-            svg {
-                width: 65px;
-                height: 65px;
-            }
-        }
+                .st1 {
+                    fill: #FF6464;
+                }
 
-        .menuItem .menuItem3 {
-            background-color: $menuColor4;
+                .st2 {
+                    fill: #BE4B50;
+                }
+
+                .st3 {
+                    fill: #F0DCBE;
+                }
+
+                .st4 {
+                    fill: #E1C3A0;
+                }
+
+                svg {
+                    width: 65px;
+                    height: 65px;
+                }
+            }
         }
     }
 
@@ -185,7 +315,7 @@ $menuColor4: #837395;
 
         .formContentWrapper {
             display: table;
-            width: 100%;
+            width: 80%;
 
             .sectionHeader {
                 font-size: 20px;
@@ -193,49 +323,65 @@ $menuColor4: #837395;
             }
 
             .form-row {
-                display: table-row;
-                margin: 12px;
+                display: flex;
+                flex-direction: row;
+                margin-left: 12px;
+                margin-top: 12px;
                 height: 35px;
 
                 label {
                     display: table-cell;
-                    font-size: 12pt;
+                    font-size: 10pt;
                     vertical-align: middle;
-                    width: 30%;
                     max-width: max-content;
                 }
 
                 input {
-                    display: table-cell;
-                    width: 60%;
+                    float: right;
+                    margin-left: auto;
+                    height: 24px;
+                    padding-left: 4px;
                 }
 
-                .pt-checkbox {
+                .pt-switch {
                     font-size: 10pt;
                     font-weight: lighter;
                     color: $connectionHeadingsFontColour !important;
                     text-align: left;
                     margin: 0;
+                    margin-left: 12px;
+                }
+            }
 
-                    span.pt-control-indicator {
-                        margin: 5px;
-                        font-size: unset;
-                        font-weight: unset;
-                        font-style: unset;
-                        box-shadow: unset;
-                        line-height: unset;
-                        background: unset;
-                        box-shadow: unset;
-                        font-size: 11pt;
-                        color: $connectionCheckboxColour;
-                        border-radius: 0;
-                        background-color: $connectionCheckboxBackgroundColour; // outline: $connectionCheckboxColour solid 1px;
-                        border: 1px solid $connectionCheckboxColour;
-                    }
+            .switch {
+                display: flex;
+                flex-direction: row;
+                margin-left: 12px;
 
-                    span.pt-control-indicator:hover {
-                        background-color: $connectionCheckboxBackgroundColourHover;
-                    }
+                .switchLabel {
+                    margin-left: 8px;
+                }
+            }
+
+            .fileInput {
+                margin-left: 12px;
+                min-width: 150px;
+
+                input {
+                    height: 30px;
+                    width: 40%;
+                    padding-left: 8px;
+                    margin-right: 8px;
+                }
+
+                button {
+                    border-radius: 0.5em;
+                    background-color: #2f3344;
+                    font-size: 12px;
+                }
+
+                button:hover {
+                    background-color: #41465C;
                 }
             }
 
@@ -248,11 +394,8 @@ $menuColor4: #837395;
 
         .formContentWrapper.ApplicationPreferences {
             .form-row {
-                height: 50px;
-
                 label {
                     vertical-align: text-top;
-                    width: 20%;
                 }
             }
         }
@@ -260,7 +403,7 @@ $menuColor4: #837395;
 }
 
 .configContentFooter {
-    width: 75%;
+    width: 90%;
 
     .saveBtn {
         float: right;
@@ -268,11 +411,15 @@ $menuColor4: #837395;
         color: $connectionButtonFontColour;
         width: 7em;
         background-image: unset;
-        background-color: $connectionButtonBackgroundColourConnect;
+        background-color: #87A886 !important;
         border: unset;
         box-shadow: unset;
         border-radius: 0.25em;
         background: none;
         font-weight: lighter;
+    }
+
+    .saveBtn:hover {
+        background-color: #577856 !important;
     }
 }

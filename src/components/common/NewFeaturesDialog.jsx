@@ -70,10 +70,8 @@ export default class NewFeaturesDialog extends React.Component<Props, State> {
       globalString('general/newFeaturesDialog/numberOfNewFeatures'),
       10
     );
-    console.log(numberOfFeatures);
     const newFeatures = [];
     for (let count = 1; count <= numberOfFeatures; count += 1) {
-      console.log(count);
       newFeatures.push({
         title: globalString(
           'general/newFeaturesDialog/newFeature' + count + 'Title'

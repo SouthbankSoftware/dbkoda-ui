@@ -1,6 +1,9 @@
 {
   "en": {
     "general": {
+      "on": "On",
+      "off": "Off",
+      "browse": "Browse",
       "confirm": "Okay",
       "cancel": "Cancel",
       "close": "Close",
@@ -288,7 +291,17 @@
       "welcome": {
         "heading": "Welcome"
       },
+      "home": {
+        "title": "Home",
+        "welcome": "Welcome to dbKoda."
+      },
       "config": {
+        "sections": {
+          "paths": "Paths",
+          "performance": "Performance Panel",
+          "application": "Application",
+          "passwords": "Password Store"
+        },
         "heading": "Preferences",
         "menuApplication": "Application",
         "menuPaths": "Paths",
@@ -311,8 +324,8 @@
           "alarmDisplayingWindow":
             "Alarm keepalive (ms). (Panel restart required)"
         },
-        "mongoCmd": "Mongo Path",
-        "drillCmd": "Drill Path",
+        "mongoCmd": "Mongo Binary Path",
+        "drillCmd": "Apache Drill Path",
         "drillControllerCmd": "Drill Controller Path",
         "passwordStoreEnabled": "Password Store Enabled",
         "applyButton": "Apply",

@@ -27,9 +27,14 @@
 import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import ApplicationIcon from '~/styles/icons/menu-application-icon.svg';
-import PathsIcon from '~/styles/icons/menu-paths-icon.svg';
+
 import PasswordStoreIcon from '~/styles/icons/lock-icon.svg';
+import HomeSectionIcon from '~/styles/icons/color/home-icon.svg';
+import PathsSectionIcon from '~/styles/icons/color/folder-icon.svg';
+import ApplicationSectionIcon from '~/styles/icons/color/settings-icon.svg';
+import ShortcutsSectionIcon from '~/styles/icons/color/keys-icon.svg';
+import PerformanceSectionIcon from '~/styles/icons/color/performance-icon.svg';
+import FeaturesSectionIcon from '~/styles/icons/color/new-icon.svg';
 import MenuItem from './MenuItem';
 
 @inject(allStores => ({
@@ -51,18 +56,29 @@ export default class Menu extends React.Component {
     return (
       <div className="configMenu">
         <MenuItem
-          name="Application"
+          name="Home"
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >
-          <ApplicationIcon className="dbKodaSVG" width={20} height={20} />
+          <HomeSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
           name="Paths"
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >
-          <PathsIcon className="dbKodaSVG" width={20} height={20} />
+          <PathsSectionIcon className="dbKodaSVG" width={20} height={20} />
+        </MenuItem>
+        <MenuItem
+          name="Application"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
+          <ApplicationSectionIcon
+            className="dbKodaSVG"
+            width={20}
+            height={20}
+          />
         </MenuItem>
         <MenuItem
           name="PasswordStore"
@@ -76,7 +92,25 @@ export default class Menu extends React.Component {
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >
-          <PasswordStoreIcon className="dbKodaSVG" width={20} height={20} />
+          <PerformanceSectionIcon
+            className="dbKodaSVG"
+            width={20}
+            height={20}
+          />
+        </MenuItem>
+        <MenuItem
+          name="Shortcuts"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
+          <ShortcutsSectionIcon className="dbKodaSVG" width={20} height={20} />
+        </MenuItem>
+        <MenuItem
+          name="Features"
+          isSelected={this.isItemSelected}
+          changeMenu={this.changeMenuSelected}
+        >
+          <FeaturesSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
       </div>
     );

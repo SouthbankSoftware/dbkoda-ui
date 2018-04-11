@@ -30,6 +30,7 @@ import { action, reaction, toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton, Intent } from '@blueprintjs/core';
 import ConfigDatabaseIcon from '~/styles/icons/config-database-icon-1.svg';
+import DBKodaIcon from '~/styles/icons/dbkoda-logo.svg';
 import ErrorView from '#/common/ErrorView';
 import Menu from './Menu';
 import Application from './Application';
@@ -154,18 +155,23 @@ export default class View extends React.Component {
     return form;
   };
 
+  shouldShowApplyButton = () => {
+    return (
+      this.props.store.configPage.selectedMenu === 'Performance' ||
+      this.props.store.configPage.selectedMenu === 'PasswordStore' ||
+      this.props.store.configPage.selectedMenu === 'Paths' ||
+      this.props.store.configPage.selectedMenu === 'Application'
+    );
+  };
+
   render() {
     return (
       <div className="configPanelTabWrapper">
         <div className="configPanelWrapper">
           <div className="configTitleWrapper">
             <h1>
-              <ConfigDatabaseIcon
-                className="dbKodaSVG"
-                width={25}
-                height={25}
-              />{' '}
-              {this.props.title}
+              <DBKodaIcon className="dbKodaSVG logo" width={25} height={25} />{' '}
+              {globalString('editor/home/welcome')}
             </h1>
           </div>
           <div className="configContentWrapper">
@@ -177,12 +183,14 @@ export default class View extends React.Component {
             </div>
           </div>
           <div className="configContentFooter">
-            <AnchorButton
-              className="saveBtn"
-              intent={Intent.SUCCESS}
-              onClick={this.applyChanges}
-              text={globalString('editor/config/applyButton')}
-            />
+            {this.shouldShowApplyButton() && (
+              <AnchorButton
+                className="saveBtn"
+                intent={Intent.SUCCESS}
+                onClick={this.applyChanges}
+                text={globalString('editor/config/applyButton')}
+              />
+            )}
           </div>
         </div>
       </div>
