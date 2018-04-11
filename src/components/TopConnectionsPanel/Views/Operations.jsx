@@ -1,9 +1,9 @@
 /**
  * @Author: Wahaj Shamim <wahaj>
- * @Date:   2018-04-10T14:34:47+10:00
+ * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-11T15:29:35+10:00
+ * @Last modified time: 2018-04-11T16:43:36+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,6 +24,8 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+
 import _ from 'lodash';
 import * as React from 'react';
 import { observer } from 'mobx-react';
@@ -37,7 +39,7 @@ import {
 import TextSortableColumn from '../Components/TextSortableColumn';
 
 @observer
-export default class ConnectionsView extends React.Component<Props> {
+export default class OperationsView extends React.Component<Props> {
   constructor() {
     super();
     this.state = {
@@ -45,19 +47,24 @@ export default class ConnectionsView extends React.Component<Props> {
       sortedIndexMap: [],
       data: null,
       columns: [
-            new TextSortableColumn('Connection Id', 0),
-            new TextSortableColumn('appName', 1),
-            new TextSortableColumn('client', 2),
-            new TextSortableColumn('lastNs', 3),
-            new TextSortableColumn('lastOp', 4),
-            new TextSortableColumn('lastCommand', 5),
-            new TextSortableColumn('Sampled μs', 6)
+            new TextSortableColumn('OpId', 0),
+            new TextSortableColumn('Namespace', 1),
+            new TextSortableColumn('Operation', 2),
+            new TextSortableColumn('Sampled μs', 3),
+            new TextSortableColumn('Plan Summary', 4)
           ]
     };
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.connections) {
-      this.setState({data: nextProps.connections});
+    if (nextProps && nextProps.operations) {
+      const operations = [];
+      for (const opId in nextProps.operations) {
+        if (nextProps.operations.hasOwnProperty(opId)) {
+          const opObj = nextProps.operations[opId];
+          operations.push({opId, ...opObj});
+        }
+      }
+      this.setState({data: operations});
     }
   }
 
@@ -75,28 +82,22 @@ export default class ConnectionsView extends React.Component<Props> {
     let cellValue = '';
     switch (columnIndex) {
       case 0:
-        cellValue = this.state.data[rowIndex].connectionId;
+        cellValue = this.state.data[rowIndex].opId;
         break;
       case 1:
-        cellValue = this.state.data[rowIndex].appName;
+        cellValue = this.state.data[rowIndex].ns;
         break;
       case 2:
-        cellValue = this.state.data[rowIndex].client;
+        cellValue = this.state.data[rowIndex].op;
         break;
       case 3:
-        cellValue = this.state.data[rowIndex].lastNs;
-        break;
-      case 4:
-        cellValue = this.state.data[rowIndex].lastOp;
-        break;
-      case 5:
-        cellValue = this.state.data[rowIndex].lastCommand;
-        break;
-      case 6:
         cellValue = this.state.data[rowIndex].us;
         break;
+      case 4:
+        cellValue = this.state.data[rowIndex].palnSummary;
+        break;
       default:
-        cellValue = this.state.data[rowIndex].connectionId;
+        cellValue = this.state.data[rowIndex].opId;
         break;
     }
     if (typeof cellValue === 'object') {
@@ -140,19 +141,17 @@ export default class ConnectionsView extends React.Component<Props> {
   }
 
   render() {
-    const { connections } = this.props;
-
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
-    const columnsWidthsPercent = [10, 15, 15, 15, 15, 15, 15];
-    const columnsWidths = columnsWidthsPercent.map(width => (width * window.innerWidth / 100));
+    const columnsWidthsPercent = [20, 20, 20, 20, 20];
+    const columnsWidths = columnsWidthsPercent.map(width => (width * window.innerWidth * 0.6 / 100)); // TODO: replace 0.6 with left bottom panel percent width
 
     return (
       <div style={{ height: '100%' }}>
-        {connections &&
-          connections.length && (
+        {this.state.data &&
+          (
             <Table
               enableMultipleSelection={false}
-              numRows={connections.length}
+              numRows={this.state.data.length}
               enableRowHeader={false}
               selectionModes={SelectionModes.FULL_ROWS}
               bodyContextMenuRenderer={this.renderBodyContextMenu}
