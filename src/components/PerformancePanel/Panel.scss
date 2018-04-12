@@ -3,7 +3,7 @@
  * @Date:   2017-12-12T22:16:38+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-08T14:51:02+11:00
+ * @Last modified time: 2018-04-10T11:58:31+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -23,7 +23,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 @import "../../styles/_defaultTheme.scss";
 
 .PerformancePanel {
@@ -45,6 +44,7 @@
     height: 100%;
     width: 100%;
     z-index: 10;
+
     .item-status-panel {
       height: 100%;
       font-size: 24px;
@@ -54,15 +54,19 @@
       flex-direction: row;
       align-items: center;
     }
+
     .status-text {
       margin: auto;
     }
+
     .ssh-status-panel {
       width: 14.50%;
     }
+
     .mongo-status-panel {
       width: 85.50%;
       margin-left: 14.5%;
+
       .mongo-status-text {
         margin: auto;
       }
@@ -227,6 +231,10 @@
     button.reset-button:hover {
       background-color: $connectionButtonBackgroundColourHover;
       color: $connectionButtonFontColourHover;
+    }
+
+    button.top-con-button {
+      width: 10em !important;
     }
   }
 

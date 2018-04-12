@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:15:28+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-29T12:42:24+11:00
+ * @Last modified time: 2018-04-10T11:58:09+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -49,6 +49,7 @@ type Props = {
   onClose: () => void,
   resetHighWaterMark: (profileId: UUID) => void,
   resetPerformancePanel: (profileId: UUID) => void,
+  getTopConnections: () => void,
   api: *,
   mongoStatus: String,
   sshStatus: String
@@ -105,6 +106,7 @@ export default class PerformancePanel extends React.Component<Props> {
       onClose,
       resetHighWaterMark,
       resetPerformancePanel,
+      getTopConnections,
       mongoStatus,
       sshStatus
     } = this.props;
@@ -119,6 +121,22 @@ export default class PerformancePanel extends React.Component<Props> {
               {profileAlias}
               {isUnresponsive && ' (Not Responding)'}
             </div>
+            {getTopConnections && (
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content="Get Top Connections"
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+                >
+                <Button
+                  className="top-con-button reset-button pt-button pt-intent-primary"
+                  text="Top Connections"
+                  onClick={getTopConnections}
+                  />
+              </Tooltip>
+             )}
             {resetHighWaterMark &&
               !isUnresponsive && (
                 <Tooltip

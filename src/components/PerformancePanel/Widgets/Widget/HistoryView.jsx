@@ -255,8 +255,7 @@ export default class HistoryView extends React.PureComponent<Props, State> {
                   ) {
                     conversionUnit = 'b/s';
                   }
-                  const value = convertToTarget(v(data), conversionUnit, maxUnit, 3)
-                    .value;
+                  const {value} = convertToTarget(v(data), conversionUnit, maxUnit, 3);
                   return typeof value === 'number' ? value : null;
                 }}
                 name={name}
