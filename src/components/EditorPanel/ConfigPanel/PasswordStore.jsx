@@ -26,13 +26,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import {
-  AnchorButton,
-  Checkbox,
-  Dialog,
-  Intent,
-  Switch
-} from '@blueprintjs/core';
+import { AnchorButton, Dialog, Intent, Switch } from '@blueprintjs/core';
 
 @inject(allStores => ({
   store: allStores.store,

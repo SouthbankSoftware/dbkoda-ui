@@ -29,7 +29,6 @@ import React from 'react';
 import { action, reaction, toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton, Intent } from '@blueprintjs/core';
-import ConfigDatabaseIcon from '~/styles/icons/config-database-icon-1.svg';
 import DBKodaIcon from '~/styles/icons/dbkoda-logo.svg';
 import ErrorView from '#/common/ErrorView';
 import Menu from './Menu';
@@ -37,6 +36,8 @@ import Application from './Application';
 import PasswordStore from './PasswordStore';
 import Paths from './Paths';
 import Performance from './Performance';
+import LearnShortcuts from './LearnShortcuts';
+import WelcomeView from './WelcomeView';
 import './Panel.scss';
 
 @inject(allStores => ({
@@ -147,6 +148,12 @@ export default class View extends React.Component {
             renderFieldLabel={this.renderFieldLabel}
           />
         );
+        break;
+      case 'Shortcuts':
+        form = <LearnShortcuts />;
+        break;
+      case 'Home':
+        form = <WelcomeView />;
         break;
       default:
         form = <ErrorView error="Unknown menu item selection." />;
