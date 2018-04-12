@@ -140,6 +140,7 @@ export default class Toolbar extends React.Component {
         const { currentTab } = this.props.store.outputPanel;
         if (clearingOutput && this.props.store.outputs.get(currentTab)) {
           this.props.store.outputs.get(currentTab).output = '';
+          this.props.store.outputs.get(currentTab).currentExecStartLine = 0;
           this.props.store.outputPanel.clearingOutput = false;
         } else if (currentTab.indexOf('Explain-') === 0) {
           // close explain output

@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-11T16:32:02+10:00
+ * @Last modified time: 2018-04-12T16:42:23+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,11 +26,11 @@
 
 
 import * as React from 'react';
-import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import SplitPane from 'react-split-pane';
 import ConnectionsView from './Views/Connections';
 import OperationsView from './Views/Operations';
+import OperationDetails from './Views/OperationDetails';
 
 import './Panel.scss';
 
@@ -43,26 +43,32 @@ export default class TopConnectionsPanel extends React.Component<Props> {
   constructor() {
     super();
     this.state = {
-      selectedConnection: null
+      selectedConnection: null,
+      selectedOperation: null
     };
   }
   render() {
     const { store } = this.props;
     const { topConnectionsPanel } = store;
     const connections = topConnectionsPanel.payload;
-    const { selectedConnection } = this.state;
+    const { selectedConnection, selectedOperation } = this.state;
     let operations = null;
     if (selectedConnection && selectedConnection.ops) {
       operations = selectedConnection.ops;
     }
+
     const splitPane2Style = {
       display: 'flex',
       flexDirection: 'column'
     };
-    const onConnectionSelection = action((selectedConnection) => {
+    const onConnectionSelection = (selectedConnection) => {
       console.log('selectedConnection:', selectedConnection);
       this.setState({selectedConnection});
-    });
+    };
+
+    const onOperationSelection = (selectedOperation) => {
+      this.setState({selectedOperation});
+    };
     return (
       <div>
         <SplitPane
@@ -84,8 +90,8 @@ export default class TopConnectionsPanel extends React.Component<Props> {
             minSize={700}
             maxSize={1200}
           >
-            <div className="operationList"><OperationsView operations={operations} /></div>
-            <div><span>Bottom Right Pane</span></div>
+            <div className="operationList"><OperationsView operations={operations} onSelect={onOperationSelection} /></div>
+            <div className="operationDetails"><OperationDetails operation={selectedOperation} /></div>
           </SplitPane>
         </SplitPane>
       </div>

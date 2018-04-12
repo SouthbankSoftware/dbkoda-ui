@@ -46,7 +46,8 @@ export type Output = {
   showingMore: boolean,
   commandHistory: [string],
   enhancedJson: string,
-  tableJson: string
+  tableJson: string,
+  currentExecStartLine: number
 };
 
 export type OutputPanel = {

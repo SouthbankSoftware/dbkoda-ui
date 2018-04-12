@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-11T16:43:36+10:00
+ * @Last modified time: 2018-04-12T16:10:37+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -33,7 +33,8 @@ import { action } from 'mobx';
 import {
   SelectionModes,
   Table,
-  Utils
+  Utils,
+  TableLoadingOption
 } from '@blueprintjs/table';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
@@ -144,27 +145,31 @@ export default class OperationsView extends React.Component<Props> {
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
     const columnsWidthsPercent = [20, 20, 20, 20, 20];
     const columnsWidths = columnsWidthsPercent.map(width => (width * window.innerWidth * 0.6 / 100)); // TODO: replace 0.6 with left bottom panel percent width
-
+    const loadingOptions = [];
+    let numRows = 10;
+    if (this.state.data && this.state.data.length) {
+      numRows = this.state.data.length;
+    } else {
+      loadingOptions.push(TableLoadingOption.CELLS);
+    }
     return (
       <div style={{ height: '100%' }}>
-        {this.state.data &&
-          (
-            <Table
-              enableMultipleSelection={false}
-              numRows={this.state.data.length}
-              enableRowHeader={false}
-              selectionModes={SelectionModes.FULL_ROWS}
-              bodyContextMenuRenderer={this.renderBodyContextMenu}
-              enableRowResizing={false}
-              enableColumnResizing={false}
-              defaultRowHeight={60}
-              onSelection={region => this.onSelection(region)}
-              selectedRegions={this.state.lastSelectRegion}
-              columnWidths={columnsWidths}
-            >
-              {columns}
-            </Table>
-          )}
+        <Table
+          enableMultipleSelection={false}
+          numRows={numRows}
+          loadingOptions={loadingOptions}
+          enableRowHeader={false}
+          selectionModes={SelectionModes.FULL_ROWS}
+          bodyContextMenuRenderer={this.renderBodyContextMenu}
+          enableRowResizing={false}
+          enableColumnResizing={false}
+          defaultRowHeight={30}
+          onSelection={region => this.onSelection(region)}
+          selectedRegions={this.state.lastSelectRegion}
+          columnWidths={columnsWidths}
+        >
+          {columns}
+        </Table>
       </div>
     );
   }
