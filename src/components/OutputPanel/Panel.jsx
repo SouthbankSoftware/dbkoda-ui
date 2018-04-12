@@ -1,9 +1,11 @@
 /*
- * @Author: Chris Trott <chris>
+ * @flow
+ *
+ * @Author: Chris Trott <christrott>
  * @Date:   2017-03-07T10:53:19+11:00
  * @Email:  chris@southbanksoftware.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T17:58:34+11:00
+ * @Last modified by:   christrott
+ * @Last modified time: 2018-04-12T16:47:56+11:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -27,6 +29,7 @@
 import React from 'react';
 import { action, reaction, runInAction, toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
+// $FlowFixMe
 import { Tab, Tabs, Button } from '@blueprintjs/core';
 import { DetailsPanel } from '#/DetailsPanel';
 import { StoragePanel } from '#/StoragePanel';
@@ -42,20 +45,33 @@ import { Broker, EventType } from '../../helpers/broker';
 import { EnhancedJson } from '../EnhancedJsonPanel';
 import { TableView } from '../TableViewPanel';
 
+type Props = {
+  store: *,
+  api: *,
+}
+
 /**
  * The main panel for the Output view, this handles tabbing,
  * and parents the editor and toolbar components
  */
 @inject('store', 'api')
 @observer
-export default class Panel extends React.Component {
-  constructor(props) {
+export default class Panel extends React.Component<Props> {
+  lastEditorId: ?string;
+  // editorRefs: { [string]: {} };
+  closingTab: boolean;
+  debug: boolean;
+
+  constructor(props: Props) {
     super(props);
     this.lastEditorId = null;
-    this.editorRefs = [];
-    this.setEditorRef = this.setEditorRef.bind(this);
-    this.getDocumentAtLine = this.getDocumentAtLine.bind(this);
     this.closingTab = false;
+    // $FlowFixMe
+    this.setEditorRef = this.setEditorRef.bind(this);
+    // $FlowFixMe
+    this.getDocumentAtLine = this.getDocumentAtLine.bind(this);
+    this.props.store.outputPanel.editorRefs = [];
+
     /**
      * Reaction function for when the active editorPanel is changed,
      * update the active outputPanel
@@ -97,7 +113,7 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
-  explainOutputAvailable({ id, shell }) {
+  explainOutputAvailable({ id, shell }: { id: string, shell: string }) {
     const editors = [...this.props.store.editors.entries()];
     const that = this;
     editors.map(editor => {
@@ -117,7 +133,7 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
-  shellOutputAvailable({ id, shellId }) {
+  shellOutputAvailable({ id, shellId }: { id: string, shellId: string }) {
     const editors = [...this.props.store.editors.entries()];
     editors.map(editor => {
       if (
@@ -137,7 +153,7 @@ export default class Panel extends React.Component {
   }
 
   @action.bound
-  closeTab(editorId, tabType) {
+  closeTab(editorId: string, tabType: string) {
     switch (tabType) {
       case 'tableJSON':
         this.props.store.outputs.get(editorId).tableJson = null;
@@ -178,12 +194,13 @@ export default class Panel extends React.Component {
     this.closingTab = true;
   }
 
-  setEditorRef(editorId, cmRef) {
-    this.editorRefs[editorId] = cmRef;
+  setEditorRef(editorId: string, cmRef: {}) {
+    this.props.store.outputPanel.editorRefs[editorId] = cmRef;
   }
 
-  getDocumentAtLine(editorId, lineNumber, direction, lines) {
-    const cm = this.editorRefs[editorId].getCodeMirror();
+  getDocumentAtLine(editorId: string, lineNumber: number, direction: number, lines: { start: number, end: number, status: string }) {
+    // $FlowFixMe
+    const cm = this.props.store.outputPanel.editorRefs[editorId].getCodeMirror();
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
     if (
@@ -295,7 +312,7 @@ export default class Panel extends React.Component {
    * @param {string} newTab - The html id of the new active tab
    */
   @action.bound
-  changeTab(newTab) {
+  changeTab(newTab: string) {
     if (IS_DEVELOPMENT) {
       console.log(`changeTab(${newTab})`);
     }
@@ -312,8 +329,9 @@ export default class Panel extends React.Component {
         newTab.indexOf('ChartView') < 0 &&
         newTab.indexOf('Storage') < 0
       ) {
-        if (this.editorRefs[newTab]) {
-          const cm = this.editorRefs[newTab].getCodeMirror();
+        if (this.props.store.outputPanel.editorRefs[newTab]) {
+          // $FlowFixMe
+          const cm = this.props.store.outputPanel.editorRefs[newTab].getCodeMirror();
           cm.focus();
         }
       }
@@ -324,7 +342,7 @@ export default class Panel extends React.Component {
    * Renders tabs based on the number of editors currently open
    * @param {Object[]} editors - The editor states that require output rendering
    */
-  renderTabs(editors) {
+  renderTabs(editors: []) {
     const tabs = editors.map(editor => {
       const arrTabs = [];
       const editorId = editor[1].id;
@@ -655,7 +673,7 @@ export default class Panel extends React.Component {
           {this.renderTabs([...this.props.store.editors.entries()])}
         </Tabs>
         <OutputToolbar
-          editorRefs={this.editorRefs}
+          editorRefs={this.props.store.outputPanel.editorRefs}
           getDocumentAtLine={this.getDocumentAtLine}
         />
       </div>

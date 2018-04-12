@@ -177,11 +177,12 @@ class View extends React.Component {
             this.props.store.editorPanel.activeEditorId === this.props.id &&
             executingEditorAll === true
           ) {
+            this.setExecStartLine();
             const editor = this.props.store.editors.get(
               this.props.store.editorPanel.activeEditorId,
             );
             const shell = editor.shellId;
-            const profileId = editor.profileId;
+            const {profileId} = editor;
             const currEditorValue = this.getEditorValue();
             Broker.emit(EventType.FEATURE_USE, 'ExecuteAll');
             // Listen for completion
@@ -190,7 +191,7 @@ class View extends React.Component {
             this.props.store.editors.get(editor.id).lastExecutionFailed = false;
             this.props.store.editorToolbar.isActiveExecuting = true;
             // Send request to feathers client
-            const type = editor.type;
+            const {type} = editor;
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 90000;
@@ -341,14 +342,15 @@ class View extends React.Component {
             this.props.store.editorPanel.activeEditorId === this.props.id &&
             executingEditorLines === true
           ) {
+            this.setExecStartLine();
             // Determine code to send.
             const editor = this.props.store.editors.get(
               this.props.store.editorPanel.activeEditorId,
             );
             const shell = editor.shellId;
-            const profileId = editor.profileId;
+            const {profileId} = editor;
             const cm = this.editor.getCodeMirror(); // eslint-disable-line
-            const line = cm.getCursor().line;
+            const {line} = cm.getCursor();
             let content = cm.getSelection();
             if (cm.getSelection().length > 0) {
               Broker.emit(EventType.FEATURE_USE, 'ExecuteSelected');
@@ -361,7 +363,7 @@ class View extends React.Component {
             this.props.store.editors.get(editor.id).lastExecutionFailed = false;
             this.props.store.editorToolbar.isActiveExecuting = true;
 
-            const type = editor.type;
+            const {type} = editor;
             if (type == EditorTypes.DRILL) {
               const service = featherClient().service('/drill');
               service.timeout = 90000;
@@ -529,7 +531,7 @@ class View extends React.Component {
             dragDrop
           ) {
             if (this.props.store.dragItem.item) {
-              const item = this.props.store.dragItem.item;
+              const {item} = this.props.store.dragItem;
               if (this.props.store.editors.get(this.props.id).type === 'drill') {
                 console.log('SQL DnD');
                 this.insertAtCursor(TreeDropActions.getSQLForTreeNode(item));
@@ -573,7 +575,7 @@ class View extends React.Component {
             );
             const shell = editor.shellId;
             const id = editor.profileId;
-            const type = editor.type;
+            const {type} = editor;
             const service = type && type === 'os'
               ? featherClient().service('/os-execution')
               : featherClient().service('/mongo-stop-execution');
@@ -787,6 +789,17 @@ class View extends React.Component {
     };
   }
 
+  /*
+   * Set the execution start line number from the output panel so it can be referenced when working with result sets
+   */
+  @action.bound
+  setExecStartLine() {
+    const {activeEditorId} = this.props.store.editorPanel;
+    const outputCm = this.props.store.outputPanel.editorRefs[activeEditorId].getCodeMirror();
+    this.props.store.outputs.get(activeEditorId).currentExecStartLine = outputCm.lineCount();
+    console.log(`Output Exec Start Line: ${this.props.store.outputs.get(activeEditorId).currentExecStartLine}`);
+  }
+
   getActiveProfileId() {
     const editor = this.props.store.editors.get(
       this.props.store.editorPanel.activeEditorId,
@@ -802,7 +815,7 @@ class View extends React.Component {
   }
 
   setEditorValue(newValue) {
-    const cm = this.doc.cm;
+    const {cm} = this.doc;
     const scrollInfo = cm.getScrollInfo();
     this.doc.setValue(newValue);
     cm.scrollTo(scrollInfo.left, scrollInfo.top);
