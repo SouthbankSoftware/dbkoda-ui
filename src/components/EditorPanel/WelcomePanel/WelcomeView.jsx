@@ -19,21 +19,19 @@
  */
 
 /**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-04-10 14:32:37
-* @Email:  mike@southbanksoftware.com
-* @Last modified by:   mike
-* @Last modified time: 2017-04-10 14:32:40
-*/
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-04-10 14:32:37
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2017-04-10 14:32:40
+ */
 
 /* eslint-disable react/no-string-refs */
 import React from 'react';
-import {inject, observer} from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import DBKodaIcon from '../../../styles/icons/dbkoda-logo.svg';
 import WelcomeMenu from './WelcomeMenu.jsx';
 import WelcomeContent from './WelcomeContent.jsx';
-import ChooseTheme from './ChooseTheme.jsx';
-import LearnShortcuts from './LearnShortcuts.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -52,10 +50,6 @@ export default class WelcomeView extends React.Component {
     switch (this.props.store.welcomePage.currentContent) {
       case 'Welcome':
         return <WelcomeContent />;
-      case 'Choose Theme':
-        return <ChooseTheme />;
-      case 'Keyboard Shortcuts':
-        return <LearnShortcuts />;
       default:
         return <div>ERROR</div>;
     }
@@ -67,9 +61,7 @@ export default class WelcomeView extends React.Component {
         <div className="welcomePanelWrapper">
           <div className="welcomeTitleWrapper">
             <DBKodaIcon className="dbKodaLogo" width={20} height={20} />
-            <h1>
-              Welcome To DBKoda
-            </h1>
+            <h1>Welcome To DBKoda</h1>
           </div>
           <div className="welcomeMiddleSection">
             <div className="welcomeMenuWrapper">

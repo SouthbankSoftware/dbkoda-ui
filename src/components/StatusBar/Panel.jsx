@@ -181,7 +181,7 @@ export default class Panel extends React.Component {
     NewToaster.show({
       message: globalString('status_bar/feedback/toaster_confirm'),
       className: 'success',
-      icon: 'thumbs-up',
+      icon: 'thumbs-up'
     });
     this.setState({ isFeedbackAlertOpen: false });
   }
@@ -239,7 +239,7 @@ export default class Panel extends React.Component {
               />
             ),
             className: 'danger',
-            icon: 'thumbs-up',
+            icon: 'thumbs-up'
           });
         });
     }
@@ -288,7 +288,7 @@ export default class Panel extends React.Component {
           NewToaster.show({
             message: globalString('status_bar/support_bundle/toaster_confirm'),
             className: 'success',
-            icon: 'thumbs-up',
+            icon: 'thumbs-up'
           });
           resolve(result);
         })
@@ -494,7 +494,7 @@ export default class Panel extends React.Component {
                 </span>
               </div>
             )}
-          <div className="configButton" onClick={this.props.api.openConfigTab}>
+          <div className="configButton" onClick={this.props.api.openHomeTab}>
             <span className="pt-icon-cog" />
           </div>
           <div className="feedbackButton" onClick={this.onClickFeedback}>

@@ -19,16 +19,17 @@
  */
 
 /**
-* @Author: Michael Harrison <mike>
-* @Date:   2017-04-10 14:32:37
-* @Email:  mike@southbanksoftware.com
-* @Last modified by:   mike
-* @Last modified time: 2017-04-10 14:32:40
-*/
+ * @Author: Michael Harrison <mike>
+ * @Date:   2017-04-10 14:32:37
+ * @Email:  mike@southbanksoftware.com
+ * @Last modified by:   mike
+ * @Last modified time: 2017-04-10 14:32:40
+ */
 
 /* eslint-disable react/no-string-refs */
 import React from 'react';
-import {inject, observer} from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import WelcomeContent from './WelcomeContent.jsx';
 
 /**
  * Panel for wrapping the Editor View and EditorToolbar.
@@ -36,18 +37,25 @@ import {inject, observer} from 'mobx-react';
  */
 @inject('store')
 @observer
-export default class ChooseTheme extends React.Component {
+export default class WelcomeView extends React.Component {
   static propTypes = {};
   constructor(props) {
     super(props);
     this.state = {};
   }
 
+  renderWelcomePage() {
+    switch (this.props.store.welcomePage.currentContent) {
+      case 'Welcome':
+        return <WelcomeContent />;
+      default:
+        return <div>ERROR</div>;
+    }
+  }
+
   render() {
     return (
-      <div className="chooseThemeWrapper">
-       Filler Theme
-      </div>
+      <div className="welcomeContentWrapper">{this.renderWelcomePage()}</div>
     );
   }
 }

@@ -26,7 +26,7 @@
 
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { AnchorButton, Checkbox, Dialog, Intent } from '@blueprintjs/core';
+import { AnchorButton, Dialog, Intent, Switch } from '@blueprintjs/core';
 
 @inject(allStores => ({
   store: allStores.store,
@@ -66,22 +66,24 @@ export default class PasswordStore extends React.Component {
   render() {
     return (
       <div className="formContentWrapper">
+        <div className="sectionHeader">
+          {' '}
+          {globalString('editor/config/sections/passwords')}
+        </div>
         <div className="form-row">
           {this.props.renderFieldLabel('passwordStoreEnabled')}
-          <Checkbox
-            type="text"
-            id="passwordStoreEnabled"
-            checked={this.props.settings.passwordStoreEnabled}
-            onChange={this.onCheckboxToggle}
-          />
           <Dialog
             className="confirmDialog"
             title="Remove Password Store?"
             isOpen={this.state.isConfirmOpen}
           >
             <div className="dialogContent">
-              <p>{globalString('editor/config/remove_store_dialog/question')}</p>
-              <p>{globalString('editor/config/remove_store_dialog/qualifier')}</p>
+              <p>
+                {globalString('editor/config/remove_store_dialog/question')}
+              </p>
+              <p>
+                {globalString('editor/config/remove_store_dialog/qualifier')}
+              </p>
             </div>
             <div className="dialogButtons">
               <AnchorButton
@@ -100,6 +102,20 @@ export default class PasswordStore extends React.Component {
               </AnchorButton>
             </div>
           </Dialog>
+        </div>
+        <div className="switch">
+          <Switch
+            type="text"
+            id="passwordStoreEnabled"
+            checked={this.props.settings.passwordStoreEnabled}
+            onChange={this.onCheckboxToggle}
+          />
+          <div className="switchLabel">
+            {this.props.settings.passwordStoreEnabled &&
+              globalString('general/on')}
+            {!this.props.settings.passwordStoreEnabled &&
+              globalString('general/off')}
+          </div>
         </div>
       </div>
     );

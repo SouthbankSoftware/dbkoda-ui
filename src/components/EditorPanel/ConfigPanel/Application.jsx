@@ -27,7 +27,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Checkbox } from '@blueprintjs/core';
+import { Switch } from '@blueprintjs/core';
 
 @observer
 export default class Application extends React.Component {
@@ -63,33 +63,59 @@ export default class Application extends React.Component {
   render() {
     return (
       <div className="formContentWrapper ApplicationPreferences">
-        <div className="sectionHeader">General</div>
+        <div className="sectionHeader">
+          {' '}
+          {globalString('editor/config/sections/application')}
+        </div>
         <div className="form-row">
           {this.props.renderFieldLabel('telemetryEnabled')}
-          <Checkbox
+        </div>
+        <div className="switch">
+          <Switch
             type="text"
             id="telemetryEnabled"
             checked={this.props.settings.telemetryEnabled}
             onChange={this.onCheckboxToggle}
           />
+          <div className="switchLabel">
+            {this.props.settings.telemetryEnabled && globalString('general/on')}
+            {!this.props.settings.telemetryEnabled &&
+              globalString('general/off')}
+          </div>
         </div>
         <div className="form-row">
           {this.props.renderFieldLabel('tableOutputDefault')}
-          <Checkbox
+        </div>
+        <div className="switch">
+          <Switch
             type="text"
             id="tableOutputDefault"
             checked={this.props.settings.tableOutputDefault}
             onChange={this.onCheckboxToggle}
           />
+          <div className="switchLabel">
+            {this.props.settings.tableOutputDefault &&
+              globalString('general/on')}
+            {!this.props.settings.tableOutputDefault &&
+              globalString('general/off')}
+          </div>
         </div>
         <div className="form-row">
           {this.props.renderFieldLabel('showNewFeaturesDialogOnStart')}
-          <Checkbox
+        </div>
+        <div className="switch">
+          <Switch
             type="text"
             id="showNewFeaturesDialogOnStart"
             checked={this.props.settings.showNewFeaturesDialogOnStart}
             onChange={this.onCheckboxToggle}
           />
+          <div className="switchLabel">
+            {this.props.settings.showNewFeaturesDialogOnStart &&
+              globalString('general/on')}
+            {!this.props.settings.showNewFeaturesDialogOnStart &&
+              globalString('general/off')}
+          </div>
         </div>
       </div>
     );
