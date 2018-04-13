@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T11:24:43+10:00
+ * @Last modified time: 2018-04-13T16:02:27+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,6 +24,7 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import _ from 'lodash';
 import { observable, action } from 'mobx';
 import { restore } from 'dumpenvy';
 import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
@@ -88,7 +89,8 @@ export default class Store {
   @observable profileId = null;
   @observable topConnectionsPanel = observable.object({
     payload: null,
-    selectedConnection: null
+    selectedConnection: null,
+    highWaterMarkConnection: null
   }, null, { deep: false });
 
   toasterCallback = null;
@@ -142,6 +144,7 @@ export default class Store {
           console.log(args.profileId);
           console.table(args.payload);
           this.topConnectionsPanel.payload = args.payload;
+          this.topConnectionsPanel.highWaterMarkConnection = _.maxBy(this.topConnectionsPanel.payload, (con) => { return con.us; });
         }
       }
     }
