@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-11T15:50:03+10:00
+ * @Last modified time: 2018-04-13T11:24:43+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -45,6 +45,10 @@ global.globalNumber = (value, config) =>
 global.config = null;
 
 class PerformanceWindowApi {
+  store = null;
+  constructor(store) {
+    this.store = store;
+  }
   profileId = null;
   setProfileId(id) {
     this.profileId = id;
@@ -71,6 +75,8 @@ class PerformanceWindowApi {
 
   @action.bound
   getTopConnections = () => {
+    this.store.topConnectionsPanel.payload = null;
+    this.store.topConnectionsPanel.selectedConnection = null;
     this.sendCommandToMainProcess('pw_getTopConnections');
   }
 }

@@ -3,7 +3,7 @@
  * @Date:   2017-12-12T22:16:38+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-10T11:58:31+10:00
+ * @Last modified time: 2018-04-13T10:28:39+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -218,7 +218,7 @@
       font-size: small;
       color: $connectionButtonFontColour;
       width: 8em !important;
-      border-radius: 0;
+      border-radius: 5px;
       background-image: unset;
       background-color: #474747;
       border: 1px solid $connectionButtonBorderColour;

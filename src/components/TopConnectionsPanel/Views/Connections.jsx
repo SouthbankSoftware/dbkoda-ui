@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-12T16:07:01+10:00
+ * @Last modified time: 2018-04-13T11:26:54+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@ import {
   Utils,
   TableLoadingOption
 } from '@blueprintjs/table';
+import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
 
@@ -46,23 +47,27 @@ export default class ConnectionsView extends React.Component<Props> {
       sortedIndexMap: [],
       data: null,
       columns: [
-            new TextSortableColumn('Connection Id', 0),
-            new TextSortableColumn('appName', 1),
-            new TextSortableColumn('client', 2),
-            new TextSortableColumn('lastNs', 3),
-            new TextSortableColumn('lastOp', 4),
-            new TextSortableColumn('lastCommand', 5),
-            new TextSortableColumn('Sampled μs', 6)
-          ]
+        new TextSortableColumn('Connection Id', 0),
+        new TextSortableColumn('appName', 1),
+        new TextSortableColumn('client', 2),
+        new TextSortableColumn('lastNs', 3),
+        new TextSortableColumn('lastOp', 4),
+        new TextSortableColumn('lastCommand', 5),
+        new TextSortableColumn('Sampled μs', 6)
+      ]
     };
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.connections) {
-      this.setState({data: nextProps.connections});
+      this.setState({ data: nextProps.connections });
     }
   }
 
-  getCellData = (rowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
+  getCellData = (
+    rowIndex: number,
+    columnIndex: number,
+    bUseIndex: boolen = true
+  ) => {
     if (bUseIndex) {
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
       if (sortedRowIndex != null) {
@@ -113,7 +118,10 @@ export default class ConnectionsView extends React.Component<Props> {
     const { data } = this.state;
     const sortedIndexMap = Utils.times(data.length, (i: number) => i);
     sortedIndexMap.sort((a: number, b: number) => {
-      return comparator(this.getCellData(a, columnIndex, false), this.getCellData(b, columnIndex, false));
+      return comparator(
+        this.getCellData(a, columnIndex, false),
+        this.getCellData(b, columnIndex, false)
+      );
     });
     this.setState({ sortedIndexMap });
   };
@@ -141,11 +149,15 @@ export default class ConnectionsView extends React.Component<Props> {
   }
 
   render() {
-    const { connections } = this.props;
+    const { connections, showPerformancePanel } = this.props;
 
-    const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
+    const columns = this.state.columns.map(col =>
+      col.getColumn(this.getCellData, this.sortColumn)
+    );
     const columnsWidthsPercent = [10, 15, 15, 15, 15, 15, 15];
-    const columnsWidths = columnsWidthsPercent.map(width => (width * window.innerWidth / 100));
+    const columnsWidths = columnsWidthsPercent.map(
+      width => width * window.innerWidth / 100
+    );
 
     const loadingOptions = [];
     let numRows = 10;
@@ -156,22 +168,45 @@ export default class ConnectionsView extends React.Component<Props> {
     }
     return (
       <div style={{ height: '100%' }}>
-        <Table
-          enableMultipleSelection={false}
-          numRows={numRows}
-          loadingOptions={loadingOptions}
-          enableRowHeader={false}
-          selectionModes={SelectionModes.FULL_ROWS}
-          bodyContextMenuRenderer={this.renderBodyContextMenu}
-          enableRowResizing={false}
-          enableColumnResizing={false}
-          defaultRowHeight={30}
-          onSelection={region => this.onSelection(region)}
-          selectedRegions={this.state.lastSelectRegion}
-          columnWidths={columnsWidths}
-        >
-          {columns}
-        </Table>
+        <nav className="pt-navbar connectionsToolbar">
+          <div className="pt-navbar-group pt-align-left">
+            <div className="pt-navbar-heading">Connections</div>
+          </div>
+          <div className="pt-navbar-group pt-align-right">
+            <Tooltip
+              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+              content="Show Performance Panel"
+              hoverOpenDelay={1000}
+              inline
+              intent={Intent.PRIMARY}
+              position={Position.BOTTOM}
+            >
+              <Button
+                className="reset-button pt-button pt-intent-primary"
+                text="Performance"
+                onClick={showPerformancePanel}
+              />
+            </Tooltip>
+          </div>
+        </nav>
+        <div style={{ height: '100%' }}>
+          <Table
+            enableMultipleSelection={false}
+            numRows={numRows}
+            loadingOptions={loadingOptions}
+            enableRowHeader={false}
+            selectionModes={SelectionModes.FULL_ROWS}
+            bodyContextMenuRenderer={this.renderBodyContextMenu}
+            enableRowResizing={false}
+            enableColumnResizing={false}
+            defaultRowHeight={30}
+            onSelection={region => this.onSelection(region)}
+            selectedRegions={this.state.lastSelectRegion}
+            columnWidths={columnsWidths}
+          >
+            {columns}
+          </Table>
+        </div>
       </div>
     );
   }

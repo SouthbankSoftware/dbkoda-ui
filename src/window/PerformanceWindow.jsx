@@ -3,7 +3,7 @@
  * @Date:   2018-03-01T13:48:11+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-10T14:24:57+10:00
+ * @Last modified time: 2018-04-13T11:26:00+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -144,7 +144,7 @@ class PerformanceWindow extends React.Component {
                   this.setState({sshStatus: Status.NORMAL, mongoStatus: Status.NORMAL});
                   store.api.resetPerformancePanel();
                 }}
-                getTopConnections={() => {
+                showTopConnections={() => {
                   this.setState({bTopConnection: true});
                   store.api.getTopConnections();
                 }}
@@ -159,7 +159,9 @@ class PerformanceWindow extends React.Component {
           </div>
         )}
         {this.state.bTopConnection && (
-          <TopConnectionsPanel />
+          <TopConnectionsPanel showPerformancePanel={() => {
+            this.setState({bTopConnection: false});
+          }} />
         )}
       </div>
     );

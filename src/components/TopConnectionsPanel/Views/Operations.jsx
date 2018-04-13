@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-12T16:10:37+10:00
+ * @Last modified time: 2018-04-13T09:40:16+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -154,22 +154,31 @@ export default class OperationsView extends React.Component<Props> {
     }
     return (
       <div style={{ height: '100%' }}>
-        <Table
-          enableMultipleSelection={false}
-          numRows={numRows}
-          loadingOptions={loadingOptions}
-          enableRowHeader={false}
-          selectionModes={SelectionModes.FULL_ROWS}
-          bodyContextMenuRenderer={this.renderBodyContextMenu}
-          enableRowResizing={false}
-          enableColumnResizing={false}
-          defaultRowHeight={30}
-          onSelection={region => this.onSelection(region)}
-          selectedRegions={this.state.lastSelectRegion}
-          columnWidths={columnsWidths}
-        >
-          {columns}
-        </Table>
+        <nav className="pt-navbar connectionsToolbar">
+          <div className="pt-navbar-group pt-align-left">
+            <div className="pt-navbar-heading">
+              Operations
+            </div>
+          </div>
+        </nav>
+        <div style={{ height: '100%' }}>
+          <Table
+            enableMultipleSelection={false}
+            numRows={numRows}
+            loadingOptions={loadingOptions}
+            enableRowHeader={false}
+            selectionModes={SelectionModes.FULL_ROWS}
+            bodyContextMenuRenderer={this.renderBodyContextMenu}
+            enableRowResizing={false}
+            enableColumnResizing={false}
+            defaultRowHeight={30}
+            onSelection={region => this.onSelection(region)}
+            selectedRegions={this.state.lastSelectRegion}
+            columnWidths={columnsWidths}
+          >
+            {columns}
+          </Table>
+        </div>
       </div>
     );
   }
