@@ -167,7 +167,7 @@ export default class Toolbar extends React.Component {
     } else if (message === 'newEditor') {
       this.props.api.addEditor();
     } else if (message === 'openPreferences') {
-      this.props.api.openConfigTab();
+      this.props.api.openHomeTab();
     }
   };
 
@@ -276,7 +276,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: warningMsg,
         className: 'danger',
-        icon: 'thumbs-down',
+        icon: 'thumbs-down'
       });
     }
   }
@@ -351,7 +351,7 @@ export default class Toolbar extends React.Component {
             NewToaster.show({
               message: err.message,
               className: 'danger',
-              icon: 'thumbs-down',
+              icon: 'thumbs-down'
             });
             throw err;
           });
@@ -420,7 +420,7 @@ export default class Toolbar extends React.Component {
     NewToaster.show({
       message: warningMsg,
       className: 'danger',
-      icon: 'thumbs-down',
+      icon: 'thumbs-down'
     });
 
     return Promise.reject(new Error(warningMsg));
@@ -436,7 +436,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
         className: 'warning',
-        icon: 'thumbs-down',
+        icon: 'thumbs-down'
       });
     } else {
       this.props.store.editorPanel.executingEditorLines = true;
@@ -453,7 +453,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: globalString('editor/toolbar/cannotExecuteOnWelcome'),
         className: 'warning',
-        icon: 'thumbs-down',
+        icon: 'thumbs-down'
       });
     } else {
       this.props.store.editorPanel.executingEditorAll = true;
@@ -472,7 +472,7 @@ export default class Toolbar extends React.Component {
       NewToaster.show({
         message: 'Cannot stop execution. Nothing is executing.',
         className: 'warning',
-        icon: 'thumbs-down',
+        icon: 'thumbs-down'
       });
     }
   }
@@ -522,7 +522,7 @@ export default class Toolbar extends React.Component {
             NewToaster.show({
               message: 'Swapped Profiles.',
               className: 'success',
-              icon: 'pt-icon-thumbs-up',
+              icon: 'pt-icon-thumbs-up'
             });
           } else {
             const match = res.match(/Error/g);
@@ -534,7 +534,7 @@ export default class Toolbar extends React.Component {
               NewToaster.show({
                 message: globalString('editor/toolbar/profileSwapSslError'),
                 className: 'danger',
-                icon: 'thumbs-down',
+                icon: 'thumbs-down'
               });
             } else {
               runInAction('Update dropdown on success', () => {
@@ -543,7 +543,7 @@ export default class Toolbar extends React.Component {
               NewToaster.show({
                 message: 'Swapped Profiles.',
                 className: 'success',
-                icon: 'pt-icon-thumbs-up',
+                icon: 'pt-icon-thumbs-up'
               });
             }
           }
@@ -557,7 +557,7 @@ export default class Toolbar extends React.Component {
           NewToaster.show({
             message: globalString('editor/toolbar/profileSwapError'),
             className: 'danger',
-            icon: 'thumbs-down',
+            icon: 'thumbs-down'
           });
         });
     }

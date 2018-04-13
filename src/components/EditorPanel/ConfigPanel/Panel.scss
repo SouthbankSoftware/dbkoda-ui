@@ -82,13 +82,13 @@ h4 {
         width: 30%;
         max-width: 225px;
         min-width: 110px;
+        border-right: 1px solid $selectDarkBorderColor;
 
         .configMenu {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             width: 100%;
-            border-right: 1px solid $selectDarkBorderColor;
 
             .menuItem {
                 width: 100px;
@@ -297,7 +297,7 @@ h4 {
     }
 
     .configRightFormWrapper {
-        margin-left: 50px;
+        margin-left: 30px;
         width: 100%;
 
         button.pt-button.formButton {
@@ -469,7 +469,6 @@ h4 {
             .welcomePageContentLeft {
                 width: 250px;
                 color: $welcomeViewSocialMediaText;
-                padding-left: 20px;
                 padding-right: 20px;
                 border-right: 1px solid $welcomeViewDividerTransparent;
                 flex-shrink: 0;
@@ -487,7 +486,8 @@ h4 {
 
                 .docsContent {
                     overflow-y: auto;
-                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
 
                     .docsList {
                         overflow-y: auto;
@@ -548,89 +548,127 @@ h4 {
                         }
                     }
 
-                    .linksList {
-                        display: flex;
-                        flex-direction: row;
-                        flex-grow: 1;
+                    .linksWrapper {
+                        h2 {
+                            margin: 0px;
+                        }
 
-                        .linkWrapper {
-                            flex-direction: column;
-                            margin-right: 10px;
+                        .linksList {
+                            display: flex;
+                            flex-direction: row;
+                            flex-grow: 1;
 
-                            a {
-                                width: 100px;
-                                border-radius: 50%;
-                                order: 1;
-                                flex-grow: 4;
-                                background: $welcomeViewIconBGHover;
-                                font-size: 40;
-                            }
+                            .linkWrapper {
+                                flex-direction: column;
+                                margin-right: 10px;
 
-                            a:focus {
-                                box-shadow: none !important;
-                            }
-
-                            .twitterIcon {
-                                width: 60px;
-                                height: 60px;
-                                position: relative;
-
-                                svg {
-                                    width: 30px;
-                                    height: 30px;
-                                    position: absolute;
-                                    top: 50%;
-                                    bottom: 50%;
-                                    transform: translate(-50%, -50%);
-                                    fill: $welcomeViewSocialMediaIcons;
+                                a {
+                                    width: 40px;
+                                    border-radius: 50%;
+                                    order: 1;
+                                    flex-grow: 4;
+                                    background: none;
+                                    font-size: 40;
                                 }
-                            }
 
-                            .gitHubIcon {
-                                width: 60px;
-                                height: 60px;
-                                position: relative;
-
-                                svg {
-                                    width: 30px;
-                                    height: 30px;
-                                    position: absolute;
-                                    top: 50%;
-                                    bottom: 50%;
-                                    transform: translate(-50%, -50%);
-                                    fill: $welcomeViewSocialMediaIcons;
+                                a:focus {
+                                    box-shadow: none !important;
                                 }
-                            }
 
-                            .kodaIcon {
-                                width: 60px;
-                                height: 60px;
-                                position: relative;
+                                .twitterIcon {
+                                    width: 40px;
+                                    height: 40px;
+                                    position: relative;
 
-                                svg {
-                                    width: 30px;
-                                    height: 30px;
-                                    position: absolute;
-                                    top: 50%;
-                                    bottom: 50%;
-                                    transform: translate(-50%, -50%);
-                                    fill: $welcomeViewSocialMediaIcons;
+                                    svg {
+                                        width: 30px;
+                                        height: 30px;
+                                        position: absolute;
+                                        top: 50%;
+                                        bottom: 50%;
+                                        transform: translate(-50%, -50%);
+                                        fill: $welcomeViewSocialMediaIcons;
+                                    }
 
-                                    path.st0 {
-                                        fill: none;
+                                    svg:hover {
+                                        fill: lighten($welcomeViewSocialMediaIcons, 20);
                                     }
                                 }
-                            }
 
-                            a:hover {
-                                background-color: $welcomeViewIconBG;
-                            }
+                                .gitHubIcon {
+                                    width: 40px;
+                                    height: 40px;
+                                    position: relative;
 
-                            p {
-                                flex-grow: 1;
-                                order: 2;
-                                text-align: center;
-                                margin-top: 10%;
+                                    svg {
+                                        width: 30px;
+                                        height: 30px;
+                                        position: absolute;
+                                        top: 50%;
+                                        bottom: 50%;
+                                        transform: translate(-50%, -50%);
+                                        fill: $welcomeViewSocialMediaIcons;
+                                    }
+
+                                    svg:hover {
+                                        fill: lighten($welcomeViewSocialMediaIcons, 20);
+                                    }
+                                }
+
+                                .kodaIcon {
+                                    width: 40px;
+                                    height: 40px;
+                                    position: relative;
+
+                                    svg {
+                                        width: 30px;
+                                        height: 30px;
+                                        position: absolute;
+                                        top: 50%;
+                                        bottom: 50%;
+                                        transform: translate(-50%, -50%);
+                                        fill: $welcomeViewSocialMediaIcons;
+
+                                        path.st0 {
+                                            fill: none;
+                                        }
+                                    }
+
+                                    svg:hover {
+                                        fill: lighten($welcomeViewSocialMediaIcons, 20);
+                                    }
+                                }
+
+                                .mediumIcon {
+                                    width: 40px;
+                                    height: 40px;
+                                    position: relative;
+
+                                    svg {
+                                        width: 30px;
+                                        height: 30px;
+                                        position: absolute;
+                                        top: 50%;
+                                        bottom: 50%;
+                                        transform: translate(-50%, -50%);
+                                        fill: $welcomeViewSocialMediaIcons;
+                                    }
+
+                                    svg:hover {
+                                        fill: lighten($welcomeViewSocialMediaIcons, 20);
+                                    }
+                                }
+
+                                a:hover {
+                                    background-color: none;
+                                }
+
+                                p {
+                                    flex-grow: 1;
+                                    order: 2;
+                                    text-align: center;
+                                    margin-top: 10%;
+                                }
                             }
                         }
                     }
@@ -639,11 +677,11 @@ h4 {
 
             .welcomePageContentRight {
                 padding-right: 3%;
-                padding-left: 20px;
                 flex-grow: 1;
                 flex-shrink: 1;
                 display: flex;
                 flex-direction: column;
+                padding-left: 40px;
 
                 h2 {
                     margin-bottom: 20px;
@@ -723,6 +761,7 @@ h4 {
                         min-height: 150px;
                         max-height: 300px;
                         margin-bottom: 20px;
+                        padding-top: 10px;
 
                         .newsContentWrapper {
                             margin-left: 12px;

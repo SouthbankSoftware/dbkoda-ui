@@ -120,9 +120,10 @@ export default class EditorApi {
   }
 
   @action.bound
-  openConfigTab() {
-    this.store.configPage.isOpen = true;
-    this.store.editorPanel.activeEditorId = 'Config';
+  openHomeTab() {
+    // this.store.configPage.isOpen = true;
+    this.store.welcomePage.isOpen = true;
+    this.store.editorPanel.activeEditorId = 'Default';
   }
 
   @action.bound

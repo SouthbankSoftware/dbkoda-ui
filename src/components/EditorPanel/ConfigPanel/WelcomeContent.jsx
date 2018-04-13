@@ -35,8 +35,9 @@ import { AnchorButton } from '@blueprintjs/core';
 import moment from 'moment';
 import TwitterIcon from '~/styles/icons/twitter-icon.svg';
 import GithubIcon from '~/styles/icons/github-icon.svg';
-import DocumentIcon from '~/styles/icons/document-icon.svg';
+import DocumentIcon from '~/styles/icons/document-solid-icon.svg';
 import KodaIcon from '~/styles/icons/dbkoda-logo.svg';
+import MediumIcon from '~/styles/icons/medium-logo.svg';
 
 const FEED_URL =
   'https://cors-anywhere.herokuapp.com/https://medium.com/feed/dbkoda';
@@ -144,6 +145,14 @@ export default class WelcomeContent extends React.Component {
         .shell.openExternal('https://dbkoda.useresponse.com/topic/add');
     }
   }
+  @action.bound
+  onClickGettingStarted() {
+    if (IS_ELECTRON) {
+      window
+        .require('electron')
+        .shell.openExternal('https://dbkoda.useresponse.com/topic/add');
+    }
+  }
 
   @action.bound
   onClickTwitter() {
@@ -168,6 +177,15 @@ export default class WelcomeContent extends React.Component {
       window
         .require('electron')
         .shell.openExternal('http://southbanksoftware.github.io/');
+    }
+  }
+
+  @action.bound
+  onClickMedium() {
+    if (IS_ELECTRON) {
+      window
+        .require('electron')
+        .shell.openExternal('https://medium.com/dbkoda');
     }
   }
 
@@ -214,6 +232,17 @@ export default class WelcomeContent extends React.Component {
                 <span className="iconWrapper">
                   <AnchorButton
                     className="docsIcon"
+                    onClick={this.onClickGettingStarted}
+                  >
+                    <DocumentIcon width={30} height={30} />
+                  </AnchorButton>
+                </span>
+                <p>Need help getting started?</p>
+              </div>
+              <div className="documentationLinkWrapper">
+                <span className="iconWrapper">
+                  <AnchorButton
+                    className="docsIcon"
                     onClick={this.onClickNeedHelp}
                   >
                     <DocumentIcon width={30} height={30} />
@@ -233,31 +262,38 @@ export default class WelcomeContent extends React.Component {
                 <p>Found a bug? Let us know!</p>
               </div>
             </div>
-            <h2>Links</h2>
-            <div className="linksList">
-              <div className="linkWrapper">
-                <AnchorButton
-                  className="twitterIcon"
-                  onClick={this.onClickTwitter}
-                >
-                  <TwitterIcon width={50} height={50} />
-                </AnchorButton>
-                <p>Twitter</p>
-              </div>
-              <div className="linkWrapper">
-                <AnchorButton
-                  className="gitHubIcon"
-                  onClick={this.onClickGithub}
-                >
-                  <GithubIcon width={50} height={50} />
-                </AnchorButton>
-                <p>Github</p>
-              </div>
-              <div className="linkWrapper">
-                <AnchorButton className="kodaIcon" onClick={this.onClickKoda}>
-                  <KodaIcon width={50} height={50} />
-                </AnchorButton>
-                <p>dbKoda</p>
+            <div className="linksWrapper">
+              <h2>Links</h2>
+              <div className="linksList">
+                <div className="linkWrapper">
+                  <AnchorButton
+                    className="twitterIcon"
+                    onClick={this.onClickTwitter}
+                  >
+                    <TwitterIcon width={50} height={50} />
+                  </AnchorButton>
+                </div>
+                <div className="linkWrapper">
+                  <AnchorButton
+                    className="gitHubIcon"
+                    onClick={this.onClickGithub}
+                  >
+                    <GithubIcon width={50} height={50} />
+                  </AnchorButton>
+                </div>
+                <div className="linkWrapper">
+                  <AnchorButton className="kodaIcon" onClick={this.onClickKoda}>
+                    <KodaIcon width={50} height={50} />
+                  </AnchorButton>
+                </div>
+                <div className="linkWrapper">
+                  <AnchorButton
+                    className="mediumIcon"
+                    onClick={this.onClickMedium}
+                  >
+                    <MediumIcon width={50} height={50} />
+                  </AnchorButton>
+                </div>
               </div>
             </div>
           </div>

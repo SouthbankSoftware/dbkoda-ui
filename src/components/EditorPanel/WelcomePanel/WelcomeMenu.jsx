@@ -121,7 +121,7 @@ export default class Panel extends React.Component {
           <div className="welcomeButtonWrapper">
             <AnchorButton
               className="welcomeMenuButton openConfigBtn"
-              onClick={this.props.api.openConfigTab}
+              onClick={this.props.api.openHomeTab}
             >
               <ConfigDatabaseIcon
                 className="dbKodaSVG"

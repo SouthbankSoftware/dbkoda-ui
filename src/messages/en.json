@@ -289,7 +289,7 @@
         }
       },
       "welcome": {
-        "heading": "Welcome"
+        "heading": "Home"
       },
       "home": {
         "title": "Home",
@@ -302,7 +302,7 @@
           "application": "Application",
           "passwords": "Password Store"
         },
-        "heading": "Preferences",
+        "heading": "Home",
         "menuApplication": "Application",
         "menuPaths": "Paths",
         "menuPasswordStore": "Password Store",

@@ -115,7 +115,7 @@ export default class DataCenter {
     this.getEditorDisplayName = this.editorApi.getEditorDisplayName.bind(this);
     this.removeEditor = this.editorApi.removeEditor.bind(this);
     this.addDrillEditor = this.editorApi.addDrillEditor.bind(this);
-    this.openConfigTab = this.editorApi.openConfigTab.bind(this);
+    this.openHomeTab = this.editorApi.openHomeTab.bind(this);
 
     // Tree API public functions
     this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);

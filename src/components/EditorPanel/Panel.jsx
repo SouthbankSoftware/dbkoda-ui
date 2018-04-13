@@ -967,7 +967,6 @@ export default class Panel extends React.Component {
           selectedTabId={this.props.store.editorPanel.activeEditorId}
         >
           {this.renderWelcome()}
-          {this.props.store.configPage.isOpen && this.renderConfigTab()}
           {editors.map(editor => {
             const [, editorObj] = editor;
             const tabClassName = editorObj.alias.replace(/[\. ]/g, '');
