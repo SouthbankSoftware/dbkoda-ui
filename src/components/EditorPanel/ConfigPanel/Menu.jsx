@@ -106,7 +106,7 @@ export default class Menu extends React.Component {
           <ShortcutsSectionIcon className="dbKodaSVG" width={20} height={20} />
         </MenuItem>
         <MenuItem
-          name="Features"
+          name="UserGuide"
           isSelected={this.isItemSelected}
           changeMenu={this.changeMenuSelected}
         >

@@ -38,6 +38,7 @@ import { Broker, EventType } from '~/helpers/broker';
 import { NewToaster } from '#/common/Toaster';
 import LoadingView from '#/common/LoadingView';
 import HappyIcon from '../../styles/icons/happy.svg';
+import HomeSectionIcon from '../../styles/icons/color/home-icon.svg';
 import NeutralIcon from '../../styles/icons/neutral.svg';
 import SadIcon from '../../styles/icons/sad.svg';
 import BugIcon from '../../styles/icons/error.svg';
@@ -495,7 +496,7 @@ export default class Panel extends React.Component {
               </div>
             )}
           <div className="configButton" onClick={this.props.api.openHomeTab}>
-            <span className="pt-icon-cog" />
+            <HomeSectionIcon width={10} height={10} />
           </div>
           <div className="feedbackButton" onClick={this.onClickFeedback}>
             <HappyIcon width={10} height={10} />

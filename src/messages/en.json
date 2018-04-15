@@ -300,7 +300,11 @@
           "paths": "Paths",
           "performance": "Performance Panel",
           "application": "Application",
-          "passwords": "Password Store"
+          "passwords": "Password Store",
+          "User Guide": "User Guide"
+        },
+        "guides": {
+          "sections": {}
         },
         "heading": "Home",
         "menuApplication": "Application",

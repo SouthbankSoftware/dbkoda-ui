@@ -38,6 +38,7 @@ import Paths from './Paths';
 import Performance from './Performance';
 import LearnShortcuts from './LearnShortcuts';
 import WelcomeView from './WelcomeView';
+import Features from './Features';
 import './Panel.scss';
 
 @inject(allStores => ({
@@ -154,6 +155,9 @@ export default class View extends React.Component {
         break;
       case 'Home':
         form = <WelcomeView />;
+        break;
+      case 'UserGuide':
+        form = <Features />;
         break;
       default:
         form = <ErrorView error="Unknown menu item selection." />;
