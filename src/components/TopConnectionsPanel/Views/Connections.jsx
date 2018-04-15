@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T11:26:54+10:00
+ * @Last modified time: 2018-04-13T16:20:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -37,6 +37,7 @@ import {
 import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
+import ProgressBarColumn from '../Components/ProgressBarColumn';
 
 @observer
 export default class ConnectionsView extends React.Component<Props> {
@@ -46,6 +47,7 @@ export default class ConnectionsView extends React.Component<Props> {
       lastSelectRegion: null,
       sortedIndexMap: [],
       data: null,
+      highWaterMark: null,
       columns: [
         new TextSortableColumn('Connection Id', 0),
         new TextSortableColumn('appName', 1),
@@ -53,13 +55,17 @@ export default class ConnectionsView extends React.Component<Props> {
         new TextSortableColumn('lastNs', 3),
         new TextSortableColumn('lastOp', 4),
         new TextSortableColumn('lastCommand', 5),
-        new TextSortableColumn('Sampled μs', 6)
+        new TextSortableColumn('Sampled μs', 6),
+        new ProgressBarColumn('Sampled us', 'us', 7)
       ]
     };
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.connections) {
       this.setState({ data: nextProps.connections });
+    }
+    if (nextProps && nextProps.highWaterMark) {
+      this.setState({highWaterMark: nextProps.highWaterMark});
     }
   }
 
@@ -100,6 +106,12 @@ export default class ConnectionsView extends React.Component<Props> {
         break;
       case 6:
         cellValue = this.state.data[rowIndex].us;
+        break;
+      case 7:
+        cellValue = _.pick(this.state.data[rowIndex], 'us');
+        if (this.state.highWaterMark) {
+          cellValue.highWaterMark = this.state.highWaterMark.us;
+        }
         break;
       default:
         cellValue = this.state.data[rowIndex].connectionId;
@@ -154,7 +166,7 @@ export default class ConnectionsView extends React.Component<Props> {
     const columns = this.state.columns.map(col =>
       col.getColumn(this.getCellData, this.sortColumn)
     );
-    const columnsWidthsPercent = [10, 15, 15, 15, 15, 15, 15];
+    const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
     const columnsWidths = columnsWidthsPercent.map(
       width => width * window.innerWidth / 100
     );
