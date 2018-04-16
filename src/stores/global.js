@@ -70,6 +70,7 @@ export default class Store {
   @nodump profileStore = null;
   @observable locale = 'en';
   @observable version = '0.11.0-beta';
+  @observable previousVersion = null;
   @observable updateAvailable = false;
   @observable.shallow editors = observable.map(null, { deep: false });
   @observable.shallow outputs = observable.map(null, { deep: false });

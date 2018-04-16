@@ -76,7 +76,21 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    const { store } = this.props;
     Broker.emit(EventType.APP_RENDERED);
+
+    // Check if user has upgraded to new version for showing new features dialog.
+    if (store.previousVersion) {
+      if (store.previousVersion !== store.version) {
+        // New version - Show new features.
+        store.editorPanel.showNewFeaturesDialog = true;
+        store.previousVersion = store.version;
+      }
+    } else {
+      // If no version specified, this is first install - Show new Features.
+      store.editorPanel.showNewFeaturesDialog = true;
+      store.previousVersion = store.version;
+    }
   }
   @action.bound
   updateRightSplitPos(pos) {

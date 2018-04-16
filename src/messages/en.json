@@ -11,8 +11,8 @@
       "newFeaturesDialog": {
         "numberOfNewFeatures": "4",
         "openAtStart": "Show on App Start",
-        "title": "New Features!",
-        "subTitle": "Here are some of our latest features from version",
+        "title": "New Features",
+        "subTitle": "Here are some of our latest features!",
         "release": "0.11.",
         "newFeature1Title": "Top Connections View",
         "newFeature1Body":
