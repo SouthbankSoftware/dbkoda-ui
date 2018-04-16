@@ -3,7 +3,7 @@
  * @Date:   2018-04-06T14:15:28+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T16:08:46+10:00
+ * @Last modified time: 2018-04-16T13:58:18+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -28,6 +28,8 @@
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
 import SplitPane from 'react-split-pane';
+import autobind from 'autobind-decorator';
+import { debounce } from 'lodash';
 import ConnectionsView from './Views/Connections';
 import OperationsView from './Views/Operations';
 import OperationDetails from './Views/OperationDetails';
@@ -44,8 +46,24 @@ export default class TopConnectionsPanel extends React.Component<Props> {
     super();
     this.state = {
       selectedConnection: null,
-      selectedOperation: null
+      selectedOperation: null,
+      bottomSplitPos: 1000,
+      topSplitPos: window.innerWidth
     };
+  }
+  componentDidMount() {
+    window.addEventListener('resize', debounce(this.handleResize, 400));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+  @autobind
+  handleResize() {
+    this.setState({topSplitPos: window.innerWidth});
+  }
+  @autobind
+  updateBottomSplitPos(pos) {
+    this.setState({bottomSplitPos: pos});
   }
   render() {
     const { store, showPerformancePanel } = this.props;
@@ -63,7 +81,6 @@ export default class TopConnectionsPanel extends React.Component<Props> {
       flexDirection: 'column'
     };
     const onConnectionSelection = (selectedConnection) => {
-      console.log('selectedConnection:', selectedConnection);
       this.setState({selectedConnection});
     };
 
@@ -81,17 +98,17 @@ export default class TopConnectionsPanel extends React.Component<Props> {
           pane2Style={splitPane2Style}
         >
           <div className="connectionList">
-            <ConnectionsView connections={connections} highWaterMark={highWaterMarkCon} onSelect={onConnectionSelection} showPerformancePanel={showPerformancePanel} />
+            <ConnectionsView connections={connections} highWaterMark={highWaterMarkCon} onSelect={onConnectionSelection} showPerformancePanel={showPerformancePanel} tableWidth={this.state.topSplitPos} />
           </div>
           <SplitPane
             className="RootSplitPane"
             split="vertical"
-            defaultSize="60%"
-            onDragFinished={this.updateOverallSplitPos}
+            defaultSize={this.state.bottomSplitPos}
+            onDragFinished={this.updateBottomSplitPos}
             minSize={700}
             maxSize={1200}
           >
-            <div className="operationList"><OperationsView operations={operations} onSelect={onOperationSelection} /></div>
+            <div className="operationList"><OperationsView operations={operations} onSelect={onOperationSelection} tableWidth={this.state.bottomSplitPos} /></div>
             <div className="operationDetails"><OperationDetails operation={selectedOperation} /></div>
           </SplitPane>
         </SplitPane>

@@ -47,8 +47,8 @@ import { TableView } from '../TableViewPanel';
 
 type Props = {
   store: *,
-  api: *,
-}
+  api: *
+};
 
 /**
  * The main panel for the Output view, this handles tabbing,
@@ -134,7 +134,27 @@ export default class Panel extends React.Component<Props> {
 
   @action.bound
   shellOutputAvailable({ id, shellId }: { id: string, shellId: string }) {
-    const editors = [...this.props.store.editors.entries()];
+    // Get the active editor:
+    const activeEditor = this.props.store.editors.get(
+      this.props.store.editorPanel.activeEditorId
+    );
+    if (IS_DEVELOPMENT) {
+      console.log(id);
+      console.log(shellId);
+      console.log(activeEditor);
+    }
+
+    if (id === activeEditor.id) {
+      if (activeEditor.explains) {
+        activeEditor.explains.active = false;
+      }
+      this.props.api.outputApi.openView(OutputToolbarContexts.RAW);
+    }
+
+    // Check if new output matches current editor:
+
+    /* @Mike @TODO -> this logic is ooooooold and can probably be deleted. More testing is required.
+         const editors = [...this.props.store.editors.entries()];
     editors.map(editor => {
       if (
         editor[1].visible &&
@@ -149,7 +169,7 @@ export default class Panel extends React.Component<Props> {
           }
         });
       }
-    });
+    }); */
   }
 
   @action.bound
@@ -198,9 +218,16 @@ export default class Panel extends React.Component<Props> {
     this.props.store.outputPanel.editorRefs[editorId] = cmRef;
   }
 
-  getDocumentAtLine(editorId: string, lineNumber: number, direction: number, lines: { start: number, end: number, status: string }) {
+  getDocumentAtLine(
+    editorId: string,
+    lineNumber: number,
+    direction: number,
+    lines: { start: number, end: number, status: string }
+  ) {
     // $FlowFixMe
-    const cm = this.props.store.outputPanel.editorRefs[editorId].getCodeMirror();
+    const cm = this.props.store.outputPanel.editorRefs[
+      editorId
+    ].getCodeMirror();
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
     if (
@@ -331,7 +358,9 @@ export default class Panel extends React.Component<Props> {
       ) {
         if (this.props.store.outputPanel.editorRefs[newTab]) {
           // $FlowFixMe
-          const cm = this.props.store.outputPanel.editorRefs[newTab].getCodeMirror();
+          const cm = this.props.store.outputPanel.editorRefs[
+            newTab
+          ].getCodeMirror();
           cm.focus();
         }
       }
@@ -406,7 +435,9 @@ export default class Panel extends React.Component<Props> {
               }
               key={tabId}
               id={tabId}
-              title={globalString(`output/tabs/${OutputToolbarContexts.ENHANCED_VIEW}`)}
+              title={globalString(
+                `output/tabs/${OutputToolbarContexts.ENHANCED_VIEW}`
+              )}
               panel={
                 <EnhancedJson
                   outputId={editorId}
@@ -436,7 +467,9 @@ export default class Panel extends React.Component<Props> {
               }
               key={tabId}
               id={tabId}
-              title={globalString(`output/tabs/${OutputToolbarContexts.TABLE_VIEW}`)}
+              title={globalString(
+                `output/tabs/${OutputToolbarContexts.TABLE_VIEW}`
+              )}
               panel={
                 <TableView
                   outputId={editorId}
@@ -475,7 +508,9 @@ export default class Panel extends React.Component<Props> {
               }
               id={tabId}
               key={tabId}
-              title={globalString(`output/tabs/${OutputToolbarContexts.CHART_VIEW}`)}
+              title={globalString(
+                `output/tabs/${OutputToolbarContexts.CHART_VIEW}`
+              )}
               panel={<ChartPanel editorId={editorId} />}
             >
               <Button
@@ -499,7 +534,9 @@ export default class Panel extends React.Component<Props> {
               }
               key={tabId}
               id={tabId}
-              title={globalString(`output/tabs/${OutputToolbarContexts.EXPLAIN_VIEW}`)}
+              title={globalString(
+                `output/tabs/${OutputToolbarContexts.EXPLAIN_VIEW}`
+              )}
               panel={<Explain editor={editor[1]} />}
             >
               <Button
@@ -525,7 +562,9 @@ export default class Panel extends React.Component<Props> {
               }
               key={tabId}
               id={tabId}
-              title={globalString(`output/tabs/${OutputToolbarContexts.DETAILS_VIEW}`)}
+              title={globalString(
+                `output/tabs/${OutputToolbarContexts.DETAILS_VIEW}`
+              )}
               panel={
                 <DetailsPanel
                   isVisible={
@@ -583,7 +622,10 @@ export default class Panel extends React.Component<Props> {
     }
 
     // terminals
-    const { store: { terminals }, api } = this.props;
+    const {
+      store: { terminals },
+      api
+    } = this.props;
     const localTerminals = [];
     const sshTerminals = [];
 
