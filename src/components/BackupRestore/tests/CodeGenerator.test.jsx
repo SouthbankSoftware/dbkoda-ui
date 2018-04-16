@@ -50,8 +50,8 @@ describe('test backup restore generator view', () => {
       directoryPath: '/tmp',
       allCollections: true,
       collections: ['col1', 'col2'],
+      exportType: {selected: 'json'},
       selectedCollections: [],
-      exportType: {},
       db: 'testdb',
     };
     const gc = generateCode({
@@ -64,11 +64,11 @@ describe('test backup restore generator view', () => {
     assert.equal(code.length, 3);
     assert.equal(
       code[0],
-      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" -o "/tmp/col1.json" ',
+      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --type "json" -o "/tmp/col1.json" ',
     );
     assert.equal(
       code[1],
-      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col2" -o "/tmp/col2.json" ',
+      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col2" --type "json" -o "/tmp/col2.json" ',
     );
   });
 
@@ -100,7 +100,7 @@ describe('test backup restore generator view', () => {
     assert.equal(code.length, 2);
     assert.equal(
       code[0],
-      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --jsonArray -o "/tmp/col1.json" ',
+      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --jsonArray --type "" -o "/tmp/col1.json" ',
     );
   });
 
@@ -135,7 +135,7 @@ describe('test backup restore generator view', () => {
     assert.equal(code.length, 2);
     assert.equal(
       code[0],
-      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --pretty --jsonArray --noHeaderLine -o "/tmp/col1.json" ',
+      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --pretty --jsonArray --noHeaderLine --type "" -o "/tmp/col1.json" ',
     );
   });
 
@@ -170,7 +170,7 @@ describe('test backup restore generator view', () => {
     assert.equal(code.length, 3);
     assert.equal(
       code[0],
-      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --pretty --jsonArray --noHeaderLine -q "{a:a}" -o "/tmp/col1.json" ',
+      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --pretty --jsonArray --noHeaderLine --type "" -q "{a:a}" -o "/tmp/col1.json" ',
     );
   });
 
@@ -210,7 +210,7 @@ describe('test backup restore generator view', () => {
     assert.equal(code.length, 3);
     assert.equal(
       code[0],
-      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --pretty --jsonArray --noHeaderLine -q "{a:a}" --forceTableScan --skip "10" --limit "20" --assertExists -o "/tmp/col1.json" ',
+      'mongoexport --host "localhost" --port "27017" --db "testdb" --collection "col1" --pretty --jsonArray --noHeaderLine --type "" -q "{a:a}" --forceTableScan --skip "10" --limit "20" --assertExists -o "/tmp/col1.json" ',
     );
   });
 
