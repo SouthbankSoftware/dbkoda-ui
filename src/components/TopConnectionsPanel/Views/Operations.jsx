@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-16T13:57:13+10:00
+ * @Last modified time: 2018-04-16T16:59:50+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -166,7 +166,7 @@ export default class OperationsView extends React.Component<Props> {
             </div>
           </div>
         </nav>
-        <div style={{ height: '100%' }}>
+        <div style={{ height: 'calc(100% - 50px)' }}>
           <Table
             enableMultipleSelection={false}
             numRows={numRows}
