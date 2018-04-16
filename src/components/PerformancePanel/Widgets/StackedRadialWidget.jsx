@@ -25,16 +25,16 @@
 
 import * as d3 from 'd3';
 import React from 'react';
-import {observer} from 'mobx-react';
-import {action, autorun} from 'mobx';
+import { observer } from 'mobx-react';
+import { action, autorun } from 'mobx';
 import _ from 'lodash';
-import {PopoverInteractionKind} from '@blueprintjs/core';
+import { PopoverInteractionKind } from '@blueprintjs/core';
 // $FlowFixMe
-import {Popover2} from '@blueprintjs/labs';
-import type {WidgetState} from '~/api/Widget';
-import type {PerformancePanelState} from '~/api/PerformancePanel';
+import { Popover2 } from '@blueprintjs/labs';
+import type { WidgetState } from '~/api/Widget';
+import type { PerformancePanelState } from '~/api/PerformancePanel';
 import './StackedRadialWidget.scss';
-import {convertUnits} from './Utils';
+import { convertUnits } from './Utils';
 import Widget from './Widget';
 import Legend from './Legend';
 
@@ -43,13 +43,13 @@ const colors = ['#AC8BC0', '#E26847', '#42BB6D', '#7040A3', '#365F87'];
 type Props = {
   performancePanel: PerformancePanelState,
   widget: WidgetState,
-  widgetStyle: *,
+  widgetStyle: *
 };
 
 type State = {
   width: number,
   height: number,
-  lastLayerTweened: *,
+  lastLayerTweened: *
 };
 
 @observer
@@ -82,7 +82,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     this.state = {
       width: StackedRadialWidget.width,
       height: StackedRadialWidget.height,
-      lastLayerTweened: {key: '', index: 1},
+      lastLayerTweened: { key: '', index: 1 }
     };
     if (this.props.widget.colorList) {
       this.colors = this.props.widget.colorList;
@@ -107,8 +107,8 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
             index: 0,
             name: 'move',
             icon: '\uF105',
-            percentage: 0,
-          },
+            percentage: 0
+          }
         ];
       }
       return [
@@ -116,8 +116,8 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           index: this.state.lastLayerTweened.index,
           name: 'move',
           icon: '\uF105',
-          percentage: this.itemValues[this.state.lastLayerTweened.key],
-        },
+          percentage: this.itemValues[this.state.lastLayerTweened.key]
+        }
       ];
     };
   }
@@ -272,12 +272,12 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
 
     // Add tooltip.
 
-    this.fields.push({field, layer, data});
+    this.fields.push({ field, layer, data });
     this.field = field;
     d3
       .transition()
       .duration(1000)
-      .each(() => this.update({field, layer, data}));
+      .each(() => this.update({ field, layer, data }));
 
     return field;
   }
@@ -330,7 +330,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
    * When new data is recieved, update the relevant ring.
    */
   update(field: Object) {
-    this.state.lastLayerTweened = {key: field.data, index: field.layer};
+    this.state.lastLayerTweened = { key: field.data, index: field.layer };
     field.field = field.field
       .each(function(d) {
         this._value = d.percentage;
@@ -412,7 +412,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
 
   @action.bound
   updateD3Graphs = action(latestValue => {
-    const {stats} = this.props.performancePanel;
+    const { stats } = this.props.performancePanel;
     // $FlowFixMe
     this.itemValues = [];
     this.maxValue = 0;
@@ -423,8 +423,11 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
           : parseInt(latestValue[key], 10);
         // If fixedValue is null, give a 0 value so it will render straight away.
         this.itemValues[key] = fixedValue;
-        const {hwm} = stats[key];
-        this.maxValue = parseInt(Math.max(hwm, fixedValue, this.maxValue, 0), 10);
+        const { hwm } = stats[key];
+        this.maxValue = parseInt(
+          Math.max(hwm, fixedValue, this.maxValue, 0),
+          10
+        );
       });
 
       this.fields.map(field => {
@@ -477,7 +480,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         this.buildWidget('.radial-' + parseInt(count + 1, 10), count + 1, item);
       });
       this._autorunDisposer = autorun(() => {
-        const {items, values} = this.props.widget;
+        const { items, values } = this.props.widget;
 
         const latestValue =
           values.length > 0 ? values[values.length - 1].value : {};
@@ -500,7 +503,7 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
     }
     this.setState({
       width: width - 20,
-      height: height - 20,
+      height: height - 20
     });
     this._rebuildOnResize();
   };
@@ -529,15 +532,15 @@ export default class StackedRadialWidget extends React.Component<Props, State> {
         'px - ' +
         this.state.width * 0.175 +
         'px)',
-      top: 'calc(50% - ' + this.state.width * count / 4.25 / 2 + 'px)',
+      top: 'calc(50% - ' + this.state.width * count / 4.25 / 2 + 'px)'
     };
   }
 
   render() {
-    const {widget, widgetStyle} = this.props;
-    const {displayName} = widget;
+    const { widget, widgetStyle } = this.props;
+    const { displayName } = widget;
 
-    const wrapperStyle = {width: this.state.width * 0.55};
+    const wrapperStyle = { width: this.state.width * 0.55 };
 
     // $FlowIssue
     return (

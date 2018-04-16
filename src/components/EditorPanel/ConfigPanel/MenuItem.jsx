@@ -34,12 +34,14 @@ import { AnchorButton, Tooltip, Intent, Position } from '@blueprintjs/core';
 @observer
 export default class MenuItem extends React.Component {
   render() {
-    const itemClass = this.props.isSelected(this.props.name) ? 'menuItem selected' : 'menuItem';
+    const itemClass = this.props.isSelected(this.props.name)
+      ? 'menuItem selected'
+      : 'menuItem';
     return (
       <div className={itemClass}>
         <Tooltip
           intent={Intent.PRIMARY}
-          hoverOpenDelay={1000}
+          hoverOpenDelay={500}
           content={this.props.name}
           tooltipClassName="pt-dark"
           position={Position.TOP}

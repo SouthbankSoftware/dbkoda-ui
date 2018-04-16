@@ -81,6 +81,37 @@ export default class StaticApi {
     });
   }
 
+  static parseDefaultTableJson(rsStr, resultSet, cm, outputId) {
+    return new Promise((resolve, reject) => {
+      const documents = [];
+      let currentLine = resultSet.start;
+      const lines = _.clone(resultSet);
+      while (currentLine < resultSet.end && lines.status !== 'Invalid') {
+        try {
+          const doc = this.getDocumentAtLine(outputId, currentLine, 1, lines, cm);
+          if (doc && lines.status !== 'Invalid') {
+            documents.push(doc);
+          }
+        } catch (ex) {
+          reject(ex.message);
+        }
+        currentLine = lines.end + 1;
+      }
+      if (documents.length > 0) {
+        const ParseWorker = require('worker-loader!./workers/jsonParse.js'); // eslint-disable-line
+        const parseWorker = new ParseWorker();
+        parseWorker.postMessage({ cmd: 'start', jsonStr: `[ ${documents.join(',')} ]` });
+        parseWorker.addEventListener('message', e => {
+          if (e.data[1]) {
+            reject(e.data[1]);
+          } else {
+            resolve(e.data[0]);
+          }
+        });
+      }
+    });
+  }
+
   static findResultSet(jsonStr, lines, cm, outputId) {
     return new Promise(resolve => {
       const linesAbove = _.clone(lines);
@@ -181,7 +212,7 @@ export default class StaticApi {
         }
       }
 
-      const finalDocument =
+        const finalDocument =
         '[' +
         documentsAbove
           .reverse()
@@ -200,6 +231,8 @@ export default class StaticApi {
   }
 
   static getDocumentAtLine(editorId, lineNumber, direction, lines, cm) {
+    console.log('getDocumentAtLine()');
+    console.log(lines.start);
     const startLine = cm.getLine(lineNumber);
     // Skip these lines to continue reading result set
     if (

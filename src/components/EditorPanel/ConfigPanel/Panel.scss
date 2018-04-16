@@ -265,7 +265,7 @@ h4 {
                 }
             }
 
-            .menuItem .menuItemFeatures {
+            .menuItem .menuItemUserGuide {
                 background-color: $menuBackground7;
 
                 .st0 {
@@ -450,9 +450,10 @@ h4 {
                         padding-right: 4px;
                         border: 1px solid rgba(191, 190, 192, 0.5);
                         border-radius: 0.5em;
-                        width: 30%;
-                        height: 80px;
+                        width: 50%;
+                        height: 100px;
                         min-width: 150px;
+                        max-width: 250px;
                         display: flex;
                         flex-direction: column;
                         flex-wrap: nowrap;

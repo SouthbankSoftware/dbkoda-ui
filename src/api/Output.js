@@ -346,7 +346,8 @@ export default class OutputApi {
     displayType: string,
     lines: any,
     editor: Editor,
-    singleDoc: boolean
+    singleDoc: boolean,
+    tableDefaultView: ?boolean
   ) {
     let tabPrefix = '';
     if (displayType === 'enhancedJson') {
@@ -367,7 +368,8 @@ export default class OutputApi {
         lines,
         // $FlowFixMe
         editor.getCodeMirror(),
-        singleDoc
+        singleDoc,
+        tableDefaultView
       );
     }
 
@@ -420,9 +422,35 @@ export default class OutputApi {
     displayType: string,
     lines: any,
     cm: {},
-    singleLine: boolean
+    singleLine: boolean,
+    defaultOutput: ?boolean
   ) {
-    if (singleLine) {
+    if (defaultOutput) {
+      lines.start = this.store.outputs.get(outputId).currentExecStartLine;
+      // $FlowFixMe
+      lines.end = cm.lineCount();
+      StaticApi.parseDefaultTableJson(jsonStr, lines, cm, outputId)
+        .then(result => {
+          console.log(result);
+          runInAction(() => {
+            this.store.outputs.get(outputId)[displayType] = {
+              json: result,
+              firstLine: lines.start,
+              lastLine: lines.end
+            };
+          });
+        }, () => {
+          runInAction(() => {
+            // Revert to raw view if table view JSON can't be parsed
+            NewToaster.show({
+              message: globalString('output/editor/tableDefaultNotJson'),
+              className: 'warning',
+              icon: ''
+            });
+            this.openView(OutputToolbarContexts.RAW);
+          });
+        });
+    } else if (singleLine) {
       // Single line implemention
       StaticApi.parseShellJson(jsonStr).then(
         result => {

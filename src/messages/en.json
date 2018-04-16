@@ -11,8 +11,8 @@
       "newFeaturesDialog": {
         "numberOfNewFeatures": "4",
         "openAtStart": "Show on App Start",
-        "title": "New Features!",
-        "subTitle": "Here are some of our latest features from version",
+        "title": "New Features",
+        "subTitle": "Here are some of our latest features!",
         "release": "0.11.",
         "newFeature1Title": "Top Connections View",
         "newFeature1Body":
@@ -170,7 +170,8 @@
         "expandAll": "Expand All",
         "numOfDocs": "Number of Documents: ",
         "exceededMaxDocs":
-          "Table View is currently limited to 500 documents at a time, please narrow your query."
+          "Table View is currently limited to 500 documents at a time, please narrow your query.",
+        "tableDefaultNotJson": "Could not display query data in a table as JSON was not found, reverting to Raw view for this query."
       },
       "terminal": {
         "execute": "Execute Command (Enter)"
@@ -300,7 +301,11 @@
           "paths": "Paths",
           "performance": "Performance Panel",
           "application": "Application",
-          "passwords": "Password Store"
+          "passwords": "Password Store",
+          "User Guide": "User Guide"
+        },
+        "guides": {
+          "sections": {}
         },
         "heading": "Home",
         "menuApplication": "Application",

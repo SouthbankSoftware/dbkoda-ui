@@ -5,6 +5,13 @@
         .header {
             .title {
                 font-size: 28px;
+                display: flex;
+                flex-direction: row;
+
+                .versionNumber {
+                    margin-left: 10px;
+                    opacity: 0.4;
+                }
             }
 
             .subtitle {

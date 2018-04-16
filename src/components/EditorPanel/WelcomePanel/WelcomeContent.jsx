@@ -32,13 +32,15 @@ import xml2js from 'xml2js';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { AnchorButton } from '@blueprintjs/core';
+import LoadingView from '#/common/LoadingView';
 import moment from 'moment';
 import TwitterIcon from '~/styles/icons/twitter-icon.svg';
 import GithubIcon from '~/styles/icons/github-icon.svg';
 import DocumentIcon from '~/styles/icons/document-icon.svg';
 import KodaIcon from '~/styles/icons/dbkoda-logo.svg';
 
-const FEED_URL = 'https://cors-anywhere.herokuapp.com/https://medium.com/feed/dbkoda';
+const FEED_URL =
+  'https://cors-anywhere.herokuapp.com/https://medium.com/feed/dbkoda';
 const CONTENT_SUMMARY_RE = /<p>.*?<\/p>/;
 
 /**
@@ -103,14 +105,18 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickBlog(number) {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal(this.state.newsJSX[number].link);
+      window
+        .require('electron')
+        .shell.openExternal(this.state.newsJSX[number].link);
     }
   }
 
   @action.bound
   onClickMongoDocumentation() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('https://docs.mongodb.com/');
+      window
+        .require('electron')
+        .shell.openExternal('https://docs.mongodb.com/');
     }
   }
   @action.bound
@@ -126,33 +132,43 @@ export default class WelcomeContent extends React.Component {
   @action.bound
   onClickNeedHelp() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('https://dbkoda.useresponse.com/');
+      window
+        .require('electron')
+        .shell.openExternal('https://dbkoda.useresponse.com/');
     }
   }
   @action.bound
   onClickLodgeABug() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('https://dbkoda.useresponse.com/topic/add');
+      window
+        .require('electron')
+        .shell.openExternal('https://dbkoda.useresponse.com/topic/add');
     }
   }
 
   @action.bound
   onClickTwitter() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('https://twitter.com/db_Koda');
+      window
+        .require('electron')
+        .shell.openExternal('https://twitter.com/db_Koda');
     }
   }
   @action.bound
   onClickGithub() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('https://github.com/SouthbankSoftware/dbkoda');
+      window
+        .require('electron')
+        .shell.openExternal('https://github.com/SouthbankSoftware/dbkoda');
     }
   }
 
   @action.bound
   onClickKoda() {
     if (IS_ELECTRON) {
-      window.require('electron').shell.openExternal('http://southbanksoftware.github.io/');
+      window
+        .require('electron')
+        .shell.openExternal('http://southbanksoftware.github.io/');
     }
   }
 
@@ -175,7 +191,10 @@ export default class WelcomeContent extends React.Component {
             <div className="docsList">
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickMongoDocumentation}>
+                  <AnchorButton
+                    className="docsIcon"
+                    onClick={this.onClickMongoDocumentation}
+                  >
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -183,7 +202,10 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickReleaseNotes}>
+                  <AnchorButton
+                    className="docsIcon"
+                    onClick={this.onClickReleaseNotes}
+                  >
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -191,7 +213,10 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickNeedHelp}>
+                  <AnchorButton
+                    className="docsIcon"
+                    onClick={this.onClickNeedHelp}
+                  >
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -199,7 +224,10 @@ export default class WelcomeContent extends React.Component {
               </div>
               <div className="documentationLinkWrapper">
                 <span className="iconWrapper">
-                  <AnchorButton className="docsIcon" onClick={this.onClickLodgeABug}>
+                  <AnchorButton
+                    className="docsIcon"
+                    onClick={this.onClickLodgeABug}
+                  >
                     <DocumentIcon width={30} height={30} />
                   </AnchorButton>
                 </span>
@@ -209,13 +237,19 @@ export default class WelcomeContent extends React.Component {
             <h2>Links</h2>
             <div className="linksList">
               <div className="linkWrapper">
-                <AnchorButton className="twitterIcon" onClick={this.onClickTwitter}>
+                <AnchorButton
+                  className="twitterIcon"
+                  onClick={this.onClickTwitter}
+                >
                   <TwitterIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Twitter</p>
               </div>
               <div className="linkWrapper">
-                <AnchorButton className="gitHubIcon" onClick={this.onClickGithub}>
+                <AnchorButton
+                  className="gitHubIcon"
+                  onClick={this.onClickGithub}
+                >
                   <GithubIcon width={50} height={50} />
                 </AnchorButton>
                 <p>Github</p>
@@ -231,11 +265,14 @@ export default class WelcomeContent extends React.Component {
         </div>
         <div className="welcomePageContentRight">
           <h2>News</h2>
-          {this.state.newsJSX && (
+          {this.state.newsJSX ? (
             <div className="newsListWrapper">
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(0)}>
+                  <AnchorButton
+                    className="svgWrapper"
+                    onClick={() => this.onClickBlog(0)}
+                  >
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
@@ -248,12 +285,17 @@ export default class WelcomeContent extends React.Component {
                     }}
                     onClick={this._captureAndOpenHrefExternally}
                   />
-                  <p className="datePublished">{this.state.newsJSX[0].pubDate}</p>
+                  <p className="datePublished">
+                    {this.state.newsJSX[0].pubDate}
+                  </p>
                 </div>
               </div>
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(1)}>
+                  <AnchorButton
+                    className="svgWrapper"
+                    onClick={() => this.onClickBlog(1)}
+                  >
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
@@ -266,12 +308,17 @@ export default class WelcomeContent extends React.Component {
                     }}
                     onClick={this._captureAndOpenHrefExternally}
                   />
-                  <p className="datePublished">{this.state.newsJSX[1].pubDate}</p>
+                  <p className="datePublished">
+                    {this.state.newsJSX[1].pubDate}
+                  </p>
                 </div>
               </div>
               <div className="newsItemWrapper">
                 <div className="newsIconWrapper">
-                  <AnchorButton className="svgWrapper" onClick={() => this.onClickBlog(2)}>
+                  <AnchorButton
+                    className="svgWrapper"
+                    onClick={() => this.onClickBlog(2)}
+                  >
                     <KodaIcon width={40} height={40} />
                   </AnchorButton>
                 </div>
@@ -284,11 +331,15 @@ export default class WelcomeContent extends React.Component {
                     }}
                     onClick={this._captureAndOpenHrefExternally}
                   />
-                  <p className="datePublished">{this.state.newsJSX[2].pubDate}</p>
+                  <p className="datePublished">
+                    {this.state.newsJSX[2].pubDate}
+                  </p>
                 </div>
               </div>
             </div>
-          )}
+          ) : (
+            <LoadingView />
+          )}{' '}
         </div>
       </div>
     );

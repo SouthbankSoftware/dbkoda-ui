@@ -245,15 +245,17 @@ export default class Toolbar extends React.Component {
         this.props.store.editorToolbar.currentProfile,
         this.props.store.editorToolbar.shellId
       ),
-      this.onExecutionFinished.bind(this)
+      () => { this.onExecutionFinished(this.props.store.editorToolbar.currentProfile, this.props.store.editorToolbar.shellId); }
     );
   }
 
-  onExecutionFinished() {
+  @action.bound
+  onExecutionFinished(currentProfile, execShellId) {
     console.log('Execution Finished!');
-    if (this.props.config.settings.tableOutputDefault) {
+    const {shellId} = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    if (this.props.config.settings.tableOutputDefault && shellId === execShellId) {
       setTimeout(() => {
-        this.openTableView();
+        this.openTableView(false, true);
       }, 0);
     }
   }
@@ -381,7 +383,7 @@ export default class Toolbar extends React.Component {
                   className="pt-intent-danger circleButton tableViewButton"
                   onClick={() => {
                     if (currentOutput.chartView) {
-                      this.openTableView(true);
+                      this.openTableView(true, false);
                     } else if (
                       existingOutputs.tableJson &&
                       !currentOutput.rawView
@@ -390,7 +392,7 @@ export default class Toolbar extends React.Component {
                         OutputToolbarContexts.TABLE_VIEW
                       );
                     } else {
-                      this.openTableView();
+                      this.openTableView(false, false);
                     }
                   }}
                   disabled={
@@ -784,7 +786,7 @@ export default class Toolbar extends React.Component {
    * @param {boolean} fromChart - Determines whether or not the table should be generated from the chart view.
    */
   @action.bound
-  openTableView(fromChart) {
+  openTableView(fromChart, defaultView) {
     let editor;
     if (fromChart) {
       editor = this.props.editorRefs[this.props.store.outputPanel.currentTab];
@@ -833,7 +835,8 @@ export default class Toolbar extends React.Component {
         'tableJson',
         lines,
         editor,
-        false
+        false,
+        defaultView
       );
     }
   }
