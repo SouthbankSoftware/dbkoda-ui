@@ -245,13 +245,15 @@ export default class Toolbar extends React.Component {
         this.props.store.editorToolbar.currentProfile,
         this.props.store.editorToolbar.shellId
       ),
-      this.onExecutionFinished.bind(this)
+      () => { this.onExecutionFinished(this.props.store.editorToolbar.currentProfile, this.props.store.editorToolbar.shellId); }
     );
   }
 
-  onExecutionFinished() {
+  @action.bound
+  onExecutionFinished(currentProfile, execShellId) {
     console.log('Execution Finished!');
-    if (this.props.config.settings.tableOutputDefault) {
+    const {shellId} = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
+    if (this.props.config.settings.tableOutputDefault && shellId === execShellId) {
       setTimeout(() => {
         this.openTableView(false, true);
       }, 0);
