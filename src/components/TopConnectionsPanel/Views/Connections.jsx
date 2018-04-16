@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T16:20:47+10:00
+ * @Last modified time: 2018-04-16T14:01:19+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,10 +39,15 @@ import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
 
+const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
+
 @observer
 export default class ConnectionsView extends React.Component<Props> {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const columnsWidths = columnsWidthsPercent.map(
+      width => width * this.props.tableWidth / 100
+    );
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
@@ -56,8 +61,9 @@ export default class ConnectionsView extends React.Component<Props> {
         new TextSortableColumn('lastOp', 4),
         new TextSortableColumn('lastCommand', 5),
         new TextSortableColumn('Sampled μs', 6),
-        new ProgressBarColumn('Sampled us', 'us', 7)
-      ]
+        new ProgressBarColumn('', 'us', 7)
+      ],
+      columnsWidths
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -66,6 +72,10 @@ export default class ConnectionsView extends React.Component<Props> {
     }
     if (nextProps && nextProps.highWaterMark) {
       this.setState({highWaterMark: nextProps.highWaterMark});
+    }
+    if (nextProps && nextProps.tableWidth) {
+      const columnsWidths = columnsWidthsPercent.map(width => (width * nextProps.tableWidth / 100));
+      this.setState({columnsWidths});
     }
   }
 
@@ -140,7 +150,6 @@ export default class ConnectionsView extends React.Component<Props> {
 
   @action
   onSelection(region) {
-    console.log('region:', region);
     if (region.length == 0) {
       return;
     }
@@ -154,7 +163,6 @@ export default class ConnectionsView extends React.Component<Props> {
     if (sortedRowIndex != null) {
       rowIndex = sortedRowIndex;
     }
-    console.log(this.state.data[rowIndex]);
     if (this.props.onSelect) {
       this.props.onSelect(this.state.data[rowIndex]);
     }
@@ -165,10 +173,6 @@ export default class ConnectionsView extends React.Component<Props> {
 
     const columns = this.state.columns.map(col =>
       col.getColumn(this.getCellData, this.sortColumn)
-    );
-    const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
-    const columnsWidths = columnsWidthsPercent.map(
-      width => width * window.innerWidth / 100
     );
 
     const loadingOptions = [];
@@ -214,7 +218,7 @@ export default class ConnectionsView extends React.Component<Props> {
             defaultRowHeight={30}
             onSelection={region => this.onSelection(region)}
             selectedRegions={this.state.lastSelectRegion}
-            columnWidths={columnsWidths}
+            columnWidths={this.state.columnsWidths}
           >
             {columns}
           </Table>

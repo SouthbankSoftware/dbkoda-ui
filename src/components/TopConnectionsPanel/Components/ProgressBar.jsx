@@ -4,7 +4,7 @@
  * @Date:   2018-02-07T10:55:24+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T16:51:57+10:00
+ * @Last modified time: 2018-04-16T16:10:28+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -55,15 +55,18 @@ export default class ProgressBar extends React.Component<Props> {
   _chartEl: *;
   _chart: *;
   _dataGroup: *;
-  _tipEl: *;
-  _tipREl: *;
   _tip: *;
   _totalDivisor: *;
   _unit: any;
 
   _createD3View = () => {
-    this._tip = d3.select(this._tipEl).style('opacity', 0);
-    d3.select(this._tipREl).style('opacity', 0);
+    this._tip = d3
+      .select('body')
+      .append('div')
+      .attr('class', 'd3-tip-top')
+      .style('opacity', 0)
+      .style('position', 'absolute')
+      .style('z-index', 1000);
 
     this._chart = d3.select(this._chartEl).attrs({
       width: '100%',
@@ -189,21 +192,16 @@ export default class ProgressBar extends React.Component<Props> {
         x: 0
       })
       .on('mouseover', d => {
-        const xScale = this._chartEl.clientWidth / vbWidth;
-        const yScale = this._chartEl.clientHeight / vbHeight;
-        const wRatio = xScale < yScale ? xScale : yScale;
-        const w = d.sumValue / this._totalDivisor * chartWidth;
-        let xDiff = (this._chartEl.clientWidth - chartWidth * wRatio) / 2;
-        const yDiff = (this._chartEl.clientHeight - barHeight * wRatio) / 2;
-        if (this._chartEl.previousSibling) {
-          xDiff += this._chartEl.previousSibling.clientWidth;
-        }
-        let x = w * wRatio + xDiff;
-        const y = yDiff - 20;
+        d3.selectAll('.d3-tip-top')
+        .transition()
+        .duration(500)
+        .style('opacity', 0)
+        .style('z-index', -1);
         this._tip
           .transition()
           .duration(200)
-          .style('opacity', 0.9);
+          .style('opacity', 0.9)
+          .style('z-index', 1000);
         const strTipValue =
           String(d.value).indexOf('.') >= 0
             ? Number(d.value).toFixed(2)
@@ -214,23 +212,23 @@ export default class ProgressBar extends React.Component<Props> {
             d.key +
             ':</strong> <span style="color:red">' +
             strTipLabel.value +
-            ' ' +
-            strTipLabel.unit +
             '</span>'
         );
         const strWidth = String(d.key + ': ' + strTipValue).length * 8;
 
-        x -= strWidth / 2;
         this._tip
-          .style('left', x - 10 + 'px')
-          .style('top', y + 'px')
-          .style('width', strWidth + 10 + 'px');
+        .style('left', d3.event.pageX - strWidth / 2 + 'px')
+        .style('top', d3.event.pageY - 28 + 'px')
+        .style('width', strWidth + 10 + 'px');
       })
       .on('mouseout', () => {
-        this._tip
-          .transition()
-          .duration(500)
-          .style('opacity', 0);
+        if (d3.event.relatedTarget.className !== 'd3-tip-top') {
+          this._tip
+            .transition()
+            .duration(500)
+            .style('opacity', 0)
+            .style('z-index', -1);
+        }
       })
       .transition(t)
       .attr('width', d => {
@@ -256,7 +254,6 @@ export default class ProgressBar extends React.Component<Props> {
   }
 
   componentDidUpdate() {
-    console.log('componentDidUpdate progressbar');
     setTimeout(() => {
       // this._recreateD3View();
       const { value, unit, waterMark } = this.props;
@@ -287,11 +284,6 @@ export default class ProgressBar extends React.Component<Props> {
           )}
           <svg className="chart" ref={_chartEl => (this._chartEl = _chartEl)} />
         </div>
-        <div className="d3-tip-top" ref={_tipEl => (this._tipEl = _tipEl)} />
-        <div
-          className="d3-tip-right"
-          ref={_tipREl => (this._tipREl = _tipREl)}
-        />
       </div>
     );
   }

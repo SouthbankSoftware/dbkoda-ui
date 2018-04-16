@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T09:40:16+10:00
+ * @Last modified time: 2018-04-16T13:57:13+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,10 +39,13 @@ import {
 
 import TextSortableColumn from '../Components/TextSortableColumn';
 
+const columnsWidthsPercent = [20, 20, 20, 20, 20];
+
 @observer
 export default class OperationsView extends React.Component<Props> {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const columnsWidths = columnsWidthsPercent.map(width => (width * this.props.tableWidth / 100));
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
@@ -53,7 +56,8 @@ export default class OperationsView extends React.Component<Props> {
             new TextSortableColumn('Operation', 2),
             new TextSortableColumn('Sampled μs', 3),
             new TextSortableColumn('Plan Summary', 4)
-          ]
+          ],
+      columnsWidths
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -66,6 +70,10 @@ export default class OperationsView extends React.Component<Props> {
         }
       }
       this.setState({data: operations});
+    }
+    if (nextProps && nextProps.tableWidth) {
+      const columnsWidths = columnsWidthsPercent.map(width => (width * nextProps.tableWidth / 100));
+      this.setState({columnsWidths});
     }
   }
 
@@ -121,7 +129,6 @@ export default class OperationsView extends React.Component<Props> {
 
   @action
   onSelection(region) {
-    console.log('region:', region);
     if (region.length == 0) {
       return;
     }
@@ -135,7 +142,6 @@ export default class OperationsView extends React.Component<Props> {
     if (sortedRowIndex != null) {
       rowIndex = sortedRowIndex;
     }
-    console.log(this.state.data[rowIndex]);
     if (this.props.onSelect) {
       this.props.onSelect(this.state.data[rowIndex]);
     }
@@ -143,8 +149,7 @@ export default class OperationsView extends React.Component<Props> {
 
   render() {
     const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
-    const columnsWidthsPercent = [20, 20, 20, 20, 20];
-    const columnsWidths = columnsWidthsPercent.map(width => (width * window.innerWidth * 0.6 / 100)); // TODO: replace 0.6 with left bottom panel percent width
+     // TODO: replace 0.6 with left bottom panel percent width
     const loadingOptions = [];
     let numRows = 10;
     if (this.state.data && this.state.data.length) {
@@ -174,7 +179,7 @@ export default class OperationsView extends React.Component<Props> {
             defaultRowHeight={30}
             onSelection={region => this.onSelection(region)}
             selectedRegions={this.state.lastSelectRegion}
-            columnWidths={columnsWidths}
+            columnWidths={this.state.columnsWidths}
           >
             {columns}
           </Table>
