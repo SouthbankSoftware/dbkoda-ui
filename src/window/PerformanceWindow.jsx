@@ -38,10 +38,11 @@ import '@blueprintjs/table/lib/css/table.css';
 import '~/styles/global.scss';
 import '~/styles/fonts/index.css';
 import '#/App.scss';
+import {ProfileConfiguration} from '../components/ProfileConfiguration';
 import Status from '../components/PerformancePanel/Status';
 
 @inject(allStores => ({
-  store: allStores.store
+  store: allStores.store,
 }))
 @observer
 class PerformanceWindow extends React.Component {
@@ -50,7 +51,8 @@ class PerformanceWindow extends React.Component {
     this.state = {
       sshStatus: Status.NORMAL,
       mongoStatus: Status.NORMAL,
-      bTopConnection: false
+      bTopConnection: false,
+      profileConfiguration: false,
     };
 
     document.addEventListener(
@@ -79,13 +81,17 @@ class PerformanceWindow extends React.Component {
     if (document.hidden) {
       logToMain('info', 'becomes hidden');
 
-      const {store: {performancePanel}} = this.props;
+      const {
+        store: {performancePanel},
+      } = this.props;
 
       detachFromMobx(performancePanel);
     } else {
       logToMain('info', 'becomes visible');
 
-      const {store: {performancePanel}} = this.props;
+      const {
+        store: {performancePanel},
+      } = this.props;
 
       attachToMobx(performancePanel);
     }
@@ -126,6 +132,24 @@ class PerformanceWindow extends React.Component {
     }
   }
 
+  showTopConnectionPanel = show => {
+    if (show) {
+      const {store} = this.props;
+      this.setState({bTopConnection: true, profileConfiguration: false});
+      store.api.getTopConnections();
+    } else {
+      this.setState({bTopConnection: false});
+    }
+  };
+
+  showProfileConfiguration = show => {
+    if (show) {
+      this.setState({profileConfiguration: true, bTopConnection: false});
+    } else {
+      this.setState({profileConfiguration: false});
+    }
+  };
+
   render() {
     const {store} = this.props;
     console.log(store.resetPerformancePanel);
@@ -141,13 +165,13 @@ class PerformanceWindow extends React.Component {
                 onClose={null}
                 resetHighWaterMark={store.api.resetHighWaterMark}
                 resetPerformancePanel={() => {
-                  this.setState({sshStatus: Status.NORMAL, mongoStatus: Status.NORMAL});
+                  this.setState({
+                    sshStatus: Status.NORMAL,
+                    mongoStatus: Status.NORMAL,
+                  });
                   store.api.resetPerformancePanel();
                 }}
-                showTopConnections={() => {
-                  this.setState({bTopConnection: true});
-                  store.api.getTopConnections();
-                }}
+                showTopConnections={() => this.showTopConnectionPanel(true)}
                 sshStatus={this.state.sshStatus}
                 mongoStatus={this.state.mongoStatus}
               />
@@ -159,10 +183,13 @@ class PerformanceWindow extends React.Component {
           </div>
         )}
         {this.state.bTopConnection && (
-          <TopConnectionsPanel showPerformancePanel={() => {
-            this.setState({bTopConnection: false});
-          }} />
+          <TopConnectionsPanel
+            showPerformancePanel={() => {
+              this.showTopConnectionPanel(false);
+            }}
+          />
         )}
+        {this.state.profileConfiguration && <ProfileConfiguration />}
       </div>
     );
   }
