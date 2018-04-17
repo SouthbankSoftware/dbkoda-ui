@@ -1,5 +1,5 @@
 import {inject, observer} from 'mobx-react';
-import ProfileConfiguration from './ProfileConfigurationComponent';
+import ProfileConfiguration from '../components/ProfileConfigurationComponent';
 
 const ProfileConfigurationContainer = inject(allStores => ({
   api: allStores.store.api,
