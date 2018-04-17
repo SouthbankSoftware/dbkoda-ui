@@ -53,7 +53,7 @@ class PerformanceWindow extends React.Component {
       sshStatus: Status.NORMAL,
       mongoStatus: Status.NORMAL,
       bTopConnection: false,
-      profileConfiguration: false,
+      bProfileConfiguration: false,
       bProfiling: false,
     };
 
@@ -139,38 +139,40 @@ class PerformanceWindow extends React.Component {
       const {store} = this.props;
       this.setState({
         bTopConnection: true,
-        profileConfiguration: false,
+        bProfileConfiguration: false,
         bProfiling: false,
       });
       store.api.getTopConnections();
-    } else {
-      this.setState({bTopConnection: false});
     }
   };
 
   showProfileConfiguration = show => {
     if (show) {
-      const {store} = this.props;
       this.setState({
-        profileConfiguration: true,
+        bProfileConfiguration: true,
         bTopConnection: false,
         bProfiling: false,
       });
-      store.api.getProfilingDataBases();
-    } else {
-      this.setState({profileConfiguration: false});
     }
+  };
+
+  showPerformancePanel = () => {
+    this.setState({
+      bProfiling: false,
+      bProfileConfiguration: false,
+      bTopConnection: false,
+    });
   };
 
   showProfiling = show => {
     if (show) {
+      const {store} = this.props;
       this.setState({
-        profileConfiguration: false,
+        bProfileConfiguration: false,
         bTopConnection: false,
         bProfiling: true,
       });
-    } else {
-      this.setState({bProfiling: false});
+      store.api.getProfilingDataBases();
     }
   };
 
@@ -180,7 +182,8 @@ class PerformanceWindow extends React.Component {
     return (
       <div>
         {!this.state.bTopConnection &&
-          !this.state.bProfiling && (
+          !this.state.bProfiling &&
+          !this.state.bProfileConfiguration && (
             <div>
               {store.performancePanel ? (
                 <PerformancePanel
@@ -200,6 +203,9 @@ class PerformanceWindow extends React.Component {
                   showProfiling={() => {
                     this.showProfiling(true);
                   }}
+                  showProfileConfiguration={() => {
+                    this.showProfileConfiguration(true);
+                  }}
                   sshStatus={this.state.sshStatus}
                   mongoStatus={this.state.mongoStatus}
                 />
@@ -213,18 +219,24 @@ class PerformanceWindow extends React.Component {
         {this.state.bTopConnection && (
           <TopConnectionsPanel
             showPerformancePanel={() => {
-              this.showTopConnectionPanel(false);
+              this.showPerformancePanel();
             }}
           />
         )}
         {this.state.bProfiling && (
           <ProfilingPanel
             showPerformancePanel={() => {
-              this.showProfiling(false);
+              this.showPerformancePanel();
             }}
           />
         )}
-        {this.state.profileConfiguration && <ProfileConfiguration />}
+        {this.state.bProfileConfiguration && (
+          <ProfileConfiguration
+            showPerformancePanel={() => {
+              this.showPerformancePanel();
+            }}
+          />
+        )}
       </div>
     );
   }

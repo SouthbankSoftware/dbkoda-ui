@@ -53,7 +53,8 @@
         "ssh_unsupported_os": "Unsupported OS"
       },
       "profiling": {
-        "profilingButtonText": "Profiling"
+        "profilingButtonText": "Profiling",
+        "profile-configuration-button-text": "Profile Configure"
       }
     },
     "aggregate_builder": {

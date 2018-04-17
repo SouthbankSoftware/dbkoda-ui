@@ -116,6 +116,7 @@ export default class PerformancePanel extends React.Component<Props> {
       resetHighWaterMark,
       resetPerformancePanel,
       showTopConnections,
+      showProfileConfiguration,
       showProfiling,
       mongoStatus,
       sshStatus
@@ -165,6 +166,22 @@ export default class PerformancePanel extends React.Component<Props> {
                   className="top-con-button reset-button pt-button pt-intent-primary"
                   text="Top Connections"
                   onClick={showTopConnections}
+                />
+              </Tooltip>
+            )}
+            {showProfileConfiguration && (
+              <Tooltip
+                className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                content={globalString('performance/profiling/profile-configuration-button-text')}
+                hoverOpenDelay={1000}
+                inline
+                intent={Intent.PRIMARY}
+                position={Position.BOTTOM}
+              >
+                <Button
+                  className="top-con-button reset-button pt-button pt-intent-primary"
+                  text={globalString('performance/profiling/profile-configuration-button-text')}
+                  onClick={showProfileConfiguration}
                 />
               </Tooltip>
             )}
