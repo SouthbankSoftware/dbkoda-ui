@@ -1,0 +1,25 @@
+@import "../../../styles/_defaultTheme.scss";
+.profile-config-buttons {
+    .pt-popover-wrapper {
+      border-bottom: unset;
+    }
+}
+
+.profile-config-button {
+    width: 12em !important;
+    border-radius: 5px;
+    background-image: unset;
+    color: $connectionButtonFontColour;
+    background-color: #474747 !important;
+    border: 1px solid $connectionButtonBorderColour;
+    height: 32px;
+    line-height: 10px;
+    min-height: 32px;
+    background-image: unset !important;
+    margin-right: 40px;
+}
+
+.profile-config-button:hover {
+    background-color: #565971 !important;
+    color: #dfdee0 !important;
+}

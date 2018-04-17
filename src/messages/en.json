@@ -54,7 +54,12 @@
       },
       "profiling": {
         "profilingButtonText": "Profiling",
-        "profile-configuration-button-text": "Profile Configure"
+        "profile-configuration-button-text": "Profile Configure",
+        "configuration": {
+          "setup": "Setup Profiling",
+          "analyse": "Analyse Profiling",
+          "performance": "Performance"
+        }
       }
     },
     "aggregate_builder": {
