@@ -148,11 +148,13 @@ class PerformanceWindow extends React.Component {
 
   showProfileConfiguration = show => {
     if (show) {
+      const {store} = this.props;
       this.setState({
         bProfileConfiguration: true,
         bTopConnection: false,
         bProfiling: false,
       });
+      store.api.getProfilingDataBases();
     }
   };
 
