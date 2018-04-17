@@ -72,14 +72,21 @@ class PerformanceWindowApi {
   @action.bound
   openStorageDDView = () => {
     this.sendCommandToMainProcess('pw_openStorageDDView');
-  }
+  };
 
   @action.bound
   getTopConnections = () => {
     this.store.topConnectionsPanel.payload = null;
     this.store.topConnectionsPanel.selectedConnection = null;
     this.sendCommandToMainProcess('pw_getTopConnections');
-  }
+  };
+
+  @action.bound
+  getProfilingDataBases = () => {
+    this.store.profilingPanel.databases = null;
+    this.store.profilingPanel.selectedDatabase = null;
+    this.sendCommandToMainProcess('pw_getProfilingDataBases');
+  };
 }
 
 export default class Store {
@@ -87,11 +94,26 @@ export default class Store {
   api = null;
   @observable.shallow performancePanel = null;
   @observable profileId = null;
-  @observable topConnectionsPanel = observable.object({
-    payload: null,
-    selectedConnection: null,
-    highWaterMarkConnection: null
-  }, null, { deep: false });
+  @observable
+  topConnectionsPanel = observable.object(
+    {
+      payload: null,
+      selectedConnection: null,
+      highWaterMarkConnection: null
+    },
+    null,
+    { deep: false }
+  );
+
+  @observable
+  profilingPanel = observable.object(
+    {
+      databases: null,
+      selectedDatabase: null
+    },
+    null,
+    { deep: false }
+  );
 
   toasterCallback = null;
   errorHandler = null;
@@ -144,7 +166,12 @@ export default class Store {
           console.log(args.profileId);
           console.table(args.payload);
           this.topConnectionsPanel.payload = args.payload;
-          this.topConnectionsPanel.highWaterMarkConnection = _.maxBy(this.topConnectionsPanel.payload, (con) => { return con.us; });
+          this.topConnectionsPanel.highWaterMarkConnection = _.maxBy(
+            this.topConnectionsPanel.payload,
+            con => {
+              return con.us;
+            }
+          );
         }
       }
     }

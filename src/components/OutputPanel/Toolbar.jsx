@@ -187,7 +187,9 @@ export default class Toolbar extends React.Component {
 
     reaction(
       () => this.props.store.editorToolbar.shellId,
-      () => { this.onShellIdChanged(); }
+      () => {
+        this.onShellIdChanged();
+      }
     );
   }
 
@@ -239,27 +241,28 @@ export default class Toolbar extends React.Component {
   }
 
   onShellIdChanged() {
-    console.log(`EventType.createShellExecutionFinishEvent(${this.props.store.editorPanel.activeEditorId}, ${this.props.store.editorToolbar.shellId})`);
+    console.log(
+      `EventType.createShellExecutionFinishEvent(${
+        this.props.store.editorPanel.activeEditorId
+      }, ${this.props.store.editorToolbar.shellId})`
+    );
     Broker.on(
       EventType.createShellExecutionFinishEvent(
         this.props.store.editorToolbar.currentProfile,
         this.props.store.editorToolbar.shellId
       ),
-      () => { this.onExecutionFinished(this.props.store.editorToolbar.currentProfile, this.props.store.editorToolbar.shellId); }
+      this.onExecutionFinished.bind(this)
     );
   }
 
-  @action.bound
-  onExecutionFinished(currentProfile, execShellId) {
+  onExecutionFinished() {
     console.log('Execution Finished!');
-    const {shellId} = this.props.store.editors.get(this.props.store.editorPanel.activeEditorId);
-    if (this.props.config.settings.tableOutputDefault && shellId === execShellId) {
+    if (this.props.config.settings.tableOutputDefault) {
       setTimeout(() => {
         this.openTableView(false, true);
       }, 0);
     }
   }
-
 
   renderDownloadMenu() {
     return (

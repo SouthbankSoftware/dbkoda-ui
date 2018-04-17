@@ -29,6 +29,7 @@ import {action} from 'mobx';
 import {inject, observer} from 'mobx-react';
 import {PerformancePanel} from '#/PerformancePanel';
 import {TopConnectionsPanel} from '#/TopConnectionsPanel';
+import {ProfilingPanel} from '#/ProfilingPanel';
 import {NewToaster} from '#/common/Toaster';
 import {attachToMobx, detachFromMobx} from '~/api/PerformancePanel';
 
@@ -53,6 +54,7 @@ class PerformanceWindow extends React.Component {
       mongoStatus: Status.NORMAL,
       bTopConnection: false,
       profileConfiguration: false,
+      bProfiling: false,
     };
 
     document.addEventListener(
@@ -135,7 +137,11 @@ class PerformanceWindow extends React.Component {
   showTopConnectionPanel = show => {
     if (show) {
       const {store} = this.props;
-      this.setState({bTopConnection: true, profileConfiguration: false});
+      this.setState({
+        bTopConnection: true,
+        profileConfiguration: false,
+        bProfiling: false,
+      });
       store.api.getTopConnections();
     } else {
       this.setState({bTopConnection: false});
@@ -144,48 +150,77 @@ class PerformanceWindow extends React.Component {
 
   showProfileConfiguration = show => {
     if (show) {
-      this.setState({profileConfiguration: true, bTopConnection: false});
+      const {store} = this.props;
+      this.setState({
+        profileConfiguration: true,
+        bTopConnection: false,
+        bProfiling: false,
+      });
+      store.api.getProfilingDataBases();
     } else {
       this.setState({profileConfiguration: false});
     }
   };
 
+  showProfiling = show => {
+    if (show) {
+      this.setState({
+        profileConfiguration: false,
+        bTopConnection: false,
+        bProfiling: true,
+      });
+    } else {
+      this.setState({bProfiling: false});
+    }
+  };
+
   render() {
     const {store} = this.props;
-    console.log(store.resetPerformancePanel);
-    console.log(store.resetHighWaterMark);
 
     return (
       <div>
-        {!this.state.bTopConnection && (
-          <div>
-            {store.performancePanel ? (
-              <PerformancePanel
-                performancePanel={store.performancePanel}
-                onClose={null}
-                resetHighWaterMark={store.api.resetHighWaterMark}
-                resetPerformancePanel={() => {
-                  this.setState({
-                    sshStatus: Status.NORMAL,
-                    mongoStatus: Status.NORMAL,
-                  });
-                  store.api.resetPerformancePanel();
-                }}
-                showTopConnections={() => this.showTopConnectionPanel(true)}
-                sshStatus={this.state.sshStatus}
-                mongoStatus={this.state.mongoStatus}
-              />
-            ) : (
-              <div>
-                <span>Loading Performance Panel...</span>
-              </div>
-            )}
-          </div>
-        )}
+        {!this.state.bTopConnection &&
+          !this.state.bProfiling && (
+            <div>
+              {store.performancePanel ? (
+                <PerformancePanel
+                  performancePanel={store.performancePanel}
+                  onClose={null}
+                  resetHighWaterMark={store.api.resetHighWaterMark}
+                  resetPerformancePanel={() => {
+                    this.setState({
+                      sshStatus: Status.NORMAL,
+                      mongoStatus: Status.NORMAL,
+                    });
+                    store.api.resetPerformancePanel();
+                  }}
+                  showTopConnections={() => {
+                    this.showTopConnectionPanel(true);
+                  }}
+                  showProfiling={() => {
+                    this.showProfiling(true);
+                  }}
+                  sshStatus={this.state.sshStatus}
+                  mongoStatus={this.state.mongoStatus}
+                />
+              ) : (
+                <div>
+                  <span>Loading Performance Panel...</span>
+                </div>
+              )}
+            </div>
+          )}
         {this.state.bTopConnection && (
           <TopConnectionsPanel
             showPerformancePanel={() => {
               this.showTopConnectionPanel(false);
+            }}
+          />
+        )}
+        {this.state.bProfiling && (
+          <ProfilingPanel
+            showPerformancePanel={() => {
+              this.showProfiling(false);
             }}
           />
         )}
