@@ -83,7 +83,7 @@ class PerformanceWindowApi {
 
   @action.bound
   getProfilingDataBases = () => {
-    this.store.profilingPanel.databases = null;
+    this.store.profilingPanel.databases = [];
     this.store.profilingPanel.selectedDatabase = null;
     this.sendCommandToMainProcess('pw_getProfilingDataBases');
   };
@@ -108,7 +108,7 @@ export default class Store {
   @observable
   profilingPanel = observable.object(
     {
-      databases: null,
+      databases: [],
       selectedDatabase: null
     },
     null,
@@ -170,6 +170,31 @@ export default class Store {
             this.topConnectionsPanel.payload,
             con => {
               return con.us;
+            }
+          );
+        } else if (args.command === 'mw_profilingDatabaseData') {
+          // Transform payload into a list of databases.
+          const dbList = [];
+          args.payload.forEach(item => {
+            // Get name of database (key)
+            const db = {};
+            const keys = Object.keys(item);
+            if (item[keys[0]].was) {
+              db.name = keys[0];
+              db.value = item[keys[0]];
+              dbList.push(db);
+            }
+          });
+          console.log('DB List: ', dbList);
+          this.profilingPanel.databases = dbList;
+        } else if (args.command === 'mw_profilingData') {
+          console.log(args.profileId);
+          console.log(args.payload);
+          this.profilingPanel.payload = args.payload;
+          this.profilingPanel.highWaterMarkProfile = _.maxBy(
+            this.profilingPanel.payload,
+            op => {
+              return op.us;
             }
           );
         }

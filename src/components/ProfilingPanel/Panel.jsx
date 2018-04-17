@@ -29,8 +29,17 @@ import { inject, observer } from 'mobx-react';
 import SplitPane from 'react-split-pane';
 import autobind from 'autobind-decorator';
 import { debounce } from 'lodash';
-import ConnectionsView from './Views/Connections';
-import OperationsView from './Views/Operations';
+import {
+  Classes,
+  Button,
+  MenuItem,
+  Intent,
+  Position,
+  Tooltip
+} from '@blueprintjs/core';
+import { Select } from '@blueprintjs/select';
+import ProfilingView from './Views/ProfilingView';
+import ExplainView from './Views/ExplainView';
 import OperationDetails from './Views/OperationDetails';
 
 import './Panel.scss';
@@ -44,7 +53,8 @@ export default class ProfilingPanel extends React.Component<Props> {
   constructor() {
     super();
     this.state = {
-      selectedConnection: null,
+      selectedDatabase: null,
+      databaseList: [],
       selectedOperation: null,
       bottomSplitPos: 1000,
       topSplitPos: window.innerWidth
@@ -64,66 +74,119 @@ export default class ProfilingPanel extends React.Component<Props> {
   updateBottomSplitPos(pos) {
     this.setState({ bottomSplitPos: pos });
   }
+
+  _onDBSelect = item => {
+    console.log('Selected DB: ', item);
+    this.setState({ selectedDatabase: item.name });
+  };
+
   render() {
     const { store, showPerformancePanel } = this.props;
-    const { topConnectionsPanel } = store;
-    const connections = topConnectionsPanel.payload;
-    const highWaterMarkCon = topConnectionsPanel.highWaterMarkConnection;
-    const { selectedConnection, selectedOperation } = this.state;
-    let operations = null;
-    if (selectedConnection && selectedConnection.ops) {
-      operations = selectedConnection.ops;
+    const { profilingPanel } = store;
+    const { selectedDatabase, selectedOperation } = this.state;
+    const ops = profilingPanel.payload;
+    const { highWaterMarkProfile } = profilingPanel;
+    if (!selectedDatabase && profilingPanel.databases[0]) {
+      this.state.selectedDatabase = profilingPanel.databases[0].name;
     }
 
     const splitPane2Style = {
       display: 'flex',
       flexDirection: 'column'
     };
-    const onConnectionSelection = selectedConnection => {
-      this.setState({ selectedConnection });
+
+    const renderItem = (item, { handleClick, modifiers }) => {
+      console.log(modifiers);
+      return (
+        <MenuItem
+          className={modifiers.active ? Classes.ACTIVE : ''}
+          key={item.name}
+          label={item.name}
+          onClick={handleClick}
+          text={item.name}
+        />
+      );
+    };
+
+    const filterItem = (query, item) => {
+      return (
+        `${item.name}. ${item.name.toLowerCase()}`.indexOf(
+          query.toLowerCase()
+        ) >= 0
+      );
     };
 
     const onOperationSelection = selectedOperation => {
       this.setState({ selectedOperation });
     };
+
     return (
-      <div>
+      <div className="profilingView">
         <SplitPane
           className="MainSplitPane"
           split="horizontal"
-          defaultSize="60%"
+          defaultSize="40%"
           minSize={200}
           maxSize={1000}
           pane2Style={splitPane2Style}
         >
-          <div className="connectionList">
-            <ConnectionsView
-              connections={connections}
-              highWaterMark={highWaterMarkCon}
-              onSelect={onConnectionSelection}
-              showPerformancePanel={showPerformancePanel}
-              tableWidth={this.state.topSplitPos}
-            />
-          </div>
-          <SplitPane
-            className="BottomSplitPane"
-            split="vertical"
-            defaultSize={this.state.bottomSplitPos}
-            onDragFinished={this.updateBottomSplitPos}
-            minSize={700}
-            maxSize={1200}
-          >
-            <div className="operationList">
-              <OperationsView
-                operations={operations}
+          <div className="profilingResultsWrapper">
+            <nav className=" pt-navbar panelHeader">
+              <div className="pt-navbar-group pt-align-left">
+                <div className="pt-navbar-heading">Profiling Results</div>
+              </div>
+              <div className="pt-navbar-group pt-align-right">
+                <Tooltip
+                  className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
+                  content="Show Performance Panel"
+                  hoverOpenDelay={1000}
+                  inline
+                  intent={Intent.PRIMARY}
+                  position={Position.BOTTOM}
+                >
+                  <Button
+                    className="reset-button pt-button pt-intent-primary"
+                    text="Performance"
+                    onClick={showPerformancePanel}
+                  />
+                </Tooltip>
+              </div>
+            </nav>
+            <div className="tableWrapper">
+              <div className="dbSelectWrapper">
+                <span className="dbSelectLabel">Database</span>
+                <Select
+                  filterable={false}
+                  items={profilingPanel.databases}
+                  itemRenderer={renderItem}
+                  itemPredicate={filterItem}
+                  noResults={<MenuItem disabled text="No Results" />}
+                  onItemSelect={this._onDBSelect}
+                >
+                  <Button
+                    className="select-button"
+                    text={this.state.selectedDatabase || 'Select Database'}
+                    rightIcon="double-caret-vertical"
+                  />
+                </Select>
+              </div>
+              <ProfilingView
+                operations={ops}
+                highWaterMark={highWaterMarkProfile}
                 onSelect={onOperationSelection}
-                tableWidth={this.state.bottomSplitPos}
+                showPerformancePanel={showPerformancePanel}
+                tableWidth={this.state.topSplitPos}
               />
             </div>
+          </div>
+          <div className="detailsWrapper">
             <div className="operationDetails">
               <OperationDetails operation={selectedOperation} />
             </div>
-          </SplitPane>
+            <div className="explainView">
+              <ExplainView operation={selectedOperation} />
+            </div>
+          </div>
         </SplitPane>
       </div>
     );

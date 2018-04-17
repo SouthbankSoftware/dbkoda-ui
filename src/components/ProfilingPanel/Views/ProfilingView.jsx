@@ -1,9 +1,9 @@
 /**
- * @Author: Wahaj Shamim <wahaj>
+ * @Author: Michael Harrison
  * @Date:   2018-04-10T14:34:47+10:00
- * @Email:  wahaj@southbanksoftware.com
- * @Last modified by:   wahaj
- * @Last modified time: 2018-04-16T16:19:47+10:00
+ * @Email:  Mike@southbanksoftware.com
+ * @Last modified by:   Mike
+ * @Last modified time: 2018-04-17T16:19:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,15 +34,14 @@ import {
   Utils,
   TableLoadingOption
 } from '@blueprintjs/table';
-import { Button, Intent, Position, Tooltip } from '@blueprintjs/core';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
 import ProgressBarColumn from '../Components/ProgressBarColumn';
 
-const columnsWidthsPercent = [10, 15, 15, 10, 10, 15, 10, 15];
+const columnsWidthsPercent = [15, 20, 10, 25, 5, 5, 15];
 
 @observer
-export default class ConnectionsView extends React.Component<Props> {
+export default class ProfilingView extends React.Component<Props> {
   constructor(props) {
     super(props);
     const columnsWidths = columnsWidthsPercent.map(
@@ -54,28 +53,29 @@ export default class ConnectionsView extends React.Component<Props> {
       data: null,
       highWaterMark: null,
       columns: [
-        new TextSortableColumn('Connection Id', 0),
-        new TextSortableColumn('appName', 1),
-        new TextSortableColumn('client', 2),
-        new TextSortableColumn('lastNs', 3),
-        new TextSortableColumn('lastOp', 4),
-        new TextSortableColumn('lastCommand', 5),
-        new TextSortableColumn('Sampled μs', 6),
-        new ProgressBarColumn('', 'us', 7)
+        new TextSortableColumn('Id', 0),
+        new TextSortableColumn('ns', 1),
+        new TextSortableColumn('Plan Summary', 2),
+        new TextSortableColumn('Plan Stack', 3),
+        new TextSortableColumn('Count', 4),
+        new TextSortableColumn('ms', 5),
+        new ProgressBarColumn('', 'us', 6)
       ],
       columnsWidths
     };
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.connections) {
-      this.setState({ data: nextProps.connections });
+    if (nextProps && nextProps.ops) {
+      this.setState({ data: nextProps.ops });
     }
     if (nextProps && nextProps.highWaterMark) {
-      this.setState({highWaterMark: nextProps.highWaterMark});
+      this.setState({ highWaterMark: nextProps.highWaterMark });
     }
     if (nextProps && nextProps.tableWidth) {
-      const columnsWidths = columnsWidthsPercent.map(width => (width * nextProps.tableWidth / 100));
-      this.setState({columnsWidths});
+      const columnsWidths = columnsWidthsPercent.map(
+        width => width * nextProps.tableWidth / 100
+      );
+      this.setState({ columnsWidths });
     }
   }
 
@@ -97,25 +97,22 @@ export default class ConnectionsView extends React.Component<Props> {
     let cellValue = '';
     switch (columnIndex) {
       case 0:
-        cellValue = this.state.data[rowIndex].connectionId;
+        cellValue = this.state.data[rowIndex].id;
         break;
       case 1:
-        cellValue = this.state.data[rowIndex].appName;
+        cellValue = this.state.data[rowIndex].ns;
         break;
       case 2:
-        cellValue = this.state.data[rowIndex].client;
+        cellValue = this.state.data[rowIndex].planSummary;
         break;
       case 3:
-        cellValue = this.state.data[rowIndex].lastNs;
+        cellValue = this.state.data[rowIndex].planStack;
         break;
       case 4:
-        cellValue = this.state.data[rowIndex].lastOp;
+        cellValue = this.state.data[rowIndex].count;
         break;
       case 5:
-        cellValue = this.state.data[rowIndex].lastCommand;
-        break;
-      case 6:
-        cellValue = this.state.data[rowIndex].us;
+        cellValue = this.state.data[rowIndex].ms;
         break;
       case 7:
         cellValue = _.pick(this.state.data[rowIndex], 'us');
@@ -124,7 +121,7 @@ export default class ConnectionsView extends React.Component<Props> {
         }
         break;
       default:
-        cellValue = this.state.data[rowIndex].connectionId;
+        cellValue = this.state.data[rowIndex].id;
         break;
     }
     if (typeof cellValue === 'object') {
@@ -169,7 +166,7 @@ export default class ConnectionsView extends React.Component<Props> {
   }
 
   render() {
-    const { connections, showPerformancePanel } = this.props;
+    const { ops } = this.props;
 
     const columns = this.state.columns.map(col =>
       col.getColumn(this.getCellData, this.sortColumn)
@@ -177,34 +174,13 @@ export default class ConnectionsView extends React.Component<Props> {
 
     const loadingOptions = [];
     let numRows = 10;
-    if (connections && connections.length) {
-      numRows = connections.length;
+    if (ops && ops.length) {
+      numRows = ops.length;
     } else {
       loadingOptions.push(TableLoadingOption.CELLS);
     }
     return (
-      <div style={{ height: '100%' }}>
-        <nav className="pt-navbar connectionsToolbar">
-          <div className="pt-navbar-group pt-align-left">
-            <div className="pt-navbar-heading">Connections</div>
-          </div>
-          <div className="pt-navbar-group pt-align-right">
-            <Tooltip
-              className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-              content="Show Performance Panel"
-              hoverOpenDelay={1000}
-              inline
-              intent={Intent.PRIMARY}
-              position={Position.BOTTOM}
-            >
-              <Button
-                className="reset-button pt-button pt-intent-primary"
-                text="Performance"
-                onClick={showPerformancePanel}
-              />
-            </Tooltip>
-          </div>
-        </nav>
+      <div className="opsTableWrapper" style={{ height: '100%' }}>
         <div style={{ height: 'calc(100% - 50px)' }}>
           <Table
             enableMultipleSelection={false}
@@ -215,7 +191,7 @@ export default class ConnectionsView extends React.Component<Props> {
             bodyContextMenuRenderer={this.renderBodyContextMenu}
             enableRowResizing={false}
             enableColumnResizing={false}
-            defaultRowHeight={30}
+            defaultRowHeight={20}
             onSelection={region => this.onSelection(region)}
             selectedRegions={this.state.lastSelectRegion}
             columnWidths={this.state.columnsWidths}
