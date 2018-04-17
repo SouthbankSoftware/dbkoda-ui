@@ -25,12 +25,13 @@
  */
 
 import React from 'react';
-import {action} from 'mobx';
-import {inject, observer} from 'mobx-react';
-import {PerformancePanel} from '#/PerformancePanel';
-import {TopConnectionsPanel} from '#/TopConnectionsPanel';
-import {NewToaster} from '#/common/Toaster';
-import {attachToMobx, detachFromMobx} from '~/api/PerformancePanel';
+import { action } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { PerformancePanel } from '#/PerformancePanel';
+import { TopConnectionsPanel } from '#/TopConnectionsPanel';
+import { ProfilingPanel } from '#/ProfilingPanel';
+import { NewToaster } from '#/common/Toaster';
+import { attachToMobx, detachFromMobx } from '~/api/PerformancePanel';
 
 import 'normalize.css/normalize.css';
 import '@blueprintjs/core/lib/css/blueprint.css';
@@ -50,7 +51,8 @@ class PerformanceWindow extends React.Component {
     this.state = {
       sshStatus: Status.NORMAL,
       mongoStatus: Status.NORMAL,
-      bTopConnection: false
+      bTopConnection: false,
+      bProfiling: false
     };
 
     document.addEventListener(
@@ -63,7 +65,7 @@ class PerformanceWindow extends React.Component {
   }
 
   componentWillMount() {
-    const {store} = this.props;
+    const { store } = this.props;
     store.toasterCallback = this._showToasterFromMainWindow;
     store.errorHandler = this._errorHandler;
   }
@@ -79,13 +81,17 @@ class PerformanceWindow extends React.Component {
     if (document.hidden) {
       logToMain('info', 'becomes hidden');
 
-      const {store: {performancePanel}} = this.props;
+      const {
+        store: { performancePanel }
+      } = this.props;
 
       detachFromMobx(performancePanel);
     } else {
       logToMain('info', 'becomes visible');
 
-      const {store: {performancePanel}} = this.props;
+      const {
+        store: { performancePanel }
+      } = this.props;
 
       attachToMobx(performancePanel);
     }
@@ -104,22 +110,22 @@ class PerformanceWindow extends React.Component {
     console.log('received an error', err);
     switch (err.code) {
       case 'SSH_NOT_ENABLED':
-        this.setState({sshStatus: Status.NOT_ENABLED});
+        this.setState({ sshStatus: Status.NOT_ENABLED });
         break;
       case 'SSH_CONNECTION_CLOSED':
-        this.setState({sshStatus: Status.CONNECTION_BROKEN});
+        this.setState({ sshStatus: Status.CONNECTION_BROKEN });
         break;
       case 'MONGO_CONNECTION_CLOSED':
-        this.setState({mongoStatus: Status.CONNECTION_BROKEN});
+        this.setState({ mongoStatus: Status.CONNECTION_BROKEN });
         break;
       case 'MONGO_RECONNECT_SUCCESS':
-        this.setState({mongoStatus: Status.NORMAL});
+        this.setState({ mongoStatus: Status.NORMAL });
         break;
       case 'SSH_RECONNECTION_SUCCESS':
-        this.setState({sshStatus: Status.NORMAL});
+        this.setState({ sshStatus: Status.NORMAL });
         break;
       case 'UNSUPPORTED_STATS_OS':
-        this.setState({sshStatus: Status.UNSUPPORTED_STATS_OS});
+        this.setState({ sshStatus: Status.UNSUPPORTED_STATS_OS });
         break;
       default:
         break;
@@ -127,41 +133,56 @@ class PerformanceWindow extends React.Component {
   }
 
   render() {
-    const {store} = this.props;
-    console.log(store.resetPerformancePanel);
-    console.log(store.resetHighWaterMark);
+    const { store } = this.props;
 
     return (
       <div>
-        {!this.state.bTopConnection && (
-          <div>
-            {store.performancePanel ? (
-              <PerformancePanel
-                performancePanel={store.performancePanel}
-                onClose={null}
-                resetHighWaterMark={store.api.resetHighWaterMark}
-                resetPerformancePanel={() => {
-                  this.setState({sshStatus: Status.NORMAL, mongoStatus: Status.NORMAL});
-                  store.api.resetPerformancePanel();
-                }}
-                showTopConnections={() => {
-                  this.setState({bTopConnection: true});
-                  store.api.getTopConnections();
-                }}
-                sshStatus={this.state.sshStatus}
-                mongoStatus={this.state.mongoStatus}
-              />
-            ) : (
-              <div>
-                <span>Loading Performance Panel...</span>
-              </div>
-            )}
-          </div>
-        )}
+        {!this.state.bTopConnection &&
+          !this.state.bProfiling && (
+            <div>
+              {store.performancePanel ? (
+                <PerformancePanel
+                  performancePanel={store.performancePanel}
+                  onClose={null}
+                  resetHighWaterMark={store.api.resetHighWaterMark}
+                  resetPerformancePanel={() => {
+                    this.setState({
+                      sshStatus: Status.NORMAL,
+                      mongoStatus: Status.NORMAL
+                    });
+                    store.api.resetPerformancePanel();
+                  }}
+                  showTopConnections={() => {
+                    this.setState({ bTopConnection: true });
+                    store.api.getTopConnections();
+                  }}
+                  showProfiling={() => {
+                    this.setState({ bProfiling: true });
+                    store.api.getProfilingDataBases();
+                  }}
+                  sshStatus={this.state.sshStatus}
+                  mongoStatus={this.state.mongoStatus}
+                />
+              ) : (
+                <div>
+                  <span>Loading Performance Panel...</span>
+                </div>
+              )}
+            </div>
+          )}
         {this.state.bTopConnection && (
-          <TopConnectionsPanel showPerformancePanel={() => {
-            this.setState({bTopConnection: false});
-          }} />
+          <TopConnectionsPanel
+            showPerformancePanel={() => {
+              this.setState({ bTopConnection: false });
+            }}
+          />
+        )}
+        {this.state.bProfiling && (
+          <ProfilingPanel
+            showPerformancePanel={() => {
+              this.setState({ bProfiling: false });
+            }}
+          />
         )}
       </div>
     );

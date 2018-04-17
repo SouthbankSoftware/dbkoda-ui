@@ -51,6 +51,9 @@
         "ssh_reconnect_success": "SSH Reconnect Success",
         "mongo_reconnect_success": "Mongo Reconnect Success",
         "ssh_unsupported_os": "Unsupported OS"
+      },
+      "profiling": {
+        "profilingButtonText": "Profiling"
       }
     },
     "aggregate_builder": {
@@ -171,7 +174,8 @@
         "numOfDocs": "Number of Documents: ",
         "exceededMaxDocs":
           "Table View is currently limited to 500 documents at a time, please narrow your query.",
-        "tableDefaultNotJson": "Could not display query data in a table as JSON was not found, reverting to Raw view for this query."
+        "tableDefaultNotJson":
+          "Could not display query data in a table as JSON was not found, reverting to Raw view for this query."
       },
       "terminal": {
         "execute": "Execute Command (Enter)"

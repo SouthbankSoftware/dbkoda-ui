@@ -87,5 +87,8 @@ export default {
   WINDOW_REFRESHING: 'window-refreshing',
   WINDOW_CLOSING: 'window-closing',
   TOP_CONNECTIONS_DATA: 'top-connections-data',
-  TOP_CONNECTIONS_ERROR: 'top-connections-error'
+  TOP_CONNECTIONS_ERROR: 'top-connections-error',
+  PROFILING_DATA: 'profiling-data',
+  PROFILING_DATABASES_DATA: 'profiling-databases-data',
+  PROFILING_ERROR: 'profiling-error'
 };

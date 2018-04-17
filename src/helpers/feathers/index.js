@@ -115,12 +115,25 @@ class FeatherClient {
     this.loggerService = this.service('logger');
     this.configService = this.service('config');
 
+    // Top connections event handling.
     this.topConnectionsService = this.service('top-connections');
     this.topConnectionsService.on('data', data => {
       Broker.emit(EventType.TOP_CONNECTIONS_DATA, data);
     });
     this.topConnectionsService.on('error', data => {
       Broker.emit(EventType.TOP_CONNECTIONS_ERROR, data);
+    });
+
+    // Profiling event handling.
+    this.profilingService = this.service('profile');
+    this.profilingService.on('data', data => {
+      console.log('!!!!!');
+      console.log(data);
+      console.log('!!!!!');
+      Broker.emit(EventType.PROFILING_DATA, data);
+    });
+    this.profilingService.on('error', data => {
+      Broker.emit(EventType.PROFILING_ERROR, data);
     });
   }
 

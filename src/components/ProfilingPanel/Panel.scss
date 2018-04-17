@@ -1,0 +1,176 @@
+/**
+ * @Author: Wahaj Shamim <wahaj>
+ * @Date:   2018-04-11T10:33:36+10:00
+ * @Email:  wahaj@southbanksoftware.com
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-16T17:05:35+10:00
+ *
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+@import '../../styles/_defaultTheme.scss';
+
+.Pane .vertical .Pane1 {
+  overflow-y: hidden !important;
+}
+
+.BottomSplitPane {
+  height: 100%;
+}
+
+.BottomSplitPane > .Pane2 {
+  background-color: #292929 !important;
+}
+
+.connectionList {
+  width: 100%;
+  height: 100%;
+}
+
+.operationList {
+  width: 100%;
+  height: 100%;
+}
+
+.pt-navbar {
+  overflow: hidden !important;
+  background-color: $editorBackground !important;
+  color: $tableBodyText;
+
+  .pt-navbar-heading {
+    font-size: small;
+  }
+}
+
+.ResetButton {
+  align-self: center;
+  margin-right: 40px;
+  height: 22px;
+  border-bottom: unset !important;
+
+  button.reset-button {
+    font-weight: lighter;
+    font-size: small;
+    color: $connectionButtonFontColour;
+    width: 8em !important;
+    border-radius: 5px;
+    background-image: unset;
+    background-color: #313131;
+    border: 1px solid $connectionButtonBorderColour;
+    box-shadow: unset;
+    height: 22px;
+    line-height: 10px;
+    min-height: 22px;
+  }
+
+  button.reset-button:hover {
+    background-color: $connectionButtonBackgroundColourHover;
+    color: $connectionButtonFontColourHover;
+  }
+
+  button.top-con-button {
+    width: 10em !important;
+  }
+}
+
+.pt-table-container {
+  .pt-table-quadrant {
+    background-color: $editorBackground;
+  }
+
+  .pt-table-top-container {
+    .pt-table-column-headers {
+      background-color: #425F58;
+      color: $tableHeaderText;
+
+      .pt-table-header {
+        .pt-table-column-name {
+          .pt-table-truncated-text {
+            font-size: smaller;
+          }
+
+          .pt-table-th-menu-container-background {
+            background: unset;
+          }
+        }
+      }
+
+      .pt-table-header:hover {
+        background-color: darken(#425F58, 10%);
+      }
+
+      .pt-table-header:hover::before {
+        background: unset;
+      }
+    }
+  }
+
+  .pt-table-bottom-container {
+    .pt-table-quadrant-body-container {
+      background-color: rgba(0, 0, 0, 0) !important;
+
+      div {
+        .pt-table-body-virtual-client {
+          background-color: rgba(0, 0, 0, 0) !important;
+
+          .pt-table-body-cells {
+            background-color: rgba(0, 0, 0, 0) !important;
+
+            .pt-table-cell {
+              background-color: rgba(0, 0, 0, 0);
+              color: $tableBodyText;
+              display: flex;
+              align-items: center;
+            }
+
+            .pt-table-cell-ledger-even {
+              background-color: $tableBackgroundEven;
+            }
+
+            .pt-table-cell-ledger-odd {
+              background-color: $tableBackgroundOdd;
+            }
+          }
+        }
+
+        .pt-table-overlay-layer {
+          .pt-table-selection-region {
+            background-color: rgba(250, 250, 250, 0.2);
+            border: unset;
+          }
+        }
+      }
+    }
+  }
+}
+
+.progressBarCell {
+  .pt-table-no-wrap-text,
+  .pt-table-truncated-text {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.cm-s-material.CodeMirror {
+  background-color: #292929;
+}
+
+.CodeMirror pre {
+  box-shadow: unset;
+}

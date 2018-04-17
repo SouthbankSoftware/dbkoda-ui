@@ -35,6 +35,7 @@ import TreeApi from './Tree';
 import DrillApi from './Drill';
 import PasswordApi from './Password';
 import TopConnectionsApi from './TopConnections';
+import ProfilingApi from './Profiling';
 
 export default class DataCenter {
   store;
@@ -56,6 +57,7 @@ export default class DataCenter {
     this.drillApi = new DrillApi(store, this);
     this.passwordApi = new PasswordApi(store, this, config);
     this.topConnectionsApi = new TopConnectionsApi(store, this);
+    this.profilingApi = new ProfilingApi(store, this);
 
     this.init = this.init.bind(this);
 
@@ -65,12 +67,17 @@ export default class DataCenter {
     this.addOutput = this.outputApi.addOutput.bind(this);
     this.removeOutput = this.outputApi.removeOutput.bind(this);
     this.initJsonView = this.outputApi.initJsonView.bind(this);
-    this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(this);
+    this.swapOutputShellConnection = this.outputApi.swapOutputShellConnection.bind(
+      this
+    );
     this.addDrillOutput = this.outputApi.addDrillOutput.bind(this);
     this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
 
     // TopConnections public APIs
     _.assign(this, _.pick(this.topConnectionsApi, ['getTopConnections']));
+
+    // Profling public APIs
+    _.assign(this, _.pick(this.profilingApi, ['getProfilingDataBases']));
 
     // Terminal public APIs
     _.assign(
@@ -105,7 +112,9 @@ export default class DataCenter {
     // Editor API public functions
     this.addEditor = this.editorApi.addEditor.bind(this);
     this.setNewEditorState = this.editorApi.setNewEditorState.bind(this);
-    this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(this);
+    this.createNewEditorFailed = this.editorApi.createNewEditorFailed.bind(
+      this
+    );
     this.getUnsavedEditorInternalFileName = this.editorApi.getUnsavedEditorInternalFileName.bind(
       this
     );
@@ -118,7 +127,9 @@ export default class DataCenter {
     this.openHomeTab = this.editorApi.openHomeTab.bind(this);
 
     // Tree API public functions
-    this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(this);
+    this.addNewEditorForTreeAction = this.treeApi.addNewEditorForTreeAction.bind(
+      this
+    );
     this.showStorageStatsView = this.treeApi.showStorageStatsView.bind(this);
 
     // Profile API public functions
@@ -135,9 +146,15 @@ export default class DataCenter {
 
     // Drill API public functions
     this.addNewEditorForDrill = this.drillApi.addNewEditorForDrill.bind(this);
-    this.checkForExistingDrillProfile = this.drillApi.checkForExistingDrillProfile.bind(this);
-    this.openEditorWithDrillProfileId = this.drillApi.openEditorWithDrillProfileId.bind(this);
-    this.deleteProfileFromDrill = this.drillApi.deleteProfileFromDrill.bind(this);
+    this.checkForExistingDrillProfile = this.drillApi.checkForExistingDrillProfile.bind(
+      this
+    );
+    this.openEditorWithDrillProfileId = this.drillApi.openEditorWithDrillProfileId.bind(
+      this
+    );
+    this.deleteProfileFromDrill = this.drillApi.deleteProfileFromDrill.bind(
+      this
+    );
   }
 
   init() {
