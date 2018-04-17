@@ -51,6 +51,7 @@ type Props = {
   resetPerformancePanel: (profileId: UUID) => void,
   showTopConnections: () => void,
   showProfiling: () => void,
+  showProfileConfiguration: () => void,
   api: *,
   mongoStatus: String,
   sshStatus: String
@@ -172,7 +173,9 @@ export default class PerformancePanel extends React.Component<Props> {
             {showProfileConfiguration && (
               <Tooltip
                 className="ResetButton pt-tooltip-indicator pt-tooltip-indicator-form"
-                content={globalString('performance/profiling/profile-configuration-button-text')}
+                content={globalString(
+                  'performance/profiling/profile-configuration-button-text'
+                )}
                 hoverOpenDelay={1000}
                 inline
                 intent={Intent.PRIMARY}
@@ -180,7 +183,9 @@ export default class PerformancePanel extends React.Component<Props> {
               >
                 <Button
                   className="top-con-button reset-button pt-button pt-intent-primary"
-                  text={globalString('performance/profiling/profile-configuration-button-text')}
+                  text={globalString(
+                    'performance/profiling/profile-configuration-button-text'
+                  )}
                   onClick={showProfileConfiguration}
                 />
               </Tooltip>
