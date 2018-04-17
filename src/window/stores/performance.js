@@ -172,6 +172,10 @@ export default class Store {
               return con.us;
             }
           );
+        } else if (args.command === 'mw_profilingDatabaseData') {
+          console.log(args.profileId);
+          console.log(args.payload);
+          this.profilingPanel.databases = args.payload;
         }
       }
     }

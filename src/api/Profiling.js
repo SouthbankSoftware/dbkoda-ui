@@ -39,17 +39,17 @@ export default class Profiling {
     this.store = store;
     this.api = api;
 
-    Broker.on(EventType.PROFILING_DATA, ({ profileId, payload }) => {
+    Broker.on(EventType.PROFILING_DATABASES_DATA, ({ profileId, payload }) => {
       const { alias } = this.store.profileStore.profiles.get(profileId);
 
       console.log(
         `%cProfling Databases for ${alias} (${profileId}):`,
         'color: green'
       );
-      console.table(payload);
+      console.log(payload);
       this.api.sendMsgToPerformanceWindow({
         profileId,
-        command: 'mw_getProfilingDataBases',
+        command: 'mw_profilingDatabaseData',
         payload
       });
     });
@@ -81,7 +81,6 @@ export default class Profiling {
     });
   };
 
-  // @Mike @TODO -> Replace with correct feathers call.
   getProfilingDataBases = (profileId: UUID) => {
     featherClient()
       .service('profile')
@@ -90,9 +89,12 @@ export default class Profiling {
           op: 'configuration'
         }
       })
-      /*       .then(res => {
-        console.log(res);
-      }) */
+      .then(res => {
+        Broker.emit(EventType.PROFILING_DATABASES_DATA, {
+          profileId,
+          payload: res
+        });
+      })
       .catch(err => {
         this._handleError(profileId, err);
       });

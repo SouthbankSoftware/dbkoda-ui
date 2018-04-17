@@ -127,9 +127,7 @@ class FeatherClient {
     // Profiling event handling.
     this.profilingService = this.service('profile');
     this.profilingService.on('data', data => {
-      console.log('!!!!!');
-      console.log(data);
-      console.log('!!!!!');
+      console.log('Recieved Data from Profile Service: ', data);
       Broker.emit(EventType.PROFILING_DATA, data);
     });
     this.profilingService.on('error', data => {
