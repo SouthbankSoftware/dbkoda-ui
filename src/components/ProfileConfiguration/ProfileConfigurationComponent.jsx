@@ -2,6 +2,7 @@ import React from 'react';
 
 export default class ProfileConfiguration extends React.Component {
   render() {
-    return <div />;
+    console.log(this.props.store);
+    return <div>profile</div>;
   }
 }
