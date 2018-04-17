@@ -39,7 +39,7 @@ import '@blueprintjs/table/lib/css/table.css';
 import '~/styles/global.scss';
 import '~/styles/fonts/index.css';
 import '#/App.scss';
-import {ProfileConfiguration} from '../components/ProfileConfiguration';
+import ProfileConfiguration from '../components/ProfileConfiguration';
 import Status from '../components/PerformancePanel/Status';
 
 @inject(allStores => ({
