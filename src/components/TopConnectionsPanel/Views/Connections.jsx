@@ -3,7 +3,7 @@
  * @Date:   2018-04-10T14:34:47+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-16T16:19:47+10:00
+ * @Last modified time: 2018-04-17T14:30:02+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -157,14 +157,15 @@ export default class ConnectionsView extends React.Component<Props> {
     regionObj = _.pick(regionObj, 'rows');
 
     this.setState({ lastSelectRegion: [regionObj] });
-
-    let rowIndex = regionObj.rows[0];
-    const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
-    if (sortedRowIndex != null) {
-      rowIndex = sortedRowIndex;
-    }
-    if (this.props.onSelect) {
-      this.props.onSelect(this.state.data[rowIndex]);
+    if (regionObj && regionObj.rows) {
+      let rowIndex = regionObj.rows[0];
+      const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
+      if (sortedRowIndex != null) {
+        rowIndex = sortedRowIndex;
+      }
+      if (this.props.onSelect) {
+        this.props.onSelect(this.state.data[rowIndex]);
+      }
     }
   }
 

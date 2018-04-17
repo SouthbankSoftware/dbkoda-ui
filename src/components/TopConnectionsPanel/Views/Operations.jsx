@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T15:31:22+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-16T16:59:50+10:00
+ * @Last modified time: 2018-04-17T16:36:41+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -24,11 +24,9 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
 import _ from 'lodash';
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
 import {
   SelectionModes,
@@ -36,28 +34,43 @@ import {
   Utils,
   TableLoadingOption
 } from '@blueprintjs/table';
+import {
+  AnchorButton,
+  Intent,
+  Dialog
+} from '@blueprintjs/core';
+import autobind from 'autobind-decorator';
 
 import TextSortableColumn from '../Components/TextSortableColumn';
+import ActionsColumn from '../Components/ActionsColumn';
 
-const columnsWidthsPercent = [20, 20, 20, 20, 20];
+const columnsWidthsPercent = [15, 20, 20, 15, 20, 10];
 
+@inject(allStores => ({
+  api: allStores.store.api
+}))
 @observer
 export default class OperationsView extends React.Component<Props> {
   constructor(props) {
     super(props);
-    const columnsWidths = columnsWidthsPercent.map(width => (width * this.props.tableWidth / 100));
+    const columnsWidths = columnsWidthsPercent.map(
+      width => width * this.props.tableWidth / 100
+    );
     this.state = {
       lastSelectRegion: null,
       sortedIndexMap: [],
       data: null,
       columns: [
-            new TextSortableColumn('OpId', 0),
-            new TextSortableColumn('Namespace', 1),
-            new TextSortableColumn('Operation', 2),
-            new TextSortableColumn('Sampled μs', 3),
-            new TextSortableColumn('Plan Summary', 4)
-          ],
-      columnsWidths
+        new TextSortableColumn('OpId', 0),
+        new TextSortableColumn('Namespace', 1),
+        new TextSortableColumn('Operation', 2),
+        new TextSortableColumn('Sampled μs', 3),
+        new TextSortableColumn('Plan Summary', 4),
+        new ActionsColumn('', 5, this.killProcessAction)
+      ],
+      columnsWidths,
+      removeOperationAlert: false,
+      selectedOpId: null
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -66,18 +79,33 @@ export default class OperationsView extends React.Component<Props> {
       for (const opId in nextProps.operations) {
         if (nextProps.operations.hasOwnProperty(opId)) {
           const opObj = nextProps.operations[opId];
-          operations.push({opId, ...opObj});
+          operations.push({ opId, ...opObj });
         }
       }
-      this.setState({data: operations});
+      this.setState({ data: operations });
     }
     if (nextProps && nextProps.tableWidth) {
-      const columnsWidths = columnsWidthsPercent.map(width => (width * nextProps.tableWidth / 100));
-      this.setState({columnsWidths});
+      const columnsWidths = columnsWidthsPercent.map(
+        width => width * nextProps.tableWidth / 100
+      );
+      this.setState({ columnsWidths });
     }
   }
 
-  getCellData = (rowIndex: number, columnIndex: number, bUseIndex: boolen = true) => {
+  @autobind
+  killProcessAction(opId: number) {
+    console.log('kill process id:', opId);
+    this.setState({
+      selectedOpId: opId,
+      removeOperationAlert: true
+    });
+  }
+
+  getCellData = (
+    rowIndex: number,
+    columnIndex: number,
+    bUseIndex: boolen = true
+  ) => {
     if (bUseIndex) {
       const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
       if (sortedRowIndex != null) {
@@ -105,6 +133,12 @@ export default class OperationsView extends React.Component<Props> {
       case 4:
         cellValue = this.state.data[rowIndex].palnSummary;
         break;
+      case 5:
+        cellValue = {
+          opId: this.state.data[rowIndex].opId,
+          bDelete: (this.state.lastSelectRegion && this.state.lastSelectRegion[0].rows && this.state.lastSelectRegion[0].rows[0] === rowIndex)
+        };
+        break;
       default:
         cellValue = this.state.data[rowIndex].opId;
         break;
@@ -122,7 +156,10 @@ export default class OperationsView extends React.Component<Props> {
     const { data } = this.state;
     const sortedIndexMap = Utils.times(data.length, (i: number) => i);
     sortedIndexMap.sort((a: number, b: number) => {
-      return comparator(this.getCellData(a, columnIndex, false), this.getCellData(b, columnIndex, false));
+      return comparator(
+        this.getCellData(a, columnIndex, false),
+        this.getCellData(b, columnIndex, false)
+      );
     });
     this.setState({ sortedIndexMap });
   };
@@ -137,19 +174,36 @@ export default class OperationsView extends React.Component<Props> {
 
     this.setState({ lastSelectRegion: [regionObj] });
 
-    let rowIndex = regionObj.rows[0];
-    const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
-    if (sortedRowIndex != null) {
-      rowIndex = sortedRowIndex;
+    if (regionObj && regionObj.rows) {
+      let rowIndex = regionObj.rows[0];
+      const sortedRowIndex = this.state.sortedIndexMap[rowIndex];
+      if (sortedRowIndex != null) {
+        rowIndex = sortedRowIndex;
+      }
+      if (this.props.onSelect) {
+        this.props.onSelect(this.state.data[rowIndex]);
+      }
     }
-    if (this.props.onSelect) {
-      this.props.onSelect(this.state.data[rowIndex]);
+  }
+
+  @autobind
+  hideRemoveOperationAlert() {
+    this.setState({removeOperationAlert: false});
+  }
+
+  @autobind
+  removeOperation() {
+    if (this.state.selectedOpId) {
+      console.log('remove Operation yes::', this.state.selectedOpId);
+      this.props.api.killOperation(parseInt(this.state.selectedOpId, 10));
+      this.hideRemoveOperationAlert();
     }
   }
 
   render() {
-    const columns = this.state.columns.map(col => col.getColumn(this.getCellData, this.sortColumn));
-     // TODO: replace 0.6 with left bottom panel percent width
+    const columns = this.state.columns.map(col =>
+      col.getColumn(this.getCellData, this.sortColumn)
+    );
     const loadingOptions = [];
     let numRows = 10;
     if (this.state.data && this.state.data.length) {
@@ -161,9 +215,7 @@ export default class OperationsView extends React.Component<Props> {
       <div style={{ height: '100%' }}>
         <nav className="pt-navbar connectionsToolbar">
           <div className="pt-navbar-group pt-align-left">
-            <div className="pt-navbar-heading">
-              Operations
-            </div>
+            <div className="pt-navbar-heading">Operations</div>
           </div>
         </nav>
         <div style={{ height: 'calc(100% - 50px)' }}>
@@ -184,6 +236,30 @@ export default class OperationsView extends React.Component<Props> {
             {columns}
           </Table>
         </div>
+        <Dialog
+          className="pt-dark remove-profile-alert-dialog"
+          intent={Intent.PRIMARY}
+          isOpen={this.state.removeOperationAlert}
+        >
+          <div className="dialogContent">
+            <p>{globalString('topConnections/operations/removeAlert/prompt')}</p>
+          </div>
+          <div className="dialogButtons">
+            <AnchorButton
+              className="submitButton"
+              type="submit"
+              intent={Intent.SUCCESS}
+              onClick={this.removeOperation}
+              text={globalString('general/confirmYes')}
+            />
+            <AnchorButton
+              className="cancelButton"
+              intent={Intent.DANGER}
+              onClick={this.hideRemoveOperationAlert}
+              text={globalString('general/cancel')}
+            />
+          </div>
+        </Dialog>
       </div>
     );
   }

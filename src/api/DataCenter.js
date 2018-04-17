@@ -3,7 +3,7 @@
  * @Date:   2017-07-25T09:46:42+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-10T10:50:48+10:00
+ * @Last modified time: 2018-04-17T16:34:36+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -74,7 +74,7 @@ export default class DataCenter {
     this.drillOutputAvailable = this.outputApi.drillOutputAvailable.bind(this);
 
     // TopConnections public APIs
-    _.assign(this, _.pick(this.topConnectionsApi, ['getTopConnections']));
+    _.assign(this, _.pick(this.topConnectionsApi, ['getTopConnections', 'killOperation']));
 
     // Profling public APIs
     _.assign(this, _.pick(this.profilingApi, ['getProfilingDataBases']));

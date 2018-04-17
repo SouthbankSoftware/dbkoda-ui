@@ -5,6 +5,7 @@
       "off": "Off",
       "browse": "Browse",
       "confirm": "Okay",
+      "confirmYes": "Yes",
       "cancel": "Cancel",
       "close": "Close",
       "send": "Send",
@@ -776,6 +777,16 @@
         "drill_download_success": "Drill Downloaded Complete",
         "drill_controller_download_success": "Drill Plugin Complete",
         "drill_download_failed": "Error Downloading Drill"
+      }
+    },
+    "topConnections": {
+      "operations": {
+        "removeAlert": {
+          "prompt": "Are you sure you want to kill this operation?"
+        },
+        "actionsColumn": {
+          "deleteButtonTooltip": "Kill Process"
+        }
       }
     }
   }

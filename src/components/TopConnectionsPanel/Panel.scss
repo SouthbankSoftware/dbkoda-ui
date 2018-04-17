@@ -3,7 +3,7 @@
  * @Date:   2018-04-11T10:33:36+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-16T17:05:35+10:00
+ * @Last modified time: 2018-04-17T13:56:47+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -173,4 +173,57 @@
 
 .CodeMirror pre {
   box-shadow: unset;
+}
+
+.actionsColumnCell {
+  div {
+    width: 100%;
+  }
+}
+
+.actionToolbar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .pt-button {
+    background: $buttonSecondaryBackground !important;
+    color: $buttonSecondaryIcon !important;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
+    position: relative;
+    min-height: 24px;
+    min-width: 24px;
+
+    svg.dbKodaSVG {
+      position: absolute;
+      top: 50%;
+      bottom: 50%;
+      width: 50%;
+      height: 50%;
+      transform: translate(-50%, -50%);
+      fill: $buttonSecondaryIcon;
+    }
+  }
+
+  .pt-button:hover {
+    background: $buttonSecondaryBackgroundHover !important;
+  }
+
+  .pt-button.deleteButton {
+    background: $buttonDangerBackground !important;
+  }
+
+  .pt-button.deleteButton:hover {
+    background: $buttonDangerBackgroundHover !important;
+  }
+
+  .pt-button.pt-disabled:hover {
+    background: $buttonSecondaryBackground !important;
+  }
+
+  .pt-button.pt-disabled.deleteButton:hover {
+    background: $buttonDangerBackground !important;
+  }
 }

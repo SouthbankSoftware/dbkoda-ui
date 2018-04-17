@@ -3,7 +3,7 @@
  * @Date:   2018-02-27T15:17:00+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-13T16:02:27+10:00
+ * @Last modified time: 2018-04-17T16:32:56+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -55,8 +55,8 @@ class PerformanceWindowApi {
     this.profileId = id;
   }
   @action.bound
-  sendCommandToMainProcess = command => {
-    ipcRenderer.send('performance', { command, profileId: this.profileId });
+  sendCommandToMainProcess = (command, params) => {
+    ipcRenderer.send('performance', { command, profileId: this.profileId, ...params });
   };
 
   @action.bound
@@ -80,6 +80,11 @@ class PerformanceWindowApi {
     this.store.topConnectionsPanel.selectedConnection = null;
     this.sendCommandToMainProcess('pw_getTopConnections');
   };
+
+  @action.bound
+  killOperation = (opId) => {
+    this.sendCommandToMainProcess('pw_killOperation', {opId});
+  }
 
   @action.bound
   getProfilingDataBases = () => {
