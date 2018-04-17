@@ -691,7 +691,6 @@ export default class PerformancePanelApi {
 
   @action.bound
   _handlePerformanceWindowEvents(event, args) {
-    console.log('_handlePerformanceWindowEvents::', args);
     const { performancePanels } = this.store;
     if (args.profileId) {
       if (args.command === 'pw_windowReady') {
@@ -745,7 +744,6 @@ export default class PerformancePanelApi {
       } else if (args.command === 'pw_killOperation') {
         this.api.killOperation(args.profileId, args.opId);
       } else if (args.command === 'pw_getProfilingDataBases') {
-        console.log(this.api);
         this.api.getProfilingDataBases(args.profileId);
       }
     }
