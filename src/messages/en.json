@@ -58,7 +58,8 @@
         "configuration": {
           "setup": "Setup Profiling",
           "analyse": "Analyse Profiling",
-          "performance": "Performance"
+          "performance": "Performance",
+          "database-list-title": "Database to Profile"
         }
       }
     },
