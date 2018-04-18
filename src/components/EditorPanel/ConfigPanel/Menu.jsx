@@ -27,7 +27,7 @@
 import React from 'react';
 import { action } from 'mobx';
 import { inject, observer } from 'mobx-react';
-
+import MenuItem from '#/common/MenuItem';
 import PasswordStoreIcon from '~/styles/icons/lock-icon.svg';
 import HomeSectionIcon from '~/styles/icons/color/home-icon.svg';
 import PathsSectionIcon from '~/styles/icons/color/folder-icon.svg';
@@ -35,7 +35,6 @@ import ApplicationSectionIcon from '~/styles/icons/color/settings-icon.svg';
 import ShortcutsSectionIcon from '~/styles/icons/color/keys-icon.svg';
 import PerformanceSectionIcon from '~/styles/icons/color/performance-icon.svg';
 import FeaturesSectionIcon from '~/styles/icons/color/new-icon.svg';
-import MenuItem from './MenuItem';
 
 @inject(allStores => ({
   store: allStores.store

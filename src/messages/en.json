@@ -29,6 +29,10 @@
           "Sometimes JSON can be hard to read, enable this option in the preferances panel to always open your data in an easy to read table view. (Placeholder Text"
       }
     },
+    "sideNav": {
+      "Editor": "Editor",
+      "Profile": "Profile Manager"
+    },
     "performance": {
       "title": "Performance Panel",
       "unresponsive":
@@ -55,7 +59,17 @@
       },
       "profiling": {
         "profilingButtonText": "Profiling",
-        "profile-configuration-button-text": "Profile Configure"
+        "profile-configuration-button-text": "Profile Configure",
+        "configuration": {
+          "setup": "Setup Profiling",
+          "analyse": "Analyse Profiling",
+          "performance": "Performance",
+          "database-list-title": "Database to Profile",
+          "profile-mode": "Profile Mode",
+          "operation-exceeds": "Operation exceeding time limit",
+          "profiling-off": "Profiling off",
+          "profile-all": "All"
+        }
       }
     },
     "aggregate_builder": {

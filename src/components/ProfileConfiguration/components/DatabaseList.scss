@@ -1,0 +1,26 @@
+@import './styles.scss';
+@import './styles.scss';
+
+.profile-config-database-list {
+    // border-right: 1px solid #4a4f70;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 50px;
+
+    .profile-db-list-title {
+        color: $fontColor;
+        font-weight: $titleFontWeight;
+        font-size: $titleFontSize;
+        text-align: right;
+    }
+    .profile-db-list {
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0px;
+        .db-item {
+            margin: 10px 0px;
+            font-size: $fontSize;
+        }
+    }
+}

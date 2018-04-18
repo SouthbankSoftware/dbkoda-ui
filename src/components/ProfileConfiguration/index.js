@@ -1,3 +1,3 @@
-import ProfileConfiguration from './ProfileConfigurationContainer';
+import ProfileConfiguration from './containers/ProfileConfigurationContainer';
 
 export default ProfileConfiguration;

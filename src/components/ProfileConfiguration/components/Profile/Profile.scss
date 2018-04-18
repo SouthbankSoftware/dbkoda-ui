@@ -1,0 +1,14 @@
+@import '../styles.scss';
+.db-profiling-detailed-panel {
+  display: flex;
+  flex-direction: column;
+  .profiling-label {
+    color: $fontColor;
+    margin: 10px 0px;
+    font-size: $fontSize;
+  }
+  .profiling-title {
+    font-weight: $titleFontWeight;
+    font-size: $titleFontSize;
+  }
+}
