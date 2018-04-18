@@ -19,6 +19,7 @@
  */
 
 import React from 'react';
+import {Radio, RadioGroup} from '@blueprintjs/core';
 
 import './Profile.scss';
 
@@ -31,22 +32,26 @@ export default class Profile extends React.Component {
   componentDidMount() {}
 
   render() {
-    const {db} = this.props;
+    // const {db} = this.props;
     return (
       <div>
-        <div>
-          {globalString('performance/profiling/configuration/profile-mode')}
-        </div>
-        <div>
-          {globalString(
-            'performance/profiling/configuration/operation-exceeds'
-          )}
-        </div>
-        <div>
-          {globalString(
-            'performance/profiling/configuration/profiling-off'
-          )}
-        </div>
+        <RadioGroup>
+          <Radio
+            label={globalString(
+              'performance/profiling/configuration/profile-mode'
+            )}
+          />
+          <Radio
+            label={globalString(
+              'performance/profiling/configuration/operation-exceeds'
+            )}
+          />
+          <Radio
+            label={globalString(
+              'performance/profiling/configuration/profiling-off'
+            )}
+          />
+        </RadioGroup>
       </div>
     );
   }
