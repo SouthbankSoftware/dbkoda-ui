@@ -3,7 +3,6 @@ import React from 'react';
 import './DatabaseList.scss';
 
 export default class DatabaseList extends React.Component {
-
   render() {
     return (
       <div className="profile-config-database-list">
