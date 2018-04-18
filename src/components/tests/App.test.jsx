@@ -40,10 +40,15 @@ describe('App', () => {
   beforeAll(() => {
     configure({ enforceActions: true });
     globalizeInit();
-    app = shallow(<App.wrappedComponent store={{ password: { showDialog: false, verifyPassword: false } }} layout={layout} />);
+    app = shallow(
+      <App.wrappedComponent
+        store={{ password: { showDialog: false, verifyPassword: false }, editorPanel: { showNewFeaturesDialog: false } }}
+        config={{settings: { showNewFeaturesDialogOnStart: false } }}
+        layout={layout} />
+      );
   });
 
-  test('has 2 split panels', () => {
-    expect(app.find('SplitPane').length).toEqual(2);
+  test('has 1 split panel', () => {
+    expect(app.find('SplitPane').length).toEqual(1);
   });
 });

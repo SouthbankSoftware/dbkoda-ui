@@ -29,6 +29,10 @@
           "Sometimes JSON can be hard to read, enable this option in the preferances panel to always open your data in an easy to read table view. (Placeholder Text"
       }
     },
+    "sideNav": {
+      "Editor": "Editor",
+      "Profile": "Profile Manager"
+    },
     "performance": {
       "title": "Performance Panel",
       "unresponsive":

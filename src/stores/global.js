@@ -32,7 +32,7 @@ import {
   deserializer,
   postDeserializer
 } from '#/common/mobxDumpenvyExtension';
-import { EditorTypes, DrawerPanes } from '#/common/Constants';
+import { EditorTypes, DrawerPanes, NavPanes } from '#/common/Constants';
 import { featherClient } from '~/helpers/feathers';
 import { NewToaster } from '#/common/Toaster';
 import moment from 'moment';
@@ -159,7 +159,8 @@ export default class Store {
 
   @observable
   drawer = observable({
-    drawerChild: DrawerPanes.DEFAULT
+    drawerChild: DrawerPanes.DEFAULT,
+    activeNavPane: NavPanes.EDITOR
   });
 
   @observable
@@ -247,13 +248,18 @@ export default class Store {
   };
 
   @action.bound
+  setActiveNavPane = value => {
+    this.drawer.activeNavPane = value;
+  }
+
+  @action.bound
   showConnectionPane = () => {
-    this.setDrawerChild(DrawerPanes.PROFILE);
+    this.setActiveNavPane(NavPanes.PROFILE);
   };
 
   @action.bound
   hideConnectionPane = () => {
-    this.setDrawerChild(DrawerPanes.DEFAULT);
+    this.setActiveNavPane(NavPanes.EDITOR);
   };
 
   @action.bound
