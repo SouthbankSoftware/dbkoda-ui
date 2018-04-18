@@ -30,7 +30,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { NavPanes } from '#/common/Constants';
 import MenuItem from '#/common/MenuItem.jsx';
-import EditorIcon from '~/styles/icons/color/home-icon.svg';
+import EditorIcon from '~/styles/icons/home-icon.svg';
 import ProfileIcon from '~/styles/icons/connection-icon.svg';
 import './Panel.scss';
 
