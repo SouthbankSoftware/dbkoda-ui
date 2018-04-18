@@ -44,6 +44,11 @@ export const EditorTypes = {
   DRILL: 'drill'
 };
 
+export const NavPanes = {
+  EDITOR: 'Editor',
+  PROFILE: 'Profile'
+};
+
 export const DrawerPanes = {
   DEFAULT: 'default',
   PROFILE: 'profile',

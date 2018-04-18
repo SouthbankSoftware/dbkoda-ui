@@ -38,7 +38,8 @@ import { Analytics } from '#/Analytics';
 import { StatusPanel } from '#/StatusBar';
 import { PerformancePanel } from '#/PerformancePanel';
 import { ProfileManager } from '#/ProfileManager';
-import { DrawerPanes } from '#/common/Constants';
+import { SideNav } from '#/SideNav';
+import { NavPanes } from '#/common/Constants';
 import PasswordDialog from '#/common/PasswordDialog';
 import NewFeaturesDialog from '#/common/NewFeaturesDialog';
 import PasswordResetDialog from '#/common/PasswordResetDialog';
@@ -144,24 +145,38 @@ class App extends React.Component {
         <SplitPane
           className="RootSplitPane"
           split="vertical"
-          defaultSize={defaultOverallSplitPos}
-          onDragFinished={this.updateOverallSplitPos}
-          minSize={350}
-          maxSize={750}
+          defaultSize={80}
+          minSize={80}
+          maxSize={80}
         >
-          <SidebarPanel />
-          <SplitPane
-            className="RightSplitPane"
-            split="horizontal"
-            defaultSize={defaultRightSplitPos}
-            onDragFinished={this.updateRightSplitPos}
-            minSize={200}
-            maxSize={1000}
-            pane2Style={splitPane2Style}
-          >
-            <EditorPanel />
-            <OutputPanel />
-          </SplitPane>
+          <SideNav />
+          <div className="fullPanel">
+            {store.drawer && store.drawer.activeNavPane == NavPanes.PROFILE &&
+            <ProfileManager />}
+            {!store.drawer || store.drawer.activeNavPane == NavPanes.EDITOR &&
+            <SplitPane
+              className="EditorSplitPane"
+              split="vertical"
+              defaultSize={defaultOverallSplitPos}
+              onDragFinished={this.updateOverallSplitPos}
+              minSize={350}
+              maxSize={750}
+            >
+              <SidebarPanel />
+              <SplitPane
+                className="RightSplitPane"
+                split="horizontal"
+                defaultSize={defaultRightSplitPos}
+                onDragFinished={this.updateRightSplitPos}
+                minSize={200}
+                maxSize={1000}
+                pane2Style={splitPane2Style}
+              >
+                <EditorPanel />
+                <OutputPanel />
+              </SplitPane>
+            </SplitPane>}
+          </div>
         </SplitPane>
         <StatusPanel className="statusPanel" />
         {store.performancePanel ? (
@@ -181,9 +196,6 @@ class App extends React.Component {
               console.log('!!!');
             }}
           />
-        ) : null}
-        {store.drawer && store.drawer.drawerChild == DrawerPanes.PROFILE ? (
-          <ProfileManager />
         ) : null}
         {process.env.NODE_ENV !== 'production' ? (
           <div className="DevTools">
