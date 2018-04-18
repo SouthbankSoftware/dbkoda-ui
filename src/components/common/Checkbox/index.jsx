@@ -18,34 +18,21 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import Checkbox from '../../common/Checkbox';
+import {Checkbox} from '@blueprintjs/core';
 
-import './DatabaseList.scss';
+import './style.scss';
 
-export default class DatabaseList extends React.Component {
-  render() {
-    const {selectDatabase} = this.props;
-    return (
-      <div className="profile-config-database-list">
-        <div className="profile-db-list-title">
-          {globalString(
-            'performance/profiling/configuration/database-list-title'
-          )}
-        </div>
-        <div className="profile-db-list">
-          {this.props.databases.map(db => {
-            return (
-              <Checkbox
-                key={db.name}
-                className="db-item"
-                label={db.name}
-                value={db.selected}
-                onClick={() => selectDatabase(db)}
-              />
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-}
+export default props => {
+  const clsName = props.className
+    ? props.className + ' checkbox-form'
+    : 'checkbox-form';
+  const {value, label} = props;
+  return (
+    <Checkbox
+      className={clsName}
+      onClick={props.onClick}
+      checked={value}
+      label={label}
+    />
+  );
+};

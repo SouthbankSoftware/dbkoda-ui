@@ -1,9 +1,22 @@
 .profile-config-database-list {
     // border-right: 1px solid #4a4f70;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 50px;
+
     .profile-db-list-title {
         color: #bfbec0;
         font-weight: bolder;
         font-size: larger;
         text-align: right;
+    }
+    .profile-db-list {
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0px;
+        .db-item {
+            margin: 10px 0px;
+        }
     }
 }

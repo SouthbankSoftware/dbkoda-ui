@@ -17,33 +17,35 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import React from 'react';
-import Checkbox from '../../common/Checkbox';
 
-import './DatabaseList.scss';
+import './Profile.scss';
 
-export default class DatabaseList extends React.Component {
+export default class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {db: {was: 0}};
+  }
+
+  componentDidMount() {}
+
   render() {
-    const {selectDatabase} = this.props;
+    const {db} = this.props;
     return (
-      <div className="profile-config-database-list">
-        <div className="profile-db-list-title">
+      <div>
+        <div>
+          {globalString('performance/profiling/configuration/profile-mode')}
+        </div>
+        <div>
           {globalString(
-            'performance/profiling/configuration/database-list-title'
+            'performance/profiling/configuration/operation-exceeds'
           )}
         </div>
-        <div className="profile-db-list">
-          {this.props.databases.map(db => {
-            return (
-              <Checkbox
-                key={db.name}
-                className="db-item"
-                label={db.name}
-                value={db.selected}
-                onClick={() => selectDatabase(db)}
-              />
-            );
-          })}
+        <div>
+          {globalString(
+            'performance/profiling/configuration/profiling-off'
+          )}
         </div>
       </div>
     );

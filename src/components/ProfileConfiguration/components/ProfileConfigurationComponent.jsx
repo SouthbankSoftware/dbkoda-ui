@@ -1,53 +1,37 @@
+/**
+ * dbKoda - a modern, open source code editor, for MongoDB.
+ * Copyright (C) 2017-2018 Southbank Software
+ *
+ * This file is part of dbKoda.
+ *
+ * dbKoda is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * dbKoda is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 import React from 'react';
 import {Responsive, WidthProvider} from 'react-grid-layout';
 
 import './styles.scss';
 import Button from './Button';
 import DatabaseList from './DatabaseList';
+import layouts from './Layout';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 export default class ProfileConfiguration extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      layouts: [
-        {
-          i: 'top-padding',
-          className: 'profile-config-top-padding',
-          x: 0,
-          y: 0,
-          w: 12,
-          h: 1,
-          static: true,
-        },
-        {
-          i: 'title',
-          className: 'profile-config-title',
-          x: 0,
-          y: 1,
-          w: 2,
-          h: 1,
-          static: true,
-        },
-        {
-          i: 'buttons',
-          className: 'profile-config-buttons',
-          x: 6,
-          y: 1,
-          w: 6,
-          h: 1,
-          static: true,
-        },
-        {
-          i: 'db-list',
-          className: 'profile-config-db-list',
-          x: 0,
-          y: 2,
-          w: 2,
-          h: 2,
-          static: true,
-        },
-      ],
+      layouts,
     };
   }
 
@@ -85,6 +69,7 @@ export default class ProfileConfiguration extends React.Component {
           <div key={layout.i} className={layout.className} data-grid={layout}>
             <DatabaseList
               databases={this.props.databases}
+              selectDatabase={this.props.selectDatabase}
               performancePanel={this.props.performancePanel}
             />
           </div>

@@ -17,23 +17,42 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import {Button, Tooltip, Intent, Position} from '@blueprintjs/core';
-import './button.scss';
 
-export default ({onClick, text, className, toolTipClassName}) => (
-  <Tooltip
-    className={`${toolTipClassName} pt-tooltip-indicator pt-tooltip-indicator-form`}
-    content=""
-    hoverOpenDelay={1000}
-    inline
-    intent={Intent.PRIMARY}
-    position={Position.BOTTOM}
-  >
-    <Button
-      className={`${className} profile-config-button pt-button pt-intent-primary`}
-      text={text}
-      onClick={onClick}
-    />
-  </Tooltip>
-);
+export default [
+  {
+    i: 'top-padding',
+    className: 'profile-config-top-padding',
+    x: 0,
+    y: 0,
+    w: 12,
+    h: 1,
+    static: true,
+  },
+  {
+    i: 'title',
+    className: 'profile-config-title',
+    x: 0,
+    y: 1,
+    w: 3,
+    h: 1,
+    static: true,
+  },
+  {
+    i: 'buttons',
+    className: 'profile-config-buttons',
+    x: 6,
+    y: 1,
+    w: 6,
+    h: 1,
+    static: true,
+  },
+  {
+    i: 'db-list',
+    className: 'profile-config-db-list',
+    x: 0,
+    y: 2,
+    w: 3,
+    h: 2,
+    static: true,
+  },
+];
