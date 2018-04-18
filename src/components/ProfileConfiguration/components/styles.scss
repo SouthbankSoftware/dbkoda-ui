@@ -1,14 +1,17 @@
+@import "../../../styles/_defaultTheme.scss";
 $fontColor: #bfbec0;
-
+$fontSize: large;
+$titleFontWeight: normal;
+$titleFontSize: x-large;
 .profile-config-panel {
-  height: 100vh !important;
-  background-color: #202020 !important;
+    height: 100vh !important;
+    background-color: #202020 !important;
 }
 
 .profile-config-title {
     color: $fontColor;
-    font-weight: bolder;
-    font-size: larger;
+    font-weight: $titleFontWeight;
+    font-size: $titleFontSize;
     margin-left: 50px;
 }
 
@@ -18,8 +21,17 @@ $fontColor: #bfbec0;
     color: #bfbec0;
     display: flex;
     margin-left: auto;
-
     .pt-popover-wrapper:nth-child(1) {
-      margin-left: auto;
+        margin-left: auto;
     }
+}
+
+.profile-config-db-detail {
+    border-right-style: solid;
+    border-color: white;
+    border-width: 1px;
+    border-right-width: 1px;
+    border-left-style: solid;
+    border-left-width: 1px;
+    padding: 0px 20px;
 }

@@ -25,6 +25,7 @@ import './styles.scss';
 import Button from './Button';
 import DatabaseList from './DatabaseList';
 import layouts from './Layout';
+import Profile from './Profile';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 export default class ProfileConfiguration extends React.Component {
@@ -72,6 +73,17 @@ export default class ProfileConfiguration extends React.Component {
               selectDatabase={this.props.selectDatabase}
               performancePanel={this.props.performancePanel}
             />
+          </div>
+        );
+      }
+      if (layout.i === 'db-profile') {
+        return (
+          <div
+            key={layout.i}
+            className={layout.className}
+            data-grid={layout}
+          >
+            <Profile />
           </div>
         );
       }

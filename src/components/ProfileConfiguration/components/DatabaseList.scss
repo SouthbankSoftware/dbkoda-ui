@@ -1,3 +1,6 @@
+@import './styles.scss';
+@import './styles.scss';
+
 .profile-config-database-list {
     // border-right: 1px solid #4a4f70;
     display: flex;
@@ -6,9 +9,9 @@
     margin-left: 50px;
 
     .profile-db-list-title {
-        color: #bfbec0;
-        font-weight: bolder;
-        font-size: larger;
+        color: $fontColor;
+        font-weight: $titleFontWeight;
+        font-size: $titleFontSize;
         text-align: right;
     }
     .profile-db-list {
@@ -17,6 +20,7 @@
         margin: 10px 0px;
         .db-item {
             margin: 10px 0px;
+            font-size: $fontSize;
         }
     }
 }
