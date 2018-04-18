@@ -33,6 +33,7 @@ export default class ProfileConfiguration extends React.Component {
     super(props);
     this.state = {
       layouts,
+      selectedDb: null,
     };
   }
 
@@ -53,6 +54,11 @@ export default class ProfileConfiguration extends React.Component {
     );
   }
 
+  selectDatabase = (db) => {
+    this.setState({selectedDb: db});
+    this.props.selectDatabase(db);
+  }
+
   createDomElement(layouts) {
     return layouts.map(layout => {
       if (layout.i === 'buttons') {
@@ -70,7 +76,7 @@ export default class ProfileConfiguration extends React.Component {
           <div key={layout.i} className={layout.className} data-grid={layout}>
             <DatabaseList
               databases={this.props.databases}
-              selectDatabase={this.props.selectDatabase}
+              selectDatabase={this.selectDatabase}
               performancePanel={this.props.performancePanel}
             />
           </div>
@@ -78,13 +84,14 @@ export default class ProfileConfiguration extends React.Component {
       }
       if (layout.i === 'db-profile') {
         return (
-          <div
-            key={layout.i}
-            className={layout.className}
-            data-grid={layout}
-          >
+          <div key={layout.i} className={layout.className} data-grid={layout}>
             <Profile />
           </div>
+        );
+      }
+      if (layout.i === 'profile-tips') {
+        return (
+          <div key={layout.i} className={layout.className} data-grid={layout} />
         );
       }
       return (

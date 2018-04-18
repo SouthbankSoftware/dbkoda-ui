@@ -4,11 +4,21 @@
   flex-direction: column;
   .profiling-label {
     color: $fontColor;
-    margin: 10px 0px;
+    margin: 20px 0px;
     font-size: $fontSize;
   }
   .profiling-title {
     font-weight: $titleFontWeight;
     font-size: $titleFontSize;
+    margin: 0;
+  }
+  .exceeding-limit-panel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .pt-numeric-input {
+      height: 30px;
+      margin: auto;
+    }
   }
 }

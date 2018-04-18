@@ -19,45 +19,83 @@
  */
 
 import React from 'react';
-import {Radio, RadioGroup} from '@blueprintjs/core';
+import {Radio, RadioGroup, NumericInput} from '@blueprintjs/core';
 
 import './Profile.scss';
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {db: {was: 0}};
+    this.state = {db: {was: 0}, selectedValue: -1, exceedLimit: 1000000};
   }
 
-  componentDidMount() {}
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.db) {
+      const {db} = nextProps;
+      this.setState({db});
+    }
+  }
+
+  getSelectedValue() {
+    if (this.state.selectedValue >= 0) {
+      return this.state.selectedValue;
+    }
+    switch (this.state.db.was) {
+      case 0:
+        return 2;
+      case 1:
+        return 1;
+      case 2:
+        return 0;
+      default:
+        return 0;
+    }
+  }
+
+  onChange = e => {
+    this.setState({selectedValue: parseInt(e.target.value, 10)});
+  };
 
   render() {
-    // const {db} = this.props;
+    const selectedValue = this.getSelectedValue();
     return (
       <div className="db-profiling-detailed-panel">
         <div className="profiling-label profiling-title">
           {globalString('performance/profiling/configuration/profile-mode')}
         </div>
-        <RadioGroup>
+        {/* <RadioGroup selectedValue={selectedValue} onChange={this.onChange}> */}
+        <Radio
+          value={0}
+          checked={selectedValue === 0}
+          onChange={this.onChange}
+          className="profiling-label"
+          label={globalString(
+            'performance/profiling/configuration/profile-all'
+          )}
+        />
+        <div className="exceeding-limit-panel">
           <Radio
-            className="profiling-label"
-            label={globalString(
-              'performance/profiling/configuration/profile-all'
-            )}
-          />
-          <Radio
+            value={1}
+            onChange={this.onChange}
+            checked={selectedValue === 1}
             className="profiling-label"
             label={globalString(
               'performance/profiling/configuration/operation-exceeds'
             )}
           />
-          <Radio
-            className="profiling-label"
-            label={globalString(
-              'performance/profiling/configuration/profiling-off'
-            )}
-          />
-        </RadioGroup>
+
+          <NumericInput />
+        </div>
+        <Radio
+          value={2}
+          onChange={this.onChange}
+          className="profiling-label"
+          checked={selectedValue === 2}
+          label={globalString(
+            'performance/profiling/configuration/profiling-off'
+          )}
+        />
+        {/* </RadioGroup> */}
       </div>
     );
   }
