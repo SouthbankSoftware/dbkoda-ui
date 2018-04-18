@@ -84,7 +84,8 @@ export default class ProfileConfiguration extends React.Component {
         return (
           <div key={layout.i} className={layout.className} data-grid={layout}>
             <DatabaseList
-              performancePanel={this.props.store.performancePanel}
+              databases={this.props.databases}
+              performancePanel={this.props.performancePanel}
             />
           </div>
         );
