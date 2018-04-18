@@ -102,9 +102,7 @@ export default class OperationDetails extends React.Component {
           </div>
         </nav>
         <div style={{ height: '100%' }}>
-          <div className="editorView">
-            <CodeMirror value={this.state.code} options={this.cmOptions} />
-          </div>
+          <div className="editorView" />
         </div>
       </div>
     );

@@ -56,7 +56,11 @@ class PerformanceWindowApi {
   }
   @action.bound
   sendCommandToMainProcess = (command, params) => {
-    ipcRenderer.send('performance', { command, profileId: this.profileId, ...params });
+    ipcRenderer.send('performance', {
+      command,
+      profileId: this.profileId,
+      ...params
+    });
   };
 
   @action.bound
@@ -82,15 +86,21 @@ class PerformanceWindowApi {
   };
 
   @action.bound
-  killOperation = (opId) => {
-    this.sendCommandToMainProcess('pw_killOperation', {opId});
-  }
+  killOperation = opId => {
+    this.sendCommandToMainProcess('pw_killOperation', { opId });
+  };
 
   @action.bound
   getProfilingDataBases = () => {
     this.store.profilingPanel.databases = [];
     this.store.profilingPanel.selectedDatabase = null;
     this.sendCommandToMainProcess('pw_getProfilingDataBases');
+  };
+
+  @action.bound
+  getProfilingData = database => {
+    this.store.profilingPanel.payload = null;
+    this.sendCommandToMainProcess('pw_getProfilingData', { database });
   };
 }
 

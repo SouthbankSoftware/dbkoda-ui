@@ -77,7 +77,10 @@ export default class DataCenter {
     _.assign(this, _.pick(this.topConnectionsApi, ['getTopConnections', 'killOperation']));
 
     // Profling public APIs
-    _.assign(this, _.pick(this.profilingApi, ['getProfilingDataBases']));
+    _.assign(
+      this,
+      _.pick(this.profilingApi, ['getProfilingDataBases', 'getProfilingData'])
+    );
 
     // Terminal public APIs
     _.assign(
