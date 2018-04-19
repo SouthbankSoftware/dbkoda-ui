@@ -19,7 +19,7 @@
  */
 
 import React from 'react';
-import {Radio, RadioGroup, NumericInput} from '@blueprintjs/core';
+import {Radio, NumericInput} from '@blueprintjs/core';
 
 import './Profile.scss';
 
