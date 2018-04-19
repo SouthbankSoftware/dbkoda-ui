@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-19T15:26:11+10:00
+ * @Last modified time: 2018-04-19T15:28:46+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -112,7 +112,7 @@ export class ConnectionForm extends JsonForm {
 
   @action
   updateClusterUrl(field) {
-
+    console.log(field);
   }
   /**
    * Function to update the alias field on certain other fields
