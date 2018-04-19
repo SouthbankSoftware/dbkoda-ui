@@ -3,7 +3,7 @@
  * @Date:   2017-07-17T12:55:19+10:00
  * @Email:  wahaj@southbanksoftware.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-27T14:28:21+11:00
+ * @Last modified time: 2018-04-19T13:59:10+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -26,21 +26,21 @@
 @import "./_defaultTheme.scss";
 
 span.cm-invalidchar {
-    display: none;
+  display: none;
 }
 
 body {
-    background-color: $panelLeftBackground;
-    overflow: hidden !important;
-    font-family: -apple-system, 'BlinkMacSystemFont', 'Arial', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'Icons16', sans-serif;
+  background-color: $panelLeftBackground;
+  overflow: hidden !important;
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Arial', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'Icons16', sans-serif;
 }
 
 #root div {}
 
 .aggregateTabInnerWrapper {
-    .vertical {
-        position: unset !important;
-    }
+  .vertical {
+    position: unset !important;
+  }
 }
 
 .pt-navbar-heading,
@@ -49,41 +49,41 @@ h2,
 h3,
 h4 span,
 p {
-    font-family: Arial;
+  font-family: Arial;
 }
 
 ::-webkit-scrollbar {
-    background-color: $scrollBarThumb !important;
+  background-color: $scrollBarThumb !important;
 }
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: $scrollBarBackground !important;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: $scrollBarBackground !important;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: $scrollBarThumb !important;
+  background-color: $scrollBarThumb !important;
 }
 
 ::-webkit-scrollbar-button {
-    background-color: $scrollBarTopAndBottom !important;
+  background-color: $scrollBarTopAndBottom !important;
 }
 
 ::-webkit-scrollbar-corner {
-    background-color: $scrollBarThumb !important;
+  background-color: $scrollBarThumb !important;
 }
 
 .profileList,
 .pt-tab-list {
-    overflow: auto !important;
+  overflow: auto !important;
 }
 
 .CodeMirror-scroll {
-    overflow: auto !important;
+  overflow: auto !important;
 }
 
 .CodeMirror-scrollbar-filler {
-    background: $scrollBarBackground;
+  background: $scrollBarBackground;
 }
 
 .horizontal,
@@ -92,7 +92,7 @@ p {
 .pt-table-body,
 .pt-tree-node-content,
 .welcomePageContentRight {
-    overflow: hidden !important;
+  overflow: hidden !important;
 }
 
 .feedIconWrapper,
@@ -100,513 +100,514 @@ p {
 .feedItemContent,
 .feedList,
 .pt-icon- {
-    overflow: unset !important;
+  overflow: unset !important;
 }
 
 h1 {
-    color: $white;
-    font-size: 40px;
-    margin-top: 4px;
+  color: $white;
+  font-size: 40px;
+  margin-top: 4px;
 }
 
 h2 {
-    color: $white;
-    margin-top: 4px;
+  color: $white;
+  margin-top: 4px;
 }
 
 h3 {
-    color: $white;
-    margin-top: 4px;
+  color: $white;
+  margin-top: 4px;
 }
 
 .pt-popover-content {
-    color: $toolTipFontColour !important;
-    background-color: $toolTipBackgroundColour !important;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10pt;
+  color: $toolTipFontColour !important;
+  background-color: $toolTipBackgroundColour !important;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
 }
 
 .pt-popover-arrow {
-    svg {
-        path {
-            fill: #ffffff !important;
-            color: $toolTipBackgroundColour !important;
-        }
+  svg {
+    path {
+      fill: $toolTipBackgroundColour !important;
+      color: $toolTipBackgroundColour !important;
     }
+  }
 }
 
 .pt-toast:first-child {
-    margin-top: 100px;
+  margin-top: 100px;
 }
 
 .pt-toast {
-    color: unset !important;
+  color: unset !important;
 }
 
 .unsavedFileIndicator {
-    top: 11.5px;
-    margin: 0 10px 0 0;
-    width: 7px;
-    height: 7px;
-    background: $buttonDangerBackground;
-    float: left;
-    position: relative;
-    border-radius: 50%;
-    opacity: 0;
+  top: 11.5px;
+  margin: 0 10px 0 0;
+  width: 7px;
+  height: 7px;
+  background: $buttonDangerBackground;
+  float: left;
+  position: relative;
+  border-radius: 50%;
+  opacity: 0;
 }
 
 div.pt-dialog {
-    background-color: $panelLeftBackground !important;
+  background-color: $panelLeftBackground !important;
 
-    div.pt-alert-footer {
-        button {
-            font-weight: lighter !important;
-            color: $dialogButtonBorder;
-            width: 7em !important;
-            background-image: unset !important;
-            background-color: $panelLeftBackground;
-            border: 1px solid $dialogButtonBorder !important;
-            box-shadow: unset !important;
-            border-top-left-radius: 1em;
-            border-bottom-left-radius: 1em;
-            border-top-right-radius: 1em;
-            border-bottom-right-radius: 1em;
-        }
-
-        button.pt-button:hover {
-            background-color: $connectionButtonBackgroundColourHover;
-            color: $connectionButtonFontColourHover !important;
-        }
+  div.pt-alert-footer {
+    button {
+      font-weight: lighter !important;
+      color: $dialogButtonBorder;
+      width: 7em !important;
+      background-image: unset !important;
+      background-color: $panelLeftBackground;
+      border: 1px solid $dialogButtonBorder !important;
+      box-shadow: unset !important;
+      border-top-left-radius: 1em;
+      border-bottom-left-radius: 1em;
+      border-top-right-radius: 1em;
+      border-bottom-right-radius: 1em;
     }
 
-    input[type='text'],
-    input[type='number'],
-    input[type='password'] {
-        background: unset;
-        color: $connectionActiveTextFieldTextColour !important;
+    button.pt-button:hover {
+      background-color: $connectionButtonBackgroundColourHover;
+      color: $connectionButtonFontColourHover !important;
     }
+  }
 
-    input[type='text']:focus,
-    input[type='number']:focus,
-    input[type='password']:focus {
-        background-color: $connectionActiveTextFieldBackgroundColour !important;
-        box-shadow: none !important;
-    }
+  input[type='text'],
+  input[type='number'],
+  input[type='password'] {
+    background: unset;
+    color: $connectionActiveTextFieldTextColour !important;
+  }
+
+  input[type='text']:focus,
+  input[type='number']:focus,
+  input[type='password']:focus {
+    background-color: $connectionActiveTextFieldBackgroundColour !important;
+    box-shadow: none !important;
+  }
 }
 
 .pt-tab {
-    padding: 0 8px;
-    user-select: none;
+  padding: 0 8px;
+  user-select: none;
 }
 
 .pt-tab .pt-button.pt-minimal {
-    padding: 0;
-    margin-right: -10px;
-    line-height: 14px;
-    min-height: 14px;
-    top: 8px;
+  padding: 0;
+  margin-right: -10px;
+  line-height: 14px;
+  min-height: 14px;
+  top: 8px;
 }
 
 .CodeMirror-lines:focus {
-    outline: none !important;
+  outline: none !important;
 }
 
 .pt-tab .pt-button.pt-minimal:focus,
 .pt-tab .pt-button.pt-minimal:hover {
-    background: unset;
-    box-shadow: none !important;
+  background: unset;
+  box-shadow: none !important;
 }
 
 .pt-tab {
-    height: 31px;
+  height: 31px;
 }
 
 .pt-dark .pt-navbar,
 .pt-dark.pt-navbar {
-    box-shadow: none;
+  box-shadow: none;
 }
 
 .pt-toast {
-    .pt-icon-standard {
-        display: none;
-    }
+  .pt-icon-standard {
+    display: none;
+  }
 }
 
 .pt-toast.success {
-    background-color: $toastBackgroundColourSuccess !important;
+  background-color: $toastBackgroundColourSuccess !important;
+  color: $toastFontColourSuccess !important;
+
+  span {
     color: $toastFontColourSuccess !important;
+  }
 
-    span {
-        color: $toastFontColourSuccess !important;
+  div {
+    button::before {
+      color: $toastCloseIconColourSuccess !important;
     }
 
-    div {
-        button::before {
-            color: $toastCloseIconColourSuccess !important;
-        }
-
-        button:focus {
-            outline-style: none;
-        }
+    button:focus {
+      outline-style: none;
     }
+  }
 }
 
 .pt-toast.warning {
-    background-color: $toastBackgroundColourWarning !important;
+  background-color: $toastBackgroundColourWarning !important;
+  color: $toastFontColourWarning !important;
+
+  span {
     color: $toastFontColourWarning !important;
+  }
 
-    span {
-        color: $toastFontColourWarning !important;
+  div {
+    button::before {
+      color: $toastCloseIconColourWarning !important;
     }
 
-    div {
-        button::before {
-            color: $toastCloseIconColourWarning !important;
-        }
-
-        button:focus {
-            outline-style: none;
-        }
+    button:focus {
+      outline-style: none;
     }
+  }
 }
 
 .pt-toast.danger {
-    background-color: $toastBackgroundColourDanger !important;
+  background-color: $toastBackgroundColourDanger !important;
+  color: $toastFontColourDanger !important;
+
+  span {
     color: $toastFontColourDanger !important;
+  }
 
-    span {
-        color: $toastFontColourDanger !important;
+  div {
+    color: unset !important;
+    color: $toastCloseIconColourDanger !important;
+
+    button::before {
+      color: $toastCloseIconColourDanger !important;
     }
 
-    div {
-        color: unset !important;
-        color: $toastCloseIconColourDanger !important;
-
-        button::before {
-            color: $toastCloseIconColourDanger !important;
-        }
-
-        button:focus {
-            outline-style: none;
-        }
+    button:focus {
+      outline-style: none;
     }
+  }
 }
 
 .pt-toast.info {
-    background-color: $toastBackgroundColourInfo !important;
+  background-color: $toastBackgroundColourInfo !important;
+  color: $toastFontColourInfo !important;
+
+  span {
     color: $toastFontColourInfo !important;
+  }
 
-    span {
-        color: $toastFontColourInfo !important;
+  div {
+    color: unset !important;
+    color: $toastCloseIconColourInfo !important;
+
+    button::before {
+      color: $toastCloseIconColourInfo !important;
     }
 
-    div {
-        color: unset !important;
-        color: $toastCloseIconColourInfo !important;
-
-        button::before {
-            color: $toastCloseIconColourInfo !important;
-        }
-
-        button:focus {
-            outline-style: none;
-        }
+    button:focus {
+      outline-style: none;
     }
+  }
 }
 
 .circleButton {
-    background-color: $buttonTertiaryBackground !important;
-    color: $buttonTertiaryIcon !important;
-    border-radius: 50%;
-    margin-left: 5px;
-    margin-right: 5px;
+  background-color: $buttonTertiaryBackground !important;
+  color: $buttonTertiaryIcon !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .circleButton:hover {
-    background-color: $buttonTertiaryBackgroundHover !important;
-    border-radius: 50%;
-    margin-left: 5px;
-    margin-right: 5px;
+  background-color: $buttonTertiaryBackgroundHover !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .circleButton.pt-disabled {
-    background-color: $buttonTertiaryBackgroundDisabled !important;
+  background-color: $buttonTertiaryBackgroundDisabled !important;
 }
 
 .circleButton.warningButton {
-    background-color: $keywordThree !important;
-    color: $white !important;
-    border-radius: 50%;
-    margin-left: 5px;
-    margin-right: 5px;
+  background-color: $keywordThree !important;
+  color: $white !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .circleButton.warningButton:hover {
-    background-color: $buttonTertiaryBackground !important;
-    border-radius: 50%;
-    margin-left: 5px;
-    margin-right: 5px;
+  background-color: $buttonTertiaryBackground !important;
+  border-radius: 50%;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .middleRow {
-    height: 100%;
-    overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 .RootSplitPane > .Pane1 {
-    background-color: $panelLeftBackground;
-    overflow-y: auto;
+  background-color: $panelLeftBackground;
+  overflow-y: auto;
 }
 
 .RootSplitPane > .Pane2 {
-    background-color: $panelRightBackground;
-    overflow-y: auto;
+  background-color: $panelRightBackground;
+  overflow-y: auto;
 }
 
 .fullHeight {
-    height: 100%;
+  height: 100%;
 }
 
 .dbkoda-toaster {
-    z-index: 20000;
+  z-index: 20000;
 }
 
 .pt-tabs {
-    color: $white;
-    background-color: $tabBackground;
+  color: $white;
+  background-color: $tabBackground;
 }
 
 .pt-tab-panel {
-    flex: 1;
-    display: flex;
-    margin-top: 2px;
+  flex: 1;
+  display: flex;
+  margin-top: 2px;
 }
 
 .pt-tab {
-    color: $white;
+  color: $white;
 }
 
 .pt-tab-list {
-    margin-left: 28px;
-    overflow-x: scroll;
+  margin-left: 28px;
+  overflow-x: scroll;
 }
 
 .pt-tab-list::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .pt-tab-indicator {
-    background-color: $white;
+  background-color: $white;
 }
 
 .pt-select {
-    background-color: $keywordFour !important;
+  background-color: $keywordFour !important;
 }
 
 .cm-s-ambiance .CodeMirror-linenumber {
-    color: $white;
+  color: $white;
 }
 
 span.cm-error {
-    background-color: unset !important;
+  background-color: unset !important;
 }
 
 .CodeMirror,
 .ReactCodeMirror {
-    height: 100%;
+  height: 100%;
 }
-
 //  //// Global CSS: ////  //
 /////////////////////////////
 
 .pt-dark pre {
-    box-shadow: unset;
-    background: unset;
-    color: unset;
+  box-shadow: unset;
+  background: unset;
+  color: unset;
 }
 
 select.pt-intent-primary {
-    background-color: $selectDarkPrimaryBackground !important;
-    color: $buttonPrimaryBackground !important;
+  background-color: $selectDarkPrimaryBackground !important;
+  color: $buttonPrimaryBackground !important;
 }
 
 input.pt-input,
 textarea {
-    background-color: $searchPrimaryBackground !important;
-    color: $searchPrimaryFontColor !important;
+  background-color: $searchPrimaryBackground !important;
+  color: $searchPrimaryFontColor !important;
 }
 
 input.pt-input.secondaryInput,
 textarea {
-    background-color: $searchSecondaryBackground !important;
-    color: $searchSecondaryFontColor !important;
+  background-color: $searchSecondaryBackground !important;
+  color: $searchSecondaryFontColor !important;
 }
 
 .pt-icon-search {
-    color: $buttonPrimaryIcon !important;
+  color: $buttonPrimaryIcon !important;
 }
 
 ::-webkit-input-placeholder {
-    color: $searchPrimaryFontColor !important;
+  color: $searchPrimaryFontColor !important;
 }
 
 .tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px solid $keywordThree;
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px solid $keywordThree;
 }
 
 .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 160px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    font-size: 12px;
-
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-    top: -5px;
-    left: 105%;
+  visibility: hidden;
+  width: 160px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 12px;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 105%;
 }
 
 .pt-overlay-open {
+  z-index: 999;
+
+  .pt-overlay-content {
     z-index: 999;
+  }
 }
 
 .tooltip:hover .tooltiptext {
-    visibility: visible;
+  visibility: visible;
 }
 
 a.pt-intent-primary {
-    background-color: $buttonPrimaryBackground !important;
-    color: $buttonPrimaryIcon !important;
+  background-color: $buttonPrimaryBackground !important;
+  color: $buttonPrimaryIcon !important;
 }
 
 a.pt-intent-primary:hover {
-    background-color: $buttonPrimaryBackgroundHover !important;
-    color: $buttonPrimaryIcon !important;
+  background-color: $buttonPrimaryBackgroundHover !important;
+  color: $buttonPrimaryIcon !important;
 }
 
 a.pt-disabled.pt-intent-primary {
-    background-color: rgba(255, 255, 255, 0.3) !important;
+  background-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 .pt-tab:not([aria-disabled='true']):hover,
 .pt-tab[aria-selected='true']:hover {
-    color: $buttonSecondaryBackgroundHover !important;
+  color: $buttonSecondaryBackgroundHover !important;
 }
 
 .cm-string.cm-property {
-    color: $propertyStringFontColor !important;
+  color: $propertyStringFontColor !important;
 }
 
 .pt-button.pt-disabled {
-    opacity: 0.2;
+  opacity: 0.2;
 }
 
 .pt-button {
-    box-shadow: unset !important;
+  box-shadow: unset !important;
 }
 
 .pt-numeric-input .pt-button-group.pt-vertical {
-    .pt-button {
-        border-radius: 0 0 0 0 !important;
-        margin-bottom: 0 !important;
-        flex: 1 1 15px;
-    }
+  .pt-button {
+    border-radius: 0 0 0 0 !important;
+    margin-bottom: 0 !important;
+    flex: 1 1 15px;
+  }
 }
 
 .pt-control input:focus ~ .pt-control-indicator,
 input[type='radio']:focus,
 input[type='checkbox']:focus {
-    outline: none;
-    box-shadow: 0 0 0 1px $searchPrimaryBackground !important;
+  outline: none;
+  box-shadow: 0 0 0 1px $searchPrimaryBackground !important;
 }
 
 a[role='button']:focus,
 button:focus {
-    outline: none;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
 }
 
 .pt-menu-item .pt-icon {
-    color: #5c7080 !important;
+  color: #5c7080 !important;
 }
 
 .pt-menu-divider,
 .pt-menu-header {
-    border-top: 1px solid rgba(16, 22, 26, 0.15) !important;
+  border-top: 1px solid rgba(16, 22, 26, 0.15) !important;
 }
 
 .pt-menu-header > h6 {
-    color: #182026 !important;
+  color: #182026 !important;
 }
 
 ul.CodeMirror-hints {
-    border: none;
-    background-color: $hintsBackgroundColor;
-    overflow-y: hidden;
+  border: none;
+  background-color: $hintsBackgroundColor;
+  overflow-y: hidden;
 
-    li.CodeMirror-hint {
-        color: $hintsColor;
-    }
+  li.CodeMirror-hint {
+    color: $hintsColor;
+  }
 
-    li.CodeMirror-hint-active {
-        background-color: $hintsBackgroundActiveColor;
-    }
+  li.CodeMirror-hint-active {
+    background-color: $hintsBackgroundActiveColor;
+  }
 }
 
 div.optInDialog {
-    h1 {
-        margin-bottom: 30px;
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  div.dialogButtons {
+    a.submitButton {
+      background-color: $buttonSuccessBackground !important;
     }
 
-    div.dialogButtons {
-        a.submitButton {
-            background-color: $buttonSuccessBackground !important;
-        }
+    a.submitButton:hover {
+      background-color: $buttonSuccessBackgroundHover !important;
+    }
+  }
 
-        a.submitButton:hover {
-            background-color: $buttonSuccessBackgroundHover !important;
-        }
+  div.dialogButtons.false {
+    a.submitButton {
+      background-color: $buttonDangerBackground !important;
     }
 
-    div.dialogButtons.false {
-        a.submitButton {
-            background-color: $buttonDangerBackground !important;
-        }
-
-        a.submitButton:hover {
-            background-color: $buttonDangerBackgroundHover !important;
-        }
+    a.submitButton:hover {
+      background-color: $buttonDangerBackgroundHover !important;
     }
+  }
 }
 
 .d3-tip-top {
-    position: absolute;
-    text-align: center;
-    height: 18px;
-    line-height: 1;
-    padding: 2px;
-    background: rgba(255, 255, 255, 0.8);
-    color: #333;
-    border-radius: 2px;
+  position: absolute;
+  text-align: center;
+  height: 18px;
+  line-height: 1;
+  padding: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  border-radius: 2px;
 }
-
 /* Creates a small triangle extender for the tooltip */
 .d3-tip-top:after {
-    box-sizing: border-box;
-    display: block;
-    font-size: 10px;
-    width: 100%;
-    line-height: 1;
-    color: rgba(255, 255, 255, 0.8);
-    content: '\25BC';
-    position: absolute;
-    text-align: center;
-    top: 15px;
+  box-sizing: border-box;
+  display: block;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.8);
+  content: '\25BC';
+  position: absolute;
+  text-align: center;
+  top: 15px;
 }
