@@ -34,19 +34,25 @@ export default class Profile extends React.Component {
   render() {
     // const {db} = this.props;
     return (
-      <div>
+      <div className="db-profiling-detailed-panel">
+        <div className="profiling-label profiling-title">
+          {globalString('performance/profiling/configuration/profile-mode')}
+        </div>
         <RadioGroup>
           <Radio
+            className="profiling-label"
             label={globalString(
-              'performance/profiling/configuration/profile-mode'
+              'performance/profiling/configuration/profile-all'
             )}
           />
           <Radio
+            className="profiling-label"
             label={globalString(
               'performance/profiling/configuration/operation-exceeds'
             )}
           />
           <Radio
+            className="profiling-label"
             label={globalString(
               'performance/profiling/configuration/profiling-off'
             )}

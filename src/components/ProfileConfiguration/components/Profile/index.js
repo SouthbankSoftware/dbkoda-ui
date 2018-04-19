@@ -18,49 +18,6 @@
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default [
-  {
-    i: 'top-padding',
-    className: 'profile-config-top-padding',
-    x: 0,
-    y: 0,
-    w: 12,
-    h: 1,
-    static: true,
-  },
-  {
-    i: 'title',
-    className: 'profile-config-title',
-    x: 0,
-    y: 1,
-    w: 3,
-    h: 1,
-    static: true,
-  },
-  {
-    i: 'buttons',
-    className: 'profile-config-buttons',
-    x: 6,
-    y: 1,
-    w: 6,
-    h: 1,
-    static: true,
-  },
-  {
-    i: 'db-list',
-    className: 'profile-config-db-list',
-    x: 0,
-    y: 2,
-    w: 3,
-    h: 2,
-    static: true,
-  },
-  {
-    i: 'db-profile',
-    className: 'profile-config-db-detail',
-    x: 4,
-    y: 1,
-    w: 8,
-    h: 4
-  },
-];
+import Profile from './Profile';
+
+export default Profile;
