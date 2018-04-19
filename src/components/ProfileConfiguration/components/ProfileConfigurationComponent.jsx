@@ -38,11 +38,26 @@ export default class ProfileConfiguration extends React.Component {
   }
 
   componentDidMount() {
-
+    this.setSelectedDatabase(this.props.databases);
   }
 
   componentWillReceiveProps(nextProps) {
-    
+    if (nextProps.databases) {
+      this.setSelectedDatabase(nextProps.databases);
+    }
+  }
+
+  setSelectedDatabase(databases) {
+    let selectedDb;
+    databases.forEach(db => {
+      if (db.selected) {
+        selectedDb = db;
+        return -1;
+      }
+    });
+    if (selectedDb) {
+      this.setState({selectedDb});
+    }
   }
 
   createButtonPanels(layout) {
@@ -63,7 +78,6 @@ export default class ProfileConfiguration extends React.Component {
   }
 
   selectDatabase = db => {
-    this.setState({selectedDb: db});
     this.props.selectDatabase(db);
   };
 
@@ -80,17 +94,6 @@ export default class ProfileConfiguration extends React.Component {
         );
       }
       if (layout.i === 'db-list') {
-        const {databases} = this.props;
-        let selectedDb;
-        databases.forEach(db => {
-          if (db.selected) {
-            selectedDb = db;
-            return -1;
-          }
-        });
-        if (selectedDb) {
-          this.setState({selectedDb});
-        }
         return (
           <div key={layout.i} className={layout.className} data-grid={layout}>
             <DatabaseList
