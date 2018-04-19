@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-01-31T11:40:21+11:00
+ * @Last modified time: 2018-04-19T15:28:46+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -25,11 +25,17 @@
  */
 
 import { action } from 'mobx';
+import StaticApi from '~/api/static';
 import { Profile } from '~/api/Profile';
 import { JsonForm } from './JsonForm';
 
 const MAX_URL_ALIAS_LENGTH = 25;
 const MAX_HOSTNAME_ALIAS_LENGTH = 20;
+const SubformCategory = {
+  BASIC: 'basic',
+  CLUSTER: 'cluster',
+  SSH: 'ssh'
+};
 
 export class ConnectionForm extends JsonForm {
   constructor(api) {
@@ -46,14 +52,21 @@ export class ConnectionForm extends JsonForm {
   /**
    * Overrided function from JsonForm to update the alias
    */
-  getSubformFields(selectedSubform, column) {
+  getSubformFields(selectedSubform, column, updateValues = false) {
     const fieldsCol = [];
     const subForm = this.formSchema[selectedSubform];
     if (subForm.fields) {
       subForm.fields.forEach((field) => {
-        if (field.name === 'alias') {
-          this.updateAlias(field);
+        if (updateValues) {
+          if (selectedSubform === SubformCategory.BASIC) {
+            if (field.name === 'alias') {
+              this.updateAlias(field);
+            } else if (field.name === 'url') {
+              this.updateUrl(field);
+            }
+          }
         }
+
         if (field.column === column) {
           fieldsCol.push(field);
         }
@@ -80,14 +93,33 @@ export class ConnectionForm extends JsonForm {
       this.updateAlias(field);
     }
 
+    if (field.subForm.value === SubformCategory.BASIC && (field.name !== 'urlRadio' || field.name !== 'url')) {
+      this.updateUrl(field);
+    }
+
     this.validateForm();
+  }
+  @action
+  updateUrl(field) {
+    const urlField = field.$('url');
+    const isUrlMode = field.$('urlRadio').value;
+    if (!isUrlMode) {
+      let connectionUrl = StaticApi.mongoProtocol + field.$('host').value + ':' + field.$('port').value;
+      connectionUrl += '/' + field.$('authenticationDatabase').value;
+      urlField.value = connectionUrl;
+    }
+  }
+
+  @action
+  updateClusterUrl(field) {
+    console.log(field);
   }
   /**
    * Function to update the alias field on certain other fields
    */
   @action
   updateAlias(field) {
-    if (!this.isEditMode && !this.hasAliasChanged && field.subForm.name == 'Basic Connection') {
+    if (!this.isEditMode && !this.hasAliasChanged && field.subForm.value == SubformCategory.BASIC) {
       const isUrlMode = field.$('urlRadio').value;
       const aliasField = field.$('alias');
 

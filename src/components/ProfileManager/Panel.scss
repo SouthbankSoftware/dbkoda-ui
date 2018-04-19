@@ -3,7 +3,7 @@
  * @Date:   2018-01-10T09:56:16+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-03-27T14:30:37+11:00
+ * @Last modified time: 2018-04-19T13:46:46+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -248,6 +248,14 @@
     color: $connectionActiveTextFieldTextColour !important;
   }
 
+  input[type='text']::placeholder,
+  input[type='number']::placeholder,
+  input[type='Numeric']::placeholder,
+  input[type='password']::placeholder {
+    background: unset;
+    color: lighten($connectionActiveTextFieldTextColour, 20) !important;
+  }
+
   input[type='text']:focus,
   input[type='number']:focus,
   input[type='Numeric']:focus,
@@ -322,6 +330,7 @@
     }
 
     .pt-input,
+    .pt-popover-wrapper,
     .pt-select {
       width: 100%;
       min-width: 200px;

@@ -1,6 +1,7 @@
 {
   "basic": {
     "name": "Basic Connection",
+    "value": "basic",
     "tips": [
       "For simple connections, you can enter all the connection details on this page.  For a more complex connection (replica set for instance), use the URI field.  For an operating system terminal, to connect via an SSH tunnel or to monitor operating system statistics, checkout the \"SSH Options\""
     ],
@@ -120,8 +121,91 @@
       }
     ]
   },
+  "cluster": {
+    "name": "Cluster Configuration",
+    "value": "cluster",
+    "tips": ["This page allows you to configure items specific to a replica set. Specify a comma seperated list of the hosts and ports in the replica set to get started.  Eg 'host1:port1, host2:port2, host3:port3'"],
+    "fields": [
+      {
+        "name": "hostsList",
+        "label": "List of hosts:ports",
+        "placeholder": "localhost:27017, localhost:27016",
+        "options": {"tooltip": "If blank, we'll connect to nominated host and deduce the host list"},
+        "value": "",
+        "type": "text",
+        "column": 1,
+        "rules": "string",
+        "disabled": false,
+        "checkbox": "disabled"
+      },
+      {
+        "name": "replicaSetName",
+        "label": "Replica Set Name",
+        "value": "",
+        "type": "text",
+        "column": 1,
+        "rules": "string",
+        "disabled": false,
+        "checkbox": "disabled"
+      },
+      {
+        "name": "w",
+        "label": "w (write concern w option)",
+        "options": {"tooltip": "write concern: specifiy a number, 'majority' or a tagSet"},
+        "value": "",
+        "type": "text",
+        "column": 2,
+        "rules": "string"
+      },
+      {
+        "name": "wTimeout",
+        "label": "wtimeout",
+        "options": {"tooltip": "Time in ms to wait for write concern. 0=no timeout"},
+        "value": 0,
+        "type": "number",
+        "column": 2,
+        "rules": "string"
+      },
+      {
+        "name": "journal",
+        "label": "Journal",
+        "options": {"tooltip": "Write concern 'j' option.  If true writes must journal before returning"},
+        "value": true,
+        "type": "checkbox",
+        "column": 2
+      },
+      {
+        "name": "readPref",
+        "label": "Read Preference",
+        "value": "primary",
+        "options": {"dropdown": ["primary", "primaryPreferred", "secondary", "secondaryPreferred", "nearest"]},
+        "type": "select",
+        "column": 2
+      },
+      {
+        "name": "urlRadioCluster",
+        "label": "Use URI instead",
+        "value": false,
+        "type": "checkbox",
+        "column": 2,
+        "refFields": ["urlCluster", "hostsList", "replicaSetName"]
+      },
+      {
+        "name": "urlCluster",
+        "label": "URI",
+        "placeholder": "mongodb://",
+        "rules": "regex:/^mongodb:///",
+        "value": "mongodb://",
+        "type": "text",
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
+      }
+    ]
+  },
   "ssh": {
     "name": "SSH Options",
+    "value": "ssh",
     "tips": [
       "Configure an SSH connection to your mongodb server here.  This can be used to establish a tunnel to a MongoDB server behind a firewall, or to estalish an SSH terminal to issue commands like 'top', or to collection OS statistics in the performance panel",
       "For details on establishing a SSH tunnel, see the FAQ item https://dbkoda.useresponse.com/knowledge-base/article/what-is-ssh-tunneling-and-how-do-i-set-it-up"
