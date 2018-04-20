@@ -58,12 +58,12 @@ class ProfileConfigurationContainer extends React.Component {
     this.setState({databases: this.state.databases});
   };
 
-  commitProfileConfiguration = (config) => {
+  commitProfileConfiguration = config => {
     console.log('change profile configuration ', config);
-    if(config && config.length > 0) {
+    if (config && config.length > 0) {
       this.props.api.setProfilingDatabaseConfiguration(config);
     }
-  }
+  };
 
   render() {
     return (
