@@ -58,6 +58,10 @@ class ProfileConfigurationContainer extends React.Component {
     this.setState({databases: this.state.databases});
   };
 
+  commitProfileConfiguration = (config) => {
+    console.log('change profile configuration ', config);
+  }
+
   render() {
     return (
       <ProfileConfiguration
@@ -65,6 +69,7 @@ class ProfileConfigurationContainer extends React.Component {
         selectDatabase={this.selectDatabase}
         showPerformancePanel={this.props.showPerformancePanel}
         performancePanel={this.props.store.performancePanel}
+        commitProfileConfiguration={this.commitProfileConfiguration}
       />
     );
   }

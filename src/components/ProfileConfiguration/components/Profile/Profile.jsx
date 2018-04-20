@@ -19,7 +19,13 @@
  */
 
 import React from 'react';
-import {Radio, NumericInput} from '@blueprintjs/core';
+import {
+  Radio,
+  NumericInput,
+  Tooltip,
+  Intent,
+  Position,
+} from '@blueprintjs/core';
 
 import './Profile.scss';
 
@@ -102,37 +108,71 @@ export default class Profile extends React.Component {
         <div className="profiling-label profiling-title">
           {globalString('performance/profiling/configuration/profile-mode')}
         </div>
-        <Radio
-          value={0}
-          checked={selectedValue === 0}
-          onChange={this.onChange}
-          className="profiling-label"
-          label={globalString(
-            'performance/profiling/configuration/profile-all'
-          )}
-        />
-        <div className="exceeding-limit-panel">
-          <Radio
-            value={1}
-            onChange={this.onChange}
-            checked={selectedValue === 1}
-            className="profiling-label operation-exceeds"
-            label={globalString(
-              'performance/profiling/configuration/operation-exceeds'
+        <div>
+          <Tooltip
+            className=""
+            content={globalString(
+              'performance/profiling/configuration/tooltip/level2'
             )}
-          />
+            hoverOpenDelay={1000}
+            intent={Intent.PRIMARY}
+            position={Position.TOP}
+          >
+            <Radio
+              value={0}
+              checked={selectedValue === 0}
+              onChange={this.onChange}
+              className="profiling-label profile-all"
+              label={globalString(
+                'performance/profiling/configuration/profile-all'
+              )}
+            />
+          </Tooltip>
+        </div>
+        <div className="exceeding-limit-panel">
+          <Tooltip
+            className=""
+            content={globalString(
+              'performance/profiling/configuration/tooltip/level1'
+            )}
+            hoverOpenDelay={1000}
+            intent={Intent.PRIMARY}
+            position={Position.TOP}
+          >
+            <Radio
+              value={1}
+              onChange={this.onChange}
+              checked={selectedValue === 1}
+              className="profiling-label operation-exceeds"
+              label={globalString(
+                'performance/profiling/configuration/operation-exceeds'
+              )}
+            />
+          </Tooltip>
           <NumericInput value={this.state.exceedLimit} />
           <div className="profiling-label">ms</div>
         </div>
-        <Radio
-          value={2}
-          onChange={this.onChange}
-          className="profiling-label"
-          checked={selectedValue === 2}
-          label={globalString(
-            'performance/profiling/configuration/profiling-off'
-          )}
-        />
+        <div>
+          <Tooltip
+            className=""
+            content={globalString(
+              'performance/profiling/configuration/tooltip/level0'
+            )}
+            hoverOpenDelay={1000}
+            intent={Intent.PRIMARY}
+            position={Position.TOP}
+          >
+            <Radio
+              value={2}
+              onChange={this.onChange}
+              className="profiling-label"
+              checked={selectedValue === 2}
+              label={globalString(
+                'performance/profiling/configuration/profiling-off'
+              )}
+            />
+          </Tooltip>
+        </div>
         <div className="exceeding-limit-panel">
           <div className="profiling-label collection-size">
             {globalString(
@@ -151,7 +191,10 @@ export default class Profile extends React.Component {
           )}
         </div>
         <div className="button-group">
-          <button className="profile-button profile-button-apply">
+          <button
+            className="profile-button profile-button-apply"
+            onClick={() => {}}
+          >
             {globalString('performance/profiling/configuration/apply')}
           </button>
           <button

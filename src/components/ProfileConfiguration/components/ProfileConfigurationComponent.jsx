@@ -50,9 +50,8 @@ export default class ProfileConfiguration extends React.Component {
   setSelectedDatabase(databases) {
     let selectedDb;
     databases.forEach(db => {
-      if (db.selected) {
+      if (db.selected && !selectedDb) {
         selectedDb = db;
-        return -1;
       }
     });
     this.setState({selectedDb});
@@ -108,6 +107,7 @@ export default class ProfileConfiguration extends React.Component {
             <Profile
               selectedDb={this.state.selectedDb}
               showPerformancePanel={this.props.showPerformancePanel}
+              commitProfileConfiguration={this.props.commitProfileConfiguration}
             />
           </div>
         );
