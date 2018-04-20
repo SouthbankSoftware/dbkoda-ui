@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-20T16:06:29+10:00
+ * @Last modified time: 2018-04-20T17:44:24+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -131,10 +131,46 @@ export class ConnectionForm extends JsonForm {
     const isUrlMode = field.$('urlRadioCluster').value;
     if (!isUrlMode) {
       console.log(field);
-      let connectionUrl = StaticApi.mongoProtocol + field.$('host', SubformCategory.BASIC).value + ':' + field.$('port', SubformCategory.BASIC).value;
-      const conDB = field.$('authenticationDatabase', SubformCategory.BASIC).value;
+      let connectionUrl = StaticApi.mongoProtocol;
+      if (field.$('hostsList').value === '') {
+        connectionUrl += (field.$('host', SubformCategory.BASIC).value + ':' + field.$('port', SubformCategory.BASIC).value);
+      } else {
+        connectionUrl += field.$('hostsList').value;
+      }
       connectionUrl += '/';
+
+      const conDB = field.$('authenticationDatabase', SubformCategory.BASIC).value;
       connectionUrl += ((conDB === '') ? 'admin' : conDB);
+
+      const addQueryParam = (key, value) => {
+        let addQM = false;
+        if (connectionUrl.indexOf('?') < 0) {
+          connectionUrl += '?';
+          addQM = true;
+        }
+        if (connectionUrl.indexOf(key) < 0) {
+          if (!addQM) {
+            connectionUrl += '&';
+          }
+          connectionUrl += (key + '=' + value);
+        }
+      };
+      if (field.$('replicaSetName').value !== '') {
+        addQueryParam('replicaSet', field.$('replicaSetName').value);
+      }
+      if (field.$('w').value !== '') {
+        addQueryParam('w', field.$('w').value);
+      }
+      if (field.$('wtimeoutMS').value !== 0) {
+        addQueryParam('wtimeoutMS', field.$('wtimeoutMS').value);
+      }
+      if (field.$('journal').value !== false) {
+        addQueryParam('j', 'true');
+      }
+      if (field.$('readPref').value !== '') {
+        addQueryParam('readPreference', field.$('readPref').value);
+      }
+
       urlField.value = connectionUrl;
     }
   }

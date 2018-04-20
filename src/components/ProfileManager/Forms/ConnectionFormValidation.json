@@ -226,7 +226,7 @@
               }
             },
             {
-              "$id": "wTimeout",
+              "$id": "wtimeoutMS",
               "additionalProperties": false,
               "properties": {
                 "name": { "type": "string" },
