@@ -30,6 +30,7 @@ export default class Profile extends React.Component {
       selectedDb: {value: {was: 0}},
       selectedValue: -1,
       exceedLimit: 100,
+      profileCollectionSize: 1000000,
     };
     this.state = {...this.defaultOptions};
   }
@@ -94,7 +95,6 @@ export default class Profile extends React.Component {
         <div className="profiling-label profiling-title">
           {globalString('performance/profiling/configuration/profile-mode')}
         </div>
-        {/* <RadioGroup selectedValue={selectedValue} onChange={this.onChange}> */}
         <Radio
           value={0}
           checked={selectedValue === 0}
@@ -126,7 +126,28 @@ export default class Profile extends React.Component {
             'performance/profiling/configuration/profiling-off'
           )}
         />
-        {/* </RadioGroup> */}
+        <div className="exceeding-limit-panel">
+          <div className="profiling-label collection-size">
+            {globalString(
+              'performance/profiling/configuration/profile-collection-size'
+            )}
+          </div>
+          <NumericInput className="size-limit" value={this.state.profileCollectionSize} />
+          <div className="profiling-label">Byte</div>
+        </div>
+        <div className="profiling-label profile-size-warning">
+          {globalString(
+            'performance/profiling/configuration/system-profile-size-warning'
+          )}
+        </div>
+        <div className="button-group">
+          <button className="profile-button profile-button-apply">
+            {globalString('performance/profiling/configuration/apply')}
+          </button>
+          <button className="profile-button profile-button-cancel">
+            {globalString('performance/profiling/configuration/cancel')}
+          </button>
+        </div>
       </div>
     );
   }
