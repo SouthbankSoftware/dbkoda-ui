@@ -3,7 +3,7 @@
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-18T15:58:13+10:00
+ * @Last modified time: 2018-04-20T11:48:20+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -110,10 +110,17 @@
    addAdditionalFieldProps(field, subForm) {
      field.id = field.name; // fix to add id as required by UI fields
      field.subForm = subForm;
-     field.$ = (siblingFieldName) => { // get Sibling field of the sub form
-       const refField = _.find(field.subForm.fields, (f) => {
-         return f.name === siblingFieldName;
-       });
+     field.$ = (siblingFieldName, siblingSubform = '') => { // get Sibling field of the sub form
+       let refField = null;
+       if (siblingSubform !== '') {
+         refField = _.find(this.formSchema[siblingSubform].fields, (f) => {
+           return f.name === siblingFieldName;
+         });
+       } else {
+         refField = _.find(field.subForm.fields, (f) => {
+           return f.name === siblingFieldName;
+         });
+       }
        return refField;
      };
      set(field, { error: ''});

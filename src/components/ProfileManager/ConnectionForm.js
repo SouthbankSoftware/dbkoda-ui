@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:43:58+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-19T15:28:46+10:00
+ * @Last modified time: 2018-04-20T16:06:29+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -41,6 +41,9 @@ export class ConnectionForm extends JsonForm {
   constructor(api) {
     super(api);
 
+    this.loadDefaultSchema();
+  }
+  loadDefaultSchema() {
     const formSchema = require('./Forms/ConnectionForm.json');
     this.loadFormSchema(formSchema);
     const validationSchema = require('./Forms/ConnectionFormValidation.json');
@@ -52,18 +55,21 @@ export class ConnectionForm extends JsonForm {
   /**
    * Overrided function from JsonForm to update the alias
    */
-  getSubformFields(selectedSubform, column, updateValues = false) {
+  getSubformFields(selectedSubform, column) {
     const fieldsCol = [];
     const subForm = this.formSchema[selectedSubform];
     if (subForm.fields) {
       subForm.fields.forEach((field) => {
-        if (updateValues) {
-          if (selectedSubform === SubformCategory.BASIC) {
-            if (field.name === 'alias') {
-              this.updateAlias(field);
-            } else if (field.name === 'url') {
-              this.updateUrl(field);
-            }
+        // Update fields on load
+        if (selectedSubform === SubformCategory.BASIC) {
+          if (field.name === 'alias') {
+            this.updateAlias(field);
+          } else if (field.name === 'url') {
+            this.updateUrl(field);
+          }
+        } else if (selectedSubform === SubformCategory.CLUSTER) {
+          if (field.name === 'urlCluster') {
+            this.updateClusterUrl(field);
           }
         }
 
@@ -93,8 +99,15 @@ export class ConnectionForm extends JsonForm {
       this.updateAlias(field);
     }
 
-    if (field.subForm.value === SubformCategory.BASIC && (field.name !== 'urlRadio' || field.name !== 'url')) {
+    if (field.subForm.value === SubformCategory.BASIC && field.name !== 'urlRadio' && field.name !== 'url') {
       this.updateUrl(field);
+    }
+
+    if (field.name === 'urlRadioCluster' && field.value) { // disable the cluster config to use the cluster url
+      this.updateFieldValue(field.$('useClusterConfig'), false);
+    }
+    if (field.subForm.value === SubformCategory.CLUSTER && field.name !== 'urlRadioCluster' && field.name !== 'urlCluster') {
+      this.updateClusterUrl(field);
     }
 
     this.validateForm();
@@ -105,14 +118,25 @@ export class ConnectionForm extends JsonForm {
     const isUrlMode = field.$('urlRadio').value;
     if (!isUrlMode) {
       let connectionUrl = StaticApi.mongoProtocol + field.$('host').value + ':' + field.$('port').value;
-      connectionUrl += '/' + field.$('authenticationDatabase').value;
+      const conDB = field.$('authenticationDatabase').value;
+      connectionUrl += '/';
+      connectionUrl += ((conDB === '') ? 'admin' : conDB);
       urlField.value = connectionUrl;
     }
   }
 
   @action
   updateClusterUrl(field) {
-    console.log(field);
+    const urlField = field.$('urlCluster');
+    const isUrlMode = field.$('urlRadioCluster').value;
+    if (!isUrlMode) {
+      console.log(field);
+      let connectionUrl = StaticApi.mongoProtocol + field.$('host', SubformCategory.BASIC).value + ':' + field.$('port', SubformCategory.BASIC).value;
+      const conDB = field.$('authenticationDatabase', SubformCategory.BASIC).value;
+      connectionUrl += '/';
+      connectionUrl += ((conDB === '') ? 'admin' : conDB);
+      urlField.value = connectionUrl;
+    }
   }
   /**
    * Function to update the alias field on certain other fields
@@ -262,7 +286,7 @@ export class ConnectionForm extends JsonForm {
    */
   onReset() {
     this.formErrors = [];
-    this.formSchema = this.loadDefaultSchema();
+    this.loadDefaultSchema();
     console.log('onReset:', this.formSchema);
   }
 }

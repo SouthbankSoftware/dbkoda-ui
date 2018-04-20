@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-19T14:07:12+10:00
+ * @Last modified time: 2018-04-20T13:02:12+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -120,8 +120,7 @@ export default class ProfileManager extends React.Component<Props, State> {
   renderUIFields(column: number) {
     const fields = this.form.getSubformFields(
       this.state.selectedSubform,
-      column,
-      true
+      column
     );
     const uiFields = [];
     if (fields) {
@@ -300,7 +299,10 @@ export default class ProfileManager extends React.Component<Props, State> {
                   />
                   <Button
                     className="reset-button pt-button pt-intent-warning"
-                    onClick={() => this.form.onReset()}
+                    onClick={() => {
+                      this.form.onReset();
+                      this.forceUpdate();
+                    }}
                     text={globalString('connection/form/resetButton')}
                   />
                 </div>

@@ -127,16 +127,26 @@
     "tips": ["This page allows you to configure items specific to a replica set. Specify a comma seperated list of the hosts and ports in the replica set to get started.  Eg 'host1:port1, host2:port2, host3:port3'"],
     "fields": [
       {
+        "name": "useClusterConfig",
+        "label": "Use Cluster Configuration",
+        "value": false,
+        "type": "checkbox",
+        "column": 1,
+        "refFields": ["hostsList", "replicaSetName", "w", "wtimeoutMS", "journal", "readPref"],
+        "disabled": false,
+        "checkbox": "disabled"
+      },
+      {
         "name": "hostsList",
         "label": "List of hosts:ports",
-        "placeholder": "localhost:27017, localhost:27016",
+        "placeholder": "e.g. localhost:27017, localhost:27016",
         "options": {"tooltip": "If blank, we'll connect to nominated host and deduce the host list"},
         "value": "",
         "type": "text",
         "column": 1,
         "rules": "string",
-        "disabled": false,
-        "checkbox": "disabled"
+        "disabled": true,
+        "checkbox": "enabled"
       },
       {
         "name": "replicaSetName",
@@ -145,8 +155,8 @@
         "type": "text",
         "column": 1,
         "rules": "string",
-        "disabled": false,
-        "checkbox": "disabled"
+        "disabled": true,
+        "checkbox": "enabled"
       },
       {
         "name": "w",
@@ -155,32 +165,40 @@
         "value": "",
         "type": "text",
         "column": 2,
-        "rules": "string"
+        "rules": "string",
+        "disabled": true,
+        "checkbox": "enabled"
       },
       {
-        "name": "wTimeout",
-        "label": "wtimeout",
+        "name": "wtimeoutMS",
+        "label": "wtimeoutMS",
         "options": {"tooltip": "Time in ms to wait for write concern. 0=no timeout"},
         "value": 0,
         "type": "number",
         "column": 2,
-        "rules": "string"
+        "rules": "string",
+        "disabled": true,
+        "checkbox": "enabled"
       },
       {
         "name": "journal",
         "label": "Journal",
         "options": {"tooltip": "Write concern 'j' option.  If true writes must journal before returning"},
-        "value": true,
+        "value": false,
         "type": "checkbox",
-        "column": 2
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
       },
       {
         "name": "readPref",
         "label": "Read Preference",
-        "value": "primary",
-        "options": {"dropdown": ["primary", "primaryPreferred", "secondary", "secondaryPreferred", "nearest"]},
+        "value": "",
+        "options": {"dropdown": ["", "primary", "primaryPreferred", "secondary", "secondaryPreferred", "nearest"]},
         "type": "select",
-        "column": 2
+        "column": 2,
+        "disabled": true,
+        "checkbox": "enabled"
       },
       {
         "name": "urlRadioCluster",
@@ -188,7 +206,7 @@
         "value": false,
         "type": "checkbox",
         "column": 2,
-        "refFields": ["urlCluster", "hostsList", "replicaSetName"]
+        "refFields": ["urlCluster", "useClusterConfig"]
       },
       {
         "name": "urlCluster",
