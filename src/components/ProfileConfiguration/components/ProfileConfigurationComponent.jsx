@@ -33,8 +33,45 @@ export default class ProfileConfiguration extends React.Component {
     super(props);
     this.state = {
       layouts,
+      selectedDb: null,
     };
   }
+
+  componentDidMount() {
+    this.setSelectedDatabase(this.props.databases);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.databases) {
+      this.setSelectedDatabase(nextProps.databases);
+    }
+  }
+
+  setSelectedDatabase(databases) {
+    let selectedDb;
+    databases.forEach(db => {
+      if (db.selected && !selectedDb) {
+        selectedDb = db;
+      }
+    });
+    this.setState({selectedDb});
+  }
+
+  getSelectedDatabases = () => {
+    const {databases} = this.props;
+    if (databases) {
+      return databases.filter(db => db.selected);
+    }
+    return [];
+  };
+
+  commitProfileConfiguration = ({level, slowms, profileSize}) => {
+    const dbs = this.getSelectedDatabases();
+    const configs = dbs.map(db => {
+      return {level, slowms, profileSize, dbName: db.name};
+    });
+    this.props.commitProfileConfiguration(configs);
+  };
 
   createButtonPanels(layout) {
     const {showPerformancePanel} = this.props;
@@ -53,6 +90,10 @@ export default class ProfileConfiguration extends React.Component {
     );
   }
 
+  selectDatabase = db => {
+    this.props.selectDatabase(db);
+  };
+
   createDomElement(layouts) {
     return layouts.map(layout => {
       if (layout.i === 'buttons') {
@@ -70,7 +111,7 @@ export default class ProfileConfiguration extends React.Component {
           <div key={layout.i} className={layout.className} data-grid={layout}>
             <DatabaseList
               databases={this.props.databases}
-              selectDatabase={this.props.selectDatabase}
+              selectDatabase={this.selectDatabase}
               performancePanel={this.props.performancePanel}
             />
           </div>
@@ -78,13 +119,18 @@ export default class ProfileConfiguration extends React.Component {
       }
       if (layout.i === 'db-profile') {
         return (
-          <div
-            key={layout.i}
-            className={layout.className}
-            data-grid={layout}
-          >
-            <Profile />
+          <div key={layout.i} className={layout.className} data-grid={layout}>
+            <Profile
+              selectedDb={this.state.selectedDb}
+              showPerformancePanel={this.props.showPerformancePanel}
+              commitProfileConfiguration={this.commitProfileConfiguration}
+            />
           </div>
+        );
+      }
+      if (layout.i === 'profile-tips') {
+        return (
+          <div key={layout.i} className={layout.className} data-grid={layout} />
         );
       }
       return (

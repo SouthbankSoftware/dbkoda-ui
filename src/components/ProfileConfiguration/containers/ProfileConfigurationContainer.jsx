@@ -41,7 +41,7 @@ class ProfileConfigurationContainer extends React.Component {
       const {profilingPanel} = this.props.store;
       if (profilingPanel.databases && profilingPanel.databases.length > 0) {
         profilingPanel.databases.forEach(db => {
-          db.selected = db.value.was > 0;
+          db.selected = false;
         });
         this.setState({databases: profilingPanel.databases});
       }
@@ -58,6 +58,13 @@ class ProfileConfigurationContainer extends React.Component {
     this.setState({databases: this.state.databases});
   };
 
+  commitProfileConfiguration = config => {
+    console.log('change profile configuration ', config);
+    if (config && config.length > 0) {
+      this.props.api.setProfilingDatabaseConfiguration(config);
+    }
+  };
+
   render() {
     return (
       <ProfileConfiguration
@@ -65,6 +72,7 @@ class ProfileConfigurationContainer extends React.Component {
         selectDatabase={this.selectDatabase}
         showPerformancePanel={this.props.showPerformancePanel}
         performancePanel={this.props.store.performancePanel}
+        commitProfileConfiguration={this.commitProfileConfiguration}
       />
     );
   }
