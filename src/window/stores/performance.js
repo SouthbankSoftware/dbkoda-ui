@@ -190,18 +190,22 @@ export default class Store {
         } else if (args.command === 'mw_profilingDatabaseData') {
           // Transform payload into a list of databases.
           const dbList = [];
+          const allDbs = [];
           args.payload.forEach(item => {
             // Get name of database (key)
             const db = {};
             const keys = Object.keys(item);
+            db.name = keys[0];
+            db.value = item[keys[0]];
             if (item[keys[0]].was) {
-              db.name = keys[0];
-              db.value = item[keys[0]];
               dbList.push(db);
             }
+            allDbs.push(db);
           });
           console.log('DB List: ', dbList);
-          this.profilingPanel.databases = dbList;
+          console.log('All DB List: ', allDbs);
+          this.profilingPanel.databases = allDbs;
+          this.profilingPanel.enabledDatabases = dbList;
         } else if (args.command === 'mw_profilingData') {
           console.log(args.profileId);
           console.log(args.payload);

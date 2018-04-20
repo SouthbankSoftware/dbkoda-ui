@@ -41,7 +41,7 @@ class ProfileConfigurationContainer extends React.Component {
       const {profilingPanel} = this.props.store;
       if (profilingPanel.databases && profilingPanel.databases.length > 0) {
         profilingPanel.databases.forEach(db => {
-          db.selected = db.value.was > 0;
+          db.selected = false;
         });
         this.setState({databases: profilingPanel.databases});
       }

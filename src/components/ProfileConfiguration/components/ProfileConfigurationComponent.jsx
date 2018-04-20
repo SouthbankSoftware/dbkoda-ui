@@ -33,7 +33,29 @@ export default class ProfileConfiguration extends React.Component {
     super(props);
     this.state = {
       layouts,
+      selectedDb: null,
     };
+  }
+
+  componentDidMount() {
+    this.setSelectedDatabase(this.props.databases);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.databases) {
+      this.setSelectedDatabase(nextProps.databases);
+    }
+  }
+
+  setSelectedDatabase(databases) {
+    let selectedDb;
+    databases.forEach(db => {
+      if (db.selected) {
+        selectedDb = db;
+        return -1;
+      }
+    });
+    this.setState({selectedDb});
   }
 
   createButtonPanels(layout) {
@@ -53,6 +75,10 @@ export default class ProfileConfiguration extends React.Component {
     );
   }
 
+  selectDatabase = db => {
+    this.props.selectDatabase(db);
+  };
+
   createDomElement(layouts) {
     return layouts.map(layout => {
       if (layout.i === 'buttons') {
@@ -70,7 +96,7 @@ export default class ProfileConfiguration extends React.Component {
           <div key={layout.i} className={layout.className} data-grid={layout}>
             <DatabaseList
               databases={this.props.databases}
-              selectDatabase={this.props.selectDatabase}
+              selectDatabase={this.selectDatabase}
               performancePanel={this.props.performancePanel}
             />
           </div>
@@ -78,13 +104,14 @@ export default class ProfileConfiguration extends React.Component {
       }
       if (layout.i === 'db-profile') {
         return (
-          <div
-            key={layout.i}
-            className={layout.className}
-            data-grid={layout}
-          >
-            <Profile />
+          <div key={layout.i} className={layout.className} data-grid={layout}>
+            <Profile selectedDb={this.state.selectedDb} />
           </div>
+        );
+      }
+      if (layout.i === 'profile-tips') {
+        return (
+          <div key={layout.i} className={layout.className} data-grid={layout} />
         );
       }
       return (

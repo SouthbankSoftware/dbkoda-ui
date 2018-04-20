@@ -19,45 +19,114 @@
  */
 
 import React from 'react';
-import {Radio, RadioGroup} from '@blueprintjs/core';
+import {Radio, NumericInput} from '@blueprintjs/core';
 
 import './Profile.scss';
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {db: {was: 0}};
+    this.defaultOptions = {
+      selectedDb: {value: {was: 0}},
+      selectedValue: -1,
+      exceedLimit: 100,
+    };
+    this.state = {...this.defaultOptions};
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.applySelectedDatabase(this.props.selectedDb);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedDb) {
+      if (nextProps.selectedDb.name !== this.state.selectedDb.name) {
+        this.applySelectedDatabase(nextProps.selectedDb);
+        this.applyExceedLimits(nextProps.selectedDb);
+      }
+    } else {
+      this.setState({...this.defaultOptions});
+    }
+  }
+
+  applySelectedDatabase(selectedDb) {
+    console.log('selected db', selectedDb);
+    if (selectedDb) {
+      const selectedValue = this.getSelectedValueFromWas(selectedDb.value.was);
+      this.setState({selectedDb, selectedValue});
+    }
+  }
+
+  applyExceedLimits(selectedDb) {
+    if (selectedDb) {
+      this.setState({exceedLimit: selectedDb.value.slowms});
+    }
+  }
+
+  getSelectedValue() {
+    if (this.state.selectedValue >= 0) {
+      return this.state.selectedValue;
+    }
+    return this.getSelectedValueFromWas(this.state.selectedDb.value.was);
+  }
+
+  getSelectedValueFromWas(was) {
+    switch (was) {
+      case 0:
+        return 2;
+      case 1:
+        return 1;
+      case 2:
+        return 0;
+      default:
+        return 0;
+    }
+  }
+
+  onChange = e => {
+    this.setState({selectedValue: parseInt(e.target.value, 10)});
+  };
 
   render() {
-    // const {db} = this.props;
+    const selectedValue = this.getSelectedValue();
     return (
       <div className="db-profiling-detailed-panel">
         <div className="profiling-label profiling-title">
           {globalString('performance/profiling/configuration/profile-mode')}
         </div>
-        <RadioGroup>
+        {/* <RadioGroup selectedValue={selectedValue} onChange={this.onChange}> */}
+        <Radio
+          value={0}
+          checked={selectedValue === 0}
+          onChange={this.onChange}
+          className="profiling-label"
+          label={globalString(
+            'performance/profiling/configuration/profile-all'
+          )}
+        />
+        <div className="exceeding-limit-panel">
           <Radio
-            className="profiling-label"
-            label={globalString(
-              'performance/profiling/configuration/profile-all'
-            )}
-          />
-          <Radio
-            className="profiling-label"
+            value={1}
+            onChange={this.onChange}
+            checked={selectedValue === 1}
+            className="profiling-label operation-exceeds"
             label={globalString(
               'performance/profiling/configuration/operation-exceeds'
             )}
           />
-          <Radio
-            className="profiling-label"
-            label={globalString(
-              'performance/profiling/configuration/profiling-off'
-            )}
-          />
-        </RadioGroup>
+          <NumericInput value={this.state.exceedLimit} />
+          <div className="profiling-label">ms</div>
+        </div>
+        <Radio
+          value={2}
+          onChange={this.onChange}
+          className="profiling-label"
+          checked={selectedValue === 2}
+          label={globalString(
+            'performance/profiling/configuration/profiling-off'
+          )}
+        />
+        {/* </RadioGroup> */}
       </div>
     );
   }

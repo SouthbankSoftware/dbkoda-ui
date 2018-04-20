@@ -3,7 +3,7 @@
  * @Date:   2018-01-05T16:32:20+11:00
  * @Email:  inbox.wahaj@gmail.com
  * @Last modified by:   wahaj
- * @Last modified time: 2018-02-06T09:55:36+11:00
+ * @Last modified time: 2018-04-19T14:07:12+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -39,6 +39,7 @@ import TextField from '#/common/FormFields/TextField';
 import NumericField from '#/common/FormFields/NumericField';
 import BooleanField from '#/common/FormFields/BooleanField';
 import FileField from '#/common/FormFields/FileField';
+import SelectField from '#/common/FormFields/SelectField';
 
 import TipsField from './TipsField';
 import { ConnectionForm } from './ConnectionForm';
@@ -119,7 +120,8 @@ export default class ProfileManager extends React.Component<Props, State> {
   renderUIFields(column: number) {
     const fields = this.form.getSubformFields(
       this.state.selectedSubform,
-      column
+      column,
+      true
     );
     const uiFields = [];
     if (fields) {
@@ -133,6 +135,8 @@ export default class ProfileManager extends React.Component<Props, State> {
           uiField = <BooleanField key={field.name} field={field} />;
         } else if (field.type == 'file') {
           uiField = <FileField key={field.name} field={field} />;
+        } else if (field.type == 'select') {
+            uiField = <SelectField key={field.name} field={field} />;
         }
 
         uiFields.push(uiField);

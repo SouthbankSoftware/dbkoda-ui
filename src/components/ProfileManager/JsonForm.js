@@ -2,8 +2,8 @@
  * @Author: Wahaj Shamim <wahaj>
  * @Date:   2018-01-24T09:50:36+11:00
  * @Email:  inbox.wahaj@gmail.com
- * @Last modified by:   guiguan
- * @Last modified time: 2018-03-22T17:10:08+11:00
+ * @Last modified by:   wahaj
+ * @Last modified time: 2018-04-18T15:58:13+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -34,6 +34,7 @@
    number: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onValueChange', 'onBlur'],
    checkbox: ['name', 'value', 'type', 'id', 'placeholder', 'disabled', 'onClick', 'onBlur'],
    file: ['name', 'value', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
+   select: ['name', 'value', 'id', 'placeholder', 'disabled', 'onChange', 'onBlur'],
  };
 
  export class JsonForm {
