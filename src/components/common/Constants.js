@@ -74,6 +74,10 @@ export const TableViewConstants = {
   DEFAULT_MAX_ROWS: 200
 };
 
+export const ProfilingConstants = {
+  NO_RESULTS: 'noResults'
+};
+
 export const OutputToolbarContexts = {
   DEFAULT: 'Default',
   RAW: 'Raw',

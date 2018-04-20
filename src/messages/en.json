@@ -69,6 +69,11 @@
           "operation-exceeds": "Operation exceeding time limit",
           "profiling-off": "Profiling off",
           "profile-all": "All"
+        },
+        "results": {
+          "noResultsFoundTitle": "No Results",
+          "noResultsFoundBody":
+            "We were unable to find any profiling data for that database."
         }
       }
     },

@@ -26,7 +26,10 @@
 
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
+import { runInAction } from 'mobx';
 import autobind from 'autobind-decorator';
+import { ProfilingConstants } from '#/common/constants';
+import ErrorView from '#/common/ErrorView';
 import { debounce } from 'lodash';
 import {
   Classes,
@@ -40,6 +43,7 @@ import { Select } from '@blueprintjs/select';
 import ProfilingView from './Views/ProfilingView';
 import ExplainView from './Views/ExplainView';
 import OperationDetails from './Views/OperationDetails';
+import NoResultsView from './Views/NoResultsView';
 
 import './Panel.scss';
 
@@ -76,6 +80,11 @@ export default class ProfilingPanel extends React.Component<Props> {
 
   _onDBSelect = item => {
     this.setState({ selectedDatabase: item.name });
+    this.setState({ selectedOperation: null }); // Reset selected operation to null.
+    runInAction('Reset profiling payload to null before re-fetching.', () => {
+      this.props.store.profilingPanel.payload = null;
+    });
+
     this.props.store.api.getProfilingData(item);
   };
 
@@ -83,10 +92,14 @@ export default class ProfilingPanel extends React.Component<Props> {
     const { store, showPerformancePanel } = this.props;
     const { profilingPanel } = store;
     const { selectedDatabase, selectedOperation } = this.state;
-    const ops = profilingPanel.payload;
+    const ops = this.props.store.profilingPanel.payload;
     const { highWaterMarkProfile } = profilingPanel;
+    let renderTable = true;
     if (!selectedDatabase && profilingPanel.databases[0]) {
       this.state.selectedDatabase = profilingPanel.databases[0].name;
+    }
+    if (ops === ProfilingConstants.NO_RESULTS) {
+      renderTable = false;
     }
 
     const renderItem = (item, { handleClick, modifiers }) => {
@@ -146,13 +159,25 @@ export default class ProfilingPanel extends React.Component<Props> {
                 />
               </Select>
             </div>
-            <ProfilingView
-              operations={ops}
-              highWaterMark={highWaterMarkProfile}
-              onSelect={onOperationSelection}
-              showPerformancePanel={showPerformancePanel}
-              tableWidth={this.state.topSplitPos}
-            />
+
+            {renderTable ? (
+              <ProfilingView
+                ops={ops}
+                highWaterMark={highWaterMarkProfile}
+                onSelect={onOperationSelection}
+                showPerformancePanel={showPerformancePanel}
+                tableWidth={this.state.topSplitPos}
+              />
+            ) : (
+              <ErrorView
+                title={globalString(
+                  'performance/profiling/results/noResultsFoundTitle'
+                )}
+                error={globalString(
+                  'performance/profiling/results/noResultsFoundBody'
+                )}
+              />
+            )}
           </div>
         </div>
         <div className="detailsWrapper">

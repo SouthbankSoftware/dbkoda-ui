@@ -65,8 +65,11 @@ export default class ProfilingView extends React.Component<Props> {
     };
   }
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     if (nextProps && nextProps.ops) {
       this.setState({ data: nextProps.ops });
+    } else {
+      this.setState({ data: null });
     }
     if (nextProps && nextProps.highWaterMark) {
       this.setState({ highWaterMark: nextProps.highWaterMark });
@@ -114,7 +117,7 @@ export default class ProfilingView extends React.Component<Props> {
       case 5:
         cellValue = this.state.data[rowIndex].ms;
         break;
-      case 7:
+      case 6:
         cellValue = _.pick(this.state.data[rowIndex], 'us');
         if (this.state.highWaterMark) {
           cellValue.highWaterMark = this.state.highWaterMark.us;
@@ -167,6 +170,7 @@ export default class ProfilingView extends React.Component<Props> {
 
   render() {
     const { ops } = this.props;
+    console.log(this.props);
 
     const columns = this.state.columns.map(col =>
       col.getColumn(this.getCellData, this.sortColumn)

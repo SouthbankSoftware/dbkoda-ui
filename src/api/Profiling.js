@@ -116,14 +116,12 @@ export default class Profiling {
   };
 
   getProfilingData = (profileId: UUID, database: string) => {
-    console.log(profileId);
-    console.log(database);
     featherClient()
       .service('profile')
       .get(profileId, {
         query: {
           op: 'profile',
-          dbname: database
+          dbName: database
         }
       })
       .then(res => {
