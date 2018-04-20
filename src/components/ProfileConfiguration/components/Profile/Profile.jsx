@@ -101,6 +101,11 @@ export default class Profile extends React.Component {
     this.setState({selectedValue: parseInt(e.target.value, 10)});
   };
 
+  commitProfileConfiguration = () => {
+    const {selectedValue, exceedLimit, profileCollectionSize} = this.state;
+    this.props.commitProfileConfiguration({level: selectedValue, slowms: exceedLimit, profileSize: profileCollectionSize});
+  };
+
   render() {
     const selectedValue = this.getSelectedValue();
     return (
@@ -203,7 +208,9 @@ export default class Profile extends React.Component {
         <div className="button-group">
           <button
             className="profile-button profile-button-apply"
-            onClick={() => {}}
+            onClick={() => {
+              this.commitProfileConfiguration();
+            }}
           >
             {globalString('performance/profiling/configuration/apply')}
           </button>

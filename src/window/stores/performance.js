@@ -25,18 +25,18 @@
  */
 
 import _ from 'lodash';
-import { observable, action } from 'mobx';
-import { restore } from 'dumpenvy';
-import { deserializer, postDeserializer } from '#/common/mobxDumpenvyExtension';
-import { handleNewData, attachToMobx } from '~/api/PerformancePanel';
+import {observable, action} from 'mobx';
+import {restore} from 'dumpenvy';
+import {deserializer, postDeserializer} from '#/common/mobxDumpenvyExtension';
+import {handleNewData, attachToMobx} from '~/api/PerformancePanel';
 
 const electron = window.require('electron');
-const { ipcRenderer } = electron;
+const {ipcRenderer} = electron;
 
 const Globalize = require('globalize'); // doesn't work well with import
 // Globalize Configuration for Performance Window
 global.Globalize = Globalize;
-const { language, region } = Globalize.locale().attributes;
+const {language, region} = Globalize.locale().attributes;
 global.locale = `${language}-${region}`;
 global.globalString = (path, ...params) =>
   Globalize.messageFormatter(path)(...params);
@@ -56,7 +56,11 @@ class PerformanceWindowApi {
   }
   @action.bound
   sendCommandToMainProcess = (command, params) => {
-    ipcRenderer.send('performance', { command, profileId: this.profileId, ...params });
+    ipcRenderer.send('performance', {
+      command,
+      profileId: this.profileId,
+      ...params,
+    });
   };
 
   @action.bound
@@ -82,15 +86,23 @@ class PerformanceWindowApi {
   };
 
   @action.bound
-  killOperation = (opId) => {
+  killOperation = opId => {
     this.sendCommandToMainProcess('pw_killOperation', {opId});
-  }
+  };
 
   @action.bound
   getProfilingDataBases = () => {
     this.store.profilingPanel.databases = [];
     this.store.profilingPanel.selectedDatabase = null;
     this.sendCommandToMainProcess('pw_getProfilingDataBases');
+  };
+
+  @action.bound
+  setProfilingDatabaseConfiguration = configs => {
+    console.log('send profiling database configuration ', configs);
+    this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', {
+      configs,
+    });
   };
 }
 
@@ -104,20 +116,20 @@ export default class Store {
     {
       payload: null,
       selectedConnection: null,
-      highWaterMarkConnection: null
+      highWaterMarkConnection: null,
     },
     null,
-    { deep: false }
+    {deep: false}
   );
 
   @observable
   profilingPanel = observable.object(
     {
       databases: [],
-      selectedDatabase: null
+      selectedDatabase: null,
     },
     null,
-    { deep: false }
+    {deep: false}
   );
 
   toasterCallback = null;
@@ -144,11 +156,11 @@ export default class Store {
         if (args.command === 'mw_initData') {
           global.config = this.config = restore(args.configObject, {
             deserializer,
-            postDeserializer
+            postDeserializer,
           });
           this.performancePanel = restore(args.dataObject, {
             deserializer,
-            postDeserializer
+            postDeserializer,
           });
           attachToMobx(this.performancePanel);
         } else if (

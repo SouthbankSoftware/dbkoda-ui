@@ -60,6 +60,9 @@ class ProfileConfigurationContainer extends React.Component {
 
   commitProfileConfiguration = (config) => {
     console.log('change profile configuration ', config);
+    if(config && config.length > 0) {
+      this.props.api.setProfilingDatabaseConfiguration(config);
+    }
   }
 
   render() {
