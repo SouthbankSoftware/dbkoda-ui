@@ -174,11 +174,21 @@ export default class Profile extends React.Component {
           </Tooltip>
         </div>
         <div className="exceeding-limit-panel">
-          <div className="profiling-label collection-size">
-            {globalString(
-              'performance/profiling/configuration/profile-collection-size'
+          <Tooltip
+            className=""
+            content={globalString(
+              'performance/profiling/configuration/tooltip/collection-size'
             )}
-          </div>
+            hoverOpenDelay={1000}
+            intent={Intent.PRIMARY}
+            position={Position.TOP}
+          >
+            <div className="profiling-label collection-size">
+              {globalString(
+                'performance/profiling/configuration/profile-collection-size'
+              )}
+            </div>
+          </Tooltip>
           <NumericInput
             className="size-limit"
             value={this.state.profileCollectionSize}

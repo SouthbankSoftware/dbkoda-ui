@@ -76,7 +76,8 @@
           "tooltip": {
             "level0" : "The profiler is off and does not collect any data. This is the default profiler level.",
             "level1" : "The profiler collects data for operations that take longer than the value of slowms.",
-            "level2" : "The profiler collects data for all operations."
+            "level2" : "The profiler collects data for all operations.",
+            "collection-size": "The system.profile collection is a capped collection with a default size of 1 megabyte."
           }
         }
       }
