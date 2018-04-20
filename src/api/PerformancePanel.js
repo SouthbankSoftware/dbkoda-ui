@@ -5,7 +5,7 @@
  * @Date:   2017-12-12T22:48:11+11:00
  * @Email:  root@guiguan.net
  * @Last modified by:   wahaj
- * @Last modified time: 2018-04-17T16:37:12+10:00
+ * @Last modified time: 2018-04-20T17:10:58+10:00
  *
  * dbKoda - a modern, open source code editor, for MongoDB.
  * Copyright (C) 2017-2018 Southbank Software
@@ -712,7 +712,7 @@ export default class PerformancePanelApi {
           );
           // $FlowFixMe
           this.eventQueue[args.profileId].events.forEach(err =>
-            this._handleError(args.profileId, err, 'err')
+            this._handleError(args.profileId, err, 'error')
           );
           delete this.eventQueue[args.profileId];
         }
