@@ -55,9 +55,7 @@ export default class ProfileConfiguration extends React.Component {
         return -1;
       }
     });
-    if (selectedDb) {
-      this.setState({selectedDb});
-    }
+    this.setState({selectedDb});
   }
 
   createButtonPanels(layout) {

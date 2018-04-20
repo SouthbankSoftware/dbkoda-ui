@@ -26,13 +26,40 @@ import './Profile.scss';
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {db: {was: 0}, selectedValue: -1, exceedLimit: 1000000};
+    this.defaultOptions = {
+      selectedDb: {value: {was: 0}},
+      selectedValue: -1,
+      exceedLimit: 100,
+    };
+    this.state = {...this.defaultOptions};
+  }
+
+  componentDidMount() {
+    this.applySelectedDatabase(this.props.selectedDb);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.db) {
-      const {db} = nextProps;
-      this.setState({db});
+    if (nextProps.selectedDb) {
+      if (nextProps.selectedDb.name !== this.state.selectedDb.name) {
+        this.applySelectedDatabase(nextProps.selectedDb);
+        this.applyExceedLimits(nextProps.selectedDb);
+      }
+    } else {
+      this.setState({...this.defaultOptions});
+    }
+  }
+
+  applySelectedDatabase(selectedDb) {
+    console.log('selected db', selectedDb);
+    if (selectedDb) {
+      const selectedValue = this.getSelectedValueFromWas(selectedDb.value.was);
+      this.setState({selectedDb, selectedValue});
+    }
+  }
+
+  applyExceedLimits(selectedDb) {
+    if (selectedDb) {
+      this.setState({exceedLimit: selectedDb.value.slowms});
     }
   }
 
@@ -40,7 +67,11 @@ export default class Profile extends React.Component {
     if (this.state.selectedValue >= 0) {
       return this.state.selectedValue;
     }
-    switch (this.state.db.was) {
+    return this.getSelectedValueFromWas(this.state.selectedDb.value.was);
+  }
+
+  getSelectedValueFromWas(was) {
+    switch (was) {
       case 0:
         return 2;
       case 1:
@@ -78,13 +109,13 @@ export default class Profile extends React.Component {
             value={1}
             onChange={this.onChange}
             checked={selectedValue === 1}
-            className="profiling-label"
+            className="profiling-label operation-exceeds"
             label={globalString(
               'performance/profiling/configuration/operation-exceeds'
             )}
           />
-
-          <NumericInput />
+          <NumericInput value={this.state.exceedLimit} />
+          <div className="profiling-label">ms</div>
         </div>
         <Radio
           value={2}

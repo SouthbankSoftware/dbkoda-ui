@@ -1,24 +1,31 @@
 @import '../styles.scss';
 .db-profiling-detailed-panel {
-  display: flex;
-  flex-direction: column;
-  .profiling-label {
-    color: $fontColor;
-    margin: 20px 0px;
-    font-size: $fontSize;
-  }
-  .profiling-title {
-    font-weight: $titleFontWeight;
-    font-size: $titleFontSize;
-    margin: 0;
-  }
-  .exceeding-limit-panel {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    .pt-numeric-input {
-      height: 30px;
-      margin: auto;
+    flex-direction: column;
+    .profiling-label {
+        color: $fontColor;
+        margin: 20px 0px;
+        font-size: $fontSize;
     }
-  }
+    .profiling-title {
+        font-weight: $titleFontWeight;
+        font-size: $titleFontSize;
+        margin: 0;
+    }
+    .exceeding-limit-panel {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .operation-exceeds {
+            flex: 3;
+        }
+        .pt-numeric-input {
+            flex: 1;
+            height: 30px;
+            margin: auto;
+            .pt-input-group {
+                width: 50%;
+            }
+        }
+    }
 }
