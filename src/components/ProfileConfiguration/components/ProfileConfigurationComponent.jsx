@@ -105,7 +105,10 @@ export default class ProfileConfiguration extends React.Component {
       if (layout.i === 'db-profile') {
         return (
           <div key={layout.i} className={layout.className} data-grid={layout}>
-            <Profile selectedDb={this.state.selectedDb} />
+            <Profile
+              selectedDb={this.state.selectedDb}
+              showPerformancePanel={this.props.showPerformancePanel}
+            />
           </div>
         );
       }

@@ -44,6 +44,7 @@ export default class Profile extends React.Component {
       if (nextProps.selectedDb.name !== this.state.selectedDb.name) {
         this.applySelectedDatabase(nextProps.selectedDb);
         this.applyExceedLimits(nextProps.selectedDb);
+        this.applyCollectionSize(nextProps.selectedDb);
       }
     } else {
       this.setState({...this.defaultOptions});
@@ -61,6 +62,12 @@ export default class Profile extends React.Component {
   applyExceedLimits(selectedDb) {
     if (selectedDb) {
       this.setState({exceedLimit: selectedDb.value.slowms});
+    }
+  }
+
+  applyCollectionSize(selectedDb) {
+    if (selectedDb) {
+      this.setState({profileCollectionSize: selectedDb.value.size});
     }
   }
 
@@ -132,7 +139,10 @@ export default class Profile extends React.Component {
               'performance/profiling/configuration/profile-collection-size'
             )}
           </div>
-          <NumericInput className="size-limit" value={this.state.profileCollectionSize} />
+          <NumericInput
+            className="size-limit"
+            value={this.state.profileCollectionSize}
+          />
           <div className="profiling-label">Byte</div>
         </div>
         <div className="profiling-label profile-size-warning">
@@ -144,7 +154,10 @@ export default class Profile extends React.Component {
           <button className="profile-button profile-button-apply">
             {globalString('performance/profiling/configuration/apply')}
           </button>
-          <button className="profile-button profile-button-cancel">
+          <button
+            className="profile-button profile-button-cancel"
+            onClick={() => this.props.showPerformancePanel()}
+          >
             {globalString('performance/profiling/configuration/cancel')}
           </button>
         </div>
