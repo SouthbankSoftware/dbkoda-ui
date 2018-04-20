@@ -60,19 +60,19 @@ export default class Profile extends React.Component {
   applySelectedDatabase(selectedDb) {
     console.log('selected db', selectedDb);
     if (selectedDb) {
-      const selectedValue = this.getSelectedValueFromWas(selectedDb.value.was);
+      const selectedValue = selectedDb.value.was;
       this.setState({selectedDb, selectedValue});
     }
   }
 
   applyExceedLimits(selectedDb) {
-    if (selectedDb) {
+    if (selectedDb && selectedDb.value.slowms) {
       this.setState({exceedLimit: selectedDb.value.slowms});
     }
   }
 
   applyCollectionSize(selectedDb) {
-    if (selectedDb) {
+    if (selectedDb && selectedDb.value.size) {
       this.setState({profileCollectionSize: selectedDb.value.size});
     }
   }
@@ -81,20 +81,7 @@ export default class Profile extends React.Component {
     if (this.state.selectedValue >= 0) {
       return this.state.selectedValue;
     }
-    return this.getSelectedValueFromWas(this.state.selectedDb.value.was);
-  }
-
-  getSelectedValueFromWas(was) {
-    switch (was) {
-      case 0:
-        return 2;
-      case 1:
-        return 1;
-      case 2:
-        return 0;
-      default:
-        return 0;
-    }
+    return this.state.selectedDb.value.was;
   }
 
   onChange = e => {
@@ -103,7 +90,11 @@ export default class Profile extends React.Component {
 
   commitProfileConfiguration = () => {
     const {selectedValue, exceedLimit, profileCollectionSize} = this.state;
-    this.props.commitProfileConfiguration({level: selectedValue, slowms: exceedLimit, profileSize: profileCollectionSize});
+    this.props.commitProfileConfiguration({
+      level: selectedValue,
+      slowms: exceedLimit,
+      profileSize: profileCollectionSize,
+    });
   };
 
   render() {
@@ -124,8 +115,8 @@ export default class Profile extends React.Component {
             position={Position.TOP}
           >
             <Radio
-              value={0}
-              checked={selectedValue === 0}
+              value={2}
+              checked={selectedValue === 2}
               onChange={this.onChange}
               className="profiling-label profile-all"
               label={globalString(
@@ -154,7 +145,14 @@ export default class Profile extends React.Component {
               )}
             />
           </Tooltip>
-          <NumericInput value={this.state.exceedLimit} />
+          <NumericInput
+            value={this.state.exceedLimit}
+            stepSize={10}
+            majorStepSize={100}
+            selectAllOnFocus
+            min={1}
+            onValueChange={v => this.setState({exceedLimit: v})}
+          />
           <div className="profiling-label">ms</div>
         </div>
         <div>
@@ -168,10 +166,10 @@ export default class Profile extends React.Component {
             position={Position.TOP}
           >
             <Radio
-              value={2}
+              value={0}
               onChange={this.onChange}
               className="profiling-label"
-              checked={selectedValue === 2}
+              checked={selectedValue === 0}
               label={globalString(
                 'performance/profiling/configuration/profiling-off'
               )}
@@ -196,6 +194,10 @@ export default class Profile extends React.Component {
           </Tooltip>
           <NumericInput
             className="size-limit"
+            stepSize={1000}
+            majorStepSize={1000000}
+            min={1000}
+            onValueChange={v => this.setState({profileCollectionSize: v})}
             value={this.state.profileCollectionSize}
           />
           <div className="profiling-label">Byte</div>
