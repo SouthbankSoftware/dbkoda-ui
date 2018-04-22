@@ -43,7 +43,6 @@ import { Select } from '@blueprintjs/select';
 import ProfilingView from './Views/ProfilingView';
 import ExplainView from './Views/ExplainView';
 import OperationDetails from './Views/OperationDetails';
-import NoResultsView from './Views/NoResultsView';
 
 import './Panel.scss';
 
@@ -95,8 +94,8 @@ export default class ProfilingPanel extends React.Component<Props> {
     const ops = this.props.store.profilingPanel.payload;
     const { highWaterMarkProfile } = profilingPanel;
     let renderTable = true;
-    if (!selectedDatabase && profilingPanel.databases[0]) {
-      this.state.selectedDatabase = profilingPanel.databases[0].name;
+    if (!selectedDatabase && profilingPanel.enabledDatabases && profilingPanel.enabledDatabases[0]) {
+      this.state.selectedDatabase = profilingPanel.enabledDatabases[0].name;
     }
     if (ops === ProfilingConstants.NO_RESULTS) {
       renderTable = false;
@@ -147,7 +146,7 @@ export default class ProfilingPanel extends React.Component<Props> {
               <span className="dbSelectLabel">Database</span>
               <Select
                 filterable={false}
-                items={profilingPanel.databases}
+                items={profilingPanel.enabledDatabases}
                 itemRenderer={renderItem}
                 noResults={<MenuItem disabled text="No Results" />}
                 onItemSelect={this._onDBSelect}

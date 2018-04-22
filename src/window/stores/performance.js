@@ -204,14 +204,10 @@ export default class Store {
             }
             allDbs.push(db);
           });
-<<<<<<< Updated upstream
           console.log('DB List: ', dbList);
           console.log('All DB List: ', allDbs);
           this.profilingPanel.databases = allDbs;
           this.profilingPanel.enabledDatabases = dbList;
-=======
-          this.profilingPanel.databases = dbList;
->>>>>>> Stashed changes
         } else if (args.command === 'mw_profilingData') {
           // Check if empty result set
           if (
