@@ -33,7 +33,7 @@ import 'codemirror/addon/dialog/dialog.css';
 import 'codemirror/addon/search/matchesonscrollbar.css';
 import { observer } from 'mobx-react';
 import React from 'react';
-import CodeMirror from '#/common/LegacyCodeMirror';
+import CodeMirror from '#/common/LegacyCodeMirror'; // eslint-disable-line
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/selection/active-line.js';
 import 'codemirror/addon/display/autorefresh.js';

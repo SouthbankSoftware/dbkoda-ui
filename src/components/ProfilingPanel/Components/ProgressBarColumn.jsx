@@ -62,8 +62,8 @@ export default class ProgressBarColumn {
     };
     const menuRenderer = this.renderMenu.bind(this, sortColumn);
     const columnHeaderCellRenderer = () => (
-      <ColumnHeaderCell name={this.name} menuRenderer={menuRenderer} />
-    ); // eslint-disable-line
+      <ColumnHeaderCell name={this.name} menuRenderer={menuRenderer} /> // eslint-disable-line
+    );
     return (
       <Column
         cellRenderer={cellRenderer}
