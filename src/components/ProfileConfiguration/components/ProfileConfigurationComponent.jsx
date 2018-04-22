@@ -50,13 +50,28 @@ export default class ProfileConfiguration extends React.Component {
   setSelectedDatabase(databases) {
     let selectedDb;
     databases.forEach(db => {
-      if (db.selected) {
+      if (db.selected && !selectedDb) {
         selectedDb = db;
-        return -1;
       }
     });
     this.setState({selectedDb});
   }
+
+  getSelectedDatabases = () => {
+    const {databases} = this.props;
+    if (databases) {
+      return databases.filter(db => db.selected);
+    }
+    return [];
+  };
+
+  commitProfileConfiguration = ({level, slowms, profileSize}) => {
+    const dbs = this.getSelectedDatabases();
+    const configs = dbs.map(db => {
+      return {level, slowms, profileSize, dbName: db.name};
+    });
+    this.props.commitProfileConfiguration(configs);
+  };
 
   createButtonPanels(layout) {
     const {showPerformancePanel} = this.props;
@@ -105,7 +120,11 @@ export default class ProfileConfiguration extends React.Component {
       if (layout.i === 'db-profile') {
         return (
           <div key={layout.i} className={layout.className} data-grid={layout}>
-            <Profile selectedDb={this.state.selectedDb} />
+            <Profile
+              selectedDb={this.state.selectedDb}
+              showPerformancePanel={this.props.showPerformancePanel}
+              commitProfileConfiguration={this.commitProfileConfiguration}
+            />
           </div>
         );
       }

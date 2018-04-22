@@ -103,6 +103,13 @@ class PerformanceWindowApi {
     this.store.profilingPanel.payload = null;
     this.sendCommandToMainProcess('pw_getProfilingData', { database });
   };
+
+  setProfilingDatabaseConfiguration = configs => {
+    console.log('send profiling database configuration ', configs);
+    this.sendCommandToMainProcess('pw_setProfilingDatabseConfiguration', {
+      configs
+    });
+  };
 }
 
 export default class Store {

@@ -105,7 +105,8 @@ export default class DataCenter {
         'changeSamplingRate',
         'reactToSamplingRateChange',
         'showToasterInPerformanceWindow',
-        'sendMsgToPerformanceWindow'
+        'sendMsgToPerformanceWindow',
+        'setProfilingDatabseConfiguration'
       ])
     );
 

@@ -7,6 +7,9 @@
         margin: 20px 0px;
         font-size: $fontSize;
     }
+    .profile-all {
+        width: 20%;
+    }
     .profiling-title {
         font-weight: $titleFontWeight;
         font-size: $titleFontSize;
@@ -17,15 +20,42 @@
         flex-direction: row;
         align-items: center;
         .operation-exceeds {
-            flex: 3;
+            width: 400px;
+        }
+        .collection-size {
+            width: 400px;
+        }
+        .profile-size-warning {
+            margin-top: 0px;
         }
         .pt-numeric-input {
-            flex: 1;
+            flex: 1.5;
             height: 30px;
             margin: auto;
             .pt-input-group {
-                width: 50%;
+                width: 70%;
             }
+        }
+    }
+    .button-group {
+        display: flex;
+        flex-direction: row;
+        margin-top: 20px;
+        .profile-button {
+          width: 100px;
+          height: 40px;
+          border-radius: 5px;
+          margin: 10px;
+          border: none;
+          color: white;
+          cursor: pointer;
+        }
+        .profile-button-cancel{
+          background-color: rgb(185, 95, 92);
+        }
+        .profile-button-apply{
+          background-color: rgb(135, 169, 134);
+
         }
     }
 }

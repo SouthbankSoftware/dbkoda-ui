@@ -59,16 +59,18 @@ export default [
     i: 'db-profile',
     className: 'profile-config-db-detail',
     x: 3,
-    y: 1,
+    y: 2,
     w: 5,
-    h: 4
+    h: 4,
+    static: true,
   },
   {
     i: 'profile-tips',
     className: 'profile-config-tips',
     x: 8,
-    y: 1,
+    y: 2,
     w: 4,
-    h: 4
+    h: 4,
+    static: true,
   },
 ];
