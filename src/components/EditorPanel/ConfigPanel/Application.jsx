@@ -101,6 +101,23 @@ export default class Application extends React.Component {
           </div>
         </div>
         <div className="form-row">
+          {this.props.renderFieldLabel('automaticAutoComplete')}
+        </div>
+        <div className="switch">
+          <Switch
+            type="text"
+            id="automaticAutoComplete"
+            checked={this.props.settings.automaticAutoComplete}
+            onChange={this.onCheckboxToggle}
+          />
+          <div className="switchLabel">
+            {this.props.settings.automaticAutoComplete &&
+              globalString('general/on')}
+            {!this.props.settings.automaticAutoComplete &&
+              globalString('general/off')}
+          </div>
+        </div>
+        <div className="form-row">
           {this.props.renderFieldLabel('showNewFeaturesDialogOnStart')}
         </div>
         <div className="switch">

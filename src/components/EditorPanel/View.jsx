@@ -117,7 +117,8 @@ function collect(connect, monitor) {
 @inject(allStores => ({
   store: allStores.store,
   api: allStores.api,
-  profiles: allStores.profileStore.profiles
+  profiles: allStores.profileStore.profiles,
+  config: allStores.config,
 }))
 @ContextMenuTarget
 class View extends React.Component {
@@ -671,6 +672,11 @@ class View extends React.Component {
   componentDidMount() {
     this.refresh();
 
+    if (this.props.config.settings.automaticAutoComplete) {
+      const cm = this.editor.getCodeMirror();
+      cm.on('change', CodeMirror.commands.autocomplete);
+    }
+
     const _updateUnsavedFileIndicator = _.debounce(
       () => {
         const elem = document.querySelector(`#unsavedFileIndicator_${this.id}`);
@@ -783,6 +789,7 @@ class View extends React.Component {
                 list: res,
               };
             },
+            'completeSingle': false,
           };
           cm.showHint(options);
         });
