@@ -218,6 +218,18 @@ export default class Store {
               return op.us;
             }
           );
+        } else if (args.command === 'mw_updateDatabaseConfiguration') {
+          console.log('update database configuration res:', args);
+          if (this.profilingPanel.databases && args && args.dbConfigs) {
+            const newDbs = this.profilingPanel.databases.map(db => {
+              const find = args.dbConfigs.find(o => o.name === db.name);
+              if (find) {
+                db.value = find;
+              }
+              return db;
+            });
+            this.profilingPanel.databases = newDbs;
+          }
         }
       }
     }
