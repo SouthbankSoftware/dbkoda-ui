@@ -17,60 +17,20 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with dbKoda.  If not, see <http://www.gnu.org/licenses/>.
  */
+import React from 'react';
+import TipsCard from '../../common/TipsCard';
 
-export default [
+const tips = [
   {
-    i: 'top-padding',
-    className: 'profile-config-top-padding',
-    x: 0,
-    y: 0,
-    w: 12,
-    h: 1,
-    static: true,
+    content:
+      'The database profiler collects detailed information about Database Commands executed against a running mongod instance. This includes CRUD operations as well as configuration and administration commands. The profiler writes all the data it collects to the system.profile collection, a capped collection in the admin database. See Database Profiler Output for an overview of the system.profile documents created by the profiler.',
   },
   {
-    i: 'title',
-    className: 'profile-config-title',
-    x: 0,
-    y: 1,
-    w: 3,
-    h: 1,
-    static: true,
-  },
-  {
-    i: 'buttons',
-    className: 'profile-config-buttons',
-    x: 6,
-    y: 1,
-    w: 6,
-    h: 1,
-    static: true,
-  },
-  {
-    i: 'db-list',
-    className: 'profile-config-db-list',
-    x: 0,
-    y: 2,
-    w: 3,
-    h: 2,
-    static: true,
-  },
-  {
-    i: 'db-profile',
-    className: 'profile-config-db-detail',
-    x: 3,
-    y: 2,
-    w: 5,
-    h: 4,
-    static: true,
-  },
-  {
-    i: 'profile-tips',
-    className: 'profile-config-tips',
-    x: 8.5,
-    y: 2,
-    w: 3,
-    h: 4,
-    static: true,
+    content:
+      'The profiler is off by default. You can enable the profiler on a per-database or per-instance basis at one of several profiling levels.',
   },
 ];
+
+export default () => {
+  return <TipsCard tips={tips} />;
+};
